@@ -1,0 +1,63 @@
+import { Directive, Input } from '@angular/core';
+import { AutoSizeType } from './input.component';
+
+@Directive({
+  selector: '[triInput], [tri-input]',
+  host: {
+    '[class.ant-input]': 'true',
+    '[class.ant-input-lg]': '_size === "large"',
+    '[class.ant-input-sm]': '_size === "small"',
+    '[class.ant-input-disabled]': '_disabled',
+    '[disabled]': 'disabled',
+//    '[autosize]': '_autosize',
+    '[readonly]': '_readonly'
+  }
+})
+export class InputDirective {
+  _size = 'default';
+  _readonly = false;
+  _autosize: boolean | AutoSizeType = false;
+  _disabled = false;
+
+  @Input()
+  get size(): string {
+    return this._size;
+  }
+
+  set size(value: string) {
+    this._size = value;
+  }
+
+  @Input()
+  get disabled(): boolean {
+    return this._disabled;
+  }
+
+  set disabled(value: boolean) {
+    this._disabled = value;
+  }
+
+  @Input()
+  get readonly(): boolean {
+    return this._readonly;
+  }
+
+  set readonly(value: boolean) {
+    this._readonly = value;
+  }
+
+  @Input()
+  get autosize() {
+    return this._autosize;
+  }
+
+  set autosize(value: string | boolean | AutoSizeType) {
+    if (typeof value === 'string') {
+      this._autosize = true;
+    } else {
+      this._autosize = <boolean | AutoSizeType>value;
+    }
+  }
+
+  constructor() {}
+}

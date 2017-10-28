@@ -1,0 +1,1053 @@
+
+.ant-grid {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.ant-grid.ant-display-block {
+  display: block;
+}
+
+.ant-grid .ant-grid-container {
+  display: flex;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.ant-grid table {
+  margin: 0;
+  width: 100%;
+  max-width: none;
+  border-width: 0;
+  border-color: inherit;
+  border-collapse: separate;
+  border-spacing: 0;
+  empty-cells: show;
+  outline: 0;
+}
+
+.ant-grid thead,
+.ant-grid tbody,
+.ant-grid tfoot {
+  text-align: left;
+  border-color: inherit;
+}
+
+.ant-grid tr {
+  border-color: inherit;
+}
+
+.ant-grid th,
+.ant-grid td {
+  padding: 8px 12px;
+  border-style: solid;
+  border-color: inherit;
+  outline: 0;
+  font-weight: inherit;
+  text-align: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ant-grid th:first-child,
+.ant-grid td:first-child {
+  border-left-width: 0;
+}
+
+.ant-grid th:focus,
+.ant-grid td:focus {
+  outline: none;
+}
+
+.ant-grid th {
+  border-width: 0 0 1px 1px;
+  white-space: nowrap;
+}
+
+.ant-grid td {
+  border-width: 0 0 0 1px;
+  vertical-align: middle;
+}
+
+.ant-grid a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ant-grid a:hover {
+  text-decoration: none;
+}
+
+.ant-grid table,
+.ant-grid .ant-grid-header-wrap {
+  box-sizing: content-box;
+}
+
+.ant-grid .ant-group-col,
+.ant-grid .ant-hierarchy-col {
+  padding: 0;
+  width: 32px;
+}
+
+.ant-grid .ant-grouping-row p {
+  display: flex;
+  align-items: center;
+  align-content: center;
+}
+
+.ant-grid .ant-grouping-row td {
+  overflow: visible;
+}
+
+.ant-grid .ant-grouping-row + tr td {
+  border-top-width: 1px;
+}
+
+.ant-grid .ant-grouping-row .ant-group-cell,
+.ant-grid .ant-grouping-row + tr .ant-group-cell {
+  border-top-width: 0;
+  text-overflow: ellipsis;
+}
+
+.ant-grid .ant-grouping-row .ant-icon {
+  margin-left: -4px;
+  margin-right: 8px;
+}
+
+.ant-grid .ant-group-footer td {
+  border-style: solid;
+  border-width: 1px 0;
+}
+
+.ant-grid .ant-group-footer .ant-group-cell + td {
+  border-left-width: 1px;
+}
+
+.ant-grid .ant-hierarchy-cell {
+  text-align: center;
+  padding: 0;
+  overflow: visible;
+}
+
+.ant-grid .ant-hierarchy-cell > .ant-icon {
+  padding: 8px 0;
+  width: 100%;
+  height: 100%;
+  line-height: 1.42857;
+  display: inline-block;
+  outline: 0;
+}
+
+.ant-grid .ant-hierarchy-cell + td {
+  border-left-width: 0;
+}
+
+.ant-grid[dir="rtl"] thead,
+.ant-grid[dir="rtl"] tbody,
+.ant-grid[dir="rtl"] tfoot,
+.ant-rtl .ant-grid thead,
+.ant-rtl .ant-grid tbody,
+.ant-rtl .ant-grid tfoot {
+  text-align: right;
+}
+
+.ant-grid[dir="rtl"] th,
+.ant-rtl .ant-grid th {
+  white-space: nowrap;
+}
+
+.ant-grid[dir="rtl"] .ant-grid-header-wrap,
+.ant-rtl .ant-grid .ant-grid-header-wrap {
+  border-width: 0 0 0 1px;
+}
+
+.ant-grid[dir="rtl"] .ant-group-indicator .ant-btn.ant-bare,
+.ant-grid[dir="rtl"] .ant-drag-clue .ant-btn.ant-bare,
+.ant-rtl .ant-grid .ant-group-indicator .ant-btn.ant-bare,
+.ant-rtl .ant-grid .ant-drag-clue .ant-btn.ant-bare {
+  margin-left: -2px;
+  margin-right: 8px;
+}
+
+.ant-grid[dir="rtl"] .ant-group-indicator .ant-link .ant-icon,
+.ant-grid[dir="rtl"] .ant-drag-clue .ant-link .ant-icon,
+.ant-rtl .ant-grid .ant-group-indicator .ant-link .ant-icon,
+.ant-rtl .ant-grid .ant-drag-clue .ant-link .ant-icon {
+  margin-left: 4px;
+  margin-right: -2px;
+}
+
+.ant-grid[dir="rtl"] .ant-group-indicator,
+.ant-rtl .ant-grid .ant-group-indicator {
+  margin-right: 0;
+  margin-left: 4px;
+}
+
+.ant-grid[dir="rtl"] .ant-group-indicator + .ant-group-indicator,
+.ant-rtl .ant-grid .ant-group-indicator + .ant-group-indicator {
+  margin-right: 4px;
+}
+
+.ant-grid[dir="rtl"] .ant-grid-content-locked,
+.ant-grid[dir="rtl"] .ant-grid-footer-locked,
+.ant-grid[dir="rtl"] .ant-grid-header-locked,
+.ant-rtl .ant-grid .ant-grid-content-locked,
+.ant-rtl .ant-grid .ant-grid-footer-locked,
+.ant-rtl .ant-grid .ant-grid-header-locked {
+  border-left-width: 1px;
+  border-right-width: 0;
+}
+
+.ant-grid[dir="rtl"] th:first-child,
+.ant-grid[dir="rtl"] td:first-child,
+.ant-rtl .ant-grid th:first-child,
+.ant-rtl .ant-grid td:first-child {
+  border-left-width: 1px;
+}
+
+.ant-grid[dir="rtl"] th:last-child,
+.ant-grid[dir="rtl"] td:last-child,
+.ant-rtl .ant-grid th:last-child,
+.ant-rtl .ant-grid td:last-child {
+  border-left-width: 0;
+}
+
+.ant-grid[dir="rtl"] td.ant-hierarchy-cell,
+.ant-rtl .ant-grid td.ant-hierarchy-cell {
+  border-left-width: 0;
+}
+
+.ant-grid[dir="rtl"] .ant-grid-header,
+.ant-grid[dir="rtl"] .ant-grid-footer,
+.ant-rtl .ant-grid .ant-grid-header,
+.ant-rtl .ant-grid .ant-grid-footer {
+  padding-left: 17px;
+  padding-right: 0;
+}
+
+.ant-grid[dir="rtl"] .ant-grid-header .ant-header:first-child,
+.ant-rtl .ant-grid .ant-grid-header .ant-header:first-child {
+  border-right-width: 0;
+}
+
+.ant-grid[dir="rtl"] .ant-filtercell-operator,
+.ant-rtl .ant-grid .ant-filtercell-operator {
+  margin-left: 0;
+  margin-right: 4px;
+}
+
+.ant-grid[dir="rtl"] .ant-dirty,
+.ant-rtl .ant-grid .ant-dirty {
+  left: auto;
+  right: 0;
+}
+
+.ant-grid[dir="rtl"] .ant-edit-cell > .ant-textbox,
+.ant-grid[dir="rtl"] .ant-edit-cell > .ant-widget,
+.ant-grid[dir="rtl"] .ant-edit-cell > .ant-block,
+.ant-grid[dir="rtl"] .ant-edit-cell > .text-box,
+.ant-grid[dir="rtl"] .ant-grid-edit-row > td > .ant-textbox,
+.ant-grid[dir="rtl"] .ant-grid-edit-row > td > .ant-widget,
+.ant-grid[dir="rtl"] .ant-grid-edit-row > td > .ant-block,
+.ant-grid[dir="rtl"] .ant-grid-edit-row > td > .text-box,
+.ant-rtl .ant-grid .ant-edit-cell > .ant-textbox,
+.ant-rtl .ant-grid .ant-edit-cell > .ant-widget,
+.ant-rtl .ant-grid .ant-edit-cell > .ant-block,
+.ant-rtl .ant-grid .ant-edit-cell > .text-box,
+.ant-rtl .ant-grid .ant-grid-edit-row > td > .ant-textbox,
+.ant-rtl .ant-grid .ant-grid-edit-row > td > .ant-widget,
+.ant-rtl .ant-grid .ant-grid-edit-row > td > .ant-block,
+.ant-rtl .ant-grid .ant-grid-edit-row > td > .text-box {
+  margin-right: calc(-8px - 1px);
+}
+
+.ant-grid .ant-tooltip.ant-tooltip-validation {
+  display: flex;
+  position: absolute;
+  width: auto;
+  padding: 4px 8px;
+}
+
+.ant-grid .ant-tooltip.ant-tooltip-validation .ant-callout {
+  display: block;
+}
+
+.ant-grid .ant-animation-container-fixed .ant-tooltip.ant-tooltip-validation {
+  position: static;
+}
+
+.ant-grid .ant-dirty-cell {
+  position: relative;
+}
+
+.ant-grid .ant-dirty {
+  border-width: 5px;
+  left: 0;
+  right: auto;
+}
+
+.ant-grid-toolbar {
+  padding: 8px;
+  border-width: 0 0 1px;
+  border-style: solid;
+  border-color: inherit;
+  text-overflow: clip;
+  cursor: default;
+  display: block;
+}
+
+.ant-grid-toolbar .ant-btn {
+  vertical-align: middle;
+}
+
+.ant-grid-toolbar .ant-btn + .ant-btn {
+  margin-left: 4px;
+}
+
+.ant-grouping-header {
+  display: block;
+  padding: 8px;
+  border-width: 0 0 1px;
+  border-style: solid;
+  border-color: inherit;
+  line-height: calc(10px + 1.42857em);
+}
+
+.ant-group-indicator,
+.ant-drag-clue {
+  border-radius: 2px;
+  margin: 0;
+  padding: 4px 8px;
+  border-width: 1px;
+  border-style: solid;
+  line-height: 1.42857;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+  vertical-align: top;
+}
+
+.ant-group-indicator .ant-link,
+.ant-group-indicator .ant-btn.ant-bare,
+.ant-drag-clue .ant-link,
+.ant-drag-clue .ant-btn.ant-bare {
+  padding: 0;
+  border-width: 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+.ant-group-indicator .ant-link .ant-icon,
+.ant-drag-clue .ant-link .ant-icon {
+  margin-left: -2px;
+  margin-right: 4px;
+}
+
+.ant-group-indicator .ant-btn.ant-bare,
+.ant-drag-clue .ant-btn.ant-bare {
+  margin-left: 8px;
+  margin-right: -2px;
+  padding: 0;
+  width: auto;
+  height: auto;
+  opacity: .5;
+}
+
+.ant-group-indicator .ant-btn.ant-bare::before, .ant-group-indicator .ant-btn.ant-bare::after,
+.ant-drag-clue .ant-btn.ant-bare::before,
+.ant-drag-clue .ant-btn.ant-bare::after {
+  display: none;
+}
+
+.ant-group-indicator .ant-btn.ant-bare:hover,
+.ant-drag-clue .ant-btn.ant-bare:hover {
+  opacity: 1;
+}
+
+.ant-group-indicator {
+  margin-right: 4px;
+}
+
+.ant-group-indicator + .ant-group-indicator {
+  margin-left: 4px;
+}
+
+.ant-grouping-dropclue {
+  width: 12px;
+  height: calc(10px + 1.42857em);
+  position: absolute;
+}
+
+.ant-grouping-dropclue::before, .ant-grouping-dropclue::after {
+  display: inline-block;
+  content: '';
+  position: absolute;
+}
+
+.ant-grouping-dropclue::before {
+  border-width: 6px;
+  border-style: solid;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  top: 0;
+}
+
+.ant-grouping-dropclue::after {
+  width: 2px;
+  height: calc(100% - 6px);
+  top: 6px;
+  left: calc(6px - (2px / 2));
+}
+
+.ant-grid-header-wrap,
+.ant-grid-footer-wrap {
+  width: 100%;
+  border-width: 0 1px 0 0;
+  border-style: solid;
+  border-color: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.ant-grid-header,
+.ant-grid-footer {
+  flex: 0 0 auto;
+  padding-right: 17px;
+  border-width: 0;
+  border-style: solid;
+  border-color: inherit;
+}
+
+.ant-grid-header table,
+.ant-grid-footer table {
+  table-layout: fixed;
+}
+
+div.ant-grid-header,
+div.ant-grid-footer {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.ant-ie div.ant-grid-header {
+  display: block;
+}
+
+.ant-grid-header {
+  border-bottom-width: 1px;
+}
+
+.ant-grid-header table {
+  margin-bottom: -1px;
+}
+
+.ant-grid-header .ant-header {
+  position: relative;
+  vertical-align: bottom;
+}
+
+.ant-grid-header .ant-header:first-child {
+  border-left-width: 0;
+}
+
+.ant-grid-header .ant-header.ant-first {
+  border-left-width: 1px;
+}
+
+.ant-grid-header .ant-header > .ant-link {
+  margin: -8px -12px;
+  padding: 8px 12px;
+  line-height: inherit;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ant-ff .ant-grid-header .ant-header > .ant-link {
+  margin-inline-start: 0;
+  padding-inline-start: 0;
+}
+
+.ant-grid-header .ant-header.ant-filterable > .ant-link {
+  margin-right: calc(10px + 1.42857em);
+}
+
+.ant-grid-header .ant-header > .ant-link:focus {
+  text-decoration: none;
+}
+
+.ant-grid-header .ant-header > .ant-link > .ant-icon {
+  margin: 0 .4ex;
+  position: static;
+  vertical-align: middle;
+}
+
+.ant-grid-header .ant-grid-filter,
+.ant-grid-header .ant-header-column-menu {
+  padding: 4px;
+  width: calc(10px + 1.42857em);
+  height: calc(10px + 1.42857em);
+  box-sizing: border-box;
+  outline: 0;
+  line-height: 1.42857;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  float: right;
+  position: relative;
+  z-index: 1;
+}
+
+.ant-grid-header .ant-grid-filter {
+  margin: -4px 0;
+}
+
+.ant-grid-header .ant-header-column-menu {
+  margin: 0;
+  margin-top: calc((1.42857em + (-1 * calc(10px + 1.42857em))) / 2);
+  margin-bottom: calc((1.42857em + (-1 * calc(10px + 1.42857em))) / 2);
+  margin-right: -12px;
+}
+
+.ant-grid-header .ant-header-column-menu + .ant-link {
+  margin-right: calc(1.42857em + 8px + 2px - 12px);
+}
+
+.ant-grid-header .ant-header > .ant-link > .ant-icon.ant-i-sort-desc-sm, .ant-grid-header .ant-header > .ant-link > .ant-icon.ant-i-sort-asc-sm {
+  vertical-align: text-top;
+  margin-left: calc(8px - 1px);
+}
+
+.ant-grid-header .ant-sort-order {
+  display: inline-block;
+  font-size: 12px;
+  height: 16px;
+  margin-left: -4px;
+  vertical-align: top;
+  margin-top: 2px;
+}
+
+.ant-grid-footer {
+  border-width: 1px 0 0;
+}
+
+.ant-grid-footer td {
+  height: 1.42857em;
+}
+
+.ant-filter-row {
+  line-height: 1.42857;
+}
+
+.ant-filter-row th {
+  padding: 8px;
+}
+
+.ant-filter-row .ant-multiselect {
+  height: auto;
+}
+
+.ant-filtercell {
+  width: auto;
+  display: flex;
+}
+
+.ant-filtercell > span,
+.ant-filtercell .ant-filtercell-wrapper {
+  display: flex;
+  flex: 1;
+}
+
+.ant-filtercell > span > label,
+.ant-filtercell .ant-filtercell-wrapper > label {
+  vertical-align: middle;
+}
+
+.ant-filtercell .ant-filtercell-wrapper > .ant-widget, .ant-filtercell .ant-filtercell-wrapper > .ant-block {
+  width: 100%;
+}
+
+.ant-filtercell > span .ant-btn {
+  visibility: visible;
+  pointer-events: all;
+}
+
+.ant-filtercell > span .ant-btn,
+.ant-filtercell > span .ant-dropdown-operator {
+  margin-left: 4px;
+}
+
+.ant-filtercell > span .ant-numerictextbox {
+  width: auto;
+}
+
+.ant-filtercell .ant-filtercell-operator > .ant-btn.ant-clear-button-visible {
+  visibility: visible;
+  height: calc(10px + 1.42857em);
+}
+
+.ant-filtercell .ant-filtercell-operator > .ant-btn:not(.ant-clear-button-visible) {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.ant-filtercell .ant-filtercell-operator {
+  margin-left: 4px;
+}
+
+.ant-filtercell .ant-widget:not(.ant-dropdown-operator), .ant-filtercell .ant-block:not(.ant-dropdown-operator),
+.ant-filtercell .ant-filtercell-wrapper > .ant-textbox {
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.ant-filtercell .ant-filtercell-wrapper > .ant-textbox {
+  width: 100%;
+  min-width: 0;
+}
+
+.ant-filtercell .ant-autocomplete .ant-input,
+.ant-filtercell .ant-dropdown-wrap .ant-input,
+.ant-filtercell .ant-numeric-wrap .ant-input,
+.ant-filtercell .ant-picker-wrap .ant-input,
+.ant-filtercell .ant-selectbox .ant-input,
+.ant-filtercell .ant-textbox > input {
+  padding-left: 0;
+  padding-right: 0;
+  text-indent: 8px;
+}
+
+.ant-filtercell.ant-filtercell-boolean .ant-filtercell-wrapper {
+  padding-right: calc(1.42857em + 8px + 2px + 4px);
+  overflow: hidden;
+}
+
+.ant-grid-content,
+.ant-grid-content-locked {
+  border-color: inherit;
+}
+
+.ant-grid-content table,
+.ant-grid-content-locked table {
+  table-layout: fixed;
+}
+
+.ant-grid-content tr:last-child td,
+.ant-grid-content-locked tr:last-child td {
+  border-bottom-width: 0;
+}
+
+.ant-grid-content {
+  width: 100%;
+  min-height: 0;
+  overflow: auto;
+  overflow-x: auto;
+  overflow-y: scroll;
+  position: relative;
+  flex: 1;
+}
+
+.ant-grid-content .ant-btn {
+  vertical-align: middle;
+  margin: 0 .16em;
+}
+
+.ant-virtual-scrollable-wrap {
+  height: 100%;
+  overflow-y: hidden;
+  position: relative;
+}
+
+.ant-grid-edit-row td {
+  text-overflow: clip;
+}
+
+//.ant-grid-edit-row .ant-widget, .ant-grid-edit-row .ant-block,
+//.ant-grid-edit-row .ant-btn,
+//.ant-grid-edit-row .ant-textbox,
+//.ant-grid-edit-row .ant-input.ant-textbox {
+  //height: auto;
+//}
+
+.ant-grid-edit-row .ant-edit-cell {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.ant-grid-edit-row .ant-dirty-cell {
+  overflow: visible;
+}
+
+.ant-edit-cell > .ant-textbox,
+.ant-edit-cell > .ant-widget,
+.ant-edit-cell > .ant-block,
+.ant-edit-cell > .text-box,
+.ant-grid-edit-row > td > .ant-textbox,
+.ant-grid-edit-row > td > .ant-widget,
+.ant-grid-edit-row > td > .ant-block,
+.ant-grid-edit-row > td > .text-box {
+  margin-left: calc(-8px - 1px);
+}
+
+.ant-grid-edit-row td > .ant-textbox,
+.ant-grid-edit-row td > .ant-widget,
+.ant-grid-edit-row td > .ant-block,
+.ant-edit-cell > .ant-textbox,
+.ant-edit-cell > .ant-widget,
+.ant-edit-cell > .ant-block {
+  width: calc(100% + ((8px + 1px) * 2));
+}
+
+.ant-grid-edit-row td > .ant-textbox,
+.ant-grid-edit-row td > .ant-widget,
+.ant-grid-edit-row td > .ant-block,
+.ant-command-cell > .ant-btn,
+.ant-edit-cell > .ant-textbox,
+.ant-edit-cell > .ant-widget,
+.ant-edit-cell > .ant-block {
+  margin-top: calc((1.42857em + (-1 * calc(10px + 1.42857em))) / 2);
+  margin-bottom: calc((1.42857em + (-1 * calc(10px + 1.42857em))) / 2);
+  vertical-align: middle;
+}
+
+.ant-grid > .ant-resize-handle,
+.ant-grid-header .ant-resize-handle {
+  height: 25px;
+  cursor: col-resize;
+  position: absolute;
+  z-index: 2;
+}
+
+.ant-grid-pager {
+  padding: 8px;
+  border-width: 1px 0 0;
+  border-color: inherit;
+}
+
+.ant-grid-virtual .ant-grid-content .ant-grid-table,
+.ant-grid-virtual .ant-grid-content > table {
+  position: absolute;
+  z-index: 1;
+}
+
+.ant-grid-virtual .ant-grid-content > .ant-height-container {
+  position: relative;
+}
+
+.ant-grid-add-row td {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
+
+.ant-grid-lockedcolumns {
+  white-space: nowrap;
+}
+
+.ant-grid-content,
+.ant-grid-content-locked,
+.ant-pager-wrap {
+  white-space: normal;
+}
+
+.ant-grid-content-locked,
+.ant-grid-footer-locked,
+.ant-grid-header-locked {
+  flex: 1 0 auto;
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+  position: relative;
+  border-style: solid;
+  border-width: 0 1px 0 0;
+}
+
+.ant-grid-content-locked + .ant-grid-content.ant-auto-scrollable,
+.ant-grid-footer-locked + .ant-grid-content.ant-auto-scrollable,
+.ant-grid-header-locked + .ant-grid-content.ant-auto-scrollable {
+  display: inline-block;
+}
+
+.ant-grid-content,
+.ant-grid-footer-wrap,
+.ant-grid-header-wrap {
+  flex: 1 1 auto;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.ant-grid-content.ant-auto-scrollable,
+.ant-grid-footer-wrap.ant-auto-scrollable,
+.ant-grid-header-wrap.ant-auto-scrollable {
+  display: block;
+}
+
+.ant-grid-header-locked > table,
+.ant-grid-header-wrap > table {
+  margin-bottom: -1px;
+}
+
+.ant-header.ant-drag-clue {
+  overflow: hidden;
+}
+
+.ant-grid-no-scrollbar .ant-grid-header-wrap {
+  border-width: 0;
+}
+
+.ant-loading-pdf-mask {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.ant-loading-pdf-mask > .ant-i-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 64px;
+}
+
+.ant-loading-pdf-mask .ant-loading-pdf-progress {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.ant-grid-pdf-export-element {
+  position: absolute;
+  left: -10000px;
+  top: -10000px;
+}
+
+.ant-grid-pdf-export-element .ant-filter-row {
+  display: none;
+}
+
+.ant-filter-menu > div:not(.ant-animation-container),
+.ant-filter-menu .ant-filter-menu-container {
+  padding: 0.5em 1em;
+}
+
+.ant-filter-menu > div > div > .ant-btn {
+  margin: 0.5em 1% 0;
+  width: 48%;
+  box-sizing: border-box;
+  display: inline-block;
+}
+
+.ant-filter-menu .ant-widget, .ant-filter-menu .ant-block,
+.ant-filter-menu .ant-radio-list,
+.ant-filter-menu .ant-textbox {
+  margin: 0.5em 0;
+  width: 100%;
+  display: block;
+}
+
+.ant-filter-menu .ant-widget.ant-filter-and, .ant-filter-menu .ant-filter-and.ant-block {
+  width: 6em;
+  margin: 1em 0;
+}
+
+.ant-filter-menu .ant-action-buttons {
+  margin: 1em -1em -0.5em;
+}
+
+.ant-filter-menu .ant-action-buttons .ant-btn {
+  margin: 0;
+}
+
+.ant-multiche.ant-wrap {
+  max-height: 300px;
+  overflow: auto;
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+
+.ant-multiche.ant-wrap .ant-item + .ant-item {
+  margin-top: 0.5em;
+}
+
+.ant-multiche.ant-wrap .ant-label {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.ant-multiche.ant-wrap .ant-label input {
+  margin: 0 0.25em;
+}
+
+.ant-filter-selected-items {
+  font-weight: bold;
+  line-height: normal;
+  white-space: nowrap;
+  margin: 1em 0 0.5em;
+}
+
+.ant-autofitting {
+  width: auto !important;
+  table-layout: auto !important;
+}
+
+.ant-autofitting th.ant-header,
+.ant-autofitting td {
+  white-space: nowrap !important;
+}
+
+.ant-autofitting .ant-detail-row {
+  display: none !important;
+}
+
+.ant-grid-header,
+.ant-header,
+.ant-grid-header-wrap,
+.ant-grouping-header,
+.ant-grouping-header .ant-group-indicator,
+.ant-grid td,
+.ant-grid-footer,
+.ant-grid-footer-wrap,
+.ant-grid-content-locked,
+.ant-grid-footer-locked,
+.ant-grid-header-locked,
+.ant-filter-row > th {
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.ant-grid-header,
+.ant-grid-toolbar,
+.ant-grouping-header,
+.ant-grid-add-row,
+.ant-grid-footer,
+.ant-drag-clue {
+  color: #656565;
+  background-color: #f6f6f6;
+}
+
+.ant-group-footer td,
+.ant-grouping-row td,
+tbody .ant-group-cell {
+  color: #656565;
+  background-color: #ededed;
+}
+
+.ant-grid-footer td,
+.ant-group-footer td,
+.ant-grouping-row td {
+  font-weight: bold;
+}
+
+.ant-grid {
+  background-clip: padding-box;
+}
+
+.ant-ie11 .ant-grid,
+.ant-edge12 .ant-grid,
+.ant-edge13 .ant-grid {
+  background-clip: border-box;
+}
+
+.ant-grid tr.ant-alt {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.ant-grid tr.ant-state-selected,
+.ant-grid td.ant-state-selected {
+  color: inherit;
+  background-color: rgba(255, 99, 88, 0.25);
+}
+
+.ant-grid td.ant-state-focused,
+.ant-grid th.ant-state-focused {
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.13);
+}
+
+.ant-grid .ant-grid-filter,
+.ant-grid .ant-header-column-menu,
+.ant-grid .ant-hierarchy-cell .ant-icon {
+  border-width: 0;
+  color: #656565;
+}
+
+.ant-grid .ant-grouping-row {
+  background-color: #ededed;
+}
+
+.ant-grid .ant-grouping-row .ant-icon {
+  color: #656565;
+  text-decoration: none;
+}
+
+.ant-grid .ant-grouping-dropclue::before {
+  border-color: #656565 transparent transparent;
+}
+
+.ant-grid .ant-grouping-dropclue::after {
+  background-color: #656565;
+}
+
+.ant-grid .ant-tooltip.ant-tooltip-validation {
+  color: #ffffff;
+  background-color: #ff6358;
+}
+
+.ant-grid .ant-tooltip.ant-tooltip-validation .ant-callout-n {
+  border-bottom-color: #ff6358;
+}
+
+.ant-grid .ant-tooltip.ant-tooltip-validation .ant-callout-e {
+  border-left-color: #ff6358;
+}
+
+.ant-grid .ant-tooltip.ant-tooltip-validation .ant-callout-s {
+  border-top-color: #ff6358;
+}
+
+.ant-grid .ant-tooltip.ant-tooltip-validation .ant-callout-w {
+  border-right-color: #ff6358;
+}
+
+.ant-grid .ant-dirty {
+  border-color: currentColor transparent transparent currentColor;
+}
+
+.ant-grid[dir="rtl"] .ant-dirty,
+.ant-rtl .ant-grid .ant-dirty {
+  border-color: currentColor currentColor transparent transparent;
+}
+
+col.ant-sorted,
+th.ant-sorted {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.ant-grid-header .ant-i-sort-asc-sm,
+.ant-grid-header .ant-i-sort-desc-sm,
+.ant-grid-header .ant-sort-order {
+  color: #ff6358;
+}
+
+.ant-grid-header .ant-grid-filter:hover {
+  color: #656565;
+  background-color: #ededed;
+}
+
+.ant-grid-header .ant-grid-filter:focus {
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.ant-grid-header .ant-grid-filter.ant-state-active {
+  color: #ffffff;
+  background-color: #ff6358;
+}

@@ -1,0 +1,22 @@
+
+@import "./dropdown";
+
+tri-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+tri-dropdown-button {
+  position: relative;
+  display: inline-block;
+}
+
+//
+.#{$dropdown-prefix-cls} {
+  top: 100%;
+  left: 0;
+  position: relative;
+  width: 100%;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}

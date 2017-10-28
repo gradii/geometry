@@ -1,0 +1,119 @@
+@import '../core/style/index';
+
+$tag-prefix-cls: "#{$ant-prefix}-tag";
+
+.#{$tag-prefix-cls} {
+  display: inline-block;
+  line-height: 20px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: $border-radius-base;
+  border: $border-width-base $border-style-base $border-color-split;
+  background: $tag-default-bg;
+  font-size: $tag-font-size;
+  transition: all 0.3s $ease-in-out-circ;
+  opacity: 1;
+  margin-right: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+
+  @at-root &:hover {
+    opacity: 0.85;
+  }
+
+  @at-root &,
+  & a,
+  & a:hover {
+    color: $tag-default-color;
+  }
+
+  @at-root &-text {
+    a:first-child:last-child {
+      display: inline-block;
+      margin: 0 -8px;
+      padding: 0 8px;
+    }
+  }
+
+  .#{$iconfont-css-prefix}-cross {
+    @include iconfont-size-under-12px(10px);
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 3px;
+    transition: all 0.3s ease;
+    opacity: 0.66;
+
+    @at-root &:hover {
+      opacity: 1;
+    }
+  }
+
+  @at-root &-has-color {
+    border-color: transparent;
+    @at-root &,
+    & a,
+    & a:hover,
+    & .#{$iconfont-css-prefix}-cross,
+    & .#{$iconfont-css-prefix}-cross:hover {
+      color: #fff;
+    }
+  }
+
+  @at-root &-checkable {
+    background-color: transparent;
+    border-color: transparent;
+    @at-root &:not(#{&}-checked):hover {
+      color: $primary-color;
+    }
+    @at-root &:active,
+    &-checked {
+      color: #fff;
+    }
+    @at-root &-checked {
+      background-color: $primary-6;
+    }
+    @at-root &:active {
+      background-color: $primary-7;
+    }
+  }
+
+  @at-root &-close {
+    width: 0 !important;
+    padding: 0;
+    margin: 0;
+  }
+
+  @at-root &-zoom-enter,
+  &-zoom-appear {
+    animation: antFadeIn .2s $ease-in-out-circ;
+    animation-fill-mode: both;
+  }
+
+  @at-root &-zoom-leave {
+    animation: antZoomOut .3s $ease-in-out-circ;
+    animation-fill-mode: both;
+  }
+
+  $colors: pink, red, orange, yellow, cyan, green, blue, purple;
+  // mixin to iterate over colors and create CSS class for each one
+  @mixin make-color-classes($i: length($colors)) {
+    @if $i > 0 {
+      @include make-color-classes($i - 1);
+      $color: nth($colors, $i);
+      $lightColor: map_get($g-colors, "#{$color}-2");
+      $darkColor: map_get($g-colors, "#{$color}-6");
+      @at-root &-#{$color} {
+        color: $darkColor;
+        background: $lightColor;
+        border-color: $lightColor;
+      }
+      @at-root &-#{$color}-inverse {
+        background: $darkColor;
+        border-color: $darkColor;
+        color: #fff;
+      }
+    }
+  }
+
+  @include make-color-classes();
+}

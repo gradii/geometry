@@ -1,0 +1,356 @@
+/* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
+@import "_color/colors";
+
+// The prefix to use on all css classes from ant.
+$ant-prefix             : ant !default;
+
+// -------- Colors -----------
+$primary-color          : $blue !default;
+$info-color             : $blue !default;
+$success-color          : $green !default;
+$error-color            : $red !default;
+$highlight-color        : $red !default;
+$warning-color          : $yellow !default;
+$normal-color           : #d9d9d9 !default;
+
+// Color used by default to control hover and active backgrounds and for
+// alert info backgrounds.
+$primary-1: color-palette($primary-color, 1) !default;  // replace tint($primary-color, 90%)
+$primary-2: color-palette($primary-color, 2) !default;  // replace tint($primary-color, 80%)
+// unused
+$primary-3: color-palette($primary-color, 3) !default;
+$primary-4: color-palette($primary-color, 4) !default;
+// Color used to control the text color in many active and hover states.
+$primary-5: color-palette($primary-color, 5) !default;  // replace tint($primary-color, 20%)
+$primary-6: $primary-color !default;                                 // don't use, use $primary-color
+// Color used to control the text color of active buttons.
+$primary-7: color-palette($primary-color, 7) !default;  // replace shade($primary-color, 5%)
+// unused
+$primary-8: color-palette($primary-color, 8) !default;
+// unused
+$primary-9: color-palette($primary-color, 9) !default;
+// unused
+$primary-10: color-palette($primary-color, 10) !default;
+
+// Base Scaffolding Variables
+// ---
+
+// Background color for `<body>`
+$body-background        : #fff !default;
+// Base background color for most components
+$component-background   : #fff !default;
+$font-family            : "Helvetica Neue For Number", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$code-family            : Consolas, Menlo, Courier, monospace !default;
+$heading-color          : rgba(#000, 0.85) !default;
+$text-color             : rgba(#000, 0.65) !default;
+$text-color-secondary   : rgba(#000, 0.43) !default;
+$heading-color-dark     : rgba(#fff, 0.97) !default;
+$text-color-dark        : rgba(#fff, 0.91) !default;
+$text-color-secondary-dark: rgba(#fff, 0.67) !default;
+$font-size-base         : 12px !default;
+$font-size-lg           : $font-size-base + 2px !default;
+$line-height-base       : 1.5 !default;
+$border-radius-base     : 4px !default;
+$border-radius-sm       : 2px !default;
+
+// The background colors for active and hover states for things like
+// list items or table cells.
+$item-active-bg         : $primary-1 !default;
+$item-hover-bg          : $primary-1 !default;
+
+// ICONFONT
+$iconfont-css-prefix    : anticon !default;
+$icon-url               : "https://at.alicdn.com/t/font_zck90zmlh7hf47vi" !default;
+
+// LINK
+$link-color             : $primary-color !default;
+$link-hover-color       : $primary-5 !default;
+$link-active-color      : $primary-7 !default;
+$link-hover-decoration  : none !default;
+
+// Animation
+$ease-out            : cubic-bezier(0.215, 0.61, 0.355, 1) !default;
+$ease-in             : cubic-bezier(0.55, 0.055, 0.675, 0.19) !default;
+$ease-in-out         : cubic-bezier(0.645, 0.045, 0.355, 1) !default;
+$ease-out-back       : cubic-bezier(0.12, 0.4, 0.29, 1.46) !default;
+$ease-in-back        : cubic-bezier(0.71, -0.46, 0.88, 0.6) !default;
+$ease-in-out-back    : cubic-bezier(0.71, -0.46, 0.29, 1.46) !default;
+$ease-out-circ       : cubic-bezier(0.08, 0.82, 0.17, 1) !default;
+$ease-in-circ        : cubic-bezier(0.6, 0.04, 0.98, 0.34) !default;
+$ease-in-out-circ    : cubic-bezier(0.78, 0.14, 0.15, 0.86) !default;
+$ease-out-quint      : cubic-bezier(0.23, 1, 0.32, 1) !default;
+$ease-in-quint       : cubic-bezier(0.755, 0.05, 0.855, 0.06) !default;
+$ease-in-out-quint   : cubic-bezier(0.86, 0, 0.07, 1) !default;
+
+// Border color
+$border-color-base      : #d9d9d9 !default;        // base border outline a component
+$border-color-split     : #e9e9e9 !default;        // split border inside a component
+$border-width-base      : 1px !default;            // width of the border for a component
+$border-style-base      : solid !default;          // style of a components border
+
+// Outline
+$outline-blur-size      : 0 !default;
+$outline-width          : 2px !default;
+$outline-color          : $primary-color !default;
+
+// Default background color for disabled states, Collapse wrappers,
+// and several active and hover states.
+$background-color-base  : #f7f7f7 !default;
+$background-color-active: #eee !default;
+
+// Disabled states
+$disabled-color         : rgba(#000, 0.25) !default;
+$disabled-bg            : $background-color-base !default;
+$disabled-color-dark    : rgba(#fff, 0.35) !default;
+
+// Shadow
+$shadow-color           : rgba(0, 0, 0, .2) !default;
+$shadow-1-up            : 0 -1px 6px $shadow-color !default;
+$shadow-1-down          : 0 1px 6px $shadow-color !default;
+$shadow-1-left          : -1px 0 6px $shadow-color !default;
+$shadow-1-right         : 1px 0 6px $shadow-color !default;
+$shadow-2               : 0 2px 8px $shadow-color !default;
+$box-shadow-base        : $shadow-1-down !default;
+
+// Buttons
+$btn-font-weight        : 500 !default;
+$btn-border-radius-base : $border-radius-base !default;
+$btn-border-radius-sm   : $border-radius-base !default;
+
+$btn-primary-color      : #fff !default;
+$btn-primary-bg         : $primary-color !default;
+
+$btn-default-color      : $text-color !default;
+$btn-default-bg         : #fff !default;
+$btn-default-border     : $border-color-base !default;
+
+$btn-danger-color       : $error-color !default;
+$btn-danger-bg          : $background-color-base !default;
+$btn-danger-border      : $border-color-base !default;
+
+$btn-disable-color      : $disabled-color !default;
+$btn-disable-bg         : $disabled-bg !default;
+$btn-disable-border     : $border-color-base !default;
+
+$btn-padding-base       : 0 15px !default;
+$btn-font-size-lg       : $font-size-lg !default;
+$btn-padding-lg         : $btn-padding-base !default;
+$btn-padding-sm         : 0 7px !default;
+
+$btn-height-base        : 28px !default;
+$btn-height-lg          : 32px !default;
+$btn-height-sm          : 22px !default;
+
+$btn-circle-size        : $btn-height-base !default;
+$btn-circle-size-lg     : $btn-height-lg !default;
+$btn-circle-size-sm     : $btn-height-sm !default;
+
+$btn-group-border       : $primary-7 !default;
+
+// Radio buttons
+$radio-button-bg           : $btn-default-bg !default;
+$radio-button-color        : $btn-default-color !default;
+
+// Media queries breakpoints
+// Extra small screen / phone
+$screen-xs              : 480px !default;
+$screen-xs-min          : $screen-xs !default;
+
+// Small screen / tablet
+$screen-sm              : 768px !default;
+$screen-sm-min          : $screen-sm !default;
+
+// Medium screen / desktop
+$screen-md              : 992px !default;
+$screen-md-min          : $screen-md !default;
+
+// Large screen / wide desktop
+$screen-lg              : 1200px !default;
+$screen-lg-min          : $screen-lg !default;
+
+// Extra Large screen / full hd
+$screen-xl              : 1600px !default;
+$screen-xl-min          : $screen-xl !default;
+
+// provide a maximum
+$screen-xs-max          : ($screen-sm-min - 1px) !default;
+$screen-sm-max          : ($screen-md-min - 1px) !default;
+$screen-md-max          : ($screen-lg-min - 1px) !default;
+$screen-lg-max          : ($screen-xl-min - 1px) !default;
+
+// Grid system
+$grid-columns           : 24 !default;
+$grid-gutter-width      : 0 !default;
+
+// Layout
+$layout-body-background      : #ececec !default;
+$layout-header-background    : #404040 !default;
+$layout-header-height        : 64px !default;
+$layout-header-padding       : 0 50px !default;
+$layout-footer-padding       : 24px 50px !default;
+$layout-sider-background     : $layout-header-background !default;
+$layout-trigger-height       : 48px !default;
+$layout-trigger-background   : tint($heading-color, 20%) !default;
+$layout-trigger-color        : #fff !default;
+$layout-zero-trigger-width   : 36px !default;
+$layout-zero-trigger-height  : 42px !default;
+
+// z-index list
+$zindex-affix           : 10 !default;
+$zindex-back-top        : 10 !default;
+$zindex-modal-mask      : 1000 !default;
+$zindex-modal           : 1000 !default;
+$zindex-notification    : 1010 !default;
+$zindex-message         : 1010 !default;
+$zindex-popover         : 1030 !default;
+$zindex-picker          : 1050 !default;
+$zindex-dropdown        : 1050 !default;
+$zindex-tooltip         : 1060 !default;
+
+// Animation
+$animation-duration-slow: .3s !default; // Modal
+$animation-duration-base: .2s !default;
+$animation-duration-fast: .1s !default; // Tooltip
+
+// Form
+// ---
+$label-required-color        : $highlight-color !default;
+$label-color                 : $heading-color !default;
+$form-item-margin-bottom     : 24px !default;
+$form-item-trailing-colon    : true !default;
+
+// Input
+// ---
+$input-height-base           : 28px !default;
+$input-height-lg             : 32px !default;
+$input-height-sm             : 22px !default;
+$input-padding-horizontal    : 7px !default;
+$input-padding-vertical-base : 4px !default;
+$input-padding-vertical-sm   : 1px !default;
+$input-padding-vertical-lg   : 6px !default;
+$input-placeholder-color     : $disabled-color !default;
+$input-color                 : $text-color !default;
+$input-border-color          : $border-color-base !default;
+$input-bg                    : #fff !default;
+$input-addon-bg              : #eee !default;
+$input-hover-border-color    : $primary-color !default;
+$input-disabled-bg           : $disabled-bg !default;
+
+// Tooltip
+// ---
+//* Tooltip max width
+$tooltip-max-width            : 250px !default;
+//** Tooltip text color
+$tooltip-color                : #fff !default;
+//** Tooltip background color
+$tooltip-bg                   : rgba(64, 64, 64, .85) !default;
+//** Tooltip arrow width
+$tooltip-arrow-width          : 5px !default;
+//** Tooltip distance with trigger
+$tooltip-distance             : $tooltip-arrow-width - 1px + 4px !default;
+//** Tooltip arrow color
+$tooltip-arrow-color          : $tooltip-bg !default;
+
+// Popover
+// ---
+//** Popover body background color
+$popover-bg                   : #fff !default;
+//** Popover text color
+$popover-color                : $text-color !default;
+//** Popover maximum width
+$popover-min-width            : 177px !default;
+//** Popover arrow width
+$popover-arrow-width          : 4px !default;
+//** Popover arrow color
+$popover-arrow-color          : $popover-bg !default;
+//** Popover outer arrow width
+$popover-arrow-outer-width    : ($popover-arrow-width + 1px) !default;
+//** Popover outer arrow color
+$popover-arrow-outer-color    : fade-out($border-color-base, 0.3) !default;
+//** Popover distance with trigger
+$popover-distance             : $popover-arrow-width + 4px !default;
+
+// Modal
+// --
+$modal-mask-bg: rgba(55, 55, 55, 0.6) !default;
+
+// Progress
+// --
+$process-default-color: $primary-color !default;
+$progress-remaining-color: $background-color-base !default;
+
+// Menu
+// ---
+$menu-dark-bg: $layout-header-background !default;
+$menu-dark-submenu-bg: #333 !default;
+
+// Spin
+// ---
+$spin-dot-size-sm: 14px !default;
+$spin-dot-size: 20px !default;
+$spin-dot-size-lg: 32px !default;
+
+// Table
+// --
+$table-header-bg: $background-color-base !default;
+$table-header-sort-bg: $background-color-active !default;
+$table-row-hover-bg: $primary-1 !default;
+$table-selected-row-bg: #fafafa !default;
+$table-padding-vertical: 16px !default;
+$table-padding-horizontal: 8px !default;
+
+// Tag
+// --
+$tag-default-bg: #f3f3f3 !default;
+$tag-default-color: $text-color !default;
+$tag-font-size: $font-size-base !default;
+
+// TimePicker
+// ---
+$time-picker-panel-column-width: 56px !default;
+$time-picker-panel-width: $time-picker-panel-column-width * 3 !default;
+$time-picker-selected-bg: $background-color-base !default;
+
+// Carousel
+// ---
+$carousel-dot-width: 16px !default;
+$carousel-dot-height: 3px !default;
+$carousel-dot-active-width: 24px !default;
+
+// Badge
+// ---
+$badge-height: 20px !default;
+$badge-dot-size: 8px !default;
+$badge-font-size: $font-size-base !default;
+
+// Rate
+// ---
+$rate-star-color: #f5a623 !default;
+$rate-star-bg: #e9e9e9 !default;
+
+// Card
+// ---
+$card-head-height: 48px !default;
+$card-head-color: $heading-color !default;
+$card-head-background: $component-background !default;
+
+// Tabs
+// ---
+$tabs-card-head-background: #f9f9f9 !default;
+$tabs-title-font-size: $font-size-lg !default;
+
+// BackTop
+$back-top-color: #fff !default;
+$back-top-bg: rgba(64, 64, 64, 0.4) !default;
+$back-top-hover-bg: rgba(64, 64, 64, 0.6) !default;
+
+// Avatar
+$avatar-size-base: 32px !default;
+$avatar-size-lg: 40px !default;
+$avatar-size-sm: 24px !default;
+$avatar-font-size-base: 18px !default;
+$avatar-font-size-lg: 24px !default;
+$avatar-font-size-sm: 14px !default;
+$avatar-bg: #ccc !default;
+$avatar-color: #fff !default;
+$avatar-border-radius: $border-radius-base !default;

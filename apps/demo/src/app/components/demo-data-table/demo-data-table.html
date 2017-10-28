@@ -1,0 +1,29 @@
+<article>
+  <section class="markdown"><h1>Data Table 数据表格</h1>
+    <section class="markdown"><p>数据表格用于展示数据。</p>
+      <h2 id="何时使用"><span i18n="test1|test2@@when-to-use">何时使用</span>
+        <!-- <a class="anchor">#</a> -->
+      </h2>
+      <p>用于复杂数据展示。</p>
+    </section>
+    <h2>代码演示<i class="code-box-expand-trigger anticon anticon-appstore" title="展开全部代码"></i></h2>
+  </section>
+  <div tri-row [gutter]="8">
+    <div tri-col [span]="24">
+      <demo-code-box [title]="'基本数据'" id="components-button-demo-basic" [code]="DemoButtonTypeCode">
+        <tri-demo-data-table-basic demo></tri-demo-data-table-basic>
+        <div intro>
+          <p>在此写说明。</p>
+        </div>
+      </demo-code-box>
+    </div>
+    <div tri-col [span]="24">
+      <demo-code-box [title]="'基本数据'" id="components-button-demo-foo" [code]="DemoButtonTypeCode">
+        <tri-demo-data-table-basic demo></tri-demo-data-table-basic>
+        <div intro>
+          <p>在此写说明。</p>
+        </div>
+      </demo-code-box>
+    </div>
+  </div>
+</article>

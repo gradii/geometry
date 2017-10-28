@@ -1,0 +1,123 @@
+@import '../core/style/index';
+
+$collapse-prefix-cls: "#{$ant-prefix}-collapse";
+
+$collapse-header-bg: $background-color-base;
+$collapse-active-bg: $background-color-active;
+
+@mixin collapse-close() {
+  @include iconfont-size-under-12px(9px, 0);
+}
+@mixin collapse-open() {
+  @include iconfont-size-under-12px(9px, 90deg);
+}
+
+.#{$collapse-prefix-cls} {
+  background-color: $collapse-header-bg;
+  border-radius: $border-radius-base;
+  border: $border-width-base $border-style-base $border-color-base;
+  border-bottom: 0;
+
+   @at-root &> #{&}-item {
+    border-bottom: $border-width-base $border-style-base $border-color-base;
+
+     @at-root &:last-child {
+       @at-root &,
+        &> .#{$collapse-prefix-cls}-header {
+        border-radius: 0 0 $border-radius-base $border-radius-base;
+      }
+    }
+
+    > .#{$collapse-prefix-cls}-header {
+      line-height: 22px;
+      padding: 8px 0 8px 32px;
+      color: $heading-color;
+      cursor: pointer;
+      position: relative;
+      transition: all .3s;
+
+      .arrow {
+        @include collapse-close();
+        @include iconfont-mixin();
+        position: absolute;
+        color: $text-color-secondary;
+        display: inline-block;
+        font-weight: bold;
+        line-height: 40px;
+        vertical-align: middle;
+        transition: transform 0.24s;
+        top: 0;
+        left: 16px;
+         @at-root &:before {
+          content: "\E61F";
+        }
+      }
+    }
+  }
+
+   @at-root &-anim-active {
+    transition: height .2s $ease-out;
+  }
+
+   @at-root &-content {
+    overflow: hidden;
+    color: $text-color;
+    padding: 0 16px;
+    background-color: $component-background;
+
+     @at-root &> #{&}-box {
+      padding-top: 16px;
+      padding-bottom: 16px;
+    }
+
+     @at-root &-inactive {
+      display: none;
+    }
+  }
+
+   @at-root &-item:last-child {
+    > .#{$collapse-prefix-cls}-content {
+      border-radius: 0 0 $border-radius-base $border-radius-base;
+    }
+  }
+
+   @at-root &> #{&}-item > #{&}-header[aria-expanded="true"] {
+    .arrow {
+      @include collapse-open();
+    }
+  }
+
+   @at-root &-borderless {
+    background-color: $component-background;
+    border: 0;
+  }
+
+   @at-root &-borderless > #{&}-item-active {
+    border: 0;
+  }
+
+   @at-root &-borderless > #{&}-item > #{&}-content {
+    background-color: transparent;
+    border-top: $border-width-base $border-style-base $border-color-base;
+  }
+
+   @at-root &-borderless > #{&}-item > #{&}-header {
+    transition: all .3s;
+     @at-root &:hover {
+      background-color: $collapse-header-bg;
+    }
+  }
+
+   @at-root &#{&}-item-disabled > #{&}-header {
+     @at-root &,
+      &> .arrow {
+      cursor: not-allowed;
+      color: $disabled-color;
+      background-color: $disabled-bg;
+    }
+  }
+
+   @at-root &> #{&}-item:not(#{&}-item-disabled) > .#{$collapse-prefix-cls}-header:active {
+    background-color: $collapse-active-bg;
+  }
+}

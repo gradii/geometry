@@ -1,0 +1,14 @@
+{
+  "name": "@gradii/triangle",
+  "version": "0.0.0-PLACEHOLDER",
+  "description": "",
+  "main": "./_bundles/triangle.umd.js",
+  "module": "./_esm5/triangle.es5.js",
+  "es2015": "./_esm2015/triangle.js",
+  "typings": "./triangle.d.ts",
+  "publishConfig": {
+  },
+  "dependencies": {
+    "moment": "^2.19.3"
+  }
+}

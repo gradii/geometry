@@ -1,0 +1,108 @@
+<div class="page-wrapper">
+  <header id="header" class="clearfix">
+    <div tri-row>
+      <div tri-col [xs]="'24'" [sm]="'8'" [md]="'8'" [lg]="'4'">
+        <a id="logo" href>
+          <img alt="logo" src="./assets/img/zorro.svg">
+          <span>NG-ZORRO</span>
+        </a>
+      </div>
+      <div tri-col [xs]="'0'" [sm]="'16'" [md]="'16'" [lg]="'20'" class="nav nav-hide">
+        <div id="search-box">
+          <tri-select [placeHolder]="'搜索组件...'" [mode]="'combobox'" [(ngModel)]="searchComponent"
+                      (ngModelChange)="navigateToPage($event)">
+            <tri-option [value]="component.path" [label]="component.label+' - '+component.zh"
+                        *ngFor="let component of componentList"></tri-option>
+          </tri-select>
+        </div>
+        <div class="version">
+          <tri-select [placeHolder]="'搜索组件...'" [size]="'small'" [ngModel]="currentVersion"
+                      (ngModelChange)="navigateToVersion($event)">
+            <tri-option [value]="version" [label]="version" *ngFor="let version of versionList"></tri-option>
+          </tri-select>
+        </div>
+
+        <ul tri-menu [mode]="'horizontal'" id="nav">
+          <li tri-menu-item [selected]="true">
+            <a routerLink="/docs/angular/introduce"><span>组件</span></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+  <div class="main-wrapper">
+    <div tri-row>
+      <div tri-col [xs]="'24'" [sm]="'24'" [md]="'6'" [lg]="'4'">
+        <ul tri-menu [mode]="'inline'" class="aside-container">
+          <li *ngFor="let intro of routerList.intro" tri-menu-item routerLinkActive="ant-menu-item-selected"
+              style="padding-left: 24px;">
+            <a routerLink="{{intro.path}}">{{intro.label}}</a>
+          </li>
+          <li tri-submenu [open]="true">
+            <span title><h4>Components</h4></span>
+            <ul>
+              <li tri-menu-group *ngFor="let group of routerList.components">
+                <span title>{{group.name}}</span>
+                <ul>
+                  <li tri-menu-item routerLinkActive="ant-menu-item-selected" *ngFor="let component of group.children">
+                    <a routerLink="{{component.path}}">
+                      <span>{{component.label}}</span><span class="chinese">{{component.zh}}</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div tri-col class="main-container" [xs]="'24'" [sm]="'24'" [md]="'18'" [lg]="'20'">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+  <footer id="footer">
+    <ul>
+      <li><h2><i class="anticon anticon-github"></i> GitHub</h2>
+        <div>
+          <a target="_blank " href="https://github.com/NG-ZORRO/ng-zorro-antd"><span>源码仓库</span></a>
+        </div>
+        <div>
+          <a target="_blank " href="https://github.com/websemantics/awesome-ant-design">
+            <span>Awesome Ant Design</span></a>
+        </div>
+      </li>
+      <li><h2><i class="anticon anticon-link"></i> <span>相关站点</span></h2>
+        <div>
+          <a href="http://www.angular.cn" target="_blank">Angular</a>
+          <span> - </span><span>中文网</span></div>
+        <div>
+          <a href="https://cli.angular.io/" target="_blank">CLI</a>
+          <span> - </span><span>脚手架工具</span></div>
+        <div>
+          <a href="https://ant.design/docs/react/introduce-cn" target="_blank">Ant Design</a>
+          <span> - </span><span>React版本</span></div>
+        <div>
+          <a target="_blank" rel="noopener noreferrer" href="https://antv.alipay.com/">AntV</a>
+          <span> - </span><span>数据可视化</span></div>
+        <div>
+          <a target="_blank" rel="noopener noreferrer" href="http://library.ant.design/">AntD Library</a>
+          <span> - </span><span>Axure 部件库</span></div>
+      <li><h2>
+        <i class="anticon anticon-customer-service"></i> <span>社区</span>
+      </h2>
+        <div>
+          <a href="#/changelog"><span>更新记录</span></a>
+        </div>
+        <div>
+          <a target="_blank" rel="noopener noreferrer" href="http://ng.ant.design/issue-helper/#/new-issue">
+            <span>报告 Bug</span></a>
+        </div>
+      </li>
+      <li>
+        <h2>Copyright © 2017</h2>
+        <div><span>计算平台事业部 & 阿里云事业群 </span></div>
+        <div>@NG-ZORRO</div>
+      </li>
+    </ul>
+  </footer>
+</div>

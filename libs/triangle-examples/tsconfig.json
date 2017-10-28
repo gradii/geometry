@@ -1,0 +1,15 @@
+// Configuration for IDEs only.
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "..",
+    "outDir": "./dist/packages/all/examples",
+    "baseUrl": ".",
+    "paths": {
+      "@gradii/triangle/*": [
+        "../../dist/packages/triangle/src/*"
+      ]
+    }
+  },
+  "include": ["./**/*.ts"]
+}
