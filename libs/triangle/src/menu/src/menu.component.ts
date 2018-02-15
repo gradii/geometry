@@ -1,19 +1,11 @@
-import {
-  Component,
-  ViewEncapsulation,
-  HostBinding,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  AfterViewInit
-} from '@angular/core';
+import { AfterViewInit, Component, HostBinding, Input, OnChanges, SimpleChanges, ViewEncapsulation } from '@angular/core';
 
 export type Mode = 'vertical' | 'horizontal' | 'inline';
 
 @Component({
-  selector: '[tri-menu]',
+  selector     : '[tri-menu]',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <ng-content></ng-content>`
 })
 export class MenuComponent implements OnChanges, AfterViewInit {

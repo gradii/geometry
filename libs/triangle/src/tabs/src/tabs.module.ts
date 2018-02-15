@@ -1,13 +1,13 @@
+import { ObserversModule } from '@angular/cdk/observers';
+import { PortalModule } from '@angular/cdk/portal';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { TabsInkBarDirective } from './tabs-ink-bar.directive';
-import { TabComponent } from './tab.component';
-import { TabSetComponent } from './tabset.component';
-import { TabsNavComponent } from './tabs-nav.component';
 import { TabBodyComponent } from './tab-body.component';
 import { TabLabelDirective } from './tab-label.directive';
-import { CommonModule } from '@angular/common';
-import { PortalModule } from '@angular/cdk/portal';
-import { ObserversModule } from '@angular/cdk/observers';
+import { TabComponent } from './tab.component';
+import { TabsInkBarDirective } from './tabs-ink-bar.directive';
+import { TabsNavComponent } from './tabs-nav.component';
+import { TabSetComponent } from './tabset.component';
 
 /**
  *
@@ -47,7 +47,7 @@ import { ObserversModule } from '@angular/cdk/observers';
     TabsInkBarDirective,
     TabBodyComponent
   ],
-  exports: [TabComponent, TabSetComponent, TabsNavComponent, TabLabelDirective, TabsInkBarDirective, TabBodyComponent],
-  imports: [CommonModule, PortalModule, ObserversModule]
+  exports     : [TabComponent, TabSetComponent, TabsNavComponent, TabLabelDirective, TabsInkBarDirective, TabBodyComponent],
+  imports     : [CommonModule, PortalModule, ObserversModule]
 })
 export class TriTabsModule {}

@@ -4,6 +4,7 @@ export interface TransferItem {
   disabled?: boolean;
   checked?: boolean;
   _hiden?: boolean;
+
   /* tslint:disable-next-line:no-any */
   [key: string]: any;
 }

@@ -1,41 +1,41 @@
+import { Direction, Directionality } from '@angular/cdk/bidi';
 /** code from https://github.com/angular/material2 */
 import {
-  Component,
-  ElementRef,
   AfterContentChecked,
-  ContentChildren,
-  ViewEncapsulation,
-  Input,
   AfterContentInit,
+  Component,
+  ContentChild,
+  ContentChildren,
+  ElementRef,
+  HostBinding,
+  Input,
+  NgZone,
   Optional,
   QueryList,
-  NgZone,
   Renderer2,
-  ViewChild,
   TemplateRef,
-  ContentChild,
-  HostBinding
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
+import { fromEvent } from 'rxjs/observable/fromEvent';
+import { merge } from 'rxjs/observable/merge';
+import { of as observableOf } from 'rxjs/observable/of';
+import { auditTime } from 'rxjs/operator/auditTime';
+import { startWith } from 'rxjs/operator/startWith';
 import { Subscription } from 'rxjs/Subscription';
-import { TabsInkBarDirective } from './tabs-ink-bar.directive';
 import { TabLabelDirective } from './tab-label.directive';
+import { TabsInkBarDirective } from './tabs-ink-bar.directive';
 
 const EXAGGERATED_OVERSCROLL = 64;
 export type ScrollDirection = 'after' | 'before';
-import { of as observableOf } from 'rxjs/observable/of';
-import { merge } from 'rxjs/observable/merge';
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import { auditTime } from 'rxjs/operator/auditTime';
-import { startWith } from 'rxjs/operator/startWith';
-import { Direction, Directionality } from '@angular/cdk/bidi';
 
 /** duplicated defined https://github.com/angular/angular-cli/issues/2034 **/
 export type TabPositionMode = 'horizontal' | 'vertical';
 
 @Component({
-  selector: 'tri-tabs-nav',
+  selector     : 'tri-tabs-nav',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div style="float:right;" *ngIf="_tabBarExtraContent">
       <div class="ant-tabs-extra-content">
         <ng-template [ngTemplateOutlet]="_tabBarExtraContent">
@@ -131,12 +131,10 @@ export class TabsNavComponent implements AfterContentChecked, AfterContentInit {
     this._selectedIndex = value;
   }
 
-  constructor(
-    public _elementRef: ElementRef,
-    private _ngZone: NgZone,
-    private _renderer: Renderer2,
-    @Optional() private _dir: Directionality
-  ) {}
+  constructor(public _elementRef: ElementRef,
+              private _ngZone: NgZone,
+              private _renderer: Renderer2,
+              @Optional() private _dir: Directionality) {}
 
   _onContentChanges() {
     if (this.showPagination) {
@@ -177,7 +175,7 @@ export class TabsNavComponent implements AfterContentChecked, AfterContentInit {
     this._realignInkBar = this._ngZone.runOutsideAngular(() => {
       const dirChange = this._dir ? this._dir.change : observableOf(null);
       const resize =
-        typeof window !== 'undefined' ? auditTime.call(fromEvent(window, 'resize'), 10) : observableOf(null);
+              typeof window !== 'undefined' ? auditTime.call(fromEvent(window, 'resize'), 10) : observableOf(null);
 
       return startWith.call(merge(dirChange, resize), null).subscribe(() => {
         if (this.showPagination) {
@@ -313,9 +311,9 @@ export class TabsNavComponent implements AfterContentChecked, AfterContentInit {
   _alignInkBarToSelectedTab(): void {
     if (this.type === 'line') {
       const selectedLabelWrapper =
-        this._labelWrappers && this._labelWrappers.length
-          ? this._labelWrappers.toArray()[this.selectedIndex].elementRef.nativeElement
-          : null;
+              this._labelWrappers && this._labelWrappers.length
+                ? this._labelWrappers.toArray()[this.selectedIndex].elementRef.nativeElement
+                : null;
       if (this._inkBar) {
         this._inkBar.alignToElement(selectedLabelWrapper);
       }

@@ -1,25 +1,25 @@
 import {
-  Component,
-  ViewEncapsulation,
-  Input,
-  ElementRef,
   AfterViewInit,
-  EventEmitter,
-  Output,
-  ContentChild,
   ChangeDetectorRef,
-  TemplateRef,
-  OnInit,
+  Component,
+  ContentChild,
   ContentChildren,
-  QueryList
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  QueryList,
+  TemplateRef,
+  ViewEncapsulation
 } from '@angular/core';
 import { measureScrollbar } from '@gradii/triangle/util';
 import { ThDirective } from './th.directive';
 
 @Component({
-  selector: 'tri-table',
+  selector     : 'tri-table',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div
       class="ant-table-wrapper"
       [class.ant-table-empty]="data.length==0">
@@ -113,7 +113,7 @@ export class TableComponent implements AfterViewInit, OnInit {
   @Input() isPageIndexReset = true;
   @ContentChild('fixedHeader') fixedHeader: TemplateRef<any>;
 
-  @ContentChildren(ThDirective, { descendants: true })
+  @ContentChildren(ThDirective, {descendants: true})
   set setThs(value: QueryList<ThDirective>) {
     this.ths = value.toArray();
   }
@@ -219,7 +219,7 @@ export class TableComponent implements AfterViewInit, OnInit {
   ngOnInit() {
     const scrollbarWidth = measureScrollbar();
     this._headerBottomStyle = {
-      marginBottom: `-${scrollbarWidth}px`,
+      marginBottom : `-${scrollbarWidth}px`,
       paddingBottom: `0px`
     };
   }

@@ -4,17 +4,17 @@ export interface DraggableOptions {
   release?: Function;
 }
 
-const proxy = function(a, b) {
-  return function(e) {
+const proxy = function (a, b) {
+  return function (e) {
     return b(a(e));
   };
 };
 
-const bind = function(el, event, callback) {
+const bind = function (el, event, callback) {
   return el.addEventListener && el.addEventListener(event, callback);
 };
 
-const unbind = function(el, event, callback) {
+const unbind = function (el, event, callback) {
   return el.removeEventListener && el.removeEventListener(event, callback);
 };
 
@@ -23,25 +23,25 @@ const touchRegExp = /touch/;
 function normalizeEvent(e) {
   if (e.type.match(touchRegExp)) {
     return {
-      pageX: e.changedTouches[0].pageX,
-      pageY: e.changedTouches[0].pageY,
-      type: e.type,
+      pageX        : e.changedTouches[0].pageX,
+      pageY        : e.changedTouches[0].pageY,
+      type         : e.type,
       originalEvent: e
     };
   }
 
   return {
-    pageX: e.pageX,
-    pageY: e.pageY,
-    type: e.type,
-    ctrlKey: e.ctrlKey,
-    shiftKey: e.shiftKey,
-    altKey: e.altKey,
+    pageX        : e.pageX,
+    pageY        : e.pageY,
+    type         : e.type,
+    ctrlKey      : e.ctrlKey,
+    shiftKey     : e.shiftKey,
+    altKey       : e.altKey,
     originalEvent: e
   };
 }
 
-const noop = function() {};
+const noop = function () {};
 
 // 300ms is the usual mouse interval;
 // However, an underpowered mobile device under a heavy load may queue mouse events for a longer period.

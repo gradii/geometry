@@ -2,10 +2,12 @@ import { ContentChildren, Input, QueryList, TemplateRef } from '@angular/core';
 import { FooterTemplateDirective } from '../table-footer/footer-template.directive';
 import { HeaderTemplateDirective } from '../table-header/header-template.directive';
 
-export const isSpanColumn     = column => column.isSpanColumn;
-export const isCheckboxColumn = function (column) { return column.isCheckboxColumn; };
-const isColumnContainer       = column => column.isColumnGroup || isSpanColumn(column);
-export type AutoGenerateColumnPositon = 'start'|'middle'|'end';
+export const isSpanColumn = column => column.isSpanColumn;
+export const isCheckboxColumn = function (column) {
+  return column.isCheckboxColumn;
+};
+const isColumnContainer = column => column.isColumnGroup || isSpanColumn(column);
+export type AutoGenerateColumnPositon = 'start' | 'middle' | 'end';
 
 export class ColumnBase {
   public autoGenerateColumnPosition: AutoGenerateColumnPositon;
@@ -16,49 +18,45 @@ export class ColumnBase {
   minResizableWidth: number;
 
   @Input() title: string;
+  @Input() locked: boolean;
+  @Input() hidden: boolean;
+  @Input() media: string;
   @Input()
-           locked: boolean;
+  style: {
+    [key: string]: string;
+  };
   @Input()
-           hidden: boolean;
+  headerStyle: {
+    [key: string]: string;
+  };
   @Input()
-           media: string;
-  @Input()
-           style: {
-             [key: string]: string;
-           };
-  @Input()
-           headerStyle: {
-             [key: string]: string;
-           };
-  @Input()
-           footerStyle: {
-             [key: string]: string;
-           };
+  footerStyle: {
+    [key: string]: string;
+  };
   @Input('class')
-           cssClass: | string
-             | string[]
-             | Set<string>
-             | {
-             [key: string]: any;
-           };
+  cssClass: | string
+    | string[]
+    | Set<string>
+    | {
+    [key: string]: any;
+  };
   @Input()
-           headerClass: | string
-             | string[]
-             | Set<string>
-             | {
-             [key: string]: any;
-           };
+  headerClass: | string
+    | string[]
+    | Set<string>
+    | {
+    [key: string]: any;
+  };
   @Input()
-           footerClass: | string
-             | string[]
-             | Set<string>
-             | {
-             [key: string]: any;
-           };
+  footerClass: | string
+    | string[]
+    | Set<string>
+    | {
+    [key: string]: any;
+  };
   @ContentChildren(HeaderTemplateDirective, {descendants: false})
-           headerTemplates: QueryList<HeaderTemplateDirective>;
-  @ContentChildren(FooterTemplateDirective)
-           footerTemplate: FooterTemplateDirective;
+  headerTemplates: QueryList<HeaderTemplateDirective>;
+  @ContentChildren(FooterTemplateDirective) footerTemplate: FooterTemplateDirective;
   private _width;
 
   constructor(public parent?: ColumnBase) {

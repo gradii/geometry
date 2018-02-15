@@ -1,4 +1,4 @@
-import { Directive, Renderer2, ElementRef, NgZone, HostBinding, Input } from '@angular/core';
+import { Directive, ElementRef, HostBinding, Input, NgZone, Renderer2 } from '@angular/core';
 
 export type TabPositionMode = 'horizontal' | 'vertical';
 

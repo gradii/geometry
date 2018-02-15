@@ -1,10 +1,8 @@
-/* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed, ComponentFixtureAutoDetect } from '@angular/core/testing';
+import { TriButtonComponent, TriButtonGroupComponent, TriButtonModule } from '@gradii/triangle/button';
 import { Component, DebugElement } from '@angular/core';
+/* tslint:disable:no-unused-variable */
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { TriButtonModule } from '@gradii/triangle/button';
-import { TriButtonComponent } from '@gradii/triangle/button';
-import { TriButtonGroupComponent } from '@gradii/triangle/button';
 
 describe('TriButton', () => {
   let testComponent;
@@ -18,9 +16,9 @@ describe('TriButton', () => {
     beforeEach(
       async(() => {
         TestBed.configureTestingModule({
-          imports: [TriButtonModule],
+          imports     : [TriButtonModule],
           declarations: [TestApp],
-          providers: []
+          providers   : []
         }).compileComponents();
       })
     );
@@ -138,9 +136,9 @@ describe('TriButton', () => {
     beforeEach(
       async(() => {
         TestBed.configureTestingModule({
-          imports: [TriButtonModule],
+          imports     : [TriButtonModule],
           declarations: [TestAppDisabled],
-          providers: []
+          providers   : []
         }).compileComponents();
       })
     );
@@ -161,9 +159,9 @@ describe('TriButton', () => {
     beforeEach(
       async(() => {
         TestBed.configureTestingModule({
-          imports: [TriButtonModule],
+          imports     : [TriButtonModule],
           declarations: [TestAppGroup],
-          providers: []
+          providers   : []
         }).compileComponents();
       })
     );

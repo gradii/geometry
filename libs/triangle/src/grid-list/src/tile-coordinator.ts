@@ -6,8 +6,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {QueryList} from '@angular/core';
-import {GridTileComponent} from './grid-tile';
+import { QueryList } from '@angular/core';
+import { GridTileComponent } from './grid-tile';
 
 /**
  * Class for determining, from a list of tiles, the (row, col) position of each of those tiles
@@ -37,7 +37,9 @@ export class TileCoordinator {
   rowIndex: number = 0;
 
   /** Gets the total number of rows occupied by tiles */
-  get rowCount(): number { return this.rowIndex + 1; }
+  get rowCount(): number {
+    return this.rowIndex + 1;
+  }
 
   /** Gets the total span of rows occupied by tiles.
    * Ex: A list with 1 row that contains a tile with rowspan 2 will have a total rowspan of 2. */
@@ -76,8 +78,9 @@ export class TileCoordinator {
   /** Finds the next available space large enough to fit the tile. */
   private _findMatchingGap(tileCols: number): number {
     if (tileCols > this.tracker.length) {
-      throw Error(`tri-grid-list: tile with colspan ${tileCols} is wider than ` +
-                      `grid with cols="${this.tracker.length}".`);
+      throw Error(
+        `tri-grid-list: tile with colspan ${tileCols} is wider than ` + `grid with cols="${this.tracker.length}".`
+      );
     }
 
     // Start index is inclusive, end index is exclusive.

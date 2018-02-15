@@ -1,17 +1,16 @@
-import { Component, OnInit, ViewEncapsulation, Input, HostBinding, ContentChild, TemplateRef } from '@angular/core';
-
-import { trigger, style, transition, animate } from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { Component, ContentChild, HostBinding, Input, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'tri-badge',
+  selector     : 'tri-badge',
   encapsulation: ViewEncapsulation.None,
-  animations: [
+  animations   : [
     trigger('enterLeave', [
-      transition('void => *', [style({ opacity: 0 }), animate('0.3s cubic-bezier(0.12, 0.4, 0.29, 1.46)')]),
-      transition('* => void', [style({ opacity: 1 }), animate('0.3s cubic-bezier(0.12, 0.4, 0.29, 1.46)')])
+      transition('void => *', [style({opacity: 0}), animate('0.3s cubic-bezier(0.12, 0.4, 0.29, 1.46)')]),
+      transition('* => void', [style({opacity: 1}), animate('0.3s cubic-bezier(0.12, 0.4, 0.29, 1.46)')])
     ])
   ],
-  template: `
+  template     : `
     <ng-template *ngIf="content" [ngTemplateOutlet]="content"></ng-template>
     <span class="ant-badge-status-dot ant-badge-status-{{status}}" *ngIf="status"></span>
     <span class="ant-badge-status-text" *ngIf="badgeText">{{badgeText}}</span>

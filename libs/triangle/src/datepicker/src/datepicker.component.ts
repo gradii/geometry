@@ -1,26 +1,15 @@
-import {
-  Component,
-  ViewEncapsulation,
-  Input,
-  ElementRef,
-  forwardRef,
-  ChangeDetectorRef,
-  ViewChild,
-  HostBinding,
-  OnInit
-} from '@angular/core';
-import * as moment from 'moment';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { DropDownAnimation } from '@gradii/triangle/core';
+import { DEFAULT_DATEPICKER_POSITIONS, DropDownAnimation } from '@gradii/triangle/core';
 import { TimePickerInnerComponent } from '@gradii/triangle/time-picker';
 import { ConnectionPositionPair } from '@angular/cdk/overlay';
-import { DEFAULT_DATEPICKER_POSITIONS } from '@gradii/triangle/core';
+import { ChangeDetectorRef, Component, ElementRef, forwardRef, HostBinding, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import * as moment from 'moment';
 
 @Component({
-  selector: 'tri-datepicker',
+  selector     : 'tri-datepicker',
   encapsulation: ViewEncapsulation.None,
-  animations: [DropDownAnimation],
-  template: `
+  animations   : [DropDownAnimation],
+  template     : `
     <span style="display: block"
           (click)="_openCalendar()"
           cdkOverlayOrigin
@@ -187,11 +176,11 @@ import { DEFAULT_DATEPICKER_POSITIONS } from '@gradii/triangle/core';
         </div>
       </div>
     </ng-template>`,
-  providers: [
+  providers    : [
     {
-      provide: NG_VALUE_ACCESSOR,
+      provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => DatePickerComponent),
-      multi: true
+      multi      : true
     }
   ]
 })

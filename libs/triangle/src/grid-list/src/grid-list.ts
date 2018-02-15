@@ -1,20 +1,20 @@
+import { coerceToNumber, coerceToString } from '@gradii/triangle/util';
+import { Directionality } from '@angular/cdk/bidi';
 import {
-  Component,
-  ViewEncapsulation,
   AfterContentChecked,
-  OnInit,
-  Input,
-  ContentChildren,
-  QueryList,
-  ElementRef,
-  Optional,
   ChangeDetectionStrategy,
+  Component,
+  ContentChildren,
+  ElementRef,
+  Input,
+  OnInit,
+  Optional,
+  QueryList,
+  ViewEncapsulation
 } from '@angular/core';
 import { GridTileComponent } from './grid-tile';
 import { TileCoordinator } from './tile-coordinator';
-import { TileStyler, FitTileStyler, RatioTileStyler, FixedTileStyler } from './tile-styler';
-import { Directionality } from '@angular/cdk/bidi';
-import { coerceToNumber, coerceToString } from '@gradii/triangle/util';
+import { FitTileStyler, FixedTileStyler, RatioTileStyler, TileStyler } from './tile-styler';
 
 const TRI_FIT_MODE = 'fit';
 
@@ -26,11 +26,11 @@ const TRI_FIT_MODE = 'fit';
       <ng-content></ng-content>
     </div>`,
   host               : {
-    'class': 'ant-grid-list',
+    class: 'ant-grid-list'
   },
   changeDetection    : ChangeDetectionStrategy.OnPush,
   encapsulation      : ViewEncapsulation.None,
-  preserveWhitespaces: false,
+  preserveWhitespaces: false
 })
 export class GridListComponent implements OnInit, AfterContentChecked {
   /** Number of columns being rendered. */
@@ -57,15 +57,23 @@ export class GridListComponent implements OnInit, AfterContentChecked {
 
   /** Amount of columns in the grid list. */
   @Input()
-  get cols() { return this._cols; }
+  get cols() {
+    return this._cols;
+  }
 
-  set cols(value: any) { this._cols = coerceToNumber(value); }
+  set cols(value: any) {
+    this._cols = coerceToNumber(value);
+  }
 
   /** Size of the grid list's gutter in pixels. */
   @Input()
-  get gutterSize() { return this._gutter; }
+  get gutterSize() {
+    return this._gutter;
+  }
 
-  set gutterSize(value: any) { this._gutter = coerceToString(value); }
+  set gutterSize(value: any) {
+    this._gutter = coerceToString(value);
+  }
 
   /** Set internal representation of row height from the user-provided value. */
   @Input()
@@ -122,7 +130,7 @@ export class GridListComponent implements OnInit, AfterContentChecked {
 
   /** Computes and applies the size and position for all children grid tiles. */
   private _layoutTiles(): void {
-    const tracker   = new TileCoordinator(this.cols, this._tiles);
+    const tracker = new TileCoordinator(this.cols, this._tiles);
     const direction = this._dir ? this._dir.value : 'ltr';
     this._tileStyler.init(this.gutterSize, tracker, this.cols, direction);
 

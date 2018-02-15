@@ -1,6 +1,6 @@
+import { DropDownAnimation } from '@gradii/triangle/core';
 import { BACKSPACE, DOWN_ARROW, ENTER, LEFT_ARROW, RIGHT_ARROW, UP_ARROW } from '@angular/cdk/keycodes';
 import {
-  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -20,7 +20,6 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { DropDownAnimation } from '@gradii/triangle/core';
 
 const ESC = 27;
 
@@ -64,14 +63,15 @@ export interface CascaderOption {
   isLeaf?: boolean;
   parent?: CascaderOption;
   children?: CascaderOption[];
+
   [key: string]: any;
 }
 
 @Component({
-  selector: 'tri-cascader',
+  selector     : 'tri-cascader',
   encapsulation: ViewEncapsulation.None,
-  animations: [DropDownAnimation],
-  template: `
+  animations   : [DropDownAnimation],
+  template     : `
     <div
       cdkOverlayOrigin
       #origin="cdkOverlayOrigin"
@@ -139,15 +139,15 @@ export interface CascaderOption {
       </div>
     </ng-template>
   `,
-  providers: [
+  providers    : [
     {
-      provide: NG_VALUE_ACCESSOR,
+      provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => CascaderComponent),
-      multi: true
+      multi      : true
     }
   ],
-  host: {
-    'ant-cascader': 'true',
+  host         : {
+    'ant-cascader'       : 'true',
     'ant-cascader-picker': 'true'
   }
 })
@@ -166,6 +166,7 @@ export class CascaderComponent implements OnInit, OnDestroy, OnChanges, ControlV
   get _inputValue() {
     return this.__inputValue;
   }
+
   set _inputValue(inputValue) {
     this.__inputValue = inputValue;
     if (inputValue.length) {
@@ -321,7 +322,7 @@ export class CascaderComponent implements OnInit, OnDestroy, OnChanges, ControlV
 
   get _arrowCls(): any {
     return {
-      [`ant-cascader-picker-arrow`]: true,
+      [`ant-cascader-picker-arrow`]       : true,
       [`ant-cascader-picker-arrow-expand`]: this._popupVisible
     };
   }
@@ -336,23 +337,23 @@ export class CascaderComponent implements OnInit, OnDestroy, OnChanges, ControlV
     return {
       [`ant-cascader-input`]: 1,
       [`ant-input-disabled`]: this.disabled,
-      [`ant-input-lg`]: this.size === 'large',
-      [`ant-input-sm`]: this.size === 'small'
+      [`ant-input-lg`]      : this.size === 'large',
+      [`ant-input-sm`]      : this.size === 'small'
     };
   }
 
   get _menuCls(): any {
     return {
-      [`ant-cascader-menus`]: true,
+      [`ant-cascader-menus`]       : true,
       [`ant-cascader-menus-hidden`]: !this._popupVisible,
-      [`${this.popupClassName}`]: this.popupClassName
+      [`${this.popupClassName}`]   : this.popupClassName
     };
   }
 
   /** 获取菜单中列的样式 */
   get _columnCls(): any {
     return {
-      [`ant-cascader-menu`]: true,
+      [`ant-cascader-menu`]      : true,
       [`${this.columnClassName}`]: this.columnClassName
     };
   }
@@ -360,11 +361,11 @@ export class CascaderComponent implements OnInit, OnDestroy, OnChanges, ControlV
   /** 获取列中Option的样式 */
   _getOptionCls(option: CascaderOption, index: number): any {
     return {
-      [`ant-cascader-menu-item`]: true,
-      [`ant-cascader-menu-item-expand`]: !option.isLeaf,
-      [`ant-cascader-menu-item-active`]: this._isActiveOption(option, index),
+      [`ant-cascader-menu-item`]         : true,
+      [`ant-cascader-menu-item-expand`]  : !option.isLeaf,
+      [`ant-cascader-menu-item-active`]  : this._isActiveOption(option, index),
       [`ant-cascader-menu-item-disabled`]: option.disabled,
-      [`ant-cascader-menu-item-loading`]: option.loading
+      [`ant-cascader-menu-item-loading`] : option.loading
     };
   }
 
@@ -449,7 +450,7 @@ export class CascaderComponent implements OnInit, OnDestroy, OnChanges, ControlV
     // 设置当前控件的显示值
     this._displayLabel = this._displayRender.call(this, labels, selectedOptions);
     this._displayLabelIsTemplate = !(typeof this._displayLabel === 'string');
-    this._displayLabelContext = { labels, selectedOptions };
+    this._displayLabelContext = {labels, selectedOptions};
   }
 
   /** 由用户来定义点击后是否变更 */
@@ -622,7 +623,7 @@ export class CascaderComponent implements OnInit, OnDestroy, OnChanges, ControlV
       new Promise((resolve, reject) => {
         this.load.emit({
           option: null,
-          index: -1,
+          index : -1,
           resolve,
           reject
         });
@@ -717,7 +718,7 @@ export class CascaderComponent implements OnInit, OnDestroy, OnChanges, ControlV
     // trigger `nzSelect` event
     this.select.emit({
       option: option,
-      index: index
+      index : index
     });
 
     // load children directly
@@ -730,7 +731,7 @@ export class CascaderComponent implements OnInit, OnDestroy, OnChanges, ControlV
       new Promise((resolve, reject) => {
         this.load.emit({
           option: option,
-          index: index,
+          index : index,
           resolve,
           reject
         });
@@ -835,6 +836,7 @@ export class CascaderComponent implements OnInit, OnDestroy, OnChanges, ControlV
   _moveUp(): void {
     this._moveUpOrDown(true);
   }
+
   _moveDown(): void {
     this._moveUpOrDown(false);
   }

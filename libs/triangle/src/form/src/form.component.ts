@@ -7,9 +7,9 @@ import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
     <ng-content></ng-content>
   `,
   host         : {
-    '[class.ant-form-horizontal]': '_type == "horizontal"',
-    '[class.ant-form-vertical]'  : '_type == "vertical"',
-    '[class.ant-form-inline]'    : '_type == "inline"',
+    '[class.ant-form-horizontal]': '_color == "horizontal"',
+    '[class.ant-form-vertical]'  : '_color == "vertical"',
+    '[class.ant-form-inline]'    : '_color == "inline"',
   }
 })
 export class FormComponent implements OnInit {

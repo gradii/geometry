@@ -1,5 +1,5 @@
-import { SortDescriptor } from '@gradii/triangle/data-query';
-import { GroupDescriptor } from '@gradii/triangle/data-query';
+import { GroupDescriptor, SortDescriptor } from '@gradii/triangle/data-query';
+
 export interface PageChangeEvent {
   skip: number;
 

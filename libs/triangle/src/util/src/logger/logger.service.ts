@@ -1,4 +1,4 @@
-import { Injectable, InjectionToken, Inject, Provider, SkipSelf, Optional } from '@angular/core';
+import { Inject, Injectable, InjectionToken, Optional, Provider, SkipSelf } from '@angular/core';
 
 @Injectable()
 export class LoggerService {
@@ -48,7 +48,7 @@ export function LOGGER_SERVICE_PROVIDER_FACTORY(exist, loggerState) {
 }
 
 export const LOGGER_SERVICE_PROVIDER: Provider = {
-  provide: LoggerService,
+  provide   : LoggerService,
   useFactory: LOGGER_SERVICE_PROVIDER_FACTORY,
-  deps: [[new Optional(), new SkipSelf(), LoggerService], TRI_LOGGER_STATE]
+  deps      : [[new Optional(), new SkipSelf(), LoggerService], TRI_LOGGER_STATE]
 };

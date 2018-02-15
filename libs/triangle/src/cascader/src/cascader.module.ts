@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
-import { CascaderComponent } from './cascader.component';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { OverlayModule } from '@angular/cdk/overlay';
 import { TriInputModule } from '@gradii/triangle/inputs';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CascaderComponent } from './cascader.component';
 import { CascaderDirective } from './cascader.directive';
 
 /**
@@ -40,8 +40,8 @@ import { CascaderDirective } from './cascader.directive';
  * <!-- example(cascader-reactive-form) -->
  */
 @NgModule({
-  imports: [CommonModule, FormsModule, OverlayModule, TriInputModule],
+  imports     : [CommonModule, FormsModule, OverlayModule, TriInputModule],
   declarations: [CascaderComponent, CascaderDirective],
-  exports: [CascaderComponent, CascaderDirective]
+  exports     : [CascaderComponent, CascaderDirective]
 })
 export class TriCascaderModule {}

@@ -1,17 +1,15 @@
 import { Directive, HostBinding, HostListener, Input } from '@angular/core';
-import { RadioOption } from './radio.component';
 import { RadioGroupDirective } from './radio-group.directive';
-
+import { RadioOption } from './radio.component';
 
 @Directive({
-  selector: '[tri-radio-tile], [triRadioTile]' 
+  selector: '[tri-radio-tile], [triRadioTile]'
 })
 export class RadioTileDirective implements RadioOption {
-
   _label: string;
   _value: string;
-  _checked  = false;
-  _focused  = false;
+  _checked = false;
+  _focused = false;
   _disabled = false;
 
   @Input()
@@ -23,8 +21,7 @@ export class RadioTileDirective implements RadioOption {
     this._label = value;
   }
 
-  @Input()
-  toggleable: boolean;
+  @Input() toggleable: boolean;
 
   @Input()
   @HostBinding('class.ant-radio-wrapper-checked')
@@ -80,10 +77,10 @@ export class RadioTileDirective implements RadioOption {
   onClick(e) {
     e.preventDefault();
     if (!this._disabled) {
-      if(this.toggleable && this._checked) {
+      if (this.toggleable && this._checked) {
         this._checked = false;
         this.radioGroup.selectRadio(null);
-      }else{
+      } else {
         this._checked = true;
         this.radioGroup.selectRadio(this);
       }

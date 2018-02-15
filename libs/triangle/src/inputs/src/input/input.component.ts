@@ -1,3 +1,4 @@
+import { calculateNodeHeight } from '@gradii/triangle/util';
 import {
   AfterViewInit,
   Component,
@@ -8,13 +9,11 @@ import {
   HostListener,
   Input,
   Output,
-  Renderer2,
   TemplateRef,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { calculateNodeHeight } from '@gradii/triangle/util';
 
 export interface AutoSizeType {
   minRows?: number;
@@ -96,16 +95,16 @@ export type SizeType = 'large' | 'small' | 'default';
 export class InputComponent implements ControlValueAccessor, AfterViewInit {
   // _el: HTMLElement;
   _value: string;
-  _size: SizeType                   = 'default';
-  _prefixCls                        = 'ant-input';
-  _composing                        = false;
+  _size: SizeType = 'default';
+  _prefixCls = 'ant-input';
+  _composing = false;
   _classMap;
-  _disabled                         = false;
-  _readonly                         = false;
+  _disabled = false;
+  _readonly = false;
   _autosize: boolean | AutoSizeType = true;
 
   // ngModel Access
-  onChange: any  = Function.prototype;
+  onChange: any = Function.prototype;
   onTouched: any = Function.prototype;
 
   @Input() placeHolder: string;
@@ -189,7 +188,6 @@ export class InputComponent implements ControlValueAccessor, AfterViewInit {
    * 自适应内容高度，可设置为 true|false 或对象： `{{'{ minRows: 2, maxRows: 6 }'}}`
    */
   set autosize(value: boolean | AutoSizeType) {
-
     this._autosize = <boolean | AutoSizeType>value;
 
     if (this._autosize) {
@@ -279,13 +277,13 @@ export class InputComponent implements ControlValueAccessor, AfterViewInit {
   // }
 
   resizeTextarea() {
-    const textAreaRef           = this.textAreaRef.nativeElement;
+    const textAreaRef = this.textAreaRef.nativeElement;
     // eliminate jitter
-    textAreaRef.style.height    = 'auto';
-    const maxRows               = this.autosize ? (this.autosize as AutoSizeType).maxRows || null : null;
-    const minRows               = this.autosize ? (this.autosize as AutoSizeType).minRows || null : null;
-    const textareaStyles        = calculateNodeHeight(textAreaRef, false, minRows, maxRows);
-    textAreaRef.style.height    = `${textareaStyles.height}px`;
+    textAreaRef.style.height = 'auto';
+    const maxRows = this.autosize ? (this.autosize as AutoSizeType).maxRows || null : null;
+    const minRows = this.autosize ? (this.autosize as AutoSizeType).minRows || null : null;
+    const textareaStyles = calculateNodeHeight(textAreaRef, false, minRows, maxRows);
+    textAreaRef.style.height = `${textareaStyles.height}px`;
     textAreaRef.style.overflowY = textareaStyles.overflowY;
   }
 

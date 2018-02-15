@@ -1,9 +1,9 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'tri-slider-marks',
+  selector     : 'tri-slider-marks',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div [class]="className">
       <span *ngFor="let attr of attrs; trackBy: trackById" [ngClass]="attr.classes" [ngStyle]="attr.style" [innerHTML]="attr.label"></span>
     </div>
@@ -31,44 +31,44 @@ export class SliderMarksComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    const { vertical, className, marksArray, min, max, lowerBound, upperBound } = this;
+    const {vertical, className, marksArray, min, max, lowerBound, upperBound} = this;
     const range = max - min;
     this.attrs = marksArray.map(mark => {
-      const { value, offset, config } = mark;
+      const {value, offset, config} = mark;
       // calc styles
       let label = config,
-        style;
+          style;
       if (vertical) {
         style = {
           marginBottom: '-50%',
-          bottom: `${(value - min) / range * 100}%`
+          bottom      : `${(value - min) / range * 100}%`
         };
       } else {
         const marksCount = marksArray.length,
-          unit = 100 / (marksCount - 1),
-          markWidth = unit * 0.9;
+              unit       = 100 / (marksCount - 1),
+              markWidth  = unit * 0.9;
         style = {
-          width: `${markWidth}%`,
+          width     : `${markWidth}%`,
           marginLeft: `${-markWidth / 2}%`,
-          left: `${(value - min) / range * 100}%`
+          left      : `${(value - min) / range * 100}%`
         };
       }
       // custom configuration
       if (typeof config === 'object') {
         label = config.label;
         if (config.style) {
-          style = { ...style, ...config.style };
+          style = {...style, ...config.style};
         }
       }
       return {
-        id: value,
-        value: value,
-        offset: offset,
+        id     : value,
+        value  : value,
+        offset : offset,
         classes: {
           [`${className}-text`]: true
         },
-        style: style,
-        label: label
+        style  : style,
+        label  : label
       };
     }); // END - map
     this.togglePointActive();
@@ -79,11 +79,11 @@ export class SliderMarksComponent implements OnInit, OnChanges {
   }
 
   togglePointActive() {
-    const { className, attrs, lowerBound, upperBound, included } = this;
+    const {className, attrs, lowerBound, upperBound, included} = this;
     if (attrs && lowerBound !== null && upperBound !== null) {
       attrs.forEach(attr => {
-        const value = attr.value,
-          isActive = (!included && value === upperBound) || (included && value <= upperBound && value >= lowerBound);
+        const value    = attr.value,
+              isActive = (!included && value === upperBound) || (included && value <= upperBound && value >= lowerBound);
         attr.classes[`${className}-text-active`] = isActive;
       });
     }
@@ -95,9 +95,9 @@ export class SliderMarksComponent implements OnInit, OnChanges {
 export type Mark =
   | string
   | {
-      style: Object;
-      label: string;
-    };
+  style: Object;
+  label: string;
+};
 
 export class Marks {
   number: Mark;

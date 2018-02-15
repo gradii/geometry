@@ -1,17 +1,18 @@
-import { Component, Input, OnChanges } from '@angular/core';
 import { GroupDescriptor } from '@gradii/triangle/data-query';
-import { ChangeNotificationService } from '../service/change-notification.service';
+import { isPresent } from '@gradii/triangle/util';
+import { Component, Input, OnChanges } from '@angular/core';
 import { ColumnBase, isCheckboxColumn, isSpanColumn } from '../columns/column-base';
-import { columnsSpan, columnsToRender } from '../helper/column-common';
 import { GroupFooterItem, GroupItem, Item } from '../data-collection/data.iterators';
-import { DetailTemplateDirective } from '../table-shared/detail-template.directive';
+import { NoRecordsTemplateDirective } from '../directive/no-records-template.directive';
+import { GroupsService } from '../grouping/groups.service';
+import { columnsSpan, columnsToRender } from '../helper/column-common';
+import { RowClassFn } from '../row-class';
+import { SelectableSettings } from '../selection/selectable-settings';
+import { ChangeNotificationService } from '../service/change-notification.service';
 import { DetailsService } from '../service/details.service';
 import { EditService } from '../service/edit.service';
-import { GroupsService } from '../grouping/groups.service';
-import { NoRecordsTemplateDirective } from '../directive/no-records-template.directive';
-import { RowClassFn } from '../row-class';
-import { isChanged, isPresent } from '../utils';
-import { SelectableSettings } from '../selection/selectable-settings';
+import { DetailTemplateDirective } from '../table-shared/detail-template.directive';
+import { isChanged } from '../utils';
 
 @Component({
   selector: '[triGridTableBody]',
@@ -198,18 +199,18 @@ export class TableBodyComponent implements OnChanges {
               groupsService: GroupsService,
               changeNotification: ChangeNotificationService,
               editService: EditService) {
-    this.detailsService      = detailsService;
-    this.groupsService       = groupsService;
-    this.changeNotification  = changeNotification;
-    this.editService         = editService;
-    this.columns             = [];
-    this.groups              = [];
-    this.skip                = 0;
-    this.noRecordsText       = '没有记录';
+    this.detailsService = detailsService;
+    this.groupsService = groupsService;
+    this.changeNotification = changeNotification;
+    this.editService = editService;
+    this.columns = [];
+    this.groups = [];
+    this.skip = 0;
+    this.noRecordsText = '没有记录';
     this.skipGroupDecoration = false;
-    this.showGroupFooters    = false;
-    this.lockedColumnsCount  = 0;
-    this.rowClass            = () => null;
+    this.showGroupFooters = false;
+    this.lockedColumnsCount = 0;
+    this.rowClass = () => null;
   }
 
   get newDataItem() {
@@ -297,10 +298,10 @@ export class TableBodyComponent implements OnChanges {
   }
 
   isSelectableSingle(): boolean {
-    return this.isSelectable() && (this.selectable as SelectableSettings).mode === 'single'
+    return this.isSelectable() && (this.selectable as SelectableSettings).mode === 'single';
   }
 
   isSelectableMultiple(): boolean {
-    return this.isSelectable() && (this.selectable as SelectableSettings).mode === 'multiple'
+    return this.isSelectable() && (this.selectable as SelectableSettings).mode === 'multiple';
   }
 }

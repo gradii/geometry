@@ -1,7 +1,5 @@
-import { getIterator, itemAt } from './data.iterators';
 import { DataResultIterator } from './data-result-iterator';
-
-
+import { itemAt } from './data.iterators';
 
 export class DataCollection {
   private accessor;

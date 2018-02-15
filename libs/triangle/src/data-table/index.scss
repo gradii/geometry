@@ -162,10 +162,10 @@
   border-width: 0 0 0 1px;
 }
 
-.ant-grid[dir="rtl"] .ant-group-indicator .ant-btn.ant-bare,
-.ant-grid[dir="rtl"] .ant-drag-clue .ant-btn.ant-bare,
-.ant-rtl .ant-grid .ant-group-indicator .ant-btn.ant-bare,
-.ant-rtl .ant-grid .ant-drag-clue .ant-btn.ant-bare {
+.ant-grid[dir="rtl"] .ant-group-indicator .ant-button.ant-bare,
+.ant-grid[dir="rtl"] .ant-drag-clue .ant-button.ant-bare,
+.ant-rtl .ant-grid .ant-group-indicator .ant-button.ant-bare,
+.ant-rtl .ant-grid .ant-drag-clue .ant-button.ant-bare {
   margin-left: -2px;
   margin-right: 8px;
 }
@@ -297,11 +297,11 @@
   display: block;
 }
 
-.ant-grid-toolbar .ant-btn {
+.ant-grid-toolbar .ant-button {
   vertical-align: middle;
 }
 
-.ant-grid-toolbar .ant-btn + .ant-btn {
+.ant-grid-toolbar .ant-button + .ant-button {
   margin-left: 4px;
 }
 
@@ -330,9 +330,9 @@
 }
 
 .ant-group-indicator .ant-link,
-.ant-group-indicator .ant-btn.ant-bare,
+.ant-group-indicator .ant-button.ant-bare,
 .ant-drag-clue .ant-link,
-.ant-drag-clue .ant-btn.ant-bare {
+.ant-drag-clue .ant-button.ant-bare {
   padding: 0;
   border-width: 0;
   display: inline-flex;
@@ -345,8 +345,8 @@
   margin-right: 4px;
 }
 
-.ant-group-indicator .ant-btn.ant-bare,
-.ant-drag-clue .ant-btn.ant-bare {
+.ant-group-indicator .ant-button.ant-bare,
+.ant-drag-clue .ant-button.ant-bare {
   margin-left: 8px;
   margin-right: -2px;
   padding: 0;
@@ -355,14 +355,14 @@
   opacity: .5;
 }
 
-.ant-group-indicator .ant-btn.ant-bare::before, .ant-group-indicator .ant-btn.ant-bare::after,
-.ant-drag-clue .ant-btn.ant-bare::before,
-.ant-drag-clue .ant-btn.ant-bare::after {
+.ant-group-indicator .ant-button.ant-bare::before, .ant-group-indicator .ant-button.ant-bare::after,
+.ant-drag-clue .ant-button.ant-bare::before,
+.ant-drag-clue .ant-button.ant-bare::after {
   display: none;
 }
 
-.ant-group-indicator .ant-btn.ant-bare:hover,
-.ant-drag-clue .ant-btn.ant-bare:hover {
+.ant-group-indicator .ant-button.ant-bare:hover,
+.ant-drag-clue .ant-button.ant-bare:hover {
   opacity: 1;
 }
 
@@ -572,12 +572,12 @@ div.ant-grid-footer {
   width: 100%;
 }
 
-.ant-filtercell > span .ant-btn {
+.ant-filtercell > span .ant-button {
   visibility: visible;
   pointer-events: all;
 }
 
-.ant-filtercell > span .ant-btn,
+.ant-filtercell > span .ant-button,
 .ant-filtercell > span .ant-dropdown-operator {
   margin-left: 4px;
 }
@@ -586,12 +586,12 @@ div.ant-grid-footer {
   width: auto;
 }
 
-.ant-filtercell .ant-filtercell-operator > .ant-btn.ant-clear-button-visible {
+.ant-filtercell .ant-filtercell-operator > .ant-button.ant-clear-button-visible {
   visibility: visible;
   height: calc(10px + 1.42857em);
 }
 
-.ant-filtercell .ant-filtercell-operator > .ant-btn:not(.ant-clear-button-visible) {
+.ant-filtercell .ant-filtercell-operator > .ant-button:not(.ant-clear-button-visible) {
   visibility: hidden;
   pointer-events: none;
 }
@@ -652,7 +652,7 @@ div.ant-grid-footer {
   flex: 1;
 }
 
-.ant-grid-content .ant-btn {
+.ant-grid-content .ant-button {
   vertical-align: middle;
   margin: 0 .16em;
 }
@@ -667,12 +667,12 @@ div.ant-grid-footer {
   text-overflow: clip;
 }
 
-//.ant-grid-edit-row .ant-widget, .ant-grid-edit-row .ant-block,
-//.ant-grid-edit-row .ant-btn,
-//.ant-grid-edit-row .ant-textbox,
-//.ant-grid-edit-row .ant-input.ant-textbox {
-  //height: auto;
-//}
+.ant-grid-edit-row .ant-widget, .ant-grid-edit-row .ant-block,
+.ant-grid-edit-row .ant-button,
+.ant-grid-edit-row .ant-textbox,
+.ant-grid-edit-row .ant-input.ant-textbox {
+  height: auto;
+}
 
 .ant-grid-edit-row .ant-edit-cell {
   padding-top: 0;
@@ -706,7 +706,7 @@ div.ant-grid-footer {
 .ant-grid-edit-row td > .ant-textbox,
 .ant-grid-edit-row td > .ant-widget,
 .ant-grid-edit-row td > .ant-block,
-.ant-command-cell > .ant-btn,
+.ant-command-cell > .ant-button,
 .ant-edit-cell > .ant-textbox,
 .ant-edit-cell > .ant-widget,
 .ant-edit-cell > .ant-block {
@@ -839,7 +839,7 @@ div.ant-grid-footer {
   padding: 0.5em 1em;
 }
 
-.ant-filter-menu > div > div > .ant-btn {
+.ant-filter-menu > div > div > .ant-button {
   margin: 0.5em 1% 0;
   width: 48%;
   box-sizing: border-box;
@@ -863,7 +863,7 @@ div.ant-grid-footer {
   margin: 1em -1em -0.5em;
 }
 
-.ant-filter-menu .ant-action-buttons .ant-btn {
+.ant-filter-menu .ant-action-buttons .ant-button {
   margin: 0;
 }
 

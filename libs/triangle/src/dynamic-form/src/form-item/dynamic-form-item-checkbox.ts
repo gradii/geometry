@@ -1,23 +1,15 @@
-import { DynamicFormItem } from '../dynamic-form-item';
-import { DynamicFormItemArgs } from '../dynamic-form-item';
+import { DynamicFormItem, DynamicFormItemArgs } from '../dynamic-form-item';
 
 export interface DynamicFormItemCheckboxArgs extends DynamicFormItemArgs {
-  span?: string
+  span?: string;
 }
 
 export class DynamicFormItemCheckbox extends DynamicFormItem {
-
   public type = 'checkbox';
 
   public span: string;
 
-  public constructor({
-                       label,
-                       value,
-                       name,
-                       span,
-                       validatorOrOpts
-                     }: DynamicFormItemCheckboxArgs) {
+  public constructor({label, value, name, span, validatorOrOpts}: DynamicFormItemCheckboxArgs) {
     super({
       label,
       value,

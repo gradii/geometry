@@ -1,5 +1,6 @@
 export class PreventableEvent {
   private prevented;
+
   constructor() {
     this.prevented = false;
   }

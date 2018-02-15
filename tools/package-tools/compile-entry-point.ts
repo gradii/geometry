@@ -2,9 +2,10 @@ import {join, resolve as resolvePath} from 'path';
 import {spawn} from 'child_process';
 import {writeFileSync, readFileSync} from 'fs';
 import {sync as glob} from 'glob';
-import {red} from 'chalk';
 import {BuildPackage} from './build-package';
 import {existsSync} from 'fs';
+
+const red = require('chalk').red;
 
 /** Incrementing ID counter. */
 let nextId = 0;
@@ -38,7 +39,7 @@ export async function compileEntryPoint(buildPackage: BuildPackage, tsconfigName
     childProcess.on('exit', (exitCode: number) => exitCode === 0 ? resolve() : reject());
   })
     .catch(() => {
-      const error = red(`Failed to compile ${secondaryEntryPoint} using ${entryPointTsconfigPath}`);
+      const error = red(`Failed to compile ${secondaryEntryPoint} using ${entryPointTsconfigPath}\ncompile command "ngc ${ngcFlags.join(' ')}"`);
       console.error(error);
     });
 }

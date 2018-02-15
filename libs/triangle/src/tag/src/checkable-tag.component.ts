@@ -1,23 +1,23 @@
-import {
-  Component,
-  OnInit,
-  AfterViewInit,
-  ViewEncapsulation,
-  Input,
-  ElementRef,
-  Renderer2,
-  HostListener,
-  HostBinding,
-  Output,
-  EventEmitter
-} from '@angular/core';
 import { TagAnimation } from '@gradii/triangle/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+  Renderer2,
+  ViewEncapsulation
+} from '@angular/core';
 
 @Component({
-  selector: 'tri-checkable-tag',
+  selector     : 'tri-checkable-tag',
   encapsulation: ViewEncapsulation.None,
-  animations: [TagAnimation],
-  template: `
+  animations   : [TagAnimation],
+  template     : `
     <span *ngIf="!_closed"
           class="ant-tag ant-tag-checkable"
           [class.ant-tag-pink]="color=='pink'"

@@ -43,3 +43,7 @@ testem.log
 Thumbs.db
 /.gitconfig
 /combined.log
+
+#npm
+yarn.lock
+package.lock.json

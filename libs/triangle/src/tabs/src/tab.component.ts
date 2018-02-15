@@ -1,16 +1,5 @@
+import { Component, ContentChild, EventEmitter, HostBinding, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { TabSetComponent } from './tabset.component';
-import {
-  Component,
-  HostBinding,
-  ContentChild,
-  Output,
-  EventEmitter,
-  TemplateRef,
-  Input,
-  ViewChild,
-  OnDestroy,
-  OnInit
-} from '@angular/core';
 
 @Component({
   selector: 'tri-tab',
@@ -19,7 +8,7 @@ import {
       <ng-content></ng-content>
     </ng-template>
   `,
-  styles: []
+  styles  : []
 })
 export class TabComponent implements OnDestroy, OnInit {
   position: number | null = null;

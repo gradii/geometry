@@ -1,25 +1,26 @@
-import { Component, ContentChild, Host, Input, Optional, SkipSelf, TemplateRef } from '@angular/core';
-import { AutoGenerateColumnPositon, ColumnBase } from './column-base';
+import { isPresent } from '@gradii/triangle/util';
+import { Component, ContentChild, forwardRef, Host, Input, Optional, SkipSelf, TemplateRef } from '@angular/core';
 import { CellTemplateDirective } from '../directive/cell-template.directive';
 import { EditTemplateDirective } from '../directive/edit-template.directive';
-import { FilterCellTemplateDirective } from '../filtering/filter-cell-template.directive';
+import { FilterMenuTemplateDirective } from '../filtering/filter-menu/filter-menu-template.directive';
+import { FilterCellTemplateDirective } from '../filtering/filter-row/filter-cell-template.directive';
 import { GroupFooterTemplateDirective } from '../grouping/group-footer-template.directive';
 import { GroupHeaderTemplateDirective } from '../grouping/group-header-template.directive';
 import { ColumnSortSettings } from '../helper/sort-settings';
-import { isPresent } from '../utils';
+import { AutoGenerateColumnPositon, ColumnBase } from './column-base';
 
 export function isColumnComponent(column) {
   return isPresent(column.field);
 }
 
 @Component({
+  selector : 'tri-data-table-column',
   providers: [
     {
       provide    : ColumnBase,
-      useExisting: ColumnComponent // tslint:disable-line:no-forward-ref
+      useExisting: forwardRef(() => ColumnComponent)
     }
   ],
-  selector : 'tri-data-table-column',
   template : ''
 })
 export class ColumnComponent extends ColumnBase {
@@ -28,8 +29,8 @@ export class ColumnComponent extends ColumnBase {
   @Input() field: string;
   @Input() format: string;
   @Input() sortable: boolean | ColumnSortSettings;
-  @Input() editor: 'text' | 'numeric' | 'date' | 'boolean';
-  @Input() filter: 'text' | 'numeric' | 'boolean' | 'date';
+  @Input() editor: 'text' | 'numeric' | 'date' | 'boolean' | string;
+  @Input() filter: 'text' | 'numeric' | 'boolean' | 'date' | string;
   @Input() filterable: boolean;
   @Input() editable: boolean;
   @ContentChild(CellTemplateDirective) cellTemplate: CellTemplateDirective;
@@ -37,6 +38,7 @@ export class ColumnComponent extends ColumnBase {
   @ContentChild(GroupFooterTemplateDirective) groupFooterTemplate: GroupFooterTemplateDirective;
   @ContentChild(EditTemplateDirective) editTemplate: EditTemplateDirective;
   @ContentChild(FilterCellTemplateDirective) filterCellTemplate: FilterCellTemplateDirective;
+  @ContentChild(FilterMenuTemplateDirective) filterMenuTemplate: FilterMenuTemplateDirective;
 
   constructor(@SkipSelf()
               @Host()
@@ -63,6 +65,10 @@ export class ColumnComponent extends ColumnBase {
 
   get filterCellTemplateRef(): TemplateRef<any> {
     return this.filterCellTemplate ? this.filterCellTemplate.templateRef : undefined;
+  }
+
+  get filterMenuTemplateRef(): TemplateRef<any> {
+    return this.filterMenuTemplate ? this.filterMenuTemplate.templateRef : undefined;
   }
 
   get displayTitle(): string {

@@ -1,15 +1,14 @@
-import { DynamicFormItem } from './dynamic-form-item';
 import { FormGroup } from '@angular/forms';
+import { DynamicFormItem } from './dynamic-form-item';
 
 export class FormSchema {
-
   private _dynamicFormItemList = [];
 
   private _formGroup: FormGroup;
 
   public constructor(formSchema: DynamicFormItem[] = []) {
     this._dynamicFormItemList = formSchema;
-    this._formGroup           = this.generateFormGroup();
+    this._formGroup = this.generateFormGroup();
   }
 
   public get formGroup() {
@@ -32,7 +31,7 @@ export class FormSchema {
   }
 
   public removeFormItem(formName) {
-    this._dynamicFormItemList = this._dynamicFormItemList.filter(formItem => formName !== formItem.name)
+    this._dynamicFormItemList = this._dynamicFormItemList.filter(formItem => formName !== formItem.name);
   }
 
   public * [Symbol.iterator]() {

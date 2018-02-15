@@ -1,35 +1,29 @@
-import {
-  Component,
-  ViewEncapsulation,
-  Input,
-  ElementRef,
-  HostListener,
-  AfterContentInit,
-  Renderer2
-} from '@angular/core';
+import { AfterContentInit, Component, ElementRef, HostListener, Input, Renderer2, ViewEncapsulation } from '@angular/core';
 
-export type ButtonType = 'primary' | 'dashed' | 'danger';
+export type ButtonColor = 'primary' | 'warning' | 'success' | 'dashed' | 'danger';
 export type ButtonShape = 'circle' | null;
 export type ButtonSize = 'small' | 'large' | 'default';
 
 @Component({
-  selector: 'tri-button, [triButton], [tri-button]',
+  selector     : 'tri-button, [triButton], [tri-button]',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <i class="anticon anticon-spin anticon-loading" style="display: inline-block" *ngIf="loading"></i>
     <ng-content></ng-content>
   `,
-  host: {
-    '[class.ant-btn]': 'true',
-    '[class.ant-btn-primary]': 'type == "primary"',
-    '[class.ant-btn-dashed]': 'type == "dashed"',
-    '[class.ant-btn-danger]': 'type == "danger"',
-    '[class.ant-btn-circle]': 'type == "circle"',
-    '[class.ant-btn-lg]': 'size == "large"',
-    '[class.ant-btn-sm]': 'size == "small"',
-    '[class.ant-btn-loading]': 'loading',
-    '[class.ant-btn-clicked]': '_clicked',
-    '[class.ant-btn-icon-only]': '_iconOnly',
+  host         : {
+    '[class.ant-btn]'                 : 'true',
+    '[class.ant-btn-primary]'         : '_color === "primary"',
+    '[class.ant-btn-dashed]'          : '_color === "dashed"',
+    '[class.ant-btn-success]'         : '_color === "success"',
+    '[class.ant-btn-warning]'         : '_color === "warning"',
+    '[class.ant-btn-danger]'          : '_color === "danger"',
+    '[class.ant-btn-circle]'          : '_color === "circle"',
+    '[class.ant-btn-lg]'              : '_size === "large"',
+    '[class.ant-btn-sm]'              : '_size === "small"',
+    '[class.ant-btn-loading]'         : 'loading',
+    '[class.ant-btn-clicked]'         : '_clicked',
+    '[class.ant-btn-icon-only]'       : '_iconOnly',
     '[class.ant-btn-background-ghost]': 'ghost'
   }
 })
@@ -37,10 +31,15 @@ export class ButtonComponent implements AfterContentInit {
   _el: HTMLElement;
   nativeElement: HTMLElement;
   _iconElement: HTMLElement;
-  _type: ButtonType;
+  /** @internal*/
+  _color: ButtonColor;
+  /** @internal*/
   _shape: ButtonShape;
+  /** @internal*/
   _size: ButtonSize;
+  /** @internal*/
   _iconOnly = false;
+  /** @internal*/
   _loading = false;
   _clicked = false;
   _ghost = false;
@@ -64,13 +63,22 @@ export class ButtonComponent implements AfterContentInit {
     return this._ghost;
   }
 
+  @Input()
+  get color(): ButtonColor {
+    return this._color;
+  }
+
+  set color(value: ButtonColor) {
+    this._color = value;
+  }
+
   /**
    * Get button type
    * 按钮类型
    */
-  @Input()
-  get type(): ButtonType {
-    return this._type;
+  @Input('type')
+  get deprecatedType(): ButtonColor {
+    return this._color;
   }
 
   /**
@@ -78,8 +86,8 @@ export class ButtonComponent implements AfterContentInit {
    * 设置按钮类型，可选值为  `primary`   `dashed`   `danger`   `default`
    * @param value
    */
-  set type(value: ButtonType) {
-    this._type = value;
+  set deprecatedType(value: ButtonColor) {
+    this._color = value;
   }
 
   /**

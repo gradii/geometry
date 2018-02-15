@@ -1,8 +1,8 @@
+import { OverlayModule } from '@angular/cdk/overlay';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ToolTipComponent } from './tooltip.component';
 import { TooltipDirective } from './tooltip.directive';
-import { CommonModule } from '@angular/common';
-import { OverlayModule } from '@angular/cdk/overlay';
 
 /**
  *

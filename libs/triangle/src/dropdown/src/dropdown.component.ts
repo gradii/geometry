@@ -1,3 +1,6 @@
+import { DEFAULT_DROPDOWN_POSITIONS, DropDownAnimation, POSITION_MAP } from '@gradii/triangle/core';
+import { MenuComponent } from '@gradii/triangle/menu';
+import { ConnectionPositionPair } from '@angular/cdk/overlay';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -12,8 +15,6 @@ import {
   Renderer2,
   ViewEncapsulation
 } from '@angular/core';
-import { DEFAULT_DROPDOWN_POSITIONS, DropDownAnimation, POSITION_MAP } from '@gradii/triangle/core';
-import { MenuComponent } from '@gradii/triangle/menu';
 import { Observable } from 'rxjs/Observable';
 import { merge } from 'rxjs/observable/merge';
 import { Observer } from 'rxjs/Observer';
@@ -21,7 +22,6 @@ import { debounceTime } from 'rxjs/operator/debounceTime';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import { DropDownDirective } from './dropdown.directive';
-import { ConnectionPositionPair } from '@angular/cdk/overlay';
 
 export type Placement = 'bottomLeft' | 'bottomCenter' | 'bottomRight' | 'topLeft' | 'topCenter' | 'topRight';
 
@@ -30,37 +30,37 @@ export type Placement = 'bottomLeft' | 'bottomCenter' | 'bottomRight' | 'topLeft
  * The `[tri-dropdown-custom]` is used for define the content of dropdown, can't mix menu together.
  */
 @Component({
-  selector: 'tri-dropdown',
-  encapsulation: ViewEncapsulation.None,
-  animations: [DropDownAnimation],
+  selector       : 'tri-dropdown',
+  encapsulation  : ViewEncapsulation.None,
+  animations     : [DropDownAnimation],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <div>
-      <ng-content></ng-content>
-    </div>
-    <ng-template
-      cdkConnectedOverlay
-      [cdkConnectedOverlayHasBackdrop]="_hasBackdrop"
-      [cdkConnectedOverlayPositions]="_positions"
-      [cdkConnectedOverlayOrigin]="_origin"
-      (backdropClick)="_hide()"
-      [cdkConnectedOverlayMinWidth]="_triggerWidth"
-      (positionChange)="_onPositionChange($event)"
-      [cdkConnectedOverlayOpen]="visible">
-      <div
-        class="ant-dropdown ant-dropdown-placement-{{placement}}"
-        [@dropDownAnimation]="_dropDownPosition"
-        (mouseenter)="_onMouseEnterEvent($event)"
-        (mouseleave)="_onMouseLeaveEvent($event)"
-        [style.minWidth.px]="_triggerWidth"
-        (click)="_clickDropDown($event)">
-        <div [class.ant-table-filter-dropdown]="hasFilterButton">
-          <ng-content select="[tri-menu]"></ng-content>
-          <ng-content select="[tri-table-filter]"></ng-content>
-        </div>
-        <ng-content select="[tri-dropdown-custom]"></ng-content>
-      </div>
-    </ng-template>`
+  template       : `
+              <div>
+                <ng-content></ng-content>
+              </div>
+              <ng-template
+                cdkConnectedOverlay
+                [cdkConnectedOverlayHasBackdrop]="_hasBackdrop"
+                [cdkConnectedOverlayPositions]="_positions"
+                [cdkConnectedOverlayOrigin]="_origin"
+                (backdropClick)="_hide()"
+                [cdkConnectedOverlayMinWidth]="_triggerWidth"
+                (positionChange)="_onPositionChange($event)"
+                [cdkConnectedOverlayOpen]="visible">
+                <div
+                  class="ant-dropdown ant-dropdown-placement-{{placement}}"
+                  [@dropDownAnimation]="_dropDownPosition"
+                  (mouseenter)="_onMouseEnterEvent($event)"
+                  (mouseleave)="_onMouseLeaveEvent($event)"
+                  [style.minWidth.px]="_triggerWidth"
+                  (click)="_clickDropDown($event)">
+                  <div [class.ant-table-filter-dropdown]="hasFilterButton">
+                    <ng-content select="[tri-menu]"></ng-content>
+                    <ng-content select="[tri-table-filter]"></ng-content>
+                  </div>
+                  <ng-content select="[tri-dropdown-custom]"></ng-content>
+                </div>
+              </ng-template>`
 })
 export class DropDownComponent implements OnInit, OnDestroy, AfterViewInit {
   hasFilterButton = false;

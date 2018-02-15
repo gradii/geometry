@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  template: ``,
+  template     : ``,
   encapsulation: ViewEncapsulation.None
 })
 export class RootStyleComponent {}

@@ -1,4 +1,4 @@
-import { Directive, HostBinding, ElementRef } from '@angular/core';
+import { Directive, ElementRef, HostBinding } from '@angular/core';
 
 @Directive({
   selector: '[triCarouselContent]'

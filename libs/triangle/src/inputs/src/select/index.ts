@@ -1,2 +1,2 @@
 export { TriSelectModule } from './select.module';
-export * from './option.component'
+export * from './option.component';

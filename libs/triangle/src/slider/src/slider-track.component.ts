@@ -1,9 +1,9 @@
-import { Component, OnChanges, SimpleChanges, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'tri-slider-track',
+  selector     : 'tri-slider-track',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div [class]="className" [ngStyle]="style"></div>
   `
 })
@@ -20,7 +20,7 @@ export class SliderTrackComponent implements OnChanges {
   style: any = {};
 
   ngOnChanges(changes: SimpleChanges) {
-    const { offset, length, included, vertical, style } = this;
+    const {offset, length, included, vertical, style} = this;
     if (changes.nzIncluded) {
       style.visibility = included ? 'visible' : 'hidden';
     }

@@ -1,17 +1,17 @@
+import { NzMenuComponent, NzMenuItemComponent, NzMenuModule, NzSubMenuComponent } from '@gradii/menu';
+import { Component } from '@angular/core';
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed, ComponentFixtureAutoDetect } from '@angular/core/testing';
-import { Component, ViewChild } from '@angular/core';
+import { async, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NzMenuComponent, NzMenuItemComponent, NzMenuModule, NzSubMenuComponent } from '@gradii/menu';
 
 describe('NzMenuComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [NzMenuModule, BrowserAnimationsModule],
+        imports     : [NzMenuModule, BrowserAnimationsModule],
         declarations: [TestMenu, TestMenuTheme, TestMenuSubMenu],
-        providers: []
+        providers   : []
       }).compileComponents();
     })
   );
@@ -100,7 +100,7 @@ describe('NzMenuComponent', () => {
       debugElement.nativeElement.classList.add('custom-class');
 
       testComponent._nzMode = 'vertical';
-      testComponent._customClass = { customClass1: true };
+      testComponent._customClass = {customClass1: true};
       fixture.detectChanges();
       expect(debugElement.nativeElement.classList.contains('custom-class')).toBe(true);
       expect(debugElement.nativeElement.classList.contains('customClass1')).toBe(true);
@@ -215,8 +215,9 @@ describe('NzMenuComponent', () => {
 })
 class TestMenu {
   _mode = 'vertical';
-  _customClass = { customClass1: false };
+  _customClass = {customClass1: false};
 }
+
 @Component({
   selector: 'test-menu-theme',
   template: `

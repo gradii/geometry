@@ -1,7 +1,4 @@
-import {
-  Component, Input, OnInit, ElementRef, ViewEncapsulation, Renderer2,
-  ChangeDetectionStrategy, ChangeDetectorRef
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
 export type TriJustify = 'start' | 'end' | 'center' | 'space-around' | 'space-between';
 export type RowAlign = 'top' | 'middle' | 'bottom';
@@ -26,14 +23,14 @@ export type TriType = 'flex' | null;
     '[class.ant-row-flex-space-around]' : 'type=="flex"&&justify=="space-around"',
     '[class.ant-row-flex-space-between]': 'type=="flex"&&justify=="space-between"',
     '[style.margin-left.px]'            : '-_gutter/2',
-    '[style.margin-right.px]'           : '-_gutter/2',
+    '[style.margin-right.px]'           : '-_gutter/2'
   }
 })
 export class RowComponent implements OnInit {
   _el: HTMLElement;
   _gutter: number;
   _type: TriType;
-  _align: RowAlign     = 'top';
+  _align: RowAlign = 'top';
   _justify: TriJustify = 'start';
 
   /**
@@ -111,8 +108,7 @@ export class RowComponent implements OnInit {
     this.cdRef.markForCheck();
   }
 
-  constructor(private cdRef: ChangeDetectorRef) {
-  }
+  constructor(private cdRef: ChangeDetectorRef) {}
 
   ngOnInit() {
     // this.setClassMap();

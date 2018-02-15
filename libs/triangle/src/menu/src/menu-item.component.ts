@@ -1,14 +1,4 @@
-import {
-  Component,
-  HostBinding,
-  Input,
-  AfterViewInit,
-  HostListener,
-  ChangeDetectorRef,
-  Renderer2,
-  Optional,
-  ElementRef
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostBinding, HostListener, Input, Optional, Renderer2 } from '@angular/core';
 import { MenuComponent } from './menu.component';
 import { SubMenuComponent } from './submenu.component';
 
@@ -103,13 +93,11 @@ export class MenuItemComponent implements AfterViewInit {
     }
   }
 
-  constructor(
-    private _renderer: Renderer2,
-    public cd: ChangeDetectorRef,
-    private menuComponent: MenuComponent,
-    @Optional() public subMenuComponent: SubMenuComponent,
-    private hostElement: ElementRef
-  ) {
+  constructor(private _renderer: Renderer2,
+              public cd: ChangeDetectorRef,
+              private menuComponent: MenuComponent,
+              @Optional() public subMenuComponent: SubMenuComponent,
+              private hostElement: ElementRef) {
     this.menuComponent.menuItems.push(this);
     /** store origin padding in padding */
     if (this.hostElement.nativeElement.style['padding-left']) {

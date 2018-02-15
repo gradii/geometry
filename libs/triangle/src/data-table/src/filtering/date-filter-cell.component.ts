@@ -3,7 +3,7 @@ import { FilterService } from './filter.service';
 import { BaseFilterCellComponent, localizeOperators } from './base-filter-cell.component';
 import { isNullOrEmptyString, extractFormat } from '../utils';
 import { FilterComponent } from './filter-component.interface';
-import { ColumnComponent } from '../columns/column.component';
+import { ColumnComponent } from '../column.component';
 import { CompositeFilterDescriptor, FilterDescriptor } from '@gradii/triangle/data-query';
 const dateOperators = localizeOperators({
   filterEqOperator: 'eq',

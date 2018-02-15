@@ -1,7 +1,8 @@
-import {Directive, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
-import {process, State} from '@gradii/triangle/data-query';
-import {DataTableComponent} from '../data-table.component';
-import {anyChanged, isPresent} from '../utils';
+import { process, State } from '@gradii/triangle/data-query';
+import { isPresent } from '@gradii/triangle/util';
+import { Directive, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { DataTableComponent } from '../data-table.component';
+import { anyChanged } from '../utils';
 
 @Directive({
   selector: '[triGridBinding], [tri-grid-binding]'
@@ -12,7 +13,7 @@ export class DataBindingDirective implements OnInit, OnDestroy, OnChanges {
   private stateChangeSubscription;
 
   constructor(protected grid: DataTableComponent) {
-    this.state        = {
+    this.state = {
       skip: 0
     };
     this.originalData = [];
@@ -49,7 +50,7 @@ export class DataBindingDirective implements OnInit, OnDestroy, OnChanges {
   @Input('triGridBinding')
   set data(value) {
     this.originalData = value || [];
-    this.grid.data    = this.process(this.state);
+    this.grid.data = this.process(this.state);
   }
 
   ngOnInit() {
@@ -82,10 +83,10 @@ export class DataBindingDirective implements OnInit, OnDestroy, OnChanges {
   }
 
   applyState({skip, take, sort, group, filter}: { skip?; take?; sort?; group?; filter? }) {
-    this.skip     = skip;
+    this.skip = skip;
     this.pageSize = take;
-    this.sort     = sort;
-    this.group    = group;
-    this.filter   = filter;
+    this.sort = sort;
+    this.group = group;
+    this.filter = filter;
   }
 }

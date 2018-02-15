@@ -1,15 +1,15 @@
-import { NgModule } from '@angular/core';
-import { TagComponent } from './tag.component';
-import { CheckableTagComponent } from './checkable-tag.component';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CheckableTagComponent } from './checkable-tag.component';
+import { TagComponent } from './tag.component';
 
 /**
  *
  */
 @NgModule({
-  imports: [CommonModule, FormsModule],
+  imports     : [CommonModule, FormsModule],
   declarations: [TagComponent, CheckableTagComponent],
-  exports: [TagComponent, CheckableTagComponent]
+  exports     : [TagComponent, CheckableTagComponent]
 })
 export class TriTagModule {}

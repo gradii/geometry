@@ -1,29 +1,29 @@
+import { ConnectionPositionPair } from '@angular/cdk/overlay';
+import { AnimationEvent } from '@angular/animations';
 import {
-  Component,
-  ViewEncapsulation,
-  Input,
-  TemplateRef,
-  Output,
-  Renderer2,
-  EventEmitter,
   AfterViewInit,
   ChangeDetectorRef,
+  Component,
   ContentChild,
-  ViewChild
+  EventEmitter,
+  Input,
+  Output,
+  Renderer2,
+  TemplateRef,
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
+import { DEFAULT_4_POSITIONS, FadeAnimation, POSITION_MAP } from '@gradii/triangle/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { TooltipDirective } from './tooltip.directive';
-import { AnimationEvent } from '@angular/animations';
-import { FadeAnimation } from '@gradii/triangle/core';
-import { POSITION_MAP, DEFAULT_4_POSITIONS } from '@gradii/triangle/core';
-import { OverlayOrigin, ConnectionPositionPair, ConnectedOverlayDirective } from '@angular/cdk/overlay';
+import { ConnectedOverlayDirective } from '@angular/cdk/overlay';
 
 @Component({
-  selector: 'tri-tooltip',
+  selector     : 'tri-tooltip',
   encapsulation: ViewEncapsulation.None,
-  animations: [FadeAnimation],
-  template: `
+  animations   : [FadeAnimation],
+  template     : `
     <ng-content></ng-content>
     <ng-template
       #overlay="cdkConnectedOverlay"
@@ -111,7 +111,7 @@ export class ToolTipComponent implements AfterViewInit {
   }
 
   visibleSource = new BehaviorSubject<boolean>(false);
-  visible$ = this.visibleSource.asObservable();
+  visible$: Observable<boolean> = this.visibleSource.asObservable();
 
   /**
    * Set trigger
@@ -204,7 +204,7 @@ export class ToolTipComponent implements AfterViewInit {
 
   setClassMap() {
     this._classMap = {
-      [this.overlayClassName]: true,
+      [this.overlayClassName]                     : true,
       [`ant-tooltip-placement-${this._placement}`]: true
     };
   }

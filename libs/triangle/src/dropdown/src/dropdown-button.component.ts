@@ -1,23 +1,13 @@
-import {
-  Component,
-  ViewEncapsulation,
-  OnInit,
-  OnDestroy,
-  Input,
-  ViewChild,
-  Output,
-  EventEmitter,
-  AfterViewInit
-} from '@angular/core';
 import { DropDownAnimation } from '@gradii/triangle/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DropDownComponent } from './dropdown.component';
 import { DropDownDirective } from './dropdown.directive';
 
 @Component({
-  selector: 'tri-dropdown-button',
+  selector     : 'tri-dropdown-button',
   encapsulation: ViewEncapsulation.None,
-  animations: [DropDownAnimation],
-  template: `
+  animations   : [DropDownAnimation],
+  template     : `
     <div class="ant-btn-group ant-dropdown-button" triDropdown>
       <button
         triButton

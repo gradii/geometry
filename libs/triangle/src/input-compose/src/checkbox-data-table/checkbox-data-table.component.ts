@@ -1,7 +1,7 @@
-import { Component, forwardRef, Input, ViewEncapsulation } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { SelectionEvent } from '@gradii/triangle/data-table';
 import { isArray, isPresent } from '@gradii/triangle/util';
+import { Component, forwardRef, Input, ViewEncapsulation } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BaseInputOutputDataTable } from './base-input-output-data-table';
 
 @Component({
@@ -47,16 +47,15 @@ import { BaseInputOutputDataTable } from './base-input-output-data-table';
       <tri-grid-checkbox-column [showSelectAll]="showSelectAll"></tri-grid-checkbox-column>
     </tri-data-table>
   `,
-  providers: [
+  providers    : [
     {
       provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => CheckboxDataTableComponent),
       multi      : true
     }
-  ],
+  ]
 })
 export class CheckboxDataTableComponent extends BaseInputOutputDataTable implements ControlValueAccessor {
-
   private selected;
   private selectedChangeFn;
   private selectedTouchFn;

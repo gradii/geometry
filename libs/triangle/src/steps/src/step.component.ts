@@ -1,23 +1,23 @@
 import {
-  Component,
-  OnInit,
-  Input,
-  ViewEncapsulation,
-  ElementRef,
   AfterViewInit,
-  Renderer2,
+  Component,
   ContentChild,
-  ViewChild,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  Renderer2,
   TemplateRef,
-  OnDestroy
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
-import { StepConnectService } from './step-connect.service';
 import { Subscription } from 'rxjs/Subscription';
+import { StepConnectService } from './step-connect.service';
 
 @Component({
-  selector: 'tri-step',
+  selector     : 'tri-step',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div class="ant-steps-tail" #stepsTail *ngIf="_last !== true">
       <i></i>
     </div>
@@ -119,14 +119,14 @@ export class StepComponent implements OnInit, AfterViewInit, OnDestroy {
 
   initClassMap() {
     this.stepStatusClass = {
-      ['ant-steps-item']: true,
-      [`ant-steps-status-wait`]: this._status === 'wait',
+      ['ant-steps-item']          : true,
+      [`ant-steps-status-wait`]   : this._status === 'wait',
       [`ant-steps-status-process`]: this._status === 'process',
-      [`ant-steps-status-finish`]: this._status === 'finish',
-      [`ant-steps-status-error`]: this._status === 'error',
-      ['ant-steps-item-last']: this._last,
-      ['ant-steps-custom']: !!this.icon,
-      ['ant-steps-next-error']: this.stepConnectService.errorIndex === 'error' && this._current === this.index - 1
+      [`ant-steps-status-finish`] : this._status === 'finish',
+      [`ant-steps-status-error`]  : this._status === 'error',
+      ['ant-steps-item-last']     : this._last,
+      ['ant-steps-custom']        : !!this.icon,
+      ['ant-steps-next-error']    : this.stepConnectService.errorIndex === 'error' && this._current === this.index - 1
     };
     for (const i in this.stepStatusClass) {
       if (this.stepStatusClass[i]) {
@@ -164,7 +164,7 @@ export class StepComponent implements OnInit, AfterViewInit, OnDestroy {
       this._last = true;
     } else {
       this.stepConnectService.lastElementSizeEvent.subscribe(data => {
-        const { count, width } = data;
+        const {count, width} = data;
         this._renderer.setStyle(this.erf.nativeElement, 'width', 100 / (count - 1) + '%');
         this._renderer.setStyle(this.erf.nativeElement, 'margin-right', -(width / (count - 1) + 5) + 'px');
         if (this._direction === 'horizontal') {

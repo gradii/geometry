@@ -3,6 +3,6 @@ import { DatePipe } from './date.pipe';
 
 @NgModule({
   declarations: [DatePipe],
-  exports: [DatePipe]
+  exports     : [DatePipe]
 })
 export class TriUtilModule {}

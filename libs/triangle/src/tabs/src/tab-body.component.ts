@@ -1,9 +1,9 @@
-import { Component, ViewEncapsulation, TemplateRef, Input } from '@angular/core';
+import { Component, Input, TemplateRef, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'tri-tab-body',
+  selector     : 'tri-tab-body',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <ng-template [ngTemplateOutlet]="content"></ng-template>
   `
 })

@@ -1,4 +1,4 @@
-import { Directive, Input, ElementRef, HostBinding } from '@angular/core';
+import { Directive, ElementRef, HostBinding, Input } from '@angular/core';
 
 @Directive({
   selector: '[triTd], [tri-td]'

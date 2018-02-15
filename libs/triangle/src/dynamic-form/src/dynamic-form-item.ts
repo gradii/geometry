@@ -1,11 +1,12 @@
-import { FormControl } from '@angular/forms';
 import { isObservable, isPromise } from '@gradii/triangle/util';
+import { FormControl } from '@angular/forms';
 
 
 export interface DynamicFormItemArgs {
   label: string;
   value: any;
   name: string;
+  required?: boolean;
   tooltip?: string;
   inputs?: { [key: string]: any };
   outputs?: { [key: string]: any };
@@ -22,6 +23,7 @@ export class DynamicFormItem extends FormControl {
   public name;
 
   public tooltip;
+  public required;
 
   public inputs: any;
   public outputs: any;
@@ -34,6 +36,7 @@ export class DynamicFormItem extends FormControl {
                        value,
                        name,
                        tooltip,
+                       required,
                        inputs,
                        outputs,
                        validatorOrOpts
@@ -43,6 +46,7 @@ export class DynamicFormItem extends FormControl {
     this.label = label;
     this.name = name;
     this.tooltip = tooltip;
+    this.required = !!required;
     this.inputs = inputs || {};
     this.outputs = outputs || {};
   }

@@ -1,12 +1,11 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { TriButtonModule } from '@gradii/triangle/button';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { ConfirmComponent } from './confirm.component';
+import { ModalSubject } from './modal-subject.service';
 
-import {ModalComponent} from './modal.component';
-import {ConfirmComponent} from './confirm.component';
-import {ModalService} from './modal.service';
-import {ModalSubject} from './modal-subject.service';
-
-import {TriButtonModule} from '@gradii/triangle/button';
+import { ModalComponent } from './modal.component';
+import { ModalService } from './modal.service';
 
 /**
  *

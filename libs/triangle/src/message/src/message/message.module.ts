@@ -1,7 +1,7 @@
+import { OverlayModule } from '@angular/cdk/overlay';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MESSAGE_DEFAULT_CONFIG_PROVIDER } from './message-config';
-import { CommonModule } from '@angular/common';
-import { OverlayModule } from '@angular/cdk/overlay';
 import { MessageContainerComponent } from './message-container.component';
 import { MessageComponent } from './message.component';
 

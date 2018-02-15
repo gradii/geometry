@@ -1,6 +1,6 @@
+import { TriToolTipModule } from '@gradii/triangle/tooltip';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { TriToolTipModule } from '@gradii/triangle/tooltip';
 import { SliderHandleComponent } from './slider-handle.component';
 import { SliderMarksComponent } from './slider-marks.component';
 import { SliderStepComponent } from './slider-step.component';
@@ -31,7 +31,7 @@ import { SliderService } from './slider.service';
  <!-- example(slider-mark) -->
  */
 @NgModule({
-  exports: [SliderComponent, SliderTrackComponent, SliderHandleComponent, SliderStepComponent, SliderMarksComponent],
+  exports     : [SliderComponent, SliderTrackComponent, SliderHandleComponent, SliderStepComponent, SliderMarksComponent],
   declarations: [
     SliderComponent,
     SliderTrackComponent,
@@ -39,7 +39,7 @@ import { SliderService } from './slider.service';
     SliderStepComponent,
     SliderMarksComponent
   ],
-  imports: [CommonModule, TriToolTipModule],
-  providers: [SliderService]
+  imports     : [CommonModule, TriToolTipModule],
+  providers   : [SliderService]
 })
 export class TriSliderModule {}

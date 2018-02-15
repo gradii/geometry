@@ -1,11 +1,11 @@
+import { ScrollService } from '@gradii/triangle/core';
 import { Component } from '@angular/core';
 /* tslint:disable:no-unused-variable */
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ScrollService } from '@gradii/triangle/core';
-
-import { AffixModule } from '../src/affix.module';
 import { AffixComponent } from '../src/affix.component';
+
+import { TriAffixModule } from '../src/affix.module';
 
 describe('Component:tri-affix', () => {
   let scrollSrv: MockNzScrollService;
@@ -17,9 +17,9 @@ describe('Component:tri-affix', () => {
   beforeEach(
     fakeAsync(() => {
       TestBed.configureTestingModule({
-        imports: [AffixModule],
+        imports     : [TriAffixModule],
         declarations: [TestAffixComponent],
-        providers: [{ provide: ScrollService, useClass: MockNzScrollService }]
+        providers   : [{provide: ScrollService, useClass: MockNzScrollService}]
       }).compileComponents();
 
       fixture = TestBed.createComponent(TestAffixComponent);
@@ -51,7 +51,7 @@ class TestAffixComponent {
 
 class MockNzScrollService {
   getOffset(el: Element): { top: number; left: number } {
-    return { top: 0, left: 0 };
+    return {top: 0, left: 0};
   }
 
   getScroll(el?: Element | Window, top: boolean = true): number {

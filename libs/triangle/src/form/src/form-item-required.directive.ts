@@ -6,5 +6,5 @@ import { Directive, HostBinding, Input } from '@angular/core';
 export class FormItemRequiredDirective {
   @Input()
   @HostBinding(`class.ant-form-item-required`)
-  nzRequired = true;
+  required = true;
 }

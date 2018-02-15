@@ -4,7 +4,7 @@ import { BaseFilterCellComponent } from './base-filter-cell.component';
 import { isBlank, isPresent, isNullOrEmptyString } from '../utils';
 import { FilterInputDirective } from './filter-input.directive';
 import { CompositeFilterDescriptor, FilterDescriptor } from '@gradii/triangle/data-query';
-import { ColumnComponent } from '../columns/column.component';
+import { ColumnComponent } from '../column.component';
 @Component({
   selector : 'tri-data-table-filter-wrapper-cell',
   template: `

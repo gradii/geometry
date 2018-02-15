@@ -1,15 +1,4 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  ElementRef,
-  HostBinding,
-  OnChanges,
-  Renderer2,
-  SimpleChange,
-  Host,
-  Optional
-} from '@angular/core';
+import { Component, ElementRef, Host, HostBinding, Input, OnChanges, OnInit, Optional, Renderer2, SimpleChange } from '@angular/core';
 import { RowComponent } from './row.component';
 
 export abstract class EmbeddedProperty {
@@ -25,7 +14,7 @@ export abstract class EmbeddedProperty {
   template: `
     <ng-content></ng-content>
   `,
-  styles: []
+  styles  : []
 })
 export class ColComponent implements OnInit, OnChanges {
   _classList: Array<string> = [];
@@ -148,13 +137,11 @@ export class ColComponent implements OnInit, OnChanges {
     this.setClassMap();
   }
 
-  constructor(
-    private _elementRef: ElementRef,
-    @Optional()
-    @Host()
-    public _row: RowComponent,
-    private _renderer: Renderer2
-  ) {
+  constructor(private _elementRef: ElementRef,
+              @Optional()
+              @Host()
+              public _row: RowComponent,
+              private _renderer: Renderer2) {
     this._el = this._elementRef.nativeElement;
   }
 

@@ -1,4 +1,4 @@
-import { Component, Input, Output, HostListener, HostBinding, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'tri-row-expand-icon',

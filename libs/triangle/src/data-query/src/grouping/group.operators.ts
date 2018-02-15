@@ -1,24 +1,23 @@
-import { exec, map, groupCombinator } from '../transducers';
+import { Reducer } from '../common.interfaces';
+import { filterBy } from '../filtering/filter-expression.factory';
+import { exec, groupCombinator, map } from '../transducers';
 import { isArray, isPresent } from '../utils';
 import { aggregateBy } from './aggregate.operators';
-import { filterBy } from '../filtering/filter-expression.factory';
 import { GroupDescriptor, GroupResult } from './group-descriptor.interface';
-import { Reducer } from '../common.interfaces';
-export const normalizeGroups = function(descriptors) {
+
+export const normalizeGroups = function (descriptors) {
   descriptors = isArray(descriptors) ? descriptors : [descriptors];
-  return descriptors.map(function(x) {
-    return Object.assign({ dir: 'asc' }, x);
+  return descriptors.map(function (x) {
+    return Object.assign({dir: 'asc'}, x);
   });
 };
-const identity = map(function(x) {
+const identity = map(function (x) {
   return x;
 });
-export let groupBy = function<T>(
-  data: T[],
-  descriptors?: GroupDescriptor[],
-  transformers?: Reducer,
-  originalData?: T[]
-): GroupResult[] | T[] {
+export let groupBy = function <T>(data: T[],
+                                  descriptors?: GroupDescriptor[],
+                                  transformers?: Reducer,
+                                  originalData?: T[]): GroupResult[] | T[] {
   if (descriptors === void 0) {
     descriptors = [];
   }
@@ -36,26 +35,26 @@ export let groupBy = function<T>(
   const initialValue = {};
   const view = exec(transformers(groupCombinator(descriptor.field)), initialValue, data);
   const result = [];
-  Object.keys(view).forEach(function(field) {
-    Object.keys(view[field]).forEach(function(value) {
+  Object.keys(view).forEach(function (field) {
+    Object.keys(view[field]).forEach(function (value) {
       const group = view[field][value];
       let aggregateResult = {};
       let filteredData = originalData;
       if (isPresent(descriptor.aggregates)) {
         filteredData = filterBy(originalData, {
-          field: descriptor.field,
+          field     : descriptor.field,
           ignoreCase: false,
-          operator: 'eq',
-          value: group.value
+          operator  : 'eq',
+          value     : group.value
         });
         aggregateResult = aggregateBy(filteredData, descriptor.aggregates);
       }
       result[group.__position] = {
         aggregates: aggregateResult,
-        field: field,
-        items:
+        field     : field,
+        items     :
           descriptors.length > 1 ? groupBy(group.items, descriptors.slice(1), identity, filteredData) : group.items,
-        value: group.value
+        value     : group.value
       };
     });
   });

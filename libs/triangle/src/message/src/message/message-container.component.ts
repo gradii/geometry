@@ -1,11 +1,11 @@
-import { Optional, Inject, Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { MessageDataFilled, MessageDataOptions } from './message.definitions';
+import { Component, Inject, OnInit, Optional, ViewEncapsulation } from '@angular/core';
 import { MESSAGE_CONFIG, MESSAGE_DEFAULT_CONFIG, MessageConfig } from './message-config';
+import { MessageDataFilled, MessageDataOptions } from './message.definitions';
 
 @Component({
-  selector: 'tri-message-container',
+  selector     : 'tri-message-container',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div class="ant-message">
       <tri-message *ngFor="let message of messages; let i = index" [message]="message" [index]="i"></tri-message>
     </div>
@@ -15,14 +15,12 @@ export class MessageContainerComponent<Config extends MessageConfig> implements 
   messages: MessageDataFilled[] = [];
   config: Config;
 
-  constructor(
-    @Optional()
-    @Inject(MESSAGE_DEFAULT_CONFIG)
-    defaultConfig,
-    @Optional()
-    @Inject(MESSAGE_CONFIG)
-    config
-  ) {
+  constructor(@Optional()
+              @Inject(MESSAGE_DEFAULT_CONFIG)
+                defaultConfig,
+              @Optional()
+              @Inject(MESSAGE_CONFIG)
+                config) {
     this.config = Object.assign({}, defaultConfig, config) as Config;
   }
 
@@ -55,8 +53,8 @@ export class MessageContainerComponent<Config extends MessageConfig> implements 
   // Merge default options and cutom message options
   protected _mergeMessageOptions(options: MessageDataOptions): MessageDataOptions {
     const defaultOptions: MessageDataOptions = {
-      duration: this.config.duration,
-      animate: this.config.animate,
+      duration    : this.config.duration,
+      animate     : this.config.animate,
       pauseOnHover: this.config.pauseOnHover
     };
     return Object.assign(defaultOptions, options);

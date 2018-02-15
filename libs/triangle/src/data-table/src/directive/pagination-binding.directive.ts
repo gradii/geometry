@@ -1,8 +1,6 @@
-import {Directive} from "@angular/core";
+import { Directive } from '@angular/core';
 
 @Directive({
   selector: '[triGridPaginationBinding], [tri-grid-paginationBinding]'
 })
-export class PaginationBindingDirective {
-
-}
+export class PaginationBindingDirective {}

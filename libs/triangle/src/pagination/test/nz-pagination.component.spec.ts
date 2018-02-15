@@ -1,16 +1,16 @@
-/* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed, ComponentFixtureAutoDetect, fakeAsync, tick } from '@angular/core/testing';
-import { Component, ViewChild } from '@angular/core';
-import { By } from '@angular/platform-browser';
 import { TriPaginationComponent, TriPaginationModule } from '@gradii/triangle/pagination';
+import { Component } from '@angular/core';
+/* tslint:disable:no-unused-variable */
+import { async, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 describe('TriPaginationComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [TriPaginationModule],
+        imports     : [TriPaginationModule],
         declarations: [TestPaginationBasic, TestPaginationChanger, TestPaginationSimple, TestPaginationShowTotal],
-        providers: []
+        providers   : []
       }).compileComponents();
     })
   );
@@ -159,7 +159,7 @@ describe('TriPaginationComponent', () => {
     selector: 'tri-test-pagination-changer',
     template: `
       <tri-pagination [nzPageIndex]="_nzPageIndex" [nzTotal]="_nzTotal" nzShowSizeChanger
-        [nzPageSize]="_nzPageSize" [nzSize]="_nzSize"></tri-pagination>`
+                      [nzPageSize]="_nzPageSize" [nzSize]="_nzSize"></tri-pagination>`
   })
   class TestPaginationChanger {
     _nzPageIndex = 3;
@@ -183,7 +183,7 @@ describe('TriPaginationComponent', () => {
     selector: 'tri-test-pagination-simple',
     template: `
       <tri-pagination [nzPageIndex]="2" [nzTotal]="50" nzSimple></tri-pagination>`,
-    styles: []
+    styles  : []
   })
   class TestPaginationSimple {}
 
@@ -191,7 +191,7 @@ describe('TriPaginationComponent', () => {
     selector: 'tri-test-pagination-total',
     template: `
       <tri-pagination [nzPageIndex]="pageSize" [nzTotal]="80" nzShowTotal [nzPageSize]="20"></tri-pagination>`,
-    styles: []
+    styles  : []
   })
   class TestPaginationShowTotal {
     pageSize = 1;

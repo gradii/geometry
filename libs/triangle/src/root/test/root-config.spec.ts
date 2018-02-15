@@ -6,8 +6,8 @@ describe('RootConfig', () => {
   let mockElement: HTMLDivElement;
 
   beforeEach(() => {
-    mockDocument = { head: { appendChild: () => null }, createElement: () => null } as any;
-    mockConfig = { extraFontName: '', extraFontUrl: '' } as any;
+    mockDocument = {head: {appendChild: () => null}, createElement: () => null} as any;
+    mockConfig = {extraFontName: '', extraFontUrl: ''} as any;
     mockElement = {} as any;
 
     spyOn(mockDocument, 'createElement').and.returnValue(mockElement);

@@ -1,13 +1,13 @@
-import { Component, OnInit, Input, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { StepConnectService } from './step-connect.service';
 
 export type Direction = 'horizontal' | 'vertical';
 
 @Component({
-  selector: 'tri-steps',
+  selector     : 'tri-steps',
   encapsulation: ViewEncapsulation.None,
-  providers: [StepConnectService],
-  template: `
+  providers    : [StepConnectService],
+  template     : `
     <div class="ant-steps" [ngClass]="_stepsClassMap">
       <ng-content></ng-content>
     </div>
@@ -69,10 +69,10 @@ export class StepsComponent implements OnInit, OnDestroy {
 
   setDirectionClass() {
     this._stepsClassMap = {
-      [`ant-steps-${this.direction}`]: true,
+      [`ant-steps-${this.direction}`]      : true,
       [`ant-steps-label-${this.direction}`]: true,
-      [`ant-steps-dot`]: this.progressDot,
-      ['ant-steps-small']: this.size === 'small'
+      [`ant-steps-dot`]                    : this.progressDot,
+      ['ant-steps-small']                  : this.size === 'small'
     };
   }
 

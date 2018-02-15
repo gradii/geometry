@@ -1,4 +1,4 @@
-import { Directive, TemplateRef, Optional } from '@angular/core';
+import { Directive, Optional, TemplateRef } from '@angular/core';
 
 @Directive({
   selector: '[triGridNoRecordsTemplate], [tri-grid-no-records-template]'

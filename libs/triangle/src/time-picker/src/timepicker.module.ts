@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
-import { TimePickerComponent } from './timepicker.component';
-import { TimePickerInnerComponent } from './timepicker-inner.component';
-import { CommonModule } from '@angular/common';
 import { TriUtilModule } from '@gradii/triangle/util';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { TimePickerInnerComponent } from './timepicker-inner.component';
+import { TimePickerComponent } from './timepicker.component';
 
 /**
  *
@@ -28,8 +28,8 @@ import { OverlayModule } from '@angular/cdk/overlay';
  <!-- example(time-picker-disabled-options) -->
  */
 @NgModule({
-  imports: [CommonModule, TriUtilModule, OverlayModule],
+  imports     : [CommonModule, TriUtilModule, OverlayModule],
   declarations: [TimePickerComponent, TimePickerInnerComponent],
-  exports: [TimePickerComponent, TimePickerInnerComponent]
+  exports     : [TimePickerComponent, TimePickerInnerComponent]
 })
 export class TriTimePickerModule {}

@@ -124,6 +124,14 @@ $btn-default-color      : $text-color !default;
 $btn-default-bg         : #fff !default;
 $btn-default-border     : $border-color-base !default;
 
+$btn-success-color      : #fff;
+$btn-success-bg         : $success-color;
+$btn-success-border     : $success-color;
+
+$btn-warning-color      : #fff;
+$btn-warning-bg         : $warning-color;
+$btn-warning-border     : $warning-color;
+
 $btn-danger-color       : $error-color !default;
 $btn-danger-bg          : $background-color-base !default;
 $btn-danger-border      : $border-color-base !default;

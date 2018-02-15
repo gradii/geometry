@@ -13,17 +13,17 @@ $spin-dot-default: $text-color-secondary;
   font-size: $font-size-base;
   display: none;
 
-  @at-root &-spinning {
+   @at-root &-spinning {
     opacity: 1;
     position: static;
     display: inline-block;
   }
 
-  @at-root &-nested-loading {
+   @at-root &-nested-loading {
     position: relative;
   }
 
-  @at-root &-nested-loading {
+   @at-root &-nested-loading {
     > div > .#{$spin-prefix-cls} {
       position: absolute;
       height: 100%;
@@ -42,7 +42,7 @@ $spin-dot-default: $text-color-secondary;
         width: 100%;
         padding-top: ($spin-dot-size - $font-size-base) / 2 + 2px;
       }
-      @at-root &.#{$spin-prefix-cls}-show-text .#{$spin-prefix-cls}-dot {
+       @at-root &.#{$spin-prefix-cls}-show-text .#{$spin-prefix-cls}-dot {
         margin-top: -$spin-dot-size / 2 - 10px;
       }
     }
@@ -54,7 +54,7 @@ $spin-dot-default: $text-color-secondary;
       .#{$spin-prefix-cls}-text {
         padding-top: ($spin-dot-size-sm - $font-size-base) / 2 + 2px;
       }
-      @at-root &.#{$spin-prefix-cls}-show-text .#{$spin-prefix-cls}-dot {
+       @at-root &.#{$spin-prefix-cls}-show-text .#{$spin-prefix-cls}-dot {
         margin-top: -$spin-dot-size-sm / 2 - 10px;
       }
     }
@@ -66,31 +66,31 @@ $spin-dot-default: $text-color-secondary;
       .#{$spin-prefix-cls}-text {
         padding-top: ($spin-dot-size-lg - $font-size-base) / 2 + 2px;
       }
-      @at-root &.#{$spin-prefix-cls}-show-text .#{$spin-prefix-cls}-dot {
+       @at-root &.#{$spin-prefix-cls}-show-text .#{$spin-prefix-cls}-dot {
         margin-top: -$spin-dot-size-lg / 2 - 10px;
       }
     }
   }
 
-  @at-root &-container {
+   @at-root &-container {
     transition: all 0.3s $ease-in-out;
     position: relative;
   }
 
-  @at-root &-blur {
+   @at-root &-blur {
     overflow: hidden;
     opacity: 0.7;
     -webkit-filter: blur(0.5px);
     filter: blur(0.5px);
 
     /* autoprefixer: off */
-    //filter: unquote("progid\:DXImageTransform\.Microsoft\.Blur(PixelRadius\=1, MakeShadow\=false)");
+    filter: unquote("progid\:DXImageTransform\.Microsoft\.Blur(PixelRadius\=1, MakeShadow\=false)");
+    /* autoprefixer: on */
     // workround for a strange style bug in safari:
     // https://github.com/ant-design/ant-design/issues/4622
     // have no clue why this works
-    /* autoprefixer: on */
     -webkit-transform: translateZ(0);
-    @at-root &:after {
+     @at-root &:after {
       content: '';
       position: absolute;
       left: 0;
@@ -106,14 +106,14 @@ $spin-dot-default: $text-color-secondary;
 
   // tip
   // ------------------------------
-  @at-root &-tip {
+   @at-root &-tip {
     color: $spin-dot-default;
   }
 
   // dots
   // ------------------------------
 
-  @at-root &-dot {
+   @at-root &-dot {
     position: relative;
     display: inline-block;
     @include square($spin-dot-size);
@@ -130,21 +130,21 @@ $spin-dot-default: $text-color-secondary;
       opacity: 0.3;
       animation: antSpinMove 1s infinite linear alternate;
       transform-origin: 50% 50%;
-      @at-root &:nth-child(1) {
+       @at-root &:nth-child(1) {
         left: 0;
         top: 0;
       }
-      @at-root &:nth-child(2) {
+       @at-root &:nth-child(2) {
         right: 0;
         top: 0;
         animation-delay: 0.4s;
       }
-      @at-root &:nth-child(3) {
+       @at-root &:nth-child(3) {
         right: 0;
         bottom: 0;
         animation-delay: 0.8s;
       }
-      @at-root &:nth-child(4) {
+       @at-root &:nth-child(4) {
         left: 0;
         bottom: 0;
         animation-delay: 1.2s;
@@ -155,7 +155,7 @@ $spin-dot-default: $text-color-secondary;
   // Sizes
   // ------------------------------
   // small
-  @at-root &-sm #{&}-dot {
+   @at-root &-sm #{&}-dot {
     @include square($spin-dot-size-sm);
     i {
       width: 6px;
@@ -164,7 +164,7 @@ $spin-dot-default: $text-color-secondary;
   }
 
   // large
-  @at-root &-lg #{&}-dot {
+   @at-root &-lg #{&}-dot {
     @include square($spin-dot-size-lg);
     i {
       width: 14px;
@@ -172,7 +172,7 @@ $spin-dot-default: $text-color-secondary;
     }
   }
 
-  @at-root &#{&}-show-text #{&}-text {
+   @at-root &#{&}-show-text #{&}-text {
     display: block;
   }
 }

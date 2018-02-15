@@ -1,15 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ViewEncapsulation,
-  Input,
-  ElementRef,
-  Output,
-  ContentChild,
-  TemplateRef,
-  EventEmitter,
-  HostBinding
-} from '@angular/core';
+import { Component, ContentChild, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output, TemplateRef, ViewEncapsulation } from '@angular/core';
 
 import * as moment from 'moment';
 import { Moment } from 'moment';
@@ -43,9 +32,9 @@ export interface WeekInterface {
 }
 
 @Component({
-  selector: 'tri-calendar',
+  selector     : 'tri-calendar',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div
       [class.ant-fullcalendar-fullscreen]="fullScreen"
       [class.ant-patch-full-height]="datePicker">
@@ -341,7 +330,7 @@ export class CalendarComponent implements OnInit {
     let monthIndex = date.month();
     let count = 0;
     while (!done) {
-      weeks.push({ days: this._buildWeek(date.clone(), month) });
+      weeks.push({days: this._buildWeek(date.clone(), month)});
       date.add(1, 'w');
       done = count++ > 4;
       monthIndex = date.month();
@@ -353,38 +342,38 @@ export class CalendarComponent implements OnInit {
     const days: Array<DayInterface> = [];
     for (let i = 0; i < 7; i++) {
       days.push({
-        number: date.date(),
-        isLastMonth: date.month() < month.month(),
-        isNextMonth: date.month() > month.month(),
-        isCurrentDay: date.isSame(new Date(), 'day'),
+        number       : date.date(),
+        isLastMonth  : date.month() < month.month(),
+        isNextMonth  : date.month() > month.month(),
+        isCurrentDay : date.isSame(new Date(), 'day'),
         isSelectedDay: date.isSame(this.value, 'day'),
-        title: date.format('YYYY-MM-DD'),
-        date: date,
-        disabled: this.disabledDate && this.disabledDate(date.toDate()),
+        title        : date.format('YYYY-MM-DD'),
+        date         : date,
+        disabled     : this.disabledDate && this.disabledDate(date.toDate()),
         firstDisabled:
-          this.disabledDate &&
-          this.disabledDate(date.toDate()) &&
-          (date.day() === 0 ||
-            (date.day() !== 0 &&
-              this.disabledDate &&
-              !this.disabledDate(
-                date
-                  .clone()
-                  .subtract(1, 'day')
-                  .toDate()
-              ))),
-        lastDisabled:
-          this.disabledDate &&
-          this.disabledDate(date.toDate()) &&
-          (date.day() === 6 ||
-            (date.day() !== 6 &&
-              this.disabledDate &&
-              !this.disabledDate(
-                date
-                  .clone()
-                  .add(1, 'day')
-                  .toDate()
-              )))
+        this.disabledDate &&
+        this.disabledDate(date.toDate()) &&
+        (date.day() === 0 ||
+          (date.day() !== 0 &&
+            this.disabledDate &&
+            !this.disabledDate(
+              date
+                .clone()
+                .subtract(1, 'day')
+                .toDate()
+            ))),
+        lastDisabled :
+        this.disabledDate &&
+        this.disabledDate(date.toDate()) &&
+        (date.day() === 6 ||
+          (date.day() !== 6 &&
+            this.disabledDate &&
+            !this.disabledDate(
+              date
+                .clone()
+                .add(1, 'day')
+                .toDate()
+            )))
       });
       date = date.clone();
       date.add(1, 'd');
@@ -397,10 +386,10 @@ export class CalendarComponent implements OnInit {
     let months: Array<MonthInterface> = [];
     for (let i = 0; i < 12; i++) {
       months.push({
-        index: i,
-        name: this._listOfMonthName[i],
-        year: date.year(),
-        isCurrentMonth: moment(new Date()).month() === i && date.isSame(new Date(), 'year'),
+        index          : i,
+        name           : this._listOfMonthName[i],
+        year           : date.year(),
+        isCurrentMonth : moment(new Date()).month() === i && date.isSame(new Date(), 'year'),
         isSelectedMonth: this._showMonth === i
       });
       if ((i + 1) % 3 === 0) {

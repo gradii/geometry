@@ -34,10 +34,10 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class CheckboxComponent implements ControlValueAccessor {
   _el: HTMLElement;
-  _checked       = false;
-  _focused       = false;
+  _checked = false;
+  _focused = false;
   // ngModel Access
-  onChange: any  = Function.prototype;
+  onChange: any = Function.prototype;
   onTouched: any = Function.prototype;
 
   /**
@@ -67,8 +67,7 @@ export class CheckboxComponent implements ControlValueAccessor {
     this._checked = value;
   }
 
-  @Output()
-  change = new EventEmitter<any>();
+  @Output() change = new EventEmitter<any>();
 
   @HostListener('click', ['$event'])
   onClick(e) {
@@ -85,7 +84,7 @@ export class CheckboxComponent implements ControlValueAccessor {
     this.onChange(value);
     this._checked = value;
 
-    this.change.emit({sender: this, checked: value})
+    this.change.emit({sender: this, checked: value});
   }
 
   focus() {

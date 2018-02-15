@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CompositeFilterDescriptor, FilterDescriptor } from '@gradii/triangle/data-query';
-import { ColumnComponent } from '../columns/column.component';
+import { ColumnComponent } from '../column.component';
 import { BaseFilterCellComponent } from './base-filter-cell.component';
 import { FilterService } from './filter.service';
 

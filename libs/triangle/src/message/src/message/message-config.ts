@@ -14,11 +14,11 @@ export const MESSAGE_DEFAULT_CONFIG = new InjectionToken<MessageConfig>('MESSAGE
 export const MESSAGE_CONFIG = new InjectionToken<MessageConfig>('MESSAGE_CONFIG');
 
 export const MESSAGE_DEFAULT_CONFIG_PROVIDER = {
-  provide: MESSAGE_DEFAULT_CONFIG,
+  provide : MESSAGE_DEFAULT_CONFIG,
   useValue: {
-    duration: 1500,
-    animate: true,
+    duration    : 2500,
+    animate     : true,
     pauseOnHover: true,
-    maxStack: 7
+    maxStack    : 7
   }
 };

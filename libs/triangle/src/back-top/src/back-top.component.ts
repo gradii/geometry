@@ -1,35 +1,23 @@
-import {
-  Component,
-  ContentChild,
-  EventEmitter,
-  Input,
-  NgZone,
-  OnDestroy,
-  OnInit,
-  Output,
-  TemplateRef,
-  ViewEncapsulation
-} from '@angular/core';
-
-import { animate, style, transition, trigger } from '@angular/animations';
-
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import { throttleTime } from 'rxjs/operators/throttleTime';
-import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
-import { Subscription } from 'rxjs/Subscription';
-
 import { ScrollService } from '@gradii/triangle/core';
 
+import { animate, style, transition, trigger } from '@angular/animations';
+import { Component, ContentChild, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewEncapsulation } from '@angular/core';
+
+import { fromEvent } from 'rxjs/observable/fromEvent';
+import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
+import { throttleTime } from 'rxjs/operators/throttleTime';
+import { Subscription } from 'rxjs/Subscription';
+
 @Component({
-  selector: 'tri-back-top',
+  selector     : 'tri-back-top',
   encapsulation: ViewEncapsulation.None,
-  animations: [
+  animations   : [
     trigger('enterLeave', [
-      transition(':enter', [style({ opacity: 0 }), animate(300, style({ opacity: 1 }))]),
-      transition(':leave', [style({ opacity: 1 }), animate(300, style({ opacity: 0 }))])
+      transition(':enter', [style({opacity: 0}), animate(300, style({opacity: 1}))]),
+      transition(':leave', [style({opacity: 1}), animate(300, style({opacity: 0}))])
     ])
   ],
-  template: `
+  template     : `
     <div class="ant-back-top" (click)="clickBackTop()" [@enterLeave] *ngIf="_display">
       <ng-template #defaultContent>
         <div class="ant-back-top-content"><i class="anticon anticon-to-top ant-back-top-icon"></i></div>

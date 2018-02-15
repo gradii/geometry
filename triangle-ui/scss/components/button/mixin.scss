@@ -8,26 +8,26 @@
 }
 
 @mixin button-disabled() {
-   &.disabled, &[disabled] {
-     &,
-     &:hover,
-     &:focus,
-     &:active,
-     &.active {
+  &.disabled, &[disabled] {
+    &,
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
       @include button-color($btn-disable-color, $btn-disable-bg, $btn-disable-border);
     }
   }
 }
 
-@mixin button-variant-primary($color, $background) {
-  @include button-color($color, $background, $background);
+@mixin button-variant-primary($color, $background, $border: $background) {
+  @include button-color($color, $background, $border);
   &:hover, &:focus {
-    @include button-color($color, color-palette($background, 5), color-palette($background, 5));
+    @include button-color($color, color-palette($background, 5), color-palette($border, 5));
   }
 
   &:active,
   &.active {
-    @include button-color($color, color-palette($background, 7), color-palette($background, 7));
+    @include button-color($color, color-palette($background, 7), color-palette($border, 7));
   }
 
   @include button-disabled();
@@ -37,12 +37,12 @@
   @include button-color($color, $background, $border);
 
   &:hover,
-    &:focus {
+  &:focus {
     @include button-color($primary-color, $background, $primary-color);
   }
 
   &:active,
-    &.active {
+  &.active {
     @include button-color($primary-7, $background, $primary-7);
   }
 
@@ -53,12 +53,12 @@
   @include button-color($color, $background, $border);
 
   &:hover,
-    &:focus {
+  &:focus {
     @include button-color($btn-primary-color, $color, $color);
   }
 
   &:active,
-    &.active {
+  &.active {
     @include button-color($btn-primary-color, color-palette($color, 7), color-palette($color, 7));
   }
 
@@ -109,9 +109,9 @@
     z-index: 1;
 
     &:hover,
-      &:focus,
-      &:active,
-      &.active {
+    &:focus,
+    &:active,
+    &.active {
       z-index: 2;
     }
 
@@ -171,7 +171,7 @@
   }
 
   &.disabled,
-    &[disabled] {
+  &[disabled] {
     cursor: not-allowed;
     > * {
       pointer-events: none;
@@ -185,6 +185,11 @@
   &-sm {
     @include button-size($btn-height-sm, $btn-padding-sm, $font-size-base, $btn-border-radius-sm);
   }
+
+  //& + & {
+  //  margin-left: 4px;
+  //  margin-top: 4px;
+  //}
 }
 
 // primary button style
@@ -196,9 +201,9 @@
 @mixin btn-default() {
   @include button-variant-other($btn-default-color, $btn-default-bg, $btn-default-border);
   &:hover,
-    &:focus,
-    &:active,
-    &.active {
+  &:focus,
+  &:active,
+  &.active {
     background: #fff;
   }
 }
@@ -212,6 +217,14 @@
 @mixin btn-dashed() {
   @include button-variant-other($btn-default-color, $btn-default-bg, $btn-default-border);
   border-style: dashed;
+}
+
+@mixin btn-success() {
+  @include button-variant-primary($btn-success-color, $btn-success-bg);
+}
+
+@mixin btn-warning() {
+  @include button-variant-primary($btn-warning-color, $btn-warning-bg);
 }
 
 // danger button style
@@ -242,8 +255,8 @@
 
   .#{$btnClassName} + .#{$btnClassName},
   .#{$btnClassName} + &,
-  &+ .#{$btnClassName},
-  &+ & {
+  & + .#{$btnClassName},
+  & + & {
     margin-left: -1px;
   }
 
@@ -268,15 +281,15 @@
     padding-left: 8px;
   }
 
-  &> & {
+  & > & {
     float: left;
   }
 
-  &> &:not(:first-child):not(:last-child) > .#{$btnClassName} {
+  & > &:not(:first-child):not(:last-child) > .#{$btnClassName} {
     border-radius: 0;
   }
 
-  &> &:first-child:not(:last-child) {
+  & > &:first-child:not(:last-child) {
     > .#{$btnClassName}:last-child {
       border-bottom-right-radius: 0;
       border-top-right-radius: 0;
@@ -284,7 +297,7 @@
     }
   }
 
-  &> &:last-child:not(:first-child) > .#{$btnClassName}:first-child {
+  & > &:last-child:not(:first-child) > .#{$btnClassName}:first-child {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
     padding-left: 8px;

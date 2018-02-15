@@ -1,10 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { LayoutComponent } from './layout.component';
-import { HeaderComponent } from './header.component';
 import { ContentComponent } from './content.component';
 import { FooterComponent } from './footer.component';
+import { HeaderComponent } from './header.component';
+import { LayoutComponent } from './layout.component';
 import { SiderComponent } from './sider.component';
-import { CommonModule } from '@angular/common';
 
 /**
  *
@@ -72,7 +72,7 @@ import { CommonModule } from '@angular/common';
  */
 @NgModule({
   declarations: [LayoutComponent, HeaderComponent, ContentComponent, FooterComponent, SiderComponent],
-  exports: [LayoutComponent, HeaderComponent, ContentComponent, FooterComponent, SiderComponent],
-  imports: [CommonModule]
+  exports     : [LayoutComponent, HeaderComponent, ContentComponent, FooterComponent, SiderComponent],
+  imports     : [CommonModule]
 })
 export class TriLayoutModule {}

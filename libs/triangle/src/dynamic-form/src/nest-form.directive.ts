@@ -1,7 +1,6 @@
 import { Directive, forwardRef } from '@angular/core';
 import { ControlValueAccessor, FormGroupDirective, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-
 @Directive({
   selector : 'tri-form[formGroup]',
   providers: [
@@ -13,7 +12,6 @@ import { ControlValueAccessor, FormGroupDirective, NG_VALUE_ACCESSOR } from '@an
   ]
 })
 export class NestFormDirective implements ControlValueAccessor {
-
   get formValue() {
     return this.formGroupDirective.form.value;
   }
@@ -38,5 +36,4 @@ export class NestFormDirective implements ControlValueAccessor {
   registerOnTouched(fn: any): void {
     this.onTouch = fn;
   }
-
 }

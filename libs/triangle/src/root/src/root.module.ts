@@ -1,30 +1,20 @@
-import {
-  NgModule,
-  OnDestroy,
-  ComponentRef,
-  ComponentFactoryResolver,
-  Inject,
-  Optional,
-  Injector,
-  APP_INITIALIZER
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { DOCUMENT } from '@angular/common';
-import { RootComponent } from './root.component';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { APP_INITIALIZER, ComponentFactoryResolver, ComponentRef, Inject, Injector, NgModule, OnDestroy, Optional } from '@angular/core';
+import { createNzRootInitializer, ROOT_CONFIG } from './root-config';
 import { RootStyleComponent } from './root-style.component';
-import { ROOT_CONFIG, createNzRootInitializer } from './root-config';
+import { RootComponent } from './root.component';
 
 @NgModule({
-  exports: [RootComponent],
-  declarations: [RootComponent, RootStyleComponent],
-  imports: [CommonModule],
+  exports        : [RootComponent],
+  declarations   : [RootComponent, RootStyleComponent],
+  imports        : [CommonModule],
   entryComponents: [RootStyleComponent],
-  providers: [
+  providers      : [
     {
-      provide: APP_INITIALIZER,
-      multi: true,
+      provide   : APP_INITIALIZER,
+      multi     : true,
       useFactory: createNzRootInitializer,
-      deps: [DOCUMENT, [new Optional(), ROOT_CONFIG]]
+      deps      : [DOCUMENT, [new Optional(), ROOT_CONFIG]]
     }
   ]
 })

@@ -1,18 +1,13 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TriFormModule } from '@gradii/triangle/form';
-import {
-  TriCheckboxModule, TriInputModule, TriInputNumberModule, TriRadioModule,
-  TriSelectModule
-} from '@gradii/triangle/inputs';
-import { TriGridModule } from '@gradii/triangle/grid';
-import { DynamicFormFactoryComponent } from './dynamic-form-factory.component';
 import { TriDataTableModule } from '@gradii/triangle/data-table';
-import { TriCheckboxDataTableModule } from '@gradii/triangle/input-compose';
+import { TriFormModule } from '@gradii/triangle/form';
+import { TriGridModule } from '@gradii/triangle/grid';
+import { TriCheckboxDataTableModule, TriRangeInputModule } from '@gradii/triangle/input-compose';
+import { TriCheckboxModule, TriInputModule, TriInputNumberModule, TriRadioModule, TriSelectModule } from '@gradii/triangle/inputs';
 import { TriToolTipModule } from '@gradii/triangle/tooltip';
-import { TriRangeInputModule } from '@gradii/triangle/input-compose/src/range-input/range-input.module';
-
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DynamicFormFactoryComponent } from './dynamic-form-factory.component';
 
 /**
  * the TriDynamicFormModule should be be imported by TriDynamicFormModule.exports()
@@ -35,20 +30,13 @@ import { TriRangeInputModule } from '@gradii/triangle/input-compose/src/range-in
     TriDataTableModule,
     TriCheckboxDataTableModule,
 
-    TriFormModule,
-
+    TriFormModule
   ],
-  declarations: [
-    DynamicFormFactoryComponent
-  ],
-  exports     : [
-    DynamicFormFactoryComponent
-  ],
+  declarations: [DynamicFormFactoryComponent],
+  exports     : [DynamicFormFactoryComponent]
 })
 export class TriDynamicFormModule {
   public static exports() {
-    return [
-      DynamicFormFactoryComponent
-    ];
+    return [DynamicFormFactoryComponent];
   }
 }

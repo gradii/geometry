@@ -95,4 +95,4 @@ import { NotificationService } from '@gradii/triangle/message';
   ],
   providers: [NotificationService, MessageService]
 })
-export class TriangleModule {}
+export class TriangleBundleModule {}

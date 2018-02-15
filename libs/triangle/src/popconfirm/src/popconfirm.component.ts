@@ -1,13 +1,13 @@
-import { Component, ViewEncapsulation, Input, Output, EventEmitter, ContentChild } from '@angular/core';
-import { PopConfirmDirective } from './popconfirm.directive';
 import { FadeAnimation } from '@gradii/triangle/core';
 import { ToolTipComponent } from '@gradii/triangle/tooltip';
+import { Component, ContentChild, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { PopConfirmDirective } from './popconfirm.directive';
 
 @Component({
-  selector: 'tri-popconfirm',
+  selector     : 'tri-popconfirm',
   encapsulation: ViewEncapsulation.None,
-  animations: [FadeAnimation],
-  template: `
+  animations   : [FadeAnimation],
+  template     : `
     <ng-content></ng-content>
     <ng-template
       cdkConnectedOverlay

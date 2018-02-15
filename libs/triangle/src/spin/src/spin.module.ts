@@ -1,10 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { SpinComponent } from './spin.component';
-import { CommonModule } from '@angular/common';
 
 @NgModule({
-  exports: [SpinComponent],
+  exports     : [SpinComponent],
   declarations: [SpinComponent],
-  imports: [CommonModule]
+  imports     : [CommonModule]
 })
 export class TriSpinModule {}

@@ -14,9 +14,9 @@ export class AvatarAutosizeDirective implements OnChanges {
     if ('avatarBoundingClientRect' in changes) {
       if (
         changes['avatarBoundingClientRect'].currentValue.height !==
-          changes['avatarBoundingClientRect'].previousValue.height ||
+        changes['avatarBoundingClientRect'].previousValue.height ||
         changes['avatarBoundingClientRect'].currentValue.width !==
-          changes['avatarBoundingClientRect'].previousValue.width
+        changes['avatarBoundingClientRect'].previousValue.width
       ) {
         this._calcSize();
       }

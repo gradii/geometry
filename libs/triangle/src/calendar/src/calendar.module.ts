@@ -1,9 +1,8 @@
-import { NgModule } from '@angular/core';
-import { CalendarComponent } from './calendar.component';
+import { TriRadioModule, TriSelectModule } from '@gradii/triangle/inputs';
 import { CommonModule } from '@angular/common';
-import { TriSelectModule } from '@gradii/triangle/inputs';
-import { TriRadioModule } from '@gradii/triangle/inputs';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CalendarComponent } from './calendar.component';
 
 /**
  *
@@ -23,8 +22,8 @@ import { FormsModule } from '@angular/forms';
  * <!-- example(calendar-content) -->
  */
 @NgModule({
-  imports: [CommonModule, TriSelectModule, TriRadioModule, FormsModule],
+  imports     : [CommonModule, TriSelectModule, TriRadioModule, FormsModule],
   declarations: [CalendarComponent],
-  exports: [CalendarComponent]
+  exports     : [CalendarComponent]
 })
 export class TriCalendarModule {}

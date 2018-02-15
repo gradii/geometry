@@ -1,3 +1,5 @@
+import { ScrollService } from '@gradii/triangle/core';
+import { DOCUMENT } from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -11,14 +13,11 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
 
 import { fromEvent } from 'rxjs/observable/fromEvent';
-import { Subscription } from 'rxjs/Subscription';
-import { throttleTime } from 'rxjs/operators/throttleTime';
 import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
-
-import { ScrollService } from '@gradii/triangle/core';
+import { throttleTime } from 'rxjs/operators/throttleTime';
+import { Subscription } from 'rxjs/Subscription';
 import { AnchorLinkComponent } from './anchor-link.component';
 
 interface Section {
@@ -27,9 +26,9 @@ interface Section {
 }
 
 @Component({
-  selector: 'tri-anchor',
+  selector     : 'tri-anchor',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div class="ant-anchor-wrapper" #container>
       <div class="ant-anchor">
         <div class="ant-anchor-ink">

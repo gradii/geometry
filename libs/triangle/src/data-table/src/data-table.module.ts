@@ -1,23 +1,23 @@
-import { LayoutModule } from "@angular/cdk/layout";
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
 import { TriPaginationModule } from '@gradii/triangle/pagination';
 import { TriSpinModule } from '@gradii/triangle/spin';
+import { LayoutModule } from '@angular/cdk/layout';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { DataTableComponent } from './data-table.component';
 // import { CldrIntlService, IntlService } from '@gradii/triangle/tri-angular-intl';
 import { DataBindingDirective } from './directive/databinding.directive';
-import { ToolbarTemplateDirective } from './table-shared/toolbar-template.directive';
 // import { LocalizedMessagesDirective } from './localization/localized-messages.directive';
 // import { CustomMessagesComponent } from './localization/custom-messages.component';
-import { RowFilterModule } from './filtering/filtering.module';
+import { RowFilterModule } from './filtering/row-filter.module';
 import { GroupModule } from './grouping/group.module';
 import { ListComponent } from './list.component';
+import { SelectionDirective } from './selection/selection.directive';
 import { BodyModule } from './table-body/body.module';
 import { FooterModule } from './table-footer/footer.module';
 import { HeaderModule } from './table-header/header.module';
 import { SharedModule } from './table-shared/shared.module';
+import { ToolbarTemplateDirective } from './table-shared/toolbar-template.directive';
 import { ToolbarComponent } from './table-toolbar/toolbar.component';
-import { SelectionDirective } from './selection/selection.directive';
 
 @NgModule({
   declarations: [
@@ -28,7 +28,7 @@ import { SelectionDirective } from './selection/selection.directive';
     // CustomMessagesComponent,
     DataBindingDirective,
     ToolbarTemplateDirective,
-    SelectionDirective,
+    SelectionDirective
   ],
   exports     : [
     DataTableComponent,
@@ -58,7 +58,6 @@ import { SelectionDirective } from './selection/selection.directive';
     LayoutModule
   ],
   providers   : [
-
     // {provide: IntlService, useClass: CldrIntlService}
   ]
 })

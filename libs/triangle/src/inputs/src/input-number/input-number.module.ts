@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
-import { InputNumberComponent } from './input-number.component';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { InputNumberComponent } from './input-number.component';
 
 /**
  *
@@ -22,8 +22,8 @@ import { FormsModule } from '@angular/forms';
  * <!-- example(input-number-digit) -->
  */
 @NgModule({
-  imports: [CommonModule, FormsModule],
+  imports     : [CommonModule, FormsModule],
   declarations: [InputNumberComponent],
-  exports: [InputNumberComponent]
+  exports     : [InputNumberComponent]
 })
 export class TriInputNumberModule {}

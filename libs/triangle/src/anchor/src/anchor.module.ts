@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
+import { SCROLL_SERVICE_PROVIDER } from '@gradii/triangle/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { AnchorLinkComponent } from './anchor-link.component';
+import { AnchorLinkDirective } from './anchor-link.directive';
 
 import { AnchorComponent } from './anchor.component';
-import { AnchorLinkComponent } from './anchor-link.component';
-import { SCROLL_SERVICE_PROVIDER } from '@gradii/triangle/core';
-import { AnchorLinkDirective } from './anchor-link.directive';
 
 /**
  *
@@ -21,8 +21,8 @@ import { AnchorLinkDirective } from './anchor-link.directive';
  */
 @NgModule({
   declarations: [AnchorComponent, AnchorLinkComponent, AnchorLinkDirective],
-  exports: [AnchorComponent, AnchorLinkComponent, AnchorLinkDirective],
-  imports: [CommonModule],
-  providers: [SCROLL_SERVICE_PROVIDER]
+  exports     : [AnchorComponent, AnchorLinkComponent, AnchorLinkDirective],
+  imports     : [CommonModule],
+  providers   : [SCROLL_SERVICE_PROVIDER]
 })
 export class TriAnchorModule {}

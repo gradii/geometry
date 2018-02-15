@@ -8,8 +8,8 @@ export class SliderService {
   }
 
   getPrecision(num) {
-    const numStr = num.toString(),
-      dotIndex = numStr.indexOf('.');
+    const numStr   = num.toString(),
+          dotIndex = numStr.indexOf('.');
     return dotIndex >= 0 ? numStr.length - dotIndex - 1 : 0;
   }
 
@@ -48,13 +48,13 @@ export class SliderService {
     // Running getBoundingClientRect on a
     // disconnected node in IE throws an error
     if (!elem.getClientRects().length) {
-      return { top: 0, left: 0 };
+      return {top: 0, left: 0};
     }
     // Get document-relative position by adding viewport scroll to viewport-relative gBCR
     const rect = elem.getBoundingClientRect(),
-      win = elem.ownerDocument.defaultView;
+          win  = elem.ownerDocument.defaultView;
     return {
-      top: rect.top + win.pageYOffset,
+      top : rect.top + win.pageYOffset,
       left: rect.left + win.pageXOffset
     };
   }

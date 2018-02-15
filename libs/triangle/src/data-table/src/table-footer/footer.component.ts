@@ -1,9 +1,10 @@
-import { Component, Input, HostBinding } from '@angular/core';
+import { GroupDescriptor } from '@gradii/triangle/data-query';
+import { Component, HostBinding, Input } from '@angular/core';
+import { ColumnBase } from '../columns/column-base';
+import { ColumnComponent } from '../columns/column.component';
 import { columnsToRender } from '../helper/column-common';
 import { DetailTemplateDirective } from '../table-shared/detail-template.directive';
-import { GroupDescriptor } from '@gradii/triangle/data-query';
-import { ColumnComponent } from '../columns/column.component';
-import { ColumnBase } from '../columns/column-base';
+
 @Component({
   selector: '[triGridFooter]',
   template: `
@@ -41,15 +42,18 @@ export class FooterComponent {
   @Input() detailTemplate: DetailTemplateDirective;
   @Input() scrollable: boolean;
   @Input() lockedColumnsCount: number;
+
   constructor() {
     this.columns = [];
     this.groups = [];
     this.lockedColumnsCount = 0;
   }
+
   @HostBinding('class.ant-grid-footer')
   get footerClass(): boolean {
     return !this.scrollable;
   }
+
   get columnsToRender(): ColumnBase[] {
     return columnsToRender(this.columns || []);
   }

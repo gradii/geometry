@@ -1,5 +1,5 @@
-import {Component, ContentChild, HostBinding, Input} from '@angular/core';
-import {NgControl} from "@angular/forms";
+import { Component, ContentChild, HostBinding, Input } from '@angular/core';
+import { NgControl } from '@angular/forms';
 
 @Component({
   selector: '[tri-form-control], [triFormControl]',
@@ -56,29 +56,25 @@ export class FormControlComponent {
     return (
       this._isDirtyAndError('validating') ||
       this.validateStatus === 'pending' ||
-      (this.validateStatus &&
-        (this.validateStatus as NgControl).dirty &&
-        (this.validateStatus as NgControl).pending
-      )
+      (this.validateStatus && (this.validateStatus as NgControl).dirty && (this.validateStatus as NgControl).pending)
     );
   }
 
   get isError(): boolean {
-    return this.validateStatus === 'error' ||
-      this.validateStatus &&
-      (this.validateStatus as NgControl).dirty &&
-      (this.validateStatus as NgControl).errors &&
-      (this.validateStatus as NgControl).hasError &&
-      !(this.validateStatus as NgControl).hasError('warning');
+    return (
+      this.validateStatus === 'error' ||
+      (this.validateStatus &&
+        (this.validateStatus as NgControl).dirty &&
+        (this.validateStatus as NgControl).errors &&
+        (this.validateStatus as NgControl).hasError &&
+        !(this.validateStatus as NgControl).hasError('warning'))
+    );
   }
 
   get isSuccess(): boolean {
     return (
       this.validateStatus === 'success' ||
-      (this.validateStatus &&
-        (this.validateStatus as NgControl).dirty &&
-        (this.validateStatus as NgControl).valid
-      )
+      (this.validateStatus && (this.validateStatus as NgControl).dirty && (this.validateStatus as NgControl).valid)
     );
   }
 
@@ -92,8 +88,7 @@ export class FormControlComponent {
       (this.validateStatus &&
         (this.validateStatus as NgControl).dirty &&
         (this.validateStatus as NgControl).hasError &&
-        (this.validateStatus as NgControl).hasError(name)
-      )
+        (this.validateStatus as NgControl).hasError(name))
     );
   }
 

@@ -1,18 +1,18 @@
+import { Component } from '@angular/core';
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed, ComponentFixtureAutoDetect } from '@angular/core/testing';
-import { Component, DebugElement } from '@angular/core';
+import { async, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { NzBreadCrumbModule } from '../src/breadcrumb.module';
-import { NzBreadCrumbComponent } from '../src/breadcrumb.component';
 import { NzBreadCrumbItemComponent } from '../src/breadcrumb-item.component';
+import { NzBreadCrumbComponent } from '../src/breadcrumb.component';
+import { NzBreadCrumbModule } from '../src/breadcrumb.module';
 
 describe('NzBreadCrumb', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [NzBreadCrumbModule],
+        imports     : [NzBreadCrumbModule],
         declarations: [WithoutBreadCrumb, WithoutBreadCrumbItem, TestBreadCrumb, TestSeparator],
-        providers: []
+        providers   : []
       }).compileComponents();
     })
   );
@@ -106,6 +106,7 @@ describe('NzBreadCrumb', () => {
     });
   });
 });
+
 @Component({
   selector: 'test-without-breadcrumb-item',
   template: `
@@ -123,6 +124,7 @@ class WithoutBreadCrumbItem {}
   `
 })
 class WithoutBreadCrumb {}
+
 @Component({
   selector: 'test-breadcrumb',
   template: `
@@ -139,6 +141,7 @@ class WithoutBreadCrumb {}
 class TestBreadCrumb {
   _custormString = 'Home';
 }
+
 @Component({
   selector: 'test-separator',
   template: `

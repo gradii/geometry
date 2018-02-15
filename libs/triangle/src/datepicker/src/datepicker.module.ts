@@ -1,13 +1,13 @@
-import { NgModule } from '@angular/core';
-import { DatePickerComponent } from './datepicker.component';
-import { CommonModule } from '@angular/common';
+import { TriCalendarModule } from '@gradii/triangle/calendar';
 import { TriInputModule } from '@gradii/triangle/inputs';
+import { TriLocaleModule } from '@gradii/triangle/locale';
 import { TriTimePickerModule } from '@gradii/triangle/time-picker';
 import { TriUtilModule } from '@gradii/triangle/util';
-import { TriCalendarModule } from '@gradii/triangle/calendar';
-import { FormsModule } from '@angular/forms';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { TriLocaleModule } from '@gradii/triangle/locale';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { DatePickerComponent } from './datepicker.component';
 
 /**
  *
@@ -33,7 +33,7 @@ import { TriLocaleModule } from '@gradii/triangle/locale';
  * !-- example(date-picker-disable-date) -->
  */
 @NgModule({
-  imports: [
+  imports     : [
     CommonModule,
     TriTimePickerModule,
     TriUtilModule,
@@ -44,6 +44,6 @@ import { TriLocaleModule } from '@gradii/triangle/locale';
     OverlayModule
   ],
   declarations: [DatePickerComponent],
-  exports: [DatePickerComponent]
+  exports     : [DatePickerComponent]
 })
 export class TriDatePickerModule {}

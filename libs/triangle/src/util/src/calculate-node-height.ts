@@ -41,15 +41,15 @@ function calculateNodeStyling(node, useCache = false) {
   const style = window.getComputedStyle(node);
 
   const boxSizing =
-    style.getPropertyValue('box-sizing') ||
-    style.getPropertyValue('-moz-box-sizing') ||
-    style.getPropertyValue('-webkit-box-sizing');
+          style.getPropertyValue('box-sizing') ||
+          style.getPropertyValue('-moz-box-sizing') ||
+          style.getPropertyValue('-webkit-box-sizing');
 
   const paddingSize =
-    parseFloat(style.getPropertyValue('padding-bottom')) + parseFloat(style.getPropertyValue('padding-top'));
+          parseFloat(style.getPropertyValue('padding-bottom')) + parseFloat(style.getPropertyValue('padding-top'));
 
   const borderSize =
-    parseFloat(style.getPropertyValue('border-bottom-width')) + parseFloat(style.getPropertyValue('border-top-width'));
+          parseFloat(style.getPropertyValue('border-bottom-width')) + parseFloat(style.getPropertyValue('border-top-width'));
 
   const sizingStyle = SIZING_STYLE.map(name => `${name}:${style.getPropertyValue(name)}`).join(';');
 
@@ -67,12 +67,10 @@ function calculateNodeStyling(node, useCache = false) {
   return nodeInfo;
 }
 
-export function calculateNodeHeight(
-  uiTextNode,
-  useCache = false,
-  minRows: number | null = null,
-  maxRows: number | null = null
-) {
+export function calculateNodeHeight(uiTextNode,
+                                    useCache               = false,
+                                    minRows: number | null = null,
+                                    maxRows: number | null = null) {
   if (!hiddenTextarea) {
     hiddenTextarea = document.createElement('textarea');
     document.body.appendChild(hiddenTextarea);
@@ -88,7 +86,7 @@ export function calculateNodeHeight(
 
   // Copy all CSS properties that have an impact on the height of the content in
   // the textbox
-  const { paddingSize, borderSize, boxSizing, sizingStyle } = calculateNodeStyling(uiTextNode, useCache);
+  const {paddingSize, borderSize, boxSizing, sizingStyle} = calculateNodeStyling(uiTextNode, useCache);
 
   // Need to have the overflow attribute to hide the scrollbar otherwise
   // text-lines will not calculated properly as the shadow will technically be
@@ -133,5 +131,5 @@ export function calculateNodeHeight(
   if (!maxRows) {
     overflowY = 'hidden';
   }
-  return { height, minHeight, maxHeight, overflowY };
+  return {height, minHeight, maxHeight, overflowY};
 }

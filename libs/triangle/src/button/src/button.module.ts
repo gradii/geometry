@@ -1,7 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ButtonGroupComponent } from './button-group.component';
 import { ButtonComponent } from './button.component';
-import { CommonModule } from '@angular/common';
 
 /**
  *
@@ -30,7 +30,7 @@ import { CommonModule } from '@angular/common';
  */
 @NgModule({
   declarations: [ButtonComponent, ButtonGroupComponent],
-  exports: [ButtonComponent, ButtonGroupComponent],
-  imports: [CommonModule]
+  exports     : [ButtonComponent, ButtonGroupComponent],
+  imports     : [CommonModule]
 })
 export class TriButtonModule {}

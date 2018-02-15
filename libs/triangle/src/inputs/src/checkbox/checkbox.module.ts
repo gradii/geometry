@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { CheckboxComponent } from './checkbox.component';
-import { CheckboxGroupComponent } from './checkbox-group.component';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CheckboxGroupComponent } from './checkbox-group.component';
+import { CheckboxComponent } from './checkbox.component';
 
 /**
  * # Checkbox 多选框

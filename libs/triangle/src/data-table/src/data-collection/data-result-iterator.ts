@@ -1,6 +1,6 @@
 import { DataResult } from '@gradii/triangle/data-query';
+import { isPresent } from '@gradii/triangle/util';
 import { getIterator } from './data.iterators';
-import { isPresent } from "../utils";
 
 export interface GridDataResult extends DataResult {}
 
@@ -25,7 +25,7 @@ export class DataResultIterator {
   }
 
   get data(): any[] {
-    return this.isObject ? (this.source as GridDataResult).data : this.source as any[];
+    return this.isObject ? (this.source as GridDataResult).data : (this.source as any[]);
   }
 
   map(fn: (item: any, index: number, array: any[]) => any): any[] {

@@ -1,4 +1,4 @@
-import { Directive, ViewContainerRef, Input, OnDestroy } from '@angular/core';
+import { Directive, Input, OnDestroy, ViewContainerRef } from '@angular/core';
 
 /**
  * TODO　remove

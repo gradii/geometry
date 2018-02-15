@@ -3,7 +3,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { TriangleModule } from './triangle-module';
+import { TriangleBundleModule } from './triangle-module';
 
 export interface LiveExample {
   title: string;
@@ -2337,6 +2337,6 @@ export const EXAMPLE_LIST = [
   declarations: EXAMPLE_LIST,
   exports: EXAMPLE_LIST,
   entryComponents: EXAMPLE_LIST,
-  imports: [TriangleModule, FormsModule, ReactiveFormsModule, CommonModule]
+  imports: [TriangleBundleModule, FormsModule, ReactiveFormsModule, CommonModule]
 })
 export class TriangleExampleModule {}

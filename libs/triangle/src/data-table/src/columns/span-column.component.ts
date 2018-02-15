@@ -1,19 +1,9 @@
-import {
-  forwardRef,
-  Component,
-  SkipSelf,
-  Host,
-  Optional,
-  QueryList,
-  ContentChildren,
-  Input,
-  TemplateRef
-} from '@angular/core';
+import { isPresent } from '@gradii/triangle/util';
+import { Component, ContentChildren, Host, Input, Optional, QueryList, SkipSelf, TemplateRef } from '@angular/core';
 import { CellTemplateDirective } from '../directive/cell-template.directive';
 import { EditTemplateDirective } from '../directive/edit-template.directive';
 import { ColumnBase } from './column-base';
 import { ColumnComponent } from './column.component';
-import { isPresent } from '../utils';
 
 export function isSpanColumnComponent(column) {
   return column.isSpanColumn;
@@ -32,30 +22,30 @@ export function isSpanColumnComponent(column) {
 export class SpanColumnComponent extends ColumnBase {
   readonly isSpanColumn: boolean;
   @ContentChildren(CellTemplateDirective, {descendants: false})
-           template: QueryList<CellTemplateDirective>;
+  template: QueryList<CellTemplateDirective>;
   @ContentChildren(EditTemplateDirective, {descendants: false})
-           editTemplate: QueryList<EditTemplateDirective>;
+  editTemplate: QueryList<EditTemplateDirective>;
   @ContentChildren(ColumnComponent) childColumns: QueryList<ColumnComponent>;
-           title: string;
-           width: number;
-           headerStyle: {
-             [key: string]: string;
-           };
-           footerStyle: {
-             [key: string]: string;
-           };
-           headerClass: | string
-             | string[]
-             | Set<string>
-             | {
-             [key: string]: any;
-           };
-           footerClass: | string
-             | string[]
-             | Set<string>
-             | {
-             [key: string]: any;
-           };
+  title: string;
+  width: number;
+  headerStyle: {
+    [key: string]: string;
+  };
+  footerStyle: {
+    [key: string]: string;
+  };
+  headerClass: | string
+    | string[]
+    | Set<string>
+    | {
+    [key: string]: any;
+  };
+  footerClass: | string
+    | string[]
+    | Set<string>
+    | {
+    [key: string]: any;
+  };
   private _editable;
   private _hidden;
   private _locked;
@@ -67,12 +57,12 @@ export class SpanColumnComponent extends ColumnBase {
     super(parent);
 
     this.isSpanColumn = true;
-    this.template     = new QueryList<CellTemplateDirective>();
+    this.template = new QueryList<CellTemplateDirective>();
     this.editTemplate = new QueryList<EditTemplateDirective>();
     this.childColumns = new QueryList<ColumnComponent>();
-    this._editable    = true;
-    this._hidden      = false;
-    this._locked      = false;
+    this._editable = true;
+    this._hidden = false;
+    this._locked = false;
     if (parent && (<SpanColumnComponent>parent).isSpanColumn) {
       throw new Error('SpanColumn cannot be nested inside another SpanColumn');
     }

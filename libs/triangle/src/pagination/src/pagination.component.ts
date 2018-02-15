@@ -1,10 +1,7 @@
-import {PageChangeEvent} from "@gradii/triangle/data-table";
-import {
-  Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChange, SimpleChanges,
-  ViewEncapsulation
-} from '@angular/core';
+import { PageChangeEvent } from '@gradii/triangle/data-table';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
 
-const isChanged  = (propertyName: string, changes: any, skipFirstChange: boolean = true) =>
+const isChanged = (propertyName: string, changes: any, skipFirstChange: boolean = true) =>
   changes[propertyName] &&
   (!changes[propertyName].isFirstChange() || !skipFirstChange) &&
   changes[propertyName].previousValue !== changes[propertyName].currentValue;
@@ -116,17 +113,17 @@ const anyChanged = (propertyNames: string[], changes: any, skipFirstChange: bool
 export class PaginationComponent implements OnChanges {
   _el: HTMLElement;
   // cache pageIndex
-  _current         = 1;
+  _current = 1;
   _total: number;
   // _pageSize        = 10;
-  _firstIndex      = 1;
-  _lastIndex       = Infinity;
-  _pages           = [];
-  _options         = [10, 20, 30, 40, 50];
+  _firstIndex = 1;
+  _lastIndex = Infinity;
+  _pages = [];
+  _options = [10, 20, 30, 40, 50];
   _showSizeChanger = false;
   _showQuickJumper = false;
-  _showTotal       = false;
-  _simple          = false;
+  _showTotal = false;
+  _simple = false;
 
   _offset: number;
   _limit: number = 10;
@@ -150,9 +147,7 @@ export class PaginationComponent implements OnChanges {
   }
 
   @Input()
-  set showDetail(value: boolean) {
-
-  }
+  set showDetail(value: boolean) {}
 
   /**
    * Set whether can quick jump to some page, when add this property show quick jumper
@@ -209,9 +204,9 @@ export class PaginationComponent implements OnChanges {
   }
 
   @Input()
-  set forPage({pageIndex, pageSize}: { pageIndex: number, pageSize: number }) {
+  set forPage({pageIndex, pageSize}: { pageIndex: number; pageSize: number }) {
     this.pageIndex = pageIndex;
-    this.limit     = pageSize;
+    this.limit = pageSize;
   }
 
   /**
@@ -382,11 +377,10 @@ export class PaginationComponent implements OnChanges {
         tmpPages.push({index: i});
       }
     } else if (!isFinite(this._lastIndex)) {
-
     } else {
       const current = this.pageIndex;
-      let left      = Math.max(2, current - 2);
-      let right     = Math.min(current + 2, this._lastIndex - 1);
+      let left = Math.max(2, current - 2);
+      let right = Math.min(current + 2, this._lastIndex - 1);
 
       // if (current - 1 <= 2) {
       //   right = 5;
@@ -437,13 +431,14 @@ export class PaginationComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['skip'] || changes['offset'] || changes['limit'] || changes['take']) {
       if (changes['pageIndex'] || changes['pageSize']) {
-        console.warn(`pageSize and pageIndex is incompatible with "skip offset limit take", ` +
-          `pageSize and pageIndex is deprecated and it will not take effect. please consider to use skip take`);
+        console.warn(
+          `pageSize and pageIndex is incompatible with "skip offset limit take", ` +
+          `pageSize and pageIndex is deprecated and it will not take effect. please consider to use skip take`
+        );
       }
     }
     // if (anyChanged(['skip', 'offset', 'limit', 'take', 'pageIndex', 'pageSize'], changes, true)) {
     //   this.pageChange.emit({skip: this.offset, take: this.limit});
     // }
   }
-
 }

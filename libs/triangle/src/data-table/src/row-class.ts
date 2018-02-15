@@ -9,17 +9,14 @@ export interface RowArgs {
   index: number;
 }
 
-export interface RowClassArgs extends RowArgs {
-}
+export interface RowClassArgs extends RowArgs {}
 
-export type RowClassFn = (
-  context: RowClassArgs
-) =>
+export type RowClassFn = (context: RowClassArgs) =>
   | string
   | string[]
   | Set<string>
   | {
-      [key: string]: any;
-    };
+  [key: string]: any;
+};
 
 export type RowSelectedFn = (context: RowArgs) => boolean;

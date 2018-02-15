@@ -1,22 +1,12 @@
-import {
-  Component,
-  HostBinding,
-  HostListener,
-  Optional,
-  Host,
-  Input,
-  ViewEncapsulation,
-  Output,
-  EventEmitter
-} from '@angular/core';
+import { Component, EventEmitter, Host, HostBinding, HostListener, Input, Optional, Output, ViewEncapsulation } from '@angular/core';
 import { LayoutComponent } from './layout.component';
 
 export type BreakPoinit = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 @Component({
-  selector: 'tri-sider',
+  selector     : 'tri-sider',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <ng-content></ng-content>
     <span class="ant-layout-sider-zero-width-trigger" *ngIf="_isZeroTrigger" (click)="toggleCollapse()">
       <i class="anticon anticon-bars"></i>
@@ -129,18 +119,16 @@ export class SiderComponent {
     this.collapsedChange.emit(this.collapsed);
   }
 
-  constructor(
-    @Optional()
-    @Host()
-    private layoutComponent: LayoutComponent
-  ) {
+  constructor(@Optional()
+              @Host()
+              private layoutComponent: LayoutComponent) {
     if (this.layoutComponent) {
       this.layoutComponent.hasSider = true;
     }
     if (typeof window !== 'undefined') {
       const matchMediaPolyfill = (mediaQuery: string): MediaQueryList => {
         return {
-          media: mediaQuery,
+          media  : mediaQuery,
           matches: false,
           addListener() {},
           removeListener() {}

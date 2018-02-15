@@ -8,7 +8,7 @@
   "typings": "./triangle.d.ts",
   "publishConfig": {
   },
-  "dependencies": {
+  "peerDependencies": {
     "moment": "^2.19.3"
   }
 }

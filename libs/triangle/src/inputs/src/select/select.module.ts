@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SelectComponent } from './select.component';
 import { OptionComponent } from './option.component';
 import { OptionPipe } from './option.pipe';
-import { OverlayModule } from '@angular/cdk/overlay';
+import { SelectComponent } from './select.component';
 
 /**
  *
@@ -31,8 +31,8 @@ import { OverlayModule } from '@angular/cdk/overlay';
  * <!-- example(select-multiple-change) -->
  */
 @NgModule({
-  imports: [CommonModule, FormsModule, OverlayModule],
+  imports     : [CommonModule, FormsModule, OverlayModule],
   declarations: [OptionPipe, OptionComponent, SelectComponent],
-  exports: [OptionPipe, OptionComponent, SelectComponent]
+  exports     : [OptionPipe, OptionComponent, SelectComponent]
 })
 export class TriSelectModule {}

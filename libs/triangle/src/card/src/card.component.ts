@@ -1,9 +1,9 @@
-import { Component, Input, HostBinding, ContentChild, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { Component, ContentChild, HostBinding, Input, TemplateRef, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'tri-card',
+  selector     : 'tri-card',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div class="ant-card-head" *ngIf="!!titleTemplate">
       <h3 class="ant-card-head-title">
         <ng-template

@@ -6,6 +6,15 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.None
 })
 export class DemoDataTableComponent implements OnInit {
+  DemoButtonTypeCode = '';
+  DemoButtonSizeCode = '';
+  DemoButtonLoadingCode = '';
+  DemoButtonIconCode = '';
+  DemoButtonGroupCode = '';
+  DemoButtonDisabledCode = '';
+  DemoButtonGhostCode = '';
+  DemoButtonMultipleCode = '';
+
   constructor() {}
 
   ngOnInit() {}

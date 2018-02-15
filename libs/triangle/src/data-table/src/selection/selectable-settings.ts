@@ -1,11 +1,6 @@
-export type SelectableMode =
-  "single"
-  | "multiple";
+export type SelectableMode = 'single' | 'multiple';
 
-export type SelectAllCheckboxState =
-  "checked"
-  | "unchecked"
-  | "indeterminate";
+export type SelectAllCheckboxState = 'checked' | 'unchecked' | 'indeterminate';
 
 export interface SelectableSettings {
   /**
@@ -31,5 +26,3 @@ export interface SelectableSettings {
    */
   mode?: SelectableMode;
 }
-
-

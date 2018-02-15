@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input, HostListener, forwardRef } from '@angular/core';
+import { Component, forwardRef, HostListener, Input, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 /**
@@ -11,9 +11,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
  * ```
  */
 @Component({
-  selector: 'tri-switch',
+  selector     : 'tri-switch',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <span [ngClass]="_classMap"
           class="ant-switch"
           [class.ant-switch-checked]="_checked"
@@ -30,11 +30,11 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       </span>
     </span>
   `,
-  providers: [
+  providers    : [
     {
-      provide: NG_VALUE_ACCESSOR,
+      provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => SwitchComponent),
-      multi: true
+      multi      : true
     }
   ]
 })

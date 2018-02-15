@@ -1,8 +1,8 @@
-import { Injectable, Inject, Provider, Optional, SkipSelf } from '@angular/core';
 import { LoggerService } from '@gradii/triangle/util';
-import { LOCALE } from './locale.token';
-import { Locale } from './locale.class';
+import { Inject, Injectable, Optional, Provider, SkipSelf } from '@angular/core';
 import * as moment from 'moment';
+import { Locale } from './locale.class';
+import { LOCALE } from './locale.token';
 
 @Injectable()
 export class LocaleService {
@@ -44,7 +44,7 @@ export class LocaleService {
 
   private _getObjectPath(obj: Object, path: string): any {
     const paths = path.split('.'),
-      depth = paths.length;
+          depth = paths.length;
     let index = 0;
     while (obj && index < depth) {
       obj = obj[paths[index++]];
@@ -58,7 +58,7 @@ export function LOCALE_SERVICE_PROVIDER_FACTORY(exist, locale, logger) {
 }
 
 export const LOCALE_SERVICE_PROVIDER: Provider = {
-  provide: LocaleService,
+  provide   : LocaleService,
   useFactory: LOCALE_SERVICE_PROVIDER_FACTORY,
-  deps: [[new Optional(), new SkipSelf(), LocaleService], LOCALE, LoggerService]
+  deps      : [[new Optional(), new SkipSelf(), LocaleService], LOCALE, LoggerService]
 };

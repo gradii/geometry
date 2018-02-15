@@ -6,5 +6,5 @@ export { GlobalMonitorService, Position } from './src/global-monitor';
 export { measureScrollbar } from './src/mesureScrollBar';
 
 export * from './src/logger/index';
-export * from './src/isType'
-export * from './src/coerce'
+export * from './src/isType';
+export * from './src/coerce';

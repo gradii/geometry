@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
 import { TriSelectModule } from '@gradii/triangle/inputs';
-import { PaginationComponent } from './pagination.component';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { PaginationComponent } from './pagination.component';
 
 /**
  *
@@ -29,8 +29,8 @@ import { FormsModule } from '@angular/forms';
  */
 @NgModule({
   declarations: [PaginationComponent],
-  exports: [PaginationComponent],
-  imports: [CommonModule, FormsModule, TriSelectModule]
+  exports     : [PaginationComponent],
+  imports     : [CommonModule, FormsModule, TriSelectModule]
 })
 export class TriPaginationModule {
   static exports() {

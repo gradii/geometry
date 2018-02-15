@@ -1,10 +1,10 @@
-/* tslint:disable:no-unused-variable */
-import { async, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Component } from '@angular/core';
+/* tslint:disable:no-unused-variable */
+import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { InputNumberModule } from './input-number.module';
 import { InputNumberComponent } from './input-number.component';
+import { InputNumberModule } from './input-number.module';
 
 describe('InputNumber', () => {
   let testComponent;
@@ -14,9 +14,9 @@ describe('InputNumber', () => {
     beforeEach(
       async(() => {
         TestBed.configureTestingModule({
-          imports: [InputNumberModule, FormsModule],
+          imports     : [InputNumberModule, FormsModule],
           declarations: [NzInputNumberComponentIntSpecComponent],
-          providers: []
+          providers   : []
         }).compileComponents();
       })
     );
@@ -68,9 +68,9 @@ describe('InputNumber', () => {
     beforeEach(
       async(() => {
         TestBed.configureTestingModule({
-          imports: [InputNumberModule, FormsModule],
+          imports     : [InputNumberModule, FormsModule],
           declarations: [NzInputNumberComponentDigitSpecComponent],
-          providers: []
+          providers   : []
         }).compileComponents();
       })
     );

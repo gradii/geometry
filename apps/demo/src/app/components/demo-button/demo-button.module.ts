@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 // import { DemoButtonTypeComponent } from './demo-button-type.component';
 // import { DemoButtonIconComponent } from './demo-button-icon.component';
 // import { DemoButtonSizeComponent } from './demo-button-size.component';
@@ -13,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { DemoButtonComponent } from './demo-button.component';
 import { DemoButtonRoutingModule } from './demo-button.routing.module';
 import { DemoCodeBoxModule } from '../../share/demo-codebox/demo-codebox.module';
-import { EXAMPLE_LIST, TriangleExampleModule, TriangleModule } from '@gradii/triangle-examples';
+import { TriangleBundleModule, TriangleExampleModule } from '@gradii/triangle-examples';
 // import { CodeBoxModule } from '../share/codebox/codebox.module';
 // import { NgZorroAntdModule } from '../../../index.showcase';
 // import { DemoButtonRoutingModule } from './demo-button.routing.module';
@@ -22,7 +21,7 @@ import { EXAMPLE_LIST, TriangleExampleModule, TriangleModule } from '@gradii/tri
   imports: [
     // NgZorroAntdModule,
 
-    TriangleModule,
+    TriangleBundleModule,
     TriangleExampleModule,
 
     DemoButtonRoutingModule,

@@ -3,14 +3,14 @@ import { AutoSizeType } from './input.component';
 
 @Directive({
   selector: '[triInput], [tri-input]',
-  host: {
-    '[class.ant-input]': 'true',
-    '[class.ant-input-lg]': '_size === "large"',
-    '[class.ant-input-sm]': '_size === "small"',
+  host    : {
+    '[class.ant-input]'         : 'true',
+    '[class.ant-input-lg]'      : '_size === "large"',
+    '[class.ant-input-sm]'      : '_size === "small"',
     '[class.ant-input-disabled]': '_disabled',
-    '[disabled]': 'disabled',
-//    '[autosize]': '_autosize',
-    '[readonly]': '_readonly'
+    '[disabled]'                : 'disabled',
+    //    '[autosize]': '_autosize',
+    '[readonly]'                : '_readonly'
   }
 })
 export class InputDirective {

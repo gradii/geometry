@@ -1,4 +1,4 @@
-import { Directive, TemplateRef, Optional, Input } from '@angular/core';
+import { Directive, Input, Optional, TemplateRef } from '@angular/core';
 
 export type DetailTemplateShowIfFn = (dataItem: any, index: number) => boolean;
 

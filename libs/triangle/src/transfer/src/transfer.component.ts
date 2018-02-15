@@ -1,3 +1,5 @@
+import { LocaleService } from '@gradii/triangle/locale';
+import { coerceBoolean } from '@gradii/triangle/util';
 // tslint:disable:member-ordering
 import {
   ChangeDetectionStrategy,
@@ -15,10 +17,7 @@ import {
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
-import { NzLocaleService } from '../../locale/index';
-import { toBoolean } from '../util/convert';
 import { TransferItem } from './item';
-import { LocaleService } from '@gradii/triangle/locale';
 
 export interface TransferCanMove {
   direction: string;
@@ -44,50 +43,50 @@ export interface TransferSelectChange {
 }
 
 @Component({
-  selector: 'tri-transfer',
-  template: `
+  selector       : 'tri-transfer',
+  template       : `
     <tri-transfer-list class="ant-transfer-list" [ngStyle]="listStyle" data-direction="left"
-        [titleText]="titles[0]"
-        [dataSource]="leftDataSource"
-        [filter]="leftFilter"
-        [filterOption]="filterOption"
-        (filterChange)="handleFilterChange($event)"
-        [render]="render"
-        [showSearch]="showSearch"
-        [searchPlaceholder]="searchPlaceholder"
-        [notFoundContent]="notFoundContent"
-        [itemUnit]="itemUnit"
-        [itemsUnit]="itemsUnit"
-        [footer]="footer"
-        (handleSelect)="handleLeftSelect($event)"
-        (handleSelectAll)="handleLeftSelectAll($event)"></tri-transfer-list>
+                       [titleText]="titles[0]"
+                       [dataSource]="leftDataSource"
+                       [filter]="leftFilter"
+                       [filterOption]="filterOption"
+                       (filterChange)="handleFilterChange($event)"
+                       [render]="render"
+                       [showSearch]="showSearch"
+                       [searchPlaceholder]="searchPlaceholder"
+                       [notFoundContent]="notFoundContent"
+                       [itemUnit]="itemUnit"
+                       [itemsUnit]="itemsUnit"
+                       [footer]="footer"
+                       (handleSelect)="handleLeftSelect($event)"
+                       (handleSelectAll)="handleLeftSelectAll($event)"></tri-transfer-list>
     <div class="ant-transfer-operation">
-        <button tri-button (click)="moveToLeft()" [disabled]="!leftActive" [type]="'primary'" [size]="'small'">
-            <i class="anticon anticon-left"></i><span *ngIf="operations[1]">{{ nzOperations[1] }}</span>
-        </button>
-        <button tri-button (click)="moveToRight()" [disabled]="!rightActive" [type]="'primary'" [size]="'small'">
-            <i class="anticon anticon-right"></i><span *ngIf="operations[0]">{{ operations[0] }}</span>
-        </button>
+      <button tri-button (click)="moveToLeft()" [disabled]="!leftActive" [type]="'primary'" [size]="'small'">
+        <i class="anticon anticon-left"></i><span *ngIf="operations[1]">{{ nzOperations[1] }}</span>
+      </button>
+      <button tri-button (click)="moveToRight()" [disabled]="!rightActive" [type]="'primary'" [size]="'small'">
+        <i class="anticon anticon-right"></i><span *ngIf="operations[0]">{{ operations[0] }}</span>
+      </button>
     </div>
     <tri-transfer-list class="ant-transfer-list" [ngStyle]="listStyle" data-direction="right"
-        [titleText]="titles[1]"
-        [dataSource]="rightDataSource"
-        [filter]="rightFilter"
-        [filterOption]="filterOption"
-        (filterChange)="handleFilterChange($event)"
-        [render]="render"
-        [showSearch]="showSearch"
-        [searchPlaceholder]="searchPlaceholder"
-        [notFoundContent]="notFoundContent"
-        [itemUnit]="itemUnit"
-        [itemsUnit]="itemsUnit"
-        [footer]="footer"
-        (handleSelect)="handleRightSelect($event)"
-        (handleSelectAll)="handleRightSelectAll($event)"></tri-transfer-list>
+                       [titleText]="titles[1]"
+                       [dataSource]="rightDataSource"
+                       [filter]="rightFilter"
+                       [filterOption]="filterOption"
+                       (filterChange)="handleFilterChange($event)"
+                       [render]="render"
+                       [showSearch]="showSearch"
+                       [searchPlaceholder]="searchPlaceholder"
+                       [notFoundContent]="notFoundContent"
+                       [itemUnit]="itemUnit"
+                       [itemsUnit]="itemsUnit"
+                       [footer]="footer"
+                       (handleSelect)="handleRightSelect($event)"
+                       (handleSelectAll)="handleRightSelectAll($event)"></tri-transfer-list>
   `,
-  encapsulation: ViewEncapsulation.None,
+  encapsulation  : ViewEncapsulation.None,
   // tslint:disable-next-line:use-host-property-decorator
-  host: {
+  host           : {
     '[class.ant-transfer]': 'true'
   },
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -113,7 +112,7 @@ export class TransferComponent implements OnChanges {
   // search
   @Input()
   set showSearch(value: boolean) {
-    this._showSearch = toBoolean(value);
+    this._showSearch = coerceBoolean(value);
   }
 
   get showSearch(): boolean {
@@ -142,7 +141,7 @@ export class TransferComponent implements OnChanges {
   private splitDataSource(): void {
     this.leftDataSource = [];
     this.rightDataSource = [];
-    this.nzDataSource.forEach(record => {
+    this.dataSource.forEach(record => {
       if (record.direction === 'right') {
         this.rightDataSource.push(record);
       } else {
@@ -164,10 +163,10 @@ export class TransferComponent implements OnChanges {
   handleSelect(direction: 'left' | 'right', checked: boolean, item?: TransferItem): void {
     const list = this.getCheckedData(direction);
     this.updateOperationStatus(direction, list.length);
-    this.selectionChange.emit({ direction, checked, list, item });
+    this.selectionChange.emit({direction, checked, list, item});
   }
 
-  handleFilterChange(ret: { direction: string, value: string }): void {
+  handleFilterChange(ret: { direction: string; value: string }): void {
     this.searchChange.emit(ret);
     this.cd.detectChanges();
   }
@@ -180,7 +179,8 @@ export class TransferComponent implements OnChanges {
   rightActive = false;
 
   private updateOperationStatus(direction: string, count?: number): void {
-    this[direction === 'right' ? 'leftActive' : 'rightActive'] = (typeof count === 'undefined' ? this.getCheckedData(direction).filter(w => !w.disabled).length : count) > 0;
+    this[direction === 'right' ? 'leftActive' : 'rightActive'] =
+      (typeof count === 'undefined' ? this.getCheckedData(direction).filter(w => !w.disabled).length : count) > 0;
     this.cd.detectChanges();
   }
 
@@ -192,11 +192,10 @@ export class TransferComponent implements OnChanges {
     this.updateOperationStatus(oppositeDirection, 0);
     const datasource = direction === 'left' ? this.rightDataSource : this.leftDataSource;
     const moveList = datasource.filter(item => item.checked === true && !item.disabled);
-    this.canMove({ direction, list: moveList })
-        .subscribe(
-          newMoveList => this.truthMoveTo(direction, newMoveList.filter(i => !!i)),
-          () => moveList.forEach(i => i.checked = false)
-        );
+    this.canMove({direction, list: moveList}).subscribe(
+      newMoveList => this.truthMoveTo(direction, newMoveList.filter(i => !!i)),
+      () => moveList.forEach(i => (i.checked = false))
+    );
   }
 
   private truthMoveTo(direction: string, list: TransferItem[]): void {
@@ -213,15 +212,14 @@ export class TransferComponent implements OnChanges {
     this.updateOperationStatus(oppositeDirection);
     this.change.emit({
       from: oppositeDirection,
-      to: direction,
+      to  : direction,
       list
     });
   }
 
   // endregion
 
-  constructor(private _locale: LocaleService, private el: ElementRef, private cd: ChangeDetectorRef) {
-  }
+  constructor(private _locale: LocaleService, private el: ElementRef, private cd: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('dataSource' in changes || 'targetKeys' in changes) {

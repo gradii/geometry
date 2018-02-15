@@ -1,15 +1,14 @@
-/* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed, ComponentFixtureAutoDetect } from '@angular/core/testing';
+import { NzColDirective, NzGridModule, NzRowComponent } from '@gradii/grid';
 import { Component, DebugElement } from '@angular/core';
+/* tslint:disable:no-unused-variable */
+import { async, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { NzColDirective, NzGridModule } from '@gradii/grid';
-import { NzRowComponent } from '@gradii/grid';
 
 describe('NzGrid', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [NzGridModule],
+        imports     : [NzGridModule],
         declarations: [
           GridListWithoutCols,
           GridListWithoutRows,
@@ -155,7 +154,7 @@ describe('NzGrid', () => {
       const debugElement_col = fixture.debugElement.query(By.directive(NzColDirective));
 
       // window.resizeTo(800, 600);
-      testComponent._col1 = { xs: 2, xm: 4, md: 6, lg: 8, xl: 10 };
+      testComponent._col1 = {xs: 2, xm: 4, md: 6, lg: 8, xl: 10};
       fixture.detectChanges();
       expect(debugElement_col.nativeElement.classList.contains('ant-col-xs-2')).toBe(true);
       expect(debugElement_col.nativeElement.classList.contains('ant-col-sm-4')).toBe(true);
@@ -163,7 +162,7 @@ describe('NzGrid', () => {
       expect(debugElement_col.nativeElement.classList.contains('ant-col-lg-8')).toBe(true);
       expect(debugElement_col.nativeElement.classList.contains('ant-col-xl-10')).toBe(true);
 
-      testComponent._col1 = { xs: 'custom_string', xm: 4, md: 6, lg: 8, xl: 10 };
+      testComponent._col1 = {xs: 'custom_string', xm: 4, md: 6, lg: 8, xl: 10};
       expect(() => {
         fixture.detectChanges();
       }).not.toThrow();
@@ -201,7 +200,7 @@ describe('NzGrid', () => {
       const testComponentResponsive = fixtureResponsive.debugElement.componentInstance;
       const debugElement_col_responsive = fixtureResponsive.debugElement.query(By.directive(NzColDirective));
       debugElement_col_responsive.nativeElement.classList.add('custom-class');
-      testComponentResponsive._col1 = { xs: 2, xm: 4, md: 6, lg: 8, xl: 10 };
+      testComponentResponsive._col1 = {xs: 2, xm: 4, md: 6, lg: 8, xl: 10};
       fixtureResponsive.detectChanges();
       expect(debugElement_col_responsive.nativeElement.classList.contains('custom-class')).toBe(true);
     });
@@ -210,7 +209,7 @@ describe('NzGrid', () => {
       const debugElement_embedded_span = fixtureSpan.debugElement.query(By.directive(NzColDirective));
       fixtureSpan.detectChanges();
       const className =
-        'ant-col-xs-1 ant-col-xs-pull-1 ant-col-xs-push-1 ant-col-xs-offset-1 ant-col-xs-order-1 ant-col-sm-1 ant-col-sm-pull-1 ant-col-sm-push-1 ant-col-sm-offset-1 ant-col-sm-order-1 ant-col-md-1 ant-col-md-pull-1 ant-col-md-push-1 ant-col-md-offset-1 ant-col-md-order-1 ant-col-lg-1 ant-col-lg-pull-1 ant-col-lg-push-1 ant-col-lg-offset-1 ant-col-lg-order-1 ant-col-xl-1 ant-col-xl-pull-1 ant-col-xl-push-1 ant-col-xl-offset-1 ant-col-xl-order-1';
+              'ant-col-xs-1 ant-col-xs-pull-1 ant-col-xs-push-1 ant-col-xs-offset-1 ant-col-xs-order-1 ant-col-sm-1 ant-col-sm-pull-1 ant-col-sm-push-1 ant-col-sm-offset-1 ant-col-sm-order-1 ant-col-md-1 ant-col-md-pull-1 ant-col-md-push-1 ant-col-md-offset-1 ant-col-md-order-1 ant-col-lg-1 ant-col-lg-pull-1 ant-col-lg-push-1 ant-col-lg-offset-1 ant-col-lg-order-1 ant-col-xl-1 ant-col-xl-pull-1 ant-col-xl-push-1 ant-col-xl-offset-1 ant-col-xl-order-1';
       expect(debugElement_embedded_span.nativeElement.className === className).toBe(true);
     });
   });
@@ -331,10 +330,10 @@ function getStyle(el: DebugElement, prop: string): string {
 }
 
 /** Test component that contains an nzGrid. */
-@Component({ template: '<div tri-row></div>' })
+@Component({template: '<div tri-row></div>'})
 class GridListWithoutCols {}
 
-@Component({ template: '<div tri-col></div>' })
+@Component({template: '<div tri-col></div>'})
 class GridListWithoutRows {}
 
 @Component({
@@ -400,7 +399,7 @@ class TestPushPull {
     </div>`
 })
 class TestColResponsive {
-  _col1 = { xs: 2, xm: 4, md: 6, lg: 8, xl: 10 };
+  _col1 = {xs: 2, xm: 4, md: 6, lg: 8, xl: 10};
 }
 
 @Component({

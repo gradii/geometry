@@ -1,10 +1,9 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges, ViewEncapsulation } from '@angular/core';
-import { SliderMarksComponent, Marks } from './slider-marks.component';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'tri-slider-step',
+  selector     : 'tri-slider-step',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div class="{{prefixCls}}-step">
       <span *ngFor="let attr of attrs; trackBy: trackById" [ngClass]="attr.classes" [ngStyle]="attr.style"></span>
     </div>
@@ -30,19 +29,19 @@ export class SliderStepComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    const orient = this.vertical ? 'bottom' : 'left',
-      prefixCls = this.prefixCls;
+    const orient    = this.vertical ? 'bottom' : 'left',
+          prefixCls = this.prefixCls;
     this.attrs = this.marksArray.map(mark => {
-      const { value, offset } = mark;
+      const {value, offset} = mark;
       return {
-        id: value,
-        value: value,
-        offset: offset,
-        style: {
+        id     : value,
+        value  : value,
+        offset : offset,
+        style  : {
           [orient]: `${offset}%`
         },
         classes: {
-          [`${prefixCls}-dot`]: true,
+          [`${prefixCls}-dot`]       : true,
           [`${prefixCls}-dot-active`]: false
         }
       };
@@ -55,11 +54,11 @@ export class SliderStepComponent implements OnInit, OnChanges {
   }
 
   togglePointActive() {
-    const { prefixCls, attrs, lowerBound, upperBound, included } = this;
+    const {prefixCls, attrs, lowerBound, upperBound, included} = this;
     if (attrs && lowerBound !== null && upperBound !== null) {
       attrs.forEach(attr => {
-        const value = attr.value,
-          isActive = (!included && value === upperBound) || (included && value <= upperBound && value >= lowerBound);
+        const value    = attr.value,
+              isActive = (!included && value === upperBound) || (included && value <= upperBound && value >= lowerBound);
         attr.classes[`${prefixCls}-dot-active`] = isActive;
       });
     }

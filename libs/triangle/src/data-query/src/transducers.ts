@@ -1,5 +1,5 @@
-import { isPresent, isNumeric, isDate } from './utils';
 import { getter } from './accessor';
+import { isDate, isNumeric, isPresent } from './utils';
 
 export interface AggregateResult {
   [fieldName: string]: {
@@ -10,42 +10,43 @@ export interface AggregateResult {
     max?: number;
   };
 }
-const valueToString = function(value) {
+
+const valueToString = function (value) {
   value = isPresent(value) && value.getTime ? value.getTime() : value;
   return value + '';
 };
-export let groupCombinator = function(field) {
+export let groupCombinator = function (field) {
   const prop = getter(field, true);
   let position = 0;
-  return function(agg, value) {
+  return function (agg, value) {
     agg[field] = agg[field] || {};
     const groupValue = prop(value);
     const key = valueToString(groupValue);
-    const values = agg[field][key] || { __position: position++, aggregates: {}, items: [], value: groupValue };
+    const values = agg[field][key] || {__position: position++, aggregates: {}, items: [], value: groupValue};
     values.items.push(value);
     agg[field][key] = values;
     return agg;
   };
 };
-export let expandAggregates = function(result) {
+export let expandAggregates = function (result) {
   if (result === void 0) {
     result = {};
   }
-  Object.keys(result).forEach(function(field) {
+  Object.keys(result).forEach(function (field) {
     const aggregates = result[field];
-    Object.keys(aggregates).forEach(function(aggregate) {
+    Object.keys(aggregates).forEach(function (aggregate) {
       aggregates[aggregate] = aggregates[aggregate].result();
     });
   });
   return result;
 };
-const aggregatesFuncs = function(name) {
+const aggregatesFuncs = function (name) {
   return {
-    average: function() {
+    average: function () {
       let value = 0;
       let count = 0;
       return {
-        calc: function(curr) {
+        calc  : function (curr) {
           if (isNumeric(curr)) {
             value += curr;
             count++;
@@ -53,69 +54,69 @@ const aggregatesFuncs = function(name) {
             value = curr;
           }
         },
-        result: function() {
+        result: function () {
           return isNumeric(value) ? value / count : value;
         }
       };
     },
-    count: function() {
+    count  : function () {
       let state = 0;
       return {
-        calc: function() {
+        calc  : function () {
           return state++;
         },
-        result: function() {
+        result: function () {
           return state;
         }
       };
     },
-    max: function() {
+    max    : function () {
       let state = Number.NEGATIVE_INFINITY;
       return {
-        calc: function(value) {
+        calc  : function (value) {
           state = isNumeric(state) || isDate(state) ? state : value;
           if (state < value && (isNumeric(value) || isDate(value))) {
             state = value;
           }
         },
-        result: function() {
+        result: function () {
           return state;
         }
       };
     },
-    min: function() {
+    min    : function () {
       let state = Number.POSITIVE_INFINITY;
       return {
-        calc: function(value) {
+        calc  : function (value) {
           state = isNumeric(state) || isDate(state) ? state : value;
           if (state > value && (isNumeric(value) || isDate(value))) {
             state = value;
           }
         },
-        result: function() {
+        result: function () {
           return state;
         }
       };
     },
-    sum: function() {
+    sum    : function () {
       let state = 0;
       return {
-        calc: function(value) {
+        calc  : function (value) {
           return (state += value);
         },
-        result: function() {
+        result: function () {
           return state;
         }
       };
     }
   }[name]();
 };
-export let aggregatesCombinator = function(descriptors) {
-  const functions = descriptors.map(function(descriptor) {
+export let aggregatesCombinator = function (descriptors) {
+  const functions = descriptors.map(function (descriptor) {
     const fieldAccessor = getter(descriptor.field, true);
     const aggregateName = (descriptor.aggregate || '').toLowerCase();
     const aggregateAccessor = getter(aggregateName, true);
-    return function(state, value) {
+    return function (state, value) {
       const fieldAggregates = fieldAccessor(state) || {};
       const aggregateFunction = aggregateAccessor(fieldAggregates) || aggregatesFuncs(aggregateName);
       aggregateFunction.calc(fieldAccessor(value));
@@ -124,34 +125,34 @@ export let aggregatesCombinator = function(descriptors) {
       return state;
     };
   });
-  return function(state, value) {
-    return functions.reduce(function(agg, calc) {
+  return function (state, value) {
+    return functions.reduce(function (agg, calc) {
       return calc(agg, value);
     }, state);
   };
 };
-export let concat = function(arr, value) {
+export let concat = function (arr, value) {
   arr.push(value);
   return arr;
 };
-export let map = function(transform) {
-  return function(reduce) {
-    return function(acc, curr, index) {
+export let map = function (transform) {
+  return function (reduce) {
+    return function (acc, curr, index) {
       return reduce(acc, transform(curr, index));
     };
   };
 };
-export let filter = function(predicate) {
-  return function(reduce) {
-    return function(acc, curr) {
+export let filter = function (predicate) {
+  return function (reduce) {
+    return function (acc, curr) {
       return predicate(curr) ? reduce(acc, curr) : acc;
     };
   };
 };
-export let isTransformerResult = function(source) {
+export let isTransformerResult = function (source) {
   return isPresent(source.__value);
 };
-const reduced = function(x) {
+const reduced = function (x) {
   if (isTransformerResult(x)) {
     return x;
   }
@@ -160,28 +161,28 @@ const reduced = function(x) {
     reduced: true
   };
 };
-export let take = function(count) {
-  return function(reduce) {
-    return function(acc, curr) {
+export let take = function (count) {
+  return function (reduce) {
+    return function (acc, curr) {
       return count-- > 0 ? reduce(acc, curr) : reduced(acc);
     };
   };
 };
-export let takeWhile = function(predicate) {
-  return function(reduce) {
-    return function(acc, curr) {
+export let takeWhile = function (predicate) {
+  return function (reduce) {
+    return function (acc, curr) {
       return predicate(curr) ? reduce(acc, curr) : reduced(acc);
     };
   };
 };
-export let skip = function(count) {
-  return function(reduce) {
-    return function(acc, curr) {
+export let skip = function (count) {
+  return function (reduce) {
+    return function (acc, curr) {
       return count-- <= 0 ? reduce(acc, curr) : acc;
     };
   };
 };
-export let exec = function(transform, initialValue, data) {
+export let exec = function (transform, initialValue, data) {
   let result = initialValue;
   for (let idx = 0, length_1 = data.length; idx < length_1; idx++) {
     result = transform(result, data[idx], idx);

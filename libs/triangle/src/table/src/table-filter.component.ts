@@ -1,5 +1,5 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
 import { DropDownComponent } from '@gradii/triangle/dropdown';
+import { Component, HostBinding, OnInit } from '@angular/core';
 
 @Component({
   selector: '[tri-table-filter]',

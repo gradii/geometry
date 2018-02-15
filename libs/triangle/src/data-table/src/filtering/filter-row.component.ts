@@ -1,7 +1,7 @@
 import { Component, Input, HostBinding } from '@angular/core';
 import { DetailTemplateDirective } from '../table-shared/detail-template.directive';
 import { CompositeFilterDescriptor, GroupDescriptor } from '@gradii/triangle/data-query';
-import { ColumnBase } from '../columns/column-base';
+import { ColumnBase } from '../column-base';
 @Component({
   selector: '[triGridFilterRow]',
   template: `

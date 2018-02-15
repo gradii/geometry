@@ -1,11 +1,10 @@
+import { isFunction, isPresent, isString } from '@gradii/triangle/util';
 import { EventEmitter, Input, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { DataTableComponent } from "../data-table.component";
-import { isFunction, isPresent, isString } from '@gradii/triangle/util';
+import { DataTableComponent } from '../data-table.component';
 import { RowArgs } from '../row-class';
 
 export class Selection {
-
   /**
    * Defines the collection that will store the selected item keys.
    */
@@ -27,13 +26,10 @@ export class Selection {
   }
 
   init() {
-
     if (!isPresent(this.grid.rowSelected)) {
       this.grid.rowSelected = row => this.selectedKeys.includes(this.getItemKey(row));
     }
-    this.selectionChangeSubscription = this.grid
-      .selectionChange
-      .subscribe(this.onSelectionChange.bind(this));
+    this.selectionChangeSubscription = this.grid.selectionChange.subscribe(this.onSelectionChange.bind(this));
   }
 
   destroy() {
@@ -47,7 +43,7 @@ export class Selection {
   getItemKey(row) {
     if (this.selectedBy) {
       if (isString(this.selectedBy)) {
-        if(!(this.selectedBy in row.dataItem)){
+        if (!(this.selectedBy in row.dataItem)) {
           throw new Error(`the selection key ${this.selectedBy} must exist in row data item!`);
         }
         return row.dataItem[this.selectedBy as string];
@@ -62,13 +58,13 @@ export class Selection {
   onSelectionChange(selection) {
     const _this = this;
     selection.deselectedRows.forEach(item => {
-      const itemKey   = _this.getItemKey(item);
+      const itemKey = _this.getItemKey(item);
       const itemIndex = _this.selectedKeys.indexOf(itemKey);
       if (itemIndex >= 0) {
         _this.selectedKeys.splice(itemIndex, 1);
       }
     });
-    if (this.grid.selectableSettings.mode === "single" && this.selectedKeys.length > 0) {
+    if (this.grid.selectableSettings.mode === 'single' && this.selectedKeys.length > 0) {
       this.reset();
     }
     selection.selectedRows.forEach(item => {

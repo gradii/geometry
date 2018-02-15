@@ -1,4 +1,3 @@
-
 export const isPresent = function (value) {
   return value !== null && value !== undefined;
 };
@@ -21,7 +20,7 @@ export const isObject = function (item: any) {
   return item !== null && typeof item === 'object' && Object.prototype.toString.call(item) === '[object Object]';
 };
 export const isRegex = function (value) {
-  return Object.prototype.toString.call(value)=== '[object RegExp]';
+  return Object.prototype.toString.call(value) === '[object RegExp]';
 };
 export const isTruthy = function (value) {
   return !!value;
@@ -69,10 +68,14 @@ export const isInfinite = function (result) {
 export const isEquivalent = function (a, b) {
   const aProps = Object.getOwnPropertyNames(a);
   const bProps = Object.getOwnPropertyNames(b);
-  if (aProps.length !== bProps.length) {return false;}
+  if (aProps.length !== bProps.length) {
+    return false;
+  }
   for (let i = 0; i < aProps.length; i++) {
     const propName = aProps[i];
-    if (a[propName] !== b[propName]) {return false;}
+    if (a[propName] !== b[propName]) {
+      return false;
+    }
   }
   return true;
 };

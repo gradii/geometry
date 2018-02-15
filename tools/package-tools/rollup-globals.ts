@@ -1,6 +1,6 @@
-import {join} from 'path';
-import {getSubdirectoryNames, getSubPackageDirectoryNames} from './secondary-entry-points';
-import {buildConfig} from './build-config';
+import { join } from 'path';
+import { buildConfig } from './build-config';
+import { getSubPackageDirectoryNames } from './secondary-entry-points';
 
 /** Method that converts dash-case strings to a camel-based string. */
 export const dashCaseToCamelCase =
@@ -118,6 +118,7 @@ export const rollupGlobals = {
   'rxjs/operator/throttleTime'        : 'Rx.Observable.prototype',
 
   // Operators with chain-functionality itself (from rxjs 5.x) used by us
+  'rxjs/operators'                     : 'Rx.Observable.prototype',
   'rxjs/operators/auditTime'           : 'Rx.Observable.prototype',
   'rxjs/operators/catch'               : 'Rx.Observable.prototype',
   'rxjs/operators/debounceTime'        : 'Rx.Observable.prototype',
@@ -137,4 +138,9 @@ export const rollupGlobals = {
   'rxjs/operators/throttleTime'        : 'Rx.Observable.prototype',
   'rxjs/operators/tap'                 : 'Rx.Observable.prototype',
   'rxjs/operators/merge'               : 'Rx.Observable.prototype',
+
+  //rxjs symbol
+  'rxjs/symbol/iterator'    : 'Rx.Symbol.iterator',
+  'rxjs/symbol/observable'  : 'Rx.Symbol.observable',
+  'rxjs/symbol/rxSubscriber': 'Rx.Symbol.rxSubscriber',
 };

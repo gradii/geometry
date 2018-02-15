@@ -1,12 +1,7 @@
-import {
-  AfterContentInit, AfterViewInit, Component, ElementRef, forwardRef, HostBinding, Input,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, HostBinding, Input, ViewEncapsulation } from '@angular/core';
+import { RadioGroupDirective } from './radio-group.directive';
 
-import { RadioComponent, RadioOption } from './radio.component';
-import { RadioButtonComponent } from './radio-button.component';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { RadioGroupDirective } from '@gradii/triangle/inputs/src/radio/radio-group.directive';
+import { RadioOption } from './radio.component';
 
 @Component({
   selector     : 'tri-radio-group',
@@ -25,8 +20,7 @@ import { RadioGroupDirective } from '@gradii/triangle/inputs/src/radio/radio-gro
   }
 })
 export class RadioGroupComponent extends RadioGroupDirective {
-  @Input()
-  options: RadioOption[] = [];
+  @Input() options: RadioOption[] = [];
 
   /**
    * Get size

@@ -1,5 +1,4 @@
-import { Component, ContentChild, Input, TemplateRef } from '@angular/core';
-import { ControlValueAccessor } from '@angular/forms';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'tri-radio-grid-list',
@@ -7,8 +6,4 @@ import { ControlValueAccessor } from '@angular/forms';
     
   `
 })
-export class RadioGridTileComponent {
-
-
-
-}
+export class RadioGridTileComponent {}

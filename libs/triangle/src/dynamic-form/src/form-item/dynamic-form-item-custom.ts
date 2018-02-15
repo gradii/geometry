@@ -1,5 +1,5 @@
-import { DynamicFormItem, DynamicFormItemArgs } from '@gradii/triangle/dynamic-form/src/dynamic-form-item';
 import { TemplateRef } from '@angular/core';
+import { DynamicFormItem, DynamicFormItemArgs } from '../dynamic-form-item';
 
 export interface DynamicFormItemCustomArgs extends DynamicFormItemArgs {
   templateRef: TemplateRef<any>;
@@ -8,7 +8,6 @@ export interface DynamicFormItemCustomArgs extends DynamicFormItemArgs {
 }
 
 export class DynamicFormItemCustom extends DynamicFormItem {
-
   public type = 'custom';
   public templateRef;
 
@@ -17,7 +16,7 @@ export class DynamicFormItemCustom extends DynamicFormItem {
   constructor(options: DynamicFormItemCustomArgs) {
     super(options);
 
-    this.templateRef     = options.templateRef;
+    this.templateRef = options.templateRef;
     this.templateContext = options.templateContext;
 
     this.init();

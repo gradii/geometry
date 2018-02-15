@@ -1,7 +1,6 @@
-import { ComponentFactoryResolver, Injector, ComponentRef, ComponentFactory, APP_INITIALIZER } from '@angular/core';
+import { RootModule, RootStyleComponent } from '@gradii/triangle/root';
+import { APP_INITIALIZER, ComponentFactory, ComponentFactoryResolver, ComponentRef, Injector } from '@angular/core';
 import { async, inject, TestBed } from '@angular/core/testing';
-import { RootModule } from '@gradii/triangle/root';
-import { RootStyleComponent } from '@gradii/triangle/root';
 
 describe('NzRootModule', () => {
   let ngModule: RootModule;
@@ -13,12 +12,12 @@ describe('NzRootModule', () => {
   let mockComponentRef: ComponentRef<RootStyleComponent>;
 
   beforeEach(() => {
-    mockDocument = { createElement: () => null } as any;
+    mockDocument = {createElement: () => null} as any;
     mockInjector = {} as any;
-    mockFactoryResolver = { resolveComponentFactory: () => null } as any;
+    mockFactoryResolver = {resolveComponentFactory: () => null} as any;
     mockElement = {} as any;
-    mockComponentFactory = { create: () => null } as any;
-    mockComponentRef = { destroy: () => null } as any;
+    mockComponentFactory = {create: () => null} as any;
+    mockComponentRef = {destroy: () => null} as any;
 
     spyOn(mockDocument, 'createElement').and.returnValue(mockElement);
     spyOn(mockComponentRef, 'destroy');
@@ -47,9 +46,9 @@ describe('NzRootModule with Angular integration', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [RootModule],
+        imports     : [RootModule],
         declarations: [],
-        providers: []
+        providers   : []
       }).compileComponents();
     })
   );

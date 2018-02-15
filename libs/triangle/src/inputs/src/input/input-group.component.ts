@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewEncapsulation, Input, ElementRef, Renderer2, HostBinding } from '@angular/core';
+import { Component, ElementRef, HostBinding, Input, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'tri-input-group',
+  selector     : 'tri-input-group',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <ng-content></ng-content>
   `
 })

@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { BreadCrumbItemComponent } from './breadcrumb-item.component';
 
 import { BreadCrumbComponent } from './breadcrumb.component';
-import { BreadCrumbItemComponent } from './breadcrumb-item.component';
 
 /**
  *
@@ -25,8 +25,8 @@ import { BreadCrumbItemComponent } from './breadcrumb-item.component';
  * <!-- example(bread-crumb-icon) -->
  */
 @NgModule({
-  imports: [CommonModule],
+  imports     : [CommonModule],
   declarations: [BreadCrumbComponent, BreadCrumbItemComponent],
-  exports: [BreadCrumbComponent, BreadCrumbItemComponent]
+  exports     : [BreadCrumbComponent, BreadCrumbItemComponent]
 })
 export class TriBreadCrumbModule {}

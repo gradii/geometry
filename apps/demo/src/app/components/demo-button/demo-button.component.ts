@@ -16,6 +16,15 @@ export class DemoButtonComponent implements OnInit {
   // DemoButtonGhostCode = require('!!raw-loader!./nz-demo-button-ghost.component');
   // DemoButtonMultipleCode = require('!!raw-loader!./nz-demo-button-multiple.component');
 
+  DemoButtonTypeCode = '';
+  DemoButtonSizeCode = '';
+  DemoButtonLoadingCode = '';
+  DemoButtonIconCode = '';
+  DemoButtonGroupCode = '';
+  DemoButtonDisabledCode = '';
+  DemoButtonGhostCode = '';
+  DemoButtonMultipleCode = '';
+
   constructor() {}
 
   ngOnInit() {}

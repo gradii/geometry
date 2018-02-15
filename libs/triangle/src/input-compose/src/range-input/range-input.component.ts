@@ -1,8 +1,6 @@
-import { Component, ContentChild, forwardRef, Input, TemplateRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { RadioGridListComponent } from '@gradii/triangle/input-compose/src/radio-grid-list/radio-grid-list.component';
 import { isArray, isPresent } from '@gradii/triangle/util';
-import { TrackByFunction } from '@angular/core/src/change_detection/differs/iterable_differs';
+import { Component, forwardRef, Input, TrackByFunction } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector : 'tri-range-input',
@@ -10,7 +8,7 @@ import { TrackByFunction } from '@angular/core/src/change_detection/differs/iter
     <ng-template ngFor let-val [ngForOf]="values" [ngForTrackBy]="trackBy" let-i="index">
       <div tri-form-item>
         <input tri-input
-               style="width: calc(100% - 25px)"
+               style="width: calc(100% - 45px)"
                [size]="'large'"
                [ngModel]="val"
                (ngModelChange)="onModelChange(i, $event)"
@@ -35,10 +33,9 @@ import { TrackByFunction } from '@angular/core/src/change_detection/differs/iter
       useExisting: forwardRef(() => RangeInputComponent),
       multi      : true
     }
-  ],
+  ]
 })
 export class RangeInputComponent implements ControlValueAccessor {
-
   private _onChange: Function;
   private _onTouch: Function;
 
@@ -49,9 +46,7 @@ export class RangeInputComponent implements ControlValueAccessor {
     return index;
   };
 
-  constructor() {
-
-  }
+  constructor() {}
 
   addField(event) {
     this.values.push(null);
@@ -82,5 +77,4 @@ export class RangeInputComponent implements ControlValueAccessor {
   registerOnTouched(fn: any): void {
     this._onTouch = fn;
   }
-
 }

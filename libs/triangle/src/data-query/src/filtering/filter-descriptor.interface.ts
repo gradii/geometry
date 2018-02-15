@@ -1,4 +1,5 @@
 import { isPresent } from '../utils';
+
 export interface FilterDescriptor {
   field?: string | Function;
   operator: string | Function;

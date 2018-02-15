@@ -1,9 +1,9 @@
 import { AfterContentInit, Directive, forwardRef } from '@angular/core';
-
-import { RadioComponent, RadioOption } from './radio.component';
-import { RadioButtonComponent } from './radio-button.component';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { isPresent } from '@gradii/triangle/util';
+import { RadioButtonComponent } from './radio-button.component';
+
+import { RadioComponent, RadioOption } from './radio.component';
 
 @Directive({
   selector : 'tri-radio-group, [triRadioList], [tri-radio-list]',
@@ -13,7 +13,7 @@ import { isPresent } from '@gradii/triangle/util';
       useExisting: forwardRef(() => RadioGroupDirective),
       multi      : true
     }
-  ],
+  ]
 })
 export class RadioGroupDirective implements AfterContentInit, ControlValueAccessor {
   _value: string;

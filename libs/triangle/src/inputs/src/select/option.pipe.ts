@@ -16,7 +16,7 @@ export class OptionPipe implements PipeTransform {
       if (_options.length) {
         return _options;
       } else {
-        return <SelectOption[] >[
+        return <SelectOption[]>[
           {
             value   : value.value,
             disabled: value.disabled,

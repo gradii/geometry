@@ -1,7 +1,7 @@
-import {Observable} from 'rxjs/Observable';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Observer} from 'rxjs/Observer';
-import {RowHeightService} from '../service/row-height.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
+import { RowHeightService } from '../service/row-height.service';
 
 export class ScrollAction {
   constructor(public offset: number) {}

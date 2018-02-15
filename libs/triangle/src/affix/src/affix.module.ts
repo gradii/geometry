@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
+import { SCROLL_SERVICE_PROVIDER } from '@gradii/triangle/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
 import { AffixComponent } from './affix.component';
-import { SCROLL_SERVICE_PROVIDER } from '@gradii/triangle/core';
 
 /**
  * # Affix 固钉
@@ -21,8 +21,8 @@ import { SCROLL_SERVICE_PROVIDER } from '@gradii/triangle/core';
  */
 @NgModule({
   declarations: [AffixComponent],
-  exports: [AffixComponent],
-  imports: [CommonModule],
-  providers: [SCROLL_SERVICE_PROVIDER]
+  exports     : [AffixComponent],
+  imports     : [CommonModule],
+  providers   : [SCROLL_SERVICE_PROVIDER]
 })
 export class TriAffixModule {}

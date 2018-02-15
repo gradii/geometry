@@ -1,6 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RateComponent } from './rate.component';
-import { CommonModule } from '@angular/common';
 
 /**
  *
@@ -20,8 +20,8 @@ import { CommonModule } from '@angular/common';
  <!-- example(rate-disabled) -->
  */
 @NgModule({
-  exports: [RateComponent],
+  exports     : [RateComponent],
   declarations: [RateComponent],
-  imports: [CommonModule]
+  imports     : [CommonModule]
 })
 export class TriRateModule {}

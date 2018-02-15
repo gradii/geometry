@@ -1,5 +1,5 @@
-import {Component, HostBinding, TemplateRef} from '@angular/core';
-import {DataTableComponent} from '../data-table.component';
+import { Component, HostBinding, TemplateRef } from '@angular/core';
+import { DataTableComponent } from '../data-table.component';
 
 @Component({
   selector: 'tri-data-table-toolbar',

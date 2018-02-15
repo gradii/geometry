@@ -1,6 +1,6 @@
-import { Directive, HostListener, HostBinding, Inject } from '@angular/core';
-import { EditService } from './../service/edit.service';
+import { Directive, HostBinding, HostListener, Inject } from '@angular/core';
 import { CELL_CONTEXT } from './../cell-context';
+import { EditService } from './../service/edit.service';
 
 @Directive({
   selector: '[triGridCancelCommand], [tri-grid-cancel-command]'

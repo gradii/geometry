@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { PopoverDirective } from './popover.directive';
-import { PopoverComponent } from './popover.component';
-import { CommonModule } from '@angular/common';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { PopoverComponent } from './popover.component';
+import { PopoverDirective } from './popover.directive';
 
 /**
  *
@@ -23,8 +23,8 @@ import { OverlayModule } from '@angular/cdk/overlay';
  */
 @NgModule({
   entryComponents: [PopoverComponent],
-  exports: [PopoverDirective, PopoverComponent],
-  declarations: [PopoverDirective, PopoverComponent],
-  imports: [CommonModule, OverlayModule]
+  exports        : [PopoverDirective, PopoverComponent],
+  declarations   : [PopoverDirective, PopoverComponent],
+  imports        : [CommonModule, OverlayModule]
 })
 export class TriPopoverModule {}

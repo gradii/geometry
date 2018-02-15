@@ -1,15 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-
-import { FormComponent } from './form.component';
-import { FormItemDirective } from './form-item.directive';
 import { FormControlComponent } from './form-control.component';
 import { FormExplainComponent } from './form-explain.directive';
-import { FormTextDirective } from './form-text.directive';
-import { FormSplitDirective } from './form-split.directive';
 import { FormExtraDirective } from './form-extra.directive';
-import { FormLabelDirective } from './form-label.directive';
 import { FormItemRequiredDirective } from './form-item-required.directive';
-import { CommonModule } from '@angular/common';
+import { FormItemDirective } from './form-item.directive';
+import { FormLabelDirective } from './form-label.directive';
+import { FormSplitDirective } from './form-split.directive';
+import { FormTextDirective } from './form-text.directive';
+
+import { FormComponent } from './form.component';
 
 /**
  *
@@ -81,7 +81,7 @@ import { CommonModule } from '@angular/common';
     FormSplitDirective,
     FormItemRequiredDirective
   ],
-  exports: [
+  exports     : [
     FormExtraDirective,
     FormLabelDirective,
     FormComponent,
@@ -92,6 +92,6 @@ import { CommonModule } from '@angular/common';
     FormSplitDirective,
     FormItemRequiredDirective
   ],
-  imports: [CommonModule]
+  imports     : [CommonModule]
 })
 export class TriFormModule {}

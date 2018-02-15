@@ -1,9 +1,9 @@
 import { Component, HostBinding, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'tri-layout',
+  selector     : 'tri-layout',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <ng-content></ng-content>
   `
 })

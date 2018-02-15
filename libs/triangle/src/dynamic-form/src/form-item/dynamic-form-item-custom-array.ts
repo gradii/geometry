@@ -1,6 +1,6 @@
-import { DynamicFormItem, DynamicFormItemArgs } from '@gradii/triangle/dynamic-form/src/dynamic-form-item';
 import { TemplateRef } from '@angular/core';
-import { DynamicFormItemArray } from '@gradii/triangle/dynamic-form/src/dynamic-form-item-array';
+import { DynamicFormItemArgs } from '../dynamic-form-item';
+import { DynamicFormItemArray } from '../dynamic-form-item-array';
 
 export interface DynamicFormItemCustomArrayArgs extends DynamicFormItemArgs {
   templateRef: TemplateRef<any>;
@@ -9,7 +9,6 @@ export interface DynamicFormItemCustomArrayArgs extends DynamicFormItemArgs {
 }
 
 export class DynamicFormItemCustomArray extends DynamicFormItemArray {
-
   public type = 'custom-array';
   public templateRef;
 
@@ -18,7 +17,7 @@ export class DynamicFormItemCustomArray extends DynamicFormItemArray {
   constructor(options: DynamicFormItemCustomArrayArgs) {
     super(options);
 
-    this.templateRef     = options.templateRef;
+    this.templateRef = options.templateRef;
     this.templateContext = options.templateContext;
 
     this.init();

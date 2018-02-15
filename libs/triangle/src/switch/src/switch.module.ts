@@ -1,6 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { SwitchComponent } from './switch.component';
-import { CommonModule } from '@angular/common';
 
 /**
  *
@@ -24,8 +24,8 @@ import { CommonModule } from '@angular/common';
  * <!-- example(switch-size) -->
  */
 @NgModule({
-  exports: [SwitchComponent],
+  exports     : [SwitchComponent],
   declarations: [SwitchComponent],
-  imports: [CommonModule]
+  imports     : [CommonModule]
 })
 export class TriSwitchModule {}

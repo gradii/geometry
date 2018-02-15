@@ -1,7 +1,7 @@
+import { coerceBoolean } from '@gradii/triangle/util';
 // tslint:disable:member-ordering
 import {
   Component,
-  ContentChild,
   DoCheck,
   ElementRef,
   EventEmitter,
@@ -15,7 +15,6 @@ import {
   SimpleChanges,
   TemplateRef
 } from '@angular/core';
-import { toBoolean } from '../util/convert';
 import { TransferItem } from './item';
 
 @Component({
@@ -73,7 +72,7 @@ export class TransferListComponent implements OnChanges, OnInit, DoCheck {
   // search
   @Input()
   set showSearch(value: boolean) {
-    this._showSearch = toBoolean(value);
+    this._showSearch = coerceBoolean(value);
   }
 
   get showSearch(): boolean {
@@ -90,7 +89,7 @@ export class TransferListComponent implements OnChanges, OnInit, DoCheck {
   // events
   @Output() handleSelectAll: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() handleSelect: EventEmitter<TransferItem> = new EventEmitter();
-  @Output() filterChange: EventEmitter<{ direction: string, value: string }> = new EventEmitter();
+  @Output() filterChange: EventEmitter<{ direction: string; value: string }> = new EventEmitter();
 
   // endregion
 
@@ -102,10 +101,7 @@ export class TransferListComponent implements OnChanges, OnInit, DoCheck {
   _setClassMap(): void {
     this._classList.forEach(cls => this._renderer.removeClass(this._el.nativeElement, cls));
 
-    this._classList = [
-      this._prefixCls,
-      !!this.footer && `${this._prefixCls}-with-footer`
-    ].filter(item => !!item);
+    this._classList = [this._prefixCls, !!this.footer && `${this._prefixCls}-with-footer`].filter(item => !!item);
 
     this._classList.forEach(cls => this._renderer.addClass(this._el.nativeElement, cls));
   }

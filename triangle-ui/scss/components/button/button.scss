@@ -13,22 +13,22 @@ $btn-ghost-border: $border-color-base;
   @include btn;
   @include btn-default;
 
-   @at-root &-primary {
+  @at-root &-primary {
     @include btn-primary;
 
     @at-root .#{$btn-prefix-cls}-group &:not(:first-child):not(:last-child) {
       border-right-color: $btn-group-border;
       border-left-color: $btn-group-border;
 
-       @at-root &:disabled {
+      @at-root &:disabled {
         border-color: $btn-default-border;
       }
     }
 
     @at-root .#{$btn-prefix-cls}-group &:first-child {
-       @at-root &:not(:last-child) {
+      @at-root &:not(:last-child) {
         border-right-color: $btn-group-border;
-         @at-root &[disabled] {
+        @at-root &[disabled] {
           border-right-color: $btn-default-border;
         }
       }
@@ -38,30 +38,38 @@ $btn-ghost-border: $border-color-base;
     .#{$btn-prefix-cls}-group &:last-child:not(:first-child),
     .#{$btn-prefix-cls}-group & + & {
       border-left-color: $btn-group-border;
-       @at-root &[disabled] {
+      @at-root &[disabled] {
         border-left-color: $btn-default-border;
       }
     }
   }
 
-   @at-root &-ghost {
+  @at-root &-success {
+    @include btn-success;
+  }
+
+  @at-root &-warning {
+    @include btn-warning;
+  }
+
+  @at-root &-ghost {
     @include btn-ghost;
   }
 
-   @at-root &-dashed {
+  @at-root &-dashed {
     @include btn-dashed;
   }
 
-   @at-root &-danger {
+  @at-root &-danger {
     @include btn-danger;
   }
 
-   @at-root &-circle,
-    &-circle-outline {
+  @at-root &-circle,
+  &-circle-outline {
     @include btn-circle($btn-prefix-cls)
   }
 
-   @at-root &:before {
+  @at-root &:before {
     position: absolute;
     top: -1px;
     left: -1px;
@@ -81,11 +89,11 @@ $btn-ghost-border: $border-color-base;
     transition: margin-left .3s $ease-in-out,
   }
 
-   @at-root &#{&}-loading:before {
+  @at-root &#{&}-loading:before {
     display: block;
   }
 
-   @at-root &#{&}-loading:not(#{&}-circle):not(#{&}-circle-outline) {
+  @at-root &#{&}-loading:not(#{&}-circle):not(#{&}-circle-outline) {
     padding-left: 29px;
     pointer-events: none;
     position: relative;
@@ -94,25 +102,25 @@ $btn-ghost-border: $border-color-base;
     }
   }
 
-   @at-root &-sm#{&}-loading:not(#{&}-circle):not(#{&}-circle-outline) {
+  @at-root &-sm#{&}-loading:not(#{&}-circle):not(#{&}-circle-outline) {
     padding-left: 24px;
     .#{$iconfont-css-prefix} {
       margin-left: -17px;
     }
   }
 
-   @at-root &-group {
+  @at-root &-group {
     @include btn-group($btn-prefix-cls);
   }
 
-   @at-root &:not(#{&}-circle):not(#{&}-circle-outline)#{&+'-icon-only'} {
+  @at-root &:not(#{&}-circle):not(#{&}-circle-outline)#{&+'-icon-only'} {
     padding-left: 8px;
     padding-right: 8px;
   }
 
   // http://stackoverflow.com/a/21281554/3040605
-   @at-root &:focus > span,
-    &:active > span {
+  @at-root &:focus > span,
+  &:active > span {
     position: relative;
   }
 
@@ -122,7 +130,7 @@ $btn-ghost-border: $border-color-base;
     margin-left: 0.5em;
   }
 
-   @at-root &-clicked:after {
+  @at-root &-clicked:after {
     content: '';
     position: absolute;
     top: -1px;
@@ -136,21 +144,29 @@ $btn-ghost-border: $border-color-base;
     display: block;
   }
 
-   @at-root &-danger#{&}-clicked:after {
+  @at-root &-success#{&}-clicked:after {
+    border-color: $btn-success-border;
+  }
+
+  @at-root &-warning#{&}-clicked:after {
+    border-color: $btn-warning-border;
+  }
+
+  @at-root &-danger#{&}-clicked:after {
     border-color: $btn-danger-color;
   }
 
-   @at-root &-background-ghost {
+  @at-root &-background-ghost {
     background: transparent !important;
     border-color: #fff;
     color: #fff;
   }
 
-   @at-root &-background-ghost#{&}-primary {
+  @at-root &-background-ghost#{&}-primary {
     @include button-variant-ghost($primary-color);
   }
 
-   @at-root &-background-ghost#{&}-danger {
+  @at-root &-background-ghost#{&}-danger {
     @include button-variant-ghost($btn-danger-color);
   }
 }

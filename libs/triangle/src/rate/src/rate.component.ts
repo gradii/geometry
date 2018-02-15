@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewEncapsulation, Input, forwardRef } from '@angular/core';
+import { Component, forwardRef, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-  selector: 'tri-rate',
+  selector     : 'tri-rate',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <ul class="ant-rate"
         [class.ant-rate-disabled]="_disabled"
         (mouseleave)="_leaveRate($event)">
@@ -24,11 +24,11 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       </li>
     </ul>
   `,
-  providers: [
+  providers    : [
     {
-      provide: NG_VALUE_ACCESSOR,
+      provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => RateComponent),
-      multi: true
+      multi      : true
     }
   ]
 })

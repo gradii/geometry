@@ -1,14 +1,14 @@
-import { Injectable, Inject, Provider, SkipSelf, Optional } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { Inject, Injectable, Optional, Provider, SkipSelf } from '@angular/core';
 
 const availablePrefixs = ['moz', 'ms', 'webkit'];
 
 function requestAnimationFramePolyfill() {
   let lastTime = 0;
-  return function(callback) {
+  return function (callback) {
     const currTime = new Date().getTime();
     const timeToCall = Math.max(0, 16 - (currTime - lastTime));
-    const id = window.setTimeout(function() {
+    const id = window.setTimeout(function () {
       callback(currTime + timeToCall);
     }, timeToCall);
     lastTime = currTime + timeToCall;
@@ -59,7 +59,7 @@ export class ScrollService {
   /** 获取 `el` 相对于视窗距离 */
   getOffset(el: Element): { top: number; left: number } {
     let ret = {
-      top: 0,
+      top : 0,
       left: 0
     };
     if (!el || !el.getClientRects().length) {
@@ -130,7 +130,7 @@ export function SCROLL_SERVICE_PROVIDER_FACTORY(doc, scrollService) {
 }
 
 export const SCROLL_SERVICE_PROVIDER: Provider = {
-  provide: ScrollService,
+  provide   : ScrollService,
   useFactory: SCROLL_SERVICE_PROVIDER_FACTORY,
-  deps: [DOCUMENT, [new Optional(), new SkipSelf(), ScrollService]]
+  deps      : [DOCUMENT, [new Optional(), new SkipSelf(), ScrollService]]
 };

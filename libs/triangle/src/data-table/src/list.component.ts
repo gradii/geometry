@@ -1,4 +1,5 @@
-import {GroupDescriptor} from '@gradii/triangle/data-query';
+import { GroupDescriptor } from '@gradii/triangle/data-query';
+import { isPresent } from '@gradii/triangle/util';
 import {
   AfterViewInit,
   Component,
@@ -18,30 +19,30 @@ import {
   Renderer2,
   ViewChild
 } from '@angular/core';
-import {fromEvent} from "rxjs/observable/fromEvent";
-import {filter} from "rxjs/operators/filter";
+import { fromEvent } from 'rxjs/observable/fromEvent';
 import 'rxjs/operator/filter';
-import {map} from "rxjs/operators/map";
-import {merge} from "rxjs/operators/merge";
-import {tap} from "rxjs/operators/tap";
-import {Subject} from 'rxjs/Subject';
-import {ColumnBase} from './columns/column-base';
-import {ColumnsContainer} from './columns/columns-container';
-import {NoRecordsTemplateDirective} from './directive/no-records-template.directive';
-import {GroupableSettings} from './grouping/group-settings';
-import {GroupsService} from './grouping/groups.service';
-import {expandColumns} from './helper/column-common';
-import {Action, PageAction, ScrollAction, ScrollerService} from './helper/scroller.service';
-import {RowClassFn} from './row-class';
-import {syncRowsHeight} from './row-sync';
-import {ChangeNotificationService} from './service/change-notification.service';
-import {DetailsService} from './service/details.service';
-import {RowHeightService} from './service/row-height.service';
-import {ScrollSyncService} from './service/scroll-sync.service';
-import {SuspendService} from './service/suspend.service';
-import {DetailTemplateDirective} from './table-shared/detail-template.directive';
-import {isChanged, isPresent, isUniversal} from './utils';
-import {switchMap} from 'rxjs/operators/switchMap';
+import { filter } from 'rxjs/operators/filter';
+import { map } from 'rxjs/operators/map';
+import { merge } from 'rxjs/operators/merge';
+import { switchMap } from 'rxjs/operators/switchMap';
+import { tap } from 'rxjs/operators/tap';
+import { Subject } from 'rxjs/Subject';
+import { ColumnBase } from './columns/column-base';
+import { ColumnsContainer } from './columns/columns-container';
+import { NoRecordsTemplateDirective } from './directive/no-records-template.directive';
+import { GroupableSettings } from './grouping/group-settings';
+import { GroupsService } from './grouping/groups.service';
+import { expandColumns } from './helper/column-common';
+import { Action, PageAction, ScrollAction, ScrollerService } from './helper/scroller.service';
+import { RowClassFn } from './row-class';
+import { syncRowsHeight } from './row-sync';
+import { ChangeNotificationService } from './service/change-notification.service';
+import { DetailsService } from './service/details.service';
+import { RowHeightService } from './service/row-height.service';
+import { ScrollSyncService } from './service/scroll-sync.service';
+import { SuspendService } from './service/suspend.service';
+import { DetailTemplateDirective } from './table-shared/detail-template.directive';
+import { isChanged, isUniversal } from './utils';
 
 export const SCROLLER_FACTORY_TOKEN = new InjectionToken('grid-scroll-service-factory');
 
@@ -49,7 +50,7 @@ export function DEFAULT_SCROLLER_FACTORY(observable) {
   return new ScrollerService(observable);
 }
 
-const wheelDeltaY         = e => {
+const wheelDeltaY = e => {
   const deltaY = e.wheelDeltaY;
   if (e.wheelDelta && (deltaY === undefined || deltaY)) {
     return e.wheelDelta;
@@ -63,8 +64,8 @@ const preventLockedScroll = el => event => {
     event.preventDefault();
   }
 };
-const translateY          = (renderer, value) => el => renderer.setStyle(el, 'transform', 'translateY(' + value + 'px)');
-const firstChild          = el => (el ? el.nativeElement.children[0] : null);
+const translateY = (renderer, value) => el => renderer.setStyle(el, 'transform', 'translateY(' + value + 'px)');
+const firstChild = el => (el ? el.nativeElement.children[0] : null);
 
 @Component({
   providers: [
@@ -164,7 +165,7 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
   @Input() groupable: GroupableSettings | boolean;
   @Input() rowClass: RowClassFn;
   @Output() pageChange: EventEmitter<Action>;
-          totalHeight: number;
+  totalHeight: number;
   // readonly showFooter: boolean;
   @ViewChild('container') container: ElementRef;
   @ViewChild('lockedContainer') lockedContainer: ElementRef;
@@ -182,19 +183,19 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
               renderer: Renderer2,
               scrollSyncService: ScrollSyncService) {
     this.changeNotification = changeNotification;
-    this.suspendService     = suspendService;
-    this.groupsService      = groupsService;
-    this.ngZone             = ngZone;
-    this.renderer           = renderer;
-    this.scrollSyncService  = scrollSyncService;
-    this.groups             = [];
-    this.skip               = 0;
-    this.columns            = new ColumnsContainer(() => []);
-    this.groupable          = false;
-    this.pageChange         = new EventEmitter();
-    this.dispatcher         = new Subject();
-    this.scroller           = scrollerFactory(this.dispatcher);
-    this.subscriptions      = detailsService.changes.subscribe(x => this.detailExpand(x));
+    this.suspendService = suspendService;
+    this.groupsService = groupsService;
+    this.ngZone = ngZone;
+    this.renderer = renderer;
+    this.scrollSyncService = scrollSyncService;
+    this.groups = [];
+    this.skip = 0;
+    this.columns = new ColumnsContainer(() => []);
+    this.groupable = false;
+    this.pageChange = new EventEmitter();
+    this.dispatcher = new Subject();
+    this.scroller = scrollerFactory(this.dispatcher);
+    this.subscriptions = detailsService.changes.subscribe(x => this.detailExpand(x));
   }
 
   @HostBinding('class.ant-grid-container')
@@ -273,14 +274,14 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
       return;
     }
     this.rowHeightService = new RowHeightService(this.total, this.rowHeight, this.detailRowHeight);
-    this.totalHeight      = this.rowHeightService.totalHeight();
+    this.totalHeight = this.rowHeightService.totalHeight();
     if (!isUniversal()) {
       this.ngZone.runOutsideAngular(this.createScroller.bind(this));
     }
   }
 
   detailExpand(_a) {
-    const index  = _a.index;
+    const index = _a.index;
     const expand = _a.expand;
     if (expand) {
       this.rowHeightService.expandDetail(index);
@@ -337,8 +338,7 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
       .forEach(translateY(this.renderer, offset));
   }
 
-  onContainerScroll(_a) {
-    const scrollTop = _a.scrollTop;
+  onContainerScroll({scrollTop}) {
     if (this.lockedContainer) {
       this.lockedContainer.nativeElement.scrollTop = scrollTop;
     }
@@ -351,7 +351,8 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
           .pipe(
             merge(this.groupsService.changes.pipe(switchMap(() => this.ngZone.onStable.take(1)))),
             filter(() => isPresent(this.lockedContainer))
-          ).subscribe(() => this.syncRowsHeight())
+          )
+          .subscribe(() => this.syncRowsHeight())
       )
     );
   }

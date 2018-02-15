@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
-import { columnsToRender } from './helper/column-common';
-import { ColumnComponent } from './columns/column.component';
 import { GroupDescriptor } from '@gradii/triangle/data-query';
-import { DetailTemplateDirective } from './table-shared/detail-template.directive';
+import { Component, Input } from '@angular/core';
 import { ColumnBase } from './columns/column-base';
+import { ColumnComponent } from './columns/column.component';
+import { columnsToRender } from './helper/column-common';
+import { DetailTemplateDirective } from './table-shared/detail-template.directive';
+
 @Component({
   selector: '[triGridColGroup], [tri-grid-col-group]',
   template: `
@@ -18,10 +19,12 @@ export class ColGroupComponent {
   @Input() columns: ColumnComponent[];
   @Input() groups: GroupDescriptor[];
   @Input() detailTemplate: DetailTemplateDirective;
+
   constructor() {
     this.columns = [];
     this.groups = [];
   }
+
   get columnsToRender(): ColumnBase[] {
     return columnsToRender(this.columns);
   }

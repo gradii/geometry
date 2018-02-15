@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectorRef, Input, ViewChild, forwardRef } from '@angular/core';
+import { DropDownAnimation } from '@gradii/triangle/core';
+import { ChangeDetectorRef, Component, forwardRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as moment from 'moment';
-import { DropDownAnimation } from '@gradii/triangle/core';
 
 export interface TimeUnitInterface {
   index: number;
@@ -10,9 +10,9 @@ export interface TimeUnitInterface {
 }
 
 @Component({
-  selector: 'tri-timepicker-inner',
+  selector     : 'tri-timepicker-inner',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <span
       class="ant-calendar-time-picker"
       [ngClass]="{'ant-time-picker-large':size=='large','ant-time-picker-small':size=='small'}">
@@ -91,12 +91,12 @@ export interface TimeUnitInterface {
       </div>
       </div>
     </span>`,
-  animations: [DropDownAnimation],
-  providers: [
+  animations   : [DropDownAnimation],
+  providers    : [
     {
-      provide: NG_VALUE_ACCESSOR,
+      provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => TimePickerInnerComponent),
-      multi: true
+      multi      : true
     }
   ]
 })
@@ -217,10 +217,10 @@ export class TimePickerInnerComponent implements OnInit, ControlValueAccessor {
   // got from rc-timepicker
   scrollTo(element, to, duration) {
     const requestAnimationFrame =
-      window.requestAnimationFrame ||
-      function requestAnimationFrameTimeout() {
-        return setTimeout(arguments[0], 10);
-      };
+            window.requestAnimationFrame ||
+            function requestAnimationFrameTimeout() {
+              return setTimeout(arguments[0], 10);
+            };
     if (duration <= 0) {
       element.scrollTop = to;
       return;
@@ -331,8 +331,8 @@ export class TimePickerInnerComponent implements OnInit, ControlValueAccessor {
     for (let i = 0; i <= 23; i++) {
       this._hourList.push({
         disabled: this.disabledHours && this.disabledHours().indexOf(i) !== -1,
-        name: i.toString().length === 1 ? '0' + i : '' + i,
-        index: i
+        name    : i.toString().length === 1 ? '0' + i : '' + i,
+        index   : i
       });
     }
   }
@@ -342,8 +342,8 @@ export class TimePickerInnerComponent implements OnInit, ControlValueAccessor {
     for (let i = 0; i <= 59; i++) {
       this._minuteList.push({
         disabled: this.disabledMinutes && this.disabledMinutes(this._selectedHour).indexOf(i) !== -1,
-        name: i.toString().length === 1 ? '0' + i : '' + i,
-        index: i
+        name    : i.toString().length === 1 ? '0' + i : '' + i,
+        index   : i
       });
     }
   }
@@ -353,9 +353,9 @@ export class TimePickerInnerComponent implements OnInit, ControlValueAccessor {
     for (let i = 0; i <= 59; i++) {
       this._secondList.push({
         disabled:
-          this.disabledSeconds && this.disabledSeconds(this._selectedHour, this._selectedMinute).indexOf(i) !== -1,
-        name: i.toString().length === 1 ? '0' + i : '' + i,
-        index: i
+        this.disabledSeconds && this.disabledSeconds(this._selectedHour, this._selectedMinute).indexOf(i) !== -1,
+        name    : i.toString().length === 1 ? '0' + i : '' + i,
+        index   : i
       });
     }
   }

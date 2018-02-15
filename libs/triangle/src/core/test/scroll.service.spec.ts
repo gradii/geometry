@@ -1,8 +1,6 @@
-import { ReflectiveInjector } from '@angular/core';
-import { PlatformLocation } from '@angular/common';
-import { DOCUMENT } from '@angular/common';
-
 import { ScrollService } from '@gradii/triangle/core';
+import { DOCUMENT, PlatformLocation } from '@angular/common';
+import { ReflectiveInjector } from '@angular/core';
 
 describe('ScrollService', () => {
   const TOP: number = 10;
@@ -35,8 +33,8 @@ describe('ScrollService', () => {
   beforeEach(() => {
     injector = ReflectiveInjector.resolveAndCreate([
       ScrollService,
-      { provide: DOCUMENT, useClass: MockDocument },
-      { provide: PlatformLocation, useClass: MockPlatformLocation }
+      {provide: DOCUMENT, useClass: MockDocument},
+      {provide: PlatformLocation, useClass: MockPlatformLocation}
     ]);
     location = injector.get(PlatformLocation);
     document = injector.get(DOCUMENT);

@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, ContentChild, ViewEncapsulation, TemplateRef } from '@angular/core';
+import { Component, ContentChild, Input, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'tri-timeline-item',
+  selector     : 'tri-timeline-item',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <li
       class="ant-timeline-item"
       [class.ant-timeline-item-last]="_lastItem">
@@ -18,10 +18,10 @@ import { Component, OnInit, Input, ContentChild, ViewEncapsulation, TemplateRef 
         <ng-content></ng-content>
       </div>
     </li>`,
-  styleUrls: []
+  styleUrls    : []
 })
 export class TimelineItemComponent implements OnInit {
-  itemHeadClass = { 'ant-timeline-item-head-blue': true };
+  itemHeadClass = {'ant-timeline-item-head-blue': true};
   _color = 'blue';
   _custom = false;
   _lastItem = false;

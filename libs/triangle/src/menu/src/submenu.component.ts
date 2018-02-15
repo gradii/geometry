@@ -1,35 +1,35 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
+  AfterViewInit,
+  ChangeDetectorRef,
   Component,
-  OnInit,
-  OnDestroy,
+  ContentChildren,
+  EventEmitter,
   HostBinding,
   HostListener,
-  ContentChildren,
-  AfterViewInit,
   Input,
-  Output,
-  EventEmitter,
-  ChangeDetectorRef
+  OnDestroy,
+  OnInit,
+  Output
 } from '@angular/core';
-import { style, animate, state, transition, trigger } from '@angular/animations';
-import { MenuComponent } from './menu.component';
-import { Subject } from 'rxjs/Subject';
 import { debounceTime } from 'rxjs/operator/debounceTime';
+import { Subject } from 'rxjs/Subject';
+import { MenuComponent } from './menu.component';
 
 @Component({
-  selector: '[tri-submenu]',
+  selector  : '[tri-submenu]',
   animations: [
     trigger('fadeAnimation', [
-      state('*', style({ opacity: 1 })),
-      transition('* => void', [animate(150, style({ opacity: 0, display: 'none' }))]),
-      transition('void => *', [style({ opacity: '0' }), animate(150, style({ opacity: 1 }))])
+      state('*', style({opacity: 1})),
+      transition('* => void', [animate(150, style({opacity: 0, display: 'none'}))]),
+      transition('void => *', [style({opacity: '0'}), animate(150, style({opacity: 1}))])
     ]),
     trigger('expandAnimation', [
-      transition('expand => void', [style({ height: '*', overflow: 'hidden' }), animate(150, style({ height: 0 }))]),
-      transition('void => expand', [style({ height: 0, overflow: 'hidden' }), animate(150, style({ height: '*' }))])
+      transition('expand => void', [style({height: '*', overflow: 'hidden'}), animate(150, style({height: 0}))]),
+      transition('void => expand', [style({height: 0, overflow: 'hidden'}), animate(150, style({height: '*'}))])
     ])
   ],
-  template: `
+  template  : `
     <div
       [class.ant-dropdown-menu-submenu-title]="isInDropDown"
       [class.ant-menu-submenu-title]="!isInDropDown"

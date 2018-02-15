@@ -1,6 +1,8 @@
 const getDocument = () => (typeof document !== 'undefined' ? document : <Document>{});
+
 export class BrowserSupportService {
   private scrollbar;
+
   get scrollbarWidth() {
     const document = getDocument();
     if (!this.scrollbar && document && document.createElement) {

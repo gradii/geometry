@@ -1,11 +1,11 @@
-import { Component, HostBinding, Input, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 
 import { RadioComponent } from './radio.component';
 
 @Component({
-  selector: '[tri-radio-button]',
+  selector     : '[tri-radio-button]',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <span [class.ant-radio-button]="true"
           [class.ant-radio-button-checked]="_checked"
           [class.ant-radio-button-focused]="_focused"
@@ -19,10 +19,10 @@ import { RadioComponent } from './radio.component';
     </span>
     <ng-content></ng-content>
   `,
-  host: {
-    '[class.ant-radio-button-wrapper]': 'true',
+  host         : {
+    '[class.ant-radio-button-wrapper]'         : 'true',
     '[class.ant-radio-button-wrapper-disabled]': 'disabled',
-    '[class.ant-radio-button-wrapper-checked]': 'checked'
+    '[class.ant-radio-button-wrapper-checked]' : 'checked'
   }
 })
 export class RadioButtonComponent extends RadioComponent {}

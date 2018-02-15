@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CardGridDirective } from './card-grid.directive';
 
 import { CardComponent } from './card.component';
-import { CardGridDirective } from './card-grid.directive';
 
 /**
  *
@@ -28,8 +28,8 @@ import { CardGridDirective } from './card-grid.directive';
  * <!-- example(card-inner) -->
  */
 @NgModule({
-  imports: [CommonModule],
+  imports     : [CommonModule],
   declarations: [CardComponent, CardGridDirective],
-  exports: [CardComponent, CardGridDirective]
+  exports     : [CardComponent, CardGridDirective]
 })
 export class TriCardModule {}

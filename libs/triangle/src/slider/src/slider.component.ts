@@ -14,17 +14,17 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { merge } from 'rxjs/observable/merge';
 import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
+import { filter } from 'rxjs/operators/filter';
 import { map } from 'rxjs/operators/map';
 import { pluck } from 'rxjs/operators/pluck';
 import { takeUntil } from 'rxjs/operators/takeUntil';
-import { SliderService } from './slider.service';
-import { Marks, MarksArray } from './slider-marks.component';
-import { filter } from 'rxjs/operators/filter';
 import { tap } from 'rxjs/operators/tap';
+import { Subscription } from 'rxjs/Subscription';
+import { Marks, MarksArray } from './slider-marks.component';
+import { SliderService } from './slider.service';
 
 export type SliderValue = number[] | number;
 
@@ -35,16 +35,16 @@ export class SliderHandle {
 }
 
 @Component({
-  selector: 'tri-slider',
+  selector     : 'tri-slider',
   encapsulation: ViewEncapsulation.None,
-  providers: [
+  providers    : [
     {
-      provide: NG_VALUE_ACCESSOR,
+      provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => SliderComponent),
-      multi: true
+      multi      : true
     }
   ],
-  template: `
+  template     : `
     <div #slider [ngClass]="classMap">
       <div class="ant-slider-rail"></div>
       <tri-slider-track
@@ -200,10 +200,10 @@ export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges,
   prefixCls = 'ant-slider';
   classMap: Object;
   activeValueIndex: number = null; // Current activated handle's index ONLY for range=true
-  track = { offset: null, length: null }; // Track's offset and length
+  track = {offset: null, length: null}; // Track's offset and length
   handles: SliderHandle[]; // Handles' offset
   marksArray: MarksArray; // "marks" in array type with more data & FILTER out the invalid mark
-  bounds = { lower: null, upper: null }; // now for tri-slider-step
+  bounds = {lower: null, upper: null}; // now for tri-slider-step
   onValueChange: Function; // Used by ngModel. BUG: onValueChange() will not success to effect the "value" variable ( [(ngModel)]="value" ) when the first initializing, except using "nextTick" functionality (MAY angular2's problem ?)
   isDragging = false; // Current dragging state
 
@@ -310,7 +310,7 @@ export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges,
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const { disabled } = changes;
+    const {disabled} = changes;
     if (disabled && !disabled.firstChange) {
       this.toggleDragDisabled(disabled.currentValue);
       this.setClassMap();
@@ -326,11 +326,11 @@ export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges,
   // |--------------------------------------------------------------------------------------------
 
   setClassMap() {
-    const { prefixCls, disabled, vertical, marksArray } = this;
+    const {prefixCls, disabled, vertical, marksArray} = this;
     this.classMap = {
-      [prefixCls]: true,
-      [`${prefixCls}-disabled`]: disabled,
-      [`${prefixCls}-vertical`]: vertical,
+      [prefixCls]                : true,
+      [`${prefixCls}-disabled`]  : disabled,
+      [`${prefixCls}-vertical`]  : vertical,
       [`${prefixCls}-with-marks`]: marksArray ? marksArray.length : 0
     };
   }
@@ -339,8 +339,8 @@ export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges,
   setActiveValueIndex(pointerValue: number): void {
     if (this.range) {
       let minimal = null,
-        gap,
-        activeIndex;
+          gap,
+          activeIndex;
       (<number[]>this.getValue()).forEach((val, index) => {
         gap = Math.abs(pointerValue - val);
         if (minimal === null || gap < minimal) {
@@ -379,7 +379,7 @@ export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges,
   }
 
   toMarksArray(marks) {
-    const { min, max } = this;
+    const {min, max} = this;
     const marksArray = [];
     for (const key in marks) {
       const mark = marks[key];
@@ -387,7 +387,7 @@ export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges,
       if (val < min || val > max) {
         continue;
       }
-      marksArray.push({ value: val, offset: this.valueToOffset(val), config: mark });
+      marksArray.push({value: val, offset: this.valueToOffset(val), config: mark});
     }
     return marksArray;
   }
@@ -425,24 +425,24 @@ export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges,
   }
 
   createDrag() {
-    const sliderDOM = this.sliderDOM,
-      orientField = this.vertical ? 'pageY' : 'pageX',
-      mouse: any = {
-        start: 'mousedown',
-        move: 'mousemove',
-        end: 'mouseup',
-        pluckKey: [orientField]
-      },
-      touch: any = {
-        start: 'touchstart',
-        move: 'touchmove',
-        end: 'touchend',
-        pluckKey: ['touches', '0', orientField],
-        filter: (e: MouseEvent | TouchEvent) => !this.utils.isNotTouchEvent(<TouchEvent>e)
-      };
+    const sliderDOM   = this.sliderDOM,
+          orientField = this.vertical ? 'pageY' : 'pageX',
+          mouse: any  = {
+            start   : 'mousedown',
+            move    : 'mousemove',
+            end     : 'mouseup',
+            pluckKey: [orientField]
+          },
+          touch: any  = {
+            start   : 'touchstart',
+            move    : 'touchmove',
+            end     : 'touchend',
+            pluckKey: ['touches', '0', orientField],
+            filter  : (e: MouseEvent | TouchEvent) => !this.utils.isNotTouchEvent(<TouchEvent>e)
+          };
     // make observables
     [mouse, touch].forEach(source => {
-      const { start, move, end, pluckKey, filterFunc = ((value: any, index: number) => true) as any } = source;
+      const {start, move, end, pluckKey, filterFunc = ((value: any, index: number) => true) as any} = source;
       // start
       source.startPlucked$ = fromEvent(sliderDOM, start).pipe(
         filter(filterFunc),
@@ -530,12 +530,12 @@ export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges,
 
   // find the closest value depend on pointer's position
   findClosestValue(position: number): number {
-    const { vertical, step, min, max, marks, dots, utils } = this,
-      sliderStart = this.getSliderStartPosition(),
-      sliderLength = this.getSliderLength();
-    const ratio = utils.correctNumLimit((position - sliderStart) / sliderLength, 0, 1),
-      val = (max - min) * (vertical ? 1 - ratio : ratio) + min,
-      points = (marks === null ? [] : Object.keys(marks).map(parseFloat)) as Array<any>;
+    const {vertical, step, min, max, marks, dots, utils} = this,
+          sliderStart                                    = this.getSliderStartPosition(),
+          sliderLength                                   = this.getSliderLength();
+    const ratio  = utils.correctNumLimit((position - sliderStart) / sliderLength, 0, 1),
+          val    = (max - min) * (vertical ? 1 - ratio : ratio) + min,
+          points = (marks === null ? [] : Object.keys(marks).map(parseFloat)) as Array<any>;
     // push closest step
     if (step !== null && !dots) {
       const closest = Math.round(val / step) * step;
@@ -651,7 +651,7 @@ export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges,
   private _generateHandles(amount: number) {
     const handles: SliderHandle[] = [];
     for (let i = 0; i < amount; i++) {
-      handles.push({ offset: null, value: null, active: false });
+      handles.push({offset: null, value: null, active: false});
     }
     return handles;
   }

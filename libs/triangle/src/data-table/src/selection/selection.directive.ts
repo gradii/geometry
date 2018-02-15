@@ -1,6 +1,6 @@
-import { Directive, Host, Self } from '@angular/core';
-import { Selection } from "./selection-default";
+import { Directive, Host } from '@angular/core';
 import { DataTableComponent } from '../data-table.component';
+import { Selection } from './selection-default';
 
 /**
  * A directive which stores the row selection state of the Grid in memory.
@@ -13,14 +13,12 @@ export class SelectionDirective extends Selection {
     super(grid);
   }
 
-
   ngOnInit() {
     if (this.grid.selectable === false) {
       this.grid.selectable = true;
     }
     this.grid.selectionDirective = true;
   }
-
 
   ngOnDestroy() {
     super.destroy();

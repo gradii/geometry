@@ -1,6 +1,6 @@
-import { Component, Input, OnInit, Inject, Optional } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { ROOT_CONFIG, RootConfig, createNzRootInitializer } from './root-config';
+import { Component, Inject, Input, OnInit, Optional } from '@angular/core';
+import { createNzRootInitializer, ROOT_CONFIG, RootConfig } from './root-config';
 
 @Component({
   selector: '[tri-root],tri-root',
@@ -13,18 +13,16 @@ export class RootComponent implements OnInit {
   @Input() extraFontName: string;
   @Input() extraFontUrl: string;
 
-  constructor(
-    @Inject(DOCUMENT) private _document: any,
-    // Cannot use type annotation here due to https://github.com/angular/angular-cli/issues/2034
-    // Should be revisited after AOT being made the only option
-    @Inject(ROOT_CONFIG)
-    @Optional()
-    private options: any | undefined
-  ) {}
+  constructor(@Inject(DOCUMENT) private _document: any,
+              // Cannot use type annotation here due to https://github.com/angular/angular-cli/issues/2034
+              // Should be revisited after AOT being made the only option
+              @Inject(ROOT_CONFIG)
+              @Optional()
+              private options: any | undefined) {}
 
   ngOnInit() {
     if (this.extraFontName && this.extraFontUrl && !this.options) {
-      const options: RootConfig = { extraFontName: this.extraFontName, extraFontUrl: this.extraFontUrl };
+      const options: RootConfig = {extraFontName: this.extraFontName, extraFontUrl: this.extraFontUrl};
       const initializer = createNzRootInitializer(this._document, options);
       initializer();
     }

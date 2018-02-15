@@ -1,5 +1,5 @@
-import {isPresent} from '../utils';
-import {GroupResult} from '@gradii/triangle/data-query';
+import { GroupResult } from '@gradii/triangle/data-query';
+import { isPresent } from '@gradii/triangle/util';
 
 export interface GroupItem {
   type: 'group';
@@ -35,10 +35,10 @@ export interface IteratorState {
   groupIndex?: number;
 }
 
-const isGroupItem        = function (source) {
+const isGroupItem = function (source) {
   return source.items !== undefined && source.field !== undefined;
 };
-const flattenGroups      = function (groups) {
+const flattenGroups = function (groups) {
   return groups.reduce(function (acc, curr) {
     if (isGroupItem(curr)) {
       return acc.concat(flattenGroups(curr.items));
@@ -46,7 +46,7 @@ const flattenGroups      = function (groups) {
     return acc.concat([curr]);
   }, []); // tslint:disable-line:align
 };
-export const itemAt      = (data: any[], index: number): any => {
+export const itemAt = (data: any[], index: number): any => {
   const first = data[0];
   if (isPresent(first) && isGroupItem(first)) {
     return flattenGroups(data)[index];
@@ -100,9 +100,9 @@ export class Iterator<T> {
     if (resultMap === void 0) {
       resultMap = x => x;
     }
-    this.dataIndex      = dataIndex;
-    this.resultMap      = resultMap;
-    const iterator      = arr[Symbol.iterator];
+    this.dataIndex = dataIndex;
+    this.resultMap = resultMap;
+    const iterator = arr[Symbol.iterator];
     this._innerIterator = iterator ? arr[Symbol.iterator]() : new ArrayIterator(arr);
   }
 
@@ -156,19 +156,19 @@ export class GroupIterator<T> {
               dataIndex: number      = 0,
               parentIndex: string    = '',
               groupIndex: number     = 0) {
-    this.arr               = arr;
-    this.outputFooters     = outputFooters;
-    this.level             = level;
-    this.dataIndex         = dataIndex;
-    this.parentIndex       = parentIndex;
-    this.groupIndex        = groupIndex;
+    this.arr = arr;
+    this.outputFooters = outputFooters;
+    this.level = level;
+    this.dataIndex = dataIndex;
+    this.parentIndex = parentIndex;
+    this.groupIndex = groupIndex;
     this.currentGroupIndex = '';
-    this.arr               = arr || [];
-    this._iterator         = new Iterator(this.arr, this.dataIndex);
+    this.arr = arr || [];
+    this._iterator = new Iterator(this.arr, this.dataIndex);
   }
 
   nextGroupItem(): IteratorResult<GroupItem> {
-    this.current        = this._iterator.next().value;
+    this.current = this._iterator.next().value;
     this._innerIterator = null;
     if (this.current) {
       this.currentGroupIndex = prefix(this.parentIndex, this.groupIndex++);
@@ -189,7 +189,7 @@ export class GroupIterator<T> {
 
   footerItem(): IteratorResult<GroupFooterItem> {
     if (this.current) {
-      const group  = this.current;
+      const group = this.current;
       this.current = null;
       return {
         done : false,
@@ -219,9 +219,9 @@ export class GroupIterator<T> {
   }
 
   nextDataItem(group: GroupResult): IteratorResult<Item | GroupItem | GroupFooterItem> {
-    const iterator     = this.innerIterator(group);
+    const iterator = this.innerIterator(group);
     const currentIndex = iterator.index;
-    const result       = iterator.next();
+    const result = iterator.next();
     if (isPresent(result.value) && (<any>result.value).type !== 'footer') {
       this.dataIndex = currentIndex;
     }

@@ -1,19 +1,36 @@
 import { CompositeFilterDescriptor, GroupDescriptor, GroupResult, SortDescriptor } from '@gradii/triangle/data-query';
+import { SelectableSettings } from '@gradii/triangle/data-table';
+import { isArray, isFunction, isObject, isPresent } from '@gradii/triangle/util';
 import {
-  AfterContentChecked, AfterContentInit, AfterViewInit, Component, ContentChild, ContentChildren, ElementRef,
-  EventEmitter, Input, isDevMode, NgZone, OnChanges, OnDestroy, Output, QueryList, Renderer2, ViewChild
+  AfterContentChecked,
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  ContentChild,
+  ContentChildren,
+  ElementRef,
+  EventEmitter,
+  Input,
+  isDevMode,
+  NgZone,
+  OnChanges,
+  OnDestroy,
+  Output,
+  QueryList,
+  Renderer2,
+  ViewChild
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { filter } from "rxjs/operators/filter";
-import { map } from "rxjs/operators/map";
-import { merge } from "rxjs/operators/merge";
+import { filter } from 'rxjs/operators/filter';
+import { map } from 'rxjs/operators/map';
+import { merge } from 'rxjs/operators/merge';
 import { CELL_CONTEXT, EMPTY_CELL_CONTEXT } from './cell-context';
 import { ColumnBase } from './columns/column-base';
 import { isColumnGroupComponent } from './columns/column-group.component';
 import { ColumnList } from './columns/column-list';
 import { ColumnComponent } from './columns/column.component';
 import { ColumnsContainer } from './columns/columns-container';
-import { DataResultIterator, GridDataResult } from "./data-collection/data-result-iterator";
+import { DataResultIterator, GridDataResult } from './data-collection/data-result-iterator';
 import { DataCollection } from './data-collection/data.collection';
 import { NoRecordsTemplateDirective } from './directive/no-records-template.directive';
 import { AddEvent } from './event/add-event-args.interface';
@@ -31,39 +48,35 @@ import { columnsToRender, expandColumns } from './helper/column-common';
 import { ScrollMode } from './helper/scrollmode';
 import { SortSettings } from './helper/sort-settings';
 import { ListComponent } from './list.component';
-import { RowClassFn } from './row-class';
+import { RowClassFn, RowSelectedFn } from './row-class';
 import { syncRowsHeight } from './row-sync';
+import { Selection } from './selection/selection-default';
+import { SelectionEvent, SelectionService } from './selection/selection.service';
 import { BrowserSupportService } from './service/browser-support.service';
 import { ChangeNotificationService } from './service/change-notification.service';
 import { DetailsService } from './service/details.service';
+import { DomEventsService } from './service/dom-events.service';
 import { EditService } from './service/edit.service';
 import { ResponsiveService } from './service/responsive.service';
 import { ScrollSyncService } from './service/scroll-sync.service';
-import { Selection } from "./selection/selection-default";
 import { SuspendService } from './service/suspend.service';
 
 import { DetailTemplateDirective } from './table-shared/detail-template.directive';
 import { ToolbarTemplateDirective } from './table-shared/toolbar-template.directive';
-import { anyChanged, isArray, isChanged, isPresent, isUniversal } from './utils';
-import { DomEventsService } from './service/dom-events.service';
-import { SelectionEvent, SelectionService } from './selection/selection.service';
-import { RowSelectedFn } from './row-class';
-import { SelectableSettings } from '@gradii/triangle/data-table';
-import { isFunction, isObject } from '@gradii/triangle/util';
+import { anyChanged, isChanged, isUniversal } from './utils';
 
 const createControl = source => (acc, key) => {
   acc[key] = new FormControl(source[key]);
   return acc;
 };
 
-const fieldMapFnObjectFactory = (obj) => {
-  return function (field) {
+const fieldMapFnObjectFactory = obj => {
+  return function (field): string {
     for (let [key, val] of Object.entries(obj)) {
       if (field === key) {
-        return val;
+        return val as string;
       }
     }
-
   };
 };
 export type fieldMapFn = (fieldKey: string) => string;
@@ -137,7 +150,10 @@ export type fieldMapFn = (fieldKey: string) => string;
  </ng-container>
  */
 @Component({
-  providers: [
+  selector           : 'tri-data-table',
+  exportAs           : 'triDataTable',
+  preserveWhitespaces: false,
+  providers          : [
     BrowserSupportService,
     SelectionService,
     DetailsService,
@@ -147,23 +163,20 @@ export type fieldMapFn = (fieldKey: string) => string;
     ChangeNotificationService,
     EditService,
     SuspendService,
-    {
-      provide : CELL_CONTEXT,
-      useValue: EMPTY_CELL_CONTEXT
-    },
     FilterService,
     ResponsiveService,
     ScrollSyncService,
     DomEventsService,
+    {
+      provide : CELL_CONTEXT,
+      useValue: EMPTY_CELL_CONTEXT
+    }
   ],
-  selector : 'tri-data-table',
-  exportAs : 'triDataTable',
-  host     : {
+  host               : {
     '[attr.dir]'       : 'direction',
     '[style.height.px]': 'height'
   },
-  template : `
-
+  template           : `
     <tri-data-table-toolbar *ngIf="showTopToolbar"></tri-data-table-toolbar>
     <!--<tri-spin >-->
     <div class="ant-grid ant-widget ant-data-table ant-table-large"
@@ -332,15 +345,6 @@ export type fieldMapFn = (fieldKey: string) => string;
       </ng-template>
     </div>
     <!--</tri-spin>-->
-    <!-- <tri-pager
-       *ngIf="showPager"
-       [template]="pagerTemplate"
-       [pageSize]="pageSize"
-       [total]="view.total"
-       [skip]="skip"
-       [options]="pageable"
-       (pageChange)="notifyPageChange('pager', $event)">
-     </tri-pager>-->
     <tri-pagination
       class="ant-data-table-pagination"
       *ngIf="showPager"
@@ -358,80 +362,40 @@ export type fieldMapFn = (fieldKey: string) => string;
   `
 })
 export class DataTableComponent implements OnChanges, AfterViewInit, AfterContentChecked, AfterContentInit, OnDestroy {
-  private selectionService;
-  private wrapper: ElementRef;
-  private groupInfoService;
-  private groupsService;
-  private changeNotification;
-  private detailsService;
-  private editService;
-  private filterService;
-  private responsiveService;
-  private renderer;
-  private ngZone;
-  private scrollSyncService;
   private _rowClass;
   private _RowSelected;
   private _hasGeneratedColumn: boolean;
 
   @Input() data: any[] | GridDataResult;
-
   @Input() pageSize: number;
-
   @Input() height: number;
-
   @Input() rowHeight: number;
-
   @Input() detailRowHeight: number;
-
   @Input() skip = 0;
-
   @Input() scrollable: ScrollMode = 'scrollable';
-
   @Input() selectable: boolean | SelectableSettings = false;
-
   @Input() filter: CompositeFilterDescriptor;
-
-  @Input() filterable = false;
-
+  @Input() filterable: boolean | 'menu' | 'simple' = false;
   @Input() sortable: SortSettings = false;
-
   @Input() pageable: boolean = false;
-
   @Input() groupable: GroupableSettings | boolean = false;
-
   @Input() autoGenerateColumns: boolean;
-
   @Input() fieldMap: fieldMapFn | object;
 
   @Output() filterChange: EventEmitter<CompositeFilterDescriptor> = new EventEmitter();
-
   @Output() pageChange: EventEmitter<PageChangeEvent> = new EventEmitter();
-
   @Output() groupChange: EventEmitter<GroupDescriptor[]> = new EventEmitter();
-
   @Output() sortChange: EventEmitter<SortDescriptor[]> = new EventEmitter();
-
   @Output() selectionChange: EventEmitter<SelectionEvent> = new EventEmitter();
-
   @Output() dataStateChange: EventEmitter<DataStateChangeEvent> = new EventEmitter();
-
   @Output() groupExpand: EventEmitter<{ group: GroupResult }> = new EventEmitter();
-
   @Output() groupCollapse: EventEmitter<{ group: GroupResult }> = new EventEmitter();
-
   @Output() detailExpand: EventEmitter<{ index: number; dataItem: any }> = new EventEmitter();
-
   @Output() detailCollapse: EventEmitter<{ index: number; dataItem: any }> = new EventEmitter();
-
   @Output() edit: EventEmitter<EditEvent> = new EventEmitter();
-
   @Output() cancel: EventEmitter<CancelEvent> = new EventEmitter();
-
   @Output() save: EventEmitter<SaveEvent> = new EventEmitter();
-
   @Output() remove: EventEmitter<RemoveEvent> = new EventEmitter();
-
   @Output() add: EventEmitter<AddEvent> = new EventEmitter();
 
   @ContentChildren(ColumnBase) columns: QueryList<ColumnBase>;
@@ -470,30 +434,18 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   public selectionDirective = false;
 
   constructor(supportService: BrowserSupportService,
-              selectionService: SelectionService,
-              wrapper: ElementRef,
-              groupInfoService: GroupInfoService,
-              groupsService: GroupsService,
-              changeNotification: ChangeNotificationService,
-              detailsService: DetailsService,
-              editService: EditService,
-              filterService: FilterService,
-              responsiveService: ResponsiveService,
-              renderer: Renderer2,
-              ngZone: NgZone,
-              scrollSyncService: ScrollSyncService) {
-    this.selectionService = selectionService;
-    this.wrapper = wrapper;
-    this.groupInfoService = groupInfoService;
-    this.groupsService = groupsService;
-    this.changeNotification = changeNotification;
-    this.detailsService = detailsService;
-    this.editService = editService;
-    this.filterService = filterService;
-    this.responsiveService = responsiveService;
-    this.renderer = renderer;
-    this.ngZone = ngZone;
-    this.scrollSyncService = scrollSyncService;
+              private selectionService: SelectionService,
+              private wrapper: ElementRef,
+              private groupInfoService: GroupInfoService,
+              private groupsService: GroupsService,
+              private changeNotification: ChangeNotificationService,
+              private detailsService: DetailsService,
+              private editService: EditService,
+              private filterService: FilterService,
+              private responsiveService: ResponsiveService,
+              private renderer: Renderer2,
+              private ngZone: NgZone,
+              private scrollSyncService: ScrollSyncService) {
     this.columns = new QueryList<ColumnBase>();
     this.columnsContainer = new ColumnsContainer(() =>
       this.columnList.filter(column => !this.isHidden(column) && this.matchesMedia(column))
@@ -538,9 +490,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     this.attachStateChangesEmitter();
     this.attachEditHandlers();
     this.columnsContainerChangeSubscription = this.columnsContainer.changes
-      .pipe(
-        filter(() => this.totalColumnLevels > 0 && this.lockedColumns.length > 0)
-      )
+      .pipe(filter(() => this.totalColumnLevels > 0 && this.lockedColumns.length > 0))
       .subscribe(this.columnsContainerChange.bind(this));
     this.columnList = new ColumnList(this.columns);
   }
@@ -781,25 +731,25 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     if (this.scrollSyncService) {
       this.scrollSyncService.destroy();
     }
-//    if (this.documentClickSubscription) {
-//      this.documentClickSubscription();
-//    }
-//    if (this.windowBlurSubscription) {
-//      this.windowBlurSubscription();
-//    }
+    //    if (this.documentClickSubscription) {
+    //      this.documentClickSubscription();
+    //    }
+    //    if (this.windowBlurSubscription) {
+    //      this.windowBlurSubscription();
+    //    }
     if (this.defaultSelection) {
       this.defaultSelection.destroy();
     }
-//    if (this.cellClickSubscription) {
-//      this.cellClickSubscription.unsubscribe();
-//    }
-//    if (this.footerChangeSubscription) {
-//      this.footerChangeSubscription.unsubscribe();
-//    }
-//    this.ngZone = null;
-//    if (this.columnResizingSubscription) {
-//      this.columnResizingSubscription.unsubscribe();
-//    }
+    //    if (this.cellClickSubscription) {
+    //      this.cellClickSubscription.unsubscribe();
+    //    }
+    //    if (this.footerChangeSubscription) {
+    //      this.footerChangeSubscription.unsubscribe();
+    //    }
+    //    this.ngZone = null;
+    //    if (this.columnResizingSubscription) {
+    //      this.columnResizingSubscription.unsubscribe();
+    //    }
   }
 
   attachScrollSync() {
@@ -831,30 +781,33 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     this.editService.addRow(group);
   }
 
+  //todo
   editCell(rowIndex, column, group) {
     var instance = this.columnInstance(column);
-    this.editService.editCell(rowIndex, instance, group);
-//    this.focusEditElement('.ant-grid-edit-cell');
-  };
+    this.editService.editRow(rowIndex, group);
+    //    this.focusEditElement('.ant-grid-edit-cell');
+  }
 
+  //todo
   closeCell() {
-    this.editService.closeCell();
-  };
+    this.editService.close();
+  }
 
+  //todo
   cancelCell() {
-    this.editService.cancelCell();
-  };
+    this.editService.close();
+  }
 
-//  autoFitColumn (column) {
-//    this.columnResizingService.autoFit(column);
-//  }
+  //  autoFitColumn (column) {
+  //    this.columnResizingService.autoFit(column);
+  //  }
 
-//  autoFitColumns (columns) {
-//    if (columns === void 0) {
-//      columns = this.columns;
-//    }
-//    columns.forEach(this.autoFitColumn.bind(this));
-//  };
+  //  autoFitColumns (columns) {
+  //    if (columns === void 0) {
+  //      columns = this.columns;
+  //    }
+  //    columns.forEach(this.autoFitColumn.bind(this));
+  //  };
 
   notifyPageChange(source, event) {
     if (source === 'list' && !this.isVirtual) {
@@ -863,7 +816,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     this.pageChange.emit(event);
   }
 
-//  focusEditElement(){}
+  //  focusEditElement(){}
 
   initSelectionService() {
     if (!this.selectionDirective && !isPresent(this.defaultSelection)) {
@@ -877,17 +830,17 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     if (!this.selectionDirective && !this.selectableSettings.enabled) {
       this.defaultSelection.reset();
     }
-  };
+  }
 
-//  setEditFocus (element) {
-//    if (element) {
-//      var focusable = findFocusable(element);
-//      if (focusable) {
-//        focusable.focus();
-//        return true;
-//      }
-//    }
-//  }
+  //  setEditFocus (element) {
+  //    if (element) {
+  //      var focusable = findFocusable(element);
+  //      if (focusable) {
+  //        focusable.focus();
+  //        return true;
+  //      }
+  //    }
+  //  }
 
   columnInstance(column) {
     let instance;
@@ -895,20 +848,18 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
       instance = this.columnList.filter(function (item) {
         return !item.isColumnGroup && !item.hidden;
       })[column];
-    }
-    else if (typeof column === 'string') {
+    } else if (typeof column === 'string') {
       instance = this.columnList.filter(function (item) {
         return (item as ColumnComponent).field === column;
       })[0];
-    }
-    else {
+    } else {
       instance = column;
     }
     if (!instance && isDevMode()) {
-      throw new Error("Invalid column " + column);
+      throw new Error('Invalid column ' + column);
     }
     return instance;
-  };
+  }
 
   verifySettings() {
     if (isDevMode()) {
@@ -937,7 +888,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   }
 
   _autoGenerateColumns() {
-    //check field define column
+    // check field define column
     const fieldColumns = [];
     const otherColumns = [];
 
@@ -1023,7 +974,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
               take : this.pageSize
             }))
           )
-        ),
+        )
       )
       .subscribe(x => this.dataStateChange.emit(x));
   }

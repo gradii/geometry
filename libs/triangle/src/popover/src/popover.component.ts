@@ -1,12 +1,13 @@
-import { Component, ViewEncapsulation, Input, ContentChild } from '@angular/core';
-import { PopoverDirective } from './popover.directive';
 import { FadeAnimation } from '@gradii/triangle/core';
 import { ToolTipComponent } from '@gradii/triangle/tooltip';
+import { Component, ContentChild, Input, ViewEncapsulation } from '@angular/core';
+import { PopoverDirective } from './popover.directive';
+
 @Component({
-  selector: 'tri-popover',
+  selector     : 'tri-popover',
   encapsulation: ViewEncapsulation.None,
-  animations: [FadeAnimation],
-  template: `
+  animations   : [FadeAnimation],
+  template     : `
     <ng-content></ng-content>
     <ng-template
       cdkConnectedOverlay

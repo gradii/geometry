@@ -1,21 +1,20 @@
 import { NgModule } from '@angular/core';
+import { GridAvatarCssTriStyler, GridTileFooterCssTriStyler, GridTileHeaderCssTriStyler } from './directive/index';
 
 import { GridListComponent } from './grid-list';
 import { GridTileComponent } from './grid-tile';
-import { GridAvatarCssTriStyler, GridTileFooterCssTriStyler, GridTileHeaderCssTriStyler } from './directive/index';
 import { GridTileText } from './grid-tile-text';
 
-
 @NgModule({
-  imports: [
-//    TriLineModule, TriCommonModule
+  imports     : [
+    //    TriLineModule, TriCommonModule
   ],
-  exports: [
+  exports     : [
     GridListComponent,
     GridTileComponent,
     GridTileText,
-//    TriLineModule,
-//    TriCommonModule,
+    //    TriLineModule,
+    //    TriCommonModule,
     GridTileHeaderCssTriStyler,
     GridTileFooterCssTriStyler,
     GridAvatarCssTriStyler
@@ -27,6 +26,6 @@ import { GridTileText } from './grid-tile-text';
     GridTileHeaderCssTriStyler,
     GridTileFooterCssTriStyler,
     GridAvatarCssTriStyler
-  ],
+  ]
 })
 export class TriGridListModule {}

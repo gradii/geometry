@@ -6,9 +6,9 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {GridListComponent} from './grid-list';
-import {GridTileComponent} from './grid-tile';
-import {TileCoordinator} from './tile-coordinator';
+import { GridListComponent } from './grid-list';
+import { GridTileComponent } from './grid-tile';
+import { TileCoordinator } from './tile-coordinator';
 
 /**
  * Sets the style properties for an individual tile, given the position calculated by the
@@ -55,7 +55,6 @@ export abstract class TileStyler {
     return `(${sizePercent}% - (${this._gutterSize} * ${gutterFraction}))`;
   }
 
-
   /**
    * Gets The horizontal or vertical position of a tile, e.g., the 'top' or 'left' property value.
    * @param offset Number of tiles that have already been rendered in the row/column.
@@ -68,7 +67,6 @@ export abstract class TileStyler {
     return offset === 0 ? '0' : calc(`(${baseSize} + ${this._gutterSize}) * ${offset}`);
   }
 
-
   /**
    * Gets the actual size of a tile, e.g., width or height, taking rowspan or colspan into account.
    * @param baseSize Base size of a 1x1 tile (as computed in getBaseTileSize).
@@ -78,7 +76,6 @@ export abstract class TileStyler {
   getTileSize(baseSize: string, span: number): string {
     return `(${baseSize} * ${span}) + (${span - 1} * ${this._gutterSize})`;
   }
-
 
   /**
    * Sets the style properties to be applied to a tile for the given row and column index.
@@ -99,8 +96,7 @@ export abstract class TileStyler {
   }
 
   /** Sets the horizontal placement of the tile in the list. */
-  setColStyles(tile: GridTileComponent, colIndex: number, percentWidth: number,
-               gutterWidth: number) {
+  setColStyles(tile: GridTileComponent, colIndex: number, percentWidth: number, gutterWidth: number) {
     // Base horizontal size of a column.
     let baseTileWidth = this.getBaseTileSize(percentWidth, gutterWidth);
 
@@ -131,15 +127,16 @@ export abstract class TileStyler {
    * This method will be implemented by each type of TileStyler.
    * @docs-private
    */
-  abstract setRowStyles(tile: GridTileComponent, rowIndex: number, percentWidth: number,
-                        gutterWidth: number);
+  abstract setRowStyles(tile: GridTileComponent, rowIndex: number, percentWidth: number, gutterWidth: number);
 
   /**
    * Calculates the computed height and returns the correct style property to set.
    * This method can be implemented by each type of TileStyler.
    * @docs-private
    */
-  getComputedHeight(): [string, string] | null { return null; }
+  getComputedHeight(): [string, string] | null {
+    return null;
+  }
 
   /**
    * Called when the tile styler is swapped out with a different one. To be used for cleanup.
@@ -149,15 +146,15 @@ export abstract class TileStyler {
   abstract reset(list: GridListComponent);
 }
 
-
 /**
  * This type of styler is instantiated when the user passes in a fixed row height.
  * Example <mat-grid-list cols="3" rowHeight="100px">
  * @docs-private
  */
 export class FixedTileStyler extends TileStyler {
-
-  constructor(public fixedRowHeight: string) { super(); }
+  constructor(public fixedRowHeight: string) {
+    super();
+  }
 
   init(gutterSize: string, tracker: TileCoordinator, cols: number, direction: string) {
     super.init(gutterSize, tracker, cols, direction);
@@ -170,9 +167,7 @@ export class FixedTileStyler extends TileStyler {
   }
 
   getComputedHeight(): [string, string] {
-    return [
-      'height', calc(`${this.getTileSpan(this.fixedRowHeight)} + ${this.getGutterSpan()}`)
-    ];
+    return ['height', calc(`${this.getTileSpan(this.fixedRowHeight)} + ${this.getGutterSpan()}`)];
   }
 
   reset(list: GridListComponent) {
@@ -185,14 +180,12 @@ export class FixedTileStyler extends TileStyler {
   }
 }
 
-
 /**
  * This type of styler is instantiated when the user passes in a width:height ratio
  * for the row height.  Example <mat-grid-list cols="3" rowHeight="3:1">
  * @docs-private
  */
 export class RatioTileStyler extends TileStyler {
-
   /** Ratio width:height given by user to determine row height.*/
   rowHeightRatio: number;
   baseTileHeight: string;
@@ -202,8 +195,7 @@ export class RatioTileStyler extends TileStyler {
     this._parseRatio(value);
   }
 
-  setRowStyles(tile: GridTileComponent, rowIndex: number, percentWidth: number,
-               gutterWidth: number): void {
+  setRowStyles(tile: GridTileComponent, rowIndex: number, percentWidth: number, gutterWidth: number): void {
     let percentHeightPerTile = percentWidth / this.rowHeightRatio;
     this.baseTileHeight = this.getBaseTileSize(percentHeightPerTile, gutterWidth);
 
@@ -215,9 +207,7 @@ export class RatioTileStyler extends TileStyler {
   }
 
   getComputedHeight(): [string, string] {
-    return [
-      'padding-bottom', calc(`${this.getTileSpan(this.baseTileHeight)} + ${this.getGutterSpan()}`)
-    ];
+    return ['padding-bottom', calc(`${this.getTileSpan(this.baseTileHeight)} + ${this.getGutterSpan()}`)];
   }
 
   reset(list: GridListComponent) {
@@ -248,7 +238,6 @@ export class RatioTileStyler extends TileStyler {
  * @docs-private
  */
 export class FitTileStyler extends TileStyler {
-
   setRowStyles(tile: GridTileComponent, rowIndex: number): void {
     // Percent of the available vertical space that one row takes up.
     let percentHeightPerTile = 100 / this._rowspan;
@@ -271,13 +260,12 @@ export class FitTileStyler extends TileStyler {
   }
 }
 
-
 /** Wraps a CSS string in a calc function */
-function calc(exp: string): string { return `calc(${exp})`; }
-
+function calc(exp: string): string {
+  return `calc(${exp})`;
+}
 
 /** Appends pixels to a CSS string if no units are given. */
 function normalizeUnits(value: string): string {
-  return (value.match(/px|em|rem/)) ? value : value + 'px';
+  return value.match(/px|em|rem/) ? value : value + 'px';
 }
-

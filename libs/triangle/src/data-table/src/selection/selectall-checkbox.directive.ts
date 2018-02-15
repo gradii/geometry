@@ -1,47 +1,43 @@
-import {
-  Directive, ElementRef, EventEmitter, Host, HostBinding, Input, NgZone, Output, Renderer2,
-  Self
-} from '@angular/core';
-import { isPresent } from '../utils';
+import { CheckboxComponent } from '@gradii/triangle/inputs';
+import { isPresent } from '@gradii/triangle/util';
+import { Directive, EventEmitter, Host, HostBinding, Input, NgZone, Output, Self } from '@angular/core';
 import { SelectAllCheckboxState } from './selectable-settings';
 import { SelectionService } from './selection.service';
-import { CheckboxComponent } from '@gradii/triangle/inputs';
 
 @Directive({
   selector: '[triGridSelectAllCheckbox]',
-  host: {
+  host    : {
     '(change)': 'onClick()'
   }
 })
 export class SelectAllCheckboxDirective {
-//  private el;
-//  private renderer;
+  //  private el;
+  //  private renderer;
   private ngZone;
-  @Input()
-          state: SelectAllCheckboxState;
-  @Output()
-          selectAllChange: EventEmitter<SelectAllCheckboxState> = new EventEmitter();
-  @HostBinding('attr.type')
-          type: string;
+  @Input() state: SelectAllCheckboxState;
+  @Output() selectAllChange: EventEmitter<SelectAllCheckboxState> = new EventEmitter();
+  @HostBinding('attr.type') type: string;
   private destroyClick;
   private stateSet;
 
-  constructor(@Host() @Self() private checkbox: CheckboxComponent,
+  constructor(@Host()
+              @Self()
+              private checkbox: CheckboxComponent,
               private selectionService: SelectionService,
-//              el: ElementRef, renderer: Renderer2,
+              //              el: ElementRef, renderer: Renderer2,
               ngZone: NgZone) {
-//    this.el       = el;
-//    this.renderer = renderer;
-    this.ngZone   = ngZone;
+    //    this.el       = el;
+    //    this.renderer = renderer;
+    this.ngZone = ngZone;
     /**
      * Fires when the user clicks the select-all checkbox (`kendoGridSelectAllCheckbox`).
      */
     this.selectAllChange = new EventEmitter();
-    this.type     = "checkbox";
+    this.type = 'checkbox';
     this.stateSet = false;
-//    this.ngZone.runOutsideAngular(() => {
-//      this.destroyClick = this.renderer.listen(this.el.nativeElement, "click", this.onClick.bind(this));
-//    });
+    //    this.ngZone.runOutsideAngular(() => {
+    //      this.destroyClick = this.renderer.listen(this.el.nativeElement, "click", this.onClick.bind(this));
+    //    });
   }
 
   ngAfterContentChecked() {
@@ -53,20 +49,19 @@ export class SelectAllCheckboxDirective {
   }
 
   ngOnDestroy() {
-//    if (this.destroyClick) {
-//      this.destroyClick();
-//    }
+    //    if (this.destroyClick) {
+    //      this.destroyClick();
+    //    }
   }
 
   /**
    * @hidden
    */
   onClick() {
-
     const isChecked = this.checkbox.checked;
-    const options   = this.selectionService.options;
-    this.selectAllChange.emit(isChecked ? "checked" : "unchecked");
-    if (options.enabled && options.mode === "multiple") {
+    const options = this.selectionService.options;
+    this.selectAllChange.emit(isChecked ? 'checked' : 'unchecked');
+    if (options.enabled && options.mode === 'multiple') {
       this.ngZone.run(() => {
         this.selectionService.updateAll(isChecked);
       });
@@ -78,9 +73,9 @@ export class SelectAllCheckboxDirective {
    */
   setState() {
     const state = this.stateSet ? this.stateToBool() : this.selectionService.selectAllState;
-//    const elem  = this.el.nativeElement;
-//    this.renderer.setProperty(elem, "indeterminate", !isPresent(state));
-//    this.renderer.setProperty(elem, "checked", isPresent(state) ? state : false);
+    //    const elem  = this.el.nativeElement;
+    //    this.renderer.setProperty(elem, "indeterminate", !isPresent(state));
+    //    this.renderer.setProperty(elem, "checked", isPresent(state) ? state : false);
     this.checkbox.indeterminate = !isPresent(state);
     this.checkbox.checked = isPresent(state) ? state : false;
   }
@@ -90,9 +85,9 @@ export class SelectAllCheckboxDirective {
    */
   stateToBool() {
     switch (this.state) {
-      case "checked":
+      case 'checked':
         return true;
-      case "unchecked":
+      case 'unchecked':
         return false;
       default:
         return undefined;

@@ -1,7 +1,8 @@
-import { QueryList, EventEmitter } from '@angular/core';
-import { isColumnGroupComponent } from './column-group.component';
+import { EventEmitter, QueryList } from '@angular/core';
 import { ColumnBase } from './column-base';
-const reset = function(...lists) {
+import { isColumnGroupComponent } from './column-group.component';
+
+const reset = function (...lists) {
   let diff = false;
   lists.forEach((item, i) => {
     const list = item[0];
@@ -11,6 +12,7 @@ const reset = function(...lists) {
   });
   return diff;
 };
+
 export class ColumnsContainer {
   private columns;
   allColumns: QueryList<ColumnBase>;
@@ -21,6 +23,7 @@ export class ColumnsContainer {
   nonLockedLeafColumns: QueryList<ColumnBase>;
   totalLevels: number;
   changes: EventEmitter<any>;
+
   constructor(columns: Function) {
     this.columns = columns;
     this.allColumns = new QueryList<ColumnBase>();
@@ -32,6 +35,7 @@ export class ColumnsContainer {
     this.totalLevels = 0;
     this.changes = new EventEmitter();
   }
+
   refresh(): void {
     const _this = this;
     const currentLevels = this.totalLevels;
@@ -54,14 +58,14 @@ export class ColumnsContainer {
       _this.totalLevels = column.level > _this.totalLevels ? column.level : _this.totalLevels;
     });
     const changes =
-      reset(
-        [this.leafColumns, leafColumns],
-        [this.lockedLeafColumns, lockedLeafColumns],
-        [this.nonLockedLeafColumns, nonLockedLeafColumns],
-        [this.lockedColumns, lockedColumns],
-        [this.allColumns, allColumns],
-        [this.nonLockedColumns, nonLockedColumns]
-      ) || currentLevels !== this.totalLevels;
+            reset(
+              [this.leafColumns, leafColumns],
+              [this.lockedLeafColumns, lockedLeafColumns],
+              [this.nonLockedLeafColumns, nonLockedLeafColumns],
+              [this.lockedColumns, lockedColumns],
+              [this.allColumns, allColumns],
+              [this.nonLockedColumns, nonLockedColumns]
+            ) || currentLevels !== this.totalLevels;
     if (changes) {
       this.changes.emit();
     }

@@ -1,20 +1,11 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  ViewEncapsulation,
-  OnChanges,
-  SimpleChanges,
-  ViewChild,
-  HostListener
-} from '@angular/core';
 import { ToolTipComponent } from '@gradii/triangle/tooltip';
+import { Component, HostListener, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { SliderComponent } from './slider.component';
 
 @Component({
-  selector: 'tri-slider-handle',
+  selector     : 'tri-slider-handle',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <tri-tooltip *ngIf="tipFormatter !== null" #tooltip [title]="tooltipTitle" [trigger]="null">
       <div tri-tooltip [class]="nzClassName" [ngStyle]="style"></div>
     </tri-tooltip>
@@ -66,6 +57,7 @@ export class SliderHandleComponent implements OnInit, OnChanges {
       this.active = true;
     }
   }
+
   @HostListener('mouseleave', ['$event'])
   onMouseLeave($event) {
     if (!this._slider.isDragging) {

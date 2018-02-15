@@ -4,9 +4,9 @@ export type AvatarShape = 'square' | 'circle';
 export type AvatarSize = 'small' | 'large' | 'default';
 
 @Component({
-  selector: 'tri-avatar',
+  selector     : 'tri-avatar',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <i class="anticon anticon-{{icon}}" *ngIf="icon && _hasIcon"></i>
     <img [src]="src" *ngIf="src && _isSrcExist" (error)="_imgError($event)"/>
     <span class="ant-avatar-string"
@@ -15,15 +15,15 @@ export type AvatarSize = 'small' | 'large' | 'default';
           [avatarBoundingClientRect]="_el.getBoundingClientRect()"
           *ngIf="text && _hasText">{{text}}</span>
   `,
-  host: {
-    '[class.ant-avatar]': 'true',
-    '[class.ant-avatar-icon]': '!!icon',
-    '[class.ant-avatar-image]': '!!src',
+  host         : {
+    '[class.ant-avatar]'        : 'true',
+    '[class.ant-avatar-icon]'   : '!!icon',
+    '[class.ant-avatar-image]'  : '!!src',
     '[class.ant-avatar-default]': 'size=="default"',
-    '[class.ant-avatar-large]': 'size=="large"',
-    '[class.ant-avatar-small]': 'size=="sm"',
-    '[class.ant-avatar-circle]': 'shape=="circle"',
-    '[class.ant-avatar-square]': 'shape=="square"'
+    '[class.ant-avatar-large]'  : 'size=="large"',
+    '[class.ant-avatar-small]'  : 'size=="sm"',
+    '[class.ant-avatar-circle]' : 'shape=="circle"',
+    '[class.ant-avatar-square]' : 'shape=="square"'
   }
 })
 export class AvatarComponent implements OnChanges {

@@ -1,20 +1,20 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewEncapsulation, } from '@angular/core';
 import { coerceToNumber } from '@gradii/triangle/util';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector           : 'tri-grid-tile',
   exportAs           : 'triGridTile',
   host               : {
-    'class': 'ant-grid-tile',
+    class: 'ant-grid-tile'
   },
   template           : `
     <figure class="ant-figure">
       <ng-content></ng-content>
     </figure>`,
-//  styleUrls          : ['grid-list.css'],
+  //  styleUrls          : ['grid-list.css'],
   encapsulation      : ViewEncapsulation.None,
   preserveWhitespaces: false,
-  changeDetection    : ChangeDetectionStrategy.OnPush,
+  changeDetection    : ChangeDetectionStrategy.OnPush
 })
 export class GridTileComponent {
   _rowspan: number = 1;
@@ -24,15 +24,23 @@ export class GridTileComponent {
 
   /** Amount of rows that the grid tile takes up. */
   @Input()
-  get rowspan(): number { return this._rowspan; }
+  get rowspan(): number {
+    return this._rowspan;
+  }
 
-  set rowspan(value) { this._rowspan = coerceToNumber(value); }
+  set rowspan(value) {
+    this._rowspan = coerceToNumber(value);
+  }
 
   /** Amount of columns that the grid tile takes up. */
   @Input()
-  get colspan(): number { return this._colspan; }
+  get colspan(): number {
+    return this._colspan;
+  }
 
-  set colspan(value) { this._colspan = coerceToNumber(value); }
+  set colspan(value) {
+    this._colspan = coerceToNumber(value);
+  }
 
   /**
    * Sets the style of the grid-tile element.  Needs to be set manually to avoid

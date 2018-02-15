@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AvatarComponent } from './avatar.component';
+import { NgModule } from '@angular/core';
 import { AvatarAutosizeDirective } from './avatar-autosize.directive';
+import { AvatarComponent } from './avatar.component';
 
 /**
  *
@@ -22,7 +22,7 @@ import { AvatarAutosizeDirective } from './avatar-autosize.directive';
  */
 @NgModule({
   declarations: [AvatarComponent, AvatarAutosizeDirective],
-  exports: [AvatarComponent],
-  imports: [CommonModule]
+  exports     : [AvatarComponent],
+  imports     : [CommonModule]
 })
 export class TriAvatarModule {}

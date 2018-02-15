@@ -1,10 +1,10 @@
-import { Component, ViewEncapsulation, Input, forwardRef, OnInit } from '@angular/core';
+import { Component, forwardRef, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-  selector: 'tri-progress',
+  selector     : 'tri-progress',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div [ngClass]="'ant-progress ant-progress-status-'+status"
          [class.ant-progress-line]="type=='line'"
          [class.ant-progress-show-info]="showInfo"
@@ -40,19 +40,19 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       </div>
     </div>
   `,
-  providers: [
+  providers    : [
     {
-      provide: NG_VALUE_ACCESSOR,
+      provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => ProgressComponent),
-      multi: true
+      multi      : true
     }
   ]
 })
 export class ProgressComponent implements ControlValueAccessor, OnInit {
   _statusColorMap = {
-    normal: '#108ee9',
+    normal   : '#108ee9',
     exception: '#ff5500',
-    success: '#87d068'
+    success  : '#87d068'
   };
 
   _pathString = '';
@@ -110,8 +110,8 @@ export class ProgressComponent implements ControlValueAccessor, OnInit {
   updateCircleStatus() {
     const circleSize = this.width || 132;
     this._circleStyle = {
-      'width.px': circleSize,
-      'height.px': circleSize,
+      'width.px'    : circleSize,
+      'height.px'   : circleSize,
       'font-size.px': circleSize * 0.16 + 6
     };
     const radius = 50 - this.strokeWidth / 2;
@@ -120,9 +120,9 @@ export class ProgressComponent implements ControlValueAccessor, OnInit {
      a ${radius},${radius} 0 1 1 0,${2 * radius}
      a ${radius},${radius} 0 1 1 0,-${2 * radius}`;
     this._pathStyle = {
-      'stroke-dasharray': len + 'px ' + len + 'px',
+      'stroke-dasharray' : len + 'px ' + len + 'px',
       'stroke-dashoffset': (100 - this._percent) / 100 * len + 'px',
-      transition: 'stroke-dashoffset 0.3s ease 0s, stroke 0.3s ease'
+      transition         : 'stroke-dashoffset 0.3s ease 0s, stroke 0.3s ease'
     };
   }
 

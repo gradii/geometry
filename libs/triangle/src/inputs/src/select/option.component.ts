@@ -2,7 +2,6 @@ import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular
 
 import { SelectComponent } from './select.component';
 
-
 export interface SelectOption {
   value: string;
   label: string;
@@ -10,14 +9,13 @@ export interface SelectOption {
   disabled?: boolean;
 }
 
-
 @Component({
-  selector: 'tri-option',
+  selector     : 'tri-option',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <ng-content></ng-content>
   `,
-  styleUrls: []
+  styleUrls    : []
 })
 export class OptionComponent implements OnDestroy, OnInit, SelectOption {
   private _value: string;

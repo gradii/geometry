@@ -1,5 +1,5 @@
-import {QueryList} from '@angular/core';
-import {ColumnBase} from './column-base';
+import { QueryList } from '@angular/core';
+import { ColumnBase } from './column-base';
 
 const forEachColumn = function (list, callback) {
   list.forEach(function (column) {

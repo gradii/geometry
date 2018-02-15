@@ -1,13 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
-
 export interface MatrixInput {
   label: string;
   placeHolder: string;
   value: any;
 }
-
 
 @Component({
   selector: 'matrix-input',
@@ -44,14 +42,11 @@ export interface MatrixInput {
   `
 })
 export class MatrixInputComponent implements ControlValueAccessor {
-
-
   _span;
   _spanSub;
   private _maxtrixInputArray: MatrixInput[] = [];
 
-  @Input()
-  gutter = 10;
+  @Input() gutter = 10;
 
   @Input()
   get maxtrixInputArray(): any[] {
@@ -59,28 +54,18 @@ export class MatrixInputComponent implements ControlValueAccessor {
   }
 
   set maxtrixInputArray(value: any[]) {
-    this._span              = Math.floor(24 / value.length);
-    this._spanSub           = Math.round(24 % value.length);
+    this._span = Math.floor(24 / value.length);
+    this._spanSub = Math.round(24 % value.length);
     this._maxtrixInputArray = value;
   }
 
-  removeField() {
+  removeField() {}
 
-  }
+  addField() {}
 
-  addField() {
+  writeValue(obj: any): void {}
 
-  }
+  registerOnChange(fn: any): void {}
 
-  writeValue(obj: any): void {
-
-  }
-
-  registerOnChange(fn: any): void {
-
-  }
-
-  registerOnTouched(fn: any): void {
-
-  }
+  registerOnTouched(fn: any): void {}
 }

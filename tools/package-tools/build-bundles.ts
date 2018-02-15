@@ -1,11 +1,12 @@
-import {dirname, join} from 'path';
-import {uglifyJsFile} from './minify-sources';
-import {buildConfig} from './build-config';
-import {BuildPackage} from './build-package';
-import {rollupRemoveLicensesPlugin} from './rollup-remove-licenses';
-import {dashCaseToCamelCase, rollupGlobals} from './rollup-globals';
-import {logger} from './Logger';
-import {existsSync} from 'fs';
+import { existsSync } from 'fs';
+import { dirname, join } from 'path';
+import { buildConfig } from './build-config';
+import { BuildPackage } from './build-package';
+import { logger } from './Logger';
+import { uglifyJsFile } from './minify-sources';
+import { dashCaseToCamelCase, rollupGlobals } from './rollup-globals';
+import { rollupRemoveLicensesPlugin } from './rollup-remove-licenses';
+import { remapSourcemap } from './sourcemap-remap';
 
 // There are no type definitions available for these imports.
 const rollup = require('rollup');
@@ -109,6 +110,12 @@ export class PackageBundler {
     // Create a minified UMD bundle using UglifyJS
     // TODO: re-add sorcery when we upgrade to Angular 5.x
     uglifyJsFile(config.umdDest, config.umdMinDest);
+
+    // Remaps the sourcemaps to be based on top of the original TypeScript source files.
+    await remapSourcemap(config.esm2015Dest);
+    await remapSourcemap(config.esm5Dest);
+    await remapSourcemap(config.umdDest);
+    await remapSourcemap(config.umdMinDest);
   }
 
   /** Creates a rollup bundle of a specified JavaScript file.*/
@@ -127,20 +134,20 @@ export class PackageBundler {
         console.warn(message);
       },
       plugins : [
-        rollupReplace({"import * as moment": "import moment"}),
+        rollupReplace({'import * as moment': 'import moment'}),
         rollupRemoveLicensesPlugin,
       ]
     };
 
     const writeOptions = {
       // Keep the moduleId empty because we don't want to force developers to a specific moduleId.
-      moduleId  : '',
-      name: config.moduleName || 'gd.triangle',
-      banner    : buildConfig.licenseBanner,
-      format    : config.format,
-      file      : config.dest,
-      globals   : rollupGlobals,
-      sourcemap : true
+      amd      : {id: config.moduleId},
+      name     : config.moduleName || 'ali.triangle',
+      banner   : buildConfig.licenseBanner,
+      format   : config.format,
+      file     : config.dest,
+      globals  : rollupGlobals,
+      sourcemap: true
     };
 
     // For UMD bundles, we need to adjust the `external` bundle option in order to include
@@ -157,7 +164,7 @@ export class PackageBundler {
       // secondary entry-points from the rollup globals because we want the UMD for the
       // primary entry-point to include *all* of the sources for those entry-points.
       if (this.buildPackage.exportsSecondaryEntryPointsAtRoot &&
-        config.moduleName === `tri.${this.buildPackage.name}`) {
+        config.moduleName === `ali.tri.${this.buildPackage.name}`) {
 
         const importRegex = new RegExp(`@gradii/${this.buildPackage.name}/.+`);
         external = external.filter(e => !importRegex.test(e));
@@ -172,7 +179,7 @@ export class PackageBundler {
       bundleOptions.external = external;
     }
 
-    logger.debug("rollup bundle options", bundleOptions);
+    logger.debug('rollup bundle options', bundleOptions);
     return rollup.rollup(bundleOptions).then((bundle: any) => bundle.write(writeOptions));
   }
 
@@ -209,4 +216,5 @@ interface RollupBundleConfig {
   dest: string;
   format: string;
   moduleName: string;
+  moduleId?: string;
 }

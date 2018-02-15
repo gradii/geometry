@@ -1,13 +1,11 @@
+import { CellComponent, EditService } from '@gradii/triangle/data-table';
+import { TriDatePickerModule } from '@gradii/triangle/datepicker';
+import { TriInputNumberModule } from '@gradii/triangle/inputs';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestContext } from './helpers.spec';
-import { By } from '@angular/platform-browser';
-import { EditService } from '@gradii/triangle/data-table';
-import { TriInputNumberModule } from '@gradii/triangle/inputs';
-import { TriDatePickerModule } from '@gradii/triangle/datepicker';
-import { CellComponent } from '@gradii/triangle/data-table';
 
 @Component({
   template: `
@@ -25,7 +23,7 @@ class SimpleTest {}
 class CellTemplateTestComponent {}
 
 @Component({
-  template: `
+  template : `
     <!--<tri-grid-column>-->
     <div triGridCell
          [rowIndex]="-1"
@@ -43,16 +41,16 @@ class CellTemplateTestComponent {}
 })
 class NewRowTestComponent implements OnInit {
   public column = {
-    field: 'foo',
-    editable: true,
-    editTemplate: null,
+    field          : 'foo',
+    editable       : true,
+    editTemplate   : null,
     editTemplateRef: null,
-    cssClass: 'awesome_css',
-    style: { height: '20px' },
-    colspan: 1
+    cssClass       : 'awesome_css',
+    style          : {height: '20px'},
+    colspan        : 1
   };
   newDataItem = 'test';
-  @ViewChild('cellEditId', { read: TemplateRef })
+  @ViewChild('cellEditId', {read: TemplateRef})
   editTemplate;
 
   constructor(editService: EditService) {
@@ -68,11 +66,11 @@ class NewRowTestComponent implements OnInit {
   }
 }
 
-describe('DatagridCell Component', function() {
+describe('DatagridCell Component', function () {
   let context: TestContext<CellComponent, any>;
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
+      imports     : [
         CommonModule,
         ReactiveFormsModule,
         // FormsModule,
@@ -81,18 +79,18 @@ describe('DatagridCell Component', function() {
         TriDatePickerModule
       ],
       declarations: [CellComponent, SimpleTest, CellTemplateTestComponent, NewRowTestComponent],
-      providers: [EditService]
+      providers   : [EditService]
     });
   });
-  it('projects content', function() {
+  it('projects content', function () {
     context = new TestContext<CellComponent, SimpleTest>(CellComponent, SimpleTest);
     expect(context.clarityElement.textContent.trim()).toMatch('Hello World');
   });
-  it('cell template context', function() {
+  it('cell template context', function () {
     context = new TestContext<CellComponent, CellTemplateTestComponent>(CellComponent, CellTemplateTestComponent);
     expect(context.clarityElement.textContent.trim()).toMatch('StartEnd');
   });
-  it('new row context', function() {
+  it('new row context', function () {
     context = new TestContext<CellComponent, CellTemplateTestComponent>(CellComponent, NewRowTestComponent);
     expect(context.clarityElement.classList).toContain('awesome_css');
     expect(context.clarityElement.textContent.trim()).toMatch('hello world test');

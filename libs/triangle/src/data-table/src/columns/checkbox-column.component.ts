@@ -1,7 +1,7 @@
-import { ColumnBase } from '../columns/column-base';
 import { Component, ContentChild, forwardRef, Host, Input, Optional, SkipSelf, TemplateRef } from '@angular/core';
+import { ColumnBase } from '../columns/column-base';
 import { CellTemplateDirective } from '../directive/cell-template.directive';
-import { AutoGenerateColumnPositon } from '@gradii/triangle/data-table/src/columns/column-base';
+import { AutoGenerateColumnPositon } from './column-base';
 
 @Component({
   providers: [
@@ -11,25 +11,25 @@ import { AutoGenerateColumnPositon } from '@gradii/triangle/data-table/src/colum
     }
   ],
   selector : 'tri-grid-checkbox-column',
-  template : ""
+  template : ''
 })
 export class CheckboxColumnComponent extends ColumnBase {
   public autoGenerateColumnPosition = 'start' as AutoGenerateColumnPositon;
 
   isCheckboxColumn = true;
 
-  @Input()
-  showSelectAll;
+  @Input() showSelectAll;
 
-  @ContentChild(CellTemplateDirective)
-  template;
-
+  @ContentChild(CellTemplateDirective) template;
 
   get templateRef(): TemplateRef<CellTemplateDirective> {
     return this.template ? this.template.templateRef : undefined;
   }
 
-  public constructor(@SkipSelf() @Host() @Optional() parent: ColumnBase) {
-    super(parent)
+  public constructor(@SkipSelf()
+                     @Host()
+                     @Optional()
+                       parent: ColumnBase) {
+    super(parent);
   }
 }

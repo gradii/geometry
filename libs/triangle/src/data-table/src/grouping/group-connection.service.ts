@@ -1,38 +1,38 @@
-import {EventEmitter, Injectable, NgZone} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {from} from "rxjs/observable/from";
-import {filter} from "rxjs/operators/filter";
-import {map} from "rxjs/operators/map";
-import {switchMap} from "rxjs/operators/switchMap";
-import {take} from "rxjs/operators/take";
-import {tap} from "rxjs/operators/tap";
-import {ColumnComponent} from '../columns/column.component';
-import {DraggableDirective} from '../table-shared/draggable.directive';
-import {isNullOrEmptyString, isPresent} from '../utils';
+import { isNullOrEmptyString, isPresent } from '@gradii/triangle/util';
+import { EventEmitter, Injectable, NgZone } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { from } from 'rxjs/observable/from';
+import { filter } from 'rxjs/operators/filter';
+import { map } from 'rxjs/operators/map';
+import { switchMap } from 'rxjs/operators/switchMap';
+import { take } from 'rxjs/operators/take';
+import { tap } from 'rxjs/operators/tap';
+import { ColumnComponent } from '../columns/column.component';
+import { DraggableDirective } from '../table-shared/draggable.directive';
 
-const getDocument    = el => el.ownerDocument.documentElement;
-const getWindow      = el => el.ownerDocument.defaultView;
-const hasClass       = (className, el) => new RegExp('(^| )' + className + '( |$)').test(el.className);
+const getDocument = el => el.ownerDocument.documentElement;
+const getWindow = el => el.ownerDocument.defaultView;
+const hasClass = (className, el) => new RegExp('(^| )' + className + '( |$)').test(el.className);
 const isDeleteButton = el => hasClass('ant-i-group-delete', el) || hasClass('ant-button-icon', el);
 const scrollPosition = element => {
   const documentElement = getDocument(element);
-  const win             = getWindow(element);
+  const win = getWindow(element);
   return {
     x: win.pageXOffset || documentElement.scrollLeft || 0,
     y: win.pageYOffset || documentElement.scrollTop || 0
   };
 };
-const isOutside      = (target, {pageX, pageY}) => {
+const isOutside = (target, {pageX, pageY}) => {
   const {right, left, top, bottom} = target.getBoundingClientRect();
-  const _c                         = scrollPosition(target);
-  const x                          = _c.x;
-  const y                          = _c.y;
+  const _c = scrollPosition(target);
+  const x = _c.x;
+  const y = _c.y;
   return !(pageX > left + x && pageX < right + x && pageY > top + y && pageY < bottom + y);
 };
 const preventDefault = e => e.originalEvent.preventDefault();
-const createDropCue  = container => {
-  const cue         = document.createElement('div');
-  cue.className     = 'ant-grouping-dropclue';
+const createDropCue = container => {
+  const cue = document.createElement('div');
+  cue.className = 'ant-grouping-dropclue';
   cue.style.display = 'none';
   container.appendChild(cue);
   return {
@@ -43,8 +43,8 @@ const createDropCue  = container => {
         left = element.offsetLeft + element.offsetWidth;
         idx += 1;
       }
-      cue.style.top     = element.offsetTop + 'px';
-      cue.style.left    = left + 'px';
+      cue.style.top = element.offsetTop + 'px';
+      cue.style.left = left + 'px';
       cue.style.display = '';
       return idx;
     },
@@ -73,7 +73,7 @@ export class GroupConnectionService {
   }> {
     if (isPresent(target)) {
       this.target = target;
-      this.cue    = createDropCue(target);
+      this.cue = createDropCue(target);
     }
     return this.change.asObservable();
   }
@@ -85,7 +85,7 @@ export class GroupConnectionService {
   showCue(e: { pageX: number; pageY: number }): void {
     const item = this.items.filter(x => !isOutside(x, e))[0];
     if (item) {
-      const index       = this.items.indexOf(item);
+      const index = this.items.indexOf(item);
       this.currentIndex = this.cue.position(item, e, index, index === this.items.length - 1);
     } else {
       this.cue.hide();
@@ -113,7 +113,7 @@ export class GroupConnectionService {
   }
 }
 
-const append     = element => {
+const append = element => {
   let appended = false;
   return () => {
     if (!appended) {
@@ -124,17 +124,17 @@ const append     = element => {
   };
 };
 const createHint = column => {
-  const hint         = document.createElement('div');
-  hint.className     = 'ant-header ant-drag-clue';
+  const hint = document.createElement('div');
+  hint.className = 'ant-header ant-drag-clue';
   hint.style.cssText = 'display:none;position:absolute;';
-  hint.innerHTML     = '' + (column.title || column.field);
-  const getElement   = append(hint);
+  hint.innerHTML = '' + (column.title || column.field);
+  const getElement = append(hint);
   return {
     move: e => {
       preventDefault(e);
-      const element         = getElement();
-      element.style.top     = e.pageY + 'px';
-      element.style.left    = e.pageX + 'px';
+      const element = getElement();
+      element.style.top = e.pageY + 'px';
+      element.style.left = e.pageX + 'px';
       element.style.display = '';
       return () => document.body.removeChild(hint);
     }
@@ -151,8 +151,8 @@ export class GroupDragService {
   private subscriptions;
 
   constructor(connection: GroupConnectionService, ngzone: NgZone) {
-    this.connection    = connection;
-    this.ngzone        = ngzone;
+    this.connection = connection;
+    this.ngzone = ngzone;
     this.subscriptions = [];
   }
 
@@ -164,8 +164,8 @@ export class GroupDragService {
     this.ngzone.runOutsideAngular(() => {
       _this.unsubscribe();
       _this.subscriptions = draggables.map(draggable => {
-        const presses  = from(draggable.tri.press);
-        const drags    = from(draggable.tri.drag);
+        const presses = from(draggable.tri.press);
+        const drags = from(draggable.tri.drag);
         const releases = from(draggable.tri.release);
         return presses
           .pipe(
@@ -177,21 +177,16 @@ export class GroupDragService {
             tap(preventDefault),
             switchMap(_a => {
               const column = _a.column;
-              return drags.pipe(
-                filter(_filter),
-                tap(e => _this.connection.showCue(e)),
-                map(createHint(column).move)
-              );
+              return drags.pipe(filter(_filter), tap(e => _this.connection.showCue(e)), map(createHint(column).move));
             }),
             switchMap(removeHint =>
-              releases
-                .pipe(
-                  take(1),
-                  tap(() => {
-                    removeHint();
-                    _this.connection.hideCue();
-                  })
-                )
+              releases.pipe(
+                take(1),
+                tap(() => {
+                  removeHint();
+                  _this.connection.hideCue();
+                })
+              )
             ),
             filter(e => !_this.connection.isOutside(e))
           )

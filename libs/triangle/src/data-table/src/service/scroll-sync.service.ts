@@ -1,11 +1,11 @@
-import {Injectable, NgZone} from '@angular/core';
-import {fromEvent} from 'rxjs/observable/fromEvent';
+import { Injectable, NgZone } from '@angular/core';
+import { fromEvent } from 'rxjs/observable/fromEvent';
 import 'rxjs/observable/of';
-import {filter} from "rxjs/operators/filter";
-import {map} from "rxjs/operators/map";
-import {tap} from "rxjs/operators/tap";
-import {Subject} from 'rxjs/Subject';
-import {Subscription} from 'rxjs/Subscription';
+import { filter } from 'rxjs/operators/filter';
+import { map } from 'rxjs/operators/map';
+import { tap } from 'rxjs/operators/tap';
+import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
 
 @Injectable()
 export class ScrollSyncService {
@@ -16,10 +16,10 @@ export class ScrollSyncService {
   private subscriptions;
 
   constructor(ngZone: NgZone) {
-    const _this        = this;
-    this.ngZone        = ngZone;
-    this.changes       = new Subject();
-    this.elements      = [];
+    const _this = this;
+    this.ngZone = ngZone;
+    this.changes = new Subject();
+    this.elements = [];
     this.subscriptions = new Subscription(() => {});
     this.subscriptions.add(this.changes.subscribe(x => _this.scrollLeft(x)));
   }
@@ -32,32 +32,26 @@ export class ScrollSyncService {
     this.elements.push({element: el, sourceType});
     if (sourceType === 'body' || sourceType === 'header') {
       this.ngZone.runOutsideAngular(() => {
-        const obs = fromEvent(el, 'scroll')
-          .pipe(
-            map((_a: any) => {
-              const _b          = _a.target;
-              const scrollLeft  = _b.scrollLeft;
-              const scrollRight = _b.scrollRight;
-              return {
-                scrollLeft,
-                scrollRight,
-                sourceType
-              };
-            })
-          );
+        const obs = fromEvent(el, 'scroll').pipe(
+          map((_a: any) => {
+            const _b = _a.target;
+            const scrollLeft = _b.scrollLeft;
+            const scrollRight = _b.scrollRight;
+            return {
+              scrollLeft,
+              scrollRight,
+              sourceType
+            };
+          })
+        );
         _this.subscriptions.add(
           obs
-            .pipe(
-              filter(x => !_this.source || _this.source === x.sourceType),
-              tap(x => (_this.source = x.sourceType))
-            )
+            .pipe(filter(x => !_this.source || _this.source === x.sourceType), tap(x => (_this.source = x.sourceType)))
             .subscribe(x => _this.changes.next(x))
         );
         _this.subscriptions.add(
           obs
-            .pipe(
-              filter(x => _this.source && _this.source !== x.sourceType)
-            )
+            .pipe(filter(x => _this.source && _this.source !== x.sourceType))
             .subscribe(() => (_this.source = undefined))
         );
       });

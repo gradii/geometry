@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
+import { SCROLL_SERVICE_PROVIDER } from '@gradii/triangle/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
 import { BackTopComponent } from './back-top.component';
-import { SCROLL_SERVICE_PROVIDER } from '@gradii/triangle/core';
 
 /**
  *
@@ -24,8 +24,8 @@ import { SCROLL_SERVICE_PROVIDER } from '@gradii/triangle/core';
  */
 @NgModule({
   declarations: [BackTopComponent],
-  exports: [BackTopComponent],
-  imports: [CommonModule],
-  providers: [SCROLL_SERVICE_PROVIDER]
+  exports     : [BackTopComponent],
+  imports     : [CommonModule],
+  providers   : [SCROLL_SERVICE_PROVIDER]
 })
 export class TriBackTopModule {}

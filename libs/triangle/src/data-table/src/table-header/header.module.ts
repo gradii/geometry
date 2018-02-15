@@ -1,17 +1,29 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HeaderComponent } from './header.component';
-import { GroupModule } from '../grouping/group.module';
-import { SharedModule } from '../table-shared/shared.module';
-import { RowFilterModule } from '../filtering/filtering.module';
-import { HeaderTemplateDirective } from './header-template.directive';
 import { TriCheckboxModule } from '@gradii/triangle/inputs';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FilterMenuModule } from '../filtering/filter-menu/filter-menu.module';
+import { FilterSimpleModule } from '../filtering/filter-simple/filter-simple.module';
+import { RowFilterModule } from '../filtering/row-filter.module';
+import { GroupModule } from '../grouping/group.module';
 import { SelectAllCheckboxDirective } from '../selection/selectall-checkbox.directive';
+import { SharedModule } from '../table-shared/shared.module';
+import { HeaderTemplateDirective } from './header-template.directive';
+import { HeaderComponent } from './header.component';
 
 @NgModule({
-  imports     : [CommonModule, TriCheckboxModule, GroupModule, RowFilterModule, SharedModule],
+  imports     : [
+    CommonModule,
+    TriCheckboxModule,
+    GroupModule,
+    RowFilterModule,
+    FilterMenuModule,
+    FilterSimpleModule,
+    OverlayModule,
+    SharedModule
+  ],
   declarations: [HeaderComponent, HeaderTemplateDirective, SelectAllCheckboxDirective],
-  exports     : [HeaderComponent, HeaderTemplateDirective, SelectAllCheckboxDirective],
+  exports     : [HeaderComponent, HeaderTemplateDirective, SelectAllCheckboxDirective]
 })
 export class HeaderModule {
   static exports() {

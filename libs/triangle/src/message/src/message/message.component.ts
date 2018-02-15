@@ -1,21 +1,21 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation, Input } from '@angular/core';
-import { MessageDataFilled, MessageDataOptions } from './message.definitions';
-import { MessageContainerComponent } from './message-container.component';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MessageConfig } from './message-config';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { MessageContainerComponent } from './message-container.component';
+import { MessageDataFilled, MessageDataOptions } from './message.definitions';
 
 @Component({
-  selector: 'tri-message',
+  selector     : 'tri-message',
   encapsulation: ViewEncapsulation.None,
-  animations: [
+  animations   : [
     trigger('enterLeave', [
-      state('enter', style({ opacity: 1, transform: 'translateY(0)' })),
-      transition('* => enter', [style({ opacity: 0, transform: 'translateY(-50%)' }), animate('100ms linear')]),
-      state('leave', style({ opacity: 0, transform: 'translateY(-50%)' })),
-      transition('* => leave', [style({ opacity: 1, transform: 'translateY(0)' }), animate('100ms linear')])
+      state('enter', style({opacity: 1, transform: 'translateY(0)'})),
+      transition('* => enter', [style({opacity: 0, transform: 'translateY(-50%)'}), animate('100ms linear')]),
+      state('leave', style({opacity: 0, transform: 'translateY(-50%)'})),
+      transition('* => leave', [style({opacity: 1, transform: 'translateY(0)'}), animate('100ms linear')])
     ])
   ],
-  template: `
+  template     : `
     <div class="ant-message-notice"
          [@enterLeave]="message.state"
          (mouseenter)="onEnter()"

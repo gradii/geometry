@@ -2,7 +2,7 @@
 import { Component, Input, HostBinding } from '@angular/core';
 import { FilterService } from './filter.service';
 import { BaseFilterCellComponent } from './base-filter-cell.component';
-import { ColumnComponent } from '../columns/column.component';
+import { ColumnComponent } from '../column.component';
 import { CompositeFilterDescriptor, FilterDescriptor } from '@gradii/triangle/data-query';
 
 @Component({

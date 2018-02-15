@@ -1,13 +1,13 @@
+import { TriButtonModule } from '@gradii/triangle/button';
+import { TriMenuModule } from '@gradii/triangle/menu';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TriButtonModule } from '@gradii/triangle/button';
-import { TriMenuModule } from '@gradii/triangle/menu';
 import { DropDownButtonComponent } from './dropdown-button.component';
 
 import { DropDownComponent } from './dropdown.component';
 import { DropDownDirective } from './dropdown.directive';
-import { OverlayModule } from '@angular/cdk/overlay';
 
 /**
  *
@@ -35,8 +35,8 @@ import { OverlayModule } from '@angular/cdk/overlay';
  * <!-- example(drop-down-hide) -->
  */
 @NgModule({
-  imports: [CommonModule, OverlayModule, FormsModule, TriButtonModule, TriMenuModule],
+  imports     : [CommonModule, OverlayModule, FormsModule, TriButtonModule, TriMenuModule],
   declarations: [DropDownComponent, DropDownButtonComponent, DropDownDirective],
-  exports: [DropDownComponent, DropDownButtonComponent, DropDownDirective]
+  exports     : [DropDownComponent, DropDownButtonComponent, DropDownDirective]
 })
 export class TriDropDownModule {}

@@ -1,10 +1,10 @@
-import { Component, ViewEncapsulation, Input } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { CollapseComponent } from './collapse.component';
 
 @Component({
-  selector: 'tri-collapseset',
+  selector     : 'tri-collapseset',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div class="ant-collapse" [class.ant-collapse-borderless]="!bordered">
       <ng-content></ng-content>
     </div>

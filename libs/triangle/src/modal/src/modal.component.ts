@@ -1,11 +1,25 @@
+import { GlobalMonitorService, isBoolean, isFunction, isObservable } from '@gradii/triangle/util';
 import {
-  AfterViewInit, Component, ComponentFactory, ComponentRef, ContentChild, ElementRef, EventEmitter, HostListener,
-  Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation
+  AfterViewInit,
+  Component,
+  ComponentFactory,
+  ComponentRef,
+  ContentChild,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
+  ViewEncapsulation
 } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { ModalSubject } from './modal-subject.service';
-import { GlobalMonitorService, isBoolean, isFunction, isObservable } from '@gradii/triangle/util';
-import { Observable } from 'rxjs';
 
 interface Position {
   x: number;
@@ -69,36 +83,36 @@ interface Position {
   `
 })
 export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
-  _prefixCls                          = 'ant-modal';
+  _prefixCls = 'ant-modal';
   _maskClassMap;
   _bodyClassMap;
   _bodyStyleMap;
-  _visible                            = false;
-  _confirmLoading                     = false;
-  _closable                           = true;
-  _width                              = '520px';
-  _zIndex                             = 1000;
-  _maskClosable                       = true;
-  _title                              = '';
+  _visible = false;
+  _confirmLoading = false;
+  _closable = true;
+  _width = '520px';
+  _zIndex = 1000;
+  _maskClosable = true;
+  _title = '';
   _titleTpl: TemplateRef<any>;
   _titleTplContext: any;
-  _content                            = '';
+  _content = '';
   _contentTpl: TemplateRef<any>;
   _contentTplContext: any;
   _footerTpl: TemplateRef<any>;
   _footerTplContext: any;
-  _okText                             = '确 定';
-  _cancelText                         = '取 消';
-  _okDisabled: boolean | Function     = false;
+  _okText = '确 定';
+  _cancelText = '取 消';
+  _okDisabled: boolean | Function = false;
   _cancelDisabled: boolean | Function = false;
-  _style: any                         = {};
-  _wrapClass                          = `${this._prefixCls}-wrap`;
-  _customClass                        = '';
-  _animationStatus                    = '';
+  _style: any = {};
+  _wrapClass = `${this._prefixCls}-wrap`;
+  _customClass = '';
+  _animationStatus = '';
   _bodyComponent: ComponentFactory<any>;
-  _componentParams: Object            = {};
-  _footerHide                         = false;
-  modalId                             = `triModal${GlobalMonitorService.getGlobalCount()}`;
+  _componentParams: Object = {};
+  _footerHide = false;
+  modalId = `triModal${GlobalMonitorService.getGlobalCount()}`;
   @ViewChild('modal_content') contentEl: ElementRef;
   @ViewChild('modal_component', {read: ViewContainerRef})
   bodyEl: ViewContainerRef;
@@ -295,7 +309,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     if (isObservable(value)) {
       (<Observable<boolean>>value).subscribe(_ => {
         this._okDisabled = _;
-      })
+      });
     } else {
       this._okDisabled = <boolean | Function>value;
     }
@@ -319,7 +333,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     if (isObservable(value)) {
       (<Observable<boolean>>value).subscribe(_ => {
         this._okDisabled = _;
-      })
+      });
     } else {
       this._cancelDisabled = <boolean | Function>value;
     }
@@ -390,7 +404,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setStyles(origin?): void {
-    const el              = this.contentEl.nativeElement;
+    const el = this.contentEl.nativeElement;
     const transformOrigin = origin ? `${origin.x - el.offsetLeft}px ${origin.y - el.offsetTop}px 0px` : '';
 
     this._bodyStyleMap = Object.assign(

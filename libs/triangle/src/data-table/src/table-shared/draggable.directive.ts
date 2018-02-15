@@ -1,7 +1,7 @@
-import {EventEmitter, ElementRef, Directive, Input, OnDestroy} from '@angular/core';
-import {Draggable} from '@gradii/triangle/draggable';
-import {ColumnComponent} from '../columns/column.component';
-import {delay} from 'rxjs/operators/delay';
+import { Draggable } from '@gradii/triangle/draggable';
+import { Directive, ElementRef, EventEmitter, Input, OnDestroy } from '@angular/core';
+import { delay } from 'rxjs/operators/delay';
+import { ColumnComponent } from '../columns/column.component';
 
 @Directive({
   outputs : ['tri.press', 'tri.drag', 'tri.release'],

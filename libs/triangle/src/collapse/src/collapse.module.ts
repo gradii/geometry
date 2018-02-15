@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { CollapseComponent } from './collapse.component';
 import { CollapsesetComponent } from './collapseset.component';
 
@@ -29,7 +29,7 @@ export const NZ_COLLAPSE_DIRECTIVES: Array<any> = [CollapsesetComponent, Collaps
  */
 @NgModule({
   declarations: NZ_COLLAPSE_DIRECTIVES,
-  exports: NZ_COLLAPSE_DIRECTIVES,
-  imports: [CommonModule]
+  exports     : NZ_COLLAPSE_DIRECTIVES,
+  imports     : [CommonModule]
 })
 export class TriCollapseModule {}

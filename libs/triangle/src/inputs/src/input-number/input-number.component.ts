@@ -1,19 +1,8 @@
-import {
-  Component,
-  ViewEncapsulation,
-  Input,
-  Output,
-  ElementRef,
-  EventEmitter,
-  Renderer2,
-  ViewChild,
-  HostBinding,
-  forwardRef
-} from '@angular/core';
+import { isInfinite, isNumeric } from '@gradii/triangle/util';
+import { TAB } from '@angular/cdk/keycodes';
+import { Component, ElementRef, EventEmitter, forwardRef, HostBinding, Input, Output, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { TAB } from '@angular/cdk/keycodes';
-import { isNumeric, isInfinite } from '@gradii/triangle/util';
 
 @Component({
   selector     : 'tri-input-number',
@@ -22,17 +11,18 @@ import { isNumeric, isInfinite } from '@gradii/triangle/util';
     <div class="ant-input-number-handler-wrap"
          (mouseover)="_mouseInside = true"
          (mouseout)="_mouseInside = false">
-      <a class="ant-input-number-handler ant-input-number-handler-up"
+      <a *ngIf="spinners"
+         class="ant-input-number-handler ant-input-number-handler-up"
          [class.ant-input-number-handler-up-disabled]="_disabledUp"
          (click)="_numberUp($event)">
         <span
           class="ant-input-number-handler-up-inner"
           (click)="$event.preventDefault();"></span>
       </a>
-      <a
-        class="ant-input-number-handler ant-input-number-handler-down"
-        [class.ant-input-number-handler-down-disabled]="_disabledDown"
-        (click)="_numberDown($event)">
+      <a *ngIf="spinners"
+         class="ant-input-number-handler ant-input-number-handler-down"
+         [class.ant-input-number-handler-down-disabled]="_disabledDown"
+         (click)="_numberDown($event)">
         <span
           class="ant-input-number-handler-down-inner"
           (click)="$event.preventDefault();">
@@ -64,31 +54,35 @@ import { isNumeric, isInfinite } from '@gradii/triangle/util';
   ]
 })
 export class InputNumberComponent implements ControlValueAccessor {
-
   private _min: number = -Infinity;
   private _max: number = Infinity;
 
   _el: HTMLElement;
   _value: number;
-  _size            = 'default';
-  _prefixCls       = 'ant-input-number';
-  _step            = 1;
-  _precisionStep   = 0;
+  _size = 'default';
+  _prefixCls = 'ant-input-number';
+  _step = 1;
+  _precisionStep = 0;
   _precisionFactor = 1;
   _displayValue;
-  _disabledUp      = false;
-  _disabledDown    = false;
-  _focused         = false;
-  _mouseInside     = false;
+  _disabledUp = false;
+  _disabledDown = false;
+  _focused = false;
+  _mouseInside = false;
   // ngModel Access
-  onChange: any    = Function.prototype;
-  onTouched: any   = Function.prototype;
+  onChange: any = Function.prototype;
+  onTouched: any = Function.prototype;
   @ViewChild('inputNumber') _inputNumber: ElementRef;
 
   /**
    * Placeholder
    */
   @Input() placeHolder = '';
+
+  /**
+   * whether show up/down spinner
+   */
+  @Input() spinners: boolean = true;
 
   /**
    * Min number
@@ -162,7 +156,7 @@ export class InputNumberComponent implements ControlValueAccessor {
    * 每次改变步数，可以为小数
    */
   set step(value: number) {
-    this._step       = value;
+    this._step = value;
     const stepString = value.toString();
     if (stepString.indexOf('e-') >= 0) {
       this._precisionStep = parseInt(stepString.slice(stepString.indexOf('e-')), 10);
@@ -173,7 +167,7 @@ export class InputNumberComponent implements ControlValueAccessor {
     this._precisionFactor = Math.pow(10, this._precisionStep);
   }
 
-  @Output() blur: EventEmitter<MouseEvent>  = new EventEmitter();
+  @Output() blur: EventEmitter<MouseEvent> = new EventEmitter();
   @Output() focus: EventEmitter<MouseEvent> = new EventEmitter();
 
   _numberUp($event) {
@@ -295,13 +289,13 @@ export class InputNumberComponent implements ControlValueAccessor {
     if (this._value === value) {
       return;
     }
-    this._value                           = this._getBoundValue(value);
-    this._displayValue                    = this._value;
+    this._value = this._getBoundValue(value);
+    this._displayValue = this._value;
     this._inputNumber.nativeElement.value = this._value;
     if (emitChange) {
       this.onChange(this._value);
     }
-    this._disabledUp   = this.value !== undefined && !(this.value + this.step <= this._max);
+    this._disabledUp = this.value !== undefined && !(this.value + this.step <= this._max);
     this._disabledDown = this.value !== undefined && !(this.value - this.step >= this._min);
   }
 }

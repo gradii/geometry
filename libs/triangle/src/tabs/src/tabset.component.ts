@@ -1,24 +1,24 @@
 /** code from https://github.com/angular/material2 */
 
 import {
-  Component,
-  OnInit,
-  Output,
-  ElementRef,
-  ViewEncapsulation,
-  Input,
   AfterContentChecked,
   AfterViewInit,
-  EventEmitter,
-  Renderer2,
+  Component,
   ContentChild,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  Renderer2,
   TemplateRef,
-  ViewChild
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
-import { TabComponent } from './tab.component';
-import { TabsNavComponent } from './tabs-nav.component';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operator/map';
+import { TabComponent } from './tab.component';
+import { TabsNavComponent } from './tabs-nav.component';
 
 export interface AnimatedInterface {
   inkBar: boolean;
@@ -35,9 +35,9 @@ export type TabPositionMode = 'horizontal' | 'vertical';
 export type TabType = 'line' | 'card';
 
 @Component({
-  selector: 'tri-tabset, [triTabset]',
+  selector     : 'tri-tabset, [triTabset]',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div [ngClass]="_classMap" #hostContent>
       <tri-tabs-nav
         #tabNav
@@ -206,13 +206,13 @@ export class TabSetComponent implements AfterContentChecked, OnInit, AfterViewIn
 
   _setClassMap(): void {
     this._classMap = {
-      [this._prefixCls]: true,
-      [`${this._prefixCls}-vertical`]: this._tabPosition === 'left' || this._tabPosition === 'right',
+      [this._prefixCls]                          : true,
+      [`${this._prefixCls}-vertical`]            : this._tabPosition === 'left' || this._tabPosition === 'right',
       [`${this._prefixCls}-${this._tabPosition}`]: this._tabPosition,
-      [`${this._prefixCls}-no-animation`]:
-        this.animated === false || (<AnimatedInterface>this.animated).tabPane === false,
-      [`${this._prefixCls}-${this._type}`]: this._type,
-      [`${this._prefixCls}-mini`]: this.size === 'small'
+      [`${this._prefixCls}-no-animation`]        :
+      this.animated === false || (<AnimatedInterface>this.animated).tabPane === false,
+      [`${this._prefixCls}-${this._type}`]       : this._type,
+      [`${this._prefixCls}-mini`]                : this.size === 'small'
     };
   }
 

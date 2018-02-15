@@ -1,21 +1,21 @@
 import {
+  AfterViewInit,
   Component,
   ContentChildren,
-  ViewChild,
-  HostBinding,
-  AfterViewInit,
-  Renderer2,
-  OnDestroy,
-  Input,
   ElementRef,
+  HostBinding,
+  Input,
+  OnDestroy,
+  Renderer2,
+  ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import { CarouselContentDirective } from './carousel-content.directive';
 
 @Component({
-  selector: 'tri-carousel',
+  selector     : 'tri-carousel',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div class="slick-initialized slick-slider" [class.slick-vertical]="vertical">
       <div class="slick-list" #slickList triCarouselSlickList>
         <div class="slick-track" style="opacity: 1;" [style.transform]="transform" #slickTrack triCarouselSlickTrack>

@@ -1,30 +1,27 @@
-import { Component, forwardRef, ContentChild, SkipSelf, Host, Optional, TemplateRef } from '@angular/core';
-import { ColumnBase } from './column-base';
+import { Component, ContentChild, Host, Optional, SkipSelf, TemplateRef } from '@angular/core';
 import { CellTemplateDirective } from '../directive/cell-template.directive';
-import { AutoGenerateColumnPositon } from '@gradii/triangle/data-table/src/columns/column-base';
+import { AutoGenerateColumnPositon, ColumnBase } from './column-base';
 
 @Component({
   providers: [
     {
-      provide: ColumnBase,
+      provide    : ColumnBase,
       useExisting: CommandColumnComponent
     }
   ],
   selector : 'tri-data-table-command-column',
-  template: ''
+  template : ''
 })
 export class CommandColumnComponent extends ColumnBase {
   public autoGenerateColumnPosition = 'end' as AutoGenerateColumnPositon;
-  
+
   parent: ColumnBase;
   @ContentChild(CellTemplateDirective) template: CellTemplateDirective;
 
-  constructor(
-    @SkipSelf()
-    @Host()
-    @Optional()
-    parent?: ColumnBase
-  ) {
+  constructor(@SkipSelf()
+              @Host()
+              @Optional()
+                parent?: ColumnBase) {
     super(parent);
   }
 

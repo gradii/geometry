@@ -1,48 +1,49 @@
-import { isPresent, isString, isArray } from '../utils';
+import { isArray, isPresent, isString } from '../utils';
 import { isCompositeFilterDescriptor } from './filter-descriptor.interface';
+
 const dateRegExp = /^\/Date\((.*?)\)\/$/;
 const newLineRegExp = /(\r+|\n+)/g;
 const quoteRegExp = /(?=['\\])/g;
-const operatorMap = function(key) {
+const operatorMap = function (key) {
   return (
     {
-      '!=': 'neq',
-      '<': 'lt',
-      '<=': 'lte',
-      '==': 'eq',
-      '>': 'gt',
-      '>=': 'gte',
-      equal: 'eq',
-      equals: 'eq',
-      equalto: 'eq',
-      ge: 'gte',
-      greater: 'gt',
-      greaterthan: 'gt',
-      greaterthanequal: 'gte',
-      isempty: 'isempty',
-      isequalto: 'eq',
-      isgreaterthan: 'gt',
+      '!='                  : 'neq',
+      '<'                   : 'lt',
+      '<='                  : 'lte',
+      '=='                  : 'eq',
+      '>'                   : 'gt',
+      '>='                  : 'gte',
+      equal                 : 'eq',
+      equals                : 'eq',
+      equalto               : 'eq',
+      ge                    : 'gte',
+      greater               : 'gt',
+      greaterthan           : 'gt',
+      greaterthanequal      : 'gte',
+      isempty               : 'isempty',
+      isequalto             : 'eq',
+      isgreaterthan         : 'gt',
       isgreaterthanorequalto: 'gte',
-      islessthan: 'lt',
-      islessthanorequalto: 'lte',
-      isnotempty: 'isnotempty',
-      isnotequalto: 'neq',
-      isnull: 'isnull',
-      le: 'lte',
-      less: 'lt',
-      lessthan: 'lt',
-      lessthanequal: 'lte',
-      ne: 'neq',
-      notequal: 'neq',
-      notequals: 'neq',
-      notequalto: 'neq',
-      notsubstringof: 'doesnotcontain'
+      islessthan            : 'lt',
+      islessthanorequalto   : 'lte',
+      isnotempty            : 'isnotempty',
+      isnotequalto          : 'neq',
+      isnull                : 'isnull',
+      le                    : 'lte',
+      less                  : 'lt',
+      lessthan              : 'lt',
+      lessthanequal         : 'lte',
+      ne                    : 'neq',
+      notequal              : 'neq',
+      notequals             : 'neq',
+      notequalto            : 'neq',
+      notsubstringof        : 'doesnotcontain'
     }[key.toLowerCase()] || key
   );
 };
-const normalizeOperator = function(descriptor) {
+const normalizeOperator = function (descriptor) {
   const filters = descriptor.filters || [];
-  filters.forEach(function(filter) {
+  filters.forEach(function (filter) {
     if (!isCompositeFilterDescriptor(filter) && isString(filter.operator)) {
       filter.operator = operatorMap(filter.operator);
     }
@@ -51,27 +52,27 @@ const normalizeOperator = function(descriptor) {
     }
   });
 };
-const normalizeDescriptor = function(descriptor) {
+const normalizeDescriptor = function (descriptor) {
   if (!isCompositeFilterDescriptor(descriptor)) {
     return {
       filters: isArray(descriptor) ? descriptor : [descriptor],
-      logic: 'and'
+      logic  : 'and'
     };
   }
   return descriptor;
 };
-export let normalizeFilters = function(descriptor) {
+export let normalizeFilters = function (descriptor) {
   if (isPresent(descriptor)) {
     descriptor = normalizeDescriptor(descriptor);
     normalizeOperator(descriptor);
   }
   return descriptor;
 };
-export let operators = (function() {
-  const quote = function(value) {
+export let operators = (function () {
+  const quote = function (value) {
     return value.replace(quoteRegExp, '\\').replace(newLineRegExp, '');
   };
-  const operator = function(op, a, b, ignore) {
+  const operator = function (op, a, b, ignore) {
     if (b != null) {
       if (isString(b)) {
         b = quote(b);
@@ -93,7 +94,7 @@ export let operators = (function() {
     }
     return `${a} ${op} ${b}`;
   };
-  const apply = function(template, a, b, ignore) {
+  const apply = function (template, a, b, ignore) {
     if (ignore) {
       a = `(${a} || '').toLowerCase()`;
       if (b) {
@@ -106,9 +107,9 @@ export let operators = (function() {
     return template(a, b);
   };
   return {
-    contains: function(a, b, ignore) {
+    contains        : function (a, b, ignore) {
       return apply(
-        function(s1, s2) {
+        function (s1, s2) {
           return `${s1}.indexOf('${s2}') >= 0`;
         },
         a,
@@ -116,9 +117,9 @@ export let operators = (function() {
         ignore
       );
     },
-    doesnotcontain: function(a, b, ignore) {
+    doesnotcontain  : function (a, b, ignore) {
       return apply(
-        function(s1, s2) {
+        function (s1, s2) {
           return `${s1}.indexOf('${s2}') == -1`;
         },
         a,
@@ -126,9 +127,9 @@ export let operators = (function() {
         ignore
       );
     },
-    doesnotendwith: function(a, b, ignore) {
+    doesnotendwith  : function (a, b, ignore) {
       return apply(
-        function(s1, s2) {
+        function (s1, s2) {
           return `${s1}.indexOf('${s2}', ${s1}.length - ${(s2 || '').length}) < 0`;
         },
         a,
@@ -136,9 +137,9 @@ export let operators = (function() {
         ignore
       );
     },
-    doesnotstartwith: function(a, b, ignore) {
+    doesnotstartwith: function (a, b, ignore) {
       return apply(
-        function(s1, s2) {
+        function (s1, s2) {
           return `${s1}.lastIndexOf('${s2}', 0) == -1`;
         },
         a,
@@ -146,9 +147,9 @@ export let operators = (function() {
         ignore
       );
     },
-    endswith: function(a, b, ignore) {
+    endswith        : function (a, b, ignore) {
       return apply(
-        function(s1, s2) {
+        function (s1, s2) {
           return `${s1}.indexOf('${s2}', ${s1}.length - ${(s2 || '').length}) >= 0`;
         },
         a,
@@ -156,37 +157,37 @@ export let operators = (function() {
         ignore
       );
     },
-    eq: function(a, b, ignore) {
+    eq              : function (a, b, ignore) {
       return operator('==', a, b, ignore);
     },
-    gt: function(a, b, ignore) {
+    gt              : function (a, b, ignore) {
       return operator('>', a, b, ignore);
     },
-    gte: function(a, b, ignore) {
+    gte             : function (a, b, ignore) {
       return operator('>=', a, b, ignore);
     },
-    isempty: function(a) {
+    isempty         : function (a) {
       return `${a} === ''`;
     },
-    isnotempty: function(a) {
+    isnotempty      : function (a) {
       return `${a} !== ''`;
     },
-    isnotnull: function(a) {
+    isnotnull       : function (a) {
       return `(${a} !== null && ${a} !== undefined)`;
     },
-    isnull: function(a) {
+    isnull          : function (a) {
       return `(${a} === null || ${a} === undefined)`;
     },
-    lt: function(a, b, ignore) {
+    lt              : function (a, b, ignore) {
       return operator('<', a, b, ignore);
     },
-    lte: function(a, b, ignore) {
+    lte             : function (a, b, ignore) {
       return operator('<=', a, b, ignore);
     },
-    neq: function(a, b, ignore) {
+    neq             : function (a, b, ignore) {
       return operator('!=', a, b, ignore);
     },
-    quote: function(value) {
+    quote           : function (value) {
       if (value && value.getTime) {
         return `new Date(${value.getTime()})`;
       }
@@ -195,9 +196,9 @@ export let operators = (function() {
       }
       return `${value}`;
     },
-    startswith: function(a, b, ignore) {
+    startswith      : function (a, b, ignore) {
       return apply(
-        function(s1, s2) {
+        function (s1, s2) {
           return `${s1}.lastIndexOf('${s2}', 0) == 0`;
         },
         a,

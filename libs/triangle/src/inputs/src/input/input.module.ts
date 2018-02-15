@@ -1,9 +1,9 @@
-import {NgModule} from '@angular/core';
-import {InputComponent} from './input.component';
-import {InputDirective} from './input.directive';
-import {InputGroupComponent} from './input-group.component';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { InputGroupComponent } from './input-group.component';
+import { InputComponent } from './input.component';
+import { InputDirective } from './input.directive';
 
 /**
  *

@@ -1,6 +1,6 @@
+import { SelectionEvent } from '@gradii/triangle/data-table';
 import { Directive, HostBinding, HostListener, Input } from '@angular/core';
 import { SelectionService } from '../selection/selection.service';
-import { SelectionEvent } from '@gradii/triangle/data-table';
 
 /**
  * @deprecated
@@ -16,7 +16,7 @@ export class SelectableDirective {
 
   constructor(selectionService: SelectionService) {
     this.selectionService = selectionService;
-    this.ignored          = /^(a|input|textarea|button)$/i;
+    this.ignored = /^(a|input|textarea|button)$/i;
   }
 
   @Input()
@@ -36,10 +36,10 @@ export class SelectableDirective {
     }
     if (this.shouldSelect(target.tagName)) {
       const ev: SelectionEvent = this.selectionService.toggleByIndex(this.index);
-      ev.ctrlKey               = false;
+      ev.ctrlKey = false;
       //Setting the deprecated `index` and `selected` properties
-      ev.index                 = this.index;
-      ev.selected              = !!ev.selectedRows.find(_ => _.index === this.index);
+      ev.index = this.index;
+      ev.selected = !!ev.selectedRows.find(_ => _.index === this.index);
       this.selectionService.changes.emit(ev);
     }
   }

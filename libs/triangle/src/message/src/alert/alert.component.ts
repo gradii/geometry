@@ -1,17 +1,17 @@
+import { FadeAnimation } from '@gradii/triangle/core';
 /**
  * @author MoXun
  */
-import { Component, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
-import { FadeAnimation } from '@gradii/triangle/core';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 
 /**
  * todo doc [alert-body] [alert-description]
  */
 @Component({
-  selector: 'tri-alert',
+  selector     : 'tri-alert',
   encapsulation: ViewEncapsulation.None,
-  animations: [FadeAnimation],
-  template: `
+  animations   : [FadeAnimation],
+  template     : `
     <div [ngClass]="_classMap" *ngIf="_display" [@fadeAnimation]>
       <i
         class="ant-alert-icon anticon"
@@ -102,10 +102,10 @@ export class AlertComponent {
   get _classMap() {
     const antAlert = 'ant-alert';
     return {
-      [`${antAlert}`]: true,
-      [`${antAlert}-${this.type}`]: true,
-      [`${antAlert}-no-icon`]: !this.showIcon,
-      [`${antAlert}-banner`]: this.banner,
+      [`${antAlert}`]                 : true,
+      [`${antAlert}-${this.type}`]    : true,
+      [`${antAlert}-no-icon`]         : !this.showIcon,
+      [`${antAlert}-banner`]          : this.banner,
       [`${antAlert}-with-description`]: !!this.description
     };
   }

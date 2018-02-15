@@ -1,8 +1,9 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-
 import { TriPaginationModule } from '@gradii/triangle/pagination';
 import { TriSpinModule } from '@gradii/triangle/spin';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { RowExpandIconComponent } from './row-expand-icon.component';
+import { RowIndentComponent } from './row-indent.component';
 import { TableDividerDirective } from './table-divider.directive';
 import { TableFilterComponent } from './table-filter.component';
 import { TableSortComponent } from './table-sort.component';
@@ -10,8 +11,6 @@ import { TableComponent } from './table.component';
 import { TbodyTrDirective } from './tbody-tr.directive';
 import { TbodyDirective } from './tbody.directive';
 import { TdDirective } from './td.directive';
-import { RowExpandIconComponent } from './row-expand-icon.component';
-import { RowIndentComponent } from './row-indent.component';
 import { ThDirective } from './th.directive';
 import { TheadDirective } from './thead.directive';
 
@@ -70,7 +69,7 @@ import { TheadDirective } from './thead.directive';
     TableDividerDirective,
     TableSortComponent
   ],
-  exports: [
+  exports     : [
     RowIndentComponent,
     RowExpandIconComponent,
     TableFilterComponent,
@@ -83,6 +82,6 @@ import { TheadDirective } from './thead.directive';
     TableDividerDirective,
     TableSortComponent
   ],
-  imports: [CommonModule, TriPaginationModule, TriSpinModule]
+  imports     : [CommonModule, TriPaginationModule, TriSpinModule]
 })
 export class TriTableModule {}

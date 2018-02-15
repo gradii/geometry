@@ -1,10 +1,10 @@
-import { Component, Input, ElementRef, Host, HostBinding } from '@angular/core';
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Component, ElementRef, Host, HostBinding, Input } from '@angular/core';
 import { CollapsesetComponent } from './collapseset.component';
 
 @Component({
-  selector: 'tri-collapse',
-  template: `
+  selector  : 'tri-collapse',
+  template  : `
     <div class="ant-collapse-header" [attr.aria-expanded]="_active" (click)="clickHeader($event)" role="tab">
       <i class="arrow"></i>
       <ng-template [ngIf]="title">
@@ -26,14 +26,14 @@ import { CollapsesetComponent } from './collapseset.component';
         'inactive',
         style({
           opacity: '0',
-          height: 0
+          height : 0
         })
       ),
       state(
         'active',
         style({
           opacity: '1',
-          height: '*'
+          height : '*'
         })
       ),
       transition('inactive => active', animate('150ms ease-in')),

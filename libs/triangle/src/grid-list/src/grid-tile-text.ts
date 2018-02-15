@@ -10,8 +10,6 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
     <ng-content></ng-content>`,
   changeDetection    : ChangeDetectionStrategy.OnPush,
   encapsulation      : ViewEncapsulation.None,
-  preserveWhitespaces: false,
+  preserveWhitespaces: false
 })
-export class GridTileText {
-}
-
+export class GridTileText {}

@@ -1,13 +1,25 @@
-import {
-  AfterContentChecked, AfterContentInit, Component, ElementRef, EventEmitter, forwardRef, HostListener, Input,
-  OnInit, Output, Renderer2, TemplateRef, ViewChild, ViewEncapsulation
-} from '@angular/core';
-import { DOWN_ARROW, ENTER, TAB } from '@angular/cdk/keycodes';
-import { SelectOption } from './option.component';
-import { OptionPipe } from './option.pipe';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DropDownAnimation, TagAnimation } from '@gradii/triangle/core';
 import { isArray } from '@gradii/triangle/util';
+import { DOWN_ARROW, ENTER, TAB } from '@angular/cdk/keycodes';
+import {
+  AfterContentChecked,
+  AfterContentInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+  Renderer2,
+  TemplateRef,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { SelectOption } from './option.component';
+import { OptionPipe } from './option.pipe';
 
 @Component({
   selector     : 'tri-select',
@@ -133,49 +145,49 @@ import { isArray } from '@gradii/triangle/util';
 })
 export class SelectComponent implements OnInit, AfterContentInit, AfterContentChecked, ControlValueAccessor {
   _el: HTMLElement;
-  _prefixCls                          = 'ant-select';
-  _classList: Array<string>           = [];
+  _prefixCls = 'ant-select';
+  _classList: Array<string> = [];
   _dropDownClassMap;
   _selectionClassMap;
-  _selectionPrefixCls                 = `ant-select-selection`;
+  _selectionPrefixCls = `ant-select-selection`;
   _size: string;
   _value: Array<string> | string;
-  _placeholder                        = 'Placeholder';
-  _notFoundContent                    = 'Not found';
-  _isOpen                             = false;
-  _disabled                           = false;
-  _showSearch                         = false;
-  _isTags                             = false;
-  _searchText                         = '';
-  _triggerWidth                       = 0;
+  _placeholder = 'Placeholder';
+  _notFoundContent = 'Not found';
+  _isOpen = false;
+  _disabled = false;
+  _showSearch = false;
+  _isTags = false;
+  _searchText = '';
+  _triggerWidth = 0;
   _selectedOption: SelectOption;
   _operatingMultipleOption: SelectOption;
   _selectedOptions: Set<SelectOption> = new Set();
-  _options: SelectOption []           = [];
-  _cacheOptions: SelectOption[]       = [];
-  _filterOptions: SelectOption[]      = [];
-  _tagsOptions: SelectOption[]        = [];
+  _options: SelectOption[] = [];
+  _cacheOptions: SelectOption[] = [];
+  _filterOptions: SelectOption[] = [];
+  _tagsOptions: SelectOption[] = [];
   _activeFilterOption: SelectOption;
-  _isMultiInit                        = false;
+  _isMultiInit = false;
   _dropDownPosition: 'top' | 'bottom' = 'bottom';
-  _isMultiple                         = false;
-  _composing                          = false;
+  _isMultiple = false;
+  _composing = false;
   _mode;
-  _keepUnListOptions                  = false;
-  _allowClear                         = false;
+  _keepUnListOptions = false;
+  _allowClear = false;
   private _compareFun: Function;
   private _optionTemplate: TemplateRef<any>;
 
   // ngModel Access
-  onChange: any                             = Function.prototype;
-  onTouched: any                            = Function.prototype;
+  onChange: any = Function.prototype;
+  onTouched: any = Function.prototype;
   @ViewChild('searchInput') searchInputElementRef;
   @ViewChild('trigger') trigger: ElementRef;
   @ViewChild('dropdownUl') dropdownUl: ElementRef;
   @Output() searchChange: EventEmitter<any> = new EventEmitter();
-  @Output() openChange: EventEmitter<any>   = new EventEmitter();
-  @Input() filter                           = true;
-  @Input() maxMultiple                      = Infinity;
+  @Output() openChange: EventEmitter<any> = new EventEmitter();
+  @Input() filter = true;
+  @Input() maxMultiple = Infinity;
 
   /**
    * When add this property, support clear, available for single select
@@ -335,7 +347,7 @@ export class SelectComponent implements OnInit, AfterContentInit, AfterContentCh
    * @param  value
    */
   set tags(value: boolean) {
-    this._isTags  = value;
+    this._isTags = value;
     this.multiple = value;
   }
 
@@ -458,7 +470,7 @@ export class SelectComponent implements OnInit, AfterContentInit, AfterContentCh
       $event.stopPropagation();
     }
     this._selectedOption = null;
-    this.value           = null;
+    this.value = null;
     this.onChange(null);
   }
 
@@ -484,7 +496,7 @@ export class SelectComponent implements OnInit, AfterContentInit, AfterContentCh
     if (option && !option.disabled) {
       if (!this.multiple) {
         this._selectedOption = option;
-        this._value          = option.value;
+        this._value = option.value;
         if (isUserClick) {
           this.onChange(option.value);
         }

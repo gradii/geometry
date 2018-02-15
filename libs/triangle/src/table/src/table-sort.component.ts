@@ -1,20 +1,10 @@
-import {
-  Component,
-  ViewEncapsulation,
-  Input,
-  Output,
-  Host,
-  Optional,
-  EventEmitter,
-  OnInit,
-  Renderer2
-} from '@angular/core';
+import { Component, EventEmitter, Host, Input, OnInit, Optional, Output, Renderer2, ViewEncapsulation } from '@angular/core';
 import { ThDirective } from './th.directive';
 
 @Component({
-  selector: 'tri-table-sort',
+  selector     : 'tri-table-sort',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div class="ant-table-column-sorter">
       <span class="ant-table-column-sorter-up" [ngClass]="{'on':_value == 'ascend'}" title="↑"
             (click)="_setValue('ascend')">
@@ -60,12 +50,10 @@ export class TableSortComponent implements OnInit {
     this.valueChange.emit(this.value);
   }
 
-  constructor(
-    @Host()
-    @Optional()
-    private _thDirective: ThDirective,
-    private _renderer: Renderer2
-  ) {}
+  constructor(@Host()
+              @Optional()
+              private _thDirective: ThDirective,
+              private _renderer: Renderer2) {}
 
   ngOnInit() {}
 }

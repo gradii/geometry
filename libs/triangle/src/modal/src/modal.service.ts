@@ -1,15 +1,20 @@
+import { isObservable, isPresent, isPromise } from '@gradii/triangle/util';
 import {
-  ApplicationRef, ComponentFactory, ComponentFactoryResolver, ComponentRef, Injectable,
-  ModuleWithComponentFactories, TemplateRef, Type
+  ApplicationRef,
+  ComponentFactory,
+  ComponentFactoryResolver,
+  ComponentRef,
+  Injectable,
+  ModuleWithComponentFactories,
+  TemplateRef,
+  Type
 } from '@angular/core';
-import { ModalComponent } from './modal.component';
+import { Observable, Subscription } from 'rxjs';
+import { rxSubscriber } from 'rxjs/symbol/rxSubscriber';
 import { ConfirmComponent } from './confirm.component';
 import { ConfirmOptions, ModalOptions } from './modal-options.provider';
 import { ModalSubject } from './modal-subject.service';
-import { Observable, Subscriber, Subscription } from 'rxjs';
-import { isObservable, isPresent, isPromise } from '@gradii/triangle/util';
-import { tap } from 'rxjs/operators';
-import { rxSubscriber } from 'rxjs/symbol/rxSubscriber';
+import { ModalComponent } from './modal.component';
 
 export interface ConfigInterface {
   type?: string;
@@ -23,8 +28,8 @@ export interface ConfigInterface {
   iconType?: string;
   okText?: string;
   cancelText?: string;
-  okDisabled?: boolean | Function | Observable<boolean>,
-  cancelDisabled?: boolean | Function | Observable<boolean>,
+  okDisabled?: boolean | Function | Observable<boolean>;
+  cancelDisabled?: boolean | Function | Observable<boolean>;
   style?: object;
   class?: string;
   closable?: boolean;
@@ -46,12 +51,12 @@ export class ModalService {
   _confirmCompFactory: ComponentFactory<ConfirmComponent>;
 
   constructor(private _appRef: ApplicationRef, private _cfr: ComponentFactoryResolver) {
-    this._modalCompFactory   = this._cfr.resolveComponentFactory(ModalComponent);
+    this._modalCompFactory = this._cfr.resolveComponentFactory(ModalComponent);
     this._confirmCompFactory = this._cfr.resolveComponentFactory(ConfirmComponent);
   }
 
   _initConfig(config: Object, options: Object = {}): Object {
-    const props                    = {};
+    const props = {};
     const optionalParams: string[] = [
       'componentParams', // 将componentParams放在第一位是因为必须在content赋值前进行赋值
       'visible',
@@ -84,8 +89,8 @@ export class ModalService {
     });
 
     const isShowConfirmLoading = !!config['showConfirmLoading'];
-    props['onOk']              = this._getConfirmCb(props['onOk'], isShowConfirmLoading);
-    props['onCancel']          = this._getConfirmCb(props['onCancel']);
+    props['onOk'] = this._getConfirmCb(props['onOk'], isShowConfirmLoading);
+    props['onCancel'] = this._getConfirmCb(props['onCancel']);
     // 在service模式下，不需要onOk，防止触发this.onOk.emit(e);
     // delete props['onOk'];
     // delete props['onCancel'];
@@ -104,9 +109,11 @@ export class ModalService {
         } else if (isPromise(ret)) {
           ret.then(_close);
         } else if (rxSubscriber in ret) {
-          ret.add(() => {_close()})
+          ret.add(() => {
+            _close();
+          });
         } else if (isObservable(ret)) {
-          (ret as Observable<any>).subscribe(_ => _close())
+          (ret as Observable<any>).subscribe(_ => _close());
         }
       } else {
         _close();
@@ -126,12 +133,12 @@ export class ModalService {
     if (props['content'] instanceof Type) {
       customComponentFactory = this._cfr.resolveComponentFactory(<Type<any>>props['content']);
       // 将编译出来的ngmodule中的用户component的factory作为modal内容存入
-      props['content']       = <any>customComponentFactory;
+      props['content'] = <any>customComponentFactory;
     }
 
-    compRef  = this._appRef.bootstrap(factory);
+    compRef = this._appRef.bootstrap(factory);
     instance = compRef.instance;
-    subject  = instance.subject;
+    subject = instance.subject;
 
     ['onOk', 'onCancel'].forEach((eventType: string) => {
       subject.on(eventType, () => {
@@ -173,7 +180,7 @@ export class ModalService {
    */
   open(config: ConfigInterface): ModalSubject {
     const options: ModalOptions = new ModalOptions();
-    const props                 = this._initConfig(config, options);
+    const props = this._initConfig(config, options);
     return this._open(props, this._modalCompFactory);
   }
 
@@ -182,7 +189,7 @@ export class ModalService {
    */
   _openConfirm(config: ConfigInterface): ModalSubject {
     const options: ConfirmOptions = new ConfirmOptions();
-    const props                   = this._initConfig(config, options);
+    const props = this._initConfig(config, options);
     return this._open(props, this._confirmCompFactory);
   }
 

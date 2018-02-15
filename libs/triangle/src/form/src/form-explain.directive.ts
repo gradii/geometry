@@ -2,12 +2,12 @@ import { Component, HostBinding, OnDestroy, OnInit, ViewEncapsulation } from '@a
 import { FormItemDirective } from './form-item.directive';
 
 @Component({
-  selector: '[tri-form-explain]',
+  selector     : '[tri-form-explain]',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <ng-content></ng-content>
   `,
-  styles: []
+  styles       : []
 })
 export class FormExplainComponent implements OnDestroy, OnInit {
   @HostBinding(`class.ant-form-explain`)

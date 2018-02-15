@@ -1,11 +1,11 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {GroupHeaderTemplateDirective} from './group-header-template.directive';
-import {GroupHeaderComponent} from './group-header.component';
-import {GroupFooterTemplateDirective} from './group-footer-template.directive';
-import {GroupPanelComponent} from './group-panel.component';
-import {GroupIndicatorComponent} from './group-indicator.component';
-import {SharedModule} from '../table-shared/shared.module';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { SharedModule } from '../table-shared/shared.module';
+import { GroupFooterTemplateDirective } from './group-footer-template.directive';
+import { GroupHeaderTemplateDirective } from './group-header-template.directive';
+import { GroupHeaderComponent } from './group-header.component';
+import { GroupIndicatorComponent } from './group-indicator.component';
+import { GroupPanelComponent } from './group-panel.component';
 
 const exportedModules = [
   GroupHeaderTemplateDirective,
@@ -18,7 +18,7 @@ const exportedModules = [
 @NgModule({
   imports     : [CommonModule, SharedModule],
   declarations: [exportedModules],
-  exports     : [exportedModules],
+  exports     : [exportedModules]
 })
 export class GroupModule {
   static exports() {

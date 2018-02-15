@@ -1,16 +1,16 @@
+import { TriButtonModule } from '@gradii/triangle/button';
+import { TriCheckboxModule, TriInputModule } from '@gradii/triangle/inputs';
+import { TriLocaleModule } from '@gradii/triangle/locale';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TransferComponent } from '@gradii/triangle/transfer/src/transfer.component';
-import { TransferListComponent } from '@gradii/triangle/transfer/src/transfer-list.component';
-import { TransferSearchComponent } from '@gradii/triangle/transfer/src/transfer-search.component';
-import { TriCheckboxModule, TriInputModule } from '@gradii/triangle/inputs';
-import { TriButtonModule } from '@gradii/triangle/button';
-import { TriLocaleModule } from '@gradii/triangle/locale';
+import { TransferListComponent } from './transfer-list.component';
+import { TransferSearchComponent } from './transfer-search.component';
+import { TransferComponent } from './transfer.component';
 
 @NgModule({
-  imports:      [CommonModule, FormsModule, TriCheckboxModule, TriButtonModule, TriInputModule, TriLocaleModule],
+  imports     : [CommonModule, FormsModule, TriCheckboxModule, TriButtonModule, TriInputModule, TriLocaleModule],
   declarations: [TransferComponent, TransferListComponent, TransferSearchComponent],
-  exports:      [TransferComponent]
+  exports     : [TransferComponent]
 })
-export class TriTransferModule { }
+export class TriTransferModule {}

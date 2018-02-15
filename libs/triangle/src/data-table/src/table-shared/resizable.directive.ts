@@ -1,5 +1,5 @@
-import {Directive, ElementRef, Input, OnDestroy, Optional, Renderer2} from '@angular/core';
-import {DataTableComponent} from '../data-table.component';
+import { Directive, ElementRef, Input, OnDestroy, Optional, Renderer2 } from '@angular/core';
+import { DataTableComponent } from '../data-table.component';
 
 @Directive({
   selector: '[triGridResizableContainer], [tri-grid-resizable-container]'
@@ -13,10 +13,10 @@ export class ResizableContainerDirective implements OnDestroy {
   private resizeSubscription;
 
   constructor(el: ElementRef, renderer: Renderer2, @Optional() grid?: DataTableComponent) {
-    this.el       = el;
+    this.el = el;
     this.renderer = renderer;
-    this.grid     = grid;
-    this.enabled  = false;
+    this.grid = grid;
+    this.enabled = false;
   }
 
   @Input('lockedWidth')
@@ -31,7 +31,7 @@ export class ResizableContainerDirective implements OnDestroy {
   @Input()
   set triGridResizableContainer(enabled) {
     const refresh = enabled !== this.enabled;
-    this.enabled  = enabled;
+    this.enabled = enabled;
     if (refresh) {
       this.attachResize();
       this.resize();
@@ -57,7 +57,7 @@ export class ResizableContainerDirective implements OnDestroy {
   private resize() {
     if (this.grid && this.grid.wrapper) {
       const containerElement = this.grid.wrapper.nativeElement;
-      const width            = this.enabled ? `${Math.max(containerElement.clientWidth - this._lockedWidth, 0)}px` : '';
+      const width = this.enabled ? `${Math.max(containerElement.clientWidth - this._lockedWidth, 0)}px` : '';
       this.renderer.setStyle(this.el.nativeElement, 'width', width);
     }
   }

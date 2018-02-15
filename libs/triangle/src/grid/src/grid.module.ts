@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { RowComponent } from './row.component';
-import { ColDirective } from './col.directive';
-import { ColComponent } from './col.component';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { ColComponent } from './col.component';
+import { ColDirective } from './col.directive';
+import { RowComponent } from './row.component';
 
 /**
  *

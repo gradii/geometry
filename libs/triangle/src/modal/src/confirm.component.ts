@@ -1,17 +1,7 @@
-import {
-  Component,
-  HostListener,
-  OnInit,
-  ViewEncapsulation,
-  Input,
-  ElementRef,
-  ViewChild,
-  OnDestroy,
-  TemplateRef
-} from '@angular/core';
+import { GlobalMonitorService } from '@gradii/triangle/util';
+import { Component, ElementRef, HostListener, Input, OnDestroy, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { ModalSubject } from './modal-subject.service';
-import { GlobalMonitorService } from '@gradii/triangle/util';
 
 interface Position {
   x: number;
@@ -86,24 +76,24 @@ interface Position {
   `
 })
 export class ConfirmComponent implements OnInit, OnDestroy {
-  _prefixCls       = 'ant-modal';
+  _prefixCls = 'ant-modal';
   _bodyStyleMap;
-  _visible         = false;
-  _width           = '416px';
-  _zIndex          = 1000;
-  _iconTypeCls     = 'anticon anticon-question-circle';
-  _title           = '';
+  _visible = false;
+  _width = '416px';
+  _zIndex = 1000;
+  _iconTypeCls = 'anticon anticon-question-circle';
+  _title = '';
   _titleTpl: TemplateRef<any>;
   _contentTplContext: any;
-  _content         = '';
-  _maskClosable    = true;
+  _content = '';
+  _maskClosable = true;
   _contentTpl: TemplateRef<any>;
-  _okText          = '知道了';
-  _cancelText      = '';
+  _okText = '知道了';
+  _cancelText = '';
   _animationStatus = '';
-  _confirmLoading  = false;
-  _customClass     = '';
-  _typeCls         = `ant-confirm-confirm`;
+  _confirmLoading = false;
+  _customClass = '';
+  _typeCls = `ant-confirm-confirm`;
   @ViewChild('confirm_content') private contentEl: ElementRef;
 
   /**
@@ -253,7 +243,7 @@ export class ConfirmComponent implements OnInit, OnDestroy {
   }
 
   setStyles(origin?): void {
-    const el              = this.contentEl.nativeElement;
+    const el = this.contentEl.nativeElement;
     const transformOrigin = origin ? `${origin.x - el.offsetLeft}px ${origin.y - el.offsetTop}px 0px` : '';
 
     this._bodyStyleMap = {

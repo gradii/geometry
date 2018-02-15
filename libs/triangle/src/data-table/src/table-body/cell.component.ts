@@ -1,10 +1,11 @@
-import {Component, Input, Inject, Optional} from '@angular/core';
-import {EditService} from '../service/edit.service';
-import {CommandColumnComponent} from '../columns/command-column.component';
-import {ColumnComponent, isColumnComponent} from '../columns/column.component';
-import {isPresent, isNullOrEmptyString, extractFormat} from '../utils';
-import {CELL_CONTEXT, CellContext} from '../cell-context';
-import {ColumnBase} from '../columns/column-base';
+import { isNullOrEmptyString, isPresent } from '@gradii/triangle/util';
+import { Component, Inject, Input, Optional } from '@angular/core';
+import { CELL_CONTEXT, CellContext } from '../cell-context';
+import { ColumnBase } from '../columns/column-base';
+import { ColumnComponent, isColumnComponent } from '../columns/column.component';
+import { CommandColumnComponent } from '../columns/command-column.component';
+import { EditService } from '../service/edit.service';
+import { extractFormat } from '../utils';
 
 @Component({
   selector: '[triGridCell], [tri-grid-cell]',
@@ -65,9 +66,9 @@ export class CellComponent {
               @Optional()
               @Inject(CELL_CONTEXT)
                 cellContext: CellContext) {
-    this.editService      = editService;
-    this.cellContext      = cellContext;
-    this.isNew            = false;
+    this.editService = editService;
+    this.cellContext = cellContext;
+    this.isNew = false;
     this._templateContext = {};
   }
 
@@ -97,11 +98,11 @@ export class CellComponent {
 
   get templateContext() {
     this._templateContext.$implicit = this.formGroup;
-    this._templateContext.isNew     = this.isNew;
-    this._templateContext.column    = this.column;
-    this._templateContext.dataItem  = this.dataItem;
+    this._templateContext.isNew = this.isNew;
+    this._templateContext.column = this.column;
+    this._templateContext.dataItem = this.dataItem;
     this._templateContext.formGroup = this.formGroup;
-    this._templateContext.rowIndex  = this.rowIndex;
+    this._templateContext.rowIndex = this.rowIndex;
     return this._templateContext;
   }
 

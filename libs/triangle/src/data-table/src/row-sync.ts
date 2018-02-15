@@ -1,13 +1,13 @@
 const set = value => pair => pair.forEach(x => (x.style.height = value));
-const clearHeight         = pairs =>
+const clearHeight = pairs =>
   pairs
     .filter(_a => {
-      const left  = _a[0];
+      const left = _a[0];
       const right = _a[1];
       return left.style.height || right.style.height;
     })
     .forEach(set(''));
-const zip                 = (arr1, arr2) => {
+const zip = (arr1, arr2) => {
   const result = [];
   for (let idx = 0, len = arr1.length; idx < len; idx++) {
     if (!arr2[idx]) {
@@ -17,12 +17,12 @@ const zip                 = (arr1, arr2) => {
   }
   return result;
 };
-const setHeight           = heights => (row, idx) => set(heights[idx] + 1 + 'px')(row);
-const getHeights          = rows =>
+const setHeight = heights => (row, idx) => set(heights[idx] + 1 + 'px')(row);
+const getHeights = rows =>
   rows.map(_a => {
-    const left          = _a[0];
-    const right         = _a[1];
-    const height        = left.offsetHeight;
+    const left = _a[0];
+    const right = _a[1];
+    const height = left.offsetHeight;
     const offsetHeight2 = right.offsetHeight;
     if (height < offsetHeight2) {
       return offsetHeight2;

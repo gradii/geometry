@@ -1,8 +1,7 @@
+import { TriButtonModule } from '@gradii/triangle/button';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-import { TriButtonModule } from '@gradii/triangle/button';
 import { MenuDividerComponent } from './menu-divider.component';
 import { MenuGroupComponent } from './menu-group.component';
 import { MenuItemComponent } from './menu-item.component';
@@ -34,8 +33,8 @@ import { SubMenuComponent } from './submenu.component';
  * <!-- example(menu-dynamic) -->
  */
 @NgModule({
-  imports: [CommonModule, FormsModule, TriButtonModule],
+  imports     : [CommonModule, FormsModule, TriButtonModule],
   declarations: [MenuComponent, MenuItemComponent, SubMenuComponent, MenuDividerComponent, MenuGroupComponent],
-  exports: [MenuComponent, MenuItemComponent, SubMenuComponent, MenuDividerComponent, MenuGroupComponent]
+  exports     : [MenuComponent, MenuItemComponent, SubMenuComponent, MenuDividerComponent, MenuGroupComponent]
 })
 export class TriMenuModule {}

@@ -1,18 +1,9 @@
-import {
-  Component,
-  ViewEncapsulation,
-  Input,
-  ElementRef,
-  AfterContentInit,
-  HostBinding,
-  ViewChild,
-  Renderer2
-} from '@angular/core';
+import { AfterContentInit, Component, ElementRef, HostBinding, Input, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'tri-spin',
+  selector     : 'tri-spin',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div>
       <div class="ant-spin"
            [ngClass]="{'ant-spin-spinning':spinning,'ant-spin-lg':_size=='lg','ant-spin-sm':_size=='sm','ant-spin-show-text':_tip}">
@@ -64,7 +55,7 @@ export class SpinComponent implements AfterContentInit {
    * @param value
    */
   set size(value) {
-    this._size = { large: 'lg', small: 'sm' }[value];
+    this._size = {large: 'lg', small: 'sm'}[value];
   }
 
   constructor(private _elementRef: ElementRef, private _renderer: Renderer2) {

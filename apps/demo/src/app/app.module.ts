@@ -1,18 +1,18 @@
-import {TriangleExampleModule, TriangleModule} from '@gradii/triangle-examples';
-import {TriDataTableModule} from "@gradii/triangle/data-table";
-import {MESSAGE_CONFIG, MessageService, NOTIFICATION_CONFIG, NotificationService} from '@gradii/triangle/message';
-import {ROOT_CONFIG} from '@gradii/triangle/root';
-import {TRI_LOGGER_STATE} from '@gradii/triangle/util';
-import {HttpClientModule} from '@angular/common/http';
-import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {BrowserModule, Title} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {PreloadAllModules, RouterModule} from '@angular/router';
-import {AppComponent} from './app.component';
-import {routes} from './app.routing.module';
-import {DemoCodeBoxModule} from './share/demo-codebox/demo-codebox.module';
-import {DemoHighlightModule} from './share/demo-highlight/demo-highlight.module';
+import { TriangleExampleModule, TriangleBundleModule } from '@gradii/triangle-examples';
+import { TriDataTableModule } from '@gradii/triangle/data-table';
+import { MESSAGE_CONFIG, MessageService, NOTIFICATION_CONFIG, NotificationService } from '@gradii/triangle/message';
+import { ROOT_CONFIG } from '@gradii/triangle/root';
+import { TRI_LOGGER_STATE } from '@gradii/triangle/util';
+import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule, Title } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PreloadAllModules, RouterModule } from '@angular/router';
+import { AppComponent } from './app.component';
+import { routes } from './app.routing.module';
+import { DemoCodeBoxModule } from './share/demo-codebox/demo-codebox.module';
+import { DemoHighlightModule } from './share/demo-highlight/demo-highlight.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,7 +22,7 @@ import {DemoHighlightModule} from './share/demo-highlight/demo-highlight.module'
     FormsModule,
     HttpClientModule,
 
-    TriangleModule,
+    TriangleBundleModule,
 
     TriDataTableModule,
     TriangleExampleModule,

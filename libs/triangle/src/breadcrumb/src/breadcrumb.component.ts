@@ -1,9 +1,9 @@
 import { Component, HostBinding, Input, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'tri-breadcrumb',
+  selector     : 'tri-breadcrumb',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <ng-content></ng-content>`
 })
 export class BreadCrumbComponent {

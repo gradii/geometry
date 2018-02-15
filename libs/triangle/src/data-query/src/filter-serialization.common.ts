@@ -1,11 +1,11 @@
-import {isString, isDate} from './utils';
+import { isDate, isString } from './utils';
 
-export let wrapIf           = function (predicate) {
+export let wrapIf = function (predicate) {
   return function (str, ...args) {
     return predicate() ? '' + str[0] + args[0] + str[1] : args[0];
   };
 };
-export let toUTC            = function (date) {
+export let toUTC = function (date) {
   return new Date(
     Date.UTC(
       date.getFullYear(),
@@ -18,15 +18,35 @@ export let toUTC            = function (date) {
     )
   );
 };
-export let quote            = ({value, field, ignoreCase, operator}: { value: string, field: any, ignoreCase: any, operator: any }) => {
+export let quote = ({
+                      value,
+                      field,
+                      ignoreCase,
+                      operator
+                    }: {
+  value: string;
+  field: any;
+  ignoreCase: any;
+  operator: any;
+}) => {
   return {
-    value     : "'" + value.replace(/'/g, "''") + "'",
+    value     : '\'' + value.replace(/'/g, '\'\'') + '\'',
     field     : field,
     ignoreCase: ignoreCase,
     operator  : operator
   };
 };
-export let formatDate       = ({value, field, ignoreCase, operator}: { value: string, field: any, ignoreCase: any, operator: any }) => {
+export let formatDate = ({
+                           value,
+                           field,
+                           ignoreCase,
+                           operator
+                         }: {
+  value: string;
+  field: any;
+  ignoreCase: any;
+  operator: any;
+}) => {
   return {
     value     : JSON.stringify(toUTC(value)).replace(/"/g, ''),
     field     : field,
@@ -34,7 +54,7 @@ export let formatDate       = ({value, field, ignoreCase, operator}: { value: st
     operator  : operator
   };
 };
-export let toLower          = function ({field, value, ignoreCase, operator}) {
+export let toLower = function ({field, value, ignoreCase, operator}) {
   return {
     field     : wrapIf(() => ignoreCase)(['tolower(', ')'], field),
     value     : value,
@@ -42,7 +62,17 @@ export let toLower          = function ({field, value, ignoreCase, operator}) {
     operator  : operator
   };
 };
-export let normalizeField   = ({value, field, ignoreCase, operator}: { value: string, field: any, ignoreCase: any, operator: any }) => {
+export let normalizeField = ({
+                               value,
+                               field,
+                               ignoreCase,
+                               operator
+                             }: {
+  value: string;
+  field: any;
+  ignoreCase: any;
+  operator: any;
+}) => {
   return {
     value     : value,
     field     : field.replace(/\./g, '/'),
@@ -50,10 +80,10 @@ export let normalizeField   = ({value, field, ignoreCase, operator}: { value: st
     operator  : operator
   };
 };
-export let isStringValue    = function (x) {
+export let isStringValue = function (x) {
   return isString(x.value);
 };
-export let isDateValue      = function (x) {
+export let isDateValue = function (x) {
   return isDate(x.value);
 };
 export let serializeFilters = function (map, join) {

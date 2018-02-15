@@ -1,19 +1,10 @@
-import {
-  Component,
-  OnInit,
-  ContentChild,
-  ViewEncapsulation,
-  ContentChildren,
-  QueryList,
-  AfterContentInit,
-  TemplateRef
-} from '@angular/core';
+import { AfterContentInit, Component, ContentChild, ContentChildren, OnInit, QueryList, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { TimelineItemComponent } from './timeline-item.component';
 
 @Component({
-  selector: 'tri-timeline',
+  selector     : 'tri-timeline',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <ul class="ant-timeline" [class.ant-timeline-pending]="_isPending">
       <ng-content></ng-content>
       <li *ngIf="_isPending" class="ant-timeline-item ant-timeline-item-pending">

@@ -1,6 +1,5 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { NzCollapseComponent, NzCollapsesetComponent } from '@gradii/collapse';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 describe('My First Test', () => {
   it('should get "Hello Taobao"', () => {});

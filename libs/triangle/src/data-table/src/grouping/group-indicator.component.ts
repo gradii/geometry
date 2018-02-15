@@ -1,12 +1,13 @@
+import { GroupDescriptor } from '@gradii/triangle/data-query';
 // tslint:disable:component-selector
-import {Component, HostBinding, Input, Output, EventEmitter, ChangeDetectionStrategy} from '@angular/core';
-import {GroupInfoService} from './group-info.service';
-import {GroupDescriptor} from '@gradii/triangle/data-query';
+import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
+import { GroupInfoService } from './group-info.service';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector       : '[triGroupIndicator], tri-group-indicator',
-  template       : `
+  selector           : '[triGroupIndicator], tri-group-indicator',
+  changeDetection    : ChangeDetectionStrategy.OnPush,
+  preserveWhitespaces: false,
+  template           : `
     <a href="#" class="ant-link" (click)="toggleDirection()">
                        <span class="ant-icon"
                              [class.ant-i-sort-asc-sm]="dir === 'asc'"
@@ -25,8 +26,8 @@ export class GroupIndicatorComponent {
 
   constructor(groupInfoService: GroupInfoService) {
     this.groupInfoService = groupInfoService;
-    this.directionChange  = new EventEmitter();
-    this.remove           = new EventEmitter();
+    this.directionChange = new EventEmitter();
+    this.remove = new EventEmitter();
   }
 
   @HostBinding('class.ant-group-indicator')

@@ -1,11 +1,8 @@
-import {ContentChildren, QueryList, HostBinding, AfterContentInit, OnDestroy} from '@angular/core';
-import {CompositeFilterDescriptor, FilterDescriptor, isCompositeFilterDescriptor} from '@gradii/triangle/data-query';
-import {map} from "rxjs/operators/map";
-import {isPresent, observe} from '../utils';
-import {FilterOperatorBase, toJSON} from './operators/filter-operator.base';
-import {FilterService} from './filter.service';
+import { CompositeFilterDescriptor, FilterDescriptor, isCompositeFilterDescriptor } from '@gradii/triangle/data-query';
+import { isPresent } from '@gradii/triangle/util';
+import { FilterService } from './filter.service';
 
-const flatten: any             = filter => {
+export const flatten: any = filter => {
   if (isPresent(filter.filters)) {
     return filter.filters.reduce(
       (acc, curr) => acc.concat(isCompositeFilterDescriptor(curr) ? flatten(curr) : [curr]),
@@ -14,7 +11,7 @@ const flatten: any             = filter => {
   }
   return [];
 };
-const trimFilterByField        = (filter, field) => {
+const trimFilterByField = (filter, field) => {
   if (isPresent(filter) && isPresent(filter.filters)) {
     filter.filters = filter.filters.filter(x => {
       if (isCompositeFilterDescriptor(x)) {
@@ -26,35 +23,41 @@ const trimFilterByField        = (filter, field) => {
     });
   }
 };
+
+export const filtersByField = function (filter, field) {
+  return flatten(filter || {}).filter(function (x) {
+    return x.field === field;
+  });
+};
+
+export const filterByField = function (filter, field) {
+  var currentFilter = filtersByField(filter, field)[0];
+  return currentFilter;
+};
+
+export const removeFilter = function (filter, field) {
+  trimFilterByField(filter, field);
+  return filter;
+};
 export const localizeOperators = operators => localization =>
   Object.keys(operators).map(key => ({
     text : localization.get(key),
     value: operators[key]
   }));
 
-export abstract class BaseFilterCellComponent implements AfterContentInit, OnDestroy {
-  protected filterService: FilterService;
-  @ContentChildren(FilterOperatorBase) operatorList: QueryList<FilterOperatorBase>;
-            filter: CompositeFilterDescriptor;
+export abstract class BaseFilterCellComponent /*implements AfterContentInit, OnDestroy*/ {
+  filter: CompositeFilterDescriptor;
   protected defaultOperators: Array<{
-    text: string;
+    label: string;
     value: string;
   }>;
-  private _operators;
-  private operationListSubscription;
+  private _operators = [];
 
-  constructor(filterService: FilterService) {
-    this.filterService = filterService;
-    this.operatorList  = new QueryList<FilterOperatorBase>();
-  }
-
-  @HostBinding('class.ant-filtercell')
-  get hostClasses() {
-    return true;
+  constructor(protected filterService: FilterService) {
   }
 
   get operators(): Array<{
-    text: string;
+    label: string;
     value: string;
   }> {
     return this._operators.length ? this._operators : this.defaultOperators;
@@ -64,21 +67,6 @@ export abstract class BaseFilterCellComponent implements AfterContentInit, OnDes
     this._operators = values;
   }
 
-  ngAfterContentInit() {
-    this.operationListSubscription = observe(this.operatorList)
-      .pipe(
-        map(toJSON)
-      )
-      .subscribe(x => {
-        this.operators = x;
-      });
-  }
-
-  ngOnDestroy() {
-    if (this.operationListSubscription) {
-      this.operationListSubscription.unsubscribe();
-    }
-  }
 
   protected filterByField(field: string): FilterDescriptor {
     const currentFilter = this.filtersByField(field)[0];
@@ -99,7 +87,7 @@ export abstract class BaseFilterCellComponent implements AfterContentInit, OnDes
       filters: [],
       logic  : 'and'
     };
-    const currentFilter                   = flatten(root).filter(x => x.field === filter.field)[0];
+    const currentFilter = flatten(root).filter(x => x.field === filter.field)[0];
     if (!isPresent(currentFilter)) {
       root.filters.push(filter);
     } else {

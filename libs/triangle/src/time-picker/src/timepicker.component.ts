@@ -1,16 +1,15 @@
-import { Component, ViewEncapsulation, forwardRef, ViewChild, Input } from '@angular/core';
+import { DEFAULT_DATEPICKER_POSITIONS, DropDownAnimation } from '@gradii/triangle/core';
+import { ConnectionPositionPair } from '@angular/cdk/overlay';
+import { Component, forwardRef, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as moment from 'moment';
-import { DropDownAnimation } from '@gradii/triangle/core';
 import { TimePickerInnerComponent } from './timepicker-inner.component';
-import { DEFAULT_DATEPICKER_POSITIONS } from '@gradii/triangle/core';
-import { ConnectionPositionPair } from '@angular/cdk/overlay';
 
 @Component({
-  selector: 'tri-timepicker',
+  selector     : 'tri-timepicker',
   encapsulation: ViewEncapsulation.None,
-  animations: [DropDownAnimation],
-  template: `
+  animations   : [DropDownAnimation],
+  template     : `
     <span
       class="ant-time-picker"
       [class.ant-time-picker-large]="size=='large'"
@@ -118,11 +117,11 @@ import { ConnectionPositionPair } from '@angular/cdk/overlay';
         </div>
       </div>
     </ng-template>`,
-  providers: [
+  providers    : [
     {
-      provide: NG_VALUE_ACCESSOR,
+      provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => TimePickerComponent),
-      multi: true
+      multi      : true
     }
   ]
 })

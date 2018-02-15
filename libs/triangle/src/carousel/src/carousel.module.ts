@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
-import { CarouselComponent } from './carousel.component';
-import { CarouselContentDirective } from './carousel-content.directive';
 import { CommonModule } from '@angular/common';
-import { CarouselSlickTrackDirective } from './carousel-slick-track.directive';
+import { NgModule } from '@angular/core';
+import { CarouselContentDirective } from './carousel-content.directive';
 import { CarouselSlickListDirective } from './carousel-slick-list.directive';
+import { CarouselSlickTrackDirective } from './carousel-slick-track.directive';
+import { CarouselComponent } from './carousel.component';
 
 /**
  * # Carousel 走马灯
@@ -26,7 +26,7 @@ import { CarouselSlickListDirective } from './carousel-slick-list.directive';
  */
 @NgModule({
   declarations: [CarouselComponent, CarouselContentDirective, CarouselSlickListDirective, CarouselSlickTrackDirective],
-  exports: [CarouselComponent, CarouselContentDirective, CarouselSlickListDirective, CarouselSlickTrackDirective],
-  imports: [CommonModule]
+  exports     : [CarouselComponent, CarouselContentDirective, CarouselSlickListDirective, CarouselSlickTrackDirective],
+  imports     : [CommonModule]
 })
 export class TriCarouselModule {}

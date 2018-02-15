@@ -1,11 +1,11 @@
-import { Component, Input, ViewEncapsulation, AfterContentInit, ElementRef, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 
 export type ButtonGroupSize = 'small' | 'large' | 'default';
 
 @Component({
-  selector: 'tri-button-group',
+  selector     : 'tri-button-group',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div class="ant-btn-group"
          [class.ant-btn-lg]="size=='large'"
          [class.ant-btn-sm]="size=='small'"
@@ -13,7 +13,7 @@ export type ButtonGroupSize = 'small' | 'large' | 'default';
       <ng-content></ng-content>
     </div>
   `,
-  styleUrls: []
+  styleUrls    : []
 })
 export class ButtonGroupComponent implements AfterContentInit {
   _size: ButtonGroupSize;

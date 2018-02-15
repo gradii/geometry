@@ -1,7 +1,6 @@
 import { Component, ContentChildren, Host, Optional, QueryList, SkipSelf } from '@angular/core';
-import { ColumnBase } from './column-base';
 import { columnsSpan } from '../helper/column-common';
-import { AutoGenerateColumnPositon } from '@gradii/triangle/data-table/src/columns/column-base';
+import { AutoGenerateColumnPositon, ColumnBase } from './column-base';
 
 export function isColumnGroupComponent(column) {
   return column.isColumnGroup;
@@ -10,25 +9,23 @@ export function isColumnGroupComponent(column) {
 @Component({
   providers: [
     {
-      provide: ColumnBase,
+      provide    : ColumnBase,
       useExisting: ColumnGroupComponent
     }
   ],
   selector : 'tri-data-table-column-group',
-  template: ''
+  template : ''
 })
 export class ColumnGroupComponent extends ColumnBase {
   public autoGenerateColumnPosition = 'middle' as AutoGenerateColumnPositon;
-  
+
   isColumnGroup = true;
   @ContentChildren(ColumnBase) children: QueryList<ColumnBase>;
 
-  constructor(
-    @SkipSelf()
-    @Host()
-    @Optional()
-    public parent?: ColumnBase
-  ) {
+  constructor(@SkipSelf()
+              @Host()
+              @Optional()
+              public parent?: ColumnBase) {
     super(parent);
     if (parent && (<any>parent).isSpanColumn) {
       throw new Error('ColumnGroupComponent cannot be nested inside SpanColumnComponent');

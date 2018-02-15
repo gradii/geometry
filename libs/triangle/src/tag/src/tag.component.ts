@@ -1,23 +1,11 @@
-import {
-  Component,
-  OnInit,
-  AfterViewInit,
-  ViewEncapsulation,
-  Input,
-  ElementRef,
-  Renderer2,
-  HostListener,
-  HostBinding,
-  Output,
-  EventEmitter
-} from '@angular/core';
 import { TagAnimation } from '@gradii/triangle/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output, Renderer2, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'tri-tag',
+  selector     : 'tri-tag',
   encapsulation: ViewEncapsulation.None,
-  animations: [TagAnimation],
-  template: `
+  animations   : [TagAnimation],
+  template     : `
     <span *ngIf="!_closed"
           [ngClass]="_tagCls"
           class="ant-tag"
