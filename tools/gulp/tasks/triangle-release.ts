@@ -37,7 +37,7 @@ task('triangle:build-release', ['triangle:prepare-release'], () => composeReleas
  */
 task('triangle:prepare-release', sequenceTask(
   'triangle:build',
-  ['material:copy-prebuilt-themes', 'material:bundle-theming-scss']
+  ['triangle:copy-prebuilt-themes', 'triangle:bundle-theming-scss']
 ));
 
 /** Copies all prebuilt themes into the release package under `prebuilt-themes/` */
