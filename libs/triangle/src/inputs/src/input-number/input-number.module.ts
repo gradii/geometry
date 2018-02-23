@@ -12,14 +12,14 @@ import { InputNumberComponent } from './input-number.component';
  * ### 代码演示
  *
  * 数字输入框
- * <!-- example(input-number-basic) -->
+ * <!-- example(tri-demo-input-number-basic) -->
  * 点击按钮切换可用状态。
- * <!-- example(input-number-disabled) -->
+ * <!-- example(tri-demo-input-number-disabled) -->
  * 三种大小的数字输入框，当 size 分别为  `large`  和  `small`  时，输入框高度为  `32px`  和
  * `22px`  ，默认高度为  `28px`
- * <!-- example(input-number-size) -->
+ * <!-- example(tri-demo-input-number-size) -->
  * 和原生的数字输入框一样，value 的精度由 step 的小数位数决定。
- * <!-- example(input-number-digit) -->
+ * <!-- example(tri-demo-input-number-digit) -->
  */
 @NgModule({
   imports     : [CommonModule, FormsModule],

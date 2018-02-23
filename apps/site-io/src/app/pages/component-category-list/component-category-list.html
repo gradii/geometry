@@ -1,0 +1,11 @@
+<div class="docs-component-category-list">
+  <a *ngFor="let category of docItems.getItemsInCategories()"
+     class="docs-component-category-list-item"
+     [routerLink]="['/categories/', category.id]">
+    <tri-card class="docs-component-category-list-card">
+      <ng-template #body>
+        {{category.name}}
+      </ng-template>
+    </tri-card>
+  </a>
+</div>

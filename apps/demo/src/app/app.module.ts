@@ -1,5 +1,5 @@
-import { TriangleExampleModule, TriangleBundleModule } from '@gradii/triangle-examples';
-import { TriDataTableModule } from '@gradii/triangle/data-table';
+import { TriangleExampleModule, TriangleModule } from '@gradii/triangle-examples';
+import { TriDataTableModule } from "@gradii/triangle/data-table";
 import { MESSAGE_CONFIG, MessageService, NOTIFICATION_CONFIG, NotificationService } from '@gradii/triangle/message';
 import { ROOT_CONFIG } from '@gradii/triangle/root';
 import { TRI_LOGGER_STATE } from '@gradii/triangle/util';
@@ -16,31 +16,31 @@ import { DemoHighlightModule } from './share/demo-highlight/demo-highlight.modul
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [
+  imports     : [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
 
-    TriangleBundleModule,
+    TriangleModule,
 
     TriDataTableModule,
     TriangleExampleModule,
 
     DemoCodeBoxModule,
     DemoHighlightModule,
-    RouterModule.forRoot(routes, { useHash: true, preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, {useHash: true, preloadingStrategy: PreloadAllModules})
   ],
-  providers: [
+  providers   : [
     NotificationService,
     MessageService,
-    { provide: TRI_LOGGER_STATE, useValue: true },
-    { provide: MESSAGE_CONFIG, useValue: { duration: 3000 } },
-    { provide: NOTIFICATION_CONFIG, useValue: { top: '20px' } },
-    { provide: ROOT_CONFIG, useValue: { extraFontName: 'anticon', extraFontUrl: './assets/fonts/iconfont' } },
+    {provide: TRI_LOGGER_STATE, useValue: true},
+    {provide: MESSAGE_CONFIG, useValue: {duration: 3000}},
+    {provide: NOTIFICATION_CONFIG, useValue: {top: '20px'}},
+    {provide: ROOT_CONFIG, useValue: {extraFontName: 'anticon', extraFontUrl: './assets/fonts/iconfont'}},
     // { provide: TRI_LOCALE, useValue: enUS },
     Title
   ],
-  bootstrap: [AppComponent]
+  bootstrap   : [AppComponent]
 })
 export class AppModule {}

@@ -1,339 +1,339 @@
 export const ROUTER_LIST = {
-  intro: [
+  intro     : [
     {
-      path: 'docs/angular/introduce',
+      path : 'docs/angular/introduce',
       // 'loadChildren': './demo-intro-index/demo-intro.module#NzIntroModule',
       label: 'Ant Design of Angular'
     },
     {
-      path: 'docs/angular/getting-started',
+      path : 'docs/angular/getting-started',
       // 'loadChildren': './demo-intro-getting-started/demo-intro-get-started.module#NzIntroGetStartedModule',
       label: '快速上手'
     },
     {
-      path: 'changelog',
+      path : 'changelog',
       // 'loadChildren': './demo-intro-changelog/demo-intro-changelog.module#NzIntroChangeLogModule',
       label: '更新日志'
     },
     {
-      path: 'i18n',
+      path : 'i18n',
       // 'loadChildren': './demo-intro-i18n/demo-intro-i18n.module#NzIntroI18nModule',
       label: '国际化'
     }
   ],
   components: [
     {
-      name: 'General',
+      name    : 'General',
       children: [
         {
           label: 'Button',
-          path: 'components/button',
+          path : 'components/button',
           // 'loadChildren': './components/demo-button/demo-button.module#DemoButtonModule',
-          zh: '按钮'
+          zh   : '按钮'
         },
         {
           label: 'Icon',
-          path: 'components/icon',
+          path : 'components/icon',
           // 'loadChildren': './components/demo-icon/demo-icon.module#DemoIconModule',
-          zh: '图标'
+          zh   : '图标'
         }
       ]
     },
     {
-      name: 'Data Table',
+      name    : 'Data Table',
       children: [
         {
           label: 'Data Table',
-          path: 'components/data-table',
-          zh: '数据表格'
+          path : 'components/data-table',
+          zh   : '数据表格'
         }
       ]
     },
     {
-      name: 'Layout',
+      name    : 'Layout',
       children: [
         {
           label: 'Grid',
-          path: 'components/grid',
+          path : 'components/grid',
           // 'loadChildren': './components/demo-grid/demo-grid.module#DemoGridModule',
-          zh: '栅格'
+          zh   : '栅格'
         },
         {
           label: 'Layout',
-          path: 'components/layout',
+          path : 'components/layout',
           // 'loadChildren': './components/demo-layout/demo-layout.module#DemoLayoutModule',
-          zh: '布局'
+          zh   : '布局'
         }
       ]
     },
     {
-      name: 'Navigation',
+      name    : 'Navigation',
       children: [
         {
           label: 'Affix',
-          path: 'components/affix',
+          path : 'components/affix',
           // 'loadChildren': './components/demo-affix/demo-affix.module#DemoAffixModule',
-          zh: '固钉'
+          zh   : '固钉'
         },
         {
           label: 'Breadcrumb',
-          path: 'components/breadcrumb',
+          path : 'components/breadcrumb',
           // 'loadChildren': './components/demo-breadcrumb/demo-breadcrumb.module#DemoBreadCrumbModule',
-          zh: '面包屑'
+          zh   : '面包屑'
         },
         {
           label: 'Dropdown',
-          path: 'components/dropdown',
+          path : 'components/dropdown',
           // 'loadChildren': './components/demo-dropdown/demo-dropdown.module#DemoDropDownModule',
-          zh: '下拉菜单'
+          zh   : '下拉菜单'
         },
         {
           label: 'Menu',
-          path: 'components/menu',
+          path : 'components/menu',
           // 'loadChildren': './components/demo-menu/demo-menu.module#DemoMenuModule',
-          zh: '菜单'
+          zh   : '菜单'
         },
         {
           label: 'Pagination',
-          path: 'components/pagination',
+          path : 'components/pagination',
           // 'loadChildren': './components/demo-pagination/demo-pagination.module#DemoPaginationModule',
-          zh: '分页'
+          zh   : '分页'
         },
         {
           label: 'Steps',
-          path: 'components/steps',
+          path : 'components/steps',
           // 'loadChildren': './components/demo-steps/demo-steps.module#DemoStepsModule',
-          zh: '步骤条'
+          zh   : '步骤条'
         }
       ]
     },
     {
-      name: 'Data Entry',
+      name    : 'Data Entry',
       children: [
         {
           label: 'Cascader',
-          path: 'components/cascader',
+          path : 'components/cascader',
           // 'loadChildren': './components/demo-cascader/demo-cascader.module#DemoCascaderModule',
-          zh: '级联选择'
+          zh   : '级联选择'
         },
         {
           label: 'Checkbox',
-          path: 'components/checkbox',
+          path : 'components/checkbox',
           // 'loadChildren': './components/demo-checkbox/demo-checkbox.module#DemoCheckboxModule',
-          zh: '多选框'
+          zh   : '多选框'
         },
         {
           label: 'DatePicker',
-          path: 'components/date-picker',
+          path : 'components/date-picker',
           // 'loadChildren': './components/demo-datepicker/demo-datepicker.module#DemoDatePickerModule',
-          zh: '日期选择框'
+          zh   : '日期选择框'
         },
         {
           label: 'Form',
-          path: 'components/form',
+          path : 'components/form',
           // 'loadChildren': './components/demo-form/demo-form.module#DemoFormModule',
-          zh: '表单'
+          zh   : '表单'
         },
         {
           label: 'InputNumber',
-          path: 'components/input-number',
+          path : 'components/input-number',
           // 'loadChildren': './components/demo-input-number/demo-input-number.module#DemoInputNumberModule',
-          zh: '数字输入框'
+          zh   : '数字输入框'
         },
         {
           label: 'Input',
-          path: 'components/input',
+          path : 'components/input',
           // 'loadChildren': './components/demo-input/demo-input.module#DemoInputModule',
-          zh: '输入框'
+          zh   : '输入框'
         },
         {
           label: 'Rate',
-          path: 'components/rate',
+          path : 'components/rate',
           // 'loadChildren': './components/demo-rate/demo-rate.module#DemoRateModule',
-          zh: '评分'
+          zh   : '评分'
         },
         {
           label: 'Radio',
-          path: 'components/radio',
+          path : 'components/radio',
           // 'loadChildren': './components/demo-radio/demo-radio.module#DemoRadioModule',
-          zh: '单选框'
+          zh   : '单选框'
         },
         {
           label: 'Select',
-          path: 'components/select',
+          path : 'components/select',
           // 'loadChildren': './components/demo-select/demo-select.module#DemoSelectModule',
-          zh: '选择器'
+          zh   : '选择器'
         },
         {
           label: 'Slider',
-          path: 'components/slider',
+          path : 'components/slider',
           // 'loadChildren': './components/demo-slider/demo-slider.module#DemoSliderModule',
-          zh: '滑动输入条'
+          zh   : '滑动输入条'
         },
         {
           label: 'Switch',
-          path: 'components/switch',
+          path : 'components/switch',
           // 'loadChildren': './components/demo-switch/demo-switch.module#DemoSwitchModule',
-          zh: '开关'
+          zh   : '开关'
         },
         {
           label: 'TimePicker',
-          path: 'components/time-picker',
+          path : 'components/time-picker',
           // 'loadChildren': './components/demo-timepicker/demo-timepicker.module#DemoTimePickerModule',
-          zh: '时间选择框'
+          zh   : '时间选择框'
         },
         {
           label: 'Transfer',
-          path: 'components/transfer',
+          path : 'components/transfer',
           // 'loadChildren': './components/demo-timepicker/demo-timepicker.module#DemoTimePickerModule',
-          zh: '穿梭框'
+          zh   : '穿梭框'
         }
       ]
     },
     {
-      name: 'Data Display',
+      name    : 'Data Display',
       children: [
         {
           label: 'Avatar',
-          path: 'components/avatar',
+          path : 'components/avatar',
           // 'loadChildren': './components/demo-avatar/demo-avatar.module#DemoAvatarModule',
-          zh: '头像'
+          zh   : '头像'
         },
         {
           label: 'Badge',
-          path: 'components/badge',
+          path : 'components/badge',
           // 'loadChildren': './components/demo-badge/demo-badge.module#DemoBadgeModule',
-          zh: '徽标数'
+          zh   : '徽标数'
         },
         {
           label: 'Calendar',
-          path: 'components/calendar',
+          path : 'components/calendar',
           // 'loadChildren': './components/demo-calendar/demo-calendar.module#DemoCalendarModule',
-          zh: '日历'
+          zh   : '日历'
         },
         {
           label: 'Card',
-          path: 'components/card',
+          path : 'components/card',
           // 'loadChildren': './components/demo-card/demo-card.module#DemoCardModule',
-          zh: '卡片'
+          zh   : '卡片'
         },
         {
           label: 'Carousel',
-          path: 'components/carousel',
+          path : 'components/carousel',
           // 'loadChildren': './components/demo-carousel/demo-carousel.module#DemoCarouselModule',
-          zh: '走马灯'
+          zh   : '走马灯'
         },
         {
           label: 'Collapse',
-          path: 'components/collapse',
+          path : 'components/collapse',
           // 'loadChildren': './components/demo-collapse/demo-collapse.module#DemoCollapseModule',
-          zh: '折叠面板'
+          zh   : '折叠面板'
         },
         {
           label: 'Popover',
-          path: 'components/popover',
+          path : 'components/popover',
           // 'loadChildren': './components/demo-popover/demo-popover.module#DemoPopoverModule',
-          zh: '气泡卡片'
+          zh   : '气泡卡片'
         },
         {
           label: 'Tooltip',
-          path: 'components/tooltip',
+          path : 'components/tooltip',
           // 'loadChildren': './components/demo-tooltip/demo-tooltip.module#DemoTooltipModule',
-          zh: '文字提示'
+          zh   : '文字提示'
         },
         {
           label: 'Table',
-          path: 'components/table',
+          path : 'components/table',
           // 'loadChildren': './components/demo-table/demo-table.module#DemoTableModule',
-          zh: '表格'
+          zh   : '表格'
         },
         {
           label: 'Tabs',
-          path: 'components/tabs',
+          path : 'components/tabs',
           // 'loadChildren': './components/demo-tabs/demo-tabs.module#DemoTabsModule',
-          zh: '标签页'
+          zh   : '标签页'
         },
         {
           label: 'Tag',
-          path: 'components/tag',
+          path : 'components/tag',
           // 'loadChildren': './components/demo-tag/demo-tag.module#DemoTagModule',
-          zh: '标签'
+          zh   : '标签'
         },
         {
           label: 'Timeline',
-          path: 'components/timeline',
+          path : 'components/timeline',
           // 'loadChildren': './components/demo-timeline/demo-timeline.module#DemoTimelineModule',
-          zh: '时间轴'
+          zh   : '时间轴'
         }
       ]
     },
     {
-      name: 'FeedBack',
+      name    : 'FeedBack',
       children: [
         {
           label: 'Alert',
-          path: 'components/alert',
+          path : 'components/alert',
           // 'loadChildren': './components/demo-alert/demo-alert.module#DemoAlertModule',
-          zh: '警告提示'
+          zh   : '警告提示'
         },
         {
           label: 'Message',
-          path: 'components/message',
+          path : 'components/message',
           // 'loadChildren': './components/demo-message/demo-message.module#DemoMessageModule',
-          zh: '全局提示'
+          zh   : '全局提示'
         },
         {
           label: 'Modal',
-          path: 'components/modal',
+          path : 'components/modal',
           // 'loadChildren': './components/demo-modal/demo-modal.module#DemoModalModule',
-          zh: '对话框'
+          zh   : '对话框'
         },
         {
           label: 'Notification',
-          path: 'components/notification',
+          path : 'components/notification',
           // 'loadChildren': './components/demo-notification/demo-notification.module#DemoNotificationModule',
-          zh: '通知提醒框'
+          zh   : '通知提醒框'
         },
         {
           label: 'Progress',
-          path: 'components/progress',
+          path : 'components/progress',
           // 'loadChildren': './components/demo-progress/demo-progress.module#DemoProgressModule',
-          zh: '进度条'
+          zh   : '进度条'
         },
         {
           label: 'Popconfirm',
-          path: 'components/popconfirm',
+          path : 'components/popconfirm',
           // 'loadChildren': './components/demo-popconfirm/demo-popconfirm.module#DemoPopconfirmModule',
-          zh: '气泡确认框'
+          zh   : '气泡确认框'
         },
         {
           label: 'Spin',
-          path: 'components/spin',
+          path : 'components/spin',
           // 'loadChildren': './components/demo-spin/demo-spin.module#DemoSpinModule',
-          zh: '加载中'
+          zh   : '加载中'
         }
       ]
     },
     {
-      name: 'Other',
+      name    : 'Other',
       children: [
         {
           label: 'Anchor',
-          path: 'other/anchor',
+          path : 'other/anchor',
           // 'loadChildren': './components/demo-anchor/demo-anchor.module#DemoAnchorModule',
-          zh: '锚点'
+          zh   : '锚点'
         },
         {
           label: 'BackTop',
-          path: 'other/back-top',
+          path : 'other/back-top',
           // 'loadChildren': './components/demo-back-top/demo-back-top.module#DemoBackTopModule',
-          zh: '回到顶部'
+          zh   : '回到顶部'
         },
         {
           label: 'Locale',
-          path: 'other/locale',
+          path : 'other/locale',
           // 'loadChildren': './components/demo-locale/demo-locale.module#DemoLocaleModule',
-          zh: '国际化'
+          zh   : '国际化'
         }
       ]
     }
@@ -342,29 +342,29 @@ export const ROUTER_LIST = {
 
 export const INTRO_ROUTES = [
   {
-    path: 'docs/angular/introduce',
+    path        : 'docs/angular/introduce',
     loadChildren: './demo-intro-index/demo-intro.module#DemoIntroModule'
   },
   {
-    path: 'docs/angular/getting-started',
+    path        : 'docs/angular/getting-started',
     loadChildren: './demo-intro-getting-started/demo-intro-get-started.module#DemoIntroGetStartedModule'
   },
   {
-    path: 'changelog',
+    path        : 'changelog',
     loadChildren: './demo-intro-changelog/demo-intro-changelog.module#DemoIntroChangeLogModule'
   },
   {
-    path: 'i18n',
+    path        : 'i18n',
     loadChildren: './demo-intro-i18n/demo-intro-i18n.module#DemoIntroI18nModule'
   }
 ];
 export const DEMO_ROUTES = [
   {
-    path: 'components/button',
+    path        : 'components/button',
     loadChildren: './components/demo-button/demo-button.module#DemoButtonModule'
   },
   {
-    path: 'components/data-table',
+    path        : 'components/data-table',
     loadChildren: './components/demo-data-table/demo-data-table.module#DemoDataTableModule'
   }
   // {

@@ -18,11 +18,11 @@ import { BreadCrumbComponent } from './breadcrumb.component';
  * ### 代码演示
  *
  * 最简单的用法。
- * <!-- example(bread-crumb-basic) -->
+ * <!-- example(tri-demo-bread-crumb-basic) -->
  * 使用  `nzSeparator="'>'"` 可以自定义分隔符。
- * <!-- example(bread-crumb-separator) -->
+ * <!-- example(tri-demo-bread-crumb-separator) -->
  * 图标放在文字前面。
- * <!-- example(bread-crumb-icon) -->
+ * <!-- example(tri-demo-bread-crumb-icon) -->
  */
 @NgModule({
   imports     : [CommonModule],

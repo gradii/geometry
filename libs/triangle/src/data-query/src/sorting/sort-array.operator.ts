@@ -1,5 +1,5 @@
+import { isPresent, isBlank } from '../utils';
 import { getter } from '../accessor';
-import { isBlank, isPresent } from '../utils';
 
 export type Comparer = <T>(a: T, b: T) => number;
 const compare: Comparer = (a: any, b: any) => {
@@ -14,29 +14,29 @@ const compare: Comparer = (a: any, b: any) => {
   }
   return a > b ? 1 : a < b ? -1 : 0;
 };
-const compareDesc: Comparer = function (a, b) {
+const compareDesc: Comparer = function(a, b) {
   return compare(b, a);
 };
-const descriptorAsFunc = function (descriptor) {
+const descriptorAsFunc = function(descriptor) {
   const prop = getter(descriptor.field, true);
-  return function (a, b) {
+  return function(a, b) {
     return (descriptor.dir === 'asc' ? compare : compareDesc)(prop(a), prop(b));
   };
 };
-const initial = function (_a, _b) {
+const initial = function(_a, _b) {
   return 0;
 };
-export let composeSortDescriptors = function (descriptors) {
+export function composeSortDescriptors(descriptors) {
   return descriptors
-    .filter(function (x) {
+    .filter(function(x) {
       return isPresent(x.dir);
     })
-    .map(function (descriptor) {
+    .map(function(descriptor) {
       return descriptorAsFunc(descriptor);
     })
-    .reduce(function (acc, curr) {
-      return function (a, b) {
+    .reduce(function(acc, curr) {
+      return function(a, b) {
         return acc(a, b) || curr(a, b);
       };
     }, initial);
-};
+}

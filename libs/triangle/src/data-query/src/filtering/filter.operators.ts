@@ -1,4 +1,4 @@
-import { isArray, isPresent, isString } from '../utils';
+import { isPresent, isString, isArray } from '../utils';
 import { isCompositeFilterDescriptor } from './filter-descriptor.interface';
 
 const dateRegExp = /^\/Date\((.*?)\)\/$/;
@@ -61,13 +61,15 @@ const normalizeDescriptor = function (descriptor) {
   }
   return descriptor;
 };
-export let normalizeFilters = function (descriptor) {
+
+export function normalizeFilters(descriptor) {
   if (isPresent(descriptor)) {
     descriptor = normalizeDescriptor(descriptor);
     normalizeOperator(descriptor);
   }
   return descriptor;
-};
+}
+
 export let operators = (function () {
   const quote = function (value) {
     return value.replace(quoteRegExp, '\\').replace(newLineRegExp, '');

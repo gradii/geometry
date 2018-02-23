@@ -8,31 +8,31 @@ import { Component, OnInit } from '@angular/core';
   template: `
     <tri-table #table [dataSource]="data" [pageSize]="10" (dataChange)="_displayDataChange($event)">
       <thead tri-thead>
-        <tr>
-          <th tri-th [checkbox]="true">
-            <label tri-checkbox [(ngModel)]="_allChecked" [indeterminate]="_indeterminate" (ngModelChange)="_checkAll($event)">
-            </label>
-          </th>
-          <th tri-th><span>Name</span></th>
-          <th tri-th><span>Age</span></th>
-          <th tri-th><span>Address</span></th>
-        </tr>
+      <tr>
+        <th tri-th [checkbox]="true">
+          <tri-checkbox [(ngModel)]="_allChecked" [indeterminate]="_indeterminate" (ngModelChange)="_checkAll($event)">
+          </tri-checkbox>
+        </th>
+        <th tri-th><span>Name</span></th>
+        <th tri-th><span>Age</span></th>
+        <th tri-th><span>Address</span></th>
+      </tr>
       </thead>
       <tbody tri-tbody>
-        <tr tri-tbody-tr *ngFor="let data of table.data">
-          <td tri-td [checkbox]="true">
-            <label tri-checkbox [disabled]="data.disabled" [(ngModel)]="data.checked" (ngModelChange)="_refreshStatus($event)">
-            </label>
-          </td>
-          <td tri-td>
-            <a>{{data.name}}</a>
-          </td>
-          <td tri-td>{{data.age}}</td>
-          <td tri-td>{{data.address}}</td>
-        </tr>
+      <tr tri-tbody-tr *ngFor="let data of table.data">
+        <td tri-td [checkbox]="true">
+          <tri-checkbox [disabled]="data.disabled" [(ngModel)]="data.checked" (ngModelChange)="_refreshStatus($event)">
+          </tri-checkbox>
+        </td>
+        <td tri-td>
+          <a>{{data.name}}</a>
+        </td>
+        <td tri-td>{{data.age}}</td>
+        <td tri-td>{{data.address}}</td>
+      </tr>
       </tbody>
     </tri-table>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoTableSelectionPropsComponent implements OnInit {
   _allChecked = false;
@@ -40,22 +40,22 @@ export class TriDemoTableSelectionPropsComponent implements OnInit {
   _displayData = [];
   data = [
     {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
+      key     : '1',
+      name    : 'John Brown',
+      age     : 32,
       disabled: true,
-      address: 'New York No. 1 Lake Park'
+      address : 'New York No. 1 Lake Park'
     },
     {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
+      key    : '2',
+      name   : 'Jim Green',
+      age    : 42,
       address: 'London No. 1 Lake Park'
     },
     {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
+      key    : '3',
+      name   : 'Joe Black',
+      age    : 32,
       address: 'Sidney No. 1 Lake Park'
     }
   ];

@@ -1,0 +1,43 @@
+<div class="docs-example-viewer-wrapper">
+  <div class="docs-example-viewer-title">
+    <div class="docs-example-viewer-title-spacer">{{exampleData?.title}}</div>
+
+    <tri-tooltip>
+      <button tri-tooltip
+              nz-button type="button" (click)="toggleSourceView()">
+        <i class="anticon anticon-ellipsis"></i>
+      </button>
+      <ng-template #tooltipTemplate>
+        <span>View source</span>
+      </ng-template>
+    </tri-tooltip>
+
+    <plunker-button [example]="example"></plunker-button>
+  </div>
+
+  <div class="docs-example-viewer-source" *ngIf="showSource">
+
+    <tri-tabset>
+      <!-- TODO(jelbourn): don't hard-code the html + ts + css structure -->
+      <!--<tri-tab *ngFor="let extension of ['HTML', 'TS', 'CSS']">-->
+      <tri-tab *ngFor="let file of _exampleFiles">
+        <ng-template #tabHeadingTemplate>
+          {{file.name}}
+        </ng-template>
+        <div class="docs-example-source-wrapper">
+          <button md-icon-button type="button" class="docs-example-source-copy"
+                  title="Copy example source" aria-label="Copy example source to clipboard"
+                  (click)="copySource(viewer.textContent)">
+            <i class="anticon anticon-copy">content_copy</i>
+          </button>
+          <pre class="docs-example-source"><doc-viewer
+            #viewer [documentUrl]="file.path"></doc-viewer></pre>
+        </div>
+      </tri-tab>
+    </tri-tabset>
+  </div>
+
+  <div class="docs-example-viewer-body">
+    <ng-template [portalHost]="selectedPortal"></ng-template>
+  </div>
+</div>

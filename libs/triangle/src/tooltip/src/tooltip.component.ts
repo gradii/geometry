@@ -165,13 +165,13 @@ export class ToolTipComponent implements AfterViewInit {
   }
 
   // Manually force updating current overlay's position
-  updatePosition() {
+  updatePosition(): void {
     if (this.overlay && this.overlay.overlayRef) {
       this.overlay.overlayRef.updatePosition();
     }
   }
 
-  onPositionChange($event) {
+  onPositionChange($event): void {
     for (const key in POSITION_MAP) {
       if (JSON.stringify($event.connectionPair) === JSON.stringify(POSITION_MAP[key])) {
         this.placement = key;

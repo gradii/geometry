@@ -1,5 +1,5 @@
-import { compose } from '../funcs';
 import { isPresent } from '../utils';
+import { compose } from '../funcs';
 
 export interface ServerGroupResult {
   Items: Object[];
@@ -44,11 +44,13 @@ const translateGroup = compose(function ({field, hasSubgroups, value, aggregates
     value     : value
   };
 }, normalizeGroup);
-export let translateDataSourceResultGroups = function (data) {
+
+export function translateDataSourceResultGroups(data) {
   return data.map(translateGroup);
-};
-export let translateAggregateResults = function (data) {
+}
+
+export function translateAggregateResults(data) {
   return (data || []).reduce(function (acc, x) {
     return set(x.Member, acc, set(x.AggregateMethodName.toLowerCase(), acc[x.Member] || {}, x.Value));
   }, {});
-};
+}

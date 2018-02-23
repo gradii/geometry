@@ -1,5 +1,5 @@
+import { isPresent, isNumeric, isDate } from './utils';
 import { getter } from './accessor';
-import { isDate, isNumeric, isPresent } from './utils';
 
 export interface AggregateResult {
   [fieldName: string]: {
@@ -15,7 +15,8 @@ const valueToString = function (value) {
   value = isPresent(value) && value.getTime ? value.getTime() : value;
   return value + '';
 };
-export let groupCombinator = function (field) {
+
+export function groupCombinator(field) {
   const prop = getter(field, true);
   let position = 0;
   return function (agg, value) {
@@ -27,8 +28,9 @@ export let groupCombinator = function (field) {
     agg[field][key] = values;
     return agg;
   };
-};
-export let expandAggregates = function (result) {
+}
+
+export function expandAggregates(result) {
   if (result === void 0) {
     result = {};
   }
@@ -39,8 +41,9 @@ export let expandAggregates = function (result) {
     });
   });
   return result;
-};
-const aggregatesFuncs = function (name) {
+}
+
+function aggregatesFuncs(name) {
   return {
     average: function () {
       let value = 0;
@@ -110,8 +113,9 @@ const aggregatesFuncs = function (name) {
       };
     }
   }[name]();
-};
-export let aggregatesCombinator = function (descriptors) {
+}
+
+export function aggregatesCombinator(descriptors) {
   const functions = descriptors.map(function (descriptor) {
     const fieldAccessor = getter(descriptor.field, true);
     const aggregateName = (descriptor.aggregate || '').toLowerCase();
@@ -130,29 +134,34 @@ export let aggregatesCombinator = function (descriptors) {
       return calc(agg, value);
     }, state);
   };
-};
-export let concat = function (arr, value) {
+}
+
+export function concat(arr, value) {
   arr.push(value);
   return arr;
-};
-export let map = function (transform) {
+}
+
+export function map(transform) {
   return function (reduce) {
     return function (acc, curr, index) {
       return reduce(acc, transform(curr, index));
     };
   };
-};
-export let filter = function (predicate) {
+}
+
+export function filter(predicate) {
   return function (reduce) {
     return function (acc, curr) {
       return predicate(curr) ? reduce(acc, curr) : acc;
     };
   };
-};
-export let isTransformerResult = function (source) {
+}
+
+export function isTransformerResult(source) {
   return isPresent(source.__value);
-};
-const reduced = function (x) {
+}
+
+function reduced(x) {
   if (isTransformerResult(x)) {
     return x;
   }
@@ -160,29 +169,33 @@ const reduced = function (x) {
     __value: x,
     reduced: true
   };
-};
-export let take = function (count) {
+}
+
+export function take(count) {
   return function (reduce) {
     return function (acc, curr) {
       return count-- > 0 ? reduce(acc, curr) : reduced(acc);
     };
   };
-};
-export let takeWhile = function (predicate) {
+}
+
+export function takeWhile(predicate) {
   return function (reduce) {
     return function (acc, curr) {
       return predicate(curr) ? reduce(acc, curr) : reduced(acc);
     };
   };
-};
-export let skip = function (count) {
+}
+
+export function skip(count) {
   return function (reduce) {
     return function (acc, curr) {
       return count-- <= 0 ? reduce(acc, curr) : acc;
     };
   };
-};
-export let exec = function (transform, initialValue, data) {
+}
+
+export function exec(transform, initialValue, data) {
   let result = initialValue;
   for (let idx = 0, length_1 = data.length; idx < length_1; idx++) {
     result = transform(result, data[idx], idx);
@@ -192,4 +205,4 @@ export let exec = function (transform, initialValue, data) {
     }
   }
   return result;
-};
+}

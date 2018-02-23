@@ -13,13 +13,13 @@ import { CalendarComponent } from './calendar.component';
  * ### 代码演示
  *
  * 一个通用的日历面板，支持年/月切换。
- * <!-- example(calendar-basic) -->
+ * <!-- example(tri-demo-calendar-basic) -->
  * 通过  `nzLocale`  配置时区、语言等, 默认支持 en, zh-cn
- * <!-- example(calendar-locale) -->
+ * <!-- example(tri-demo-calendar-locale) -->
  * 用于嵌套在空间有限的容器中。
- * <!-- example(calendar-card) -->
+ * <!-- example(tri-demo-calendar-card) -->
  * 一个复杂的应用示例，用 dateCell 和 monthCell 模板来自定义需要渲染的数据。
- * <!-- example(calendar-content) -->
+ * <!-- example(tri-demo-calendar-content) -->
  */
 @NgModule({
   imports     : [CommonModule, TriSelectModule, TriRadioModule, FormsModule],

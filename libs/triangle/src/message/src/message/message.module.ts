@@ -44,13 +44,13 @@ const providers = [MESSAGE_DEFAULT_CONFIG_PROVIDER];
  * ### 代码演示
  *
  * 信息提醒反馈。
- * <!-- example(message-basic) -->
+ * <!-- example(tri-demo-message-basic) -->
  * 自定义时长  `10s` ，默认时长为  `1.5s` 。
- * <!-- example(message-duration) -->
+ * <!-- example(tri-demo-message-duration) -->
  * 包括成功、失败、警告。
- * <!-- example(message-icon) -->
+ * <!-- example(tri-demo-message-icon) -->
  * 进行全局 loading，异步自行移除。
- * <!-- example(message-loading) -->
+ * <!-- example(tri-demo-message-loading) -->
  */
 @NgModule({
   imports        : [CommonModule, OverlayModule],

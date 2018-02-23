@@ -1,30 +1,39 @@
-export const isPresent = function (value) {
+export function isPresent(value) {
   return value !== null && value !== undefined;
-};
-export const isBlank = function (value) {
+}
+
+export function isBlank(value) {
   return value === null || value === undefined;
-};
-export const isArray = function (value) {
+}
+
+export function isArray(value) {
   return Array.isArray(value);
-};
-export const isFunction = function (value) {
+}
+
+export function isFunction(value) {
   return typeof value === 'function';
-};
-export const isString = function (value) {
+}
+
+export function isString(value) {
   return typeof value === 'string';
-};
-export const isTruthy = function (value) {
+}
+
+export function isTruthy(value) {
   return !!value;
-};
-export const isNullOrEmptyString = function (value) {
+}
+
+export function isNullOrEmptyString(value) {
   return isBlank(value) || value.trim().length === 0;
-};
-export const isNotNullOrEmptyString = function (value) {
+}
+
+export function isNotNullOrEmptyString(value) {
   return !isNullOrEmptyString(value);
-};
-export const isNumeric = function (value) {
+}
+
+export function isNumeric(value) {
   return !isNaN(value - parseFloat(value));
-};
-export const isDate = function (value) {
+}
+
+export function isDate(value) {
   return value && value.getTime;
-};
+}

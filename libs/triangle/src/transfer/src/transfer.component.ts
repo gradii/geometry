@@ -1,6 +1,3 @@
-import { LocaleService } from '@gradii/triangle/locale';
-import { coerceBoolean } from '@gradii/triangle/util';
-// tslint:disable:member-ordering
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -15,6 +12,8 @@ import {
   TemplateRef,
   ViewEncapsulation
 } from '@angular/core';
+import { LocaleService } from '@gradii/triangle/locale';
+import { coerceToBoolean } from '@gradii/triangle/util';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { TransferItem } from './item';
@@ -106,13 +105,14 @@ export class TransferComponent implements OnChanges {
   @Input() itemUnit = this._locale.translate('Transfer.itemUnit');
   @Input() itemsUnit = this._locale.translate('Transfer.itemsUnit');
   @Input() canMove: (arg: TransferCanMove) => Observable<TransferItem[]> = (arg: TransferCanMove) => of(arg.list);
+  // tslint:disable:member-ordering
   @ContentChild('render') render: TemplateRef<void>;
   @ContentChild('footer') footer: TemplateRef<void>;
 
   // search
   @Input()
   set showSearch(value: boolean) {
-    this._showSearch = coerceBoolean(value);
+    this._showSearch = coerceToBoolean(value);
   }
 
   get showSearch(): boolean {
@@ -166,7 +166,7 @@ export class TransferComponent implements OnChanges {
     this.selectionChange.emit({direction, checked, list, item});
   }
 
-  handleFilterChange(ret: { direction: string; value: string }): void {
+  handleFilterChange(ret: { direction: string, value: string }): void {
     this.searchChange.emit(ret);
     this.cd.detectChanges();
   }
@@ -179,8 +179,11 @@ export class TransferComponent implements OnChanges {
   rightActive = false;
 
   private updateOperationStatus(direction: string, count?: number): void {
-    this[direction === 'right' ? 'leftActive' : 'rightActive'] =
-      (typeof count === 'undefined' ? this.getCheckedData(direction).filter(w => !w.disabled).length : count) > 0;
+    this[direction === 'right' ? 'leftActive' : 'rightActive'] = (
+      typeof count === 'undefined' ?
+        this.getCheckedData(direction).filter(w => !w.disabled).length :
+        count
+    ) > 0;
     this.cd.detectChanges();
   }
 
@@ -192,10 +195,11 @@ export class TransferComponent implements OnChanges {
     this.updateOperationStatus(oppositeDirection, 0);
     const datasource = direction === 'left' ? this.rightDataSource : this.leftDataSource;
     const moveList = datasource.filter(item => item.checked === true && !item.disabled);
-    this.canMove({direction, list: moveList}).subscribe(
-      newMoveList => this.truthMoveTo(direction, newMoveList.filter(i => !!i)),
-      () => moveList.forEach(i => (i.checked = false))
-    );
+    this.canMove({direction, list: moveList})
+      .subscribe(
+        newMoveList => this.truthMoveTo(direction, newMoveList.filter(i => !!i)),
+        () => moveList.forEach(i => i.checked = false)
+      );
   }
 
   private truthMoveTo(direction: string, list: TransferItem[]): void {
@@ -219,7 +223,8 @@ export class TransferComponent implements OnChanges {
 
   // endregion
 
-  constructor(private _locale: LocaleService, private el: ElementRef, private cd: ChangeDetectorRef) {}
+  constructor(private _locale: LocaleService, private el: ElementRef, private cd: ChangeDetectorRef) {
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('dataSource' in changes || 'targetKeys' in changes) {

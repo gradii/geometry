@@ -7,9 +7,9 @@ import { Component, OnInit } from '@angular/core';
   selector: 'tri-demo-checkbox-indeterminate',
   template: `
     <div style="border-bottom: 1px solid rgb(233, 233, 233);">
-      <label tri-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" [indeterminate]="indeterminate">
+      <tri-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" [indeterminate]="indeterminate">
         <span>Check all</span>
-      </label>
+      </tri-checkbox>
     </div>
     <br>
     <tri-checkbox-group [(ngModel)]="checkOptionsOne" (ngModelChange)="updateSingleChecked()"></tri-checkbox-group>

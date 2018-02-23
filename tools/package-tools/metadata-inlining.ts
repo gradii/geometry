@@ -1,7 +1,7 @@
-import {readFileSync, writeFileSync} from 'fs';
-import {basename} from 'path';
-import {sync as glob} from 'glob';
-import {join} from 'path';
+import { readFileSync, writeFileSync } from 'fs';
+import { basename } from 'path';
+import { sync as glob } from 'glob';
+import { join } from 'path';
 
 /**
  * Recurse through a parsed metadata.json file and inline all html and css.
@@ -52,6 +52,6 @@ export function inlinePackageMetadataFiles(packagePath: string) {
   glob(join(packagePath, '**/*.metadata.json')).forEach(path => {
     const metadata = JSON.parse(readFileSync(path, 'utf-8'));
     inlineMetadataResources(metadata, componentResources);
-    writeFileSync(path , JSON.stringify(metadata), 'utf-8');
+    writeFileSync(path, JSON.stringify(metadata), 'utf-8');
   });
 }

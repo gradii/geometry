@@ -1,4 +1,4 @@
-import {writeFileSync} from 'fs';
+import { writeFileSync } from 'fs';
 
 // There are no type definitions available for these imports.
 const uglify = require('uglify-js');
@@ -8,7 +8,7 @@ export function uglifyJsFile(inputPath: string, outputPath: string) {
   const sourcemapOut = `${outputPath}.map`;
   const result = uglify.minify(inputPath, {
     outSourceMap: sourcemapOut,
-    output: {
+    output      : {
       comments: 'some'
     }
   });

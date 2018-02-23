@@ -12,19 +12,19 @@ import { ProgressComponent } from './progress.component';
  - 当需要显示一个操作完成的百分比时。
  ### 代码演示
  标准的进度条。
- <!-- example(progress-basic) -->
+ <!-- example(tri-demo-progress-basic) -->
  适合放在较狭窄的区域内。
- <!-- example(progress-line-mini) -->
+ <!-- example(tri-demo-progress-line-mini) -->
  会动的进度条才是好进度条。
- <!-- example(progress-circle-dynamic) -->
+ <!-- example(tri-demo-progress-circle-dynamic) -->
  `format`  属性指定格式。
- <!-- example(progress-format) -->
+ <!-- example(tri-demo-progress-format) -->
  圈形的进度。
- <!-- example(progress-circle) -->
+ <!-- example(tri-demo-progress-circle) -->
  小一号的圈形进度。
- <!-- example(progress-circle-mini) -->
+ <!-- example(tri-demo-progress-circle-mini) -->
  会动的进度条才是好进度条。
- <!-- example(progress-line-dynamic) -->
+ <!-- example(tri-demo-progress-line-dynamic) -->
  */
 @NgModule({
   exports     : [ProgressComponent],

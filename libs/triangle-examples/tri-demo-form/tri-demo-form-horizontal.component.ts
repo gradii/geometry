@@ -119,9 +119,9 @@ import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from
       </div>
       <div tri-form-item tri-row style="margin-bottom:8px;">
         <div tri-form-control tri-col [span]="14" [offset]="6">
-          <label tri-checkbox formControlName="agree">
+          <tri-checkbox formControlName="agree">
             <span>I have read the <a>agreement</a></span>
-          </label>
+          </tri-checkbox>
         </div>
       </div>
       <div tri-form-item tri-row style="margin-bottom:8px;">

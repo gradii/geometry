@@ -1,28 +1,30 @@
-@import '../../triangle/src/core/style/index';
+@import '../../../triangle-ui/scss/mixins';
 
-.icon-wrapper {
-  position: relative;
-  padding: 0px 30px;
-}
+@include exports('tri-demo:silder-icon') {
+  .icon-wrapper {
+    position: relative;
+    padding: 0px 30px;
+  }
 
-.icon-wrapper .anticon {
-  position: absolute;
-  top: -3px;
-  width: 16px;
-  height: 16px;
-  line-height: 1;
-  font-size: 16px;
-  color: $disabled-color;
-}
+  .icon-wrapper .anticon {
+    position: absolute;
+    top: -3px;
+    width: 16px;
+    height: 16px;
+    line-height: 1;
+    font-size: 16px;
+    color: $disabled-color;
+  }
 
-.icon-wrapper .anticon:first-child {
-  left: 0;
-}
+  .icon-wrapper .anticon:first-child {
+    left: 0;
+  }
 
-.icon-wrapper .anticon:last-child {
-  right: 0;
-}
+  .icon-wrapper .anticon:last-child {
+    right: 0;
+  }
 
-.icon-wrapper .anticon.anticon-highlight {
-  color: #666;
+  .icon-wrapper .anticon.anticon-highlight {
+    color: #666;
+  }
 }

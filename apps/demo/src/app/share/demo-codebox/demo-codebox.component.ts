@@ -2,9 +2,9 @@ import { Input, Component, OnInit, ViewEncapsulation, ElementRef, Inject } from 
 import { DOCUMENT } from '@angular/common';
 
 @Component({
-  selector: 'demo-code-box',
+  selector     : 'demo-code-box',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <section class="code-box" [ngClass]="{'expand':expanded}">
       <section class="code-box-demo">
         <div>
@@ -38,7 +38,7 @@ import { DOCUMENT } from '@angular/common';
       </section>
     </section>
   `,
-  styleUrls: ['./demo-codebox.less']
+  styleUrls    : ['./demo-codebox.less']
 })
 export class DemoCodeBoxComponent implements OnInit {
   _code: string;

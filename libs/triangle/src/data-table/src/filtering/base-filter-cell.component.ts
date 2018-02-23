@@ -2,7 +2,7 @@ import { CompositeFilterDescriptor, FilterDescriptor, isCompositeFilterDescripto
 import { isPresent } from '@gradii/triangle/util';
 import { FilterService } from './filter.service';
 
-export const flatten: any = filter => {
+export function flatten(filter) {
   if (isPresent(filter.filters)) {
     return filter.filters.reduce(
       (acc, curr) => acc.concat(isCompositeFilterDescriptor(curr) ? flatten(curr) : [curr]),
@@ -10,7 +10,8 @@ export const flatten: any = filter => {
     );
   }
   return [];
-};
+}
+
 const trimFilterByField = (filter, field) => {
   if (isPresent(filter) && isPresent(filter.filters)) {
     filter.filters = filter.filters.filter(x => {
@@ -24,26 +25,28 @@ const trimFilterByField = (filter, field) => {
   }
 };
 
-export const filtersByField = function (filter, field) {
+export function filtersByField(filter, field) {
   return flatten(filter || {}).filter(function (x) {
     return x.field === field;
   });
-};
+}
 
-export const filterByField = function (filter, field) {
-  var currentFilter = filtersByField(filter, field)[0];
-  return currentFilter;
-};
+export function filterByField(filter, field) {
+  return filtersByField(filter, field)[0];
+}
 
-export const removeFilter = function (filter, field) {
+export function removeFilter(filter, field) {
   trimFilterByField(filter, field);
   return filter;
-};
-export const localizeOperators = operators => localization =>
-  Object.keys(operators).map(key => ({
-    text : localization.get(key),
-    value: operators[key]
-  }));
+}
+
+export function localizeOperators(operators) {
+  return localization =>
+    Object.keys(operators).map(key => ({
+      text : localization.get(key),
+      value: operators[key]
+    }));
+}
 
 export abstract class BaseFilterCellComponent /*implements AfterContentInit, OnDestroy*/ {
   filter: CompositeFilterDescriptor;

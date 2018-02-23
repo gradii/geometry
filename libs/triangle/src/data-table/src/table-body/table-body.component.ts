@@ -69,7 +69,7 @@ import { isChanged } from '../utils';
     </tr>
     <ng-template ngFor
                  [ngForOf]="data"
-                 [ngForTrackBy]="trackByFn"
+                 [ngForTrackBy]="trackByFn()"
                  let-item>
       <tr *ngIf="isGroup(item) && isParentGroupExpanded(item)"
           triGridGroupHeader
@@ -213,20 +213,20 @@ export class TableBodyComponent implements OnChanges {
     this.rowClass = () => null;
   }
 
-  get newDataItem() {
+  get newDataItem(): any {
     return this.editService.newDataItem;
   }
 
-  toggleRow(index, dataItem) {
+  toggleRow(index, dataItem): boolean {
     this.detailsService.toggleRow(index, dataItem);
     return false;
   }
 
-  trackByFn(_, item) {
-    return item.data ? item.data : item;
+  trackByFn(): Function {
+    return (_, item) => item.data ? item.data : item;
   }
 
-  isExpanded(index) {
+  isExpanded(index): boolean {
     return this.detailsService.isExpanded(index);
   }
 

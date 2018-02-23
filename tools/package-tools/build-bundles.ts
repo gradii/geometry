@@ -141,8 +141,8 @@ export class PackageBundler {
 
     const writeOptions = {
       // Keep the moduleId empty because we don't want to force developers to a specific moduleId.
-      amd      : {id: config.moduleId},
-      name     : config.moduleName || 'ali.triangle',
+      amd      : {moduleId: config.moduleId},
+      name     : config.moduleName || 'gd.triangle',
       banner   : buildConfig.licenseBanner,
       format   : config.format,
       file     : config.dest,
@@ -164,7 +164,7 @@ export class PackageBundler {
       // secondary entry-points from the rollup globals because we want the UMD for the
       // primary entry-point to include *all* of the sources for those entry-points.
       if (this.buildPackage.exportsSecondaryEntryPointsAtRoot &&
-        config.moduleName === `ali.tri.${this.buildPackage.name}`) {
+        config.moduleName === `gd.tri.${this.buildPackage.name}`) {
 
         const importRegex = new RegExp(`@gradii/${this.buildPackage.name}/.+`);
         external = external.filter(e => !importRegex.test(e));
@@ -179,7 +179,7 @@ export class PackageBundler {
       bundleOptions.external = external;
     }
 
-    logger.debug('rollup bundle options', bundleOptions);
+    logger.debug("rollup bundle options", bundleOptions);
     return rollup.rollup(bundleOptions).then((bundle: any) => bundle.write(writeOptions));
   }
 

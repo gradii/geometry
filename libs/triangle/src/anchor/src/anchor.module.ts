@@ -1,10 +1,10 @@
-import { SCROLL_SERVICE_PROVIDER } from '@gradii/triangle/core';
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { AnchorLinkComponent } from './anchor-link.component';
-import { AnchorLinkDirective } from './anchor-link.directive';
+import { CommonModule } from '@angular/common';
 
 import { AnchorComponent } from './anchor.component';
+import { AnchorLinkComponent } from './anchor-link.component';
+import { SCROLL_SERVICE_PROVIDER } from '@gradii/triangle/core';
+import { AnchorLinkDirective } from './anchor-link.directive';
 
 /**
  *
@@ -15,9 +15,9 @@ import { AnchorComponent } from './anchor.component';
  * ### 代码演示
  *
  * 需要配合  `tri-affix`  使用。
- * <!-- example(anchor-fixed) -->
+ * <!-- example(tri-demo-anchor-fixed) -->
  * 最简单的用法。
- * <!-- example(anchor-basic) -->
+ * <!-- example(tri-demo-anchor-basic) -->
  */
 @NgModule({
   declarations: [AnchorComponent, AnchorLinkComponent, AnchorLinkDirective],

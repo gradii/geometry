@@ -5,7 +5,7 @@ import { CheckableTagComponent } from './checkable-tag.component';
 import { TagComponent } from './tag.component';
 
 /**
- *
+ * tag
  */
 @NgModule({
   imports     : [CommonModule, FormsModule],

@@ -781,19 +781,19 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     this.editService.addRow(group);
   }
 
-  //todo
+  // todo
   editCell(rowIndex, column, group) {
     var instance = this.columnInstance(column);
     this.editService.editRow(rowIndex, group);
     //    this.focusEditElement('.ant-grid-edit-cell');
   }
 
-  //todo
+  // todo
   closeCell() {
     this.editService.close();
   }
 
-  //todo
+  // todo
   cancelCell() {
     this.editService.close();
   }

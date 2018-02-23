@@ -21,9 +21,9 @@ import { Component, OnInit } from '@angular/core';
               <i class="anticon anticon-filter" tri-dropdown></i>
               <ul tri-menu>
                 <li tri-menu-item *ngFor="let filter of filterNameArray">
-                  <label tri-checkbox [(ngModel)]="filter.value">
+                  <tri-checkbox [(ngModel)]="filter.value">
                     <span>{{filter.name}}</span>
-                  </label>
+                  </tri-checkbox>
                 </li>
               </ul>
               <div tri-table-filter>
@@ -43,9 +43,9 @@ import { Component, OnInit } from '@angular/core';
               <i class="anticon anticon-filter" tri-dropdown></i>
               <ul tri-menu>
                 <li tri-menu-item *ngFor="let filter of filterAddressArray">
-                  <label tri-checkbox [(ngModel)]="filter.value">
+                  <tri-checkbox [(ngModel)]="filter.value">
                     <span>{{filter.name}}</span>
-                  </label>
+                  </tri-checkbox>
                 </li>
               </ul>
               <div tri-table-filter>

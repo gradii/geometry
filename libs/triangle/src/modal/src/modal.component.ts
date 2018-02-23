@@ -473,7 +473,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.visible = false;
   }
 
-  clickOk(e): void {
+  clickOk(e: MouseEvent): void {
     if (this.onOk) {
       this.onOk.emit(e);
     } else {
@@ -482,7 +482,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subject.next('onOk');
   }
 
-  clickCancel(e): void {
+  clickCancel(e: MouseEvent): void {
     this.onCancel.emit(e);
     this.subject.next('onCancel');
   }

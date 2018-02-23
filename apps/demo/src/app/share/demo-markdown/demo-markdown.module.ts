@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { DemoMarkdownComponent } from './demo-markdown.component';
 
 @NgModule({
-  imports: [CommonModule],
+  imports     : [CommonModule],
   declarations: [DemoMarkdownComponent],
-  exports: [DemoMarkdownComponent]
+  exports     : [DemoMarkdownComponent]
 })
 export class DemoMarkdownModule {}

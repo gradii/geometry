@@ -1,0 +1,8 @@
+<!-- TODO: change the template to be plunker icon -->
+<tri-tooltip [title]="isDisabled ? 'Building Plunker example...' : 'Edit in Plunker'">
+  <button tri-tooltip nz-button type="button"
+          (click)="openPlunker()"
+          [disabled]="isDisabled">
+    <i class="anticon anticon-link"></i>
+  </button>
+</tri-tooltip>

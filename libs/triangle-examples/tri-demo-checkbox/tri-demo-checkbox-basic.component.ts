@@ -6,9 +6,9 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'tri-demo-checkbox-basic',
   template: `
-    <label tri-checkbox [(ngModel)]="_checked" (ngModelChange)="_console($event)">
+    <tri-checkbox [(ngModel)]="_checked" (ngModelChange)="_console($event)">
       <span>Checkbox</span>
-    </label>`,
+    </tri-checkbox>`,
   styles: []
 })
 export class TriDemoCheckboxBasicComponent implements OnInit {

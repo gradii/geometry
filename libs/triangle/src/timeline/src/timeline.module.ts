@@ -15,13 +15,13 @@ import { TimelineComponent } from './timeline.component';
  * ### 代码演示
  *
  * Timeline基础用法。
- * <!-- example(timeline-basic) -->
+ * <!-- example(tri-demo-timeline-basic) -->
  * 圆圈颜色，绿色用于已完成、成功状态，红色表示告警或错误状态，蓝色可表示正在进行或其他默认状态。
- * <!-- example(timeline-color) -->
+ * <!-- example(tri-demo-timeline-color) -->
  *
- * <!-- example(timeline-pending) -->
+ * <!-- example(tri-demo-timeline-pending) -->
  * 可以通过 ` ng-template ` 和 ` #custom ` 设置自定义元素。
- * <!-- example(timeline-custom) -->
+ * <!-- example(tri-demo-timeline-custom) -->
  */
 @NgModule({
   declarations: [TimelineItemComponent, TimelineComponent],

@@ -16,11 +16,11 @@ import { BackTopComponent } from './back-top.component';
  * ### 代码演示
  *
  * 最简单的用法。
- * <!-- example(back-top-basic) -->
+ * <!-- example(tri-demo-back-top-basic) -->
  * 可以自定义回到顶部按钮的样式，限制宽高： `40px * 40px` 。
- * <!-- example(back-top-custom) -->
+ * <!-- example(tri-demo-back-top-custom) -->
  * 设置  `[nzTarget]`  参数，允许对某个容器返回顶部。
- * <!-- example(back-top-target) -->
+ * <!-- example(tri-demo-back-top-target) -->
  */
 @NgModule({
   declarations: [BackTopComponent],

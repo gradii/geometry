@@ -3,9 +3,8 @@ import { FooterTemplateDirective } from '../table-footer/footer-template.directi
 import { HeaderTemplateDirective } from '../table-header/header-template.directive';
 
 export const isSpanColumn = column => column.isSpanColumn;
-export const isCheckboxColumn = function (column) {
-  return column.isCheckboxColumn;
-};
+
+export function isCheckboxColumn(column) { return column.isCheckboxColumn; };
 const isColumnContainer = column => column.isColumnGroup || isSpanColumn(column);
 export type AutoGenerateColumnPositon = 'start' | 'middle' | 'end';
 
@@ -21,20 +20,16 @@ export class ColumnBase {
   @Input() locked: boolean;
   @Input() hidden: boolean;
   @Input() media: string;
-  @Input()
-  style: {
+  @Input() style: {
     [key: string]: string;
   };
-  @Input()
-  headerStyle: {
+  @Input() headerStyle: {
     [key: string]: string;
   };
-  @Input()
-  footerStyle: {
+  @Input() footerStyle: {
     [key: string]: string;
   };
-  @Input('class')
-  cssClass: | string
+  @Input('class') cssClass: | string
     | string[]
     | Set<string>
     | {
@@ -56,7 +51,8 @@ export class ColumnBase {
   };
   @ContentChildren(HeaderTemplateDirective, {descendants: false})
   headerTemplates: QueryList<HeaderTemplateDirective>;
-  @ContentChildren(FooterTemplateDirective) footerTemplate: FooterTemplateDirective;
+  @ContentChildren(FooterTemplateDirective)
+  footerTemplate: FooterTemplateDirective;
   private _width;
 
   constructor(public parent?: ColumnBase) {

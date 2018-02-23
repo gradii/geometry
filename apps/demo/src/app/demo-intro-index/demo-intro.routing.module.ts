@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { DemoIntroComponent } from './demo-intro.component';
 
 @NgModule({
-  imports: [RouterModule.forChild([{ path: '', component: DemoIntroComponent }])],
+  imports: [RouterModule.forChild([{path: '', component: DemoIntroComponent}])],
   exports: [RouterModule]
 })
 export class DemoIntroRoutingModule {}

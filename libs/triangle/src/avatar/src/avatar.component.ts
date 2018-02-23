@@ -37,7 +37,7 @@ export class AvatarComponent implements OnChanges {
   /**
    * The shape of avatar `circle`   `square`
    * 指定头像的形状 `circle`   `square`
-   * @default circle
+   * @default 'circle'
    */
   @Input() shape: AvatarShape = 'circle';
 

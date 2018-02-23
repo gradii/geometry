@@ -38,7 +38,7 @@ export class TabComponent implements OnDestroy, OnInit {
   /**
    * #nzTabHeading
    */
-  @ContentChild('nzTabHeading') _tabHeading: TemplateRef<any>;
+  @ContentChild('tabHeadingTemplate') _tabHeading: TemplateRef<any>;
   @HostBinding('class.ant-tabs-tabpane') _nzTabsTabpane = true;
   @ViewChild(TemplateRef) _content: TemplateRef<any>;
 

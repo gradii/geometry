@@ -1,14 +1,25 @@
-import { ScrollService } from '@gradii/triangle/core';
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { fromEvent } from 'rxjs/observable/fromEvent';
-import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
-import { throttleTime } from 'rxjs/operators/throttleTime';
 import { Subscription } from 'rxjs/Subscription';
+import { throttleTime } from 'rxjs/operators/throttleTime';
+import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
+
+import { ScrollService } from '@gradii/triangle/core';
 
 @Component({
-  selector     : 'tri-affix',
+  selector: 'tri-affix',
   encapsulation: ViewEncapsulation.None,
-  template     : `
+  template: `
     <div #wrap>
       <ng-content></ng-content>
     </div>`
@@ -61,7 +72,7 @@ export class AffixComponent implements OnInit, OnDestroy {
   private reCalculate() {
     const elOffset = this.scrollSrv.getOffset(this._el.nativeElement);
     this.orgOffset = {
-      top : elOffset.top + this.scrollSrv.getScroll(this.getTarget()),
+      top: elOffset.top + this.scrollSrv.getScroll(this.getTarget()),
       left: elOffset.left + this.scrollSrv.getScroll(this.getTarget(), false)
     };
 

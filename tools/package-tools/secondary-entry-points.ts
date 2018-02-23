@@ -1,8 +1,8 @@
-import {join} from 'path';
-import {readdirSync, lstatSync, existsSync} from 'fs';
-import {spawnSync} from 'child_process';
-import {BuildPackage} from './build-package';
-import {platform} from 'os';
+import { join } from 'path';
+import { readdirSync, lstatSync, existsSync } from 'fs';
+import { spawnSync } from 'child_process';
+import { BuildPackage } from './build-package';
+import { platform } from 'os';
 
 
 /**

@@ -1,9 +1,9 @@
-import {join, resolve as resolvePath} from 'path';
-import {spawn} from 'child_process';
-import {writeFileSync, readFileSync} from 'fs';
-import {sync as glob} from 'glob';
-import {BuildPackage} from './build-package';
-import {existsSync} from 'fs';
+import { join, resolve as resolvePath } from 'path';
+import { spawn } from 'child_process';
+import { writeFileSync, readFileSync } from 'fs';
+import { sync as glob } from 'glob';
+import { BuildPackage } from './build-package';
+import { existsSync } from 'fs';
 
 const red = require('chalk').red;
 

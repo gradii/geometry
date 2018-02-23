@@ -1,0 +1,13 @@
+<div class="docs-primary-header">
+  <h1>{{guide.name}}</h1>
+</div>
+
+<div class="main-wrapper">
+  <div class="docs-guide-toc-and-content">
+    <doc-viewer class="docs-guide-content"
+                (contentLoaded)="toc.updateScrollPosition()"
+                [documentUrl]="guide.document"></doc-viewer>
+    <table-of-contents #toc></table-of-contents>
+  </div>
+</div>
+

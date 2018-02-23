@@ -1,4 +1,4 @@
-import {Logger, transports} from 'winston';
+import { Logger, transports } from 'winston';
 
 const env = process.env.NODE_ENV || 'development';
 

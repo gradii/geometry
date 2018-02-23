@@ -4,9 +4,9 @@ import { Title } from '@angular/platform-browser';
 import { ROUTER_LIST } from './router';
 
 @Component({
-  selector: 'app-root',
+  selector     : 'app-root',
   encapsulation: ViewEncapsulation.None,
-  templateUrl: './app.component.html'
+  templateUrl  : './app.component.html'
   // styleUrls    : [
   //  './style/index.scss',
   // ]

@@ -85,13 +85,13 @@ export class DemoDataTableBasicEditComponent implements OnInit {
     this.editService.read();
   }
 
-  protected addHandler({ sender }) {
+  protected addHandler({sender}) {
     this.closeEditor(sender);
 
     sender.addRow(new Product());
   }
 
-  protected editHandler({ sender, rowIndex, dataItem }) {
+  protected editHandler({sender, rowIndex, dataItem}) {
     this.closeEditor(sender);
 
     this.editedRowIndex = rowIndex;
@@ -100,7 +100,7 @@ export class DemoDataTableBasicEditComponent implements OnInit {
     sender.editRow(rowIndex);
   }
 
-  protected cancelHandler({ sender, rowIndex }) {
+  protected cancelHandler({sender, rowIndex}) {
     this.closeEditor(sender, rowIndex);
   }
 
@@ -111,7 +111,7 @@ export class DemoDataTableBasicEditComponent implements OnInit {
     this.editedProduct = undefined;
   }
 
-  protected saveHandler({ sender, rowIndex, dataItem, isNew }) {
+  protected saveHandler({sender, rowIndex, dataItem, isNew}) {
     this.editService.save(dataItem, isNew);
 
     sender.closeRow(rowIndex);
@@ -120,7 +120,7 @@ export class DemoDataTableBasicEditComponent implements OnInit {
     this.editedProduct = undefined;
   }
 
-  protected removeHandler({ dataItem }) {
+  protected removeHandler({dataItem}) {
     this.editService.remove(dataItem);
   }
 }

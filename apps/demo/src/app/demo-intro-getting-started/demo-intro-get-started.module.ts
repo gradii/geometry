@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { DemoIntroGetStartedRoutingModule } from './demo-intro-get-started.routing.module';
 
 @NgModule({
-  imports: [CommonModule, DemoHighlightModule, DemoIntroGetStartedRoutingModule, DemoMarkdownModule],
+  imports     : [CommonModule, DemoHighlightModule, DemoIntroGetStartedRoutingModule, DemoMarkdownModule],
   declarations: [DemoIntroGetStartedComponent]
 })
 export class DemoIntroGetStartedModule {}

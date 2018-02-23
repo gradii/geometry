@@ -30,9 +30,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
                 </div>
                 <div tri-form-item>
                   <div tri-form-control>
-                    <label tri-checkbox formControlName="remember">
+                    <tri-checkbox formControlName="remember">
                       <span>Remember me</span>
-                    </label>
+                    </tri-checkbox>
                     <a class="login-form-forgot" class="login-form-forgot">Forgot password</a>
                     <button tri-button class="login-form-button" [type]="'primary'" [size]="'large'">Log in</button>
                     Or

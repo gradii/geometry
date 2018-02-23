@@ -17,15 +17,15 @@ export const NZ_COLLAPSE_DIRECTIVES: Array<any> = [CollapsesetComponent, Collaps
  * ### 代码演示
  *
  * 可以同时展开多个面板，这个例子默认展开了第一个。
- * <!-- example(collapse-basic) -->
+ * <!-- example(tri-demo-collapse-basic) -->
  * 手风琴，每次只打开一个tab。默认打开第一个。
- * <!-- example(collapse-accordion) -->
+ * <!-- example(tri-demo-collapse-accordion) -->
  * 嵌套折叠面板。
- * <!-- example(collapse-nest) -->
+ * <!-- example(tri-demo-collapse-nest) -->
  * 一套没有边框的简洁样式。
- * <!-- example(collapse-border) -->
+ * <!-- example(tri-demo-collapse-border) -->
  * 自定义各个面板的背景色、圆角和边距。
- * <!-- example(collapse-custom) -->
+ * <!-- example(tri-demo-collapse-custom) -->
  */
 @NgModule({
   declarations: NZ_COLLAPSE_DIRECTIVES,

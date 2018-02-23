@@ -15,15 +15,15 @@ import { CheckboxComponent } from './checkbox.component';
  * ### 代码演示
  *
  * 简单的checkbox
- * <!-- example(checkbox-basic) -->
+ * <!-- example(tri-demo-checkbox-basic) -->
  * 联动 checkbox。
- * <!-- example(checkbox-controller) -->
+ * <!-- example(tri-demo-checkbox-controller) -->
  * 在实现全选效果时，你可能会用到  `nzIndeterminate`  属性。
- * <!-- example(checkbox-indeterminate) -->
+ * <!-- example(tri-demo-checkbox-indeterminate) -->
  * checkbox不可用
- * <!-- example(checkbox-disabled) -->
+ * <!-- example(tri-demo-checkbox-disabled) -->
  * 方便的从数组生成 Checkbox 组。
- * <!-- example(checkbox-group) -->
+ * <!-- example(tri-demo-checkbox-group) -->
  */
 @NgModule({
   imports     : [CommonModule, FormsModule],

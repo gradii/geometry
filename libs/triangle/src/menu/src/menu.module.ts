@@ -18,19 +18,19 @@ import { SubMenuComponent } from './submenu.component';
  * ### 代码演示
  *
  * 水平的顶部导航菜单。
- * <!-- example(menu-basic) -->
+ * <!-- example(tri-demo-menu-basic) -->
  * 垂直菜单，子菜单内嵌在菜单区域。
- * <!-- example(menu-inline) -->
+ * <!-- example(tri-demo-menu-inline) -->
  * 内嵌菜单可以被缩起/展开。
- * <!-- example(menu-collapsed) -->
+ * <!-- example(tri-demo-menu-collapsed) -->
  * 控制菜单开合，点击菜单，收起其他展开的所有菜单，保持菜单聚焦简洁。
- * <!-- example(menu-expand) -->
+ * <!-- example(tri-demo-menu-expand) -->
  * 子菜单是弹出的形式。
- * <!-- example(menu-vertical) -->
+ * <!-- example(tri-demo-menu-vertical) -->
  * 内建了两套主题  `light|dark` 默认  `light`
- * <!-- example(menu-theme) -->
+ * <!-- example(tri-demo-menu-theme) -->
  * 展示动态切换模式。
- * <!-- example(menu-dynamic) -->
+ * <!-- example(tri-demo-menu-dynamic) -->
  */
 @NgModule({
   imports     : [CommonModule, FormsModule, TriButtonModule],

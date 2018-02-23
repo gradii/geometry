@@ -18,21 +18,21 @@ import { DropDownDirective } from './dropdown.directive';
  * ### 代码演示
  *
  * 最简单的下拉菜单。
- * <!-- example(drop-down-basic) -->
+ * <!-- example(tri-demo-drop-down-basic) -->
  * 分割线和不可用菜单项。
- * <!-- example(drop-down-other) -->
+ * <!-- example(tri-demo-drop-down-other) -->
  * 点击菜单项后会触发事件。
- * <!-- example(drop-down-trigger) -->
+ * <!-- example(tri-demo-drop-down-trigger) -->
  * 传入的菜单里有多个层级。
- * <!-- example(drop-down-cascading) -->
+ * <!-- example(tri-demo-drop-down-cascading) -->
  * 支持 6 个弹出位置。
- * <!-- example(drop-down-position) -->
+ * <!-- example(tri-demo-drop-down-position) -->
  * 默认是移入触发菜单，可以点击触发。
- * <!-- example(drop-down-click) -->
+ * <!-- example(tri-demo-drop-down-click) -->
  * 左边是按钮，右边是额外的相关功能菜单。
- * <!-- example(drop-down-button) -->
+ * <!-- example(tri-demo-drop-down-button) -->
  * 默认是点击关闭菜单，可以关闭此功能。
- * <!-- example(drop-down-hide) -->
+ * <!-- example(tri-demo-drop-down-hide) -->
  */
 @NgModule({
   imports     : [CommonModule, OverlayModule, FormsModule, TriButtonModule, TriMenuModule],

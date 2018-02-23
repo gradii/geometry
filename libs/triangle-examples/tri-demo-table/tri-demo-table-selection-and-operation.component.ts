@@ -10,31 +10,32 @@ import { Component, OnInit } from '@angular/core';
       <button tri-button [disabled]="_disabledButton" [type]="'primary'" [loading]="_operating" (click)="_operateData()">Operating</button>
       <span style="margin-left: 8px;" *ngIf="_checkedNumber">Selected {{_checkedNumber}} items</span>
     </div>
-    <tri-table #table [dataSource]="_dataSet" [pageSize]="10" (dataChange)="_displayDataChange($event)" (pageIndexChange)="_refreshStatus()" (pageSizeChange)="_refreshStatus()">
+    <tri-table #table [dataSource]="_dataSet" [pageSize]="10" (dataChange)="_displayDataChange($event)" (pageIndexChange)="_refreshStatus()"
+               (pageSizeChange)="_refreshStatus()">
       <thead tri-thead>
-        <tr>
-          <th tri-th [checkbox]="true">
-            <label tri-checkbox [(ngModel)]="_allChecked" [indeterminate]="_indeterminate" (ngModelChange)="_checkAll($event)">
-            </label>
-          </th>
-          <th tri-th><span>Name</span></th>
-          <th tri-th><span>Age</span></th>
-          <th tri-th><span>Address</span></th>
-        </tr>
+      <tr>
+        <th tri-th [checkbox]="true">
+          <tri-checkbox [(ngModel)]="_allChecked" [indeterminate]="_indeterminate" (ngModelChange)="_checkAll($event)">
+          </tri-checkbox>
+        </th>
+        <th tri-th><span>Name</span></th>
+        <th tri-th><span>Age</span></th>
+        <th tri-th><span>Address</span></th>
+      </tr>
       </thead>
       <tbody tri-tbody>
-        <tr tri-tbody-tr *ngFor="let data of table.data">
-          <td tri-td [checkbox]="true">
-            <label tri-checkbox [(ngModel)]="data.checked" (ngModelChange)="_refreshStatus($event)">
-            </label>
-          </td>
-          <td tri-td>{{data.name}}</td>
-          <td tri-td>{{data.age}}</td>
-          <td tri-td>{{data.address}}</td>
-        </tr>
+      <tr tri-tbody-tr *ngFor="let data of table.data">
+        <td tri-td [checkbox]="true">
+          <tri-checkbox [(ngModel)]="data.checked" (ngModelChange)="_refreshStatus($event)">
+          </tri-checkbox>
+        </td>
+        <td tri-td>{{data.name}}</td>
+        <td tri-td>{{data.age}}</td>
+        <td tri-td>{{data.address}}</td>
+      </tr>
       </tbody>
     </tri-table>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoTableSelectionAndOperationComponent implements OnInit {
   _allChecked = false;
@@ -81,9 +82,9 @@ export class TriDemoTableSelectionAndOperationComponent implements OnInit {
   ngOnInit() {
     for (let i = 0; i < 46; i++) {
       this._dataSet.push({
-        key: i,
-        name: `Edward King ${i}`,
-        age: 32,
+        key    : i,
+        name   : `Edward King ${i}`,
+        age    : 32,
         address: `London, Park Lane no. ${i}`
       });
     }

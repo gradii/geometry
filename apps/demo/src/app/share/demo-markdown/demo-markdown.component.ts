@@ -4,9 +4,9 @@ import * as marked from 'marked';
 import * as HighLight from 'highlight.js';
 
 @Component({
-  selector: 'demo-markdown',
+  selector     : 'demo-markdown',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <article class="markdown" [innerHTML]="_parsedHTML"></article>
   `
 })

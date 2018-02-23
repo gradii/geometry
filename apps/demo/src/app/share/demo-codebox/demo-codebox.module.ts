@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TriangleBundleModule } from '@gradii/triangle-examples';
+import { TriangleModule } from '@gradii/triangle-examples';
 import { DemoCodeBoxComponent } from './demo-codebox.component';
 import { DemoHighlightModule } from '../demo-highlight/demo-highlight.module';
 
 @NgModule({
-  imports: [CommonModule, DemoHighlightModule, TriangleBundleModule],
+  imports     : [CommonModule, DemoHighlightModule, TriangleModule],
   declarations: [DemoCodeBoxComponent],
-  exports: [DemoCodeBoxComponent]
+  exports     : [DemoCodeBoxComponent]
 })
 export class DemoCodeBoxModule {}

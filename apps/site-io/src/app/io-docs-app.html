@@ -1,0 +1,56 @@
+<tri-layout>
+  <tri-header>
+    <header id="header" class="clearfix">
+      <div tri-row type="flex">
+        <div tri-col [xs]="'24'" [sm]="'8'" [md]="'8'" [lg]="'4'">
+          <a id="logo" href>
+            <img alt="logo" src="./assets/img/zorro.svg">
+            <span>Triangle</span>
+          </a>
+        </div>
+        <div tri-col [xs]="'0'" [sm]="'16'" [md]="'16'" [lg]="'20'" class="nav nav-hide">
+          <div id="search-box">
+            <tri-select [placeHolder]="'搜索组件...'" [mode]="'combobox'" [(ngModel)]="searchComponent"
+                        (ngModelChange)="navigateToPage($event)">
+              <tri-option [value]="'components/' + component.id" [label]="component.name"
+                          *ngFor="let component of componentList"></tri-option>
+            </tri-select>
+          </div>
+          <ul tri-menu [mode]="'horizontal'" id="nav">
+            <li tri-menu-item [selected]="true">
+              <a routerLink="/docs/angular/introduce"><span>组件</span></a>
+            </li>
+            <!--<li nz-menu-item>-->
+            <!--<theme-picker></theme-picker>-->
+            <!--</li>-->
+          </ul>
+        </div>
+      </div>
+    </header>
+  </tri-header>
+  <tri-layout class="docs-content">
+    <tri-sider>
+      <ul tri-menu theme="dark" #sidenav
+          [mode]="isScreenSmall() ? 'vertical' : 'inline'">
+        <!--[inlineCollapsed]="isScreenSmall()"-->
+        <li tri-submenu *ngFor="let category of docItems.getItemsInCategories()">
+          <span title>{{category.name}}</span>
+          <ul>
+            <li tri-menu-item *ngFor="let component of category.items">
+              <a [routerLink]="['/components/', component.id]"
+                 routerLinkActive="docs-component-viewer-sidenav-item-selected">
+                {{component.name}}
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </tri-sider>
+    <tri-content>
+      <router-outlet></router-outlet>
+    </tri-content>
+  </tri-layout>
+  <tri-footer>
+    <app-footer></app-footer>
+  </tri-footer>
+</tri-layout>

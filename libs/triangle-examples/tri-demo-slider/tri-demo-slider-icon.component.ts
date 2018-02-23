@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 /**
  * @title slider-icon
- * styleUrls: [ './tri-demo-slider-icon.scss' ]
+ *
+ * @description styleUrls: [ './tri-demo-slider-icon.scss' ]
  */
 @Component({
   selector: 'tri-demo-slider-icon',

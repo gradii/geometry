@@ -1,0 +1,17 @@
+<ul tri-menu [mode]="'horizontal'">
+  <li tri-menu-item
+      *ngFor="let section of ['Overview', 'API', 'Examples']"
+  >
+    <a class="docs-component-viewer-section-tab"
+       [routerLink]="section.toLowerCase()"
+       (select)="router.router.navigate(section)"
+       routerLinkActive #rla="routerLinkActive"
+    >
+      {{section}}
+    </a>
+  </li>
+</ul>
+
+<div class="docs-component-viewer-content">
+  <router-outlet></router-outlet>
+</div>

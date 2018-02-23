@@ -11,19 +11,19 @@ import { BadgeComponent } from './badge.component';
  * ### 代码演示
  *
  * 简单的徽章展示。
- * <!-- example(badge-basic) -->
+ * <!-- example(tri-demo-badge-basic) -->
  * 超过  `nzOverflowCount`  的会显示为  `{{ '${nzOverflowCount}+' }}` 。
- * <!-- example(badge-my-ceil) -->
+ * <!-- example(tri-demo-badge-my-ceil) -->
  * 没有具体的数字。
- * <!-- example(badge-dot) -->
+ * <!-- example(tri-demo-badge-dot) -->
  * 用于表示状态的小圆点。
- * <!-- example(badge-status) -->
+ * <!-- example(tri-demo-badge-status) -->
  * 不包裹任何元素即是独立使用，可自定样式展现。
- * <!-- example(badge-stand-alones) -->
+ * <!-- example(tri-demo-badge-stand-alones) -->
  * 用 a 标签进行包裹即可
- * <!-- example(badge-click-able) -->
+ * <!-- example(tri-demo-badge-click-able) -->
  * 展示动态变化的效果。
- * <!-- example(badge-animate) -->
+ * <!-- example(tri-demo-badge-animate) -->
  */
 @NgModule({
   declarations: [BadgeComponent],

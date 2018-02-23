@@ -1,5 +1,5 @@
-import {BuildPackage, buildConfig} from 'material2-build-tools';
-import {join} from 'path';
+import { BuildPackage, buildConfig } from 'material2-build-tools';
+import { join } from 'path';
 
 export const trianglePackage = new BuildPackage('triangle');
 

@@ -17,7 +17,7 @@ export class LocaleService {
    * TODO: cache more deeply paths for performance
    */
   translate(path: string, data?: any) {
-    this._logger.debug(`[NzLocaleService] Translating(${this._locale.locale}): ${path}`);
+    this._logger.debug(`[LocaleService] Translating(${this._locale.locale}): ${path}`);
     let content = this._getObjectPath(this._locale, path);
     if (typeof content === 'string') {
       if (data) {

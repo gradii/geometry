@@ -1,7 +1,7 @@
 import { expr } from '../accessor';
-import { isFunction, isPresent } from '../utils';
+import { isPresent, isFunction } from '../utils';
 import { isCompositeFilterDescriptor } from './filter-descriptor.interface';
-import { normalizeFilters, operators } from './filter.operators';
+import { operators, normalizeFilters } from './filter.operators';
 
 const logic = {and: ' && ', or: ' || '};
 const fieldProp = function (field, fieldFunctions) {
@@ -70,8 +70,9 @@ const factory = (function () {
     }
   };
 })();
-export let filterExpr = factory.filterExpr;
-export let compileFilter = function (descriptor) {
+export const filterExpr = factory.filterExpr;
+
+export function compileFilter(descriptor) {
   if (!descriptor || descriptor.filters.length === 0) {
     return function () {
       return true;
@@ -85,10 +86,11 @@ export let compileFilter = function (descriptor) {
     : function (d) {
       return predicate(d, expr.fields, expr.operators);
     };
-};
-export let filterBy = function (data, descriptor) {
+}
+
+export function filterBy(data, descriptor) {
   if (!isPresent(descriptor) || (isCompositeFilterDescriptor(descriptor) && descriptor.filters.length === 0)) {
     return data;
   }
   return data.filter(compileFilter(normalizeFilters(descriptor)));
-};
+}

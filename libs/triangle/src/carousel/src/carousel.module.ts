@@ -16,13 +16,13 @@ import { CarouselComponent } from './carousel.component';
  * ### 代码演示
  *
  * 最简单的用法。
- * <!-- example(carousel-basic) -->
+ * <!-- example(tri-demo-carousel-basic) -->
  * 切换效果为渐显。
- * <!-- example(carousel-fade) -->
+ * <!-- example(tri-demo-carousel-fade) -->
  * 垂直显示。
- * <!-- example(carousel-vertical) -->
+ * <!-- example(tri-demo-carousel-vertical) -->
  * 定时切换下一张。
- * <!-- example(carousel-auto) -->
+ * <!-- example(tri-demo-carousel-auto) -->
  */
 @NgModule({
   declarations: [CarouselComponent, CarouselContentDirective, CarouselSlickListDirective, CarouselSlickTrackDirective],

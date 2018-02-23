@@ -1,11 +1,22 @@
-import { AfterViewInit, Component, HostBinding, Input, OnChanges, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ViewEncapsulation,
+  HostBinding,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  AfterViewInit
+} from '@angular/core';
+import { SubMenuComponent } from './submenu.component';
+import { MenuItemComponent } from './menu-item.component';
 
 export type Mode = 'vertical' | 'horizontal' | 'inline';
 
 @Component({
-  selector     : '[tri-menu]',
-  encapsulation: ViewEncapsulation.None,
-  template     : `
+  selector           : '[tri-menu]',
+  preserveWhitespaces: false,
+  encapsulation      : ViewEncapsulation.None,
+  template           : `
     <ng-content></ng-content>`
 })
 export class MenuComponent implements OnChanges, AfterViewInit {
@@ -14,16 +25,16 @@ export class MenuComponent implements OnChanges, AfterViewInit {
   /** set when in dropdown component */
   isInDropDown = false;
   /** collection of menu item */
-  menuItems = [];
+  menuItems: MenuItemComponent[] = [];
   /** collection of sub menu */
-  subMenus = [];
+  subMenus: SubMenuComponent[] = [];
   /** view init flat */
   isInit = false;
   /** temporary mode */
   _tempMode: Mode;
   /** opened index of array */
   _subMenusOpenIndex = [];
-  /** nzInlineCollapsed */
+  /** inlineCollapsed */
   _inlineCollapsed = false;
 
   @Input() mode: Mode = 'vertical';
@@ -144,7 +155,7 @@ export class MenuComponent implements OnChanges, AfterViewInit {
 
   /** trigger when menu item clicked */
   clearAllSelected() {
-    this.menuItems.forEach(menu => (menu.nzSelected = false));
+    this.menuItems.forEach(menu => (menu.selected = false));
   }
 
   hideSubMenus() {
@@ -158,7 +169,7 @@ export class MenuComponent implements OnChanges, AfterViewInit {
   }
 
   reductionSubMenus() {
-    this._subMenusOpenIndex.forEach(i => (this.subMenus[i].nzOpen = true));
+    this._subMenusOpenIndex.forEach(i => (this.subMenus[i].open = true));
     this._subMenusOpenIndex = [];
   }
 

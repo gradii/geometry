@@ -52,9 +52,9 @@ export class RandomUserService {
             <i class="anticon anticon-filter" tri-dropdown></i>
             <ul tri-menu>
               <li tri-menu-item *ngFor="let filter of _filterGender">
-                <label tri-checkbox [(ngModel)]="filter.value">
+                <tri-checkbox [(ngModel)]="filter.value">
                   <span>{{filter.name}}</span>
-                </label>
+                </tri-checkbox>
               </li>
             </ul>
             <div tri-table-filter>

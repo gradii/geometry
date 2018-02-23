@@ -1,23 +1,25 @@
-import { Reducer } from '../common.interfaces';
-import { filterBy } from '../filtering/filter-expression.factory';
-import { exec, groupCombinator, map } from '../transducers';
+import { exec, map, groupCombinator } from '../transducers';
 import { isArray, isPresent } from '../utils';
 import { aggregateBy } from './aggregate.operators';
+import { filterBy } from '../filtering/filter-expression.factory';
 import { GroupDescriptor, GroupResult } from './group-descriptor.interface';
+import { Reducer } from '../common.interfaces';
 
-export const normalizeGroups = function (descriptors) {
+export function normalizeGroups(descriptors) {
   descriptors = isArray(descriptors) ? descriptors : [descriptors];
   return descriptors.map(function (x) {
     return Object.assign({dir: 'asc'}, x);
   });
-};
+}
+
 const identity = map(function (x) {
   return x;
 });
-export let groupBy = function <T>(data: T[],
-                                  descriptors?: GroupDescriptor[],
-                                  transformers?: Reducer,
-                                  originalData?: T[]): GroupResult[] | T[] {
+
+export function groupBy<T>(data: T[],
+                           descriptors?: GroupDescriptor[],
+                           transformers?: Reducer,
+                           originalData?: T[]): GroupResult[] | T[] {
   if (descriptors === void 0) {
     descriptors = [];
   }
@@ -59,4 +61,4 @@ export let groupBy = function <T>(data: T[],
     });
   });
   return result;
-};
+}

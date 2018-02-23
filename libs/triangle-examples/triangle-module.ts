@@ -47,7 +47,7 @@ import { MessageService } from '@gradii/triangle/message';
 import { NotificationService } from '@gradii/triangle/message';
 
 @NgModule({
-  exports: [
+  exports  : [
     TriButtonModule,
     TriAlertModule,
     TriBadgeModule,
@@ -95,4 +95,4 @@ import { NotificationService } from '@gradii/triangle/message';
   ],
   providers: [NotificationService, MessageService]
 })
-export class TriangleBundleModule {}
+export class TriangleModule {}

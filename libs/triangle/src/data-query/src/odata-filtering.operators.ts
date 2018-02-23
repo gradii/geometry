@@ -1,6 +1,14 @@
-import { formatDate, isDateValue, isStringValue, normalizeField, quote, serializeFilters, toLower } from './filter-serialization.common';
 import { isCompositeFilterDescriptor } from './filtering/filter-descriptor.interface';
 import { compose, either } from './funcs';
+import {
+  formatDate,
+  normalizeField,
+  quote,
+  toLower,
+  isDateValue,
+  isStringValue,
+  serializeFilters
+} from './filter-serialization.common';
 
 const fnFormatter = function (operator) {
   return function (_a) {
@@ -10,9 +18,7 @@ const fnFormatter = function (operator) {
   };
 };
 const singleOperatorFormatter = function (operator) {
-  return function (_a) {
-    const field = _a.field,
-          value = _a.value;
+  return function ({field, value}) {
     return field + ' ' + operator + ' ' + value;
   };
 };
@@ -47,20 +53,16 @@ const filterOperators = {
   eq            : typedOperator('eq'),
   gt            : typedOperator('gt'),
   gte           : typedOperator('ge'),
-  isempty       : function (_a) {
-    const field = _a.field;
-    return field + ' eq \'\'';
+  isempty       : function ({field}) {
+    return field + " eq ''";
   },
-  isnotempty    : function (_a) {
-    const field = _a.field;
-    return field + ' ne \'\'';
+  isnotempty    : function ({field}) {
+    return field + " ne ''";
   },
-  isnotnull     : function (_a) {
-    const field = _a.field;
+  isnotnull     : function ({field}) {
     return field + ' ne null';
   },
-  isnull        : function (_a) {
-    const field = _a.field;
+  isnull        : function ({field}) {
     return field + ' eq null';
   },
   lt            : typedOperator('lt'),
@@ -77,9 +79,10 @@ const serialize = function (x) {
 const serializeAll = serializeFilters(function (filter) {
   return either(isCompositeFilterDescriptor, serializeAll, serialize)(filter);
 }, join);
-export let serializeFilter = function (filter) {
+
+export function serializeFilter(filter) {
   if (filter.filters && filter.filters.length) {
     return '$filter=' + serializeAll(filter);
   }
   return '';
-};
+}

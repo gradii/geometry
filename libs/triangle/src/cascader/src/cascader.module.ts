@@ -19,25 +19,25 @@ import { CascaderDirective } from './cascader.directive';
  * ### 代码演示
  *
  * 省市区级联。
- * <!-- example(cascader-basic) -->
+ * <!-- example(tri-demo-cascader-basic) -->
  * 切换按钮和结果分开。
- * <!-- example(cascader-custom-trigger) -->
+ * <!-- example(tri-demo-cascader-custom-trigger) -->
  * 通过指定 nzOptions 里的  `disabled`  字段。
- * <!-- example(cascader-disabled) -->
+ * <!-- example(tri-demo-cascader-disabled) -->
  * 不同大小的级联选择器。
- * <!-- example(cascader-size) -->
+ * <!-- example(tri-demo-cascader-size) -->
  * 默认值通过数组的方式指定。
- * <!-- example(cascader-default-value) -->
+ * <!-- example(tri-demo-cascader-default-value) -->
  * 通过移入展开下级菜单，点击完成选择。
- * <!-- example(cascader-hover) -->
+ * <!-- example(tri-demo-cascader-hover) -->
  * 这种交互允许只选中父级选项。设置  `nzChangeOnSelect`  或者  `nzChangeOn`  。
- * <!-- example(cascader-change-on-select) -->
+ * <!-- example(tri-demo-cascader-change-on-select) -->
  * 例如给最后一项加上邮编链接。
- * <!-- example(cascader-custom-render) -->
+ * <!-- example(tri-demo-cascader-custom-render) -->
  * 使用事件  `nzLoad`  实现动态加载选项。
- * <!-- example(cascader-lazy) -->
+ * <!-- example(tri-demo-cascader-lazy) -->
  * 创建响应式表单组件，并通过  `reset()`  方法重置数值。
- * <!-- example(cascader-reactive-form) -->
+ * <!-- example(tri-demo-cascader-reactive-form) -->
  */
 @NgModule({
   imports     : [CommonModule, FormsModule, OverlayModule, TriInputModule],

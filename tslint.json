@@ -4,7 +4,11 @@
     "node_modules/@nrwl/schematics/src/tslint"
   ],
   "rules": {
-    "align": [true, "parameters", "statements"],
+    "align": [
+      true,
+      "parameters",
+      "statements"
+    ],
     "arrow-return-shorthand": true,
     "callable-types": true,
     "class-name": true,
@@ -12,7 +16,7 @@
       true,
       "check-space"
     ],
-    "curly": true,
+    "curly": false,
     "eofline": true,
     "forin": true,
     "import-blacklist": [
@@ -63,7 +67,7 @@
       "ignore-params"
     ],
     "no-misused-new": true,
-    "no-non-null-assertion": true,
+    "no-non-null-assertion": false,
     "no-shadowed-variable": true,
     "no-string-literal": false,
     "no-string-throw": true,
@@ -89,13 +93,21 @@
     "directive-selector": [
       true,
       false,
-      "tri",
+      [
+        "tri",
+        "io"
+      ],
       "camelCase"
     ],
     "component-selector": [
       true,
       false,
-      ["tri", "dk", "app", "demo"],
+      [
+        "tri",
+        "app",
+        "demo",
+        "io"
+      ],
       "kebab-case"
     ],
     "use-input-property-decorator": true,
@@ -110,7 +122,6 @@
     "no-access-missing-member": false,
     "templates-use-public": true,
     "invoke-injectable": true,
-
     "nx-enforce-module-boundaries": [
       true,
       {

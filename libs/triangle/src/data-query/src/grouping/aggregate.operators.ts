@@ -1,4 +1,4 @@
-import { aggregatesCombinator, exec, expandAggregates, map } from '../transducers';
+import { exec, map, aggregatesCombinator, expandAggregates } from '../transducers';
 
 export interface AggregateDescriptor {
   field: string;
@@ -8,11 +8,12 @@ export interface AggregateDescriptor {
 const identity = map(function (x) {
   return x;
 });
-export const aggregateBy = function (data, descriptors = [], transformers = identity) {
+
+export function aggregateBy(data, descriptors = [], transformers = identity) {
   const initialValue = {};
   if (!descriptors.length) {
     return initialValue;
   }
   const result = exec(transformers(aggregatesCombinator(descriptors)), initialValue, data);
   return expandAggregates(result);
-};
+}

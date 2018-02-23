@@ -15,13 +15,13 @@ import { SwitchComponent } from './switch.component';
  * ### 代码演示
  *
  * 最简单的用法。
- * <!-- example(switch-basic) -->
+ * <!-- example(tri-demo-switch-basic) -->
  * 带有文字和图标
- * <!-- example(switch-text) -->
+ * <!-- example(tri-demo-switch-text) -->
  * tri-switch失效状态
- * <!-- example(switch-disabled) -->
+ * <!-- example(tri-demo-switch-disabled) -->
  * `[size]="'small'"` 表示小号开关
- * <!-- example(switch-size) -->
+ * <!-- example(tri-demo-switch-size) -->
  */
 @NgModule({
   exports     : [SwitchComponent],

@@ -3,7 +3,7 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "rootDir": "..",
-    "outDir": "./dist/packages/all/examples",
+    "outDir": "./dist/packages/triangle-examples",
     "baseUrl": ".",
     "paths": {
       "@gradii/triangle/*": [
@@ -11,5 +11,7 @@
       ]
     }
   },
-  "include": ["./**/*.ts"]
+  "include": [
+    "./**/*.ts"
+  ]
 }

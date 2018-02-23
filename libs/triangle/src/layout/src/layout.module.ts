@@ -56,19 +56,19 @@ import { SiderComponent } from './sider.component';
  * ### 代码演示
  *
  * 典型的页面布局。
- * <!-- example(layout-basic) -->
+ * <!-- example(tri-demo-layout-basic) -->
  * 最基本的『上-中-下』布局。
- * <!-- example(layout-top) -->
+ * <!-- example(tri-demo-layout-top) -->
  * 同样拥有顶部导航及侧边栏，区别是两边未留边距，多用于应用型的网站。
- * <!-- example(layout-top-side2) -->
+ * <!-- example(tri-demo-layout-top-side2) -->
  * 拥有顶部导航及侧边栏的页面，多用于展示类网站。
- * <!-- example(layout-top-side) -->
+ * <!-- example(tri-demo-layout-top-side) -->
  * 侧边两列式布局。页面横向空间有限时，侧边导航可收起。
- * <!-- example(layout-side) -->
+ * <!-- example(tri-demo-layout-side) -->
  * 要使用自定义触发器，可以设置  `nzTrigger="null"`  来隐藏默认设定。
- * <!-- example(layout-trigger) -->
+ * <!-- example(tri-demo-layout-trigger) -->
  * tri-sider 支持响应式布局。
- * <!-- example(layout-responsive) -->
+ * <!-- example(tri-demo-layout-responsive) -->
  */
 @NgModule({
   declarations: [LayoutComponent, HeaderComponent, ContentComponent, FooterComponent, SiderComponent],

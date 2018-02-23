@@ -6,11 +6,11 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'tri-demo-checkbox-disabled',
   template: `
-    <label tri-checkbox [disabled]="true" [ngModel]="false">
-    </label>
+    <tri-checkbox [disabled]="true" [ngModel]="false">
+    </tri-checkbox>
     <br>
-    <label tri-checkbox [disabled]="true" [ngModel]="true">
-    </label>`,
+    <tri-checkbox [disabled]="true" [ngModel]="true">
+    </tri-checkbox>`,
   styles: []
 })
 export class TriDemoCheckboxDisabledComponent implements OnInit {

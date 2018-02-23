@@ -1,4 +1,4 @@
-import {buildConfig} from './build-config';
+import { buildConfig } from './build-config';
 import MagicString from 'magic-string';
 
 /** License banner from the build config that will be removed in all source files. */
@@ -9,7 +9,7 @@ const licenseBanner = buildConfig.licenseBanner;
  * This is necessary to avoid having the license comment repeated in the output.
  */
 export const rollupRemoveLicensesPlugin = {
-  name: 'rollup-clean-duplicate-licenses',
+  name     : 'rollup-clean-duplicate-licenses',
   transform: (code: string) => {
     const newContent = new MagicString(code);
 
@@ -20,7 +20,7 @@ export const rollupRemoveLicensesPlugin = {
 
     return {
       code: newContent.toString(),
-      map:  newContent.generateMap({ hires: true })
+      map : newContent.generateMap({hires: true})
     };
   }
 };

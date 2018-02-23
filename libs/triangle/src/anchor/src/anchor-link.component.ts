@@ -1,11 +1,20 @@
-import { Component, ContentChild, ElementRef, HostBinding, HostListener, Input, TemplateRef, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ViewEncapsulation,
+  Input,
+  TemplateRef,
+  ContentChild,
+  HostBinding,
+  HostListener,
+  ElementRef
+} from '@angular/core';
 
 import { AnchorComponent } from './anchor.component';
 
 @Component({
-  selector     : 'tri-anchor-link, [triAnchorLink], [tri-anchor-link]',
+  selector: 'tri-anchor-link, [triAnchorLink], [tri-anchor-link]',
   encapsulation: ViewEncapsulation.None,
-  template     : `
+  template: `
     <a (click)="goToClick($event)" href="{{href}}" class="ant-anchor-link-title">
       <span *ngIf="!contentTemplate">{{title}}</span>
       <ng-template *ngIf="contentTemplate" [ngTemplateOutlet]="contentTemplate"></ng-template>

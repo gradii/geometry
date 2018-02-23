@@ -2,9 +2,9 @@ import { Input, Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Aft
 import * as HighLight from 'highlight.js';
 
 @Component({
-  selector: 'demo-highlight',
+  selector     : 'demo-highlight',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <pre [ngClass]="'language-'+language"><code #code [innerText]="code"></code></pre>
   `
 })

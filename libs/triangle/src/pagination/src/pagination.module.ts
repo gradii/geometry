@@ -13,19 +13,19 @@ import { PaginationComponent } from './pagination.component';
  - 可切换页码浏览数据。
  ### 代码演示
  基础分页。
- <!-- example(pagination-basic) -->
+ <!-- example(tri-demo-pagination-basic) -->
  改变每页显示条目。
- <!-- example(pagination-changer) -->
+ <!-- example(tri-demo-pagination-changer) -->
  迷你版本。
- <!-- example(pagination-mini) -->
+ <!-- example(tri-demo-pagination-mini) -->
  更多分页。
- <!-- example(pagination-more) -->
+ <!-- example(tri-demo-pagination-more) -->
  快速跳转到某一页。
- <!-- example(pagination-jump) -->
+ <!-- example(tri-demo-pagination-jump) -->
  简单地翻页。
- <!-- example(pagination-simple) -->
+ <!-- example(tri-demo-pagination-simple) -->
  通过设置  `nzShowTotal`  展示总共有多少数据。
- <!-- example(pagination-total) -->
+ <!-- example(tri-demo-pagination-total) -->
  */
 @NgModule({
   declarations: [PaginationComponent],

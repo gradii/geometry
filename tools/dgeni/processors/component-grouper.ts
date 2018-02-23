@@ -1,7 +1,7 @@
-import {DocCollection, Document, Processor} from 'dgeni';
-import {InterfaceExportDoc} from 'dgeni-packages/typescript/api-doc-types/InterfaceExportDoc';
+import { DocCollection, Document, Processor } from 'dgeni';
+import { InterfaceExportDoc } from 'dgeni-packages/typescript/api-doc-types/InterfaceExportDoc';
 import * as path from 'path';
-import {CategorizedClassDoc} from '../common/dgeni-definitions';
+import { CategorizedClassDoc } from '../common/dgeni-definitions';
 
 /** Component group data structure. */
 export class ComponentGroup {
@@ -67,9 +67,9 @@ export class ComponentGrouper implements Processor {
       const documentInfo = getDocumentPackageInfo(doc);
 
       const packageName = documentInfo.packageName;
-      const packageDisplayName = documentInfo.packageName === 'cdk' ? 'CDK' : 'Material';
+      const packageDisplayName = documentInfo.packageName;
 
-      const moduleImportPath = `@angular/${packageName}/${documentInfo.entryPointName}`;
+      const moduleImportPath = `@gradii/${packageName}/${documentInfo.entryPointName}`;
       const groupName = packageName + '-' + documentInfo.name;
 
       // Get the group for this doc, or, if one does not exist, create it.
@@ -93,9 +93,9 @@ export class ComponentGrouper implements Processor {
         group.services.push(doc);
       } else if (doc.isNgModule) {
         group.ngModule = doc;
-      } else if (doc.docType == 'class') {
+      } else if (doc.docType === 'class') {
         group.additionalClasses.push(doc);
-      } else if (doc.docType == 'interface') {
+      } else if (doc.docType === 'interface') {
         group.additionalInterfaces.push(doc);
       }
     });
@@ -112,18 +112,12 @@ function getDocumentPackageInfo(doc: Document) {
 
   // All of the component documentation is under either `src/lib` or `src/cdk`.
   // We group the docs up by the directory immediately under that root.
-  const pathSegments = path.relative(basePath, filePath).split(path.sep);
+  let pathSegments = path.relative(basePath, filePath).split(path.sep).filter(p => p !== 'src');
   let groupName = pathSegments[1];
 
-  // For the ripples there should be a component group in the docs. Even it's not a
-  // secondary-entry point it can be still documented with its own `material-ripple.html` file.
-  if (pathSegments[1] === 'core' && pathSegments[2] === 'ripple') {
-    groupName = 'ripple';
-  }
-
   return {
-    name: groupName,
-    packageName: pathSegments[0] === 'lib' ? 'material' : pathSegments[0],
+    name          : groupName,
+    packageName   : pathSegments[0],
     entryPointName: pathSegments[1],
   };
 }

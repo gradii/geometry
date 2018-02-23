@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'demo-button',
-  templateUrl: './demo-button.html',
+  selector     : 'demo-button',
+  templateUrl  : './demo-button.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: ['./demo-button.less']
+  styleUrls    : ['./demo-button.less']
 })
 export class DemoButtonComponent implements OnInit {
   // DemoButtonTypeCode = require('!!raw-loader!./nz-demo-button-type.component');
@@ -15,15 +15,6 @@ export class DemoButtonComponent implements OnInit {
   // DemoButtonDisabledCode = require('!!raw-loader!./nz-demo-button-disabled.component');
   // DemoButtonGhostCode = require('!!raw-loader!./nz-demo-button-ghost.component');
   // DemoButtonMultipleCode = require('!!raw-loader!./nz-demo-button-multiple.component');
-
-  DemoButtonTypeCode = '';
-  DemoButtonSizeCode = '';
-  DemoButtonLoadingCode = '';
-  DemoButtonIconCode = '';
-  DemoButtonGroupCode = '';
-  DemoButtonDisabledCode = '';
-  DemoButtonGhostCode = '';
-  DemoButtonMultipleCode = '';
 
   constructor() {}
 

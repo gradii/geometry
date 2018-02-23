@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'demo-intro-get-started',
+  selector   : 'demo-intro-get-started',
   templateUrl: './demo-intro-get-started.html'
 })
 export class DemoIntroGetStartedComponent {

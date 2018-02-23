@@ -1,14 +1,14 @@
-import { getter } from './accessor';
-import { compileFilter } from './filtering/filter-expression.factory';
-import { normalizeFilters } from './filtering/filter.operators';
-import { compose } from './funcs';
-import { groupBy, normalizeGroups } from './grouping/group.operators';
-import { sort } from './sorting/sort';
-import { composeSortDescriptors } from './sorting/sort-array.operator';
-import { concat, exec, filter, skip, take } from './transducers';
 import { isPresent, isString } from './utils';
+import { composeSortDescriptors } from './sorting/sort-array.operator';
+import { groupBy, normalizeGroups } from './grouping/group.operators';
+import { normalizeFilters } from './filtering/filter.operators';
+import { compileFilter } from './filtering/filter-expression.factory';
+import { exec, skip, take, filter, concat } from './transducers';
+import { getter } from './accessor';
+import { compose } from './funcs';
+import { sort } from './sorting/sort';
 
-export let orderBy = function (data, descriptors) {
+export function orderBy(data, descriptors) {
   if (
     descriptors.some(function (x) {
       return isPresent(x.dir);
@@ -19,7 +19,8 @@ export let orderBy = function (data, descriptors) {
     sort(data, 0, data.length, comparer);
   }
   return data;
-};
+}
+
 const defaultComparer = function (a, b) {
   return a === b;
 };
@@ -37,13 +38,15 @@ const _distinct = function (data, comparer) {
     return xs.findIndex(comparer.bind(null, x)) === idx;
   });
 };
-export let distinct = function (data, comparer) {
+
+export function distinct(data, comparer) {
   if (comparer === void 0) {
     comparer = defaultComparer;
   }
   return _distinct(data, normalizeComparer(comparer));
-};
-export let count = function (data, predicate) {
+}
+
+export function count(data, predicate) {
   let counter = 0;
   for (let idx = 0, length_1 = data.length; idx < length_1; idx++) {
     if (predicate(data[idx])) {
@@ -51,14 +54,16 @@ export let count = function (data, predicate) {
     }
   }
   return counter;
-};
-export let limit = function (data, predicate) {
+}
+
+export function limit(data, predicate) {
   if (predicate) {
     return data.filter(predicate);
   }
   return data;
-};
-export let process = function (data, state) {
+}
+
+export function process(data, state) {
   const skipCount        = state.skip,
         takeCount        = state.take,
         filterDescriptor = state.filter,
@@ -101,4 +106,4 @@ export let process = function (data, state) {
     data : hasGroups ? groupBy(data, group) : data,
     total: total
   };
-};
+}

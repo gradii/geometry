@@ -28,21 +28,23 @@ const wrapExpression = function (members, paramName) {
     .join(paramName);
 };
 const getterCache = {};
-export let expr = function (expression = '', safe = false, paramName = 'd') {
+
+export function expr(expression = '', safe = false, paramName = 'd') {
   if (expression && expression.charAt(0) !== '[') {
     expression = '.' + expression;
   }
   if (safe) {
     expression = expression.replace(/"([^.]*)\.([^"]*)"/g, '"$1_$DOT$_$2"');
-    expression = expression.replace(/'([^.]*)\.([^']*)'/g, '\'$1_$DOT$_$2\'');
+    expression = expression.replace(/'([^.]*)\.([^']*)'/g, "'$1_$DOT$_$2'");
     expression = wrapExpression(expression.split('.'), paramName);
     expression = expression.replace(/_\$DOT\$_/g, '.');
   } else {
     expression = paramName + expression;
   }
   return expression;
-};
-export let getter = function (expression: string, safe?: boolean) {
+}
+
+export function getter(expression: string, safe?: boolean) {
   const key = expression + safe;
   return (getterCache[key] = getterCache[key] || new Function('d', 'return ' + expr(expression, safe)));
-};
+}

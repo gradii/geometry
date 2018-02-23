@@ -23,7 +23,7 @@ import { PopoverDirective } from './popover.directive';
         <div class="ant-popover-content">
           <div class="ant-popover-arrow"></div>
           <div class="ant-popover-inner">
-            <div class="ant-popover-title">{{nzTitle}}</div>
+            <div class="ant-popover-title">{{title}}</div>
             <div class="ant-popover-inner-content">
               <span *ngIf="!template">{{content}}</span>
               <ng-template

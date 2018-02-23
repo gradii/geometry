@@ -13,13 +13,13 @@ import { PopoverDirective } from './popover.directive';
  和  `Tooltip`  的区别是，用户可以对浮层上的元素进行操作，因此它可以承载更复杂的内容，比如链接或按钮等。
  ### 代码演示
  最简单的用法。
- <!-- example(popover-basic) -->
+ <!-- example(tri-demo-popover-basic) -->
  鼠标移入、聚集、点击。
- <!-- example(popover-trigger) -->
+ <!-- example(tri-demo-popover-trigger) -->
  位置有十二个方向
- <!-- example(ponover-location) -->
+ <!-- example(tri-demo-ponover-location) -->
  使用 `nzVisible` 属性控制浮层显示
- <!-- example(tri-demo-popover-click-hide) -->
+ <!-- example(tri-demo-tri-demo-popover-click-hide) -->
  */
 @NgModule({
   entryComponents: [PopoverComponent],

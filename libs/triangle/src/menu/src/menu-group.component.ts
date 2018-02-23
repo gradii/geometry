@@ -11,5 +11,5 @@ import { Component, HostBinding } from '@angular/core';
     </ul>`
 })
 export class MenuGroupComponent {
-  @HostBinding('class.ant-menu-item-group') _nzMenuItemGroup = true;
+  @HostBinding('class.ant-menu-item-group') _menuItemGroup = true;
 }

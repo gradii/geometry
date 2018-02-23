@@ -74,7 +74,7 @@ export class AppModule { }
 用下面的代码替换 `/src/app/app.component.html`
 
 ```html
-<button nz-button [nzType]="'primary'">测试按钮</button>
+<button tri-button [type]="'primary'">测试按钮</button>
 ```
 [查看](#/components/button)最简单的Button效果
 

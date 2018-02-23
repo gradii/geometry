@@ -7,9 +7,9 @@ import { Component, OnInit } from '@angular/core';
   selector: 'tri-demo-checkbox-controller',
   template: `
     <p style="margin-bottom: 20px;">
-      <label tri-checkbox [(ngModel)]="isCheckedButton" [disabled]="isDisabledButton">
+      <tri-checkbox [(ngModel)]="isCheckedButton" [disabled]="isDisabledButton">
         <span>{{isCheckedButton ? 'Checked' : 'Unchecked'}} - {{isDisabledButton ? 'Disabled' : 'Enabled'}}</span>
-      </label>
+      </tri-checkbox>
     </p>
     <p>
       <button tri-button [type]="'primary'" (click)="checkButton()" [size]="'small'">

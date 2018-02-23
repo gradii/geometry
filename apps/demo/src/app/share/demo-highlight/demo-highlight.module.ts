@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { DemoHighlightComponent } from './demo-highlight.component';
 
 @NgModule({
-  imports: [CommonModule],
+  imports     : [CommonModule],
   declarations: [DemoHighlightComponent],
-  exports: [DemoHighlightComponent]
+  exports     : [DemoHighlightComponent]
 })
 export class DemoHighlightModule {}

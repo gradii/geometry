@@ -18,25 +18,25 @@ import { ModalService } from './modal.service';
  另外当需要一个简洁的确认框询问用户时，可以使用精心封装好的  `NzModalService.confirm()`  等方法。
  ### 代码演示
  最简单的用法。
- <!-- example(modal-basic) -->
+ <!-- example(tri-demo-modal-basic) -->
  Modal的service用法，示例中演示了用户自定义模板、自定义component、以及获取传出数据的方法。
- <!-- example(modal-service) -->
+ <!-- example(tri-demo-modal-service) -->
  使用  `confirm()`  可以快捷地弹出确认框。onCancel/onOk 返回 promise 可以延迟关闭
- <!-- example(confirm-async) -->
+ <!-- example(tri-demo-confirm-async) -->
  设置  `okText`  与  `cancelText`  以自定义按钮文字。
- <!-- example(modal-locale) -->
+ <!-- example(tri-demo-modal-locale) -->
  您可以直接使用  `style.top`  或配合其他样式来设置对话框位置。
- <!-- example(modal-style) -->
+ <!-- example(tri-demo-modal-style) -->
  点击确定后异步关闭对话框，例如提交表单。
- <!-- example(modal-async) -->
+ <!-- example(tri-demo-modal-async) -->
  更复杂的例子，自定义了页头的内容及页脚的按钮，点击提交后进入 loading 状态，完成后关闭。
- <!-- example(modal-customize) -->
+ <!-- example(tri-demo-modal-customize) -->
  使用  `confirm()`  可以快捷地弹出确认框。
- <!-- example(confirm-basic) -->
+ <!-- example(tri-demo-confirm-basic) -->
  各种类型的信息提示，只提供一个按钮用于关闭。
- <!-- example(confirm-info) -->
+ <!-- example(tri-demo-confirm-info) -->
  手动关闭modal。
- <!-- example(confirm-destroy) -->
+ <!-- example(tri-demo-confirm-destroy) -->
  ### NzModalService.xxx()
  包括：
  NzModalService.open

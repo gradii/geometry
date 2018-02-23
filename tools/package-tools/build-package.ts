@@ -1,11 +1,11 @@
-import {join, resolve as resolvePath} from 'path';
-import {spawn} from 'child_process';
-import {red} from 'chalk';
-import {PackageBundler} from './build-bundles';
-import {buildConfig} from './build-config';
-import {getSecondaryEntryPointsForPackage} from './secondary-entry-points';
-import {compileEntryPoint, renamePrivateReExportsToBeUnique} from './compile-entry-point';
-import {createPackageBuildTasks} from './gulp/build-tasks-gulp';
+import { join, resolve as resolvePath } from 'path';
+import { spawn } from 'child_process';
+import { red } from 'chalk';
+import { PackageBundler } from './build-bundles';
+import { buildConfig } from './build-config';
+import { getSecondaryEntryPointsForPackage } from './secondary-entry-points';
+import { compileEntryPoint, renamePrivateReExportsToBeUnique } from './compile-entry-point';
+import { createPackageBuildTasks } from './gulp/build-tasks-gulp';
 
 const {packagesDir, outputDir} = buildConfig;
 
@@ -48,6 +48,7 @@ export class BuildPackage {
     this.cacheSecondaryEntryPoints();
     return this._secondaryEntryPointsByDepth;
   }
+
   private _secondaryEntryPointsByDepth: string[][];
 
   /** Secondary entry points for the package. */
@@ -55,6 +56,7 @@ export class BuildPackage {
     this.cacheSecondaryEntryPoints();
     return this._secondaryEntryPoints;
   }
+
   private _secondaryEntryPoints: string[];
 
   constructor(readonly name: string, readonly dependencies: BuildPackage[] = []) {
@@ -68,7 +70,7 @@ export class BuildPackage {
     this.entryFilePath = join(this.outputDir, 'index.js');
   }
 
-  public createTasks(){
+  public createTasks() {
     createPackageBuildTasks(this);
   }
 
@@ -119,10 +121,10 @@ export class BuildPackage {
 
       childProcess.on('exit', (exitCode: number) => exitCode === 0 ? resolve() : reject());
     })
-    .catch(() => {
-      const error = red(`Failed to compile ${secondaryEntryPoint} using ${entryPointTsconfigPath}`);
-      console.error(error);
-    });
+      .catch(() => {
+        const error = red(`Failed to compile ${secondaryEntryPoint} using ${entryPointTsconfigPath}`);
+        console.error(error);
+      });
   }
 
   /** Stores the secondary entry-points for this package if they haven't been computed already. */

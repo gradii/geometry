@@ -32,9 +32,9 @@
       }
     },
     {
-      "name": "dev-ui",
-      "root": "apps/dev-ui/src",
-      "outDir": "dist/apps/dev-ui",
+      "name": "site-io",
+      "root": "apps/site-io/src",
+      "outDir": "dist/apps/site-io",
       "assets": [
         "assets",
         "favicon.ico"
@@ -47,7 +47,8 @@
       "testTsconfig": "../../../tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.scss"
+        "styles.scss",
+        "main.scss"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
@@ -90,6 +91,14 @@
     },
     {
       "project": "apps/dev-ui/e2e/tsconfig.e2e.json",
+      "exclude": "**/node_modules/**"
+    },
+    {
+      "project": "apps/site-io/apps/demo/src/tsconfig.app.json",
+      "exclude": "**/node_modules/**"
+    },
+    {
+      "project": "apps/site-io/e2e/tsconfig.e2e.json",
       "exclude": "**/node_modules/**"
     }
   ],

@@ -1,11 +1,11 @@
 import {task} from 'gulp';
 import {readFileSync, existsSync} from 'fs';
 import {join} from 'path';
-import {green, red} from 'chalk';
 import {releasePackages} from './publish';
 import {sync as glob} from 'glob';
 import {buildConfig, sequenceTask} from 'material2-build-tools';
 
+const {green, red} = require('chalk');
 /** Path to the directory where all releases are created. */
 const releasesDir = join(buildConfig.outputDir, 'releases');
 

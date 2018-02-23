@@ -1,4 +1,4 @@
-import { TriangleBundleModule, TriangleExampleModule } from '@gradii/triangle-examples';
+import { TriangleExampleModule, TriangleModule } from '@gradii/triangle-examples';
 import { TriDataTableModule } from '@gradii/triangle/data-table';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -13,10 +13,10 @@ import { EditService } from './examples/basic-edit/edit.service';
 import { HttpClient, HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  imports: [
+  imports     : [
     // NgZorroAntdModule,
 
-    TriangleBundleModule,
+    TriangleModule,
     TriangleExampleModule,
     TriDataTableModule,
 
@@ -28,10 +28,10 @@ import { HttpClient, HttpClientJsonpModule, HttpClientModule } from '@angular/co
     DemoCodeBoxModule
   ],
   declarations: [DemoDataTableComponent, DemoDataTableBasicComponent, DemoDataTableBasicEditComponent],
-  providers: [
+  providers   : [
     {
-      deps: [HttpClient],
-      provide: EditService,
+      deps      : [HttpClient],
+      provide   : EditService,
       useFactory: (jsonp: HttpClient) => () => new EditService(jsonp)
     }
   ]

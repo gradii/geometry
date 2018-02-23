@@ -1,10 +1,10 @@
-import { getter } from '../accessor';
-import { isDateValue, isStringValue, quote, serializeFilters, toUTC } from '../filter-serialization.common';
 import { isCompositeFilterDescriptor } from '../filtering/filter-descriptor.interface';
+import { isPresent, isNotNullOrEmptyString, isArray } from '../utils';
+import { getter } from '../accessor';
 import { compose, either } from '../funcs';
-import { AggregateDescriptor } from '../grouping/aggregate.operators';
+import { isStringValue, isDateValue, quote, serializeFilters, toUTC } from '../filter-serialization.common';
 import { State } from '../state';
-import { isArray, isNotNullOrEmptyString, isPresent } from '../utils';
+import { AggregateDescriptor } from '../grouping/aggregate.operators';
 
 const prefixWith = function (key) {
   return function (value) {
@@ -30,9 +30,7 @@ const isNotEmpty = function (accessor) {
 const runOrEmpty = function (predicate, fn) {
   return either(predicate, fn, empty);
 };
-const calcPage = function (_a) {
-  const skip = _a.skip,
-        take = _a.take;
+const calcPage = function ({skip, take}) {
   return Math.floor((skip || 0) / take) + 1;
 };
 const formatDescriptors = function (accessor, formatter) {
@@ -81,14 +79,10 @@ const formatSort = formatDescriptors(sort, directionFormatter);
 const formatGroup = formatDescriptors(group, directionFormatter);
 const formatAggregates = formatDescriptors(aggregates, aggregateFormatter);
 const prefixDateValue = function (value) {
-  return 'datetime\'' + value + '\'';
+  return "datetime'" + value + "'";
 };
 const formatDateValue = compose(prefixDateValue, removeAfterDot, sanitizeDateLiterals, JSON.stringify, toUTC);
-const formatDate = function (_a) {
-  const field      = _a.field,
-        value      = _a.value,
-        ignoreCase = _a.ignoreCase,
-        operator   = _a.operator;
+const formatDate = function ({field, value, ignoreCase, operator}) {
   return {
     value     : formatDateValue(value),
     field     : field,
@@ -155,12 +149,13 @@ const rules = function (state) {
     }[key];
   };
 };
-export let toDataSourceRequestString = function (state) {
+
+export function toDataSourceRequestString(state) {
   return Object.keys(state)
     .map(rules(state))
     .filter(isNotNullOrEmptyString)
     .join('&');
-};
+}
 
 export type DataSourceRequestState = State & {
   aggregates?: Array<AggregateDescriptor>;

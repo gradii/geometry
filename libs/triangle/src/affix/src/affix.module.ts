@@ -1,8 +1,8 @@
-import { SCROLL_SERVICE_PROVIDER } from '@gradii/triangle/core';
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { AffixComponent } from './affix.component';
+import { SCROLL_SERVICE_PROVIDER } from '@gradii/triangle/core';
 
 /**
  * # Affix 固钉
@@ -13,16 +13,16 @@ import { AffixComponent } from './affix.component';
  * ### 代码演示
  *
  * 最简单的用法。
- * <!-- example(affix-basic) -->
+ * <!-- example(tri-demo-affix-basic) -->
  * 可以获得是否固定的状态。
- * <!-- example(affix-fixed) -->
+ * <!-- example(tri-demo-affix-fixed) -->
  * 用  `target`  设置  `tri-affix`  需要监听其滚动事件的元素，默认为  `window` 。
- * <!-- example(affix-container) -->
+ * <!-- example(tri-demo-affix-container) -->
  */
 @NgModule({
   declarations: [AffixComponent],
-  exports     : [AffixComponent],
-  imports     : [CommonModule],
-  providers   : [SCROLL_SERVICE_PROVIDER]
+  exports: [AffixComponent],
+  imports: [CommonModule],
+  providers: [SCROLL_SERVICE_PROVIDER]
 })
 export class TriAffixModule {}

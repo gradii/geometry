@@ -9,7 +9,7 @@ import { RowComponent } from './row.component';
  * # Grid 栅格
  * 24 栅格系统。
  * ### 设计理念
- * <!-- example(grid-demo) -->
+ * <!-- example(tri-demo-grid-demo) -->
  * 在多数业务情况下，Ant Design需要在设计区域内解决大量信息收纳的问题，因此在 12 栅格系统的基础上，我们将整个设计建议区域按照 24 等分的原则进行划分。
  * 划分之后的信息区块我们称之为『盒子』。建议横向排列的盒子数量最多四个，最少一个。『盒子』在整个屏幕上占比见上图。设计部分基于盒子的单位定制盒子内部的排版规则，以保证视觉层面的舒适感。
  * 概述
@@ -33,31 +33,31 @@ import { RowComponent } from './row.component';
  * 我们的栅格化系统支持 Flex 布局，允许子元素在父节点内的水平对齐方式 - 居左、居中、居右、等宽排列、分散排列。子元素与子元素之间，支持顶部对齐、垂直居中对齐、底部对齐的方式。同时，支持使用 order 来定义元素的排列顺序。
  * Flex 布局是基于 24 栅格来定义每一个『盒子』的宽度，但排版则不拘泥于栅格。
  * 从堆叠到水平排列。
- * <!-- example(grid-basic) -->
+ * <!-- example(tri-demo-grid-basic) -->
  * 栅格常常需要和间隔进行配合，你可以使用  `tri-row`  的  `gutter`  属性，我们推荐使用  `(16+8n)px`  作为栅格间隔。
  *
- * <!-- example(grid-gutter) -->
+ * <!-- example(tri-demo-grid-gutter) -->
  * 列偏移
- * <!-- example(grid-offset) -->
+ * <!-- example(tri-demo-grid-offset) -->
  * 列排序
- * <!-- example(grid-sort) -->
+ * <!-- example(tri-demo-grid-sort) -->
  * Flex布局基础
- * <!-- example(grid-flex) -->
+ * <!-- example(tri-demo-grid-flex) -->
  * Flex 子元素垂直对齐。
- * <!-- example(grid-flex-align) -->
+ * <!-- example(tri-demo-grid-flex-align) -->
  * 通过 Flex 布局的 Order 来改变元素的排序。
- * <!-- example(grid-flex-order) -->
+ * <!-- example(tri-demo-grid-flex-order) -->
  * 参照 Bootstrap 的
  * <a href="[object Object]">响应式设计</a>
  * ，预设四个响应尺寸： `xs`   `sm`   `md`   `lg`   `xl` 。
  *
- * <!-- example(grid-responsive) -->
+ * <!-- example(tri-demo-grid-responsive) -->
  *
- * `span`    `pull`   `push`   `offset`   `order`  属性可以通过内嵌到  `nzXs`   `nzSm`   `nzMd`   `nzLg`   `nzXl`  属性中来使用。
+ * `span`    `pull`   `push`   `offset`   `order`  属性可以通过内嵌到  `xs`   `sm`   `md`   `lg`   `xl`  属性中来使用。
  *
- * <!-- example(grid-responsive-more) -->
+ * <!-- example(tri-demo-grid-responsive-more) -->
  * 可以简单配置几种等分栅格和间距。
- * <!-- example(grid-gutter-config) -->
+ * <!-- example(tri-demo-grid-gutter-config) -->
  *
  */
 @NgModule({

@@ -13,19 +13,19 @@ import { CardComponent } from './card.component';
  * ### 代码演示
  *
  * 包含标题、内容、操作区域。
- * <!-- example(card-basic) -->
+ * <!-- example(tri-demo-card-basic) -->
  * 在灰色背景上使用无边框的卡片。
- * <!-- example(card-border) -->
+ * <!-- example(tri-demo-card-border) -->
  * 只包含内容区域。
- * <!-- example(card-simple) -->
+ * <!-- example(tri-demo-card-simple) -->
  * 可以调整默认边距，设定宽度。
- * <!-- example(card-flex) -->
+ * <!-- example(tri-demo-card-flex) -->
  * 在系统概览页面常常和栅格进行配合。
- * <!-- example(card-grid) -->
+ * <!-- example(tri-demo-card-grid) -->
  * 数据读入前会有文本块样式。
- * <!-- example(card-loading) -->
+ * <!-- example(tri-demo-card-loading) -->
  * 一种常见的卡片内容区隔模式。
- * <!-- example(card-inner) -->
+ * <!-- example(tri-demo-card-inner) -->
  */
 @NgModule({
   imports     : [CommonModule],

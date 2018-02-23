@@ -47,27 +47,27 @@ import { FormComponent } from './form.component';
  * ### 代码演示
  *
  * 水平登录栏，常用在顶部导航栏中。
- * <!-- example(form-inline) -->
+ * <!-- example(tri-demo-form-inline) -->
  * 普通的登录框，可以容纳更多的元素。
- * <!-- example(form-login) -->
+ * <!-- example(tri-demo-form-login) -->
  * 用户填写必须的信息以注册新用户。
- * <!-- example(form-horizontal) -->
+ * <!-- example(tri-demo-form-horizontal) -->
  * 三列栅格式的表单排列方式，常用于数据表格的高级搜索。
- * <!-- example(form-advanced) -->
+ * <!-- example(tri-demo-form-advanced) -->
  * 动态增加、减少表单项。
- * <!-- example(form-dynamic) -->
+ * <!-- example(tri-demo-form-dynamic) -->
  * 表单有三种布局
- * <!-- example(form-layout) -->
+ * <!-- example(tri-demo-form-layout) -->
  * 我们为表单控件定义了三种校验状态，你可以不使用 `Reactive Form` 的异步返回数据，而直接定义表单的返回状态，定义 `<tri-form-control>` 的 `nzValidateStatus`  输入即可。
  *
- * <!-- example(form-validate) -->
+ * <!-- example(tri-demo-form-validate) -->
  * 当使用
  * <a href="[object Object]">响应式表单(Reactive Form)</a>
  * 时，将 `<tri-form-control>` 的 `nzValidateStatus`  属性定义为当前 `formControlName` 名称，
  *
- * <!-- example(form-validate-dynamic) -->
+ * <!-- example(tri-demo-form-validate-dynamic) -->
  * 以上演示没有出现的表单控件对应的校验演示。
- * <!-- example(form-mix) -->
+ * <!-- example(tri-demo-form-mix) -->
  */
 @NgModule({
   declarations: [

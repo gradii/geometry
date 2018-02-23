@@ -1,8 +1,8 @@
-import {task, src, dest} from 'gulp';
-import {Dgeni} from 'dgeni';
+import { task, src, dest } from 'gulp';
+import { Dgeni } from 'dgeni';
 import * as path from 'path';
-import {buildConfig} from 'material2-build-tools';
-import {apiDocsPackage} from '../../dgeni/index';
+import { buildConfig, sequenceTask } from 'material2-build-tools';
+import { apiDocsPackage } from '../../dgeni/index';
 
 // There are no type definitions available for these imports.
 const markdown = require('gulp-markdown');
@@ -12,7 +12,7 @@ const rename = require('gulp-rename');
 const flatten = require('gulp-flatten');
 const htmlmin = require('gulp-htmlmin');
 const hljs = require('highlight.js');
-const dom  = require('gulp-dom');
+const dom = require('gulp-dom');
 
 const {outputDir, packagesDir} = buildConfig;
 
@@ -53,13 +53,14 @@ const MARKDOWN_TAGS_TO_CLASS_ALIAS = [
 
 // Options for the html-minifier that minifies the generated HTML files.
 const htmlMinifierOptions = {
-  collapseWhitespace: true,
-  removeComments: true,
-  caseSensitive: true,
+  collapseWhitespace   : true,
+  removeComments       : true,
+  caseSensitive        : true,
   removeAttributeQuotes: false
 };
 
 const markdownOptions = {
+  breaks   : true,
   // Add syntax highlight using highlight.js
   highlight: (code: string, language: string): string => {
     if (language) {
@@ -72,70 +73,76 @@ const markdownOptions = {
   }
 };
 
-/** Generate all docs content. */
-task('docs', [
-  'markdown-docs',
-  'markdown-docs-cdk',
-  'highlight-examples',
-  'api-docs',
-  'minified-api-docs',
-  'build-examples-module',
-  'stackblitz-example-assets',
-]);
-
-/** Generates html files from the markdown overviews and guides for material. */
-task('markdown-docs', () => {
-  // Extend the renderer for custom heading anchor rendering
-  markdown.marked.Renderer.prototype.heading = (text: string, level: number): string => {
-    if (level === 3 || level === 4) {
-      const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
-      return `
+// Extend the renderer for custom heading anchor rendering
+markdown.marked.Renderer.prototype.heading = (text: string, level: number): string => {
+  if (level === 3 || level === 4) {
+    const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
+    return `
         <h${level} id="${escapedText}" class="docs-header-link">
           <span header-link="${escapedText}"></span>
           ${text}
         </h${level}>
       `;
-    } else {
-      return `<h${level}>${text}</h${level}>`;
-    }
-  };
+  } else {
+    return `<h${level}>${text}</h${level}>`;
+  }
+};
 
-  return src(['src/lib/**/!(README).md', 'guides/*.md'])
-      .pipe(rename({prefix: 'material-'}))
-      .pipe(markdown(markdownOptions))
-      .pipe(transform(transformMarkdownFiles))
-      .pipe(dom(createTagNameAliaser('docs-markdown')))
-      .pipe(dest('dist/docs/markdown'));
+/** Generate all docs content. */
+task('docs', sequenceTask(
+  [
+    'markdown-docs-triangle',
+    'markdown-docs-guides',
+    'build-highlighted-examples',
+    'build-examples-module',
+    'api-docs',
+    'copy-stackblitz-examples'
+  ],
+  'minify-html-files'
+));
+
+task('docs:clean', sequenceTask([
+  'clean:docs',
+  'docs'
+]));
+
+/** Generates html files from the markdown overviews and guides for material. */
+task('markdown-docs-triangle', () => {
+  return src(['libs/triangle/!(guides)/**/!(README).md'])
+    .pipe(rename({prefix: 'triangle-', extname: '.html'}))
+    .pipe(markdown(markdownOptions))
+    .pipe(transform('utf8', transformMarkdownFiles))
+    .pipe(dom(createTagNameAliaser('docs-markdown')))
+    .pipe(flatten())
+    .pipe(dest('dist/docs/markdown'));
 });
 
-// TODO(jelbourn): figure out how to avoid duplicating this task w/ material while still
-// disambiguating the output.
-/** Generates html files from the markdown overviews and guides for the cdk. */
-task('markdown-docs-cdk', () => {
-  return src(['src/cdk/**/!(README).md'])
-      .pipe(rename({prefix: 'cdk-'}))
-      .pipe(markdown(markdownOptions))
-      .pipe(transform(transformMarkdownFiles))
-      .pipe(dom(createTagNameAliaser('docs-markdown')))
-      .pipe(dest('dist/docs/markdown'));
+task('markdown-docs-guides', () => {
+  return src(['libs/*/guides/**/!(README).md'])
+    .pipe(rename({prefix: 'triangle-', extname: '.html'}))
+    .pipe(markdown(markdownOptions))
+    .pipe(transform('utf8', transformMarkdownFiles))
+    .pipe(dom(createTagNameAliaser('docs-markdown')))
+    .pipe(flatten())
+    .pipe(dest('dist/docs/guides'));
 });
 
 /**
  * Creates syntax-highlighted html files from the examples to be used for the source view of
  * live examples on the docs site.
  */
-task('highlight-examples', () => {
+task('build-highlighted-examples', () => {
   // rename files to fit format: [filename]-[filetype].html
   const renameFile = (filePath: any) => {
     const extension = filePath.extname.slice(1);
     filePath.basename = `${filePath.basename}-${extension}`;
   };
 
-  return src('src/material-examples/**/*.+(html|css|ts)')
-      .pipe(flatten())
-      .pipe(rename(renameFile))
-      .pipe(highlight())
-      .pipe(dest('dist/docs/examples'));
+  return src('libs/triangle-examples/**/*.+(html|css|ts)')
+  // .pipe(flatten())
+    .pipe(rename(renameFile))
+    .pipe(highlight())
+    .pipe(dest('dist/docs/examples'));
 });
 
 /** Generates API docs from the source JsDoc using dgeni. */
@@ -144,26 +151,29 @@ task('api-docs', () => {
   return docs.generate();
 });
 
-/** Generates minified html api docs. */
-task('minified-api-docs', ['api-docs'], () => {
-  return src('dist/docs/api/*.html')
+/**
+ * Minifies all HTML files that have been generated. The HTML files for the
+ * highlighted examples can be skipped, because it won't have any effect.
+ */
+task('minify-html-files', () => {
+  return src('dist/docs/+(api|markdown)/**/*.html')
     .pipe(htmlmin(htmlMinifierOptions))
-    .pipe(dest('dist/docs/api/'));
+    .pipe(dest('dist/docs'));
 });
 
 /** Copies example sources to be used as stackblitz assets for the docs site. */
-task('stackblitz-example-assets', () => {
-  src(path.join(packagesDir, 'material-examples', '**/*'))
-      .pipe(dest(path.join(DIST_DOCS, 'stackblitz', 'examples')));
+task('copy-stackblitz-examples', () => {
+  src(path.join(packagesDir, 'triangle-examples', '**/*'))
+    .pipe(dest(path.join(DIST_DOCS, 'stackblitz', 'examples')));
 });
 
 /** Updates the markdown file's content to work inside of the docs app. */
-function transformMarkdownFiles(buffer: Buffer, file: any): string {
+function transformMarkdownFiles(buffer: Buffer, file: any) {
   let content = buffer.toString('utf-8');
 
   // Replace <!-- example(..) --> comments with HTML elements.
   content = content.replace(EXAMPLE_PATTERN, (_match: string, name: string) =>
-    `<div material-docs-example="${name}"></div>`
+    `<div docs-example="${name}"></div>`
   );
 
   // Replace the URL in anchor elements inside of compiled markdown files.
@@ -199,7 +209,7 @@ function fixMarkdownDocLinks(link: string, filePath: string): string {
  * @param classPrefix The prefix to use for the alias class.
  */
 function createTagNameAliaser(classPrefix: string) {
-  return function() {
+  return function () {
     MARKDOWN_TAGS_TO_CLASS_ALIAS.forEach(tag => {
       for (let el of this.querySelectorAll(tag)) {
         el.classList.add(`${classPrefix}-${tag}`);

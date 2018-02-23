@@ -1,7 +1,7 @@
-import {readFileSync, writeFileSync} from 'fs';
-import {platform} from 'os';
-import {buildConfig} from './build-config';
-import {spawnSync} from 'child_process';
+import { readFileSync, writeFileSync } from 'fs';
+import { platform } from 'os';
+import { buildConfig } from './build-config';
+import { spawnSync } from 'child_process';
 
 /** Variable that is set to the string for version placeholders. */
 const versionPlaceholderText = '0.0.0-PLACEHOLDER';
@@ -49,12 +49,12 @@ function buildPlaceholderFindCommand(packageDir: string) {
   if (platform() === 'win32') {
     return {
       binary: 'findstr',
-      args: ['/msi', `${ngVersionPlaceholderText} ${versionPlaceholderText}`, `${packageDir}\\*`]
+      args  : ['/msi', `${ngVersionPlaceholderText} ${versionPlaceholderText}`, `${packageDir}\\*`]
     };
   } else {
     return {
       binary: 'grep',
-      args: ['-ril', `${ngVersionPlaceholderText}\\|${versionPlaceholderText}`, packageDir]
+      args  : ['-ril', `${ngVersionPlaceholderText}\\|${versionPlaceholderText}`, packageDir]
     };
   }
 }

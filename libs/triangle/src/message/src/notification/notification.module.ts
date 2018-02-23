@@ -40,13 +40,13 @@ import { NotificationComponent } from './notification.component';
 {{ '}' }}
  ### 代码演示
  最简单的用法，4.5 秒后自动关闭。
- <!-- example(notification-basic) -->
+ <!-- example(tri-demo-notification-basic) -->
  通知提醒框左侧有图标。
- <!-- example(notification-icon) -->
+ <!-- example(tri-demo-notification-icon) -->
  自定义通知框自动关闭的延时，默认 `4.5s` ，取消自动关闭只要将该值设为  `0`  即可。
- <!-- example(notification-duration) -->
+ <!-- example(tri-demo-notification-duration) -->
  自定义通知栏内HTML，注意防止XSS
- <!-- example(notification-html) -->
+ <!-- example(tri-demo-notification-html) -->
  */
 @NgModule({
   imports        : [CommonModule, OverlayModule],

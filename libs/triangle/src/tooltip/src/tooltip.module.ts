@@ -14,11 +14,11 @@ import { TooltipDirective } from './tooltip.directive';
  * ### 代码演示
  *
  * 最简单的用法
- * <!-- example(tooltip-basic) -->
+ * <!-- example(tri-demo-tooltip-basic) -->
  * 装载模板
- * <!-- example(tooltip-template) -->
+ * <!-- example(tri-demo-tooltip-template) -->
  * 位置有 12 个方向。
- * <!-- example(tooltip-position) -->
+ * <!-- example(tri-demo-tooltip-position) -->
  * ### 注意
  * 请确保  `Tooltip` 的子元素能接受
  * `onMouseEnter` `onMouseLeave` `onFocus` `onClick` 事件。

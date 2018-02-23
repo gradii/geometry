@@ -393,7 +393,7 @@ class TestPushPull {
   selector: 'test-col-responsive',
   template: `
     <div tri-row>
-      <div tri-col [nzXs]="_col1.xs" [nzSm]="_col1.xm" [nzMd]="_col1.md" [nzLg]="_col1.lg" [nzXl]="_col1.xl">
+      <div tri-col [xs]="_col1.xs" [sm]="_col1.xm" [md]="_col1.md" [lg]="_col1.lg" [xl]="_col1.xl">
         Col
       </div>
     </div>`
@@ -469,11 +469,11 @@ class TestTypeFlexOrder {
     <div tri-row [type]="'flex'">
       <div
         tri-col
-        [nzXs]="{ span: 1, offset: 1,push:1, order:1,pull:1 }"
-        [nzSm]="{ span: 1, offset: 1,push:1, order:1,pull:1 }"
-        [nzMd]="{ span: 1, offset: 1,push:1, order:1,pull:1 }"
-        [nzLg]="{ span: 1, offset: 1,push:1, order:1,pull:1 }"
-        [nzXl]="{ span: 1, offset: 1,push:1, order:1,pull:1 }"></div>
+        [xs]="{ span: 1, offset: 1,push:1, order:1,pull:1 }"
+        [sm]="{ span: 1, offset: 1,push:1, order:1,pull:1 }"
+        [md]="{ span: 1, offset: 1,push:1, order:1,pull:1 }"
+        [lg]="{ span: 1, offset: 1,push:1, order:1,pull:1 }"
+        [xl]="{ span: 1, offset: 1,push:1, order:1,pull:1 }"></div>
     </div>
   `
 })

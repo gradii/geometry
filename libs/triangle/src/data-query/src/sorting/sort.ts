@@ -1,4 +1,4 @@
-const merge = function (data, left, middle, right, compare) {
+const merge = function(data, left, middle, right, compare) {
   let leftLength = middle - left;
   let rightLength = right - middle;
   const temp = [];
@@ -26,7 +26,7 @@ const merge = function (data, left, middle, right, compare) {
     rightLength--;
   }
 };
-export let sort = function (data, start, end, compare) {
+export function sort(data, start, end, compare) {
   if (end - start < 2) {
     return;
   }
@@ -34,4 +34,4 @@ export let sort = function (data, start, end, compare) {
   sort(data, start, mid, compare);
   sort(data, mid, end, compare);
   merge(data, start, mid, end, compare);
-};
+}
