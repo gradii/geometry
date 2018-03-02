@@ -2,9 +2,11 @@ import { AfterContentInit, Component, forwardRef, Input, ViewEncapsulation } fro
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-  selector     : 'tri-checkbox-group',
-  encapsulation: ViewEncapsulation.None,
-  template     : `
+  moduleId           : module.id,
+  selector           : 'tri-checkbox-group',
+  encapsulation      : ViewEncapsulation.None,
+  preserveWhitespaces: false,
+  template           : `
     <tri-checkbox
       [class.ant-checkbox-vertical]="type=='vertical'"
       *ngFor="let option of _options"
@@ -13,14 +15,14 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       (ngModelChange)="_optionChange()">
       <span>{{option.label}}</span>
     </tri-checkbox>`,
-  providers    : [
+  providers          : [
     {
       provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => CheckboxGroupComponent),
       multi      : true
     }
   ],
-  host         : {
+  host               : {
     '[class.ant-checkbox-group]': 'true'
   }
 })

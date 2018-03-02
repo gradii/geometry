@@ -5,7 +5,7 @@ $ant-grid-list-two-line-height: 68px;
 // side padding for text in tile headers and footers
 $ant-grid-list-text-padding: 16px;
 
-@include exports('grid-list') {
+@include import-once('grid-list') {
 
   .ant-grid-list {
     display: block;

@@ -31,6 +31,7 @@
     "@ngrx/store": "^5.1.0",
     "@ngrx/store-devtools": "^5.1.0",
     "@nrwl/nx": "^0.7.3",
+    "bootstrap": "^4.0.0",
     "core-js": "^2.5.3",
     "global": "^4.3.2",
     "highlight.js": "^9.12.0",
@@ -43,7 +44,7 @@
   "devDependencies": {
     "@angular/cli": "^1.6.8",
     "@angular/compiler-cli": "^5.2.5",
-    "@angular/material": "^5.2.1",
+    "@angular/material": "^5.2.3",
     "@angular/service-worker": "^5.2.5",
     "@nrwl/schematics": "^0.7.3",
     "@types/chalk": "^2.2.0",

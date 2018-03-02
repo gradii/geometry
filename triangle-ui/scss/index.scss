@@ -1,4 +1,8 @@
 @import "./mixins";
+// Core
+@import "_core/base";
+@import "_core/iconfont";
+@import "_core/motion";
 
 //build angular cdk
 $cdk-overlay-dark-backdrop-background: transparent;

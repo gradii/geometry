@@ -4,9 +4,11 @@ import { RadioGroupDirective } from './radio-group.directive';
 import { RadioOption } from './radio.component';
 
 @Component({
-  selector     : 'tri-radio-group',
-  encapsulation: ViewEncapsulation.None,
-  template     : `
+  moduleId           : module.id,
+  selector           : 'tri-radio-group',
+  encapsulation      : ViewEncapsulation.None,
+  preserveWhitespaces: false,
+  template           : `
     <label tri-radio *ngFor="let radio of options"
            [checked]="radio?.value == _value"
            [disabled]="_disabled"
@@ -15,7 +17,7 @@ import { RadioOption } from './radio.component';
     </label>
     <ng-content></ng-content>
   `,
-  host         : {
+  host               : {
     '[class.ant-radio-group]': 'true'
   }
 })

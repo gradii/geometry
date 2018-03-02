@@ -4,7 +4,7 @@ $radio-inner-prefix-cls: "#{$radio-prefix-cls}-inner";
 $radio-duration: .3s;
 
 .#{$radio-group-prefix-cls} {
-  display: inline-block;
+  display: inline-flex;
   font-size: $font-size-base;
 }
 
@@ -74,10 +74,8 @@ $radio-duration: .3s;
     display: block;
     width: 14px;
     height: 14px;
-    border-width: 1px;
-    border-style: solid;
     border-radius: 14px;
-    border-color: $border-color-base;
+    border: 1px solid $border-color-base;
     background-color: $radio-button-bg;
     transition: all $radio-duration;
   }

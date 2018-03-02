@@ -1,26 +1,21 @@
 import { Component, ElementRef, HostBinding, Input, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector     : 'tri-input-group',
-  encapsulation: ViewEncapsulation.None,
-  template     : `
+  moduleId           : module.id,
+  selector           : 'tri-input-group',
+  encapsulation      : ViewEncapsulation.None,
+  preserveWhitespaces: false,
+  template           : `
     <ng-content></ng-content>
-  `
+  `,
+  host               : {
+    '[class.ant-input-group]'        : 'true',
+    '[class.ant-input-group-compact]': 'compact',
+    '[class.ant-input-group-lg]'     : 'size === "lg"',
+    '[class.ant-input-group-sm]'     : 'size === "sm"'
+  }
 })
-export class InputGroupComponent implements OnInit {
-  _el: HTMLElement;
-  _prefixCls = 'ant-input';
-
-  @HostBinding(`class.ant-input-group-lg`)
-  get _isLarge(): boolean {
-    return this.size === 'lg';
-  }
-
-  @HostBinding(`class.ant-input-group-sm`)
-  get _isSmall(): boolean {
-    return this.size === 'sm';
-  }
-
+export class InputGroupComponent {
   /**
    * all size in `tri-input-group`
    * `tri-input-group`  中所有的  `tri-input`  的大小
@@ -32,13 +27,5 @@ export class InputGroupComponent implements OnInit {
    * 是否用紧凑模式
    */
   @Input()
-  @HostBinding(`class.ant-input-group-compact`)
   compact = false;
-
-  constructor(private _elementRef: ElementRef, private _render: Renderer2) {
-    this._el = this._elementRef.nativeElement;
-    this._render.addClass(this._el, `${this._prefixCls}-group`);
-  }
-
-  ngOnInit() {}
 }

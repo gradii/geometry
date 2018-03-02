@@ -5,9 +5,10 @@ import { Component, ElementRef, EventEmitter, forwardRef, HostBinding, Input, Ou
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-  selector     : 'tri-input-number',
-  encapsulation: ViewEncapsulation.None,
-  template     : `
+  selector           : 'tri-input-number',
+  encapsulation      : ViewEncapsulation.None,
+  preserveWhitespaces: false,
+  template           : `
     <div class="ant-input-number-handler-wrap"
          (mouseover)="_mouseInside = true"
          (mouseout)="_mouseInside = false">
@@ -45,7 +46,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
              [attr.step]="_step"
              autocomplete="off">
     </div>`,
-  providers    : [
+  providers          : [
     {
       provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => InputNumberComponent),

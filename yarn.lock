@@ -141,9 +141,9 @@
   dependencies:
     tslib "^1.7.1"
 
-"@angular/material@^5.2.1":
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/@angular/material/-/material-5.2.1.tgz#c0433edf98904dc35ae15dfa93ede755418843dd"
+"@angular/material@^5.2.3":
+  version "5.2.3"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-5.2.3.tgz#ce7e2abb79c0bd16dff7f247b21c5339d02dd949"
   dependencies:
     tslib "^1.7.1"
 
@@ -1131,6 +1131,10 @@ boom@5.x.x:
   resolved "https://registry.npmjs.org/boom/-/boom-5.2.0.tgz#5dd9da6ee3a5f302077436290cb717d3f4a54e02"
   dependencies:
     hoek "4.x.x"
+
+bootstrap@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.0.0.tgz#ceb03842c145fcc1b9b4e15da2a05656ba68469a"
 
 brace-expansion@^1.0.0, brace-expansion@^1.1.7:
   version "1.1.8"

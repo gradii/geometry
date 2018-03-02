@@ -3,9 +3,11 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { RadioComponent } from './radio.component';
 
 @Component({
-  selector     : '[tri-radio-button]',
-  encapsulation: ViewEncapsulation.None,
-  template     : `
+  moduleId           : module.id,
+  selector           : '[tri-radio-button]',
+  encapsulation      : ViewEncapsulation.None,
+  preserveWhitespaces: false,
+  template           : `
     <span [class.ant-radio-button]="true"
           [class.ant-radio-button-checked]="_checked"
           [class.ant-radio-button-focused]="_focused"
@@ -19,7 +21,7 @@ import { RadioComponent } from './radio.component';
     </span>
     <ng-content></ng-content>
   `,
-  host         : {
+  host               : {
     '[class.ant-radio-button-wrapper]'         : 'true',
     '[class.ant-radio-button-wrapper-disabled]': 'disabled',
     '[class.ant-radio-button-wrapper-checked]' : 'checked'

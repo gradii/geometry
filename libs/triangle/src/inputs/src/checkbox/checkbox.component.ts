@@ -2,8 +2,10 @@ import { Component, EventEmitter, forwardRef, HostListener, Input, Output, ViewE
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
+  moduleId     : module.id,
   selector     : 'tri-checkbox',
-  encapsulation: ViewEncapsulation.None,
+  encapsulation      : ViewEncapsulation.None,
+  preserveWhitespaces: false,
   template     : `
     <label>
       <span [class.ant-checkbox]="true"

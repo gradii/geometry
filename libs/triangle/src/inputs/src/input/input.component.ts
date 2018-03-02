@@ -23,9 +23,11 @@ export interface AutoSizeType {
 export type SizeType = 'large' | 'small' | 'default';
 
 @Component({
-  selector     : 'tri-input',
-  encapsulation: ViewEncapsulation.None,
-  template     : `
+  moduleId           : module.id,
+  selector           : 'tri-input',
+  encapsulation      : ViewEncapsulation.None,
+  preserveWhitespaces: false,
+  template           : `
     <span class="ant-input-group-addon" *ngIf="_addOnContentBefore">
       <ng-template [ngTemplateOutlet]="_addOnContentBefore">
       </ng-template>
@@ -79,14 +81,14 @@ export type SizeType = 'large' | 'small' | 'default';
       <ng-template [ngTemplateOutlet]="_addOnContentAfter">
       </ng-template>
     </span>`,
-  providers    : [
+  providers          : [
     {
       provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => InputComponent),
       multi      : true
     }
   ],
-  host         : {
+  host               : {
     '[class.ant-input-wrapper]'      : 'type !== "search" && !_prefixContent && !_suffixContent',
     '[class.ant-input-affix-wrapper]': 'type === "search" || _prefixContent || _suffixContent',
     '[class.ant-input-group]'        : '_addOnContentBefore || _addOnContentAfter'
