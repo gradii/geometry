@@ -27,7 +27,7 @@ import { Component, OnInit } from '@angular/core';
           </li>
         </ul>
       </li>
-      <li tri-menu-item><a href="https://ng.ant.design" target="_blank" rel="noopener noreferrer">Navigation Four - Link</a></li>
+      <li tri-menu-item><a href="https://ng.tri.design" target="_blank" rel="noopener noreferrer">Navigation Four - Link</a></li>
     </ul>`,
   styles: []
 })

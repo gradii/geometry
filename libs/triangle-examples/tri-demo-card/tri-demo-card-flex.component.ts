@@ -31,7 +31,7 @@ import { Component, OnInit } from '@angular/core';
         color: #999;
       }
 
-      :host ::ng-deep .ant-card-body {
+      :host ::ng-deep .tri-card-body {
         padding: 0;
       }`
   ]

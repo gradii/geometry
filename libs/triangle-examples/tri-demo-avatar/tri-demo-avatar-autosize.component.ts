@@ -16,7 +16,7 @@ const ColorList = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae'];
   `,
   styles: [
     `
-    :host ::ng-deep .ant-avatar {
+    :host ::ng-deep .tri-avatar {
       margin-top: 16px;
       margin-right: 16px;
     }

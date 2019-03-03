@@ -1,0 +1,11 @@
+.#{$breadcrumb-prefix-cls} {
+  display: block;
+   @at-root &> tri-breadcrumb-item:last-child {
+    font-weight: bold;
+    color: $text-color;
+  }
+
+   @at-root &> tri-breadcrumb-item:last-child #{&}-separator {
+    display: none;
+  }
+}

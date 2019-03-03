@@ -32,11 +32,11 @@ import { Component, OnInit } from '@angular/core';
   `,
   styles: [
     `
-    :host ::ng-deep .ant-badge {
+    :host ::ng-deep .tri-badge {
       margin-right: 16px;
     }
 
-    :host ::ng-deep .ant-badge:not(.ant-badge-status) {
+    :host ::ng-deep .tri-badge:not(.tri-badge-status) {
       margin-right: 16px;
     }
 

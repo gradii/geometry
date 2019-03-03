@@ -25,7 +25,7 @@ import { Component } from '@angular/core';
       margin: 0 0 16px;
     }
 
-    .ant-slider-with-marks {
+    .tri-slider-with-marks {
       margin-bottom: 44px;
     }
   `

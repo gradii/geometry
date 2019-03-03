@@ -29,7 +29,7 @@ import { Component, OnInit } from '@angular/core';
   `,
   styles: [
     `
-    :host ::ng-deep .ant-badge {
+    :host ::ng-deep .tri-badge {
       margin-right: 16px;
     }
 

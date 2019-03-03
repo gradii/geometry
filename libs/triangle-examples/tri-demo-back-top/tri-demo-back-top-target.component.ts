@@ -26,7 +26,7 @@ import { Component, OnInit } from '@angular/core';
     height: 1500px;
   }
 
-  :host ::ng-deep .long-div .ant-back-top {
+  :host ::ng-deep .long-div .tri-back-top {
     right: 150px;
   }
 

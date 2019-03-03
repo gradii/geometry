@@ -47,7 +47,7 @@ import { Component } from '@angular/core';
       justify-content: center;
     }
 
-    :host ::ng-deep .vertical-center-modal .ant-modal {
+    :host ::ng-deep .vertical-center-modal .tri-modal {
       top: 0;
     }
   `

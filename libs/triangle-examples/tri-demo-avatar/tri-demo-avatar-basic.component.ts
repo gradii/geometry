@@ -19,7 +19,7 @@ import { Component } from '@angular/core';
   `,
   styles: [
     `
-    :host ::ng-deep .ant-avatar {
+    :host ::ng-deep .tri-avatar {
       margin-top: 16px;
       margin-right: 16px;
     }

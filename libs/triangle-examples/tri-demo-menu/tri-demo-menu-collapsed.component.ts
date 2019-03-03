@@ -11,8 +11,8 @@ import { Component, OnInit } from '@angular/core';
               (click)="toggleCollapsed()"
               style="margin-bottom: 10px;">
         <i class="anticon"
-           [class.anticon-menu-unfold]="isCollapsed"
-           [class.anticon-menu-fold]="!isCollapsed">
+           [class.triicon-menu-unfold]="isCollapsed"
+           [class.triicon-menu-fold]="!isCollapsed">
         </i>
       </button>
       <ul tri-menu [mode]="'inline'" theme='dark' [inlineCollapsed]="isCollapsed">

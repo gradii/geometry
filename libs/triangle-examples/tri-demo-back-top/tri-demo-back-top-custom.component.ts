@@ -17,10 +17,10 @@ import { Component, OnInit } from '@angular/core';
   `,
   styles: [
     `
-  :host ::ng-deep .ant-back-top {
+  :host ::ng-deep .tri-back-top {
     bottom: 100px;
   }
-  :host ::ng-deep .ant-back-top-inner {
+  :host ::ng-deep .tri-back-top-inner {
     height: 40px;
     width: 40px;
     line-height: 40px;

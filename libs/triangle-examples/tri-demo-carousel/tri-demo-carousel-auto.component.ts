@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
       <div tri-carousel-content *ngFor="let index of array"><h3>{{index}}</h3></div>
     </tri-carousel>`,
   styles: [
-    `:host ::ng-deep .ant-carousel .slick-slide {
+    `:host ::ng-deep .tri-carousel .slick-slide {
       text-align: center;
       height: 160px;
       line-height: 160px;

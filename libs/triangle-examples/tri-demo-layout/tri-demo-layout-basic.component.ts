@@ -41,28 +41,28 @@ import { Component, OnInit } from '@angular/core';
   `,
   styles: [
     `
-    :host ::ng-deep .ant-layout-content {
+    :host ::ng-deep .tri-layout-content {
       background: rgba(16, 142, 233, 1);
       color: #fff;
       min-height: 120px;
       line-height: 120px;
     }
 
-    :host ::ng-deep .ant-layout-header, :host ::ng-deep .ant-layout-footer {
+    :host ::ng-deep .tri-layout-header, :host ::ng-deep .tri-layout-footer {
       background: #7dbcea;
       color: #fff;
     }
 
-    :host ::ng-deep .ant-layout-footer {
+    :host ::ng-deep .tri-layout-footer {
       line-height: 1.5;
     }
 
-    :host > .ant-layout {
+    :host > .tri-layout {
       text-align: center;
       margin-bottom: 48px;
     }
 
-    :host ::ng-deep .ant-layout-sider {
+    :host ::ng-deep .tri-layout-sider {
       background: #3ba0e9;
       color: #fff;
       line-height: 120px;

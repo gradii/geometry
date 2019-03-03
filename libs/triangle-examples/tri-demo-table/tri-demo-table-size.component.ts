@@ -145,7 +145,7 @@ import { Component, OnInit } from '@angular/core';
         margin-bottom: 10px;
       }
 
-      .components-table-demo-control-bar ::ng-deep .ant-form-item {
+      .components-table-demo-control-bar ::ng-deep .tri-form-item {
         margin-right: 16px;
         margin-bottom: 8px;
       }

@@ -1,0 +1,20 @@
+tri-tab {
+  display: block;
+}
+
+tri-tabs-nav {
+  display: block;
+}
+
+tri-tabset {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  .ant-tabs {
+    height: 100%;
+  }
+}
+
+tri-tab-body{
+  display: block;
+}

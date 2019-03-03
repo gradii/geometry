@@ -52,15 +52,15 @@ import { Component, OnInit } from '@angular/core';
       margin: 16px;
     }
 
-    :host ::ng-deep .ant-layout-sider-collapsed .nav-text {
+    :host ::ng-deep .tri-layout-sider-collapsed .nav-text {
       display: none;
     }
 
-    :host ::ng-deep .ant-layout-sider-collapsed .ant-menu-submenu-title:after {
+    :host ::ng-deep .tri-layout-sider-collapsed .tri-menu-submenu-title:after {
       display: none;
     }
 
-    :host ::ng-deep .ant-layout-sider-collapsed .anticon {
+    :host ::ng-deep .tri-layout-sider-collapsed .triicon {
       font-size: 16px;
       margin-left: 8px;
     }

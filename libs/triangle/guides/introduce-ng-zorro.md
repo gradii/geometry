@@ -49,7 +49,7 @@ $ npm install ng-zorro-antd --save
 
 ## 链接
 
-- [首页](http://ng.ant.design)
+- [首页](http://ng.tri.design)
 - [Angular官方文档](https://angular.cn/)
 - [开发脚手架](https://cli.angular.io/)
 - [TypeScript](https://www.typescriptlang.org/)

@@ -101,11 +101,11 @@ import { Component, OnInit } from '@angular/core';
   `,
   styles: [
     `
-    .ant-popover-wrap > a {
+    .tri-popover-wrap > a {
       margin-right: 1em;
     }
 
-    .ant-btn {
+    .tri-btn {
       margin-right: 1em;
       margin-bottom: 1em;
     }

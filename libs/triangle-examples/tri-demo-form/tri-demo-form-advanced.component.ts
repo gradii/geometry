@@ -26,7 +26,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
           <button tri-button (click)="resetForm()">Clear</button>
           <a style="margin-left:8px;font-size:12px;" (click)="toggleCollapse()">
             Collapse
-            <i class="anticon" [class.anticon-down]="isCollapse" [class.anticon-up]="!isCollapse"></i>
+            <i class="anticon" [class.triicon-down]="isCollapse" [class.triicon-up]="!isCollapse"></i>
           </a>
         </div>
       </div>
@@ -38,7 +38,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
   styles: [
     `
-      .ant-advanced-search-form {
+      .tri-advanced-search-form {
         padding: 24px;
         background: #fbfbfb;
         border: 1px solid #d9d9d9;

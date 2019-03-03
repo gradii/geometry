@@ -31,7 +31,7 @@ import { Component, OnInit } from '@angular/core';
       </tri-sider>
       <tri-layout>
         <tri-header style="background: #fff; padding:0;">
-          <i class="anticon trigger" [class.anticon-menu-fold]="!isCollapsed" [class.anticon-menu-unfold]="isCollapsed" (click)="isCollapsed=!isCollapsed"></i>
+          <i class="anticon trigger" [class.triicon-menu-fold]="!isCollapsed" [class.triicon-menu-unfold]="isCollapsed" (click)="isCollapsed=!isCollapsed"></i>
         </tri-header>
         <tri-content style="margin:0 16px;">
           <tri-breadcrumb style="margin:12px 0;">
@@ -54,15 +54,15 @@ import { Component, OnInit } from '@angular/core';
       margin: 16px;
     }
 
-    :host ::ng-deep .ant-layout-sider-collapsed .nav-text {
+    :host ::ng-deep .tri-layout-sider-collapsed .nav-text {
       display: none;
     }
 
-    :host ::ng-deep .ant-layout-sider-collapsed .ant-menu-submenu-title:after {
+    :host ::ng-deep .tri-layout-sider-collapsed .tri-menu-submenu-title:after {
       display: none;
     }
 
-    :host ::ng-deep .ant-layout-sider-collapsed .anticon {
+    :host ::ng-deep .tri-layout-sider-collapsed .triicon {
       font-size: 16px;
       margin-left: 8px;
     }
