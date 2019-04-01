@@ -1,27 +1,42 @@
-import { Component, HostBinding, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Host, HostBinding, Input, ViewEncapsulation } from '@angular/core';
 import { RadioGroupDirective } from './radio-group.directive';
 
 import { RadioOption } from './radio.component';
 
+export type RadioType = 'button' | 'label' | string;
+
 @Component({
-  moduleId           : module.id,
-  selector           : 'tri-radio-group',
-  encapsulation      : ViewEncapsulation.None,
-  preserveWhitespaces: false,
-  template           : `
-    <label tri-radio *ngFor="let radio of options"
-           [checked]="radio?.value == _value"
-           [disabled]="_disabled"
-           [value]="radio?.value"
-           [label]="radio?.label">
-    </label>
+  selector     : 'tri-radio-group',
+  encapsulation: ViewEncapsulation.None,
+  template     : `
+    <ng-template [ngIf]="_radioType==='label'">
+      <label tri-radio *ngFor="let radio of options"
+             [checked]="radio?.value == radioGroupDirective._value"
+             [disabled]="radioGroupDirective._disabled||radio.disabled"
+             [value]="radio?.value"
+             [label]="radio?.label">
+      </label>
+    </ng-template>
+    <ng-template [ngIf]="_radioType==='button'">
+      <button tri-radio-button *ngFor="let radio of options"
+              [checked]="radio?.value == radioGroupDirective._value"
+              [disabled]="radioGroupDirective._disabled||radio.disabled"
+              [value]="radio?.value"
+              [label]="radio?.label"></button>
+    </ng-template>
     <ng-content></ng-content>
   `,
-  host               : {
-    '[class.tri-radio-group]': 'true'
+  host         : {
+    '[class.tri-radio-group]': 'true',
+    '[class.tri-radio-group-large]': '_size === "large"',
+    '[class.tri-radio-group-small]': '_size === "small"'
   }
 })
-export class RadioGroupComponent extends RadioGroupDirective {
+export class RadioGroupComponent /*extends RadioGroupDirective*/ {
+  /** @docs-private */
+  _radioType: RadioType = 'label';
+  _size: string;
+
   @Input() options: RadioOption[] = [];
 
   /**
@@ -42,13 +57,15 @@ export class RadioGroupComponent extends RadioGroupDirective {
     this._size = value;
   }
 
-  @HostBinding('class.tri-radio-group-large')
-  get isLarge() {
-    return this._size === 'large';
+  @Input()
+  get radioType(): string {
+    return this._radioType;
   }
 
-  @HostBinding('class.tri-radio-group-small')
-  get isSmall() {
-    return this._size === 'small';
+  set radioType(value: string) {
+    this._radioType = value;
+  }
+
+  constructor(@Host() public radioGroupDirective: RadioGroupDirective) {
   }
 }

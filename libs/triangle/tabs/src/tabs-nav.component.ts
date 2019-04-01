@@ -1,5 +1,4 @@
 import { Direction, Directionality } from '@angular/cdk/bidi';
-/** code from https://github.com/angular/material2 */
 import {
   AfterContentChecked,
   AfterContentInit,
@@ -17,12 +16,8 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import { merge } from 'rxjs/observable/merge';
-import { of as observableOf } from 'rxjs/observable/of';
-import { auditTime } from 'rxjs/operator/auditTime';
-import { startWith } from 'rxjs/operator/startWith';
-import { Subscription } from 'rxjs/Subscription';
+import { fromEvent, merge, of as observableOf, Subscription } from 'rxjs';
+import { auditTime, startWith } from 'rxjs/operators';
 import { TabLabelDirective } from './tab-label.directive';
 import { TabsInkBarDirective } from './tabs-ink-bar.directive';
 
@@ -37,29 +32,29 @@ export type TabPositionMode = 'horizontal' | 'vertical';
   encapsulation: ViewEncapsulation.None,
   template     : `
     <div style="float:right;" *ngIf="_tabBarExtraContent">
-      <div class="ant-tabs-extra-content">
+      <div class="tri-tabs-extra-content">
         <ng-template [ngTemplateOutlet]="_tabBarExtraContent">
         </ng-template>
       </div>
     </div>
-    <div class="ant-tabs-nav-container"
+    <div class="tri-tabs-nav-container"
          [class.tri-tabs-nav-container-scrolling]="_showPaginationControls"
          #tabListContainer>
-      <span class="ant-tabs-tab-prev ant-tabs-tab-arrow-show"
+      <span class="tri-tabs-tab-prev tri-tabs-tab-arrow-show"
             [class.tri-tabs-tab-btn-disabled]="_disableScrollBefore"
             (click)="_scrollHeader('before')"
             *ngIf="_showPaginationControls">
-        <span class="ant-tabs-tab-prev-icon"></span>
+        <span class="tri-tabs-tab-prev-icon"></span>
       </span>
-      <span class="ant-tabs-tab-next ant-tabs-tab-arrow-show"
+      <span class="tri-tabs-tab-next tri-tabs-tab-arrow-show"
             [class.tri-tabs-tab-btn-disabled]="_disableScrollAfter"
             (click)="_scrollHeader('after')"
             *ngIf="_showPaginationControls">
-        <span class="ant-tabs-tab-next-icon"></span>
+        <span class="tri-tabs-tab-next-icon"></span>
       </span>
-      <div class="ant-tabs-nav-wrap">
-        <div class="ant-tabs-nav-scroll">
-          <div class="ant-tabs-nav" [class.tri-tabs-nav-animated]="animated" #tabList
+      <div class="tri-tabs-nav-wrap">
+        <div class="tri-tabs-nav-scroll">
+          <div class="tri-tabs-nav" [class.tri-tabs-nav-animated]="animated" #tabList
                (cdkObserveContent)="_onContentChanges()">
             <div triTabsInkBar [hidden]="hideBar" [animated]="animated" [positionMode]="positionMode"
                  style="display: block;"></div>
@@ -175,9 +170,9 @@ export class TabsNavComponent implements AfterContentChecked, AfterContentInit {
     this._realignInkBar = this._ngZone.runOutsideAngular(() => {
       const dirChange = this._dir ? this._dir.change : observableOf(null);
       const resize =
-              typeof window !== 'undefined' ? auditTime.call(fromEvent(window, 'resize'), 10) : observableOf(null);
+              typeof window !== 'undefined' ? fromEvent(window, 'resize').pipe(auditTime(10)) : observableOf(null);
 
-      return startWith.call(merge(dirChange, resize), null).subscribe(() => {
+      return merge(dirChange, resize).pipe(startWith(null)).subscribe(() => {
         if (this.showPagination) {
           this._updatePagination();
         }

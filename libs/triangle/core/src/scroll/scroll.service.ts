@@ -30,7 +30,7 @@ function getRequestAnimationFrame() {
   return prefix ? window[`${prefix}RequestAnimationFrame`] : requestAnimationFramePolyfill();
 }
 
-const reqAnimFrame = getRequestAnimationFrame();
+export const reqAnimFrame = getRequestAnimationFrame();
 
 function easeInOutCubic(t: number, b: number, c: number, d: number) {
   const cc = c - b;
@@ -42,7 +42,9 @@ function easeInOutCubic(t: number, b: number, c: number, d: number) {
   }
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ScrollService {
   constructor(@Inject(DOCUMENT) private doc: any) {}
 
@@ -68,7 +70,7 @@ export class ScrollService {
 
     const rect = el.getBoundingClientRect();
     if (rect.width || rect.height) {
-      const doc = el.ownerDocument.documentElement;
+      const doc = el.ownerDocument!.documentElement;
       ret.top = rect.top - doc.clientTop;
       ret.left = rect.left - doc.clientLeft;
     } else {

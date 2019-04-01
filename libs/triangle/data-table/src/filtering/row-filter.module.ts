@@ -1,9 +1,11 @@
-import { TriDatePickerModule } from '@gradii/triangle/datepicker';
+import { TriDatePickerModule } from '@gradii/triangle/date-picker';
 import { TriDropDownModule } from '@gradii/triangle/dropdown';
 import { TriInputModule, TriInputNumberModule, TriSelectModule } from '@gradii/triangle/inputs';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FilterMenuTemplateDirective } from '../filtering/filter-menu/filter-menu-template.directive';
+import { FilterSimpleTemplateDirective } from '../filtering/filter-simple/filter-simple-template.directive';
 import { FilterSharedModule } from '../filtering/shared/filter-shared.module';
 import { FilterHostDirective } from './filter-host.directive';
 import { AutoCompleteFilterCellComponent } from './filter-row/autocomplete-filter-cell.component';

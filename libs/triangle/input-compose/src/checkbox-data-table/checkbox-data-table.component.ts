@@ -1,6 +1,6 @@
-import { SelectionEvent } from '@gradii/triangle/data-table';
+import { DataTableComponent, DetailTemplateDirective, SelectionEvent } from '@gradii/triangle/data-table';
 import { isArray, isPresent } from '@gradii/triangle/util';
-import { Component, forwardRef, Input, ViewEncapsulation } from '@angular/core';
+import { AfterContentChecked, Component, forwardRef, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BaseInputOutputDataTable } from './base-input-output-data-table';
 
@@ -9,6 +9,7 @@ import { BaseInputOutputDataTable } from './base-input-output-data-table';
   encapsulation: ViewEncapsulation.None,
   template     : `
     <tri-data-table
+      #dataTable
       [autoGenerateColumns]="true"
       [selectedKeys]="selectedKeys || []"
       [selectedBy]="selectedBy"
@@ -21,6 +22,7 @@ import { BaseInputOutputDataTable } from './base-input-output-data-table';
       [scrollable]="'scrollable'"
       [filter]="filter"
       [filterable]="filterable"
+      [resizable]="resizable"
       [sortable]="sortable"
       [pageable]="pageable"
       [groupable]="groupable"
@@ -38,13 +40,14 @@ import { BaseInputOutputDataTable } from './base-input-output-data-table';
       (groupCollapse)="groupCollapse.emit($event)"
       (detailExpand)="detailExpand.emit($event)"
       (detailCollapse)="detailCollapse.emit($event)"
+      (autoGenerateColumnsChange)="autoGenerateColumnsChange.emit($event)"
       (edit)="edit.emit($event)"
       (cancel)="cancel.emit($event)"
       (save)="save.emit($event)"
       (remove)="remove.emit($event)"
       (add)="add.emit($event)"
     >
-      <tri-grid-checkbox-column [showSelectAll]="showSelectAll"></tri-grid-checkbox-column>
+      <tri-data-table-checkbox-column [showSelectAll]="showSelectAll"></tri-data-table-checkbox-column>
     </tri-data-table>
   `,
   providers    : [
@@ -55,23 +58,35 @@ import { BaseInputOutputDataTable } from './base-input-output-data-table';
     }
   ]
 })
-export class CheckboxDataTableComponent extends BaseInputOutputDataTable implements ControlValueAccessor {
-  private selected;
+export class CheckboxDataTableComponent extends BaseInputOutputDataTable implements AfterContentChecked, ControlValueAccessor {
   private selectedChangeFn;
   private selectedTouchFn;
 
+  @ViewChild('dataTable', {read: DataTableComponent})
+  dataTable: DataTableComponent;
+
   @Input() showSelectAll: boolean = false;
+
+  @Input()
+  detailTemplateDirective: DetailTemplateDirective;
+
 
   onSelectionChange(event: SelectionEvent) {
     if (!isPresent(this.selectedBy)) {
-      this.selectedChangeFn(event.selectedRows);
       this.selectedTouchFn();
+      this.selectedChangeFn(event.selectedRows);
     }
   }
 
   onSelectedKeysChange(event) {
-    this.selectedChangeFn(event);
     this.selectedTouchFn();
+    this.selectedChangeFn(event);
+  }
+
+  ngAfterContentChecked() {
+    if (this.dataTable && this.detailTemplateDirective instanceof DetailTemplateDirective && !this.detailTemplateDirective.hackHidden) {
+      this.dataTable.detailTemplate = this.detailTemplateDirective;
+    }
   }
 
   writeValue(value: any): void {

@@ -4,9 +4,9 @@ import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputNumberComponent } from './input-number.component';
-import { InputNumberModule } from './input-number.module';
+import { TriInputNumberModule } from './input-number.module';
 
-describe('InputNumber', () => {
+describe('input number', () => {
   let testComponent;
   let fixture;
   let debugElement;
@@ -14,15 +14,15 @@ describe('InputNumber', () => {
     beforeEach(
       async(() => {
         TestBed.configureTestingModule({
-          imports     : [InputNumberModule, FormsModule],
-          declarations: [NzInputNumberComponentIntSpecComponent],
+          imports     : [TriInputNumberModule, FormsModule],
+          declarations: [InputNumberComponentIntSpecComponent],
           providers   : []
         }).compileComponents();
       })
     );
 
     beforeEach(() => {
-      fixture = TestBed.createComponent(NzInputNumberComponentIntSpecComponent);
+      fixture = TestBed.createComponent(InputNumberComponentIntSpecComponent);
       testComponent = fixture.debugElement.componentInstance;
       debugElement = fixture.debugElement.query(By.directive(InputNumberComponent));
     });
@@ -31,7 +31,7 @@ describe('InputNumber', () => {
       fakeAsync(() => {
         fixture.detectChanges();
         const handlerDownElement = debugElement.nativeElement.querySelector('.tri-input-number-handler-down');
-        expect(handlerDownElement.classList.contains('ant-input-number-handler-down-disabled')).toBe(true);
+        expect(handlerDownElement.classList.contains('tri-input-number-handler-down-disabled')).toBe(true);
         handlerDownElement.click();
         fixture.detectChanges();
         expect(testComponent.initValue).toBe(1);
@@ -41,14 +41,14 @@ describe('InputNumber', () => {
         const handlerUpElement = debugElement.nativeElement.querySelector('.tri-input-number-handler-up');
         handlerUpElement.click();
         fixture.detectChanges();
-        expect(handlerUpElement.classList.contains('ant-input-number-handler-up-disabled')).toBe(true);
+        expect(handlerUpElement.classList.contains('tri-input-number-handler-up-disabled')).toBe(true);
         expect(testComponent.initValue).toBe(10);
       })
     );
     it('should disable style work', () => {
       testComponent.isDisabled = true;
       fixture.detectChanges();
-      expect(debugElement.nativeElement.classList.contains('ant-input-number-disabled')).toBe(true);
+      expect(debugElement.nativeElement.classList.contains('tri-input-number-disabled')).toBe(true);
     });
     it(
       'should size style work',
@@ -56,11 +56,11 @@ describe('InputNumber', () => {
         testComponent.size = 'large';
         tick();
         fixture.detectChanges();
-        expect(debugElement.nativeElement.classList.contains('ant-input-number-lg')).toBe(true);
+        expect(debugElement.nativeElement.classList.contains('tri-input-number-lg')).toBe(true);
         testComponent.size = 'small';
         tick();
         fixture.detectChanges();
-        expect(debugElement.nativeElement.classList.contains('ant-input-number-sm')).toBe(true);
+        expect(debugElement.nativeElement.classList.contains('tri-input-number-sm')).toBe(true);
       })
     );
   });
@@ -68,15 +68,15 @@ describe('InputNumber', () => {
     beforeEach(
       async(() => {
         TestBed.configureTestingModule({
-          imports     : [InputNumberModule, FormsModule],
-          declarations: [NzInputNumberComponentDigitSpecComponent],
+          imports     : [TriInputNumberModule, FormsModule],
+          declarations: [InputNumberComponentDigitSpecComponent],
           providers   : []
         }).compileComponents();
       })
     );
 
     beforeEach(() => {
-      fixture = TestBed.createComponent(NzInputNumberComponentDigitSpecComponent);
+      fixture = TestBed.createComponent(InputNumberComponentDigitSpecComponent);
       testComponent = fixture.debugElement.componentInstance;
       debugElement = fixture.debugElement.query(By.directive(InputNumberComponent));
     });
@@ -85,7 +85,7 @@ describe('InputNumber', () => {
       fakeAsync(() => {
         fixture.detectChanges();
         const handlerDownElement = debugElement.nativeElement.querySelector('.tri-input-number-handler-down');
-        expect(handlerDownElement.classList.contains('ant-input-number-handler-down-disabled')).toBe(true);
+        expect(handlerDownElement.classList.contains('tri-input-number-handler-down-disabled')).toBe(true);
         handlerDownElement.click();
         fixture.detectChanges();
         expect(testComponent.initValue).toBe(1);
@@ -95,7 +95,7 @@ describe('InputNumber', () => {
         const handlerUpElement = debugElement.nativeElement.querySelector('.tri-input-number-handler-up');
         handlerUpElement.click();
         fixture.detectChanges();
-        expect(handlerUpElement.classList.contains('ant-input-number-handler-up-disabled')).toBe(true);
+        expect(handlerUpElement.classList.contains('tri-input-number-handler-up-disabled')).toBe(true);
         expect(testComponent.initValue).toBe(10);
       })
     );
@@ -110,7 +110,7 @@ describe('InputNumber', () => {
     <tri-input-number [size]="size" [(ngModel)]="initValue" [min]="1" [max]="10" [step]="1" [disabled]="isDisabled"></tri-input-number>
   `
 })
-export class NzInputNumberComponentIntSpecComponent {
+export class InputNumberComponentIntSpecComponent {
   isDisabled = false;
   initValue = 1;
   size = 'default';
@@ -122,6 +122,6 @@ export class NzInputNumberComponentIntSpecComponent {
     <tri-input-number [(ngModel)]="initValue" [min]="1" [max]="10" [step]="0.1"></tri-input-number>
   `
 })
-export class NzInputNumberComponentDigitSpecComponent {
+export class InputNumberComponentDigitSpecComponent {
   initValue = 1;
 }

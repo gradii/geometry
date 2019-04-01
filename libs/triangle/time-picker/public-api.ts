@@ -1,3 +1,6 @@
-export * from './src/timepicker.component';
-export * from './src/timepicker.module';
-export * from './src/timepicker-inner.component';
+export * from './src/time-picker.component';
+export * from './src/time-picker.module';
+
+export {TimeHolder as ɵTimeHolder} from './src/time-holder'
+export {TimeValueAccessorDirective as ɵTimeValueAccessorDirective} from './src/time-value-accessor.directive'
+export {TimePickerPanelComponent as ɵTimePickerPanelComponent} from './src/time-picker-panel.component'

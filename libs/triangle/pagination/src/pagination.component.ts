@@ -1,49 +1,44 @@
-import { PageChangeEvent } from '@gradii/triangle/data-table';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
-
-const isChanged = (propertyName: string, changes: any, skipFirstChange: boolean = true) =>
-  changes[propertyName] &&
-  (!changes[propertyName].isFirstChange() || !skipFirstChange) &&
-  changes[propertyName].previousValue !== changes[propertyName].currentValue;
-const anyChanged = (propertyNames: string[], changes: any, skipFirstChange: boolean = true) =>
-  propertyNames.some(name => isChanged(name, changes, skipFirstChange));
+import { isInfinite } from '@gradii/triangle/util';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { ForPageChangeEvent, PageChangeEvent } from './event/page-change.event';
 
 @Component({
   selector     : 'tri-pagination',
   encapsulation: ViewEncapsulation.None,
   template     : `
-    <ul class="ant-pagination ant-pagination-simple" *ngIf="simple">
+    <ul class="tri-pagination tri-pagination-simple" *ngIf="simple">
       <li
         title="上一页"
-        class="ant-pagination-prev"
+        class="tri-pagination-prev"
         (click)="_jumpPage(pageIndex-1)"
         [class.tri-pagination-disabled]="_isFirstIndex">
         <a></a>
       </li>
-      <li [attr.title]="pageIndex+'/'+_lastIndex" class="ant-pagination-simple-pager">
-        <input [ngModel]="pageIndex" (ngModelChange)="_pageIndexChange($event)" size="3"><span
-        class="ant-pagination-slash">／</span>{{_lastIndex}}
+      <li [attr.title]="pageIndex+'/'+_lastIndex" class="tri-pagination-simple-pager">
+        <input [ngModel]="pageIndex" (ngModelChange)="_pageIndexChange($event)" size="3">
+        <div style="display: inline-block" *ngIf="!isInfinite(_lastIndex)"><span
+          class="tri-pagination-slash">／</span>{{_lastIndex}} </div>
       </li>
       <li
         title="下一页"
-        class="ant-pagination-next"
+        class="tri-pagination-next"
         (click)="_jumpPage(pageIndex+1)"
         [class.tri-pagination-disabled]="_isLastIndex">
         <a></a>
       </li>
     </ul>
-    <ul *ngIf="!simple" class="ant-pagination" [class.mini]="size=='small'">
-      <span class="ant-pagination-total-text" *ngIf="showTotal">共 {{_total}} 条</span>
+    <ul *ngIf="!simple" class="tri-pagination" [class.mini]="size=='small'">
+      <span class="tri-pagination-total-text" *ngIf="showTotal">共 {{_total}} 条</span>
       <li
         title="上一页"
-        class="ant-pagination-prev"
+        class="tri-pagination-prev"
         (click)="_jumpPage(pageIndex-1)"
         [class.tri-pagination-disabled]="_isFirstIndex">
         <a></a>
       </li>
       <li
         title="第一页"
-        class="ant-pagination-item"
+        class="tri-pagination-item"
         (click)="_jumpPage(_firstIndex)"
         [class.tri-pagination-item-active]="_isFirstIndex">
         <a>{{_firstIndex}}</a>
@@ -51,14 +46,14 @@ const anyChanged = (propertyNames: string[], changes: any, skipFirstChange: bool
       <li
         [attr.title]="'向前 '+_roundPageSize+' 页'"
         (click)="_jumpBefore(limit)"
-        class="ant-pagination-jump-prev"
+        class="tri-pagination-jump-prev"
         *ngIf="(_lastIndex >9)&&(pageIndex-3>_firstIndex)">
         <a></a>
       </li>
       <li
         *ngFor="let page of _pages"
         [attr.title]="page.index"
-        class="ant-pagination-item"
+        class="tri-pagination-item"
         (click)="_jumpPage(page.index)"
         [class.tri-pagination-item-active]="pageIndex==page.index">
         <a>{{page.index}}</a>
@@ -66,30 +61,30 @@ const anyChanged = (propertyNames: string[], changes: any, skipFirstChange: bool
       <li
         [attr.title]="'向后 '+_roundPageSize+' 页'"
         (click)="_jumpAfter(limit)"
-        class="ant-pagination-jump-next"
+        class="tri-pagination-jump-next"
         *ngIf="(_lastIndex >9)&&(pageIndex+3<_lastIndex)">
         <a></a>
       </li>
       <li
         [attr.title]="'最后一页: '+_lastIndex"
-        class="ant-pagination-item"
+        class="tri-pagination-item"
         (click)="_jumpPage(_lastIndex)"
-        *ngIf="(_lastIndex>0)&&(_lastIndex!==_firstIndex)"
+        *ngIf="(_lastIndex>0)&&(_lastIndex!==_firstIndex)&&!isInfinite(_lastIndex)"
         [class.tri-pagination-item-active]="_isLastIndex">
         <a>{{_lastIndex}}</a>
       </li>
       <li
         title="下一页"
-        class="ant-pagination-next"
+        class="tri-pagination-next"
         (click)="_jumpPage(pageIndex+1)"
         [class.tri-pagination-disabled]="_isLastIndex">
         <a></a>
       </li>
-      <div class="ant-pagination-options">
+      <div class="tri-pagination-options">
         <tri-select
           *ngIf="showSizeChanger"
           [size]="size=='small'?'small':''"
-          class="ant-pagination-options-size-changer"
+          class="tri-pagination-options-size-changer"
           [ngModel]="limit"
           (ngModelChange)="_pageSizeChange($event)">
           <tri-option
@@ -103,19 +98,16 @@ const anyChanged = (propertyNames: string[], changes: any, skipFirstChange: bool
             [value]="_limit">
           </tri-option>
         </tri-select>
-        <div class="ant-pagination-options-quick-jumper"
+        <div class="tri-pagination-options-quick-jumper"
              *ngIf="showQuickJumper">
           跳至<input [ngModel]="pageIndex" (ngModelChange)="_pageIndexChange($event)">页
         </div>
       </div>
     </ul>`
 })
-export class PaginationComponent implements OnChanges {
-  _el: HTMLElement;
-  // cache pageIndex
+export class PaginationComponent {
   _current = 1;
   _total: number;
-  // _pageSize        = 10;
   _firstIndex = 1;
   _lastIndex = Infinity;
   _pages = [];
@@ -125,8 +117,12 @@ export class PaginationComponent implements OnChanges {
   _showTotal = false;
   _simple = false;
 
-  _offset: number;
+  _offset: number = 0;
   _limit: number = 10;
+
+  isInfinite(n) {
+    return isInfinite(n);
+  }
 
   /**
    * Whether can change pageSize, when add this property the page will change dropdown menu
@@ -182,7 +178,7 @@ export class PaginationComponent implements OnChanges {
    * 获取显示总共有多少条数据
    */
   get showTotal() {
-    return this._showTotal;
+    return this._showTotal && !isInfinite(this._total);
   }
 
   /**
@@ -205,8 +201,8 @@ export class PaginationComponent implements OnChanges {
 
   @Input()
   set forPage({pageIndex, pageSize}: { pageIndex: number; pageSize: number }) {
-    this.pageIndex = pageIndex;
     this.limit = pageSize;
+    this.pageIndex = pageIndex;
   }
 
   /**
@@ -216,21 +212,7 @@ export class PaginationComponent implements OnChanges {
   @Input() size: string;
 
   @Output() pageChange: EventEmitter<PageChangeEvent> = new EventEmitter();
-
-  /**
-   * the event of page size change
-   */
-  @Output() pageSizeChange: EventEmitter<number> = new EventEmitter();
-
-  /**
-   * the event of page index change
-   */
-  @Output() pageIndexChange: EventEmitter<number> = new EventEmitter();
-
-  /**
-   * the event of page index click change
-   */
-  @Output() pageIndexClickChange: EventEmitter<number> = new EventEmitter();
+  @Output() forPageChange: EventEmitter<ForPageChangeEvent> = new EventEmitter();
 
   _jumpBefore(pageSize) {
     this._jumpPage(this.pageIndex - Math.round(pageSize / 2));
@@ -242,8 +224,7 @@ export class PaginationComponent implements OnChanges {
 
   /**
    * Get current page index
-   * 获取当前页数(双向绑定)
-   * @deprecated deprecated for input binding, please use forPage
+   * 获取当前页数
    */
   @Input()
   get pageIndex(): number {
@@ -267,11 +248,11 @@ export class PaginationComponent implements OnChanges {
       this._current = value;
 
       if (isFinite(this.limit)) {
-        this.offset = (value - 1) * this.limit;
+        this._offset = (value - 1) * this.limit;
       } else {
-        this.offset = value;
+        this._offset = value;
       }
-      this.pageIndexChange.emit(value);
+      this._buildIndexes();
     }
   }
 
@@ -279,7 +260,7 @@ export class PaginationComponent implements OnChanges {
    * Limit
    * 限制
    */
-  @Input('limit')
+  @Input()
   get limit() {
     return this._limit;
   }
@@ -287,10 +268,9 @@ export class PaginationComponent implements OnChanges {
   set limit(value: number) {
     value = Math.round(value);
     if (value > 0 && value !== this._limit) {
+      this._limit = value;
       this._buildPageIndex();
       this._buildIndexes();
-      this.pageSizeChange.emit(this._limit);
-      this.pageChange.emit({skip: this._offset, take: this._limit});
     }
   }
 
@@ -298,18 +278,17 @@ export class PaginationComponent implements OnChanges {
    * Offset
    * 偏移量
    */
-  @Input('offset')
+  @Input()
   get offset() {
     return this._offset;
   }
 
   set offset(value: number) {
     const _offset = Math.abs(Number(value));
-    if (this._offset !== _offset) {
+    if (_offset >= 0 && _offset !== this._offset) {
       this._offset = _offset;
       this._buildPageIndex();
       this._buildIndexes();
-      this.pageChange.emit({skip: this._offset, take: this._limit});
     }
   }
 
@@ -319,7 +298,7 @@ export class PaginationComponent implements OnChanges {
    */
   @Input()
   get pageSize(): number {
-    return this._offset;
+    return this._limit;
   }
 
   /**
@@ -329,8 +308,8 @@ export class PaginationComponent implements OnChanges {
    * @deprecated
    */
   set pageSize(value: number) {
-    console.warn(`the input of pagination page size is deprecated, please use skip offset instead`);
-    this.offset = value;
+    console.warn(`the input of pagination page size is deprecated, please use limit offset instead`);
+    this.limit = value;
   }
 
   /**
@@ -357,10 +336,14 @@ export class PaginationComponent implements OnChanges {
 
   _pageSizeChange($event) {
     this.limit = $event;
+    this.pageChange.emit({skip: this._offset, take: this._limit});
+    this.forPageChange.emit({pageIndex: this.pageIndex, pageSize: this.pageSize});
   }
 
   _pageIndexChange($event) {
     this.pageIndex = $event;
+    this.pageChange.emit({skip: this._offset, take: this._limit});
+    this.forPageChange.emit({pageIndex: this.pageIndex, pageSize: this.pageSize});
   }
 
   _buildPageIndex() {
@@ -376,19 +359,10 @@ export class PaginationComponent implements OnChanges {
       for (let i = 2; i <= this._lastIndex - 1; i++) {
         tmpPages.push({index: i});
       }
-    } else if (!isFinite(this._lastIndex)) {
     } else {
       const current = this.pageIndex;
       let left = Math.max(2, current - 2);
       let right = Math.min(current + 2, this._lastIndex - 1);
-
-      // if (current - 1 <= 2) {
-      //   right = 5;
-      // }
-      //
-      // if (this._lastIndex - current <= 2) {
-      //   left = this._lastIndex - 4;
-      // }
 
       for (let i = left; i <= right; i++) {
         tmpPages.push({index: i});
@@ -398,9 +372,7 @@ export class PaginationComponent implements OnChanges {
   }
 
   _jumpPage(index) {
-    if (index === this.pageIndex) {
-      return;
-    }
+    const _prevIndex = this.pageIndex;
 
     if (index < this._firstIndex) {
       this.pageIndex = this._firstIndex;
@@ -409,7 +381,11 @@ export class PaginationComponent implements OnChanges {
     } else {
       this.pageIndex = index;
     }
-    this.pageIndexClickChange.emit(this.pageIndex);
+    if (_prevIndex === this.pageIndex) {
+      return;
+    }
+    this.pageChange.emit({skip: this._offset, take: this._limit});
+    this.forPageChange.emit({pageIndex: this.pageIndex, pageSize: this.pageSize});
   }
 
   get _isLastIndex() {
@@ -424,21 +400,6 @@ export class PaginationComponent implements OnChanges {
     return Math.round(this.limit / 2);
   }
 
-  constructor(private _elementRef: ElementRef) {
-    this._el = this._elementRef.nativeElement;
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['skip'] || changes['offset'] || changes['limit'] || changes['take']) {
-      if (changes['pageIndex'] || changes['pageSize']) {
-        console.warn(
-          `pageSize and pageIndex is incompatible with "skip offset limit take", ` +
-          `pageSize and pageIndex is deprecated and it will not take effect. please consider to use skip take`
-        );
-      }
-    }
-    // if (anyChanged(['skip', 'offset', 'limit', 'take', 'pageIndex', 'pageSize'], changes, true)) {
-    //   this.pageChange.emit({skip: this.offset, take: this.limit});
-    // }
+  constructor() {
   }
 }

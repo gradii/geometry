@@ -8,33 +8,32 @@ import { DetailTemplateDirective } from '../table-shared/detail-template.directi
 @Component({
   selector: '[triGridFooter]',
   template: `
-              <ng-template [ngIf]="true">
-                <tr [class.tri-footer-template]="true">
-                  <td
-                    [class.tri-group-cell]="true"
-                    *ngFor="let g of groups">
-                  </td>
-                  <td
-                    [class.tri-hierarchy-cell]="true"
-                    *ngIf="detailTemplate?.templateRef">
-                  </td>
-                  <td
-                    [ngClass]="column.footerClass"
-                    [ngStyle]="column.footerStyle"
-                    *ngFor="let column of columnsToRender; let columnIndex = index">
-                    <ng-template
-                      tri-template-context
-                      [templateContext]="{
-                        templateRef: column.footerTemplateRef,
+    <ng-template [ngIf]="true">
+      <tr [class.tri-footer-template]="true">
+        <td
+          [class.tri-group-cell]="true"
+          *ngFor="let g of groups">
+        </td>
+        <td
+          [class.tri-hierarchy-cell]="true"
+          *ngIf="detailTemplate?.templateRef">
+        </td>
+        <td
+          [ngClass]="column.footerClass"
+          [ngStyle]="column.footerStyle"
+          *ngFor="let column of columnsToRender; let columnIndex = index">
+          <ng-template
+            [ngTemplateOutlet]="column.footerTemplateRef"
+            [ngTemplateOutletContext]="{
                         columnIndex: lockedColumnsCount + columnIndex,
                         column: column,
                         $implicit: column
-                    }">
-                    </ng-template>
-                  </td>
-                </tr>
-              </ng-template>
-            `
+                        }">
+          </ng-template>
+        </td>
+      </tr>
+    </ng-template>
+  `
 })
 export class FooterComponent {
   @Input() columns: ColumnComponent[];
@@ -49,7 +48,7 @@ export class FooterComponent {
     this.lockedColumnsCount = 0;
   }
 
-  @HostBinding('class.tri-grid-footer')
+  @HostBinding('class.tri-data-table-footer')
   get footerClass(): boolean {
     return !this.scrollable;
   }

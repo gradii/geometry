@@ -29,17 +29,25 @@ export type CommandEvent = {
 
 @Injectable()
 export class EditService {
+  private _editedIndices;
+  get editedIndices() {
+    return this._editedIndices;
+  }
+
+  set editedIndices(value) {
+    this._editedIndices = value;
+  }
   changes: EventEmitter<CommandEvent>;
-  private editedIndices;
+
   private newItemGroup;
 
   constructor() {
     this.changes = new EventEmitter();
-    this.editedIndices = [];
+    this._editedIndices = [];
   }
 
   editRow(index: number, group?: any): void {
-    this.editedIndices.push({index, group});
+    this._editedIndices.push({index, group});
   }
 
   addRow(group: any): void {
@@ -57,19 +65,24 @@ export class EditService {
     return {};
   }
 
+  closeAll():void {
+    this.newItemGroup = undefined;
+    this._editedIndices = [];
+  }
+
   close(index?: number): void {
     if (isNewRow(index)) {
       this.newItemGroup = undefined;
       return;
     }
-    this.editedIndices = this.editedIndices.filter(isNotEqual(index));
+    this._editedIndices = this._editedIndices.filter(isNotEqual(index));
   }
 
   context(index?: number): Entity {
     if (isNewRow(index)) {
       return this.newItemGroup;
     }
-    return this.editedIndices.find(isEqual(index));
+    return this._editedIndices.find(isEqual(index));
   }
 
   isEdited(index: number): boolean {
@@ -81,7 +94,7 @@ export class EditService {
   }
 
   beginAdd(): void {
-    this.changes.emit({action: 'add'});
+    this.changes.emit({action: 'add', rowIndex: -1, isNew: true});
   }
 
   endEdit(rowIndex?: number): void {

@@ -7,8 +7,7 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, HostBinding, Input,
   animations   : [TagAnimation],
   template     : `
     <span *ngIf="!_closed"
-          [ngClass]="_tagCls"
-          class="ant-tag"
+          class="tri-tag"
           [class.tri-tag-pink]="color=='pink'"
           [class.tri-tag-red]="color=='red'"
           [class.tri-tag-yellow]="color=='yellow'"
@@ -18,17 +17,16 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, HostBinding, Input,
           [class.tri-tag-blue]="color=='blue'"
           [class.tri-tag-purple]="color=='purple'"
           [class.tri-tag-has-color]="color && !_isPresetColor(color)"
-          
           [style.backgroundColor]="_backgroundColor"
           [@tagAnimation]
           (@tagAnimation.done)="_afterClose($event)">
-      <span class="ant-tag-text"><ng-content></ng-content></span>
+      <span class="tri-tag-text"><ng-content></ng-content></span>
       <i class="anticon anticon-cross" (click)="_close($event)" *ngIf="closable"></i>
     </span>
   `
 })
 export class TagComponent implements OnInit, AfterViewInit {
-  _prefixCls = 'ant-tag';
+  _prefixCls = 'tri-tag';
   _closed = false;
 
   /** Whether tag is closable */

@@ -14,13 +14,13 @@ import { FilterService } from '../../filter.service';
       [currentFilter]="currentFilter"
       [filterService]="filterService"
     >-->
-      <tri-datepicker
+      <tri-date-picker
         #picker
         triFilterInput
         [ngModel]="currentFilter?.value"
         [format]="format"
       >
-      </tri-datepicker>
+      </tri-date-picker>
     <!--</tri-data-table-filter-menu-input-wrapper>-->
   `
 })

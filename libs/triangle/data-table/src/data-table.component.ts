@@ -1,10 +1,10 @@
 import { CompositeFilterDescriptor, GroupDescriptor, GroupResult, SortDescriptor } from '@gradii/triangle/data-query';
-import { SelectableSettings } from '@gradii/triangle/data-table';
-import { isArray, isFunction, isObject, isPresent } from '@gradii/triangle/util';
+import { isArray, isBoolean, isDate, isFunction, isNumber, isObject, isPresent } from '@gradii/triangle/util';
 import {
   AfterContentChecked,
   AfterContentInit,
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ContentChild,
   ContentChildren,
@@ -18,13 +18,14 @@ import {
   Output,
   QueryList,
   Renderer2,
+  Self,
   ViewChild
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { filter } from 'rxjs/operators/filter';
-import { map } from 'rxjs/operators/map';
-import { merge } from 'rxjs/operators/merge';
+import { merge } from 'rxjs';
+import { filter, map, take } from 'rxjs/operators';
 import { CELL_CONTEXT, EMPTY_CELL_CONTEXT } from './cell-context';
+import { ColumnResizingService } from './column-resize/column-resizing.service';
 import { ColumnBase } from './columns/column-base';
 import { isColumnGroupComponent } from './columns/column-group.component';
 import { ColumnList } from './columns/column-list';
@@ -33,6 +34,9 @@ import { ColumnsContainer } from './columns/columns-container';
 import { DataResultIterator, GridDataResult } from './data-collection/data-result-iterator';
 import { DataCollection } from './data-collection/data.collection';
 import { NoRecordsTemplateDirective } from './directive/no-records-template.directive';
+import { ColumnReorderService } from './dragdrop/column-reorder.service';
+import { DragHintService } from './dragdrop/drag-hint.service';
+import { DropCueService } from './dragdrop/drop-cue.service';
 import { AddEvent } from './event/add-event-args.interface';
 import { CancelEvent } from './event/cancel-event-args.interface';
 import { DataStateChangeEvent, PageChangeEvent } from './event/change-event-args.interface';
@@ -40,16 +44,18 @@ import { EditEvent } from './event/edit-event-args.interface';
 import { RemoveEvent } from './event/remove-event-args.interface';
 import { SaveEvent } from './event/save-event-args.interface';
 import { FilterService } from './filtering/filter.service';
-import { GroupConnectionService } from './grouping/group-connection.service';
 import { GroupInfoService } from './grouping/group-info.service';
 import { GroupableSettings } from './grouping/group-settings';
 import { GroupsService } from './grouping/groups.service';
-import { columnsToRender, expandColumns } from './helper/column-common';
+import { expandColumns } from './helper/column-common';
+import { IdService } from './helper/id.service';
 import { ScrollMode } from './helper/scrollmode';
 import { SortSettings } from './helper/sort-settings';
+import { SortService } from './helper/sort.service';
 import { ListComponent } from './list.component';
 import { RowClassFn, RowSelectedFn } from './row-class';
 import { syncRowsHeight } from './row-sync';
+import { SelectableSettings } from './selection/selectable-settings';
 import { Selection } from './selection/selection-default';
 import { SelectionEvent, SelectionService } from './selection/selection.service';
 import { BrowserSupportService } from './service/browser-support.service';
@@ -63,7 +69,7 @@ import { SuspendService } from './service/suspend.service';
 
 import { DetailTemplateDirective } from './table-shared/detail-template.directive';
 import { ToolbarTemplateDirective } from './table-shared/toolbar-template.directive';
-import { anyChanged, isChanged, isUniversal } from './utils';
+import { anyChanged, isUniversal } from './utils';
 
 const createControl = source => (acc, key) => {
   acc[key] = new FormControl(source[key]);
@@ -74,12 +80,13 @@ const fieldMapFnObjectFactory = obj => {
   return function (field): string {
     for (let [key, val] of Object.entries(obj)) {
       if (field === key) {
-        return val as string;
+        return (val as string);
       }
     }
   };
 };
 export type fieldMapFn = (fieldKey: string) => string;
+export type fieldFilterMapFn = (fieldKey: string) => 'text' | 'numeric' | 'boolean' | 'date' | string;
 
 /**
  *
@@ -153,13 +160,13 @@ export type fieldMapFn = (fieldKey: string) => string;
   selector           : 'tri-data-table',
   exportAs           : 'triDataTable',
   preserveWhitespaces: false,
+  // changeDetection    : ChangeDetectionStrategy.OnPush,
   providers          : [
     BrowserSupportService,
     SelectionService,
     DetailsService,
     GroupsService,
     GroupInfoService,
-    GroupConnectionService,
     ChangeNotificationService,
     EditService,
     SuspendService,
@@ -170,31 +177,37 @@ export type fieldMapFn = (fieldKey: string) => string;
     {
       provide : CELL_CONTEXT,
       useValue: EMPTY_CELL_CONTEXT
-    }
+    },
+    ColumnResizingService,
+    DragHintService,
+    DropCueService,
+    ColumnReorderService,
+    IdService,
+    SortService,
   ],
   host               : {
-    '[attr.dir]'       : 'direction',
-    '[style.height.px]': 'height'
+    '[class.tri-data-table-wrapper]': 'true',
+    '[attr.dir]'                    : 'direction',
+    '[style.height.px]'             : 'height'
   },
   template           : `
     <tri-data-table-toolbar *ngIf="showTopToolbar"></tri-data-table-toolbar>
-    <!--<tri-spin >-->
-    <div class="ant-grid ant-widget ant-data-table ant-table-large"
-         [class.tri-grid-lockedcolumns]="lockedLeafColumns.length > 0"
-         [class.tri-grid-virtual]="isVirtual"
+    <div class="tri-data-table tri-widget tri-table-large"
+         [class.tri-data-table-lockedcolumns]="lockedLeafColumns.length > 0"
+         [class.tri-data-table-virtual]="isVirtual"
     >
       <tri-data-table-group-panel
-        class="ant-table-title"
+        class="tri-table-title"
         *ngIf="showGroupPanel"
-        [text]="groupable.emptyText"
+        [text]="_groupable?.emptyText"
         [groups]="group"
         (change)="groupChange.emit($event)">
       </tri-data-table-group-panel>
       <ng-template [ngIf]="isScrollable">
         <div
-          class="ant-grid-header ant-data-table-header ant-data-table-thead"
+          class="tri-data-table-header tri-data-table-thead"
           [style.padding]="headerPadding">
-          <div class="ant-grid-header ant-data-table-header-locked" #lockedHeader
+          <div class="tri-data-table-header tri-data-table-header-locked" #lockedHeader
                *ngIf="isLocked"
                [style.width.px]="lockedWidth">
             <table>
@@ -205,6 +218,7 @@ export type fieldMapFn = (fieldKey: string) => string;
               </colgroup>
               <thead triGridHeader
                      [scrollable]="true"
+                     [resizable]="resizable"
                      [columns]="lockedColumns"
                      [totalColumnLevels]="totalColumnLevels"
                      [sort]="sort"
@@ -213,12 +227,11 @@ export type fieldMapFn = (fieldKey: string) => string;
                      [filterable]="filterable"
                      [groupable]="showGroupPanel"
                      [sortable]="sortable"
-                     (sortChange)="sortChange.emit($event)"
                      [detailTemplate]="detailTemplate">
               </thead>
             </table>
           </div>
-          <div class="ant-grid-header-wrap ant-data-table-header-wrap" #header
+          <div class="tri-data-table-header-wrap" #header
                [triGridResizableContainer]="lockedLeafColumns.length"
                [lockedWidth]="lockedWidth + scrollbarWidth + 3">
             <table [style.width.px]="nonLockedWidth">
@@ -229,6 +242,7 @@ export type fieldMapFn = (fieldKey: string) => string;
               </colgroup>
               <thead triGridHeader
                      [scrollable]="true"
+                     [resizable]="resizable"
                      [columns]="nonLockedColumns"
                      [totalColumnLevels]="totalColumnLevels"
                      [sort]="sort"
@@ -238,19 +252,19 @@ export type fieldMapFn = (fieldKey: string) => string;
                      [groups]="isLocked ? [] : group"
                      [sortable]="sortable"
                      [lockedColumnsCount]="lockedLeafColumns.length"
-                     (sortChange)="sortChange.emit($event)"
                      [detailTemplate]="detailTemplate">
               </thead>
             </table>
           </div>
         </div>
-        <tri-grid-list
+        <tri-data-table-list
           tri-grid-selectable
           [data]="view"
+          [rowData]="view"
           [rowHeight]="rowHeight"
           [detailRowHeight]="detailRowHeight"
-          [total]="isVirtual ? view.total : pageSize"
-          [take]="pageSize"
+          [total]="isVirtual ? view.total : take"
+          [take]="take"
           [groups]="group"
           [groupable]="groupable"
           [skip]="skip"
@@ -260,14 +274,14 @@ export type fieldMapFn = (fieldKey: string) => string;
           [noRecordsTemplate]="noRecordsTemplate"
           (pageChange)="notifyPageChange('list', $event)"
           [rowClass]="rowClass">
-        </tri-grid-list>
+        </tri-data-table-list>
         <div
           *ngIf="showFooter"
-          class="ant-table-footer"
+          class="tri-table-footer"
           [style.paddingRight.px]="scrollbarWidth">
           <div
             *ngIf="lockedLeafColumns.length"
-            class="ant-table-footer-locked"
+            class="tri-table-footer-locked"
             [style.width.px]="lockedWidth">
             <table>
               <colgroup triGridColGroup
@@ -284,7 +298,7 @@ export type fieldMapFn = (fieldKey: string) => string;
             </table>
           </div>
           <div #footer
-               class="ant-table-footer-wrap"
+               class="tri-table-footer-wrap"
                [triGridResizableContainer]="lockedLeafColumns.length"
                [lockedWidth]="lockedWidth + scrollbarWidth + 3">
             <table [style.width.px]="nonLockedWidth">
@@ -313,6 +327,7 @@ export type fieldMapFn = (fieldKey: string) => string;
           </colgroup>
           <thead triGridHeader
                  [scrollable]="false"
+                 [resizable]="resizable"
                  [columns]="visibleColumns"
                  [totalColumnLevels]="totalColumnLevels"
                  [groups]="group"
@@ -321,7 +336,6 @@ export type fieldMapFn = (fieldKey: string) => string;
                  [sortable]="sortable"
                  [filter]="filter"
                  [filterable]="filterable"
-                 (sortChange)="sortChange.emit($event)"
                  [detailTemplate]="detailTemplate">
           </thead>
           <tbody triGridTableBody
@@ -330,7 +344,7 @@ export type fieldMapFn = (fieldKey: string) => string;
                  [skip]="skip"
                  [columns]="leafColumns"
                  [selectable]="selectable"
-                 [noRecordsTemplate]="noRecordsTemplate"
+                 [noRecordsText]="''"
                  [detailTemplate]="detailTemplate"
                  [rowClass]="rowClass">
           </tbody>
@@ -344,43 +358,268 @@ export type fieldMapFn = (fieldKey: string) => string;
         </table>
       </ng-template>
     </div>
-    <!--</tri-spin>-->
+    <div style="margin: 4rem;text-align: center;font-size: medium;" *ngIf="view.length==0&&!loading"> 没有数据</div>
+    <tri-spin style="position:absolute;width:100%;" *ngIf="loading" [spinning]="loading" [size]="'large'"></tri-spin>
     <tri-pagination
-      class="ant-data-table-pagination"
+      class="tri-data-table-pagination"
       *ngIf="showPager"
+      [simple]="pageSimple"
       [offset]="skip"
-      [limit]="pageSize"
+      [limit]="take"
       [total]="view.total"
-      [showTotal]="true"
-      [showSizeChanger]="true"
-      [showQuickJumper]="true"
-      [showDetail]="true"
+      [showTotal]="pageShowTotal"
+      [showSizeChanger]="pageShowSizeChanger"
+      [showQuickJumper]="pageShowQuickJumper"
+      [showDetail]="pageShowDetail"
       (pageChange)="notifyPageChange('pager', $event)">
-      >
     </tri-pagination>
     <tri-data-table-toolbar *ngIf="showBottomToolbar"></tri-data-table-toolbar>
-  `
+  `,
+  styles             : [`
+
+  `]
 })
 export class DataTableComponent implements OnChanges, AfterViewInit, AfterContentChecked, AfterContentInit, OnDestroy {
-  private _rowClass;
-  private _RowSelected;
-  private _hasGeneratedColumn: boolean;
+  direction = 'ltr';
+  _sort: SortDescriptor[];
+  _group: GroupDescriptor[];
+  cachedWindowWidth;
+  defaultSelection;
+  selectionSubscription;
+  stateChangeSubscription;
+  groupExpandCollapseSubscription;
+  detailsServiceSubscription;
+  editServiceSubscription;
+  filterSubscription;
+  sortSubscription;
+  columnsChangeSubscription;
+  resizeSubscription;
+  orientationSubscription;
+  columnsContainerChangeSubscription;
+  _pageSimple = true;
+  _pageShowTotal = true;
+  _pageShowSizeChanger = true;
+  _pageShowQuickJumper = true;
+  _pageShowDetail = true;
+  _take: number;
+  _skip = 0;
+  _rowHeight: number;
+  _detailRowHeight: number;
+  _scrollable: ScrollMode = 'scrollable';
+  _selectable: boolean | SelectableSettings = false;
+  _filter: CompositeFilterDescriptor = {logic: 'and', filters: []};
+  _filterable: boolean | 'menu' | 'simple' = false;
+  _resizable: boolean = false;
+  _sortable: SortSettings = false;
+  _pageable: boolean = false;
+  _groupable: GroupableSettings = {enabled: false, showFooter: false};
+  _autoGenerateColumns: boolean;
+  _fieldMap: fieldMapFn | object;
+  _fieldFilterMap: fieldFilterMapFn | object;
+  _childItemsPath: string;
+  _showGroups: boolean;
 
-  @Input() data: any[] | GridDataResult;
-  @Input() pageSize: number;
+  _data: any[] | GridDataResult;
+
+  _rowClass;
+  _RowSelected;
+  _hasGeneratedColumn: boolean;
+
+  // _cv: CollectionView = new CollectionView();
+  // _rows: RowCollection = new RowCollection(24);
+
+  @Input() loading = false;
+
+  @Input()
+  get data(): any[] | GridDataResult {return this._data;}
+  set data(value: any[] | GridDataResult) {
+    this.dataSource = value;
+    // this.cdr.markForCheck();
+  }
+
+  // /**
+  //  * @deprecated
+  //  */
+  // @Input()
+  // get data(): any[] | GridDataResult {
+  //   return this._data;
+  // }
+  //
+  // set data(value: any[] | GridDataResult) {
+  //   if (isObject(value) && value.hasOwnProperty('data') && value.hasOwnProperty('total')) {
+  //     this.dataSource = (value as GridDataResult).data;
+  //     this._cv.totalItemCount = (value as GridDataResult).total;
+  //   }else{
+  //     this.dataSource = value;
+  //   }
+  //   this._data = value;
+  // }
+  @Input()
+  get dataSource(): any[] | GridDataResult {return this._data;}
+
+  set dataSource(value: any[] | GridDataResult) {
+    if (this._data != value) {
+      this._data = value;
+      this.view = new DataCollection(new DataResultIterator(value, this._group, this._skip, this._childItemsPath));
+
+      // this._bindRow();
+      // this._rows.iter = Iterable.defer(() => this._bindRow()).memoize();
+      // this.cdr.markForCheck();
+    }
+  }
+  @Input('page.simple')
+  get pageSimple(): boolean {return this._pageSimple;}
+  set pageSimple(value: boolean) {
+    this._pageSimple = value;
+    // this.cdr.markForCheck();
+  }
+  @Input('page.showTotal')
+  get pageShowTotal(): boolean {return this._pageShowTotal;}
+  set pageShowTotal(value: boolean) {
+    this._pageShowTotal = value;
+    // this.cdr.markForCheck();
+  }
+  @Input('page.showSizeChanger')
+  get pageShowSizeChanger(): boolean {return this._pageShowSizeChanger;}
+  set pageShowSizeChanger(value: boolean) {
+    this._pageShowSizeChanger = value;
+    // this.cdr.markForCheck();
+  }
+  @Input('page.showQuickJumper')
+  get pageShowQuickJumper(): boolean {return this._pageShowQuickJumper;}
+  set pageShowQuickJumper(value: boolean) {
+    this._pageShowQuickJumper = value;
+    // this.cdr.markForCheck();
+  }
+  @Input('page.showDetail')
+  get pageShowDetail(): boolean {return this._pageShowDetail;}
+  set pageShowDetail(value: boolean) {
+    this._pageShowDetail = value;
+    // this.cdr.markForCheck();
+  }
+  @Input()
+  get take(): number {return this._take;}
+  set take(value: number) {
+    this._take = value;
+    // this.cdr.markForCheck();
+  }
+  @Input()
+  get skip(): number {return this._skip;}
+  set skip(value: number) {
+    this._skip = value;
+    // this.cdr.markForCheck();
+  }
   @Input() height: number;
-  @Input() rowHeight: number;
-  @Input() detailRowHeight: number;
-  @Input() skip = 0;
-  @Input() scrollable: ScrollMode = 'scrollable';
-  @Input() selectable: boolean | SelectableSettings = false;
-  @Input() filter: CompositeFilterDescriptor;
-  @Input() filterable: boolean | 'menu' | 'simple' = false;
-  @Input() sortable: SortSettings = false;
-  @Input() pageable: boolean = false;
-  @Input() groupable: GroupableSettings | boolean = false;
-  @Input() autoGenerateColumns: boolean;
-  @Input() fieldMap: fieldMapFn | object;
+  @Input()
+  get rowHeight(): number {return this._rowHeight;}
+  set rowHeight(value: number) {
+    this._rowHeight = value;
+    // this.cdr.markForCheck();
+  }
+  @Input()
+  get detailRowHeight(): number {return this._detailRowHeight;}
+  set detailRowHeight(value: number) {
+    this._detailRowHeight = value;
+    // this.cdr.markForCheck();
+  }
+  @Input()
+  get scrollable(): ScrollMode {return this._scrollable;}
+  set scrollable(value: ScrollMode) {
+    this._scrollable = value;
+    // this.cdr.markForCheck();
+  }
+  @Input()
+  get selectable(): boolean | SelectableSettings {return this._selectable;}
+  set selectable(value: boolean | SelectableSettings) {
+    this._selectable = value;
+    // this.cdr.markForCheck();
+  }
+  @Input()
+  get filter(): CompositeFilterDescriptor {return this._filter;}
+  set filter(value: CompositeFilterDescriptor) {
+    this._filter = value;
+    // this.cdr.markForCheck();
+  }
+  @Input()
+  get filterable() {return this._filterable;}
+  set filterable(value) {
+    this._filterable = value;
+    // this.cdr.markForCheck();
+  }
+  @Input()
+  get resizable() {return this._resizable;}
+  set resizable(value) {
+    this._resizable = value;
+    // this.cdr.markForCheck();
+  }
+  @Input()
+  get sortable(): SortSettings {return this._sortable;}
+  set sortable(value: SortSettings) {
+    this._sortable = value;
+    // this.cdr.markForCheck();
+  }
+  @Input()
+  get pageable(): boolean {return this._pageable;}
+  set pageable(value: boolean) {
+    this._pageable = value;
+    // this.cdr.markForCheck();
+  }
+  @Input()
+  get groupable(): GroupableSettings | boolean {return this._groupable;}
+  set groupable(value: GroupableSettings | boolean) {
+    if (isBoolean(value)) {
+      this._groupable.enabled = value;
+    } else {
+      Object.assign(this._groupable, value);
+    }
+    // this.cdr.markForCheck();
+  }
+  @Input()
+  get autoGenerateColumns(): boolean {return this._autoGenerateColumns;}
+  set autoGenerateColumns(value: boolean) {
+    this._autoGenerateColumns = value;
+    // this.cdr.markForCheck();
+  }
+  @Input()
+  get fieldMap(): fieldMapFn | object {return this._fieldMap;}
+  set fieldMap(value: fieldMapFn | object) {
+    this._fieldMap = value;
+    // this.cdr.markForCheck();
+  }
+  @Input()
+  get fieldFilterMap(): fieldFilterMapFn | object {return this._fieldFilterMap;}
+  set fieldFilterMap(value: fieldFilterMapFn | object) {
+    this._fieldFilterMap = value;
+    // this.cdr.markForCheck();
+  }
+  @Input()
+  get childItemsPath(): string {return this._childItemsPath;}
+  set childItemsPath(value: string) {
+    this._childItemsPath = value;
+    // this.cdr.markForCheck();
+  }
+  @Input()
+  get showGroups(): boolean {return this._showGroups;}
+  set showGroups(value: boolean) {
+    this._showGroups = value;
+    // this.cdr.markForCheck();
+  }
+  @Input()
+  get sort(): SortDescriptor[] {return this._sort;}
+  set sort(value) {
+    if (isArray(value)) {
+      this._sort = value;
+      // this.cdr.markForCheck();
+    }
+  }
+  @Input()
+  get group(): GroupDescriptor[] {return this._group;}
+  set group(value) {
+    if (isArray(value)) {
+      this._group = value;
+      // this.cdr.markForCheck();
+    }
+  }
 
   @Output() filterChange: EventEmitter<CompositeFilterDescriptor> = new EventEmitter();
   @Output() pageChange: EventEmitter<PageChangeEvent> = new EventEmitter();
@@ -392,6 +631,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   @Output() groupCollapse: EventEmitter<{ group: GroupResult }> = new EventEmitter();
   @Output() detailExpand: EventEmitter<{ index: number; dataItem: any }> = new EventEmitter();
   @Output() detailCollapse: EventEmitter<{ index: number; dataItem: any }> = new EventEmitter();
+  @Output() autoGenerateColumnsChange = new EventEmitter();
   @Output() edit: EventEmitter<EditEvent> = new EventEmitter();
   @Output() cancel: EventEmitter<CancelEvent> = new EventEmitter();
   @Output() save: EventEmitter<SaveEvent> = new EventEmitter();
@@ -412,63 +652,53 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   scrollbarWidth: number;
   columnList: ColumnList;
   columnsContainer: ColumnsContainer;
-  view: DataCollection;
-  private direction = 'ltr';
-  private _sort;
-  private _group;
-  private cachedWindowWidth;
-  private defaultSelection;
-  private selectionSubscription;
-  private stateChangeSubscription;
-  private groupExpandCollapseSubscription;
-  private detailsServiceSubscription;
-  private editServiceSubscription;
-  private filterSubscription;
-  private columnsChangeSubscription;
-  private pdfSubscription;
-  private resizeSubscription;
-  private orientationSubscription;
-  private excelSubscription;
-  private columnsContainerChangeSubscription;
+  view: DataCollection<any>;
 
   public selectionDirective = false;
 
   constructor(supportService: BrowserSupportService,
-              private selectionService: SelectionService,
+              @Self() private selectionService: SelectionService,
               private wrapper: ElementRef,
-              private groupInfoService: GroupInfoService,
-              private groupsService: GroupsService,
-              private changeNotification: ChangeNotificationService,
-              private detailsService: DetailsService,
-              private editService: EditService,
-              private filterService: FilterService,
+              @Self() private groupInfoService: GroupInfoService,
+              @Self() private groupsService: GroupsService,
+              @Self() private changeNotification: ChangeNotificationService,
+              @Self() private detailsService: DetailsService,
+              @Self() private editService: EditService,
+              @Self() private filterService: FilterService,
+              @Self() private sortService: SortService,
               private responsiveService: ResponsiveService,
               private renderer: Renderer2,
               private ngZone: NgZone,
-              private scrollSyncService: ScrollSyncService) {
+              private scrollSyncService: ScrollSyncService,
+              private cdr: ChangeDetectorRef) {
     this.columns = new QueryList<ColumnBase>();
     this.columnsContainer = new ColumnsContainer(() =>
       this.columnList.filter(column => !this.isHidden(column) && this.matchesMedia(column))
     );
-    this.view = new DataCollection(() => new DataResultIterator(this.data, this.skip, this.showGroupFooters));
+    // this.view = new DataCollection(new DataResultIterator(this._data, this._group, this.skip, this.childItemsPath));
     this._sort = [];
     this._group = [];
-    this.data = [];
+    this._data = [];
     this.cachedWindowWidth = 0;
     this._rowClass = () => null;
     this.scrollbarWidth = supportService.scrollbarWidth;
     this.groupInfoService.registerColumnsContainer(() => this.columnList);
     if (selectionService) {
-      this.selectionSubscription = selectionService.changes.subscribe(event => {
-        this.selectionChange.emit(event);
-      });
+      this.selectionSubscription = selectionService.changes
+      // .pipe(
+      //   tap(() => this.cdr.markForCheck())
+      // )
+        .subscribe(event => {
+          this.selectionChange.emit(event);
+        });
     }
     this.groupExpandCollapseSubscription = groupsService.changes
       .pipe(
         filter(_a => {
           const dataItem = _a.dataItem;
           return isPresent(dataItem);
-        })
+        }),
+        // tap(() => this.cdr.markForCheck())
       )
       .subscribe(_a => {
         const expand = _a.expand;
@@ -479,43 +709,33 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
       .pipe(
         filter(({dataItem}) => {
           return isPresent(dataItem);
-        })
+        }),
+        // tap(() => this.cdr.markForCheck())
       )
       .subscribe(({expand, dataItem, index}) => {
         return expand ? this.detailExpand.emit({dataItem, index}) : this.detailCollapse.emit({dataItem, index});
       });
-    this.filterSubscription = this.filterService.changes.subscribe(x => {
-      this.filterChange.emit(x);
+    this.filterSubscription = this.filterService.changes
+    // .pipe(
+    // tap(() => this.cdr.markForCheck())
+    // )
+      .subscribe(x => {
+        this.filterChange.emit(x);
+      });
+    this.sortSubscription = this.sortService.changes.subscribe(x => {
+      this.sortChange.emit(x);
     });
     this.attachStateChangesEmitter();
     this.attachEditHandlers();
     this.columnsContainerChangeSubscription = this.columnsContainer.changes
-      .pipe(filter(() => this.totalColumnLevels > 0 && this.lockedColumns.length > 0))
+      .pipe(
+        filter(() => this.totalColumnLevels > 0 && this.lockedColumns.length > 0),
+        // tap(() => this.cdr.markForCheck())
+      )
       .subscribe(this.columnsContainerChange.bind(this));
     this.columnList = new ColumnList(this.columns);
   }
 
-  @Input()
-  get sort(): SortDescriptor[] {
-    return this._sort;
-  }
-
-  set sort(value) {
-    if (isArray(value)) {
-      this._sort = value;
-    }
-  }
-
-  @Input()
-  get group(): GroupDescriptor[] {
-    return this._group;
-  }
-
-  set group(value) {
-    if (isArray(value)) {
-      this._group = value;
-    }
-  }
 
   get showTopToolbar(): boolean {
     return this.toolbarTemplate && ['top', 'both'].includes(this.toolbarTemplate.position);
@@ -530,38 +750,24 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   }
 
   get showPager(): boolean {
-    return !this.isVirtual && this.pageable !== false;
+    return !this.isVirtual && this._pageable !== false &&
+      //first page not show pager
+      !(this._skip == 0 && this.view.length == 0);
   }
 
   get showGroupPanel(): boolean {
-    return this.groupable && (<GroupableSettings>this.groupable).enabled !== false;
+    return this._groupable && (<GroupableSettings>this._groupable).enabled !== false;
   }
 
   @Input()
-  get rowClass(): RowClassFn {
-    return this._rowClass;
-  }
+  get rowClass(): RowClassFn {return this._rowClass;}
 
-  set rowClass(fn) {
-    if (!isFunction(fn)) {
-      console.warn(`rowClass must be a function, but received ${JSON.stringify(fn)}.`);
-    } else {
-      this._rowClass = fn;
-    }
-  }
+  set rowClass(fn) {if (isFunction(fn)) {this._rowClass = fn;}}
 
   @Input()
-  get rowSelected(): RowSelectedFn {
-    return this._RowSelected;
-  }
+  get rowSelected(): RowSelectedFn {return this._RowSelected;}
 
-  set rowSelected(fn) {
-    if (!isFunction(fn)) {
-      console.warn(`rowSelected must be a function, but received ${JSON.stringify(fn)}.`);
-    } else {
-      this._RowSelected = fn;
-    }
-  }
+  set rowSelected(fn) {if (isFunction(fn)) {this._RowSelected = fn;}}
 
   get headerPadding(): any {
     const padding = `${this.scrollbarWidth}px`;
@@ -570,20 +776,20 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     return `0 ${right} 0 ${left}`;
   }
 
-  get showGroupFooters(): boolean {
-    return columnsToRender(this.columnList.toArray()).filter(column => column.groupFooterTemplateRef).length > 0;
-  }
+  // get showGroupFooters(): boolean {
+  //   return columnsToRender(this.columnList.toArray()).filter(column => column.groupFooterTemplateRef).length > 0;
+  // }
 
   get showFooter(): boolean {
     return this.columnList.filter(column => column.footerTemplateRef).length > 0;
   }
 
   get isVirtual(): boolean {
-    return this.scrollable === 'virtual';
+    return this._scrollable === 'virtual';
   }
 
   get isScrollable(): boolean {
-    return this.scrollable !== 'none';
+    return this._scrollable !== 'none';
   }
 
   get visibleColumns(): QueryList<ColumnBase> {
@@ -616,7 +822,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
 
   get lockedWidth(): number {
     const groupCellsWidth = this.group.length * 30; // this should be the value of group-cell inside the theme!
-    return expandColumns(this.lockedLeafColumns.toArray()).reduce(
+    return expandColumns(this.lockedLeafColumns.toArray()).reduce<number>(
       (prev, curr) => prev + (curr.width || 0),
       groupCellsWidth
     );
@@ -634,6 +840,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
       return this.selectionService.options;
     }
     return undefined;
+  }
+
+  _cvCollectionChanged() {
   }
 
   expandRow(index) {
@@ -661,7 +870,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   }
 
   onDataChange() {
-    this._autoGenerateColumns();
+    this._runAutoGenerateColumns();
     this.changeNotification.notify();
     if (isPresent(this.defaultSelection)) {
       this.defaultSelection.reset();
@@ -669,11 +878,15 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     this.initSelectionService();
   }
 
+  ngOnInit() {
+    this.view = new DataCollection(new DataResultIterator(this._data, this._group, this._skip, this._childItemsPath));
+  }
+
   ngOnChanges(changes) {
-    if (isChanged('data', changes)) {
+    if (anyChanged(['data', 'dataSource'], changes)) {
       this.onDataChange();
     }
-    if (this.lockedLeafColumns.length && anyChanged(['pageSize', 'skip', 'sort', 'group'], changes)) {
+    if (this.lockedLeafColumns.length && anyChanged(['take', 'skip', 'sort', 'group'], changes)) {
       this.changeNotification.notify();
     }
   }
@@ -692,7 +905,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   }
 
   ngAfterContentInit() {
-    this._autoGenerateColumns();
+    this._runAutoGenerateColumns();
     this.columnList = new ColumnList(this.columns);
     this.columnsChangeSubscription = this.columns.changes.subscribe(() => this.verifySettings());
   }
@@ -715,6 +928,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     }
     if (this.filterSubscription) {
       this.filterSubscription.unsubscribe();
+    }
+    if (this.sortSubscription) {
+      this.sortSubscription.unsubscribe();
     }
     if (this.columnsChangeSubscription) {
       this.columnsChangeSubscription.unsubscribe();
@@ -764,6 +980,10 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     }
   }
 
+  closeAll() {
+    this.editService.closeAll();
+  }
+
   editRow(index, group?) {
     this.editService.editRow(index, group);
   }
@@ -781,19 +1001,19 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     this.editService.addRow(group);
   }
 
-  // todo
+  //todo
   editCell(rowIndex, column, group) {
     var instance = this.columnInstance(column);
     this.editService.editRow(rowIndex, group);
-    //    this.focusEditElement('.tri-grid-edit-cell');
+    //    this.focusEditElement('.ant-data-table-edit-cell');
   }
 
-  // todo
+  //todo
   closeCell() {
     this.editService.close();
   }
 
-  // todo
+  //todo
   cancelCell() {
     this.editService.close();
   }
@@ -813,6 +1033,8 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     if (source === 'list' && !this.isVirtual) {
       return;
     }
+    this._skip = event.skip;
+    this._take = event.take;
     this.pageChange.emit(event);
   }
 
@@ -824,7 +1046,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     }
     this.selectionService.init({
       rowSelected: this.rowSelected,
-      selectable : this.selectable,
+      selectable : this._selectable,
       view       : this.view
     });
     if (!this.selectionDirective && !this.selectableSettings.enabled) {
@@ -881,14 +1103,14 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
       if (this.columnList.filter(x => x.locked && x.parent && !x.parent.isLocked).length) {
         throw new Error('Locked child columns require their parent columns to be locked.');
       }
-      if ((this.rowHeight || this.detailRowHeight) && !this.isVirtual) {
+      if ((this._rowHeight || this._detailRowHeight) && !this.isVirtual) {
         throw new Error('Row height and detail row height settings requires virtual scrolling mode to be enabled.');
       }
     }
   }
 
-  _autoGenerateColumns() {
-    // check field define column
+  _runAutoGenerateColumns() {
+    //check field define column
     const fieldColumns = [];
     const otherColumns = [];
 
@@ -900,10 +1122,10 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     });
 
     const order = ['start', 'middle', 'end'];
-    if (this.view.length && (!this.columns.length || this.autoGenerateColumns) && !this._hasGeneratedColumn) {
+    if (this.view.length && (!this.columns.length || this._autoGenerateColumns) && !this._hasGeneratedColumn) {
       let keys;
-      if (isObject(this.fieldMap)) {
-        keys = Object.keys(this.fieldMap);
+      if (isObject(this._fieldMap)) {
+        keys = Object.keys(this._fieldMap);
       } else {
         keys = Object.keys(this.view.at(0));
       }
@@ -912,11 +1134,25 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
           .map(field => {
             const column = new ColumnComponent();
             column.field = field;
-            if (isFunction(this.fieldMap)) {
-              column.title = (this.fieldMap as fieldMapFn)(field);
-            } else if (isObject(this.fieldMap)) {
-              column.title = fieldMapFnObjectFactory(this.fieldMap)(field);
+            if (isFunction(this._fieldMap)) {
+              column.title = (this._fieldMap as fieldMapFn)(field);
+            } else if (isObject(this._fieldMap)) {
+              column.title = fieldMapFnObjectFactory(this._fieldMap)(field);
             }
+            if (isFunction(this._fieldMap)) {
+              column.filter = (this._fieldFilterMap as fieldFilterMapFn)(field);
+            } else if (isObject(this._fieldFilterMap)) {
+              column.filter = fieldMapFnObjectFactory(this._fieldFilterMap)(field);
+            } else if (this.view.length > 0) {
+              const data = this.view.at(0);
+              column.filter = ((field, _data) => {
+                if (isNumber(_data)) return 'numeric';
+                else if (isBoolean(_data)) return 'boolean';
+                else if (isDate(_data)) return 'date';
+                else return 'text';
+              })(field, data[field]);
+            }
+
             return column;
           })
           .concat(otherColumns)
@@ -929,54 +1165,50 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
           })
       );
       this._hasGeneratedColumn = true;
+
+      this.autoGenerateColumnsChange.emit(this.columns.toArray());
     }
   }
 
   attachStateChangesEmitter() {
-    this.stateChangeSubscription = this.pageChange
-      .pipe(
+    this.stateChangeSubscription = merge(
+      this.pageChange.pipe(
         map(x => ({
-          filter: this.filter,
+          filter: this._filter,
           group : this.group,
           skip  : x.skip,
           sort  : this.sort,
           take  : x.take
-        })),
-        merge(
-          this.sortChange.pipe(
-            map(sort => ({
-              filter: this.filter,
-              group : this.group,
-              skip  : this.skip,
-              sort,
-              take  : this.pageSize
-            }))
-          )
-        ),
-        merge(
-          this.groupChange.pipe(
-            map(group => ({
-              filter: this.filter,
-              group,
-              skip  : this.skip,
-              sort  : this.sort,
-              take  : this.pageSize
-            }))
-          )
-        ),
-        merge(
-          this.filterChange.pipe(
-            map(filter => ({
-              filter,
-              group: this.group,
-              skip : 0,
-              sort : this.sort,
-              take : this.pageSize
-            }))
-          )
-        )
+        }))
+      ),
+      this.sortChange.pipe(
+        map(sort => ({
+          filter: this._filter,
+          group : this.group,
+          skip  : this._skip,
+          sort,
+          take  : this._take
+        }))
+      ),
+      this.groupChange.pipe(
+        map(group => ({
+          filter: this._filter,
+          group,
+          skip  : this._skip,
+          sort  : this.sort,
+          take  : this._take
+        }))
+      ),
+      this.filterChange.pipe(
+        map(filter => ({
+          filter,
+          group: this.group,
+          skip : 0,
+          sort : this.sort,
+          take : this._take
+        }))
       )
-      .subscribe(x => this.dataStateChange.emit(x));
+    ).subscribe(x => this.dataStateChange.emit(x));
   }
 
   attachEditHandlers() {
@@ -986,13 +1218,13 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     this.editServiceSubscription = this.editService.changes.subscribe(this.emitCRUDEvent.bind(this));
   }
 
-  emitCRUDEvent(_a) {
-    const action = _a.action;
-    const rowIndex = _a.rowIndex;
-    const formGroup = _a.formGroup;
-    const isNew = _a.isNew;
-    let dataItem = this.view.at(rowIndex - this.skip);
-    if (action !== 'add' && !dataItem) {
+  emitCRUDEvent({action, rowIndex, formGroup, isNew}) {
+    let dataItem;
+    let row = this.view.at(rowIndex);
+    if (isPresent(row)) {
+      dataItem = row.dataItem;
+    }
+    if (action !== 'add' && !row) {
       dataItem = formGroup.value;
     }
     const args = {
@@ -1041,10 +1273,20 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   }
 
   columnsContainerChange() {
-    this.ngZone.onStable.take(1).subscribe(() => {
+    this.ngZone.onStable.pipe(take(1)).subscribe(() => {
       if (this.lockedHeader) {
         syncRowsHeight(this.lockedHeader.nativeElement.children[0], this.header.nativeElement.children[0]);
       }
     });
+  }
+
+  showGroupFooters: boolean;
+
+  resetGroupsState() {
+
+  }
+
+  expandGroupChildren(groupIndex) {
+
   }
 }

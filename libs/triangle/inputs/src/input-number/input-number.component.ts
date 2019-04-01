@@ -1,38 +1,37 @@
-import { isInfinite, isNumeric } from '@gradii/triangle/util';
+import { isBlank, isInfinite, isNullOrEmptyString, isNumeric, isPresent } from '@gradii/triangle/util';
 import { TAB } from '@angular/cdk/keycodes';
 import { Component, ElementRef, EventEmitter, forwardRef, HostBinding, Input, Output, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-  selector           : 'tri-input-number',
-  encapsulation      : ViewEncapsulation.None,
-  preserveWhitespaces: false,
-  template           : `
-    <div class="ant-input-number-handler-wrap"
+  selector     : 'tri-input-number',
+  encapsulation: ViewEncapsulation.None,
+  template     : `
+    <div class="tri-input-number-handler-wrap"
          (mouseover)="_mouseInside = true"
          (mouseout)="_mouseInside = false">
       <a *ngIf="spinners"
-         class="ant-input-number-handler ant-input-number-handler-up"
+         class="tri-input-number-handler tri-input-number-handler-up"
          [class.tri-input-number-handler-up-disabled]="_disabledUp"
          (click)="_numberUp($event)">
         <span
-          class="ant-input-number-handler-up-inner"
+          class="tri-input-number-handler-up-inner"
           (click)="$event.preventDefault();"></span>
       </a>
       <a *ngIf="spinners"
-         class="ant-input-number-handler ant-input-number-handler-down"
+         class="tri-input-number-handler tri-input-number-handler-down"
          [class.tri-input-number-handler-down-disabled]="_disabledDown"
          (click)="_numberDown($event)">
         <span
-          class="ant-input-number-handler-down-inner"
+          class="tri-input-number-handler-down-inner"
           (click)="$event.preventDefault();">
         </span>
       </a>
     </div>
     <div
-      class="ant-input-number-input-wrap">
-      <input class="ant-input-number-input"
+      class="tri-input-number-input-wrap">
+      <input class="tri-input-number-input"
              #inputNumber
              [placeholder]="placeHolder"
              [disabled]="disabled"
@@ -46,7 +45,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
              [attr.step]="_step"
              autocomplete="off">
     </div>`,
-  providers          : [
+  providers    : [
     {
       provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => InputNumberComponent),
@@ -55,17 +54,26 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ]
 })
 export class InputNumberComponent implements ControlValueAccessor {
+
   private _min: number = -Infinity;
   private _max: number = Infinity;
 
   _el: HTMLElement;
   _value: number;
   _size = 'default';
-  _prefixCls = 'ant-input-number';
+  _prefixCls = 'tri-input-number';
   _step = 1;
   _precisionStep = 0;
   _precisionFactor = 1;
   _displayValue;
+  private get displayValue() {
+    return this._displayValue;
+  }
+
+  private set displayValue(value) {
+    this._displayValue = isBlank(value) ? '' : value;
+  }
+
   _disabledUp = false;
   _disabledDown = false;
   _focused = false;
@@ -157,15 +165,17 @@ export class InputNumberComponent implements ControlValueAccessor {
    * 每次改变步数，可以为小数
    */
   set step(value: number) {
-    this._step = value;
-    const stepString = value.toString();
-    if (stepString.indexOf('e-') >= 0) {
-      this._precisionStep = parseInt(stepString.slice(stepString.indexOf('e-')), 10);
+    if (isPresent(value)) {
+      this._step = value;
+      const stepString = value.toString();
+      if (stepString.indexOf('e-') >= 0) {
+        this._precisionStep = parseInt(stepString.slice(stepString.indexOf('e-')), 10);
+      }
+      if (stepString.indexOf('.') >= 0) {
+        this._precisionStep = stepString.length - stepString.indexOf('.') - 1;
+      }
+      this._precisionFactor = Math.pow(10, this._precisionStep);
     }
-    if (stepString.indexOf('.') >= 0) {
-      this._precisionStep = stepString.length - stepString.indexOf('.') - 1;
-    }
-    this._precisionFactor = Math.pow(10, this._precisionStep);
   }
 
   @Output() blur: EventEmitter<MouseEvent> = new EventEmitter();
@@ -175,8 +185,8 @@ export class InputNumberComponent implements ControlValueAccessor {
     $event.preventDefault();
     $event.stopPropagation();
     this._inputNumber.nativeElement.focus();
-    if (this.value === undefined) {
-      this.value = this._min || 0;
+    if (isBlank(this.value)) {
+      this.value = isInfinite(this._min) ? 0 : this._min;
     }
     if (!this._disabledUp) {
       this.value = this.toPrecisionAsStep(
@@ -189,8 +199,8 @@ export class InputNumberComponent implements ControlValueAccessor {
     $event.preventDefault();
     $event.stopPropagation();
     this._inputNumber.nativeElement.focus();
-    if (this.value === undefined) {
-      this.value = this._min || 0;
+    if (isBlank(this.value)) {
+      this.value = isInfinite(this._min) ? 0 : this._min;
     }
     if (!this._disabledDown) {
       this.value = this.toPrecisionAsStep(
@@ -233,14 +243,22 @@ export class InputNumberComponent implements ControlValueAccessor {
   }
 
   _userInputChange() {
-    const numberValue = +this._displayValue;
-    if (this._isNumber(numberValue) && numberValue <= this._max && numberValue >= this._min) {
-      this.value = numberValue;
+    if (isNullOrEmptyString(this._displayValue)) {
+      this.value = undefined;
+    } else if (this._displayValue === 'Infinity') {
+      this.value = Infinity;
+    } else if (this._displayValue === '-Infinity') {
+      this.value = -Infinity;
+    } else {
+      const numberValue = +this._displayValue;
+      if (this._isNumber(numberValue) && numberValue <= this._max && numberValue >= this._min) {
+        this.value = numberValue;
+      }
     }
   }
 
   _checkValue() {
-    this._displayValue = this.value;
+    this.displayValue = this.value;
   }
 
   _getBoundValue(value) {
@@ -291,8 +309,8 @@ export class InputNumberComponent implements ControlValueAccessor {
       return;
     }
     this._value = this._getBoundValue(value);
-    this._displayValue = this._value;
-    this._inputNumber.nativeElement.value = this._value;
+    this.displayValue = this._value;
+    // this._inputNumber.nativeElement.value = this._value;
     if (emitChange) {
       this.onChange(this._value);
     }

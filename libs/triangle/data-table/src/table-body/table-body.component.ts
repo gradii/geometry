@@ -1,12 +1,14 @@
 import { GroupDescriptor } from '@gradii/triangle/data-query';
 import { isPresent } from '@gradii/triangle/util';
 import { Component, Input, OnChanges } from '@angular/core';
-import { ColumnBase, isCheckboxColumn, isSpanColumn } from '../columns/column-base';
+import { ColumnBase, isCheckboxColumn, isHierarchyColumn, isSpanColumn } from '../columns/column-base';
 import { GroupFooterItem, GroupItem, Item } from '../data-collection/data.iterators';
 import { NoRecordsTemplateDirective } from '../directive/no-records-template.directive';
 import { GroupsService } from '../grouping/groups.service';
 import { columnsSpan, columnsToRender } from '../helper/column-common';
 import { RowClassFn } from '../row-class';
+import { GroupRow } from '../row-column/group-row';
+import { Row } from '../row-column/row';
 import { SelectableSettings } from '../selection/selectable-settings';
 import { ChangeNotificationService } from '../service/change-notification.service';
 import { DetailsService } from '../service/details.service';
@@ -15,10 +17,12 @@ import { DetailTemplateDirective } from '../table-shared/detail-template.directi
 import { isChanged } from '../utils';
 
 @Component({
-  selector: '[triGridTableBody]',
+  selector: '[tri-grid-table-body], [triGridTableBody]',
   template: `
+
+    <!--新元素-->
     <ng-template [ngIf]="editService.hasNewItem">
-      <tr class="ant-grid-add-row ant-grid-edit-row ant-table-row">
+      <tr class="tri-data-table-add-row tri-data-table-edit-row tri-table-row">
         <ng-template [ngIf]="!skipGroupDecoration">
           <td [class.tri-group-cell]="true" *ngFor="let g of groups"></td>
         </ng-template>
@@ -36,15 +40,14 @@ import { isChanged } from '../utils';
           [attr.colspan]="column.colspan"
           *ngFor="let column of columns; let columnIndex = index">
           <ng-template
-            tri-template-context
-            [templateContext]="{
-                        templateRef: column.templateRef,
-                        dataItem: newDataItem,
+            [ngTemplateOutlet]="column.templateRef"
+            [ngTemplateOutletContext]="{
+                        dataItem: newDataItem, 
                         column: column,
                         columnIndex: columnIndex,
                         rowIndex: -1,
                         isNew: true,
-                        $implicit: newDataItem
+                        $implicit: newDataItem | valueOf: column.field: column.format
                         }">
           </ng-template>
           <ng-template [ngIf]="isBoundColumn(column)">{{newDataItem | valueOf: column.field: column.format}}
@@ -53,106 +56,126 @@ import { isChanged } from '../utils';
         </td>
       </tr>
     </ng-template>
-    <tr *ngIf="data?.length === 0 || data == null" class="ant-grid-norecords">
+
+    <!--无数据-->
+    <tr *ngIf="rowData?.length === 0 || rowData == null" class="tri-data-table-norecords">
       <td [attr.colspan]="colSpan">
-        <ng-template
-          [ngIf]="noRecordsTemplate?.templateRef"
-          tri-template-context
-          [templateContext]="{
-                    templateRef: noRecordsTemplate?.templateRef
-                 }">
+        <ng-template [ngTemplateOutlet]="noRecordsTemplate?.templateRef">
         </ng-template>
-        <ng-container *ngIf="!noRecordsTemplate?.templateRef">
-          {{noRecordsText}}
-        </ng-container>
+        <!--<ng-template [ngIf]="!noRecordsTemplate?.templateRef">-->
+          <!--{{noRecordsText}}-->
+        <!--</ng-template>-->
       </td>
     </tr>
+
     <ng-template ngFor
-                 [ngForOf]="data"
-                 [ngForTrackBy]="trackByFn()"
-                 let-item>
-      <tr *ngIf="isGroup(item) && isParentGroupExpanded(item)"
+                 [ngForOf]="rowData"
+                 [ngForTrackBy]="trackByFn"
+                 let-rowItem>
+
+      <!--行分组头-->
+      <tr *ngIf="isGroup(rowItem)"
           triGridGroupHeader
           [columns]="columns"
           [groups]="groups"
-          [item]="item"
+          [rowItem]="rowItem"
           [hasDetails]="detailTemplate?.templateRef"
           [skipGroupDecoration]="skipGroupDecoration">
       </tr>
+
+      <!--行分组元素-->
       <tr
-        *ngIf="isDataItem(item) && isInExpandedGroup(item)"
-        [ngClass]="rowClass({ dataItem: item.data, index: item.index })"
-        [class.tri-alt]="isOdd(item)"
+        *ngIf="isDataItem(rowItem)&&isVisible(rowItem)"
+        [ngClass]="rowClass({ dataItem: rowItem.dataItem, index: rowItem.index })"
+        [class.tri-alt]="isOdd(rowItem)"
         [class.tri-master-row]="detailTemplate?.templateRef"
-        [class.tri-grid-edit-row]="editService.isEdited(item.index)"
+        [class.tri-data-table-edit-row]="editService.isEdited(rowItem.index)"
         [triGridSelectable]="isSelectable()"
-        [index]="item.index">
+        [index]="rowItem.index">
         <ng-template [ngIf]="!skipGroupDecoration">
           <td [class.tri-group-cell]="true" *ngFor="let g of groups"></td>
         </ng-template>
+
+        <!--首列-->
         <td [class.tri-hierarchy-cell]="true"
             *ngIf="detailTemplate?.templateRef">
-          <a class="ant-icon"
-             *ngIf="detailTemplate.showIf(item.data, item.index)"
-             [ngClass]="detailButtonStyles(item.index)"
-             href="#" tabindex="-1" (click)="toggleRow(item.index, item.data)"></a>
+          <i class="anticon"
+             *ngIf="detailTemplate.showDetailButton"
+             [ngClass]="detailButtonStyles(rowItem.index)"
+             tabindex="-1" (click)="toggleRow(rowItem.index, rowItem.dataItem)"></i>
         </td>
+
+        <!--非首列-->
         <td
           triGridCell
-          [rowIndex]="item.index"
+          [rowIndex]="rowItem.index"
           [column]="column"
-          [dataItem]="item.data"
+          [dataItem]="rowItem.dataItem"
           [ngClass]="column.cssClass"
           [ngStyle]="column.style"
           [attr.colspan]="column.colspan"
           *ngFor="let column of columns; let columnIndex = index">
           <ng-template
-            tri-template-context
-            [templateContext]="{
-                        templateRef: column.templateRef,
-                        dataItem: item.data,
+            [ngTemplateOutlet]="column.templateRef"
+            [ngTemplateOutletContext]="{
+                        dataItem: rowItem.dataItem,
                         column: column,
                         columnIndex: lockedColumnsCount + columnIndex,
-                        rowIndex: item.index,
-                        $implicit: item.data
+                        rowIndex: rowItem.index,
+                        $implicit: rowItem.dataItem | valueOf: column.field: column.format
                         }">
           </ng-template>
+
+          <ng-template [ngIf]="isCheckboxColumn(column)">
+            <tri-checkbox [triGridSelectionCheckbox]="rowItem.index"></tri-checkbox>
+          </ng-template>
+
           <ng-template [ngIf]="isSpanColumn(column)">
             <ng-template ngFor let-childColumn [ngForOf]="childColumns(column)">
-              {{item.data | valueOf: childColumn.field: childColumn.format}}
+              {{rowItem.dataItem | valueOf: childColumn.field: childColumn.format}}
             </ng-template>
           </ng-template>
-          <ng-template [ngIf]="isBoundColumn(column)">{{item.data | valueOf: column.field: column.format}}
+
+          <ng-template [ngIf]="isHierarchyColumn(column)">
+            <span [style.paddingLeft.px]="isHierarchyColumn(column)?rowItem.level*column.spanLevel:null">
+              <i *ngIf="rowItem.hasChildren"
+                 class="anticon"
+                 style="cursor: pointer;user-select: none"
+                 [class.anticon-caret-right]="rowItem.isCollapsed"
+                 [class.anticon-caret-down]="!rowItem.isCollapsed"
+                 (click)="$event.stopPropagation();toggleHierarchyRow(rowItem)"
+              ></i>
+              <i *ngIf="!rowItem.hasChildren" class="anticon" style="width: 12px; height: 12px"></i>
+            </span>
           </ng-template>
-          <ng-template [ngIf]="isCheckboxColumn(column)">
-            <tri-checkbox [triGridSelectionCheckbox]="item.index"></tri-checkbox>
-          </ng-template>
+
+          <ng-template [ngIf]="isBoundColumn(column)">{{rowItem.dataItem | valueOf: column.field: column.format}}</ng-template>
         </td>
       </tr>
-      <tr *ngIf="isDataItem(item) && 
-                 isInExpandedGroup(item) && 
+
+      <!--行详情-->
+      <tr *ngIf="isDataItem(rowItem) && 
+                 isInExpandedGroup(rowItem) && 
                  detailTemplate?.templateRef &&
-                 detailTemplate.showIf(item.data, item.index) && 
-                 isExpanded(item.index)"
+                 isDetailExpanded(rowItem.index)"
           [class.tri-detail-row]="true"
-          [class.tri-alt]="isOdd(item)">
+          [class.tri-alt]="isOdd(rowItem)">
         <td [class.tri-group-cell]="true" *ngFor="let g of groups"></td>
         <td [class.tri-hierarchy-cell]="true"></td>
         <td [class.tri-detail-cell]="true"
             [attr.colspan]="columnsSpan">
           <ng-template
-            tri-template-context
-            [templateContext]="{
-                        templateRef: detailTemplate?.templateRef,
-                        dataItem: item.data,
-                        rowIndex: item.index,
-                        $implicit: item.data
-                        }">
+            [ngTemplateOutlet]="detailTemplate?.templateRef"
+            [ngTemplateOutletContext]="{
+                        dataItem: rowItem.dataItem,
+                        rowIndex: rowItem.index,
+                        $implicit: rowItem.dataItem
+            }">
           </ng-template>
         </td>
       </tr>
       <tr
-        *ngIf="isFooter(item) && (isInExpandedGroup(item) || (showGroupFooters && isParentGroupExpanded(item)))"
+        *ngIf="isFooter(rowItem) && (isInExpandedGroup(rowItem) || (showGroupFooters && isParentGroupExpanded(rowItem)))"
         [class.tri-group-footer]="true">
         <ng-template [ngIf]="!skipGroupDecoration">
           <td [class.tri-group-cell]="true" *ngFor="let g of groups"></td>
@@ -163,14 +186,13 @@ import { isChanged } from '../utils';
         <td
           *ngFor="let column of footerColumns;">
           <ng-template
-            tri-template-context
-            [templateContext]="{
-                        templateRef: column.groupFooterTemplateRef,
-                        group: item.data,
+            [ngTemplateOutlet]="column.groupFooterTemplateRef"
+            [ngTemplateOutletContext]="{
+                        group: rowItem.dataItem,
                         field: column.field,
                         column: column,
-                        $implicit: item.data?.aggregates
-                        }">
+                        $implicit: rowItem.dataItem?.aggregates
+            }">
           </ng-template>
         </td>
       </tr>
@@ -182,11 +204,12 @@ export class TableBodyComponent implements OnChanges {
   groupsService: GroupsService;
   private changeNotification;
   editService: EditService;
-  @Input() columns: ColumnBase[];
+  @Input() columns: Array<any | ColumnBase>;
   @Input() groups: GroupDescriptor[];
   @Input() detailTemplate: DetailTemplateDirective;
   @Input() noRecordsTemplate: NoRecordsTemplateDirective;
   @Input() data: Array<GroupItem | Item | GroupFooterItem>;
+  @Input() rowData: Array<Row | GroupRow>;
   @Input() skip: number;
   @Input() selectable: boolean | SelectableSettings;
   @Input() noRecordsText: string;
@@ -213,34 +236,40 @@ export class TableBodyComponent implements OnChanges {
     this.rowClass = () => null;
   }
 
-  get newDataItem(): any {
+  get newDataItem() {
     return this.editService.newDataItem;
   }
 
-  toggleRow(index, dataItem): boolean {
+  toggleRow(index, dataItem) {
     this.detailsService.toggleRow(index, dataItem);
     return false;
   }
 
-  trackByFn(): Function {
-    return (_, item) => item.data ? item.data : item;
+  trackByFn(_, item) {
+    return item.data ? item.data : item;
   }
 
-  isExpanded(index): boolean {
+  isDetailExpanded(index) {
     return this.detailsService.isExpanded(index);
   }
 
   detailButtonStyles(index) {
-    const expanded = this.isExpanded(index);
-    return {'ant-minus': expanded, 'ant-plus': !expanded};
+    const expanded = this.isDetailExpanded(index);
+    return {'anticon-minus-square': expanded, 'anticon-plus-square': !expanded};
   }
 
   isGroup(item) {
-    return item.type === 'group';
+    // return item.type === 'group';
+    return item instanceof GroupRow;
   }
 
   isDataItem(item) {
-    return !this.isGroup(item) && !this.isFooter(item);
+    // return !this.isGroup(item) && !this.isFooter(item);
+    return item instanceof Row && !(item instanceof GroupRow);
+  }
+
+  isVisible(item: Row | GroupRow) {
+    return item.isVisible;
   }
 
   isFooter(item) {
@@ -252,11 +281,15 @@ export class TableBodyComponent implements OnChanges {
   }
 
   isParentGroupExpanded(item) {
-    return this.groupsService.isInExpandedGroup(item.index || item.groupIndex);
+    return this.groupsService.isInExpandedGroup(item.index /*|| item.groupIndex*/);
   }
 
   isOdd(item) {
     return item.index % 2 === 0;
+  }
+
+  toggleHierarchyRow(item: Row | GroupRow) {
+    item.isCollapsed = !item.isCollapsed;
   }
 
   ngOnChanges(changes) {
@@ -291,6 +324,10 @@ export class TableBodyComponent implements OnChanges {
 
   isCheckboxColumn(column) {
     return isCheckboxColumn(column) && !column.templateRef;
+  }
+
+  isHierarchyColumn(column) {
+    return isHierarchyColumn(column) && !column.templateRef;
   }
 
   isSelectable(): boolean {

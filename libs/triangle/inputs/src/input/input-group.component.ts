@@ -1,21 +1,28 @@
-import { Component, ElementRef, HostBinding, Input, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
+import { Component, HostBinding, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  moduleId           : module.id,
-  selector           : 'tri-input-group',
-  encapsulation      : ViewEncapsulation.None,
-  preserveWhitespaces: false,
-  template           : `
+  selector     : 'tri-input-group',
+  encapsulation: ViewEncapsulation.None,
+  template     : `
     <ng-content></ng-content>
   `,
-  host               : {
-    '[class.tri-input-group]'        : 'true',
-    '[class.tri-input-group-compact]': 'compact',
-    '[class.tri-input-group-lg]'     : 'size === "lg"',
-    '[class.tri-input-group-sm]'     : 'size === "sm"'
+  host         : {
+    '[class.tri-input-group]': 'true'
   }
 })
-export class InputGroupComponent {
+export class InputGroupComponent implements OnInit {
+  _el: HTMLElement;
+
+  @HostBinding(`class.tri-input-group-lg`)
+  get _isLarge(): boolean {
+    return this.size === 'lg';
+  }
+
+  @HostBinding(`class.tri-input-group-sm`)
+  get _isSmall(): boolean {
+    return this.size === 'sm';
+  }
+
   /**
    * all size in `tri-input-group`
    * `tri-input-group`  中所有的  `tri-input`  的大小
@@ -27,5 +34,8 @@ export class InputGroupComponent {
    * 是否用紧凑模式
    */
   @Input()
+  @HostBinding(`class.tri-input-group-compact`)
   compact = false;
+
+  ngOnInit() {}
 }

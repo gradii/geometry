@@ -1,6 +1,6 @@
 import { FadeAnimation } from '@gradii/triangle/core';
 import { ToolTipComponent } from '@gradii/triangle/tooltip';
-import { Component, ContentChild, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { Component, ContentChild, EventEmitter, Input, Output, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { PopConfirmDirective } from './popconfirm.directive';
 
 @Component({
@@ -18,25 +18,25 @@ import { PopConfirmDirective } from './popconfirm.directive';
       (positionChange)="onPositionChange($event)"
       [cdkConnectedOverlayPositions]="_positions"
       [cdkConnectedOverlayOpen]="visible$ | async">
-      <div class="ant-popover" [ngClass]="_classMap" [ngStyle]="overlayStyle" [@fadeAnimation]="''+(visible$ | async)"
+      <div class="tri-popover" [ngClass]="_classMap" [ngStyle]="overlayStyle" [@fadeAnimation]="''+(visible$ | async)"
            (@fadeAnimation.done)="_afterVisibilityAnimation($event)">
-        <div class="ant-popover-content">
-          <div class="ant-popover-arrow"></div>
-          <div class="ant-popover-inner">
+        <div class="tri-popover-content">
+          <div class="tri-popover-arrow"></div>
+          <div class="tri-popover-inner">
             <div>
-              <div class="ant-popover-inner-content">
-                <div class="ant-popover-message" *ngIf="!template">
+              <div class="tri-popover-inner-content">
+                <div class="tri-popover-message" *ngIf="!popoverTemplate">
                   <i class="anticon anticon-exclamation-circle"></i>
-                  <div class="ant-popover-message-title">{{title}}</div>
+                  <div class="tri-popover-message-title">{{title}}</div>
                 </div>
-                <div class="ant-popover-buttons" *ngIf="!template">
-                  <button triButton [size]="'small'" (click)="onCancel()"><span>{{cancelText}}</span></button>
-                  <button triButton [size]="'small'" [type]="'primary'" (click)="onConfirm()">
+                <div class="tri-popover-buttons" *ngIf="!popoverTemplate">
+                  <button tri-button [size]="'small'" (click)="_onCancel()"><span>{{cancelText}}</span></button>
+                  <button tri-button [size]="'small'" [color]="'primary'" (click)="_onConfirm()">
                     <span>{{okText}}</span></button>
                 </div>
                 <ng-template
-                  *ngIf="template"
-                  [ngTemplateOutlet]="template">
+                  *ngIf="popoverTemplate"
+                  [ngTemplateOutlet]="popoverTemplate">
                 </ng-template>
               </div>
             </div>
@@ -46,10 +46,12 @@ import { PopConfirmDirective } from './popconfirm.directive';
     </ng-template>`
 })
 export class PopConfirmComponent extends ToolTipComponent {
-  _prefix = 'ant-popover-placement';
+  _prefix = 'tri-popover-placement';
   _trigger = 'click';
   _hasBackdrop = true;
   _condition = false;
+
+  @ContentChild('popoverTemplate') popoverTemplate: TemplateRef<any>;
 
   /**
    * Content

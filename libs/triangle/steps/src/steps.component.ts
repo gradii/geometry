@@ -1,22 +1,24 @@
-import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Directive, Host, Input, OnDestroy, OnInit, Self } from '@angular/core';
 import { StepConnectService } from './step-connect.service';
 
 export type Direction = 'horizontal' | 'vertical';
 
-@Component({
-  selector     : 'tri-steps',
-  encapsulation: ViewEncapsulation.None,
-  providers    : [StepConnectService],
-  template     : `
-    <div class="ant-steps" [ngClass]="_stepsClassMap">
-      <ng-content></ng-content>
-    </div>
-  `
+@Directive({
+  selector : 'tri-steps',
+  providers: [StepConnectService],
+  host     : {
+    '[class.tri-steps]'                 : 'true',
+    '[class.tri-steps-horizontal]'      : 'direction==="horizontal"',
+    '[class.tri-steps-vertical]'        : 'direction==="vertical"',
+    '[class.tri-steps-label-horizontal]': 'direction==="horizontal"',
+    '[class.tri-steps-label-vertical]'  : 'direction==="vertical"',
+    '[class.tri-steps-dot]'             : 'progressDot',
+    '[class.tri-steps-small]'           : 'size === "small"'
+  }
 })
 export class StepsComponent implements OnInit, OnDestroy {
   _status: string;
   _current: number;
-  _stepsClassMap: Object;
   _progressDot = false;
   _direction: Direction = 'horizontal';
 
@@ -42,7 +44,6 @@ export class StepsComponent implements OnInit, OnDestroy {
     }
     this.stepConnectService.processDot = true;
     this.stepConnectService.processDotEvent.next(true);
-    this.setDirectionClass();
   }
 
   get progressDot() {
@@ -67,19 +68,10 @@ export class StepsComponent implements OnInit, OnDestroy {
     return this._current;
   }
 
-  setDirectionClass() {
-    this._stepsClassMap = {
-      [`ant-steps-${this.direction}`]      : true,
-      [`ant-steps-label-${this.direction}`]: true,
-      [`ant-steps-dot`]                    : this.progressDot,
-      ['ant-steps-small']                  : this.size === 'small'
-    };
+  constructor(@Host() @Self() private stepConnectService: StepConnectService) {
   }
 
-  constructor(private stepConnectService: StepConnectService) {}
-
   ngOnInit() {
-    this.setDirectionClass();
     if (this._status) {
       this.stepConnectService.errorIndex = this._status;
       this.stepConnectService.errorIndexObject.next(this._status);

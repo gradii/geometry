@@ -4,12 +4,13 @@ import { CellTemplateDirective } from '../directive/cell-template.directive';
 import { EditTemplateDirective } from '../directive/edit-template.directive';
 import { FilterMenuTemplateDirective } from '../filtering/filter-menu/filter-menu-template.directive';
 import { FilterCellTemplateDirective } from '../filtering/filter-row/filter-cell-template.directive';
+import { FilterSimpleTemplateDirective } from '../filtering/filter-simple/filter-simple-template.directive';
 import { GroupFooterTemplateDirective } from '../grouping/group-footer-template.directive';
 import { GroupHeaderTemplateDirective } from '../grouping/group-header-template.directive';
 import { ColumnSortSettings } from '../helper/sort-settings';
 import { AutoGenerateColumnPositon, ColumnBase } from './column-base';
 
-export function isColumnComponent(column) {
+export function isColumnComponent(column): column is ColumnComponent {
   return isPresent(column.field);
 }
 
@@ -28,17 +29,19 @@ export class ColumnComponent extends ColumnBase {
 
   @Input() field: string;
   @Input() format: string;
-  @Input() sortable: boolean | ColumnSortSettings;
-  @Input() editor: 'text' | 'numeric' | 'date' | 'boolean' | string;
-  @Input() filter: 'text' | 'numeric' | 'boolean' | 'date' | string;
-  @Input() filterable: boolean;
-  @Input() editable: boolean;
+  @Input() sortable: boolean | ColumnSortSettings = {mode: 'single'} as ColumnSortSettings;
+  @Input() groupable: boolean = true;
+  @Input() editor: 'text' | 'textarea' | 'numeric' | 'date' | 'boolean' | 'datetime' | string;
+  @Input() filter: 'text' | 'numeric' | 'boolean' | 'date' | 'datetime' | string;
+  @Input() filterable: boolean = true;
+  @Input() editable: boolean = true;
   @ContentChild(CellTemplateDirective) cellTemplate: CellTemplateDirective;
   @ContentChild(GroupHeaderTemplateDirective) groupHeaderTemplate: GroupHeaderTemplateDirective;
   @ContentChild(GroupFooterTemplateDirective) groupFooterTemplate: GroupFooterTemplateDirective;
   @ContentChild(EditTemplateDirective) editTemplate: EditTemplateDirective;
   @ContentChild(FilterCellTemplateDirective) filterCellTemplate: FilterCellTemplateDirective;
   @ContentChild(FilterMenuTemplateDirective) filterMenuTemplate: FilterMenuTemplateDirective;
+  @ContentChild(FilterSimpleTemplateDirective) filterSimpleTemplate: FilterSimpleTemplateDirective;
 
   constructor(@SkipSelf()
               @Host()
@@ -69,6 +72,10 @@ export class ColumnComponent extends ColumnBase {
 
   get filterMenuTemplateRef(): TemplateRef<any> {
     return this.filterMenuTemplate ? this.filterMenuTemplate.templateRef : undefined;
+  }
+
+  get filterSimpleTemplateRef(): TemplateRef<any> {
+    return this.filterSimpleTemplate ? this.filterSimpleTemplate.templateRef : undefined;
   }
 
   get displayTitle(): string {

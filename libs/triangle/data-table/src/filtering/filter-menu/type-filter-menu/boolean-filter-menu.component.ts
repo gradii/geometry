@@ -1,6 +1,6 @@
 import { Component, HostBinding, Input } from '@angular/core';
 import { CompositeFilterDescriptor } from '@gradii/triangle/data-query';
-import { LocaleService } from '@gradii/triangle/locale';
+import { I18nService } from '@gradii/triangle/i18n';
 import { ColumnComponent } from '../../../columns/column.component';
 import { BaseFilterCellComponent } from '../../base-filter-cell.component';
 import { FilterService } from '../../filter.service';
@@ -34,7 +34,7 @@ export class BooleanFilterMenuComponent extends BaseFilterCellComponent {
     return false;
   }
 
-  constructor(protected localization: LocaleService) {
+  constructor(protected localization: I18nService) {
     // super(null, localization);
     super(null);
   }

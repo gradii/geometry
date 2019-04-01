@@ -1,11 +1,13 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "importHelpers": true,
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "downlevelIteration": true,
     "target": "es5",
     "typeRoots": [
       "node_modules/@types"
@@ -21,9 +23,14 @@
         "libs/*"
       ],
       "@gradii/triangle/*": [
-        "libs/triangle/src/*"
+        "libs/triangle/*/public-api.ts"
+      ],
+      "@gradii/triangle/*/testing": [
+        "libs/triangle/*/testing/public-api.ts"
       ]
-    }
+
+    },
+    "module": "es2015"
   },
   "exclude": [
     "node_modules",

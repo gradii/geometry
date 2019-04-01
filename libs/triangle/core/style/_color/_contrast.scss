@@ -1,7 +1,6 @@
 // Color Contrast
 // ==============
 
-
 // WCAG Contrast
 // -------------
 /// These named contrast-ratios are defined by the [WCAG][WCAG].
@@ -9,12 +8,11 @@
 /// [WCAG]: http://www.w3.org/TR/2008/REC-WCAG20-20081211/#visual-audio-contrast-contrast
 ///
 /// @access private
-$WCAG-CONTRAST: ( // sass-lint:disable-line variable-name-format
+$WCAG-CONTRAST : (// sass-lint:disable-line variable-name-format
   'AA-large': 3,
   'AA': 4.5,
   'AAA': 7,
 );
-
 
 // Contrast
 // --------
@@ -55,33 +53,30 @@ $WCAG-CONTRAST: ( // sass-lint:disable-line variable-name-format
 ) {
   // Establish default options if they are missing
   @if length($options) == 0 {
-    $options: append($options, map-get($colors, 'contrast-light') or #fff);
-    $options: append($options, map-get($colors, 'contrast-dark') or #000);
+    $options : append($options, map-get($colors, 'contrast-light') or #fff);
+    $options : append($options, map-get($colors, 'contrast-dark') or #000);
   } @else if length($options) == 1 {
     @error 'Provide at least two contrasting color options for `contrast()`';
   }
 
   // Get the colors and their contrasts
-  $color-val: $color;
-  $color-lum: luminance($color-val);
-  $color-list: ();
-  $contrast-list: ();
+  $color-val : $color;
+  $color-lum : luminance($color-val);
+  $color-list : ();
+  $contrast-list : ();
 
   @each $item in $options {
-    $luminance: luminance($item);
-    $contrast: contrast-ratio($color-lum, $luminance);
-
-    $color-list: append($color-list, $item);
-    $contrast-list: append($contrast-list, $contrast);
+    $luminance : luminance($item);
+    $contrast : contrast-ratio($color-lum, $luminance);
+    $color-list : append($color-list, $item);
+    $contrast-list : append($contrast-list, $contrast);
   }
 
   // Find the best results
-  $best-ratio: max($contrast-list...);
-  $best-color: nth($color-list, index($contrast-list, $best-ratio));
-
+  $best-ratio : max($contrast-list...);
+  $best-color : nth($color-list, index($contrast-list, $best-ratio));
   @return $best-color;
 }
-
 
 // Contrasted
 // ----------
@@ -119,12 +114,10 @@ $WCAG-CONTRAST: ( // sass-lint:disable-line variable-name-format
   $background,
   $options...
 ) {
-  $background: color($background);
-
-  background-color: $background;
-  color: contrast($background, $options...);
+  $background : color($background);
+  background-color : $background;
+  color            : contrast($background, $options...);
 }
-
 
 // Contrast Ratio
 // --------------
@@ -160,24 +153,21 @@ $WCAG-CONTRAST: ( // sass-lint:disable-line variable-name-format
   $contrast,
   $require: false
 ) {
-  $is-lumins: (type-of($base) == 'number');
-  $uppercase: (
+  $is-lumins : (type-of($base) == 'number');
+  $uppercase : (
     'aaa': 'AAA',
     'aa': 'AA',
     'aa-large': 'AA-large'
   );
-
-  $base-lumin: if($is-lumins, $base, luminance($base));
-  $contrast-lumin: if($is-lumins, $contrast, luminance($contrast));
-
-  $darker: min($base-lumin, $contrast-lumin);
-  $lighter: max($base-lumin, $contrast-lumin);
-
-  $ratio: ($lighter + 0.05) / ($darker + 0.05);
+  $base-lumin : if($is-lumins, $base, luminance($base));
+  $contrast-lumin : if($is-lumins, $contrast, luminance($contrast));
+  $darker : min($base-lumin, $contrast-lumin);
+  $lighter : max($base-lumin, $contrast-lumin);
+  $ratio : ($lighter + 0.05) / ($darker + 0.05);
 
   @if (type-of($require) != 'number') {
-    $require: map-get($uppercase, $require) or $require;
-    $require: map-get($WCAG-CONTRAST, $require); // sass-lint:disable-line variable-name-format
+    $require : map-get($uppercase, $require) or $require;
+    $require : map-get($WCAG-CONTRAST, $require); // sass-lint:disable-line variable-name-format
   }
 
   @if $require and ($ratio < $require) {
@@ -186,7 +176,6 @@ $WCAG-CONTRAST: ( // sass-lint:disable-line variable-name-format
 
   @return $ratio;
 }
-
 
 // Luminance
 // ---------
@@ -202,31 +191,31 @@ $WCAG-CONTRAST: ( // sass-lint:disable-line variable-name-format
 @function luminance(
   $color
 ) {
-  $luminance: 0;
+  $luminance : 0;
 
   @if (type-of($color) != 'color') {
     @error '`#{$color}` is not a color.';
   }
 
   @each $component in 'red' 'green' 'blue' {
-    $value: call($component, $color) / 255;
+    $value : call($component, $color) / 255;
 
     @if ($value < 0.03928) {
-      $value: $value / 12.92;
+      $value : $value / 12.92;
     } @else {
-      $base: ($value + 0.055) / 1.055;
-      $value: _acc-pow($base, 2.4);
+      $base : ($value + 0.055) / 1.055;
+      $value : _acc-pow($base, 2.4);
     }
 
     @if ($component == 'red') {
-      $value: $value * 0.2126;
+      $value : $value * 0.2126;
     } @else if ($component == 'green') {
-      $value: $value * 0.7152;
+      $value : $value * 0.7152;
     } @else {
-      $value: $value * 0.0722;
+      $value : $value * 0.0722;
     }
 
-    $luminance: $luminance + $value;
+    $luminance : $luminance + $value;
   }
 
   @return $luminance;

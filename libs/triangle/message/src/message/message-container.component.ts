@@ -6,7 +6,7 @@ import { MessageDataFilled, MessageDataOptions } from './message.definitions';
   selector     : 'tri-message-container',
   encapsulation: ViewEncapsulation.None,
   template     : `
-    <div class="ant-message">
+    <div class="tri-message">
       <tri-message *ngFor="let message of messages; let i = index" [message]="message" [index]="i"></tri-message>
     </div>
   `

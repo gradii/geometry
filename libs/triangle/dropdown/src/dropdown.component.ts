@@ -1,26 +1,9 @@
 import { DEFAULT_DROPDOWN_POSITIONS, DropDownAnimation, POSITION_MAP } from '@gradii/triangle/core';
 import { MenuComponent } from '@gradii/triangle/menu';
 import { ConnectionPositionPair } from '@angular/cdk/overlay';
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ContentChild,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  Renderer2,
-  ViewEncapsulation
-} from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { merge } from 'rxjs/observable/merge';
-import { Observer } from 'rxjs/Observer';
-import { debounceTime } from 'rxjs/operator/debounceTime';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
+import { OnChanges, SimpleChanges, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2, ViewEncapsulation } from '@angular/core';
+import { Observable ,  merge ,  Observer ,  Subject ,  Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { DropDownDirective } from './dropdown.directive';
 
 export type Placement = 'bottomLeft' | 'bottomCenter' | 'bottomRight' | 'topLeft' | 'topCenter' | 'topRight';
@@ -35,32 +18,34 @@ export type Placement = 'bottomLeft' | 'bottomCenter' | 'bottomRight' | 'topLeft
   animations     : [DropDownAnimation],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template       : `
-              <div>
-                <ng-content></ng-content>
-              </div>
-              <ng-template
-                cdkConnectedOverlay
-                [cdkConnectedOverlayHasBackdrop]="_hasBackdrop"
-                [cdkConnectedOverlayPositions]="_positions"
-                [cdkConnectedOverlayOrigin]="_origin"
-                (backdropClick)="_hide()"
-                [cdkConnectedOverlayMinWidth]="_triggerWidth"
-                (positionChange)="_onPositionChange($event)"
-                [cdkConnectedOverlayOpen]="visible">
-                <div
-                  class="ant-dropdown ant-dropdown-placement-{{placement}}"
-                  [@dropDownAnimation]="_dropDownPosition"
-                  (mouseenter)="_onMouseEnterEvent($event)"
-                  (mouseleave)="_onMouseLeaveEvent($event)"
-                  [style.minWidth.px]="_triggerWidth"
-                  (click)="_clickDropDown($event)">
-                  <div [class.tri-table-filter-dropdown]="hasFilterButton">
-                    <ng-content select="[tri-menu]"></ng-content>
-                    <ng-content select="[tri-table-filter]"></ng-content>
-                  </div>
-                  <ng-content select="[tri-dropdown-custom]"></ng-content>
-                </div>
-              </ng-template>`
+    <div>
+      <ng-content></ng-content>
+    </div>
+    <ng-template
+      cdkConnectedOverlay
+      cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+      [cdkConnectedOverlayHasBackdrop]="_hasBackdrop"
+      [cdkConnectedOverlayPositions]="_positions"
+      [cdkConnectedOverlayOrigin]="_origin"
+      (backdropClick)="_hide()"
+      [cdkConnectedOverlayMinWidth]="_triggerWidth"
+      (positionChange)="_onPositionChange($event)"
+      [cdkConnectedOverlayOpen]="visible">
+      <div
+        class="tri-dropdown tri-dropdown-placement-{{placement}}"
+        [@dropDownAnimation]="_dropDownPosition"
+        (mouseenter)="_onMouseEnterEvent($event)"
+        (mouseleave)="_onMouseLeaveEvent($event)"
+        [style.minWidth.px]="_triggerWidth"
+        (click)="_clickDropDown($event)">
+        <div [class.tri-table-filter-dropdown]="hasFilterButton">
+          <ng-content select="[tri-menu]"></ng-content>
+          <ng-content select="[tri-table-filter]"></ng-content>
+        </div>
+        <ng-content select="[tri-dropdown-custom]"></ng-content>
+      </div>
+    </ng-template>`,
+  exportAs: 'tri-dropdown'
 })
 export class DropDownComponent implements OnInit, OnDestroy, AfterViewInit {
   hasFilterButton = false;
@@ -172,22 +157,10 @@ export class DropDownComponent implements OnInit, OnDestroy, AfterViewInit {
   };
 
   _startSubscribe(observable$: Observable<boolean | {}>) {
-    this._subscription = debounceTime.call(observable$, 300).subscribe(this._onVisibleChange);
+    this._subscription = observable$.pipe(debounceTime(300)).subscribe(this._onVisibleChange);
   }
 
-  ngOnInit() {
-    if (this._menu) {
-      this._menu.setDropDown(true);
-    }
-  }
-
-  ngOnDestroy() {
-    if (this._subscription) {
-      this._subscription.unsubscribe();
-    }
-  }
-
-  ngAfterViewInit() {
+  handleTriggerEvt() {
     let mouse$: Observable<boolean>;
     if (this.trigger === 'hover') {
       mouse$ = Observable.create((observer: Observer<boolean>) => {
@@ -214,6 +187,25 @@ export class DropDownComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     const observable$ = merge(mouse$, this._visibleChange);
     this._startSubscribe(observable$);
+  }
+
+  ngOnInit() {
+    if (this._menu) {
+      this._menu.setDropDown(true);
+    }
+    setTimeout(() => {
+      this.handleTriggerEvt();
+    },300)
+  }
+
+  ngOnDestroy() {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
+  }
+
+  ngAfterViewInit() {
+
   }
 
   get _hasBackdrop() {

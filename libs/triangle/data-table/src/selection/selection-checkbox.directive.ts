@@ -16,7 +16,7 @@ export class SelectionCheckboxDirective implements AfterContentChecked, OnDestro
   private destroyChange;
 
   constructor(private selectionService: SelectionService,
-              privateel: ElementRef,
+              private el: ElementRef,
               //            private renderer: Renderer2,
               private checkbox: CheckboxComponent) {
     this.selectionService = selectionService;

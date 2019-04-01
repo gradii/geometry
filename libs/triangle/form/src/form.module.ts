@@ -1,7 +1,9 @@
+import { FormValidatorsMessagePipe } from './form-validators-message.pipe';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormControlComponent } from './form-control.component';
-import { FormExplainComponent } from './form-explain.directive';
+import { FormErrorMessageDirective } from './form-error-message.directive';
+import { FormExplainComponent } from './form-explain.component';
 import { FormExtraDirective } from './form-extra.directive';
 import { FormItemRequiredDirective } from './form-item-required.directive';
 import { FormItemDirective } from './form-item.directive';
@@ -9,7 +11,8 @@ import { FormLabelDirective } from './form-label.directive';
 import { FormSplitDirective } from './form-split.directive';
 import { FormTextDirective } from './form-text.directive';
 
-import { FormComponent } from './form.component';
+import { FormDirective } from './form.directive';
+import { FormNoFeedbackDirective } from "./form-no-feedback.directive";
 
 /**
  *
@@ -73,25 +76,36 @@ import { FormComponent } from './form.component';
   declarations: [
     FormExtraDirective,
     FormLabelDirective,
-    FormComponent,
+    FormDirective,
     FormItemDirective,
     FormControlComponent,
     FormExplainComponent,
+    FormExplainComponent,
     FormTextDirective,
     FormSplitDirective,
-    FormItemRequiredDirective
+    FormItemRequiredDirective,
+    FormErrorMessageDirective,
+
+    FormNoFeedbackDirective,
+
+    //pipes
+    [FormValidatorsMessagePipe]
   ],
   exports     : [
     FormExtraDirective,
     FormLabelDirective,
-    FormComponent,
+    FormDirective,
     FormItemDirective,
     FormControlComponent,
     FormExplainComponent,
+    FormExplainComponent,
     FormTextDirective,
     FormSplitDirective,
-    FormItemRequiredDirective
+    FormItemRequiredDirective,
+    FormErrorMessageDirective,
+    FormNoFeedbackDirective
   ],
-  imports     : [CommonModule]
+  imports     : [CommonModule],
+  providers   : []
 })
 export class TriFormModule {}

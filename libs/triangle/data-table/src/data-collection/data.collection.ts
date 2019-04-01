@@ -1,58 +1,60 @@
 import { DataResultIterator } from './data-result-iterator';
-import { itemAt } from './data.iterators';
 
-export class DataCollection {
-  private accessor;
+export class DataCollection<T> {
 
-  constructor(accessor: () => DataResultIterator) {
-    this.accessor = accessor;
+  constructor(protected accessor: DataResultIterator<T>) {
   }
 
-  get total() {
-    return this.accessor().total;
+  get total(): number {
+    return this.accessor.total;
   }
 
-  get length() {
-    return this.accessor().data.length;
+  get length(): number {
+    return this.accessor.data.length;
   }
 
-  get first() {
-    return this.accessor().data[0];
+  get first(): T {
+    return this.accessor.data[0];
   }
 
-  get last() {
-    return this.accessor().data[this.length - 1];
+  get last(): T {
+    return this.accessor.data[this.length - 1];
   }
 
-  at(index: number): any {
-    return itemAt(this.accessor().data, index);
+  at(index: number): T {
+    // return itemAt(this.accessor.data, index);
+    return this.accessor.data[index];
   }
 
   map(fn: (item: any, index: number, array: any[]) => any): any[] {
-    return this.accessor().map(fn);
+    return this.accessor.map(fn);
   }
 
   filter(fn: (item: any, index: number, array: any[]) => boolean): any[] {
-    return this.accessor().filter(fn);
+    return this.accessor.filter(fn);
   }
 
   reduce(fn: (prevValue: any, curValue: any, curIndex: number, array: any[]) => any, init: any): any {
-    return this.accessor().reduce(fn, init);
+    return this.accessor.reduce(fn, init);
   }
 
   forEach(fn: (item: any, index: number, array: any[]) => void): void {
-    this.accessor().forEach(fn);
+    this.accessor.forEach(fn);
   }
 
   some(fn: (value: any, index: number, array: any[]) => boolean): boolean {
-    return this.accessor().some(fn);
+    return this.accessor.some(fn);
   }
 
   toString(): string {
-    return this.accessor().toString();
+    return this.accessor.toString();
   }
 
-  [Symbol.iterator]() {
-    return this.accessor()[Symbol.iterator]();
+  * [Symbol.iterator](): Iterator<T> {
+    for (let item of this.accessor) {
+      yield item;
+    }
+
+    // return this.accessor[Symbol.iterator]();
   }
 }

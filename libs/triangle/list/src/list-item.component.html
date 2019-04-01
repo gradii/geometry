@@ -1,0 +1,26 @@
+<ng-template #contentTpl>
+  <div *ngIf="content" class="tri-list-item-content" [ngClass]="{'tri-list-item-content-single': metas.length < 1}">
+    <ng-container *stringTemplateOutlet="content">{{ content }}</ng-container>
+  </div>
+</ng-template>
+<ng-template #actionsTpl>
+  <ul *ngIf="actions?.length > 0" class="tri-list-item-action">
+    <li *ngFor="let i of actions; let last=last;">
+      <ng-template [ngTemplateOutlet]="i"></ng-template>
+      <em *ngIf="!last" class="tri-list-item-action-split"></em>
+    </li>
+  </ul>
+</ng-template>
+<ng-template #mainTpl>
+  <ng-content></ng-content>
+  <ng-template [ngTemplateOutlet]="contentTpl"></ng-template>
+  <ng-template [ngTemplateOutlet]="actionsTpl"></ng-template>
+</ng-template>
+<div *ngIf="extra; else mainTpl" class="tri-list-item-extra-wrap">
+  <div class="tri-list-item-main">
+    <ng-template [ngTemplateOutlet]="mainTpl"></ng-template>
+  </div>
+  <div class="tri-list-item-extra">
+    <ng-template [ngTemplateOutlet]="extra"></ng-template>
+  </div>
+</div>

@@ -12,13 +12,13 @@ import { Component, ContentChild, HostBinding, Input, OnInit, TemplateRef, ViewE
   ],
   template     : `
     <ng-template *ngIf="content" [ngTemplateOutlet]="content"></ng-template>
-    <span class="ant-badge-status-dot ant-badge-status-{{status}}" *ngIf="status"></span>
-    <span class="ant-badge-status-text" *ngIf="badgeText">{{badgeText}}</span>
+    <span class="tri-badge-status-dot tri-badge-status-{{status}}" *ngIf="status"></span>
+    <span class="tri-badge-status-text" *ngIf="badgeText">{{badgeText}}</span>
     <sup [@enterLeave]
          [ngStyle]="badgeStyle"
          *ngIf="(isDot)||(count>0)||((count==0)&&showZero)"
          data-show="true"
-         class="ant-scroll-number"
+         class="tri-scroll-number"
          [class.tri-badge-count]="!isDot"
          [class.tri-badge-dot]="isDot">
       <ng-template ngFor
@@ -26,7 +26,7 @@ import { Component, ContentChild, HostBinding, Input, OnInit, TemplateRef, ViewE
                    let-number
                    let-i="index">
         <span *ngIf="count <= overflowCount"
-              class="ant-scroll-number-only"
+              class="tri-scroll-number-only"
               [style.transform]="'translateY('+((-countArray[i]*100))+'%)'">
         <ng-template [ngIf]="(!isDot)&&(countArray[i]!=null)">
           <p *ngFor="let p of countSingleArray" [class.current]="p==countArray[i]">{{p}}</p>

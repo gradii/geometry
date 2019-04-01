@@ -8,42 +8,38 @@ import { GroupInfoService } from './group-info.service';
   changeDetection    : ChangeDetectionStrategy.OnPush,
   preserveWhitespaces: false,
   template           : `
-    <a href="#" class="ant-link" (click)="toggleDirection()">
-                       <span class="ant-icon"
-                             [class.tri-i-sort-asc-sm]="dir === 'asc'"
-                             [class.tri-i-sort-desc-sm]="dir === 'desc'"></span>
+    <a href="#" class="tri-link" tabindex="-1" (click)="toggleDirection()">
+         <span class="tri-icon"
+               [class.tri-i-sort-asc-sm]="dir === 'asc'"
+               [class.tri-i-sort-desc-sm]="dir === 'desc'"></span>
       {{title}}</a>
-    <a class="ant-button ant-button-icon ant-bare" (click)="removeDescriptor()">
-      <span class="ant-icon ant-i-group-delete"></span>
+    <a class="tri-button tri-button-icon tri-bare" tabindex="-1" (click)="removeDescriptor()">
+      <span class="tri-icon tri-i-group-delete"></span>
     </a>
   `
 })
 export class GroupIndicatorComponent {
-  groupInfoService: GroupInfoService;
-  @Output() directionChange: EventEmitter<GroupDescriptor>;
-  @Output() remove: EventEmitter<GroupDescriptor>;
-  @Input() group: GroupDescriptor;
+  @Output() public directionChange: EventEmitter<GroupDescriptor> = new EventEmitter<GroupDescriptor>();
+  @Output() public remove: EventEmitter<GroupDescriptor> = new EventEmitter<GroupDescriptor>();
 
-  constructor(groupInfoService: GroupInfoService) {
-    this.groupInfoService = groupInfoService;
-    this.directionChange = new EventEmitter();
-    this.remove = new EventEmitter();
-  }
+  @Input() public group: GroupDescriptor;
 
-  @HostBinding('class.tri-group-indicator')
-  get groupIndicatorClass(): boolean {
+  @HostBinding('class.k-group-indicator')
+  public get groupIndicatorClass(): boolean {
     return true;
   }
 
-  get title(): string {
+  constructor(public groupInfoService: GroupInfoService) { }
+
+  public get title(): string {
     return this.groupInfoService.groupTitle(this.group);
   }
 
-  get dir(): string {
+  public get dir(): string {
     return this.group.dir ? this.group.dir : 'asc';
   }
 
-  toggleDirection(): boolean {
+  public toggleDirection(): boolean {
     this.directionChange.emit({
       dir  : this.dir === 'asc' ? 'desc' : 'asc',
       field: this.group.field
@@ -51,7 +47,7 @@ export class GroupIndicatorComponent {
     return false;
   }
 
-  removeDescriptor(): boolean {
+  public removeDescriptor(): boolean {
     this.remove.emit({
       dir  : this.group.dir,
       field: this.group.field

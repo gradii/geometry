@@ -1,7 +1,7 @@
 import { Directive, Input, Optional, TemplateRef } from '@angular/core';
 
 @Directive({
-  selector: '[triGridToolbarTemplate], [tri-grid-toolbar-template]'
+  selector: '[triDataTableToolbarTemplate], [tri-data-table-toolbar-template]'
 })
 export class ToolbarTemplateDirective {
   _position: 'top' | 'bottom' | 'both';

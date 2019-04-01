@@ -4,48 +4,58 @@ import { Component, ContentChild, HostBinding, Input, TemplateRef, ViewEncapsula
   selector     : 'tri-card',
   encapsulation: ViewEncapsulation.None,
   template     : `
-    <div class="ant-card-head" *ngIf="!!titleTemplate">
-      <h3 class="ant-card-head-title">
+    <div class="tri-card-head" *ngIf="!titleTemplate&&title">
+      <h3 class="tri-card-head-title">{{title}}</h3>
+    </div>
+    <div class="tri-card-head" *ngIf="!!titleTemplate">
+      <h3 class="tri-card-head-title">
         <ng-template
           [ngTemplateOutlet]="titleTemplate">
         </ng-template>
       </h3>
     </div>
-    <div class="ant-card-extra" *ngIf="!!extraTemplate">
+    <div class="tri-card-extra" *ngIf="!!extraTemplate">
       <ng-template
         [ngTemplateOutlet]="extraTemplate">
       </ng-template>
     </div>
-    <div class="ant-card-body">
+    <div class="tri-card-body">
       <ng-template
         *ngIf="!loading&&!!bodyTemplate"
         [ngTemplateOutlet]="bodyTemplate">
       </ng-template>
       <ng-content *ngIf="!loading&&!bodyTemplate"></ng-content>
       <div *ngIf="loading">
-        <p class="ant-card-loading-block" style="width: 94%;"></p>
+        <p class="tri-card-loading-block" style="width: 94%;"></p>
         <p>
-          <span class="ant-card-loading-block" style="width: 28%;"></span>
-          <span class="ant-card-loading-block" style="width: 62%;"></span>
+          <span class="tri-card-loading-block" style="width: 28%;"></span>
+          <span class="tri-card-loading-block" style="width: 62%;"></span>
         </p>
         <p>
-          <span class="ant-card-loading-block" style="width: 22%;"></span>
-          <span class="ant-card-loading-block" style="width: 66%;"></span>
+          <span class="tri-card-loading-block" style="width: 22%;"></span>
+          <span class="tri-card-loading-block" style="width: 66%;"></span>
         </p>
         <p>
-          <span class="ant-card-loading-block" style="width: 56%;"></span>
-          <span class="ant-card-loading-block" style="width: 39%;"></span>
+          <span class="tri-card-loading-block" style="width: 56%;"></span>
+          <span class="tri-card-loading-block" style="width: 39%;"></span>
         </p>
         <p>
-          <span class="ant-card-loading-block" style="width: 21%;"></span>
-          <span class="ant-card-loading-block" style="width: 15%;"></span>
-          <span class="ant-card-loading-block" style="width: 40%;"></span>
+          <span class="tri-card-loading-block" style="width: 21%;"></span>
+          <span class="tri-card-loading-block" style="width: 15%;"></span>
+          <span class="tri-card-loading-block" style="width: 40%;"></span>
         </p>
       </div>
     </div>
   `
 })
 export class CardComponent {
+
+  /**
+   * Card title if titleTemplate is not exist.
+   */
+  @Input()
+  title;
+
   /**
    * Whether show border
    * 是否有边框

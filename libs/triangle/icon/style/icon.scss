@@ -1,0 +1,35 @@
+// The width/height of the icon element.
+$ant-icon-size : 24px !default;
+
+.tri-icon {
+  background-repeat : no-repeat;
+  display           : inline-block;
+  fill              : currentColor;
+  height            : $ant-icon-size;
+  width             : $ant-icon-size;
+
+  &.tri-icon-inline {
+    font-size   : inherit;
+    height      : inherit;
+    line-height : inherit;
+    width       : inherit;
+  }
+}
+
+// Icons that will be mirrored in RTL.
+[dir='rtl'] .tri-icon-rtl-mirror {
+  transform : scale(-1, 1);
+}
+
+.tri-form-field:not(.tri-form-field-appearance-legacy) {
+  .tri-form-field-prefix,
+  .tri-form-field-suffix {
+    .tri-icon {
+      display : block;
+    }
+
+    .tri-icon-button .tri-icon {
+      margin : auto;
+    }
+  }
+}

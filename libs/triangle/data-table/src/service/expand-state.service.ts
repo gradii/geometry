@@ -6,9 +6,9 @@ export class ExpandStateService {
     expand: boolean;
     index: number;
   }>;
-  private rowState;
+  protected rowState;
 
-  constructor() {
+  constructor(protected isInitiallyCollapsed: boolean) {
     this.changes = new EventEmitter();
     this.rowState = [];
   }
@@ -24,5 +24,9 @@ export class ExpandStateService {
 
   isExpanded(index: any): boolean {
     return this.rowState.includes(index);
+  }
+
+  public reset(): void {
+    this.rowState = [];
   }
 }

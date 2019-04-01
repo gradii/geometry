@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
   selector           : 'tri-grid-tile-header, tri-grid-tile-footer',
   template           : `
     <ng-content select="[tri-grid-avatar], [triGridAvatar]"></ng-content>
-    <div class="ant-grid-list-text">
+    <div class="tri-grid-list-text">
       <ng-content></ng-content>
     </div>
     <ng-content></ng-content>`,

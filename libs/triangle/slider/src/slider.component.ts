@@ -13,16 +13,8 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import { merge } from 'rxjs/observable/merge';
-import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
-import { filter } from 'rxjs/operators/filter';
-import { map } from 'rxjs/operators/map';
-import { pluck } from 'rxjs/operators/pluck';
-import { takeUntil } from 'rxjs/operators/takeUntil';
-import { tap } from 'rxjs/operators/tap';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable ,  fromEvent ,  merge ,  Subscription } from 'rxjs';
+import { distinctUntilChanged ,  filter ,  map ,  pluck ,  takeUntil ,  tap } from 'rxjs/operators';
 import { Marks, MarksArray } from './slider-marks.component';
 import { SliderService } from './slider.service';
 
@@ -46,9 +38,9 @@ export class SliderHandle {
   ],
   template     : `
     <div #slider [ngClass]="classMap">
-      <div class="ant-slider-rail"></div>
+      <div class="tri-slider-rail"></div>
       <tri-slider-track
-        className="{{prefixCls}}-track"
+        className="tri-slider-track"
         [vertical]="vertical"
         [included]="included"
         [offset]="track.offset"
@@ -64,15 +56,15 @@ export class SliderHandle {
       ></tri-slider-step>
       <tri-slider-handle
         *ngFor="let handle of handles;"
-        className="{{prefixCls}}-handle"
-        [vertical]="nzVertical"
+        className="tri-slider-handle"
+        [vertical]="vertical"
         [offset]="handle.offset"
         [value]="handle.value"
         [active]="handle.active"
         [tipFormatter]="tipFormatter"
       ></tri-slider-handle>
       <tri-slider-marks *ngIf="marksArray"
-                        className="{{prefixCls}}-mark"
+                        className="tri-slider-mark"
                         [vertical]="vertical"
                         [min]="min"
                         [max]="max"
@@ -197,7 +189,7 @@ export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges,
   sliderDOM: any;
   cacheSliderStart: number = null;
   cacheSliderLength: number = null;
-  prefixCls = 'ant-slider';
+  prefixCls = 'tri-slider';
   classMap: Object;
   activeValueIndex: number = null; // Current activated handle's index ONLY for range=true
   track = {offset: null, length: null}; // Track's offset and length

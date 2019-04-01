@@ -1,26 +1,23 @@
-import {
-  Component,
-  ViewEncapsulation,
-  Input,
-  TemplateRef,
-  ContentChild,
-  HostBinding,
-  HostListener,
-  ElementRef
-} from '@angular/core';
+import { Component, ContentChild, ElementRef, Input, ViewEncapsulation } from '@angular/core';
+import { AnchorLinkTemplateDirective } from './anchor-link-template.directive';
 
 import { AnchorComponent } from './anchor.component';
 
 @Component({
-  selector: 'tri-anchor-link, [triAnchorLink], [tri-anchor-link]',
+  selector     : 'tri-anchor-link, [triAnchorLink], [tri-anchor-link]',
   encapsulation: ViewEncapsulation.None,
-  template: `
-    <a (click)="goToClick($event)" href="{{href}}" class="ant-anchor-link-title">
+  template     : `
+    <a (click)="goToClick($event)" href="{{href}}" class="tri-anchor-link-title" title="{{title}}">
       <span *ngIf="!contentTemplate">{{title}}</span>
-      <ng-template *ngIf="contentTemplate" [ngTemplateOutlet]="contentTemplate"></ng-template>
+      <ng-template *ngIf="contentTemplate" [ngTemplateOutlet]="contentTemplate.templateRef"></ng-template>
     </a>
     <ng-content></ng-content>
-  `
+  `,
+  host         : {
+    '[class.tri-anchor-link]'       : 'true',
+    '[class.tri-anchor-link-active]': 'active',
+    'style'                         : 'display:block'
+  }
 })
 export class AnchorLinkComponent {
   /**
@@ -39,25 +36,25 @@ export class AnchorLinkComponent {
    * The template used for content
    * 文字内容，会覆盖掉  `title`  的内容
    */
-  @ContentChild('contentTemplate') contentTemplate: TemplateRef<any>;
+  @ContentChild(AnchorLinkTemplateDirective) contentTemplate: AnchorLinkTemplateDirective;
 
-  @HostBinding('class.tri-anchor-link') _anchorLink = true;
-
-  @HostBinding('class.tri-anchor-link-active') active: boolean = false;
-
-  @HostListener('click')
-  _onClick() {
-    this._anchorComp.scrollTo(this);
-  }
+  active: boolean = false;
 
   constructor(public el: ElementRef, private _anchorComp: AnchorComponent) {
-    this._anchorComp.add(this);
+  }
+
+  ngOnInit() {
+    this._anchorComp.registerLink(this);
   }
 
   goToClick(e: Event) {
     e.preventDefault();
     e.stopPropagation();
-    this._anchorComp.scrollTo(this);
+    this._anchorComp.handleScrollTo(this);
     // return false;
+  }
+
+  ngOnDestroy(): void {
+    this._anchorComp.unregisterLink(this);
   }
 }

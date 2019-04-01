@@ -2,24 +2,24 @@
 
 .#{$form-prefix-cls}-item {
   > label {
-    color: $label-color;
-    text-align: right;
-    vertical-align: middle;
-    padding: 7px 0;
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-     @at-root &:after {
-      content: ":";
-      margin: 0 8px 0 2px;
-      position: relative;
-      top: -0.5px;
+    color          : $label-color;
+    text-align     : right;
+    vertical-align : middle;
+    padding        : 7px 0;
+    display        : inline-block;
+    overflow       : hidden;
+    text-overflow  : ellipsis;
+    white-space    : nowrap;
+    @at-root &:after {
+      content  : ":";
+      margin   : 0 8px 0 2px;
+      position : relative;
+      top      : -0.5px;
     }
   }
-   @at-root &-control {
+  @at-root &-control {
     tri-input {
-      width: 100%;
+      width : 100%;
     }
   }
 }

@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ColComponent } from './col.component';
 import { ColDirective } from './col.directive';
-import { RowComponent } from './row.component';
+import { RowDirective } from './row.directive';
 
 /**
  *
@@ -61,8 +60,8 @@ import { RowComponent } from './row.component';
  *
  */
 @NgModule({
-  declarations: [RowComponent, ColDirective, ColComponent],
-  exports     : [RowComponent, ColDirective, ColComponent],
+  declarations: [RowDirective, ColDirective],
+  exports     : [RowDirective, ColDirective],
   imports     : [CommonModule]
 })
 export class TriGridModule {}

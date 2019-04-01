@@ -1,6 +1,6 @@
 import { FadeAnimation } from '@gradii/triangle/core';
 import { ToolTipComponent } from '@gradii/triangle/tooltip';
-import { Component, ContentChild, Input, ViewEncapsulation } from '@angular/core';
+import { Component, ContentChild, Input, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { PopoverDirective } from './popover.directive';
 
 @Component({
@@ -18,17 +18,17 @@ import { PopoverDirective } from './popover.directive';
       (positionChange)="onPositionChange($event)"
       [cdkConnectedOverlayPositions]="_positions"
       [cdkConnectedOverlayOpen]="visible$ | async">
-      <div class="ant-popover" [ngClass]="_classMap" [ngStyle]="overlayStyle" [@fadeAnimation]="''+(visible$ | async)"
+      <div class="tri-popover" [ngClass]="_classMap" [ngStyle]="overlayStyle" [@fadeAnimation]="''+(visible$ | async)"
         (@fadeAnimation.done)="_afterVisibilityAnimation($event)">
-        <div class="ant-popover-content">
-          <div class="ant-popover-arrow"></div>
-          <div class="ant-popover-inner">
-            <div class="ant-popover-title">{{title}}</div>
-            <div class="ant-popover-inner-content">
-              <span *ngIf="!template">{{content}}</span>
+        <div class="tri-popover-content">
+          <div class="tri-popover-arrow"></div>
+          <div class="tri-popover-inner">
+            <div class="tri-popover-title">{{title}}</div>
+            <div class="tri-popover-inner-content">
+              <span *ngIf="!popoverTemplate">{{content}}</span>
               <ng-template
-                *ngIf="template"
-                [ngTemplateOutlet]="template">
+                *ngIf="popoverTemplate"
+                [ngTemplateOutlet]="popoverTemplate">
               </ng-template>
             </div>
           </div>
@@ -37,7 +37,9 @@ import { PopoverDirective } from './popover.directive';
     </ng-template>`
 })
 export class PopoverComponent extends ToolTipComponent {
-  _prefix = 'ant-popover-placement';
+  _prefix = 'tri-popover-placement';
+
+  @ContentChild('popoverTemplate') popoverTemplate: TemplateRef<any>;
 
   /**
    * Content

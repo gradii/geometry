@@ -1,20 +1,13 @@
 import { isObservable, isPresent, isPromise } from '@gradii/triangle/util';
-import {
-  ApplicationRef,
-  ComponentFactory,
-  ComponentFactoryResolver,
-  ComponentRef,
-  Injectable,
-  ModuleWithComponentFactories,
-  TemplateRef,
-  Type
-} from '@angular/core';
+import { ApplicationRef, ComponentFactory, ComponentFactoryResolver, ComponentRef, Injectable, ModuleWithComponentFactories, TemplateRef, Type } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { rxSubscriber } from 'rxjs/symbol/rxSubscriber';
+import { rxSubscriber } from 'rxjs/internal-compatibility';
 import { ConfirmComponent } from './confirm.component';
 import { ConfirmOptions, ModalOptions } from './modal-options.provider';
 import { ModalSubject } from './modal-subject.service';
 import { ModalComponent } from './modal.component';
+
+let zIndex = 1000;
 
 export interface ConfigInterface {
   type?: string;
@@ -81,7 +74,7 @@ export class ModalService {
       'moduleWithComponentFactories'
     ];
 
-    config = Object.assign(options, config);
+    config = Object.assign({zIndex: ++zIndex}, options, config);
     optionalParams.forEach(key => {
       if (config[key] !== undefined) {
         props[key] = config[key];
@@ -104,14 +97,12 @@ export class ModalService {
       }
       if (fn) {
         const ret = fn();
-        if (ret === true || !isPresent(ret)) {
+        if (ret === false) {
+          return;
+        } else if (ret === true || !isPresent(ret)) {
           _close();
         } else if (isPromise(ret)) {
           ret.then(_close);
-        } else if (rxSubscriber in ret) {
-          ret.add(() => {
-            _close();
-          });
         } else if (isObservable(ret)) {
           (ret as Observable<any>).subscribe(_ => _close());
         }

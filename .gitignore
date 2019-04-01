@@ -46,5 +46,6 @@ Thumbs.db
 /combined.log
 
 #npm
-yarn.lock
 package.lock.json
+/yarn-error.log
+/.cache/

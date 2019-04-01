@@ -1,220 +1,220 @@
-
-$popover-prefix-cls: "#{$ant-prefix}-popover";
+$popover-prefix-cls : "#{$ant-prefix}-popover";
 
 .#{$popover-prefix-cls} {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: $zindex-popover;
-  cursor: auto;
-  user-select: text;
-  white-space: normal;
-  font-size: $font-size-base;
-  line-height: $line-height-base;
-  font-weight: normal;
-  text-align: left;
+  position    : absolute;
+  top         : 0;
+  left        : 0;
+  z-index     : $zindex-popover;
+  cursor      : auto;
+  user-select : text;
+  white-space : normal;
+  font-size   : $font-size-base;
+  line-height : $line-height-base;
+  font-weight : normal;
+  text-align  : left;
 
-   @at-root &:after {
-    content: "";
-    position: absolute;
-    background: rgba(255, 255, 255, 0.01);
+  @at-root &:after {
+    content    : "";
+    position   : absolute;
+    background : rgba(255, 255, 255, 0.01);
   }
 
-   @at-root &-hidden {
-    display: none;
+  @at-root &-hidden {
+    display : none;
   }
 
   // Offset the popover to account for the popover arrow
-   @at-root &-placement-top,
-    &-placement-topLeft,
-    &-placement-topRight {
-    padding-bottom: $popover-distance;
+  @at-root &-placement-top,
+  &-placement-topLeft,
+  &-placement-topRight {
+    padding-bottom : $popover-distance;
   }
 
-   @at-root &-placement-right,
-    &-placement-rightTop,
-    &-placement-rightBottom {
-    padding-left: $popover-distance;
+  @at-root &-placement-right,
+  &-placement-rightTop,
+  &-placement-rightBottom {
+    padding-left : $popover-distance;
   }
 
-   @at-root &-placement-bottom,
-    &-placement-bottomLeft,
-    &-placement-bottomRight {
-    padding-top: $popover-distance;
+  @at-root &-placement-bottom,
+  &-placement-bottomLeft,
+  &-placement-bottomRight {
+    padding-top : $popover-distance;
   }
 
-   @at-root &-placement-left,
-    &-placement-leftTop,
-    &-placement-leftBottom {
-    padding-right: $popover-distance;
+  @at-root &-placement-left,
+  &-placement-leftTop,
+  &-placement-leftBottom {
+    padding-right : $popover-distance;
   }
 
-   @at-root &-inner {
-    background-color: $popover-bg;
-    background-clip: padding-box;
-    border-radius: $border-radius-base;
-    box-shadow: $box-shadow-base;
+  @at-root &-inner {
+    background-color : $popover-bg;
+    background-clip  : padding-box;
+    border-radius    : $border-radius-base;
+    box-shadow       : $box-shadow-base;
   }
 
-   @at-root &-title {
-    min-width: $popover-min-width;
-    margin: 0; // reset heading margin
-    padding: 0 16px;
-    line-height: 32px;
-    height: 32px;
-    border-bottom: 1px solid $border-color-split;
-    color: $popover-color;
-    font-weight: 500;
+  @at-root &-title {
+    min-width     : $popover-min-width;
+    margin        : 0; // reset heading margin
+    padding       : 0 16px;
+    line-height   : 32px;
+    height        : 32px;
+    border-bottom : 1px solid $border-color-split;
+    color         : $popover-color;
+    font-weight   : 500;
   }
 
-   @at-root &-inner-content {
-    padding: 8px 16px;
-    color: $popover-color;
+  @at-root &-inner-content {
+    padding : 8px 16px;
+    color   : $popover-color;
   }
 
-   @at-root &-message {
-    padding: 8px 0 16px;
-    font-size: $font-size-base;
-    color: $popover-color;
+  @at-root &-message {
+    padding   : 8px 0 16px;
+    font-size : $font-size-base;
+    color     : $popover-color;
     > .#{$iconfont-css-prefix} {
-      color: $warning-color;
-      line-height: 17px;
-      position: absolute;
+      color       : $warning-color;
+      line-height : 17px;
+      position    : absolute;
     }
-     @at-root &-title {
-      padding-left: 20px;
+
+    @at-root &-title {
+      padding-left : 20px;
     }
   }
 
-   @at-root &-buttons {
-    text-align: right;
-    margin-bottom: 8px;
+  @at-root &-buttons {
+    text-align    : right;
+    margin-bottom : 8px;
     button {
-      margin-left: 8px;
+      margin-left : 8px;
     }
   }
 
   // Arrows
   // .popover-arrow is outer, .popover-arrow:after is inner
 
-   @at-root &-arrow {
-     @at-root &,
-      &:after {
-      position: absolute;
-      display: block;
-      width: 0;
-      height: 0;
-      border-color: transparent;
-      border-style: solid;
+  @at-root &-arrow {
+    @at-root &,
+    &:after {
+      position     : absolute;
+      display      : block;
+      width        : 0;
+      height       : 0;
+      border-color : transparent;
+      border-style : solid;
     }
   }
 
-   @at-root &-arrow {
-    border-width: $popover-arrow-outer-width;
+  @at-root &-arrow {
+    border-width : $popover-arrow-outer-width;
   }
 
-   @at-root &-arrow:after {
-    border-width: $popover-arrow-width;
-    content: "";
+  @at-root &-arrow:after {
+    border-width : $popover-arrow-width;
+    content      : "";
   }
 
-   @at-root &-placement-top > #{&}-content > #{&}-arrow,
-    &-placement-topLeft > #{&}-content >  #{&}-arrow,
-    &-placement-topRight > #{&}-content >  #{&}-arrow {
-    border-bottom-width: 0;
-    border-top-color: $popover-arrow-outer-color;
-    bottom: $popover-distance - $popover-arrow-outer-width;
-     @at-root &:after {
-      content: " ";
-      bottom: 1px;
-      margin-left: -$popover-arrow-width;
-      border-bottom-width: 0;
-      border-top-color: $popover-arrow-color;
+  @at-root &-placement-top > #{&}-content > #{&}-arrow,
+  &-placement-topLeft > #{&}-content > #{&}-arrow,
+  &-placement-topRight > #{&}-content > #{&}-arrow {
+    border-bottom-width : 0;
+    border-top-color    : $popover-arrow-outer-color;
+    bottom              : $popover-distance - $popover-arrow-outer-width;
+    @at-root &:after {
+      content             : " ";
+      bottom              : 1px;
+      margin-left         : -$popover-arrow-width;
+      border-bottom-width : 0;
+      border-top-color    : $popover-arrow-color;
     }
   }
-   @at-root &-placement-top > #{&}-content >  #{&}-arrow {
-    left: 50%;
-    margin-left: -$popover-arrow-outer-width;
+  @at-root &-placement-top > #{&}-content > #{&}-arrow {
+    left        : 50%;
+    margin-left : -$popover-arrow-outer-width;
   }
-   @at-root &-placement-topLeft > #{&}-content >  #{&}-arrow {
-    left: 16px;
+  @at-root &-placement-topLeft > #{&}-content > #{&}-arrow {
+    left : 16px;
   }
-   @at-root &-placement-topRight > #{&}-content >  #{&}-arrow {
-    right: 16px;
-  }
-
-   @at-root &-placement-right > #{&}-content >  #{&}-arrow,
-    &-placement-rightTop > #{&}-content >  #{&}-arrow,
-    &-placement-rightBottom > #{&}-content >  #{&}-arrow {
-    left: $popover-distance - $popover-arrow-outer-width;
-    border-left-width: 0;
-    border-right-color: $popover-arrow-outer-color;
-     @at-root &:after {
-      content: " ";
-      left: 1px;
-      bottom: -$popover-arrow-width;
-      border-left-width: 0;
-      border-right-color: $popover-arrow-color;
-    }
-  }
-   @at-root &-placement-right > #{&}-content >  #{&}-arrow {
-    top: 50%;
-    margin-top: -$popover-arrow-outer-width;
-  }
-   @at-root &-placement-rightTop > #{&}-content >  #{&}-arrow {
-    top: 12px;
-  }
-   @at-root &-placement-rightBottom > #{&}-content >  #{&}-arrow {
-    bottom: 12px;
+  @at-root &-placement-topRight > #{&}-content > #{&}-arrow {
+    right : 16px;
   }
 
-   @at-root &-placement-bottom > #{&}-content >  #{&}-arrow,
-    &-placement-bottomLeft > #{&}-content >  #{&}-arrow,
-    &-placement-bottomRight > #{&}-content >  #{&}-arrow {
-    border-top-width: 0;
-    border-bottom-color: $popover-arrow-outer-color;
-    top: $popover-distance - $popover-arrow-outer-width;
-     @at-root &:after {
-      content: " ";
-      top: 1px;
-      margin-left: -$popover-arrow-width;
-      border-top-width: 0;
-      border-bottom-color: $popover-arrow-color;
+  @at-root &-placement-right > #{&}-content > #{&}-arrow,
+  &-placement-rightTop > #{&}-content > #{&}-arrow,
+  &-placement-rightBottom > #{&}-content > #{&}-arrow {
+    left               : $popover-distance - $popover-arrow-outer-width;
+    border-left-width  : 0;
+    border-right-color : $popover-arrow-outer-color;
+    @at-root &:after {
+      content            : " ";
+      left               : 1px;
+      bottom             : -$popover-arrow-width;
+      border-left-width  : 0;
+      border-right-color : $popover-arrow-color;
     }
   }
-   @at-root &-placement-bottom > #{&}-content >  #{&}-arrow {
-    left: 50%;
-    margin-left: -$popover-arrow-outer-width;
+  @at-root &-placement-right > #{&}-content > #{&}-arrow {
+    top        : 50%;
+    margin-top : -$popover-arrow-outer-width;
   }
-   @at-root &-placement-bottomLeft > #{&}-content >  #{&}-arrow {
-    left: 16px;
+  @at-root &-placement-rightTop > #{&}-content > #{&}-arrow {
+    top : 12px;
   }
-   @at-root &-placement-bottomRight > #{&}-content >  #{&}-arrow {
-    right: 16px;
+  @at-root &-placement-rightBottom > #{&}-content > #{&}-arrow {
+    bottom : 12px;
   }
 
-   @at-root &-placement-left > #{&}-content >  #{&}-arrow,
-    &-placement-leftTop > #{&}-content >  #{&}-arrow,
-    &-placement-leftBottom > #{&}-content >  #{&}-arrow {
-    right: $popover-distance - $popover-arrow-outer-width;
-    border-right-width: 0;
-    border-left-color: $popover-arrow-outer-color;
-     @at-root &:after {
-      content: " ";
-      right: 1px;
-      border-right-width: 0;
-      border-left-color: $popover-arrow-color;
-      bottom: -$popover-arrow-width;
+  @at-root &-placement-bottom > #{&}-content > #{&}-arrow,
+  &-placement-bottomLeft > #{&}-content > #{&}-arrow,
+  &-placement-bottomRight > #{&}-content > #{&}-arrow {
+    border-top-width    : 0;
+    border-bottom-color : $popover-arrow-outer-color;
+    top                 : $popover-distance - $popover-arrow-outer-width;
+    @at-root &:after {
+      content             : " ";
+      top                 : 1px;
+      margin-left         : -$popover-arrow-width;
+      border-top-width    : 0;
+      border-bottom-color : $popover-arrow-color;
     }
   }
-   @at-root &-placement-left > #{&}-content >  #{&}-arrow {
-    top: 50%;
-    margin-top: -$popover-arrow-outer-width;
+  @at-root &-placement-bottom > #{&}-content > #{&}-arrow {
+    left        : 50%;
+    margin-left : -$popover-arrow-outer-width;
   }
-   @at-root &-placement-leftTop > #{&}-content >  #{&}-arrow {
-    top: 12px;
+  @at-root &-placement-bottomLeft > #{&}-content > #{&}-arrow {
+    left : 16px;
   }
-   @at-root &-placement-leftBottom > #{&}-content >  #{&}-arrow {
-    bottom: 12px;
+  @at-root &-placement-bottomRight > #{&}-content > #{&}-arrow {
+    right : 16px;
+  }
+
+  @at-root &-placement-left > #{&}-content > #{&}-arrow,
+  &-placement-leftTop > #{&}-content > #{&}-arrow,
+  &-placement-leftBottom > #{&}-content > #{&}-arrow {
+    right              : $popover-distance - $popover-arrow-outer-width;
+    border-right-width : 0;
+    border-left-color  : $popover-arrow-outer-color;
+    @at-root &:after {
+      content            : " ";
+      right              : 1px;
+      border-right-width : 0;
+      border-left-color  : $popover-arrow-color;
+      bottom             : -$popover-arrow-width;
+    }
+  }
+  @at-root &-placement-left > #{&}-content > #{&}-arrow {
+    top        : 50%;
+    margin-top : -$popover-arrow-outer-width;
+  }
+  @at-root &-placement-leftTop > #{&}-content > #{&}-arrow {
+    top : 12px;
+  }
+  @at-root &-placement-leftBottom > #{&}-content > #{&}-arrow {
+    bottom : 12px;
   }
 }

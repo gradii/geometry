@@ -1,3 +1,4 @@
+import { isFunction } from '@gradii/triangle/util';
 import { Component, ContentChild, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { RadioTileDirective } from './radio-tile.directive';
 
@@ -16,9 +17,9 @@ export interface RadioOption {
           [class.tri-radio-checked]="_checked"
           [class.tri-radio-focused]="_focused"
           [class.tri-radio-disabled]="_disabled">
-      <span class="ant-radio-inner"></span>
+      <span class="tri-radio-inner"></span>
       <input type="radio"
-             class="ant-radio-input"
+             class="tri-radio-input"
              [(ngModel)]="checked"
              (focus)="focus()"
              (blur)="blur()">
@@ -42,6 +43,8 @@ export class RadioComponent extends RadioTileDirective implements RadioOption {
 
   blur() {
     this._focused = false;
-    this.radioGroup.onTouched();
+    if (isFunction(this.radioGroup.onTouched)) {
+      this.radioGroup.onTouched();
+    }
   }
 }

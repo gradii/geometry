@@ -1,21 +1,43 @@
-import { Component, ContentChild, HostBinding, Input } from '@angular/core';
+import { Component, ContentChild, Directive, HostBinding, Input, OnInit } from "@angular/core";
 import { NgControl } from '@angular/forms';
 
 @Component({
-  selector: '[tri-form-control], [triFormControl]',
+  selector: 'tri-form-control, [tri-form-control], [triFormControl]',
   template: `
-    <div class="ant-form-item-control"
+    <div class="tri-form-item-control"
          [class.has-warning]="isWarning"
          [class.has-error]="isError"
          [class.has-success]="isSuccess"
          [class.has-feedback]="hasFeedBack"
-         [class.is-validating]="isValidate">
-      <ng-content></ng-content>
+         [class.is-validating]="isValidate"
+    >
+      <span class="tri-form-item-children">
+        <ng-content></ng-content>
+        <span *ngIf="hasFeedback" class="tri-form-item-children-icon">
+          <i class="anticon"
+             [class.anticon-check-circle]="isSuccess"
+             [class.anticon-close-circle]="isError"
+             [class.anticon-exclamation-circle]="isWarning"
+          ></i>
+        </span>
+      </span>
+      <ng-content select="tri-form-explain"></ng-content>
+      <ng-content select="tri-form-extra"></ng-content>
     </div>
   `,
-  styles  : []
+  host    : {
+    '[class.tri-form.item-control-wrapper]': 'true',
+    '[class.tri-form-item-control]': "true",
+    '[class.has-warning]'          : "isWarning",
+    '[class.has-error]'            : "isError",
+    '[class.has-success]'          : "isSuccess",
+    '[class.has-feedback]'         : "hasFeedBack",
+    '[class.is-validating]'        : "isValidate",
+  }
 })
 export class FormControlComponent {
+  public iconType: string;
+
   _hasFeedback = false;
   @HostBinding(`class.tri-form-item-control-wrapper`)
   _validateStatus;

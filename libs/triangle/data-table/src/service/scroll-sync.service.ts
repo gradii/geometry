@@ -1,11 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import 'rxjs/observable/of';
-import { filter } from 'rxjs/operators/filter';
-import { map } from 'rxjs/operators/map';
-import { tap } from 'rxjs/operators/tap';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
+import { fromEvent, Subject, Subscription } from 'rxjs';
+import { filter, map, tap } from 'rxjs/operators';
 
 @Injectable()
 export class ScrollSyncService {

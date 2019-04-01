@@ -27,12 +27,12 @@ export class MenuItemComponent implements AfterViewInit {
     if (value) {
       this._renderer.addClass(
         this.hostElement.nativeElement,
-        this.isInDropDown ? 'ant-dropdown-menu-item-selected' : 'ant-menu-item-selected'
+        this.isInDropDown ? 'tri-dropdown-menu-item-selected' : 'tri-menu-item-selected'
       );
     } else {
       this._renderer.removeClass(
         this.hostElement.nativeElement,
-        this.isInDropDown ? 'ant-dropdown-menu-item-selected' : 'ant-menu-item-selected'
+        this.isInDropDown ? 'tri-dropdown-menu-item-selected' : 'tri-menu-item-selected'
       );
     }
   }
@@ -46,7 +46,7 @@ export class MenuItemComponent implements AfterViewInit {
 
   /** clear all item selected status except this */
   @HostListener('click', ['$event'])
-  _onClickItem() {
+  _onClickItem(event?) {
     if (this.menuComponent.clickActive && !this.disable) {
       this.menuComponent.clearAllSelected();
       this.selected = true;

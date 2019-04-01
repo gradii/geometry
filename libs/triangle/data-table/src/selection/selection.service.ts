@@ -1,6 +1,8 @@
 import { isPresent } from '@gradii/triangle/util';
 import { EventEmitter, Injectable } from '@angular/core';
 import { RowArgs, RowSelectedFn } from '../row-class';
+import { GroupRow } from '../row-column/group-row';
+import { Row } from '../row-column/row';
 import { DomEventsService } from '../service/dom-events.service';
 import { SelectableSettings } from './selectable-settings';
 
@@ -35,7 +37,7 @@ export interface SelectionServiceSettings {
   rowSelected: RowSelectedFn;
   selectable: boolean | SelectableSettings;
   view: {
-    accessor: Function;
+    accessor: Iterable<any>;
     at: Function;
     length: Number;
   };
@@ -81,18 +83,14 @@ export class SelectionService {
     this.currentSelection = [];
     if (settings.selectable && settings.selectable.enabled !== false) {
       const iterator = this.getIterator();
-      while (true) {
-        const item = iterator.next();
-        if (item.done) {
-          break;
-        }
-        if (item.value && item.value.type === 'data') {
+      for (let item of iterator) {
+        if (item instanceof Row) {
           const rowArgs = {
-            dataItem: item.value.data,
-            index   : item.value.index
+            dataItem: item.dataItem,
+            index   : item.index
           };
           if (settings.rowSelected(rowArgs)) {
-            this.currentSelection[item.value.index] = rowArgs;
+            this.currentSelection[item.index] = rowArgs;
           }
         }
       }
@@ -126,6 +124,26 @@ export class SelectionService {
     this.changes.emit(ev);
   }
 
+  toggleByIndex(index: number): any {
+    const iterator = this.getIterator();
+    if (this.selectAllChecked && this.isSelected(index)) {
+      this.selectAllChecked = false;
+    }
+    for (let item of iterator) {
+      if (item instanceof Row && item.index === index) {
+        const itemToToggle = {
+          data : item.dataItem,
+          index: item.index
+        };
+        if (this.isSelected(index) || this.options.mode === 'multiple') {
+          return this.toggle(itemToToggle);
+        } else {
+          return this.select(itemToToggle);
+        }
+      }
+    }
+  }
+
   toggle(item: any): any {
     const selectedRows = [];
     const deselectedRows = [];
@@ -135,34 +153,17 @@ export class SelectionService {
     } else {
       selectedRows.push({dataItem: item.data, index: item.index});
     }
+
+    this.currentSelection.forEach(row => {
+      if (row.index !== item.index) {
+        selectedRows.push(row);
+      }
+    });
+
     return {
       deselectedRows,
       selectedRows
     };
-  }
-
-  toggleByIndex(index: number): any {
-    const iterator = this.getIterator();
-    if (this.selectAllChecked && this.isSelected(index)) {
-      this.selectAllChecked = false;
-    }
-    while (true) {
-      const item = iterator.next();
-      if (item.done) {
-        break;
-      }
-      if (item.value && item.value.type === 'data' && item.value.index === index) {
-        const itemToToggle = {
-          data : item.value.data,
-          index: item.value.index
-        };
-        if (this.isSelected(index) || this.options.mode === 'multiple') {
-          return this.toggle(itemToToggle);
-        } else {
-          return this.select(itemToToggle);
-        }
-      }
-    }
   }
 
   select(item: any): any {
@@ -189,18 +190,15 @@ export class SelectionService {
     const start = Math.min(this.lastSelectionStartIndex, item.index);
     const end = Math.max(this.lastSelectionStartIndex, item.index);
     const iterator = this.getIterator();
-    while (true) {
-      const next = iterator.next();
-      if (next.done) {
-        break;
-      }
-      if (next.value && next.value.type === 'data') {
-        const idx = next.value.index;
+
+    for (let item of iterator) {
+      if (item instanceof Row) {
+        const idx = item.index;
         if ((idx < start || idx > end) && this.isSelected(idx)) {
-          deselectedRows.push({dataItem: next.value.data, index: idx});
+          deselectedRows.push({dataItem: item.dataItem, index: idx});
         }
         if (idx >= start && idx <= end && !this.isSelected(idx)) {
-          selectedRows.push({dataItem: next.value.data, index: idx});
+          selectedRows.push({dataItem: item.dataItem, index: idx});
         }
       }
     }
@@ -215,18 +213,14 @@ export class SelectionService {
     const selectedRows = [];
     const deselectedRows = [];
     const iterator = this.getIterator();
-    while (true) {
-      const next = iterator.next();
-      if (next.done) {
-        break;
-      }
-      if (next.value && next.value.type === 'data') {
-        const idx = next.value.index;
+    for (let item of iterator) {
+      if (item instanceof Row) {
+        const idx = item.index;
         if (this.isSelected(idx) && !selectAllChecked) {
-          deselectedRows.push({dataItem: next.value.data, index: idx});
+          deselectedRows.push({dataItem: item.dataItem, index: idx});
         }
         if (!this.isSelected(idx) && selectAllChecked) {
-          selectedRows.push({dataItem: next.value.data, index: idx});
+          selectedRows.push({dataItem: item.dataItem, index: idx});
         }
       }
     }
@@ -286,12 +280,12 @@ export class SelectionService {
     }
   }
 
-  getIterator() {
-    const accessor = this.settings.view.accessor();
+  getIterator(): Iterable<Row | GroupRow> {
+    const accessor = this.settings.view.accessor;
     if (!accessor) {
-      return;
+      return [];
     }
-    return accessor[Symbol.iterator]();
+    return accessor;
   }
 
   setDeprecatedEventProperties(ev) {

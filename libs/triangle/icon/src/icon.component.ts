@@ -1,16 +1,5 @@
-import { take } from 'rxjs/operators/take';
-import {
-  Attribute,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-  ViewEncapsulation,
-} from '@angular/core';
-import { CanColor, mixinColor } from '@angular/material/core';
+import { Attribute, Directive, ElementRef, Input, OnChanges, OnInit, SimpleChanges, } from '@angular/core';
+import { take } from 'rxjs/operators';
 import { IconRegistry } from './icon-registry';
 
 /**
@@ -40,29 +29,29 @@ import { IconRegistry } from './icon-registry';
  *   Example:
  *     `<tri-icon fontSet="fa" fontIcon="alarm"></tri-icon>`
  */
-@Component({
-  moduleId           : module.id,
-  template           : '<ng-content></ng-content>',
-  selector           : 'tri-icon',
-  exportAs           : 'triIcon',
+@Directive({
+  selector: 'tri-icon, i[tri-icon]',
+  exportAs: 'triIcon',
   // styleUrls          : ['icon.css'],
   // inputs             : ['color'],
-  host               : {
-    'role' : 'img',
-    'class': 'tri-icon',
+  host    : {
+    'role'                   : 'img',
+    'class'                  : 'tri-icon',
+    '[class.tri-icon-inline]': 'inline',
   },
-  encapsulation      : ViewEncapsulation.None,
-  preserveWhitespaces: false,
-  changeDetection    : ChangeDetectionStrategy.OnPush,
 })
 export class IconComponent implements OnChanges, OnInit {
+
+  @Input() inline: boolean;
 
   /** Name of the icon in the SVG icon set. */
   @Input() svgIcon: string;
 
   /** Font set that the icon is a part of. */
   @Input()
-  get fontSet(): string { return this._fontSet; }
+  get fontSet(): string {
+    return this._fontSet;
+  }
 
   set fontSet(value: string) {
     this._fontSet = this._cleanupFontValue(value);
@@ -72,7 +61,9 @@ export class IconComponent implements OnChanges, OnInit {
 
   /** Name of an icon within a font set. */
   @Input()
-  get fontIcon(): string { return this._fontIcon; }
+  get fontIcon(): string {
+    return this._fontIcon;
+  }
 
   set fontIcon(value: string) {
     this._fontIcon = this._cleanupFontValue(value);

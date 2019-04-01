@@ -1,14 +1,14 @@
 .#{$badge-prefix-cls} {
 
-   @at-root &-count {
-    position: absolute;
-    transform: translateX(50%);
-    right: 0;
+  @at-root &-count {
+    position  : absolute;
+    transform : translateX(50%);
+    right     : 0;
   }
-   @at-root &-dot {
-    position: absolute;
-    transform: translateX(50%);
-    right: 0;
+  @at-root &-dot {
+    position  : absolute;
+    transform : translateX(50%);
+    right     : 0;
 
   }
 }

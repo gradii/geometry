@@ -1,8 +1,7 @@
 import { isNullOrEmptyString } from '@gradii/triangle/util';
-import { QueryList } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { from } from 'rxjs/observable/from';
-import { merge } from 'rxjs/operators/merge';
+import { InjectionToken, QueryList } from '@angular/core';
+import { Observable ,  from } from 'rxjs';
+import { merge } from 'rxjs/operators';
 
 // export const isPresent                     = (value: any): boolean => value !== null && value !== undefined;
 // export const isBlank: Function             = value => value === null || value === undefined;
@@ -22,4 +21,33 @@ export const extractFormat = format => {
     return format.slice(3, format.length - 1);
   }
   return format;
+};
+
+
+export const not = (fn: (...x: any[]) => boolean) => (...args): boolean => !fn.apply(null, args);
+
+export type Condition<T> = (x: T) => boolean;
+
+export const or = <T>(...conditions: Condition<T>[]) => (value: T): boolean => conditions.reduce((acc, x) => acc || x(value), false);
+
+export const and = <T>(...conditions: Condition<T>[]) => (value: T): boolean => conditions.reduce((acc, x) => acc && x(value), true);
+
+export const Skip = new InjectionToken("Skip"); // tslint:disable-line:variable-name
+
+export const guid = () => {
+  let id = "";
+  let i;
+  let random;
+
+  for (i = 0; i < 32; i++) {
+    random = Math.random() * 16 | 0; // tslint:disable-line:no-bitwise
+
+    if (i === 8 || i === 12 || i === 16 || i === 20) {
+      id += "-";
+    }
+    // tslint:disable-next-line:no-bitwise
+    id += (i === 12 ? 4 : (i === 16 ? (random & 3 | 8) : random)).toString(16);
+  }
+
+  return id;
 };

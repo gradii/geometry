@@ -1,10 +1,10 @@
-$_NEWTON_ITERATIONS: 4;
-$_NEWTON_MIN_SLOPE: 0.001;
-$_SUBDIVISION_PRECISION: 0.0000001;
-$_SUBDIVISION_MAX_ITERATIONS: 10;
+$_NEWTON_ITERATIONS : 4;
+$_NEWTON_MIN_SLOPE : 0.001;
+$_SUBDIVISION_PRECISION : 0.0000001;
+$_SUBDIVISION_MAX_ITERATIONS : 10;
 
-$_kSplineTableSize: 11;
-$_kSampleStepSize: 1.0 / ( $_kSplineTableSize - 1.0);
+$_kSplineTableSize : 11;
+$_kSampleStepSize : 1.0 / ( $_kSplineTableSize - 1.0);
 
 //$float32ArraySupported = typeof Float32Array === 'function';
 
@@ -31,20 +31,20 @@ $_kSampleStepSize: 1.0 / ( $_kSplineTableSize - 1.0);
 }
 
 @function _binary-subdivide ($aX, $aA, $aB, $mX1, $mX2) {
-  $currentT: false;
-  $currentX: false;
-  $i: 0;
+  $currentT : false;
+  $currentX : false;
+  $i : 0;
   // since we can't write do while.
   // we loop over all iterations count. just want to make this code more semantically.
   @for $i from 1 through $_SUBDIVISION_MAX_ITERATIONS {
     // @debug 'binary subdivide count #{$i} times`';
     @if not $currentX or abs($currentX) > $_SUBDIVISION_PRECISION {
-      $currentT: $aA + ($aB - $aA) / 2.0;
-      $currentX: _calcBezier($currentT, $mX1, $mX2) - $aX;
+      $currentT : $aA + ($aB - $aA) / 2.0;
+      $currentX : _calcBezier($currentT, $mX1, $mX2) - $aX;
       @if ($currentX > 0.0) {
-        $aB: $currentT;
+        $aB : $currentT;
       } @else {
-        $aA: $currentT;
+        $aA : $currentT;
       }
 
       // @debug 'current X is #{$currentX}';
@@ -59,12 +59,12 @@ $_kSampleStepSize: 1.0 / ( $_kSplineTableSize - 1.0);
   @for $i from 1 through $_NEWTON_ITERATIONS {
     // @debug '-->newton raphsome iterate #{$i} times';
 
-    $currentSlope: _getSlope($aGuessT, $mX1, $mX2);
+    $currentSlope : _getSlope($aGuessT, $mX1, $mX2);
     @if ($currentSlope == 0.0) {
       @return $aGuessT;
     }
-    $currentX: _calcBezier($aGuessT, $mX1, $mX2) - $aX;
-    $aGuessT: $aGuessT - $currentX / $currentSlope;
+    $currentX : _calcBezier($aGuessT, $mX1, $mX2) - $aX;
+    $aGuessT : $aGuessT - $currentX / $currentSlope;
 
     // @debug 'current slope is #{$currentSlope}';
     // @debug 'current calculate X is #{$currentX}';
@@ -77,31 +77,30 @@ $_kSampleStepSize: 1.0 / ( $_kSplineTableSize - 1.0);
 
   // Precompute samples table
   //$sampleValues: float32ArraySupported ? new Float32Array(kSplineTableSize) : new Array(kSplineTableSize);
-  $sampleValues: ();
+  $sampleValues : ();
   @for $i from 0 to $_kSplineTableSize {
-    $sampleValues: append($sampleValues, _calcBezier($i * $_kSampleStepSize, $mX1, $mX2));
+    $sampleValues : append($sampleValues, _calcBezier($i * $_kSampleStepSize, $mX1, $mX2));
   }
 
   // @debug 'samplevalues is `#{$sampleValues}`';
 
-  $intervalStart: 0.0;
-  $currentSample: 2;
-  $lastSample: $_kSplineTableSize - 1;
+  $intervalStart : 0.0;
+  $currentSample : 2;
+  $lastSample : $_kSplineTableSize - 1;
 
   //for (; currentSample !== lastSample && sampleValues[currentSample] <= aX; ++currentSample) {
   //  intervalStart += kSampleStepSize;
   //}
   @while $currentSample != $lastSample and nth($sampleValues, $currentSample) <= $aX {
-    $currentSample: $currentSample + 1;
-    $intervalStart: $intervalStart+ $_kSampleStepSize;
+    $currentSample : $currentSample + 1;
+    $intervalStart : $intervalStart+ $_kSampleStepSize;
   }
-  $currentSample: $currentSample - 1;
+  $currentSample : $currentSample - 1;
 
   // Interpolate to provide an initial guess for t
-  $dist: ($aX - nth($sampleValues, $currentSample)) / (nth($sampleValues, $currentSample + 1) - nth($sampleValues, $currentSample));
-  $guessForT: $intervalStart + $dist * $_kSampleStepSize;
-
-  $initialSlope: _getSlope($guessForT, $mX1, $mX2);
+  $dist : ($aX - nth($sampleValues, $currentSample)) / (nth($sampleValues, $currentSample + 1) - nth($sampleValues, $currentSample));
+  $guessForT : $intervalStart + $dist * $_kSampleStepSize;
+  $initialSlope : _getSlope($guessForT, $mX1, $mX2);
 
   // @debug '$intervalStart is #{$intervalStart}';
   // @debug '$dist is #{$dist}';
@@ -137,6 +136,6 @@ $_kSampleStepSize: 1.0 / ( $_kSplineTableSize - 1.0);
 }
 
 @function color-easing ($x) {
-   //@debug 'the x value will be calculated `#{$x}`';
+  //@debug 'the x value will be calculated `#{$x}`';
   @return percentage(_bezier-easing(0.26, 0.09, 0.37, 0.18, $x));
 }

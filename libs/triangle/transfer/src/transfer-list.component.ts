@@ -1,3 +1,4 @@
+import { coerceToBoolean } from '@gradii/triangle/util';
 // tslint:disable:member-ordering
 import {
   Component,
@@ -14,31 +15,31 @@ import {
   SimpleChanges,
   TemplateRef
 } from '@angular/core';
-import { coerceToBoolean } from '@gradii/triangle/util';
 import { TransferItem } from './item';
 
 @Component({
   selector: 'tri-transfer-list',
   template: `
-    <div class="ant-transfer-list-header">
-      <label tri-checkbox [(ngModel)]="stat.checkAll" (ngModelChange)="onHandleSelectAll($event)"
-             [indeterminate]="stat.checkHalf"></label><span class="ant-transfer-list-header-selected">
+    <div class="tri-transfer-list-header">
+      <tri-checkbox [(ngModel)]="stat.checkAll" (ngModelChange)="onHandleSelectAll($event)"
+             [indeterminate]="stat.checkHalf"></tri-checkbox>
+      <span class="tri-transfer-list-header-selected">
         <span>{{ (stat.checkCount > 0 ? stat.checkCount + '/' : '') + stat.shownCount }} {{ dataSource.length > 1 ? itemsUnit : itemUnit }}</span>
-        <span *ngIf="titleText" class="ant-transfer-list-header-title">{{ titleText }}</span>
+        <span *ngIf="titleText" class="tri-transfer-list-header-title">{{ titleText }}</span>
       </span>
     </div>
-    <div class="{{showSearch ? 'ant-transfer-list-body ant-transfer-list-body-with-search' : 'ant-transfer-list-body'}}"
-         [ngClass]="{'ant-transfer__nodata': stat.shownCount === 0}">
-      <div *ngIf="showSearch" class="ant-transfer-list-body-search-wrapper">
-        <tri-transfer-search class="ant-transfer-list-search"
+    <div class="{{showSearch ? 'tri-transfer-list-body tri-transfer-list-body-with-search' : 'tri-transfer-list-body'}}"
+         [ngClass]="{'tri-transfer__nodata': stat.shownCount === 0}">
+      <div *ngIf="showSearch" class="tri-transfer-list-body-search-wrapper">
+        <tri-transfer-search class="tri-transfer-list-search"
                              (valueChanged)="handleFilter($event)"
                              (valueClear)="handleClear()"
                              [placeholder]="searchPlaceholder"
                              [value]="filter"></tri-transfer-search>
       </div>
-      <ul class="ant-transfer-list-content">
+      <ul class="tri-transfer-list-content">
         <ng-container *ngFor="let item of dataSource">
-          <li *ngIf="!item._hiden" (click)="_handleSelect(item)" class="ant-transfer-list-content-item">
+          <li *ngIf="!item._hiden" (click)="_handleSelect(item)" class="tri-transfer-list-content-item">
             <label tri-checkbox [ngModel]="item.checked" [disabled]="item.disabled">
               <span>
                 <ng-container *ngIf="!render; else renderContainer">{{ item.title }}</ng-container>
@@ -48,9 +49,9 @@ import { TransferItem } from './item';
           </li>
         </ng-container>
       </ul>
-      <div class="ant-transfer-list-body-not-found">{{ notFoundContent }}</div>
+      <div class="tri-transfer-list-body-not-found">{{ notFoundContent }}</div>
     </div>
-    <div *ngIf="footer" class="ant-transfer-list-footer">
+    <div *ngIf="footer" class="tri-transfer-list-footer">
       <ng-template [ngTemplateOutlet]="footer" [ngTemplateOutletContext]="{ $implicit: direction }"></ng-template>
     </div>
   `
@@ -89,22 +90,19 @@ export class TransferListComponent implements OnChanges, OnInit, DoCheck {
   // events
   @Output() handleSelectAll: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() handleSelect: EventEmitter<TransferItem> = new EventEmitter();
-  @Output() filterChange: EventEmitter<{ direction: string, value: string }> = new EventEmitter();
+  @Output() filterChange: EventEmitter<{ direction: string; value: string }> = new EventEmitter();
 
   // endregion
 
   // region: styles
 
-  _prefixCls = 'ant-transfer-list';
+  _prefixCls = 'tri-transfer-list';
   _classList: string[] = [];
 
   _setClassMap(): void {
     this._classList.forEach(cls => this._renderer.removeClass(this._el.nativeElement, cls));
 
-    this._classList = [
-      this._prefixCls,
-      !!this.footer && `${this._prefixCls}-with-footer`
-    ].filter(item => !!item);
+    this._classList = [this._prefixCls, !!this.footer && `${this._prefixCls}-with-footer`].filter(item => !!item);
 
     this._classList.forEach(cls => this._renderer.addClass(this._el.nativeElement, cls));
   }

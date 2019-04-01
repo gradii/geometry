@@ -1,23 +1,22 @@
-import { AfterContentInit, Component, ElementRef, Input, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 
 export type ButtonGroupSize = 'small' | 'large' | 'default';
 
 @Component({
-  selector     : 'tri-button-group',
-  encapsulation: ViewEncapsulation.None,
-  template     : `
-    <div class="ant-btn-group"
-         [class.tri-btn-lg]="size=='large'"
-         [class.tri-btn-sm]="size=='small'"
-         #groupWrapper>
-      <ng-content></ng-content>
-    </div>
+  selector           : 'tri-button-group',
+  encapsulation      : ViewEncapsulation.None,
+  preserveWhitespaces: false,
+  template           : `
+    <ng-content></ng-content>
   `,
-  styleUrls    : []
+  host               : {
+    '[class.tri-btn-group]': 'true',
+    '[class.tri-btn-group-lg]'   : "_size=='large'",
+    '[class.tri-btn-group-sm]'   : "_size=='small'"
+  },
 })
-export class ButtonGroupComponent implements AfterContentInit {
+export class ButtonGroupComponent {
   _size: ButtonGroupSize;
-  @ViewChild('groupWrapper') _groupWrapper: ElementRef;
 
   @Input()
   get size(): ButtonGroupSize {
@@ -28,15 +27,4 @@ export class ButtonGroupComponent implements AfterContentInit {
     this._size = value;
   }
 
-  constructor() {}
-
-  // todo fixme
-  ngAfterContentInit() {
-    /** trim text node between button */
-    Array.from(this._groupWrapper.nativeElement.childNodes).forEach((node: HTMLElement) => {
-      if (node.nodeType === 3) {
-        this._groupWrapper.nativeElement.removeChild(node);
-      }
-    });
-  }
 }

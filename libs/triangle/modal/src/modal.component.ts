@@ -1,4 +1,4 @@
-import { GlobalMonitorService, isBoolean, isFunction, isObservable } from '@gradii/triangle/util';
+import { GlobalMonitorService, isBoolean, isFunction, isObservable, isPromise } from '@gradii/triangle/util';
 import {
   AfterViewInit,
   Component,
@@ -27,10 +27,11 @@ interface Position {
 }
 
 @Component({
-  selector     : 'tri-modal',
-  viewProviders: [ModalSubject],
-  encapsulation: ViewEncapsulation.None,
-  template     : `
+  selector           : 'tri-modal',
+  viewProviders      : [ModalSubject],
+  encapsulation      : ViewEncapsulation.None,
+  preserveWhitespaces: false,
+  template           : `
     <div [ngClass]="_customClass">
       <div [ngClass]="_maskClassMap"
            [style.zIndex]="_zIndex"></div>
@@ -42,32 +43,32 @@ interface Position {
            [ngStyle]="{ 'display': !_visible && !_animationStatus ? 'none' : '' }">
 
         <div #modal_content role="document" [ngClass]="_bodyClassMap" [ngStyle]="_bodyStyleMap">
-          <div class="ant-modal-content">
+          <div class="tri-modal-content">
             <ng-template [ngIf]="_closable">
-              <button aria-label="Close" class="ant-modal-close" (click)="clickCancel($event)">
-                <span class="ant-modal-close-x"></span>
+              <button aria-label="Close" class="tri-modal-close" (click)="clickCancel($event)">
+                <span class="tri-modal-close-x"></span>
               </button>
             </ng-template>
-            <div class="ant-modal-header" *ngIf="_title || _titleTpl">
-              <div class="ant-modal-title" [attr.id]="modalId">
+            <div class="tri-modal-header" *ngIf="_title || _titleTpl">
+              <div class="tri-modal-title" [attr.id]="modalId">
                 <ng-template #defaultTitle>{{ _title }}</ng-template>
                 <ng-template [ngTemplateOutlet]="_titleTpl || defaultTitle"
                              [ngTemplateOutletContext]="_titleTplContext"></ng-template>
               </div>
             </div>
-            <div class="ant-modal-body">
+            <div class="tri-modal-body">
               <ng-template #defaultContent>{{ _content }}</ng-template>
               <ng-template [ngTemplateOutlet]="_contentTpl || defaultContent"
                            [ngTemplateOutletContext]="_contentTplContext"></ng-template>
               <ng-template #modal_component></ng-template>
             </div>
-            <div class="ant-modal-footer" *ngIf="!_footerHide">
+            <div class="tri-modal-footer" *ngIf="!_footerHide">
               <ng-template #defaultFooter>
-                <button triButton [type]="'ghost'" [size]="'large'" [disabled]="cancelDisabled"
+                <button triButton [color]="'ghost'" [size]="'large'" [disabled]="cancelDisabled"
                         (click)="clickCancel($event)">
                   <span>{{ _cancelText }}</span>
                 </button>
-                <button triButton [type]="'primary'" [size]="'large'" [disabled]="okDisabled" (click)="clickOk($event)"
+                <button triButton [color]="'primary'" [size]="'large'" [disabled]="okDisabled" (click)="clickOk($event)"
                         [loading]="_confirmLoading">
                   <span>{{ _okText }}</span>
                 </button>
@@ -80,17 +81,23 @@ interface Position {
         <div tabindex="0" style="width: 0px; height: 0px; overflow: hidden;">sentinel</div>
       </div>
     </div>
-  `
+  `,
+  exportAs           : 'triModal'
 })
 export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
-  _prefixCls = 'ant-modal';
+  _prefixCls = 'tri-modal';
   _maskClassMap;
   _bodyClassMap;
   _bodyStyleMap;
   _visible = false;
   _confirmLoading = false;
   _closable = true;
+  _minWidth = null;
+  _maxWidth = null;
   _width = '520px';
+  _minHeight = null;
+  _maxHeight = null;
+  _height = null;
   _zIndex = 1000;
   _maskClosable = true;
   _title = '';
@@ -197,6 +204,52 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
+   * minWidth 最小宽度
+   * @param value
+   */
+  @Input()
+  set minWidth(value: any) {
+    this._minWidth = typeof value === 'number' ? value + 'px' : value;
+  }
+
+  /**
+   * maxWidth 最大宽度
+   * @param value
+   */
+  @Input()
+  set maxWidth(value: any) {
+    this._maxWidth = typeof value === 'number' ? value + 'px' : value;
+  }
+
+  /**
+   * Height
+   * 高度
+   * @param value
+   */
+  @Input()
+  set height(value: any) {
+    this._height = typeof value === 'number' ? value + 'px' : value;
+  }
+
+  /**
+   * minHeight 最小高度
+   * @param value
+   */
+  @Input()
+  set minHeight(value: any) {
+    this._minHeight = typeof value === 'number' ? value + 'px' : value;
+  }
+
+  /**
+   * maxHeight 最大高度
+   * @param value
+   */
+  @Input()
+  set maxHeight(value: any) {
+    this._maxHeight = typeof value === 'number' ? value + 'px' : value;
+  }
+
+  /**
    * ZIndex
    * ZIndex
    * @param value
@@ -231,7 +284,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
       // 如果容器对象已存在，则直接渲染，如果不存在，则设置到_bodyComponent，在ngAfterViewInit中执行
       if (this.bodyEl) {
         const compRef: ComponentRef<any> = this.bodyEl.createComponent(value, null, this._vcr.injector);
-        Object.assign(compRef.instance, this._componentParams);
+        this.assignComponentParams(compRef.instance, this._componentParams);
       } else {
         this._bodyComponent = value;
       }
@@ -409,7 +462,12 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this._bodyStyleMap = Object.assign(
       {
+        minWidth          : this._minWidth,
+        maxWidth          : this._maxWidth,
         width             : this._width,
+        minHeight         : this._minHeight,
+        maxHeight         : this._maxHeight,
+        height            : this._height,
         'transform-origin': transformOrigin
       },
       this._style
@@ -473,7 +531,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.visible = false;
   }
 
-  clickOk(e: MouseEvent): void {
+  clickOk(e): void {
     if (this.onOk) {
       this.onOk.emit(e);
     } else {
@@ -482,13 +540,30 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subject.next('onOk');
   }
 
-  clickCancel(e: MouseEvent): void {
+  clickCancel(e): void {
     this.onCancel.emit(e);
     this.subject.next('onCancel');
   }
 
   constructor(public subject: ModalSubject, private _vcr: ViewContainerRef) {
     this.subject.modalId = this.modalId;
+  }
+
+  assignComponentParams(instance, params) {
+    for (let [key, value] of Object.entries(params)) {
+      if (isPromise(value)) {
+
+        (value as Promise<any>).then(_ => {
+          instance[key] = _;
+        });
+      } else if (isObservable(value)) {
+        (value as Observable<any>).subscribe(_ => {
+          instance[key] = _;
+        });
+      } else {
+        instance[key] = value;
+      }
+    }
   }
 
   ngOnInit() {
@@ -499,7 +574,8 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit() {
     if (this._bodyComponent) {
       const compRef: ComponentRef<any> = this.bodyEl.createComponent(this._bodyComponent, null, this._vcr.injector);
-      Object.assign(compRef.instance, this._componentParams);
+      // Object.assign(compRef.instance, this._componentParams);
+      this.assignComponentParams(compRef.instance, this._componentParams);
     }
   }
 

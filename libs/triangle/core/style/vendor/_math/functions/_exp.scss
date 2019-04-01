@@ -4,5 +4,5 @@
 //     exp(1)  // 2.71828
 //     exp(-1) // 0.36788
 @function exp ($x) {
-    @return pow($E, $x);
+  @return pow($E, $x);
 }

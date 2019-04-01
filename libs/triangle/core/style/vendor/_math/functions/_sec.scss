@@ -4,6 +4,6 @@
 //     sec(0.7854) // 1.41422
 //     sec(45deg)  // 1.41422
 @function sec ($x) {
-    $x: unitless-rad($x);
-    @return 1 / cos($x);
+  $x : unitless-rad($x);
+  @return 1 / cos($x);
 }

@@ -1,9 +1,12 @@
 export * from './src/data-table.module';
 export * from './src/table-shared/shared.module';
 export * from './src/data-table.component';
+export * from './src/columns/checkbox-column.component';
 export * from './src/columns/column.component';
-export * from './src/columns/span-column.component';
+export * from './src/columns/column-base';
 export * from './src/columns/column-group.component';
+export * from './src/columns/command-column.component';
+export * from './src/columns/span-column.component';
 export * from './src/table-toolbar/toolbar.component';
 export * from './src/table-shared/toolbar-template.directive';
 export * from './src/directive/cell-template.directive';
@@ -26,7 +29,6 @@ export * from './src/selection/selection-default';
 export * from './src/helper/sort-settings';
 export * from './src/table-shared/resizable.directive';
 export * from './src/table-body/selectable.directive';
-export * from './src/table-shared/template-context.directive';
 export * from './src/grouping/group-settings';
 export * from './src/directive/no-records-template.directive';
 export * from './src/directive/databinding.directive';
@@ -54,3 +56,4 @@ export * from './src/event/remove-event-args.interface';
 export * from './src/event/save-event-args.interface';
 export * from './src/event/cancel-event-args.interface';
 export * from './src/service/edit.service';
+export * from './src/utils'

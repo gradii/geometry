@@ -1,4 +1,4 @@
-import { Directive, Input } from '@angular/core';
+import { ChangeDetectorRef, Directive, Input } from '@angular/core';
 import { AutoSizeType } from './input.component';
 
 @Directive({
@@ -59,5 +59,10 @@ export class InputDirective {
     }
   }
 
-  constructor() {}
+  constructor(private _cdRef: ChangeDetectorRef) {
+  }
+
+  ngOnInit() {
+    this._cdRef.detectChanges()
+  }
 }

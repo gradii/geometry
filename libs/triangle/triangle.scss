@@ -1,0 +1,123 @@
+@import "core/style/mixins";
+// Core
+@import "core/style/_core/base";
+@import "core/style/_core/iconfont";
+@import "core/style/_core/motion";
+
+//build angular cdk
+@import "../../node_modules/@angular/cdk/overlay";
+//$cdk-overlay-dark-backdrop-background : transparent;
+$cdk-z-index-overlay-container: rgba(0, 0, 0, 0.5);
+$cdk-z-index-overlay-container: 100000;
+@include cdk-overlay();
+.cdk-global-overlay-wrapper {
+  overflow: auto;
+}
+.tri-overlay-transparent-backdrop {
+  &, &.cdk-overlay-backdrop-showing {
+    opacity: 0;
+  }
+}
+
+//basic style
+//@import "core/style/root";
+
+//Components
+
+//basic components
+@import "grid/style/grid";
+@import "grid/style/mixin";
+@import "grid-list/style/grid-list";
+
+@import "button/style/button";
+@import "button/style/mixin";
+
+@import "icon/style/icon";
+
+@import "inputs/style/checkbox";
+@import "inputs/style/checkbox-mixin";
+@import "inputs/style/input";
+@import "inputs/style/input-group";
+@import "inputs/style/input-number";
+@import "inputs/style/input-mixin";
+@import "inputs/style/input-patch";
+@import "inputs/style/radio";
+@import "inputs/style/search-input";
+@import "inputs/style/select";
+@import "layout/style/layout";
+@import "layout/style/layout-patch";
+
+@import "inputs/style/option";
+@import "inputs/style/option-group";
+
+//featured components
+@import "affix/style/affix";
+@import "affix/style/patch";
+@import "alert/style/alert";
+@import "autocomplete/style/auto-complete";
+@import "anchor/style/anchor";
+@import "anchor/style/anchor-patch";
+@import "avatar/style/avatar";
+@import "avatar/style/avatar-patch";
+@import "back-top/style/back-top";
+@import "back-top/style/back-top-patch";
+@import "badge/style/badge";
+@import "badge/style/badge-patch";
+@import "breadcrumb/style/breadcrumb";
+@import "breadcrumb/style/breadcrumb-patch";
+@import "calendar/style/calendar";
+@import "calendar/style/calendar-patch";
+@import "card/style/card-patch";
+@import "card/style/card";
+@import "carousel/style/carousel";
+@import "carousel/style/carousel-patch";
+@import "cascader/style/cascader";
+@import "cascader/style/cascader-patch";
+@import "collapse/style/collapse";
+@import "collapse/style/collapse-patch";
+@import "data-table/style/index";
+@import "data-table/style/pagination";
+@import "date-picker/style/date-picker";
+@import "desc-list/style/desc-list";
+@import "dialog/style/dialog";
+@import "dialog/style/dialog-theme";
+@import "dropdown/style/dropdown";
+@import "dropdown/style/dropdown-patch";
+@import "form/style/mixin";
+@import "form/style/form";
+@import "form/style/form-patch";
+@import "form/style/form-grid";
+@import "menu/style/menu";
+@import "message/style/message";
+@import "message/style/notification";
+@import "modal/style/confirm";
+@import "modal/style/modal";
+@import "pagination/style/pagination";
+@import "popover/style/index";
+@import "popover/style/patch";
+@import "popconfirm/style/popconfirm";
+@import "popconfirm/style/popconfirm-patch";
+@import "progress/style/progress";
+@import "progress/style/progress-abc";
+@import "rate/style/index";
+@import "root/style/root";
+@import "slider/style/slider";
+@import "spin/style/spin";
+@import "steps/style/steps";
+@import "steps/style/steps-patch";
+@import "switch/style/switch";
+//@import "tabs/style/card-style";
+@import "tabs/style/tabs";
+@import "tabs/style/tabs-patch";
+@import "tag/style/tag";
+@import "tag/style/tag-patch";
+@import "time-picker/style/time-picker";
+@import "time-picker/style/time-picker-patch";
+@import "timeline/style/index";
+@import "tooltip/style/tooltip";
+@import "tooltip/style/tool-patch";
+@import "ng-tree/style/tree";
+@import "tree/style/index";
+@import "drawer/style/drawer";
+
+//@import "components/common";

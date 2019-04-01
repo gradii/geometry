@@ -1,0 +1,45 @@
+@import '../../core/style/component_mixins/menu-common';
+
+$input-prefix-cls : #{$ant-prefix}-input;
+$select-prefix-cls : #{$ant-prefix}-select;
+$autocomplete-prefix-cls : #{$ant-prefix}-autocomplete;
+
+$input-padding-horizontal-base : 4px;
+
+$autocomplete-background-color-light : hsl(0, 0, 98%); // background of header and selected item
+$autocomplete-background-color-base : hsl(0, 0, 96%); // Default grey background color
+
+$autocomplete-panel-max-height : 256px !default;
+
+.#{$autocomplete-prefix-cls}-panel {
+  @include menu-base();
+  visibility       : hidden;
+  max-width        : none;
+  max-height       : $autocomplete-panel-max-height;
+  position         : relative;
+  width            : 100%;
+  border-radius    : $border-radius-base;
+  box-sizing       : border-box;
+  outline          : none;
+
+  //theme
+  background-color : $component-background;
+  color            : $autocomplete-background-color-light;
+  box-shadow       : $box-shadow-base;
+
+  //margin
+  margin-top: 4px;
+  margin-bottom: 4px;
+
+  &.#{$autocomplete-prefix-cls}-visible {
+    visibility : visible;
+  }
+
+  &.#{$autocomplete-prefix-cls}-hidden {
+    visibility : hidden;
+  }
+
+}
+
+
+

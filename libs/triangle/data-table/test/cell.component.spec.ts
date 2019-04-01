@@ -1,11 +1,14 @@
-import { CellComponent, EditService } from '@gradii/triangle/data-table';
-import { TriDatePickerModule } from '@gradii/triangle/datepicker';
+import { EditService } from '@gradii/triangle/data-table';
+import { TriFormModule } from '@gradii/triangle/form';
+import { TriSwitchModule } from '@gradii/triangle/switch';
+import { CellComponent } from '../src/table-body/cell.component';
+import { TriDatePickerModule } from '@gradii/triangle/date-picker';
 import { TriInputNumberModule } from '@gradii/triangle/inputs';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { TestContext } from './helpers.spec';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TestContext } from './util/helpers';
 
 @Component({
   template: `
@@ -72,11 +75,13 @@ describe('DatagridCell Component', function () {
     TestBed.configureTestingModule({
       imports     : [
         CommonModule,
+        FormsModule,
         ReactiveFormsModule,
-        // FormsModule,
         // SharedModule,
         TriInputNumberModule,
-        TriDatePickerModule
+        TriDatePickerModule,
+        TriFormModule,
+        TriSwitchModule
       ],
       declarations: [CellComponent, SimpleTest, CellTemplateTestComponent, NewRowTestComponent],
       providers   : [EditService]

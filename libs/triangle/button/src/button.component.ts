@@ -1,49 +1,57 @@
-import { AfterContentInit, Component, ElementRef, HostListener, Input, Renderer2, ViewEncapsulation } from '@angular/core';
+import {
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  Renderer2,
+  ViewEncapsulation
+} from '@angular/core';
 
-export type ButtonColor = 'primary' | 'warning' | 'success' | 'dashed' | 'danger';
+export type ButtonColor = 'primary' | 'warning' | 'success' | 'dashed' | 'danger' | 'highlight';
 export type ButtonShape = 'circle' | null;
 export type ButtonSize = 'small' | 'large' | 'default';
 
 @Component({
-  selector     : 'tri-button, [triButton], [tri-button]',
-  encapsulation: ViewEncapsulation.None,
-  template     : `
+  selector           : '[triButton], [tri-button]',
+  preserveWhitespaces: false,
+  changeDetection    : ChangeDetectionStrategy.OnPush,
+  encapsulation      : ViewEncapsulation.None,
+  template           : `
     <i class="anticon anticon-spin anticon-loading" style="display: inline-block" *ngIf="loading"></i>
     <ng-content></ng-content>
   `,
-  host         : {
+  host               : {
     '[class.tri-btn]'                 : 'true',
     '[class.tri-btn-primary]'         : '_color === "primary"',
     '[class.tri-btn-dashed]'          : '_color === "dashed"',
     '[class.tri-btn-success]'         : '_color === "success"',
     '[class.tri-btn-warning]'         : '_color === "warning"',
     '[class.tri-btn-danger]'          : '_color === "danger"',
-    '[class.tri-btn-circle]'          : '_color === "circle"',
+    '[class.tri-btn-highlight]'       : '_color === "highlight"',
+    '[class.tri-btn-circle]'          : '_shape === "circle"',
     '[class.tri-btn-lg]'              : '_size === "large"',
     '[class.tri-btn-sm]'              : '_size === "small"',
-    '[class.tri-btn-loading]'         : 'loading',
+    '[class.tri-btn-loading]'         : '_loading',
     '[class.tri-btn-clicked]'         : '_clicked',
     '[class.tri-btn-icon-only]'       : '_iconOnly',
-    '[class.tri-btn-background-ghost]': 'ghost'
+    '[class.tri-btn-background-ghost]': '_ghost'
   }
 })
 export class ButtonComponent implements AfterContentInit {
   _el: HTMLElement;
   nativeElement: HTMLElement;
   _iconElement: HTMLElement;
-  /** @internal*/
   _color: ButtonColor;
-  /** @internal*/
   _shape: ButtonShape;
-  /** @internal*/
   _size: ButtonSize;
-  /** @internal*/
   _iconOnly = false;
-  /** @internal*/
   _loading = false;
   _clicked = false;
   _ghost = false;
-  _prefixCls = 'ant-btn';
+  _prefixCls = 'tri-btn';
 
   /**
    * Set Ghost
@@ -73,19 +81,12 @@ export class ButtonComponent implements AfterContentInit {
   }
 
   /**
-   * Get button type
-   * 按钮类型
-   */
-  @Input('type')
-  get deprecatedType(): ButtonColor {
-    return this._color;
-  }
-
-  /**
    * Set button type, Optional: `primary`, `dashed`, `danger`, `default`
    * 设置按钮类型，可选值为  `primary`   `dashed`   `danger`   `default`
    * @param value
+   * @deprecated
    */
+  @Input('type')
   set deprecatedType(value: ButtonColor) {
     this._color = value;
   }
@@ -113,17 +114,18 @@ export class ButtonComponent implements AfterContentInit {
    * 设置按钮大小，可选值为  `small`   `large`  或者不设
    * @param  value
    */
-  @Input()
-  set size(value: ButtonSize) {
-    this._size = value;
-  }
 
   /**
    * Get button size
    * 按钮大小
    */
+  @Input()
   get size(): ButtonSize {
     return this._size;
+  }
+
+  set size(value: ButtonSize) {
+    this._size = value;
   }
 
   /**
@@ -148,12 +150,14 @@ export class ButtonComponent implements AfterContentInit {
   @HostListener('click')
   _onClick() {
     this._clicked = true;
+    // this.cdRef.markForCheck();
     setTimeout(() => {
       this._clicked = false;
+      // this.cdRef.markForCheck();
     }, 300);
   }
 
-  constructor(private _elementRef: ElementRef, private _renderer: Renderer2) {
+  constructor(private _elementRef: ElementRef, private _renderer: Renderer2, private cdRef: ChangeDetectorRef) {
     this._el = this._elementRef.nativeElement;
   }
 

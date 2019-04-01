@@ -1,12 +1,21 @@
 import { ScrollService } from '@gradii/triangle/core';
 
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, ContentChild, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  EventEmitter,
+  Input,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  Output,
+  TemplateRef,
+  ViewEncapsulation
+} from '@angular/core';
 
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
-import { throttleTime } from 'rxjs/operators/throttleTime';
-import { Subscription } from 'rxjs/Subscription';
+import { fromEvent, Subscription } from 'rxjs';
+import { distinctUntilChanged, throttleTime } from 'rxjs/operators';
 
 @Component({
   selector     : 'tri-back-top',
@@ -18,11 +27,11 @@ import { Subscription } from 'rxjs/Subscription';
     ])
   ],
   template     : `
-    <div class="ant-back-top" (click)="clickBackTop()" [@enterLeave] *ngIf="_display">
+    <div class="tri-back-top" (click)="clickBackTop()" [@enterLeave] *ngIf="_display">
       <ng-template #defaultContent>
-        <div class="ant-back-top-content"><i class="anticon anticon-to-top ant-back-top-icon"></i></div>
+        <div class="tri-back-top-content"><i class="anticon anticon-to-top tri-back-top-icon"></i></div>
       </ng-template>
-      <ng-template [ngTemplateOutlet]="nzTemplate || defaultContent"></ng-template>
+      <ng-template [ngTemplateOutlet]="contentTemplate || defaultContent"></ng-template>
     </div>
   `
 })
@@ -58,7 +67,8 @@ export class BackTopComponent implements OnInit, OnDestroy {
 
   @Output() clickEvent: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(private scrollSrv: ScrollService, private _ngZone: NgZone) {}
+  constructor(private scrollSrv: ScrollService, private _ngZone: NgZone) {
+  }
 
   ngOnInit(): void {
     if (!this.scroll$) {

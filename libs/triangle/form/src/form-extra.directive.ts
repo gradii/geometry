@@ -1,9 +1,10 @@
 import { Directive, HostBinding } from '@angular/core';
 
 @Directive({
-  selector: '[triFormExtra], [tri-form-extra]'
+  selector: 'tri-form-extra, [triFormExtra], [tri-form-extra]',
+  host: {
+    '[class.tri-form-extra]': 'true'
+  }
 })
 export class FormExtraDirective {
-  @HostBinding(`class.tri-form-extra`)
-  _nzFormExtra = true;
 }

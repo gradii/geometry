@@ -9,7 +9,7 @@ import { anyChanged } from '../utils';
 })
 export class DataBindingDirective implements OnInit, OnDestroy, OnChanges {
   protected state: State;
-  private originalData;
+  protected originalData;
   private stateChangeSubscription;
 
   constructor(protected grid: DataTableComponent) {
@@ -38,8 +38,8 @@ export class DataBindingDirective implements OnInit, OnDestroy, OnChanges {
   }
 
   @Input()
-  set pageSize(value) {
-    this.grid.pageSize = this.state.take = value;
+  set take(value) {
+    this.grid.take = this.state.take = value;
   }
 
   @Input()
@@ -63,7 +63,7 @@ export class DataBindingDirective implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes) {
-    if (anyChanged(['pageSize', 'skip', 'sort', 'group', 'filter'], changes)) {
+    if (anyChanged(['take', 'skip', 'sort', 'group', 'filter'], changes)) {
       this.rebind();
     }
   }
@@ -84,7 +84,7 @@ export class DataBindingDirective implements OnInit, OnDestroy, OnChanges {
 
   applyState({skip, take, sort, group, filter}: { skip?; take?; sort?; group?; filter? }) {
     this.skip = skip;
-    this.pageSize = take;
+    this.take = take;
     this.sort = sort;
     this.group = group;
     this.filter = filter;

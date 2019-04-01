@@ -1,17 +1,18 @@
 import { AfterContentInit, Component, ElementRef, HostBinding, Input, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector     : 'tri-spin',
-  encapsulation: ViewEncapsulation.None,
-  template     : `
-    <div>
-      <div class="ant-spin"
-           [ngClass]="{'ant-spin-spinning':spinning,'ant-spin-lg':_size=='lg','ant-spin-sm':_size=='sm','ant-spin-show-text':_tip}">
-        <span class="ant-spin-dot"><i></i><i></i><i></i><i></i></span>
-        <div class="ant-spin-text">{{_tip}}</div>
+  selector           : 'tri-spin',
+  encapsulation      : ViewEncapsulation.None,
+  preserveWhitespaces: false,
+  template           : `
+    <div style="margin-top: 10px; text-align: center">
+      <div class="tri-spin"
+           [ngClass]="{'tri-spin-spinning':spinning,'tri-spin-lg':_size=='lg','tri-spin-sm':_size=='sm','tri-spin-show-text':_tip}">
+        <span class="tri-spin-dot"><i></i><i></i><i></i><i></i></span>
+        <div class="tri-spin-text">{{_tip}}</div>
       </div>
     </div>
-    <div class="ant-spin-container" [class.tri-spin-blur]="spinning" #ref [hidden]="ref.children.length == 0">
+    <div class="tri-spin-container" [class.tri-spin-blur]="spinning" #ref [hidden]="ref.children.length == 0">
       <ng-content></ng-content>
     </div>
 
@@ -33,7 +34,7 @@ export class SpinComponent implements AfterContentInit {
   @ViewChild('ref') _ref;
 
   @HostBinding('class.tri-spin-nested-loading')
-  private get isNested() {
+  get isNested() {
     return this.spinning && this._ref.nativeElement.childNodes.length !== 0;
   }
 

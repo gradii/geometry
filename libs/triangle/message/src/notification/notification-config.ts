@@ -2,8 +2,8 @@ import { InjectionToken } from '@angular/core';
 import { MessageConfig } from '../message/message-config';
 
 export class NotificationConfig extends MessageConfig {
-  nzTop?: string;
-  nzRight?: string;
+  top?: string;
+  right?: string;
 }
 
 export const NOTIFICATION_DEFAULT_CONFIG = new InjectionToken<NotificationConfig>('NOTIFICATION_DEFAULT_CONFIG');
@@ -13,11 +13,11 @@ export const NOTIFICATION_CONFIG = new InjectionToken<NotificationConfig>('NOTIF
 export const NOTIFICATION_DEFAULT_CONFIG_PROVIDER = {
   provide : NOTIFICATION_DEFAULT_CONFIG,
   useValue: {
-    nzTop         : '24px',
-    nzRight       : '0px',
-    nzDuration    : 4500,
-    nzMaxStack    : 7,
-    nzPauseOnHover: true,
-    nzAnimate     : true
+    top         : '24px',
+    right       : '0px',
+    duration    : 4500,
+    maxStack    : 7,
+    pauseOnHover: true,
+    animate     : true
   }
 };

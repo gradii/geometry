@@ -22,6 +22,14 @@ export interface Item {
   groupIndex: string;
 }
 
+export interface HierarchyItem {
+  type: 'hierarchy-data';
+  data: Object;
+  index: number;
+  groupIndex: string;
+  children: HierarchyItem[]
+}
+
 export interface IteratorResult<T> {
   done: boolean;
   value: T;
@@ -93,13 +101,7 @@ export class Iterator<T> {
   private resultMap;
   protected _innerIterator: any;
 
-  constructor(arr: any[], dataIndex?: number, resultMap?: (x: T, idx: number) => T) {
-    if (dataIndex === void 0) {
-      dataIndex = 0;
-    }
-    if (resultMap === void 0) {
-      resultMap = x => x;
-    }
+  constructor(arr: any[], dataIndex: number = 0, resultMap: (x: T, idx: number) => T = x => x) {
     this.dataIndex = dataIndex;
     this.resultMap = resultMap;
     const iterator = arr[Symbol.iterator];
@@ -130,6 +132,15 @@ export class ItemIterator extends Iterator<IteratorResult<Item | GroupItem | Gro
 
   get index() {
     return this.dataIndex;
+  }
+}
+
+export class RecursiveIterator {
+  constructor(arr: any[], dataIndex: number, groupIndex: string) {
+  }
+
+  next() {
+
   }
 }
 

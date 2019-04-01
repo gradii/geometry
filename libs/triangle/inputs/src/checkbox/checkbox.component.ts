@@ -1,11 +1,13 @@
+import { isFunction } from '@gradii/triangle/util';
 import { Component, EventEmitter, forwardRef, HostListener, Input, Output, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+/**
+ * form value bind with checked
+ */
 @Component({
-  moduleId     : module.id,
   selector     : 'tri-checkbox',
-  encapsulation      : ViewEncapsulation.None,
-  preserveWhitespaces: false,
+  encapsulation: ViewEncapsulation.None,
   template     : `
     <label>
       <span [class.tri-checkbox]="true"
@@ -13,14 +15,19 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
             [class.tri-checkbox-focused]="_focused"
             [class.tri-checkbox-disabled]="disabled"
             [class.tri-checkbox-indeterminate]="indeterminate">
-        <span class="ant-checkbox-inner"></span>
+        <span class="tri-checkbox-inner"></span>
         <input type="checkbox"
-               class="ant-checkbox-input"
+               class="tri-checkbox-input"
+               [attr.value]="value"
                [ngModel]="checked"
                (focus)="focus()"
-               (blur)="onTouched();blur()">
+               (blur)="blur()"
+               (change)="$event.stopPropagation()">
       </span>
-      <ng-content></ng-content>
+      <ng-template [ngIf]="label"><span>{{label}}</span></ng-template>
+      <ng-template [ngIf]="!label">
+        <ng-content></ng-content>
+      </ng-template>
     </label>
   `,
   providers    : [
@@ -35,12 +42,13 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   }
 })
 export class CheckboxComponent implements ControlValueAccessor {
+
   _el: HTMLElement;
   _checked = false;
   _focused = false;
   // ngModel Access
-  onChange: any = Function.prototype;
-  onTouched: any = Function.prototype;
+  onChange: Function;
+  onTouched: Function;
 
   /**
    * Whether disable
@@ -54,7 +62,11 @@ export class CheckboxComponent implements ControlValueAccessor {
    */
   @Input() indeterminate = false;
 
-  @Input() label;
+  @Input() label: string;
+
+  @Input() value: any;
+
+  @Input() initValue: boolean = true;
 
   /**
    * whether checked
@@ -71,10 +83,17 @@ export class CheckboxComponent implements ControlValueAccessor {
 
   @Output() change = new EventEmitter<any>();
 
+  @Output() indeterminateChange = new EventEmitter<any>();
+
   @HostListener('click', ['$event'])
   onClick(e) {
     e.preventDefault();
     if (!this.disabled) {
+      if (this.indeterminate && this._checked) {
+        this.indeterminate = false;
+        this.indeterminateChange.emit(this.indeterminate);
+      }
+
       this.updateValue(!this._checked);
     }
   }
@@ -83,7 +102,9 @@ export class CheckboxComponent implements ControlValueAccessor {
     if (value === this._checked) {
       return;
     }
-    this.onChange(value);
+    if (isFunction(this.onChange)) {
+      this.onChange(value);
+    }
     this._checked = value;
 
     this.change.emit({sender: this, checked: value});
@@ -95,12 +116,15 @@ export class CheckboxComponent implements ControlValueAccessor {
 
   blur() {
     this._focused = false;
+    if (isFunction(this.onTouched)) {
+      this.onTouched();
+    }
   }
 
   constructor() {}
 
   writeValue(value: any): void {
-    this._checked = value;
+    this._checked = !!value;
   }
 
   registerOnChange(fn: (_: any) => {}): void {

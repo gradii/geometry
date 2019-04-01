@@ -39,12 +39,12 @@ export class ColumnsContainer {
   refresh(): void {
     const _this = this;
     const currentLevels = this.totalLevels;
-    const leafColumns = new Array();
-    const lockedLeafColumns = new Array();
-    const nonLockedLeafColumns = new Array();
-    const lockedColumns = new Array();
-    const nonLockedColumns = new Array();
-    const allColumns = new Array();
+    const leafColumns = [];
+    const lockedLeafColumns = [];
+    const nonLockedLeafColumns = [];
+    const lockedColumns = [];
+    const nonLockedColumns = [];
+    const allColumns = [];
     this.totalLevels = 0;
     this.columns().forEach(column => {
       const containerLeafColumns = column.isLocked === true ? lockedLeafColumns : nonLockedLeafColumns;

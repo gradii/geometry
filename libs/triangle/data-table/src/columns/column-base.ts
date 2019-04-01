@@ -1,26 +1,35 @@
 import { ContentChildren, Input, QueryList, TemplateRef } from '@angular/core';
+import { CheckboxColumnComponent } from '../columns/checkbox-column.component';
+import { HierarchyColumnComponent } from '../columns/hierarchy-column.component';
 import { FooterTemplateDirective } from '../table-footer/footer-template.directive';
 import { HeaderTemplateDirective } from '../table-header/header-template.directive';
 
 export const isSpanColumn = column => column.isSpanColumn;
 
-export function isCheckboxColumn(column) { return column.isCheckboxColumn; };
-const isColumnContainer = column => column.isColumnGroup || isSpanColumn(column);
+export function isCheckboxColumn(column) { return (column as CheckboxColumnComponent).isCheckboxColumn; }
+
+export function isHierarchyColumn(column) { return (column as HierarchyColumnComponent).isHierarchyColumn; }
+
+function isColumnContainer(column) { return column.isColumnGroup || isSpanColumn(column); }
+
 export type AutoGenerateColumnPositon = 'start' | 'middle' | 'end';
 
 export class ColumnBase {
+  public matchesMedia: boolean = true;
+  public orderIndex: number = 0;
   public autoGenerateColumnPosition: AutoGenerateColumnPositon;
 
   isColumnGroup: boolean;
   isSpanColumn: boolean;
-  resizable: boolean;
-  minResizableWidth: number;
 
-  @Input() title: string;
-  @Input() locked: boolean;
-  @Input() hidden: boolean;
-  @Input() media: string;
-  @Input() style: {
+  @Input() public resizable: boolean = true;
+  @Input() public reorderable: boolean = true;
+  @Input() public minResizableWidth: number = 10;
+  @Input() public title: string;
+  @Input() public locked: boolean;
+  @Input() public hidden: boolean;
+  @Input() public media: string;
+  @Input() public style: {
     [key: string]: string;
   };
   @Input() headerStyle: {
@@ -50,13 +59,14 @@ export class ColumnBase {
     [key: string]: any;
   };
   @ContentChildren(HeaderTemplateDirective, {descendants: false})
-  headerTemplates: QueryList<HeaderTemplateDirective>;
+  headerTemplates: QueryList<HeaderTemplateDirective> = new QueryList<HeaderTemplateDirective>();
   @ContentChildren(FooterTemplateDirective)
   footerTemplate: FooterTemplateDirective;
   private _width;
+  private _minWidth;
+  private _maxWidth;
 
   constructor(public parent?: ColumnBase) {
-    this.headerTemplates = new QueryList<HeaderTemplateDirective>();
     if (parent && !isColumnContainer(parent)) {
       throw new Error('Columns can be nested only inside ColumnGroupComponent');
     }
@@ -69,6 +79,24 @@ export class ColumnBase {
 
   set width(value) {
     this._width = parseInt(value, 10);
+  }
+
+  @Input()
+  get minWidth() {
+    return this._minWidth;
+  }
+
+  set minWidth(value) {
+    this._minWidth = parseInt(value, 10);
+  }
+
+  @Input()
+  get maxWidth() {
+    return this._maxWidth;
+  }
+
+  set maxWidth(value) {
+    this._maxWidth = parseInt(value, 10);
   }
 
   get level() {
@@ -101,5 +129,9 @@ export class ColumnBase {
 
   get displayTitle() {
     return this.title;
+  }
+
+  public get isVisible(): boolean {
+    return !this.hidden && this.matchesMedia;
   }
 }

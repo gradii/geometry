@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable, NgZone } from '@angular/core';
-import { take } from 'rxjs/operators/take';
+import { take } from 'rxjs/operators';
 
 @Injectable()
 export class ChangeNotificationService {

@@ -21,24 +21,24 @@ import { ThDirective } from './th.directive';
   encapsulation: ViewEncapsulation.None,
   template     : `
     <div
-      class="ant-table-wrapper"
+      class="tri-table-wrapper"
       [class.tri-table-empty]="data.length==0">
       <tri-spin [spinning]="loading">
         <div>
           <div
-            class="ant-table"
+            class="tri-table"
             [class.tri-table-fixed-header]="scroll"
             [class.tri-table-scroll-position-left]="scroll"
             [class.tri-table-bordered]="bordered"
             [class.tri-table-large]="(size!=='middle')&&(size!=='small')"
             [class.tri-table-middle]="size=='middle'"
             [class.tri-table-small]="size=='small'">
-            <div class="ant-table-title" *ngIf="showTitle">
+            <div class="tri-table-title" *ngIf="showTitle">
               <ng-content select="[tri-table-title]"></ng-content>
             </div>
-            <div class="ant-table-content">
+            <div class="tri-table-content">
               <div [class.tri-table-scroll]="scroll">
-                <div class="ant-table-header" [ngStyle]="_headerBottomStyle" *ngIf="scroll">
+                <div class="tri-table-header" [ngStyle]="_headerBottomStyle" *ngIf="scroll">
                   <table>
                     <colgroup>
                       <col *ngFor="let th of ths" [style.width]="th.width" [style.minWidth]="th.width">
@@ -46,7 +46,7 @@ import { ThDirective } from './th.directive';
                     <ng-template [ngTemplateOutlet]="fixedHeader"></ng-template>
                   </table>
                 </div>
-                <div class="ant-table-body" [style.maxHeight.px]="scroll?.y" [style.overflowY]="scroll?.y?'scroll':''">
+                <div class="tri-table-body" [style.maxHeight.px]="scroll?.y" [style.overflowY]="scroll?.y?'scroll':''">
                   <table>
                     <colgroup>
                       <col [style.width]="th.width" [style.minWidth]="th.width" *ngFor="let th of ths">
@@ -54,13 +54,13 @@ import { ThDirective } from './th.directive';
                     <ng-content></ng-content>
                   </table>
                 </div>
-                <div class="ant-table-placeholder" *ngIf="data.length==0 && !customNoResult">
+                <div class="tri-table-placeholder" *ngIf="data.length==0 && !customNoResult">
                   <span>没有数据</span>
                 </div>
-                <div class="ant-table-placeholder" *ngIf="data.length==0 && customNoResult">
+                <div class="tri-table-placeholder" *ngIf="data.length==0 && customNoResult">
                   <ng-content select="[noResult]"></ng-content>
                 </div>
-                <div class="ant-table-footer" *ngIf="showFooter">
+                <div class="tri-table-footer" *ngIf="showFooter">
                   <ng-content select="[tri-table-footer]"></ng-content>
                 </div>
               </div>
@@ -69,15 +69,14 @@ import { ThDirective } from './th.directive';
         </div>
         <tri-pagination
           *ngIf="isPagination&&data.length"
-          class="ant-table-pagination"
+          class="tri-table-pagination"
           [showSizeChanger]="showSizeChanger"
           [showQuickJumper]="showQuickJumper"
           [showTotal]="showTotal"
           [size]="(size=='middle'||size=='small')?'small':''"
-          [(pageSize)]="pageSize"
-          [total]="total"
-          [(pageIndex)]="pageIndex"
-          (pageIndexClickChange)="pageChangeClick($event)">
+          [offset]="offset"
+          [limit]="limit"
+          [total]="total">
         </tri-pagination>
       </tri-spin>
     </div>
@@ -151,39 +150,15 @@ export class TableComponent implements AfterViewInit, OnInit {
     this._generateData(true);
   }
 
-  @Input()
-  get pageIndex() {
-    return this._current;
-  }
-
-  set pageIndex(value: number) {
-    if (this._current === value) {
-      return;
-    }
-    this._current = value;
-    this._generateData();
-    this.pageIndexChange.emit(this.pageIndex);
-  }
-
   pageChangeClick(value) {
     this.pageIndexChangeClick.emit(value);
   }
 
   @Input()
-  get pageSize() {
-    return this._pageSize;
-  }
+  offset;
 
-  set pageSize(value: number) {
-    if (this._pageSize === value) {
-      return;
-    }
-    this._pageSize = value;
-    this._generateData();
-    if (this._isInit) {
-      this.pageSizeChange.emit(value);
-    }
-  }
+  @Input()
+  limit;
 
   @Input()
   get total() {
@@ -200,15 +175,7 @@ export class TableComponent implements AfterViewInit, OnInit {
   _generateData(forceRefresh = false) {
     if (!this._isAjax) {
       if (this.isPagination) {
-        if (forceRefresh) {
-          if (this.isPageIndexReset) {
-            this.pageIndex = 1;
-          } else {
-            const maxPageIndex = Math.ceil(this._dataSet.length / this.pageSize);
-            this.pageIndex = !this.pageIndex ? 1 : this.pageIndex > maxPageIndex ? maxPageIndex : this.pageIndex;
-          }
-        }
-        this.data = this._dataSet.slice((this.pageIndex - 1) * this.pageSize, this.pageIndex * this.pageSize);
+        this.data = this._dataSet.slice(this.offset, this.offset + this.limit);
       } else {
         this.data = this._dataSet;
       }

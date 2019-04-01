@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CascaderComponent } from './cascader.component';
-import { CascaderDirective } from './cascader.directive';
 
 /**
  *
@@ -41,7 +40,7 @@ import { CascaderDirective } from './cascader.directive';
  */
 @NgModule({
   imports     : [CommonModule, FormsModule, OverlayModule, TriInputModule],
-  declarations: [CascaderComponent, CascaderDirective],
-  exports     : [CascaderComponent, CascaderDirective]
+  declarations: [CascaderComponent],
+  exports     : [CascaderComponent]
 })
 export class TriCascaderModule {}

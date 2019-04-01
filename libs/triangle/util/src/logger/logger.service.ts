@@ -1,5 +1,11 @@
 import { Inject, Injectable, InjectionToken, Optional, Provider, SkipSelf } from '@angular/core';
 
+export const TRI_LOGGER_STATE = new InjectionToken<boolean>('tri-logger-state'); // Whether print the log
+
+export function LOGGER_SERVICE_PROVIDER_FACTORY(exist, loggerState) {
+  return exist || new LoggerService(loggerState);
+}
+
 @Injectable()
 export class LoggerService {
   constructor(@Inject(TRI_LOGGER_STATE) private _loggerState: boolean) {}
@@ -39,12 +45,6 @@ export class LoggerService {
       console.log.apply(console, ['[NG-ZORRO-DEBUG]'].concat(arrs));
     }
   }
-}
-
-export const TRI_LOGGER_STATE = new InjectionToken<boolean>('tri-logger-state'); // Whether print the log
-
-export function LOGGER_SERVICE_PROVIDER_FACTORY(exist, loggerState) {
-  return exist || new LoggerService(loggerState);
 }
 
 export const LOGGER_SERVICE_PROVIDER: Provider = {

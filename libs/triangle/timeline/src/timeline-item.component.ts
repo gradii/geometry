@@ -1,66 +1,89 @@
-import { Component, ContentChild, Input, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component, ContentChild,
+  ElementRef,
+  Input,
+  OnInit,
+  Renderer2,
+  SimpleChanges,
+  TemplateRef,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
+import { TimelineMode } from './timeline.component';
 
 @Component({
-  selector     : 'tri-timeline-item',
-  encapsulation: ViewEncapsulation.None,
-  template     : `
+  selector           : 'tri-timeline-item',
+  encapsulation      : ViewEncapsulation.None,
+  changeDetection    : ChangeDetectionStrategy.OnPush,
+  preserveWhitespaces: false,
+  template           : `
     <li
-      class="ant-timeline-item"
-      [class.tri-timeline-item-last]="_lastItem">
-      <div class="ant-timeline-item-tail"></div>
-      <div class="ant-timeline-item-head"
-        [class.tri-timeline-item-head-custom]="_custom"
-        [ngClass]="itemHeadClass">
-        <ng-template [ngTemplateOutlet]="_customContent">
-        </ng-template>
+      class="tri-timeline-item"
+      [class.tri-timeline-item-last]="isLast"
+      #liTemplate>
+      <div class="tri-timeline-item-tail"></div>
+      <div class="tri-timeline-item-head"
+           [class.tri-timeline-item-head-red]="color === 'red'"
+           [class.tri-timeline-item-head-blue]="color === 'blue'"
+           [class.tri-timeline-item-head-green]="color === 'green'"
+           [class.tri-timeline-item-head-custom]="!!dotTemplate">
+        <ng-template [ngTemplateOutlet]="dotTemplate"></ng-template>
       </div>
-      <div class="ant-timeline-item-content">
+      <div class="tri-timeline-item-content"
+           [class.tri-timeline-item-content-right]="position === 'right'"
+           [class.tri-timeline-item-content-left]="position === 'left'">
         <ng-content></ng-content>
       </div>
+      <!--other content-->
+      <div class="tri-timeline-item-content"
+           [class.tri-timeline-item-content-right]="position === 'left'"
+           [class.tri-timeline-item-content-left]="position === 'right'">
+        <ng-template [ngTemplateOutlet]="otherTemplate"></ng-template>
+      </div>
     </li>`,
-  styleUrls    : []
+  styleUrls          : []
 })
 export class TimelineItemComponent implements OnInit {
-  itemHeadClass = {'ant-timeline-item-head-blue': true};
-  _color = 'blue';
-  _custom = false;
-  _lastItem = false;
+  @ViewChild('liTemplate') liTemplate: ElementRef;
+  @Input() color: string = 'blue';
+  @ContentChild('dotTemplate')
+  dotTemplate: TemplateRef<void>;
 
-  /**
-   * #custom
-   */
-  @ContentChild('custom') _customContent: TemplateRef<any>;
+  isLast = false;
+  position: TimelineMode | undefined;
 
-  /**
-   * Get the color, fixture: `green`，`red`，`blue`
-   * 获取圈的颜色，固定为 `green`，`red`，`blue`
-   */
   @Input()
-  get color() {
-    return this._color;
+  otherContent: string;
+
+  @ContentChild('otherTemplate', {read: TemplateRef})
+  otherTemplate: TemplateRef<void>;
+
+  constructor(private renderer: Renderer2, private cdr: ChangeDetectorRef) {
   }
 
-  /**
-   * Set color, fixture: `green`，`red`，`blue`
-   * 设置颜色
-   * @param  color
-   */
-  set color(color: string) {
-    this._color = color;
-    if (color === 'green') {
-      this.itemHeadClass['ant-timeline-item-head-green'] = true;
-    } else if (color === 'red') {
-      this.itemHeadClass['ant-timeline-item-head-red'] = true;
-    } else {
-      this.itemHeadClass['ant-timeline-item-head-blue'] = true;
+  ngOnInit(): void {
+    this.tryUpdateCustomColor();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.color) {
+      this.tryUpdateCustomColor();
     }
   }
 
-  constructor() {}
+  detectChanges(): void {
+    this.cdr.detectChanges();
+  }
 
-  ngOnInit() {
-    if (this._customContent) {
-      this._custom = true;
+  private tryUpdateCustomColor(): void {
+    const defaultColors = ['blue', 'red', 'green'];
+    const circle = this.liTemplate.nativeElement.querySelector('.tri-timeline-item-head');
+    if (defaultColors.indexOf(this.color) === -1) {
+      this.renderer.setStyle(circle, 'border-color', this.color);
+    } else {
+      this.renderer.removeStyle(circle, 'border-color');
     }
   }
 }

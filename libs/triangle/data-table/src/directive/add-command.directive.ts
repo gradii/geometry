@@ -16,7 +16,7 @@ export class AddCommandDirective {
     this.editService.beginAdd();
   }
 
-  @HostBinding('class.tri-grid-add-command')
+  @HostBinding('class.tri-data-table-add-command')
   get commandClass() {
     return true;
   }

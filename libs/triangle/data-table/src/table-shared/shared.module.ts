@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ColGroupComponent } from '../col-group.component';
+import { TableDirective } from '../column-resize/table.directive';
 import { ColumnGroupComponent } from '../columns/column-group.component';
 import { ColumnComponent } from '../columns/column.component';
 import { SpanColumnComponent } from '../columns/span-column.component';
@@ -9,7 +10,6 @@ import { FooterTemplateDirective } from '../table-footer/footer-template.directi
 import { DetailTemplateDirective } from './detail-template.directive';
 import { DraggableDirective } from './draggable.directive';
 import { ResizableContainerDirective } from './resizable.directive';
-import { TemplateContextDirective } from './template-context.directive';
 
 @NgModule({
   declarations: [
@@ -19,10 +19,10 @@ import { TemplateContextDirective } from './template-context.directive';
     FooterTemplateDirective,
     ColGroupComponent,
     ResizableContainerDirective,
-    TemplateContextDirective,
     FieldAccessorPipe,
     DetailTemplateDirective,
-    SpanColumnComponent
+    SpanColumnComponent,
+    TableDirective,
   ],
   exports     : [
     DraggableDirective,
@@ -31,10 +31,10 @@ import { TemplateContextDirective } from './template-context.directive';
     FooterTemplateDirective,
     ColGroupComponent,
     ResizableContainerDirective,
-    TemplateContextDirective,
     FieldAccessorPipe,
     DetailTemplateDirective,
-    SpanColumnComponent
+    SpanColumnComponent,
+    TableDirective
   ],
   imports     : [CommonModule]
 })

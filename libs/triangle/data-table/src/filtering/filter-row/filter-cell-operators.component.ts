@@ -11,10 +11,10 @@ import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/co
                          >
                            <!--
                            [data]="operators"
-                           class="ant-dropdown-operator"
+                           class="tri-dropdown-operator"
                            (valueChange)="onChange($event)"
                            [value]="value"
-                           [iconClass]="'ant-i-filter'"
+                           [iconClass]="'tri-i-filter'"
                            [valuePrimitive]="true"
                            [textField]="'text'"
                            [popupSettings]="{ width: 'auto' }"
@@ -24,10 +24,10 @@ import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/co
                          </tri-select>
                          <button *ngIf="showButton"
                                  type="button"
-                                 class="ant-button ant-button-icon"
+                                 class="tri-button tri-button-icon"
                                  title="Clear"
                                  (click)="clearClick()">
-                           <span class="ant-icon ant-i-filter-clear"></span>
+                           <span class="tri-icon tri-i-filter-clear"></span>
                          </button>
                        `
 })

@@ -6,6 +6,8 @@ import { NgModule } from '@angular/core';
 import { DataTableComponent } from './data-table.component';
 // import { CldrIntlService, IntlService } from '@gradii/triangle/tri-angular-intl';
 import { DataBindingDirective } from './directive/databinding.directive';
+import { PaginationBindingDirective } from './directive/pagination-binding.directive';
+import { FilterSimpleModule } from './filtering/filter-simple/filter-simple.module';
 // import { LocalizedMessagesDirective } from './localization/localized-messages.directive';
 // import { CustomMessagesComponent } from './localization/custom-messages.component';
 import { RowFilterModule } from './filtering/row-filter.module';
@@ -28,22 +30,25 @@ import { ToolbarComponent } from './table-toolbar/toolbar.component';
     // CustomMessagesComponent,
     DataBindingDirective,
     ToolbarTemplateDirective,
-    SelectionDirective
+    SelectionDirective,
+    PaginationBindingDirective,
   ],
   exports     : [
     DataTableComponent,
     ToolbarTemplateDirective,
-    ToolbarComponent,
+    // ToolbarComponent,
     DataBindingDirective,
     SelectionDirective,
+    PaginationBindingDirective,
     // CustomMessagesComponent,
     GroupModule.exports(),
     SharedModule.exports(),
-    BodyModule.exports(),
+    BodyModule,
     HeaderModule.exports(),
     FooterModule.exports(),
     TriPaginationModule.exports(),
-    RowFilterModule.exports()
+    RowFilterModule.exports(),
+    FilterSimpleModule.exports()
   ],
   imports     : [
     CommonModule,
@@ -54,6 +59,7 @@ import { ToolbarComponent } from './table-toolbar/toolbar.component';
     FooterModule,
     TriPaginationModule,
     RowFilterModule,
+    FilterSimpleModule,
     TriSpinModule,
     LayoutModule
   ],

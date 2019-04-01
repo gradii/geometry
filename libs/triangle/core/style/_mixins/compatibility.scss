@@ -2,47 +2,31 @@
 
 // rotate for ie8 and blow
 @mixin ie-rotate($rotation) {
-  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=#{$rotation})";
-}
-
-// rotate for ie8 and blow
-// degrees unit
-@mixin ie-rotate-via-degrees($degrees) {
-  /* IE6-IE8 */
-  $costheta: cos($degrees);
-  $sintheta: sin($degrees);
-  $negsintheta: $sintheta * -1;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=#{cos($degrees)}, M12=#{$negsintheta}, M21=#{$sintheta}, M22=#{$costheta})";
-  zoom: 1;
-
-  :root & {
-    filter: none;
-  }
+  -ms-filter : "progid:DXImageTransform.Microsoft.BasicImage(rotation=#{$rotation})";
 }
 
 // support rotate for all browsers
 @mixin cross-rotate($degrees) {
-  -webkit-transform: rotate($degrees);
-  -moz-transform: rotate($degrees);
-  -ms-transform: rotate($degrees);
-  -o-transform: rotate($degrees);
-  transform: rotate($degrees);
-  @include ie-rotate-via-degrees($degrees);
+  -webkit-transform : rotate($degrees);
+  -moz-transform    : rotate($degrees);
+  -ms-transform     : rotate($degrees);
+  -o-transform      : rotate($degrees);
+  transform         : rotate($degrees);
 }
 
 // Placeholder text
 @mixin placeholder($color: $input-placeholder-color) {
   // Firefox
   &::-moz-placeholder {
-    color: $color;
-    opacity: 1; // Override Firefox's unusual default opacity; see https://github.com/twbs/bootstrap/pull/11526
+    color   : $color;
+    opacity : 1; // Override Firefox's unusual default opacity; see https://github.com/twbs/bootstrap/pull/11526
   }
   // Internet Explorer 10+
   &:-ms-input-placeholder {
-    color: $color;
+    color : $color;
   }
   // Safari and Chrome
   &::-webkit-input-placeholder {
-    color: $color;
+    color : $color;
   }
 }

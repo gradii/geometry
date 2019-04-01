@@ -14,7 +14,7 @@ interface Position {
   encapsulation: ViewEncapsulation.None,
   template     : `
     <div [ngClass]="_customClass">
-      <div class="ant-modal-mask"
+      <div class="tri-modal-mask"
            [class.tri-modal-mask-hidden]="!_visible && !_animationStatus"
            [class.fade-enter]="_animationStatus === 'enter'"
            [class.fade-enter-active]="_animationStatus === 'enter'"
@@ -23,7 +23,7 @@ interface Position {
            [style.zIndex]="_zIndex"></div>
       <div tabindex="-1" role="dialog"
            (click)="closeFromMask($event)"
-           class="ant-modal-wrap"
+           class="tri-modal-wrap"
            [style.zIndex]="_zIndex"
            [style.display]="!_visible&&!_animationStatus?'none':'flex'"
            [style.flex-direction]="'column'"
@@ -32,22 +32,23 @@ interface Position {
 
         <div #confirm_content
              role="document"
-             class="ant-modal ant-confirm ant-confirm-confirm"
+             class="tri-modal tri-confirm tri-confirm-confirm"
+             [ngClass]="_typeCls"
              [class.zoom-enter]="_animationStatus === 'enter'"
              [class.zoom-enter-active]="_animationStatus === 'enter'"
              [class.zoom-leave]="_animationStatus === 'leave'"
              [class.zoom-leave-active]="_animationStatus === 'leave'"
              [ngStyle]="_bodyStyleMap">
-          <div class="ant-modal-content">
-            <div class="ant-modal-body">
+          <div class="tri-modal-content">
+            <div class="tri-modal-body">
               <div style="zoom: 1; overflow: hidden;">
-                <div class="ant-confirm-body">
+                <div class="tri-confirm-body">
                   <i [ngClass]="_iconTypeCls"></i>
-                  <span class="ant-confirm-title">
+                  <span class="tri-confirm-title">
                     <ng-template #defaultTitle>{{ _title }}</ng-template>
                     <ng-template [ngTemplateOutlet]="_titleTpl || defaultTitle"></ng-template>
                   </span>
-                  <div class="ant-confirm-content">
+                  <div class="tri-confirm-content">
                     <ng-template #defaultContent>
                       <div [innerHTML]="_content"></div>
                     </ng-template>
@@ -55,13 +56,13 @@ interface Position {
                                  [ngTemplateOutletContext]="_contentTplContext"></ng-template>
                   </div>
                 </div>
-                <div class="ant-confirm-btns">
+                <div class="tri-confirm-btns">
                   <ng-template [ngIf]="_cancelText">
-                    <button triButton [type]="'ghost'" [size]="'large'" (click)="subject.next('onCancel')">
+                    <button triButton [color]="'ghost'" [size]="'large'" (click)="subject.next('onCancel')">
                       <span>{{ _cancelText }}</span>
                     </button>
                   </ng-template>
-                  <button triButton #confirm_ok_btn [type]="'primary'" [size]="'large'"
+                  <button triButton #confirm_ok_btn [color]="'primary'" [size]="'large'"
                           (click)="subject.next('onOk')" [loading]="_confirmLoading">
                     <span>{{ _okText }}</span>
                   </button>
@@ -76,7 +77,7 @@ interface Position {
   `
 })
 export class ConfirmComponent implements OnInit, OnDestroy {
-  _prefixCls = 'ant-modal';
+  _prefixCls = 'tri-modal';
   _bodyStyleMap;
   _visible = false;
   _width = '416px';
@@ -93,7 +94,7 @@ export class ConfirmComponent implements OnInit, OnDestroy {
   _animationStatus = '';
   _confirmLoading = false;
   _customClass = '';
-  _typeCls = `ant-confirm-confirm`;
+  _typeCls = `tri-confirm-confirm`;
   @ViewChild('confirm_content') private contentEl: ElementRef;
 
   /**
@@ -216,7 +217,7 @@ export class ConfirmComponent implements OnInit, OnDestroy {
   @Input()
   set confirmType(value: string) {
     if (value) {
-      this._typeCls = `ant-confirm-${value}`;
+      this._typeCls = `tri-confirm-${value}`;
     }
   }
 

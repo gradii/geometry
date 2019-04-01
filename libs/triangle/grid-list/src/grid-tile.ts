@@ -5,10 +5,10 @@ import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewEncapsulatio
   selector           : 'tri-grid-tile',
   exportAs           : 'triGridTile',
   host               : {
-    class: 'ant-grid-tile'
+    class: 'tri-grid-tile'
   },
   template           : `
-    <figure class="ant-figure">
+    <figure class="tri-figure">
       <ng-content></ng-content>
     </figure>`,
   //  styleUrls          : ['grid-list.css'],

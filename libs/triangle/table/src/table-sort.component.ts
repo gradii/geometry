@@ -5,12 +5,12 @@ import { ThDirective } from './th.directive';
   selector     : 'tri-table-sort',
   encapsulation: ViewEncapsulation.None,
   template     : `
-    <div class="ant-table-column-sorter">
-      <span class="ant-table-column-sorter-up" [ngClass]="{'on':_value == 'ascend'}" title="↑"
+    <div class="tri-table-column-sorter">
+      <span class="tri-table-column-sorter-up" [ngClass]="{'on':_value == 'ascend'}" title="↑"
             (click)="_setValue('ascend')">
         <i class="anticon anticon-caret-up"></i>
       </span>
-      <span class="ant-table-column-sorter-down" [ngClass]="{'on':_value == 'descend'}" title="↓"
+      <span class="tri-table-column-sorter-down" [ngClass]="{'on':_value == 'descend'}" title="↓"
             (click)="_setValue('descend')">
         <i class="anticon anticon-caret-down"></i>
       </span>
@@ -30,7 +30,7 @@ export class TableSortComponent implements OnInit {
     this._value = value;
     if (this._value !== 'ascend' && this._value !== 'descend') {
       if (this._thDirective) {
-        this._renderer.removeClass(this._thDirective._el, 'ant-table-column-sort');
+        this._renderer.removeClass(this._thDirective._el, 'tri-table-column-sort');
       }
     }
   }
@@ -39,12 +39,12 @@ export class TableSortComponent implements OnInit {
     if (this.value === value) {
       this.value = null;
       if (this._thDirective) {
-        this._renderer.removeClass(this._thDirective._el, 'ant-table-column-sort');
+        this._renderer.removeClass(this._thDirective._el, 'tri-table-column-sort');
       }
     } else {
       this.value = value;
       if (this._thDirective) {
-        this._renderer.addClass(this._thDirective._el, 'ant-table-column-sort');
+        this._renderer.addClass(this._thDirective._el, 'tri-table-column-sort');
       }
     }
     this.valueChange.emit(this.value);

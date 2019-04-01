@@ -16,12 +16,12 @@ import { MessageDataFilled, MessageDataOptions } from './message.definitions';
     ])
   ],
   template     : `
-    <div class="ant-message-notice"
+    <div class="tri-message-notice"
          [@enterLeave]="message.state"
          (mouseenter)="onEnter()"
          (mouseleave)="onLeave()">
-      <div class="ant-message-notice-content">
-        <div *ngIf="!message.html" class="ant-message-custom-content" [ngClass]="'ant-message-' + message.type">
+      <div class="tri-message-notice-content">
+        <div *ngIf="!message.html" class="tri-message-custom-content" [ngClass]="'tri-message-' + message.type">
           <ng-container [ngSwitch]="message.type">
             <i *ngSwitchCase="'success'" class="anticon anticon-check-circle"></i>
             <i *ngSwitchCase="'info'" class="anticon anticon-info-circle"></i>

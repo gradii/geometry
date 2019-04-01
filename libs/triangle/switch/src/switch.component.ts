@@ -13,19 +13,20 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 @Component({
   selector     : 'tri-switch',
   encapsulation: ViewEncapsulation.None,
+  exportAs     : 'triSwitch',
   template     : `
     <span [ngClass]="_classMap"
-          class="ant-switch"
+          class="tri-switch"
           [class.tri-switch-checked]="_checked"
           [class.tri-switch-disabled]="_disabled"
           [class.tri-switch-small]="_size === 'small'"
           tabindex="0">
-      <span [ngClass]="_innerPrefixCls">
+      <span class="tri-switch-inner">
         <ng-template [ngIf]="_checked">
-          <ng-content select="[checked]"></ng-content>
+          <ng-content select="[checked], [aria-checked=true]"></ng-content>
         </ng-template>
         <ng-template [ngIf]="!_checked">
-          <ng-content select="[unchecked]"></ng-content>
+          <ng-content select="[unchecked], [aria-checked=false]"></ng-content>
         </ng-template>
       </span>
     </span>
@@ -39,8 +40,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ]
 })
 export class SwitchComponent implements /* OnInit,*/ ControlValueAccessor {
-  _prefixCls = 'ant-switch';
-  _innerPrefixCls = `ant-switch-inner`;
+  _prefixCls = 'tri-switch';
   _classMap;
   _size: string;
   _checked = false;
@@ -49,6 +49,12 @@ export class SwitchComponent implements /* OnInit,*/ ControlValueAccessor {
   // ngModel Access
   onChange: any = Function.prototype;
   onTouched: any = Function.prototype;
+
+  @Input()
+  dataConfigTrue = true;
+
+  @Input()
+  dataConfigFalse = false;
 
   /**
    * Get size
@@ -93,7 +99,7 @@ export class SwitchComponent implements /* OnInit,*/ ControlValueAccessor {
     e.preventDefault();
     if (!this._disabled) {
       this.updateValue(!this._checked);
-      this.onChange(this._checked);
+      this.onChange(this.mapCheckValue(this._checked));
     }
   }
 
@@ -101,18 +107,23 @@ export class SwitchComponent implements /* OnInit,*/ ControlValueAccessor {
     if (this._checked === value) {
       return;
     }
-    this._checked = value;
-    // this.setClassMap();
+
+    if (value === this.dataConfigTrue) {
+      this._checked = true;
+    } else if (value === this.dataConfigFalse) {
+      this._checked = false;
+    }
+
+    this._checked = !!value;
   }
 
-  // setClassMap(): void {
-  //   this._classMap = {
-  //     ['ant-switch']         : true,
-  //     [`ant-switch-checked`] : this._checked,
-  //     [`ant-switch-disabled`]: this._disabled,
-  //     [`ant-switch-small`]   : this._size === 'small'
-  //   };
-  // }
+  private mapCheckValue(checked) {
+    if (checked) {
+      return this.dataConfigTrue;
+    } else {
+      return this.dataConfigFalse;
+    }
+  }
 
   writeValue(value: any): void {
     this.updateValue(value);
@@ -129,8 +140,4 @@ export class SwitchComponent implements /* OnInit,*/ ControlValueAccessor {
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
-
-  // ngOnInit() {
-  // this.setClassMap();
-  // }
 }

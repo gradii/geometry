@@ -1,5 +1,3 @@
-export * from './alert/alert.component';
-export * from './alert/alert.module';
 export * from './message/message.component';
 export * from './message/message.definitions';
 export * from './message/message.module';

@@ -1,7 +1,10 @@
 import { GroupDescriptor } from '@gradii/triangle/data-query';
+import { GroupRow } from './row-column/group-row';
+import { Row } from './row-column/row';
 import { isPresent } from '@gradii/triangle/util';
 import {
-  AfterViewInit,
+  AfterViewInit, ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -19,14 +22,9 @@ import {
   Renderer2,
   ViewChild
 } from '@angular/core';
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import 'rxjs/operator/filter';
-import { filter } from 'rxjs/operators/filter';
-import { map } from 'rxjs/operators/map';
-import { merge } from 'rxjs/operators/merge';
-import { switchMap } from 'rxjs/operators/switchMap';
-import { tap } from 'rxjs/operators/tap';
-import { Subject } from 'rxjs/Subject';
+import { fromEvent ,  Subject } from 'rxjs';
+
+import { filter ,  map ,  merge ,  switchMap ,  tap } from 'rxjs/operators';
 import { ColumnBase } from './columns/column-base';
 import { ColumnsContainer } from './columns/columns-container';
 import { NoRecordsTemplateDirective } from './directive/no-records-template.directive';
@@ -68,17 +66,12 @@ const translateY = (renderer, value) => el => renderer.setStyle(el, 'transform',
 const firstChild = el => (el ? el.nativeElement.children[0] : null);
 
 @Component({
-  providers: [
-    {
-      provide : SCROLLER_FACTORY_TOKEN,
-      useValue: DEFAULT_SCROLLER_FACTORY
-    }
-  ],
-  selector : 'tri-grid-list',
+  selector : 'tri-data-table-list',
+  // changeDetection: ChangeDetectionStrategy.OnPush,
   template : `
     <div
       #lockedContainer
-      class="ant-grid-content-locked ant-table-tbody"
+      class="tri-data-table-content-locked tri-table-tbody"
       *ngIf="isLocked"
       [style.width.px]="lockedWidth">
       <table>
@@ -92,6 +85,7 @@ const firstChild = el => (el ? el.nativeElement.children[0] : null);
           triGridTableBody
           [groups]="groups"
           [data]="data"
+          [rowData]="rowData"
           [noRecordsText]="''"
           [columns]="lockedLeafColumns"
           [detailTemplate]="detailTemplate"
@@ -102,14 +96,14 @@ const firstChild = el => (el ? el.nativeElement.children[0] : null);
         </tbody>
       </table>
       <div
-        class="ant-height-container">
+        class="tri-height-container">
         <div
           [style.height.px]="totalHeight"></div>
       </div>
     </div>
     <div
       #container
-      class="ant-grid-content ant-virtual-content ant-table-tbody"
+      class="tri-data-table-content tri-virtual-content tri-table-tbody"
       [triGridResizableContainer]="lockedLeafColumns.length"
       [lockedWidth]="lockedWidth + 1">
       <table
@@ -124,6 +118,7 @@ const firstChild = el => (el ? el.nativeElement.children[0] : null);
           triGridTableBody
           [skipGroupDecoration]="isLocked"
           [data]="data"
+          [rowData]="rowData"
           [groups]="groups"
           [showGroupFooters]="showFooter"
           [columns]="nonLockedLeafColumns"
@@ -136,12 +131,18 @@ const firstChild = el => (el ? el.nativeElement.children[0] : null);
         </tbody>
       </table>
       <div
-        class="ant-height-container">
+        class="tri-height-container">
         <div
           [style.height.px]="totalHeight"></div>
       </div>
     </div>
-  `
+  `,
+  providers: [
+    {
+      provide : SCROLLER_FACTORY_TOKEN,
+      useValue: DEFAULT_SCROLLER_FACTORY
+    }
+  ],
 })
 export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   private changeNotification;
@@ -152,6 +153,7 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
   private scrollSyncService;
   // readonly hostClass: boolean;
   @Input() data: any[];
+  @Input() rowData: Array<Row|GroupRow>;
   @Input() groups: GroupDescriptor[];
   @Input() total: number;
   @Input() rowHeight: number;
@@ -164,6 +166,7 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
   @Input() selectable: boolean;
   @Input() groupable: GroupableSettings | boolean;
   @Input() rowClass: RowClassFn;
+
   @Output() pageChange: EventEmitter<Action>;
   totalHeight: number;
   // readonly showFooter: boolean;
@@ -181,7 +184,8 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
               @Optional() groupsService: GroupsService,
               ngZone: NgZone,
               renderer: Renderer2,
-              scrollSyncService: ScrollSyncService) {
+              scrollSyncService: ScrollSyncService,
+              private _cdr: ChangeDetectorRef) {
     this.changeNotification = changeNotification;
     this.suspendService = suspendService;
     this.groupsService = groupsService;
@@ -198,7 +202,7 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
     this.subscriptions = detailsService.changes.subscribe(x => this.detailExpand(x));
   }
 
-  @HostBinding('class.tri-grid-container')
+  @HostBinding('class.tri-data-table-container')
   get hostClass() {
     return true;
   }
@@ -280,9 +284,7 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
     }
   }
 
-  detailExpand(_a) {
-    const index = _a.index;
-    const expand = _a.expand;
+  detailExpand({index, expand}) {
     if (expand) {
       this.rowHeightService.expandDetail(index);
     } else {

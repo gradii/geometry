@@ -8,22 +8,22 @@ import { DropDownDirective } from './dropdown.directive';
   encapsulation: ViewEncapsulation.None,
   animations   : [DropDownAnimation],
   template     : `
-    <div class="ant-btn-group ant-dropdown-button" triDropdown>
+    <div class="tri-btn-group tri-dropdown-button" triDropdown>
       <button
         triButton
-        type="button"
+        [attr.type]="'button'"
         [disabled]="disable"
-        [type]="type"
+        [color]="color"
         [size]="size"
-        (click)="click.emit($event)">
+        (click)="clickEvent.emit($event)">
         <span><ng-content></ng-content></span>
       </button>
       <button
         triButton
-        [type]="type"
+        [color]="color"
         [size]="size"
-        type="button"
-        class="ant-dropdown-trigger"
+        [attr.type]="'button'"
+        class="tri-dropdown-trigger"
         [disabled]="disable"
         (click)="_onClickEvent()"
         (mouseenter)="_onMouseEnterEvent($event)"
@@ -35,13 +35,13 @@ import { DropDownDirective } from './dropdown.directive';
       [cdkConnectedOverlayHasBackdrop]="_hasBackdrop"
       [cdkConnectedOverlayPositions]="_positions"
       [cdkConnectedOverlayOrigin]="_origin"
+      [cdkConnectedOverlayMinHeight]="_triggerWidth"
       (backdropClick)="_hide()"
       (detach)="_hide()"
-      [minWidth]="_triggerWidth"
       (positionChange)="_onPositionChange($event)"
       [cdkConnectedOverlayOpen]="visible">
       <div
-        class="{{'ant-dropdown ant-dropdown-placement-'+placement}}"
+        class="{{'tri-dropdown tri-dropdown-placement-'+placement}}"
         [@dropDownAnimation]="_dropDownPosition"
         (mouseenter)="_onMouseEnterEvent($event)"
         (mouseleave)="_onMouseLeaveEvent($event)"
@@ -64,14 +64,14 @@ export class DropDownButtonComponent extends DropDownComponent implements OnInit
    * The type of button
    * 按钮类型
    */
-  @Input() type = 'default';
+  @Input() color = 'default';
   @ViewChild('content') content;
 
   /**
    * click event
    * 点击左侧按钮的回调
    */
-  @Output() click = new EventEmitter();
+  @Output() clickEvent = new EventEmitter();
   @ViewChild(DropDownDirective) _origin;
 
   _onVisibleChange = (visible: boolean) => {

@@ -1,6 +1,6 @@
 import { TriButtonModule } from '@gradii/triangle/button';
 import { TriCardModule } from '@gradii/triangle/card';
-import { TriDatePickerModule } from '@gradii/triangle/datepicker';
+import { TriDatePickerModule } from '@gradii/triangle/date-picker';
 import { TriGridModule } from '@gradii/triangle/grid';
 import { TriInputModule, TriInputNumberModule, TriRadioModule, TriSelectModule } from '@gradii/triangle/inputs';
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -41,6 +41,7 @@ import { StringFilterMenuComponent } from './type-filter-menu/string-filter-menu
     FilterMenuContainerComponent,
     StringFilterMenuComponent,
     FilterMenuTemplateDirective,
+    //type filter menu
     NumericFilterMenuComponent,
     NumericFilterMenuInputComponent,
     DateFilterMenuInputComponent,
@@ -65,4 +66,5 @@ import { StringFilterMenuComponent } from './type-filter-menu/string-filter-menu
     BooleanFilterMenuComponent
   ]
 })
-export class FilterMenuModule {}
+export class FilterMenuModule {
+}

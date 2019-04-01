@@ -55,7 +55,7 @@ export class SelectAllCheckboxDirective {
   }
 
   /**
-   * @hidden
+   * @docs-private
    */
   onClick() {
     const isChecked = this.checkbox.checked;
@@ -69,7 +69,7 @@ export class SelectAllCheckboxDirective {
   }
 
   /**
-   * @hidden
+   * @docs-private
    */
   setState() {
     const state = this.stateSet ? this.stateToBool() : this.selectionService.selectAllState;
@@ -81,7 +81,7 @@ export class SelectAllCheckboxDirective {
   }
 
   /**
-   * @hidden
+   * @docs-private
    */
   stateToBool() {
     switch (this.state) {

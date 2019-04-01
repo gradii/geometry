@@ -10,13 +10,20 @@ import { AutoGenerateColumnPositon } from './column-base';
       useExisting: forwardRef(() => CheckboxColumnComponent) // tslint:disable-line:no-forward-ref
     }
   ],
-  selector : 'tri-grid-checkbox-column',
+  selector : 'tri-data-table-checkbox-column',
   template : ''
 })
 export class CheckboxColumnComponent extends ColumnBase {
   public autoGenerateColumnPosition = 'start' as AutoGenerateColumnPositon;
 
   isCheckboxColumn = true;
+
+  @Input('class') cssClass: | string
+    | string[]
+    | Set<string>
+    | {
+    [key: string]: any;
+  } = 'tri-data-table-checkbox-column';
 
   @Input() showSelectAll;
 

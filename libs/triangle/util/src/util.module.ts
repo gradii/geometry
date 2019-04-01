@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
-import { DatePipe } from './date.pipe';
+import { DatePipe } from './pipe/date.pipe';
+import { SafeUrlPipe } from './pipe/safe-url.pipe';
 
 @NgModule({
-  declarations: [DatePipe],
-  exports     : [DatePipe]
+  declarations: [DatePipe, SafeUrlPipe],
+  exports     : [DatePipe, SafeUrlPipe]
 })
 export class TriUtilModule {}

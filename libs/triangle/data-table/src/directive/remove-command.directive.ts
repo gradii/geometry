@@ -24,7 +24,7 @@ export class RemoveCommandDirective {
     return this.editService.isEdited(this.rowIndex) ? 'none' : '';
   }
 
-  @HostBinding('class.tri-grid-remove-command')
+  @HostBinding('class.tri-data-table-remove-command')
   get commandClass() {
     return true;
   }

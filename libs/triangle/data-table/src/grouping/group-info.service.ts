@@ -1,7 +1,7 @@
 import { GroupDescriptor } from '@gradii/triangle/data-query';
+import { GroupRow } from '../row-column/group-row';
 import { ColumnList } from '../columns/column-list';
-import { isColumnComponent } from '../columns/column.component';
-import { GroupItem } from '../data-collection/data.iterators';
+import { ColumnComponent, isColumnComponent } from '../columns/column.component';
 import { expandColumns } from '../helper/column-common';
 
 export class GroupInfoService {
@@ -11,25 +11,31 @@ export class GroupInfoService {
     this._columnList = ColumnList.empty;
   }
 
-  get columns() {
-    return expandColumns(this._columnList().toArray()).filter(isColumnComponent);
+  get columns(): ColumnComponent[]  {
+    return <ColumnComponent[]>expandColumns(this._columnList().toArray()).filter(isColumnComponent);
   }
 
   registerColumnsContainer(columns: () => ColumnList): void {
     this._columnList = columns;
   }
 
-  formatForGroup(item: GroupItem | GroupDescriptor): string {
+  formatForGroup(item: GroupRow | GroupDescriptor): string {
     const column = this.columnForGroup(item);
     return column ? column.format : '';
   }
 
-  groupTitle(item: GroupItem | GroupDescriptor): string {
+  public isGroupable(groupField: string): boolean {
+    const [column] = this.columns.filter(x => x.field === groupField);
+
+    return column ? column.groupable : true;
+  }
+
+  groupTitle(item: GroupRow | GroupDescriptor): string {
     const column = this.columnForGroup(item);
     return column ? column.title || column.field : this.groupField(item);
   }
 
-  groupHeaderTemplate(item: GroupItem | GroupDescriptor): any {
+  groupHeaderTemplate(item: GroupRow | GroupDescriptor): any {
     const column = this.columnForGroup(item);
     return column ? column.groupHeaderTemplateRef : undefined;
   }

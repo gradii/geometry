@@ -2,6 +2,7 @@ import { TriPaginationModule } from '@gradii/triangle/pagination';
 import { TriSpinModule } from '@gradii/triangle/spin';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { TriDropDownModule } from '@gradii/triangle/dropdown';
 import { RowExpandIconComponent } from './row-expand-icon.component';
 import { RowIndentComponent } from './row-indent.component';
 import { TableDividerDirective } from './table-divider.directive';
@@ -82,6 +83,6 @@ import { TheadDirective } from './thead.directive';
     TableDividerDirective,
     TableSortComponent
   ],
-  imports     : [CommonModule, TriPaginationModule, TriSpinModule]
+  imports     : [CommonModule, TriPaginationModule, TriSpinModule, TriDropDownModule]
 })
 export class TriTableModule {}

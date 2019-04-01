@@ -1,5 +1,5 @@
 import { isNullOrEmptyString, isPresent } from '@gradii/triangle/util';
-import { Component, Inject, Input, Optional } from '@angular/core';
+import { Component, Host, Inject, Input, Optional, Self, SkipSelf } from '@angular/core';
 import { CELL_CONTEXT, CellContext } from '../cell-context';
 import { ColumnBase } from '../columns/column-base';
 import { ColumnComponent, isColumnComponent } from '../columns/column.component';
@@ -16,7 +16,14 @@ import { extractFormat } from '../utils';
         <ng-template
           *ngIf="column.editTemplateRef"
           [ngTemplateOutlet]="column.editTemplateRef"
-          [ngTemplateOutletContext]="templateContext">
+          [ngTemplateOutletContext]="{
+                $implicit : dataItem|valueOf:column.field:column.format,
+                isNew : isNew,
+                column : column,
+                dataItem : dataItem,
+                formGroup : formGroup,
+                rowIndex : rowIndex
+          }">
         </ng-template>
         <ng-container [ngSwitch]="column.editor" *ngIf="!column.editTemplate">
           <div tri-form-control
@@ -27,10 +34,17 @@ import { extractFormat } from '../utils';
               [formControl]="formGroup.get(column.field)"
             ></tri-input-number>
             <!--[format]="format"-->
-            <tri-datepicker
+            <tri-date-picker
               *ngSwitchCase="'date'"
               [formControl]="formGroup.get(column.field)"
-            ></tri-datepicker>
+            ></tri-date-picker>
+            <!--[format]="format"-->
+            <tri-date-picker
+              *ngSwitchCase="'datetime'"
+              showTime="true"
+              format="yyyy-MM-dd HH:mm:ss"
+              [formControl]="formGroup.get(column.field)"
+            ></tri-date-picker>
             <!--[format]="format"-->
             <!-- <input
                *ngSwitchCase="'boolean'"
@@ -43,6 +57,11 @@ import { extractFormat } from '../utils';
             >
             </tri-switch>
             <tri-input
+              *ngSwitchCase="'textarea'"
+              [formControl]="formGroup.get(column.field)"
+              type="textarea"
+            ></tri-input>
+            <tri-input
               *ngSwitchDefault
               [formControl]="formGroup.get(column.field)"
             ></tri-input>
@@ -54,22 +73,15 @@ import { extractFormat } from '../utils';
   `
 })
 export class CellComponent {
-  private editService: EditService;
-  private cellContext: CellContext;
-  @Input() public column: ColumnBase;
-  @Input() public isNew: boolean;
+  @Input() public column: any | ColumnBase;
+  @Input() public isNew: boolean = false;
   @Input() public dataItem: any;
   private _rowIndex;
-  private _templateContext;
 
-  constructor(editService: EditService,
+  constructor(private editService: EditService,
               @Optional()
               @Inject(CELL_CONTEXT)
-                cellContext: CellContext) {
-    this.editService = editService;
-    this.cellContext = cellContext;
-    this.isNew = false;
-    this._templateContext = {};
+              private cellContext: CellContext) {
   }
 
   @Input()
@@ -94,16 +106,6 @@ export class CellComponent {
 
   get formGroup() {
     return this.editService.context(this.rowIndex).group;
-  }
-
-  get templateContext() {
-    this._templateContext.$implicit = this.formGroup;
-    this._templateContext.isNew = this.isNew;
-    this._templateContext.column = this.column;
-    this._templateContext.dataItem = this.dataItem;
-    this._templateContext.formGroup = this.formGroup;
-    this._templateContext.rowIndex = this.rowIndex;
-    return this._templateContext;
   }
 
   get format() {

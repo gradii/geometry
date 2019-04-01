@@ -6,11 +6,9 @@ import { EditService } from '../service/edit.service';
   selector: '[triGridSaveCommand], [tri-grid-save-command]'
 })
 export class SaveCommandDirective {
-  private editService;
   rowIndex: number;
 
-  constructor(editService: EditService, @Inject(CELL_CONTEXT) cellContext: CellContext) {
-    this.editService = editService;
+  constructor(private editService: EditService, @Inject(CELL_CONTEXT) cellContext: CellContext) {
     this.rowIndex = cellContext.rowIndex;
   }
 
@@ -24,7 +22,7 @@ export class SaveCommandDirective {
     return !this.editService.isEdited(this.rowIndex) ? 'none' : '';
   }
 
-  @HostBinding('class.tri-grid-save-command')
+  @HostBinding('class.tri-data-table-save-command')
   get commandClass() {
     return true;
   }

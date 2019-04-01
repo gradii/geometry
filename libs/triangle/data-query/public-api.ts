@@ -5,7 +5,7 @@ export {
   CompositeFilterDescriptor,
   isCompositeFilterDescriptor
 } from './src/filtering/filter-descriptor.interface';
-export { toODataString } from './src/odata.operators';
+export { toODataString } from './src/odata/odata.operators';
 export { toDataSourceRequestString, DataSourceRequestState } from './src/mvc/operators';
 export {
   translateDataSourceResultGroups,

@@ -18,11 +18,11 @@ import {
   SelectionEvent,
   SortSettings
 } from '@gradii/triangle/data-table';
-import { EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
 export class BaseInputOutputDataTable {
   @Input() data: any[] | GridDataResult;
-  @Input() pageSize: number;
+  @Input() take: number;
   @Input() height: number;
   @Input() rowHeight: number;
   @Input() detailRowHeight: number;
@@ -31,6 +31,7 @@ export class BaseInputOutputDataTable {
   @Input() selectable: boolean | SelectableSettings = false;
   @Input() filter: CompositeFilterDescriptor;
   @Input() filterable = false;
+  @Input() resizable = true;
   @Input() sortable: SortSettings = false;
   @Input() pageable: boolean = false;
   @Input() groupable: GroupableSettings | boolean = false;
@@ -59,4 +60,5 @@ export class BaseInputOutputDataTable {
   @Output() remove: EventEmitter<RemoveEvent> = new EventEmitter();
   @Output() add: EventEmitter<AddEvent> = new EventEmitter();
   @Output() selectedKeysChange: EventEmitter<any[]> = new EventEmitter();
+  @Output() autoGenerateColumnsChange: EventEmitter<any[]> = new EventEmitter();
 }

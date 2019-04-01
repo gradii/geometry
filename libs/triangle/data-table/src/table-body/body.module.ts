@@ -1,4 +1,5 @@
-import { TriDatePickerModule } from '@gradii/triangle/datepicker';
+import { HierarchyColumnComponent } from '../columns/hierarchy-column.component';
+import { TriDatePickerModule } from '@gradii/triangle/date-picker';
 import { TriFormModule } from '@gradii/triangle/form';
 import { TriCheckboxModule, TriInputModule, TriInputNumberModule, TriRadioModule } from '@gradii/triangle/inputs';
 import { TriSwitchModule } from '@gradii/triangle/switch';
@@ -24,6 +25,7 @@ import { TableBodyComponent } from './table-body.component';
 
 const exported = [
   CommandColumnComponent,
+  HierarchyColumnComponent,
   CheckboxColumnComponent,
   SelectionCheckboxDirective,
   SelectableDirective,
@@ -60,19 +62,4 @@ const exported = [
   ]
 })
 export class BodyModule {
-  static exports() {
-    return [
-      CommandColumnComponent,
-      CheckboxColumnComponent,
-      SelectionCheckboxDirective,
-      CellTemplateDirective,
-      NoRecordsTemplateDirective,
-      EditTemplateDirective,
-      EditCommandDirective,
-      CancelCommandDirective,
-      SaveCommandDirective,
-      RemoveCommandDirective,
-      AddCommandDirective
-    ];
-  }
 }

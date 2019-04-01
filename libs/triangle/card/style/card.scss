@@ -1,122 +1,132 @@
-
-$card-prefix-cls: "#{$ant-prefix}-card";
-$card-padding-base: 24px;
-$card-padding-wider: 32px;
+$card-prefix-cls : "#{$ant-prefix}-card";
+$card-padding-base : 24px;
+$card-padding-wider : 32px;
 
 .#{$card-prefix-cls} {
-  background: $component-background;
-  border-radius: $border-radius-sm;
-  font-size: $font-size-base;
-  position: relative;
-  transition: all .3s;
+  background    : $component-background;
+  border-radius : $border-radius-sm;
+  font-size     : $font-size-base;
+  position      : relative;
+  transition    : all .3s;
 
-   @at-root &:not(#{&}-no-hovering):hover {
-    box-shadow: $box-shadow-base;
-    border-color: transparent;
+  @at-root &:not(#{&}-no-hovering):hover {
+    box-shadow   : $box-shadow-base;
+    border-color : transparent;
   }
 
-   @at-root &-bordered {
-    border: $border-width-base $border-style-base $border-color-split;
+  @at-root &-bordered {
+    border     : $border-width-base $border-style-base $border-color-split;
+    box-shadow : 0 0.5rem 1rem rgba(0, 0, 0, .05);
   }
 
-   @at-root &-head {
-    height: $card-head-height;
-    line-height: $card-head-height;
-    background: $card-head-background;
-    border-bottom: $border-width-base $border-style-base $border-color-split;
-    padding: 0 $card-padding-base;
-    border-radius: $border-radius-sm $border-radius-sm 0 0;
+  @at-root &-head {
+    height        : $card-head-height;
+    line-height   : $card-head-line-height;
+    background    : $card-head-background;
+    border-bottom : $border-width-base $border-style-base $border-color-split;
+    padding       : ($card-head-height - $card-head-line-height)/2 ($card-padding-base);
+    border-radius : $border-radius-sm $border-radius-sm 0 0;
 
-     @at-root &-title {
-      font-size: $font-size-lg;
-      display: inline-block;
-      text-overflow: ellipsis;
-      width: 100%;
-      overflow: hidden;
-      white-space: nowrap;
-      color: $card-head-color;
-      font-weight: 500;
+    @at-root &-title {
+      font-size     : $font-size-lg;
+      display       : inline-block;
+      text-overflow : ellipsis;
+      width         : 100%;
+      overflow      : hidden;
+      white-space   : nowrap;
+      color         : $card-head-color;
+      font-weight   : 500;
+      line-height   : $card-head-line-height;
+      padding       : 0 0 0 5px;
+      margin        : 0 0 0 -5px;
+      border-left   : 3px solid $primary-color;
     }
   }
 
-   @at-root &-extra {
-    position: absolute;
-    right: $card-padding-base;
-    top: 14px;
+  @at-root &-extra {
+    position : absolute;
+    right    : $card-padding-base;
+    top      : 14px;
   }
 
-   @at-root &-body {
-    padding: $card-padding-base;
+  @at-root &-body {
+    padding : $card-padding-base;
     @include clearfix;
   }
 
-   @at-root &-loading #{&}-body {
-    user-select: none;
-    padding: 0;
-  }
-
-   @at-root &-loading-content {
-    padding: $card-padding-base;
-  }
-
-   @at-root &-loading-block {
-    display: inline-block;
-    margin: 5px 1% 0;
-    height: 14px;
-    border-radius: $border-radius-sm;
-    background: linear-gradient(90deg, rgba(207, 216, 220, .2), rgba(207, 216, 220, .4), rgba(207, 216, 220, .2));
-    animation: card-loading 1.4s ease infinite;
-    background-size: 600% 600%;
-  }
-
-   @at-root &-contain-grid #{&}-body {
-    margin: -0.5px;
-    padding: 0;
-  }
-
-   @at-root &-grid {
-    border-radius: 0;
-    border: 0;
-    box-shadow: 0 0 0 0.5px $border-color-split, 0 0 0 0.5px $border-color-split inset;
-    width: 33.33%;
-    float: left;
-    padding: $card-padding-base;
-    transition: all .3s;
-     @at-root &:hover {
-      position: relative;
-      z-index: 1;
-      box-shadow: $box-shadow-base;
+  @at-root &#{&}-compact {
+    .#{$card-prefix-cls}-body {
+      padding : 5px;
     }
   }
 
-   @at-root &-wider-padding #{&}-head {
-    padding: 0 $card-padding-wider;
+  @at-root &-loading #{&}-body {
+    user-select : none;
+    padding     : 0;
   }
 
-   @at-root &-wider-padding #{&}-body {
-    padding: $card-padding-base $card-padding-wider;
+  @at-root &-loading-content {
+    padding : $card-padding-base;
   }
 
-   @at-root &-wider-padding #{&}-extra {
-    right: $card-padding-wider;
+  @at-root &-loading-block {
+    display         : inline-block;
+    margin          : 5px 1% 0;
+    height          : 14px;
+    border-radius   : $border-radius-sm;
+    background      : linear-gradient(90deg, rgba(207, 216, 220, .2), rgba(207, 216, 220, .4), rgba(207, 216, 220, .2));
+    animation       : card-loading 1.4s ease infinite;
+    background-size : 600% 600%;
   }
 
-   @at-root &-padding-transition #{&}-head,
-    &-padding-transition #{&}-body {
-    transition: padding .3s;
+  @at-root &-contain-grid #{&}-body {
+    margin  : -0.5px;
+    padding : 0;
   }
 
-   @at-root &-padding-transition #{&}-extra {
-    transition: right .3s;
+  @at-root &-grid {
+    border-radius : 0;
+    border        : 0;
+    box-shadow    : 0 0 0 0.5px $border-color-split, 0 0 0 0.5px $border-color-split inset;
+    width         : 33.33%;
+    float         : left;
+    padding       : $card-padding-base;
+    transition    : all .3s;
+    @at-root &:hover {
+      position   : relative;
+      z-index    : 1;
+      box-shadow : $box-shadow-base;
+    }
+  }
+
+  @at-root &-wider-padding #{&}-head {
+    padding : 0 $card-padding-wider;
+  }
+
+  @at-root &-wider-padding #{&}-body {
+    padding : $card-padding-base $card-padding-wider;
+  }
+
+  @at-root &-wider-padding #{&}-extra {
+    right : $card-padding-wider;
+  }
+
+  @at-root &-padding-transition #{&}-head,
+  &-padding-transition #{&}-body {
+    transition : padding .3s;
+  }
+
+  @at-root &-padding-transition #{&}-extra {
+    transition : right .3s;
   }
 }
 
 @keyframes card-loading {
   0%,
   100% {
-    background-position: 0 50%;
+    background-position : 0 50%;
   }
   50% {
-    background-position: 100% 50%;
+    background-position : 100% 50%;
   }
 }

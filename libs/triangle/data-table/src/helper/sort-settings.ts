@@ -7,11 +7,13 @@ export type ColumnSortSettings =
 export type SortSettings =
   | boolean
   | ColumnSortSettings & {
-  mode?: 'single' | 'multiple';
+  mode: 'single' | 'multiple';
 };
 const DEFAULTS: any = {
-  allowUnsort: true,
-  mode       : 'single'
+  allowUnsort     : true,
+  mode            : 'single',
+  showIndexes     : true,
+  initialDirection: 'asc'
 };
 export const normalize: (...settings: (
   | boolean

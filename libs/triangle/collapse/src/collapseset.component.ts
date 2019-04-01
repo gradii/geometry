@@ -5,7 +5,7 @@ import { CollapseComponent } from './collapse.component';
   selector     : 'tri-collapseset',
   encapsulation: ViewEncapsulation.None,
   template     : `
-    <div class="ant-collapse" [class.tri-collapse-borderless]="!bordered">
+    <div class="tri-collapse" [class.tri-collapse-borderless]="!bordered">
       <ng-content></ng-content>
     </div>
   `

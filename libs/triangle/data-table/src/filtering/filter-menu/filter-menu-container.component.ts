@@ -1,6 +1,6 @@
 import { CompositeFilterDescriptor } from '@gradii/triangle/data-query';
 import { isNullOrEmptyString, isPresent } from '@gradii/triangle/util';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, SkipSelf } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Self, SkipSelf } from '@angular/core';
 import { ColumnComponent } from '../../columns/column.component';
 import { filtersByField, removeFilter } from '../base-filter-cell.component';
 import { FilterService } from '../filter.service';
@@ -34,29 +34,32 @@ const parentLogicOfDefault = function (filter, field, def = 'and') {
   providers: [FilterService],
   selector : 'tri-data-table-filter-menu-container',
   template : `
-    <form tri-form (submit)="submit()" (reset)="reset()"
+    <form tri-form (submit)="$event.preventDefault();submit();" (reset)="reset()"
           layout="inline"
-          class="ant-filter-menu ant-popup ant-group ant-reset ant-state-border-up">
-      <div class="ant-filter-menu-container mb-3">
+          class="tri-filter-menu tri-popup tri-group tri-reset tri-state-border-up">
+      <div class="tri-filter-menu-container">
         <ng-container [ngSwitch]="hasTemplate">
           <ng-template [ngSwitchCase]="false">
-            <ng-container ngSwitch="componentFilterType">
+            <ng-container [ngSwitch]="componentFilterType">
               <ng-template ngSwitchCase="date">
-                <tri-data-table-date-filter-menu
-                  [column]="column"
-                  [filter]="childFilter"
+                <tri-data-table-date-filter-menu [column]="column"
+                                                 [filter]="childFilter"
                 >
                 </tri-data-table-date-filter-menu>
               </ng-template>
               <ng-template ngSwitchCase="numeric">
-                <tri-data-table-numeric-filter-menu>
+                <tri-data-table-numeric-filter-menu [column]="column"
+                                                    [filterService]="childService"
+                                                    [filter]="childFilter">
                 </tri-data-table-numeric-filter-menu>
               </ng-template>
               <ng-template ngSwitchCase="boolean">
-                <tri-data-table-boolean-filter-menu>
+                <tri-data-table-boolean-filter-menu [column]="column"
+                                                    [filterService]="childService"
+                                                    [filter]="childFilter">
                 </tri-data-table-boolean-filter-menu>
               </ng-template>
-              <ng-template ngSwitchDefault>
+              <ng-template ngSwitchDefault><!-- default string -->
                 <tri-data-table-string-filter-menu [column]="column"
                                                    [filterService]="childService"
                                                    [filter]="childFilter">
@@ -120,8 +123,8 @@ export class FilterMenuContainerComponent implements OnInit, OnDestroy {
 
   @Output() close: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(@SkipSelf() protected parentService: FilterService,
-              protected childService: FilterService) {
+  constructor(@SkipSelf() public parentService: FilterService,
+              @Self() public childService: FilterService) {
   }
 
   submit(): boolean {

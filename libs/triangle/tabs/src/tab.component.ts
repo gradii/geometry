@@ -1,4 +1,4 @@
-import { Component, ContentChild, EventEmitter, HostBinding, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ContentChild, EventEmitter, Host, HostBinding, Input, OnDestroy, OnInit, Output, Self, SkipSelf, TemplateRef, ViewChild } from '@angular/core';
 import { TabSetComponent } from './tabset.component';
 
 @Component({
@@ -36,10 +36,10 @@ export class TabComponent implements OnDestroy, OnInit {
   @Output() deselectEvent = new EventEmitter();
 
   /**
-   * #nzTabHeading
+   * #tabHeadingTemplate
    */
   @ContentChild('tabHeadingTemplate') _tabHeading: TemplateRef<any>;
-  @HostBinding('class.tri-tabs-tabpane') _nzTabsTabpane = true;
+  @HostBinding('class.tri-tabs-tabpane') _tabsTabpane = true;
   @ViewChild(TemplateRef) _content: TemplateRef<any>;
 
   get content(): TemplateRef<any> | null {

@@ -1,9 +1,10 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[triFormSplit], [tri-form-split]'
+  selector: 'tri-form-split, [triFormSplit], [tri-form-split]',
+  host: {
+    '[class.tri-form-split]': 'true'
+  }
 })
 export class FormSplitDirective {
-  @HostBinding(`class.tri-form-split`)
-  _nzFormSplit = true;
 }

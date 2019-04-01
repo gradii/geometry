@@ -1,8 +1,7 @@
-import { isBlank } from '@gradii/triangle/util';
-import { Component, Input } from '@angular/core';
 import { CompositeFilterDescriptor, FilterDescriptor } from '@gradii/triangle/data-query';
-import { LocaleService } from '@gradii/triangle/locale';
-import { isNullOrEmptyString, isPresent } from '@gradii/triangle/util';
+import { isBlank, isNullOrEmptyString, isPresent } from '@gradii/triangle/util';
+import { Component, Input } from '@angular/core';
+import { I18nService } from '@gradii/triangle/i18n';
 import { ColumnComponent } from '../../../columns/column.component';
 import { extractFormat } from '../../../utils';
 import { BaseFilterCellComponent } from '../../base-filter-cell.component';
@@ -11,25 +10,40 @@ import { FilterService } from '../../filter.service';
 @Component({
   selector: 'tri-data-table-string-filter-menu',
   template: `
-    <div class="flex-column align-items-center justify-content-center">
-      <tri-select class="mb-2"
-                  [options]="operators"
-                  [ngModel]="firstFilter.operator"
-                  (ngModelChange)="operatorChange($event, firstFilter)"
-      >
-      </tri-select>
-      <tri-input class="mb-2" [ngModel]="firstFilter?.value" (ngModelChange)="onChange($event, firstFilter)"></tri-input>
-      <tri-radio-group class="align-self-center" *ngIf="extra"
-                       [options]="logicOperators"
-                       [ngModel]="filter?.logic"
-                       (ngModelChange)="logicChange($event)">
-      </tri-radio-group>
-      <tri-select class="mb-2" *ngIf="extra" [options]="operators"
-                  [ngModel]="secondFilter.operator"
-                  (ngModelChange)="operatorChange($event, secondFilter)"
-      >
-      </tri-select>
-      <tri-input *ngIf="extra" [ngModel]="secondFilter?.value" (ngModelChange)="onChange($event, secondFilter)"></tri-input>
+    <div tri-row [gutter]="12">
+      <div tri-col [span]="8">
+        <tri-select class="mb-2"
+                    [ngModel]="firstFilter.operator"
+                    (ngModelChange)="operatorChange($event, firstFilter)"
+        >
+          <tri-option *ngFor="let it of operators" [label]="it.label" [value]="it.value"></tri-option>
+        </tri-select>
+      </div>
+
+      <div tri-col [span]="16">
+        <tri-input class="mb-2" [ngModel]="firstFilter?.value"
+                   (ngModelChange)="onChange($event, firstFilter)"></tri-input>
+      </div>
+
+      <div tri-col [span]="24">
+        <tri-radio-group class="mb-2 align-self-center" *ngIf="extra"
+                         [options]="logicOperators"
+                         [ngModel]="filter?.logic"
+                         (ngModelChange)="logicChange($event)">
+        </tri-radio-group>
+      </div>
+
+      <div tri-col [span]="8">
+        <tri-select class="mb-2" *ngIf="extra"
+                    [ngModel]="secondFilter.operator"
+                    (ngModelChange)="operatorChange($event, secondFilter)">
+          <tri-option *ngFor="let it of operators" [label]="it.label" [value]="it.value"></tri-option>
+        </tri-select>
+      </div>
+      <div tri-col [span]="16">
+        <tri-input *ngIf="extra" [ngModel]="secondFilter?.value"
+                   (ngModelChange)="onChange($event, secondFilter)"></tri-input>
+      </div>
     </div>
   `
 }) /*extends StringFilterComponent*/
@@ -70,7 +84,7 @@ export class StringFilterMenuComponent extends BaseFilterCellComponent {
   @Input() extra: boolean = true;
   @Input() filterService: FilterService;
 
-  constructor(protected localization: LocaleService) {
+  constructor(protected localization: I18nService) {
     super(null);
   }
 

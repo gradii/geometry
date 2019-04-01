@@ -7,7 +7,7 @@ import { SliderComponent } from './slider.component';
   encapsulation: ViewEncapsulation.None,
   template     : `
     <tri-tooltip *ngIf="tipFormatter !== null" #tooltip [title]="tooltipTitle" [trigger]="null">
-      <div tri-tooltip [class]="nzClassName" [ngStyle]="style"></div>
+      <div tri-tooltip [class]="className" [ngStyle]="style"></div>
     </tri-tooltip>
     <div *ngIf="tipFormatter === null" [class]="className" [ngStyle]="style"></div>
   `

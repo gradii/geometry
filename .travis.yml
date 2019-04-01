@@ -1,0 +1,43 @@
+language: node_js
+sudo: required
+dist: trusty
+node_js:
+  - '10.9.0'
+
+addons:
+  #  firefox: "38.0"
+  apt:
+    sources:
+      # needed to install g++ that is used by npms's native modules
+      - ubuntu-toolchain-r-test
+    packages:
+      # needed to install g++ that is used by npms's native modules
+      - g++-4.8
+
+cache:
+  yarn: true
+  directories:
+    - ./node_modules
+    - ~/bazel_repository_cache
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - env: "CI_MODE=saucelabs_optional"
+    - env: "CI_MODE=browserstack_optional"
+
+before_install:
+  # source the env.sh script so that the exported variables are available to other scripts later on
+  - BAZEL_VERSION="0.24.1"
+  - wget -q -O - https://bazel.build/bazel-release.pub.gpg |sudo apt-key add -
+  - echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
+  - sudo apt-get update
+  - sudo apt-get install -y bazel=$BAZEL_VERSION
+  - sudo rm -rf /var/lib/apt/lists/*
+#  - source ./scripts/ci/env.sh print
+
+install:
+  - bazel build --repository_cache=~/bazel_repository_cache
+
+script:
+  - bazel build libs/triangle:npm_package --config=release

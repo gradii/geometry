@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { AvatarAutosizeDirective } from './avatar-autosize.directive';
 import { AvatarComponent } from './avatar.component';
 
 /**
@@ -21,7 +20,7 @@ import { AvatarComponent } from './avatar.component';
  * <!-- example(tri-demo-avatar-badge) -->
  */
 @NgModule({
-  declarations: [AvatarComponent, AvatarAutosizeDirective],
+  declarations: [AvatarComponent],
   exports     : [AvatarComponent],
   imports     : [CommonModule]
 })

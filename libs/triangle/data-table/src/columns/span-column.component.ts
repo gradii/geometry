@@ -5,7 +5,7 @@ import { EditTemplateDirective } from '../directive/edit-template.directive';
 import { ColumnBase } from './column-base';
 import { ColumnComponent } from './column.component';
 
-export function isSpanColumnComponent(column) {
+export function isSpanColumnComponent(column): column is SpanColumnComponent {
   return column.isSpanColumn;
 }
 

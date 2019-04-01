@@ -1,103 +1,94 @@
 // mixins for grid system
 // ------------------------
 @mixin make-row($gutter: $grid-gutter-width) {
-  position: relative;
-  margin-left: ($gutter / -2);
-  margin-right: ($gutter / -2);
-  height: auto;
+  position     : relative;
+  margin-left  : ($gutter / -2);
+  margin-right : ($gutter / -2);
+  height       : auto;
   @include clearfix;
 }
 
 @mixin make-grid-columns() {
-  @mixin col($index) {
-    $item: ".#{$ant-prefix}-col-#{$index}, .#{$ant-prefix}-col-xs-#{$index}, .#{$ant-prefix}-col-sm-#{$index}, .#{$ant-prefix}-col-md-#{$index}, .#{$ant-prefix}-col-lg-#{$index}";
-    @include col(($index + 1), $item);
+  $index : 1;
+  $list : ();
+
+  @while ($index <= $grid-columns) {
+    $item : (
+      ".#{$ant-prefix}-col-#{$index}",
+      ".#{$ant-prefix}-col-xs-#{$index}",
+      ".#{$ant-prefix}-col-sm-#{$index}",
+      ".#{$ant-prefix}-col-md-#{$index}",
+      ".#{$ant-prefix}-col-lg-#{$index}"
+    );
+    $list : append($list, $item);
+    $index : $index + 1;
   }
-  @mixin col($index, $list: ()) {
-    @if ($index <= $grid-columns) {
-      $item: ".#{$ant-prefix}-col-#{$index}, .#{$ant-prefix}-col-xs-#{$index}, .#{$ant-prefix}-col-sm-#{$index}, .#{$ant-prefix}-col-md-#{$index}, .#{$ant-prefix}-col-lg-#{$index}";
-      @include col(($index + 1), "#{$list}, #{$item}");
-    } @else if ($index > $grid-columns) {
-      #{$list} {
-        position: relative;
-        // Prevent columns from collapsing when empty
-        min-height: 1px;
-        padding-left: ($grid-gutter-width / 2);
-        padding-right: ($grid-gutter-width / 2);
-      }
-    }
+  #{$list} {
+    position      : relative;
+    // Prevent columns from collapsing when empty
+    min-height    : 1px;
+    padding-left  : ($grid-gutter-width / 2);
+    padding-right : ($grid-gutter-width / 2);
   }
-  @include col(1);
 }
 
 @mixin float-grid-columns($class) {
-  @mixin col($index, $list: ()) { // initial
-    //@if ($index <= $grid-columns) {
-    //  $item: unquote('.#{$ant-prefix}-col#{$class}-#{$index}');
-    //  @include col(($index + 1), append($list, $item, comma));
-    //} @else if ($index > $grid-columns) {
-    //  #{$list} {
-    //    float: left;
-    //    flex: 0 0 auto;
-    //  }
-    //}
+  $index : 1;
+  $list : ();
 
-    @while $index <= $grid-columns {
-      $item: unquote('.#{$ant-prefix}-col#{$class}-#{$index}');
-      $list: append($list, $item, comma);
-      $index: $index + 1;
-    }
-
-    #{$list} {
-      float: left;
-      flex: 0 0 auto;
-    }
+  @while $index <= $grid-columns {
+    $item : unquote('.#{$ant-prefix}-col#{$class}-#{$index}');
+    $list : append($list, $item, comma);
+    $index : $index + 1;
   }
 
-  @include col(1); // kickstart it
+  #{$list} {
+    float : left;
+    flex  : 0 0 auto;
+  }
 }
 
 // lesshint false
 @mixin loop-grid-columns($index, $class) {
   @if $index > 0 {
     .#{$ant-prefix}-col#{$class}-#{$index} {
-      display: block;
-      width: percentage(($index / $grid-columns));
+      display : block;
+      width   : percentage(($index / $grid-columns));
     }
     .#{$ant-prefix}-col#{$class}-push-#{$index} {
-      left: percentage(($index / $grid-columns));
+      left : percentage(($index / $grid-columns));
     }
     .#{$ant-prefix}-col#{$class}-pull-#{$index} {
-      right: percentage(($index / $grid-columns));
+      right : percentage(($index / $grid-columns));
     }
     .#{$ant-prefix}-col#{$class}-offset-#{$index} {
-      margin-left: percentage(($index / $grid-columns));
+      margin-left : percentage(($index / $grid-columns));
     }
     .#{$ant-prefix}-col#{$class}-order-#{$index} {
-      order: $index;
+      order : $index;
     }
     @include loop-grid-columns(($index - 1), $class);
   } @else if $index == 0 {
     .#{$ant-prefix}-col#{$class}-#{$index} {
-      display: none;
+      display : none;
     }
     .#{$ant-prefix}-col-push-#{$index} {
-      left: auto;
+      left : auto;
     }
     .#{$ant-prefix}-col-pull-#{$index} {
-      right: auto;
+      right : auto;
     }
     .#{$ant-prefix}-col#{$class}-push-#{$index} {
-      left: auto;
+      left : auto;
     }
     .#{$ant-prefix}-col#{$class}-pull-#{$index} {
-      right: auto;
+      right : auto;
     }
     .#{$ant-prefix}-col#{$class}-offset-#{$index} {
-      margin-left: 0;
+      margin-left : 0;
     }
     .#{$ant-prefix}-col#{$class}-order-#{$index} {
-      order: 0;
+      order : 0;
     }
   }
 }

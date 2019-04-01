@@ -5,39 +5,42 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   selector     : 'tri-progress',
   encapsulation: ViewEncapsulation.None,
   template     : `
-    <div [ngClass]="'ant-progress ant-progress-status-'+status"
+    <div [ngClass]="'tri-progress tri-progress-status-'+status"
          [class.tri-progress-line]="type=='line'"
+         [class.tri-progress-inline]="type=='inline'"
          [class.tri-progress-show-info]="showInfo"
          [class.tri-progress-circle]="type=='circle'">
-      <div *ngIf="type=='line'">
-        <div class="ant-progress-outer">
-          <div class="ant-progress-inner">
-            <div class="ant-progress-bg"
-                 [style.width.%]="_percent"
+      <div *ngIf="type=='line'||type=='inline'">
+        <div class="tri-progress-outer">
+          <div class="tri-progress-inner">
+            <div class="tri-progress-bg"
+                 [style.width.%]="+_percent"
                  [style.height.px]="strokeWidth"></div>
           </div>
         </div>
-        <span class="ant-progress-text" *ngIf="showInfo">
+        <span class="tri-progress-text" *ngIf="showInfo">
           <ng-template [ngIf]="(status=='active')||(status=='normal')||(_hasFormat)">{{_format(_percent)}}</ng-template>
-          <ng-template [ngIf]="(status=='exception')||(status=='success')&&(!_hasFormat)">
+          <ng-template [ngIf]="((status=='exception')||(status=='success'))&&(!_hasFormat)">
             <i class="anticon" [ngClass]="{'anticon-check-circle':status=='success','anticon-cross-circle':status=='exception'}"></i>
           </ng-template>
         </span>
       </div>
-      <div class="ant-progress-inner" *ngIf="type=='circle'" [ngStyle]="_circleStyle">
+     
+      <div class="tri-progress-inner" *ngIf="type=='circle'" [ngStyle]="_circleStyle">
         <svg class="rc-progress-circle " viewBox="0 0 100 100" *ngIf="type=='circle'">
           <path class="rc-progress-circle-trail" [attr.d]="_pathString" stroke="#f3f3f3" [attr.stroke-width]="strokeWidth"
                 fill-opacity="0"></path>
           <path class="rc-progress-circle-path" [attr.d]="_pathString" stroke-linecap="round" [attr.stroke]="_statusColorMap[status]"
                 stroke-width="6" fill-opacity="0" [ngStyle]="_pathStyle"></path>
         </svg>
-        <span class="ant-progress-text" *ngIf="showInfo"><ng-template
+        <span class="tri-progress-text" *ngIf="showInfo"><ng-template
           [ngIf]="(status=='active')||(status=='normal')||(_hasFormat)">{{_format(_percent)}}</ng-template>
           <ng-template [ngIf]="(status=='exception')||(status=='success')&&!(_hasFormat)">
             <i class="anticon" [ngClass]="{'anticon-check':status=='success','anticon-cross':status=='exception'}"></i>
           </ng-template>
         </span>
       </div>
+      
     </div>
   `,
   providers    : [
@@ -66,7 +69,7 @@ export class ProgressComponent implements ControlValueAccessor, OnInit {
   onTouched: any = Function.prototype;
 
   /**
-   * 类型，可选  `line` `circle`
+   * 类型，可选  `line` `circle` `inline` `dashboard`
    */
   @Input() type = 'line';
 
@@ -105,7 +108,7 @@ export class ProgressComponent implements ControlValueAccessor, OnInit {
     this._hasFormat = true;
   }
 
-  _format = percent => percent + '%';
+  _format = percent => percent ? percent + '%' : '暂无';
 
   updateCircleStatus() {
     const circleSize = this.width || 132;
@@ -130,11 +133,11 @@ export class ProgressComponent implements ControlValueAccessor, OnInit {
 
   writeValue(value: number): void {
     this._percent = value;
-    if (this._percent === 100) {
-      this.status = 'success';
-    } else {
-      this.status = this._rawStatus;
-    }
+    // if (this._percent === 100) {
+    //   this.status = 'success';
+    // } else {
+    //   this.status = this._rawStatus;
+    // }
     if (this.type === 'circle') {
       this.updateCircleStatus();
     }

@@ -1,108 +1,230 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostBinding,
-  Input,
-  OnDestroy,
-  Output,
-  QueryList,
-  ViewChildren
-} from '@angular/core';
 import { GroupDescriptor } from '@gradii/triangle/data-query';
-import { DraggableDirective } from '../table-shared/draggable.directive';
-import { observe } from '../utils';
-import { GroupConnectionService, GroupDragService } from './group-connection.service';
+import { I18nService } from '@gradii/triangle/i18n';
+import { isNullOrEmptyString } from '@gradii/triangle/util';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostBinding, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { from ,  merge ,  Subscription } from 'rxjs';
+import { filter ,  switchMapTo ,  takeUntil ,  tap } from 'rxjs/operators';
+import { isTargetBefore, position } from '../dragdrop/common';
+import { DragAndDropContext } from '../dragdrop/context-types';
+import { DragHintService } from '../dragdrop/drag-hint.service';
+import { DropCueService } from '../dragdrop/drop-cue.service';
+
+import { DropTargetDirective } from '../dragdrop/drop-target.directive';
+
+import { and, Condition, observe, or } from '../utils';
+
+import { GroupInfoService } from './group-info.service';
+
+type DropCondition = Condition<{
+  field: string;
+  groups: GroupDescriptor[];
+  target: DragAndDropContext;
+}>;
+
+const withoutField: DropCondition = ({field}) => isNullOrEmptyString(field);
+const alreadyGrouped: DropCondition = ({groups, field}) => groups.some(group => group.field === field);
+const overSameTarget: DropCondition = ({target, field}) => target.field === field;
+const overLastTarget: DropCondition = ({target}) => target.lastTarget;
+const isLastGroup: DropCondition = ({groups, field}) =>
+  groups.map(group => group.field).indexOf(field) === groups.length - 1;
+
+const isNotGroupable = (groupsService: GroupInfoService) => ({field}) => !groupsService.isGroupable(field);
+
+const columnRules = (groupService: GroupInfoService) => or(
+  withoutField,
+  alreadyGrouped,
+  isNotGroupable(groupService)
+);
+
+const indicatorRules = or(
+  overSameTarget,
+  and(
+    overLastTarget,
+    isLastGroup
+  )
+);
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers      : [GroupDragService],
   selector       : 'tri-data-table-group-panel',
   template       : `
-                     <ng-template [ngIf]="groups.length === 0">
-                       {{ text }}
-                     </ng-template>
-                     <div *ngFor="let group of groups"
-                          triGroupIndicator
-                          tri-grid-draggable
-                          [gridDraggable]="group"
-                          [group]="group"
-                          (directionChange)="directionChange($event)"
-                          (remove)="remove($event)">
-                     </div>
-                   `
+    <ng-template [ngIf]="groups.length === 0">
+      <div
+        class="tri-indicator-container"
+        [context]="{
+                    lastTarget: true
+                }"
+        triDropTarget>
+        {{ text }}
+      </div>
+    </ng-template>
+    <div *ngFor="let group of groups"
+         class="tri-indicator-container"
+         [context]="{
+                field: group.field
+            }"
+         triDropTarget>
+      <div
+        [triDraggableColumn]="true"
+        [context]="{
+                    field: group.field,
+                    type: 'groupIndicator',
+                    hint:  groupInfoService.groupTitle(group)
+                }"
+        triGroupIndicator
+        triGridDraggable
+        [group]="group"
+        (directionChange)="directionChange($event)"
+        (remove)="remove($event)">
+      </div>
+    </div>
+    <div class="tri-indicator-container"
+         *ngIf="groups.length !== 0"
+         [context]="{
+                lastTarget: true
+            }"
+         triDropTarget>&nbsp;
+    </div>
+  `
 })
-export class GroupPanelComponent implements AfterViewInit, OnDestroy {
-  private connection;
-  private draggableService;
-  private localization;
-  @Output() change: EventEmitter<GroupDescriptor[]>;
-  @Input() groups: GroupDescriptor[];
-  @ViewChildren(DraggableDirective) draggables: QueryList<DraggableDirective>;
-  @ViewChildren(DraggableDirective) dropTargets: QueryList<ElementRef>;
-  private emptyText;
-  private subscription;
+export class GroupPanelComponent implements OnDestroy, OnInit {
 
-  constructor(connection: GroupConnectionService, draggableService: GroupDragService, element: ElementRef) {
-    const _this = this;
-    this.connection = connection;
-    this.draggableService = draggableService;
-    this.change = new EventEmitter();
-    this.groups = [];
-    this.subscription = connection.register(element.nativeElement).subscribe(_a => {
-      const field = _a.field;
-      const idx = _a.idx;
-      return _this.insert(field, idx);
-    });
-  }
+  @Output() public change: EventEmitter<GroupDescriptor[]> = new EventEmitter<GroupDescriptor[]>();
 
   @HostBinding('class.tri-grouping-header')
-  get groupHeaderClass() {
+  @HostBinding('class.tri-grouping-header-flex')
+  public get groupHeaderClass(): boolean {
     return true;
   }
 
   @Input()
-  get text() {
-    return this.emptyText ? this.emptyText : this.localization.get('groupPanelEmpty');
-  }
-
-  set text(value) {
+  public set text(value: string) {
     this.emptyText = value;
   }
 
-  ngAfterViewInit() {
-    const _this = this;
+  public get text(): string {
+    return this.emptyText ? this.emptyText : this.localization.translate('groupPanelEmpty');
+  }
+
+  @Input() public groups: GroupDescriptor[] = [];
+
+  @ViewChildren(DropTargetDirective) public dropTargets: QueryList<DropTargetDirective> = new QueryList<DropTargetDirective>();
+
+  private emptyText: string;
+  private subscription: Subscription = new Subscription();
+  private targetSubscription: Subscription;
+
+  constructor(
+    private hint: DragHintService,
+    private cue: DropCueService,
+    public groupInfoService: GroupInfoService,
+    private localization: I18nService,
+    private cd: ChangeDetectorRef
+  ) { }
+
+  public ngAfterViewInit(): void {
     this.subscription.add(
-      observe(this.dropTargets).subscribe(items => _this.connection.registerItems(items.map(x => x.nativeElement)))
-    );
-    this.subscription.add(
-      observe(this.draggables).subscribe((items: any) => _this.draggableService.connect(items.toArray()))
+      observe(this.dropTargets)
+        .subscribe(this.attachTargets.bind(this))
     );
   }
 
-  ngOnDestroy() {
-    this.draggableService.unsubscribe();
+  public ngOnInit(): void {
+    this.subscription.add(
+      this.localization.localeChange.subscribe(() => this.cd.markForCheck())
+    );
+  }
+
+  public ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-  }
 
-  directionChange(group: GroupDescriptor): void {
-    const index = this.groups.findIndex(x => x.field === group.field);
-    const groups = this.groups.slice(0, index).concat([group], this.groups.slice(index + 1));
-    this.change.emit(groups);
-  }
-
-  insert(field: string, index: number): void {
-    const groups = this.groups.filter(x => x.field !== field);
-    if (groups.length || this.groups.length === 0) {
-      this.change.emit(groups.slice(0, index).concat([{field}], groups.slice(index)));
+    if (this.targetSubscription) {
+      this.targetSubscription.unsubscribe();
     }
   }
 
-  remove(group: GroupDescriptor): void {
+  public directionChange(group: GroupDescriptor): void {
+    const index = this.groups.findIndex(x => x.field === group.field);
+    const groups = [...this.groups.slice(0, index), group, ...this.groups.slice(index + 1)];
+
+    this.change.emit(groups);
+  }
+
+  public insert(field: string, index: number): void {
+    const groups = this.groups.filter(x => x.field !== field);
+
+    if (groups.length || this.groups.length === 0) {
+      this.change.emit([...groups.slice(0, index), {field: field}, ...groups.slice(index)]);
+    }
+  }
+
+  public remove(group: GroupDescriptor): void {
     this.change.emit(this.groups.filter(x => x.field !== group.field));
+  }
+
+  public canDrop(draggable: DragAndDropContext, target: DragAndDropContext): boolean {
+    const isIndicator = draggable.type === 'groupIndicator';
+    const rules = isIndicator
+      ? indicatorRules
+      : columnRules(this.groupInfoService);
+
+    return !rules({
+      field : draggable.field,
+      groups: this.groups,
+      target
+    });
+  }
+
+  private attachTargets(): void {
+    if (this.targetSubscription) {
+      this.targetSubscription.unsubscribe();
+    }
+
+    this.targetSubscription = new Subscription();
+
+    const enterStream = this.dropTargets
+      .reduce((acc, target) => merge(acc, target.enter), from([]));
+
+    const leaveStream = this.dropTargets
+      .reduce((acc, target) => merge(acc, target.leave), from([]));
+
+    const dropStream = this.dropTargets
+      .reduce((acc, target) => merge(acc, target.drop), from([]));
+
+    this.targetSubscription.add(
+      enterStream.pipe(
+        tap(_ => this.hint.removeLock()),
+        filter(({draggable, target}) => this.canDrop(draggable.context, target.context)),
+        tap(this.enter.bind(this)),
+        switchMapTo(
+          dropStream.pipe(takeUntil(leaveStream.pipe(tap(this.leave.bind(this)))))
+        )
+      ).subscribe(this.drop.bind(this))
+    );
+  }
+
+  private enter({draggable, target}: any): void {
+    this.hint.enable();
+
+    const before = target.context.lastTarget || isTargetBefore(
+      draggable.element.nativeElement,
+      target.element.nativeElement
+    );
+
+    this.cue.position(position(target.element.nativeElement, before));
+  }
+
+  private leave(): void {
+    this.hint.disable();
+    this.cue.hide();
+  }
+
+  private drop({target, draggable}: any): void {
+    const field = draggable.context.field;
+    const index = this.dropTargets.toArray().indexOf(target);
+
+    this.insert(field, index);
   }
 }

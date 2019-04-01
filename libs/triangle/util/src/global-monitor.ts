@@ -5,7 +5,7 @@ export interface Position {
   y: number;
 }
 
-export class NzGlobalMonitorService {
+export class GlobalMonitorService {
   counter = 0;
   lastClickPos: Position = {
     x: 0,
@@ -38,4 +38,4 @@ export class NzGlobalMonitorService {
   }
 }
 
-export const GlobalMonitorService = new NzGlobalMonitorService();
+export const GLOBAL_MONITOR_SERVICE = new GlobalMonitorService();

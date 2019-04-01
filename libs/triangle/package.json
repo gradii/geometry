@@ -2,13 +2,28 @@
   "name": "@gradii/triangle",
   "version": "0.0.0-PLACEHOLDER",
   "description": "",
-  "main": "./_bundles/triangle.umd.js",
-  "module": "./_esm5/triangle.es5.js",
-  "es2015": "./_esm2015/triangle.js",
+  "main": "./bundles/triangle.umd.js",
+  "module": "./esm5/triangle.es5.js",
+  "es2015": "./esm2015/triangle.js",
   "typings": "./triangle.d.ts",
+  "keywords": [
+    "angular",
+    "triangle",
+    "components"
+  ],
   "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
   },
   "peerDependencies": {
-    "moment": "^2.19.3"
-  }
+    "@angular/animations": "0.0.0-NG",
+    "@angular/cdk": "0.0.0-NG",
+    "@angular/core": "0.0.0-NG",
+    "@angular/common": "0.0.0-NG",
+    "@angular/forms": "0.0.0-NG"
+  },
+  "dependencies": {
+    "tslib": "^1.7.1"
+  },
+  "sideEffects": false
 }
+

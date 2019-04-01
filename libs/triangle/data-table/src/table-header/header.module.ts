@@ -1,7 +1,9 @@
+import { DragAndDropModule } from '../dragdrop/drag-and-drop.module';
 import { TriCheckboxModule } from '@gradii/triangle/inputs';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ColumnHandleDirective } from '../column-resize/column-handle.directive';
 import { FilterMenuModule } from '../filtering/filter-menu/filter-menu.module';
 import { FilterSimpleModule } from '../filtering/filter-simple/filter-simple.module';
 import { RowFilterModule } from '../filtering/row-filter.module';
@@ -20,10 +22,11 @@ import { HeaderComponent } from './header.component';
     FilterMenuModule,
     FilterSimpleModule,
     OverlayModule,
-    SharedModule
+    SharedModule,
+    DragAndDropModule
   ],
-  declarations: [HeaderComponent, HeaderTemplateDirective, SelectAllCheckboxDirective],
-  exports     : [HeaderComponent, HeaderTemplateDirective, SelectAllCheckboxDirective]
+  declarations: [HeaderComponent, HeaderTemplateDirective, SelectAllCheckboxDirective, ColumnHandleDirective],
+  exports     : [HeaderComponent, HeaderTemplateDirective, SelectAllCheckboxDirective, ColumnHandleDirective]
 })
 export class HeaderModule {
   static exports() {

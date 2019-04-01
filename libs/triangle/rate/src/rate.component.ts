@@ -2,14 +2,15 @@ import { Component, forwardRef, Input, OnInit, ViewEncapsulation } from '@angula
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-  selector     : 'tri-rate',
-  encapsulation: ViewEncapsulation.None,
-  template     : `
-    <ul class="ant-rate"
+  selector           : 'tri-rate',
+  encapsulation      : ViewEncapsulation.None,
+  preserveWhitespaces: false,
+  template           : `
+    <ul class="tri-rate"
         [class.tri-rate-disabled]="_disabled"
         (mouseleave)="_leaveRate($event)">
       <li *ngFor="let star of _starArray; let i = index"
-          class="ant-rate-star"
+          class="tri-rate-star"
           [class.tri-rate-star-full]="i + 1 < _hoverValue || (!_hasHalf && i + 1 === _hoverValue)"
           [class.tri-rate-star-half]="_hasHalf && i + 1 === _hoverValue"
           [class.tri-rate-star-active]="_hasHalf && i + 1 === _hoverValue"
@@ -17,14 +18,15 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
           (mouseover)="_hoverRate($event, i, true)"
           (click)="_clickRate($event, i, true)">
-        <div class="ant-rate-star-first" (mouseover)="_hoverRate($event, i)" (click)="_clickRate($event, i)">
+        <div class="tri-rate-star-first" (mouseover)="_hoverRate($event, i)" (click)="_clickRate($event, i)">
           <i class="anticon anticon-star"></i></div>
-        <div class="ant-rate-star-second" (mouseover)="_hoverRate($event, i, true)" (click)="_clickRate($event, i, true)">
+        <div class="tri-rate-star-second" (mouseover)="_hoverRate($event, i, true)"
+             (click)="_clickRate($event, i, true)">
           <i class="anticon anticon-star"></i></div>
       </li>
     </ul>
   `,
-  providers    : [
+  providers          : [
     {
       provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => RateComponent),
@@ -33,7 +35,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ]
 })
 export class RateComponent implements OnInit, ControlValueAccessor {
-  _prefixCls = 'ant-rate';
+  _prefixCls = 'tri-rate';
   _classMap;
   _starArray: Array<any> = new Array();
   _count = 5;
@@ -137,7 +139,7 @@ export class RateComponent implements OnInit, ControlValueAccessor {
     }
   }
 
-  _clickRate(e, index, isFull): void {
+  _clickRate(e, index, isFull = false): void {
     e.stopPropagation();
     if (this._disabled) {
       return;
@@ -150,7 +152,7 @@ export class RateComponent implements OnInit, ControlValueAccessor {
     this.onChange(this._value);
   }
 
-  _hoverRate(e, index, isFull): void {
+  _hoverRate(e, index, isFull = false): void {
     e.stopPropagation();
     if (this._disabled) {
       return;

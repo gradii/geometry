@@ -24,7 +24,7 @@ export class CancelCommandDirective {
     return !this.editService.isEdited(this.rowIndex) ? 'none' : '';
   }
 
-  @HostBinding('class.tri-grid-cancel-command')
+  @HostBinding('class.tri-data-table-cancel-command')
   get commandClass() {
     return true;
   }

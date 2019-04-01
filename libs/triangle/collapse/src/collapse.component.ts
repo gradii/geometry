@@ -5,7 +5,7 @@ import { CollapsesetComponent } from './collapseset.component';
 @Component({
   selector  : 'tri-collapse',
   template  : `
-    <div class="ant-collapse-header" [attr.aria-expanded]="_active" (click)="clickHeader($event)" role="tab">
+    <div class="tri-collapse-header" [attr.aria-expanded]="_active" (click)="clickHeader($event)" role="tab">
       <i class="arrow"></i>
       <ng-template [ngIf]="title">
         {{ title }}
@@ -14,8 +14,8 @@ import { CollapsesetComponent } from './collapseset.component';
         <ng-content select="[collapse-title]"></ng-content>
       </ng-template>
     </div>
-    <div class="ant-collapse-content" [@collapseState]="_active?'active':'inactive'">
-      <div class="ant-collapse-content-box">
+    <div class="tri-collapse-content" [@collapseState]="_active?'active':'inactive'">
+      <div class="tri-collapse-content-box">
         <ng-content></ng-content>
       </div>
     </div>

@@ -1,17 +1,6 @@
 import { coerceToNumber, coerceToString } from '@gradii/triangle/util';
 import { Directionality } from '@angular/cdk/bidi';
-import {
-  AfterContentChecked,
-  ChangeDetectionStrategy,
-  Component,
-  ContentChildren,
-  ElementRef,
-  Input,
-  OnInit,
-  Optional,
-  QueryList,
-  ViewEncapsulation
-} from '@angular/core';
+import { AfterContentChecked, ChangeDetectionStrategy, Component, ContentChildren, ElementRef, Input, OnInit, Optional, QueryList, ViewEncapsulation } from '@angular/core';
 import { GridTileComponent } from './grid-tile';
 import { TileCoordinator } from './tile-coordinator';
 import { FitTileStyler, FixedTileStyler, RatioTileStyler, TileStyler } from './tile-styler';
@@ -26,7 +15,7 @@ const TRI_FIT_MODE = 'fit';
       <ng-content></ng-content>
     </div>`,
   host               : {
-    class: 'ant-grid-list'
+    class: "tri-grid-list"
   },
   changeDetection    : ChangeDetectionStrategy.OnPush,
   encapsulation      : ViewEncapsulation.None,
@@ -53,7 +42,8 @@ export class GridListComponent implements OnInit, AfterContentChecked {
   /** Query list of tiles that are being rendered. */
   @ContentChildren(GridTileComponent) _tiles: QueryList<GridTileComponent>;
 
-  constructor(private _element: ElementRef, @Optional() private _dir: Directionality) {}
+  constructor(private _element: ElementRef, @Optional() private _dir: Directionality) {
+  }
 
   /** Amount of columns in the grid list. */
   @Input()

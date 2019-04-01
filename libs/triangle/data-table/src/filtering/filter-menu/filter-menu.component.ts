@@ -12,7 +12,7 @@ import { FilterService } from '../filter.service';
   selector           : 'tri-data-table-filter-menu',
   preserveWhitespaces: false,
   template           : `
-    <a [ngClass]="{'ant-grid-filter':true, 'ant-state-active': hasFilters}"
+    <a [ngClass]="{'tri-data-table-filter':true, 'tri-state-active': hasFilters}"
        (click)="toggle($event)"
        href="#"
        title="Filter">
@@ -21,24 +21,23 @@ import { FilterService } from '../filter.service';
     <ng-template
       cdkConnectedOverlay
       cdkConnectedOverlayHasBackdrop
+      cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
       [cdkConnectedOverlayOrigin]="origin"
       [cdkConnectedOverlayOpen]="_open"
       [cdkConnectedOverlayPositions]="_positions"
       (backdropClick)="closeMenu()"
       (detach)="closeMenu()">
-      <tri-card>
+      <tri-card class="tri-card-compact">
         <tri-data-table-filter-menu-container
           [column]="column"
           [filter]="filter"
-          (close)="close()"
-        >
+          (close)="close()">
         </tri-data-table-filter-menu-container>
       </tri-card>
     </ng-template>
   `
 })
 export class FilterMenuComponent extends BaseFilterCellComponent {
-  private popupRef;
   _open: boolean = false;
   _positions = [
     POSITION_MAP['bottomLeft'],
@@ -77,7 +76,7 @@ export class FilterMenuComponent extends BaseFilterCellComponent {
     this._open = !this._open;
   }
 
-  protected close(): void {
+  close(): void {
     // this.popupService.destroy();
     this._open = false;
   }

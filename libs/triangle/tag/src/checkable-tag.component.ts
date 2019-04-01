@@ -19,7 +19,7 @@ import {
   animations   : [TagAnimation],
   template     : `
     <span *ngIf="!_closed"
-          class="ant-tag ant-tag-checkable"
+          class="tri-tag tri-tag-checkable"
           [class.tri-tag-pink]="color=='pink'"
           [class.tri-tag-red]="color=='red'"
           [class.tri-tag-yellow]="color=='yellow'"
@@ -33,13 +33,13 @@ import {
           [style.backgroundColor]="_backgroundColor"
           [@tagAnimation]
           (@tagAnimation.done)="_afterClose($event)">
-      <span class="ant-tag-text"><ng-content></ng-content></span>
+      <span class="tri-tag-text"><ng-content></ng-content></span>
       <i class="anticon anticon-cross" (click)="_close($event)" *ngIf="closable"></i>
     </span>
   `
 })
 export class CheckableTagComponent implements OnInit, AfterViewInit {
-  _prefixCls = 'ant-tag';
+  _prefixCls = 'tri-tag';
   _closed = false;
 
   /** Whether tag is checked */
@@ -99,6 +99,6 @@ export class CheckableTagComponent implements OnInit, AfterViewInit {
   ngOnInit() {}
 
   ngAfterViewInit(): void {
-    this._render.addClass(this._elementRef.nativeElement, `ant-tag-root`);
+    this._render.addClass(this._elementRef.nativeElement, `tri-tag-root`);
   }
 }

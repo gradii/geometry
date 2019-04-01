@@ -11,38 +11,42 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { StepConnectService } from './step-connect.service';
 
 @Component({
   selector     : 'tri-step',
   encapsulation: ViewEncapsulation.None,
   template     : `
-    <div class="ant-steps-tail" #stepsTail *ngIf="_last !== true">
+    <div class="tri-steps-tail" #stepsTail *ngIf="_last !== true">
       <i></i>
+      <span class="tri-steps-tail-tip" *ngIf="tailTip">{{tailTip}}</span>
     </div>
-    <div class="ant-steps-step">
-      <div class="ant-steps-head">
-        <div class="ant-steps-head-inner">
+    <div class="tri-steps-step">
+      <div class="tri-steps-head">
+        <div class="tri-steps-head-inner">
           <ng-template [ngIf]="!_processDot">
-            <span class="ant-steps-icon anticon anticon-check" *ngIf="_status === 'finish' && !icon"></span>
-            <span class="ant-steps-icon anticon anticon-cross" *ngIf="_status === 'error'"></span>
-            <span class="ant-steps-icon"
-                  *ngIf="(_status === 'process' || _status === 'wait') && !icon">{{index + 1}}</span>
-            <span class="ant-steps-icon" *ngIf="icon">
-            <ng-template [ngTemplateOutlet]="icon"></ng-template>
-          </span>
+            <span class="tri-steps-icon anticon anticon-check" *ngIf="_status === 'finish' && !iconTemplate"></span>
+            <span class="tri-steps-icon anticon anticon-cross" *ngIf="_status === 'error' && !iconTemplate"></span>
+            <span class="tri-steps-icon"
+                  *ngIf="(_status === 'process' || _status === 'wait') && !iconTemplate">{{index + 1}}</span>
+            <span class="tri-steps-icon" *ngIf="iconTemplate">
+              <ng-template [ngTemplateOutlet]="iconTemplate"></ng-template>
+            </span>
           </ng-template>
           <ng-template [ngIf]="_processDot">
-            <span class="ant-steps-icon">
-              <span class="ant-steps-icon-dot"></span>
+            <span class="tri-steps-icon">
+              <span class="tri-steps-icon-dot"></span>
             </span>
           </ng-template>
         </div>
       </div>
-      <div class="ant-steps-main">
-        <div class="ant-steps-title">{{title}}</div>
-        <div class="ant-steps-description">{{description}}</div>
+      <div class="tri-steps-main">
+        <div class="tri-steps-title">{{title}}</div>
+        <div class="tri-steps-description">
+          {{description}}
+          <ng-template [ngTemplateOutlet]="descriptionTemplate"></ng-template>
+        </div>
       </div>
     </div>
   `
@@ -59,10 +63,13 @@ export class StepComponent implements OnInit, AfterViewInit, OnDestroy {
   _directionEventSubscription: Subscription;
   _currentEventSubscription: Subscription;
   _errorIndexObjectSubscription: Subscription;
-  index: number;
   stepStatusClass;
-  @ContentChild('icon') icon: TemplateRef<any>;
+
+  @ContentChild('iconTemplate') iconTemplate: TemplateRef<any>;
   @ViewChild('stepsTail') _stepsTail: ElementRef;
+
+  @Input()
+  index: number;
 
   /**
    * Specify current step status, optional: `wait`   `process`   `finish`   `error`
@@ -95,6 +102,11 @@ export class StepComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   @Input() description: string;
 
+  @ContentChild('descriptionTemplate', {read: TemplateRef})
+  descriptionTemplate: TemplateRef<void>;
+
+  @Input() tailTip: string;
+
   get _current() {
     return this._currentIndex;
   }
@@ -119,14 +131,14 @@ export class StepComponent implements OnInit, AfterViewInit, OnDestroy {
 
   initClassMap() {
     this.stepStatusClass = {
-      ['ant-steps-item']          : true,
-      [`ant-steps-status-wait`]   : this._status === 'wait',
-      [`ant-steps-status-process`]: this._status === 'process',
-      [`ant-steps-status-finish`] : this._status === 'finish',
-      [`ant-steps-status-error`]  : this._status === 'error',
-      ['ant-steps-item-last']     : this._last,
-      ['ant-steps-custom']        : !!this.icon,
-      ['ant-steps-next-error']    : this.stepConnectService.errorIndex === 'error' && this._current === this.index - 1
+      ['tri-steps-item']          : true,
+      [`tri-steps-status-wait`]   : this._status === 'wait',
+      [`tri-steps-status-process`]: this._status === 'process',
+      [`tri-steps-status-finish`] : this._status === 'finish',
+      [`tri-steps-status-error`]  : this._status === 'error',
+      ['tri-steps-item-last']     : this._last,
+      ['tri-steps-custom']        : !!this.iconTemplate,
+      ['tri-steps-next-error']    : this.stepConnectService.errorIndex === 'error' && this._current === this.index - 1
     };
     for (const i in this.stepStatusClass) {
       if (this.stepStatusClass[i]) {
@@ -139,7 +151,7 @@ export class StepComponent implements OnInit, AfterViewInit, OnDestroy {
 
   init() {
     // 记录个数
-    this.index = this.stepConnectService.itemIndex;
+    // this.index = this.stepConnectService.itemIndex;
     this._processDot = this.stepConnectService.processDot;
     this._direction = this.stepConnectService.direction;
     this._current = this.stepConnectService.current;
@@ -158,11 +170,11 @@ export class StepComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
     this.initClassMap();
-    this.stepConnectService.itemIndex += 1;
+    // this.stepConnectService.itemIndex += 1;
     /** judge if last step */
     if (!this.erf.nativeElement.nextElementSibling) {
       this._last = true;
-    } else {
+    } /*else {
       this.stepConnectService.lastElementSizeEvent.subscribe(data => {
         const {count, width} = data;
         this._renderer.setStyle(this.erf.nativeElement, 'width', 100 / (count - 1) + '%');
@@ -171,7 +183,7 @@ export class StepComponent implements OnInit, AfterViewInit, OnDestroy {
           this._renderer.setStyle(this._stepsTail.nativeElement, 'padding-right', width / (count - 1) + 5 + 'px');
         }
       });
-    }
+    }*/
   }
 
   constructor(private erf: ElementRef, private stepConnectService: StepConnectService, private _renderer: Renderer2) {

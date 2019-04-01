@@ -1,4 +1,5 @@
-import { GroupDescriptor, SortDescriptor } from '@gradii/triangle/data-query';
+import { FilterDescriptor, GroupDescriptor, SortDescriptor } from '@gradii/triangle/data-query';
+import { CompositeFilterDescriptor } from '@gradii/triangle/data-query';
 
 export interface PageChangeEvent {
   skip: number;
@@ -14,4 +15,6 @@ export interface DataStateChangeEvent {
   sort?: SortDescriptor[];
 
   group?: GroupDescriptor[];
+
+  filter?: CompositeFilterDescriptor;
 }

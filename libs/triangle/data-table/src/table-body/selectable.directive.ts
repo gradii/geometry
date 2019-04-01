@@ -1,6 +1,5 @@
-import { SelectionEvent } from '@gradii/triangle/data-table';
 import { Directive, HostBinding, HostListener, Input } from '@angular/core';
-import { SelectionService } from '../selection/selection.service';
+import { SelectionEvent, SelectionService } from '../selection/selection.service';
 
 /**
  * @deprecated

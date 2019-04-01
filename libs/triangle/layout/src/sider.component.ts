@@ -8,11 +8,11 @@ export type BreakPoinit = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   encapsulation: ViewEncapsulation.None,
   template     : `
     <ng-content></ng-content>
-    <span class="ant-layout-sider-zero-width-trigger" *ngIf="_isZeroTrigger" (click)="toggleCollapse()">
+    <span class="tri-layout-sider-zero-width-trigger" *ngIf="_isZeroTrigger" (click)="toggleCollapse()">
       <i class="anticon anticon-bars"></i>
     </span>
-    <div class="ant-layout-sider-trigger" *ngIf="_isSiderTrgger" (click)="toggleCollapse()">
-      <i class="anticon" [class.triicon-left]="!collapsed" [class.triicon-right]="collapsed"></i>
+    <div class="tri-layout-sider-trigger" *ngIf="_isSiderTrgger" (click)="toggleCollapse()">
+      <i class="anticon" [class.anticon-left]="!collapsed" [class.anticon-right]="collapsed"></i>
     </div>
   `
 })
@@ -124,17 +124,6 @@ export class SiderComponent {
               private layoutComponent: LayoutComponent) {
     if (this.layoutComponent) {
       this.layoutComponent.hasSider = true;
-    }
-    if (typeof window !== 'undefined') {
-      const matchMediaPolyfill = (mediaQuery: string): MediaQueryList => {
-        return {
-          media  : mediaQuery,
-          matches: false,
-          addListener() {},
-          removeListener() {}
-        };
-      };
-      window.matchMedia = window.matchMedia || matchMediaPolyfill;
     }
   }
 

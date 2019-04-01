@@ -3,7 +3,7 @@ import { isPresent } from '@gradii/triangle/util';
 import { FilterService } from './filter.service';
 
 export function flatten(filter) {
-  if (isPresent(filter.filters)) {
+  if (isPresent(filter) && isPresent(filter.filters)) {
     return filter.filters.reduce(
       (acc, curr) => acc.concat(isCompositeFilterDescriptor(curr) ? flatten(curr) : [curr]),
       []
@@ -72,8 +72,7 @@ export abstract class BaseFilterCellComponent /*implements AfterContentInit, OnD
 
 
   protected filterByField(field: string): FilterDescriptor {
-    const currentFilter = this.filtersByField(field)[0];
-    return currentFilter;
+    return this.filtersByField(field)[0];
   }
 
   protected filtersByField(field: string): FilterDescriptor[] {

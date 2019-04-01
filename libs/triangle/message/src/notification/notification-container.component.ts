@@ -6,7 +6,7 @@ import { NOTIFICATION_CONFIG, NOTIFICATION_DEFAULT_CONFIG, NotificationConfig } 
   selector     : 'tri-notification-container',
   encapsulation: ViewEncapsulation.None,
   template     : `
-    <div class="ant-notification" [style.top]="config.nzTop" [style.right]="config.nzRight">
+    <div class="tri-notification" [style.top]="config.top" [style.right]="config.right">
       <tri-notification *ngFor="let message of messages; let i = index" [message]="message" [index]="i"></tri-notification>
     </div>
   `

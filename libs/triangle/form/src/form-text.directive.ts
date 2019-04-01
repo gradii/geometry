@@ -1,9 +1,10 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[triFormText], [tri-form-text]'
+  selector: 'tri-form-text, [triFormText], [tri-form-text]',
+  host: {
+    '[class.tri-form-text]': 'true'
+  }
 })
 export class FormTextDirective {
-  @HostBinding(`class.tri-form-text`)
-  _nzFormText = true;
 }

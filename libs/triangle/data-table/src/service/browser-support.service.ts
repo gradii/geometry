@@ -7,7 +7,7 @@ export class BrowserSupportService {
     const document = getDocument();
     if (!this.scrollbar && document && document.createElement) {
       const div = document.createElement('div');
-      div.style.cssText = 'overflow:scroll;overflow-x:hidden;zoom:1;clear:both;display:block';
+      div.style.cssText = 'overflow:scroll;overflow-x:hidden;overflow-x:overlay;overflow-y:overlay;zoom:1;clear:both;display:block';
       div.innerHTML = '&nbsp;';
       document.body.appendChild(div);
       this.scrollbar = div.offsetWidth - div.scrollWidth;

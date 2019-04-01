@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ProgressAComponent } from './progress-a.component';
+import { ProgressBarAComponent } from './progress-bar-a.component';
 import { ProgressComponent } from './progress.component';
 
 /**
@@ -27,8 +29,13 @@ import { ProgressComponent } from './progress.component';
  <!-- example(tri-demo-progress-line-dynamic) -->
  */
 @NgModule({
-  exports     : [ProgressComponent],
-  declarations: [ProgressComponent],
+  exports     : [
+    ProgressComponent,
+    ProgressAComponent
+  ],
+  declarations: [
+    ProgressComponent,
+    ProgressAComponent, ProgressBarAComponent],
   imports     : [CommonModule]
 })
 export class TriProgressModule {}

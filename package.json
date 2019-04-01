@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "format": "prettier --single-quote --print-width 120 --write \"{apps,libs}/**/*.ts\"",
-    "postinstall": "node tools/cli-patches/patch.js"
+    "postinstall": "ngc -p angular-tsconfig.json"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
@@ -33,19 +33,30 @@
     "@nrwl/nx": "^7.6.2",
     "bootstrap": "^4.3.1",
     "core-js": "^2.6.5",
+    "date-fns": "^2.0.0-alpha.27",
     "global": "^4.3.2",
     "highlight.js": "^9.15.6",
+    "ix": "^2.5.3",
     "moment": "^2.24.0",
     "node-gyp": "^3.8.0",
     "normalize-scss": "^7.0.1",
     "rxjs": "^6.4.0",
+    "tslib": "^1.9.0",
     "zone.js": "^0.8.29"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "~0.13.0",
+    "@angular/bazel": "^7.2.11",
     "@angular/cli": "^7.3.4",
     "@angular/compiler-cli": "^7.2.7",
     "@angular/material": "^7.3.3",
     "@angular/service-worker": "^7.2.7",
+    "@bazel/bazel": "^0.23.2",
+    "@bazel/ibazel": "^0.10.0",
+    "@bazel/jasmine": "^0.27.9",
+    "@bazel/karma": "^0.27.9",
+    "@bazel/typescript": "^0.26.0",
+    "@nrwl/builders": "^7.8.3",
     "@nrwl/schematics": "^7.6.2",
     "@types/fs-extra": "^5.0.5",
     "@types/glob": "^7.1.1",
@@ -79,7 +90,10 @@
     "gulp-transform": "^3.0.5",
     "http-rewrite-middleware": "^0.1.6",
     "jasmine-core": "~3.3.0",
+    "jasmine-marbles": "^0.4.1",
     "jasmine-spec-reporter": "~4.2.1",
+    "jest": "^24.7.1",
+    "jest-preset-angular": "^7.1.0",
     "js-yaml": "^3.12.2",
     "karma": "~4.0.1",
     "karma-chrome-launcher": "~2.2.0",
@@ -105,8 +119,12 @@
     "ts-node": "~8.0.2",
     "tsconfig-paths": "^3.8.0",
     "tslint": "~5.13.1",
-    "typescript": "~3.3.3333",
+    "typescript": "~3.2.0",
     "unist-util-visit": "^1.4.0",
     "winston": "^3.2.1"
+  },
+  "optionalDependencies": {
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.7"
   }
 }

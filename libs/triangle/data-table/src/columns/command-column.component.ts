@@ -1,4 +1,4 @@
-import { Component, ContentChild, Host, Optional, SkipSelf, TemplateRef } from '@angular/core';
+import { Component, ContentChild, Host, Input, Optional, SkipSelf, TemplateRef } from '@angular/core';
 import { CellTemplateDirective } from '../directive/cell-template.directive';
 import { AutoGenerateColumnPositon, ColumnBase } from './column-base';
 
@@ -14,6 +14,13 @@ import { AutoGenerateColumnPositon, ColumnBase } from './column-base';
 })
 export class CommandColumnComponent extends ColumnBase {
   public autoGenerateColumnPosition = 'end' as AutoGenerateColumnPositon;
+
+  @Input() cssClass: | string
+    | string[]
+    | Set<string>
+    | {
+    [key: string]: any;
+  } = 'tri-data-table-command-column';
 
   parent: ColumnBase;
   @ContentChild(CellTemplateDirective) template: CellTemplateDirective;

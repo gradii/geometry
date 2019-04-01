@@ -1,11 +1,11 @@
-import { Directive, HostBinding, HostListener, Input } from '@angular/core';
+import { Directive, HostBinding, HostListener, Input, OnChanges, OnDestroy } from '@angular/core';
 import { RadioGroupDirective } from './radio-group.directive';
 import { RadioOption } from './radio.component';
 
 @Directive({
   selector: '[tri-radio-tile], [triRadioTile]'
 })
-export class RadioTileDirective implements RadioOption {
+export class RadioTileDirective implements RadioOption, OnChanges, OnDestroy {
   _label: string;
   _value: string;
   _checked = false;
@@ -21,7 +21,7 @@ export class RadioTileDirective implements RadioOption {
     this._label = value;
   }
 
-  @Input() toggleable: boolean;
+  @Input() toggleable: boolean = true;
 
   @Input()
   @HostBinding('class.tri-radio-wrapper-checked')
@@ -61,7 +61,7 @@ export class RadioTileDirective implements RadioOption {
   @Input()
   @HostBinding('class.tri-radio-wrapper-disabled')
   get disabled(): boolean {
-    return this._disabled;
+    return this._disabled || this.radioGroup._disabled;
   }
 
   /**
@@ -76,7 +76,7 @@ export class RadioTileDirective implements RadioOption {
   @HostListener('click', ['$event'])
   onClick(e) {
     e.preventDefault();
-    if (!this._disabled) {
+    if (!this.disabled) {
       if (this.toggleable && this._checked) {
         this._checked = false;
         this.radioGroup.selectRadio(null);
@@ -89,5 +89,13 @@ export class RadioTileDirective implements RadioOption {
 
   constructor(protected radioGroup: RadioGroupDirective) {
     this.radioGroup.addRadio(this);
+  }
+
+  ngOnChanges() {
+    this.radioGroup.updateChecked();
+  }
+
+  ngOnDestroy() {
+    this.radioGroup.removeRadio(this);
   }
 }

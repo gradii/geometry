@@ -12,8 +12,9 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { debounceTime } from 'rxjs/operator/debounceTime';
-import { Subject } from 'rxjs/Subject';
+
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { MenuComponent } from './menu.component';
 
 @Component({
@@ -181,7 +182,7 @@ export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    debounceTime.call(this._$mouseSubject, 300).subscribe((data: boolean) => {
+    this._$mouseSubject.pipe(debounceTime(300)).subscribe((data: boolean) => {
       this.open = data;
     });
   }

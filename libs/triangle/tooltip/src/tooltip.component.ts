@@ -1,23 +1,9 @@
-import { ConnectionPositionPair } from '@angular/cdk/overlay';
-import { AnimationEvent } from '@angular/animations';
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ContentChild,
-  EventEmitter,
-  Input,
-  Output,
-  Renderer2,
-  TemplateRef,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
 import { DEFAULT_4_POSITIONS, FadeAnimation, POSITION_MAP } from '@gradii/triangle/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { AnimationEvent } from '@angular/animations';
+import { CdkConnectedOverlay, ConnectionPositionPair } from '@angular/cdk/overlay';
+import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, EventEmitter, Input, Output, Renderer2, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { BehaviorSubject ,  Observable } from 'rxjs';
 import { TooltipDirective } from './tooltip.directive';
-import { ConnectedOverlayDirective } from '@angular/cdk/overlay';
 
 @Component({
   selector     : 'tri-tooltip',
@@ -35,11 +21,11 @@ import { ConnectedOverlayDirective } from '@angular/cdk/overlay';
       (positionChange)="onPositionChange($event)"
       [cdkConnectedOverlayPositions]="_positions"
       [cdkConnectedOverlayOpen]="visible$ | async">
-      <div class="ant-tooltip" [ngClass]="_classMap" [ngStyle]="overlayStyle" [@fadeAnimation]="''+(visible$ | async)"
+      <div class="tri-tooltip" [ngClass]="_classMap" [ngStyle]="overlayStyle" [@fadeAnimation]="''+(visible$ | async)"
            (@fadeAnimation.done)="_afterVisibilityAnimation($event)">
-        <div class="ant-tooltip-content">
-          <div class="ant-tooltip-arrow"></div>
-          <div class="ant-tooltip-inner">
+        <div class="tri-tooltip-content">
+          <div class="tri-tooltip-arrow"></div>
+          <div class="tri-tooltip-inner">
             <span *ngIf="!tooltipTemplate">{{title}}</span>
             <ng-template
               *ngIf="tooltipTemplate"
@@ -87,7 +73,7 @@ export class ToolTipComponent implements AfterViewInit {
   /**
    * #overlay
    */
-  @ViewChild('overlay') overlay: ConnectedOverlayDirective;
+  @ViewChild('overlay') overlay: CdkConnectedOverlay;
 
   /**
    * Set to manual control overlay display and hidden. two way binding
@@ -132,7 +118,7 @@ export class ToolTipComponent implements AfterViewInit {
     return this._trigger;
   }
 
-  _prefix = 'ant-tooltip-placement';
+  _prefix = 'tri-tooltip-placement';
   _positions: ConnectionPositionPair[] = [...DEFAULT_4_POSITIONS];
   _classMap = {};
   _placement = 'top';
@@ -205,7 +191,7 @@ export class ToolTipComponent implements AfterViewInit {
   setClassMap() {
     this._classMap = {
       [this.overlayClassName]                     : true,
-      [`ant-tooltip-placement-${this._placement}`]: true
+      [`tri-tooltip-placement-${this._placement}`]: true
     };
   }
 

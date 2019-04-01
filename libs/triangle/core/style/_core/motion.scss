@@ -1,4 +1,3 @@
-@import "../_mixins/motion";
 @import "motion/fade";
 @import "motion/move";
 @import "motion/other";
@@ -6,10 +5,12 @@
 @import "motion/swing";
 @import "motion/zoom";
 
-// For common/openAnimation
-.ant-motion-collapse {
-  overflow: hidden;
-  &-active {
-    transition: height .15s $ease-in-out, opacity .15s $ease-in-out !important;
+@include import-once('core:motion', true) {
+  // For common/openAnimation
+  .tri-motion-collapse {
+    overflow : hidden;
+    &-active {
+      transition : height .15s $ease-in-out, opacity .15s $ease-in-out !important;
+    }
   }
 }

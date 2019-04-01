@@ -1,13 +1,13 @@
 import { Directive, HostBinding } from '@angular/core';
 
 @Directive({
-  selector: '[triFormItem], [tri-form-item]'
+  selector: 'tri-form-item, [triFormItem], [tri-form-item]',
+  host    : {
+    '[class.tri-form-item]': 'true'
+  }
 })
 export class FormItemDirective {
   _withHelp = 0;
-
-  @HostBinding(`class.tri-form-item`)
-  _nzFormItem = true;
 
   enableHelp() {
     this._withHelp++;
@@ -22,5 +22,6 @@ export class FormItemDirective {
     return this._withHelp > 0;
   }
 
-  constructor() {}
+  constructor() {
+  }
 }

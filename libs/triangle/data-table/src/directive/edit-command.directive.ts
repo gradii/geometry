@@ -24,7 +24,7 @@ export class EditCommandDirective {
     return this.editService.isEdited(this.rowIndex) ? 'none' : '';
   }
 
-  @HostBinding('class.tri-grid-edit-command')
+  @HostBinding('class.tri-data-table-edit-command')
   get commandClass() {
     return true;
   }

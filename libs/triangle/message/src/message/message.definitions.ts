@@ -11,6 +11,7 @@ export interface MessageData {
 
   // For string content
   type?: 'success' | 'info' | 'warning' | 'error' | 'loading' | any;
+  title?: string;
   content?: string;
 }
 

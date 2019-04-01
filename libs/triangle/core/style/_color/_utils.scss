@@ -1,7 +1,6 @@
 // Color Utilities
 // ===============
 
-
 // Tint
 // ----
 /// Mix a color with `white` to get a lighter tint.
@@ -23,7 +22,6 @@
   @return mix(#fff, $color, $percentage);
 }
 
-
 // Shade
 // -----
 /// Mix a color with `black` to get a darker shade.
@@ -43,41 +41,4 @@
   $percentage
 ) {
   @return mix(#000, $color, $percentage);
-}
-
-
-// Get Function
-// ------------
-/// Get a first-class function in Sass 3.5+,
-/// or the function name string (unchanged)
-/// in older Sass versions.
-/// This is safe to use internally,
-/// as it allows users to pass in
-/// either a string, or a previously-captured function.
-///
-/// @access private
-///
-/// @param {String | Function} $function -
-///   The name (string) of a function,
-///   or the function to be called.
-/// @return {String | Function} -
-///   Returns a first-class function in Sass 3.5+,
-///   or the function name string in older Sass versions.
-@function _ac-color-get-function(
-  $function
-) {
-  $type: type-of($function);
-  $local: ('tint', 'shade');
-
-  @if ($type == 'function') {
-    @return $function;
-  } @else if ($type == 'string') and function-exists('get-function') {
-    @if index($local, $function) {
-      @return get-function($function);
-    }
-
-    @error '[#{$type}] `#{$function}` must be a first-class function';
-  }
-
-  @return $function;
 }

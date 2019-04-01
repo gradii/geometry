@@ -98,7 +98,7 @@ export let operators = (function () {
   };
   const apply = function (template, a, b, ignore) {
     if (ignore) {
-      a = `(${a} || '').toLowerCase()`;
+      a = `((${a} || '')+'').toLowerCase()`;
       if (b) {
         b = b.toLowerCase();
       }

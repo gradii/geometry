@@ -2,30 +2,32 @@
   @include make-motion($className, $keyframeName);
   .#{$className}-enter,
   .#{$className}-appear {
-    opacity: 0;
-    animation-timing-function: linear;
+    opacity                   : 0;
+    animation-timing-function : linear;
   }
   .#{$className}-leave {
-    animation-timing-function: linear;
+    animation-timing-function : linear;
   }
 }
 
-@include fade-motion(fade, antFade);
+@include import-once('core:motion:fade', true) {
+  @include fade-motion(fade, antFade);
 
-@keyframes antFadeIn {
-  0% {
-    opacity: 0;
+  @keyframes antFadeIn {
+    0% {
+      opacity : 0;
+    }
+    100% {
+      opacity : 1;
+    }
   }
-  100% {
-    opacity: 1;
-  }
-}
 
-@keyframes antFadeOut {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
+  @keyframes antFadeOut {
+    0% {
+      opacity : 1;
+    }
+    100% {
+      opacity : 0;
+    }
   }
 }

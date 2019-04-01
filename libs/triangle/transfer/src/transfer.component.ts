@@ -1,3 +1,5 @@
+import { coerceToBoolean } from '@gradii/triangle/util';
+// tslint:disable:member-ordering
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -12,10 +14,8 @@ import {
   TemplateRef,
   ViewEncapsulation
 } from '@angular/core';
-import { LocaleService } from '@gradii/triangle/locale';
-import { coerceToBoolean } from '@gradii/triangle/util';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { I18nService } from '@gradii/triangle/i18n';
+import { Observable, of } from 'rxjs';
 import { TransferItem } from './item';
 
 export interface TransferCanMove {
@@ -44,7 +44,7 @@ export interface TransferSelectChange {
 @Component({
   selector       : 'tri-transfer',
   template       : `
-    <tri-transfer-list class="ant-transfer-list" [ngStyle]="listStyle" data-direction="left"
+    <tri-transfer-list class="tri-transfer-list" [ngStyle]="listStyle" data-direction="left"
                        [titleText]="titles[0]"
                        [dataSource]="leftDataSource"
                        [filter]="leftFilter"
@@ -59,15 +59,15 @@ export interface TransferSelectChange {
                        [footer]="footer"
                        (handleSelect)="handleLeftSelect($event)"
                        (handleSelectAll)="handleLeftSelectAll($event)"></tri-transfer-list>
-    <div class="ant-transfer-operation">
-      <button tri-button (click)="moveToLeft()" [disabled]="!leftActive" [type]="'primary'" [size]="'small'">
-        <i class="anticon anticon-left"></i><span *ngIf="operations[1]">{{ nzOperations[1] }}</span>
+    <div class="tri-transfer-operation">
+      <button tri-button (click)="moveToLeft()" [disabled]="!leftActive" [color]="'primary'" [size]="'small'">
+        <i class="anticon anticon-left"></i><span *ngIf="operations[1]">{{ operations[1] }}</span>
       </button>
-      <button tri-button (click)="moveToRight()" [disabled]="!rightActive" [type]="'primary'" [size]="'small'">
+      <button tri-button (click)="moveToRight()" [disabled]="!rightActive" [color]="'primary'" [size]="'small'">
         <i class="anticon anticon-right"></i><span *ngIf="operations[0]">{{ operations[0] }}</span>
       </button>
     </div>
-    <tri-transfer-list class="ant-transfer-list" [ngStyle]="listStyle" data-direction="right"
+    <tri-transfer-list class="tri-transfer-list" [ngStyle]="listStyle" data-direction="right"
                        [titleText]="titles[1]"
                        [dataSource]="rightDataSource"
                        [filter]="rightFilter"
@@ -99,13 +99,12 @@ export class TransferComponent implements OnChanges {
   // region: fields
 
   @Input() dataSource: TransferItem[] = [];
-  @Input() titles: string[] = this._locale.translate('Transfer.titles').split(',');
+  @Input() titles: string[] = this.localization.translate('Transfer.titles').split(',');
   @Input() operations: string[] = [];
   @Input() listStyle: object;
-  @Input() itemUnit = this._locale.translate('Transfer.itemUnit');
-  @Input() itemsUnit = this._locale.translate('Transfer.itemsUnit');
+  @Input() itemUnit = this.localization.translate('Transfer.itemUnit');
+  @Input() itemsUnit = this.localization.translate('Transfer.itemsUnit');
   @Input() canMove: (arg: TransferCanMove) => Observable<TransferItem[]> = (arg: TransferCanMove) => of(arg.list);
-  // tslint:disable:member-ordering
   @ContentChild('render') render: TemplateRef<void>;
   @ContentChild('footer') footer: TemplateRef<void>;
 
@@ -120,8 +119,8 @@ export class TransferComponent implements OnChanges {
   }
 
   @Input() filterOption: (inputValue: string, item: TransferItem) => boolean;
-  @Input() searchPlaceholder = this._locale.translate('Transfer.searchPlaceholder');
-  @Input() notFoundContent = this._locale.translate('Transfer.notFoundContent');
+  @Input() searchPlaceholder = this.localization.translate('Transfer.searchPlaceholder');
+  @Input() notFoundContent = this.localization.translate('Empty.description');
 
   // events
   @Output() change: EventEmitter<TransferChange> = new EventEmitter();
@@ -166,7 +165,7 @@ export class TransferComponent implements OnChanges {
     this.selectionChange.emit({direction, checked, list, item});
   }
 
-  handleFilterChange(ret: { direction: string, value: string }): void {
+  handleFilterChange(ret: { direction: string; value: string }): void {
     this.searchChange.emit(ret);
     this.cd.detectChanges();
   }
@@ -179,11 +178,8 @@ export class TransferComponent implements OnChanges {
   rightActive = false;
 
   private updateOperationStatus(direction: string, count?: number): void {
-    this[direction === 'right' ? 'leftActive' : 'rightActive'] = (
-      typeof count === 'undefined' ?
-        this.getCheckedData(direction).filter(w => !w.disabled).length :
-        count
-    ) > 0;
+    this[direction === 'right' ? 'leftActive' : 'rightActive'] =
+      (typeof count === 'undefined' ? this.getCheckedData(direction).filter(w => !w.disabled).length : count) > 0;
     this.cd.detectChanges();
   }
 
@@ -195,11 +191,10 @@ export class TransferComponent implements OnChanges {
     this.updateOperationStatus(oppositeDirection, 0);
     const datasource = direction === 'left' ? this.rightDataSource : this.leftDataSource;
     const moveList = datasource.filter(item => item.checked === true && !item.disabled);
-    this.canMove({direction, list: moveList})
-      .subscribe(
-        newMoveList => this.truthMoveTo(direction, newMoveList.filter(i => !!i)),
-        () => moveList.forEach(i => i.checked = false)
-      );
+    this.canMove({direction, list: moveList}).subscribe(
+      newMoveList => this.truthMoveTo(direction, newMoveList.filter(i => !!i)),
+      () => moveList.forEach(i => (i.checked = false))
+    );
   }
 
   private truthMoveTo(direction: string, list: TransferItem[]): void {
@@ -223,8 +218,7 @@ export class TransferComponent implements OnChanges {
 
   // endregion
 
-  constructor(private _locale: LocaleService, private el: ElementRef, private cd: ChangeDetectorRef) {
-  }
+  constructor(private localization: I18nService, private el: ElementRef, private cd: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('dataSource' in changes || 'targetKeys' in changes) {

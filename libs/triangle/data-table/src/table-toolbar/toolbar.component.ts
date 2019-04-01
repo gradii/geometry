@@ -11,7 +11,7 @@ import { DataTableComponent } from '../data-table.component';
   `,
   host    : {
     '[class.tri-header]'      : 'true',
-    '[class.tri-grid-toolbar]': 'true'
+    '[class.tri-data-table-toolbar]': 'true'
   }
 })
 export class ToolbarComponent {
@@ -19,7 +19,7 @@ export class ToolbarComponent {
 
   @HostBinding('class')
   get classNames(): string {
-    return 'ant-header ant-grid-toolbar';
+    return 'tri-header tri-data-table-toolbar';
   }
 
   get toolbarTemplateRef(): TemplateRef<any> {

@@ -1,6 +1,7 @@
 import { calculateNodeHeight } from '@gradii/triangle/util';
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ContentChild,
   ElementRef,
@@ -9,6 +10,7 @@ import {
   HostListener,
   Input,
   Output,
+  Renderer2,
   TemplateRef,
   ViewChild,
   ViewEncapsulation
@@ -23,16 +25,14 @@ export interface AutoSizeType {
 export type SizeType = 'large' | 'small' | 'default';
 
 @Component({
-  moduleId           : module.id,
-  selector           : 'tri-input',
-  encapsulation      : ViewEncapsulation.None,
-  preserveWhitespaces: false,
-  template           : `
-    <span class="ant-input-group-addon" *ngIf="_addOnContentBefore">
+  selector     : 'tri-input',
+  encapsulation: ViewEncapsulation.None,
+  template     : `
+    <span class="tri-input-group-addon" *ngIf="_addOnContentBefore">
       <ng-template [ngTemplateOutlet]="_addOnContentBefore">
       </ng-template>
     </span>
-    <span class="ant-input-prefix" *ngIf="_prefixContent">
+    <span class="tri-input-prefix" *ngIf="_prefixContent">
       <ng-template [ngTemplateOutlet]="_prefixContent">
       </ng-template>
     </span>
@@ -44,13 +44,13 @@ export type SizeType = 'large' | 'small' | 'default';
         [disabled]="disabled"
         [readonly]="readonly"
         [attr.type]="type"
-        class="ant-input"
+        class="tri-input"
         [class.tri-input-sm]="_size=='small'"
         [class.tri-input-lg]="_size=='large'"
         [class.tri-input-disabled]="_disabled"
         [class.tri-input-search]="type==='search'"
         [ngClass]="_classMap"
-        [attr.placeholder]="placeHolder"
+        [attr.placeholder]="placeholder"
         [(ngModel)]="value">
     </ng-template>
     <ng-template [ngIf]="type=='textarea'">
@@ -65,30 +65,31 @@ export type SizeType = 'large' | 'small' | 'default';
         type="textarea"
         [attr.rows]="rows"
         [attr.cols]="cols"
-        class="ant-input"
+        class="tri-input"
         [class.tri-input-sm]="_size=='small'"
         [class.tri-input-lg]="_size=='large'"
         [class.tri-input-disabled]="_disabled"
-        [attr.placeholder]="placeHolder"
+        [attr.placeholder]="placeholder"
         [(ngModel)]="value"></textarea>
     </ng-template>
-    <span class="ant-input-suffix" *ngIf="(type==='search')||(_suffixContent)">
-      <i class="anticon anticon-search ant-input-search-icon" *ngIf="type==='search'"></i>
+    <span class="tri-input-suffix" *ngIf="(type==='search')||(_suffixContent)">
+      <i class="anticon anticon-search tri-input-search-icon" *ngIf="type==='search'"></i>
       <ng-template [ngTemplateOutlet]="_suffixContent">
       </ng-template>
     </span>
-    <span class="ant-input-group-addon" *ngIf="_addOnContentAfter">
+    <span class="tri-input-group-addon" *ngIf="_addOnContentAfter">
       <ng-template [ngTemplateOutlet]="_addOnContentAfter">
       </ng-template>
     </span>`,
-  providers          : [
+  providers    : [
     {
       provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => InputComponent),
       multi      : true
     }
   ],
-  host               : {
+  exportAs     : 'triInput',
+  host         : {
     '[class.tri-input-wrapper]'      : 'type !== "search" && !_prefixContent && !_suffixContent',
     '[class.tri-input-affix-wrapper]': 'type === "search" || _prefixContent || _suffixContent',
     '[class.tri-input-group]'        : '_addOnContentBefore || _addOnContentAfter'
@@ -98,7 +99,7 @@ export class InputComponent implements ControlValueAccessor, AfterViewInit {
   // _el: HTMLElement;
   _value: string;
   _size: SizeType = 'default';
-  _prefixCls = 'ant-input';
+  _prefixCls = 'tri-input';
   _composing = false;
   _classMap;
   _disabled = false;
@@ -109,7 +110,14 @@ export class InputComponent implements ControlValueAccessor, AfterViewInit {
   onChange: any = Function.prototype;
   onTouched: any = Function.prototype;
 
-  @Input() placeHolder: string;
+  /**
+   * @deprecated
+   */
+  @Input() set placeHolder(value: string) {
+    this.placeholder = value;
+  }
+
+  @Input() placeholder: string;
 
   /**
    * [must] declare input type, same as the type attribute of the input tag. also, provider `type="textarea"`.
@@ -289,15 +297,14 @@ export class InputComponent implements ControlValueAccessor, AfterViewInit {
     textAreaRef.style.overflowY = textareaStyles.overflowY;
   }
 
-  textareaOnChange() {
+  textareaOnChange(event?) {
     if (this.type === 'textarea' && this.autosize) {
       this.resizeTextarea();
     }
   }
 
-  // constructor(private _elementRef: ElementRef, private _renderer: Renderer2) {
-  //   this._el = this._elementRef.nativeElement;
-  // }
+  constructor(private _elementRef: ElementRef, private _renderer: Renderer2, private _cdRef: ChangeDetectorRef) {
+  }
 
   // ngAfterContentInit() {
   // if (this.type === 'search' || this._prefixContent || this._suffixContent) {
@@ -309,6 +316,9 @@ export class InputComponent implements ControlValueAccessor, AfterViewInit {
   //   this._renderer.setAttribute(this._el, 'class', `ant-input-group`);
   // }
   // }
+  ngOnInit() {
+    this._cdRef.detectChanges();
+  }
 
   ngAfterViewInit() {
     if (this.type === 'textarea' && this.autosize) {

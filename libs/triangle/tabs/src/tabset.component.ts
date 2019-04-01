@@ -1,22 +1,9 @@
 /** code from https://github.com/angular/material2 */
 
-import {
-  AfterContentChecked,
-  AfterViewInit,
-  Component,
-  ContentChild,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  Renderer2,
-  TemplateRef,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operator/map';
+import { AfterContentChecked, AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { TabComponent } from './tab.component';
 import { TabsNavComponent } from './tabs-nav.component';
 
@@ -48,9 +35,7 @@ export type TabType = 'line' | 'card';
         [animated]="inkBarAnimated"
         [hideBar]="hide"
         [selectedIndex]="selectedIndex">
-        <ng-template #tabBarExtraContent>
-          <ng-template [ngTemplateOutlet]="tabBarExtraContent"></ng-template>
-        </ng-template>
+        <ng-template [ngTemplateOutlet]="tabBarExtraContent"></ng-template>
         <div
           triTabLabel
           [class.tri-tabs-tab-active]="(selectedIndex == i)&&!hide"
@@ -60,13 +45,13 @@ export type TabType = 'line' | 'card';
           <ng-template [ngTemplateOutlet]="tab._tabHeading"></ng-template>
         </div>
       </tri-tabs-nav>
-      <div class="ant-tabs-content"
+      <div class="tri-tabs-content"
            #tabContent
            [class.tri-tabs-content-animated]="tabPaneAnimated"
            [class.tri-tabs-content-no-animated]="!tabPaneAnimated"
            [style.margin-left.%]="tabPaneAnimated&&(-selectedIndex*100)">
         <tri-tab-body
-          class="ant-tabs-tabpane"
+          class="tri-tabs-tabpane"
           [class.tri-tabs-tabpane-active]="(selectedIndex == i)&&!hide"
           [class.tri-tabs-tabpane-inactive]="(selectedIndex != i)||hide"
           [content]="tab.content"
@@ -78,7 +63,7 @@ export type TabType = 'line' | 'card';
 export class TabSetComponent implements AfterContentChecked, OnInit, AfterViewInit {
   _el;
   _classMap;
-  _prefixCls = 'ant-tabs';
+  _prefixCls = 'tri-tabs';
   _width;
   _tabPosition: TabPosition = 'top';
   _tabPositionMode: TabPositionMode = 'horizontal';
@@ -121,7 +106,7 @@ export class TabSetComponent implements AfterContentChecked, OnInit, AfterViewIn
    */
   @Output()
   get selectedIndexChange(): Observable<number> {
-    return map.call(this.selectChange, event => event.index);
+    return this.selectChange.pipe(map(event => event.index));
   }
 
   /**
@@ -280,5 +265,6 @@ export class TabSetComponent implements AfterContentChecked, OnInit, AfterViewIn
     return this.animated === true || (<AnimatedInterface>this.animated).tabPane === true;
   }
 
-  constructor(private _renderer: Renderer2) {}
+  constructor(private _renderer: Renderer2) {
+  }
 }

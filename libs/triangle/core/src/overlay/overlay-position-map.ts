@@ -92,7 +92,9 @@ export const DEFAULT_4_POSITIONS = _objectValues([
   POSITION_MAP['bottom'],
   POSITION_MAP['left']
 ]);
-export const DEFAULT_DROPDOWN_POSITIONS = _objectValues([POSITION_MAP['bottomLeft'], POSITION_MAP['topLeft']]);
+export const DEFAULT_DROPDOWN_POSITIONS = _objectValues(
+  [POSITION_MAP['bottomLeft'], POSITION_MAP['topLeft'],
+  POSITION_MAP['bottomRight'], POSITION_MAP['topRight']]);
 export const DEFAULT_DATEPICKER_POSITIONS = [
   {
     originX : 'start',

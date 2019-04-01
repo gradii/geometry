@@ -4,8 +4,7 @@ import { NgModule } from '@angular/core';
 import { MESSAGE_DEFAULT_CONFIG_PROVIDER } from './message-config';
 import { MessageContainerComponent } from './message-container.component';
 import { MessageComponent } from './message.component';
-
-const providers = [MESSAGE_DEFAULT_CONFIG_PROVIDER];
+import { MessageService } from './message.service';
 
 /**
  *
@@ -55,7 +54,8 @@ const providers = [MESSAGE_DEFAULT_CONFIG_PROVIDER];
 @NgModule({
   imports        : [CommonModule, OverlayModule],
   declarations   : [MessageContainerComponent, MessageComponent],
-  providers      : providers,
+  providers      : [MESSAGE_DEFAULT_CONFIG_PROVIDER, MessageService],
   entryComponents: [MessageContainerComponent]
 })
-export class TriMessageModule {}
+export class TriMessageModule {
+}

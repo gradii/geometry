@@ -1,5 +1,5 @@
 import { TriButtonModule } from '@gradii/triangle/button';
-import { TriLocaleModule } from '@gradii/triangle/locale';
+import { TriI18nModule } from '@gradii/triangle/i18n';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -30,6 +30,6 @@ import { PopConfirmDirective } from './popconfirm.directive';
 @NgModule({
   declarations: [PopConfirmComponent, PopConfirmDirective],
   exports     : [PopConfirmComponent, PopConfirmDirective],
-  imports     : [CommonModule, TriButtonModule, OverlayModule, TriLocaleModule]
+  imports     : [CommonModule, TriButtonModule, OverlayModule, TriI18nModule]
 })
 export class TriPopConfirmModule {}

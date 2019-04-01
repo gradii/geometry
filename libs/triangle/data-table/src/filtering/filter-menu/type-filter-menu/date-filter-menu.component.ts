@@ -1,7 +1,7 @@
 import { CompositeFilterDescriptor, FilterDescriptor } from '@gradii/triangle/data-query';
-import { LocaleService } from '@gradii/triangle/locale';
 import { isNullOrEmptyString, isPresent } from '@gradii/triangle/util';
 import { Component, HostBinding, Input } from '@angular/core';
+import { I18nService } from '@gradii/triangle/i18n';
 import { ColumnComponent } from '../../../columns/column.component';
 import { extractFormat } from '../../../utils';
 import { BaseFilterCellComponent } from '../../base-filter-cell.component';
@@ -22,12 +22,11 @@ import { FilterService } from '../../filter.service';
       [max]="max"
     >
     </tri-data-table-date-filter-menu-input>
-    <tri-select 
+    <tri-select
       *ngIf="extra"
-      class="mb-2 ant-filter-and"
-      [options]="logicOperators"
-      [ngModel]="filter?.logic"
-    >
+      class="mb-2 tri-filter-and"
+      [ngModel]="filter?.logic">
+      <tri-option *ngFor="let it of operators" [label]="it.label" [value]="it.value"></tri-option>
     </tri-select>
     <tri-data-table-date-filter-menu-input
       class="mb-2"
@@ -77,7 +76,7 @@ export class DateFilterMenuComponent extends BaseFilterCellComponent {
 
   filterService: FilterService;
 
-  constructor(protected localization: LocaleService) {
+  constructor(protected localization: I18nService) {
     // super(null, localization);
     super(null);
   }

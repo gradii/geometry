@@ -19,7 +19,8 @@
     }
   },
   "files": [
-    "test.js"
+    "test.js",
+    "polyfills.ts"
   ],
   "include": [
     "**/*.spec.ts",

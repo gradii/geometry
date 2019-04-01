@@ -1,7 +1,7 @@
 import { CompositeFilterDescriptor, FilterDescriptor } from '@gradii/triangle/data-query';
-import { LocaleService } from '@gradii/triangle/locale';
 import { isNullOrEmptyString, isPresent } from '@gradii/triangle/util';
 import { Component, HostBinding, Input } from '@angular/core';
+import { I18nService } from '@gradii/triangle/i18n';
 import { ColumnComponent } from '../../../columns/column.component';
 import { extractFormat } from '../../../utils';
 import { BaseFilterCellComponent } from '../../base-filter-cell.component';
@@ -27,11 +27,10 @@ import { FilterService } from '../../filter.service';
     </tri-data-table-numeric-filter-menu-input>
     <tri-select
       *ngIf="extra"
-      class="ant-filter-and"
-      [options]="logicOperators"
+      class="tri-filter-and"
       [ngModel]="filter?.logic"
-      (ngModelChange)="logicChange($event)"
-    >
+      (ngModelChange)="logicChange($event)">
+      <tri-option *ngFor="let it of operators" [label]="it.label" [value]="it.value"></tri-option>
     </tri-select>
     <tri-data-table-numeric-filter-menu-input
       *ngIf="extra"
@@ -85,7 +84,7 @@ export class NumericFilterMenuComponent extends BaseFilterCellComponent {
   @Input() extra: boolean = true;
   @Input() filterService: FilterService;
 
-  constructor(localization: LocaleService) {
+  constructor(localization: I18nService) {
     super(null);
   }
 

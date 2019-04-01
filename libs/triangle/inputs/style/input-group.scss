@@ -1,0 +1,10 @@
+@import "./input-mixin";
+
+//== Style for input-group: input with label, with button or dropdown...
+.#{$ant-prefix}-input-group {
+  @include input-group("#{$ant-prefix}-input");
+  @at-root &-wrapper {
+    display        : inline-block;
+    vertical-align : top; // https://github.com/ant-design/ant-design/issues/6403
+  }
+}

@@ -1,85 +1,158 @@
-
-$timeline-prefix-cls: "#{$ant-prefix}-timeline";
-$timeline-color: $border-color-split;
+$timeline-prefix-cls : "#{$ant-prefix}-timeline";
+$timeline-color : $border-color-split;
 
 .#{$timeline-prefix-cls} {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  list-style : none;
+  margin     : 0;
+  padding    : 0;
 
-   @at-root &-item {
-    position: relative;
-    padding: 0 0 12px;
-    list-style: none;
-    margin: 0;
+  @at-root &-item {
+    display    : flex;
+    font-size  : $font-size-base;
+    position   : relative;
+    padding    : 0 0 12px;
+    list-style : none;
+    margin     : 0;
 
-     @at-root &-tail {
-      position: absolute;
-      left: 5px;
-      top: 0;
-      height: 100%;
-      border-left: 2px solid $timeline-color;
+    @at-root &-tail {
+      position    : absolute;
+      left        : 4px;
+      top         : 0.75em;
+      height      : 100%;
+      border-left : 2px solid $timeline-color;
     }
 
-     @at-root &-pending #{&}-tail {
-      display: none;
+    @at-root &-pending #{&}-head {
+      font-size : $font-size-sm;
     }
 
-     @at-root &-head {
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      background-color: $component-background;
-      border-radius: 100px;
-      border: 2px solid transparent;
-       @at-root &-blue {
-        border-color: $primary-color;
-        color: $primary-color;
+    @at-root &-pending #{&}-tail {
+      display : none;
+    }
+
+    @at-root &-head {
+      position         : absolute;
+      width            : 10px;
+      height           : 10px;
+      background-color : $component-background;
+      border-radius    : 100px;
+      border           : 2px solid transparent;
+      @at-root &-blue {
+        border-color : $primary-color;
+        color        : $primary-color;
       }
-       @at-root &-red {
-        border-color: $error-color;
-        color: $error-color;
+      @at-root &-red {
+        border-color : $error-color;
+        color        : $error-color;
       }
-       @at-root &-green {
-        border-color: $success-color;
-        color: $success-color;
+      @at-root &-green {
+        border-color : $success-color;
+        color        : $success-color;
       }
     }
 
-     @at-root &-head-custom {
-      position: absolute;
-      text-align: center;
-      width: 40px;
-      left: -14px;
-      line-height: 1;
-      margin-top: 6px;
-      border: 0;
-      height: auto;
-      border-radius: 0;
-      padding: 3px 0;
-      font-size: $font-size-base;
-      transform: translateY(-50%);
+    @at-root &-head-custom {
+      position      : absolute;
+      text-align    : center;
+      width         : auto;
+      height        : auto;
+      top           : 5.5px;
+      left          : 5px;
+      line-height   : 1;
+      margin-top    : 0;
+      border        : 0;
+      border-radius : 0;
+      padding       : 3px 1px;
+      transform     : translateY(-50%);
     }
 
-     @at-root &-content {
-      padding: 0 0 10px 24px;
-      font-size: $font-size-base;
-      position: relative;
-      top: -3px;
+    @at-root &-content {
+      position : relative;
+      top      : - rem-convert('px', $font-size-base * $line-height-base - $font-size-base) + 1px;
+      margin   : 0 0 0 18px;
     }
 
-     @at-root &-last {
+    @at-root &-last {
       .#{$timeline-prefix-cls}-item-tail {
-        border-left: 2px dotted $timeline-color;
-        display: none;
+        display : none;
       }
+
       .#{$timeline-prefix-cls}-item-content {
-        min-height: 48px;
+        min-height : 48px;
       }
     }
   }
 
-   @at-root &#{&}-pending #{&}-item-last #{&}-item-tail {
-    display: block;
+
+  &.#{$timeline-prefix-cls}-alternate,
+  &.#{$timeline-prefix-cls}-right {
+    .#{$timeline-prefix-cls}-item {
+      &-tail,
+      &-head,
+      &-head-custom {
+        left : 50%;
+      }
+
+      &-head {
+        margin-left : -4px;
+
+        &-custom {
+          margin-left : 1px;
+        }
+      }
+
+      .#{$timeline-prefix-cls}-item-content {
+        &-right {
+          left       : 50%;
+          width      : 50%;
+          text-align : left;
+        }
+      }
+
+      .#{$timeline-prefix-cls}-item-content {
+        &-left {
+          right      : 50%;
+          width      : 50%;
+          margin     : 0 18px 0 0;
+          text-align : right;
+        }
+      }
+    }
+  }
+
+  &.#{$timeline-prefix-cls}-right {
+    .#{$timeline-prefix-cls}-item-left {
+      .#{$timeline-prefix-cls}-item-tail,
+      .#{$timeline-prefix-cls}-item-head,
+      .#{$timeline-prefix-cls}-item-head-custom {
+        left : 100%;
+      }
+
+      .#{$timeline-prefix-cls}-item-content {
+        right : 0;
+        left  : -30px;
+        width : 100%;
+      }
+    }
+  }
+
+  @at-root &#{&}-pending #{&}-item-last #{&}-item-tail {
+    display     : block;
+    border-left : 2px dotted $timeline-color;
+  }
+
+  @at-root &#{&}-reverse #{&}-item-last #{&}-item-tail {
+    display : none;
+  }
+
+  @at-root &#{&}-reverse #{&}-item-pending {
+    .#{$timeline-prefix-cls}-item-tail {
+      display     : block;
+      border-left : 2px dotted $timeline-color;
+    }
+
+    .#{$timeline-prefix-cls}-item-content {
+      min-height : 48px;
+    }
   }
 }
