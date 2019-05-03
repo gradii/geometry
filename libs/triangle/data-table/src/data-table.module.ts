@@ -5,8 +5,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { DataTableComponent } from './data-table.component';
 // import { CldrIntlService, IntlService } from '@gradii/triangle/tri-angular-intl';
-import { DataBindingDirective } from './directive/databinding.directive';
-import { PaginationBindingDirective } from './directive/pagination-binding.directive';
 import { FilterSimpleModule } from './filtering/filter-simple/filter-simple.module';
 // import { LocalizedMessagesDirective } from './localization/localized-messages.directive';
 // import { CustomMessagesComponent } from './localization/custom-messages.component';
@@ -28,18 +26,14 @@ import { ToolbarComponent } from './table-toolbar/toolbar.component';
     ToolbarComponent,
     // LocalizedMessagesDirective,
     // CustomMessagesComponent,
-    DataBindingDirective,
     ToolbarTemplateDirective,
     SelectionDirective,
-    PaginationBindingDirective,
   ],
   exports     : [
     DataTableComponent,
     ToolbarTemplateDirective,
     // ToolbarComponent,
-    DataBindingDirective,
     SelectionDirective,
-    PaginationBindingDirective,
     // CustomMessagesComponent,
     GroupModule.exports(),
     SharedModule.exports(),

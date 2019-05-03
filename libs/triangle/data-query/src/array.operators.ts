@@ -64,8 +64,8 @@ export function limit(data, predicate) {
 }
 
 export function process(data, state) {
-  const skipCount        = state.skip,
-        takeCount        = state.take,
+  const skipCount        = state.pageIndex,
+        takeCount        = state.pageSize,
         filterDescriptor = state.filter,
         sort             = state.sort,
         group            = state.group;

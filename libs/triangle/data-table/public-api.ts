@@ -31,7 +31,6 @@ export * from './src/table-shared/resizable.directive';
 export * from './src/table-body/selectable.directive';
 export * from './src/grouping/group-settings';
 export * from './src/directive/no-records-template.directive';
-export * from './src/directive/databinding.directive';
 export * from './src/filtering/filter.service';
 export * from './src/filtering/filter-row/filter-cell-template.directive';
 export * from './src/filtering/filter-row/filter-cell.component';

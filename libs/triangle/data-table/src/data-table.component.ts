@@ -263,11 +263,11 @@ export type fieldFilterMapFn = (fieldKey: string) => 'text' | 'numeric' | 'boole
           [rowData]="view"
           [rowHeight]="rowHeight"
           [detailRowHeight]="detailRowHeight"
-          [total]="isVirtual ? view.total : take"
-          [take]="take"
+          [total]="isVirtual ? view.total : pageSize"
+          [skip]="pageIndex"
+          [take]="pageSize"
           [groups]="group"
           [groupable]="groupable"
-          [skip]="skip"
           [columns]="columnsContainer"
           [selectable]="selectable"
           [detailTemplate]="detailTemplate"
@@ -341,7 +341,7 @@ export type fieldFilterMapFn = (fieldKey: string) => 'text' | 'numeric' | 'boole
           <tbody triGridTableBody
                  [groups]="group"
                  [data]="view"
-                 [skip]="skip"
+                 [skip]="pageIndex"
                  [columns]="leafColumns"
                  [selectable]="selectable"
                  [noRecordsText]="''"
@@ -364,13 +364,12 @@ export type fieldFilterMapFn = (fieldKey: string) => 'text' | 'numeric' | 'boole
       class="tri-data-table-pagination"
       *ngIf="showPager"
       [simple]="pageSimple"
-      [offset]="skip"
-      [limit]="take"
+      [pageIndex]="pageIndex"
+      [pageSize]="pageSize"
       [total]="view.total"
       [showTotal]="pageShowTotal"
       [showSizeChanger]="pageShowSizeChanger"
       [showQuickJumper]="pageShowQuickJumper"
-      [showDetail]="pageShowDetail"
       (pageChange)="notifyPageChange('pager', $event)">
     </tri-pagination>
     <tri-data-table-toolbar *ngIf="showBottomToolbar"></tri-data-table-toolbar>
@@ -400,9 +399,8 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _pageShowTotal = true;
   _pageShowSizeChanger = true;
   _pageShowQuickJumper = true;
-  _pageShowDetail = true;
-  _take: number;
-  _skip = 0;
+  _pageSize: number;
+  _pageIndex = 0;
   _rowHeight: number;
   _detailRowHeight: number;
   _scrollable: ScrollMode = 'scrollable';
@@ -437,30 +435,13 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     // this.cdr.markForCheck();
   }
 
-  // /**
-  //  * @deprecated
-  //  */
-  // @Input()
-  // get data(): any[] | GridDataResult {
-  //   return this._data;
-  // }
-  //
-  // set data(value: any[] | GridDataResult) {
-  //   if (isObject(value) && value.hasOwnProperty('data') && value.hasOwnProperty('total')) {
-  //     this.dataSource = (value as GridDataResult).data;
-  //     this._cv.totalItemCount = (value as GridDataResult).total;
-  //   }else{
-  //     this.dataSource = value;
-  //   }
-  //   this._data = value;
-  // }
   @Input()
   get dataSource(): any[] | GridDataResult {return this._data;}
 
   set dataSource(value: any[] | GridDataResult) {
     if (this._data != value) {
       this._data = value;
-      this.view = new DataCollection(new DataResultIterator(value, this._group, this._skip, this._childItemsPath));
+      this.view = new DataCollection(new DataResultIterator(value/*, this._group, this._skip*/, this._childItemsPath));
 
       // this._bindRow();
       // this._rows.iter = Iterable.defer(() => this._bindRow()).memoize();
@@ -491,22 +472,16 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     this._pageShowQuickJumper = value;
     // this.cdr.markForCheck();
   }
-  @Input('page.showDetail')
-  get pageShowDetail(): boolean {return this._pageShowDetail;}
-  set pageShowDetail(value: boolean) {
-    this._pageShowDetail = value;
+  @Input()
+  get pageIndex(): number {return this._pageIndex;}
+  set pageIndex(value: number) {
+    this._pageIndex = value;
     // this.cdr.markForCheck();
   }
   @Input()
-  get take(): number {return this._take;}
-  set take(value: number) {
-    this._take = value;
-    // this.cdr.markForCheck();
-  }
-  @Input()
-  get skip(): number {return this._skip;}
-  set skip(value: number) {
-    this._skip = value;
+  get pageSize(): number {return this._pageSize;}
+  set pageSize(value: number) {
+    this._pageSize = value;
     // this.cdr.markForCheck();
   }
   @Input() height: number;
@@ -750,9 +725,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   }
 
   get showPager(): boolean {
-    return !this.isVirtual && this._pageable !== false &&
+    return !this.isVirtual && this._pageable !== false && !this._childItemsPath &&
       //first page not show pager
-      !(this._skip == 0 && this.view.length == 0);
+      !(this._pageIndex == 0 && this.view.length == 0);
   }
 
   get showGroupPanel(): boolean {
@@ -878,15 +853,19 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     this.initSelectionService();
   }
 
-  ngOnInit() {
-    this.view = new DataCollection(new DataResultIterator(this._data, this._group, this._skip, this._childItemsPath));
+  // ngOnInit() {
+  //   this.view = new DataCollection(new DataResultIterator(this._data/*, this._group, this._skip*/, this._childItemsPath));
+  // }
+
+  initView() {
+
   }
 
   ngOnChanges(changes) {
     if (anyChanged(['data', 'dataSource'], changes)) {
       this.onDataChange();
     }
-    if (this.lockedLeafColumns.length && anyChanged(['take', 'skip', 'sort', 'group'], changes)) {
+    if (this.lockedLeafColumns.length && anyChanged(['pageIndex', 'pageSize', 'sort', 'group'], changes)) {
       this.changeNotification.notify();
     }
   }
@@ -1033,8 +1012,8 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     if (source === 'list' && !this.isVirtual) {
       return;
     }
-    this._skip = event.skip;
-    this._take = event.take;
+    this._pageIndex = event.pageIndex;
+    this._pageSize = event.pageSize;
     this.pageChange.emit(event);
   }
 
@@ -1185,18 +1164,18 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
         map(sort => ({
           filter: this._filter,
           group : this.group,
-          skip  : this._skip,
+          skip  : this._pageIndex,
           sort,
-          take  : this._take
+          take  : this._pageSize
         }))
       ),
       this.groupChange.pipe(
         map(group => ({
           filter: this._filter,
           group,
-          skip  : this._skip,
+          skip  : this._pageIndex,
           sort  : this.sort,
-          take  : this._take
+          take  : this._pageSize
         }))
       ),
       this.filterChange.pipe(
@@ -1205,7 +1184,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
           group: this.group,
           skip : 0,
           sort : this.sort,
-          take : this._take
+          take : this._pageSize
         }))
       )
     ).subscribe(x => this.dataStateChange.emit(x));

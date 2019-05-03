@@ -15,9 +15,9 @@ const serializeSort = function(orderby) {
 const rules = function(key, state) {
   return {
     filter: serializeFilter(state.filter || {}),
-    skip: '$skip=' + state.skip,
+    skip: '$skip=' + state.pageIndex,
     sort: serializeSort(state.sort || []),
-    take: '$top=' + state.take
+    take: '$top=' + state.pageSize
   }[key];
 };
 export function toODataString(state) {

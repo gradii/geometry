@@ -43,6 +43,8 @@ export interface IteratorState {
   groupIndex?: number;
 }
 
+/*
+
 const isGroupItem = function (source) {
   return source.items !== undefined && source.field !== undefined;
 };
@@ -132,15 +134,6 @@ export class ItemIterator extends Iterator<IteratorResult<Item | GroupItem | Gro
 
   get index() {
     return this.dataIndex;
-  }
-}
-
-export class RecursiveIterator {
-  constructor(arr: any[], dataIndex: number, groupIndex: string) {
-  }
-
-  next() {
-
   }
 }
 
@@ -255,3 +248,4 @@ export class GroupIterator<T> {
     return this;
   }
 }
+*/

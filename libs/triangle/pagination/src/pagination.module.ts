@@ -1,7 +1,9 @@
+import { TriI18nModule } from '@gradii/triangle/i18n';
 import { TriSelectModule } from '@gradii/triangle/inputs';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { TriIconModule } from 'libs/triangle/icon';
 import { PaginationComponent } from './pagination.component';
 
 /**
@@ -30,7 +32,7 @@ import { PaginationComponent } from './pagination.component';
 @NgModule({
   declarations: [PaginationComponent],
   exports     : [PaginationComponent],
-  imports     : [CommonModule, FormsModule, TriSelectModule]
+  imports: [CommonModule, FormsModule, TriSelectModule, TriI18nModule, TriIconModule]
 })
 export class TriPaginationModule {
   static exports() {

@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc/libs/triangle",
     "module": "commonjs",
-    "types": ["jest", "node", "jasmine"]
+    "types": ["node", "jasmine"]
   },
   "files": ["test.ts"],
   "include": ["**/*.spec.ts", "**/*.d.ts"]

@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
-import { ICON_REGISTRY_PROVIDER } from './icon-registry';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ICON_REGISTRY_PROVIDER, IconRegistry } from './icon-registry';
 import { IconComponent } from './icon.component';
+
+const DEFAULT_SVG_ICON = ``;
 
 /**
  * # Icon图标
@@ -43,4 +46,8 @@ import { IconComponent } from './icon.component';
   declarations: [IconComponent],
   providers   : [ICON_REGISTRY_PROVIDER],
 })
-export class TriIconModule {}
+export class TriIconModule {
+  constructor(iconRegistry: IconRegistry, sanitizer: DomSanitizer) {
+    iconRegistry.addSvgIconSet(sanitizer.bypassSecurityTrustResourceUrl(DEFAULT_SVG_ICON));
+  }
+}

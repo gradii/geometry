@@ -1,6 +1,5 @@
 import { PaginationComponent, TriPaginationModule } from '@gradii/triangle/pagination';
 import { Component } from '@angular/core';
-/* tslint:disable:no-unused-variable */
 import { async, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -9,7 +8,7 @@ describe('TriPaginationComponent', () => {
     async(() => {
       TestBed.configureTestingModule({
         imports     : [TriPaginationModule],
-        declarations: [TestPaginationBasic, TestPaginationChanger, TestPaginationSimple, TestPaginationShowTotal],
+        declarations: [TestPaginationBasic, TestPaginationChanger, TestPaginationSimple, TestPaginationShowTotal, TestPaginationQuickJumper],
         providers   : []
       }).compileComponents();
     })
@@ -101,17 +100,17 @@ describe('TriPaginationComponent', () => {
       expect(debugElement.nativeElement.querySelector('.tri-pagination').classList.contains('mini')).toBe(true);
     });
 
-    // it('Quickly jump to a page', () => {
-    //   const fixture = TestBed.createComponent(TestPaginationQuickJumper);
-    //   const testComponent = fixture.debugElement.componentInstance;
-    //   const debugElement = fixture.debugElement.query(By.directive(TriPaginationComponent));
-    //   fixture.detectChanges();
-    //   expect(debugElement.nativeElement.querySelector('.tri-pagination-options-quick-jumper')).toBeDefined();
-    //
-    //   testComponent._size = 'small';
-    //   fixture.detectChanges();
-    //   expect(debugElement.nativeElement.querySelector('.tri-pagination').classList.contains('mini')).toBe(true);
-    // });
+    it('Quickly jump to a page', () => {
+      const fixture = TestBed.createComponent(TestPaginationQuickJumper);
+      const testComponent = fixture.debugElement.componentInstance;
+      const debugElement = fixture.debugElement.query(By.directive(PaginationComponent));
+      fixture.detectChanges();
+      expect(debugElement.nativeElement.querySelector('.tri-pagination-options-quick-jumper')).toBeDefined();
+
+      testComponent._size = 'small';
+      fixture.detectChanges();
+      expect(debugElement.nativeElement.querySelector('.tri-pagination').classList.contains('mini')).toBe(true);
+    });
 
     it('simply flip the page', () => {
       const fixture = TestBed.createComponent(TestPaginationSimple);
@@ -147,9 +146,9 @@ describe('TriPaginationComponent', () => {
   @Component({
     selector: 'tri-test-pagination-basic',
     template: `
-      <tri-pagination [forPage]="{pageIndex: _pageIndex}" 
+      <tri-pagination [pageIndex]="_pageIndex"
                       [total]="_total"
-                      (forPageChange)="_pageIndex = $event.pageIndex"></tri-pagination>
+                      (pageChange)="_pageIndex = $event.pageIndex"></tri-pagination>
     `
   })
   class TestPaginationBasic {
@@ -161,7 +160,10 @@ describe('TriPaginationComponent', () => {
   @Component({
     selector: 'tri-test-pagination-changer',
     template: `
-      <tri-pagination [forPage]="{pageIndex: _pageIndex, pageSize: _pageSize}" [total]="_total" [showSizeChanger]="true"
+      <tri-pagination [pageIndex]="_pageIndex"
+                      [pageSize]="_pageSize"
+                      [total]="_total" 
+                      [showSizeChanger]="true"
                       [size]="_size"></tri-pagination>`
   })
   class TestPaginationChanger {
@@ -171,16 +173,19 @@ describe('TriPaginationComponent', () => {
     _size = '';
   }
 
-  // @Component({
-  //   selector: 'tri-demo-pagination-quick-jumper',
-  //   template: `
-  //     <tri-pagination [(pageIndex)]="1" [total]="50" [size]="_size" showSizeChanger
-  //                    showQuickJumper></tri-pagination>
-  //   `
-  // })
-  // class TestPaginationQuickJumper {
-  //   _size = '';
-  // }
+  @Component({
+    selector: 'tri-demo-pagination-quick-jumper',
+    template: `
+      <tri-pagination [pageIndex]="1"
+                      [total]="50"
+                      [size]="_size"
+                      [showSizeChanger]="true"
+                      [showQuickJumper]="true"></tri-pagination>
+    `
+  })
+  class TestPaginationQuickJumper {
+    _size = '';
+  }
 
   @Component({
     selector: 'tri-test-pagination-simple',

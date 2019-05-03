@@ -1,9 +1,5 @@
-import { GroupDescriptor } from '@gradii/triangle/data-query';
-import { GroupRow } from './row-column/group-row';
-import { Row } from './row-column/row';
-import { isPresent } from '@gradii/triangle/util';
 import {
-  AfterViewInit, ChangeDetectionStrategy,
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -22,9 +18,11 @@ import {
   Renderer2,
   ViewChild
 } from '@angular/core';
-import { fromEvent ,  Subject } from 'rxjs';
+import { GroupDescriptor } from '@gradii/triangle/data-query';
+import { isPresent } from '@gradii/triangle/util';
+import { fromEvent, Subject } from 'rxjs';
 
-import { filter ,  map ,  merge ,  switchMap ,  tap } from 'rxjs/operators';
+import { filter, map, merge, switchMap, tap } from 'rxjs/operators';
 import { ColumnBase } from './columns/column-base';
 import { ColumnsContainer } from './columns/columns-container';
 import { NoRecordsTemplateDirective } from './directive/no-records-template.directive';
@@ -33,6 +31,8 @@ import { GroupsService } from './grouping/groups.service';
 import { expandColumns } from './helper/column-common';
 import { Action, PageAction, ScrollAction, ScrollerService } from './helper/scroller.service';
 import { RowClassFn } from './row-class';
+import { GroupRow } from './row-column/group-row';
+import { Row } from './row-column/row';
 import { syncRowsHeight } from './row-sync';
 import { ChangeNotificationService } from './service/change-notification.service';
 import { DetailsService } from './service/details.service';
@@ -86,7 +86,7 @@ const firstChild = el => (el ? el.nativeElement.children[0] : null);
           [groups]="groups"
           [data]="data"
           [rowData]="rowData"
-          [noRecordsText]="''"
+          [noRecordsText]="'没有数据'"
           [columns]="lockedLeafColumns"
           [detailTemplate]="detailTemplate"
           [showGroupFooters]="showFooter"
@@ -153,7 +153,7 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
   private scrollSyncService;
   // readonly hostClass: boolean;
   @Input() data: any[];
-  @Input() rowData: Array<Row|GroupRow>;
+  @Input() rowData: Array<Row | GroupRow>;
   @Input() groups: GroupDescriptor[];
   @Input() total: number;
   @Input() rowHeight: number;
@@ -264,14 +264,6 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
     }
   }
 
-  ngOnDestroy() {
-    if (this.subscriptions) {
-      this.subscriptions.unsubscribe();
-    }
-    if (this.scroller) {
-      this.scroller.destroy();
-    }
-  }
 
   init() {
     if (this.suspendService.scroll) {
@@ -351,11 +343,20 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
       this.subscriptions.add(
         this.changeNotification.changes
           .pipe(
-            merge(this.groupsService.changes.pipe(switchMap(() => this.ngZone.onStable.take(1)))),
+            merge(this.groupsService.changes.pipe(switchMap(() => this.ngZone.onStable.pageSize(1)))),
             filter(() => isPresent(this.lockedContainer))
           )
           .subscribe(() => this.syncRowsHeight())
       )
     );
+  }
+
+  ngOnDestroy() {
+    if (this.subscriptions) {
+      this.subscriptions.unsubscribe();
+    }
+    if (this.scroller) {
+      this.scroller.destroy();
+    }
   }
 }

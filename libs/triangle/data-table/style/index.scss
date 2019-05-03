@@ -4,14 +4,17 @@ $data-table-line-height : 1.12 !default;
   display        : flex;
   flex-direction : column;
   position       : relative;
+
   &.tri-display-block {
     display : block;
   }
+
   .tri-data-table-container {
     display  : flex;
     flex     : 1 1 auto;
     overflow : hidden;
   }
+
   table {
     margin          : 0;
     width           : 100%;
@@ -21,15 +24,18 @@ $data-table-line-height : 1.12 !default;
     empty-cells     : show;
     outline         : 0;
   }
+
   thead, tbody, tfoot {
     text-align   : left;
     border-color : inherit;
   }
+
   tr {
     border-color : inherit;
   }
+
   th, td {
-    padding       : 6px 8px;
+    padding       : 12px 12px;
     border-style  : solid;
     outline       : 0;
     font-weight   : inherit;
@@ -37,26 +43,32 @@ $data-table-line-height : 1.12 !default;
     overflow      : hidden;
     text-overflow : ellipsis;
   }
+
   th:first-child, td:first-child {
     border-left-width : 0;
   }
+
   th:focus, td:focus {
     outline : none;
   }
+
   th:hover, td:hover {
     word-break      : break-all;
     word-break-wrap : break-word;
     white-space     : normal;
   }
+
   th {
     border-width : 1px 0 1px 1px;
     //white-space: nowrap;
-    font-size    : 12px;
+    font-size    : 14px;
     word-wrap    : break-word;
+
     a {
       color : inherit;
     }
   }
+
   td {
     padding        : 0 8px;
     line-height    : 28px;
@@ -64,59 +76,74 @@ $data-table-line-height : 1.12 !default;
     border-width   : 0 0 0 1px;
     vertical-align : middle;
   }
+
   a {
     //color           : inherit;
     text-decoration : none;
+
     &:hover {
       text-decoration : none;
     }
   }
+
   table, .tri-data-table-header-wrap {
     box-sizing : content-box;
   }
+
   .tri-group-col, .tri-hierarchy-col {
     padding : 0;
     width   : 32px;
   }
+
   .tri-grouping-row {
     p {
       display       : flex;
       align-items   : center;
       align-content : center;
     }
+
     td {
       overflow : visible;
+      border   : 0;
     }
+
     + tr td {
       border-top-width : 1px;
     }
-    .tri-group-cell, + tr .tri-group-cell {
-      border-top-width : 0;
-      text-overflow    : ellipsis;
+
+    .tri-group-cell, ~ tr .tri-group-cell {
+      border        : 0;
+      text-overflow : ellipsis;
     }
+
     .tri-icon {
       margin-left  : -4px;
       margin-right : 8px;
     }
   }
+
   &-compact {
     th, td {
       padding : 2px;
     }
   }
+
   .tri-group-footer {
     td {
       border-style : solid;
       border-width : 1px 0;
     }
+
     .tri-group-cell + td {
       border-left-width : 1px;
     }
   }
+
   .tri-hierarchy-cell {
     text-align : center;
     padding    : 0;
     overflow   : visible;
+
     > .tri-icon {
       padding     : 8px 0;
       width       : 100%;
@@ -125,11 +152,13 @@ $data-table-line-height : 1.12 !default;
       display     : inline-block;
       outline     : 0;
     }
+
     + th,
     + td {
       border-left-width : 0;
     }
   }
+
   &[dir="rtl"] {
     thead, tbody, tfoot {
       text-align : right;
@@ -138,6 +167,7 @@ $data-table-line-height : 1.12 !default;
 
   &-edit-command:not(.tri-btn) {
     color : $success-color;
+
     &:hover {
       color : color-palette($success-color, 5);
     }
@@ -145,6 +175,7 @@ $data-table-line-height : 1.12 !default;
 
   &-save-command:not(.tri-btn) {
     color : $primary-color;
+
     &:hover {
       color : color-palette($primary-color, 5);
     }
@@ -152,34 +183,22 @@ $data-table-line-height : 1.12 !default;
 
   &-remove-command:not(.tri-btn) {
     color : $error-color;
+
     &:hover {
       color : color-palette($error-color, 5);
     }
   }
 }
 
-.tri-rtl .tri-data-table {
-  thead, tbody, tfoot {
-    text-align : right;
-  }
-}
-
-.tri-data-table[dir="rtl"] th, .tri-rtl .tri-data-table th {
-  white-space : nowrap;
-}
-
-.tri-data-table[dir="rtl"] .tri-data-table-header-wrap, .tri-rtl .tri-data-table .tri-data-table-header-wrap {
-  border-width : 0 0 0 1px;
-}
-
 .tri-data-table[dir="rtl"] {
-  .tri-group-indicator .tri-btn.tri-bare, .tri-drag-clue .tri-btn.tri-bare {
-    margin-left  : -2px;
-    margin-right : 8px;
+  th {
+    white-space : nowrap;
   }
-}
 
-.tri-rtl .tri-data-table {
+  .tri-data-table-header-wrap {
+    border-width : 0 0 0 1px;
+  }
+
   .tri-group-indicator .tri-btn.tri-bare, .tri-drag-clue .tri-btn.tri-bare {
     margin-left  : -2px;
     margin-right : 8px;
@@ -187,115 +206,64 @@ $data-table-line-height : 1.12 !default;
 }
 
 .tri-data-table[dir="rtl"] {
-  .tri-group-indicator .tri-link .tri-icon, .tri-drag-clue .tri-link .tri-icon {
-    margin-left  : 4px;
-    margin-right : -2px;
+  .tri-group-indicator {
+    .tri-link .tri-icon, .tri-drag-clue .tri-link .tri-icon {
+      margin-left  : 4px;
+      margin-right : -2px;
+    }
   }
-}
 
-.tri-rtl .tri-data-table {
-  .tri-group-indicator .tri-link .tri-icon, .tri-drag-clue .tri-link .tri-icon {
+  .tri-group-indicator {
+    margin-right : 0;
     margin-left  : 4px;
-    margin-right : -2px;
   }
-}
 
-.tri-data-table[dir="rtl"] .tri-group-indicator, .tri-rtl .tri-data-table .tri-group-indicator {
-  margin-right : 0;
-  margin-left  : 4px;
-}
+  + .tri-group-indicator {
+    margin-right : 4px;
+  }
 
-.tri-data-table[dir="rtl"] .tri-group-indicator + .tri-group-indicator, .tri-rtl .tri-data-table .tri-group-indicator + .tri-group-indicator {
-  margin-right : 4px;
-}
-
-.tri-data-table[dir="rtl"] {
   .tri-data-table-content-locked, .tri-data-table-footer-locked, .tri-data-table-header-locked {
     border-left-width  : 1px;
     border-right-width : 0;
   }
-}
 
-.tri-rtl .tri-data-table {
-  .tri-data-table-content-locked, .tri-data-table-footer-locked, .tri-data-table-header-locked {
-    border-left-width  : 1px;
+  th:first-child, td:first-child {
+    border-left-width : 1px;
+  }
+
+  th:last-child, td:last-child {
+    border-left-width : 0;
+  }
+
+  td.tri-hierarchy-cell {
+    border-left-width : 0;
+  }
+
+  .tri-data-table-header, .tri-data-table-footer {
+    padding-left  : 17px;
+    padding-right : 0;
+  }
+
+  .tri-data-table-header .tri-header:first-child {
     border-right-width : 0;
   }
-}
 
-.tri-data-table[dir="rtl"] {
-  th:first-child, td:first-child {
-    border-left-width : 1px;
+  .tri-filtercell-operator {
+    margin-left  : 0;
+    margin-right : 4px;
   }
-}
 
-.tri-rtl .tri-data-table {
-  th:first-child, td:first-child {
-    border-left-width : 1px;
+  .tri-dirty {
+    left  : auto;
+    right : 0;
   }
-}
 
-.tri-data-table[dir="rtl"] {
-  th:last-child, td:last-child {
-    border-left-width : 0;
-  }
-}
-
-.tri-rtl .tri-data-table {
-  th:last-child, td:last-child {
-    border-left-width : 0;
-  }
-}
-
-.tri-data-table[dir="rtl"] td.tri-hierarchy-cell, .tri-rtl .tri-data-table td.tri-hierarchy-cell {
-  border-left-width : 0;
-}
-
-.tri-data-table[dir="rtl"] {
-  .tri-data-table-header, .tri-data-table-footer {
-    padding-left  : 17px;
-    padding-right : 0;
-  }
-}
-
-.tri-rtl .tri-data-table {
-  .tri-data-table-header, .tri-data-table-footer {
-    padding-left  : 17px;
-    padding-right : 0;
-  }
-}
-
-.tri-data-table[dir="rtl"] .tri-data-table-header .tri-header:first-child, .tri-rtl .tri-data-table .tri-data-table-header .tri-header:first-child {
-  border-right-width : 0;
-}
-
-.tri-data-table[dir="rtl"] .tri-filtercell-operator, .tri-rtl .tri-data-table .tri-filtercell-operator {
-  margin-left  : 0;
-  margin-right : 4px;
-}
-
-.tri-data-table[dir="rtl"] .tri-dirty, .tri-rtl .tri-data-table .tri-dirty {
-  left  : auto;
-  right : 0;
-}
-
-.tri-data-table[dir="rtl"] {
   .tri-edit-cell > {
     .tri-textbox, .tri-widget, .tri-block, .text-box {
       margin-right : calc(-8px - 1px);
     }
   }
-  .tri-data-table-edit-row > td {
-    padding : 0;
-  }
-}
 
-.tri-rtl .tri-data-table {
-  .tri-edit-cell > {
-    .tri-textbox, .tri-widget, .tri-block, .text-box {
-      margin-right : calc(-8px - 1px);
-    }
-  }
   .tri-data-table-edit-row > td {
     padding : 0;
   }
@@ -307,16 +275,20 @@ $data-table-line-height : 1.12 !default;
     position : absolute;
     width    : auto;
     padding  : 4px 8px;
+
     .tri-callout {
       display : block;
     }
   }
+
   .tri-animation-container-fixed .tri-tooltip.tri-tooltip-validation {
     position : static;
   }
+
   .tri-dirty-cell {
     position : relative;
   }
+
   .tri-dirty {
     border-width : 5px;
     left         : 0;
@@ -332,8 +304,10 @@ $data-table-line-height : 1.12 !default;
   text-overflow       : clip;
   cursor              : default;
   display             : block;
+
   > .tri-btn {
     vertical-align : middle;
+
     + .tri-btn {
       margin-left : 4px;
     }
@@ -413,6 +387,7 @@ $data-table-line-height : 1.12 !default;
 
 .tri-group-indicator {
   margin-right : 4px;
+
   + .tri-group-indicator {
     margin-left : 4px;
   }
@@ -422,11 +397,13 @@ $data-table-line-height : 1.12 !default;
   width    : 12px;
   height   : calc(10px + 1.42857em);
   position : absolute;
+
   &::before, &::after {
     display  : inline-block;
     content  : '';
     position : absolute;
   }
+
   &::before {
     border              : 6px solid;
     border-right-color  : transparent;
@@ -434,6 +411,7 @@ $data-table-line-height : 1.12 !default;
     border-left-color   : transparent;
     top                 : 0;
   }
+
   &::after {
     width  : 2px;
     height : calc(100% - 6px);
@@ -474,19 +452,24 @@ div {
 
 .tri-data-table-header {
   border-bottom-width : 1px;
+
   table {
     margin-bottom : -1px;
   }
+
   .tri-header {
     position       : relative;
     vertical-align : bottom;
     overflow       : visible;
+
     &:first-child {
       border-left-width : 0;
     }
+
     &.tri-first {
       border-left-width : 1px;
     }
+
     > .tri-link {
       margin        : -8px -12px;
       padding       : 8px 12px;
@@ -508,10 +491,12 @@ div {
     &.tri-filterable > .tri-link {
       margin-right : calc(10px + 1.42857em);
     }
+
     > .tri-link {
       &:focus {
         text-decoration : none;
       }
+
       > .tri-icon {
         margin         : 0 .4ex;
         position       : static;
@@ -519,6 +504,7 @@ div {
       }
     }
   }
+
   .tri-data-table-filter, .tri-header-column-menu {
     padding         : 4px;
     width           : calc(10px + 1.42857em);
@@ -536,16 +522,20 @@ div {
     right           : 0;
     z-index         : 1;
   }
+
   .tri-data-table-filter, .tri-data-table-sort-order {
     margin-top    : auto;
     margin-bottom : auto;
   }
+
   .tri-header-column-menu {
     margin : calc((1.42857em + (-1 * calc(10px + 1.42857em))) / 2) -12px calc((1.42857em + (-1 * calc(10px + 1.42857em))) / 2) 0;
+
     + .tri-link {
       margin-right : calc(1.42857em + 8px + 2px - 12px);
     }
   }
+
   //.tri-data-table-sort-order {
   //  right : 25px;
   //}
@@ -555,6 +545,7 @@ div {
       margin-left    : calc(8px - 1px);
     }
   }
+
   .tri-data-table-sort-order {
     display        : inline-block;
     font-size      : 12px;
@@ -566,6 +557,7 @@ div {
 
 .tri-data-table-footer {
   border-width : 1px 0 0;
+
   td {
     height : 1.42857em;
   }
@@ -573,9 +565,11 @@ div {
 
 .tri-filter-row {
   line-height : $data-table-line-height;
+
   th {
     padding : 8px;
   }
+
   .tri-multiselect {
     height : auto;
   }
@@ -584,62 +578,76 @@ div {
 .tri-filtercell {
   width   : auto;
   display : flex;
+
   > span {
     display : flex;
     flex    : 1;
   }
+
   .tri-filtercell-wrapper {
     display : flex;
     flex    : 1;
+
     > {
       label {
         vertical-align : middle;
       }
+
       .tri-widget, .tri-block {
         width : 100%;
       }
     }
   }
+
   > span > label {
     vertical-align : middle;
   }
+
   > span {
     .tri-btn {
       visibility     : visible;
       pointer-events : all;
       margin-left    : 4px;
     }
+
     .tri-dropdown-operator {
       margin-left : 4px;
     }
+
     .tri-numerictextbox {
       width : auto;
     }
   }
+
   .tri-filtercell-operator {
     > .tri-btn {
       &.tri-clear-button-visible {
         visibility : visible;
         height     : calc(10px + 1.42857em);
       }
+
       &:not(.tri-clear-button-visible) {
         visibility     : hidden;
         pointer-events : none;
       }
     }
+
     margin-left : 4px;
   }
+
   .tri-widget:not(.tri-dropdown-operator),
   .tri-block:not(.tri-dropdown-operator) {
     display : flex;
     flex    : 1 1 auto;
   }
+
   .tri-filtercell-wrapper > .tri-textbox {
     display   : flex;
     flex      : 1 1 auto;
     width     : 100%;
     min-width : 0;
   }
+
   .tri-autocomplete .tri-input,
   .tri-dropdown-wrap .tri-input,
   .tri-numeric-wrap .tri-input,
@@ -650,6 +658,7 @@ div {
     padding-right : 0;
     text-indent   : 8px;
   }
+
   &.tri-filtercell-boolean .tri-filtercell-wrapper {
     padding-right : calc(1.42857em + 8px + 2px + 4px);
     overflow      : hidden;
@@ -672,8 +681,6 @@ div {
   width      : 100%;
   min-height : 0;
   overflow   : auto;
-  overflow-y : scroll;
-  overflow-y : overlay;
   position   : relative;
   flex       : 1;
   //.tri-btn {
@@ -692,10 +699,12 @@ div {
   td {
     text-overflow : clip;
   }
+
   .tri-edit-cell {
     padding-top    : 0;
     padding-bottom : 0;
   }
+
   .tri-dirty-cell {
     overflow : visible;
   }
@@ -718,9 +727,13 @@ div {
   > td {
     padding : 2px;
   }
+
   td > {
     .tri-textbox, .tri-widget, .tri-block {
-      width : calc(100% + ((8px + 1px) * 2));
+      width          : calc(100% + ((8px + 1px) * 2));
+      margin-top     : calc((1.42857em + (-1 * calc(10px + 1.42857em))) / 2);
+      margin-bottom  : calc((1.42857em + (-1 * calc(10px + 1.42857em))) / 2);
+      vertical-align : middle;
     }
   }
 }
@@ -731,18 +744,11 @@ div {
   }
 }
 
-.tri-data-table-edit-row td > {
-  .tri-textbox, .tri-widget, .tri-block {
-    margin-top     : calc((1.42857em + (-1 * calc(10px + 1.42857em))) / 2);
-    margin-bottom  : calc((1.42857em + (-1 * calc(10px + 1.42857em))) / 2);
-    vertical-align : middle;
-  }
-}
-
 .tri-data-table-command-column {
   > .tri-btn + .tri-btn {
     margin-left : 0.25rem;
   }
+
   @at-root & > .tri-data-table-remove-command,
   #{&} > .tri-data-table-edit-command,
   #{&} > .tri-data-table-save-command,
@@ -792,11 +798,13 @@ div {
     position : absolute;
     z-index  : 1;
   }
+
   > {
     table {
       position : absolute;
       z-index  : 1;
     }
+
     .tri-height-container {
       position : relative;
     }
@@ -863,12 +871,14 @@ div {
   top      : 0;
   left     : 0;
   z-index  : 100;
+
   > .tri-i-loading {
     position  : absolute;
     top       : 50%;
     left      : 50%;
     font-size : 64px;
   }
+
   .tri-loading-pdf-progress {
     margin   : auto;
     position : absolute;
@@ -883,6 +893,7 @@ div {
   position : absolute;
   left     : -10000px;
   top      : -10000px;
+
   .tri-filter-row {
     display : none;
   }
@@ -892,12 +903,14 @@ div {
   > div:not(.tri-animation-container), .tri-filter-menu-container {
     padding : 0.5em 1em;
   }
+
   > div > div > .tri-btn {
     margin     : 0.5em 1% 0;
     width      : 48%;
     box-sizing : border-box;
     display    : inline-block;
   }
+
   .tri-widget,
   .tri-block,
   .tri-radio-list,
@@ -906,13 +919,16 @@ div {
     width   : 100%;
     display : block;
   }
+
   .tri-widget.tri-filter-and,
   .tri-filter-and.tri-block {
     width  : 6em;
     margin : 1em 0;
   }
+
   .tri-action-buttons {
     margin : 1em -1em -0.5em;
+
     .tri-btn {
       margin : 0;
     }
@@ -924,14 +940,17 @@ div {
   overflow    : auto;
   overflow-x  : hidden;
   white-space : nowrap;
+
   .tri-item + .tri-item {
     margin-top : 0.5em;
   }
+
   .tri-label {
     margin      : 0;
     display     : flex;
     align-items : center;
     cursor      : pointer;
+
     input {
       margin : 0 0.25em;
     }
@@ -948,9 +967,11 @@ div {
 .tri-autofitting {
   width        : auto !important;
   table-layout : auto !important;
+
   th.tri-header, td {
     white-space : nowrap !important;
   }
+
   .tri-detail-row {
     display : none !important;
   }
@@ -962,6 +983,7 @@ div {
 
 .tri-grouping-header {
   border-color : rgba(91, 108, 121, 0.08);
+
   .tri-group-indicator {
     border-color : rgba(91, 108, 121, 0.08);
   }
@@ -984,7 +1006,7 @@ div {
 .tri-grouping-header
 .tri-drag-clue {
   color            : #656565;
-  background-color : #f5f6fa;
+  background-color : #fafafa;
 }
 
 .tri-group-footer td,
@@ -1001,9 +1023,9 @@ tbody .tri-group-cell {
 }
 
 .tri-data-table-wrapper {
-  display: flex;
-  flex-direction: column;
-  position: relative;
+  display        : flex;
+  flex-direction : column;
+  position       : relative;
 }
 
 .tri-data-table {
@@ -1033,61 +1055,77 @@ tbody .tri-group-cell {
       //todo remove disable
       //background-color : rgba(0, 0, 0, 0.04);
     }
+
     &.tri-state-selected {
       color            : inherit;
       background-color : rgba(89, 186, 255, 0.25);
     }
   }
+
   td {
     &.tri-state-selected {
       color            : inherit;
       background-color : rgba(89, 186, 255, 0.25);
     }
+
     &.tri-state-focused {
       box-shadow : inset 0 0 0 2px rgba(0, 0, 0, 0.13);
     }
   }
+
   th.tri-state-focused {
     box-shadow : inset 0 0 0 2px rgba(0, 0, 0, 0.13);
   }
+
   .tri-data-table-filter, .tri-header-column-menu, .tri-hierarchy-cell .tri-icon {
     border-width : 0;
     color        : #656565;
   }
+
   .tri-grouping-row {
     background-color : #ededed;
+
     .tri-icon {
       color           : #656565;
       text-decoration : none;
     }
   }
+
   .tri-grouping-dropclue {
     &::before {
       border-color : #656565 transparent transparent;
     }
+
     &::after {
       background-color : #656565;
     }
   }
+
   .tri-tooltip.tri-tooltip-validation {
     color            : #ffffff;
     background-color : $primary-5;
+
     .tri-callout-n {
       border-bottom-color : $primary-5;
     }
+
     .tri-callout-e {
       border-left-color : $primary-5;
     }
+
     .tri-callout-s {
       border-top-color : $primary-5;
     }
+
     .tri-callout-w {
       border-right-color : $primary-5;
     }
   }
+
   .tri-dirty {
     border-color : currentColor transparent transparent currentColor;
   }
+
   &[dir="rtl"] .tri-dirty {
     border-color : currentColor currentColor transparent transparent;
   }
@@ -1105,14 +1143,17 @@ col.tri-sorted, th.tri-sorted {
   .tri-i-sort-asc-sm, .tri-i-sort-desc-sm, .tri-sort-order {
     color : #656565;
   }
+
   .tri-data-table-filter {
     &:hover {
       color            : #656565;
       background-color : #ededed;
     }
+
     &:focus {
       box-shadow : inset 0 0 0 2px rgba(0, 0, 0, 0.1);
     }
+
     &.tri-state-active {
       color            : #ffffff;
       background-color : $primary-color;

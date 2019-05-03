@@ -1,8 +1,12 @@
-import { DataResult, GroupDescriptor } from '@gradii/triangle/data-query';
-import { isFunction, isPresent, isString, isIterable } from '@gradii/triangle/util';
+import { DataResult } from '@gradii/triangle/data-query';
+import { isFunction, isIterable, isPresent, isString } from '@gradii/triangle/util';
 import { Iterable as IterableX } from 'ix';
 import { GroupRow } from '../row-column/group-row';
 import { Row } from '../row-column/row';
+
+const isGroupItem = function (source) {
+  return source.items !== undefined && source.field !== undefined;
+};
 
 export interface GridDataResult extends DataResult {
 }
@@ -16,8 +20,8 @@ export class DataResultIterator<T> implements Iterable<T> {
   private iterator;
 
   constructor(private source: GridDataResult | any[] = [],
-              private groups: GroupDescriptor[],
-              private skip: number = 0,
+              // private groups: GroupDescriptor[],
+              // private skip: number = 0,
               // private groupFooters: boolean          = false,
               private childItemsPath: string | Function) {
 
@@ -86,7 +90,7 @@ export class DataResultIterator<T> implements Iterable<T> {
   private* _bindRow() {
     if (this._data) {
       const list = this._data;
-      const groups = this.groups;
+      // const groups = this.groups;
 
       // bind to hierarchical sources (childItemsPath)
       if (this.childItemsPath) {
@@ -95,47 +99,50 @@ export class DataResultIterator<T> implements Iterable<T> {
         }
 
         // bind to grouped sources
-      } else if (groups != null && groups.length > 0 /*&& this.showGroups*/) {
-        for (let item of groups) {
-          yield* this._addGroup(item);
-        }
-
-        // bind to regular sources
+        // } else if (groups != null && groups.length > 0 /*&& this.showGroups*/) {
+        //   for (let item of groups) {
+        //     yield* this._addGroup(item);
+        //   }
+        //
+        //   // bind to regular sources
       } else {
         if (isIterable(list)) {
+          const first = IterableX.from(list).first();
           for (let item of list) {
-            yield new Row(item);
+            if (isGroupItem(first)) {
+              yield* this._addGroup(item);
+            } else {
+              yield new Row(item);
+            }
           }
-        }else{
-          throw new Error('the data from list is not iterable')
+        } else {
+          throw new Error('the data from list is not iterable');
         }
       }
     }
   }
 
-  private* _addGroup(g) {
-
-    // add group row
-    const gr = new GroupRow();
-    gr.level = g.level;
-    gr.dataItem = g;
-    yield gr;
-
+  private* _addGroup(g, level = 0, parent?: GroupRow) {
     // add child rows
-    if (g.isBottomLevel) {
-      for (var i = 0; i < g.items.length; i++) {
-        yield new Row(g.items[i]);
+    if (isGroupItem(g)) {
+      // add group row
+      const gr = new GroupRow();
+      gr.level = level;
+      gr.dataItem = g;
+      yield gr;
+
+      for (let _it of g.items) {
+        yield* this._addGroup(_it, level + 1, gr);
       }
+
     } else {
-      for (var i = 0; i < g.groups.length; i++) {
-        yield* this._addGroup(g.groups[i]);
-      }
+      yield new Row(g);
     }
   }
 
   private* _addTreeNode(item: any, level: number, parent?: GroupRow | Row) {
-    var gr = new Row(parent),
-      children = this.getChildren(item, this.childItemsPath);
+    var gr       = new Row(parent),
+        children = this.getChildren(item, this.childItemsPath);
 
     // add main node
     gr.dataItem = item;
@@ -165,10 +172,5 @@ export class DataResultIterator<T> implements Iterable<T> {
 
   [Symbol.iterator](): Iterator<T> {
     return this.iterator[Symbol.iterator]();
-    // return getIterator(this.data, {
-    //   dataIndex : this.skip,
-    //   footers   : this.groupFooters,
-    //   groupIndex: this.skip
-    // });
   }
 }

@@ -14,7 +14,7 @@ import { EditService } from './basic-edit/edit.service';
       <tri-data-table
         [data]="view | async"
         [height]="533"
-        [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
+        [pageSize]="gridState.take" [pageIndex]="gridState.skip" [sort]="gridState.sort"
         [pageable]="true" [sortable]="true"
         (dataStateChange)="onStateChange($event)"
         (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
