@@ -32,7 +32,8 @@ before_install:
   - wget -q -O - https://bazel.build/bazel-release.pub.gpg |sudo apt-key add -
   - echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
   - sudo apt-get update
-  - sudo apt-get install -y bazel=$BAZEL_VERSION
+#  - sudo apt-get install -y bazel=$BAZEL_VERSION
+  - sudo apt-get install bazel
   - sudo rm -rf /var/lib/apt/lists/*
 #  - source ./scripts/ci/env.sh print
 
