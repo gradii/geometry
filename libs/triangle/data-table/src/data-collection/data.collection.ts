@@ -2,6 +2,13 @@ import { DataResultIterator } from './data-result-iterator';
 
 export class DataCollection<T> {
 
+  public renderData;
+
+
+  getViewRange(start, end) {
+
+  }
+
   constructor(protected accessor: DataResultIterator<T>) {
   }
 

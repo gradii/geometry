@@ -1,3 +1,4 @@
+import { FragmentDataChunk } from './fragment-data-chunk';
 import { RowColFlags } from './row-col-flags';
 
 
@@ -8,8 +9,10 @@ export class DataGridModel {
   _szMax: number;
   _list = null;
   _f: RowColFlags;
-  _pos = 0;
-  _idx = -1;
+  _pos  = 0;
+  _idx  = -1;
+
+  _dataChunk: FragmentDataChunk;
 
   /**
    * Gets or sets a value indicating whether the row or column is visible.
@@ -36,15 +39,25 @@ export class DataGridModel {
    * Gets the position of the row or column.
    */
   get pos(): number {
-    if (this._list) this._list._update();
-    return this._pos;
+    let pos;
+    const sz = this._dataChunk.defaultSize;
+    if (this._idx > -1) {
+      pos = this._idx * sz;
+      for (let i in this._dataChunk.chunks) {
+        if (this._idx > i as number) {
+          pos += this._dataChunk.chunks[i] - sz;
+        } else {
+          break;
+        }
+      }
+    }
+    return pos;
   }
 
   /**
    * Gets the index of the row or column in the parent collection.
    */
   get index(): number {
-    if (this._list) this._list._update();
     return this._idx;
   }
 
@@ -60,45 +73,42 @@ export class DataGridModel {
   set size(value: number) {
     if (value != this._sz) {
       this._sz = value;
-      // this.onPropertyChanged();
     }
   }
 
-  // /**
-  //  * Gets the render size of the row or column.
-  //  * This property accounts for visibility, default size, and min and max sizes.
-  //  */
-  // get renderSize(): number {
-  //   if (!this.isVisible) {
-  //     return 0;
-  //   }
-  //   var sz   = this._sz,
-  //       list = this._list;
-  //
-  //   // default size
-  //   if ((sz == null || sz < 0) && list != null) {
-  //     return Math.round((<RowColCollection>(list)).defaultSize);
-  //   }
-  //
-  //   // min/max
-  //   if (list != null) {
-  //     if (list.minSize != null && sz < list.minSize) {
-  //       sz = list.minSize;
-  //     }
-  //     if (list.maxSize != null && sz > list.maxSize) {
-  //       sz = list.maxSize;
-  //     }
-  //   }
-  //   if (this._szMin != null && sz < this._szMin) {
-  //     sz = this._szMin;
-  //   }
-  //   if (this._szMax != null && sz > this._szMax) {
-  //     sz = this._szMax;
-  //   }
-  //
-  //   // done
-  //   return Math.round(sz);
-  // }
+  /**
+   * Gets the render size of the row or column.
+   * This property accounts for visibility, default size, and min and max sizes.
+   */
+  get renderSize(): number {
+    if (!this.isVisible) {
+      return 0;
+    }
+    var sz   = this._sz,
+        list = this._list;
+
+    // default size
+    if ((sz == null || sz < 0) && list != null) {
+      return Math.round(this._dataChunk.defaultSize);
+    }
+
+    // min/max
+    if (this._dataChunk.minSize != null && sz < this._dataChunk.minSize) {
+      sz = this._dataChunk.minSize;
+    }
+    if (this._dataChunk.maxSize != null && sz > this._dataChunk.maxSize) {
+      sz = this._dataChunk.maxSize;
+    }
+    if (this._szMin != null && sz < this._szMin) {
+      sz = this._szMin;
+    }
+    if (this._szMax != null && sz > this._szMax) {
+      sz = this._szMax;
+    }
+
+    // done
+    return Math.round(sz);
+  }
 
   /**
    * Gets or sets a value indicating whether the user can resize the row or column with the mouse.

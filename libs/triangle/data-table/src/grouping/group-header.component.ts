@@ -1,5 +1,5 @@
-import { GroupDescriptor } from '@gradii/triangle/data-query';
 import { Component, HostBinding, Input } from '@angular/core';
+import { GroupDescriptor } from '@gradii/triangle/data-query';
 import { ColumnComponent } from '../columns/column.component';
 import { columnsSpan } from '../helper/column-common';
 import { GroupRow } from '../row-column/group-row';
@@ -16,9 +16,10 @@ import { GroupsService } from './groups.service';
     <td [attr.colspan]="groupSpan(rowItem)">
       <p class="tri-reset">
         <ng-template [ngIf]="!skipGroupDecoration">
-          <a href="#" tabindex="-1" (click)="toggleGroup(rowItem)"
+          <i (click)="toggleGroup(rowItem)"
+             style="cursor: pointer;cursor: pointer;font-size: 12px;margin:0 6px; 0 0"
              [ngClass]="groupButtonStyles(rowItem.index)">
-          </a>
+          </i>
           <ng-template [ngIf]="!groupHeaderTemplate(rowItem)">
             {{groupTitle(rowItem)}}: {{rowItem.dataItem | valueOf:"value": formatForGroup(rowItem)}}
           </ng-template>
@@ -65,13 +66,14 @@ export class GroupHeaderComponent {
     return new Array(item.level);
   }
 
-  toggleGroup(item: GroupRow): boolean {
+  toggleGroup(item: GroupRow) {
     //todo data-table fix me
     // this.groupsService.toggleRow(item.index, item.data);
-    return false;
+    item.isCollapsed = !item.isCollapsed;
+    // return false;
   }
 
-  groupSpan(item: GroupRow):number {
+  groupSpan(item: GroupRow): number {
     let columnCount = columnsSpan(this.columns);
     if (this.skipGroupDecoration) {
       return columnCount;
@@ -85,7 +87,11 @@ export class GroupHeaderComponent {
 
   groupButtonStyles(groupIndex: any): any {
     const expanded = this.groupsService.isExpanded(groupIndex);
-    return {'anticon-plus-square-o': expanded, 'anticon-minus-square-o': !expanded, 'anticon': true};
+    return {
+      'anticon-caret-right': expanded,
+      'anticon-caret-down' : !expanded,
+      'anticon'            : true
+    };
   }
 
   formatForGroup(item: GroupRow): string {

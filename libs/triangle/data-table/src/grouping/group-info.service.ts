@@ -40,11 +40,11 @@ export class GroupInfoService {
     return column ? column.groupHeaderTemplateRef : undefined;
   }
 
-  private groupField(group) {
-    return group.data ? group.data.field : group.field;
+  private groupField(group: GroupRow | GroupDescriptor) {
+    return group.field;
   }
 
-  private columnForGroup(group) {
+  private columnForGroup(group: GroupRow | GroupDescriptor) {
     const field = this.groupField(group);
     const column = this.columns.filter(x => x.field === field)[0];
     return column;

@@ -1,5 +1,5 @@
-import { RowColFlags } from './row-col-flags';
 import { Row } from './row';
+import { RowColFlags } from './row-col-flags';
 
 
 /**
@@ -10,6 +10,10 @@ export class GroupRow extends Row {
   children: Array<GroupRow | Row> = [];
 
   parent: GroupRow;
+
+  field: string;
+
+  value: any;
 
   /**
    * Initializes a new instance of a @see:GroupRow.
@@ -72,6 +76,7 @@ export class GroupRow extends Row {
   }
 
   // // sets the collapsed/expanded state of a group row
+  /*
   _setCollapsed(collapsed: boolean) {
     for(let r of this.children) {
       r._setFlag(RowColFlags.ParentCollapsed, collapsed);
@@ -112,6 +117,7 @@ export class GroupRow extends Row {
     //     // fire GroupCollapsedChanged
     //     g.onGroupCollapsedChanged(e);
   }
+  */
 
   // /**
   //  * Gets a CellRange object that contains all of the rows in the group represented

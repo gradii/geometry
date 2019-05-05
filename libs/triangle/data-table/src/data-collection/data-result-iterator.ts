@@ -1,4 +1,4 @@
-import { DataResult } from '@gradii/triangle/data-query';
+import { DataResult, GroupDescriptor, GroupResult } from '@gradii/triangle/data-query';
 import { isFunction, isIterable, isPresent, isString } from '@gradii/triangle/util';
 import { Iterable as IterableX } from 'ix';
 import { GroupRow } from '../row-column/group-row';
@@ -23,7 +23,7 @@ export class DataResultIterator<T> implements Iterable<T> {
               // private groups: GroupDescriptor[],
               // private skip: number = 0,
               // private groupFooters: boolean          = false,
-              private childItemsPath: string | Function) {
+              private childItemsPath: string | Function = null) {
 
     if (!isPresent(source)) {
       this.source = [];
@@ -122,13 +122,15 @@ export class DataResultIterator<T> implements Iterable<T> {
     }
   }
 
-  private* _addGroup(g, level = 0, parent?: GroupRow) {
+  private* _addGroup(g: any, level = 0, parent?: GroupRow) {
     // add child rows
     if (isGroupItem(g)) {
       // add group row
       const gr = new GroupRow();
       gr.level = level;
       gr.dataItem = g;
+      gr.field = g.field;
+      gr.value = g.value;
       yield gr;
 
       for (let _it of g.items) {

@@ -100,6 +100,8 @@ $data-table-line-height : 1.12 !default;
       display       : flex;
       align-items   : center;
       align-content : center;
+      margin-top    : 0;
+      margin-bottom : 0;
     }
 
     td {
@@ -1129,10 +1131,6 @@ tbody .tri-group-cell {
   &[dir="rtl"] .tri-dirty {
     border-color : currentColor currentColor transparent transparent;
   }
-}
-
-.tri-rtl .tri-data-table .tri-dirty {
-  border-color : currentColor currentColor transparent transparent;
 }
 
 col.tri-sorted, th.tri-sorted {

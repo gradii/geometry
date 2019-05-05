@@ -1,4 +1,4 @@
-import { CellTemplateDirective, ColumnComponent, EditService } from '@gradii/triangle/data-table';
+import { CellTemplateDirective, ColumnComponent, EditService, SharedModule } from '@gradii/triangle/data-table';
 import { TriDatePickerModule } from '@gradii/triangle/date-picker';
 import { TriFormModule } from '@gradii/triangle/form';
 import { TriInputModule, TriInputNumberModule } from '@gradii/triangle/inputs';
@@ -40,7 +40,6 @@ class CellComponentTest implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.column);
   }
 }
 
@@ -85,7 +84,8 @@ describe('Column Component', function () {
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        // SharedModule,
+
+        SharedModule,
         TriInputNumberModule,
         TriDatePickerModule,
         TriFormModule,
@@ -97,7 +97,6 @@ describe('Column Component', function () {
         CellTemplateDirective,
         EditTemplateDirective,
         CellComponent,
-        ColumnComponent,
         CellComponentTest,
         CellEditComponentTest
       ],
@@ -107,7 +106,6 @@ describe('Column Component', function () {
   it('projects content', function () {
     context = new TestContext<ColumnComponent, CellComponentTest>(ColumnComponent, CellComponentTest);
     expect(context.testComponent instanceof CellComponentTest).toBeTruthy();
-    // console.log(context.testComponent);
     expect(context.clarityElement.textContent.trim()).toMatch('');
   });
   it('projects edit content', function () {

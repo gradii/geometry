@@ -1,0 +1,21 @@
+<p>
+  group works!
+</p>
+
+<tri-data-table
+  [dataSource]="gridView"
+  [pageable]="true"
+  [groupable]="true"
+  [height]="400"
+  [group]="groups"
+  (groupChange)="groupChange($event)"
+>
+  <tri-data-table-column field="ProductID" title="ID" [width]="80"></tri-data-table-column>
+  <tri-data-table-column field="ProductName" title="Name" [width]="300"></tri-data-table-column>
+  <tri-data-table-column field="UnitPrice" title="Unit Price" [width]="120"></tri-data-table-column>
+  <tri-data-table-column field="Category.CategoryName" title="Category">
+    <ng-template triGridGroupHeaderTemplate let-value="value">
+      {{value}}
+    </ng-template>
+  </tri-data-table-column>
+</tri-data-table>

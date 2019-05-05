@@ -1,9 +1,9 @@
-import { EditService } from '@gradii/triangle/data-table';
+import { EditService, SharedModule } from '@gradii/triangle/data-table';
 import { TriFormModule } from '@gradii/triangle/form';
 import { TriSwitchModule } from '@gradii/triangle/switch';
 import { CellComponent } from '../src/table-body/cell.component';
 import { TriDatePickerModule } from '@gradii/triangle/date-picker';
-import { TriInputNumberModule } from '@gradii/triangle/inputs';
+import { TriInputModule, TriInputNumberModule } from '@gradii/triangle/inputs';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -63,7 +63,6 @@ class NewRowTestComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.editTemplate);
     this.column.editTemplate = this.editTemplate;
     this.column.editTemplateRef = this.editTemplate;
   }
@@ -77,7 +76,9 @@ describe('DatagridCell Component', function () {
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        // SharedModule,
+
+        SharedModule,
+        TriInputModule,
         TriInputNumberModule,
         TriDatePickerModule,
         TriFormModule,
