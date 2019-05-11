@@ -1,11 +1,12 @@
-import { join, resolve as resolvePath } from 'path';
-import { spawn } from 'child_process';
-import { red } from 'chalk';
-import { PackageBundler } from './build-bundles';
-import { buildConfig } from './build-config';
-import { getSecondaryEntryPointsForPackage } from './secondary-entry-points';
-import { compileEntryPoint, renamePrivateReExportsToBeUnique } from './compile-entry-point';
-import { createPackageBuildTasks } from './gulp/build-tasks-gulp';
+import {join} from 'path';
+import {PackageBundler} from './build-bundles';
+import {buildConfig} from './build-config';
+import {
+  addImportAsToAllMetadata,
+  compileEntryPoint,
+  renamePrivateReExportsToBeUnique,
+} from './compile-entry-point';
+import {getSecondaryEntryPointsForPackage} from './secondary-entry-points';
 
 const {packagesDir, outputDir} = buildConfig;
 
@@ -31,47 +32,34 @@ export class BuildPackage {
   /** Whether the secondary entry-point styles should be copied to the release output. */
   copySecondaryEntryPointStylesToRoot = false;
 
+  /** Whether the build package has schematics or not. */
+  hasSchematics = false;
+
   /** Path to the entry file of the package in the output directory. */
   readonly entryFilePath: string;
 
-  /** Path to the tsconfig file, which will be used to build the package. */
-  private readonly tsconfigBuild: string;
-
-  /** Path to the tsconfig file, which will be used to build the tests. */
-  private readonly tsconfigTests: string;
-
   /** Package bundler instance. */
-  private bundler = new PackageBundler(this);
+  private _bundler = new PackageBundler(this);
 
   /** Secondary entry-points partitioned by their build depth. */
-  private get secondaryEntryPointsByDepth(): string[][] {
-    this.cacheSecondaryEntryPoints();
+  get secondaryEntryPointsByDepth(): string[][] {
+    this._cacheSecondaryEntryPoints();
     return this._secondaryEntryPointsByDepth;
   }
-
   private _secondaryEntryPointsByDepth: string[][];
 
   /** Secondary entry points for the package. */
   get secondaryEntryPoints(): string[] {
-    this.cacheSecondaryEntryPoints();
+    this._cacheSecondaryEntryPoints();
     return this._secondaryEntryPoints;
   }
-
   private _secondaryEntryPoints: string[];
 
   constructor(readonly name: string, readonly dependencies: BuildPackage[] = []) {
     this.sourceDir = join(packagesDir, name);
     this.outputDir = join(outputDir, 'packages', name);
     this.esm5OutputDir = join(outputDir, 'packages', name, 'esm5');
-
-    this.tsconfigBuild = join(this.sourceDir, buildTsconfigName);
-    this.tsconfigTests = join(this.sourceDir, testsTsconfigName);
-
     this.entryFilePath = join(this.outputDir, 'index.js');
-  }
-
-  public createTasks() {
-    createPackageBuildTasks(this);
   }
 
   /** Compiles the package sources with all secondary entry points. */
@@ -91,12 +79,13 @@ export class BuildPackage {
 
   /** Compiles the TypeScript test source files for the package. */
   async compileTests() {
-    await this._compileTestEntryPoint(testsTsconfigName);
+    return compileEntryPoint(this, testsTsconfigName)
+      .then(() => addImportAsToAllMetadata(this));
   }
 
   /** Creates all bundles for the package and all associated entry points. */
   async createBundles() {
-    await this.bundler.createBundles();
+    await this._bundler.createBundles();
   }
 
   /** Compiles TS into both ES2015 and ES5, then updates exports. */
@@ -106,29 +95,8 @@ export class BuildPackage {
       .then(() => renamePrivateReExportsToBeUnique(this, p));
   }
 
-  /** Compiles the TypeScript sources of a primary or secondary entry point. */
-  private _compileTestEntryPoint(tsconfigName: string, secondaryEntryPoint = ''): Promise<any> {
-    const entryPointPath = join(this.sourceDir, secondaryEntryPoint);
-    const entryPointTsconfigPath = join(entryPointPath, tsconfigName);
-
-    return new Promise((resolve, reject) => {
-      const ngcPath = resolvePath('./node_modules/.bin/ngc');
-      const childProcess = spawn(ngcPath, ['-p', entryPointTsconfigPath], {shell: true});
-
-      // Pipe stdout and stderr from the child process.
-      childProcess.stdout.on('data', (data: any) => console.log(`${data}`));
-      childProcess.stderr.on('data', (data: any) => console.error(red(`${data}`)));
-
-      childProcess.on('exit', (exitCode: number) => exitCode === 0 ? resolve() : reject());
-    })
-      .catch(() => {
-        const error = red(`Failed to compile ${secondaryEntryPoint} using ${entryPointTsconfigPath}`);
-        console.error(error);
-      });
-  }
-
   /** Stores the secondary entry-points for this package if they haven't been computed already. */
-  private cacheSecondaryEntryPoints() {
+  private _cacheSecondaryEntryPoints() {
     if (!this._secondaryEntryPoints) {
       this._secondaryEntryPointsByDepth = getSecondaryEntryPointsForPackage(this);
       this._secondaryEntryPoints =

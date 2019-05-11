@@ -1,8 +1,8 @@
-import { join } from 'path';
-import { readdirSync, lstatSync, existsSync } from 'fs';
-import { spawnSync } from 'child_process';
-import { BuildPackage } from './build-package';
-import { platform } from 'os';
+import {join} from 'path';
+import {readdirSync, lstatSync, existsSync} from 'fs';
+import {spawnSync} from 'child_process';
+import {BuildPackage} from './build-package';
+import {platform} from 'os';
 
 
 /**
@@ -20,11 +20,8 @@ export function getSecondaryEntryPointsForPackage(pkg: BuildPackage) {
 
   // Get the list of all entry-points as the list of directories in the package that have a
   // tsconfig-build.json
-  // const entryPoints = getSubPackageDirectoryNames(packageDir)
-  //   .filter(d => existsSync(join(packageDir, d, 'tsconfig-build.json')));
-
-  const entryPoints = getSubPackageMeta(packageDir)
-    .filter(meta => existsSync(join(meta.path, 'tsconfig-build.json'))).map(m => m.name);
+  const entryPoints = getSubdirectoryNames(packageDir)
+      .filter(d => existsSync(join(packageDir, d, 'tsconfig-build.json')));
 
   // Create nodes that comprise the build graph.
   const buildNodes: BuildNode[] = entryPoints.map(p => ({name: p, deps: [], depth: 0}));
@@ -41,18 +38,18 @@ export function getSecondaryEntryPointsForPackage(pkg: BuildPackage) {
   // Update the deps for each node to point to the appropriate BuildNodes.
   buildNodes.forEach(node => {
     const importStatementFindCommand = buildPackageImportStatementFindCommand(
-      join(packageDir, node.name), `@gradii/${packageName}`);
+        join(packageDir, node.name), packageName);
 
     // Look for any imports that reference this same umbrella package and get the corresponding
     // BuildNode for each by looking at the import statements with grep.
     node.deps = spawnSync(importStatementFindCommand.binary, importStatementFindCommand.args)
-      .stdout
-      .toString()
-      .split('\n')
-      .filter(n => n)
-      .map(importStatement => importStatement.match(importRegex)![1])
-      .filter(n => nodeLookup.has(n) && n !== node.name)
-      .map(depName => nodeLookup.get(depName)!) || [];
+    .stdout
+    .toString()
+    .split('\n')
+    .filter(n => n)
+    .map(importStatement => importStatement.match(importRegex)![1])
+    .filter(n => nodeLookup.has(n) && n !== node.name)
+    .map(depName => nodeLookup.get(depName)!) || [];
   });
 
   // Concatenate the build order for each node into one global build order.
@@ -85,39 +82,6 @@ export function getSubdirectoryNames(dir: string): string[] {
   return readdirSync(dir).filter(f => lstatSync(join(dir, f)).isDirectory());
 }
 
-interface Meta {
-  name: string;
-  path: string;
-}
-
-export function getSubPackageMeta(dir: string): Meta[] {
-  let meta: Meta[] = [];
-
-  let packageNames = getSubdirectoryNames(dir);
-  if (packageNames.includes('src')) {
-    meta = meta.concat(getSubPackageMeta(join(dir, 'src')));
-  } else {
-    meta = meta.concat(packageNames.map(p => {
-      return <Meta>{
-        name: p,
-        path: join(dir, p)
-      };
-    }));
-  }
-
-  return meta;
-}
-
-export function getSubPackageDirectoryNames(dir: string): string[] {
-  let packageNames = getSubdirectoryNames(dir);
-
-  if (packageNames.includes('src')) {
-    return getSubPackageDirectoryNames(join(dir, 'src'));
-  } else {
-    return packageNames;
-  }
-}
-
 /** A node in the build graph of a package's entry-points. */
 interface BuildNode {
   name: string;
@@ -128,10 +92,10 @@ interface BuildNode {
 
 
 /**
- * Partitions nodes into groups by depth. For example,
+ * `Partitions nodes into groups by depth. For example,
  * [{name: a11y, depth: 1}, {name: bidi, depth: 0}, {name: platform, depth: 0}]
  * =>
- * [ [{name: bidi, depth: 0}, {name: platform, depth: 0}], [{name: a11y, depth: 1}] ]
+ * [ [{name: bidi, depth: 0}, {name: platform, depth: 0}], [{name: a11y, depth: 1}] ]`
  */
 function partitionNodesByDepth(nodes: BuildNode[]): BuildNode[][] {
   const result: BuildNode[][] = [[]];
@@ -154,12 +118,12 @@ function buildPackageImportStatementFindCommand(searchDirectory: string, package
   if (platform() === 'win32') {
     return {
       binary: 'findstr',
-      args  : ['/r', `from.'${packageName}/.*'`, `${searchDirectory}\\*.ts`]
+      args: ['/r', `from.'@angular/${packageName}/.*'`, `${searchDirectory}\\*.ts`]
     };
   } else {
     return {
       binary: 'grep',
-      args  : ['-Eroh', '--include', '*.ts', `from '${packageName}/.+';`, searchDirectory]
+      args: ['-Eroh', '--include', '*.ts', `from '@angular/${packageName}/.+';`, searchDirectory]
     };
   }
 }

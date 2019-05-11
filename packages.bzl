@@ -4,7 +4,7 @@ TRIANGLE_PACKAGES = [
   "affix",
   "alert",
   "anchor",
-  "auto-complete",
+  "autocomplete",
   "avatar",
   "back-top",
   "badge",
@@ -35,7 +35,7 @@ TRIANGLE_PACKAGES = [
   "input-compose",
   "inputs",
   "layout",
-  "locale",
+#  "locale",
 #  "math-date",
 #  "math-vector",
   "menu",
@@ -52,24 +52,23 @@ TRIANGLE_PACKAGES = [
   "spin",
   "steps",
   "switch",
-  "table",
   "tabs",
   "tag",
   "time-picker",
   "timeline",
   "tooltip",
   "transfer",
-  "tree",
+#  "tree",
   "util",
 ]
 
-TRIANGLE_TARGETS = ["//libs/triangle"] + ["//libs/triangle/%s" % p for p in TRIANGLE_PACKAGES]
+TRIANGLE_TARGETS = ["//src/triangle"] + ["//src/triangle/%s" % p for p in TRIANGLE_PACKAGES]
 
 
 # List that references the sass libraries for each Material package. This can be used to create
 # the theming scss-bundle or to specify dependencies for the all-theme.scss file.
 TRIANGLE_SCSS_LIBS = [
-  "//libs/triangle/%s:%s_scss_lib" % (p, p.replace('-', '_')) for p in TRIANGLE_PACKAGES
+  "//src/triangle/%s:%s_scss_lib" % (p, p.replace('-', '_')) for p in TRIANGLE_PACKAGES
 ]
 
 # Each individual package uses a placeholder for the version of Angular to ensure they're

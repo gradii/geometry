@@ -1,18 +1,15 @@
-import { existsSync } from 'fs';
-import { dirname, join } from 'path';
-import { buildConfig } from './build-config';
-import { BuildPackage } from './build-package';
-import { logger } from './Logger';
-import { uglifyJsFile } from './minify-sources';
-import { dashCaseToCamelCase, rollupGlobals } from './rollup-globals';
-import { rollupRemoveLicensesPlugin } from './rollup-remove-licenses';
-import { remapSourcemap } from './sourcemap-remap';
+import {join, dirname} from 'path';
+import {uglifyJsFile} from './minify-sources';
+import {buildConfig} from './build-config';
+import {BuildPackage} from './build-package';
+import {rollupRemoveLicensesPlugin} from './rollup-remove-licenses';
+import {rollupGlobals, dashCaseToCamelCase} from './rollup-globals';
+import {remapSourcemap} from './sourcemap-remap';
 
 // There are no type definitions available for these imports.
 const rollup = require('rollup');
 const rollupNodeResolutionPlugin = require('rollup-plugin-node-resolve');
 const rollupAlias = require('rollup-plugin-alias');
-const rollupReplace = require('rollup-plugin-replace');
 
 /** Directory where all bundles will be created in. */
 const bundlesDir = join(buildConfig.outputDir, 'bundles');
@@ -20,57 +17,54 @@ const bundlesDir = join(buildConfig.outputDir, 'bundles');
 
 /** Utility for creating bundles from raw ngc output. */
 export class PackageBundler {
-  constructor(private buildPackage: BuildPackage) {
+
+  /** Name of the AMD module for the primary entry point of the build package. */
+  private readonly _primaryAmdModuleName: string;
+
+  constructor(private _buildPackage: BuildPackage) {
+    this._primaryAmdModuleName = this._getAmdModuleName(_buildPackage.name);
   }
 
   /** Creates all bundles for the package and all associated entry points (UMD, ES5, ES2015). */
   async createBundles() {
-    for (const entryPoint of this.buildPackage.secondaryEntryPoints) {
-      await this.bundleSecondaryEntryPoint(entryPoint);
+    for (const entryPoint of this._buildPackage.secondaryEntryPoints) {
+      await this._bundleSecondaryEntryPoint(entryPoint);
     }
 
-    await this.bundlePrimaryEntryPoint();
+    await this._bundlePrimaryEntryPoint();
   }
 
   /** Bundles the primary entry-point w/ given entry file, e.g. @angular/cdk */
-  private async bundlePrimaryEntryPoint() {
-    const packageName = this.buildPackage.name;
+  private async _bundlePrimaryEntryPoint() {
+    const packageName = this._buildPackage.name;
 
-    return this.bundleEntryPoint({
-      entryFile    : this.buildPackage.entryFilePath,
-      esm5EntryFile: join(this.buildPackage.esm5OutputDir, 'index.js'),
-      moduleName   : `ng.${this.buildPackage.name}`,
-      esm2015Dest  : join(bundlesDir, `${packageName}.js`),
-      esm5Dest     : join(bundlesDir, `${packageName}.es5.js`),
-      umdDest      : join(bundlesDir, `${packageName}.umd.js`),
-      umdMinDest   : join(bundlesDir, `${packageName}.umd.min.js`),
+    return this._bundleEntryPoint({
+      entryFile: this._buildPackage.entryFilePath,
+      esm5EntryFile: join(this._buildPackage.esm5OutputDir, 'index.js'),
+      importName: `@angular/${packageName}`,
+      moduleName: this._primaryAmdModuleName,
+      esm2015Dest: join(bundlesDir, `${packageName}.js`),
+      esm5Dest: join(bundlesDir, `${packageName}.es5.js`),
+      umdDest: join(bundlesDir, `${packageName}.umd.js`),
+      umdMinDest: join(bundlesDir, `${packageName}.umd.min.js`),
     });
   }
 
   /** Bundles a single secondary entry-point w/ given entry file, e.g. @angular/cdk/a11y */
-  private async bundleSecondaryEntryPoint(entryPoint: string) {
-    const packageName = this.buildPackage.name;
-    let entryFile, esm5EntryFile;
-    if (existsSync(join(this.buildPackage.outputDir, entryPoint, 'index.js'))) {
-      entryFile = join(this.buildPackage.outputDir, entryPoint, 'index.js');
-    } else {
-      entryFile = join(this.buildPackage.outputDir, 'src', entryPoint, 'index.js');
-    }
+  private async _bundleSecondaryEntryPoint(entryPointName: string) {
+    const packageName = this._buildPackage.name;
+    const entryFile = join(this._buildPackage.outputDir, entryPointName, 'index.js');
+    const esm5EntryFile = join(this._buildPackage.esm5OutputDir, entryPointName, 'index.js');
 
-    if (existsSync(join(this.buildPackage.esm5OutputDir, entryPoint, 'index.js'))) {
-      esm5EntryFile = join(this.buildPackage.esm5OutputDir, entryPoint, 'index.js');
-    } else {
-      esm5EntryFile = join(this.buildPackage.esm5OutputDir, 'src', entryPoint, 'index.js');
-    }
-
-    return this.bundleEntryPoint({
+    return this._bundleEntryPoint({
       entryFile,
       esm5EntryFile,
-      moduleName : `ng.${packageName}.${dashCaseToCamelCase(entryPoint)}`,
-      esm2015Dest: join(bundlesDir, `${packageName}`, `${entryPoint}.js`),
-      esm5Dest   : join(bundlesDir, `${packageName}`, `${entryPoint}.es5.js`),
-      umdDest    : join(bundlesDir, `${packageName}-${entryPoint}.umd.js`),
-      umdMinDest : join(bundlesDir, `${packageName}-${entryPoint}.umd.min.js`),
+      importName: `@angular/${packageName}/${entryPointName}`,
+      moduleName: this._getAmdModuleName(packageName, entryPointName),
+      esm2015Dest: join(bundlesDir, `${packageName}`, `${entryPointName}.js`),
+      esm5Dest: join(bundlesDir, `${packageName}`, `${entryPointName}.es5.js`),
+      umdDest: join(bundlesDir, `${packageName}-${entryPointName}.umd.js`),
+      umdMinDest: join(bundlesDir, `${packageName}-${entryPointName}.umd.min.js`),
     });
   }
 
@@ -79,36 +73,35 @@ export class PackageBundler {
    * @param config Configuration that specifies the entry-point, module name, and output
    *     bundle paths.
    */
-  private async bundleEntryPoint(config: BundlesConfig) {
+  private async _bundleEntryPoint(config: BundlesConfig) {
     // Build FESM-2015 bundle file.
-    // TODO: re-add sorcery when we upgrade to Angular 5.x
-    await this.createRollupBundle({
+    await this._createRollupBundle({
+      importName: config.importName,
       moduleName: config.moduleName,
-      entry     : config.entryFile,
-      dest      : config.esm2015Dest,
-      format    : 'es',
+      entry: config.entryFile,
+      dest: config.esm2015Dest,
+      format: 'es',
     });
 
     // Build FESM-5 bundle file.
-    // TODO: re-add sorcery when we upgrade to Angular 5.x
-    await this.createRollupBundle({
+    await this._createRollupBundle({
+      importName: config.importName,
       moduleName: config.moduleName,
-      entry     : config.esm5EntryFile,
-      dest      : config.esm5Dest,
-      format    : 'es',
+      entry: config.esm5EntryFile,
+      dest: config.esm5Dest,
+      format: 'es',
     });
 
     // Create UMD bundle of ES5 output.
-    // TODO: re-add sorcery when we upgrade to Angular 5.x
-    await this.createRollupBundle({
+    await this._createRollupBundle({
+      importName: config.importName,
       moduleName: config.moduleName,
-      entry     : config.esm5Dest,
-      dest      : config.umdDest,
-      format    : 'umd'
+      entry: config.esm5Dest,
+      dest: config.umdDest,
+      format: 'umd'
     });
 
     // Create a minified UMD bundle using UglifyJS
-    // TODO: re-add sorcery when we upgrade to Angular 5.x
     uglifyJsFile(config.umdDest, config.umdMinDest);
 
     // Remaps the sourcemaps to be based on top of the original TypeScript source files.
@@ -118,35 +111,37 @@ export class PackageBundler {
     await remapSourcemap(config.umdMinDest);
   }
 
-  /** Creates a rollup bundle of a specified JavaScript file.*/
-  private async createRollupBundle(config: RollupBundleConfig) {
+  /** Creates a rollup bundle of a specified JavaScript file. */
+  private async _createRollupBundle(config: RollupBundleConfig) {
     const bundleOptions = {
-      context : 'this',
+      context: 'this',
       external: Object.keys(rollupGlobals),
-      input   : config.entry,
-      onwarn  : (message: string) => {
+      input: config.entry,
+      onwarn: (warning: any) => {
         // TODO(jelbourn): figure out *why* rollup warns about certain symbols not being found
         // when those symbols don't appear to be in the input file in the first place.
-        if (/but never used/.test(message)) {
+        if (/but never used/.test(warning.message)) {
           return false;
         }
 
-        console.warn(message);
+        if (warning.code === 'CIRCULAR_DEPENDENCY') {
+          throw Error(warning.message);
+        }
+
+        console.warn(warning.message);
       },
-      plugins : [
-        rollupReplace({'import * as moment': 'import moment'}),
+      plugins: [
         rollupRemoveLicensesPlugin,
       ]
     };
 
     const writeOptions = {
-      // Keep the moduleId empty because we don't want to force developers to a specific moduleId.
-      amd      : {moduleId: config.moduleId},
-      name     : config.moduleName || 'gd.triangle',
-      banner   : buildConfig.licenseBanner,
-      format   : config.format,
-      file     : config.dest,
-      globals  : rollupGlobals,
+      name: config.moduleName || 'ng.material',
+      amd: {id: config.importName},
+      banner: buildConfig.licenseBanner,
+      format: config.format,
+      file: config.dest,
+      globals: rollupGlobals,
       sourcemap: true
     };
 
@@ -163,23 +158,22 @@ export class PackageBundler {
       // If each secondary entry-point is re-exported at the root, we want to exclude those
       // secondary entry-points from the rollup globals because we want the UMD for the
       // primary entry-point to include *all* of the sources for those entry-points.
-      if (this.buildPackage.exportsSecondaryEntryPointsAtRoot &&
-        config.moduleName === `gd.tri.${this.buildPackage.name}`) {
+      if (this._buildPackage.exportsSecondaryEntryPointsAtRoot &&
+          config.moduleName === this._primaryAmdModuleName) {
 
-        const importRegex = new RegExp(`@gradii/${this.buildPackage.name}/.+`);
+        const importRegex = new RegExp(`@angular/${this._buildPackage.name}/.+`);
         external = external.filter(e => !importRegex.test(e));
 
         // Use the rollup-alias plugin to map imports of the form `@angular/material/button`
         // to the actual file location so that rollup can resolve the imports (otherwise they
         // will be treated as external dependencies and not included in the bundle).
         bundleOptions.plugins.push(
-          rollupAlias(this.getResolvedSecondaryEntryPointImportPaths(config.dest)));
+            rollupAlias(this._getResolvedSecondaryEntryPointImportPaths(config.dest)));
       }
 
       bundleOptions.external = external;
     }
 
-    logger.debug("rollup bundle options", bundleOptions);
     return rollup.rollup(bundleOptions).then((bundle: any) => bundle.write(writeOptions));
   }
 
@@ -189,20 +183,39 @@ export class PackageBundler {
    * @param bundleOutputDir Path to the bundle output directory.
    * @returns Map of alias to resolved path.
    */
-  private getResolvedSecondaryEntryPointImportPaths(bundleOutputDir: string) {
-    return this.buildPackage.secondaryEntryPoints.reduce((map, p) => {
-      map[`@gradii/${this.buildPackage.name}/${p}`] =
-        join(dirname(bundleOutputDir), this.buildPackage.name, `${p}.es5.js`);
+  private _getResolvedSecondaryEntryPointImportPaths(bundleOutputDir: string) {
+    return this._buildPackage.secondaryEntryPoints.reduce((map, p) => {
+      map[`@angular/${this._buildPackage.name}/${p}`] =
+          join(dirname(bundleOutputDir), this._buildPackage.name, `${p}.es5.js`);
       return map;
-    }, {} as { [key: string]: string });
+    }, {} as {[key: string]: string});
+  }
+
+  /**
+   * Gets the AMD module name for a package and an optional entry point. This is consistent
+   * to the module name format being used in "angular/angular".
+   */
+  private _getAmdModuleName(packageName: string, entryPointName?: string) {
+    // For example, the AMD module name for the "@angular/material-examples" package should be
+    // "ng.materialExamples". We camel-case the package name in case it contains dashes.
+    let amdModuleName = `ng.${dashCaseToCamelCase(packageName)}`;
+
+    if (entryPointName) {
+      // For example, the "@angular/material/bottom-sheet" entry-point should be converted into
+      // the following AMD module name: "ng.material.bottomSheet". Similar to the package name,
+      // the entry-point name needs to be camel-cased in case it contains dashes.
+      amdModuleName += `.${dashCaseToCamelCase(entryPointName)}`;
+    }
+
+    return amdModuleName;
   }
 }
-
 
 /** Configuration for creating library bundles. */
 interface BundlesConfig {
   entryFile: string;
   esm5EntryFile: string;
+  importName: string;
   moduleName: string;
   esm2015Dest: string;
   esm5Dest: string;
@@ -216,5 +229,5 @@ interface RollupBundleConfig {
   dest: string;
   format: string;
   moduleName: string;
-  moduleId?: string;
+  importName: string;
 }

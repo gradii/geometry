@@ -3,6 +3,8 @@
 // with AOT compilation, NGC needs the "ngsummary.json" files.
 {
   "compilerOptions": {
+    "module": "umd",
+    "moduleResolution": "node",
     "lib": [
       "dom",
       "es2015"
@@ -16,11 +18,6 @@
   "exclude": [
     "node_modules/@angular/bazel/**",
     "node_modules/@angular/compiler-cli/**",
-    "node_modules/@angular/**/testing/**",
-    "node_modules/@angular/*/schematics/**",
-    "node_modules/@angular/cdk/typings/schematics/**",
-    "node_modules/@angular/cdk/schematics/**",
-    "node_modules/@angular/router/upgrade.d.ts",
-    "node_modules/@angular/router/upgrade/**"
+    "node_modules/@angular/**/testing/**"
   ]
 }

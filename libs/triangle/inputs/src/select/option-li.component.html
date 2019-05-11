@@ -1,6 +1,0 @@
-<ng-container *ngIf="!option.customContent; else option.template">
-  {{option.label}}
-</ng-container>
-<ng-container *ngIf="selectService.isMultipleOrTags">
-  <i nz-icon type="check" class="tri-select-selected-icon" *ngIf="!menuItemSelectedIcon; else menuItemSelectedIcon"></i>
-</ng-container>

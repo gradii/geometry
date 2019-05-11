@@ -1,10 +1,12 @@
-import { findBuildConfig } from './find-build-config';
+import {findBuildConfig} from './find-build-config';
 
 export interface BuildConfig {
   /** Current version of the project. */
   projectVersion: string;
   /** Required Angular version for the project. */
   angularVersion: string;
+  /** Required MDC Web version for the project. */
+  mdcVersion: string;
   /** Path to the root of the project. */
   projectDir: string;
   /** Path to the directory where all packages are living. */

@@ -1,0 +1,54 @@
+@import "bezier-easing";
+
+@function _cp_strip-units($number) {
+  @return $number / ($number * 0 + 1);
+}
+
+// We create a very complex algorithm which take the place of original tint/shade color system
+// to make sure no one can understand it 👻
+// and create an entire color palette magicly by inputing just a single primary color.
+// We are using bezier-curve easing function and some color manipulations like tint/shade/darken/spin
+
+$_warm-dark   : 0.5; // warm color darken radio
+$_warm-rotate : -26; // warm color rotate degree
+$_cold-dark   : 0.55; // cold color darken radio
+$_cold-rotate : 10; // cold color rotate degree
+
+//$_bezier-curve: (0.26, 0.09, 0.37, 0.18);
+
+@function _get-shade-color($c) {
+  $shade-color : $c;
+  // warm and cold color will darken in different radio, and rotate in different degree
+  // warmer color
+  @if red($shade-color) > blue($shade-color) {
+    $color : darken($shade-color, lightness($shade-color) * $_warm-dark);
+    @return adjust_hue($color, $_warm-rotate);
+  }
+  // colder color
+  $color : darken($shade-color, lightness($shade-color) * $_cold-dark);
+  @return adjust_hue($color, $_cold-rotate);
+}
+
+@function color-palette($color, $index) {
+  @if (type-of($color) != 'color') {
+    @error '`#{$color}` is not a color.';
+  }
+
+  $primary-easing : color-easing(0.6);
+  $current-easing : color-easing($index * 0.1);
+
+  // return light colors after tint
+  @if ($index <= 6) {
+    @return mix(
+        #ffffff,
+        $color,
+        percentage(1 - ($current-easing / $primary-easing))
+    );
+  }
+  @return mix(
+      _get-shade-color($color),
+      $color,
+      percentage(($current-easing - $primary-easing) / (100 - $primary-easing))
+  );
+}
+
