@@ -256,7 +256,7 @@ jobs:
       - *restore_cache
       - *copy_bazel_config
 
-      - run: bazel build libs/triangle:npm_package --config=release
+      - run: bazel build src/triangle:npm_package --config=release
       - run: yarn check-release-output
 
       # Store the release output in the workspace storage. This means that other jobs

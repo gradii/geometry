@@ -32,7 +32,7 @@ TRIANGLE_PACKAGES = [
   "grid-list",
   "i18n",
   "icon",
-  "input-compose",
+#  "input-compose",
   "inputs",
   "layout",
 #  "locale",
