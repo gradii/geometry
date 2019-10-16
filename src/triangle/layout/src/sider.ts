@@ -9,24 +9,26 @@ import {
   Output,
   ViewEncapsulation
 } from '@angular/core';
-import { LayoutComponent } from './layout.component';
+import { Layout } from './layout';
 
 export type BreakPoinit = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 @Component({
-  selector: 'tri-sider',
+  selector     : 'tri-sider',
   encapsulation: ViewEncapsulation.None,
-  template: `
-    <ng-content></ng-content>
-    <span class="tri-layout-sider-zero-width-trigger" *ngIf="_isZeroTrigger" (click)="toggleCollapse()">
+  template     : `
+      <ng-content></ng-content>
+      <span class="tri-layout-sider-zero-width-trigger" *ngIf="_isZeroTrigger"
+            (click)="toggleCollapse()">
       <i class="anticon anticon-bars"></i>
     </span>
-    <div class="tri-layout-sider-trigger" *ngIf="_isSiderTrgger" (click)="toggleCollapse()">
-      <i class="anticon" [class.anticon-left]="!collapsed" [class.anticon-right]="collapsed"></i>
-    </div>
+      <div class="tri-layout-sider-trigger" *ngIf="_isSiderTrgger" (click)="toggleCollapse()">
+          <i class="anticon" [class.anticon-left]="!collapsed"
+             [class.anticon-right]="collapsed"></i>
+      </div>
   `
 })
-export class SiderComponent {
+export class Sider {
   _dimensionMap = {
     xl: '1600px',
     lg: '1200px',
@@ -70,7 +72,7 @@ export class SiderComponent {
 
   constructor(@Optional()
               @Host()
-              private layoutComponent: LayoutComponent) {
+              private layoutComponent: Layout) {
     if (this.layoutComponent) {
       this.layoutComponent.hasSider = true;
     }
@@ -136,7 +138,7 @@ export class SiderComponent {
   }
 
   @HostListener('window:resize', ['$event'])
-  onWindowResize(e) {
+  onWindowResize(e: any) {
     if (this.breakpoint) {
       const matchBelow = window.matchMedia(`(max-width: ${this._dimensionMap[this.breakpoint]})`).matches;
       this._below = matchBelow;

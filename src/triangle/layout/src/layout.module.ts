@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ContentComponent } from './content.component';
-import { FooterComponent } from './footer.component';
-import { HeaderComponent } from './header.component';
-import { LayoutComponent } from './layout.component';
-import { SiderComponent } from './sider.component';
+import { Content } from './content';
+import { Footer } from './footer';
+import { Header } from './header';
+import { Layout } from './layout';
+import { Sider } from './sider';
 
 /**
  *
@@ -71,8 +71,8 @@ import { SiderComponent } from './sider.component';
  * <!-- example(tri-demo-layout-responsive) -->
  */
 @NgModule({
-  declarations: [LayoutComponent, HeaderComponent, ContentComponent, FooterComponent, SiderComponent],
-  exports     : [LayoutComponent, HeaderComponent, ContentComponent, FooterComponent, SiderComponent],
+  declarations: [Layout, Header, Content, Footer, Sider],
+  exports     : [Layout, Header, Content, Footer, Sider],
   imports     : [CommonModule]
 })
 export class TriLayoutModule {}

@@ -1,12 +1,14 @@
 import { Component, HostBinding, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector     : 'tri-footer',
+  selector     : 'tri-layout',
   encapsulation: ViewEncapsulation.None,
   template     : `
     <ng-content></ng-content>
   `
 })
-export class FooterComponent {
-  @HostBinding('class.tri-layout-footer') _layoutFooter = true;
+export class Layout {
+  @HostBinding('class.tri-layout-has-sider') hasSider = false;
+
+  @HostBinding('class.tri-layout') _layout = true;
 }

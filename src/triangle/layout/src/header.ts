@@ -6,6 +6,6 @@ import { Component, HostBinding } from '@angular/core';
     <ng-content></ng-content>
   `
 })
-export class HeaderComponent {
+export class Header {
   @HostBinding('class.tri-layout-header') _layoutHeader = true;
 }

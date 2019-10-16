@@ -7,6 +7,6 @@ import { Component, HostBinding, ViewEncapsulation } from '@angular/core';
     <ng-content></ng-content>
   `
 })
-export class ContentComponent {
+export class Content {
   @HostBinding('class.tri-layout-content') _layoutContent = true;
 }
