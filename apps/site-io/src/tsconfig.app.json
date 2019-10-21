@@ -2,7 +2,6 @@
   "extends": "../../../tsconfig.json",
   "include": [
     "**/*.ts"
-    /* add all lazy-loaded libraries here: "../../../../../libs/my-lib/index.ts" */
   ],
   "exclude": [
     "**/*.spec.ts",

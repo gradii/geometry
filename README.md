@@ -4,7 +4,7 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/gradii/triangle.svg)](https://greenkeeper.io/)
 
 
-##常用命令
+## 常用命令
 ```
 bazel build //src/triangle:npm_package
 ```

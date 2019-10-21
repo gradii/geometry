@@ -1,6 +1,3 @@
-// Workaround for https://github.com/angular/angular/issues/18810
-// This file is required because when using the Angular NPM packages and building
-// with AOT compilation, NGC needs the "ngsummary.json" files.
 {
   "compilerOptions": {
     "module": "umd",
