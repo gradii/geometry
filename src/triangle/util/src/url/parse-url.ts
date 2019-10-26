@@ -35,7 +35,6 @@ const rules = [
  * origin.
  *
  * @type {Object}
- * @private
  */
 const ignore = {hash: 1, query: 1};
 
@@ -45,7 +44,6 @@ const ignore = {hash: 1, query: 1};
  * @param relative Pathname of the relative URL.
  * @param base Pathname of the base URL.
  * @return Resolved pathname.
- * @private
  */
 function resolve(relative, base) {
   const path = (base || '/').split('/').slice(0, -1).concat(relative.split('/'));
@@ -85,7 +83,6 @@ function resolve(relative, base) {
  * @param address URL we want to parse.
  * @param [location] Location defaults for relative paths.
  * @param [parser] Parser for the query string.
- * @private
  */
 class Url {
 
@@ -240,7 +237,6 @@ class Url {
    *
    * @param address URL we want to extract from.
    * @return Extracted information.
-   * @private
    */
   static extractProtocol(address = '') {
     const match = protocolre.exec(address);
