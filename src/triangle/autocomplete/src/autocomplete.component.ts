@@ -56,6 +56,7 @@ export function TRI_AUTOCOMPLETE_DEFAULT_OPTIONS_FACTORY(): TriAutocompleteDefau
           </div>
       </ng-template>
   `,
+  styleUrls      : ['../style/autocomplete.css'],
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   exportAs       : 'triAutocomplete',

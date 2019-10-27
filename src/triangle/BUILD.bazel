@@ -1,6 +1,6 @@
 package(default_visibility=["//visibility:public"])
 
-#load("//tools:sass_bundle.bzl", "sass_bundle")
+load("//tools:sass_bundle.bzl", "sass_bundle")
 load("//tools:defaults.bzl", "ng_module", "ng_package")
 load("//:packages.bzl", "TRIANGLE_PACKAGES", "TRIANGLE_TARGETS", "TRIANGLE_SCSS_LIBS",
     "ROLLUP_GLOBALS")
@@ -17,16 +17,13 @@ ng_module(
   ],
 )
 
-#sass_bundle(
-#  name = "triangle_bundle",
-#  srcs = [
-#    "//src/cdk/a11y:a11y_scss_lib",
-#    "//src/cdk/overlay:overlay_scss_lib",
-#    "//src/cdk/text-field:text_field_scss_lib",
-#  ] + TRIANGLE_SCSS_LIBS,
-#  entry_point = '//src/lib/core:theming/_all-theme.scss',
-#  output_name = "_theming.scss",
-#)
+sass_bundle(
+  name = "triangle_bundle",
+  srcs = [
+  ] + TRIANGLE_SCSS_LIBS,
+  entry_point = '//src/triangle/core:theming/_all-theme.scss',
+  output_name = "_theming.scss",
+)
 
 #filegroup(
 #  name = "overviews",
@@ -41,7 +38,7 @@ ng_package(
   entry_point_name = "triangle",
   globals = ROLLUP_GLOBALS,
   data = [
-#    ":theming_bundle",
+    ":theming_bundle",
 #    "//src/lib/prebuilt-themes:indigo-pink",
 #    "//src/lib/prebuilt-themes:deeppurple-amber",
 #    "//src/lib/prebuilt-themes:pink-bluegrey",

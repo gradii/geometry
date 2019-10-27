@@ -2,23 +2,25 @@
  * import third party library first
  * include mathsass etc.
  */
-@import "vendor/_math/_math";
+@import "vendor/math/math";
 // Color
-@import "_color/contrast";
-@import "_color/utils";
-@import "_color/color-palette";
+@import "color/contrast";
+@import "color/utils";
+@import "color/color-palette";
+//Variables And Theme
 @import "variables";
 // Mixins
-@import "_mixins/border-radius";
-@import "_mixins/box-shadow";
-@import "_mixins/gradients";
-@import "_mixins/rem";
-@import "_mixins/transition";
-@import "_mixins/clearfix";
-@import "_mixins/compatibility";
-@import "_mixins/iconfont";
-@import "_mixins/import-once";
-@import "_mixins/layout";
-@import "_mixins/motion";
-@import "_mixins/reset";
-@import "_mixins/size";
+@import "mixins/border-radius";
+@import "mixins/box-shadow";
+@import "mixins/clearfix";
+@import "mixins/compatibility";
+@import "mixins/gradients";
+@import "mixins/iconfont";
+@import "mixins/import-once";
+@import "mixins/layout";
+@import "mixins/motion";
+@import "mixins/opacity";
+@import "mixins/rem";
+@import "mixins/reset";
+@import "mixins/size";
+@import "mixins/transition";

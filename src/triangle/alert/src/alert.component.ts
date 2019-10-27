@@ -16,8 +16,8 @@ import { coerceToBoolean } from '@gradii/triangle/util';
 @Component({
   selector           : 'tri-alert',
   animations         : [FadeAnimation],
-  encapsulation      : ViewEncapsulation.None,
   preserveWhitespaces: false,
+  encapsulation      : ViewEncapsulation.None,
   changeDetection    : ChangeDetectionStrategy.OnPush,
   template           : `
     <div
@@ -74,6 +74,7 @@ import { coerceToBoolean } from '@gradii/triangle/util';
       </a>
     </div>
   `,
+  styleUrls: ["../style/alert.css"]
 })
 export class AlertComponent {
   display = true;

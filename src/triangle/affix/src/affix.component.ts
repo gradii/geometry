@@ -10,7 +10,8 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  ViewChild
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
 import { ScrollService } from '@gradii/triangle/core';
 import { coerceToNumber, shallowEqual } from '@gradii/triangle/util';
@@ -22,6 +23,7 @@ import { throttleByAnimationFrameDecorator } from './throttleByAnimationFrame';
       <div #wrap>
           <ng-content></ng-content>
       </div>`,
+  encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles         : [
       `:host {

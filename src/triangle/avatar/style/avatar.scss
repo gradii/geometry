@@ -1,3 +1,5 @@
+@import "../../core/style/themes/default-theme";
+
 $avatar-prefix-cls : "#{$ant-prefix}-avatar";
 
 @mixin avatar-size($size, $font-size) {
