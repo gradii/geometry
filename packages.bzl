@@ -41,7 +41,7 @@ TRIANGLE_PACKAGES = [
   "menu",
   "message",
   "modal",
-  "ng-tree",
+  "tree",
   "pagination",
   "popconfirm",
   "popover",

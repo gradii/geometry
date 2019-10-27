@@ -36,7 +36,7 @@ import { TreeService } from './tree.service';
 import { Ng2TreeSettings, TreeModel } from './tree.types';
 
 @Component({
-  selector : 'tri-ng-tree',
+  selector : 'tri-tree',
   template : `
       <tree-internal #rootComponent
                      [tree]="tree"

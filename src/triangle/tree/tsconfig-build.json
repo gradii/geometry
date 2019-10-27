@@ -8,7 +8,7 @@
     "annotateForClosureCompiler": true,
     "strictMetadataEmit": true,
     "flatModuleOutFile": "index.js",
-    "flatModuleId": "@gradii/triangle/ng-tree",
+    "flatModuleId": "@gradii/triangle/tree",
     "skipTemplateCodegen": true
   }
 }
