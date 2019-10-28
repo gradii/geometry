@@ -15,14 +15,14 @@ import { GroupInfoService } from './group-info.service';
   changeDetection    : ChangeDetectionStrategy.OnPush,
   preserveWhitespaces: false,
   template           : `
-    <a href="#" class="tri-link" tabindex="-1" (click)="toggleDirection()">
+      <a href="#" class="tri-link" tabindex="-1" (click)="toggleDirection()">
          <span class="tri-icon"
                [class.tri-i-sort-asc-sm]="dir === 'asc'"
                [class.tri-i-sort-desc-sm]="dir === 'desc'"></span>
-      {{title}}</a>
-    <a class="tri-button tri-button-icon tri-bare" tabindex="-1" (click)="removeDescriptor()">
-      <span class="tri-icon tri-i-group-delete"></span>
-    </a>
+          {{title}}</a>
+      <a class="tri-button tri-button-icon tri-bare" tabindex="-1" (click)="removeDescriptor()">
+          <span class="tri-icon tri-i-group-delete"></span>
+      </a>
   `
 })
 export class GroupIndicatorComponent {

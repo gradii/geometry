@@ -38,8 +38,8 @@ import { DrawerRef } from './drawer-ref';
 export const DRAWER_ANIMATE_DURATION = 300;
 
 @Component({
-  selector: 'tri-drawer',
-  template: `
+  selector           : 'tri-drawer',
+  template           : `
       <ng-template #drawerTemplate>
           <div
                   class="tri-drawer"
@@ -91,7 +91,7 @@ export const DRAWER_ANIMATE_DURATION = 300;
       </ng-template>
   `,
   preserveWhitespaces: false,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection    : ChangeDetectionStrategy.OnPush
 })
 export class DrawerComponent<T = any, R = any, D = any> extends DrawerRef<R>
   implements OnInit, OnDestroy, AfterViewInit, OnChanges, DrawerOptions {

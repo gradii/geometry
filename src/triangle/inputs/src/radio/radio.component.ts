@@ -35,7 +35,7 @@ export interface RadioOption {
   }
 })
 export class RadioComponent extends RadioTileDirective implements RadioOption {
-  @ContentChild(TemplateRef, { static: false }) labelTemplate;
+  @ContentChild(TemplateRef, {static: false}) labelTemplate;
 
   focus() {
     this._focused = true;

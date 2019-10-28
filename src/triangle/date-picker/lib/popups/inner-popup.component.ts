@@ -14,7 +14,7 @@ import { CandyDate } from '../candy-date/candy-date';
 import { DisabledDateFn, PanelMode } from '../standard-types';
 
 @Component({
-  selector: 'inner-popup',
+  selector   : 'inner-popup',
   templateUrl: 'inner-popup.component.html'
 })
 

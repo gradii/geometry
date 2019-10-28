@@ -44,44 +44,48 @@ export interface TransferSelectChange {
 @Component({
   selector       : 'tri-transfer',
   template       : `
-    <tri-transfer-list class="tri-transfer-list" [ngStyle]="listStyle" data-direction="left"
-                       [titleText]="titles[0]"
-                       [dataSource]="leftDataSource"
-                       [filter]="leftFilter"
-                       [filterOption]="filterOption"
-                       (filterChange)="handleFilterChange($event)"
-                       [render]="render"
-                       [showSearch]="showSearch"
-                       [searchPlaceholder]="searchPlaceholder"
-                       [notFoundContent]="notFoundContent"
-                       [itemUnit]="itemUnit"
-                       [itemsUnit]="itemsUnit"
-                       [footer]="footer"
-                       (handleSelect)="handleLeftSelect($event)"
-                       (handleSelectAll)="handleLeftSelectAll($event)"></tri-transfer-list>
-    <div class="tri-transfer-operation">
-      <button tri-button (click)="moveToLeft()" [disabled]="!leftActive" [color]="'primary'" [size]="'small'">
-        <i class="anticon anticon-left"></i><span *ngIf="operations[1]">{{ operations[1] }}</span>
-      </button>
-      <button tri-button (click)="moveToRight()" [disabled]="!rightActive" [color]="'primary'" [size]="'small'">
-        <i class="anticon anticon-right"></i><span *ngIf="operations[0]">{{ operations[0] }}</span>
-      </button>
-    </div>
-    <tri-transfer-list class="tri-transfer-list" [ngStyle]="listStyle" data-direction="right"
-                       [titleText]="titles[1]"
-                       [dataSource]="rightDataSource"
-                       [filter]="rightFilter"
-                       [filterOption]="filterOption"
-                       (filterChange)="handleFilterChange($event)"
-                       [render]="render"
-                       [showSearch]="showSearch"
-                       [searchPlaceholder]="searchPlaceholder"
-                       [notFoundContent]="notFoundContent"
-                       [itemUnit]="itemUnit"
-                       [itemsUnit]="itemsUnit"
-                       [footer]="footer"
-                       (handleSelect)="handleRightSelect($event)"
-                       (handleSelectAll)="handleRightSelectAll($event)"></tri-transfer-list>
+      <tri-transfer-list class="tri-transfer-list" [ngStyle]="listStyle" data-direction="left"
+                         [titleText]="titles[0]"
+                         [dataSource]="leftDataSource"
+                         [filter]="leftFilter"
+                         [filterOption]="filterOption"
+                         (filterChange)="handleFilterChange($event)"
+                         [render]="render"
+                         [showSearch]="showSearch"
+                         [searchPlaceholder]="searchPlaceholder"
+                         [notFoundContent]="notFoundContent"
+                         [itemUnit]="itemUnit"
+                         [itemsUnit]="itemsUnit"
+                         [footer]="footer"
+                         (handleSelect)="handleLeftSelect($event)"
+                         (handleSelectAll)="handleLeftSelectAll($event)"></tri-transfer-list>
+      <div class="tri-transfer-operation">
+          <button tri-button (click)="moveToLeft()" [disabled]="!leftActive" [color]="'primary'"
+                  [size]="'small'">
+              <i class="anticon anticon-left"></i><span
+                  *ngIf="operations[1]">{{ operations[1] }}</span>
+          </button>
+          <button tri-button (click)="moveToRight()" [disabled]="!rightActive" [color]="'primary'"
+                  [size]="'small'">
+              <i class="anticon anticon-right"></i><span
+                  *ngIf="operations[0]">{{ operations[0] }}</span>
+          </button>
+      </div>
+      <tri-transfer-list class="tri-transfer-list" [ngStyle]="listStyle" data-direction="right"
+                         [titleText]="titles[1]"
+                         [dataSource]="rightDataSource"
+                         [filter]="rightFilter"
+                         [filterOption]="filterOption"
+                         (filterChange)="handleFilterChange($event)"
+                         [render]="render"
+                         [showSearch]="showSearch"
+                         [searchPlaceholder]="searchPlaceholder"
+                         [notFoundContent]="notFoundContent"
+                         [itemUnit]="itemUnit"
+                         [itemsUnit]="itemsUnit"
+                         [footer]="footer"
+                         (handleSelect)="handleRightSelect($event)"
+                         (handleSelectAll)="handleRightSelectAll($event)"></tri-transfer-list>
   `,
   encapsulation  : ViewEncapsulation.None,
   // tslint:disable-next-line:use-host-property-decorator

@@ -249,7 +249,7 @@ export class ColumnHandleDirective implements OnInit, OnDestroy {
     this.originalWidth = headerWidth(this.element);
 
     this.service.resizedColumn({
-      column: this.column,
+      column  : this.column,
       oldWidth: this.originalWidth
     });
   }

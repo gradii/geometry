@@ -18,7 +18,7 @@ import { getClosestDialog } from './helper';
   selector: `[tri-dialog-close], [triDialogClose]`,
   exportAs: 'triDialogClose',
   host    : {
-    '(click)': 'dialogRef.close(dialogResult)',
+    '(click)'          : 'dialogRef.close(dialogResult)',
     '[attr.aria-label]': 'ariaLabel',
   }
 })

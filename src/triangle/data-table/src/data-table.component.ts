@@ -427,10 +427,10 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   @Output() remove: EventEmitter<RemoveEvent> = new EventEmitter();
   @Output() add: EventEmitter<AddEvent> = new EventEmitter();
   @ContentChildren(ColumnBase) columns: QueryList<ColumnBase>;
-  @ContentChild(DetailTemplateDirective, { static: false }) detailTemplate: DetailTemplateDirective;
+  @ContentChild(DetailTemplateDirective, {static: false}) detailTemplate: DetailTemplateDirective;
   @ContentChildren(NoRecordsTemplateDirective) noRecordsTemplate: NoRecordsTemplateDirective;
   // pagerTemplate: PagerTemplateDirective;
-  @ContentChild(ToolbarTemplateDirective, { static: false }) toolbarTemplate: ToolbarTemplateDirective;
+  @ContentChild(ToolbarTemplateDirective, {static: false}) toolbarTemplate: ToolbarTemplateDirective;
   @ViewChild('lockedHeader', {static: false}) lockedHeader: any;
   @ViewChild('header', {static: false}) header: any;
   @ViewChild('footer', {static: false}) footer: any;
@@ -745,6 +745,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     this._fieldFilterMap = value;
     // this.cdr.markForCheck();
   }
+
   // todo
   // @ContentChild(PagerTemplateDirective, { static: false })
 

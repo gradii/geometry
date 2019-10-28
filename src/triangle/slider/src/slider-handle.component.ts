@@ -12,9 +12,9 @@ import { ToolTipComponent } from '@gradii/triangle/tooltip';
 import { SliderComponent } from './slider.component';
 
 @Component({
-  selector: 'tri-slider-handle',
+  selector     : 'tri-slider-handle',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <tri-tooltip *ngIf="tipFormatter !== null" #tooltip [title]="tooltipTitle" [trigger]="null">
       <div tri-tooltip [class]="className" [ngStyle]="style"></div>
     </tri-tooltip>

@@ -47,7 +47,7 @@ export function removeFilter(filter, field) {
 export function localizeOperators(operators) {
   return localization =>
     Object.keys(operators).map(key => ({
-      text: localization.get(key),
+      text : localization.get(key),
       value: operators[key]
     }));
 }

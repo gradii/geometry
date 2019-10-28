@@ -13,7 +13,7 @@ describe('OptionComponent component', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [TriOptionModule],
+      imports     : [TriOptionModule],
       declarations: [BasicOption]
     }).compileComponents();
   }));

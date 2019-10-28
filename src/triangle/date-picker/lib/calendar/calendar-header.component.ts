@@ -13,7 +13,7 @@ import { CandyDate } from '../candy-date/candy-date';
 import { PanelMode } from '../standard-types';
 
 @Component({
-  selector: 'calendar-header',
+  selector   : 'calendar-header',
   templateUrl: 'calendar-header.component.html'
 })
 

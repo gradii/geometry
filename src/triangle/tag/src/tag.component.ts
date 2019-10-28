@@ -13,10 +13,10 @@ import {
 import { TagAnimation } from '@gradii/triangle/core';
 
 @Component({
-  selector: 'tri-tag',
+  selector     : 'tri-tag',
   encapsulation: ViewEncapsulation.None,
-  animations: [TagAnimation],
-  template: `
+  animations   : [TagAnimation],
+  template     : `
     <span *ngIf="!_closed"
           class="tri-tag"
           [class.tri-tag-pink]="color=='pink'"

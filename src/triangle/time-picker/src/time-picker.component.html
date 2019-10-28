@@ -1,12 +1,12 @@
 <input
-  #inputElement
-  (click)="onOpen()"
-  [(ngModel)]="value"
-  [placeholder]="placeHolder || ('TimePicker.placeholder' | triI18n)"
-  [triTime]="format"
-  class="tri-time-picker-input"
-  readonly="readonly"
-  type="text">
+    #inputElement
+    (click)="onOpen()"
+    [(ngModel)]="value"
+    [placeholder]="placeHolder || ('TimePicker.placeholder' | triI18n)"
+    [triTime]="format"
+    class="tri-time-picker-input"
+    readonly="readonly"
+    type="text">
 <span class="tri-time-picker-icon"></span>
 
 <ng-template

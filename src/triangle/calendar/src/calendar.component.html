@@ -22,7 +22,9 @@
     <tr *ngFor="let week of dateMatrix; index as row"
         [class.tri-fullcalendar-active-week]="row === activeDateRow"
         [class.tri-fullcalendar-current-week]="row === currentDateRow">
-      <td (click)="onDateSelect(day.value, row, col)" *ngFor="let day of week; index as col" [class.tri-fullcalendar-last-month-cell]="day.rel === 'last'" [class.tri-fullcalendar-next-month-btn-day]="day.rel === 'next'"
+      <td (click)="onDateSelect(day.value, row, col)" *ngFor="let day of week; index as col"
+          [class.tri-fullcalendar-last-month-cell]="day.rel === 'last'"
+          [class.tri-fullcalendar-next-month-btn-day]="day.rel === 'next'"
           [class.tri-fullcalendar-selected-day]="row === activeDateRow && col === activeDateCol"
           [class.tri-fullcalendar-today]="row === currentDateRow && col === currentDateCol"
           [title]="day.title"
@@ -49,7 +51,8 @@
   <table cellspacing="0" class="tri-fullcalendar-month-panel-table" role="grid">
     <tbody class="tri-fullcalendar-month-panel-tbody">
     <tr *ngFor="let row of [0, 1, 2, 3]" role="row">
-      <td (click)="onMonthSelect(row * 3 + col)" *ngFor="let col of [0, 1, 2]" [class.tri-fullcalendar-month-panel-current-cell]="row === currentMonthRow && col === currentMonthCol"
+      <td (click)="onMonthSelect(row * 3 + col)" *ngFor="let col of [0, 1, 2]"
+          [class.tri-fullcalendar-month-panel-current-cell]="row === currentMonthRow && col === currentMonthCol"
           [class.tri-fullcalendar-month-panel-selected-cell]="row === activeMonthRow && col === activeMonthCol"
           [title]="monthsInYear[row * 3 + col].title"
           class="tri-fullcalendar-month-panel-cell"

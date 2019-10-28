@@ -500,8 +500,8 @@ export function ICON_REGISTRY_PROVIDER_FACTORY(parentRegistry: IconRegistry,
 /** @docs-private */
 export const ICON_REGISTRY_PROVIDER = {
   // If there is already an IconRegistry available, use that. Otherwise, provide a new one.
-  provide: IconRegistry,
-  deps: [
+  provide   : IconRegistry,
+  deps      : [
     [new Optional(), new SkipSelf(), IconRegistry],
     [new Optional(), HttpClient],
     DomSanitizer,

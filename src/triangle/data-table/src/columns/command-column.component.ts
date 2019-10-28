@@ -13,7 +13,7 @@ import { AutoGenerateColumnPositon, ColumnBase } from './column-base';
 @Component({
   providers: [
     {
-      provide: ColumnBase,
+      provide    : ColumnBase,
       useExisting: CommandColumnComponent
     }
   ],
@@ -31,7 +31,7 @@ export class CommandColumnComponent extends ColumnBase {
   } = 'tri-data-table-command-column';
 
   parent: ColumnBase;
-  @ContentChild(CellTemplateDirective, { static: false }) template: CellTemplateDirective;
+  @ContentChild(CellTemplateDirective, {static: false}) template: CellTemplateDirective;
 
   constructor(@SkipSelf()
               @Host()

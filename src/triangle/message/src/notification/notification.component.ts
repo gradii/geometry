@@ -5,9 +5,9 @@ import { MessageComponent } from '../message/message.component';
 import { NotificationContainerComponent } from './notification-container.component';
 
 @Component({
-  selector: 'tri-notification',
+  selector     : 'tri-notification',
   encapsulation: ViewEncapsulation.None,
-  animations: [
+  animations   : [
     trigger('enterLeave', [
       state('enter', style({opacity: 1, transform: 'translateX(0)'})),
       transition('* => enter', [style({
@@ -21,7 +21,7 @@ import { NotificationContainerComponent } from './notification-container.compone
       }), animate('100ms linear')])
     ])
   ],
-  template: `
+  template     : `
     <div class="tri-notification-notice tri-notification-notice-closable"
          [@enterLeave]="message.state"
          (mouseenter)="onEnter()"

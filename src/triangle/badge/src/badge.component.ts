@@ -10,15 +10,15 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'tri-badge',
+  selector     : 'tri-badge',
   encapsulation: ViewEncapsulation.None,
-  animations: [
+  animations   : [
     trigger('enterLeave', [
       transition('void => *', [style({opacity: 0}), animate('0.3s cubic-bezier(0.12, 0.4, 0.29, 1.46)')]),
       transition('* => void', [style({opacity: 1}), animate('0.3s cubic-bezier(0.12, 0.4, 0.29, 1.46)')])
     ])
   ],
-  template: `
+  template     : `
       <ng-template *ngIf="content" [ngTemplateOutlet]="content"></ng-template>
       <span class="tri-badge-status-dot tri-badge-status-{{status}}" *ngIf="status"></span>
       <span class="tri-badge-status-text" *ngIf="badgeText">{{badgeText}}</span>

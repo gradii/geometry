@@ -44,13 +44,13 @@ export class ColumnComponent extends ColumnBase {
   @Input() filter: 'text' | 'numeric' | 'boolean' | 'date' | 'datetime' | string;
   @Input() filterable: boolean = true;
   @Input() editable: boolean = true;
-  @ContentChild(CellTemplateDirective, { static: false }) cellTemplate: CellTemplateDirective;
-  @ContentChild(GroupHeaderTemplateDirective, { static: false }) groupHeaderTemplate: GroupHeaderTemplateDirective;
-  @ContentChild(GroupFooterTemplateDirective, { static: false }) groupFooterTemplate: GroupFooterTemplateDirective;
-  @ContentChild(EditTemplateDirective, { static: false }) editTemplate: EditTemplateDirective;
-  @ContentChild(FilterCellTemplateDirective, { static: false }) filterCellTemplate: FilterCellTemplateDirective;
-  @ContentChild(FilterMenuTemplateDirective, { static: false }) filterMenuTemplate: FilterMenuTemplateDirective;
-  @ContentChild(FilterSimpleTemplateDirective, { static: false }) filterSimpleTemplate: FilterSimpleTemplateDirective;
+  @ContentChild(CellTemplateDirective, {static: false}) cellTemplate: CellTemplateDirective;
+  @ContentChild(GroupHeaderTemplateDirective, {static: false}) groupHeaderTemplate: GroupHeaderTemplateDirective;
+  @ContentChild(GroupFooterTemplateDirective, {static: false}) groupFooterTemplate: GroupFooterTemplateDirective;
+  @ContentChild(EditTemplateDirective, {static: false}) editTemplate: EditTemplateDirective;
+  @ContentChild(FilterCellTemplateDirective, {static: false}) filterCellTemplate: FilterCellTemplateDirective;
+  @ContentChild(FilterMenuTemplateDirective, {static: false}) filterMenuTemplate: FilterMenuTemplateDirective;
+  @ContentChild(FilterSimpleTemplateDirective, {static: false}) filterSimpleTemplate: FilterSimpleTemplateDirective;
 
   constructor(@SkipSelf()
               @Host()

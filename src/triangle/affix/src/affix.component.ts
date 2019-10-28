@@ -1,4 +1,3 @@
-// tslint:disable:no-any
 import { CdkScrollable } from '@angular/cdk/overlay';
 import {
   ChangeDetectionStrategy,
@@ -29,7 +28,8 @@ import { throttleByAnimationFrameDecorator } from './throttleByAnimationFrame';
       `:host {
           display : block;
       }`
-  ]
+  ],
+  styleUrls      : ['../style/affix.css']
 })
 export class AffixComponent implements OnInit, OnDestroy {
 

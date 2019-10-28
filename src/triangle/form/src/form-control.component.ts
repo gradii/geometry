@@ -107,7 +107,7 @@ export class FormControlComponent {
     return this.hasFeedback as boolean;
   }
 
-  _isDirtyAndError(name: string):boolean {
+  _isDirtyAndError(name: string): boolean {
     return Boolean(
       this.validateStatus === name ||
       (this.validateStatus &&

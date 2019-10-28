@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TriI18nModule } from '@gradii/triangle/i18n';
-import { TriSelectModule } from '@gradii/triangle/inputs';
 import { TriIconModule } from '@gradii/triangle/icon';
+import { TriSelectModule } from '@gradii/triangle/inputs';
 import { PaginationComponent } from './pagination.component';
 
 /**

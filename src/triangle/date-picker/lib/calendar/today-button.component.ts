@@ -12,7 +12,7 @@ import { CalendarI18nInterface, I18nService } from '@gradii/triangle/i18n';
 import { CandyDate } from '../candy-date/candy-date';
 
 @Component({
-  selector: 'today-button',
+  selector   : 'today-button',
   templateUrl: 'today-button.component.html'
 })
 

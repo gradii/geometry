@@ -8,9 +8,9 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'tri-card',
+  selector     : 'tri-card',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div class="tri-card-head" *ngIf="!titleTemplate&&title">
       <h3 class="tri-card-head-title">{{title}}</h3>
     </div>

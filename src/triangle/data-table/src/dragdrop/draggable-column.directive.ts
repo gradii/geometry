@@ -141,7 +141,7 @@ export class DraggableColumnDirective implements OnInit, OnDestroy {
     }
 
     this.drag.emit({
-      draggable: this,
+      draggable : this,
       mouseEvent: move
     });
   }

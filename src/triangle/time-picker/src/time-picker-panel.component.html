@@ -19,9 +19,9 @@
     </div>
     <div class="{{ prefixCls }}-combobox">
       <div
-        #hourListElement
-        *ngIf="hourEnabled"
-        class="{{ prefixCls }}-select">
+          #hourListElement
+          *ngIf="hourEnabled"
+          class="{{ prefixCls }}-select">
         <ul>
           <ng-container *ngFor="let hour of hourRange">
             <li
@@ -38,9 +38,9 @@
         </ul>
       </div>
       <div
-        #minuteListElement
-        *ngIf="minuteEnabled"
-        class="{{ prefixCls }}-select">
+          #minuteListElement
+          *ngIf="minuteEnabled"
+          class="{{ prefixCls }}-select">
         <ul>
           <ng-container *ngFor="let minute of minuteRange">
             <li
@@ -57,9 +57,9 @@
         </ul>
       </div>
       <div
-        #secondListElement
-        *ngIf="secondEnabled"
-        class="{{ prefixCls }}-select">
+          #secondListElement
+          *ngIf="secondEnabled"
+          class="{{ prefixCls }}-select">
         <ul>
           <ng-container *ngFor="let second of secondRange">
             <li

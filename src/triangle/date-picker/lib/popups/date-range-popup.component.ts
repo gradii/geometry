@@ -23,7 +23,7 @@ import {
 import { getTimeConfig, isAllowedDate } from '../util';
 
 @Component({
-  selector: 'date-range-popup',
+  selector   : 'date-range-popup',
   templateUrl: 'date-range-popup.component.html'
 })
 

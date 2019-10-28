@@ -11,7 +11,8 @@
   <ng-container *ngIf="dataSource">
     <div *ngIf="loading && dataSource.length === 0" [style.min-height.px]="53"></div>
     <div *ngIf="grid; else itemsTpl" [gutter]="grid.gutter" tri-row>
-      <div *ngFor="let item of dataSource; let index = index" [lg]="grid.lg" [md]="grid.md" [sm]="grid.sm" [span]="grid.span" [xXl]="grid.xxl" [xl]="grid.xl"
+      <div *ngFor="let item of dataSource; let index = index" [lg]="grid.lg" [md]="grid.md" [sm]="grid.sm"
+           [span]="grid.span" [xXl]="grid.xxl" [xl]="grid.xl"
            [xs]="grid.xs" tri-col>
         <ng-template [ngTemplateOutletContext]="{ $implicit: item, index: index }"
                      [ngTemplateOutlet]="renderItem"></ng-template>

@@ -52,5 +52,5 @@ export class PopoverComponent extends ToolTipComponent {
    * `NzPopoverDirective` directive
    * `NzPopoverDirective` 指令
    */
-  @ContentChild(PopoverDirective, { static: false }) origin;
+  @ContentChild(PopoverDirective, {static: false}) origin;
 }

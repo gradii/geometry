@@ -74,7 +74,7 @@ import { coerceToBoolean } from '@gradii/triangle/util';
       </a>
     </div>
   `,
-  styleUrls: ["../style/alert.css"]
+  styleUrls          : ['../style/alert.css']
 })
 export class AlertComponent {
   display = true;

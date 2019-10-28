@@ -5,9 +5,9 @@ import { MessageContainerComponent } from './message-container.component';
 import { MessageDataFilled, MessageDataOptions } from './message.definitions';
 
 @Component({
-  selector: 'tri-message',
+  selector     : 'tri-message',
   encapsulation: ViewEncapsulation.None,
-  animations: [
+  animations   : [
     trigger('enterLeave', [
       state('enter', style({opacity: 1, transform: 'translateY(0)'})),
       transition('* => enter', [style({
@@ -21,7 +21,7 @@ import { MessageDataFilled, MessageDataOptions } from './message.definitions';
       }), animate('100ms linear')])
     ])
   ],
-  template: `
+  template     : `
     <div class="tri-message-notice"
          [@enterLeave]="message.state"
          (mouseenter)="onEnter()"

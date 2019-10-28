@@ -10,10 +10,10 @@ import { GridTileComponent } from './grid-tile';
 import { GridTileText } from './grid-tile-text';
 
 @NgModule({
-  imports: [
+  imports     : [
     //    TriLineModule, TriCommonModule
   ],
-  exports: [
+  exports     : [
     GridListComponent,
     GridTileComponent,
     GridTileText,

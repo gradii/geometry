@@ -16,9 +16,9 @@ import { ColumnComponent } from './column.component';
 @Component({
   providers: [
     {
-      provide: ColumnBase,
+      provide    : ColumnBase,
       useExisting: forwardRef(() => HierarchyColumnComponent),
-      multi: true
+      multi      : true
     }
   ],
   selector : 'tri-data-table-hierarchy-column',
@@ -39,7 +39,7 @@ export class HierarchyColumnComponent extends ColumnComponent {
     [key: string]: any;
   } = 'tri-data-table-hierarchy-column';
 
-  @ContentChild(CellTemplateDirective, { static: false }) template;
+  @ContentChild(CellTemplateDirective, {static: false}) template;
 
   constructor(@SkipSelf()
               @Host()

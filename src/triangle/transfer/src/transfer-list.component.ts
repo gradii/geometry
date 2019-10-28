@@ -20,40 +20,43 @@ import { TransferItem } from './item';
 @Component({
   selector: 'tri-transfer-list',
   template: `
-    <div class="tri-transfer-list-header">
-      <tri-checkbox [(ngModel)]="stat.checkAll" (ngModelChange)="onHandleSelectAll($event)"
-             [indeterminate]="stat.checkHalf"></tri-checkbox>
-      <span class="tri-transfer-list-header-selected">
+      <div class="tri-transfer-list-header">
+          <tri-checkbox [(ngModel)]="stat.checkAll" (ngModelChange)="onHandleSelectAll($event)"
+                        [indeterminate]="stat.checkHalf"></tri-checkbox>
+          <span class="tri-transfer-list-header-selected">
         <span>{{ (stat.checkCount > 0 ? stat.checkCount + '/' : '') + stat.shownCount }} {{ dataSource.length > 1 ? itemsUnit : itemUnit }}</span>
         <span *ngIf="titleText" class="tri-transfer-list-header-title">{{ titleText }}</span>
       </span>
-    </div>
-    <div class="{{showSearch ? 'tri-transfer-list-body tri-transfer-list-body-with-search' : 'tri-transfer-list-body'}}"
-         [ngClass]="{'tri-transfer__nodata': stat.shownCount === 0}">
-      <div *ngIf="showSearch" class="tri-transfer-list-body-search-wrapper">
-        <tri-transfer-search class="tri-transfer-list-search"
-                             (valueChanged)="handleFilter($event)"
-                             (valueClear)="handleClear()"
-                             [placeholder]="searchPlaceholder"
-                             [value]="filter"></tri-transfer-search>
       </div>
-      <ul class="tri-transfer-list-content">
-        <ng-container *ngFor="let item of dataSource">
-          <li *ngIf="!item._hiden" (click)="_handleSelect(item)" class="tri-transfer-list-content-item">
-            <label tri-checkbox [ngModel]="item.checked" [disabled]="item.disabled">
+      <div class="{{showSearch ? 'tri-transfer-list-body tri-transfer-list-body-with-search' : 'tri-transfer-list-body'}}"
+           [ngClass]="{'tri-transfer__nodata': stat.shownCount === 0}">
+          <div *ngIf="showSearch" class="tri-transfer-list-body-search-wrapper">
+              <tri-transfer-search class="tri-transfer-list-search"
+                                   (valueChanged)="handleFilter($event)"
+                                   (valueClear)="handleClear()"
+                                   [placeholder]="searchPlaceholder"
+                                   [value]="filter"></tri-transfer-search>
+          </div>
+          <ul class="tri-transfer-list-content">
+              <ng-container *ngFor="let item of dataSource">
+                  <li *ngIf="!item._hiden" (click)="_handleSelect(item)"
+                      class="tri-transfer-list-content-item">
+                      <label tri-checkbox [ngModel]="item.checked" [disabled]="item.disabled">
               <span>
                 <ng-container *ngIf="!render; else renderContainer">{{ item.title }}</ng-container>
-                <ng-template #renderContainer [ngTemplateOutlet]="render" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
+                <ng-template #renderContainer [ngTemplateOutlet]="render"
+                             [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
               </span>
-            </label>
-          </li>
-        </ng-container>
-      </ul>
-      <div class="tri-transfer-list-body-not-found">{{ notFoundContent }}</div>
-    </div>
-    <div *ngIf="footer" class="tri-transfer-list-footer">
-      <ng-template [ngTemplateOutlet]="footer" [ngTemplateOutletContext]="{ $implicit: direction }"></ng-template>
-    </div>
+                      </label>
+                  </li>
+              </ng-container>
+          </ul>
+          <div class="tri-transfer-list-body-not-found">{{ notFoundContent }}</div>
+      </div>
+      <div *ngIf="footer" class="tri-transfer-list-footer">
+          <ng-template [ngTemplateOutlet]="footer"
+                       [ngTemplateOutletContext]="{ $implicit: direction }"></ng-template>
+      </div>
   `
 })
 export class TransferListComponent implements OnChanges, OnInit, DoCheck {

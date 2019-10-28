@@ -11,27 +11,28 @@ import { FilterService } from '../filter.service';
   selector           : 'tri-data-table-numeric-filter-cell',
   preserveWhitespaces: false,
   template           : `
-    <tri-data-table-filter-wrapper-cell
-      [column]="column"
-      [filter]="filter"
-      [operators]="operators"
-      [defaultOperator]="operator"
-      [showOperators]="showOperators">
-      <!-- 
-      <tri-numerictextbox
-         triFilterInput
-         [autoCorrect]="true"
-         [value]="currentFilter?.value"
-         [format]="format"
-         [decimals]="decimals"
-         [spinners]="spinners"
-         [min]="min"
-         [max]="max"
-         [step]="step">
-       </tri-numerictextbox>
-       -->
-      <tri-input-number tri-filter-input [min]="min" [max]="max" [step]="step"></tri-input-number>
-    </tri-data-table-filter-wrapper-cell>
+      <tri-data-table-filter-wrapper-cell
+              [column]="column"
+              [filter]="filter"
+              [operators]="operators"
+              [defaultOperator]="operator"
+              [showOperators]="showOperators">
+          <!-- 
+          <tri-numerictextbox
+             triFilterInput
+             [autoCorrect]="true"
+             [value]="currentFilter?.value"
+             [format]="format"
+             [decimals]="decimals"
+             [spinners]="spinners"
+             [min]="min"
+             [max]="max"
+             [step]="step">
+           </tri-numerictextbox>
+           -->
+          <tri-input-number tri-filter-input [min]="min" [max]="max"
+                            [step]="step"></tri-input-number>
+      </tri-data-table-filter-wrapper-cell>
   `
 })
 export class NumericFilterCellComponent extends BaseFilterCellComponent {

@@ -14,13 +14,15 @@
       [option]="selectService.addedTagOption"
       tri-option-li>
   </li>
-  <li *ngFor="let option of selectService.listOfOptionComponent | triFilterOption : selectService.searchValue : selectService.filterOption : selectService.serverSearch; trackBy: trackValue"
-      [menuItemSelectedIcon]="menuItemSelectedIcon"
-      [option]="option"
-      tri-option-li>
+  <li
+    *ngFor="let option of selectService.listOfOptionComponent | triFilterOption : selectService.searchValue : selectService.filterOption : selectService.serverSearch; trackBy: trackValue"
+    [menuItemSelectedIcon]="menuItemSelectedIcon"
+    [option]="option"
+    tri-option-li>
   </li>
-  <li *ngFor="let group of selectService.listOfOptionGroupComponent | triFilterGroupOption : selectService.searchValue : selectService.filterOption :selectService.serverSearch; trackBy: trackLabel"
-      class="tri-select-dropdown-menu-item-group">
+  <li
+    *ngFor="let group of selectService.listOfOptionGroupComponent | triFilterGroupOption : selectService.searchValue : selectService.filterOption :selectService.serverSearch; trackBy: trackLabel"
+    class="tri-select-dropdown-menu-item-group">
     <div [attr.title]="group.isLabelString ? group.label : ''"
          class="tri-select-dropdown-menu-item-group-title">
       <ng-container *stringTemplateOutlet="group.label">
@@ -28,16 +30,18 @@
       </ng-container>
     </div>
     <ul class="tri-select-dropdown-menu-item-group-list">
-      <li *ngFor="let option of group.listOfOptionComponent | triFilterOption : selectService.searchValue : selectService.filterOption :selectService.serverSearch; trackBy: trackValue"
-          [menuItemSelectedIcon]="menuItemSelectedIcon"
-          [option]="option"
-          tri-option-li>
+      <li
+        *ngFor="let option of group.listOfOptionComponent | triFilterOption : selectService.searchValue : selectService.filterOption :selectService.serverSearch; trackBy: trackValue"
+        [menuItemSelectedIcon]="menuItemSelectedIcon"
+        [option]="option"
+        tri-option-li>
       </li>
     </ul>
   </li>
-  <li *ngFor="let option of selectService.listOfTagOption | triFilterOption : selectService.searchValue : selectService.filterOption : selectService.serverSearch; trackBy: trackValue "
-      [menuItemSelectedIcon]="menuItemSelectedIcon"
-      [option]="option"
-      tri-option-li>
+  <li
+    *ngFor="let option of selectService.listOfTagOption | triFilterOption : selectService.searchValue : selectService.filterOption : selectService.serverSearch; trackBy: trackValue "
+    [menuItemSelectedIcon]="menuItemSelectedIcon"
+    [option]="option"
+    tri-option-li>
   </li>
 </ul>

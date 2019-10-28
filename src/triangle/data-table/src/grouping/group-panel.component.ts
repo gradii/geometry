@@ -180,7 +180,7 @@ export class GroupPanelComponent implements OnDestroy, OnInit {
       : columnRules(this.groupInfoService);
 
     return !rules({
-      field: draggable.field,
+      field : draggable.field,
       groups: this.groups,
       target
     });

@@ -18,7 +18,7 @@ import { debounceTime } from 'rxjs/operators';
 import { MenuComponent } from './menu.component';
 
 @Component({
-  selector: '[tri-submenu]',
+  selector  : '[tri-submenu]',
   animations: [
     trigger('fadeAnimation', [
       state('*', style({opacity: 1})),
@@ -36,7 +36,7 @@ import { MenuComponent } from './menu.component';
       }), animate(150, style({height: '*'}))])
     ])
   ],
-  template: `
+  template  : `
     <div
       [class.tri-dropdown-menu-submenu-title]="isInDropDown"
       [class.tri-menu-submenu-title]="!isInDropDown"

@@ -36,7 +36,7 @@ export class AnchorLinkComponent {
    * The template used for content
    * 文字内容，会覆盖掉  `title`  的内容
    */
-  @ContentChild(AnchorLinkTemplateDirective, { static: false }) contentTemplate: AnchorLinkTemplateDirective;
+  @ContentChild(AnchorLinkTemplateDirective, {static: false}) contentTemplate: AnchorLinkTemplateDirective;
 
   active: boolean = false;
 
