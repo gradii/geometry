@@ -9,14 +9,7 @@ import {
   sequenceTask,
 } from 'material2-build-tools';
 import {
-  cdkPackage,
-  materialExperimentalPackage,
-  cdkExperimentalPackage,
-  materialPackage,
-  momentAdapterPackage,
-  googleMapsPackage,
-  examplesPackage,
-  youTubePlayerPackage,
+  trianglePackage
 } from '../packages';
 import {watchFilesAndReload} from '../util/watch-files-reload';
 
@@ -94,24 +87,7 @@ task('stage-deploy:devapp', ['build:devapp'], () => {
   copyFiles(outDir, '**/*.+(css|js|map)', deployOutputDir);
   copyFiles(join(projectDir, 'node_modules'), vendorGlob, join(deployOutputDir, 'node_modules'));
   copyFiles(bundlesDir, '*.+(js|map)', join(deployOutputDir, 'dist/bundles'));
-  copyFiles(cdkPackage.outputDir, '**/*.+(js|map)', join(deployOutputDir, 'dist/packages/cdk'));
-  copyFiles(materialPackage.outputDir, '**/*.+(js|map)',
-    join(deployOutputDir, 'dist/packages/material'));
-  copyFiles(materialExperimentalPackage.outputDir, '**/*.+(js|map)',
-    join(deployOutputDir, 'dist/packages/material-experimental'));
-  copyFiles(youTubePlayerPackage.outputDir, '**/*.+(js|map)',
-    join(deployOutputDir, 'dist/packages/youtube-player'));
-  copyFiles(cdkExperimentalPackage.outputDir, '**/*.+(js|map)',
-    join(deployOutputDir, 'dist/packages/cdk-experimental'));
-  copyFiles(materialPackage.outputDir, '**/prebuilt/*.+(css|map)',
-    join(deployOutputDir, 'dist/packages/material'));
-  copyFiles(examplesPackage.outputDir, '**/*.+(js|map)',
-    join(deployOutputDir, 'dist/packages/material-examples'));
-  copyFiles(momentAdapterPackage.outputDir, '**/*.+(js|map)',
-    join(deployOutputDir, 'dist/packages/material-moment-adapter'));
-  copyFiles(
-      googleMapsPackage.outputDir, '**/*.+(js|map)',
-      join(deployOutputDir, 'dist/packages/google-maps'));
+  copyFiles(trianglePackage.outputDir, '**/*.+(js|map)', join(deployOutputDir, 'dist/packages/triangle'));
 });
 
 /**
@@ -146,48 +122,7 @@ task(':watch:devapp', () => {
   // because we only want to build the changed package (using the build-no-bundles task).
 
   // CDK package watchers.
-  watchFilesAndReload(join(cdkPackage.sourceDir, '**/*'), ['cdk:build-no-bundles']);
-
-  const materialCoreThemingGlob = join(
-    materialPackage.sourceDir,
-    '**/core/+(theming|typography)/**/*.scss'
-  );
-
-  // Material package watchers.
-  watchFilesAndReload([
-    join(materialPackage.sourceDir, '**/!(*-theme.scss)'),
-    join(materialExperimentalPackage.sourceDir, '**/!(*_mdc-*.scss)'),
-    `!${materialCoreThemingGlob}`
-  ], ['material:build-no-bundles']);
-  watchFilesAndReload([
-    join(materialPackage.sourceDir, '**/*-theme.scss'),
-    join(materialExperimentalPackage.sourceDir, '**/*_mdc-*.scss'),
-    materialCoreThemingGlob
-  ], [':build:devapp:scss']);
-
-  // Moment adapter package watchers
-  watchFilesAndReload(join(momentAdapterPackage.sourceDir, '**/*'),
-    ['material-moment-adapter:build-no-bundles']);
-
-  // Material experimental package watchers
-  watchFilesAndReload(join(materialExperimentalPackage.sourceDir, '**/*'),
-    ['material-experimental:build-no-bundles']);
-
-  // Youtube player package watchers
-  watchFilesAndReload(join(youTubePlayerPackage.sourceDir, '**/*'),
-    ['youtube-player:build-no-bundles']);
-
-  // CDK experimental package watchers
-  watchFilesAndReload(join(cdkExperimentalPackage.sourceDir, '**/*'),
-    ['cdk-experimental:build-no-bundles']);
-
-  // Google Maps package watchers
-  watchFilesAndReload(join(googleMapsPackage.sourceDir, '**/*'),
-    ['google-maps:build-no-bundles']);
-
-  // Example package watchers.
-  watchFilesAndReload(join(examplesPackage.sourceDir, '**/*'),
-    ['material-examples:build-no-bundles']);
+  watchFilesAndReload(join(trianglePackage.sourceDir, '**/*'), ['triangle:build-no-bundles']);
 });
 
 // Note that we need to rebuild the TS here, because the resource inlining

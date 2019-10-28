@@ -1,26 +1,6 @@
 import {task} from 'gulp';
-import {createPackageBuildTasks, sequenceTask} from 'material2-build-tools';
-import {
-  allBuildPackages,
-  cdkExperimentalPackage,
-  cdkPackage,
-  examplesPackage,
-  googleMapsPackage,
-  materialExperimentalPackage,
-  materialPackage,
-  momentAdapterPackage,
-  youTubePlayerPackage
-} from './packages';
-
-createPackageBuildTasks(cdkPackage);
-createPackageBuildTasks(cdkExperimentalPackage);
-createPackageBuildTasks(materialPackage);
-createPackageBuildTasks(materialExperimentalPackage);
-createPackageBuildTasks(examplesPackage, ['build-examples-module']);
-createPackageBuildTasks(momentAdapterPackage);
-createPackageBuildTasks(youTubePlayerPackage);
-createPackageBuildTasks(googleMapsPackage);
-
+import { createPackageBuildTasks, sequenceTask } from 'material2-build-tools';
+import { trianglePackage } from './packages';
 import './tasks/aot';
 import './tasks/breaking-changes';
 import './tasks/ci';
@@ -29,12 +9,14 @@ import './tasks/default';
 import './tasks/development';
 import './tasks/example-module';
 import './tasks/lint';
-import './tasks/material-release';
+import './tasks/release';
 import './tasks/unit-test';
 import './tasks/universal';
 
+createPackageBuildTasks(trianglePackage);
+
 /** Task that builds all available release packages. */
-task('build-release-packages', sequenceTask(
-  'clean',
-  allBuildPackages.map(buildPackage => `${buildPackage.name}:build-release`)
-));
+// task('build-release-packages', sequenceTask(
+//   'clean',
+//   allBuildPackages.map(buildPackage => `${buildPackage.name}:build-release`)
+// ));
