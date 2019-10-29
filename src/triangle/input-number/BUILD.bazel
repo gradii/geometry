@@ -9,28 +9,37 @@ load("//tools:defaults.bzl",
   )
 
 ng_module(
-  name = "data-iterator",
+  name = "input-number",
   srcs = glob(["**/*.ts"], exclude=["**/*.spec.ts"]),
-  module_name = "@gradii/triangle/data-iterator",
+  module_name = "@gradii/triangle/input-number",
   assets = [] + glob(["**/*.html"]),
   deps = [
+    "@npm//@angular/animations",
+    "@npm//@angular/common",
+    "@npm//@angular/core",
+    "@npm//@angular/forms",
+    "@npm//@angular/cdk",
+    "@npm//rxjs",
+    "//src/triangle/core",
+    "//src/triangle/util",
+    "//src/triangle/i18n",
+    "//src/triangle/icon"
   ]
 )
-#
-#sass_library(
-#  name = "autocomplete_scss_lib",
-#  srcs = glob(["**/_*.scss"]),
-#  deps = ["//src/triangle/core:core_scss_lib"],
-#)
-#
-#sass_binary(
-#  name = "autocomplete_scss",
-#  src = "autocomplete.scss",
-#  deps = [
-#    "//src/cdk/a11y:a11y_scss_lib",
-#    "//src/lib/core:core_scss_lib",
-#  ],
-#)
+
+sass_library(
+  name = "input-number_scss_lib",
+  srcs = glob(["**/_*.scss"]),
+  deps = ["//src/triangle/core:core_scss_lib"],
+)
+
+sass_binary(
+  name = "input-number_scss",
+  src = "style/input-number.scss",
+  deps = [
+    "//src/triangle/input-number:input-number_scss_lib",
+  ],
+)
 #
 #ng_test_library(
 #  name = "autocomplete_test_sources",

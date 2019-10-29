@@ -9,11 +9,21 @@ load("//tools:defaults.bzl",
   )
 
 ng_module(
-  name = "data-ix",
+  name = "select",
   srcs = glob(["**/*.ts"], exclude=["**/*.spec.ts"]),
-  module_name = "@gradii/triangle/data-ix",
+  module_name = "@gradii/triangle/select",
   assets = [] + glob(["**/*.html"]),
   deps = [
+    "@npm//@angular/animations",
+    "@npm//@angular/common",
+    "@npm//@angular/core",
+    "@npm//@angular/forms",
+    "@npm//@angular/cdk",
+    "@npm//rxjs",
+    "//src/triangle/core",
+    "//src/triangle/util",
+    "//src/triangle/i18n",
+    "//src/triangle/icon"
   ]
 )
 #

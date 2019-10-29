@@ -43,7 +43,8 @@ import {
           </ng-template>
           <ng-template [ngIf]="count > overflowCount">{{overflowCount}}+</ng-template>
       </sup>
-  `
+  `,
+  styleUrls: ['../style/badge.css']
 })
 export class BadgeComponent implements OnInit {
   maxNumberArray;

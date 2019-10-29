@@ -27,7 +27,8 @@ import { CarouselContentDirective } from './carousel-content.directive';
           <button>1</button>
         </li>
       </ul>
-    </div>`
+    </div>`,
+  styleUrls: ['../style/carousel.css']
 })
 export class CarouselComponent implements AfterViewInit, OnDestroy {
   activeIndex = 0;

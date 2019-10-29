@@ -53,7 +53,8 @@ import {
         </p>
       </div>
     </div>
-  `
+  `,
+  styleUrls: ['../style/card.css']
 })
 export class CardComponent {
 

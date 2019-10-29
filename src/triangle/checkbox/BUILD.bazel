@@ -9,10 +9,10 @@ load("//tools:defaults.bzl",
   )
 
 ng_module(
-  name = "carousel",
+  name = "checkbox",
   srcs = glob(["**/*.ts"], exclude=["**/*.spec.ts"]),
-  module_name = "@gradii/triangle/carousel",
-  assets = [':style/carousel.css'] + glob(["**/*.html"]),
+  module_name = "@gradii/triangle/checkbox",
+  assets = [] + glob(["**/*.html"]),
   deps = [
     "@npm//@angular/animations",
     "@npm//@angular/common",
@@ -23,20 +23,21 @@ ng_module(
     "//src/triangle/core",
     "//src/triangle/util",
     "//src/triangle/i18n",
+    "//src/triangle/icon"
   ]
 )
 
 sass_library(
-  name = "carousel_scss_lib",
+  name = "checkbox_scss_lib",
   srcs = glob(["**/_*.scss"]),
   deps = ["//src/triangle/core:core_scss_lib"],
 )
 
 sass_binary(
-  name = "carousel_scss",
-  src = "style/carousel.scss",
+  name = "checkbox_scss",
+  src = "style/checkbox.scss",
   deps = [
-    "//src/triangle/carousel:carousel_scss_lib",
+    "//src/triangle/checkbox:checkbox_scss_lib",
   ],
 )
 #
