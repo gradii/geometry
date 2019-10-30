@@ -61,7 +61,7 @@ export class Draggable {
   private _mousedown: Function;
   private _element: Element;
 
-  constructor(ref?: DraggableOptions) {
+  constructor(ref: DraggableOptions) {
     let press = ref.press;
     if (press === void 0) {
       press = noop;

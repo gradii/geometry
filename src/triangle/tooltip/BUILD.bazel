@@ -12,7 +12,7 @@ ng_module(
   name = "tooltip",
   srcs = glob(["**/*.ts"], exclude=["**/*.spec.ts"]),
   module_name = "@gradii/triangle/tooltip",
-  assets = [] + glob(["**/*.html"]),
+  assets = [':style/tooltip.css'] + glob(["**/*.html"]),
   deps = [
     "@npm//@angular/animations",
     "@npm//@angular/common",
@@ -25,21 +25,20 @@ ng_module(
     "//src/triangle/i18n",
   ]
 )
-#
-#sass_library(
-#  name = "autocomplete_scss_lib",
-#  srcs = glob(["**/_*.scss"]),
-#  deps = ["//src/triangle/core:core_scss_lib"],
-#)
-#
-#sass_binary(
-#  name = "autocomplete_scss",
-#  src = "autocomplete.scss",
-#  deps = [
-#    "//src/cdk/a11y:a11y_scss_lib",
-#    "//src/lib/core:core_scss_lib",
-#  ],
-#)
+
+sass_library(
+  name = "tooltip_scss_lib",
+  srcs = glob(["**/_*.scss"]),
+  deps = ["//src/triangle/core:core_scss_lib"],
+)
+
+sass_binary(
+  name = "tooltip_scss",
+  src = "style/tooltip.scss",
+  deps = [
+    "//src/triangle/tooltip:tooltip_scss_lib",
+  ],
+)
 #
 #ng_test_library(
 #  name = "autocomplete_test_sources",

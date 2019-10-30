@@ -54,7 +54,8 @@ import { PopConfirmDirective } from './popconfirm.directive';
                   </div>
               </div>
           </div>
-      </ng-template>`
+      </ng-template>`,
+  styleUrls: ['../style/popconfirm.css']
 })
 export class PopConfirmComponent extends ToolTipComponent {
   _prefix = 'tri-popover-placement';

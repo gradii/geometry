@@ -113,7 +113,8 @@ import { PageChangeEvent } from './event/page-change.event';
                                                  (ngModelChange)="_pageIndexChange($event)">{{'Pagination.page'|triI18n}}
         </div>
       </div>
-    </ul>`
+    </ul>`,
+  styleUrls: ['../style/pagination.css']
 })
 export class PaginationComponent {
   _firstIndex = 1;

@@ -86,13 +86,13 @@ function resolve(relative, base) {
  */
 class Url {
 
-  public slashes;
-  public host;
-  public hostname;
-  public protocol;
-  public port;
-  public query;
-  public pathname;
+  public slashes: string;
+  public host: string;
+  public hostname: string;
+  public protocol: string;
+  public port: string;
+  public query: string;
+  public pathname: string;
   public hash: string;
   private auth: any;
   private username: string;

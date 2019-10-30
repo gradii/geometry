@@ -35,6 +35,7 @@ TRIANGLE_PACKAGES = [
 #  "input-compose",
   "input",
   "input-number",
+  "radio",
   "checkbox",
   "select",
   "radio",

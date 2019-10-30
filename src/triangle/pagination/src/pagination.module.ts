@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TriI18nModule } from '@gradii/triangle/i18n';
 import { TriIconModule } from '@gradii/triangle/icon';
-import { TriSelectModule } from '@gradii/triangle/inputs';
+import { TriSelectModule } from '@gradii/triangle/select';
 import { PaginationComponent } from './pagination.component';
 
 /**
