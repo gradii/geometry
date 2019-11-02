@@ -6,12 +6,10 @@ import { TriButtonModule } from '@gradii/triangle/button';
 import { TriCardModule } from '@gradii/triangle/card';
 import { TriDatePickerModule } from '@gradii/triangle/date-picker';
 import { TriGridModule } from '@gradii/triangle/grid';
-import {
-  TriInputModule,
-  TriInputNumberModule,
-  TriRadioModule,
-  TriSelectModule
-} from '@gradii/triangle/inputs';
+import { TriInputModule } from '@gradii/triangle/input';
+import { TriInputNumberModule } from '@gradii/triangle/input-number';
+import { TriRadioModule } from '@gradii/triangle/radio';
+import { TriSelectModule } from '@gradii/triangle/select';
 import { FilterSharedModule } from '../shared/filter-shared.module';
 import { FilterMenuContainerComponent } from './filter-menu-container.component';
 import { FilterMenuTemplateDirective } from './filter-menu-template.directive';

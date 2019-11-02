@@ -21,7 +21,7 @@ import {
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { dispatchKeyboardEvent } from '@gradii/triangle/core/testing';
-import { OptionComponent, SelectComponent, TriSelectModule } from '@gradii/triangle/inputs';
+import { SelectComponent } from '@gradii/triangle/select';
 import { defaultFilterOption } from '../src/select/option.pipe';
 
 describe('tri-select component', () => {

@@ -23,7 +23,7 @@ ng_module(
     "//src/triangle/core",
     "//src/triangle/util",
     "//src/triangle/i18n",
-    "//src/triangle/inputs",
+    "//src/triangle/select",
     "//src/triangle/icon",
   ]
 )

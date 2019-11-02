@@ -9,10 +9,9 @@ import { CalendarHeaderComponent } from '@gradii/triangle/calendar';
 import { TriI18nModule } from '@gradii/triangle/i18n';
 import {
   RadioGroupComponent as RadioGroup,
-  SelectComponent,
   TriRadioModule,
-  TriSelectModule
-} from '@gradii/triangle/inputs';
+} from '@gradii/triangle/radio';
+import { SelectComponent, TriSelectModule } from '@gradii/triangle/select';
 
 registerLocaleData(zh);
 

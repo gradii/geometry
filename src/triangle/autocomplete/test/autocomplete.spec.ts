@@ -42,7 +42,7 @@ import {
   MockNgZone,
   typeInElement,
 } from '@gradii/triangle/core/testing';
-import { TriInputModule } from '@gradii/triangle/inputs';
+import { TriInputModule } from '@gradii/triangle/input';
 import { EMPTY, Observable, Subject, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import {

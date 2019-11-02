@@ -1,14 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TriCheckboxModule } from '@gradii/triangle/checkbox';
 import { TriDatePickerModule } from '@gradii/triangle/date-picker';
 import { TriFormModule } from '@gradii/triangle/form';
-import {
-  TriCheckboxModule,
-  TriInputModule,
-  TriInputNumberModule,
-  TriRadioModule
-} from '@gradii/triangle/inputs';
+import { TriInputModule } from '@gradii/triangle/input';
+import { TriInputNumberModule } from '@gradii/triangle/input-number';
+import { TriRadioModule } from '@gradii/triangle/radio';
 import { TriSwitchModule } from '@gradii/triangle/switch';
 import { CheckboxColumnComponent } from '../columns/checkbox-column.component';
 import { CommandColumnComponent } from '../columns/command-column.component';

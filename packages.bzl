@@ -38,7 +38,6 @@ TRIANGLE_PACKAGES = [
   "radio",
   "checkbox",
   "select",
-  "radio",
   "layout",
 #  "locale",
 #  "math-date",

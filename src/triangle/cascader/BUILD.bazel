@@ -23,7 +23,7 @@ ng_module(
     "//src/triangle/core",
     "//src/triangle/util",
     "//src/triangle/i18n",
-    "//src/triangle/inputs",
+    "//src/triangle/input",
   ]
 )
 
@@ -37,7 +37,6 @@ sass_binary(
   name = "cascader_scss",
   src = "style/cascader.scss",
   deps = [
-    "//src/triangle/cascader:cascader_scss_lib",
     "//src/triangle/cascader:cascader_scss_lib",
   ],
 )

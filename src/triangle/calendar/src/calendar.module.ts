@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TriI18nModule } from '@gradii/triangle/i18n';
-import { TriRadioModule, TriSelectModule } from '@gradii/triangle/inputs';
+import { TriRadioModule } from '@gradii/triangle/radio';
+import { TriSelectModule } from '@gradii/triangle/select';
 import {
   DateCellDirective,
   DateFullCellDirective,

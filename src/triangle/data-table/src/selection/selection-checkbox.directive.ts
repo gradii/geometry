@@ -6,7 +6,7 @@ import {
   Input,
   OnDestroy
 } from '@angular/core';
-import { CheckboxComponent } from '@gradii/triangle/inputs';
+import { CheckboxComponent } from '@gradii/triangle/checkbox';
 import { SelectionService } from './selection.service';
 
 @Directive({

@@ -35,7 +35,10 @@ ng_module(
     "//src/triangle/data-query",
     "//src/triangle/button",
     "//src/triangle/form",
-    "//src/triangle/inputs",
+    "//src/triangle/radio",
+    "//src/triangle/input",
+    "//src/triangle/input-number",
+    "//src/triangle/select",
     "//src/triangle/draggable",
   ]
 )

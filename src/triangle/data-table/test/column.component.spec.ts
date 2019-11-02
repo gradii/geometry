@@ -10,7 +10,8 @@ import {
 } from '@gradii/triangle/data-table';
 import { TriDatePickerModule } from '@gradii/triangle/date-picker';
 import { TriFormModule } from '@gradii/triangle/form';
-import { TriInputModule, TriInputNumberModule } from '@gradii/triangle/inputs';
+import { TriInputModule } from '@gradii/triangle/input';
+import { TriInputNumberModule } from '@gradii/triangle/input-number';
 import { TriSwitchModule } from '@gradii/triangle/switch';
 import { ColumnBase } from '../src/columns/column-base';
 import { EditTemplateDirective } from '../src/directive/edit-template.directive';

@@ -1,7 +1,7 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { TriCheckboxModule } from '@gradii/triangle/inputs';
+import { TriCheckboxModule } from '@gradii/triangle/checkbox';
 import { ColumnHandleDirective } from '../column-resize/column-handle.directive';
 import { DragAndDropModule } from '../dragdrop/drag-and-drop.module';
 import { FilterMenuModule } from '../filtering/filter-menu/filter-menu.module';

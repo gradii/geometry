@@ -2,7 +2,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TriInputModule } from '@gradii/triangle/inputs';
+import { TriInputModule } from '@gradii/triangle/input';
 import { CascaderComponent } from './cascader.component';
 
 /**

@@ -8,7 +8,7 @@ import {
   Output,
   Self
 } from '@angular/core';
-import { CheckboxComponent } from '@gradii/triangle/inputs';
+import { CheckboxComponent } from '@gradii/triangle/checkbox';
 import { isPresent } from '@gradii/triangle/util';
 import { SelectAllCheckboxState } from './selectable-settings';
 import { SelectionService } from './selection.service';
@@ -25,7 +25,7 @@ export class SelectAllCheckboxDirective {
   @Output() selectAllChange: EventEmitter<SelectAllCheckboxState> = new EventEmitter();
   @HostBinding('attr.type') type: string;
   //  private renderer;
-  private ngZone;
+  private ngZone: NgZone;
   private destroyClick;
   private stateSet;
 
