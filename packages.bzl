@@ -1,70 +1,49 @@
 # List of all components / subpackages.
 
 TRIANGLE_PACKAGES = [
-  "affix",
-  "alert",
-  "anchor",
-  "autocomplete",
-  "avatar",
-  "back-top",
-  "badge",
-  "breadcrumb",
-  "button",
-  "calendar",
-  "card",
-  "carousel",
-  "cascader",
-  "collapse",
-  "core",
+  "affix", "alert", "anchor", "autocomplete", "avatar", "back-top", "badge", "breadcrumb", "button", "calendar",
+  "card", "carousel", "cascader", "collapse", "core",
 #  "data-grid",
 #  "data-iterator",
 #  "data-ix",
-  "data-query",
 #  "data-store",
-  "data-table",
-  "date-picker",
-  "desc-list",
-  "dialog",
-  "draggable",
-  "dropdown",
-  "form",
-  "grid",
-  "grid-list",
-  "i18n",
-  "icon",
+  "data-query", "data-table", "date-picker", "desc-list", "dialog", "draggable", "dropdown", "form",
+  "grid", "grid-list", "i18n", "icon",
 #  "input-compose",
-  "input",
-  "input-number",
-  "radio",
-  "checkbox",
-  "select",
-  "layout",
+  "input", "input-number", "radio", "checkbox", "select", "layout",
 #  "locale",
 #  "math-date",
 #  "math-vector",
-  "menu",
-  "message",
-  "modal",
-  "tree",
-  "pagination",
-  "popconfirm",
-  "popover",
-  "progress",
-  "rate",
+  "menu", "message", "modal", "tree", "pagination", "popconfirm", "popover", "progress", "rate",
 #  "root",
-  "slider",
-  "spin",
-  "steps",
-  "switch",
-  "tabs",
-  "tag",
-  "time-picker",
-  "timeline",
-  "tooltip",
-  "transfer",
+  "slider", "spin", "steps", "switch", "tabs", "tag", "time-picker", "timeline", "tooltip", "transfer", "util",
 #  "tree",
-  "util",
 ]
+
+
+TRIANGLE_SCSS_PACKAGES = [
+  "affix", "alert", "anchor", "autocomplete", "avatar", "back-top", "badge", "breadcrumb", "button", "calendar",
+  "card", "carousel", "cascader", "collapse",
+#  "core",
+#  "data-grid",
+#  "data-store",
+#  "data-query",
+  "data-table", "date-picker", "desc-list", "dialog",
+#  "draggable",
+  "dropdown", "form",
+  "grid", "grid-list", "icon",
+#  "i18n",
+  "input", "input-number", "radio", "checkbox", "select", "layout",
+#  "locale",
+#  "math-date",
+#  "math-vector",
+  "menu", "message", "modal", "tree", "pagination", "popconfirm", "popover", "progress", "rate",
+#  "root",
+  "slider", "spin", "steps", "switch", "tabs", "tag", "time-picker", "timeline", "tooltip", "transfer",
+#  "util",
+#  "tree",
+]
+
 
 TRIANGLE_TARGETS = ["//src/triangle"] + ["//src/triangle/%s" % p for p in TRIANGLE_PACKAGES]
 
@@ -72,7 +51,7 @@ TRIANGLE_TARGETS = ["//src/triangle"] + ["//src/triangle/%s" % p for p in TRIANG
 # List that references the sass libraries for each Material package. This can be used to create
 # the theming scss-bundle or to specify dependencies for the all-theme.scss file.
 TRIANGLE_SCSS_LIBS = [
-  "//src/triangle/%s:%s_scss_lib" % (p, p.replace('-', '_')) for p in TRIANGLE_PACKAGES
+  "//src/triangle/%s:%s_scss_lib" % (p, p) for p in TRIANGLE_SCSS_PACKAGES
 ]
 
 # Each individual package uses a placeholder for the version of Angular to ensure they're

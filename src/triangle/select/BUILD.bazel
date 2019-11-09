@@ -38,6 +38,7 @@ sass_binary(
   src = "style/select.scss",
   deps = [
     "//src/triangle/select:select_scss_lib",
+    "//src/triangle/input:input_scss_lib",
   ],
 )
 #

@@ -12,7 +12,7 @@ ng_module(
   name = "data-table",
   srcs = glob(["**/*.ts"], exclude=["**/*.spec.ts"]),
   module_name = "@gradii/triangle/data-table",
-  assets = [] + glob(["**/*.html"]),
+  assets = [":style/data-table.css"] + glob(["**/*.html"]),
   deps = [
     "@npm//@angular/animations",
     "@npm//@angular/common",
@@ -38,6 +38,7 @@ ng_module(
     "//src/triangle/radio",
     "//src/triangle/input",
     "//src/triangle/input-number",
+    "//src/triangle/checkbox",
     "//src/triangle/select",
     "//src/triangle/draggable",
   ]

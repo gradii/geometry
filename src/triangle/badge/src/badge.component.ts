@@ -44,11 +44,11 @@ import {
           <ng-template [ngIf]="count > overflowCount">{{overflowCount}}+</ng-template>
       </sup>
   `,
-  styleUrls: ['../style/badge.css']
+  styleUrls    : ['../style/badge.css']
 })
 export class BadgeComponent implements OnInit {
-  maxNumberArray;
-  countArray = [];
+  maxNumberArray: any[];
+  countArray: any[] = [];
   countSingleArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   @ContentChild('content', {static: false}) content: TemplateRef<any>;
   @HostBinding('class.tri-badge') _badge = true;
@@ -71,7 +71,7 @@ export class BadgeComponent implements OnInit {
    * Custom style
    * 自定义样式
    */
-  @Input() badgeStyle;
+  @Input() badgeStyle: any;
   /**
    * Set badge status
    * 设置 Badge 为状态点

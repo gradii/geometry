@@ -37,6 +37,7 @@ sass_binary(
   name = "cascader_scss",
   src = "style/cascader.scss",
   deps = [
+    "//src/triangle/input:input_scss_lib",
     "//src/triangle/cascader:cascader_scss_lib",
   ],
 )

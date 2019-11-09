@@ -14,5 +14,3 @@ export * from './src/utils';
 export * from './src/contrast';
 
 export * from './src/data-util';
-
-export { parseUrl } from './src/url/parse-url';

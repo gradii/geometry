@@ -40,8 +40,7 @@ sass_binary(
   name = "transfer_scss",
   src = "style/transfer.scss",
   deps = [
-    "//src/cdk/a11y:a11y_scss_lib",
-    "//src/lib/core:core_scss_lib",
+    "//src/triangle/transfer:transfer_scss_lib",
   ],
 )
 #

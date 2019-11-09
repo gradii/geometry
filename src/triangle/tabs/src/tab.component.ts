@@ -47,7 +47,7 @@ export class TabComponent implements OnDestroy, OnInit {
   _disabled = false;
 
   @Input()
-  set disabled(value) {
+  set disabled(value: boolean) {
     this._disabled = value;
   }
 

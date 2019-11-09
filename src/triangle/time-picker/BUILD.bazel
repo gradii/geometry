@@ -34,8 +34,9 @@ sass_library(
 
 sass_binary(
   name = "time-picker_scss",
-  src = "time-picker.scss",
+  src = "style/time-picker.scss",
   deps = [
+    "//src/triangle/input:input_scss_lib",
     "//src/triangle/time-picker:time-picker_scss_lib",
   ],
 )

@@ -38,6 +38,7 @@ sass_binary(
   name = "pagination_scss",
   src = "style/pagination.scss",
   deps = [
+    "//src/triangle/input:input_scss_lib",
     "//src/triangle/pagination:pagination_scss_lib",
   ],
 )

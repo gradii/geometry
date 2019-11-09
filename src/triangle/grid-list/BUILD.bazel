@@ -34,7 +34,7 @@ sass_library(
 
 sass_binary(
   name = "grid-list_scss",
-  src = "grid-list.scss",
+  src = "style/grid-list.scss",
   deps = [
     "//src/triangle/grid-list:grid-list_scss_lib",
   ],

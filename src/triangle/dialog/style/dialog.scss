@@ -1,3 +1,5 @@
+@import "../../core/style/themes/default.theme";
+
 $dialog-prefix-cls  : "#{$ant-prefix}-dialog" !default;
 $dialog-header-bg   : #f9fafb !default;
 $dialog-content-bg  : $component-background !default;
@@ -94,7 +96,7 @@ $dialog-mask-bg     : rgba(55, 55, 55, 0.6) !default;
     border-top : $border-width-base $border-style-base $border-color-split;
     padding    : .625rem 1rem .625rem .625rem;
     text-align : right;
-    @include border-radius((0 0 $border-radius-base $border-radius-base))
+    @include border-radius((0 0 $border-radius-base $border-radius-base));
     button + button {
       margin-left   : .5rem;
       margin-bottom : 0;

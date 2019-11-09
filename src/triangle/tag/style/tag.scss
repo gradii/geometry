@@ -1,3 +1,5 @@
+@import "../../core/style/themes/default.theme";
+
 $tag-prefix-cls : "#{$ant-prefix}-tag";
 
 .#{$tag-prefix-cls}, .tri-tag-ghost {
@@ -102,12 +104,12 @@ $tag-prefix-cls : "#{$ant-prefix}-tag";
       $color      : nth($colors, $i);
       $lightColor : map_get($g-colors, "#{$color}-2");
       $darkColor  : map_get($g-colors, "#{$color}-6");
-      @at-root &-#{$color} {
+      @at-root &-#{"" + $color} {
         color        : $darkColor;
         background   : $lightColor;
         border-color : $lightColor;
       }
-      @at-root &-#{$color}-inverse {
+      @at-root &-#{"" + $color}-inverse {
         background   : $darkColor;
         border-color : $darkColor;
         color        : #fff;

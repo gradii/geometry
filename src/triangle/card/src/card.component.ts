@@ -62,7 +62,7 @@ export class CardComponent {
    * Card title if titleTemplate is not exist.
    */
   @Input()
-  title;
+  title: string;
 
   /**
    * Whether show border

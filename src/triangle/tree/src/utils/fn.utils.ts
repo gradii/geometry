@@ -18,7 +18,7 @@ export function has(value: any, prop: string): boolean {
   return value && typeof value === 'object' && value.hasOwnProperty(prop);
 }
 
-export function isFunction(value: any) {
+export function isFunction(value: any): value is Function {
   return typeof value === 'function';
 }
 

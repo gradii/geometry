@@ -1,4 +1,5 @@
-@import "input-mixin";
+@import "../../core/style/themes/default.theme";
+@import "../../input/style/input-mixin";
 
 $select-prefix-cls    : "#{$ant-prefix}-select";
 $select-option-height : 2rem;

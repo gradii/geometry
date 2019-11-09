@@ -34,7 +34,7 @@ sass_library(
 
 sass_binary(
   name = "tag_scss",
-  src = "tag.scss",
+  src = "style/tag.scss",
   deps = [
     "//src/triangle/tag:tag_scss_lib",
   ],

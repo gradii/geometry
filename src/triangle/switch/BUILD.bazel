@@ -34,7 +34,7 @@ sass_library(
 
 sass_binary(
   name = "switch_scss",
-  src = "switch.scss",
+  src = "style/switch.scss",
   deps = [
     "//src/triangle/switch:switch_scss_lib",
   ],

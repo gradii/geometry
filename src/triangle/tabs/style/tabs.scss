@@ -1,6 +1,8 @@
+@import '../../core/style/themes/default.theme';
+@import "./card-style";
+
 $tab-prefix-cls : "#{$ant-prefix}-tabs";
 
-@import "./card-style";
 
 .#{$tab-prefix-cls} {
   box-sizing : border-box;

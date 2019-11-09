@@ -18,10 +18,10 @@ ng_module(
 )
 
 sass_bundle(
-  name = "triangle_bundle",
+  name = "theming_bundle",
   srcs = [
   ] + TRIANGLE_SCSS_LIBS,
-  entry_point = '//src/triangle/core:theming/_all-theme.scss',
+  entry_point = '//src/triangle/core:style/themes/_all-theme.scss',
   output_name = "_theming.scss",
 )
 

@@ -12,7 +12,7 @@ ng_module(
   name = "badge",
   srcs = glob(["**/*.ts"], exclude=["**/*.spec.ts"]),
   module_name = "@gradii/triangle/badge",
-  assets = [] + glob(["**/*.html"]),
+  assets = [":style/badge.css"] + glob(["**/*.html"]),
   deps = [
     "@npm//@angular/animations",
     "@npm//@angular/common",

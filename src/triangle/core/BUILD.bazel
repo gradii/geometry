@@ -8,6 +8,8 @@ load("//tools:defaults.bzl",
 #  "markdown_to_html"
   )
 
+load("//:packages.bzl", "TRIANGLE_SCSS_LIBS")
+
 ng_module(
   name = "core",
   srcs = glob(["**/*.ts"], exclude=["**/*.spec.ts"]),
@@ -30,13 +32,23 @@ sass_library(
   deps = [],
 )
 
-sass_binary(
-  name = "core_scss",
-  src = "style/core.scss",
-  deps = [
-    "//src/lib/core:core_scss_lib",
-  ],
+
+sass_library(
+    name = "all_themes",
+    srcs = [
+        "themes/_all-theme.scss",
+    ],
+    deps = TRIANGLE_SCSS_LIBS,
 )
+
+
+#sass_binary(
+#  name = "core_scss",
+#  src = "style/core.scss",
+#  deps = [
+#    "//src/triangle/core:core_scss_lib",
+#  ],
+#)
 #
 #ng_test_library(
 #  name = "autocomplete_test_sources",
