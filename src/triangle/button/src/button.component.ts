@@ -23,6 +23,7 @@ export type ButtonSize = 'small' | 'large' | 'default';
     <i class="anticon anticon-spin anticon-loading" style="display: inline-block" *ngIf="loading"></i>
     <ng-content></ng-content>
   `,
+  styleUrls: ['../style/button.css'],
   host               : {
     '[class.tri-btn]'                 : 'true',
     '[class.tri-btn-primary]'         : '_color === "primary"',

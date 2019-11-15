@@ -4,8 +4,14 @@ import { Component, HostBinding, ViewEncapsulation } from '@angular/core';
   selector     : 'tri-layout',
   encapsulation: ViewEncapsulation.None,
   template     : `
-    <ng-content></ng-content>
-  `
+      <ng-content></ng-content>
+  `,
+  styleUrls    : ['../style/layout.css'],
+  styles       : [
+      `:host {
+          display : block;
+      }`
+  ],
 })
 export class Layout {
   @HostBinding('class.tri-layout-has-sider') hasSider = false;

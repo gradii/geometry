@@ -38,7 +38,7 @@ yarn_install(
         "//:angular-tsconfig.json",
         "//:tools/npm/check-npm.js",
     ],
-    package_json = "//:package.json",
+    package_json = "//:package-bazel.json",
     # Temporarily disable node_modules symlinking until the fix for
     # https://github.com/bazelbuild/bazel/issues/8487 makes it into a
     # future Bazel release
