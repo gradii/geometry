@@ -1,12 +1,14 @@
+@import "../../core/style/themes/default.theme";
+
 // The width/height of the icon element.
-$ant-icon-size : 24px !default;
+$tri-icon-size : 24px !default;
 
 .tri-icon {
   background-repeat : no-repeat;
   display           : inline-block;
   fill              : currentColor;
-  height            : $ant-icon-size;
-  width             : $ant-icon-size;
+  height            : $tri-icon-size;
+  width             : $tri-icon-size;
 
   &.tri-icon-inline {
     font-size   : inherit;

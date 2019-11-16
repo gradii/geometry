@@ -1,11 +1,13 @@
 import {
   Attribute,
-  Directive,
+  ChangeDetectionStrategy,
+  Component,
   ElementRef,
   Input,
   OnChanges,
   OnInit,
   SimpleChanges,
+  ViewEncapsulation,
 } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { IconRegistry } from './icon-registry';
@@ -37,16 +39,19 @@ import { IconRegistry } from './icon-registry';
  *   Example:
  *     `<tri-icon fontSet="fa" fontIcon="alarm"></tri-icon>`
  */
-@Directive({
-  selector: 'tri-icon, i[tri-icon]',
-  exportAs: 'triIcon',
-  // styleUrls          : ['icon.css'],
+@Component({
+  selector       : 'tri-icon, i[tri-icon]',
+  exportAs       : 'triIcon',
+  template       : '<ng-content></ng-content>',
+  styleUrls      : ['../style/icon.css'],
   // inputs             : ['color'],
-  host    : {
+  host           : {
     'role'                   : 'img',
     'class'                  : 'tri-icon',
     '[class.tri-icon-inline]': 'inline',
   },
+  encapsulation  : ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IconComponent implements OnChanges, OnInit {
 
