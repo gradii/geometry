@@ -1,20 +1,29 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
 import { DOCUMENT } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
   Inject,
   Injectable,
   InjectionToken,
+  OnDestroy,
   Optional,
   SecurityContext,
   SkipSelf,
 } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
 import { forkJoin, Observable, of as observableOf, throwError as observableThrow } from 'rxjs';
 import { catchError, finalize, map, share, tap } from 'rxjs/operators';
 
 
 /**
- * Returns an exception to be thrown in the case when attempting to
+ * Returns an exception to be thrown in sthe case when attempting to
  * load an icon with a name that cannot be found.
  * @docs-private
  */
@@ -25,11 +34,11 @@ export function getIconNameNotFoundError(iconName: string): Error {
 
 /**
  * Returns an exception to be thrown when the consumer attempts to use
- * `<mat-icon>` without including @angular/http.
+ * `<tri-icon>` without including @angular/common/http.
  * @docs-private
  */
 export function getIconNoHttpProviderError(): Error {
-  return Error('Could not find HttpClient provider for use with Angular Material icons. ' +
+  return Error('Could not find HttpClient provider for use with icons. ' +
     'Please include the HttpClientModule from @angular/common/http in your ' +
     'app imports.');
 }
@@ -40,9 +49,25 @@ export function getIconNoHttpProviderError(): Error {
  * @param url URL that was attempted to be sanitized.
  * @docs-private
  */
-export function getIconFailedToSanitizeError(url: SafeResourceUrl): Error {
-  return Error(`The URL provided to MatIconRegistry was not trusted as a resource URL ` +
+export function getIconFailedToSanitizeUrlError(url: SafeResourceUrl): Error {
+  return Error(`The URL provided to IconRegistry was not trusted as a resource URL ` +
     `via Angular's DomSanitizer. Attempted URL was "${url}".`);
+}
+
+/**
+ * Returns an exception to be thrown when a HTML string couldn't be sanitized.
+ * @param literal HTML that was attempted to be sanitized.
+ * @docs-private
+ */
+export function getIconFailedToSanitizeLiteralError(literal: SafeHtml): Error {
+  return Error(`The literal provided to IconRegistry was not trusted as safe HTML by ` +
+    `Angular's DomSanitizer. Attempted literal was "${literal}".`);
+}
+
+/** Options that can be used to configure how an icon or the icons in an icon set are presented. */
+export interface IconOptions {
+  /** View box to set on the icon. */
+  viewBox?: string;
 }
 
 /**
@@ -50,20 +75,31 @@ export function getIconFailedToSanitizeError(url: SafeResourceUrl): Error {
  * @docs-private
  */
 class SvgIconConfig {
-  svgElement: SVGElement | null = null;
+  url: SafeResourceUrl | null;
+  svgElement: SVGElement | null;
 
-  constructor(public url: SafeResourceUrl) { }
+  constructor(url: SafeResourceUrl, options?: IconOptions);
+  constructor(svgElement: SVGElement, options?: IconOptions);
+  constructor(data: SafeResourceUrl | SVGElement, public options?: IconOptions) {
+    // Note that we can't use `instanceof SVGElement` here,
+    // because it'll break during server-side rendering.
+    if (!!(data as any).nodeName) {
+      this.svgElement = data as SVGElement;
+    } else {
+      this.url = data as SafeResourceUrl;
+    }
+  }
 }
 
 /**
- * Service to register and display icons used by the `<mat-icon>` component.
+ * Service to register and display icons used by the `<tri-icon>` component.
  * - Registers icon URLs by namespace and name.
  * - Registers icon set URLs by namespace.
  * - Registers aliases for CSS classes, for use with icon fonts.
  * - Loads icons from URLs and extracts individual icons from icon sets.
  */
-@Injectable()
-export class IconRegistry {
+@Injectable({providedIn: 'root'})
+export class IconRegistry implements OnDestroy {
   private _document: Document;
 
   /**
@@ -88,15 +124,15 @@ export class IconRegistry {
 
   /**
    * The CSS class to apply when an `<tri-icon>` component has no icon name, url, or font specified.
-   * The default 'material-icons' value assumes that the material icon font has been loaded as
+   * The default 'triangle-icons' value assumes that the material icon font has been loaded as
    * described at http://google.github.io/material-design-icons/#icon-font-for-the-web
    */
   private _defaultFontSetClass = 'triangle-icons';
 
-  constructor(@Optional() private _httpClient: HttpClient,
-              private _sanitizer: DomSanitizer,
-              @Optional() @Inject(DOCUMENT) document?: any) {
-    // TODO(crisbeto): make _document required next major release.
+  constructor(
+    @Optional() private _httpClient: HttpClient,
+    private _sanitizer: DomSanitizer,
+    @Optional() @Inject(DOCUMENT) document: any) {
     this._document = document;
   }
 
@@ -105,8 +141,17 @@ export class IconRegistry {
    * @param iconName Name under which the icon should be registered.
    * @param url
    */
-  addSvgIcon(iconName: string, url: SafeResourceUrl): this {
-    return this.addSvgIconInNamespace('', iconName, url);
+  addSvgIcon(iconName: string, url: SafeResourceUrl, options?: IconOptions): this {
+    return this.addSvgIconInNamespace('', iconName, url, options);
+  }
+
+  /**
+   * Registers an icon using an HTML string in the default namespace.
+   * @param iconName Name under which the icon should be registered.
+   * @param literal SVG source of the icon.
+   */
+  addSvgIconLiteral(iconName: string, literal: SafeHtml, options?: IconOptions): this {
+    return this.addSvgIconLiteralInNamespace('', iconName, literal, options);
   }
 
   /**
@@ -115,18 +160,43 @@ export class IconRegistry {
    * @param iconName Name under which the icon should be registered.
    * @param url
    */
-  addSvgIconInNamespace(namespace: string, iconName: string, url: SafeResourceUrl): this {
-    const key = iconKey(namespace, iconName);
-    this._svgIconConfigs.set(key, new SvgIconConfig(url));
-    return this;
+  addSvgIconInNamespace(namespace: string, iconName: string, url: SafeResourceUrl,
+                        options?: IconOptions): this {
+    return this._addSvgIconConfig(namespace, iconName, new SvgIconConfig(url, options));
+  }
+
+  /**
+   * Registers an icon using an HTML string in the specified namespace.
+   * @param namespace Namespace in which the icon should be registered.
+   * @param iconName Name under which the icon should be registered.
+   * @param literal SVG source of the icon.
+   */
+  addSvgIconLiteralInNamespace(namespace: string, iconName: string, literal: SafeHtml,
+                               options?: IconOptions): this {
+    const sanitizedLiteral = this._sanitizer.sanitize(SecurityContext.HTML, literal);
+
+    if (!sanitizedLiteral) {
+      throw getIconFailedToSanitizeLiteralError(literal);
+    }
+
+    const svgElement = this._createSvgElementForSingleIcon(sanitizedLiteral, options);
+    return this._addSvgIconConfig(namespace, iconName, new SvgIconConfig(svgElement, options));
   }
 
   /**
    * Registers an icon set by URL in the default namespace.
    * @param url
    */
-  addSvgIconSet(url: SafeResourceUrl): this {
-    return this.addSvgIconSetInNamespace('', url);
+  addSvgIconSet(url: SafeResourceUrl, options?: IconOptions): this {
+    return this.addSvgIconSetInNamespace('', url, options);
+  }
+
+  /**
+   * Registers an icon set using an HTML string in the default namespace.
+   * @param literal SVG source of the icon set.
+   */
+  addSvgIconSetLiteral(literal: SafeHtml, options?: IconOptions): this {
+    return this.addSvgIconSetLiteralInNamespace('', literal, options);
   }
 
   /**
@@ -134,20 +204,29 @@ export class IconRegistry {
    * @param namespace Namespace in which to register the icon set.
    * @param url
    */
-  addSvgIconSetInNamespace(namespace: string, url: SafeResourceUrl): this {
-    const config = new SvgIconConfig(url);
-    const configNamespace = this._iconSetConfigs.get(namespace);
-
-    if (configNamespace) {
-      configNamespace.push(config);
-    } else {
-      this._iconSetConfigs.set(namespace, [config]);
-    }
-    return this;
+  addSvgIconSetInNamespace(namespace: string, url: SafeResourceUrl, options?: IconOptions): this {
+    return this._addSvgIconSetConfig(namespace, new SvgIconConfig(url, options));
   }
 
   /**
-   * Defines an alias for a CSS class name to be used for icon fonts. Creating an triIcon
+   * Registers an icon set using an HTML string in the specified namespace.
+   * @param namespace Namespace in which to register the icon set.
+   * @param literal SVG source of the icon set.
+   */
+  addSvgIconSetLiteralInNamespace(namespace: string, literal: SafeHtml,
+                                  options?: IconOptions): this {
+    const sanitizedLiteral = this._sanitizer.sanitize(SecurityContext.HTML, literal);
+
+    if (!sanitizedLiteral) {
+      throw getIconFailedToSanitizeLiteralError(literal);
+    }
+
+    const svgElement = this._svgElementFromString(sanitizedLiteral);
+    return this._addSvgIconSetConfig(namespace, new SvgIconConfig(svgElement, options));
+  }
+
+  /**
+   * Defines an alias for a CSS class name to be used for icon fonts. Creating an matIcon
    * component with the alias as the fontSet input will cause the class name to be applied
    * to the `<tri-icon>` element.
    *
@@ -179,7 +258,7 @@ export class IconRegistry {
   }
 
   /**
-   * Returns the CSS class name to be used for icon fonts when an `<mat-icon>` component does not
+   * Returns the CSS class name to be used for icon fonts when an `<tri-icon>` component does not
    * have a fontSet input value, and is not loading an icon by name or URL.
    */
   getDefaultFontSetClass(): string {
@@ -195,13 +274,13 @@ export class IconRegistry {
    * @param safeUrl URL from which to fetch the SVG icon.
    */
   getSvgIconFromUrl(safeUrl: SafeResourceUrl): Observable<SVGElement> {
-    let url = this._sanitizer.sanitize(SecurityContext.RESOURCE_URL, safeUrl);
+    const url = this._sanitizer.sanitize(SecurityContext.RESOURCE_URL, safeUrl);
 
     if (!url) {
-      throw getIconFailedToSanitizeError(safeUrl);
+      throw getIconFailedToSanitizeUrlError(safeUrl);
     }
 
-    let cachedIcon = this._cachedIconsByUrl.get(url);
+    const cachedIcon = this._cachedIconsByUrl.get(url);
 
     if (cachedIcon) {
       return observableOf(cloneSvg(cachedIcon));
@@ -240,6 +319,12 @@ export class IconRegistry {
     return observableThrow(getIconNameNotFoundError(key));
   }
 
+  ngOnDestroy() {
+    this._svgIconConfigs.clear();
+    this._iconSetConfigs.clear();
+    this._cachedIconsByUrl.clear();
+  }
+
   /**
    * Returns the cached icon for a SvgIconConfig if available, or fetches it from its URL if not.
    */
@@ -264,7 +349,8 @@ export class IconRegistry {
    * The returned Observable produces the SVG element if possible, and throws
    * an error if no icon with the specified name can be found.
    */
-  private _getSvgFromIconSetConfigs(name: string, iconSetConfigs: SvgIconConfig[]): Observable<SVGElement> {
+  private _getSvgFromIconSetConfigs(name: string, iconSetConfigs: SvgIconConfig[]):
+    Observable<SVGElement> {
     // For all the icon set SVG elements we've fetched, see if any contain an icon with the
     // requested name.
     const namedIcon = this._extractIconWithNameFromAnySet(name, iconSetConfigs);
@@ -282,12 +368,12 @@ export class IconRegistry {
       .filter(iconSetConfig => !iconSetConfig.svgElement)
       .map(iconSetConfig => {
         return this._loadSvgIconSetFromConfig(iconSetConfig).pipe(
-          catchError((err: any): Observable<SVGElement | null> => {
-            let url = this._sanitizer.sanitize(SecurityContext.RESOURCE_URL, iconSetConfig.url);
+          catchError((err: HttpErrorResponse): Observable<SVGElement | null> => {
+            const url = this._sanitizer.sanitize(SecurityContext.RESOURCE_URL, iconSetConfig.url);
 
-            // Swallow errors fetching individual URLs so the combined Observable won't
-            // necessarily fail.
-            console.log(`Loading icon set URL: ${url} failed: ${err}`);
+            // Swallow errors fetching individual URLs so the
+            // combined Observable won't necessarily fail.
+            console.error(`Loading icon set URL: ${url} failed: ${err.message}`);
             return observableOf(null);
           })
         );
@@ -311,12 +397,13 @@ export class IconRegistry {
    * tag matches the specified name. If found, copies the nested element to a new SVG element and
    * returns it. Returns null if no matching element is found.
    */
-  private _extractIconWithNameFromAnySet(iconName: string, iconSetConfigs: SvgIconConfig[]): SVGElement | null {
+  private _extractIconWithNameFromAnySet(iconName: string, iconSetConfigs: SvgIconConfig[]):
+    SVGElement | null {
     // Iterate backwards, so icon sets added later have precedence.
     for (let i = iconSetConfigs.length - 1; i >= 0; i--) {
       const config = iconSetConfigs[i];
       if (config.svgElement) {
-        const foundIcon = this._extractSvgIconFromSet(config.svgElement, iconName);
+        const foundIcon = this._extractSvgIconFromSet(config.svgElement, iconName, config.options);
         if (foundIcon) {
           return foundIcon;
         }
@@ -331,7 +418,7 @@ export class IconRegistry {
    */
   private _loadSvgIconFromConfig(config: SvgIconConfig): Observable<SVGElement> {
     return this._fetchUrl(config.url)
-      .pipe(map(svgText => this._createSvgElementForSingleIcon(svgText)));
+      .pipe(map(svgText => this._createSvgElementForSingleIcon(svgText, config.options)));
   }
 
   /**
@@ -358,9 +445,9 @@ export class IconRegistry {
   /**
    * Creates a DOM element from the given SVG string, and adds default attributes.
    */
-  private _createSvgElementForSingleIcon(responseText: string): SVGElement {
+  private _createSvgElementForSingleIcon(responseText: string, options?: IconOptions): SVGElement {
     const svg = this._svgElementFromString(responseText);
-    this._setSvgAttributes(svg);
+    this._setSvgAttributes(svg, options);
     return svg;
   }
 
@@ -369,8 +456,11 @@ export class IconRegistry {
    * tag matches the specified name. If found, copies the nested element to a new SVG element and
    * returns it. Returns null if no matching element is found.
    */
-  private _extractSvgIconFromSet(iconSet: SVGElement, iconName: string): SVGElement | null {
-    const iconSource = iconSet.querySelector('#' + iconName);
+  private _extractSvgIconFromSet(iconSet: SVGElement, iconName: string,
+                                 options?: IconOptions): SVGElement | null {
+    // Use the `id="iconName"` syntax in order to escape special
+    // characters in the ID (versus using the #iconName syntax).
+    const iconSource = iconSet.querySelector(`[id="${iconName}"]`);
 
     if (!iconSource) {
       return null;
@@ -379,19 +469,19 @@ export class IconRegistry {
     // Clone the element and remove the ID to prevent multiple elements from being added
     // to the page with the same ID.
     const iconElement = iconSource.cloneNode(true) as Element;
-    iconElement.id = '';
+    iconElement.removeAttribute('id');
 
     // If the icon node is itself an <svg> node, clone and return it directly. If not, set it as
     // the content of a new <svg> node.
     if (iconElement.nodeName.toLowerCase() === 'svg') {
-      return this._setSvgAttributes(iconElement as SVGElement);
+      return this._setSvgAttributes(iconElement as SVGElement, options);
     }
 
     // If the node is a <symbol>, it won't be rendered so we have to convert it into <svg>. Note
     // that the same could be achieved by referring to it via <use href="#id">, however the <use>
     // tag is problematic on Firefox, because it needs to include the current page path.
     if (iconElement.nodeName.toLowerCase() === 'symbol') {
-      return this._setSvgAttributes(this._toSvgElement(iconElement));
+      return this._setSvgAttributes(this._toSvgElement(iconElement), options);
     }
 
     // createElement('SVG') doesn't work as expected; the DOM ends up with
@@ -403,24 +493,22 @@ export class IconRegistry {
     // Clone the node so we don't remove it from the parent icon set element.
     svg.appendChild(iconElement);
 
-    return this._setSvgAttributes(svg);
+    return this._setSvgAttributes(svg, options);
   }
 
   /**
    * Creates a DOM element from the given SVG string.
    */
   private _svgElementFromString(str: string): SVGElement {
-    if (this._document || typeof document !== 'undefined') {
-      const div = (this._document || document).createElement('DIV');
-      div.innerHTML = str;
-      const svg = div.querySelector('svg') as SVGElement;
-      if (!svg) {
-        throw Error('<svg> tag not found');
-      }
-      return svg;
+    const div = this._document.createElement('DIV');
+    div.innerHTML = str;
+    const svg = div.querySelector('svg') as SVGElement;
+
+    if (!svg) {
+      throw Error('<svg> tag not found');
     }
 
-    throw new Error('iconRegistry could not resolve document.');
+    return svg;
   }
 
   /**
@@ -441,15 +529,17 @@ export class IconRegistry {
   /**
    * Sets the default attributes for an SVG element to be used as an icon.
    */
-  private _setSvgAttributes(svg: SVGElement): SVGElement {
-    if (!svg.getAttribute('xmlns')) {
-      svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    }
+  private _setSvgAttributes(svg: SVGElement, options?: IconOptions): SVGElement {
     svg.setAttribute('fit', '');
     svg.setAttribute('height', '100%');
     svg.setAttribute('width', '100%');
     svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     svg.setAttribute('focusable', 'false'); // Disable IE11 default behavior to make SVGs focusable.
+
+    if (options && options.viewBox) {
+      svg.setAttribute('viewBox', options.viewBox);
+    }
+
     return svg;
   }
 
@@ -457,15 +547,19 @@ export class IconRegistry {
    * Returns an Observable which produces the string contents of the given URL. Results may be
    * cached, so future calls with the same URL may not cause another HTTP request.
    */
-  private _fetchUrl(safeUrl: SafeResourceUrl): Observable<string> {
+  private _fetchUrl(safeUrl: SafeResourceUrl | null): Observable<string> {
     if (!this._httpClient) {
       throw getIconNoHttpProviderError();
+    }
+
+    if (safeUrl == null) {
+      throw Error(`Cannot fetch icon from URL "${safeUrl}".`);
     }
 
     const url = this._sanitizer.sanitize(SecurityContext.RESOURCE_URL, safeUrl);
 
     if (!url) {
-      throw getIconFailedToSanitizeError(safeUrl);
+      throw getIconFailedToSanitizeUrlError(safeUrl);
     }
 
     // Store in-progress fetches to avoid sending a duplicate request for a URL when there is
@@ -477,7 +571,7 @@ export class IconRegistry {
       return inProgressFetch;
     }
 
-    // TODO(jelbourn): for some reason, the `finally` operator "loses" the generic type on the
+    // TODO(jelbourn): for some reason, the `finalize` operator "loses" the generic type on the
     // Observable. Figure out why and fix it.
     const req = this._httpClient.get(url, {responseType: 'text'}).pipe(
       finalize(() => this._inProgressUrlFetches.delete(url)),
@@ -487,13 +581,42 @@ export class IconRegistry {
     this._inProgressUrlFetches.set(url, req);
     return req;
   }
+
+  /**
+   * Registers an icon config by name in the specified namespace.
+   * @param namespace Namespace in which to register the icon config.
+   * @param iconName Name under which to register the config.
+   * @param config Config to be registered.
+   */
+  private _addSvgIconConfig(namespace: string, iconName: string, config: SvgIconConfig): this {
+    this._svgIconConfigs.set(iconKey(namespace, iconName), config);
+    return this;
+  }
+
+  /**
+   * Registers an icon set config in the specified namespace.
+   * @param namespace Namespace in which to register the icon config.
+   * @param config Config to be registered.
+   */
+  private _addSvgIconSetConfig(namespace: string, config: SvgIconConfig): this {
+    const configNamespace = this._iconSetConfigs.get(namespace);
+
+    if (configNamespace) {
+      configNamespace.push(config);
+    } else {
+      this._iconSetConfigs.set(namespace, [config]);
+    }
+
+    return this;
+  }
 }
 
 /** @docs-private */
-export function ICON_REGISTRY_PROVIDER_FACTORY(parentRegistry: IconRegistry,
-                                               httpClient: HttpClient,
-                                               sanitizer: DomSanitizer,
-                                               document?: any) {
+export function ICON_REGISTRY_PROVIDER_FACTORY(
+  parentRegistry: IconRegistry,
+  httpClient: HttpClient,
+  sanitizer: DomSanitizer,
+  document?: any) {
   return parentRegistry || new IconRegistry(httpClient, sanitizer, document);
 }
 
