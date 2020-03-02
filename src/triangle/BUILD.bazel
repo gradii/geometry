@@ -1,52 +1,60 @@
-package(default_visibility=["//visibility:public"])
+package(default_visibility = ["//visibility:public"])
 
-load("//tools:sass_bundle.bzl", "sass_bundle")
-load("//tools:defaults.bzl", "ng_module", "ng_package")
-load("//:packages.bzl", "TRIANGLE_PACKAGES", "TRIANGLE_TARGETS", "TRIANGLE_SCSS_LIBS",
-    "ROLLUP_GLOBALS")
+load("@npm//scss-bundle:index.bzl", "scss_bundle")
+load(
+    "//src/triangle:config.bzl",
+    "TRIANGLE_ENTRYPOINTS",
+    "TRIANGLE_ENTRYPOINTS_WITH_STYLES",
+    "TRIANGLE_SCSS_LIBS",
+    "TRIANGLE_TARGETS",
+)
+load("//tools:defaults.bzl", "ng_package", "ts_library")
 
-# Root "@angular/material" entry-point.
-ng_module(
-  name = "triangle",
-  srcs = glob(["*.ts"], exclude=["**/*.spec.ts"]),
-  module_name = "@gradii/triangle",
-  deps = ["//src/triangle/%s" % p for p in TRIANGLE_PACKAGES] + [
-    "@npm//@angular/common",
-    "@npm//@angular/forms",
-    "@npm//@angular/animations",
-  ],
+ts_library(
+    name = "triangle",
+    srcs = ["index.ts"],
+    module_name = "@gradii/triangle",
 )
 
-sass_bundle(
-  name = "theming_bundle",
-  srcs = [
-  ] + TRIANGLE_SCSS_LIBS,
-  entry_point = '//src/triangle/core:style/themes/_all-theme.scss',
-  output_name = "_theming.scss",
+scss_bundle(
+    name = "theming_bundle",
+    outs = ["_theming.scss"],
+    args = [
+        "--entryFile=$(location //src/triangle/core:themes/_all-theme.scss)",
+        "--outFile=$(location :_theming.scss)",
+    ],
+    data = TRIANGLE_SCSS_LIBS + [
+        "//src/triangle/core:themes/_all-theme.scss",
+        # Config file is required by "scss-bundle" and will be automatically
+        # loaded by the CLI. It expects the config to be in the execroot.
+        "//:scss-bundle.config.json",
+    ],
 )
-
-#filegroup(
-#  name = "overviews",
-#  srcs = ["//src/lib/%s:overview" % name for name in TRIANGLE_PACKAGES]
-#)
 
 # Creates the @angular/material package published to npm.
 ng_package(
-  name = "npm_package",
-  srcs = ["package.json"],
-  entry_point = ":public-api.ts",
-  entry_point_name = "triangle",
-  globals = ROLLUP_GLOBALS,
-  data = [
-    ":theming_bundle",
-#    "//src/lib/prebuilt-themes:indigo-pink",
-#    "//src/lib/prebuilt-themes:deeppurple-amber",
-#    "//src/lib/prebuilt-themes:pink-bluegrey",
-#    "//src/lib/prebuilt-themes:purple-green",
-  ],
-  packages = [
-#      "//src/lib/schematics:npm_package"
-  ],
-  deps = TRIANGLE_TARGETS,
-  tags = ["manual"],
+    name = "npm_package",
+    srcs = [
+        "package.json",
+    ],
+    data = [
+        ":theming_bundle",
+        #        "//src/triangle/core:theming_scss_lib",
+        #        "//src/triangle/prebuilt-themes:deeppurple-amber",
+        #        "//src/triangle/prebuilt-themes:indigo-pink",
+        #        "//src/triangle/prebuilt-themes:pink-bluegrey",
+        #        "//src/triangle/prebuilt-themes:purple-green",
+    ] + TRIANGLE_SCSS_LIBS,
+    entry_point = ":index.ts",
+    entry_point_name = "triangle",
+    nested_packages = [],
+    tags = ["release-package"],
+    deps = TRIANGLE_TARGETS,
+)
+
+filegroup(
+    name = "overviews",
+    # Only secondary entry-points declare overview files currently. Entry-points
+    # which contain a slash are not in the top-level and do not have an overview.
+    srcs = ["//src/triangle/%s:overview" % ep for ep in TRIANGLE_ENTRYPOINTS if not "/" in ep],
 )

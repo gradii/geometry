@@ -2,9 +2,9 @@
 export const releasePackages = [
   'cdk',
   'material',
+  'google-maps',
   'youtube-player',
   'cdk-experimental',
   'material-experimental',
   'material-moment-adapter',
-  'google-maps',
 ];

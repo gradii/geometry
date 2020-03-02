@@ -36,9 +36,9 @@ export class SelectTopControlComponent implements OnInit, OnDestroy {
   @Input() allowClear = false;
   @Input() showArrow = true;
   @Input() loading = false;
-  @Input() suffixIcon: TemplateRef<void>;
-  @Input() clearIcon: TemplateRef<void>;
-  @Input() removeIcon: TemplateRef<void>;
+  @Input() suffixIcon: TemplateRef<any>;
+  @Input() clearIcon: TemplateRef<any>;
+  @Input() removeIcon: TemplateRef<any>;
   // tslint:disable-next-line:no-any
   @Input() maxTagPlaceholder: TemplateRef<{ $implicit: any[] }>;
   @Input() tokenSeparators: string[] = [];
@@ -109,7 +109,7 @@ export class SelectTopControlComponent implements OnInit, OnDestroy {
     }
   }
 
-  removeSelectedValue(option: OptionComponent, e: KeyboardEvent): void {
+  removeSelectedValue(option: OptionComponent, e: KeyboardEvent|MouseEvent): void {
     this.selectService.removeValueFormSelected(option);
     e.stopPropagation();
   }

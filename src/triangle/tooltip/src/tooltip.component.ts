@@ -1,5 +1,5 @@
-import { AnimationEvent } from '@angular/animations';
-import { CdkConnectedOverlay, ConnectionPositionPair } from '@angular/cdk/overlay';
+import {AnimationEvent} from '@angular/animations';
+import {CdkConnectedOverlay, ConnectionPositionPair} from '@angular/cdk/overlay';
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -13,41 +13,41 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { DEFAULT_4_POSITIONS, FadeAnimation, POSITION_MAP } from '@gradii/triangle/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { TooltipDirective } from './tooltip.directive';
+import {DEFAULT_4_POSITIONS, FadeAnimation, POSITION_MAP} from '@gradii/triangle/core';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {TooltipDirective} from './tooltip.directive';
 
 @Component({
   selector     : 'tri-tooltip',
   encapsulation: ViewEncapsulation.None,
   animations   : [FadeAnimation],
   template     : `
-      <ng-content></ng-content>
-      <ng-template
-              #overlay="cdkConnectedOverlay"
-              cdkConnectedOverlay
-              [cdkConnectedOverlayOrigin]="origin"
-              [cdkConnectedOverlayHasBackdrop]="_hasBackdrop"
-              (backdropClick)="hide()"
-              (detach)="hide()"
-              (positionChange)="onPositionChange($event)"
-              [cdkConnectedOverlayPositions]="_positions"
-              [cdkConnectedOverlayOpen]="visible$ | async">
-          <div class="tri-tooltip" [ngClass]="_classMap" [ngStyle]="overlayStyle"
-               [@fadeAnimation]="''+(visible$ | async)"
-               (@fadeAnimation.done)="_afterVisibilityAnimation($event)">
-              <div class="tri-tooltip-content">
-                  <div class="tri-tooltip-arrow"></div>
-                  <div class="tri-tooltip-inner">
-                      <span *ngIf="!tooltipTemplate">{{title}}</span>
-                      <ng-template
-                              *ngIf="tooltipTemplate"
-                              [ngTemplateOutlet]="tooltipTemplate">
-                      </ng-template>
-                  </div>
-              </div>
+    <ng-content></ng-content>
+    <ng-template
+      #overlay="cdkConnectedOverlay"
+      cdkConnectedOverlay
+      [cdkConnectedOverlayOrigin]="origin"
+      [cdkConnectedOverlayHasBackdrop]="_hasBackdrop"
+      (backdropClick)="hide()"
+      (detach)="hide()"
+      (positionChange)="onPositionChange($event)"
+      [cdkConnectedOverlayPositions]="_positions"
+      [cdkConnectedOverlayOpen]="visible$ | async">
+      <div class="tri-tooltip" [ngClass]="_classMap" [ngStyle]="overlayStyle"
+           [@fadeAnimation]="''+(visible$ | async)"
+           (@fadeAnimation.done)="_afterVisibilityAnimation($event)">
+        <div class="tri-tooltip-content">
+          <div class="tri-tooltip-arrow"></div>
+          <div class="tri-tooltip-inner">
+            <span *ngIf="!tooltipTemplate">{{title}}</span>
+            <ng-template
+              *ngIf="tooltipTemplate"
+              [ngTemplateOutlet]="tooltipTemplate">
+            </ng-template>
           </div>
-      </ng-template>`
+        </div>
+      </div>
+    </ng-template>`
 })
 export class ToolTipComponent implements AfterViewInit {
   /**
@@ -76,7 +76,7 @@ export class ToolTipComponent implements AfterViewInit {
   /**
    * `TooltipDirective`
    */
-  @ContentChild(TooltipDirective, {static: false}) origin;
+  @ContentChild(TooltipDirective, {static: false}) origin: TooltipDirective;
 
   /**
    * #Template
@@ -87,14 +87,15 @@ export class ToolTipComponent implements AfterViewInit {
    * #overlay
    */
   @ViewChild('overlay', {static: false}) overlay: CdkConnectedOverlay;
-  visibleSource = new BehaviorSubject<boolean>(false);
-  visible$: Observable<boolean> = this.visibleSource.asObservable();
-  _prefix = 'tri-tooltip-placement';
+  visibleSource                        = new BehaviorSubject<boolean>(false);
+  visible$: Observable<boolean>        = this.visibleSource.asObservable();
+  _prefix                              = 'tri-tooltip-placement';
   _positions: ConnectionPositionPair[] = [...DEFAULT_4_POSITIONS];
-  _classMap = {};
-  _hasBackdrop = false;
+  _classMap                            = {};
+  _hasBackdrop                         = false;
 
-  constructor(private _renderer: Renderer2, private _cdr: ChangeDetectorRef) {}
+  constructor(private _renderer: Renderer2, private _cdr: ChangeDetectorRef) {
+  }
 
   /**
    * Get visible
@@ -117,13 +118,17 @@ export class ToolTipComponent implements AfterViewInit {
     }
   }
 
-  _placement = 'top';
+  _placement: any = 'top';
 
   /**
-   * Get the positon of tooltip, optional: `top` `left` `right` `bottom` `topLeft` `topRight`<br />
-   * `bottomLeft` `bottomRight` `leftTop` `leftBottom` `rightTop` `rightBottom`
-   * 获取气泡框位置，可选 `top` `left` `right` `bottom` `topLeft` `topRight`<br />
-   * `bottomLeft` `bottomRight` `leftTop` `leftBottom` `rightTop` `rightBottom`
+   * Get the positon of tooltip, optional:
+   * `top` `left` `right` `bottom`
+   * `topLeft` `topRight` `bottomLeft` `bottomRight`
+   * `leftTop` `leftBottom` `rightTop` `rightBottom`
+   * 获取气泡框位置，可选
+   * `top` `left` `right` `bottom`
+   * `topLeft` `topRight` `bottomLeft` `bottomRight`
+   * `leftTop` `leftBottom` `rightTop` `rightBottom`
    */
   @Input()
   get placement() {
@@ -131,15 +136,18 @@ export class ToolTipComponent implements AfterViewInit {
   }
 
   /**
-   * Set the positon of tooltip, optional: `top` `left` `right` `bottom` `topLeft` `topRight`<br />
-   * `bottomLeft` `bottomRight` `leftTop` `leftBottom` `rightTop` `rightBottom`
-   * 设置气泡框位置，可选 `top` `left` `right` `bottom` `topLeft` `topRight`<br />
-   * `bottomLeft` `bottomRight` `leftTop` `leftBottom` `rightTop` `rightBottom`
+   * Set the positon of tooltip, optional:
+   * `top` `left` `right` `bottom`
+   * `topLeft` `topRight` `bottomLeft` `bottomRight` `leftTop` `leftBottom` `rightTop` `rightBottom`
+   * 设置气泡框位置，可选
+   * `top` `left` `right` `bottom`
+   * `topLeft` `topRight` `bottomLeft` `bottomRight` `leftTop` `leftBottom` `rightTop` `rightBottom`
    * @param value
    */
   set placement(value) {
     if (value !== this._placement) {
       this._placement = value;
+      // @ts-ignore
       this._positions.unshift(POSITION_MAP[this.placement] as ConnectionPositionPair);
     }
   }
@@ -161,7 +169,7 @@ export class ToolTipComponent implements AfterViewInit {
    */
   @Input()
   set trigger(value) {
-    this._trigger = value;
+    this._trigger     = value;
     this._hasBackdrop = this._trigger === 'click';
   }
 
@@ -172,8 +180,9 @@ export class ToolTipComponent implements AfterViewInit {
     }
   }
 
-  onPositionChange($event): void {
+  onPositionChange($event: any): void {
     for (const key in POSITION_MAP) {
+      // @ts-ignore
       if (JSON.stringify($event.connectionPair) === JSON.stringify(POSITION_MAP[key])) {
         this.placement = key;
         break;
@@ -185,12 +194,12 @@ export class ToolTipComponent implements AfterViewInit {
   }
 
   show(): void {
-    this.visible = true;
+    this.visible              = true;
     this.origin.isTooltipOpen = true;
   }
 
   hide(): void {
-    this.visible = false;
+    this.visible              = false;
     this.origin.isTooltipOpen = false;
   }
 

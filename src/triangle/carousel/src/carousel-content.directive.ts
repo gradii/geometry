@@ -1,13 +1,20 @@
-import { Directive, ElementRef, HostBinding } from '@angular/core';
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import {Directive, ElementRef, HostBinding} from '@angular/core';
 
 @Directive({
   selector: '[triCarouselContent]'
 })
 export class CarouselContentDirective {
-  width = 0;
+  width    = 0;
   isActive = false;
-  left = null;
-  top = null;
+  left     = null;
+  top      = null;
   fadeMode = false;
   nativeElement: HTMLElement;
 
@@ -42,6 +49,7 @@ export class CarouselContentDirective {
     if (this.fadeMode) {
       return 'relative';
     }
+    return null;
   }
 
   @HostBinding('style.opacity')
@@ -49,5 +57,6 @@ export class CarouselContentDirective {
     if (this.fadeMode) {
       return this.isActive ? 1 : 0;
     }
+    return null;
   }
 }

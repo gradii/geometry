@@ -44,7 +44,7 @@ function arrayEquals<T>(array1: T[], array2: T[]): boolean {
   return true;
 }
 
-const defaultDisplayRender = label => label.join(' / ');
+const defaultDisplayRender = (labels: string[], selectedOptions: any[]) => labels.join(' / ');
 
 export type CascaderExpandTrigger = 'click' | 'hover';
 export type CascaderTriggerType = 'click' | 'hover';

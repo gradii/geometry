@@ -1,24 +1,25 @@
 /**
  * @license
- * Copyright Google LLC All Rights Reserved.
+ * Copyright LinboLen Rights Reserved.
  *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * Use of this source code is governed by an MIT-style license
  */
 
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { TriPseudoCheckboxModule } from '../selection/index';
-import { OptionGroupComponent } from './option-group.component';
-import { OptionComponent } from './option.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {TriRippleModule} from '../ripple/index';
+import {TriPseudoCheckboxModule} from '../selection/index';
+import {TriOption} from './option';
+import {TriOptgroup} from './optgroup';
+
 
 @NgModule({
-  imports     : [CommonModule, TriPseudoCheckboxModule],
-  exports     : [TriPseudoCheckboxModule, OptionComponent, OptionGroupComponent],
-  declarations: [OptionComponent, OptionGroupComponent]
+  imports: [TriRippleModule, CommonModule, TriPseudoCheckboxModule],
+  exports: [TriOption, TriOptgroup],
+  declarations: [TriOption, TriOptgroup]
 })
 export class TriOptionModule {}
 
 
-export * from './option.component';
-export * from './option-group.component';
+export * from './option';
+export * from './optgroup';

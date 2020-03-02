@@ -1,14 +1,19 @@
 /**
  * @license
- * Copyright Google LLC All Rights Reserved.
+ * Copyright LinboLen Rights Reserved.
  *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * Use of this source code is governed by an MIT-style license
  */
 
-import { GridListComponent } from './grid-list';
-import { GridTileComponent } from './grid-tile';
-import { TileCoordinator } from './tile-coordinator';
+import {TriGridList} from './grid-list';
+import {TriGridTile} from './grid-tile';
+import {TileCoordinator} from './tile-coordinator';
+
+/**
+ * RegExp that can be used to check whether a value will
+ * be allowed inside a CSS `calc()` expression.
+ */
+const cssCalcAllowedValue = /^-?\d+((\.\d+)?[A-Za-z%$]?)+$/;
 
 /**
  * Sets the style properties for an individual tile, given the position calculated by the
@@ -17,7 +22,7 @@ import { TileCoordinator } from './tile-coordinator';
  */
 export abstract class TileStyler {
   _gutterSize: string;
-  _rows: number = 0;
+  _rows: number    = 0;
   _rowspan: number = 0;
   _cols: number;
   _direction: string;
@@ -33,10 +38,10 @@ export abstract class TileStyler {
    */
   init(gutterSize: string, tracker: TileCoordinator, cols: number, direction: string): void {
     this._gutterSize = normalizeUnits(gutterSize);
-    this._rows = tracker.rowCount;
-    this._rowspan = tracker.rowspan;
-    this._cols = cols;
-    this._direction = direction;
+    this._rows       = tracker.rowCount;
+    this._rowspan    = tracker.rowspan;
+    this._cols       = cols;
+    this._direction  = direction;
   }
 
   /**
@@ -55,6 +60,7 @@ export abstract class TileStyler {
     return `(${sizePercent}% - (${this._gutterSize} * ${gutterFraction}))`;
   }
 
+
   /**
    * Gets The horizontal or vertical position of a tile, e.g., the 'top' or 'left' property value.
    * @param offset Number of tiles that have already been rendered in the row/column.
@@ -67,6 +73,7 @@ export abstract class TileStyler {
     return offset === 0 ? '0' : calc(`(${baseSize} + ${this._gutterSize}) * ${offset}`);
   }
 
+
   /**
    * Gets the actual size of a tile, e.g., width or height, taking rowspan or colspan into account.
    * @param baseSize Base size of a 1x1 tile (as computed in getBaseTileSize).
@@ -77,13 +84,14 @@ export abstract class TileStyler {
     return `(${baseSize} * ${span}) + (${span - 1} * ${this._gutterSize})`;
   }
 
+
   /**
    * Sets the style properties to be applied to a tile for the given row and column index.
    * @param tile Tile to which to apply the styling.
    * @param rowIndex Index of the tile's row.
    * @param colIndex Index of the tile's column.
    */
-  setStyle(tile: GridTileComponent, rowIndex: number, colIndex: number): void {
+  setStyle(tile: TriGridTile, rowIndex: number, colIndex: number): void {
     // Percent of the available horizontal space that one column takes up.
     let percentWidthPerTile = 100 / this._cols;
 
@@ -96,13 +104,14 @@ export abstract class TileStyler {
   }
 
   /** Sets the horizontal placement of the tile in the list. */
-  setColStyles(tile: GridTileComponent, colIndex: number, percentWidth: number, gutterWidth: number) {
+  setColStyles(tile: TriGridTile, colIndex: number, percentWidth: number,
+               gutterWidth: number) {
     // Base horizontal size of a column.
     let baseTileWidth = this.getBaseTileSize(percentWidth, gutterWidth);
 
     // The width and horizontal position of each tile is always calculated the same way, but the
     // height and vertical position depends on the rowMode.
-    let side = this._direction === 'ltr' ? 'left' : 'right';
+    let side = this._direction === 'rtl' ? 'right' : 'left';
     tile._setStyle(side, this.getTilePosition(baseTileWidth, colIndex));
     tile._setStyle('width', calc(this.getTileSize(baseTileWidth, tile.colspan)));
   }
@@ -127,7 +136,8 @@ export abstract class TileStyler {
    * This method will be implemented by each type of TileStyler.
    * @docs-private
    */
-  abstract setRowStyles(tile: GridTileComponent, rowIndex: number, percentWidth: number, gutterWidth: number);
+  abstract setRowStyles(tile: TriGridTile, rowIndex: number, percentWidth: number,
+                        gutterWidth: number): void;
 
   /**
    * Calculates the computed height and returns the correct style property to set.
@@ -143,15 +153,17 @@ export abstract class TileStyler {
    * @param list Grid list that the styler was attached to.
    * @docs-private
    */
-  abstract reset(list: GridListComponent);
+  abstract reset(list: TriGridList): void;
 }
+
 
 /**
  * This type of styler is instantiated when the user passes in a fixed row height.
- * Example <mat-grid-list cols="3" rowHeight="100px">
+ * Example `<tri-grid-list cols="3" rowHeight="100px">`
  * @docs-private
  */
 export class FixedTileStyler extends TileStyler {
+
   constructor(public fixedRowHeight: string) {
     super();
   }
@@ -159,34 +171,44 @@ export class FixedTileStyler extends TileStyler {
   init(gutterSize: string, tracker: TileCoordinator, cols: number, direction: string) {
     super.init(gutterSize, tracker, cols, direction);
     this.fixedRowHeight = normalizeUnits(this.fixedRowHeight);
+
+    if (!cssCalcAllowedValue.test(this.fixedRowHeight)) {
+      throw Error(`Invalid value "${this.fixedRowHeight}" set as rowHeight.`);
+    }
   }
 
-  setRowStyles(tile: GridTileComponent, rowIndex: number): void {
+  setRowStyles(tile: TriGridTile, rowIndex: number): void {
     tile._setStyle('top', this.getTilePosition(this.fixedRowHeight, rowIndex));
     tile._setStyle('height', calc(this.getTileSize(this.fixedRowHeight, tile.rowspan)));
   }
 
   getComputedHeight(): [string, string] {
-    return ['height', calc(`${this.getTileSpan(this.fixedRowHeight)} + ${this.getGutterSpan()}`)];
+    return [
+      'height', calc(`${this.getTileSpan(this.fixedRowHeight)} + ${this.getGutterSpan()}`)
+    ];
   }
 
-  reset(list: GridListComponent) {
+  reset(list: TriGridList) {
     list._setListStyle(['height', null]);
 
-    list._tiles.forEach(tile => {
-      tile._setStyle('top', null);
-      tile._setStyle('height', null);
-    });
+    if (list._tiles) {
+      list._tiles.forEach(tile => {
+        tile._setStyle('top', null);
+        tile._setStyle('height', null);
+      });
+    }
   }
 }
 
+
 /**
  * This type of styler is instantiated when the user passes in a width:height ratio
- * for the row height.  Example <mat-grid-list cols="3" rowHeight="3:1">
+ * for the row height.  Example `<tri-grid-list cols="3" rowHeight="3:1">`
  * @docs-private
  */
 export class RatioTileStyler extends TileStyler {
-  /** Ratio width:height given by user to determine row height.*/
+
+  /** Ratio width:height given by user to determine row height. */
   rowHeightRatio: number;
   baseTileHeight: string;
 
@@ -195,27 +217,30 @@ export class RatioTileStyler extends TileStyler {
     this._parseRatio(value);
   }
 
-  setRowStyles(tile: GridTileComponent, rowIndex: number, percentWidth: number, gutterWidth: number): void {
+  setRowStyles(tile: TriGridTile, rowIndex: number, percentWidth: number,
+               gutterWidth: number): void {
     let percentHeightPerTile = percentWidth / this.rowHeightRatio;
-    this.baseTileHeight = this.getBaseTileSize(percentHeightPerTile, gutterWidth);
+    this.baseTileHeight      = this.getBaseTileSize(percentHeightPerTile, gutterWidth);
 
     // Use padding-top and margin-top to maintain the given aspect ratio, as
     // a percentage-based value for these properties is applied versus the *width* of the
     // containing block. See http://www.w3.org/TR/CSS2/box.html#margin-properties
-    tile._setStyle('margin-top', this.getTilePosition(this.baseTileHeight, rowIndex));
-    tile._setStyle('padding-top', calc(this.getTileSize(this.baseTileHeight, tile.rowspan)));
+    tile._setStyle('marginTop', this.getTilePosition(this.baseTileHeight, rowIndex));
+    tile._setStyle('paddingTop', calc(this.getTileSize(this.baseTileHeight, tile.rowspan)));
   }
 
   getComputedHeight(): [string, string] {
-    return ['padding-bottom', calc(`${this.getTileSpan(this.baseTileHeight)} + ${this.getGutterSpan()}`)];
+    return [
+      'paddingBottom', calc(`${this.getTileSpan(this.baseTileHeight)} + ${this.getGutterSpan()}`)
+    ];
   }
 
-  reset(list: GridListComponent) {
-    list._setListStyle(['padding-bottom', null]);
+  reset(list: TriGridList) {
+    list._setListStyle(['paddingBottom', null]);
 
     list._tiles.forEach(tile => {
-      tile._setStyle('margin-top', null);
-      tile._setStyle('padding-top', null);
+      tile._setStyle('marginTop', null);
+      tile._setStyle('paddingTop', null);
     });
   }
 
@@ -223,7 +248,7 @@ export class RatioTileStyler extends TileStyler {
     const ratioParts = value.split(':');
 
     if (ratioParts.length !== 2) {
-      throw Error(`mat-grid-list: invalid ratio given for row-height: "${value}"`);
+      throw Error(`tri-grid-list: invalid ratio given for row-height: "${value}"`);
     }
 
     this.rowHeightRatio = parseFloat(ratioParts[0]) / parseFloat(ratioParts[1]);
@@ -233,12 +258,12 @@ export class RatioTileStyler extends TileStyler {
 /**
  * This type of styler is instantiated when the user selects a "fit" row height mode.
  * In other words, the row height will reflect the total height of the container divided
- * by the number of rows.  Example <mat-grid-list cols="3" rowHeight="fit">
+ * by the number of rows.  Example `<tri-grid-list cols="3" rowHeight="fit">`
  *
  * @docs-private
  */
 export class FitTileStyler extends TileStyler {
-  setRowStyles(tile: GridTileComponent, rowIndex: number): void {
+  setRowStyles(tile: TriGridTile, rowIndex: number): void {
     // Percent of the available vertical space that one row takes up.
     let percentHeightPerTile = 100 / this._rowspan;
 
@@ -252,20 +277,25 @@ export class FitTileStyler extends TileStyler {
     tile._setStyle('height', calc(this.getTileSize(baseTileHeight, tile.rowspan)));
   }
 
-  reset(list: GridListComponent) {
-    list._tiles.forEach(tile => {
-      tile._setStyle('top', null);
-      tile._setStyle('height', null);
-    });
+  reset(list: TriGridList) {
+    if (list._tiles) {
+      list._tiles.forEach(tile => {
+        tile._setStyle('top', null);
+        tile._setStyle('height', null);
+      });
+    }
   }
 }
+
 
 /** Wraps a CSS string in a calc function */
 function calc(exp: string): string {
   return `calc(${exp})`;
 }
 
+
 /** Appends pixels to a CSS string if no units are given. */
 function normalizeUnits(value: string): string {
-  return value.match(/px|em|rem/) ? value : value + 'px';
+  return value.match(/([A-Za-z%]+)$/) ? value : `${value}px`;
 }
+

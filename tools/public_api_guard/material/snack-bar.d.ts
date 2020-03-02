@@ -5,13 +5,16 @@ export declare const MAT_SNACK_BAR_DEFAULT_OPTIONS: InjectionToken<MatSnackBarCo
 export declare function MAT_SNACK_BAR_DEFAULT_OPTIONS_FACTORY(): MatSnackBarConfig;
 
 export declare class MatSnackBar implements OnDestroy {
-    _openedSnackBarRef: MatSnackBarRef<any> | null;
+    get _openedSnackBarRef(): MatSnackBarRef<any> | null;
+    set _openedSnackBarRef(value: MatSnackBarRef<any> | null);
     constructor(_overlay: Overlay, _live: LiveAnnouncer, _injector: Injector, _breakpointObserver: BreakpointObserver, _parentSnackBar: MatSnackBar, _defaultConfig: MatSnackBarConfig);
     dismiss(): void;
     ngOnDestroy(): void;
     open(message: string, action?: string, config?: MatSnackBarConfig): MatSnackBarRef<SimpleSnackBar>;
     openFromComponent<T>(component: ComponentType<T>, config?: MatSnackBarConfig): MatSnackBarRef<T>;
     openFromTemplate(template: TemplateRef<any>, config?: MatSnackBarConfig): MatSnackBarRef<EmbeddedViewRef<any>>;
+    static ɵfac: i0.ɵɵFactoryDef<MatSnackBar>;
+    static ɵprov: i0.ɵɵInjectableDef<MatSnackBar>;
 }
 
 export declare const matSnackBarAnimations: {
@@ -36,6 +39,7 @@ export declare class MatSnackBarContainer extends BasePortalOutlet implements On
     readonly _onExit: Subject<any>;
     _portalOutlet: CdkPortalOutlet;
     _role: 'alert' | 'status' | null;
+    attachDomPortal: (portal: DomPortal<HTMLElement>) => void;
     snackBarConfig: MatSnackBarConfig;
     constructor(_ngZone: NgZone, _elementRef: ElementRef<HTMLElement>, _changeDetectorRef: ChangeDetectorRef,
     snackBarConfig: MatSnackBarConfig);
@@ -45,6 +49,8 @@ export declare class MatSnackBarContainer extends BasePortalOutlet implements On
     exit(): Observable<void>;
     ngOnDestroy(): void;
     onAnimationEnd(event: AnimationEvent): void;
+    static ɵcmp: i0.ɵɵComponentDefWithMeta<MatSnackBarContainer, "snack-bar-container", never, {}, {}, never>;
+    static ɵfac: i0.ɵɵFactoryDef<MatSnackBarContainer>;
 }
 
 export interface MatSnackBarDismiss {
@@ -54,6 +60,8 @@ export interface MatSnackBarDismiss {
 export declare type MatSnackBarHorizontalPosition = 'start' | 'center' | 'end' | 'left' | 'right';
 
 export declare class MatSnackBarModule {
+    static ɵinj: i0.ɵɵInjectorDef<MatSnackBarModule>;
+    static ɵmod: i0.ɵɵNgModuleDefWithMeta<MatSnackBarModule, [typeof i1.MatSnackBarContainer, typeof i2.SimpleSnackBar], [typeof i3.OverlayModule, typeof i4.PortalModule, typeof i5.CommonModule, typeof i6.MatButtonModule, typeof i7.MatCommonModule], [typeof i1.MatSnackBarContainer, typeof i7.MatCommonModule]>;
 }
 
 export declare class MatSnackBarRef<T> {
@@ -77,8 +85,10 @@ export declare class SimpleSnackBar {
         message: string;
         action: string;
     };
-    readonly hasAction: boolean;
+    get hasAction(): boolean;
     snackBarRef: MatSnackBarRef<SimpleSnackBar>;
     constructor(snackBarRef: MatSnackBarRef<SimpleSnackBar>, data: any);
     action(): void;
+    static ɵcmp: i0.ɵɵComponentDefWithMeta<SimpleSnackBar, "simple-snack-bar", never, {}, {}, never>;
+    static ɵfac: i0.ɵɵFactoryDef<SimpleSnackBar>;
 }

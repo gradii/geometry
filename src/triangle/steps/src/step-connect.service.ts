@@ -10,7 +10,7 @@ export class StepConnectService {
 
   itemIndex = 0;
 
-  id;
+  id: any;
 
   direction = 'horizontal';
 

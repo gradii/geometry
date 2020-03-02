@@ -9,14 +9,14 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { reqAnimFrame } from '@gradii/triangle/core';
-import { isPresent } from '@gradii/triangle/util';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {reqAnimFrame} from '@gradii/triangle/core';
+import {isPresent} from '@gradii/triangle/util';
 
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { TimeHolder } from './time-holder';
-import { TimeValueAccessorDirective } from './time-value-accessor.directive';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {TimeHolder} from './time-holder';
+import {TimeValueAccessorDirective} from './time-value-accessor.directive';
 
 function makeRange(length: number, step: number = 1): number[] {
   return new Array(Math.ceil(length / step)).fill(0).map((_, i) => i * step);
@@ -40,12 +40,12 @@ function makeRange(length: number, step: number = 1): number[] {
   }
 })
 export class TimePickerPanelComponent implements ControlValueAccessor, OnInit, OnDestroy {
-  prefixCls: string = 'tri-time-picker-panel';
-  time = new TimeHolder();
-  hourEnabled = true;
-  minuteEnabled = true;
-  secondEnabled = true;
-  enabledColumns = 3;
+  prefixCls: string              = 'tri-time-picker-panel';
+  time                           = new TimeHolder();
+  hourEnabled                    = true;
+  minuteEnabled                  = true;
+  secondEnabled                  = true;
+  enabledColumns                 = 3;
   hourRange: ReadonlyArray<{ index: number, disabled: boolean }>;
   minuteRange: ReadonlyArray<{ index: number, disabled: boolean }>;
   secondRange: ReadonlyArray<{ index: number, disabled: boolean }>;
@@ -55,11 +55,11 @@ export class TimePickerPanelComponent implements ControlValueAccessor, OnInit, O
   @ViewChild('secondListElement', {static: false}) secondListElement;
   @Input() inDatePicker: boolean = false; // If inside a date-picker, more diff works need to be done
   @Input() addOn: TemplateRef<void>;
-  @Input() hideDisabledOptions = false;
+  @Input() hideDisabledOptions   = false;
   @Input() clearText: string;
   @Input() placeHolder: string;
-  @Output() timeClear = new EventEmitter<void>();
-  private unsubscribe$ = new Subject<void>();
+  @Output() timeClear            = new EventEmitter<void>();
+  private unsubscribe$           = new Subject<void>();
   private onChange: (value: Date) => void;
   private onTouch: () => void;
 
@@ -117,12 +117,12 @@ export class TimePickerPanelComponent implements ControlValueAccessor, OnInit, O
   @Input()
   set format(value: string) {
     if (isPresent(value)) {
-      this._format = value;
+      this._format        = value;
       this.enabledColumns = 0;
-      const charSet = new Set(value);
-      this.hourEnabled = charSet.has('H') || charSet.has('h');
-      this.minuteEnabled = charSet.has('m');
-      this.secondEnabled = charSet.has('s');
+      const charSet       = new Set(value);
+      this.hourEnabled    = charSet.has('H') || charSet.has('h');
+      this.minuteEnabled  = charSet.has('m');
+      this.secondEnabled  = charSet.has('s');
       if (this.hourEnabled) {
         this.enabledColumns++;
       }
@@ -289,7 +289,7 @@ export class TimePickerPanelComponent implements ControlValueAccessor, OnInit, O
   }
 
   scrollToSelected(instance: HTMLElement, index: number, duration: number = 0, unit: string): void {
-    const transIndex = this.translateIndex(index, unit);
+    const transIndex    = this.translateIndex(index, unit);
     const currentOption = (instance.children[0].children[transIndex] || instance.children[0].children[0]) as HTMLElement;
     this.scrollTo(instance, currentOption.offsetTop, duration);
   }
@@ -305,6 +305,7 @@ export class TimePickerPanelComponent implements ControlValueAccessor, OnInit, O
       const disabledSeconds = this.disabledSeconds && this.disabledSeconds(this.time.hours, this.time.minutes);
       return this.calcIndex(disabledSeconds, this.secondRange.map(item => item.index).indexOf(index));
     }
+    return -1;
   }
 
   scrollTo(element: HTMLElement, to: number, duration: number): void {
@@ -313,7 +314,7 @@ export class TimePickerPanelComponent implements ControlValueAccessor, OnInit, O
       return;
     }
     const difference = to - element.scrollTop;
-    const perTick = difference / duration * 10;
+    const perTick    = difference / duration * 10;
 
     reqAnimFrame(() => {
       element.scrollTop = element.scrollTop + perTick;

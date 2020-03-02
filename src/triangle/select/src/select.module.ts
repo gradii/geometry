@@ -41,7 +41,6 @@ import { SelectComponent } from './select.component';
     SelectComponent,
     OptionContainerComponent,
     OptionGroupComponent,
-    SelectTopControlComponent
   ]
 })
 export class TriSelectModule {}

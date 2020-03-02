@@ -24,7 +24,7 @@ import { SliderComponent } from './slider.component';
 export class SliderHandleComponent implements OnInit, OnChanges {
   // Static properties
   @Input() className: string;
-  @Input() vertical: string;
+  @Input() vertical: boolean;
   @Input() offset: number;
   @Input() value: number; // [For tooltip]
   @Input() tipFormatter: Function; // [For tooltip]

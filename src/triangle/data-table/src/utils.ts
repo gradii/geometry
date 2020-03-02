@@ -16,7 +16,7 @@ export const anyChanged = (propertyNames: string[], changes: any, skipFirstChang
   propertyNames.some(name => isChanged(name, changes, skipFirstChange));
 export const observe = (list: QueryList<any>): Observable<any> => from([list]).pipe(merge(list.changes));
 export const isUniversal = () => typeof document === 'undefined';
-export const extractFormat = format => {
+export const extractFormat = (format: any) => {
   if (!isNullOrEmptyString(format) && format.startsWith('{0:')) {
     return format.slice(3, format.length - 1);
   }
@@ -24,13 +24,13 @@ export const extractFormat = format => {
 };
 
 
-export const not = (fn: (...x: any[]) => boolean) => (...args): boolean => !fn.apply(null, args);
+export const not = (fn: (...x: any[]) => boolean) => (...args: any[]): boolean => !fn.apply(null, args);
 
 export type Condition<T> = (x: T) => boolean;
 
-export const or = <T>(...conditions: Condition<T>[]) => (value: T): boolean => conditions.reduce((acc, x) => acc || x(value), false);
+export const or = <T>(...conditions: Condition<T>[]) => (value: T): boolean => conditions.reduce((acc: boolean, x) => acc || x(value), false);
 
-export const and = <T>(...conditions: Condition<T>[]) => (value: T): boolean => conditions.reduce((acc, x) => acc && x(value), true);
+export const and = <T>(...conditions: Condition<T>[]) => (value: T): boolean => conditions.reduce((acc: boolean, x) => acc && x(value), true);
 
 export const Skip = new InjectionToken('Skip'); // tslint:disable-line:variable-name
 

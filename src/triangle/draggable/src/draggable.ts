@@ -4,23 +4,23 @@ export interface DraggableOptions {
   release?: Function;
 }
 
-const proxy = function (a, b) {
-  return function (e) {
+const proxy = function (a: any, b: any) {
+  return function (e: any) {
     return b(a(e));
   };
 };
 
-const bind = function (el, event, callback) {
+const bind = function (el: any, event: any, callback: any) {
   return el.addEventListener && el.addEventListener(event, callback);
 };
 
-const unbind = function (el, event, callback) {
+const unbind = function (el: any, event: any, callback: any) {
   return el.removeEventListener && el.removeEventListener(event, callback);
 };
 
 const touchRegExp = /touch/;
 
-function normalizeEvent(e) {
+function normalizeEvent(e: any) {
   if (e.type.match(touchRegExp)) {
     return {
       pageX        : e.changedTouches[0].pageX,
@@ -41,24 +41,18 @@ function normalizeEvent(e) {
   };
 }
 
-const noop = function () {};
+const noop = function () {
+};
 
 // 300ms is the usual mouse interval;
 // However, an underpowered mobile device under a heavy load may queue mouse events for a longer period.
 const IGNORE_MOUSE_TIMEOUT = 2000;
 
 export class Draggable {
-  _restoreMouse;
-  _mousemove: Function;
-  _mouseup: Function;
   private _pressHandler: Function;
   private _dragHandler: Function;
   private _releaseHandler: Function;
   private _ignoreMouse: boolean;
-  private _touchstart: Function;
-  private _touchmove: Function;
-  private _touchend: Function;
-  private _mousedown: Function;
   private _element: Element;
 
   constructor(ref: DraggableOptions) {
@@ -75,62 +69,62 @@ export class Draggable {
       release = noop;
     }
 
-    this._pressHandler = proxy(normalizeEvent, press);
-    this._dragHandler = proxy(normalizeEvent, drag);
+    this._pressHandler   = proxy(normalizeEvent, press);
+    this._dragHandler    = proxy(normalizeEvent, drag);
     this._releaseHandler = proxy(normalizeEvent, release);
 
     this._ignoreMouse = false;
-
-    this._touchstart = e => {
-      if (e.touches.length === 1) {
-        this._pressHandler(e);
-      }
-    };
-
-    this._touchmove = e => {
-      if (e.touches.length === 1) {
-        this._dragHandler(e);
-      }
-    };
-
-    this._touchend = e => {
-      // the last finger has been lifted, and the user is not doing gesture.
-      // there might be a better way to handle this.
-      if (e.touches.length === 0 && e.changedTouches.length === 1) {
-        this._releaseHandler(e);
-        this._ignoreMouse = true;
-        setTimeout(this._restoreMouse, IGNORE_MOUSE_TIMEOUT);
-      }
-    };
-
-    this._restoreMouse = () => {
-      this._ignoreMouse = false;
-    };
-
-    this._mousedown = e => {
-      const which = e.which;
-
-      if ((which && which > 1) || this._ignoreMouse) {
-        return;
-      }
-
-      bind(document, 'mousemove', this._mousemove);
-      bind(document, 'mouseup', this._mouseup);
-      this._pressHandler(e);
-    };
-
-    this._mousemove = e => {
-      this._dragHandler(e);
-    };
-
-    this._mouseup = e => {
-      unbind(document, 'mousemove', this._mousemove);
-      unbind(document, 'mouseup', this._mouseup);
-      this._releaseHandler(e);
-    };
   }
 
-  bindTo(element) {
+  _touchstart = (e: any) => {
+    if (e.touches.length === 1) {
+      this._pressHandler(e);
+    }
+  };
+
+  _touchmove = (e: any) => {
+    if (e.touches.length === 1) {
+      this._dragHandler(e);
+    }
+  };
+
+  _touchend = (e: any) => {
+    // the last finger has been lifted, and the user is not doing gesture.
+    // there might be a better way to handle this.
+    if (e.touches.length === 0 && e.changedTouches.length === 1) {
+      this._releaseHandler(e);
+      this._ignoreMouse = true;
+      setTimeout(this._restoreMouse, IGNORE_MOUSE_TIMEOUT);
+    }
+  };
+
+  _restoreMouse = () => {
+    this._ignoreMouse = false;
+  };
+
+  _mousedown = (e: any) => {
+    const which = e.which;
+
+    if ((which && which > 1) || this._ignoreMouse) {
+      return;
+    }
+
+    bind(document, 'mousemove', this._mousemove);
+    bind(document, 'mouseup', this._mouseup);
+    this._pressHandler(e);
+  };
+
+  _mousemove = (e: any) => {
+    this._dragHandler(e);
+  };
+
+  _mouseup = (e: any) => {
+    unbind(document, 'mousemove', this._mousemove);
+    unbind(document, 'mouseup', this._mouseup);
+    this._releaseHandler(e);
+  };
+
+  bindTo(element: any) {
     if (element === this._element) {
       return;
     }

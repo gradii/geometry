@@ -20,19 +20,21 @@ export declare const MAT_AUTOCOMPLETE_SCROLL_STRATEGY_FACTORY_PROVIDER: {
 
 export declare const MAT_AUTOCOMPLETE_VALUE_ACCESSOR: any;
 
-export declare class MatAutocomplete extends _MatAutocompleteMixinBase implements AfterContentInit, CanDisableRipple {
+export declare class MatAutocomplete extends _MatAutocompleteMixinBase implements AfterContentInit, CanDisableRipple, OnDestroy {
     _classList: {
         [key: string]: boolean;
     };
     _isOpen: boolean;
     _keyManager: ActiveDescendantKeyManager<MatOption>;
-    autoActiveFirstOption: boolean;
-    classList: string;
+    get autoActiveFirstOption(): boolean;
+    set autoActiveFirstOption(value: boolean);
+    set classList(value: string);
     readonly closed: EventEmitter<void>;
     displayWith: ((value: any) => string) | null;
     id: string;
-    readonly isOpen: boolean;
+    get isOpen(): boolean;
     readonly opened: EventEmitter<void>;
+    readonly optionActivated: EventEmitter<MatAutocompleteActivatedEvent>;
     optionGroups: QueryList<MatOptgroup>;
     readonly optionSelected: EventEmitter<MatAutocompleteSelectedEvent>;
     options: QueryList<MatOption>;
@@ -46,6 +48,16 @@ export declare class MatAutocomplete extends _MatAutocompleteMixinBase implement
     _setScrollTop(scrollTop: number): void;
     _setVisibility(): void;
     ngAfterContentInit(): void;
+    ngOnDestroy(): void;
+    static ngAcceptInputType_autoActiveFirstOption: BooleanInput;
+    static ngAcceptInputType_disableRipple: BooleanInput;
+    static ɵcmp: i0.ɵɵComponentDefWithMeta<MatAutocomplete, "mat-autocomplete", ["matAutocomplete"], { "disableRipple": "disableRipple"; "displayWith": "displayWith"; "autoActiveFirstOption": "autoActiveFirstOption"; "panelWidth": "panelWidth"; "classList": "class"; }, { "optionSelected": "optionSelected"; "opened": "opened"; "closed": "closed"; "optionActivated": "optionActivated"; }, ["options", "optionGroups"]>;
+    static ɵfac: i0.ɵɵFactoryDef<MatAutocomplete>;
+}
+
+export interface MatAutocompleteActivatedEvent {
+    option: MatOption | null;
+    source: MatAutocomplete;
 }
 
 export interface MatAutocompleteDefaultOptions {
@@ -53,12 +65,16 @@ export interface MatAutocompleteDefaultOptions {
 }
 
 export declare class MatAutocompleteModule {
+    static ɵinj: i0.ɵɵInjectorDef<MatAutocompleteModule>;
+    static ɵmod: i0.ɵɵNgModuleDefWithMeta<MatAutocompleteModule, [typeof i1.MatAutocomplete, typeof i2.MatAutocompleteTrigger, typeof i3.MatAutocompleteOrigin], [typeof i4.MatOptionModule, typeof i5.OverlayModule, typeof i4.MatCommonModule, typeof i6.CommonModule], [typeof i1.MatAutocomplete, typeof i4.MatOptionModule, typeof i2.MatAutocompleteTrigger, typeof i3.MatAutocompleteOrigin, typeof i4.MatCommonModule]>;
 }
 
 export declare class MatAutocompleteOrigin {
     elementRef: ElementRef<HTMLElement>;
     constructor(
     elementRef: ElementRef<HTMLElement>);
+    static ɵdir: i0.ɵɵDirectiveDefWithMeta<MatAutocompleteOrigin, "[matAutocompleteOrigin]", ["matAutocompleteOrigin"], {}, {}, never>;
+    static ɵfac: i0.ɵɵFactoryDef<MatAutocompleteOrigin>;
 }
 
 export declare class MatAutocompleteSelectedEvent {
@@ -69,23 +85,25 @@ export declare class MatAutocompleteSelectedEvent {
     option: MatOption);
 }
 
-export declare class MatAutocompleteTrigger implements ControlValueAccessor, OnChanges, OnDestroy {
+export declare class MatAutocompleteTrigger implements ControlValueAccessor, AfterViewInit, OnChanges, OnDestroy {
     _onChange: (value: any) => void;
     _onTouched: () => void;
-    readonly activeOption: MatOption | null;
+    get activeOption(): MatOption | null;
     autocomplete: MatAutocomplete;
     autocompleteAttribute: string;
-    autocompleteDisabled: boolean;
+    get autocompleteDisabled(): boolean;
+    set autocompleteDisabled(value: boolean);
     connectedTo: MatAutocompleteOrigin;
     readonly optionSelections: Observable<MatOptionSelectionChange>;
-    readonly panelClosingActions: Observable<MatOptionSelectionChange | null>;
-    readonly panelOpen: boolean;
+    get panelClosingActions(): Observable<MatOptionSelectionChange | null>;
+    get panelOpen(): boolean;
     position: 'auto' | 'above' | 'below';
     constructor(_element: ElementRef<HTMLInputElement>, _overlay: Overlay, _viewContainerRef: ViewContainerRef, _zone: NgZone, _changeDetectorRef: ChangeDetectorRef, scrollStrategy: any, _dir: Directionality, _formField: MatFormField, _document: any, _viewportRuler?: ViewportRuler | undefined);
     _handleFocus(): void;
     _handleInput(event: KeyboardEvent): void;
     _handleKeydown(event: KeyboardEvent): void;
     closePanel(): void;
+    ngAfterViewInit(): void;
     ngOnChanges(changes: SimpleChanges): void;
     ngOnDestroy(): void;
     openPanel(): void;
@@ -94,4 +112,7 @@ export declare class MatAutocompleteTrigger implements ControlValueAccessor, OnC
     setDisabledState(isDisabled: boolean): void;
     updatePosition(): void;
     writeValue(value: any): void;
+    static ngAcceptInputType_autocompleteDisabled: BooleanInput;
+    static ɵdir: i0.ɵɵDirectiveDefWithMeta<MatAutocompleteTrigger, "input[matAutocomplete], textarea[matAutocomplete]", ["matAutocompleteTrigger"], { "autocomplete": "matAutocomplete"; "position": "matAutocompletePosition"; "connectedTo": "matAutocompleteConnectedTo"; "autocompleteAttribute": "autocomplete"; "autocompleteDisabled": "matAutocompleteDisabled"; }, {}, never>;
+    static ɵfac: i0.ɵɵFactoryDef<MatAutocompleteTrigger>;
 }

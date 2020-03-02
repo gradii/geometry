@@ -36,7 +36,7 @@ export abstract class AbstractPickerComponent implements OnInit, OnChanges, Cont
 
   @Input() format: string;
 
-  @Input() value: CompatibleValue;
+  @Input() value: any;
   isRange: boolean = false; // Indicate whether the value is a range value
   @ViewChild(PickerComponent, {static: false}) protected picker: PickerComponent;
 

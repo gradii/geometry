@@ -1,89 +1,82 @@
-@import "../../core/style/themes/default.theme";
+@import "../../core/themes/default.theme";
+@import '../../core/style/legend/list-common';
+@import '../../core/style/legend/layout-common';
 
 // height of tile header or footer if it has one line
-$ant-grid-list-one-line-height : 48px;
+$tri-grid-list-one-line-height : 48px;
 // height of tile header or footer if it has two lines
-$ant-grid-list-two-line-height : 68px;
+$tri-grid-list-two-line-height : 68px;
 // side padding for text in tile headers and footers
-$ant-grid-list-text-padding    : 16px;
+$tri-grid-list-text-padding    : 16px;
 
-@include import-once('grid-list') {
+.tri-grid-list {
+  display  : block;
+  position : relative;
+}
 
-  .tri-grid-list {
-    display  : block;
-    position : relative;
+.tri-grid-tile {
+  display  : block;
+  position : absolute;
+  overflow : hidden;
+
+  .tri-figure {
+    @include layout-fill;
+    display         : flex;
+
+    align-items     : center;
+    justify-content : center;
+    height          : 100%;
+
+    padding         : 0;
+    margin          : 0;
   }
 
-  .tri-grid-tile {
-    display    : block;
-    position   : absolute;
-    overflow   : hidden;
-    box-sizing : border-box;
+  // Headers & footers
+  .tri-grid-tile-header,
+  .tri-grid-tile-footer {
+    @include tri-normalize-text();
 
-    .tri-figure {
-      @include layout-fill;
-      display         : flex;
-      align-items     : center;
-      justify-content : center;
-      height          : 100%;
-      padding         : 0;
-      margin          : 0;
+    display     : flex;
+    align-items : center;
+    height      : $tri-grid-list-one-line-height;
+    color       : #fff;
+    background  : rgba(0, 0, 0, 0.38);
+    overflow    : hidden;
+    padding     : 0 $tri-grid-list-text-padding;
+
+    // Positioning
+    position    : absolute;
+    left        : 0;
+    right       : 0;
+
+    &.tri-2-line {
+      height : $tri-grid-list-two-line-height;
+    }
+  }
+
+  .tri-grid-list-text {
+    @include tri-line-wrapper-base();
+  }
+
+  .tri-grid-tile-header {
+    top : 0;
+  }
+
+  .tri-grid-tile-footer {
+    bottom : 0;
+  }
+
+  .tri-grid-avatar {
+    padding-right : $tri-grid-list-text-padding;
+
+    [dir='rtl'] & {
+      padding-right : 0;
+      padding-left  : $tri-grid-list-text-padding;
     }
 
-    // Headers & footers
-    .tri-grid-tile-header,
-    .tri-grid-tile-footer {
-      display     : flex;
-      align-items : center;
-      height      : $ant-grid-list-one-line-height;
-      color       : #fff;
-      background  : rgba(0, 0, 0, 0.38);
-      overflow    : hidden;
-      padding     : 0 $ant-grid-list-text-padding;
-
-      // Positioning
-      position    : absolute;
-      left        : 0;
-      right       : 0;
-
-      &.tri-2-line {
-        height : $ant-grid-list-two-line-height;
-      }
-    }
-
-    .tri-grid-list-text {
-      display        : flex;
-      flex-direction : column;
-      width          : 100%;
-      box-sizing     : border-box;
-      overflow       : hidden;
-
-      // Must remove wrapper when lines are empty or it takes up horizontal
-      // space and pushes other elements to the right.
-      &:empty {
-        display : none;
-      }
-    }
-
-    .tri-grid-tile-header {
-      top : 0;
-    }
-
-    .tri-grid-tile-footer {
-      bottom : 0;
-    }
-
-    .tri-grid-avatar {
-      padding-right : $ant-grid-list-text-padding;
-
-      [dir='rtl'] & {
-        padding-right : 0;
-        padding-left  : $ant-grid-list-text-padding;
-      }
-
-      &:empty {
-        display : none;
-      }
+    &:empty {
+      display : none;
     }
   }
 }
+

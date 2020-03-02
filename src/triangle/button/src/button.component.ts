@@ -10,7 +10,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-export type ButtonColor = 'primary' | 'warning' | 'success' | 'dashed' | 'danger' | 'highlight';
+export type ButtonColor = 'primary' | 'warning' | 'success' | 'dashed' | 'danger' | 'highlight' | 'default';
 export type ButtonShape = 'circle' | null;
 export type ButtonSize = 'small' | 'large' | 'default';
 

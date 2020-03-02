@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation, } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  Input,
+  Optional,
+  ViewEncapsulation,
+} from '@angular/core';
+import {ANIMATION_MODULE_TYPE} from '@angular/platform-browser/animations';
 
 /**
  * Possible states for a pseudo checkbox.
@@ -20,16 +28,16 @@ export type TriPseudoCheckboxState = 'unchecked' | 'checked' | 'indeterminate';
  * @docs-private
  */
 @Component({
-  moduleId       : module.id,
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector       : 'tri-pseudo-checkbox',
-  template       : '<span class="tri-checkbox-inner"></span>',
+  template       : '',
   host           : {
-    'class'                             : 'tri-checkbox',
-    '[class.tri-checkbox-indeterminate]': 'state === "indeterminate"',
-    '[class.tri-checkbox-checked]'      : 'state === "checked"',
-    '[class.tri-checkbox-disabled]'     : 'disabled',
+    'class'                                    : 'tri-pseudo-checkbox',
+    '[class.tri-pseudo-checkbox-indeterminate]': 'state === "indeterminate"',
+    '[class.tri-pseudo-checkbox-checked]'      : 'state === "checked"',
+    '[class.tri-pseudo-checkbox-disabled]'     : 'disabled',
+    '[class._tri-animation-noopable]'          : '_animationMode === "NoopAnimations"',
   },
 })
 export class PseudoCheckbox {
@@ -38,4 +46,7 @@ export class PseudoCheckbox {
 
   /** Whether the checkbox is disabled. */
   @Input() disabled: boolean = false;
+
+  constructor(@Optional() @Inject(ANIMATION_MODULE_TYPE) public _animationMode?: string) {
+  }
 }

@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostBinding, Input, NgZone, Renderer2 } from '@angular/core';
+import {Directive, ElementRef, HostBinding, Input, NgZone, Renderer2} from '@angular/core';
 
 export type TabPositionMode = 'horizontal' | 'vertical';
 
@@ -6,21 +6,24 @@ export type TabPositionMode = 'horizontal' | 'vertical';
   selector: '[triTabsInkBar]'
 })
 export class TabsInkBarDirective {
-  @HostBinding('class.tri-tabs-ink-bar') _nzTabsInkBar = true;
+  @HostBinding('class.tri-tabs-ink-bar')
+  _nzTabsInkBar = true;
+
   @Input()
   @HostBinding('class.tri-tabs-ink-bar-animated')
   animated: boolean;
 
   @Input() positionMode: TabPositionMode = 'horizontal';
 
-  constructor(private _renderer: Renderer2, private _elementRef: ElementRef, private _ngZone: NgZone) {}
+  constructor(private _renderer: Renderer2, private _elementRef: ElementRef, private _ngZone: NgZone) {
+  }
 
   alignToElement(element: HTMLElement) {
     this.show();
 
     this._ngZone.runOutsideAngular(() => {
       requestAnimationFrame(() => {
-        /** when horizontal remove height style and add transfrom left **/
+        // when horizontal remove height style and add transfrom left
         if (this.positionMode === 'horizontal') {
           this._renderer.removeStyle(this._elementRef.nativeElement, 'height');
           this._renderer.setStyle(
@@ -30,7 +33,7 @@ export class TabsInkBarDirective {
           );
           this._renderer.setStyle(this._elementRef.nativeElement, 'width', this._getElementWidth(element));
         } else {
-          /** when vertical remove width style and add transfrom top **/
+          // when vertical remove width style and add transfrom top
           this._renderer.removeStyle(this._elementRef.nativeElement, 'width');
           this._renderer.setStyle(
             this._elementRef.nativeElement,
@@ -47,7 +50,7 @@ export class TabsInkBarDirective {
     this._renderer.setStyle(this._elementRef.nativeElement, 'visibility', 'visible');
   }
 
-  setDisplay(value): void {
+  setDisplay(value: any): void {
     this._renderer.setStyle(this._elementRef.nativeElement, 'display', value);
   }
 

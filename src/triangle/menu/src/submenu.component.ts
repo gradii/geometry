@@ -10,7 +10,8 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Output
+  Output,
+  QueryList
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
@@ -37,38 +38,38 @@ import { MenuComponent } from './menu.component';
     ])
   ],
   template  : `
-    <div
-      [class.tri-dropdown-menu-submenu-title]="isInDropDown"
-      [class.tri-menu-submenu-title]="!isInDropDown"
-      (mouseenter)="onMouseEnterEvent($event)"
-      (mouseleave)="onMouseLeaveEvent($event)"
-      (click)="clickSubMenuTitle()"
-      [style.paddingLeft.px]="(menuComponent.mode === 'inline')?(level*24):null">
-      <ng-content select="[title]"></ng-content>
-    </div>
-    <ul
-      [class.tri-dropdown-menu]="isInDropDown"
-      [@fadeAnimation]
-      [@expandAnimation]="expandState"
-      [class.tri-menu]="!isInDropDown"
-      [class.tri-dropdown-menu-vertical]="isInDropDown"
-      [class.tri-menu-vertical]="(!isInDropDown)&&(menuComponent.mode!=='inline')"
-      [class.tri-menu-inline]="(!isInDropDown)&&(menuComponent.mode==='inline')"
-      [class.tri-dropdown-menu-sub]="isInDropDown"
-      [class.tri-menu-sub]="!isInDropDown"
-      *ngIf="open"
-      (click)="clickSubMenuDropDown()"
-      (mouseleave)="onMouseLeaveEvent($event)"
-      (mouseenter)="onMouseEnterEvent($event)">
-      <ng-content></ng-content>
-    </ul>
+      <div
+              [class.tri-dropdown-menu-submenu-title]="isInDropDown"
+              [class.tri-menu-submenu-title]="!isInDropDown"
+              (mouseenter)="onMouseEnterEvent($event)"
+              (mouseleave)="onMouseLeaveEvent($event)"
+              (click)="clickSubMenuTitle()"
+              [style.paddingLeft.px]="(menuComponent.mode === 'inline')?(level*24):null">
+          <ng-content select="[title]"></ng-content>
+      </div>
+      <ul
+              [class.tri-dropdown-menu]="isInDropDown"
+              [@fadeAnimation]
+              [@expandAnimation]="expandState"
+              [class.tri-menu]="!isInDropDown"
+              [class.tri-dropdown-menu-vertical]="isInDropDown"
+              [class.tri-menu-vertical]="(!isInDropDown)&&(menuComponent.mode!=='inline')"
+              [class.tri-menu-inline]="(!isInDropDown)&&(menuComponent.mode==='inline')"
+              [class.tri-dropdown-menu-sub]="isInDropDown"
+              [class.tri-menu-sub]="!isInDropDown"
+              *ngIf="open"
+              (click)="clickSubMenuDropDown()"
+              (mouseleave)="onMouseLeaveEvent($event)"
+              (mouseenter)="onMouseEnterEvent($event)">
+          <ng-content></ng-content>
+      </ul>
   `
 })
 export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
   isInDropDown = false;
   level = 1;
-  _$mouseSubject = new Subject();
-  @ContentChildren(SubMenuComponent) subMenus;
+  _$mouseSubject = new Subject<boolean>();
+  @ContentChildren(SubMenuComponent) subMenus: QueryList<SubMenuComponent>;
 
   /**
    * Submenu whether can be expanded, two way binding support.
@@ -92,7 +93,7 @@ export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get submenuSelected(): boolean {
-    return !!this.subMenus._results.find(e => e !== this && e.subItemSelected);
+    return !!this.subMenus.find(e => e !== this && e.subItemSelected);
   }
 
   get expandState() {
@@ -163,14 +164,14 @@ export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   @HostListener('mouseenter', ['$event'])
-  onMouseEnterEvent(e) {
+  onMouseEnterEvent(e: MouseEvent) {
     if (this.menuComponent.mode === 'horizontal' || this.menuComponent.mode === 'vertical' || this.isInDropDown) {
       this._$mouseSubject.next(true);
     }
   }
 
   @HostListener('mouseleave', ['$event'])
-  onMouseLeaveEvent(e) {
+  onMouseLeaveEvent(e: MouseEvent) {
     if (this.menuComponent.mode === 'horizontal' || this.menuComponent.mode === 'vertical' || this.isInDropDown) {
       this._$mouseSubject.next(false);
     }
@@ -180,7 +181,7 @@ export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isInDropDown = this.menuComponent.isInDropDown;
     if (this.subMenus.length && this.menuComponent.mode === 'inline') {
       this.subMenus.filter(x => x !== this).forEach(menu => {
-        setTimeout(_ => {
+        setTimeout(() => {
           menu.level = this.level + 1;
         });
       });

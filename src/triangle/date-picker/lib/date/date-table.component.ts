@@ -243,7 +243,7 @@ export interface WeekDayLabel {
 export interface DateCell {
   value: CandyDate;
   title: string;
-  customContent: TemplateRef<Date> | string;
+  customContent: any;
   content: string;
   isSelected?: boolean;
   isToday?: boolean;
@@ -253,7 +253,7 @@ export interface DateCell {
   isInRange?: boolean;
   classMap?: object;
 
-  onClick(date: CandyDate): void;
+  onClick(date?: CandyDate): void;
 
   onMouseEnter(): void;
 }

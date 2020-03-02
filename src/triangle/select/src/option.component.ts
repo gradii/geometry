@@ -14,7 +14,7 @@ import {
   templateUrl    : './option.component.html'
 })
 export class OptionComponent {
-  @ViewChild(TemplateRef, {static: false}) template: TemplateRef<void>;
+  @ViewChild(TemplateRef, {static: false}) template: TemplateRef<any>;
   @Input() label: string;
   // tslint:disable-next-line:no-any
   @Input() value: any;

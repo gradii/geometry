@@ -9,6 +9,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
+import { ButtonColor, ButtonSize } from '@gradii/triangle/button';
 import { DropDownAnimation } from '@gradii/triangle/core';
 import { DropDownComponent } from './dropdown.component';
 import { DropDownDirective } from './dropdown.directive';
@@ -68,21 +69,21 @@ export class DropDownButtonComponent extends DropDownComponent implements OnInit
    * The size of button
    * 按钮大小
    */
-  @Input() size = 'default';
+  @Input() size: ButtonSize = 'default';
 
   /**
    * The type of button
    * 按钮类型
    */
-  @Input() color = 'default';
-  @ViewChild('content', {static: false}) content;
+  @Input() color: ButtonColor = 'default';
+  @ViewChild('content', {static: false}) content: any;
 
   /**
    * click event
    * 点击左侧按钮的回调
    */
   @Output() clickEvent = new EventEmitter();
-  @ViewChild(DropDownDirective, {static: false}) _origin;
+  @ViewChild(DropDownDirective, {static: false}) _origin: DropDownDirective;
 
   _onVisibleChange = (visible: boolean) => {
     if (this.disable) {

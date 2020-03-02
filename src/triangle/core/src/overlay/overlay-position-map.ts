@@ -1,6 +1,6 @@
-import { ConnectionPositionPair } from '@angular/cdk/overlay';
+import {ConnectionPositionPair} from '@angular/cdk/overlay';
 
-export const POSITION_MAP = {
+export const POSITION_MAP                 = {
   top         : {
     originX : 'center',
     originY : 'top',
@@ -86,15 +86,15 @@ export const POSITION_MAP = {
     overlayY: 'bottom'
   }
 };
-export const DEFAULT_4_POSITIONS = _objectValues([
-  POSITION_MAP['top'],
-  POSITION_MAP['right'],
-  POSITION_MAP['bottom'],
-  POSITION_MAP['left']
-]);
-export const DEFAULT_DROPDOWN_POSITIONS = _objectValues(
+export const DEFAULT_4_POSITIONS          = _objectValues([
+                                                            POSITION_MAP['top'],
+                                                            POSITION_MAP['right'],
+                                                            POSITION_MAP['bottom'],
+                                                            POSITION_MAP['left']
+                                                          ]);
+export const DEFAULT_DROPDOWN_POSITIONS   = _objectValues(
   [POSITION_MAP['bottomLeft'], POSITION_MAP['topLeft'],
-    POSITION_MAP['bottomRight'], POSITION_MAP['topRight']]);
+   POSITION_MAP['bottomRight'], POSITION_MAP['topRight']]);
 export const DEFAULT_DATEPICKER_POSITIONS = [
   {
     originX : 'start',
@@ -110,8 +110,8 @@ export const DEFAULT_DATEPICKER_POSITIONS = [
   }
 ] as ConnectionPositionPair[];
 
-function arrayMap(array, iteratee) {
-  let index = -1;
+function arrayMap(array: any[], iteratee: Function) {
+  let index    = -1;
   const length = array == null ? 0 : array.length,
         result = Array(length);
 
@@ -121,12 +121,12 @@ function arrayMap(array, iteratee) {
   return result;
 }
 
-function baseValues(object, props) {
-  return arrayMap(props, function (key) {
+function baseValues(object: any, props: any[]) {
+  return arrayMap(props, function (key: string) {
     return object[key];
   });
 }
 
-function _objectValues(object) {
+function _objectValues(object: any) {
   return object == null ? [] : baseValues(object, Object.keys(object));
 }

@@ -1,3 +1,5 @@
+export declare function _supportsShadowDom(): boolean;
+
 export declare function getRtlScrollAxisType(): RtlScrollAxisType;
 
 export declare function getSupportedInputTypes(): Set<string>;
@@ -15,12 +17,16 @@ export declare class Platform {
     WEBKIT: boolean;
     isBrowser: boolean;
     constructor(_platformId?: Object | undefined);
+    static ɵfac: i0.ɵɵFactoryDef<Platform>;
+    static ɵprov: i0.ɵɵInjectableDef<Platform>;
 }
 
 export declare class PlatformModule {
+    static ɵinj: i0.ɵɵInjectorDef<PlatformModule>;
+    static ɵmod: i0.ɵɵNgModuleDefWithMeta<PlatformModule, never, never, never>;
 }
 
-export declare enum RtlScrollAxisType {
+export declare const enum RtlScrollAxisType {
     NORMAL = 0,
     NEGATED = 1,
     INVERTED = 2

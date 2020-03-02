@@ -17,6 +17,7 @@ import {
   QueryList,
   Renderer2,
   Self,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -84,18 +85,19 @@ import { DetailTemplateDirective } from './table-shared/detail-template.directiv
 import { ToolbarTemplateDirective } from './table-shared/toolbar-template.directive';
 import { anyChanged, isUniversal } from './utils';
 
-const createControl = source => (acc, key) => {
+const createControl = (source: any) => (acc: any, key: string) => {
   acc[key] = new FormControl(source[key]);
   return acc;
 };
 
-const fieldMapFnObjectFactory = obj => {
-  return function (field): string {
+const fieldMapFnObjectFactory = (obj: any) => {
+  return function (field: any): string {
     for (let [key, val] of Object.entries(obj)) {
       if (field === key) {
         return (val as string);
       }
     }
+    return null;
   };
 };
 export type fieldMapFn = (fieldKey: string) => string;
@@ -204,188 +206,190 @@ export type fieldFilterMapFn = (fieldKey: string) => 'text' | 'numeric' | 'boole
     '[style.height.px]'             : 'height'
   },
   template           : `
-    <tri-data-table-toolbar *ngIf="showTopToolbar"></tri-data-table-toolbar>
-    <div class="tri-data-table tri-widget tri-table-large"
-         [class.tri-data-table-lockedcolumns]="lockedLeafColumns.length > 0"
-         [class.tri-data-table-virtual]="isVirtual"
-    >
-      <tri-data-table-group-panel
-        class="tri-table-title"
-        *ngIf="showGroupPanel"
-        [text]="_groupable?.emptyText"
-        [groups]="group"
-        (change)="groupChange.emit($event)">
-      </tri-data-table-group-panel>
-      <ng-template [ngIf]="isScrollable">
-        <div
-          class="tri-data-table-header tri-data-table-thead"
-          [style.padding]="headerPadding">
-          <div class="tri-data-table-header tri-data-table-header-locked" #lockedHeader
-               *ngIf="isLocked"
-               [style.width.px]="lockedWidth">
-            <table>
-              <colgroup triGridColGroup
-                        [columns]="lockedLeafColumns"
-                        [groups]="group"
-                        [detailTemplate]="detailTemplate">
-              </colgroup>
-              <thead triGridHeader
-                     [scrollable]="true"
-                     [resizable]="resizable"
-                     [columns]="lockedColumns"
-                     [totalColumnLevels]="totalColumnLevels"
-                     [sort]="sort"
-                     [groups]="group"
-                     [filter]="filter"
-                     [filterable]="filterable"
-                     [groupable]="showGroupPanel"
-                     [sortable]="sortable"
-                     [detailTemplate]="detailTemplate">
-              </thead>
-            </table>
-          </div>
-          <div class="tri-data-table-header-wrap" #header
-               [triGridResizableContainer]="lockedLeafColumns.length"
-               [lockedWidth]="lockedWidth + scrollbarWidth + 3">
-            <table [style.width.px]="nonLockedWidth">
-              <colgroup triGridColGroup
-                        [columns]="nonLockedLeafColumns"
-                        [groups]="isLocked ? [] : group"
-                        [detailTemplate]="detailTemplate">
-              </colgroup>
-              <thead triGridHeader
-                     [scrollable]="true"
-                     [resizable]="resizable"
-                     [columns]="nonLockedColumns"
-                     [totalColumnLevels]="totalColumnLevels"
-                     [sort]="sort"
-                     [filter]="filter"
-                     [filterable]="filterable"
-                     [groupable]="showGroupPanel"
-                     [groups]="isLocked ? [] : group"
-                     [sortable]="sortable"
-                     [lockedColumnsCount]="lockedLeafColumns.length"
-                     [detailTemplate]="detailTemplate">
-              </thead>
-            </table>
-          </div>
-        </div>
-        <tri-data-table-list
-          tri-grid-selectable
-          [data]="view"
-          [rowData]="view"
-          [rowHeight]="rowHeight"
-          [detailRowHeight]="detailRowHeight"
-          [total]="isVirtual ? view.total : pageSize"
-          [skip]="pageIndex"
-          [take]="pageSize"
-          [groups]="group"
-          [groupable]="groupable"
-          [columns]="columnsContainer"
-          [selectable]="selectable"
-          [detailTemplate]="detailTemplate"
-          [noRecordsTemplate]="noRecordsTemplate"
-          (pageChange)="notifyPageChange('list', $event)"
-          [rowClass]="rowClass">
-        </tri-data-table-list>
-        <div
-          *ngIf="showFooter"
-          class="tri-table-footer"
-          [style.paddingRight.px]="scrollbarWidth">
-          <div
-            *ngIf="lockedLeafColumns.length"
-            class="tri-table-footer-locked"
-            [style.width.px]="lockedWidth">
-            <table>
-              <colgroup triGridColGroup
-                        [columns]="lockedLeafColumns"
-                        [groups]="group"
-                        [detailTemplate]="detailTemplate">
-              </colgroup>
-              <tfoot triGridFooter
-                     [scrollable]="true"
-                     [groups]="group"
-                     [columns]="lockedLeafColumns"
-                     [detailTemplate]="detailTemplate">
-              </tfoot>
-            </table>
-          </div>
-          <div #footer
-               class="tri-table-footer-wrap"
-               [triGridResizableContainer]="lockedLeafColumns.length"
-               [lockedWidth]="lockedWidth + scrollbarWidth + 3">
-            <table [style.width.px]="nonLockedWidth">
-              <colgroup triGridColGroup
-                        [columns]="nonLockedLeafColumns"
-                        [groups]="isLocked ? [] : group"
-                        [detailTemplate]="detailTemplate">
-              </colgroup>
-              <tfoot triGridFooter
-                     [scrollable]="true"
-                     [groups]="isLocked ? [] : group"
-                     [columns]="nonLockedLeafColumns"
-                     [lockedColumnsCount]="lockedLeafColumns.length"
-                     [detailTemplate]="detailTemplate">
-              </tfoot>
-            </table>
-          </div>
-        </div>
-      </ng-template>
-      <ng-template [ngIf]="!isScrollable">
-        <table>
-          <colgroup triGridColGroup
-                    [columns]="leafColumns"
-                    [groups]="group"
-                    [detailTemplate]="detailTemplate">
-          </colgroup>
-          <thead triGridHeader
-                 [scrollable]="false"
-                 [resizable]="resizable"
-                 [columns]="visibleColumns"
-                 [totalColumnLevels]="totalColumnLevels"
-                 [groups]="group"
-                 [groupable]="showGroupPanel"
-                 [sort]="sort"
-                 [sortable]="sortable"
-                 [filter]="filter"
-                 [filterable]="filterable"
-                 [detailTemplate]="detailTemplate">
-          </thead>
-          <tbody triGridTableBody
-                 [groups]="group"
-                 [data]="view"
-                 [skip]="pageIndex"
-                 [columns]="leafColumns"
-                 [selectable]="selectable"
-                 [noRecordsText]="''"
-                 [detailTemplate]="detailTemplate"
-                 [rowClass]="rowClass">
-          </tbody>
-          <tfoot triGridFooter
-                 *ngIf="showFooter"
-                 [scrollable]="false"
-                 [groups]="group"
-                 [columns]="leafColumns"
-                 [detailTemplate]="detailTemplate">
-          </tfoot>
-        </table>
-      </ng-template>
-    </div>
-    <div style="margin: 4rem;text-align: center;font-size: medium;" *ngIf="view.length==0&&!loading"> 没有数据</div>
-    <tri-spin style="position:absolute;width:100%;" *ngIf="loading" [spinning]="loading" [size]="'large'"></tri-spin>
-    <tri-pagination
-      class="tri-data-table-pagination"
-      *ngIf="showPager"
-      [simple]="pageSimple"
-      [pageIndex]="pageIndex"
-      [pageSize]="pageSize"
-      [total]="view.total"
-      [showTotal]="pageShowTotal"
-      [showSizeChanger]="pageShowSizeChanger"
-      [showQuickJumper]="pageShowQuickJumper"
-      (pageChange)="notifyPageChange('pager', $event)">
-    </tri-pagination>
-    <tri-data-table-toolbar *ngIf="showBottomToolbar"></tri-data-table-toolbar>
+      <tri-data-table-toolbar *ngIf="showTopToolbar"></tri-data-table-toolbar>
+      <div class="tri-data-table tri-widget tri-table-large"
+           [class.tri-data-table-lockedcolumns]="lockedLeafColumns.length > 0"
+           [class.tri-data-table-virtual]="isVirtual"
+      >
+          <tri-data-table-group-panel
+                  class="tri-table-title"
+                  *ngIf="showGroupPanel"
+                  [text]="_groupable?.emptyText"
+                  [groups]="group"
+                  (change)="groupChange.emit($event)">
+          </tri-data-table-group-panel>
+          <ng-template [ngIf]="isScrollable">
+              <div class="tri-data-table-header tri-data-table-thead"
+                   [style.padding]="headerPadding">
+                  <div class="tri-data-table-header tri-data-table-header-locked" #lockedHeader
+                       *ngIf="isLocked"
+                       [style.width.px]="lockedWidth">
+                      <table>
+                          <colgroup triGridColGroup
+                                    [columns]="lockedLeafColumns"
+                                    [groups]="group"
+                                    [detailTemplate]="detailTemplate">
+                          </colgroup>
+                          <thead triGridHeader
+                                 [scrollable]="true"
+                                 [resizable]="resizable"
+                                 [columns]="lockedColumns"
+                                 [totalColumnLevels]="totalColumnLevels"
+                                 [sort]="sort"
+                                 [groups]="group"
+                                 [filter]="filter"
+                                 [filterable]="filterable"
+                                 [groupable]="showGroupPanel"
+                                 [sortable]="sortable"
+                                 [detailTemplate]="detailTemplate">
+                          </thead>
+                      </table>
+                  </div>
+                  <div class="tri-data-table-header-wrap" #header
+                       [triGridResizableContainer]="lockedLeafColumns.length"
+                       [lockedWidth]="lockedWidth + scrollbarWidth + 3">
+                      <table [style.width.px]="nonLockedWidth">
+                          <colgroup triGridColGroup
+                                    [columns]="nonLockedLeafColumns"
+                                    [groups]="isLocked ? [] : group"
+                                    [detailTemplate]="detailTemplate">
+                          </colgroup>
+                          <thead triGridHeader
+                                 [scrollable]="true"
+                                 [resizable]="resizable"
+                                 [columns]="nonLockedColumns"
+                                 [totalColumnLevels]="totalColumnLevels"
+                                 [sort]="sort"
+                                 [filter]="filter"
+                                 [filterable]="filterable"
+                                 [groupable]="showGroupPanel"
+                                 [groups]="isLocked ? [] : group"
+                                 [sortable]="sortable"
+                                 [lockedColumnsCount]="lockedLeafColumns.length"
+                                 [detailTemplate]="detailTemplate">
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+              <tri-data-table-list
+                      tri-grid-selectable
+                      [data]="view"
+                      [rowData]="view"
+                      [rowHeight]="rowHeight"
+                      [detailRowHeight]="detailRowHeight"
+                      [total]="isVirtual ? view.total : pageSize"
+                      [skip]="pageIndex"
+                      [take]="pageSize"
+                      [groups]="group"
+                      [groupable]="groupable"
+                      [columns]="columnsContainer"
+                      [selectable]="selectable"
+                      [detailTemplate]="detailTemplate"
+                      [noRecordsTemplate]="noRecordsTemplate"
+                      (pageChange)="notifyPageChange('list', $event)"
+                      [rowClass]="rowClass">
+              </tri-data-table-list>
+              <div
+                      *ngIf="showFooter"
+                      class="tri-table-footer"
+                      [style.paddingRight.px]="scrollbarWidth">
+                  <div
+                          *ngIf="lockedLeafColumns.length"
+                          class="tri-table-footer-locked"
+                          [style.width.px]="lockedWidth">
+                      <table>
+                          <colgroup triGridColGroup
+                                    [columns]="lockedLeafColumns"
+                                    [groups]="group"
+                                    [detailTemplate]="detailTemplate">
+                          </colgroup>
+                          <tfoot triGridFooter
+                                 [scrollable]="true"
+                                 [groups]="group"
+                                 [columns]="lockedLeafColumns"
+                                 [detailTemplate]="detailTemplate">
+                          </tfoot>
+                      </table>
+                  </div>
+                  <div #footer
+                       class="tri-table-footer-wrap"
+                       [triGridResizableContainer]="lockedLeafColumns.length"
+                       [lockedWidth]="lockedWidth + scrollbarWidth + 3">
+                      <table [style.width.px]="nonLockedWidth">
+                          <colgroup triGridColGroup
+                                    [columns]="nonLockedLeafColumns"
+                                    [groups]="isLocked ? [] : group"
+                                    [detailTemplate]="detailTemplate">
+                          </colgroup>
+                          <tfoot triGridFooter
+                                 [scrollable]="true"
+                                 [groups]="isLocked ? [] : group"
+                                 [columns]="nonLockedLeafColumns"
+                                 [lockedColumnsCount]="lockedLeafColumns.length"
+                                 [detailTemplate]="detailTemplate">
+                          </tfoot>
+                      </table>
+                  </div>
+              </div>
+          </ng-template>
+          <ng-template [ngIf]="!isScrollable">
+              <table>
+                  <colgroup triGridColGroup
+                            [columns]="leafColumns"
+                            [groups]="group"
+                            [detailTemplate]="detailTemplate">
+                  </colgroup>
+                  <thead triGridHeader
+                         [scrollable]="false"
+                         [resizable]="resizable"
+                         [columns]="visibleColumns"
+                         [totalColumnLevels]="totalColumnLevels"
+                         [groups]="group"
+                         [groupable]="showGroupPanel"
+                         [sort]="sort"
+                         [sortable]="sortable"
+                         [filter]="filter"
+                         [filterable]="filterable"
+                         [detailTemplate]="detailTemplate">
+                  </thead>
+                  <tbody triGridTableBody
+                         [groups]="group"
+                         [data]="view"
+                         [skip]="pageIndex"
+                         [columns]="leafColumns"
+                         [selectable]="selectable"
+                         [noRecordsText]="''"
+                         [detailTemplate]="detailTemplate"
+                         [rowClass]="rowClass">
+                  </tbody>
+                  <tfoot triGridFooter
+                         *ngIf="showFooter"
+                         [scrollable]="false"
+                         [groups]="group"
+                         [columns]="leafColumns"
+                         [detailTemplate]="detailTemplate">
+                  </tfoot>
+              </table>
+          </ng-template>
+      </div>
+      <div style="margin: 4rem;text-align: center;font-size: medium;"
+           *ngIf="view.length==0&&!loading"> 没有数据
+      </div>
+      <tri-spin style="position:absolute;width:100%;" *ngIf="loading" [spinning]="loading"
+                [size]="'large'"></tri-spin>
+      <tri-pagination
+              class="tri-data-table-pagination"
+              *ngIf="showPager"
+              [simple]="pageSimple"
+              [pageIndex]="pageIndex"
+              [pageSize]="pageSize"
+              [total]="view.total"
+              [showTotal]="pageShowTotal"
+              [showSizeChanger]="pageShowSizeChanger"
+              [showQuickJumper]="pageShowQuickJumper"
+              (pageChange)="notifyPageChange('pager', $event)">
+      </tri-pagination>
+      <tri-data-table-toolbar *ngIf="showBottomToolbar"></tri-data-table-toolbar>
   `,
   styles             : [`
 
@@ -944,7 +948,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
 
   }
 
-  ngOnChanges(changes) {
+  ngOnChanges(changes: SimpleChanges) {
     if (anyChanged(['data', 'dataSource'], changes)) {
       this.onDataChange();
     }
@@ -1046,15 +1050,15 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     this.editService.closeAll();
   }
 
-  editRow(index, group?) {
+  editRow(index: number, group?: any) {
     this.editService.editRow(index, group);
   }
 
-  closeRow(index) {
+  closeRow(index: number) {
     this.editService.close(index);
   }
 
-  addRow(group) {
+  addRow(group: any) {
     const isFormGroup = group instanceof FormGroup;
     if (!isFormGroup) {
       const fields = Object.keys(group).reduce(createControl(group), {});
@@ -1093,7 +1097,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
 
   //  focusEditElement(){}
 
-  notifyPageChange(source, event) {
+  notifyPageChange(source: any, event: any) {
     if (source === 'list' && !this.isVirtual) {
       return;
     }
@@ -1126,7 +1130,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     }
   }
 
-  columnInstance(column) {
+  columnInstance(column: any) {
     let instance;
     if (typeof column === 'number') {
       instance = this.columnList.filter(function (item) {
@@ -1173,8 +1177,8 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
 
   _runAutoGenerateColumns() {
     //check field define column
-    const fieldColumns = [];
-    const otherColumns = [];
+    const fieldColumns: ColumnBase[] = [];
+    const otherColumns: ColumnBase[] = [];
 
     this.columns.forEach(column => {
       if (column instanceof ColumnComponent) {
@@ -1317,11 +1321,11 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     }
   }
 
-  isHidden(c) {
+  isHidden(c: ColumnBase) {
     return c.hidden || (c.parent && this.isHidden(c.parent));
   }
 
-  matchesMedia(c) {
+  matchesMedia(c: ColumnBase) {
     const matches = this.responsiveService.matchesMedia(c.media);
     return matches && (!c.parent || this.matchesMedia(c.parent));
   }
@@ -1346,7 +1350,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
 
   }
 
-  expandGroupChildren(groupIndex) {
+  expandGroupChildren(groupIndex: number) {
 
   }
 }

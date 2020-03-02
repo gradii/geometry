@@ -68,7 +68,7 @@ interface Position {
                 </div>
                 <div class="tri-confirm-btns">
                   <ng-template [ngIf]="_cancelText">
-                    <button triButton [color]="'ghost'" [size]="'large'" (click)="subject.next('onCancel')">
+                    <button triButton [ghost]="true" [size]="'large'" (click)="subject.next('onCancel')">
                       <span>{{ _cancelText }}</span>
                     </button>
                   </ng-template>

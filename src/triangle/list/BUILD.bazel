@@ -1,36 +1,41 @@
-package(default_visibility=["//visibility:public"])
+package(default_visibility = ["//visibility:public"])
 
-load("@io_bazel_rules_sass//:defs.bzl", "sass_library", "sass_binary")
-load("//tools:defaults.bzl",
-  "ng_module",
-#  "ng_test_library",
-#  "ng_web_test_suite",
-#  "markdown_to_html"
-  )
+load(
+    "//tools:defaults.bzl",
+    "ng_module",
+    "sass_binary",
+    "sass_library",
+    #  "ng_test_library",
+    #  "ng_web_test_suite",
+    #  "markdown_to_html"
+)
 
 ng_module(
-  name = "list",
-  srcs = glob(["**/*.ts"], exclude=["**/*.spec.ts"]),
-  module_name = "@gradii/triangle/list",
-  assets = [] + glob(["**/*.html"]),
-  deps = [
-    "@npm//rxjs",
-    "//src/triangle/core",
-  ]
+    name = "list",
+    srcs = glob(
+        ["**/*.ts"],
+        exclude = ["**/*.spec.ts"],
+    ),
+    assets = [] + glob(["**/*.html"]),
+    module_name = "@gradii/triangle/list",
+    deps = [
+        "//src/triangle/core",
+        "@npm//rxjs",
+    ],
 )
 
 sass_library(
-  name = "list_scss_lib",
-  srcs = glob(["**/_*.scss"]),
-  deps = ["//src/triangle/core:core_scss_lib"],
+    name = "list_scss_lib",
+    srcs = glob(["**/_*.scss"]),
+    deps = ["//src/triangle/core:core_scss_lib"],
 )
 
 sass_binary(
-  name = "list_scss",
-  src = "style/list.scss",
-  deps = [
-    "//src/triangle/list:list_scss_lib",
-  ],
+    name = "list_scss",
+    src = "style/list.scss",
+    deps = [
+        "//src/triangle/list:list_scss_lib",
+    ],
 )
 #
 #ng_test_library(
@@ -63,6 +68,6 @@ sass_binary(
 #)
 
 filegroup(
-  name = "source-files",
-  srcs = glob(["**/*.ts"]),
+    name = "source-files",
+    srcs = glob(["**/*.ts"]),
 )

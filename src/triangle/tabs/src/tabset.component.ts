@@ -15,11 +15,11 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
-import { TabComponent } from './tab.component';
-import { TabsNavComponent } from './tabs-nav.component';
+import {TabComponent} from './tab.component';
+import {TabsNavComponent} from './tabs-nav.component';
 
 export interface AnimatedInterface {
   inkBar: boolean;
@@ -75,14 +75,13 @@ export type TabType = 'line' | 'card';
     </div>`
 })
 export class TabSetComponent implements AfterContentChecked, OnInit, AfterViewInit {
-  _el;
-  _classMap;
-  _prefixCls = 'tri-tabs';
-  _width;
-  _tabPositionMode: TabPositionMode = 'horizontal';
-  _indexToSelect: number | null = 0;
-  _isViewInit = false;
-  _tabs: Array<TabComponent> = [];
+  _el: any;
+  _classMap: any;
+  _prefixCls                                           = 'tri-tabs';
+  _tabPositionMode: TabPositionMode                    = 'horizontal';
+  _indexToSelect: number | null                        = 0;
+  _isViewInit                                          = false;
+  _tabs: Array<TabComponent>                           = [];
   @ContentChild('tabBarExtraContent', {static: false}) tabBarExtraContent: TemplateRef<any>;
   @ViewChild('tabNav', {static: false}) _tabNav: TabsNavComponent;
   @ViewChild('tabContent', {static: false}) _tabContent: ElementRef;
@@ -91,23 +90,23 @@ export class TabSetComponent implements AfterContentChecked, OnInit, AfterViewIn
    * Whether use animation to switch tabs
    * 是否使用动画切换 Tabs，在  `tabPosition=top|bottom`  时有效
    */
-  @Input() animated: AnimatedInterface | boolean = true;
+  @Input() animated: AnimatedInterface | boolean       = true;
   /**
    * whether show slider when over hight or width
    * 超出高度或宽度后是否显示滑动按钮
    */
-  @Input() showPagination = true;
+  @Input() showPagination                              = true;
   /**
    * whether hide
    * 是否隐藏
    */
-  @Input() hide = false;
+  @Input() hide                                        = false;
   /**
    * the event select change
    */
   @Output() selectChange: EventEmitter<TabChangeEvent> = new EventEmitter<TabChangeEvent>(true);
-  @Input() size = 'default';
-  tabs: Array<TabComponent> = [];
+  @Input() size                                        = 'default';
+  tabs: Array<TabComponent>                            = [];
 
   constructor(private _renderer: Renderer2) {
   }
@@ -197,7 +196,7 @@ export class TabSetComponent implements AfterContentChecked, OnInit, AfterViewIn
     return this.animated === true || (<AnimatedInterface>this.animated).tabPane === true;
   }
 
-  _setPosition(value) {
+  _setPosition(value: any) {
     if (this._isViewInit) {
       if (value === 'bottom') {
         this._renderer.insertBefore(
@@ -227,7 +226,7 @@ export class TabSetComponent implements AfterContentChecked, OnInit, AfterViewIn
     };
   }
 
-  clickLabel(index) {
+  clickLabel(index: number) {
     this.selectedIndex = index;
     this._tabs[index].clickEvent.emit();
   }

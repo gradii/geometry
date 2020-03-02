@@ -1,0 +1,21 @@
+@import '../../style/palette';
+@import '../../style/theming';
+@import '../../style/typography/typography-utils';
+
+@mixin tri-optgroup-theme($theme) {
+  $foreground: map-get($theme, foreground);
+
+  .tri-optgroup-label {
+    color: tri-color($foreground, secondary-text);
+  }
+
+  .tri-optgroup-disabled .tri-optgroup-label {
+    color: tri-color($foreground, hint-text);
+  }
+}
+
+@mixin tri-optgroup-typography($config) {
+  .tri-optgroup-label {
+    @include tri-typography-level-to-styles($config, body-2);
+  }
+}

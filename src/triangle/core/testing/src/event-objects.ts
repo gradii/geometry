@@ -1,9 +1,8 @@
 /**
  * @license
- * Copyright Google LLC All Rights Reserved.
+ * Copyright LinboLen Rights Reserved.
  *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * Use of this source code is governed by an MIT-style license
  */
 
 /** Creates a browser MouseEvent with the specified options. */
@@ -40,6 +39,7 @@ export function createTouchEvent(type: string, pageX = 0, pageY = 0) {
   const event = document.createEvent('UIEvent');
   const touchDetails = {pageX, pageY};
 
+  // @ts-ignore
   event.initUIEvent(type, true, true, window, 0);
 
   // Most of the browsers don't have a "initTouchEvent" method that can be used to define

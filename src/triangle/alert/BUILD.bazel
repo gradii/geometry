@@ -1,43 +1,48 @@
-package(default_visibility=["//visibility:public"])
+package(default_visibility = ["//visibility:public"])
 
-load("@io_bazel_rules_sass//:defs.bzl", "sass_library", "sass_binary")
-load("//tools:defaults.bzl",
-  "ng_module",
-#  "ng_test_library",
-#  "ng_web_test_suite",
-#  "markdown_to_html"
-  )
+load(
+    "//tools:defaults.bzl",
+    "ng_module",
+    "sass_binary",
+    "sass_library",
+    #  "ng_test_library",
+    #  "ng_web_test_suite",
+    #  "markdown_to_html"
+)
 
 ng_module(
-  name = "alert",
-  srcs = glob(["**/*.ts"], exclude=["**/*.spec.ts"]),
-  module_name = "@gradii/triangle/alert",
-  assets = [":style/alert.css"] + glob(["**/*.html"]),
-  deps = [
-    "@npm//@angular/animations",
-    "@npm//@angular/common",
-    "@npm//@angular/core",
-    "@npm//@angular/forms",
-    "@npm//@angular/cdk",
-    "@npm//rxjs",
-    "//src/triangle/core",
-    "//src/triangle/util",
-    "//src/triangle/i18n",
-  ]
+    name = "alert",
+    srcs = glob(
+        ["**/*.ts"],
+        exclude = ["**/*.spec.ts"],
+    ),
+    assets = [":style/alert.css"] + glob(["**/*.html"]),
+    module_name = "@gradii/triangle/alert",
+    deps = [
+        "//src/triangle/core",
+        "//src/triangle/i18n",
+        "//src/triangle/util",
+        "@npm//@angular/animations",
+        "@npm//@angular/cdk",
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/forms",
+        "@npm//rxjs",
+    ],
 )
 
 sass_library(
-  name = "alert_scss_lib",
-  srcs = glob(["**/_*.scss"]),
-  deps = ["//src/triangle/core:core_scss_lib"],
+    name = "alert_scss_lib",
+    srcs = glob(["**/_*.scss"]),
+    deps = ["//src/triangle/core:core_scss_lib"],
 )
 
 sass_binary(
-  name = "alert_scss",
-  src = "style/alert.scss",
-  deps = [
-    "//src/triangle/alert:alert_scss_lib",
-  ],
+    name = "alert_scss",
+    src = "style/alert.scss",
+    deps = [
+        "//src/triangle/alert:alert_scss_lib",
+    ],
 )
 #
 #ng_test_library(
@@ -70,6 +75,6 @@ sass_binary(
 #)
 
 filegroup(
-  name = "source-files",
-  srcs = glob(["**/*.ts"]),
+    name = "source-files",
+    srcs = glob(["**/*.ts"]),
 )

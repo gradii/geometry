@@ -24,10 +24,6 @@ import { CalendarComponent } from './calendar.component';
   ],
   exports     : [
     CalendarComponent,
-    DateCellDirective,
-    DateFullCellDirective,
-    MonthCellDirective,
-    MonthFullCellDirective
   ],
   imports     : [CommonModule, FormsModule, TriI18nModule, TriRadioModule, TriSelectModule]
 })

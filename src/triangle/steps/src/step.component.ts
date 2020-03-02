@@ -11,60 +11,60 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { StepConnectService } from './step-connect.service';
+import {Subscription} from 'rxjs';
+import {StepConnectService} from './step-connect.service';
 
 @Component({
   selector     : 'tri-step',
   encapsulation: ViewEncapsulation.None,
   template     : `
-      <div class="tri-steps-tail" #stepsTail *ngIf="_last !== true">
-          <i></i>
-          <span class="tri-steps-tail-tip" *ngIf="tailTip">{{tailTip}}</span>
-      </div>
-      <div class="tri-steps-step">
-          <div class="tri-steps-head">
-              <div class="tri-steps-head-inner">
-                  <ng-template [ngIf]="!_processDot">
+    <div class="tri-steps-tail" #stepsTail *ngIf="_last !== true">
+      <i></i>
+      <span class="tri-steps-tail-tip" *ngIf="tailTip">{{tailTip}}</span>
+    </div>
+    <div class="tri-steps-step">
+      <div class="tri-steps-head">
+        <div class="tri-steps-head-inner">
+          <ng-template [ngIf]="!_processDot">
                       <span class="tri-steps-icon anticon anticon-check"
                             *ngIf="_status === 'finish' && !iconTemplate"></span>
-                      <span class="tri-steps-icon anticon anticon-cross"
-                            *ngIf="_status === 'error' && !iconTemplate"></span>
-                      <span class="tri-steps-icon"
-                            *ngIf="(_status === 'process' || _status === 'wait') && !iconTemplate">{{index + 1}}</span>
-                      <span class="tri-steps-icon" *ngIf="iconTemplate">
+            <span class="tri-steps-icon anticon anticon-cross"
+                  *ngIf="_status === 'error' && !iconTemplate"></span>
+            <span class="tri-steps-icon"
+                  *ngIf="(_status === 'process' || _status === 'wait') && !iconTemplate">{{index + 1}}</span>
+            <span class="tri-steps-icon" *ngIf="iconTemplate">
               <ng-template [ngTemplateOutlet]="iconTemplate"></ng-template>
             </span>
-                  </ng-template>
-                  <ng-template [ngIf]="_processDot">
+          </ng-template>
+          <ng-template [ngIf]="_processDot">
             <span class="tri-steps-icon">
               <span class="tri-steps-icon-dot"></span>
             </span>
-                  </ng-template>
-              </div>
-          </div>
-          <div class="tri-steps-main">
-              <div class="tri-steps-title">{{title}}</div>
-              <div class="tri-steps-description">
-                  {{description}}
-                  <ng-template [ngTemplateOutlet]="descriptionTemplate"></ng-template>
-              </div>
-          </div>
+          </ng-template>
+        </div>
       </div>
+      <div class="tri-steps-main">
+        <div class="tri-steps-title">{{title}}</div>
+        <div class="tri-steps-description">
+          {{description}}
+          <ng-template [ngTemplateOutlet]="descriptionTemplate"></ng-template>
+        </div>
+      </div>
+    </div>
   `
 })
 export class StepComponent implements OnInit, AfterViewInit, OnDestroy {
   _ifCustomStatus = false;
-  _currentIndex;
-  _el;
-  _last = false;
-  _processDot = false;
-  _direction = 'horizontal';
+  _currentIndex: number;
+  _el: any;
+  _last           = false;
+  _processDot     = false;
+  _direction      = 'horizontal';
   _processDotEventSubscription: Subscription;
   _directionEventSubscription: Subscription;
   _currentEventSubscription: Subscription;
   _errorIndexObjectSubscription: Subscription;
-  stepStatusClass;
+  stepStatusClass: any;
   @ContentChild('iconTemplate', {static: false}) iconTemplate: TemplateRef<any>;
   @ViewChild('stepsTail', {static: false}) _stepsTail: ElementRef;
   @Input()
@@ -83,7 +83,9 @@ export class StepComponent implements OnInit, AfterViewInit, OnDestroy {
   descriptionTemplate: TemplateRef<void>;
   @Input() tailTip: string;
 
-  constructor(private erf: ElementRef, private stepConnectService: StepConnectService, private _renderer: Renderer2) {
+  constructor(private erf: ElementRef,
+              private stepConnectService: StepConnectService,
+              private _renderer: Renderer2) {
     this._el = erf.nativeElement;
   }
 
@@ -104,7 +106,7 @@ export class StepComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   @Input()
   set status(status) {
-    this._status = status;
+    this._status         = status;
     this._ifCustomStatus = true;
   }
 
@@ -153,19 +155,19 @@ export class StepComponent implements OnInit, AfterViewInit, OnDestroy {
   init() {
     // 记录个数
     // this.index = this.stepConnectService.itemIndex;
-    this._processDot = this.stepConnectService.processDot;
-    this._direction = this.stepConnectService.direction;
-    this._current = this.stepConnectService.current;
-    this._processDotEventSubscription = this.stepConnectService.processDotEvent.subscribe(data => {
+    this._processDot                   = this.stepConnectService.processDot;
+    this._direction                    = this.stepConnectService.direction;
+    this._current                      = this.stepConnectService.current;
+    this._processDotEventSubscription  = this.stepConnectService.processDotEvent.subscribe((data: any) => {
       this._processDot = data;
     });
-    this._directionEventSubscription = this.stepConnectService.directionEvent.subscribe(data => {
+    this._directionEventSubscription   = this.stepConnectService.directionEvent.subscribe((data: any) => {
       this._direction = data;
     });
-    this._currentEventSubscription = this.stepConnectService.currentEvent.subscribe(data => {
+    this._currentEventSubscription     = this.stepConnectService.currentEvent.subscribe((data: any) => {
       this._current = data;
     });
-    this._errorIndexObjectSubscription = this.stepConnectService.errorIndexObject.subscribe(data => {
+    this._errorIndexObjectSubscription = this.stepConnectService.errorIndexObject.subscribe((data: any) => {
       if (this._current === this.index) {
         this._status = data;
       }
@@ -193,7 +195,7 @@ export class StepComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     if (this._last) {
-      setTimeout(_ => {
+      setTimeout(() => {
         this.stepConnectService.lastElementSizeEvent.next({
           count: this.erf.nativeElement.parentElement.childElementCount,
           width: this.erf.nativeElement.firstElementChild.offsetWidth

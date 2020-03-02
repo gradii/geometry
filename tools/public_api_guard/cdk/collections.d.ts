@@ -30,8 +30,7 @@ export interface SelectionChange<T> {
 
 export declare class SelectionModel<T> {
     changed: Subject<SelectionChange<T>>;
-    onChange: Subject<SelectionChange<T>>;
-    readonly selected: T[];
+    get selected(): T[];
     constructor(_multiple?: boolean, initiallySelectedValues?: T[], _emitChanges?: boolean);
     clear(): void;
     deselect(...values: T[]): void;
@@ -54,6 +53,8 @@ export declare class UniqueSelectionDispatcher implements OnDestroy {
     listen(listener: UniqueSelectionDispatcherListener): () => void;
     ngOnDestroy(): void;
     notify(id: string, name: string): void;
+    static ɵfac: i0.ɵɵFactoryDef<UniqueSelectionDispatcher>;
+    static ɵprov: i0.ɵɵInjectableDef<UniqueSelectionDispatcher>;
 }
 
 export declare type UniqueSelectionDispatcherListener = (id: string, name: string) => void;

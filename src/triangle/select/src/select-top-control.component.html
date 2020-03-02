@@ -45,7 +45,7 @@
               (mousedown)="$event.preventDefault()"
               *ngIf="!option.disabled"
               class="tri-select-selection__choice__remove">
-          <i *ngIf="!removeIcon; else removeIcon" class="tri-select-remove-icon" nz-icon type="close"></i>
+          <i *ngIf="!removeIcon; else removeIcon" class="tri-select-remove-icon" tri-icon type="close"></i>
         </span>
       </li>
     </ng-container>
@@ -74,11 +74,11 @@
       *ngIf="allowClear && selectService.listOfSelectedValue.length"
       class="tri-select-selection__clear"
       tri-select-unselectable>
-    <i *ngIf="!clearIcon; else clearIcon" class="tri-select-close-icon" nz-icon theme="fill" type="close-circle"></i>
+    <i *ngIf="!clearIcon; else clearIcon" class="tri-select-close-icon" tri-icon theme="fill" type="close-circle"></i>
   </span>
 <span *ngIf="showArrow" class="tri-select-arrow" tri-select-unselectable>
-  <i *ngIf="loading; else defaultArrow" nz-icon type="loading"></i>
+  <i *ngIf="loading; else defaultArrow" tri-icon type="loading"></i>
   <ng-template #defaultArrow>
-    <i *ngIf="!suffixIcon; else suffixIcon" class="tri-select-arrow-icon" nz-icon type="down"></i>
+    <i *ngIf="!suffixIcon; else suffixIcon" class="tri-select-arrow-icon" tri-icon type="down"></i>
   </ng-template>
 </span>

@@ -11,9 +11,10 @@ import {
   selector     : 'tri-slider-step',
   encapsulation: ViewEncapsulation.None,
   template     : `
-    <div class="{{prefixCls}}-step">
-      <span *ngFor="let attr of attrs; trackBy: trackById" [ngClass]="attr.classes" [ngStyle]="attr.style"></span>
-    </div>
+      <div class="{{prefixCls}}-step">
+          <span *ngFor="let attr of attrs; trackBy: trackById" [ngClass]="attr.classes"
+                [ngStyle]="attr.style"></span>
+      </div>
   `
 })
 export class SliderStepComponent implements OnInit, OnChanges {
@@ -27,7 +28,7 @@ export class SliderStepComponent implements OnInit, OnChanges {
   @Input() marksArray: any[];
   @Input() included: boolean;
 
-  attrs;
+  attrs: any;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.lowerBound || changes.upperBound) {

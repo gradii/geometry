@@ -4,7 +4,7 @@ import { Directive, ElementRef, HostBinding } from '@angular/core';
   selector: '[tri-tooltip], [triTooltip]'
 })
 export class TooltipDirective {
-  @HostBinding('class.tri-tooltip-open') isTooltipOpen;
+  @HostBinding('class.tri-tooltip-open') isTooltipOpen: boolean;
 
   constructor(public elementRef: ElementRef) {
   }

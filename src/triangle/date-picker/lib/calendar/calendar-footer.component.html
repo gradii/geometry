@@ -7,7 +7,7 @@
        class="{{ prefixCls }}-footer-extra {{ isRange ? prefixCls + '-range-quick-selector' : '' }}">
     <ng-container [ngSwitch]="true">
       <ng-container *ngSwitchCase="isTemplateRef(extraFooter)">
-        <ng-container *ngTemplateOutlet="extraFooter"></ng-container>
+        <ng-container *stringTemplateOutlet="extraFooter"></ng-container>
       </ng-container>
       <ng-container *ngSwitchCase="isNonEmptyString(extraFooter)">
         <span [innerHTML]="extraFooter"></span>

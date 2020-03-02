@@ -37,43 +37,43 @@ export class SliderHandle {
     }
   ],
   template     : `
-    <div #slider [ngClass]="classMap">
-      <div class="tri-slider-rail"></div>
-      <tri-slider-track
-        className="tri-slider-track"
-        [vertical]="vertical"
-        [included]="included"
-        [offset]="track.offset"
-        [length]="track.length"
-      ></tri-slider-track>
-      <tri-slider-step *ngIf="marksArray"
-                       prefixCls="{{prefixCls}}"
-                       [vertical]="vertical"
-                       [lowerBound]="bounds.lower"
-                       [upperBound]="bounds.upper"
-                       [marksArray]="marksArray"
-                       [included]="included"
-      ></tri-slider-step>
-      <tri-slider-handle
-        *ngFor="let handle of handles;"
-        className="tri-slider-handle"
-        [vertical]="vertical"
-        [offset]="handle.offset"
-        [value]="handle.value"
-        [active]="handle.active"
-        [tipFormatter]="tipFormatter"
-      ></tri-slider-handle>
-      <tri-slider-marks *ngIf="marksArray"
-                        className="tri-slider-mark"
-                        [vertical]="vertical"
-                        [min]="min"
-                        [max]="max"
-                        [lowerBound]="bounds.lower"
-                        [upperBound]="bounds.upper"
-                        [marksArray]="marksArray"
-                        [included]="included"
-      ></tri-slider-marks>
-    </div>
+      <div #slider [ngClass]="classMap">
+          <div class="tri-slider-rail"></div>
+          <tri-slider-track
+                  className="tri-slider-track"
+                  [vertical]="vertical"
+                  [included]="included"
+                  [offset]="track.offset"
+                  [length]="track.length"
+          ></tri-slider-track>
+          <tri-slider-step *ngIf="marksArray"
+                           prefixCls="{{prefixCls}}"
+                           [vertical]="vertical"
+                           [lowerBound]="bounds.lower"
+                           [upperBound]="bounds.upper"
+                           [marksArray]="marksArray"
+                           [included]="included"
+          ></tri-slider-step>
+          <tri-slider-handle
+                  *ngFor="let handle of handles;"
+                  className="tri-slider-handle"
+                  [vertical]="vertical"
+                  [offset]="handle.offset"
+                  [value]="handle.value"
+                  [active]="handle.active"
+                  [tipFormatter]="tipFormatter"
+          ></tri-slider-handle>
+          <tri-slider-marks *ngIf="marksArray"
+                            className="tri-slider-mark"
+                            [vertical]="vertical"
+                            [min]="min"
+                            [max]="max"
+                            [lowerBound]="bounds.lower"
+                            [upperBound]="bounds.upper"
+                            [marksArray]="marksArray"
+                            [included]="included"
+          ></tri-slider-marks>
+      </div>
   `
 })
 export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges, OnDestroy {
@@ -158,7 +158,8 @@ export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges,
   dragend_: Subscription;
   @ViewChild('slider', {static: false}) private slider: ElementRef;
 
-  constructor(private utils: SliderService) {}
+  constructor(private utils: SliderService) {
+  }
 
   // Inside properties
   _range = false;
@@ -191,7 +192,7 @@ export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges,
    * Get whether vertical
    * 获取是否坚直显示
    */
-  get vertical() {
+  get vertical(): boolean {
     return this._vertical;
   }
 
@@ -205,12 +206,8 @@ export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges,
    * @param  value
    */
   @Input()
-  set vertical(value: boolean | string) {
-    if (value === '') {
-      this._vertical = true;
-    } else {
-      this._vertical = value as boolean;
-    }
+  set vertical(value: boolean) {
+    this._vertical = value;
   }
 
   setValue(val: SliderValue, isWriteValue: boolean = false) {
@@ -269,7 +266,8 @@ export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges,
     this.onValueChange = fn;
   }
 
-  registerOnTouched(fn) {}
+  registerOnTouched(fn) {
+  }
 
   // |--------------------------------------------------------------------------------------------
   // | Lifecycle hooks
@@ -439,7 +437,7 @@ export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges,
       source.startPlucked$ = fromEvent(sliderDOM, start).pipe(
         filter(filterFunc),
         tap(this.utils.pauseEvent),
-        pluck(...pluckKey),
+        pluck<any, any>(...pluckKey),
         map((position: number) => this.findClosestValue(position))
       );
       // end
@@ -449,7 +447,7 @@ export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges,
         filter(filterFunc),
         tap(this.utils.pauseEvent),
         pluck(...pluckKey),
-        distinctUntilChanged(),
+        distinctUntilChanged<any>(),
         map((position: number) => this.findClosestValue(position)),
         distinctUntilChanged(),
         takeUntil(source.end$)
@@ -625,7 +623,7 @@ export class SliderComponent implements ControlValueAccessor, OnInit, OnChanges,
   log(...messages: Array<any>) {
     if (this.debugId !== null) {
       const args = [`[tri-slider][#${this.debugId}] `].concat(Array.prototype.slice.call(arguments));
-      console.log.apply(null, args);
+      console.log(...args);
     }
   }
 

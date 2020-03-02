@@ -1,5 +1,5 @@
-import { Component, forwardRef, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {Component, forwardRef, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 @Component({
   selector           : 'tri-rate',
@@ -18,7 +18,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
           (mouseover)="_hoverRate($event, i, true)"
           (click)="_clickRate($event, i, true)">
-        <div class="tri-rate-star-first" (mouseover)="_hoverRate($event, i)" (click)="_clickRate($event, i)">
+        <div class="tri-rate-star-first" (mouseover)="_hoverRate($event, i)"
+             (click)="_clickRate($event, i)">
           <i class="anticon anticon-star"></i></div>
         <div class="tri-rate-star-second" (mouseover)="_hoverRate($event, i, true)"
              (click)="_clickRate($event, i, true)">
@@ -35,15 +36,15 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ]
 })
 export class RateComponent implements OnInit, ControlValueAccessor {
-  _prefixCls = 'tri-rate';
-  _classMap;
+  _prefixCls             = 'tri-rate';
+  _classMap: any;
   _starArray: Array<any> = new Array();
-  _hoverValue = 0; // 鼠标悬浮时的星数，为正整数，和_hasHalf配合使用
-  _hasHalf = false;
-  _floatReg: any = /^\d+(\.\d+)?$/;
+  _hoverValue            = 0; // 鼠标悬浮时的星数，为正整数，和_hasHalf配合使用
+  _hasHalf               = false;
+  _floatReg: any         = /^\d+(\.\d+)?$/;
   // ngModel Access
-  onChange: any = Function.prototype;
-  onTouched: any = Function.prototype;
+  onChange: any          = Function.prototype;
+  onTouched: any         = Function.prototype;
 
   _count = 5;
 
@@ -142,20 +143,20 @@ export class RateComponent implements OnInit, ControlValueAccessor {
     }
   }
 
-  _clickRate(e, index, isFull = false): void {
+  _clickRate(e: any, index: number, isFull = false): void {
     e.stopPropagation();
     if (this._disabled) {
       return;
     }
     this._hoverValue = this._value = index + 1;
-    this._hasHalf = !isFull && this._allowHalf;
+    this._hasHalf    = !isFull && this._allowHalf;
     if (this._hasHalf) {
       this._value -= 0.5;
     }
     this.onChange(this._value);
   }
 
-  _hoverRate(e, index, isFull = false): void {
+  _hoverRate(e: any, index: number, isFull = false): void {
     e.stopPropagation();
     if (this._disabled) {
       return;
@@ -167,10 +168,10 @@ export class RateComponent implements OnInit, ControlValueAccessor {
     }
 
     this._hoverValue = index + 1;
-    this._hasHalf = isHalf;
+    this._hasHalf    = isHalf;
   }
 
-  _leaveRate(e): void {
+  _leaveRate(e: any): void {
     e.stopPropagation();
     let oldVal = this._value;
     if (this._floatReg.test(oldVal)) {

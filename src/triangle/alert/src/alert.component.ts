@@ -49,13 +49,13 @@ import { coerceToBoolean } from '@gradii/triangle/util';
       <span class="tri-alert-message" *ngIf="message">
         <ng-container *ngIf="isMessageString; else messageTemplate">{{ message }}</ng-container>
         <ng-template #messageTemplate>
-          <ng-template [ngTemplateOutlet]="message"></ng-template>
+          <ng-template [stringTemplateOutlet]="message"></ng-template>
         </ng-template>
       </span>
       <span class="tri-alert-description" *ngIf="description">
         <ng-container *ngIf="isDescriptionString; else descriptionTemplate">{{ description }}</ng-container>
         <ng-template #descriptionTemplate>
-          <ng-template [ngTemplateOutlet]="description"></ng-template>
+          <ng-template [stringTemplateOutlet]="description"></ng-template>
         </ng-template>
       </span>
       <a
@@ -68,7 +68,7 @@ import { coerceToBoolean } from '@gradii/triangle/util';
         <ng-container *ngIf="closeText; else closeDefaultTemplate">
           <ng-container *ngIf="isCloseTextString; else closeTextTemplate">{{ closeText }}</ng-container>
           <ng-template #closeTextTemplate>
-            <ng-template [ngTemplateOutlet]="closeText"></ng-template>
+            <ng-template [stringTemplateOutlet]="closeText"></ng-template>
           </ng-template>
         </ng-container>
       </a>

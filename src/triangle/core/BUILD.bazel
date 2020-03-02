@@ -1,46 +1,73 @@
-package(default_visibility=["//visibility:public"])
+package(default_visibility = ["//visibility:public"])
 
-load("@io_bazel_rules_sass//:defs.bzl", "sass_library", "sass_binary")
-load("//tools:defaults.bzl",
-  "ng_module",
-#  "ng_test_library",
-#  "ng_web_test_suite",
-#  "markdown_to_html"
-  )
-
-load("//:packages.bzl", "TRIANGLE_SCSS_LIBS")
+load("//src/triangle:config.bzl", "TRIANGLE_SCSS_LIBS")
+load(
+    "//tools:defaults.bzl",
+    "ng_module",
+    "sass_binary",
+    "sass_library",
+    #  "ng_test_library",
+    #  "ng_web_test_suite",
+    #  "markdown_to_html"
+)
 
 ng_module(
-  name = "core",
-  srcs = glob(["**/*.ts"], exclude=["**/*.spec.ts"]),
-  module_name = "@gradii/triangle/core",
-  assets = glob(["**/*.html"]),
-  deps = [
-    "@npm//@angular/common",
-    "@npm//@angular/core",
-    "@npm//@angular/forms",
-    "@npm//@angular/animations",
-    "@npm//@angular/cdk",
-    "@npm//rxjs",
-    "//src/triangle/util"
-  ]
+    name = "core",
+    srcs = glob(
+        ["**/*.ts"],
+        exclude = ["**/*.spec.ts"],
+    ),
+    assets = [
+        ":src/selection/pseudo-checkbox/pseudo-checkbox.css",
+        ":src/option/option.css",
+        ":src/option/optgroup.css",
+    ] + glob(["**/*.html"]),
+    module_name = "@gradii/triangle/core",
+    deps = [
+        "//src/triangle/util",
+        "@npm//@angular/animations",
+        "@npm//@angular/cdk",
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/forms",
+        "@npm//rxjs",
+    ],
 )
 
 sass_library(
-  name = "core_scss_lib",
-  srcs = glob(["**/_*.scss"]),
-  deps = [],
+    name = "core_scss_lib",
+    srcs = glob(
+        ["**/_*.scss"],
+        exclude = ["themes/_all-theme.scss"],
+    ),
+    deps = [],
 )
 
-
 sass_library(
-    name = "all_themes",
+    name = "theming_scss_lib",
     srcs = [
         "themes/_all-theme.scss",
     ],
     deps = TRIANGLE_SCSS_LIBS,
 )
 
+sass_binary(
+    name = "pseudo_checkbox_scss",
+    src = "src/selection/pseudo-checkbox/pseudo-checkbox.scss",
+    deps = [":core_scss_lib"],
+)
+
+sass_binary(
+    name = "option_scss",
+    src = "src/option/option.scss",
+    deps = [":core_scss_lib"],
+)
+
+sass_binary(
+    name = "optgroup_scss",
+    src = "src/option/optgroup.scss",
+    deps = [":core_scss_lib"],
+)
 
 #sass_binary(
 #  name = "core_scss",
@@ -80,6 +107,6 @@ sass_library(
 #)
 
 filegroup(
-  name = "source-files",
-  srcs = glob(["**/*.ts"]),
+    name = "source-files",
+    srcs = glob(["**/*.ts"]),
 )

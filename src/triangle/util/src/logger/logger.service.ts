@@ -1,48 +1,45 @@
-import { Inject, Injectable, InjectionToken, Optional, Provider, SkipSelf } from '@angular/core';
+import {Inject, Injectable, InjectionToken, Optional, Provider, SkipSelf} from '@angular/core';
 
-export const TRI_LOGGER_STATE = new InjectionToken<boolean>('tri-logger-state'); // Whether print the log
+// Whether print the log
+export const TRI_LOGGER_STATE = new InjectionToken<boolean>('tri-logger-state');
 
-export function LOGGER_SERVICE_PROVIDER_FACTORY(exist, loggerState) {
+export function LOGGER_SERVICE_PROVIDER_FACTORY(exist: boolean, loggerState: any) {
   return exist || new LoggerService(loggerState);
 }
 
 @Injectable()
 export class LoggerService {
-  constructor(@Inject(TRI_LOGGER_STATE) private _loggerState: boolean) {}
+  constructor(@Inject(TRI_LOGGER_STATE) private _loggerState: boolean) {
+  }
 
   log(...args: any[]) {
     if (this._loggerState) {
-      // console.log(...args);
-      console.log.apply(console, arguments);
+      console.log(...args);
     }
   }
 
   warn(...args: any[]) {
     if (this._loggerState) {
-      // console.warn(...args);
-      console.warn.apply(console, arguments);
+      console.warn(...args);
     }
   }
 
   error(...args: any[]) {
     if (this._loggerState) {
-      // console.error(...args);
-      console.error.apply(console, arguments);
+      console.error(...args);
     }
   }
 
   info(...args: any[]) {
     if (this._loggerState) {
-      // console.log(...args);
-      console.log.apply(console, arguments);
+      console.log(...args);
     }
   }
 
   debug(...args: any[]) {
     if (this._loggerState) {
-      // console.log('[NG-ZORRO-DEBUG]', ...args);
+      console.log('[DEBUG]', ...args);
       const arrs = Array.prototype.slice.call(arguments);
-      console.log.apply(console, ['[NG-ZORRO-DEBUG]'].concat(arrs));
     }
   }
 }

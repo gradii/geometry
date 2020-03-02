@@ -1,12 +1,13 @@
+// Configuration for IDEs only.
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "types": [
-      "node",
-      "jest"
-    ]
+    "rootDir": "..",
+    "baseUrl": ".",
+    "paths": {
+      "@gradii/triangle": ["../triangle"],
+      "@gradii/triangle/*": ["../triangle/*"]
+    }
   },
-  "include": [
-    "**/*.ts"
-  ]
+  "include": ["./**/*.ts"]
 }

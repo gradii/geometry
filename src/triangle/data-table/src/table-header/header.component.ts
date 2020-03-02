@@ -43,35 +43,36 @@ import { DetailTemplateDirective } from '../table-shared/detail-template.directi
 import { and, not, observe } from '../utils';
 
 
-const mergeObjects = (...args) => Object.assign.apply(null, [{}].concat(args));
+//@ts-ignore
+const mergeObjects = (...args: any[]) => Object.assign.apply(null, [{}].concat(args));
 
-const directions = initialDirection => initialDirection === 'asc' ? ['asc', 'desc'] : ['desc', 'asc'];
+const directions = (initialDirection: any) => initialDirection === 'asc' ? ['asc', 'desc'] : ['desc', 'asc'];
 
 /**
  * @hidden
  */
-const isRootLevel = ({parent}) => !isTruthy(parent);
+const isRootLevel = ({parent}: any) => !isTruthy(parent);
 
-const ofColumnType = ({draggable}) => ['column', 'columnGroup']
+const ofColumnType = ({draggable}: any) => ['column', 'columnGroup']
   .indexOf(draggable.context.type) >= 0;
 
-const notSameElement = ({draggable, target}) =>
+const notSameElement = ({draggable, target}: any) =>
   draggable.element.nativeElement !== target.element.nativeElement;
 
-const inSameParent = (x, y) => x.parent === y.parent ||
+const inSameParent = (x: any, y: any): boolean => x.parent === y.parent ||
   (isInSpanColumn(y) && inSameParent(x, y.parent));
 
-const sameParent = ({draggable, target}) =>
+const sameParent = ({draggable, target}: any) =>
   inSameParent(draggable.context.column, target.context.column);
 
-const lastNonLocked = ({draggable}) =>
+const lastNonLocked = ({draggable}: any) =>
   !isTruthy(draggable.context.column.locked) &&
   isRootLevel(draggable.context.column) &&
   draggable.context.lastColumn;
 
-const notInSpanColumn = ({draggable}) => !isInSpanColumn(draggable.context.column);
+const notInSpanColumn = ({draggable}: any) => !isInSpanColumn(draggable.context.column);
 
-const reorderable = ({draggable}) => draggable.context.column.reorderable;
+const reorderable = ({draggable}: any) => draggable.context.column.reorderable;
 
 const rules = and(
   ofColumnType,
@@ -87,123 +88,129 @@ const rules = and(
   selector           : '[tri-grid-header], [triGridHeader]',
   preserveWhitespaces: false,
   template           : `
-    <tr *ngFor="let i of columnLevels; let levelIndex = index">
-      <th
-        [class.tri-group-cell]="true"
-        [class.tri-header]="true"
-        *ngFor="let g of groups">
-      </th>
-      <th
-        [class.tri-hierarchy-cell]="true"
-        [class.tri-header]="true"
-        *ngIf="detailTemplate?.templateRef">
-      </th>
-      <ng-template ngFor let-column [ngForOf]="columnsForLevel(levelIndex)" let-columnIndex="index">
-        <th cdkOverlayOrigin
-            #columnAnchor="cdkOverlayOrigin"
-            tri-grid-draggable
-            [class.tri-header]="true"
-            [class.tri-first]="isFirstOnRow(column, columnIndex)"
-            *ngIf="!isColumnGroupComponent(column)"
-            [ngClass]="column.headerClass"
-            [ngStyle]="column.headerStyle"
-            [attr.rowspan]="column.rowspan(totalColumnLevels)"
-            [attr.colspan]="column.colspan">
-          <!--列头过滤器-->
-          <tri-data-table-filter-menu
-            *ngIf="showFilterMenu && isFilterable(column)"
-            [column]="column"
-            [filter]="filter"
-            [columnOverlayOrigin]="columnAnchor">
-          </tri-data-table-filter-menu>
-          <tri-data-table-filter-simple
-            *ngIf="showFilterSimple && isFilterable(column)"
-            [column]="column"
-            [filter]="filter"
-            [columnOverlayOrigin]="columnAnchor">
-          </tri-data-table-filter-simple>
+      <tr *ngFor="let i of columnLevels; let levelIndex = index">
+          <th
+                  [class.tri-group-cell]="true"
+                  [class.tri-header]="true"
+                  *ngFor="let g of groups">
+          </th>
+          <th
+                  [class.tri-hierarchy-cell]="true"
+                  [class.tri-header]="true"
+                  *ngIf="detailTemplate?.templateRef">
+          </th>
+          <ng-template ngFor let-column [ngForOf]="columnsForLevel(levelIndex)"
+                       let-columnIndex="index">
+              <th cdkOverlayOrigin
+                  #columnAnchor="cdkOverlayOrigin"
+                  tri-grid-draggable
+                  [class.tri-header]="true"
+                  [class.tri-first]="isFirstOnRow(column, columnIndex)"
+                  *ngIf="!isColumnGroupComponent(column)"
+                  [ngClass]="column.headerClass"
+                  [ngStyle]="column.headerStyle"
+                  [attr.rowspan]="column.rowspan(totalColumnLevels)"
+                  [attr.colspan]="column.colspan">
+                  <!--列头过滤器-->
+                  <tri-data-table-filter-menu
+                          *ngIf="showFilterMenu && isFilterable(column)"
+                          [column]="column"
+                          [filter]="filter"
+                          [columnOverlayOrigin]="columnAnchor">
+                  </tri-data-table-filter-menu>
+                  <tri-data-table-filter-simple
+                          *ngIf="showFilterSimple && isFilterable(column)"
+                          [column]="column"
+                          [filter]="filter"
+                          [columnOverlayOrigin]="columnAnchor">
+                  </tri-data-table-filter-simple>
 
-          <!--列头不可排序-->
-          <ng-template [ngIf]="!isSortable(column)">
-            <ng-template
-              [ngTemplateOutlet]="column.headerTemplateRef"
-              [ngTemplateOutletContext]="{
+                  <!--列头不可排序-->
+                  <ng-template [ngIf]="!isSortable(column)">
+                      <ng-template
+                              [ngTemplateOutlet]="column.headerTemplateRef"
+                              [ngTemplateOutletContext]="{
                                         columnIndex: lockedColumnsCount + columnIndex,
                                         column: column,
                                         $implicit: column
                                         }">
-            </ng-template>
-            <ng-template [ngIf]="!column.headerTemplateRef">{{column.displayTitle}}</ng-template>
-          </ng-template>
+                      </ng-template>
+                      <ng-template
+                              [ngIf]="!column.headerTemplateRef">{{column.displayTitle}}</ng-template>
+                  </ng-template>
 
-          <!--列头排序按钮-->
-          <ng-template [ngIf]="isSortable(column)">
-            <a href="#" #link class="tri-link" (click)="sortColumn(column, $event, link, sortSpan)">
-              <ng-template
-                [ngTemplateOutlet]="column.headerTemplateRef"
-                [ngTemplateOutletContext]="{
+                  <!--列头排序按钮-->
+                  <ng-template [ngIf]="isSortable(column)">
+                      <a href="#" #link class="tri-link"
+                         (click)="sortColumn(column, $event, link, sortSpan)">
+                          <ng-template
+                                  [ngTemplateOutlet]="column.headerTemplateRef"
+                                  [ngTemplateOutletContext]="{
                                           columnIndex: columnIndex,
                                           column: column,
                                           $implicit: column}">
-              </ng-template>
-              <ng-template [ngIf]="!column.headerTemplateRef"><span>{{column.displayTitle}}</span></ng-template>
-              <span #sortSpan class="tri-data-table-sort-order">
+                          </ng-template>
+                          <ng-template [ngIf]="!column.headerTemplateRef">
+                              <span>{{column.displayTitle}}</span></ng-template>
+                          <span #sortSpan class="tri-data-table-sort-order">
                   <i [ngClass]="sortIcon(column.field)"></i>
                 </span>
-            </a>
-          </ng-template>
+                      </a>
+                  </ng-template>
 
-          <!--列头多选按钮-->
-          <ng-template [ngIf]="isCheckboxColumn(column) && !column.headerTemplateRef && column.showSelectAll">
-            <tri-checkbox triGridSelectAllCheckbox></tri-checkbox>
-          </ng-template>
+                  <!--列头多选按钮-->
+                  <ng-template
+                          [ngIf]="isCheckboxColumn(column) && !column.headerTemplateRef && column.showSelectAll">
+                      <tri-checkbox triGridSelectAllCheckbox></tri-checkbox>
+                  </ng-template>
 
-          <span triGridColumnHandle
-                tri-grid-draggable
-                class="tri-column-resizer"
-                *ngIf="resizable"
-                [column]="column"
-                [columns]="columns">
+                  <span triGridColumnHandle
+                        tri-grid-draggable
+                        class="tri-column-resizer"
+                        *ngIf="resizable"
+                        [column]="column"
+                        [columns]="columns">
            </span>
-        </th>
-        <!--列头分组按钮-->
-        <th *ngIf="isColumnGroupComponent(column)"
-            [class.tri-header]="true"
-            [class.tri-first]="isFirstOnRow(column, columnIndex)"
-            [ngClass]="column.headerClass"
-            [ngStyle]="column.headerStyle"
-            [attr.rowspan]="column.rowspan(totalColumnLevels)"
-            [attr.colspan]="column.colspan">
-          <ng-template
-            [ngTemplateOutlet]="column.headerTemplateRef"
-            [ngTemplateOutletContext]="{
+              </th>
+              <!--列头分组按钮-->
+              <th *ngIf="isColumnGroupComponent(column)"
+                  [class.tri-header]="true"
+                  [class.tri-first]="isFirstOnRow(column, columnIndex)"
+                  [ngClass]="column.headerClass"
+                  [ngStyle]="column.headerStyle"
+                  [attr.rowspan]="column.rowspan(totalColumnLevels)"
+                  [attr.colspan]="column.colspan">
+                  <ng-template
+                          [ngTemplateOutlet]="column.headerTemplateRef"
+                          [ngTemplateOutletContext]="{
                                       columnIndex: lockedColumnsCount + columnIndex,
                                       column: column,
                                       $implicit: column}">
+                  </ng-template>
+                  <ng-template
+                          [ngIf]="!column.headerTemplateRef">{{column.displayTitle}}</ng-template>
+              </th>
           </ng-template>
-          <ng-template [ngIf]="!column.headerTemplateRef">{{column.displayTitle}}</ng-template>
-        </th>
-      </ng-template>
-    </tr>
-    <tr triGridFilterRow
-        *ngIf="showFilterRow"
-        [columns]="leafColumns"
-        [filter]="filter"
-        [groups]="groups"
-        [detailTemplate]="detailTemplate"
-    ></tr>
+      </tr>
+      <tr triGridFilterRow
+          *ngIf="showFilterRow"
+          [columns]="leafColumns"
+          [filter]="filter"
+          [groups]="groups"
+          [detailTemplate]="detailTemplate"
+      ></tr>
   `,
   styles             : [`
-    .tri-column-resizer {
-      cursor   : col-resize;
-      display  : block;
-      height   : 1000%;
-      position : absolute;
-      top      : 0;
-      width    : .5em;
-      margin   : 0 -0.25em;
-      z-index  : 100;
-    }
+      .tri-column-resizer {
+          cursor   : col-resize;
+          display  : block;
+          height   : 1000%;
+          position : absolute;
+          top      : 0;
+          width    : .5em;
+          margin   : 0 -0.25em;
+          z-index  : 100;
+      }
   `]
 })
 export class HeaderComponent implements OnDestroy, AfterViewInit {
@@ -320,23 +327,21 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
   }
 
   public sortState(column: ColumnComponent): string {
-    if (!this.isSortable(column)) {
-      return;
+    if (this.isSortable(column)) {
+      const state = this.sortDescriptor(column.field);
+      if (state.dir === 'asc') {
+        return 'ascending';
+      }
+      if (state.dir === 'desc') {
+        return 'descending';
+      }
     }
-
-    const state = this.sortDescriptor(column.field);
-    if (state.dir === 'asc') {
-      return 'ascending';
-    }
-
-    if (state.dir === 'desc') {
-      return 'descending';
-    }
+    return null;
   }
 
   public sortStatus(column: ColumnComponent): string {
     if (!this.sortedFields[column.field] || !this.isSortable(column)) {
-      return;
+      return null;
     }
 
     let msg = 'sortedDefault';
@@ -372,7 +377,7 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
   public ngOnChanges(changes: any): void {
     const sortChange = changes.sort;
     if (sortChange && !sortChange.isFirstChange()) {
-      sortChange.currentValue.forEach(change => {
+      sortChange.currentValue.forEach((change: any) => {
         this.sortedFields[change.field] = true;
       });
     }
@@ -402,7 +407,7 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
   }
 
   public isFirstOnRow(column: ColumnComponent, index: number): boolean {
-    const isTailing = (c) => c &&
+    const isTailing = (c: any): boolean => c &&
       (this.columnsForLevel(c.level).indexOf(c) > 0 || isTailing(c.parent));
 
     return index === 0 && !this.groups.length && !this.detailTemplate && isTailing(column.parent);
@@ -417,8 +422,9 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
       (this.columnMenuTemplate || column.columnMenuTemplates.length || hasItems(this.columnMenu, column));
   }
 
-  public isFilterable(column: ColumnComponent): boolean {
-    return !isNullOrEmptyString(column.field) && column.filterable === true;
+  public isFilterable(column: ColumnBase): boolean {
+    return !isNullOrEmptyString((column as ColumnComponent).field) &&
+      (column as ColumnComponent).filterable === true;
   }
 
   public canDrop(draggable: DraggableColumnDirective, target: DropTargetDirective): boolean {
@@ -487,7 +493,7 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
 
     this.targetSubscription.add(
       enterStream.pipe(
-        tap(({target, draggable}) => {
+        tap(({target, draggable}: any) => {
           if (draggable.context.type === 'groupIndicator') { return; }
 
           const targetLocked = isTruthy(target.context.column.isLocked);
@@ -541,7 +547,7 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
         .pipe(
           takeUntil(leaveStream),
           takeUntil(dropStream),
-          map(({mouseEvent}) =>
+          map(({mouseEvent}: { mouseEvent: MouseEvent }) =>
             mergeObjects({changeContainer: true}, e, {mouseEvent})
           )
         );

@@ -39,7 +39,6 @@ export function throwDialogContentAlreadyAttachedError() {
  * @docs-private
  */
 @Component({
-  moduleId       : module.id,
   selector       : 'tri-dialog-container',
   templateUrl    : './dialog-container.html',
   encapsulation  : ViewEncapsulation.None,

@@ -1,12 +1,13 @@
-import { ChangeDetectorRef, Pipe, PipeTransform } from '@angular/core';
+import {ChangeDetectorRef, Pipe, PipeTransform} from '@angular/core';
 
-import { I18nService } from './i18n.service';
+import {I18nService} from './i18n.service';
+import {Subscription} from 'rxjs';
 
 @Pipe({
   name: 'triI18n'
 })
 export class I18nPipe implements PipeTransform {
-  private _subscription;
+  private _subscription: Subscription;
 
   constructor(private i18n: I18nService, private cdr: ChangeDetectorRef) {
   }

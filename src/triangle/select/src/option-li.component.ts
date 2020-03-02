@@ -37,7 +37,7 @@ export class OptionLiComponent implements OnInit, OnDestroy {
   active = false;
   destroy$ = new Subject();
   @Input() option: OptionComponent;
-  @Input() menuItemSelectedIcon: TemplateRef<void>;
+  @Input() menuItemSelectedIcon: TemplateRef<any>;
 
   constructor(
     private elementRef: ElementRef,
@@ -54,7 +54,7 @@ export class OptionLiComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.selectService.listOfSelectedValue$.pipe(takeUntil(this.destroy$)).subscribe(list => {
-      this.selected = isPresent(list.find(v => this.selectService.compareWith(v, this.option.value)));
+      this.selected = isPresent(list.find((v: any) => this.selectService.compareWith(v, this.option.value)));
       this.cdr.markForCheck();
     });
     this.selectService.activatedOption$.pipe(takeUntil(this.destroy$)).subscribe(option => {

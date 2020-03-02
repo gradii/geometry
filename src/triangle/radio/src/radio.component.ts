@@ -4,7 +4,7 @@ import { RadioTileDirective } from './radio-tile.directive';
 
 export interface RadioOption {
   value: string;
-  label: string | TemplateRef<any>;
+  label: string;
   checked?: boolean;
   disabled?: boolean;
 }
@@ -35,7 +35,7 @@ export interface RadioOption {
   }
 })
 export class RadioComponent extends RadioTileDirective implements RadioOption {
-  @ContentChild(TemplateRef, {static: false}) labelTemplate;
+  @ContentChild(TemplateRef, {static: false}) labelTemplate: TemplateRef<any>;
 
   focus() {
     this._focused = true;

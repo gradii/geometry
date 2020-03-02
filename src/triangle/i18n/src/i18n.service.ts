@@ -1,19 +1,21 @@
-import { DatePipe } from '@angular/common';
-import { Inject, Injectable, Optional, Provider, SkipSelf } from '@angular/core';
-import { LoggerService } from '@gradii/triangle/util';
+import {DatePipe} from '@angular/common';
+import {Inject, Injectable, Optional, Provider, SkipSelf} from '@angular/core';
+import {LoggerService} from '@gradii/triangle/util';
 
-import { BehaviorSubject, Observable } from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 import zh_CN from '../languages/zh_CN';
-import { I18nInterface } from './i18n.interface';
-import { I18N } from './i18n.token';
+import {I18nInterface} from './i18n.interface';
+import {I18N} from './i18n.token';
 
 @Injectable()
 export class I18nService {
   private _locale: I18nInterface;
   private _change = new BehaviorSubject<I18nInterface>(this._locale);
 
-  constructor(@Inject(I18N) locale: I18nInterface, private _logger: LoggerService, private datePipe: DatePipe) {
+  constructor(@Inject(I18N) locale: I18nInterface,
+              private _logger: LoggerService,
+              private datePipe: DatePipe) {
     this.setLocale(locale || zh_CN);
   }
 
@@ -21,9 +23,6 @@ export class I18nService {
     return this._change.asObservable();
   }
 
-  // [NOTE] Performance issue: this method may called by every change detections
-  // TODO: cache more deeply paths for performance
-  /* tslint:disable-next-line:no-any */
   translate(path: string, data?: any): string {
     // this._logger.debug(`[NzI18nService] Translating(${this._locale.locale}): ${path}`);
     let content = this._getObjectPath(this._locale, path) as string;
@@ -68,7 +67,7 @@ export class I18nService {
   }
 
   formatDate(date: Date, format?: string, locale?: string): string {
-    return date ? this.datePipe.transform(date, format, null, locale || this.getLocale().locale) : '';
+    return date ? this.datePipe.transform(date, format, undefined, locale || this.getLocale().locale) : '';
   }
 
   /**
@@ -76,28 +75,28 @@ export class I18nService {
    * Why? For now, we need to support the existing language formats in AntD, and AntD uses the default temporal syntax.
    */
   formatDateCompatible(date: Date, format?: string, locale?: string): string {
-    return this.formatDate(date, this.compatDateFormat(format), locale);
+    return this.formatDate(date, this._compatDateFormat(format), locale);
   }
 
-  parseDate(text: string): Date {
+  parseDate(text: string): Date | null {
     if (!text) {
-      return;
+      return null;
     }
     return new Date(text);
   }
 
-  parseTime(text: string): Date {
+  parseTime(text: string): Date | null {
     if (!text) {
-      return;
+      return null;
     }
     return new Date(`1970-01-01 ${text}`);
   }
 
   private _getObjectPath(obj: object, path: string): string | object | any { // tslint:disable-line:no-any
-    let res = obj;
-    const paths = path.split('.');
-    const depth = paths.length;
-    let index = 0;
+    let res: any = obj;
+    const paths  = path.split('.');
+    const depth  = paths.length;
+    let index    = 0;
     while (res && index < depth) {
       res = res[paths[index++]];
     }
@@ -108,13 +107,12 @@ export class I18nService {
    * Compatible translate the moment-like format pattern to angular's pattern
    * Why? For now, we need to support the existing language formats in AntD, and AntD uses the default temporal syntax.
    *
-   * TODO: compare and complete all format patterns
    * Each format docs as below:
    * @link https://momentjs.com/docs/#/displaying/format/
    * @link https://angular.io/api/common/DatePipe#description
    * @param format input format pattern
    */
-  private compatDateFormat(format: string): string {
+  private _compatDateFormat(format: string): string {
     return format && format
       .replace(/Y/g, 'y') // only support y, yy, yyy, yyyy
       .replace(/D/g, 'd'); // d, dd represent of D, DD for momentjs, others are not support

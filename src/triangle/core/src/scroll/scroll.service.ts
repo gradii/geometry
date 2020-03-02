@@ -1,32 +1,34 @@
-import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable, Optional, Provider, SkipSelf } from '@angular/core';
+import {DOCUMENT} from '@angular/common';
+import {Inject, Injectable, Optional, Provider, SkipSelf} from '@angular/core';
 
 const availablePrefixs = ['moz', 'ms', 'webkit'];
 
 function requestAnimationFramePolyfill() {
   let lastTime = 0;
-  return function (callback) {
-    const currTime = new Date().getTime();
+  return function (callback: Function) {
+    const currTime   = new Date().getTime();
     const timeToCall = Math.max(0, 16 - (currTime - lastTime));
-    const id = window.setTimeout(function () {
+    const id         = window.setTimeout(function () {
       callback(currTime + timeToCall);
     }, timeToCall);
-    lastTime = currTime + timeToCall;
+    lastTime         = currTime + timeToCall;
     return id;
   };
 }
 
 function getRequestAnimationFrame() {
   if (typeof window === 'undefined') {
-    return () => {};
+    return () => {
+    };
   }
   if (window.requestAnimationFrame) {
     // https://github.com/vuejs/vue/issues/4465
     return window.requestAnimationFrame.bind(window);
   }
 
-  const prefix = availablePrefixs.filter(key => `${key}RequestAnimationFrame` in window)[0];
+  const prefix = availablePrefixs.find(key => `${key}RequestAnimationFrame` in window);
 
+  // @ts-ignore
   return prefix ? window[`${prefix}RequestAnimationFrame`] : requestAnimationFramePolyfill();
 }
 
@@ -43,16 +45,17 @@ function easeInOutCubic(t: number, b: number, c: number, d: number) {
 }
 
 @Injectable({
-  providedIn: 'root'
-})
+              providedIn: 'root'
+            })
 export class ScrollService {
-  constructor(@Inject(DOCUMENT) private doc: any) {}
+  constructor(@Inject(DOCUMENT) private _doc: any) {
+  }
 
   /** 设置 `el` 滚动条位置 */
   setScrollTop(el: Element | Window, topValue: number = 0) {
     if (el === window) {
-      this.doc.body.scrollTop = topValue;
-      this.doc.documentElement.scrollTop = topValue;
+      this._doc.body.scrollTop            = topValue;
+      this._doc.documentElement.scrollTop = topValue;
     } else {
       (el as Element).scrollTop = topValue;
     }
@@ -71,10 +74,10 @@ export class ScrollService {
     const rect = el.getBoundingClientRect();
     if (rect.width || rect.height) {
       const doc = el.ownerDocument!.documentElement;
-      ret.top = rect.top - doc.clientTop;
-      ret.left = rect.left - doc.clientLeft;
+      ret.top   = rect.top - doc.clientTop;
+      ret.left  = rect.left - doc.clientLeft;
     } else {
-      ret.top = rect.top;
+      ret.top  = rect.top;
       ret.left = rect.left;
     }
 
@@ -86,12 +89,13 @@ export class ScrollService {
     if (!el) {
       el = window;
     }
-    const prop = top ? 'pageYOffset' : 'pageXOffset';
-    const method = top ? 'scrollTop' : 'scrollLeft';
+    const prop     = top ? 'pageYOffset' : 'pageXOffset';
+    const method   = top ? 'scrollTop' : 'scrollLeft';
     const isWindow = el === window;
-    let ret = isWindow ? el[prop] : el[method];
+    // @ts-ignore
+    let ret        = isWindow ? el[prop] : el[method];
     if (isWindow && typeof ret !== 'number') {
-      ret = this.doc.documentElement[method];
+      ret = this._doc.documentElement[method];
     }
 
     return ret;
@@ -105,7 +109,11 @@ export class ScrollService {
    * @param  [easing] 动作算法，默认：`easeInOutCubic`
    * @param  [callback] 动画结束后回调
    */
-  scrollTo(containerEl: Element | Window, targetTopValue: number = 0, easing?: Function, callback?: Function) {
+  scrollTo(
+    containerEl: Element | Window,
+    targetTopValue: number = 0,
+    easing?: Function,
+    callback?: Function) {
     if (!containerEl) {
       containerEl = window;
     }
@@ -113,8 +121,11 @@ export class ScrollService {
     const startTime = Date.now();
     const frameFunc = () => {
       const timestamp = Date.now();
-      const time = timestamp - startTime;
-      this.setScrollTop(containerEl, (easing || easeInOutCubic)(time, scrollTop, targetTopValue, 450));
+      const time      = timestamp - startTime;
+      this.setScrollTop(
+        containerEl,
+        (easing || easeInOutCubic)(time, scrollTop, targetTopValue, 450)
+      );
       if (time < 450) {
         reqAnimFrame(frameFunc);
       } else {
@@ -127,7 +138,7 @@ export class ScrollService {
   }
 }
 
-export function SCROLL_SERVICE_PROVIDER_FACTORY(doc, scrollService) {
+export function SCROLL_SERVICE_PROVIDER_FACTORY(doc: any, scrollService: any) {
   return scrollService || new ScrollService(doc);
 }
 

@@ -25,43 +25,43 @@ import {
   selector     : 'tri-input-number',
   encapsulation: ViewEncapsulation.None,
   template     : `
-    <div class="tri-input-number-handler-wrap"
-         (mouseover)="_mouseInside = true"
-         (mouseout)="_mouseInside = false">
-      <a *ngIf="spinners"
-         class="tri-input-number-handler tri-input-number-handler-up"
-         [class.tri-input-number-handler-up-disabled]="_disabledUp"
-         (click)="_numberUp($event)">
+      <div class="tri-input-number-handler-wrap"
+           (mouseover)="_mouseInside = true"
+           (mouseout)="_mouseInside = false">
+          <a *ngIf="spinners"
+             class="tri-input-number-handler tri-input-number-handler-up"
+             [class.tri-input-number-handler-up-disabled]="_disabledUp"
+             (click)="_numberUp($event)">
         <span
-          class="tri-input-number-handler-up-inner"
-          (click)="$event.preventDefault();"></span>
-      </a>
-      <a *ngIf="spinners"
-         class="tri-input-number-handler tri-input-number-handler-down"
-         [class.tri-input-number-handler-down-disabled]="_disabledDown"
-         (click)="_numberDown($event)">
+                class="tri-input-number-handler-up-inner"
+                (click)="$event.preventDefault();"></span>
+          </a>
+          <a *ngIf="spinners"
+             class="tri-input-number-handler tri-input-number-handler-down"
+             [class.tri-input-number-handler-down-disabled]="_disabledDown"
+             (click)="_numberDown($event)">
         <span
-          class="tri-input-number-handler-down-inner"
-          (click)="$event.preventDefault();">
+                class="tri-input-number-handler-down-inner"
+                (click)="$event.preventDefault();">
         </span>
-      </a>
-    </div>
-    <div
-      class="tri-input-number-input-wrap">
-      <input class="tri-input-number-input"
-             #inputNumber
-             [placeholder]="placeHolder"
-             [disabled]="disabled"
-             [(ngModel)]="_displayValue"
-             (blur)="_emitBlur($event)"
-             (focus)="_emitFocus($event)"
-             (keydown)="_emitKeydown($event)"
-             (ngModelChange)="_userInputChange()"
-             [attr.min]="min"
-             [attr.max]="max"
-             [attr.step]="_step"
-             autocomplete="off">
-    </div>`,
+          </a>
+      </div>
+      <div
+              class="tri-input-number-input-wrap">
+          <input class="tri-input-number-input"
+                 #inputNumber
+                 [placeholder]="placeHolder"
+                 [disabled]="disabled"
+                 [(ngModel)]="_displayValue"
+                 (blur)="_emitBlur($event)"
+                 (focus)="_emitFocus($event)"
+                 (keydown)="_emitKeydown($event)"
+                 (ngModelChange)="_userInputChange()"
+                 [attr.min]="min"
+                 [attr.max]="max"
+                 [attr.step]="_step"
+                 autocomplete="off">
+      </div>`,
   providers    : [
     {
       provide    : NG_VALUE_ACCESSOR,
@@ -99,8 +99,8 @@ export class InputNumberComponent implements ControlValueAccessor {
   @Input()
   @HostBinding('class.tri-input-number-disabled')
   disabled = false;
-  @Output() blur: EventEmitter<MouseEvent> = new EventEmitter();
-  @Output() focus: EventEmitter<MouseEvent> = new EventEmitter();
+  @Output() blur: EventEmitter<any> = new EventEmitter();
+  @Output() focus: EventEmitter<any> = new EventEmitter();
 
   constructor(private _elementRef: ElementRef, private _renderer: Renderer2) {
     this._el = this._elementRef.nativeElement;
@@ -151,7 +151,7 @@ export class InputNumberComponent implements ControlValueAccessor {
     this._updateValue(value);
   }
 
-  _size = 'default';
+  _size: any = 'default';
 
   /**
    * Get the input size
@@ -202,7 +202,7 @@ export class InputNumberComponent implements ControlValueAccessor {
     }
   }
 
-  _displayValue;
+  _displayValue: any;
 
   private get displayValue() {
     return this._displayValue;
@@ -212,7 +212,7 @@ export class InputNumberComponent implements ControlValueAccessor {
     this._displayValue = isBlank(value) ? '' : value;
   }
 
-  _numberUp($event) {
+  _numberUp($event: MouseEvent) {
     $event.preventDefault();
     $event.stopPropagation();
     this._inputNumber.nativeElement.focus();
@@ -226,7 +226,7 @@ export class InputNumberComponent implements ControlValueAccessor {
     }
   }
 
-  _numberDown($event) {
+  _numberDown($event: MouseEvent) {
     $event.preventDefault();
     $event.stopPropagation();
     this._inputNumber.nativeElement.focus();
@@ -240,7 +240,7 @@ export class InputNumberComponent implements ControlValueAccessor {
     }
   }
 
-  _emitBlur($event) {
+  _emitBlur($event: FocusEvent) {
     // avoid unnecessary events
     if (this._focused && !this._mouseInside) {
       this._checkValue();
@@ -250,7 +250,7 @@ export class InputNumberComponent implements ControlValueAccessor {
     this.onTouched();
   }
 
-  _emitFocus($event) {
+  _emitFocus($event: FocusEvent) {
     // avoid unnecessary events
     if (!this._focused) {
       this._focused = true;
@@ -258,7 +258,7 @@ export class InputNumberComponent implements ControlValueAccessor {
     }
   }
 
-  _emitKeydown($event) {
+  _emitKeydown($event: KeyboardEvent) {
     if ($event.keyCode === TAB && this._focused) {
       this._focused = false;
       this.blur.emit($event);
@@ -284,7 +284,7 @@ export class InputNumberComponent implements ControlValueAccessor {
     this.displayValue = this.value;
   }
 
-  _getBoundValue(value) {
+  _getBoundValue(value: number) {
     if (value > this._max) {
       return this._max;
     } else if (value < this._min) {
@@ -294,12 +294,12 @@ export class InputNumberComponent implements ControlValueAccessor {
     }
   }
 
-  _isNumber(value) {
+  _isNumber(value: any) {
     return !isNaN(value) && isFinite(value);
   }
 
-  toPrecisionAsStep(num) {
-    if (isNaN(num) || num === '') {
+  toPrecisionAsStep(num: number) {
+    if (isNaN(num)) {
       return num;
     }
     return Number(Number(num).toFixed(this._precisionStep));

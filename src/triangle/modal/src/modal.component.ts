@@ -38,55 +38,59 @@ interface Position {
   encapsulation      : ViewEncapsulation.None,
   preserveWhitespaces: false,
   template           : `
-    <div [ngClass]="_customClass">
-      <div [ngClass]="_maskClassMap"
-           [style.zIndex]="_zIndex"></div>
-      <div tabindex="-1" role="dialog"
-           [attr.aria-labelledby]="modalId"
-           (click)="closeFromMask($event)"
-           [ngClass]="_wrapClass"
-           [style.zIndex]="_zIndex"
-           [ngStyle]="{ 'display': !_visible && !_animationStatus ? 'none' : '' }">
+      <div [ngClass]="_customClass">
+          <div [ngClass]="_maskClassMap"
+               [style.zIndex]="_zIndex"></div>
+          <div tabindex="-1" role="dialog"
+               [attr.aria-labelledby]="modalId"
+               (click)="closeFromMask($event)"
+               [ngClass]="_wrapClass"
+               [style.zIndex]="_zIndex"
+               [ngStyle]="{ 'display': !_visible && !_animationStatus ? 'none' : '' }">
 
-        <div #modal_content role="document" [ngClass]="_bodyClassMap" [ngStyle]="_bodyStyleMap">
-          <div class="tri-modal-content">
-            <ng-template [ngIf]="_closable">
-              <button aria-label="Close" class="tri-modal-close" (click)="clickCancel($event)">
-                <span class="tri-modal-close-x"></span>
-              </button>
-            </ng-template>
-            <div class="tri-modal-header" *ngIf="_title || _titleTpl">
-              <div class="tri-modal-title" [attr.id]="modalId">
-                <ng-template #defaultTitle>{{ _title }}</ng-template>
-                <ng-template [ngTemplateOutlet]="_titleTpl || defaultTitle"
-                             [ngTemplateOutletContext]="_titleTplContext"></ng-template>
+              <div #modal_content role="document" [ngClass]="_bodyClassMap"
+                   [ngStyle]="_bodyStyleMap">
+                  <div class="tri-modal-content">
+                      <ng-template [ngIf]="_closable">
+                          <button aria-label="Close" class="tri-modal-close"
+                                  (click)="clickCancel($event)">
+                              <span class="tri-modal-close-x"></span>
+                          </button>
+                      </ng-template>
+                      <div class="tri-modal-header" *ngIf="_title || _titleTpl">
+                          <div class="tri-modal-title" [attr.id]="modalId">
+                              <ng-template #defaultTitle>{{ _title }}</ng-template>
+                              <ng-template [ngTemplateOutlet]="_titleTpl || defaultTitle"
+                                           [ngTemplateOutletContext]="_titleTplContext"></ng-template>
+                          </div>
+                      </div>
+                      <div class="tri-modal-body">
+                          <ng-template #defaultContent>{{ _content }}</ng-template>
+                          <ng-template [ngTemplateOutlet]="_contentTpl || defaultContent"
+                                       [ngTemplateOutletContext]="_contentTplContext"></ng-template>
+                          <ng-template #modal_component></ng-template>
+                      </div>
+                      <div class="tri-modal-footer" *ngIf="!_footerHide">
+                          <ng-template #defaultFooter>
+                              <button triButton [ghost]="true" [size]="'large'"
+                                      [disabled]="cancelDisabled"
+                                      (click)="clickCancel($event)">
+                                  <span>{{ _cancelText }}</span>
+                              </button>
+                              <button triButton [color]="'primary'" [size]="'large'"
+                                      [disabled]="okDisabled" (click)="clickOk($event)"
+                                      [loading]="_confirmLoading">
+                                  <span>{{ _okText }}</span>
+                              </button>
+                          </ng-template>
+                          <ng-template [ngTemplateOutlet]="_footerTpl || defaultFooter"
+                                       [ngTemplateOutletContext]="_footerTplContext"></ng-template>
+                      </div>
+                  </div>
               </div>
-            </div>
-            <div class="tri-modal-body">
-              <ng-template #defaultContent>{{ _content }}</ng-template>
-              <ng-template [ngTemplateOutlet]="_contentTpl || defaultContent"
-                           [ngTemplateOutletContext]="_contentTplContext"></ng-template>
-              <ng-template #modal_component></ng-template>
-            </div>
-            <div class="tri-modal-footer" *ngIf="!_footerHide">
-              <ng-template #defaultFooter>
-                <button triButton [color]="'ghost'" [size]="'large'" [disabled]="cancelDisabled"
-                        (click)="clickCancel($event)">
-                  <span>{{ _cancelText }}</span>
-                </button>
-                <button triButton [color]="'primary'" [size]="'large'" [disabled]="okDisabled" (click)="clickOk($event)"
-                        [loading]="_confirmLoading">
-                  <span>{{ _okText }}</span>
-                </button>
-              </ng-template>
-              <ng-template [ngTemplateOutlet]="_footerTpl || defaultFooter"
-                           [ngTemplateOutletContext]="_footerTplContext"></ng-template>
-            </div>
+              <div tabindex="0" style="width: 0px; height: 0px; overflow: hidden;">sentinel</div>
           </div>
-        </div>
-        <div tabindex="0" style="width: 0px; height: 0px; overflow: hidden;">sentinel</div>
       </div>
-    </div>
   `,
   exportAs           : 'triModal'
 })
@@ -557,7 +561,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.visible = false;
   }
 
-  clickOk(e): void {
+  clickOk(e: MouseEvent): void {
     if (this.onOk) {
       this.onOk.emit(e);
     } else {
@@ -566,12 +570,12 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subject.next('onOk');
   }
 
-  clickCancel(e): void {
+  clickCancel(e: MouseEvent): void {
     this.onCancel.emit(e);
     this.subject.next('onCancel');
   }
 
-  assignComponentParams(instance, params) {
+  assignComponentParams(instance: any, params: any) {
     for (let [key, value] of Object.entries(params)) {
       if (isPromise(value)) {
 

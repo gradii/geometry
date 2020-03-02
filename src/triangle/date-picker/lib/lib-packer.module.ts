@@ -5,6 +5,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { TriCommonModule } from '@gradii/triangle/core';
 
 import { TriI18nModule } from '@gradii/triangle/i18n';
 import { TriTimePickerModule } from '@gradii/triangle/time-picker';
@@ -30,6 +31,7 @@ import { YearPanelComponent } from './year/year-panel.component';
     FormsModule,
 
     TriI18nModule,
+    TriCommonModule,
     TriTimePickerModule
   ],
   exports     : [

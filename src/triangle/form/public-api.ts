@@ -8,3 +8,5 @@ export * from './src/form-item-required.directive';
 export * from './src/form-label.directive';
 export * from './src/form-split.directive';
 export * from './src/form-text.directive';
+export * from './src/form-error-message.directive';
+export * from './src/form-no-feedback.directive';

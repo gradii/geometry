@@ -56,3 +56,37 @@ export * from './src/event/save-event-args.interface';
 export * from './src/event/cancel-event-args.interface';
 export * from './src/service/edit.service';
 export * from './src/utils';
+
+export { AddCommandDirective as ɵAddCommandDirective } from './src/directive/add-command.directive';
+export {
+  GroupIndicatorComponent as ɵGroupIndicatorComponent
+}from './src/grouping/group-indicator.component';
+export { GroupPanelComponent as ɵGroupPanelComponent } from './src/grouping/group-panel.component';
+export { DraggableDirective as ɵDraggableDirective } from './src/table-shared/draggable.directive';
+export { FieldAccessorPipe as ɵFieldAccessorPipe } from './src/pipe/field-accessor.pipe';
+export { TableDirective as ɵTableDirective } from './src/column-resize/table.directive';
+export { NumericFilterCellComponent as ɵNumericFilterCellComponent } from './src/filtering/filter-row/numeric-filter-cell.component';
+export { FilterHostDirective as ɵFilterHostDirective } from './src/filtering/filter-host.directive';
+export { FilterCellWrapperComponent as ɵFilterCellWrapperComponent } from './src/filtering/filter-row/filter-cell-wrapper.component';
+export { HierarchyColumnComponent as ɵHierarchyColumnComponent } from './src/columns/hierarchy-column.component';
+export { EditTemplateDirective as ɵEditTemplateDirective } from './src/directive/edit-template.directive';
+export { CellComponent as ɵCellComponent } from './src/table-body/cell.component';
+export { EditCommandDirective as ɵEditCommandDirective } from './src/directive/edit-command.directive';
+export { CancelCommandDirective as ɵCancelCommandDirective } from './src/directive/cancel-command.directive';
+export { SaveCommandDirective as ɵSaveCommandDirective } from './src/directive/save-command.directive';
+export { BooleanFilterCellComponent as ɵBooleanFilterCellComponent } from './src/filtering/filter-row/boolean-filter-cell.component';
+export {
+  FilterRowComponent as ɵFilterRowComponent
+}from './src/filtering/filter-row/filter-row.component';
+export {
+  FilterCellOperatorsComponent as ɵFilterCellOperatorsComponent
+}from './src/filtering/filter-row/filter-cell-operators.component';
+export {
+  GroupHeaderComponent as ɵGroupHeaderComponent
+}from './src/grouping/group-header.component';
+export {
+  RemoveCommandDirective as ɵRemoveCommandDirective
+}from './src/directive/remove-command.directive';
+export {
+  ColumnHandleDirective as ɵColumnHandleDirective
+}from './src/column-resize/column-handle.directive';

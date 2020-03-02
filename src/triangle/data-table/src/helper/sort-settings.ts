@@ -30,6 +30,7 @@ export const normalize: (...settings: (
   allowUnsort?: boolean;
 } & {
   mode?: 'single' | 'multiple';
-}))[]) => any = (...settings) => {
+}))[]) => any = (...settings: any[]) => {
+  //@ts-ignore
   return Object.assign.apply(Object, [DEFAULTS].concat(settings));
 };

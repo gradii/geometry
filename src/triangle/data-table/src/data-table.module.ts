@@ -62,7 +62,4 @@ import { ToolbarComponent } from './table-toolbar/toolbar.component';
   ]
 })
 export class TriDataTableModule {
-  static exports() {
-    return [];
-  }
 }

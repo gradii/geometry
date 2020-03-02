@@ -1,35 +1,41 @@
-import { NgModule } from '@angular/core';
-import {
-  GridAvatarCssTriStyler,
-  GridTileFooterCssTriStyler,
-  GridTileHeaderCssTriStyler
-} from './directive/index';
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
 
-import { GridListComponent } from './grid-list';
-import { GridTileComponent } from './grid-tile';
-import { GridTileText } from './grid-tile-text';
+import {NgModule} from '@angular/core';
+import {
+  TriGridAvatarCssTriStyler,
+  TriGridTile,
+  TriGridTileFooterCssTriStyler,
+  TriGridTileHeaderCssTriStyler,
+  TriGridTileText
+} from './grid-tile';
+import {TriGridList} from './grid-list';
+import {TriCommonModule, TriLineModule} from '@gradii/triangle/core';
+
 
 @NgModule({
-  imports     : [
-    //    TriLineModule, TriCommonModule
-  ],
-  exports     : [
-    GridListComponent,
-    GridTileComponent,
-    GridTileText,
-    //    TriLineModule,
-    //    TriCommonModule,
-    GridTileHeaderCssTriStyler,
-    GridTileFooterCssTriStyler,
-    GridAvatarCssTriStyler
+  imports: [TriLineModule, TriCommonModule],
+  exports: [
+    TriGridList,
+    TriGridTile,
+    TriGridTileText,
+    TriLineModule,
+    TriCommonModule,
+    TriGridTileHeaderCssTriStyler,
+    TriGridTileFooterCssTriStyler,
+    TriGridAvatarCssTriStyler
   ],
   declarations: [
-    GridListComponent,
-    GridTileComponent,
-    GridTileText,
-    GridTileHeaderCssTriStyler,
-    GridTileFooterCssTriStyler,
-    GridAvatarCssTriStyler
-  ]
+    TriGridList,
+    TriGridTile,
+    TriGridTileText,
+    TriGridTileHeaderCssTriStyler,
+    TriGridTileFooterCssTriStyler,
+    TriGridAvatarCssTriStyler
+  ],
 })
 export class TriGridListModule {}

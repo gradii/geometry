@@ -1,4 +1,8 @@
-import { ConnectionPositionPair } from '@angular/cdk/overlay';
+import {
+  ConnectedOverlayPositionChange,
+  ConnectionPositionPair,
+  VerticalConnectionPos
+} from '@angular/cdk/overlay';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -69,15 +73,15 @@ export type Placement =
 export class DropDownComponent implements OnInit, OnDestroy, AfterViewInit {
   hasFilterButton = false;
   _triggerWidth = 0;
-  _dropDownPosition: 'top' | 'bottom' = 'bottom';
+  _dropDownPosition: VerticalConnectionPos = 'bottom';
   _positions: ConnectionPositionPair[] = [...DEFAULT_DROPDOWN_POSITIONS];
   _subscription: Subscription;
   /**
    * Use for locating the element of dropdown menu.
    * 用于定位触发下拉菜单的元素
    */
-  @ContentChild(DropDownDirective, {static: false}) _origin;
-  @ContentChild(MenuComponent, {static: false}) _menu;
+  @ContentChild(DropDownDirective, {static: false}) _origin: DropDownDirective;
+  @ContentChild(MenuComponent, {static: false}) _menu: MenuComponent;
   /**
    * the behavior of trigger dropdown.
    * 触发下拉的行为
@@ -93,7 +97,7 @@ export class DropDownComponent implements OnInit, OnDestroy, AfterViewInit {
    * 菜单是否显示
    */
   @Input() visible = false;
-  @Output() _visibleChange = new Subject();
+  @Output() _visibleChange = new Subject<boolean>();
   /**
    * The visible change event
    * 菜单显示状态改变时调用，参数为 visible
@@ -130,13 +134,13 @@ export class DropDownComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  _onMouseEnterEvent(e) {
+  _onMouseEnterEvent(e: MouseEvent) {
     if (this.trigger === 'hover') {
       this._show();
     }
   }
 
-  _onMouseLeaveEvent(e) {
+  _onMouseLeaveEvent(e: MouseEvent) {
     if (this.trigger === 'hover') {
       this._hide();
     }
@@ -150,11 +154,11 @@ export class DropDownComponent implements OnInit, OnDestroy, AfterViewInit {
     this._visibleChange.next(true);
   }
 
-  _onPositionChange(position) {
+  _onPositionChange(position: ConnectedOverlayPositionChange) {
     this._dropDownPosition = position.connectionPair.originY;
   }
 
-  _clickDropDown($event) {
+  _clickDropDown($event: MouseEvent) {
     $event.stopPropagation();
     if (this.clickHide) {
       this._hide();
@@ -178,7 +182,7 @@ export class DropDownComponent implements OnInit, OnDestroy, AfterViewInit {
     this._changeDetector.markForCheck();
   };
 
-  _startSubscribe(observable$: Observable<boolean | {}>) {
+  _startSubscribe(observable$: Observable<boolean>) {
     this._subscription = observable$.pipe(debounceTime(300)).subscribe(this._onVisibleChange);
   }
 

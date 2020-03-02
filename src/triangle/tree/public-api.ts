@@ -30,5 +30,7 @@ export {
 } from './src/tree.events';
 
 export { TreeComponent } from './src/tree.component';
+export { TreeCommandTemplateDirective } from './src/tree-command-template.directive';
+export { TreeRenderTemplateDirective } from './src/tree-render-template.directive';
 export { TreeController } from './src/tree-controller';
 export { TriNgTreeModule } from './src/tree.module';

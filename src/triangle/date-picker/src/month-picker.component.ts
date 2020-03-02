@@ -48,7 +48,7 @@ export class MonthPickerComponent extends AbstractPickerComponent implements OnC
     }
   }
 
-  onValueChange(value: CandyDate): void {
+  onValueChange(value: CandyDate | CandyDate[]): void {
     super.onValueChange(value);
 
     this.closeOverlay();

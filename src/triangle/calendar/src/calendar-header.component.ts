@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { SizeLDSType } from '@gradii/triangle/core';
 import { I18nService as I18n } from '@gradii/triangle/i18n';
 import { setMonth } from 'date-fns';
 
@@ -36,7 +37,7 @@ export class CalendarHeaderComponent implements OnInit {
     return this.activeDate.getMonth();
   }
 
-  get size(): string {
+  get size(): SizeLDSType {
     return this.fullscreen ? 'default' : 'small';
   }
 

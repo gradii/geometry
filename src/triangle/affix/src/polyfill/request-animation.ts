@@ -43,6 +43,7 @@ export function cancelRequestAnimationFrame(id: number): any {
     (
       (window as any)[`${prefix}CancelAnimationFrame`] ||
       (window as any)[`${prefix}CancelRequestAnimationFrame`]
+    // @ts-ignore
     ).call(this, id) : clearTimeout(id);
 }
 

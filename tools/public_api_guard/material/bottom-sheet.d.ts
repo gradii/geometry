@@ -3,12 +3,15 @@ export declare const MAT_BOTTOM_SHEET_DATA: InjectionToken<any>;
 export declare const MAT_BOTTOM_SHEET_DEFAULT_OPTIONS: InjectionToken<MatBottomSheetConfig<any>>;
 
 export declare class MatBottomSheet implements OnDestroy {
-    _openedBottomSheetRef: MatBottomSheetRef<any> | null;
+    get _openedBottomSheetRef(): MatBottomSheetRef<any> | null;
+    set _openedBottomSheetRef(value: MatBottomSheetRef<any> | null);
     constructor(_overlay: Overlay, _injector: Injector, _parentBottomSheet: MatBottomSheet, _location?: Location | undefined, _defaultOptions?: MatBottomSheetConfig<any> | undefined);
     dismiss(): void;
     ngOnDestroy(): void;
-    open<T, D = any, R = any>(template: TemplateRef<T>, config?: MatBottomSheetConfig<D>): MatBottomSheetRef<T, R>;
     open<T, D = any, R = any>(component: ComponentType<T>, config?: MatBottomSheetConfig<D>): MatBottomSheetRef<T, R>;
+    open<T, D = any, R = any>(template: TemplateRef<T>, config?: MatBottomSheetConfig<D>): MatBottomSheetRef<T, R>;
+    static ɵfac: i0.ɵɵFactoryDef<MatBottomSheet>;
+    static ɵprov: i0.ɵɵInjectableDef<MatBottomSheet>;
 }
 
 export declare const matBottomSheetAnimations: {
@@ -34,6 +37,7 @@ export declare class MatBottomSheetContainer extends BasePortalOutlet implements
     _animationState: 'void' | 'visible' | 'hidden';
     _animationStateChanged: EventEmitter<AnimationEvent>;
     _portalOutlet: CdkPortalOutlet;
+    attachDomPortal: (portal: DomPortal<HTMLElement>) => void;
     bottomSheetConfig: MatBottomSheetConfig;
     constructor(_elementRef: ElementRef<HTMLElement>, _changeDetectorRef: ChangeDetectorRef, _focusTrapFactory: FocusTrapFactory, breakpointObserver: BreakpointObserver, document: any,
     bottomSheetConfig: MatBottomSheetConfig);
@@ -44,9 +48,13 @@ export declare class MatBottomSheetContainer extends BasePortalOutlet implements
     enter(): void;
     exit(): void;
     ngOnDestroy(): void;
+    static ɵcmp: i0.ɵɵComponentDefWithMeta<MatBottomSheetContainer, "mat-bottom-sheet-container", never, {}, {}, never>;
+    static ɵfac: i0.ɵɵFactoryDef<MatBottomSheetContainer>;
 }
 
 export declare class MatBottomSheetModule {
+    static ɵinj: i0.ɵɵInjectorDef<MatBottomSheetModule>;
+    static ɵmod: i0.ɵɵNgModuleDefWithMeta<MatBottomSheetModule, [typeof i1.MatBottomSheetContainer], [typeof i2.OverlayModule, typeof i3.MatCommonModule, typeof i4.PortalModule], [typeof i1.MatBottomSheetContainer, typeof i3.MatCommonModule]>;
 }
 
 export declare class MatBottomSheetRef<T = any, R = any> {
