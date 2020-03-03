@@ -61,7 +61,7 @@ export class NumericFilterMenuComponent extends BaseFilterCellComponent {
   @Input() max: number;
   @Input() spinners: boolean;
   @Input() format: string;
-  @Input() decimals: string;
+  @Input() decimals: number;
   @Input() step: number;
   @Input() extra: boolean = true;
   @Input() filterService: FilterService;
@@ -113,7 +113,7 @@ export class NumericFilterMenuComponent extends BaseFilterCellComponent {
     this.filter.logic = value;
   }
 
-  private insertDefaultFilter(index, filter) {
+  private insertDefaultFilter(index: number, filter: any) {
     this.filter = this.filter || {filters: [], logic: 'and'};
     this.filter.filters[index] = filter;
     return filter;

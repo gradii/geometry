@@ -34,7 +34,7 @@ import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/co
 export class FilterCellOperatorsComponent {
   @Input()
   operators: Array<{
-    text: string;
+    label: string;
     value: string;
   }> = [];
 

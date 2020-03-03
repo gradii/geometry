@@ -15,7 +15,7 @@ import {
   Optional,
   Output,
   QueryList,
-  Renderer2,
+  Renderer2, SimpleChanges,
   ViewChild
 } from '@angular/core';
 import { GroupDescriptor } from '@gradii/triangle/data-query';
@@ -41,14 +41,15 @@ import { ScrollSyncService } from './service/scroll-sync.service';
 import { SuspendService } from './service/suspend.service';
 import { DetailTemplateDirective } from './table-shared/detail-template.directive';
 import { isChanged, isUniversal } from './utils';
+import { DataCollection, SelectableSettings } from '@gradii/triangle/data-table';
 
 export const SCROLLER_FACTORY_TOKEN = new InjectionToken('grid-scroll-service-factory');
 
-export function DEFAULT_SCROLLER_FACTORY(observable) {
+export function DEFAULT_SCROLLER_FACTORY(observable: any) {
   return new ScrollerService(observable);
 }
 
-const wheelDeltaY = e => {
+const wheelDeltaY = (e: any) => {
   const deltaY = e.wheelDeltaY;
   if (e.wheelDelta && (deltaY === undefined || deltaY)) {
     return e.wheelDelta;
@@ -146,8 +147,8 @@ const firstChild = el => (el ? el.nativeElement.children[0] : null);
 })
 export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   // readonly hostClass: boolean;
-  @Input() data: any[];
-  @Input() rowData: Array<Row | GroupRow>;
+  @Input() data: any[] | DataCollection<any>;
+  @Input() rowData: Array<Row | GroupRow> | DataCollection<any>;
   @Input() groups: GroupDescriptor[];
   @Input() total: number;
   @Input() rowHeight: number;
@@ -157,7 +158,7 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
   @Input() columns: ColumnsContainer;
   @Input() detailTemplate: DetailTemplateDirective;
   @Input() noRecordsTemplate: NoRecordsTemplateDirective;
-  @Input() selectable: boolean;
+  @Input() selectable: boolean | SelectableSettings;
   @Input() groupable: GroupableSettings | boolean;
   @Input() rowClass: RowClassFn;
   @Output() pageChange: EventEmitter<Action>;
@@ -229,7 +230,8 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
   get nonLockedWidth() {
     const nonLockedLeafColumns = this.nonLockedLeafColumns;
     if (this.lockedLeafColumns.length) {
-      return expandColumns(nonLockedLeafColumns.toArray()).reduce((prev, curr) => prev + (curr.width || 0), 0);
+      return expandColumns(nonLockedLeafColumns.toArray())
+        .reduce((prev, curr) => prev + (curr.width || 0), 0);
     }
     // if (this.rtl) {
     //   return expandColumns(nonLockedLeafColumns.toArray()).reduce((prev, curr) => prev + curr.width, 0) || '100%';
@@ -246,7 +248,7 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
     this.handleRowSync();
   }
 
-  ngOnChanges(changes) {
+  ngOnChanges(changes: SimpleChanges) {
     if (isChanged('total', changes)) {
       this.init();
     }
@@ -275,7 +277,7 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
     }
   }
 
-  detailExpand({index, expand}) {
+  detailExpand({index, expand}: any) {
     if (expand) {
       this.rowHeightService.expandDetail(index);
     } else {
@@ -319,19 +321,21 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
     this.subscriptions.add(
       observable
         .pipe(filter(x => x instanceof PageAction))
-        .subscribe(x => this.ngZone.run(() => this.pageChange.emit(x)))
-        .add(observable.pipe(filter(x => x instanceof ScrollAction)).subscribe(this.scroll.bind(this)))
+        .subscribe((x: any) => this.ngZone.run(() => this.pageChange.emit(x)))
+        .add(
+          observable.pipe(filter(x => x instanceof ScrollAction))
+            .subscribe(this.scroll.bind(this))
+        )
     );
   }
 
-  scroll(_a) {
-    const offset = _a.offset;
+  scroll({offset: offset}: any) {
     [firstChild(this.container), firstChild(this.lockedContainer)]
       .filter(isPresent)
       .forEach(translateY(this.renderer, offset));
   }
 
-  onContainerScroll({scrollTop}) {
+  onContainerScroll({scrollTop}: any) {
     if (this.lockedContainer) {
       this.lockedContainer.nativeElement.scrollTop = scrollTop;
     }
@@ -342,7 +346,9 @@ export class ListComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
       this.subscriptions.add(
         this.changeNotification.changes
           .pipe(
-            merge(this.groupsService.changes.pipe(switchMap(() => this.ngZone.onStable.pageSize(1)))),
+            merge(this.groupsService.changes.pipe(
+              switchMap(() => this.ngZone.onStable.pageSize(1))
+            )),
             filter(() => isPresent(this.lockedContainer))
           )
           .subscribe(() => this.syncRowsHeight())

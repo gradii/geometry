@@ -64,8 +64,9 @@ const indicatorRules = or(
       <div
         class="tri-indicator-container"
         [context]="{
-                    lastTarget: true
-                }"
+            type: 'groupIndicator',
+            lastTarget: true
+        }"
         triDropTarget>
         {{ text }}
       </div>
@@ -73,8 +74,9 @@ const indicatorRules = or(
     <div *ngFor="let group of groups"
          class="tri-indicator-container"
          [context]="{
-                field: group.field
-            }"
+            type: 'columnGroup',
+            field: group.field
+         }"
          triDropTarget>
       <div
         [triDraggableColumn]="true"
@@ -93,6 +95,7 @@ const indicatorRules = or(
     <div class="tri-indicator-container"
          *ngIf="groups.length !== 0"
          [context]="{
+                type: 'groupIndicator',
                 lastTarget: true
             }"
          triDropTarget>&nbsp;
@@ -114,7 +117,8 @@ export class GroupPanelComponent implements OnDestroy, OnInit {
     public groupInfoService: GroupInfoService,
     private localization: I18nService,
     private cd: ChangeDetectorRef
-  ) { }
+  ) {
+  }
 
   @HostBinding('class.tri-grouping-header')
   @HostBinding('class.tri-grouping-header-flex')

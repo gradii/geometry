@@ -17,7 +17,7 @@ import { FilterService } from '../filter.service';
           <tri-dropdown>
               <ul tri-menu>
                   <li tri-menu-item
-                      *ngFor="let item of data; let valueField = valueField; ">{{item[valueField]}}</li>
+                      *ngFor="let item of data;">{{item[valueField]}}</li>
               </ul>
           </tri-dropdown>
       </tri-data-table-filter-wrapper-cell>

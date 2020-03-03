@@ -1,6 +1,13 @@
-import {ConnectionPositionPair} from '@angular/cdk/overlay';
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
 
-export const POSITION_MAP                 = {
+import { ConnectedPosition, ConnectionPositionPair } from '@angular/cdk/overlay';
+
+export const POSITION_MAP: { [key: string]: ConnectedPosition } = {
   top         : {
     originX : 'center',
     originY : 'top',
@@ -86,13 +93,13 @@ export const POSITION_MAP                 = {
     overlayY: 'bottom'
   }
 };
-export const DEFAULT_4_POSITIONS          = _objectValues([
-                                                            POSITION_MAP['top'],
-                                                            POSITION_MAP['right'],
-                                                            POSITION_MAP['bottom'],
-                                                            POSITION_MAP['left']
-                                                          ]);
-export const DEFAULT_DROPDOWN_POSITIONS   = _objectValues(
+export const DEFAULT_4_POSITIONS = _objectValues([
+  POSITION_MAP['top'],
+  POSITION_MAP['right'],
+  POSITION_MAP['bottom'],
+  POSITION_MAP['left']
+]);
+export const DEFAULT_DROPDOWN_POSITIONS = _objectValues(
   [POSITION_MAP['bottomLeft'], POSITION_MAP['topLeft'],
    POSITION_MAP['bottomRight'], POSITION_MAP['topRight']]);
 export const DEFAULT_DATEPICKER_POSITIONS = [
@@ -111,7 +118,7 @@ export const DEFAULT_DATEPICKER_POSITIONS = [
 ] as ConnectionPositionPair[];
 
 function arrayMap(array: any[], iteratee: Function) {
-  let index    = -1;
+  let index = -1;
   const length = array == null ? 0 : array.length,
         result = Array(length);
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, QueryList, SimpleChanges } from '@angular/core';
 import { GroupDescriptor } from '@gradii/triangle/data-query';
 import { isPresent } from '@gradii/triangle/util';
 import {
@@ -20,6 +20,7 @@ import { DetailsService } from '../service/details.service';
 import { EditService } from '../service/edit.service';
 import { DetailTemplateDirective } from '../table-shared/detail-template.directive';
 import { isChanged } from '../utils';
+import { DataCollection } from '@gradii/triangle/data-table';
 
 @Component({
   selector: '[tri-grid-table-body], [triGridTableBody]',
@@ -55,7 +56,8 @@ import { isChanged } from '../utils';
                         $implicit: newDataItem | valueOf: column.field: column.format
                         }">
           </ng-template>
-          <ng-template [ngIf]="isBoundColumn(column)">{{newDataItem | valueOf: column.field: column.format}}
+          <ng-template
+            [ngIf]="isBoundColumn(column)">{{newDataItem | valueOf: column.field: column.format}}
           </ng-template>
 
         </td>
@@ -68,7 +70,7 @@ import { isChanged } from '../utils';
         <ng-template [ngTemplateOutlet]="noRecordsTemplate?.templateRef">
         </ng-template>
         <!--<ng-template [ngIf]="!noRecordsTemplate?.templateRef">-->
-          <!--{{noRecordsText}}-->
+        <!--{{noRecordsText}}-->
         <!--</ng-template>-->
       </td>
     </tr>
@@ -84,7 +86,7 @@ import { isChanged } from '../utils';
           [columns]="columns"
           [groups]="groups"
           [rowItem]="rowItem"
-          [hasDetails]="detailTemplate?.templateRef"
+          [hasDetails]="!!detailTemplate?.templateRef"
           [skipGroupDecoration]="skipGroupDecoration">
       </tr>
 
@@ -142,7 +144,8 @@ import { isChanged } from '../utils';
           </ng-template>
 
           <ng-template [ngIf]="isHierarchyColumn(column)">
-            <span [style.paddingLeft.px]="isHierarchyColumn(column)?rowItem.level*column.spanLevel:null">
+            <span
+              [style.paddingLeft.px]="isHierarchyColumn(column)?rowItem.level*column.spanLevel:null">
               <i *ngIf="rowItem.hasChildren"
                  class="anticon"
                  style="cursor: pointer;user-select: none"
@@ -154,7 +157,8 @@ import { isChanged } from '../utils';
             </span>
           </ng-template>
 
-          <ng-template [ngIf]="isBoundColumn(column)">{{rowItem.dataItem | valueOf: column.field: column.format}}</ng-template>
+          <ng-template
+            [ngIf]="isBoundColumn(column)">{{rowItem.dataItem | valueOf: column.field: column.format}}</ng-template>
         </td>
       </tr>
 
@@ -193,10 +197,10 @@ import { isChanged } from '../utils';
           <ng-template
             [ngTemplateOutlet]="column.groupFooterTemplateRef"
             [ngTemplateOutletContext]="{
-                        group: rowItem.dataItem,
-                        field: column.field,
-                        column: column,
-                        $implicit: rowItem.dataItem?.aggregates
+                group: rowItem.dataItem,
+                field: column.field,
+                column: column,
+                $implicit: rowItem.dataItem?.aggregates
             }">
           </ng-template>
         </td>
@@ -208,12 +212,12 @@ export class TableBodyComponent implements OnChanges {
   detailsService: DetailsService;
   groupsService: GroupsService;
   editService: EditService;
-  @Input() columns: Array<any | ColumnBase>;
+  @Input() columns: Array<any | ColumnBase> | QueryList<any | ColumnBase>;
   @Input() groups: GroupDescriptor[];
   @Input() detailTemplate: DetailTemplateDirective;
   @Input() noRecordsTemplate: NoRecordsTemplateDirective;
-  @Input() data: Array<GroupItem | Item | GroupFooterItem>;
-  @Input() rowData: Array<Row | GroupRow>;
+  @Input() data: Array<GroupItem | Item | GroupFooterItem | any> | DataCollection<any>;
+  @Input() rowData: Array<Row | GroupRow | any> | DataCollection<any>;
   @Input() skip: number;
   @Input() selectable: boolean | SelectableSettings;
   @Input() noRecordsText: string;
@@ -246,41 +250,41 @@ export class TableBodyComponent implements OnChanges {
   }
 
   get columnsSpan() {
-    return columnsSpan(this.columns);
+    return columnsSpan(this.columns as Array<any>);
   }
 
   get colSpan() {
     return this.columnsSpan + this.groups.length + (isPresent(this.detailTemplate) ? 1 : 0);
   }
 
-  get footerColumns() {
+  get footerColumns(): ColumnBase[] | any[] {
     return columnsToRender(this.columns);
   }
 
-  toggleRow(index, dataItem) {
+  toggleRow(index: number, dataItem: any) {
     this.detailsService.toggleRow(index, dataItem);
     return false;
   }
 
-  trackByFn(_, item) {
+  trackByFn(_: any, item: any) {
     return item.data ? item.data : item;
   }
 
-  isDetailExpanded(index) {
+  isDetailExpanded(index: number) {
     return this.detailsService.isExpanded(index);
   }
 
-  detailButtonStyles(index) {
+  detailButtonStyles(index: number) {
     const expanded = this.isDetailExpanded(index);
     return {'anticon-minus-square': expanded, 'anticon-plus-square': !expanded};
   }
 
-  isGroup(item) {
+  isGroup(item: any) {
     // return item.type === 'group';
     return item instanceof GroupRow;
   }
 
-  isDataItem(item) {
+  isDataItem(item: any) {
     // return !this.isGroup(item) && !this.isFooter(item);
     return item instanceof Row && !(item instanceof GroupRow);
   }
@@ -289,19 +293,19 @@ export class TableBodyComponent implements OnChanges {
     return item.isVisible;
   }
 
-  isFooter(item) {
+  isFooter(item: any) {
     return item.type === 'footer';
   }
 
-  isInExpandedGroup(item) {
+  isInExpandedGroup(item: any) {
     return this.groupsService.isInExpandedGroup(item.groupIndex, false);
   }
 
-  isParentGroupExpanded(item) {
+  isParentGroupExpanded(item: any) {
     return this.groupsService.isInExpandedGroup(item.index /*|| item.groupIndex*/);
   }
 
-  isOdd(item) {
+  isOdd(item: any) {
     return item.index % 2 === 0;
   }
 
@@ -309,29 +313,29 @@ export class TableBodyComponent implements OnChanges {
     item.isCollapsed = !item.isCollapsed;
   }
 
-  ngOnChanges(changes) {
+  ngOnChanges(changes: SimpleChanges) {
     if (isChanged('columns', changes, false)) {
       this.changeNotification.notify();
     }
   }
 
-  isSpanColumn(column) {
+  isSpanColumn(column: any) {
     return isSpanColumn(column) && !column.templateRef;
   }
 
-  childColumns(column) {
+  childColumns(column: any): Array<ColumnBase | any> {
     return columnsToRender([column]);
   }
 
-  isBoundColumn(column) {
+  isBoundColumn(column: any) {
     return column.field && !column.templateRef;
   }
 
-  isCheckboxColumn(column) {
+  isCheckboxColumn(column: any) {
     return isCheckboxColumn(column) && !column.templateRef;
   }
 
-  isHierarchyColumn(column) {
+  isHierarchyColumn(column: any) {
     return isHierarchyColumn(column) && !column.templateRef;
   }
 

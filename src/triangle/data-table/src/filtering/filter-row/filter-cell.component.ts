@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CompositeFilterDescriptor } from '@gradii/triangle/data-query';
 import { isNullOrEmptyString, isPresent } from '@gradii/triangle/util';
-import { ColumnComponent } from '../../columns/column.component';
+import { ColumnBase } from '@gradii/triangle/data-table';
 
 @Component({
   selector           : '[triGridFilterCell]',
@@ -24,7 +24,7 @@ import { ColumnComponent } from '../../columns/column.component';
   `
 })
 export class FilterCellComponent {
-  @Input() column: ColumnComponent;
+  @Input() column: ColumnBase | any;
   @Input() filter: CompositeFilterDescriptor;
 
   constructor() {

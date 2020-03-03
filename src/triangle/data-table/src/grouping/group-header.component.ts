@@ -1,10 +1,10 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, HostBinding, Input, QueryList } from '@angular/core';
 import { GroupDescriptor } from '@gradii/triangle/data-query';
-import { ColumnComponent } from '../columns/column.component';
 import { columnsSpan } from '../helper/column-common';
 import { GroupRow } from '../row-column/group-row';
 import { GroupInfoService } from './group-info.service';
 import { GroupsService } from './groups.service';
+import { ColumnBase } from '@gradii/triangle/data-table';
 
 @Component({
   selector           : '[triGridGroupHeader]',
@@ -45,7 +45,7 @@ export class GroupHeaderComponent {
   @Input() rowItem: GroupRow;
   @Input() skipGroupDecoration: boolean;
   @Input() hasDetails: boolean;
-  @Input() columns: Array<ColumnComponent>;
+  @Input() columns: Array<ColumnBase | any> | QueryList<any>;
   @Input() groups: Array<GroupDescriptor>;
 
   constructor(groupsService: GroupsService, groupInfoService: GroupInfoService) {

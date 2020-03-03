@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, HostBinding, Input, QueryList } from '@angular/core';
 import { GroupDescriptor } from '@gradii/triangle/data-query';
 import { ColumnBase } from '../columns/column-base';
 import { ColumnComponent } from '../columns/column.component';
@@ -36,7 +36,7 @@ import { DetailTemplateDirective } from '../table-shared/detail-template.directi
   `
 })
 export class FooterComponent {
-  @Input() columns: ColumnComponent[];
+  @Input() columns: ColumnComponent[] | QueryList<ColumnBase>;
   @Input() groups: GroupDescriptor[];
   @Input() detailTemplate: DetailTemplateDirective;
   @Input() scrollable: boolean;

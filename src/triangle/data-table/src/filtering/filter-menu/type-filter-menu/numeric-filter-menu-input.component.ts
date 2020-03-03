@@ -28,7 +28,7 @@ import { FilterService } from '../../filter.service';
 })
 export class NumericFilterMenuInputComponent {
   @Input() operators: Array<{
-    text: string;
+    label: string;
     value: string;
   }> = [];
   @Input() column: ColumnComponent;

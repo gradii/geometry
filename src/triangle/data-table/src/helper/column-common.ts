@@ -1,10 +1,18 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { orderBy } from '@gradii/triangle/data-query';
 import { isNullOrEmptyString, isTruthy } from '@gradii/triangle/util';
 import { ColumnBase } from '../columns/column-base';
 import { isSpanColumnComponent } from '../columns/span-column.component';
+import { QueryList } from '@angular/core';
+import { ColumnComponent } from '@gradii/triangle/data-table';
 
-
-export const expandColumns = (columns: Array<ColumnBase>): Array<ColumnBase> => (
+export const expandColumns = (columns: QueryList<ColumnComponent | ColumnBase> | Array<ColumnComponent | ColumnBase>): Array<ColumnBase> => (
   columns.reduce((acc, column) => acc.concat(
     isSpanColumnComponent(column) ? column.childColumns.toArray() : [column]
   ), []) // tslint:disable-line:align
@@ -20,11 +28,11 @@ export const expandColumnsWithSpan = (columns: Array<ColumnBase>): Array<ColumnB
 );
 
 
-export const columnsToRender = (columns: Array<ColumnBase>): Array<ColumnBase> => (
+export const columnsToRender = (columns: QueryList<ColumnComponent | ColumnBase> | Array<ColumnComponent | ColumnBase>): Array<ColumnBase> => (
   expandColumns(columns).filter(x => x.isVisible)
 );
 
-const sumProp = (prop: string) => (array: Array<any>): number =>
+const sumProp = (prop: string) => (array: Array<any> | QueryList<any>): number =>
   (array || []).reduce((prev, curr) => prev + (curr[prop] || 0), 0);
 
 

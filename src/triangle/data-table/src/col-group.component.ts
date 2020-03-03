@@ -1,4 +1,17 @@
-import { Component, Input } from '@angular/core';
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  QueryList,
+  ViewEncapsulation
+} from '@angular/core';
 import { GroupDescriptor } from '@gradii/triangle/data-query';
 import { ColumnBase } from './columns/column-base';
 import { ColumnComponent } from './columns/column.component';
@@ -7,19 +20,20 @@ import { DetailTemplateDirective } from './table-shared/detail-template.directiv
 
 @Component({
   selector: '[triGridColGroup], [tri-grid-col-group]',
+  encapsulation: ViewEncapsulation.None,
   template: `
-              <ng-template [ngIf]="true">
-                <col [class.tri-group-col]="true" *ngFor="let g of groups"/>
-                <col [class.tri-hierarchy-col]="true" *ngIf="detailTemplate?.templateRef"/>
-                <col *ngFor="let column of columnsToRender" 
-                     [style.width.px]="column.width" 
-                     [style.minWidth.px]="column.minWidth" 
-                     [style.maxWidth.px]="column.maxWidth"/>
-              </ng-template>
-            `
+    <ng-template [ngIf]="true">
+      <col [class.tri-group-col]="true" *ngFor="let g of groups"/>
+      <col [class.tri-hierarchy-col]="true" *ngIf="detailTemplate?.templateRef"/>
+      <col *ngFor="let column of columnsToRender"
+           [style.width.px]="column.width"
+           [style.minWidth.px]="column.minWidth"
+           [style.maxWidth.px]="column.maxWidth"/>
+    </ng-template>
+  `
 })
 export class ColGroupComponent {
-  @Input() columns: ColumnComponent[];
+  @Input() columns: QueryList<ColumnComponent | ColumnBase> | Array<ColumnComponent | ColumnBase>;
   @Input() groups: GroupDescriptor[];
   @Input() detailTemplate: DetailTemplateDirective;
 

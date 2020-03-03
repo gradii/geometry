@@ -35,14 +35,14 @@ import { ToolbarComponent } from './table-toolbar/toolbar.component';
     // ToolbarComponent,
     SelectionDirective,
     // CustomMessagesComponent,
-    GroupModule.exports(),
-    SharedModule.exports(),
+    GroupModule,
+    SharedModule,
     BodyModule,
-    HeaderModule.exports(),
-    FooterModule.exports(),
-    TriPaginationModule.exports(),
-    RowFilterModule.exports(),
-    FilterSimpleModule.exports()
+    HeaderModule,
+    FooterModule,
+    TriPaginationModule,
+    RowFilterModule,
+    FilterSimpleModule
   ],
   imports     : [
     CommonModule,

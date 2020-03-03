@@ -8,7 +8,7 @@ import {
   Input,
   NgZone,
   OnDestroy,
-  OnInit
+  OnInit, QueryList
 } from '@angular/core';
 import { I18nService } from '@gradii/triangle/i18n';
 import { isBlank, isPresent, isTruthy } from '@gradii/triangle/util';
@@ -117,7 +117,7 @@ const indexOf = (target, list) => {
 })
 export class ColumnHandleDirective implements OnInit, OnDestroy {
 
-  @Input() public columns: Array<ColumnBase> = [];
+  @Input() public columns: Array<ColumnBase|any>| QueryList<any> = [];
 
   @Input() public column: ColumnBase;
   private originalWidth: number;

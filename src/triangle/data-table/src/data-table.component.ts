@@ -105,71 +105,71 @@ export type fieldFilterMapFn = (fieldKey: string) => 'text' | 'numeric' | 'boole
 
 /**
  *
- <ng-container triGridLocalizedMessages
- i18n-groupPanelEmpty="nz.grid.groupPanelEmpty|The label visible in the Grid group panel when it is empty"
- groupPanelEmpty="Drag a column header and drop it here to group by that column"
- i18n-noRecords="nz.grid.noRecords|The label visible in the Grid when there are no records"
- noRecords="No records available."
- i18n-pagerFirstPage="nz.grid.pagerFirstPage|The label for the first page button in Grid pager"
- pagerFirstPage="Go to the first page"
- i18n-pagerPreviousPage="nz.grid.pagerPreviousPage|The label for the previous page button in Grid pager"
- pagerPreviousPage="Go to the previous page"
- i18n-pagerNextPage="nz.grid.pagerNextPage|The label for the next page button in Grid pager"
- pagerNextPage="Go to the next page"
- i18n-pagerLastPage="nz.grid.pagerLastPage|The label for the last page button in Grid pager"
- pagerLastPage="Go to the last page"
- i18n-pagerPage="nz.grid.pagerPage|The label before the current page number in the Grid pager"
- pagerPage="Page"
- i18n-pagerOf="nz.grid.pagerOf|The label before the total pages number in the Grid pager"
- pagerOf="of"
- i18n-pagerItems="nz.grid.pagerItems|The label after the total pages number in the Grid pager"
- pagerItems="items"
- i18n-pagerItemsPerPage="nz.grid.pagerItemsPerPage|The label for the page size chooser in the Grid pager"
- pagerItemsPerPage="items per page"
- i18n-filterEqOperator="nz.grid.filterEqOperator|The text of the equal filter operator"
- filterEqOperator="Is equal to"
- i18n-filterNotEqOperator="nz.grid.filterNotEqOperator|The text of the not equal filter operator"
- filterNotEqOperator="Is not equal to"
- i18n-filterIsNullOperator="nz.grid.filterIsNullOperator|The text of the is null filter operator"
- filterIsNullOperator="Is null"
- i18n-filterIsNotNullOperator="nz.grid.filterIsNotNullOperator|The text of the is not null filter operator"
- filterIsNotNullOperator="Is not null"
- i18n-filterIsEmptyOperator="nz.grid.filterIsEmptyOperator|The text of the is empty filter operator"
- filterIsEmptyOperator="Is empty"
- i18n-filterIsNotEmptyOperator="nz.grid.filterIsNotEmptyOperator|The text of the is not empty filter operator"
- filterIsNotEmptyOperator="Is not empty"
- i18n-filterStartsWithOperator="nz.grid.filterStartsWithOperator|The text of the starts with filter operator"
- filterStartsWithOperator="Starts with"
- i18n-filterContainsOperator="nz.grid.filterContainsOperator|The text of the contains filter operator"
- filterContainsOperator="Contains"
- i18n-filterNotContainsOperator="nz.grid.filterNotContainsOperator|The text of the does not contain filter operator"
- filterNotContainsOperator="Does not contain"
- i18n-filterEndsWithOperator="nz.grid.filterEndsWithOperator|The text of the ends with filter operator"
- filterEndsWithOperator="Ends with"
- i18n-filterGteOperator="nz.grid.filterGteOperator|The text of the greater than or equal filter operator"
- filterGteOperator="Is greater than or equal to"
- i18n-filterGtOperator="nz.grid.filterGtOperator|The text of the greater than filter operator"
- filterGtOperator="Is greater than"
- i18n-filterLteOperator="nz.grid.filterLteOperator|The text of the less than or equal filter operator"
- filterLteOperator="Is less than or equal to"
- i18n-filterLtOperator="nz.grid.filterLtOperator|The text of the less than filter operator"
- filterLtOperator="Is less than"
- i18n-filterIsTrue="nz.grid.filterIsTrue|The text of the IsTrue boolean filter option"
- filterIsTrue="Is True"
- i18n-filterIsFalse="nz.grid.filterIsFalse|The text of the IsFalse boolean filter option"
- filterIsFalse="Is False"
- i18n-filterBooleanAll="nz.grid.filterBooleanAll|The text of the (All) boolean filter option"
- filterBooleanAll="(All)"
- i18n-filterAfterOrEqualOperator="nz.grid.filterAfterOrEqualOperator|The text of the after or equal date filter operator"
- filterAfterOrEqualOperator="Is after or equal to"
- i18n-filterAfterOperator="nz.grid.filterAfterOperator|The text of the after date filter operator"
- filterAfterOperator="Is after"
- i18n-filterBeforeOperator="nz.grid.filterBeforeOperator|The text of the before date filter operator"
- filterBeforeOperator="Is before"
- i18n-filterBeforeOrEqualOperator="nz.grid.filterBeforeOrEqualOperator|The text of the before or equal date filter operator"
- filterBeforeOrEqualOperator="Is before or equal to"
- >
- </ng-container>
+ * <ng-container triGridLocalizedMessages
+ * i18n-groupPanelEmpty="nz.grid.groupPanelEmpty|The label visible in the Grid group panel when it is empty"
+ * groupPanelEmpty="Drag a column header and drop it here to group by that column"
+ * i18n-noRecords="nz.grid.noRecords|The label visible in the Grid when there are no records"
+ * noRecords="No records available."
+ * i18n-pagerFirstPage="nz.grid.pagerFirstPage|The label for the first page button in Grid pager"
+ * pagerFirstPage="Go to the first page"
+ * i18n-pagerPreviousPage="nz.grid.pagerPreviousPage|The label for the previous page button in Grid pager"
+ * pagerPreviousPage="Go to the previous page"
+ * i18n-pagerNextPage="nz.grid.pagerNextPage|The label for the next page button in Grid pager"
+ * pagerNextPage="Go to the next page"
+ * i18n-pagerLastPage="nz.grid.pagerLastPage|The label for the last page button in Grid pager"
+ * pagerLastPage="Go to the last page"
+ * i18n-pagerPage="nz.grid.pagerPage|The label before the current page number in the Grid pager"
+ * pagerPage="Page"
+ * i18n-pagerOf="nz.grid.pagerOf|The label before the total pages number in the Grid pager"
+ * pagerOf="of"
+ * i18n-pagerItems="nz.grid.pagerItems|The label after the total pages number in the Grid pager"
+ * pagerItems="items"
+ * i18n-pagerItemsPerPage="nz.grid.pagerItemsPerPage|The label for the page size chooser in the Grid pager"
+ * pagerItemsPerPage="items per page"
+ * i18n-filterEqOperator="nz.grid.filterEqOperator|The text of the equal filter operator"
+ * filterEqOperator="Is equal to"
+ * i18n-filterNotEqOperator="nz.grid.filterNotEqOperator|The text of the not equal filter operator"
+ * filterNotEqOperator="Is not equal to"
+ * i18n-filterIsNullOperator="nz.grid.filterIsNullOperator|The text of the is null filter operator"
+ * filterIsNullOperator="Is null"
+ * i18n-filterIsNotNullOperator="nz.grid.filterIsNotNullOperator|The text of the is not null filter operator"
+ * filterIsNotNullOperator="Is not null"
+ * i18n-filterIsEmptyOperator="nz.grid.filterIsEmptyOperator|The text of the is empty filter operator"
+ * filterIsEmptyOperator="Is empty"
+ * i18n-filterIsNotEmptyOperator="nz.grid.filterIsNotEmptyOperator|The text of the is not empty filter operator"
+ * filterIsNotEmptyOperator="Is not empty"
+ * i18n-filterStartsWithOperator="nz.grid.filterStartsWithOperator|The text of the starts with filter operator"
+ * filterStartsWithOperator="Starts with"
+ * i18n-filterContainsOperator="nz.grid.filterContainsOperator|The text of the contains filter operator"
+ * filterContainsOperator="Contains"
+ * i18n-filterNotContainsOperator="nz.grid.filterNotContainsOperator|The text of the does not contain filter operator"
+ * filterNotContainsOperator="Does not contain"
+ * i18n-filterEndsWithOperator="nz.grid.filterEndsWithOperator|The text of the ends with filter operator"
+ * filterEndsWithOperator="Ends with"
+ * i18n-filterGteOperator="nz.grid.filterGteOperator|The text of the greater than or equal filter operator"
+ * filterGteOperator="Is greater than or equal to"
+ * i18n-filterGtOperator="nz.grid.filterGtOperator|The text of the greater than filter operator"
+ * filterGtOperator="Is greater than"
+ * i18n-filterLteOperator="nz.grid.filterLteOperator|The text of the less than or equal filter operator"
+ * filterLteOperator="Is less than or equal to"
+ * i18n-filterLtOperator="nz.grid.filterLtOperator|The text of the less than filter operator"
+ * filterLtOperator="Is less than"
+ * i18n-filterIsTrue="nz.grid.filterIsTrue|The text of the IsTrue boolean filter option"
+ * filterIsTrue="Is True"
+ * i18n-filterIsFalse="nz.grid.filterIsFalse|The text of the IsFalse boolean filter option"
+ * filterIsFalse="Is False"
+ * i18n-filterBooleanAll="nz.grid.filterBooleanAll|The text of the (All) boolean filter option"
+ * filterBooleanAll="(All)"
+ * i18n-filterAfterOrEqualOperator="nz.grid.filterAfterOrEqualOperator|The text of the after or equal date filter operator"
+ * filterAfterOrEqualOperator="Is after or equal to"
+ * i18n-filterAfterOperator="nz.grid.filterAfterOperator|The text of the after date filter operator"
+ * filterAfterOperator="Is after"
+ * i18n-filterBeforeOperator="nz.grid.filterBeforeOperator|The text of the before date filter operator"
+ * filterBeforeOperator="Is before"
+ * i18n-filterBeforeOrEqualOperator="nz.grid.filterBeforeOrEqualOperator|The text of the before or equal date filter operator"
+ * filterBeforeOrEqualOperator="Is before or equal to"
+ * >
+ * </ng-container>
  */
 @Component({
   selector           : 'tri-data-table',
@@ -206,194 +206,193 @@ export type fieldFilterMapFn = (fieldKey: string) => 'text' | 'numeric' | 'boole
     '[style.height.px]'             : 'height'
   },
   template           : `
-      <tri-data-table-toolbar *ngIf="showTopToolbar"></tri-data-table-toolbar>
-      <div class="tri-data-table tri-widget tri-table-large"
-           [class.tri-data-table-lockedcolumns]="lockedLeafColumns.length > 0"
-           [class.tri-data-table-virtual]="isVirtual"
-      >
-          <tri-data-table-group-panel
-                  class="tri-table-title"
-                  *ngIf="showGroupPanel"
-                  [text]="_groupable?.emptyText"
-                  [groups]="group"
-                  (change)="groupChange.emit($event)">
-          </tri-data-table-group-panel>
-          <ng-template [ngIf]="isScrollable">
-              <div class="tri-data-table-header tri-data-table-thead"
-                   [style.padding]="headerPadding">
-                  <div class="tri-data-table-header tri-data-table-header-locked" #lockedHeader
-                       *ngIf="isLocked"
-                       [style.width.px]="lockedWidth">
-                      <table>
-                          <colgroup triGridColGroup
-                                    [columns]="lockedLeafColumns"
-                                    [groups]="group"
-                                    [detailTemplate]="detailTemplate">
-                          </colgroup>
-                          <thead triGridHeader
-                                 [scrollable]="true"
-                                 [resizable]="resizable"
-                                 [columns]="lockedColumns"
-                                 [totalColumnLevels]="totalColumnLevels"
-                                 [sort]="sort"
-                                 [groups]="group"
-                                 [filter]="filter"
-                                 [filterable]="filterable"
-                                 [groupable]="showGroupPanel"
-                                 [sortable]="sortable"
-                                 [detailTemplate]="detailTemplate">
-                          </thead>
-                      </table>
-                  </div>
-                  <div class="tri-data-table-header-wrap" #header
-                       [triGridResizableContainer]="lockedLeafColumns.length"
-                       [lockedWidth]="lockedWidth + scrollbarWidth + 3">
-                      <table [style.width.px]="nonLockedWidth">
-                          <colgroup triGridColGroup
-                                    [columns]="nonLockedLeafColumns"
-                                    [groups]="isLocked ? [] : group"
-                                    [detailTemplate]="detailTemplate">
-                          </colgroup>
-                          <thead triGridHeader
-                                 [scrollable]="true"
-                                 [resizable]="resizable"
-                                 [columns]="nonLockedColumns"
-                                 [totalColumnLevels]="totalColumnLevels"
-                                 [sort]="sort"
-                                 [filter]="filter"
-                                 [filterable]="filterable"
-                                 [groupable]="showGroupPanel"
-                                 [groups]="isLocked ? [] : group"
-                                 [sortable]="sortable"
-                                 [lockedColumnsCount]="lockedLeafColumns.length"
-                                 [detailTemplate]="detailTemplate">
-                          </thead>
-                      </table>
-                  </div>
-              </div>
-              <tri-data-table-list
-                      tri-grid-selectable
-                      [data]="view"
-                      [rowData]="view"
-                      [rowHeight]="rowHeight"
-                      [detailRowHeight]="detailRowHeight"
-                      [total]="isVirtual ? view.total : pageSize"
-                      [skip]="pageIndex"
-                      [take]="pageSize"
-                      [groups]="group"
-                      [groupable]="groupable"
-                      [columns]="columnsContainer"
-                      [selectable]="selectable"
-                      [detailTemplate]="detailTemplate"
-                      [noRecordsTemplate]="noRecordsTemplate"
-                      (pageChange)="notifyPageChange('list', $event)"
-                      [rowClass]="rowClass">
-              </tri-data-table-list>
-              <div
-                      *ngIf="showFooter"
-                      class="tri-table-footer"
-                      [style.paddingRight.px]="scrollbarWidth">
-                  <div
-                          *ngIf="lockedLeafColumns.length"
-                          class="tri-table-footer-locked"
-                          [style.width.px]="lockedWidth">
-                      <table>
-                          <colgroup triGridColGroup
-                                    [columns]="lockedLeafColumns"
-                                    [groups]="group"
-                                    [detailTemplate]="detailTemplate">
-                          </colgroup>
-                          <tfoot triGridFooter
-                                 [scrollable]="true"
-                                 [groups]="group"
-                                 [columns]="lockedLeafColumns"
-                                 [detailTemplate]="detailTemplate">
-                          </tfoot>
-                      </table>
-                  </div>
-                  <div #footer
-                       class="tri-table-footer-wrap"
-                       [triGridResizableContainer]="lockedLeafColumns.length"
-                       [lockedWidth]="lockedWidth + scrollbarWidth + 3">
-                      <table [style.width.px]="nonLockedWidth">
-                          <colgroup triGridColGroup
-                                    [columns]="nonLockedLeafColumns"
-                                    [groups]="isLocked ? [] : group"
-                                    [detailTemplate]="detailTemplate">
-                          </colgroup>
-                          <tfoot triGridFooter
-                                 [scrollable]="true"
-                                 [groups]="isLocked ? [] : group"
-                                 [columns]="nonLockedLeafColumns"
-                                 [lockedColumnsCount]="lockedLeafColumns.length"
-                                 [detailTemplate]="detailTemplate">
-                          </tfoot>
-                      </table>
-                  </div>
-              </div>
-          </ng-template>
-          <ng-template [ngIf]="!isScrollable">
-              <table>
-                  <colgroup triGridColGroup
-                            [columns]="leafColumns"
-                            [groups]="group"
-                            [detailTemplate]="detailTemplate">
-                  </colgroup>
-                  <thead triGridHeader
-                         [scrollable]="false"
-                         [resizable]="resizable"
-                         [columns]="visibleColumns"
-                         [totalColumnLevels]="totalColumnLevels"
-                         [groups]="group"
-                         [groupable]="showGroupPanel"
-                         [sort]="sort"
-                         [sortable]="sortable"
-                         [filter]="filter"
-                         [filterable]="filterable"
-                         [detailTemplate]="detailTemplate">
-                  </thead>
-                  <tbody triGridTableBody
-                         [groups]="group"
-                         [data]="view"
-                         [skip]="pageIndex"
-                         [columns]="leafColumns"
-                         [selectable]="selectable"
-                         [noRecordsText]="''"
-                         [detailTemplate]="detailTemplate"
-                         [rowClass]="rowClass">
-                  </tbody>
-                  <tfoot triGridFooter
-                         *ngIf="showFooter"
-                         [scrollable]="false"
-                         [groups]="group"
-                         [columns]="leafColumns"
-                         [detailTemplate]="detailTemplate">
-                  </tfoot>
-              </table>
-          </ng-template>
-      </div>
-      <div style="margin: 4rem;text-align: center;font-size: medium;"
-           *ngIf="view.length==0&&!loading"> 没有数据
-      </div>
-      <tri-spin style="position:absolute;width:100%;" *ngIf="loading" [spinning]="loading"
-                [size]="'large'"></tri-spin>
-      <tri-pagination
-              class="tri-data-table-pagination"
-              *ngIf="showPager"
-              [simple]="pageSimple"
-              [pageIndex]="pageIndex"
-              [pageSize]="pageSize"
-              [total]="view.total"
-              [showTotal]="pageShowTotal"
-              [showSizeChanger]="pageShowSizeChanger"
-              [showQuickJumper]="pageShowQuickJumper"
-              (pageChange)="notifyPageChange('pager', $event)">
-      </tri-pagination>
-      <tri-data-table-toolbar *ngIf="showBottomToolbar"></tri-data-table-toolbar>
+    <tri-data-table-toolbar *ngIf="showTopToolbar"></tri-data-table-toolbar>
+    <div class="tri-data-table tri-widget tri-table-large"
+         [class.tri-data-table-lockedcolumns]="lockedLeafColumns.length > 0"
+         [class.tri-data-table-virtual]="isVirtual"
+    >
+      <tri-data-table-group-panel
+        class="tri-table-title"
+        *ngIf="showGroupPanel"
+        [text]="_groupable?.emptyText"
+        [groups]="group"
+        (change)="groupChange.emit($event)">
+      </tri-data-table-group-panel>
+      <ng-template [ngIf]="isScrollable">
+        <div class="tri-data-table-header tri-data-table-thead"
+             [style.padding]="headerPadding">
+          <div class="tri-data-table-header tri-data-table-header-locked" #lockedHeader
+               *ngIf="isLocked"
+               [style.width.px]="lockedWidth">
+            <table>
+              <colgroup triGridColGroup
+                        [columns]="lockedLeafColumns"
+                        [groups]="group"
+                        [detailTemplate]="detailTemplate">
+              </colgroup>
+              <thead triGridHeader
+                     [scrollable]="true"
+                     [resizable]="resizable"
+                     [columns]="lockedColumns"
+                     [totalColumnLevels]="totalColumnLevels"
+                     [sort]="sort"
+                     [groups]="group"
+                     [filter]="filter"
+                     [filterable]="filterable"
+                     [groupable]="showGroupPanel"
+                     [sortable]="sortable"
+                     [detailTemplate]="detailTemplate">
+              </thead>
+            </table>
+          </div>
+          <div class="tri-data-table-header-wrap" #header
+               [triGridResizableContainer]="lockedLeafColumns.length"
+               [lockedWidth]="lockedWidth + scrollbarWidth + 3">
+            <table [style.width.px]="nonLockedWidth">
+              <colgroup triGridColGroup
+                        [columns]="nonLockedLeafColumns"
+                        [groups]="isLocked ? [] : group"
+                        [detailTemplate]="detailTemplate">
+              </colgroup>
+              <thead triGridHeader
+                     [scrollable]="true"
+                     [resizable]="resizable"
+                     [columns]="nonLockedColumns"
+                     [totalColumnLevels]="totalColumnLevels"
+                     [sort]="sort"
+                     [filter]="filter"
+                     [filterable]="filterable"
+                     [groupable]="showGroupPanel"
+                     [groups]="isLocked ? [] : group"
+                     [sortable]="sortable"
+                     [lockedColumnsCount]="lockedLeafColumns.length"
+                     [detailTemplate]="detailTemplate">
+              </thead>
+            </table>
+          </div>
+        </div>
+        <tri-data-table-list
+          tri-grid-selectable
+          [data]="view"
+          [rowData]="view"
+          [rowHeight]="rowHeight"
+          [detailRowHeight]="detailRowHeight"
+          [total]="isVirtual ? view.total : pageSize"
+          [skip]="pageIndex"
+          [take]="pageSize"
+          [groups]="group"
+          [groupable]="groupable"
+          [columns]="columnsContainer"
+          [selectable]="selectable"
+          [detailTemplate]="detailTemplate"
+          [noRecordsTemplate]="noRecordsTemplate"
+          (pageChange)="notifyPageChange('list', $event)"
+          [rowClass]="rowClass">
+        </tri-data-table-list>
+        <div
+          *ngIf="showFooter"
+          class="tri-table-footer"
+          [style.paddingRight.px]="scrollbarWidth">
+          <div
+            *ngIf="lockedLeafColumns.length"
+            class="tri-table-footer-locked"
+            [style.width.px]="lockedWidth">
+            <table>
+              <colgroup triGridColGroup
+                        [columns]="lockedLeafColumns"
+                        [groups]="group"
+                        [detailTemplate]="detailTemplate">
+              </colgroup>
+              <tfoot triGridFooter
+                     [scrollable]="true"
+                     [groups]="group"
+                     [columns]="lockedLeafColumns"
+                     [detailTemplate]="detailTemplate">
+              </tfoot>
+            </table>
+          </div>
+          <div #footer
+               class="tri-table-footer-wrap"
+               [triGridResizableContainer]="lockedLeafColumns.length"
+               [lockedWidth]="lockedWidth + scrollbarWidth + 3">
+            <table [style.width.px]="nonLockedWidth">
+              <colgroup triGridColGroup
+                        [columns]="nonLockedLeafColumns"
+                        [groups]="isLocked ? [] : group"
+                        [detailTemplate]="detailTemplate">
+              </colgroup>
+              <tfoot triGridFooter
+                     [scrollable]="true"
+                     [groups]="isLocked ? [] : group"
+                     [columns]="nonLockedLeafColumns"
+                     [lockedColumnsCount]="lockedLeafColumns.length"
+                     [detailTemplate]="detailTemplate">
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template [ngIf]="!isScrollable">
+        <table>
+          <colgroup triGridColGroup
+                    [columns]="leafColumns"
+                    [groups]="group"
+                    [detailTemplate]="detailTemplate">
+          </colgroup>
+          <thead triGridHeader
+                 [scrollable]="false"
+                 [resizable]="resizable"
+                 [columns]="visibleColumns"
+                 [totalColumnLevels]="totalColumnLevels"
+                 [groups]="group"
+                 [groupable]="showGroupPanel"
+                 [sort]="sort"
+                 [sortable]="sortable"
+                 [filter]="filter"
+                 [filterable]="filterable"
+                 [detailTemplate]="detailTemplate">
+          </thead>
+          <tbody triGridTableBody
+                 [groups]="group"
+                 [data]="view"
+                 [skip]="pageIndex"
+                 [columns]="leafColumns"
+                 [selectable]="selectable"
+                 [noRecordsText]="''"
+                 [detailTemplate]="detailTemplate"
+                 [rowClass]="rowClass">
+          </tbody>
+          <tfoot triGridFooter
+                 *ngIf="showFooter"
+                 [scrollable]="false"
+                 [groups]="group"
+                 [columns]="leafColumns"
+                 [detailTemplate]="detailTemplate">
+          </tfoot>
+        </table>
+      </ng-template>
+    </div>
+    <div style="margin: 4rem;text-align: center;font-size: medium;"
+         *ngIf="view.length==0&&!loading"> 没有数据
+    </div>
+    <tri-spin style="position:absolute;width:100%;" *ngIf="loading" [spinning]="loading"
+              [size]="'large'"></tri-spin>
+    <tri-pagination
+      class="tri-data-table-pagination"
+      *ngIf="showPager"
+      [simple]="pageSimple"
+      [pageIndex]="pageIndex"
+      [pageSize]="pageSize"
+      [total]="view.total"
+      [showTotal]="pageShowTotal"
+      [showSizeChanger]="pageShowSizeChanger"
+      [showQuickJumper]="pageShowQuickJumper"
+      (pageChange)="notifyPageChange('pager', $event)">
+    </tri-pagination>
+    <tri-data-table-toolbar *ngIf="showBottomToolbar"></tri-data-table-toolbar>
   `,
   styles             : [`
-
-  `]
+                        `]
 })
 export class DataTableComponent implements OnChanges, AfterViewInit, AfterContentChecked, AfterContentInit, OnDestroy {
   direction = 'ltr';
@@ -478,9 +477,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     this.groupInfoService.registerColumnsContainer(() => this.columnList);
     if (selectionService) {
       this.selectionSubscription = selectionService.changes
-      // .pipe(
-      //   tap(() => this.cdr.markForCheck())
-      // )
+        // .pipe(
+        //   tap(() => this.cdr.markForCheck())
+        // )
         .subscribe(event => {
           this.selectionChange.emit(event);
         });
@@ -512,9 +511,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
         }) : this.detailCollapse.emit({dataItem, index});
       });
     this.filterSubscription = this.filterService.changes
-    // .pipe(
-    // tap(() => this.cdr.markForCheck())
-    // )
+      // .pipe(
+      // tap(() => this.cdr.markForCheck())
+      // )
       .subscribe(x => {
         this.filterChange.emit(x);
       });
@@ -535,7 +534,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _sort: SortDescriptor[];
 
   @Input()
-  get sort(): SortDescriptor[] {return this._sort;}
+  get sort(): SortDescriptor[] {
+    return this._sort;
+  }
 
   set sort(value) {
     if (isArray(value)) {
@@ -547,7 +548,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _group: GroupDescriptor[];
 
   @Input()
-  get group(): GroupDescriptor[] {return this._group;}
+  get group(): GroupDescriptor[] {
+    return this._group;
+  }
 
   set group(value) {
     if (isArray(value)) {
@@ -559,7 +562,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _pageSimple = true;
 
   @Input('page.simple')
-  get pageSimple(): boolean {return this._pageSimple;}
+  get pageSimple(): boolean {
+    return this._pageSimple;
+  }
 
   set pageSimple(value: boolean) {
     this._pageSimple = value;
@@ -569,7 +574,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _pageShowTotal = true;
 
   @Input('page.showTotal')
-  get pageShowTotal(): boolean {return this._pageShowTotal;}
+  get pageShowTotal(): boolean {
+    return this._pageShowTotal;
+  }
 
   set pageShowTotal(value: boolean) {
     this._pageShowTotal = value;
@@ -579,7 +586,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _pageShowSizeChanger = true;
 
   @Input('page.showSizeChanger')
-  get pageShowSizeChanger(): boolean {return this._pageShowSizeChanger;}
+  get pageShowSizeChanger(): boolean {
+    return this._pageShowSizeChanger;
+  }
 
   set pageShowSizeChanger(value: boolean) {
     this._pageShowSizeChanger = value;
@@ -589,7 +598,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _pageShowQuickJumper = true;
 
   @Input('page.showQuickJumper')
-  get pageShowQuickJumper(): boolean {return this._pageShowQuickJumper;}
+  get pageShowQuickJumper(): boolean {
+    return this._pageShowQuickJumper;
+  }
 
   set pageShowQuickJumper(value: boolean) {
     this._pageShowQuickJumper = value;
@@ -599,7 +610,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _pageSize: number;
 
   @Input()
-  get pageSize(): number {return this._pageSize;}
+  get pageSize(): number {
+    return this._pageSize;
+  }
 
   set pageSize(value: number) {
     this._pageSize = value;
@@ -609,7 +622,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _pageIndex = 0;
 
   @Input()
-  get pageIndex(): number {return this._pageIndex;}
+  get pageIndex(): number {
+    return this._pageIndex;
+  }
 
   set pageIndex(value: number) {
     this._pageIndex = value;
@@ -619,7 +634,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _rowHeight: number;
 
   @Input()
-  get rowHeight(): number {return this._rowHeight;}
+  get rowHeight(): number {
+    return this._rowHeight;
+  }
 
   set rowHeight(value: number) {
     this._rowHeight = value;
@@ -629,7 +646,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _detailRowHeight: number;
 
   @Input()
-  get detailRowHeight(): number {return this._detailRowHeight;}
+  get detailRowHeight(): number {
+    return this._detailRowHeight;
+  }
 
   set detailRowHeight(value: number) {
     this._detailRowHeight = value;
@@ -639,7 +658,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _scrollable: ScrollMode = 'scrollable';
 
   @Input()
-  get scrollable(): ScrollMode {return this._scrollable;}
+  get scrollable(): ScrollMode {
+    return this._scrollable;
+  }
 
   set scrollable(value: ScrollMode) {
     this._scrollable = value;
@@ -649,7 +670,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _selectable: boolean | SelectableSettings = false;
 
   @Input()
-  get selectable(): boolean | SelectableSettings {return this._selectable;}
+  get selectable(): boolean | SelectableSettings {
+    return this._selectable;
+  }
 
   set selectable(value: boolean | SelectableSettings) {
     this._selectable = value;
@@ -659,7 +682,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _filter: CompositeFilterDescriptor = {logic: 'and', filters: []};
 
   @Input()
-  get filter(): CompositeFilterDescriptor {return this._filter;}
+  get filter(): CompositeFilterDescriptor {
+    return this._filter;
+  }
 
   set filter(value: CompositeFilterDescriptor) {
     this._filter = value;
@@ -669,7 +694,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _filterable: boolean | 'menu' | 'simple' = false;
 
   @Input()
-  get filterable() {return this._filterable;}
+  get filterable() {
+    return this._filterable;
+  }
 
   set filterable(value) {
     this._filterable = value;
@@ -679,7 +706,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _resizable: boolean = false;
 
   @Input()
-  get resizable() {return this._resizable;}
+  get resizable() {
+    return this._resizable;
+  }
 
   set resizable(value) {
     this._resizable = value;
@@ -689,7 +718,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _sortable: SortSettings = false;
 
   @Input()
-  get sortable(): SortSettings {return this._sortable;}
+  get sortable(): SortSettings {
+    return this._sortable;
+  }
 
   set sortable(value: SortSettings) {
     this._sortable = value;
@@ -699,7 +730,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _pageable: boolean = false;
 
   @Input()
-  get pageable(): boolean {return this._pageable;}
+  get pageable(): boolean {
+    return this._pageable;
+  }
 
   set pageable(value: boolean) {
     this._pageable = value;
@@ -709,7 +742,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _groupable: GroupableSettings = {enabled: false, showFooter: false};
 
   @Input()
-  get groupable(): GroupableSettings | boolean {return this._groupable;}
+  get groupable(): GroupableSettings | boolean {
+    return this._groupable;
+  }
 
   set groupable(value: GroupableSettings | boolean) {
     if (isBoolean(value)) {
@@ -723,7 +758,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _autoGenerateColumns: boolean;
 
   @Input()
-  get autoGenerateColumns(): boolean {return this._autoGenerateColumns;}
+  get autoGenerateColumns(): boolean {
+    return this._autoGenerateColumns;
+  }
 
   set autoGenerateColumns(value: boolean) {
     this._autoGenerateColumns = value;
@@ -733,7 +770,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _fieldMap: fieldMapFn | object;
 
   @Input()
-  get fieldMap(): fieldMapFn | object {return this._fieldMap;}
+  get fieldMap(): fieldMapFn | object {
+    return this._fieldMap;
+  }
 
   set fieldMap(value: fieldMapFn | object) {
     this._fieldMap = value;
@@ -743,7 +782,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _fieldFilterMap: fieldFilterMapFn | object;
 
   @Input()
-  get fieldFilterMap(): fieldFilterMapFn | object {return this._fieldFilterMap;}
+  get fieldFilterMap(): fieldFilterMapFn | object {
+    return this._fieldFilterMap;
+  }
 
   set fieldFilterMap(value: fieldFilterMapFn | object) {
     this._fieldFilterMap = value;
@@ -756,7 +797,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _childItemsPath: string;
 
   @Input()
-  get childItemsPath(): string {return this._childItemsPath;}
+  get childItemsPath(): string {
+    return this._childItemsPath;
+  }
 
   set childItemsPath(value: string) {
     this._childItemsPath = value;
@@ -766,7 +809,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _showGroups: boolean;
 
   @Input()
-  get showGroups(): boolean {return this._showGroups;}
+  get showGroups(): boolean {
+    return this._showGroups;
+  }
 
   set showGroups(value: boolean) {
     this._showGroups = value;
@@ -776,7 +821,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _data: any[] | GridDataResult;
 
   @Input()
-  get data(): any[] | GridDataResult {return this._data;}
+  get data(): any[] | GridDataResult {
+    return this._data;
+  }
 
   set data(value: any[] | GridDataResult) {
     this.dataSource = value;
@@ -786,12 +833,20 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   _rowClass;
 
   @Input()
-  get rowClass(): RowClassFn {return this._rowClass;}
+  get rowClass(): RowClassFn {
+    return this._rowClass;
+  }
 
-  set rowClass(fn) {if (isFunction(fn)) {this._rowClass = fn;}}
+  set rowClass(fn) {
+    if (isFunction(fn)) {
+      this._rowClass = fn;
+    }
+  }
 
   @Input()
-  get dataSource(): any[] | GridDataResult {return this._data;}
+  get dataSource(): any[] | GridDataResult {
+    return this._data;
+  }
 
   set dataSource(value: any[] | GridDataResult) {
     if (this._data != value) {
@@ -827,9 +882,15 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   }
 
   @Input()
-  get rowSelected(): RowSelectedFn {return this._RowSelected;}
+  get rowSelected(): RowSelectedFn {
+    return this._RowSelected;
+  }
 
-  set rowSelected(fn) {if (isFunction(fn)) {this._RowSelected = fn;}}
+  set rowSelected(fn) {
+    if (isFunction(fn)) {
+      this._RowSelected = fn;
+    }
+  }
 
   // get showGroupFooters(): boolean {
   //   return columnsToRender(this.columnList.toArray()).filter(column => column.groupFooterTemplateRef).length > 0;
@@ -1212,10 +1273,15 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
             } else if (this.view.length > 0) {
               const data = this.view.at(0);
               column.filter = ((field, _data) => {
-                if (isNumber(_data)) return 'numeric';
-                else if (isBoolean(_data)) return 'boolean';
-                else if (isDate(_data)) return 'date';
-                else return 'text';
+                if (isNumber(_data)) {
+                  return 'numeric';
+                } else if (isBoolean(_data)) {
+                  return 'boolean';
+                } else if (isDate(_data)) {
+                  return 'date';
+                } else {
+                  return 'text';
+                }
               })(field, data[field]);
             }
 
@@ -1225,8 +1291,12 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
           .sort((a: ColumnBase, b: ColumnBase) => {
             let Pa = a.autoGenerateColumnPosition;
             let Pb = b.autoGenerateColumnPosition;
-            if (!order.includes(Pa)) Pa = 'middle';
-            if (!order.includes(Pb)) Pb = 'middle';
+            if (!order.includes(Pa)) {
+              Pa = 'middle';
+            }
+            if (!order.includes(Pb)) {
+              Pb = 'middle';
+            }
             return order.indexOf(Pa) - order.indexOf(Pb);
           })
       );

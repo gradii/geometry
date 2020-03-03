@@ -41,7 +41,7 @@ import { extractFormat } from '../utils';
             <!--[format]="format"-->
             <tri-date-picker
               *ngSwitchCase="'datetime'"
-              showTime="true"
+              [showTime]="true"
               format="yyyy-MM-dd HH:mm:ss"
               [formControl]="formGroup.get(column.field)"
             ></tri-date-picker>
