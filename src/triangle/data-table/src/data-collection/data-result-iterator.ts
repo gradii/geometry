@@ -1,6 +1,7 @@
 import { DataResult } from '@gradii/triangle/data-query';
 import { isFunction, isIterable, isPresent, isString } from '@gradii/triangle/util';
-import { Iterable as IterableX } from 'ix';
+import { defer, from, first, IterableX, toArray } from 'ix/iterable';
+import { map, memoize, publish } from 'ix/iterable/operators';
 import { GroupRow } from '../row-column/group-row';
 import { Row } from '../row-column/row';
 
@@ -13,7 +14,7 @@ export interface GridDataResult extends DataResult {
 
 export class DataResultIterator<T> implements Iterable<T> {
   private _cachedData: Array<T>;
-  private iterator;
+  private iterator: IterableX<any>;
 
   constructor(private source: GridDataResult | any[]    = [],
               // private groups: GroupDescriptor[],
@@ -31,20 +32,21 @@ export class DataResultIterator<T> implements Iterable<T> {
       this._data = this.source;
     }
 
-    this.iterator = IterableX.defer(() => this._bindRow())
-      .map((row, idx) => {
+    this.iterator = defer(() => this._bindRow()).pipe(
+      map((row, idx) => {
         row._idx = idx;
         return row;
-      })
-      .publish()
-      .memoize();
+      }),
+      publish(),
+      memoize()
+    );
   }
 
   private _data: any[];
 
   get data(): any[] {
     if (!this._cachedData) {
-      this._cachedData = this.iterator.toArray();
+      this._cachedData = toArray(this.iterator);
     }
     return this._cachedData;
   }
@@ -111,9 +113,9 @@ export class DataResultIterator<T> implements Iterable<T> {
         //   // bind to regular sources
       } else {
         if (isIterable(list)) {
-          const first = IterableX.from(list).first();
+          const f = first(from(list).pipe());
           for (let item of list) {
-            if (isGroupItem(first)) {
+            if (isGroupItem(f)) {
               yield* this._addGroup(item);
             } else {
               yield new Row(item);

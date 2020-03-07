@@ -16,7 +16,7 @@ ng_module(
         ["**/*.ts"],
         exclude = ["**/*.spec.ts"],
     ),
-    assets = [":style/data-table.css"] + glob(["**/*.html"]),
+    assets = [":style/data-table.css", ":style/pagination.css"] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/data-table",
     deps = [
         "@npm//@angular/animations",
@@ -62,6 +62,15 @@ sass_binary(
         "//src/triangle/data-table:data_table_scss_lib",
     ],
 )
+
+sass_binary(
+    name = "pagination_scss",
+    src = "style/pagination.scss",
+    deps = [
+        "//src/triangle/data-table:data_table_scss_lib",
+    ],
+)
+
 #
 #ng_test_library(
 #  name = "autocomplete_test_sources",
