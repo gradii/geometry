@@ -164,7 +164,7 @@
     $btn-padding-y-base, $btn-padding-x-base, $btn-font-size-base, $btn-line-height-base, $btn-border-radius-base);
   user-select      : none;
   vertical-align   : middle;
-  transition       : all .3s $ease-in-out;
+  transition       : all .1s $ease-in-out;
   position         : relative;
 
   > .#{$iconfont-css-prefix} {
