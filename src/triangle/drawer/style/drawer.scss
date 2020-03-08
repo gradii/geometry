@@ -1,5 +1,5 @@
-// Preserve the typo for compatibility
-// https://github.com/ant-design/ant-design/issues/14628
+@import "../../core/themes/default-theme";
+
 $dawer-prefix-cls      : #{$ant-prefix}-drawer;
 $drawer-prefix-cls     : $dawer-prefix-cls;
 $drawer-header-padding : 16px 24px;

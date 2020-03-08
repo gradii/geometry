@@ -65,7 +65,7 @@ export const DRAWER_ANIMATE_DURATION = 300;
                           <div *ngIf="title" class="tri-drawer-header">
                               <div class="tri-drawer-title">
                                   <ng-container *ngIf="isTemplateRef(title); else elseTitle">
-                                      <ng-template [ngTemplateOutlet]="title"></ng-template>
+                                      <ng-template [stringTemplateOutlet]="title"></ng-template>
                                   </ng-container>
                                   <ng-template #elseTitle>
                                       <div [innerHTML]="title"></div>
@@ -203,7 +203,7 @@ export class DrawerComponent<T = any, R = any, D = any> extends DrawerRef<R>
     return this._afterClose.asObservable();
   }
 
-  isTemplateRef(value: {}): boolean {
+  isTemplateRef(value: {}): value is TemplateRef<any> {
     return value instanceof TemplateRef;
   }
 

@@ -69,6 +69,12 @@ sass_binary(
     deps = [":core_scss_lib"],
 )
 
+sass_binary(
+    name = "indigo_pink_prebuilt",
+    src = "themes/prebuilt/indigo-pink.scss",
+    deps = [":theming_scss_lib"],
+)
+
 #sass_binary(
 #  name = "core_scss",
 #  src = "style/core.scss",
