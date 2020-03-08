@@ -41,6 +41,7 @@ export function throwDialogContentAlreadyAttachedError() {
 @Component({
   selector       : 'tri-dialog-container',
   templateUrl    : './dialog-container.html',
+  styleUrls      : ['../style/dialog.css'],
   encapsulation  : ViewEncapsulation.None,
   // Using OnPush for dialogs caused some G3 sync issues. Disabled until we can track them down.
   // tslint:disable-next-line:validate-decorators
@@ -62,7 +63,7 @@ export function throwDialogContentAlreadyAttachedError() {
 })
 export class TriDialogContainer extends BasePortalOutlet {
   /** The portal outlet inside of this container into which the dialog content will be loaded. */
-  @ViewChild(CdkPortalOutlet, {static: false}) _portalOutlet: CdkPortalOutlet;
+  @ViewChild(CdkPortalOutlet, {static: true}) _portalOutlet: CdkPortalOutlet;
   /** State of the dialog animation. */
   _state: 'void' | 'enter' | 'exit' = 'enter';
   /** Emits when an animation state changes. */

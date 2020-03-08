@@ -39,6 +39,5 @@ import { TriDialogHeader } from './helper/dialog-header';
     TriDialog,
     TRI_DIALOG_SCROLL_STRATEGY_PROVIDER,
   ],
-  entryComponents: [TriDialogContainer],
 })
 export class TriDialogModule {}
