@@ -61,12 +61,6 @@ import { StringFilterMenuComponent } from './type-filter-menu/string-filter-menu
     DateFilterMenuInputComponent,
     DateFilterMenuComponent,
     BooleanFilterMenuComponent
-  ],
-  entryComponents: [
-    StringFilterMenuComponent,
-    NumericFilterMenuComponent,
-    DateFilterMenuComponent,
-    BooleanFilterMenuComponent
   ]
 })
 export class FilterMenuModule {

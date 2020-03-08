@@ -350,7 +350,6 @@ export class EmptyTestCustomComponent {
 @NgModule({
   imports        : [CommonModule, TriEmptyModule, TriListModule],
   declarations   : [EmptyTestServiceComponent, EmptyTestCustomComponent],
-  entryComponents: [EmptyTestCustomComponent],
   exports        : [EmptyTestServiceComponent, EmptyTestCustomComponent]
 })
 export class EmptyTestServiceModule {}
@@ -358,7 +357,6 @@ export class EmptyTestServiceModule {}
 @NgModule({
   imports        : [CommonModule, TriEmptyModule, TriListModule],
   declarations   : [EmptyTestServiceComponent, EmptyTestCustomComponent],
-  entryComponents: [EmptyTestCustomComponent],
   exports        : [EmptyTestServiceComponent, EmptyTestCustomComponent],
   providers      : [
     {

@@ -53,6 +53,5 @@ import { NotificationService } from './notification.service';
   imports        : [CommonModule, OverlayModule],
   declarations   : [NotificationComponent, NotificationContainerComponent],
   providers      : [NOTIFICATION_DEFAULT_CONFIG_PROVIDER, NotificationService],
-  entryComponents: [NotificationContainerComponent]
 })
 export class TriNotificationModule {}

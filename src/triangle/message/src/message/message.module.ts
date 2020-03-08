@@ -55,7 +55,6 @@ import { MessageService } from './message.service';
   imports        : [CommonModule, OverlayModule],
   declarations   : [MessageContainerComponent, MessageComponent],
   providers      : [MESSAGE_DEFAULT_CONFIG_PROVIDER, MessageService],
-  entryComponents: [MessageContainerComponent]
 })
 export class TriMessageModule {
 }

@@ -57,11 +57,6 @@ import { StringFilterSimpleComponent } from './type-filter-simple/string-filter-
     DateFilterSimpleComponent,
     StringFilterSimpleComponent,
     FilterSimpleTemplateDirective
-  ],
-  entryComponents: [
-    BooleanFilterSimpleComponent,
-    DateFilterSimpleComponent,
-    StringFilterSimpleComponent
   ]
 })
 export class FilterSimpleModule {

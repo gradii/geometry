@@ -22,7 +22,6 @@ import { PopoverDirective } from './popover.directive';
  <!-- example(tri-demo-tri-demo-popover-click-hide) -->
  */
 @NgModule({
-  entryComponents: [PopoverComponent],
   exports        : [PopoverDirective, PopoverComponent],
   declarations   : [PopoverDirective, PopoverComponent],
   imports        : [CommonModule, OverlayModule]

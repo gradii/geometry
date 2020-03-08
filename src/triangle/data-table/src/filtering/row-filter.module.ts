@@ -58,7 +58,6 @@ const ENTRY_COMPONENTS = [
   declarations   : [INTERNAL_COMPONENTS, FILTER_OPERATORS],
   imports        : [importedModules, FilterSharedModule],
   exports        : [INTERNAL_COMPONENTS, FILTER_OPERATORS],
-  entryComponents: ENTRY_COMPONENTS
 })
 export class RowFilterModule {
   static exports() {

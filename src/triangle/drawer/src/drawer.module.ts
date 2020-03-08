@@ -9,7 +9,6 @@ import { DrawerService } from './drawer.service';
   imports        : [CommonModule, OverlayModule, PortalModule],
   exports        : [DrawerComponent],
   declarations   : [DrawerComponent],
-  entryComponents: [DrawerComponent],
   providers      : [DrawerService]
 })
 export class TriDrawerModule {}

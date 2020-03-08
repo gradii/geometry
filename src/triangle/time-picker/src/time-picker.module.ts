@@ -18,7 +18,6 @@ import { TimeValueAccessorDirective } from './time-value-accessor.directive';
     TimePickerComponent
   ],
   imports        : [CommonModule, FormsModule, TriI18nModule, OverlayModule],
-  entryComponents: []
 })
 export class TriTimePickerModule {
 }

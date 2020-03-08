@@ -28,6 +28,5 @@ import { TooltipDirective } from './tooltip.directive';
   declarations   : [ToolTipComponent, TooltipDirective],
   exports        : [ToolTipComponent, TooltipDirective],
   imports        : [CommonModule, OverlayModule],
-  entryComponents: [ToolTipComponent]
 })
 export class TriToolTipModule {}

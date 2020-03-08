@@ -1,7 +1,6 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
 import { async, ComponentFixture, fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
-import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TriDrawerModule } from '@gradii/triangle/drawer';
 import { DrawerRef } from '../src/drawer-ref';
@@ -392,9 +391,6 @@ describe('DrawerService', () => {
       providers   : [DrawerService],
       declarations: [TestDrawerWithServiceComponent, DrawerCustomComponent]
     });
-    TestBed.overrideModule(BrowserDynamicTestingModule, {
-      set: {entryComponents: [DrawerCustomComponent]}
-    }).compileComponents();
   }));
 
   beforeEach(async(() => {
