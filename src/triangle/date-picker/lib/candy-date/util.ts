@@ -1,4 +1,11 @@
 /**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
  * [Temporary] Get the first day of week depend on locale (0-6 represent as Sunday-Saturday)
  * @param locale Locale code
  */

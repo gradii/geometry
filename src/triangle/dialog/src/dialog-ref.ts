@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { ESCAPE } from '@angular/cdk/keycodes';
 import { GlobalPositionStrategy, OverlayRef, OverlaySizeConfig } from '@angular/cdk/overlay';
 import { Location } from '@angular/common';

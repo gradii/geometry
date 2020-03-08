@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Injectable } from '@angular/core';
 
 // Incremented each time the service is instantiated.
@@ -14,15 +21,15 @@ export class IdService {
     this.prefix = `k-grid${sequence++}`;
   }
 
-  public cellId(rowIndex: number, colIndex: number): string {
+  cellId(rowIndex: number, colIndex: number): string {
     return `${this.prefix}-r${rowIndex}c${colIndex}`;
   }
 
-  public selectionCheckboxId(itemIndex: any): string {
+  selectionCheckboxId(itemIndex: any): string {
     return `${this.prefix}-checkbox${itemIndex}`;
   }
 
-  public selectAllCheckboxId(): string {
+  selectAllCheckboxId(): string {
     return `${this.prefix}-select-all`;
   }
 }

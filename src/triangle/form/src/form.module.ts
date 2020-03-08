@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormControlComponent } from './form-control.component';
@@ -88,7 +95,7 @@ import { FormDirective } from './form.directive';
 
     FormNoFeedbackDirective,
 
-    //pipes
+    // pipes
     [FormValidatorsMessagePipe]
   ],
   exports     : [

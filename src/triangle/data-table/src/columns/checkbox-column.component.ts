@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   Component,
   ContentChild,
@@ -23,7 +30,7 @@ import { AutoGenerateColumnPositon } from './column-base';
   template : ''
 })
 export class CheckboxColumnComponent extends ColumnBase {
-  public autoGenerateColumnPosition = 'start' as AutoGenerateColumnPositon;
+  autoGenerateColumnPosition = 'start' as AutoGenerateColumnPositon;
 
   isCheckboxColumn = true;
 
@@ -38,7 +45,7 @@ export class CheckboxColumnComponent extends ColumnBase {
 
   @ContentChild(CellTemplateDirective, {static: false}) template;
 
-  public constructor(@SkipSelf()
+  constructor(@SkipSelf()
                      @Host()
                      @Optional()
                        parent: ColumnBase) {

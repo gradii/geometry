@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Component, HostBinding, Input } from '@angular/core';
 import { CompositeFilterDescriptor } from '@gradii/triangle/data-query';
 import { I18nService } from '@gradii/triangle/i18n';

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   AfterContentChecked,
   Directive,
@@ -49,7 +56,7 @@ export class SelectionCheckboxDirective implements AfterContentChecked, OnDestro
     if (this.selectionService.options.enabled) {
       const ev = this.selectionService.toggleByIndex(this.itemIndex);
       ev.ctrlKey = false;
-      //Setting the deprecated `index` and `selected` properties
+      // Setting the deprecated `index` and `selected` properties
       ev.index = this.itemIndex;
       ev.selected = ev.selectedRows.length > ev.deselectedRows.length;
       this.selectionService.changes.emit(ev);

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { isArray, isPresent, isString } from '../utils';
 import { isCompositeFilterDescriptor } from './filter-descriptor.interface';
 

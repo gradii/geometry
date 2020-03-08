@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 export { CandyDate } from './lib/candy-date/candy-date';
 export {
   PickerResult, PickerResultSingle, PickerResultRange, PresetRanges, PanelMode

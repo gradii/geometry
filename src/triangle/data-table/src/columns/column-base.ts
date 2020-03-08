@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { ContentChildren, Input, QueryList, TemplateRef } from '@angular/core';
 import { CheckboxColumnComponent } from '../columns/checkbox-column.component';
 import { HierarchyColumnComponent } from '../columns/hierarchy-column.component';
@@ -15,21 +22,21 @@ function isColumnContainer(column) { return column.isColumnGroup || isSpanColumn
 export type AutoGenerateColumnPositon = 'start' | 'middle' | 'end';
 
 export class ColumnBase {
-  public matchesMedia: boolean = true;
-  public orderIndex: number = 0;
-  public autoGenerateColumnPosition: AutoGenerateColumnPositon;
+  matchesMedia: boolean = true;
+  orderIndex: number = 0;
+  autoGenerateColumnPosition: AutoGenerateColumnPositon;
 
   isColumnGroup: boolean;
   isSpanColumn: boolean;
 
-  @Input() public resizable: boolean = true;
-  @Input() public reorderable: boolean = true;
-  @Input() public minResizableWidth: number = 10;
-  @Input() public title: string;
-  @Input() public locked: boolean;
-  @Input() public hidden: boolean;
-  @Input() public media: string;
-  @Input() public style: {
+  @Input() resizable: boolean = true;
+  @Input() reorderable: boolean = true;
+  @Input() minResizableWidth: number = 10;
+  @Input() title: string;
+  @Input() locked: boolean;
+  @Input() hidden: boolean;
+  @Input() media: string;
+  @Input() style: {
     [key: string]: string;
   };
   @Input() headerStyle: {
@@ -130,7 +137,7 @@ export class ColumnBase {
     return this.title;
   }
 
-  public get isVisible(): boolean {
+  get isVisible(): boolean {
     return !this.hidden && this.matchesMedia;
   }
 

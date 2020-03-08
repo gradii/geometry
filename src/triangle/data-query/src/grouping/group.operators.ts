@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Reducer } from '../common.interfaces';
 import { filterBy } from '../filtering/filter-expression.factory';
 import { exec, groupCombinator, map } from '../transducers';

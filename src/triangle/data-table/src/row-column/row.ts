@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { DataGridModel } from './data-grid-model';
 import { RowColFlags } from './row-col-flags';
 
@@ -82,8 +89,8 @@ export class Row extends DataGridModel {
   private static _recursiveParentCollapsed(r, collapsed) {
     r._setFlag(RowColFlags.ParentCollapsed, collapsed);
     if (
-      collapsed && r.hasChildren || //折叠则折叠全部
-      !collapsed && r.hasChildren && !r.isCollapsed //展开则只展开未折叠的
+      collapsed && r.hasChildren || // 折叠则折叠全部
+      !collapsed && r.hasChildren && !r.isCollapsed // 展开则只展开未折叠的
     ) {
       for (let sr of r.children) {
         Row._recursiveParentCollapsed(sr, collapsed);

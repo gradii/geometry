@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 function matchMediaFunc(): (mediaQuery: string) => MediaQueryList {
   if (typeof window === 'undefined') {
     return () => null;

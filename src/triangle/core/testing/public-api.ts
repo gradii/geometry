@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 export * from './src/dispatch-events';
 export * from './src/event-objects';
 export * from './src/type-in-element';

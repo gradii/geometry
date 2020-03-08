@@ -1,4 +1,11 @@
 /**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
  * Additional configuration for the `reorderColumn` method.
  */
 export interface ColumnReorderConfig {

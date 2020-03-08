@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { FragmentDataChunk } from './fragment-data-chunk';
 import { RowColFlags } from './row-col-flags';
 
@@ -63,7 +70,7 @@ export class DataGridModel {
     if (!this.isVisible) {
       return 0;
     }
-    var sz   = this._sz,
+    let sz   = this._sz,
         list = this._list;
 
     // default size

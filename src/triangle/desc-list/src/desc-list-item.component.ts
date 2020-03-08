@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
 
 @Component({
@@ -24,9 +31,11 @@ export class DescListItemComponent {
 
   @Input()
   set term(value: string | TemplateRef<any>) {
-    if (value instanceof TemplateRef)
+    if (value instanceof TemplateRef) {
       this._termTpl = value;
-    else
+    }
+    else {
       this._term = value;
+    }
   }
 }

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 // tslint:disable:component-selector
 import {
   ChangeDetectionStrategy,
@@ -26,27 +33,27 @@ import { GroupInfoService } from './group-info.service';
   `
 })
 export class GroupIndicatorComponent {
-  @Output() public directionChange: EventEmitter<GroupDescriptor> = new EventEmitter<GroupDescriptor>();
-  @Output() public remove: EventEmitter<GroupDescriptor> = new EventEmitter<GroupDescriptor>();
+  @Output() directionChange: EventEmitter<GroupDescriptor> = new EventEmitter<GroupDescriptor>();
+  @Output() remove: EventEmitter<GroupDescriptor> = new EventEmitter<GroupDescriptor>();
 
-  @Input() public group: GroupDescriptor;
+  @Input() group: GroupDescriptor;
 
   constructor(public groupInfoService: GroupInfoService) { }
 
   @HostBinding('class.k-group-indicator')
-  public get groupIndicatorClass(): boolean {
+  get groupIndicatorClass(): boolean {
     return true;
   }
 
-  public get title(): string {
+  get title(): string {
     return this.groupInfoService.groupTitle(this.group);
   }
 
-  public get dir(): string {
+  get dir(): string {
     return this.group.dir ? this.group.dir : 'asc';
   }
 
-  public toggleDirection(): boolean {
+  toggleDirection(): boolean {
     this.directionChange.emit({
       dir  : this.dir === 'asc' ? 'desc' : 'asc',
       field: this.group.field
@@ -54,7 +61,7 @@ export class GroupIndicatorComponent {
     return false;
   }
 
-  public removeDescriptor(): boolean {
+  removeDescriptor(): boolean {
     this.remove.emit({
       dir  : this.group.dir,
       field: this.group.field

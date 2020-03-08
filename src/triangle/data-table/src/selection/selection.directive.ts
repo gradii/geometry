@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Directive, Host } from '@angular/core';
 import { DataTableComponent } from '../data-table.component';
 import { Selection } from './selection-default';

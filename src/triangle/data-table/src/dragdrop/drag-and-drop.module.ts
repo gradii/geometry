@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { NgModule } from '@angular/core';
 import { DragAndDropService } from './drag-and-drop.service';
 import { DragHintService } from './drag-hint.service';

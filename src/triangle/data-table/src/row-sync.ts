@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 const set = value => pair => pair.forEach(x => (x.style.height = value));
 const clearHeight = pairs =>
   pairs

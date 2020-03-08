@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -44,7 +51,7 @@ import { and, not, observe } from '../utils';
 import { CheckboxColumnComponent } from '@gradii/triangle/data-table';
 
 
-//@ts-ignore
+// @ts-ignore
 const mergeObjects = (...args: any[]) => Object.assign.apply(null, [{}].concat(args));
 
 const directions = (initialDirection: any) => initialDirection === 'asc' ? ['asc', 'desc'] : ['desc', 'asc'];
@@ -215,24 +222,24 @@ const rules = and(
                         `]
 })
 export class HeaderComponent implements OnDestroy, AfterViewInit {
-  @Input() public totalColumnLevels: number;
-  @Input() public columns: Array<ColumnBase | any> | QueryList<any | ColumnBase> = [];
-  @Input() public groups: Array<GroupDescriptor> = [];
-  @Input() public detailTemplate: DetailTemplateDirective;
-  @Input() public scrollable: boolean;
-  @Input() public filterable: FilterableSettings;
-  @Input() public sort: Array<SortDescriptor> = new Array<SortDescriptor>();
-  @Input() public filter: CompositeFilterDescriptor;
-  @Input() public sortable: SortSettings = false;
-  @Input() public groupable: boolean = false;
-  @Input() public lockedColumnsCount: number = 0;
-  @Input() public resizable: boolean = false;
-  @Input() public reorderable: boolean = false;
-  @Input() public columnMenu: boolean = false;
-  @Input() public columnMenuTemplate: TemplateRef<any>;
-  @Input() public totalColumnsCount: number = 0;
-  public sortedFields: any = {};
-  @ViewChildren(DropTargetDirective) public dropTargets: QueryList<DropTargetDirective> = new QueryList<DropTargetDirective>();
+  @Input() totalColumnLevels: number;
+  @Input() columns: Array<ColumnBase | any> | QueryList<any | ColumnBase> = [];
+  @Input() groups: Array<GroupDescriptor> = [];
+  @Input() detailTemplate: DetailTemplateDirective;
+  @Input() scrollable: boolean;
+  @Input() filterable: FilterableSettings;
+  @Input() sort: Array<SortDescriptor> = new Array<SortDescriptor>();
+  @Input() filter: CompositeFilterDescriptor;
+  @Input() sortable: SortSettings = false;
+  @Input() groupable: boolean = false;
+  @Input() lockedColumnsCount: number = 0;
+  @Input() resizable: boolean = false;
+  @Input() reorderable: boolean = false;
+  @Input() columnMenu: boolean = false;
+  @Input() columnMenuTemplate: TemplateRef<any>;
+  @Input() totalColumnsCount: number = 0;
+  sortedFields: any = {};
+  @ViewChildren(DropTargetDirective) dropTargets: QueryList<DropTargetDirective> = new QueryList<DropTargetDirective>();
   private subscription: Subscription = new Subscription();
   private targetSubscription: Subscription;
 
@@ -252,32 +259,32 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
     return !this.scrollable;
   }
 
-  public get sortableLabel(): string {
+  get sortableLabel(): string {
     return this.localization.translate('sortable');
   }
 
   // Number of unlocked columns in the next table, if any
-  public get unlockedColumnsCount(): number {
+  get unlockedColumnsCount(): number {
     return this.totalColumnsCount - this.lockedColumnsCount - this.columns.length;
   }
 
-  public get showFilterMenu(): boolean {
+  get showFilterMenu(): boolean {
     return !this.columnMenu && hasFilterMenu(this.filterable);
   }
 
-  public get showFilterSimple() {
+  get showFilterSimple() {
     return hasFilterSimple(this.filterable);
   }
 
-  public get showFilterRow(): boolean {
+  get showFilterRow(): boolean {
     return hasFilterRow(this.filterable);
   }
 
-  public get columnLevels(): Array<number> {
+  get columnLevels(): Array<number> {
     return new Array((this.totalColumnLevels || 0) + 1);
   }
 
-  public get leafColumns(): ColumnBase[] {
+  get leafColumns(): ColumnBase[] {
     return columnsToRender(this.columns || []).filter(x => !isColumnGroupComponent(x));
   }
 
@@ -291,7 +298,7 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
     return false;
   }
 
-  public onHeaderKeydown(column: ColumnComponent, args: KeyboardEvent): void {
+  onHeaderKeydown(column: ColumnComponent, args: KeyboardEvent): void {
     if (!this.sortable || args.defaultPrevented || column.sortable === false) {
       return;
     }
@@ -301,7 +308,7 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
     }
   }
 
-  public showSortNumbering(column: ColumnComponent): boolean {
+  showSortNumbering(column: ColumnComponent): boolean {
     const {showIndexes} = normalize(this.sortable);
     return showIndexes
       && this.sort
@@ -309,7 +316,7 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
       && this.sortOrder(column.field) > 0;
   }
 
-  public sortOrder(field: string): number {
+  sortOrder(field: string): number {
     return this.sort
         .filter(({dir}) => isPresent(dir))
         .findIndex(x => x.field === field)
@@ -327,7 +334,7 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
     };
   }
 
-  public sortState(column: ColumnComponent): string {
+  sortState(column: ColumnComponent): string {
     if (this.isSortable(column)) {
       const state = this.sortDescriptor(column.field);
       if (state.dir === 'asc') {
@@ -340,7 +347,7 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
     return null;
   }
 
-  public sortStatus(column: ColumnComponent): string {
+  sortStatus(column: ColumnComponent): string {
     if (!this.sortedFields[column.field] || !this.isSortable(column)) {
       return null;
     }
@@ -357,7 +364,7 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
     return this.localization.translate(msg);
   }
 
-  public toggleSort(column: ColumnComponent): Array<SortDescriptor> {
+  toggleSort(column: ColumnComponent): Array<SortDescriptor> {
     const {allowUnsort, mode, initialDirection} = normalize(this.sortable, column.sortable);
     const descriptor = this.toggleDirection(column.field, allowUnsort, initialDirection);
 
@@ -375,7 +382,7 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
     );
   }
 
-  public ngOnChanges(changes: any): void {
+  ngOnChanges(changes: any): void {
     const sortChange = changes.sort;
     if (sortChange && !sortChange.isFirstChange()) {
       sortChange.currentValue.forEach((change: any) => {
@@ -384,7 +391,7 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
     }
   }
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.subscription.add(
       this.localization.localeChange
         .subscribe(() => this.cd.markForCheck())
@@ -403,36 +410,36 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
     this.subscription.unsubscribe();
   }
 
-  public selectAllCheckboxId(): string {
+  selectAllCheckboxId(): string {
     return this.idService.selectAllCheckboxId();
   }
 
-  public isFirstOnRow(column: ColumnComponent, index: number): boolean {
+  isFirstOnRow(column: ColumnComponent, index: number): boolean {
     const isTailing = (c: any): boolean => c &&
       (this.columnsForLevel(c.level).indexOf(c) > 0 || isTailing(c.parent));
 
     return index === 0 && !this.groups.length && !this.detailTemplate && isTailing(column.parent);
   }
 
-  public leafColumnIndex(column: ColumnComponent): number {
+  leafColumnIndex(column: ColumnComponent): number {
     return this.leafColumns.indexOf(column);
   }
 
-  public showColumnMenu(column: any): boolean {
+  showColumnMenu(column: any): boolean {
     return this.columnMenu && column.columnMenu &&
       (this.columnMenuTemplate || column.columnMenuTemplates.length || hasItems(this.columnMenu, column));
   }
 
-  public isFilterable(column: ColumnBase): boolean {
+  isFilterable(column: ColumnBase): boolean {
     return !isNullOrEmptyString((column as ColumnComponent).field) &&
       (column as ColumnComponent).filterable === true;
   }
 
-  public canDrop(draggable: DraggableColumnDirective, target: DropTargetDirective): boolean {
+  canDrop(draggable: DraggableColumnDirective, target: DropTargetDirective): boolean {
     return this.reorderable && rules({draggable, target});
   }
 
-  public shouldActivate(column: ColumnBase): boolean {
+  shouldActivate(column: ColumnBase): boolean {
     const canReorder = this.reorderable && column.reorderable;
 
     if (!canReorder && !isColumnComponent(column)) {
@@ -444,22 +451,22 @@ export class HeaderComponent implements OnDestroy, AfterViewInit {
     return groupable || canReorder;
   }
 
-  public isSortable(column: ColumnComponent): boolean {
+  isSortable(column: ColumnComponent): boolean {
     return !isNullOrEmptyString(column.field)
       && isTruthy(this.sortable) && isTruthy(column.sortable);
   }
 
-  public isCheckboxColumn(column: any): column is CheckboxColumnComponent {
+  isCheckboxColumn(column: any): column is CheckboxColumnComponent {
     return isCheckboxColumn(column) && !column.templateRef;
   }
 
-  public columnsForLevel(level: number): Array<ColumnBase | any> {
+  columnsForLevel(level: number): Array<ColumnBase | any> {
     const columns = this.columns ? this.columns.filter(column => column.level === level) : [];
 
     return sortColumns(columnsToRender(columns));
   }
 
-  public isColumnGroupComponent(column: ColumnBase): boolean {
+  isColumnGroupComponent(column: ColumnBase): boolean {
     return isColumnGroupComponent(column);
   }
 

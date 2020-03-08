@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SizeLDSType } from '@gradii/triangle/core';
 import { I18nService as I18n } from '@gradii/triangle/i18n';

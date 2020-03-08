@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { EventEmitter, Injectable } from '@angular/core';
 import { contains } from './common';
 import { DraggableColumnDirective } from './draggable-column.directive';
@@ -10,20 +17,20 @@ import { DropTargetDirective } from './drop-target.directive';
 @Injectable()
 export class DragAndDropService {
 
-  public changes: EventEmitter<any> = new EventEmitter<any>();
+  changes: EventEmitter<any> = new EventEmitter<any>();
 
   private register: DropTargetDirective[] = [];
   private lastTarget: DropTargetDirective = null;
 
-  public add(target: DropTargetDirective): void {
+  add(target: DropTargetDirective): void {
     this.register.push(target);
   }
 
-  public remove(target: DropTargetDirective): void {
+  remove(target: DropTargetDirective): void {
     this.register = this.register.filter(current => current !== target);
   }
 
-  public notifyDrag(draggable: DraggableColumnDirective, element: any, mouseEvent: any): void {
+  notifyDrag(draggable: DraggableColumnDirective, element: any, mouseEvent: any): void {
     const target = this.targetFor(element);
 
     if (this.lastTarget === target) { return; }
@@ -47,7 +54,7 @@ export class DragAndDropService {
     this.lastTarget = target;
   }
 
-  public notifyDrop(draggable: DraggableColumnDirective, mouseEvent: any): void {
+  notifyDrop(draggable: DraggableColumnDirective, mouseEvent: any): void {
     this.changes.next({
       draggable,
       mouseEvent,

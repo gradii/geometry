@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import CalendarLocale from '../calendar/it_IT';
 import TimePickerLocale from '../time-picker/it_IT';
 

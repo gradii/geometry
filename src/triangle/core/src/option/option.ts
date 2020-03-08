@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {BooleanInput, coerceBooleanProperty} from '@angular/cdk/coercion';
 import {ENTER, SPACE, hasModifierKey} from '@angular/cdk/keycodes';
 import {

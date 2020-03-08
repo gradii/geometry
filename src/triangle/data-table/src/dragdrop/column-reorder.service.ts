@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { EventEmitter, Injectable } from '@angular/core';
 
 /**
@@ -5,9 +12,9 @@ import { EventEmitter, Injectable } from '@angular/core';
  */
 @Injectable()
 export class ColumnReorderService {
-  public changes: EventEmitter<any> = new EventEmitter<any>();
+  changes: EventEmitter<any> = new EventEmitter<any>();
 
-  public reorder(e: any): void {
+  reorder(e: any): void {
     this.changes.emit(e);
   }
 }

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { EventEmitter } from '@angular/core';
 
 export class ExpandStateService {
@@ -26,7 +33,7 @@ export class ExpandStateService {
     return this.rowState.includes(index);
   }
 
-  public reset(): void {
+  reset(): void {
     this.rowState = [];
   }
 }

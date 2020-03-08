@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { GroupResult } from '@gradii/triangle/data-query';
 
 export interface GroupItem {
@@ -26,7 +33,7 @@ export interface HierarchyItem {
   data: Object;
   index: number;
   groupIndex: string;
-  children: HierarchyItem[]
+  children: HierarchyItem[];
 }
 
 export interface IteratorResult<T> {

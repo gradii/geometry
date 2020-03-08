@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { GroupDescriptor } from '@gradii/triangle/data-query';
 import { ColumnList } from '../columns/column-list';
 import { ColumnComponent, isColumnComponent } from '../columns/column.component';
@@ -24,7 +31,7 @@ export class GroupInfoService {
     return column ? column.format : '';
   }
 
-  public isGroupable(groupField: string): boolean {
+  isGroupable(groupField: string): boolean {
     const [column] = this.columns.filter(x => x.field === groupField);
 
     return column ? column.groupable : true;

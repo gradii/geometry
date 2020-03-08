@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 export * from './src/option-group.component';
 export * from './src/option-container.component';
 export * from './src/option.component';

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Injectable, NgZone } from '@angular/core';
 import { fromEvent, Subject, Subscription } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';

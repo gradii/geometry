@@ -11,7 +11,7 @@ export {
   SanityChecks,
   GranularSanityChecks,
 } from './common-module';
-export {StringTemplateOutletDirective} from './string_template_outlet'
+export {StringTemplateOutletDirective} from './string_template_outlet';
 export {CanDisable, CanDisableCtor, mixinDisabled} from './disabled';
 export {CanColor, CanColorCtor, mixinColor, ThemePalette} from './color';
 export {CanDisableRipple, CanDisableRippleCtor, mixinDisableRipple} from './disable-ripple';

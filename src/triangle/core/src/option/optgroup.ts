@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {BooleanInput} from '@angular/cdk/coercion';
 import {ChangeDetectionStrategy, Component, Input, ViewEncapsulation} from '@angular/core';
 import {CanDisable, CanDisableCtor, mixinDisabled} from '../common-behaviors/disabled';

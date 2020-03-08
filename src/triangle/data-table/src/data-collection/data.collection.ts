@@ -1,8 +1,15 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { DataResultIterator } from './data-result-iterator';
 
 export class DataCollection<T> {
 
-  public renderData;
+  renderData;
 
   constructor(protected accessor: DataResultIterator<T>) {
   }

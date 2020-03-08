@@ -1,10 +1,10 @@
-import {
-  CalendarI18nInterface,
-  DatePickerI18nInterface,
-  DatePickerLangI18nInterface,
-  PaginationI18nInterface,
-  TimePickerI18nInterface
-} from './src/i18n.interface';
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 
 export {I18nPipe} from './src/i18n.pipe';
 export {TriI18nModule} from './src/i18n.module';

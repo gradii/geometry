@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Pipe, PipeTransform } from '@angular/core';
 import { getter } from '@gradii/triangle/data-query';
 import { isNullOrEmptyString } from '@gradii/triangle/util';

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import Calendar from './calendar/et_EE';
 import DatePicker from './date-picker/et_EE';
 import Pagination from './pagination/et_EE';

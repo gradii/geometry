@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { NgModule } from '@angular/core';
 
 import { LOGGER_SERVICE_PROVIDER, TRI_LOGGER_STATE } from './logger.service';

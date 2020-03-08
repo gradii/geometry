@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Component, HostBinding, Input } from '@angular/core';
 import { CompositeFilterDescriptor, FilterDescriptor } from '@gradii/triangle/data-query';
 import { I18nService } from '@gradii/triangle/i18n';
@@ -49,7 +56,7 @@ export class BooleanFilterSimpleComponent extends BaseFilterCellComponent {
     return this.currentFilter ? this.currentFilter.operator : this.operator;
   }
 
-  public get firstFilter() {
+  get firstFilter() {
     if (isPresent(this.filter) && isPresent(this.filter.filters) && this.filter.filters.length) {
       return this.filter.filters[0];
     } else {

@@ -44,7 +44,7 @@ class CellTemplateTestComponent {}
   providers: [EditService]
 })
 class NewRowTestComponent implements OnInit {
-  public column = {
+  column = {
     field          : 'foo',
     editable       : true,
     editTemplate   : null,

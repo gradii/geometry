@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Component, Inject, Input, Optional } from '@angular/core';
 import { isNullOrEmptyString, isPresent } from '@gradii/triangle/util';
 import { CELL_CONTEXT, CellContext } from '../cell-context';
@@ -73,9 +80,9 @@ import { extractFormat } from '../utils';
   `
 })
 export class CellComponent {
-  @Input() public column: any | ColumnBase;
-  @Input() public isNew: boolean = false;
-  @Input() public dataItem: any;
+  @Input() column: any | ColumnBase;
+  @Input() isNew: boolean = false;
+  @Input() dataItem: any;
 
   constructor(private editService: EditService,
               @Optional()

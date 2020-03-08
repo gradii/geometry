@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import CalendarLocale from '../calendar/ar_EG';
 import TimePickerLocale from '../time-picker/ar_EG';
 

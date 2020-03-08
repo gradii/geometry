@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Component, HostBinding, Input, QueryList } from '@angular/core';
 import { GroupDescriptor } from '@gradii/triangle/data-query';
 import { columnsSpan } from '../helper/column-common';
@@ -67,7 +74,7 @@ export class GroupHeaderComponent {
   }
 
   toggleGroup(item: GroupRow) {
-    //todo data-table fix me
+    // todo data-table fix me
     // this.groupsService.toggleRow(item.index, item.data);
     item.isCollapsed = !item.isCollapsed;
     // return false;

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Pipe, PipeTransform, QueryList } from '@angular/core';
 import { OptionGroupComponent } from './option-group.component';
 import { OptionComponent } from './option.component';

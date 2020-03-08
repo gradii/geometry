@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   Directive,
   ElementRef,
@@ -56,8 +63,8 @@ const hideThenShow = (element, cont) => {
   selector: '[triDraggableColumn]'
 })
 export class DraggableColumnDirective implements OnInit, OnDestroy {
-  @Input() public context: DragAndDropContext = <DragAndDropContext>{};
-  @Output() public drag: EventEmitter<any> = new EventEmitter<any>();
+  @Input() context: DragAndDropContext = <DragAndDropContext>{};
+  @Output() drag: EventEmitter<any> = new EventEmitter<any>();
   private subscriptions: Subscription = new Subscription();
   private enabled: boolean;
 
@@ -73,11 +80,11 @@ export class DraggableColumnDirective implements OnInit, OnDestroy {
   ) { }
 
   @Input()
-  public set triDraggableColumn(enabled: boolean) {
+  set triDraggableColumn(enabled: boolean) {
     this.enabled = enabled;
   }
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.subscriptions.add(
       this.zone.runOutsideAngular(() =>
         this.draggable.tri.press.pipe(
@@ -120,7 +127,7 @@ export class DraggableColumnDirective implements OnInit, OnDestroy {
     }
   }
 
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }

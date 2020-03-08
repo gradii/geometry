@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { SortDescriptor } from '@gradii/triangle/data-query';
 import { Subject } from 'rxjs';
 
@@ -6,9 +13,9 @@ import { Subject } from 'rxjs';
  */
 export class SortService {
 
-  public changes: Subject<SortDescriptor[]> = new Subject<SortDescriptor[]>();
+  changes: Subject<SortDescriptor[]> = new Subject<SortDescriptor[]>();
 
-  public sort(value: SortDescriptor[]): void {
+  sort(value: SortDescriptor[]): void {
     this.changes.next(value);
   }
 }

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Component, ContentChild, HostBinding, Input } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
@@ -36,7 +43,7 @@ import { NgControl } from '@angular/forms';
   }
 })
 export class FormControlComponent {
-  public iconType: string;
+  iconType: string;
   @ContentChild(NgControl, {static: false}) ngControl: NgControl;
 
   constructor() {}

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Pipe, PipeTransform } from '@angular/core';
 import { I18nService } from '@gradii/triangle/i18n';
 import { isObject, isPresent } from '@gradii/triangle/util';

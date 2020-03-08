@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -104,9 +111,9 @@ const indicatorRules = or(
 })
 export class GroupPanelComponent implements OnDestroy, OnInit {
 
-  @Output() public change: EventEmitter<GroupDescriptor[]> = new EventEmitter<GroupDescriptor[]>();
-  @Input() public groups: GroupDescriptor[] = [];
-  @ViewChildren(DropTargetDirective) public dropTargets: QueryList<DropTargetDirective> = new QueryList<DropTargetDirective>();
+  @Output() change: EventEmitter<GroupDescriptor[]> = new EventEmitter<GroupDescriptor[]>();
+  @Input() groups: GroupDescriptor[] = [];
+  @ViewChildren(DropTargetDirective) dropTargets: QueryList<DropTargetDirective> = new QueryList<DropTargetDirective>();
   private emptyText: string;
   private subscription: Subscription = new Subscription();
   private targetSubscription: Subscription;
@@ -122,33 +129,33 @@ export class GroupPanelComponent implements OnDestroy, OnInit {
 
   @HostBinding('class.tri-grouping-header')
   @HostBinding('class.tri-grouping-header-flex')
-  public get groupHeaderClass(): boolean {
+  get groupHeaderClass(): boolean {
     return true;
   }
 
-  public get text(): string {
+  get text(): string {
     return this.emptyText ? this.emptyText : this.localization.translate('groupPanelEmpty');
   }
 
   @Input()
-  public set text(value: string) {
+  set text(value: string) {
     this.emptyText = value;
   }
 
-  public ngAfterViewInit(): void {
+  ngAfterViewInit(): void {
     this.subscription.add(
       observe(this.dropTargets)
         .subscribe(this.attachTargets.bind(this))
     );
   }
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.subscription.add(
       this.localization.localeChange.subscribe(() => this.cd.markForCheck())
     );
   }
 
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
@@ -158,14 +165,14 @@ export class GroupPanelComponent implements OnDestroy, OnInit {
     }
   }
 
-  public directionChange(group: GroupDescriptor): void {
+  directionChange(group: GroupDescriptor): void {
     const index = this.groups.findIndex(x => x.field === group.field);
     const groups = [...this.groups.slice(0, index), group, ...this.groups.slice(index + 1)];
 
     this.change.emit(groups);
   }
 
-  public insert(field: string, index: number): void {
+  insert(field: string, index: number): void {
     const groups = this.groups.filter(x => x.field !== field);
 
     if (groups.length || this.groups.length === 0) {
@@ -173,11 +180,11 @@ export class GroupPanelComponent implements OnDestroy, OnInit {
     }
   }
 
-  public remove(group: GroupDescriptor): void {
+  remove(group: GroupDescriptor): void {
     this.change.emit(this.groups.filter(x => x.field !== group.field));
   }
 
-  public canDrop(draggable: DragAndDropContext, target: DragAndDropContext): boolean {
+  canDrop(draggable: DragAndDropContext, target: DragAndDropContext): boolean {
     const isIndicator = draggable.type === 'groupIndicator';
     const rules = isIndicator
       ? indicatorRules

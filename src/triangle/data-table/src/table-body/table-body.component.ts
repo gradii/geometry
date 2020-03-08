@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Component, Input, OnChanges, QueryList, SimpleChanges } from '@angular/core';
 import { GroupDescriptor } from '@gradii/triangle/data-query';
 import { isPresent } from '@gradii/triangle/util';
@@ -48,7 +55,7 @@ import { DataCollection } from '@gradii/triangle/data-table';
           <ng-template
             [ngTemplateOutlet]="column.templateRef"
             [ngTemplateOutletContext]="{
-                        dataItem: newDataItem, 
+                        dataItem: newDataItem,
                         column: column,
                         columnIndex: columnIndex,
                         rowIndex: -1,
@@ -163,8 +170,8 @@ import { DataCollection } from '@gradii/triangle/data-table';
       </tr>
 
       <!--行详情-->
-      <tr *ngIf="isDataItem(rowItem) && 
-                 isInExpandedGroup(rowItem) && 
+      <tr *ngIf="isDataItem(rowItem) &&
+                 isInExpandedGroup(rowItem) &&
                  detailTemplate?.templateRef &&
                  isDetailExpanded(rowItem.index)"
           [class.tri-detail-row]="true"

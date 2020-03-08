@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { DataResult } from '@gradii/triangle/data-query';
 import { isFunction, isIterable, isPresent, isString } from '@gradii/triangle/util';
 import { defer, from, first, IterableX, toArray } from 'ix/iterable';
@@ -149,7 +156,7 @@ export class DataResultIterator<T> implements Iterable<T> {
   }
 
   private* _addTreeNode(item: any, level: number, parent?: GroupRow | Row) {
-    var gr       = new Row(parent),
+    let gr       = new Row(parent),
         children = this.getChildren(item, this.childItemsPath);
 
     // add main node
@@ -159,7 +166,7 @@ export class DataResultIterator<T> implements Iterable<T> {
 
     // add child nodes
     if (children) {
-      for (var i = 0; i < children.length; i++) {
+      for (let i = 0; i < children.length; i++) {
         const child = yield* this._addTreeNode(children[i], level + 1, gr);
         gr.children.push(child);
       }

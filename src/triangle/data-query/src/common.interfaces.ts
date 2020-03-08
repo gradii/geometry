@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 export type Combinator = <T, U>(acc: U, curr: T) => T;
 export type Reducer = (reduce: Combinator) => Transformer;
 

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Component, HostBinding, Input, QueryList } from '@angular/core';
 import { GroupDescriptor } from '@gradii/triangle/data-query';
 import { ColumnBase } from '../columns/column-base';

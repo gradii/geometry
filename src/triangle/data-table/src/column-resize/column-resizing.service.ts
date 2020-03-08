@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { EventEmitter, Injectable } from '@angular/core';
 
 import { zip } from 'rxjs';
@@ -26,14 +33,14 @@ const resizeArgs = (column, extra) => Object.assign({
  */
 @Injectable()
 export class ColumnResizingService {
-  public changes: EventEmitter<ColumnResizeAction> = new EventEmitter<ColumnResizeAction>();
+  changes: EventEmitter<ColumnResizeAction> = new EventEmitter<ColumnResizeAction>();
 
   private column: ColumnBase;
   private resizedColumns: Array<ColumnResizeArgs>;
   private tables: Array<AutoFitFn> = new Array<AutoFitFn>();
   private muteEndNotification: boolean = false;
 
-  public start(column: ColumnBase): void {
+  start(column: ColumnBase): void {
 
     this.trackColumns(column);
 
@@ -47,7 +54,7 @@ export class ColumnResizingService {
     });
   }
 
-  public resizeColumns(deltaPercent: number): void {
+  resizeColumns(deltaPercent: number): void {
     const action = resizeArgs(
       this.column, {
         deltaPercent,
@@ -57,7 +64,7 @@ export class ColumnResizingService {
     this.changes.emit(action);
   }
 
-  public resizeTable(delta: number): void {
+  resizeTable(delta: number): void {
     const action = resizeArgs(
       this.column, {
         delta,
@@ -67,11 +74,11 @@ export class ColumnResizingService {
     this.changes.emit(action);
   }
 
-  public resizedColumn(state: ColumnResizeArgs): void {
+  resizedColumn(state: ColumnResizeArgs): void {
     this.resizedColumns.push(state);
   }
 
-  public end(): void {
+  end(): void {
     this.changes.emit({
       columns       : [],
       resizedColumns: this.resizedColumns,
@@ -79,7 +86,7 @@ export class ColumnResizingService {
     });
   }
 
-  public registerTable(fn: AutoFitFn): Function {
+  registerTable(fn: AutoFitFn): Function {
     this.tables.push(fn);
 
     return () => {
@@ -87,7 +94,7 @@ export class ColumnResizingService {
     };
   }
 
-  public measureColumns(info: Array<any>): void {
+  measureColumns(info: Array<any>): void {
     const observables = this.tables.map(fn => fn(info));
 
     zip(...observables)
@@ -107,7 +114,7 @@ export class ColumnResizingService {
       });
   }
 
-  public autoFit(column: ColumnBase): void {
+  autoFit(column: ColumnBase): void {
     this.muteEndNotification = true;
 
     this.start(column);

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { InjectionToken, QueryList } from '@angular/core';
 import { isNullOrEmptyString } from '@gradii/triangle/util';
 import { from, Observable } from 'rxjs';

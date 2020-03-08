@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 export function either(predicate, right, left) {
   return function (value) {
     return predicate(value) ? right(value) : left(value);

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
   CdkOverlayOrigin,
@@ -18,7 +25,6 @@ import {
   ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { DropDownAnimation } from '@gradii/triangle/core';
 import { I18nService as I18n } from '@gradii/triangle/i18n';
 
 @Component({

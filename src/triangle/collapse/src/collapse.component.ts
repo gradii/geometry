@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, Host, HostBinding, Input } from '@angular/core';
 import { CollapsesetComponent } from './collapseset.component';

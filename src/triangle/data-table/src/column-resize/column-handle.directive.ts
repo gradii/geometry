@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   ChangeDetectorRef,
   Directive,
@@ -117,9 +124,9 @@ const indexOf = (target, list) => {
 })
 export class ColumnHandleDirective implements OnInit, OnDestroy {
 
-  @Input() public columns: Array<ColumnBase|any>| QueryList<any> = [];
+  @Input() columns: Array<ColumnBase|any>| QueryList<any> = [];
 
-  @Input() public column: ColumnBase;
+  @Input() column: ColumnBase;
   private originalWidth: number;
   private subscriptions: Subscription = new Subscription();
   private rtl: boolean = false;
@@ -149,7 +156,7 @@ export class ColumnHandleDirective implements OnInit, OnDestroy {
   }
 
   @HostListener('dblclick')
-  public autoFit(): void {
+  autoFit(): void {
     const allLeafs = allLeafColumns(this.columns);
     const currentLeafs = leafColumns([this.column]).filter(column => isTruthy(column.resizable));
 
@@ -173,7 +180,7 @@ export class ColumnHandleDirective implements OnInit, OnDestroy {
     this.service.measureColumns(columnInfo);
   }
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     const service = this.service.changes.pipe(
       filter(() => this.column.resizable),
       filter(e => isPresent(e.columns.find(column => column === this.column)))
@@ -193,7 +200,7 @@ export class ColumnHandleDirective implements OnInit, OnDestroy {
       this.service.changes.pipe(
         filter(e => e.type === 'start'),
         filter(this.shouldUpdate.bind(this)),
-        take(1) //on first resize only
+        take(1) // on first resize only
       ).subscribe(this.initColumnWidth.bind(this))
     );
 
@@ -229,7 +236,7 @@ export class ColumnHandleDirective implements OnInit, OnDestroy {
     // );
   }
 
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }
@@ -276,7 +283,7 @@ export class ColumnHandleDirective implements OnInit, OnDestroy {
 
   private sizeToFit({columns, widths}: ColumnResizeAction): void {
     const index = columns.indexOf(this.column);
-    const width = Math.max(...widths.map(w => w[index])) + 1; //add 1px for IE
+    const width = Math.max(...widths.map(w => w[index])) + 1; // add 1px for IE
     const tableDelta = width - this.originalWidth;
 
     this.updateWidth(this.column, width);
@@ -287,7 +294,7 @@ export class ColumnHandleDirective implements OnInit, OnDestroy {
   private updateWidth(column: ColumnBase, width: number): void {
     column.width = width;
 
-    this.cdr.markForCheck(); //force CD cycle
+    this.cdr.markForCheck(); // force CD cycle
   }
 
   private columnsForLevel(level: number): Array<ColumnBase> {

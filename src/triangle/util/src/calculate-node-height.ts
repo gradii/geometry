@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 const HIDDEN_TEXTAREA_STYLE = `
   min-height:0 !important;
   max-height:none !important;

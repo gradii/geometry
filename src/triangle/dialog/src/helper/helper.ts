@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { ElementRef } from '@angular/core';
 import { TriDialogRef } from '../dialog-ref';
 

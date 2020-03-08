@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 export * from './src/data-table.module';
 export * from './src/table-shared/shared.module';
 export * from './src/data-table.component';

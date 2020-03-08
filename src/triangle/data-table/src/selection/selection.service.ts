@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { EventEmitter, Injectable } from '@angular/core';
 import { isPresent } from '@gradii/triangle/util';
 import { RowArgs, RowSelectedFn } from '../row-class';
@@ -6,7 +13,7 @@ import { Row } from '../row-column/row';
 import { DomEventsService } from '../service/dom-events.service';
 import { SelectableSettings } from './selectable-settings';
 
-var nextId = 0;
+let nextId = 0;
 
 export interface SelectionEvent {
   /**

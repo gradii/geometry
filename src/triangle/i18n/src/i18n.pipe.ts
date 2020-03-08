@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {ChangeDetectorRef, Pipe, PipeTransform} from '@angular/core';
 
 import {I18nService} from './i18n.service';

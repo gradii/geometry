@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Component, ContentChildren, Host, Optional, QueryList, SkipSelf } from '@angular/core';
 import { columnsSpan } from '../helper/column-common';
 import { AutoGenerateColumnPositon, ColumnBase } from './column-base';
@@ -17,7 +24,7 @@ export function isColumnGroupComponent(column) {
   template : ''
 })
 export class ColumnGroupComponent extends ColumnBase {
-  public autoGenerateColumnPosition = 'middle' as AutoGenerateColumnPositon;
+  autoGenerateColumnPosition = 'middle' as AutoGenerateColumnPositon;
 
   isColumnGroup = true;
   @ContentChildren(ColumnBase) children: QueryList<ColumnBase>;

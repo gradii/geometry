@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import Calendar from './calendar/zh_CN';
 import DatePicker from './date-picker/zh_CN';
 import Pagination from './pagination/zh_CN';

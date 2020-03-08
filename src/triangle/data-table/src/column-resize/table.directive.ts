@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   ChangeDetectorRef,
   Directive,
@@ -58,7 +65,7 @@ const pipe = (...fns) => data => fns.reduce((state, fn) => state ? fn(state) : 0
 })
 export class TableDirective implements OnInit, OnDestroy {
 
-  @Input() public locked: boolean = false;
+  @Input() locked: boolean = false;
   private originalWidth: number;
   private firstResize: boolean = false;
   private subscription: Subscription;
@@ -77,7 +84,7 @@ export class TableDirective implements OnInit, OnDestroy {
     return this.firstResize ? 0 : null;
   }
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     const obs = this.service
       .changes.pipe(filter(e => this.locked === e.locked));
 
@@ -98,7 +105,7 @@ export class TableDirective implements OnInit, OnDestroy {
       .registerTable(this.autoFitObservable.bind(this));
   }
 
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
@@ -120,7 +127,7 @@ export class TableDirective implements OnInit, OnDestroy {
   private updateWidth(width: number): void {
     this.renderer.setStyle(this.element.nativeElement, 'width', width + 'px');
 
-    this.cdr.detectChanges(); //force CD cycle
+    this.cdr.detectChanges(); // force CD cycle
   }
 
   private autoFitObservable(columnInfo: Array<AutoFitInfo>): AutoFitObservable {
@@ -128,7 +135,7 @@ export class TableDirective implements OnInit, OnDestroy {
       this.zone.runOutsideAngular(() => {
         this.renderer.addClass(this.element.nativeElement, 'k-autofitting');
 
-        this.cdr.detectChanges(); //force CD cycle
+        this.cdr.detectChanges(); // force CD cycle
 
         const widths = columnInfo.map(this.measureColumn.bind(this));
 

@@ -40,7 +40,7 @@ import { TestContext } from './util/helpers';
 class CellComponentTest implements OnInit {
   newDataItem = 'test';
   @ViewChild(ColumnComponent, {read: ColumnComponent, static: false})
-  public column;
+  column;
 
   constructor(editService: EditService) {
   }
@@ -72,7 +72,7 @@ class CellComponentTest implements OnInit {
 class CellEditComponentTest implements OnInit {
   newDataItem = 'test';
   @ViewChild(ColumnComponent, {read: ColumnComponent, static: false})
-  public column: ColumnBase;
+  column: ColumnBase;
 
   constructor(private editService: EditService) {
   }

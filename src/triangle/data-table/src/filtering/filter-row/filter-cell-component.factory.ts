@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { BooleanFilterCellComponent } from './boolean-filter-cell.component';
 import { DateFilterCellComponent } from './date-filter-cell.component';
 import { NumericFilterCellComponent } from './numeric-filter-cell.component';

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, ValidationErrors } from '@angular/forms';
 import { FormItemDirective } from './form-item.directive';
@@ -27,7 +34,7 @@ export class FormExplainComponent implements OnDestroy, OnInit {
   constructor(private _formItem: FormItemDirective) {
   }
 
-  public get explains(): ValidationErrors | null {
+  get explains(): ValidationErrors | null {
     if (this.source) {
       return this.source.errors;
     }

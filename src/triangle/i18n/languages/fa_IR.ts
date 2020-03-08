@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import Calendar from './calendar/fa_IR';
 import DatePicker from './date-picker/fa_IR';
 import Pagination from './pagination/fa_IR';

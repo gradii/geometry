@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 const merge = function (data, left, middle, right, compare) {
   let leftLength = middle - left;
   let rightLength = right - middle;

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { animate, AnimationTriggerMetadata, style, transition, trigger } from '@angular/animations';
 import { AnimationCurves, AnimationDuration } from './animation';
 

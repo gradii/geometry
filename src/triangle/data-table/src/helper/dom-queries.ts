@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 const focusableRegex = /^(?:a|input|select|option|textarea|button|object)$/i;
 const NODE_NAME_PREDICATES = {};
 

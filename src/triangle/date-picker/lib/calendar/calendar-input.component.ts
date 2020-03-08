@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CalendarI18nInterface, I18nService } from '@gradii/triangle/i18n';
 import { CandyDate } from '../candy-date/candy-date';

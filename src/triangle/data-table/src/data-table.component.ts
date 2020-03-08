@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   AfterContentChecked,
   AfterContentInit,
@@ -447,7 +454,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   columnList: ColumnList;
   columnsContainer: ColumnsContainer;
   view: DataCollection<any>;
-  public selectionDirective = false;
+  selectionDirective = false;
   showGroupFooters: boolean;
 
   constructor(supportService: BrowserSupportService,
@@ -875,7 +882,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
 
   get showPager(): boolean {
     return !this.isVirtual && this._pageable !== false && !this._childItemsPath &&
-      //first page not show pager
+      // first page not show pager
       !(this._pageIndex == 0 && this.view.length == 0);
   }
 
@@ -1130,14 +1137,14 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     this.editService.addRow(group);
   }
 
-  //todo
+  // todo
   editCell(rowIndex, column, group) {
-    var instance = this.columnInstance(column);
+    let instance = this.columnInstance(column);
     this.editService.editRow(rowIndex, group);
     //    this.focusEditElement('.ant-data-table-edit-cell');
   }
 
-  //todo
+  // todo
   closeCell() {
     this.editService.close();
   }
@@ -1153,7 +1160,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   //    columns.forEach(this.autoFitColumn.bind(this));
   //  };
 
-  //todo
+  // todo
   cancelCell() {
     this.editService.close();
   }
@@ -1239,7 +1246,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   }
 
   _runAutoGenerateColumns() {
-    //check field define column
+    // check field define column
     const fieldColumns: ColumnBase[] = [];
     const otherColumns: ColumnBase[] = [];
 

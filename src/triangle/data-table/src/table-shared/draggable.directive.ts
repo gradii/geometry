@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Directive, ElementRef, EventEmitter, NgZone, OnDestroy } from '@angular/core';
 import { Draggable } from '@gradii/triangle/draggable';
 
@@ -21,7 +28,7 @@ export class DraggableDirective implements OnDestroy {
         press  : (e: number): void => this.tri.press.next(e),
         release: (e: number): void => this.tri.release.next(e)
       });
-      ngZone.runOutsideAngular(() => {this.draggable.bindTo(element.nativeElement);});
+      ngZone.runOutsideAngular(() => {this.draggable.bindTo(element.nativeElement); });
     }
 
   }

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import Calendar from './calendar/uk_UA';
 import DatePicker from './date-picker/uk_UA';
 import Pagination from './pagination/uk_UA';

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 // export class DateChangeEvent {
 //   constructor(public current: CandyDate, public previous: CandyDate, public source?: DateChangeSource) {}
 // }

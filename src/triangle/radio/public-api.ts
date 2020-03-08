@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 export { RadioComponent } from './src/radio.component';
 export { RadioButtonComponent } from './src/radio-button.component';
 export { RadioGroupComponent } from './src/radio-group.component';

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -282,8 +289,8 @@ export class PaginationComponent {
     value = Math.round(value);
     if (value > 0 && value !== this._pageSize) {
       this._pageSize = value;
-      this._buildPageIndex();//auto change page index
-      //esle this._buildOffset();
+      this._buildPageIndex(); // auto change page index
+      // esle this._buildOffset();
       this.cdr.markForCheck();
     }
   }

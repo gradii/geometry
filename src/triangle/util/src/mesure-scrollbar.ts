@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 let scrollbarWidth: any;
 
 // Measure scrollbar width for padding body during modal show/hide

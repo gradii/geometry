@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -44,7 +51,7 @@ import { StringFilterMenuComponent } from './type-filter-menu/string-filter-menu
     FilterMenuContainerComponent,
     StringFilterMenuComponent,
     FilterMenuTemplateDirective,
-    //type filter menu
+    // type filter menu
     NumericFilterMenuComponent,
     NumericFilterMenuInputComponent,
     DateFilterMenuInputComponent,

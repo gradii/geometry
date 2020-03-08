@@ -1,4 +1,11 @@
 /**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
  * Flags that specify the state of a grid row or column.
  */
 export enum RowColFlags {

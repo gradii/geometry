@@ -52,7 +52,7 @@ import {
 import { TriAutocompleteSelectedEvent } from '../src/event/autocomplete-selected-event';
 
 
-const AutocompleteMarginHeight = 4; //4px
+const AutocompleteMarginHeight = 4; // 4px
 
 describe('autocomplete', () => {
   let overlayContainer: OverlayContainer;

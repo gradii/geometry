@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {ElementRef, NgZone} from '@angular/core';
 import {Platform, normalizePassiveListenerOptions} from '@angular/cdk/platform';
 import {isFakeMousedownFromScreenReader} from '@angular/cdk/a11y';

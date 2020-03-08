@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { addMonths, addYears, endOfMonth, Locale, setDay } from 'date-fns';
 import { firstDayOfWeek } from './util';
 
@@ -51,7 +58,7 @@ export class CandyDate {
     return this.nativeDate.getMonth();
   }
 
-  //weeekday
+  // weeekday
   getDay(): number {
     return this.nativeDate.getDay();
   }

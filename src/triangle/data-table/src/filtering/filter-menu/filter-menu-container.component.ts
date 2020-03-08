@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   Component,
   EventEmitter,
@@ -137,7 +144,7 @@ export class FilterMenuContainerComponent implements OnInit, OnDestroy {
     return isPresent(this.column) && isPresent(this.column.filterMenuTemplateRef);
   }
 
-  public get componentFilterType() {
+  get componentFilterType() {
     if (isPresent(this.column) && !isNullOrEmptyString(this.column.filter)) {
       return this.column.filter;
     }

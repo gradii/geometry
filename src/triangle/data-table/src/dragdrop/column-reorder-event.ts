@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { ColumnBase } from '../columns/column-base';
 import { PreventableEvent } from '../event/preventable-event';
 
@@ -8,19 +15,19 @@ export class ColumnReorderEvent extends PreventableEvent {
   /**
    * The reordered column.
    */
-  public readonly column: ColumnBase;
+  readonly column: ColumnBase;
 
   /**
    * The new index of the column.
    * Relative to the collection of columns.
    */
-  public readonly newIndex: number;
+  readonly newIndex: number;
 
   /**
    * The original index of the column before reordering.
    * Relative to the collection of columns.
    */
-  public readonly oldIndex: number;
+  readonly oldIndex: number;
 
   /**
    * @hidden

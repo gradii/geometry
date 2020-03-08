@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 export type ColumnSortSettings =
   | boolean
   | {
@@ -31,6 +38,6 @@ export const normalize: (...settings: (
 } & {
   mode?: 'single' | 'multiple';
 }))[]) => any = (...settings: any[]) => {
-  //@ts-ignore
+  // @ts-ignore
   return Object.assign.apply(Object, [DEFAULTS].concat(settings));
 };

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Directive, HostBinding, HostListener, Inject } from '@angular/core';
 import { CELL_CONTEXT } from '../cell-context';
 import { EditService } from '../service/edit.service';

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { NgModule } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ICON_REGISTRY_PROVIDER, IconRegistry } from './icon-registry';

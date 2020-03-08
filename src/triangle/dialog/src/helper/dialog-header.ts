@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Component, ElementRef, Input, OnInit, Optional } from '@angular/core';
 import { TriDialog } from '../dialog';
 import { TriDialogRef } from '../dialog-ref';

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 export interface PaginationI18nInterface {
   items_per_page: string;
   jump_to: string;
@@ -96,5 +103,5 @@ export interface I18nInterface {
     previewFile: string;
   };
 
-  [key: string]: any
+  [key: string]: any;
 }

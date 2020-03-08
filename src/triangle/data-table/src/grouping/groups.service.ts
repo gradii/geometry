@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Inject, Injectable, Optional } from '@angular/core';
 import { ExpandStateService } from '../service/expand-state.service';
 import { Skip } from '../utils';
@@ -13,7 +20,7 @@ export class GroupsService extends ExpandStateService {
     super(isCollapsed);
   }
 
-  public isInExpandedGroup(groupIndex: string, skipSelf: boolean = true): boolean {
+  isInExpandedGroup(groupIndex: string, skipSelf: boolean = true): boolean {
     if (skipSelf) {
       groupIndex = removeLast(groupIndex);
     }
@@ -27,7 +34,7 @@ export class GroupsService extends ExpandStateService {
     return expanded;
   }
 
-  public expandChildren(groupIndex: string): void {
+  expandChildren(groupIndex: string): void {
     this.rowState = this.rowState.filter((x: any) => !x.startsWith(groupIndex));
   }
 }

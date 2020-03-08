@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   Component,
   ContentChild,
@@ -21,7 +28,7 @@ import { AutoGenerateColumnPositon, ColumnBase } from './column-base';
   template : ''
 })
 export class CommandColumnComponent extends ColumnBase {
-  public autoGenerateColumnPosition = 'end' as AutoGenerateColumnPositon;
+  autoGenerateColumnPosition = 'end' as AutoGenerateColumnPositon;
 
   @Input() cssClass: | string
     | string[]

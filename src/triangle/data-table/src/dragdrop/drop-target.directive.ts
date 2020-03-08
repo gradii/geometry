@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   Directive,
   ElementRef,
@@ -21,11 +28,11 @@ import { DragAndDropService } from './drag-and-drop.service';
   selector: '[triDropTarget]'
 })
 export class DropTargetDirective implements OnInit, OnDestroy {
-  @Input() public context: DragAndDropContext = <DragAndDropContext>{};
+  @Input() context: DragAndDropContext = <DragAndDropContext>{};
 
-  @Output() public enter: EventEmitter<any> = new EventEmitter<any>();
-  @Output() public leave: EventEmitter<any> = new EventEmitter<any>();
-  @Output() public drop: EventEmitter<any> = new EventEmitter<any>();
+  @Output() enter: EventEmitter<any> = new EventEmitter<any>();
+  @Output() leave: EventEmitter<any> = new EventEmitter<any>();
+  @Output() drop: EventEmitter<any> = new EventEmitter<any>();
 
   private subscriptions: Subscription = new Subscription();
 
@@ -34,7 +41,7 @@ export class DropTargetDirective implements OnInit, OnDestroy {
     private service: DragAndDropService
   ) { }
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.service.add(this);
 
     const changes = this.service.changes.pipe(filter(({target}) => target === this));
@@ -61,7 +68,7 @@ export class DropTargetDirective implements OnInit, OnDestroy {
     );
   }
 
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 // 数组元素为数字
 export function compareNum(num1: number, num2: number) {
   return num1 - num2;

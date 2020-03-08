@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Directive, HostBinding, HostListener, Input } from '@angular/core';
 import { SelectionEvent, SelectionService } from '../selection/selection.service';
 
@@ -36,7 +43,7 @@ export class SelectableDirective {
     if (this.shouldSelect(target.tagName)) {
       const ev: SelectionEvent = this.selectionService.toggleByIndex(this.index);
       ev.ctrlKey = false;
-      //Setting the deprecated `index` and `selected` properties
+      // Setting the deprecated `index` and `selected` properties
       ev.index = this.index;
       ev.selected = !!ev.selectedRows.find(_ => _.index === this.index);
       this.selectionService.changes.emit(ev);

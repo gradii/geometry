@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {Inject, Injectable, InjectionToken, Optional, Provider, SkipSelf} from '@angular/core';
 
 // Whether print the log

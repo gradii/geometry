@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 // tslint:disable:no-access-missing-member
 import { Component, HostBinding, Input } from '@angular/core';
 import { CompositeFilterDescriptor, FilterDescriptor } from '@gradii/triangle/data-query';

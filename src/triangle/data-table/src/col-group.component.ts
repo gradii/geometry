@@ -6,7 +6,6 @@
  */
 
 import {
-  ChangeDetectionStrategy,
   Component,
   Input,
   QueryList,

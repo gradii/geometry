@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Component, Host, Input, ViewEncapsulation } from '@angular/core';
 import { RadioGroupDirective } from './radio-group.directive';
 

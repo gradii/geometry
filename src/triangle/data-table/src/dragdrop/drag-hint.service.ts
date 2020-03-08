@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Injectable, Sanitizer, SecurityContext } from '@angular/core';
 
 import { append, offset } from './common';
@@ -43,7 +50,7 @@ export class DragHintService {
 
   constructor(private santizer: Sanitizer) { }
 
-  public create(down: any, target: Element, title: string): void {
+  create(down: any, target: Element, title: string): void {
     this.initCoords(down);
 
     this.dom = document.createElement('div');
@@ -60,11 +67,11 @@ export class DragHintService {
         `;
   }
 
-  public attach(): Function {
+  attach(): Function {
     return append(this.dom);
   }
 
-  public remove(): void {
+  remove(): void {
     if (this.dom && this.dom.parentNode) {
       (function (el: any): any {
         setTimeout(() => document.body.removeChild(el));
@@ -74,31 +81,31 @@ export class DragHintService {
     }
   }
 
-  public show(): void {
+  show(): void {
     this.dom.style.display = '';
   }
 
-  public hide(): void {
+  hide(): void {
     this.dom.style.display = 'none';
   }
 
-  public enable(): void {
+  enable(): void {
     updateClass(this.dom, true);
   }
 
-  public disable(): void {
+  disable(): void {
     updateClass(this.dom, false);
   }
 
-  public removeLock(): void {
+  removeLock(): void {
     updateLock(this.dom);
   }
 
-  public toggleLock(locked: boolean): void {
+  toggleLock(locked: boolean): void {
     updateLock(this.dom, locked);
   }
 
-  public move(move: any): void {
+  move(move: any): void {
     this.dom.style.top = this.initialTop + move.pageY + 'px';
     this.dom.style.left = this.initialLeft + move.pageX + 'px';
   }

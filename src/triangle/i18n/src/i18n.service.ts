@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {DatePipe} from '@angular/common';
 import {Inject, Injectable, Optional, Provider, SkipSelf} from '@angular/core';
 import {LoggerService} from '@gradii/triangle/util';
