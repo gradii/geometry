@@ -73,7 +73,7 @@ $btn-ghost-border : $border-color-base;
   }
 
   .#{$iconfont-css-prefix} {
-    transition : margin-left .3s $ease-in-out,
+    transition : margin-left .1s $ease-in-out,
   }
 
   @at-root &#{&}-loading:before {
