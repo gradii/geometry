@@ -32,43 +32,44 @@ import {
   selector     : 'tri-input-number',
   encapsulation: ViewEncapsulation.None,
   template     : `
-      <div class="tri-input-number-handler-wrap"
-           (mouseover)="_mouseInside = true"
-           (mouseout)="_mouseInside = false">
-          <a *ngIf="spinners"
-             class="tri-input-number-handler tri-input-number-handler-up"
-             [class.tri-input-number-handler-up-disabled]="_disabledUp"
-             (click)="_numberUp($event)">
+    <div class="tri-input-number-handler-wrap"
+         (mouseover)="_mouseInside = true"
+         (mouseout)="_mouseInside = false">
+      <a *ngIf="spinners"
+         class="tri-input-number-handler tri-input-number-handler-up"
+         [class.tri-input-number-handler-up-disabled]="_disabledUp"
+         (click)="_numberUp($event)">
         <span
-                class="tri-input-number-handler-up-inner"
-                (click)="$event.preventDefault();"></span>
-          </a>
-          <a *ngIf="spinners"
-             class="tri-input-number-handler tri-input-number-handler-down"
-             [class.tri-input-number-handler-down-disabled]="_disabledDown"
-             (click)="_numberDown($event)">
+          class="tri-input-number-handler-up-inner"
+          (click)="$event.preventDefault();"></span>
+      </a>
+      <a *ngIf="spinners"
+         class="tri-input-number-handler tri-input-number-handler-down"
+         [class.tri-input-number-handler-down-disabled]="_disabledDown"
+         (click)="_numberDown($event)">
         <span
-                class="tri-input-number-handler-down-inner"
-                (click)="$event.preventDefault();">
+          class="tri-input-number-handler-down-inner"
+          (click)="$event.preventDefault();">
         </span>
-          </a>
-      </div>
-      <div
-              class="tri-input-number-input-wrap">
-          <input class="tri-input-number-input"
-                 #inputNumber
-                 [placeholder]="placeHolder"
-                 [disabled]="disabled"
-                 [(ngModel)]="_displayValue"
-                 (blur)="_emitBlur($event)"
-                 (focus)="_emitFocus($event)"
-                 (keydown)="_emitKeydown($event)"
-                 (ngModelChange)="_userInputChange()"
-                 [attr.min]="min"
-                 [attr.max]="max"
-                 [attr.step]="_step"
-                 autocomplete="off">
-      </div>`,
+      </a>
+    </div>
+    <div
+      class="tri-input-number-input-wrap">
+      <input class="tri-input-number-input"
+             #inputNumber
+             [placeholder]="placeHolder"
+             [disabled]="disabled"
+             [(ngModel)]="_displayValue"
+             (blur)="_emitBlur($event)"
+             (focus)="_emitFocus($event)"
+             (keydown)="_emitKeydown($event)"
+             (ngModelChange)="_userInputChange()"
+             [attr.min]="min"
+             [attr.max]="max"
+             [attr.step]="_step"
+             autocomplete="off">
+    </div>`,
+  styleUrls    : [`../style/input-number.css`],
   providers    : [
     {
       provide    : NG_VALUE_ACCESSOR,

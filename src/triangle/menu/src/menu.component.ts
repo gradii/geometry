@@ -24,7 +24,8 @@ export type Mode = 'vertical' | 'horizontal' | 'inline';
   preserveWhitespaces: false,
   encapsulation      : ViewEncapsulation.None,
   template           : `
-    <ng-content></ng-content>`
+    <ng-content></ng-content>`,
+  styleUrls: [`../style/menu.css`]
 })
 export class MenuComponent implements OnChanges, AfterViewInit {
   /** set when has submenu component */

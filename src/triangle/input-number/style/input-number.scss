@@ -1,4 +1,5 @@
-@import "./input-mixin";
+@import "../../core/themes/default-theme";
+@import "../../input/style/input-mixin";
 
 $input-number-prefix-cls : "#{$ant-prefix}-input-number";
 
