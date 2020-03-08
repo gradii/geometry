@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 export { TabComponent } from './src/tab.component';
 export { TabBodyComponent } from './src/tab-body.component';
 export { TabLabelDirective } from './src/tab-label.directive';

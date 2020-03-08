@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {Component, Inject, OnInit, Optional, ViewEncapsulation} from '@angular/core';
 import {MESSAGE_CONFIG, MESSAGE_DEFAULT_CONFIG, MessageConfig} from './message-config';
 import {MessageDataFilled, MessageDataOptions} from './message.definitions';

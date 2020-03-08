@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { TemplateRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DrawerPlacement } from './drawer-options';

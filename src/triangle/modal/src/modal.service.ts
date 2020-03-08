@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   ApplicationRef,
   ComponentFactory,
@@ -38,9 +45,9 @@ export interface ConfigInterface {
   wrapClassName?: string;
   footer?: TemplateRef<void> | boolean;
   showConfirmLoading?: boolean;
-  //Promise及Observable 默认成功关闭对话框 Subscription teardown 关闭对话框
+  // Promise及Observable 默认成功关闭对话框 Subscription teardown 关闭对话框
   onOk?: () => void | boolean | Promise<any> | Observable<any> | Subscription;
-  //Promise及Observable 默认成功关闭对话框 Subscription teardown 关闭对话框
+  // Promise及Observable 默认成功关闭对话框 Subscription teardown 关闭对话框
   onCancel?: () => void | boolean | Promise<any> | Observable<any> | Subscription;
   componentParams?: object;
   moduleWithComponentFactories?: ModuleWithComponentFactories<void>;

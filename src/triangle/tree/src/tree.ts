@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Observable, Observer, of } from 'rxjs';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -31,8 +38,8 @@ enum ChildrenLoadingState {
 }
 
 export class Tree {
-  public node: TreeModel;
-  public parent: Tree;
+  node: TreeModel;
+  parent: Tree;
   private _loadChildren: ChildrenLoadingFunction;
   private _childrenLoadingState: ChildrenLoadingState = ChildrenLoadingState.NotStarted;
 
@@ -42,7 +49,7 @@ export class Tree {
    * @param {Tree} [parent] - An optional parent if you want to build a tree from the model that should be a child of an existing Tree instance.
    * @param {boolean} [isBranch] - An option that makes a branch from created tree. Branch can have children.
    */
-  public constructor(node: TreeModel, parent: Tree = null, isBranch: boolean = false) {
+  constructor(node: TreeModel, parent: Tree = null, isBranch: boolean = false) {
     this.buildTreeFromModel(node, parent, isBranch || Array.isArray(node.children));
   }
 
@@ -68,7 +75,7 @@ export class Tree {
    * Get children of the current tree.
    * return The children of the current tree.
    */
-  public get children(): Tree[] {
+  get children(): Tree[] {
     return this._children;
   }
 
@@ -77,7 +84,7 @@ export class Tree {
    * Once children are loaded `loadChildren` function won't be called anymore and loaded for the first time children are emitted in case of subsequent calls.
    * return An observable which emits children once they are loaded.
    */
-  public get childrenAsync(): Observable<Tree[]> {
+  get childrenAsync(): Observable<Tree[]> {
     if (this.canLoadChildren()) {
       return this._childrenAsyncOnce();
     }
@@ -88,7 +95,7 @@ export class Tree {
    * Get the value of the current node
    * return The value of the node.
    */
-  public get value(): any {
+  get value(): any {
     return this.node.value;
   }
 
@@ -96,7 +103,7 @@ export class Tree {
    * Set the value of the current node
    * @param {(string|RenamableNode)} value - The new value of the node.
    */
-  public set value(value: any) {
+  set value(value: any) {
     if (typeof value !== 'string' && !Tree.isRenamable(value)) {
       return;
     }
@@ -109,24 +116,24 @@ export class Tree {
     }
   }
 
-  public get checked(): boolean {
+  get checked(): boolean {
     return !!get(this.node.settings, 'checked');
   }
 
-  public set checked(checked: boolean) {
+  set checked(checked: boolean) {
     this.node.settings = Object.assign({}, this.node.settings, {checked});
   }
 
-  public get checkedChildren(): Tree[] {
+  get checkedChildren(): Tree[] {
     return this.hasLoadedChildern() ? this.children.filter(child => child.checked) : [];
   }
 
-  public get selectionAllowed(): boolean {
+  get selectionAllowed(): boolean {
     const value = get(this.node.settings, 'selectionAllowed');
     return isNil(value) ? true : !!value;
   }
 
-  public set selectionAllowed(selectionAllowed: boolean) {
+  set selectionAllowed(selectionAllowed: boolean) {
     this.node.settings = Object.assign({}, this.node.settings, {selectionAllowed});
   }
 
@@ -134,7 +141,7 @@ export class Tree {
    * Get a node's position in its parent.
    * return The position inside a parent.
    */
-  public get positionInParent(): number {
+  get positionInParent(): number {
     if (this.isRoot()) {
       return -1;
     }
@@ -146,7 +153,7 @@ export class Tree {
    * Get menu items of the current tree.
    * return The menu items of the current tree.
    */
-  public get menuItems(): NodeMenuItem[] {
+  get menuItems(): NodeMenuItem[] {
     return get(this.node.settings, 'menuItems');
   }
 
@@ -154,7 +161,7 @@ export class Tree {
    * Get a current folding type: expanded, collapsed or leaf.
    * return A folding type of the current tree.
    */
-  public get foldingType(): FoldingType {
+  get foldingType(): FoldingType {
     if (!this.node._foldingType) {
       this._setFoldingType();
     }
@@ -165,7 +172,7 @@ export class Tree {
    * Get a css class for element which displayes folding state - expanded, collapsed or leaf
    * return A string icontaining css class (classes)
    */
-  public get foldingCssClass(): string {
+  get foldingCssClass(): string {
     return this.getCssClassesFromSettings() || this.foldingType.cssClass;
   }
 
@@ -173,7 +180,7 @@ export class Tree {
    * Get a html template to render before every node's name.
    * return A string representing a html template.
    */
-  public get nodeTemplate(): string {
+  get nodeTemplate(): string {
     return this.getTemplateFromSettings();
   }
 
@@ -181,18 +188,18 @@ export class Tree {
    * Get a html template to render for an element activatin left menu of a node.
    * return A string representing a html template.
    */
-  public get leftMenuTemplate(): string {
+  get leftMenuTemplate(): string {
     if (this.hasLeftMenu()) {
       return get(this.node.settings, 'templates.leftMenu', '<span></span>');
     }
     return '';
   }
 
-  public get id(): number | string {
+  get id(): number | string {
     return get(this.node, 'id');
   }
 
-  public set id(id: number | string) {
+  set id(id: number | string) {
     this.node.id = id;
   }
 
@@ -202,7 +209,7 @@ export class Tree {
    * return - A flag indicating that value is empty or not.
    * @static
    */
-  public static isValueEmpty(value: string): boolean {
+  static isValueEmpty(value: string): boolean {
     return isEmpty(trim(value));
   }
 
@@ -212,7 +219,7 @@ export class Tree {
    * return - A flag indicating whether given value is Renamable node or not.
    * @static
    */
-  public static isRenamable(value: any): value is RenamableNode {
+  static isRenamable(value: any): value is RenamableNode {
     return (
       has(value, 'setName') &&
       isFunction(value.setName) &&
@@ -232,12 +239,12 @@ export class Tree {
     return renamableValue;
   }
 
-  public hasDeferredChildren(): boolean {
+  hasDeferredChildren(): boolean {
     return typeof this._loadChildren === 'function';
   }
 
   /* Setting the children loading state to Loading since a request was dispatched to the client */
-  public loadingChildrenRequested(): void {
+  loadingChildrenRequested(): void {
     this._childrenLoadingState = ChildrenLoadingState.Loading;
   }
 
@@ -246,7 +253,7 @@ export class Tree {
    * Makes sense only for nodes that define `loadChildren` function.
    * return A flag indicating that children are being loaded.
    */
-  public childrenAreBeingLoaded(): boolean {
+  childrenAreBeingLoaded(): boolean {
     return this._childrenLoadingState === ChildrenLoadingState.Loading;
   }
 
@@ -255,7 +262,7 @@ export class Tree {
    * Makes sense only for nodes that define `loadChildren` function.
    * return A flag indicating that children were loaded.
    */
-  public childrenWereLoaded(): boolean {
+  childrenWereLoaded(): boolean {
     return this._childrenLoadingState === ChildrenLoadingState.Completed;
   }
 
@@ -264,14 +271,14 @@ export class Tree {
    * Makes sense only for nodes that define `loadChildren` function.
    * return A flag indicating that children should be loaded for the current node.
    */
-  public childrenShouldBeLoaded(): boolean {
+  childrenShouldBeLoaded(): boolean {
     return !this.childrenWereLoaded() && (!!this._loadChildren || this.node.emitLoadNextLevel === true);
   }
 
   /**
    * By calling this method you start process of loading node's children using `loadChildren` function.
    */
-  public reloadChildren(): void {
+  reloadChildren(): void {
     if (this.childrenShouldBeLoaded()) {
       this._childrenLoadingState = ChildrenLoadingState.Loading;
       this._loadChildren((children: TreeModel[]) => {
@@ -284,7 +291,7 @@ export class Tree {
   /**
    * By calling this method you will remove all current children of a treee and create new.
    */
-  public setChildren(children: Array<TreeModel>): void {
+  setChildren(children: Array<TreeModel>): void {
     this._children = children && children.map((child: TreeModel) => new Tree(child, this));
     if (this.childrenShouldBeLoaded()) {
       this._childrenLoadingState = ChildrenLoadingState.Completed;
@@ -297,7 +304,7 @@ export class Tree {
    * @param {TreeModel} model - Tree model of the new node which will be inserted. Empty node will be created by default and it will fire edit mode of this node
    * return A newly created child node.
    */
-  public createNode(isBranch: boolean, model: TreeModel = {value: ''}): Tree {
+  createNode(isBranch: boolean, model: TreeModel = {value: ''}): Tree {
     const tree = new Tree(model, this, isBranch);
     if (!model.id) {
       tree.markAsNew();
@@ -333,7 +340,7 @@ export class Tree {
    * @param [number] position - Position in which sibling will be inserted. By default it will be inserted at the last position in a parent.
    * return A newly inserted sibling, or null if you are trying to make a sibling for the root.
    */
-  public addSibling(sibling: Tree, position?: number): Tree {
+  addSibling(sibling: Tree, position?: number): Tree {
     if (Array.isArray(get(this.parent, 'children'))) {
       return this.parent.addChild(sibling, position);
     }
@@ -346,7 +353,7 @@ export class Tree {
    * @param [number] position - Position in which child will be inserted. By default it will be inserted at the last position in a parent.
    * return A newly inserted child.
    */
-  public addChild(child: Tree, position?: number): Tree {
+  addChild(child: Tree, position?: number): Tree {
     const newborn = this._addChild(Tree.cloneTreeShallow(child), position);
 
     this._setFoldingType();
@@ -361,7 +368,7 @@ export class Tree {
    * Swap position of the current node with the given sibling. If node passed as a parameter is not a sibling - nothing happens.
    * @param {Tree} sibling - A sibling with which current node shold be swapped.
    */
-  public swapWithSibling(sibling: Tree): void {
+  swapWithSibling(sibling: Tree): void {
     if (!this.hasSibling(sibling)) {
       return;
     }
@@ -377,7 +384,7 @@ export class Tree {
    * Check whether or not this tree is static.
    * return A flag indicating whether or not this tree is static.
    */
-  public isStatic(): boolean {
+  isStatic(): boolean {
     return get(this.node.settings, 'static', false);
   }
 
@@ -385,7 +392,7 @@ export class Tree {
    * Check whether or not this tree has a left menu.
    * return A flag indicating whether or not this tree has a left menu.
    */
-  public hasLeftMenu(): boolean {
+  hasLeftMenu(): boolean {
     return !get(this.node.settings, 'static', false) && get(this.node.settings, 'leftMenu', false);
   }
 
@@ -393,7 +400,7 @@ export class Tree {
    * Check whether or not this tree has a right menu.
    * return A flag indicating whether or not this tree has a right menu.
    */
-  public hasRightMenu(): boolean {
+  hasRightMenu(): boolean {
     return !get(this.node.settings, 'static', false) && get(this.node.settings, 'rightMenu', false);
   }
 
@@ -401,7 +408,7 @@ export class Tree {
    * Check whether this tree is "Leaf" or not.
    * return A flag indicating whether or not this tree is a "Leaf".
    */
-  public isLeaf(): boolean {
+  isLeaf(): boolean {
     return !this.isBranch();
   }
 
@@ -409,7 +416,7 @@ export class Tree {
    * Check whether or not this tree has a custom menu.
    * return A flag indicating whether or not this tree has a custom menu.
    */
-  public hasCustomMenu(): boolean {
+  hasCustomMenu(): boolean {
     return !this.isStatic() && !!get(this.node.settings, 'menuItems', false);
   }
 
@@ -417,7 +424,7 @@ export class Tree {
    * Check whether this tree is "Branch" or not. "Branch" is a node that has children.
    * return A flag indicating whether or not this tree is a "Branch".
    */
-  public isBranch(): boolean {
+  isBranch(): boolean {
     return this.node.emitLoadNextLevel === true || Array.isArray(this._children);
   }
 
@@ -425,7 +432,7 @@ export class Tree {
    * Check whether this tree has children.
    * return A flag indicating whether or not this tree has children.
    */
-  public hasChildren(): boolean {
+  hasChildren(): boolean {
     return !isEmpty(this._children) || this.childrenShouldBeLoaded();
   }
 
@@ -433,7 +440,7 @@ export class Tree {
    * Check whether this tree is a root or not. The root is the tree (node) that doesn't have parent (or technically its parent is null).
    * return A flag indicating whether or not this tree is the root.
    */
-  public isRoot(): boolean {
+  isRoot(): boolean {
     return isNil(this.parent);
   }
 
@@ -442,7 +449,7 @@ export class Tree {
    * @param {Tree} tree - A tree that should be tested on a siblingness.
    * return A flag indicating whether or not provided tree is the sibling of the current one.
    */
-  public hasSibling(tree: Tree): boolean {
+  hasSibling(tree: Tree): boolean {
     return !this.isRoot() && includes(this.parent.children, tree);
   }
 
@@ -452,7 +459,7 @@ export class Tree {
    * @param {Tree} tree - A tree that should be tested (child candidate).
    * return A flag indicating whether provided tree is a child or not.
    */
-  public hasChild(tree: Tree): boolean {
+  hasChild(tree: Tree): boolean {
     return includes(this._children, tree);
   }
 
@@ -461,7 +468,7 @@ export class Tree {
    * The given tree will be removed only in case it is a direct child of the current tree (@see {@link hasChild}).
    * @param {Tree} tree - A tree that should be removed.
    */
-  public removeChild(tree: Tree): void {
+  removeChild(tree: Tree): void {
     if (!this.hasChildren()) {
       return;
     }
@@ -476,7 +483,7 @@ export class Tree {
   /**
    * Remove current tree from its parent.
    */
-  public removeItselfFromParent(): void {
+  removeItselfFromParent(): void {
     if (!this.parent) {
       return;
     }
@@ -488,7 +495,7 @@ export class Tree {
    * Switch folding type of the current tree. "Leaf" node cannot switch its folding type cause it doesn't have children, hence nothing to fold.
    * If node is a "Branch" and it is expanded, then by invoking current method state of the tree should be switched to "collapsed" and vice versa.
    */
-  public switchFoldingType(): void {
+  switchFoldingType(): void {
     if (this.isLeaf() || !this.hasChildren()) {
       return;
     }
@@ -502,7 +509,7 @@ export class Tree {
    * Check that tree is expanded.
    * return A flag indicating whether current tree is expanded. Always returns false for the "Leaf" tree and for an empty tree.
    */
-  public isNodeExpanded(): boolean {
+  isNodeExpanded(): boolean {
     return this.foldingType === FoldingType.Expanded;
   }
 
@@ -510,17 +517,17 @@ export class Tree {
    * Check that tree is collapsed.
    * return A flag indicating whether current tree is collapsed. Always returns false for the "Leaf" tree and for an empty tree.
    */
-  public isNodeCollapsed(): boolean {
+  isNodeCollapsed(): boolean {
     return this.foldingType === FoldingType.Collapsed;
   }
 
-  public disableCollapseOnInit() {
+  disableCollapseOnInit() {
     if (this.node.settings) {
       this.node.settings.isCollapsedOnInit = false;
     }
   }
 
-  public isCollapsedOnInit() {
+  isCollapsedOnInit() {
     return !!get(this.node.settings, 'isCollapsedOnInit');
   }
 
@@ -528,14 +535,14 @@ export class Tree {
    * Check that current tree is newly created (added by user via menu for example). Tree that was built from the TreeModel is not marked as new.
    * return A flag whether the tree is new.
    */
-  public isNew(): boolean {
+  isNew(): boolean {
     return this.node._status === TreeStatus.New;
   }
 
   /**
    * Mark current tree as new (@see {@link isNew}).
    */
-  public markAsNew(): void {
+  markAsNew(): void {
     this.node._status = TreeStatus.New;
   }
 
@@ -543,14 +550,14 @@ export class Tree {
    * Check that current tree is being renamed (it is in the process of its value renaming initiated by a user).
    * return A flag whether the tree is being renamed.
    */
-  public isBeingRenamed(): boolean {
+  isBeingRenamed(): boolean {
     return this.node._status === TreeStatus.IsBeingRenamed;
   }
 
   /**
    * Mark current tree as being renamed (@see {@link isBeingRenamed}).
    */
-  public markAsBeingRenamed(): void {
+  markAsBeingRenamed(): void {
     this.node._status = TreeStatus.IsBeingRenamed;
   }
 
@@ -558,14 +565,14 @@ export class Tree {
    * Check that current tree is modified (for example it was renamed).
    * return A flag whether the tree is modified.
    */
-  public isModified(): boolean {
+  isModified(): boolean {
     return this.node._status === TreeStatus.Modified;
   }
 
   /**
    * Mark current tree as modified (@see {@link isModified}).
    */
-  public markAsModified(): void {
+  markAsModified(): void {
     this.node._status = TreeStatus.Modified;
   }
 
@@ -573,7 +580,7 @@ export class Tree {
    * Makes a clone of an underlying TreeModel instance
    * return a clone of an underlying TreeModel instance
    */
-  public toTreeModel(): TreeModel {
+  toTreeModel(): TreeModel {
     const model = defaultsDeep(this.isLeaf() ? {} : {children: []}, this.node);
 
     if (this.children) {

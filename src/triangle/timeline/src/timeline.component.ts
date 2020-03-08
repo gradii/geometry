@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   AfterContentInit,
   ChangeDetectorRef,
@@ -23,7 +30,7 @@ export type TimelineMode =
   | 'alternate'
   | 'right'
   | 'both-but-other-left'
-  | 'both-but-other-right'
+  | 'both-but-other-right';
 
 const reverseChildNodes = function (parent: HTMLElement): void {
   const children = parent.childNodes;

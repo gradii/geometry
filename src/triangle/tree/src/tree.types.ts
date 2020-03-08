@@ -1,15 +1,22 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { NodeMenuItem } from './menu/node-menu.component';
 import { defaultsDeep, get, omit } from './utils/fn.utils';
 
 export class FoldingType {
-  public static Expanded: FoldingType = new FoldingType('node-expanded');
-  public static Collapsed: FoldingType = new FoldingType('node-collapsed');
-  public static Empty: FoldingType = new FoldingType('node-empty');
-  public static Leaf: FoldingType = new FoldingType('node-leaf');
+  static Expanded: FoldingType = new FoldingType('node-expanded');
+  static Collapsed: FoldingType = new FoldingType('node-collapsed');
+  static Empty: FoldingType = new FoldingType('node-empty');
+  static Leaf: FoldingType = new FoldingType('node-leaf');
 
-  public constructor(private _cssClass: string) {}
+  constructor(private _cssClass: string) {}
 
-  public get cssClass(): string {
+  get cssClass(): string {
     return this._cssClass;
   }
 }
@@ -55,40 +62,40 @@ export interface Templates {
 }
 
 export class TreeModelSettings {
-  public static readonly NOT_CASCADING_SETTINGS = ['selectionAllowed'];
+  static readonly NOT_CASCADING_SETTINGS = ['selectionAllowed'];
   /* cssClasses - set custom css classes which will be used for a tree */
-  public cssClasses?: CssClasses;
+  cssClasses?: CssClasses;
   /* Templates - set custom html templates to be used in a tree */
-  public templates?: Templates;
+  templates?: Templates;
   /**
    * "leftMenu" property when set to true makes left menu available.
    * @name TreeModelSettings#leftMenu
    * @default false
    */
-  public leftMenu?: boolean;
+  leftMenu?: boolean;
   /**
    * "rightMenu" property when set to true makes right menu available.
    * @name TreeModelSettings#rightMenu
    * @default true
    */
-  public rightMenu?: boolean;
+  rightMenu?: boolean;
   /**
    * "menu" property when set will be available as custom context menu.
    * @name TreeModelSettings#MenuItems
    * @type NodeMenuItem
    */
-  public menuItems?: NodeMenuItem[];
+  menuItems?: NodeMenuItem[];
   /**
    * "static" property when set to true makes it impossible to drag'n'drop tree or call a menu on it.
    * @name TreeModelSettings#static
    * @default false
    */
-  public static?: boolean;
-  public isCollapsedOnInit?: boolean;
-  public checked?: boolean;
-  public selectionAllowed?: boolean;
+  static?: boolean;
+  isCollapsedOnInit?: boolean;
+  checked?: boolean;
+  selectionAllowed?: boolean;
 
-  public static merge(child: TreeModel, parent: TreeModel): TreeModelSettings {
+  static merge(child: TreeModel, parent: TreeModel): TreeModelSettings {
     const parentCascadingSettings = omit(get(parent, 'settings'), TreeModelSettings.NOT_CASCADING_SETTINGS);
     return defaultsDeep({}, get(child, 'settings'), parentCascadingSettings, {
       static           : false,
@@ -106,9 +113,9 @@ export class Ng2TreeSettings {
    * Indicates root visibility in the tree. When true - root is invisible.
    * @name Ng2TreeSettings#rootIsVisible
    */
-  rootIsVisible? = true;
-  showCheckboxes? = false;
-  enableCheckboxes? = true;
+  rootIsVisible ? = true;
+  showCheckboxes ? = false;
+  enableCheckboxes ? = true;
 }
 
 export enum TreeStatus {

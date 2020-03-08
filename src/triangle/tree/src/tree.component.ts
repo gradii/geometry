@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   Component,
   ContentChild,
@@ -49,51 +56,51 @@ export class TreeComponent implements OnInit, OnChanges, OnDestroy {
   private static EMPTY_TREE: Tree = new Tree({value: ''});
 
   /* tslint:disable:no-input-rename */
-  @Input('tree') public treeModel: TreeModel;
+  @Input('tree') treeModel: TreeModel;
   /* tslint:enable:no-input-rename */
 
-  @Input() public settings: Ng2TreeSettings;
+  @Input() settings: Ng2TreeSettings;
 
-  @Output() public nodeCreated: EventEmitter<any> = new EventEmitter();
+  @Output() nodeCreated: EventEmitter<any> = new EventEmitter();
 
-  @Output() public nodeRemoved: EventEmitter<any> = new EventEmitter();
+  @Output() nodeRemoved: EventEmitter<any> = new EventEmitter();
 
-  @Output() public nodeRenamed: EventEmitter<any> = new EventEmitter();
+  @Output() nodeRenamed: EventEmitter<any> = new EventEmitter();
 
-  @Output() public nodeSelected: EventEmitter<any> = new EventEmitter();
+  @Output() nodeSelected: EventEmitter<any> = new EventEmitter();
 
-  @Output() public nodeUnselected: EventEmitter<any> = new EventEmitter();
+  @Output() nodeUnselected: EventEmitter<any> = new EventEmitter();
 
-  @Output() public nodeMoved: EventEmitter<any> = new EventEmitter();
+  @Output() nodeMoved: EventEmitter<any> = new EventEmitter();
 
-  @Output() public nodeExpanded: EventEmitter<any> = new EventEmitter();
+  @Output() nodeExpanded: EventEmitter<any> = new EventEmitter();
 
-  @Output() public nodeCollapsed: EventEmitter<any> = new EventEmitter();
+  @Output() nodeCollapsed: EventEmitter<any> = new EventEmitter();
 
-  @Output() public loadNextLevel: EventEmitter<any> = new EventEmitter();
+  @Output() loadNextLevel: EventEmitter<any> = new EventEmitter();
 
-  @Output() public nodeChecked: EventEmitter<NodeCheckedEvent> = new EventEmitter();
+  @Output() nodeChecked: EventEmitter<NodeCheckedEvent> = new EventEmitter();
 
-  @Output() public nodeUnchecked: EventEmitter<NodeUncheckedEvent> = new EventEmitter();
+  @Output() nodeUnchecked: EventEmitter<NodeUncheckedEvent> = new EventEmitter();
 
-  @Output() public menuItemSelected: EventEmitter<any> = new EventEmitter();
+  @Output() menuItemSelected: EventEmitter<any> = new EventEmitter();
 
-  public tree: Tree;
+  tree: Tree;
 
   @ViewChild('rootComponent', {static: true})
-  public rootComponent: TreeInternalComponent;
+  rootComponent: TreeInternalComponent;
 
   @ContentChild(TreeRenderTemplateDirective, {read: TreeRenderTemplateDirective, static: false})
-  public renderTemplate: TreeRenderTemplateDirective;
+  renderTemplate: TreeRenderTemplateDirective;
 
   @ContentChild(TreeCommandTemplateDirective, {read: TreeCommandTemplateDirective, static: false})
-  public commandTemplate: TreeCommandTemplateDirective;
+  commandTemplate: TreeCommandTemplateDirective;
 
   private subscriptions: Subscription[] = [];
 
-  public constructor(@Inject(TreeService) private treeService: TreeService) {}
+  constructor(@Inject(TreeService) private treeService: TreeService) {}
 
-  public ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: SimpleChanges): void {
     if (!this.treeModel) {
       this.tree = TreeComponent.EMPTY_TREE;
     } else {
@@ -101,7 +108,7 @@ export class TreeComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
 
     this.subscriptions.push(
       this.treeService.nodeRemoved$.subscribe((e: NodeRemovedEvent) => {
@@ -176,11 +183,11 @@ export class TreeComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  public getController(): TreeController {
+  getController(): TreeController {
     return this.rootComponent.controller;
   }
 
-  public getControllerByNodeId(id: number | string): TreeController {
+  getControllerByNodeId(id: number | string): TreeController {
     return this.treeService.getController(id);
   }
 

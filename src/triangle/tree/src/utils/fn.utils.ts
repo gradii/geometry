@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 export function isEmpty(value: any[] | string): boolean {
   if (typeof value === 'string') {
     return !/\S/.test(value);

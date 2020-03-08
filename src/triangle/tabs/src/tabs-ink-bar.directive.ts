@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {Directive, ElementRef, HostBinding, Input, NgZone, Renderer2} from '@angular/core';
 
 export type TabPositionMode = 'horizontal' | 'vertical';

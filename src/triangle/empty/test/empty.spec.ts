@@ -256,7 +256,7 @@ describe('empty', () => {
     /**
      * Config default empty content via injection.
      */
-    //todo fixme there sames have a bug in detect change component dynamic created
+    // todo fixme there sames have a bug in detect change component dynamic created
     //
     // describe('service injection', () => {
     //   beforeEach(() => {

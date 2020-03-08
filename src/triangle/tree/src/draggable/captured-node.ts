@@ -1,26 +1,33 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { ElementRef } from '@angular/core';
 import { Tree } from '../tree';
 
 export class CapturedNode {
-  public constructor(private anElement: ElementRef, private aTree: Tree) {}
+  constructor(private anElement: ElementRef, private aTree: Tree) {}
 
-  public get element(): ElementRef {
+  get element(): ElementRef {
     return this.anElement;
   }
 
-  public get tree(): Tree {
+  get tree(): Tree {
     return this.aTree;
   }
 
-  public canBeDroppedAt(element: ElementRef): boolean {
+  canBeDroppedAt(element: ElementRef): boolean {
     return !this.sameAs(element) && !this.contains(element);
   }
 
-  public contains(other: ElementRef): boolean {
+  contains(other: ElementRef): boolean {
     return this.element.nativeElement.contains(other.nativeElement);
   }
 
-  public sameAs(other: ElementRef): boolean {
+  sameAs(other: ElementRef): boolean {
     return this.element === other;
   }
 }

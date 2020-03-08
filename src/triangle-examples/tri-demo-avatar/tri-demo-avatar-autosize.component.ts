@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Component } from '@angular/core';
 
 const UserList = ['U', 'Lucy', 'Tom', 'Edward'];
@@ -30,7 +37,7 @@ export class TriDemoAvatarAutoSizeComponent {
   change() {
     let idx = UserList.indexOf(this.text);
     ++idx;
-    if (idx == UserList.length) idx = 0;
+    if (idx == UserList.length) { idx = 0; }
     this.text = UserList[idx];
     this.color = ColorList[idx];
   }

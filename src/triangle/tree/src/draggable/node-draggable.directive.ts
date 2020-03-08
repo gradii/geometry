@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Directive, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Tree } from '../tree';
 import { CapturedNode } from './captured-node';
@@ -7,16 +14,16 @@ import { NodeDraggableService } from './node-draggable.service';
   selector: '[nodeDraggable]'
 })
 export class NodeDraggableDirective implements OnDestroy, OnInit {
-  public static DATA_TRANSFER_STUB_DATA = 'some browsers enable drag-n-drop only when dataTransfer has data';
+  static DATA_TRANSFER_STUB_DATA = 'some browsers enable drag-n-drop only when dataTransfer has data';
 
-  @Input() public nodeDraggable: ElementRef;
+  @Input() nodeDraggable: ElementRef;
 
-  @Input() public tree: Tree;
+  @Input() tree: Tree;
 
   private nodeNativeElement: HTMLElement;
   private disposersForDragListeners: Function[] = [];
 
-  public constructor(
+  constructor(
     @Inject(ElementRef) public element: ElementRef,
     @Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService,
     @Inject(Renderer2) private renderer: Renderer2
@@ -24,7 +31,7 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
     this.nodeNativeElement = element.nativeElement;
   }
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     if (!this.tree.isStatic()) {
       this.renderer.setAttribute(this.nodeNativeElement, 'draggable', 'true');
       this.disposersForDragListeners.push(
@@ -48,7 +55,7 @@ export class NodeDraggableDirective implements OnDestroy, OnInit {
     }
   }
 
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     /* tslint:disable:typedef */
     this.disposersForDragListeners.forEach(dispose => dispose());
     /* tslint:enable:typedef */

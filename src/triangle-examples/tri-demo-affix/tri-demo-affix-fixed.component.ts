@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import { Component } from '@angular/core';
 
 /**
  * @title affix-fixed

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 // tslint:disable:member-ordering
 import {
   ChangeDetectionStrategy,
@@ -218,7 +225,7 @@ export class TransferComponent implements OnChanges {
     const targetDatasource = direction === 'left' ? this.leftDataSource : this.rightDataSource;
     for (const item of list) {
       const idx = datasource.indexOf(item);
-      if (idx === -1) continue;
+      if (idx === -1) { continue; }
       item.checked = false;
       targetDatasource.push(item);
       datasource.splice(idx, 1);

@@ -1,4 +1,11 @@
 /**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
  * Counts the amount of option group labels that precede the specified option.
  * @param optionIndex Index of the option at which to start counting.
  * @param options Flat list of all of the options.

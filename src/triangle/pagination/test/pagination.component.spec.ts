@@ -162,7 +162,7 @@ describe('TriPaginationComponent', () => {
     template: `
       <tri-pagination [pageIndex]="_pageIndex"
                       [pageSize]="_pageSize"
-                      [total]="_total" 
+                      [total]="_total"
                       [showSizeChanger]="true"
                       [size]="_size"></tri-pagination>`
   })

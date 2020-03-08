@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { ElementRef, Inject, Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -25,59 +32,59 @@ import { isEmpty } from './utils/fn.utils';
 
 @Injectable()
 export class TreeService {
-  public nodeMoved$: Subject<NodeMovedEvent> = new Subject<NodeMovedEvent>();
-  public nodeRemoved$: Subject<NodeRemovedEvent> = new Subject<NodeRemovedEvent>();
-  public nodeRenamed$: Subject<NodeRenamedEvent> = new Subject<NodeRenamedEvent>();
-  public nodeCreated$: Subject<NodeCreatedEvent> = new Subject<NodeCreatedEvent>();
-  public nodeSelected$: Subject<NodeSelectedEvent> = new Subject<NodeSelectedEvent>();
-  public nodeUnselected$: Subject<NodeUnselectedEvent> = new Subject<NodeUnselectedEvent>();
-  public nodeExpanded$: Subject<NodeExpandedEvent> = new Subject<NodeExpandedEvent>();
-  public nodeCollapsed$: Subject<NodeCollapsedEvent> = new Subject<NodeCollapsedEvent>();
-  public menuItemSelected$: Subject<MenuItemSelectedEvent> = new Subject<MenuItemSelectedEvent>();
-  public loadNextLevel$: Subject<LoadNextLevelEvent> = new Subject<LoadNextLevelEvent>();
-  public nodeChecked$: Subject<NodeCheckedEvent> = new Subject<NodeCheckedEvent>();
-  public nodeUnchecked$: Subject<NodeUncheckedEvent> = new Subject<NodeUncheckedEvent>();
-  public nodeIndetermined$: Subject<NodeIndeterminedEvent> = new Subject<NodeIndeterminedEvent>();
+  nodeMoved$: Subject<NodeMovedEvent> = new Subject<NodeMovedEvent>();
+  nodeRemoved$: Subject<NodeRemovedEvent> = new Subject<NodeRemovedEvent>();
+  nodeRenamed$: Subject<NodeRenamedEvent> = new Subject<NodeRenamedEvent>();
+  nodeCreated$: Subject<NodeCreatedEvent> = new Subject<NodeCreatedEvent>();
+  nodeSelected$: Subject<NodeSelectedEvent> = new Subject<NodeSelectedEvent>();
+  nodeUnselected$: Subject<NodeUnselectedEvent> = new Subject<NodeUnselectedEvent>();
+  nodeExpanded$: Subject<NodeExpandedEvent> = new Subject<NodeExpandedEvent>();
+  nodeCollapsed$: Subject<NodeCollapsedEvent> = new Subject<NodeCollapsedEvent>();
+  menuItemSelected$: Subject<MenuItemSelectedEvent> = new Subject<MenuItemSelectedEvent>();
+  loadNextLevel$: Subject<LoadNextLevelEvent> = new Subject<LoadNextLevelEvent>();
+  nodeChecked$: Subject<NodeCheckedEvent> = new Subject<NodeCheckedEvent>();
+  nodeUnchecked$: Subject<NodeUncheckedEvent> = new Subject<NodeUncheckedEvent>();
+  nodeIndetermined$: Subject<NodeIndeterminedEvent> = new Subject<NodeIndeterminedEvent>();
 
   private controllers: Map<string | number, TreeController> = new Map();
 
-  public constructor(@Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService) {
+  constructor(@Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService) {
     this.nodeRemoved$.subscribe((e: NodeRemovedEvent) => e.node.removeItselfFromParent());
   }
 
-  public unselectStream(tree: Tree): Observable<NodeSelectedEvent> {
+  unselectStream(tree: Tree): Observable<NodeSelectedEvent> {
     return this.nodeSelected$.pipe(filter((e: NodeSelectedEvent) => tree !== e.node));
   }
 
-  public fireNodeRemoved(tree: Tree): void {
+  fireNodeRemoved(tree: Tree): void {
     this.nodeRemoved$.next(new NodeRemovedEvent(tree, tree.positionInParent));
   }
 
-  public fireNodeCreated(tree: Tree): void {
+  fireNodeCreated(tree: Tree): void {
     this.nodeCreated$.next(new NodeCreatedEvent(tree));
   }
 
-  public fireNodeSelected(tree: Tree): void {
+  fireNodeSelected(tree: Tree): void {
     this.nodeSelected$.next(new NodeSelectedEvent(tree));
   }
 
-  public fireNodeUnselected(tree: Tree): void {
+  fireNodeUnselected(tree: Tree): void {
     this.nodeUnselected$.next(new NodeUnselectedEvent(tree));
   }
 
-  public fireNodeRenamed(oldValue: RenamableNode | string, tree: Tree): void {
+  fireNodeRenamed(oldValue: RenamableNode | string, tree: Tree): void {
     this.nodeRenamed$.next(new NodeRenamedEvent(tree, oldValue, tree.value));
   }
 
-  public fireNodeMoved(tree: Tree, parent: Tree): void {
+  fireNodeMoved(tree: Tree, parent: Tree): void {
     this.nodeMoved$.next(new NodeMovedEvent(tree, parent));
   }
 
-  public fireMenuItemSelected(tree: Tree, selectedItem: string): void {
+  fireMenuItemSelected(tree: Tree, selectedItem: string): void {
     this.menuItemSelected$.next(new MenuItemSelectedEvent(tree, selectedItem));
   }
 
-  public fireNodeSwitchFoldingType(tree: Tree): void {
+  fireNodeSwitchFoldingType(tree: Tree): void {
     if (tree.isNodeExpanded()) {
       this.fireNodeExpanded(tree);
       if (this.shouldFireLoadNextLevel(tree)) {
@@ -88,15 +95,15 @@ export class TreeService {
     }
   }
 
-  public fireNodeChecked(tree: Tree): void {
+  fireNodeChecked(tree: Tree): void {
     this.nodeChecked$.next(new NodeCheckedEvent(tree));
   }
 
-  public fireNodeUnchecked(tree: Tree): void {
+  fireNodeUnchecked(tree: Tree): void {
     this.nodeUnchecked$.next(new NodeUncheckedEvent(tree));
   }
 
-  public draggedStream(tree: Tree, element: ElementRef): Observable<NodeDraggableEvent> {
+  draggedStream(tree: Tree, element: ElementRef): Observable<NodeDraggableEvent> {
     return this.nodeDraggableService.draggableNodeEvents$
       .pipe(
         filter((e: NodeDraggableEvent) => e.target === element),
@@ -104,17 +111,17 @@ export class TreeService {
       );
   }
 
-  public setController(id: string | number, controller: TreeController): void {
+  setController(id: string | number, controller: TreeController): void {
     this.controllers.set(id, controller);
   }
 
-  public deleteController(id: string | number): void {
+  deleteController(id: string | number): void {
     if (this.controllers.has(id)) {
       this.controllers.delete(id);
     }
   }
 
-  public getController(id: string | number): TreeController {
+  getController(id: string | number): TreeController {
     if (this.controllers.has(id)) {
       return this.controllers.get(id);
     }
@@ -122,11 +129,11 @@ export class TreeService {
     return null;
   }
 
-  public hasController(id: string | number): boolean {
+  hasController(id: string | number): boolean {
     return this.controllers.has(id);
   }
 
-  public fireNodeIndetermined(tree: Tree): void {
+  fireNodeIndetermined(tree: Tree): void {
     this.nodeIndetermined$.next(new NodeIndeterminedEvent(tree));
   }
 

@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { InputDirective } from '@gradii/triangle/inputs';
 
 /**
@@ -25,9 +32,9 @@ import { InputDirective } from '@gradii/triangle/inputs';
   styles: []
 })
 export class TriDemoTagControlComponent implements OnInit {
-  public tags = ['Unremovable', 'Tag 2', 'Tag 3'];
-  public inputVisible = false;
-  public inputValue = '';
+  tags = ['Unremovable', 'Tag 2', 'Tag 3'];
+  inputVisible = false;
+  inputValue = '';
   @ViewChild('input') input: InputDirective;
 
   handleClose(removedTag: any): void {

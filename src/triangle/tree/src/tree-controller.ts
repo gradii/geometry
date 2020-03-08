@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { NodeMenuItemAction } from './menu/menu.events';
 import { Tree } from './tree';
 import { TreeInternalComponent } from './tree-internal.component';
@@ -15,56 +22,56 @@ export class TreeController {
     this.treeService = this.component.treeService;
   }
 
-  public select(): void {
+  select(): void {
     if (!this.isSelected()) {
       this.component.onNodeSelected({button: MouseButtons.Left});
     }
   }
 
-  public unselect(): void {
+  unselect(): void {
     if (this.isSelected()) {
       this.component.onNodeUnselected({button: MouseButtons.Left});
     }
   }
 
-  public isSelected(): boolean {
+  isSelected(): boolean {
     return this.component.isSelected;
   }
 
-  public expand(): void {
+  expand(): void {
     if (this.isCollapsed()) {
       this.component.onSwitchFoldingType();
     }
   }
 
-  public isExpanded(): boolean {
+  isExpanded(): boolean {
     return this.tree.isNodeExpanded();
   }
 
-  public collapse(): void {
+  collapse(): void {
     if (this.isExpanded()) {
       this.component.onSwitchFoldingType();
     }
   }
 
-  public isCollapsed(): boolean {
+  isCollapsed(): boolean {
     return this.tree.isNodeCollapsed();
   }
 
-  public toTreeModel(): TreeModel {
+  toTreeModel(): TreeModel {
     return this.tree.toTreeModel();
   }
 
-  public rename(newValue: string): void {
+  rename(newValue: string): void {
     this.tree.markAsBeingRenamed();
     this.component.applyNewValue({type: 'keyup', value: newValue});
   }
 
-  public remove(): void {
+  remove(): void {
     this.component.onMenuItemSelected({nodeMenuItemAction: NodeMenuItemAction.Remove});
   }
 
-  public addChild(newNode: TreeModel): void {
+  addChild(newNode: TreeModel): void {
     if (this.tree.hasDeferredChildren() && !this.tree.childrenWereLoaded()) {
       return;
     }
@@ -73,7 +80,7 @@ export class TreeController {
     this.treeService.fireNodeCreated(newTree);
   }
 
-  public addChildAsync(newNode: TreeModel): Promise<Tree> {
+  addChildAsync(newNode: TreeModel): Promise<Tree> {
     if (this.tree.hasDeferredChildren() && !this.tree.childrenWereLoaded()) {
       return Promise.reject(
         new Error('This node loads its children asynchronously, hence child cannot be added this way')
@@ -91,7 +98,7 @@ export class TreeController {
     });
   }
 
-  public changeNodeId(id: string | number) {
+  changeNodeId(id: string | number) {
     if (!id) {
       throw Error('You should supply an id!');
     }
@@ -105,45 +112,45 @@ export class TreeController {
     this.treeService.setController(this.tree.id, this);
   }
 
-  public reloadChildren(): void {
+  reloadChildren(): void {
     this.tree.reloadChildren();
   }
 
-  public setChildren(children: TreeModel[]): void {
+  setChildren(children: TreeModel[]): void {
     if (!this.tree.isLeaf()) {
       this.tree.setChildren(children);
     }
   }
 
-  public startRenaming(): void {
+  startRenaming(): void {
     this.tree.markAsBeingRenamed();
   }
 
-  public check(): void {
+  check(): void {
     this.component.onNodeChecked();
   }
 
-  public uncheck(): void {
+  uncheck(): void {
     this.component.onNodeUnchecked();
   }
 
-  public isChecked(): boolean {
+  isChecked(): boolean {
     return this.tree.checked;
   }
 
-  public isIndetermined(): boolean {
+  isIndetermined(): boolean {
     return get(this.component, 'checkboxElementRef.nativeElement.indeterminate');
   }
 
-  public allowSelection() {
+  allowSelection() {
     this.tree.selectionAllowed = true;
   }
 
-  public forbidSelection() {
+  forbidSelection() {
     this.tree.selectionAllowed = false;
   }
 
-  public isSelectionAllowed(): boolean {
+  isSelectionAllowed(): boolean {
     return this.tree.selectionAllowed;
   }
 }

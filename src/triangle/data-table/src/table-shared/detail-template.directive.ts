@@ -15,7 +15,6 @@ export class DetailTemplateDirective {
 
   /**
    * I must declare detail template, even though i not use id
-   * @type {boolean}
    */
   @Input()
   hackHidden = false;

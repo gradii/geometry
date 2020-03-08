@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Component, OnInit } from '@angular/core';
 
 const tagsFromServer = ['Movie', 'Books', 'Music', 'Sports'];
@@ -17,8 +24,8 @@ const tagsFromServer = ['Movie', 'Books', 'Music', 'Sports'];
   styles: []
 })
 export class TriDemoTagHotTagsComponent implements OnInit {
-  public hotTags = tagsFromServer;
-  public selectedTags = [];
+  hotTags = tagsFromServer;
+  selectedTags = [];
 
   handleChange(checked: boolean, tag: string): void {
     if (checked) {

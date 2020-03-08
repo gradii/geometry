@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   Component,
   ElementRef,
@@ -107,7 +114,7 @@ export class ConfirmComponent implements OnInit, OnDestroy {
    * 获取对话框是否可见
    */
   @Input()
-  public get visible(): boolean {
+  get visible(): boolean {
     return this._visible;
   }
 
@@ -116,7 +123,7 @@ export class ConfirmComponent implements OnInit, OnDestroy {
    * 设置对话框是否可见
    * @param  value
    */
-  public set visible(value: boolean) {
+  set visible(value: boolean) {
     if (this._visible === value) {
       return;
     }

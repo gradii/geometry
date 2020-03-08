@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   Component,
   ElementRef,
@@ -31,13 +38,13 @@ import { NodeMenuService } from './node-menu.service';
 export class NodeMenuComponent implements OnInit, OnDestroy {
 
   @Output()
-  public menuItemSelected: EventEmitter<NodeMenuItemSelectedEvent> = new EventEmitter<NodeMenuItemSelectedEvent>();
+  menuItemSelected: EventEmitter<NodeMenuItemSelectedEvent> = new EventEmitter<NodeMenuItemSelectedEvent>();
 
-  @Input() public menuItems: NodeMenuItem[];
+  @Input() menuItems: NodeMenuItem[];
 
-  @ViewChild('menuContainer', {read: ElementRef, static: false}) public menuContainer: any;
+  @ViewChild('menuContainer', {read: ElementRef, static: false}) menuContainer: any;
 
-  public availableMenuItems: NodeMenuItem[] = [
+  availableMenuItems: NodeMenuItem[] = [
     {
       name    : 'New tag',
       action  : NodeMenuItemAction.NewTag,
@@ -62,20 +69,20 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
 
   private disposersForGlobalListeners: Function[] = [];
 
-  public constructor(@Inject(Renderer2) private renderer: Renderer2,
+  constructor(@Inject(Renderer2) private renderer: Renderer2,
                      @Inject(NodeMenuService) private nodeMenuService: NodeMenuService) {}
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.availableMenuItems = this.menuItems || this.availableMenuItems;
     this.disposersForGlobalListeners.push(this.renderer.listen('document', 'keyup', this.closeMenu.bind(this)));
     this.disposersForGlobalListeners.push(this.renderer.listen('document', 'mousedown', this.closeMenu.bind(this)));
   }
 
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.disposersForGlobalListeners.forEach((dispose: Function) => dispose());
   }
 
-  public onMenuItemSelected(e: MouseEvent, selectedMenuItem: NodeMenuItem): void {
+  onMenuItemSelected(e: MouseEvent, selectedMenuItem: NodeMenuItem): void {
     if (isLeftButtonClicked(e)) {
       this.menuItemSelected.emit({
         nodeMenuItemAction  : selectedMenuItem.action,

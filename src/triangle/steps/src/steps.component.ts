@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Directive, Host, Input, OnDestroy, OnInit, Self } from '@angular/core';
 import { StepConnectService } from './step-connect.service';
 

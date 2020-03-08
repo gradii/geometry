@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright LinboLen Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { animate, state, style, transition, trigger } from '@angular/animations';
 /* tslint:disable:no-access-missing-member */
 import { Component, ViewEncapsulation } from '@angular/core';
