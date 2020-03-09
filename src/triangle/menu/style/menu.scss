@@ -36,6 +36,7 @@ $menu-font-size       : $font-size-base !default;
   @at-root &-item,
   &-submenu,
   &-submenu-title {
+    outline: 0;
     cursor : pointer;
   }
   @at-root &-submenu, #{&}-submenu-inline {
