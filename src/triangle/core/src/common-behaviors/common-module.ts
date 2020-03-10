@@ -86,7 +86,6 @@ export class TriCommonModule {
     if (!this._hasDoneGlobalChecks) {
       this._checkDoctypeIsDefined();
       this._checkThemeIsPresent();
-      this._checkCdkVersionMatch();
       this._hasDoneGlobalChecks = true;
     }
   }
@@ -144,19 +143,5 @@ export class TriCommonModule {
     }
 
     this._document.body.removeChild(testElement);
-  }
-
-  /** Checks whether the material version matches the cdk version */
-  private _checkCdkVersionMatch(): void {
-    const isEnabled = this._checksAreEnabled() &&
-      (this._sanityChecks === true || (this._sanityChecks as GranularSanityChecks).version);
-
-    if (isEnabled && VERSION.full !== CDK_VERSION.full) {
-      console.warn(
-          'The Angular Material version (' + VERSION.full + ') does not match ' +
-          'the Angular CDK version (' + CDK_VERSION.full + ').\n' +
-          'Please ensure the versions of these two packages exactly match.'
-      );
-    }
   }
 }
