@@ -105,7 +105,9 @@ export class ColDirective implements OnInit, OnChanges {
     return this._row && this._row._gutter / 2;
   }
 
-  /** temp solution since no method add classMap to host https://github.com/angular/angular/issues/7289*/
+  /**
+   * temp solution since no method add classMap to host https://github.com/angular/angular/issues/7289
+   */
   setClassMap(): void {
     this._classList.forEach(_className => {
       this._renderer.removeClass(this._el, _className);
@@ -128,19 +130,21 @@ export class ColDirective implements OnInit, OnChanges {
 
   generateClass() {
     const listOfSizeInputName = ['xs', 'sm', 'md', 'lg', 'xl'];
-    const listOfClassName = [];
+    const listOfClassName: string[] = [];
     listOfSizeInputName.forEach(name => {
       const sizeName = name.toLowerCase();
-      if (typeof this[name] === 'number' || typeof this[name] === 'string') {
-        listOfClassName.push(this[name] && `tri-col-${sizeName}-${this[name]}`);
+      const field = Reflect.get(this, name);
+
+      if (typeof field === 'number' || typeof field === 'string') {
+        listOfClassName.push(field && `tri-col-${sizeName}-${field}`);
       } else {
-        listOfClassName.push(this[name] && this[name]['span'] && `tri-col-${sizeName}-${this[name]['span']}`);
-        listOfClassName.push(this[name] && this[name]['pull'] && `tri-col-${sizeName}-pull-${this[name]['pull']}`);
-        listOfClassName.push(this[name] && this[name]['push'] && `tri-col-${sizeName}-push-${this[name]['push']}`);
+        listOfClassName.push(field && field['span'] && `tri-col-${sizeName}-${field['span']}`);
+        listOfClassName.push(field && field['pull'] && `tri-col-${sizeName}-pull-${field['pull']}`);
+        listOfClassName.push(field && field['push'] && `tri-col-${sizeName}-push-${field['push']}`);
         listOfClassName.push(
-          this[name] && this[name]['offset'] && `tri-col-${sizeName}-offset-${this[name]['offset']}`
+          field && field['offset'] && `tri-col-${sizeName}-offset-${field['offset']}`
         );
-        listOfClassName.push(this[name] && this[name]['order'] && `tri-col-${sizeName}-order-${this[name]['order']}`);
+        listOfClassName.push(field && field['order'] && `tri-col-${sizeName}-order-${field['order']}`);
       }
     });
     return listOfClassName;

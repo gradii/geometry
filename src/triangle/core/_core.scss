@@ -16,6 +16,10 @@
 @import './src/option/optgroup-theme';
 @import './src/selection/pseudo-checkbox/pseudo-checkbox-theme';
 
+// Core style from component directory
+@import '../grid/style/mixin';
+@import '../grid/style/grid';
+
 // Mixin that renders all of the core styles that are not theme-dependent.
 @mixin tri-core($typography-config: null) {
   //@include angular-material-typography($typography-config);
@@ -45,17 +49,17 @@
   // inside of a `tri-sidenav-container`. Note that we need to exclude the ampersand
   // selector in case the mixin is included at the top level.
   .tri-app-background#{if(&, ', &.tri-app-background', '')} {
-    $background: map-get($theme, background);
-    $foreground: map-get($theme, foreground);
+    $background      : map-get($theme, background);
+    $foreground      : map-get($theme, foreground);
 
-    background-color: tri-color($background, background);
-    color: tri-color($foreground, text);
+    background-color : tri-color($background, background);
+    color            : tri-color($foreground, text);
   }
 
   // Marker that is used to determine whether the user has added a theme to their page.
   @at-root {
     .tri-theme-loaded-marker {
-      display: none;
+      display : none;
     }
   }
 }
