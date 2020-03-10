@@ -1,5 +1,5 @@
-@import "../../core/themes/default-theme";
-@import "./mixin";
+@import "../../themes/default-theme";
+@import "./grid-mixin";
 
 // Grid system
 .#{$ant-prefix}-row {
