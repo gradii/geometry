@@ -9,6 +9,7 @@ $card-padding-wider : 32px;
   border-radius : $border-radius-sm;
   font-size     : $font-size-base;
   position      : relative;
+  display       : block;
   transition    : all .3s;
 
   @at-root &:not(#{&}-no-hovering):hover {
