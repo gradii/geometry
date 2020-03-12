@@ -94,7 +94,7 @@ TRIANGLE_ENTRYPOINTS_WITH_STYLES = [
     "dropdown",
     "empty",
     "form",
-    "grid",
+    #  "grid",
     "grid-list",
     "icon",
     #  "i18n",

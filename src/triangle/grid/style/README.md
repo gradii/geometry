@@ -1,0 +1,1 @@
+move style to core directory

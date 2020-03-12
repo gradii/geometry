@@ -17,8 +17,7 @@
 @import './src/selection/pseudo-checkbox/pseudo-checkbox-theme';
 
 // Core style from component directory
-@import '../grid/style/mixin';
-@import '../grid/style/grid';
+@import './src/grid/grid';
 
 // Mixin that renders all of the core styles that are not theme-dependent.
 @mixin tri-core($typography-config: null) {

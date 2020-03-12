@@ -71,4 +71,5 @@ import { RowDirective } from './row.directive';
   exports     : [RowDirective, ColDirective],
   imports     : [CommonModule]
 })
-export class TriGridModule {}
+export class TriGridModule {
+}
