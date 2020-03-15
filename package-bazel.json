@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "@angular/animations": "^9.0.1",
+    "@angular/cdk": "^9.0.1",
     "@angular/common": "^9.0.1",
     "@angular/compiler": "^9.0.1",
     "@angular/core": "^9.0.1",
@@ -12,12 +13,12 @@
     "@angular/forms": "^9.0.1",
     "@angular/platform-browser": "^9.0.1",
     "core-js": "^3.6.4",
+    "date-fns": "^2.9.0",
+    "ix": "^3.0.2",
     "rxjs": "^6.5.3",
     "tslib": "^1.10.0",
-    "zone.js": "~0.10.2",
-    "@angular/cdk": "^9.0.1",
-    "date-fns": "^2.9.0",
-    "uuid": "^3.4.0"
+    "uuid": "^3.4.0",
+    "zone.js": "~0.10.2"
   },
   "devDependencies": {
     "@angular-devkit/core": "^9.0.2",

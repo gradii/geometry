@@ -29,6 +29,7 @@ $card-padding-wider : 32px;
     border-bottom : $border-width-base $border-style-base $border-color-split;
     padding       : ($card-head-height - $card-head-line-height)/2 ($card-padding-base);
     border-radius : $border-radius-sm $border-radius-sm 0 0;
+    box-sizing    : border-box;
 
     @at-root &-title {
       font-size     : $font-size-lg;
