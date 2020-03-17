@@ -7,8 +7,12 @@ $layout-prefix-cls : "#{$ant-prefix}-layout";
     .#{$layout-prefix-cls} {
       background     : $layout-body-background;
 
-      @at-root &-header {
-        //background  : $layout-header-background;
+      @at-root &-header-light {
+        background  : $background-color-base;
+      }
+
+      @at-root &-header-dark {
+        background  : $layout-header-background;
       }
 
       @at-root &-footer {
