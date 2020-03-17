@@ -1,3 +1,8 @@
+@import './style/root';
+@import './style/mixins';
+@import './style/motion';
+@import './style/core/base';
+
 @import './style/cdk/overlay';
 @import './style/cdk/a11y';
 @import './style/cdk/text-field';

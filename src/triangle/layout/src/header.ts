@@ -5,14 +5,16 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, HostBinding, Input, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'tri-header',
-  template: `
+  selector           : 'tri-header',
+  preserveWhitespaces: false,
+  encapsulation      : ViewEncapsulation.None,
+  template           : `
     <ng-content></ng-content>
   `,
-  host    : {
+  host               : {
     '[class.tri-layout-light]': "theme === 'light'",
     '[class.tri-layout-dark]' : "theme === 'dark'"
   }

@@ -8,9 +8,10 @@
 import { Component, HostBinding, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector     : 'tri-content',
-  encapsulation: ViewEncapsulation.None,
-  template     : `
+  selector           : 'tri-content',
+  preserveWhitespaces: false,
+  encapsulation      : ViewEncapsulation.None,
+  template           : `
     <ng-content></ng-content>
   `
 })
