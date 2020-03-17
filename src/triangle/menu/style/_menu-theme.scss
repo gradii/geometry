@@ -4,177 +4,179 @@ $menu-prefix-cls      : "#{$ant-prefix}-menu" !default;
 $menu-collapsed-width : 64px !default;
 $menu-font-size       : $font-size-base !default;
 
-// default theme
-.#{$menu-prefix-cls} {
-  box-shadow    : $box-shadow-base;
-  color         : $text-color;
-  background    : $component-background;
+@mixin tri-menu-theme($theme) {
+  // default theme
+  .#{$menu-prefix-cls} {
+    box-shadow : $box-shadow-base;
+    color      : $text-color;
+    background : $component-background;
 
-  @at-root &-item-group-title {
-    color       : $text-color-secondary;
-  }
+    @at-root &-item-group-title {
+      color : $text-color-secondary;
+    }
 
-  @at-root &-item:active,
-  &-submenu-title:active {
-    background : $item-active-bg;
-  }
+    @at-root &-item:active,
+    &-submenu-title:active {
+      background : $item-active-bg;
+    }
 
-  @at-root &-item > a {
-    color   : $text-color;
-    @at-root &:hover {
+    @at-root &-item > a {
+      color : $text-color;
+      @at-root &:hover {
+        color : $primary-color;
+      }
+      @at-root &:before {
+        background-color : transparent;
+      }
+    }
+
+    @at-root &-item-divider {
+      background-color : $border-color-split;
+    }
+
+    @at-root &-item:hover,
+    &-item-active,
+    &:not(#{&}-inline) #{&}-submenu-open,
+    &-submenu-active,
+    &-submenu-title:hover {
       color : $primary-color;
     }
-    @at-root &:before {
+
+    @at-root &-horizontal > #{&}-item:hover,
+    &-horizontal > #{&}-item-active,
+    &-horizontal > #{&}-submenu #{&}-submenu-title:hover {
       background-color : transparent;
     }
-  }
 
-  @at-root &-item-divider {
-    background-color : $border-color-split;
-  }
-
-  @at-root &-item:hover,
-  &-item-active,
-  &:not(#{&}-inline) #{&}-submenu-open,
-  &-submenu-active,
-  &-submenu-title:hover {
-    color : $primary-color;
-  }
-
-  @at-root &-horizontal > #{&}-item:hover,
-  &-horizontal > #{&}-item-active,
-  &-horizontal > #{&}-submenu #{&}-submenu-title:hover {
-    background-color : transparent;
-  }
-
-  @at-root &-item-selected {
-    color : $primary-color;
-    > a,
-    > a:hover {
+    @at-root &-item-selected {
       color : $primary-color;
+      > a,
+      > a:hover {
+        color : $primary-color;
+      }
     }
-  }
 
-  @at-root &:not(#{&}-horizontal) #{&}-item-selected {
-    background-color : $item-active-bg;
-  }
-
-  @at-root & > #{&}-item-divider {
-    background-color : $border-color-split;
-  }
-
-  @at-root &-submenu {
-    > .#{$menu-prefix-cls} {
-      background-color : $component-background;
+    @at-root &:not(#{&}-horizontal) #{&}-item-selected {
+      background-color : $item-active-bg;
     }
-  }
 
-  @at-root &-vertical #{&}-submenu-selected {
-    color : $primary-color;
-    > a {
+    @at-root & > #{&}-item-divider {
+      background-color : $border-color-split;
+    }
+
+    @at-root &-submenu {
+      > .#{$menu-prefix-cls} {
+        background-color : $component-background;
+      }
+    }
+
+    @at-root &-vertical #{&}-submenu-selected {
       color : $primary-color;
+      > a {
+        color : $primary-color;
+      }
+    }
+
+    // Disabled state sets text to gray and nukes hover/tab effects
+    @at-root &-item-disabled,
+    &-submenu-disabled {
+      color        : $disabled-color !important;
+      background   : none;
+      border-color : transparent !important;
+      > a {
+        color : $disabled-color !important;
+      }
+
+      > .#{$menu-prefix-cls}-submenu-title {
+        color : $disabled-color !important;
+      }
     }
   }
 
-  // Disabled state sets text to gray and nukes hover/tab effects
-  @at-root &-item-disabled,
-  &-submenu-disabled {
-    color        : $disabled-color !important;
-    background   : none;
-    border-color : transparent !important;
-    > a {
-      color          : $disabled-color !important;
+  // dark theme
+  .#{$menu-prefix-cls} {
+    @at-root &-dark,
+    &-dark #{&}-sub {
+      color      : $text-color-secondary-dark;
+      background : $menu-dark-bg;
     }
 
-    > .#{$menu-prefix-cls}-submenu-title {
-      color  : $disabled-color !important;
+    @at-root &-dark #{&}-inline#{&}-sub {
+      background : $menu-dark-submenu-bg;
     }
-  }
-}
 
-// dark theme
-.#{$menu-prefix-cls} {
-  @at-root &-dark,
-  &-dark #{&}-sub {
-    color      : $text-color-secondary-dark;
-    background : $menu-dark-bg;
-  }
+    @at-root &-dark#{&}-horizontal {
+      border-bottom-color : $menu-dark-bg;
+    }
 
-  @at-root &-dark #{&}-inline#{&}-sub {
-    background : $menu-dark-submenu-bg;
-  }
+    @at-root &-dark#{&}-horizontal > #{&}-item,
+    &-dark#{&}-horizontal > #{&}-submenu {
+      border-color  : $menu-dark-bg;
+      border-bottom : 0;
+    }
 
-  @at-root &-dark#{&}-horizontal {
-    border-bottom-color : $menu-dark-bg;
-  }
+    @at-root &-dark #{&}-item,
+    &-dark #{&}-item-group-title,
+    &-dark #{&}-item > a {
+      color : $text-color-secondary-dark;
+    }
 
-  @at-root &-dark#{&}-horizontal > #{&}-item,
-  &-dark#{&}-horizontal > #{&}-submenu {
-    border-color  : $menu-dark-bg;
-    border-bottom : 0;
-  }
-
-  @at-root &-dark #{&}-item,
-  &-dark #{&}-item-group-title,
-  &-dark #{&}-item > a {
-    color : $text-color-secondary-dark;
-  }
-
-  @at-root &-dark#{&}-inline,
-  &-dark#{&}-vertical {
-    border-right : 0;
-  }
-
-  @at-root &-dark#{&}-inline #{&}-item,
-  &-dark#{&}-vertical #{&}-item {
-    border-right : 0;
-    margin-left  : 0;
-    left         : 0;
-    @at-root &:after {
+    @at-root &-dark#{&}-inline,
+    &-dark#{&}-vertical {
       border-right : 0;
     }
-  }
 
-  @at-root &-dark #{&}-item:hover,
-  &-dark #{&}-item-active,
-  &-dark #{&}-submenu-active,
-  &-dark:not(#{&}-inline) #{&}-submenu-open,
-  &-dark #{&}-submenu-selected,
-  &-dark #{&}-submenu:hover,
-  &-dark #{&}-submenu-title:hover {
-    background-color : transparent;
-    color            : #fff;
-    > a {
-      color : #fff;
-    }
-  }
-
-  @at-root &-dark #{&}-item-selected {
-    border-right : 0;
-    color        : #fff;
-    @at-root &:after {
+    @at-root &-dark#{&}-inline #{&}-item,
+    &-dark#{&}-vertical #{&}-item {
       border-right : 0;
+      margin-left  : 0;
+      left         : 0;
+      @at-root &:after {
+        border-right : 0;
+      }
     }
-    > a,
-    > a:hover {
-      color : #fff;
-    }
-  }
 
-  @at-root &#{&}-dark #{&}-item-selected {
-    background-color : $primary-color;
-  }
-
-  // Disabled state sets text to dark gray and nukes hover/tab effects
-  @at-root &-dark #{&}-item-disabled,
-  &-dark #{&}-submenu-disabled {
-    @at-root &,
-    & > a {
-      opacity : 0.8;
-      color   : $disabled-color-dark !important;
+    @at-root &-dark #{&}-item:hover,
+    &-dark #{&}-item-active,
+    &-dark #{&}-submenu-active,
+    &-dark:not(#{&}-inline) #{&}-submenu-open,
+    &-dark #{&}-submenu-selected,
+    &-dark #{&}-submenu:hover,
+    &-dark #{&}-submenu-title:hover {
+      background-color : transparent;
+      color            : #fff;
+      > a {
+        color : #fff;
+      }
     }
-    > .#{$menu-prefix-cls}-submenu-title {
-      color : $disabled-color-dark !important;
+
+    @at-root &-dark #{&}-item-selected {
+      border-right : 0;
+      color        : #fff;
+      @at-root &:after {
+        border-right : 0;
+      }
+      > a,
+      > a:hover {
+        color : #fff;
+      }
+    }
+
+    @at-root &#{&}-dark #{&}-item-selected {
+      background-color : $primary-color;
+    }
+
+    // Disabled state sets text to dark gray and nukes hover/tab effects
+    @at-root &-dark #{&}-item-disabled,
+    &-dark #{&}-submenu-disabled {
+      @at-root &,
+      & > a {
+        opacity : 0.8;
+        color   : $disabled-color-dark !important;
+      }
+      > .#{$menu-prefix-cls}-submenu-title {
+        color : $disabled-color-dark !important;
+      }
     }
   }
 }
