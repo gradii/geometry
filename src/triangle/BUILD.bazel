@@ -41,7 +41,7 @@ ng_package(
         ":theming_bundle",
         #        "//src/triangle/core:theming_scss_lib",
         #        "//src/triangle/prebuilt-themes:deeppurple-amber",
-                "//src/triangle/prebuilt-themes:indigo-pink",
+        "//src/triangle/prebuilt-themes:indigo-pink",
         #        "//src/triangle/prebuilt-themes:pink-bluegrey",
         #        "//src/triangle/prebuilt-themes:purple-green",
     ] + TRIANGLE_SCSS_LIBS,

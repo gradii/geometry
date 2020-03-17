@@ -1,4 +1,7 @@
-@include import-once('core:base', true) {
+@import "./variables";
+@import "./mixins";
+
+@mixin tri-reboot() {
 
   /* stylelint-disable at-rule-no-unknown */
 
