@@ -7,7 +7,6 @@ $layout-prefix-cls : "#{$ant-prefix}-layout";
     display        : flex;
     flex-direction : column;
     flex           : auto;
-    background     : $layout-body-background;
 
     @at-root &#{&}-has-sider {
       flex-direction : row;
@@ -23,7 +22,6 @@ $layout-prefix-cls : "#{$ant-prefix}-layout";
     }
 
     @at-root &-header {
-      background  : $layout-header-background;
       padding     : $layout-header-padding;
       height      : $layout-header-height;
       line-height : $layout-header-height;
@@ -31,7 +29,6 @@ $layout-prefix-cls : "#{$ant-prefix}-layout";
 
     @at-root &-footer {
       padding   : $layout-footer-padding;
-      color     : $text-color;
       font-size : $font-size-base;
     }
 
@@ -42,7 +39,6 @@ $layout-prefix-cls : "#{$ant-prefix}-layout";
     @at-root &-sider {
       transition : all .15s $ease-in-out;
       position   : relative;
-      background : $layout-sider-background;
 
       /* fix firefox can't set width smaller than content on flex item */
       min-width  : 0;
@@ -63,8 +59,6 @@ $layout-prefix-cls : "#{$ant-prefix}-layout";
         cursor      : pointer;
         height      : $layout-trigger-height;
         line-height : $layout-trigger-height;
-        background  : $layout-trigger-background;
-        color       : $layout-trigger-color;
       }
 
       @at-root &-zero-width {
@@ -80,16 +74,10 @@ $layout-prefix-cls : "#{$ant-prefix}-layout";
           width         : $layout-zero-trigger-width;
           height        : $layout-zero-trigger-height;
           line-height   : $layout-zero-trigger-height;
-          background    : $layout-sider-background;
-          color         : #fff;
           font-size     : $layout-zero-trigger-width / 2;
           border-radius : 0 $border-radius-base $border-radius-base 0;
           cursor        : pointer;
           transition    : background .3s ease;
-
-          @at-root &:hover {
-            background : tint($layout-sider-background, 10%);
-          }
         }
       }
     }

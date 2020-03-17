@@ -57,4 +57,5 @@
 @mixin gradii-triangle-theme($theme) {
   @include tri-core-theme($theme);
   @include tri-menu-theme($theme);
+  @include tri-layout-theme($theme);
 }
