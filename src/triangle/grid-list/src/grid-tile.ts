@@ -18,9 +18,9 @@ import {
   ChangeDetectionStrategy,
   Inject,
 } from '@angular/core';
-import {TriLine, setLines} from '@gradii/triangle/core';
-import {coerceNumberProperty, NumberInput} from '@angular/cdk/coercion';
-import {TRI_GRID_LIST, TriGridListBase} from './grid-list-base';
+import { TriLine, setLines } from '@gradii/triangle/core';
+import { coerceNumberProperty, NumberInput } from '@angular/cdk/coercion';
+import { TRI_GRID_LIST, TriGridListBase } from './grid-list-base';
 
 @Component({
   selector       : 'tri-grid-tile',

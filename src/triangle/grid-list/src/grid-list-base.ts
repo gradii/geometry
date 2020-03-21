@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {InjectionToken} from '@angular/core';
+import { InjectionToken } from '@angular/core';
 
 /**
  * Injection token used to provide a grid list to a tile and to avoid circular imports.

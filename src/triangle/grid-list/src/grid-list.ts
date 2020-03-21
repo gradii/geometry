@@ -17,12 +17,12 @@ import {
   Optional,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import {TriGridTile} from './grid-tile';
-import {TileCoordinator} from './tile-coordinator';
-import {TileStyler, FitTileStyler, RatioTileStyler, FixedTileStyler} from './tile-styler';
-import {Directionality} from '@angular/cdk/bidi';
-import {coerceNumberProperty, NumberInput} from '@angular/cdk/coercion';
-import {TRI_GRID_LIST, TriGridListBase} from './grid-list-base';
+import { TriGridTile } from './grid-tile';
+import { TileCoordinator } from './tile-coordinator';
+import { TileStyler, FitTileStyler, RatioTileStyler, FixedTileStyler } from './tile-styler';
+import { Directionality } from '@angular/cdk/bidi';
+import { coerceNumberProperty, NumberInput } from '@angular/cdk/coercion';
+import { TRI_GRID_LIST, TriGridListBase } from './grid-list-base';
 
 
 // TODO(kara): Conditional (responsive) column count / row size.
@@ -32,22 +32,22 @@ import {TRI_GRID_LIST, TriGridListBase} from './grid-list-base';
 const TRI_FIT_MODE = 'fit';
 
 @Component({
-  selector: 'tri-grid-list',
-  exportAs: 'triGridList',
-  templateUrl: 'grid-list.html',
-  styleUrls: ['../style/grid-list.css'],
-  host: {
-    'class': 'tri-grid-list',
+  selector       : 'tri-grid-list',
+  exportAs       : 'triGridList',
+  templateUrl    : 'grid-list.html',
+  styleUrls      : ['../style/grid-list.css'],
+  host           : {
+    'class'      : 'tri-grid-list',
     // Ensures that the "cols" input value is reflected in the DOM. This is
     // needed for the grid-list harness.
     '[attr.cols]': 'cols',
   },
-  providers: [{
-    provide: TRI_GRID_LIST,
+  providers      : [{
+    provide    : TRI_GRID_LIST,
     useExisting: TriGridList
   }],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+  encapsulation  : ViewEncapsulation.None,
 })
 export class TriGridList implements TriGridListBase, OnInit, AfterContentChecked {
   /** Number of columns being rendered. */
@@ -74,23 +74,35 @@ export class TriGridList implements TriGridListBase, OnInit, AfterContentChecked
   @ContentChildren(TriGridTile, {descendants: true}) _tiles: QueryList<TriGridTile>;
 
   constructor(private _element: ElementRef<HTMLElement>,
-              @Optional() private _dir: Directionality) {}
+              @Optional() private _dir: Directionality) {
+  }
 
   /** Amount of columns in the grid list. */
   @Input()
-  get cols(): number { return this._cols; }
+  get cols(): number {
+    return this._cols;
+  }
+
   set cols(value: number) {
     this._cols = Math.max(1, Math.round(coerceNumberProperty(value)));
   }
 
   /** Size of the grid list's gutter in pixels. */
   @Input()
-  get gutterSize(): string { return this._gutter; }
-  set gutterSize(value: string) { this._gutter = `${value == null ? '' : value}`; }
+  get gutterSize(): string {
+    return this._gutter;
+  }
+
+  set gutterSize(value: string) {
+    this._gutter = `${value == null ? '' : value}`;
+  }
 
   /** Set internal representation of row height from the user-provided value. */
   @Input()
-  get rowHeight(): string | number { return this._rowHeight; }
+  get rowHeight(): string | number {
+    return this._rowHeight;
+  }
+
   set rowHeight(value: string | number) {
     const newValue = `${value == null ? '' : value}`;
 
@@ -117,7 +129,7 @@ export class TriGridList implements TriGridListBase, OnInit, AfterContentChecked
   private _checkCols() {
     if (!this.cols) {
       throw Error(`tri-grid-list: must pass in number of columns. ` +
-                  `Example: <tri-grid-list cols="3">`);
+        `Example: <tri-grid-list cols="3">`);
     }
   }
 

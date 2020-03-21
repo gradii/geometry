@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {TriGridList} from './grid-list';
-import {TriGridTile} from './grid-tile';
-import {TileCoordinator} from './tile-coordinator';
+import { TriGridList } from './grid-list';
+import { TriGridTile } from './grid-tile';
+import { TileCoordinator } from './tile-coordinator';
 
 /**
  * RegExp that can be used to check whether a value will
@@ -22,7 +22,7 @@ const cssCalcAllowedValue = /^-?\d+((\.\d+)?[A-Za-z%$]?)+$/;
  */
 export abstract class TileStyler {
   _gutterSize: string;
-  _rows: number    = 0;
+  _rows: number = 0;
   _rowspan: number = 0;
   _cols: number;
   _direction: string;
@@ -38,10 +38,10 @@ export abstract class TileStyler {
    */
   init(gutterSize: string, tracker: TileCoordinator, cols: number, direction: string): void {
     this._gutterSize = normalizeUnits(gutterSize);
-    this._rows       = tracker.rowCount;
-    this._rowspan    = tracker.rowspan;
-    this._cols       = cols;
-    this._direction  = direction;
+    this._rows = tracker.rowCount;
+    this._rowspan = tracker.rowspan;
+    this._cols = cols;
+    this._direction = direction;
   }
 
   /**
@@ -220,7 +220,7 @@ export class RatioTileStyler extends TileStyler {
   setRowStyles(tile: TriGridTile, rowIndex: number, percentWidth: number,
                gutterWidth: number): void {
     let percentHeightPerTile = percentWidth / this.rowHeightRatio;
-    this.baseTileHeight      = this.getBaseTileSize(percentHeightPerTile, gutterWidth);
+    this.baseTileHeight = this.getBaseTileSize(percentHeightPerTile, gutterWidth);
 
     // Use padding-top and margin-top to maintain the given aspect ratio, as
     // a percentage-based value for these properties is applied versus the *width* of the

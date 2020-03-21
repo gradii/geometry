@@ -5,7 +5,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {NgModule} from '@angular/core';
+import { NgModule } from '@angular/core';
+import { TriCommonModule, TriLineModule } from '@gradii/triangle/core';
+import { TriGridList } from './grid-list';
 import {
   TriGridAvatarCssTriStyler,
   TriGridTile,
@@ -13,13 +15,11 @@ import {
   TriGridTileHeaderCssTriStyler,
   TriGridTileText
 } from './grid-tile';
-import {TriGridList} from './grid-list';
-import {TriCommonModule, TriLineModule} from '@gradii/triangle/core';
 
 
 @NgModule({
-  imports: [TriLineModule, TriCommonModule],
-  exports: [
+  imports     : [TriLineModule, TriCommonModule],
+  exports     : [
     TriGridList,
     TriGridTile,
     TriGridTileText,
@@ -38,4 +38,5 @@ import {TriCommonModule, TriLineModule} from '@gradii/triangle/core';
     TriGridAvatarCssTriStyler
   ],
 })
-export class TriGridListModule {}
+export class TriGridListModule {
+}

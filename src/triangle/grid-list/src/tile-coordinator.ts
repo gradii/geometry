@@ -44,7 +44,9 @@ export class TileCoordinator {
   rowIndex: number = 0;
 
   /** Gets the total number of rows occupied by tiles */
-  get rowCount(): number { return this.rowIndex + 1; }
+  get rowCount(): number {
+    return this.rowIndex + 1;
+  }
 
   /**
    * Gets the total span of rows occupied by tiles.
@@ -93,7 +95,7 @@ export class TileCoordinator {
   private _findMatchingGap(tileCols: number): number {
     if (tileCols > this.tracker.length) {
       throw Error(`tri-grid-list: tile with colspan ${tileCols} is wider than ` +
-                      `grid with cols="${this.tracker.length}".`);
+        `grid with cols="${this.tracker.length}".`);
     }
 
     // Start index is inclusive, end index is exclusive.
@@ -174,5 +176,6 @@ export class TileCoordinator {
  * @docs-private
  */
 export class TilePosition {
-  constructor(public row: number, public col: number) {}
+  constructor(public row: number, public col: number) {
+  }
 }
