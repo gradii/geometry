@@ -530,8 +530,8 @@ export class IconRegistry implements OnDestroy {
    */
   private _setSvgAttributes(svg: SVGElement, options?: IconOptions): SVGElement {
     svg.setAttribute('fit', '');
-    svg.setAttribute('height', '100%');
-    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', '1em');
+    svg.setAttribute('width', '1em');
     svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     svg.setAttribute('focusable', 'false'); // Disable IE11 default behavior to make SVGs focusable.
 
