@@ -7,10 +7,12 @@
 
 import { NgModule } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { TWOTONE_SVG_ICONS } from '@gradii/triangle/icon/src/icons/twotone.svg';
+import { FILL_SVG_ICONS } from './icons/fill.svg';
+import { OUTLINE_SVG_ICONS } from './icons/outline.svg';
 import { ICON_REGISTRY_PROVIDER, IconRegistry } from './icon-registry';
 import { IconComponent } from './icon.component';
 
-const DEFAULT_SVG_ICON = ``;
 
 /**
  * # Icon图标
@@ -55,6 +57,8 @@ const DEFAULT_SVG_ICON = ``;
 })
 export class TriIconModule {
   constructor(iconRegistry: IconRegistry, sanitizer: DomSanitizer) {
-    iconRegistry.addSvgIconSet(sanitizer.bypassSecurityTrustResourceUrl(DEFAULT_SVG_ICON));
+    iconRegistry.addSvgIconSetLiteralInNamespace('fill', sanitizer.bypassSecurityTrustResourceUrl(FILL_SVG_ICONS));
+    iconRegistry.addSvgIconSetLiteralInNamespace('outline', sanitizer.bypassSecurityTrustResourceUrl(OUTLINE_SVG_ICONS));
+    iconRegistry.addSvgIconSetLiteralInNamespace('twotone', sanitizer.bypassSecurityTrustResourceUrl(TWOTONE_SVG_ICONS));
   }
 }
