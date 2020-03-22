@@ -57,8 +57,8 @@ import { IconComponent } from './icon.component';
 })
 export class TriIconModule {
   constructor(iconRegistry: IconRegistry, sanitizer: DomSanitizer) {
-    iconRegistry.addSvgIconSetLiteralInNamespace('fill', sanitizer.bypassSecurityTrustResourceUrl(FILL_SVG_ICONS));
-    iconRegistry.addSvgIconSetLiteralInNamespace('outline', sanitizer.bypassSecurityTrustResourceUrl(OUTLINE_SVG_ICONS));
-    iconRegistry.addSvgIconSetLiteralInNamespace('twotone', sanitizer.bypassSecurityTrustResourceUrl(TWOTONE_SVG_ICONS));
+    iconRegistry.addSvgIconSetInNamespace('fill', sanitizer.bypassSecurityTrustResourceUrl(FILL_SVG_ICONS));
+    iconRegistry.addSvgIconSetInNamespace('outline', sanitizer.bypassSecurityTrustResourceUrl(OUTLINE_SVG_ICONS));
+    iconRegistry.addSvgIconSetInNamespace('twotone', sanitizer.bypassSecurityTrustResourceUrl(TWOTONE_SVG_ICONS));
   }
 }
