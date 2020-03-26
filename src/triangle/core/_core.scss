@@ -1,5 +1,11 @@
+@import "./style/functions";
+@import "./style/variables";
+@import "./style/utilities";
+@import "./style/mixins";
+
 @import './style/reboot';
 @import './style/root';
+@import './style/api';
 
 @import './style/cdk/overlay';
 @import './style/cdk/a11y';
@@ -28,6 +34,7 @@
   @include tri-reboot();
   @include tri-root();
   @include tri-ripple();
+  @include tri-api();
   @include cdk-a11y();
   @include cdk-overlay();
   @include cdk-text-field();

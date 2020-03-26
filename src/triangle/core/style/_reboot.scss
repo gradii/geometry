@@ -68,11 +68,6 @@
     -webkit-tap-highlight-color : rgba(0, 0, 0, 0); // 6
   }
 
-  // IE10+ doesn't honor `<meta name="viewport">` in some cases.
-  @-ms-viewport {
-    width : device-width;
-  }
-
   // Shim for "new" HTML5 structural elements to display correctly (IE10, older browsers)
   article, aside, dialog, figcaption, figure, footer, header, hgroup, main, nav, section {
     display : block;

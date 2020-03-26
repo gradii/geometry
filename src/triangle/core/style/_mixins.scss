@@ -2,16 +2,19 @@
  * import third party library first
  * include mathsass etc.
  */
+@import "vendor/rfs";
 @import "vendor/math/math";
 // Color
 @import "color/contrast";
 @import "color/utils";
 @import "color/color-palette";
 //Variables And Theme
+@import "functions";
 @import "variables";
 // Mixins
 @import "mixins/border-radius";
 @import "mixins/box-shadow";
+@import "mixins/breakpoints";
 @import "mixins/clearfix";
 @import "mixins/compatibility";
 @import "mixins/gradients";
@@ -23,4 +26,6 @@
 @import "mixins/rem";
 @import "mixins/reset";
 @import "mixins/size";
+@import "mixins/text-truncate";
 @import "mixins/transition";
+@import "mixins/utilities";

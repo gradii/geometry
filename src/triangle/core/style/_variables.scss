@@ -86,6 +86,7 @@ $primary-10                     : color-palette($primary-color, 10) !default;
 
 // Background color for `<body>`
 //$body-background        : #edf0f9 !default;
+$body-color                     : $gray-900 !default;
 $body-background                : #fafafa !default;
 // Base background color for most components
 $component-background           : #fff !default;
@@ -100,8 +101,10 @@ $text-color-secondary-dark      : #ababab !default;
 $icon-color                     : inherit;
 $icon-color-hover               : fade($black, 75%);
 
+// Font
 $font-family-no-number          : "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 $font-family                    : "Helvetica Neue For Number", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$font-family-monospace          : SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
 $code-family                    : Consolas, Menlo, Courier, monospace !default;
 
 $root-font-size                 : 16px !default;
@@ -109,9 +112,11 @@ $font-size-base                 : 1rem !default;
 $font-size-lg                   : ($font-size-base * 1.125) !default;
 $font-size-sm                   : ($font-size-base * 0.875) !default;
 
+$font-weight-lighter            : lighter !default;
 $font-weight-light              : 300 !default;
 $font-weight-normal             : 400 !default;
 $font-weight-bold               : 700 !default;
+$font-weight-bolder             : bolder !default;
 $font-weight-base               : $font-weight-normal !default;
 
 $line-height-base               : 1.25 !default;
@@ -120,6 +125,7 @@ $line-height-sm                 : 1.15 !default;
 
 $border-radius-base             : 4px !default; //no rem
 $border-radius-sm               : 2px !default; //no rem
+$border-radius-lg               : 6px !default; //no rem
 
 $h1-font-size                   : $font-size-base * 2.5 !default;
 $h2-font-size                   : $font-size-base * 2 !default;
@@ -137,6 +143,8 @@ $enable-transitions             : true !default;
 $enable-hover-media-query       : false !default; // Deprecated, no longer affects any compiled CSS
 $enable-grid-classes            : true !default;
 $enable-print-styles            : true !default;
+$enable-rfs                     : true !default;
+$enable-important-utilities     : false !default;
 
 // vertical paddings
 $padding-lg                     : 1.5rem !default; // containers
@@ -209,6 +217,11 @@ $shadow-1-left                  : -1px 0 6px $shadow-color !default;
 $shadow-1-right                 : 1px 0 6px $shadow-color !default;
 $shadow-2                       : 0 2px 8px $shadow-color !default;
 $box-shadow-base                : $shadow-1-down !default;
+
+$box-shadow-sm                  : 0 .125rem .25rem rgba($black, .075) !default;
+$box-shadow                     : 0 .5rem 1rem rgba($black, .15) !default;
+$box-shadow-lg                  : 0 1rem 3rem rgba($black, .175) !default;
+$box-shadow-inset               : inset 0 1px 2px rgba($black, .075) !default;
 
 // Buttons
 $btn-font-weight                : $font-weight-normal !default;
@@ -307,6 +320,37 @@ $screen-xs-max                  : ($screen-sm-min - 1px) !default;
 $screen-sm-max                  : ($screen-md-min - 1px) !default;
 $screen-md-max                  : ($screen-lg-min - 1px) !default;
 $screen-lg-max                  : ($screen-xl-min - 1px) !default;
+
+// Grid breakpoints
+//
+// Define the minimum dimensions at which your layout will change,
+// adapting to different screen sizes, for use in media queries.
+
+$grid-breakpoints               : (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+) !default;
+
+@include _assert-ascending($grid-breakpoints, "$grid-breakpoints");
+@include _assert-starts-at-zero($grid-breakpoints, "$grid-breakpoints");
+
+
+// Grid containers
+//
+// Define the maximum width of `.container` for different screen sizes.
+
+$container-max-widths           : (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px
+) !default;
+
+@include _assert-ascending($container-max-widths, "$container-max-widths");
+
 
 // Grid system
 $grid-columns                   : 24 !default;
@@ -475,6 +519,24 @@ $card-head-height               : 3rem !default;
 $card-head-line-height          : 1.5rem !default;
 $card-head-color                : $heading-color !default;
 $card-head-background           : $component-background !default;
+
+// Spacing
+//
+// Control the default styling of most Bootstrap elements by modifying these
+// variables. Mostly focused on spacing.
+// You can add more entries to the $spacers map, should you need more variation.
+
+$spacer                         : 1rem !default;
+$spacers                        : (
+  0: 0,
+  1: $spacer * .25,
+  2: $spacer * .5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 3,
+) !default;
+
+$negative-spacers               : negativify-map($spacers) !default;
 
 // Tabs
 // ---
