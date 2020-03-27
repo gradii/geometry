@@ -33,8 +33,7 @@ export class DescListItemComponent {
   set term(value: string | TemplateRef<any>) {
     if (value instanceof TemplateRef) {
       this._termTpl = value;
-    }
-    else {
+    } else {
       this._term = value;
     }
   }

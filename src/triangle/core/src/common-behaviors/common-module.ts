@@ -8,7 +8,6 @@
 import {HighContrastModeDetector} from '@angular/cdk/a11y';
 import {BidiModule} from '@angular/cdk/bidi';
 import {Inject, InjectionToken, isDevMode, NgModule, Optional, Version} from '@angular/core';
-import {VERSION as CDK_VERSION} from '@angular/cdk';
 import {StringTemplateOutletDirective} from './string_template_outlet';
 
 
