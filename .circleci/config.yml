@@ -183,7 +183,7 @@ jobs:
 
       - run: ./scripts/circleci/lint-bazel-files.sh
       - run: yarn ownerslint
-      - run: yarn stylelint
+      # - run: yarn stylelint
       - run: yarn tslint
 
       - *save_cache
