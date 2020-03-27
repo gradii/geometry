@@ -147,7 +147,7 @@ export class AlertComponent {
 
   /**
    * @deprecated
-   * @param {string} value
+   * @param value
    */
   @Input()
   set type(value: string) {

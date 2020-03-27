@@ -205,7 +205,7 @@ export class Tree {
 
   /**
    * Check that value passed is not empty (it doesn't consist of only whitespace symbols).
-   * @param {string} value - A value that should be checked.
+   * @param value - A value that should be checked.
    * return - A flag indicating that value is empty or not.
    * @static
    */
