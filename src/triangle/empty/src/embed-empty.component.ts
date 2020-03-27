@@ -32,9 +32,9 @@ import {
 import { EmptyService } from './empty.service';
 
 @Component({
+  selector       : 'tri-embed-empty',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation  : ViewEncapsulation.None,
-  selector       : 'tri-embed-empty',
   templateUrl    : './embed-empty.component.html'
 })
 export class EmbedEmptyComponent implements OnChanges, OnInit, OnDestroy {

@@ -17,7 +17,7 @@ import {
   TemplateRef,
   ViewEncapsulation
 } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeValue } from '@angular/platform-browser';
 import { I18nService } from '@gradii/triangle/i18n';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -35,7 +35,7 @@ import { emptyImage } from './empty-config';
   }
 })
 export class EmptyComponent implements OnChanges, OnInit, OnDestroy {
-  @Input() notFoundImage: string | TemplateRef<void>;
+  @Input() notFoundImage: string | SafeValue | TemplateRef<void>;
   @Input() notFoundContent: string | TemplateRef<void>;
   @Input() notFoundFooter: string | TemplateRef<void>;
 
