@@ -41,7 +41,7 @@ if (module === require.main) {
  * output directory.
  */
 function defaultBuildReleasePackages() {
-  buildReleasePackages(false, join(projectDir, 'dist/releases'));
+  buildReleasePackages(true, join(projectDir, 'dist/releases'));
 }
 
 /**

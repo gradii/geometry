@@ -4,6 +4,7 @@ load(
     "//tools:defaults.bzl",
     "ng_module",
     "sass_binary",
+    "sass_library"
 )
 
 ng_module(
