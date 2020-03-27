@@ -55,7 +55,7 @@ yarn_install(
         "//:tools/postinstall/apply-patches.js",
         "//:tools/postinstall/update-ngcc-main-fields.js",
     ],
-    package_json = "//:package-bazel.json",
+    package_json = "//:package.json",
     yarn_lock = "//:yarn.lock",
 )
 

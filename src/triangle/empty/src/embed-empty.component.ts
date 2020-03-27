@@ -21,7 +21,7 @@ import {
   ViewContainerRef,
   ViewEncapsulation
 } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeValue } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import {
   EMPTY_COMPONENT_NAME,
@@ -44,9 +44,9 @@ export class EmbedEmptyComponent implements OnChanges, OnInit, OnDestroy {
   content?: EmptyCustomContent;
   contentType: 'component' | 'template' | 'string' = 'string';
   contentPortal?: Portal<any>; // tslint:disable-line:no-any
-  defaultSvg = this.sanitizer.bypassSecurityTrustResourceUrl(simpleEmptyImage);
+  defaultSvg: string | SafeValue = this.sanitizer.bypassSecurityTrustResourceUrl(simpleEmptyImage);
   size: EmptySize = '';
-  subs_ = new Subscription();
+  subs_: Subscription = new Subscription();
 
   constructor(
     public emptyService: EmptyService,

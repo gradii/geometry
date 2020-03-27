@@ -24,7 +24,7 @@ import {
 })
 export class ListItemMetaComponent {
   avatarStr = '';
-  avatarTpl: TemplateRef<void>;
+  avatarTpl: TemplateRef<any>;
   @Input() title: string | TemplateRef<void>;
   @Input() description: string | TemplateRef<void>;
 

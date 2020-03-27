@@ -6,6 +6,7 @@
  */
 
 import {Directive, EmbeddedViewRef, Input, TemplateRef, ViewContainerRef} from '@angular/core';
+import { SafeValue } from '@angular/platform-browser';
 
 @Directive({
   selector: '[stringTemplateOutlet]'
@@ -21,7 +22,7 @@ export class StringTemplateOutletDirective {
   }
 
   @Input()
-  set stringTemplateOutlet(value: string | TemplateRef<void>) {
+  set stringTemplateOutlet(value: string | SafeValue | TemplateRef<void>) {
     if (value instanceof TemplateRef) {
       this._isTemplate    = true;
       this._inputTemplate = value as TemplateRef<void>;

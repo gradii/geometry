@@ -29,7 +29,9 @@ import { emptyImage } from './empty-config';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation  : ViewEncapsulation.None,
   templateUrl    : './empty.component.html',
-  styles         : ['tri-empty { display: block; }'],
+  styles         : [`tri-empty {
+    display: block;
+  }`],
   host           : {
     class: 'tri-empty'
   }
@@ -45,12 +47,13 @@ export class EmptyComponent implements OnChanges, OnInit, OnDestroy {
   // I can use a directive but this would expose the name `footer`.
   // @ContentChild(TemplateRef, { static: false }) notFoundFooter: TemplateRef<void>;
 
-  defaultSvg = this.sanitizer.bypassSecurityTrustResourceUrl(emptyImage);
+  defaultSvg: string | SafeValue = this.sanitizer.bypassSecurityTrustResourceUrl(emptyImage);
   isContentString = false;
   locale: { [key: string]: string } = {};
   private destroy$ = new Subject<void>();
 
-  constructor(private sanitizer: DomSanitizer, private i18n: I18nService, private cdr: ChangeDetectorRef) {}
+  constructor(private sanitizer: DomSanitizer, private i18n: I18nService, private cdr: ChangeDetectorRef) {
+  }
 
   get shouldRenderContent(): boolean {
     const content = this.notFoundContent;
