@@ -184,8 +184,12 @@ jobs:
       - run: ./scripts/circleci/lint-bazel-files.sh
       - run: yarn ownerslint
       # - run: yarn stylelint
-      # - run: yarn tslint
-
+      - run:
+          command: |
+            mkdir -p ~/reports
+            yarn tslint ~/reports/tslint.xml -t checkstyle
+      - store_test_results:
+          path: ~/reports
       - *save_cache
 
   # -------------------------------------------------------------------------------------------
