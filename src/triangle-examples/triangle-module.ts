@@ -18,17 +18,15 @@ import { TriCardModule } from '@gradii/triangle/card';
 import { TriCarouselModule } from '@gradii/triangle/carousel';
 import { TriCascaderModule } from '@gradii/triangle/cascader';
 import { TriCollapseModule } from '@gradii/triangle/collapse';
-import { TriDatePickerModule } from '@gradii/triangle/datepicker';
+import { TriDatePickerModule } from '@gradii/triangle/date-picker';
 import { TriDropDownModule } from '@gradii/triangle/dropdown';
 import { TriFormModule } from '@gradii/triangle/form';
 import { TriGridModule } from '@gradii/triangle/grid';
-import {
-  TriCheckboxModule,
-  TriInputModule,
-  TriInputNumberModule,
-  TriRadioModule,
-  TriSelectModule
-} from '@gradii/triangle/inputs';
+import { TriInputModule } from '@gradii/triangle/input';
+import { TriRadioModule } from '@gradii/triangle/radio';
+import { TriCheckboxModule } from '@gradii/triangle/checkbox';
+import { TriSelectModule } from '@gradii/triangle/select';
+import { TriInputNumberModule } from '@gradii/triangle/input-number';
 import { TriLayoutModule } from '@gradii/triangle/layout';
 import { TriMenuModule } from '@gradii/triangle/menu';
 import { TriAlertModule, TriMessageModule, TriNotificationModule } from '@gradii/triangle/message';
@@ -38,12 +36,10 @@ import { TriPopConfirmModule } from '@gradii/triangle/popconfirm';
 import { TriPopoverModule } from '@gradii/triangle/popover';
 import { TriProgressModule } from '@gradii/triangle/progress';
 import { TriRateModule } from '@gradii/triangle/rate';
-import { TriRootModule } from '@gradii/triangle/root';
 import { TriSliderModule } from '@gradii/triangle/slider';
 import { TriSpinModule } from '@gradii/triangle/spin';
 import { TriStepsModule } from '@gradii/triangle/steps';
 import { TriSwitchModule } from '@gradii/triangle/switch';
-import { TriTableModule } from '@gradii/triangle/table';
 import { TriTabsModule } from '@gradii/triangle/tabs';
 import { TriTagModule } from '@gradii/triangle/tag';
 import { TriTimePickerModule } from '@gradii/triangle/time-picker';
@@ -79,7 +75,6 @@ import { NotificationService } from '@gradii/triangle/message';
     TriSliderModule,
     TriSwitchModule,
     TriProgressModule,
-    TriTableModule,
     TriTabsModule,
     TriTagModule,
     TriTimePickerModule,
@@ -89,7 +84,6 @@ import { NotificationService } from '@gradii/triangle/message';
     TriMenuModule,
     TriBreadCrumbModule,
     TriLayoutModule,
-    TriRootModule,
     TriCarouselModule,
     TriCardModule,
     TriCollapseModule,

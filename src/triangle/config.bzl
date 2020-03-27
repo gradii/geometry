@@ -27,6 +27,7 @@ TRIANGLE_ENTRYPOINTS = [
     "draggable",
     "drawer",
     "dropdown",
+    "empty",
     "form",
     "grid",
     "grid-list",

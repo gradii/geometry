@@ -53,6 +53,7 @@ ROLLUP_GLOBALS = {
     "@angular/cdk/testing/testbed": "ng.cdk.testing.testbed",
 
     # Third-party libraries.
+    "date-fns": "date-fns",
     "moment": "moment",
     "protractor": "protractor",
     "rxjs": "rxjs",
@@ -60,6 +61,8 @@ ROLLUP_GLOBALS = {
     "tslib": "tslib",
     "uuid": "uuid",
     "ix": "ix",
+    "ix/iterable": "ix.iterable",
+    "ix/iterable/operators": "ix.iterable.operators",
 }
 
 # Converts a string from dash-case to lower camel case.

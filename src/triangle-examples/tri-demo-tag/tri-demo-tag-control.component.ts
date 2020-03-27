@@ -6,7 +6,7 @@
  */
 
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { InputDirective } from '@gradii/triangle/inputs';
+import { InputDirective } from '@gradii/triangle/input';
 
 /**
  * @title tag-control

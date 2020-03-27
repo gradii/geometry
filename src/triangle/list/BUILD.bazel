@@ -20,6 +20,7 @@ ng_module(
     module_name = "@gradii/triangle/list",
     deps = [
         "//src/triangle/core",
+        "//src/triangle/empty",
         "@npm//rxjs",
     ],
 )

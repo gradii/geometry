@@ -8,7 +8,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 /**
  * @title form-validate-dynamic
