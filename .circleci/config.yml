@@ -147,7 +147,7 @@ jobs:
   # -----------------------------------
   bazel_build:
     <<: *job_defaults
-    resource_class: xlarge
+    resource_class: medium
     steps:
       - *checkout_code
       - *restore_cache
@@ -194,7 +194,7 @@ jobs:
   # -------------------------------------------------------------------------------------------
   build_release_packages:
     <<: *job_defaults
-    resource_class: xlarge
+    resource_class: medium
     steps:
       - *checkout_code
       - *restore_cache
@@ -240,7 +240,7 @@ jobs:
   # ----------------------------------------
   publish_snapshots:
     <<: *job_defaults
-    resource_class: xlarge
+    resource_class: medium
     steps:
       - *checkout_code
       - *restore_cache
@@ -261,8 +261,9 @@ jobs:
   # Job that runs the local browser tests against the Angular Github snapshots
   # ----------------------------------------------------------------------------
   snapshot_tests_local_browsers:
-    docker: *docker-firefox-image
-    resource_class: xlarge
+    docker:
+      - image: *docker-firefox-image
+    resource_class: medium
     steps:
       - *checkout_code
       - *restore_cache
