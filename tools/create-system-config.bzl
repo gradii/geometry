@@ -28,9 +28,9 @@ def create_system_config(
         substitutions = {
             "$ANGULAR_PACKAGE_BUNDLES": str(ANGULAR_PACKAGE_BUNDLES),
             "$BASE_URL": base_url,
-            "$TRIANGLE_ENTRYPOINTS_TMPL": str(TRIANGLE_ENTRYPOINTS),
             "$NODE_MODULES_BASE_PATH": node_modules_base_path,
             "$PACKAGES_DIR": packages_dir,
+            "$TRIANGLE_ENTRYPOINTS_TMPL": str(TRIANGLE_ENTRYPOINTS),
         },
         template = "//tools:system-config-tmpl.js",
     )

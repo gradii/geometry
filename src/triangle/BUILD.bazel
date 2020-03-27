@@ -4,10 +4,8 @@ load("@npm//scss-bundle:index.bzl", "scss_bundle")
 load(
     "//src/triangle:config.bzl",
     "TRIANGLE_ENTRYPOINTS",
-    "TRIANGLE_ENTRYPOINTS_WITH_STYLES",
     "TRIANGLE_SCSS_LIBS",
     "TRIANGLE_TARGETS",
-    "TRIANGLE_TESTING_TARGETS"
 )
 load("//tools:defaults.bzl", "ng_package", "ts_library")
 

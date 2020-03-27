@@ -69,7 +69,7 @@ TRIANGLE_ENTRYPOINTS = [
 ]
 
 TRIANGLE_TESTING_ENTRYPOINTS = [
-    "core/testing"
+    "core/testing",
 ]
 
 TRIANGLE_ENTRYPOINTS_WITH_STYLES = [
