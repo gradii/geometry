@@ -40,6 +40,7 @@ TRIANGLE_ENTRYPOINTS = [
     "checkbox",
     "select",
     "layout",
+    "list",
     #  "locale",
     #  "math-date",
     #  "math-vector",
@@ -65,6 +66,10 @@ TRIANGLE_ENTRYPOINTS = [
     "transfer",
     "util",
     #  "tree",
+]
+
+TRIANGLE_TESTING_ENTRYPOINTS = [
+    "core/testing"
 ]
 
 TRIANGLE_ENTRYPOINTS_WITH_STYLES = [
@@ -105,6 +110,11 @@ TRIANGLE_ENTRYPOINTS_WITH_STYLES = [
     "checkbox",
     "select",
     "layout",
+    "list",
+    "radio",
+    "checkbox",
+    "select",
+    "layout",
     #  "locale",
     #  "math-date",
     #  "math-vector",
@@ -140,3 +150,5 @@ TRIANGLE_SCSS_LIBS = [
 
 TRIANGLE_TARGETS = ["//src/triangle"] + \
                    ["//src/triangle/%s" % ep for ep in TRIANGLE_ENTRYPOINTS]
+
+TRIANGLE_TESTING_TARGETS = ["//src/triangle/%s" % ep for ep in TRIANGLE_TESTING_ENTRYPOINTS]

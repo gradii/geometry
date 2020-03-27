@@ -7,6 +7,7 @@ load(
     "TRIANGLE_ENTRYPOINTS_WITH_STYLES",
     "TRIANGLE_SCSS_LIBS",
     "TRIANGLE_TARGETS",
+    "TRIANGLE_TESTING_TARGETS"
 )
 load("//tools:defaults.bzl", "ng_package", "ts_library")
 

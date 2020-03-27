@@ -1,7 +1,7 @@
 package(default_visibility = ["//visibility:public"])
 
 load("//:rollup-globals.bzl", "ROLLUP_GLOBALS")
-load("//src/triangle:config.bzl", "TRIANGLE_ENTRYPOINTS")
+load("//src/triangle:config.bzl", "TRIANGLE_ENTRYPOINTS", "TRIANGLE_TESTING_ENTRYPOINTS")
 
 exports_files([
     "LICENSE",
@@ -14,7 +14,7 @@ genrule(
     cmd = "echo '%s' > $@" % ROLLUP_GLOBALS,
 )
 
-entryPoints = ["triangle/%s" % e for e in TRIANGLE_ENTRYPOINTS]
+entryPoints = ["triangle/%s" % e for e in TRIANGLE_ENTRYPOINTS + TRIANGLE_TESTING_ENTRYPOINTS]
 
 genrule(
     name = "entry_points_manifest",
