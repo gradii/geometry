@@ -1,5 +1,3 @@
-package(default_visibility = ["//visibility:public"])
-
 load("@npm//scss-bundle:index.bzl", "scss_bundle")
 load(
     "//src/triangle:config.bzl",
@@ -8,6 +6,8 @@ load(
     "TRIANGLE_TARGETS",
 )
 load("//tools:defaults.bzl", "ng_package", "ts_library")
+
+package(default_visibility = ["//visibility:public"])
 
 ts_library(
     name = "triangle",

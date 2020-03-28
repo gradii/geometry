@@ -1,8 +1,8 @@
-package(default_visibility = ["//visibility:public"])
-
 load("@npm_bazel_typescript//:index.bzl", "ts_config")
 load("//src/triangle:config.bzl", "TRIANGLE_ENTRYPOINTS")
 load("//tools/dgeni:index.bzl", "dgeni_api_docs")
+
+package(default_visibility = ["//visibility:public"])
 
 triangleApiEntryPoints = TRIANGLE_ENTRYPOINTS
 
