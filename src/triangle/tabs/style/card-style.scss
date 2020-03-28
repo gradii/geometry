@@ -11,13 +11,12 @@ $tab-prefix-cls : "#{$ant-prefix}-tabs";
     visibility : hidden;
   }
   @at-root &#{&}-card > #{&}-bar #{&}-tab {
-    margin        : 0;
     border        : $border-width-base $border-style-base $border-color-base;
     border-bottom : 0;
     border-radius : $border-radius-base $border-radius-base 0 0;
     transition    : all 0.3s $ease-in-out;
     background    : $tabs-card-head-background;
-    margin-right  : 2px;
+    margin        : 0 2px 0 0;
   }
   @at-root &#{&}-card > #{&}-bar #{&}-tab {
     padding    : 5px 16px 4px;
