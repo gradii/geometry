@@ -1,0 +1,32 @@
+@import '../../core/style/legend/noop-animation';
+@import './tabs-common';
+
+@include paginated-tab-header;
+
+.tri-ink-bar {
+  @include ink-bar;
+}
+
+.tri-tab-labels {
+  @include paginated-tab-header-item-wrapper;
+}
+
+.tri-tab-label-container {
+  @include paginated-tab-header-container;
+}
+
+.tri-tab-list {
+  @include _noop-animation();
+}
+
+// Wraps each tab label
+.tri-tab-label {
+  @include tab-label;
+  position: relative;
+}
+
+@media ($tri-xsmall) {
+  .tri-tab-label {
+    min-width: 72px;
+  }
+}

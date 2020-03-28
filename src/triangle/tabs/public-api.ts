@@ -5,17 +5,21 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-export { TabComponent } from './src/tab.component';
-export { TabBodyComponent } from './src/tab-body.component';
-export { TabLabelDirective } from './src/tab-label.directive';
-export { TriTabsModule } from './src/tabs.module';
-export { TabsInkBarDirective } from './src/tabs-ink-bar.directive';
-export { TabsNavComponent } from './src/tabs-nav.component';
+export {TriTabsModule} from './src/tabs-module';
+export * from './src/tab-group';
+export {TriInkBar, _TriInkBarPositioner, _TRI_INK_BAR_POSITIONER} from './src/ink-bar';
 export {
-  AnimatedInterface,
-  TabChangeEvent,
-  TabPosition,
-  TabPositionMode,
-  TabSetComponent,
-  TabType
-} from './src/tabset.component';
+  TriTabBody,
+  _TriTabBodyBase,
+  TriTabBodyOriginState,
+  TriTabBodyPositionState,
+  TriTabBodyPortal
+} from './src/tab-body';
+export {TriTabHeader, _TriTabHeaderBase} from './src/tab-header';
+export {TriTabLabelWrapper} from './src/tab-label-wrapper';
+export {TriTab, TRI_TAB_GROUP} from './src/tab';
+export {TriTabLabel} from './src/tab-label';
+export {TriTabContent} from './src/tab-content';
+export {ScrollDirection} from './src/paginated-tab-header';
+export * from './src/tabs-animations';
+export {TRI_TABS_CONFIG, TriTabsConfig} from './src/tab-config';

@@ -1,14 +1,11 @@
+package(default_visibility = ["//visibility:public"])
+
 load(
     "//tools:defaults.bzl",
     "ng_module",
     "sass_binary",
     "sass_library",
-    #  "ng_test_library",
-    #  "ng_web_test_suite",
-    #  "markdown_to_html"
 )
-
-package(default_visibility = ["//visibility:public"])
 
 ng_module(
     name = "tabs",
@@ -16,63 +13,55 @@ ng_module(
         ["**/*.ts"],
         exclude = ["**/*.spec.ts"],
     ),
-    assets = [":style/tabs.css"] + glob(["**/*.html"]),
+    assets = [
+        ":style/tab-body.css",
+        ":style/tab-header.css",
+        ":style/tab-group.css",
+    ] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/tabs",
     deps = [
         "//src/triangle/core",
-        "//src/triangle/i18n",
-        "//src/triangle/util",
-        "@npm//@angular/animations",
         "@npm//@angular/cdk",
+        "@npm//@angular/animations",
         "@npm//@angular/common",
         "@npm//@angular/core",
-        "@npm//@angular/forms",
         "@npm//rxjs",
     ],
 )
 
 sass_library(
     name = "tabs_scss_lib",
-    srcs = glob(["**/_*.scss"]) + [":style/card-style.scss"],
-    deps = ["//src/triangle/core:core_scss_lib"],
+    srcs = glob(["**/_*.scss"]),
+    deps = [
+        "//src/triangle/core:core_scss_lib"
+    ],
 )
 
 sass_binary(
-    name = "tabs_scss",
-    src = "style/tabs.scss",
+    name = "tab_body_scss",
+    src = "style/tab-body.scss",
     deps = [
-        "//src/triangle/tabs:tabs_scss_lib",
+        "//src/triangle/core:core_scss_lib"
     ],
 )
-#
-#ng_test_library(
-#  name = "autocomplete_test_sources",
-#  srcs = glob(["**/*.spec.ts"]),
-#  deps = [
-#    "@npm//@angular/forms",
-#    "@npm//@angular/platform-browser",
-#    "@npm//rxjs",
-#    "//src/cdk/bidi",
-#    "//src/cdk/keycodes",
-#    "//src/cdk/overlay",
-#    "//src/cdk/scrolling",
-#    "//src/cdk/testing",
-#    "//src/lib/core",
-#    "//src/lib/form-field",
-#    "//src/lib/input",
-#    ":autocomplete"
-#  ]
-#)
-#
-#ng_web_test_suite(
-#  name = "unit_tests",
-#  deps = [":autocomplete_test_sources"],
-#)
-#
-#markdown_to_html(
-#  name = "overview",
-#  srcs = [":affix.md"],
-#)
+
+sass_binary(
+    name = "tab_header_scss",
+    src = "style/tab-header.scss",
+    deps = [
+        ":tabs_scss_lib",
+        "//src/triangle/core:core_scss_lib"
+    ],
+)
+
+sass_binary(
+    name = "tab_group_scss",
+    src = "style/tab-group.scss",
+    deps = [
+        ":tabs_scss_lib",
+        "//src/triangle/core:core_scss_lib"
+    ],
+)
 
 filegroup(
     name = "source-files",

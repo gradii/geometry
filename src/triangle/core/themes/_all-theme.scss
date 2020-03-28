@@ -58,4 +58,5 @@
   @include tri-core-theme($theme);
   @include tri-menu-theme($theme);
   @include tri-layout-theme($theme);
+  @include tri-tabs-theme($theme);
 }
