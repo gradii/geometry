@@ -8,7 +8,7 @@
  * be passed to this script to ensure that the rollup globals are up-to-date.
  */
 
-import chalk from 'chalk';
+import {red, yellow, green} from 'chalk';
 import {readFileSync} from 'fs';
 import * as minimatch from 'minimatch';
 import {join, relative} from 'path';
@@ -18,7 +18,7 @@ const projectRoot = join(__dirname, '../');
 const args = process.argv.slice(2);
 
 if (args.length !== 1) {
-  console.error(chalk.red('No rollup globals file has been specified.'));
+  console.error(red('No rollup globals file has been specified.'));
   process.exit(1);
 }
 
@@ -61,13 +61,13 @@ parsedConfig.fileNames.forEach(fileName => {
 });
 
 if (failures.size) {
-  console.error(chalk.red('  ✘   Rollup globals are not up-to-date.'));
+  console.error(red('  ✘   Rollup globals are not up-to-date.'));
   console.error();
   failures.forEach((missingGlobals, fileName) => {
-    console.error(chalk.yellow(`  ⮑   ${fileName}:`));
+    console.error(yellow(`  ⮑   ${fileName}:`));
     missingGlobals.forEach(g => console.error(`      - ${g}`));
   });
   process.exit(1);
 } else {
-  console.info(chalk.green('  ✓   Rollup globals are up-to-date.'));
+  console.info(green('  ✓   Rollup globals are up-to-date.'));
 }
