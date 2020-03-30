@@ -14,9 +14,9 @@ import {
 } from './notification-config';
 
 @Component({
-  selector     : 'tri-notification-container',
+  selector: 'tri-notification-container',
   encapsulation: ViewEncapsulation.None,
-  template     : `
+  template: `
     <div class="tri-notification" [style.top]="config.top" [style.right]="config.right">
       <tri-notification *ngFor="let message of messages; let i = index" [message]="message" [index]="i"></tri-notification>
     </div>

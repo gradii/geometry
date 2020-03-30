@@ -31,5 +31,6 @@ export class StepConnectService {
 
   errorIndex: string;
 
-  constructor() {}
+  constructor() {
+  }
 }

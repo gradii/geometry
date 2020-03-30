@@ -15,8 +15,8 @@
   // results in:
   // ._tri-animation-noopable.my-root .my-subclass { ... }
   @at-root ._tri-animation-noopable#{&} {
-    transition: none;
-    animation: none;
+    transition : none;
+    animation  : none;
     @content;
   }
 }

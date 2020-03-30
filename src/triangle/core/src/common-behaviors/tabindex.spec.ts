@@ -1,4 +1,4 @@
-import {mixinTabIndex} from './tabindex';
+import { mixinTabIndex } from './tabindex';
 
 describe('mixinTabIndex', () => {
 

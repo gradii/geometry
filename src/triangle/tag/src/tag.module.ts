@@ -19,4 +19,5 @@ import { TagComponent } from './tag.component';
   declarations: [TagComponent, CheckableTagComponent],
   exports     : [TagComponent, CheckableTagComponent]
 })
-export class TriTagModule {}
+export class TriTagModule {
+}

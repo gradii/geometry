@@ -34,7 +34,8 @@ export class CalendarHeaderComponent implements OnInit {
   months: Array<{ label: string, value: number }>;
   private prefixCls = 'tri-fullcalendar';
 
-  constructor(private i18n: I18n) { }
+  constructor(private i18n: I18n) {
+  }
 
   get activeYear(): number {
     return this.activeDate.getFullYear();

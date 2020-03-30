@@ -19,10 +19,10 @@ import { ToolTipComponent } from '@gradii/triangle/tooltip';
 import { PopConfirmDirective } from './popconfirm.directive';
 
 @Component({
-  selector     : 'tri-popconfirm',
+  selector: 'tri-popconfirm',
   encapsulation: ViewEncapsulation.None,
-  animations   : [FadeAnimation],
-  template     : `
+  animations: [FadeAnimation],
+  template: `
       <ng-content></ng-content>
       <ng-template
               cdkConnectedOverlay

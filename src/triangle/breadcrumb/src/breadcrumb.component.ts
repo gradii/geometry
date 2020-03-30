@@ -21,5 +21,6 @@ export class BreadCrumbComponent {
   @Input() separator = '/';
   @HostBinding('class.tri-breadcrumb') _breadcrumb = true;
 
-  constructor() {}
+  constructor() {
+  }
 }

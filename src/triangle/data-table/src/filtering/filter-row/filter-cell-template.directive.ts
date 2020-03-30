@@ -11,5 +11,6 @@ import { Directive, Optional, TemplateRef } from '@angular/core';
   selector: '[triGridFilterCellTemplate]'
 })
 export class FilterCellTemplateDirective {
-  constructor(@Optional() public templateRef: TemplateRef<any>) {}
+  constructor(@Optional() public templateRef: TemplateRef<any>) {
+  }
 }

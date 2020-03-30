@@ -54,28 +54,28 @@ const appendEqual = function (str) {
   return str + ' eq -1';
 };
 const filterOperators = {
-  contains      : stringFnOperator('contains'),
+  contains: stringFnOperator('contains'),
   doesnotcontain: compose(appendEqual, stringFnOperator('indexof')),
-  endswith      : stringFnOperator('endswith'),
-  eq            : typedOperator('eq'),
-  gt            : typedOperator('gt'),
-  gte           : typedOperator('ge'),
-  isempty       : function ({field}) {
+  endswith: stringFnOperator('endswith'),
+  eq: typedOperator('eq'),
+  gt: typedOperator('gt'),
+  gte: typedOperator('ge'),
+  isempty: function ({field}) {
     return field + ' eq \'\'';
   },
-  isnotempty    : function ({field}) {
+  isnotempty: function ({field}) {
     return field + ' ne \'\'';
   },
-  isnotnull     : function ({field}) {
+  isnotnull: function ({field}) {
     return field + ' ne null';
   },
-  isnull        : function ({field}) {
+  isnull: function ({field}) {
     return field + ' eq null';
   },
-  lt            : typedOperator('lt'),
-  lte           : typedOperator('le'),
-  neq           : typedOperator('ne'),
-  startswith    : stringFnOperator('startswith')
+  lt: typedOperator('lt'),
+  lte: typedOperator('le'),
+  neq: typedOperator('ne'),
+  startswith: stringFnOperator('startswith')
 };
 const join = function (x) {
   return ' ' + x.logic + ' ';

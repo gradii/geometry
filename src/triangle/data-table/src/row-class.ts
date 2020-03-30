@@ -16,7 +16,8 @@ export interface RowArgs {
   index: number;
 }
 
-export interface RowClassArgs extends RowArgs {}
+export interface RowClassArgs extends RowArgs {
+}
 
 export type RowClassFn = (context: RowClassArgs) =>
   | string

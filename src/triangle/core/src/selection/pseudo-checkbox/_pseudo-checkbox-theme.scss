@@ -1,35 +1,35 @@
 @import '../../../style/theming';
 
 @mixin tri-pseudo-checkbox-theme($theme) {
-  $is-dark-theme: map-get($theme, is-dark);
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
-  $background: map-get($theme, background);
+  $is-dark-theme                : map-get($theme, is-dark);
+  $primary                      : map-get($theme, primary);
+  $accent                       : map-get($theme, accent);
+  $warn                         : map-get($theme, warn);
+  $background                   : map-get($theme, background);
 
   // NOTE(traviskaufman): While the spec calls for translucent blacks/whites for disabled colors,
   // this does not work well with elements layered on top of one another. To get around this we
   // blend the colors together based on the base color and the theme background.
-  $white-30pct-opacity-on-dark: #686868;
-  $black-26pct-opacity-on-light: #b0b0b0;
-  $disabled-color: if($is-dark-theme, $white-30pct-opacity-on-dark, $black-26pct-opacity-on-light);
-  $colored-box-selector: '.tri-pseudo-checkbox-checked, .tri-pseudo-checkbox-indeterminate';
+  $white-30pct-opacity-on-dark  : #686868;
+  $black-26pct-opacity-on-light : #b0b0b0;
+  $disabled-color               : if($is-dark-theme, $white-30pct-opacity-on-dark, $black-26pct-opacity-on-light);
+  $colored-box-selector         : '.tri-pseudo-checkbox-checked, .tri-pseudo-checkbox-indeterminate';
 
   .tri-pseudo-checkbox {
-    color: tri-color(map-get($theme, foreground), secondary-text);
+    color : tri-color(map-get($theme, foreground), secondary-text);
 
     &::after {
-      color: tri-color($background, background);
+      color : tri-color($background, background);
     }
   }
 
   .tri-pseudo-checkbox-disabled {
-    color: $disabled-color;
+    color : $disabled-color;
   }
 
   .tri-primary .tri-pseudo-checkbox-checked,
   .tri-primary .tri-pseudo-checkbox-indeterminate {
-    background: tri-color(map-get($theme, primary));
+    background : tri-color(map-get($theme, primary));
   }
 
   // Default to the accent color. Note that the pseudo checkboxes are meant to inherit the
@@ -41,18 +41,18 @@
   .tri-pseudo-checkbox-indeterminate,
   .tri-accent .tri-pseudo-checkbox-checked,
   .tri-accent .tri-pseudo-checkbox-indeterminate {
-    background: tri-color(map-get($theme, accent));
+    background : tri-color(map-get($theme, accent));
   }
 
   .tri-warn .tri-pseudo-checkbox-checked,
   .tri-warn .tri-pseudo-checkbox-indeterminate {
-    background: tri-color(map-get($theme, warn));
+    background : tri-color(map-get($theme, warn));
   }
 
   .tri-pseudo-checkbox-checked,
   .tri-pseudo-checkbox-indeterminate {
     &.tri-pseudo-checkbox-disabled {
-      background: $disabled-color;
+      background : $disabled-color;
     }
   }
 }

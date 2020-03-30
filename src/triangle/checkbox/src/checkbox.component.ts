@@ -79,7 +79,8 @@ export class CheckboxComponent implements ControlValueAccessor {
   @Output() change = new EventEmitter<any>();
   @Output() indeterminateChange = new EventEmitter<any>();
 
-  constructor() {}
+  constructor() {
+  }
 
   _checked = false;
 

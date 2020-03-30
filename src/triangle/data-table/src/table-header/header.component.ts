@@ -21,6 +21,7 @@ import {
   GroupDescriptor,
   SortDescriptor
 } from '@gradii/triangle/data-query';
+import { CheckboxColumnComponent } from '@gradii/triangle/data-table';
 import { I18nService } from '@gradii/triangle/i18n';
 import { isNullOrEmptyString, isPresent, isTruthy } from '@gradii/triangle/util';
 import { merge, Observable, of, Subscription } from 'rxjs';
@@ -48,7 +49,6 @@ import { normalize, SortSettings } from '../helper/sort-settings';
 import { SortService } from '../helper/sort.service';
 import { DetailTemplateDirective } from '../table-shared/detail-template.directive';
 import { and, not, observe } from '../utils';
-import { CheckboxColumnComponent } from '@gradii/triangle/data-table';
 
 
 // @ts-ignore

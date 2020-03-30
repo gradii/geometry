@@ -7,11 +7,11 @@
 
 import { NgModule } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { TWOTONE_SVG_ICONS } from './icons/twotone.svg';
-import { FILL_SVG_ICONS } from './icons/fill.svg';
-import { OUTLINE_SVG_ICONS } from './icons/outline.svg';
 import { ICON_REGISTRY_PROVIDER, IconRegistry } from './icon-registry';
 import { IconComponent } from './icon.component';
+import { FILL_SVG_ICONS } from './icons/fill.svg';
+import { OUTLINE_SVG_ICONS } from './icons/outline.svg';
+import { TWOTONE_SVG_ICONS } from './icons/twotone.svg';
 
 
 /**

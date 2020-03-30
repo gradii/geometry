@@ -15,7 +15,7 @@ import { Component, HostBinding, ViewEncapsulation } from '@angular/core';
   `,
   styleUrls    : ['../style/layout.css'],
   styles       : [
-      `:host {
+    `:host {
           display : block;
       }`
   ],

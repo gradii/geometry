@@ -13,11 +13,17 @@ import { HeaderTemplateDirective } from '../table-header/header-template.directi
 
 export const isSpanColumn = column => column.isSpanColumn;
 
-export function isCheckboxColumn(column) { return (column as CheckboxColumnComponent).isCheckboxColumn; }
+export function isCheckboxColumn(column) {
+  return (column as CheckboxColumnComponent).isCheckboxColumn;
+}
 
-export function isHierarchyColumn(column) { return (column as HierarchyColumnComponent).isHierarchyColumn; }
+export function isHierarchyColumn(column) {
+  return (column as HierarchyColumnComponent).isHierarchyColumn;
+}
 
-function isColumnContainer(column) { return column.isColumnGroup || isSpanColumn(column); }
+function isColumnContainer(column) {
+  return column.isColumnGroup || isSpanColumn(column);
+}
 
 export type AutoGenerateColumnPositon = 'start' | 'middle' | 'end';
 

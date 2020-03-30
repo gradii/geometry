@@ -692,13 +692,18 @@ class TestRangePickerComponent {
   // --- Suite 2
   open;
 
-  onOpenChange(open: boolean): void { }
+  onOpenChange(open: boolean): void {
+  }
 
-  modelValueChange(d: Date): void { }
+  modelValueChange(d: Date): void {
+  }
 
-  onPanelChange(evt?): void {}
+  onPanelChange(evt?): void {
+  }
 
-  onCalendarChange(evt?): void {}
+  onCalendarChange(evt?): void {
+  }
 
-  onOk(evt?): void {}
+  onOk(evt?): void {
+  }
 }

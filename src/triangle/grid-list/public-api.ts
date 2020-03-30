@@ -10,4 +10,4 @@ export * from './src/grid-list';
 export * from './src/grid-tile';
 
 // Privately exported for the grid-list harness.
-export {TileCoordinator as ɵTileCoordinator} from './src/tile-coordinator';
+export { TileCoordinator as ɵTileCoordinator } from './src/tile-coordinator';

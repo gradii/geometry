@@ -19,7 +19,7 @@ import { CalendarI18nInterface, I18nService } from '@gradii/triangle/i18n';
 import { CandyDate } from '../candy-date/candy-date';
 
 @Component({
-  selector   : 'today-button',
+  selector: 'today-button',
   templateUrl: 'today-button.component.html'
 })
 
@@ -35,13 +35,15 @@ export class TodayButtonComponent implements OnInit, OnChanges {
   isDisabled: boolean = false;
   private now: CandyDate = new CandyDate();
 
-  constructor(private i18n: I18nService) { }
+  constructor(private i18n: I18nService) {
+  }
 
   get title(): string {
     return this.i18n.formatDate(this.now.nativeDate, 'longDate');
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.disabledDate) {

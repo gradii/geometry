@@ -40,28 +40,28 @@
 ) {
 
   // Declare an initial map with all of the levels.
-  $config: (
-    display-4:      $display-4,
-    display-3:      $display-3,
-    display-2:      $display-2,
-    display-1:      $display-1,
-    headline:       $headline,
-    title:          $title,
-    subheading-2:   $subheading-2,
-    subheading-1:   $subheading-1,
-    body-2:         $body-2,
-    body-1:         $body-1,
-    caption:        $caption,
-    button:         $button,
-    input:          $input,
+  $config : (
+    display-4: $display-4,
+    display-3: $display-3,
+    display-2: $display-2,
+    display-1: $display-1,
+    headline: $headline,
+    title: $title,
+    subheading-2: $subheading-2,
+    subheading-1: $subheading-1,
+    body-2: $body-2,
+    body-1: $body-1,
+    caption: $caption,
+    button: $button,
+    input: $input,
   );
 
   // Loop through the levels and set the `font-family` of the ones that don't have one to the base.
   // Note that Sass can't modify maps in place, which means that we need to merge and re-assign.
   @each $key, $level in $config {
     @if map-get($level, font-family) == null {
-      $new-level: map-merge($level, (font-family: $font-family));
-      $config: map-merge($config, ($key: $new-level));
+      $new-level : map-merge($level, (font-family: $font-family));
+      $config : map-merge($config, ($key: $new-level));
     }
   }
 
@@ -73,22 +73,22 @@
 @mixin mat-base-typography($config, $selector: '.mat-typography') {
   .mat-h1, .mat-headline, #{$selector} h1 {
     @include mat-typography-level-to-styles($config, headline);
-    margin: 0 0 16px;
+    margin : 0 0 16px;
   }
 
   .mat-h2, .mat-title, #{$selector} h2 {
     @include mat-typography-level-to-styles($config, title);
-    margin: 0 0 16px;
+    margin : 0 0 16px;
   }
 
   .mat-h3, .mat-subheading-2, #{$selector} h3 {
     @include mat-typography-level-to-styles($config, subheading-2);
-    margin: 0 0 16px;
+    margin : 0 0 16px;
   }
 
   .mat-h4, .mat-subheading-1, #{$selector} h4 {
     @include mat-typography-level-to-styles($config, subheading-1);
-    margin: 0 0 16px;
+    margin : 0 0 16px;
   }
 
   // Note: the spec doesn't have anything that would correspond to h5 and h6, but we add these for
@@ -96,26 +96,26 @@
   // and h6 at 0.67em.
   .mat-h5, #{$selector} h5 {
     @include mat-typography-font-shorthand(
-       // calc is used here to support css variables
-      calc(#{mat-font-size($config, body-1)} * 0.83),
-      mat-font-weight($config, body-1),
-      mat-line-height($config, body-1),
-      mat-font-family($config, body-1)
+      // calc is used here to support css variables
+        calc(#{mat-font-size($config, body-1)} * 0.83),
+        mat-font-weight($config, body-1),
+        mat-line-height($config, body-1),
+        mat-font-family($config, body-1)
     );
 
-    margin: 0 0 12px;
+    margin : 0 0 12px;
   }
 
   .mat-h6, #{$selector} h6 {
     @include mat-typography-font-shorthand(
-       // calc is used here to support css variables
-      calc(#{mat-font-size($config, body-1)} * 0.67),
-      mat-font-weight($config, body-1),
-      mat-line-height($config, body-1),
-      mat-font-family($config, body-1)
+      // calc is used here to support css variables
+        calc(#{mat-font-size($config, body-1)} * 0.67),
+        mat-font-weight($config, body-1),
+        mat-line-height($config, body-1),
+        mat-font-family($config, body-1)
     );
 
-    margin: 0 0 12px;
+    margin : 0 0 12px;
   }
 
   .mat-body-strong, .mat-body-2 {
@@ -126,7 +126,7 @@
     @include mat-typography-level-to-styles($config, body-1);
 
     p {
-      margin: 0 0 12px;
+      margin : 0 0 12px;
     }
   }
 
@@ -136,21 +136,21 @@
 
   .mat-display-4, #{$selector} .mat-display-4 {
     @include mat-typography-level-to-styles($config, display-4);
-    margin: 0 0 56px;
+    margin : 0 0 56px;
   }
 
   .mat-display-3, #{$selector} .mat-display-3 {
     @include mat-typography-level-to-styles($config, display-3);
-    margin: 0 0 64px;
+    margin : 0 0 64px;
   }
 
   .mat-display-2, #{$selector} .mat-display-2 {
     @include mat-typography-level-to-styles($config, display-2);
-    margin: 0 0 64px;
+    margin : 0 0 64px;
   }
 
   .mat-display-1, #{$selector} .mat-display-1 {
     @include mat-typography-level-to-styles($config, display-1);
-    margin: 0 0 64px;
+    margin : 0 0 64px;
   }
 }

@@ -45,6 +45,7 @@ export class DateFilterMenuInputComponent {
   @Input() min: Date;
   @Input() max: Date;
 
-  constructor() {}
+  constructor() {
+  }
 
 }

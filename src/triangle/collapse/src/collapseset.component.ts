@@ -37,7 +37,8 @@ export class CollapsesetComponent {
    */
   @Input() bordered = true;
 
-  constructor() {}
+  constructor() {
+  }
 
   click(collapse) {
     if (this.accordion) {

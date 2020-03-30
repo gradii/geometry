@@ -43,4 +43,5 @@ import { WeekPickerComponent } from './week-picker.component';
   ],
   providers   : []
 })
-export class TriDatePickerModule {}
+export class TriDatePickerModule {
+}

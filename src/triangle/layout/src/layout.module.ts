@@ -82,4 +82,5 @@ import { Sider } from './sider';
   exports     : [Layout, Header, Content, Footer, Sider],
   imports     : [CommonModule]
 })
-export class TriLayoutModule {}
+export class TriLayoutModule {
+}

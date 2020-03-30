@@ -5,24 +5,24 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  Component,
-  ViewEncapsulation,
-  AfterContentChecked,
-  OnInit,
-  Input,
-  ContentChildren,
-  QueryList,
-  ElementRef,
-  Optional,
-  ChangeDetectionStrategy,
-} from '@angular/core';
-import { TriGridTile } from './grid-tile';
-import { TileCoordinator } from './tile-coordinator';
-import { TileStyler, FitTileStyler, RatioTileStyler, FixedTileStyler } from './tile-styler';
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceNumberProperty, NumberInput } from '@angular/cdk/coercion';
+import {
+  AfterContentChecked,
+  ChangeDetectionStrategy,
+  Component,
+  ContentChildren,
+  ElementRef,
+  Input,
+  OnInit,
+  Optional,
+  QueryList,
+  ViewEncapsulation,
+} from '@angular/core';
 import { TRI_GRID_LIST, TriGridListBase } from './grid-list-base';
+import { TriGridTile } from './grid-tile';
+import { TileCoordinator } from './tile-coordinator';
+import { FitTileStyler, FixedTileStyler, RatioTileStyler, TileStyler } from './tile-styler';
 
 
 // TODO(kara): Conditional (responsive) column count / row size.
@@ -50,32 +50,23 @@ const TRI_FIT_MODE = 'fit';
   encapsulation  : ViewEncapsulation.None,
 })
 export class TriGridList implements TriGridListBase, OnInit, AfterContentChecked {
-  /** Number of columns being rendered. */
-  private _cols: number;
-
+  static ngAcceptInputType_cols: NumberInput;
+  /** Query list of tiles that are being rendered. */
+  @ContentChildren(TriGridTile, {descendants: true}) _tiles: QueryList<TriGridTile>;
   /** Used for determiningthe position of each tile in the grid. */
   private _tileCoordinator: TileCoordinator;
-
-  /**
-   * Row height value passed in by user. This can be one of three types:
-   * - Number value (ex: "100px"):  sets a fixed row height to that value
-   * - Ratio value (ex: "4:3"): sets the row height based on width:height ratio
-   * - "Fit" mode (ex: "fit"): sets the row height to total height divided by number of rows
-   */
-  private _rowHeight: string;
-
   /** The amount of space between tiles. This will be something like '5px' or '2em'. */
   private _gutter: string = '1px';
 
   /** Sets position and size styles for a tile */
   private _tileStyler: TileStyler;
 
-  /** Query list of tiles that are being rendered. */
-  @ContentChildren(TriGridTile, {descendants: true}) _tiles: QueryList<TriGridTile>;
-
   constructor(private _element: ElementRef<HTMLElement>,
               @Optional() private _dir: Directionality) {
   }
+
+  /** Number of columns being rendered. */
+  private _cols: number;
 
   /** Amount of columns in the grid list. */
   @Input()
@@ -87,15 +78,13 @@ export class TriGridList implements TriGridListBase, OnInit, AfterContentChecked
     this._cols = Math.max(1, Math.round(coerceNumberProperty(value)));
   }
 
-  /** Size of the grid list's gutter in pixels. */
-  @Input()
-  get gutterSize(): string {
-    return this._gutter;
-  }
-
-  set gutterSize(value: string) {
-    this._gutter = `${value == null ? '' : value}`;
-  }
+  /**
+   * Row height value passed in by user. This can be one of three types:
+   * - Number value (ex: "100px"):  sets a fixed row height to that value
+   * - Ratio value (ex: "4:3"): sets the row height based on width:height ratio
+   * - "Fit" mode (ex: "fit"): sets the row height to total height divided by number of rows
+   */
+  private _rowHeight: string;
 
   /** Set internal representation of row height from the user-provided value. */
   @Input()
@@ -112,6 +101,16 @@ export class TriGridList implements TriGridListBase, OnInit, AfterContentChecked
     }
   }
 
+  /** Size of the grid list's gutter in pixels. */
+  @Input()
+  get gutterSize(): string {
+    return this._gutter;
+  }
+
+  set gutterSize(value: string) {
+    this._gutter = `${value == null ? '' : value}`;
+  }
+
   ngOnInit() {
     this._checkCols();
     this._checkRowHeight();
@@ -123,6 +122,13 @@ export class TriGridList implements TriGridListBase, OnInit, AfterContentChecked
    */
   ngAfterContentChecked() {
     this._layoutTiles();
+  }
+
+  /** Sets style on the main grid-list element, given the style name and value. */
+  _setListStyle(style: [string, string | null] | null): void {
+    if (style) {
+      (this._element.nativeElement.style as any)[style[0]] = style[1];
+    }
   }
 
   /** Throw a friendly error if cols property is missing */
@@ -176,13 +182,4 @@ export class TriGridList implements TriGridListBase, OnInit, AfterContentChecked
 
     this._setListStyle(this._tileStyler.getComputedHeight());
   }
-
-  /** Sets style on the main grid-list element, given the style name and value. */
-  _setListStyle(style: [string, string | null] | null): void {
-    if (style) {
-      (this._element.nativeElement.style as any)[style[0]] = style[1];
-    }
-  }
-
-  static ngAcceptInputType_cols: NumberInput;
 }

@@ -44,7 +44,8 @@ export class OptionContainerComponent implements OnDestroy, OnInit {
   @Output() readonly scrollToBottom = new EventEmitter<void>();
   private destroy$ = new Subject();
 
-  constructor(public selectService: SelectService, private cdr: ChangeDetectorRef, private ngZone: NgZone) {}
+  constructor(public selectService: SelectService, private cdr: ChangeDetectorRef, private ngZone: NgZone) {
+  }
 
   scrollIntoViewIfNeeded(option: OptionComponent): void {
     // delay after open

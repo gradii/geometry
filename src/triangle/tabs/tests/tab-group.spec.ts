@@ -1,20 +1,23 @@
-import {LEFT_ARROW} from '@angular/cdk/keycodes';
-import {Component, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
-import {By} from '@angular/platform-browser';
-import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {CommonModule} from '@angular/common';
+import { LEFT_ARROW } from '@angular/cdk/keycodes';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import {
+  BrowserAnimationsModule,
+  NoopAnimationsModule
+} from '@angular/platform-browser/animations';
 import { dispatchFakeEvent, dispatchKeyboardEvent } from '@gradii/triangle/core/testing';
+import { Observable } from 'rxjs';
 import { TriTab } from '../src/tab';
 import { TriTabGroup, TriTabHeaderPosition } from '../src/tab-group';
 import { TriTabsModule } from '../src/tabs-module';
-import {Observable} from 'rxjs';
 
 
 describe('TriTabGroup', () => {
   beforeEach(fakeAsync(() => {
     TestBed.configureTestingModule({
-      imports: [TriTabsModule, CommonModule, NoopAnimationsModule],
+      imports     : [TriTabsModule, CommonModule, NoopAnimationsModule],
       declarations: [
         SimpleTabsTestApp,
         SimpleDynamicTabsTestApp,
@@ -121,7 +124,7 @@ describe('TriTabGroup', () => {
     it('should update tab positions when selected index is changed', () => {
       fixture.detectChanges();
       const component: TriTabGroup =
-          fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
+              fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
       const tabs: TriTab[] = component._tabs.toArray();
 
       expect(tabs[0].position).toBeLessThan(0);
@@ -146,7 +149,7 @@ describe('TriTabGroup', () => {
     it('should clamp the selected index to the size of the number of tabs', () => {
       fixture.detectChanges();
       const component: TriTabGroup =
-          fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
+              fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
 
       // Set the index to be negative, expect first tab selected
       fixture.componentInstance.selectedIndex = -1;
@@ -283,7 +286,7 @@ describe('TriTabGroup', () => {
 
     it('should clean up the tabs QueryList on destroy', () => {
       const component: TriTabGroup =
-        fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
+              fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
       const spy = jasmine.createSpy('complete spy');
       const subscription = component._tabs.changes.subscribe({complete: spy});
 
@@ -295,7 +298,7 @@ describe('TriTabGroup', () => {
 
     it('should have a focus indicator', () => {
       const tabLabelNativeElements =
-          [...fixture.debugElement.nativeElement.querySelectorAll('.mat-tab-label')];
+              [...fixture.debugElement.nativeElement.querySelectorAll('.mat-tab-label')];
 
       expect(tabLabelNativeElements.every(el => el.classList.contains('mat-focus-indicator')))
         .toBe(true);
@@ -371,7 +374,7 @@ describe('TriTabGroup', () => {
       labels = fixture.debugElement.queryAll(By.css('.mat-tab-disabled'));
       expect(labels.length).toBe(2);
       expect(labels.every(label => label.nativeElement.getAttribute('aria-disabled') === 'true'))
-          .toBe(true);
+        .toBe(true);
     });
   });
 
@@ -388,7 +391,7 @@ describe('TriTabGroup', () => {
     it('should be able to add a new tab, select it, and have correct origin position',
       fakeAsync(() => {
         const component: TriTabGroup =
-            fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
+                fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
 
         let tabs: TriTab[] = component._tabs.toArray();
         expect(tabs[0].origin).toBe(null);
@@ -415,12 +418,12 @@ describe('TriTabGroup', () => {
 
         tabs = component._tabs.toArray();
         expect(tabs[0].origin).toBeLessThan(0);
-    }));
+      }));
 
 
     it('should update selected index if the last tab removed while selected', fakeAsync(() => {
       const component: TriTabGroup =
-          fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
+              fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
 
       const numberOfTabs = component._tabs.length;
       fixture.componentInstance.selectedIndex = numberOfTabs - 1;
@@ -439,7 +442,7 @@ describe('TriTabGroup', () => {
     it('should maintain the selected tab if a new tab is added', () => {
       fixture.detectChanges();
       const component: TriTabGroup =
-          fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
+              fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
 
       fixture.componentInstance.selectedIndex = 1;
       fixture.detectChanges();
@@ -459,7 +462,7 @@ describe('TriTabGroup', () => {
       fixture.detectChanges();
 
       const component: TriTabGroup =
-          fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
+              fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
 
       // Remove the first tab that is right before the selected one.
       fixture.componentInstance.tabs.splice(0, 1);
@@ -474,7 +477,7 @@ describe('TriTabGroup', () => {
     it('should be able to select a new tab after creation', fakeAsync(() => {
       fixture.detectChanges();
       const component: TriTabGroup =
-        fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
+              fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
 
       fixture.componentInstance.tabs.push({label: 'Last tab', content: 'at the end'});
       fixture.componentInstance.selectedIndex = 3;
@@ -530,7 +533,7 @@ describe('TriTabGroup', () => {
       tick();
 
       tabGroup =
-          fixture.debugElement.query(By.directive(TriTabGroup))!.componentInstance as TriTabGroup;
+        fixture.debugElement.query(By.directive(TriTabGroup))!.componentInstance as TriTabGroup;
     }));
 
     it('should support a tab-group with the simple api', fakeAsync(() => {
@@ -622,7 +625,7 @@ describe('TriTabGroup', () => {
 
       expect(groups.length).toBe(2);
       expect(groups[0]._tabs.map((tab: TriTab) => tab.textLabel))
-          .toEqual(['One', 'Two']);
+        .toEqual(['One', 'Two']);
       expect(groups[1]._tabs.map((tab: TriTab) => tab.textLabel))
         .toEqual(['Inner tab one', 'Inner tab two']);
     }));
@@ -646,15 +649,15 @@ describe('TriTabGroup', () => {
     fixture.detectChanges();
 
     let tabComponent: TriTabGroup = fixture.debugElement
-        .query(By.css('mat-tab-group'))!.componentInstance;
+      .query(By.css('mat-tab-group'))!.componentInstance;
     expect(tabComponent.selectedIndex).toBe(expectedIndex);
 
     let tabLabelElement = fixture.debugElement
-        .query(By.css(`.mat-tab-label:nth-of-type(${expectedIndex + 1})`))!.nativeElement;
+      .query(By.css(`.mat-tab-label:nth-of-type(${expectedIndex + 1})`))!.nativeElement;
     expect(tabLabelElement.classList.contains('mat-tab-label-active')).toBe(true);
 
     let tabContentElement = fixture.debugElement
-        .query(By.css(`mat-tab-body:nth-of-type(${expectedIndex + 1})`))!.nativeElement;
+      .query(By.css(`mat-tab-body:nth-of-type(${expectedIndex + 1})`))!.nativeElement;
     expect(tabContentElement.classList.contains('mat-tab-body-active')).toBe(true);
   }
 
@@ -671,7 +674,7 @@ describe('TriTabGroup', () => {
 describe('nested TriTabGroup with enabled animations', () => {
   beforeEach(fakeAsync(() => {
     TestBed.configureTestingModule({
-      imports: [TriTabsModule, BrowserAnimationsModule],
+      imports     : [TriTabsModule, BrowserAnimationsModule],
       declarations: [NestedTabs, TabsWithCustomAnimationDuration]
     });
 
@@ -727,13 +730,17 @@ class SimpleTabsTestApp {
   selectEvent: any;
   disableRipple: boolean = false;
   headerPosition: TriTabHeaderPosition = 'above';
+
   handleFocus(event: any) {
     this.focusEvent = event;
   }
+
   handleSelection(event: any) {
     this.selectEvent = event;
   }
-  animationDone() { }
+
+  animationDone() {
+  }
 }
 
 @Component({
@@ -758,9 +765,11 @@ class SimpleDynamicTabsTestApp {
   selectedIndex: number = 1;
   focusEvent: any;
   selectEvent: any;
+
   handleFocus(event: any) {
     this.focusEvent = event;
   }
+
   handleSelection(event: any) {
     this.selectEvent = event;
   }
@@ -777,14 +786,14 @@ class SimpleDynamicTabsTestApp {
 })
 class BindedTabsTestApp {
   tabs = [
-    { label: 'one', content: 'one' },
-    { label: 'two', content: 'two' }
+    {label: 'one', content: 'one'},
+    {label: 'two', content: 'two'}
   ];
   selectedIndex = 0;
 
   addNewActiveTab(): void {
     this.tabs.push({
-      label: 'new tab',
+      label  : 'new tab',
       content: 'new content'
     });
     this.selectedIndex = this.tabs.length - 1;
@@ -822,16 +831,15 @@ class DisabledTabsTestApp {
         <ng-template mat-tab-label>{{ tab.label }}</ng-template>
         {{ tab.content }}
       </mat-tab>
-   </mat-tab-group>
+    </mat-tab-group>
   `
 })
 class AsyncTabsTestApp implements OnInit {
-  private _tabs = [
-    { label: 'one', content: 'one' },
-    { label: 'two', content: 'two' }
-  ];
-
   tabs: Observable<any>;
+  private _tabs = [
+    {label: 'one', content: 'one'},
+    {label: 'two', content: 'two'}
+  ];
 
   ngOnInit() {
     // Use ngOnInit because there is some issue with scheduling the async task in the constructor.
@@ -892,11 +900,12 @@ class NestedTabs {
       </mat-tab>
     </mat-tab-group>
   `,
- })
- class TemplateTabs {}
+})
+class TemplateTabs {
+}
 
 
- @Component({
+@Component({
   template: `
   <mat-tab-group>
     <mat-tab [aria-label]="ariaLabel" [aria-labelledby]="ariaLabelledby"></mat-tab>
@@ -931,7 +940,8 @@ class TabGroupWithIsActiveBinding {
     </mat-tab-group>
   `,
 })
-class TabsWithCustomAnimationDuration {}
+class TabsWithCustomAnimationDuration {
+}
 
 
 @Component({

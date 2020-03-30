@@ -42,5 +42,6 @@ export class InputGroupComponent implements OnInit {
     return this.size === 'sm';
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

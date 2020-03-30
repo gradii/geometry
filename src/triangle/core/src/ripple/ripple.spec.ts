@@ -1,20 +1,21 @@
-import {TestBed, ComponentFixture, fakeAsync, tick, inject} from '@angular/core/testing';
-import {Component, ViewChild} from '@angular/core';
-import {Platform} from '@angular/cdk/platform';
+import { Platform } from '@angular/cdk/platform';
+import { Component, ViewChild } from '@angular/core';
+import { ComponentFixture, fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   dispatchEvent,
   dispatchMouseEvent,
   dispatchTouchEvent,
 } from '../../testing/dispatch-events';
+import { createMouseEvent, createTouchEvent, } from '../../testing/event-objects';
 import {
-  createTouchEvent,
-  createMouseEvent,
-} from '../../testing/event-objects';
-import {defaultRippleAnitriionConfig, RippleAnitriionConfig} from './ripple-renderer';
-import {
-  TriRipple, TriRippleModule, MAT_RIPPLE_GLOBAL_OPTIONS, RippleState, RippleGlobalOptions
+  MAT_RIPPLE_GLOBAL_OPTIONS,
+  RippleGlobalOptions,
+  RippleState,
+  TriRipple,
+  TriRippleModule
 } from './index';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import { defaultRippleAnitriionConfig, RippleAnitriionConfig } from './ripple-renderer';
 
 /** Shorthands for the enter and exit duration of ripples. */
 const {enterDuration, exitDuration} = defaultRippleAnitriionConfig;
@@ -26,8 +27,8 @@ describe('TriRipple', () => {
   let platform: Platform;
 
   /** Extracts the numeric value of a pixel size string like '123px'. */
-  const pxStringToFloat      = (s: string | null) => s ? parseFloat(s) : 0;
-  const startingWindowWidth  = window.innerWidth;
+  const pxStringToFloat = (s: string | null) => s ? parseFloat(s) : 0;
+  const startingWindowWidth = window.innerWidth;
   const startingWindowHeight = window.innerHeight;
 
   beforeEach(() => {
@@ -46,7 +47,7 @@ describe('TriRipple', () => {
     platform = p;
 
     // Set body margin to 0 during tests so it doesn't mess up position calculations.
-    originalBodyMargin         = document.body.style.margin;
+    originalBodyMargin = document.body.style.margin;
     document.body.style.margin = '0';
   }));
 
@@ -58,13 +59,13 @@ describe('TriRipple', () => {
     let rippleDirective: TriRipple;
 
     const TARGET_HEIGHT = 200;
-    const TARGET_WIDTH  = 300;
+    const TARGET_WIDTH = 300;
 
     beforeEach(() => {
       fixture = TestBed.createComponent(BasicRippleContainer);
       fixture.detectChanges();
 
-      rippleTarget    = fixture.nativeElement.querySelector('.tri-ripple');
+      rippleTarget = fixture.nativeElement.querySelector('.tri-ripple');
       rippleDirective = fixture.componentInstance.ripple;
     });
 
@@ -90,8 +91,8 @@ describe('TriRipple', () => {
       // location, and large enough to reach the furthest corner, which is 250px to the right
       // and 125px down relative to the click position.
       let expectedRadius = Math.sqrt(maxDistanceX * maxDistanceX + maxDistanceY * maxDistanceY);
-      let expectedLeft   = elementRect.left + 50 - expectedRadius;
-      let expectedTop    = elementRect.top + 75 - expectedRadius;
+      let expectedLeft = elementRect.left + 50 - expectedRadius;
+      let expectedTop = elementRect.top + 75 - expectedRadius;
 
       let ripple = rippleTarget.querySelector('.tri-ripple-element') as HTMLElement;
 
@@ -276,7 +277,7 @@ describe('TriRipple', () => {
     });
 
     it('does not run events inside the NgZone', () => {
-      const spy          = jasmine.createSpy('zone unstable callback');
+      const spy = jasmine.createSpy('zone unstable callback');
       const subscription = fixture.ngZone!.onUnstable.subscribe(spy);
 
       dispatchMouseEvent(rippleTarget, 'mousedown');
@@ -300,21 +301,21 @@ describe('TriRipple', () => {
 
     describe('when page is scrolled', () => {
       let veryLargeElement: HTMLDivElement = document.createElement('div');
-      let pageScrollTop                    = 500;
-      let pageScrollLeft                   = 500;
+      let pageScrollTop = 500;
+      let pageScrollLeft = 500;
 
       beforeEach(() => {
         // Add a very large element to make the page scroll
-        veryLargeElement.style.width  = '4000px';
+        veryLargeElement.style.width = '4000px';
         veryLargeElement.style.height = '4000px';
 
         document.body.appendChild(veryLargeElement);
-        document.body.scrollTop  = pageScrollTop;
+        document.body.scrollTop = pageScrollTop;
         document.body.scrollLeft = pageScrollLeft;
 
         // Firefox
         document.documentElement!.scrollLeft = pageScrollLeft;
-        document.documentElement!.scrollTop  = pageScrollTop;
+        document.documentElement!.scrollTop = pageScrollTop;
 
         // Mobile safari
         window.scrollTo(pageScrollLeft, pageScrollTop);
@@ -322,25 +323,25 @@ describe('TriRipple', () => {
 
       afterEach(() => {
         document.body.removeChild(veryLargeElement);
-        document.body.scrollTop  = 0;
+        document.body.scrollTop = 0;
         document.body.scrollLeft = 0;
 
         // Firefox
         document.documentElement!.scrollLeft = 0;
-        document.documentElement!.scrollTop  = 0;
+        document.documentElement!.scrollTop = 0;
 
         // Mobile safari
         window.scrollTo(0, 0);
       });
 
       it('create ripple with correct position', () => {
-        let elementTop  = 600;
+        let elementTop = 600;
         let elementLeft = 750;
-        let left        = 50;
-        let top         = 75;
+        let left = 50;
+        let top = 75;
 
         rippleTarget.style.left = `${elementLeft}px`;
-        rippleTarget.style.top  = `${elementTop}px`;
+        rippleTarget.style.top = `${elementTop}px`;
 
         // Simulate a keyboard-triggered click by setting event coordinates to 0.
         dispatchMouseEvent(rippleTarget, 'mousedown',
@@ -349,8 +350,8 @@ describe('TriRipple', () => {
         );
 
         let expectedRadius = Math.sqrt(250 * 250 + 125 * 125);
-        let expectedLeft   = left - expectedRadius;
-        let expectedTop    = top - expectedRadius;
+        let expectedLeft = left - expectedRadius;
+        let expectedTop = top - expectedRadius;
 
         let ripple = rippleTarget.querySelector('.tri-ripple-element') as HTMLElement;
 
@@ -379,7 +380,7 @@ describe('TriRipple', () => {
       fixture = TestBed.createComponent(BasicRippleContainer);
       fixture.detectChanges();
 
-      rippleTarget    = fixture.nativeElement.querySelector('.tri-ripple');
+      rippleTarget = fixture.nativeElement.querySelector('.tri-ripple');
       rippleDirective = fixture.componentInstance.ripple;
     });
 
@@ -494,7 +495,7 @@ describe('TriRipple', () => {
       fixture = TestBed.createComponent(testComponent);
       fixture.detectChanges();
 
-      rippleTarget    = fixture.nativeElement.querySelector('.tri-ripple');
+      rippleTarget = fixture.nativeElement.querySelector('.tri-ripple');
       rippleDirective = fixture.componentInstance.ripple;
     }
 
@@ -586,7 +587,7 @@ describe('TriRipple', () => {
       fixture = TestBed.createComponent(BasicRippleContainer);
       fixture.detectChanges();
 
-      rippleTarget    = fixture.nativeElement.querySelector('.tri-ripple');
+      rippleTarget = fixture.nativeElement.querySelector('.tri-ripple');
       rippleDirective = fixture.componentInstance.ripple;
     });
 
@@ -603,7 +604,7 @@ describe('TriRipple', () => {
       fixture = TestBed.createComponent(RippleContainerWithInputBindings);
       fixture.detectChanges();
 
-      controller   = fixture.debugElement.componentInstance;
+      controller = fixture.debugElement.componentInstance;
       rippleTarget = fixture.debugElement.nativeElement.querySelector('.tri-ripple');
     });
 
@@ -671,8 +672,8 @@ describe('TriRipple', () => {
       // bounding rect. The ripple should expand to cover the rect corners, which are 150px
       // horizontally and 100px vertically from the midpoint.
       let expectedRadius = Math.sqrt(150 * 150 + 100 * 100);
-      let expectedLeft   = elementRect.left + (elementRect.width / 2) - expectedRadius;
-      let expectedTop    = elementRect.top + (elementRect.height / 2) - expectedRadius;
+      let expectedLeft = elementRect.left + (elementRect.width / 2) - expectedRadius;
+      let expectedTop = elementRect.top + (elementRect.height / 2) - expectedRadius;
 
       let ripple = rippleTarget.querySelector('.tri-ripple-element') as HTMLElement;
 
@@ -695,7 +696,7 @@ describe('TriRipple', () => {
       dispatchMouseEvent(rippleTarget, 'mouseup');
 
       let expectedLeft = elementRect.left + 50 - customRadius;
-      let expectedTop  = elementRect.top + 75 - customRadius;
+      let expectedTop = elementRect.top + 75 - customRadius;
 
       let ripple = rippleTarget.querySelector('.tri-ripple-element') as HTMLElement;
 
@@ -752,8 +753,8 @@ class RippleContainerWithInputBindings {
   trigger: HTMLElement;
   centered = false;
   disabled = false;
-  radius   = 0;
-  color    = '';
+  radius = 0;
+  color = '';
   @ViewChild(TriRipple) ripple: TriRipple;
 }
 

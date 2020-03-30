@@ -11,5 +11,6 @@ import { Directive, Optional, TemplateRef } from '@angular/core';
   selector: '[triGridNoRecordsTemplate], [tri-grid-no-records-template]'
 })
 export class NoRecordsTemplateDirective {
-  constructor(@Optional() public templateRef: TemplateRef<any>) {}
+  constructor(@Optional() public templateRef: TemplateRef<any>) {
+  }
 }

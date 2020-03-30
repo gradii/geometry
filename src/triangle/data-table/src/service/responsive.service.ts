@@ -21,7 +21,8 @@ const bootstrapToMedia = media =>
 
 @Injectable()
 export class ResponsiveService {
-  constructor(private mediaMatcher: MediaMatcher) {}
+  constructor(private mediaMatcher: MediaMatcher) {
+  }
 
   matchesMedia(media: string): boolean {
     return !media || this.mediaMatcher.matchMedia(bootstrapToMedia(media)).matches;

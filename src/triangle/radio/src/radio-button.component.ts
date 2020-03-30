@@ -32,4 +32,5 @@ import { RadioComponent } from './radio.component';
     '[class.tri-radio-button-wrapper-checked]' : 'checked'
   }
 })
-export class RadioButtonComponent extends RadioComponent {}
+export class RadioButtonComponent extends RadioComponent {
+}

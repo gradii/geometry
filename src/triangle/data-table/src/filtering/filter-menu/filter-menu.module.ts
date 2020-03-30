@@ -29,7 +29,7 @@ import { NumericFilterMenuComponent } from './type-filter-menu/numeric-filter-me
 import { StringFilterMenuComponent } from './type-filter-menu/string-filter-menu.component';
 
 @NgModule({
-  imports        : [
+  imports     : [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -46,7 +46,7 @@ import { StringFilterMenuComponent } from './type-filter-menu/string-filter-menu
     TriGridModule,
     OverlayModule
   ],
-  declarations   : [
+  declarations: [
     FilterMenuComponent,
     FilterMenuContainerComponent,
     StringFilterMenuComponent,
@@ -58,7 +58,7 @@ import { StringFilterMenuComponent } from './type-filter-menu/string-filter-menu
     DateFilterMenuComponent,
     BooleanFilterMenuComponent
   ],
-  exports        : [
+  exports     : [
     FilterMenuComponent,
     FilterMenuContainerComponent,
     StringFilterMenuComponent,

@@ -76,12 +76,24 @@ export {
   NumericFilterCellComponent as ɵNumericFilterCellComponent
 } from './src/filtering/filter-row/numeric-filter-cell.component';
 export { FilterHostDirective as ɵFilterHostDirective } from './src/filtering/filter-host.directive';
-export { FilterSimpleTemplateDirective as ɵFilterSimpleTemplateDirective } from './src/filtering/filter-simple/filter-simple-template.directive';
-export { FilterSimpleModule as ɵFilterSimpleModule } from './src/filtering/filter-simple/filter-simple.module';
-export { FilterSimpleComponent as ɵFilterSimpleComponent } from './src/filtering/filter-simple/filter-simple.component';
-export { DateFilterSimpleComponent as ɵDateFilterSimpleComponent } from './src/filtering/filter-simple/type-filter-simple/date-filter-simple.component';
-export { StringFilterSimpleComponent as ɵStringFilterSimpleComponent } from './src/filtering/filter-simple/type-filter-simple/string-filter-simple.component';
-export { BooleanFilterSimpleComponent as ɵBooleanFilterSimpleComponent } from './src/filtering/filter-simple/type-filter-simple/boolean-filter-simple.component';
+export {
+  FilterSimpleTemplateDirective as ɵFilterSimpleTemplateDirective
+} from './src/filtering/filter-simple/filter-simple-template.directive';
+export {
+  FilterSimpleModule as ɵFilterSimpleModule
+} from './src/filtering/filter-simple/filter-simple.module';
+export {
+  FilterSimpleComponent as ɵFilterSimpleComponent
+} from './src/filtering/filter-simple/filter-simple.component';
+export {
+  DateFilterSimpleComponent as ɵDateFilterSimpleComponent
+} from './src/filtering/filter-simple/type-filter-simple/date-filter-simple.component';
+export {
+  StringFilterSimpleComponent as ɵStringFilterSimpleComponent
+} from './src/filtering/filter-simple/type-filter-simple/string-filter-simple.component';
+export {
+  BooleanFilterSimpleComponent as ɵBooleanFilterSimpleComponent
+} from './src/filtering/filter-simple/type-filter-simple/boolean-filter-simple.component';
 export {
   FilterCellWrapperComponent as ɵFilterCellWrapperComponent
 } from './src/filtering/filter-row/filter-cell-wrapper.component';

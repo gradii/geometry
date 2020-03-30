@@ -15,12 +15,11 @@
 // @param $primary
 // @param $lighter
 @function tri-palette($base-palette, $default: 500, $lighter: 100, $darker: 700, $text: $default) {
-  $result: map_merge($base-palette, (
+  $result : map_merge($base-palette, (
     default: map-get($base-palette, $default),
     lighter: map-get($base-palette, $lighter),
     darker: map-get($base-palette, $darker),
     text: map-get($base-palette, $text),
-
     default-contrast: tri-contrast($base-palette, $default),
     lighter-contrast: tri-contrast($base-palette, $lighter),
     darker-contrast: tri-contrast($base-palette, $darker)
@@ -28,7 +27,7 @@
 
   // For each hue in the palette, add a "-contrast" color to the map.
   @each $hue, $color in $base-palette {
-    $result: map_merge($result, (
+    $result : map_merge($result, (
       '#{$hue}-contrast': tri-contrast($base-palette, $hue)
     ));
   }
@@ -52,7 +51,7 @@
     @return tri-color($palette, default, $hue);
   }
 
-  $color: map-get($palette, $hue);
+  $color : map-get($palette, $hue);
 
   @if (type-of($color) != color) {
     // If the $color resolved to something different from a color (e.g. a CSS variable),

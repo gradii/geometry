@@ -1,25 +1,25 @@
-import {ComponentHarness, HarnessLoader} from '@angular/cdk/testing';
-import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
-import {Component} from '@angular/core';
-import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {MatTabsModule} from '@angular/material/tabs';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {MatTabGroupHarness} from './tab-group-harness';
+import { ComponentHarness, HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatTabsModule } from '@angular/material/tabs';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTabGroupHarness } from './tab-group-harness';
 
 /** Shared tests to run on both the original and MDC-based tab-group's. */
 export function runHarnessTests(
-    tabsModule: typeof MatTabsModule,
-    tabGroupHarness: typeof MatTabGroupHarness) {
+  tabsModule: typeof MatTabsModule,
+  tabGroupHarness: typeof MatTabGroupHarness) {
   let fixture: ComponentFixture<TabGroupHarnessTest>;
   let loader: HarnessLoader;
 
   beforeEach(async () => {
     await TestBed
-        .configureTestingModule({
-          imports: [tabsModule, NoopAnimationsModule],
-          declarations: [TabGroupHarnessTest],
-        })
-        .compileComponents();
+      .configureTestingModule({
+        imports     : [tabsModule, NoopAnimationsModule],
+        declarations: [TabGroupHarnessTest],
+      })
+      .compileComponents();
 
     fixture = TestBed.createComponent(TabGroupHarnessTest);
     fixture.detectChanges();
@@ -68,7 +68,7 @@ export function runHarnessTests(
   it('should throw error when attempting to select invalid tab', async () => {
     const tabGroup = await loader.getHarness(tabGroupHarness);
     await expectAsync(tabGroup.selectTab({label: 'Fake'})).toBeRejectedWithError(
-        /Cannot find mat-tab matching filter {"label":"Fake"}/);
+      /Cannot find mat-tab matching filter {"label":"Fake"}/);
   });
 
   it('should be able to get label of tabs', async () => {

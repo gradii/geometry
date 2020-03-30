@@ -20,7 +20,7 @@ import { AutoGenerateColumnPositon, ColumnBase } from './column-base';
 @Component({
   providers: [
     {
-      provide    : ColumnBase,
+      provide: ColumnBase,
       useExisting: CommandColumnComponent
     }
   ],

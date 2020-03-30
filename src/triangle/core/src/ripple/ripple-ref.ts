@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {RippleConfig, RippleRenderer} from './ripple-renderer';
+import { RippleConfig, RippleRenderer } from './ripple-renderer';
 
 /** Possible states for a ripple element. */
 export const enum RippleState {

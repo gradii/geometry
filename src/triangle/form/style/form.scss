@@ -522,7 +522,7 @@ form {
 }
 
 .has-warning {
-  @include form-control-validation ($warning-color, $warning-color);
+  @include form-control-validation($warning-color, $warning-color);
 
   //select
   .#{$ant-prefix}-select {
@@ -562,7 +562,7 @@ form {
 }
 
 .has-error {
-  @include form-control-validation ($error-color, $error-color);
+  @include form-control-validation($error-color, $error-color);
 
   //select
   .#{$ant-prefix}-select {

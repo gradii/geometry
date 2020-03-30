@@ -7,7 +7,7 @@
 
 import { DataResult } from '@gradii/triangle/data-query';
 import { isFunction, isIterable, isPresent, isString } from '@gradii/triangle/util';
-import { defer, from, first, IterableX, toArray } from 'ix/iterable';
+import { defer, first, from, IterableX, toArray } from 'ix/iterable';
 import { map, memoize, publish } from 'ix/iterable/operators';
 import { GroupRow } from '../row-column/group-row';
 import { Row } from '../row-column/row';

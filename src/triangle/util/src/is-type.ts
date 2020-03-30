@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {TemplateRef, Type} from '@angular/core';
-import {isObservable as _isObservable} from 'rxjs';
+import { TemplateRef, Type } from '@angular/core';
+import { isObservable as _isObservable } from 'rxjs';
 
 export function isPresent(value: any) {
   return value !== null && value !== undefined;

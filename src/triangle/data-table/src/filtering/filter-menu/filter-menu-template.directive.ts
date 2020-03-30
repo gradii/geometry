@@ -11,5 +11,6 @@ import { Directive, Optional, TemplateRef } from '@angular/core';
   selector: '[triDataTableFilterMenuTemplate]'
 })
 export class FilterMenuTemplateDirective {
-  constructor(@Optional() public templateRef: TemplateRef<any>) {}
+  constructor(@Optional() public templateRef: TemplateRef<any>) {
+  }
 }

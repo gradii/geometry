@@ -13,7 +13,9 @@ function requestAnimationFramePolyfill(): typeof requestAnimationFrame {
   return function (callback: FrameRequestCallback): number {
     const currTime = new Date().getTime();
     const timeToCall = Math.max(0, 16 - (currTime - lastTime));
-    const id = window.setTimeout(() => { callback(currTime + timeToCall); }, timeToCall);
+    const id = window.setTimeout(() => {
+      callback(currTime + timeToCall);
+    }, timeToCall);
     lastTime = currTime + timeToCall;
     return id;
   };
@@ -50,7 +52,7 @@ export function cancelRequestAnimationFrame(id: number): any {
     (
       (window as any)[`${prefix}CancelAnimationFrame`] ||
       (window as any)[`${prefix}CancelRequestAnimationFrame`]
-    // @ts-ignore
+      // @ts-ignore
     ).call(this, id) : clearTimeout(id);
 }
 

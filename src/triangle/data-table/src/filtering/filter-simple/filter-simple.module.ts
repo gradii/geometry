@@ -30,7 +30,7 @@ import { StringFilterSimpleComponent } from './type-filter-simple/string-filter-
 
 @NgModule({
 
-  imports        : [
+  imports     : [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -47,7 +47,7 @@ import { StringFilterSimpleComponent } from './type-filter-simple/string-filter-
     TriI18nModule,
     OverlayModule
   ],
-  declarations   : [
+  declarations: [
     FilterSimpleComponent,
     FilterSimpleTemplateDirective,
     FilterSimpleContainerComponent,
@@ -58,7 +58,7 @@ import { StringFilterSimpleComponent } from './type-filter-simple/string-filter-
     NumericFilterSimpleComponent,
     NumericFilterSimpleInputComponent,
   ],
-  exports        : [
+  exports     : [
     FilterSimpleComponent,
     BooleanFilterSimpleComponent,
     DateFilterSimpleComponent,

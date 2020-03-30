@@ -37,4 +37,5 @@ import { CheckboxComponent } from './checkbox.component';
   declarations: [CheckboxComponent, CheckboxGroupComponent],
   exports     : [CheckboxComponent, CheckboxGroupComponent]
 })
-export class TriCheckboxModule {}
+export class TriCheckboxModule {
+}

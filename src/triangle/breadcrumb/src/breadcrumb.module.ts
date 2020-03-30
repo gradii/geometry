@@ -36,4 +36,5 @@ import { BreadCrumbComponent } from './breadcrumb.component';
   declarations: [BreadCrumbComponent, BreadCrumbItemComponent],
   exports     : [BreadCrumbComponent, BreadCrumbItemComponent]
 })
-export class TriBreadCrumbModule {}
+export class TriBreadCrumbModule {
+}

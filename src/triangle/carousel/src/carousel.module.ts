@@ -36,4 +36,5 @@ import { CarouselComponent } from './carousel.component';
   exports     : [CarouselComponent, CarouselContentDirective, CarouselSlickListDirective, CarouselSlickTrackDirective],
   imports     : [CommonModule]
 })
-export class TriCarouselModule {}
+export class TriCarouselModule {
+}

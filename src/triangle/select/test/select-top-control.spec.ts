@@ -20,10 +20,14 @@ describe('tri-select top control', () => {
       listOfSelectedValue       : [1, 2, 3],
       listOfCachedSelectedOption: createListOfOption(10),
       isMultipleOrTags          : true,
-      removeValueFormSelected   : () => {},
-      tokenSeparate             : () => {},
-      updateSearchValue         : () => {},
-      updateListOfSelectedValue : () => {},
+      removeValueFormSelected   : () => {
+      },
+      tokenSeparate             : () => {
+      },
+      updateSearchValue         : () => {
+      },
+      updateListOfSelectedValue : () => {
+      },
       compareWith               : (o1, o2) => o1 === o2
     };
     TestBed.configureTestingModule({

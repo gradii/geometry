@@ -32,8 +32,8 @@ $menu-font-size       : $font-size-base !default;
   @at-root &-item,
   &-submenu,
   &-submenu-title {
-    outline: 0;
-    cursor : pointer;
+    outline : 0;
+    cursor  : pointer;
   }
   @at-root &-submenu, #{&}-submenu-inline {
     transition : border-color .3s $ease-in-out, background .3s $ease-in-out, padding .15s $ease-in-out;
@@ -59,22 +59,22 @@ $menu-font-size       : $font-size-base !default;
       text-decoration : none;
     }
     @at-root &:before {
-      position         : absolute;
-      width            : 100%;
-      height           : 100%;
-      top              : 0;
-      left             : 0;
-      bottom           : 0;
-      right            : 0;
-      content          : '';
+      position : absolute;
+      width    : 100%;
+      height   : 100%;
+      top      : 0;
+      left     : 0;
+      bottom   : 0;
+      right    : 0;
+      content  : '';
     }
   }
 
   @at-root &-item-divider {
-    height           : 1px;
-    overflow         : hidden;
-    line-height      : 0;
-    margin           : 0.5em 0;
+    height      : 1px;
+    overflow    : hidden;
+    line-height : 0;
+    margin      : 0.5em 0;
   }
 
   @at-root &-item:hover,
@@ -232,18 +232,18 @@ $menu-font-size       : $font-size-base !default;
   }
 
   @at-root & > #{&}-item-divider {
-    height           : 1px;
-    margin           : 1px 0;
-    overflow         : hidden;
-    padding          : 0;
-    line-height      : 0;
+    height      : 1px;
+    margin      : 1px 0;
+    overflow    : hidden;
+    padding     : 0;
+    line-height : 0;
   }
 
   @at-root &-submenu {
     position : relative;
 
     > .#{$menu-prefix-cls} {
-      border-radius    : $border-radius-base;
+      border-radius : $border-radius-base;
       @at-root &-submenu-title:after {
         transition : transform .3s $ease-in-out;
       }
@@ -373,7 +373,7 @@ $menu-font-size       : $font-size-base !default;
   // Disabled state sets text to gray and nukes hover/tab effects
   @at-root &-item-disabled,
   &-submenu-disabled {
-    cursor       : not-allowed;
+    cursor : not-allowed;
     > a {
       pointer-events : none;
     }

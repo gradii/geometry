@@ -28,7 +28,9 @@ export class DraggableDirective implements OnDestroy {
         press  : (e: number): void => this.tri.press.next(e),
         release: (e: number): void => this.tri.release.next(e)
       });
-      ngZone.runOutsideAngular(() => {this.draggable.bindTo(element.nativeElement); });
+      ngZone.runOutsideAngular(() => {
+        this.draggable.bindTo(element.nativeElement);
+      });
     }
 
   }

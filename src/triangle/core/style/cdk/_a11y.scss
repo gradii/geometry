@@ -1,20 +1,20 @@
 @mixin cdk-a11y {
   .cdk-visually-hidden {
-    border: 0;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
+    border             : 0;
+    clip               : rect(0 0 0 0);
+    height             : 1px;
+    margin             : -1px;
+    overflow           : hidden;
+    padding            : 0;
+    position           : absolute;
+    width              : 1px;
 
     // Avoid browsers rendering the focus ring in some cases.
-    outline: 0;
+    outline            : 0;
 
     // Avoid some cases where the browser will still render the native controls (see #9049).
-    -webkit-appearance: none;
-    -moz-appearance: none;
+    -webkit-appearance : none;
+    -moz-appearance    : none;
   }
 }
 
@@ -24,8 +24,7 @@
 @mixin _cdk-optionally-nest-content($selector-context) {
   @if ($selector-context == '') {
     @content;
-  }
-  @else {
+  } @else {
     #{$selector-context} {
       @content;
     }
@@ -57,7 +56,7 @@
   // `.cdk-high-contrast-xxx #{&}` will only apply the parent selector to the first part of the
   // context. We address this by nesting the selector context under .cdk-high-contrast.
   @at-root {
-    $selector-context: #{&};
+    $selector-context : #{&};
 
     @if ($encapsulation != 'on') {
       .cdk-high-contrast-#{$target} {

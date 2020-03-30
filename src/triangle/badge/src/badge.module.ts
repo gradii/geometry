@@ -37,4 +37,5 @@ import { BadgeComponent } from './badge.component';
   exports     : [BadgeComponent],
   imports     : [CommonModule]
 })
-export class TriBadgeModule {}
+export class TriBadgeModule {
+}

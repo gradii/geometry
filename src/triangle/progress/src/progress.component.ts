@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {Component, forwardRef, Input, OnInit, ViewEncapsulation} from '@angular/core';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import { Component, forwardRef, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector     : 'tri-progress',
@@ -68,14 +68,14 @@ export class ProgressComponent implements ControlValueAccessor, OnInit {
     success  : '#87d068'
   };
 
-  _pathString    = '';
-  _pathStyle     = {};
-  _circleStyle   = {};
-  _percent       = 0;
-  _hasFormat     = false;
-  _rawStatus     = 'normal';
+  _pathString = '';
+  _pathStyle = {};
+  _circleStyle = {};
+  _percent = 0;
+  _hasFormat = false;
+  _rawStatus = 'normal';
   // ngModel Access
-  onChange: any  = Function.prototype;
+  onChange: any = Function.prototype;
   onTouched: any = Function.prototype;
 
   /**
@@ -117,25 +117,25 @@ export class ProgressComponent implements ControlValueAccessor, OnInit {
    */
   @Input('format')
   set _setFormat(value: Function) {
-    this._format    = value;
+    this._format = value;
     this._hasFormat = true;
   }
 
   _format: Function = (percent: any) => percent ? percent + '%' : '暂无';
 
   updateCircleStatus() {
-    const circleSize  = this.width || 132;
+    const circleSize = this.width || 132;
     this._circleStyle = {
       'width.px'    : circleSize,
       'height.px'   : circleSize,
       'font-size.px': circleSize * 0.16 + 6
     };
-    const radius      = 50 - this.strokeWidth / 2;
-    const len         = Math.PI * 2 * radius;
-    this._pathString  = `M 50,50 m 0,-${radius}
+    const radius = 50 - this.strokeWidth / 2;
+    const len = Math.PI * 2 * radius;
+    this._pathString = `M 50,50 m 0,-${radius}
      a ${radius},${radius} 0 1 1 0,${2 * radius}
      a ${radius},${radius} 0 1 1 0,-${2 * radius}`;
-    this._pathStyle   = {
+    this._pathStyle = {
       'stroke-dasharray' : len + 'px ' + len + 'px',
       'stroke-dashoffset': (100 - this._percent) / 100 * len + 'px',
       transition         : 'stroke-dashoffset 0.3s ease 0s, stroke 0.3s ease'

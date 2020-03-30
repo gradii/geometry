@@ -33,4 +33,5 @@ describe('select unselectable', () => {
     <div tri-select-unselectable></div>
   `
 })
-export class TestSelectUnselectableComponent {}
+export class TestSelectUnselectableComponent {
+}

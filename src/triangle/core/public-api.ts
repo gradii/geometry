@@ -5,11 +5,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-export {CollapseAnimation} from './src/animation/collapse-animations';
-export {DropDownAnimation} from './src/animation/dropdown-animations';
-export {FadeAnimation} from './src/animation/fade-animations';
-export {TagAnimation} from './src/animation/tag-animations';
-export {SlideAnimation, SlideAlertAnimation} from './src/animation/slide-animations';
+export { CollapseAnimation } from './src/animation/collapse-animations';
+export { DropDownAnimation } from './src/animation/dropdown-animations';
+export { FadeAnimation } from './src/animation/fade-animations';
+export { TagAnimation } from './src/animation/tag-animations';
+export { SlideAnimation, SlideAlertAnimation } from './src/animation/slide-animations';
 export {
   ZoomAnimation, ZoomBadgeAnimation, ZoomBigAnimation
 } from './src/animation/zoom-animations';

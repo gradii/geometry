@@ -76,8 +76,8 @@ export class Draggable {
       release = noop;
     }
 
-    this._pressHandler   = proxy(normalizeEvent, press);
-    this._dragHandler    = proxy(normalizeEvent, drag);
+    this._pressHandler = proxy(normalizeEvent, press);
+    this._dragHandler = proxy(normalizeEvent, drag);
     this._releaseHandler = proxy(normalizeEvent, release);
 
     this._ignoreMouse = false;

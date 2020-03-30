@@ -13,9 +13,10 @@ import { DrawerComponent } from './drawer.component';
 import { DrawerService } from './drawer.service';
 
 @NgModule({
-  imports        : [CommonModule, OverlayModule, PortalModule],
-  exports        : [DrawerComponent],
-  declarations   : [DrawerComponent],
-  providers      : [DrawerService]
+  imports     : [CommonModule, OverlayModule, PortalModule],
+  exports     : [DrawerComponent],
+  declarations: [DrawerComponent],
+  providers   : [DrawerService]
 })
-export class TriDrawerModule {}
+export class TriDrawerModule {
+}

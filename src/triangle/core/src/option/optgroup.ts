@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {BooleanInput} from '@angular/cdk/coercion';
-import {ChangeDetectionStrategy, Component, Input, ViewEncapsulation} from '@angular/core';
-import {CanDisable, CanDisableCtor, mixinDisabled} from '../common-behaviors/disabled';
+import { BooleanInput } from '@angular/cdk/coercion';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
+import { CanDisable, CanDisableCtor, mixinDisabled } from '../common-behaviors/disabled';
 
 
 // Boilerplate for applying mixins to TriOptgroup.
@@ -41,12 +41,10 @@ let _uniqueOptgroupIdCounter = 0;
   }
 })
 export class TriOptgroup extends _TriOptgroupMixinBase implements CanDisable {
-  /** Label for the option group. */
-  @Input() label: string;
-
-  /** Unique id for the underlying label. */
-  _labelId: string = `tri-optgroup-label-${_uniqueOptgroupIdCounter++}`;
-
   // tslint:disable-next-line:variable-name
   static ngAcceptInputType_disabled: BooleanInput;
+  /** Label for the option group. */
+  @Input() label: string;
+  /** Unique id for the underlying label. */
+  _labelId: string = `tri-optgroup-label-${_uniqueOptgroupIdCounter++}`;
 }

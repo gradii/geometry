@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {Observable, Subscriber} from 'rxjs';
-import {Constructor} from './constructor';
+import { Observable, Subscriber } from 'rxjs';
+import { Constructor } from './constructor';
 
 
 /**
@@ -33,7 +33,7 @@ export type HasInitializedCtor = Constructor<HasInitialized>;
 
 /** Mixin to augment a directive with an initialized property that will emits when ngOnInit ends. */
 export function mixinInitialized<T extends Constructor<{}>>(base: T):
-    HasInitializedCtor & T {
+  HasInitializedCtor & T {
   return class extends base {
     /** Whether this directive has been marked as initialized. */
     _isInitialized = false;
@@ -59,7 +59,9 @@ export function mixinInitialized<T extends Constructor<{}>>(base: T):
       }
     });
 
-    constructor(...args: any[]) { super(...args); }
+    constructor(...args: any[]) {
+      super(...args);
+    }
 
     /**
      * Marks the state as initialized and notifies pending subscribers. Should be called at the end
@@ -69,7 +71,7 @@ export function mixinInitialized<T extends Constructor<{}>>(base: T):
     _markInitialized(): void {
       if (this._isInitialized) {
         throw Error('This directive has already been marked as initialized and ' +
-            'should not be called twice.');
+          'should not be called twice.');
       }
 
       this._isInitialized = true;

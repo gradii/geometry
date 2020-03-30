@@ -257,7 +257,9 @@ export class TestComponent {
   showInkInFixed = false;
   target = null;
 
-  _click() {}
+  _click() {
+  }
 
-  _scroll() {}
+  _scroll() {
+  }
 }

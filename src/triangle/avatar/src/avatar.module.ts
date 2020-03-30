@@ -31,4 +31,5 @@ import { AvatarComponent } from './avatar.component';
   exports     : [AvatarComponent],
   imports     : [CommonModule]
 })
-export class TriAvatarModule {}
+export class TriAvatarModule {
+}

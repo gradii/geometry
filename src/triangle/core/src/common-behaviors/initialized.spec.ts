@@ -1,8 +1,10 @@
-import {mixinInitialized} from './initialized';
-import {HasInitialized} from '@angular/material/core';
+import { HasInitialized } from '@angular/material/core';
+import { mixinInitialized } from './initialized';
 
 describe('MixinHasInitialized', () => {
-  class EmptyClass { }
+  class EmptyClass {
+  }
+
   let instance: HasInitialized;
 
   beforeEach(() => {

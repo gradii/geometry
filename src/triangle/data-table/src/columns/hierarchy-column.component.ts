@@ -23,9 +23,9 @@ import { ColumnComponent } from './column.component';
 @Component({
   providers: [
     {
-      provide    : ColumnBase,
+      provide: ColumnBase,
       useExisting: forwardRef(() => HierarchyColumnComponent),
-      multi      : true
+      multi: true
     }
   ],
   selector : 'tri-data-table-hierarchy-column',

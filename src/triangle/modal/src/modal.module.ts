@@ -183,9 +183,10 @@ import { ModalService } from './modal.service';
  其他（ 用户可以自定义任何事件，都可以通过该对象监听 ）
  */
 @NgModule({
-  providers      : [ModalSubject, ModalService],
-  declarations   : [ModalComponent, ConfirmComponent],
-  exports        : [ModalComponent, ConfirmComponent],
-  imports        : [CommonModule, TriButtonModule]
+  providers   : [ModalSubject, ModalService],
+  declarations: [ModalComponent, ConfirmComponent],
+  exports     : [ModalComponent, ConfirmComponent],
+  imports     : [CommonModule, TriButtonModule]
 })
-export class TriModalModule {}
+export class TriModalModule {
+}

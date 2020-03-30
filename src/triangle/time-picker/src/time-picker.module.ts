@@ -15,16 +15,16 @@ import { TimePickerComponent } from './time-picker.component';
 import { TimeValueAccessorDirective } from './time-value-accessor.directive';
 
 @NgModule({
-  declarations   : [
+  declarations: [
     TimePickerComponent,
     TimePickerPanelComponent,
     TimeValueAccessorDirective
   ],
-  exports        : [
+  exports     : [
     TimePickerPanelComponent,
     TimePickerComponent
   ],
-  imports        : [CommonModule, FormsModule, TriI18nModule, OverlayModule],
+  imports     : [CommonModule, FormsModule, TriI18nModule, OverlayModule],
 })
 export class TriTimePickerModule {
 }

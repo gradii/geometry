@@ -1,14 +1,14 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {Component, DebugElement} from '@angular/core';
-import {By} from '@angular/platform-browser';
+import { ENTER, SPACE } from '@angular/cdk/keycodes';
 import {
-  dispatchFakeEvent,
-  dispatchKeyboardEvent,
   createKeyboardEvent,
   dispatchEvent,
+  dispatchFakeEvent,
+  dispatchKeyboardEvent,
 } from '@angular/cdk/testing/private';
-import {SPACE, ENTER} from '@angular/cdk/keycodes';
-import {TriOption, TriOptionModule} from './index';
+import { Component, DebugElement } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { TriOption, TriOptionModule } from './index';
 
 describe('TriOption component', () => {
 
@@ -24,7 +24,7 @@ describe('TriOption component', () => {
     fixture.detectChanges();
 
     const optionInstance: TriOption =
-        fixture.debugElement.query(By.directive(TriOption))!.componentInstance;
+            fixture.debugElement.query(By.directive(TriOption))!.componentInstance;
     const completeSpy = jasmine.createSpy('complete spy');
     const subscription = optionInstance._stateChanges.subscribe({complete: completeSpy});
 
@@ -38,7 +38,7 @@ describe('TriOption component', () => {
     fixture.detectChanges();
 
     const optionInstance: TriOption =
-        fixture.debugElement.query(By.directive(TriOption))!.componentInstance;
+            fixture.debugElement.query(By.directive(TriOption))!.componentInstance;
 
     optionInstance.select();
     expect(optionInstance.selected).toBe(true);
@@ -60,7 +60,7 @@ describe('TriOption component', () => {
     fixture.detectChanges();
 
     const optionInstance: TriOption =
-        fixture.debugElement.query(By.directive(TriOption))!.componentInstance;
+            fixture.debugElement.query(By.directive(TriOption))!.componentInstance;
 
     optionInstance.deselect();
     expect(optionInstance.selected).toBe(false);

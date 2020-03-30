@@ -46,4 +46,5 @@ import { InputDirective } from './input.directive';
   exports     : [InputComponent, InputGroupComponent, InputDirective],
   imports     : [CommonModule, FormsModule]
 })
-export class TriInputModule {}
+export class TriInputModule {
+}

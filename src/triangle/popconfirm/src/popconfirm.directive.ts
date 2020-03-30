@@ -11,5 +11,6 @@ import { Directive, ElementRef } from '@angular/core';
   selector: '[triPopConfirm]'
 })
 export class PopConfirmDirective {
-  constructor(public elementRef: ElementRef) {}
+  constructor(public elementRef: ElementRef) {
+  }
 }

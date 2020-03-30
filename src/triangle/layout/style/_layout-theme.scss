@@ -5,32 +5,32 @@ $layout-prefix-cls : "#{$ant-prefix}-layout";
 @mixin tri-layout-theme($theme) {
   @include import-once('component:layout') {
     .#{$layout-prefix-cls} {
-      background     : $layout-body-background;
+      background : $layout-body-background;
 
       @at-root &-header-light {
-        background  : $background-color-base;
+        background : $background-color-base;
       }
 
       @at-root &-header-dark {
-        background  : $layout-header-background;
+        background : $layout-header-background;
       }
 
       @at-root &-footer {
-        color     : $text-color;
+        color : $text-color;
       }
 
       @at-root &-sider {
         background : $layout-sider-background;
 
         @at-root &-trigger {
-          background  : $layout-trigger-background;
-          color       : $layout-trigger-color;
+          background : $layout-trigger-background;
+          color      : $layout-trigger-color;
         }
 
         @at-root &-zero-width {
           @at-root &-trigger {
-            background    : $layout-sider-background;
-            color         : #fff;
+            background : $layout-sider-background;
+            color      : #fff;
 
             @at-root &:hover {
               background : tint($layout-sider-background, 10%);

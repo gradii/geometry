@@ -110,7 +110,7 @@ export function calculateNodeHeight(uiTextNode: any,
 
   let minHeight = -Infinity;
   let maxHeight = Infinity;
-  let height    = hiddenTextarea.scrollHeight;
+  let height = hiddenTextarea.scrollHeight;
   let overflowY;
 
   if (boxSizing === 'border-box') {
@@ -123,7 +123,7 @@ export function calculateNodeHeight(uiTextNode: any,
 
   if (minRows !== null || maxRows !== null) {
     // measure height of a textarea with a single row
-    hiddenTextarea.value  = '';
+    hiddenTextarea.value = '';
     const singleRowHeight = hiddenTextarea.scrollHeight - paddingSize;
     if (minRows !== null) {
       minHeight = singleRowHeight * minRows;
@@ -138,7 +138,7 @@ export function calculateNodeHeight(uiTextNode: any,
         maxHeight = maxHeight + paddingSize + borderSize;
       }
       overflowY = height > maxHeight ? '' : 'hidden';
-      height    = Math.min(maxHeight, height);
+      height = Math.min(maxHeight, height);
     }
   }
   // Remove scroll bar flash when autosize without maxRows

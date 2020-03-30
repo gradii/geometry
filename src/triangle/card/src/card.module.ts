@@ -39,4 +39,5 @@ import { CardComponent } from './card.component';
   declarations: [CardComponent, CardGridDirective],
   exports     : [CardComponent, CardGridDirective]
 })
-export class TriCardModule {}
+export class TriCardModule {
+}

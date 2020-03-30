@@ -57,8 +57,9 @@ import { NotificationService } from './notification.service';
  <!-- example(tri-demo-notification-html) -->
  */
 @NgModule({
-  imports        : [CommonModule, OverlayModule],
-  declarations   : [NotificationComponent, NotificationContainerComponent],
-  providers      : [NOTIFICATION_DEFAULT_CONFIG_PROVIDER, NotificationService],
+  imports     : [CommonModule, OverlayModule],
+  declarations: [NotificationComponent, NotificationContainerComponent],
+  providers   : [NOTIFICATION_DEFAULT_CONFIG_PROVIDER, NotificationService],
 })
-export class TriNotificationModule {}
+export class TriNotificationModule {
+}

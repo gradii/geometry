@@ -11,5 +11,6 @@ import { Directive, Optional, TemplateRef } from '@angular/core';
   selector: '[triGridFooterTemplate], [tri-grid-footer-template]'
 })
 export class FooterTemplateDirective {
-  constructor(@Optional() public templateRef: TemplateRef<any>) {}
+  constructor(@Optional() public templateRef: TemplateRef<any>) {
+  }
 }

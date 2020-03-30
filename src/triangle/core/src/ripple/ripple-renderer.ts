@@ -5,11 +5,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {ElementRef, NgZone} from '@angular/core';
-import {Platform, normalizePassiveListenerOptions} from '@angular/cdk/platform';
-import {isFakeMousedownFromScreenReader} from '@angular/cdk/a11y';
-import {coerceElement} from '@angular/cdk/coercion';
-import {RippleRef, RippleState} from './ripple-ref';
+import { isFakeMousedownFromScreenReader } from '@angular/cdk/a11y';
+import { coerceElement } from '@angular/cdk/coercion';
+import { normalizePassiveListenerOptions, Platform } from '@angular/cdk/platform';
+import { ElementRef, NgZone } from '@angular/core';
+import { RippleRef, RippleState } from './ripple-ref';
 
 export type RippleConfig = {
   color?: string;
@@ -124,7 +124,7 @@ export class RippleRenderer {
    * @param config Extra ripple options.
    */
   fadeInRipple(x: number, y: number, config: RippleConfig = {}): RippleRef {
-    const containerRect   = this._containerRect =
+    const containerRect = this._containerRect =
       this._containerRect || this._containerElement.getBoundingClientRect();
     const anitriionConfig = {...defaultRippleAnitriionConfig, ...config.anitriion};
 
@@ -133,18 +133,18 @@ export class RippleRenderer {
       y = containerRect.top + containerRect.height / 2;
     }
 
-    const radius   = config.radius || distanceToFurthestCorner(x, y, containerRect);
-    const offsetX  = x - containerRect.left;
-    const offsetY  = y - containerRect.top;
+    const radius = config.radius || distanceToFurthestCorner(x, y, containerRect);
+    const offsetX = x - containerRect.left;
+    const offsetY = y - containerRect.top;
     const duration = anitriionConfig.enterDuration;
 
     const ripple = document.createElement('div');
     ripple.classList.add('tri-ripple-element');
 
-    ripple.style.left   = `${offsetX - radius}px`;
-    ripple.style.top    = `${offsetY - radius}px`;
+    ripple.style.left = `${offsetX - radius}px`;
+    ripple.style.top = `${offsetY - radius}px`;
     ripple.style.height = `${radius * 2}px`;
-    ripple.style.width  = `${radius * 2}px`;
+    ripple.style.width = `${radius * 2}px`;
 
     // If a custom color has been specified, set it as inline style. If no color is
     // set, the default color will be applied through the ripple theme styles.
@@ -211,12 +211,12 @@ export class RippleRenderer {
       return;
     }
 
-    const rippleEl        = rippleRef.element;
+    const rippleEl = rippleRef.element;
     const anitriionConfig = {...defaultRippleAnitriionConfig, ...rippleRef.config.anitriion};
 
     rippleEl.style.transitionDuration = `${anitriionConfig.exitDuration}ms`;
-    rippleEl.style.opacity            = '0';
-    rippleRef.state                   = RippleState.FADING_OUT;
+    rippleEl.style.opacity = '0';
+    rippleRef.state = RippleState.FADING_OUT;
 
     // Once the ripple faded out, the ripple can be safely removed from the DOM.
     this._runTimeoutOutsideZone(() => {
@@ -250,11 +250,20 @@ export class RippleRenderer {
     this._triggerElement = element;
   }
 
+  /** Removes previously registered event listeners from the trigger element. */
+  _removeTriggerEvents() {
+    if (this._triggerElement) {
+      this._triggerEvents.forEach((fn, type) => {
+        this._triggerElement!.removeEventListener(type, fn, passiveEventOptions);
+      });
+    }
+  }
+
   /** Function being called whenever the trigger is being pressed using mouse. */
   private _onMousedown = (event: MouseEvent) => {
     // Screen readers will fire fake mouse events for space/enter. Skip launching a
     // ripple in this case for consistency with the non-screen-reader experience.
-    const isFakeMousedown  = isFakeMousedownFromScreenReader(event);
+    const isFakeMousedown = isFakeMousedownFromScreenReader(event);
     const isSyntheticEvent = this._lastTouchStartEvent &&
       Date.now() < this._lastTouchStartEvent + ignoreMouseEventsTimeout;
 
@@ -271,7 +280,7 @@ export class RippleRenderer {
       // events will launch a second ripple if we don't ignore mouse events for a specific
       // time after a touchstart event.
       this._lastTouchStartEvent = Date.now();
-      this._isPointerDown       = true;
+      this._isPointerDown = true;
 
       // Use `changedTouches` so we skip any touches where the user put
       // their finger down, but used another finger to tap the element again.
@@ -307,15 +316,6 @@ export class RippleRenderer {
   /** Runs a timeout outside of the Angular zone to avoid triggering the change detection. */
   private _runTimeoutOutsideZone(fn: Function, delay = 0) {
     this._ngZone.runOutsideAngular(() => setTimeout(fn, delay));
-  }
-
-  /** Removes previously registered event listeners from the trigger element. */
-  _removeTriggerEvents() {
-    if (this._triggerElement) {
-      this._triggerEvents.forEach((fn, type) => {
-        this._triggerElement!.removeEventListener(type, fn, passiveEventOptions);
-      });
-    }
   }
 }
 

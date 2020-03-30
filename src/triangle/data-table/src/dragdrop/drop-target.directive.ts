@@ -39,7 +39,8 @@ export class DropTargetDirective implements OnInit, OnDestroy {
   constructor(
     public element: ElementRef,
     private service: DragAndDropService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.service.add(this);
@@ -76,9 +77,9 @@ export class DropTargetDirective implements OnInit, OnDestroy {
 
   private eventArgs(e: any): Object {
     return {
-      target    : this,
+      target: this,
       mouseEvent: e.mouseEvent,
-      draggable : e.draggable
+      draggable: e.draggable
     };
   }
 }

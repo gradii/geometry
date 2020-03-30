@@ -5,10 +5,10 @@
 @include tri-core();
 //
 //// Define a theme.
-$primary: tri-palette($tri-indigo);
-$accent:  tri-palette($tri-pink, A200, A100, A400);
+$primary : tri-palette($tri-indigo);
+$accent  : tri-palette($tri-pink, A200, A100, A400);
 //
-$theme: tri-light-theme($primary, $accent);
+$theme   : tri-light-theme($primary, $accent);
 //
 //// Include all theme styles for the components.
 @include gradii-triangle-theme($theme);

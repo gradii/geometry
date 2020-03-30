@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {Directive, EmbeddedViewRef, Input, TemplateRef, ViewContainerRef} from '@angular/core';
+import { Directive, EmbeddedViewRef, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { SafeValue } from '@angular/platform-browser';
 
 @Directive({
@@ -13,8 +13,8 @@ import { SafeValue } from '@angular/platform-browser';
 })
 export class StringTemplateOutletDirective {
   private _isTemplate: boolean;
-  private _inputTemplate: TemplateRef<void> | null      = null;
-  private _inputViewRef: EmbeddedViewRef<void> | null   = null;
+  private _inputTemplate: TemplateRef<void> | null = null;
+  private _inputViewRef: EmbeddedViewRef<void> | null = null;
   private _defaultViewRef: EmbeddedViewRef<void> | null = null;
 
   constructor(private _viewContainer: ViewContainerRef,
@@ -24,7 +24,7 @@ export class StringTemplateOutletDirective {
   @Input()
   set stringTemplateOutlet(value: string | SafeValue | TemplateRef<void>) {
     if (value instanceof TemplateRef) {
-      this._isTemplate    = true;
+      this._isTemplate = true;
       this._inputTemplate = value as TemplateRef<void>;
     } else {
       this._isTemplate = false;

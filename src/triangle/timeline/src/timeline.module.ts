@@ -35,4 +35,5 @@ import { TimelineComponent } from './timeline.component';
   exports     : [TimelineItemComponent, TimelineComponent],
   imports     : [CommonModule]
 })
-export class TriTimelineModule {}
+export class TriTimelineModule {
+}

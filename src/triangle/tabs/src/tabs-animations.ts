@@ -5,7 +5,14 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { animate, AnimationTriggerMetadata, state, style, transition, trigger, } from '@angular/animations';
+import {
+  animate,
+  AnimationTriggerMetadata,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 
 /**
  * Animations used by the Material tabs.

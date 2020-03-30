@@ -6,88 +6,88 @@
 /** The mixins below are shared between tri-menu and tri-select */
 
 // menu width must be a multiple of 56px
-$tri-menu-overlay-min-width: 112px !default;   // 56 * 2
-$tri-menu-overlay-max-width: 280px !default;   // 56 * 5
+$tri-menu-overlay-min-width : 112px !default; // 56 * 2
+$tri-menu-overlay-max-width : 280px !default; // 56 * 5
 
-$tri-menu-item-height: 48px !default;
-$tri-menu-side-padding: 16px !default;
-$tri-menu-icon-margin: 16px !default;
+$tri-menu-item-height       : 48px !default;
+$tri-menu-side-padding      : 16px !default;
+$tri-menu-icon-margin       : 16px !default;
 
 
 @mixin tri-menu-base() {
-  min-width: $tri-menu-overlay-min-width;
-  max-width: $tri-menu-overlay-max-width;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;   // for momentum scroll on mobile
+  min-width                  : $tri-menu-overlay-min-width;
+  max-width                  : $tri-menu-overlay-max-width;
+  overflow                   : auto;
+  -webkit-overflow-scrolling : touch; // for momentum scroll on mobile
 }
 
 @mixin tri-menu-item-base() {
   @include tri-truncate-line();
 
   // Needs to be a block for the ellipsis to work.
-  display: block;
-  line-height: $tri-menu-item-height;
-  height: $tri-menu-item-height;
-  padding: 0 $tri-menu-side-padding;
+  display         : block;
+  line-height     : $tri-menu-item-height;
+  height          : $tri-menu-item-height;
+  padding         : 0 $tri-menu-side-padding;
 
-  text-align: left;
-  text-decoration: none;   // necessary to reset anchor tags
+  text-align      : left;
+  text-decoration : none; // necessary to reset anchor tags
 
   // Required for Edge not to show scrollbars when setting the width manually. See #12112.
-  max-width: 100%;
+  max-width       : 100%;
 
   &[disabled] {
-    cursor: default;
+    cursor : default;
   }
 
   [dir='rtl'] & {
-    text-align: right;
+    text-align : right;
   }
 
   .tri-icon {
-    margin-right: $tri-menu-icon-margin;
-    vertical-align: middle;
+    margin-right   : $tri-menu-icon-margin;
+    vertical-align : middle;
 
     svg {
-      vertical-align: top;
+      vertical-align : top;
     }
 
     [dir='rtl'] & {
-      margin-left: $tri-menu-icon-margin;
-      margin-right: 0;
+      margin-left  : $tri-menu-icon-margin;
+      margin-right : 0;
     }
   }
 }
 
 @mixin tri-menu-item-submenu-trigger($side-padding, $triangle-height: 10px) {
   // Increase the side padding to prevent the indicator from overlapping the text.
-  padding-right: $side-padding * 2;
+  padding-right : $side-padding * 2;
 
   // Renders a triangle to indicate that the menu item will open a sub-menu.
   &::after {
-    $size: $triangle-height / 2;
+    $size        : $triangle-height / 2;
 
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: $size 0 $size $size;
-    border-color: transparent transparent transparent currentColor;
-    content: '';
-    display: inline-block;
-    position: absolute;
-    top: 50%;
-    right: $side-padding;
-    transform: translateY(-50%);
+    width        : 0;
+    height       : 0;
+    border-style : solid;
+    border-width : $size 0 $size $size;
+    border-color : transparent transparent transparent currentColor;
+    content      : '';
+    display      : inline-block;
+    position     : absolute;
+    top          : 50%;
+    right        : $side-padding;
+    transform    : translateY(-50%);
   }
 
   [dir='rtl'] & {
-    padding-right: $side-padding;
-    padding-left: $side-padding * 2;
+    padding-right : $side-padding;
+    padding-left  : $side-padding * 2;
 
     &::after {
-      right: auto;
-      left: $side-padding;
-      transform: rotateY(180deg) translateY(-50%);
+      right     : auto;
+      left      : $side-padding;
+      transform : rotateY(180deg) translateY(-50%);
     }
   }
 }
@@ -99,5 +99,5 @@ $tri-menu-icon-margin: 16px !default;
   // not the trigger element for the ripples and can be therefore disabled like that. Disabling
   // the pointer events ensures that there is no `click` event that can bubble up and cause
   // the menu panel to close.
-  pointer-events: none;
+  pointer-events : none;
 }

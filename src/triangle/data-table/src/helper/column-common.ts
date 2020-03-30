@@ -5,12 +5,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { QueryList } from '@angular/core';
 import { orderBy } from '@gradii/triangle/data-query';
+import { ColumnComponent } from '@gradii/triangle/data-table';
 import { isNullOrEmptyString, isTruthy } from '@gradii/triangle/util';
 import { ColumnBase } from '../columns/column-base';
 import { isSpanColumnComponent } from '../columns/span-column.component';
-import { QueryList } from '@angular/core';
-import { ColumnComponent } from '@gradii/triangle/data-table';
 
 export const expandColumns = (columns: QueryList<ColumnComponent | ColumnBase> | Array<ColumnComponent | ColumnBase>): Array<ColumnBase> => (
   columns.reduce((acc, column) => acc.concat(

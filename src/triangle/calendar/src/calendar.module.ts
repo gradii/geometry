@@ -34,4 +34,5 @@ import { CalendarComponent } from './calendar.component';
   ],
   imports     : [CommonModule, FormsModule, TriI18nModule, TriRadioModule, TriSelectModule]
 })
-export class TriCalendarModule {}
+export class TriCalendarModule {
+}

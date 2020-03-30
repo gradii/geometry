@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {FormGroup} from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 
 export function getDirtyValues(formGroup: FormGroup) {
   let dirtyValues: any = {};  // initialize empty object

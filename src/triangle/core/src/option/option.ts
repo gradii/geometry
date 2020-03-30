@@ -5,8 +5,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {BooleanInput, coerceBooleanProperty} from '@angular/cdk/coercion';
-import {ENTER, SPACE, hasModifierKey} from '@angular/cdk/keycodes';
+import { FocusableOption, FocusOptions, FocusOrigin } from '@angular/cdk/a11y';
+import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { ENTER, hasModifierKey, SPACE } from '@angular/cdk/keycodes';
 import {
   AfterViewChecked,
   ChangeDetectionStrategy,
@@ -23,9 +24,8 @@ import {
   QueryList,
   ViewEncapsulation,
 } from '@angular/core';
-import {FocusOptions, FocusableOption, FocusOrigin} from '@angular/cdk/a11y';
-import {Subject} from 'rxjs';
-import {TriOptgroup} from './optgroup';
+import { Subject } from 'rxjs';
+import { TriOptgroup } from './optgroup';
 
 /**
  * Option IDs need to be unique across components, so this counter exists outside of
@@ -85,26 +85,45 @@ export const MAT_OPTION_PARENT_COMPONENT =
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TriOption implements FocusableOption, AfterViewChecked, OnDestroy {
-  private _selected            = false;
-  private _active              = false;
-  private _disabled            = false;
+  static ngAcceptInputType_disabled: BooleanInput;
+  /** The form value of the option. */
+  @Input() value: any;
+  /** The unique ID of the option. */
+  @Input() id: string = `tri-option-${_uniqueIdCounter++}`;
+  /** Event emitted when the option is selected or deselected. */
+  // tslint:disable-next-line:no-output-on-prefix
+  @Output() readonly onSelectionChange = new EventEmitter<TriOptionSelectionChange>();
+  /** Emits when the state of the option changes and any parents have to be notified. */
+  readonly _stateChanges = new Subject<void>();
   private _mostRecentViewValue = '';
 
-  /** Whether the wrapping component is in multiple selection mode. */
-  get multiple() {
-    return this._parent && this._parent.multiple;
+  constructor(
+    private _element: ElementRef<HTMLElement>,
+    private _changeDetectorRef: ChangeDetectorRef,
+    @Optional() @Inject(MAT_OPTION_PARENT_COMPONENT) private _parent: TriOptionParentComponent,
+    @Optional() readonly group: TriOptgroup) {
   }
+
+  private _selected = false;
 
   /** Whether or not the option is currently selected. */
   get selected(): boolean {
     return this._selected;
   }
 
-  /** The form value of the option. */
-  @Input() value: any;
+  private _active = false;
 
-  /** The unique ID of the option. */
-  @Input() id: string = `tri-option-${_uniqueIdCounter++}`;
+  /**
+   * Whether or not the option is currently active and ready to be selected.
+   * An active option displays styles as if it is focused, but the
+   * focus is actually retained somewhere else. This comes in handy
+   * for components like autocomplete where focus must remain on the input.
+   */
+  get active(): boolean {
+    return this._active;
+  }
+
+  private _disabled = false;
 
   /** Whether the option is disabled. */
   @Input()
@@ -116,33 +135,14 @@ export class TriOption implements FocusableOption, AfterViewChecked, OnDestroy {
     this._disabled = coerceBooleanProperty(value);
   }
 
+  /** Whether the wrapping component is in multiple selection mode. */
+  get multiple() {
+    return this._parent && this._parent.multiple;
+  }
+
   /** Whether ripples for the option are disabled. */
   get disableRipple() {
     return this._parent && this._parent.disableRipple;
-  }
-
-  /** Event emitted when the option is selected or deselected. */
-  // tslint:disable-next-line:no-output-on-prefix
-  @Output() readonly onSelectionChange = new EventEmitter<TriOptionSelectionChange>();
-
-  /** Emits when the state of the option changes and any parents have to be notified. */
-  readonly _stateChanges = new Subject<void>();
-
-  constructor(
-    private _element: ElementRef<HTMLElement>,
-    private _changeDetectorRef: ChangeDetectorRef,
-    @Optional() @Inject(MAT_OPTION_PARENT_COMPONENT) private _parent: TriOptionParentComponent,
-    @Optional() readonly group: TriOptgroup) {
-  }
-
-  /**
-   * Whether or not the option is currently active and ready to be selected.
-   * An active option displays styles as if it is focused, but the
-   * focus is actually retained somewhere else. This comes in handy
-   * for components like autocomplete where focus must remain on the input.
-   */
-  get active(): boolean {
-    return this._active;
   }
 
   /**
@@ -278,8 +278,6 @@ export class TriOption implements FocusableOption, AfterViewChecked, OnDestroy {
   private _emitSelectionChangeEvent(isUserInput = false): void {
     this.onSelectionChange.emit(new TriOptionSelectionChange(this, isUserInput));
   }
-
-  static ngAcceptInputType_disabled: BooleanInput;
 }
 
 /**
@@ -294,7 +292,7 @@ export function _countGroupLabelsBeforeOption(optionIndex: number, options: Quer
 
   if (optionGroups.length) {
     let optionsArray = options.toArray();
-    let groups       = optionGroups.toArray();
+    let groups = optionGroups.toArray();
     let groupCounter = 0;
 
     for (let i = 0; i < optionIndex + 1; i++) {

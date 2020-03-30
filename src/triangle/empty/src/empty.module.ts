@@ -18,4 +18,5 @@ import { EmptyComponent } from './empty.component';
   declarations: [EmptyComponent, EmbedEmptyComponent],
   exports     : [EmptyComponent, EmbedEmptyComponent, TriCommonModule]
 })
-export class TriEmptyModule {}
+export class TriEmptyModule {
+}

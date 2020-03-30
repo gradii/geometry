@@ -26,9 +26,11 @@ export class CalendarInputComponent implements OnInit {
   prefixCls: string = 'tri-calendar';
   invalidInputClass: string = '';
 
-  constructor(private i18n: I18nService) { }
+  constructor(private i18n: I18nService) {
+  }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
   onInputKeyup(event: Event): void {
     const date = this.checkValidInputDate(event);

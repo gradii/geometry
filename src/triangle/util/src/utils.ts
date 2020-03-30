@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {isPresent} from './is-type';
+import { isPresent } from './is-type';
 
 export function loop() {
 }

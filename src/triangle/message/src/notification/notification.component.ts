@@ -34,13 +34,17 @@ import { NotificationContainerComponent } from './notification-container.compone
          (mouseenter)="onEnter()"
          (mouseleave)="onLeave()">
       <div *ngIf="!message.html" class="tri-notification-notice-content">
-        <div class="tri-notification-notice-content" [ngClass]="{ 'tri-notification-notice-with-icon': message.type !== 'blank' }">
+        <div class="tri-notification-notice-content"
+             [ngClass]="{ 'tri-notification-notice-with-icon': message.type !== 'blank' }">
           <ng-container [ngSwitch]="message.type">
-            <i *ngSwitchCase="'success'" class="tri-notification-notice-icon tri-notification-notice-icon-success anticon anticon-check-circle-o"></i>
-            <i *ngSwitchCase="'info'" class="tri-notification-notice-icon tri-notification-notice-icon-info anticon anticon-info-circle-o"></i>
+            <i *ngSwitchCase="'success'"
+               class="tri-notification-notice-icon tri-notification-notice-icon-success anticon anticon-check-circle-o"></i>
+            <i *ngSwitchCase="'info'"
+               class="tri-notification-notice-icon tri-notification-notice-icon-info anticon anticon-info-circle-o"></i>
             <i *ngSwitchCase="'warning'"
                class="tri-notification-notice-icon tri-notification-notice-icon-warning anticon anticon-exclamation-circle-o"></i>
-            <i *ngSwitchCase="'error'" class="tri-notification-notice-icon tri-notification-notice-icon-error anticon anticon-cross-circle-o"></i>
+            <i *ngSwitchCase="'error'"
+               class="tri-notification-notice-icon tri-notification-notice-icon-error anticon anticon-cross-circle-o"></i>
           </ng-container>
           <div class="tri-notification-notice-message">{{message.title}}</div>
           <div class="tri-notification-notice-description">{{message.content}}</div>

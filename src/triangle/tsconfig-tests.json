@@ -11,13 +11,21 @@
     "importHelpers": false,
     "module": "commonjs",
     "target": "es5",
-    "types": ["jasmine"],
+    "types": [
+      "jasmine"
+    ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "paths": {
-      "@angular/cdk": ["../../dist/packages/cdk"],
-      "@angular/cdk/*": ["../../dist/packages/cdk/*"],
-      "@angular/material/*": ["./*"]
+      "@angular/cdk": [
+        "../../dist/packages/cdk"
+      ],
+      "@angular/cdk/*": [
+        "../../dist/packages/cdk/*"
+      ],
+      "@angular/material/*": [
+        "./*"
+      ]
     }
   },
   "include": [

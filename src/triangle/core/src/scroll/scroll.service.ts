@@ -5,20 +5,20 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {DOCUMENT} from '@angular/common';
-import {Inject, Injectable, Optional, Provider, SkipSelf} from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Inject, Injectable, Optional, Provider, SkipSelf } from '@angular/core';
 
 const availablePrefixs = ['moz', 'ms', 'webkit'];
 
 function requestAnimationFramePolyfill() {
   let lastTime = 0;
   return function (callback: Function) {
-    const currTime   = new Date().getTime();
+    const currTime = new Date().getTime();
     const timeToCall = Math.max(0, 16 - (currTime - lastTime));
-    const id         = window.setTimeout(function () {
+    const id = window.setTimeout(function () {
       callback(currTime + timeToCall);
     }, timeToCall);
-    lastTime         = currTime + timeToCall;
+    lastTime = currTime + timeToCall;
     return id;
   };
 }
@@ -52,8 +52,8 @@ function easeInOutCubic(t: number, b: number, c: number, d: number) {
 }
 
 @Injectable({
-              providedIn: 'root'
-            })
+  providedIn: 'root'
+})
 export class ScrollService {
   constructor(@Inject(DOCUMENT) private _doc: any) {
   }
@@ -61,7 +61,7 @@ export class ScrollService {
   /** 设置 `el` 滚动条位置 */
   setScrollTop(el: Element | Window, topValue: number = 0) {
     if (el === window) {
-      this._doc.body.scrollTop            = topValue;
+      this._doc.body.scrollTop = topValue;
       this._doc.documentElement.scrollTop = topValue;
     } else {
       (el as Element).scrollTop = topValue;
@@ -81,10 +81,10 @@ export class ScrollService {
     const rect = el.getBoundingClientRect();
     if (rect.width || rect.height) {
       const doc = el.ownerDocument!.documentElement;
-      ret.top   = rect.top - doc.clientTop;
-      ret.left  = rect.left - doc.clientLeft;
+      ret.top = rect.top - doc.clientTop;
+      ret.left = rect.left - doc.clientLeft;
     } else {
-      ret.top  = rect.top;
+      ret.top = rect.top;
       ret.left = rect.left;
     }
 
@@ -96,11 +96,11 @@ export class ScrollService {
     if (!el) {
       el = window;
     }
-    const prop     = top ? 'pageYOffset' : 'pageXOffset';
-    const method   = top ? 'scrollTop' : 'scrollLeft';
+    const prop = top ? 'pageYOffset' : 'pageXOffset';
+    const method = top ? 'scrollTop' : 'scrollLeft';
     const isWindow = el === window;
     // @ts-ignore
-    let ret        = isWindow ? el[prop] : el[method];
+    let ret = isWindow ? el[prop] : el[method];
     if (isWindow && typeof ret !== 'number') {
       ret = this._doc.documentElement[method];
     }
@@ -128,7 +128,7 @@ export class ScrollService {
     const startTime = Date.now();
     const frameFunc = () => {
       const timestamp = Date.now();
-      const time      = timestamp - startTime;
+      const time = timestamp - startTime;
       this.setScrollTop(
         containerEl,
         (easing || easeInOutCubic)(time, scrollTop, targetTopValue, 450)

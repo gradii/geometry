@@ -52,7 +52,8 @@ export class FilterCellOperatorsComponent {
   @Output() valueChange: EventEmitter<string> = new EventEmitter();
   @Output() clear: EventEmitter<{}> = new EventEmitter();
 
-  constructor() {}
+  constructor() {
+  }
 
   @HostBinding('class.tri-filtercell-operator')
   get hostClasses() {

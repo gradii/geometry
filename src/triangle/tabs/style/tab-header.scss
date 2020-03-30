@@ -22,11 +22,11 @@
 // Wraps each tab label
 .tri-tab-label {
   @include tab-label;
-  position: relative;
+  position : relative;
 }
 
 @media ($tri-xsmall) {
   .tri-tab-label {
-    min-width: 72px;
+    min-width : 72px;
   }
 }

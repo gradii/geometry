@@ -1050,7 +1050,8 @@ describe('Dialog with a parent Dialog', () => {
 
 @Directive({selector: 'dir-with-view-container'})
 class DirectiveWithViewContainer {
-  constructor(public viewContainerRef: ViewContainerRef) { }
+  constructor(public viewContainerRef: ViewContainerRef) {
+  }
 }
 
 @Component({
@@ -1058,7 +1059,8 @@ class DirectiveWithViewContainer {
   template       : 'hello',
 })
 class ComponentWithOnPushViewContainer {
-  constructor(public viewContainerRef: ViewContainerRef) { }
+  constructor(public viewContainerRef: ViewContainerRef) {
+  }
 }
 
 @Component({
@@ -1097,7 +1099,8 @@ class ComponentWithTemplateRef {
 class PizzaMsg {
   constructor(public dialogRef: TriDialogRef<PizzaMsg>,
               public dialogInjector: Injector,
-              public directionality: Directionality) {}
+              public directionality: Directionality) {
+  }
 }
 
 @Component({
@@ -1114,17 +1117,20 @@ class ContentElementDialog {
   providers: [TriDialog]
 })
 class ComponentThatProvidesMatDialog {
-  constructor(public dialog: TriDialog) {}
+  constructor(public dialog: TriDialog) {
+  }
 }
 
 /** Simple component for testing ComponentPortal. */
 @Component({template: ''})
 class DialogWithInjectedData {
-  constructor(@Inject(TRI_DIALOG_DATA) public data: any) { }
+  constructor(@Inject(TRI_DIALOG_DATA) public data: any) {
+  }
 }
 
 @Component({template: '<p>Pasta</p>'})
-class DialogWithoutFocusableElements {}
+class DialogWithoutFocusableElements {
+}
 
 // Create a real (non-test) NgModule as a workaround for
 // https://github.com/angular/angular/issues/10760
@@ -1140,8 +1146,9 @@ const TEST_DIRECTIVES = [
 ];
 
 @NgModule({
-  imports        : [TriDialogModule, NoopAnimationsModule],
-  exports        : TEST_DIRECTIVES,
-  declarations   : TEST_DIRECTIVES,
+  imports     : [TriDialogModule, NoopAnimationsModule],
+  exports     : TEST_DIRECTIVES,
+  declarations: TEST_DIRECTIVES,
 })
-class DialogTestModule {}
+class DialogTestModule {
+}

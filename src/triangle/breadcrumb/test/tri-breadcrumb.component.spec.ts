@@ -112,7 +112,7 @@ describe('breadcrumb', () => {
 @Component({
   selector: 'test-without-breadcrumb-item',
   template: `
-      <tri-breadcrumb></tri-breadcrumb>
+    <tri-breadcrumb></tri-breadcrumb>
   `
 })
 class WithoutBreadCrumbItem {
@@ -121,9 +121,9 @@ class WithoutBreadCrumbItem {
 @Component({
   selector: 'test-without-breadcrumb',
   template: `
-      <tri-breadcrumb-item>
-          Home
-      </tri-breadcrumb-item>
+    <tri-breadcrumb-item>
+      Home
+    </tri-breadcrumb-item>
   `
 })
 class WithoutBreadCrumb {
@@ -132,14 +132,14 @@ class WithoutBreadCrumb {
 @Component({
   selector: 'test-breadcrumb',
   template: `
-      <tri-breadcrumb>
-          <tri-breadcrumb-item>
-              {{_custormString}}
-          </tri-breadcrumb-item>
-          <tri-breadcrumb-item>
-              {{_custormString}}
-          </tri-breadcrumb-item>
-      </tri-breadcrumb>
+    <tri-breadcrumb>
+      <tri-breadcrumb-item>
+        {{_custormString}}
+      </tri-breadcrumb-item>
+      <tri-breadcrumb-item>
+        {{_custormString}}
+      </tri-breadcrumb-item>
+    </tri-breadcrumb>
   `
 })
 class TestBreadCrumb {
@@ -149,14 +149,14 @@ class TestBreadCrumb {
 @Component({
   selector: 'test-separator',
   template: `
-      <tri-breadcrumb [separator]="_separator">
-          <tri-breadcrumb-item>
-              Home
-          </tri-breadcrumb-item>
-          <tri-breadcrumb-item>
-              Home2
-          </tri-breadcrumb-item>
-      </tri-breadcrumb>
+    <tri-breadcrumb [separator]="_separator">
+      <tri-breadcrumb-item>
+        Home
+      </tri-breadcrumb-item>
+      <tri-breadcrumb-item>
+        Home2
+      </tri-breadcrumb-item>
+    </tri-breadcrumb>
   `
 })
 class TestSeparator {

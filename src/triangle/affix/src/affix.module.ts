@@ -32,4 +32,5 @@ import { AffixComponent } from './affix.component';
   exports     : [AffixComponent],
   providers   : [ScrollService]
 })
-export class TriAffixModule {}
+export class TriAffixModule {
+}

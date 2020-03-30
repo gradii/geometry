@@ -48,7 +48,8 @@ export class DragHintService {
   private initialTop: number;
   private initialLeft: number;
 
-  constructor(private santizer: Sanitizer) { }
+  constructor(private santizer: Sanitizer) {
+  }
 
   create(down: any, target: Element, title: string): void {
     this.initCoords(down);

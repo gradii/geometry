@@ -10,19 +10,23 @@ import { Directive } from '@angular/core';
 @Directive({
   selector: '[triDateCell]'
 })
-export class DateCellDirective {}
+export class DateCellDirective {
+}
 
 @Directive({
   selector: '[triMonthCell]'
 })
-export class MonthCellDirective {}
+export class MonthCellDirective {
+}
 
 @Directive({
   selector: '[triDateFullCell]'
 })
-export class DateFullCellDirective {}
+export class DateFullCellDirective {
+}
 
 @Directive({
   selector: '[triMonthFullCell]'
 })
-export class MonthFullCellDirective {}
+export class MonthFullCellDirective {
+}

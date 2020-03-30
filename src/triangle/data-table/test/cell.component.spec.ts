@@ -15,7 +15,8 @@ import { TestContext } from './util/helpers';
   template: `
     <div triGridCell>Hello World</div>`
 })
-class SimpleTest {}
+class SimpleTest {
+}
 
 @Component({
   template: `
@@ -24,7 +25,8 @@ class SimpleTest {}
       <ng-template>Template</ng-template>
     </div>`
 })
-class CellTemplateTestComponent {}
+class CellTemplateTestComponent {
+}
 
 @Component({
   template : `

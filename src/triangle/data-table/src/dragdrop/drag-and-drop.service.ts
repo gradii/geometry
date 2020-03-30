@@ -33,7 +33,9 @@ export class DragAndDropService {
   notifyDrag(draggable: DraggableColumnDirective, element: any, mouseEvent: any): void {
     const target = this.targetFor(element);
 
-    if (this.lastTarget === target) { return; }
+    if (this.lastTarget === target) {
+      return;
+    }
 
     this.changes.next({
       draggable,

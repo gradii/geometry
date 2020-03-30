@@ -19,9 +19,9 @@ import { ToolTipComponent } from '@gradii/triangle/tooltip';
 import { SliderComponent } from './slider.component';
 
 @Component({
-  selector     : 'tri-slider-handle',
+  selector: 'tri-slider-handle',
   encapsulation: ViewEncapsulation.None,
-  template     : `
+  template: `
     <tri-tooltip *ngIf="tipFormatter !== null" #tooltip [title]="tooltipTitle" [trigger]="null">
       <div tri-tooltip [class]="className" [ngStyle]="style"></div>
     </tri-tooltip>
@@ -40,7 +40,8 @@ export class SliderHandleComponent implements OnInit, OnChanges {
   tooltipTitle: string; // [For tooltip]
   style: any = {};
 
-  constructor(private _slider: SliderComponent) {}
+  constructor(private _slider: SliderComponent) {
+  }
 
   @Input()
   set active(show: boolean) {
@@ -54,7 +55,8 @@ export class SliderHandleComponent implements OnInit, OnChanges {
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.offset) {

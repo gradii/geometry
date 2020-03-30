@@ -5,44 +5,44 @@
 
 .tri-option {
   @include tri-menu-item-base();
-  position: relative;
-  cursor: pointer;
-  outline: none;
-  display: flex;
-  flex-direction: row;
-  max-width: 100%;
-  box-sizing: border-box;
-  align-items: center;
-  -webkit-tap-highlight-color: transparent;
+  position                    : relative;
+  cursor                      : pointer;
+  outline                     : none;
+  display                     : flex;
+  flex-direction              : row;
+  max-width                   : 100%;
+  box-sizing                  : border-box;
+  align-items                 : center;
+  -webkit-tap-highlight-color : transparent;
 
   &[aria-disabled='true'] {
     @include user-select(none);
-    cursor: default;
+    cursor : default;
   }
 
   .tri-optgroup &:not(.tri-option-multiple) {
-    padding-left: $tri-menu-side-padding * 2;
+    padding-left : $tri-menu-side-padding * 2;
 
     [dir='rtl'] & {
-      padding-left: $tri-menu-side-padding;
-      padding-right: $tri-menu-side-padding * 2;
+      padding-left  : $tri-menu-side-padding;
+      padding-right : $tri-menu-side-padding * 2;
     }
   }
 
   @include cdk-high-contrast(active, off) {
-    $high-contrast-border-width: 1px;
+    $high-contrast-border-width : 1px;
 
     // Add a margin to offset the border that we're adding to active option, in order
     // to avoid the options shifting as the user is moving through the list.
-    margin: 0 $high-contrast-border-width;
+    margin                      : 0 $high-contrast-border-width;
 
     &.tri-active {
       // We use a border here, rather than an outline, because the outline will be cut off
       // by the `overflow: hidden` on the panel wrapping the options, whereas a border
       // will push the element inwards. This could be done using `outline-offset: -1px`,
       // however the property isn't supported on IE11.
-      border: solid $high-contrast-border-width currentColor;
-      margin: 0;
+      border : solid $high-contrast-border-width currentColor;
+      margin : 0;
     }
   }
 }
@@ -52,10 +52,10 @@
 //   {{value}}
 // </tri-option>
 .tri-option-text {
-  display: inline-block;
-  flex-grow: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  display       : inline-block;
+  flex-grow     : 1;
+  overflow      : hidden;
+  text-overflow : ellipsis;
 }
 
 // Increase specificity because ripple styles are part of the `tri-core` mixin and can
@@ -66,20 +66,20 @@
   // Disable pointer events for the ripple container because the container will overlay the
   // user content and we don't want to disable mouse events on the user content.
   // Pointer events can be safely disabled because the ripple trigger element is the host element.
-  pointer-events: none;
+  pointer-events : none;
 
   // Prevents the ripple from completely covering the option in high contrast mode.
   @include cdk-high-contrast(active, off) {
-    opacity: 0.5;
+    opacity : 0.5;
   }
 }
 
 .tri-option-pseudo-checkbox {
-  $margin: $tri-menu-side-padding / 2;
-  margin-right: $margin;
+  $margin      : $tri-menu-side-padding / 2;
+  margin-right : $margin;
 
   [dir='rtl'] & {
-    margin-left: $margin;
-    margin-right: 0;
+    margin-left  : $margin;
+    margin-right : 0;
   }
 }

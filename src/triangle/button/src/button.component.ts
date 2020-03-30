@@ -17,7 +17,14 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-export type ButtonColor = 'primary' | 'warning' | 'success' | 'dashed' | 'danger' | 'highlight' | 'default';
+export type ButtonColor =
+  'primary'
+  | 'warning'
+  | 'success'
+  | 'dashed'
+  | 'danger'
+  | 'highlight'
+  | 'default';
 export type ButtonShape = 'circle' | null;
 export type ButtonSize = 'small' | 'large' | 'default';
 
@@ -30,7 +37,7 @@ export type ButtonSize = 'small' | 'large' | 'default';
     <i class="anticon anticon-spin anticon-loading" style="display: inline-block" *ngIf="loading"></i>
     <ng-content></ng-content>
   `,
-  styleUrls: ['../style/button.css'],
+  styleUrls          : ['../style/button.css'],
   host               : {
     '[class.tri-btn]'                 : 'true',
     '[class.tri-btn-primary]'         : '_color === "primary"',

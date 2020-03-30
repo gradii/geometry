@@ -111,7 +111,8 @@ export class DropDownComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   @Output() visibleChange: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(private _renderer: Renderer2, protected _changeDetector: ChangeDetectorRef) {}
+  constructor(private _renderer: Renderer2, protected _changeDetector: ChangeDetectorRef) {
+  }
 
   _placement: Placement = 'bottomLeft';
 

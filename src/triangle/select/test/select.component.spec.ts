@@ -29,7 +29,7 @@ describe('tri-select component', () => {
   let overlayContainerElement: HTMLElement;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports     : [TriSelectModule, NoopAnimationsModule, FormsModule, ReactiveFormsModule],
+      imports: [TriSelectModule, NoopAnimationsModule, FormsModule, ReactiveFormsModule],
       declarations: [
         TestSelectDefaultComponent,
         TestSelectTagsComponent,

@@ -35,4 +35,5 @@ import { BackTopComponent } from './back-top.component';
   imports     : [CommonModule],
   providers   : [SCROLL_SERVICE_PROVIDER]
 })
-export class TriBackTopModule {}
+export class TriBackTopModule {
+}

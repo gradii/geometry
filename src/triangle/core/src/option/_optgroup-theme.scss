@@ -3,14 +3,14 @@
 @import '../../style/typography/typography-utils';
 
 @mixin tri-optgroup-theme($theme) {
-  $foreground: map-get($theme, foreground);
+  $foreground : map-get($theme, foreground);
 
   .tri-optgroup-label {
-    color: tri-color($foreground, secondary-text);
+    color : tri-color($foreground, secondary-text);
   }
 
   .tri-optgroup-disabled .tri-optgroup-label {
-    color: tri-color($foreground, hint-text);
+    color : tri-color($foreground, hint-text);
   }
 }
 

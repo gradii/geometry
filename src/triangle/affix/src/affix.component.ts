@@ -32,7 +32,7 @@ import { throttleByAnimationFrameDecorator } from './throttleByAnimationFrame';
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles         : [
-      `:host {
+    `:host {
           display : block;
       }`
   ],

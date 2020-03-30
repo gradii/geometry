@@ -48,9 +48,11 @@ export class DateTableComponent implements OnInit, OnChanges {
   isTemplateRef = isTemplateRef;
   isNonEmptyString = isNonEmptyString;
 
-  constructor(private i18n: I18nService) { }
+  constructor(private i18n: I18nService) {
+  }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isDateRealChange(changes.value) ||

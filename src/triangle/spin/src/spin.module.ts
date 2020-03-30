@@ -33,4 +33,5 @@ import { SpinComponent } from './spin.component';
   declarations: [SpinComponent],
   imports     : [CommonModule]
 })
-export class TriSpinModule {}
+export class TriSpinModule {
+}

@@ -15,7 +15,8 @@ import {
   Input,
   NgZone,
   OnDestroy,
-  OnInit, QueryList
+  OnInit,
+  QueryList
 } from '@angular/core';
 import { I18nService } from '@gradii/triangle/i18n';
 import { isBlank, isPresent, isTruthy } from '@gradii/triangle/util';
@@ -103,7 +104,9 @@ const indexOf = (target, list) => {
     const current = list[index];
     const isParentSpanColumn = isInSpanColumn(current);
 
-    if (current === target) { break; }
+    if (current === target) {
+      break;
+    }
 
     if ((ignore-- <= 0) && isParentSpanColumn) {
       ignore = current.parent.childColumns.length - 1;
@@ -124,7 +127,7 @@ const indexOf = (target, list) => {
 })
 export class ColumnHandleDirective implements OnInit, OnDestroy {
 
-  @Input() columns: Array<ColumnBase|any>| QueryList<any> = [];
+  @Input() columns: Array<ColumnBase | any> | QueryList<any> = [];
 
   @Input() column: ColumnBase;
   private originalWidth: number;
@@ -138,7 +141,8 @@ export class ColumnHandleDirective implements OnInit, OnDestroy {
     private zone: NgZone,
     private cdr: ChangeDetectorRef,
     private localization: I18nService
-  ) { }
+  ) {
+  }
 
   @HostBinding('style.display')
   get visible(): string {

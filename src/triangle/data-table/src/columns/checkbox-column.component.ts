@@ -22,7 +22,7 @@ import { AutoGenerateColumnPositon } from './column-base';
 @Component({
   providers: [
     {
-      provide    : ColumnBase,
+      provide: ColumnBase,
       useExisting: forwardRef(() => CheckboxColumnComponent) // tslint:disable-line:no-forward-ref
     }
   ],
@@ -46,9 +46,9 @@ export class CheckboxColumnComponent extends ColumnBase {
   @ContentChild(CellTemplateDirective, {static: false}) template;
 
   constructor(@SkipSelf()
-                     @Host()
-                     @Optional()
-                       parent: ColumnBase) {
+              @Host()
+              @Optional()
+                parent: ColumnBase) {
     super(parent);
   }
 

@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {Inject, Injectable, InjectionToken, Optional, Provider, SkipSelf} from '@angular/core';
+import { Inject, Injectable, InjectionToken, Optional, Provider, SkipSelf } from '@angular/core';
 
 // Whether print the log
 export const TRI_LOGGER_STATE = new InjectionToken<boolean>('tri-logger-state');

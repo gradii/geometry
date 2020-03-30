@@ -42,9 +42,9 @@ import {
 } from './calendar-cells';
 
 @Component({
-  selector   : 'tri-calendar',
+  selector: 'tri-calendar',
   templateUrl: './calendar.component.html',
-  providers  : [
+  providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CalendarComponent), multi: true}
   ]
 })

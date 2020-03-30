@@ -5,14 +5,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  NgModule,
-  Directive,
-  ElementRef,
-  QueryList,
-} from '@angular/core';
-import {startWith} from 'rxjs/operators';
-import {TriCommonModule} from '../common-behaviors/common-module';
+import { Directive, ElementRef, NgModule, QueryList, } from '@angular/core';
+import { startWith } from 'rxjs/operators';
+import { TriCommonModule } from '../common-behaviors/common-module';
 
 
 /**

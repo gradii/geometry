@@ -27,9 +27,11 @@ export class MonthPanelComponent implements OnInit {
 
   prefixCls: string = 'tri-calendar-month-panel';
 
-  constructor() { }
+  constructor() {
+  }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
   previousYear(): void {
     this.gotoYear(-1);

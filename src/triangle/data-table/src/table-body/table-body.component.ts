@@ -7,6 +7,7 @@
 
 import { Component, Input, OnChanges, QueryList, SimpleChanges } from '@angular/core';
 import { GroupDescriptor } from '@gradii/triangle/data-query';
+import { DataCollection } from '@gradii/triangle/data-table';
 import { isPresent } from '@gradii/triangle/util';
 import {
   ColumnBase,
@@ -27,7 +28,6 @@ import { DetailsService } from '../service/details.service';
 import { EditService } from '../service/edit.service';
 import { DetailTemplateDirective } from '../table-shared/detail-template.directive';
 import { isChanged } from '../utils';
-import { DataCollection } from '@gradii/triangle/data-table';
 
 @Component({
   selector: '[tri-grid-table-body], [triGridTableBody]',

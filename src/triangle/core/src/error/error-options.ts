@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {Injectable} from '@angular/core';
-import {FormGroupDirective, NgForm, FormControl} from '@angular/forms';
+import { Injectable } from '@angular/core';
+import { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 
 /** Error state matcher that matches when a control is invalid and dirty. */
 @Injectable()

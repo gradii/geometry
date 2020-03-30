@@ -13,7 +13,7 @@ import {
   Optional,
   ViewEncapsulation,
 } from '@angular/core';
-import {ANIMATION_MODULE_TYPE} from '@angular/platform-browser/animations';
+import { ANIMATION_MODULE_TYPE } from '@angular/platform-browser/animations';
 
 /**
  * Possible states for a pseudo checkbox.

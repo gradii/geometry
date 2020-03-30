@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {Constructor} from './constructor';
-import {ElementRef} from '@angular/core';
+import { ElementRef } from '@angular/core';
+import { Constructor } from './constructor';
 
 /** @docs-private */
 export interface CanColor {
@@ -27,11 +27,21 @@ export type ThemePalette = 'primary' | 'accent' | 'warn' | undefined;
 
 /** Mixin to augment a directive with a `color` property. */
 export function mixinColor<T extends Constructor<HasElementRef>>(
-    base: T, defaultColor?: ThemePalette): CanColorCtor & T {
+  base: T, defaultColor?: ThemePalette): CanColorCtor & T {
   return class extends base {
+    constructor(...args: any[]) {
+      super(...args);
+
+      // Set the default color that can be specified from the mixin.
+      this.color = defaultColor;
+    }
+
     private _color: ThemePalette;
 
-    get color(): ThemePalette { return this._color; }
+    get color(): ThemePalette {
+      return this._color;
+    }
+
     set color(value: ThemePalette) {
       const colorPalette = value || defaultColor;
 
@@ -45,13 +55,6 @@ export function mixinColor<T extends Constructor<HasElementRef>>(
 
         this._color = colorPalette;
       }
-    }
-
-    constructor(...args: any[]) {
-      super(...args);
-
-      // Set the default color that can be specified from the mixin.
-      this.color = defaultColor;
     }
   };
 }

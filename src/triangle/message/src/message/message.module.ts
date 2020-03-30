@@ -59,9 +59,9 @@ import { MessageService } from './message.service';
  * <!-- example(tri-demo-message-loading) -->
  */
 @NgModule({
-  imports        : [CommonModule, OverlayModule],
-  declarations   : [MessageContainerComponent, MessageComponent],
-  providers      : [MESSAGE_DEFAULT_CONFIG_PROVIDER, MessageService],
+  imports     : [CommonModule, OverlayModule],
+  declarations: [MessageContainerComponent, MessageComponent],
+  providers   : [MESSAGE_DEFAULT_CONFIG_PROVIDER, MessageService],
 })
 export class TriMessageModule {
 }

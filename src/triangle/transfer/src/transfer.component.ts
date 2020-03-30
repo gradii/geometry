@@ -132,7 +132,8 @@ export class TransferComponent implements OnChanges {
 
   // region: process data
 
-  constructor(private localization: I18nService, private el: ElementRef, private cd: ChangeDetectorRef) {}
+  constructor(private localization: I18nService, private el: ElementRef, private cd: ChangeDetectorRef) {
+  }
 
   private _showSearch = false;
 
@@ -225,7 +226,9 @@ export class TransferComponent implements OnChanges {
     const targetDatasource = direction === 'left' ? this.leftDataSource : this.rightDataSource;
     for (const item of list) {
       const idx = datasource.indexOf(item);
-      if (idx === -1) { continue; }
+      if (idx === -1) {
+        continue;
+      }
       item.checked = false;
       targetDatasource.push(item);
       datasource.splice(idx, 1);

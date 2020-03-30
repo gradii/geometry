@@ -20,20 +20,20 @@ import { TriDialogContent } from './helper/dialog-content';
 import { TriDialogHeader } from './helper/dialog-header';
 
 @NgModule({
-  imports        : [
+  imports     : [
     CommonModule,
     OverlayModule,
     PortalModule,
     A11yModule,
   ],
-  exports        : [
+  exports     : [
     TriDialogContainer,
     TriDialogClose,
     TriDialogHeader,
     TriDialogActions,
     TriDialogContent,
   ],
-  declarations   : [
+  declarations: [
     TriDialogContainer,
     TriDialogClose,
     TriDialogHeader,
@@ -42,9 +42,10 @@ import { TriDialogHeader } from './helper/dialog-header';
 
     DummyDialog
   ],
-  providers      : [
+  providers   : [
     TriDialog,
     TRI_DIALOG_SCROLL_STRATEGY_PROVIDER,
   ],
 })
-export class TriDialogModule {}
+export class TriDialogModule {
+}

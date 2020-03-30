@@ -9,7 +9,8 @@ import { ElementRef } from '@angular/core';
 import { Tree } from '../tree';
 
 export class CapturedNode {
-  constructor(private anElement: ElementRef, private aTree: Tree) {}
+  constructor(private anElement: ElementRef, private aTree: Tree) {
+  }
 
   get element(): ElementRef {
     return this.anElement;

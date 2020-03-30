@@ -35,4 +35,5 @@ import { SwitchComponent } from './switch.component';
   declarations: [SwitchComponent],
   imports     : [CommonModule]
 })
-export class TriSwitchModule {}
+export class TriSwitchModule {
+}

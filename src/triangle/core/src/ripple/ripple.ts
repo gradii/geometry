@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {Platform} from '@angular/cdk/platform';
+import { Platform } from '@angular/cdk/platform';
 import {
   Directive,
   ElementRef,
@@ -17,9 +17,14 @@ import {
   OnInit,
   Optional,
 } from '@angular/core';
-import {RippleRef} from './ripple-ref';
-import {RippleAnitriionConfig, RippleConfig, RippleRenderer, RippleTarget} from './ripple-renderer';
-import {ANIMATION_MODULE_TYPE} from '@angular/platform-browser/animations';
+import { ANIMATION_MODULE_TYPE } from '@angular/platform-browser/animations';
+import { RippleRef } from './ripple-ref';
+import {
+  RippleAnitriionConfig,
+  RippleConfig,
+  RippleRenderer,
+  RippleTarget
+} from './ripple-renderer';
 
 /** Configurable options for `triRipple`. */
 export interface RippleGlobalOptions {
@@ -45,13 +50,13 @@ export interface RippleGlobalOptions {
 
 /** Injection token that can be used to specify the global ripple options. */
 export const MAT_RIPPLE_GLOBAL_OPTIONS =
-    new InjectionToken<RippleGlobalOptions>('tri-ripple-global-options');
+  new InjectionToken<RippleGlobalOptions>('tri-ripple-global-options');
 
 @Directive({
   selector: '[tri-ripple], [triRipple]',
   exportAs: 'triRipple',
-  host: {
-    'class': 'tri-ripple',
+  host    : {
+    'class'                       : 'tri-ripple',
     '[class.tri-ripple-unbounded]': 'unbounded'
   }
 })
@@ -82,37 +87,10 @@ export class TriRipple implements OnInit, OnDestroy, RippleTarget {
    * `NoopAnitriionsModule` is being used.
    */
   @Input('triRippleAnitriion') anitriion: RippleAnitriionConfig;
-
-  /**
-   * Whether click events will not trigger the ripple. Ripples can be still launched manually
-   * by using the `launch()` method.
-   */
-  @Input('triRippleDisabled')
-  get disabled() { return this._disabled; }
-  set disabled(value: boolean) {
-    this._disabled = value;
-    this._setupTriggerEventsIfEnabled();
-  }
-  private _disabled: boolean = false;
-
-  /**
-   * The element that triggers the ripple when click events are received.
-   * Defaults to the directive's host element.
-   */
-  @Input('triRippleTrigger')
-  get trigger() { return this._trigger || this._elementRef.nativeElement; }
-  set trigger(trigger: HTMLElement) {
-    this._trigger = trigger;
-    this._setupTriggerEventsIfEnabled();
-  }
-  private _trigger: HTMLElement;
-
   /** Renderer for the ripple DOM manipulations. */
   private _rippleRenderer: RippleRenderer;
-
   /** Options that are set globally for all ripples. */
   private _globalOptions: RippleGlobalOptions;
-
   /** Whether ripple directive is initialized and the input bindings are set. */
   private _isInitialized: boolean = false;
 
@@ -130,18 +108,36 @@ export class TriRipple implements OnInit, OnDestroy, RippleTarget {
     }
   }
 
-  ngOnInit() {
-    this._isInitialized = true;
+  private _disabled: boolean = false;
+
+  /**
+   * Whether click events will not trigger the ripple. Ripples can be still launched manually
+   * by using the `launch()` method.
+   */
+  @Input('triRippleDisabled')
+  get disabled() {
+    return this._disabled;
+  }
+
+  set disabled(value: boolean) {
+    this._disabled = value;
     this._setupTriggerEventsIfEnabled();
   }
 
-  ngOnDestroy() {
-    this._rippleRenderer._removeTriggerEvents();
+  private _trigger: HTMLElement;
+
+  /**
+   * The element that triggers the ripple when click events are received.
+   * Defaults to the directive's host element.
+   */
+  @Input('triRippleTrigger')
+  get trigger() {
+    return this._trigger || this._elementRef.nativeElement;
   }
 
-  /** Fades out all currently showing ripple elements. */
-  fadeOutAll() {
-    this._rippleRenderer.fadeOutAll();
+  set trigger(trigger: HTMLElement) {
+    this._trigger = trigger;
+    this._setupTriggerEventsIfEnabled();
   }
 
   /**
@@ -150,10 +146,10 @@ export class TriRipple implements OnInit, OnDestroy, RippleTarget {
    */
   get rippleConfig(): RippleConfig {
     return {
-      centered: this.centered,
-      radius: this.radius,
-      color: this.color,
-      anitriion: {...this._globalOptions.anitriion, ...this.anitriion},
+      centered            : this.centered,
+      radius              : this.radius,
+      color               : this.color,
+      anitriion           : {...this._globalOptions.anitriion, ...this.anitriion},
       terminateOnPointerUp: this._globalOptions.terminateOnPointerUp,
     };
   }
@@ -166,11 +162,18 @@ export class TriRipple implements OnInit, OnDestroy, RippleTarget {
     return this.disabled || !!this._globalOptions.disabled;
   }
 
-  /** Sets up the trigger event listeners if ripples are enabled. */
-  private _setupTriggerEventsIfEnabled() {
-    if (!this.disabled && this._isInitialized) {
-      this._rippleRenderer.setupTriggerEvents(this.trigger);
-    }
+  ngOnInit() {
+    this._isInitialized = true;
+    this._setupTriggerEventsIfEnabled();
+  }
+
+  ngOnDestroy() {
+    this._rippleRenderer._removeTriggerEvents();
+  }
+
+  /** Fades out all currently showing ripple elements. */
+  fadeOutAll() {
+    this._rippleRenderer.fadeOutAll();
   }
 
   /**
@@ -193,6 +196,13 @@ export class TriRipple implements OnInit, OnDestroy, RippleTarget {
       return this._rippleRenderer.fadeInRipple(configOrX, y, {...this.rippleConfig, ...config});
     } else {
       return this._rippleRenderer.fadeInRipple(0, 0, {...this.rippleConfig, ...configOrX});
+    }
+  }
+
+  /** Sets up the trigger event listeners if ripples are enabled. */
+  private _setupTriggerEventsIfEnabled() {
+    if (!this.disabled && this._isInitialized) {
+      this._rippleRenderer.setupTriggerEvents(this.trigger);
     }
   }
 }

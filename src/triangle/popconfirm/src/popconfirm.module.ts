@@ -39,4 +39,5 @@ import { PopConfirmDirective } from './popconfirm.directive';
   exports     : [PopConfirmComponent, PopConfirmDirective],
   imports     : [CommonModule, TriButtonModule, OverlayModule, TriI18nModule]
 })
-export class TriPopConfirmModule {}
+export class TriPopConfirmModule {
+}

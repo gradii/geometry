@@ -11,5 +11,6 @@ import { Directive, Optional, TemplateRef } from '@angular/core';
   selector: '[triGridHeaderTemplate], [tri-grid-header-template]'
 })
 export class HeaderTemplateDirective {
-  constructor(@Optional() public templateRef: TemplateRef<any>) {}
+  constructor(@Optional() public templateRef: TemplateRef<any>) {
+  }
 }

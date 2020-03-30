@@ -6,9 +6,9 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {ComponentHarness, HarnessPredicate} from '@angular/cdk/testing';
-import {TabGroupHarnessFilters, TabHarnessFilters} from './tab-harness-filters';
-import {MatTabHarness} from './tab-harness';
+import { ComponentHarness, HarnessPredicate } from '@angular/cdk/testing';
+import { MatTabHarness } from './tab-harness';
+import { TabGroupHarnessFilters, TabHarnessFilters } from './tab-harness-filters';
 
 /** Harness for interacting with a standard mat-tab-group in tests. */
 export class MatTabGroupHarness extends ComponentHarness {
@@ -23,10 +23,10 @@ export class MatTabGroupHarness extends ComponentHarness {
    */
   static with(options: TabGroupHarnessFilters = {}): HarnessPredicate<MatTabGroupHarness> {
     return new HarnessPredicate(MatTabGroupHarness, options)
-        .addOption('selectedTabLabel', options.selectedTabLabel, async (harness, label) => {
-          const selectedTab = await harness.getSelectedTab();
-          return HarnessPredicate.stringMatches(await selectedTab.getLabel(), label);
-        });
+      .addOption('selectedTabLabel', options.selectedTabLabel, async (harness, label) => {
+        const selectedTab = await harness.getSelectedTab();
+        return HarnessPredicate.stringMatches(await selectedTab.getLabel(), label);
+      });
   }
 
   /**

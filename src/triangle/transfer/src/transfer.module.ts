@@ -21,4 +21,5 @@ import { TransferComponent } from './transfer.component';
   declarations: [TransferComponent, TransferListComponent, TransferSearchComponent],
   exports     : [TransferComponent]
 })
-export class TriTransferModule {}
+export class TriTransferModule {
+}

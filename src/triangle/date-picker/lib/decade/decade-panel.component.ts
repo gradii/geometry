@@ -26,7 +26,8 @@ export class DecadePanelComponent implements OnChanges {
   prefixCls: string = 'tri-calendar-decade-panel';
   panelDecades: PanelDecadeData[][];
 
-  constructor() {}
+  constructor() {
+  }
 
   get startYear(): number {
     return parseInt(`${this.value.getYear() / 100}`, 10) * 100;

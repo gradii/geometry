@@ -39,4 +39,5 @@ import { RadioComponent } from './radio.component';
   exports     : [RadioTileDirective, RadioGroupDirective, RadioComponent, RadioButtonComponent, RadioGroupComponent],
   declarations: [RadioTileDirective, RadioGroupDirective, RadioComponent, RadioButtonComponent, RadioGroupComponent]
 })
-export class TriRadioModule {}
+export class TriRadioModule {
+}

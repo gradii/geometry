@@ -1,12 +1,18 @@
-import {Direction, Directionality} from '@angular/cdk/bidi';
-import {PortalModule, TemplatePortal} from '@angular/cdk/portal';
-import {CommonModule} from '@angular/common';
-import {AfterContentInit, Component, TemplateRef, ViewChild, ViewContainerRef} from '@angular/core';
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {TriRippleModule} from '@gradii/triangle/core';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {TriTabBody, TriTabBodyPortal} from '../src/tab-body';
-import {Subject} from 'rxjs';
+import { Direction, Directionality } from '@angular/cdk/bidi';
+import { PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { CommonModule } from '@angular/common';
+import {
+  AfterContentInit,
+  Component,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { TriRippleModule } from '@gradii/triangle/core';
+import { Subject } from 'rxjs';
+import { TriTabBody, TriTabBodyPortal } from '../src/tab-body';
 
 
 describe('TriTabBody', () => {
@@ -195,7 +201,8 @@ class SimpleTabBodyApp implements AfterContentInit {
   @ViewChild(TriTabBody) tabBody: TriTabBody;
   @ViewChild(TemplateRef, {static: true}) template: TemplateRef<any>;
 
-  constructor(private _viewContainerRef: ViewContainerRef) { }
+  constructor(private _viewContainerRef: ViewContainerRef) {
+  }
 
   ngAfterContentInit() {
     this.content = new TemplatePortal(this.template, this._viewContainerRef);

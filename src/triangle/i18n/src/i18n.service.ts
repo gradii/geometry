@@ -5,15 +5,15 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {DatePipe} from '@angular/common';
-import {Inject, Injectable, Optional, Provider, SkipSelf} from '@angular/core';
-import {LoggerService} from '@gradii/triangle/util';
+import { DatePipe } from '@angular/common';
+import { Inject, Injectable, Optional, Provider, SkipSelf } from '@angular/core';
+import { LoggerService } from '@gradii/triangle/util';
 
-import {BehaviorSubject, Observable} from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import zh_CN from '../languages/zh_CN';
-import {I18nInterface} from './i18n.interface';
-import {I18N} from './i18n.token';
+import { I18nInterface } from './i18n.interface';
+import { I18N } from './i18n.token';
 
 @Injectable()
 export class I18nService {
@@ -101,9 +101,9 @@ export class I18nService {
 
   private _getObjectPath(obj: object, path: string): string | object | any { // tslint:disable-line:no-any
     let res: any = obj;
-    const paths  = path.split('.');
-    const depth  = paths.length;
-    let index    = 0;
+    const paths = path.split('.');
+    const depth = paths.length;
+    let index = 0;
     while (res && index < depth) {
       res = res[paths[index++]];
     }

@@ -70,7 +70,8 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
   private disposersForGlobalListeners: Function[] = [];
 
   constructor(@Inject(Renderer2) private renderer: Renderer2,
-                     @Inject(NodeMenuService) private nodeMenuService: NodeMenuService) {}
+              @Inject(NodeMenuService) private nodeMenuService: NodeMenuService) {
+  }
 
   ngOnInit(): void {
     this.availableMenuItems = this.menuItems || this.availableMenuItems;

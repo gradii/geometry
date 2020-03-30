@@ -46,7 +46,8 @@ export class FormControlComponent {
   iconType: string;
   @ContentChild(NgControl, {static: false}) ngControl: NgControl;
 
-  constructor() {}
+  constructor() {
+  }
 
   _hasFeedback = false;
 

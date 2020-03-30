@@ -73,6 +73,7 @@ export class ListComponent {
   @Input() noResult: string | TemplateRef<void>;
 
   // #endregion
-  constructor(private el: ElementRef) {}
+  constructor(private el: ElementRef) {
+  }
 
 }

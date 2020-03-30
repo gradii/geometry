@@ -14,7 +14,8 @@ export class FoldingType {
   static Empty: FoldingType = new FoldingType('node-empty');
   static Leaf: FoldingType = new FoldingType('node-leaf');
 
-  constructor(private _cssClass: string) {}
+  constructor(private _cssClass: string) {
+  }
 
   get cssClass(): string {
     return this._cssClass;

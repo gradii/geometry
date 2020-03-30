@@ -1,4 +1,4 @@
-import {mixinDisableRipple} from './disable-ripple';
+import { mixinDisableRipple } from './disable-ripple';
 
 describe('mixinDisableRipple', () => {
 
@@ -32,4 +32,5 @@ describe('mixinDisableRipple', () => {
 
 });
 
-class TestClass {}
+class TestClass {
+}

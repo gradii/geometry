@@ -50,4 +50,5 @@ import { CascaderComponent } from './cascader.component';
   declarations: [CascaderComponent],
   exports     : [CascaderComponent]
 })
-export class TriCascaderModule {}
+export class TriCascaderModule {
+}

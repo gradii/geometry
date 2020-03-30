@@ -67,7 +67,8 @@ export class CheckableTagComponent implements OnInit, AfterViewInit {
   /** Event: emit on change */
   @Output() change = new EventEmitter<boolean>();
 
-  constructor(private _elementRef: ElementRef, private _render: Renderer2) {}
+  constructor(private _elementRef: ElementRef, private _render: Renderer2) {
+  }
 
   @HostBinding('attr.data-show')
   get _dataShow(): boolean {
@@ -103,7 +104,8 @@ export class CheckableTagComponent implements OnInit, AfterViewInit {
     return /^(pink|red|yellow|orange|cyan|green|blue|purple)(-inverse)?$/.test(color);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngAfterViewInit(): void {
     this._render.addClass(this._elementRef.nativeElement, `tri-tag-root`);

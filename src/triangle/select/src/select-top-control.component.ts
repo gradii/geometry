@@ -55,7 +55,8 @@ export class SelectTopControlComponent implements OnInit, OnDestroy {
     private renderer: Renderer2,
     public selectService: SelectService,
     private cdr: ChangeDetectorRef,
-  ) {}
+  ) {
+  }
 
   get placeHolderDisplay(): string {
     return this.inputValue || this.isComposing || this.selectService.listOfSelectedValue.length ? 'none' : 'block';
@@ -116,7 +117,7 @@ export class SelectTopControlComponent implements OnInit, OnDestroy {
     }
   }
 
-  removeSelectedValue(option: OptionComponent, e: KeyboardEvent|MouseEvent): void {
+  removeSelectedValue(option: OptionComponent, e: KeyboardEvent | MouseEvent): void {
     this.selectService.removeValueFormSelected(option);
     e.stopPropagation();
   }

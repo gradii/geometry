@@ -46,4 +46,5 @@ import { DropDownDirective } from './dropdown.directive';
   declarations: [DropDownComponent, DropDownButtonComponent, DropDownDirective],
   exports     : [DropDownComponent, DropDownButtonComponent, DropDownDirective]
 })
-export class TriDropDownModule {}
+export class TriDropDownModule {
+}

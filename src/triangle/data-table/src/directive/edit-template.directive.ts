@@ -11,5 +11,6 @@ import { Directive, TemplateRef } from '@angular/core';
   selector: '[triGridEditTemplate], [tri-grid-edit-template]'
 })
 export class EditTemplateDirective {
-  constructor(public templateRef: TemplateRef<any>) {}
+  constructor(public templateRef: TemplateRef<any>) {
+  }
 }

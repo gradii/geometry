@@ -10,4 +10,5 @@ import { Directive } from '@angular/core';
 @Directive({
   selector: '[triCarouselSlickList]'
 })
-export class CarouselSlickListDirective {}
+export class CarouselSlickListDirective {
+}

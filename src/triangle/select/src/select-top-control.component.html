@@ -74,7 +74,7 @@
       *ngIf="allowClear && selectService.listOfSelectedValue.length"
       class="tri-select-selection__clear"
       tri-select-unselectable>
-    <i *ngIf="!clearIcon; else clearIcon" class="tri-select-close-icon" tri-icon theme="fill" type="close-circle"></i>
+    <i *ngIf="!clearIcon; else clearIcon" class="tri-select-close-icon" theme="fill" tri-icon type="close-circle"></i>
   </span>
 <span *ngIf="showArrow" class="tri-select-arrow" tri-select-unselectable>
   <i *ngIf="loading; else defaultArrow" tri-icon type="loading"></i>

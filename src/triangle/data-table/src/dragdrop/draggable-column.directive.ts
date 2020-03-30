@@ -77,7 +77,8 @@ export class DraggableColumnDirective implements OnInit, OnDestroy {
     private cue: DropCueService,
     // private nav: NavigationService,
     private renderer: Renderer2
-  ) { }
+  ) {
+  }
 
   @Input()
   set triDraggableColumn(enabled: boolean) {
@@ -148,7 +149,7 @@ export class DraggableColumnDirective implements OnInit, OnDestroy {
     }
 
     this.drag.emit({
-      draggable : this,
+      draggable: this,
       mouseEvent: move
     });
   }

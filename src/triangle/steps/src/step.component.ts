@@ -18,8 +18,8 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import {Subscription} from 'rxjs';
-import {StepConnectService} from './step-connect.service';
+import { Subscription } from 'rxjs';
+import { StepConnectService } from './step-connect.service';
 
 @Component({
   selector     : 'tri-step',
@@ -64,9 +64,9 @@ export class StepComponent implements OnInit, AfterViewInit, OnDestroy {
   _ifCustomStatus = false;
   _currentIndex: number;
   _el: any;
-  _last           = false;
-  _processDot     = false;
-  _direction      = 'horizontal';
+  _last = false;
+  _processDot = false;
+  _direction = 'horizontal';
   _processDotEventSubscription: Subscription;
   _directionEventSubscription: Subscription;
   _currentEventSubscription: Subscription;
@@ -113,7 +113,7 @@ export class StepComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   @Input()
   set status(status) {
-    this._status         = status;
+    this._status = status;
     this._ifCustomStatus = true;
   }
 
@@ -162,16 +162,16 @@ export class StepComponent implements OnInit, AfterViewInit, OnDestroy {
   init() {
     // 记录个数
     // this.index = this.stepConnectService.itemIndex;
-    this._processDot                   = this.stepConnectService.processDot;
-    this._direction                    = this.stepConnectService.direction;
-    this._current                      = this.stepConnectService.current;
-    this._processDotEventSubscription  = this.stepConnectService.processDotEvent.subscribe((data: any) => {
+    this._processDot = this.stepConnectService.processDot;
+    this._direction = this.stepConnectService.direction;
+    this._current = this.stepConnectService.current;
+    this._processDotEventSubscription = this.stepConnectService.processDotEvent.subscribe((data: any) => {
       this._processDot = data;
     });
-    this._directionEventSubscription   = this.stepConnectService.directionEvent.subscribe((data: any) => {
+    this._directionEventSubscription = this.stepConnectService.directionEvent.subscribe((data: any) => {
       this._direction = data;
     });
-    this._currentEventSubscription     = this.stepConnectService.currentEvent.subscribe((data: any) => {
+    this._currentEventSubscription = this.stepConnectService.currentEvent.subscribe((data: any) => {
       this._current = data;
     });
     this._errorIndexObjectSubscription = this.stepConnectService.errorIndexObject.subscribe((data: any) => {

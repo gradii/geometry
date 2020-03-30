@@ -39,4 +39,5 @@ export const NZ_COLLAPSE_DIRECTIVES: Array<any> = [CollapsesetComponent, Collaps
   exports     : NZ_COLLAPSE_DIRECTIVES,
   imports     : [CommonModule]
 })
-export class TriCollapseModule {}
+export class TriCollapseModule {
+}

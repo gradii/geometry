@@ -9,7 +9,8 @@ import { Tree } from './tree';
 import { RenamableNode } from './tree.types';
 
 export class NodeEvent {
-  constructor(public node: Tree) {}
+  constructor(public node: Tree) {
+  }
 }
 
 export class NodeSelectedEvent extends NodeEvent {

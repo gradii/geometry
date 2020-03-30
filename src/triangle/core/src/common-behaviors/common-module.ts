@@ -5,10 +5,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {HighContrastModeDetector} from '@angular/cdk/a11y';
-import {BidiModule} from '@angular/cdk/bidi';
-import {Inject, InjectionToken, isDevMode, NgModule, Optional, Version} from '@angular/core';
-import {StringTemplateOutletDirective} from './string_template_outlet';
+import { HighContrastModeDetector } from '@angular/cdk/a11y';
+import { BidiModule } from '@angular/cdk/bidi';
+import { Inject, InjectionToken, isDevMode, NgModule, Optional, Version } from '@angular/core';
+import { StringTemplateOutletDirective } from './string_template_outlet';
 
 
 // Private version constant to circumvent test/build issues,
@@ -25,7 +25,7 @@ export function TRIANGLE_SANITY_CHECKS_FACTORY(): SanityChecks {
 /** Injection token that configures whether the Material sanity checks are enabled. */
 export const TRIANGLE_SANITY_CHECKS = new InjectionToken<SanityChecks>('mat-sanity-checks', {
   providedIn: 'root',
-  factory: TRIANGLE_SANITY_CHECKS_FACTORY,
+  factory   : TRIANGLE_SANITY_CHECKS_FACTORY,
 });
 
 /**
@@ -54,8 +54,8 @@ export interface GranularSanityChecks {
  * This module should be imported to each top-level component module (e.g., MatTabsModule).
  */
 @NgModule({
-  imports: [BidiModule],
-  exports: [BidiModule, StringTemplateOutletDirective],
+  imports     : [BidiModule],
+  exports     : [BidiModule, StringTemplateOutletDirective],
   declarations: [StringTemplateOutletDirective]
 })
 export class TriCommonModule {
@@ -72,8 +72,8 @@ export class TriCommonModule {
   private _sanityChecks: SanityChecks;
 
   constructor(
-      highContrastModeDetector: HighContrastModeDetector,
-      @Optional() @Inject(TRIANGLE_SANITY_CHECKS) sanityChecks: any) {
+    highContrastModeDetector: HighContrastModeDetector,
+    @Optional() @Inject(TRIANGLE_SANITY_CHECKS) sanityChecks: any) {
     // While A11yModule also does this, we repeat it here to avoid importing A11yModule
     // in MatCommonModule.
     highContrastModeDetector._applyBodyHighContrastModeCssClasses();
@@ -119,7 +119,7 @@ export class TriCommonModule {
       (this._sanityChecks === false || !(this._sanityChecks as GranularSanityChecks).theme);
 
     if (isDisabled || !this._document || !this._document.body ||
-        typeof getComputedStyle !== 'function') {
+      typeof getComputedStyle !== 'function') {
       return;
     }
 

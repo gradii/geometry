@@ -1,5 +1,5 @@
-import {mixinColor} from './color';
-import {ElementRef} from '@angular/core';
+import { ElementRef } from '@angular/core';
+import { mixinColor } from './color';
 
 describe('MixinColor', () => {
 
@@ -8,12 +8,12 @@ describe('MixinColor', () => {
     const instance = new classWithColor();
 
     expect(instance.color)
-        .toBeFalsy('Expected the mixed-into class to have a color property');
+      .toBeFalsy('Expected the mixed-into class to have a color property');
 
     instance.color = 'accent';
 
     expect(instance.color)
-        .toBe('accent', 'Expected the mixed-into class to have an updated color property');
+      .toBe('accent', 'Expected the mixed-into class to have an updated color property');
   });
 
   it('should remove old color classes if new color is set', () => {

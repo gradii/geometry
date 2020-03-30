@@ -14,4 +14,5 @@ import { Directive } from '@angular/core';
   selector: `[tri-dialog-content], tri-dialog-content, [triDialogContent]`,
   host    : {'class': 'tri-dialog-content'}
 })
-export class TriDialogContent {}
+export class TriDialogContent {
+}

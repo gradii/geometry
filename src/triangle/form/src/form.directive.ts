@@ -21,7 +21,8 @@ export class FormDirective implements OnInit {
   @Input()
   fixedLabel: number;
 
-  constructor() {}
+  constructor() {
+  }
 
   /** @internal */
   _layout = 'horizontal';
@@ -36,5 +37,6 @@ export class FormDirective implements OnInit {
     this._layout = value;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

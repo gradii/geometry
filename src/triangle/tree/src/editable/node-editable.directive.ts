@@ -31,7 +31,8 @@ export class NodeEditableDirective implements OnInit {
   constructor(
     @Inject(Renderer2) private renderer: Renderer2,
     @Inject(ElementRef) private elementRef: ElementRef
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     const nativeElement = this.elementRef.nativeElement;

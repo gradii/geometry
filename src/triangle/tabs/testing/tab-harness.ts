@@ -6,8 +6,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {ComponentHarness, HarnessLoader, HarnessPredicate} from '@angular/cdk/testing';
-import {TabHarnessFilters} from './tab-harness-filters';
+import { ComponentHarness, HarnessLoader, HarnessPredicate } from '@angular/cdk/testing';
+import { TabHarnessFilters } from './tab-harness-filters';
 
 /** Harness for interacting with a standard Angular Material tab-label in tests. */
 export class MatTabHarness extends ComponentHarness {
@@ -22,8 +22,8 @@ export class MatTabHarness extends ComponentHarness {
    */
   static with(options: TabHarnessFilters = {}): HarnessPredicate<MatTabHarness> {
     return new HarnessPredicate(MatTabHarness, options)
-        .addOption('label', options.label,
-            (harness, label) => HarnessPredicate.stringMatches(harness.getLabel(), label));
+      .addOption('label', options.label,
+        (harness, label) => HarnessPredicate.stringMatches(harness.getLabel(), label));
   }
 
   /** Gets the label of the tab. */
@@ -32,12 +32,12 @@ export class MatTabHarness extends ComponentHarness {
   }
 
   /** Gets the aria-label of the tab. */
-  async getAriaLabel(): Promise<string|null> {
+  async getAriaLabel(): Promise<string | null> {
     return (await this.host()).getAttribute('aria-label');
   }
 
   /** Gets the value of the "aria-labelledby" attribute. */
-  async getAriaLabelledby(): Promise<string|null> {
+  async getAriaLabelledby(): Promise<string | null> {
     return (await this.host()).getAttribute('aria-labelledby');
   }
 

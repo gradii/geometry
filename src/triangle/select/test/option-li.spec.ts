@@ -14,7 +14,8 @@ describe('select option li', () => {
       activatedOption$    : new ReplaySubject(1),
       listOfSelectedValue$: new Subject(),
       compareWith         : (o1, o2) => o1 === o2,
-      clickOption         : () => {}
+      clickOption         : () => {
+      }
     };
     TestBed.configureTestingModule({
       providers   : [{provide: SelectService, useValue: selectServiceStub}],

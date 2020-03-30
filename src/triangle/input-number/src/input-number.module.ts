@@ -33,4 +33,5 @@ import { InputNumberComponent } from './input-number.component';
   declarations: [InputNumberComponent],
   exports     : [InputNumberComponent]
 })
-export class TriInputNumberModule {}
+export class TriInputNumberModule {
+}

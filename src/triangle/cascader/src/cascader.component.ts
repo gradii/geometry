@@ -109,7 +109,7 @@ export interface ShowSearchOptions {
     '[class.tri-cascader-picker-with-value]': '_inputValue && _inputValue.length'
   },
   styles             : [
-      `.tri-cascader-menus {
+    `.tri-cascader-menus {
           margin-top    : 4px;
           margin-bottom : 4px;
           top           : 100%;
@@ -431,7 +431,9 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
       return;
     }
     this.onTouched(); // set your control to 'touched'
-    if (this.showSearch) { this.focus(); }
+    if (this.showSearch) {
+      this.focus();
+    }
 
     if (this.isClickTiggerAction()) {
       this.delaySetMenuVisible(!this.menuVisible, 100);
@@ -462,7 +464,7 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
       const hostEl = this.el;
       const menuEl = this.menu && this.menu.nativeElement as HTMLElement;
       if (hostEl.contains(mouseTarget) || (menuEl && menuEl.contains(mouseTarget))
-      /*|| mouseTarget.parentElement.contains(menuEl)*/) {
+        /*|| mouseTarget.parentElement.contains(menuEl)*/) {
         // 因为浮层的backdrop出现，暂时没有办法自动消失
         return;
       }
@@ -544,7 +546,9 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
    * @param event 鼠标事件
    */
   onOptionClick(option: CascaderOption, index: number, event: Event): void {
-    if (event) { event.preventDefault(); }
+    if (event) {
+      event.preventDefault();
+    }
 
     // Keep focused state for keyboard support
     this.el.focus();
@@ -637,7 +641,9 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
       const index = result.path.length - 1;
       const destiNode = result.path[index];
       const mockClickParent = (node: CascaderOption, cIndex: number) => {
-        if (node && node.parent) { mockClickParent(node.parent, cIndex - 1); }
+        if (node && node.parent) {
+          mockClickParent(node.parent, cIndex - 1);
+        }
         this.onOptionClick(node, cIndex, event);
       };
       mockClickParent(destiNode, index);
@@ -1011,7 +1017,9 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
     const defaultFilter = (inputValue: string, p: CascaderOption[]): boolean => {
       let flag = false;
       p.forEach(n => {
-        if (n.label.indexOf(inputValue) > -1) { flag = true; }
+        if (n.label.indexOf(inputValue) > -1) {
+          flag = true;
+        }
       });
       return flag;
     };
@@ -1025,10 +1033,16 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
       const disabled = forceDisabled || node.disabled;
       path.push(node);
       node.children.forEach((sNode) => {
-        if (!sNode.parent) { sNode.parent = node; }
+        if (!sNode.parent) {
+          sNode.parent = node;
+        }
         /** 搜索的同时建立 parent 连接，因为用户直接搜索的话是没有建立连接的，会提升从叶子节点回溯的难度 */
-        if (!sNode.isLeaf) { loopParent(sNode, disabled); }
-        if (sNode.isLeaf || !sNode.children) { loopChild(sNode, disabled); }
+        if (!sNode.isLeaf) {
+          loopParent(sNode, disabled);
+        }
+        if (sNode.isLeaf || !sNode.children) {
+          loopChild(sNode, disabled);
+        }
       });
       path.pop();
     };
@@ -1048,7 +1062,9 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
     };
 
     this.oldColumnsHolder[0].forEach(node => loopParent(node));
-    if (sorter) { results.sort((a, b) => sorter(a.path, b.path, this._inputValue)); }
+    if (sorter) {
+      results.sort((a, b) => sorter(a.path, b.path, this._inputValue));
+    }
     this.columns = [results];
   }
 }

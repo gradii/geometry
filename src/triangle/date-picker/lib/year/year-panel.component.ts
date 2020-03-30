@@ -28,7 +28,8 @@ export class YearPanelComponent implements OnChanges {
   prefixCls: string = 'tri-calendar-year-panel';
   panelYears: PanelYearData[][];
 
-  constructor() { }
+  constructor() {
+  }
 
   get currentYear(): number {
     return this.value.getYear();

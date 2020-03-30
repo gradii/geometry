@@ -35,9 +35,11 @@ export class MonthTableComponent implements OnInit, OnChanges {
   prefixCls: string = 'tri-calendar-month-panel';
   panelMonths: PanelMonthData[][];
 
-  constructor(private i18n: I18nService) { }
+  constructor(private i18n: I18nService) {
+  }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.value || changes.disabledDate) {

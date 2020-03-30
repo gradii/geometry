@@ -22,105 +22,107 @@ import { PageChangeEvent } from './event/page-change.event';
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template       : `
-      <ul class="tri-pagination tri-pagination-simple" *ngIf="simple">
-          <li
-                  [attr.title]="'Pagination.prev_page'|triI18n"
-                  class="tri-pagination-prev"
-                  (click)="_jumpRelative(-1)"
-                  [class.tri-pagination-disabled]="_isFirstIndex">
-              <a></a>
-          </li>
-          <li [attr.title]="pageIndex+'/'+_lastIndex" class="tri-pagination-simple-pager">
-              <input [ngModel]="pageIndex" (ngModelChange)="_pageIndexChange($event)" size="3">
-              <div style="display: inline-block" *ngIf="!isInfinite(_lastIndex)"><span
-                      class="tri-pagination-slash">／</span>{{_lastIndex}} </div>
-          </li>
-          <li
-                  [attr.title]="'Pagination.next_page'|triI18n"
-                  class="tri-pagination-next"
-                  (click)="_jumpRelative(+1)"
-                  [class.tri-pagination-disabled]="_isLastIndex">
-              <a></a>
-          </li>
-      </ul>
-      <ul *ngIf="!simple" class="tri-pagination" [class.mini]="size=='small'">
-          <span class="tri-pagination-total-text" *ngIf="showTotal">共 {{_total}} 条</span>
-          <li
-                  [attr.title]="'Pagination.prev_page'|triI18n"
-                  class="tri-pagination-prev"
-                  (click)="_jumpRelative(-1)"
-                  [class.tri-pagination-disabled]="_isFirstIndex">
-              <a></a>
-          </li>
-          <li
-                  [attr.title]="_firstIndex"
-                  class="tri-pagination-item"
-                  (click)="_jumpPage(_firstIndex)"
-                  [class.tri-pagination-item-active]="_isFirstIndex">
-              <a>{{_firstIndex}}</a>
-          </li>
-          <li
-                  [attr.title]="'Pagination.prev_5'|triI18n"
-                  (click)="_jumpRelative(-5)"
-                  class="tri-pagination-jump-prev"
-                  *ngIf="(_lastIndex >9)&&(pageIndex-3>_firstIndex)">
-              <a></a>
-          </li>
-          <li
-                  *ngFor="let page of _buildIndexes()"
-                  [attr.title]="page.index"
-                  class="tri-pagination-item"
-                  (click)="_jumpPage(page.index)"
-                  [class.tri-pagination-item-active]="pageIndex==page.index">
-              <a>{{page.index}}</a>
-          </li>
-          <li
-                  [attr.title]="'Pagination.next_5'|triI18n"
-                  (click)="_jumpRelative(+5)"
-                  class="tri-pagination-jump-next"
-                  *ngIf="(_lastIndex >9)&&(pageIndex+3<_lastIndex)">
-              <a></a>
-          </li>
-          <li
-                  [attr.title]="_lastIndex"
-                  class="tri-pagination-item"
-                  (click)="_jumpPage(_lastIndex)"
-                  *ngIf="(_lastIndex>0)&&(_lastIndex!==_firstIndex)&&!isInfinite(_lastIndex)"
-                  [class.tri-pagination-item-active]="_isLastIndex">
-              <a>{{_lastIndex}}</a>
-          </li>
-          <li
-                  [attr.title]="'Pagination.next_page'|triI18n"
-                  class="tri-pagination-next"
-                  (click)="_jumpPage(pageIndex+1)"
-                  [class.tri-pagination-disabled]="_isLastIndex">
-              <a></a>
-          </li>
-          <div class="tri-pagination-options">
-              <tri-select
-                      *ngIf="_showSizeChanger"
-                      [size]="size=='small'?'small':'default'"
-                      class="tri-pagination-options-size-changer"
-                      [ngModel]="pageSize"
-                      (ngModelChange)="_pageSizeChange($event)">
-                  <tri-option
-                          *ngFor="let option of _options"
-                          [label]="option+ '条/页'"
-                          [value]="option">
-                  </tri-option>
-                  <tri-option
-                          *ngIf="_options.indexOf(_pageSize)==-1"
-                          [label]="_pageSize + '条/页'"
-                          [value]="_pageSize">
-                  </tri-option>
-              </tri-select>
-              <div class="tri-pagination-options-quick-jumper"
-                   *ngIf="showQuickJumper">
-                  {{'Pagination.jump_to'|triI18n}}<input [ngModel]="pageIndex"
-                                                         (ngModelChange)="_pageIndexChange($event)">{{'Pagination.page'|triI18n}}
-              </div>
-          </div>
-      </ul>`,
+    <ul class="tri-pagination tri-pagination-simple" *ngIf="simple">
+      <li
+        [attr.title]="'Pagination.prev_page'|triI18n"
+        class="tri-pagination-prev"
+        (click)="_jumpRelative(-1)"
+        [class.tri-pagination-disabled]="_isFirstIndex">
+        <a></a>
+      </li>
+      <li [attr.title]="pageIndex+'/'+_lastIndex" class="tri-pagination-simple-pager">
+        <input [ngModel]="pageIndex" (ngModelChange)="_pageIndexChange($event)" size="3">
+        <div style="display: inline-block" *ngIf="!isInfinite(_lastIndex)"><span
+          class="tri-pagination-slash">／</span>{{_lastIndex}} </div>
+      </li>
+      <li
+        [attr.title]="'Pagination.next_page'|triI18n"
+        class="tri-pagination-next"
+        (click)="_jumpRelative(+1)"
+        [class.tri-pagination-disabled]="_isLastIndex">
+        <a></a>
+      </li>
+    </ul>
+    <ul *ngIf="!simple" class="tri-pagination" [class.mini]="size=='small'">
+      <span class="tri-pagination-total-text" *ngIf="showTotal">共 {{_total}} 条</span>
+      <li
+        [attr.title]="'Pagination.prev_page'|triI18n"
+        class="tri-pagination-prev"
+        (click)="_jumpRelative(-1)"
+        [class.tri-pagination-disabled]="_isFirstIndex">
+        <a></a>
+      </li>
+      <li
+        [attr.title]="_firstIndex"
+        class="tri-pagination-item"
+        (click)="_jumpPage(_firstIndex)"
+        [class.tri-pagination-item-active]="_isFirstIndex">
+        <a>{{_firstIndex}}</a>
+      </li>
+      <li
+        [attr.title]="'Pagination.prev_5'|triI18n"
+        (click)="_jumpRelative(-5)"
+        class="tri-pagination-jump-prev"
+        *ngIf="(_lastIndex >9)&&(pageIndex-3>_firstIndex)">
+        <a></a>
+      </li>
+      <li
+        *ngFor="let page of _buildIndexes()"
+        [attr.title]="page.index"
+        class="tri-pagination-item"
+        (click)="_jumpPage(page.index)"
+        [class.tri-pagination-item-active]="pageIndex==page.index">
+        <a>{{page.index}}</a>
+      </li>
+      <li
+        [attr.title]="'Pagination.next_5'|triI18n"
+        (click)="_jumpRelative(+5)"
+        class="tri-pagination-jump-next"
+        *ngIf="(_lastIndex >9)&&(pageIndex+3<_lastIndex)">
+        <a></a>
+      </li>
+      <li
+        [attr.title]="_lastIndex"
+        class="tri-pagination-item"
+        (click)="_jumpPage(_lastIndex)"
+        *ngIf="(_lastIndex>0)&&(_lastIndex!==_firstIndex)&&!isInfinite(_lastIndex)"
+        [class.tri-pagination-item-active]="_isLastIndex">
+        <a>{{_lastIndex}}</a>
+      </li>
+      <li
+        [attr.title]="'Pagination.next_page'|triI18n"
+        class="tri-pagination-next"
+        (click)="_jumpPage(pageIndex+1)"
+        [class.tri-pagination-disabled]="_isLastIndex">
+        <a></a>
+      </li>
+      <div class="tri-pagination-options">
+        <tri-select
+          *ngIf="_showSizeChanger"
+          [size]="size=='small'?'small':'default'"
+          class="tri-pagination-options-size-changer"
+          [ngModel]="pageSize"
+          (ngModelChange)="_pageSizeChange($event)">
+          <tri-option
+            *ngFor="let option of _options"
+            [label]="option+ '条/页'"
+            [value]="option">
+          </tri-option>
+          <tri-option
+            *ngIf="_options.indexOf(_pageSize)==-1"
+            [label]="_pageSize + '条/页'"
+            [value]="_pageSize">
+          </tri-option>
+        </tri-select>
+        <div class="tri-pagination-options-quick-jumper"
+             *ngIf="showQuickJumper">
+          {{'Pagination.jump_to'|triI18n}}
+          <input [ngModel]="pageIndex"
+                 (ngModelChange)="_pageIndexChange($event)">
+          {{'Pagination.page'|triI18n}}
+        </div>
+      </div>
+    </ul>`,
   styleUrls      : ['../style/pagination.css']
 })
 export class PaginationComponent {

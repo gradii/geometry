@@ -9,11 +9,13 @@ import { BehaviorSubject, Observable, Observer } from 'rxjs';
 import { RowHeightService } from '../service/row-height.service';
 
 export class ScrollAction {
-  constructor(public offset: number) {}
+  constructor(public offset: number) {
+  }
 }
 
 export class PageAction {
-  constructor(public skip: number, public take: number) {}
+  constructor(public skip: number, public take: number) {
+  }
 }
 
 export type Action = ScrollAction | PageAction;

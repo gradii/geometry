@@ -40,4 +40,5 @@ import { ButtonComponent } from './button.component';
   exports     : [ButtonComponent, ButtonGroupComponent],
   imports     : [CommonModule]
 })
-export class TriButtonModule {}
+export class TriButtonModule {
+}

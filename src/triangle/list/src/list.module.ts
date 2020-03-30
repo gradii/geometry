@@ -22,4 +22,5 @@ import { ListComponent } from './list.component';
   declarations: [ListComponent, ListItemComponent, ListItemMetaComponent],
   exports     : [ListComponent, ListItemComponent, ListItemMetaComponent]
 })
-export class TriListModule {}
+export class TriListModule {
+}

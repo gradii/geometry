@@ -111,8 +111,9 @@ export class TreeInternalComponent implements OnInit, OnChanges, OnDestroy, Afte
   private subscriptions: Subscription[] = [];
 
   constructor(private nodeMenuService: NodeMenuService,
-                     public treeService: TreeService,
-                     public nodeElementRef: ElementRef) {}
+              public treeService: TreeService,
+              public nodeElementRef: ElementRef) {
+  }
 
   ngAfterViewInit(): void {
     if (this.tree.checked && !(this.tree as any).firstCheckedFired) {

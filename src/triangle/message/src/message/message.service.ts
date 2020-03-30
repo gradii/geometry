@@ -18,7 +18,8 @@ export class MessageBaseService<ContainerClass extends MessageContainerComponent
 
   constructor(protected overlay: Overlay,
               protected containerClass: Type<ContainerClass>,
-              private _idPrefix: string = '') {}
+              private _idPrefix: string = '') {
+  }
 
   protected _container: ContainerClass;
 

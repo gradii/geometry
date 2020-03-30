@@ -35,7 +35,7 @@ import { CarouselContentDirective } from './carousel-content.directive';
         </li>
       </ul>
     </div>`,
-  styleUrls: ['../style/carousel.css']
+  styleUrls    : ['../style/carousel.css']
 })
 export class CarouselComponent implements AfterViewInit, OnDestroy {
   activeIndex = 0;
@@ -68,7 +68,8 @@ export class CarouselComponent implements AfterViewInit, OnDestroy {
   vertical = false;
   @HostBinding('class.tri-carousel') _nzCarousel = true;
 
-  constructor(public hostElement: ElementRef, private _renderer: Renderer2) {}
+  constructor(public hostElement: ElementRef, private _renderer: Renderer2) {
+  }
 
   /**
    * User for identify the content of the slider

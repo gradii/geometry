@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {TriOption as OptionComponent} from '@gradii/triangle/core';
-import {TriAutocomplete} from '../autocomplete.component';
+import { TriOption as OptionComponent } from '@gradii/triangle/core';
+import { TriAutocomplete } from '../autocomplete.component';
 
 /** Event object that is emitted when an autocomplete option is selected. */
 export class TriAutocompleteSelectedEvent {

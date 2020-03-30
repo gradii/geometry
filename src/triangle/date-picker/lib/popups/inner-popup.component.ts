@@ -21,7 +21,7 @@ import { CandyDate } from '../candy-date/candy-date';
 import { DisabledDateFn, PanelMode } from '../standard-types';
 
 @Component({
-  selector   : 'inner-popup',
+  selector: 'inner-popup',
   templateUrl: 'inner-popup.component.html'
 })
 
@@ -50,9 +50,11 @@ export class InnerPopupComponent implements OnInit, OnChanges {
 
   prefixCls: string = 'tri-calendar';
 
-  constructor() { }
+  constructor() {
+  }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.value && !this.value) {

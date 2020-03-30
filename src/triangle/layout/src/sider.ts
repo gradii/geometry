@@ -21,9 +21,9 @@ import { Layout } from './layout';
 export type BreakPoinit = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 @Component({
-  selector     : 'tri-sider',
+  selector: 'tri-sider',
   encapsulation: ViewEncapsulation.None,
-  template     : `
+  template: `
       <ng-content></ng-content>
       <span class="tri-layout-sider-zero-width-trigger" *ngIf="_isZeroTrigger"
             (click)="toggleCollapse()">

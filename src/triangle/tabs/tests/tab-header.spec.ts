@@ -1,16 +1,10 @@
-import {Direction, Directionality} from '@angular/cdk/bidi';
-import {END, ENTER, HOME, LEFT_ARROW, RIGHT_ARROW, SPACE} from '@angular/cdk/keycodes';
-import {PortalModule} from '@angular/cdk/portal';
-import {ScrollingModule, ViewportRuler} from '@angular/cdk/scrolling';
-import {
-  dispatchFakeEvent,
-  dispatchKeyboardEvent,
-  createKeyboardEvent,
-  dispatchEvent,
-  createMouseEvent,
-} from '@gradii/triangle/core/testing';
-import {CommonModule} from '@angular/common';
-import {Component, ViewChild} from '@angular/core';
+import { Direction, Directionality } from '@angular/cdk/bidi';
+import { END, ENTER, HOME, LEFT_ARROW, RIGHT_ARROW, SPACE } from '@angular/cdk/keycodes';
+import { MutationObserverFactory, ObserversModule } from '@angular/cdk/observers';
+import { PortalModule } from '@angular/cdk/portal';
+import { ScrollingModule, ViewportRuler } from '@angular/cdk/scrolling';
+import { CommonModule } from '@angular/common';
+import { Component, ViewChild } from '@angular/core';
 import {
   async,
   ComponentFixture,
@@ -19,13 +13,19 @@ import {
   TestBed,
   tick,
 } from '@angular/core/testing';
-import {TriRippleModule} from '@gradii/triangle/core';
-import {By} from '@angular/platform-browser';
-import {TriInkBar} from '../src/ink-bar';
-import {TriTabHeader} from '../src/tab-header';
-import {TriTabLabelWrapper} from '../src/tab-label-wrapper';
-import {Subject} from 'rxjs';
-import {ObserversModule, MutationObserverFactory} from '@angular/cdk/observers';
+import { By } from '@angular/platform-browser';
+import { TriRippleModule } from '@gradii/triangle/core';
+import {
+  createKeyboardEvent,
+  createMouseEvent,
+  dispatchEvent,
+  dispatchFakeEvent,
+  dispatchKeyboardEvent,
+} from '@gradii/triangle/core/testing';
+import { Subject } from 'rxjs';
+import { TriInkBar } from '../src/ink-bar';
+import { TriTabHeader } from '../src/tab-header';
+import { TriTabLabelWrapper } from '../src/tab-label-wrapper';
 
 
 describe('TriTabHeader', () => {
@@ -37,14 +37,14 @@ describe('TriTabHeader', () => {
   beforeEach(async(() => {
     dir = 'ltr';
     TestBed.configureTestingModule({
-      imports: [CommonModule, PortalModule, TriRippleModule, ScrollingModule, ObserversModule],
+      imports     : [CommonModule, PortalModule, TriRippleModule, ScrollingModule, ObserversModule],
       declarations: [
         TriTabHeader,
         TriInkBar,
         TriTabLabelWrapper,
         SimpleTabHeaderApp,
       ],
-      providers: [
+      providers   : [
         ViewportRuler,
         {provide: Directionality, useFactory: () => ({value: dir, change: change.asObservable()})},
       ]
@@ -255,7 +255,7 @@ describe('TriTabHeader', () => {
         appComponent.tabHeader.focusIndex = appComponent.tabs.length - 1;
         fixture.detectChanges();
         expect(appComponent.tabHeader.scrollDistance)
-            .toBe(appComponent.tabHeader._getMaxScrollDistance());
+          .toBe(appComponent.tabHeader._getMaxScrollDistance());
 
         // Focus on the first tab, expect this to be the maximum scroll distance.
         appComponent.tabHeader.focusIndex = 0;
@@ -321,7 +321,7 @@ describe('TriTabHeader', () => {
         appComponent.tabHeader.focusIndex = appComponent.tabs.length - 1;
         fixture.detectChanges();
         expect(appComponent.tabHeader.scrollDistance)
-            .toBe(appComponent.tabHeader._getMaxScrollDistance());
+          .toBe(appComponent.tabHeader._getMaxScrollDistance());
 
         // Focus on the first tab, expect this to be the maximum scroll distance.
         appComponent.tabHeader.focusIndex = 0;
@@ -492,7 +492,7 @@ describe('TriTabHeader', () => {
         tick(100);
 
         expect(header.scrollDistance)
-            .toBeGreaterThan(previousDistance, 'Expected to scroll again after some more time.');
+          .toBeGreaterThan(previousDistance, 'Expected to scroll again after some more time.');
 
         dispatchFakeEvent(nextButton, endEventName);
       }
@@ -515,19 +515,19 @@ describe('TriTabHeader', () => {
         tick(300);
 
         expect(header.scrollDistance)
-            .toBe(currentScroll, 'Expected not to scroll after short amount of time.');
+          .toBe(currentScroll, 'Expected not to scroll after short amount of time.');
 
         tick(1000);
 
         expect(header.scrollDistance)
-            .toBeLessThan(currentScroll, 'Expected to scroll after some time.');
+          .toBeLessThan(currentScroll, 'Expected to scroll after some time.');
 
         currentScroll = header.scrollDistance;
 
         tick(100);
 
         expect(header.scrollDistance)
-            .toBeLessThan(currentScroll, 'Expected to scroll again after some more time.');
+          .toBeLessThan(currentScroll, 'Expected to scroll again after some more time.');
 
         dispatchFakeEvent(nextButton, endEventName);
       }
@@ -619,9 +619,13 @@ describe('TriTabHeader', () => {
       TestBed.overrideProvider(MutationObserverFactory, {
         useValue: {
           // Stub out the MutationObserver since the native one is async.
-          create: function(callback: Function) {
+          create: function (callback: Function) {
             mutationCallbacks.push(callback);
-            return {observe: () => {}, disconnect: () => {}};
+            return {
+              observe      : () => {
+              }, disconnect: () => {
+              }
+            };
           }
         }
       });
@@ -630,9 +634,9 @@ describe('TriTabHeader', () => {
       fixture.detectChanges();
 
       const tabHeaderElement: HTMLElement =
-          fixture.nativeElement.querySelector('.mat-tab-header');
+              fixture.nativeElement.querySelector('.mat-tab-header');
       const labels =
-          Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('.label-content'));
+              Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('.label-content'));
       const extraText = new Array(100).fill('w').join();
       const enabledClass = 'mat-tab-header-pagination-controls-enabled';
 
@@ -673,7 +677,7 @@ interface Tab {
     </mat-tab-header>
   </div>
   `,
-  styles: [`
+  styles  : [`
     :host {
       width: 130px;
     }

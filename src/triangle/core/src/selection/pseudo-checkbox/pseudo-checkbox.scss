@@ -2,67 +2,66 @@
 @import '../../../style/legend/noop-animation';
 
 // Padding inside of a pseudo checkbox.
-$_tri-pseudo-checkbox-padding: $tri-checkbox-border-width * 2;
+$_tri-pseudo-checkbox-padding : $tri-checkbox-border-width * 2;
 
 // Size of the checkmark in a pseudo checkbox.
-$_tri-pseudo-checkmark-size: $tri-checkbox-size - (2 * $_tri-pseudo-checkbox-padding);
+$_tri-pseudo-checkmark-size   : $tri-checkbox-size - (2 * $_tri-pseudo-checkbox-padding);
 
 
 .tri-pseudo-checkbox {
-  width: $tri-checkbox-size;
-  height: $tri-checkbox-size;
-  border: $tri-checkbox-border-width solid;
-  border-radius: 2px;
-  cursor: pointer;
-  display: inline-block;
-  vertical-align: middle;
-  box-sizing: border-box;
-  position: relative;
-  flex-shrink: 0;
-  transition:
-      border-color $tri-checkbox-transition-duration $tri-linear-out-slow-in-timing-function,
-      background-color $tri-checkbox-transition-duration $tri-linear-out-slow-in-timing-function;
+  width          : $tri-checkbox-size;
+  height         : $tri-checkbox-size;
+  border         : $tri-checkbox-border-width solid;
+  border-radius  : 2px;
+  cursor         : pointer;
+  display        : inline-block;
+  vertical-align : middle;
+  box-sizing     : border-box;
+  position       : relative;
+  flex-shrink    : 0;
+  transition     : border-color $tri-checkbox-transition-duration $tri-linear-out-slow-in-timing-function,
+  background-color $tri-checkbox-transition-duration $tri-linear-out-slow-in-timing-function;
 
   // Used to render the checkmark/mixedmark inside of the box.
   &::after {
-    position: absolute;
-    opacity: 0;
-    content: '';
-    border-bottom: $tri-checkbox-border-width solid currentColor;
-    transition: opacity $tri-checkbox-transition-duration $tri-linear-out-slow-in-timing-function;
+    position      : absolute;
+    opacity       : 0;
+    content       : '';
+    border-bottom : $tri-checkbox-border-width solid currentColor;
+    transition    : opacity $tri-checkbox-transition-duration $tri-linear-out-slow-in-timing-function;
   }
 
   &.tri-pseudo-checkbox-checked, &.tri-pseudo-checkbox-indeterminate {
-    border-color: transparent;
+    border-color : transparent;
   }
 
   @include _noop-animation {
     &::after {
-      transition: none;
+      transition : none;
     }
   }
 }
 
 .tri-pseudo-checkbox-disabled {
-  cursor: default;
+  cursor : default;
 }
 
 .tri-pseudo-checkbox-indeterminate::after {
-  top: ($tri-checkbox-size - $tri-checkbox-border-width) / 2 - $tri-checkbox-border-width;
-  left: $tri-checkbox-border-width / 2;
-  width: $tri-checkbox-size - 6px;
-  opacity: 1;
-  border-radius: 2px;
+  top           : ($tri-checkbox-size - $tri-checkbox-border-width) / 2 - $tri-checkbox-border-width;
+  left          : $tri-checkbox-border-width / 2;
+  width         : $tri-checkbox-size - 6px;
+  opacity       : 1;
+  border-radius : 2px;
 }
 
 .tri-pseudo-checkbox-checked::after {
-  top: ($tri-checkbox-size / 2) - ($_tri-pseudo-checkmark-size / 4) -
+  top         : ($tri-checkbox-size / 2) - ($_tri-pseudo-checkmark-size / 4) -
       ($tri-checkbox-size / 10) - $tri-checkbox-border-width;
-  left: $_tri-pseudo-checkbox-padding - $tri-checkbox-border-width * 1.5;
-  width: $_tri-pseudo-checkmark-size;
-  height: ($_tri-pseudo-checkmark-size - $tri-checkbox-border-width) / 2;
-  border-left: $tri-checkbox-border-width solid currentColor;
-  transform: rotate(-45deg);
-  opacity: 1;
-  box-sizing: content-box;
+  left        : $_tri-pseudo-checkbox-padding - $tri-checkbox-border-width * 1.5;
+  width       : $_tri-pseudo-checkmark-size;
+  height      : ($_tri-pseudo-checkmark-size - $tri-checkbox-border-width) / 2;
+  border-left : $tri-checkbox-border-width solid currentColor;
+  transform   : rotate(-45deg);
+  opacity     : 1;
+  box-sizing  : content-box;
 }

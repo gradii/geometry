@@ -26,4 +26,5 @@ const exported = [
   exports     : [exported],
   providers   : [DragAndDropService, DragHintService, DropCueService]
 })
-export class DragAndDropModule {}
+export class DragAndDropModule {
+}

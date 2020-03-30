@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {Component, forwardRef, Input, OnInit, ViewEncapsulation} from '@angular/core';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import { Component, forwardRef, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector           : 'tri-rate',
@@ -43,15 +43,15 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
   ]
 })
 export class RateComponent implements OnInit, ControlValueAccessor {
-  _prefixCls             = 'tri-rate';
+  _prefixCls = 'tri-rate';
   _classMap: any;
   _starArray: Array<any> = new Array();
-  _hoverValue            = 0; // 鼠标悬浮时的星数，为正整数，和_hasHalf配合使用
-  _hasHalf               = false;
-  _floatReg: any         = /^\d+(\.\d+)?$/;
+  _hoverValue = 0; // 鼠标悬浮时的星数，为正整数，和_hasHalf配合使用
+  _hasHalf = false;
+  _floatReg: any = /^\d+(\.\d+)?$/;
   // ngModel Access
-  onChange: any          = Function.prototype;
-  onTouched: any         = Function.prototype;
+  onChange: any = Function.prototype;
+  onTouched: any = Function.prototype;
 
   _count = 5;
 
@@ -156,7 +156,7 @@ export class RateComponent implements OnInit, ControlValueAccessor {
       return;
     }
     this._hoverValue = this._value = index + 1;
-    this._hasHalf    = !isFull && this._allowHalf;
+    this._hasHalf = !isFull && this._allowHalf;
     if (this._hasHalf) {
       this._value -= 0.5;
     }
@@ -175,7 +175,7 @@ export class RateComponent implements OnInit, ControlValueAccessor {
     }
 
     this._hoverValue = index + 1;
-    this._hasHalf    = isHalf;
+    this._hasHalf = isHalf;
   }
 
   _leaveRate(e: any): void {

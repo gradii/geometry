@@ -4,65 +4,65 @@
 @import './tabs-common';
 
 .tri-tab-group {
-  display: flex;
-  flex-direction: column;
+  display        : flex;
+  flex-direction : column;
 
   &.tri-tab-group-inverted-header {
-    flex-direction: column-reverse;
+    flex-direction : column-reverse;
   }
 }
 
 // Wraps each tab label
 .tri-tab-label {
   @include tab-label;
-  position: relative;
+  position : relative;
 }
 
 @media ($tri-xsmall) {
   .tri-tab-label {
-    padding: 0 12px;
+    padding : 0 12px;
   }
 }
 
 @media ($tri-small) {
   .tri-tab-label {
-    padding: 0 12px;
+    padding : 0 12px;
   }
 }
 
 // Note that we only want to target direct descendant tabs.
 .tri-tab-group[tri-stretch-tabs] > .tri-tab-header .tri-tab-label {
-  flex-basis: 0;
-  flex-grow: 1;
+  flex-basis : 0;
+  flex-grow  : 1;
 }
 
 // The bottom section of the view; contains the tab bodies
 .tri-tab-body-wrapper {
   @include _noop-animation();
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  transition: height $tri-tab-animation-duration $ease-in-out-curve-function;
+  position   : relative;
+  overflow   : hidden;
+  display    : flex;
+  transition : height $tri-tab-animation-duration $ease-in-out-curve-function;
 }
 
 // Wraps each tab body
 .tri-tab-body {
   @include tri-fill;
-  display: block;
-  overflow: hidden;
+  display    : block;
+  overflow   : hidden;
 
   // Fix for auto content wrapping in IE11
-  flex-basis: 100%;
+  flex-basis : 100%;
 
   &.tri-tab-body-active {
-    position: relative;
-    overflow-x: hidden;
-    overflow-y: auto;
-    z-index: 1;
-    flex-grow: 1;
+    position   : relative;
+    overflow-x : hidden;
+    overflow-y : auto;
+    z-index    : 1;
+    flex-grow  : 1;
   }
 
   .tri-tab-group.tri-tab-group-dynamic-height &.tri-tab-body-active {
-    overflow-y: hidden;
+    overflow-y : hidden;
   }
 }

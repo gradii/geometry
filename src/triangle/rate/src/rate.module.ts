@@ -31,4 +31,5 @@ import { RateComponent } from './rate.component';
   declarations: [RateComponent],
   imports     : [CommonModule]
 })
-export class TriRateModule {}
+export class TriRateModule {
+}

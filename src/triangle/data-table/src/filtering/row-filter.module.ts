@@ -62,9 +62,9 @@ const ENTRY_COMPONENTS = [
 ];
 
 @NgModule({
-  declarations   : [INTERNAL_COMPONENTS, FILTER_OPERATORS],
-  imports        : [importedModules, FilterSharedModule],
-  exports        : [INTERNAL_COMPONENTS, FILTER_OPERATORS],
+  declarations: [INTERNAL_COMPONENTS, FILTER_OPERATORS],
+  imports     : [importedModules, FilterSharedModule],
+  exports     : [INTERNAL_COMPONENTS, FILTER_OPERATORS],
 })
 export class RowFilterModule {
   static exports() {

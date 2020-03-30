@@ -7,8 +7,8 @@
 
 import { Component, Input } from '@angular/core';
 import { CompositeFilterDescriptor } from '@gradii/triangle/data-query';
-import { isNullOrEmptyString, isPresent } from '@gradii/triangle/util';
 import { ColumnBase } from '@gradii/triangle/data-table';
+import { isNullOrEmptyString, isPresent } from '@gradii/triangle/util';
 
 @Component({
   selector           : '[triGridFilterCell]',

@@ -4,10 +4,10 @@
 $pagination-prefix-cls : "#{$ant-prefix}-pagination";
 
 .#{$pagination-prefix-cls} {
-  font-size   : $font-size-base;
+  font-size : $font-size-base;
   @include user-select(none);
-  margin: 0;
-  padding: 0;
+  margin    : 0;
+  padding   : 0;
 
 
   @at-root &:after {

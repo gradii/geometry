@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {Directionality} from '@angular/cdk/bidi';
-import {coerceBooleanProperty} from '@angular/cdk/coercion';
-import {DOWN_ARROW, ENTER, ESCAPE, TAB, UP_ARROW} from '@angular/cdk/keycodes';
+import { Directionality } from '@angular/cdk/bidi';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { DOWN_ARROW, ENTER, ESCAPE, TAB, UP_ARROW } from '@angular/cdk/keycodes';
 import {
   FlexibleConnectedPositionStrategy,
   Overlay,
@@ -16,9 +16,9 @@ import {
   PositionStrategy,
   ScrollStrategy,
 } from '@angular/cdk/overlay';
-import {TemplatePortal} from '@angular/cdk/portal';
-import {ViewportRuler} from '@angular/cdk/scrolling';
-import {DOCUMENT} from '@angular/common';
+import { TemplatePortal } from '@angular/cdk/portal';
+import { ViewportRuler } from '@angular/cdk/scrolling';
+import { DOCUMENT } from '@angular/common';
 import {
   ChangeDetectorRef,
   Directive,
@@ -31,7 +31,7 @@ import {
   Optional,
   ViewContainerRef,
 } from '@angular/core';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {
   _countGroupLabelsBeforeOption,
   _getOptionScrollPosition,
@@ -47,9 +47,9 @@ import {
   Subject,
   Subscription
 } from 'rxjs';
-import {delay, filter, map, switchMap, take, tap} from 'rxjs/operators';
-import {AutocompleteOrigin} from './autocomplete-origin';
-import {TriAutocomplete} from './autocomplete.component';
+import { delay, filter, map, switchMap, take, tap } from 'rxjs/operators';
+import { AutocompleteOrigin } from './autocomplete-origin';
+import { TriAutocomplete } from './autocomplete.component';
 import {
   AUTOCOMPLETE_OPTION_HEIGHT,
   AUTOCOMPLETE_PANEL_HEIGHT,
@@ -93,7 +93,7 @@ export class AutocompleteTrigger implements ControlValueAccessor, OnDestroy {
    * `autocomplete` attribute to be set on the input element.
    * @docs-private
    */
-  @Input('autocomplete') autocompleteAttribute: string           = 'off';
+  @Input('autocomplete') autocompleteAttribute: string = 'off';
   /** Stream of autocomplete option selections. */
   readonly optionSelections: Observable<TriOptionSelectionEvent> = defer(() => {
     if (this.autocomplete && this.autocomplete.options) {
@@ -108,27 +108,27 @@ export class AutocompleteTrigger implements ControlValueAccessor, OnDestroy {
   }) as Observable<TriOptionSelectionEvent>;
   private _overlayRef: OverlayRef | null;
   private _portal: TemplatePortal;
-  private _componentDestroyed                                    = false;
+  private _componentDestroyed = false;
   private _scrollStrategy: () => ScrollStrategy;
   /** Old value of the native input. Used to work around issues with the `input` event on IE. */
   private _previousValue: string | number | null;
   /** Strategy that is used to position the panel. */
   private _positionStrategy: FlexibleConnectedPositionStrategy;
   /** Whether or not the label state is being overridden. */
-  private _manuallyFloatingLabel                                 = false;
+  private _manuallyFloatingLabel = false;
   /** The subscription for closing actions (some are bound to document). */
   private _closingActionsSubscription: Subscription;
   /** Subscription to viewport size changes. */
-  private _viewportSubscription                                  = Subscription.EMPTY;
+  private _viewportSubscription = Subscription.EMPTY;
   /**
    * Whether the autocomplete can open the next time it is focused. Used to prevent a focused,
    * closed autocomplete from being reopened if the user switches to another browser tab and then
    * comes back.
    */
-  private _canOpenOnNextFocus                                    = true;
+  private _canOpenOnNextFocus = true;
   /** Stream of keyboard events that can close the panel. */
-  private readonly _closeKeyEventStream                          = new Subject<void>();
-  private _overlayAttached: boolean                              = false;
+  private readonly _closeKeyEventStream = new Subject<void>();
+  private _overlayAttached: boolean = false;
 
   constructor(private _element: ElementRef<HTMLInputElement>, private _overlay: Overlay,
               private _viewContainerRef: ViewContainerRef,
@@ -297,7 +297,7 @@ export class AutocompleteTrigger implements ControlValueAccessor, OnDestroy {
       event.preventDefault();
     } else if (this.autocomplete) {
       const prevActiveItem = this.autocomplete._keyManager.activeItem;
-      const isArrowKey     = keyCode === UP_ARROW || keyCode === DOWN_ARROW;
+      const isArrowKey = keyCode === UP_ARROW || keyCode === DOWN_ARROW;
 
       if (this.panelOpen || keyCode === TAB) {
         this.autocomplete._keyManager.onKeydown(event);
@@ -312,7 +312,7 @@ export class AutocompleteTrigger implements ControlValueAccessor, OnDestroy {
   }
 
   _handleInput(event: KeyboardEvent): void {
-    let target                        = event.target as HTMLInputElement;
+    let target = event.target as HTMLInputElement;
     let value: number | string | null = target.value;
 
     // Based on `NumberValueAccessor` from forms.
@@ -387,7 +387,7 @@ export class AutocompleteTrigger implements ControlValueAccessor, OnDestroy {
    * not adjusted.
    */
   private _scrollToOption(): void {
-    const index      = this.autocomplete._keyManager.activeItemIndex || 0;
+    const index = this.autocomplete._keyManager.activeItemIndex || 0;
     const labelCount = _countGroupLabelsBeforeOption(index,
       this.autocomplete.options, this.autocomplete.optionGroups);
 
@@ -405,7 +405,7 @@ export class AutocompleteTrigger implements ControlValueAccessor, OnDestroy {
    * stream every time the option list changes.
    */
   private _subscribeToClosingActions(): Subscription {
-    const firstStable   = this._zone.onStable.asObservable().pipe(take(1));
+    const firstStable = this._zone.onStable.asObservable().pipe(take(1));
     const optionChanges = this.autocomplete.options.changes.pipe(
       tap(() => this._positionStrategy.reapplyLastPosition()),
       // Defer emitting to the stream until the next tick, because changing
@@ -494,8 +494,8 @@ export class AutocompleteTrigger implements ControlValueAccessor, OnDestroy {
     let overlayRef = this._overlayRef;
 
     if (!overlayRef) {
-      this._portal     = new TemplatePortal(this.autocomplete.template, this._viewContainerRef);
-      overlayRef       = this._overlay.create(this._getOverlayConfig());
+      this._portal = new TemplatePortal(this.autocomplete.template, this._viewContainerRef);
+      overlayRef = this._overlay.create(this._getOverlayConfig());
       this._overlayRef = overlayRef;
 
       // Use the `keydownEvents` in order to take advantage of

@@ -9,5 +9,6 @@ import { ElementRef } from '@angular/core';
 import { CapturedNode } from './captured-node';
 
 export class NodeDraggableEvent {
-  constructor(public captured: CapturedNode, public target: ElementRef) {}
+  constructor(public captured: CapturedNode, public target: ElementRef) {
+  }
 }

@@ -28,7 +28,7 @@ export function isSpanColumnComponent(column): column is SpanColumnComponent {
 @Component({
   providers: [
     {
-      provide    : ColumnBase,
+      provide: ColumnBase,
       useExisting: SpanColumnComponent
     }
   ],

@@ -77,7 +77,8 @@ export class TableDirective implements OnInit, OnDestroy {
     private service: ColumnResizingService,
     private zone: NgZone,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) {
+  }
 
   @HostBinding('style.min-width')
   get minWidth(): number | null {

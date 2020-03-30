@@ -32,8 +32,9 @@ import { TooltipDirective } from './tooltip.directive';
  *
  */
 @NgModule({
-  declarations   : [ToolTipComponent, TooltipDirective],
-  exports        : [ToolTipComponent, TooltipDirective],
-  imports        : [CommonModule, OverlayModule],
+  declarations: [ToolTipComponent, TooltipDirective],
+  exports     : [ToolTipComponent, TooltipDirective],
+  imports     : [CommonModule, OverlayModule],
 })
-export class TriToolTipModule {}
+export class TriToolTipModule {
+}

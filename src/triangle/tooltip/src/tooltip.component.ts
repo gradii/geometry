@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {AnimationEvent} from '@angular/animations';
-import {CdkConnectedOverlay, ConnectionPositionPair} from '@angular/cdk/overlay';
+import { AnimationEvent } from '@angular/animations';
+import { CdkConnectedOverlay, ConnectionPositionPair } from '@angular/cdk/overlay';
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -20,9 +20,9 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import {DEFAULT_4_POSITIONS, FadeAnimation, POSITION_MAP} from '@gradii/triangle/core';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {TooltipDirective} from './tooltip.directive';
+import { DEFAULT_4_POSITIONS, FadeAnimation, POSITION_MAP } from '@gradii/triangle/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { TooltipDirective } from './tooltip.directive';
 
 @Component({
   selector     : 'tri-tooltip',
@@ -94,12 +94,12 @@ export class ToolTipComponent implements AfterViewInit {
    * #overlay
    */
   @ViewChild('overlay', {static: false}) overlay: CdkConnectedOverlay;
-  visibleSource                        = new BehaviorSubject<boolean>(false);
-  visible$: Observable<boolean>        = this.visibleSource.asObservable();
-  _prefix                              = 'tri-tooltip-placement';
+  visibleSource = new BehaviorSubject<boolean>(false);
+  visible$: Observable<boolean> = this.visibleSource.asObservable();
+  _prefix = 'tri-tooltip-placement';
   _positions: ConnectionPositionPair[] = [...DEFAULT_4_POSITIONS];
-  _classMap                            = {};
-  _hasBackdrop                         = false;
+  _classMap = {};
+  _hasBackdrop = false;
 
   constructor(private _renderer: Renderer2, private _cdr: ChangeDetectorRef) {
   }
@@ -176,7 +176,7 @@ export class ToolTipComponent implements AfterViewInit {
    */
   @Input()
   set trigger(value) {
-    this._trigger     = value;
+    this._trigger = value;
     this._hasBackdrop = this._trigger === 'click';
   }
 
@@ -201,12 +201,12 @@ export class ToolTipComponent implements AfterViewInit {
   }
 
   show(): void {
-    this.visible              = true;
+    this.visible = true;
     this.origin.isTooltipOpen = true;
   }
 
   hide(): void {
-    this.visible              = false;
+    this.visible = false;
     this.origin.isTooltipOpen = false;
   }
 

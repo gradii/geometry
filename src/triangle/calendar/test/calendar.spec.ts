@@ -16,7 +16,7 @@ registerLocaleData(zh);
 describe('calendar', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports     : [
+      imports: [
         FormsModule,
         TriCalendarModule,
         NoopAnimationsModule
@@ -434,7 +434,8 @@ class TestCalendarFullscreenComponent {
     </tri-calendar>
   `
 })
-class TestCalendarDateCellComponent {}
+class TestCalendarDateCellComponent {
+}
 
 @Component({
   template: `
@@ -445,7 +446,8 @@ class TestCalendarDateCellComponent {}
     </tri-calendar>
   `
 })
-class TestCalendarDateFullCellComponent {}
+class TestCalendarDateFullCellComponent {
+}
 
 @Component({
   template: `
@@ -456,7 +458,8 @@ class TestCalendarDateFullCellComponent {}
     </tri-calendar>
   `
 })
-class TestCalendarMonthCellComponent {}
+class TestCalendarMonthCellComponent {
+}
 
 @Component({
   template: `
@@ -467,4 +470,5 @@ class TestCalendarMonthCellComponent {}
     </tri-calendar>
   `
 })
-class TestCalendarMonthFullCellComponent {}
+class TestCalendarMonthFullCellComponent {
+}

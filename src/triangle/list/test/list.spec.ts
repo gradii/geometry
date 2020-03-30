@@ -282,4 +282,5 @@ class TestListWithTemplateComponent {
     </tri-list>
   `
 })
-class TestListItemComponent {}
+class TestListItemComponent {
+}

@@ -37,7 +37,8 @@ export class TriDialogHeader implements OnInit {
   constructor(
     @Optional() private _dialogRef: TriDialogRef<any>,
     private _elementRef: ElementRef<HTMLElement>,
-    private _dialog: TriDialog) {}
+    private _dialog: TriDialog) {
+  }
 
   ngOnInit() {
     if (!this._dialogRef) {

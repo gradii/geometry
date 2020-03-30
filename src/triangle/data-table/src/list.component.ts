@@ -22,10 +22,12 @@ import {
   Optional,
   Output,
   QueryList,
-  Renderer2, SimpleChanges,
+  Renderer2,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
 import { GroupDescriptor } from '@gradii/triangle/data-query';
+import { DataCollection, SelectableSettings } from '@gradii/triangle/data-table';
 import { isPresent } from '@gradii/triangle/util';
 import { fromEvent, Subject } from 'rxjs';
 
@@ -48,7 +50,6 @@ import { ScrollSyncService } from './service/scroll-sync.service';
 import { SuspendService } from './service/suspend.service';
 import { DetailTemplateDirective } from './table-shared/detail-template.directive';
 import { isChanged, isUniversal } from './utils';
-import { DataCollection, SelectableSettings } from '@gradii/triangle/data-table';
 
 export const SCROLLER_FACTORY_TOKEN = new InjectionToken('grid-scroll-service-factory');
 

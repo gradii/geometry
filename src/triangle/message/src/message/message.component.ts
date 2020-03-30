@@ -34,7 +34,8 @@ import { MessageDataFilled, MessageDataOptions } from './message.definitions';
          (mouseenter)="onEnter()"
          (mouseleave)="onLeave()">
       <div class="tri-message-notice-content">
-        <div *ngIf="!message.html" class="tri-message-custom-content" [ngClass]="'tri-message-' + message.type">
+        <div *ngIf="!message.html" class="tri-message-custom-content"
+             [ngClass]="'tri-message-' + message.type">
           <ng-container [ngSwitch]="message.type">
             <i *ngSwitchCase="'success'" class="anticon anticon-check-circle"></i>
             <i *ngSwitchCase="'info'" class="anticon anticon-info-circle"></i>
@@ -61,7 +62,8 @@ export class MessageComponent implements OnInit, OnDestroy {
   private _eraseTimingStart: number;
   private _eraseTTL: number; // Time to live
 
-  constructor(private _messageContainer: MessageContainerComponent<MessageConfig>) {}
+  constructor(private _messageContainer: MessageContainerComponent<MessageConfig>) {
+  }
 
   ngOnInit() {
     this._options = this.message.options;

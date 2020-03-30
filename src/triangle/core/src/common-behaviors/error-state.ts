@@ -5,18 +5,19 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {FormControl, FormGroupDirective, NgControl, NgForm} from '@angular/forms';
-import {Subject} from 'rxjs';
-import {ErrorStateMatcher} from '../error/error-options';
-import {Constructor} from './constructor';
+import { FormControl, FormGroupDirective, NgControl, NgForm } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { ErrorStateMatcher } from '../error/error-options';
+import { Constructor } from './constructor';
 
 
 /** @docs-private */
 export interface CanUpdateErrorState {
-  updateErrorState(): void;
   readonly stateChanges: Subject<void>;
   errorState: boolean;
   errorStateMatcher: ErrorStateMatcher;
+
+  updateErrorState(): void;
 }
 
 /** @docs-private */
@@ -35,7 +36,7 @@ export interface HasErrorState {
  * For component with `errorState` and need to update `errorState`.
  */
 export function mixinErrorState<T extends Constructor<HasErrorState>>(base: T)
-: CanUpdateErrorStateCtor & T {
+  : CanUpdateErrorStateCtor & T {
   return class extends base {
     /** Whether the component is in an error state. */
     errorState: boolean = false;
@@ -48,6 +49,10 @@ export function mixinErrorState<T extends Constructor<HasErrorState>>(base: T)
 
     errorStateMatcher: ErrorStateMatcher;
 
+    constructor(...args: any[]) {
+      super(...args);
+    }
+
     updateErrorState() {
       const oldState = this.errorState;
       const parent = this._parentFormGroup || this._parentForm;
@@ -59,10 +64,6 @@ export function mixinErrorState<T extends Constructor<HasErrorState>>(base: T)
         this.errorState = newState;
         this.stateChanges.next();
       }
-    }
-
-    constructor(...args: any[]) {
-      super(...args);
     }
   };
 }

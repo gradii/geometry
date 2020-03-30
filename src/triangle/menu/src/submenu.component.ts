@@ -45,31 +45,31 @@ import { MenuComponent } from './menu.component';
     ])
   ],
   template  : `
-      <div
-              [class.tri-dropdown-menu-submenu-title]="isInDropDown"
-              [class.tri-menu-submenu-title]="!isInDropDown"
-              (mouseenter)="onMouseEnterEvent($event)"
-              (mouseleave)="onMouseLeaveEvent($event)"
-              (click)="clickSubMenuTitle()"
-              [style.paddingLeft.px]="(menuComponent.mode === 'inline')?(level*24):null">
-          <ng-content select="[title]"></ng-content>
-      </div>
-      <ul
-              [class.tri-dropdown-menu]="isInDropDown"
-              [@fadeAnimation]
-              [@expandAnimation]="expandState"
-              [class.tri-menu]="!isInDropDown"
-              [class.tri-dropdown-menu-vertical]="isInDropDown"
-              [class.tri-menu-vertical]="(!isInDropDown)&&(menuComponent.mode!=='inline')"
-              [class.tri-menu-inline]="(!isInDropDown)&&(menuComponent.mode==='inline')"
-              [class.tri-dropdown-menu-sub]="isInDropDown"
-              [class.tri-menu-sub]="!isInDropDown"
-              *ngIf="open"
-              (click)="clickSubMenuDropDown()"
-              (mouseleave)="onMouseLeaveEvent($event)"
-              (mouseenter)="onMouseEnterEvent($event)">
-          <ng-content></ng-content>
-      </ul>
+    <div
+      [class.tri-dropdown-menu-submenu-title]="isInDropDown"
+      [class.tri-menu-submenu-title]="!isInDropDown"
+      (mouseenter)="onMouseEnterEvent($event)"
+      (mouseleave)="onMouseLeaveEvent($event)"
+      (click)="clickSubMenuTitle()"
+      [style.paddingLeft.px]="(menuComponent.mode === 'inline')?(level*24):null">
+      <ng-content select="[title]"></ng-content>
+    </div>
+    <ul
+      [class.tri-dropdown-menu]="isInDropDown"
+      [@fadeAnimation]
+      [@expandAnimation]="expandState"
+      [class.tri-menu]="!isInDropDown"
+      [class.tri-dropdown-menu-vertical]="isInDropDown"
+      [class.tri-menu-vertical]="(!isInDropDown)&&(menuComponent.mode!=='inline')"
+      [class.tri-menu-inline]="(!isInDropDown)&&(menuComponent.mode==='inline')"
+      [class.tri-dropdown-menu-sub]="isInDropDown"
+      [class.tri-menu-sub]="!isInDropDown"
+      *ngIf="open"
+      (click)="clickSubMenuDropDown()"
+      (mouseleave)="onMouseLeaveEvent($event)"
+      (mouseenter)="onMouseEnterEvent($event)">
+      <ng-content></ng-content>
+    </ul>
   `
 })
 export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {

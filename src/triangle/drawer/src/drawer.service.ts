@@ -56,7 +56,8 @@ export class DrawerBuilderForService<R> {
 
 @Injectable({providedIn: 'root'})
 export class DrawerService {
-  constructor(private overlay: Overlay) {}
+  constructor(private overlay: Overlay) {
+  }
 
   // tslint:disable-next-line:no-any
   create<T = any, D = any, R = any>(options: DrawerOptions<T, D>): DrawerRef<R> {

@@ -13,7 +13,8 @@ import { PseudoCheckbox } from './pseudo-checkbox/pseudo-checkbox';
   exports     : [PseudoCheckbox],
   declarations: [PseudoCheckbox]
 })
-export class TriPseudoCheckboxModule {}
+export class TriPseudoCheckboxModule {
+}
 
 
 export * from './pseudo-checkbox/pseudo-checkbox';

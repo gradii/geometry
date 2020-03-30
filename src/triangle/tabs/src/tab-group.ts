@@ -5,7 +5,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { BooleanInput, coerceBooleanProperty, coerceNumberProperty, NumberInput } from '@angular/cdk/coercion';
+import {
+  BooleanInput,
+  coerceBooleanProperty,
+  coerceNumberProperty,
+  NumberInput
+} from '@angular/cdk/coercion';
 import {
   AfterContentChecked,
   AfterContentInit,

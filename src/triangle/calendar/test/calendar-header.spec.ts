@@ -7,10 +7,7 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarHeaderComponent } from '@gradii/triangle/calendar';
 import { TriI18nModule } from '@gradii/triangle/i18n';
-import {
-  RadioGroupComponent as RadioGroup,
-  TriRadioModule,
-} from '@gradii/triangle/radio';
+import { RadioGroupComponent as RadioGroup, TriRadioModule, } from '@gradii/triangle/radio';
 import { SelectComponent, TriSelectModule } from '@gradii/triangle/select';
 
 registerLocaleData(zh);

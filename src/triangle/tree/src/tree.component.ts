@@ -98,7 +98,8 @@ export class TreeComponent implements OnInit, OnChanges, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(@Inject(TreeService) private treeService: TreeService) {}
+  constructor(@Inject(TreeService) private treeService: TreeService) {
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (!this.treeModel) {

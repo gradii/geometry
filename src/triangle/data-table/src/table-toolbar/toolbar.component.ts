@@ -22,7 +22,8 @@ import { DataTableComponent } from '../data-table.component';
   }
 })
 export class ToolbarComponent {
-  constructor(private grid: DataTableComponent) {}
+  constructor(private grid: DataTableComponent) {
+  }
 
   @HostBinding('class')
   get classNames(): string {

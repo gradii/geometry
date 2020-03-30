@@ -25,10 +25,10 @@
 
 // Gets the font-family from a typography config and removes the quotes around it.
 @function mat-font-family($config, $level: null) {
-  $font-family: map-get($config, font-family);
+  $font-family : map-get($config, font-family);
 
   @if $level != null {
-    $font-family: _mat-get-type-value($config, $level, font-family);
+    $font-family : _mat-get-type-value($config, $level, font-family);
   }
 
   // Guard against unquoting non-string values, because it's deprecated.
@@ -49,26 +49,25 @@
        $line-height == null or
        $font-family == null) {
 
-    font-size: $font-size;
-    font-weight: $font-weight;
-    line-height: $line-height;
-    font-family: $font-family;
-  }
-  @else {
+    font-size   : $font-size;
+    font-weight : $font-weight;
+    line-height : $line-height;
+    font-family : $font-family;
+  } @else {
     // Otherwise use the shorthand `font`, because it's the least amount of bytes. Note
     // that we need to use interpolation for `font-size/line-height` in order to prevent
     // Sass from dividing the two values.
-    font: $font-weight #{$font-size}/#{$line-height} $font-family;
+    font        : $font-weight #{$font-size}/#{$line-height} $font-family;
   }
 }
 
 // Converts a typography level into CSS styles.
 @mixin mat-typography-level-to-styles($config, $level) {
-  $font-size: mat-font-size($config, $level);
-  $font-weight: mat-font-weight($config, $level);
-  $line-height: mat-line-height($config, $level);
-  $font-family: mat-font-family($config, $level);
+  $font-size     : mat-font-size($config, $level);
+  $font-weight   : mat-font-weight($config, $level);
+  $line-height   : mat-line-height($config, $level);
+  $font-family   : mat-font-family($config, $level);
 
   @include mat-typography-font-shorthand($font-size, $font-weight, $line-height, $font-family);
-  letter-spacing: mat-letter-spacing($config, $level);
+  letter-spacing : mat-letter-spacing($config, $level);
 }

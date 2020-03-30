@@ -33,4 +33,5 @@ import { AnchorComponent } from './anchor.component';
   imports     : [CommonModule, TriAffixModule],
   providers   : [SCROLL_SERVICE_PROVIDER]
 })
-export class TriAnchorModule {}
+export class TriAnchorModule {
+}

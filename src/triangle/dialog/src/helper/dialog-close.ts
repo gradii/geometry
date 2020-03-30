@@ -25,7 +25,7 @@ import { getClosestDialog } from './helper';
   selector: `[tri-dialog-close], [triDialogClose]`,
   exportAs: 'triDialogClose',
   host    : {
-    '(click)'          : 'dialogRef.close(dialogResult)',
+    '(click)': 'dialogRef.close(dialogResult)',
     '[attr.aria-label]': 'ariaLabel',
   }
 })
@@ -41,7 +41,8 @@ export class TriDialogClose implements OnInit, OnChanges {
   constructor(
     @Optional() public dialogRef: TriDialogRef<any>,
     private _elementRef: ElementRef<HTMLElement>,
-    private _dialog: TriDialog) {}
+    private _dialog: TriDialog) {
+  }
 
   ngOnInit() {
     if (!this.dialogRef) {

@@ -20,7 +20,7 @@ import { CandyDate } from '../candy-date/candy-date';
 import { PanelMode } from '../standard-types';
 
 @Component({
-  selector   : 'calendar-header',
+  selector: 'calendar-header',
   templateUrl: 'calendar-header.component.html'
 })
 
@@ -43,7 +43,8 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
 
   private yearToMonth: boolean = false; // Indicate whether should change to month panel when current is year panel (if referer=month, it should show month panel when choosed a year)
 
-  constructor(private i18n: I18nService) { }
+  constructor(private i18n: I18nService) {
+  }
 
   ngOnInit(): void {
     if (!this.value) {

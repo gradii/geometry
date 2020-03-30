@@ -12,5 +12,6 @@ export class DomEventsService {
   cellClick = new EventEmitter();
   cellMousedown = new EventEmitter();
 
-  constructor() {}
+  constructor() {
+  }
 }

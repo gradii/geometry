@@ -105,7 +105,8 @@ export class ConfirmComponent implements OnInit, OnDestroy {
   _typeCls = `tri-confirm-confirm`;
   @ViewChild('confirm_content', {static: false}) private contentEl: ElementRef;
 
-  constructor(public subject: ModalSubject) {}
+  constructor(public subject: ModalSubject) {
+  }
 
   _visible = false;
 
@@ -281,7 +282,8 @@ export class ConfirmComponent implements OnInit, OnDestroy {
     };
   }
 
-  setClassMap(): void {}
+  setClassMap(): void {
+  }
 
   anmiateFade(status): void {
     this._animationStatus = status;

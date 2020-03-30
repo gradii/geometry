@@ -22,10 +22,10 @@ import { DropDownComponent } from './dropdown.component';
 import { DropDownDirective } from './dropdown.directive';
 
 @Component({
-  selector     : 'tri-dropdown-button',
+  selector: 'tri-dropdown-button',
   encapsulation: ViewEncapsulation.None,
-  animations   : [DropDownAnimation],
-  template     : `
+  animations: [DropDownAnimation],
+  template: `
       <div class="tri-btn-group tri-dropdown-button" triDropdown>
           <button
                   triButton

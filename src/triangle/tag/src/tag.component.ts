@@ -59,7 +59,8 @@ export class TagComponent implements OnInit, AfterViewInit {
   /** Event: emit after close */
   @Output() close = new EventEmitter<Event>();
 
-  constructor(private _elementRef: ElementRef, private _render: Renderer2) {}
+  constructor(private _elementRef: ElementRef, private _render: Renderer2) {
+  }
 
   @HostBinding('attr.data-show')
   get _dataShow(): boolean {
@@ -89,7 +90,8 @@ export class TagComponent implements OnInit, AfterViewInit {
     return /^(pink|red|yellow|orange|cyan|green|blue|purple)(-inverse)?$/.test(color);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngAfterViewInit(): void {
     this._render.addClass(this._elementRef.nativeElement, `${this._prefixCls}-root`);

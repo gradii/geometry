@@ -17,5 +17,6 @@ import { BreadCrumbComponent } from './breadcrumb.component';
     <span class="tri-breadcrumb-separator">{{breadCrumbComponent?.separator}}</span>`
 })
 export class BreadCrumbItemComponent {
-  constructor(public breadCrumbComponent: BreadCrumbComponent) {}
+  constructor(public breadCrumbComponent: BreadCrumbComponent) {
+  }
 }

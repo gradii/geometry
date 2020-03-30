@@ -50,4 +50,5 @@ import { SelectComponent } from './select.component';
     OptionGroupComponent,
   ]
 })
-export class TriSelectModule {}
+export class TriSelectModule {
+}

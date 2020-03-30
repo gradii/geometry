@@ -49,4 +49,5 @@ import { SliderService } from './slider.service';
   imports     : [CommonModule, TriToolTipModule],
   providers   : [SliderService]
 })
-export class TriSliderModule {}
+export class TriSliderModule {
+}

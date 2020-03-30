@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {ActiveDescendantKeyManager} from '@angular/cdk/a11y';
-import {coerceBooleanProperty} from '@angular/cdk/coercion';
+import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
   AfterContentInit,
   ChangeDetectionStrategy,
@@ -25,10 +25,10 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {
-  TriOption as OptionComponent,
-  TriOptgroup as OptionGroupComponent
+  TriOptgroup as OptionGroupComponent,
+  TriOption as OptionComponent
 } from '@gradii/triangle/core';
-import {TriAutocompleteSelectedEvent} from './event/autocomplete-selected-event';
+import { TriAutocompleteSelectedEvent } from './event/autocomplete-selected-event';
 
 
 /**
@@ -80,7 +80,7 @@ export class TriAutocomplete implements AfterContentInit {
   _keyManager: ActiveDescendantKeyManager<OptionComponent>;
 
   /** Whether the autocomplete panel should be visible, depending on option length. */
-  showPanel: boolean                                                            = false;
+  showPanel: boolean = false;
   /** @docs-private */
   @ViewChild(TemplateRef, {static: false}) template: TemplateRef<any>;
   /** Element for the panel containing the autocomplete options. */
@@ -90,7 +90,7 @@ export class TriAutocomplete implements AfterContentInit {
   /** @docs-private */
   @ContentChildren(OptionGroupComponent) optionGroups: QueryList<OptionGroupComponent>;
   /** Function that maps an option's control value to its display value in the trigger. */
-  @Input() displayWith: ((value: any) => string) | null                         = null;
+  @Input() displayWith: ((value: any) => string) | null = null;
   /**
    * Specify the width of the autocomplete panel.  Can be any CSS sizing value, otherwise it will
    * match the width of its host.
@@ -101,11 +101,11 @@ export class TriAutocomplete implements AfterContentInit {
   @Output() readonly optionSelected: EventEmitter<TriAutocompleteSelectedEvent> =
     new EventEmitter<TriAutocompleteSelectedEvent>();
   /** Event that is emitted when the autocomplete panel is opened. */
-  @Output() readonly opened: EventEmitter<void>                                 = new EventEmitter<void>();
+  @Output() readonly opened: EventEmitter<void> = new EventEmitter<void>();
   /** Event that is emitted when the autocomplete panel is closed. */
-  @Output() readonly closed: EventEmitter<void>                                 = new EventEmitter<void>();
+  @Output() readonly closed: EventEmitter<void> = new EventEmitter<void>();
   /** Unique ID to be used by autocomplete trigger's "aria-owns" property. */
-  id: string                                                                    = `tri-autocomplete-${_uniqueAutocompleteIdCounter++}`;
+  id: string = `tri-autocomplete-${_uniqueAutocompleteIdCounter++}`;
 
   constructor(
     private _changeDetectorRef: ChangeDetectorRef,
@@ -195,7 +195,7 @@ export class TriAutocomplete implements AfterContentInit {
   /** Sets the autocomplete visibility classes on a classlist based on the panel is visible. */
   private _setVisibilityClasses(classList: { [key: string]: boolean }) {
     classList['tri-autocomplete-visible'] = this.showPanel;
-    classList['tri-autocomplete-hidden']  = !this.showPanel;
+    classList['tri-autocomplete-hidden'] = !this.showPanel;
   }
 }
 

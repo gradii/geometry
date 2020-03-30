@@ -20,10 +20,10 @@ import { SubMenuComponent } from './submenu.component';
 export type Mode = 'vertical' | 'horizontal' | 'inline';
 
 @Component({
-  selector           : '[tri-menu]',
+  selector: '[tri-menu]',
   preserveWhitespaces: false,
-  encapsulation      : ViewEncapsulation.None,
-  template           : `
+  encapsulation: ViewEncapsulation.None,
+  template: `
     <ng-content></ng-content>`,
   styleUrls: [`../style/menu.css`]
 })

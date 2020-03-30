@@ -13,4 +13,5 @@ import { SafeUrlPipe } from './pipe/safe-url.pipe';
   declarations: [DatePipe, SafeUrlPipe],
   exports     : [DatePipe, SafeUrlPipe]
 })
-export class TriUtilModule {}
+export class TriUtilModule {
+}

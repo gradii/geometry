@@ -44,4 +44,5 @@ import { StepsComponent } from './steps.component';
   declarations: [StepsComponent, StepComponent],
   providers   : [StepConnectService]
 })
-export class TriStepsModule {}
+export class TriStepsModule {
+}

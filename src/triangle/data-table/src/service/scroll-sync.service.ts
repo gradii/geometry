@@ -22,7 +22,8 @@ export class ScrollSyncService {
     this.ngZone = ngZone;
     this.changes = new Subject();
     this.elements = [];
-    this.subscriptions = new Subscription(() => {});
+    this.subscriptions = new Subscription(() => {
+    });
     this.subscriptions.add(this.changes.subscribe(x => _this.scrollLeft(x)));
   }
 

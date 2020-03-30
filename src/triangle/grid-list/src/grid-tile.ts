@@ -5,21 +5,21 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { coerceNumberProperty, NumberInput } from '@angular/cdk/coercion';
 import {
+  AfterContentInit,
+  ChangeDetectionStrategy,
   Component,
-  ViewEncapsulation,
+  ContentChildren,
+  Directive,
   ElementRef,
+  Inject,
   Input,
   Optional,
-  ContentChildren,
   QueryList,
-  AfterContentInit,
-  Directive,
-  ChangeDetectionStrategy,
-  Inject,
+  ViewEncapsulation,
 } from '@angular/core';
-import { TriLine, setLines } from '@gradii/triangle/core';
-import { coerceNumberProperty, NumberInput } from '@angular/cdk/coercion';
+import { setLines, TriLine } from '@gradii/triangle/core';
 import { TRI_GRID_LIST, TriGridListBase } from './grid-list-base';
 
 @Component({
@@ -38,13 +38,15 @@ import { TRI_GRID_LIST, TriGridListBase } from './grid-list-base';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TriGridTile {
-  _rowspan: number = 1;
-  _colspan: number = 1;
+  static ngAcceptInputType_rowspan: NumberInput;
+  static ngAcceptInputType_colspan: NumberInput;
 
   constructor(
     private _element: ElementRef<HTMLElement>,
     @Optional() @Inject(TRI_GRID_LIST) public _gridList?: TriGridListBase) {
   }
+
+  _rowspan: number = 1;
 
   /** Amount of rows that the grid tile takes up. */
   @Input()
@@ -55,6 +57,8 @@ export class TriGridTile {
   set rowspan(value: number) {
     this._rowspan = Math.round(coerceNumberProperty(value));
   }
+
+  _colspan: number = 1;
 
   /** Amount of columns that the grid tile takes up. */
   @Input()
@@ -73,9 +77,6 @@ export class TriGridTile {
   _setStyle(property: string, value: any): void {
     (this._element.nativeElement.style as any)[property] = value;
   }
-
-  static ngAcceptInputType_rowspan: NumberInput;
-  static ngAcceptInputType_colspan: NumberInput;
 }
 
 @Component({

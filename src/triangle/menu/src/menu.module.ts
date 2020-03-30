@@ -44,4 +44,5 @@ import { SubMenuComponent } from './submenu.component';
   declarations: [MenuComponent, MenuItemComponent, SubMenuComponent, MenuDividerComponent, MenuGroupComponent],
   exports     : [MenuComponent, MenuItemComponent, SubMenuComponent, MenuDividerComponent, MenuGroupComponent]
 })
-export class TriMenuModule {}
+export class TriMenuModule {
+}

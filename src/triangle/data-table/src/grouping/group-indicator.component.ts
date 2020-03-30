@@ -38,7 +38,8 @@ export class GroupIndicatorComponent {
 
   @Input() group: GroupDescriptor;
 
-  constructor(public groupInfoService: GroupInfoService) { }
+  constructor(public groupInfoService: GroupInfoService) {
+  }
 
   @HostBinding('class.k-group-indicator')
   get groupIndicatorClass(): boolean {

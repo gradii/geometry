@@ -32,10 +32,10 @@ import {
 import { EmptyService } from './empty.service';
 
 @Component({
-  selector       : 'tri-embed-empty',
+  selector: 'tri-embed-empty',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation  : ViewEncapsulation.None,
-  templateUrl    : './embed-empty.component.html'
+  encapsulation: ViewEncapsulation.None,
+  templateUrl: './embed-empty.component.html'
 })
 export class EmbedEmptyComponent implements OnChanges, OnInit, OnDestroy {
   @Input() componentName: string;
@@ -54,7 +54,8 @@ export class EmbedEmptyComponent implements OnChanges, OnInit, OnDestroy {
     private viewContainerRef: ViewContainerRef,
     private cdr: ChangeDetectorRef,
     private injector: Injector
-  ) {}
+  ) {
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.componentName) {

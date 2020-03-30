@@ -326,7 +326,8 @@ export class EmptyTestServiceComponent {
 
   noResult?: string | null;
 
-  constructor(public emptyService: EmptyService) {}
+  constructor(public emptyService: EmptyService) {
+  }
 
   reset(): void {
     this.emptyService.resetDefault();
@@ -344,25 +345,28 @@ export class EmptyTestServiceComponent {
   `
 })
 export class EmptyTestCustomComponent {
-  constructor(@Inject(EMPTY_COMPONENT_NAME) public name: string) {}
+  constructor(@Inject(EMPTY_COMPONENT_NAME) public name: string) {
+  }
 }
 
 @NgModule({
-  imports        : [CommonModule, TriEmptyModule, TriListModule],
-  declarations   : [EmptyTestServiceComponent, EmptyTestCustomComponent],
-  exports        : [EmptyTestServiceComponent, EmptyTestCustomComponent]
+  imports     : [CommonModule, TriEmptyModule, TriListModule],
+  declarations: [EmptyTestServiceComponent, EmptyTestCustomComponent],
+  exports     : [EmptyTestServiceComponent, EmptyTestCustomComponent]
 })
-export class EmptyTestServiceModule {}
+export class EmptyTestServiceModule {
+}
 
 @NgModule({
-  imports        : [CommonModule, TriEmptyModule, TriListModule],
-  declarations   : [EmptyTestServiceComponent, EmptyTestCustomComponent],
-  exports        : [EmptyTestServiceComponent, EmptyTestCustomComponent],
-  providers      : [
+  imports     : [CommonModule, TriEmptyModule, TriListModule],
+  declarations: [EmptyTestServiceComponent, EmptyTestCustomComponent],
+  exports     : [EmptyTestServiceComponent, EmptyTestCustomComponent],
+  providers   : [
     {
       provide : DEFAULT_EMPTY_CONTENT,
       useValue: EmptyTestCustomComponent
     }
   ]
 })
-export class EmptyTestInjectionModule {}
+export class EmptyTestInjectionModule {
+}

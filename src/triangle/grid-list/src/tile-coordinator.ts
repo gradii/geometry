@@ -42,6 +42,8 @@ export class TileCoordinator {
 
   /** The current row index. */
   rowIndex: number = 0;
+  /** The computed (row, col) position of each tile (the output). */
+  positions: TilePosition[];
 
   /** Gets the total number of rows occupied by tiles */
   get rowCount(): number {
@@ -58,9 +60,6 @@ export class TileCoordinator {
     // add the difference to the rowcount
     return lastRowMax > 1 ? this.rowCount + lastRowMax - 1 : this.rowCount;
   }
-
-  /** The computed (row, col) position of each tile (the output). */
-  positions: TilePosition[];
 
   /**
    * Updates the tile positions.

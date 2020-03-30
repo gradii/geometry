@@ -26,30 +26,31 @@ import {
     ])
   ],
   template     : `
-      <ng-template *ngIf="content" [ngTemplateOutlet]="content"></ng-template>
-      <span class="tri-badge-status-dot tri-badge-status-{{status}}" *ngIf="status"></span>
-      <span class="tri-badge-status-text" *ngIf="badgeText">{{badgeText}}</span>
-      <sup [@enterLeave]
-           [ngStyle]="badgeStyle"
-           *ngIf="(isDot)||(count>0)||((count==0)&&showZero)"
-           data-show="true"
-           class="tri-scroll-number"
-           [class.tri-badge-count]="!isDot"
-           [class.tri-badge-dot]="isDot">
-          <ng-template ngFor
-                       [ngForOf]="maxNumberArray"
-                       let-number
-                       let-i="index">
+    <ng-template *ngIf="content" [ngTemplateOutlet]="content"></ng-template>
+    <span class="tri-badge-status-dot tri-badge-status-{{status}}" *ngIf="status"></span>
+    <span class="tri-badge-status-text" *ngIf="badgeText">{{badgeText}}</span>
+    <sup [@enterLeave]
+         [ngStyle]="badgeStyle"
+         *ngIf="(isDot)||(count>0)||((count==0)&&showZero)"
+         data-show="true"
+         class="tri-scroll-number"
+         [class.tri-badge-count]="!isDot"
+         [class.tri-badge-dot]="isDot">
+      <ng-template ngFor
+                   [ngForOf]="maxNumberArray"
+                   let-number
+                   let-i="index">
         <span *ngIf="count <= overflowCount"
               class="tri-scroll-number-only"
               [style.transform]="'translateY('+((-countArray[i]*100))+'%)'">
         <ng-template [ngIf]="(!isDot)&&(countArray[i]!=null)">
-          <p *ngFor="let p of countSingleArray" [class.current]="p==countArray[i]">{{p}}</p>
+          <p *ngFor="let p of countSingleArray"
+             [class.current]="p==countArray[i]">{{p}}</p>
         </ng-template>
         </span>
-          </ng-template>
-          <ng-template [ngIf]="count > overflowCount">{{overflowCount}}+</ng-template>
-      </sup>
+      </ng-template>
+      <ng-template [ngIf]="count > overflowCount">{{overflowCount}}+</ng-template>
+    </sup>
   `,
   styleUrls    : ['../style/badge.css']
 })
@@ -87,7 +88,8 @@ export class BadgeComponent implements OnInit {
   @HostBinding('class.tri-badge-status')
   status: string;
 
-  constructor() {}
+  constructor() {
+  }
 
   _showZero = false;
 

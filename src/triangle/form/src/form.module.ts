@@ -115,4 +115,5 @@ import { FormDirective } from './form.directive';
   imports     : [CommonModule],
   providers   : []
 })
-export class TriFormModule {}
+export class TriFormModule {
+}

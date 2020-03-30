@@ -29,11 +29,11 @@ import { DescListItemComponent } from './desc-list-item.component';
     </div>
   `,
   host    : {
-    '[class.tri-desc-list]'           : 'true',
+    '[class.tri-desc-list]': 'true',
     '[class.tri-desc-list-horizontal]': 'layout === "horizontal"',
-    '[class.tri-desc-list-vertical]'  : 'layout === "vertical"',
-    '[class.tri-desc-list-small]'     : 'size === "small"',
-    '[class.tri-desc-list-large]'     : 'size === "large"',
+    '[class.tri-desc-list-vertical]': 'layout === "vertical"',
+    '[class.tri-desc-list-small]': 'size === "small"',
+    '[class.tri-desc-list-large]': 'size === "large"',
   }
 })
 export class DescListComponent {

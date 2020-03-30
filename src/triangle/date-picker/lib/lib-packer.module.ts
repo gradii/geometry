@@ -74,4 +74,5 @@ import { YearPanelComponent } from './year/year-panel.component';
     DateRangePopupComponent
   ]
 })
-export class LibPackerModule {}
+export class LibPackerModule {
+}

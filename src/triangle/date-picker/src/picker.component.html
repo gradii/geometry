@@ -4,17 +4,17 @@
   <!-- Content of single picker -->
   <ng-container *ngIf="!isRange">
     <input
-        #pickerInput
-        (click)="onClickInputBox()"
-        [class.tri-input-disabled]="disabled"
-        [class.tri-input-lg]="size === 'large'"
-        [class.tri-input-sm]="size === 'small'"
-        [disabled]="disabled"
+      #pickerInput
+      (click)="onClickInputBox()"
+      [class.tri-input-disabled]="disabled"
+      [class.tri-input-lg]="size === 'large'"
+      [class.tri-input-sm]="size === 'small'"
+      [disabled]="disabled"
 
-        class="{{ prefixCls }}-picker-input tri-input"
-        placeholder="{{ getPlaceholder() }}"
-        readonly
-        value="{{ getReadableValue() }}"
+      class="{{ prefixCls }}-picker-input tri-input"
+      placeholder="{{ getPlaceholder() }}"
+      readonly
+      value="{{ getReadableValue() }}"
     />
     <ng-container *ngTemplateOutlet="tplRightRest"></ng-container>
   </ng-container>
@@ -22,12 +22,12 @@
   <!-- Content of range picker -->
   <ng-container *ngIf="isRange">
     <span
-        #pickerInput
-        (click)="onClickInputBox()"
-        [class.tri-input-disabled]="disabled"
-        [class.tri-input-lg]="size === 'large'"
-        [class.tri-input-sm]="size === 'small'"
-        class="{{ prefixCls }}-picker-input tri-input"
+      #pickerInput
+      (click)="onClickInputBox()"
+      [class.tri-input-disabled]="disabled"
+      [class.tri-input-lg]="size === 'large'"
+      [class.tri-input-sm]="size === 'small'"
+      class="{{ prefixCls }}-picker-input tri-input"
     >
       <ng-container *ngTemplateOutlet="tplRangeInput; context: { partType: 'left' }"></ng-container>
       <span class="{{ prefixCls }}-range-picker-separator"> ~ </span>
