@@ -49,9 +49,6 @@ $collapse-active-bg  : $background-color-active;
         transition     : transform 0.24s;
         top            : 0;
         left           : 16px;
-        @at-root &:before {
-          content : "\E61F";
-        }
       }
     }
   }

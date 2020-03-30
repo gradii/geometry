@@ -5,19 +5,11 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
 
 .#{$pagination-prefix-cls} {
   font-size : $font-size-base;
+  @include clearfix();
   @include user-select(none);
+
   margin    : 0;
   padding   : 0;
-
-
-  @at-root &:after {
-    content    : " ";
-    display    : block;
-    height     : 0;
-    clear      : both;
-    overflow   : hidden;
-    visibility : hidden;
-  }
 
   @at-root &-total-text {
     display        : inline-block;
@@ -89,34 +81,6 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
       color          : $disabled-color;
       text-align     : center;
     }
-
-    @at-root &:focus,
-    &:hover {
-      @at-root &:after {
-        color          : $primary-color;
-        @include iconfont-size-under-12px(8px);
-        letter-spacing : -1px;
-        font-family    : "anticon";
-      }
-    }
-  }
-
-  @at-root &-jump-prev {
-    @at-root &:focus,
-    &:hover {
-      @at-root &:after {
-        content : "\e620\e620";
-      }
-    }
-  }
-
-  @at-root &-jump-next {
-    @at-root &:focus,
-    &:hover {
-      @at-root &:after {
-        content : "\e61f\e61f";
-      }
-    }
   }
 
   @at-root &-prev,
@@ -168,24 +132,6 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
       border-color : $primary-color;
       a {
         color : $primary-color;
-      }
-    }
-  }
-
-  @at-root &-prev {
-    a {
-      @at-root &:after {
-        content : "\e620";
-        display : block;
-      }
-    }
-  }
-
-  @at-root &-next {
-    a {
-      @at-root &:after {
-        content : "\e61f";
-        display : block;
       }
     }
   }
@@ -285,13 +231,6 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
     height      : 20px;
     line-height : 20px;
     border      : 0;
-
-    a {
-      @at-root &:after {
-        height      : 20px;
-        line-height : 20px;
-      }
-    }
   }
 
   @at-root &.mini #{&}-jump-prev,

@@ -12,8 +12,11 @@ import { CollapsesetComponent } from './collapseset.component';
 @Component({
   selector  : 'tri-collapse',
   template  : `
-    <div class="tri-collapse-header" [attr.aria-expanded]="_active" (click)="clickHeader($event)" role="tab">
-      <i class="arrow"></i>
+    <div class="tri-collapse-header" [attr.aria-expanded]="_active" (click)="clickHeader($event)"
+         role="tab">
+      <i class="arrow">
+        <tri-icon svgIcon="outline:right"></tri-icon>
+      </i>
       <ng-template [ngIf]="title">
         {{ title }}
       </ng-template>
@@ -46,10 +49,16 @@ import { CollapsesetComponent } from './collapseset.component';
       transition('inactive => active', animate('150ms ease-in')),
       transition('active => inactive', animate('150ms ease-out'))
     ])
-  ]
+  ],
+  styles    : [`
+                 tri-collapse {
+                   display: block;
+                 }
+               `]
 })
 export class CollapseComponent {
-  _el;
+  private _el;
+
   @HostBinding('class.tri-collapse-item') _collapseItem = true;
   /**
    * The title of collapse

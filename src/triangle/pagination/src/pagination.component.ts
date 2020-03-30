@@ -28,7 +28,9 @@ import { PageChangeEvent } from './event/page-change.event';
         class="tri-pagination-prev"
         (click)="_jumpRelative(-1)"
         [class.tri-pagination-disabled]="_isFirstIndex">
-        <a></a>
+        <a>
+          <tri-icon svgIcon="outline:left"></tri-icon>
+        </a>
       </li>
       <li [attr.title]="pageIndex+'/'+_lastIndex" class="tri-pagination-simple-pager">
         <input [ngModel]="pageIndex" (ngModelChange)="_pageIndexChange($event)" size="3">
@@ -40,7 +42,9 @@ import { PageChangeEvent } from './event/page-change.event';
         class="tri-pagination-next"
         (click)="_jumpRelative(+1)"
         [class.tri-pagination-disabled]="_isLastIndex">
-        <a></a>
+        <a>
+          <tri-icon svgIcon="outline:right"></tri-icon>
+        </a>
       </li>
     </ul>
     <ul *ngIf="!simple" class="tri-pagination" [class.mini]="size=='small'">
@@ -50,7 +54,9 @@ import { PageChangeEvent } from './event/page-change.event';
         class="tri-pagination-prev"
         (click)="_jumpRelative(-1)"
         [class.tri-pagination-disabled]="_isFirstIndex">
-        <a></a>
+        <a>
+          <tri-icon svgIcon="outline:left"></tri-icon>
+        </a>
       </li>
       <li
         [attr.title]="_firstIndex"
@@ -94,7 +100,9 @@ import { PageChangeEvent } from './event/page-change.event';
         class="tri-pagination-next"
         (click)="_jumpPage(pageIndex+1)"
         [class.tri-pagination-disabled]="_isLastIndex">
-        <a></a>
+        <a>
+          <tri-icon svgIcon="outline:right"></tri-icon>
+        </a>
       </li>
       <div class="tri-pagination-options">
         <tri-select
@@ -137,7 +145,7 @@ export class PaginationComponent {
   @Input() size: string;
   @Output() pageChange: EventEmitter<PageChangeEvent> = new EventEmitter();
 
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor(private _cdr: ChangeDetectorRef) {
   }
 
   _total: number = Infinity;
@@ -161,7 +169,7 @@ export class PaginationComponent {
       return;
     }
     this._total = value;
-    this.cdr.markForCheck();
+    this._cdr.markForCheck();
   }
 
   _showSizeChanger = false;
@@ -267,7 +275,7 @@ export class PaginationComponent {
       this._pageIndex = value;
 
       this._buildOffset();
-      this.cdr.markForCheck();
+      this._cdr.markForCheck();
     }
   }
 
@@ -293,7 +301,7 @@ export class PaginationComponent {
       this._pageSize = value;
       this._buildPageIndex(); // auto change page index
       // esle this._buildOffset();
-      this.cdr.markForCheck();
+      this._cdr.markForCheck();
     }
   }
 

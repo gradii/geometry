@@ -93,7 +93,7 @@ $tri-menu-icon-margin       : 16px !default;
 }
 
 @mixin tri-menu-item-ripple() {
-  @include tri-fill;
+  @include tri-fill();
 
   // Prevent any pointer events on the ripple container for a menu item. The ripple container is
   // not the trigger element for the ripples and can be therefore disabled like that. Disabling

@@ -16,6 +16,10 @@ $tri-icon-size : 1em !default;
     line-height : inherit;
     width       : inherit;
   }
+
+  > svg {
+    vertical-align : text-bottom;
+  }
 }
 
 // Icons that will be mirrored in RTL.

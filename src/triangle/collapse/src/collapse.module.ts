@@ -7,10 +7,9 @@
 
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { TriIconModule } from '@gradii/triangle/icon';
 import { CollapseComponent } from './collapse.component';
 import { CollapsesetComponent } from './collapseset.component';
-
-export const NZ_COLLAPSE_DIRECTIVES: Array<any> = [CollapsesetComponent, CollapseComponent];
 
 /**
  *
@@ -35,9 +34,9 @@ export const NZ_COLLAPSE_DIRECTIVES: Array<any> = [CollapsesetComponent, Collaps
  * <!-- example(tri-demo-collapse-custom) -->
  */
 @NgModule({
-  declarations: NZ_COLLAPSE_DIRECTIVES,
-  exports     : NZ_COLLAPSE_DIRECTIVES,
-  imports     : [CommonModule]
+  imports: [CommonModule, TriIconModule],
+  declarations: [CollapsesetComponent, CollapseComponent],
+  exports     : [CollapsesetComponent, CollapseComponent],
 })
 export class TriCollapseModule {
 }

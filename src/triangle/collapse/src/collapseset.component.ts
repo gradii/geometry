@@ -5,17 +5,19 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { CollapseComponent } from './collapse.component';
 
 @Component({
-  selector     : 'tri-collapseset',
-  encapsulation: ViewEncapsulation.None,
-  template     : `
+  selector       : 'tri-collapseset',
+  encapsulation  : ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Default,
+  template       : `
     <div class="tri-collapse" [class.tri-collapse-borderless]="!bordered">
       <ng-content></ng-content>
     </div>
-  `
+  `,
+  styleUrls: [`../style/collapse.css`]
 })
 export class CollapsesetComponent {
   /**
