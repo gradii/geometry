@@ -70,6 +70,7 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
     width            : 100%;
     text-align       : left;
     outline          : 0;
+    box-sizing       : border-box;
     height           : $input-height-base - 2px/$root-font-size; //fix for rem calculate missing 1px
     transition       : all 0.3s linear;
     color            : $input-color;

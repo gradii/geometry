@@ -35,6 +35,7 @@ const sharpMatcherRegx = /#([^#]+)$/;
 @Component({
   selector           : 'tri-anchor',
   preserveWhitespaces: false,
+  changeDetection    : ChangeDetectionStrategy.OnPush,
   template           : `
     <tri-affix *ngIf="affix;else content" [offsetTop]="offsetTop">
       <ng-template [ngTemplateOutlet]="content"></ng-template>
@@ -50,7 +51,7 @@ const sharpMatcherRegx = /#([^#]+)$/;
       </div>
     </ng-template>
   `,
-  changeDetection    : ChangeDetectionStrategy.OnPush
+  styleUrls          : [`../style/anchor.scss`]
 })
 export class AnchorComponent implements AfterViewInit, OnDestroy {
   scroll$: Subscription = null;
