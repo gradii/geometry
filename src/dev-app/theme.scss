@@ -1,0 +1,14 @@
+@import '../triangle/core/themes/all-theme';
+
+* {
+  box-sizing: border-box;
+}
+
+@include tri-core();
+
+// Define the default theme (same as the example above).
+$candy-app-primary: tri-palette($tri-indigo);
+$candy-app-accent: tri-palette($tri-pink, A200, A100, A400);
+$candy-app-theme: tri-light-theme($candy-app-primary, $candy-app-accent);
+
+@include gradii-triangle-theme($candy-app-theme);

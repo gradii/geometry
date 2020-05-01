@@ -9,10 +9,7 @@
 // identifiers of the format "$NAME_TMPL" will be replaced by the Bazel rule that
 // converts this template file into the actual SystemJS configuration file.
 
-var CDK_PACKAGES = $CDK_ENTRYPOINTS_TMPL;
-var CDK_EXPERIMENTAL_PACKAGES = $CDK_EXPERIMENTAL_ENTRYPOINTS_TMPL;
-var MATERIAL_PACKAGES = $MATERIAL_ENTRYPOINTS_TMPL;
-var MATERIAL_EXPERIMENTAL_PACKAGES = $MATERIAL_EXPERIMENTAL_ENTRYPOINTS_TMPL;
+var TRIANGLE_PACKAGES = $TRIANGLE_ENTRYPOINTS_TMPL;
 
 /** Map of Angular framework packages and their bundle names. */
 var frameworkPackages = $ANGULAR_PACKAGE_BUNDLES;
@@ -30,40 +27,11 @@ var nodeModulesPath = '$NODE_MODULES_BASE_PATH';
 var pathMapping = {
   'tslib': 'node:tslib/tslib.js',
   'moment': 'node:moment/min/moment-with-locales.min.js',
+  'date-fns': 'date-fns_bundle.umd.js',
 
   'rxjs': 'node:rxjs/bundles/rxjs.umd.min.js',
   'rxjs/operators': 'tools/system-rxjs-operators.js',
 
-  // MDC Web
-  '@material/animation': 'node:@material/animation/dist/mdc.animation.js',
-  '@material/auto-init': 'node:@material/auto-init/dist/mdc.autoInit.js',
-  '@material/base': 'node:@material/base/dist/mdc.base.js',
-  '@material/checkbox': 'node:@material/checkbox/dist/mdc.checkbox.js',
-  '@material/chips': 'node:@material/chips/dist/mdc.chips.js',
-  '@material/dialog': 'node:@material/dialog/dist/mdc.dialog.js',
-  '@material/dom': 'node:@material/dom/dist/mdc.dom.js',
-  '@material/drawer': 'node:@material/drawer/dist/mdc.drawer.js',
-  '@material/floating-label': 'node:@material/floating-label/dist/mdc.floatingLabel.js',
-  '@material/form-field': 'node:@material/form-field/dist/mdc.formField.js',
-  '@material/icon-button': 'node:@material/icon-button/dist/mdc.iconButton.js',
-  '@material/line-ripple': 'node:@material/line-ripple/dist/mdc.lineRipple.js',
-  '@material/linear-progress': 'node:@material/linear-progress/dist/mdc.linearProgress.js',
-  '@material/list': 'node:@material/list/dist/mdc.list.js',
-  '@material/menu': 'node:@material/menu/dist/mdc.menu.js',
-  '@material/menu-surface': 'node:@material/menu-surface/dist/mdc.menuSurface.js',
-  '@material/notched-outline': 'node:@material/notched-outline/dist/mdc.notchedOutline.js',
-  '@material/radio': 'node:@material/radio/dist/mdc.radio.js',
-  '@material/ripple': 'node:@material/ripple/dist/mdc.ripple.js',
-  '@material/select': 'node:@material/select/dist/mdc.select.js',
-  '@material/slider': 'node:@material/slider/dist/mdc.slider.js',
-  '@material/snackbar': 'node:@material/snackbar/dist/mdc.snackbar.js',
-  '@material/switch': 'node:@material/switch/dist/mdc.switch.js',
-  '@material/tab': 'node:@material/tab/dist/mdc.tab.js',
-  '@material/tab-bar': 'node:@material/tab-bar/dist/mdc.tabBar.js',
-  '@material/tab-indicator': 'node:@material/tab-indicator/dist/mdc.tabIndicator.js',
-  '@material/tab-scroller': 'node:@material/tab-scroller/dist/mdc.tabScroller.js',
-  '@material/textfield': 'node:@material/textfield/dist/mdc.textfield.js',
-  '@material/top-app-bar': 'node:@material/top-app-bar/dist/mdc.topAppBar.js'
 };
 
 /** Package configurations that will be used in SystemJS. */
@@ -72,13 +40,6 @@ var packagesConfig = {
   // without explicit extension. This is common in CommonJS.
   '.': {defaultExtension: 'js'},
 };
-
-// Manual directories that need to be configured too. These directories are not
-// public entry-points, but they are imported in source files as if they were. In order
-// to ensure that the directory imports properly resolve to the "index.js" files within
-// SystemJS, we configure them similar to actual package entry-points.
-CDK_PACKAGES.push('testing/private', 'testing/testbed/fake-events');
-MATERIAL_PACKAGES.push('testing');
 
 // Configure framework packages.
 setupFrameworkPackages();
@@ -123,7 +84,10 @@ function setupFrameworkPackages() {
       // These are stored in the `__ivy_ngcc_` folder that has been generated
       // since we run ngcc with `--create-ivy-entry-points`. Filter out the compiler
       // package because it won't be processed by ngcc.
-      if (isRunningWithIvy && entryPointName !== '@angular/compiler') {
+      if (isRunningWithIvy &&
+        entryPointName !== '@angular/compiler' &&
+        entryPointName !== '@angular/cdk/coercion'
+      ) {
         bundlePath = '__ivy_ngcc__/' + bundlePath;
       }
       packagesConfig[entryPointName] = {
@@ -141,31 +105,15 @@ function setupFrameworkPackages() {
 /** Configures the local release packages in SystemJS */
 function setupLocalReleasePackages() {
   // Configure all primary entry-points.
-  configureEntryPoint('cdk');
-  configureEntryPoint('cdk-experimental');
-  configureEntryPoint('components-examples');
-  configureEntryPoint('material');
-  configureEntryPoint('material-experimental');
-  configureEntryPoint('material-moment-adapter');
-  configureEntryPoint('google-maps');
-  configureEntryPoint('youtube-player');
+  configureEntryPoint('triangle');
 
   // Configure all secondary entry-points.
-  CDK_PACKAGES.forEach(function(pkgName) {
-    configureEntryPoint('cdk', pkgName);
-  });
-  CDK_EXPERIMENTAL_PACKAGES.forEach(function(pkgName) {
-    configureEntryPoint('cdk-experimental', pkgName);
-  });
-  MATERIAL_EXPERIMENTAL_PACKAGES.forEach(function(pkgName) {
-    configureEntryPoint('material-experimental', pkgName);
-  });
-  MATERIAL_PACKAGES.forEach(function(pkgName) {
-    configureEntryPoint('material', pkgName);
+  TRIANGLE_PACKAGES.forEach(function(pkgName) {
+    configureEntryPoint('triangle', pkgName);
   });
 
   // Private secondary entry-points.
-  configureEntryPoint('components-examples', 'private');
+  // configureEntryPoint('components-examples', 'private');
 }
 
 /** Configures the specified package, its entry-point and its examples. */
@@ -173,8 +121,8 @@ function configureEntryPoint(pkgName, entryPoint) {
   var name = entryPoint ? pkgName + '/' + entryPoint : pkgName;
   var examplesName = 'components-examples/' + name;
 
-  pathMapping['@angular/' + name] = packagesPath + '/' + name;
-  pathMapping['@angular/' + examplesName] = packagesPath + '/' + examplesName;
+  pathMapping['@gradii/' + name] = packagesPath + '/' + name;
+  pathMapping['@gradii/' + examplesName] = packagesPath + '/' + examplesName;
 
   // Ensure that imports which resolve to the entry-point directory are
   // redirected to the "index.js" file of the directory.

@@ -27,13 +27,40 @@ ANGULAR_NGCC_BUNDLES = [
     ("@angular/router", ["router.umd.js"]),
 ]
 
+ANGULAR_CDK_BUNDLES = [("@angular/cdk",
+    [
+        "cdk-a11y.umd.js",
+        "cdk-accordion.umd.js",
+        "cdk-bidi.umd.js",
+        "cdk-clipboard.umd.js",
+        "cdk-coercion.umd.js",
+        "cdk-collections.umd.js",
+        "cdk-drag-drop.umd.js",
+        "cdk-keycodes.umd.js",
+        "cdk-layout.umd.js",
+        "cdk-observers.umd.js",
+        "cdk-overlay.umd.js",
+        "cdk-platform.umd.js",
+        "cdk-portal.umd.js",
+        "cdk-scrolling.umd.js",
+        "cdk-stepper.umd.js",
+        "cdk-table.umd.js",
+        "cdk-text-field.umd.js",
+        "cdk-tree.umd.js",
+        "cdk-testing.umd.js",
+        "cdk-testing/protractor.umd.js",
+        "cdk-testing/testbed.umd.js",
+    ]),
+
+]
+
 """
   Gets a dictionary of all packages and their bundle names.
 """
 
 def getFrameworkPackageBundles():
     res = {}
-    for pkgName, bundleNames in ANGULAR_NGCC_BUNDLES + ANGULAR_NO_NGCC_BUNDLES:
+    for pkgName, bundleNames in ANGULAR_NGCC_BUNDLES + ANGULAR_NO_NGCC_BUNDLES + ANGULAR_CDK_BUNDLES:
         res[pkgName] = res.get(pkgName, []) + bundleNames
     return res
 

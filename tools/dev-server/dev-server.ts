@@ -21,18 +21,21 @@ export class DevServer {
 
   /** Options of the browser-sync server. */
   options: browserSync.Options = {
-    open: false,
-    online: false,
-    port: this.port,
-    notify: false,
+    open     : false,
+    online   : false,
+    port     : this.port,
+    notify   : false,
     ghostMode: false,
-    server: false,
-    middleware: (req, res) => this._bazelMiddleware(req, res),
+    server   : {
+      directory : false,
+      middleware: [(req, res) => this._bazelMiddleware(req, res)],
+    },
   };
 
   constructor(
-      readonly port: number, private _rootPaths: string[],
-      private _historyApiFallback: boolean = false) {}
+    readonly port: number, private _rootPaths: string[],
+    private _historyApiFallback: boolean = false) {
+  }
 
   /** Starts the server on the given port. */
   async start() {
@@ -70,6 +73,7 @@ export class DevServer {
       if (!absoluteJoinedPath.startsWith(absoluteRootPath)) {
         res.statusCode = 500;
         res.end('Error: Detected directory traversal');
+        return;
       }
     }
 
@@ -77,7 +81,7 @@ export class DevServer {
     // "connect-history-api-fallback" package. See the conditions for a request being redirected
     // to the index: https://github.com/bripkens/connect-history-api-fallback#introduction
     if (this._historyApiFallback && req.method === 'GET' && !req.url.includes('.') &&
-        req.headers.accept && req.headers.accept.includes('text/html')) {
+      req.headers.accept && req.headers.accept.includes('text/html')) {
       req.url = '/index.html';
     }
 
@@ -93,7 +97,7 @@ export class DevServer {
   }
 
   /** Resolves a given URL from the runfiles using the corresponding manifest path. */
-  private _resolveUrlFromRunfiles(url: string): string|null {
+  private _resolveUrlFromRunfiles(url: string): string | null {
     for (let rootPath of this._rootPaths) {
       try {
         return require.resolve(path.posix.join(rootPath, getManifestPath(url)));

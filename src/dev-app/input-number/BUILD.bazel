@@ -1,0 +1,22 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "input-number",
+    srcs = glob(["**/*.ts"]),
+    assets = [
+        "dev-input-number.html",
+        ":dev_input_number_scss",
+    ],
+    deps = [
+        "//src/triangle/input-number",
+        "@npm//@angular/forms",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_input_number_scss",
+    src = "dev-input-number.scss",
+)
