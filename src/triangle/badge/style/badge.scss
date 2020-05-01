@@ -16,8 +16,6 @@ $number-prefix-cls : "#{$ant-prefix}-scroll-number";
     height           : $badge-height;
     border-radius    : $badge-height / 2;
     min-width        : $badge-height;
-    background       : $highlight-color;
-    color            : #fff;
     line-height      : $badge-height;
     text-align       : center;
     padding          : 0 6px;
@@ -25,10 +23,6 @@ $number-prefix-cls : "#{$ant-prefix}-scroll-number";
     white-space      : nowrap;
     transform-origin : -10% center;
     font-family      : tahoma;
-    a,
-    a:hover {
-      color : #fff;
-    }
   }
 
   @at-root &-dot {
@@ -39,9 +33,7 @@ $number-prefix-cls : "#{$ant-prefix}-scroll-number";
     height           : $badge-dot-size;
     width            : $badge-dot-size;
     border-radius    : 100%;
-    background       : $highlight-color;
     z-index          : 10;
-    box-shadow       : 0 0 0 1px #fff;
   }
 
   @at-root &-status {
@@ -55,10 +47,8 @@ $number-prefix-cls : "#{$ant-prefix}-scroll-number";
       border-radius : 50%;
     }
     @at-root &-success {
-      background-color : $success-color;
     }
     @at-root &-processing {
-      background-color : $primary-color;
       position         : relative;
       @at-root &:after {
         position      : absolute;
@@ -73,16 +63,12 @@ $number-prefix-cls : "#{$ant-prefix}-scroll-number";
       }
     }
     @at-root &-default {
-      background-color : $normal-color;
     }
     @at-root &-error {
-      background-color : $error-color;
     }
     @at-root &-warning {
-      background-color : $warning-color;
     }
     @at-root &-text {
-      color       : $text-color;
       font-size   : $badge-font-size;
       margin-left : 8px;
     }

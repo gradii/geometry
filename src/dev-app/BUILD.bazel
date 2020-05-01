@@ -15,20 +15,20 @@ ng_module(
         "main-module.ts",
     ],
     deps = [
-        "@npm//@angular/cdk",
         "//src/dev-app/dev-app",
         "//src/dev-app/input-number",
-        "@npm//date-fns",
+        "@npm//@angular/cdk",
         "@npm//@angular/router",
+        "@npm//date-fns",
     ],
 )
 
 rollup_bundle(
     name = "date-fns_bundle.umd",
-    srcs = [ "@npm//date-fns" ],
+    srcs = ["@npm//date-fns"],
+    config_file = ":rollup.config.js",
     entry_point = "@npm//:node_modules/date-fns/esm/index.js",
     format = "umd",
-    config_file = ":rollup.config.js",
 )
 
 sass_binary(
@@ -47,7 +47,6 @@ create_system_config(
     output_name = "system-config.js",
 )
 
-
 # File group for all static files which are needed to serve the dev-app. These files are
 # used in the devserver as runfiles and will be copied into the static web package that can
 # be deployed on static hosting services (like firebase).
@@ -56,9 +55,9 @@ filegroup(
     srcs = [
         "favicon.ico",
         "index.html",
+        ":date-fns_bundle.umd",
         ":system-config",
         ":theme",
-        ":date-fns_bundle.umd",
         "//tools:system-rxjs-operators.js",
         "@npm//:node_modules/@webcomponents/custom-elements/custom-elements.min.js",
         "@npm//:node_modules/core-js-bundle/index.js",

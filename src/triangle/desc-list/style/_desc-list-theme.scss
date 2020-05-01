@@ -1,0 +1,24 @@
+@import "../../core/themes/default-theme";
+
+$desc-list-prefix-cls : "#{$ant-prefix}-desc-list";
+
+@mixin tri-desc-list-theme($theme) {
+  $foreground : map-get($theme, foreground);
+
+  .#{$desc-list-prefix-cls} {
+    @at-root & #{&}-title {
+      color : tri-color($foreground, heading-color);
+    }
+    @at-root & #{&}-term {
+      color : tri-color($foreground, heading-color);
+    }
+    @at-root & #{&}-detail {
+      color : tri-color($foreground, text-color);
+    }
+    @at-root &#{&}-small {
+      .#{$desc-list-prefix-cls}-title {
+        color : tri-color($foreground, text-color);
+      }
+    }
+  }
+}

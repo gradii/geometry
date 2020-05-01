@@ -139,7 +139,7 @@
         "properties": {
           "!host": "\\[class\\]",
           "!preserveWhitespaces": ".*",
-          "!styles": ".*",
+//          "!styles": ".*",
           "!moduleId": ".*",
           "changeDetection": "\\.OnPush$",
           "encapsulation": "\\.None$"

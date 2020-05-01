@@ -1,4 +1,70 @@
+@import "../../core/themes/default-theme";
 
-@mixin alert-theme() {
+$alert-prefix-cls : #{$ant-prefix}-alert;
 
+@mixin tri-alert-theme($theme) {
+  $success : map-get($theme, "success");
+  $info : map-get($theme, "info");
+  $warning : map-get($theme, "warning");
+  $error : map-get($theme, "error");
+
+  $foreground          : map-get($theme, foreground);
+  $background          : map-get($theme, background);
+
+  $alert-message-color : tri-color($foreground, heading-color);
+  $alert-text-color    : tri-color($foreground, text-color);
+
+  .#{$alert-prefix-cls} {
+    @include reset-component;
+    color : $alert-text-color;
+
+    @at-root &-success {
+      border           : $border-width-base $border-style-base tri-color($success, 200);
+      background-color : tri-color($success, 100);
+      .#{$alert-prefix-cls}-icon {
+        color : tri-color($success);
+      }
+    }
+
+    @at-root &-info {
+      border           : $border-width-base $border-style-base tri-color($success, 200);
+      background-color : tri-color($success, 100);
+      .#{$alert-prefix-cls}-icon {
+        color : tri-color($info);
+      }
+    }
+
+    @at-root &-warning {
+      border           : $border-width-base $border-style-base tri-color($warning, 200);
+      background-color : tri-color($warning, 100);
+      .#{$alert-prefix-cls}-icon {
+        color : tri-color($warning);
+      }
+    }
+
+    @at-root &-error {
+      border           : $border-width-base $border-style-base tri-color($error, 200);
+      background-color : tri-color($error, 100);
+      .#{$alert-prefix-cls}-icon {
+        color : tri-color($error);
+      }
+    }
+
+    @at-root &-close-icon {
+      .#{$iconfont-css-prefix}-cross {
+        color : tri-color($foreground, text-color-secondary);
+        @at-root &:hover {
+          color : #404040;
+        }
+      }
+    }
+
+    @at-root &-with-description {
+      color : tri-color($foreground, text-color);
+    }
+
+    @at-root &-with-description #{&}-message {
+      color : $alert-message-color;
+    }
+  }
 }

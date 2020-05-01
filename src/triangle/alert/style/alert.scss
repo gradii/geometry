@@ -2,15 +2,11 @@
 
 $alert-prefix-cls    : #{$ant-prefix}-alert;
 
-$alert-message-color : $heading-color;
-$alert-text-color    : $text-color;
-
 .#{$alert-prefix-cls} {
   @include reset-component;
   position      : relative;
   padding       : .5rem 2.375rem .5rem 2.375rem;
   border-radius : $border-radius-base;
-  color         : $alert-text-color;
   font-size     : $font-size-base;
   line-height   : $line-height-base;
 
@@ -36,38 +32,6 @@ $alert-text-color    : $text-color;
     display     : none;
   }
 
-  @at-root &-success {
-    border           : $border-width-base $border-style-base $green-2;
-    background-color : $green-1;
-    .#{$alert-prefix-cls}-icon {
-      color : $success-color;
-    }
-  }
-
-  @at-root &-info {
-    border           : $border-width-base $border-style-base $primary-2;
-    background-color : $primary-1;
-    .#{$alert-prefix-cls}-icon {
-      color : $info-color;
-    }
-  }
-
-  @at-root &-warning {
-    border           : $border-width-base $border-style-base $yellow-2;
-    background-color : $yellow-1;
-    .#{$alert-prefix-cls}-icon {
-      color : $warning-color;
-    }
-  }
-
-  @at-root &-error {
-    border           : $border-width-base $border-style-base $red-2;
-    background-color : $red-1;
-    .#{$alert-prefix-cls}-icon {
-      color : $error-color;
-    }
-  }
-
   @at-root &-close-icon {
     font-size   : $font-size-base;
     position    : absolute;
@@ -79,11 +43,7 @@ $alert-text-color    : $text-color;
     cursor      : pointer;
 
     .#{$iconfont-css-prefix}-cross {
-      color      : $text-color-secondary;
       transition : color .3s ease;
-      @at-root &:hover {
-        color : #404040;
-      }
     }
   }
 
@@ -96,7 +56,6 @@ $alert-text-color    : $text-color;
     padding       : 1rem 1rem 1rem 3.75rem;
     position      : relative;
     border-radius : $border-radius-base;
-    color         : $text-color;
     line-height   : 1.5;
   }
 
@@ -121,7 +80,6 @@ $alert-text-color    : $text-color;
 
   @at-root &-with-description #{&}-message {
     font-size     : $font-size-lg;
-    color         : $alert-message-color;
     display       : block;
     margin-bottom : 4px;
   }
@@ -175,9 +133,4 @@ $alert-text-color    : $text-color;
     transform-origin : 0 0;
     transform        : scaleY(0);
   }
-}
-
-//patch
-#{$alert-prefix-cls} {
-  display : block;
 }

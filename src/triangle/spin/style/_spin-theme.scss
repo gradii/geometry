@@ -1,0 +1,51 @@
+@import "../../core/themes/default-theme";
+
+
+$spin-prefix-cls  : "#{$ant-prefix}-spin";
+
+// Spin
+// ---
+$spin-dot-size-sm : 0.875rem !default;
+$spin-dot-size    : 1.25rem !default;
+$spin-dot-size-lg : 2rem !default;
+
+
+
+@mixin tri-spin-theme($theme) {
+  $primary : map-get($theme, primary);
+  $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+  $spin-dot-default : tri-color($foreground, text-color-secondary);
+
+  .#{$spin-prefix-cls} {
+    color : tri-color($primary);
+
+    @at-root &-blur {
+      opacity : 0.7;
+      @at-root &:after {
+        background : #fff;
+      }
+    }
+
+    // tip
+    // ------------------------------
+    @at-root &-tip {
+      color : $spin-dot-default;
+    }
+
+    // dots
+    // ------------------------------
+
+    @at-root &-dot {
+      i {
+        background-color : tri-color($primary);
+      }
+    }
+  }
+
+  @media all and (-ms-high-contrast : none), (-ms-high-contrast : active) {
+    .#{$spin-prefix-cls}-blur {
+      background : tri-color($background, component-background);
+    }
+  }
+}

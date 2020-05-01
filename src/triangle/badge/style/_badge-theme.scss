@@ -1,0 +1,47 @@
+@import "../../core/themes/default-theme";
+
+$badge-prefix-cls  : "#{$ant-prefix}-badge";
+$number-prefix-cls : "#{$ant-prefix}-scroll-number";
+
+@mixin tri-badge-theme($theme) {
+  .#{$badge-prefix-cls} {
+
+    @at-root &-count {
+      background       : tri-color(tri-palette($theme, highlight));
+      color            : #fff;
+      a,
+      a:hover {
+        color : #fff;
+      }
+    }
+
+    @at-root &-dot {
+      background       : tri-color(tri-palette($theme, highlight));
+      box-shadow       : 0 0 0 1px #fff;
+    }
+
+    @at-root &-status {
+      @at-root &-success {
+        background-color : tri-color(tri-palette($theme, success));
+      }
+      @at-root &-processing {
+        background-color : tri-color(tri-palette($theme, primary));
+        @at-root &:after {
+          border        : 1px solid $primary-color;
+        }
+      }
+      @at-root &-default {
+        background-color : tri-color(tri-palette($theme, normal-color));
+      }
+      @at-root &-error {
+        background-color : tri-color(tri-palette($theme, error));
+      }
+      @at-root &-warning {
+        background-color : tri-color(tri-palette($theme, warning));
+      }
+      @at-root &-text {
+        color       : tri-color(tri-palette($theme, text-color));
+      }
+    }
+  }
+}

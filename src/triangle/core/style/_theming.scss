@@ -65,12 +65,29 @@
 
 
 // Creates a container object for a light theme to be given to individual component theme mixins.
-@function tri-light-theme($primary, $accent, $warn: tri-palette($tri-red)) {
+@function tri-light-theme(
+  $primary,
+  $secondary,
+  $info,
+  $success,
+  $error,
+  $highlight,
+  $warning,
+  $dark,
+  $accent,
+  $warn: tri-palette($tri-red)
+) {
   @return (
     primary: $primary,
+    secondary: $secondary,
+    info: $info,
+    success: $success,
+    error: $error,
+    highlight: $highlight,
+    warning: $warning,
+    dark: $dark,
     accent: $accent,
     warn: $warn,
-    is-dark: false,
     foreground: $tri-light-theme-foreground,
     background: $tri-light-theme-background,
   );

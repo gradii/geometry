@@ -1,0 +1,15 @@
+@import "../../core/themes/default-theme";
+
+$backtop-prefix-cls : "#{$ant-prefix}-back-top";
+
+@mixin tri-back-top-theme($theme) {
+  .#{$backtop-prefix-cls} {
+    @at-root &-content {
+      background-color : tri-palette($theme, back-top-bg);
+      color            : $back-top-color;
+      @at-root &:hover {
+        background-color : $back-top-hover-bg;
+      }
+    }
+  }
+}

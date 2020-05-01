@@ -58,7 +58,18 @@ import { StepConnectService } from './step-connect.service';
         </div>
       </div>
     </div>
-  `
+  `,
+  styleUrls: [`../style/steps.css`],
+  styles: [`
+             .tri-steps-horizontal tri-step:not(:first-child) .tri-steps-head {
+               padding-left : 10px;
+               margin-left  : -10px;
+             }
+
+             tri-step {
+               display : block;
+             }
+           `]
 })
 export class StepComponent implements OnInit, AfterViewInit, OnDestroy {
   _ifCustomStatus = false;

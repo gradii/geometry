@@ -15,13 +15,10 @@ $backtop-prefix-cls : "#{$ant-prefix}-back-top";
     height           : 40px;
     width            : 40px;
     border-radius    : 20px;
-    background-color : $back-top-bg;
-    color            : $back-top-color;
     text-align       : center;
     transition       : all .3s $ease-in-out;
 
     @at-root &:hover {
-      background-color : $back-top-hover-bg;
       transition       : all .3s $ease-in-out;
     }
   }

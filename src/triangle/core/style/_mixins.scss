@@ -4,9 +4,9 @@
  */
 @import "vendor/rfs";
 @import "vendor/math/math";
+@import "vendor/color/contrast";
+@import "vendor/color/utils";
 // Color
-@import "color/contrast";
-@import "color/utils";
 @import "color/color-palette";
 //Variables And Theme
 @import "functions";
@@ -38,5 +38,4 @@
 @import "legend/list-common";
 @import "legend/menu-common";
 @import "legend/noop-animation";
-@import "legend/variables";
 @import "legend/vendor-prefixes";

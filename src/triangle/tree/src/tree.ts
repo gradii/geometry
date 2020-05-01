@@ -446,7 +446,7 @@ export class Tree {
 
   /**
    * Check whether provided tree is a sibling of the current tree. Sibling trees (nodes) are the trees that have the same parent.
-   * @param {Tree} tree - A tree that should be tested on a siblingness.
+   * @param tree - A tree that should be tested on a siblingness.
    * return A flag indicating whether or not provided tree is the sibling of the current one.
    */
   hasSibling(tree: Tree): boolean {
@@ -456,7 +456,7 @@ export class Tree {
   /**
    * Check whether provided tree is a child of the current tree.
    * This method tests that provided tree is a <strong>direct</strong> child of the current tree.
-   * @param {Tree} tree - A tree that should be tested (child candidate).
+   * @param tree - A tree that should be tested (child candidate).
    * return A flag indicating whether provided tree is a child or not.
    */
   hasChild(tree: Tree): boolean {
@@ -466,7 +466,7 @@ export class Tree {
   /**
    * Remove given tree from the current tree.
    * The given tree will be removed only in case it is a direct child of the current tree (@see {@link hasChild}).
-   * @param {Tree} tree - A tree that should be removed.
+   * @param tree - A tree that should be removed.
    */
   removeChild(tree: Tree): void {
     if (!this.hasChildren()) {

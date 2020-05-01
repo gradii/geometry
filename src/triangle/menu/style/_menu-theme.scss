@@ -5,25 +5,28 @@ $menu-collapsed-width : 64px !default;
 $menu-font-size       : $font-size-base !default;
 
 @mixin tri-menu-theme($theme) {
+  $foreground: map-get($theme, foreground);
+  $primary: map-get($theme, primary);
+
   // default theme
   .#{$menu-prefix-cls} {
     box-shadow : $box-shadow-base;
-    color      : $text-color;
-    background : $component-background;
+    color      : tri-color($foreground, text-color);
+    background : tri-color($foreground, component-background);
 
     @at-root &-item-group-title {
-      color : $text-color-secondary;
+      color : tri-color($foreground, text-color-secondary);
     }
 
     @at-root &-item:active,
     &-submenu-title:active {
-      background : $item-active-bg;
+      background : tri-color($foreground, item-active-bg);
     }
 
     @at-root &-item > a {
-      color : $text-color;
+      color : tri-color($foreground, text-color);
       @at-root &:hover {
-        color : $primary-color;
+        color : tri-color($primary);
       }
       @at-root &:before {
         background-color : transparent;
@@ -31,7 +34,7 @@ $menu-font-size       : $font-size-base !default;
     }
 
     @at-root &-item-divider {
-      background-color : $border-color-split;
+      background-color : tri-color($foreground, border-color-split);
     }
 
     @at-root &-item:hover,
@@ -39,7 +42,7 @@ $menu-font-size       : $font-size-base !default;
     &:not(#{&}-inline) #{&}-submenu-open,
     &-submenu-active,
     &-submenu-title:hover {
-      color : $primary-color;
+      color : tri-color($primary);
     }
 
     @at-root &-horizontal > #{&}-item:hover,
@@ -49,10 +52,10 @@ $menu-font-size       : $font-size-base !default;
     }
 
     @at-root &-item-selected {
-      color : $primary-color;
+      color : tri-color($primary);
       > a,
       > a:hover {
-        color : $primary-color;
+        color : tri-color($primary);
       }
     }
 
@@ -71,9 +74,9 @@ $menu-font-size       : $font-size-base !default;
     }
 
     @at-root &-vertical #{&}-submenu-selected {
-      color : $primary-color;
+      color : tri-color($primary);
       > a {
-        color : $primary-color;
+        color : tri-color($primary);
       }
     }
 

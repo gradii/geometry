@@ -1,10 +1,18 @@
 @import "../../core/themes/default-theme";
 
+
+
 $spin-prefix-cls  : "#{$ant-prefix}-spin";
-$spin-dot-default : $text-color-secondary;
+
+// Spin
+// ---
+$spin-dot-size-sm               : 0.875rem !default;
+$spin-dot-size                  : 1.25rem !default;
+$spin-dot-size-lg               : 2rem !default;
+
+
 
 .#{$spin-prefix-cls} {
-  color          : $primary-color;
   vertical-align : middle;
   text-align     : center;
   opacity        : 0;
@@ -97,17 +105,9 @@ $spin-dot-default : $text-color-secondary;
       right      : 0;
       top        : 0;
       bottom     : 0;
-      background : #fff;
-      opacity    : 0.3;
       transition : all .3s;
       z-index    : 10;
     }
-  }
-
-  // tip
-  // ------------------------------
-  @at-root &-tip {
-    color : $spin-dot-default;
   }
 
   // dots
@@ -123,7 +123,6 @@ $spin-dot-default : $text-color-secondary;
       width            : 9px;
       height           : 9px;
       border-radius    : 100%;
-      background-color : $primary-color;
       transform        : scale(0.75);
       display          : block;
       position         : absolute;

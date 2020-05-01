@@ -60,7 +60,8 @@ import { coerceToBoolean } from '@gradii/triangle/util';
         </ng-template>
       </span>
       <span class="tri-alert-description" *ngIf="description">
-        <ng-container *ngIf="isDescriptionString; else descriptionTemplate">{{ description }}</ng-container>
+        <ng-container
+          *ngIf="isDescriptionString; else descriptionTemplate">{{ description }}</ng-container>
         <ng-template #descriptionTemplate>
           <ng-template [stringTemplateOutlet]="description"></ng-template>
         </ng-template>
@@ -73,7 +74,8 @@ import { coerceToBoolean } from '@gradii/triangle/util';
           <i class="anticon anticon-cross"></i>
         </ng-template>
         <ng-container *ngIf="closeText; else closeDefaultTemplate">
-          <ng-container *ngIf="isCloseTextString; else closeTextTemplate">{{ closeText }}</ng-container>
+          <ng-container
+            *ngIf="isCloseTextString; else closeTextTemplate">{{ closeText }}</ng-container>
           <ng-template #closeTextTemplate>
             <ng-template [stringTemplateOutlet]="closeText"></ng-template>
           </ng-template>
@@ -81,7 +83,10 @@ import { coerceToBoolean } from '@gradii/triangle/util';
       </a>
     </div>
   `,
-  styleUrls          : ['../style/alert.css']
+  styleUrls          : ['../style/alert.css'],
+  styles             : [`.tri-alert {
+    display: block;
+  }`],
 })
 export class AlertComponent {
   display = true;
