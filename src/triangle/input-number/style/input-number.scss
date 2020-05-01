@@ -13,8 +13,8 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
   @include input();
   margin        : 0;
   padding       : 0;
-  font-size     : $font-size-base;
-  height        : $input-height-base;
+  //font-size     : $font-size-base;
+  //height        : $input-height-base;
   display       : inline-block;
   border        : $border-width-base $border-style-base $border-color-base;
   border-radius : $border-radius-base;
@@ -129,10 +129,6 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
     @at-root &-inner {
       top        : 50%;
       margin-top : -6px;
-      @at-root &:before {
-        text-align : center;
-        content    : "\e61e";
-      }
     }
     @at-root &:hover {
       height : 60% !important;
@@ -146,10 +142,6 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
     @at-root &-inner {
       top        : 50%;
       margin-top : -6px;
-      @at-root &:before {
-        text-align : center;
-        content    : "\e61d";
-      }
     }
     @at-root &:hover {
       height : 60% !important;

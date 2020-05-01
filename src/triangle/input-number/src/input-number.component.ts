@@ -41,7 +41,9 @@ import {
          (click)="_numberUp($event)">
         <span
           class="tri-input-number-handler-up-inner"
-          (click)="$event.preventDefault();"></span>
+          (click)="$event.preventDefault();">
+            <tri-icon svgIcon="outline:up"></tri-icon>
+        </span>
       </a>
       <a *ngIf="spinners"
          class="tri-input-number-handler tri-input-number-handler-down"
@@ -50,6 +52,7 @@ import {
         <span
           class="tri-input-number-handler-down-inner"
           (click)="$event.preventDefault();">
+            <tri-icon svgIcon="outline:down"></tri-icon>
         </span>
       </a>
     </div>

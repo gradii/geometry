@@ -8,6 +8,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { TriIconModule } from '@gradii/triangle/icon';
 import { InputNumberComponent } from './input-number.component';
 
 /**
@@ -29,7 +30,7 @@ import { InputNumberComponent } from './input-number.component';
  * <!-- example(tri-demo-input-number-digit) -->
  */
 @NgModule({
-  imports     : [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, TriIconModule],
   declarations: [InputNumberComponent],
   exports     : [InputNumberComponent]
 })
