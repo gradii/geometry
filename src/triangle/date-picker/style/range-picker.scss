@@ -1,4 +1,10 @@
+@import "../../core/themes/default-theme";
+
 $input-box-height : 34px;
+
+$calendar-prefix-cls            : "#{$ant-prefix}-calendar";
+$calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
+
 
 .#{$calendar-prefix-cls}-range-picker-input {
   background-color : transparent;
@@ -7,11 +13,6 @@ $input-box-height : 34px;
   outline          : 0;
   width            : 44%;
   text-align       : center;
-  @include placeholder();
-
-  @at-root &[disabled] {
-    cursor : not-allowed;
-  }
 }
 
 .#{$calendar-prefix-cls}-range-picker-separator {

@@ -9,7 +9,7 @@
   background    : $component-background;
   outline       : none;
 
-  > div { // TODO: this is a useless wrapper, and we need to remove it in rc-calendar
+  > div {
     height : 100%;
   }
 }
@@ -19,7 +19,7 @@
 }
 
 .#{$calendar-prefix-cls}-year-panel-header {
-  @include calendarPanelHeader(#{$calendar-prefix-cls}-year-panel);
+  @include calendar-panel-header(#{$calendar-prefix-cls}-year-panel);
 }
 
 .#{$calendar-prefix-cls}-year-panel-body {

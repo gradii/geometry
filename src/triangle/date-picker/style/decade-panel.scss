@@ -1,3 +1,8 @@
+@import '../../core/themes/default-theme';
+
+$calendar-prefix-cls            : "#{$ant-prefix}-calendar";
+$calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
+
 .#{$calendar-prefix-cls}-decade-panel {
   position      : absolute;
   top           : 0;
@@ -5,7 +10,6 @@
   bottom        : 0;
   left          : 0;
   z-index       : 10;
-  background    : $component-background;
   border-radius : $border-radius-base;
   outline       : none;
 }
@@ -15,7 +19,7 @@
 }
 
 .#{$calendar-prefix-cls}-decade-panel-header {
-  @include calendarPanelHeader(#{$calendar-prefix-cls}-decade-panel);
+  @include calendar-panel-header(#{$calendar-prefix-cls}-decade-panel);
 }
 
 .#{$calendar-prefix-cls}-decade-panel-body {
@@ -37,7 +41,6 @@
 .#{$calendar-prefix-cls}-decade-panel-decade {
   display       : inline-block;
   margin        : 0 auto;
-  color         : $text-color;
   background    : transparent;
   text-align    : center;
   height        : 24px;
@@ -47,17 +50,14 @@
   transition    : background 0.3s ease;
 
   @at-root &:hover {
-    background : $item-hover-bg;
     cursor     : pointer;
   }
 }
 
 .#{$calendar-prefix-cls}-decade-panel-selected-cell .#{$calendar-prefix-cls}-decade-panel-decade {
-  background : $primary-color;
   color      : #fff;
 
   @at-root &:hover {
-    background : $primary-color;
     color      : #fff;
   }
 }
@@ -66,6 +66,5 @@
 .#{$calendar-prefix-cls}-decade-panel-next-century-cell {
   .#{$calendar-prefix-cls}-decade-panel-decade {
     user-select : none;
-    color       : $disabled-color;
   }
 }

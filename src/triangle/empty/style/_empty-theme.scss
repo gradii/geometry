@@ -1,0 +1,17 @@
+@import "../../core/themes/default-theme";
+
+$empty-prefix-cls: #{$ant-prefix}-empty;
+
+@mixin tri-empty-theme($theme) {
+  $background: map-get($theme, background);
+  .#{$empty-prefix-cls} {
+    // antd internal empty style
+    &-normal {
+      color: tri-color($background, disabled-color);
+    }
+
+    &-small {
+      color: tri-color($background, disabled-color);
+    }
+  }
+}

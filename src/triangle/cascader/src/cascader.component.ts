@@ -109,6 +109,9 @@ export interface ShowSearchOptions {
     '[class.tri-cascader-picker-with-value]': '_inputValue && _inputValue.length'
   },
   styles             : [
+    `.tri-cascader {
+      display : block;
+    }`,
     `.tri-cascader-menus {
           margin-top    : 4px;
           margin-bottom : 4px;

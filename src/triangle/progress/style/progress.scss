@@ -1,5 +1,4 @@
 @import "../../core/themes/default-theme";
-@import "./progress-abc";
 
 $progress-prefix-cls : "#{$ant-prefix}-progress" !default;
 
@@ -31,7 +30,6 @@ $progress-prefix-cls : "#{$ant-prefix}-progress" !default;
   @at-root &-inner {
     display          : inline-block;
     width            : 100%;
-    background-color : $progress-remaining-color;
     border-radius    : 100px;
     vertical-align   : middle;
     @at-root .#{$progress-prefix-cls}-inline #{&} {
@@ -39,17 +37,8 @@ $progress-prefix-cls : "#{$ant-prefix}-progress" !default;
     }
   }
 
-  @at-root &-circle-trail {
-    stroke : $progress-remaining-color;
-  }
-
-  @at-root &-circle-path {
-    stroke : $process-default-color;
-  }
-
   @at-root &-bg {
     border-radius    : 100px;
-    background-color : $process-default-color;
     transition       : all .4s $ease-out-circ 0s;
     position         : relative;
     @at-root .#{$progress-prefix-cls}-inline #{&} {
@@ -72,7 +61,6 @@ $progress-prefix-cls : "#{$ant-prefix}-progress" !default;
       position : absolute;
       left     : 0;
       width    : 100%;
-      color    : inherit !important;
     }
   }
 
@@ -85,41 +73,12 @@ $progress-prefix-cls : "#{$ant-prefix}-progress" !default;
       left          : 0;
       right         : 0;
       bottom        : 0;
-      background    : $component-background;
       border-radius : 10px;
       animation     : #{$ant-prefix}-progress-active 2.4s $ease-out-quint infinite;
     }
 
     @at-root .#{$progress-prefix-cls}-inline#{&} .#{$progress-prefix-cls}-bg:before {
       border-radius : 0;
-    }
-  }
-
-  @at-root &-status-exception {
-    .#{$progress-prefix-cls}-bg {
-      background-color : $error-color;
-    }
-
-    .#{$progress-prefix-cls}-text {
-      color : $error-color;
-    }
-
-    .#{$progress-prefix-cls}-circle-path {
-      stroke : $error-color;
-    }
-  }
-
-  @at-root &-status-success {
-    .#{$progress-prefix-cls}-bg {
-      background-color : $success-color;
-    }
-
-    .#{$progress-prefix-cls}-text {
-      color : $success-color;
-    }
-
-    .#{$progress-prefix-cls}-circle-path {
-      stroke : $success-color;
     }
   }
 
@@ -143,17 +102,6 @@ $progress-prefix-cls : "#{$ant-prefix}-progress" !default;
 
     .#{$iconfont-css-prefix} {
       font-size : 14 / 12em;
-    }
-  }
-
-  @at-root &-circle #{&}-status-exception {
-    .#{$progress-prefix-cls}-text {
-      color : $error-color;
-    }
-  }
-  @at-root &-circle #{&}-status-success {
-    .#{$progress-prefix-cls}-text {
-      color : $success-color;
     }
   }
 }

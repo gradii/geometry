@@ -65,7 +65,19 @@ import { I18nService as I18n } from '@gradii/triangle/i18n';
     '[class.tri-time-picker]'      : 'true',
     '[class.tri-time-picker-large]': 'size==="large"',
     '[class.tri-time-picker-small]': 'size==="small"'
+  },
+  styles     : [`.tri-time-picker-panel {
+    position: relative;
+    left: 0;
   }
+
+  .tri-time-picker-panel.top {
+    bottom: -8px;
+  }
+
+  .tri-time-picker-panel.bottom {
+    top: -2px;
+  }`]
 })
 export class TimePickerComponent implements ControlValueAccessor, OnInit, AfterViewInit {
   isInit = false;

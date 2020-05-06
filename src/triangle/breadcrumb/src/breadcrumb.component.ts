@@ -11,7 +11,11 @@ import { Component, HostBinding, Input, ViewEncapsulation } from '@angular/core'
   selector     : 'tri-breadcrumb',
   encapsulation: ViewEncapsulation.None,
   template     : `
-    <ng-content></ng-content>`
+    <ng-content></ng-content>`,
+  styleUrls    : ['../style/breadcrumb.css'],
+  styles       : [`tri-breadcrumb {
+    display: block;
+  }`]
 })
 export class BreadCrumbComponent {
   /**

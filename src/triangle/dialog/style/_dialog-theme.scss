@@ -1,6 +1,54 @@
+@import "../../core/themes/default-theme";
 
-.tri-dialog-container {
-  box-shadow : 0 11px 15px -7px rgba(0, 0, 0, .2), 0 24px 38px 3px rgba(0, 0, 0, .14), 0 9px 46px 8px rgba(0, 0, 0, .12);
-  background : #fff;
-  color      : rgba(0, 0, 0, .87);
+@mixin tri-dialog-theme($theme) {
+  $primary           : map-get($theme, primary);
+  $foreground        : map-get($theme, foreground);
+  $background        : map-get($theme, background);
+
+  $dialog-prefix-cls : "#{$ant-prefix}-dialog" !default;
+  $dialog-header-bg  : #f9fafb !default;
+  $dialog-content-bg : tri-color($background, component-background) !default;
+  $dialog-mask-bg    : rgba(55, 55, 55, 0.6) !default;
+
+  .#{$dialog-prefix-cls} {
+    background : $dialog-content-bg;
+    @include border-radius($border-radius-base);
+    box-shadow : $shadow-2;
+
+    @at-root &-title {
+      color : tri-color($foreground, heading-color);
+    }
+
+    @at-root &-close {
+      border     : 0;
+      background : transparent;
+      color      : tri-color($foreground, text-color-secondary);
+      @at-root &:focus,
+      &:hover {
+        color : #444;
+      }
+    }
+
+    @at-root &-header {
+      @include border-radius(($border-radius-base $border-radius-base 0 0));
+      background    : $dialog-header-bg;
+      color         : $text-color;
+      border-bottom : $border-width-base $border-style-base tri-color($foreground, border-color-split);
+    }
+
+    @at-root &-actions {
+      border-top : $border-width-base $border-style-base tri-color($foreground, border-color-split);
+      @include border-radius((0 0 $border-radius-base $border-radius-base));
+    }
+
+    @at-root &-mask {
+      background-color : #373737;
+      background-color : $dialog-mask-bg; // lesshint duplicateProperty: false
+      filter           : alpha(opacity=50);
+    }
+
+    @at-root &-open {
+      overflow : hidden;
+    }
+  }
 }

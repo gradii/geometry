@@ -16,7 +16,6 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
   //font-size     : $font-size-base;
   //height        : $input-height-base;
   display       : inline-block;
-  border        : $border-width-base $border-style-base $border-color-base;
   border-radius : $border-radius-base;
   width         : 80px;
 
@@ -25,7 +24,6 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
     line-height : 0;
     height      : 50%;
     overflow    : hidden;
-    color       : $text-color-secondary;
     position    : relative;
     transition  : all 0.1s linear;
     display     : block;
@@ -36,7 +34,6 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
     }
     @at-root &:hover #{&}-up-inner,
     &:hover #{&}-down-inner {
-      color : $primary-5;
     }
   }
 
@@ -51,7 +48,6 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
     transition  : all 0.1s linear;
     @include iconfont-size-under-12px(7px);
     right       : 4px;
-    color       : $text-color-secondary;
   }
 
   @at-root &:hover {
@@ -71,10 +67,8 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
     text-align       : left;
     outline          : 0;
     box-sizing       : border-box;
-    height           : $input-height-base - 2px/$root-font-size; //fix for rem calculate missing 1px
+    height           : $form-control-height-base - 2px/$root-font-size; //fix for rem calculate missing 1px
     transition       : all 0.3s linear;
-    color            : $input-color;
-    background-color : $input-bg;
     border           : 0;
     border-radius    : $border-radius-base;
     padding          : 0 7px;
@@ -90,7 +84,7 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
     padding : 0;
 
     input {
-      height : $input-height-lg - 2px/$root-font-size;
+      height : $form-control-height-lg - 2px/$root-font-size;
     }
   }
 
@@ -98,22 +92,20 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
     padding : 0;
 
     input {
-      height : $input-height-sm - 2px/$root-font-size;
+      height : $form-control-height-sm - 2px/$root-font-size;
     }
   }
 
   @at-root &-handler-wrap {
-    border-left   : $border-width-base $border-style-base $border-color-base;
     width         : 22px;
     height        : 100%;
-    background    : $component-background;
     position      : absolute;
     top           : 0;
     right         : 0;
     opacity       : 0;
     border-radius : 0 $border-radius-base $border-radius-base 0;
     transition    : opacity 0.24s linear 0.1s;
-    z-index       : 2; // https://github.com/ant-design/ant-design/issues/6289
+    z-index       : 2;
   }
 
   @at-root &-handler-wrap:hover #{&}-handler {
@@ -136,7 +128,6 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
   }
 
   @at-root &-handler-down {
-    border-top : $border-width-base $border-style-base $border-color-base;
     top        : -1px;
     cursor     : pointer;
     @at-root &-inner {
@@ -161,7 +152,6 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
     .#{$input-number-prefix-cls}-input {
       opacity          : 0.72;
       cursor           : not-allowed;
-      background-color : $disabled-bg;
     }
 
     .#{$input-number-prefix-cls}-handler-wrap {

@@ -1,34 +1,33 @@
-@import "calendar-mixin";
+@import '../../core/themes/default-theme';
+@import "./mixins/calendar-mixin";
+
+$calendar-prefix-cls            : "#{$ant-prefix}-calendar";
+$calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
 
 .#{$calendar-prefix-cls} {
-  position         : relative;
-  outline          : none;
-  width            : 280px;
-  border           : $border-width-base $border-style-base #fff;
-  list-style       : none;
-  font-size        : $font-size-base;
-  text-align       : left;
-  background-color : $component-background;
-  border-radius    : $border-radius-base;
-  box-shadow       : $box-shadow-base;
-  background-clip  : padding-box;
-  line-height      : $line-height-base;
+  position        : relative;
+  outline         : none;
+  width           : 280px;
+  border          : $border-width-base $border-style-base #fff;
+  list-style      : none;
+  font-size       : $font-size-base;
+  text-align      : left;
+  border-radius   : $border-radius-base;
+  box-shadow      : $box-shadow-base;
+  background-clip : padding-box;
+  line-height     : $line-height-base;
 
   @at-root &-input-wrap {
-    height        : 34px;
-    padding       : 6px $control-padding-horizontal - rem(2px);
-    border-bottom : $border-width-base $border-style-base $border-color-split;
+    height  : 34px;
+    padding : 6px $control-padding-horizontal - rem(2px);
   }
 
   @at-root &-input {
-    border     : 0;
-    width      : 100%;
-    cursor     : auto;
-    outline    : 0;
-    height     : 22px;
-    color      : $input-color;
-    background : $input-bg;
-    @include placeholder;
+    border  : 0;
+    width   : 100%;
+    cursor  : auto;
+    outline : 0;
+    height  : 22px;
   }
 
   @at-root &-week-number {
@@ -40,7 +39,7 @@
   }
 
   @at-root &-header {
-    @include calendarPanelHeader($calendar-prefix-cls);
+    @include calendar-panel-header($calendar-prefix-cls);
   }
 
   @at-root &-body {
@@ -91,7 +90,6 @@
   @at-root &-date {
     display       : block;
     margin        : 0 auto;
-    color         : $text-color;
     border-radius : $border-radius-sm;
     width         : 24px;
     height        : 24px;
@@ -107,47 +105,30 @@
     }
 
     @at-root &:hover {
-      background : $item-hover-bg;
-      cursor     : pointer;
+      cursor : pointer;
     }
 
     @at-root &:active {
-      color      : #fff;
-      background : $primary-5;
     }
   }
 
   @at-root &-today &-date {
-    border-color : $primary-color;
-    font-weight  : bold;
-    color        : $primary-color;
+    font-weight : bold;
   }
 
   @at-root &-last-month-cell #{&}-date,
   &-next-month-btn-day #{&}-date {
-    color : $disabled-color;
   }
 
-  @at-root &-selected-day #{&}-date {
-    background : $primary-color;
-    color      : #fff;
-    border     : $border-width-base $border-style-base transparent;
-
-    @at-root &:hover {
-      background : $primary-color;
-    }
-  }
 
   @at-root &-disabled-cell #{&}-date {
     cursor        : not-allowed;
     color         : #bcbcbc;
-    background    : $disabled-bg;
     border-radius : 0;
     width         : auto;
     border        : $border-width-base $border-style-base transparent;
 
     @at-root &:hover {
-      background : $disabled-bg;
     }
   }
   @at-root &-disabled-cell#{&}-today #{&}-date {
@@ -177,7 +158,6 @@
   }
 
   @at-root &-footer {
-    border-top  : $border-width-base $border-style-base $border-color-split;
     line-height : 38px;
     padding     : 0 12px;
     @at-root &:empty {
@@ -188,9 +168,8 @@
       display    : block;
     }
     @at-root &-extra + #{&}-btn {
-      border-top : $border-width-base $border-style-base $border-color-split;
-      margin     : 0 -12px;
-      padding    : 0 12px;
+      margin  : 0 -12px;
+      padding : 0 12px;
     }
   }
 
@@ -200,7 +179,6 @@
     text-align : center;
     margin     : 0 0 0 8px;
     @at-root &-disabled {
-      color  : $disabled-color;
       cursor : not-allowed;
     }
     @at-root &:only-child {
@@ -225,7 +203,6 @@
   .#{$calendar-prefix-cls}-clear-btn:after {
     @include iconfont-font("\e62e");
     font-size   : $font-size-base;
-    color       : $disabled-color;
     display     : inline-block;
     line-height : 1;
     width       : 20px;
@@ -234,14 +211,18 @@
   }
 
   .#{$calendar-prefix-cls}-clear-btn:hover:after {
-    color : $text-color-secondary;
   }
 
   .#{$calendar-prefix-cls}-ok-btn {
     @include btn();
-    @include btn-primary();
-    @include button-size($btn-height-sm,
-      $btn-padding-y-sm, $btn-padding-x-sm, $font-size-base, $btn-line-height-sm, $border-radius-base);
+    @include button-variant-primary($btn-primary-color, $btn-primary-bg);
+    @include button-size(
+        $btn-height-sm,
+        $btn-padding-y-sm,
+        $btn-padding-x-sm,
+        $font-size-base,
+        $btn-line-height-sm,
+        $border-radius-base);
     line-height : $line-height-base;
 
     @at-root &-disabled {

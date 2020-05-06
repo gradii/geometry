@@ -99,7 +99,6 @@ tree-internal {
       align-items     : center;
 
       &.selected {
-        background : color-palette($primary-color, 1);
         @if ($enable-rounded) {
           border-radius : $border-radius-base;
         }

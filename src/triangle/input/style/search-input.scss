@@ -1,18 +1,14 @@
-@import "../../button/style/mixin";
+@import "../../core/themes/default-theme";
+
+@import "../../button/style/button-mixins";
 @import "./input-mixin";
 
 .#{$ant-prefix}-input-search-icon {
   cursor     : pointer;
   transition : all .3s;
   font-size  : 14px;
-  @at-root &:hover {
-    color : $input-hover-border-color;
-  }
 }
 
-// code blow is keeped for compatibility
-// for this demo: http://1x.ant.design/components/select/#components-select-demo-search-box
-// do not delete until 3.x
 .#{$ant-prefix}-search-input-wrapper {
   display        : inline-block;
   vertical-align : middle;
@@ -40,15 +36,13 @@
     z-index       : 2;
     padding-left  : 8px;
     padding-right : 8px;
-    @at-root &:hover {
-      border-color : $border-color-base;
-    }
   }
 
-  @at-root &#{&}-focus .#{$ant-prefix}-search-btn-noempty,
-  &:hover .#{$ant-prefix}-search-btn-noempty {
-    @include btn-primary;
-  }
+  //@at-root &#{&}-focus .#{$ant-prefix}-search-btn-noempty,
+  //&:hover .#{$ant-prefix}-search-btn-noempty {
+  //  @include button-variant-primary($btn-primary-color, $btn-primary-bg);
+  //}
+
   .#{$ant-prefix}-select-combobox {
     .#{$ant-prefix}-select-selection__rendered {
       margin-right : 29px;

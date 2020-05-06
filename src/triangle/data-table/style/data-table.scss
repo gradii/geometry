@@ -162,115 +162,6 @@ $data-table-line-height : 1.12 !default;
       border-left-width : 0;
     }
   }
-
-  &[dir="rtl"] {
-    thead, tbody, tfoot {
-      text-align : right;
-    }
-  }
-
-  &-edit-command:not(.tri-btn) {
-    color : $success-color;
-
-    &:hover {
-      color : color-palette($success-color, 5);
-    }
-  }
-
-  &-save-command:not(.tri-btn) {
-    color : $primary-color;
-
-    &:hover {
-      color : color-palette($primary-color, 5);
-    }
-  }
-
-  &-remove-command:not(.tri-btn) {
-    color : $error-color;
-
-    &:hover {
-      color : color-palette($error-color, 5);
-    }
-  }
-}
-
-.tri-data-table[dir="rtl"] {
-  th {
-    white-space : nowrap;
-  }
-
-  .tri-data-table-header-wrap {
-    border-width : 0 0 0 1px;
-  }
-
-  .tri-group-indicator .tri-btn.tri-bare, .tri-drag-clue .tri-btn.tri-bare {
-    margin-left  : -2px;
-    margin-right : 8px;
-  }
-}
-
-.tri-data-table[dir="rtl"] {
-  .tri-group-indicator {
-    .tri-link .tri-icon, .tri-drag-clue .tri-link .tri-icon {
-      margin-left  : 4px;
-      margin-right : -2px;
-    }
-  }
-
-  .tri-group-indicator {
-    margin-right : 0;
-    margin-left  : 4px;
-  }
-
-  + .tri-group-indicator {
-    margin-right : 4px;
-  }
-
-  .tri-data-table-content-locked, .tri-data-table-footer-locked, .tri-data-table-header-locked {
-    border-left-width  : 1px;
-    border-right-width : 0;
-  }
-
-  th:first-child, td:first-child {
-    border-left-width : 1px;
-  }
-
-  th:last-child, td:last-child {
-    border-left-width : 0;
-  }
-
-  td.tri-hierarchy-cell {
-    border-left-width : 0;
-  }
-
-  .tri-data-table-header, .tri-data-table-footer {
-    padding-left  : 17px;
-    padding-right : 0;
-  }
-
-  .tri-data-table-header .tri-header:first-child {
-    border-right-width : 0;
-  }
-
-  .tri-filtercell-operator {
-    margin-left  : 0;
-    margin-right : 4px;
-  }
-
-  .tri-dirty {
-    left  : auto;
-    right : 0;
-  }
-
-  .tri-edit-cell > {
-    .tri-textbox, .tri-widget, .tri-block, .text-box {
-      margin-right : calc(-8px - 1px);
-    }
-  }
-
-  .tri-data-table-edit-row > td {
-    padding : 0;
-  }
 }
 
 .tri-data-table {
@@ -939,48 +830,6 @@ div {
   }
 }
 
-.tri-multiche.tri-wrap {
-  max-height  : 300px;
-  overflow    : auto;
-  overflow-x  : hidden;
-  white-space : nowrap;
-
-  .tri-item + .tri-item {
-    margin-top : 0.5em;
-  }
-
-  .tri-label {
-    margin      : 0;
-    display     : flex;
-    align-items : center;
-    cursor      : pointer;
-
-    input {
-      margin : 0 0.25em;
-    }
-  }
-}
-
-.tri-filter-selected-items {
-  font-weight : bold;
-  line-height : normal;
-  white-space : nowrap;
-  margin      : 1em 0 0.5em;
-}
-
-.tri-autofitting {
-  width        : auto !important;
-  table-layout : auto !important;
-
-  th.tri-header, td {
-    white-space : nowrap !important;
-  }
-
-  .tri-detail-row {
-    display : none !important;
-  }
-}
-
 .tri-data-table-header, .tri-header, .tri-data-table-header-wrap {
   border-color : rgba(91, 108, 121, 0.08);
 }
@@ -1020,37 +869,8 @@ tbody .tri-group-cell {
   background-color : #ededed;
 }
 
-.tri-data-table-footer td,
-.tri-group-footer td,
-.tri-grouping-row td {
-  font-weight : bold;
-}
-
-.tri-data-table-wrapper {
-  display        : flex;
-  flex-direction : column;
-  position       : relative;
-}
-
 .tri-data-table {
-  background-clip             : padding-box;
   border                      : 1px solid #e6ebf5;
-  box-sizing                  : border-box;
-  outline                     : 0;
-  font-size                   : 1rem;
-  line-height                 : $data-table-line-height;
-  display                     : flex;
-  flex                        : 1 1 auto;
-  overflow                    : hidden;
-  border-radius               : 0px;
-  -webkit-touch-callout       : none;
-  -webkit-tap-highlight-color : transparent;
-}
-
-.tri-ie11 .tri-data-table,
-.tri-edge12 .tri-data-table,
-.tri-edge13 .tri-data-table {
-  background-clip : border-box;
 }
 
 .tri-data-table {
@@ -1105,27 +925,6 @@ tbody .tri-group-cell {
     }
   }
 
-  .tri-tooltip.tri-tooltip-validation {
-    color            : #ffffff;
-    background-color : $primary-5;
-
-    .tri-callout-n {
-      border-bottom-color : $primary-5;
-    }
-
-    .tri-callout-e {
-      border-left-color : $primary-5;
-    }
-
-    .tri-callout-s {
-      border-top-color : $primary-5;
-    }
-
-    .tri-callout-w {
-      border-right-color : $primary-5;
-    }
-  }
-
   .tri-dirty {
     border-color : currentColor transparent transparent currentColor;
   }
@@ -1156,7 +955,6 @@ col.tri-sorted, th.tri-sorted {
 
     &.tri-state-active {
       color            : #ffffff;
-      background-color : $primary-color;
     }
   }
 }

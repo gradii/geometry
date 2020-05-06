@@ -3,6 +3,11 @@
 $backtop-prefix-cls : "#{$ant-prefix}-back-top";
 
 @mixin tri-back-top-theme($theme) {
+  // BackTop
+  $back-top-color                 : #fff !default;
+  $back-top-bg                    : rgba(64, 64, 64, 0.4) !default;
+  $back-top-hover-bg              : rgba(64, 64, 64, 0.6) !default;
+
   .#{$backtop-prefix-cls} {
     @at-root &-content {
       background-color : tri-palette($theme, back-top-bg);

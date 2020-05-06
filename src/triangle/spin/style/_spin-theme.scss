@@ -46,6 +46,7 @@ $spin-dot-size-lg : 2rem !default;
   @media all and (-ms-high-contrast : none), (-ms-high-contrast : active) {
     .#{$spin-prefix-cls}-blur {
       background : tri-color($background, component-background);
+      opacity    : 0.5;
     }
   }
 }

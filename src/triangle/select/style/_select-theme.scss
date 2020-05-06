@@ -1,0 +1,193 @@
+@import "../../core/themes/default-theme";
+@import "../../input/style/input-mixin";
+
+$select-prefix-cls: "#{$ant-prefix}-select";
+
+@mixin selection__clear() {
+  $primary: map-get($theme, primary);
+  $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+
+  color: tri-color($background, disabled-color);
+  background: tri-color($background, component-background);
+  @at-root &:hover {
+    color: tri-color($foreground, text-color-secondary);
+  }
+}
+
+@mixin tri-select-theme($theme) {
+
+  @include import-once("component:selection") {
+    .#{$select-prefix-cls} {
+      > ul > li > a {
+        background-color: tri-color($background, component-background);
+      }
+
+      // arrow
+      @at-root &-arrow {
+        color: tri-color($background, disabled-color);
+      }
+
+      @at-root &-selection {
+        background-color: tri-color($background, component-background);
+        border: $border-width-base $border-style-base tri-color($foreground, border-color-base);
+        border-radius: $border-radius-base;
+      }
+
+      @at-root &-disabled {
+        color: tri-color($background, disabled-color);
+      }
+
+      @at-root &-disabled #{&}-selection {
+        background: $input-disabled-bg;
+        @at-root &:hover,
+          &:focus,
+          &:active {
+          border-color: tri-color($foreground, border-color-base);
+          box-shadow: none;
+        }
+      }
+
+      @at-root &-disabled #{&}-selection--multiple #{&}-selection__choice {
+        color: opacify($black, 0.33);
+        background: $background-color-active;
+      }
+
+      @at-root &-disabled #{&}-selection__choice__remove {
+        color: tri-color($background, disabled-color);
+        @at-root &:hover {
+          color: tri-color($background, disabled-color);
+        }
+      }
+
+      @at-root &-selection__placeholder,
+        &-search__field__placeholder {
+        color: $input-placeholder-color;
+      }
+
+      @at-root &-search--inline {
+        .#{$select-prefix-cls}-search__field {
+          background: transparent;
+          border-width: 0;
+          border-radius: $border-radius-base;
+        }
+      }
+
+      @at-root &-selection--multiple {
+        @include clearfix;
+        > ul > li,
+        .#{$select-prefix-cls}-selection__rendered > ul > li {
+          // for tree-select
+          height: $input-height-base - 0.5rem;
+        }
+
+        .#{$select-prefix-cls}-selection__choice {
+          color: $tag-default-color;
+          background-color: $tag-default-bg;
+          border: 1px solid tri-color($foreground, border-color-split);
+          border-radius: 4px;
+        }
+
+        .#{$select-prefix-cls}-selection__choice__remove {
+          color: tri-color($foreground, text-color-secondary);
+          @at-root &:hover {
+            color: #404040;
+          }
+        }
+      }
+
+      @at-root &-open {
+        .#{$select-prefix-cls}-selection {
+          @include active();
+        }
+      }
+
+      @at-root &-combobox {
+        .#{$select-prefix-cls}-search__field {
+          box-shadow: none;
+        }
+      }
+      @at-root &-combobox#{&}-allow-clear #{&}-selection:hover #{&}-selection__rendered,
+        &-combobox#{&}-show-arrow #{&}-selection:hover #{&}-selection__rendered {
+        margin-right: 20px; // In case that clear button will overlap content
+      }
+    }
+  }
+
+  @include import-once("component:selection-dropdown") {
+    .#{$select-prefix-cls}-dropdown {
+      background-color: tri-color($background, component-background);
+      border-radius: $border-radius-base;
+      box-shadow: $box-shadow-base;
+
+      @at-root &-menu {
+        @at-root &-item-group-title {
+          color: tri-color($foreground, text-color-secondary);
+        }
+
+        @at-root &-item-group-list #{&}-item:first-child:not(:last-child),
+          &-item-group:not(:last-child) #{&}-item-group-list #{&}-item:last-child {
+          border-radius: 0;
+        }
+
+        @at-root &-item {
+          color: tri-color($foreground, text-color);
+          @at-root &:hover {
+            background-color: tri-color($background, item-hover-bg);
+          }
+
+          @at-root &:first-child {
+            border-radius: $border-radius-base $border-radius-base 0 0;
+          }
+
+          @at-root &:last-child {
+            border-radius: 0 0 $border-radius-base $border-radius-base;
+          }
+
+          @at-root &-disabled {
+            color: tri-color($background, disabled-color);
+
+            @at-root &:hover {
+              color: tri-color($background, disabled-color);
+              background-color: tri-color($background, component-background);
+            }
+          }
+
+          @at-root &-selected {
+            @at-root &,
+              &:hover {
+              background-color: $background-color-base;
+              color: tri-color($foreground, text-color);
+            }
+          }
+
+          @at-root &-active {
+            background-color: tri-color($foreground, item-active-bg);
+          }
+
+          @at-root &-divider {
+            background-color: #e5e5e5;
+          }
+        }
+      }
+
+      @at-root &#{&}--multiple {
+        .#{$select-prefix-cls}-dropdown-menu-item {
+          padding-right: $control-padding-horizontal + rem-convert(rem, 20px);
+
+          & .#{$select-prefix-cls}-selected-icon {
+            color: transparent;
+          }
+
+          &:hover .#{$select-prefix-cls}-selected-icon {
+            color: opacify($black, 0.87);
+          }
+          &-selected .#{$select-prefix-cls}-selected-icon,
+          &-selected:hover .#{$select-prefix-cls}-selected-icon {
+            color: $primary-color;
+          }
+        }
+      }
+    }
+  }
+}

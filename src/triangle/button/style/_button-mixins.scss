@@ -1,0 +1,89 @@
+@mixin button-variant-primary($color, $background, $border: $background) {
+  @include button-variant(
+      $background,
+      $border,
+      $color,
+      tri-color-palette($color, 5),
+      tri-color-palette($color, 5), //$hover-border,
+      $color, //$hover-color,
+      tri-color-palette($border, 7), //$active-background,
+      tri-color-palette($border, 7) //$active-border,
+      $color, //$active-color
+  );
+}
+
+@mixin button-variant-danger($color, $background, $border, $primary-color) {
+  @include button-variant(
+      $background,
+      $border,
+      $color,
+      $color, //$hover-background
+      $color, //$hover-border,
+      $primary-color, //$hover-color,
+      tri-color-palette($border, 7), //$active-background,
+      tri-color-palette($border, 7) //$active-border,
+      $primary-color, //$active-color
+  );
+}
+
+@mixin button-variant-ghost($color) {
+  @include button-variant(
+      transparent,
+      $color,
+      $color,
+      transparent,
+      tri-color-palette($color, 5), //$hover-border,
+      tri-color-palette($color, 5), //$hover-color,
+      transparent, //$active-background,
+      tri-color-palette($color, 7) //$active-border,
+      tri-color-palette($color, 7), //$active-color
+  );
+}
+
+@mixin button-variant-other($color, $background, $border, $primary-color) {
+  @include button-variant(
+      $background,
+      $border,
+      $color,
+      $background,
+      $primary-color, //$hover-border,
+      $primary-color, //$hover-color,
+      tri-color-palette($border, 7), //$active-background,
+      tri-color-palette($border, 7) //$active-border,
+      $color, //$active-color
+  );
+}
+
+
+@mixin btn-group-border(
+  $btn-group-class: btn-group,
+  $btn-group-border,
+  $btn-default-border
+) {
+  @at-root #{$btn-group-class} &:not(:first-child):not(:last-child) {
+    border-right-color : $btn-group-border;
+    border-left-color  : $btn-group-border;
+
+    @at-root &:disabled {
+      border-color : $btn-default-border;
+    }
+  }
+
+  @at-root #{$btn-group-class} &:first-child {
+    @at-root &:not(:last-child) {
+      border-right-color : $btn-group-border;
+      @at-root &[disabled] {
+        border-right-color : $btn-default-border;
+      }
+    }
+  }
+
+  @at-root
+  #{$btn-group-class} &:last-child:not(:first-child),
+  #{$btn-group-class} & + & {
+    border-left-color : $btn-group-border;
+    @at-root &[disabled] {
+      border-left-color : $btn-default-border;
+    }
+  }
+}

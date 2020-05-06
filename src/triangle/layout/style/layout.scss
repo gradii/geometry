@@ -2,6 +2,14 @@
 
 $layout-prefix-cls : "#{$ant-prefix}-layout";
 
+// Layout
+$layout-header-height           : 64px !default;
+$layout-header-padding          : 0 50px !default;
+$layout-footer-padding          : 24px 50px !default;
+$layout-trigger-height          : 48px !default;
+$layout-zero-trigger-width      : 36px !default;
+$layout-zero-trigger-height     : 42px !default;
+
 @include import-once('component:layout') {
   .#{$layout-prefix-cls} {
     display        : flex;

@@ -1,14 +1,9 @@
 @import "../../core/themes/default-theme";
 
 $slider-prefix-cls          : "#{$ant-prefix}-slider";
-// slider color
-$slider-disabled-color      : $disabled-color;
 // tooltip
-$slider-tooltip-color       : #fff;
-$slider-tooltip-bg          : tint($text-color, 4%);
 $slider-tooltip-arrow-width : 0.25rem;
 $slider-tooltip-distance    : $slider-tooltip-arrow-width + 0.25rem;
-$slider-tooltip-arrow-color : $slider-tooltip-bg;
 
 @mixin vertical() {
   @at-root &-vertical {
@@ -69,57 +64,35 @@ $slider-tooltip-arrow-color : $slider-tooltip-bg;
   }
 
   @at-root &-rail {
-    position         : absolute;
-    width            : 100%;
-    height           : 4px;
-    border-radius    : 2px;
-    background-color : $border-color-split;
-    transition       : background-color 0.3s ease;
+    position      : absolute;
+    width         : 100%;
+    height        : 4px;
+    border-radius : 2px;
+    transition    : background-color 0.3s ease;
   }
 
   @at-root &-track {
-    position         : absolute;
-    height           : 4px;
-    border-radius    : $border-radius-base;
-    background-color : tint($primary-color, 60%);
-    transition       : background-color 0.3s ease;
+    position      : absolute;
+    height        : 4px;
+    border-radius : $border-radius-base;
+    transition    : background-color 0.3s ease;
   }
 
   @at-root &-handle {
-    position         : absolute;
-    margin-left      : -7px;
-    margin-top       : -5px;
-    width            : 14px;
-    height           : 14px;
-    cursor           : pointer;
-    border-radius    : 50%;
-    border           : solid 2px tint($primary-color, 50%);
-    background-color : $component-background;
-    transition       : border-color 0.3s ease, transform .3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    position      : absolute;
+    margin-left   : -7px;
+    margin-top    : -5px;
+    width         : 14px;
+    height        : 14px;
+    cursor        : pointer;
+    border-radius : 50%;
+    transition    : border-color 0.3s ease, transform .3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
 
     @at-root &:hover {
-      border-color     : $primary-5;
       transform        : scale(1.2);
       transform-origin : center center;
     }
 
-    @at-root &:active {
-      box-shadow : 0 0 0 2px fade-out($primary-color, 0.8);
-    }
-  }
-
-  @at-root &:hover {
-    .#{$slider-prefix-cls}-rail {
-      background-color : #e1e1e1;
-    }
-
-    .#{$slider-prefix-cls}-track {
-      background-color : tint($primary-color, 40%);
-    }
-
-    .#{$slider-prefix-cls}-handle {
-      border-color : $primary-5;
-    }
   }
 
   @at-root &-mark {
@@ -136,11 +109,6 @@ $slider-tooltip-arrow-color : $slider-tooltip-bg;
     vertical-align : middle;
     text-align     : center;
     cursor         : pointer;
-    color          : $text-color-secondary;
-
-    @at-root &-active {
-      color : $text-color;
-    }
   }
 
   @at-root &-step {
@@ -151,45 +119,19 @@ $slider-tooltip-arrow-color : $slider-tooltip-bg;
   }
 
   @at-root &-dot {
-    position         : absolute;
-    top              : -2px;
-    margin-left      : -4px;
-    width            : 8px;
-    height           : 8px;
-    border           : 2px solid $border-color-split;
-    background-color : $component-background;
-    cursor           : pointer;
-    border-radius    : 50%;
-    vertical-align   : middle;
+    position       : absolute;
+    top            : -2px;
+    margin-left    : -4px;
+    width          : 8px;
+    height         : 8px;
+    cursor         : pointer;
+    border-radius  : 50%;
+    vertical-align : middle;
     @at-root &:first-child {
       margin-left : -4px;
     }
     @at-root &:last-child {
       margin-left : -4px;
-    }
-    @at-root &-active {
-      border-color : tint($primary-color, 50%);
-    }
-  }
-
-  @at-root &-disabled {
-    cursor : not-allowed;
-
-    .#{$slider-prefix-cls}-track {
-      background-color : $slider-disabled-color !important;
-    }
-
-    .#{$slider-prefix-cls}-handle,
-    .#{$slider-prefix-cls}-dot {
-      border-color     : $slider-disabled-color !important;
-      background-color : $component-background;
-      cursor           : not-allowed;
-      box-shadow       : none;
-    }
-
-    .#{$slider-prefix-cls}-mark-text,
-    .#{$slider-prefix-cls}-dot {
-      cursor : not-allowed !important;
     }
   }
 }

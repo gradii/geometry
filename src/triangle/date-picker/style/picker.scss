@@ -1,3 +1,9 @@
+@import "../../core/themes/default-theme";
+
+$calendar-prefix-cls            : "#{$ant-prefix}-calendar";
+$calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
+
+
 .#{$calendar-prefix-cls}-picker-container {
   position : absolute;
   z-index  : $zindex-picker;
@@ -80,7 +86,6 @@
       content     : "\e6bb";
       font-family : "anticon";
       font-size   : $font-size-base;
-      color       : $disabled-color;
       display     : inline-block;
       line-height : 1;
     }

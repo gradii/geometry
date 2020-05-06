@@ -1,5 +1,4 @@
-//@import "../inputs/input-mixin";
-//@import "../button/mixin";
+@import "../../core/themes/default-theme";
 
 $calendar-prefix-cls            : "#{$ant-prefix}-calendar";
 $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";

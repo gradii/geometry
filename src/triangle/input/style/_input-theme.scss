@@ -1,0 +1,26 @@
+@import "../../core/themes/default-theme";
+
+
+@mixin tri-input-theme($theme) {
+  $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+
+  $input-border-width             : tri-color($foreground, border-width-base);
+  $input-bg                       : #fff !default;
+  $input-addon-bg                 : #eee !default;
+  $input-addon-color              : tri-color($foreground, input-color);
+  $input-hover-border-color       : tri-color($foreground, primary-color);
+  $input-disabled-bg              : tri-color($foreground, disabled-bg);
+
+  $input-placeholder-color        : tri-color($foreground, disabled-color);
+  $input-color                    : tri-color($foreground, text-color);
+  $input-border-color             : tri-color($foreground, border-color-base);
+
+
+
+}
+
+
+@mixin tri-input-affix-wrapper-theme($theme) {
+
+}

@@ -13,13 +13,11 @@ $select-option-height : 2rem;
   width          : 12px;
   height         : 12px;
   margin-top     : -6px;
-  color          : $disabled-color;
   font-size      : $font-size-base;
   font-style     : normal;
   line-height    : 12px;
   text-align     : center;
   text-transform : none;
-  background     : $component-background;
   cursor         : pointer;
   opacity        : 0;
   transition     : color 0.3s ease, opacity 0.15s ease;
@@ -31,7 +29,6 @@ $select-option-height : 2rem;
    }
    */
   @at-root &:hover {
-    color : $text-color-secondary;
   }
 }
 
@@ -50,7 +47,6 @@ $select-option-height : 2rem;
 
     > ul > li > a {
       padding          : 0;
-      background-color : $component-background;
     }
 
     // arrow
@@ -60,7 +56,6 @@ $select-option-height : 2rem;
       top              : 50%;
       right            : 8px;
       margin-top       : -6px;
-      color            : $disabled-color;
       font-size        : $font-size-sm;
       line-height      : 1;
       transform-origin : 50% 50%;
@@ -76,8 +71,6 @@ $select-option-height : 2rem;
 
       box-sizing       : border-box;
 
-      background-color : $component-background;
-      border           : $border-width-base $border-style-base $border-color-base;
       border-radius    : $border-radius-base;
       outline          : none;
       transition       : all .3s $ease-in-out;
@@ -116,16 +109,13 @@ $select-option-height : 2rem;
     }
 
     @at-root &-disabled {
-      color : $disabled-color;
     }
 
     @at-root &-disabled #{&}-selection {
-      background : $input-disabled-bg;
       cursor     : not-allowed;
       @at-root &:hover,
       &:focus,
       &:active {
-        border-color : $border-color-base;
         box-shadow   : none;
       }
 
@@ -226,10 +216,8 @@ $select-option-height : 2rem;
     }
 
     @at-root &-disabled #{&}-selection__choice__remove {
-      color  : $disabled-color;
       cursor : default;
       @at-root &:hover {
-        color : $disabled-color;
       }
     }
 
@@ -249,7 +237,6 @@ $select-option-height : 2rem;
       height        : 20px;
       margin-top    : -10px;
       overflow      : hidden;
-      color         : $input-placeholder-color;
       line-height   : 20px;
       white-space   : nowrap;
       text-align    : left;
@@ -350,9 +337,6 @@ $select-option-height : 2rem;
         margin-right     : 4px;
         padding          : 0 20px 0 10px;
         overflow         : hidden;
-        color            : $tag-default-color;
-        background-color : $tag-default-bg;
-        border           : 1px solid $border-color-split;
         border-radius    : 4px;
         cursor           : default;
         transition       : padding .3s $ease-in-out;
@@ -375,7 +359,6 @@ $select-option-height : 2rem;
         position    : absolute;
         right       : 4px;
         display     : inline-block;
-        color       : $text-color-secondary;
         line-height : inherit;
         cursor      : pointer;
         font-weight : bold;
@@ -457,7 +440,6 @@ $select-option-height : 2rem;
     box-sizing       : border-box;
     font-size        : $font-size-base;
     font-variant     : initial;
-    background-color : $component-background;
     border-radius    : $border-radius-base;
     outline          : none;
     box-shadow       : $box-shadow-base;
@@ -504,7 +486,6 @@ $select-option-height : 2rem;
       @at-root &-item-group-title {
         height      : rem-convert(rem, 32px);
         padding     : 0 rem-convert(rem, 8px);
-        color       : $text-color-secondary;
         font-size   : $font-size-sm;
         line-height : rem-convert(rem, 32px);
       }
@@ -519,7 +500,6 @@ $select-option-height : 2rem;
         display       : block;
         padding       : rem-convert(rem, 5px) $control-padding-horizontal;
         overflow      : hidden;
-        color         : $text-color;
         font-weight   : normal;
         //line-height   : rem-convert(rem, 22px);
         line-height   : 22px;
@@ -529,7 +509,6 @@ $select-option-height : 2rem;
         transition    : background 0.3s ease;
 
         @at-root &:hover {
-          background-color : $item-hover-bg;
         }
 
         @at-root &:first-child {
@@ -541,12 +520,9 @@ $select-option-height : 2rem;
         }
 
         @at-root &-disabled {
-          color  : $disabled-color;
           cursor : not-allowed;
 
           @at-root &:hover {
-            color            : $disabled-color;
-            background-color : $component-background;
             cursor           : not-allowed;
           }
         }
@@ -554,14 +530,11 @@ $select-option-height : 2rem;
         @at-root &-selected {
           @at-root &,
           &:hover {
-            background-color : $background-color-base;
             font-weight      : bold;
-            color            : $text-color;
           }
         }
 
         @at-root &-active {
-          background-color : $item-active-bg;
         }
 
         @at-root &-divider {
@@ -591,7 +564,6 @@ $select-option-height : 2rem;
         }
 
         &:hover .#{$select-prefix-cls}-selected-icon {
-          color : opacify($black, 0.87);
         }
 
         &-disabled .#{$select-prefix-cls}-selected-icon {
@@ -601,7 +573,6 @@ $select-option-height : 2rem;
         &-selected .#{$select-prefix-cls}-selected-icon,
         &-selected:hover .#{$select-prefix-cls}-selected-icon {
           display : inline-block;
-          color   : $primary-color;
         }
       }
     }

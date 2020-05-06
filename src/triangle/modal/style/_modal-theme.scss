@@ -1,0 +1,50 @@
+$modal-prefix-cls : "#{$ant-prefix}-modal";
+@mixin tri-modal-theme($theme) {
+  $primary          : map-get($theme, primary);
+  $foreground       : map-get($theme, foreground);
+  $background       : map-get($theme, background);
+
+  $modal-header-bg  : #f9fafb;
+  $modal-content-bg : tri-color($background, component-background);
+
+
+  .#{$modal-prefix-cls} {
+    @at-root &-title {
+      color : tri-color($foreground, heading-color);
+    }
+
+    @at-root &-content {
+      background      : $modal-content-bg;
+      border          : 0;
+      border-radius   : $border-radius-base;
+      background-clip : padding-box;
+      box-shadow      : $shadow-2;
+    }
+
+    @at-root &-close {
+      color : tri-color($foreground, text-color-secondary);
+      @at-root &:focus,
+      &:hover {
+        color : #444;
+      }
+    }
+
+    @at-root &-header {
+      border-radius : $border-radius-base $border-radius-base 0 0;
+      background    : $modal-header-bg;
+      color         : $text-color;
+      border-bottom : $border-width-base $border-style-base tri-color($foreground, border-color-split);
+    }
+
+    @at-root &-footer {
+      border-top    : $border-width-base $border-style-base tri-color($foreground, border-color-split);
+      border-radius : 0 0 $border-radius-base $border-radius-base;
+    }
+
+    @at-root &-mask {
+      background-color : #373737;
+      background-color : $modal-mask-bg; // lesshint duplicateProperty: false
+      filter           : alpha(opacity=50);
+    }
+  }
+}

@@ -100,7 +100,11 @@ export type SizeType = 'large' | 'small' | 'default';
     '[class.tri-input-wrapper]'      : 'type !== "search" && !_prefixContent && !_suffixContent',
     '[class.tri-input-affix-wrapper]': 'type === "search" || _prefixContent || _suffixContent',
     '[class.tri-input-group]'        : '_addOnContentBefore || _addOnContentAfter'
-  }
+  },
+  styles       : [`:host {
+    display: inline-block;
+    width: 100%;
+  }`]
 })
 export class InputComponent implements ControlValueAccessor, AfterViewInit {
   _prefixCls = 'tri-input';

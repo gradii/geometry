@@ -15,7 +15,12 @@
 }
 
 // Placeholder text
-@mixin placeholder($color: $input-placeholder-color) {
+@mixin placeholder( $theme, $color: null) {
+  $foreground : map-get($theme, foreground);
+  @if ($color == null) {
+    $color: tri-color($foreground, input-placeholder-color);
+  }
+
   // Firefox
   &::-moz-placeholder {
     color   : $color;

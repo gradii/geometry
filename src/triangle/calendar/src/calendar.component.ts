@@ -42,11 +42,22 @@ import {
 } from './calendar-cells';
 
 @Component({
-  selector: 'tri-calendar',
+  selector   : 'tri-calendar',
   templateUrl: './calendar.component.html',
-  providers: [
+  providers  : [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CalendarComponent), multi: true}
-  ]
+  ],
+  styleUrls  : ['../style/calendar.css'],
+  styles     : [`
+                  tri-calendar {
+                    display: block;
+                    position: relative;
+                  }
+
+                  .tri-patch-full-height {
+                    height: 100%;
+                  }
+                `]
 })
 export class CalendarComponent implements ControlValueAccessor, OnInit {
   @Input() mode: 'month' | 'year' = 'month';

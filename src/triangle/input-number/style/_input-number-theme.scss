@@ -1,0 +1,61 @@
+@import "../../core/themes/default-theme";
+@import "../../input/style/input-mixin";
+
+$input-number-prefix-cls: "#{$ant-prefix}-input-number";
+
+@mixin tri-input-number-theme($theme) {
+  $primary    : map-get($theme, primary);
+  $foreground : map-get($theme, foreground);
+  $background : map-get($theme, background);
+
+  @mixin handler-disabled() {
+    color: #ccc !important;
+  }
+
+  .#{$input-number-prefix-cls} {
+    @include input();
+    //font-size     : $font-size-base;
+    //height        : $input-height-base;
+    border: $border-width-base $border-style-base tri-color($foreground,border-color-base);
+    border-radius: $border-radius-base;
+
+    @at-root &-handler {
+      color: tri-color($foreground,text-color-secondary);
+      @at-root &:active {
+        background: #f4f4f4;
+      }
+      @at-root &:hover #{&}-up-inner,
+        &:hover #{&}-down-inner {
+        color: tri-color($primary, 400);
+      }
+    }
+
+    @at-root &-handler-up-inner,
+      &-handler-down-inner {
+      color: tri-color($foreground,text-color-secondary);
+    }
+
+    @at-root &-input {
+      color: tri-color($foreground, input-color);
+      background-color: tri-color($foreground, input-bg);
+      border: 0;
+      border-radius: $border-radius-base;
+    }
+
+    @at-root &-handler-wrap {
+      border-left: $border-width-base $border-style-base tri-color($foreground,border-color-base);
+      background: $component-background;
+      border-radius: 0 $border-radius-base $border-radius-base 0;
+    }
+
+    @at-root &-handler-down {
+      border-top: $border-width-base $border-style-base tri-color($foreground,border-color-base);
+    }
+
+    @at-root &-disabled {
+      .#{$input-number-prefix-cls}-input {
+        background-color: tri-color($background,disabled-bg);
+      }
+    }
+  }
+}

@@ -1,0 +1,98 @@
+@import "../../core/themes/default-theme";
+
+$slider-prefix-cls : "#{$ant-prefix}-slider";
+
+@mixin tri-slider-theme($theme) {
+  $foreground                 : map-get($theme, foreground);
+  $background                 : map-get($theme, background);
+
+  $primary                    : map-get($theme, primary);
+
+  // slider color
+  $slider-disabled-color      : tri-color($foreground, disabled-color);
+  // tooltip
+  $slider-tooltip-color       : #fff;
+  $slider-tooltip-bg          : tint(tri-color($foreground, text-color), 4%);
+  $slider-tooltip-arrow-color : $slider-tooltip-bg;
+
+  .#{$slider-prefix-cls} {
+    @at-root &-rail {
+      border-radius    : 2px;
+      background-color : tri-color($foreground, border-color-split);
+    }
+
+    @at-root &-track {
+      border-radius    : $border-radius-base;
+      background-color : tint(tri-color($primary), 60%);
+    }
+
+    @at-root &-handle {
+      border           : solid 2px tint(tri-color($primary), 50%);
+      background-color : tri-color($background, component-background);
+
+      @at-root &:hover {
+        border-color : tri-color($primary, 400);
+      }
+
+      @at-root &:active {
+        box-shadow : 0 0 0 2px fade-out(tri-color($primary), 0.8);
+      }
+    }
+
+    @at-root &:hover {
+      .#{$slider-prefix-cls}-rail {
+        background-color : #e1e1e1;
+      }
+
+      .#{$slider-prefix-cls}-track {
+        background-color : tint(tri-color($primary), 40%);
+      }
+
+      .#{$slider-prefix-cls}-handle {
+        border-color : tri-color($primary, 400);
+      }
+    }
+
+    @at-root &-mark-text {
+      color : tri-color($foreground, text-color-secondary);
+
+      @at-root &-active {
+        color : tri-color($foreground, text-color);
+      }
+    }
+
+    @at-root &-step {
+      background : transparent;
+    }
+
+    @at-root &-dot {
+      border           : 2px solid tri-color($foreground, border-color-split);
+      background-color : tri-color($background, component-background);
+      border-radius    : 50%;
+      @at-root &-active {
+        border-color : tint(tri-color($primary), 50%);
+      }
+    }
+
+    @at-root &-disabled {
+      cursor : not-allowed;
+
+      .#{$slider-prefix-cls}-track {
+        background-color : $slider-disabled-color !important;
+      }
+
+      .#{$slider-prefix-cls}-handle,
+      .#{$slider-prefix-cls}-dot {
+        border-color     : $slider-disabled-color !important;
+        background-color : tri-color($background, component-background);
+        cursor           : not-allowed;
+        box-shadow       : none;
+      }
+
+      .#{$slider-prefix-cls}-mark-text,
+      .#{$slider-prefix-cls}-dot {
+        cursor : not-allowed !important;
+      }
+    }
+  }
+}

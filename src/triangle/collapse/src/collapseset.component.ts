@@ -17,7 +17,10 @@ import { CollapseComponent } from './collapse.component';
       <ng-content></ng-content>
     </div>
   `,
-  styleUrls: [`../style/collapse.css`]
+  styleUrls      : [`../style/collapse.css`],
+  styles         : [`:host {
+    display: block;
+  }`]
 })
 export class CollapsesetComponent {
   /**

@@ -33,7 +33,7 @@ ng_module(
 
 sass_library(
     name = "progress_scss_lib",
-    srcs = glob(["**/_*.scss"]) + [":style/progress-abc.scss"],
+    srcs = glob(["**/_*.scss"]),
     deps = ["//src/triangle/core:core_scss_lib"],
 )
 

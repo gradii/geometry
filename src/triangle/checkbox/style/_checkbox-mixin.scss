@@ -1,4 +1,8 @@
 @mixin antCheckboxFn($checkbox-prefix-cls: "#{$ant-prefix}-checkbox") {
+  $primary: map-get($theme, primary);
+  $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+  
   $checkbox-size             : 16px;
   $checkbox-inner-prefix-cls : "#{$checkbox-prefix-cls}-inner";
   // 一般状态
@@ -14,7 +18,7 @@
     @at-root .#{$checkbox-prefix-cls}-wrapper:hover #{&}-inner,
     &:hover #{&}-inner,
     &-input:focus + #{&}-inner {
-      border-color : $primary-color;
+      border-color : tri-color($primary);
     }
 
     @at-root &-checked:after {
@@ -24,7 +28,7 @@
       width               : 100%;
       height              : 100%;
       border-radius       : $border-radius-sm;
-      border              : 1px solid $primary-color;
+      border              : 1px solid tri-color($primary);
       content             : '';
       animation           : antCheckboxEffect 0.36s ease-in-out;
       animation-fill-mode : both;
@@ -43,7 +47,7 @@
       display          : inline-block;
       width            : $checkbox-size;
       height           : $checkbox-size;
-      border           : $border-width-base $border-style-base $border-color-base;
+      border           : $border-width-base $border-style-base tri-color($foreground,border-color-base);
       border-radius    : $border-radius-sm;
       background-color : #fff;
       transition       : all .3s;
@@ -91,7 +95,7 @@
   }
 
   .#{$checkbox-prefix-cls}-indeterminate.#{$checkbox-prefix-cls}-disabled .#{$checkbox-inner-prefix-cls}::after {
-    border-color : $disabled-color;
+    border-color : tri-color($background,disabled-color);
   }
 
   // 选中状态
@@ -113,8 +117,8 @@
   .#{$checkbox-prefix-cls}-checked,
   .#{$checkbox-prefix-cls}-indeterminate {
     .#{$checkbox-inner-prefix-cls} {
-      background-color : $primary-color;
-      border-color     : $primary-color;
+      background-color : tri-color($primary);
+      border-color     : tri-color($primary);
     }
   }
 
@@ -124,7 +128,7 @@
     @at-root &.#{$checkbox-prefix-cls}-checked {
       .#{$checkbox-inner-prefix-cls}::after {
         animation-name : none;
-        border-color   : $disabled-color;
+        border-color   : tri-color($background,disabled-color);
       }
     }
 
@@ -133,7 +137,7 @@
     }
 
     .#{$checkbox-inner-prefix-cls} {
-      border-color     : $border-color-base !important;
+      border-color     : tri-color($foreground,border-color-base) !important;
       background-color : $input-disabled-bg;
       @at-root &::after {
         animation-name : none;
@@ -142,7 +146,7 @@
     }
 
     @at-root & + span {
-      color  : $disabled-color;
+      color  : tri-color($background,disabled-color);
       cursor : not-allowed;
     }
   }

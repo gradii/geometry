@@ -1,0 +1,34 @@
+@import "../../core/themes/default-theme";
+
+@mixin tri-carousel-theme($theme) {
+  .slick-vertical .slick-slide {
+    border: $border-width-base $border-style-base transparent;
+  }
+  // Arrows
+  .slick-prev,
+  .slick-next {
+    background: transparent;
+    color: transparent;
+
+    &:hover,
+    &:focus {
+      background: transparent;
+      color: transparent;
+    }
+  }
+
+  // Dots
+  .slick-dots {
+    li {
+      button {
+        border: 0;
+        background: #fff;
+        color: transparent;
+      }
+
+      @at-root &.slick-active button {
+        background: #fff;
+      }
+    }
+  }
+}

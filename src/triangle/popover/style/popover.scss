@@ -1,6 +1,18 @@
 @import "../../core/themes/default-theme";
 
-$popover-prefix-cls : "#{$ant-prefix}-popover";
+$popover-prefix-cls        : "#{$ant-prefix}-popover";
+
+// Popover
+// ---
+//** Popover maximum width
+$popover-min-width         : 177px !default;
+//** Popover arrow width
+$popover-arrow-width       : 0.25rem !default;
+//** Popover outer arrow width
+$popover-arrow-outer-width : ($popover-arrow-width + 0.0625rem) !default;
+//** Popover distance with trigger
+$popover-distance          : $popover-arrow-width + 0.25rem !default;
+
 
 .#{$popover-prefix-cls} {
   position    : absolute;
@@ -16,9 +28,8 @@ $popover-prefix-cls : "#{$ant-prefix}-popover";
   text-align  : left;
 
   @at-root &:after {
-    content    : "";
-    position   : absolute;
-    background : rgba(255, 255, 255, 0.01);
+    content  : "";
+    position : absolute;
   }
 
   @at-root &-hidden {
@@ -51,34 +62,27 @@ $popover-prefix-cls : "#{$ant-prefix}-popover";
   }
 
   @at-root &-inner {
-    background-color : $popover-bg;
-    background-clip  : padding-box;
-    border-radius    : $border-radius-base;
-    box-shadow       : $box-shadow-base;
+    background-clip : padding-box;
+    border-radius   : $border-radius-base;
   }
 
   @at-root &-title {
-    min-width     : $popover-min-width;
-    margin        : 0; // reset heading margin
-    padding       : 0 16px;
-    line-height   : 32px;
-    height        : 32px;
-    border-bottom : 1px solid $border-color-split;
-    color         : $popover-color;
-    font-weight   : 500;
+    min-width   : $popover-min-width;
+    margin      : 0; // reset heading margin
+    padding     : 0 16px;
+    line-height : 32px;
+    height      : 32px;
+    font-weight : 500;
   }
 
   @at-root &-inner-content {
     padding : 8px 16px;
-    color   : $popover-color;
   }
 
   @at-root &-message {
     padding   : 8px 0 16px;
     font-size : $font-size-base;
-    color     : $popover-color;
     > .#{$iconfont-css-prefix} {
-      color       : $warning-color;
       line-height : 17px;
       position    : absolute;
     }
@@ -106,7 +110,6 @@ $popover-prefix-cls : "#{$ant-prefix}-popover";
       display      : block;
       width        : 0;
       height       : 0;
-      border-color : transparent;
       border-style : solid;
     }
   }
@@ -124,14 +127,12 @@ $popover-prefix-cls : "#{$ant-prefix}-popover";
   &-placement-topLeft > #{&}-content > #{&}-arrow,
   &-placement-topRight > #{&}-content > #{&}-arrow {
     border-bottom-width : 0;
-    border-top-color    : $popover-arrow-outer-color;
     bottom              : $popover-distance - $popover-arrow-outer-width;
     @at-root &:after {
       content             : " ";
       bottom              : 1px;
       margin-left         : -$popover-arrow-width;
       border-bottom-width : 0;
-      border-top-color    : $popover-arrow-color;
     }
   }
   @at-root &-placement-top > #{&}-content > #{&}-arrow {
@@ -148,15 +149,13 @@ $popover-prefix-cls : "#{$ant-prefix}-popover";
   @at-root &-placement-right > #{&}-content > #{&}-arrow,
   &-placement-rightTop > #{&}-content > #{&}-arrow,
   &-placement-rightBottom > #{&}-content > #{&}-arrow {
-    left               : $popover-distance - $popover-arrow-outer-width;
-    border-left-width  : 0;
-    border-right-color : $popover-arrow-outer-color;
+    left              : $popover-distance - $popover-arrow-outer-width;
+    border-left-width : 0;
     @at-root &:after {
-      content            : " ";
-      left               : 1px;
-      bottom             : -$popover-arrow-width;
-      border-left-width  : 0;
-      border-right-color : $popover-arrow-color;
+      content           : " ";
+      left              : 1px;
+      bottom            : -$popover-arrow-width;
+      border-left-width : 0;
     }
   }
   @at-root &-placement-right > #{&}-content > #{&}-arrow {
@@ -173,15 +172,13 @@ $popover-prefix-cls : "#{$ant-prefix}-popover";
   @at-root &-placement-bottom > #{&}-content > #{&}-arrow,
   &-placement-bottomLeft > #{&}-content > #{&}-arrow,
   &-placement-bottomRight > #{&}-content > #{&}-arrow {
-    border-top-width    : 0;
-    border-bottom-color : $popover-arrow-outer-color;
-    top                 : $popover-distance - $popover-arrow-outer-width;
+    border-top-width : 0;
+    top              : $popover-distance - $popover-arrow-outer-width;
     @at-root &:after {
-      content             : " ";
-      top                 : 1px;
-      margin-left         : -$popover-arrow-width;
-      border-top-width    : 0;
-      border-bottom-color : $popover-arrow-color;
+      content          : " ";
+      top              : 1px;
+      margin-left      : -$popover-arrow-width;
+      border-top-width : 0;
     }
   }
   @at-root &-placement-bottom > #{&}-content > #{&}-arrow {
@@ -200,12 +197,10 @@ $popover-prefix-cls : "#{$ant-prefix}-popover";
   &-placement-leftBottom > #{&}-content > #{&}-arrow {
     right              : $popover-distance - $popover-arrow-outer-width;
     border-right-width : 0;
-    border-left-color  : $popover-arrow-outer-color;
     @at-root &:after {
       content            : " ";
       right              : 1px;
       border-right-width : 0;
-      border-left-color  : $popover-arrow-color;
       bottom             : -$popover-arrow-width;
     }
   }

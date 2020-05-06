@@ -73,7 +73,8 @@ export class CollapseComponent {
   @HostBinding('class.tri-collapse-item-disabled')
   disabled = false;
 
-  constructor(@Host() private _collapseSet: CollapsesetComponent, private _elementRef: ElementRef) {
+  constructor(@Host() private _collapseSet: CollapsesetComponent,
+              private _elementRef: ElementRef) {
     this._el = this._elementRef.nativeElement;
     this._collapseSet.addTab(this);
   }
@@ -98,7 +99,7 @@ export class CollapseComponent {
     }
   }
 
-  clickHeader($event) {
+  clickHeader($event: any) {
     this.active = !this.active;
     /** trigger host collapseSet click event */
     this._collapseSet.click(this);

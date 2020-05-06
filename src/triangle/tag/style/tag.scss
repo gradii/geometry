@@ -2,6 +2,10 @@
 
 $tag-prefix-cls : "#{$ant-prefix}-tag";
 
+// Tag
+// --
+$tag-font-size                  : $font-size-base !default;
+
 .#{$tag-prefix-cls}, .tri-tag-ghost {
   display       : inline-block;
   line-height   : 20px;
@@ -9,8 +13,6 @@ $tag-prefix-cls : "#{$ant-prefix}-tag";
   padding       : 0 8px;
   //border-radius : $border-radius-base;
   border-radius : 3px;
-  border        : $border-width-base $border-style-base $border-color-split;
-  background    : $tag-default-bg;
   //font-size     : $tag-font-size;
   font-size     : 10px;
   transition    : all 0.3s $ease-in-out-circ;
@@ -21,12 +23,6 @@ $tag-prefix-cls : "#{$ant-prefix}-tag";
 
   @at-root &:hover {
     opacity : 0.85;
-  }
-
-  @at-root &,
-  & a,
-  & a:hover {
-    color : $tag-default-color;
   }
 
   @at-root &-text {
@@ -50,35 +46,6 @@ $tag-prefix-cls : "#{$ant-prefix}-tag";
     }
   }
 
-  @at-root &-has-color {
-    border-color : transparent;
-    @at-root &,
-    & a,
-    & a:hover,
-    & .#{$iconfont-css-prefix}-cross,
-    & .#{$iconfont-css-prefix}-cross:hover {
-      color : #fff;
-    }
-  }
-
-  @at-root &-checkable {
-    background-color : transparent;
-    border-color     : transparent;
-    @at-root &:not(#{&}-checked):hover {
-      color : $primary-color;
-    }
-    @at-root &:active,
-    &-checked {
-      color : #fff;
-    }
-    @at-root &-checked {
-      background-color : $primary-6;
-    }
-    @at-root &:active {
-      background-color : $primary-7;
-    }
-  }
-
   @at-root &-close {
     width   : 0 !important;
     padding : 0;
@@ -95,27 +62,4 @@ $tag-prefix-cls : "#{$ant-prefix}-tag";
     animation           : antZoomOut .3s $ease-in-out-circ;
     animation-fill-mode : both;
   }
-
-  $colors       : pink, red, orange, yellow, cyan, green, blue, purple;
-  // mixin to iterate over colors and create CSS class for each one
-  @mixin make-color-classes($i: length($colors)) {
-    @if $i > 0 {
-      @include make-color-classes($i - 1);
-      $color      : nth($colors, $i);
-      $lightColor : map_get($g-colors, "#{$color}-2");
-      $darkColor  : map_get($g-colors, "#{$color}-6");
-      @at-root &-#{"" + $color} {
-        color        : $darkColor;
-        background   : $lightColor;
-        border-color : $lightColor;
-      }
-      @at-root &-#{"" + $color}-inverse {
-        background   : $darkColor;
-        border-color : $darkColor;
-        color        : #fff;
-      }
-    }
-  }
-
-  @include make-color-classes();
 }

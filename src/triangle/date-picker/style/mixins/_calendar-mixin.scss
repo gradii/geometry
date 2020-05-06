@@ -1,13 +1,10 @@
-@mixin calendarPanelHeader($calendar-prefix-cls) {
+
+
+@mixin calendar-panel-header($calendar-prefix-cls) {
   height        : 40px;
   line-height   : 40px;
   text-align    : center;
   user-select   : none;
-  border-bottom : $border-width-base $border-style-base $border-color-split;
-
-  a:hover {
-    color : $link-hover-color;
-  }
 
   .#{$calendar-prefix-cls}-century-select,
   .#{$calendar-prefix-cls}-decade-select,
@@ -16,7 +13,6 @@
     padding     : 0 2px;
     font-weight : 500;
     display     : inline-block;
-    color       : $heading-color;
     line-height : 40px;
   }
 
@@ -37,7 +33,6 @@
   .#{$calendar-prefix-cls}-next-year-btn {
     position    : absolute;
     top         : 0;
-    color       : $text-color-secondary;
     font-family : Arial, "Hiragino Sans GB", "Microsoft Yahei", "Microsoft Sans Serif", sans-serif;
     padding     : 0 5px;
     font-size   : 16px;

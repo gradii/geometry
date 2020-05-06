@@ -1,0 +1,155 @@
+@import "../../core/themes/default-theme";
+
+$radio-prefix-cls       : "#{$ant-prefix}-radio" !default;
+$radio-group-prefix-cls : "#{$radio-prefix-cls}-group" !default;
+$radio-inner-prefix-cls : "#{$radio-prefix-cls}-inner" !default;
+$radio-duration         : 0.3s !default;
+
+@mixin tri-radio-theme($theme) {
+  $primary    : map-get($theme, primary);
+  $foreground : map-get($theme, foreground);
+  $background : map-get($theme, background);
+
+  .#{$radio-prefix-cls} {
+    @at-root .#{$radio-prefix-cls}-wrapper:hover #{&},
+    &:hover,
+    &-focused {
+      .#{$radio-inner-prefix-cls} {
+        border-color : $primary;
+      }
+    }
+
+    @at-root &-checked::after {
+      border-radius : 50%;
+      border        : $radio-outer-circle-size solid $primary;
+    }
+
+    @at-root &-inner {
+      @at-root &::after {
+        border-radius    : 50%;
+        border           : 0;
+        background-color : $primary;
+      }
+      border-radius    : 50%;
+      border           : $radio-outer-circle-size solid tri-color($foreground, border-color-base);
+      background-color : $radio-button-bg;
+    }
+  }
+
+  // 选中状态
+  .#{$radio-prefix-cls}-checked {
+    .#{$radio-inner-prefix-cls} {
+      border-color : $primary;
+    }
+  }
+
+  .#{$radio-prefix-cls}-disabled {
+    .#{$radio-inner-prefix-cls} {
+      border-color     : tri-color($foreground, border-color-base) !important;
+      background-color : tri-color($theme, input-disabled-bg);
+      @at-root &:after {
+        background-color : #ccc;
+      }
+    }
+
+    @at-root & + span {
+      color : tri-color($background, disabled-color) ;
+    }
+  }
+
+  .#{$radio-prefix-cls}-button-wrapper {
+    color       : $radio-button-color;
+    border      : $border-width-base $border-style-base tri-color($foreground, border-color-base);
+    border-left : 0;
+    background  : tri-color($foreground, radio-button-bg);
+
+    a {
+      color : tri-color($foreground, radio-button-color);
+    }
+
+    @at-root .#{$radio-group-prefix-cls}-large #{&} {
+      height : tri-color($foreground, input-height-lg);
+    }
+
+    @at-root .#{$radio-group-prefix-cls}-small #{&} {
+      @at-root &:first-child {
+        border-radius : $border-radius-sm 0 0 $border-radius-sm;
+      }
+      @at-root &:last-child {
+        border-radius : 0 $border-radius-sm $border-radius-sm 0;
+      }
+    }
+
+    @at-root &:not(:first-child) {
+      @at-root &::before {
+        background-color : tri-color($foreground, border-color-base);
+      }
+    }
+    @at-root &:first-child {
+      border-radius : $border-radius-base 0 0 $border-radius-base;
+      border-left   : $border-width-base $border-style-base tri-color($foreground, border-color-base);
+    }
+
+    @at-root &:last-child {
+      border-radius : 0 $border-radius-base $border-radius-base 0;
+    }
+
+    @at-root &:first-child:last-child {
+      border-radius : $border-radius-base;
+    }
+
+    @at-root &:hover,
+    &-focused {
+      color : $primary;
+    }
+
+    @at-root &-checked {
+      background   : tri-color($foreground, radio-button-bg);
+      border-color : $primary;
+      color        : $primary;
+      box-shadow   : -1px 0 0 0 $primary;
+      @at-root &::before {
+        background-color : $primary !important;
+      }
+      @at-root &:first-child {
+        border-color : $primary;
+        box-shadow   : none !important;
+      }
+
+      @at-root &:hover {
+        border-color : tri-color($primary, 400);
+        box-shadow   : -1px 0 0 0 tri-color($primary, 400);
+        color        : tri-color($primary, 400);
+      }
+
+      @at-root &:active {
+        border-color : tri-color($primary, 600);
+        box-shadow   : -1px 0 0 0 tri-color($primary, 600);
+        color        : tri-color($primary, 600);
+      }
+    }
+
+    @at-root &-disabled {
+      border-color     : tri-color($foreground, border-color-base);
+      background-color : tri-color($foreground, input-disabled-bg);
+      color            : tri-color($background, disabled-color) ;
+
+      @at-root &:first-child,
+      &:hover {
+        border-color     : tri-color($foreground, border-color-base);
+        background-color : tri-color($foreground, input-disabled-bg);
+        color            : tri-color($background, disabled-color) ;
+      }
+      @at-root &:first-child {
+        border-left-color : tri-color($foreground, border-color-base);
+      }
+    }
+
+    @at-root &-disabled#{&}-checked {
+      color            : #fff;
+      background-color : #e6e6e6;
+      border-color     : tri-color($foreground, border-color-base);
+      box-shadow       : none;
+    }
+  }
+}

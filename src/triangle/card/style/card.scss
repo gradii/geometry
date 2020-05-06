@@ -5,7 +5,6 @@ $card-padding-base  : 24px;
 $card-padding-wider : 32px;
 
 .#{$card-prefix-cls} {
-  background    : $component-background;
   border-radius : $border-radius-sm;
   font-size     : $font-size-base;
   position      : relative;
@@ -18,15 +17,11 @@ $card-padding-wider : 32px;
   }
 
   @at-root &-bordered {
-    border     : $border-width-base $border-style-base $border-color-split;
-    box-shadow : 0 0.5rem 1rem rgba(0, 0, 0, .05);
   }
 
   @at-root &-head {
     height        : $card-head-height;
     line-height   : $card-head-line-height;
-    background    : $card-head-background;
-    border-bottom : $border-width-base $border-style-base $border-color-split;
     padding       : ($card-head-height - $card-head-line-height)/2 ($card-padding-base);
     border-radius : $border-radius-sm $border-radius-sm 0 0;
     box-sizing    : border-box;
@@ -38,12 +33,10 @@ $card-padding-wider : 32px;
       width         : 100%;
       overflow      : hidden;
       white-space   : nowrap;
-      color         : $card-head-color;
       font-weight   : 500;
       line-height   : $card-head-line-height;
       padding       : 0 0 0 5px;
       margin        : 0 0 0 -5px;
-      border-left   : 3px solid $primary-color;
     }
   }
 
@@ -91,7 +84,6 @@ $card-padding-wider : 32px;
   @at-root &-grid {
     border-radius : 0;
     border        : 0;
-    box-shadow    : 0 0 0 0.5px $border-color-split, 0 0 0 0.5px $border-color-split inset;
     width         : 33.33%;
     float         : left;
     padding       : $card-padding-base;

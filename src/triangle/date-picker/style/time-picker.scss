@@ -2,7 +2,6 @@
   position         : absolute;
   width            : 100%;
   top              : 40px;
-  background-color : $component-background;
 
   @at-root &-panel {
     z-index  : $zindex-picker;

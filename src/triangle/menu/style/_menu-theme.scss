@@ -1,12 +1,19 @@
 @import "../../core/themes/default-theme";
 
-$menu-prefix-cls      : "#{$ant-prefix}-menu" !default;
-$menu-collapsed-width : 64px !default;
-$menu-font-size       : $font-size-base !default;
+$menu-prefix-cls : "#{$ant-prefix}-menu" !default;
 
 @mixin tri-menu-theme($theme) {
-  $foreground: map-get($theme, foreground);
-  $primary: map-get($theme, primary);
+  $foreground           : map-get($theme, foreground);
+  $background           : map-get($theme, background);
+  $primary              : map-get($theme, primary);
+
+  $menu-collapsed-width : 64px !default;
+  $menu-font-size       : $font-size-base !default;
+
+  // Menu
+  // ---
+  $menu-dark-bg         : tri-color($background, layout-header-background);
+  $menu-dark-submenu-bg : #333 !default;
 
   // default theme
   .#{$menu-prefix-cls} {
@@ -64,12 +71,12 @@ $menu-font-size       : $font-size-base !default;
     }
 
     @at-root & > #{&}-item-divider {
-      background-color : $border-color-split;
+      background-color : tri-color($foreground, border-color-split);
     }
 
     @at-root &-submenu {
       > .#{$menu-prefix-cls} {
-        background-color : $component-background;
+        background-color : tri-color($background, component-background);
       }
     }
 
@@ -83,15 +90,15 @@ $menu-font-size       : $font-size-base !default;
     // Disabled state sets text to gray and nukes hover/tab effects
     @at-root &-item-disabled,
     &-submenu-disabled {
-      color        : $disabled-color !important;
+      color        : tri-color($foreground, disabled-color) !important;
       background   : none;
       border-color : transparent !important;
       > a {
-        color : $disabled-color !important;
+        color : tri-color($foreground, disabled-color) !important;
       }
 
       > .#{$menu-prefix-cls}-submenu-title {
-        color : $disabled-color !important;
+        color : tri-color($foreground, disabled-color) !important;
       }
     }
   }
@@ -100,7 +107,7 @@ $menu-font-size       : $font-size-base !default;
   .#{$menu-prefix-cls} {
     @at-root &-dark,
     &-dark #{&}-sub {
-      color      : $text-color-secondary-dark;
+      color      : tri-color($foreground, text-color-secondary-dark);
       background : $menu-dark-bg;
     }
 
@@ -121,7 +128,7 @@ $menu-font-size       : $font-size-base !default;
     @at-root &-dark #{&}-item,
     &-dark #{&}-item-group-title,
     &-dark #{&}-item > a {
-      color : $text-color-secondary-dark;
+      color : tri-color($foreground, text-color-secondary-dark);
     }
 
     @at-root &-dark#{&}-inline,
@@ -166,7 +173,7 @@ $menu-font-size       : $font-size-base !default;
     }
 
     @at-root &#{&}-dark #{&}-item-selected {
-      background-color : $primary-color;
+      background-color : tri-color($foreground, primary-color);
     }
 
     // Disabled state sets text to dark gray and nukes hover/tab effects
@@ -175,10 +182,10 @@ $menu-font-size       : $font-size-base !default;
       @at-root &,
       & > a {
         opacity : 0.8;
-        color   : $disabled-color-dark !important;
+        color   : tri-color($foreground, disabled-color-dark) !important;
       }
       > .#{$menu-prefix-cls}-submenu-title {
-        color : $disabled-color-dark !important;
+        color : tri-color($foreground, disabled-color-dark) !important;
       }
     }
   }

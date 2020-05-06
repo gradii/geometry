@@ -4,11 +4,13 @@ $badge-prefix-cls  : "#{$ant-prefix}-badge";
 $number-prefix-cls : "#{$ant-prefix}-scroll-number";
 
 @mixin tri-badge-theme($theme) {
+  $primary : map-get($theme, primary);
+
   .#{$badge-prefix-cls} {
 
     @at-root &-count {
-      background       : tri-color(tri-palette($theme, highlight));
-      color            : #fff;
+      background : tri-color(tri-palette($theme, highlight));
+      color      : #fff;
       a,
       a:hover {
         color : #fff;
@@ -16,8 +18,8 @@ $number-prefix-cls : "#{$ant-prefix}-scroll-number";
     }
 
     @at-root &-dot {
-      background       : tri-color(tri-palette($theme, highlight));
-      box-shadow       : 0 0 0 1px #fff;
+      background : tri-color(tri-palette($theme, highlight));
+      box-shadow : 0 0 0 1px #fff;
     }
 
     @at-root &-status {
@@ -27,7 +29,7 @@ $number-prefix-cls : "#{$ant-prefix}-scroll-number";
       @at-root &-processing {
         background-color : tri-color(tri-palette($theme, primary));
         @at-root &:after {
-          border        : 1px solid $primary-color;
+          border : 1px solid tri-color($primary);
         }
       }
       @at-root &-default {
@@ -40,7 +42,7 @@ $number-prefix-cls : "#{$ant-prefix}-scroll-number";
         background-color : tri-color(tri-palette($theme, warning));
       }
       @at-root &-text {
-        color       : tri-color(tri-palette($theme, text-color));
+        color : tri-color(tri-palette($theme, text-color));
       }
     }
   }

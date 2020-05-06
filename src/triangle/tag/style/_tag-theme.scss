@@ -1,0 +1,76 @@
+@import "../../core/themes/default-theme";
+
+$tag-prefix-cls : "#{$ant-prefix}-tag";
+
+
+@mixin tri-tag-theme($theme) {
+  $foreground        : map-get($theme, foreground);
+
+  $tag-default-bg    : #f3f3f3 !default;
+  $tag-default-color : tri-color($foreground, text-color);
+
+  .#{$tag-prefix-cls},
+  .tri-tag-ghost {
+    border-radius : 3px;
+    border        : $border-width-base $border-style-base tri-color($foreground, border-color-split);
+    background    : $tag-default-bg;
+
+    @at-root &,
+    & a,
+    & a:hover {
+      color : $tag-default-color;
+    }
+
+    @at-root &-has-color {
+      border-color : transparent;
+      @at-root &,
+      & a,
+      & a:hover,
+      & .#{$iconfont-css-prefix}-cross,
+      & .#{$iconfont-css-prefix}-cross:hover {
+        color : #fff;
+      }
+    }
+
+    @at-root &-checkable {
+      background-color : transparent;
+      border-color     : transparent;
+      @at-root &:not(#{&}-checked):hover {
+        color : $primary-color;
+      }
+      @at-root &:active,
+      &-checked {
+        color : #fff;
+      }
+      @at-root &-checked {
+        background-color : $primary-6;
+      }
+      @at-root &:active {
+        background-color : $primary-7;
+      }
+    }
+
+    $colors       : pink, red, orange, yellow, cyan, green, blue, purple;
+    // mixin to iterate over colors and create CSS class for each one
+    @mixin make-color-classes($i: length($colors)) {
+      @if $i > 0 {
+        @include make-color-classes($i - 1);
+        $color      : nth($colors, $i);
+        $lightColor : map_get($g-colors, "#{$color}-2");
+        $darkColor  : map_get($g-colors, "#{$color}-6");
+        @at-root &-#{"" + $color} {
+          color        : $darkColor;
+          background   : $lightColor;
+          border-color : $lightColor;
+        }
+        @at-root &-#{"" + $color}-inverse {
+          background   : $darkColor;
+          border-color : $darkColor;
+          color        : #fff;
+        }
+      }
+    }
+
+    @include make-color-classes();
+  }
+}

@@ -1,0 +1,50 @@
+@import "../../core/themes/default-theme";
+
+$timeline-prefix-cls : "#{$ant-prefix}-timeline";
+
+@mixin tri-timeline-theme($theme) {
+  $foreground     : map-get($theme, foreground);
+  $background     : map-get($theme, background);
+
+  $primary        : map-get($theme, primary);
+  $error          : map-get($theme, error);
+  $success        : map-get($theme, success);
+
+  $timeline-color : tri-color($foreground, border-color-split);
+
+  .#{$timeline-prefix-cls} {
+    @at-root &-item {
+      @at-root &-tail {
+        border-left : 2px solid $timeline-color;
+      }
+
+      @at-root &-head {
+        background-color : tri-color($background, component-background);
+        border-radius    : 100px;
+        border           : 2px solid transparent;
+        @at-root &-blue {
+          border-color : tri-color($primary);
+          color        : tri-color($primary);
+        }
+        @at-root &-red {
+          border-color : tri-color($error);
+          color        : tri-color($error);
+        }
+        @at-root &-green {
+          border-color : tri-color($success);
+          color        : tri-color($success);
+        }
+      }
+    }
+
+    @at-root &#{&}-pending #{&}-item-last #{&}-item-tail {
+      border-left : 2px dotted $timeline-color;
+    }
+
+    @at-root &#{&}-reverse #{&}-item-pending {
+      .#{$timeline-prefix-cls}-item-tail {
+        border-left : 2px dotted $timeline-color;
+      }
+    }
+  }
+}

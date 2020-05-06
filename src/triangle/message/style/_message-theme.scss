@@ -1,0 +1,28 @@
+$message-prefix-cls: "#{$ant-prefix}-message";
+
+@mixin tri-message-theme($theme) {
+  .#{$message-prefix-cls} {
+    @at-root &-notice-content {
+      border-radius: $border-radius-base;
+      box-shadow: $shadow-2;
+      background: $component-background;
+    }
+
+    @at-root &-success .#{$iconfont-css-prefix} {
+      color: $success-color;
+    }
+
+    @at-root &-error .#{$iconfont-css-prefix} {
+      color: $error-color;
+    }
+
+    @at-root &-warning .#{$iconfont-css-prefix} {
+      color: $warning-color;
+    }
+
+    @at-root &-info .#{$iconfont-css-prefix},
+      &-loading .#{$iconfont-css-prefix} {
+      color: $info-color;
+    }
+  }
+}

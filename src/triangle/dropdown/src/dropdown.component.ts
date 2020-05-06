@@ -47,35 +47,54 @@ export type Placement =
   encapsulation  : ViewEncapsulation.None,
   animations     : [DropDownAnimation],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  exportAs       : 'tri-dropdown',
   template       : `
-      <div>
-          <ng-content></ng-content>
+    <div>
+      <ng-content></ng-content>
+    </div>
+    <ng-template
+      cdkConnectedOverlay
+      cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+      [cdkConnectedOverlayHasBackdrop]="_hasBackdrop"
+      [cdkConnectedOverlayPositions]="_positions"
+      [cdkConnectedOverlayOrigin]="_origin"
+      (backdropClick)="_hide()"
+      [cdkConnectedOverlayMinWidth]="_triggerWidth"
+      (positionChange)="_onPositionChange($event)"
+      [cdkConnectedOverlayOpen]="visible">
+      <div
+        class="tri-dropdown tri-dropdown-placement-{{placement}}"
+        [@dropDownAnimation]="_dropDownPosition"
+        (mouseenter)="_onMouseEnterEvent($event)"
+        (mouseleave)="_onMouseLeaveEvent($event)"
+        [style.minWidth.px]="_triggerWidth"
+        (click)="_clickDropDown($event)">
+        <div [class.tri-table-filter-dropdown]="hasFilterButton">
+          <ng-content select="[tri-menu]"></ng-content>
+          <ng-content select="[tri-table-filter]"></ng-content>
+        </div>
+        <ng-content select="[tri-dropdown-custom]"></ng-content>
       </div>
-      <ng-template
-              cdkConnectedOverlay
-              cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
-              [cdkConnectedOverlayHasBackdrop]="_hasBackdrop"
-              [cdkConnectedOverlayPositions]="_positions"
-              [cdkConnectedOverlayOrigin]="_origin"
-              (backdropClick)="_hide()"
-              [cdkConnectedOverlayMinWidth]="_triggerWidth"
-              (positionChange)="_onPositionChange($event)"
-              [cdkConnectedOverlayOpen]="visible">
-          <div
-                  class="tri-dropdown tri-dropdown-placement-{{placement}}"
-                  [@dropDownAnimation]="_dropDownPosition"
-                  (mouseenter)="_onMouseEnterEvent($event)"
-                  (mouseleave)="_onMouseLeaveEvent($event)"
-                  [style.minWidth.px]="_triggerWidth"
-                  (click)="_clickDropDown($event)">
-              <div [class.tri-table-filter-dropdown]="hasFilterButton">
-                  <ng-content select="[tri-menu]"></ng-content>
-                  <ng-content select="[tri-table-filter]"></ng-content>
-              </div>
-              <ng-content select="[tri-dropdown-custom]"></ng-content>
-          </div>
-      </ng-template>`,
-  exportAs       : 'tri-dropdown'
+    </ng-template>`,
+  styleUrls      : ['../style/dropdown.css'],
+  styles         : [`tri-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  tri-dropdown-button {
+    position: relative;
+    display: inline-block;
+  }
+
+  .tri-dropdown-button {
+    top: 100%;
+    left: 0;
+    position: relative;
+    width: 100%;
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }`]
 })
 export class DropDownComponent implements OnInit, OnDestroy, AfterViewInit {
   hasFilterButton = false;

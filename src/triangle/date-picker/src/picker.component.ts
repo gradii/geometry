@@ -21,7 +21,8 @@ import {
   Input,
   OnInit,
   Output,
-  ViewChild
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
 import { DropDownAnimation } from '@gradii/triangle/core';
 import { I18nService } from '@gradii/triangle/i18n';
@@ -29,11 +30,13 @@ import { CandyDate } from '../lib/candy-date/candy-date';
 
 @Component({
   selector       : 'tri-picker',
+  encapsulation  : ViewEncapsulation.None,
   templateUrl    : './picker.component.html',
   animations     : [
     DropDownAnimation
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: [`../style/picker.css`]
 })
 
 export class PickerComponent implements OnInit, AfterViewInit {

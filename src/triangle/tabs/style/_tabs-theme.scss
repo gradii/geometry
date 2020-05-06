@@ -9,6 +9,11 @@
   $foreground    : map-get($theme, foreground);
   $header-border : 1px solid tri-color($foreground, divider);
 
+  // Tabs
+  // ---
+  $tabs-card-head-background      : #f9f9f9 !default;
+  $tabs-title-font-size           : $font-size-lg !default;
+
   .tri-tab-nav-bar,
   .tri-tab-header {
     border-bottom : $header-border;

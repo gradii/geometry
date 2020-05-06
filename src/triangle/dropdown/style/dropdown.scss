@@ -42,7 +42,6 @@ $dropdown-prefix-cls : "#{$ant-prefix}-dropdown";
     padding          : 0;
     margin           : 0;
     text-align       : left;
-    background-color : $component-background;
     border-radius    : $border-radius-base;
     box-shadow       : $box-shadow-base;
     background-clip  : padding-box;
@@ -54,40 +53,17 @@ $dropdown-prefix-cls : "#{$ant-prefix}-dropdown";
       clear       : both;
       font-size   : $font-size-base;
       font-weight : normal;
-      color       : $text-color;
       white-space : nowrap;
       cursor      : pointer;
       transition  : all .3s;
 
       > a {
-        color      : $text-color;
         display    : block;
         padding    : 7px 8px;
         margin     : -7px -8px;
         transition : all .3s;
         @at-root &:focus {
           text-decoration : none;
-        }
-      }
-
-      @at-root &-selected,
-      &-selected > a {
-        color            : $primary-color;
-        background-color : $item-active-bg;
-      }
-
-      @at-root &:hover {
-        background-color : $item-hover-bg;
-      }
-
-      @at-root &-disabled {
-        color  : $disabled-color;
-        cursor : not-allowed;
-
-        @at-root &:hover {
-          color            : $disabled-color;
-          background-color : $component-background;
-          cursor           : not-allowed;
         }
       }
 
@@ -109,7 +85,6 @@ $dropdown-prefix-cls : "#{$ant-prefix}-dropdown";
       @at-root &-divider {
         height           : 1px;
         overflow         : hidden;
-        background-color : $border-color-split;
         line-height      : 0;
         margin           : 0.5em 0;
       }
@@ -120,7 +95,6 @@ $dropdown-prefix-cls : "#{$ant-prefix}-dropdown";
       position    : absolute;
       content     : "\e61f";
       right       : 8px;
-      color       : $text-color-secondary;
       @include iconfont-size-under-12px(10px);
     }
 
@@ -137,12 +111,6 @@ $dropdown-prefix-cls : "#{$ant-prefix}-dropdown";
       transform-origin : 0 0;
     }
 
-    @at-root &-submenu#{&}-submenu-disabled .#{$dropdown-prefix-cls}-menu-submenu-title {
-      @at-root &,
-      &:after {
-        color : $disabled-color;
-      }
-    }
     @at-root &-submenu:first-child #{&}-submenu-title {
       border-radius : $border-radius-base $border-radius-base 0 0;
     }
@@ -198,34 +166,5 @@ $dropdown-prefix-cls : "#{$ant-prefix}-dropdown";
   }
   .#{$iconfont-css-prefix}-down {
     @include iconfont-size-under-12px(10px);
-  }
-}
-
-// https://github.com/ant-design/ant-design/issues/4903
-.#{$dropdown-prefix-cls}-menu-dark {
-  @at-root &,
-  & .#{$dropdown-prefix-cls}-menu {
-    background : $menu-dark-bg;
-  }
-  .#{$dropdown-prefix-cls}-menu-item,
-  .#{$dropdown-prefix-cls}-menu-submenu-title,
-  .#{$dropdown-prefix-cls}-menu-item > a {
-    color : $text-color-secondary-dark;
-    @at-root &:after {
-      color : $text-color-secondary-dark;
-    }
-    @at-root &:hover {
-      color      : #fff;
-      background : transparent;
-    }
-  }
-
-  .#{$dropdown-prefix-cls}-menu-item-selected {
-    @at-root &,
-    &:hover,
-    & > a {
-      background : $primary-color;
-      color      : #fff;
-    }
   }
 }

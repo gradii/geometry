@@ -1,0 +1,29 @@
+@import "../../core/themes/default-theme";
+
+$breadcrumb-prefix-cls : "#{$ant-prefix}-breadcrumb";
+
+@mixin tri-breadcrumb-theme($theme) {
+  $foreground : map-get($theme, foreground);
+  $primary : map-get($theme, primary);
+
+  .#{$breadcrumb-prefix-cls} {
+    color : tri-color($foreground, text-color);
+
+    a {
+      color : tri-color($foreground, text-color);
+
+      @at-root &:hover {
+        color : tri-color($primary, 400);
+      }
+    }
+
+    @at-root & > span:last-child {
+      color : tri-color($foreground, text-color);
+    }
+
+    @at-root &-separator {
+      color : rgba(0, 0, 0, 0.3);
+    }
+
+  }
+}

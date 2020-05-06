@@ -1,0 +1,12 @@
+
+
+@mixin tri-input-group-theme($theme, $inputClass) {
+  $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+
+  .#{$inputClass}-prefix,
+  .#{$inputClass}-suffix {
+    color       : tri-color($foreground, input-color);
+  }
+
+}

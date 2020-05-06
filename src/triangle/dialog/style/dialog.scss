@@ -1,18 +1,14 @@
 @import "../../core/themes/default-theme";
 
 $dialog-prefix-cls  : "#{$ant-prefix}-dialog" !default;
-$dialog-header-bg   : #f9fafb !default;
-$dialog-content-bg  : $component-background !default;
 $zindex-dialog-mask : 100 !default;
 $zindex-dialog      : 1000 !default;
-$dialog-mask-bg     : rgba(55, 55, 55, 0.6) !default;
 
 .#{$dialog-prefix-cls} {
   position        : relative;
   width           : 100%;
   height          : 100%;
   margin          : 0 auto;
-  background      : $dialog-content-bg;
   outline         : 0;
   @include border-radius($border-radius-base);
   background-clip : padding-box;
@@ -35,7 +31,6 @@ $dialog-mask-bg     : rgba(55, 55, 55, 0.6) !default;
     font-size   : $font-size-lg;
     line-height : 21px;
     font-weight : 500;
-    color       : $heading-color;
   }
 
   @at-root &-close {
@@ -50,7 +45,6 @@ $dialog-mask-bg     : rgba(55, 55, 55, 0.6) !default;
     line-height     : 1;
     text-decoration : none;
     transition      : color .3s ease;
-    color           : $text-color-secondary;
     outline         : 0;
 
     @at-root &-x {
@@ -80,11 +74,8 @@ $dialog-mask-bg     : rgba(55, 55, 55, 0.6) !default;
   }
 
   @at-root &-header {
-    padding       : .8125rem 1rem;
     @include border-radius(($border-radius-base $border-radius-base 0 0));
-    background    : $dialog-header-bg;
-    color         : $text-color;
-    border-bottom : $border-width-base $border-style-base $border-color-split;
+    padding       : .8125rem 1rem;
   }
 
   @at-root &-content {
@@ -94,7 +85,6 @@ $dialog-mask-bg     : rgba(55, 55, 55, 0.6) !default;
   }
 
   @at-root &-actions {
-    border-top : $border-width-base $border-style-base $border-color-split;
     padding    : .625rem 1rem .625rem .625rem;
     text-align : right;
     @include border-radius((0 0 $border-radius-base $border-radius-base));
@@ -117,8 +107,6 @@ $dialog-mask-bg     : rgba(55, 55, 55, 0.6) !default;
     right            : 0;
     left             : 0;
     bottom           : 0;
-    background-color : #373737;
-    background-color : $dialog-mask-bg; // lesshint duplicateProperty: false
     height           : 100%;
     z-index          : $zindex-dialog-mask;
     filter           : alpha(opacity=50);

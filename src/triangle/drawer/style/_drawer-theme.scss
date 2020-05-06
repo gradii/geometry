@@ -1,0 +1,96 @@
+@import "../../core/themes/default-theme";
+
+$dawer-prefix-cls  : #{$ant-prefix}-drawer;
+$drawer-prefix-cls : $dawer-prefix-cls;
+
+@mixin tri-drawer-theme($theme) {
+  $foreground : map-get($theme, foreground);
+  $background : map-get($theme, background);
+
+  .#{$drawer-prefix-cls} {
+    > * {
+      transition : transform $animation-duration-slow $ease-base-in, box-shadow $animation-duration-slow $ease-base-in;
+    }
+
+    &-left {
+      &.#{$drawer-prefix-cls}-open {
+        .#{$drawer-prefix-cls}-content-wrapper {
+          box-shadow : $shadow-1-right;
+        }
+      }
+    }
+
+    &-right {
+      &.#{$drawer-prefix-cls}-open {
+        .#{$drawer-prefix-cls}-content-wrapper {
+          box-shadow : $shadow-1-left;
+        }
+      }
+    }
+
+    &-top {
+      &.#{$drawer-prefix-cls}-open {
+        .#{$drawer-prefix-cls}-content-wrapper {
+          box-shadow : $shadow-1-down;
+        }
+      }
+    }
+
+    &-bottom {
+      .#{$drawer-prefix-cls} {
+        &-content-wrapper {
+          bottom : 0;
+        }
+      }
+
+      &.#{$drawer-prefix-cls}-open {
+        .#{$drawer-prefix-cls}-content-wrapper {
+          box-shadow : $shadow-1-up;
+        }
+      }
+    }
+
+    &-title {
+      color : tri-color($foreground, heading-color);
+    }
+
+    &-content {
+      background-color : tri-color($background, component-background);
+      background-clip  : padding-box;
+      border           : 0;
+    }
+
+    &-close {
+      color      : tri-color($foreground, text-color-secondary);
+      background : transparent;
+      border     : 0;
+
+      &:focus,
+      &:hover {
+        color : tri-color($foreground, icon-color-hover);
+      }
+    }
+
+    &-header {
+      color         : tri-color($foreground, text-color);
+      background    : tri-color($background, component-background);
+      border-bottom : $border-width-base $border-style-base tri-color($foreground, border-color-split);
+      border-radius : $border-radius-base $border-radius-base 0 0;
+    }
+
+    &-header-no-title {
+      color      : tri-color($foreground, text-color);
+      background : tri-color($background, component-background);
+    }
+
+    &-mask {
+      background-color : $modal-mask-bg;
+    }
+
+    &-open {
+      &-content {
+        box-shadow : $shadow-2;
+      }
+    }
+  }
+}

@@ -15,7 +15,8 @@ import { Component, HostBinding, Input, OnInit, ViewEncapsulation } from '@angul
   `,
   host         : {
     '[class.tri-input-group]': 'true'
-  }
+  },
+  styleUrls: [`../style/input-group.css`]
 })
 export class InputGroupComponent implements OnInit {
   _el: HTMLElement;

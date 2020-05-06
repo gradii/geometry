@@ -101,7 +101,6 @@ $menu-font-size       : $font-size-base !default;
 
   @at-root &-inline,
   &-vertical {
-    border-right : $border-width-base $border-style-base $border-color-split;
     .#{$menu-prefix-cls}-item {
       margin-left : -1px;
       left        : 1px;
@@ -113,7 +112,6 @@ $menu-font-size       : $font-size-base !default;
         right        : 0;
         top          : 0;
         bottom       : 0;
-        border-right : 3px solid $primary-color;
         transform    : scaleY(.0001);
         opacity      : 0;
         transition   : transform .15s $ease-out, opacity .15s $ease-out;
@@ -287,7 +285,6 @@ $menu-font-size       : $font-size-base !default;
 
   @at-root &-horizontal {
     border        : 0;
-    border-bottom : $border-width-base $border-style-base $border-color-split;
     box-shadow    : none;
     z-index       : 0;
 
@@ -302,7 +299,6 @@ $menu-font-size       : $font-size-base !default;
       &-active,
       &-open,
       &-selected {
-        border-bottom : 2px solid $primary-color;
       }
 
       > a {

@@ -22,7 +22,8 @@ import { DateRangePickerComponent } from './date-range-picker.component';
   }],
   host       : {
     '[class.tri-calendar-picker]': 'true'
-  }
+  },
+  styleUrls: [`../style/date-picker.css`]
 })
 
 export class DatePickerComponent extends DateRangePickerComponent {

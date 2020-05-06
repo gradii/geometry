@@ -18,13 +18,11 @@ $rate-prefix-cls : "#{$ant-prefix}-rate";
   }
 
   @at-root &-star {
-    margin       : 0;
+    margin       : 0 8px 0 0;
     padding      : 0;
     display      : inline-block;
-    margin-right : 8px;
     position     : relative;
     transition   : all .3s;
-    color        : $rate-star-bg;
     cursor       : pointer;
 
     @at-root &-first,
@@ -50,16 +48,6 @@ $rate-prefix-cls : "#{$ant-prefix}-rate";
     @at-root &-half #{&}-first,
     &-half #{&}-second {
       opacity : 1;
-    }
-
-    @at-root &-half #{&}-first,
-    &-full #{&}-second {
-      color : $rate-star-color;
-    }
-
-    @at-root &-half:hover #{&}-first,
-    &-full:hover #{&}-second {
-      color : tint($rate-star-color, 20%);
     }
   }
 

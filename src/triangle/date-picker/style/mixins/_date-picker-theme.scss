@@ -1,0 +1,20 @@
+@import "../../core/themes/default-theme";
+@import "month-panel-theme";
+
+$calendar-prefix-cls            : "#{$ant-prefix}-calendar";
+$calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
+
+@mixin tri-data-picker-theme($theme) {
+  //@import "picker";
+  //@import "calendar";
+  //@import "range-picker";
+  //@import "time-picker";
+  //@import "month-panel";
+  //@import "year-panel";
+  //@import "decade-panel";
+  //@import "month-picker";
+  //@import "week-picker";
+
+  @include _tri-month-panel-theme();
+
+}

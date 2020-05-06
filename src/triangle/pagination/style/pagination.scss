@@ -30,15 +30,12 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
     list-style       : none;
     display          : inline-block;
     vertical-align   : middle;
-    border           : $border-width-base $border-style-base $border-color-base;
-    background-color : $component-background;
     margin-right     : 8px;
     font-family      : Arial;
     outline          : 0;
 
     a {
       text-decoration : none;
-      color           : $text-color;
       transition      : none;
       margin          : 0 6px;
     }
@@ -46,20 +43,14 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
     @at-root &:focus,
     &:hover {
       transition   : all .3s;
-      border-color : $primary-color;
       a {
-        color : $primary-color;
       }
     }
 
     @at-root &-active {
-      background-color : $primary-color;
-      border-color     : $primary-color;
 
       @at-root &:focus,
       &:hover {
-        background-color : $primary-5;
-        border-color     : $primary-5;
       }
 
       @at-root & a,
@@ -78,7 +69,6 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
       content        : "•••";
       display        : block;
       letter-spacing : 2px;
-      color          : $disabled-color;
       text-align     : center;
     }
   }
@@ -94,7 +84,6 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
   &-jump-next {
     font-family    : Arial;
     cursor         : pointer;
-    color          : $text-color;
     border-radius  : $border-radius-base;
     list-style     : none;
     min-width      : 28px;
@@ -108,12 +97,9 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
 
   @at-root &-prev,
   &-next {
-    border           : $border-width-base $border-style-base $border-color-base;
-    background-color : $component-background;
     outline          : 0;
 
     a {
-      color       : $text-color;
       outline     : none;
       user-select : none;
 
@@ -129,9 +115,7 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
 
     @at-root &:focus,
     &:hover {
-      border-color : $primary-color;
       a {
-        color : $primary-color;
       }
     }
   }
@@ -166,8 +150,8 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
 
     @at-root &-quick-jumper {
       display     : inline-block;
-      height      : $input-height-base;
-      line-height : $input-height-base;
+      height      : $form-control-height-base;
+      line-height : $form-control-height-base;
 
       input {
         @include input;
@@ -194,9 +178,7 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
     input {
       margin           : 0 8px;
       box-sizing       : border-box;
-      background-color : $component-background;
       border-radius    : $border-radius-base;
-      border           : $border-width-base $border-style-base $border-color-base;
       outline          : none;
       padding          : 5px 8px;
       height           : 24px;
@@ -204,7 +186,6 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
       transition       : border-color .3s;
 
       @at-root &:hover {
-        border-color : $primary-color;
       }
     }
   }
