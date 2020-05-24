@@ -3,6 +3,9 @@
 
 $timepicker-prefix-cls : "#{$ant-prefix}-time-picker";
 
+$time-picker-panel-column-width : 56px !default;
+$time-picker-panel-width        : $time-picker-panel-column-width * 3 !default;
+
 .#{$timepicker-prefix-cls}-panel {
   z-index  : $zindex-picker;
   position : absolute;
@@ -28,8 +31,6 @@ $timepicker-prefix-cls : "#{$ant-prefix}-time-picker";
     cursor      : auto;
     line-height : 1.5;
     outline     : 0;
-
-    @include placeholder;
 
     @at-root &-wrap {
       box-sizing    : border-box;
@@ -167,13 +168,6 @@ $timepicker-prefix-cls : "#{$ant-prefix}-time-picker";
   font-size  : $font-size-base;
   transition : opacity 0.3s ease;
   width      : 100px;
-
-  @at-root &-input {
-    @include input;
-    @at-root &[disabled] {
-      @include disabled;
-    }
-  }
 
   @at-root &-large #{&}-input {
     @include input-lg;

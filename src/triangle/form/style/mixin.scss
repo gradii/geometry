@@ -1,6 +1,11 @@
-//@import "../inputs/input-mixin";
+@import "../../input/style/input-mixin";
+@import "../../input/style/input-theme";
 
-@mixin form-control-validation($text-color: $input-color, $border-color: $input-border-color, $background-color: $input-bg) {
+@mixin form-control-validation(
+  $text-color: $input-color,
+  $border-color: $input-border-color,
+  $background-color: $input-bg
+) {
   .#{$ant-prefix}-form-explain,
   .#{$ant-prefix}-form-split {
     color : $text-color;
@@ -13,7 +18,7 @@
     }
 
     @at-root &:focus {
-      @include active($border-color);
+      @include tri-input-active-theme($theme, $border-color);
     }
 
     @at-root &:not([disabled]):hover {
@@ -22,7 +27,7 @@
   }
 
   .#{$ant-prefix}-calendar-picker-open .#{$ant-prefix}-calendar-picker-input {
-    @include active($border-color);
+    @include tri-input-active-theme($theme, $border-color);
   }
 
   .#{$ant-prefix}-input-prefix {

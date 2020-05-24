@@ -18,7 +18,7 @@
 @mixin placeholder( $theme, $color: null) {
   $foreground : map-get($theme, foreground);
   @if ($color == null) {
-    $color: tri-color($foreground, input-placeholder-color);
+    $color : tri-color($foreground, input-placeholder-color);
   }
 
   // Firefox

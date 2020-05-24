@@ -45,8 +45,7 @@ $btn-circle-size-sm             : $btn-height-sm !default;
 // Button styles
 // -----------------------------
 .#{$btn-prefix-cls} {
-  @include btn;
-  @include btn-default;
+  @include btn();
 
   @at-root &-circle,
   &-circle-outline {

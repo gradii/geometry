@@ -5,18 +5,19 @@
 
 $form-prefix-cls: "#{$ant-prefix}-form";
 @include reset-form();
+
 @mixin tri-form-theme($theme) {
   $foreground: map-get($theme, foreground);
   $background: map-get($theme, background);
   $success: map-get($theme, success);
   $primary: map-get($theme, primary);
+  $error: map-get($theme, error);
 
   // Form
   // ---
   $label-required-color           : tri-color($theme, highlight-color);
   $label-color                    : tri-color($theme, heading-color);
   $form-item-margin-bottom        : 1rem !default;
-  $form-item-trailing-colon       : true !default;
 
   .#{$form-prefix-cls}-item-required:before {
     color: $label-required-color;
@@ -38,9 +39,7 @@ $form-prefix-cls: "#{$ant-prefix}-form";
     color: tri-color($foreground, text-color-secondary);
   }
 
-  // 表单下的输入框尺寸唯一: 大尺寸
   form {
-    // input[type=file]
     .#{$ant-prefix}-upload {
       background: transparent;
     }
@@ -82,7 +81,7 @@ $form-prefix-cls: "#{$ant-prefix}-form";
     .#{$ant-prefix}-select {
       @at-root &-open .#{$ant-prefix}-select-selection,
         &-focused #{$ant-prefix}-select-selection {
-        @include active(tri-color($success));
+        @include tri-input-active-theme(tri-color($success));
       }
     }
 
@@ -111,7 +110,7 @@ $form-prefix-cls: "#{$ant-prefix}-form";
       box-shadow: -1px 0 0 0 tri-color($success);
       @at-root &-focused,
         &:focus {
-        @include active(tri-color($success));
+        @include tri-input-active-theme(tri-color($success));
       }
       @at-root &:not([disabled]):hover {
         border-color: tri-color($success);
@@ -123,7 +122,7 @@ $form-prefix-cls: "#{$ant-prefix}-form";
     .#{$ant-prefix}-time-picker-input {
       @at-root &-focused,
         &:focus {
-        @include active(tri-color($success));
+        @include tri-input-active-theme(tri-color($success));
       }
       @at-root &:not([disabled]):hover {
         border-color: tri-color($success);
@@ -143,7 +142,7 @@ $form-prefix-cls: "#{$ant-prefix}-form";
 
       @at-root &.#{$ant-prefix}-mention-active .#{$ant-prefix}-mention-editor,
         & .#{$ant-prefix}-mention-editor:not([disabled]):focus {
-        @include active(tri-color($success));
+        @include tri-input-active-theme(tri-color($success));
       }
     }
   }
@@ -173,7 +172,7 @@ $form-prefix-cls: "#{$ant-prefix}-form";
       }
       @at-root &-open .#{$ant-prefix}-select-selection,
         &-focused .#{$ant-prefix}-select-selection {
-        @include active(tri-color($warning));
+        @include tri-input-active-theme(tri-color($warning));
       }
     }
 
@@ -191,7 +190,7 @@ $form-prefix-cls: "#{$ant-prefix}-form";
       border-color: tri-color($warning);
       @at-root &-focused,
         &:focus {
-        @include active(tri-color($warning));
+        @include tri-input-active-theme(tri-color($warning));
       }
       @at-root &:not([disabled]):hover {
         border-color: tri-color($warning);
@@ -213,7 +212,7 @@ $form-prefix-cls: "#{$ant-prefix}-form";
       }
       @at-root &-open .#{$ant-prefix}-select-selection,
         &-focused .#{$ant-prefix}-select-selection {
-        @include active(tri-color($error));
+        @include tri-input-active-theme(tri-color($error));
       }
     }
 

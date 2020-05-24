@@ -1,5 +1,6 @@
 @import "../../core/themes/default-theme";
 @import "../../input/style/input-mixin";
+@import "../../input/style/input-theme";
 
 $cascader-prefix-cls : "#{$ant-prefix}-cascader";
 
@@ -26,6 +27,11 @@ $cascader-prefix-cls : "#{$ant-prefix}-cascader";
         color      : tri-color($background, disabled-color);
       }
 
+
+      @at-root &:focus .#{$cascader-prefix-cls}-input {
+        @include tri-input-active-theme($theme);
+      }
+
       @at-root &-clear {
         background : tri-color($background, component-background);
         color      : tri-color($background, disabled-color);
@@ -39,6 +45,7 @@ $cascader-prefix-cls : "#{$ant-prefix}-cascader";
         color : tri-color($foreground, text-color-secondary);
       }
     }
+
     @at-root &-menus {
       background : tri-color($background, component-background);
       box-shadow : $box-shadow-base;

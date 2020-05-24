@@ -1,19 +1,23 @@
 @import "../../core/themes/default-theme";
+
 @import "../../input/style/input-mixin";
+@import "../../input/style/input-theme";
 
 $input-number-prefix-cls: "#{$ant-prefix}-input-number";
 
+@mixin handler-disabled() {
+  opacity : 0.72;
+  color   : #ccc !important;
+  cursor  : not-allowed;
+}
 @mixin tri-input-number-theme($theme) {
   $primary    : map-get($theme, primary);
   $foreground : map-get($theme, foreground);
   $background : map-get($theme, background);
 
-  @mixin handler-disabled() {
-    color: #ccc !important;
-  }
 
   .#{$input-number-prefix-cls} {
-    @include input();
+    @include tri-input-theme();
     //font-size     : $font-size-base;
     //height        : $input-height-base;
     border: $border-width-base $border-style-base tri-color($foreground,border-color-base);
@@ -40,11 +44,16 @@ $input-number-prefix-cls: "#{$ant-prefix}-input-number";
       background-color: tri-color($foreground, input-bg);
       border: 0;
       border-radius: $border-radius-base;
+      @include placeholder($theme);
+
+      @at-root &[disabled] {
+        @include tri-input-disabled-theme($theme);
+      }
     }
 
     @at-root &-handler-wrap {
       border-left: $border-width-base $border-style-base tri-color($foreground,border-color-base);
-      background: $component-background;
+      background: tri-color($background, component-background);
       border-radius: 0 $border-radius-base $border-radius-base 0;
     }
 
@@ -56,6 +65,30 @@ $input-number-prefix-cls: "#{$ant-prefix}-input-number";
       .#{$input-number-prefix-cls}-input {
         background-color: tri-color($background,disabled-bg);
       }
+    }
+  }
+
+  @at-root &-handler-down-disabled,
+  &-handler-up-disabled,
+  &-disabled {
+    .#{$input-number-prefix-cls}-handler-down-inner,
+    .#{$input-number-prefix-cls}-handler-up-inner {
+      @include handler-disabled();
+    }
+  }
+
+  @at-root &-disabled {
+    .#{$input-number-prefix-cls}-input {
+      opacity          : 0.72;
+      cursor           : not-allowed;
+    }
+
+    .#{$input-number-prefix-cls}-handler-wrap {
+      display : none;
+    }
+
+    .#{$input-number-prefix-cls}-handler {
+      @include handler-disabled();
     }
   }
 }

@@ -4,8 +4,31 @@
   $foreground: map-get($theme, foreground);
   $background: map-get($theme, background);
 
+  $primary: map-get($theme, primary);
+
   .#{$inputClass}-prefix,
   .#{$inputClass}-suffix {
     color       : tri-color($foreground, input-color);
+  }
+
+  @at-root &-addon {
+    color            : tri-color($theme, input-addon-color);
+    background-color : tri-color($theme, input-addon-bg);
+    border           : $input-border-width $border-style-base tri-color($theme, input-border-color);
+
+    .#{$ant-prefix}-select {
+
+      > .#{$ant-prefix}-select-selection {
+        background-color : inherit;
+        border           : $input-border-width $border-style-base transparent;
+      }
+
+      @at-root &-open,
+      &-focused {
+        .#{$ant-prefix}-select-selection {
+          color : tri-color($primary);
+        }
+      }
+    }
   }
 }

@@ -23,11 +23,13 @@
 
 }
 
-@mixin tri-input-active-theme($theme) {
+@mixin tri-input-active-theme($theme, $color : null) {
   $foreground  : map-get($theme, foreground);
   $background  : map-get($theme, background);
 
-  $color       : tri-color($theme, outline-color);
+  @if $color == null {
+    $color : tri-color($theme, outline-color);
+  }
 
   border-color : tri-color-palette($color, 5);
   outline      : 0;
@@ -44,8 +46,8 @@
 }
 
 @mixin tri-input-disabled-theme($theme) {
-  $foreground: map-get($theme, foreground);
-  $background: map-get($theme, background);
+  $foreground      : map-get($theme, foreground);
+  $background      : map-get($theme, background);
 
   background-color : tri-color($foreground, input-disabled-bg);
   opacity          : 1;
@@ -57,8 +59,8 @@
 }
 
 @mixin tri-input-theme($theme) {
-  $foreground  : map-get($theme, foreground);
-  $background  : map-get($theme, background);
+  $foreground : map-get($theme, foreground);
+  $background : map-get($theme, background);
 
   color       : tri-color($theme, input-color);
   background  : tri-color($theme, input-bg) none;

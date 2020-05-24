@@ -1,8 +1,10 @@
 @import "../../core/themes/default-theme";
 
-$card-prefix-cls    : "#{$ant-prefix}-card";
-$card-padding-base  : 24px;
-$card-padding-wider : 32px;
+$card-prefix-cls       : "#{$ant-prefix}-card";
+$card-padding-base     : 24px;
+$card-padding-wider    : 32px;
+$card-head-height      : 3rem !default;
+$card-head-line-height : 1.5rem !default;
 
 .#{$card-prefix-cls} {
   border-radius : $border-radius-sm;

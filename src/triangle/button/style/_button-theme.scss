@@ -51,8 +51,7 @@ $btn-prefix-cls : "#{$ant-prefix}-btn";
   // Button styles
   // -----------------------------
   .#{$btn-prefix-cls} {
-    @include btn;
-    @include btn-default;
+    @include btn-default($theme);
 
     @at-root &-primary {
       @include button-variant-primary($btn-primary-color, $btn-primary-bg);

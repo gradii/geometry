@@ -1,16 +1,13 @@
 @import "../../core/themes/default-theme";
 @import "../../input/style/input-mixin";
+@import "../../input/style/input-theme";
 
 $timepicker-prefix-cls : "#{$ant-prefix}-time-picker";
 
 @mixin tri-time-picker-theme($theme) {
-  $foreground : map-get($theme, foreground);
-  $background : map-get($theme, background);
+  $foreground                     : map-get($theme, foreground);
+  $background                     : map-get($theme, background);
 
-  // TimePicker
-  // ---
-  $time-picker-panel-column-width : 56px !default;
-  $time-picker-panel-width        : $time-picker-panel-column-width * 3 !default;
   $time-picker-selected-bg        : tri-color($background, background-color-base) !default;
 
   .#{$timepicker-prefix-cls}-panel {
@@ -21,6 +18,9 @@ $timepicker-prefix-cls : "#{$ant-prefix}-time-picker";
     }
 
     @at-root &-input {
+
+      @include placeholder($theme);
+
       @at-root &-wrap {
         border-bottom : $border-width-base $border-style-base tri-color($foreground, border-color-split);
       }
@@ -69,6 +69,13 @@ $timepicker-prefix-cls : "#{$ant-prefix}-time-picker";
   .#{$timepicker-prefix-cls} {
     @at-root &-icon {
       color : tri-color($foreground, text-color-secondary);
+    }
+
+    @at-root &-input {
+      @include input;
+      @at-root &[disabled] {
+        @include tri-input-disabled-theme($theme);
+      }
     }
   }
 }

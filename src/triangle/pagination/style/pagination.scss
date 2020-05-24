@@ -120,20 +120,6 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
     }
   }
 
-  @at-root &-disabled {
-    @at-root &:hover {
-      border-color : $border-color-base;
-      a {
-        color  : $disabled-color;
-        cursor : not-allowed;
-      }
-    }
-    cursor : not-allowed;
-    a {
-      color : $disabled-color;
-    }
-  }
-
   @at-root &-slash {
     margin : 0 10px 0 5px;
   }

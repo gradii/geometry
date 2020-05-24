@@ -3,28 +3,7 @@
 @import "./input-mixin";
 @import "./search-input";
 
-
-// Input
-// ---
-$input-height-base           : $form-control-height-base !default;
-$input-height-lg             : $form-control-height-lg !default;
-$input-height-sm             : $form-control-height-sm !default;
-
-$input-line-height           : $line-height-base !default;
-$input-line-height-sm        : $line-height-sm !default;
-$input-line-height-lg        : $line-height-lg !default;
-
-$input-padding-horizontal    : 0.5rem !default;
-$input-padding-vertical-base : 0.25rem !default;
-$input-padding-vertical-sm   : 0.125rem !default;
-$input-padding-vertical-lg   : 0.375rem !default;
-
-$input-border-width          : $border-width-base !default;
-//$input-bg                       : #fff !default;
-//$input-addon-bg                 : #eee !default;
-//$input-addon-color              : $input-color !default;
-//$input-hover-border-color       : $primary-color !default;
-//$input-disabled-bg              : $disabled-bg !default;
+@import "./input_variables";
 
 // Input styles
 .#{$ant-prefix}-input {

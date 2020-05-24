@@ -1,12 +1,15 @@
 @import "../../core/themes/default-theme";
 @import "../../input/style/input-mixin";
+@import "../../input/style/input-theme";
 
 $select-prefix-cls: "#{$ant-prefix}-select";
 
-@mixin selection__clear() {
-  $primary: map-get($theme, primary);
+@mixin selection__clear($theme) {
   $foreground: map-get($theme, foreground);
   $background: map-get($theme, background);
+
+  $primary: map-get($theme, primary);
+  $black: map-get($theme, black);
 
   color: tri-color($background, disabled-color);
   background: tri-color($background, component-background);
@@ -16,6 +19,11 @@ $select-prefix-cls: "#{$ant-prefix}-select";
 }
 
 @mixin tri-select-theme($theme) {
+  $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+
+  $primary: map-get($theme, primary);
+  $black: map-get($theme, black);
 
   @include import-once("component:selection") {
     .#{$select-prefix-cls} {
@@ -32,6 +40,24 @@ $select-prefix-cls: "#{$ant-prefix}-select";
         background-color: tri-color($background, component-background);
         border: $border-width-base $border-style-base tri-color($foreground, border-color-base);
         border-radius: $border-radius-base;
+
+        @at-root &:hover {
+          @include tri-input-hover-theme();
+        }
+
+        @at-root .#{$select-prefix-cls}-focused #{&},
+        &:focus,
+        &:active {
+          @include tri-input-active-theme();
+        }
+
+        @at-root &__clear {
+          @include selection__clear();
+        }
+
+        @at-root &:hover #{&}__clear {
+          opacity : 1;
+        }
       }
 
       @at-root &-disabled {
@@ -39,7 +65,7 @@ $select-prefix-cls: "#{$ant-prefix}-select";
       }
 
       @at-root &-disabled #{&}-selection {
-        background: $input-disabled-bg;
+        background: tri-color($foreground, input-disabled-bg);
         @at-root &:hover,
           &:focus,
           &:active {
@@ -49,8 +75,8 @@ $select-prefix-cls: "#{$ant-prefix}-select";
       }
 
       @at-root &-disabled #{&}-selection--multiple #{&}-selection__choice {
-        color: opacify($black, 0.33);
-        background: $background-color-active;
+        color: opacify(tri-color($black), 0.33);
+        background: tri-color($background, background-color-active);
       }
 
       @at-root &-disabled #{&}-selection__choice__remove {
@@ -62,7 +88,7 @@ $select-prefix-cls: "#{$ant-prefix}-select";
 
       @at-root &-selection__placeholder,
         &-search__field__placeholder {
-        color: $input-placeholder-color;
+        color: tri-color($theme, input-placeholder-color);
       }
 
       @at-root &-search--inline {
@@ -82,8 +108,8 @@ $select-prefix-cls: "#{$ant-prefix}-select";
         }
 
         .#{$select-prefix-cls}-selection__choice {
-          color: $tag-default-color;
-          background-color: $tag-default-bg;
+          color: tri-color($foreground, tag-default-color);
+          background-color: tri-color($foreground, tag-default-bg);
           border: 1px solid tri-color($foreground, border-color-split);
           border-radius: 4px;
         }
@@ -98,7 +124,7 @@ $select-prefix-cls: "#{$ant-prefix}-select";
 
       @at-root &-open {
         .#{$select-prefix-cls}-selection {
-          @include active();
+          @include tri-input-active-theme($theme);
         }
       }
 
@@ -109,7 +135,7 @@ $select-prefix-cls: "#{$ant-prefix}-select";
       }
       @at-root &-combobox#{&}-allow-clear #{&}-selection:hover #{&}-selection__rendered,
         &-combobox#{&}-show-arrow #{&}-selection:hover #{&}-selection__rendered {
-        margin-right: 20px; // In case that clear button will overlap content
+        margin-right: 20px;
       }
     }
   }
@@ -156,7 +182,7 @@ $select-prefix-cls: "#{$ant-prefix}-select";
           @at-root &-selected {
             @at-root &,
               &:hover {
-              background-color: $background-color-base;
+              background-color: tri-color($background, background-color-base);
               color: tri-color($foreground, text-color);
             }
           }
@@ -184,7 +210,7 @@ $select-prefix-cls: "#{$ant-prefix}-select";
           }
           &-selected .#{$select-prefix-cls}-selected-icon,
           &-selected:hover .#{$select-prefix-cls}-selected-icon {
-            color: $primary-color;
+            color: tri-color($primary);
           }
         }
       }

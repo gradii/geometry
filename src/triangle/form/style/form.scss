@@ -1,11 +1,9 @@
-//@import "../inputs/input-mixin";
-//@import "../button/mixin";
-//@import "../grid/mixin";
 @import "./mixin";
 
 $form-prefix-cls         : "#{$ant-prefix}-form";
 $form-component-height   : $input-height-base;
 $form-feedback-font-size : $font-size-base;
+
 @include reset-form();
 
 label {
@@ -30,7 +28,7 @@ label {
   }
 }
 
-// Radio #{&}#{&} Checkbox
+// Radio
 input[type="radio"],
 input[type="checkbox"] {
   @at-root &[disabled],
@@ -434,7 +432,7 @@ form {
   // select
   .#{$ant-prefix}-select {
     @at-root &-open .#{$ant-prefix}-select-selection, &-focused #{$ant-prefix}-select-selection {
-      @include active($success-color);
+      @include tri-input-active-theme($theme, $success-color);
     }
   }
 
@@ -641,34 +639,5 @@ form {
   .#{$ant-prefix}-input-group .#{$ant-prefix}-input,
   .#{$ant-prefix}-input-group .#{$ant-prefix}-input-group-addon {
     height : $input-height-base;
-  }
-}
-
-// need there different zoom animation
-// otherwise won't trigger anim
-@keyframes diffZoomIn1 {
-  0% {
-    transform : scale(0);
-  }
-  100% {
-    transform : scale(1);
-  }
-}
-
-@keyframes diffZoomIn2 {
-  0% {
-    transform : scale(0);
-  }
-  100% {
-    transform : scale(1);
-  }
-}
-
-@keyframes diffZoomIn3 {
-  0% {
-    transform : scale(0);
-  }
-  100% {
-    transform : scale(1);
   }
 }

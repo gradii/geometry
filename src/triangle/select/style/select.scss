@@ -76,23 +76,7 @@ $select-option-height : 2rem;
       transition       : all .3s $ease-in-out;
       user-select      : none;
 
-      @at-root &:hover {
-        @include hover();
-      }
 
-      @at-root .#{$select-prefix-cls}-focused #{&},
-      &:focus,
-      &:active {
-        @include active();
-      }
-
-      @at-root &__clear {
-        @include selection__clear();
-      }
-
-      @at-root &:hover #{&}__clear {
-        opacity : 1;
-      }
 
       @at-root &-selected-value {
         float         : left;
@@ -128,8 +112,6 @@ $select-option-height : 2rem;
 
     @at-root &-disabled #{&}-selection--multiple #{&}-selection__choice {
       padding-right : 10px;
-      color         : opacify($black, 0.33);
-      background    : $background-color-active;
       @at-root &__remove {
         display : none;
       }
@@ -147,7 +129,6 @@ $select-option-height : 2rem;
       margin-right : 7px;
       margin-left  : 7px;
       line-height  : $input-height-base - .125rem;
-      // https://github.com/ant-design/ant-design/issues/3481#issuecomment-254721026
       @at-root &:after {
         content        : '.';
         visibility     : hidden;
@@ -394,7 +375,6 @@ $select-option-height : 2rem;
       }
 
       .#{$select-prefix-cls}-selection {
-        @include active();
       }
     }
 
