@@ -2,25 +2,79 @@
 
 
 @mixin tri-input-theme($theme) {
-  $foreground: map-get($theme, foreground);
-  $background: map-get($theme, background);
+  $foreground               : map-get($theme, foreground);
+  $background               : map-get($theme, background);
 
-  $input-border-width             : tri-color($foreground, border-width-base);
-  $input-bg                       : #fff !default;
-  $input-addon-bg                 : #eee !default;
-  $input-addon-color              : tri-color($foreground, input-color);
-  $input-hover-border-color       : tri-color($foreground, primary-color);
-  $input-disabled-bg              : tri-color($foreground, disabled-bg);
+  $input-border-width       : tri-color($foreground, border-width-base);
+  $input-bg                 : #fff !default;
+  $input-addon-bg           : #eee !default;
+  $input-addon-color        : tri-color($foreground, input-color);
+  $input-hover-border-color : tri-color($foreground, primary-color);
+  $input-disabled-bg        : tri-color($foreground, disabled-bg);
 
-  $input-placeholder-color        : tri-color($foreground, disabled-color);
-  $input-color                    : tri-color($foreground, text-color);
-  $input-border-color             : tri-color($foreground, border-color-base);
-
-
+  $input-placeholder-color  : tri-color($foreground, disabled-color);
+  $input-color              : tri-color($foreground, text-color);
+  $input-border-color       : tri-color($foreground, border-color-base);
 
 }
 
 
 @mixin tri-input-affix-wrapper-theme($theme) {
 
+}
+
+@mixin tri-input-active-theme($theme) {
+  $foreground  : map-get($theme, foreground);
+  $background  : map-get($theme, background);
+
+  $color       : tri-color($theme, outline-color);
+
+  border-color : tri-color-palette($color, 5);
+  outline      : 0;
+  box-shadow   : 0 0 $outline-blur-size $outline-width rgba($color, 0.20);
+}
+
+@mixin tri-input-hover-theme($theme) {
+  $foreground  : map-get($theme, foreground);
+  $background  : map-get($theme, background);
+
+  $color       : tri-color($theme, input-hover-border-color);
+
+  border-color : tri-color-palette($color, 5);
+}
+
+@mixin tri-input-disabled-theme($theme) {
+  $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+
+  background-color : tri-color($foreground, input-disabled-bg);
+  opacity          : 1;
+  cursor           : not-allowed;
+  color            : tri-color($foreground, disabled-color);
+  @at-root &:hover {
+    @include tri-input-hover-theme(tri-color($foreground, input-border-color));
+  }
+}
+
+@mixin tri-input-theme($theme) {
+  $foreground  : map-get($theme, foreground);
+  $background  : map-get($theme, background);
+
+  color       : tri-color($theme, input-color);
+  background  : tri-color($theme, input-bg) none;
+  border      : $border-width-base $border-style-base tri-color($foreground, input-border-color);
+  @include placeholder($theme);
+  transition  : all .3s;
+
+  @at-root &:hover {
+    @include tri-input-hover-theme($theme);
+  }
+
+  @at-root &:focus {
+    @include tri-input-active-theme($theme);
+  }
+
+  @at-root &-disabled {
+    @include tri-input-disabled-theme($theme);
+  }
 }

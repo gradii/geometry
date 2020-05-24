@@ -18,31 +18,8 @@ $input-padding-vertical-lg      : 0.375rem !default;
   line-height : $input-line-height-sm;
 }
 
-// input status
-// == when focus or actived
-@mixin active($color: $outline-color) {
-  border-color : tri-color-palette($color, 5);
-  outline      : 0;
-  box-shadow   : 0 0 $outline-blur-size $outline-width rgba($color, 0.20);
-}
 
-// == when hoverd
-@mixin hover($color: $input-hover-border-color) {
-  border-color : tri-color-palette($color, 5);
-}
 
-@mixin disabled($theme) {
-  $foreground: map-get($theme, foreground);
-  $background: map-get($theme, background);
-
-  background-color : tri-color($foreground, input-disabled-bg);
-  opacity          : 1;
-  cursor           : not-allowed;
-  color            : tri-color($foreground, disabled-color);
-  @at-root &:hover {
-    @include hover(tri-color($foreground, input-border-color));
-  }
-}
 
 // Basic style for input
 @mixin input() {
@@ -54,28 +31,24 @@ $input-padding-vertical-lg      : 0.375rem !default;
   cursor      : text;
   font-size   : $font-size-base;
   line-height : $input-line-height;
-  color       : $input-color;
-  background  : $input-bg none;
-  border      : $border-width-base $border-style-base $input-border-color;
   @include border-radius($border-radius-base);
-  @include placeholder($theme);
+  //@include placeholder($theme);
   transition  : all .3s;
 
-  @at-root &:hover {
-    @include hover();
-  }
+  //@at-root &:hover {
+  //  @include hover();
+  //}
+  //
+  //@at-root &:focus {
+  //  @include active();
+  //}
+  //
+  //@at-root &-disabled {
+  //  @include disabled();
+  //}
 
-  @at-root &:focus {
-    @include active();
-  }
-
-  @at-root &-disabled {
-    @include disabled();
-  }
-
-  // Reset height for `textarea`s
   @at-root textarea#{&} {
-    max-width      : 100%; // prevent textearea resize from coming out of its container
+    max-width      : 100%;
     height         : auto;
     vertical-align : bottom;
   }
@@ -99,9 +72,9 @@ $input-padding-vertical-lg      : 0.375rem !default;
     z-index : 1;
   }
 
-  @at-root &:hover .#{$inputClass}:not(.#{$inputClass}-disabled) {
-    @include hover();
-  }
+  //@at-root &:hover .#{$inputClass}:not(.#{$inputClass}-disabled) {
+  //  @include hover();
+  //}
 
   .#{$inputClass}-prefix,
   .#{$inputClass}-suffix {
@@ -110,7 +83,7 @@ $input-padding-vertical-lg      : 0.375rem !default;
     transform   : translateY(-50%);
     z-index     : 2;
     line-height : 0;
-    color       : $input-color;
+    //color       : $input-color;
   }
 
   .#{$inputClass}-prefix {
