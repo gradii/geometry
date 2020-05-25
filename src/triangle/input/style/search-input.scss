@@ -28,7 +28,7 @@
   }
 
   .#{$ant-prefix}-search-btn {
-    @include btn-default;
+    //@include btn-default($theme);
     border-radius : 0 ($border-radius-base - 1px) ($border-radius-base - 1px) 0;
     left          : -1px;
     position      : relative;

@@ -1,3 +1,5 @@
+@import "../../core/themes/default-theme";
+
 .#{$calendar-timepicker-prefix-cls} {
   position         : absolute;
   width            : 100%;
@@ -16,7 +18,7 @@
     list-style       : none;
     font-size        : $font-size-base;
     text-align       : left;
-    background-color : $component-background;
+    //background-color : $component-background;
     background-clip  : padding-box;
     line-height      : 1.5;
     overflow         : hidden;
@@ -47,7 +49,7 @@
   @at-root &-select {
     float        : left;
     font-size    : $font-size-base;
-    border-right : $border-width-base $border-style-base $border-color-split;
+    //border-right : $border-width-base $border-style-base $border-color-split;
     box-sizing   : border-box;
     overflow     : hidden;
     position     : relative; // Fix chrome weird render bug
@@ -95,16 +97,16 @@
     }
 
     li:hover {
-      background : $item-hover-bg;
+      //background : $item-hover-bg;
     }
 
     @at-root li#{&}-option-selected {
-      background  : $time-picker-selected-bg;
+      //background  : $time-picker-selected-bg;
       font-weight : bold;
     }
 
     @at-root li#{&}-option-disabled {
-      color : $btn-disable-color;
+      //color : $btn-disable-color;
       @at-root &:hover {
         background : transparent;
         cursor     : not-allowed;
@@ -118,7 +120,7 @@
     padding     : 0 2px;
     font-weight : bold;
     display     : inline-block;
-    color       : $heading-color;
+    //color       : $heading-color;
     line-height : 34px;
   }
 
@@ -140,7 +142,7 @@
       margin-right : 8px;
 
       @at-root &-disabled {
-        color : $disabled-color;
+        //color : $disabled-color;
       }
     }
   }

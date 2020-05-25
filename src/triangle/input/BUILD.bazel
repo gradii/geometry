@@ -16,7 +16,11 @@ ng_module(
         ["**/*.ts"],
         exclude = ["**/*.spec.ts"],
     ),
-    assets = [] + glob(["**/*.html"]),
+    assets = [
+        ":style/input-group.css",
+        ":style/input.css",
+        ":style/search-input.css",
+    ] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/input",
     deps = [
         "//src/triangle/core",
@@ -41,6 +45,22 @@ sass_library(
 sass_binary(
     name = "input_scss",
     src = "style/input.scss",
+    deps = [
+        "//src/triangle/input:input_scss_lib",
+    ],
+)
+
+sass_binary(
+    name = "input_group_scss",
+    src = "style/input-group.scss",
+    deps = [
+        "//src/triangle/input:input_scss_lib",
+    ],
+)
+
+sass_binary(
+    name = "search_input_scss",
+    src = "style/search-input.scss",
     deps = [
         "//src/triangle/input:input_scss_lib",
     ],

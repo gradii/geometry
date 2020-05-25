@@ -4,13 +4,16 @@
 $calendar-prefix-cls            : "#{$ant-prefix}-calendar";
 $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
 
-@mixin tri-calendar-theme {
+@mixin tri-calendar-theme($theme) {
+  $foreground : map-get($theme, foreground);
+  $background : map-get($theme, background);
+
   .#{$calendar-prefix-cls} {
-    background-color : $component-background;
+    background-color : tri-color($background, component-background);
 
     @at-root &-input {
-      color      : $input-color;
-      background : $input-bg;
+      color      : tri-color($foreground, input-color);
+      background : tri-color($foreground, input-bg);
       @include placeholder($theme);
     }
 
@@ -19,10 +22,10 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
     }
 
     @at-root &-date {
-      color         : $text-color;
+      color : tri-color($theme, text-color);
 
       @at-root &:hover {
-        background : $item-hover-bg;
+        background : tri-color($theme, item-hover-bg);
         cursor     : pointer;
       }
 
@@ -54,10 +57,10 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
     }
 
     @at-root &-disabled-cell #{&}-date {
-      cursor        : not-allowed;
-      color         : #bcbcbc;
-      background    : $disabled-bg;
-      border        : $border-width-base $border-style-base transparent;
+      cursor     : not-allowed;
+      color      : #bcbcbc;
+      background : $disabled-bg;
+      border     : $border-width-base $border-style-base transparent;
 
       @at-root &:hover {
         background : $disabled-bg;
@@ -65,7 +68,7 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
     }
 
     @at-root &-footer {
-      border-top  : $border-width-base $border-style-base $border-color-split;
+      border-top : $border-width-base $border-style-base $border-color-split;
       @at-root &-extra + #{&}-btn {
         border-top : $border-width-base $border-style-base $border-color-split;
       }
@@ -83,7 +86,7 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
     }
 
     .#{$calendar-prefix-cls}-clear-btn:after {
-      color       : $disabled-color;
+      color : $disabled-color;
     }
 
     .#{$calendar-prefix-cls}-clear-btn:hover:after {
@@ -106,5 +109,4 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
       }
     }
   }
-
 }

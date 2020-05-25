@@ -7,8 +7,10 @@
 //// Define a theme.
 $primary : tri-palette($tri-indigo);
 $accent  : tri-palette($tri-pink, A200, A100, A400);
+$info    : tri-palette($tri-blue, A200, A100, A400);
+$success : tri-palette($tri-blue, A200, A100, A400);
 //
-$theme   : tri-light-theme($primary, $accent);
+$theme   : tri-light-theme($primary, $accent, $info, $success, $success, $success, $success, $success, $success);
 //
 //// Include all theme styles for the components.
 @include gradii-triangle-theme($theme);

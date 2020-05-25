@@ -46,7 +46,7 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
   }
 
   @at-root &:hover #{&}-input:not(.#{$ant-prefix}-input-disabled) {
-    border-color : $primary-color;
+    //border-color : $primary-color;
   }
 
   @at-root &-clear,
@@ -66,12 +66,12 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
   @at-root &-clear {
     opacity        : 0;
     z-index        : 1;
-    color          : $disabled-color;
-    background     : $input-bg;
+    //color          : $disabled-color;
+    //background     : $input-bg;
     pointer-events : none;
     cursor         : pointer;
     @at-root &:hover {
-      color : $text-color-secondary;
+      //color : $text-color-secondary;
     }
   }
 
@@ -81,7 +81,7 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
   }
 
   @at-root &-icon {
-    color : $disabled-color;
+    //color : $disabled-color;
     @at-root &:after {
       content     : "\e6bb";
       font-family : "anticon";

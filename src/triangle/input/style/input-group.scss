@@ -70,11 +70,8 @@
     font-size        : $font-size-base;
     font-weight      : normal;
     line-height      : $line-height-base;
-    color            : $input-addon-color;
     text-align       : center;
     white-space      : nowrap;
-    background-color : $input-addon-bg;
-    border           : $input-border-width $border-style-base $input-border-color;
     @include border-radius($border-radius-base);
     position         : relative;
     transition       : all .3s;
@@ -93,7 +90,6 @@
       @at-root &-open,
       &-focused {
         .#{$ant-prefix}-select-selection {
-          color : $primary-color;
         }
       }
     }

@@ -104,7 +104,8 @@ export type SizeType = 'large' | 'small' | 'default';
   styles       : [`:host {
     display: inline-block;
     width: 100%;
-  }`]
+  }`],
+  styleUrls: [`../style/input.css`, `../style/search-input.css`]
 })
 export class InputComponent implements ControlValueAccessor, AfterViewInit {
   _prefixCls = 'tri-input';

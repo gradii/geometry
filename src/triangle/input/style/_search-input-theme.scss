@@ -1,0 +1,15 @@
+@import "../../core/themes/default-theme";
+
+@import "../../button/style/button-mixins";
+@import "./input-mixin";
+
+
+@mixin tri-search-input-theme($theme) {
+
+  .#{$ant-prefix}-search-input {
+    .#{$ant-prefix}-search-btn {
+      @include btn-default($theme);
+    }
+  }
+
+}

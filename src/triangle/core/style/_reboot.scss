@@ -84,7 +84,7 @@
     font-size        : $font-size-base;
     line-height      : $line-height-base;
     color            : $text-color;
-    background-color : $body-background;
+    //background-color : $body-background;
   }
   // Suppress the focus outline on elements that cannot be accessed via keyboard.
   // This prevents an unwanted focus outline from appearing around elements that
@@ -223,7 +223,7 @@
   //
 
   a {
-    color                        : $link-color;
+    //color                        : $link-color;
     background-color             : transparent; // remove the gray background on active links in IE 10.
     text-decoration              : $link-decoration;
     outline                      : none;
@@ -237,11 +237,11 @@
     }
 
     &:hover {
-      color : $link-hover-color;
+      //color : $link-hover-color;
     }
 
     &:active {
-      color : $link-active-color;
+      //color : $link-active-color;
     }
 
     &:active,
@@ -251,7 +251,7 @@
     }
 
     &[disabled] {
-      color          : $disabled-color;
+      //color          : $disabled-color;
       cursor         : not-allowed;
       pointer-events : none;
     }
@@ -332,7 +332,7 @@
   caption {
     padding-top    : .75em;
     padding-bottom : .3em;
-    color          : $text-color-secondary;
+    //color          : $text-color-secondary;
     text-align     : left;
     caption-side   : bottom;
   }
@@ -501,11 +501,11 @@
 
   mark {
     padding          : .2em;
-    background-color : $yellow-1;
+    //background-color : $yellow-1;
   }
 
   ::selection {
-    background : $primary-color;
+    //background : $primary-color;
     color      : #fff;
   }
 

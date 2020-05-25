@@ -29,12 +29,12 @@
 @import './src/grid/grid';
 
 // Mixin that renders all of the core styles that are not theme-dependent.
-@mixin tri-core($typography-config: null) {
+@mixin tri-core($typography-config: null, $utilities: ()) {
   //@include angular-material-typography($typography-config);
   @include tri-reboot();
   @include tri-root();
   @include tri-ripple();
-  @include tri-api();
+  @include tri-api($utilities);
   @include cdk-a11y();
   @include cdk-overlay();
   @include cdk-text-field();

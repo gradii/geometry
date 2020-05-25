@@ -1,3 +1,8 @@
+@import "../../core/themes/default-theme";
+
+$calendar-prefix-cls            : "#{$ant-prefix}-calendar";
+$calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
+
 .#{$calendar-prefix-cls}-week-number {
   @at-root &-cell {
     opacity : 0.5;
@@ -6,16 +11,16 @@
     transition : all .3s;
     cursor     : pointer;
     @at-root &:hover {
-      background : $primary-1;
+      //background : $primary-1;
     }
     @at-root &.#{$calendar-prefix-cls}-active-week {
-      background  : $primary-2;
+      //background  : $primary-2;
       font-weight : bold;
     }
     .#{$calendar-prefix-cls}-selected-day .#{$calendar-prefix-cls}-date,
     .#{$calendar-prefix-cls}-selected-day:hover .#{$calendar-prefix-cls}-date {
       background : transparent;
-      color      : $text-color;
+      //color      : $text-color;
     }
   }
 }

@@ -3,9 +3,32 @@
 $tag-prefix-cls : "#{$ant-prefix}-tag";
 
 
+@mixin make-color-classes($colors) {
+  $i : length($colors);
+
+  @if $i > 0 {
+    @include make-color-classes($i - 1);
+    $color      : nth($colors, $i);
+    $lightColor : map_get($g-colors, "#{$color}-2");
+    $darkColor  : map_get($g-colors, "#{$color}-6");
+    @at-root &-#{"" + $color} {
+      color        : $darkColor;
+      background   : $lightColor;
+      border-color : $lightColor;
+    }
+    @at-root &-#{"" + $color}-inverse {
+      background   : $darkColor;
+      border-color : $darkColor;
+      color        : #fff;
+    }
+  }
+}
+
+
 @mixin tri-tag-theme($theme) {
   $foreground        : map-get($theme, foreground);
 
+  $primary           : map-get($theme, primary);
   $tag-default-bg    : #f3f3f3 !default;
   $tag-default-color : tri-color($foreground, text-color);
 
@@ -43,34 +66,16 @@ $tag-prefix-cls : "#{$ant-prefix}-tag";
         color : #fff;
       }
       @at-root &-checked {
-        background-color : $primary-6;
+        background-color : tri-color($primary, 500);
       }
       @at-root &:active {
-        background-color : $primary-7;
+        background-color : tri-color($primary, 600);
       }
     }
 
     $colors       : pink, red, orange, yellow, cyan, green, blue, purple;
     // mixin to iterate over colors and create CSS class for each one
-    @mixin make-color-classes($i: length($colors)) {
-      @if $i > 0 {
-        @include make-color-classes($i - 1);
-        $color      : nth($colors, $i);
-        $lightColor : map_get($g-colors, "#{$color}-2");
-        $darkColor  : map_get($g-colors, "#{$color}-6");
-        @at-root &-#{"" + $color} {
-          color        : $darkColor;
-          background   : $lightColor;
-          border-color : $lightColor;
-        }
-        @at-root &-#{"" + $color}-inverse {
-          background   : $darkColor;
-          border-color : $darkColor;
-          color        : #fff;
-        }
-      }
-    }
 
-    @include make-color-classes();
+    @include make-color-classes($colors);
   }
 }

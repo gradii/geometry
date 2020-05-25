@@ -215,7 +215,7 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
 
   .#{$calendar-prefix-cls}-ok-btn {
     @include btn();
-    @include button-variant-primary($btn-primary-color, $btn-primary-bg);
+    //@include button-variant-primary($btn-primary-color, $btn-primary-bg);
     @include button-size(
         $btn-height-sm,
         $btn-padding-y-sm,
@@ -225,12 +225,12 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
         $border-radius-base);
     line-height : $line-height-base;
 
-    @at-root &-disabled {
-      @include button-color($btn-disable-color, $btn-disable-bg, $btn-disable-border);
-      cursor : not-allowed;
-      @at-root &:hover {
-        @include button-color($btn-disable-color, $btn-disable-bg, $btn-disable-border);
-      }
-    }
+    //@at-root &-disabled {
+    //  @include button-color($btn-disable-color, $btn-disable-bg, $btn-disable-border);
+    //  cursor : not-allowed;
+    //  @at-root &:hover {
+    //    @include button-color($btn-disable-color, $btn-disable-bg, $btn-disable-border);
+    //  }
+    //}
   }
 }

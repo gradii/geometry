@@ -67,7 +67,7 @@ $menu-prefix-cls : "#{$ant-prefix}-menu" !default;
     }
 
     @at-root &:not(#{&}-horizontal) #{&}-item-selected {
-      background-color : $item-active-bg;
+      background-color : tri-color($foreground, item-active-bg);
     }
 
     @at-root & > #{&}-item-divider {

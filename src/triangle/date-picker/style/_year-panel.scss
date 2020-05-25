@@ -6,7 +6,7 @@
   left          : 0;
   z-index       : 10;
   border-radius : $border-radius-base;
-  background    : $component-background;
+  //background    : $component-background;
   outline       : none;
 
   > div {
@@ -40,7 +40,7 @@
 .#{$calendar-prefix-cls}-year-panel-year {
   display       : inline-block;
   margin        : 0 auto;
-  color         : $text-color;
+  //color         : $text-color;
   background    : transparent;
   text-align    : center;
   height        : 24px;
@@ -50,17 +50,17 @@
   transition    : background 0.3s ease;
 
   @at-root &:hover {
-    background : $item-hover-bg;
+    //background : $item-hover-bg;
     cursor     : pointer;
   }
 }
 
 .#{$calendar-prefix-cls}-year-panel-selected-cell .#{$calendar-prefix-cls}-year-panel-year {
-  background : $primary-color;
+  //background : $primary-color;
   color      : #fff;
 
   @at-root &:hover {
-    background : $primary-color;
+    //background : $primary-color;
     color      : #fff;
   }
 }
@@ -69,6 +69,6 @@
 .#{$calendar-prefix-cls}-year-panel-next-decade-cell {
   .#{$calendar-prefix-cls}-year-panel-year {
     user-select : none;
-    color       : $disabled-color;
+    //color       : $disabled-color;
   }
 }

@@ -16,7 +16,7 @@ ng_module(
         ["**/*.ts"],
         exclude = ["**/*.spec.ts"],
     ),
-    assets = glob(["**/*.html"]),
+    assets = ["style/date-picker.css", "style/picker.css"] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/date-picker",
     deps = [
         "//src/triangle/core",
@@ -43,10 +43,20 @@ sass_binary(
     name = "date_picker_scss",
     src = "style/date-picker.scss",
     deps = [
-        "//src/cdk/a11y:a11y_scss_lib",
-        "//src/lib/core:core_scss_lib",
+        "//src/triangle/date-picker:date_picker_scss_lib",
+        "//src/triangle/core:core_scss_lib",
     ],
 )
+
+sass_binary(
+    name = "picker_scss",
+    src = "style/picker.scss",
+    deps = [
+        "//src/triangle/date-picker:date_picker_scss_lib",
+        "//src/triangle/core:core_scss_lib",
+    ],
+)
+
 #
 #ng_test_library(
 #  name = "autocomplete_test_sources",

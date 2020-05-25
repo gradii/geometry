@@ -1,4 +1,4 @@
-
+@import "../../core/themes/default-theme";
 
 @mixin tri-input-group-theme($theme, $inputClass) {
   $foreground: map-get($theme, foreground);

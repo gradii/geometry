@@ -1,4 +1,5 @@
 @import "../../core/themes/default-theme";
+@import "../../input/style/input-mixin";
 
 $input-box-height : 34px;
 
@@ -16,7 +17,7 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
 }
 
 .#{$calendar-prefix-cls}-range-picker-separator {
-  color          : $text-color-secondary;
+  //color          : $text-color-secondary;
   width          : 10px;
   display        : inline-block;
   height         : 100%;
@@ -46,7 +47,7 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
     float : left;
     .#{$calendar-prefix-cls} {
       @at-root &-time-picker-inner {
-        border-right : 1.5px solid $border-color-split;
+        //border-right : 1.5px solid $border-color-split;
       }
     }
   }
@@ -55,7 +56,7 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
     float : right;
     .#{$calendar-prefix-cls} {
       @at-root &-time-picker-inner {
-        border-left : 1.5px solid $border-color-split;
+        //border-left : 1.5px solid $border-color-split;
       }
     }
   }
@@ -68,7 +69,7 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
     text-align  : center;
     height      : $input-box-height;
     line-height : $input-box-height;
-    color       : $text-color-secondary;
+    //color       : $text-color-secondary;
   }
 
   @at-root &-right .#{$calendar-prefix-cls}-date-input-wrap {
@@ -142,7 +143,7 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
     @at-root &:before {
       content       : '';
       display       : block;
-      background    : $item-active-bg;
+      //background    : $item-active-bg;
       border-radius : 0;
       border        : 0;
       position      : absolute;
@@ -169,7 +170,7 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
       border-bottom : 0;
     }
     @at-root &-body {
-      border-top : $border-width-base $border-style-base $border-color-split;
+      //border-top : $border-width-base $border-style-base $border-color-split;
     }
   }
 
@@ -193,8 +194,8 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
       @at-root &-combobox {
         display          : inline-block;
         height           : 100%;
-        background-color : $component-background;
-        border-top       : $border-width-base $border-style-base $border-color-split;
+        //background-color : $component-background;
+        //border-top       : $border-width-base $border-style-base $border-color-split;
       }
       @at-root &-select {
         height : 100%;
