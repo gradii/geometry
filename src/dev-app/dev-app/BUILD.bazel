@@ -5,9 +5,9 @@ package(default_visibility = ["//visibility:public"])
 ng_module(
     name = "dev-app",
     srcs = glob(["**/*.ts"]),
-    assets = [
-    ],
+    assets = [] + glob(["**/*.html"]),
     deps = [
+        "@npm//@angular/core",
         "@npm//@angular/router",
     ],
 )

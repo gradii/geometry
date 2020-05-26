@@ -1,0 +1,42 @@
+@mixin tri-reboot-theme($theme) {
+  $foreground : map-get($theme, foreground);
+  $background : map-get($theme, background);
+
+  $primary    : map-get($theme, primary);
+  $warning     : map-get($theme, warning);
+
+  body {
+    color            : tri-color($foreground, text-color);
+    background-color : tri-color($background, body-background);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color : tri-color($foreground, heading-color);
+  }
+
+  a {
+    color : tri-color($foreground, link-color);
+
+    &:hover {
+      color : tri-color($foreground, link-hover-color);
+    }
+
+    &:active {
+      color : tri-color($foreground, link-active-color);
+    }
+  }
+
+  caption {
+    color : tri-color($foreground, text-color-secondary);
+  }
+
+  mark {
+    background-color : tri-color($warning, 50);
+  }
+
+  ::selection {
+    background : tri-color($primary);
+    color      : #fff;
+  }
+
+}

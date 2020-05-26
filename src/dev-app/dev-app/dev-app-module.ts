@@ -3,14 +3,15 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DevApp404 } from './dev-app-404';
 import { DevAppHome } from './dev-app-home';
+import { DevAppLayout } from './dev-app-layout';
 
 @NgModule({
   imports     : [
     CommonModule,
 
-    RouterModule,
+    RouterModule.forChild([]),
   ],
-  declarations: [DevAppHome, DevApp404],
+  declarations: [DevAppHome, DevAppLayout, DevApp404],
   exports     : [],
 })
 export class DevAppModule {

@@ -10,6 +10,9 @@
 @import './style/cdk/overlay';
 @import './style/cdk/a11y';
 @import './style/cdk/text-field';
+
+@import './style/reboot-theme';
+
 //
 //@import 'style/legend/elevation';
 //@import 'ripple/ripple';
@@ -42,6 +45,8 @@
 
 // Mixin that renders all of the core styles that depend on the theme.
 @mixin tri-core-theme($theme) {
+  @include tri-reboot-theme($theme);
+
   @include tri-ripple-theme($theme);
   @include tri-option-theme($theme);
   @include tri-optgroup-theme($theme);
