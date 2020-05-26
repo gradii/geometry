@@ -54,53 +54,53 @@ build --config=ivy
 #######################
 # Remote HTTP Caching #
 #######################
-build --remote_http_cache=https://storage.googleapis.com/angular-team-cache
-build --remote_accept_cached=true
-build --remote_upload_local_results=false
+#build --remote_http_cache=https://storage.googleapis.com/angular-team-cache
+#build --remote_accept_cached=true
+#build --remote_upload_local_results=false
 
 ######################################
 # Remote HTTP Caching writes support #
 # Turn on these settings with        #
 #  --config=-http-caching            #
 ######################################
-build:remote-http-caching --remote_upload_local_results=true
+#build:remote-http-caching --remote_upload_local_results=true
 
 ################################
 # Remote Execution Setup       #
 ################################
 
 # Use the Angular team internal GCP instance for remote execution.
-build:remote --remote_instance_name=projects/internal-200822/instances/default_instance
-build:remote --project_id=internal-200822
+#build:remote --remote_instance_name=projects/internal-200822/instances/default_instance
+#build:remote --project_id=internal-200822
 
 # Needed due to: https://github.com/bazelbuild/bazel/issues/7254
-build:remote --define=EXECUTOR=remote
+#build:remote --define=EXECUTOR=remote
 
 # Setup the remote build execution servers.
-build:remote --remote_cache=remotebuildexecution.googleapis.com
-build:remote --remote_executor=remotebuildexecution.googleapis.com
-build:remote --tls_enabled=true
-build:remote --auth_enabled=true
+#build:remote --remote_cache=remotebuildexecution.googleapis.com
+#build:remote --remote_executor=remotebuildexecution.googleapis.com
+#build:remote --tls_enabled=true
+#build:remote --auth_enabled=true
 
 # Setup the toolchain and platform for the remote build execution. The platform
 # is automatically configured by the "rbe_autoconfig" rule in the project workpsace.
-build:remote --crosstool_top=@rbe_default//cc:toolchain
-build:remote --host_javabase=@rbe_default//java:jdk
-build:remote --javabase=@rbe_default//java:jdk
-build:remote --host_java_toolchain=@bazel_tools//tools/jdk:toolchain_hostjdk8
-build:remote --java_toolchain=@bazel_tools//tools/jdk:toolchain_hostjdk8
-build:remote --extra_execution_platforms=//tools:rbe_platform
-build:remote --host_platform=//tools:rbe_platform
-build:remote --platforms=//tools:rbe_platform
-build:remote --extra_toolchains=@rbe_default//config:cc-toolchain
+#build:remote --crosstool_top=@rbe_default//cc:toolchain
+#build:remote --host_javabase=@rbe_default//java:jdk
+#build:remote --javabase=@rbe_default//java:jdk
+#build:remote --host_java_toolchain=@bazel_tools//tools/jdk:toolchain_hostjdk8
+#build:remote --java_toolchain=@bazel_tools//tools/jdk:toolchain_hostjdk8
+#build:remote --extra_execution_platforms=//tools:rbe_platform
+#build:remote --host_platform=//tools:rbe_platform
+#build:remote --platforms=//tools:rbe_platform
+#build:remote --extra_toolchains=@rbe_default//config:cc-toolchain
 
 # Setup Build Event Service
-build:remote --bes_backend=buildeventservice.googleapis.com
-build:remote --bes_timeout=30s
-build:remote --bes_results_url="https://source.cloud.google.com/results/invocations/"
+#build:remote --bes_backend=buildeventservice.googleapis.com
+#build:remote --bes_timeout=30s
+#build:remote --bes_results_url="https://source.cloud.google.com/results/invocations/"
 
 # Set remote caching settings
-build:remote --remote_accept_cached=true
+#build:remote --remote_accept_cached=true
 
 ################################
 # --config=debug               #
