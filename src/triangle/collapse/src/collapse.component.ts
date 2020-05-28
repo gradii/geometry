@@ -50,6 +50,7 @@ import { CollapsesetComponent } from './collapseset.component';
       transition('active => inactive', animate('150ms ease-out'))
     ])
   ],
+  styleUrls : [`../style/collapse.css`],
   styles    : [`
                  tri-collapse {
                    display: block;

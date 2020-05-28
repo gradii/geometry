@@ -1,79 +1,80 @@
 @import "../../core/themes/default-theme";
 
-$collapse-prefix-cls: "#{$ant-prefix}-collapse";
+$collapse-prefix-cls : "#{$ant-prefix}-collapse";
 @mixin tri-collapse-theme($theme) {
-  $primary    : map-get($theme, primary);
-  $foreground : map-get($theme, foreground);
-  $background : map-get($theme, background);
+  $primary            : map-get($theme, primary);
+  $foreground         : map-get($theme, foreground);
+  $background         : map-get($theme, background);
 
-  $collapse-header-bg: tri-color($background, background-color-base);
-  $collapse-active-bg: tri-color($background, background-color-active);
+  $collapse-header-bg : tri-color($background, background-color-base);
+  $collapse-active-bg : tri-color($background, background-color-active);
 
   .#{$collapse-prefix-cls} {
-    background-color: $collapse-header-bg;
-    border-radius: $border-radius-base;
-    border: $border-width-base $border-style-base tri-color($foreground,border-color-base);
-    border-bottom: 0;
+    background-color : $collapse-header-bg;
+    border-radius    : $border-radius-base;
+    border           : $border-width-base $border-style-base tri-color($foreground, border-color-base);
+    border-bottom    : 0;
 
     @at-root & > #{&}-item {
-      border-bottom: $border-width-base $border-style-base tri-color($foreground,border-color-base);
+      border-bottom : $border-width-base $border-style-base tri-color($foreground, border-color-base);
 
       @at-root &:last-child {
         @at-root &,
-          & > .#{$collapse-prefix-cls}-header {
-          border-radius: 0 0 $border-radius-base $border-radius-base;
+        & > .#{$collapse-prefix-cls}-header {
+          border-radius : 0 0 $border-radius-base $border-radius-base;
         }
       }
 
       > .#{$collapse-prefix-cls}-header {
-        color: tri-color($foreground, heading-color);
+        color : tri-color($foreground, heading-color);
+
         .arrow {
-          color: tri-color($foreground,text-color-secondary);
+          color : tri-color($foreground, text-color-secondary);
         }
       }
     }
 
     @at-root &-content {
-      color: tri-color($foreground, text-color);
-      background-color: tri-color($background,component-background);
+      color            : tri-color($foreground, text-color);
+      background-color : tri-color($background, component-background);
     }
 
     @at-root &-item:last-child {
       > .#{$collapse-prefix-cls}-content {
-        border-radius: 0 0 $border-radius-base $border-radius-base;
+        border-radius : 0 0 $border-radius-base $border-radius-base;
       }
     }
 
     @at-root &-borderless {
-      background-color: tri-color($background,component-background);
-      border: 0;
+      background-color : tri-color($background, component-background);
+      border           : 0;
     }
 
     @at-root &-borderless > #{&}-item-active {
-      border: 0;
+      border : 0;
     }
 
     @at-root &-borderless > #{&}-item > #{&}-content {
-      background-color: transparent;
-      border-top: $border-width-base $border-style-base tri-color($foreground,border-color-base);
+      background-color : transparent;
+      border-top       : $border-width-base $border-style-base tri-color($foreground, border-color-base);
     }
 
     @at-root &-borderless > #{&}-item > #{&}-header {
       @at-root &:hover {
-        background-color: $collapse-header-bg;
+        background-color : $collapse-header-bg;
       }
     }
 
     @at-root &#{&}-item-disabled > #{&}-header {
       @at-root &,
-        & > .arrow {
-        color: tri-color($background,disabled-color);
-        background-color: tri-color($background,disabled-bg);
+      & > .arrow {
+        color            : tri-color($background, disabled-color);
+        background-color : tri-color($background, disabled-bg);
       }
     }
 
     @at-root & > #{&}-item:not(#{&}-item-disabled) > .#{$collapse-prefix-cls}-header:active {
-      background-color: $collapse-active-bg;
+      background-color : $collapse-active-bg;
     }
   }
 }

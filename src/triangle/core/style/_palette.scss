@@ -124,7 +124,7 @@ $tri-blue                   : (
   )
 );
 
-$tri-primary : $tri-blue;
+$tri-primary                : $tri-blue;
 
 $tri-indigo                 : (
   50: #e8eaf6,
@@ -444,11 +444,13 @@ $tri-light-theme-background : (
   unselected-chip: map_get($tri-grey, 300),
   disabled-list-option: map_get($tri-grey, 200),
   tooltip: map_get($tri-grey, 700),
-
-  body-background-color : #fafafa,
-  component-background-color : #fff,
+  body-background : #fafafa,
+  component-background : #fff,
   item-active-bg : map-get($tri-primary, 500),
   item-hover-bg : map-get($tri-primary, 50),
+
+  background-color-base : map_get($tri-gray, 50),
+  background-color-active : #eee,
 );
 
 // Background palette for dark themes.
@@ -468,11 +470,13 @@ $tri-dark-theme-background  : (
   unselected-chip: map_get($tri-grey, 700),
   disabled-list-option: black,
   tooltip: map_get($tri-grey, 700),
-
-  body-background-color : #fafafa,
-  component-background-color : #fff,
+  body-background : #fafafa,
+  component-background : #fff,
   item-active-bg : map-get($tri-primary, 500),
   item-hover-bg : map-get($tri-primary, 50),
+
+  background-color-base : map_get($tri-gray, 50),
+  background-color-active : #eee,
 );
 
 // Foreground palette for light themes.
@@ -492,7 +496,6 @@ $tri-light-theme-foreground : (
   slider-min: rgba(black, 0.87),
   slider-off: rgba(black, 0.26),
   slider-off-active: rgba(black, 0.38),
-
   normal-color : #d9d9d9,
   body-color : map-get($tri-gray, 900),
   heading-color : #262626,
@@ -503,27 +506,21 @@ $tri-light-theme-foreground : (
   text-color-secondary-dark : #ababab,
   icon-color : inherit,
   icon-color-hover : fade(#000, 75%),
-
-  link-color                     : map-get($tri-primary, 500),
-  link-hover-color               : map-get($tri-primary, 400),
-  link-active-color              : map-get($tri-primary, 700),
-  outline-color                  : map-get($tri-primary, 500),
-
+  link-color : map-get($tri-primary, 500),
+  link-hover-color : map-get($tri-primary, 400),
+  link-active-color : map-get($tri-primary, 700),
+  outline-color : map-get($tri-primary, 500),
   //Border color
-  border-color-base              : #d9d9d9, // base border outline a component
-  border-color-split             : #e9e9e9, // split border inside a component
-
+  border-color-base : #d9d9d9, // base border outline a component
+  border-color-split : #e9e9e9, // split border inside a component
   // Default background color for disabled states, Collapse wrappers,
   // and several active and hover states.
-  background-color-base          : map_get($tri-gray, 50),
-  background-color-active        : #eee,
-
+  //background-color-base : map_get($tri-gray, 50),
+  //background-color-active : #eee,
   // Disabled states
-  disabled-color                 : rgba(#000, 0.25),
-  disabled-bg                    : map_get($tri-gray, 50), //$background-color-base,
-  disabled-color-dark            : rgba(#fff, 0.35),
-
-
+  disabled-color : rgba(#000, 0.25),
+  disabled-bg : map_get($tri-gray, 50), //$background-color-base,
+  disabled-color-dark : rgba(#fff, 0.35),
 );
 
 // Foreground palette for dark themes.
@@ -543,7 +540,6 @@ $tri-dark-theme-foreground  : (
   slider-min: white,
   slider-off: rgba(white, 0.3),
   slider-off-active: rgba(white, 0.3),
-
   normal-color : #d9d9d9,
   body-color : map-get($tri-gray, 900),
   heading-color : #262626,
@@ -554,11 +550,21 @@ $tri-dark-theme-foreground  : (
   text-color-secondary-dark : #ababab,
   icon-color : inherit,
   icon-color-hover : fade(#000, 75%),
-
-  link-color                     : map-get($tri-primary, 500),
-  link-hover-color               : map-get($tri-primary, 400),
-  link-active-color              : map-get($tri-primary, 700),
-  outline-color                  : map-get($tri-primary, 500),
+  link-color : map-get($tri-primary, 500),
+  link-hover-color : map-get($tri-primary, 400),
+  link-active-color : map-get($tri-primary, 700),
+  outline-color : map-get($tri-primary, 500),
+  //Border color
+  border-color-base : #d9d9d9, // base border outline a component
+  border-color-split : #e9e9e9, // split border inside a component
+  // Default background color for disabled states, Collapse wrappers,
+  // and several active and hover states.
+  //background-color-base : map_get($tri-gray, 50),
+  //background-color-active : #eee,
+  // Disabled states
+  disabled-color : rgba(#000, 0.25),
+  disabled-bg : map_get($tri-gray, 50), //$background-color-base,
+  disabled-color-dark : rgba(#fff, 0.35),
 );
 
 //

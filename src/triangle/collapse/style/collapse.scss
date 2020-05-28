@@ -16,6 +16,7 @@ $collapse-prefix-cls : "#{$ant-prefix}-collapse";
   border-bottom    : 0;
 
   @at-root & > #{&}-item {
+    display: block;
 
     @at-root &:last-child {
       @at-root &,

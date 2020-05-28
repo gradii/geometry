@@ -54,10 +54,12 @@
 
 
 @mixin gradii-triangle-theme($theme) {
-  @debug $theme;
+  //@debug $theme;
 
   @include tri-core-theme($theme);
   @include tri-menu-theme($theme);
   @include tri-layout-theme($theme);
   @include tri-tabs-theme($theme);
+
+  @include tri-collapse-theme($theme);
 }
