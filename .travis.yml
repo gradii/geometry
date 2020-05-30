@@ -27,18 +27,19 @@ matrix:
     - env: "CI_MODE=browserstack_optional"
 
 before_install:
-  # source the env.sh script so that the exported variables are available to other scripts later on
-  - BAZEL_VERSION="0.24.1"
-  - wget -q -O - https://bazel.build/bazel-release.pub.gpg |sudo apt-key add -
-  - echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
-  - sudo apt-get update
-#  - sudo apt-get install -y bazel=$BAZEL_VERSION
-  - sudo apt-get install bazel
-  - sudo rm -rf /var/lib/apt/lists/*
-#  - source ./scripts/ci/env.sh print
+#  # source the env.sh script so that the exported variables are available to other scripts later on
+#  - BAZEL_VERSION="0.24.1"
+#  - wget -q -O - https://bazel.build/bazel-release.pub.gpg |sudo apt-key add -
+#  - echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
+#  - sudo apt-get update
+##  - sudo apt-get install -y bazel=$BAZEL_VERSION
+#  - sudo apt-get install bazel
+#  - sudo rm -rf /var/lib/apt/lists/*
+##  - source ./scripts/ci/env.sh print
+  - yarn install
 
 install:
-  - bazel build --repository_cache=~/bazel_repository_cache
+  - yarn bazel build --repository_cache=~/bazel_repository_cache
 
 script:
-  - bazel build libs/triangle:npm_package --config=release
+  - yarn bazel build libs/triangle:npm_package --config=release
