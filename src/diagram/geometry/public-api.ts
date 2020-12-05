@@ -9,4 +9,4 @@ export * from './src/bezier-curve';
 export * from './src/matrix';
 export * from './src/point';
 export * from './src/polygon';
-export * from './src/rectangle';
+// export * from './src/rectangle';

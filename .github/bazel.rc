@@ -1,0 +1,1 @@
+build --repository_cache=/home/runner/bazel_repository_cache

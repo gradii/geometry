@@ -1,15 +1,15 @@
 {
-  "name": "@gradii/triangle",
-  "version": "0.0.0-PLACEHOLDER",
-  "description": "Triangle Packages",
-  "main": "./bundles/triangle.umd.js",
-  "fesm5": "./fesm5/triangle.js",
-  "fesm2015": "./fesm2015/triangle.js",
+  "name": "@gradii/diagram",
+  "version": "0.0.1-alpha.0",
+  "description": "Diagram Packages",
+  "main": "./bundles/diagram.umd.js",
+  "fesm5": "./fesm5/diagram.js",
+  "fesm2015": "./fesm2015/diagram.js",
   "esm5": "./esm5/index.js",
   "esm2015": "./esm2015/index.js",
   "typings": "./index.d.ts",
-  "module": "./fesm5/triangle.js",
-  "es2015": "./fesm2015/triangle.js",
+  "module": "./fesm5/diagram.js",
+  "es2015": "./fesm2015/diagram.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/gradii/triangle.git"
@@ -17,6 +17,7 @@
   "keywords": [
     "angular",
     "triangle",
+    "diagram",
     "components"
   ],
   "license": "MIT",
@@ -36,7 +37,7 @@
   "ng-update": {
     "migrations": "./schematics/migration.json",
     "packageGroup": [
-      "@gradii/triangle"
+      "@gradii/diagram"
     ]
   },
   "sideEffects": false,

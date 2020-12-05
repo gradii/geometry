@@ -1,4 +1,5 @@
 load("//src/triangle:config.bzl", "TRIANGLE_ENTRYPOINTS")
+load("//src/diagram:config.bzl", "DIAGRAM_ENTRYPOINTS")
 
 # Base rollup globals for everything in the repo. Note that we want to disable
 # sorting of the globals as we manually group dict entries.
@@ -53,6 +54,7 @@ ROLLUP_GLOBALS = {
     "@angular/cdk/testing/testbed": "ng.cdk.testing.testbed",
 
     # Third-party libraries.
+    "closest": "closest",
     "date-fns": "date-fns",
     "moment": "moment",
     "protractor": "protractor",
@@ -84,3 +86,4 @@ def create_globals(packageName, entryPoints):
     })
 
 create_globals("triangle", TRIANGLE_ENTRYPOINTS)
+create_globals("diagram", DIAGRAM_ENTRYPOINTS)

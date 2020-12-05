@@ -24,6 +24,9 @@
       "@gradii/triangle/*": [
         "src/triangle/*/public-api.ts"
       ],
+      "@gradii/diagram/*": [
+        "src/diagram/*/public-api.ts"
+      ],
       "@gradii/triangle/*/testing": [
         "src/triangle/*/testing/public-api.ts"
       ]

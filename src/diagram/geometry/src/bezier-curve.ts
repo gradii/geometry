@@ -8,7 +8,7 @@
 import { Point } from './point';
 import { Polygon } from './polygon';
 
-export enum BezierCurvepPoints {
+export const enum BezierCurvePoints {
   SOURCE = 0,
   SOURCE_CONTROL = 1,
   TARGET_CONTROL = 2,
@@ -21,6 +21,7 @@ export class BezierCurve extends Polygon {
   }
 
   getSVGCurve(): string {
+    // tslint:disable-next-line:max-line-length
     return `M${this.getSource().toSVG()} C${this.getSourceControl().toSVG()}, ${this.getTargetControl().toSVG()}, ${this.getTarget().toSVG()}`;
   }
 
@@ -32,34 +33,34 @@ export class BezierCurve extends Polygon {
   }
 
   getSource(): Point {
-    return this.points[BezierCurvepPoints.SOURCE];
+    return this.points[BezierCurvePoints.SOURCE];
   }
 
   getSourceControl(): Point {
-    return this.points[BezierCurvepPoints.SOURCE_CONTROL];
+    return this.points[BezierCurvePoints.SOURCE_CONTROL];
   }
 
   getTargetControl(): Point {
-    return this.points[BezierCurvepPoints.TARGET_CONTROL];
+    return this.points[BezierCurvePoints.TARGET_CONTROL];
   }
 
   getTarget(): Point {
-    return this.points[BezierCurvepPoints.TARGET];
+    return this.points[BezierCurvePoints.TARGET];
   }
 
   setSource(point: Point) {
-    this.points[BezierCurvepPoints.SOURCE] = point;
+    this.points[BezierCurvePoints.SOURCE] = point;
   }
 
   setSourceControl(point: Point) {
-    this.points[BezierCurvepPoints.SOURCE_CONTROL] = point;
+    this.points[BezierCurvePoints.SOURCE_CONTROL] = point;
   }
 
   setTargetControl(point: Point) {
-    this.points[BezierCurvepPoints.TARGET_CONTROL] = point;
+    this.points[BezierCurvePoints.TARGET_CONTROL] = point;
   }
 
   setTarget(point: Point) {
-    this.points[BezierCurvepPoints.TARGET] = point;
+    this.points[BezierCurvePoints.TARGET] = point;
   }
 }

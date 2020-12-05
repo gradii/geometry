@@ -15,17 +15,26 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "${{ matrix.node }}"
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         id: yarn-cache
         with:
           path: |
             node_modules
-            */*/node_modules
+            **/node_modules
           key: "${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}"
           restore-keys: "${{ runner.os }}-yarn-\n"
+      - uses: actions/cache@v2
+        id: bazel-cache
+        with:
+          path: |
+            /home/runner/bazel_repository_cache
+          key: "${{ runner.os }}-bazel-${{ hashFiles('.bazelversion') }}-${{ hashFiles('WORKSPACE') }}-${{ hashFiles('**/yarn.lock') }}"
+          restore-keys: "${{ runner.os }}-bazel-\n"
+      - name: Setup bazel ci config
+        run: echo "import %workspace%/.github/bazel.rc" >> ./.bazelrc
       - name: Installing project dependencies
         run: yarn install --frozen-lockfile --non-interactive
       - name: Setting up global Bazel binary
         run: "./scripts/circleci/setup_bazel_binary.sh"
       - run: yarn build
-      - run: yarn check-release-output
+#      - run: yarn check-release-output

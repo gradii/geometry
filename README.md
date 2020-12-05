@@ -1,6 +1,5 @@
 # Triangle
 
-[![Build Status](https://travis-ci.com/LinBoLen/triangle.svg?token=GrAszzpvUziQMLDcLucq&branch=master)](https://travis-ci.com/LinBoLen/triangle)
 [![Build Status](https://github.com/gradii/triangle/workflows/CI/badge.svg)](https://github.com/gradii/triangle/actions?query=workflow%3ACI)
 [![Greenkeeper badge](https://badges.greenkeeper.io/gradii/triangle.svg)](https://greenkeeper.io/)
 

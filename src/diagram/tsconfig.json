@@ -5,11 +5,11 @@
     "rootDir": "..",
     "baseUrl": ".",
     "paths": {
-      "@gradii/triangle": [
-        "../triangle"
+      "@gradii/diagram": [
+        "../diagram"
       ],
-      "@gradii/triangle/*": [
-        "../triangle/*"
+      "@gradii/diagram/*": [
+        "../diagram/*"
       ]
     }
   },

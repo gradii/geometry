@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "projects": {
+    "diagram-demo": {
+      "projectType": "application",
+      "root": "apps/diagram-demo",
+      "sourceRoot": "apps/diagram-demo/src",
+      "prefix": "applications",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/diagram-demo",
+            "index": "apps/diagram-demo/src/index.html",
+            "main": "apps/diagram-demo/src/main.ts",
+            "polyfills": "apps/diagram-demo/src/polyfills.ts",
+            "tsConfig": "apps/diagram-demo/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/diagram-demo/src/favicon.ico",
+              "apps/diagram-demo/src/assets"
+            ],
+            "styles": ["apps/diagram-demo/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/diagram-demo/src/environments/environment.ts",
+                  "with": "apps/diagram-demo/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "diagram-demo:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "diagram-demo:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "diagram-demo:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/diagram-demo/tsconfig.app.json",
+              "apps/diagram-demo/tsconfig.spec.json",
+              "apps/diagram-demo/tsconfig.editor.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/diagram-demo/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/diagram-demo"],
+          "options": {
+            "jestConfig": "apps/diagram-demo/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "diagram-demo-e2e": {
+      "root": "apps/diagram-demo-e2e",
+      "sourceRoot": "apps/diagram-demo-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/diagram-demo-e2e/cypress.json",
+            "tsConfig": "apps/diagram-demo-e2e/tsconfig.e2e.json",
+            "devServerTarget": "diagram-demo:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "diagram-demo:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/diagram-demo-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/diagram-demo-e2e/**/*"]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/angular",
+    "analytics": false
+  },
+  "schematics": {
+    "@nrwl/workspace": {
+      "library": {
+        "linter": "tslint"
+      }
+    },
+    "@nrwl/cypress": {
+      "cypress-project": {
+        "linter": "tslint"
+      }
+    },
+    "@nrwl/node": {
+      "application": {
+        "linter": "tslint"
+      },
+      "library": {
+        "linter": "tslint"
+      }
+    },
+    "@nrwl/nest": {
+      "application": {
+        "linter": "tslint"
+      },
+      "library": {
+        "linter": "tslint"
+      }
+    },
+    "@nrwl/express": {
+      "application": {
+        "linter": "tslint"
+      },
+      "library": {
+        "linter": "tslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    }
+  },
+  "defaultProject": "diagram-demo"
+}

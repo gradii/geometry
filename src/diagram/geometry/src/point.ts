@@ -52,7 +52,7 @@ export class Point {
     ]);
   }
 
-  static createScaleMatrix(x, y, origin: Point): Matrix {
+  static createScaleMatrix(x: number, y: number, origin: Point): Matrix {
     return this.multiply(
       Point.translateMatrix(origin.x, origin.y),
       Point.scaleMatrix(x, y),

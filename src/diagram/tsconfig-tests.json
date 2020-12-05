@@ -17,14 +17,11 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "paths": {
-      "@angular/cdk": [
-        "../../dist/packages/cdk"
+      "@angular/diagram": [
+        "../../dist/packages/diagram"
       ],
       "@angular/cdk/*": [
         "../../dist/packages/cdk/*"
-      ],
-      "@angular/material/*": [
-        "./*"
       ]
     }
   },
