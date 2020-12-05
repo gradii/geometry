@@ -28,6 +28,7 @@ import { FilterService } from '../filter.service';
 })
 export class FilterCellWrapperComponent extends BaseFilterCellComponent /*implements AfterContentInit, OnDestroy*/ {
   @Input() showOperators: boolean = true;
+  // @ts-ignore
   @Input() operators: Array<{
     label: string;
     value: string;

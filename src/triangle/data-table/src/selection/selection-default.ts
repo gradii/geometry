@@ -5,12 +5,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { isFunction, isPresent, isString } from '@gradii/triangle/util';
 import { Subscription } from 'rxjs';
 import { DataTableComponent } from '../data-table.component';
 import { RowArgs } from '../row-class';
 
+@Directive()
 export class Selection {
   /**
    * Defines the collection that will store the selected item keys.

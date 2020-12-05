@@ -18,12 +18,14 @@ import { I18N } from './i18n.token';
 @Injectable()
 export class I18nService {
   private _locale: I18nInterface;
-  private _change = new BehaviorSubject<I18nInterface>(this._locale);
+  private _change: BehaviorSubject<I18nInterface>;
 
   constructor(@Inject(I18N) locale: I18nInterface,
               private _logger: LoggerService,
               private datePipe: DatePipe) {
     this.setLocale(locale || zh_CN);
+
+    this._change = new BehaviorSubject<I18nInterface>(this._locale);
   }
 
   get localeChange(): Observable<I18nInterface> {
@@ -131,9 +133,9 @@ export function LOCALE_SERVICE_PROVIDER_FACTORY(exist: I18nService, locale: I18n
 }
 
 export const I18N_SERVICE_PROVIDER: Provider = {
-  provide   : I18nService,
+  provide: I18nService,
   useFactory: LOCALE_SERVICE_PROVIDER_FACTORY,
-  deps      : [
+  deps: [
     [new Optional(), new SkipSelf(), I18nService],
     I18N,
     LoggerService,

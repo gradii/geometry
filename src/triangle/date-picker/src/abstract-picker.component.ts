@@ -6,6 +6,7 @@
  */
 
 import {
+  Directive,
   EventEmitter,
   Input,
   OnChanges,
@@ -25,6 +26,7 @@ const POPUP_STYLE_PATCH = {'position': 'relative'}; // Aim to override antd's st
 /**
  * The base picker for all common APIs
  */
+@Directive()
 export abstract class AbstractPickerComponent implements OnInit, OnChanges, ControlValueAccessor {
   // --- Common API
   @Input() allowClear: boolean = true;

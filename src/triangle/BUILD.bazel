@@ -45,7 +45,6 @@ ng_package(
         #        "//src/triangle/prebuilt-themes:purple-green",
     ] + TRIANGLE_SCSS_LIBS,
     entry_point = ":index.ts",
-    entry_point_name = "triangle",
     nested_packages = [],
     tags = ["release-package"],
     deps = TRIANGLE_TARGETS,

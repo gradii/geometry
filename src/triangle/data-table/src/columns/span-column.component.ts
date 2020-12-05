@@ -43,7 +43,7 @@ export class SpanColumnComponent extends ColumnBase {
   editTemplate: QueryList<EditTemplateDirective>;
   @ContentChildren(ColumnComponent) childColumns: QueryList<ColumnComponent>;
   title: string;
-  width: number;
+  // width: number;
   headerStyle: {
     [key: string]: string;
   };
@@ -93,7 +93,9 @@ export class SpanColumnComponent extends ColumnBase {
 
   private _hidden;
 
+
   @Input()
+  // @ts-ignore
   get hidden(): boolean {
     return this._hidden || this.childColumns.toArray().every(x => x.hidden);
   }
@@ -103,7 +105,7 @@ export class SpanColumnComponent extends ColumnBase {
   }
 
   private _locked;
-
+  // @ts-ignore
   get locked() {
     return this._locked || this.childColumns.some(c => c.locked);
   }

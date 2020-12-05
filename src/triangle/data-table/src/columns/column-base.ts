@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { ContentChildren, Input, QueryList, TemplateRef } from '@angular/core';
+import { ContentChildren, Directive, Input, QueryList, TemplateRef } from '@angular/core';
 import { CheckboxColumnComponent } from '../columns/checkbox-column.component';
 import { HierarchyColumnComponent } from '../columns/hierarchy-column.component';
 import { FooterTemplateDirective } from '../table-footer/footer-template.directive';
@@ -27,6 +27,7 @@ function isColumnContainer(column) {
 
 export type AutoGenerateColumnPositon = 'start' | 'middle' | 'end';
 
+@Directive()
 export class ColumnBase {
   matchesMedia: boolean = true;
   orderIndex: number = 0;
@@ -82,38 +83,14 @@ export class ColumnBase {
     }
   }
 
-  private _width;
+  @Input()
+  width: number;
 
   @Input()
-  get width() {
-    return this._width;
-  }
-
-  set width(value) {
-    this._width = parseInt(value, 10);
-  }
-
-  private _minWidth;
+  minWidth: number;
 
   @Input()
-  get minWidth() {
-    return this._minWidth;
-  }
-
-  set minWidth(value) {
-    this._minWidth = parseInt(value, 10);
-  }
-
-  private _maxWidth;
-
-  @Input()
-  get maxWidth() {
-    return this._maxWidth;
-  }
-
-  set maxWidth(value) {
-    this._maxWidth = parseInt(value, 10);
-  }
+  maxWidth: number;
 
   get level() {
     if (this.parent && isSpanColumn(this.parent)) {

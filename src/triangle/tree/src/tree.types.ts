@@ -83,7 +83,6 @@ export class TreeModelSettings {
   /**
    * "menu" property when set will be available as custom context menu.
    * @name TreeModelSettings#MenuItems
-   * @type NodeMenuItem
    */
   menuItems?: NodeMenuItem[];
   /**
@@ -99,12 +98,12 @@ export class TreeModelSettings {
   static merge(child: TreeModel, parent: TreeModel): TreeModelSettings {
     const parentCascadingSettings = omit(get(parent, 'settings'), TreeModelSettings.NOT_CASCADING_SETTINGS);
     return defaultsDeep({}, get(child, 'settings'), parentCascadingSettings, {
-      static           : false,
-      leftMenu         : false,
-      rightMenu        : true,
+      static: false,
+      leftMenu: false,
+      rightMenu: true,
       isCollapsedOnInit: false,
-      checked          : false,
-      selectionAllowed : true
+      checked: false,
+      selectionAllowed: true
     });
   }
 }
@@ -128,7 +127,7 @@ export enum TreeStatus {
 export interface RenamableNode {
   /**
    * Set new value of the renamable node. Implementation of this method is up to user.
-   * @param {string} name - A new value of the node.
+   * @paramname - A new value of the node.
    */
   setName(name: string): void;
 

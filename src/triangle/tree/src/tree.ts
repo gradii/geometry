@@ -17,19 +17,7 @@ import {
   TreeModelSettings,
   TreeStatus
 } from './tree.types';
-import {
-  defaultsDeep,
-  get,
-  has,
-  includes,
-  isEmpty,
-  isFunction,
-  isNil,
-  omit,
-  once,
-  size,
-  trim
-} from './utils/fn.utils';
+import { defaultsDeep, get, has, includes, isEmpty, isFunction, isNil, omit, once, size, trim } from './utils/fn.utils';
 
 enum ChildrenLoadingState {
   NotStarted,
@@ -45,9 +33,9 @@ export class Tree {
 
   /**
    * Build an instance of Tree from an object implementing TreeModel interface.
-   * @param {TreeModel} model - A model that is used to build a tree.
-   * @param {Tree} [parent] - An optional parent if you want to build a tree from the model that should be a child of an existing Tree instance.
-   * @param {boolean} [isBranch] - An option that makes a branch from created tree. Branch can have children.
+   * @parammodel - A model that is used to build a tree.
+   * @param[parent] - An optional parent if you want to build a tree from the model that should be a child of an existing Tree instance.
+   * @param[isBranch] - An option that makes a branch from created tree. Branch can have children.
    */
   constructor(node: TreeModel, parent: Tree = null, isBranch: boolean = false) {
     this.buildTreeFromModel(node, parent, isBranch || Array.isArray(node.children));
@@ -101,7 +89,7 @@ export class Tree {
 
   /**
    * Set the value of the current node
-   * @param {(string|RenamableNode)} value - The new value of the node.
+   * @paramvalue - The new value of the node.
    */
   set value(value: any) {
     if (typeof value !== 'string' && !Tree.isRenamable(value)) {
@@ -207,7 +195,6 @@ export class Tree {
    * Check that value passed is not empty (it doesn't consist of only whitespace symbols).
    * @param value - A value that should be checked.
    * return - A flag indicating that value is empty or not.
-   * @static
    */
   static isValueEmpty(value: string): boolean {
     return isEmpty(trim(value));
@@ -215,9 +202,8 @@ export class Tree {
 
   /**
    * Check whether a given value can be considered RenamableNode.
-   * @param {any} value - A value to check.
+   * @paramvalue - A value to check.
    * return - A flag indicating whether given value is Renamable node or not.
-   * @static
    */
   static isRenamable(value: any): value is RenamableNode {
     return (
@@ -300,8 +286,8 @@ export class Tree {
 
   /**
    * Create a new node in the current tree.
-   * @param {boolean} isBranch - A flag that indicates whether a new node should be a "Branch". "Leaf" node will be created by default
-   * @param {TreeModel} model - Tree model of the new node which will be inserted. Empty node will be created by default and it will fire edit mode of this node
+   * @paramisBranch - A flag that indicates whether a new node should be a "Branch". "Leaf" node will be created by default
+   * @parammodel - Tree model of the new node which will be inserted. Empty node will be created by default and it will fire edit mode of this node
    * return A newly created child node.
    */
   createNode(isBranch: boolean, model: TreeModel = {value: ''}): Tree {
@@ -336,9 +322,9 @@ export class Tree {
 
   /**
    * Add a sibling node for the current node. This won't work if the current node is a root.
-   * @param {Tree} sibling - A node that should become a sibling.
-   * @param [number] position - Position in which sibling will be inserted. By default it will be inserted at the last position in a parent.
    * return A newly inserted sibling, or null if you are trying to make a sibling for the root.
+   * @paramsibling - A node that should become a sibling.
+   * @param position - Position in which sibling will be inserted. By default it will be inserted at the last position in a parent.
    */
   addSibling(sibling: Tree, position?: number): Tree {
     if (Array.isArray(get(this.parent, 'children'))) {
@@ -349,8 +335,8 @@ export class Tree {
 
   /**
    * Add a child node for the current node.
-   * @param {Tree} child - A node that should become a child.
-   * @param [number] position - Position in which child will be inserted. By default it will be inserted at the last position in a parent.
+   * @paramchild - A node that should become a child.
+   * @param position - Position in which child will be inserted. By default it will be inserted at the last position in a parent.
    * return A newly inserted child.
    */
   addChild(child: Tree, position?: number): Tree {
@@ -366,7 +352,7 @@ export class Tree {
 
   /**
    * Swap position of the current node with the given sibling. If node passed as a parameter is not a sibling - nothing happens.
-   * @param {Tree} sibling - A sibling with which current node shold be swapped.
+   * @paramsibling - A sibling with which current node shold be swapped.
    */
   swapWithSibling(sibling: Tree): void {
     if (!this.hasSibling(sibling)) {

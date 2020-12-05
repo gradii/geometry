@@ -6,6 +6,7 @@
  */
 
 import {
+  Directive,
   EventEmitter,
   Input,
   OnChanges,
@@ -21,10 +22,7 @@ import { DisabledTimeFn, PanelMode, PresetRanges } from '../lib/standard-types';
 
 import { AbstractPickerComponent, CompatibleDate } from './abstract-picker.component';
 
-// @Component({
-//   template: `` // Just for rollup
-// })
-
+@Directive()
 export class DateRangePickerComponent extends AbstractPickerComponent implements OnInit, OnChanges {
   showWeek: boolean = false; // Should show as week picker
 
