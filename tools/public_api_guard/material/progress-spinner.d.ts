@@ -3,13 +3,9 @@ export declare const MAT_PROGRESS_SPINNER_DEFAULT_OPTIONS: InjectionToken<MatPro
 export declare function MAT_PROGRESS_SPINNER_DEFAULT_OPTIONS_FACTORY(): MatProgressSpinnerDefaultOptions;
 
 export declare class MatProgressSpinner extends _MatProgressSpinnerMixinBase implements OnInit, CanColor {
-    get _circleRadius(): number;
-    get _circleStrokeWidth(): number;
     _elementRef: ElementRef<HTMLElement>;
     _noopAnimations: boolean;
-    get _strokeCircumference(): number;
-    get _strokeDashOffset(): number | null;
-    get _viewBox(): string;
+    _spinnerAnimationLabel: string;
     get diameter(): number;
     set diameter(size: number);
     mode: ProgressSpinnerMode;
@@ -18,12 +14,17 @@ export declare class MatProgressSpinner extends _MatProgressSpinnerMixinBase imp
     get value(): number;
     set value(newValue: number);
     constructor(_elementRef: ElementRef<HTMLElement>, platform: Platform, _document: any, animationMode: string, defaults?: MatProgressSpinnerDefaultOptions);
+    _getCircleRadius(): number;
+    _getCircleStrokeWidth(): number;
+    _getStrokeCircumference(): number;
+    _getStrokeDashOffset(): number | null;
+    _getViewBox(): string;
     ngOnInit(): void;
     static ngAcceptInputType_diameter: NumberInput;
     static ngAcceptInputType_strokeWidth: NumberInput;
     static ngAcceptInputType_value: NumberInput;
-    static ɵcmp: i0.ɵɵComponentDefWithMeta<MatProgressSpinner, "mat-progress-spinner", ["matProgressSpinner"], { "color": "color"; "diameter": "diameter"; "strokeWidth": "strokeWidth"; "mode": "mode"; "value": "value"; }, {}, never>;
-    static ɵfac: i0.ɵɵFactoryDef<MatProgressSpinner>;
+    static ɵcmp: i0.ɵɵComponentDefWithMeta<MatProgressSpinner, "mat-progress-spinner", ["matProgressSpinner"], { "color": "color"; "diameter": "diameter"; "strokeWidth": "strokeWidth"; "mode": "mode"; "value": "value"; }, {}, never, never>;
+    static ɵfac: i0.ɵɵFactoryDef<MatProgressSpinner, [null, null, { optional: true; }, { optional: true; }, null]>;
 }
 
 export interface MatProgressSpinnerDefaultOptions {
@@ -39,8 +40,8 @@ export declare class MatProgressSpinnerModule {
 
 export declare class MatSpinner extends MatProgressSpinner {
     constructor(elementRef: ElementRef<HTMLElement>, platform: Platform, document: any, animationMode: string, defaults?: MatProgressSpinnerDefaultOptions);
-    static ɵcmp: i0.ɵɵComponentDefWithMeta<MatSpinner, "mat-spinner", never, { "color": "color"; }, {}, never>;
-    static ɵfac: i0.ɵɵFactoryDef<MatSpinner>;
+    static ɵcmp: i0.ɵɵComponentDefWithMeta<MatSpinner, "mat-spinner", never, { "color": "color"; }, {}, never, never>;
+    static ɵfac: i0.ɵɵFactoryDef<MatSpinner, [null, null, { optional: true; }, { optional: true; }, null]>;
 }
 
 export declare type ProgressSpinnerMode = 'determinate' | 'indeterminate';

@@ -14,7 +14,7 @@ export declare const MAT_TOOLTIP_SCROLL_STRATEGY_FACTORY_PROVIDER: {
     useFactory: typeof MAT_TOOLTIP_SCROLL_STRATEGY_FACTORY;
 };
 
-export declare class MatTooltip implements OnDestroy, OnInit {
+export declare class MatTooltip implements OnDestroy, AfterViewInit {
     _overlayRef: OverlayRef | null;
     _tooltipInstance: TooltipComponent | null;
     get disabled(): boolean;
@@ -33,7 +33,7 @@ export declare class MatTooltip implements OnDestroy, OnInit {
     });
     touchGestures: TooltipTouchGestures;
     constructor(_overlay: Overlay, _elementRef: ElementRef<HTMLElement>, _scrollDispatcher: ScrollDispatcher, _viewContainerRef: ViewContainerRef, _ngZone: NgZone, _platform: Platform, _ariaDescriber: AriaDescriber, _focusMonitor: FocusMonitor, scrollStrategy: any, _dir: Directionality, _defaultOptions: MatTooltipDefaultOptions,
-    _hammerLoader?: any);
+    _document: any);
     _getOrigin(): {
         main: OriginConnectionPosition;
         fallback: OriginConnectionPosition;
@@ -44,15 +44,15 @@ export declare class MatTooltip implements OnDestroy, OnInit {
     };
     _isTooltipVisible(): boolean;
     hide(delay?: number): void;
+    ngAfterViewInit(): void;
     ngOnDestroy(): void;
-    ngOnInit(): void;
     show(delay?: number): void;
     toggle(): void;
     static ngAcceptInputType_disabled: BooleanInput;
     static ngAcceptInputType_hideDelay: NumberInput;
     static ngAcceptInputType_showDelay: NumberInput;
     static ɵdir: i0.ɵɵDirectiveDefWithMeta<MatTooltip, "[matTooltip]", ["matTooltip"], { "position": "matTooltipPosition"; "disabled": "matTooltipDisabled"; "showDelay": "matTooltipShowDelay"; "hideDelay": "matTooltipHideDelay"; "touchGestures": "matTooltipTouchGestures"; "message": "matTooltip"; "tooltipClass": "matTooltipClass"; }, {}, never>;
-    static ɵfac: i0.ɵɵFactoryDef<MatTooltip>;
+    static ɵfac: i0.ɵɵFactoryDef<MatTooltip, [null, null, null, null, null, null, null, null, null, { optional: true; }, { optional: true; }, null]>;
 }
 
 export declare const matTooltipAnimations: {
@@ -69,7 +69,7 @@ export interface MatTooltipDefaultOptions {
 
 export declare class MatTooltipModule {
     static ɵinj: i0.ɵɵInjectorDef<MatTooltipModule>;
-    static ɵmod: i0.ɵɵNgModuleDefWithMeta<MatTooltipModule, [typeof i1.MatTooltip, typeof i1.TooltipComponent], [typeof i2.A11yModule, typeof i3.CommonModule, typeof i4.OverlayModule, typeof i5.MatCommonModule], [typeof i1.MatTooltip, typeof i1.TooltipComponent, typeof i5.MatCommonModule]>;
+    static ɵmod: i0.ɵɵNgModuleDefWithMeta<MatTooltipModule, [typeof i1.MatTooltip, typeof i1.TooltipComponent], [typeof i2.A11yModule, typeof i3.CommonModule, typeof i4.OverlayModule, typeof i5.MatCommonModule], [typeof i1.MatTooltip, typeof i1.TooltipComponent, typeof i5.MatCommonModule, typeof i6.CdkScrollableModule]>;
 }
 
 export declare const SCROLL_THROTTLE_MS = 20;
@@ -95,8 +95,8 @@ export declare class TooltipComponent implements OnDestroy {
     isVisible(): boolean;
     ngOnDestroy(): void;
     show(delay: number): void;
-    static ɵcmp: i0.ɵɵComponentDefWithMeta<TooltipComponent, "mat-tooltip-component", never, {}, {}, never>;
-    static ɵfac: i0.ɵɵFactoryDef<TooltipComponent>;
+    static ɵcmp: i0.ɵɵComponentDefWithMeta<TooltipComponent, "mat-tooltip-component", never, {}, {}, never, never>;
+    static ɵfac: i0.ɵɵFactoryDef<TooltipComponent, never>;
 }
 
 export declare type TooltipPosition = 'left' | 'right' | 'above' | 'below' | 'before' | 'after';

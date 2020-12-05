@@ -1,3 +1,5 @@
+export declare function _getShadowRoot(element: HTMLElement): Node | null;
+
 export declare function _supportsShadowDom(): boolean;
 
 export declare function getRtlScrollAxisType(): RtlScrollAxisType;
@@ -16,8 +18,8 @@ export declare class Platform {
     TRIDENT: boolean;
     WEBKIT: boolean;
     isBrowser: boolean;
-    constructor(_platformId?: Object | undefined);
-    static ɵfac: i0.ɵɵFactoryDef<Platform>;
+    constructor(_platformId: Object);
+    static ɵfac: i0.ɵɵFactoryDef<Platform, never>;
     static ɵprov: i0.ɵɵInjectableDef<Platform>;
 }
 

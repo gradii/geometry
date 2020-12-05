@@ -33,7 +33,7 @@ export declare class MatSort extends _MatSortMixinBase implements CanDisable, Ha
     static ngAcceptInputType_disableClear: BooleanInput;
     static ngAcceptInputType_disabled: BooleanInput;
     static ɵdir: i0.ɵɵDirectiveDefWithMeta<MatSort, "[matSort]", ["matSort"], { "disabled": "matSortDisabled"; "active": "matSortActive"; "start": "matSortStart"; "direction": "matSortDirection"; "disableClear": "matSortDisableClear"; }, { "sortChange": "matSortChange"; }, never>;
-    static ɵfac: i0.ɵɵFactoryDef<MatSort>;
+    static ɵfac: i0.ɵɵFactoryDef<MatSort, never>;
 }
 
 export interface MatSortable {
@@ -51,7 +51,7 @@ export declare const matSortAnimations: {
     readonly allowChildren: AnimationTriggerMetadata;
 };
 
-export declare class MatSortHeader extends _MatSortHeaderMixinBase implements CanDisable, MatSortable, OnDestroy, OnInit {
+export declare class MatSortHeader extends _MatSortHeaderMixinBase implements CanDisable, MatSortable, OnDestroy, OnInit, AfterViewInit {
     _arrowDirection: SortDirection;
     _columnDef: MatSortHeaderColumnDef;
     _disableViewStateAnimation: boolean;
@@ -64,36 +64,38 @@ export declare class MatSortHeader extends _MatSortHeaderMixinBase implements Ca
     set disableClear(v: boolean);
     id: string;
     start: 'asc' | 'desc';
-    constructor(_intl: MatSortHeaderIntl, changeDetectorRef: ChangeDetectorRef, _sort: MatSort, _columnDef: MatSortHeaderColumnDef,
-    _focusMonitor?: FocusMonitor | undefined, _elementRef?: ElementRef<HTMLElement> | undefined);
-    _getAriaSortAttribute(): "ascending" | "descending" | null;
+    constructor(_intl: MatSortHeaderIntl, changeDetectorRef: ChangeDetectorRef, _sort: MatSort, _columnDef: MatSortHeaderColumnDef, _focusMonitor: FocusMonitor, _elementRef: ElementRef<HTMLElement>);
+    _getAriaSortAttribute(): "none" | "ascending" | "descending";
     _getArrowDirectionState(): string;
     _getArrowViewState(): string;
     _handleClick(): void;
+    _handleKeydown(event: KeyboardEvent): void;
     _isDisabled(): boolean;
     _isSorted(): boolean;
     _renderArrow(): boolean;
     _setAnimationTransitionState(viewState: ArrowViewStateTransition): void;
     _setIndicatorHintVisible(visible: boolean): void;
+    _toggleOnInteraction(): void;
     _updateArrowDirection(): void;
+    ngAfterViewInit(): void;
     ngOnDestroy(): void;
     ngOnInit(): void;
     static ngAcceptInputType_disableClear: BooleanInput;
     static ngAcceptInputType_disabled: BooleanInput;
-    static ɵcmp: i0.ɵɵComponentDefWithMeta<MatSortHeader, "[mat-sort-header]", ["matSortHeader"], { "disabled": "disabled"; "id": "mat-sort-header"; "arrowPosition": "arrowPosition"; "start": "start"; "disableClear": "disableClear"; }, {}, never>;
-    static ɵfac: i0.ɵɵFactoryDef<MatSortHeader>;
+    static ɵcmp: i0.ɵɵComponentDefWithMeta<MatSortHeader, "[mat-sort-header]", ["matSortHeader"], { "disabled": "disabled"; "id": "mat-sort-header"; "arrowPosition": "arrowPosition"; "start": "start"; "disableClear": "disableClear"; }, {}, never, ["*"]>;
+    static ɵfac: i0.ɵɵFactoryDef<MatSortHeader, [null, null, { optional: true; }, { optional: true; }, null, null]>;
 }
 
 export declare class MatSortHeaderIntl {
     readonly changes: Subject<void>;
     sortButtonLabel: (id: string) => string;
-    static ɵfac: i0.ɵɵFactoryDef<MatSortHeaderIntl>;
+    static ɵfac: i0.ɵɵFactoryDef<MatSortHeaderIntl, never>;
     static ɵprov: i0.ɵɵInjectableDef<MatSortHeaderIntl>;
 }
 
 export declare class MatSortModule {
     static ɵinj: i0.ɵɵInjectorDef<MatSortModule>;
-    static ɵmod: i0.ɵɵNgModuleDefWithMeta<MatSortModule, [typeof i1.MatSort, typeof i2.MatSortHeader], [typeof i3.CommonModule], [typeof i1.MatSort, typeof i2.MatSortHeader]>;
+    static ɵmod: i0.ɵɵNgModuleDefWithMeta<MatSortModule, [typeof i1.MatSort, typeof i2.MatSortHeader], [typeof i3.CommonModule, typeof i4.MatCommonModule], [typeof i1.MatSort, typeof i2.MatSortHeader]>;
 }
 
 export interface Sort {

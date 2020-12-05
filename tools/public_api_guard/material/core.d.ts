@@ -1,6 +1,48 @@
 export declare function _countGroupLabelsBeforeOption(optionIndex: number, options: QueryList<MatOption>, optionGroups: QueryList<MatOptgroup>): number;
 
-export declare function _getOptionScrollPosition(optionIndex: number, optionHeight: number, currentScrollPosition: number, panelHeight: number): number;
+export declare function _getOptionScrollPosition(optionOffset: number, optionHeight: number, currentScrollPosition: number, panelHeight: number): number;
+
+export declare class _MatOptgroupBase extends _MatOptgroupMixinBase implements CanDisable {
+    _inert: boolean;
+    _labelId: string;
+    label: string;
+    constructor(parent?: MatOptionParentComponent);
+    static ngAcceptInputType_disabled: BooleanInput;
+    static ɵdir: i0.ɵɵDirectiveDefWithMeta<_MatOptgroupBase, never, never, { "label": "label"; }, {}, never>;
+    static ɵfac: i0.ɵɵFactoryDef<_MatOptgroupBase, [{ optional: true; }]>;
+}
+
+export declare class _MatOptionBase implements FocusableOption, AfterViewChecked, OnDestroy {
+    readonly _stateChanges: Subject<void>;
+    get active(): boolean;
+    get disableRipple(): boolean | undefined;
+    get disabled(): any;
+    set disabled(value: any);
+    readonly group: _MatOptgroupBase;
+    id: string;
+    get multiple(): boolean | undefined;
+    readonly onSelectionChange: EventEmitter<MatOptionSelectionChange>;
+    get selected(): boolean;
+    value: any;
+    get viewValue(): string;
+    constructor(_element: ElementRef<HTMLElement>, _changeDetectorRef: ChangeDetectorRef, _parent: MatOptionParentComponent, group: _MatOptgroupBase);
+    _getAriaSelected(): boolean | null;
+    _getHostElement(): HTMLElement;
+    _getTabIndex(): string;
+    _handleKeydown(event: KeyboardEvent): void;
+    _selectViaInteraction(): void;
+    deselect(): void;
+    focus(_origin?: FocusOrigin, options?: FocusOptions): void;
+    getLabel(): string;
+    ngAfterViewChecked(): void;
+    ngOnDestroy(): void;
+    select(): void;
+    setActiveStyles(): void;
+    setInactiveStyles(): void;
+    static ngAcceptInputType_disabled: BooleanInput;
+    static ɵdir: i0.ɵɵDirectiveDefWithMeta<_MatOptionBase, never, never, { "value": "value"; "id": "id"; "disabled": "disabled"; }, { "onSelectionChange": "onSelectionChange"; }, never>;
+    static ɵfac: i0.ɵɵFactoryDef<_MatOptionBase, never>;
+}
 
 export declare class AnimationCurves {
     static ACCELERATION_CURVE: string;
@@ -15,12 +57,9 @@ export declare class AnimationDurations {
     static EXITING: string;
 }
 
-export declare const JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9, NOV = 10, DEC = 11;
-
-export declare const JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9, NOV = 10, DEC = 11;
-
 export interface CanColor {
     color: ThemePalette;
+    defaultColor: ThemePalette | undefined;
 }
 
 export declare type CanColorCtor = Constructor<CanColor>;
@@ -49,7 +88,7 @@ export declare type CanUpdateErrorStateCtor = Constructor<CanUpdateErrorState>;
 export declare abstract class DateAdapter<D> {
     protected _localeChanges: Subject<void>;
     protected locale: any;
-    get localeChanges(): Observable<void>;
+    readonly localeChanges: Observable<void>;
     abstract addCalendarDays(date: D, days: number): D;
     abstract addCalendarMonths(date: D, months: number): D;
     abstract addCalendarYears(date: D, years: number): D;
@@ -67,6 +106,7 @@ export declare abstract class DateAdapter<D> {
     abstract getMonth(date: D): number;
     abstract getMonthNames(style: 'long' | 'short' | 'narrow'): string[];
     abstract getNumDaysInMonth(date: D): number;
+    getValidDateOrNull(obj: unknown): D | null;
     abstract getYear(date: D): number;
     abstract getYearName(date: D): string;
     abstract invalid(): D;
@@ -79,8 +119,6 @@ export declare abstract class DateAdapter<D> {
     abstract today(): D;
 }
 
-export declare const JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9, NOV = 10, DEC = 11;
-
 export declare const defaultRippleAnimationConfig: {
     enterDuration: number;
     exitDuration: number;
@@ -88,70 +126,14 @@ export declare const defaultRippleAnimationConfig: {
 
 export declare class ErrorStateMatcher {
     isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean;
-    static ɵfac: i0.ɵɵFactoryDef<ErrorStateMatcher>;
+    static ɵfac: i0.ɵɵFactoryDef<ErrorStateMatcher, never>;
     static ɵprov: i0.ɵɵInjectableDef<ErrorStateMatcher>;
-}
-
-export declare const JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9, NOV = 10, DEC = 11;
-
-export declare type FloatLabelType = 'always' | 'never' | 'auto';
-
-export declare class GestureConfig extends HammerGestureConfig {
-    events: string[];
-    constructor(_hammerOptions?: HammerOptions | undefined, _commonModule?: MatCommonModule);
-    buildHammer(element: HTMLElement): HammerInstance;
-    static ɵfac: i0.ɵɵFactoryDef<GestureConfig>;
-    static ɵprov: i0.ɵɵInjectableDef<GestureConfig>;
 }
 
 export interface GranularSanityChecks {
     doctype: boolean;
-    hammer: boolean;
     theme: boolean;
     version: boolean;
-}
-
-export interface HammerInput {
-    center: {
-        x: number;
-        y: number;
-    };
-    deltaX: number;
-    deltaY: number;
-    preventDefault: () => {};
-}
-
-export interface HammerInstance {
-    off(eventName: string, callback: Function): void;
-    on(eventName: string, callback: Function): void;
-}
-
-export interface HammerManager {
-    add(recogniser: Recognizer | Recognizer[]): Recognizer;
-    emit(event: string, data: any): void;
-    off(events: string, handler?: Function): void;
-    on(events: string, handler: Function): void;
-    set(options: any): HammerManager;
-}
-
-export interface HammerOptions {
-    cssProps?: {
-        [key: string]: string;
-    };
-    domEvents?: boolean;
-    enable?: boolean | ((manager: HammerManager) => boolean);
-    inputClass?: HammerInput;
-    inputTarget?: EventTarget;
-    preset?: any[];
-    recognizers?: any[];
-    touchAction?: string;
-}
-
-export interface HammerStatic {
-    Pan: Recognizer;
-    Press: Recognizer;
-    Swipe: Recognizer;
-    new (element: HTMLElement | SVGElement, options?: any): HammerManager;
 }
 
 export interface HasInitialized {
@@ -162,22 +144,11 @@ export interface HasInitialized {
 export declare type HasInitializedCtor = Constructor<HasInitialized>;
 
 export interface HasTabIndex {
+    defaultTabIndex: number;
     tabIndex: number;
 }
 
 export declare type HasTabIndexCtor = Constructor<HasTabIndex>;
-
-export declare const JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9, NOV = 10, DEC = 11;
-
-export declare const JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9, NOV = 10, DEC = 11;
-
-export declare const JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9, NOV = 10, DEC = 11;
-
-export interface LabelOptions {
-    float?: FloatLabelType;
-}
-
-export declare const JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9, NOV = 10, DEC = 11;
 
 export declare const MAT_DATE_FORMATS: InjectionToken<MatDateFormats>;
 
@@ -185,23 +156,17 @@ export declare const MAT_DATE_LOCALE: InjectionToken<string>;
 
 export declare function MAT_DATE_LOCALE_FACTORY(): string;
 
-export declare const MAT_DATE_LOCALE_PROVIDER: {
-    provide: InjectionToken<string>;
-    useExisting: InjectionToken<string>;
-};
-
-export declare const MAT_HAMMER_OPTIONS: InjectionToken<HammerOptions>;
-
-export declare const MAT_LABEL_GLOBAL_OPTIONS: InjectionToken<LabelOptions>;
-
 export declare const MAT_NATIVE_DATE_FORMATS: MatDateFormats;
+
+export declare const MAT_OPTGROUP: InjectionToken<MatOptgroup>;
 
 export declare const MAT_OPTION_PARENT_COMPONENT: InjectionToken<MatOptionParentComponent>;
 
 export declare const MAT_RIPPLE_GLOBAL_OPTIONS: InjectionToken<RippleGlobalOptions>;
 
 export declare class MatCommonModule {
-    constructor(highContrastModeDetector: HighContrastModeDetector, sanityChecks: any);
+    protected _document: Document;
+    constructor(highContrastModeDetector: HighContrastModeDetector, sanityChecks: any, document: any);
     static ɵinj: i0.ɵɵInjectorDef<MatCommonModule>;
     static ɵmod: i0.ɵɵNgModuleDefWithMeta<MatCommonModule, never, [typeof i1.BidiModule], [typeof i1.BidiModule]>;
 }
@@ -212,6 +177,7 @@ export declare type MatDateFormats = {
     };
     display: {
         dateInput: any;
+        monthLabel?: any;
         monthYearLabel: any;
         dateA11yLabel: any;
         monthYearA11yLabel: any;
@@ -222,7 +188,7 @@ export declare const MATERIAL_SANITY_CHECKS: InjectionToken<SanityChecks>;
 
 export declare class MatLine {
     static ɵdir: i0.ɵɵDirectiveDefWithMeta<MatLine, "[mat-line], [matLine]", never, {}, {}, never>;
-    static ɵfac: i0.ɵɵFactoryDef<MatLine>;
+    static ɵfac: i0.ɵɵFactoryDef<MatLine, never>;
 }
 
 export declare class MatLineModule {
@@ -230,70 +196,38 @@ export declare class MatLineModule {
     static ɵmod: i0.ɵɵNgModuleDefWithMeta<MatLineModule, [typeof MatLine], [typeof i1.MatCommonModule], [typeof MatLine, typeof i1.MatCommonModule]>;
 }
 
-export declare class MatLineSetter {
-    constructor(lines: QueryList<MatLine>, element: ElementRef<HTMLElement>);
-}
-
 export declare class MatNativeDateModule {
     static ɵinj: i0.ɵɵInjectorDef<MatNativeDateModule>;
     static ɵmod: i0.ɵɵNgModuleDefWithMeta<MatNativeDateModule, never, [typeof NativeDateModule], never>;
 }
 
-export declare class MatOptgroup extends _MatOptgroupMixinBase implements CanDisable {
-    _labelId: string;
-    label: string;
-    static ngAcceptInputType_disabled: BooleanInput;
-    static ɵcmp: i0.ɵɵComponentDefWithMeta<MatOptgroup, "mat-optgroup", ["matOptgroup"], { "disabled": "disabled"; "label": "label"; }, {}, never>;
-    static ɵfac: i0.ɵɵFactoryDef<MatOptgroup>;
+export declare class MatOptgroup extends _MatOptgroupBase {
+    static ɵcmp: i0.ɵɵComponentDefWithMeta<MatOptgroup, "mat-optgroup", ["matOptgroup"], { "disabled": "disabled"; }, {}, never, ["*", "mat-option, ng-container"]>;
+    static ɵfac: i0.ɵɵFactoryDef<MatOptgroup, never>;
 }
 
-export declare class MatOption implements FocusableOption, AfterViewChecked, OnDestroy {
-    readonly _stateChanges: Subject<void>;
-    get active(): boolean;
-    get disableRipple(): boolean | undefined;
-    get disabled(): any;
-    set disabled(value: any);
-    readonly group: MatOptgroup;
-    id: string;
-    get multiple(): boolean | undefined;
-    readonly onSelectionChange: EventEmitter<MatOptionSelectionChange>;
-    get selected(): boolean;
-    value: any;
-    get viewValue(): string;
-    constructor(_element: ElementRef<HTMLElement>, _changeDetectorRef: ChangeDetectorRef, _parent: MatOptionParentComponent, group: MatOptgroup);
-    _getAriaSelected(): boolean | null;
-    _getHostElement(): HTMLElement;
-    _getTabIndex(): string;
-    _handleKeydown(event: KeyboardEvent): void;
-    _selectViaInteraction(): void;
-    deselect(): void;
-    focus(_origin?: FocusOrigin, options?: FocusOptions): void;
-    getLabel(): string;
-    ngAfterViewChecked(): void;
-    ngOnDestroy(): void;
-    select(): void;
-    setActiveStyles(): void;
-    setInactiveStyles(): void;
-    static ngAcceptInputType_disabled: BooleanInput;
-    static ɵcmp: i0.ɵɵComponentDefWithMeta<MatOption, "mat-option", ["matOption"], { "value": "value"; "id": "id"; "disabled": "disabled"; }, { "onSelectionChange": "onSelectionChange"; }, never>;
-    static ɵfac: i0.ɵɵFactoryDef<MatOption>;
+export declare class MatOption extends _MatOptionBase {
+    constructor(element: ElementRef<HTMLElement>, changeDetectorRef: ChangeDetectorRef, parent: MatOptionParentComponent, group: MatOptgroup);
+    static ɵcmp: i0.ɵɵComponentDefWithMeta<MatOption, "mat-option", ["matOption"], {}, {}, never, ["*"]>;
+    static ɵfac: i0.ɵɵFactoryDef<MatOption, [null, null, { optional: true; }, { optional: true; }]>;
 }
 
 export declare class MatOptionModule {
     static ɵinj: i0.ɵɵInjectorDef<MatOptionModule>;
-    static ɵmod: i0.ɵɵNgModuleDefWithMeta<MatOptionModule, [typeof i1.MatOption, typeof i2.MatOptgroup], [typeof i3.MatRippleModule, typeof i4.CommonModule, typeof i5.MatPseudoCheckboxModule], [typeof i1.MatOption, typeof i2.MatOptgroup]>;
+    static ɵmod: i0.ɵɵNgModuleDefWithMeta<MatOptionModule, [typeof i1.MatOption, typeof i2.MatOptgroup], [typeof i3.MatRippleModule, typeof i4.CommonModule, typeof i5.MatCommonModule, typeof i6.MatPseudoCheckboxModule], [typeof i1.MatOption, typeof i2.MatOptgroup]>;
 }
 
 export interface MatOptionParentComponent {
     disableRipple?: boolean;
+    inertGroups?: boolean;
     multiple?: boolean;
 }
 
 export declare class MatOptionSelectionChange {
     isUserInput: boolean;
-    source: MatOption;
+    source: _MatOptionBase;
     constructor(
-    source: MatOption,
+    source: _MatOptionBase,
     isUserInput?: boolean);
 }
 
@@ -302,13 +236,13 @@ export declare class MatPseudoCheckbox {
     disabled: boolean;
     state: MatPseudoCheckboxState;
     constructor(_animationMode?: string | undefined);
-    static ɵcmp: i0.ɵɵComponentDefWithMeta<MatPseudoCheckbox, "mat-pseudo-checkbox", never, { "state": "state"; "disabled": "disabled"; }, {}, never>;
-    static ɵfac: i0.ɵɵFactoryDef<MatPseudoCheckbox>;
+    static ɵcmp: i0.ɵɵComponentDefWithMeta<MatPseudoCheckbox, "mat-pseudo-checkbox", never, { "state": "state"; "disabled": "disabled"; }, {}, never, never>;
+    static ɵfac: i0.ɵɵFactoryDef<MatPseudoCheckbox, [{ optional: true; }]>;
 }
 
 export declare class MatPseudoCheckboxModule {
     static ɵinj: i0.ɵɵInjectorDef<MatPseudoCheckboxModule>;
-    static ɵmod: i0.ɵɵNgModuleDefWithMeta<MatPseudoCheckboxModule, [typeof i1.MatPseudoCheckbox], never, [typeof i1.MatPseudoCheckbox]>;
+    static ɵmod: i0.ɵɵNgModuleDefWithMeta<MatPseudoCheckboxModule, [typeof i1.MatPseudoCheckbox], [typeof i2.MatCommonModule], [typeof i1.MatPseudoCheckbox]>;
 }
 
 export declare type MatPseudoCheckboxState = 'unchecked' | 'checked' | 'indeterminate';
@@ -325,14 +259,14 @@ export declare class MatRipple implements OnInit, OnDestroy, RippleTarget {
     get trigger(): HTMLElement;
     set trigger(trigger: HTMLElement);
     unbounded: boolean;
-    constructor(_elementRef: ElementRef<HTMLElement>, ngZone: NgZone, platform: Platform, globalOptions?: RippleGlobalOptions, animationMode?: string);
+    constructor(_elementRef: ElementRef<HTMLElement>, ngZone: NgZone, platform: Platform, globalOptions?: RippleGlobalOptions, _animationMode?: string | undefined);
     fadeOutAll(): void;
     launch(config: RippleConfig): RippleRef;
     launch(x: number, y: number, config?: RippleConfig): RippleRef;
     ngOnDestroy(): void;
     ngOnInit(): void;
     static ɵdir: i0.ɵɵDirectiveDefWithMeta<MatRipple, "[mat-ripple], [matRipple]", ["matRipple"], { "color": "matRippleColor"; "unbounded": "matRippleUnbounded"; "centered": "matRippleCentered"; "radius": "matRippleRadius"; "animation": "matRippleAnimation"; "disabled": "matRippleDisabled"; "trigger": "matRippleTrigger"; }, {}, never>;
-    static ɵfac: i0.ɵɵFactoryDef<MatRipple>;
+    static ɵfac: i0.ɵɵFactoryDef<MatRipple, [null, null, null, { optional: true; }, { optional: true; }]>;
 }
 
 export declare class MatRippleModule {
@@ -340,19 +274,17 @@ export declare class MatRippleModule {
     static ɵmod: i0.ɵɵNgModuleDefWithMeta<MatRippleModule, [typeof i1.MatRipple], [typeof i2.MatCommonModule, typeof i3.PlatformModule], [typeof i1.MatRipple, typeof i2.MatCommonModule]>;
 }
 
-export declare const JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9, NOV = 10, DEC = 11;
-
 export declare function mixinColor<T extends Constructor<HasElementRef>>(base: T, defaultColor?: ThemePalette): CanColorCtor & T;
 
 export declare function mixinDisabled<T extends Constructor<{}>>(base: T): CanDisableCtor & T;
 
-export declare function mixinDisableRipple<T extends Constructor<{}>>(base: T): CanDisableRippleCtor & T;
+export declare function mixinDisableRipple<T extends AbstractConstructor<{}>>(base: T): CanDisableRippleCtor & T;
 
 export declare function mixinErrorState<T extends Constructor<HasErrorState>>(base: T): CanUpdateErrorStateCtor & T;
 
 export declare function mixinInitialized<T extends Constructor<{}>>(base: T): HasInitializedCtor & T;
 
-export declare function mixinTabIndex<T extends Constructor<CanDisable>>(base: T, defaultTabIndex?: number): HasTabIndexCtor & T;
+export declare function mixinTabIndex<T extends AbstractConstructor<CanDisable>>(base: T, defaultTabIndex?: number): HasTabIndexCtor & T;
 
 export declare class NativeDateAdapter extends DateAdapter<Date> {
     useUtcForDisplay: boolean;
@@ -380,26 +312,13 @@ export declare class NativeDateAdapter extends DateAdapter<Date> {
     parse(value: any): Date | null;
     toIso8601(date: Date): string;
     today(): Date;
-    static ɵfac: i0.ɵɵFactoryDef<NativeDateAdapter>;
+    static ɵfac: i0.ɵɵFactoryDef<NativeDateAdapter, [{ optional: true; }, null]>;
     static ɵprov: i0.ɵɵInjectableDef<NativeDateAdapter>;
 }
 
 export declare class NativeDateModule {
     static ɵinj: i0.ɵɵInjectorDef<NativeDateModule>;
     static ɵmod: i0.ɵɵNgModuleDefWithMeta<NativeDateModule, never, [typeof i1.PlatformModule], never>;
-}
-
-export declare const JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9, NOV = 10, DEC = 11;
-
-export declare const JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9, NOV = 10, DEC = 11;
-
-export interface Recognizer {
-    new (options?: any): Recognizer;
-    recognizeWith(otherRecognizer: Recognizer | string): Recognizer;
-}
-
-export interface RecognizerStatic {
-    new (options?: any): Recognizer;
 }
 
 export interface RippleAnimationConfig {
@@ -426,18 +345,21 @@ export declare class RippleRef {
     config: RippleConfig;
     element: HTMLElement;
     state: RippleState;
-    constructor(_renderer: RippleRenderer,
+    constructor(_renderer: {
+        fadeOutRipple(ref: RippleRef): void;
+    },
     element: HTMLElement,
     config: RippleConfig);
     fadeOut(): void;
 }
 
-export declare class RippleRenderer {
+export declare class RippleRenderer implements EventListenerObject {
     constructor(_target: RippleTarget, _ngZone: NgZone, elementOrElementRef: HTMLElement | ElementRef<HTMLElement>, platform: Platform);
     _removeTriggerEvents(): void;
     fadeInRipple(x: number, y: number, config?: RippleConfig): RippleRef;
     fadeOutAll(): void;
     fadeOutRipple(rippleRef: RippleRef): void;
+    handleEvent(event: Event): void;
     setupTriggerEvents(elementOrElementRef: HTMLElement | ElementRef<HTMLElement>): void;
 }
 
@@ -455,13 +377,11 @@ export interface RippleTarget {
 
 export declare type SanityChecks = boolean | GranularSanityChecks;
 
-export declare const JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9, NOV = 10, DEC = 11;
-
-export declare function setLines(lines: QueryList<MatLine>, element: ElementRef<HTMLElement>): void;
+export declare function setLines(lines: QueryList<unknown>, element: ElementRef<HTMLElement>, prefix?: string): void;
 
 export declare class ShowOnDirtyErrorStateMatcher implements ErrorStateMatcher {
     isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean;
-    static ɵfac: i0.ɵɵFactoryDef<ShowOnDirtyErrorStateMatcher>;
+    static ɵfac: i0.ɵɵFactoryDef<ShowOnDirtyErrorStateMatcher, never>;
     static ɵprov: i0.ɵɵInjectableDef<ShowOnDirtyErrorStateMatcher>;
 }
 

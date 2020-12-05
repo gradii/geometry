@@ -3,6 +3,7 @@ export declare function _isNumberValue(value: any): boolean;
 export declare type BooleanInput = string | boolean | null | undefined;
 
 export declare function coerceArray<T>(value: T | T[]): T[];
+export declare function coerceArray<T>(value: T | readonly T[]): readonly T[];
 
 export declare function coerceBooleanProperty(value: any): boolean;
 
@@ -12,5 +13,7 @@ export declare function coerceElement<T>(elementOrRef: ElementRef<T> | T): T;
 
 export declare function coerceNumberProperty(value: any): number;
 export declare function coerceNumberProperty<D>(value: any, fallback: D): number | D;
+
+export declare function coerceStringArray(value: any, separator?: string | RegExp): string[];
 
 export declare type NumberInput = string | number | null | undefined;
