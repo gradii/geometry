@@ -1,21 +1,20 @@
 /**
- * @licence
- * Copyright (c) 2018 LinBo Len <linbolen@gradii.com>
+ * @license
+ * Copyright LinboLen Rights Reserved.
  *
- * Use of this source code is governed by an MIT-style license.
- * See LICENSE file in the project root for full license information.
+ * Use of this source code is governed by an MIT-style license
  */
 
 const b1 = 4 / 11,
-      b2 = 6 / 11,
-      b3 = 8 / 11,
-      b4 = 3 / 4,
-      b5 = 9 / 11,
-      b6 = 10 / 11,
-      b7 = 15 / 16,
-      b8 = 21 / 22,
-      b9 = 63 / 64,
-      b0 = 1 / b1 / b1;
+  b2 = 6 / 11,
+  b3 = 8 / 11,
+  b4 = 3 / 4,
+  b5 = 9 / 11,
+  b6 = 10 / 11,
+  b7 = 15 / 16,
+  b8 = 21 / 22,
+  b9 = 63 / 64,
+  b0 = 1 / b1 / b1;
 
 /**
  * @private
@@ -62,7 +61,7 @@ export class BounceInOut {
     let invert: boolean;
     if (p < 0.5) {
       invert = true;
-      p      = 1 - (p * 2);
+      p = 1 - (p * 2);
     } else {
       p = (p * 2) - 1;
     }
@@ -80,7 +79,7 @@ export class BounceInOut {
 }
 
 export class EasingBounce {
-  public static easeIn: BounceIn       = new BounceIn();
-  public static easeOut: BounceOut     = new BounceOut();
+  public static easeIn: BounceIn = new BounceIn();
+  public static easeOut: BounceOut = new BounceOut();
   public static easeInOut: BounceInOut = new BounceInOut();
 }

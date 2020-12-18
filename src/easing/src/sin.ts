@@ -1,9 +1,8 @@
 /**
- * @licence
- * Copyright (c) 2018 LinBo Len <linbolen@gradii.com>
+ * @license
+ * Copyright LinboLen Rights Reserved.
  *
- * Use of this source code is governed by an MIT-style license.
- * See LICENSE file in the project root for full license information.
+ * Use of this source code is governed by an MIT-style license
  */
 
 const _HALF_PI = Math.PI / 2;
@@ -39,7 +38,7 @@ export class SinInOut {
 }
 
 export class EasingSin {
-  public static easeIn: SinIn       = new SinIn();
-  public static easeOut: SinOut     = new SinOut();
+  public static easeIn: SinIn = new SinIn();
+  public static easeOut: SinOut = new SinOut();
   public static easeInOut: SinInOut = new SinInOut();
 }

@@ -1,14 +1,10 @@
 /**
- * @licence
- * Copyright (c) 2018 LinBo Len <linbolen@gradii.com>
+ * @license
+ * Copyright LinboLen Rights Reserved.
  *
- * Use of this source code is governed by an MIT-style license.
- * See LICENSE file in the project root for full license information.
+ * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @private
- */
 export class CircleIn {
 
   public getRatio(p: number): number {
@@ -41,7 +37,7 @@ export class CircleInOut {
 }
 
 export class EasingCircle {
-  public static easeIn: CircleIn       = new CircleIn();
-  public static easeOut: CircleOut     = new CircleOut();
+  public static easeIn: CircleIn = new CircleIn();
+  public static easeOut: CircleOut = new CircleOut();
   public static easeInOut: CircleInOut = new CircleInOut();
 }
