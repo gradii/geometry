@@ -3,6 +3,7 @@
     "outDir": "../../dist/tools/release",
     "lib": ["es2016"],
     "types": ["node"],
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "esModuleInterop": true
   }
 }

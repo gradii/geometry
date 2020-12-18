@@ -2,14 +2,6 @@
   "name": "@gradii/vector-math",
   "version": "0.0.0-PLACEHOLDER",
   "description": "Vector Math Packages",
-  "main": "./bundles/vector-math.umd.js",
-  "fesm5": "./fesm5/vector-math.js",
-  "fesm2015": "./fesm2015/vector-math.js",
-  "esm5": "./esm5/index.js",
-  "esm2015": "./esm2015/index.js",
-  "typings": "./index.d.ts",
-  "module": "./fesm5/vector-math.js",
-  "es2015": "./fesm2015/vector-math.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/gradii/triangle.git"
@@ -19,20 +11,10 @@
     "vector-math"
   ],
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/gradii/triangle/issues"
-  },
-  "homepage": "https://github.com/gradii/triangle#readme",
   "peerDependencies": {
     "tslib": "0.0.0-TSLIB"
   },
-  "schematics": "./schematics/collection.json",
-  "ng-update": {
-    "migrations": "./schematics/migration.json",
-    "packageGroup": [
-      "@gradii/vector-math"
-    ]
-  },
+
   "sideEffects": false
 }
 

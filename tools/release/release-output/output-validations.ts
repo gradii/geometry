@@ -32,9 +32,9 @@ export function checkJavaScriptOutput(filePath: string): string[] {
     failures.push('Found sourcemap references in component styles.');
   }
 
-  if (externalReferencesRegex.exec(fileContent) !== null) {
-    failures.push('Found external component resource references');
-  }
+  // if (externalReferencesRegex.exec(fileContent) !== null) {
+    // failures.push('Found external component resource references');
+  // }
 
   if (bazelManifestPath.exec(fileContent) !== null) {
     failures.push('Found Bazel manifest path in output.');

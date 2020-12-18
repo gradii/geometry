@@ -203,7 +203,12 @@ jobs:
       - *setup_bazel_binary
 
       - run: yarn build
-      - run: yarn check-release-output
+      - run:
+          name: Checking release output
+          command: |
+            pkg_json_version=$(node -pe "require('./package.json').version")
+            expected_version="${pkg_json_version}-sha-$(git rev-parse --short HEAD)"
+            yarn check-release-output ${expected_version}
 
       # Store the release output in the workspace storage. This means that other jobs
       # in the same workflow can attach the release output to their job.

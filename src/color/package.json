@@ -1,15 +1,7 @@
 {
   "name": "@gradii/color",
   "version": "0.0.0-PLACEHOLDER",
-  "description": "Diagram Packages",
-  "main": "./bundles/color.umd.js",
-  "fesm5": "./fesm5/color.js",
-  "fesm2015": "./fesm2015/color.js",
-  "esm5": "./esm5/index.js",
-  "esm2015": "./esm2015/index.js",
-  "typings": "./index.d.ts",
-  "module": "./fesm5/color.js",
-  "es2015": "./fesm2015/color.js",
+  "description": "Color Packages",
   "repository": {
     "type": "git",
     "url": "https://github.com/gradii/triangle.git"
@@ -17,25 +9,6 @@
   "keywords": [
   ],
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/gradii/triangle/issues"
-  },
-  "homepage": "https://github.com/gradii/triangle#readme",
-  "peerDependencies": {
-    "@angular/animations": "0.0.0-NG",
-    "@angular/cdk": "0.0.0-NG",
-    "@angular/core": "0.0.0-NG",
-    "@angular/common": "0.0.0-NG",
-    "@angular/forms": "0.0.0-NG",
-    "tslib": "0.0.0-TSLIB"
-  },
-  "schematics": "./schematics/collection.json",
-  "ng-update": {
-    "migrations": "./schematics/migration.json",
-    "packageGroup": [
-      "@gradii/color"
-    ]
-  },
   "sideEffects": false
 }
 

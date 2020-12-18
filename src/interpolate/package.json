@@ -1,15 +1,7 @@
 {
   "name": "@gradii/interpolate",
   "version": "0.0.0-PLACEHOLDER",
-  "description": "Diagram Packages",
-  "main": "./bundles/interpolate.umd.js",
-  "fesm5": "./fesm5/interpolate.js",
-  "fesm2015": "./fesm2015/interpolate.js",
-  "esm5": "./esm5/index.js",
-  "esm2015": "./esm2015/index.js",
-  "typings": "./index.d.ts",
-  "module": "./fesm5/interpolate.js",
-  "es2015": "./fesm2015/interpolate.js",
+  "description": "Interpolate Packages",
   "repository": {
     "type": "git",
     "url": "https://github.com/gradii/triangle.git"
@@ -17,19 +9,8 @@
   "keywords": [
   ],
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/gradii/triangle/issues"
-  },
-  "homepage": "https://github.com/gradii/triangle#readme",
   "peerDependencies": {
     "tslib": "0.0.0-TSLIB"
-  },
-  "schematics": "./schematics/collection.json",
-  "ng-update": {
-    "migrations": "./schematics/migration.json",
-    "packageGroup": [
-      "@gradii/interpolate"
-    ]
   },
   "sideEffects": false
 }

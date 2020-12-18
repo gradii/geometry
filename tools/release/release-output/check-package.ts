@@ -81,15 +81,16 @@ export function checkReleasePackage(
     addFailure('No "README.md" file found in package output.');
   }
 
-  checkPrimaryPackageJson(join(packagePath, 'package.json'), expectedVersion)
-      .forEach(f => addFailure(f));
-
   // In case there are failures for this package, we want to print those
   // and return a value that implies that there were failures.
   if (failures.size) {
     printGroupedFailures(packageName, failures);
     return false;
   }
+
+  checkPrimaryPackageJson(join(packagePath, 'package.json'), expectedVersion)
+    .forEach(f => addFailure(f));
+  printGroupedFailures(packageName, failures);
 
   return true;
 }

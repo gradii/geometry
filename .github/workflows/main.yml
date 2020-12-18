@@ -38,4 +38,8 @@ jobs:
       - name: Setting up global Bazel binary
         run: "./scripts/circleci/setup_bazel_binary.sh"
       - run: yarn build
-#      - run: yarn check-release-output
+      - name: Checking release output
+        run: |
+          pkg_json_version=$(node -pe "require('./package.json').version")
+          expected_version="${pkg_json_version}-sha-$(git rev-parse --short HEAD)"
+          yarn check-release-output ${expected_version}
