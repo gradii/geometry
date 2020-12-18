@@ -1,9 +1,8 @@
 /**
- * @licence
- * Copyright (c) 2018 LinBo Len <linbolen@gradii.com>
+ * @license
+ * Copyright LinboLen Rights Reserved.
  *
- * Use of this source code is governed by an MIT-style license.
- * See LICENSE file in the project root for full license information.
+ * Use of this source code is governed by an MIT-style license
  */
 
 // tslint:disable triple-equals
@@ -12,18 +11,39 @@ import { deg2rad, rad2deg } from './common';
 import { brighter, darker } from './const';
 import { Rgb } from './rgb';
 
-const A     = -0.14861,
-      B     = +1.78277,
-      C     = -0.29227,
-      D     = -0.90649,
-      E     = +1.97294,
-      ED    = E * D,
-      EB    = E * B,
-      BC_DA = B * C - D * A;
+const A = -0.14861,
+  B = +1.78277,
+  C = -0.29227,
+  D = -0.90649,
+  E = +1.97294,
+  ED = E * D,
+  EB = E * B,
+  BC_DA = B * C - D * A;
 
 export class Cubehelix extends Color {
   constructor(public h, public s, public l, public opacity = 1) {
     super();
+  }
+
+  public static create(o) {
+    if (o instanceof Cubehelix) {
+      return new Cubehelix(o.h, o.s, o.l, o.opacity);
+    }
+    if (o instanceof Color) {
+      o = o.rgb();
+    }
+    if (!(o instanceof Rgb)) {
+      o = Rgb.create(o);
+    }
+    const r = o.r / 255,
+      g = o.g / 255,
+      b = o.b / 255,
+      l = (BC_DA * b + ED * r - EB * g) / (BC_DA + ED - EB),
+      bl = b - l,
+      k = (E * (g - l) - C * bl) / D,
+      s = Math.sqrt(k * k + bl * bl) / (E * l * (1 - l)), // NaN if l=0 or l=1
+      h = s ? Math.atan2(k, bl) * rad2deg - 120 : NaN;
+    return new Cubehelix(h < 0 ? h + 360 : h, s, l, o.opacity);
   }
 
   public brighter(k) {
@@ -37,32 +57,17 @@ export class Cubehelix extends Color {
   }
 
   public rgb() {
-    const h    = isNaN(this.h) ? 0 : (this.h + 120) * deg2rad,
-          l    = +this.l,
-          a    = isNaN(this.s) ? 0 : this.s * l * (1 - l),
-          cosh = Math.cos(h),
-          sinh = Math.sin(h);
+    const h = isNaN(this.h) ? 0 : (this.h + 120) * deg2rad,
+      l = +this.l,
+      a = isNaN(this.s) ? 0 : this.s * l * (1 - l),
+      cosh = Math.cos(h),
+      sinh = Math.sin(h);
     return new Rgb(
       255 * (l + a * (A * cosh + B * sinh)),
       255 * (l + a * (C * cosh + D * sinh)),
       255 * (l + a * (E * cosh)),
       this.opacity
     );
-  }
-
-  public static create(o) {
-    if (o instanceof Cubehelix) { return new Cubehelix(o.h, o.s, o.l, o.opacity); }
-    if (o instanceof Color) { o = o.rgb()}
-    if (!(o instanceof Rgb)) { o = Rgb.create(o); }
-    const r  = o.r / 255,
-          g  = o.g / 255,
-          b  = o.b / 255,
-          l  = (BC_DA * b + ED * r - EB * g) / (BC_DA + ED - EB),
-          bl = b - l,
-          k  = (E * (g - l) - C * bl) / D,
-          s  = Math.sqrt(k * k + bl * bl) / (E * l * (1 - l)), // NaN if l=0 or l=1
-          h  = s ? Math.atan2(k, bl) * rad2deg - 120 : NaN;
-    return new Cubehelix(h < 0 ? h + 360 : h, s, l, o.opacity);
   }
 
 }

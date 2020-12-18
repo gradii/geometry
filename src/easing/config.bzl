@@ -1,1 +1,4 @@
-VECTOR_MATH_TARGETS = ["//src/easing"]
+EASING_ENTRYPOINTS = [
+]
+
+EASING_TARGETS = ["//src/easing"]

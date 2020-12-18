@@ -1,5 +1,10 @@
 load("//src/triangle:config.bzl", "TRIANGLE_ENTRYPOINTS")
+load("//src/color:config.bzl", "COLOR_ENTRYPOINTS")
 load("//src/diagram:config.bzl", "DIAGRAM_ENTRYPOINTS")
+load("//src/easing:config.bzl", "EASING_ENTRYPOINTS")
+load("//src/interpolate:config.bzl", "INTERPOLATE_ENTRYPOINTS")
+load("//src/vector-math:config.bzl", "VECTOR_MATH_ENTRYPOINTS")
+
 
 # Base rollup globals for everything in the repo. Note that we want to disable
 # sorting of the globals as we manually group dict entries.
@@ -23,12 +28,17 @@ ROLLUP_GLOBALS = {
 
     # Primary entry-points in the project.
     "@angular/cdk": "ng.cdk",
-    "@angular/cdk-experimental": "ng.cdkExperimental",
-    "@angular/google-maps": "ng.googleMaps",
-    "@angular/material": "ng.material",
-    "@angular/material-experimental": "ng.materialExperimental",
-    "@angular/material-moment-adapter": "ng.materialMomentAdapter",
-    "@angular/youtube-player": "ng.youtubePlayer",
+#    maybe noneed to add this. it's a npm dependence, maybe needed by systemjs?
+#    "@angular/cdk-experimental": "ng.cdkExperimental",
+#    "@angular/google-maps": "ng.googleMaps",
+#    "@angular/material": "ng.material",
+#    "@angular/material-experimental": "ng.materialExperimental",
+#    "@angular/material-moment-adapter": "ng.materialMomentAdapter",
+#    "@angular/youtube-player": "ng.youtubePlayer",
+    "@gradii/color": "gd.color",
+    "@gradii/easing": "gd.easing",
+    "@gradii/interpolate": "gd.interpolate",
+    "@gradii/vector-math": "gd.vector-math",
 
     # angular cdk
     "@angular/cdk/a11y": "ng.cdk.a11y",
@@ -87,3 +97,7 @@ def create_globals(packageName, entryPoints):
 
 create_globals("triangle", TRIANGLE_ENTRYPOINTS)
 create_globals("diagram", DIAGRAM_ENTRYPOINTS)
+#create_globals("color", COLOR_ENTRYPOINTS)
+#create_globals("easing", EASING_ENTRYPOINTS)
+#create_globals("interpolate", INTERPOLATE_ENTRYPOINTS)
+#create_globals("vector-math", VECTOR_MATH_ENTRYPOINTS)

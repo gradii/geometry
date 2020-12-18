@@ -8,7 +8,7 @@
 const Overshoot = 1.70158;
 
 /**
- * @private
+ * @private-exports
  */
 export class BackIn {
 
@@ -25,7 +25,7 @@ export class BackIn {
 }
 
 /**
- * @private
+ * @private-exports
  */
 export class BackOut {
 
@@ -42,7 +42,7 @@ export class BackOut {
 }
 
 /**
- * @private
+ * @private-exports
  */
 export class BackInOut {
 

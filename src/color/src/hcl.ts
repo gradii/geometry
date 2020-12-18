@@ -1,9 +1,8 @@
 /**
- * @licence
- * Copyright (c) 2018 LinBo Len <linbolen@gradii.com>
+ * @license
+ * Copyright LinboLen Rights Reserved.
  *
- * Use of this source code is governed by an MIT-style license.
- * See LICENSE file in the project root for full license information.
+ * Use of this source code is governed by an MIT-style license
  */
 
 // tslint:disable triple-equals
@@ -16,19 +15,7 @@ const K = 18;
 
 export class Hcl extends Color {
   constructor(public h, public c, public  l, public opacity = 1) {
-    super()
-  }
-
-  public brighter(k = 1) {
-    return new Hcl(this.h, this.c, this.l + K * k, this.opacity);
-  }
-
-  public darker(k = 1) {
-    return new Hcl(this.h, this.c, this.l - K * k, this.opacity);
-  }
-
-  public rgb(): Rgb {
-    return Lab.create(this).rgb();
+    super();
   }
 
   public static create(o) {
@@ -43,6 +30,18 @@ export class Hcl extends Color {
     }
     let h = Math.atan2(o.b, o.a) * rad2deg;
     return new Hcl(h < 0 ? h + 360 : h, Math.sqrt(o.a * o.a + o.b * o.b), o.l, o.opacity);
+  }
+
+  public brighter(k = 1) {
+    return new Hcl(this.h, this.c, this.l + K * k, this.opacity);
+  }
+
+  public darker(k = 1) {
+    return new Hcl(this.h, this.c, this.l - K * k, this.opacity);
+  }
+
+  public rgb(): Rgb {
+    return Lab.create(this).rgb();
   }
 }
 

@@ -1,9 +1,8 @@
 /**
- * @licence
- * Copyright (c) 2018 LinBo Len <linbolen@gradii.com>
+ * @license
+ * Copyright LinboLen Rights Reserved.
  *
- * Use of this source code is governed by an MIT-style license.
- * See LICENSE file in the project root for full license information.
+ * Use of this source code is governed by an MIT-style license
  */
 
 // tslint:disable triple-equals
@@ -12,31 +11,65 @@ import { brighter, darker } from './const';
 import { clamp, create, hex } from './helper';
 
 export class Rgb extends Color {
-  private _r;
-  private _g;
-  private _b;
-  private _opacity;
+  // @formatter:on
+  constructor(r?: number, g?: number, b?: number, opacity = 1) {
+    super();
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.opacity = opacity;
+  }
+
+  private _r: number;
 
   // @formatter:off
-  public get r() { return this._r; }
-  public set r(value) { this._r = clamp(value, 0, 255); }
+  public get r() {
+    return this._r;
+  }
 
-  public get g() { return this._g; }
-  public set g(value) { this._g = clamp(value, 0, 255); }
+  public set r(value) {
+    this._r = clamp(value, 0, 255);
+  }
 
-  public get b() { return this._b; }
-  public set b(value) { this._b = clamp(value, 0, 255); }
+  private _g: number;
 
-  public get opacity() { return this._opacity; }
-  public set opacity(value) { this._opacity = clamp(value, 0, 1); }
+  public get g() {
+    return this._g;
+  }
 
-  // @formatter:on
-  constructor(r?, g?, b?, opacity = 1) {
-    super();
-    this.r       = r;
-    this.g       = g;
-    this.b       = b;
-    this.opacity = opacity;
+  public set g(value) {
+    this._g = clamp(value, 0, 255);
+  }
+
+  private _b: number;
+
+  public get b() {
+    return this._b;
+  }
+
+  public set b(value) {
+    this._b = clamp(value, 0, 255);
+  }
+
+  private _opacity: number;
+
+  public get opacity() {
+    return this._opacity;
+  }
+
+  public set opacity(value) {
+    this._opacity = clamp(value, 0, 1);
+  }
+
+  public static create(o: Color | string): Rgb {
+    if (!(o instanceof Color)) {
+      o = create(o);
+    }
+    if (!o) {
+      return new Rgb;
+    }
+    o = o.rgb();
+    return new Rgb((o as Rgb).r, (o as Rgb).g, (o as Rgb).b, (o as Rgb).opacity);
   }
 
   public brighter(k?) {
@@ -49,16 +82,16 @@ export class Rgb extends Color {
     return new Rgb(this._r * k, this._g * k, this._b * k, this.opacity);
   }
 
+  public displayable() {
+    return (0 <= this._r && this._r <= 255)
+      && (0 <= this._g && this._g <= 255)
+      && (0 <= this._b && this._b <= 255)
+      && (0 <= this.opacity && this.opacity <= 1);
+  }
+
   public rgb() {
     return this;
   }
-
-  // public displayable() {
-  //   return (0 <= this._r && this._r <= 255)
-  //     && (0 <= this._g && this._g <= 255)
-  //     && (0 <= this._b && this._b <= 255)
-  //     && (0 <= this.opacity && this.opacity <= 1);
-  // }
 
   public hex() {
     return `#${hex(this._r)}${hex(this._g)}${hex(this._b)}`;
@@ -66,23 +99,12 @@ export class Rgb extends Color {
 
   public toString() {
     let a = this.opacity;
-    a     = isNaN(a) ? 1 : Math.max(0, Math.min(1, a));
+    a = isNaN(a) ? 1 : Math.max(0, Math.min(1, a));
     return (a === 1 ? 'rgb(' : 'rgba(')
       + Math.max(0, Math.min(255, Math.round(this._r) || 0)) + ', '
       + Math.max(0, Math.min(255, Math.round(this._g) || 0)) + ', '
       + Math.max(0, Math.min(255, Math.round(this._b) || 0))
       + (a === 1 ? ')' : ', ' + a + ')');
-  }
-
-  public static create(o): Rgb {
-    if (!(o instanceof Color)) {
-      o = create(o);
-    }
-    if (!o) {
-      return new Rgb;
-    }
-    o = o.rgb();
-    return new Rgb(o.r, o._g, o.b, o.opacity);
   }
 }
 

@@ -1,9 +1,8 @@
 /**
- * @licence
- * Copyright (c) 2018 LinBo Len <linbolen@gradii.com>
+ * @license
+ * Copyright LinboLen Rights Reserved.
  *
- * Use of this source code is governed by an MIT-style license.
- * See LICENSE file in the project root for full license information.
+ * Use of this source code is governed by an MIT-style license
  */
 
 export { interpolateValue as interpolate } from './src/wrapper/interpolate-value';
@@ -17,11 +16,13 @@ export { interpolateRound } from './src/wrapper/interpolate-round';
 export { interpolateString } from './src/wrapper/interpolate-string';
 // export { interpolateTransformCss, interpolateTransformSvg } from './src/interpolate/transform/index';
 export { interpolateZoom } from './src/wrapper/interpolate-zoom';
-export { interpolateRgb, interpolateRgbBSpline, interpolateRgbBSplineClosed }from './src/wrapper/interpolate-rgb';
+export { interpolateRgb, interpolateRgbBSpline, interpolateRgbBSplineClosed } from './src/wrapper/interpolate-rgb';
 export { interpolateHsl, interpolateHslLong } from './src/wrapper/interpolate-hsl';
 export { interpolateLab } from './src/wrapper/interpolate-lab';
 export { interpolateHcl, interpolateHclLong } from './src/wrapper/interpolate-hcl';
-export { interpolateCubehelix, interpolateCubehelixLong, interpolateCubehelixFactory, interpolateCubehelixLongFactory } from './src/wrapper/interpolate-cubehelix';
+export {
+  interpolateCubehelix, interpolateCubehelixLong, interpolateCubehelixFactory, interpolateCubehelixLongFactory
+} from './src/wrapper/interpolate-cubehelix';
 export { interpolatePiecewise } from './src/wrapper/interpolate-piecewise';
 
 export { quantize } from './src/fn/quantize';

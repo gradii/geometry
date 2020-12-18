@@ -8,7 +8,7 @@
 const _HALF_PI = Math.PI / 2;
 
 /**
- * @private
+ * @private-exports
  */
 export class SinIn {
 
@@ -18,7 +18,7 @@ export class SinIn {
 }
 
 /**
- * @private
+ * @private-exports
  */
 export class SinOut {
 
@@ -28,7 +28,7 @@ export class SinOut {
 }
 
 /**
- * @private
+ * @private-exports
  */
 export class SinInOut {
 

@@ -1,1 +1,3 @@
+VECTOR_MATH_ENTRYPOINTS = [
+]
 VECTOR_MATH_TARGETS = ["//src/vector-math"]

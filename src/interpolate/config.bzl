@@ -1,0 +1,4 @@
+INTERPOLATE_ENTRYPOINTS = [
+]
+
+INTERPOLATE_TARGETS = ["//src/interpolate"]

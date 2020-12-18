@@ -1,0 +1,35 @@
+load("@npm//scss-bundle:index.bzl", "scss_bundle")
+load(
+    "//src/color:config.bzl",
+    "COLOR_TARGETS",
+)
+load("//tools:defaults.bzl", "ng_package", "ts_library")
+
+package(default_visibility = ["//visibility:public"])
+
+ts_library(
+    name = "color",
+    srcs = glob(
+        ["**/*.ts"],
+        exclude = [
+            "test/**/*.ts",
+            "**/*.spec.ts",
+        ],
+    ),
+    module_name = "@gradii/color",
+)
+
+# Creates the @angular/material package published to npm.
+ng_package(
+    name = "npm_package",
+    srcs = [
+        "package.json",
+    ],
+    data = [
+    ],
+    entry_point = ":index.ts",
+    entry_point_name = "color",
+    nested_packages = [],
+    tags = ["release-package"],
+    deps = COLOR_TARGETS,
+)

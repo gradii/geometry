@@ -6,7 +6,7 @@
  */
 
 /**
- * @private
+ * @private-exports
  */
 export class ExpIn {
 
@@ -16,7 +16,7 @@ export class ExpIn {
 }
 
 /**
- * @private
+ * @private-exports
  */
 export class ExpOut {
 
@@ -26,7 +26,7 @@ export class ExpOut {
 }
 
 /**
- * @private
+ * @private-exports
  */
 export class ExpInOut {
 

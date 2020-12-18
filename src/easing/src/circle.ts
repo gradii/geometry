@@ -13,7 +13,7 @@ export class CircleIn {
 }
 
 /**
- * @private
+ * @private-exports
  */
 export class CircleOut {
 
@@ -23,7 +23,7 @@ export class CircleOut {
 }
 
 /**
- * @private
+ * @private-exports
  */
 export class CircleInOut {
 

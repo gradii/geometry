@@ -1,0 +1,38 @@
+load("@npm//scss-bundle:index.bzl", "scss_bundle")
+load(
+    "//src/interpolate:config.bzl",
+    "INTERPOLATE_TARGETS",
+)
+load("//tools:defaults.bzl", "ng_package", "ts_library")
+
+package(default_visibility = ["//visibility:public"])
+
+ts_library(
+    name = "interpolate",
+    srcs = glob(
+        ["**/*.ts"],
+        exclude = [
+            "test/**/*.ts",
+            "**/*.spec.ts",
+        ],
+    ),
+    deps = [
+      "//src/color:color"
+    ],
+    module_name = "@gradii/interpolate",
+)
+
+# Creates the @angular/material package published to npm.
+ng_package(
+    name = "npm_package",
+    srcs = [
+        "package.json",
+    ],
+    data = [
+    ],
+    entry_point = ":index.ts",
+    entry_point_name = "interpolate",
+    nested_packages = [],
+    tags = ["release-package"],
+    deps = INTERPOLATE_TARGETS,
+)

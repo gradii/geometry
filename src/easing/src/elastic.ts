@@ -10,7 +10,7 @@ const Tau = 2 * Math.PI,
   Period = 0.3;
 
 /**
- * @private
+ * @private-exports
  */
 export class ElasticIn {
   private readonly _p3: number;
@@ -29,7 +29,7 @@ export class ElasticIn {
 }
 
 /**
- * @private
+ * @private-exports
  */
 export class ElasticOut {
   private _p3: number;
@@ -48,7 +48,7 @@ export class ElasticOut {
 }
 
 /**
- * @private
+ * @private-exports
  */
 export class ElasticInOut {
   private _p3: number;

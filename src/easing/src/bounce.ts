@@ -17,7 +17,7 @@ const b1 = 4 / 11,
   b0 = 1 / b1 / b1;
 
 /**
- * @private
+ * @private-exports
  */
 export class BounceIn {
 
@@ -35,7 +35,7 @@ export class BounceIn {
 }
 
 /**
- * @private
+ * @private-exports
  */
 export class BounceOut {
 
@@ -53,7 +53,7 @@ export class BounceOut {
 }
 
 /**
- * @private
+ * @private-exports
  */
 export class BounceInOut {
 
