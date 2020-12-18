@@ -27,6 +27,7 @@ jobs:
         id: bazel-cache
         with:
           path: |
+            /home/runner/.cache/bazel
             /home/runner/bazel_repository_cache
           key: "${{ runner.os }}-bazel-${{ hashFiles('.bazelversion') }}-${{ hashFiles('WORKSPACE') }}-${{ hashFiles('**/yarn.lock') }}"
           restore-keys: "${{ runner.os }}-bazel-\n"
