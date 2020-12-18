@@ -14,8 +14,8 @@ ng_module(
     assets = [],
     module_name = "@gradii/diagram/diagram-engine",
     deps = [
-        "//src/diagram/diagram-core",
         "//src/diagram/defaults",
+        "//src/diagram/diagram-core",
     ],
 )
 

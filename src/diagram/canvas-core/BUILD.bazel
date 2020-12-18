@@ -14,9 +14,9 @@ ng_module(
     assets = [],
     module_name = "@gradii/diagram/canvas-core",
     deps = [
-        "@npm//lodash",
+        "//src/diagram/geometry",
         "@npm//closest",
-        "//src/diagram/geometry"
+        "@npm//lodash",
     ],
 )
 

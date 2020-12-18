@@ -40,9 +40,6 @@
       "@gradii/diagram"
     ]
   },
-  "sideEffects": false,
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  }
+  "sideEffects": false
 }
 
