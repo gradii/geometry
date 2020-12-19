@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { State, StateOptions } from './state';
-import { Action, ActionEvent, InputType } from '../core-actions/action';
 import { CanvasEngine } from '../canvas-engine';
+import { Action, ActionEvent, InputType } from '../core-actions/action';
+import { State, StateOptions } from './state';
 
 export interface AbstractDisplacementStateEvent {
   displacementX: number;

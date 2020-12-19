@@ -1,6 +1,6 @@
-import { DiagramEngine, PortWidget } from '@gradii/diagram/diagram-core';
-import { DefaultPortModel } from './default-port-model';
 import { Component, Input } from '@angular/core';
+import { DiagramEngine } from '@gradii/diagram/diagram-core';
+import { DefaultPortModel } from './default-port-model';
 //
 // export interface DefaultPortLabelProps {
 //   port: DefaultPortModel;

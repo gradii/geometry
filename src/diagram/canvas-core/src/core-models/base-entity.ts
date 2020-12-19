@@ -5,10 +5,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Toolkit } from '../toolkit';
 import * as _ from 'lodash';
 import { CanvasEngine } from '../canvas-engine';
 import { BaseEvent, BaseListener, BaseObserver } from '../core/base-observer';
+import { Toolkit } from '../toolkit';
 import { BaseModel } from './base-model';
 
 export interface BaseEntityEvent<T extends BaseEntity = BaseEntity> extends BaseEvent {

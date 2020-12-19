@@ -5,12 +5,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  AbstractReactFactory,
-  FactoryBank,
-  LayerModel,
-  LayerModelGenerics
-} from '@gradii/diagram/canvas-core';
+import { LayerModel, LayerModelGenerics } from '@gradii/diagram/canvas-core';
 import { DiagramEngine } from '../../diagram-engine';
 import { DiagramModel } from '../../models/diagram-model';
 import { LinkModel } from '../link/link-model';

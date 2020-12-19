@@ -6,11 +6,7 @@
  */
 
 import { Component, Inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import {
-  AbstractReactFactory, ENGINE,
-  GenerateModelEvent,
-  GenerateWidgetEvent
-} from '@gradii/diagram/canvas-core';
+import { AbstractReactFactory, ENGINE, GenerateModelEvent, GenerateWidgetEvent } from '@gradii/diagram/canvas-core';
 import { DiagramEngine } from '../../diagram-engine';
 import { LinkLayerModel } from './link-layer-model';
 

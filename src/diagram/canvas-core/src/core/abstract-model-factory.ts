@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { AbstractFactory } from './abstract-factory';
-import { BaseModel } from '../core-models/base-model';
 import { CanvasEngine } from '../canvas-engine';
+import { BaseModel } from '../core-models/base-model';
+import { AbstractFactory } from './abstract-factory';
 
 export interface GenerateModelEvent {
   initialConfig?: any;

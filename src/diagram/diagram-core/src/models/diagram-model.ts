@@ -5,9 +5,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import * as _ from 'lodash';
-import { LinkModel } from '../entities/link/link-model';
-import { NodeModel } from '../entities/node/node-model';
 import {
   BaseEntityEvent,
   BaseEntityListener,
@@ -17,8 +14,11 @@ import {
   DeserializeEvent,
   LayerModel
 } from '@gradii/diagram/canvas-core';
-import { NodeLayerModel } from '../entities/node-layer/node-layer-model';
+import * as _ from 'lodash';
 import { LinkLayerModel } from '../entities/link-layer/link-layer-model';
+import { LinkModel } from '../entities/link/link-model';
+import { NodeLayerModel } from '../entities/node-layer/node-layer-model';
+import { NodeModel } from '../entities/node/node-model';
 
 export interface DiagramListener extends BaseEntityListener {
   nodesUpdated?(event: BaseEntityEvent & { node: NodeModel; isCreated: boolean }): void;

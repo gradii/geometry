@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { LinkModel } from '../link/link-model';
 import { BaseModel, BaseModelGenerics, BaseModelOptions, DeserializeEvent } from '@gradii/diagram/canvas-core';
+import { LinkModel } from '../link/link-model';
 
 export interface LabelModelOptions extends BaseModelOptions {
   offsetX?: number;

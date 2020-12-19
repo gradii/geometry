@@ -1,9 +1,9 @@
+import { DiagramCore, LinkWidget, PointModel } from '@gradii/diagram/diagram-core';
+import { Point } from '@gradii/diagram/geometry';
+import { DefaultLinkSegmentWidget } from '@gradii/diagram/react-diagrams-defaults';
 import * as React from 'react';
 import { MouseEvent } from 'react';
-import { DiagramCore, LinkWidget, PointModel } from '@gradii/diagram/diagram-core';
 import { RightAngleLinkFactory } from './right-angle-link-factory';
-import { DefaultLinkSegmentWidget } from '@gradii/diagram/react-diagrams-defaults';
-import { Point } from '@gradii/diagram/geometry';
 import { RightAngleLinkModel } from './right-angle-link-model';
 
 export interface RightAngleLinkProps {

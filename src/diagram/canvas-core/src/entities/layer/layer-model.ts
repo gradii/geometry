@@ -5,13 +5,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { BaseModel, BaseModelGenerics, BaseModelOptions } from '../../core-models/base-model';
-import { CanvasModel } from '../canvas/canvas-model';
 import * as _ from 'lodash';
 import { CanvasEngine } from '../../canvas-engine';
-import { FactoryBank, FactoryBankListener } from '../../core/factory-bank';
-import { AbstractModelFactory } from '../../core/abstract-model-factory';
 import { DeserializeEvent } from '../../core-models/base-entity';
+import { BaseModel, BaseModelGenerics, BaseModelOptions } from '../../core-models/base-model';
+import { AbstractModelFactory } from '../../core/abstract-model-factory';
+import { FactoryBank, FactoryBankListener } from '../../core/factory-bank';
+import { CanvasModel } from '../canvas/canvas-model';
 
 export interface LayerModelOptions extends BaseModelOptions {
   isSvg?: boolean;

@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { DefaultLabelModel } from './default-label-model';
 import { Component, Input } from '@angular/core';
+import { DefaultLabelModel } from './default-label-model';
 
 
 @Component({

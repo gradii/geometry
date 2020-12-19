@@ -5,11 +5,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { DefaultNodeModel } from './default-node-model';
-import { DefaultNodeWidget } from './default-node-widget';
+import { Component, Inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AbstractReactFactory, ENGINE, GenerateModelEvent, GenerateWidgetEvent } from '@gradii/diagram/canvas-core';
 import { DiagramEngine } from '@gradii/diagram/diagram-core';
-import { Component, Inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { DefaultNodeModel } from './default-node-model';
 
 @Component({
   selector: 'default-node-factory',
@@ -20,6 +19,9 @@ import { Component, Inject, OnInit, TemplateRef, ViewChild } from '@angular/core
   `
 })
 export class DefaultNodeFactory extends AbstractReactFactory<DefaultNodeModel, DiagramEngine> implements OnInit {
+  @ViewChild('nodeFactory', {read: TemplateRef, static: true})
+  nodeFactoryTemplateRef: TemplateRef<any>;
+
   constructor(@Inject(ENGINE) protected engine: DiagramEngine) {
     super('default');
   }
@@ -27,9 +29,6 @@ export class DefaultNodeFactory extends AbstractReactFactory<DefaultNodeModel, D
   ngOnInit() {
     this.engine.getNodeFactories().registerFactory(this);
   }
-
-  @ViewChild('nodeFactory', {read: TemplateRef, static: true})
-  nodeFactoryTemplateRef: TemplateRef<any>;
 
   generateReactWidget(event: GenerateWidgetEvent<any>) {
     return this.nodeFactoryTemplateRef;

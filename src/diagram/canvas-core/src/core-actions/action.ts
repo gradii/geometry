@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Toolkit } from '../toolkit';
 import { CanvasEngine } from '../canvas-engine';
 import { BaseModel } from '../core-models/base-model';
+import { Toolkit } from '../toolkit';
 
 export const enum InputType {
   MOUSE_DOWN = 'mouse-down',

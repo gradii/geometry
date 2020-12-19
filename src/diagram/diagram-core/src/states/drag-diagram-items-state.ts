@@ -7,10 +7,10 @@
 
 import { Action, ActionEvent, InputType, MoveItemsState } from '@gradii/diagram/canvas-core';
 import * as _ from 'lodash';
-import { PointModel } from '../entities/link/point-model';
 import { DiagramEngine } from '../diagram-engine';
-import { PortModel } from '../entities/port/port-model';
 import { LinkModel } from '../entities/link/link-model';
+import { PointModel } from '../entities/link/point-model';
+import { PortModel } from '../entities/port/port-model';
 
 export class DragDiagramItemsState extends MoveItemsState<DiagramEngine> {
   constructor() {

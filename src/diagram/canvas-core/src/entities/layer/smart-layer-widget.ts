@@ -5,10 +5,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { LayerModel } from './layer-model';
-import { CanvasEngine } from '../../canvas-engine';
 import { Component, Inject, Input } from '@angular/core';
+import { CanvasEngine } from '../../canvas-engine';
 import { ENGINE } from '../../tokens';
+import { LayerModel } from './layer-model';
 
 @Component({
   selector: 'smart-layer-widget, g[smart-layer-widget]',
@@ -22,11 +22,11 @@ import { ENGINE } from '../../tokens';
 })
 export class SmartLayerWidget {
 
-  constructor(@Inject(ENGINE) public engine: CanvasEngine) {
-  }
-
   @Input()
   layer: LayerModel;
+
+  constructor(@Inject(ENGINE) public engine: CanvasEngine) {
+  }
 
 
   // shouldComponentUpdate(): boolean {

@@ -5,10 +5,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { DefaultLinkFactory } from './default-link-factory';
+import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { DiagramEngine } from '@gradii/diagram/diagram-core';
+import { DefaultLinkFactory } from './default-link-factory';
 import { DefaultLinkModel } from './default-link-model';
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, ViewChildren } from '@angular/core';
 
 // export interface DefaultLinkSegmentWidgetProps {
 //   path: string;

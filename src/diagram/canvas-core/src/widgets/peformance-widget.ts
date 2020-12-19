@@ -5,12 +5,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { Component, Input, OnChanges } from '@angular/core';
 import { BaseModel } from '../core-models/base-model';
-import { ChangeDetectionStrategy, Component, Input, OnChanges, ɵmarkDirty } from '@angular/core';
 
 @Component({
   selector: 'peformance-widget',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <ng-content></ng-content>
   `
@@ -24,7 +24,7 @@ export class PeformanceWidget implements OnChanges {
   model: BaseModel;
 
   ngOnChanges() {
-    ɵmarkDirty(this);
+    // ɵmarkDirty(this);
   }
 
   // shouldComponentUpdate(

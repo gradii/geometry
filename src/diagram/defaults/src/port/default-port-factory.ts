@@ -5,10 +5,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { DefaultPortModel, DefaultPortModelOptions } from './default-port-model';
+import { Component } from '@angular/core';
 import { AbstractModelFactory } from '@gradii/diagram/canvas-core';
 import { DiagramEngine } from '@gradii/diagram/diagram-core';
-import { Component } from '@angular/core';
+import { DefaultPortModel, DefaultPortModelOptions } from './default-port-model';
 
 @Component({
   selector: 'default-port-factory',

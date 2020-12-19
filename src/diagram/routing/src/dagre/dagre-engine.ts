@@ -6,10 +6,10 @@
  */
 
 import { DiagramModel, PointModel } from '@gradii/diagram/diagram-core';
+import { Point } from '@gradii/diagram/geometry';
 import * as dagre from 'dagre';
 import { GraphLabel } from 'dagre';
 import * as _ from 'lodash';
-import { Point } from '@gradii/diagram/geometry';
 
 export interface DagreEngineOptions {
   graph?: GraphLabel;

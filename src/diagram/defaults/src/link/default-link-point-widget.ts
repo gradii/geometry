@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { PointModel } from '@gradii/diagram/diagram-core';
 import { AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, ViewChild } from '@angular/core';
+import { PointModel } from '@gradii/diagram/diagram-core';
 
 @Component({
   selector: 'g[default-link-point-widget]',
@@ -54,14 +54,6 @@ export class DefaultLinkPointWidget implements AfterViewInit, OnDestroy {
     });
   }
 
-  private _enterHandler() {
-    this.selected = true;
-  }
-
-  private _leaveHandler() {
-    this.selected = false;
-  }
-
   ngDestroy() {
     const _element = this.circleRef.nativeElement;
     _element.removeEventListener('mouseenter', this._enterHandler, true);
@@ -70,5 +62,13 @@ export class DefaultLinkPointWidget implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+  }
+
+  private _enterHandler() {
+    this.selected = true;
+  }
+
+  private _leaveHandler() {
+    this.selected = false;
   }
 }

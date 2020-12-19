@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import * as _ from 'lodash';
 import { CanvasEngine } from '../canvas-engine';
 import { Action, ActionEvent, InputType } from '../core-actions/action';
-import * as _ from 'lodash';
 
 export interface StateOptions {
   name: string;

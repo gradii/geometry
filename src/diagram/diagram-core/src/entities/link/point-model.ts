@@ -5,13 +5,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { LinkModel } from './link-model';
 import {
   BaseModelListener,
   BasePositionModel,
   BasePositionModelGenerics,
   BasePositionModelOptions
 } from '@gradii/diagram/canvas-core';
+import { LinkModel } from './link-model';
 
 export interface PointModelOptions extends Omit<BasePositionModelOptions, 'type'> {
   link: LinkModel;

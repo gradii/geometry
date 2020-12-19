@@ -5,11 +5,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { Rectangle } from '@gradii/diagram/geometry';
 import { AbstractDisplacementState, AbstractDisplacementStateEvent } from '../core-state/abstract-displacement-state';
 import { State } from '../core-state/state';
-import { SelectionLayerModel } from '../entities/selection/selection-layer-model';
-import { Rectangle } from '@gradii/diagram/geometry';
 import { ModelGeometryInterface } from '../core/model-geometry-interface';
+import { SelectionLayerModel } from '../entities/selection/selection-layer-model';
 
 export class SelectionBoxState extends AbstractDisplacementState {
   layer: SelectionLayerModel;

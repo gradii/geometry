@@ -5,7 +5,17 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, Host, Inject, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Host,
+  Inject,
+  NgZone,
+  OnInit
+} from '@angular/core';
 import { CanvasEngine } from '../../canvas-engine';
 import { ENGINE } from '../../tokens';
 
@@ -23,8 +33,8 @@ import { ENGINE } from '../../tokens';
       `
       :host {
         position : absolute;
-        height: 100%;
-        width: 100%;
+        height   : 100%;
+        width    : 100%;
       }
     `
   ]
@@ -43,9 +53,10 @@ export class CanvasWidget implements OnInit, AfterViewInit, AfterViewChecked {
   diagramEngineListener: null;
 
   constructor(@Inject(ENGINE) public engine: CanvasEngine,
+              public ngZone: NgZone,
+              public cdRef: ChangeDetectorRef,
               @Host() protected ref: ElementRef<HTMLDivElement>) {
   }
-
 
   onWheel(event: UIEvent) {
     this.engine.getActionEventBus().fireAction({event});
@@ -81,7 +92,21 @@ export class CanvasWidget implements OnInit, AfterViewInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
+    this.ngZone.runOutsideAngular(() => {
+      this.ref.nativeElement.addEventListener('wheel', (event) => {
+        this.onWheel(event);
+      });
+      this.ref.nativeElement.addEventListener('mousedown', (event) => {
+        this.onMouseDown(event);
+      });
+      this.ref.nativeElement.addEventListener('mouseup', (event) => {
+        this.onMouseUp(event);
+      });
+      this.ref.nativeElement.addEventListener('mousemove', (event) => {
+        this.onMouseMove(event);
+      });
 
+    });
   }
 
   ngAfterViewChecked() {
@@ -92,6 +117,7 @@ export class CanvasWidget implements OnInit, AfterViewInit, AfterViewChecked {
     this.canvasListener = this.engine.registerListener({
       repaintCanvas: () => {
         // this.forceUpdate(); react
+        this.cdRef.detectChanges();
       }
     });
 

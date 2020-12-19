@@ -5,10 +5,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import * as _ from 'lodash';
-import { NodeModel, NodeModelGenerics, PortModelAlignment } from '@gradii/diagram/diagram-core';
-import { DefaultPortModel } from '../port/default-port-model';
 import { BasePositionModelOptions, DeserializeEvent } from '@gradii/diagram/canvas-core';
+import { NodeModel, NodeModelGenerics, PortModelAlignment } from '@gradii/diagram/diagram-core';
+import * as _ from 'lodash';
+import { DefaultPortModel } from '../port/default-port-model';
 
 export interface DefaultNodeModelOptions extends BasePositionModelOptions {
   name?: string;

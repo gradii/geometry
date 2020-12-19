@@ -5,11 +5,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { State } from '../core-state/state';
 import { Action, ActionEvent, InputType } from '../core-actions/action';
+import { State } from '../core-state/state';
 import { DragCanvasState } from './drag-canvas-state';
-import { SelectingState } from './selecting-state';
 import { MoveItemsState } from './move-items-state';
+import { SelectingState } from './selecting-state';
 
 export class DefaultState extends State {
   constructor() {

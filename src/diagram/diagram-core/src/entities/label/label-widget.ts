@@ -5,19 +5,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  AfterViewChecked,
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Inject,
-  Input,
-  NgZone,
-  ViewChild
-} from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, Inject, Input, NgZone, ViewChild } from '@angular/core';
+import { ENGINE } from '@gradii/diagram/canvas-core';
 import { DiagramEngine } from '../../diagram-engine';
 import { LabelModel } from './label-model';
-import { ENGINE } from '@gradii/diagram/canvas-core';
 
 @Component({
   selector: 'label-widget, g[label-widget]',
@@ -53,14 +44,14 @@ export class LabelWidget implements AfterViewChecked {
   @Input()
   index: number;
 
-  get canvas() {
-    return this.engine.getCanvas();
-  }
-
   constructor(
     @Inject(ENGINE) public engine: DiagramEngine,
     private ngZone: NgZone
   ) {
+  }
+
+  get canvas() {
+    return this.engine.getCanvas();
   }
 
   // ngOnInit() {

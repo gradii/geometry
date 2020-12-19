@@ -12,10 +12,10 @@ import {
   ActionEvent,
   InputType
 } from '@gradii/diagram/canvas-core';
-import { PortModel } from '../entities/port/port-model';
-import { LinkModel } from '../entities/link/link-model';
-import { DiagramEngine } from '../diagram-engine';
 import { DiagramModel } from '@gradii/diagram/diagram-core';
+import { DiagramEngine } from '../diagram-engine';
+import { LinkModel } from '../entities/link/link-model';
+import { PortModel } from '../entities/port/port-model';
 
 export interface DragNewLinkStateOptions {
   /**

@@ -6,6 +6,7 @@
  */
 
 import * as _ from 'lodash';
+import { CanvasEngine } from '../../canvas-engine';
 import {
   BaseEntity,
   BaseEntityEvent,
@@ -14,9 +15,8 @@ import {
   BaseEntityOptions,
   DeserializeEvent
 } from '../../core-models/base-entity';
-import { LayerModel } from '../layer/layer-model';
 import { BaseModel } from '../../core-models/base-model';
-import { CanvasEngine } from '../../canvas-engine';
+import { LayerModel } from '../layer/layer-model';
 
 export interface DiagramListener extends BaseEntityListener {
   offsetUpdated?(event: BaseEntityEvent<CanvasModel> & { offsetX: number; offsetY: number }): void;

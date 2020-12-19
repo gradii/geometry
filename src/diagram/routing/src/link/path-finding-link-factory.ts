@@ -1,18 +1,19 @@
-import { DiagramCore, DiagramEngine } from '@gradii/diagram/diagram-core';
-import { PathFindingLinkModel } from './path-finding-link-model';
-import { PathFindingLinkWidget } from './path-finding-link-widget';
-import * as _ from 'lodash';
-import * as Path from 'paths-js/path';
-import { DefaultLinkFactory } from '@gradii/diagram/defaults';
+import { Component, Inject } from '@angular/core';
 import {
   AbstractDisplacementState,
   AbstractFactory,
-  Action, ENGINE,
+  Action,
+  ENGINE,
   FactoryBank,
   InputType,
   ListenerHandle
 } from '@gradii/diagram/canvas-core';
-import { Component, Inject } from '@angular/core';
+import { DefaultLinkFactory } from '@gradii/diagram/defaults';
+import { DiagramCore, DiagramEngine } from '@gradii/diagram/diagram-core';
+import * as _ from 'lodash';
+import * as Path from 'paths-js/path';
+import { PathFindingLinkModel } from './path-finding-link-model';
+import { PathFindingLinkWidget } from './path-finding-link-widget';
 
 
 @Component({
@@ -83,7 +84,7 @@ export class PathFindingLinkFactory extends DefaultLinkFactory<PathFindingLinkMo
     return <PathFindingLinkWidget diagramEngine = {this.engine};
     link = {event.model};
     factory = {this};
-    />;;
+    />;;;
   }
 
   generateModel(event): PathFindingLinkModel {

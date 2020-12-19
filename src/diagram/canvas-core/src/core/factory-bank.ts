@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { BaseEvent, BaseListener, BaseObserver } from './base-observer';
-import { AbstractFactory } from './abstract-factory';
 import * as _ from 'lodash';
+import { AbstractFactory } from './abstract-factory';
+import { BaseEvent, BaseListener, BaseObserver } from './base-observer';
 
 export interface FactoryBankListener<F extends AbstractFactory = AbstractFactory> extends BaseListener {
   /**

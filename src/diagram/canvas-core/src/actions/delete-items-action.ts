@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Action, ActionEvent, InputType } from '../core-actions/action';
 import * as _ from 'lodash';
+import { Action, ActionEvent, InputType } from '../core-actions/action';
 
 export interface DeleteItemsActionOptions {
   keyCodes?: number[];

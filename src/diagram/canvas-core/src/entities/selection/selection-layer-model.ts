@@ -5,10 +5,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { LayerModel } from '../layer/layer-model';
-import { FactoryBank } from '../../core/factory-bank';
-import { AbstractModelFactory } from '../../core/abstract-model-factory';
 import { BaseModel } from '../../core-models/base-model';
+import { AbstractModelFactory } from '../../core/abstract-model-factory';
+import { FactoryBank } from '../../core/factory-bank';
+import { LayerModel } from '../layer/layer-model';
 
 export class SelectionLayerModel extends LayerModel {
   box: ClientRect;

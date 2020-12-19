@@ -5,10 +5,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { DiagramEngine } from '@gradii/diagram/diagram-core';
-import { DefaultNodeModel } from './default-node-model';
 import { Component, Inject, Input } from '@angular/core';
 import { ENGINE } from '@gradii/diagram/canvas-core';
+import { DiagramEngine } from '@gradii/diagram/diagram-core';
+import { DefaultNodeModel } from './default-node-model';
 
 /**
  * Default node that models the DefaultNodeModel. It creates two columns

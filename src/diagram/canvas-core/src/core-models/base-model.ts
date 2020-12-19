@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { CanvasModel } from '../entities/canvas/canvas-model';
 import {
   BaseEntity,
   BaseEntityEvent,
@@ -13,7 +14,6 @@ import {
   BaseEntityOptions,
   DeserializeEvent
 } from './base-entity';
-import { CanvasModel } from '../entities/canvas/canvas-model';
 
 export interface BaseModelListener extends BaseEntityListener {
   selectionChanged?(event: BaseEntityEvent<BaseModel> & { isSelected: boolean }): void;

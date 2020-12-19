@@ -5,13 +5,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { PortModel } from '../port/port-model';
-import { PointModel } from './point-model';
-import * as _ from 'lodash';
-import { LabelModel } from '../label/label-model';
-import { DiagramEngine } from '../../diagram-engine';
-import { DiagramModel } from '../../models/diagram-model';
-import { Point, Polygon, Rectangle } from '@gradii/diagram/geometry';
 import {
   BaseEntityEvent,
   BaseModel,
@@ -20,6 +13,13 @@ import {
   DeserializeEvent,
   ModelGeometryInterface
 } from '@gradii/diagram/canvas-core';
+import { Point, Polygon, Rectangle } from '@gradii/diagram/geometry';
+import * as _ from 'lodash';
+import { DiagramEngine } from '../../diagram-engine';
+import { DiagramModel } from '../../models/diagram-model';
+import { LabelModel } from '../label/label-model';
+import { PortModel } from '../port/port-model';
+import { PointModel } from './point-model';
 
 export interface LinkModelListener extends BaseModelListener {
   sourcePortChanged?(event: BaseEntityEvent<LinkModel> & { port: null | PortModel }): void;

@@ -5,12 +5,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { ChangeDetectorRef, Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { BaseEntityEvent, BasePositionModel, ENGINE, ListenerHandle } from '@gradii/diagram/canvas-core';
 import { DiagramEngine } from '../../diagram-engine';
+import { PortModel } from '../port/port-model';
 import { LinkModel } from './link-model';
 import { PointModel } from './point-model';
-import { BaseEntityEvent, BasePositionModel, ENGINE, ListenerHandle } from '@gradii/diagram/canvas-core';
-import { PortModel } from '../port/port-model';
-import { ChangeDetectorRef, Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
 // export interface LinkProps {
 //   link: LinkModel;
@@ -66,6 +66,10 @@ export class LinkWidget implements OnChanges, OnInit {
   constructor(@Inject(ENGINE) public engine: DiagramEngine, public changeDetectRef: ChangeDetectorRef) {
   }
 
+  static generateLinePath(firstPoint: PointModel, lastPoint: PointModel): string {
+    return `M${firstPoint.getX()},${firstPoint.getY()} L ${lastPoint.getX()},${lastPoint.getY()}`;
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['link']) {
       const linkValue = changes['link'].currentValue;
@@ -74,10 +78,6 @@ export class LinkWidget implements OnChanges, OnInit {
         this.targetPort = linkValue.getTargetPort();
       }
     }
-  }
-
-  static generateLinePath(firstPoint: PointModel, lastPoint: PointModel): string {
-    return `M${firstPoint.getX()},${firstPoint.getY()} L ${lastPoint.getX()},${lastPoint.getY()}`;
   }
 
   // componentWillUnmount(): void {

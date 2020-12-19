@@ -5,10 +5,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Action, ActionEvent, InputType } from './action';
 import * as _ from 'lodash';
 import { CanvasEngine } from '../canvas-engine';
 import { BaseModel } from '../core-models/base-model';
+import { Action, ActionEvent, InputType } from './action';
 
 export class ActionEventBus {
   protected actions: { [id: string]: Action };

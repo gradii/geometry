@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { AbstractModelFactory, DeserializeEvent } from '@gradii/diagram/canvas-core';
 import {
   LinkModel,
   PortModel,
@@ -13,7 +14,6 @@ import {
   PortModelOptions
 } from '@gradii/diagram/diagram-core';
 import { DefaultLinkModel } from '../link/default-link-model';
-import { AbstractModelFactory, DeserializeEvent } from '@gradii/diagram/canvas-core';
 
 export interface DefaultPortModelOptions extends PortModelOptions {
   label?: string;

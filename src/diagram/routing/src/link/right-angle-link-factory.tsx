@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { RightAngleLinkWidget } from './right-angle-link-widget';
 import { DefaultLinkFactory } from '@gradii/diagram/react-diagrams-defaults';
+import * as React from 'react';
 import { RightAngleLinkModel } from './right-angle-link-model';
+import { RightAngleLinkWidget } from './right-angle-link-widget';
 
 /**
  * @author Daniel Lazar

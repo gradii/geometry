@@ -5,20 +5,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { AfterViewChecked, AfterViewInit, Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { ENGINE } from '@gradii/diagram/canvas-core';
 import { DiagramEngine, LinkWidget, PointModel } from '@gradii/diagram/diagram-core';
 import { DefaultLinkModel } from './default-link-model';
 import { DefaultLinkPointWidget } from './default-link-point-widget';
 import { DefaultLinkSegmentWidget } from './default-link-segment-widget';
-import {
-  AfterViewChecked,
-  AfterViewInit,
-  Component,
-  Inject,
-  Input,
-  OnDestroy,
-  OnInit
-} from '@angular/core';
-import { ENGINE } from '@gradii/diagram/canvas-core';
 
 export interface DefaultLinkProps {
   link: DefaultLinkModel;

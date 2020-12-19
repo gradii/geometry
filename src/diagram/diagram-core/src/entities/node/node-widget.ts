@@ -5,18 +5,18 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { Component, ElementRef, Inject, Input } from '@angular/core';
+import { BaseEntityEvent, BaseModel, ENGINE, ListenerHandle } from '@gradii/diagram/canvas-core';
 import { DiagramEngine } from '../../diagram-engine';
 import { NodeModel } from './node-model';
-import { BaseEntityEvent, BaseModel, ENGINE, ListenerHandle } from '@gradii/diagram/canvas-core';
-import { ChangeDetectionStrategy, Component, ElementRef, Inject, Input } from '@angular/core';
 
 @Component({
   selector: 'node-widget',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="node"
          #ref
-         [attr.data-node-id]="node.getID()"
+         [attr.data-nodeid]="node.getID()"
          [style.top.px]="node.getY()"
          [style.left.px]="node.getX()">
       <!--      <ng-template [ngTemplateOutlet]="engine.generateWIdgetForNode(node)"></ng-template>-->

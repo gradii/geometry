@@ -5,9 +5,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Inject, Input, Optional } from '@angular/core';
+import { ENGINE, ENGINE_OPTIONS, State } from '@gradii/diagram/canvas-core';
 import { DiagramEngine } from '@gradii/diagram/diagram-core';
-import { ENGINE, ENGINE_OPTIONS } from '@gradii/diagram/canvas-core';
+import { DIAGRAM_STATES } from './tokens';
 
 
 @Component({
@@ -36,8 +37,8 @@ import { ENGINE, ENGINE_OPTIONS } from '@gradii/diagram/canvas-core';
     <canvas-widget></canvas-widget>
   `,
   styles: [
-    `:host {
-      position: relative;
+      `:host {
+      position : relative;
       cursor   : move;
       overflow : hidden;
     }
@@ -45,8 +46,15 @@ import { ENGINE, ENGINE_OPTIONS } from '@gradii/diagram/canvas-core';
   ]
 })
 export class DiagramEngineComponent {
-  constructor(@Inject(ENGINE) private engine: DiagramEngine) {
+  constructor(
+    @Inject(ENGINE) private engine: DiagramEngine,
+    @Optional() @Inject(DIAGRAM_STATES) private states: State[] = []
+  ) {
+    states.forEach(state => {
+      engine.getStateMachine().pushState(state);
+    });
   }
+
 
   @Input()
   set engineModel(value: any) {

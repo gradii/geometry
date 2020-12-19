@@ -5,9 +5,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { LinkLayerModel } from './link-layer-model';
-import { DiagramEngine } from '../../diagram-engine';
 import { Component, Input } from '@angular/core';
+import { LinkLayerModel } from './link-layer-model';
 
 
 @Component({

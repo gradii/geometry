@@ -5,13 +5,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { Point } from '@gradii/diagram/geometry';
+import { CanvasEngine } from '../canvas-engine';
+import { Action, ActionEvent, InputType } from '../core-actions/action';
+import { BaseModel } from '../core-models/base-model';
+import { BasePositionModel } from '../core-models/base-position-model';
 import { AbstractDisplacementState, AbstractDisplacementStateEvent } from '../core-state/abstract-displacement-state';
 import { State } from '../core-state/state';
-import { Action, ActionEvent, InputType } from '../core-actions/action';
-import { BasePositionModel } from '../core-models/base-position-model';
-import { Point } from '@gradii/diagram/geometry';
-import { BaseModel } from '../core-models/base-model';
-import { CanvasEngine } from '../canvas-engine';
 
 export class MoveItemsState<E extends CanvasEngine = CanvasEngine> extends AbstractDisplacementState<E> {
   initialPositions: {

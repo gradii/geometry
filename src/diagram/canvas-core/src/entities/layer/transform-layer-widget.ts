@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { LayerModel } from './layer-model';
 import { Component, Input } from '@angular/core';
+import { LayerModel } from './layer-model';
 
 @Component({
   selector: 'transform-layer-widget',
@@ -23,7 +23,7 @@ import { Component, Input } from '@angular/core';
     </ng-template>
   `,
   styles: [
-      `:host .layer {
+    `:host .layer {
         top: 0;
         left: 0;
         right: 0;

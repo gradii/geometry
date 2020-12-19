@@ -24,6 +24,7 @@ import { DefaultLinkModel } from './default-link-model';
         strokeDasharray: '10, 2',
 		    animation: 'animation-selected 1s linear infinite'
       }: null"
+        class="path"
         [attr.stroke]="event?.stroke"
         [attr.stroke-width]="event?.model.getOptions().width"
         [attr.d]="event?.path"
@@ -40,6 +41,11 @@ import { DefaultLinkModel } from './default-link-model';
         to {
           stroke-dashoffset : 0;
         }
+      }
+
+      .path {
+        fill           : none;
+        pointer-events : all;
       }
     `
   ]

@@ -5,10 +5,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import * as _ from 'lodash';
-import { PortModel } from './port-model';
-import { DiagramEngine } from '../../diagram-engine';
-import { ENGINE, ListenerHandle, Toolkit } from '@gradii/diagram/canvas-core';
 import {
   AfterViewChecked,
   Component,
@@ -20,6 +16,10 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
+import { ENGINE, ListenerHandle, Toolkit } from '@gradii/diagram/canvas-core';
+import * as _ from 'lodash';
+import { DiagramEngine } from '../../diagram-engine';
+import { PortModel } from './port-model';
 
 @Component({
   selector: 'port-widget',
@@ -36,12 +36,10 @@ import {
   `
 })
 export class PortWidget implements OnInit, OnDestroy, DoCheck, AfterViewChecked {
-  private engineListenerHandle: ListenerHandle;
-
   @ViewChild('ref', {read: ElementRef, static: true})
   ref: ElementRef<HTMLDivElement>;
-
   @Input() port: PortModel;
+  private engineListenerHandle: ListenerHandle;
 
   constructor(@Inject(ENGINE) public engine: DiagramEngine) {
   }

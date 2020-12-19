@@ -5,10 +5,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { DeserializeEvent } from '@gradii/diagram/canvas-core';
+import { PointModel } from '@gradii/diagram/diagram-core';
 import { DefaultLinkModel, DefaultLinkModelOptions } from '@gradii/diagram/react-diagrams-defaults';
 import { RightAngleLinkFactory } from './right-angle-link-factory';
-import { PointModel } from '@gradii/diagram/diagram-core';
-import { DeserializeEvent } from '@gradii/diagram/canvas-core';
 
 export class RightAngleLinkModel extends DefaultLinkModel {
   lastHoverIndexOfPath: number;

@@ -1,10 +1,10 @@
-import * as React from 'react';
-import * as _ from 'lodash';
 import { DiagramCore } from '@gradii/diagram/diagram-core';
+import { DefaultLinkSegmentWidget } from '@gradii/diagram/react-diagrams-defaults';
+import * as _ from 'lodash';
+import * as React from 'react';
 import PathFinding from '../engine/path-finding';
 import { PathFindingLinkFactory } from './path-finding-link-factory';
 import { PathFindingLinkModel } from './path-finding-link-model';
-import { DefaultLinkSegmentWidget } from '@gradii/diagram/react-diagrams-defaults';
 
 export interface PathFindingLinkWidgetProps {
   color?: string;

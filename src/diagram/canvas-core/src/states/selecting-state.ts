@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { State } from '../core-state/state';
 import { Action, ActionEvent, InputType } from '../core-actions/action';
+import { State } from '../core-state/state';
 import { SelectionBoxState } from './selection-box-state';
 
 export class SelectingState extends State {

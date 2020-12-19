@@ -5,13 +5,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { AbstractReactFactory, GenerateWidgetEvent } from '../../core/abstract-react-factory';
-import { SelectionLayerModel } from './selection-layer-model';
-import { GenerateModelEvent } from '../../core/abstract-model-factory';
-import { SelectionBoxWidget } from './selection-box-widget';
 import { Component, Inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ENGINE } from '../../tokens';
 import { CanvasEngine } from '../../canvas-engine';
+import { GenerateModelEvent } from '../../core/abstract-model-factory';
+import { AbstractReactFactory, GenerateWidgetEvent } from '../../core/abstract-react-factory';
+import { ENGINE } from '../../tokens';
+import { SelectionLayerModel } from './selection-layer-model';
 
 
 @Component({

@@ -5,10 +5,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { State } from './state';
 import * as _ from 'lodash';
 import { CanvasEngine } from '../canvas-engine';
 import { BaseEvent, BaseListener, BaseObserver } from '../core/base-observer';
+import { State } from './state';
 
 export interface StateMachineListener extends BaseListener {
   stateChanged?: (event: BaseEvent & { newState: State }) => any;
@@ -52,7 +52,7 @@ export class StateMachine extends BaseObserver<StateMachineListener> {
       this.currentState.activated(old);
       this.fireEvent<'stateChanged'>(
         {
-      // @ts-ignore
+          // @ts-ignore
           newState: state
         },
         'stateChanged'

@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { PointModel } from '@gradii/diagram/diagram-core';
 import * as PF from 'pathfinding';
 import { PathFindingLinkFactory } from '../link/path-finding-link-factory';
-import { PointModel } from '@gradii/diagram/diagram-core';
 
 /*
 it can be very expensive to calculate routes when every single pixel on the canvas

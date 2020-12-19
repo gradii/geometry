@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { LabelModel, LabelModelGenerics, LabelModelOptions } from '@gradii/diagram/diagram-core';
 import { DeserializeEvent } from '@gradii/diagram/canvas-core';
+import { LabelModel, LabelModelGenerics, LabelModelOptions } from '@gradii/diagram/diagram-core';
 
 export interface DefaultLabelModelOptions extends LabelModelOptions {
   label?: string;

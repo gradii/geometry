@@ -5,11 +5,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import * as _ from 'lodash';
-import { DiagramModel } from '../../models/diagram-model';
-import { PortModel } from '../port/port-model';
-import { LinkModel } from '../link/link-model';
-import { Point, Rectangle } from '@gradii/diagram/geometry';
 import {
   BaseEntityEvent,
   BaseModelListener,
@@ -17,7 +12,12 @@ import {
   BasePositionModelGenerics,
   DeserializeEvent
 } from '@gradii/diagram/canvas-core';
+import { Point, Rectangle } from '@gradii/diagram/geometry';
+import * as _ from 'lodash';
 import { DiagramEngine } from '../../diagram-engine';
+import { DiagramModel } from '../../models/diagram-model';
+import { LinkModel } from '../link/link-model';
+import { PortModel } from '../port/port-model';
 
 export interface NodeModelListener extends BaseModelListener {
   positionChanged?(event: BaseEntityEvent<NodeModel>): void;
@@ -48,6 +48,7 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
   setPosition(point: Point): void;
   setPosition(x: number, y: number): void;
   setPosition(x: number | Point, y?: number) {
+    console.log(x, y);
     let old = this.position;
     super.setPosition(x as number, y);
 

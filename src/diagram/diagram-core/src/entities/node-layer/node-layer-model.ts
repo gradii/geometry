@@ -6,9 +6,9 @@
  */
 
 import { LayerModel, LayerModelGenerics } from '@gradii/diagram/canvas-core';
-import { NodeModel } from '../node/node-model';
 import { DiagramEngine } from '../../diagram-engine';
 import { DiagramModel } from '../../models/diagram-model';
+import { NodeModel } from '../node/node-model';
 
 export interface NodeLayerModelGenerics extends LayerModelGenerics {
   CHILDREN: NodeModel;

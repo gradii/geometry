@@ -6,10 +6,10 @@
  */
 
 import { Action, ActionEvent, DragCanvasState, InputType, SelectingState, State } from '@gradii/diagram/canvas-core';
-import { PortModel } from '../entities/port/port-model';
-import { DragNewLinkState } from './drag-new-link-state';
 import { DiagramEngine } from '../diagram-engine';
+import { PortModel } from '../entities/port/port-model';
 import { DragDiagramItemsState } from './drag-diagram-items-state';
+import { DragNewLinkState } from './drag-new-link-state';
 
 export class DefaultDiagramState extends State<DiagramEngine> {
   dragCanvas: DragCanvasState;

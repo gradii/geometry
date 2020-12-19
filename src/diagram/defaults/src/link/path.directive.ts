@@ -11,11 +11,11 @@ import { Directive, ElementRef, Input, OnInit } from '@angular/core';
   selector: 'path'
 })
 export class PathDirective implements OnInit {
-  constructor(public elementRef: ElementRef) {
-  }
-
   @Input()
   ref: (ref: SVGPathElement) => void;
+
+  constructor(public elementRef: ElementRef) {
+  }
 
   ngOnInit() {
     if (this.ref) {

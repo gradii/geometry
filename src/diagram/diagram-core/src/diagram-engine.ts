@@ -5,13 +5,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { ChangeDetectionStrategy, Component, TemplateRef } from '@angular/core';
 import {
   AbstractModelFactory,
   AbstractReactFactory,
   BaseModel,
   CanvasEngine,
-  CanvasEngineListener, CanvasEngineOptions,
+  CanvasEngineListener,
+  CanvasEngineOptions,
   FactoryBank,
   Toolkit
 } from '@gradii/diagram/canvas-core';
@@ -21,7 +21,6 @@ import { LinkModel } from './entities/link/link-model';
 import { NodeModel } from './entities/node/node-model';
 import { PortModel } from './entities/port/port-model';
 import { DiagramModel } from './models/diagram-model';
-
 
 
 export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
@@ -45,7 +44,7 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
 
     const setup = (factory: FactoryBank) => {
       factory.registerListener({
-        factoryAdded  : (event) => {
+        factoryAdded: (event) => {
           event.factory.setDiagramEngine(this);
         },
         factoryRemoved: (event) => {

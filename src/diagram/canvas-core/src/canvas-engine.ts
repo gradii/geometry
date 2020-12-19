@@ -7,6 +7,8 @@
 
 import { Point } from '@gradii/diagram/geometry';
 import { debounce } from 'lodash';
+import { DeleteItemsAction } from './actions/delete-items-action';
+import { ZoomCanvasAction } from './actions/zoom-canvas-action';
 import { ActionEventBus } from './core-actions/action-event-bus';
 import { BaseModel } from './core-models/base-model';
 import { StateMachine } from './core-state/state-machine';
@@ -15,8 +17,6 @@ import { BaseListener, BaseObserver } from './core/base-observer';
 import { FactoryBank, FactoryBankListener } from './core/factory-bank';
 import { CanvasModel } from './entities/canvas/canvas-model';
 import { LayerModel } from './entities/layer/layer-model';
-import { ZoomCanvasAction } from './actions/zoom-canvas-action';
-import { DeleteItemsAction } from './actions/delete-items-action';
 
 export interface CanvasEngineListener extends BaseListener {
   canvasReady?(): void;
@@ -91,7 +91,7 @@ export class CanvasEngine<L extends CanvasEngineListener = CanvasEngineListener,
 
   registerFactoryBank(factory: FactoryBank) {
     factory.registerListener({
-      factoryAdded  : (event) => {
+      factoryAdded: (event) => {
         event.factory.setDiagramEngine(this);
       },
       factoryRemoved: (event) => {

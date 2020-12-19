@@ -5,10 +5,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { NodeLayerModel } from './node-layer-model';
-import { DiagramEngine } from '../../diagram-engine';
 import { Component, Inject, Input } from '@angular/core';
 import { ENGINE } from '@gradii/diagram/canvas-core';
+import { DiagramEngine } from '../../diagram-engine';
+import { NodeLayerModel } from './node-layer-model';
 
 
 @Component({

@@ -5,10 +5,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { BaseModel, BaseModelGenerics, BaseModelListener, BaseModelOptions } from './base-model';
-import { BaseEntityEvent, DeserializeEvent } from './base-entity';
 import { Point, Rectangle } from '@gradii/diagram/geometry';
 import { ModelGeometryInterface } from '../core/model-geometry-interface';
+import { BaseEntityEvent, DeserializeEvent } from './base-entity';
+import { BaseModel, BaseModelGenerics, BaseModelListener, BaseModelOptions } from './base-model';
 
 export interface BasePositionModelListener extends BaseModelListener {
   positionChanged?(event: BaseEntityEvent<BasePositionModel>): void;

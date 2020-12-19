@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { BaseEntityEvent, BaseModelOptions, DeserializeEvent } from '@gradii/diagram/canvas-core';
 import {
   LabelModel,
   LinkModel,
@@ -13,9 +14,8 @@ import {
   PortModel,
   PortModelAlignment
 } from '@gradii/diagram/diagram-core';
-import { DefaultLabelModel } from '../label/default-label-model';
 import { BezierCurve } from '@gradii/diagram/geometry';
-import { BaseEntityEvent, BaseModelOptions, DeserializeEvent } from '@gradii/diagram/canvas-core';
+import { DefaultLabelModel } from '../label/default-label-model';
 
 export interface DefaultLinkModelListener extends LinkModelListener {
   colorChanged?(event: BaseEntityEvent<DefaultLinkModel> & { color: null | string }): void;

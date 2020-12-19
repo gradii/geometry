@@ -5,10 +5,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { DefaultLabelModel } from './default-label-model';
+import { Component, Inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AbstractReactFactory, ENGINE, GenerateModelEvent, GenerateWidgetEvent } from '@gradii/diagram/canvas-core';
 import { DiagramEngine } from '@gradii/diagram/diagram-core';
-import { Component, Inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { DefaultLabelModel } from './default-label-model';
 
 
 /**
@@ -23,6 +23,9 @@ import { Component, Inject, OnInit, TemplateRef, ViewChild } from '@angular/core
   `
 })
 export class DefaultLabelFactory extends AbstractReactFactory<DefaultLabelModel, DiagramEngine> implements OnInit {
+  @ViewChild('labelWidget', {read: TemplateRef, static: true})
+  labelTemplateRef: TemplateRef<any>;
+
   constructor(@Inject(ENGINE) protected engine: DiagramEngine) {
     super('default');
   }
@@ -30,9 +33,6 @@ export class DefaultLabelFactory extends AbstractReactFactory<DefaultLabelModel,
   ngOnInit() {
     this.engine.getLabelFactories().registerFactory(this);
   }
-
-  @ViewChild('labelWidget', {read: TemplateRef, static: true})
-  labelTemplateRef: TemplateRef<any>;
 
   generateReactWidget(event: GenerateWidgetEvent<DefaultLabelModel>) {
     return this.labelTemplateRef;
