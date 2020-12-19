@@ -10,11 +10,6 @@ import { DefaultNodeModel } from './default-node-model';
 import { Component, Inject, Input } from '@angular/core';
 import { ENGINE } from '@gradii/diagram/canvas-core';
 
-// export interface DefaultNodeProps {
-//   node: DefaultNodeModel;
-//   engine: DiagramEngine;
-// }
-
 /**
  * Default node that models the DefaultNodeModel. It creates two columns
  * for both all the input ports on the left, and the output ports on the right.
@@ -48,44 +43,44 @@ import { ENGINE } from '@gradii/diagram/canvas-core';
   },
   styles: [`
     :host {
-      border-radius: 5px;
-      font-family: sans-serif;
-      color: white;
-      border: 2px solid black;
-      overflow: visible;
-      font-size: 11px;
-      display: block;
+      border-radius : 5px;
+      font-family   : sans-serif;
+      color         : white;
+      border        : 2px solid black;
+      overflow      : visible;
+      font-size     : 11px;
+      display       : block;
     }
 
     .title {
-      background: rgba(0, 0, 0, 0.3);
-      display: flex;
-      white-space: nowrap;
-      justify-items: center;
+      background    : rgba(0, 0, 0, 0.3);
+      display       : flex;
+      white-space   : nowrap;
+      justify-items : center;
     }
 
     .titleName {
-      flex-grow: 1;
-      padding: 5px 5px;
+      flex-grow : 1;
+      padding   : 5px 5px;
     }
 
     .ports {
-      display: flex;
-      background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
+      display          : flex;
+      background-image : linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
     }
 
     .portsContainer {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
+      flex-grow      : 1;
+      display        : flex;
+      flex-direction : column;
     }
 
     .portsContainer:first-of-type {
-      margin-right: 10px;
+      margin-right : 10px;
     }
 
     .portsContainer:only-child {
-      margin-right: 0;
+      margin-right : 0;
     }
 
   `]

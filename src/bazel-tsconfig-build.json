@@ -14,8 +14,6 @@
     "strictNullChecks": false,
     "noImplicitReturns": false,
     "strictFunctionTypes": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
     "noImplicitThis": true,

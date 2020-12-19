@@ -21,13 +21,13 @@ export class DevServer {
 
   /** Options of the browser-sync server. */
   options: browserSync.Options = {
-    open     : false,
-    online   : false,
-    port     : this.port,
-    notify   : false,
+    open: false,
+    online: false,
+    port: this.port,
+    notify: false,
     ghostMode: false,
-    server   : {
-      directory : false,
+    server: {
+      directory: false,
       middleware: [(req, res) => this._bazelMiddleware(req, res)],
     },
   };
