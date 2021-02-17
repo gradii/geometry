@@ -115,11 +115,7 @@ export abstract class MatPaginatedTabHeader implements AfterContentChecked, Afte
               private _viewportRuler: ViewportRuler,
               @Optional() private _dir: Directionality,
               private _ngZone: NgZone,
-              /**
-               * @deprecated @breaking-change 9.0.0 `_platform` and `_animationMode`
-               * parameters to become required.
-               */
-              private _platform?: Platform,
+              private _platform: Platform,
               @Optional() @Inject(ANIMATION_MODULE_TYPE) public _animationMode?: string) {
 
     // Bind the `mouseleave` event on the outside since it doesn't change anything in the view.

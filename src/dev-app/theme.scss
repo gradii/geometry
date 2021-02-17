@@ -5,10 +5,16 @@
 @use "../triangle/core/style/variables" as v;
 @use "../triangle/core/themes/all-theme";
 @use "../triangle/core/themes/theme-global";
+@use "../triangle/core/core-theme";
+
 
 * {
   box-sizing : border-box;
 }
+
+
+// Include non-theme styles for core.
+@include core-theme.tri-core();
 
 
 @include theme-global.gradii-triangle-global();

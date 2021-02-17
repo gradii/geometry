@@ -38,7 +38,8 @@ import { TriTabLabelWrapper } from './tab-label-wrapper';
  */
 @Directive()
 // tslint:disable-next-line:class-name
-export abstract class _TriTabHeaderBase extends MatPaginatedTabHeader implements AfterContentChecked, AfterContentInit, AfterViewInit, OnDestroy {
+export abstract class _TriTabHeaderBase extends MatPaginatedTabHeader
+  implements AfterContentChecked, AfterContentInit, AfterViewInit, OnDestroy {
 
   constructor(elementRef: ElementRef,
               changeDetectorRef: ChangeDetectorRef,
@@ -76,12 +77,12 @@ export abstract class _TriTabHeaderBase extends MatPaginatedTabHeader implements
  * @docs-private
  */
 @Component({
-  selector       : 'tri-tab-header',
-  templateUrl    : 'tab-header.html',
-  styleUrls      : ['../style/tab-header.css'],
-  inputs         : ['selectedIndex'],
-  outputs        : ['selectFocusedIndex', 'indexFocused'],
-  encapsulation  : ViewEncapsulation.None,
+  selector     : 'tri-tab-header',
+  templateUrl  : 'tab-header.html',
+  styleUrls    : ['../style/tab-header.css'],
+  inputs       : ['selectedIndex'],
+  outputs      : ['selectFocusedIndex', 'indexFocused'],
+  encapsulation: ViewEncapsulation.None,
   // tslint:disable-next-line:validate-decorators
   changeDetection: ChangeDetectionStrategy.Default,
   host           : {
