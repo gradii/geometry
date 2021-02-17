@@ -1,41 +1,14 @@
-@use "../triangle/core/core" as *;
-@use "../triangle/core/style/theming" as *;
-@use "../triangle/core/style/palette" as *;
-@use "../triangle/core/themes/all-theme" as *;
+// custom theme
+@use "dev-app-theme";
+
+@use "../triangle/core/style/theming";
+@use "../triangle/core/style/variables" as v;
+@use "../triangle/core/themes/all-theme";
+@use "../triangle/core/themes/theme-global";
 
 * {
   box-sizing : border-box;
 }
 
-@include tri-core();
 
-// Define the default theme (same as the example above).
-$candy-app-primary : tri-palette($tri-indigo);
-$candy-app-accent  : tri-palette($tri-green, A200, A100, A400);
-
-
-/**
- * primary
- * secondary
- * info
- * success
- * error
- * highlight
- * warning
- * dark
- * accent
- * warn
- */
-$candy-app-theme   : tri-light-theme(
-    $candy-app-primary,
-    $candy-app-accent,
-    $tri-blue,
-    $tri-green,
-    $tri-red,
-    $tri-red,
-    $tri-yellow,
-    $tri-blue-grey,
-    $candy-app-accent,
-);
-
-@include gradii-triangle-theme($candy-app-theme);
+@include theme-global.gradii-triangle-global();

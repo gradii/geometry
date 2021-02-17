@@ -5,12 +5,12 @@
 
 $collapse-prefix-cls : "#{ v.$tri-prefix}-collapse";
 
-$primary             : theme.$primary;
-$foreground          : theme.$foreground;
-$background          : theme.$background;
+//$primary             : theme.$primary;
+//$foreground          : theme.$foreground;
+//$background          : theme.$background;
 
-$collapse-header-bg  : theming.tri-color($background, background-color-base) !default;
-$collapse-active-bg  : theming.tri-color($background, background-color-active) !default;
+$collapse-header-bg  : theming.tri-color(theme.$background, background-color-base) !default;
+$collapse-active-bg  : theming.tri-color(theme.$background, background-color-active) !default;
 
 
 @mixin tri-collapse-theme() {
@@ -18,11 +18,11 @@ $collapse-active-bg  : theming.tri-color($background, background-color-active) !
   .#{$collapse-prefix-cls} {
     background-color : $collapse-header-bg;
     border-radius    : v.$border-radius-base;
-    border           : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-base);
+    border           : v.$border-width-base v.$border-style-base theming.tri-color(theme.$foreground, border-color-base);
     border-bottom    : 0;
 
     @at-root & > #{&}-item {
-      border-bottom : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-base);
+      border-bottom : v.$border-width-base v.$border-style-base theming.tri-color(theme.$foreground, border-color-base);
 
       @at-root &:last-child {
         @at-root &,
@@ -32,17 +32,17 @@ $collapse-active-bg  : theming.tri-color($background, background-color-active) !
       }
 
       > .#{$collapse-prefix-cls}-header {
-        color : theming.tri-color($foreground, heading-color);
+        color : theming.tri-color(theme.$foreground, heading-color);
 
         .arrow {
-          color : theming.tri-color($foreground, text-color-secondary);
+          color : theming.tri-color(theme.$foreground, text-color-secondary);
         }
       }
     }
 
     @at-root &-content {
-      color            : theming.tri-color($foreground, text-color);
-      background-color : theming.tri-color($background, component-background);
+      color            : theming.tri-color(theme.$foreground, text-color);
+      background-color : theming.tri-color(theme.$background, component-background);
     }
 
     @at-root &-item:last-child {
@@ -52,7 +52,7 @@ $collapse-active-bg  : theming.tri-color($background, background-color-active) !
     }
 
     @at-root &-borderless {
-      background-color : theming.tri-color($background, component-background);
+      background-color : theming.tri-color(theme.$background, component-background);
       border           : 0;
     }
 
@@ -62,7 +62,7 @@ $collapse-active-bg  : theming.tri-color($background, background-color-active) !
 
     @at-root &-borderless > #{&}-item > #{&}-content {
       background-color : transparent;
-      border-top       : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-base);
+      border-top       : v.$border-width-base v.$border-style-base theming.tri-color(theme.$foreground, border-color-base);
     }
 
     @at-root &-borderless > #{&}-item > #{&}-header {
@@ -74,8 +74,8 @@ $collapse-active-bg  : theming.tri-color($background, background-color-active) !
     @at-root &#{&}-item-disabled > #{&}-header {
       @at-root &,
       & > .arrow {
-        color            : theming.tri-color($background, disabled-color);
-        background-color : theming.tri-color($background, disabled-bg);
+        color            : theming.tri-color(theme.$background, disabled-color);
+        background-color : theming.tri-color(theme.$background, disabled-bg);
       }
     }
 

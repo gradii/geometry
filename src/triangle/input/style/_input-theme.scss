@@ -5,8 +5,8 @@
 @use "../../core/style/variables" as v;
 
 
-$foreground               : theme.$foreground;
-$background               : theme.$background;
+$_foreground              : theme.$foreground;
+$_background              : theme.$background;
 
 $input-color              : v.$text-color !default;
 $input-border-width       : v.$border-width-base !default;
@@ -14,16 +14,16 @@ $input-bg                 : #fff !default;
 $input-addon-bg           : #eee !default;
 $input-addon-color        : $input-color !default;
 $input-hover-border-color : theming.tri-color(theme.$primary) !default;
-$input-disabled-bg        : map.get($background, disabled-bg) !default;
+$input-disabled-bg        : map.get($_background, disabled-bg) !default;
 
-$input-placeholder-color  : map.get($foreground, disabled-color) !default;
-$input-border-color       : map.get($foreground, border-color-base) !default;
+$input-placeholder-color  : map.get($_foreground, disabled-color) !default;
+$input-border-color       : map.get($_foreground, border-color-base) !default;
 
 
 @mixin tri-input-active-theme($color : null) {
 
   @if $color == null {
-    $color : theming.tri-color($foreground, outline-color);
+    $color : theming.tri-color($_foreground, outline-color);
   }
 
   border-color : theming.tri-color-palette($color, 5);
@@ -45,7 +45,7 @@ $input-border-color       : map.get($foreground, border-color-base) !default;
   background-color : $input-disabled-bg;
   opacity          : 1;
   cursor           : not-allowed;
-  color            : theming.tri-color($foreground, disabled-color);
+  color            : theming.tri-color($_foreground, disabled-color);
   @at-root &:hover {
     @include tri-input-hover-theme($input-border-color);
   }
@@ -57,7 +57,7 @@ $input-border-color       : map.get($foreground, border-color-base) !default;
   .#{v.$tri-prefix}-input {
     color      : $input-color;
     background : $input-bg none;
-    border     : v.$border-width-base v.$border-style-base theming.tri-color($foreground, input-border-color);
+    border     : v.$border-width-base v.$border-style-base theming.tri-color($_foreground, input-border-color);
     @include compatibility.placeholder();
     transition : all .3s;
 

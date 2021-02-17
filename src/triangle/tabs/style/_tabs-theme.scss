@@ -4,13 +4,13 @@
 @use "../../core/style/variables" as v;
 
 
-$background                : theme.$background;
-$foreground                : theme.$foreground;
+$_background               : theme.$background;
+$_foreground               : theme.$foreground;
+$_primary                  : theme.$primary;
+$_secondary                : theme.$secondary;
+$_warning                  : theme.$warning;
 
-$primary                   : theme.$primary;
-$secondary                 : theme.$secondary;
-$warning                   : theme.$warning;
-$header-border             : 1px solid theming.tri-color($foreground, divider);
+$tabs-header-border        : 1px solid theming.tri-color($_foreground, divider) !default;
 
 // Tabs
 // ---
@@ -21,31 +21,31 @@ $tabs-title-font-size      : v.$font-size-lg !default;
 
   .tri-tab-nav-bar,
   .tri-tab-header {
-    border-bottom : $header-border;
+    border-bottom : $tabs-header-border;
   }
 
   .tri-tab-group-inverted-header {
     .tri-tab-nav-bar,
     .tri-tab-header {
-      border-top    : $header-border;
+      border-top    : $tabs-header-border;
       border-bottom : none;
     }
   }
 
   .tri-tab-label, .tri-tab-link {
-    color : theming.tri-color($foreground, text);
+    color : theming.tri-color($_foreground, text);
 
     &.tri-tab-disabled {
-      color : theming.tri-color($foreground, disabled-text);
+      color : theming.tri-color($_foreground, disabled-text);
     }
   }
 
   .tri-tab-header-pagination-chevron {
-    border-color : theming.tri-color($foreground, text);
+    border-color : theming.tri-color($_foreground, text);
   }
 
   .tri-tab-header-pagination-disabled .tri-tab-header-pagination-chevron {
-    border-color : theming.tri-color($foreground, disabled-text);
+    border-color : theming.tri-color($_foreground, disabled-text);
   }
 
   // Remove header border when there is a background color
@@ -57,9 +57,9 @@ $tabs-title-font-size      : v.$font-size-lg !default;
 
   .tri-tab-group, .tri-tab-nav-bar {
     $theme-colors : (
-      primary: $primary,
-      accent: $secondary,
-      warn: $warning
+      primary: $_primary,
+      accent: $_secondary,
+      warn: $_warning
     );
 
     @each $name, $color in $theme-colors {

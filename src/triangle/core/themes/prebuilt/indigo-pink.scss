@@ -7,13 +7,13 @@
   $success : theming.tri-palette(v.$tri-blue, A200, A100, A400),
 );
 
-@use "../all-theme";
+@use "../theme-global";
 @use "../../core-theme";
 
 
 // Include non-theme styles for core.
-@include core-theme.tri-core();
+//@include core-theme.tri-core();
 
 
 //// Include all theme styles for the components.
-@include all-theme.gradii-triangle-global();
+@include theme-global.gradii-triangle-global();

@@ -162,8 +162,8 @@ $tri-elevation-prefix                     : "tri-elevation-z";
 }
 
 @mixin tri-theme-elevation($zValue, $opacity: $tri-elevation-opacity) {
-  $foreground: theme.$foreground;
-  $elevation-color            : map.get($foreground, elevation);
+  $_foreground: theme.$foreground;
+  $elevation-color            : map.get($_foreground, elevation);
   $elevation-color-or-default : if($elevation-color == null, $tri-elevation-color, $elevation-color);
 
   @include tri-elevation($zValue, $elevation-color-or-default, $opacity);
