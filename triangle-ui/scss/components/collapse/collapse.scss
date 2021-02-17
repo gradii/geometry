@@ -107,7 +107,7 @@ $collapse-active-bg: $background-color-active;
     }
   }
 
-   @at-root &#{&}-item-disabled > #{&}-header {
+   @at-root & > #{&}-item-disabled > #{&}-header {
      @at-root &,
       &> .arrow {
       cursor: not-allowed;
@@ -116,7 +116,7 @@ $collapse-active-bg: $background-color-active;
     }
   }
 
-   @at-root &> #{&}-item:not(#{&}-item-disabled) > .#{$collapse-prefix-cls}-header:active {
+   @at-root & > #{&}-item:not(#{&}-item-disabled) > .#{$collapse-prefix-cls}-header:active {
     background-color: $collapse-active-bg;
   }
 }

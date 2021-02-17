@@ -7,40 +7,41 @@
 import { Component, OnInit } from '@angular/core';
 
 /**
- * @title collapse-accordion
+ * @title collapse-border
  */
 @Component({
-  selector: 'tri-demo-collapse-accordion',
+  selector: 'tri-demo-collapse-border',
   template: `
-    <tri-collapseset [accordion]="true">
-      <tri-collapse
-        *ngFor="let panel of panels"
-        [title]="panel.name"
-        [active]="panel.active">
+    <tri-collapseset [bordered]="false">
+      <tri-collapse *ngFor="let panel of panels" [title]="panel.name" [active]="panel.active">
         <p>{{panel.name}} 的内容</p>
       </tri-collapse>
     </tri-collapseset>
   `,
   styles: []
 })
-export class TriDemoCollapseAccordionComponent implements OnInit {
+export class TriDemoCollapseBorderComponent implements OnInit {
   panels = [
     {
       active: true,
+      disabled: false,
       name: 'This is panel header 1',
-      childPanel: [
+      childPannel: [
         {
           active: false,
+          disabled: true,
           name: 'This is panel header 1-1'
         }
       ]
     },
     {
       active: false,
+      disabled: true,
       name: 'This is panel header 2'
     },
     {
       active: false,
+      disabled: false,
       name: 'This is panel header 3'
     }
   ];

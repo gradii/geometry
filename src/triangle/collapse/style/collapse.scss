@@ -1,19 +1,19 @@
-@import "../../core/style/mixins";
-@import "../../core/style/variables";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
 
-$collapse-prefix-cls : "#{$tri-prefix}-collapse";
+$collapse-prefix-cls : "#{v.$tri-prefix}-collapse";
 
 
 @mixin collapse-close() {
-  @include iconfont-size-under-12px(9px, 0);
+  @include mixins.iconfont-size-under-12px(9px, 0);
 }
 
 @mixin collapse-open() {
-  @include iconfont-size-under-12px(9px, 90deg);
+  @include mixins.iconfont-size-under-12px(9px, 90deg);
 }
 
 .#{$collapse-prefix-cls} {
-  border-radius : $border-radius-base;
+  border-radius : v.$border-radius-base;
   border-bottom : 0;
 
   @at-root & > #{&}-item {
@@ -22,7 +22,7 @@ $collapse-prefix-cls : "#{$tri-prefix}-collapse";
     @at-root &:last-child {
       @at-root &,
       & > .#{$collapse-prefix-cls}-header {
-        border-radius : 0 0 $border-radius-base $border-radius-base;
+        border-radius : 0 0 v.$border-radius-base v.$border-radius-base;
       }
     }
 
@@ -35,7 +35,7 @@ $collapse-prefix-cls : "#{$tri-prefix}-collapse";
 
       .arrow {
         @include collapse-close();
-        @include iconfont-mixin();
+        @include mixins.iconfont-mixin();
         position       : absolute;
         display        : inline-block;
         font-weight    : bold;
@@ -49,7 +49,7 @@ $collapse-prefix-cls : "#{$tri-prefix}-collapse";
   }
 
   @at-root &-anim-active {
-    transition : height .2s $ease-out;
+    transition : height .2s v.$ease-out;
   }
 
   @at-root &-content {
@@ -68,7 +68,7 @@ $collapse-prefix-cls : "#{$tri-prefix}-collapse";
 
   @at-root &-item:last-child {
     > .#{$collapse-prefix-cls}-content {
-      border-radius : 0 0 $border-radius-base $border-radius-base;
+      border-radius : 0 0 v.$border-radius-base v.$border-radius-base;
     }
   }
 

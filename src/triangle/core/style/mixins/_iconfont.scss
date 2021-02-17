@@ -1,4 +1,6 @@
+@use "sass:meta";
 @use "../variables" as v;
+@use "../vendor/math/helpers/strip-unit";
 
 @mixin iconfont-mixin() {
   display                 : inline-block;
@@ -29,9 +31,6 @@
 @mixin iconfont-size-under-12px($size, $rotate: 0deg) {
   display     : inline-block;
   $font-scale : $size / 12px;
-  font-size   : v.$font-size-base;
+  font-size   : 12px;
   transform   : scale($font-scale) rotate($rotate);
-  :root & {
-    font-size : v.$font-size-base; // reset ie9 and above
-  }
 }

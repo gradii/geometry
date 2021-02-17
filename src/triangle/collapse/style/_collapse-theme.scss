@@ -71,10 +71,10 @@ $collapse-active-bg  : theming.tri-color(theme.$background, background-color-act
       }
     }
 
-    @at-root &#{&}-item-disabled > #{&}-header {
+    @at-root & > #{&}-item-disabled > #{&}-header {
       @at-root &,
       & > .arrow {
-        color            : theming.tri-color(theme.$background, disabled-color);
+        color            : theming.tri-color(theme.$foreground, disabled-color);
         background-color : theming.tri-color(theme.$background, disabled-bg);
       }
     }
