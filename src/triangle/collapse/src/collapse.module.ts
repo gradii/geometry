@@ -33,7 +33,7 @@ import { CollapsesetComponent } from './collapseset.component';
  * <!-- example(tri-demo-collapse-custom) -->
  */
 @NgModule({
-  imports: [CommonModule, TriIconModule],
+  imports     : [CommonModule, TriIconModule],
   declarations: [CollapsesetComponent, CollapseComponent],
   exports     : [CollapsesetComponent, CollapseComponent],
 })

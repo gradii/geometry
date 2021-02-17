@@ -13,6 +13,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="input-number">input number</a></li>
       <li><a routerLink="alert">alert</a></li>
       <li><a routerLink="tabs">tabs</a></li>
+      <li><a routerLink="collapse">collapse</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>

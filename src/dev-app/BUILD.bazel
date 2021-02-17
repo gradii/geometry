@@ -17,6 +17,7 @@ ng_module(
     deps = [
         "//src/dev-app/dev-app",
         "//src/dev-app/input-number",
+        "//src/dev-app/collapse",
         "//src/dev-app/alert",
         "//src/dev-app/tabs",
 

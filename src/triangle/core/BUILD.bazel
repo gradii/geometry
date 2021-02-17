@@ -47,6 +47,8 @@ sass_library(
     name = "theming_scss_lib",
     srcs = [
         "themes/_all-theme.scss",
+        "themes/_theme.scss",
+        "themes/_theme-global.scss",
     ],
     deps = TRIANGLE_SCSS_LIBS,
 )

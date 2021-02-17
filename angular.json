@@ -90,6 +90,32 @@
           }
         }
       }
+    },
+    "dev-app": {
+      "projectType": "library",
+      "root": "src/dev-app",
+      "sourceRoot": "src/dev-app",
+      "prefix": "",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "src/dev-app/tsconfig.json",
+              "src/dev-app/tsconfig.json"
+            ],
+            "exclude": ["**/node_modules/**", "!src/dev-app/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/src/dev-app"],
+          "options": {
+            "jestConfig": "src/dev-app/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

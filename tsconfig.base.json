@@ -17,7 +17,6 @@
     "baseUrl": ".",
     "paths": {
       "@gradii/diagram/*": ["./src/diagram/*/public-api.ts"]
-//      "@applications/diagram": ["libs/diagram/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

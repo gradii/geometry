@@ -31,6 +31,9 @@
   "projects": {
     "diagram-demo": {
       "tags": []
+    },
+    "dev-app": {
+      "tags": []
     }
   }
 }

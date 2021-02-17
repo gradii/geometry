@@ -26,6 +26,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'tabs',
         loadChildren: '/tabs/dev-tabs.module#DevTabsModule'
+      },
+      {
+        path        : 'collapse',
+        loadChildren: '/collapse/dev-collapse.module#DevCollapseModule'
       }
     ]
   },
