@@ -71,10 +71,10 @@ function buildReleasePackages(useIvy, distPath, isSnapshotBuild) {
   const bazelBinPath = exec(`${bazelCmd} info bazel-bin`, true);
   const getOutputPath = pkgName => join(bazelBinPath, 'src', pkgName, 'npm_package');
 
-  // Build with "--config=release" or `--config=snapshot-build` so that Bazel
+  // Build with "--config=release" or `--config=snapshot` so that Bazel
   // runs the workspace stamping script. The stamping script ensures that the
   // version placeholder is populated in the release output.
-  const stampConfigArg = `--config=${isSnapshotBuild ? 'snapshot-build' : 'release'}`;
+  const stampConfigArg = `--config=${isSnapshotBuild ? 'snapshot' : 'release'}`;
   const ivySwitchConfigArg = `--config=${useIvy ? 'ivy' : 'view-engine'}`;
 
   // Walk through each release package and clear previous "npm_package" outputs. This is
