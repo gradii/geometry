@@ -1,33 +1,55 @@
-@import "../variables";
-@import './vendor-prefixes';
+@use "sass:color";
+@use "sass:map";
+@use "./vendor-prefixes";
+@use "../variables" as v;
+@use "../functions";
+@use "../contrast";
+@use "../mixins/border-radius";
+@use "../mixins/box-shadow";
+@use "../mixins/gradients";
+@use "../mixins/size";
+@use "../mixins/rfs";
+@use "../theming";
 
-$btn-font-weight                : $font-weight-normal !default;
-$btn-border-radius-base         : $border-radius-base !default;
-$btn-border-radius-sm           : $border-radius-base !default;
+@use "../../themes/theme";
 
-$btn-height-base                : 2rem !default;
-$btn-height-lg                  : 2.25rem !default;
-$btn-height-sm                  : 1.75rem !default;
+$btn-font-weight        : v.$font-weight-normal !default;
+$btn-border-radius-base : v.$border-radius-base !default;
+$btn-border-radius-sm   : v.$border-radius-base !default;
 
-$btn-padding-x-lg               : 1.125rem !default;
-$btn-padding-y-lg               : 0.375rem !default;
-$btn-font-size-lg               : $font-size-lg !default;
-$btn-line-height-lg             : 1 !default;
+$btn-height-base        : 2rem !default;
+$btn-height-lg          : 2.25rem !default;
+$btn-height-sm          : 1.75rem !default;
 
-$btn-padding-x-base             : 1rem !default;
-$btn-padding-y-base             : 0.3125rem !default;
-$btn-font-size-base             : $font-size-base !default;
-$btn-line-height-base           : 1 !default;
+$btn-padding-x-lg       : 1.125rem !default;
+$btn-padding-y-lg       : 0.375rem !default;
+$btn-font-size-lg       : v.$font-size-lg !default;
+$btn-line-height-lg     : 1 !default;
 
-$btn-padding-x-sm               : 0.5rem !default;
-$btn-padding-y-sm               : 0.25rem !default;
-$btn-font-size-sm               : $font-size-sm !default;
-$btn-line-height-sm             : 1 !default;
+$btn-padding-x-base     : 1rem !default;
+$btn-padding-y-base     : 0.3125rem !default;
+$btn-font-size-base     : v.$font-size-base !default;
+$btn-line-height-base   : 1 !default;
 
+$btn-padding-x-sm       : 0.5rem !default;
+$btn-padding-y-sm       : 0.25rem !default;
+$btn-font-size-sm       : v.$font-size-sm !default;
+$btn-line-height-sm     : 1 !default;
+
+$btn-circle-size        : $btn-height-base !default;
+$btn-circle-size-lg     : $btn-height-lg !default;
+$btn-circle-size-sm     : $btn-height-sm !default;
+
+$btn-box-shadow         : 0 !default;
+$btn-active-box-shadow  : none !default;
+$btn-focus-width        : 2px !default;
+
+$btn-primary-color      : green !default;
+$btn-primary-bg         : grey !default;
 
 // Mixin overriding default button styles like the gray background, the border, and the outline.
 @mixin tri-button-reset {
-  @include user-select(none);
+  @include vendor-prefixes.user-select(none);
   cursor                      : pointer;
   outline                     : none;
   border                      : none;
@@ -41,8 +63,8 @@ $btn-line-height-sm             : 1 !default;
   height      : $btn-height;
   line-height : $line-height;
 
-  @include font-size($font-size);
-  @include border-radius($border-radius);
+  @include rfs.font-size($font-size);
+  @include border-radius.border-radius($border-radius);
 }
 
 @mixin button-color($color, $background, $border) {
@@ -54,7 +76,7 @@ $btn-line-height-sm             : 1 !default;
     color : currentColor;
 
     &:after {
-      content    : '';
+      content    : "";
       position   : absolute;
       top        : 0;
       left       : 0;
@@ -106,8 +128,8 @@ $btn-line-height-sm             : 1 !default;
         $btn-border-radius-sm
     );
 
-    > .#{$iconfont-css-prefix} {
-      font-size : $font-size-base,
+    > .#{ v.$iconfont-css-prefix} {
+      font-size : v.$font-size-base,
     }
   }
 }
@@ -117,12 +139,12 @@ $btn-line-height-sm             : 1 !default;
 @mixin btn() {
   display          : inline-block;
   margin-bottom    : 0;
-  font-weight      : $font-weight-normal;
+  font-weight      : v.$font-weight-normal;
   text-align       : center;
   touch-action     : manipulation;
   cursor           : pointer;
   background-image : none;
-  border           : $border-width-base $border-style-base transparent;
+  border           : v.$border-width-base v.$border-style-base transparent;
   white-space      : nowrap;
   @include button-size(
       $btn-height-base,
@@ -134,10 +156,10 @@ $btn-line-height-sm             : 1 !default;
   );
   user-select      : none;
   vertical-align   : middle;
-  transition       : all .1s $ease-in-out;
+  transition       : all .1s v.$ease-in-out;
   position         : relative;
 
-  > .#{$iconfont-css-prefix} {
+  > .#{ v.$iconfont-css-prefix} {
     line-height : 1;
   }
 
@@ -162,7 +184,7 @@ $btn-line-height-sm             : 1 !default;
     cursor         : not-allowed;
     pointer-events : none;
     opacity        : 0.65;
-    @include box-shadow(none);
+    @include box-shadow.box-shadow(none);
   }
 
   &-lg {
@@ -199,16 +221,16 @@ $btn-line-height-sm             : 1 !default;
 }
 
 // default button style
-@mixin btn-default($theme) {
-  $foreground: map-get($theme, foreground);
-  $background: map-get($theme, background);
-  $primary: map-get($theme, primary);
+@mixin btn-default() {
+  $foreground : theme.$foreground;
+  $background : theme.$background;
+  $primary    : theme.$primary;
 
   @include button-variant-other(
-      tri-color($foreground, btn-default-color),
-      tri-color($foreground, btn-default-bg),
-      tri-color($foreground, btn-default-border),
-      tri-color($primary)
+      theming.tri-color($foreground, text-color),
+      theming.tri-color($background, component-background),
+      theming.tri-color($foreground, border-color-base),
+      theming.tri-color($primary)
   );
   &:hover,
   &:focus,
@@ -221,18 +243,18 @@ $btn-line-height-sm             : 1 !default;
 
 // circle button: the content only contains icon
 @mixin btn-circle($btnClassName: btn) {
-  @include square($btn-circle-size);
+  @include size.square($btn-circle-size);
   @include button-size($btn-circle-size,
     0, 0, $btn-font-size-base, $btn-line-height-base, 50%);
 
   &.#{$btnClassName}-lg {
-    @include square($btn-circle-size-lg);
+    @include size.square($btn-circle-size-lg);
     @include button-size($btn-circle-size-lg,
       0, 0, $btn-font-size-lg * 1.125, $btn-line-height-lg, 50%);
   }
 
   &.#{$btnClassName}-sm {
-    @include square($btn-circle-size-sm);
+    @include size.square($btn-circle-size-sm);
     @include button-size($btn-circle-size-sm,
       0, 0, $btn-font-size-sm, $btn-line-height-sm, 50%);
   }
@@ -304,38 +326,38 @@ $btn-line-height-sm             : 1 !default;
 @mixin button-variant(
   $background,
   $border,
-  $color: color-contrast($background),
-  $hover-background: darken($background, 7.5%),
-  $hover-border: darken($border, 10%),
-  $hover-color: color-contrast($hover-background),
-  $active-background: darken($background, 10%),
-  $active-border: darken($border, 12.5%),
-  $active-color: color-contrast($active-background),
+  $color: contrast.color-contrast($background),
+  $hover-background: color.adjust($background, $lightness: -7.5%),
+  $hover-border: color.adjust($border, $lightness: -10%),
+  $hover-color: contrast.color-contrast($hover-background),
+  $active-background: color.adjust($background, $lightness: -10%),
+  $active-border: color.adjust($border, $lightness: -12.5%),
+  $active-color: contrast.color-contrast($active-background),
   $disabled-background: $background,
   $disabled-border: $border,
   $disabled-color: $color,
 ) {
   color        : $color;
-  @include gradient-bg($background);
+  @include gradients.gradient-bg($background);
   border-color : $border;
-  @include box-shadow($btn-box-shadow);
+  @include box-shadow.box-shadow($btn-box-shadow);
 
   &:hover {
     color        : $hover-color;
-    @include gradient-bg($hover-background);
+    @include gradients.gradient-bg($hover-background);
     border-color : $hover-border;
   }
 
   &:focus,
   &.focus {
     color        : $hover-color;
-    @include gradient-bg($hover-background);
+    @include gradients.gradient-bg($hover-background);
     border-color : $hover-border;
     // Avoid using mixin so we can pass custom focus shadow properly
-    @if $enable-shadows {
-      box-shadow : $btn-box-shadow, 0 0 0 $btn-focus-width rgba(mix($color, $border, 15%), .5);
+    @if v.$enable-shadows {
+      box-shadow : $btn-box-shadow, 0 0 0 $btn-focus-width rgba(color.mix($color, $border, 15%), .5);
     } @else {
-      box-shadow : 0 0 0 $btn-focus-width rgba(mix($color, $border, 15%), .5);
+      box-shadow : 0 0 0 $btn-focus-width rgba(color.mix($color, $border, 15%), .5);
     }
   }
 
@@ -344,15 +366,15 @@ $btn-line-height-sm             : 1 !default;
     color            : $active-color;
     background-color : $active-background;
     // Remove CSS gradients if they're enabled
-    background-image : if($enable-gradients, none, null);
+    background-image : if(v.$enable-gradients, none, null);
     border-color     : $active-border;
 
     &:focus {
       // Avoid using mixin so we can pass custom focus shadow properly
-      @if $enable-shadows and $btn-active-box-shadow != none {
-        box-shadow : $btn-active-box-shadow, 0 0 0 $btn-focus-width rgba(mix($color, $border, 15%), .5);
+      @if v.$enable-shadows and $btn-active-box-shadow != none {
+        box-shadow : $btn-active-box-shadow, 0 0 0 $btn-focus-width rgba(color.mix($color, $border, 15%), .5);
       } @else {
-        box-shadow : 0 0 0 $btn-focus-width rgba(mix($color, $border, 15%), .5);
+        box-shadow : 0 0 0 $btn-focus-width rgba(color.mix($color, $border, 15%), .5);
       }
     }
   }
@@ -362,17 +384,17 @@ $btn-line-height-sm             : 1 !default;
     color            : $disabled-color;
     background-color : $disabled-background;
     // Remove CSS gradients if they're enabled
-    background-image : if($enable-gradients, none, null);
+    background-image : if(v.$enable-gradients, none, null);
     border-color     : $disabled-border;
   }
 }
 
 @mixin button-outline-variant(
   $color,
-  $color-hover: color-contrast($color),
+  $color-hover: contrast.color-contrast($color),
   $active-background: $color,
   $active-border: $color,
-  $active-color: color-contrast($active-background)
+  $active-color: contrast.color-contrast($active-background)
 ) {
   color        : $color;
   border-color : $color;
@@ -397,7 +419,7 @@ $btn-line-height-sm             : 1 !default;
 
     &:focus {
       // Avoid using mixin so we can pass custom focus shadow properly
-      @if $enable-shadows and $btn-active-box-shadow != none {
+      @if v.$enable-shadows and $btn-active-box-shadow != none {
         box-shadow : $btn-active-box-shadow, 0 0 0 $btn-focus-width rgba($color, .5);
       } @else {
         box-shadow : 0 0 0 $btn-focus-width rgba($color, .5);
@@ -409,6 +431,99 @@ $btn-line-height-sm             : 1 !default;
   &.disabled {
     color            : $color;
     background-color : transparent;
+  }
+}
+
+
+// button variant mixin
+
+@mixin button-variant-primary($color, $background, $border-color: $background) {
+  @include button-variant(
+      $background,
+      $border-color,
+      $color,
+      theming.tri-color-palette($color, 5),
+      theming.tri-color-palette($color, 5), //$hover-border,
+      $color, //$hover-color,
+      theming.tri-color-palette($border-color, 7), //$active-background,
+      theming.tri-color-palette($border-color, 7) //$active-border,
+      $color, //$active-color
+  );
+}
+
+@mixin button-variant-danger($color, $background, $border-color, $primary-color) {
+  @include button-variant(
+      $background,
+      $border-color,
+      $color,
+      $color, //$hover-background
+      $color, //$hover-border,
+      $primary-color, //$hover-color,
+      theming.tri-color-palette($border-color, 7), //$active-background,
+      theming.tri-color-palette($border-color, 7) //$active-border,
+      $primary-color, //$active-color
+  );
+}
+
+@mixin button-variant-ghost($color) {
+  @include button-variant(
+      transparent,
+      $color,
+      $color,
+      transparent,
+      theming.tri-color-palette($color, 5), //$hover-border,
+      theming.tri-color-palette($color, 5), //$hover-color,
+      transparent, //$active-background,
+      theming.tri-color-palette($color, 7) //$active-border,
+      theming.tri-color-palette($color, 7), //$active-color
+  );
+}
+
+@mixin button-variant-other($color, $background, $border-color, $primary-color) {
+  @include button-variant(
+      $background,
+      $border-color,
+      $color,
+      $background,
+      $primary-color, //$hover-border,
+      $primary-color, //$hover-color,
+      theming.tri-color-palette($border-color, 7), //$active-background,
+      theming.tri-color-palette($border-color, 7) //$active-border,
+      $color, //$active-color
+  );
+}
+
+
+@mixin btn-group-border(
+  $btn-group-class: btn-group,
+  $btn-group-border,
+  $btn-default-border
+) {
+  @at-root #{$btn-group-class} &:not(:first-child):not(:last-child) {
+    border-right-color : $btn-group-border;
+    border-left-color  : $btn-group-border;
+
+    @at-root &:disabled {
+      border-color : $btn-default-border;
+    }
+  }
+
+  @at-root #{$btn-group-class} &:first-child {
+    @at-root &:not(:last-child) {
+      border-right-color : $btn-group-border;
+      @at-root &[disabled] {
+        border-right-color : $btn-default-border;
+      }
+    }
+  }
+
+  @at-root
+  #{$btn-group-class} &:last-child:not(:first-child),
+  #{$btn-group-class} & + & {
+    border-left-color : $btn-group-border;
+    @at-root &[disabled] {
+      border-left-color : $btn-default-border;
+    }
   }
 }
 

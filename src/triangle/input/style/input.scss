@@ -1,20 +1,21 @@
-@import "../../core/themes/default-theme";
+@use "../../core/themes/theme";
+@use "../../core/style/variables" as v;
 
-@import "./input-mixin";
-@import "./search-input";
+@use "./input-mixin";
+@use "./search-input";
 
-@import "./input_variables";
+@use "./input-variables";
 
 // Input styles
-.#{$ant-prefix}-input {
-  @include input();
+.#{v.$tri-prefix}-input {
+  @include input-mixin.input();
 }
 
 // Input with affix: prefix or suffix
-.#{$ant-prefix}-input-affix-wrapper {
-  @include input-affix-wrapper("#{$ant-prefix}-input");
+.#{v.$tri-prefix}-input-affix-wrapper {
+  @include input-mixin.input-affix-wrapper("#{v.$tri-prefix}-input");
 
-  .#{$ant-prefix}-input {
+  .#{v.$tri-prefix}-input {
     min-height : 100%;
   }
 }

@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -10,8 +9,7 @@ import { ObserversModule } from '@angular/cdk/observers';
 import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { TriCommonModule } from '@gradii/triangle/core';
-import { TriRippleModule } from '@gradii/triangle/core/src/ripple';
+import { TriCommonModule, TriRippleModule } from '@gradii/triangle/core';
 import { TriInkBar } from './ink-bar';
 import { TriTab } from './tab';
 import { TriTabBody, TriTabBodyPortal } from './tab-body';

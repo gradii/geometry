@@ -1,21 +1,24 @@
-@import "../../core/themes/default-theme";
+@use "sass:map";
+@use "../../core/themes/theme";
+@use "../../core/style/theming";
+@use "../../core/style/variables" as v;
 
-$dawer-prefix-cls  : #{$ant-prefix}-drawer;
+$dawer-prefix-cls  : #{ v.$tri-prefix}-drawer;
 $drawer-prefix-cls : $dawer-prefix-cls;
 
 @mixin tri-drawer-theme($theme) {
-  $foreground : map-get($theme, foreground);
-  $background : map-get($theme, background);
+  $foreground : map.get($theme, foreground);
+  $background : map.get($theme, background);
 
   .#{$drawer-prefix-cls} {
     > * {
-      transition : transform $animation-duration-slow $ease-base-in, box-shadow $animation-duration-slow $ease-base-in;
+      transition : transform v.$animation-duration-slow v.$ease-base-in, box-shadow v.$animation-duration-slow v.$ease-base-in;
     }
 
     &-left {
       &.#{$drawer-prefix-cls}-open {
         .#{$drawer-prefix-cls}-content-wrapper {
-          box-shadow : $shadow-1-right;
+          box-shadow : v.$shadow-1-right;
         }
       }
     }
@@ -23,7 +26,7 @@ $drawer-prefix-cls : $dawer-prefix-cls;
     &-right {
       &.#{$drawer-prefix-cls}-open {
         .#{$drawer-prefix-cls}-content-wrapper {
-          box-shadow : $shadow-1-left;
+          box-shadow : v.$shadow-1-left;
         }
       }
     }
@@ -31,7 +34,7 @@ $drawer-prefix-cls : $dawer-prefix-cls;
     &-top {
       &.#{$drawer-prefix-cls}-open {
         .#{$drawer-prefix-cls}-content-wrapper {
-          box-shadow : $shadow-1-down;
+          box-shadow : v.$shadow-1-down;
         }
       }
     }
@@ -45,51 +48,51 @@ $drawer-prefix-cls : $dawer-prefix-cls;
 
       &.#{$drawer-prefix-cls}-open {
         .#{$drawer-prefix-cls}-content-wrapper {
-          box-shadow : $shadow-1-up;
+          box-shadow : v.$shadow-1-up;
         }
       }
     }
 
     &-title {
-      color : tri-color($foreground, heading-color);
+      color : theming.tri-color($foreground, heading-color);
     }
 
     &-content {
-      background-color : tri-color($background, component-background);
+      background-color : theming.tri-color($background, component-background);
       background-clip  : padding-box;
       border           : 0;
     }
 
     &-close {
-      color      : tri-color($foreground, text-color-secondary);
+      color      : theming.tri-color($foreground, text-color-secondary);
       background : transparent;
       border     : 0;
 
       &:focus,
       &:hover {
-        color : tri-color($foreground, icon-color-hover);
+        color : theming.tri-color($foreground, icon-color-hover);
       }
     }
 
     &-header {
-      color         : tri-color($foreground, text-color);
-      background    : tri-color($background, component-background);
-      border-bottom : $border-width-base $border-style-base tri-color($foreground, border-color-split);
-      border-radius : $border-radius-base $border-radius-base 0 0;
+      color         : theming.tri-color($foreground, text-color);
+      background    : theming.tri-color($background, component-background);
+      border-bottom : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-split);
+      border-radius : v.$border-radius-base v.$border-radius-base 0 0;
     }
 
     &-header-no-title {
-      color      : tri-color($foreground, text-color);
-      background : tri-color($background, component-background);
+      color      : theming.tri-color($foreground, text-color);
+      background : theming.tri-color($background, component-background);
     }
 
     &-mask {
-      background-color : $modal-mask-bg;
+      background-color : v.$modal-mask-bg;
     }
 
     &-open {
       &-content {
-        box-shadow : $shadow-2;
+        box-shadow : v.$shadow-2;
       }
     }
   }

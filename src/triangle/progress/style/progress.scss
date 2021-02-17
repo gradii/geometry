@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$progress-prefix-cls : "#{$ant-prefix}-progress" !default;
+$progress-prefix-cls : "#{$tri-prefix}-progress" !default;
 
 .#{$progress-prefix-cls} {
   display : inline-block;
@@ -28,19 +29,19 @@ $progress-prefix-cls : "#{$ant-prefix}-progress" !default;
   }
 
   @at-root &-inner {
-    display          : inline-block;
-    width            : 100%;
-    border-radius    : 100px;
-    vertical-align   : middle;
+    display        : inline-block;
+    width          : 100%;
+    border-radius  : 100px;
+    vertical-align : middle;
     @at-root .#{$progress-prefix-cls}-inline #{&} {
       border-radius : 0;
     }
   }
 
   @at-root &-bg {
-    border-radius    : 100px;
-    transition       : all .4s $ease-out-circ 0s;
-    position         : relative;
+    border-radius : 100px;
+    transition    : all .4s $ease-out-circ 0s;
+    position      : relative;
     @at-root .#{$progress-prefix-cls}-inline #{&} {
       border-radius : 0;
     }
@@ -74,7 +75,7 @@ $progress-prefix-cls : "#{$ant-prefix}-progress" !default;
       right         : 0;
       bottom        : 0;
       border-radius : 10px;
-      animation     : #{$ant-prefix}-progress-active 2.4s $ease-out-quint infinite;
+      animation     : #{$tri-prefix}-progress-active 2.4s $ease-out-quint infinite;
     }
 
     @at-root .#{$progress-prefix-cls}-inline#{&} .#{$progress-prefix-cls}-bg:before {
@@ -106,7 +107,7 @@ $progress-prefix-cls : "#{$ant-prefix}-progress" !default;
   }
 }
 
-@keyframes #{$ant-prefix}-progress-active {
+@keyframes #{$tri-prefix}-progress-active {
   0% {
     opacity : 0.1;
     width   : 0;

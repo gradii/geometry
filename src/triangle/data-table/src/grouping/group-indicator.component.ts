@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -20,7 +19,6 @@ import { GroupInfoService } from './group-info.service';
 @Component({
   selector           : '[triGroupIndicator], tri-group-indicator',
   changeDetection    : ChangeDetectionStrategy.OnPush,
-  preserveWhitespaces: false,
   template           : `
       <a href="#" class="tri-link" tabindex="-1" (click)="toggleDirection()">
          <span class="tri-icon"

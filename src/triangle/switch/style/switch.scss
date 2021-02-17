@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$switch-prefix-cls             : "#{$ant-prefix}-switch";
+$switch-prefix-cls             : "#{$tri-prefix}-switch";
 $switch-duration               : .36s;
 
 $switch-height                 : 1.5rem;
@@ -19,16 +20,16 @@ $switch-inner-active-scalar    : 1.5;
 $switch-inner-active-scalar-sm : 1.25;
 
 .#{$switch-prefix-cls} {
-  position         : relative;
-  display          : inline-block;
-  box-sizing       : border-box;
-  height           : $switch-height;
-  min-width        : $switch-height*2;
-  vertical-align   : middle;
-  border-radius    : $switch-height / 2;
-  cursor           : pointer;
-  transition       : all $switch-duration;
-  user-select      : none;
+  position       : relative;
+  display        : inline-block;
+  box-sizing     : border-box;
+  height         : $switch-height;
+  min-width      : $switch-height*2;
+  vertical-align : middle;
+  border-radius  : $switch-height / 2;
+  cursor         : pointer;
+  transition     : all $switch-duration;
+  user-select    : none;
 
   @at-root &-inner {
     color        : #fff;
@@ -40,15 +41,15 @@ $switch-inner-active-scalar-sm : 1.25;
   }
 
   @at-root &:after {
-    position         : absolute;
+    position      : absolute;
     @include square($switch-inner-height);
-    left             : $switch-inner-padding-x;
-    top              : $switch-inner-padding-y;
+    left          : $switch-inner-padding-x;
+    top           : $switch-inner-padding-y;
 
-    border-radius    : $switch-inner-height / 2;
-    content          : " ";
-    cursor           : pointer;
-    transition       : all $switch-duration $ease-in-out-circ;
+    border-radius : $switch-inner-height / 2;
+    content       : " ";
+    cursor        : pointer;
+    transition    : all $switch-duration $ease-in-out-circ;
   }
 
   @at-root &:active:after {

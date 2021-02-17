@@ -31,10 +31,6 @@
   "projects": {
     "diagram-demo": {
       "tags": []
-    },
-    "diagram-demo-e2e": {
-      "tags": [],
-      "implicitDependencies": ["diagram-demo"]
     }
   }
 }

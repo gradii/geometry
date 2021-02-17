@@ -1,15 +1,18 @@
-@import "../../core/themes/default-theme";
+@use "sass:map";
+@use "../../core/themes/theme";
+@use "../../core/style/theming";
+@use "../../core/style/variables" as v;
 
-$badge-prefix-cls  : "#{$ant-prefix}-badge";
-$number-prefix-cls : "#{$ant-prefix}-scroll-number";
+$badge-prefix-cls  : "#{ v.$tri-prefix}-badge";
+$number-prefix-cls : "#{ v.$tri-prefix}-scroll-number";
 
 @mixin tri-badge-theme($theme) {
-  $primary : map-get($theme, primary);
+  $primary : map.get($theme, primary);
 
   .#{$badge-prefix-cls} {
 
     @at-root &-count {
-      background : tri-color(tri-palette($theme, highlight));
+      background : theming.tri-color(theming.tri-palette($theme, highlight));
       color      : #fff;
       a,
       a:hover {
@@ -18,31 +21,31 @@ $number-prefix-cls : "#{$ant-prefix}-scroll-number";
     }
 
     @at-root &-dot {
-      background : tri-color(tri-palette($theme, highlight));
+      background : theming.tri-color(theming.tri-palette($theme, highlight));
       box-shadow : 0 0 0 1px #fff;
     }
 
     @at-root &-status {
       @at-root &-success {
-        background-color : tri-color(tri-palette($theme, success));
+        background-color : theming.tri-color(theming.tri-palette($theme, success));
       }
       @at-root &-processing {
-        background-color : tri-color(tri-palette($theme, primary));
+        background-color : theming.tri-color(theming.tri-palette($theme, primary));
         @at-root &:after {
-          border : 1px solid tri-color($primary);
+          border : 1px solid theming.tri-color($primary);
         }
       }
       @at-root &-default {
-        background-color : tri-color(tri-palette($theme, normal-color));
+        background-color : theming.tri-color(theming.tri-palette($theme, normal-color));
       }
       @at-root &-error {
-        background-color : tri-color(tri-palette($theme, error));
+        background-color : theming.tri-color(theming.tri-palette($theme, error));
       }
       @at-root &-warning {
-        background-color : tri-color(tri-palette($theme, warning));
+        background-color : theming.tri-color(theming.tri-palette($theme, warning));
       }
       @at-root &-text {
-        color : tri-color(tri-palette($theme, text-color));
+        color : theming.tri-color(theming.tri-palette($theme, text-color));
       }
     }
   }

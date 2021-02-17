@@ -1,39 +1,43 @@
-@import "../../core/themes/default-theme";
+@use "sass:map";
+@use "../../core/themes/theme";
+@use "../../core/style/theming";
+@use "../../core/style/variables" as v;
+@use "../../layout/style/layout-theme";
 
-$menu-prefix-cls : "#{$ant-prefix}-menu" !default;
+$foreground           : theme.$foreground;
+$background           : theme.$background;
+$primary              : theme.$primary;
 
-@mixin tri-menu-theme($theme) {
-  $foreground           : map-get($theme, foreground);
-  $background           : map-get($theme, background);
-  $primary              : map-get($theme, primary);
+$menu-prefix-cls      : #{v.$tri-prefix}-menu !default;
+$menu-collapsed-width : 64px !default;
+$menu-font-size       : v.$font-size-base !default;
 
-  $menu-collapsed-width : 64px !default;
-  $menu-font-size       : $font-size-base !default;
+// Menu
+// ---
+$menu-dark-bg         : layout-theme.$layout-header-background !default;
+$menu-dark-submenu-bg : #333 !default;
 
-  // Menu
-  // ---
-  $menu-dark-bg         : tri-color($background, layout-header-background);
-  $menu-dark-submenu-bg : #333 !default;
+@mixin tri-menu-theme() {
 
   // default theme
   .#{$menu-prefix-cls} {
-    box-shadow : $box-shadow-base;
-    color      : tri-color($foreground, text-color);
-    background : tri-color($foreground, component-background);
+    box-shadow : v.$box-shadow-base;
+    color      : theming.tri-color($foreground, text-color);
+    background : theming.tri-color($foreground, component-background);
 
     @at-root &-item-group-title {
-      color : tri-color($foreground, text-color-secondary);
+      color : theming.tri-color($foreground, text-color-secondary);
     }
 
     @at-root &-item:active,
     &-submenu-title:active {
-      background : tri-color($foreground, item-active-bg);
+      background : theming.tri-color($foreground, item-active-bg);
     }
 
     @at-root &-item > a {
-      color : tri-color($foreground, text-color);
+      color : theming.tri-color($foreground, text-color);
       @at-root &:hover {
-        color : tri-color($primary);
+        color : theming.tri-color($primary);
       }
       @at-root &:before {
         background-color : transparent;
@@ -41,7 +45,7 @@ $menu-prefix-cls : "#{$ant-prefix}-menu" !default;
     }
 
     @at-root &-item-divider {
-      background-color : tri-color($foreground, border-color-split);
+      background-color : theming.tri-color($foreground, border-color-split);
     }
 
     @at-root &-item:hover,
@@ -49,7 +53,7 @@ $menu-prefix-cls : "#{$ant-prefix}-menu" !default;
     &:not(#{&}-inline) #{&}-submenu-open,
     &-submenu-active,
     &-submenu-title:hover {
-      color : tri-color($primary);
+      color : theming.tri-color($primary);
     }
 
     @at-root &-horizontal > #{&}-item:hover,
@@ -59,46 +63,46 @@ $menu-prefix-cls : "#{$ant-prefix}-menu" !default;
     }
 
     @at-root &-item-selected {
-      color : tri-color($primary);
+      color : theming.tri-color($primary);
       > a,
       > a:hover {
-        color : tri-color($primary);
+        color : theming.tri-color($primary);
       }
     }
 
     @at-root &:not(#{&}-horizontal) #{&}-item-selected {
-      background-color : tri-color($foreground, item-active-bg);
+      background-color : theming.tri-color($foreground, item-active-bg);
     }
 
     @at-root & > #{&}-item-divider {
-      background-color : tri-color($foreground, border-color-split);
+      background-color : theming.tri-color($foreground, border-color-split);
     }
 
     @at-root &-submenu {
       > .#{$menu-prefix-cls} {
-        background-color : tri-color($background, component-background);
+        background-color : theming.tri-color($background, component-background);
       }
     }
 
     @at-root &-vertical #{&}-submenu-selected {
-      color : tri-color($primary);
+      color : theming.tri-color($primary);
       > a {
-        color : tri-color($primary);
+        color : theming.tri-color($primary);
       }
     }
 
     // Disabled state sets text to gray and nukes hover/tab effects
     @at-root &-item-disabled,
     &-submenu-disabled {
-      color        : tri-color($foreground, disabled-color) !important;
+      color        : theming.tri-color($foreground, disabled-color) !important;
       background   : none;
       border-color : transparent !important;
       > a {
-        color : tri-color($foreground, disabled-color) !important;
+        color : theming.tri-color($foreground, disabled-color) !important;
       }
 
       > .#{$menu-prefix-cls}-submenu-title {
-        color : tri-color($foreground, disabled-color) !important;
+        color : theming.tri-color($foreground, disabled-color) !important;
       }
     }
   }
@@ -107,7 +111,7 @@ $menu-prefix-cls : "#{$ant-prefix}-menu" !default;
   .#{$menu-prefix-cls} {
     @at-root &-dark,
     &-dark #{&}-sub {
-      color      : tri-color($foreground, text-color-secondary-dark);
+      color      : theming.tri-color($foreground, text-color-secondary-dark);
       background : $menu-dark-bg;
     }
 
@@ -128,7 +132,7 @@ $menu-prefix-cls : "#{$ant-prefix}-menu" !default;
     @at-root &-dark #{&}-item,
     &-dark #{&}-item-group-title,
     &-dark #{&}-item > a {
-      color : tri-color($foreground, text-color-secondary-dark);
+      color : theming.tri-color($foreground, text-color-secondary-dark);
     }
 
     @at-root &-dark#{&}-inline,
@@ -173,7 +177,7 @@ $menu-prefix-cls : "#{$ant-prefix}-menu" !default;
     }
 
     @at-root &#{&}-dark #{&}-item-selected {
-      background-color : tri-color($foreground, primary-color);
+      background-color : theming.tri-color($foreground, primary-color);
     }
 
     // Disabled state sets text to dark gray and nukes hover/tab effects
@@ -182,10 +186,10 @@ $menu-prefix-cls : "#{$ant-prefix}-menu" !default;
       @at-root &,
       & > a {
         opacity : 0.8;
-        color   : tri-color($foreground, disabled-color-dark) !important;
+        color   : theming.tri-color($foreground, disabled-color-dark) !important;
       }
       > .#{$menu-prefix-cls}-submenu-title {
-        color : tri-color($foreground, disabled-color-dark) !important;
+        color : theming.tri-color($foreground, disabled-color-dark) !important;
       }
     }
   }

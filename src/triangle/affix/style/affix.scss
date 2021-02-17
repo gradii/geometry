@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-.#{$ant-prefix}-affix {
+.#{$tri-prefix}-affix {
   position : fixed;
   z-index  : $zindex-affix;
 }

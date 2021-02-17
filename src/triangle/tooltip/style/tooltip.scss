@@ -1,15 +1,23 @@
-@import "../../core/themes/default-theme";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
 
-$tooltip-prefix-cls : "#{$ant-prefix}-tooltip";
+$tooltip-prefix-cls : "#{v.$tri-prefix}-tooltip";
+
+//* Tooltip max width
+$tooltip-max-width   : 250px !default;
+//** Tooltip arrow width
+$tooltip-arrow-width : 0.3125rem !default;
+//** Tooltip distance with trigger
+$tooltip-distance    : $tooltip-arrow-width - 0.0625rem + 0.25rem !default;
 
 // Base class
 .#{$tooltip-prefix-cls} {
   position    : absolute;
-  z-index     : $zindex-tooltip;
+  z-index     : v.$zindex-tooltip;
   display     : block;
   visibility  : visible;
-  font-size   : $font-size-base;
-  line-height : $line-height-base;
+  font-size   : v.$font-size-base;
+  line-height : v.$line-height-base;
 
   @at-root &-hidden {
     display : none;
@@ -41,12 +49,8 @@ $tooltip-prefix-cls : "#{$ant-prefix}-tooltip";
 .#{$tooltip-prefix-cls}-inner {
   max-width        : $tooltip-max-width;
   padding          : 8px 10px;
-  color            : $tooltip-color;
   text-align       : left;
   text-decoration  : none;
-  background-color : $tooltip-bg;
-  border-radius    : $border-radius-base;
-  box-shadow       : $box-shadow-base;
   min-height       : 34px;
 }
 
@@ -65,7 +69,6 @@ $tooltip-prefix-cls : "#{$ant-prefix}-tooltip";
   &-placement-topRight #{&}-arrow {
     bottom           : $tooltip-distance - $tooltip-arrow-width;
     border-width     : $tooltip-arrow-width $tooltip-arrow-width 0;
-    border-top-color : $tooltip-arrow-color;
   }
 
   @at-root &-placement-top #{&}-arrow {
@@ -86,7 +89,6 @@ $tooltip-prefix-cls : "#{$ant-prefix}-tooltip";
   &-placement-rightBottom #{&}-arrow {
     left               : $tooltip-distance - $tooltip-arrow-width;
     border-width       : $tooltip-arrow-width $tooltip-arrow-width $tooltip-arrow-width 0;
-    border-right-color : $tooltip-arrow-color;
   }
 
   @at-root &-placement-right #{&}-arrow {
@@ -107,7 +109,6 @@ $tooltip-prefix-cls : "#{$ant-prefix}-tooltip";
   &-placement-leftBottom #{&}-arrow {
     right             : $tooltip-distance - $tooltip-arrow-width;
     border-width      : $tooltip-arrow-width 0 $tooltip-arrow-width $tooltip-arrow-width;
-    border-left-color : $tooltip-arrow-color;
   }
 
   @at-root &-placement-left #{&}-arrow {
@@ -128,7 +129,6 @@ $tooltip-prefix-cls : "#{$ant-prefix}-tooltip";
   &-placement-bottomRight #{&}-arrow {
     top                 : $tooltip-distance - $tooltip-arrow-width;
     border-width        : 0 $tooltip-arrow-width $tooltip-arrow-width;
-    border-bottom-color : $tooltip-arrow-color;
   }
 
   @at-root &-placement-bottom #{&}-arrow {

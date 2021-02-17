@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -13,7 +12,6 @@ import { DetailTemplateDirective } from '../../table-shared/detail-template.dire
 
 @Component({
   selector           : '[triGridFilterRow]',
-  preserveWhitespaces: false,
   template           : `
               <th
                 [class.tri-group-cell]="true"

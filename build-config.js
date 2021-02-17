@@ -24,7 +24,6 @@ const mdcVersion = packageJson.requiredMDCVersion;
 /** License that will be placed inside of all created bundles. */
 const buildLicense = `/**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */`;

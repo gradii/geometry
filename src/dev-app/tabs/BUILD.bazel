@@ -1,0 +1,25 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "tabs",
+    srcs = glob(["**/*.ts"]),
+    assets = [
+        "dev-tabs.html",
+        ":dev_tabs_scss",
+    ],
+    deps = [
+        "//src/triangle/tabs",
+        "//src/triangle/core",
+        "//src/triangle/select",
+        "//src/triangle/input-number",
+        "@npm//@angular/common",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_tabs_scss",
+    src = "dev-tabs.scss",
+)

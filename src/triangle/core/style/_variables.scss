@@ -1,159 +1,48 @@
 // formatter:off
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 //@import "color/colors";
-@import "functions";
-@import "palette";
+@use "functions";
 
-// The prefix to use on all css classes from ant.
-$ant-prefix                             : tri !default;
+@forward "variables-palette";
+@forward "variables-animation";
+@forward "variables-background";
+@forward "variables-foreground";
+@forward "variables-layout";
+@forward "variables-other";
+@forward "variables-text";
 
-// Font
-$font-family-no-number                  : "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
-$font-family                            : "Helvetica Neue For Number", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
-$font-family-monospace                  : SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
-$code-family                            : Consolas, Menlo, Courier, monospace !default;
-
-$root-font-size                         : 16px !default;
-$font-size-base                         : 1rem !default;
-$font-size-lg                           : ($font-size-base * 1.125) !default;
-$font-size-sm                           : ($font-size-base * 0.875) !default;
-
-$font-weight-lighter                    : lighter !default;
-$font-weight-light                      : 300 !default;
-$font-weight-normal                     : 400 !default;
-$font-weight-bold                       : 700 !default;
-$font-weight-bolder                     : bolder !default;
-$font-weight-base                       : $font-weight-normal !default;
-
-$line-height-base                       : 1.25 !default;
-$line-height-lg                         : 1.375 !default;
-$line-height-sm                         : 1.15 !default;
-
-$border-radius-base                     : 4px !default; //no rem
-$border-radius-sm                       : 2px !default; //no rem
-$border-radius-lg                       : 6px !default; //no rem
-
-$h1-font-size                           : $font-size-base * 2.5 !default;
-$h2-font-size                           : $font-size-base * 2 !default;
-$h3-font-size                           : $font-size-base * 1.75 !default;
-$h4-font-size                           : $font-size-base * 1.5 !default;
-$h5-font-size                           : $font-size-base * 1.25 !default;
-$h6-font-size                           : $font-size-base !default;
 
 // Options
-$enable-caret                           : true !default;
-$enable-rounded                         : true !default;
-$enable-shadows                         : false !default;
-$enable-gradients                       : false !default;
-$enable-transitions                     : true !default;
-$enable-hover-media-query               : false !default; // Deprecated, no longer affects any compiled CSS
-$enable-grid-classes                    : true !default;
-$enable-print-styles                    : true !default;
-$enable-rfs                             : true !default;
-$enable-important-utilities             : false !default;
+$enable-caret               : true !default;
+$enable-rounded             : true !default;
+$enable-shadows             : false !default;
+$enable-gradients           : false !default;
 
-// vertical paddings
-$padding-lg                             : 1.5rem !default; // containers
-$padding-md                             : 1rem !default; // small containers and buttons
-$padding-sm                             : 0.75rem !default; // Form controls and items
-$padding-xs                             : 0.5rem !default; // small items
+$enable-hover-media-query   : false !default; // Deprecated, no longer affects any compiled CSS
+$enable-grid-classes        : true !default;
+$enable-print-styles        : true !default;
+//$enable-rfs                             : true !default;
+$enable-important-utilities : false !default;
 
-// vertical padding for all form controls
-$control-padding-horizontal             : $padding-sm !default;
-$control-padding-horizontal-sm          : $padding-xs !default;
-
-// form control
-$form-control-height-base               : 2rem !default;
-$form-control-height-lg                 : 2.5rem !default;
-$form-control-height-sm                 : 0.75rem !default;
-
-// ICONFONT
-$iconfont-css-prefix                    : anticon !default;
-$icon-url                               : "https://at.alicdn.com/t/font_zck90zmlh7hf47vi" !default;
 
 // LINK
-$link-decoration                        : none !default;
-$link-hover-decoration                  : none !default;
-
-// Animation
-$ease-base-out                          : cubic-bezier(0.7, 0.3, 0.1, 1) !default;
-$ease-base-in                           : cubic-bezier(0.9, 0, 0.3, 0.7) !default;
-$ease-out                               : cubic-bezier(0.215, 0.61, 0.355, 1) !default;
-$ease-in                                : cubic-bezier(0.55, 0.055, 0.675, 0.19) !default;
-$ease-in-out                            : cubic-bezier(0.645, 0.045, 0.355, 1) !default;
-$ease-out-back                          : cubic-bezier(0.12, 0.4, 0.29, 1.46) !default;
-$ease-in-back                           : cubic-bezier(0.71, -0.46, 0.88, 0.6) !default;
-$ease-in-out-back                       : cubic-bezier(0.71, -0.46, 0.29, 1.46) !default;
-$ease-out-circ                          : cubic-bezier(0.08, 0.82, 0.17, 1) !default;
-$ease-in-circ                           : cubic-bezier(0.6, 0.04, 0.98, 0.34) !default;
-$ease-in-out-circ                       : cubic-bezier(0.78, 0.14, 0.15, 0.86) !default;
-$ease-out-quint                         : cubic-bezier(0.23, 1, 0.32, 1) !default;
-$ease-in-quint                          : cubic-bezier(0.755, 0.05, 0.855, 0.06) !default;
-$ease-in-out-quint                      : cubic-bezier(0.86, 0, 0.07, 1) !default;
-
-// Border color
-$border-width-base                      : 1px !default; // width of the border for a component
-$border-style-base                      : solid !default; // style of a components border
-
-// Outline
-$outline-blur-size                      : 0 !default;
-$outline-width                          : 2px !default;
-
-// Shadow
-$shadow-color                           : rgba(0, 0, 0, .2) !default;
-$shadow-1-up                            : 0 -1px 6px $shadow-color !default;
-$shadow-1-down                          : 0 1px 6px $shadow-color !default;
-$shadow-1-left                          : -1px 0 6px $shadow-color !default;
-$shadow-1-right                         : 1px 0 6px $shadow-color !default;
-$shadow-2                               : 0 2px 8px $shadow-color !default;
-$box-shadow-base                        : $shadow-1-down !default;
-
-$box-shadow-sm                          : 0 .125rem .25rem rgba(black, .075) !default;
-$box-shadow                             : 0 .5rem 1rem rgba(black, .15) !default;
-$box-shadow-lg                          : 0 1rem 3rem rgba(black, .175) !default;
-$box-shadow-inset                       : inset 0 1px 2px rgba(black, .075) !default;
+$link-decoration            : none !default;
+$link-hover-decoration      : none !default;
 
 
 // Checkbox
-$checkbox-size                          : 1rem !default;
+$checkbox-size              : 1rem !default;
 
 // Radio
 //$radio-size             : 1rem !default;
 
-
-// Media queries breakpoints
-// Extra small screen / phone
-$screen-xs                              : 480px !default;
-$screen-xs-min                          : $screen-xs !default;
-
-// Small screen / tablet
-$screen-sm                              : 768px !default;
-$screen-sm-min                          : $screen-sm !default;
-
-// Medium screen / desktop
-$screen-md                              : 992px !default;
-$screen-md-min                          : $screen-md !default;
-
-// Large screen / wide desktop
-$screen-lg                              : 1200px !default;
-$screen-lg-min                          : $screen-lg !default;
-
-// Extra Large screen / full hd
-$screen-xl                              : 1600px !default;
-$screen-xl-min                          : $screen-xl !default;
-
-// provide a maximum
-$screen-xs-max                          : ($screen-sm-min - 1px) !default;
-$screen-sm-max                          : ($screen-md-min - 1px) !default;
-$screen-md-max                          : ($screen-lg-min - 1px) !default;
-$screen-lg-max                          : ($screen-xl-min - 1px) !default;
 
 // Grid breakpoints
 //
 // Define the minimum dimensions at which your layout will change,
 // adapting to different screen sizes, for use in media queries.
 
-$grid-breakpoints                       : (
+$grid-breakpoints           : (
   xs: 0,
   sm: 576px,
   md: 768px,
@@ -161,69 +50,32 @@ $grid-breakpoints                       : (
   xl: 1200px
 ) !default;
 
-@include _assert-ascending($grid-breakpoints, "$grid-breakpoints");
-@include _assert-starts-at-zero($grid-breakpoints, "$grid-breakpoints");
+@include functions.assert-ascending($grid-breakpoints, "$grid-breakpoints");
+@include functions.assert-starts-at-zero($grid-breakpoints, "$grid-breakpoints");
 
 
 // Grid containers
 //
 // Define the maximum width of `.container` for different screen sizes.
 
-$container-max-widths                   : (
+$container-max-widths       : (
   sm: 540px,
   md: 720px,
   lg: 960px,
   xl: 1140px
 ) !default;
 
-@include _assert-ascending($container-max-widths, "$container-max-widths");
+@include functions.assert-ascending($container-max-widths, "$container-max-widths");
 
 
 // Grid system
-$grid-columns                           : 24 !default;
-$grid-gutter-width                      : 0 !default;
-
-
-// z-index list
-$zindex-table-fixed                     : auto !default;
-$zindex-affix                           : 10 !default;
-$zindex-back-top                        : 10 !default;
-$zindex-badge                           : 10 !default;
-$zindex-picker-panel                    : 10 !default;
-$zindex-popup-close                     : 10 !default;
-$zindex-modal-mask                      : 100 !default;
-$zindex-modal                           : 1000 !default;
-$zindex-notification                    : 1100 !default;
-$zindex-message                         : 1100 !default;
-$zindex-popover                         : 1300 !default;
-$zindex-picker                          : 1500 !default;
-$zindex-dropdown                        : 1500 !default;
-$zindex-tooltip                         : 1600 !default;
-
-// Animation
-$animation-duration-slow                : .3s !default; // Modal
-$animation-duration-base                : .2s !default;
-$animation-duration-fast                : .1s !default; // Tooltip
-
-// Tooltip
-// ---
-//* Tooltip max width
-$tooltip-max-width                      : 250px !default;
-//** Tooltip text color
-$tooltip-color                          : #fff !default;
-//** Tooltip background color
-$tooltip-bg                             : rgba(64, 64, 64, .85) !default;
-//** Tooltip arrow width
-$tooltip-arrow-width                    : 0.3125rem !default;
-//** Tooltip distance with trigger
-$tooltip-distance                       : $tooltip-arrow-width - 0.0625rem + 0.25rem !default;
-//** Tooltip arrow color
-$tooltip-arrow-color                    : $tooltip-bg !default;
+$grid-columns               : 24 !default;
+$grid-gutter-width          : 0 !default;
 
 
 // Modal
 // --
-$modal-mask-bg                          : rgba(55, 55, 55, 0.6) !default;
+$modal-mask-bg              : rgba(55, 55, 55, 0.6) !default;
 
 
 // Table
@@ -238,92 +90,33 @@ $modal-mask-bg                          : rgba(55, 55, 55, 0.6) !default;
 
 // Carousel
 // ---
-$carousel-dot-width                     : 1rem !default;
-$carousel-dot-height                    : 0.1875rem !default;
-$carousel-dot-active-width              : 1.5rem !default;
-
-// Badge
-// ---
-$badge-height                           : 1.25rem !default;
-$badge-dot-size                         : .5rem !default;
-$badge-font-size                        : $font-size-base !default;
+$carousel-dot-width         : 1rem !default;
+$carousel-dot-height        : 0.1875rem !default;
+$carousel-dot-active-width  : 1.5rem !default;
 
 
-// Spacing
-//
-// Control the default styling of most Bootstrap elements by modifying these
-// variables. Mostly focused on spacing.
-// You can add more entries to the $spacers map, should you need more variation.
+$tri-xsmall                 : "max-width: 599px";
+$tri-small                  : "max-width: 959px";
 
-$spacer                                 : 1rem !default;
-$spacers                                : (
-  0: 0,
-  1: $spacer * .25,
-  2: $spacer * .5,
-  3: $spacer,
-  4: $spacer * 1.5,
-  5: $spacer * 3,
-) !default;
-
-$negative-spacers                       : negativify-map($spacers) !default;
-
-
-// Media queries
-// TODO(josephperrott): Change $tri-xsmall and $tri-small usages to rely on BreakpointObserver,
-$tri-xsmall                             : 'max-width: 599px';
-$tri-small                              : 'max-width: 959px';
-
-// TODO: Revisit all z-indices before beta
 // z-index master list
 
-$z-index-fab                            : 20 !default;
-$z-index-drawer                         : 100 !default;
-
-// Global constants
-$pi                                     : 3.14159265;
+$z-index-fab                : 20 !default;
+$z-index-drawer             : 100 !default;
 
 // Padding between input toggles and their labels
-$tri-toggle-padding                     : 8px !default;
+$tri-toggle-padding         : 8px !default;
 // Width and height of input toggles
-$tri-toggle-size                        : 20px !default;
-
-// Easing Curves
-// TODO(jelbourn): all of these need to be revisited
-
-// The default animation curves used by material design.
-$tri-linear-out-slow-in-timing-function : cubic-bezier(0, 0, 0.2, 0.1) !default;
-$tri-fast-out-slow-in-timing-function   : cubic-bezier(0.4, 0, 0.2, 1) !default;
-$tri-fast-out-linear-in-timing-function : cubic-bezier(0.4, 0, 1, 1) !default;
-
-$ease-in-out-curve-function             : cubic-bezier(0.35, 0, 0.25, 1) !default;
-
-$swift-ease-out-duration                : 400ms !default;
-$swift-ease-out-timing-function         : cubic-bezier(0.25, 0.8, 0.25, 1) !default;
-$swift-ease-out                         : all $swift-ease-out-duration $swift-ease-out-timing-function !default;
-
-$swift-ease-in-duration                 : 300ms !default;
-$swift-ease-in-timing-function          : cubic-bezier(0.55, 0, 0.55, 0.2) !default;
-$swift-ease-in                          : all $swift-ease-in-duration $swift-ease-in-timing-function !default;
-
-$swift-ease-in-out-duration             : 500ms !default;
-$swift-ease-in-out-timing-function      : $ease-in-out-curve-function !default;
-$swift-ease-in-out                      : all $swift-ease-in-out-duration $swift-ease-in-out-timing-function !default;
-
-$swift-linear-duration                  : 80ms !default;
-$swift-linear-timing-function           : linear !default;
-$swift-linear                           : all $swift-linear-duration $swift-linear-timing-function !default;
+$tri-toggle-size            : 20px !default;
 
 
 // Color
-$color-contrast-dark                    : #212529 !default;
-$color-contrast-light                   : #fff !default;
-$heading-color                          : #262626 !default;
-$text-color                             : #595959 !default;
+$color-contrast-dark        : #212529 !default;
+$color-contrast-light       : #fff !default;
 
 // The contrast ratio to reach against white, to determine if color changes from "light" to "dark". Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
 // See https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
-$min-contrast-ratio                     : 3 !default;
+$min-contrast-ratio         : 3 !default;
 
 
 //Form
-$form-item-trailing-colon               : true !default;
+$form-item-trailing-colon   : true !default;

@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$empty-prefix-cls : #{$ant-prefix}-empty;
+$empty-prefix-cls : #{$tri-prefix}-empty;
 $empty-font-size  : $font-size-base !default;
 
 .#{$empty-prefix-cls} {

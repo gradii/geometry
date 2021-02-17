@@ -23,7 +23,7 @@ indent_size=2
 indent_style=space
 indent_size=2
 ij_css_value_alignment = on_colon
-ij_scss_value_alignment = on_colon
+ij_scss_value_alignment = 1
 
 [{*.yml,*.yaml}]
 indent_style=space

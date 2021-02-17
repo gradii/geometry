@@ -1,4 +1,4 @@
-$notification-prefix-cls    : "#{$ant-prefix}-notification";
+$notification-prefix-cls    : "#{$tri-prefix}-notification";
 $notification-width         : 335px;
 $notification-padding       : 16px;
 $notification-margin-bottom : 10px;
@@ -51,7 +51,7 @@ $notification-margin-bottom : 10px;
         display          : block;
         max-width        : 4px;
         @at-root &:before {
-          content        : '';
+          content        : "";
           display        : block;
           padding-bottom : 100%;
         }

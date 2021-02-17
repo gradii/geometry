@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$dawer-prefix-cls      : #{$ant-prefix}-drawer;
+$dawer-prefix-cls      : #{$tri-prefix}-drawer;
 $drawer-prefix-cls     : $dawer-prefix-cls;
 $drawer-header-padding : 16px 24px;
 $drawer-body-padding   : 24px;
@@ -125,10 +126,10 @@ $drawer-body-padding   : 24px;
   }
 
   &-content {
-    position         : relative;
-    z-index          : 1;
-    background-clip  : padding-box;
-    border           : 0;
+    position        : relative;
+    z-index         : 1;
+    background-clip : padding-box;
+    border          : 0;
   }
 
   &-close {

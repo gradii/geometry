@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -43,7 +42,6 @@ interface Position {
   selector           : 'tri-modal',
   viewProviders      : [ModalSubject],
   encapsulation      : ViewEncapsulation.None,
-  preserveWhitespaces: false,
   template           : `
       <div [ngClass]="_customClass">
           <div [ngClass]="_maskClassMap"

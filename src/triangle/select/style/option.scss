@@ -1,8 +1,9 @@
-@import '../../core/style/component_mixins/menu-common';
+@use "../../core/style/mixins";
+@use "../../core/style/variables";
 
-$option-prefix-cls    : "#{$ant-prefix}-option";
+$option-prefix-cls    : "#{mixins.$tri-prefix}-option";
 
-$option-group-padding : rem-convert(rem, 14px);
+$option-group-padding : 0.875rem;
 
 .#{$option-prefix-cls} {
   @include menu-item-base();
@@ -17,9 +18,9 @@ $option-group-padding : rem-convert(rem, 14px);
 
   max-width      : 100%;
 
-  padding        : rem-convert(rem, 5px) $control-padding-horizontal;
+  padding        : 0.3125rem mixins.$control-padding-horizontal;
   overflow       : hidden;
-  color          : $text-color;
+  color          : mixins.$text-color;
   font-weight    : normal;
   //line-height   : rem-convert(rem, 22px);
   //line-height    : 22px;
@@ -27,18 +28,18 @@ $option-group-padding : rem-convert(rem, 14px);
   text-overflow  : ellipsis;
   transition     : background 0.3s ease;
 
-  &[aria-disabled='true'] {
+  &[aria-disabled="true"] {
     user-select : none;
     cursor      : default;
   }
 
 
   @at-root &:first-child {
-    @include border-radius(($border-radius-base $border-radius-base 0 0));
+    @include mixins.border-radius((mixins.$border-radius-base mixins.$border-radius-base 0 0));
   }
 
   @at-root &:last-child {
-    @include border-radius((0 0 $border-radius-base $border-radius-base));
+    @include mixins.border-radius((0 0 mixins.$border-radius-base mixins.$border-radius-base));
   }
 
   @at-root &:hover:not(#{&}-disabled),
@@ -49,7 +50,7 @@ $option-group-padding : rem-convert(rem, 14px);
   @at-root &-selected {
     background-color : $background-color-base;
     font-weight      : bold;
-    color            : $text-color;
+    color            : mixins.$text-color;
   }
 
   @at-root &-active {
@@ -73,7 +74,7 @@ $option-group-padding : rem-convert(rem, 14px);
     padding-left : $option-group-padding * 2;
   }
 
-  [dir='rtl'] & {
+  [dir="rtl"] & {
     padding-left  : $option-group-padding;
     padding-right : $option-group-padding * 2;
   }

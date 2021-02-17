@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -33,7 +32,6 @@ import { SelectService } from './select.service';
   selector           : '[tri-option-container]',
   changeDetection    : ChangeDetectionStrategy.OnPush,
   encapsulation      : ViewEncapsulation.None,
-  preserveWhitespaces: false,
   templateUrl        : './option-container.component.html'
 })
 export class OptionContainerComponent implements OnDestroy, OnInit {

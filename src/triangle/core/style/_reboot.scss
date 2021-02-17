@@ -1,5 +1,7 @@
-@import "./variables";
-@import "./mixins";
+@use "./variables" as v;
+@use "./mixins";
+@use "mixins/clearfix";
+@use "mixins/size";
 
 @mixin tri-reboot() {
 
@@ -34,7 +36,7 @@
 
   // HTML & Body reset
   html, body {
-    @include square(100%);
+    @include size.square(100%);
   }
 
   // remove the clear button of a text input control in IE10+
@@ -79,11 +81,11 @@
   // 2. As a best practice, apply a default `body-background`.
 
   body {
-    margin           : 0; // 1
-    font-family      : $font-family;
-    font-size        : $font-size-base;
-    line-height      : $line-height-base;
-    color            : $text-color;
+    margin      : 0; // 1
+    font-family : v.$font-family;
+    font-size   : v.$font-size-base;
+    line-height : v.$line-height-base;
+    color       : v.$text-color;
     //background-color : $body-background;
   }
   // Suppress the focus outline on elements that cannot be accessed via keyboard.
@@ -117,7 +119,7 @@
   h1, h2, h3, h4, h5, h6 {
     margin-top    : 0;
     margin-bottom : .5em;
-    color         : $heading-color;
+    color         : v.$heading-color;
     font-weight   : 500;
   }
 
@@ -225,7 +227,7 @@
   a {
     //color                        : $link-color;
     background-color             : transparent; // remove the gray background on active links in IE 10.
-    text-decoration              : $link-decoration;
+    text-decoration              : v.$link-decoration;
     outline                      : none;
     cursor                       : pointer;
     transition                   : color .3s;
@@ -247,7 +249,7 @@
     &:active,
     &:hover {
       outline         : 0;
-      text-decoration : $link-hover-decoration;
+      text-decoration : v.$link-hover-decoration;
     }
 
     &[disabled] {
@@ -265,7 +267,7 @@
   code,
   kbd,
   samp {
-    font-family : $code-family;
+    font-family : v.$code-family;
     font-size   : 1em; // Correct the odd `em` font sizing in all browsers.
   }
 
@@ -500,7 +502,7 @@
   }
 
   mark {
-    padding          : .2em;
+    padding : .2em;
     //background-color : $yellow-1;
   }
 
@@ -511,6 +513,6 @@
 
   // Utility classes
   .clearfix {
-    @include clearfix();
+    @include clearfix.clearfix();
   }
 }

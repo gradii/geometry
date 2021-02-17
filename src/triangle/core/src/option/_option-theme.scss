@@ -1,55 +1,57 @@
-@import '../../style/palette';
-@import '../../style/theming';
-@import '../../style/typography/typography-utils';
+@use "sass:map";
+@use "../../style/theming";
+@use "../../style/variables" as v;
+@use "../../style/typography/typography-utils";
+@use "../../themes/theme" as theme;
 
-@mixin tri-option-theme($theme) {
-  $foreground : map-get($theme, foreground);
-  $background : map-get($theme, background);
-  $primary    : map-get($theme, primary);
-  $accent     : map-get($theme, accent);
-  $warn       : map-get($theme, warn);
+@mixin tri-option-theme() {
+  $foreground : theme.$foreground;
+  $background : theme.$background;
+  $primary    : theme.$primary;
+  $secondary  : theme.$secondary;
+  $warning    : theme.$warning;
 
   .tri-option {
-    color : tri-color($foreground, text);
+    color : theming.tri-color($foreground, text);
 
     &:hover:not(.tri-option-disabled),
     &:focus:not(.tri-option-disabled) {
-      background : tri-color($background, hover);
+      background : theming.tri-color($background, hover);
     }
 
     // In multiple mode there is a checkbox to show that the option is selected.
     &.tri-selected:not(.tri-option-multiple):not(.tri-option-disabled) {
-      background : tri-color($background, hover);
+      background : theming.tri-color($background, hover);
     }
 
     &.tri-active {
-      background : tri-color($background, hover);
-      color      : tri-color($foreground, text);
+      background : theming.tri-color($background, hover);
+      color      : theming.tri-color($foreground, text);
     }
 
     &.tri-option-disabled {
-      color : tri-color($foreground, hint-text);
+      color : theming.tri-color($foreground, hint-text);
     }
   }
 
   .tri-primary .tri-option.tri-selected:not(.tri-option-disabled) {
-    color : tri-color($primary, text);
+    color : theming.tri-color($primary, text);
   }
 
   .tri-accent .tri-option.tri-selected:not(.tri-option-disabled) {
-    color : tri-color($accent, text);
+    color : theming.tri-color($secondary, text);
   }
 
   .tri-warn .tri-option.tri-selected:not(.tri-option-disabled) {
-    color : tri-color($warn, text);
+    color : theming.tri-color($warning, text);
   }
 }
 
 @mixin tri-option-typography($config) {
   .tri-option {
     font     : {
-      family : tri-font-family($config);
-      size   : tri-font-size($config, subheading-2);
+      family : typography-utils.tri-font-family($config);
+      size   : typography-utils.tri-font-size($config, subheading-2);
     }
   }
 }

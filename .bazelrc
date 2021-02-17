@@ -42,8 +42,8 @@ test --test_output=errors
 build:release --workspace_status_command="node ./tools/bazel-stamp-vars.js"
 build:release --stamp
 
-build:snapshot-build --workspace_status_command="node ./tools/bazel-stamp-vars.js --snapshot"
-build:snapshot-build --stamp
+build:snapshot --workspace_status_command="node ./tools/bazel-stamp-vars.js --snapshot"
+build:snapshot --stamp
 
 ################################
 # View Engine / Ivy toggle     #

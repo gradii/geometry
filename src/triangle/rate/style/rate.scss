@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$rate-prefix-cls : "#{$ant-prefix}-rate";
+$rate-prefix-cls : "#{$tri-prefix}-rate";
 
 .#{$rate-prefix-cls} {
   margin         : 0;
@@ -18,12 +19,12 @@ $rate-prefix-cls : "#{$ant-prefix}-rate";
   }
 
   @at-root &-star {
-    margin       : 0 8px 0 0;
-    padding      : 0;
-    display      : inline-block;
-    position     : relative;
-    transition   : all .3s;
-    cursor       : pointer;
+    margin     : 0 8px 0 0;
+    padding    : 0;
+    display    : inline-block;
+    position   : relative;
+    transition : all .3s;
+    cursor     : pointer;
 
     @at-root &-first,
     &-second {

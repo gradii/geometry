@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$slider-prefix-cls          : "#{$ant-prefix}-slider";
+$slider-prefix-cls          : "#{$tri-prefix}-slider";
 // tooltip
 $slider-tooltip-arrow-width : 0.25rem;
 $slider-tooltip-distance    : $slider-tooltip-arrow-width + 0.25rem;

@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -13,7 +12,6 @@ import { FilterService } from '../filter.service';
 
 @Component({
   selector           : 'tri-data-table-string-filter-cell',
-  preserveWhitespaces: false,
   template           : `
                          <tri-data-table-filter-wrapper-cell
                            [column]="column"

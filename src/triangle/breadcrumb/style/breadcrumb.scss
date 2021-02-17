@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$breadcrumb-prefix-cls : "#{$ant-prefix}-breadcrumb";
+$breadcrumb-prefix-cls : "#{$tri-prefix}-breadcrumb";
 
 .#{$breadcrumb-prefix-cls} {
   font-size : $font-size-base;

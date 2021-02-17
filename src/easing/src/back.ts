@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -54,7 +53,9 @@ export class BackInOut {
   }
 
   public getRatio(p: number): number {
-    return ((p *= 2) < 1) ? 0.5 * p * p * ((this.overshoot + 1) * p - this.overshoot) : 0.5 * ((p -= 2) * p * ((this.overshoot + 1) * p + this.overshoot) + 2);
+    return ((p *= 2) < 1) ?
+      0.5 * p * p * ((this.overshoot + 1) * p - this.overshoot) :
+      0.5 * ((p -= 2) * p * ((this.overshoot + 1) * p + this.overshoot) + 2);
   }
 }
 

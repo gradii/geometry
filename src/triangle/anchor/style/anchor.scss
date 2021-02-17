@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-.#{$ant-prefix} {
+.#{$tri-prefix} {
   @at-root &-anchor {
     position : relative;
 
@@ -11,23 +12,23 @@
       top      : 0;
 
       @at-root &:before {
-        content          : ' ';
-        position         : relative;
-        width            : 2px;
-        height           : 100%;
-        display          : block;
-        margin           : 0 auto;
+        content  : " ";
+        position : relative;
+        width    : 2px;
+        height   : 100%;
+        display  : block;
+        margin   : 0 auto;
       }
 
       @at-root &-ball {
-        display          : none;
-        position         : absolute;
-        width            : 9px;
-        height           : 9px;
-        border-radius    : 9px;
-        left             : 50%;
-        transition       : top .3s ease-in-out;
-        transform        : translateX(-50%);
+        display       : none;
+        position      : absolute;
+        width         : 9px;
+        height        : 9px;
+        border-radius : 9px;
+        left          : 50%;
+        transition    : top .3s ease-in-out;
+        transform     : translateX(-50%);
         @at-root &.visible {
           display : inline-block;
         }

@@ -1,7 +1,7 @@
-@import '../../style/legend/menu-common';
-@import '../../style/legend/vendor-prefixes';
-@import '../../style/legend/layout-common';
-@import '../../style/cdk/a11y';
+@import "../../style/legend/menu-common";
+@import "../../style/legend/vendor-prefixes";
+@import "../../style/legend/layout-common";
+@import "../../style/cdk/a11y";
 
 .tri-option {
   @include tri-menu-item-base();
@@ -15,7 +15,7 @@
   align-items                 : center;
   -webkit-tap-highlight-color : transparent;
 
-  &[aria-disabled='true'] {
+  &[aria-disabled="true"] {
     @include user-select(none);
     cursor : default;
   }
@@ -23,7 +23,7 @@
   .tri-optgroup &:not(.tri-option-multiple) {
     padding-left : $tri-menu-side-padding * 2;
 
-    [dir='rtl'] & {
+    [dir="rtl"] & {
       padding-left  : $tri-menu-side-padding;
       padding-right : $tri-menu-side-padding * 2;
     }
@@ -78,7 +78,7 @@
   $margin      : $tri-menu-side-padding / 2;
   margin-right : $margin;
 
-  [dir='rtl'] & {
+  [dir="rtl"] & {
     margin-left  : $margin;
     margin-right : 0;
   }

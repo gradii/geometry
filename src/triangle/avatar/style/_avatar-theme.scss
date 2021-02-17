@@ -1,15 +1,16 @@
-@import "../../core/themes/default-theme";
+@use "../../core/themes/theme";
+@use "../../core/style/variables" as v;
 
-$avatar-prefix-cls : "#{$ant-prefix}-avatar";
+$avatar-prefix-cls : "#{ v.$tri-prefix}-avatar";
 
 @mixin tri-avatar-theme($theme) {
   // Avatar
-  $avatar-bg                      : #ccc !default;
-  $avatar-color                   : #fff !default;
+  $avatar-bg    : #ccc !default;
+  $avatar-color : #fff !default;
 
   .#{$avatar-prefix-cls} {
-    background  : $avatar-bg;
-    color       : $avatar-color;
+    background : $avatar-bg;
+    color      : $avatar-color;
   }
 
 }

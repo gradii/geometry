@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -33,7 +32,7 @@ export class InterpolateObject {
     for (let [key, val] of Object.entries(this.i)) {
       this.c[key] = val(t);
     }
-    
+
     return this.c;
   }
 }

@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$popover-prefix-cls        : "#{$ant-prefix}-popover";
+$popover-prefix-cls        : "#{$tri-prefix}-popover";
 
 // Popover
 // ---

@@ -1,11 +1,12 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$alert-prefix-cls    : #{$ant-prefix}-alert;
+$alert-prefix-cls : #{$tri-prefix}-alert;
 
 .#{$alert-prefix-cls} {
-  @include reset-component;
+  @include reset-component();
   position      : relative;
-  padding       : .5rem 2.375rem .5rem 2.375rem;
+  padding       : .5rem 2.375rem .5rem 1rem;
   border-radius : $border-radius-base;
   font-size     : $font-size-base;
   line-height   : $line-height-base;
@@ -20,10 +21,9 @@ $alert-prefix-cls    : #{$ant-prefix}-alert;
   }
 
   @at-root &-icon {
-    font-size : $font-size-lg;
-    top       : .5rem + $font-size-base * $line-height-base / 2 - $font-size-lg / 2;
-    left      : 1rem;
-    position  : absolute;
+    font-size    : $font-size-lg;
+    display      : inline-block;
+    margin-right : 4px;
   }
 
   @at-root &-description {
@@ -33,7 +33,7 @@ $alert-prefix-cls    : #{$ant-prefix}-alert;
   }
 
   @at-root &-close-icon {
-    font-size   : $font-size-base;
+    font-size   : 12px;
     position    : absolute;
     right       : 1rem;
     top         : .625rem;
@@ -75,7 +75,7 @@ $alert-prefix-cls    : #{$ant-prefix}-alert;
     top       : 16px;
     right     : 16px;
     cursor    : pointer;
-    font-size : $font-size-base;
+    font-size : 12px;
   }
 
   @at-root &-with-description #{&}-message {

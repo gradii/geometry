@@ -1,3 +1,5 @@
+@use "../variables" as v;
+
 @mixin fade-motion($className, $keyframeName) {
   @include make-motion($className, $keyframeName);
   .#{$className}-enter,
@@ -15,10 +17,10 @@
   .#{$className}-enter,
   .#{$className}-appear {
     opacity                   : 0;
-    animation-timing-function : $ease-out-circ;
+    animation-timing-function : v.$ease-out-circ;
   }
   .#{$className}-leave {
-    animation-timing-function : $ease-in-circ;
+    animation-timing-function : v.$ease-in-circ;
   }
 }
 
@@ -27,10 +29,10 @@
   .#{$className}-enter,
   .#{$className}-appear {
     opacity                   : 0;
-    animation-timing-function : $ease-out-quint;
+    animation-timing-function : v.$ease-out-quint;
   }
   .#{$className}-leave {
-    animation-timing-function : $ease-in-quint;
+    animation-timing-function : v.$ease-in-quint;
   }
 }
 
@@ -47,29 +49,29 @@
   }
 }
 
-@mixin zoom-motion($className, $keyframeName, $duration: $animation-duration-base) {
+@mixin zoom-motion($className, $keyframeName, $duration: v.$animation-duration-base) {
   @include make-motion($className, $keyframeName, $duration);
   .#{$className}-enter,
   .#{$className}-appear {
     transform                 : scale(0); // need this by yiminghe
-    animation-timing-function : $ease-out-circ;
+    animation-timing-function : v.$ease-out-circ;
   }
   .#{$className}-leave {
-    animation-timing-function : $ease-in-out-circ;
+    animation-timing-function : v.$ease-in-out-circ;
   }
 }
 
-@mixin motion-common($duration: $animation-duration-base) {
+@mixin motion-common($duration: v.$animation-duration-base) {
   animation-duration  : $duration;
   animation-fill-mode : both;
 }
 
-@mixin motion-common-leave($duration: $animation-duration-base) {
+@mixin motion-common-leave($duration: v.$animation-duration-base) {
   animation-duration  : $duration;
   animation-fill-mode : both;
 }
 
-@mixin make-motion($className, $keyframeName, $duration: $animation-duration-base) {
+@mixin make-motion($className, $keyframeName, $duration: v.$animation-duration-base) {
   .#{$className}-enter,
   .#{$className}-appear {
     @include motion-common($duration);

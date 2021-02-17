@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -27,7 +26,6 @@ const dateOperators = localizeOperators({
 
 @Component({
   selector           : 'tri-data-table-date-filter-cell',
-  preserveWhitespaces: false,
   template           : `
     <tri-data-table-filter-wrapper-cell
       [column]="column"

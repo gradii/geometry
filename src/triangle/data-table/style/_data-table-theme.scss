@@ -1,42 +1,43 @@
-@import "../../core/themes/default-theme";
+@use "../../core/themes/theme";
+@use "../../core/style/theming";
 
 @mixin tri-data-table-theme($theme) {
 
   $data-table-line-height : 1.12 !default;
 
-  $primary: tri-color($theme, primary);
-  $success: tri-color($theme, success);
-  $error: tri-color($theme, error);
+  $primary                : theming.tri-color($theme, primary);
+  $success                : theming.tri-color($theme, success);
+  $error                  : theming.tri-color($theme, error);
 
   .tri-data-table {
 
     &-edit-command:not(.tri-btn) {
-      color : tri-color($success);
+      color : theming.tri-color($success);
 
       &:hover {
-        color : tri-color-palette(tri-color($success), 5);
+        color : theming.tri-color-palette(theming.tri-color($success), 5);
       }
     }
 
     &-save-command:not(.tri-btn) {
-      color : tri-color($primary);
+      color : theming.tri-color($primary);
 
       &:hover {
-        color : tri-color-palette(tri-color($primary), 5);
+        color : theming.tri-color-palette(theming.tri-color($primary), 5);
       }
     }
 
     &-remove-command:not(.tri-btn) {
-      color : tri-color($error);
+      color : theming.tri-color($error);
 
       &:hover {
-        color : tri-color-palette(tri-color($error), 5);
+        color : theming.tri-color-palette(theming.tri-color($error), 5);
       }
     }
   }
 
   .tri-data-table-toolbar {
-    background          : rgba(0, 0, 0, 0);
+    background : rgba(0, 0, 0, 0);
   }
 
   .tri-data-table-header, .tri-header, .tri-data-table-header-wrap {
@@ -79,7 +80,7 @@
   }
 
   .tri-data-table {
-    border                      : 1px solid #e6ebf5;
+    border : 1px solid #e6ebf5;
   }
 
   .tri-data-table {
@@ -136,22 +137,22 @@
 
     .tri-tooltip.tri-tooltip-validation {
       color            : #ffffff;
-      background-color : tri-color($primary, 400);
+      background-color : theming.tri-color($primary, 400);
 
       .tri-callout-n {
-        border-bottom-color : tri-color($primary, 400);
+        border-bottom-color : theming.tri-color($primary, 400);
       }
 
       .tri-callout-e {
-        border-left-color : tri-color($primary, 400);
+        border-left-color : theming.tri-color($primary, 400);
       }
 
       .tri-callout-s {
-        border-top-color : tri-color($primary, 400);
+        border-top-color : theming.tri-color($primary, 400);
       }
 
       .tri-callout-w {
-        border-right-color : tri-color($primary, 400);
+        border-right-color : theming.tri-color($primary, 400);
       }
     }
 
@@ -185,7 +186,7 @@
 
       &.tri-state-active {
         color            : #ffffff;
-        background-color : tri-color($primary);
+        background-color : theming.tri-color($primary);
       }
     }
   }

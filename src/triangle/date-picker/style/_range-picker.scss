@@ -1,10 +1,11 @@
-@import "../../core/themes/default-theme";
-@import "../../input/style/input-mixin";
+@use "../../input/style/input-mixin";
+@use "../../core/style/variables" as v;
+@use "../../input/style/input-variables";
 
-$input-box-height : 34px;
+$input-box-height               : 34px;
 
-$calendar-prefix-cls            : "#{$ant-prefix}-calendar";
-$calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
+$calendar-prefix-cls            : "#{v.$tri-prefix}-calendar";
+$calendar-timepicker-prefix-cls : "#{v.$tri-prefix}-calendar-time-picker";
 
 
 .#{$calendar-prefix-cls}-range-picker-input {
@@ -91,8 +92,8 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
 
   .#{$calendar-prefix-cls}-input,
   .#{$calendar-timepicker-prefix-cls}-input {
-    @include input();
-    height        : $input-height-sm;
+    @include input-mixin.input();
+    height        : input-variables.$input-height-sm;
     border        : 0;
     box-shadow    : none;
     padding-left  : 0;
@@ -141,7 +142,7 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
     }
 
     @at-root &:before {
-      content       : '';
+      content       : "";
       display       : block;
       //background    : $item-active-bg;
       border-radius : 0;
@@ -192,8 +193,8 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
       }
 
       @at-root &-combobox {
-        display          : inline-block;
-        height           : 100%;
+        display : inline-block;
+        height  : 100%;
         //background-color : $component-background;
         //border-top       : $border-width-base $border-style-base $border-color-split;
       }

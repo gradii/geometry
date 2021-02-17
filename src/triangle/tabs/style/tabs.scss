@@ -1,14 +1,15 @@
-@import "../../core/themes/default-theme";
+@use "../../core/style/mixins";
+@use "../../core/style/variables";
 
-$tab-prefix-cls : "#{$ant-prefix}-tabs";
+$tab-prefix-cls : "#{mixins.$tri-prefix}-tabs";
 
 
 .#{$tab-prefix-cls} {
   box-sizing : border-box;
   position   : relative;
   overflow   : hidden;
-  @include clearfix;
-  color      : $text-color;
+  @include mixins.clearfix;
+  color      : mixins.$text-color;
 
   @at-root &-ink-bar {
     z-index          : 1;
@@ -22,7 +23,7 @@ $tab-prefix-cls : "#{$ant-prefix}-tabs";
   }
 
   @at-root &-bar {
-    border-bottom : $border-width-base $border-style-base $border-color-base;
+    border-bottom : mixins.$border-width-base mixins.$border-style-base $border-color-base;
     margin-bottom : 16px;
     outline       : none;
     transition    : padding .45s;
@@ -31,13 +32,13 @@ $tab-prefix-cls : "#{$ant-prefix}-tabs";
   @at-root &-nav-container {
     overflow      : hidden;
     font-size     : $tabs-title-font-size;
-    line-height   : $line-height-base;
+    line-height   : mixins.$line-height-base;
     box-sizing    : border-box;
     position      : relative;
     white-space   : nowrap;
     margin-bottom : -1px;
     transition    : padding .45s;
-    @include clearfix;
+    @include mixins.clearfix;
 
     @at-root &-scrolling {
       padding-left  : 32px;
@@ -70,7 +71,7 @@ $tab-prefix-cls : "#{$ant-prefix}-tabs";
     }
 
     @at-root &:hover {
-      color : $text-color;
+      color : mixins.$text-color;
     }
 
     @at-root &-icon {
@@ -89,7 +90,7 @@ $tab-prefix-cls : "#{$ant-prefix}-tabs";
       @at-root &:before {
         display     : block;
         font-family : "anticon" !important;
-        @include iconfont-size-under-12px(10px);
+        @include mixins.iconfont-size-under-12px(10px);
       }
     }
   }
@@ -133,7 +134,7 @@ $tab-prefix-cls : "#{$ant-prefix}-tabs";
   @at-root &-nav {
     box-sizing   : border-box;
     padding-left : 0;
-    transition   : transform 0.5s $ease-in-out;
+    transition   : transform 0.5s mixins.$ease-in-out;
     position     : relative;
     margin       : 0;
     list-style   : none;
@@ -167,7 +168,7 @@ $tab-prefix-cls : "#{$ant-prefix}-tabs";
       }
 
       padding         : 8px 20px;
-      transition      : color 0.3s $ease-in-out;
+      transition      : color 0.3s mixins.$ease-in-out;
       cursor          : pointer;
       text-decoration : none;
 
@@ -178,7 +179,7 @@ $tab-prefix-cls : "#{$ant-prefix}-tabs";
       @at-root &:active {
         color : $primary-7;
       }
-      .#{$iconfont-css-prefix} {
+      .#{mixins.$iconfont-css-prefix} {
         width        : 14px;
         height       : 14px;
         margin-right : 8px;
@@ -191,7 +192,7 @@ $tab-prefix-cls : "#{$ant-prefix}-tabs";
   }
 
   @at-root &-mini #{&}-nav-container {
-    font-size : $font-size-base;
+    font-size : mixins.$font-size-base;
   }
 
   @at-root &-mini #{&}-tab {
@@ -222,7 +223,7 @@ $tab-prefix-cls : "#{$ant-prefix}-tabs";
       display        : flex;
       flex-direction : row;
       will-change    : margin-left;
-      transition     : margin-left 0.3s $ease-in-out;
+      transition     : margin-left 0.3s mixins.$ease-in-out;
     }
   }
 
@@ -316,7 +317,7 @@ $tab-prefix-cls : "#{$ant-prefix}-tabs";
   @at-root &-vertical#{&}-left {
     > .#{$tab-prefix-cls}-bar {
       float         : left;
-      border-right  : $border-width-base $border-style-base $border-color-split;
+      border-right  : mixins.$border-width-base mixins.$border-style-base $border-color-split;
       margin-right  : -1px;
       margin-bottom : 0;
 
@@ -339,14 +340,14 @@ $tab-prefix-cls : "#{$ant-prefix}-tabs";
 
     > .#{$tab-prefix-cls}-content {
       padding-left : 24px;
-      border-left  : $border-width-base $border-style-base $border-color-split;
+      border-left  : mixins.$border-width-base mixins.$border-style-base $border-color-split;
     }
   }
 
   @at-root &-vertical#{&}-right {
     > .#{$tab-prefix-cls}-bar {
       float         : right;
-      border-left   : $border-width-base $border-style-base $border-color-split;
+      border-left   : mixins.$border-width-base mixins.$border-style-base $border-color-split;
       margin-left   : -1px;
       margin-bottom : 0;
 
@@ -365,7 +366,7 @@ $tab-prefix-cls : "#{$ant-prefix}-tabs";
 
     > .#{$tab-prefix-cls}-content {
       padding-right : 24px;
-      border-right  : $border-width-base $border-style-base $border-color-split;
+      border-right  : mixins.$border-width-base mixins.$border-style-base $border-color-split;
     }
   }
 
@@ -377,12 +378,12 @@ $tab-prefix-cls : "#{$ant-prefix}-tabs";
 
 .#{$tab-prefix-cls}-top .#{$tab-prefix-cls}-ink-bar-animated,
 .#{$tab-prefix-cls}-bottom .#{$tab-prefix-cls}-ink-bar-animated {
-  transition : transform .3s $ease-in-out, width .3s $ease-in-out;
+  transition : transform .3s mixins.$ease-in-out, width .3s mixins.$ease-in-out;
 }
 
 .#{$tab-prefix-cls}-left .#{$tab-prefix-cls}-ink-bar-animated,
 .#{$tab-prefix-cls}-right .#{$tab-prefix-cls}-ink-bar-animated {
-  transition : transform .3s $ease-in-out, height .3s $ease-in-out;
+  transition : transform .3s mixins.$ease-in-out, height .3s mixins.$ease-in-out;
 }
 
 .no-flex,

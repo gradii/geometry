@@ -1,4 +1,5 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
 .#{$form-prefix-cls}-item {
   > label {

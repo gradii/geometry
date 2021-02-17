@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -30,7 +29,6 @@ export type ButtonSize = 'small' | 'large' | 'default';
 
 @Component({
   selector           : '[triButton], [tri-button]',
-  preserveWhitespaces: false,
   changeDetection    : ChangeDetectionStrategy.OnPush,
   encapsulation      : ViewEncapsulation.None,
   template           : `

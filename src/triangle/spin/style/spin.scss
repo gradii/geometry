@@ -1,15 +1,14 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
 
-
-$spin-prefix-cls  : "#{$ant-prefix}-spin";
+$spin-prefix-cls  : "#{$tri-prefix}-spin";
 
 // Spin
 // ---
-$spin-dot-size-sm               : 0.875rem !default;
-$spin-dot-size                  : 1.25rem !default;
-$spin-dot-size-lg               : 2rem !default;
-
+$spin-dot-size-sm : 0.875rem !default;
+$spin-dot-size    : 1.25rem !default;
+$spin-dot-size-lg : 2rem !default;
 
 
 .#{$spin-prefix-cls} {
@@ -99,7 +98,7 @@ $spin-dot-size-lg               : 2rem !default;
     /* autoprefixer: on */
     -webkit-transform : translateZ(0);
     @at-root &:after {
-      content    : '';
+      content    : "";
       position   : absolute;
       left       : 0;
       right      : 0;

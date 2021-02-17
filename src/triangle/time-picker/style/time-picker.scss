@@ -1,7 +1,8 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 @import "../../input/style/input-mixin";
 
-$timepicker-prefix-cls : "#{$ant-prefix}-time-picker";
+$timepicker-prefix-cls          : "#{$tri-prefix}-time-picker";
 
 $time-picker-panel-column-width : 56px !default;
 $time-picker-panel-width        : $time-picker-panel-column-width * 3 !default;
@@ -11,16 +12,16 @@ $time-picker-panel-width        : $time-picker-panel-column-width * 3 !default;
   position : absolute;
 
   @at-root &-inner {
-    position         : relative;
-    outline          : none;
-    list-style       : none;
-    font-size        : $font-size-base;
-    text-align       : left;
-    border-radius    : $border-radius-base;
-    background-clip  : padding-box;
-    line-height      : 1.5;
-    overflow         : hidden;
-    left             : -2px;
+    position        : relative;
+    outline         : none;
+    list-style      : none;
+    font-size       : $font-size-base;
+    text-align      : left;
+    border-radius   : $border-radius-base;
+    background-clip : padding-box;
+    line-height     : 1.5;
+    overflow        : hidden;
+    left            : -2px;
   }
 
   @at-root &-input {
@@ -33,9 +34,9 @@ $time-picker-panel-width        : $time-picker-panel-column-width * 3 !default;
     outline     : 0;
 
     @at-root &-wrap {
-      box-sizing    : border-box;
-      position      : relative;
-      padding       : 6px;
+      box-sizing : border-box;
+      position   : relative;
+      padding    : 6px;
     }
 
   }
@@ -70,13 +71,13 @@ $time-picker-panel-width        : $time-picker-panel-column-width * 3 !default;
   }
 
   @at-root &-select {
-    float       : left;
-    font-size   : $font-size-base;
-    box-sizing  : border-box;
-    width       : $time-picker-panel-column-width;
-    overflow    : hidden;
-    position    : relative; // Fix chrome weird render bug
-    max-height  : 144px;
+    float      : left;
+    font-size  : $font-size-base;
+    box-sizing : border-box;
+    width      : $time-picker-panel-column-width;
+    overflow   : hidden;
+    position   : relative; // Fix chrome weird render bug
+    max-height : 144px;
 
     @at-root &:hover {
       overflow-y : auto;
@@ -123,7 +124,7 @@ $time-picker-panel-width        : $time-picker-panel-column-width * 3 !default;
 
     @at-root li#{&}-option-disabled {
       @at-root &:hover {
-        cursor     : not-allowed;
+        cursor : not-allowed;
       }
     }
   }
@@ -133,7 +134,7 @@ $time-picker-panel-width        : $time-picker-panel-column-width * 3 !default;
   }
 
   @at-root &-addon {
-    padding    : 8px;
+    padding : 8px;
   }
 
   @at-root &.slide-up-enter.slide-up-enter-active#{&}-placement-topLeft,

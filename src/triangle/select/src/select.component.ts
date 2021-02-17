@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -44,7 +43,6 @@ import { SelectService } from './select.service';
 
 @Component({
   selector           : 'tri-select',
-  preserveWhitespaces: false,
   providers          : [
     SelectService,
     {

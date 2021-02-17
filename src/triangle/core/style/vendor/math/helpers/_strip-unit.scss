@@ -1,6 +1,7 @@
+@use "sass:math";
 // Strip unit from a number
 @function strip-unit ($number) {
-  @if unitless($number) {
+  @if math.is-unitless($number) {
     @return $number;
   } @else {
     @return $number / ($number * 0 + 1);

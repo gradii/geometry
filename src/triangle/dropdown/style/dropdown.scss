@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$dropdown-prefix-cls : "#{$ant-prefix}-dropdown";
+$dropdown-prefix-cls : "#{$tri-prefix}-dropdown";
 
 .#{$dropdown-prefix-cls} {
   position    : absolute;
@@ -15,7 +16,7 @@ $dropdown-prefix-cls : "#{$ant-prefix}-dropdown";
   @at-root &-wrap {
     position : relative;
 
-    .#{$ant-prefix}-btn > .#{$iconfont-css-prefix}-down {
+    .#{$tri-prefix}-btn > .#{$iconfont-css-prefix}-down {
       @include iconfont-size-under-12px(10px);
     }
 
@@ -36,15 +37,15 @@ $dropdown-prefix-cls : "#{$ant-prefix}-dropdown";
   }
 
   @at-root &-menu {
-    outline          : none;
-    position         : relative;
-    list-style-type  : none;
-    padding          : 0;
-    margin           : 0;
-    text-align       : left;
-    border-radius    : $border-radius-base;
-    box-shadow       : $box-shadow-base;
-    background-clip  : padding-box;
+    outline         : none;
+    position        : relative;
+    list-style-type : none;
+    padding         : 0;
+    margin          : 0;
+    text-align      : left;
+    border-radius   : $border-radius-base;
+    box-shadow      : $box-shadow-base;
+    background-clip : padding-box;
 
     @at-root &-item,
     &-submenu-title {
@@ -83,10 +84,10 @@ $dropdown-prefix-cls : "#{$ant-prefix}-dropdown";
       }
 
       @at-root &-divider {
-        height           : 1px;
-        overflow         : hidden;
-        line-height      : 0;
-        margin           : 0.5em 0;
+        height      : 1px;
+        overflow    : hidden;
+        line-height : 0;
+        margin      : 0.5em 0;
       }
     }
 
@@ -161,7 +162,7 @@ $dropdown-prefix-cls : "#{$ant-prefix}-dropdown";
 .#{$dropdown-prefix-cls}-button {
   white-space : nowrap;
 
-  @at-root &.#{$ant-prefix}-btn-group > .#{$ant-prefix}-btn:last-child:not(:first-child) {
+  @at-root &.#{$tri-prefix}-btn-group > .#{$tri-prefix}-btn:last-child:not(:first-child) {
     padding-right : 8px;
   }
   .#{$iconfont-css-prefix}-down {

@@ -1,19 +1,20 @@
-@import "../../core/themes/default-theme";
+@use "../../core/themes/theme";
+@use "../../core/style/variables" as v;
 
 @mixin tri-carousel-theme($theme) {
   .slick-vertical .slick-slide {
-    border: $border-width-base $border-style-base transparent;
+    border : v.$border-width-base v.$border-style-base transparent;
   }
   // Arrows
   .slick-prev,
   .slick-next {
-    background: transparent;
-    color: transparent;
+    background : transparent;
+    color      : transparent;
 
     &:hover,
     &:focus {
-      background: transparent;
-      color: transparent;
+      background : transparent;
+      color      : transparent;
     }
   }
 
@@ -21,13 +22,13 @@
   .slick-dots {
     li {
       button {
-        border: 0;
-        background: #fff;
-        color: transparent;
+        border     : 0;
+        background : #fff;
+        color      : transparent;
       }
 
       @at-root &.slick-active button {
-        background: #fff;
+        background : #fff;
       }
     }
   }

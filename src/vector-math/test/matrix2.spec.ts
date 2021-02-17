@@ -2,7 +2,6 @@ import { Matrix2 } from '../src/matrix2';
 import { Vector2 } from '../src/vector2';
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */

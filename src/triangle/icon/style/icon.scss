@@ -1,4 +1,5 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
 // The width/height of the icon element.
 $tri-icon-size : 1em !default;
@@ -23,7 +24,7 @@ $tri-icon-size : 1em !default;
 }
 
 // Icons that will be mirrored in RTL.
-[dir='rtl'] .tri-icon-rtl-mirror {
+[dir="rtl"] .tri-icon-rtl-mirror {
   transform : scale(-1, 1);
 }
 

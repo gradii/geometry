@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -19,7 +18,6 @@ import {
 @Component({
   selector           : 'tri-spin',
   encapsulation      : ViewEncapsulation.None,
-  preserveWhitespaces: false,
   template           : `
     <div style="margin-top: 10px; text-align: center">
       <div class="tri-spin"

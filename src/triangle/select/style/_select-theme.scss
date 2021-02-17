@@ -1,54 +1,63 @@
-@import "../../core/themes/default-theme";
-@import "../../input/style/input-mixin";
-@import "../../input/style/input-theme";
+@use "sass:color";
+@use "sass:map";
+@use "../../core/themes/theme";
+@use "../../input/style/input-mixin";
+@use "../../input/style/input-theme";
+@use "../../autocomplete/style/autocomplete-theme";
+@use "../../core/style/mixins/clearfix";
+@use "../../core/style/mixins/import-once";
+@use "../../core/style/mixins/rem";
+@use "../../core/style/theming";
+@use "../../core/style/variables" as v;
+@use "../../input/style/input-variables";
 
-$select-prefix-cls: "#{$ant-prefix}-select";
+$select-prefix-cls : #{ v.$tri-prefix}-select;
 
 @mixin selection__clear($theme) {
-  $foreground: map-get($theme, foreground);
-  $background: map-get($theme, background);
+  $foreground : map.get($theme, foreground);
+  $background : map.get($theme, background);
 
-  $primary: map-get($theme, primary);
-  $black: map-get($theme, black);
+  $primary    : map.get($theme, primary);
+  $black      : map.get($theme, black);
 
-  color: tri-color($background, disabled-color);
-  background: tri-color($background, component-background);
+  color       : theming.tri-color($background, disabled-color);
+  background  : theming.tri-color($background, component-background);
   @at-root &:hover {
-    color: tri-color($foreground, text-color-secondary);
+    color : theming.tri-color($foreground, text-color-secondary);
   }
 }
 
 @mixin tri-select-theme($theme) {
-  $foreground: map-get($theme, foreground);
-  $background: map-get($theme, background);
+  $foreground : map.get($theme, foreground);
+  $background : map.get($theme, background);
 
-  $primary: map-get($theme, primary);
-  $black: map-get($theme, black);
+  $primary    : map.get($theme, primary);
+  $black      : map.get($theme, black);
 
-  @include import-once("component:selection") {
+  @include import-once.import-once("component:selection") {
     .#{$select-prefix-cls} {
       > ul > li > a {
-        background-color: tri-color($background, component-background);
+        background-color : theming.tri-color($background, component-background);
       }
 
       // arrow
       @at-root &-arrow {
-        color: tri-color($background, disabled-color);
+        color : theming.tri-color($background, disabled-color);
       }
 
       @at-root &-selection {
-        background-color: tri-color($background, component-background);
-        border: $border-width-base $border-style-base tri-color($foreground, border-color-base);
-        border-radius: $border-radius-base;
+        background-color : theming.tri-color($background, component-background);
+        border           : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-base);
+        border-radius    : v.$border-radius-base;
 
         @at-root &:hover {
-          @include tri-input-hover-theme();
+          @include input-theme.tri-input-hover-theme();
         }
 
         @at-root .#{$select-prefix-cls}-focused #{&},
         &:focus,
         &:active {
-          @include tri-input-active-theme();
+          @include input-theme.tri-input-active-theme();
         }
 
         @at-root &__clear {
@@ -61,156 +70,157 @@ $select-prefix-cls: "#{$ant-prefix}-select";
       }
 
       @at-root &-disabled {
-        color: tri-color($background, disabled-color);
+        color : theming.tri-color($background, disabled-color);
       }
 
       @at-root &-disabled #{&}-selection {
-        background: tri-color($foreground, input-disabled-bg);
+        background : theming.tri-color($foreground, input-disabled-bg);
         @at-root &:hover,
-          &:focus,
-          &:active {
-          border-color: tri-color($foreground, border-color-base);
-          box-shadow: none;
+        &:focus,
+        &:active {
+          border-color : theming.tri-color($foreground, border-color-base);
+          box-shadow   : none;
         }
       }
 
       @at-root &-disabled #{&}-selection--multiple #{&}-selection__choice {
-        color: opacify(tri-color($black), 0.33);
-        background: tri-color($background, background-color-active);
+        color      : color.adjust(theming.tri-color($black), $alpha : 0.33);
+        background : theming.tri-color($background, background-color-active);
       }
 
       @at-root &-disabled #{&}-selection__choice__remove {
-        color: tri-color($background, disabled-color);
+        color : theming.tri-color($background, disabled-color);
         @at-root &:hover {
-          color: tri-color($background, disabled-color);
+          color : theming.tri-color($background, disabled-color);
         }
       }
 
       @at-root &-selection__placeholder,
-        &-search__field__placeholder {
-        color: tri-color($theme, input-placeholder-color);
+      &-search__field__placeholder {
+        color : theming.tri-color($theme, input-placeholder-color);
       }
 
       @at-root &-search--inline {
         .#{$select-prefix-cls}-search__field {
-          background: transparent;
-          border-width: 0;
-          border-radius: $border-radius-base;
+          background    : transparent;
+          border-width  : 0;
+          border-radius : v.$border-radius-base;
         }
       }
 
       @at-root &-selection--multiple {
-        @include clearfix;
+        @include clearfix.clearfix;
         > ul > li,
         .#{$select-prefix-cls}-selection__rendered > ul > li {
           // for tree-select
-          height: $input-height-base - 0.5rem;
+          height : input-variables.$input-height-base - 0.5rem;
         }
 
         .#{$select-prefix-cls}-selection__choice {
-          color: tri-color($foreground, tag-default-color);
-          background-color: tri-color($foreground, tag-default-bg);
-          border: 1px solid tri-color($foreground, border-color-split);
-          border-radius: 4px;
+          color            : theming.tri-color($foreground, tag-default-color);
+          background-color : theming.tri-color($foreground, tag-default-bg);
+          border           : 1px solid theming.tri-color($foreground, border-color-split);
+          border-radius    : 4px;
         }
 
         .#{$select-prefix-cls}-selection__choice__remove {
-          color: tri-color($foreground, text-color-secondary);
+          color : theming.tri-color($foreground, text-color-secondary);
           @at-root &:hover {
-            color: #404040;
+            color : #404040;
           }
         }
       }
 
       @at-root &-open {
         .#{$select-prefix-cls}-selection {
-          @include tri-input-active-theme($theme);
+          @include input-theme.tri-input-active-theme($theme);
         }
       }
 
       @at-root &-combobox {
         .#{$select-prefix-cls}-search__field {
-          box-shadow: none;
+          box-shadow : none;
         }
       }
       @at-root &-combobox#{&}-allow-clear #{&}-selection:hover #{&}-selection__rendered,
-        &-combobox#{&}-show-arrow #{&}-selection:hover #{&}-selection__rendered {
-        margin-right: 20px;
+      &-combobox#{&}-show-arrow #{&}-selection:hover #{&}-selection__rendered {
+        margin-right : 20px;
       }
     }
   }
 
-  @include import-once("component:selection-dropdown") {
+  @include import-once.import-once("component:selection-dropdown") {
     .#{$select-prefix-cls}-dropdown {
-      background-color: tri-color($background, component-background);
-      border-radius: $border-radius-base;
-      box-shadow: $box-shadow-base;
+      background-color : theming.tri-color($background, component-background);
+      border-radius    : v.$border-radius-base;
+      box-shadow       : v.$box-shadow-base;
 
       @at-root &-menu {
         @at-root &-item-group-title {
-          color: tri-color($foreground, text-color-secondary);
+          color : theming.tri-color($foreground, text-color-secondary);
         }
 
         @at-root &-item-group-list #{&}-item:first-child:not(:last-child),
-          &-item-group:not(:last-child) #{&}-item-group-list #{&}-item:last-child {
-          border-radius: 0;
+        &-item-group:not(:last-child) #{&}-item-group-list #{&}-item:last-child {
+          border-radius : 0;
         }
 
         @at-root &-item {
-          color: tri-color($foreground, text-color);
+          color : theming.tri-color($foreground, text-color);
           @at-root &:hover {
-            background-color: tri-color($background, item-hover-bg);
+            background-color : theming.tri-color($background, item-hover-bg);
           }
 
           @at-root &:first-child {
-            border-radius: $border-radius-base $border-radius-base 0 0;
+            border-radius : v.$border-radius-base v.$border-radius-base 0 0;
           }
 
           @at-root &:last-child {
-            border-radius: 0 0 $border-radius-base $border-radius-base;
+            border-radius : 0 0 v.$border-radius-base v.$border-radius-base;
           }
 
           @at-root &-disabled {
-            color: tri-color($background, disabled-color);
+            color : theming.tri-color($background, disabled-color);
 
             @at-root &:hover {
-              color: tri-color($background, disabled-color);
-              background-color: tri-color($background, component-background);
+              color            : theming.tri-color($background, disabled-color);
+              background-color : theming.tri-color($background, component-background);
             }
           }
 
           @at-root &-selected {
             @at-root &,
-              &:hover {
-              background-color: tri-color($background, background-color-base);
-              color: tri-color($foreground, text-color);
+            &:hover {
+              background-color : theming.tri-color($background, background-color-base);
+              color            : theming.tri-color($foreground, text-color);
             }
           }
 
           @at-root &-active {
-            background-color: tri-color($foreground, item-active-bg);
+            background-color : theming.tri-color($foreground, item-active-bg);
           }
 
           @at-root &-divider {
-            background-color: #e5e5e5;
+            background-color : #e5e5e5;
           }
         }
       }
 
       @at-root &#{&}--multiple {
         .#{$select-prefix-cls}-dropdown-menu-item {
-          padding-right: $control-padding-horizontal + rem-convert(rem, 20px);
+          padding-right : v.$control-padding-horizontal + 1.25rem;
 
           & .#{$select-prefix-cls}-selected-icon {
-            color: transparent;
+            color : transparent;
           }
 
           &:hover .#{$select-prefix-cls}-selected-icon {
-            color: opacify($black, 0.87);
+            color : color.adjust($black, $alpha : 0.87);
           }
+
           &-selected .#{$select-prefix-cls}-selected-icon,
           &-selected:hover .#{$select-prefix-cls}-selected-icon {
-            color: tri-color($primary);
+            color : theming.tri-color($primary);
           }
         }
       }

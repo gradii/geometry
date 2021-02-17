@@ -1,9 +1,9 @@
-@import "../../../core/themes/default-theme";
+@import "../../../core/themes/theme";
 
 
 @mixin _calendar-panel-header-theme($theme, $calendar-prefix-cls) {
-  $foreground: map-get($theme, foreground);
-  $background: map-get($theme, background);
+  $foreground   : map-get($theme, foreground);
+  $background   : map-get($theme, background);
 
   border-bottom : $border-width-base $border-style-base tri-color($foreground, border-color-split);
 
@@ -15,7 +15,7 @@
   .#{$calendar-prefix-cls}-decade-select,
   .#{$calendar-prefix-cls}-year-select,
   .#{$calendar-prefix-cls}-month-select {
-    color       : $heading-color;
+    color : $heading-color;
   }
 
   .#{$calendar-prefix-cls}-prev-century-btn,
@@ -26,6 +26,6 @@
   .#{$calendar-prefix-cls}-next-month-btn,
   .#{$calendar-prefix-cls}-prev-year-btn,
   .#{$calendar-prefix-cls}-next-year-btn {
-    color       : $text-color-secondary;
+    color : $text-color-secondary;
   }
 }

@@ -18955,10 +18955,17 @@ sass@1.27.0:
   dependencies:
     chokidar ">=2.0.0 <4.0.0"
 
-sass@^1.23.7, sass@^1.29.0:
+sass@^1.23.7:
   version "1.30.0"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.30.0.tgz#60bbbbaf76ba10117e61c6c24f00161c3d60610e"
   integrity sha512-26EUhOXRLaUY7+mWuRFqGeGGNmhB1vblpTENO1Z7mAzzIZeVxZr9EZoaY1kyGLFWdSOZxRMAufiN2mkbO6dAlw==
+  dependencies:
+    chokidar ">=2.0.0 <4.0.0"
+
+sass@^1.32.6:
+  version "1.32.6"
+  resolved "https://registry.npm.taobao.org/sass/download/sass-1.32.6.tgz?cache=0&sync_timestamp=1612223120550&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fsass%2Fdownload%2Fsass-1.32.6.tgz#e3646c8325cd97ff75a8a15226007f3ccd221393"
+  integrity sha1-42RsgyXNl/91qKFSJgB/PM0iE5M=
   dependencies:
     chokidar ">=2.0.0 <4.0.0"
 
@@ -19029,10 +19036,10 @@ schema-utils@^3.0.0:
     ajv "^6.12.5"
     ajv-keywords "^3.5.2"
 
-scss-bundle@^3.1.1:
+scss-bundle@^3.1.2:
   version "3.1.2"
-  resolved "https://registry.yarnpkg.com/scss-bundle/-/scss-bundle-3.1.2.tgz#8919dd7603d01a84822e8aab5210e5b0b50c548b"
-  integrity sha512-lvxTwCKDLgzmRWhGwJ834ggtnEhs0G9FxSJRWte+NwlshVvBcQ/kOHHkpAGDpCxIMNGz/Utl0yd/MWyQAOBhqg==
+  resolved "https://registry.npm.taobao.org/scss-bundle/download/scss-bundle-3.1.2.tgz#8919dd7603d01a84822e8aab5210e5b0b50c548b"
+  integrity sha1-iRnddgPQGoSCLoqrUhDlsLUMVIs=
   dependencies:
     "@types/archy" "^0.0.31"
     "@types/debug" "^4.1.5"

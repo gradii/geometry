@@ -1,11 +1,15 @@
-@import 'palette';
+@use "sass:color";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "variables-palette" as palette;
 
 
 // For a given hue in a palette, return the contrast color from the map of contrast palettes.
 // @param $color-map
 // @param $hue
 @function tri-contrast($palette, $hue) {
-  @return map-get(map-get($palette, contrast), $hue);
+  @return map.get(map.get($palette, contrast), $hue);
 }
 
 
@@ -15,11 +19,11 @@
 // @param $primary
 // @param $lighter
 @function tri-palette($base-palette, $default: 500, $lighter: 100, $darker: 700, $text: $default) {
-  $result : map_merge($base-palette, (
-    default: map-get($base-palette, $default),
-    lighter: map-get($base-palette, $lighter),
-    darker: map-get($base-palette, $darker),
-    text: map-get($base-palette, $text),
+  $result : map.merge($base-palette, (
+    default: map.get($base-palette, $default),
+    lighter: map.get($base-palette, $lighter),
+    darker: map.get($base-palette, $darker),
+    text: map.get($base-palette, $text),
     default-contrast: tri-contrast($base-palette, $default),
     lighter-contrast: tri-contrast($base-palette, $lighter),
     darker-contrast: tri-contrast($base-palette, $darker)
@@ -27,8 +31,8 @@
 
   // For each hue in the palette, add a "-contrast" color to the map.
   @each $hue, $color in $base-palette {
-    $result : map_merge($result, (
-      '#{$hue}-contrast': tri-contrast($base-palette, $hue)
+    $result : map.merge($result, (
+      #{$hue}-contrast: tri-contrast($base-palette, $hue)
     ));
   }
 
@@ -47,13 +51,13 @@
 @function tri-color($palette, $hue: default, $opacity: null) {
   // If hueKey is a number between zero and one, then it actually contains an
   // opacity value, so recall this function with the default hue and that given opacity.
-  @if type-of($hue) == number and $hue >= 0 and $hue <= 1 {
+  @if meta.type-of($hue) == number and $hue >= 0 and $hue <= 1 {
     @return tri-color($palette, default, $hue);
   }
 
-  $color : map-get($palette, $hue);
+  $color : map.get($palette, $hue);
 
-  @if (type-of($color) != color) {
+  @if (meta.type-of($color) != color) {
     // If the $color resolved to something different from a color (e.g. a CSS variable),
     // we can't apply the opacity anyway so we return the value as is, otherwise Sass can
     // throw an error or output something invalid.
@@ -62,7 +66,6 @@
 
   @return rgba($color, if($opacity == null, opacity($color), $opacity));
 }
-
 
 
 @function _cp_strip-units($number) {
@@ -85,18 +88,18 @@ $_cold-rotate : 10; // cold color rotate degree
   $shade-color : $c;
   // warm and cold color will darken in different radio, and rotate in different degree
   // warmer color
-  @if red($shade-color) > blue($shade-color) {
-    $color : darken($shade-color, lightness($shade-color) * $_warm-dark);
-    @return adjust_hue($color, $_warm-rotate);
+  @if color.red($shade-color) > color.blue($shade-color) {
+    $color : color.adjust($shade-color, $lightness : -(color.lightness($shade-color) * $_warm-dark));
+    @return color.adjust($color, $hue : $_warm-rotate);
   }
   // colder color
-  $color : darken($shade-color, lightness($shade-color) * $_cold-dark);
-  @return adjust_hue($color, $_cold-rotate);
+  $color : color.adjust($shade-color, $lightness : -(color.lightness($shade-color) * $_cold-dark));
+  @return color.adjust($color, $hue : $_cold-rotate);
 }
 
 @function tri-color-palette($color, $index) {
-  @if (type-of($color) != 'color') {
-    @error '`#{$color}` is not a color.';
+  @if (meta.type-of($color) != "color") {
+    @error "`#{$color}` is not a color.";
   }
 
   $primary-easing : 0.6;
@@ -104,21 +107,18 @@ $_cold-rotate : 10; // cold color rotate degree
 
   // return light colors after tint
   @if ($index <= 6) {
-    @return mix(
+    @return color.mix(
         #ffffff,
         $color,
-        percentage(1 - ($current-easing / $primary-easing))
+        math.percentage(1 - ($current-easing / $primary-easing))
     );
   }
-  @return mix(
+  @return color.mix(
       _get-shade-color($color),
       $color,
-      percentage(($current-easing - $primary-easing) / (100 - $primary-easing))
+      math.percentage(($current-easing - $primary-easing) / (100 - $primary-easing))
   );
 }
-
-
-
 
 
 // Creates a container object for a light theme to be given to individual component theme mixins.
@@ -132,7 +132,7 @@ $_cold-rotate : 10; // cold color rotate degree
   $warning,
   $dark,
   $accent,
-  $warn: tri-palette($tri-red)
+  $warn: tri-palette(palette.$tri-red)
 ) {
   @return (
     primary: $primary,
@@ -145,20 +145,20 @@ $_cold-rotate : 10; // cold color rotate degree
     dark: $dark,
     accent: $accent,
     warn: $warn,
-    foreground: $tri-light-theme-foreground,
-    background: $tri-light-theme-background,
+    foreground: palette.$tri-light-theme-foreground,
+    background: palette.$tri-light-theme-background,
   );
 }
 
 
 // Creates a container object for a dark theme to be given to individual component theme mixins.
-@function tri-dark-theme($primary, $accent, $warn: tri-palette($tri-red)) {
+@function tri-dark-theme($primary, $accent, $warn: tri-palette(palette.$tri-red)) {
   @return (
     primary: $primary,
     accent: $accent,
     warn: $warn,
     is-dark: true,
-    foreground: $tri-dark-theme-foreground,
-    background: $tri-dark-theme-background,
+    foreground: palette.$tri-dark-theme-foreground,
+    background: palette.$tri-dark-theme-background,
   );
 }

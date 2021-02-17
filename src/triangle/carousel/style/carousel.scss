@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-.#{$ant-prefix}-carousel {
+.#{$tri-prefix}-carousel {
   .slick-slider {
     position                    : relative;
     display                     : block;
@@ -196,7 +197,7 @@
   }
 }
 
-.#{$ant-prefix}-carousel-vertical {
+.#{$tri-prefix}-carousel-vertical {
   .slick-dots {
     width     : $carousel-dot-height;
     bottom    : auto;

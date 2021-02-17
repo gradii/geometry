@@ -1,4 +1,7 @@
-@import '../triangle/core/themes/all-theme';
+@use "../triangle/core/core" as *;
+@use "../triangle/core/style/theming" as *;
+@use "../triangle/core/style/palette" as *;
+@use "../triangle/core/themes/all-theme" as *;
 
 * {
   box-sizing : border-box;
@@ -8,17 +11,31 @@
 
 // Define the default theme (same as the example above).
 $candy-app-primary : tri-palette($tri-indigo);
-$candy-app-accent  : tri-palette($tri-pink, A200, A100, A400);
+$candy-app-accent  : tri-palette($tri-green, A200, A100, A400);
+
+
+/**
+ * primary
+ * secondary
+ * info
+ * success
+ * error
+ * highlight
+ * warning
+ * dark
+ * accent
+ * warn
+ */
 $candy-app-theme   : tri-light-theme(
     $candy-app-primary,
     $candy-app-accent,
-    $tri-steal,
-    $tri-steal,
-    $tri-steal,
-    $tri-steal,
+    $tri-blue,
+    $tri-green,
+    $tri-red,
+    $tri-red,
     $tri-yellow,
-    $tri-steal,
-    $tri-steal,
+    $tri-blue-grey,
+    $candy-app-accent,
 );
 
 @include gradii-triangle-theme($candy-app-theme);

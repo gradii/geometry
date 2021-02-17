@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$card-prefix-cls       : "#{$ant-prefix}-card";
+$card-prefix-cls       : "#{$tri-prefix}-card";
 $card-padding-base     : 24px;
 $card-padding-wider    : 32px;
 $card-head-height      : 3rem !default;

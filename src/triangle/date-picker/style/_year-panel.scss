@@ -51,17 +51,17 @@
 
   @at-root &:hover {
     //background : $item-hover-bg;
-    cursor     : pointer;
+    cursor : pointer;
   }
 }
 
 .#{$calendar-prefix-cls}-year-panel-selected-cell .#{$calendar-prefix-cls}-year-panel-year {
   //background : $primary-color;
-  color      : #fff;
+  color : #fff;
 
   @at-root &:hover {
     //background : $primary-color;
-    color      : #fff;
+    color : #fff;
   }
 }
 

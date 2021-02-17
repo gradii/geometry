@@ -1,3 +1,5 @@
+@use "../variables" as v;
+
 @mixin iconfont-mixin() {
   display                 : inline-block;
   font-style              : normal;
@@ -15,7 +17,7 @@
 }
 
 @mixin iconfont-font($content) {
-  font-family             : 'anticon';
+  font-family             : "anticon";
   text-rendering          : optimizeLegibility;
   -webkit-font-smoothing  : antialiased;
   -moz-osx-font-smoothing : grayscale;
@@ -27,9 +29,9 @@
 @mixin iconfont-size-under-12px($size, $rotate: 0deg) {
   display     : inline-block;
   $font-scale : $size / 12px;
-  font-size   : $font-size-base;
+  font-size   : v.$font-size-base;
   transform   : scale($font-scale) rotate($rotate);
   :root & {
-    font-size : $font-size-base; // reset ie9 and above
+    font-size : v.$font-size-base; // reset ie9 and above
   }
 }

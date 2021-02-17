@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -21,7 +20,6 @@ export type Mode = 'vertical' | 'horizontal' | 'inline';
 
 @Component({
   selector: '[tri-menu]',
-  preserveWhitespaces: false,
   encapsulation: ViewEncapsulation.None,
   template: `
     <ng-content></ng-content>`,

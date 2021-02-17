@@ -1,9 +1,10 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
 .#{$calendar-timepicker-prefix-cls} {
-  position         : absolute;
-  width            : 100%;
-  top              : 40px;
+  position : absolute;
+  width    : 100%;
+  top      : 40px;
 
   @at-root &-panel {
     z-index  : $zindex-picker;
@@ -12,17 +13,17 @@
   }
 
   @at-root &-inner {
-    display          : inline-block;
-    position         : relative;
-    outline          : none;
-    list-style       : none;
-    font-size        : $font-size-base;
-    text-align       : left;
+    display         : inline-block;
+    position        : relative;
+    outline         : none;
+    list-style      : none;
+    font-size       : $font-size-base;
+    text-align      : left;
     //background-color : $component-background;
-    background-clip  : padding-box;
-    line-height      : 1.5;
-    overflow         : hidden;
-    width            : 100%;
+    background-clip : padding-box;
+    line-height     : 1.5;
+    overflow        : hidden;
+    width           : 100%;
   }
   @at-root &-combobox {
     width : 100%;
@@ -47,13 +48,13 @@
   }
 
   @at-root &-select {
-    float        : left;
-    font-size    : $font-size-base;
+    float      : left;
+    font-size  : $font-size-base;
     //border-right : $border-width-base $border-style-base $border-color-split;
-    box-sizing   : border-box;
-    overflow     : hidden;
-    position     : relative; // Fix chrome weird render bug
-    height       : 226px;
+    box-sizing : border-box;
+    overflow   : hidden;
+    position   : relative; // Fix chrome weird render bug
+    height     : 226px;
 
     @at-root &:hover {
       overflow-y : auto;
@@ -91,7 +92,7 @@
     }
 
     li:last-child:after {
-      content : '';
+      content : "";
       height  : 202px;
       display : block;
     }

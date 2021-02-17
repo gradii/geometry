@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -31,11 +30,15 @@ export class ExpOut {
 export class ExpInOut {
 
   public getRatio(p: number): number {
-    return (p === 0.0 || p === 1.0)
-      ? p
-      : ((p *= 2) < 1)
-        ? 0.5 * Math.pow(2, 10 * (p - 1))
-        : 0.5 * (2 - Math.pow(2, -10 * (p - 1)));
+    if (p === 0.0 || p === 1.0) {
+      return p;
+    } else {
+      if ((p *= 2) < 1) {
+        return 0.5 * Math.pow(2, 10 * (p - 1));
+      } else {
+        return 0.5 * (2 - Math.pow(2, -10 * (p - 1)));
+      }
+    }
   }
 }
 

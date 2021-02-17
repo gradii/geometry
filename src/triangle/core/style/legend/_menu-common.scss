@@ -1,7 +1,7 @@
-@import '../variables';
-@import './list-common';
-@import './layout-common';
-@import './vendor-prefixes';
+@use "../variables";
+@use "./list-common";
+@use "./layout-common";
+@use "./vendor-prefixes";
 
 /** The mixins below are shared between tri-menu and tri-select */
 
@@ -22,7 +22,7 @@ $tri-menu-icon-margin       : 16px !default;
 }
 
 @mixin tri-menu-item-base() {
-  @include tri-truncate-line();
+  @include list-common.tri-truncate-line();
 
   // Needs to be a block for the ellipsis to work.
   display         : block;
@@ -40,7 +40,7 @@ $tri-menu-icon-margin       : 16px !default;
     cursor : default;
   }
 
-  [dir='rtl'] & {
+  [dir="rtl"] & {
     text-align : right;
   }
 
@@ -52,7 +52,7 @@ $tri-menu-icon-margin       : 16px !default;
       vertical-align : top;
     }
 
-    [dir='rtl'] & {
+    [dir="rtl"] & {
       margin-left  : $tri-menu-icon-margin;
       margin-right : 0;
     }
@@ -72,7 +72,7 @@ $tri-menu-icon-margin       : 16px !default;
     border-style : solid;
     border-width : $size 0 $size $size;
     border-color : transparent transparent transparent currentColor;
-    content      : '';
+    content      : "";
     display      : inline-block;
     position     : absolute;
     top          : 50%;
@@ -80,7 +80,7 @@ $tri-menu-icon-margin       : 16px !default;
     transform    : translateY(-50%);
   }
 
-  [dir='rtl'] & {
+  [dir="rtl"] & {
     padding-right : $side-padding;
     padding-left  : $side-padding * 2;
 
@@ -93,7 +93,7 @@ $tri-menu-icon-margin       : 16px !default;
 }
 
 @mixin tri-menu-item-ripple() {
-  @include tri-fill();
+  @include layout-common.tri-fill();
 
   // Prevent any pointer events on the ripple container for a menu item. The ripple container is
   // not the trigger element for the ripples and can be therefore disabled like that. Disabling

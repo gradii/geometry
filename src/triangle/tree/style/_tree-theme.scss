@@ -1,14 +1,18 @@
-@import "../../core/themes/default-theme";
+@use "sass:map";
+@use "../../core/themes/theme";
+@use "../../core/style/theming";
+@use "../../core/style/variables" as v;
 
 @mixin tri-tree-theme($theme) {
-  $primary: map-get($theme, primary);
+  $primary : map.get($theme, primary);
 
   .node-menu {
     .node-menu-content {
-      border-radius: 5px;
+      border-radius : 5px;
+
       .node-menu-item {
         &:hover {
-          background-color: #108ee9;
+          background-color : #108ee9;
         }
       }
     }
@@ -16,106 +20,107 @@
 
   tree-internal {
     .over-drop-target {
-      border: 4px solid #757575;
+      border : 4px solid #757575;
     }
 
     .tree {
       .value-container {
         &.selected {
-          background: tri-color($primary, 1);
-          @if ($enable-rounded) {
-            border-radius: $border-radius-base;
+          background : theming.tri-color($primary, 1);
+          @if (v.$enable-rounded) {
+            border-radius : v.$border-radius-base;
           }
         }
       }
 
       .node-value {
-        color: #212121;
+        color : #212121;
 
         &:after {
-          background-color: #212121;
+          background-color : #212121;
         }
       }
 
       .node-left-menu {
         span:before {
-          content: "\2026";
-          color: #757575;
+          content : "\2026";
+          color   : #757575;
         }
       }
 
       .folding {
         &.node-collapsed {
           &:before {
-            content: "\E604";
-            color: #757575;
+            content : "\E604";
+            color   : #757575;
           }
         }
 
         &.node-expanded {
           &:before {
-            content: "\E606";
-            color: #757575;
+            content : "\E606";
+            color   : #757575;
           }
         }
 
         &.node-empty {
-          color: #212121;
+          color : #212121;
 
           &:before {
-            content: "\25CF";
-            color: #757575;
+            content : "\25CF";
+            color   : #757575;
           }
         }
 
         &.node-leaf {
-          color: #212121;
+          color : #212121;
+
           &:before {
-            content: "\25CF";
-            color: #757575;
+            content : "\25CF";
+            color   : #757575;
           }
         }
       }
     }
 
     .loading-children:after {
-      content: " loading ...";
-      color: #6a1b9a;
+      content : " loading ...";
+      color   : #6a1b9a;
     }
   }
 
   @keyframes loading-children {
     0% {
-      color: #f3e5f5;
+      color : #f3e5f5;
     }
 
     12.5% {
-      color: #e1bee7;
+      color : #e1bee7;
     }
 
     25% {
-      color: #ce93d8;
+      color : #ce93d8;
     }
 
     37.5% {
-      color: #ba68c8;
+      color : #ba68c8;
     }
 
     50% {
-      color: #ab47bc;
+      color : #ab47bc;
     }
 
     62.5% {
-      color: #9c27b0;
+      color : #9c27b0;
     }
     75% {
-      color: #8e24aa;
+      color : #8e24aa;
     }
     87.5% {
-      color: #7b1fa2;
+      color : #7b1fa2;
     }
     100% {
-      color: #6a1b9a;
+      color : #6a1b9a;
     }
   }
 }

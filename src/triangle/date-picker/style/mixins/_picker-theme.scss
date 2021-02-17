@@ -1,7 +1,7 @@
-@import "../../../core/themes/default-theme";
+@import "../../../core/themes/theme";
 
-$calendar-prefix-cls            : "#{$ant-prefix}-calendar";
-$calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
+$calendar-prefix-cls            : "#{$tri-prefix}-calendar";
+$calendar-timepicker-prefix-cls : "#{$tri-prefix}-calendar-time-picker";
 
 
 @mixin tri-picker-theme($theme) {
@@ -11,7 +11,7 @@ $calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
   .#{$calendar-prefix-cls}-picker {
     @include reset-component();
 
-    @at-root &:hover #{&}-input:not(.#{$ant-prefix}-input-disabled) {
+    @at-root &:hover #{&}-input:not(.#{$tri-prefix}-input-disabled) {
       border-color : tri-color($foreground, primary-color);
     }
 

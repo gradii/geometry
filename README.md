@@ -4,11 +4,19 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/gradii/triangle.svg)](https://greenkeeper.io/)
 
 
-## 常用命令
+## commands
 ```
 bazel build //src/triangle:npm_package
 ```
 
 ```
 bazel build //src/triangle:npm_package --config=release
+```
+
+```
+bazel build //src/triangle:npm_package --config=snapshot
+```
+
+```
+yarn dev-app
 ```

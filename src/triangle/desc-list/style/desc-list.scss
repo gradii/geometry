@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$desc-list-prefix-cls : "#{$ant-prefix}-desc-list";
+$desc-list-prefix-cls : "#{$tri-prefix}-desc-list";
 
 .#{$desc-list-prefix-cls} {
   display : block;

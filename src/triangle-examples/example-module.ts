@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -15,7 +14,7 @@ import {TriangleModule} from './triangle-module';
 import {TriDemoAffixBasicComponent} from './tri-demo-affix/tri-demo-affix-basic.component';
 import {TriDemoAffixContainerComponent} from './tri-demo-affix/tri-demo-affix-container.component';
 import {TriDemoAffixFixedComponent} from './tri-demo-affix/tri-demo-affix-fixed.component';
-import {TriDemoAlert4TypeComponent} from './tri-demo-alert/tri-demo-4-style.component';
+import {TriDemoAlert4TypeComponent} from './tri-demo-alert/tri-demo-4-type.component';
 import {TriDemoAlert4TypeMessageComponent} from './tri-demo-alert/tri-demo-alert-4-type-message.component';
 import {TriDemoAlertBasicComponent} from './tri-demo-alert/tri-demo-alert-basic.component';
 import {TriDemoAlertCloseableComponent} from './tri-demo-alert/tri-demo-alert-closeable.component';

@@ -1,7 +1,9 @@
-@import "../../core/themes/default-theme";
-@import "../../input/style/input-mixin";
+@use "../../core/style/mixins";
+@use "../../core/style/variables";
+@use "../../input/style/input-mixin";
+@use "../../input/style/input-variables";
 
-$select-prefix-cls    : "#{$ant-prefix}-select";
+$select-prefix-cls    : "#{mixins.$tri-prefix}-select";
 $select-option-height : 2rem;
 
 @mixin selection__clear() {
@@ -13,7 +15,7 @@ $select-option-height : 2rem;
   width          : 12px;
   height         : 12px;
   margin-top     : -6px;
-  font-size      : $font-size-base;
+  font-size      : mixins.$font-size-base;
   font-style     : normal;
   line-height    : 12px;
   text-align     : center;
@@ -32,9 +34,9 @@ $select-option-height : 2rem;
   }
 }
 
-@include import-once('component:selection') {
+@include mixins.import-once("component:selection") {
   .#{$select-prefix-cls} {
-    @include reset-component();
+    @include mixins.reset-component();
     position : relative;
     display  : inline-block;
 
@@ -46,17 +48,17 @@ $select-option-height : 2rem;
     }
 
     > ul > li > a {
-      padding          : 0;
+      padding : 0;
     }
 
     // arrow
     @at-root &-arrow {
-      @include iconfont-mixin();
+      @include mixins.iconfont-mixin();
       position         : absolute;
       top              : 50%;
       right            : 8px;
       margin-top       : -6px;
-      font-size        : $font-size-sm;
+      font-size        : mixins.$font-size-sm;
       line-height      : 1;
       transform-origin : 50% 50%;
 
@@ -67,14 +69,14 @@ $select-option-height : 2rem;
     }
 
     @at-root &-selection {
-      display          : block;
+      display       : block;
 
-      box-sizing       : border-box;
+      box-sizing    : border-box;
 
-      border-radius    : $border-radius-base;
-      outline          : none;
-      transition       : all .3s $ease-in-out;
-      user-select      : none;
+      border-radius : mixins.$border-radius-base;
+      outline       : none;
+      transition    : all .3s mixins.$ease-in-out;
+      user-select   : none;
 
 
 
@@ -96,11 +98,11 @@ $select-option-height : 2rem;
     }
 
     @at-root &-disabled #{&}-selection {
-      cursor     : not-allowed;
+      cursor : not-allowed;
       @at-root &:hover,
       &:focus,
       &:active {
-        box-shadow   : none;
+        box-shadow : none;
       }
 
       @at-root &__clear {
@@ -119,7 +121,7 @@ $select-option-height : 2rem;
 
     @at-root &-selection--single {
       position : relative;
-      height   : $input-height-base;
+      height   : input-variables.$input-height-base;
       cursor   : pointer;
     }
 
@@ -128,9 +130,9 @@ $select-option-height : 2rem;
       display      : block;
       margin-right : 7px;
       margin-left  : 7px;
-      line-height  : $input-height-base - .125rem;
+      line-height  : input-variables.$input-height-base - .125rem;
       @at-root &:after {
-        content        : '.';
+        content        : ".";
         visibility     : hidden;
         pointer-events : none;
         display        : inline-block;
@@ -139,59 +141,59 @@ $select-option-height : 2rem;
     }
 
     @at-root &-lg {
-      font-size : $font-size-lg;
+      font-size : mixins.$font-size-lg;
       .#{$select-prefix-cls}-selection--single {
-        height : $input-height-lg;
+        height : input-variables.$input-height-lg;
       }
 
       .#{$select-prefix-cls}-selection__rendered {
-        line-height : $input-height-lg - .125rem
+        line-height : input-variables.$input-height-lg - .125rem
       }
 
       .#{$select-prefix-cls}-selection--multiple {
-        min-height : $input-height-lg;
+        min-height : input-variables.$input-height-lg;
 
         .#{$select-prefix-cls}-selection__rendered {
           li {
-            height      : $input-height-lg - .5rem;
-            line-height : $input-height-lg - .5rem;
+            height      : input-variables.$input-height-lg - .5rem;
+            line-height : input-variables.$input-height-lg - .5rem;
           }
         }
 
         .#{$select-prefix-cls}-selection__clear {
-          top : $input-height-lg / 2;
+          top : input-variables.$input-height-lg / 2;
         }
       }
     }
 
     @at-root &-sm {
       .#{$select-prefix-cls}-selection--single {
-        height : $input-height-sm;
+        height : input-variables.$input-height-sm;
       }
 
       .#{$select-prefix-cls}-selection__rendered {
-        margin      : 0 $control-padding-horizontal-sm - rem-convert(rem, 1px);
-        line-height : $input-height-sm - rem-convert(rem, 2px);
+        margin      : 0 mixins.$control-padding-horizontal-sm - mixins.rem-convert(rem, 1px);
+        line-height : input-variables.$input-height-sm - mixins.rem-convert(rem, 2px);
       }
 
       .#{$select-prefix-cls}-selection--multiple {
-        min-height : $input-height-sm;
+        min-height : input-variables.$input-height-sm;
 
         .#{$select-prefix-cls}-selection__rendered {
           li {
-            height      : $input-height-sm - rem-convert(rem, 8px);
-            line-height : $input-height-sm - rem-convert(rem, 10px);
+            height      : input-variables.$input-height-sm - mixins.rem-convert(rem, 8px);
+            line-height : input-variables.$input-height-sm - mixins.rem-convert(rem, 10px);
           }
         }
 
         .#{$select-prefix-cls}-selection__clear,
         .#{$select-prefix-cls}-selection-arrow {
-          top : $input-height-sm / 2;
+          top : input-variables.$input-height-sm / 2;
         }
 
         .#{$select-prefix-cls}-selection__clear,
         .#{$select-prefix-cls}-arrow {
-          right : $control-padding-horizontal-sm;
+          right : mixins.$control-padding-horizontal-sm;
         }
       }
     }
@@ -225,7 +227,7 @@ $select-option-height : 2rem;
     }
 
     @at-root &-search__field__placeholder {
-      left : $control-padding-horizontal;
+      left : mixins.$control-padding-horizontal;
     }
 
     @at-root &-search__field__mirror {
@@ -258,7 +260,7 @@ $select-option-height : 2rem;
         line-height   : 1;
         background    : transparent;
         border-width  : 0;
-        border-radius : $border-radius-base;
+        border-radius : mixins.$border-radius-base;
         outline       : 0;
       }
 
@@ -276,10 +278,10 @@ $select-option-height : 2rem;
     }
 
     @at-root &-selection--multiple {
-      min-height     : $input-height-base;
-      padding-bottom : rem-convert(rem, 3px);
+      min-height     : input-variables.$input-height-base;
+      padding-bottom : mixins.rem-convert(rem, 3px);
       cursor         : text;
-      @include clearfix;
+      @include mixins.clearfix;
 
       .#{$select-prefix-cls}-search--inline {
         position  : static;
@@ -301,26 +303,26 @@ $select-option-height : 2rem;
       }
 
       .#{$select-prefix-cls}-selection__placeholder {
-        margin-left : rem-convert(rem, 6px);
+        margin-left : mixins.rem-convert(rem, 6px);
       }
 
       > ul > li,
       .#{$select-prefix-cls}-selection__rendered > ul > li { // for tree-select
         margin-top  : 3px;
-        height      : $input-height-base - .5rem;
-        line-height : $input-height-base - rem-convert(rem, 8px) - rem-convert(rem, 2px);
+        height      : input-variables.$input-height-base - .5rem;
+        line-height : input-variables.$input-height-base - mixins.rem-convert(rem, 8px) - mixins.rem-convert(rem, 2px);
       }
 
       .#{$select-prefix-cls}-selection__choice {
-        position         : relative;
-        float            : left;
-        max-width        : 99%;
-        margin-right     : 4px;
-        padding          : 0 20px 0 10px;
-        overflow         : hidden;
-        border-radius    : 4px;
-        cursor           : default;
-        transition       : padding .3s $ease-in-out;
+        position      : relative;
+        float         : left;
+        max-width     : 99%;
+        margin-right  : 4px;
+        padding       : 0 20px 0 10px;
+        overflow      : hidden;
+        border-radius : 4px;
+        cursor        : default;
+        transition    : padding .3s mixins.$ease-in-out;
         @at-root &__disabled {
           padding : 0 10px;
         }
@@ -332,19 +334,19 @@ $select-option-height : 2rem;
         overflow      : hidden;
         text-overflow : ellipsis;
         max-width     : 100%;
-        transition    : margin .3s $ease-in-out;
+        transition    : margin .3s mixins.$ease-in-out;
       }
 
       .#{$select-prefix-cls}-selection__choice__remove {
-        @include iconfont-mixin();
+        @include mixins.iconfont-mixin();
         position    : absolute;
         right       : 4px;
         display     : inline-block;
         line-height : inherit;
         cursor      : pointer;
         font-weight : bold;
-        transition  : all 0.3s $ease-in-out;
-        @include iconfont-size-under-12px(8px);
+        transition  : all 0.3s mixins.$ease-in-out;
+        @include mixins.iconfont-size-under-12px(8px);
         @at-root &:hover {
           color : #404040;
         }
@@ -355,7 +357,7 @@ $select-option-height : 2rem;
 
       .#{$select-prefix-cls}-selection__clear,
       .#{$select-prefix-cls}-arrow {
-        top : $input-height-base / 2;
+        top : input-variables.$input-height-base / 2;
       }
     }
 
@@ -399,7 +401,7 @@ $select-option-height : 2rem;
         height     : 100%;
         position   : relative;
         z-index    : 1;
-        transition : all .3s $ease-in-out;
+        transition : all .3s mixins.$ease-in-out;
         box-shadow : none;
       }
     }
@@ -410,19 +412,19 @@ $select-option-height : 2rem;
   }
 }
 
-@include import-once('component:selection-dropdown') {
+@include mixins.import-once("component:selection-dropdown") {
   .#{$select-prefix-cls}-dropdown {
-    @include reset-component();
-    position         : absolute;
-    top              : -9999px;
-    left             : -9999px;
-    z-index          : $zindex-dropdown;
-    box-sizing       : border-box;
-    font-size        : $font-size-base;
-    font-variant     : initial;
-    border-radius    : $border-radius-base;
-    outline          : none;
-    box-shadow       : $box-shadow-base;
+    @include mixins.reset-component();
+    position      : absolute;
+    top           : -9999px;
+    left          : -9999px;
+    z-index       : mixins.$zindex-dropdown;
+    box-sizing    : border-box;
+    font-size     : mixins.$font-size-base;
+    font-variant  : initial;
+    border-radius : mixins.$border-radius-base;
+    outline       : none;
+    box-shadow    : mixins.$box-shadow-base;
 
     @at-root &.slide-up-enter.slide-up-enter-active#{&}-placement-bottomLeft,
     &.slide-up-appear.slide-up-appear-active#{&}-placement-bottomLeft {
@@ -464,10 +466,10 @@ $select-option-height : 2rem;
       }
 
       @at-root &-item-group-title {
-        height      : rem-convert(rem, 32px);
-        padding     : 0 rem-convert(rem, 8px);
-        font-size   : $font-size-sm;
-        line-height : rem-convert(rem, 32px);
+        height      : mixins.rem-convert(rem, 32px);
+        padding     : 0 mixins.rem-convert(rem, 8px);
+        font-size   : mixins.$font-size-sm;
+        line-height : mixins.rem-convert(rem, 32px);
       }
 
       @at-root &-item-group-list #{&}-item:first-child:not(:last-child),
@@ -478,7 +480,7 @@ $select-option-height : 2rem;
       @at-root &-item {
         position      : relative;
         display       : block;
-        padding       : rem-convert(rem, 5px) $control-padding-horizontal;
+        padding       : mixins.rem-convert(rem, 5px) mixins.$control-padding-horizontal;
         overflow      : hidden;
         font-weight   : normal;
         //line-height   : rem-convert(rem, 22px);
@@ -492,25 +494,25 @@ $select-option-height : 2rem;
         }
 
         @at-root &:first-child {
-          border-radius : $border-radius-base $border-radius-base 0 0;
+          border-radius : mixins.$border-radius-base mixins.$border-radius-base 0 0;
         }
 
         @at-root &:last-child {
-          border-radius : 0 0 $border-radius-base $border-radius-base;
+          border-radius : 0 0 mixins.$border-radius-base mixins.$border-radius-base;
         }
 
         @at-root &-disabled {
           cursor : not-allowed;
 
           @at-root &:hover {
-            cursor           : not-allowed;
+            cursor : not-allowed;
           }
         }
 
         @at-root &-selected {
           @at-root &,
           &:hover {
-            font-weight      : bold;
+            font-weight : bold;
           }
         }
 
@@ -529,12 +531,12 @@ $select-option-height : 2rem;
 
     @at-root &#{&}--multiple {
       .#{$select-prefix-cls}-dropdown-menu-item {
-        padding-right : $control-padding-horizontal + rem-convert(rem, 20px);
+        padding-right : mixins.$control-padding-horizontal + mixins.rem-convert(rem, 20px);
 
         & .#{$select-prefix-cls}-selected-icon {
           position    : absolute;
           top         : 50%;
-          right       : $control-padding-horizontal;
+          right       : mixins.$control-padding-horizontal;
           color       : transparent;
           font-weight : bold;
           font-size   : 12px;
@@ -558,7 +560,7 @@ $select-option-height : 2rem;
     }
 
     @at-root &--empty#{&}--multiple #{&}-menu-item {
-      padding-right : $control-padding-horizontal;
+      padding-right : mixins.$control-padding-horizontal;
     }
 
     @at-root &-container-open,

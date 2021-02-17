@@ -1,7 +1,8 @@
-@import "../../core/themes/default-theme";
-@import '../../core/style/cdk/a11y';
+@use "../../core/style/mixins";
+@use "../../core/style/variables";
+@use "../../core/style/cdk/a11y";
 
-@import './tabs-common';
+@use "./tabs-common";
 
 .tri-tab-group {
   display        : flex;
@@ -14,17 +15,17 @@
 
 // Wraps each tab label
 .tri-tab-label {
-  @include tab-label;
+  @include tabs-common.tab-label;
   position : relative;
 }
 
-@media ($tri-xsmall) {
+@media (mixins.$tri-xsmall) {
   .tri-tab-label {
     padding : 0 12px;
   }
 }
 
-@media ($tri-small) {
+@media (mixins.$tri-small) {
   .tri-tab-label {
     padding : 0 12px;
   }
@@ -38,16 +39,16 @@
 
 // The bottom section of the view; contains the tab bodies
 .tri-tab-body-wrapper {
-  @include _noop-animation();
+  @include mixins.noop-animation();
   position   : relative;
   overflow   : hidden;
   display    : flex;
-  transition : height $tri-tab-animation-duration $ease-in-out-curve-function;
+  transition : height tabs-common.$tri-tab-animation-duration mixins.$ease-in-out-curve-function;
 }
 
 // Wraps each tab body
 .tri-tab-body {
-  @include tri-fill;
+  @include mixins.tri-fill;
   display    : block;
   overflow   : hidden;
 

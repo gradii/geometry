@@ -1,19 +1,22 @@
-@import "../../core/themes/default-theme";
+@use "sass:map";
+@use "../../core/themes/theme";
+@use "../../core/style/theming";
+@use "../../core/style/variables" as v;
 
-$progress-prefix-cls : "#{$ant-prefix}-progress" !default;
+$progress-prefix-cls : "#{ v.$tri-prefix}-progress" !default;
 
 @mixin tri-progress-theme($theme) {
-  $primary                  : map-get($theme, primary);
-  $success                  : map-get($theme, success);
-  $error                    : map-get($theme, error);
-  $gray                     : map-get($theme, gray);
+  $primary                  : map.get($theme, primary);
+  $success                  : map.get($theme, success);
+  $error                    : map.get($theme, error);
+  $gray                     : map.get($theme, gray);
 
-  $foreground               : map-get($theme, foreground);
+  $foreground               : map.get($theme, foreground);
 
   // Progress
   // --
-  $process-default-color    : tri-color($primary);
-  $progress-remaining-color : tri-color($gray, 100) !default;
+  $process-default-color    : theming.tri-color($primary);
+  $progress-remaining-color : theming.tri-color($gray, 100) !default;
 
   .#{$progress-prefix-cls} {
     @at-root &-inner {
@@ -48,7 +51,7 @@ $progress-prefix-cls : "#{$ant-prefix}-progress" !default;
 
     @at-root &-status-active {
       .#{$progress-prefix-cls}-bg:before {
-        background    : tri-color($foreground, component-background);
+        background    : theming.tri-color($foreground, component-background);
         border-radius : 10px;
       }
 
@@ -59,25 +62,25 @@ $progress-prefix-cls : "#{$ant-prefix}-progress" !default;
 
     @at-root &-status-exception {
       .#{$progress-prefix-cls}-bg {
-        background-color : tri-color($error);
+        background-color : theming.tri-color($error);
       }
 
       .#{$progress-prefix-cls}-text {
-        color : tri-color($error);
+        color : theming.tri-color($error);
       }
 
       .#{$progress-prefix-cls}-circle-path {
-        stroke : tri-color($error);
+        stroke : theming.tri-color($error);
       }
     }
 
     @at-root &-status-success {
       .#{$progress-prefix-cls}-bg {
-        background-color : tri-color($success);
+        background-color : theming.tri-color($success);
       }
 
       .#{$progress-prefix-cls}-text {
-        color : tri-color($success);
+        color : theming.tri-color($success);
       }
     }
 
@@ -87,12 +90,12 @@ $progress-prefix-cls : "#{$ant-prefix}-progress" !default;
 
     @at-root &-circle #{&}-status-exception {
       .#{$progress-prefix-cls}-text {
-        color : tri-color($error);
+        color : theming.tri-color($error);
       }
     }
     @at-root &-circle #{&}-status-success {
       .#{$progress-prefix-cls}-text {
-        color : tri-color($success);
+        color : theming.tri-color($success);
       }
     }
   }

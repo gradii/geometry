@@ -1,10 +1,11 @@
-@import "../../core/themes/default-theme";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
 
-$full-calendar-prefix-cls : "#{$ant-prefix}-fullcalendar";
+$full-calendar-prefix-cls : "#{v.$tri-prefix}-fullcalendar";
 
 .#{$full-calendar-prefix-cls} {
-  font-size   : $font-size-base;
-  line-height : $line-height-base;
+  font-size   : v.$font-size-base;
+  line-height : v.$line-height-base;
   outline     : none;
 
   @at-root &-month-select {
@@ -15,16 +16,16 @@ $full-calendar-prefix-cls : "#{$ant-prefix}-fullcalendar";
     padding    : 11px 16px 11px 0;
     text-align : right;
 
-    .#{$ant-prefix}-select-dropdown {
+    .#{v.$tri-prefix}-select-dropdown {
       text-align : left;
     }
 
-    .#{$ant-prefix}-radio-group {
+    .#{v.$tri-prefix}-radio-group {
       margin-left : 8px;
       text-align  : left;
     }
 
-    label.#{$ant-prefix}-radio-button {
+    label.#{v.$tri-prefix}-radio-button {
       height      : 22px;
       line-height : 20px;
       padding     : 0 10px;
@@ -89,7 +90,7 @@ $full-calendar-prefix-cls : "#{$ant-prefix}-fullcalendar";
   @at-root &-value {
     display       : block;
     margin        : 0 auto;
-    border-radius : $border-radius-base;
+    border-radius : v.$border-radius-base;
     width         : 22px;
     height        : 22px;
     padding       : 0;
@@ -103,13 +104,13 @@ $full-calendar-prefix-cls : "#{$ant-prefix}-fullcalendar";
   }
 
   @at-root &-disabled-cell-first-of-row #{&}-value {
-    border-top-left-radius    : $border-radius-base;
-    border-bottom-left-radius : $border-radius-base;
+    border-top-left-radius    : v.$border-radius-base;
+    border-bottom-left-radius : v.$border-radius-base;
   }
 
   @at-root &-disabled-cell-last-of-row #{&}-value {
-    border-top-right-radius    : $border-radius-base;
-    border-bottom-right-radius : $border-radius-base;
+    border-top-right-radius    : v.$border-radius-base;
+    border-bottom-right-radius : v.$border-radius-base;
   }
 
   @at-root &-month-panel-table {
@@ -134,13 +135,13 @@ $full-calendar-prefix-cls : "#{$ant-prefix}-fullcalendar";
   }
 
   @at-root &-fullscreen #{&}-header {
-    .#{$ant-prefix}-radio-group {
+    .#{v.$tri-prefix}-radio-group {
       margin-left : 1rem;
     }
 
-    label.#{$ant-prefix}-radio-button {
-      height      : $form-control-height-base;
-      line-height : $form-control-height-base - 0.125rem;
+    label.#{v.$tri-prefix}-radio-button {
+      height      : v.$form-control-height-base;
+      line-height : v.$form-control-height-base - 0.125rem;
     }
   }
 

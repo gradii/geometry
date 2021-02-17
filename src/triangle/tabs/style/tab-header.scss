@@ -1,31 +1,31 @@
-@import '../../core/style/legend/noop-animation';
-@import './tabs-common';
+@use "../../core/style/mixins";
+@use "./tabs-common";
 
-@include paginated-tab-header;
+@include tabs-common.paginated-tab-header;
 
 .tri-ink-bar {
-  @include ink-bar;
+  @include tabs-common.ink-bar;
 }
 
 .tri-tab-labels {
-  @include paginated-tab-header-item-wrapper;
+  @include tabs-common.paginated-tab-header-item-wrapper;
 }
 
 .tri-tab-label-container {
-  @include paginated-tab-header-container;
+  @include tabs-common.paginated-tab-header-container;
 }
 
 .tri-tab-list {
-  @include _noop-animation();
+  @include mixins.noop-animation();
 }
 
 // Wraps each tab label
 .tri-tab-label {
-  @include tab-label;
+  @include tabs-common.tab-label;
   position : relative;
 }
 
-@media ($tri-xsmall) {
+@media (mixins.$tri-xsmall) {
   .tri-tab-label {
     min-width : 72px;
   }

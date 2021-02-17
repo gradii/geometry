@@ -1,4 +1,5 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
 $data-table-line-height : 1.12 !default;
 
@@ -295,7 +296,7 @@ $data-table-line-height : 1.12 !default;
 
   &::before, &::after {
     display  : inline-block;
-    content  : '';
+    content  : "";
     position : absolute;
   }
 
@@ -870,7 +871,7 @@ tbody .tri-group-cell {
 }
 
 .tri-data-table {
-  border                      : 1px solid #e6ebf5;
+  border : 1px solid #e6ebf5;
 }
 
 .tri-data-table {
@@ -954,7 +955,7 @@ col.tri-sorted, th.tri-sorted {
     }
 
     &.tri-state-active {
-      color            : #ffffff;
+      color : #ffffff;
     }
   }
 }

@@ -1,7 +1,8 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 @import "../../input/style/input-mixin";
 
-$pagination-prefix-cls : "#{$ant-prefix}-pagination";
+$pagination-prefix-cls : "#{$tri-prefix}-pagination";
 
 .#{$pagination-prefix-cls} {
   font-size : $font-size-base;
@@ -20,19 +21,19 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
   }
 
   @at-root &-item {
-    cursor           : pointer;
-    border-radius    : $border-radius-base;
-    user-select      : none;
-    min-width        : 28px;
-    height           : 28px;
-    line-height      : 28px;
-    text-align       : center;
-    list-style       : none;
-    display          : inline-block;
-    vertical-align   : middle;
-    margin-right     : 8px;
-    font-family      : Arial;
-    outline          : 0;
+    cursor         : pointer;
+    border-radius  : $border-radius-base;
+    user-select    : none;
+    min-width      : 28px;
+    height         : 28px;
+    line-height    : 28px;
+    text-align     : center;
+    list-style     : none;
+    display        : inline-block;
+    vertical-align : middle;
+    margin-right   : 8px;
+    font-family    : Arial;
+    outline        : 0;
 
     a {
       text-decoration : none;
@@ -42,7 +43,7 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
 
     @at-root &:focus,
     &:hover {
-      transition   : all .3s;
+      transition : all .3s;
       a {
       }
     }
@@ -97,7 +98,7 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
 
   @at-root &-prev,
   &-next {
-    outline          : 0;
+    outline : 0;
 
     a {
       outline     : none;
@@ -162,14 +163,14 @@ $pagination-prefix-cls : "#{$ant-prefix}-pagination";
     margin-right   : 8px;
 
     input {
-      margin           : 0 8px;
-      box-sizing       : border-box;
-      border-radius    : $border-radius-base;
-      outline          : none;
-      padding          : 5px 8px;
-      height           : 24px;
-      text-align       : center;
-      transition       : border-color .3s;
+      margin        : 0 8px;
+      box-sizing    : border-box;
+      border-radius : $border-radius-base;
+      outline       : none;
+      padding       : 5px 8px;
+      height        : 24px;
+      text-align    : center;
+      transition    : border-color .3s;
 
       @at-root &:hover {
       }

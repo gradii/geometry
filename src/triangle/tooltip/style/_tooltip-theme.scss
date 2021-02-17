@@ -1,51 +1,63 @@
-@import "../../core/themes/default-theme";
+@use "../../core/themes/theme";
+@use "../../core/style/variables" as v;
 
-$tooltip-prefix-cls: "#{$ant-prefix}-tooltip";
+$tooltip-prefix-cls    : #{v.$tri-prefix}-tooltip;
+
+
+// Tooltip
+// ---
+
+//** Tooltip text color
+$tooltip-color         : #fff !default;
+//** Tooltip background color
+$tooltip-bg            : rgba(64, 64, 64, .85) !default;
+
+//** Tooltip arrow color
+$tooltip-arrow-color   : $tooltip-bg !default;
+
+$tooltip-border-radius : v.$border-radius-base;
+
+$tooltip-box-shadow    : v.$box-shadow-base;
+
 
 @mixin tri-tooltip-theme($theme) {
   // Wrapper for the tooltip content
   .#{$tooltip-prefix-cls}-inner {
-    color: $tooltip-color;
-    background-color: $tooltip-bg;
-    border-radius: $border-radius-base;
-    box-shadow: $box-shadow-base;
+    color            : $tooltip-color;
+    background-color : $tooltip-bg;
+    border-radius    : $tooltip-border-radius;
+    box-shadow       : $tooltip-box-shadow;
   }
 
   // Arrows
   .#{$tooltip-prefix-cls}-arrow {
-    border-color: transparent;
-    border-style: solid;
+    border-color : transparent;
+    border-style : solid;
   }
 
   .#{$tooltip-prefix-cls} {
     @at-root &-placement-top #{&}-arrow,
-      &-placement-topLeft #{&}-arrow,
-      &-placement-topRight #{&}-arrow {
-      bottom: $tooltip-distance - $tooltip-arrow-width;
-      border-width: $tooltip-arrow-width $tooltip-arrow-width 0;
-      border-top-color: $tooltip-arrow-color;
+    &-placement-topLeft #{&}-arrow,
+    &-placement-topRight #{&}-arrow {
+      border-top-color : $tooltip-arrow-color;
     }
 
     @at-root &-placement-right #{&}-arrow,
-      &-placement-rightTop #{&}-arrow,
-      &-placement-rightBottom #{&}-arrow {
-      left: $tooltip-distance - $tooltip-arrow-width;
-      border-width: $tooltip-arrow-width $tooltip-arrow-width $tooltip-arrow-width 0;
-      border-right-color: $tooltip-arrow-color;
+    &-placement-rightTop #{&}-arrow,
+    &-placement-rightBottom #{&}-arrow {
+      border-right-color : $tooltip-arrow-color;
     }
 
     @at-root &-placement-left #{&}-arrow,
-      &-placement-leftTop #{&}-arrow,
-      &-placement-leftBottom #{&}-arrow {
-      border-width: $tooltip-arrow-width 0 $tooltip-arrow-width $tooltip-arrow-width;
-      border-left-color: $tooltip-arrow-color;
+    &-placement-leftTop #{&}-arrow,
+    &-placement-leftBottom #{&}-arrow {
+      border-left-color : $tooltip-arrow-color;
     }
 
     @at-root &-placement-bottom #{&}-arrow,
-      &-placement-bottomLeft #{&}-arrow,
-      &-placement-bottomRight #{&}-arrow {
-      border-width: 0 $tooltip-arrow-width $tooltip-arrow-width;
-      border-bottom-color: $tooltip-arrow-color;
+    &-placement-bottomLeft #{&}-arrow,
+    &-placement-bottomRight #{&}-arrow {
+      border-bottom-color : $tooltip-arrow-color;
     }
   }
 }

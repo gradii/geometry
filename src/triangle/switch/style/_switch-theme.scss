@@ -1,33 +1,35 @@
-@import "../../core/themes/default-theme";
+@use "sass:map";
+@use "../../core/themes/theme";
+@use "../../core/style/theming";
 
 @mixin tri-switch-theme($theme) {
-  $primary: map-get($theme, primary);
-  $foreground: map-get($theme, foreground);
+  $primary    : map.get($theme, primary);
+  $foreground : map.get($theme, foreground);
 
   .#{$switch-prefix-cls} {
-    border-radius: $switch-height / 2;
-    background-color: tri-color($foreground, disabled);
+    border-radius    : $switch-height / 2;
+    background-color : theming.tri-color($foreground, disabled);
 
     @at-root &-inner {
-      color: #fff;
+      color : #fff;
     }
 
     @at-root &:after {
-      border-radius: $switch-inner-height / 2;
-      background-color: tri-color($foreground, component-background);
+      border-radius    : $switch-inner-height / 2;
+      background-color : theming.tri-color($foreground, component-background);
     }
 
     @at-root &:focus {
-      box-shadow: 0 0 0 2px rgba(tri-color($primary), 0.2);
+      box-shadow : 0 0 0 2px rgba(theming.tri-color($primary), 0.2);
       outline    : 0;
     }
 
     @at-root &:focus:active {
-      box-shadow: none;
+      box-shadow : none;
     }
 
     @at-root &-checked {
-      background-color: tri-color($primary);
+      background-color : theming.tri-color($primary);
     }
 
     @at-root &-disabled {
@@ -41,14 +43,14 @@
       }
 
       @at-root &.#{$switch-prefix-cls}-checked {
-        background : tri-color($primary, 300);
+        background : theming.tri-color($primary, 300);
         @at-root &:after {
           background : #f4f4f4;
         }
       }
 
       .#{$switch-prefix-cls}-inner {
-        color : tri-color($foreground, disabled);
+        color : theming.tri-color($foreground, disabled);
       }
     }
   }

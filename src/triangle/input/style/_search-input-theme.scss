@@ -1,14 +1,13 @@
-@import "../../core/themes/default-theme";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
+@use "./input-mixin";
 
-@import "../../button/style/button-mixins";
-@import "./input-mixin";
 
+@mixin tri-search-input-theme() {
 
-@mixin tri-search-input-theme($theme) {
-
-  .#{$ant-prefix}-search-input {
-    .#{$ant-prefix}-search-btn {
-      @include btn-default($theme);
+  .#{v.$tri-prefix}-search-input {
+    .#{v.$tri-prefix}-search-btn {
+      @include mixins.btn-default();
     }
   }
 

@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$steps-prefix-cls           : "#{$ant-prefix}-steps";
+$steps-prefix-cls           : "#{$tri-prefix}-steps";
 
 $steps-icon-size            : 26px;
 $steps-small-icon-size      : 18px;
@@ -75,11 +76,11 @@ $steps-desciption-max-width : 120px;
   }
 
   .#{$steps-prefix-cls}-title {
-    font-size        : $font-size-lg;
-    line-height      : $steps-icon-size;
-    font-weight      : bold;
-    display          : inline-block;
-    padding-right    : 10px;
+    font-size     : $font-size-lg;
+    line-height   : $steps-icon-size;
+    font-weight   : bold;
+    display       : inline-block;
+    padding-right : 10px;
   }
 
   .#{$steps-prefix-cls}-item:last-child {
@@ -112,12 +113,12 @@ $steps-desciption-max-width : 120px;
       width          : 100%;
       position       : relative;
       @at-root &:after {
-        position   : absolute;
-        content    : '';
-        top        : 0;
-        width      : 0;
-        height     : 100%;
-        opacity    : 0;
+        position : absolute;
+        content  : "";
+        top      : 0;
+        width    : 0;
+        height   : 100%;
+        opacity  : 0;
       }
     }
 
@@ -305,12 +306,12 @@ $steps-desciption-max-width : 120px;
         border-radius : $steps-dot-size / 2;
         position      : relative;
         @at-root &:after {
-          content    : '';
-          width      : 40px;
-          height     : 24px;
-          position   : absolute;
-          top        : -8px;
-          left       : -16px;
+          content  : "";
+          width    : 40px;
+          height   : 24px;
+          position : absolute;
+          top      : -8px;
+          left     : -16px;
         }
         @at-root &:hover {
           transform : scale(1.3);
@@ -324,7 +325,7 @@ $steps-desciption-max-width : 120px;
     margin-top : 10px;
 
     .#{$steps-prefix-cls}-title {
-      padding-right    : 0;
+      padding-right : 0;
     }
   }
 

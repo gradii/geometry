@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -9,7 +8,6 @@ import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/co
 
 @Component({
   selector           : 'tri-data-table-filter-cell-operators',
-  preserveWhitespaces: false,
   template           : `
                          <tri-select
                            *ngIf="showOperators"

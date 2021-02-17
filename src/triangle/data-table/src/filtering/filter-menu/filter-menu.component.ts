@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -17,7 +16,6 @@ import { FilterService } from '../filter.service';
 
 @Component({
   selector           : 'tri-data-table-filter-menu',
-  preserveWhitespaces: false,
   template           : `
     <a [ngClass]="{'tri-data-table-filter':true, 'tri-state-active': hasFilters}"
        (click)="toggle($event)"

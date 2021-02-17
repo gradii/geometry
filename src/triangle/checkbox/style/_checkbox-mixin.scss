@@ -1,8 +1,8 @@
-@mixin antCheckboxFn($checkbox-prefix-cls: "#{$ant-prefix}-checkbox") {
-  $primary: map-get($theme, primary);
-  $foreground: map-get($theme, foreground);
-  $background: map-get($theme, background);
-  
+@mixin antCheckboxFn($checkbox-prefix-cls: "#{$tri-prefix}-checkbox") {
+  $primary                   : map-get($theme, primary);
+  $foreground                : map-get($theme, foreground);
+  $background                : map-get($theme, background);
+
   $checkbox-size             : 16px;
   $checkbox-inner-prefix-cls : "#{$checkbox-prefix-cls}-inner";
   // 一般状态
@@ -29,7 +29,7 @@
       height              : 100%;
       border-radius       : $border-radius-sm;
       border              : 1px solid tri-color($primary);
-      content             : '';
+      content             : "";
       animation           : antCheckboxEffect 0.36s ease-in-out;
       animation-fill-mode : both;
       visibility          : hidden;
@@ -47,7 +47,7 @@
       display          : inline-block;
       width            : $checkbox-size;
       height           : $checkbox-size;
-      border           : $border-width-base $border-style-base tri-color($foreground,border-color-base);
+      border           : $border-width-base $border-style-base tri-color($foreground, border-color-base);
       border-radius    : $border-radius-sm;
       background-color : #fff;
       transition       : all .3s;
@@ -63,7 +63,7 @@
         border      : 2px solid #fff;
         border-top  : 0;
         border-left : 0;
-        content     : ' ';
+        content     : " ";
         transition  : all .1s $ease-in-back;
       }
     }
@@ -84,7 +84,7 @@
 
   // 半选状态
   .#{$checkbox-prefix-cls}-indeterminate .#{$checkbox-inner-prefix-cls}::after {
-    content      : ' ';
+    content      : " ";
     transform    : scale(1);
     position     : absolute;
     border-width : 0 0 2px 0;
@@ -95,7 +95,7 @@
   }
 
   .#{$checkbox-prefix-cls}-indeterminate.#{$checkbox-prefix-cls}-disabled .#{$checkbox-inner-prefix-cls}::after {
-    border-color : tri-color($background,disabled-color);
+    border-color : tri-color($background, disabled-color);
   }
 
   // 选中状态
@@ -110,7 +110,7 @@
     border      : 2px solid #fff;
     border-top  : 0;
     border-left : 0;
-    content     : ' ';
+    content     : " ";
     transition  : all .2s $ease-out-back .1s;
   }
 
@@ -128,7 +128,7 @@
     @at-root &.#{$checkbox-prefix-cls}-checked {
       .#{$checkbox-inner-prefix-cls}::after {
         animation-name : none;
-        border-color   : tri-color($background,disabled-color);
+        border-color   : tri-color($background, disabled-color);
       }
     }
 
@@ -137,7 +137,7 @@
     }
 
     .#{$checkbox-inner-prefix-cls} {
-      border-color     : tri-color($foreground,border-color-base) !important;
+      border-color     : tri-color($foreground, border-color-base) !important;
       background-color : $input-disabled-bg;
       @at-root &::after {
         animation-name : none;
@@ -146,7 +146,7 @@
     }
 
     @at-root & + span {
-      color  : tri-color($background,disabled-color);
+      color  : tri-color($background, disabled-color);
       cursor : not-allowed;
     }
   }

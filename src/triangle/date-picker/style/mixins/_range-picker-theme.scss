@@ -1,13 +1,13 @@
-@import "../../../core/themes/default-theme";
+@import "../../../core/themes/theme";
 
-$calendar-prefix-cls            : "#{$ant-prefix}-calendar";
-$calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
+$calendar-prefix-cls            : "#{$tri-prefix}-calendar";
+$calendar-timepicker-prefix-cls : "#{$tri-prefix}-calendar-time-picker";
 
 $input-box-height               : 34px;
 
 @mixin tri-range-picker-theme($theme) {
-  $foreground: map-get($theme, foreground);
-  $background: map-get($theme, background);
+  $foreground : map-get($theme, foreground);
+  $background : map-get($theme, background);
 
   .#{$calendar-prefix-cls}-range-picker-input {
     background-color : transparent;
@@ -20,13 +20,13 @@ $input-box-height               : 34px;
   }
 
   .#{$calendar-prefix-cls}-range-picker-separator {
-    color          : tri-color($foreground, text-color-secondary);
+    color : tri-color($foreground, text-color-secondary);
   }
 
   .#{$calendar-prefix-cls}-range {
 
     @at-root &-middle {
-      color       : tri-color($foreground, text-color-secondary);
+      color : tri-color($foreground, text-color-secondary);
     }
 
     .#{$calendar-prefix-cls}-input,
@@ -36,7 +36,7 @@ $input-box-height               : 34px;
 
     .#{$calendar-prefix-cls}-in-range-cell {
       @at-root &:before {
-        background    : $item-active-bg;
+        background : $item-active-bg;
       }
     }
 

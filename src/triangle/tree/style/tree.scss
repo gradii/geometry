@@ -1,4 +1,5 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
 .node-menu {
   position : relative;
@@ -35,19 +36,19 @@
         width   : 16px;
 
         &.new-tag:before {
-          content : '\25CF';
+          content : "\25CF";
         }
 
         &.new-folder:before {
-          content : '\25B6';
+          content : "\25B6";
         }
 
         &.rename:before {
-          content : '\270E';
+          content : "\270E";
         }
 
         &.remove:before {
-          content : '\2716';
+          content : "\2716";
         }
       }
 
@@ -115,7 +116,7 @@ tree-internal {
         width            : 0;
         height           : 2px;
         background-color : #212121;
-        content          : '';
+        content          : "";
         transition       : width 0.3s;
       }
 
@@ -139,7 +140,7 @@ tree-internal {
       width   : auto;
 
       span:before {
-        content : '\2026';
+        content : "\2026";
         color   : #757575;
       }
     }
@@ -169,7 +170,7 @@ tree-internal {
         cursor : pointer;
 
         &:before {
-          content : '\E604';
+          content : "\E604";
           color   : #757575;
         }
       }
@@ -178,7 +179,7 @@ tree-internal {
         cursor : pointer;
 
         &:before {
-          content : '\E606';
+          content : "\E606";
           color   : #757575;
         }
       }
@@ -189,7 +190,7 @@ tree-internal {
         font-size  : 0.89em;
 
         &:before {
-          content : '\25CF';
+          content : "\25CF";
           color   : #757575;
         }
       }
@@ -200,7 +201,7 @@ tree-internal {
         font-size  : 0.89em;
 
         &:before {
-          content : '\25CF';
+          content : "\25CF";
           color   : #757575;
         }
       }
@@ -216,7 +217,7 @@ tree-internal {
   }
 
   .loading-children:after {
-    content                   : ' loading ...';
+    content                   : " loading ...";
     color                     : #6a1b9a;
     font-style                : italic;
     font-size                 : 0.9em;

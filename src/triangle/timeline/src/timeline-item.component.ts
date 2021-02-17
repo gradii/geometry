@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -25,7 +24,6 @@ import { TimelineMode } from './timeline.component';
   selector           : 'tri-timeline-item',
   encapsulation      : ViewEncapsulation.None,
   changeDetection    : ChangeDetectionStrategy.OnPush,
-  preserveWhitespaces: false,
   template           : `
       <li
               class="tri-timeline-item"

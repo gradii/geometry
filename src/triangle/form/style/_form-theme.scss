@@ -1,148 +1,153 @@
 //@import "../inputs/input-mixin";
 //@import "../button/mixin";
 //@import "../grid/mixin";
-@import "./mixin";
+@use "sass:map";
+@use "./mixin";
+@use "../../core/style/theming";
+@use "../../core/style/variables" as v;
+@use "../../input/style/input-theme";
 
-$form-prefix-cls: "#{$ant-prefix}-form";
-@include reset-form();
+$form-prefix-cls : "#{ v.$tri-prefix}-form";
+@include mixin.reset-form();
 
 @mixin tri-form-theme($theme) {
-  $foreground: map-get($theme, foreground);
-  $background: map-get($theme, background);
-  $success: map-get($theme, success);
-  $primary: map-get($theme, primary);
-  $error: map-get($theme, error);
+  $foreground              : map.get($theme, foreground);
+  $background              : map.get($theme, background);
+  $success                 : map.get($theme, success);
+  $primary                 : map.get($theme, primary);
+  $error                   : map.get($theme, error);
 
   // Form
   // ---
-  $label-required-color           : tri-color($theme, highlight-color);
-  $label-color                    : tri-color($theme, heading-color);
-  $form-item-margin-bottom        : 1rem !default;
+  $label-required-color    : theming.tri-color($theme, highlight-color);
+  $label-color             : theming.tri-color($theme, heading-color);
+  $form-item-margin-bottom : 1rem !default;
 
   .#{$form-prefix-cls}-item-required:before {
-    color: $label-required-color;
+    color : $label-required-color;
   }
 
   // Form items
   // You should wrap labels and controls in .#{$form-prefix-cls}-item for optimum spacing
   .#{$form-prefix-cls}-item {
-    color: tri-color($foreground, text-color);
+    color : theming.tri-color($foreground, text-color);
     @at-root &-label {
       label {
-        color: $label-color;
+        color : $label-color;
       }
     }
   }
 
   .#{$form-prefix-cls}-explain,
   .#{$form-prefix-cls}-extra {
-    color: tri-color($foreground, text-color-secondary);
+    color : theming.tri-color($foreground, text-color-secondary);
   }
 
   form {
-    .#{$ant-prefix}-upload {
-      background: transparent;
+    .#{ v.$tri-prefix}-upload {
+      background : transparent;
     }
   }
 
   // Input combined with select
-  .#{$ant-prefix}-input-group-wrap {
-    .#{$ant-prefix}-select-selection {
-      border-bottom-left-radius: 0;
-      border-top-left-radius: 0;
+  .#{ v.$tri-prefix}-input-group-wrap {
+    .#{ v.$tri-prefix}-select-selection {
+      border-bottom-left-radius : 0;
+      border-top-left-radius    : 0;
       @at-root &:hover {
-        border-color: tri-color($foreground, border-color-base);
+        border-color : theming.tri-color($foreground, border-color-base);
       }
     }
 
-    .#{$ant-prefix}-select-selection--single {
-      background-color: #eee;
+    .#{ v.$tri-prefix}-select-selection--single {
+      background-color : #eee;
     }
 
-    .#{$ant-prefix}-select-open .#{$ant-prefix}-select-selection {
-      border-color: tri-color($foreground, border-color-base);
-      box-shadow: none;
+    .#{ v.$tri-prefix}-select-open .#{ v.$tri-prefix}-select-selection {
+      border-color : theming.tri-color($foreground, border-color-base);
+      box-shadow   : none;
     }
   }
 
   .has-success {
     .#{$form-prefix-cls}-item-children .#{$form-prefix-cls}-item-children-icon {
       i {
-        color: #1bb367;
+        color : #1bb367;
       }
     }
   }
 
   // success时表单项的边框
   .has-success {
-    @include form-control-validation(tri-color($success), tri-color($success));
+    @include form-control-validation(theming.tri-color($success), theming.tri-color($success));
 
     // select
-    .#{$ant-prefix}-select {
-      @at-root &-open .#{$ant-prefix}-select-selection,
-        &-focused #{$ant-prefix}-select-selection {
-        @include tri-input-active-theme(tri-color($success));
+    .#{ v.$tri-prefix}-select {
+      @at-root &-open .#{ v.$tri-prefix}-select-selection,
+      &-focused #{ v.$tri-prefix}-select-selection {
+        @include input-theme.tri-input-active-theme(theming.tri-color($success));
       }
     }
 
-    .#{$ant-prefix}-select-selection:hover {
+    .#{ v.$tri-prefix}-select-selection:hover {
       //@include active($success-color);
-      border-color: tri-color($success) !important;
-      box-shadow: none;
+      border-color : theming.tri-color($success) !important;
+      box-shadow   : none;
     }
 
-    .#{$ant-prefix}-input-group-addon .#{$ant-prefix}-select {
+    .#{ v.$tri-prefix}-input-group-addon .#{ v.$tri-prefix}-select {
       @at-root &-selection {
-        border-color: transparent;
-        box-shadow: none;
+        border-color : transparent;
+        box-shadow   : none;
       }
     }
-    .#{$ant-prefix}-cascader-picker:focus #{$ant-prefix}-input,
-    .#{$ant-prefix}-cascader:hover {
-      border-color: tri-color($success) !important;
-      box-shadow: none;
+
+    .#{ v.$tri-prefix}-cascader-picker:focus #{ v.$tri-prefix}-input,
+    .#{ v.$tri-prefix}-cascader:hover {
+      border-color : theming.tri-color($success) !important;
+      box-shadow   : none;
     }
 
     // radio-group
-    .#{$ant-prefix}-radio-group label.tri-radio-button-wrapper-checked {
-      border-width: 1px;
-      border-color: tri-color($success);
-      box-shadow: -1px 0 0 0 tri-color($success);
+    .#{ v.$tri-prefix}-radio-group label.tri-radio-button-wrapper-checked {
+      border-width : 1px;
+      border-color : theming.tri-color($success);
+      box-shadow   : -1px 0 0 0 theming.tri-color($success);
       @at-root &-focused,
-        &:focus {
-        @include tri-input-active-theme(tri-color($success));
+      &:focus {
+        @include input-theme.tri-input-active-theme(theming.tri-color($success));
       }
       @at-root &:not([disabled]):hover {
-        border-color: tri-color($success);
+        border-color : theming.tri-color($success);
       }
     }
 
     // input-number, timepicker
-    .#{$ant-prefix}-input-number,
-    .#{$ant-prefix}-time-picker-input {
+    .#{ v.$tri-prefix}-input-number,
+    .#{ v.$tri-prefix}-time-picker-input {
       @at-root &-focused,
-        &:focus {
-        @include tri-input-active-theme(tri-color($success));
+      &:focus {
+        @include input-theme.tri-input-active-theme(theming.tri-color($success));
       }
       @at-root &:not([disabled]):hover {
-        border-color: tri-color($success);
+        border-color : theming.tri-color($success);
       }
     }
 
-    .#{$ant-prefix}-mention-wrapper {
-      .#{$ant-prefix}-mention-editor {
+    .#{ v.$tri-prefix}-mention-wrapper {
+      .#{ v.$tri-prefix}-mention-editor {
         @at-root &,
-          &:not([disabled]):hover {
+        &:not([disabled]):hover {
           @at-root &,
-            &:not([disabled]):hover {
-            border-color: tri-color($success);
+          &:not([disabled]):hover {
+            border-color : theming.tri-color($success);
           }
         }
       }
 
-      @at-root &.#{$ant-prefix}-mention-active .#{$ant-prefix}-mention-editor,
-        & .#{$ant-prefix}-mention-editor:not([disabled]):focus {
-        @include tri-input-active-theme(tri-color($success));
+      @at-root &.#{ v.$tri-prefix}-mention-active .#{ v.$tri-prefix}-mention-editor,
+      & .#{ v.$tri-prefix}-mention-editor:not([disabled]):focus {
+        @include input-theme.tri-input-active-theme(theming.tri-color($success));
       }
     }
   }
@@ -150,7 +155,7 @@ $form-prefix-cls: "#{$ant-prefix}-form";
   .has-error {
     .#{$form-prefix-cls}-item-children .#{$form-prefix-cls}-item-children-icon {
       i {
-        color: #d93649;
+        color : #d93649;
       }
     }
   }
@@ -158,93 +163,93 @@ $form-prefix-cls: "#{$ant-prefix}-form";
   .has-warning {
     .#{$form-prefix-cls}-item-children .#{$form-prefix-cls}-item-children-icon {
       i {
-        color: #ffbf00;
+        color : #ffbf00;
       }
     }
   }
 
   .has-warning {
-    @include form-control-validation(tri-color($warning), tri-color($warning));
+    @include form-control-validation(theming.tri-color($warning), theming.tri-color($warning));
     //select
-    .#{$ant-prefix}-select {
+    .#{ v.$tri-prefix}-select {
       @at-root &-selection {
-        border-color: tri-color($warning);
+        border-color : theming.tri-color($warning);
       }
-      @at-root &-open .#{$ant-prefix}-select-selection,
-        &-focused .#{$ant-prefix}-select-selection {
-        @include tri-input-active-theme(tri-color($warning));
+      @at-root &-open .#{ v.$tri-prefix}-select-selection,
+      &-focused .#{ v.$tri-prefix}-select-selection {
+        @include input-theme.tri-input-active-theme(theming.tri-color($warning));
       }
     }
 
     // arrow and icon
-    .#{$ant-prefix}-calendar-picker-icon:after,
-    .#{$ant-prefix}-picker-icon:after,
-    .#{$ant-prefix}-select-arrow,
-    .#{$ant-prefix}-cascader-picker-arrow {
-      color: tri-color($warning);
+    .#{ v.$tri-prefix}-calendar-picker-icon:after,
+    .#{ v.$tri-prefix}-picker-icon:after,
+    .#{ v.$tri-prefix}-select-arrow,
+    .#{ v.$tri-prefix}-cascader-picker-arrow {
+      color : theming.tri-color($warning);
     }
 
     //input-number, timepicker
-    .#{$ant-prefix}-input-number,
-    .#{$ant-prefix}-time-picker-input {
-      border-color: tri-color($warning);
+    .#{ v.$tri-prefix}-input-number,
+    .#{ v.$tri-prefix}-time-picker-input {
+      border-color : theming.tri-color($warning);
       @at-root &-focused,
-        &:focus {
-        @include tri-input-active-theme(tri-color($warning));
+      &:focus {
+        @include input-theme.tri-input-active-theme(theming.tri-color($warning));
       }
       @at-root &:not([disabled]):hover {
-        border-color: tri-color($warning);
+        border-color : theming.tri-color($warning);
       }
     }
   }
 
   .has-success .has-feedback {
-    color: #444444 !important;
+    color : #444444 !important;
   }
 
   .has-error {
-    @include form-control-validation(tri-color($error), tri-color($error));
+    @include form-control-validation(theming.tri-color($error), theming.tri-color($error));
 
     //select
-    .#{$ant-prefix}-select {
+    .#{ v.$tri-prefix}-select {
       @at-root &-selection {
-        border-color: tri-color($error);
+        border-color : theming.tri-color($error);
       }
-      @at-root &-open .#{$ant-prefix}-select-selection,
-        &-focused .#{$ant-prefix}-select-selection {
-        @include tri-input-active-theme(tri-color($error));
+      @at-root &-open .#{ v.$tri-prefix}-select-selection,
+      &-focused .#{ v.$tri-prefix}-select-selection {
+        @include input-theme.tri-input-active-theme(theming.tri-color($error));
       }
     }
 
-    .#{$ant-prefix}-input-group-addon .#{$ant-prefix}-select {
+    .#{ v.$tri-prefix}-input-group-addon .#{ v.$tri-prefix}-select {
       @at-root &-selection {
-        border-color: transparent;
-        box-shadow: none;
+        border-color : transparent;
+        box-shadow   : none;
       }
     }
 
     // arrow and icon
-    .#{$ant-prefix}-calendar-picker-icon:after,
-    .#{$ant-prefix}-picker-icon:after,
-    .#{$ant-prefix}-select-arrow,
-    .#{$ant-prefix}-cascader-picker-arrow {
-      color: tri-color($error);
+    .#{ v.$tri-prefix}-calendar-picker-icon:after,
+    .#{ v.$tri-prefix}-picker-icon:after,
+    .#{ v.$tri-prefix}-select-arrow,
+    .#{ v.$tri-prefix}-cascader-picker-arrow {
+      color : theming.tri-color($error);
     }
 
     //input-number, timepicker
-    .#{$ant-prefix}-input-number,
-    .#{$ant-prefix}-time-picker-input {
-      border-color: tri-color($error);
+    .#{ v.$tri-prefix}-input-number,
+    .#{ v.$tri-prefix}-time-picker-input {
+      border-color : theming.tri-color($error);
       @at-root &:not([disabled]):hover {
-        border-color: tri-color($error);
+        border-color : theming.tri-color($error);
       }
     }
 
-    .#{$ant-prefix}-mention-wrapper {
-      .#{$ant-prefix}-mention-editor {
+    .#{ v.$tri-prefix}-mention-wrapper {
+      .#{ v.$tri-prefix}-mention-editor {
         @at-root &,
-          &:not([disabled]):hover {
-          border-color: tri-color($error);
+        &:not([disabled]):hover {
+          border-color : theming.tri-color($error);
         }
       }
     }
@@ -252,10 +257,10 @@ $form-prefix-cls: "#{$ant-prefix}-form";
 
   .is-validating {
     @at-root &.has-feedback:after {
-      color: tri-color($primary);
+      color : theming.tri-color($primary);
     }
     @at-root &.has-feedback .#{form-prefix-cls}-item-children-icon {
-      color: tri-color($primary);
+      color : theming.tri-color($primary);
     }
   }
 }

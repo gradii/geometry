@@ -1,82 +1,76 @@
-@import "../../core/themes/default-theme";
+@use "sass:map";
+@use "../../core/themes/theme";
+@use "../../core/style/mixins/compatibility";
+@use "../../core/style/theming";
+@use "../../core/style/variables" as v;
 
 
-@mixin tri-input-theme($theme) {
-  $foreground               : map-get($theme, foreground);
-  $background               : map-get($theme, background);
+$foreground               : theme.$foreground;
+$background               : theme.$background;
 
-  $input-border-width       : tri-color($foreground, border-width-base);
-  $input-bg                 : #fff !default;
-  $input-addon-bg           : #eee !default;
-  $input-addon-color        : tri-color($foreground, input-color);
-  $input-hover-border-color : tri-color($foreground, primary-color);
-  $input-disabled-bg        : tri-color($foreground, disabled-bg);
+$input-color              : v.$text-color !default;
+$input-border-width       : v.$border-width-base !default;
+$input-bg                 : #fff !default;
+$input-addon-bg           : #eee !default;
+$input-addon-color        : $input-color !default;
+$input-hover-border-color : theming.tri-color(theme.$primary) !default;
+$input-disabled-bg        : map.get($background, disabled-bg) !default;
 
-  $input-placeholder-color  : tri-color($foreground, disabled-color);
-  $input-color              : tri-color($foreground, text-color);
-  $input-border-color       : tri-color($foreground, border-color-base);
-
-}
+$input-placeholder-color  : map.get($foreground, disabled-color) !default;
+$input-border-color       : map.get($foreground, border-color-base) !default;
 
 
-@mixin tri-input-affix-wrapper-theme($theme) {
-
-}
-
-@mixin tri-input-active-theme($theme, $color : null) {
-  $foreground  : map-get($theme, foreground);
-  $background  : map-get($theme, background);
+@mixin tri-input-active-theme($color : null) {
 
   @if $color == null {
-    $color : tri-color($theme, outline-color);
+    $color : theming.tri-color($foreground, outline-color);
   }
 
-  border-color : tri-color-palette($color, 5);
+  border-color : theming.tri-color-palette($color, 5);
   outline      : 0;
-  box-shadow   : 0 0 $outline-blur-size $outline-width rgba($color, 0.20);
+  box-shadow   : 0 0 v.$outline-blur-size v.$outline-width rgba($color, 0.20);
 }
 
-@mixin tri-input-hover-theme($theme) {
-  $foreground  : map-get($theme, foreground);
-  $background  : map-get($theme, background);
+@mixin tri-input-hover-theme($_input-hover-border-color: null) {
 
-  $color       : tri-color($theme, input-hover-border-color);
+  @if $_input-hover-border-color == null {
+    $_input-hover-border-color : $input-hover-border-color;
+  }
 
-  border-color : tri-color-palette($color, 5);
+  border-color : theming.tri-color-palette($_input-hover-border-color, 5);
 }
 
-@mixin tri-input-disabled-theme($theme) {
-  $foreground      : map-get($theme, foreground);
-  $background      : map-get($theme, background);
+@mixin tri-input-disabled-theme() {
 
-  background-color : tri-color($foreground, input-disabled-bg);
+  background-color : $input-disabled-bg;
   opacity          : 1;
   cursor           : not-allowed;
-  color            : tri-color($foreground, disabled-color);
+  color            : theming.tri-color($foreground, disabled-color);
   @at-root &:hover {
-    @include tri-input-hover-theme(tri-color($foreground, input-border-color));
+    @include tri-input-hover-theme($input-border-color);
   }
 }
 
-@mixin tri-input-theme($theme) {
-  $foreground : map-get($theme, foreground);
-  $background : map-get($theme, background);
+@mixin tri-input-theme() {
 
-  color       : tri-color($theme, input-color);
-  background  : tri-color($theme, input-bg) none;
-  border      : $border-width-base $border-style-base tri-color($foreground, input-border-color);
-  @include placeholder($theme);
-  transition  : all .3s;
 
-  @at-root &:hover {
-    @include tri-input-hover-theme($theme);
-  }
+  .#{v.$tri-prefix}-input {
+    color      : $input-color;
+    background : $input-bg none;
+    border     : v.$border-width-base v.$border-style-base theming.tri-color($foreground, input-border-color);
+    @include compatibility.placeholder();
+    transition : all .3s;
 
-  @at-root &:focus {
-    @include tri-input-active-theme($theme);
-  }
+    @at-root &:hover {
+      @include tri-input-hover-theme();
+    }
 
-  @at-root &-disabled {
-    @include tri-input-disabled-theme($theme);
+    @at-root &:focus {
+      @include tri-input-active-theme();
+    }
+
+    @at-root &-disabled {
+      @include tri-input-disabled-theme();
+    }
   }
 }

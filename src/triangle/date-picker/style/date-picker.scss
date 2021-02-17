@@ -1,7 +1,8 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$calendar-prefix-cls            : "#{$ant-prefix}-calendar";
-$calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
+$calendar-prefix-cls            : "#{$tri-prefix}-calendar";
+$calendar-timepicker-prefix-cls : "#{$tri-prefix}-calendar-time-picker";
 
 @import "picker";
 @import "calendar";

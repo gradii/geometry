@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -11,7 +10,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 @Component({
   selector           : 'tri-rate',
   encapsulation      : ViewEncapsulation.None,
-  preserveWhitespaces: false,
   template           : `
     <ul class="tri-rate"
         [class.tri-rate-disabled]="_disabled"

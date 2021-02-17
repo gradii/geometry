@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -18,7 +17,6 @@ import {
 @Component({
   selector           : 'tri-list-item-meta',
   templateUrl        : './list-item-meta.component.html',
-  preserveWhitespaces: false,
   changeDetection    : ChangeDetectionStrategy.OnPush,
   encapsulation      : ViewEncapsulation.None
 })

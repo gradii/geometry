@@ -1,28 +1,32 @@
-$modal-prefix-cls : "#{$ant-prefix}-modal";
+@use "sass:map";
+@use "../../core/style/theming";
+@use "../../core/style/variables" as v;
+
+$modal-prefix-cls : "#{ v.$tri-prefix}-modal";
 @mixin tri-modal-theme($theme) {
-  $primary          : map-get($theme, primary);
-  $foreground       : map-get($theme, foreground);
-  $background       : map-get($theme, background);
+  $primary          : map.get($theme, primary);
+  $foreground       : map.get($theme, foreground);
+  $background       : map.get($theme, background);
 
   $modal-header-bg  : #f9fafb;
-  $modal-content-bg : tri-color($background, component-background);
+  $modal-content-bg : theming.tri-color($background, component-background);
 
 
   .#{$modal-prefix-cls} {
     @at-root &-title {
-      color : tri-color($foreground, heading-color);
+      color : theming.tri-color($foreground, heading-color);
     }
 
     @at-root &-content {
       background      : $modal-content-bg;
       border          : 0;
-      border-radius   : $border-radius-base;
+      border-radius   : v.$border-radius-base;
       background-clip : padding-box;
-      box-shadow      : $shadow-2;
+      box-shadow      : v.$shadow-2;
     }
 
     @at-root &-close {
-      color : tri-color($foreground, text-color-secondary);
+      color : theming.tri-color($foreground, text-color-secondary);
       @at-root &:focus,
       &:hover {
         color : #444;
@@ -30,20 +34,20 @@ $modal-prefix-cls : "#{$ant-prefix}-modal";
     }
 
     @at-root &-header {
-      border-radius : $border-radius-base $border-radius-base 0 0;
+      border-radius : v.$border-radius-base v.$border-radius-base 0 0;
       background    : $modal-header-bg;
-      color         : $text-color;
-      border-bottom : $border-width-base $border-style-base tri-color($foreground, border-color-split);
+      color         : v.$text-color;
+      border-bottom : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-split);
     }
 
     @at-root &-footer {
-      border-top    : $border-width-base $border-style-base tri-color($foreground, border-color-split);
-      border-radius : 0 0 $border-radius-base $border-radius-base;
+      border-top    : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-split);
+      border-radius : 0 0 v.$border-radius-base v.$border-radius-base;
     }
 
     @at-root &-mask {
       background-color : #373737;
-      background-color : $modal-mask-bg; // lesshint duplicateProperty: false
+      background-color : v.$modal-mask-bg; // lesshint duplicateProperty: false
       filter           : alpha(opacity=50);
     }
   }

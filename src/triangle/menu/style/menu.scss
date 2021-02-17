@@ -1,8 +1,9 @@
-@import "../../core/themes/default-theme";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
 
-$menu-prefix-cls      : "#{$ant-prefix}-menu" !default;
+$menu-prefix-cls      : "#{v.$tri-prefix}-menu" !default;
 $menu-collapsed-width : 64px !default;
-$menu-font-size       : $font-size-base !default;
+$menu-font-size       : v.$font-size-base !default;
 
 // default theme
 .#{$menu-prefix-cls} {
@@ -10,9 +11,9 @@ $menu-font-size       : $font-size-base !default;
   margin-bottom : 0;
   padding-left  : 0; // Override default ul/ol
   list-style    : none;
-  z-index       : $zindex-dropdown;
+  z-index       : v.$zindex-dropdown;
   line-height   : 46px;
-  transition    : background .3s $ease-in-out, width .15s $ease-in-out;
+  transition    : background .3s v.$ease-in-out, width .15s v.$ease-in-out;
 
   @at-root &-hidden {
     display : none;
@@ -36,10 +37,10 @@ $menu-font-size       : $font-size-base !default;
     cursor  : pointer;
   }
   @at-root &-submenu, #{&}-submenu-inline {
-    transition : border-color .3s $ease-in-out, background .3s $ease-in-out, padding .15s $ease-in-out;
+    transition : border-color .3s v.$ease-in-out, background .3s v.$ease-in-out, padding .15s v.$ease-in-out;
   }
   @at-root &-item, #{&}-submenu-title {
-    transition : color .3s $ease-in-out, border-color .3s $ease-in-out, background .3s $ease-in-out, padding .15s $ease-in-out;
+    transition : color .3s v.$ease-in-out, border-color .3s v.$ease-in-out, background .3s v.$ease-in-out, padding .15s v.$ease-in-out;
   }
 
   @at-root &-item:active,
@@ -48,7 +49,7 @@ $menu-font-size       : $font-size-base !default;
 
   @at-root &-submenu #{&}-sub {
     cursor     : initial;
-    transition : background .3s $ease-in-out, padding .3s $ease-in-out;
+    transition : background .3s v.$ease-in-out, padding .3s v.$ease-in-out;
   }
 
   @at-root &-item > a {
@@ -66,7 +67,7 @@ $menu-font-size       : $font-size-base !default;
       left     : 0;
       bottom   : 0;
       right    : 0;
-      content  : '';
+      content  : "";
     }
   }
 
@@ -85,7 +86,7 @@ $menu-font-size       : $font-size-base !default;
   }
 
   @at-root &:not(#{&}-inline) #{&}-submenu-open {
-    z-index : $zindex-dropdown;
+    z-index : v.$zindex-dropdown;
   }
 
   @at-root &-horizontal #{&}-item,
@@ -107,14 +108,14 @@ $menu-font-size       : $font-size-base !default;
       position    : relative;
       z-index     : 1;
       @at-root &:after {
-        content      : "";
-        position     : absolute;
-        right        : 0;
-        top          : 0;
-        bottom       : 0;
-        transform    : scaleY(.0001);
-        opacity      : 0;
-        transition   : transform .15s $ease-out, opacity .15s $ease-out;
+        content    : "";
+        position   : absolute;
+        right      : 0;
+        top        : 0;
+        bottom     : 0;
+        transform  : scaleY(.0001);
+        opacity    : 0;
+        transition : transform .15s v.$ease-out, opacity .15s v.$ease-out;
       }
     }
   }
@@ -131,16 +132,16 @@ $menu-font-size       : $font-size-base !default;
     }
 
     > .#{$menu-prefix-cls}-item:first-child {
-      border-radius : $border-radius-base $border-radius-base 0 0;
+      border-radius : v.$border-radius-base v.$border-radius-base 0 0;
     }
 
     > .#{$menu-prefix-cls}-item:last-child,
     > .#{$menu-prefix-cls}-item-group:last-child > .#{$menu-prefix-cls}-item-group-list:last-child > .#{$menu-prefix-cls}-item:last-child {
-      border-radius : 0 0 $border-radius-base $border-radius-base;
+      border-radius : 0 0 v.$border-radius-base v.$border-radius-base;
     }
 
     > .#{$menu-prefix-cls}-item:only-child {
-      border-radius : $border-radius-base;
+      border-radius : v.$border-radius-base;
     }
   }
 
@@ -149,7 +150,7 @@ $menu-font-size       : $font-size-base !default;
     .#{$menu-prefix-cls}-selected,
     .#{$menu-prefix-cls}-item-selected {
       @at-root &:after {
-        transition : transform .15s $ease-in-out, opacity .15s $ease-in-out;
+        transition : transform .15s v.$ease-in-out, opacity .15s v.$ease-in-out;
         opacity    : 1;
         transform  : scaleY(1);
       }
@@ -167,7 +168,7 @@ $menu-font-size       : $font-size-base !default;
       @at-root &:after {
         display : none;
       }
-      .#{$iconfont-css-prefix} {
+      .#{v.$iconfont-css-prefix} {
         font-size   : 16px;
         line-height : 42px;
         margin      : 0;
@@ -182,7 +183,7 @@ $menu-font-size       : $font-size-base !default;
 
     @at-root &-tooltip {
       pointer-events : none;
-      .#{$iconfont-css-prefix} {
+      .#{v.$iconfont-css-prefix} {
         display : none;
       }
     }
@@ -194,7 +195,7 @@ $menu-font-size       : $font-size-base !default;
     position   : absolute;
     min-width  : 100%;
     margin-top : 7px;
-    z-index    : $zindex-dropdown;
+    z-index    : v.$zindex-dropdown;
   }
 
   @at-root &-submenu-vertical {
@@ -207,7 +208,7 @@ $menu-font-size       : $font-size-base !default;
     position    : absolute;
     min-width   : 160px;
     margin-left : 4px;
-    z-index     : $zindex-dropdown;
+    z-index     : v.$zindex-dropdown;
   }
 
   @at-root &-item,
@@ -217,13 +218,13 @@ $menu-font-size       : $font-size-base !default;
     position    : relative;
     display     : block;
     white-space : nowrap;
-    .#{$iconfont-css-prefix} {
+    .#{v.$iconfont-css-prefix} {
       min-width    : 14px;
       margin-right : 8px;
-      transition   : font-size .15s $ease-out, margin .3s $ease-in-out;
+      transition   : font-size .15s v.$ease-out, margin .3s v.$ease-in-out;
 
       + span {
-        transition : opacity .3s $ease-in-out, width .3s $ease-in-out;
+        transition : opacity .3s v.$ease-in-out, width .3s v.$ease-in-out;
         opacity    : 1;
       }
     }
@@ -241,9 +242,9 @@ $menu-font-size       : $font-size-base !default;
     position : relative;
 
     > .#{$menu-prefix-cls} {
-      border-radius : $border-radius-base;
+      border-radius : v.$border-radius-base;
       @at-root &-submenu-title:after {
-        transition : transform .3s $ease-in-out;
+        transition : transform .3s v.$ease-in-out;
       }
     }
 
@@ -257,7 +258,6 @@ $menu-font-size       : $font-size-base !default;
       position       : absolute;
       content        : "\e61d";
       right          : 16px;
-      @include ie-rotate(3);
       transform      : rotate(270deg) scale(0.75);
     }
 
@@ -272,21 +272,20 @@ $menu-font-size       : $font-size-base !default;
       content        : "\e61d";
       right          : 16px;
       top            : 0;
-      @include iconfont-size-under-12px(8px);
+      @include mixins.iconfont-size-under-12px(8px);
     }
 
     @at-root &-open {
       @at-root &.#{$menu-prefix-cls}-submenu-inline > .#{$menu-prefix-cls}-submenu-title:after {
-        @include ie-rotate(1);
         transform : rotate(180deg) scale(0.75);
       }
     }
   }
 
   @at-root &-horizontal {
-    border        : 0;
-    box-shadow    : none;
-    z-index       : 0;
+    border     : 0;
+    box-shadow : none;
+    z-index    : 0;
 
     > .#{$menu-prefix-cls}-item,
     > .#{$menu-prefix-cls}-submenu {

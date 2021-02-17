@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$backtop-prefix-cls : "#{$ant-prefix}-back-top";
+$backtop-prefix-cls : "#{$tri-prefix}-back-top";
 
 .#{$backtop-prefix-cls} {
   z-index  : $zindex-back-top;
@@ -12,14 +13,14 @@ $backtop-prefix-cls : "#{$ant-prefix}-back-top";
   cursor   : pointer;
 
   @at-root &-content {
-    height           : 40px;
-    width            : 40px;
-    border-radius    : 20px;
-    text-align       : center;
-    transition       : all .3s $ease-in-out;
+    height        : 40px;
+    width         : 40px;
+    border-radius : 20px;
+    text-align    : center;
+    transition    : all .3s $ease-in-out;
 
     @at-root &:hover {
-      transition       : all .3s $ease-in-out;
+      transition : all .3s $ease-in-out;
     }
   }
 

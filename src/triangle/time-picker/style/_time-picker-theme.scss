@@ -1,28 +1,33 @@
-@import "../../core/themes/default-theme";
-@import "../../input/style/input-mixin";
-@import "../../input/style/input-theme";
+@use "sass:map";
+@use "../../core/themes/theme";
+@use "../../input/style/input-mixin";
+@use "../../input/style/input-theme";
+@use "../../core/style/mixins/clearfix";
+@use "../../core/style/mixins/compatibility";
+@use "../../core/style/theming";
+@use "../../core/style/variables" as v;
 
-$timepicker-prefix-cls : "#{$ant-prefix}-time-picker";
+$timepicker-prefix-cls : "#{ v.$tri-prefix}-time-picker";
 
 @mixin tri-time-picker-theme($theme) {
-  $foreground                     : map-get($theme, foreground);
-  $background                     : map-get($theme, background);
+  $foreground              : map.get($theme, foreground);
+  $background              : map.get($theme, background);
 
-  $time-picker-selected-bg        : tri-color($background, background-color-base) !default;
+  $time-picker-selected-bg : theming.tri-color($background, background-color-base) !default;
 
   .#{$timepicker-prefix-cls}-panel {
 
     @at-root &-inner {
-      background-color : tri-color($foreground, component-background);
-      box-shadow       : $box-shadow-base;
+      background-color : theming.tri-color($foreground, component-background);
+      box-shadow       : v.$box-shadow-base;
     }
 
     @at-root &-input {
 
-      @include placeholder($theme);
+      @include compatibility.placeholder($theme);
 
       @at-root &-wrap {
-        border-bottom : $border-width-base $border-style-base tri-color($foreground, border-color-split);
+        border-bottom : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-split);
       }
 
       @at-root &-invalid {
@@ -31,18 +36,18 @@ $timepicker-prefix-cls : "#{$ant-prefix}-time-picker";
     }
 
     @at-root &-clear-btn:after {
-      color : tri-color($foreground, disabled-color);
+      color : theming.tri-color($foreground, disabled-color);
     }
 
     @at-root &-clear-btn:hover:after {
-      color : tri-color($foreground, text-color-secondary);
+      color : theming.tri-color($foreground, text-color-secondary);
     }
 
     @at-root &-select {
-      border-left : $border-width-base $border-style-base tri-color($foreground, border-color-split);
+      border-left : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-split);
 
       li:hover {
-        background : tri-color($foreground, item-hover-bg);
+        background : theming.tri-color($foreground, item-hover-bg);
       }
 
       @at-root li#{&}-option-selected {
@@ -53,7 +58,7 @@ $timepicker-prefix-cls : "#{$ant-prefix}-time-picker";
       }
 
       @at-root li#{&}-option-disabled {
-        color : tri-color($foreground, btn-disable-color);
+        color : theming.tri-color($foreground, btn-disable-color);
         @at-root &:hover {
           background : transparent;
         }
@@ -61,20 +66,20 @@ $timepicker-prefix-cls : "#{$ant-prefix}-time-picker";
     }
 
     @at-root &-combobox {
-      @include clearfix;
+      @include clearfix.clearfix;
     }
 
   }
 
   .#{$timepicker-prefix-cls} {
     @at-root &-icon {
-      color : tri-color($foreground, text-color-secondary);
+      color : theming.tri-color($foreground, text-color-secondary);
     }
 
     @at-root &-input {
-      @include input;
+      @include input-mixin.input;
       @at-root &[disabled] {
-        @include tri-input-disabled-theme($theme);
+        @include input-theme.tri-input-disabled-theme($theme);
       }
     }
   }

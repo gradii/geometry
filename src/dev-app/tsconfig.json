@@ -4,10 +4,12 @@
   "compilerOptions": {
     // Needed for Moment.js since it doesn't have a default export.
     "allowSyntheticDefaultImports": true,
+    "module": "System",
     "rootDir": "..",
     "baseUrl": ".",
     "paths": {
       "@gradii/triangle/*": ["../triangle/*"],
+      "@gradii/triangle-examples/*": ["../triangle-examples/*"]
     }
   },
   "include": ["./**/*.ts"]

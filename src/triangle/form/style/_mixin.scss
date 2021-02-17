@@ -1,5 +1,6 @@
-@import "../../input/style/input-mixin";
-@import "../../input/style/input-theme";
+@use "../../input/style/input-mixin";
+@use "../../input/style/input-theme";
+@use "../../core/style/variables" as v;
 
 
 // Reset form styles
@@ -11,7 +12,7 @@
     width         : 100%;
     padding       : 0;
     margin-bottom : 20px;
-    font-size     : $font-size-lg;
+    font-size     : v.$font-size-lg;
     line-height   : inherit;
     //color         : $text-color-secondary;
     border        : 0;
@@ -19,7 +20,7 @@
   }
 
   label {
-    font-size : $font-size-base;
+    font-size : v.$font-size-base;
   }
 
   input[type="search"] {
@@ -61,7 +62,7 @@
   output {
     display     : block;
     padding-top : 15px;
-    font-size   : $font-size-base;
-    line-height : $line-height-base;
+    font-size   : v.$font-size-base;
+    line-height : v.$line-height-base;
   }
 }

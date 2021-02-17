@@ -15,21 +15,6 @@ ts_library(
     module_name = "@gradii/triangle",
 )
 
-scss_bundle(
-    name = "theming_bundle",
-    outs = ["_theming.scss"],
-    args = [
-        "--entryFile=$(location //src/triangle/core:themes/_all-theme.scss)",
-        "--outFile=$(location :_theming.scss)",
-    ],
-    data = TRIANGLE_SCSS_LIBS + [
-        "//src/triangle/core:themes/_all-theme.scss",
-        # Config file is required by "scss-bundle" and will be automatically
-        # loaded by the CLI. It expects the config to be in the execroot.
-        "//:scss-bundle.config.json",
-    ],
-)
-
 # Creates the @angular/material package published to npm.
 ng_package(
     name = "npm_package",
@@ -37,7 +22,6 @@ ng_package(
         "package.json",
     ],
     data = [
-        ":theming_bundle",
         #        "//src/triangle/core:theming_scss_lib",
         #        "//src/triangle/prebuilt-themes:deeppurple-amber",
         "//src/triangle/prebuilt-themes:indigo-pink",

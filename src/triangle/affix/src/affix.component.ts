@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -23,6 +22,12 @@ import { ScrollService } from '@gradii/triangle/core';
 import { coerceToNumber, shallowEqual } from '@gradii/triangle/util';
 import { throttleByAnimationFrameDecorator } from './throttleByAnimationFrame';
 
+
+/**
+ * @deprecated
+ * 1. use position sticky instead
+ * 2. use animation to affix position instead. this feature no need a component
+ */
 @Component({
   selector       : 'tri-affix',
   template       : `

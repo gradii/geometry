@@ -17,6 +17,10 @@ ng_module(
     deps = [
         "//src/dev-app/dev-app",
         "//src/dev-app/input-number",
+        "//src/dev-app/alert",
+        "//src/dev-app/tabs",
+
+        "//src/triangle/core",
         "@npm//@angular/cdk",
         "@npm//@angular/router",
         "@npm//date-fns",
@@ -34,6 +38,8 @@ rollup_bundle(
 sass_binary(
     name = "theme",
     src = "theme.scss",
+    sourcemap = True,
+    sourcemap_embed_sources = True,
     include_paths = [
         "external/npm/node_modules",
     ],

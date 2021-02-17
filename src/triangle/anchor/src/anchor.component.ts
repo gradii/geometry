@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -34,7 +33,6 @@ const sharpMatcherRegx = /#([^#]+)$/;
 
 @Component({
   selector           : 'tri-anchor',
-  preserveWhitespaces: false,
   changeDetection    : ChangeDetectionStrategy.OnPush,
   template           : `
     <tri-affix *ngIf="affix;else content" [offsetTop]="offsetTop">
@@ -67,7 +65,10 @@ export class AnchorComponent implements AfterViewInit, OnDestroy {
   @ViewChild('ink', {static: false}) private ink: ElementRef;
 
   /* tslint:disable-next-line:no-any */
-  constructor(private scrollSrv: ScrollService, @Inject(DOCUMENT) private doc: any, private cdRef: ChangeDetectorRef) {
+  constructor(
+    private scrollSrv: ScrollService, @Inject(DOCUMENT)
+    private doc: any, private cdRef: ChangeDetectorRef
+  ) {
   }
 
   private _target: Element = null;
@@ -204,7 +205,8 @@ export class AnchorComponent implements AfterViewInit, OnDestroy {
 
   private registerScrollEvent(): void {
     this.removeListen();
-    this.scroll$ = fromEvent(this.getTarget(), 'scroll').pipe(throttleTime(50), distinctUntilChanged())
+    this.scroll$ = fromEvent(this.getTarget(), 'scroll')
+      .pipe(throttleTime(50), distinctUntilChanged())
       .subscribe(e => this.handleScroll());
     // 由于页面刷新时滚动条位置的记忆
     // 倒置在dom未渲染完成，导致计算不正确

@@ -1,16 +1,19 @@
-@import "../../core/themes/default-theme";
+@use "sass:map";
+@use "../../core/themes/theme";
+@use "../../core/style/theming";
+@use "../../core/style/variables" as v;
 
-$timeline-prefix-cls : "#{$ant-prefix}-timeline";
+$timeline-prefix-cls : "#{ v.$tri-prefix}-timeline";
 
 @mixin tri-timeline-theme($theme) {
-  $foreground     : map-get($theme, foreground);
-  $background     : map-get($theme, background);
+  $foreground     : map.get($theme, foreground);
+  $background     : map.get($theme, background);
 
-  $primary        : map-get($theme, primary);
-  $error          : map-get($theme, error);
-  $success        : map-get($theme, success);
+  $primary        : map.get($theme, primary);
+  $error          : map.get($theme, error);
+  $success        : map.get($theme, success);
 
-  $timeline-color : tri-color($foreground, border-color-split);
+  $timeline-color : theming.tri-color($foreground, border-color-split);
 
   .#{$timeline-prefix-cls} {
     @at-root &-item {
@@ -19,20 +22,20 @@ $timeline-prefix-cls : "#{$ant-prefix}-timeline";
       }
 
       @at-root &-head {
-        background-color : tri-color($background, component-background);
+        background-color : theming.tri-color($background, component-background);
         border-radius    : 100px;
         border           : 2px solid transparent;
         @at-root &-blue {
-          border-color : tri-color($primary);
-          color        : tri-color($primary);
+          border-color : theming.tri-color($primary);
+          color        : theming.tri-color($primary);
         }
         @at-root &-red {
-          border-color : tri-color($error);
-          color        : tri-color($error);
+          border-color : theming.tri-color($error);
+          color        : theming.tri-color($error);
         }
         @at-root &-green {
-          border-color : tri-color($success);
-          color        : tri-color($success);
+          border-color : theming.tri-color($success);
+          color        : theming.tri-color($success);
         }
       }
     }

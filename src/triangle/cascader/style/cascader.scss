@@ -1,10 +1,11 @@
-@import "../../core/themes/default-theme";
-@import "../../input/style/input-mixin";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
+@use "../../input/style/input-mixin";
 
-$cascader-prefix-cls : "#{$ant-prefix}-cascader";
+$cascader-prefix-cls : "#{v.$tri-prefix}-cascader";
 
 .#{$cascader-prefix-cls} {
-  font-size : $font-size-base;
+  font-size : v.$font-size-base;
 
   @at-root .#{$cascader-prefix-cls}-menus {
     top           : 100%;
@@ -15,7 +16,7 @@ $cascader-prefix-cls : "#{$ant-prefix}-cascader";
     margin-bottom : 4px;
   }
 
-  @at-root &-input.#{$ant-prefix}-input {
+  @at-root &-input.#{v.$tri-prefix}-input {
     background-color : transparent !important;
     cursor           : pointer;
     width            : 100%;
@@ -23,12 +24,12 @@ $cascader-prefix-cls : "#{$ant-prefix}-cascader";
   }
 
   @at-root &-picker {
-    position         : relative;
-    display          : inline-block;
-    cursor           : pointer;
-    font-size        : $font-size-base;
-    border-radius    : $border-radius-base;
-    outline          : 0;
+    position      : relative;
+    display       : inline-block;
+    cursor        : pointer;
+    font-size     : v.$font-size-base;
+    border-radius : v.$border-radius-base;
+    outline       : 0;
 
     @at-root &-label {
       position      : absolute;
@@ -50,7 +51,7 @@ $cascader-prefix-cls : "#{$ant-prefix}-cascader";
       right       : 8px;
       z-index     : 2;
       top         : 50%;
-      font-size   : $font-size-base;
+      font-size   : v.$font-size-base;
       width       : 12px;
       height      : 12px;
       margin-top  : -6px;
@@ -75,12 +76,11 @@ $cascader-prefix-cls : "#{$ant-prefix}-cascader";
       height      : 12px;
       margin-top  : -6px;
       line-height : 12px;
-      @include iconfont-size-under-12px(9px);
+      @include mixins.iconfont-size-under-12px(9px);
       @at-root &:before {
         transition : transform 0.2s ease;
       }
       @at-root &#{&}-expand {
-        @include ie-rotate(2);
         @at-root &:before {
           transform : rotate(180deg);
         }
@@ -88,11 +88,11 @@ $cascader-prefix-cls : "#{$ant-prefix}-cascader";
     }
   }
   @at-root &-menus {
-    font-size     : $font-size-base;
+    font-size     : v.$font-size-base;
     position      : absolute;
-    z-index       : $zindex-dropdown;
-    border-radius : $border-radius-base;
-    box-shadow    : $box-shadow-base;
+    z-index       : v.$zindex-dropdown;
+    border-radius : v.$border-radius-base;
+    box-shadow    : v.$box-shadow-base;
     white-space   : nowrap;
     @at-root &-empty,
     &-hidden {
@@ -126,15 +126,15 @@ $cascader-prefix-cls : "#{$ant-prefix}-cascader";
     padding        : 0;
     overflow       : auto;
     @at-root &:first-child {
-      border-radius : $border-radius-base 0 0 $border-radius-base;
+      border-radius : v.$border-radius-base 0 0 v.$border-radius-base;
     }
     @at-root &:last-child {
       border-right-color : transparent;
       margin-right       : -1px;
-      border-radius      : 0 $border-radius-base $border-radius-base 0;
+      border-radius      : 0 v.$border-radius-base v.$border-radius-base 0;
     }
     @at-root &:only-child {
-      border-radius : $border-radius-base;
+      border-radius : v.$border-radius-base;
     }
   }
   @at-root &-menu-title {
@@ -168,14 +168,14 @@ $cascader-prefix-cls : "#{$ant-prefix}-cascader";
     @at-root &-expand {
       position : relative;
       @at-root &:after {
-        @include iconfont-font("\e61f");
-        @include iconfont-size-under-12px(8px);
+        @include mixins.iconfont-font("\e61f");
+        @include mixins.iconfont-size-under-12px(8px);
         position : absolute;
         right    : 8px;
       }
     }
     @at-root &-loading:after {
-      @include iconfont-font("\e64d");
+      @include mixins.iconfont-font("\e64d");
       animation : loadingCircle 1s infinite linear;
     }
 

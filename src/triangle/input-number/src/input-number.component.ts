@@ -1,17 +1,16 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
 
 import { TAB } from '@angular/cdk/keycodes';
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
   forwardRef,
-  HostBinding,
   Input,
   Output,
   Renderer2,
@@ -29,9 +28,10 @@ import {
 } from '@gradii/triangle/util';
 
 @Component({
-  selector     : 'tri-input-number',
-  encapsulation: ViewEncapsulation.None,
-  template     : `
+  selector       : 'tri-input-number',
+  encapsulation  : ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template       : `
     <div class="tri-input-number-handler-wrap"
          (mouseover)="_mouseInside = true"
          (mouseout)="_mouseInside = false">
@@ -72,14 +72,17 @@ import {
              [attr.step]="_step"
              autocomplete="off">
     </div>`,
-  styleUrls    : [`../style/input-number.css`],
-  providers    : [
+  styleUrls      : [`../style/input-number.css`],
+  providers      : [
     {
       provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => InputNumberComponent),
       multi      : true
     }
-  ]
+  ],
+  host           : {
+    '[class.tri-input-number-disabled]': 'disabled'
+  }
 })
 export class InputNumberComponent implements ControlValueAccessor {
 
@@ -108,8 +111,8 @@ export class InputNumberComponent implements ControlValueAccessor {
    * 禁用
    */
   @Input()
-  @HostBinding('class.tri-input-number-disabled')
   disabled = false;
+
   @Output() blur: EventEmitter<any> = new EventEmitter();
   @Output() focus: EventEmitter<any> = new EventEmitter();
 

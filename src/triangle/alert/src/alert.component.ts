@@ -1,15 +1,14 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
 
-import { NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ContentChild,
   EventEmitter,
   Input,
   Output,
@@ -18,15 +17,15 @@ import {
 } from '@angular/core';
 import { FadeAnimation } from '@gradii/triangle/core';
 import { coerceToBoolean } from '@gradii/triangle/util';
+import { AlertDescriptionDirective, AlertMessageDirective } from './alert.directive';
 
 
 @Component({
-  selector           : 'tri-alert',
-  animations         : [FadeAnimation],
-  preserveWhitespaces: false,
-  encapsulation      : ViewEncapsulation.None,
-  changeDetection    : ChangeDetectionStrategy.OnPush,
-  template           : `
+  selector: 'tri-alert',
+  animations: [FadeAnimation],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
     <div
       [class.tri-alert]="true"
       [class.tri-alert-error]="type==='error'"
@@ -38,20 +37,24 @@ import { coerceToBoolean } from '@gradii/triangle/util';
       [class.tri-alert-with-description]="!!this.description"
       *ngIf="display" [@fadeAnimation]>
       <ng-container *ngIf="showIcon">
-        <i class="tri-alert-icon" [ngClass]="iconType" *ngIf="iconType; else iconTemplate"></i>
-        <ng-template #iconTemplate>
-          <i class="tri-alert-icon anticon"
-             [class.anticon-cross-circle-o]="description && type === 'error'"
-             [class.anticon-check-circle-o]="description && type === 'success'"
-             [class.anticon-info-circle-o]="description && type === 'info'"
-             [class.anticon-exclamation-circle-o]="description && type === 'warning'"
-             [class.anticon-cross-circle]="(!description) && type === 'error'"
-             [class.anticon-check-circle]="(!description) && type === 'success'"
-             [class.anticon-info-circle]="(!description) && type === 'info'"
-             [class.anticon-exclamation-circle]="(!description) && type === 'warning'"
-          >
-          </i>
-        </ng-template>
+        <div class="tri-alert-icon">
+          <ng-template [ngIf]="description">
+            <ng-container [ngSwitch]="type">
+              <tri-icon *ngSwitchCase="'error'" svgIcon="outline:close-circle"></tri-icon>
+              <tri-icon *ngSwitchCase="'success'" svgIcon="outline:check-circle"></tri-icon>
+              <tri-icon *ngSwitchCase="'info'" svgIcon="outline:info-circle"></tri-icon>
+              <tri-icon *ngSwitchCase="'warning'" svgIcon="outline:exclamation-circle"></tri-icon>
+            </ng-container>
+          </ng-template>
+          <ng-template [ngIf]="!description">
+            <ng-container [ngSwitch]="type">
+              <tri-icon *ngSwitchCase="'error'" svgIcon="fill:close-circle"></tri-icon>
+              <tri-icon *ngSwitchCase="'success'" svgIcon="fill:check-circle"></tri-icon>
+              <tri-icon *ngSwitchCase="'info'" svgIcon="fill:info-circle"></tri-icon>
+              <tri-icon *ngSwitchCase="'warning'" svgIcon="fill:exclamation-circle"></tri-icon>
+            </ng-container>
+          </ng-template>
+        </div>
       </ng-container>
       <span class="tri-alert-message" *ngIf="message">
         <ng-container *ngIf="isMessageString; else messageTemplate">{{ message }}</ng-container>
@@ -71,7 +74,7 @@ import { coerceToBoolean } from '@gradii/triangle/util';
         (click)="closeAlert($event)"
         class="tri-alert-close-icon">
         <ng-template #closeDefaultTemplate>
-          <i class="anticon anticon-cross"></i>
+          <tri-icon class="anticon-cross" svgIcon="outline:close"></tri-icon>
         </ng-template>
         <ng-container *ngIf="closeText; else closeDefaultTemplate">
           <ng-container
@@ -83,20 +86,37 @@ import { coerceToBoolean } from '@gradii/triangle/util';
       </a>
     </div>
   `,
-  styleUrls          : ['../style/alert.css'],
-  styles             : [`.tri-alert {
+  styleUrls: ['../style/alert.css'],
+  styles: [`.tri-alert {
     display: block;
   }`],
 })
 export class AlertComponent {
+
   display = true;
   isTypeSet = false;
   isShowIconSet = false;
   isDescriptionString: boolean;
   isMessageString: boolean;
   isCloseTextString: boolean;
+
   @Output() onClose: EventEmitter<boolean> = new EventEmitter();
-  @Input() iconType: NgClass;
+
+  // @Input() iconType: NgClass;
+
+  @ContentChild(AlertMessageDirective, {read: TemplateRef, static: true})
+  set messageTemplateRef(value: TemplateRef<any>) {
+    if (value instanceof TemplateRef) {
+      this.message = value;
+    }
+  }
+
+  @ContentChild(AlertDescriptionDirective, {read: TemplateRef, static: true})
+  set descriptionTemplateRef(value: TemplateRef<any>) {
+    if (value instanceof TemplateRef) {
+      this.description = value;
+    }
+  }
 
   constructor(private _cdRef: ChangeDetectorRef) {
   }
@@ -150,10 +170,6 @@ export class AlertComponent {
     return this._type;
   }
 
-  /**
-   * @deprecated
-   * @param value
-   */
   @Input()
   set type(value: string) {
     this._type = value;
@@ -200,13 +216,9 @@ export class AlertComponent {
     this._cdRef.markForCheck();
   }
 
-  @Input()
-  set color(value) {
-    this.type = value;
-  }
-
   closeAlert(event?: any): void {
     this.display = false;
     this.onClose.emit(true);
   }
+
 }

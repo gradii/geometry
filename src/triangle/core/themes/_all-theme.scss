@@ -1,65 +1,68 @@
-// Import all the theming functionality.
-@import '../core';
+// Import all the theming functionality. as *
 
-@import '../../affix/style/affix-theme';
-@import '../../alert/style/alert-theme';
-@import '../../anchor/style/anchor-theme';
-@import '../../autocomplete/style/autocomplete-theme';
-@import '../../avatar/style/avatar-theme';
-@import '../../back-top/style/back-top-theme';
-@import '../../badge/style/badge-theme';
-@import '../../breadcrumb/style/breadcrumb-theme';
-@import '../../button/style/button-theme';
-@import '../../calendar/style/calendar-theme';
-@import '../../card/style/card-theme';
-@import '../../carousel/style/carousel-theme';
-@import '../../cascader/style/cascader-theme';
-@import '../../checkbox/style/checkbox-theme';
-@import '../../collapse/style/collapse-theme';
-@import '../../data-table/style/data-table-theme';
-@import '../../date-picker/style/date-picker-theme';
-@import '../../desc-list/style/desc-list-theme';
-@import '../../dialog/style/dialog-theme';
-@import '../../drawer/style/drawer-theme';
-@import '../../dropdown/style/dropdown-theme';
-@import '../../empty/style/empty-theme';
-@import '../../form/style/form-theme';
-@import '../../grid-list/style/grid-list-theme';
-@import '../../icon/style/icon-theme';
-@import '../../input/style/input-theme';
-@import '../../input-number/style/input-number-theme';
-@import '../../layout/style/layout-theme';
-@import '../../list/style/list-theme';
-@import '../../menu/style/menu-theme';
-@import '../../message/style/message-theme';
-@import '../../modal/style/modal-theme';
-@import '../../pagination/style/pagination-theme';
-@import '../../popconfirm/style/popconfirm-theme';
-@import '../../popover/style/popover-theme';
-@import '../../progress/style/progress-theme';
-@import '../../radio/style/radio-theme';
-@import '../../rate/style/rate-theme';
-@import '../../select/style/select-theme';
-@import '../../slider/style/slider-theme';
-@import '../../spin/style/spin-theme';
-@import '../../steps/style/steps-theme';
-@import '../../switch/style/switch-theme';
-@import '../../tabs/style/tabs-theme';
-@import '../../tag/style/tag-theme';
-@import '../../time-picker/style/time-picker-theme';
-@import '../../timeline/style/timeline-theme';
-@import '../../tooltip/style/tooltip-theme';
-@import '../../transfer/style/transfer-theme';
-@import '../../tree/style/tree-theme';
+@use "../../core/core-theme" as *;
+@use "../../affix/style/affix-theme" as *;
+@use "../../alert/style/alert-theme" as *;
+@use "../../anchor/style/anchor-theme" as *;
+@use "../../autocomplete/style/autocomplete-theme" as *;
+@use "../../avatar/style/avatar-theme" as *;
+@use "../../back-top/style/back-top-theme" as *;
+@use "../../badge/style/badge-theme" as *;
+@use "../../breadcrumb/style/breadcrumb-theme" as *;
+@use "../../button/style/button-theme" as *;
+@use "../../calendar/style/calendar-theme" as *;
+@use "../../card/style/card-theme" as *;
+@use "../../carousel/style/carousel-theme" as *;
+@use "../../cascader/style/cascader-theme" as *;
+@use "../../checkbox/style/checkbox-theme" as *;
+@use "../../collapse/style/collapse-theme" as *;
+@use "../../data-table/style/data-table-theme" as *;
+@use "../../date-picker/style/date-picker-theme" as *;
+@use "../../desc-list/style/desc-list-theme" as *;
+@use "../../dialog/style/dialog-theme" as *;
+@use "../../drawer/style/drawer-theme" as *;
+@use "../../dropdown/style/dropdown-theme" as *;
+@use "../../empty/style/empty-theme" as *;
+@use "../../form/style/form-theme" as *;
+@use "../../grid-list/style/grid-list-theme" as *;
+@use "../../icon/style/icon-theme" as *;
+@use "../../input/style/input-theme" as *;
+@use "../../input-number/style/input-number-theme" as *;
+@use "../../layout/style/layout-theme" as *;
+@use "../../list/style/list-theme" as *;
+@use "../../menu/style/menu-theme" as *;
+@use "../../message/style/message-theme" as *;
+@use "../../modal/style/modal-theme" as *;
+@use "../../pagination/style/pagination-theme" as *;
+@use "../../popconfirm/style/popconfirm-theme" as *;
+@use "../../popover/style/popover-theme" as *;
+@use "../../progress/style/progress-theme" as *;
+@use "../../radio/style/radio-theme" as *;
+@use "../../rate/style/rate-theme" as *;
+@use "../../select/style/select-theme" as *;
+@use "../../slider/style/slider-theme" as *;
+@use "../../spin/style/spin-theme" as *;
+@use "../../steps/style/steps-theme" as *;
+@use "../../switch/style/switch-theme" as *;
+@use "../../tabs/style/tabs-theme" as *;
+@use "../../tag/style/tag-theme" as *;
+@use "../../time-picker/style/time-picker-theme" as *;
+@use "../../timeline/style/timeline-theme" as *;
+@use "../../tooltip/style/tooltip-theme" as *;
+@use "../../transfer/style/transfer-theme" as *;
+@use "../../tree/style/tree-theme" as *;
 
 
-@mixin gradii-triangle-theme($theme) {
-  //@debug $theme;
+@mixin gradii-triangle-global() {
 
-  @include tri-core-theme($theme);
-  @include tri-menu-theme($theme);
-  @include tri-layout-theme($theme);
-  @include tri-tabs-theme($theme);
+  @include tri-core-theme();
+  @include tri-input-theme();
+  @include tri-alert-theme();
+  @include tri-menu-theme();
+  @include tri-layout-theme();
+  @include tri-tabs-theme();
 
-  @include tri-collapse-theme($theme);
+  @include tri-collapse-theme();
+
+  @include tri-button-theme();
 }

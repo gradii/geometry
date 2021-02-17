@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -393,7 +392,6 @@ export abstract class _TriTabGroupBase extends _TriTabGroupMixinBase implements 
 /**
  * Material design tab-group component. Supports basic tab pairs (label + content) and includes
  * animated ink-bar, keyboard navigation, and screen reader.
- * See: https://material.io/design/components/tabs.html
  */
 @Component({
   selector       : 'tri-tab-group',

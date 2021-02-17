@@ -1,11 +1,10 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
 
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   template: `
@@ -13,7 +12,7 @@ import {Component} from '@angular/core';
     <p>This page does not exist</p>
     <a triButton routerLink="/">Go back to the home page</a>
   `,
-  host: {'class': 'tri-typography'},
+  host    : {'class': 'tri-typography'},
 })
 export class DevApp404 {
 }

@@ -1,6 +1,6 @@
 @import "./mixin";
 
-$form-prefix-cls         : "#{$ant-prefix}-form";
+$form-prefix-cls         : "#{$tri-prefix}-form";
 $form-component-height   : $input-height-base;
 $form-feedback-font-size : $font-size-base;
 
@@ -38,18 +38,18 @@ input[type="checkbox"] {
 }
 
 // These classes are used directly on <label>s
-.#{$ant-prefix}-radio-inline,
-.#{$ant-prefix}-radio-vertical,
-.#{$ant-prefix}-checkbox-inline,
-.#{$ant-prefix}-checkbox-vertical {
+.#{$tri-prefix}-radio-inline,
+.#{$tri-prefix}-radio-vertical,
+.#{$tri-prefix}-checkbox-inline,
+.#{$tri-prefix}-checkbox-vertical {
   @at-root &.disabled {
     cursor : not-allowed;
   }
 }
 
 // These classes are used on elements with <label> descendants
-.#{$ant-prefix}-radio,
-.#{$ant-prefix}-checkbox {
+.#{$tri-prefix}-radio,
+.#{$tri-prefix}-checkbox {
   @at-root &.disabled {
     label {
       cursor : not-allowed;
@@ -108,7 +108,7 @@ input[type="checkbox"] {
     }
   }
 
-  .#{$ant-prefix}-switch {
+  .#{$tri-prefix}-switch {
     margin : 4px 0;
   }
 
@@ -148,7 +148,7 @@ input[type="checkbox"] {
     width : 100%;
   }
 
-  .#{$ant-prefix}-input {
+  .#{$tri-prefix}-input {
     padding-right : 2rem;
 
   }
@@ -161,26 +161,26 @@ input[type="checkbox"] {
 
   // Fix overlapping between feedback icon and <Select>'s arrow.
   // https://github.com/ant-design/ant-design/issues/4431
-  > .#{$ant-prefix}-select .#{$ant-prefix}-select-arrow,
-  > .#{$ant-prefix}-select .#{$ant-prefix}-select-selection__clear,
-  :not(.#{$ant-prefix}-input-group-addon) > .#{$ant-prefix}-select .#{$ant-prefix}-select-arrow,
-  :not(.#{$ant-prefix}-input-group-addon) > .#{$ant-prefix}-select .#{$ant-prefix}-select-selection__clear {
+  > .#{$tri-prefix}-select .#{$tri-prefix}-select-arrow,
+  > .#{$tri-prefix}-select .#{$tri-prefix}-select-selection__clear,
+  :not(.#{$tri-prefix}-input-group-addon) > .#{$tri-prefix}-select .#{$tri-prefix}-select-arrow,
+  :not(.#{$tri-prefix}-input-group-addon) > .#{$tri-prefix}-select .#{$tri-prefix}-select-selection__clear {
     right : 2rem;
   }
 
-  > .#{$ant-prefix}-select .#{$ant-prefix}-select-selection-selected-value,
-  :not(.#{$ant-prefix}-input-group-addon) > .#{$ant-prefix}-select .#{$ant-prefix}-select-selection-selected-value {
+  > .#{$tri-prefix}-select .#{$tri-prefix}-select-selection-selected-value,
+  :not(.#{$tri-prefix}-input-group-addon) > .#{$tri-prefix}-select .#{$tri-prefix}-select-selection-selected-value {
     padding-right : 2rem;
   }
 
-  .#{$ant-prefix}-cascader-picker {
+  .#{$tri-prefix}-cascader-picker {
     @at-root &-clear {
       right : 2rem;
     }
   }
 
   // Fix issue: https://github.com/ant-design/ant-design/issues/4783
-  .#{$ant-prefix}-calendar-picker {
+  .#{$tri-prefix}-calendar-picker {
     @at-root &-icon,
     &-clear {
       right : 2rem;
@@ -200,19 +200,19 @@ input[type="checkbox"] {
 
 // 表单下的输入框尺寸唯一: 大尺寸
 form {
-  > .#{$ant-prefix}-select .#{$ant-prefix}-select-arrow,
-  > .#{$ant-prefix}-select .#{$ant-prefix}-select-selection__clear,
-  :not(.#{$ant-prefix}-input-group-addon) > .#{$ant-prefix}-select .#{$ant-prefix}-select-arrow,
-  :not(.#{$ant-prefix}-input-group-addon) > .#{$ant-prefix}-select .#{$ant-prefix}-select-selection__clear {
+  > .#{$tri-prefix}-select .#{$tri-prefix}-select-arrow,
+  > .#{$tri-prefix}-select .#{$tri-prefix}-select-selection__clear,
+  :not(.#{$tri-prefix}-input-group-addon) > .#{$tri-prefix}-select .#{$tri-prefix}-select-arrow,
+  :not(.#{$tri-prefix}-input-group-addon) > .#{$tri-prefix}-select .#{$tri-prefix}-select-selection__clear {
     right : 1rem;
   }
 
-  textarea.#{$ant-prefix}-input {
+  textarea.#{$tri-prefix}-input {
     height : auto;
   }
 
   // input[type=file]
-  .#{$ant-prefix}-upload {
+  .#{$tri-prefix}-upload {
     background : transparent;
   }
 
@@ -223,8 +223,8 @@ form {
   }
 
   // Radios and checkboxes on same line
-  .#{$ant-prefix}-radio-inline,
-  .#{$ant-prefix}-checkbox-inline {
+  .#{$tri-prefix}-radio-inline,
+  .#{$tri-prefix}-checkbox-inline {
     display        : inline-block;
     vertical-align : middle;
     font-weight    : normal;
@@ -236,23 +236,23 @@ form {
     }
   }
 
-  .#{$ant-prefix}-checkbox-vertical,
-  .#{$ant-prefix}-radio-vertical {
+  .#{$tri-prefix}-checkbox-vertical,
+  .#{$tri-prefix}-radio-vertical {
     display : block;
   }
 
-  .#{$ant-prefix}-checkbox-vertical + .#{$ant-prefix}-checkbox-vertical,
-  .#{$ant-prefix}-radio-vertical + .#{$ant-prefix}-radio-vertical {
+  .#{$tri-prefix}-checkbox-vertical + .#{$tri-prefix}-checkbox-vertical,
+  .#{$tri-prefix}-radio-vertical + .#{$tri-prefix}-radio-vertical {
     margin-left : 0;
   }
 
-  .#{$ant-prefix}-input-number {
+  .#{$tri-prefix}-input-number {
     margin-top   : -1px;
     margin-right : 8px;
   }
 
-  .#{$ant-prefix}-select,
-  .#{$ant-prefix}-cascader-picker {
+  .#{$tri-prefix}-select,
+  .#{$tri-prefix}-cascader-picker {
     width : 100%;
     // Fix https://github.com/ant-design/ant-design/issues/6097
     @at-root &:only-child {
@@ -261,14 +261,14 @@ form {
   }
 
   // Don't impact select inside input group
-  .#{$ant-prefix}-input-group .#{$ant-prefix}-select,
-  .#{$ant-prefix}-input-group .#{$ant-prefix}-cascader-picker {
+  .#{$tri-prefix}-input-group .#{$tri-prefix}-select,
+  .#{$tri-prefix}-input-group .#{$tri-prefix}-cascader-picker {
     width : auto;
   }
 
   // Don't impact select inside input group addon
-  .#{$ant-prefix}-input-group-addon .#{$ant-prefix}-select,
-  .#{$ant-prefix}-input-group-addon .#{$ant-prefix}-cascader-picker {
+  .#{$tri-prefix}-input-group-addon .#{$tri-prefix}-select,
+  .#{$tri-prefix}-input-group-addon .#{$tri-prefix}-cascader-picker {
     @at-root &:only-child {
       display : inline-block;
     }
@@ -276,8 +276,8 @@ form {
 }
 
 // Input combined with select
-.#{$ant-prefix}-input-group-wrap {
-  .#{$ant-prefix}-select-selection {
+.#{$tri-prefix}-input-group-wrap {
+  .#{$tri-prefix}-select-selection {
     border-bottom-left-radius : 0;
     border-top-left-radius    : 0;
     @at-root &:hover {
@@ -285,19 +285,19 @@ form {
     }
   }
 
-  .#{$ant-prefix}-select-selection--single {
+  .#{$tri-prefix}-select-selection--single {
     margin-left      : -1px;
     height           : $input-height-lg;
     background-color : #eee;
 
-    .#{$ant-prefix}-select-selection__rendered {
+    .#{$tri-prefix}-select-selection__rendered {
       padding-left  : 8px;
       padding-right : 25px;
       line-height   : 30px;
     }
   }
 
-  .#{$ant-prefix}-select-open .#{$ant-prefix}-select-selection {
+  .#{$tri-prefix}-select-open .#{$tri-prefix}-select-selection {
     border-color : $border-color-base;
     box-shadow   : none;
   }
@@ -318,31 +318,31 @@ form {
 
 .#{$form-prefix-cls}-vertical .#{$form-prefix-cls}-item-label,
   // when labelCol is 24, it is a vertical form
-.#{$ant-prefix}-col-24.#{$form-prefix-cls}-item-label,
-.#{$ant-prefix}-col-xl-24.#{$form-prefix-cls}-item-label {
+.#{$tri-prefix}-col-24.#{$form-prefix-cls}-item-label,
+.#{$tri-prefix}-col-xl-24.#{$form-prefix-cls}-item-label {
   @include make-vertical-layout();
 }
 
 @media (max-width : $screen-xs-max) {
-  .#{$ant-prefix}-col-xs-24.#{$form-prefix-cls}-item-label {
+  .#{$tri-prefix}-col-xs-24.#{$form-prefix-cls}-item-label {
     @include make-vertical-layout();
   }
 }
 
 @media (max-width : $screen-sm-max) {
-  .#{$ant-prefix}-col-sm-24.#{$form-prefix-cls}-item-label {
+  .#{$tri-prefix}-col-sm-24.#{$form-prefix-cls}-item-label {
     @include make-vertical-layout();
   }
 }
 
 @media (max-width : $screen-md-max) {
-  .#{$ant-prefix}-col-md-24.#{$form-prefix-cls}-item-label {
+  .#{$tri-prefix}-col-md-24.#{$form-prefix-cls}-item-label {
     @include make-vertical-layout();
   }
 }
 
 @media (max-width : $screen-lg-max) {
-  .#{$ant-prefix}-col-lg-24.#{$form-prefix-cls}-item-label {
+  .#{$tri-prefix}-col-lg-24.#{$form-prefix-cls}-item-label {
     @include make-vertical-layout();
   }
 }
@@ -430,19 +430,19 @@ form {
   @include form-control-validation($success-color, $success-color);
 
   // select
-  .#{$ant-prefix}-select {
-    @at-root &-open .#{$ant-prefix}-select-selection, &-focused #{$ant-prefix}-select-selection {
+  .#{$tri-prefix}-select {
+    @at-root &-open .#{$tri-prefix}-select-selection, &-focused #{$tri-prefix}-select-selection {
       @include tri-input-active-theme($theme, $success-color);
     }
   }
 
-  .#{$ant-prefix}-select-selection:hover {
+  .#{$tri-prefix}-select-selection:hover {
     //@include active($success-color);
     border-color : $success-color !important;
     box-shadow   : none;
   }
 
-  .#{$ant-prefix}-input-group-addon .#{$ant-prefix}-select {
+  .#{$tri-prefix}-input-group-addon .#{$tri-prefix}-select {
     @at-root &-selection {
       border-color : transparent;
       box-shadow   : none;
@@ -450,17 +450,17 @@ form {
   }
 
   // arrow and icon
-  .#{$ant-prefix}-calendar-picker-icon:after, #{$ant-prefix}-picker-icon:after, .#{$ant-prefix}-select-arrow, .#{$ant-prefix}-cascader-picker-arrow {
+  .#{$tri-prefix}-calendar-picker-icon:after, #{$tri-prefix}-picker-icon:after, .#{$tri-prefix}-select-arrow, .#{$tri-prefix}-cascader-picker-arrow {
     right : 2rem !important;
   }
 
-  .#{$ant-prefix}-cascader-picker:focus #{$ant-prefix}-input, .#{$ant-prefix}-cascader:hover {
+  .#{$tri-prefix}-cascader-picker:focus #{$tri-prefix}-input, .#{$tri-prefix}-cascader:hover {
     border-color : $success-color !important;
     box-shadow   : none;
   }
 
   // radio-group
-  .#{$ant-prefix}-radio-group label.tri-radio-button-wrapper-checked {
+  .#{$tri-prefix}-radio-group label.tri-radio-button-wrapper-checked {
     border-width : 1px;
     border-color : $success-color;
     box-shadow   : -1px 0 0 0 $success-color;
@@ -473,7 +473,7 @@ form {
   }
 
   // input-number, timepicker
-  .#{$ant-prefix}-input-number, .#{$ant-prefix}-time-picker-input {
+  .#{$tri-prefix}-input-number, .#{$tri-prefix}-time-picker-input {
     @at-root &-focused, &:focus {
       @include active($success-color);
     }
@@ -482,8 +482,8 @@ form {
     }
   }
 
-  .#{$ant-prefix}-mention-wrapper {
-    .#{$ant-prefix}-mention-editor {
+  .#{$tri-prefix}-mention-wrapper {
+    .#{$tri-prefix}-mention-editor {
       @at-root &, &:not([disabled]):hover {
         @at-root &, &:not([disabled]):hover {
           border-color : $success-color;
@@ -491,7 +491,7 @@ form {
       }
     }
 
-    @at-root &.#{$ant-prefix}-mention-active .#{$ant-prefix}-mention-editor, & .#{$ant-prefix}-mention-editor:not([disabled]):focus {
+    @at-root &.#{$tri-prefix}-mention-active .#{$tri-prefix}-mention-editor, & .#{$tri-prefix}-mention-editor:not([disabled]):focus {
       @include active($success-color);
     }
   }
@@ -523,27 +523,27 @@ form {
   @include form-control-validation($warning-color, $warning-color);
 
   //select
-  .#{$ant-prefix}-select {
+  .#{$tri-prefix}-select {
     @at-root &-selection {
       border-color : $warning-color;
     }
-    @at-root &-open .#{$ant-prefix}-select-selection,
-    &-focused .#{$ant-prefix}-select-selection {
+    @at-root &-open .#{$tri-prefix}-select-selection,
+    &-focused .#{$tri-prefix}-select-selection {
       @include active($warning-color);
     }
   }
 
   // arrow and icon
-  .#{$ant-prefix}-calendar-picker-icon:after,
-  .#{$ant-prefix}-picker-icon:after,
-  .#{$ant-prefix}-select-arrow,
-  .#{$ant-prefix}-cascader-picker-arrow {
+  .#{$tri-prefix}-calendar-picker-icon:after,
+  .#{$tri-prefix}-picker-icon:after,
+  .#{$tri-prefix}-select-arrow,
+  .#{$tri-prefix}-cascader-picker-arrow {
     color : $warning-color;
   }
 
   //input-number, timepicker
-  .#{$ant-prefix}-input-number,
-  .#{$ant-prefix}-time-picker-input {
+  .#{$tri-prefix}-input-number,
+  .#{$tri-prefix}-time-picker-input {
     border-color : $warning-color;
     @at-root &-focused,
     &:focus {
@@ -563,17 +563,17 @@ form {
   @include form-control-validation($error-color, $error-color);
 
   //select
-  .#{$ant-prefix}-select {
+  .#{$tri-prefix}-select {
     @at-root &-selection {
       border-color : $error-color;
     }
-    @at-root &-open .#{$ant-prefix}-select-selection,
-    &-focused .#{$ant-prefix}-select-selection {
+    @at-root &-open .#{$tri-prefix}-select-selection,
+    &-focused .#{$tri-prefix}-select-selection {
       @include active($error-color);
     }
   }
 
-  .#{$ant-prefix}-input-group-addon .#{$ant-prefix}-select {
+  .#{$tri-prefix}-input-group-addon .#{$tri-prefix}-select {
     @at-root &-selection {
       border-color : transparent;
       box-shadow   : none;
@@ -581,17 +581,17 @@ form {
   }
 
   // arrow and icon
-  .#{$ant-prefix}-calendar-picker-icon:after,
-  .#{$ant-prefix}-picker-icon:after,
-  .#{$ant-prefix}-select-arrow,
-  .#{$ant-prefix}-cascader-picker-arrow {
+  .#{$tri-prefix}-calendar-picker-icon:after,
+  .#{$tri-prefix}-picker-icon:after,
+  .#{$tri-prefix}-select-arrow,
+  .#{$tri-prefix}-cascader-picker-arrow {
     color : $error-color;
     right : 2rem !important;
   }
 
   //input-number, timepicker
-  .#{$ant-prefix}-input-number,
-  .#{$ant-prefix}-time-picker-input {
+  .#{$tri-prefix}-input-number,
+  .#{$tri-prefix}-time-picker-input {
     border-color : $error-color;
     @at-root &-focused,
     &:focus {
@@ -602,16 +602,16 @@ form {
     }
   }
 
-  .#{$ant-prefix}-mention-wrapper {
-    .#{$ant-prefix}-mention-editor {
+  .#{$tri-prefix}-mention-wrapper {
+    .#{$tri-prefix}-mention-editor {
       @at-root &,
       &:not([disabled]):hover {
         border-color : $error-color;
       }
     }
 
-    @at-root &.#{$ant-prefix}-mention-active .#{$ant-prefix}-mention-editor,
-    & .#{$ant-prefix}-mention-editor:not([disabled]):focus {
+    @at-root &.#{$tri-prefix}-mention-active .#{$tri-prefix}-mention-editor,
+    & .#{$tri-prefix}-mention-editor:not([disabled]):focus {
       @include active($error-color);
     }
   }
@@ -630,14 +630,14 @@ form {
   }
 }
 
-.#{$ant-prefix}-advanced-search-form {
+.#{$tri-prefix}-advanced-search-form {
   .#{$form-prefix-cls}-item {
     margin-bottom : 16px;
   }
 
-  .#{$ant-prefix}-input,
-  .#{$ant-prefix}-input-group .#{$ant-prefix}-input,
-  .#{$ant-prefix}-input-group .#{$ant-prefix}-input-group-addon {
+  .#{$tri-prefix}-input,
+  .#{$tri-prefix}-input-group .#{$tri-prefix}-input,
+  .#{$tri-prefix}-input-group .#{$tri-prefix}-input-group-addon {
     height : $input-height-base;
   }
 }

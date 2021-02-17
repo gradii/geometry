@@ -1,5 +1,6 @@
-@import "../../core/themes/default-theme";
-@import '../../core/style/cdk/a11y';
+@use "../../core/style/mixins";
+@use "../../core/style/variables";
+@use "../../core/style/cdk/a11y";
 
 $tri-tab-bar-height         : 48px !default;
 $tri-tab-animation-duration : 500ms !default;
@@ -25,7 +26,7 @@ $tri-tab-animation-duration : 500ms !default;
       opacity : 1;
     }
 
-    @include cdk-high-contrast(active, off) {
+    @include a11y.cdk-high-contrast(active, off) {
       $outline-width : 2px;
       outline        : dotted $outline-width;
       outline-offset : -$outline-width; // Not supported on IE, but looks better everywhere else.
@@ -35,7 +36,7 @@ $tri-tab-animation-duration : 500ms !default;
   &.tri-tab-disabled {
     cursor : default;
 
-    @include cdk-high-contrast(active, off) {
+    @include a11y.cdk-high-contrast(active, off) {
       opacity : 0.5;
     }
   }
@@ -47,7 +48,7 @@ $tri-tab-animation-duration : 500ms !default;
     white-space     : nowrap;
   }
 
-  @include cdk-high-contrast(active, off) {
+  @include a11y.cdk-high-contrast(active, off) {
     opacity : 1;
   }
 }
@@ -56,18 +57,18 @@ $tri-tab-animation-duration : 500ms !default;
 @mixin ink-bar {
   $height    : 2px;
 
-  @include _noop-animation();
+  @include mixins.noop-animation();
   position   : absolute;
   bottom     : 0;
   height     : $height;
-  transition : $tri-tab-animation-duration $ease-in-out-curve-function;
+  transition : $tri-tab-animation-duration mixins.$ease-in-out-curve-function;
 
   .tri-tab-group-inverted-header & {
     bottom : auto;
     top    : 0;
   }
 
-  @include cdk-high-contrast(active, off) {
+  @include a11y.cdk-high-contrast(active, off) {
     outline : solid $height;
     height  : 0;
   }
@@ -83,7 +84,7 @@ $tri-tab-animation-duration : 500ms !default;
   }
 
   .tri-tab-header-pagination {
-    @include user-select(none);
+    @include mixins.user-select(none);
     position                    : relative;
     display                     : none;
     justify-content             : center;
@@ -120,7 +121,7 @@ $tri-tab-animation-duration : 500ms !default;
   .tri-tab-header-pagination-chevron {
     border-style : solid;
     border-width : 2px 2px 0 0;
-    content      : '';
+    content      : "";
     height       : 8px;
     width        : 8px;
   }
@@ -141,11 +142,11 @@ $tri-tab-animation-duration : 500ms !default;
 @mixin paginated-tab-header-item-wrapper {
   display : flex;
 
-  [tri-align-tabs='center'] & {
+  [tri-align-tabs="center"] & {
     justify-content : center;
   }
 
-  [tri-align-tabs='end'] & {
+  [tri-align-tabs="end"] & {
     justify-content : flex-end;
   }
 }

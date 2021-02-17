@@ -1,0 +1,9 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+
+filegroup(
+    name = "source-files",
+    srcs = glob(["**/*.ts"]),
+)

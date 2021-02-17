@@ -1,4 +1,4 @@
-@import 'typography-utils';
+@import "typography-utils";
 
 // Represents a typography level from the Material design spec.
 @function tri-typography-level(
@@ -22,7 +22,7 @@
 // Note: The spec doesn't mention letter spacing. The values here come from
 // eyeballing it until it looked exactly like the spec examples.
 @function tri-typography-config(
-  $font-family:   'Roboto, "Helvetica Neue", sans-serif',
+  $font-family:   "Roboto, \"Helvetica Neue\", sans-serif",
   $display-4:     tri-typography-level(112px, 112px, 300, $letter-spacing: -0.05em),
   $display-3:     tri-typography-level(56px, 56px, 400, $letter-spacing: -0.02em),
   $display-2:     tri-typography-level(45px, 48px, 400, $letter-spacing: -0.005em),
@@ -70,7 +70,7 @@
 }
 
 // Adds the base typography styles, based on a config.
-@mixin tri-base-typography($config, $selector: '.tri-typography') {
+@mixin tri-base-typography($config, $selector: ".tri-typography") {
   .tri-h1, .tri-headline, #{$selector} h1 {
     @include tri-typography-level-to-styles($config, headline);
     margin : 0 0 16px;

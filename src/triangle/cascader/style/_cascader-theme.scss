@@ -1,63 +1,68 @@
-@import "../../core/themes/default-theme";
-@import "../../input/style/input-mixin";
-@import "../../input/style/input-theme";
+@use "sass:map";
+@use "../../core/themes/theme";
+@use "../../input/style/input-mixin";
+@use "../../input/style/input-theme";
+@use "../../core/style/theming";
+@use "../../core/style/variables" as v;
 
-$cascader-prefix-cls : "#{$ant-prefix}-cascader";
+$foreground          : theme.$foreground;
+$background          : theme.$background;
+$primary             : theme.$primary;
 
-@mixin tri-cascader-theme($theme) {
-  $primary    : map-get($theme, primary);
-  $foreground : map-get($theme, foreground);
-  $background : map-get($theme, background);
+$cascader-prefix-cls : #{v.$tri-prefix}-cascader !default;
+
+
+@mixin tri-cascader-theme() {
 
   .#{$cascader-prefix-cls} {
-    @at-root &-input.#{$ant-prefix}-input {
+    @at-root &-input.#{ v.$tri-prefix}-input {
       background-color : transparent !important;
     }
 
     @at-root &-picker {
-      background-color : tri-color($background, component-background);
-      border-radius    : $border-radius-base;
+      background-color : theming.tri-color($background, component-background);
+      border-radius    : v.$border-radius-base;
 
       @at-root &-with-value #{&}-label {
         color : transparent;
       }
 
       @at-root &-disabled {
-        background : tri-color($foreground, input-disabled-bg);
-        color      : tri-color($background, disabled-color);
+        background : theming.tri-color($foreground, input-disabled-bg);
+        color      : theming.tri-color($background, disabled-color);
       }
 
 
       @at-root &:focus .#{$cascader-prefix-cls}-input {
-        @include tri-input-active-theme($theme);
+        @include input-theme.tri-input-active-theme();
       }
 
       @at-root &-clear {
-        background : tri-color($background, component-background);
-        color      : tri-color($background, disabled-color);
+        background : theming.tri-color($background, component-background);
+        color      : theming.tri-color($background, disabled-color);
         @at-root &:hover {
-          color : tri-color($foreground, text-color-secondary);
+          color : theming.tri-color($foreground, text-color-secondary);
         }
       }
 
       // arrow
       @at-root &-arrow {
-        color : tri-color($foreground, text-color-secondary);
+        color : theming.tri-color($foreground, text-color-secondary);
       }
     }
 
     @at-root &-menus {
-      background : tri-color($background, component-background);
-      box-shadow : $box-shadow-base;
+      background : theming.tri-color($background, component-background);
+      box-shadow : v.$box-shadow-base;
     }
     @at-root &-menu {
-      border-right : $border-width-base $border-style-base tri-color($foreground, border-color-split);
+      border-right : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-split);
       @at-root &:first-child {
-        border-radius : $border-radius-base 0 0 $border-radius-base;
+        border-radius : v.$border-radius-base 0 0 v.$border-radius-base;
       }
       @at-root &:last-child {
         border-right-color : transparent;
-        border-radius      : 0 $border-radius-base $border-radius-base 0;
+        border-radius      : 0 v.$border-radius-base v.$border-radius-base 0;
       }
     }
     @at-root &-menu-title {
@@ -65,10 +70,10 @@ $cascader-prefix-cls : "#{$ant-prefix}-cascader";
     }
     @at-root &-menu-item {
       @at-root &:hover {
-        background : tri-color($background, item-hover-bg);
+        background : theming.tri-color($background, item-hover-bg);
       }
       @at-root &-disabled {
-        color : tri-color($background, disabled-color);
+        color : theming.tri-color($background, disabled-color);
         @at-root &:hover {
           background : transparent;
         }
@@ -76,17 +81,17 @@ $cascader-prefix-cls : "#{$ant-prefix}-cascader";
       @at-root &-active:not(#{&}-disabled) {
         @at-root &,
         &:hover {
-          background : tri-color($foreground, background-color-base);
+          background : theming.tri-color($foreground, background-color-base);
         }
       }
       @at-root &-expand {
         @at-root &:after {
-          color : tri-color($foreground, text-color-secondary);
+          color : theming.tri-color($foreground, text-color-secondary);
         }
       }
 
       @at-root &#{&}-keyword {
-        color : tri-color($foreground, highlight-color);
+        color : theming.tri-color($foreground, highlight-color);
       }
     }
   }

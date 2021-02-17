@@ -1,41 +1,48 @@
-@mixin tri-reboot-theme($theme) {
-  $foreground : map-get($theme, foreground);
-  $background : map-get($theme, background);
+@use "sass:map";
+@use "theming";
 
-  $primary    : map-get($theme, primary);
-  $warning     : map-get($theme, warning);
+@use "../themes/theme";
+
+
+@mixin tri-reboot-theme() {
+
+  $foreground : theme.$foreground;
+  $background : theme.$background;
+
+  $primary    : theme.$primary;
+  $warning    : theme.$warning;
 
   body {
-    color            : tri-color($foreground, text-color);
-    background-color : tri-color($background, body-background);
+    color            : theming.tri-color($foreground, text-color);
+    background-color : theming.tri-color($background, body-background);
   }
 
   h1, h2, h3, h4, h5, h6 {
-    color : tri-color($foreground, heading-color);
+    color : theming.tri-color($foreground, heading-color);
   }
 
   a {
-    color : tri-color($foreground, link-color);
+    color : theming.tri-color($foreground, link-color);
 
     &:hover {
-      color : tri-color($foreground, link-hover-color);
+      color : theming.tri-color($foreground, link-hover-color);
     }
 
     &:active {
-      color : tri-color($foreground, link-active-color);
+      color : theming.tri-color($foreground, link-active-color);
     }
   }
 
   caption {
-    color : tri-color($foreground, text-color-secondary);
+    color : theming.tri-color($foreground, text-color-secondary);
   }
 
   mark {
-    background-color : tri-color($warning, 100);
+    background-color : theming.tri-color($warning, 100);
   }
 
   ::selection {
-    background : tri-color($primary);
+    background : theming.tri-color($primary);
     color      : #fff;
   }
 

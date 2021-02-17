@@ -127,7 +127,7 @@ describe('alert', () => {
       [message]="message"
       [showIcon]="showIcon"
       [iconType]="iconType"
-      [color]="type"
+      [type]="type"
       (onClose)="onClose($event)">
     </tri-alert>
   `

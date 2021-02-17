@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$dialog-prefix-cls  : "#{$ant-prefix}-dialog" !default;
+$dialog-prefix-cls  : "#{$tri-prefix}-dialog" !default;
 $zindex-dialog-mask : 100 !default;
 $zindex-dialog      : 1000 !default;
 
@@ -75,7 +76,7 @@ $zindex-dialog      : 1000 !default;
 
   @at-root &-header {
     @include border-radius(($border-radius-base $border-radius-base 0 0));
-    padding       : .8125rem 1rem;
+    padding : .8125rem 1rem;
   }
 
   @at-root &-content {
@@ -102,14 +103,14 @@ $zindex-dialog      : 1000 !default;
   }
 
   @at-root &-mask {
-    position         : fixed;
-    top              : 0;
-    right            : 0;
-    left             : 0;
-    bottom           : 0;
-    height           : 100%;
-    z-index          : $zindex-dialog-mask;
-    filter           : alpha(opacity=50);
+    position : fixed;
+    top      : 0;
+    right    : 0;
+    left     : 0;
+    bottom   : 0;
+    height   : 100%;
+    z-index  : $zindex-dialog-mask;
+    filter   : alpha(opacity=50);
 
     @at-root &-hidden {
       display : none;

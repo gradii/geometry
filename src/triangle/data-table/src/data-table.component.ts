@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -181,7 +180,6 @@ export type fieldFilterMapFn = (fieldKey: string) => 'text' | 'numeric' | 'boole
 @Component({
   selector           : 'tri-data-table',
   exportAs           : 'triDataTable',
-  preserveWhitespaces: false,
   // changeDetection    : ChangeDetectionStrategy.OnPush,
   providers          : [
     BrowserSupportService,

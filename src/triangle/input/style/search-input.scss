@@ -1,33 +1,35 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-@import "../../button/style/button-mixins";
+@import "../../core/style/legend/button-common";
+@import "../../core/style/variables";
 @import "./input-mixin";
 
-.#{$ant-prefix}-input-search-icon {
+.#{$tri-prefix}-input-search-icon {
   cursor     : pointer;
   transition : all .3s;
   font-size  : 14px;
 }
 
-.#{$ant-prefix}-search-input-wrapper {
+.#{$tri-prefix}-search-input-wrapper {
   display        : inline-block;
   vertical-align : middle;
 }
 
-.#{$ant-prefix}-search-input {
-  @at-root &.#{$ant-prefix}-input-group .#{$ant-prefix}-input:first-child,
-  &.#{$ant-prefix}-input-group .#{$ant-prefix}-select:first-child {
+.#{$tri-prefix}-search-input {
+  @at-root &.#{$tri-prefix}-input-group .#{$tri-prefix}-input:first-child,
+  &.#{$tri-prefix}-input-group .#{$tri-prefix}-select:first-child {
     border-radius : $border-radius-base;
     position      : absolute;
     top           : -1px;
     width         : 100%;
   }
 
-  @at-root &.#{$ant-prefix}-input-group .#{$ant-prefix}-input:first-child {
+  @at-root &.#{$tri-prefix}-input-group .#{$tri-prefix}-input:first-child {
     padding-right : 36px;
   }
 
-  .#{$ant-prefix}-search-btn {
+  .#{$tri-prefix}-search-btn {
     //@include btn-default($theme);
     border-radius : 0 ($border-radius-base - 1px) ($border-radius-base - 1px) 0;
     left          : -1px;
@@ -38,13 +40,13 @@
     padding-right : 8px;
   }
 
-  //@at-root &#{&}-focus .#{$ant-prefix}-search-btn-noempty,
-  //&:hover .#{$ant-prefix}-search-btn-noempty {
+  //@at-root &#{&}-focus .#{$tri-prefix}-search-btn-noempty,
+  //&:hover .#{$tri-prefix}-search-btn-noempty {
   //  @include button-variant-primary($btn-primary-color, $btn-primary-bg);
   //}
 
-  .#{$ant-prefix}-select-combobox {
-    .#{$ant-prefix}-select-selection__rendered {
+  .#{$tri-prefix}-select-combobox {
+    .#{$tri-prefix}-select-selection__rendered {
       margin-right : 29px;
     }
   }

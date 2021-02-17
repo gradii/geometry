@@ -1,15 +1,15 @@
-$confirm-prefix-cls : "#{$ant-prefix}-confirm";
+$confirm-prefix-cls : "#{$tri-prefix}-confirm";
 
 .#{$confirm-prefix-cls} {
-  .#{$ant-prefix}-modal-header {
+  .#{$tri-prefix}-modal-header {
     display : none;
   }
 
-  .#{$ant-prefix}-modal-close {
+  .#{$tri-prefix}-modal-close {
     display : none;
   }
 
-  .#{$ant-prefix}-modal-body {
+  .#{$tri-prefix}-modal-body {
     padding : 30px 40px;
   }
 

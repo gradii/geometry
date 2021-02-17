@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
 
-$rate-prefix-cls : "#{$ant-prefix}-rate";
+$rate-prefix-cls : #{v.$tri-prefix}-rate;
 
 @mixin tri-rate-theme($theme) {
   // Rate
@@ -19,7 +20,7 @@ $rate-prefix-cls : "#{$ant-prefix}-rate";
 
       @at-root &-half:hover #{&}-first,
       &-full:hover #{&}-second {
-        color : tint($rate-star-color, 20%);
+        color : mixins.tint($rate-star-color, 20%);
       }
     }
   }

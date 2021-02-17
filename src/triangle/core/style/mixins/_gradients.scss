@@ -1,11 +1,14 @@
+@use "sass:color";
+@use "../variables" as v;
+
 // Gradients
 
 @mixin gradient-bg($color, $foreground: null) {
-  @if $enable-gradients {
+  @if v.$enable-gradients {
     @if $foreground {
-      background-image : $foreground, linear-gradient(180deg, mix($body-background, $color, 15%), $color);
+      background-image : $foreground, linear-gradient(180deg, color.mix($body-background, $color, 15%), $color);
     } @else {
-      background-image : linear-gradient(180deg, mix($body-background, $color, 15%), $color);
+      background-image : linear-gradient(180deg, color.mix($body-background, $color, 15%), $color);
     }
   } @else {
     background-color : $color;

@@ -1,8 +1,8 @@
 @import "./calendar-mixin";
-@import '../../../core/themes/default-theme';
+@import "../../../core/themes/theme";
 
-$calendar-prefix-cls            : "#{$ant-prefix}-calendar";
-$calendar-timepicker-prefix-cls : "#{$ant-prefix}-calendar-time-picker";
+$calendar-prefix-cls            : "#{$tri-prefix}-calendar";
+$calendar-timepicker-prefix-cls : "#{$tri-prefix}-calendar-time-picker";
 
 @mixin tri-calendar-theme($theme) {
   $foreground : map-get($theme, foreground);

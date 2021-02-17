@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -12,7 +11,6 @@ import { isNullOrEmptyString, isPresent } from '@gradii/triangle/util';
 
 @Component({
   selector           : '[triGridFilterCell]',
-  preserveWhitespaces: false,
   template           : `
     <ng-template [ngIf]="isFilterable">
       <ng-container [ngSwitch]="hasTemplate">

@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$timeline-prefix-cls : "#{$ant-prefix}-timeline";
+$timeline-prefix-cls : "#{$tri-prefix}-timeline";
 
 .#{$timeline-prefix-cls} {
   list-style : none;
@@ -55,7 +56,7 @@ $timeline-prefix-cls : "#{$ant-prefix}-timeline";
 
     @at-root &-content {
       position : relative;
-      top      : - rem-convert('px', $font-size-base * $line-height-base - $font-size-base) + 1px;
+      top      : - rem-convert("px", $font-size-base * $line-height-base - $font-size-base) + 1px;
       margin   : 0 0 0 18px;
     }
 
@@ -124,7 +125,7 @@ $timeline-prefix-cls : "#{$ant-prefix}-timeline";
   }
 
   @at-root &#{&}-pending #{&}-item-last #{&}-item-tail {
-    display     : block;
+    display : block;
   }
 
   @at-root &#{&}-reverse #{&}-item-last #{&}-item-tail {

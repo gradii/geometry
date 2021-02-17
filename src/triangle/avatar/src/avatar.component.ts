@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -24,7 +23,6 @@ export type AvatarSize = 'small' | 'large' | 'default';
 @Component({
   selector           : 'tri-avatar',
   encapsulation      : ViewEncapsulation.None,
-  preserveWhitespaces: false,
   changeDetection    : ChangeDetectionStrategy.OnPush,
   template           : `
     <i class="anticon anticon-{{icon}}" *ngIf="icon && _hasIcon"></i>

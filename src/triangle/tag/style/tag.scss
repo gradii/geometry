@@ -1,10 +1,11 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$tag-prefix-cls : "#{$ant-prefix}-tag";
+$tag-prefix-cls : "#{$tri-prefix}-tag";
 
 // Tag
 // --
-$tag-font-size                  : $font-size-base !default;
+$tag-font-size  : $font-size-base !default;
 
 .#{$tag-prefix-cls}, .tri-tag-ghost {
   display       : inline-block;

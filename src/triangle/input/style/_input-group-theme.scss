@@ -1,32 +1,36 @@
-@import "../../core/themes/default-theme";
+@use "sass:map";
+@use "../../core/style/mixins";
+@use "../../core/style/variables";
+@use "../../core/style/theming";
+@use "input-variables";
 
 @mixin tri-input-group-theme($theme, $inputClass) {
-  $foreground: map-get($theme, foreground);
-  $background: map-get($theme, background);
+  $foreground : map.get($theme, foreground);
+  $background : map.get($theme, background);
 
-  $primary: map-get($theme, primary);
+  $primary    : map.get($theme, primary);
 
   .#{$inputClass}-prefix,
   .#{$inputClass}-suffix {
-    color       : tri-color($foreground, input-color);
+    color : theming.tri-color($foreground, input-color);
   }
 
   @at-root &-addon {
-    color            : tri-color($theme, input-addon-color);
-    background-color : tri-color($theme, input-addon-bg);
-    border           : $input-border-width $border-style-base tri-color($theme, input-border-color);
+    color            : theming.tri-color($theme, input-addon-color);
+    background-color : theming.tri-color($theme, input-addon-bg);
+    border           : input-variables.$input-border-width mixins.$border-style-base theming.tri-color($theme, input-border-color);
 
-    .#{$ant-prefix}-select {
+    .#{mixins.$tri-prefix}-select {
 
-      > .#{$ant-prefix}-select-selection {
+      > .#{mixins.$tri-prefix}-select-selection {
         background-color : inherit;
-        border           : $input-border-width $border-style-base transparent;
+        border           : input-variables.$input-border-width mixins.$border-style-base transparent;
       }
 
       @at-root &-open,
       &-focused {
-        .#{$ant-prefix}-select-selection {
-          color : tri-color($primary);
+        .#{mixins.$tri-prefix}-select-selection {
+          color : theming.tri-color($primary);
         }
       }
     }

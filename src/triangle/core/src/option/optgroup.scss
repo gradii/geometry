@@ -1,5 +1,5 @@
-@import '../../style/legend/menu-common';
-@import '../../style/legend/vendor-prefixes';
+@import "../../style/legend/menu-common";
+@import "../../style/legend/vendor-prefixes";
 
 .tri-optgroup-label {
   @include tri-menu-item-base();

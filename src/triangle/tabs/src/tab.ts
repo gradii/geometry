@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -46,7 +45,7 @@ export const TRI_TAB_GROUP = new InjectionToken<any>('TRI_TAB_GROUP');
 
 @Component({
   selector       : 'tri-tab',
-  templateUrl    : 'tab.html',
+  templateUrl    : './tab.html',
   inputs         : ['disabled'],
   // tslint:disable-next-line:validate-decorators
   changeDetection: ChangeDetectionStrategy.Default,

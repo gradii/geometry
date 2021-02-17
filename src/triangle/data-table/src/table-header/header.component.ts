@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -94,7 +93,6 @@ const rules = and(
 
 @Component({
   selector           : '[tri-grid-header], [triGridHeader]',
-  preserveWhitespaces: false,
   template           : `
     <tr *ngFor="let i of columnLevels; let levelIndex = index">
       <th

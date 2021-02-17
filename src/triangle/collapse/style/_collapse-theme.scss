@@ -1,52 +1,58 @@
-@import "../../core/themes/default-theme";
+@use "sass:map";
+@use "../../core/themes/theme";
+@use "../../core/style/theming";
+@use "../../core/style/variables" as v;
 
-$collapse-prefix-cls : "#{$ant-prefix}-collapse";
-@mixin tri-collapse-theme($theme) {
-  $primary            : map-get($theme, primary);
-  $foreground         : map-get($theme, foreground);
-  $background         : map-get($theme, background);
+$collapse-prefix-cls : "#{ v.$tri-prefix}-collapse";
 
-  $collapse-header-bg : tri-color($background, background-color-base);
-  $collapse-active-bg : tri-color($background, background-color-active);
+$primary             : theme.$primary;
+$foreground          : theme.$foreground;
+$background          : theme.$background;
+
+$collapse-header-bg  : theming.tri-color($background, background-color-base) !default;
+$collapse-active-bg  : theming.tri-color($background, background-color-active) !default;
+
+
+@mixin tri-collapse-theme() {
 
   .#{$collapse-prefix-cls} {
     background-color : $collapse-header-bg;
-    border-radius    : $border-radius-base;
-    border           : $border-width-base $border-style-base tri-color($foreground, border-color-base);
+    border-radius    : v.$border-radius-base;
+    border           : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-base);
     border-bottom    : 0;
 
     @at-root & > #{&}-item {
-      border-bottom : $border-width-base $border-style-base tri-color($foreground, border-color-base);
+      border-bottom : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-base);
 
       @at-root &:last-child {
         @at-root &,
         & > .#{$collapse-prefix-cls}-header {
-          border-radius : 0 0 $border-radius-base $border-radius-base;
+          border-radius : 0 0 v.$border-radius-base v.$border-radius-base;
         }
       }
 
       > .#{$collapse-prefix-cls}-header {
-        color : tri-color($foreground, heading-color);
+        color : theming.tri-color($foreground, heading-color);
 
         .arrow {
-          color : tri-color($foreground, text-color-secondary);
+          color : theming.tri-color($foreground, text-color-secondary);
         }
       }
     }
 
     @at-root &-content {
-      color            : tri-color($foreground, text-color);
-      background-color : tri-color($background, component-background);
+      color            : theming.tri-color($foreground, text-color);
+      background-color : theming.tri-color($background, component-background);
     }
 
     @at-root &-item:last-child {
       > .#{$collapse-prefix-cls}-content {
-        border-radius : 0 0 $border-radius-base $border-radius-base;
+        border-radius : 0 0 v.$border-radius-base v.$border-radius-base;
       }
     }
 
     @at-root &-borderless {
-      background-color : tri-color($background, component-background);
+      background-color : theming.tri-color($background, component-background);
       border           : 0;
     }
 
@@ -56,7 +62,7 @@ $collapse-prefix-cls : "#{$ant-prefix}-collapse";
 
     @at-root &-borderless > #{&}-item > #{&}-content {
       background-color : transparent;
-      border-top       : $border-width-base $border-style-base tri-color($foreground, border-color-base);
+      border-top       : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-base);
     }
 
     @at-root &-borderless > #{&}-item > #{&}-header {
@@ -68,8 +74,8 @@ $collapse-prefix-cls : "#{$ant-prefix}-collapse";
     @at-root &#{&}-item-disabled > #{&}-header {
       @at-root &,
       & > .arrow {
-        color            : tri-color($background, disabled-color);
-        background-color : tri-color($background, disabled-bg);
+        color            : theming.tri-color($background, disabled-color);
+        background-color : theming.tri-color($background, disabled-bg);
       }
     }
 

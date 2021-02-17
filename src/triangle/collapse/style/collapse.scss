@@ -1,6 +1,7 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
-$collapse-prefix-cls : "#{$ant-prefix}-collapse";
+$collapse-prefix-cls : "#{$tri-prefix}-collapse";
 
 
 @mixin collapse-close() {
@@ -12,11 +13,11 @@ $collapse-prefix-cls : "#{$ant-prefix}-collapse";
 }
 
 .#{$collapse-prefix-cls} {
-  border-radius    : $border-radius-base;
-  border-bottom    : 0;
+  border-radius : $border-radius-base;
+  border-bottom : 0;
 
   @at-root & > #{&}-item {
-    display: block;
+    display : block;
 
     @at-root &:last-child {
       @at-root &,
@@ -52,8 +53,8 @@ $collapse-prefix-cls : "#{$ant-prefix}-collapse";
   }
 
   @at-root &-content {
-    overflow         : hidden;
-    padding          : 0 16px;
+    overflow : hidden;
+    padding  : 0 16px;
 
     @at-root & > #{&}-box {
       padding-top    : 16px;
@@ -78,7 +79,7 @@ $collapse-prefix-cls : "#{$ant-prefix}-collapse";
   }
 
   @at-root &-borderless {
-    border           : 0;
+    border : 0;
   }
 
   @at-root &-borderless > #{&}-item-active {

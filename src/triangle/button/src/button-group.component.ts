@@ -1,6 +1,5 @@
 /**
  * @license
- * Copyright LinboLen Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -12,7 +11,6 @@ export type ButtonGroupSize = 'small' | 'large' | 'default';
 @Component({
   selector           : 'tri-button-group',
   encapsulation      : ViewEncapsulation.None,
-  preserveWhitespaces: false,
   template           : `
     <ng-content></ng-content>
   `,

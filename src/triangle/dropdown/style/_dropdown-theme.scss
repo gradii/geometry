@@ -1,106 +1,109 @@
-@import "../../core/themes/default-theme";
+@use "sass:map";
+@use "../../core/themes/theme";
+@use "../../core/style/theming";
+@use "../../core/style/variables" as v;
 
-$dropdown-prefix-cls: "#{$ant-prefix}-dropdown";
+$dropdown-prefix-cls : "#{ v.$tri-prefix}-dropdown";
 
 @mixin tri-dropdown-theme($theme) {
-  $foreground: map-get($theme, foreground);
-  $background: map-get($theme, background);
+  $foreground : map.get($theme, foreground);
+  $background : map.get($theme, background);
 
-  $primary: map-get($theme, primary);
+  $primary    : map.get($theme, primary);
 
   .#{$dropdown-prefix-cls} {
     @at-root &-menu {
-      background-color: tri-color($background, component-background);
-      border-radius: $border-radius-base;
-      box-shadow: $box-shadow-base;
+      background-color : theming.tri-color($background, component-background);
+      border-radius    : v.$border-radius-base;
+      box-shadow       : v.$box-shadow-base;
 
       @at-root &-item,
-        &-submenu-title {
-        color: tri-color($foreground, text-color);
+      &-submenu-title {
+        color : theming.tri-color($foreground, text-color);
         > a {
-          color: tri-color($foreground, text-color);
+          color : theming.tri-color($foreground, text-color);
         }
 
         @at-root &-selected,
-          &-selected > a {
-          color: tri-color($primary);
-          background-color: tri-color($background, item-active-bg);
+        &-selected > a {
+          color            : theming.tri-color($primary);
+          background-color : theming.tri-color($background, item-active-bg);
         }
 
         @at-root &:hover {
-          background-color: tri-color($background, item-hover-bg);
+          background-color : theming.tri-color($background, item-hover-bg);
         }
 
         @at-root &-disabled {
-          color: tri-color(disabled);
+          color  : theming.tri-color(disabled);
           cursor : not-allowed;
           @at-root &:hover {
-            color: tri-color($foreground, disabled-color);
-            background-color: tri-color($background, component-background);
+            color            : theming.tri-color($foreground, disabled-color);
+            background-color : theming.tri-color($background, component-background);
             cursor           : not-allowed;
           }
         }
 
         @at-root &:first-child,
-          &:first-child > a {
-          border-radius: $border-radius-base $border-radius-base 0 0;
+        &:first-child > a {
+          border-radius : v.$border-radius-base v.$border-radius-base 0 0;
         }
 
         @at-root &:last-child,
-          &:last-child > a {
-          border-radius: 0 0 $border-radius-base $border-radius-base;
+        &:last-child > a {
+          border-radius : 0 0 v.$border-radius-base v.$border-radius-base;
         }
 
         @at-root &:only-child,
-          &:only-child > a {
-          border-radius: $border-radius-base;
+        &:only-child > a {
+          border-radius : v.$border-radius-base;
         }
       }
 
       @at-root &-submenu-title:after {
-        color: tri-color($foreground, text-color-secondary);
+        color : theming.tri-color($foreground, text-color-secondary);
       }
 
       @at-root &-submenu#{&}-submenu-disabled .#{$dropdown-prefix-cls}-menu-submenu-title {
         @at-root &,
-          &:after {
-          color: tri-color($foreground, disabled-color);
+        &:after {
+          color : theming.tri-color($foreground, disabled-color);
         }
       }
 
       @at-root &-submenu:first-child #{&}-submenu-title {
-        border-radius: $border-radius-base $border-radius-base 0 0;
+        border-radius : v.$border-radius-base v.$border-radius-base 0 0;
       }
 
       @at-root &-submenu:last-child #{&}-submenu-title {
-        border-radius: 0 0 $border-radius-base $border-radius-base;
+        border-radius : 0 0 v.$border-radius-base v.$border-radius-base;
       }
     }
   }
   .#{$dropdown-prefix-cls}-menu-dark {
     @at-root &,
-      & .#{$dropdown-prefix-cls}-menu {
-      background: tri-color($background, menu-dark-bg);
+    & .#{$dropdown-prefix-cls}-menu {
+      background : theming.tri-color($background, menu-dark-bg);
     }
     .#{$dropdown-prefix-cls}-menu-item,
     .#{$dropdown-prefix-cls}-menu-submenu-title,
     .#{$dropdown-prefix-cls}-menu-item > a {
-      color: tri-color($background, text-color-secondary-dark);
+      color : theming.tri-color($background, text-color-secondary-dark);
       @at-root &:after {
-        color: tri-color($background, text-color-secondary-dark);
+        color : theming.tri-color($background, text-color-secondary-dark);
       }
       @at-root &:hover {
-        color: #fff;
-        background: transparent;
+        color      : #fff;
+        background : transparent;
       }
     }
 
     .#{$dropdown-prefix-cls}-menu-item-selected {
       @at-root &,
-        &:hover,
-        & > a {
-        background: tri-color($primary);
-        color: #fff;
+      &:hover,
+      & > a {
+        background : theming.tri-color($primary);
+        color      : #fff;
       }
     }
   }

@@ -1,18 +1,18 @@
-@import "../../core/themes/default-theme";
-@import "../../input/style/input-mixin";
+@use "../../core/style/variables" as v;
+@use "../../core/style/mixins";
+@use "../../input/style/input-mixin";
 
-$input-number-prefix-cls : "#{$ant-prefix}-input-number";
-
+$input-number-prefix-cls : "#{v.$tri-prefix}-input-number";
 
 
 .#{$input-number-prefix-cls} {
-  @include input();
+  @include input-mixin.input();
   margin        : 0;
   padding       : 0;
   //font-size     : $font-size-base;
   //height        : $input-height-base;
   display       : inline-block;
-  border-radius : $border-radius-base;
+  border-radius : v.$border-radius-base;
   width         : 80px;
 
   @at-root &-handler {
@@ -35,14 +35,14 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
 
   @at-root &-handler-up-inner,
   &-handler-down-inner {
-    @include iconfont-mixin();
+    @include mixins.iconfont-mixin();
     line-height : 12px;
     user-select : none;
     position    : absolute;
     width       : 12px;
     height      : 12px;
     transition  : all 0.1s linear;
-    @include iconfont-size-under-12px(7px);
+    @include mixins.iconfont-size-under-12px(7px);
     right       : 4px;
   }
 
@@ -60,23 +60,23 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
   //}
 
   @at-root &-input {
-    width            : 100%;
-    text-align       : left;
-    outline          : 0;
-    box-sizing       : border-box;
-    height           : $form-control-height-base - 2px/$root-font-size; //fix for rem calculate missing 1px
-    transition       : all 0.3s linear;
-    border           : 0;
-    border-radius    : $border-radius-base;
-    padding          : 0 7px;
-    display          : block;
+    width         : 100%;
+    text-align    : left;
+    outline       : 0;
+    box-sizing    : border-box;
+    height        : v.$form-control-height-base - 2px/v.$root-font-size; //fix for rem calculate missing 1px
+    transition    : all 0.3s linear;
+    border        : 0;
+    border-radius : v.$border-radius-base;
+    padding       : 0 7px;
+    display       : block;
   }
 
   @at-root &-lg {
     padding : 0;
 
     input {
-      height : $form-control-height-lg - 2px/$root-font-size;
+      height : v.$form-control-height-lg - 2px/v.$root-font-size;
     }
   }
 
@@ -84,7 +84,7 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
     padding : 0;
 
     input {
-      height : $form-control-height-sm - 2px/$root-font-size;
+      height : v.$form-control-height-sm - 2px/v.$root-font-size;
     }
   }
 
@@ -95,7 +95,7 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
     top           : 0;
     right         : 0;
     opacity       : 0;
-    border-radius : 0 $border-radius-base $border-radius-base 0;
+    border-radius : 0 v.$border-radius-base v.$border-radius-base 0;
     transition    : opacity 0.24s linear 0.1s;
     z-index       : 2;
   }
@@ -120,8 +120,8 @@ $input-number-prefix-cls : "#{$ant-prefix}-input-number";
   }
 
   @at-root &-handler-down {
-    top        : -1px;
-    cursor     : pointer;
+    top    : -1px;
+    cursor : pointer;
     @at-root &-inner {
       top        : 50%;
       margin-top : -6px;

@@ -1,8 +1,9 @@
-@import "../../core/themes/default-theme";
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
 
 $form-grid-gutter-width : 10px !default;
 
-.#{$ant-prefix}-form-row {
+.#{$tri-prefix}-form-row {
   display      : flex;
   flex-wrap    : wrap;
   margin-right : -$form-grid-gutter-width / 2;
