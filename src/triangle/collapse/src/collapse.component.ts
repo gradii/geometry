@@ -9,9 +9,12 @@ import { Component, ElementRef, Host, HostBinding, Input } from '@angular/core';
 import { CollapsesetComponent } from './collapseset.component';
 
 @Component({
-  selector  : 'tri-collapse',
-  template  : `
-    <div class="tri-collapse-header" [attr.aria-expanded]="_active" (click)="clickHeader($event)"
+  selector: 'tri-collapse',
+  template: `
+    <div class="tri-collapse-header"
+         [class.expanded]="_active"
+         [class.collapsed]="!_active"
+         [attr.aria-expanded]="_active" (click)="clickHeader($event)"
          role="tab">
       <i class="arrow">
         <tri-icon svgIcon="outline:right"></tri-icon>
@@ -23,7 +26,8 @@ import { CollapsesetComponent } from './collapseset.component';
         <ng-content select="[collapse-title]"></ng-content>
       </ng-template>
     </div>
-    <div class="tri-collapse-content" [@collapseState]="_active?'active':'inactive'">
+    <div class="tri-collapse-content"
+         [@collapseState]="_active?'active':'inactive'">
       <div class="tri-collapse-content-box">
         <ng-content></ng-content>
       </div>
@@ -34,27 +38,27 @@ import { CollapsesetComponent } from './collapseset.component';
       state(
         'inactive',
         style({
-          opacity: '0',
-          height : 0
+          filter: 'opacity(0)',
+          height: 0
         })
       ),
       state(
         'active',
         style({
-          opacity: '1',
-          height : '*'
+          filter: 'opacity(100%)',
+          height: '*'
         })
       ),
       transition('inactive => active', animate('150ms ease-in')),
       transition('active => inactive', animate('150ms ease-out'))
     ])
   ],
-  styleUrls : [`../style/collapse.css`],
-  styles    : [`
-                 tri-collapse {
-                   display: block;
-                 }
-               `]
+  styleUrls: [`../style/collapse.css`],
+  styles: [`
+    tri-collapse {
+      display: block;
+    }
+  `]
 })
 export class CollapseComponent {
   private _el;

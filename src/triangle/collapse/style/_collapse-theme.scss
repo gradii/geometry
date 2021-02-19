@@ -12,6 +12,13 @@ $collapse-prefix-cls : "#{ v.$tri-prefix}-collapse";
 $collapse-header-bg  : theming.tri-color(theme.$background, background-color-base) !default;
 $collapse-active-bg  : theming.tri-color(theme.$background, background-color-active) !default;
 
+@mixin _border-bottom-style() {
+  border-bottom : v.$border-width-base v.$border-style-base theming.tri-color(theme.$foreground, border-color-base);
+}
+
+@mixin _border-top-style() {
+  border-top : v.$border-width-base v.$border-style-base theming.tri-color(theme.$foreground, border-color-base);
+}
 
 @mixin tri-collapse-theme() {
 
@@ -19,19 +26,11 @@ $collapse-active-bg  : theming.tri-color(theme.$background, background-color-act
     background-color : $collapse-header-bg;
     border-radius    : v.$border-radius-base;
     border           : v.$border-width-base v.$border-style-base theming.tri-color(theme.$foreground, border-color-base);
-    border-bottom    : 0;
 
     @at-root & > #{&}-item {
-      border-bottom : v.$border-width-base v.$border-style-base theming.tri-color(theme.$foreground, border-color-base);
-
-      @at-root &:last-child {
-        @at-root &,
-        & > .#{$collapse-prefix-cls}-header {
-          border-radius : 0 0 v.$border-radius-base v.$border-radius-base;
-        }
-      }
 
       > .#{$collapse-prefix-cls}-header {
+        @include _border-bottom-style();
         color : theming.tri-color(theme.$foreground, heading-color);
 
         .arrow {
@@ -43,31 +42,33 @@ $collapse-active-bg  : theming.tri-color(theme.$background, background-color-act
     @at-root &-content {
       color            : theming.tri-color(theme.$foreground, text-color);
       background-color : theming.tri-color(theme.$background, component-background);
+      @include _border-bottom-style();
     }
 
-    @at-root &-item:last-child {
+    @at-root & > #{&}-item:last-child {
+      > .#{$collapse-prefix-cls}-header {
+        border-bottom : 0;
+      }
+
       > .#{$collapse-prefix-cls}-content {
         border-radius : 0 0 v.$border-radius-base v.$border-radius-base;
+        @include _border-top-style();
+        border-bottom: 0;
       }
     }
 
-    @at-root &-borderless {
+    @at-root &#{&}-borderless {
       background-color : theming.tri-color(theme.$background, component-background);
       border           : 0;
-    }
 
-    @at-root &-borderless > #{&}-item-active {
-      border : 0;
-    }
+      > #{$collapse-prefix-cls}-item > #{$collapse-prefix-cls}-content {
+        background-color : transparent;
+      }
 
-    @at-root &-borderless > #{&}-item > #{&}-content {
-      background-color : transparent;
-      border-top       : v.$border-width-base v.$border-style-base theming.tri-color(theme.$foreground, border-color-base);
-    }
-
-    @at-root &-borderless > #{&}-item > #{&}-header {
-      @at-root &:hover {
-        background-color : $collapse-header-bg;
+      > #{$collapse-prefix-cls}-item > #{$collapse-prefix-cls}-header {
+        @at-root &:hover {
+          background-color : $collapse-header-bg;
+        }
       }
     }
 

@@ -3,7 +3,6 @@
 
 $collapse-prefix-cls : "#{v.$tri-prefix}-collapse";
 
-
 @mixin collapse-close() {
   @include mixins.iconfont-size-under-12px(9px, 0);
 }
@@ -14,7 +13,6 @@ $collapse-prefix-cls : "#{v.$tri-prefix}-collapse";
 
 .#{$collapse-prefix-cls} {
   border-radius : v.$border-radius-base;
-  border-bottom : 0;
 
   @at-root & > #{&}-item {
     display : block;
@@ -46,10 +44,6 @@ $collapse-prefix-cls : "#{v.$tri-prefix}-collapse";
         left           : 16px;
       }
     }
-  }
-
-  @at-root &-anim-active {
-    transition : height .2s v.$ease-out;
   }
 
   @at-root &-content {
