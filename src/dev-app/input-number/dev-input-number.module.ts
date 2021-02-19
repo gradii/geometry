@@ -7,18 +7,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TriInputNumberModule } from '@gradii/triangle/input-number';
-import { DevInputNumberComponent } from './dev-input-number.component';
+import { DevInputNumber } from './dev-input-number';
 
 
 @NgModule({
   imports     : [
     TriInputNumberModule,
     RouterModule.forChild([
-      {path: '', component: DevInputNumberComponent}
+      {path: '', component: DevInputNumber}
     ])
   ],
   declarations: [
-    DevInputNumberComponent
+    DevInputNumber
   ]
 })
 export class DevInputNumberModule {

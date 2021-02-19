@@ -30,6 +30,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'collapse',
         loadChildren: '/collapse/dev-collapse.module#DevCollapseModule'
+      },
+      {
+        path        : 'button',
+        loadChildren: '/button/dev-button.module#DevButtonModule'
       }
     ]
   },

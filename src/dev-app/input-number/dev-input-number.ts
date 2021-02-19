@@ -11,6 +11,6 @@ import { Component } from '@angular/core';
   templateUrl: './dev-input-number.html',
   styleUrls  : ['./dev-input-number.css']
 })
-export class DevInputNumberComponent {
+export class DevInputNumber {
 
 }

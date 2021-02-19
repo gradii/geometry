@@ -20,6 +20,7 @@ ng_module(
         "//src/dev-app/collapse",
         "//src/dev-app/alert",
         "//src/dev-app/tabs",
+        "//src/dev-app/button",
 
         "//src/triangle/core",
         "@npm//@angular/cdk",

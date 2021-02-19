@@ -1,0 +1,29 @@
+
+[id^="components-button-demo-"] .tri-btn {
+  margin-right: 8px;
+  margin-bottom: 12px;
+}
+
+[id^="components-button-demo-"] .tri-btn-group .tri-btn {
+  margin-right: 0;
+}
+
+#components-button-demo-button-group h4 {
+  margin: 16px 0;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: normal;
+}
+
+#components-button-demo-button-group h4:first-child {
+  margin-top: 0;
+}
+
+#components-button-demo-button-group .tri-btn-group {
+  margin-right: 8px;
+}
+
+#components-button-demo-button-group .tri-btn {
+  margin-bottom: 12px;
+  margin-right: 0;
+}
