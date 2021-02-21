@@ -59,6 +59,8 @@ export class TriTabChangeEvent {
 /** Possible positions for the tab header. */
 export type TriTabHeaderPosition = 'above' | 'below';
 
+export type TriTabType = 'basic' | 'card' | 'segment' | 'pills';
+
 // Boilerplate for applying mixins to TriTabGroup.
 /** @docs-private */
 class TriTabGroupMixinBase {
@@ -96,6 +98,10 @@ export abstract class _TriTabGroupBase extends _TriTabGroupMixinBase implements 
   abstract _tabHeader: TriTabGroupBaseHeader;
   /** All of the tabs that belong to the group. */
   _tabs: QueryList<TriTab> = new QueryList<TriTab>();
+
+  @Input() type: TriTabType = 'basic';
+
+
   /** Position of the tab header. */
   @Input() headerPosition: TriTabHeaderPosition = 'above';
   /**
@@ -394,11 +400,11 @@ export abstract class _TriTabGroupBase extends _TriTabGroupMixinBase implements 
  * animated ink-bar, keyboard navigation, and screen reader.
  */
 @Component({
-  selector       : 'tri-tab-group',
-  exportAs       : 'triTabGroup',
-  templateUrl    : 'tab-group.html',
-  styleUrls      : ['../style/tab-group.css'],
-  encapsulation  : ViewEncapsulation.None,
+  selector     : 'tri-tab-group',
+  exportAs     : 'triTabGroup',
+  templateUrl  : 'tab-group.html',
+  styleUrls    : ['../style/tab-group.css'],
+  encapsulation: ViewEncapsulation.None,
   // tslint:disable-next-line:validate-decorators
   changeDetection: ChangeDetectionStrategy.Default,
   inputs         : ['color', 'disableRipple'],
@@ -408,6 +414,9 @@ export abstract class _TriTabGroupBase extends _TriTabGroupMixinBase implements 
   }],
   host           : {
     'class'                                : 'tri-tab-group',
+    '[class.tri-tab-group-type-card]'      : 'type==="card"',
+    '[class.tri-tab-group-type-segment]'   : 'type==="segment"',
+    '[class.tri-tab-group-type-pills]'     : 'type==="pills"',
     '[class.tri-tab-group-dynamic-height]' : 'dynamicHeight',
     '[class.tri-tab-group-inverted-header]': 'headerPosition === "below"',
   },

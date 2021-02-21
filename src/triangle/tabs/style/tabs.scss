@@ -1,5 +1,5 @@
 @use "../../core/style/mixins";
-@use "../../core/style/variables";
+@use "../../core/style/variables" as v;
 
 $tab-prefix-cls : "#{mixins.$tri-prefix}-tabs";
 
@@ -18,7 +18,7 @@ $tab-prefix-cls : "#{mixins.$tri-prefix}-tabs";
     bottom           : 1px;
     box-sizing       : border-box;
     height           : 2px;
-    background-color : $primary-color;
+    background-color : v.$primary;
     transform-origin : 0 0;
   }
 

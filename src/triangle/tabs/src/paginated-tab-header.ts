@@ -24,6 +24,7 @@ import {
   OnDestroy,
   Optional,
   QueryList,
+  ɵmarkDirty
 } from '@angular/core';
 import { ANIMATION_MODULE_TYPE } from '@angular/platform-browser/animations';
 import { fromEvent, merge, of as observableOf, Subject, timer } from 'rxjs';
@@ -60,17 +61,17 @@ const HEADER_SCROLL_DELAY = 650;
 const HEADER_SCROLL_INTERVAL = 100;
 
 /** Item inside a paginated tab header. */
-export type MatPaginatedTabHeaderItem = FocusableOption & { elementRef: ElementRef };
+export type TriPaginatedTabHeaderItem = FocusableOption & { elementRef: ElementRef };
 
 /**
  * Base class for a tab header that supported pagination.
  * @docs-private
  */
 @Directive()
-export abstract class MatPaginatedTabHeader implements AfterContentChecked, AfterContentInit,
+export abstract class TriPaginatedTabHeader implements AfterContentChecked, AfterContentInit,
   AfterViewInit, OnDestroy {
   static ngAcceptInputType_selectedIndex: NumberInput;
-  abstract _items: QueryList<MatPaginatedTabHeaderItem>;
+  abstract _items: QueryList<TriPaginatedTabHeaderItem>;
   abstract _inkBar: { hide: () => void, alignToElement: (element: HTMLElement) => void };
   abstract _tabListContainer: ElementRef<HTMLElement>;
   abstract _tabList: ElementRef<HTMLElement>;
@@ -104,7 +105,7 @@ export abstract class MatPaginatedTabHeader implements AfterContentChecked, Afte
   /** Whether the scroll distance has changed and should be applied after the view is checked. */
   private _scrollDistanceChanged: boolean;
   /** Used to manage focus between the tabs. */
-  private _keyManager: FocusKeyManager<MatPaginatedTabHeaderItem>;
+  private _keyManager: FocusKeyManager<TriPaginatedTabHeaderItem>;
   /** Cached text content of the header. */
   private _currentTextContent: string;
   /** Stream that will stop the automated scrolling. */
@@ -197,7 +198,7 @@ export abstract class MatPaginatedTabHeader implements AfterContentChecked, Afte
       this._alignInkBarToSelectedTab();
     };
 
-    this._keyManager = new FocusKeyManager<MatPaginatedTabHeaderItem>(this._items)
+    this._keyManager = new FocusKeyManager<TriPaginatedTabHeaderItem>(this._items)
       .withHorizontalOrientation(this._getLayoutDirection())
       .withWrap();
 
@@ -228,7 +229,7 @@ export abstract class MatPaginatedTabHeader implements AfterContentChecked, Afte
     if (this._tabLabelCount != this._items.length) {
       this.updatePagination();
       this._tabLabelCount = this._items.length;
-      this._changeDetectorRef.markForCheck();
+      ɵmarkDirty(this);
     }
 
     // If the selected index has changed, scroll to the label and check if the scrolling controls
@@ -238,7 +239,7 @@ export abstract class MatPaginatedTabHeader implements AfterContentChecked, Afte
       this._checkScrollingControls();
       this._alignInkBarToSelectedTab();
       this._selectedIndexChanged = false;
-      this._changeDetectorRef.markForCheck();
+      ɵmarkDirty(this);
     }
 
     // If the scroll distance has been changed (tab selected, focused, scroll controls activated),
@@ -246,7 +247,7 @@ export abstract class MatPaginatedTabHeader implements AfterContentChecked, Afte
     if (this._scrollDistanceChanged) {
       this._updateTabScrollPosition();
       this._scrollDistanceChanged = false;
-      this._changeDetectorRef.markForCheck();
+      ɵmarkDirty(this);
     }
   }
 
@@ -299,7 +300,7 @@ export abstract class MatPaginatedTabHeader implements AfterContentChecked, Afte
       this._ngZone.run(() => {
         this.updatePagination();
         this._alignInkBarToSelectedTab();
-        this._changeDetectorRef.markForCheck();
+        ɵmarkDirty(this);
       });
     }
   }
@@ -474,7 +475,7 @@ export abstract class MatPaginatedTabHeader implements AfterContentChecked, Afte
       }
 
       if (isEnabled !== this._showPaginationControls) {
-        this._changeDetectorRef.markForCheck();
+        ɵmarkDirty(this);
       }
 
       this._showPaginationControls = isEnabled;
@@ -497,7 +498,7 @@ export abstract class MatPaginatedTabHeader implements AfterContentChecked, Afte
       // Check if the pagination arrows should be activated.
       this._disableScrollBefore = this.scrollDistance == 0;
       this._disableScrollAfter = this.scrollDistance == this._getMaxScrollDistance();
-      this._changeDetectorRef.markForCheck();
+      ɵmarkDirty(this);
     }
   }
 

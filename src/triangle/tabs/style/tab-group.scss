@@ -13,24 +13,6 @@
   }
 }
 
-// Wraps each tab label
-.tri-tab-label {
-  @include tabs-common.tab-label;
-  position : relative;
-}
-
-@media (mixins.$tri-xsmall) {
-  .tri-tab-label {
-    padding : 0 12px;
-  }
-}
-
-@media (mixins.$tri-small) {
-  .tri-tab-label {
-    padding : 0 12px;
-  }
-}
-
 // Note that we only want to target direct descendant tabs.
 .tri-tab-group[tri-stretch-tabs] > .tri-tab-header .tri-tab-label {
   flex-basis : 0;
@@ -48,7 +30,7 @@
 
 // Wraps each tab body
 .tri-tab-body {
-  @include mixins.tri-fill;
+  @include mixins.tri-fill();
   display    : block;
   overflow   : hidden;
 

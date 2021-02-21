@@ -29,7 +29,7 @@ import {
 } from '@angular/core';
 import { ANIMATION_MODULE_TYPE } from '@angular/platform-browser/animations';
 import { TriInkBar } from './ink-bar';
-import { MatPaginatedTabHeader } from './paginated-tab-header';
+import { TriPaginatedTabHeader } from './paginated-tab-header';
 import { TriTabLabelWrapper } from './tab-label-wrapper';
 
 /**
@@ -38,7 +38,7 @@ import { TriTabLabelWrapper } from './tab-label-wrapper';
  */
 @Directive()
 // tslint:disable-next-line:class-name
-export abstract class _TriTabHeaderBase extends MatPaginatedTabHeader
+export abstract class _TriTabHeaderBase extends TriPaginatedTabHeader
   implements AfterContentChecked, AfterContentInit, AfterViewInit, OnDestroy {
 
   constructor(elementRef: ElementRef,

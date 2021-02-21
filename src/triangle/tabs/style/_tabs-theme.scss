@@ -83,6 +83,62 @@ $tabs-title-font-size      : v.$font-size-lg !default;
       }
     }
   }
+
+  .tri-tab-group.tri-tab-group-type-segment {
+
+    .tri-tab-nav-bar, .tri-tab-header {
+      border : none;
+    }
+
+    .tri-tab-labels {
+      margin-right     : auto;
+      border-radius    : 0.5rem;
+      background-color : rgba(0, 0, 0, .065);
+      overflow         : hidden;
+    }
+
+    .tri-tab-label {
+      height : 2rem;
+
+      &:not(:first-child)::before {
+        margin      : 5px 0;
+        transition  : opacity 160ms ease-in-out 100ms;
+        border-left : 1px solid rgba(0, 0, 0, 0.12);
+        content     : "x";
+        display     : inline-block;
+        position    : absolute;
+        left        : 0;
+        opacity     : 1;
+        overflow    : hidden;
+        width       : 0;
+        will-change : opacity;
+      }
+
+      &.tri-tab-label-active, &.tri-tab-label-active + .tri-tab-label {
+        &::before {
+          display : none;
+        }
+      }
+    }
+
+    .tri-ink-bar {
+      background-color : unset;
+
+      padding          : 4px;
+
+      &::after {
+        content          : "";
+        border-radius    : 0.5rem;
+        background-color : #fff;
+        color            : #000;
+        display          : inline-block;
+        height           : 100%;
+        width            : 100%;
+        box-shadow       : 0 0 5px rgba(0, 0, 0, 0.16);
+      }
+    }
+  }
+
 }
 
 @mixin _tri-ink-bar($color, $hue: default) {

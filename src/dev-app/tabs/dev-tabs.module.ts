@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 import { TriTabsModule } from '@gradii/triangle/tabs';
 import { DevTabsComponent } from './dev-tabs.component';
 import { TriDemoTabsBasicComponent } from './tri-demo-tabs/tri-demo-tabs-basic.component';
+import { TriDemoTabsSegmentComponent } from './tri-demo-tabs/tri-demo-tabs-segment.component';
 
 @NgModule({
   imports     : [
@@ -19,7 +20,8 @@ import { TriDemoTabsBasicComponent } from './tri-demo-tabs/tri-demo-tabs-basic.c
     RouterModule.forChild([
       {
         path: '', component: DevTabsComponent, children: [
-          {path: 'tri-demo-tabs-basic', component: TriDemoTabsBasicComponent}
+          {path: 'tri-demo-tabs-basic', component: TriDemoTabsBasicComponent},
+          {path: 'tri-demo-tabs-segment', component: TriDemoTabsSegmentComponent}
         ]
       }
     ])
@@ -27,7 +29,8 @@ import { TriDemoTabsBasicComponent } from './tri-demo-tabs/tri-demo-tabs-basic.c
   declarations: [
     DevTabsComponent,
 
-    TriDemoTabsBasicComponent
+    TriDemoTabsBasicComponent,
+    TriDemoTabsSegmentComponent
   ]
 })
 export class DevTabsModule {

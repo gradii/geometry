@@ -2,7 +2,7 @@
 @use "../../core/style/variables";
 @use "../../core/style/cdk/a11y";
 
-$tri-tab-bar-height         : 48px !default;
+$tri-tab-bar-height         : 3rem !default;
 $tri-tab-animation-duration : 500ms !default;
 
 // Mixin styles for labels that are contained within the tab header.
@@ -18,6 +18,10 @@ $tri-tab-animation-duration : 500ms !default;
   justify-content : center;
   align-items     : center;
   white-space     : nowrap;
+
+  flex-grow       : 1;
+
+  z-index         : 2;
 
   &:focus {
     outline : none;
@@ -63,6 +67,12 @@ $tri-tab-animation-duration : 500ms !default;
   height     : $height;
   transition : $tri-tab-animation-duration mixins.$ease-in-out-curve-function;
 
+  z-index    : 1;
+
+  .tri-tab-group-type-segment & {
+    height : 100%
+  }
+
   .tri-tab-group-inverted-header & {
     bottom : auto;
     top    : 0;
@@ -101,7 +111,8 @@ $tri-tab-animation-duration : 500ms !default;
   }
 
   // The pagination control that is displayed on the left side of the tab header.
-  .tri-tab-header-pagination-before, .tri-tab-header-rtl .tri-tab-header-pagination-after {
+  .tri-tab-header-pagination-before,
+  .tri-tab-header-rtl .tri-tab-header-pagination-after {
     padding-left : 4px;
 
     .tri-tab-header-pagination-chevron {
@@ -110,7 +121,8 @@ $tri-tab-animation-duration : 500ms !default;
   }
 
   // The pagination control that is displayed on the right side of the tab header.
-  .tri-tab-header-rtl .tri-tab-header-pagination-before, .tri-tab-header-pagination-after {
+  .tri-tab-header-rtl .tri-tab-header-pagination-before,
+  .tri-tab-header-pagination-after {
     padding-right : 4px;
 
     .tri-tab-header-pagination-chevron {
