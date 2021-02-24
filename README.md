@@ -6,15 +6,19 @@
 
 ## commands
 ```
-bazel build //src/triangle:npm_package
+yarn bazel build //src/triangle:npm_package
 ```
 
 ```
-bazel build //src/triangle:npm_package --config=release
+yarn bazel build //src/triangle:npm_package --config=release
 ```
 
 ```
-bazel build //src/triangle:npm_package --config=snapshot
+yarn bazel build //src/triangle:npm_package --config=snapshot
+```
+
+```
+yarn publish $(yarn --silent bazel info bazel-bin)/src/triangle/npm_package
 ```
 
 ```
