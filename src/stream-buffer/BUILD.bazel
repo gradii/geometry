@@ -1,0 +1,39 @@
+load("@npm//scss-bundle:index.bzl", "scss_bundle")
+load(
+    "//src/stream-buffer:config.bzl",
+    "STREAM_BUFFER_TARGETS",
+)
+load("//tools:defaults.bzl", "ng_package", "ts_library")
+
+package(default_visibility = ["//visibility:public"])
+
+
+ts_library(
+    name = "stream-buffer",
+    srcs = glob(
+        ["**/*.ts"],
+        exclude = [
+            "test/**/*.ts",
+            "**/*.spec.ts",
+        ],
+    ),
+    deps = [
+    ],
+    node_modules = "@npm//:node_modules",
+    module_name = "@gradii/stream-buffer",
+    tsconfig = ":tsconfig.json",
+)
+
+ng_package(
+    name = "npm_package",
+    srcs = [
+        "package.json",
+    ],
+    data = [
+    ],
+    entry_point = ":index.ts",
+    entry_point_name = "stream-buffer",
+    nested_packages = [],
+    tags = ["release-package"],
+    deps = STREAM_BUFFER_TARGETS,
+)

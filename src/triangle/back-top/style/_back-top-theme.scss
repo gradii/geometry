@@ -2,13 +2,14 @@
 @use "../../core/style/theming";
 @use "../../core/style/variables" as v;
 
-$backtop-prefix-cls : "#{ v.$tri-prefix}-back-top";
+$backtop-prefix-cls : "#{ v.$tri-prefix}-back-top" !default;
+// BackTop
+$back-top-color    : #fff !default;
+$back-top-bg       : rgba(64, 64, 64, 0.4) !default;
+$back-top-hover-bg : rgba(64, 64, 64, 0.6) !default;
+
 
 @mixin tri-back-top-theme($theme) {
-  // BackTop
-  $back-top-color    : #fff !default;
-  $back-top-bg       : rgba(64, 64, 64, 0.4) !default;
-  $back-top-hover-bg : rgba(64, 64, 64, 0.6) !default;
 
   .#{$backtop-prefix-cls} {
     @at-root &-content {
