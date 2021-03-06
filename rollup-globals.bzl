@@ -35,10 +35,14 @@ ROLLUP_GLOBALS = {
 #    "@angular/material-experimental": "ng.materialExperimental",
 #    "@angular/material-moment-adapter": "ng.materialMomentAdapter",
 #    "@angular/youtube-player": "ng.youtubePlayer",
+    "@gradii/check-type": "gd.check-type",
     "@gradii/color": "gd.color",
+    "@gradii/diagram": "gd.diagram",
     "@gradii/easing": "gd.easing",
     "@gradii/interpolate": "gd.interpolate",
-    "@gradii/vector-math": "gd.vector-math",
+    "@gradii/stream-buffer": "gd.streamBuffer",
+    "@gradii/triangle": "gd.triangle",
+    "@gradii/vector-math": "gd.vectorMath",
 
     # angular cdk
     "@angular/cdk/a11y": "ng.cdk.a11y",
