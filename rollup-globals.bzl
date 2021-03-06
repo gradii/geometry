@@ -35,14 +35,15 @@ ROLLUP_GLOBALS = {
 #    "@angular/material-experimental": "ng.materialExperimental",
 #    "@angular/material-moment-adapter": "ng.materialMomentAdapter",
 #    "@angular/youtube-player": "ng.youtubePlayer",
-    "@gradii/check-type": "gd.check-type",
-    "@gradii/color": "gd.color",
-    "@gradii/diagram": "gd.diagram",
-    "@gradii/easing": "gd.easing",
-    "@gradii/interpolate": "gd.interpolate",
-    "@gradii/stream-buffer": "gd.streamBuffer",
-    "@gradii/triangle": "gd.triangle",
-    "@gradii/vector-math": "gd.vectorMath",
+
+    "@gradii/check-type": "gradii.check-type",
+    "@gradii/color": "gradii.color",
+    "@gradii/diagram": "gradii.diagram",
+    "@gradii/easing": "gradii.easing",
+    "@gradii/interpolate": "gradii.interpolate",
+    "@gradii/stream-buffer": "gradii.streamBuffer",
+    "@gradii/triangle": "gradii.triangle",
+    "@gradii/vector-math": "gradii.vectorMath",
 
     # angular cdk
     "@angular/cdk/a11y": "ng.cdk.a11y",
@@ -95,13 +96,13 @@ def to_umd_name(name):
 # Creates globals for a given package and its entry-points.
 def create_globals(packageName, entryPoints):
     ROLLUP_GLOBALS.update({
-        "@gradii/%s/%s" % (packageName, ep): "gd.%s.%s" % (to_umd_name(packageName), to_umd_name(ep))
+        "@gradii/%s/%s" % (packageName, ep): "gradii.%s.%s" % (to_umd_name(packageName), to_umd_name(ep))
         for ep in entryPoints
     })
 
 create_globals("triangle", TRIANGLE_ENTRYPOINTS)
 create_globals("diagram", DIAGRAM_ENTRYPOINTS)
-#create_globals("color", COLOR_ENTRYPOINTS)
-#create_globals("easing", EASING_ENTRYPOINTS)
-#create_globals("interpolate", INTERPOLATE_ENTRYPOINTS)
-#create_globals("vector-math", VECTOR_MATH_ENTRYPOINTS)
+create_globals("color", COLOR_ENTRYPOINTS)
+create_globals("easing", EASING_ENTRYPOINTS)
+create_globals("interpolate", INTERPOLATE_ENTRYPOINTS)
+create_globals("vector-math", VECTOR_MATH_ENTRYPOINTS)
