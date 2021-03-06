@@ -1,14 +1,13 @@
 {
-  "name": "@gradii/vector-math",
+  "name": "@gradii/date-math",
   "version": "0.0.0-PLACEHOLDER",
-  "description": "Vector Math Packages",
+  "description": "Date Math Packages",
   "repository": {
     "type": "git",
     "url": "https://github.com/gradii/triangle.git"
   },
   "keywords": [
-    "triangle",
-    "vector-math"
+    "date-math"
   ],
   "license": "MIT",
   "peerDependencies": {

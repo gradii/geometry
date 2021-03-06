@@ -1,14 +1,13 @@
 {
-  "name": "@gradii/vector-math",
+  "name": "@gradii/check-type",
   "version": "0.0.0-PLACEHOLDER",
-  "description": "Vector Math Packages",
+  "description": "check-type Packages",
   "repository": {
     "type": "git",
     "url": "https://github.com/gradii/triangle.git"
   },
   "keywords": [
-    "triangle",
-    "vector-math"
+    "check-type"
   ],
   "license": "MIT",
   "peerDependencies": {
