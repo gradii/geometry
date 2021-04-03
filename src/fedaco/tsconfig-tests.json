@@ -1,0 +1,30 @@
+{
+  "extends": "../bazel-tsconfig-build.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "../../dist/packages/fedaco",
+    "rootDir": ".",
+    "rootDirs": [
+      ".",
+      "../../dist/packages/fedaco"
+    ],
+    "importHelpers": false,
+    "module": "commonjs",
+    "target": "es5",
+    "types": [
+      "jasmine"
+    ],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "paths": {
+    }
+  },
+  "include": [
+    "**/index.ts",
+    "**/*.spec.ts"
+  ],
+  "exclude": [
+    "**/schematics/**/*.ts",
+    "**/*.e2e.spec.ts"
+  ]
+}

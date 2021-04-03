@@ -22,6 +22,9 @@
       "@gradii/*": [
         "src/*"
       ],
+      "@gradii/check-type": [
+        "src/check-type/public-api.ts"
+      ],
       "@gradii/triangle/*": [
         "src/triangle/*/public-api.ts"
       ],

@@ -53,7 +53,7 @@ export function isNumeric(value: any) {
   return !isNaN(value - parseFloat(value));
 }
 
-export function isDate(value: any) {
+export function isDate(value: any): value is Date {
   return typeof value === 'object' && Object.prototype.toString.call(value) === '[object Date]';
 }
 

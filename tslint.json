@@ -14,7 +14,7 @@
       }
     ],
     "no-inferrable-types": false,
-    "class-name": true,
+    "class-name": false,
     "comment-format": [true, "check-space"],
     "indent": [true, "spaces"],
     "eofline": true,
