@@ -1,0 +1,38 @@
+load("@npm//scss-bundle:index.bzl", "scss_bundle")
+load(
+    "//src/iterator:config.bzl",
+    "iterator_TARGETS",
+)
+load("//tools:defaults.bzl", "ng_package", "ts_library")
+
+package(default_visibility = ["//visibility:public"])
+
+ts_library(
+    name = "iterator",
+    srcs = glob(
+        ["**/*.ts"],
+        exclude = [
+            "test/**/*.ts",
+            "**/*.spec.ts",
+        ],
+    ),
+    deps = [
+      "//src/color:color"
+    ],
+    module_name = "@gradii/iterator",
+)
+
+# Creates the @angular/material package published to npm.
+ng_package(
+    name = "npm_package",
+    srcs = [
+        "package.json",
+    ],
+    data = [
+    ],
+    entry_point = ":index.ts",
+    entry_point_name = "iterator",
+    nested_packages = [],
+    tags = ["release-package"],
+    deps = iterator_TARGETS,
+)
