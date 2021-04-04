@@ -56,7 +56,12 @@ $WCAG-CONTRAST : (// sass-lint:disable-line variable-name-format
 ///     background: $background;
 ///     color: contrast($background, red, orange, yellow, green, blue, indigo);
 ///   }
-@function color-contrast($background, $color-contrast-dark: v.$color-contrast-dark, $color-contrast-light: v.$color-contrast-light, $min-contrast-ratio: v.$min-contrast-ratio) {
+@function color-contrast(
+  $background,
+  $color-contrast-dark: v.$color-contrast-dark,
+  $color-contrast-light: v.$color-contrast-light,
+  $min-contrast-ratio: v.$min-contrast-ratio
+) {
   $foregrounds: $color-contrast-light, $color-contrast-dark, #fff, #000;
   $max-ratio: 0;
   $max-ratio-color: null;
