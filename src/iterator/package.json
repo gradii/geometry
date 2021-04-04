@@ -1,7 +1,7 @@
 {
-  "name": "@gradii/interpolate",
+  "name": "@gradii/iterator",
   "version": "0.0.0-PLACEHOLDER",
-  "description": "Interpolate Packages",
+  "description": "Iterator Packages",
   "repository": {
     "type": "git",
     "url": "https://github.com/gradii/triangle.git"
