@@ -13,7 +13,7 @@ export const DEV_APP_ROUTES: Routes = [
     path: '', component: DevAppHome, children: [
       {
         path        : 'autocomplete',
-        loadChildren: 'autocomplete/autocomplete-demo-module#AutocompleteDemoModule'
+        loadChildren: '/autocomplete/autocomplete-demo-module#AutocompleteDemoModule'
       },
       {
         path        : 'input-number',
@@ -34,6 +34,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'button',
         loadChildren: '/button/dev-button.module#DevButtonModule'
+      },
+      {
+        path        : 'dnd',
+        loadChildren: '/dnd/dev-dnd.module#DevDndModule'
       }
     ]
   },

@@ -180,7 +180,7 @@
     shelljs "0.8.2"
     tsickle "^0.38.0"
 
-"@angular/cdk@11.0.5":
+"@angular/cdk@11.1.2":
   version "11.1.2"
   resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-11.1.2.tgz#89708a97be340bbfb7d64c84dbc7bb100f77d7ff"
   integrity sha512-RnKvMWAIcWbWoUdBfAoOs4pQl6t5O+1OuPlBNK5aL2FYqoLv5U0fP88Rf7OhjPlD0ASsPGLG45t+dA5sUVZ46Q==
