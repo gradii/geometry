@@ -1,5 +1,6 @@
 @use "../../core/style/mixins";
 @use "../../core/style/variables" as v;
+@use "./_tabs-theme" as theme;
 
 $tab-prefix-cls : "#{mixins.$tri-prefix}-tabs";
 
@@ -31,7 +32,7 @@ $tab-prefix-cls : "#{mixins.$tri-prefix}-tabs";
 
   @at-root &-nav-container {
     overflow      : hidden;
-    font-size     : $tabs-title-font-size;
+    font-size     : theme.$tabs-title-font-size;
     line-height   : mixins.$line-height-base;
     box-sizing    : border-box;
     position      : relative;
