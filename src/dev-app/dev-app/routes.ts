@@ -35,10 +35,6 @@ export const DEV_APP_ROUTES: Routes = [
         path        : 'button',
         loadChildren: '/button/dev-button.module#DevButtonModule'
       },
-      {
-        path        : 'dnd',
-        loadChildren: '/dnd/dev-dnd.module#DevDndModule'
-      }
     ]
   },
 

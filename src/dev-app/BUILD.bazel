@@ -21,7 +21,6 @@ ng_module(
         "//src/dev-app/alert",
         "//src/dev-app/tabs",
         "//src/dev-app/button",
-        "//src/dev-app/dnd",
 
         "//src/triangle/core",
         "@npm//@angular/cdk",
