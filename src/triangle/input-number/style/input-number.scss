@@ -1,6 +1,8 @@
 @use "../../core/style/variables" as v;
 @use "../../core/style/mixins";
 @use "../../input/style/input-mixin";
+@use "../../input/style/input-variables" as input-v;
+@use "../../input/style/input-theme" as input-theme;
 
 $input-number-prefix-cls : "#{v.$tri-prefix}-input-number";
 
@@ -9,8 +11,8 @@ $input-number-prefix-cls : "#{v.$tri-prefix}-input-number";
   @include input-mixin.input();
   margin        : 0;
   padding       : 0;
-  //font-size     : $font-size-base;
-  //height        : $input-height-base;
+  font-size     : v.$font-size-base;
+  height        : input-v.$input-height-base;
   display       : inline-block;
   border-radius : v.$border-radius-base;
   width         : 80px;
@@ -45,19 +47,6 @@ $input-number-prefix-cls : "#{v.$tri-prefix}-input-number";
     @include mixins.iconfont-size-under-12px(7px);
     right       : 4px;
   }
-
-  //theme
-  //@at-root &:hover {
-  //  @include hover();
-  //}
-  //
-  //@at-root &-focused {
-  //  @include active();
-  //}
-  //
-  //@at-root &-disabled {
-  //  @include disabled();
-  //}
 
   @at-root &-input {
     width         : 100%;

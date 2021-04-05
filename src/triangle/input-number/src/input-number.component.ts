@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { TAB } from '@angular/cdk/keycodes';
+import { FocusMonitor } from '@angular/cdk/a11y';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,10 +12,12 @@ import {
   EventEmitter,
   forwardRef,
   Input,
+  OnInit,
   Output,
   Renderer2,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
+  ɵmarkDirty
 } from '@angular/core';
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -32,9 +34,7 @@ import {
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template       : `
-    <div class="tri-input-number-handler-wrap"
-         (mouseover)="_mouseInside = true"
-         (mouseout)="_mouseInside = false">
+    <div class="tri-input-number-handler-wrap">
       <a *ngIf="spinners"
          class="tri-input-number-handler tri-input-number-handler-up"
          [class.tri-input-number-handler-up-disabled]="_disabledUp"
@@ -63,9 +63,6 @@ import {
              [placeholder]="placeHolder"
              [disabled]="disabled"
              [(ngModel)]="_displayValue"
-             (blur)="_emitBlur($event)"
-             (focus)="_emitFocus($event)"
-             (keydown)="_emitKeydown($event)"
              (ngModelChange)="_userInputChange()"
              [attr.min]="min"
              [attr.max]="max"
@@ -81,23 +78,24 @@ import {
     }
   ],
   host           : {
-    '[class.tri-input-number-disabled]': 'disabled'
+    '[class.tri-input-number-focused]' : '_focused',
+    '[class.tri-input-number-disabled]': 'disabled',
+    '[class.tri-input-number-lg]'      : `size === 'large'`,
+    '[class.tri-input-number-sm]'      : `size === 'small'`
   }
 })
-export class InputNumberComponent implements ControlValueAccessor {
+export class InputNumberComponent implements OnInit, ControlValueAccessor {
 
   _el: HTMLElement;
-  _prefixCls = 'tri-input-number';
   _precisionStep = 0;
   _precisionFactor = 1;
   _disabledUp = false;
   _disabledDown = false;
   _focused = false;
-  _mouseInside = false;
   // ngModel Access
   onChange: any = Function.prototype;
   onTouched: any = Function.prototype;
-  @ViewChild('inputNumber', {static: false}) _inputNumber: ElementRef;
+  @ViewChild('inputNumber', {static: false}) _inputElementRef: ElementRef;
   /**
    * Placeholder
    */
@@ -113,15 +111,10 @@ export class InputNumberComponent implements ControlValueAccessor {
   @Input()
   disabled = false;
 
+  private _min: number = -Infinity;
+
   @Output() blur: EventEmitter<any> = new EventEmitter();
   @Output() focus: EventEmitter<any> = new EventEmitter();
-
-  constructor(private _elementRef: ElementRef, private _renderer: Renderer2) {
-    this._el = this._elementRef.nativeElement;
-    this._renderer.addClass(this._el, `${this._prefixCls}`);
-  }
-
-  private _min: number = -Infinity;
 
   /**
    * Min number
@@ -172,7 +165,7 @@ export class InputNumberComponent implements ControlValueAccessor {
    * 获取输入框大小
    */
   @Input()
-  get size(): string {
+  get size(): 'large' | 'small' | 'default' {
     return this._size;
   }
 
@@ -181,10 +174,8 @@ export class InputNumberComponent implements ControlValueAccessor {
    * 设置输入框大小
    * @param  value
    */
-  set size(value: string) {
-    this._renderer.removeClass(this._el, `${this._prefixCls}-${this._size}`);
-    this._size = {large: 'lg', small: 'sm'}[value];
-    this._renderer.addClass(this._el, `${this._prefixCls}-${this._size}`);
+  set size(value: 'large' | 'small' | 'default') {
+    this._size = value;
   }
 
   _step = 1;
@@ -226,10 +217,19 @@ export class InputNumberComponent implements ControlValueAccessor {
     this._displayValue = isBlank(value) ? '' : value;
   }
 
+
+  constructor(private _elementRef: ElementRef,
+              private _renderer: Renderer2,
+              private focusMonitor: FocusMonitor,
+  ) {
+    this._el = this._elementRef.nativeElement;
+    this._renderer.addClass(this._el, 'tri-input-number');
+  }
+
   _numberUp($event: MouseEvent) {
     $event.preventDefault();
     $event.stopPropagation();
-    this._inputNumber.nativeElement.focus();
+    this._inputElementRef.nativeElement.focus();
     if (isBlank(this.value)) {
       this.value = isInfinite(this._min) ? 0 : this._min;
     }
@@ -243,7 +243,7 @@ export class InputNumberComponent implements ControlValueAccessor {
   _numberDown($event: MouseEvent) {
     $event.preventDefault();
     $event.stopPropagation();
-    this._inputNumber.nativeElement.focus();
+    this._inputElementRef.nativeElement.focus();
     if (isBlank(this.value)) {
       this.value = isInfinite(this._min) ? 0 : this._min;
     }
@@ -254,30 +254,12 @@ export class InputNumberComponent implements ControlValueAccessor {
     }
   }
 
-  _emitBlur($event: FocusEvent) {
-    // avoid unnecessary events
-    if (this._focused && !this._mouseInside) {
-      this._checkValue();
-      this._focused = false;
-      this.blur.emit($event);
-    }
-    this.onTouched();
-  }
-
-  _emitFocus($event: FocusEvent) {
-    // avoid unnecessary events
-    if (!this._focused) {
-      this._focused = true;
-      this.focus.emit($event);
-    }
-  }
-
-  _emitKeydown($event: KeyboardEvent) {
-    if ($event.keyCode === TAB && this._focused) {
-      this._focused = false;
-      this.blur.emit($event);
-    }
-  }
+  // _emitKeydown($event: KeyboardEvent) {
+  //   if ($event.keyCode === TAB && this._focused) {
+  //     this._focused = false;
+  //     this.blur.emit($event);
+  //   }
+  // }
 
   _userInputChange() {
     if (isNullOrEmptyString(this._displayValue)) {
@@ -312,6 +294,22 @@ export class InputNumberComponent implements ControlValueAccessor {
     return !isNaN(value) && isFinite(value);
   }
 
+  ngOnInit() {
+    this.focusMonitor
+      .monitor(this._elementRef, true)
+      .subscribe(focusOrigin => {
+        if (!focusOrigin) {
+          this._focused = false;
+          this._updateValue(this.value!);
+          this.blur.emit();
+          Promise.resolve().then(() => this.onTouched());
+        } else {
+          this._focused = true;
+          this.focus.emit();
+        }
+      });
+  }
+
   toPrecisionAsStep(num: number) {
     if (isNaN(num)) {
       return num;
@@ -334,14 +332,17 @@ export class InputNumberComponent implements ControlValueAccessor {
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
+    ɵmarkDirty(this);
   }
 
   private _updateValue(value: number, emitChange = true) {
+    value = this._getBoundValue(value);
+    this.displayValue = value;
+    ɵmarkDirty(this);
     if (this._value === value) {
       return;
     }
-    this._value = this._getBoundValue(value);
-    this.displayValue = this._value;
+    this._value = value;
     // this._inputNumber.nativeElement.value = this._value;
     if (emitChange) {
       this.onChange(this._value);

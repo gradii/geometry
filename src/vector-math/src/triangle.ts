@@ -22,7 +22,7 @@ export class Triangle {
     } else if (arguments.length === 1) {
       this._point0 = arguments[0].point0;
       this._point1 = arguments[1].point1;
-      this._point2 = arguments[1].point2;
+      this._point2 = arguments[2].point2;
     } else {
       this._point0 = Vector3.zero();
       this._point1 = Vector3.zero();

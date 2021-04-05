@@ -10,7 +10,7 @@ export abstract class Color {
 
   public abstract rgb(): Rgb;
 
-  public displayable():boolean {
+  public displayable(): boolean {
     return this.rgb().displayable();
   }
 

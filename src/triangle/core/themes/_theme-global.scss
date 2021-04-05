@@ -57,6 +57,7 @@
 
   @include tri-core-theme();
   @include tri-input-theme();
+  @include tri-input-number-theme();
   @include tri-alert-theme();
   @include tri-menu-theme();
   @include tri-layout-theme();

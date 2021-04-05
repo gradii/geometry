@@ -4,17 +4,17 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-const Overshoot = 1.70158;
+const OVER_SHOOT = 1.70158;
 
 /**
  * @private-exports
  */
 export class BackIn {
 
-  constructor(protected overshoot: number = Overshoot) {
+  constructor(protected overshoot: number = OVER_SHOOT) {
   }
 
-  public static create(overshoot: number = Overshoot) {
+  public static create(overshoot: number = OVER_SHOOT) {
     return new BackIn(overshoot);
   }
 
@@ -28,10 +28,10 @@ export class BackIn {
  */
 export class BackOut {
 
-  constructor(protected overshoot: number = Overshoot) {
+  constructor(protected overshoot: number = OVER_SHOOT) {
   }
 
-  public static create(overshoot: number = Overshoot) {
+  public static create(overshoot: number = OVER_SHOOT) {
     return new BackOut(overshoot);
   }
 
@@ -45,10 +45,10 @@ export class BackOut {
  */
 export class BackInOut {
 
-  constructor(protected overshoot: number = Overshoot) {
+  constructor(protected overshoot: number = OVER_SHOOT) {
   }
 
-  public static create(overshoot: number = Overshoot) {
+  public static create(overshoot: number = OVER_SHOOT) {
     return new BackInOut(overshoot);
   }
 

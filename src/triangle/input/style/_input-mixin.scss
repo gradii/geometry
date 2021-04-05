@@ -1,4 +1,5 @@
 @use "./input-variables";
+@use "./input-theme" as input-theme;
 @use "../../core/style/mixins/border-radius";
 @use "../../core/style/variables" as v;
 
@@ -37,17 +38,19 @@ $input-padding-vertical-lg   : 0.375rem !default;
   //@include placeholder($theme);
   transition  : all .3s;
 
-  //@at-root &:hover {
-  //  @include hover();
-  //}
-  //
-  //@at-root &:focus {
-  //  @include active();
-  //}
-  //
-  //@at-root &-disabled {
-  //  @include disabled();
-  //}
+  //theme
+  @at-root &:hover {
+    @include input-theme.tri-input-hover-theme();
+  }
+
+  @at-root &-focused {
+    @include input-theme.tri-input-active-theme();
+  }
+
+  @at-root &-disabled {
+    @include input-theme.tri-input-disabled-theme();
+  }
+
 
   @at-root textarea#{&} {
     max-width      : 100%;

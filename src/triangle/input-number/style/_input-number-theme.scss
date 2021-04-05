@@ -7,7 +7,7 @@
 @use "../../core/style/theming";
 @use "../../core/style/variables" as v;
 
-$input-number-prefix-cls : "#{ v.$tri-prefix}-input-number";
+$input-number-prefix-cls : "#{v.$tri-prefix}-input-number";
 
 @mixin handler-disabled() {
   opacity : 0.72;
@@ -15,10 +15,10 @@ $input-number-prefix-cls : "#{ v.$tri-prefix}-input-number";
   cursor  : not-allowed;
 }
 
-@mixin tri-input-number-theme($theme) {
-  $primary    : map.get($theme, primary);
-  $foreground : map.get($theme, foreground);
-  $background : map.get($theme, background);
+@mixin tri-input-number-theme() {
+  $primary    : theme.$primary;
+  $foreground : theme.$foreground;
+  $background : theme.$background;
 
 
   .#{$input-number-prefix-cls} {
@@ -49,10 +49,10 @@ $input-number-prefix-cls : "#{ v.$tri-prefix}-input-number";
       background-color : theming.tri-color($foreground, input-bg);
       border           : 0;
       border-radius    : v.$border-radius-base;
-      @include compatibility.placeholder($theme);
+      @include compatibility.placeholder();
 
       @at-root &[disabled] {
-        @include input-theme.tri-input-disabled-theme($theme);
+        @include input-theme.tri-input-disabled-theme();
       }
     }
 
@@ -71,29 +71,29 @@ $input-number-prefix-cls : "#{ v.$tri-prefix}-input-number";
         background-color : theming.tri-color($background, disabled-bg);
       }
     }
-  }
 
-  @at-root &-handler-down-disabled,
-  &-handler-up-disabled,
-  &-disabled {
-    .#{$input-number-prefix-cls}-handler-down-inner,
-    .#{$input-number-prefix-cls}-handler-up-inner {
-      @include handler-disabled();
-    }
-  }
-
-  @at-root &-disabled {
-    .#{$input-number-prefix-cls}-input {
-      opacity : 0.72;
-      cursor  : not-allowed;
+    @at-root &-handler-down-disabled,
+    &-handler-up-disabled,
+    &-disabled {
+      .#{$input-number-prefix-cls}-handler-down-inner,
+      .#{$input-number-prefix-cls}-handler-up-inner {
+        @include handler-disabled();
+      }
     }
 
-    .#{$input-number-prefix-cls}-handler-wrap {
-      display : none;
-    }
+    @at-root &-disabled {
+      .#{$input-number-prefix-cls}-input {
+        opacity : 0.72;
+        cursor  : not-allowed;
+      }
 
-    .#{$input-number-prefix-cls}-handler {
-      @include handler-disabled();
+      .#{$input-number-prefix-cls}-handler-wrap {
+        display : none;
+      }
+
+      .#{$input-number-prefix-cls}-handler {
+        @include handler-disabled();
+      }
     }
   }
 }
