@@ -17,10 +17,11 @@ ng_module(
     deps = [
         "//src/dev-app/dev-app",
         "//src/dev-app/input-number",
+        "//src/dev-app/button",
         "//src/dev-app/collapse",
         "//src/dev-app/alert",
         "//src/dev-app/tabs",
-        "//src/dev-app/button",
+        "//src/dev-app/icon",
 
         "//src/triangle/core",
         "@npm//@angular/cdk",

@@ -15,6 +15,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="tabs">tabs</a></li>
       <li><a routerLink="collapse">collapse</a></li>
       <li><a routerLink="button">button</a></li>
+      <li><a routerLink="icon">icon</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>
