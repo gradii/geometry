@@ -144,7 +144,7 @@ $btn-primary-bg         : grey !default;
   touch-action     : manipulation;
   cursor           : pointer;
   background-image : none;
-  border           : v.$border-width-base v.$border-style-base transparent;
+  //border           : v.$border-width-base v.$border-style-base transparent;
   white-space      : nowrap;
   @include button-size(
       $btn-height-base,
@@ -325,21 +325,21 @@ $btn-primary-bg         : grey !default;
 
 @mixin button-variant(
   $background,
-  $border,
+  $border-color,
   $color: contrast.color-contrast($background),
   $hover-background: color.adjust($background, $lightness: -7.5%),
-  $hover-border: color.adjust($border, $lightness: -10%),
+  $hover-border: color.adjust($border-color, $lightness: -10%),
   $hover-color: contrast.color-contrast($hover-background),
   $active-background: color.adjust($background, $lightness: -10%),
-  $active-border: color.adjust($border, $lightness: -12.5%),
+  $active-border: color.adjust($border-color, $lightness: -12.5%),
   $active-color: contrast.color-contrast($active-background),
   $disabled-background: $background,
-  $disabled-border: $border,
+  $disabled-border: $border-color,
   $disabled-color: $color,
 ) {
   color        : $color;
   @include gradients.gradient-bg($background);
-  border-color : $border;
+  border : v.$border-width-base v.$border-style-base $border-color;
   @include box-shadow.box-shadow($btn-box-shadow);
 
   &:hover {
@@ -355,9 +355,9 @@ $btn-primary-bg         : grey !default;
     border-color : $hover-border;
     // Avoid using mixin so we can pass custom focus shadow properly
     @if v.$enable-shadows {
-      box-shadow : $btn-box-shadow, 0 0 0 $btn-focus-width rgba(color.mix($color, $border, 15%), .5);
+      box-shadow : $btn-box-shadow, 0 0 0 $btn-focus-width rgba(color.mix($color, $border-color, 15%), .5);
     } @else {
-      box-shadow : 0 0 0 $btn-focus-width rgba(color.mix($color, $border, 15%), .5);
+      box-shadow : 0 0 0 $btn-focus-width rgba(color.mix($color, $border-color, 15%), .5);
     }
   }
 
@@ -372,9 +372,9 @@ $btn-primary-bg         : grey !default;
     &:focus {
       // Avoid using mixin so we can pass custom focus shadow properly
       @if v.$enable-shadows and $btn-active-box-shadow != none {
-        box-shadow : $btn-active-box-shadow, 0 0 0 $btn-focus-width rgba(color.mix($color, $border, 15%), .5);
+        box-shadow : $btn-active-box-shadow, 0 0 0 $btn-focus-width rgba(color.mix($color, $border-color, 15%), .5);
       } @else {
-        box-shadow : 0 0 0 $btn-focus-width rgba(color.mix($color, $border, 15%), .5);
+        box-shadow : 0 0 0 $btn-focus-width rgba(color.mix($color, $border-color, 15%), .5);
       }
     }
   }
@@ -459,8 +459,8 @@ $btn-primary-bg         : grey !default;
       $color, //$hover-background
       $color, //$hover-border,
       $primary-color, //$hover-color,
-      theming.tri-color-palette($border-color, 7), //$active-background,
-      theming.tri-color-palette($border-color, 7) //$active-border,
+      theming.tri-color-palette($color, 7), //$active-background,
+      theming.tri-color-palette($color, 7) //$active-border,
       $primary-color, //$active-color
   );
 }

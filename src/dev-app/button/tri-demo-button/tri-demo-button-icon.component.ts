@@ -13,23 +13,52 @@ import { Component, OnInit } from '@angular/core';
   selector: 'tri-demo-button-icon',
   template: `
     <button tri-button [type]="'primary'" [shape]="'circle'">
-      <i class="anticon anticon-search"></i>
+      <tri-icon svgIcon="outline:search"></tri-icon>
     </button>
     <button tri-button [type]="'primary'">
-      <i class="anticon anticon-search"></i><span>Search</span>
+      <tri-icon svgIcon="outline:search"></tri-icon>
+      <span>Search</span>
     </button>
     <br>
     <button tri-button [type]="'dashed'" [shape]="'circle'">
-      <i class="anticon anticon-search"></i>
+      <tri-icon svgIcon="outline:search"></tri-icon>
     </button>
     <button tri-button [type]="'default'">
-      <i class="anticon anticon-search"></i><span>Search</span>
+      <tri-icon svgIcon="outline:search"></tri-icon>
+      <span>Search</span>
     </button>
+
+    <div class="stretch">
+      <button tri-button [type]="'default'">
+        <tri-icon svgIcon="outline:search"></tri-icon>
+        <span>Search</span>
+      </button>
+    </div>
+    <div class="stretch">
+      <button tri-button [type]="'default'">
+        <span>Search</span>
+        <tri-icon svgIcon="outline:search"></tri-icon>
+      </button>
+    </div>
   `,
-  styles: []
+  styles  : [`
+               .stretch {
+                 width   : 250px;
+                 display : flex;
+               }
+
+               .stretch .tri-btn {
+                 flex            : 1;
+                 display         : flex;
+                 justify-content : space-between;
+                 align-items     : center;
+               }
+             `]
 })
 export class TriDemoButtonIconComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

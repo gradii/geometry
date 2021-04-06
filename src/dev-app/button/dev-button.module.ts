@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TriButtonModule } from '@gradii/triangle/button';
 import { TriDropDownModule } from '@gradii/triangle/dropdown';
+import { TriIconModule } from '@gradii/triangle/icon';
 import { TriRadioModule } from '@gradii/triangle/radio';
 import { DevButton } from './dev-button';
 import { TriDemoButtonGhostComponent } from './tri-demo-button/tri-demo-button-ghost.component';
@@ -26,6 +27,7 @@ import { TriDemoButtonTypeComponent } from './tri-demo-button/tri-demo-button-ty
     CommonModule,
     FormsModule,
 
+    TriIconModule,
     TriButtonModule,
     TriRadioModule,
     TriDropDownModule,
