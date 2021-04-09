@@ -96,7 +96,7 @@
     "ts-loader": true,
     "no-exposed-todo": true,
     "no-import-export-spacing": false,
-    "no-private-getters": true,
+    "no-private-getters": false,
     "no-undecorated-base-class-di": true,
     "no-undecorated-class-with-ng-fields": true,
     "setters-after-getters": true,

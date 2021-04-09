@@ -15,11 +15,14 @@ export function raw(value: string | number | boolean) {
   return new RawExpression(value);
 }
 
-export function bindingVariable(value:  string | number | boolean, type = 'where'){
+export function bindingVariable(value:  string | number | boolean | RawExpression, type = 'where'){
+  if(value instanceof RawExpression) {
+    return value
+  }
   return new BindingVariable(raw(value), type);
 }
 
-export function rawBindings(value: string | number | boolean, bindings: any[], type = 'where') {
+export function rawSqlBindings(value: string | number | boolean, bindings: any[], type = 'where') {
   return new RawBindingExpression(raw(value), bindings.map(it => new BindingVariable(raw(it), type)));
 }
 

@@ -10,6 +10,11 @@ export class SqliteGrammar extends Grammar implements GrammarInterface {
 
   }
 
+
+  compileInsertOrIgnore(builder: QueryBuilder, values): string {
+    return this.compileInsert(builder, values, 'or ignore into');
+  }
+
   compileSelect(builder: QueryBuilder): string {
 
     const ast = this._prepareSelectAst(builder);

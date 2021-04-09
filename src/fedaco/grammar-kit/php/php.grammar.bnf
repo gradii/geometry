@@ -1,0 +1,36 @@
+{
+
+}
+
+class ::= class_stmt
+
+class_stmt ::= "class" class_body {
+
+}
+
+
+function_stmt ::= "function" "{" "}"
+
+class_body ::= "{" stmt? "}"
+
+stmt ::=
+  class_stmt |
+  function_stmt
+
+
+str-numeric ::=
+  str-whitespaceopt? signopt? str-number
+
+str-whitespace ::=
+  str-whitespaceopt? str-whitespace-char
+
+str-whitespace-char ::=
+  new-line |
+  Space character (U+0020) |
+  Horizontal-tab character (U+0009) |
+  Vertical-tab character (U+000B) |
+  Form-feed character (U+000C)
+
+str-number ::=
+  digit-sequence |
+  floating-literal

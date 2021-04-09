@@ -1,14 +1,19 @@
-
-import { QueryBuilder } from '../query-builder';
-import { isString } from '@gradii/check-type';
+import {
+  isAnyEmpty,
+  isString
+} from '@gradii/check-type';
+import { AssignmentSetClause } from '../../query/ast/assignment-set-clause';
 import { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
 import { ConditionExpression } from '../../query/ast/expression/condition-expression';
 import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
 import { ParenthesizedExpression } from '../../query/ast/expression/parenthesized-expression';
+import { JoinFragment } from '../../query/ast/fragment/join-fragment';
+import { NestedExpression } from '../../query/ast/fragment/nested-expression';
 import { FromClause } from '../../query/ast/from-clause';
 import { FromTable } from '../../query/ast/from-table';
 import { GroupByClause } from '../../query/ast/group-by-clause';
 import { HavingClause } from '../../query/ast/having-clause';
+import { InsertSpecification } from '../../query/ast/insert-specification';
 import { JoinExpression } from '../../query/ast/join-expression';
 import { JoinedTable } from '../../query/ast/joined-table';
 import { LimitClause } from '../../query/ast/limit-clause';
@@ -20,18 +25,23 @@ import { QuerySpecification } from '../../query/ast/query-specification';
 import { SelectClause } from '../../query/ast/select-clause';
 import { SelectScalarExpression } from '../../query/ast/select-scalar-expression';
 import { TableReferenceExpression } from '../../query/ast/table-reference-expression';
+import { UpdateSpecification } from '../../query/ast/update-specification';
+import { ValuesInsertSource } from '../../query/ast/values-insert-source';
 import { WhereClause } from '../../query/ast/where-clause';
 import { SqlParser } from '../../query/parser/sql-parser';
-import { SqlNode } from '../../query/sql-node';
 import { SqlVisitor } from '../../query/sql-visitor';
 import {
+  bindingVariable,
   createIdentifier,
-  createKeyword,
   raw
 } from '../ast-factory';
 import { Builder } from '../builder';
 import { GrammarInterface } from '../grammar.interface';
-import { JoinQueryBuilder } from '../query-builder';
+import {
+  JoinQueryBuilder,
+  QueryBuilder
+} from '../query-builder';
+import { QueryBuilderVisitor } from '../visitor/query-builder-visitor';
 
 export abstract class Grammar implements GrammarInterface {
   constructor() {
@@ -132,9 +142,9 @@ export abstract class Grammar implements GrammarInterface {
     if (builder._unions.length > 0) {
       for (const it of builder._unions) {
         const rightSql = it.expression.toSql();
-        const bindings = it.expression.getBindings()
-        builder.addBinding(bindings, 'union')
-        ast            = new BinaryUnionQueryExpression(ast, raw(rightSql), it.all);
+        const bindings = it.expression.getBindings();
+        builder.addBinding(bindings, 'union');
+        ast = new BinaryUnionQueryExpression(ast, raw(rightSql), it.all);
       }
 
       if (builder._unionLimit >= 0) {
@@ -145,10 +155,10 @@ export abstract class Grammar implements GrammarInterface {
         (ast as BinaryUnionQueryExpression).offsetClause = new OffsetClause(builder._unionOffset);
       }
 
-      if(builder._unionOrders.length >0){
+      if (builder._unionOrders.length > 0) {
         (ast as BinaryUnionQueryExpression).orderByClause = new OrderByClause(
           builder._unionOrders as OrderByElement[]
-        )
+        );
       }
     }
 
@@ -158,11 +168,66 @@ export abstract class Grammar implements GrammarInterface {
     return ast;
   }
 
-
   compileAggregateFragment(aggregateFunctionName,
                            aggregateColumns,
                            visitor: SqlVisitor) {
     return ``;
+  }
+
+  compileExists(builder: QueryBuilder): string {
+    return `SELECT exists(${this.compileSelect(builder)}) AS \`exists\``;
+  }
+
+  compileInsert(builder: QueryBuilder, values, insertOption = 'into'): string {
+    // const ast = this._prepareSelectAst(builder);
+    const keys    = Object.keys(values);
+    const sources = Object.values(values);
+    const visitor = new QueryBuilderVisitor(builder._grammar, builder);
+
+    if (isAnyEmpty(values)) {
+      return `INSERT INTO ${builder._from.accept(visitor)} DEFAULT VALUES`;
+    }
+
+    const ast = new InsertSpecification(
+      insertOption,
+      new ValuesInsertSource(
+        false,
+        sources.map((it: any) => bindingVariable(it, 'insert'))
+      ),
+      keys.map(it => {
+        return SqlParser.createSqlParser(it).parseColumnAlias();
+      }),
+      builder._from
+    );
+
+
+    return ast.accept(visitor);
+  }
+
+  compileInsertGetId(builder: QueryBuilder, values: any, sequence: string): string {
+    return this.compileInsert(builder, values);
+  }
+
+  compileInsertOrIgnore(builder: QueryBuilder, values): string {
+    return this.compileInsert(builder, values, 'ignore into');
+  }
+
+  compileInsertUsing(builder: QueryBuilder, columns, nestedExpression: NestedExpression): string {
+    const ast     = new InsertSpecification(
+      'into',
+      new ValuesInsertSource(
+        false,
+        [],
+        nestedExpression
+      ),
+      columns.map(it => {
+        return SqlParser.createSqlParser(it).parseColumnAlias();
+      }),
+      builder._from
+    );
+    const visitor = new QueryBuilderVisitor(builder._grammar, builder);
+
+    return ast.accept(visitor);
   }
 
   compileJoinFragment(builder: JoinQueryBuilder, visitor: SqlVisitor): string {
@@ -208,12 +273,52 @@ export abstract class Grammar implements GrammarInterface {
     return '';
   }
 
-  compileInsert(builder: Builder, values: any): string {
-    return '';
+  _prepareUpdateAst(builder: QueryBuilder, values: any) {
+
+    const columnNodes = [];
+    for (const [key, value] of Object.entries(values)) {
+      const columnNode = SqlParser.createSqlParser(key).parseColumnAlias();
+      columnNodes.push(new AssignmentSetClause(
+        columnNode,
+        bindingVariable(value as any, 'update')
+      ));
+    }
+
+    const ast = new UpdateSpecification(
+      builder._from,
+      columnNodes,
+      builder._wheres.length > 0 ? new WhereClause(
+        new ConditionExpression(builder._wheres)
+      ) : undefined
+    );
+
+    if (builder._joins.length > 0) {
+      (ast as UpdateSpecification).fromClause = new FromClause(builder._from, builder._joins as JoinedTable[]);
+    }
+
+    if (builder._limit >= 0) {
+      (ast as UpdateSpecification).limitClause = new LimitClause(builder._limit);
+    }
+
+    if (builder._offset >= 0) {
+      (ast as UpdateSpecification).offsetClause = new OffsetClause(builder._offset);
+    }
+
+    if (builder._orders.length > 0) {
+      (ast as UpdateSpecification).orderByClause = new OrderByClause(
+        builder._orders as OrderByElement[]
+      );
+    }
+
+    return ast;
   }
 
-  compileExists(builder: QueryBuilder): string {
-    return `SELECT exists(${this.compileSelect(builder)}) AS \`exists\``;
+  compileUpdate(builder: QueryBuilder, values: any): string {
+    const ast = this._prepareUpdateAst(builder, values);
+
+    const visitor = new QueryBuilderVisitor(builder._grammar, builder);
+
+    return ast.accept(visitor);
   }
 
   distinct(distinct: boolean | any[]): string {
@@ -224,18 +329,26 @@ export abstract class Grammar implements GrammarInterface {
     return [];
   }
 
-  quoteColumnName(columnName: string): string {
+  prepareBindingsForUpdate(builder: Builder, visitor: SqlVisitor): string {
     return '';
   }
 
-  quoteTableName(tableName: string): string {
-    return tableName;
+  quoteColumnName(columnName: string): string {
+    return '';
   }
 
   quoteSchemaName(schemaName: string): string {
     return schemaName;
   }
 
+  quoteTableName(tableName: string): string {
+    return tableName;
+  }
+
   setTablePrefix(prefix: string): void {
+  }
+
+  wrap(column: string) {
+    return this.quoteColumnName(column.replace(/\s|'|"|`/g, ''));
   }
 }

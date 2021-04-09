@@ -1,0 +1,21 @@
+<ng-template [ngIf]="!template">
+  <div (click)="node.mouseAction('expanderClick', $event)"
+       *ngIf="node.hasChildren"
+       [class.toggle-children-collapsed]="node.isCollapsed"
+       [class.toggle-children-expanded]="node.isExpanded"
+       class="toggle-children-wrapper">
+    <span class="toggle-children"></span>
+  </div>
+
+  <div *ngIf="!node.hasChildren"
+       class="toggle-children-placeholder"></div>
+</ng-template>
+
+<ng-container [ngTemplateOutletContext]="{
+                $implicit: null,
+                node: node,
+                index: index,
+                options: options
+              }"
+              [ngTemplateOutlet]="template">
+</ng-container>

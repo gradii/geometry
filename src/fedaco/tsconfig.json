@@ -5,6 +5,9 @@
     "rootDir": "..",
     "baseUrl": ".",
     "paths": {
+      "@gradii/check-type": [
+        "../check-type"
+      ]
     }
   },
   "include": [

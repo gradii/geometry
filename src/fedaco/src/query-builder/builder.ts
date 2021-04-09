@@ -46,9 +46,13 @@ export abstract class Builder extends mixinJoin(
   /*The database query grammar instance.*/
   _grammar: GrammarInterface;
 
+  _unifyBindings: [];
+
   /*The current query value bindings.*/
   _bindings: { [key: string]: any[] } = {
     'select'    : [],
+    'updateJoin': [],
+    'update'    : [],
     'from'      : [],
     'join'      : [],
     'where'     : [],
@@ -56,12 +60,13 @@ export abstract class Builder extends mixinJoin(
     'having'    : [],
     'order'     : [],
     'union'     : [],
-    'unionOrder': []
+    'unionOrder': [],
+    'insert'    : []
   };
   /*An aggregate function and column to be run.*/
   _aggregate: AggregateFragment;
   /*The columns that should be returned.*/
-  _columns: Array<ColumnReferenceExpression|RawBindingExpression|RawExpression> = [];
+  _columns: Array<ColumnReferenceExpression | RawBindingExpression | RawExpression> = [];
   /*Indicates if the query returns distinct results.
 
   Occasionally contains the columns that should be distinct.*/
@@ -69,7 +74,7 @@ export abstract class Builder extends mixinJoin(
   /*The table which the query is targeting.*/
   _from: FromTable;
   /*The table joins for the query.*/
-  _joins: (JoinedTable|JoinExpression|JoinFragment)[] = [];
+  _joins: (JoinedTable | JoinExpression | JoinFragment)[] = [];
   /*The where constraints for the query.*/
   _wheres: any[] = [];
   /*The groupings for the query.*/

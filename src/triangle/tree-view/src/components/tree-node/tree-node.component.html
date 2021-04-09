@@ -1,0 +1,31 @@
+<ng-template [ngIf]="!templates.treeNodeFullTemplate">
+  <ngx-tree-node-wrapper (click)="node.mouseAction('click', $event)"
+                         (contextmenu)="node.mouseAction('contextMenu', $event)"
+                         (dblclick)="node.mouseAction('dblClick', $event)"
+                         (ngxTreeDrop)="node.onDrop($event)"
+                         (treeDropDragEnter)="node.mouseAction('dragEnter', $event)"
+                         (treeDropDragLeave)="node.mouseAction('dragLeave', $event)"
+                         (treeDropDragOver)="node.mouseAction('dragOver', $event)"
+                         [class.tree-node-wrapper-active]="node.isActive"
+                         [class.tree-node-wrapper-focused]="node.isFocused"
+                         [index]="index"
+                         [ngxTreeDrag]="node"
+                         [node]="node"
+                         [options]="options"
+                         [style.padding-left]="options.levelPadding!(node)"
+                         [templates]="templates"
+                         [treeAllowDrop]="allowDrop"
+                         [treeDragEnabled]="allowDrag(node)">
+  </ngx-tree-node-wrapper>
+
+  <ngx-tree-node-children *ngIf="node.isExpanded && node.hasVisibleChildren"
+                          [children]="node.visibleChildren"
+                          [node]="node"
+                          [options]="options"
+                          [templates]="templates"></ngx-tree-node-children>
+</ng-template>
+
+<ng-container
+  [ngTemplateOutletContext]="{ $implicit: null, node: node, index: index, options: options, templates: templates }"
+  [ngTemplateOutlet]="templates.treeNodeFullTemplate">
+</ng-container>

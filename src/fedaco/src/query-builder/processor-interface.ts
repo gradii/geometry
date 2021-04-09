@@ -1,3 +1,5 @@
 export interface ProcessorInterface {
-  processSelect
+  processSelect(queryBuilder, results)
+
+  processInsertGetId(sql, bindings: any[],sequence?)
 }

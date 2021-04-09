@@ -10,7 +10,7 @@ export interface SqlVisitor {
 
   visitAsExpression(node: SqlNode)
 
-  visitInsertSpecification(node: SqlNode)
+  visitAssignmentSetClause(node: SqlNode)
 
   visitBetweenPredicateExpression(node: SqlNode)
 
@@ -49,6 +49,8 @@ export interface SqlVisitor {
   visitIdentifyVariableDeclaration(node: SqlNode)
 
   visitInPredicateExpression(node: SqlNode)
+
+  visitInsertSpecification(node: SqlNode)
 
   visitJoinClause(node: SqlNode)
 
@@ -96,7 +98,11 @@ export interface SqlVisitor {
 
   visitSelectClause(node: SqlNode)
 
+  visitSelectInsertSource(node: SqlNode)
+
   visitSelectScalarExpression(node: SqlNode)
+
+  visitSetClause(node: SqlNode)
 
   visitStringLiteralExpression(node: SqlNode)
 
@@ -105,6 +111,10 @@ export interface SqlVisitor {
   visitTableReferenceExpression(node: SqlNode)
 
   visitUnionFragment(node: SqlNode)
+
+  visitUpdateSpecification(node: SqlNode)
+
+  visitValuesInsertSource(node: SqlNode)
 
   visitWhereClause(node: SqlNode)
 

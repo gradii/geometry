@@ -161,7 +161,7 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
       if (isFunction(column)) {
         this.addWhere(this._createSubPredicate(column), conjunction);
       } else if (isString(column)) {
-        const leftNode = SqlParser.createSqlParser(column).parseTableAlias();
+        const leftNode = SqlParser.createSqlParser(column).parseColumnAlias();
         let rightNode;
         if (isFunction(value)) {
           rightNode = this._createSubQuery('where', value);

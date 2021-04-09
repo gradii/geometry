@@ -1,0 +1,52 @@
+:host {
+  display     : flex;
+  align-items : center;
+
+  ::ng-deep .tree-node-content:hover {
+    background-color : #f7fbff
+  }
+}
+
+:host(.ngx-tree-dragging-target) {
+  ::ng-deep .tree-node-expander {
+    visibility : hidden;
+  }
+}
+
+:host(.tree-node-wrapper-active) {
+  ::ng-deep .tree-node-content,
+  ::ng-deep .tree-node-content:hover,
+  &.tree-node-wrapper-focused ::ng-deep .tree-node-content {
+    background-color : #beebff;
+  }
+}
+
+:host(.tree-node-wrapper-focused) {
+  ::ng-deep .tree-node-content {
+    background-color : #e7f4f9
+  }
+}
+
+:host(.tree-node-wrapper-active) ::ng-deep .tree-node-content,
+:host(.tree-node-wrapper-focused) ::ng-deep .tree-node-content,
+:host ::ng-deep .tree-node-content:hover {
+  box-shadow : inset 0 0 1px #999;
+}
+
+:host(.is-dragging-over) {
+  .tree-node-content {
+    position         : relative;
+    z-index          : 1;
+    background-color : #dfe;
+    box-shadow       : inset 0 0 1px #999;
+    outline          : 2px dashed #888;
+  }
+
+  .tree-node-expander *, .tree-node-content * {
+    pointer-events : none;
+  }
+}
+
+:host(.is-dragging-over-disabled) .tree-node-content {
+  opacity : 0.5
+}

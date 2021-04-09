@@ -1,11 +1,4 @@
-import {
-  isAnyEmpty,
-  isArray,
-  isBlank,
-  isBoolean,
-  isFunction,
-  isString
-} from '@gradii/check-type';
+import { isAnyEmpty, isArray, isBlank, isBoolean, isFunction, isString } from '@gradii/check-type';
 import { ColumnReferenceExpression } from '../query/ast/column-reference-expression';
 import { RawExpression } from '../query/ast/expression/raw-expression';
 import { NestedPredicateExpression } from '../query/ast/fragment/expression/nested-predicate-expression';
@@ -14,10 +7,7 @@ import { FromTable } from '../query/ast/from-table';
 import { PathExpression } from '../query/ast/path-expression';
 import { TableReferenceExpression } from '../query/ast/table-reference-expression';
 import { SqlParser } from '../query/parser/sql-parser';
-import {
-  createIdentifier,
-  rawBindings
-} from './ast-factory';
+import { createIdentifier, rawSqlBindings } from './ast-factory';
 import { wrapToArray } from './ast-helper';
 import { Builder } from './builder';
 import { ConnectionInterface } from './connection-interface';
@@ -25,7 +15,7 @@ import { GrammarInterface } from './grammar.interface';
 import { ProcessorInterface } from './processor-interface';
 
 
-export enum BindingType {
+export const enum BindingType {
   where = 'where',
   join  = 'join'
 }
@@ -59,7 +49,7 @@ export class QueryBuilder extends Builder {
     // todo
     // this._grammar = grammar || connection.getQueryGrammar();
     // this._processor = processor || connection.getPostProcessor();
-    this._grammar   = grammar;
+    this._grammar = grammar;
     this._processor = processor;
 
     this._sqlParser = new SqlParser();
@@ -71,24 +61,24 @@ export class QueryBuilder extends Builder {
   }
 
   public clone() {
-    const cloned        = this.newQuery();
-    cloned._sqlParser   = this._sqlParser;
-    cloned._bindings    = this._bindings;
-    cloned._aggregate   = this._aggregate;
-    cloned._columns     = this._columns;
-    cloned._distinct    = this._distinct;
-    cloned._from        = this._from;
-    cloned._joins       = this._joins;
-    cloned._wheres      = this._wheres;
-    cloned._groups      = this._groups;
-    cloned._havings     = this._havings;
-    cloned._orders      = this._orders;
-    cloned._limit       = this._limit;
-    cloned._offset      = this._offset;
-    cloned._unions      = this._unions;
-    cloned._unionLimit  = this._unionLimit;
+    const cloned = this.newQuery();
+    cloned._sqlParser = this._sqlParser;
+    cloned._bindings = this._bindings;
+    cloned._aggregate = this._aggregate;
+    cloned._columns = this._columns;
+    cloned._distinct = this._distinct;
+    cloned._from = this._from;
+    cloned._joins = this._joins;
+    cloned._wheres = this._wheres;
+    cloned._groups = this._groups;
+    cloned._havings = this._havings;
+    cloned._orders = this._orders;
+    cloned._limit = this._limit;
+    cloned._offset = this._offset;
+    cloned._unions = this._unions;
+    cloned._unionLimit = this._unionLimit;
     cloned._unionOffset = this._unionOffset;
-    cloned._lock        = this._lock;
+    cloned._lock = this._lock;
     return cloned;
   }
 
@@ -214,7 +204,7 @@ export class QueryBuilder extends Builder {
     //   return collect();
     // }
     column = this.stripTableForPluck(column);
-    key    = this.stripTableForPluck(key);
+    key = this.stripTableForPluck(key);
     return this.pluckFromColumn(
       queryResult,
       column,
@@ -288,6 +278,15 @@ export class QueryBuilder extends Builder {
     return this;
   }
 
+  /*Insert a new record and get the value of the primary key.*/
+  public insertGetId(values: any, sequence: string = 'id') {
+    const sql = this._grammar.compileInsertGetId(this, values, sequence);
+    return this._processor.processInsertGetId(
+      sql,
+      this.getBindings()
+      , sequence);
+  }
+
   public from(table: Function | QueryBuilder | RawExpression | string, as?: string): this {
     if (this.isQueryable(table)) {
       return this.fromSub(table, as);
@@ -332,6 +331,32 @@ export class QueryBuilder extends Builder {
     return this._connection;
   }
 
+  /*Insert new records into the table using a subquery.*/
+  public insertUsing(columns: any[], query: Function | QueryBuilder | string) {
+    if (!this.isQueryable(query)) {
+      throw new Error('InvalidArgumentException');
+    }
+    const node = this._createSubQuery('insert', query);
+    return this._connection.affectingStatement(
+      this._grammar.compileInsertUsing(this, columns, node),
+      this.getBindings()
+    );
+  }
+
+
+  /*Insert a new record into the database while ignoring errors.*/
+  public insertOrIgnore(values: any) {
+    if (isAnyEmpty(values)) {
+      return 0;
+    }
+
+    return this._connection.affectingStatement(
+      this._grammar.compileInsertOrIgnore(this, values),
+      this.getBindings()
+      // this._cleanBindings(insertValues)
+    );
+  }
+
   getGrammar() {
     return this._grammar;
   }
@@ -367,7 +392,7 @@ export class QueryBuilder extends Builder {
 
   /*Add a new "raw" select expression to the query.*/
   public selectRaw(expression: string, bindings: any[] = []) {
-    this._columns.push(rawBindings(expression, bindings));
+    this._columns.push(rawSqlBindings(expression, bindings));
     // if (bindings) {
     //   this.addBinding(bindings, 'select');
     // }
@@ -379,7 +404,7 @@ export class QueryBuilder extends Builder {
   public select(columns: string[] | { [as: string]: any }): this;
 
   public select(columns, ...cols): this {
-    this._columns            = [];
+    this._columns = [];
     this._bindings['select'] = [];
 
     columns = isArray(columns) ? columns : [columns, ...cols];
@@ -388,29 +413,52 @@ export class QueryBuilder extends Builder {
   }
 
 
-  public insert(values: any) {
-    if (isAnyEmpty(values)) {
-      return true;
-    }
-    if (!isArray(values)) {
-       values = [values];
-    } else {
-      // for (let [key, value] of Object.entries(values)) {
-      //   values[key] = value;
-      // }
-      throw new Error('not implement yet')
-    }
-
-    const insertValues = Object.values(values)
-    return this._connection.insert(
-      this._grammar.compileInsert(this, values),
-      this._cleanBindings(insertValues)
+  /*Update a record in the database.*/
+  public update(values: any) {
+    const sql = this._grammar.compileUpdate(this, values);
+    return this._connection.update(sql,
+      this.getBindings()
     );
   }
 
-  protected _cleanBindings(bindings: any[]) {
-    return bindings.filter(it=>!(it instanceof RawExpression))
+  /*Insert or update a record matching the attributes, and fill it with values.*/
+  public updateOrInsert(attributes: any[], values: any[] = []) {
+    if (!this.where(attributes).exists()) {
+      return this.insert([...attributes, ...values]);
+    }
+    if (isAnyEmpty(values)) {
+      return true;
+    }
+    return this.limit(1).update(values);
   }
+
+  public insert(values: any) {
+    if (isArray(values)) {
+      throw new Error('invalid values');
+    }
+    if (isAnyEmpty(values)) {
+      return true;
+    }
+    // if (!isArray(values)) {
+    //    values = [values];
+    // } else {
+    //   // for (let [key, value] of Object.entries(values)) {
+    //   //   values[key] = value;
+    //   // }
+    //   throw new Error('not implement yet')
+    // }
+
+    // const insertValues = Object.values(values)
+    return this._connection.insert(
+      this._grammar.compileInsert(this, values),
+      this.getBindings()
+      // this._cleanBindings(insertValues)
+    );
+  }
+
+  // protected _cleanBindings(bindings: any[]) {
+  //   return bindings.filter(it=>!(it instanceof RawExpression))
+  // }
 
   selectSub(query: Function | QueryBuilder | string, as: string) {
     let columnAsNode;
@@ -465,7 +513,7 @@ export class QueryBuilder extends Builder {
         )
       ));
     }
-    const result  = callback();
+    const result = callback();
     this._columns = original;
 
     //todo temp fix array
@@ -483,7 +531,7 @@ export class JoinQueryBuilder extends QueryBuilder {
   /*Create a new join clause instance.*/
   public constructor(parentQuery: QueryBuilder, type: string, table: string | TableReferenceExpression) {
     super(parentQuery.getConnection(), parentQuery.getGrammar(), parentQuery.getProcessor());
-    this.type  = type;
+    this.type = type;
     this.table = table;
   }
 

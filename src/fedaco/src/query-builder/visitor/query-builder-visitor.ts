@@ -1,4 +1,5 @@
 import { isString } from '@gradii/check-type';
+import { AssignmentSetClause } from '../../query/ast/assignment-set-clause';
 import { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
 import { BindingVariable } from '../../query/ast/binding-variable';
 import { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
@@ -28,6 +29,7 @@ import { GroupByClause } from '../../query/ast/group-by-clause';
 import { HavingClause } from '../../query/ast/having-clause';
 import { Identifier } from '../../query/ast/identifier';
 import { IdentifyVariableDeclaration } from '../../query/ast/identify-variable-declaration';
+import { InsertSpecification } from '../../query/ast/insert-specification';
 import { JoinClause } from '../../query/ast/join-clause';
 import { JoinExpression } from '../../query/ast/join-expression';
 import { JoinOnExpression } from '../../query/ast/join-on-expression';
@@ -42,9 +44,12 @@ import { QueryExpression } from '../../query/ast/query-expression';
 import { QuerySpecification } from '../../query/ast/query-specification';
 import { RangeVariableDeclaration } from '../../query/ast/range-variable-declaration';
 import { SelectClause } from '../../query/ast/select-clause';
+import { SelectInsertSource } from '../../query/ast/select-insert-source';
 import { SelectScalarExpression } from '../../query/ast/select-scalar-expression';
 import { TableName } from '../../query/ast/table-name';
 import { TableReferenceExpression } from '../../query/ast/table-reference-expression';
+import { UpdateSpecification } from '../../query/ast/update-specification';
+import { ValuesInsertSource } from '../../query/ast/values-insert-source';
 import { WhereClause } from '../../query/ast/where-clause';
 import { SqlNode } from '../../query/sql-node';
 import { SqlVisitor } from '../../query/sql-visitor';
@@ -54,6 +59,11 @@ import { GrammarInterface } from '../grammar.interface';
 import { QueryBuilder } from '../query-builder';
 
 export class QueryBuilderVisitor implements SqlVisitor {
+  protected inJoinExpression: boolean = false;
+  protected explicitBindingType: string;
+
+  public updateTarget;
+
   constructor(
     protected _grammar: GrammarInterface,
     /**
@@ -62,10 +72,6 @@ export class QueryBuilderVisitor implements SqlVisitor {
      */
     protected _queryBuilder: QueryBuilder
   ) {
-  }
-
-  visitExistsPredicateExpression(node: ExistsPredicateExpression) {
-    return `${node.not ? 'NOT EXISTS' : 'EXISTS'} ${node.expression.accept(this)}`;
   }
 
   visit() {
@@ -83,6 +89,10 @@ export class QueryBuilderVisitor implements SqlVisitor {
 
   visitAsExpression(node: AsExpression) {
     return `${node.name.accept(this)} AS ${node.as.accept(this)}`;
+  }
+
+  visitAssignmentSetClause(node: AssignmentSetClause) {
+    return `${node.column.accept(this)} = ${node.value.accept(this)}`;
   }
 
   visitBetweenPredicateExpression(node: BetweenPredicateExpression) {
@@ -117,7 +127,8 @@ export class QueryBuilderVisitor implements SqlVisitor {
   visitBindingVariable(node: BindingVariable) {
     this._queryBuilder.addBinding(
       node.bindingExpression.accept(this),
-      node.type
+      this.explicitBindingType ??
+      (node.type === 'where' && this.inJoinExpression ? 'join' : node.type)
     );
     // this._queryBuilder.addBinding(node.bindingExpression.dispatch(this), 'where')
     return `?`;
@@ -154,6 +165,10 @@ export class QueryBuilderVisitor implements SqlVisitor {
     throw new Error('Method not implemented.');
   }
 
+  visitExistsPredicateExpression(node: ExistsPredicateExpression) {
+    return `${node.not ? 'NOT EXISTS' : 'EXISTS'} ${node.expression.accept(this)}`;
+  }
+
   visitFieldAsExpression(node: SqlNode) {
     throw new Error('Method not implemented.');
   }
@@ -161,9 +176,9 @@ export class QueryBuilderVisitor implements SqlVisitor {
   visitFromClause(node: FromClause) {
     if (node.joins.length > 0) {
       const joins = node.joins.map(it => it.accept(this));
-      return ` FROM ${node.from.accept(this)} ${joins.join(' ')}`;
+      return `FROM ${node.from.accept(this)} ${joins.join(' ')}`;
     } else {
-      return ` FROM ${node.from.accept(this)}`;
+      return `FROM ${node.from.accept(this)}`;
     }
 
   }
@@ -187,6 +202,14 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return `${node.name.accept(this)}(${
       node.parameters.map(it => it.accept(this)).join(', ')
     })`;
+  }
+
+  visitGroupByClause(node: GroupByClause) {
+    return `GROUP BY ${node.groups.map(it => it.accept(this)).join(', ')}`;
+  }
+
+  visitHavingClause(node: HavingClause) {
+    return `HAVING ${node.expressions.map(it => it.accept(this)).join(',')}`;
   }
 
   visitIdentifier(node: Identifier) {
@@ -228,11 +251,19 @@ export class QueryBuilderVisitor implements SqlVisitor {
     } IN (${node.values.map(it => it.accept(this)).join(', ')})`;
   }
 
+  visitInsertSpecification(node: InsertSpecification) {
+    let sql = `INSERT ${node.insertOption.toUpperCase()} ${node.target.accept(this)}`;
+    sql += ` (${node.columns.map(it => it.accept(this)).join(', ')})`;
+    sql += `${node.insertSource.accept(this)}`;
+    return sql;
+  }
+
   visitJoinClause(node: JoinClause) {
     throw new Error('not implement');
   }
 
   visitJoinExpression(node: JoinExpression) {
+    this.inJoinExpression = true;
     //todo remove identifier check
     let tableName;
     if (node.name instanceof Identifier) {
@@ -242,7 +273,10 @@ export class QueryBuilderVisitor implements SqlVisitor {
     } else {
       tableName = `${node.name.accept(this)}`;
     }
-    return `${node.type.toUpperCase()} JOIN ${tableName}${node.on ? ` ON ${node.on.accept(this)}` : ''}`;
+    const sql             = `${node.type.toUpperCase()} JOIN ${tableName}${node.on ? ` ON ${node.on.accept(
+      this)}` : ''}`;
+    this.inJoinExpression = false;
+    return sql;
   }
 
   visitJoinFragment(node: JoinFragment) {
@@ -342,19 +376,21 @@ export class QueryBuilderVisitor implements SqlVisitor {
 
   visitPathExpression(node: PathExpression) {
     const columns = [];
-    for (const identifier of node.paths) {
+    for (let i = 0; i < node.paths.length; i++) {
+      const identifier = node.paths[i];
       const columnName = identifier.accept(this);
       if (columnName === '*') {
         columns.push(columnName);
       } else {
-        columns.push(this._grammar.quoteColumnName(columnName));
+        if (i === node.paths.length - 2) {
+          columns.push(this._grammar.quoteTableName(columnName));
+        } else {
+          columns.push(this._grammar.quoteColumnName(columnName));
+        }
       }
     }
 
-    if (columns.length > 1) {
-      const tableName             = columns[columns.length - 2];
-      columns[columns.length - 2] = this._grammar.quoteTableName(tableName);
-    }
+
     return columns.join('.');
   }
 
@@ -379,19 +415,19 @@ export class QueryBuilderVisitor implements SqlVisitor {
     let sql = `${node.selectClause.accept(this)}`;
 
     if (node.fromClause) {
-      sql += node.fromClause.accept(this);
+      sql += ` ${node.fromClause.accept(this)}`;
     }
 
     if (node.whereClause) {
-      sql += node.whereClause.accept(this);
+      sql += ` ${node.whereClause.accept(this)}`;
     }
 
     if (node.groupByClause) {
-      sql += node.groupByClause.accept(this);
+      sql += ` ${node.groupByClause.accept(this)}`;
     }
 
     if (node.havingClause) {
-      sql += node.havingClause.accept(this);
+      sql += ` ${node.havingClause.accept(this)}`;
     }
 
     sql += this.visitQueryExpression(node);
@@ -431,8 +467,15 @@ export class QueryBuilderVisitor implements SqlVisitor {
     }
   }
 
+  visitSelectInsertSource(node: SelectInsertSource) {
+  }
+
   visitSelectScalarExpression(node: SelectScalarExpression) {
     return `${node.expression.accept(this)} AS ${node.columnName.accept(this)}`;
+  }
+
+  visitSetClause(node: SqlNode) {
+    throw new Error('Method not implemented.');
   }
 
   visitStringLiteralExpression(node: StringLiteralExpression) {
@@ -483,19 +526,45 @@ export class QueryBuilderVisitor implements SqlVisitor {
     throw new Error('should not run');
   }
 
+  visitUpdateSpecification(node: UpdateSpecification) {
+    let sql = `UPDATE ${node.target.accept(this)}`;
+
+    sql += ` SET ${node.setClauses.map(
+      it => it.accept(this)).join(', ')
+    }`;
+
+    if (node.fromClause) {
+      sql += ` ${node.fromClause.accept(this)}`;
+    }
+
+    if (node.whereClause) {
+      sql += ` ${node.whereClause.accept(this)}`;
+    }
+
+    if (node.orderByClause) {
+      sql += ` ${node.orderByClause.accept(this)}`;
+    }
+    if (node.offsetClause) {
+      sql += ` ${node.offsetClause.accept(this)}`;
+    }
+    if (node.limitClause) {
+      sql += ` ${node.limitClause.accept(this)}`;
+    }
+    return sql;
+  }
+
+  visitValuesInsertSource(node: ValuesInsertSource) {
+    if (node.isDefault) {
+      return ' DEFAULT VALUES';
+    } else if (node.select) {
+      return ` ${node.select.accept(this)}`;
+    } else {
+      return ` VALUES (${node.values.map(it => it.accept(this)).join(', ')})`;
+    }
+  }
+
   visitWhereClause(node: WhereClause) {
-    return ` WHERE ${node.conditionExpression.accept(this)}`;
-  }
-
-  visitGroupByClause(node: GroupByClause) {
-    return ` GROUP BY ${node.groups.map(it => it.accept(this)).join(', ')}`;
-  }
-
-  visitHavingClause(node: HavingClause) {
-    return ` HAVING ${node.expressions.map(it => it.accept(this)).join(',')}`;
-  }
-
-  visitInsertSpecification(node: SqlNode) {
+    return `WHERE ${node.conditionExpression.accept(this)}`;
   }
 
 }

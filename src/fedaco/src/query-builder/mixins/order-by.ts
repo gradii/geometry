@@ -4,18 +4,20 @@ import { QueryBuilder } from '../../query-builder/query-builder';
 import { RawExpression } from '../../query/ast/expression/raw-expression';
 import { OrderByElement } from '../../query/ast/order-by-element';
 import { SqlParser } from '../../query/parser/sql-parser';
-import { rawBindings } from '../ast-factory';
+import { rawSqlBindings } from '../ast-factory';
 import { wrapToArray } from '../ast-helper';
 
 export interface QueryBuilderOrderBy {
+  oldest(column: string): this
+
   orderBy(column: Function | QueryBuilder | RawExpression | string,
           direction?: string): this
 
-  orderByRaw(sql: string, bindings: any[] | any): this
+  orderByDesc(column: (q) => void): this
 
   orderByDesc(column: string): this
 
-  orderByDesc(column: (q) => void): this
+  orderByRaw(sql: string, bindings: any[] | any): this
 
   reorder(column?, direction?): this
 }
@@ -24,6 +26,11 @@ export type QueryBuilderOrderByCtor = Constructor<QueryBuilderOrderBy>;
 
 export function mixinOrderBy<T extends Constructor<any>>(base: T): QueryBuilderOrderByCtor & T {
   return class _Self extends base {
+
+    /*Add an "order by" clause for a timestamp to the query.*/
+    public oldest(this: QueryBuilder & _Self,column: string = 'created_at') {
+      return this.orderBy(column, 'asc');
+    }
 
     /**
      * Add an "order by" clause to the query.
@@ -58,13 +65,9 @@ export function mixinOrderBy<T extends Constructor<any>>(base: T): QueryBuilderO
       return this;
     }
 
-    protected _addOrder(ast) {
-      if (this._unions.length > 0) {
-        this._unionOrders.push(ast);
-      } else {
-        this._orders.push(ast);
-      }
-      return this;
+    /*Add a descending "order by" clause to the query.*/
+    public orderByDesc(this: QueryBuilder & _Self, column: string) {
+      return this.orderBy(column, 'desc');
     }
 
     /*Add a raw "order by" clause to the query.*/
@@ -74,17 +77,12 @@ export function mixinOrderBy<T extends Constructor<any>>(base: T): QueryBuilderO
       // this.addBinding(bindings, this.qUnions ? 'unionOrder' : 'order');
       bindings = wrapToArray(bindings);
       if (this._unions.length > 0) {
-        this._unionOrders.push(rawBindings(sql, bindings, 'unionOrder'));
+        this._unionOrders.push(rawSqlBindings(sql, bindings, 'unionOrder'));
       } else {
-        this._orders.push(rawBindings(sql, bindings, 'order'));
+        this._orders.push(rawSqlBindings(sql, bindings, 'order'));
       }
 
       return this;
-    }
-
-    /*Add a descending "order by" clause to the query.*/
-    public orderByDesc(this: QueryBuilder & _Self, column: string) {
-      return this.orderBy(column, 'desc');
     }
 
     /*Remove all existing orders and optionally add a new order.*/
@@ -95,6 +93,15 @@ export function mixinOrderBy<T extends Constructor<any>>(base: T): QueryBuilderO
       this._bindings['unionOrder'] = [];
       if (column) {
         return this.orderBy(column, direction);
+      }
+      return this;
+    }
+
+    protected _addOrder(ast) {
+      if (this._unions.length > 0) {
+        this._unionOrders.push(ast);
+      } else {
+        this._orders.push(ast);
       }
       return this;
     }

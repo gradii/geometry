@@ -1,5 +1,8 @@
+import { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
 import { ComparisonPredicateExpression } from '../../query/ast/expression/comparison-predicate-expression';
 import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
+import { TableReferenceExpression } from '../../query/ast/table-reference-expression';
+import { resolveIdentifier } from '../ast-helper';
 import { GrammarInterface } from '../grammar.interface';
 import { QueryBuilder } from '../query-builder';
 import { QueryBuilderVisitor } from './query-builder-visitor';
@@ -44,4 +47,9 @@ export class PostgresQueryBuilderVisitor extends QueryBuilderVisitor {
     }
     return super.visitComparisonExpression(node);
   }
+
+  visitColumnReferenceExpression(node: ColumnReferenceExpression): string {
+    return super.visitColumnReferenceExpression(node).split('.').pop();
+  }
+
 }

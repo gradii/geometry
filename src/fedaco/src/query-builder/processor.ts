@@ -5,4 +5,8 @@ export class Processor implements ProcessorInterface {
   processSelect(queryBuilder, results) {
     return results;
   }
+
+  processInsertGetId(){
+
+  }
 }

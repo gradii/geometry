@@ -13,7 +13,7 @@ export function isBlank(value: any) {
   return value === null || value === undefined;
 }
 
-export function isNumber(value: any) {
+export function isNumber(value: any): value is number {
   return typeof value === 'number' || Object.prototype.toString.call(value) === '[object Number]';
 }
 
@@ -29,15 +29,15 @@ export function isString(value: any): value is string {
   return typeof value === 'string';
 }
 
-export function isObject(item: any) {
+export function isObject(item: any): item is object {
   return item !== null && typeof item === 'object' && Object.prototype.toString.call(item) === '[object Object]';
 }
 
-export function isRegex(value: any) {
+export function isRegex(value: any): value is RegExp {
   return Object.prototype.toString.call(value) === '[object RegExp]';
 }
 
-export function isTruthy(value: any) {
+export function isTruthy(value: any): value is true {
   return !!value;
 }
 

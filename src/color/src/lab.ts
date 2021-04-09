@@ -36,7 +36,7 @@ function rgb2lrgb(x) {
 }
 
 export class Lab extends Color {
-  //@formatter:on
+  // @formatter:on
   constructor(public l, public a, public b, public opacity = 1) {
     super();
   }
