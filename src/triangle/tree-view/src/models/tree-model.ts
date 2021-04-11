@@ -5,7 +5,7 @@
  */
 
 import { isArray, isFunction, isString } from '@gradii/check-type';
-import { Observer, Subject } from 'rxjs';
+import { Observer, Subject, Observable } from 'rxjs';
 import { EventsMap, TREE_EVENTS } from '../constants/events';
 import { TreeEvent } from './events';
 import { TreeNode } from './tree-node';
@@ -119,9 +119,10 @@ export class TreeModel {
     this.events[<keyof EventsMap>event.eventName].emit(event);
   }
 
-  subscribe(eventName: string, fn: Observer<TreeEvent>) {
-    return this.events[<keyof EventsMap>eventName].subscribe(fn);
-  }
+  //@ts-ignore
+  // subscribe(eventName: string, fn: any) {
+  //   return (this.events[<keyof EventsMap>eventName] as Observable<any>).subscribe(fn);
+  // }
 
   // getters
   /**

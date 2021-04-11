@@ -65,6 +65,7 @@ TRIANGLE_ENTRYPOINTS = [
     "tooltip",
     "transfer",
     "util",
+    "tree-view",
     #  "tree",
 ]
 
@@ -136,6 +137,7 @@ TRIANGLE_ENTRYPOINTS_WITH_STYLES = [
     "transfer",
     #  "util",
     #  "tree",
+    "tree-view",
 ]
 
 TRIANGLE_SCSS_LIBS = [

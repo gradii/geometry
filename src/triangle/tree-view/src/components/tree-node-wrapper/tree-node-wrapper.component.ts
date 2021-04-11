@@ -20,7 +20,7 @@ import { TreeVirtualScroll } from '../../services/tree-virtual-scroll.service';
 @Component({
   selector       : 'ngx-tree-node-wrapper',
   templateUrl    : './tree-node-wrapper.component.html',
-  styleUrls      : ['./tree-node-wrapper.component.scss'],
+  styleUrls      : ['../../../style/components/tree-node-wrapper.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TreeNodeWrapperComponent implements OnInit, OnDestroy, AfterViewInit {

@@ -10,7 +10,7 @@ import { TreeNode, TreeUIOptions } from '../../models';
 @Component({
   selector       : 'ngx-tree-node-content',
   templateUrl    : './tree-node-content.component.html',
-  styleUrls      : ['./tree-node-content.component.scss'],
+  styleUrls      : ['../../../style/components/tree-node-content.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TreeNodeContentComponent {

@@ -30,7 +30,7 @@ const DISABLE_ON_SCROLL_CLASS = 'disable-events-on-scroll';
 @Component({
   selector       : 'ngx-tree-viewport',
   templateUrl    : './tree-viewport.component.html',
-  styleUrls      : ['./tree-viewport.component.scss'],
+  styleUrls      : ['../../../style/components/tree-viewport.component.css'],
   providers      : [TreeVirtualScroll],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

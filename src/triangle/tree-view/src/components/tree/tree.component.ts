@@ -35,11 +35,12 @@ import {
 import { TreeDraggingTargetService } from '../../services/tree-dragging-target.service';
 import { TreeNodeChildrenComponent } from '../tree-node-children/tree-node-children.component';
 import { TreeViewportComponent } from '../tree-viewport/tree-viewport.component';
+import { isBlank, isAnyEmpty } from '@gradii/check-type';
 
 @Component({
-  selector       : 'ngx-tree',
-  templateUrl    : './tree.component.html',
-  styleUrls      : ['./tree.component.scss'],
+  selector: 'ngx-tree',
+  templateUrl: './tree.component.html',
+  styleUrls: ['../../../style/components/tree.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TreeComponent implements OnChanges, OnDestroy {
@@ -88,14 +89,14 @@ export class TreeComponent implements OnChanges, OnDestroy {
 
   @HostBinding('class.ngx-tree') className = true;
 
-  @ContentChild('loadingTemplate', {static: false}) loadingTemplate: TemplateRef<any>;
-  @ContentChild('expanderTemplate', {static: false}) expanderTemplate: TemplateRef<any>;
-  @ContentChild('treeNodeTemplate', {static: false}) treeNodeTemplate: TemplateRef<any>;
-  @ContentChild('treeNodeWrapperTemplate', {static: false}) treeNodeWrapperTemplate: TemplateRef<any>;
-  @ContentChild('treeNodeFullTemplate', {static: false}) treeNodeFullTemplate: TemplateRef<any>;
+  @ContentChild('loadingTemplate', { static: false }) loadingTemplate: TemplateRef<any>;
+  @ContentChild('expanderTemplate', { static: false }) expanderTemplate: TemplateRef<any>;
+  @ContentChild('treeNodeTemplate', { static: false }) treeNodeTemplate: TemplateRef<any>;
+  @ContentChild('treeNodeWrapperTemplate', { static: false }) treeNodeWrapperTemplate: TemplateRef<any>;
+  @ContentChild('treeNodeFullTemplate', { static: false }) treeNodeFullTemplate: TemplateRef<any>;
 
-  @ViewChild('viewport', {static: true}) viewportComponent: TreeViewportComponent;
-  @ViewChild('root', {static: true}) root: TreeNodeChildrenComponent;
+  @ViewChild('viewport', { static: true }) viewportComponent: TreeViewportComponent;
+  @ViewChild('root', { static: true }) root: TreeNodeChildrenComponent;
 
   constructor(public treeDraggingTargetService: TreeDraggingTargetService) {
     this.emitterMap = (<(keyof typeof TREE_EVENTS)[]>Object.keys(TREE_EVENTS)).reduce((map, name) => {
@@ -135,22 +136,22 @@ export class TreeComponent implements OnChanges, OnDestroy {
       this.treeModel.activateNode(this.activateTarget);
     }
 
-    if (changes.allowDrag
-      || changes.allowDrop
-      || changes.levelPadding
-      || changes.useVirtualScroll
-      || changes.nodeClass
-      || changes.referenceItemHeight
-      || changes.auditViewportUpdate) {
-      this.UIOptions = createTreeUIOptions({
-        allowDrag          : this.allowDrag,
-        allowDrop          : this.allowDrop,
-        levelPadding       : this.levelPadding,
-        useVirtualScroll   : this.useVirtualScroll,
-        referenceItemHeight: this.referenceItemHeight,
-        auditViewportUpdate: this.auditViewportUpdate,
-        nodeClass          : this.nodeClass,
-      });
+    const uiOptions: any = {};
+    [
+      'allowDrag',
+      'allowDrop',
+      'levelPadding',
+      'useVirtualScroll',
+      'nodeClass',
+      'referenceItemHeight',
+      'auditViewportUpdate'
+    ].forEach(it => {
+        if ((it in changes) && !isBlank(changes[it].currentValue)) {
+          uiOptions[it] = changes[it].currentValue;
+        }
+      })
+    if (!isAnyEmpty(uiOptions)) {
+      this.UIOptions = createTreeUIOptions(uiOptions)
     }
   }
 

@@ -21,7 +21,7 @@ import { TreeDraggingTargetService } from '../services/tree-dragging-target.serv
 const DRAG_OVER_CLASS = 'is-dragging-over';
 const DRAG_DISABLED_CLASS = 'is-dragging-over-disabled';
 
-export type AllowDropPredicate = (element: TreeNode | null | undefined, $event: MouseEvent) => boolean;
+export type AllowDropPredicate = (element: TreeNode | null | undefined, $event: DragEvent) => boolean;
 
 @Directive({
   selector: '[ngxTreeDrop]',
@@ -115,7 +115,7 @@ export class TreeDropDirective implements OnDestroy {
     this._stopEvent($event);
   }
 
-  allowDrop($event: MouseEvent) {
+  allowDrop($event: DragEvent) {
     return this._allowDrop(this.treeDraggedElement.get(), $event);
   }
 

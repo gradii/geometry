@@ -14,13 +14,25 @@ ng_module(
     name = "tree-view",
     srcs = glob(
         ["**/*.ts"],
-        exclude = ["**/*.spec.ts"],
+        exclude = ["**/*.spec.ts", "testing/**/*.ts"],
     ),
-    assets = [":style/tree-view.css"] + glob(["**/*.html"]),
+    assets = [
+      ":style/tree-view.css",
+      ":style/components/tree-loading.component.css",
+      ":style/components/tree-node-children.component.css",
+      ":style/components/tree-node-content.component.css",
+      ":style/components/tree-node-drop-slot.component.css",
+      ":style/components/tree-node-expander.component.css",
+      ":style/components/tree-node-wrapper.component.css",
+      ":style/components/tree-node.component.css",
+      ":style/components/tree-viewport.component.css",
+      ":style/components/tree.component.css"
+    ] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/tree-view",
     deps = [
         "//src/triangle/core",
         "//src/triangle/i18n",
+        "//src/check-type",
         "@npm//@angular/animations",
         "@npm//@angular/cdk",
         "@npm//@angular/common",
@@ -44,6 +56,82 @@ sass_binary(
         "//src/triangle/tree-view:tree_view_scss_lib",
     ],
 )
+
+sass_binary(
+    name = "tree_loading_component_scss",
+    src = "style/components/tree-loading.component.scss",
+    deps = [
+        "//src/triangle/tree-view:tree_view_scss_lib",
+    ],
+)
+
+
+sass_binary(
+    name = "tree_node_children_component_scss",
+    src = "style/components/tree-node-children.component.scss",
+    deps = [
+        "//src/triangle/tree-view:tree_view_scss_lib",
+    ],
+)
+
+sass_binary(
+  name = "tree_node_content_component_scss",
+  src = "style/components/tree-node-content.component.scss",
+  deps = [
+    "//src/triangle/tree-view:tree_view_scss_lib",
+  ],
+)
+
+sass_binary(
+  name = "tree_node_drop_slot_component_scss",
+  src = "style/components/tree-node-drop-slot.component.scss",
+  deps = [
+    "//src/triangle/tree-view:tree_view_scss_lib",
+  ],
+)
+
+sass_binary(
+  name = "tree_node_expander_component_scss",
+  src = "style/components/tree-node-expander.component.scss",
+  deps = [
+    "//src/triangle/tree-view:tree_view_scss_lib",
+  ],
+)
+
+sass_binary(
+  name = "tree_node_wrapper_component_scss",
+  src = "style/components/tree-node-wrapper.component.scss",
+  deps = [
+    "//src/triangle/tree-view:tree_view_scss_lib",
+  ],
+)
+
+sass_binary(
+  name = "tree_node_component_scss",
+  src = "style/components/tree-node.component.scss",
+  deps = [
+    "//src/triangle/tree-view:tree_view_scss_lib",
+  ],
+)
+
+sass_binary(
+  name = "tree_viewport_component_scss",
+  src = "style/components/tree-viewport.component.scss",
+  deps = [
+    "//src/triangle/tree-view:tree_view_scss_lib",
+  ],
+)
+
+sass_binary(
+  name = "tree_component_scss",
+  src = "style/components/tree.component.scss",
+  deps = [
+    "//src/triangle/tree-view:tree_view_scss_lib",
+  ],
+)
+
+
+
 #
 #ng_test_library(
 #  name = "autocomplete_test_sources",

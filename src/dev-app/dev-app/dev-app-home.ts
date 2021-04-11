@@ -16,6 +16,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="collapse">collapse</a></li>
       <li><a routerLink="button">button</a></li>
       <li><a routerLink="icon">icon</a></li>
+      <li><a routerLink="tree-view">tree view</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>

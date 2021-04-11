@@ -39,6 +39,10 @@ export const DEV_APP_ROUTES: Routes = [
         path        : 'icon',
         loadChildren: '/icon/dev-icon.module#DevIconModule'
       },
+      {
+        path        : 'tree-view',
+        loadChildren: '/tree-view/dev-tree-view.module#DevTreeViewModule'
+      }
     ]
   },
 

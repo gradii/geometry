@@ -13,9 +13,11 @@ import { TreeNodeWrapperComponent } from './src/components/tree-node-wrapper/tre
 import { TreeNodeComponent } from './src/components/tree-node/tree-node.component';
 import { TreeViewportComponent } from './src/components/tree-viewport/tree-viewport.component';
 import { TreeComponent } from './src/components/tree/tree.component';
+export * from './src/models/index';
 import { TreeDragDirective } from './src/directives/tree-drag.directive';
 import { TreeDropDirective } from './src/directives/tree-drop.directive';
 import { TreeDraggingTargetService } from './src/services/tree-dragging-target.service';
+import { TreeViewModule } from './src/tree-view.module';
 import {
   TreeVirtualScroll,
   VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA
@@ -35,5 +37,6 @@ export {
   TreeDropDirective,
   TreeDraggingTargetService,
   TreeVirtualScroll,
+  TreeViewModule,
   VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA
 };

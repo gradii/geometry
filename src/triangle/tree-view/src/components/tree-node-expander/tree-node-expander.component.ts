@@ -21,7 +21,7 @@ import { TreeEvent, TreeNode, TreeUIOptions } from '../../models';
 @Component({
   selector       : 'ngx-tree-node-expander',
   templateUrl    : './tree-node-expander.component.html',
-  styleUrls      : ['./tree-node-expander.component.scss'],
+  styleUrls      : ['../../../style/components/tree-node-expander.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TreeNodeExpanderComponent implements OnInit, OnDestroy {

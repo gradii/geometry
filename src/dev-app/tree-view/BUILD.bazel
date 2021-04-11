@@ -1,0 +1,24 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "tree-view",
+    srcs = glob(["**/*.ts"]),
+    assets = [
+        "dev-tree-view.html",
+        ":dev_tree_view_scss",
+    ],
+    deps = [
+        "//src/triangle/tree-view",
+        "//src/triangle/core",
+
+        "@npm//@angular/common",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_tree_view_scss",
+    src = "dev-tree-view.scss",
+)

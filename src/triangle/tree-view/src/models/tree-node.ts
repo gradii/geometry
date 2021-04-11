@@ -5,10 +5,6 @@
  */
 
 import { ElementRef } from '@angular/core';
-import first from 'lodash-es/first';
-import last from 'lodash-es/last';
-import pullAt from 'lodash-es/pullAt';
-import without from 'lodash-es/without';
 import { TREE_EVENTS } from '../constants/events';
 import { DragAndDropEvent, TreeEvent } from './events';
 import { TreeModel } from './tree-model';
@@ -199,7 +195,7 @@ export class TreeNode {
   getFirstChild(skipHidden = false) {
     const children = skipHidden ? this.visibleChildren : this.children;
 
-    return first(children || []);
+    return (children || [])[0];
   }
 
   /**
@@ -209,7 +205,8 @@ export class TreeNode {
   getLastChild(skipHidden = false) {
     const children = skipHidden ? this.visibleChildren : this.children;
 
-    return last(children || []);
+    const target = (children || []);
+    return target[target.length-1]
   }
 
   /**
@@ -465,8 +462,8 @@ export class TreeNode {
   }
 
   removeChild(node: TreeNode) {
-    pullAt(this.getField('children'), node.index);
-    this.children = without(this.children, node);
+    this.getField('children').splice( node.index, 1);
+    this.children = this.children.filter(it=> it !== node);
 
     this.reCalcChildrenIndices(0);
 

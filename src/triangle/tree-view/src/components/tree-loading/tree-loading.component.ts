@@ -10,7 +10,7 @@ import { TreeNode } from '../../models';
 @Component({
   selector       : 'ngx-tree-loading',
   templateUrl    : './tree-loading.component.html',
-  styleUrls      : ['./tree-loading.component.scss'],
+  styleUrls      : ['../../../style/components/tree-loading.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TreeLoadingComponent {

@@ -27,7 +27,7 @@ export const EXPANSION_PANEL_ANIMATION_TIMING = '225ms cubic-bezier(0.4,0.0,0.2,
 @Component({
   selector       : 'ngx-tree-node-children',
   templateUrl    : './tree-node-children.component.html',
-  styleUrls      : ['./tree-node-children.component.scss'],
+  styleUrls      : ['../../../style/components/tree-node-children.component.css'],
   animations     : [
     trigger('expandAnimation', [
       transition(':enter', [

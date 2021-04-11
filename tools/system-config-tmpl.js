@@ -106,6 +106,8 @@ function setupLocalReleasePackages() {
   // Configure all primary entry-points.
   configureEntryPoint('triangle');
 
+  configureEntryPoint('check-type');
+
   // Configure all secondary entry-points.
   TRIANGLE_PACKAGES.forEach(function(pkgName) {
     configureEntryPoint('triangle', pkgName);
