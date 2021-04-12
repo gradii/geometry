@@ -17,7 +17,7 @@ export * from './src/models/index';
 import { TreeDragDirective } from './src/directives/tree-drag.directive';
 import { TreeDropDirective } from './src/directives/tree-drop.directive';
 import { TreeDraggingTargetService } from './src/services/tree-dragging-target.service';
-import { TreeViewModule } from './src/tree-view.module';
+import { TriTreeViewModule } from './src/tree-view.module';
 import {
   TreeVirtualScroll,
   VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA
@@ -37,6 +37,6 @@ export {
   TreeDropDirective,
   TreeDraggingTargetService,
   TreeVirtualScroll,
-  TreeViewModule,
+  TriTreeViewModule,
   VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA
 };

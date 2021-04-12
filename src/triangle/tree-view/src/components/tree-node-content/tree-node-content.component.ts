@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component, HostBinding, Input, TemplateRef } f
 import { TreeNode, TreeUIOptions } from '../../models';
 
 @Component({
-  selector       : 'ngx-tree-node-content',
+  selector       : 'tri-tree-node-content',
   templateUrl    : './tree-node-content.component.html',
   styleUrls      : ['../../../style/components/tree-node-content.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

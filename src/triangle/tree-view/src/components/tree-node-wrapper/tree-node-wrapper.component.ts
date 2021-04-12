@@ -18,7 +18,7 @@ import { TreeNode, TreeTemplateMapping, TreeUIOptions } from '../../models';
 import { TreeVirtualScroll } from '../../services/tree-virtual-scroll.service';
 
 @Component({
-  selector       : 'ngx-tree-node-wrapper',
+  selector       : 'tri-tree-node-wrapper',
   templateUrl    : './tree-node-wrapper.component.html',
   styleUrls      : ['../../../style/components/tree-node-wrapper.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

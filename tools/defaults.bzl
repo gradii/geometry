@@ -166,7 +166,6 @@ def karma_web_test_suite(name, **kwargs):
             # Note: when changing the browser names here, also update the "yarn test"
             # script to reflect the new browser names.
             "@npm_angular_dev_infra_private//browsers/chromium:chromium",
-            "@npm_angular_dev_infra_private//browsers/firefox:firefox",
         ]
 
     for opt_name in kwargs.keys():
@@ -210,8 +209,9 @@ def ng_web_test_suite(deps = [], static_css = [], bootstrap = [], **kwargs):
     # reduces the amount of setup that is needed to create a test suite Bazel target. Note that the
     # prebuilt theme will be also added to CDK test suites but shouldn't affect anything.
     static_css = static_css + [
-        "//src/material/prebuilt-themes:indigo-pink",
-        "//src/material-experimental/mdc-theming:indigo_pink_prebuilt",
+        # 2021-04-13 modified
+        #"//src/material/prebuilt-themes:indigo-pink",
+        #"//src/material-experimental/mdc-theming:indigo_pink_prebuilt",
     ]
 
     # Workaround for https://github.com/bazelbuild/rules_typescript/issues/301

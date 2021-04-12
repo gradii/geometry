@@ -39,23 +39,15 @@ import { VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA } from './services/tree-virtual-scroll
     TreeDropDirective,
   ],
   exports     : [
-    TreeLoadingComponent,
-    TreeNodeComponent,
     TreeComponent,
-    TreeNodeExpanderComponent,
-    TreeNodeWrapperComponent,
-    TreeNodeChildrenComponent,
-    TreeNodeContentComponent,
-    TreeViewportComponent,
-    TreeNodeDropSlotComponent,
     TreeDragDirective,
     TreeDropDirective,
   ],
 })
-export class TreeViewModule {
-  static forRoot(): ModuleWithProviders<TreeViewModule> {
+export class TriTreeViewModule {
+  static forRoot(): ModuleWithProviders<TriTreeViewModule> {
     return {
-      ngModule : TreeViewModule,
+      ngModule : TriTreeViewModule,
       providers: [
         TreeDraggingTargetService,
         {

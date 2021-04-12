@@ -2,35 +2,52 @@ import { Component } from "@angular/core";
 import { TREE_ACTIONS, TreeDataOptions, TreeNode, TreeUIOptions } from "@gradii/triangle/tree-view";
 
 @Component({
-  selector: 'tri-demo-tree-view-basic',
-  template: `
+  selector : 'tri-demo-tree-view-virtual-scroll',
+  template : `
     <div>
-      hello tree-view
+      <p>
+        hello tree-view
+      </p>
 
-      <tri-tree-view
-        [enableAnimation]="true"
-        [nodes]="nodes"
-        [dataOptions]="customOptions"
-        [useVirtualScroll]="customOptions.useVirtualScroll"
-        [allowDrag]="customOptions.allowDrag"
-        [allowDrop]="customOptions.allowDrop"
-        [levelPadding]="customOptions.levelPadding">
-        <ng-template #treeNodeTemplate let-node="node">
-          <span title="{{node.data.subTitle}}">{{ node.data.name }}</span>
-        </ng-template>
-      </tri-tree-view>
+      <div class="demo-virtual-scroll">
+        <tri-tree-view
+          [enableAnimation]="true"
+          [nodes]="nodes"
+          [dataOptions]="customOptions"
+          [useVirtualScroll]="customOptions.useVirtualScroll"
+          [allowDrag]="customOptions.allowDrag"
+          [allowDrop]="customOptions.allowDrop"
+          [levelPadding]="customOptions.levelPadding">
+          <ng-template #treeNodeTemplate let-node="node">
+            <span title="{{node.data.subTitle}}">{{ node.data.name }}</span>
+          </ng-template>
+        </tri-tree-view>
+      </div>
 
     </div>
   `,
+  styles   : [
+    `
+      tri-tree-view {
+        display       : block;
+        height        : 400px;
+        width         : 300px;
+        border-radius : 4px;
+        outline       : 1px solid #cbcbcb;
+      }
+
+    `
+  ],
+  styleUrls: ['./tri-demo-tree-view-virtual-scroll.component.css']
 })
-export class TriDemoTreeViewBasicComponent {
+export class TriDemoTreeViewVirtualScrollComponent {
   nodes: any[];
 
   customOptions: TreeUIOptions & TreeDataOptions = {
     // displayField: 'subTitle',
     isExpandedField : 'expanded',
     idField         : 'uuid',
-    useVirtualScroll: false,
+    useVirtualScroll: true,
     allowDrag       : false,
     allowDrop       : false,
     actionMapping   : {

@@ -2,7 +2,7 @@
   display : block;
 }
 
-ngx-tree-viewport {
+tri-tree-viewport {
   position : relative;
 
   &.disable-events-on-scroll .tree-root ::ng-deep * {

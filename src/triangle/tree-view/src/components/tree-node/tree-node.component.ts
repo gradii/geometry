@@ -19,7 +19,7 @@ import { merge, Subscription } from 'rxjs';
 import { TreeEvent, TreeNode, TreeTemplateMapping, TreeUIOptions } from '../../models';
 
 @Component({
-  selector       : 'ngx-tree-node',
+  selector       : 'tri-tree-node',
   templateUrl    : './tree-node.component.html',
   styleUrls      : ['../../../style/components/tree-node.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

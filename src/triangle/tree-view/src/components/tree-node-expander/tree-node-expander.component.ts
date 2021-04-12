@@ -19,7 +19,7 @@ import { merge, Subscription } from 'rxjs';
 import { TreeEvent, TreeNode, TreeUIOptions } from '../../models';
 
 @Component({
-  selector       : 'ngx-tree-node-expander',
+  selector       : 'tri-tree-node-expander',
   templateUrl    : './tree-node-expander.component.html',
   styleUrls      : ['../../../style/components/tree-node-expander.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush

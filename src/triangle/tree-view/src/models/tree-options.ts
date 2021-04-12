@@ -197,7 +197,19 @@ export interface TreeDataOptions {
  * @param rawOpts
  */
 export function createTreeDataOptions(rawOpts: TreeDataOptions = {}): TreeDataOptions {
-  return {...defaultDataOptions, ...rawOpts};
+  return {
+    ...defaultDataOptions, ...rawOpts,
+    actionMapping: {
+      mouse: {
+        ...(defaultDataOptions.actionMapping.mouse || {}),
+        ...(rawOpts.actionMapping.mouse || {})
+      },
+      keys : {
+        ...(defaultDataOptions.actionMapping.keys || {}),
+        ...(rawOpts.actionMapping.keys || {})
+      }
+    }
+  };
 }
 
 // export const TREE_DATA_OPTIONS = new InjectionToken('TREE_DATA_OPTIONS')

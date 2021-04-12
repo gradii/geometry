@@ -7,19 +7,32 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { TreeViewModule } from '@gradii/triangle/tree-view';
+import { TriTreeViewModule } from '@gradii/triangle/tree-view';
 import { DevTreeViewComponent } from './dev-tree-view.component';
 import { TriDemoTreeViewBasicComponent } from './tri-demo-tree-view/tri-demo-tree-view-basic.component';
+import { TriDemoTreeViewVirtualScrollComponent } from './tri-demo-tree-view/tri-demo-tree-view-virtual-scroll.component';
+import { TriDemoTreeViewDragDropComponent } from './tri-demo-tree-view/tri-demo-tree-view-drag-drop.component';
 
 @NgModule({
   imports     : [
     CommonModule,
-    TreeViewModule.forRoot(),
+    TriTreeViewModule.forRoot(),
 
     RouterModule.forChild([
       {
         path: '', component: DevTreeViewComponent, children: [
-          {path: 'tri-demo-tree-view-basic', component: TriDemoTreeViewBasicComponent},
+          {
+            path     : 'tri-demo-tree-view-basic',
+            component: TriDemoTreeViewBasicComponent
+          },
+          {
+            path     : 'tri-demo-tree-view-virtual-scroll',
+            component: TriDemoTreeViewVirtualScrollComponent
+          },
+          {
+            path     : 'tri-demo-tree-view-drag-drop',
+            component: TriDemoTreeViewDragDropComponent
+          },
         ]
       }
     ])
@@ -28,8 +41,9 @@ import { TriDemoTreeViewBasicComponent } from './tri-demo-tree-view/tri-demo-tre
     DevTreeViewComponent,
 
     TriDemoTreeViewBasicComponent,
+    TriDemoTreeViewVirtualScrollComponent,
+    TriDemoTreeViewDragDropComponent
   ]
 })
 export class DevTreeViewModule {
-
 }

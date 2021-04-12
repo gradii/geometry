@@ -1,12 +1,11 @@
-import { Component } from "@angular/core";
-import { TREE_ACTIONS, TreeDataOptions, TreeNode, TreeUIOptions } from "@gradii/triangle/tree-view";
+import {TREE_ACTIONS, TreeDataOptions, TreeNode, TreeUIOptions} from '@gradii/triangle/tree-view';
+import { Component } from '@angular/core';
+
 
 @Component({
-  selector: 'tri-demo-tree-view-basic',
+  selector: 'tri-demo-tree-view-drag-drop',
   template: `
     <div>
-      hello tree-view
-
       <tri-tree-view
         [enableAnimation]="true"
         [nodes]="nodes"
@@ -21,9 +20,9 @@ import { TREE_ACTIONS, TreeDataOptions, TreeNode, TreeUIOptions } from "@gradii/
       </tri-tree-view>
 
     </div>
-  `,
+  `
 })
-export class TriDemoTreeViewBasicComponent {
+export class TriDemoTreeViewDragDropComponent {
   nodes: any[];
 
   customOptions: TreeUIOptions & TreeDataOptions = {
@@ -31,8 +30,8 @@ export class TriDemoTreeViewBasicComponent {
     isExpandedField : 'expanded',
     idField         : 'uuid',
     useVirtualScroll: false,
-    allowDrag       : false,
-    allowDrop       : false,
+    allowDrag       : true,
+    allowDrop       : true,
     actionMapping   : {
       mouse: {
         dblClick: TREE_ACTIONS.TOGGLE_EXPANDED,
@@ -96,7 +95,7 @@ export class TriDemoTreeViewBasicComponent {
       this.nodes.push({
         name    : `rootDynamic${i}`,
         subTitle: `root created dynamically ${i}`,
-        children: new Array((i + 1) * 500).fill(null).map((item, n) => ({
+        children: new Array((i + 1) * 10).fill(null).map((item, n) => ({
           name       : `childDynamic${i}.${n}`,
           subTitle   : `child created dynamically ${i}`,
           hasChildren: false,
@@ -104,4 +103,5 @@ export class TriDemoTreeViewBasicComponent {
       });
     }
   }
+
 }

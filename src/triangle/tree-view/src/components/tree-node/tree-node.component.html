@@ -1,5 +1,5 @@
 <ng-template [ngIf]="!templates.treeNodeFullTemplate">
-  <ngx-tree-node-wrapper (click)="node.mouseAction('click', $event)"
+  <tri-tree-node-wrapper (click)="node.mouseAction('click', $event)"
                          (contextmenu)="node.mouseAction('contextMenu', $event)"
                          (dblclick)="node.mouseAction('dblClick', $event)"
                          (ngxTreeDrop)="node.onDrop($event)"
@@ -16,7 +16,7 @@
                          [templates]="templates"
                          [treeAllowDrop]="allowDrop"
                          [treeDragEnabled]="allowDrag(node)">
-  </ngx-tree-node-wrapper>
+  </tri-tree-node-wrapper>
 
   <ngx-tree-node-children *ngIf="node.isExpanded && node.hasVisibleChildren"
                           [children]="node.visibleChildren"

@@ -28,7 +28,7 @@ import { TreeVirtualScroll } from '../../services/tree-virtual-scroll.service';
 const DISABLE_ON_SCROLL_CLASS = 'disable-events-on-scroll';
 
 @Component({
-  selector       : 'ngx-tree-viewport',
+  selector       : 'tri-tree-viewport',
   templateUrl    : './tree-viewport.component.html',
   styleUrls      : ['../../../style/components/tree-viewport.component.css'],
   providers      : [TreeVirtualScroll],

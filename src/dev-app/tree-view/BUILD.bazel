@@ -8,6 +8,7 @@ ng_module(
     assets = [
         "dev-tree-view.html",
         ":dev_tree_view_scss",
+        ":tri_demo_tree_view_virtual_scroll_component_scss",
     ],
     deps = [
         "//src/triangle/tree-view",
@@ -21,4 +22,9 @@ ng_module(
 sass_binary(
     name = "dev_tree_view_scss",
     src = "dev-tree-view.scss",
+)
+
+sass_binary(
+    name = "tri_demo_tree_view_virtual_scroll_component_scss",
+    src = "tri-demo-tree-view/tri-demo-tree-view-virtual-scroll.component.scss",
 )

@@ -111,16 +111,20 @@ bazel_toolchains_repositories()
 
 load("@bazel_toolchains//rules:rbe_repo.bzl", "rbe_autoconfig")
 
-rbe_autoconfig(
-    name = "rbe_default",
-    # Need to specify a base container digest in order to ensure that we can use the checked-in
-    # platform configurations for the "ubuntu16_04" image. Otherwise the autoconfig rule would
-    # need to pull the image and run it in order determine the toolchain configuration.
-    # See: https://github.com/bazelbuild/bazel-toolchains/blob/master/configs/ubuntu16_04_clang/versions.bzl#L9
-    base_container_digest = "sha256:f6568d8168b14aafd1b707019927a63c2d37113a03bcee188218f99bd0327ea1",
-    digest = "sha256:dddaaddbe07a61c2517f9b08c4977fc23c4968fcb6c0b8b5971e955d2de7a961",
-    registry = "marketplace.gcr.io",
-    # We can't use the default "ubuntu16_04" RBE image provided by the autoconfig because we need
-    # a specific Linux kernel that comes with "libx11" in order to run headless browser tests.
-    repository = "google/rbe-ubuntu16-04-webtest",
-)
+# rbe_autoconfig(
+#     name = "rbe_default",
+#     # Need to specify a base container digest in order to ensure that we can use the checked-in
+#     # platform configurations for the "ubuntu16_04" image. Otherwise the autoconfig rule would
+#     # need to pull the image and run it in order determine the toolchain configuration.
+#     # See: https://github.com/bazelbuild/bazel-toolchains/blob/master/configs/ubuntu16_04_clang/versions.bzl#L9
+#     base_container_digest = "sha256:f6568d8168b14aafd1b707019927a63c2d37113a03bcee188218f99bd0327ea1",
+#     digest = "sha256:dddaaddbe07a61c2517f9b08c4977fc23c4968fcb6c0b8b5971e955d2de7a961",
+#     registry = "marketplace.gcr.io",
+#     # We can't use the default "ubuntu16_04" RBE image provided by the autoconfig because we need
+#     # a specific Linux kernel that comes with "libx11" in order to run headless browser tests.
+#     repository = "google/rbe-ubuntu16-04-webtest",
+# )
+
+load("@npm_angular_dev_infra_private//browsers:browser_repositories.bzl", _dev_infra_browser_repositories = "browser_repositories")
+
+_dev_infra_browser_repositories()

@@ -100,10 +100,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "src/dev-app/tsconfig.json",
-              "src/dev-app/tsconfig.json"
-            ],
+            "tsConfig": ["src/dev-app/tsconfig.json"],
             "exclude": ["**/node_modules/**", "!src/dev-app/**/*"]
           }
         },
@@ -112,6 +109,56 @@
           "outputs": ["coverage/src/dev-app"],
           "options": {
             "jestConfig": "src/dev-app/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "annotation": {
+      "projectType": "library",
+      "root": "src/annotation",
+      "sourceRoot": "src/annotation/src",
+      "prefix": "applications",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "src/annotation/src/**/*.ts",
+              "src/annotation/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/src/annotation"],
+          "options": {
+            "jestConfig": "src/annotation/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "check-type": {
+      "projectType": "library",
+      "root": "src/check-type",
+      "sourceRoot": "src/check-type/src",
+      "prefix": "applications",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "src/check-type/src/**/*.ts",
+              "src/check-type/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/src/check-type"],
+          "options": {
+            "jestConfig": "src/check-type/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -158,11 +205,18 @@
       }
     },
     "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
       "unitTestRunner": "jest",
       "e2eTestRunner": "cypress"
     },
     "@nrwl/angular:library": {
+      "style": "scss",
+      "linter": "eslint",
       "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "scss"
     }
   },
   "defaultProject": "diagram-demo"
