@@ -52,7 +52,7 @@
     "@angular/common": "11.0.5",
     "@angular/compiler": "11.0.5",
     "@angular/core": "11.0.5",
-    "@angular/dev-infra-private": "https://github.com/angular/dev-infra-private-builds.git#71d57c29a10c03d07f889581608e3a2315a1dc7e",
+    "@angular/dev-infra-private": "github:angular/dev-infra-private-builds.git#71d57c29a10c03d07f889581608e3a2315a1dc7e",
     "@angular/elements": "11.0.5",
     "@angular/forms": "11.0.5",
     "@angular/platform-browser": "11.0.5",
