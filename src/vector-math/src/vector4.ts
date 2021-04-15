@@ -15,12 +15,7 @@ import { EPSILON } from './common';
 
 export class Vector4 {
   public static zero = new Vector4([0, 0, 0, 1]);
-  // tslint:disable-next-line
-  public sub = this.subtract.bind(this);
-  // tslint:disable-next-line
-  public mul = this.multiply.bind(this);
-  // tslint:disable-next-line
-  public div = this.divide.bind(this);
+
   private values = new Float32Array(4);
 
   constructor(values?: number[]);
@@ -333,6 +328,13 @@ export class Vector4 {
     return dest;
   }
 
+  public exactEquals(vector: Vector4): boolean {
+    return this.x === vector.x &&
+      this.y === vector.y &&
+      this.z === vector.z &&
+      this.w === vector.w;
+  }
+
   public equals(vector: Vector4, threshold = EPSILON): boolean {
     if (Math.abs(this.x - vector.x) > threshold) {
       return false;
@@ -359,9 +361,9 @@ export class Vector4 {
 
   public squaredLength(): number {
     const x = this.x,
-      y = this.y,
-      z = this.z,
-      w = this.w;
+          y = this.y,
+          z = this.z,
+          w = this.w;
 
     return (x * x + y * y + z * z + w * w);
   }
@@ -402,17 +404,31 @@ export class Vector4 {
     return this;
   }
 
-  public scale(value: number, dest: Vector4 = null): Vector4 {
-    if (!dest) {
-      dest = this;
-    }
+  public ceil(): Vector4 {
+    this.x = Math.ceil(this.x);
+    this.y = Math.ceil(this.y);
+    this.z = Math.ceil(this.z);
+    this.w = Math.ceil(this.w);
 
-    dest.x *= value;
-    dest.y *= value;
-    dest.z *= value;
-    dest.w *= value;
+    return this;
+  }
 
-    return dest;
+  public floor(): Vector4 {
+    this.x = Math.floor(this.x);
+    this.y = Math.floor(this.y);
+    this.z = Math.floor(this.z);
+    this.w = Math.floor(this.w);
+
+    return this;
+  }
+
+  public scale(value: number): Vector4 {
+    this.x *= value;
+    this.y *= value;
+    this.z *= value;
+    this.w *= value;
+
+    return this;
   }
 
   public normalize(): Vector4 {
@@ -440,4 +456,33 @@ export class Vector4 {
 
     return this;
   }
+
+  [Symbol.toPrimitive]() {
+    return [
+      this.values[0],
+      this.values[1],
+      this.values[2],
+      this.values[3],
+    ];
+  }
+
+  toArray() {
+    return this[Symbol.toPrimitive]();
+  }
+
+  toString() {
+    return `Vector4(${this.x}, ${this.y}, ${this.z}, ${this.w})`;
+  }
 }
+
+export interface Vector4 {
+  sub(vector: Vector4): Vector4;
+
+  mul(vector: Vector4): Vector4;
+
+  div(vector: Vector4): Vector4;
+}
+
+Vector4.prototype.sub = Vector4.prototype.subtract;
+Vector4.prototype.mul = Vector4.prototype.multiply;
+Vector4.prototype.div = Vector4.prototype.divide;

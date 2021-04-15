@@ -11,9 +11,8 @@
 import { EPSILON, equals, toRadian } from '../../src/common';
 
 describe('matrix', () => {
-  let result: any;
-
   describe('toRadian', () => {
+    let result: any;
     beforeEach(() => {
       result = toRadian(180);
     });
@@ -42,3 +41,4 @@ describe('matrix', () => {
     });
   });
 });
+

@@ -1,3 +1,10 @@
+describe('empty', () => {
+  it('empty', ()=>{
+    expect(true).toBe(true)
+  })
+});
+
+
 // /**
 //  * @licence
 //  * Copyright (c) 2018 LinBo Len <linbolen@gradii.com>

@@ -12,12 +12,7 @@ export class Vector3 {
   public static up = new Vector3([0, 1, 0]);
   public static right = new Vector3([1, 0, 0]);
   public static forward = new Vector3([0, 0, 1]);
-  // tslint:disable-next-line
-  public sub = this.subtract.bind(this);
-  // tslint:disable-next-line
-  public mul = this.multiply.bind(this);
-  // tslint:disable-next-line
-  public div = this.divide.bind(this);
+
   private values = new Float32Array(3);
 
   constructor(values?: number[]);
@@ -98,20 +93,20 @@ export class Vector3 {
 
   public get squaredLength(): number {
     let x = this.values[0],
-      y = this.values[1],
-      z = this.values[2];
+        y = this.values[1],
+        z = this.values[2];
 
     return (x * x + y * y + z * z);
   }
 
   public static dot(vector: Vector3, vector2: Vector3): number {
     const x = vector.values[0],
-      y = vector.values[1],
-      z = vector.values[2];
+          y = vector.values[1],
+          z = vector.values[2];
 
     const x2 = vector2.x,
-      y2 = vector2.y,
-      z2 = vector2.z;
+          y2 = vector2.y,
+          z2 = vector2.z;
 
     return (x * x2 + y * y2 + z * z2);
   }
@@ -122,8 +117,8 @@ export class Vector3 {
     }
 
     const x = vector.values[0] - vector2.x,
-      y = vector.values[1] - vector2.y,
-      z = vector.values[2] - vector2.z;
+          y = vector.values[1] - vector2.y,
+          z = vector.values[2] - vector2.z;
 
     let length = Math.sqrt(x * x + y * y + z * z);
 
@@ -388,8 +383,8 @@ export class Vector3 {
 
   public distanceToSquared(vector: Vector3): number {
     const x = this.values[0] - vector.values[0],
-      y = this.values[1] - vector.values[1],
-      z = this.values[2] - vector.values[2];
+          y = this.values[1] - vector.values[1],
+          z = this.values[2] - vector.values[2];
 
     return (x * x + y * y + z * z);
   }
@@ -410,12 +405,12 @@ export class Vector3 {
 
   public cross(vector: Vector3): Vector3 {
     const x = vector.values[0],
-      y = vector.values[1],
-      z = vector.values[2];
+          y = vector.values[1],
+          z = vector.values[2];
 
     const x2 = this.values[0],
-      y2 = this.values[1],
-      z2 = this.values[2];
+          y2 = this.values[1],
+          z2 = this.values[2];
 
     this.values[0] = y * z2 - z * y2;
     this.values[1] = z * x2 - x * z2;
@@ -426,12 +421,12 @@ export class Vector3 {
 
   public crossInto(vector: Vector3, out: Vector3): Vector3 {
     const x = vector.values[0],
-      y = vector.values[1],
-      z = vector.values[2];
+          y = vector.values[1],
+          z = vector.values[2];
 
     const x2 = this.values[0],
-      y2 = this.values[1],
-      z2 = this.values[2];
+          y2 = this.values[1],
+          z2 = this.values[2];
 
     out.values[0] = y * z2 - z * y2;
     out.values[1] = z * x2 - x * z2;
@@ -445,3 +440,18 @@ export class Vector3 {
   }
 
 }
+
+export interface Vector3 {
+  sub(vector: Vector3): Vector3;
+
+  mul(vector: Vector3): Vector3;
+
+  div(vector: Vector3): Vector3;
+}
+
+// tslint:disable-next-line
+Vector3.prototype.sub = Vector3.prototype.subtract;
+// tslint:disable-next-line
+Vector3.prototype.mul = Vector3.prototype.multiply;
+// tslint:disable-next-line
+Vector3.prototype.div = Vector3.prototype.divide;
