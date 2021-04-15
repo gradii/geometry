@@ -47,7 +47,7 @@ export class TriDemoTreeViewCheckboxComponent {
       },
     },
     levelPadding(node: TreeNode) {
-      return (20 + 15 * (node.level - 1)) + 'px';
+      return (8 + 8 * (node.level - 1)) + 'px';
     },
   };
 
