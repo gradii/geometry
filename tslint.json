@@ -123,8 +123,7 @@
             "!host": "\\[class\\]",
             "!preserveWhitespaces": ".*",
             "!moduleId": ".*",
-            "changeDetection": "\\.OnPush$",
-            "encapsulation": "\\.None$"
+            "changeDetection": "\\.OnPush$"
           }
         },
         "Directive": {

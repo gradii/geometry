@@ -22,7 +22,7 @@ import { TreeEvent, TreeNode, TreeTemplateMapping, TreeUIOptions } from '../../m
   selector       : 'tri-tree-node',
   templateUrl    : './tree-node.component.html',
   styleUrls      : ['../../../style/components/tree-node.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
 export class TreeNodeComponent implements OnInit, OnDestroy {
   @Input() node: TreeNode;

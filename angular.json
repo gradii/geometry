@@ -163,6 +163,56 @@
           }
         }
       }
+    },
+    "date-math": {
+      "projectType": "library",
+      "root": "src/date-math",
+      "sourceRoot": "src/date-math/src",
+      "prefix": "applications",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "src/date-math/src/**/*.ts",
+              "src/date-math/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/src/date-math"],
+          "options": {
+            "jestConfig": "src/date-math/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "vector-math": {
+      "projectType": "library",
+      "root": "src/vector-math",
+      "sourceRoot": "src/vector-math/src",
+      "prefix": "applications",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "src/vector-math/src/**/*.ts",
+              "src/vector-math/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/src/vector-math"],
+          "options": {
+            "jestConfig": "src/vector-math/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

@@ -4,19 +4,24 @@
                           [options]="options"
                           [template]="templates.expanderTemplate"></tri-tree-node-expander>
 
-  <tri-tree-node-content [index]="index"
-                         [node]="node"
+  <tri-pseudo-checkbox *ngIf="options.selectionType === 'multiple' || options.selectionType === 'single'"
+                       [ngStyle]="{margin: '0 4px'}"
+                       (click)="toggleChecked($event)"
+                       [state]="node._indeterminate ? 'indeterminate' : node._checked ? 'checked' : 'unchecked'"
+  ></tri-pseudo-checkbox>
+  <tri-tree-node-content [node]="node"
+                         [index]="index"
                          [options]="options"
                          [template]="templates.treeNodeTemplate">
   </tri-tree-node-content>
 </ng-template>
 
-<ng-container [ngTemplateOutletContext]="{
+<ng-container [ngTemplateOutlet]="templates.treeNodeWrapperTemplate"
+              [ngTemplateOutletContext]="{
                 $implicit: null,
                 node: node,
                 index: index,
                 options: options,
                 templates: templates
-              }"
-              [ngTemplateOutlet]="templates.treeNodeWrapperTemplate">
+              }">
 </ng-container>

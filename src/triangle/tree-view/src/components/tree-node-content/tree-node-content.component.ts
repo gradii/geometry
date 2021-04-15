@@ -11,7 +11,7 @@ import { TreeNode, TreeUIOptions } from '../../models';
   selector       : 'tri-tree-node-content',
   templateUrl    : './tree-node-content.component.html',
   styleUrls      : ['../../../style/components/tree-node-content.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
 export class TreeNodeContentComponent {
   @Input() options: TreeUIOptions;

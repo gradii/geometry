@@ -128,6 +128,8 @@ export interface TreeUIOptions {
    */
   auditViewportUpdate?: number;
 
+  selectionType?: 'none' | 'multiple' | 'single';
+
   /**
    * Supply function for getting a custom class for the node component
    */
@@ -141,7 +143,7 @@ export interface RawTreeUIOptions {
   useVirtualScroll?: boolean;
   referenceItemHeight?: number;
   auditViewportUpdate?: number;
-
+  selectionType?: 'none' | 'multiple' | 'single';
   nodeClass?(node: TreeNode): string;
 }
 

@@ -27,6 +27,8 @@
     "diagram-demo": { "tags": [] },
     "dev-app": { "tags": [] },
     "annotation": { "tags": ["pkg"] },
-    "check-type": { "tags": ["pkg"] }
+    "check-type": { "tags": ["pkg"] },
+    "date-math": { "tags": ["pkg"] },
+    "vector-math": { "tags": ["pkg"] }
   }
 }

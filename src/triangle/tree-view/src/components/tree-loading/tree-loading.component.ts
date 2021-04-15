@@ -11,7 +11,7 @@ import { TreeNode } from '../../models';
   selector       : 'tri-tree-loading',
   templateUrl    : './tree-loading.component.html',
   styleUrls      : ['../../../style/components/tree-loading.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
 export class TreeLoadingComponent {
   @Input() template: TemplateRef<any>;

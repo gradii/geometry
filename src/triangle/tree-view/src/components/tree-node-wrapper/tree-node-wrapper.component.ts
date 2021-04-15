@@ -12,7 +12,7 @@ import {
   HostBinding,
   Input,
   OnDestroy,
-  OnInit,
+  OnInit
 } from '@angular/core';
 import { TreeNode, TreeTemplateMapping, TreeUIOptions } from '../../models';
 import { TreeVirtualScroll } from '../../services/tree-virtual-scroll.service';
@@ -21,7 +21,6 @@ import { TreeVirtualScroll } from '../../services/tree-virtual-scroll.service';
   selector       : 'tri-tree-node-wrapper',
   templateUrl    : './tree-node-wrapper.component.html',
   styleUrls      : ['../../../style/components/tree-node-wrapper.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TreeNodeWrapperComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() node: TreeNode;
@@ -31,7 +30,23 @@ export class TreeNodeWrapperComponent implements OnInit, OnDestroy, AfterViewIni
 
   @HostBinding('class.tree-node-wrapper') className = true;
 
-  constructor(private virtualScroll: TreeVirtualScroll, private elementRef: ElementRef) {
+  constructor(private virtualScroll: TreeVirtualScroll,
+              private elementRef: ElementRef
+  ) {
+  }
+
+  toggleChecked(event: MouseEvent) {
+    event.preventDefault();
+
+    if (event.button === 0) {
+
+      // this.
+      // setTimeout(() => {
+      this.node.isChecked = !this.node.isChecked;
+      // })
+      // this.node.treeModel.
+      // this.cdRef.markForCheck()
+    }
   }
 
   ngOnInit() {

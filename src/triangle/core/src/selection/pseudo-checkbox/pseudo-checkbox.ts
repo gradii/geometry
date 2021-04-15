@@ -45,6 +45,7 @@ export type TriPseudoCheckboxState = 'unchecked' | 'checked' | 'indeterminate';
     '[class.tri-pseudo-checkbox-disabled]'     : 'disabled',
     '[class._tri-animation-noopable]'          : '_animationMode === "NoopAnimations"',
   },
+  styleUrls: ['./pseudo-checkbox.css']
 })
 export class PseudoCheckbox {
   /** Display state of the checkbox. */

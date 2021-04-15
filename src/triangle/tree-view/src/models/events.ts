@@ -10,6 +10,7 @@ export interface TreeEvent {
   eventName: string;
   node?: TreeNode;
   isExpanded?: boolean;
+  isSelected?: boolean;
   to?: { parent: TreeNode; index: number };
 }
 

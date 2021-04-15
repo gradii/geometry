@@ -71,9 +71,12 @@ export class TreeComponent implements OnChanges, OnDestroy {
   @Input() nodeClass: (node: TreeNode) => string;
   @Input() enableAnimation = true;
   @Input() keepNodesExpanded = false;
+  @Input() selectionType: 'none' | 'multiple' | 'single' = 'none';
+
 
   @Output() expand = new EventEmitter<TreeEvent>();
   @Output() collapse = new EventEmitter<TreeEvent>();
+  @Output() selection = new EventEmitter<TreeEvent>();
   @Output() toggleExpander = new EventEmitter<TreeEvent>();
   @Output() activate = new EventEmitter<TreeEvent>();
   @Output() deactivate = new EventEmitter<TreeEvent>();
@@ -143,7 +146,8 @@ export class TreeComponent implements OnChanges, OnDestroy {
       'useVirtualScroll',
       'nodeClass',
       'referenceItemHeight',
-      'auditViewportUpdate'
+      'auditViewportUpdate',
+      'selectionType'
     ].forEach(it => {
       if ((it in changes) && !isBlank(changes[it].currentValue)) {
         uiOptions[it] = changes[it].currentValue;

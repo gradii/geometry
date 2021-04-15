@@ -10,6 +10,7 @@ import { TreeEvent } from '../models/index';
 export const TREE_EVENTS = {
   expand        : 'expand',
   collapse      : 'collapse',
+  selection     : 'selection',
   toggleExpander: 'toggleExpander',
   activate      : 'activate',
   deactivate    : 'deactivate',
@@ -29,6 +30,7 @@ export const TREE_EVENTS = {
 export interface EventsMap {
   expand: EventEmitter<TreeEvent>;
   collapse: EventEmitter<TreeEvent>;
+  selection: EventEmitter<TreeEvent>;
   toggleExpander: EventEmitter<TreeEvent>;
   /**
    * normally triggered by clicking or tabbing the enter key

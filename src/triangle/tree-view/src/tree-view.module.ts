@@ -20,10 +20,14 @@ import { TreeDragDirective } from './directives/tree-drag.directive';
 import { TreeDropDirective } from './directives/tree-drop.directive';
 import { TreeDraggingTargetService } from './services/tree-dragging-target.service';
 import { VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA } from './services/tree-virtual-scroll.service';
+import { TriPseudoCheckboxModule } from '@gradii/triangle/core';
+
 
 @NgModule({
   imports     : [
     CommonModule,
+
+    TriPseudoCheckboxModule
   ],
   declarations: [
     TreeLoadingComponent,
@@ -43,6 +47,8 @@ import { VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA } from './services/tree-virtual-scroll
     TreeDragDirective,
     TreeDropDirective,
   ],
+  providers: [
+  ]
 })
 export class TriTreeViewModule {
   static forRoot(): ModuleWithProviders<TriTreeViewModule> {

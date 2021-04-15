@@ -32,34 +32,59 @@ export class TreeNode {
   loadingChildren = false;
   elementRef: ElementRef | null;
 
-  constructor(
-    /**
-     * any - Pointer to the original data.
-     *
-     */
-    public data: any,
-    /**
-     * TreeNode - Parent node
-     */
-    public parent: TreeNode | null,
-    public treeModel: TreeModel,
-    /**
-     * index of the node inside its parent's children
-     */
-    public index: number,
-  ) {
-    // Make sure there's a unique id without overriding existing ids to work with immutable data structures
-    if (this.id === undefined || this.id === null) {
-      this.id = uuid();
-    }
+  _checked = false;
+  _indeterminate = false;
 
-    treeModel.addCache(this);
-    if (data[this.options.isExpandedField!]) {
-      treeModel.setExpandedNodeInPlace(this);
-    }
+  get isChecked() {
+    return !this._indeterminate && this._checked;
+  }
 
-    if (this.getField('children')) {
-      this.initChildren();
+  set isChecked(value: boolean) {
+    // this._checked = value
+    if (value !== this.isChecked) {
+      // trigger event
+      this.treeModel.fireEvent({eventName: 'selection'});
+      this.setChecked(value, true);
+    }
+  }
+
+  setChecked(value: boolean, updateParentNode: boolean) {
+    this._checked = value;
+    if (value === true) {
+      this._indeterminate = false;
+    }
+    if (this.hasChildren && Array.isArray(this.children)) {
+      this.children.forEach((child) => child.setChecked(value, false));
+    }
+    if (updateParentNode) {
+      if (this.parent) {
+        this.parent._updateCheckedState();
+      }
+    }
+  }
+
+  _updateCheckedState() {
+    let checkedCount = 0;
+    let unCheckedCount = 0;
+    let indeterminate = false;
+    if (this.hasChildren) {
+      this.children.forEach(it => {
+        if (it.isChecked) {
+          checkedCount++;
+        } else if (it._indeterminate) {
+          indeterminate = true;
+        } else {
+          unCheckedCount++;
+        }
+      });
+    }
+    if (checkedCount > 0 && unCheckedCount > 0) {
+      indeterminate = true;
+    }
+    this._indeterminate = indeterminate;
+    this._checked = !indeterminate && checkedCount > 0;
+    if (this.parent) {
+      this.parent._updateCheckedState();
     }
   }
 
@@ -145,6 +170,37 @@ export class TreeNode {
     return (this.children || []).filter((node) => !node.isHidden);
   }
 
+  constructor(
+    /**
+     * any - Pointer to the original data.
+     *
+     */
+    public data: any,
+    /**
+     * TreeNode - Parent node
+     */
+    public parent: TreeNode | null,
+    public treeModel: TreeModel,
+    /**
+     * index of the node inside its parent's children
+     */
+    public index: number,
+  ) {
+    // Make sure there's a unique id without overriding existing ids to work with immutable data structures
+    if (this.id === undefined || this.id === null) {
+      this.id = uuid();
+    }
+
+    treeModel.addCache(this);
+    if (data[this.options.isExpandedField!]) {
+      treeModel.setExpandedNodeInPlace(this);
+    }
+
+    if (this.getField('children')) {
+      this.initChildren();
+    }
+  }
+
   /**
    * Fire an event to the renderer of the tree (if it was registered)
    */
@@ -206,7 +262,7 @@ export class TreeNode {
     const children = skipHidden ? this.visibleChildren : this.children;
 
     const target = (children || []);
-    return target[target.length-1]
+    return target[target.length - 1];
   }
 
   /**
@@ -259,6 +315,9 @@ export class TreeNode {
         if (children) {
           this.setField('children', children);
           this.initChildren();
+          if (this.isChecked) {
+            this.children.forEach(it => it.setChecked(true, false));
+          }
         }
       })
       .then(() => {
@@ -462,8 +521,8 @@ export class TreeNode {
   }
 
   removeChild(node: TreeNode) {
-    this.getField('children').splice( node.index, 1);
-    this.children = this.children.filter(it=> it !== node);
+    this.getField('children').splice(node.index, 1);
+    this.children = this.children.filter(it => it !== node);
 
     this.reCalcChildrenIndices(0);
 
@@ -522,5 +581,5 @@ export class TreeNode {
 let _uuid = 0;
 
 function uuid() {
-  return `ngx-tid-${_uuid++}`;
+  return `tri-tree-view-id-${_uuid++}`;
 }
