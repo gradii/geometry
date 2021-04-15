@@ -11,28 +11,26 @@
 @use "../../core/style/variables" as v;
 @use "../../input/style/input-variables";
 
-$select-prefix-cls : #{ v.$tri-prefix}-select;
+$select-prefix-cls : #{v.$tri-prefix}-select;
 
-@mixin selection__clear($theme) {
-  $foreground : map.get($theme, foreground);
-  $background : map.get($theme, background);
+@mixin selection-clear-theme() {
+  $foreground : theme.$foreground;
+  $background : theme.$background;
 
-  $primary    : map.get($theme, primary);
-  $black      : map.get($theme, black);
+  $primary    : theme.$primary;
 
-  color       : theming.tri-color($background, disabled-color);
+  color       : theming.tri-color($foreground, disabled-color);
   background  : theming.tri-color($background, component-background);
   @at-root &:hover {
     color : theming.tri-color($foreground, text-color-secondary);
   }
 }
 
-@mixin tri-select-theme($theme) {
-  $foreground : map.get($theme, foreground);
-  $background : map.get($theme, background);
+@mixin tri-select-theme() {
+  $foreground : theme.$foreground;
+  $background : theme.$background;
 
-  $primary    : map.get($theme, primary);
-  $black      : map.get($theme, black);
+  $primary    : theme.$primary;
 
   @include import-once.import-once("component:selection") {
     .#{$select-prefix-cls} {
@@ -42,7 +40,7 @@ $select-prefix-cls : #{ v.$tri-prefix}-select;
 
       // arrow
       @at-root &-arrow {
-        color : theming.tri-color($background, disabled-color);
+        color : theming.tri-color($foreground, disabled-color);
       }
 
       @at-root &-selection {
@@ -61,7 +59,7 @@ $select-prefix-cls : #{ v.$tri-prefix}-select;
         }
 
         @at-root &__clear {
-          @include selection__clear();
+          @include selection-clear-theme();
         }
 
         @at-root &:hover #{&}__clear {
@@ -70,7 +68,7 @@ $select-prefix-cls : #{ v.$tri-prefix}-select;
       }
 
       @at-root &-disabled {
-        color : theming.tri-color($background, disabled-color);
+        color : theming.tri-color($foreground, disabled-color);
       }
 
       @at-root &-disabled #{&}-selection {
@@ -84,20 +82,20 @@ $select-prefix-cls : #{ v.$tri-prefix}-select;
       }
 
       @at-root &-disabled #{&}-selection--multiple #{&}-selection__choice {
-        color      : color.adjust(theming.tri-color($black), $alpha : 0.33);
+        color      : color.adjust(theming.tri-color($foreground, disabled), $alpha : 0.33);
         background : theming.tri-color($background, background-color-active);
       }
 
       @at-root &-disabled #{&}-selection__choice__remove {
-        color : theming.tri-color($background, disabled-color);
+        color : theming.tri-color($foreground, disabled-color);
         @at-root &:hover {
-          color : theming.tri-color($background, disabled-color);
+          color : theming.tri-color($foreground, disabled-color);
         }
       }
 
       @at-root &-selection__placeholder,
       &-search__field__placeholder {
-        color : theming.tri-color($theme, input-placeholder-color);
+        color : input-theme.$input-placeholder-color;
       }
 
       @at-root &-search--inline {
@@ -133,7 +131,7 @@ $select-prefix-cls : #{ v.$tri-prefix}-select;
 
       @at-root &-open {
         .#{$select-prefix-cls}-selection {
-          @include input-theme.tri-input-active-theme($theme);
+          @include input-theme.tri-input-active-theme();
         }
       }
 
@@ -180,10 +178,10 @@ $select-prefix-cls : #{ v.$tri-prefix}-select;
           }
 
           @at-root &-disabled {
-            color : theming.tri-color($background, disabled-color);
+            color : theming.tri-color($foreground, disabled-color);
 
             @at-root &:hover {
-              color            : theming.tri-color($background, disabled-color);
+              color            : theming.tri-color($foreground, disabled-color);
               background-color : theming.tri-color($background, component-background);
             }
           }
@@ -215,7 +213,7 @@ $select-prefix-cls : #{ v.$tri-prefix}-select;
           }
 
           &:hover .#{$select-prefix-cls}-selected-icon {
-            color : color.adjust($black, $alpha : 0.87);
+            color : color.adjust(#000, $alpha : 0.87);
           }
 
           &-selected .#{$select-prefix-cls}-selected-icon,

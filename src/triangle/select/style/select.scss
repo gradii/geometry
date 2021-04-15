@@ -7,17 +7,20 @@ $select-prefix-cls    : "#{mixins.$tri-prefix}-select";
 $select-option-height : 2rem;
 
 @mixin selection__clear() {
+  $size : mixins.$font-size-base;
   position       : absolute;
-  top            : 50%;
-  right          : 8px;
+  top            : 0;
+  bottom         : 0;
+  right          : 0.5em;
   z-index        : 1;
   display        : inline-block;
-  width          : 12px;
-  height         : 12px;
-  margin-top     : -6px;
-  font-size      : mixins.$font-size-base;
+  width          : $size;
+  height         : $size;
+  margin-top     : auto;
+  margin-bottom  : auto;
+  font-size      : $size;
   font-style     : normal;
-  line-height    : 12px;
+  line-height    : 1;
   text-align     : center;
   text-transform : none;
   cursor         : pointer;
@@ -78,7 +81,9 @@ $select-option-height : 2rem;
       transition    : all .3s mixins.$ease-in-out;
       user-select   : none;
 
-
+      @at-root &__clear {
+        @include selection__clear();
+      }
 
       @at-root &-selected-value {
         float         : left;

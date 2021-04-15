@@ -36,7 +36,7 @@ import { SelectService } from './select.service';
 })
 export class OptionContainerComponent implements OnDestroy, OnInit {
   @ViewChildren(OptionLiComponent) listOfOptionLiComponent: QueryList<OptionLiComponent>;
-  @ViewChild('dropdownUl', {static: false}) dropdownUl: ElementRef;
+  @ViewChild('dropdownUl', {static: true}) dropdownUl: ElementRef;
   @Input() notFoundContent: string;
   @Input() menuItemSelectedIcon: TemplateRef<void>;
   @Output() readonly scrollToBottom = new EventEmitter<void>();

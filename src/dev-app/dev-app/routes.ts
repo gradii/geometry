@@ -42,6 +42,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'tree-view',
         loadChildren: '/tree-view/dev-tree-view.module#DevTreeViewModule'
+      },
+      {
+        path        : 'select',
+        loadChildren: '/select/dev-select.module#DevSelectModule'
       }
     ]
   },

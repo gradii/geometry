@@ -1,0 +1,22 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "select",
+    srcs = glob(["**/*.ts"]),
+    assets = [
+        "dev-select.html",
+        ":dev_select_scss",
+    ],
+    deps = [
+        "//src/triangle/select",
+        "@npm//@angular/forms",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_select_scss",
+    src = "dev-select.scss",
+)
