@@ -1,15 +1,16 @@
-@import "../../core/style/mixins";
-@import "../../core/style/variables";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
+@use "../../core/themes/theme";
 
-$alert-prefix-cls : #{$tri-prefix}-alert;
+$alert-prefix-cls : #{v.$tri-prefix}-alert;
 
 .#{$alert-prefix-cls} {
-  @include reset-component();
+  @include mixins.reset-component();
   position      : relative;
   padding       : .5rem 2.375rem .5rem 1rem;
-  border-radius : $border-radius-base;
-  font-size     : $font-size-base;
-  line-height   : $line-height-base;
+  border-radius : v.$border-radius-base;
+  font-size     : v.$font-size-base;
+  line-height   : v.$line-height-base;
 
   > ul {
     margin-top    : 0;
@@ -21,13 +22,13 @@ $alert-prefix-cls : #{$tri-prefix}-alert;
   }
 
   @at-root &-icon {
-    font-size    : $font-size-lg;
+    font-size    : v.$font-size-lg;
     display      : inline-block;
     margin-right : 4px;
   }
 
   @at-root &-description {
-    font-size   : $font-size-base;
+    font-size   : v.$font-size-base;
     line-height : 1.25;
     display     : none;
   }
@@ -42,7 +43,7 @@ $alert-prefix-cls : #{$tri-prefix}-alert;
     overflow    : hidden;
     cursor      : pointer;
 
-    .#{$iconfont-css-prefix}-cross {
+    .#{v.$iconfont-css-prefix}-cross {
       transition : color .3s ease;
     }
   }
@@ -55,7 +56,7 @@ $alert-prefix-cls : #{$tri-prefix}-alert;
   @at-root &-with-description {
     padding       : 1rem 1rem 1rem 3.75rem;
     position      : relative;
-    border-radius : $border-radius-base;
+    border-radius : v.$border-radius-base;
     line-height   : 1.5;
   }
 
@@ -79,7 +80,7 @@ $alert-prefix-cls : #{$tri-prefix}-alert;
   }
 
   @at-root &-with-description #{&}-message {
-    font-size     : $font-size-lg;
+    font-size     : v.$font-size-lg;
     display       : block;
     margin-bottom : 4px;
   }
@@ -93,12 +94,12 @@ $alert-prefix-cls : #{$tri-prefix}-alert;
     margin           : 0;
     padding-top      : 0;
     padding-bottom   : 0;
-    transition       : all .3s $ease-in-out-circ;
+    transition       : all .3s v.$ease-in-out-circ;
     transform-origin : 50% 0;
   }
 
   @at-root &-slide-up-leave {
-    animation           : antAlertSlideUpOut .3s $ease-in-out-circ;
+    animation           : antAlertSlideUpOut .3s v.$ease-in-out-circ;
     animation-fill-mode : both;
   }
 

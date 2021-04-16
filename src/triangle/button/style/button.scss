@@ -1,13 +1,14 @@
-@import "../../core/style/mixins";
-@import "../../core/style/variables";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
+@use "../../core/themes/theme";
 
-$btn-prefix-cls         : "#{$tri-prefix}-btn";
+$btn-prefix-cls         : "#{v.$tri-prefix}-btn";
 
 
 // Buttons
-$btn-font-weight        : $font-weight-normal !default;
-$btn-border-radius-base : $border-radius-base !default;
-$btn-border-radius-sm   : $border-radius-base !default;
+$btn-font-weight        : v.$font-weight-normal !default;
+$btn-border-radius-base : v.$border-radius-base !default;
+$btn-border-radius-sm   : v.$border-radius-base !default;
 
 $btn-height-base        : 2rem !default;
 $btn-height-lg          : 2.25rem !default;
@@ -15,17 +16,17 @@ $btn-height-sm          : 1.75rem !default;
 
 $btn-padding-x-lg       : 1.125rem !default;
 $btn-padding-y-lg       : 0.375rem !default;
-$btn-font-size-lg       : $font-size-lg !default;
+$btn-font-size-lg       : v.$font-size-lg !default;
 $btn-line-height-lg     : 1 !default;
 
 $btn-padding-x-base     : 1rem !default;
 $btn-padding-y-base     : 0.3125rem !default;
-$btn-font-size-base     : $font-size-base !default;
+$btn-font-size-base     : v.$font-size-base !default;
 $btn-line-height-base   : 1 !default;
 
 $btn-padding-x-sm       : 0.5rem !default;
 $btn-padding-y-sm       : 0.25rem !default;
-$btn-font-size-sm       : $font-size-sm !default;
+$btn-font-size-sm       : v.$font-size-sm !default;
 $btn-line-height-sm     : 1 !default;
 
 //$btn-height-base        : 28px !default;
@@ -46,15 +47,15 @@ $btn-circle-size-sm     : $btn-height-sm !default;
 // Button styles
 // -----------------------------
 .#{$btn-prefix-cls} {
-  @include btn();
+  @include mixins.btn();
 
   @at-root &-circle,
   &-circle-outline {
-    @include btn-circle($btn-prefix-cls)
+    @include mixins.btn-circle($btn-prefix-cls)
   }
 
-  .#{$iconfont-css-prefix} {
-    transition : margin-left .1s $ease-in-out,
+  .#{v.$iconfont-css-prefix} {
+    transition : margin-left .1s v.$ease-in-out,
   }
 
   @at-root &#{&}-loading:before {
@@ -65,20 +66,20 @@ $btn-circle-size-sm     : $btn-height-sm !default;
     padding-left   : 29px;
     pointer-events : none;
     position       : relative;
-    .#{$iconfont-css-prefix} {
+    .#{v.$iconfont-css-prefix} {
       margin-left : -14px;
     }
   }
 
   @at-root &-sm#{&}-loading:not(#{&}-circle):not(#{&}-circle-outline) {
     padding-left : 24px;
-    .#{$iconfont-css-prefix} {
+    .#{v.$iconfont-css-prefix} {
       margin-left : -17px;
     }
   }
 
   @at-root &-group {
-    @include btn-group($btn-prefix-cls);
+    @include mixins.btn-group($btn-prefix-cls);
   }
 
   @at-root &:not(#{&}-circle):not(#{&}-circle-outline)#{&+"-icon-only"} {
@@ -91,8 +92,8 @@ $btn-circle-size-sm     : $btn-height-sm !default;
     position : relative;
   }
 
-  > .#{$iconfont-css-prefix} + span,
-  > span + .#{$iconfont-css-prefix} {
+  > .#{v.$iconfont-css-prefix} + span,
+  > span + .#{v.$iconfont-css-prefix} {
     margin-left : 0.5em;
   }
 }
