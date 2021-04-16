@@ -1,37 +1,47 @@
 @use "sass:map";
+@use "../../core/style/mixins";
 @use "../../core/themes/theme";
 @use "../../core/style/theming";
+@use "../../button/style/button-theme";
 @use "../../core/style/variables" as v;
 
-$radio-prefix-cls       : "#{ v.$tri-prefix}-radio" !default;
-$radio-group-prefix-cls : "#{$radio-prefix-cls}-group" !default;
-$radio-inner-prefix-cls : "#{$radio-prefix-cls}-inner" !default;
-$radio-duration         : 0.3s !default;
+$radio-prefix-cls        : "#{ v.$tri-prefix}-radio" !default;
+$radio-group-prefix-cls  : "#{$radio-prefix-cls}-group" !default;
+$radio-inner-prefix-cls  : "#{$radio-prefix-cls}-inner" !default;
+$radio-duration          : 0.3s !default;
 
-@mixin tri-radio-theme($theme) {
-  $primary    : map.get($theme, primary);
-  $foreground : map.get($theme, foreground);
-  $background : map.get($theme, background);
+$radio-size              : 16px !default;
+$radio-inner-scale       : .7 !default;
+$radio-outer-circle-size : 1px !default;
+
+$radio-button-bg         : button-theme.$btn-default-bg !default;
+$radio-button-color      : button-theme.$btn-default-color !default;
+
+@mixin tri-radio-theme() {
+  $primary       : theme.$primary;
+  $primary-color : theming.tri-color($primary);
+  $foreground    : theme.$foreground;
+  $background    : theme.$background;
 
   .#{$radio-prefix-cls} {
     @at-root .#{$radio-prefix-cls}-wrapper:hover #{&},
     &:hover,
     &-focused {
       .#{$radio-inner-prefix-cls} {
-        border-color : $primary;
+        border-color : $primary-color;
       }
     }
 
     @at-root &-checked::after {
       border-radius : 50%;
-      border        : $radio-outer-circle-size solid $primary;
+      border        : $radio-outer-circle-size solid $primary-color;
     }
 
     @at-root &-inner {
       @at-root &::after {
         border-radius    : 50%;
         border           : 0;
-        background-color : $primary;
+        background-color : $primary-color;
       }
       border-radius    : 50%;
       border           : $radio-outer-circle-size solid theming.tri-color($foreground, border-color-base);
@@ -42,14 +52,14 @@ $radio-duration         : 0.3s !default;
   // 选中状态
   .#{$radio-prefix-cls}-checked {
     .#{$radio-inner-prefix-cls} {
-      border-color : $primary;
+      border-color : $primary-color;
     }
   }
 
   .#{$radio-prefix-cls}-disabled {
     .#{$radio-inner-prefix-cls} {
       border-color     : theming.tri-color($foreground, border-color-base) !important;
-      background-color : theming.tri-color($theme, input-disabled-bg);
+      background-color : theming.tri-color($foreground, input-disabled-bg);
       @at-root &:after {
         background-color : #ccc;
       }
@@ -64,7 +74,7 @@ $radio-duration         : 0.3s !default;
     color       : $radio-button-color;
     border      : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-base);
     border-left : 0;
-    background  : theming.tri-color($foreground, radio-button-bg);
+    background  : $radio-button-bg;
 
     a {
       color : theming.tri-color($foreground, radio-button-color);
@@ -103,19 +113,19 @@ $radio-duration         : 0.3s !default;
 
     @at-root &:hover,
     &-focused {
-      color : $primary;
+      color : $primary-color;
     }
 
     @at-root &-checked {
-      background   : theming.tri-color($foreground, radio-button-bg);
-      border-color : $primary;
-      color        : $primary;
-      box-shadow   : -1px 0 0 0 $primary;
+      background   : $radio-button-bg;
+      border-color : $primary-color;
+      color        : $primary-color;
+      box-shadow   : -1px 0 0 0 $primary-color;
       @at-root &::before {
-        background-color : $primary !important;
+        background-color : $primary-color !important;
       }
       @at-root &:first-child {
-        border-color : $primary;
+        border-color : $primary-color;
         box-shadow   : none !important;
       }
 

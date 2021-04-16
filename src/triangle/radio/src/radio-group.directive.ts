@@ -28,12 +28,13 @@ export type RadioGroupType = 'flex' | 'block';
   }
 })
 export class RadioGroupDirective implements AfterContentInit, AfterViewInit, ControlValueAccessor {
-  /**@docs-private*/
+  /** @docs-private */
   _value: string;
-  /**@docs-private*/
+
+  /** @docs-private */
   _size: string;
 
-  /**@docs-private*/
+  /** @docs-private */
   _type: RadioGroupType = 'flex';
 
   _disabled: boolean;

@@ -36,7 +36,8 @@ export type RadioType = 'button' | 'label' | string;
     '[class.tri-radio-group]'      : 'true',
     '[class.tri-radio-group-large]': '_size === "large"',
     '[class.tri-radio-group-small]': '_size === "small"'
-  }
+  },
+  styleUrls    : ['../style/radio.css']
 })
 export class RadioGroupComponent /*extends RadioGroupDirective*/ {
   @Input() options: RadioOption[] = [];

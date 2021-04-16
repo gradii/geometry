@@ -1,18 +1,17 @@
-@import "../../core/style/mixins";
-@import "../../core/style/variables";
+@use "sass:math";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
+@use "../../core/themes/theme";
+@use "./radio-theme";
 
-$radio-prefix-cls        : "#{$tri-prefix}-radio" !default;
-$radio-group-prefix-cls  : "#{$radio-prefix-cls}-group" !default;
-$radio-inner-prefix-cls  : "#{$radio-prefix-cls}-inner" !default;
-$radio-duration          : .3s !default;
-
-$radio-size              : 16px !default;
-$radio-inner-scale       : .7 !default;
-$radio-outer-circle-size : 1px !default;
+$radio-prefix-cls       : "#{v.$tri-prefix}-radio" !default;
+$radio-group-prefix-cls : "#{$radio-prefix-cls}-group" !default;
+$radio-inner-prefix-cls : "#{$radio-prefix-cls}-inner" !default;
+$radio-duration         : .3s !default;
 
 .#{$radio-group-prefix-cls} {
   display   : inline-block;
-  font-size : $font-size-base;
+  font-size : v.$font-size-base;
 
   &.#{$radio-group-prefix-cls}-flex {
     display     : inline-flex;
@@ -22,7 +21,7 @@ $radio-outer-circle-size : 1px !default;
 
 // 一般状态
 .#{$radio-prefix-cls}-wrapper {
-  font-size    : $font-size-base;
+  font-size    : v.$font-size-base;
   display      : inline-block;
   position     : relative;
   white-space  : nowrap;
@@ -38,8 +37,8 @@ $radio-outer-circle-size : 1px !default;
   line-height    : 1;
   vertical-align : text-bottom;
   cursor         : pointer;
-  width          : $radio-size;
-  height         : $radio-size;
+  width          : radio-theme.$radio-size;
+  height         : radio-theme.$radio-size;
 
   @at-root .#{$radio-prefix-cls}-wrapper:hover #{&},
   &:hover,
@@ -52,8 +51,8 @@ $radio-outer-circle-size : 1px !default;
     position            : absolute;
     top                 : 0;
     left                : 0;
-    width               : $radio-size;
-    height              : $radio-size;
+    width               : radio-theme.$radio-size;
+    height              : radio-theme.$radio-size;
     border-radius       : 50%;
     content             : "";
     animation           : antRadioEffect 0.36s ease-in-out;
@@ -71,23 +70,23 @@ $radio-outer-circle-size : 1px !default;
       position      : absolute;
       top           : 0;
       left          : 0;
-      width         : $radio-size - 2 * round($radio-outer-circle-size);
-      height        : $radio-size - 2 * round($radio-outer-circle-size);
+      width         : radio-theme.$radio-size - 2 * math.round(radio-theme.$radio-outer-circle-size);
+      height        : radio-theme.$radio-size - 2 * math.round(radio-theme.$radio-outer-circle-size);
       border-radius : 50%;
       display       : block;
       border        : 0;
       content       : " ";
       opacity       : 0;
       transform     : scale(0);
-      transition    : all $radio-duration $ease-in-out-circ;
+      transition    : all $radio-duration v.$ease-in-out-circ;
     }
 
     position      : relative;
     top           : 0;
     left          : 0;
     display       : inline-block;
-    width         : $radio-size;
-    height        : $radio-size;
+    width         : radio-theme.$radio-size;
+    height        : radio-theme.$radio-size;
     border-radius : 50%;
     transition    : all $radio-duration;
   }
@@ -108,9 +107,9 @@ $radio-outer-circle-size : 1px !default;
 .#{$radio-prefix-cls}-checked {
   .#{$radio-inner-prefix-cls} {
     @at-root &:after {
-      transform  : scale($radio-inner-scale);
+      transform  : scale(radio-theme.$radio-inner-scale);
       opacity    : 1;
-      transition : all $radio-duration $ease-in-out-circ;
+      transition : all $radio-duration v.$ease-in-out-circ;
     }
   }
 }
@@ -138,8 +137,8 @@ span.#{$radio-prefix-cls} + * {
 
 .#{$radio-prefix-cls}-button-wrapper {
   margin      : 0;
-  height      : $form-control-height-base;
-  line-height : $form-control-height-base - .125rem;
+  height      : v.$form-control-height-base;
+  line-height : v.$form-control-height-base - .125rem;
   display     : inline-block;
   transition  : all 0.3s ease;
   cursor      : pointer;
@@ -157,19 +156,19 @@ span.#{$radio-prefix-cls} + * {
   }
 
   @at-root .#{$radio-group-prefix-cls}-large #{&} {
-    height      : $form-control-height-lg;
-    line-height : $form-control-height-lg - .125rem;
+    height      : v.$form-control-height-lg;
+    line-height : v.$form-control-height-lg - .125rem;
   }
 
   @at-root .#{$radio-group-prefix-cls}-small #{&} {
-    height      : $form-control-height-sm;
-    line-height : $form-control-height-sm;
+    height      : v.$form-control-height-sm;
+    line-height : v.$form-control-height-sm;
     padding     : 0 12px;
     @at-root &:first-child {
-      border-radius : $border-radius-sm 0 0 $border-radius-sm;
+      border-radius : v.$border-radius-sm 0 0 v.$border-radius-sm;
     }
     @at-root &:last-child {
-      border-radius : 0 $border-radius-sm $border-radius-sm 0;
+      border-radius : 0 v.$border-radius-sm v.$border-radius-sm 0;
     }
   }
 
@@ -185,15 +184,15 @@ span.#{$radio-prefix-cls} + * {
     }
   }
   @at-root &:first-child {
-    border-radius : $border-radius-base 0 0 $border-radius-base;
+    border-radius : v.$border-radius-base 0 0 v.$border-radius-base;
   }
 
   @at-root &:last-child {
-    border-radius : 0 $border-radius-base $border-radius-base 0;
+    border-radius : 0 v.$border-radius-base v.$border-radius-base 0;
   }
 
   @at-root &:first-child:last-child {
-    border-radius : $border-radius-base;
+    border-radius : v.$border-radius-base;
   }
 
   @at-root &:hover,
