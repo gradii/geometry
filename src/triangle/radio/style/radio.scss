@@ -30,15 +30,17 @@ $radio-duration         : .3s !default;
 }
 
 .#{$radio-prefix-cls} {
-  white-space    : nowrap;
-  outline        : none;
-  display        : inline-block;
-  position       : relative;
-  line-height    : 1;
-  vertical-align : text-bottom;
-  cursor         : pointer;
-  width          : radio-theme.$radio-size;
-  height         : radio-theme.$radio-size;
+  white-space     : nowrap;
+  outline         : none;
+  display         : inline-flex;
+  align-items     : center;
+  justify-content : center;
+  position        : relative;
+  line-height     : 1;
+  vertical-align  : text-bottom;
+  cursor          : pointer;
+  width           : radio-theme.$radio-size;
+  height          : radio-theme.$radio-size;
 
   @at-root .#{$radio-prefix-cls}-wrapper:hover #{&},
   &:hover,
@@ -49,8 +51,6 @@ $radio-duration         : .3s !default;
 
   @at-root &-checked::after {
     position            : absolute;
-    top                 : 0;
-    left                : 0;
     width               : radio-theme.$radio-size;
     height              : radio-theme.$radio-size;
     border-radius       : 50%;
@@ -67,9 +67,6 @@ $radio-duration         : .3s !default;
 
   @at-root &-inner {
     @at-root &::after {
-      position      : absolute;
-      top           : 0;
-      left          : 0;
       width         : radio-theme.$radio-size - 2 * math.round(radio-theme.$radio-outer-circle-size);
       height        : radio-theme.$radio-size - 2 * math.round(radio-theme.$radio-outer-circle-size);
       border-radius : 50%;
@@ -81,9 +78,6 @@ $radio-duration         : .3s !default;
       transition    : all $radio-duration v.$ease-in-out-circ;
     }
 
-    position      : relative;
-    top           : 0;
-    left          : 0;
     display       : inline-block;
     width         : radio-theme.$radio-size;
     height        : radio-theme.$radio-size;
