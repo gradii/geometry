@@ -1,5 +1,9 @@
-import { QueryBuilder } from '../query-builder';
-import { isObject } from '@gradii/check-type';
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Constructor } from '../../helper/constructor';
 import { BindingVariable } from '../../query/ast/binding-variable';
 import { BetweenPredicateExpression } from '../../query/ast/expression/between-predicate-expression';
@@ -7,33 +11,33 @@ import { BinaryExpression } from '../../query/ast/expression/binary-expression';
 import { ComparisonPredicateExpression } from '../../query/ast/expression/comparison-predicate-expression';
 import { RawBindingExpression } from '../../query/ast/expression/raw-binding-expression';
 import { RawExpression } from '../../query/ast/expression/raw-expression';
-import { HavingClause } from '../../query/ast/having-clause';
 import { SqlParser } from '../../query/parser/sql-parser';
 import { SqlNode } from '../../query/sql-node';
 import { raw } from '../ast-factory';
+import { QueryBuilder } from '../query-builder';
 
 export interface QueryBuilderHaving {
-  addHaving(where: SqlNode, conjunction: string): this
+  addHaving(where: SqlNode, conjunction: string): this;
 
-  having(column: string, value?: string | number | boolean | RawExpression): this
+  having(column: string, value?: string | number | boolean | RawExpression): this;
 
-  having(column: string, operator?: string, value?: string | number | boolean | RawExpression, conjunction?: string): this
+  having(column: string, operator?: string, value?: string | number | boolean | RawExpression, conjunction?: string): this;
 
-  havingBetween(column: string, values: any[], conjunction?: string, not?: boolean)
+  havingBetween(column: string, values: any[], conjunction?: string, not?: boolean);
 
-  havingRaw(sql: string): this
+  havingRaw(sql: string): this;
 
-  havingRaw(sql: string, bindings: any[], conjunction?: string): this
+  havingRaw(sql: string, bindings: any[], conjunction?: string): this;
 
-  orHaving(column: string, value?: string | number | boolean | RawExpression): this
+  orHaving(column: string, value?: string | number | boolean | RawExpression): this;
 
-  orHaving(column: string, operator?: string, value?: string | number | boolean | RawExpression): this
+  orHaving(column: string, operator?: string, value?: string | number | boolean | RawExpression): this;
 
-  orHavingRaw(sql: string): this
+  orHavingRaw(sql: string): this;
 
-  orHavingRaw(sql: string, bindings: any[]): this
+  orHavingRaw(sql: string, bindings: any[]): this;
 
-  orHavingRaw(sql: string, bindings: any[]): this
+  orHavingRaw(sql: string, bindings: any[]): this;
 }
 
 export type QueryBuilderHavingCtor = Constructor<QueryBuilderHaving>;
@@ -70,7 +74,7 @@ export function mixinHaving<T extends Constructor<any>>(base: T): QueryBuilderHa
       }
       // this._havings.push(compact('type', 'column', 'operator', 'value', 'boolean'));
 
-      const leftNode  = SqlParser.createSqlParser(column).parseColumnAlias();
+      const leftNode = SqlParser.createSqlParser(column).parseColumnAlias();
       const rightNode = ((value as Object) instanceof RawExpression) ?
         // @ts-ignore
         (value as RawExpression) :
@@ -90,11 +94,11 @@ export function mixinHaving<T extends Constructor<any>>(base: T): QueryBuilderHa
 
     /*Add a "having between " clause to the query.*/
     public havingBetween(this: QueryBuilder & _Self, column: string, values: any[], conjunction: string = 'and', not: boolean = false) {
-      const expression    = SqlParser.createSqlParser(column).parseColumnAlias();
+      const expression = SqlParser.createSqlParser(column).parseColumnAlias();
       const [left, right] = values;
 
       let leftBetween, rightBetween;
-      leftBetween  = left instanceof RawExpression ?
+      leftBetween = left instanceof RawExpression ?
         left :
         new BindingVariable(raw(left), 'having');
       rightBetween = right instanceof RawExpression ?

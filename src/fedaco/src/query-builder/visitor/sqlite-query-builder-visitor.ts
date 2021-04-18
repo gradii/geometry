@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
 import { AsExpression } from '../../query/ast/expression/as-expression';
 import { ComparisonPredicateExpression } from '../../query/ast/expression/comparison-predicate-expression';
@@ -23,7 +29,7 @@ export class SqliteQueryBuilderVisitor extends QueryBuilderVisitor {
   visitBinaryUnionQueryExpression(node: BinaryUnionQueryExpression) {
     let sql = `SELECT * FROM (${node.left.accept(this)}) UNION${node.all ? ' ALL' : ''} SELECT * FROM (${node.right.accept(this)})`;
 
-    sql += this.visitQueryExpression(node)
+    sql += this.visitQueryExpression(node);
     return sql;
   }
 

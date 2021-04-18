@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { AttributeInfo } from './attribute-info';
 import { BnfAttrs } from './bnf-attrs';
 import { BnfRule } from './bnf-rule';

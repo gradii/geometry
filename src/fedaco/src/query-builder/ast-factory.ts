@@ -1,13 +1,16 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { BindingVariable } from '../query/ast/binding-variable';
 import { ColumnReferenceExpression } from '../query/ast/column-reference-expression';
 import { RawBindingExpression } from '../query/ast/expression/raw-binding-expression';
 import { RawExpression } from '../query/ast/expression/raw-expression';
 import { Identifier } from '../query/ast/identifier';
 import { PathExpression } from '../query/ast/path-expression';
-import {
-  SyntaxKind,
-  Token
-} from '../query/parser/sql-lexer';
+import { SyntaxKind, Token } from '../query/parser/sql-lexer';
 import { SqlParser } from '../query/parser/sql-parser';
 import { ForwardRefFn } from './forward-ref';
 
@@ -15,9 +18,9 @@ export function raw(value: string | number | boolean) {
   return new RawExpression(value);
 }
 
-export function bindingVariable(value:  string | number | boolean | RawExpression, type = 'where'){
-  if(value instanceof RawExpression) {
-    return value
+export function bindingVariable(value: string | number | boolean | RawExpression, type = 'where') {
+  if (value instanceof RawExpression) {
+    return value;
   }
   return new BindingVariable(raw(value), type);
 }
@@ -32,9 +35,9 @@ export function createIdentifier(identifier: string | ForwardRefFn<string>) {
 }
 
 
-export function createColumnReferenceExpression(column: string|ColumnReferenceExpression) {
-  if(column instanceof ColumnReferenceExpression) {
-    return column
+export function createColumnReferenceExpression(column: string | ColumnReferenceExpression) {
+  if (column instanceof ColumnReferenceExpression) {
+    return column;
   }
 
   if (column === '*') {

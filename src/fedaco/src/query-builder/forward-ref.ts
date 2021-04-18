@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 export type ForwardRefFn<T = any> = () => T;
 
 export function forwardRef(forwardRefFn: ForwardRefFn): ForwardRefFn<any> {

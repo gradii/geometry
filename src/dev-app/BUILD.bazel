@@ -25,6 +25,7 @@ ng_module(
         "//src/dev-app/tree-view",
         "//src/dev-app/select",
         "//src/dev-app/radio",
+        "//src/dev-app/drawer",
 
         "//src/triangle/core",
         "@npm//@angular/cdk",

@@ -1,36 +1,35 @@
-import {
-  isBlank,
-  isObject
-} from '@gradii/check-type';
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import { isObject } from '@gradii/check-type';
 import { Constructor } from '../../helper/constructor';
 import { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
 import { AggregateFragment } from '../../query/ast/fragment/aggregate-fragment';
 import { PathExpression } from '../../query/ast/path-expression';
 import { SqlParser } from '../../query/parser/sql-parser';
-import {
-  createColumnReferenceExpression,
-  createIdentifier,
-  raw
-} from '../ast-factory';
+import { createColumnReferenceExpression, createIdentifier, raw } from '../ast-factory';
 import { wrapToArray } from '../ast-helper';
 import { QueryBuilder } from '../query-builder';
 
 export interface QueryBuilderAggregate {
-  aggregate(func: string, columns: any[]): this
+  aggregate(func: string, columns: any[]): this;
 
-  count(columns?: string): this
+  count(columns?: string): this;
 
-  doesntExist(columns?: string): this
+  doesntExist(columns?: string): this;
 
-  exists(columns?: string): this
+  exists(columns?: string): this;
 
-  getCountForPagination(columns?: string[]): this
+  getCountForPagination(columns?: string[]): this;
 
-  max(columns?: string): this
+  max(columns?: string): this;
 
-  min(columns?: string): this
+  min(columns?: string): this;
 
-  sum(columns?: string): this
+  sum(columns?: string): this;
 }
 
 export type QueryBuilderAggregateCtor = Constructor<QueryBuilderAggregate>;
@@ -38,13 +37,13 @@ export type QueryBuilderAggregateCtor = Constructor<QueryBuilderAggregate>;
 export function mixinAggregate<T extends Constructor<any>>(base: T): QueryBuilderAggregateCtor & T {
   return class _Self extends base {
     /*Set the aggregate property without running the query.*/
-    _setAggregate(this: QueryBuilder & _Self, func: string, columns: Array<string|ColumnReferenceExpression>) {
+    _setAggregate(this: QueryBuilder & _Self, func: string, columns: Array<string | ColumnReferenceExpression>) {
       this._aggregate = new AggregateFragment(
         createIdentifier(func),
         columns.map(it => createColumnReferenceExpression(it))
       );
       if (this._groups.length === 0) {
-        this._orders            = [];
+        this._orders = [];
         this._bindings['order'] = [];
       }
       return this;
@@ -61,7 +60,7 @@ export function mixinAggregate<T extends Constructor<any>>(base: T): QueryBuilde
         ._setAggregate(func, columns)
         .get(columns);
 
-      //todo check collection result
+      // todo check collection result
       if (results.length > 0) {
         return results[0]['aggregate'];
       }
@@ -92,7 +91,6 @@ export function mixinAggregate<T extends Constructor<any>>(base: T): QueryBuilde
       if (results[0] === undefined) {
         return 0;
       } else if (isObject(results[0])) {
-        // @ts-ignore
         return results[0].aggregate;
       }
       return results[0].aggregate;
@@ -127,21 +125,21 @@ export function mixinAggregate<T extends Constructor<any>>(base: T): QueryBuilde
           )
         ).mergeBindings(clone).setAggregate('count', this._withoutSelectAliases(columns)).get().all();
       }
-      const without = this._unions.length > 0 ? ['orders', 'limit', 'offset'] : ['columns', 'orders', 'limit', 'offset'];
+      const without = this._unions.length > 0 ? ['_orders', '_limit', '_offset'] : ['_columns', '_orders', '_limit', '_offset'];
       return this.cloneWithout(without)
         ._setAggregate('count', this._withoutSelectAliases(columns))
         .get();
     }
 
     /*Clone the existing query instance for usage in a pagination subquery.*/
-    protected _cloneForPaginationCount(this: QueryBuilder & _Self,) {
-      return this.cloneWithout(['orders', 'limit', 'offset']);
+    protected _cloneForPaginationCount(this: QueryBuilder & _Self, ) {
+      return this.cloneWithout(['_orders', '_limit', '_offset']);
     }
 
     /*Remove the column aliases since they will break count queries.*/
     protected _withoutSelectAliases(columns: string[]) {
       return columns.map(it => {
-        const column                            = SqlParser.createSqlParser(it).parseColumnAlias();
+        const column = SqlParser.createSqlParser(it).parseColumnAlias();
         column.fieldAliasIdentificationVariable = undefined;
         return column;
       });

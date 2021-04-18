@@ -1,10 +1,16 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { ForwardRefFn } from '../../query-builder/forward-ref';
 import { _SqlParserAst } from './_sql-parser-ast';
 import { SqlLexer } from './sql-lexer';
 
 export class SqlParser {
 
-  index: number            = 0;
+  index: number = 0;
   private _lexer: SqlLexer = new SqlLexer();
 
   constructor() {
@@ -12,7 +18,7 @@ export class SqlParser {
 
   static createSqlParser(sqlString) {
     const _lexer: SqlLexer = new SqlLexer();
-    const tokens           = _lexer.tokenize(sqlString);
+    const tokens = _lexer.tokenize(sqlString);
     return new _SqlParserAst(
       sqlString,
       undefined,
@@ -60,8 +66,8 @@ export class SqlParser {
    */
   parseJoinPart(fromClause: string | ForwardRefFn<string>, joinStr: string) {
     const _lexer: SqlLexer = new SqlLexer();
-    const tokens           = _lexer.tokenize(joinStr);
-    const parserAst        = new _SqlParserAst(
+    const tokens = _lexer.tokenize(joinStr);
+    const parserAst = new _SqlParserAst(
       joinStr,
       undefined,
       0,

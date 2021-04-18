@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { SqlVisitor } from '../../sql-visitor';
 import { Expression } from './expression';
 
@@ -9,6 +15,6 @@ export class ParenthesizedExpression extends Expression {
   }
 
   accept(visitor: SqlVisitor) {
-    return visitor.visitParenthesizedExpression(this)
+    return visitor.visitParenthesizedExpression(this);
   }
 }

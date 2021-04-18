@@ -1,13 +1,16 @@
-import {
-  isAnyEmpty,
-  isString
-} from '@gradii/check-type';
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import { isAnyEmpty, isString } from '@gradii/check-type';
 import { AssignmentSetClause } from '../../query/ast/assignment-set-clause';
 import { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
+import { DeleteSpecification } from '../../query/ast/delete-specification';
 import { ConditionExpression } from '../../query/ast/expression/condition-expression';
 import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
 import { ParenthesizedExpression } from '../../query/ast/expression/parenthesized-expression';
-import { JoinFragment } from '../../query/ast/fragment/join-fragment';
 import { NestedExpression } from '../../query/ast/fragment/nested-expression';
 import { FromClause } from '../../query/ast/from-clause';
 import { FromTable } from '../../query/ast/from-table';
@@ -30,24 +33,220 @@ import { ValuesInsertSource } from '../../query/ast/values-insert-source';
 import { WhereClause } from '../../query/ast/where-clause';
 import { SqlParser } from '../../query/parser/sql-parser';
 import { SqlVisitor } from '../../query/sql-visitor';
-import {
-  bindingVariable,
-  createIdentifier,
-  raw
-} from '../ast-factory';
+import { bindingVariable, createIdentifier, raw } from '../ast-factory';
 import { Builder } from '../builder';
 import { GrammarInterface } from '../grammar.interface';
-import {
-  JoinQueryBuilder,
-  QueryBuilder
-} from '../query-builder';
+import { JoinQueryBuilder, QueryBuilder } from '../query-builder';
 import { QueryBuilderVisitor } from '../visitor/query-builder-visitor';
 
 export abstract class Grammar implements GrammarInterface {
   constructor() {
   }
 
-  _prepareAggregateAst(builder, ast) {
+  protected _prepareUpdateAst(builder: QueryBuilder, values: any) {
+
+    const columnNodes = [];
+    for (const [key, value] of Object.entries(values)) {
+      const columnNode = SqlParser.createSqlParser(key).parseColumnAlias();
+      columnNodes.push(new AssignmentSetClause(
+        columnNode,
+        bindingVariable(value as any, 'update')
+      ));
+    }
+
+    const ast = new UpdateSpecification(
+      builder._from,
+      columnNodes,
+      builder._wheres.length > 0 ? new WhereClause(
+        new ConditionExpression(builder._wheres)
+      ) : undefined
+    );
+
+    if (builder._joins.length > 0) {
+      (ast as UpdateSpecification).fromClause = new FromClause(builder._from, builder._joins as JoinedTable[]);
+    }
+
+    if (builder._limit >= 0) {
+      (ast as UpdateSpecification).limitClause = new LimitClause(builder._limit);
+    }
+
+    if (builder._offset >= 0) {
+      (ast as UpdateSpecification).offsetClause = new OffsetClause(builder._offset);
+    }
+
+    if (builder._orders.length > 0) {
+      (ast as UpdateSpecification).orderByClause = new OrderByClause(
+        builder._orders as OrderByElement[]
+      );
+    }
+
+    return ast;
+  }
+
+  compileAggregateFragment(aggregateFunctionName,
+                           aggregateColumns,
+                           visitor: SqlVisitor) {
+    return ``;
+  }
+
+  /*Compile a delete statement into SQL.*/
+  public compileDelete(query: QueryBuilder) {
+    let ast;
+    if (query._joins.length > 0) {
+      ast = this._prepareDeleteAstWithJoins(query);
+    } else {
+      ast = this._prepareDeleteAstWithoutJoins(query);
+    }
+
+    const visitor = this._createVisitor(query);
+
+    return ast.accept(visitor);
+  }
+
+  compileExists(builder: QueryBuilder): string {
+    return `SELECT exists(${this.compileSelect(builder)}) AS \`exists\``;
+  }
+
+  compileInsert(builder: QueryBuilder, values, insertOption = 'into'): string {
+    // const ast = this._prepareSelectAst(builder);
+    const keys = Object.keys(values);
+    const sources = Object.values(values);
+    const visitor = this._createVisitor(builder);
+
+    if (isAnyEmpty(values)) {
+      return `INSERT INTO ${builder._from.accept(visitor)} DEFAULT VALUES`;
+    }
+
+    const ast = new InsertSpecification(
+      insertOption,
+      new ValuesInsertSource(
+        false,
+        sources.map((it: any) => bindingVariable(it, 'insert'))
+      ),
+      keys.map(it => {
+        return SqlParser.createSqlParser(it).parseColumnAlias();
+      }),
+      builder._from
+    );
+
+    return ast.accept(visitor);
+  }
+
+  compileInsertGetId(builder: QueryBuilder, values: any, sequence: string): string {
+    return this.compileInsert(builder, values);
+  }
+
+  compileInsertOrIgnore(builder: QueryBuilder, values): string {
+    return this.compileInsert(builder, values, 'ignore into');
+  }
+
+  compileInsertUsing(builder: QueryBuilder, columns, nestedExpression: NestedExpression): string {
+    const ast = new InsertSpecification(
+      'into',
+      new ValuesInsertSource(
+        false,
+        [],
+        nestedExpression
+      ),
+      columns.map(it => {
+        return SqlParser.createSqlParser(it).parseColumnAlias();
+      }),
+      builder._from
+    );
+    const visitor = this._createVisitor(builder);
+
+    return ast.accept(visitor);
+  }
+
+  compileJoinFragment(builder: JoinQueryBuilder, visitor: SqlVisitor): string {
+    let whereClause;
+    if (builder._wheres.length > 0) {
+      // todo check
+      whereClause = new ConditionExpression(
+        builder._wheres
+      );
+    }
+    let table;
+    if (isString(builder.table)) {
+      table = SqlParser.createSqlParser(builder.table).parseTableAlias();
+    } else if (builder.table instanceof TableReferenceExpression) {
+      table = builder.table;
+    } else {
+      throw new Error('invalid table');
+    }
+
+    if (builder._joins.length > 0) {
+      table = new JoinedTable(table, builder._joins as JoinExpression[]);
+    }
+
+    const ast = new JoinExpression(
+      builder.type,
+      table,
+      whereClause
+    );
+
+    return ast.accept(visitor);
+  }
+
+  compileNestedPredicate(builder: Builder, visitor: SqlVisitor): string {
+    const ast = new ParenthesizedExpression(
+      new ConditionExpression(
+        builder._wheres
+      )
+    );
+    return ast.accept(visitor);
+  }
+
+  compileSelect(builder: Builder) {
+    return '';
+  }
+
+  compileTruncate(builder: QueryBuilder): { [sql: string]: any[] } {
+    return {
+      [`TRUNCATE TABLE ${builder._from.accept(this._createVisitor(builder))}`]: builder.getBindings()
+    };
+  }
+
+  compileUpdate(builder: QueryBuilder, values: any): string {
+    const ast = this._prepareUpdateAst(builder, values);
+
+    const visitor = this._createVisitor(builder);
+
+    return ast.accept(visitor);
+  }
+
+  distinct(distinct: boolean | any[]): string {
+    return '';
+  }
+
+  getOperators() {
+    return [];
+  }
+
+  prepareBindingsForUpdate(builder: Builder, visitor: SqlVisitor): string {
+    return '';
+  }
+
+  quoteColumnName(columnName: string): string {
+    return '';
+  }
+
+  quoteSchemaName(schemaName: string): string {
+    return schemaName;
+  }
+
+  quoteTableName(tableName: string): string {
+    return tableName;
+  }
+
+  setTablePrefix(prefix: string): void {
+  }
+
+  wrap(column: string) {
+    return this.quoteColumnName(column.replace(/\s|'|"|`/g, ''));
+  }
+
+  protected _prepareAggregateAst(builder, ast) {
     if (builder._unions.length > 0) {
       if (builder._aggregate) {
         ast = new QuerySpecification(
@@ -77,7 +276,7 @@ export abstract class Grammar implements GrammarInterface {
     return ast;
   }
 
-  _prepareSelectAst(builder: QueryBuilder) {
+  protected _prepareSelectAst(builder: QueryBuilder) {
     let whereClause, selectClause;
     if (builder._wheres.length > 0) {
       whereClause = new WhereClause(
@@ -162,193 +361,48 @@ export abstract class Grammar implements GrammarInterface {
       }
     }
 
-    //SELECT count(*) AS aggregate FROM ([SELECT STMT] UNION [SELECT STMT]) AS "temp_table"
+    // SELECT count(*) AS aggregate FROM ([SELECT STMT] UNION [SELECT STMT]) AS "temp_table"
     ast = this._prepareAggregateAst(builder, ast);
 
     return ast;
   }
 
-  compileAggregateFragment(aggregateFunctionName,
-                           aggregateColumns,
-                           visitor: SqlVisitor) {
-    return ``;
+  protected _createVisitor(queryBuilder) {
+    return new QueryBuilderVisitor(queryBuilder._grammar, queryBuilder);
   }
 
-  compileExists(builder: QueryBuilder): string {
-    return `SELECT exists(${this.compileSelect(builder)}) AS \`exists\``;
+  /*Compile a delete statement without joins into SQL.*/
+  protected _prepareDeleteAstWithoutJoins(builder: QueryBuilder) {
+    return this._prepareDeleteAstWithJoins(builder);
   }
 
-  compileInsert(builder: QueryBuilder, values, insertOption = 'into'): string {
-    // const ast = this._prepareSelectAst(builder);
-    const keys    = Object.keys(values);
-    const sources = Object.values(values);
-    const visitor = new QueryBuilderVisitor(builder._grammar, builder);
-
-    if (isAnyEmpty(values)) {
-      return `INSERT INTO ${builder._from.accept(visitor)} DEFAULT VALUES`;
-    }
-
-    const ast = new InsertSpecification(
-      insertOption,
-      new ValuesInsertSource(
-        false,
-        sources.map((it: any) => bindingVariable(it, 'insert'))
-      ),
-      keys.map(it => {
-        return SqlParser.createSqlParser(it).parseColumnAlias();
-      }),
-      builder._from
-    );
-
-
-    return ast.accept(visitor);
-  }
-
-  compileInsertGetId(builder: QueryBuilder, values: any, sequence: string): string {
-    return this.compileInsert(builder, values);
-  }
-
-  compileInsertOrIgnore(builder: QueryBuilder, values): string {
-    return this.compileInsert(builder, values, 'ignore into');
-  }
-
-  compileInsertUsing(builder: QueryBuilder, columns, nestedExpression: NestedExpression): string {
-    const ast     = new InsertSpecification(
-      'into',
-      new ValuesInsertSource(
-        false,
-        [],
-        nestedExpression
-      ),
-      columns.map(it => {
-        return SqlParser.createSqlParser(it).parseColumnAlias();
-      }),
-      builder._from
-    );
-    const visitor = new QueryBuilderVisitor(builder._grammar, builder);
-
-    return ast.accept(visitor);
-  }
-
-  compileJoinFragment(builder: JoinQueryBuilder, visitor: SqlVisitor): string {
-    let whereClause;
-    if (builder._wheres.length > 0) {
-      //todo check
-      whereClause = new ConditionExpression(
-        builder._wheres
-      );
-    }
-    let table;
-    if (isString(builder.table)) {
-      table = SqlParser.createSqlParser(builder.table).parseTableAlias();
-    } else if (builder.table instanceof TableReferenceExpression) {
-      table = builder.table;
-    } else {
-      throw new Error('invalid table');
-    }
-
-    if (builder._joins.length > 0) {
-      table = new JoinedTable(table, builder._joins as JoinExpression[]);
-    }
-
-    const ast = new JoinExpression(
-      builder.type,
-      table,
-      whereClause
-    );
-
-    return ast.accept(visitor);
-  }
-
-  compileNestedPredicate(builder: Builder, visitor: SqlVisitor): string {
-    const ast = new ParenthesizedExpression(
-      new ConditionExpression(
-        builder._wheres
-      )
-    );
-    return ast.accept(visitor);
-  }
-
-  compileSelect(builder: Builder) {
-    return '';
-  }
-
-  _prepareUpdateAst(builder: QueryBuilder, values: any) {
-
-    const columnNodes = [];
-    for (const [key, value] of Object.entries(values)) {
-      const columnNode = SqlParser.createSqlParser(key).parseColumnAlias();
-      columnNodes.push(new AssignmentSetClause(
-        columnNode,
-        bindingVariable(value as any, 'update')
-      ));
-    }
-
-    const ast = new UpdateSpecification(
+  /*Compile a delete statement with joins into SQL.*/
+  protected _prepareDeleteAstWithJoins(builder: QueryBuilder) {
+    const ast = new DeleteSpecification(
       builder._from,
-      columnNodes,
       builder._wheres.length > 0 ? new WhereClause(
         new ConditionExpression(builder._wheres)
       ) : undefined
     );
 
     if (builder._joins.length > 0) {
-      (ast as UpdateSpecification).fromClause = new FromClause(builder._from, builder._joins as JoinedTable[]);
+      (ast as DeleteSpecification).fromClause = new FromClause(builder._from, builder._joins as JoinedTable[]);
     }
 
     if (builder._limit >= 0) {
-      (ast as UpdateSpecification).limitClause = new LimitClause(builder._limit);
+      (ast as DeleteSpecification).limitClause = new LimitClause(builder._limit);
     }
 
     if (builder._offset >= 0) {
-      (ast as UpdateSpecification).offsetClause = new OffsetClause(builder._offset);
+      (ast as DeleteSpecification).offsetClause = new OffsetClause(builder._offset);
     }
 
     if (builder._orders.length > 0) {
-      (ast as UpdateSpecification).orderByClause = new OrderByClause(
+      (ast as DeleteSpecification).orderByClause = new OrderByClause(
         builder._orders as OrderByElement[]
       );
     }
 
     return ast;
-  }
-
-  compileUpdate(builder: QueryBuilder, values: any): string {
-    const ast = this._prepareUpdateAst(builder, values);
-
-    const visitor = new QueryBuilderVisitor(builder._grammar, builder);
-
-    return ast.accept(visitor);
-  }
-
-  distinct(distinct: boolean | any[]): string {
-    return '';
-  }
-
-  getOperators() {
-    return [];
-  }
-
-  prepareBindingsForUpdate(builder: Builder, visitor: SqlVisitor): string {
-    return '';
-  }
-
-  quoteColumnName(columnName: string): string {
-    return '';
-  }
-
-  quoteSchemaName(schemaName: string): string {
-    return schemaName;
-  }
-
-  quoteTableName(tableName: string): string {
-    return tableName;
-  }
-
-  setTablePrefix(prefix: string): void {
-  }
-
-  wrap(column: string) {
-    return this.quoteColumnName(column.replace(/\s|'|"|`/g, ''));
   }
 }

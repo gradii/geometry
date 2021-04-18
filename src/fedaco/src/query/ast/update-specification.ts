@@ -1,4 +1,8 @@
-
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
 
 import { SqlNode } from '../sql-node';
 import { SqlVisitor } from '../sql-visitor';
@@ -12,7 +16,7 @@ import { SetClause } from './set-clause';
 import { WhereClause } from './where-clause';
 
 
-export class UpdateSpecification extends SqlNode{
+export class UpdateSpecification extends SqlNode {
   constructor(
     public target: FromTable,
     public setClauses: SetClause[],
@@ -21,17 +25,16 @@ export class UpdateSpecification extends SqlNode{
     public orderByClause?: OrderByClause,
     public offsetClause?: OffsetClause,
     public limitClause?: LimitClause,
-
     // public  _target: TableReference,
     // public  _topRowFilter: TopRowFilter,
     // public  _outputIntoClause: OutputIntoClause,
     // public  _outputClause: OutputClause,
 
-) {
-    super()
+  ) {
+    super();
   }
 
   accept(visitor: SqlVisitor) {
-    return visitor.visitUpdateSpecification(this)
+    return visitor.visitUpdateSpecification(this);
   }
 }

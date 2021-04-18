@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { SqlVisitor } from '../../sql-visitor';
 import { ConditionFactorExpression } from './condition-factor-expression';
 import { ConditionTermExpression } from './condition-term-expression';

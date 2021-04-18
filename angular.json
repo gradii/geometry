@@ -213,6 +213,31 @@
           }
         }
       }
+    },
+    "fedaco": {
+      "projectType": "library",
+      "root": "src/fedaco",
+      "sourceRoot": "src/fedaco/src",
+      "prefix": "applications",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "src/fedaco/src/**/*.ts",
+              "src/fedaco/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/src/fedaco"],
+          "options": {
+            "jestConfig": "src/fedaco/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

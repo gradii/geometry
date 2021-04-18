@@ -1,8 +1,12 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
 import { ComparisonPredicateExpression } from '../../query/ast/expression/comparison-predicate-expression';
 import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
-import { TableReferenceExpression } from '../../query/ast/table-reference-expression';
-import { resolveIdentifier } from '../ast-helper';
 import { GrammarInterface } from '../grammar.interface';
 import { QueryBuilder } from '../query-builder';
 import { QueryBuilderVisitor } from './query-builder-visitor';
@@ -49,7 +53,11 @@ export class PostgresQueryBuilderVisitor extends QueryBuilderVisitor {
   }
 
   visitColumnReferenceExpression(node: ColumnReferenceExpression): string {
-    return super.visitColumnReferenceExpression(node).split('.').pop();
+    if (this._queryBuilder._joins.length > 0) {
+      return super.visitColumnReferenceExpression(node);
+    } else {
+      return super.visitColumnReferenceExpression(node).split('.').pop();
+    }
   }
 
 }

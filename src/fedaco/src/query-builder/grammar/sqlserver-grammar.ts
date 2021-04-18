@@ -1,15 +1,23 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import { DeleteSpecification } from '../../query/ast/delete-specification';
+import { ConditionExpression } from '../../query/ast/expression/condition-expression';
+import { FromClause } from '../../query/ast/from-clause';
+import { JoinedTable } from '../../query/ast/joined-table';
+import { OffsetClause } from '../../query/ast/offset-clause';
+import { WhereClause } from '../../query/ast/where-clause';
 import { GrammarInterface } from '../grammar.interface';
 import { QueryBuilder } from '../query-builder';
-import { QueryBuilderVisitor } from '../visitor/query-builder-visitor';
 import { SqlserverQueryBuilderVisitor } from '../visitor/sqlserver-query-builder-visitor';
 import { Grammar } from './grammar';
 
 export class SqlserverGrammar extends Grammar implements GrammarInterface {
   private _tablePrefix = '';
 
-  compileJoins() {
-
-  }
 
   compileSelect(builder: QueryBuilder): string {
 
@@ -61,5 +69,38 @@ export class SqlserverGrammar extends Grammar implements GrammarInterface {
   compileInsertGetId(builder: QueryBuilder, values: any, sequence: string): string {
     return `set nocount on;${super.compileInsertGetId(builder, values,
       sequence)};select scope_identity() as ${this.wrap(sequence)}`;
+  }
+
+  protected _createVisitor(queryBuilder) {
+    return new SqlserverQueryBuilderVisitor(queryBuilder._grammar, queryBuilder);
+  }
+
+  protected _prepareDeleteAstWithJoins(builder: QueryBuilder) {
+    const ast = new DeleteSpecification(
+      builder._from,
+      builder._wheres.length > 0 ? new WhereClause(
+        new ConditionExpression(builder._wheres)
+      ) : undefined
+    );
+
+    if (builder._joins.length > 0) {
+      (ast as DeleteSpecification).fromClause = new FromClause(builder._from, builder._joins as JoinedTable[]);
+    }
+
+    if (builder._limit >= 0) {
+      (ast as DeleteSpecification).topRow = builder._limit;
+    }
+
+    if (builder._offset >= 0) {
+      (ast as DeleteSpecification).offsetClause = new OffsetClause(builder._offset);
+    }
+
+    // if (builder._orders.length > 0) {
+    //   (ast as UpdateSpecification).orderByClause = new OrderByClause(
+    //     builder._orders as OrderByElement[]
+    //   );
+    // }
+
+    return ast;
   }
 }

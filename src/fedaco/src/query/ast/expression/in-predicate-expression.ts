@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { NestedExpression } from '../fragment/nested-expression';
 import { QueryBuilder } from './../../../query-builder/query-builder';
 import { SqlVisitor } from '../../sql-visitor';

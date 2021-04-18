@@ -1,15 +1,21 @@
-import { QueryBuilder } from '../query-builder';
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Constructor } from '../../helper/constructor';
+import { QueryBuilder } from '../query-builder';
 
 export interface BuildQueries {
 
-  when(condition, callback: (q: this, condition) => any, defaultCallback?): this
+  when(condition, callback: (q: this, condition) => any, defaultCallback?): this;
 
-  tap(callback: (q: this, condition) => any): this
+  tap(callback: (q: this, condition) => any): this;
 
-  first(columns?: any[] | string): this
+  first(columns?: any[] | string): this;
 
-  unless(value: any, callback: Function, _default?: Function )
+  unless(value: any, callback: Function, _default?: Function);
 }
 
 export type BuildQueriesCtor = Constructor<BuildQueries>;
@@ -41,7 +47,7 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
     /*Execute the query and get the first result.*/
     public first(this: QueryBuilder & _Self, columns: any[] | string = ['*']) {
       // return this.take(1).get(columns).first();
-      //todo
+      // todo
       return this.take(1).get(columns).pop();
     }
 

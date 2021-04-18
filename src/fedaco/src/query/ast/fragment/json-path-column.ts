@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { SqlNode } from '../../sql-node';
 import { SqlVisitor } from '../../sql-visitor';
 import { JsonPathExpression } from '../json-path-expression';
@@ -13,6 +19,6 @@ export class JsonPathColumn extends SqlNode {
   }
 
   accept(visitor: SqlVisitor) {
-    return visitor.visitJsonPathColumn(this)
+    return visitor.visitJsonPathColumn(this);
   }
 }

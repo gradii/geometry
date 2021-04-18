@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { isAnyEmpty } from '@gradii/check-type';
 import { GrammarInterface } from '../grammar.interface';
 import { QueryBuilder } from '../query-builder';
@@ -10,6 +16,10 @@ export class MysqlGrammar extends Grammar implements GrammarInterface {
 
   compileJoins() {
 
+  }
+
+  protected _createVisitor(queryBuilder) {
+    return new MysqlQueryBuilderVisitor(queryBuilder._grammar, queryBuilder);
   }
 
   compileSelect(builder: QueryBuilder): string {

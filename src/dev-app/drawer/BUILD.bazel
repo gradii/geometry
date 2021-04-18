@@ -1,0 +1,24 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "drawer",
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"],),
+    assets = [
+        "dev-drawer.html",
+        ":dev_drawer_scss",
+    ],
+    deps = [
+        "//src/triangle/drawer",
+        "//src/triangle/button",
+
+        "@npm//@angular/cdk",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_drawer_scss",
+    src = "dev-drawer.scss",
+)

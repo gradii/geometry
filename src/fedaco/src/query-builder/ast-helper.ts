@@ -1,7 +1,10 @@
-import {
-  isArray,
-  isBlank
-} from '@gradii/check-type';
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import { isArray, isBlank } from '@gradii/check-type';
 import { Identifier } from '../query/ast/identifier';
 import { resolveForwardRef } from './forward-ref';
 

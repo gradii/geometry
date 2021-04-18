@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { SqlVisitor } from '../../sql-visitor';
 import { BindingVariable } from '../binding-variable';
 import { RawExpression } from './raw-expression';

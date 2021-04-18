@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import * as chars from './ascii_chars';
 import {
   isExponentSign,
@@ -191,8 +197,8 @@ class _Scanner {
     }
 
     // Handle identifiers and numbers.
-    if (isIdentifierStart(peek)) return this.scanIdentifier();
-    if (chars.isDigit(peek)) return this.scanNumber(index);
+    if (isIdentifierStart(peek)) { return this.scanIdentifier(); }
+    if (chars.isDigit(peek)) { return this.scanNumber(index); }
 
     const start: number = index;
     switch (peek) {
@@ -235,7 +241,7 @@ class _Scanner {
       case chars.$BAR:
         return this.scanComplexOperator(start, '|', chars.$BAR, '|');
       case chars.$NBSP:
-        while (chars.isWhitespace(this.peek)) this.advance();
+        while (chars.isWhitespace(this.peek)) { this.advance(); }
         return this.scanToken();
     }
 
@@ -283,7 +289,7 @@ class _Scanner {
   scanIdentifier(): Token {
     const start: number = this.index;
     this.advance();
-    while (isIdentifierPart(this.peek)) this.advance();
+    while (isIdentifierPart(this.peek)) { this.advance(); }
     const str: string = this.input.substring(start, this.index);
     return KEYWORDS.indexOf(str) > -1 ? newKeywordToken(start, this.index, str) :
       newIdentifierToken(start, this.index, str);
@@ -299,8 +305,8 @@ class _Scanner {
         simple = false;
       } else if (isExponentStart(this.peek)) {
         this.advance();
-        if (isExponentSign(this.peek)) this.advance();
-        if (!chars.isDigit(this.peek)) return this.error('Invalid exponent', -1);
+        if (isExponentSign(this.peek)) { this.advance(); }
+        if (!chars.isDigit(this.peek)) { return this.error('Invalid exponent', -1); }
         simple = false;
       } else {
         break;

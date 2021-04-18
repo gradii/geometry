@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 export const KEYWORDS = [
   'add', 'all', 'alter', 'always', 'analyze', 'and', 'as', 'asc', 'before', 'between',
   'both', 'by', 'call', 'cascade', 'case', 'cast', 'change', 'character', 'check',

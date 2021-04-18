@@ -19,6 +19,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="tree-view">tree view</a></li>
       <li><a routerLink="select">select</a></li>
       <li><a routerLink="radio">radio</a></li>
+      <li><a routerLink="drawer">drawer</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>

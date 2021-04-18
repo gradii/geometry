@@ -1,5 +1,12 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { isAnyEmpty, isArray, isBlank, isBoolean, isFunction, isString } from '@gradii/check-type';
 import { ColumnReferenceExpression } from '../query/ast/column-reference-expression';
+import { ComparisonPredicateExpression } from '../query/ast/expression/comparison-predicate-expression';
 import { RawExpression } from '../query/ast/expression/raw-expression';
 import { NestedPredicateExpression } from '../query/ast/fragment/expression/nested-predicate-expression';
 import { NestedExpression } from '../query/ast/fragment/nested-expression';
@@ -7,7 +14,7 @@ import { FromTable } from '../query/ast/from-table';
 import { PathExpression } from '../query/ast/path-expression';
 import { TableReferenceExpression } from '../query/ast/table-reference-expression';
 import { SqlParser } from '../query/parser/sql-parser';
-import { createIdentifier, rawSqlBindings } from './ast-factory';
+import { bindingVariable, createIdentifier, rawSqlBindings } from './ast-factory';
 import { wrapToArray } from './ast-helper';
 import { Builder } from './builder';
 import { ConnectionInterface } from './connection-interface';
@@ -15,7 +22,7 @@ import { GrammarInterface } from './grammar.interface';
 import { ProcessorInterface } from './processor-interface';
 
 
-export const enum BindingType {
+export enum BindingType {
   where = 'where',
   join  = 'join'
 }
@@ -63,7 +70,7 @@ export class QueryBuilder extends Builder {
   public clone() {
     const cloned = this.newQuery();
     cloned._sqlParser = this._sqlParser;
-    cloned._bindings = this._bindings;
+    // cloned._bindings    = this._bindings;
     cloned._aggregate = this._aggregate;
     cloned._columns = this._columns;
     cloned._distinct = this._distinct;
@@ -94,7 +101,7 @@ export class QueryBuilder extends Builder {
   /**
    * Prepare the value and operator for a where clause.
    */
-  _prepareValueAndOperator<P = any>(value: P, operator: string, useDefault?: boolean): [P, string]
+  _prepareValueAndOperator<P = any>(value: P, operator: string, useDefault?: boolean): [P, string];
 
   _prepareValueAndOperator(value, operator, useDefault?: boolean) {
     if (useDefault) {
@@ -137,7 +144,7 @@ export class QueryBuilder extends Builder {
   /*Parse the subquery into SQL and bindings.*/
   _parseSub(type, query: any) {
     if (
-      query instanceof QueryBuilder //||
+      query instanceof QueryBuilder // ||
       // query instanceof EloquentBuilder || todo
       // query instanceof Relation todo
     ) {
@@ -158,9 +165,9 @@ export class QueryBuilder extends Builder {
    * @param columns
    * @param as
    */
-  _selectAs(columns: string, as: string)
+  _selectAs(columns: string, as: string);
 
-  _selectAs(columns: { [key: string]: string })
+  _selectAs(columns: { [key: string]: string });
 
   _selectAs(columns, as?) {
     if (arguments.length === 2) {
@@ -263,6 +270,8 @@ export class QueryBuilder extends Builder {
       } else if (isString(column)) {
         const _column = SqlParser.createSqlParser(column).parseColumnAlias();
         this._columns.push(_column);
+      } else if (column instanceof ColumnReferenceExpression) {
+        this._columns.push(column);
       }
     }
     return this;
@@ -305,7 +314,7 @@ export class QueryBuilder extends Builder {
     return this;
   }
 
-  //todo should be promise or callback
+  // todo should be promise or callback
   /**
    * get for column is temp used for query
    * @param columns
@@ -369,7 +378,7 @@ export class QueryBuilder extends Builder {
     return this._bindings;
   }
 
-  //todo
+  // todo
   isQueryable(value): value is (QueryBuilder | Function) {
     return value instanceof QueryBuilder ||
       // value instanceof EloquentBuilder ||
@@ -421,10 +430,41 @@ export class QueryBuilder extends Builder {
     );
   }
 
+  /*Delete a record from the database.*/
+  public delete(id?: any) {
+    if (!isBlank(id)) {
+      this.addWhere(
+        new ComparisonPredicateExpression(
+          new ColumnReferenceExpression(
+            new PathExpression(
+              [
+                this._from,
+                createIdentifier('id')
+              ]
+            )
+          ),
+          '=',
+          bindingVariable(id)
+        )
+      );
+    }
+    return this._connection.delete(
+      this._grammar.compileDelete(this),
+      this.getBindings()
+    );
+  }
+
+  /*Run a truncate statement on the table.*/
+  public truncate() {
+    for (const [sql, bindings] of Object.entries(this._grammar.compileTruncate(this))) {
+      this._connection.statement(sql, this.getBindings());
+    }
+  }
+
   /*Insert or update a record matching the attributes, and fill it with values.*/
-  public updateOrInsert(attributes: any[], values: any[] = []) {
+  public updateOrInsert(attributes: object, values: object = {}) {
     if (!this.where(attributes).exists()) {
-      return this.insert([...attributes, ...values]);
+      return this.insert({...attributes, ...values});
     }
     if (isAnyEmpty(values)) {
       return true;
@@ -438,6 +478,9 @@ export class QueryBuilder extends Builder {
     }
     if (isAnyEmpty(values)) {
       return true;
+    }
+    if (!this._from) {
+      throw new Error('must call from before insert');
     }
     // if (!isArray(values)) {
     //    values = [values];
@@ -505,7 +548,7 @@ export class QueryBuilder extends Builder {
 
   protected onceWithColumns(columns: string[], callback: () => any[]): any[] {
     const original = this._columns;
-    //todo check
+    // todo check
     if (original.length === 0) {
       this._columns = columns.map(it => new ColumnReferenceExpression(
         new PathExpression(
@@ -516,7 +559,7 @@ export class QueryBuilder extends Builder {
     const result = callback();
     this._columns = original;
 
-    //todo temp fix array
+    // todo temp fix array
     return wrapToArray(result);
   }
 }

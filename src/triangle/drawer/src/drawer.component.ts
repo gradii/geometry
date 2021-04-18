@@ -6,6 +6,7 @@
 
 import { FocusTrap, FocusTrapFactory } from '@angular/cdk/a11y';
 import { coerceCssPixelValue } from '@angular/cdk/coercion';
+import { ESCAPE } from '@angular/cdk/keycodes';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import {
   CdkPortalOutlet,
@@ -44,57 +45,57 @@ import { DrawerRef } from './drawer-ref';
 export const DRAWER_ANIMATE_DURATION = 300;
 
 @Component({
-  selector: 'tri-drawer',
-  template: `
-      <ng-template #drawerTemplate>
-          <div
-                  class="tri-drawer"
-                  [class.tri-drawer-open]="isOpen"
-                  [class.tri-drawer-top]="placement === 'top'"
-                  [class.tri-drawer-bottom]="placement === 'bottom'"
-                  [class.tri-drawer-right]="placement === 'right'"
-                  [class.tri-drawer-left]="placement === 'left'"
-                  [style.transform]="offsetTransform">
-              <div class="tri-drawer-mask" (click)="maskClick()" *ngIf="mask"
-                   [style.zIndex]="zIndex"
-                   [ngStyle]="maskStyle"></div>
-              <div class="tri-drawer-content-wrapper"
-                   [ngClass]="wrapClassName"
-                   [style.zIndex]="zIndex"
-                   [style.width]="_width"
-                   [style.height]="_height"
-                   [style.transform]="transform">
-                  <div class="tri-drawer-content">
-                      <div class="tri-drawer-wrapper-body"
-                           [style.overflow]="isLeftOrRight ? 'auto' : null"
-                           [style.height]="isLeftOrRight ? '100%' : null">
-                          <div *ngIf="title" class="tri-drawer-header">
-                              <div class="tri-drawer-title">
-                                  <ng-container *ngIf="isTemplateRef(title); else elseTitle">
-                                      <ng-template [stringTemplateOutlet]="title"></ng-template>
-                                  </ng-container>
-                                  <ng-template #elseTitle>
-                                      <div [innerHTML]="title"></div>
-                                  </ng-template>
-                              </div>
-                          </div>
-                          <button *ngIf="closable" (click)="closeClick()" aria-label="Close"
-                                  class="tri-drawer-close">
-                              <span class="tri-drawer-close-x"><i class="anticon anticon-close"></i></span>
-                          </button>
-                          <div class="tri-drawer-body" [ngStyle]="bodyStyle">
-                              <ng-template cdkPortalOutlet></ng-template>
-                              <ng-container *ngIf="isTemplateRef(content)">
-                                  <ng-container
-                                          *ngTemplateOutlet="content; context: templateContext"></ng-container>
-                              </ng-container>
-                              <ng-content *ngIf="!content"></ng-content>
-                          </div>
-                      </div>
-                  </div>
+  selector       : 'tri-drawer',
+  template       : `
+    <ng-template #drawerTemplate>
+      <div
+        class="tri-drawer"
+        [class.tri-drawer-open]="isOpen"
+        [class.tri-drawer-top]="placement === 'top'"
+        [class.tri-drawer-bottom]="placement === 'bottom'"
+        [class.tri-drawer-right]="placement === 'right'"
+        [class.tri-drawer-left]="placement === 'left'"
+        [style.transform]="offsetTransform">
+        <div class="tri-drawer-mask" (click)="maskClick()" *ngIf="mask"
+             [style.zIndex]="zIndex"
+             [ngStyle]="maskStyle"></div>
+        <div class="tri-drawer-content-wrapper"
+             [ngClass]="wrapClassName"
+             [style.zIndex]="zIndex"
+             [style.width]="_width"
+             [style.height]="_height"
+             [style.transform]="transform">
+          <div class="tri-drawer-content">
+            <div class="tri-drawer-wrapper-body"
+                 [style.overflow]="isLeftOrRight ? 'auto' : null"
+                 [style.height]="isLeftOrRight ? '100%' : null">
+              <div *ngIf="title" class="tri-drawer-header">
+                <div class="tri-drawer-title">
+                  <ng-container *ngIf="isTemplateRef(title); else elseTitle">
+                    <ng-template [stringTemplateOutlet]="title"></ng-template>
+                  </ng-container>
+                  <ng-template #elseTitle>
+                    <div [innerHTML]="title"></div>
+                  </ng-template>
+                </div>
               </div>
+              <button *ngIf="closable" (click)="closeClick()" aria-label="Close"
+                      class="tri-drawer-close">
+                <span class="tri-drawer-close-x"><i class="anticon anticon-close"></i></span>
+              </button>
+              <div class="tri-drawer-body" [ngStyle]="bodyStyle">
+                <ng-template cdkPortalOutlet></ng-template>
+                <ng-container *ngIf="isTemplateRef(content)">
+                  <ng-container
+                    *ngTemplateOutlet="content; context: templateContext"></ng-container>
+                </ng-container>
+                <ng-content *ngIf="!content"></ng-content>
+              </div>
+            </div>
           </div>
-      </ng-template>
+        </div>
+      </div>
+    </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -116,8 +117,8 @@ export class DrawerComponent<T = any, R = any, D = any> extends DrawerRef<R>
   @Input() offsetY = 0;
   @Output() readonly onViewInit = new EventEmitter<void>();
   @Output() readonly onClose = new EventEmitter<MouseEvent>();
-  @ViewChild('drawerTemplate', {static: false}) drawerTemplate: TemplateRef<{}>;
-  @ViewChild(CdkPortalOutlet, {static: false}) bodyPortalOutlet: CdkPortalOutlet;
+  @ViewChild('drawerTemplate', {static: true}) drawerTemplate: TemplateRef<{}>;
+  @ViewChild(CdkPortalOutlet, {static: false}) bodyPortalOutlet?: CdkPortalOutlet;
   previouslyFocusedElement: HTMLElement;
   contentParams: D; // only service
   overlayRef: OverlayRef | null;
@@ -297,7 +298,7 @@ export class DrawerComponent<T = any, R = any, D = any> extends DrawerRef<R>
   }
 
   private attachBodyContent(): void {
-    this.bodyPortalOutlet.dispose();
+    this.bodyPortalOutlet!.dispose();
 
     if (this.content instanceof Type) {
       const childInjector = new PortalInjector(this.injector, new WeakMap([[DrawerRef, this]]));
@@ -316,6 +317,19 @@ export class DrawerComponent<T = any, R = any, D = any> extends DrawerRef<R>
 
     if (this.overlayRef && !this.overlayRef.hasAttached()) {
       this.overlayRef.attach(this.portal);
+      // this.overlayRef!.keydownEvents()
+      //   .pipe(takeUntil(this.destroy$))
+      //   .subscribe((event: KeyboardEvent) => {
+      //     if (event.keyCode === ESCAPE && this.isOpen && this.keyboard) {
+      //       this.onClose.emit();
+      //     }
+      //   });
+      // this.overlayRef
+      //   .detachments()
+      //   .pipe(takeUntil(this.destroy$))
+      //   .subscribe(() => {
+      //     this.disposeOverlay();
+      //   });
     }
   }
 

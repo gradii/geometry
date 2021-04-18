@@ -71,8 +71,8 @@
       true,
       ["fit"],
       ["fdescribe"],
-      ["xit"],
-      ["xdescribe"],
+//      ["xit"],
+//      ["xdescribe"],
       {
         "name": ["first"],
         "message": "Use take(1) instead."

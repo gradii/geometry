@@ -1,4 +1,10 @@
 /**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
  * SelectClause = "SELECT" ["DISTINCT"] ColumnExpression {"," ColumnExpression}
  */
 import { SqlNode } from '../sql-node';
@@ -11,8 +17,8 @@ import { SelectScalarExpression } from './select-scalar-expression';
 export class SelectClause extends SqlNode {
 
   public constructor(public selectExpressions: Array<ColumnReferenceExpression |
-                       SelectScalarExpression | RawExpression | RawBindingExpression>        = [],
-                     public distinct: boolean | any[] = false) {
+                       SelectScalarExpression | RawExpression | RawBindingExpression> = [],
+                     public distinct: boolean | any[]                                 = false) {
     super();
   }
 

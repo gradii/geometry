@@ -1,5 +1,11 @@
-export interface ProcessorInterface {
-  processSelect(queryBuilder, results)
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
 
-  processInsertGetId(sql, bindings: any[],sequence?)
+export interface ProcessorInterface {
+  processSelect(queryBuilder, results);
+
+  processInsertGetId(sql, bindings: any[], sequence?);
 }

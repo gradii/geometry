@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { SqlNode } from '../sql-node';
 import { SqlVisitor } from '../sql-visitor';
 import { QueryExpression } from './query-expression';
@@ -13,6 +19,6 @@ export class BinaryUnionQueryExpression extends QueryExpression {
   }
 
   accept(visitor: SqlVisitor) {
-    return visitor.visitBinaryUnionQueryExpression(this)
+    return visitor.visitBinaryUnionQueryExpression(this);
   }
 }

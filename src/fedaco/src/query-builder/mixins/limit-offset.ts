@@ -1,16 +1,22 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Constructor } from '../../helper/constructor';
 import { QueryBuilder } from '../../query-builder/query-builder';
 
 export interface QueryBuilderLimitOffset {
-  limit(value: number): this
+  limit(value: number): this;
 
-  skip(value: number): this
+  skip(value: number): this;
 
-  offset(value: number): this
+  offset(value: number): this;
 
-  take(value: number): this
+  take(value: number): this;
 
-  forPage(pageNo: number, pageSize: number ): this
+  forPage(pageNo: number, pageSize: number): this;
 }
 
 export type QueryBuilderLimitOffsetCtor = Constructor<QueryBuilderLimitOffset>;
@@ -51,7 +57,7 @@ export function mixinLimitOffset<T extends Constructor<any>>(base: T): QueryBuil
       return this.limit(value);
     }
 
-    public forPage(this: QueryBuilder & _Self, pageNo: number, pageSize: number ) {
+    public forPage(this: QueryBuilder & _Self, pageNo: number, pageSize: number) {
       return this.offset((pageNo - 1) * pageSize).limit(pageSize);
     }
   };

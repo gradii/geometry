@@ -1,9 +1,10 @@
-import {
-  isArray,
-  isFunction,
-  isObject,
-  isString
-} from '@gradii/check-type';
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import { isArray, isFunction, isObject, isString } from '@gradii/check-type';
 import { Constructor } from '../../helper/constructor';
 import { QueryBuilder } from '../../query-builder/query-builder';
 import { BindingVariable } from '../../query/ast/binding-variable';
@@ -21,47 +22,47 @@ export interface WhereCommon {
   /**
    * Add another query builder as a nested where to the query builder.
    */
-  addNestedWhereQuery(query: QueryBuilder, conjunction: 'and' | 'or'): this
+  addNestedWhereQuery(query: QueryBuilder, conjunction: 'and' | 'or'): this;
 
-  addWhere(where: SqlNode, conjunction?: 'and' | 'or' | 'andX' | 'orX')
+  addWhere(where: SqlNode, conjunction?: 'and' | 'or' | 'andX' | 'orX');
 
   /**
    * Create a new query instance for nested where condition.
    */
-  forNestedWhere(): this
+  forNestedWhere(): this;
 
-  orWhere(where: (q: QueryBuilder) => void): this
+  orWhere(where: (q: QueryBuilder) => void): this;
 
-  orWhere(column: Function | string | any[], value: any): this
+  orWhere(column: Function | string | any[], value: any): this;
 
-  orWhere(column: Function | string | any[], operator: any, value: any): this
+  orWhere(column: Function | string | any[], operator: any, value: any): this;
 
-  orWhere(column: Function | string | any[], operator: any, value: (q: QueryBuilder) => void): this
+  orWhere(column: Function | string | any[], operator: any, value: (q: QueryBuilder) => void): this;
 
-  orWhereColumn(first: string | any[], operator?: string, second?: string)
+  orWhereColumn(first: string | any[], operator?: string, second?: string);
 
-  orWhereRaw(sql: string, bindings: any[])
+  orWhereRaw(sql: string, bindings: any[]);
 
-  where(columns: any[], arg1: undefined, arg2: undefined, conjunction?: 'and' | 'or'): this
+  where(columns: any[], arg1: undefined, arg2: undefined, conjunction?: 'and' | 'or'): this;
 
-  where(where: any[][]): this
+  where(where: any[][]): this;
 
-  where(where: { [key: string]: any }): this
+  where(where: { [key: string]: any }): this;
 
-  where(where: (q: QueryBuilder) => void): this
+  where(where: (q: QueryBuilder) => void): this;
 
   where(left: string,
-        right: Function | RawExpression | boolean | string | number | Array<string | number>): this
+        right: Function | RawExpression | boolean | string | number | Array<string | number>): this;
 
   where(left: string, operator: string,
-        right: Function | RawExpression | boolean | string | number | Array<string | number>): this
+        right: Function | RawExpression | boolean | string | number | Array<string | number>): this;
 
 
-  whereColumn(first: string | any[], operator?: string, second?: string, conjunction?: string)
+  whereColumn(first: string | any[], operator?: string, second?: string, conjunction?: string);
 
-  whereNested(callback: (query?) => void, conjunction?: 'and' | 'or'): this
+  whereNested(callback: (query?) => void, conjunction?: 'and' | 'or'): this;
 
-  whereRaw(sql: string, bindings: any[], conjunction?: 'and' | 'or'): this
+  whereRaw(sql: string, bindings: any[], conjunction?: 'and' | 'or'): this;
 }
 
 export type WhereCommonCtor = Constructor<WhereCommon>;
@@ -151,7 +152,7 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
       return this.whereRaw(sql, bindings, 'or');
     }
 
-    //todo
+    // todo
     where(this: QueryBuilder & _Self, column, operator?, value?, conjunction: 'and' | 'or' = 'and') {
       if (isArray(column) || isObject(column)) {
         return this._addArrayOfWheres(column, conjunction);
@@ -197,7 +198,7 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
       if (this._invalidOperator(operator)) {
         [second, operator] = [operator, '='];
       }
-      const leftNode  = SqlParser.createSqlParser(first).parseUnaryTableColumn();
+      const leftNode = SqlParser.createSqlParser(first).parseUnaryTableColumn();
       const rightNode = SqlParser.createSqlParser(second).parseUnaryTableColumn();
       this.addWhere(
         new ComparisonPredicateExpression(
@@ -240,7 +241,7 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
     }
 
     protected cleanBindings(bindings: any[]) {
-      //todo
+      // todo
       return bindings.filter(it => !(it instanceof RawExpression));
     }
   };

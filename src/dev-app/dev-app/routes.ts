@@ -50,6 +50,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'radio',
         loadChildren: '/radio/dev-radio.module#DevRadioModule'
+      },
+      {
+        path        : 'drawer',
+        loadChildren: '/drawer/dev-drawer.module#DevDrawerModule'
       }
     ]
   },

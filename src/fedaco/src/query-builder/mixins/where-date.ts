@@ -4,17 +4,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  isDate,
-  isNumber,
-  isString
-} from '@gradii/check-type';
+import { isDate, isNumber, isString } from '@gradii/check-type';
 import { format } from 'date-fns';
 import { Constructor } from '../../helper/constructor';
 import { QueryBuilder } from '../../query-builder/query-builder';
 import { BindingVariable } from '../../query/ast/binding-variable';
-import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
 import { ComparisonPredicateExpression } from '../../query/ast/expression/comparison-predicate-expression';
+import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
 import { RawExpression } from '../../query/ast/expression/raw-expression';
 import { SqlParser } from '../../query/parser/sql-parser';
 import { createIdentifier } from '../ast-factory';

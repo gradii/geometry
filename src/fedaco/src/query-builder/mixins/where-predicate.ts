@@ -1,4 +1,9 @@
-import { isFunction } from '@gradii/check-type';
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Constructor } from '../../helper/constructor';
 import { BindingVariable } from '../../query/ast/binding-variable';
 import { BetweenPredicateExpression } from '../../query/ast/expression/between-predicate-expression';
@@ -17,57 +22,57 @@ export interface WherePredicate {
 
   addWhereExistsQuery(query: QueryBuilder, boolean?: string, not?: boolean): void;
 
-  orWhereBetween(column: string, values: any[], not?: boolean): this
+  orWhereBetween(column: string, values: any[], not?: boolean): this;
 
   orWhereExists(callback: Function, not?: boolean): void;
 
-  orWhereIn(column: string, q: (q: this) => this | void): this
+  orWhereIn(column: string, q: (q: this) => this | void): this;
 
-  orWhereIn(column: string, values: any[], not?: string): this
+  orWhereIn(column: string, values: any[], not?: string): this;
 
-  orWhereIntegerInRaw(column: string, values: any[]): this
+  orWhereIntegerInRaw(column: string, values: any[]): this;
 
-  orWhereIntegerNotInRaw(column: string, values: any[]): this
+  orWhereIntegerNotInRaw(column: string, values: any[]): this;
 
-  orWhereNotBetween(column: string, values: any[]): this
+  orWhereNotBetween(column: string, values: any[]): this;
 
   orWhereNotExists(callback: Function): void;
 
-  orWhereNotIn(column: string, q: (q: this) => this | void): this
+  orWhereNotIn(column: string, q: (q: this) => this | void): this;
 
-  orWhereNotIn(column: string, values: any[]): this
+  orWhereNotIn(column: string, values: any[]): this;
 
-  orWhereNotNull(column: string| string[]): this
+  orWhereNotNull(column: string | string[]): this;
 
   /*Add an "or where null" clause to the query.*/
-  orWhereNull(column: string| string[]): this
+  orWhereNull(column: string | string[]): this;
 
-  whereBetween(column: string, values: any[], conjunction?: string, not?: boolean): this
+  whereBetween(column: string, values: any[], conjunction?: string, not?: boolean): this;
 
   whereExists(callback: Function, boolean?: string, not?: boolean): void;
 
-  whereIn(column: string, q: (q: this) => this | void): this
+  whereIn(column: string, q: (q: this) => this | void): this;
 
-  whereIn(column: string, values: any[], conjunction?: string, not?: boolean): this
+  whereIn(column: string, values: any[], conjunction?: string, not?: boolean): this;
 
-  whereIntegerInRaw(column: string, values: any[], conjunction?: string, not?: boolean): this
+  whereIntegerInRaw(column: string, values: any[], conjunction?: string, not?: boolean): this;
 
-  whereIntegerNotInRaw(column: string, values: any[], conjunction?: string): this
+  whereIntegerNotInRaw(column: string, values: any[], conjunction?: string): this;
 
-  whereNotBetween(column: string, values: any[], conjunction?: string): this
+  whereNotBetween(column: string, values: any[], conjunction?: string): this;
 
   whereNotExists(callback: Function, boolean?: string): void;
 
-  whereNotIn(column: string, q: (q: this) => this | void): this
+  whereNotIn(column: string, q: (q: this) => this | void): this;
 
-  whereNotIn(column: string, values: any[], conjunction?: string): this
+  whereNotIn(column: string, values: any[], conjunction?: string): this;
 
   /*Add a "where not null" clause to the query.*/
-  whereNotNull(columns: string | any[], conjunction?: string): this
+  whereNotNull(columns: string | any[], conjunction?: string): this;
 
-  whereNull(columns: string | any[], conjunction?: string, not?: boolean): this
+  whereNull(columns: string | any[], conjunction?: string, not?: boolean): this;
 
-  whereNull(column: string): this
+  whereNull(column: string): this;
 }
 
 export type WherePredicateCtor = Constructor<WherePredicate>;
@@ -78,8 +83,8 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
 
     /*Add an exists clause to the query.*/
     public addWhereExistsQuery(this: QueryBuilder & _Self, query: QueryBuilder,
-                               conjunction: 'and'|'or'  = 'and',
-                               not: boolean = false) {
+                               conjunction: 'and' | 'or' = 'and',
+                               not: boolean              = false) {
       // const type = not ? 'NotExists' : 'Exists';
       // this.qWheres.push(compact('type', 'query', 'boolean'));
       // this.addBinding(query.getBindings(), 'where');
@@ -151,13 +156,13 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
     public whereBetween(this: QueryBuilder & WhereCommon, column: string, values: any[],
                         conjunction: 'and' | 'or' = 'and',
                         not: boolean              = false) {
-      const expression    = SqlParser.createSqlParser(column).parseColumnAlias();
+      const expression = SqlParser.createSqlParser(column).parseColumnAlias();
       const [left, right] = values;
       let leftBetween, rightBetween;
-      leftBetween         = left instanceof RawExpression ?
+      leftBetween = left instanceof RawExpression ?
         left :
         new BindingVariable(new RawExpression(left), 'where');
-      rightBetween        = right instanceof RawExpression ?
+      rightBetween = right instanceof RawExpression ?
         right :
         new BindingVariable(new RawExpression(right), 'where');
       this.addWhere(
@@ -184,7 +189,7 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
 
     public whereIn(this: QueryBuilder & WhereCommon & _Self, column: string, values: any[],
                    conjunction: 'and' | 'or' = 'and', not = false) {
-      const expression         = SqlParser.createSqlParser(column).parseUnaryTableColumn();
+      const expression = SqlParser.createSqlParser(column).parseUnaryTableColumn();
       let subQuery, valueArray = [];
       if (this.isQueryable(values)) {
         subQuery = this._createSubQuery('where', values);

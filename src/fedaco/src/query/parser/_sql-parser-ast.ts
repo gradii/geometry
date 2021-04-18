@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { createIdentifier } from '../../query-builder/ast-factory';
 import { ColumnReferenceExpression } from '../ast/column-reference-expression';
 import { NumberLiteralExpression } from '../ast/expression/number-literal-expression';
@@ -19,10 +25,10 @@ import {
 } from './sql-lexer';
 
 export class _SqlParserAst {
-  index: number             = 0;
-  private rparensExpected   = 0;
+  index: number = 0;
+  private rparensExpected = 0;
   private rbracketsExpected = 0;
-  private rbracesExpected   = 0;
+  private rbracesExpected = 0;
 
   constructor(public input: string, public location: any, public absoluteOffset: number,
               public tokens: Token[], public inputLength: number, public parseAction: boolean,
@@ -104,7 +110,9 @@ export class _SqlParserAst {
   }
 
   expectCharacter(code: number) {
-    if (this.consumeOptionalCharacter(code)) return;
+    if (this.consumeOptionalCharacter(code)) {
+      return;
+    }
     this.error(`Missing expected ${String.fromCharCode(code)}`);
   }
 
@@ -129,7 +137,9 @@ export class _SqlParserAst {
   }
 
   expectOperator(operator: string) {
-    if (this.consumeOptionalOperator(operator)) return;
+    if (this.consumeOptionalOperator(operator)) {
+      return;
+    }
     this.error(`Missing expected operator ${operator}`);
   }
 
@@ -202,7 +212,7 @@ export class _SqlParserAst {
     return undefined;
   }
 
-  //begin parse part
+  // begin parse part
 
   parseEqCondition() {
 
@@ -353,10 +363,10 @@ export class _SqlParserAst {
       if (this.consumeOptionalCharacter(asciiChars.$PERIOD)) {
         const column = this.next;
         this.advance();
-        //report error
+        // report error
         return new PathExpression(
           [createIdentifier(table.strValue),
-            createIdentifier(column.strValue)]
+           createIdentifier(column.strValue)]
         );
       } else {
         return new PathExpression(
@@ -369,7 +379,7 @@ export class _SqlParserAst {
 
   parseWhereCondition() {
     const tableColumn = this.parseUnaryTableColumn();
-    //this should be range
+    // this should be range
     if (tableColumn) {
       if (this.consumeOptionalOperator('=')) {
         const rightExpression = this.parseUnaryTableColumn();

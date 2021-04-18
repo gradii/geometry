@@ -1,9 +1,13 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
-import { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
+import { DeleteSpecification } from '../../query/ast/delete-specification';
 import { AsExpression } from '../../query/ast/expression/as-expression';
 import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
-import { FromTable } from '../../query/ast/from-table';
-import { TableReferenceExpression } from '../../query/ast/table-reference-expression';
 import { UpdateSpecification } from '../../query/ast/update-specification';
 import { createIdentifier } from '../ast-factory';
 import { GrammarInterface } from '../grammar.interface';
@@ -23,6 +27,41 @@ export class SqlserverQueryBuilderVisitor extends QueryBuilderVisitor {
     super(_grammar, _queryBuilder);
   }
 
+  visitDeleteSpecification(node: DeleteSpecification) {
+    let sql;
+
+    if (this._queryBuilder._joins.length > 0) {
+      sql = `DELETE ${node.target.accept(this).split(/\s+as\s+/i).pop()}`;
+    } else {
+      if (node.topRow > 0) {
+        sql = `DELETE top (${node.topRow}) FROM ${node.target.accept(this)}`;
+      } else {
+        sql = `DELETE FROM ${node.target.accept(this)}`;
+      }
+    }
+
+    if (node.fromClause) {
+      sql += ` ${node.fromClause.accept(this)}`;
+    }
+
+    if (node.whereClause) {
+      sql += ` ${node.whereClause.accept(this)}`;
+    }
+
+    if (this._queryBuilder._joins.length === 0) {
+      if (node.orderByClause) {
+        sql += ` ${node.orderByClause.accept(this)}`;
+      }
+      if (node.offsetClause) {
+        sql += ` ${node.offsetClause.accept(this)}`;
+      }
+      if (node.limitClause) {
+        sql += ` ${node.limitClause.accept(this)}`;
+      }
+    }
+
+    return sql;
+  }
 
   visitBinaryUnionQueryExpression(node: BinaryUnionQueryExpression) {
     let sql = `SELECT * FROM (${node.left.accept(

@@ -1,7 +1,10 @@
-import {
-  isFunction,
-  isString
-} from '@gradii/check-type';
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import { isFunction, isString } from '@gradii/check-type';
 import { Constructor } from '../../helper/constructor';
 import { QueryBuilder } from '../../query-builder/query-builder';
 import { JoinFragment } from '../../query/ast/fragment/join-fragment';
@@ -9,10 +12,7 @@ import { JoinExpression } from '../../query/ast/join-expression';
 import { JoinOnExpression } from '../../query/ast/join-on-expression';
 import { TableReferenceExpression } from '../../query/ast/table-reference-expression';
 import { SqlParser } from '../../query/parser/sql-parser';
-import {
-  bindingVariable,
-  raw
-} from '../ast-factory';
+import { bindingVariable } from '../ast-factory';
 
 export interface QueryBuilderJoin {
   join(table: string, first, operator, second, type?, where?): this;
@@ -26,7 +26,7 @@ export interface QueryBuilderJoin {
   joinWhere(table: string, first: Function | string, operator: string, second: string, type?: string): this;
 
   joinSub(query: Function | QueryBuilder | string, as: string, first: Function | string, operator?: string,
-          second?: string|number, type?: string, where?: boolean): this;
+          second?: string | number, type?: string, where?: boolean): this;
 
   leftJoin(table: string, first: Function | string, operator?: string, second?: string): this;
 
@@ -76,17 +76,17 @@ export function mixinJoin<T extends Constructor<any>>(base: T): QueryBuilderJoin
         arguments.length === 5 || arguments.length === 6
       ) {
         if (arguments.length === 3) {
-          second   = operator;
+          second = operator;
           operator = '=';
         }
 
         let tableNode;
-        if(isString(table)) {
+        if (isString(table)) {
           tableNode = SqlParser.createSqlParser(table).parseTableAlias();
-        }else if(table instanceof TableReferenceExpression) {
+        } else if (table instanceof TableReferenceExpression) {
           tableNode = table;
-        }else {
-          throw new Error('invalid table type')
+        } else {
+          throw new Error('invalid table type');
         }
 
         let left, right;
@@ -137,7 +137,7 @@ export function mixinJoin<T extends Constructor<any>>(base: T): QueryBuilderJoin
                    operator: string = null, second: string = null, type: string = 'inner',
                    where: boolean                                               = false) {
       const node = this._createSubQuery('join', query);
-      const expression  = new TableReferenceExpression(node, as ? SqlParser.createSqlParser(as).parseUnaryTableColumn() : undefined);
+      const expression = new TableReferenceExpression(node, as ? SqlParser.createSqlParser(as).parseUnaryTableColumn() : undefined);
 
       return this.join(expression, first, operator, second, type, where);
     }

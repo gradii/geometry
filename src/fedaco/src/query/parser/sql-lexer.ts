@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import * as asciiChars from './ascii-chars';
 import {
   isExponentSign,
@@ -51,9 +57,9 @@ function newErrorToken(index: number, end: number, message: string): Token {
 export class SqlLexer {
 
   tokenize(text: string): Token[] {
-    const scanner         = new _Scanner(text);
+    const scanner = new _Scanner(text);
     const tokens: Token[] = [];
-    let token             = scanner.scanToken();
+    let token = scanner.scanToken();
     while (token != null) {
       tokens.push(token);
       token = scanner.scanToken();
@@ -66,7 +72,7 @@ export class SqlLexer {
 // tslint:disable-next-line:class-name
 class _Scanner {
   length: number;
-  peek: number  = 0;
+  peek: number = 0;
   index: number = -1;
 
   constructor(public input: string) {
@@ -121,7 +127,9 @@ class _Scanner {
   scanIdentifier(): Token {
     const start: number = this.index;
     this.advance();
-    while (isIdentifierPart(this.peek)) this.advance();
+    while (isIdentifierPart(this.peek)) {
+      this.advance();
+    }
     const str: string = this.input.substring(start, this.index);
     return KEYWORDS.indexOf(str.toLowerCase()) > -1 ? newKeywordToken(start, this.index, str.toLowerCase()) :
       newIdentifierToken(start, this.index, str);
@@ -137,15 +145,19 @@ class _Scanner {
         simple = false;
       } else if (isExponentStart(this.peek)) {
         this.advance();
-        if (isExponentSign(this.peek)) this.advance();
-        if (!asciiChars.isDigit(this.peek)) return this.error('Invalid exponent', -1);
+        if (isExponentSign(this.peek)) {
+          this.advance();
+        }
+        if (!asciiChars.isDigit(this.peek)) {
+          return this.error('Invalid exponent', -1);
+        }
         simple = false;
       } else {
         break;
       }
       this.advance();
     }
-    const str: string   = this.input.substring(start, this.index);
+    const str: string = this.input.substring(start, this.index);
     const value: number = simple ? parseIntAutoRadix(str) : parseFloat(str);
     return newNumberToken(start, this.index, value);
   }
@@ -160,8 +172,8 @@ class _Scanner {
     const quote: number = this.peek;
     this.advance();  // Skip initial quote.
 
-    let buffer: string  = '';
-    let marker: number  = this.index;
+    let buffer: string = '';
+    let marker: number = this.index;
     const input: string = this.input;
 
     while (this.peek != quote) {
@@ -203,7 +215,7 @@ class _Scanner {
 
   scanToken(): Token | null {
     const input = this.input, length = this.length;
-    let peek    = this.peek, index = this.index;
+    let peek = this.peek, index = this.index;
 
     // Skip whitespace.
     while (peek <= asciiChars.$SPACE) {
@@ -215,7 +227,7 @@ class _Scanner {
       }
     }
 
-    this.peek  = peek;
+    this.peek = peek;
     this.index = index;
 
     if (index >= length) {
@@ -223,8 +235,12 @@ class _Scanner {
     }
 
     // Handle identifiers and numbers.
-    if (isIdentifierStart(peek)) return this.scanIdentifier();
-    if (asciiChars.isDigit(peek)) return this.scanNumber(index);
+    if (isIdentifierStart(peek)) {
+      return this.scanIdentifier();
+    }
+    if (asciiChars.isDigit(peek)) {
+      return this.scanNumber(index);
+    }
 
     const start: number = index;
     switch (peek) {
@@ -267,7 +283,9 @@ class _Scanner {
       case asciiChars.$BAR:
         return this.scanComplexOperator(start, '|', asciiChars.$BAR, '|');
       case asciiChars.$NBSP:
-        while (asciiChars.isWhitespace(this.peek)) this.advance();
+        while (asciiChars.isWhitespace(this.peek)) {
+          this.advance();
+        }
         return this.scanToken();
     }
 

@@ -29,6 +29,7 @@
     "annotation": { "tags": ["pkg"] },
     "check-type": { "tags": ["pkg"] },
     "date-math": { "tags": ["pkg"] },
-    "vector-math": { "tags": ["pkg"] }
+    "vector-math": { "tags": ["pkg"] },
+    "fedaco": { "tags": ["pkg"] }
   }
 }

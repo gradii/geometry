@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { ColumnReferenceExpression } from '../query/ast/column-reference-expression';
 import { RawBindingExpression } from '../query/ast/expression/raw-binding-expression';
 import { RawExpression } from '../query/ast/expression/raw-expression';

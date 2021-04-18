@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { ProcessorInterface } from './processor-interface';
 
 export class Processor implements ProcessorInterface {
@@ -6,7 +12,7 @@ export class Processor implements ProcessorInterface {
     return results;
   }
 
-  processInsertGetId(){
+  processInsertGetId() {
 
   }
 }

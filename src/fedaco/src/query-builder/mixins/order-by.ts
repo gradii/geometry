@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { isString } from '@gradii/check-type';
 import { Constructor } from '../../helper/constructor';
 import { QueryBuilder } from '../../query-builder/query-builder';
@@ -8,18 +14,18 @@ import { rawSqlBindings } from '../ast-factory';
 import { wrapToArray } from '../ast-helper';
 
 export interface QueryBuilderOrderBy {
-  oldest(column: string): this
+  oldest(column: string): this;
 
   orderBy(column: Function | QueryBuilder | RawExpression | string,
-          direction?: string): this
+          direction?: string): this;
 
-  orderByDesc(column: (q) => void): this
+  orderByDesc(column: (q) => void): this;
 
-  orderByDesc(column: string): this
+  orderByDesc(column: string): this;
 
-  orderByRaw(sql: string, bindings: any[] | any): this
+  orderByRaw(sql: string, bindings: any[] | any): this;
 
-  reorder(column?, direction?): this
+  reorder(column?, direction?): this;
 }
 
 export type QueryBuilderOrderByCtor = Constructor<QueryBuilderOrderBy>;
@@ -28,7 +34,7 @@ export function mixinOrderBy<T extends Constructor<any>>(base: T): QueryBuilderO
   return class _Self extends base {
 
     /*Add an "order by" clause for a timestamp to the query.*/
-    public oldest(this: QueryBuilder & _Self,column: string = 'created_at') {
+    public oldest(this: QueryBuilder & _Self, column: string = 'created_at') {
       return this.orderBy(column, 'asc');
     }
 
@@ -87,9 +93,9 @@ export function mixinOrderBy<T extends Constructor<any>>(base: T): QueryBuilderO
 
     /*Remove all existing orders and optionally add a new order.*/
     public reorder(this: QueryBuilder & _Self, column?, direction = 'asc') {
-      this._orders                 = [];
-      this._unionOrders            = [];
-      this._bindings['order']      = [];
+      this._orders = [];
+      this._unionOrders = [];
+      this._bindings['order'] = [];
       this._bindings['unionOrder'] = [];
       if (column) {
         return this.orderBy(column, direction);

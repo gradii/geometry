@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { SqlNode } from '../sql-node';
 import { SqlVisitor } from '../sql-visitor';
 
@@ -18,7 +24,7 @@ export class RangeVariableDeclaration extends SqlNode {
     } else {
       return this.abstractSchemaName;
     }
-  };
+  }
 
   public accept(visitor: SqlVisitor) {
     return visitor.visitRangeVariableDeclaration(this);

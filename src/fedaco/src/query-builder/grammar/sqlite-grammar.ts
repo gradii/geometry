@@ -1,3 +1,18 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
+import { DeleteSpecification } from '../../query/ast/delete-specification';
+import { ConditionExpression } from '../../query/ast/expression/condition-expression';
+import { InPredicateExpression } from '../../query/ast/expression/in-predicate-expression';
+import { NestedExpression } from '../../query/ast/fragment/nested-expression';
+import { Identifier } from '../../query/ast/identifier';
+import { PathExpression } from '../../query/ast/path-expression';
+import { WhereClause } from '../../query/ast/where-clause';
+import { createIdentifier } from '../ast-factory';
 import { GrammarInterface } from '../grammar.interface';
 import { QueryBuilder } from '../query-builder';
 import { SqliteQueryBuilderVisitor } from '../visitor/sqlite-query-builder-visitor';
@@ -10,9 +25,23 @@ export class SqliteGrammar extends Grammar implements GrammarInterface {
 
   }
 
+  protected _createVisitor(queryBuilder) {
+    return new SqliteQueryBuilderVisitor(queryBuilder._grammar, queryBuilder);
+  }
 
   compileInsertOrIgnore(builder: QueryBuilder, values): string {
     return this.compileInsert(builder, values, 'or ignore into');
+  }
+
+  /*Compile a truncate table statement into SQL.*/
+  compileTruncate(query: QueryBuilder): { [sql: string]: any[] } {
+    const table = query._from.accept(this._createVisitor(query));
+    return {
+      'DELETE FROM sqlite_sequence WHERE name = ?': [
+        this.unQuoteTableName(table)
+      ],
+      [`DELETE FROM ${table}`]                    : []
+    };
   }
 
   compileSelect(builder: QueryBuilder): string {
@@ -46,7 +75,53 @@ export class SqliteGrammar extends Grammar implements GrammarInterface {
     return `"${this._tablePrefix}${tableName.replace(/`/g, '')}"`;
   }
 
+  unQuoteTableName(tableName): string {
+    return `${tableName.replace(/^"(.+?)"/g, '$1')}`;
+  }
+
   setTablePrefix(prefix: string) {
     this._tablePrefix = prefix;
+  }
+
+  protected _prepareDeleteAstWithJoins(builder: QueryBuilder) {
+
+    const inBuilder = builder.cloneWithout([]);
+
+    inBuilder.resetBindings();
+
+    inBuilder._columns = [
+      new ColumnReferenceExpression(
+        new PathExpression(
+          [
+            builder._from,
+            createIdentifier('rowid')
+          ]
+        )
+      )
+    ];
+    inBuilder._wheres = builder._wheres;
+
+    const ast = new DeleteSpecification(builder._from,
+      new WhereClause(
+        new ConditionExpression(
+          [
+            new InPredicateExpression(
+              new ColumnReferenceExpression(
+                new PathExpression(
+                  [new Identifier('rowid')]
+                )
+              ),
+              [],
+              new NestedExpression('where', inBuilder)
+            )
+          ]
+        )
+      ));
+
+    return ast;
+  }
+
+  protected _prepareDeleteAstWithoutJoins(builder: QueryBuilder): DeleteSpecification {
+    return this._prepareDeleteAstWithJoins(builder);
   }
 }

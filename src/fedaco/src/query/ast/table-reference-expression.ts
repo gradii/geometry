@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { SqlNode } from '../sql-node';
 import { SqlVisitor } from '../sql-visitor';
 import { ParenthesizedExpression } from './expression/parenthesized-expression';
@@ -8,8 +14,9 @@ import { TableName } from './table-name';
 
 
 export class TableReferenceExpression extends SqlNode {
+
   constructor(public expression: ParenthesizedExpression | TableName | NestedExpression,
-              public alias?: Identifier|PathExpression) {
+              public alias?: Identifier | PathExpression) {
     super();
   }
 

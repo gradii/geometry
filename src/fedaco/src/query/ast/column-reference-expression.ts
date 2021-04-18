@@ -1,4 +1,10 @@
 /**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
  * SelectExpression ::= IdentificationVariable ["." "*"] | StateFieldPathExpression |
  * (AggregateExpression | "(" Subselect ")") [["AS"] ["HIDDEN"] FieldAliasIdentificationVariable]
  *
@@ -9,6 +15,7 @@
  */
 import { SqlNode } from '../sql-node';
 import { SqlVisitor } from '../sql-visitor';
+import { RawExpression } from './expression/raw-expression';
 import { JsonPathColumn } from './fragment/json-path-column';
 import { NestedExpression } from './fragment/nested-expression';
 import { Identifier } from './identifier';

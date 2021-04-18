@@ -1,12 +1,18 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { isFunction } from '@gradii/check-type';
 import { Constructor } from '../../helper/constructor';
 import { QueryBuilder } from '../../query-builder/query-builder';
 import { UnionFragment } from '../../query/ast/fragment/union-fragment';
 
 export interface QueryBuilderUnion {
-  union(query: QueryBuilder | Function, all?: boolean): this
+  union(query: QueryBuilder | Function, all?: boolean): this;
 
-  unionAll(query: QueryBuilder | Function): this
+  unionAll(query: QueryBuilder | Function): this;
 }
 
 export type QueryBuilderUnionCtor = Constructor<QueryBuilderUnion>;

@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { SqlNode } from '../sql-node';
 import { SqlVisitor } from '../sql-visitor';
 
@@ -8,6 +14,6 @@ export class SelectInsertSource extends SqlNode {
   }
 
   accept(visitor: SqlVisitor) {
-    return visitor.visitSelectInsertSource(this)
+    return visitor.visitSelectInsertSource(this);
   }
 }
