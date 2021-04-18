@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 export function relativeError(calculated, correct) {
   if (typeof calculated == 'number' && typeof correct == 'number') {
     const diff = Math.abs(calculated - correct);

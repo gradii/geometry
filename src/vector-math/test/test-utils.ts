@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Matrix2 } from '../src/matrix2';
 import { Matrix3 } from '../src/matrix3';
 import { Matrix4 } from '../src/matrix4';

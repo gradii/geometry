@@ -1,7 +1,7 @@
 describe('empty', () => {
-  it('empty', ()=>{
-    expect(true).toBe(true)
-  })
+  it('empty', () => {
+    expect(true).toBe(true);
+  });
 });
 
 

@@ -1,10 +1,9 @@
 /**
- * @licence
- * Copyright (c) 2018 LinBo Len <linbolen@gradii.com>
+ * @license
  *
- * Use of this source code is governed by an MIT-style license.
- * See LICENSE file in the project root for full license information.
+ * Use of this source code is governed by an MIT-style license
  */
+
 import { Vector3 } from './vector3';
 
 export class Plane {
@@ -12,7 +11,7 @@ export class Plane {
 
   constructor(x: number, y: number, z: number, w: number);
 
-  constructor(normal_: Vector3, constant_: number);
+  constructor(normal: Vector3, constant: number);
 
   constructor() {
     if (arguments.length === 1 && arguments[0] instanceof Plane) {

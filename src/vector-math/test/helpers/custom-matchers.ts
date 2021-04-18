@@ -1,4 +1,10 @@
 /**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
  * @licence
  * Copyright (c) 2018 LinBo Len <linbolen@gradii.com>
  * Copyright (c) 2018 Google Inc. (https://github.com/google/vector_math.dart)

@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Matrix4 } from './matrix4';
 import { Triangle } from './triangle';
 import { Vector3 } from './vector3';

@@ -4,7 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-
 import { Matrix3 } from './matrix3';
 import { Matrix4 } from './matrix4';
 import { Vector3 } from './vector3';
