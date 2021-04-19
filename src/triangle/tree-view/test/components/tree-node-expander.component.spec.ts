@@ -1,6 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  TestBed
+} from '@angular/core/testing';
 
-import { TreeNodeExpanderComponent } from './tree-node-expander.component';
+import { TreeNodeExpanderComponent } from '../../src/components/tree-node-expander/tree-node-expander.component';
 
 describe('TreeNodeExpanderComponent', () => {
   let component: TreeNodeExpanderComponent;
@@ -14,8 +18,8 @@ describe('TreeNodeExpanderComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TreeNodeExpanderComponent);
-    component = fixture.componentInstance;
+    fixture        = TestBed.createComponent(TreeNodeExpanderComponent);
+    component      = fixture.componentInstance;
     component.node = {} as any;
     fixture.detectChanges();
   });

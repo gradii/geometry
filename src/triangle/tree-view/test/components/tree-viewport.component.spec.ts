@@ -1,12 +1,18 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  TestBed
+} from '@angular/core/testing';
 import { BrowserTestingModule } from '@angular/platform-browser/testing';
+import { TriPseudoCheckboxModule } from '@gradii/triangle/core';
+
 import { of } from 'rxjs';
+import { TreeViewportComponent } from '../../src/components/tree-viewport/tree-viewport.component';
 
 import {
   TreeVirtualScroll,
   VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA
-} from '../../services/tree-virtual-scroll.service';
-import { TreeViewportComponent } from './tree-viewport.component';
+} from '../../src/services/tree-virtual-scroll.service';
 
 describe('TreeViewportComponent', () => {
   let component: TreeViewportComponent;
@@ -16,6 +22,7 @@ describe('TreeViewportComponent', () => {
     TestBed.configureTestingModule({
       imports     : [
         BrowserTestingModule,
+        TriPseudoCheckboxModule
       ],
       declarations: [TreeViewportComponent],
       providers   : [
@@ -30,8 +37,8 @@ describe('TreeViewportComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TreeViewportComponent);
-    component = fixture.componentInstance;
+    fixture             = TestBed.createComponent(TreeViewportComponent);
+    component           = fixture.componentInstance;
     component.treeModel = {
       scrollIntoView$: of({node: {}}),
       roots          : [],

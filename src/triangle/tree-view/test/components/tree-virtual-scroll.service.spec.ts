@@ -1,6 +1,12 @@
-import { inject, TestBed } from '@angular/core/testing';
+import {
+  inject,
+  TestBed
+} from '@angular/core/testing';
 
-import { TreeVirtualScroll, VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA } from './tree-virtual-scroll.service';
+import {
+  TreeVirtualScroll,
+  VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA
+} from '../../src/services/tree-virtual-scroll.service';
 
 describe('TreeVirtualScrollService', () => {
   beforeEach(() => {
@@ -8,7 +14,7 @@ describe('TreeVirtualScrollService', () => {
       providers: [
         TreeVirtualScroll,
         {
-          provide : VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA,
+          provide: VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA,
           useValue: 5,
         },
       ],

@@ -1,16 +1,30 @@
-import { ChangeDetectionStrategy, Component, Input, TemplateRef } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  TemplateRef
+} from '@angular/core';
+import {
+  async,
+  ComponentFixture,
+  TestBed
+} from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { TriPseudoCheckboxModule } from '@gradii/triangle/core';
+import { TreeNodeChildrenComponent } from '../../src/components/tree-node-children/tree-node-children.component';
 
-import { createTreeUIOptions, TreeNode, TreeUIOptions } from '../../models/index';
+import {
+  createTreeUIOptions,
+  TreeNode,
+  TreeUIOptions
+} from '../../src/models/index';
 import {
   TreeVirtualScroll,
   VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA
-} from '../../services/tree-virtual-scroll.service';
-import { TreeNodeChildrenComponent } from './tree-node-children.component';
+} from '../../src/services/tree-virtual-scroll.service';
 
 @Component({
-  selector: 'ngx-tree-node',
+  selector: 'tri-tree-node',
   template: '',
 })
 export class FakeTreeNodeComponent {
@@ -21,7 +35,7 @@ export class FakeTreeNodeComponent {
 }
 
 @Component({
-  selector       : 'ngx-tree-loading',
+  selector       : 'tri-tree-loading',
   template       : '',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -38,6 +52,7 @@ describe('TreeNodeChildrenComponent', () => {
     TestBed.configureTestingModule({
       imports     : [
         NoopAnimationsModule,
+        TriPseudoCheckboxModule,
       ],
       declarations: [
         TreeNodeChildrenComponent,
@@ -56,10 +71,10 @@ describe('TreeNodeChildrenComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TreeNodeChildrenComponent);
-    component = fixture.componentInstance;
-    component.options = createTreeUIOptions();
-    component.node = {} as any;
+    fixture             = TestBed.createComponent(TreeNodeChildrenComponent);
+    component           = fixture.componentInstance;
+    component.options   = createTreeUIOptions();
+    component.node      = {} as any;
     component.templates = <any>{};
     fixture.detectChanges();
   });

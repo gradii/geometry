@@ -1,4 +1,4 @@
-import { createTreeUIOptions, defaultUIOptions } from './tree-options';
+import { createTreeUIOptions, defaultUIOptions } from '../../src/models/tree-options';
 
 describe('TreeDraggingTargetService', () => {
   let defaultRawOption;

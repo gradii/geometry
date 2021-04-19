@@ -11,7 +11,7 @@
        [class.virtual-scroll-disabled]="viewport.virtualScroll.isDisabled()"
        [style.transform]="'translateY(' + root.marginTop + 'px)'"
        class="tree-root">
-    <ngx-tree-node-children #root
+    <tri-tree-node-children #root
                             [children]="treeModel?.roots"
                             [disableMarginTop]="true"
                             [node]="treeModel?.virtualRoot"
@@ -24,6 +24,6 @@
                               treeNodeWrapperTemplate: treeNodeWrapperTemplate,
                               treeNodeFullTemplate: treeNodeFullTemplate
                             }">
-    </ngx-tree-node-children>
+    </tri-tree-node-children>
   </div>
 </tri-tree-viewport>

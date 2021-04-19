@@ -1,6 +1,9 @@
-import { inject, TestBed } from '@angular/core/testing';
+import {
+  inject,
+  TestBed
+} from '@angular/core/testing';
+import { TreeDraggingTargetService } from '../../src/services/tree-dragging-target.service';
 
-import { TreeDraggingTargetService } from './tree-dragging-target.service';
 
 describe('TreeDraggingTargetService', () => {
   beforeEach(() => {
@@ -9,7 +12,8 @@ describe('TreeDraggingTargetService', () => {
     });
   });
 
-  it('should be created', inject([TreeDraggingTargetService], (service: TreeDraggingTargetService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created',
+    inject([TreeDraggingTargetService], (service: TreeDraggingTargetService) => {
+      expect(service).toBeTruthy();
+    }));
 });

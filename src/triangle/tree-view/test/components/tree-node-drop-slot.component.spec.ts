@@ -1,16 +1,29 @@
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  Directive,
+  EventEmitter,
+  Input,
+  Output
+} from '@angular/core';
+import {
+  async,
+  ComponentFixture,
+  TestBed
+} from '@angular/core/testing';
 import { BrowserTestingModule } from '@angular/platform-browser/testing';
+import { TriPseudoCheckboxModule } from '@gradii/triangle/core';
+import { TreeNodeDropSlotComponent } from '../../src/components/tree-node-drop-slot/tree-node-drop-slot.component';
 
-import { createTreeUIOptions, TreeNode } from '../../models/index';
-import { TreeNodeDropSlotComponent } from './tree-node-drop-slot.component';
+import {
+  createTreeUIOptions,
+  TreeNode
+} from '../../src/models/index';
 
 @Directive({
   selector: '[ngxTreeDrop]',
 })
 export class FakeTreeDropDirective {
-  @Output('ngxTreeDrop') onDrop$ = new EventEmitter();
-  @Output('treeDropDragOver') onDragOver$ = new EventEmitter();
+  @Output('ngxTreeDrop') onDrop$            = new EventEmitter();
+  @Output('treeDropDragOver') onDragOver$   = new EventEmitter();
   @Output('treeDropDragLeave') onDragLeave$ = new EventEmitter();
   @Output('treeDropDragEnter') onDragEnter$ = new EventEmitter();
   @Input() treeAllowDrop: any;
@@ -38,6 +51,7 @@ describe('TreeNodeDropSlotComponent', () => {
     TestBed.configureTestingModule({
       imports     : [
         BrowserTestingModule,
+        TriPseudoCheckboxModule
       ],
       declarations: [
         TreeNodeDropSlotComponent,
@@ -49,8 +63,8 @@ describe('TreeNodeDropSlotComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TreeNodeDropSlotComponent);
-    component = fixture.componentInstance;
+    fixture           = TestBed.createComponent(TreeNodeDropSlotComponent);
+    component         = fixture.componentInstance;
     component.options = createTreeUIOptions();
     fixture.detectChanges();
   });

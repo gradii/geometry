@@ -1,17 +1,29 @@
-import { Component, Input } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  Component,
+  Input
+} from '@angular/core';
+import {
+  async,
+  ComponentFixture,
+  TestBed
+} from '@angular/core/testing';
 import { BrowserTestingModule } from '@angular/platform-browser/testing';
+import { TriPseudoCheckboxModule } from '@gradii/triangle/core';
+import { TreeNodeComponent } from '../../src/components/tree-node/tree-node.component';
 
-import { createTreeUIOptions, TreeNode, TreeUIOptions } from '../../models/index';
+import {
+  createTreeUIOptions,
+  TreeNode,
+  TreeUIOptions
+} from '../../src/models/index';
 import {
   FakeTreeDragDirective,
   FakeTreeDropDirective
-} from '../tree-node-drop-slot/tree-node-drop-slot.component.spec';
-import { FakeTreeNodeChildrenComponent } from '../tree/tree.component.spec';
-import { TreeNodeComponent } from './tree-node.component';
+} from './tree-node-drop-slot.component.spec';
+import { FakeTreeNodeChildrenComponent } from './tree.component.spec';
 
 @Component({
-  selector: 'ngx-tree-node-wrapper',
+  selector: 'tri-tree-node-wrapper',
   template: '',
 })
 export class FakeTreeNodeWrapperComponent {
@@ -32,6 +44,7 @@ describe('TreeNodeComponent', () => {
     TestBed.configureTestingModule({
       imports     : [
         BrowserTestingModule,
+        TriPseudoCheckboxModule
       ],
       declarations: [
         TreeNodeComponent,
@@ -45,10 +58,10 @@ describe('TreeNodeComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TreeNodeComponent);
-    component = fixture.componentInstance;
-    component.options = createTreeUIOptions();
-    component.node = {} as any;
+    fixture             = TestBed.createComponent(TreeNodeComponent);
+    component           = fixture.componentInstance;
+    component.options   = createTreeUIOptions();
+    component.node      = {} as any;
     component.templates = {} as any;
     fixture.detectChanges();
   });

@@ -1,16 +1,30 @@
-import { ChangeDetectionStrategy, Component, Input, TemplateRef } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  TemplateRef
+} from '@angular/core';
+import {
+  async,
+  ComponentFixture,
+  TestBed
+} from '@angular/core/testing';
 import { BrowserTestingModule } from '@angular/platform-browser/testing';
+import { TriPseudoCheckboxModule } from '@gradii/triangle/core';
+import { TreeNodeWrapperComponent } from '../../src/components/tree-node-wrapper/tree-node-wrapper.component';
 
-import { createTreeUIOptions, TreeNode, TreeUIOptions } from '../../models/index';
+import {
+  createTreeUIOptions,
+  TreeNode,
+  TreeUIOptions
+} from '../../src/models/index';
 import {
   TreeVirtualScroll,
   VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA
-} from '../../services/tree-virtual-scroll.service';
-import { TreeNodeWrapperComponent } from './tree-node-wrapper.component';
+} from '../../src/services/tree-virtual-scroll.service';
 
 @Component({
-  selector: 'ngx-tree-node-expander',
+  selector: 'tri-tree-node-expander',
   template: '',
 })
 export class FakeTreeNodeExpanderComponent {
@@ -21,7 +35,7 @@ export class FakeTreeNodeExpanderComponent {
 }
 
 @Component({
-  selector       : 'ngx-tree-node-content',
+  selector       : 'tri-tree-node-content',
   template       : '',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -40,6 +54,7 @@ describe('TreeNodeWrapperComponent', () => {
     TestBed.configureTestingModule({
       imports     : [
         BrowserTestingModule,
+        TriPseudoCheckboxModule
       ],
       declarations: [
         TreeNodeWrapperComponent,
@@ -58,10 +73,10 @@ describe('TreeNodeWrapperComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TreeNodeWrapperComponent);
-    component = fixture.componentInstance;
-    component.options = createTreeUIOptions();
-    component.node = {} as any;
+    fixture             = TestBed.createComponent(TreeNodeWrapperComponent);
+    component           = fixture.componentInstance;
+    component.options   = createTreeUIOptions();
+    component.node      = {} as any;
     component.templates = <any>{};
     fixture.detectChanges();
   });

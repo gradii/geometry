@@ -1,13 +1,26 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input
+} from '@angular/core';
+import {
+  async,
+  ComponentFixture,
+  TestBed
+} from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { TriPseudoCheckboxModule } from '@gradii/triangle/core';
+import { TreeComponent } from '../../src/components/tree/tree.component';
 
-import { TreeModel, TreeNode, TreeUIOptions } from '../../models/index';
-import { TreeDraggingTargetService } from '../../services/tree-dragging-target.service';
-import { TreeComponent } from './tree.component';
+import {
+  TreeModel,
+  TreeNode,
+  TreeUIOptions
+} from '../../src/models/index';
+import { TreeDraggingTargetService } from '../../src/services/tree-dragging-target.service';
 
 @Component({
-  selector: 'ngx-tree-node-children',
+  selector: 'tri-tree-node-children',
   template: '',
 })
 export class FakeTreeNodeChildrenComponent {
@@ -17,14 +30,14 @@ export class FakeTreeNodeChildrenComponent {
   @Input() templates: any;
   @Input() disableMarginTop = false;
   @Input() children: TreeNode[];
-  @Input() refreshTree = false;
+  @Input() refreshTree      = false;
 
   constructor() {
   }
 }
 
 @Component({
-  selector       : 'ngx-tree-viewport',
+  selector       : 'tri-tree-viewport',
   template       : '',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -53,6 +66,7 @@ describe('TreeComponent', () => {
     TestBed.configureTestingModule({
       imports     : [
         NoopAnimationsModule,
+        TriPseudoCheckboxModule,
       ],
       declarations: [
         TreeComponent,
@@ -67,7 +81,7 @@ describe('TreeComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TreeComponent);
+    fixture   = TestBed.createComponent(TreeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

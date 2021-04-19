@@ -25,7 +25,7 @@ import { binarySearch } from '../../util';
 export const EXPANSION_PANEL_ANIMATION_TIMING = '225ms cubic-bezier(0.4,0.0,0.2,1)';
 
 @Component({
-  selector       : 'ngx-tree-node-children',
+  selector       : 'tri-tree-node-children',
   templateUrl    : './tree-node-children.component.html',
   styleUrls      : ['../../../style/components/tree-node-children.component.css'],
   animations     : [

@@ -1,6 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  TestBed
+} from '@angular/core/testing';
 
-import { TreeLoadingComponent } from './tree-loading.component';
+import { TreeLoadingComponent } from '../../src/components/tree-loading/tree-loading.component';
 
 describe('TreeLoadingComponent', () => {
   let component: TreeLoadingComponent;
