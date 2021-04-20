@@ -74,7 +74,6 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   currentMonthCol: number = -1;
   activeMonthRow: number = -1;
   activeMonthCol: number = -1;
-  private prefixCls = 'tri-fullcalendar';
   private currentDate = new Date();
 
   constructor(private i18n: I18n) {

@@ -28,6 +28,7 @@ ng_module(
         "//src/dev-app/drawer",
         "//src/dev-app/transfer",
         "//src/dev-app/card",
+        "//src/dev-app/calendar",
 
         "//src/triangle/core",
         "@npm//@angular/cdk",

@@ -1,0 +1,23 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "calendar",
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"],),
+    assets = [
+        "dev-calendar.html",
+        ":dev_calendar_scss",
+    ],
+    deps = [
+        "//src/triangle/badge",
+        "//src/triangle/calendar",
+        "@npm//@angular/cdk",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_calendar_scss",
+    src = "dev-calendar.scss",
+)

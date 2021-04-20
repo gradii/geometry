@@ -22,6 +22,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="drawer">drawer</a></li>
       <li><a routerLink="transfer">transfer</a></li>
       <li><a routerLink="card">card</a></li>
+      <li><a routerLink="calendar">calendar</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>
