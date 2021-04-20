@@ -12,10 +12,10 @@ import { Component, OnInit } from '@angular/core';
   selector: 'tri-demo-card-loading',
   template: `
     <tri-card style="width:34%;" [loading]="true">
-      <ng-template #title>
+      <ng-template triCardTitle>
         Card title
       </ng-template>
-      <ng-template #body>
+      <ng-template triCardBody>
         Whatever content
       </ng-template>
     </tri-card>

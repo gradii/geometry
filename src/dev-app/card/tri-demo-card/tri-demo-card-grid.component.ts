@@ -15,30 +15,30 @@ import { Component, OnInit } from '@angular/core';
       <div tri-row [gutter]="8">
         <div tri-col [span]="8">
           <tri-card>
-            <ng-template #title>
+            <ng-template triCardTitle>
               Card title
             </ng-template>
-            <ng-template #body>
+            <ng-template triCardBody>
               <p>Card content</p>
             </ng-template>
           </tri-card>
         </div>
         <div tri-col [span]="8">
           <tri-card>
-            <ng-template #title>
+            <ng-template triCardTitle>
               Card title
             </ng-template>
-            <ng-template #body>
+            <ng-template triCardBody>
               <p>Card content</p>
             </ng-template>
           </tri-card>
         </div>
         <div tri-col [span]="8">
           <tri-card>
-            <ng-template #title>
+            <ng-template triCardTitle>
               Card title
             </ng-template>
-            <ng-template #body>
+            <ng-template triCardBody>
               <p>Card content</p>
             </ng-template>
           </tri-card>

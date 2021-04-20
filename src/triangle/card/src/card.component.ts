@@ -15,7 +15,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import {
-  TriCardContent,
+  TriCardBody,
   TriCardTitle,
   TriCardTitleExtra
 } from '@gradii/triangle/card/src/card.directive';
@@ -119,6 +119,6 @@ export class CardComponent {
    * The card content area
    * 卡片内容区域
    */
-  @ContentChild(TriCardContent, {static: false, read: TemplateRef})
+  @ContentChild(TriCardBody, {static: false, read: TemplateRef})
   bodyTemplate: TemplateRef<any>;
 }

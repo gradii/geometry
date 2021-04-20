@@ -16,9 +16,9 @@ import {
  * Content of a card, needed as it's used as a selector in the API.
  */
 @Directive({
-  selector: '[triCardContent]',
+  selector: '[triCardBody]',
 })
-export class TriCardContent {
+export class TriCardBody {
   constructor(@Host() templateRef: TemplateRef<any>) {
   }
 }

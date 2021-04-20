@@ -13,8 +13,8 @@ import { Component, OnInit } from '@angular/core';
   selector: 'tri-demo-card-inner',
   template: `
     <tri-card [noHovering]="true">
-      <ng-template #title>卡片标题</ng-template>
-      <ng-template #body>
+      <ng-template triCardTitle>卡片标题</ng-template>
+      <ng-template triCardBody>
         <div tri-card-grid [ngStyle]="gridStyle">卡片内容</div>
         <div tri-card-grid [ngStyle]="gridStyle">卡片内容</div>
         <div tri-card-grid [ngStyle]="gridStyle">卡片内容</div>

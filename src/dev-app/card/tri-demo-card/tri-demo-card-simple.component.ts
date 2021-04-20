@@ -12,7 +12,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'tri-demo-card-simple',
   template: `
     <tri-card style="width:300px;">
-      <ng-template #body>
+      <ng-template triCardBody>
         <p>Card content</p>
         <p>Card content</p>
         <p>Card content</p>

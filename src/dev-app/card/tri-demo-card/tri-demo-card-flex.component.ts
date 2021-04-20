@@ -12,9 +12,10 @@ import { Component, OnInit } from '@angular/core';
   selector: 'tri-demo-card-flex',
   template: `
     <tri-card style="width:240px">
-      <ng-template #body>
+      <ng-template triCardBody>
         <div class="custom-image">
-          <img alt="example" width="100%" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"/>
+          <img alt="example" width="100%"
+               src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"/>
         </div>
         <div class="custom-card">
           <h3>Europe Street beat</h3>

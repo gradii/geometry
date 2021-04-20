@@ -13,13 +13,13 @@ import { Component, OnInit } from '@angular/core';
   template: `
     <div style="background: #ECECEC;padding:30px;">
       <tri-card style="width:300px;" [bordered]="false">
-        <ng-template #title>
+        <ng-template triCardTitle>
           Card title
         </ng-template>
-        <ng-template #extra>
+        <ng-template triCardTitleExtra>
           <a>More</a>
         </ng-template>
-        <ng-template #body>
+        <ng-template triCardBody>
           <p>Card content</p>
           <p>Card content</p>
           <p>Card content</p>

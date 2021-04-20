@@ -18,7 +18,7 @@ import { Component, OnInit } from '@angular/core';
       <ng-template triCardTitleExtra>
         <a>More</a>
       </ng-template>
-      <ng-template triCardContent>
+      <ng-template triCardBody>
         <p>Card content</p>
         <p>Card content</p>
         <p>Card content</p>

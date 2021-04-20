@@ -28,7 +28,7 @@ $card-head-color       : v.$heading-color;
     }
 
     @at-root &-bordered {
-      border     : v.$border-width-base v.$border-style-base theming.tri-color($foreground, theming.tri-color($foreground, border-color-split));
+      border     : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-split);
       box-shadow : 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
     }
 

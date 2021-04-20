@@ -9,7 +9,7 @@ import { NgModule } from '@angular/core';
 import {
   TriCardActions,
   TriCardAvatar,
-  TriCardContent,
+  TriCardBody,
   TriCardFooter,
   TriCardImage,
   TriCardLgImage,
@@ -49,7 +49,7 @@ import { CardComponent } from './card.component';
  */
 
 const CARD_DIRECTIVES = [
-  TriCardContent,
+  TriCardBody,
   TriCardTitle,
   TriCardTitleExtra,
   TriCardSubtitle,
