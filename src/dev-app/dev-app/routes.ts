@@ -54,6 +54,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'drawer',
         loadChildren: '/drawer/dev-drawer.module#DevDrawerModule'
+      },
+      {
+        path        : 'transfer',
+        loadChildren: '/transfer/dev-transfer.module#DevTransferModule'
       }
     ]
   },

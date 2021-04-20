@@ -20,6 +20,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="select">select</a></li>
       <li><a routerLink="radio">radio</a></li>
       <li><a routerLink="drawer">drawer</a></li>
+      <li><a routerLink="transfer">transfer</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>

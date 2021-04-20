@@ -1,0 +1,25 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "transfer",
+    srcs = glob(["**/*.ts"]),
+    assets = [
+        "dev-transfer.html",
+        ":dev_transfer_scss",
+    ],
+    deps = [
+        "//src/triangle/transfer",
+        "//src/triangle/core",
+        "//src/triangle/select",
+        "//src/triangle/input-number",
+        "@npm//@angular/common",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_transfer_scss",
+    src = "dev-transfer.scss",
+)
