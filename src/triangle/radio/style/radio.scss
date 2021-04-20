@@ -219,6 +219,7 @@ span.#{$radio-prefix-cls} + * {
   }
 
   @at-root &-disabled {
+    cursor: not-allowed;
 
     @at-root &:first-child,
     &:hover {

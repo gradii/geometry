@@ -59,7 +59,8 @@ $radio-button-color      : button-theme.$btn-default-color !default;
   .#{$radio-prefix-cls}-disabled {
     .#{$radio-inner-prefix-cls} {
       border-color     : theming.tri-color($foreground, border-color-base) !important;
-      background-color : theming.tri-color($foreground, input-disabled-bg);
+      background-color : theming.tri-color($background, input-disabled-bg);
+
       @at-root &:after {
         background-color : #ccc;
       }
@@ -144,14 +145,14 @@ $radio-button-color      : button-theme.$btn-default-color !default;
 
     @at-root &-disabled {
       border-color     : theming.tri-color($foreground, border-color-base);
-      background-color : theming.tri-color($foreground, input-disabled-bg);
-      color            : theming.tri-color($background, disabled-color) ;
+      background-color : theming.tri-color($background, input-disabled-bg);
+      color            : theming.tri-color($foreground, disabled-color) ;
 
       @at-root &:first-child,
       &:hover {
         border-color     : theming.tri-color($foreground, border-color-base);
-        background-color : theming.tri-color($foreground, input-disabled-bg);
-        color            : theming.tri-color($background, disabled-color) ;
+        background-color : theming.tri-color($background, input-disabled-bg);
+        color            : theming.tri-color($foreground, disabled-color) ;
       }
       @at-root &:first-child {
         border-left-color : theming.tri-color($foreground, border-color-base);
