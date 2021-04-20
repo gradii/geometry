@@ -6,7 +6,6 @@
 
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
   Component,
   ElementRef,
   HostBinding,
@@ -14,13 +13,17 @@ import {
   OnDestroy,
   OnInit
 } from '@angular/core';
-import { TreeNode, TreeTemplateMapping, TreeUIOptions } from '../../models';
+import {
+  TreeNode,
+  TreeTemplateMapping,
+  TreeUIOptions
+} from '../../models';
 import { TreeVirtualScroll } from '../../services/tree-virtual-scroll.service';
 
 @Component({
-  selector       : 'tri-tree-node-wrapper',
-  templateUrl    : './tree-node-wrapper.component.html',
-  styleUrls      : ['../../../style/components/tree-node-wrapper.component.css'],
+  selector   : 'tri-tree-node-wrapper',
+  templateUrl: './tree-node-wrapper.component.html',
+  styleUrls  : ['../../../style/components/tree-node-wrapper.component.css'],
 })
 export class TreeNodeWrapperComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() node: TreeNode;
@@ -59,7 +62,8 @@ export class TreeNodeWrapperComponent implements OnInit, OnDestroy, AfterViewIni
 
   ngAfterViewInit() {
     if (!this.virtualScroll.isDisabled() && !this.virtualScroll.hasEnoughNodeHeight) {
-      this.virtualScroll.reportNodeHeight(this.elementRef.nativeElement.getBoundingClientRect().height);
+      this.virtualScroll.reportNodeHeight(
+        this.elementRef.nativeElement.getBoundingClientRect().height);
     }
   }
 }

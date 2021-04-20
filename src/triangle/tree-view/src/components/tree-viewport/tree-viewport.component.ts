@@ -6,7 +6,6 @@
 
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
   Component,
   ElementRef,
   HostBinding,
@@ -19,24 +18,30 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { isNumber } from '@gradii/check-type';
-import { merge, Subscription } from 'rxjs';
+import {
+  merge,
+  Subscription
+} from 'rxjs';
 import { auditTime } from 'rxjs/operators';
 import { TREE_EVENTS } from '../../constants/events';
-import { ScrollIntoViewTarget, TreeModel } from '../../models';
+import {
+  ScrollIntoViewTarget,
+  TreeModel
+} from '../../models';
 import { TreeVirtualScroll } from '../../services/tree-virtual-scroll.service';
 
 const DISABLE_ON_SCROLL_CLASS = 'disable-events-on-scroll';
 
 @Component({
-  selector       : 'tri-tree-viewport',
-  templateUrl    : './tree-viewport.component.html',
-  styleUrls      : ['../../../style/components/tree-viewport.component.css'],
-  providers      : [TreeVirtualScroll],
+  selector   : 'tri-tree-viewport',
+  templateUrl: './tree-viewport.component.html',
+  styleUrls  : ['../../../style/components/tree-viewport.component.css'],
+  providers  : [TreeVirtualScroll],
 
 })
 export class TreeViewportComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   lastScrollTop = 0;
-  isScrolling = false;
+  isScrolling   = false;
 
   @Input() enable: boolean;
   @Input() referenceItemHeight = 0;
@@ -46,14 +51,15 @@ export class TreeViewportComponent implements OnInit, OnChanges, AfterViewInit, 
 
   @HostBinding('class.tree-viewport') className = true;
 
-  private ticking = false;
+  private ticking               = false;
   private scrollIntoViewTicking = false;
   private lastScrollIntoViewTarget: ScrollIntoViewTarget;
-  private structureChangeSub = Subscription.EMPTY;
-  private scrollIntoViewSub = Subscription.EMPTY;
+  private structureChangeSub    = Subscription.EMPTY;
+  private scrollIntoViewSub     = Subscription.EMPTY;
   private scrollTimer: number | null;
 
-  constructor(public virtualScroll: TreeVirtualScroll, private elementRef: ElementRef, private renderer: Renderer2) {
+  constructor(public virtualScroll: TreeVirtualScroll, private elementRef: ElementRef,
+              private renderer: Renderer2) {
   }
 
   @HostListener('scroll', ['$event'])
@@ -85,21 +91,23 @@ export class TreeViewportComponent implements OnInit, OnChanges, AfterViewInit, 
   }
 
   ngOnInit() {
-    this.scrollIntoViewSub = this.treeModel.scrollIntoView$.subscribe((target: ScrollIntoViewTarget) => {
-      if (target.node.elementRef) {
-        this.scrollIntoViewAndTick(target, () => {
-          const lastTarget = this.lastScrollIntoViewTarget;
-          if (lastTarget.node.elementRef!.nativeElement.scrollIntoViewIfNeeded) {
-            lastTarget.node.elementRef!.nativeElement.scrollIntoViewIfNeeded(lastTarget.scrollToMiddle);
-          } else {
-            lastTarget.node.elementRef!.nativeElement.scrollIntoView({
-              behavior: 'auto',
-              block   : 'end',
-            });
-          }
-        });
-      }
-    });
+    this.scrollIntoViewSub = this.treeModel.scrollIntoView$.subscribe(
+      (target: ScrollIntoViewTarget) => {
+        if (target.node.elementRef) {
+          this.scrollIntoViewAndTick(target, () => {
+            const lastTarget = this.lastScrollIntoViewTarget;
+            if (lastTarget.node.elementRef!.nativeElement.scrollIntoViewIfNeeded) {
+              lastTarget.node.elementRef!.nativeElement.scrollIntoViewIfNeeded(
+                lastTarget.scrollToMiddle);
+            } else {
+              lastTarget.node.elementRef!.nativeElement.scrollIntoView({
+                behavior: 'auto',
+                block   : 'end',
+              });
+            }
+          });
+        }
+      });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -169,16 +177,18 @@ export class TreeViewportComponent implements OnInit, OnChanges, AfterViewInit, 
 
   initEventSubscription() {
     this.ngOnDestroy();
-    this.scrollIntoViewSub = this.treeModel.scrollIntoView$.subscribe((target: ScrollIntoViewTarget) => {
-      this.scrollIntoViewAndTick(target, () => {
-        const lastTarget = this.lastScrollIntoViewTarget;
-        const targetOffset = this.virtualScroll.scrollIntoView(lastTarget.node, lastTarget.force, lastTarget.scrollToMiddle);
+    this.scrollIntoViewSub = this.treeModel.scrollIntoView$.subscribe(
+      (target: ScrollIntoViewTarget) => {
+        this.scrollIntoViewAndTick(target, () => {
+          const lastTarget   = this.lastScrollIntoViewTarget;
+          const targetOffset = this.virtualScroll.scrollIntoView(lastTarget.node, lastTarget.force,
+            lastTarget.scrollToMiddle);
 
-        if (targetOffset) {
-          this.elementRef.nativeElement.scrollTop = targetOffset;
-        }
+          if (targetOffset) {
+            this.elementRef.nativeElement.scrollTop = targetOffset;
+          }
+        });
       });
-    });
 
 
     let structureChange$ = merge(

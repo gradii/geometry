@@ -67,7 +67,8 @@ export class TreeDragDirective implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if ('treeDragEnabled' in changes) {
-      this.renderer.setAttribute(this.el.nativeElement, 'draggable', this.treeDragEnabled ? 'true' : 'false');
+      this.renderer.setAttribute(this.el.nativeElement, 'draggable',
+        this.treeDragEnabled ? 'true' : 'false');
     }
   }
 }

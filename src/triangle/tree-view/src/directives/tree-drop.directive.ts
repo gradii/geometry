@@ -15,20 +15,24 @@ import {
   Renderer2
 } from '@angular/core';
 import { isFunction } from '@gradii/check-type';
-import { DragAndDropEvent, TreeNode } from '../models';
+import {
+  DragAndDropEvent,
+  TreeNode
+} from '../models';
 import { TreeDraggingTargetService } from '../services/tree-dragging-target.service';
 
-const DRAG_OVER_CLASS = 'is-dragging-over';
+const DRAG_OVER_CLASS     = 'is-dragging-over';
 const DRAG_DISABLED_CLASS = 'is-dragging-over-disabled';
 
-export type AllowDropPredicate = (element: TreeNode | null | undefined, $event: DragEvent) => boolean;
+export type AllowDropPredicate = (element: TreeNode | null | undefined,
+                                  $event: DragEvent) => boolean;
 
 @Directive({
   selector: '[ngxTreeDrop]',
 })
 export class TreeDropDirective implements OnDestroy {
-  @Output('ngxTreeDrop') onDrop$ = new EventEmitter<DragAndDropEvent>();
-  @Output('treeDropDragOver') onDragOver$ = new EventEmitter<DragAndDropEvent>();
+  @Output('ngxTreeDrop') onDrop$            = new EventEmitter<DragAndDropEvent>();
+  @Output('treeDropDragOver') onDragOver$   = new EventEmitter<DragAndDropEvent>();
   @Output('treeDropDragLeave') onDragLeave$ = new EventEmitter<DragAndDropEvent>();
   @Output('treeDropDragEnter') onDragEnter$ = new EventEmitter<DragAndDropEvent>();
 

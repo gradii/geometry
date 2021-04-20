@@ -6,7 +6,10 @@
 
 import { ElementRef } from '@angular/core';
 import { TREE_EVENTS } from '../constants/events';
-import { DragAndDropEvent, TreeEvent } from './events';
+import {
+  DragAndDropEvent,
+  TreeEvent
+} from './events';
 import { TreeModel } from './tree-model';
 import {
   AvailableMouseEvents,
@@ -24,16 +27,47 @@ export class TreeNode {
   /**
    * top edge position relative to the top edge of scroll area
    */
-  position = -1;
+  position        = -1;
   /**
    * the visual height of the node
    */
-  height = 0;
+  height          = 0;
   loadingChildren = false;
   elementRef: ElementRef | null;
 
-  _checked = false;
+  _checked       = false;
   _indeterminate = false;
+
+  constructor(
+    /**
+     * any - Pointer to the original data.
+     *
+     */
+    public data: any,
+    /**
+     * TreeNode - Parent node
+     */
+    public parent: TreeNode | null,
+    public treeModel: TreeModel,
+    /**
+     * index of the node inside its parent's children
+     */
+    public index: number,
+  ) {
+    // Make sure there's a unique id without overriding existing ids to work with immutable data structures
+    if (this.id === undefined || this.id === null) {
+      this.id = uuid();
+    }
+
+    treeModel.addCache(this);
+    if (data[this.options.isExpandedField!]) {
+      treeModel.setExpandedNodeInPlace(this);
+    }
+
+    if (this.getField('children')) {
+      this.initChildren();
+    }
+  }
 
   get isChecked() {
     return !this._indeterminate && this._checked;
@@ -45,46 +79,6 @@ export class TreeNode {
       // trigger event
       this.treeModel.fireEvent({eventName: 'selection'});
       this.setChecked(value, true);
-    }
-  }
-
-  setChecked(value: boolean, updateParentNode: boolean) {
-    this._checked = value;
-    if (value === true) {
-      this._indeterminate = false;
-    }
-    if (this.hasChildren && Array.isArray(this.children)) {
-      this.children.forEach((child) => child.setChecked(value, false));
-    }
-    if (updateParentNode) {
-      if (this.parent) {
-        this.parent._updateCheckedState();
-      }
-    }
-  }
-
-  _updateCheckedState() {
-    let checkedCount = 0;
-    let unCheckedCount = 0;
-    let indeterminate = false;
-    if (this.hasChildren) {
-      this.children.forEach(it => {
-        if (it.isChecked) {
-          checkedCount++;
-        } else if (it._indeterminate) {
-          indeterminate = true;
-        } else {
-          unCheckedCount++;
-        }
-      });
-    }
-    if (checkedCount > 0 && unCheckedCount > 0) {
-      indeterminate = true;
-    }
-    this._indeterminate = indeterminate;
-    this._checked = !indeterminate && checkedCount > 0;
-    if (this.parent) {
-      this.parent._updateCheckedState();
     }
   }
 
@@ -170,34 +164,43 @@ export class TreeNode {
     return (this.children || []).filter((node) => !node.isHidden);
   }
 
-  constructor(
-    /**
-     * any - Pointer to the original data.
-     *
-     */
-    public data: any,
-    /**
-     * TreeNode - Parent node
-     */
-    public parent: TreeNode | null,
-    public treeModel: TreeModel,
-    /**
-     * index of the node inside its parent's children
-     */
-    public index: number,
-  ) {
-    // Make sure there's a unique id without overriding existing ids to work with immutable data structures
-    if (this.id === undefined || this.id === null) {
-      this.id = uuid();
+  setChecked(value: boolean, updateParentNode: boolean) {
+    this._checked = value;
+    if (value === true) {
+      this._indeterminate = false;
     }
-
-    treeModel.addCache(this);
-    if (data[this.options.isExpandedField!]) {
-      treeModel.setExpandedNodeInPlace(this);
+    if (this.hasChildren && Array.isArray(this.children)) {
+      this.children.forEach((child) => child.setChecked(value, false));
     }
+    if (updateParentNode) {
+      if (this.parent) {
+        this.parent._updateCheckedState();
+      }
+    }
+  }
 
-    if (this.getField('children')) {
-      this.initChildren();
+  _updateCheckedState() {
+    let checkedCount   = 0;
+    let unCheckedCount = 0;
+    let indeterminate  = false;
+    if (this.hasChildren) {
+      this.children.forEach(it => {
+        if (it.isChecked) {
+          checkedCount++;
+        } else if (it._indeterminate) {
+          indeterminate = true;
+        } else {
+          unCheckedCount++;
+        }
+      });
+    }
+    if (checkedCount > 0 && unCheckedCount > 0) {
+      indeterminate = true;
+    }
+    this._indeterminate = indeterminate;
+    this._checked       = !indeterminate && checkedCount > 0;
+    if (this.parent) {
+      this.parent._updateCheckedState();
     }
   }
 
@@ -537,7 +540,7 @@ export class TreeNode {
       this.treeModel.setExpandedNodeInPlace(node, false);
     }
 
-    node.treeModel = null as any;
+    node.treeModel  = null as any;
     node.elementRef = null;
   }
 
@@ -545,7 +548,7 @@ export class TreeNode {
     this.treeModel.setFocus(true);
 
     const actionMapping = this.options.actionMapping!.mouse!;
-    const action = actionMapping[actionName];
+    const action        = actionMapping[actionName];
 
     if (action) {
       action(this.treeModel, this, $event, data);

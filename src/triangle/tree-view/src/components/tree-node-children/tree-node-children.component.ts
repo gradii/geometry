@@ -4,9 +4,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { animate, style, transition, trigger } from '@angular/animations';
 import {
-  ChangeDetectionStrategy,
+  animate,
+  style,
+  transition,
+  trigger
+} from '@angular/animations';
+import {
   ChangeDetectorRef,
   Component,
   HostBinding,
@@ -17,18 +21,25 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { TreeNode, TreeTemplateMapping, TreeUIOptions } from '../../models';
-import { PosPair, TreeVirtualScroll } from '../../services/tree-virtual-scroll.service';
+import {
+  TreeNode,
+  TreeTemplateMapping,
+  TreeUIOptions
+} from '../../models';
+import {
+  PosPair,
+  TreeVirtualScroll
+} from '../../services/tree-virtual-scroll.service';
 import { binarySearch } from '../../util';
 
 /** Time and timing curve for expansion panel animations. */
 export const EXPANSION_PANEL_ANIMATION_TIMING = '225ms cubic-bezier(0.4,0.0,0.2,1)';
 
 @Component({
-  selector       : 'tri-tree-node-children',
-  templateUrl    : './tree-node-children.component.html',
-  styleUrls      : ['../../../style/components/tree-node-children.component.css'],
-  animations     : [
+  selector   : 'tri-tree-node-children',
+  templateUrl: './tree-node-children.component.html',
+  styleUrls  : ['../../../style/components/tree-node-children.component.css'],
+  animations : [
     trigger('expandAnimation', [
       transition(':enter', [
         style({height: 0, overflow: 'hidden'}),
@@ -43,7 +54,7 @@ export const EXPANSION_PANEL_ANIMATION_TIMING = '225ms cubic-bezier(0.4,0.0,0.2,
 
 })
 export class TreeNodeChildrenComponent implements OnInit, OnChanges, OnDestroy {
-  marginTop = 0;
+  marginTop                 = 0;
   viewportNodes: TreeNode[] = [];
 
   @Input() options: TreeUIOptions;
@@ -51,13 +62,13 @@ export class TreeNodeChildrenComponent implements OnInit, OnChanges, OnDestroy {
   @Input() templates: TreeTemplateMapping;
   @Input() disableMarginTop = false;
   @Input() children: TreeNode[];
-  @Input() refreshTree = false;
+  @Input() refreshTree      = false;
 
   @HostBinding('@expandAnimation')
   expandAnimation = true;
 
   @HostBinding('class.tree-node-children') className = true;
-  private scrollSub = Subscription.EMPTY;
+  private scrollSub                                  = Subscription.EMPTY;
 
   constructor(private virtualScroll: TreeVirtualScroll, private cdRef: ChangeDetectorRef) {
   }
@@ -74,13 +85,13 @@ export class TreeNodeChildrenComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.viewportNodes = this.children;
-    this.scrollSub = this.virtualScroll.waitForCollection((metrics: PosPair) => {
+    this.scrollSub     = this.virtualScroll.waitForCollection((metrics: PosPair) => {
       if (this.node.treeModel && this.node.isExpanded) {
         // here we directly access node's visibleChildren but not component's `children`
         // property is, because it will only be updated on next lifecycle check, which is
         // after the collection notification
         this.viewportNodes = this.getViewportNodes(this.node.visibleChildren, metrics);
-        this.marginTop = this.calcMarginTop();
+        this.marginTop     = this.calcMarginTop();
         this.cdRef.markForCheck();
       }
     });

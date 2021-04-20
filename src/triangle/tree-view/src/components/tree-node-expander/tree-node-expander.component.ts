@@ -14,9 +14,16 @@ import {
   OnInit,
   TemplateRef
 } from '@angular/core';
-import { merge, Subscription } from 'rxjs';
+import {
+  merge,
+  Subscription
+} from 'rxjs';
 
-import { TreeEvent, TreeNode, TreeUIOptions } from '../../models';
+import {
+  TreeEvent,
+  TreeNode,
+  TreeUIOptions
+} from '../../models';
 
 @Component({
   selector       : 'tri-tree-node-expander',
@@ -33,7 +40,7 @@ export class TreeNodeExpanderComponent implements OnInit, OnDestroy {
   @HostBinding('class.tree-node-expander') className = true;
 
   private structureChangeSub = Subscription.EMPTY;
-  private toggleChangeSub = Subscription.EMPTY;
+  private toggleChangeSub    = Subscription.EMPTY;
 
   constructor(private cdRef: ChangeDetectorRef) {
   }
@@ -49,7 +56,7 @@ export class TreeNodeExpanderComponent implements OnInit, OnDestroy {
             this.cdRef.markForCheck();
           }
         });
-      this.toggleChangeSub = merge<TreeEvent>(
+      this.toggleChangeSub    = merge<TreeEvent>(
         this.node.treeModel.events.expand,
         this.node.treeModel.events.collapse,
       )

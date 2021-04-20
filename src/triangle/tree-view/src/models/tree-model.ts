@@ -4,12 +4,25 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isArray, isFunction, isString } from '@gradii/check-type';
-import { Subject, Subscription } from 'rxjs';
-import { EventsMap, TREE_EVENTS } from '../constants/events';
+import {
+  isArray,
+  isFunction,
+  isString
+} from '@gradii/check-type';
+import {
+  Subject,
+  Subscription
+} from 'rxjs';
+import {
+  EventsMap,
+  TREE_EVENTS
+} from '../constants/events';
 import { TreeEvent } from './events';
 import { TreeNode } from './tree-node';
-import { createTreeDataOptions, TreeDataOptions } from './tree-options';
+import {
+  createTreeDataOptions,
+  TreeDataOptions
+} from './tree-options';
 
 export interface ScrollIntoViewTarget {
   node: TreeNode;
@@ -29,11 +42,11 @@ export class TreeModel {
   readonly virtualRoot: TreeNode;
   readonly scrollIntoView$: Subject<ScrollIntoViewTarget> = new Subject();
   options: TreeDataOptions;
-  private focusedNodeId: string | null = null;
-  private expandedNodeIds: Map<string, boolean> = new Map();
-  private activeNodeIds: Map<string, boolean> = new Map();
-  private hiddenNodeIds: Map<string, boolean> = new Map();
-  private nodeCache: Map<string, TreeNode> = new Map();
+  private focusedNodeId: string | null                    = null;
+  private expandedNodeIds: Map<string, boolean>           = new Map();
+  private activeNodeIds: Map<string, boolean>             = new Map();
+  private hiddenNodeIds: Map<string, boolean>             = new Map();
+  private nodeCache: Map<string, TreeNode>                = new Map();
 
   constructor(
     private nodes: any[],
@@ -43,7 +56,7 @@ export class TreeModel {
      */
     options?: TreeDataOptions,
   ) {
-    this.options = createTreeDataOptions(options);
+    this.options            = createTreeDataOptions(options);
     const virtualRootConfig = {
       virtual: true,
       // todo: determine to use fixed children field later
@@ -183,7 +196,7 @@ export class TreeModel {
       return null;
     }
 
-    const childId = path.shift();
+    const childId             = path.shift();
     const childNode: TreeNode = startNode.children.find((it) => it.id === childId);
 
     if (!childNode) {
@@ -207,7 +220,8 @@ export class TreeModel {
    * @param     startNode  optional. Which node to start traversing from
    * @returns   First node that matches the predicate, if found - null otherwise
    */
-  getNodeBy(predicate: (node: TreeNode) => boolean, startNode: TreeNode | null = null): TreeNode | null {
+  getNodeBy(predicate: (node: TreeNode) => boolean,
+            startNode: TreeNode | null = null): TreeNode | null {
     // todo: refactor to a loop
     startNode = startNode || this.virtualRoot;
 
@@ -327,7 +341,8 @@ export class TreeModel {
    */
   focusNextNode() {
     const previousNode = this.focusedNode;
-    const nextNode = previousNode ? previousNode.findNextNode(true, true) : this.getFirstRoot(true);
+    const nextNode     = previousNode ? previousNode.findNextNode(true, true) : this.getFirstRoot(
+      true);
     if (nextNode) {
       nextNode.focus();
     }
@@ -338,7 +353,8 @@ export class TreeModel {
    */
   focusPreviousNode() {
     const previousNode = this.focusedNode;
-    const nextNode = previousNode ? previousNode.findPreviousNode(true) : this.getLastRoot(true);
+    const nextNode     = previousNode ? previousNode.findPreviousNode(true) : this.getLastRoot(
+      true);
     if (nextNode) {
       nextNode.focus();
     }
@@ -427,7 +443,8 @@ export class TreeModel {
     } else if (isFunction(filter)) {
       filterFn = filter;
     } else {
-      throw new TypeError(`Don't know what to do with filter: ${filter}. It should be either a string or function`);
+      throw new TypeError(
+        `Don't know what to do with filter: ${filter}. It should be either a string or function`);
     }
 
     const ids = new Map();
@@ -451,7 +468,7 @@ export class TreeModel {
    * @param to
    */
   moveNode(node: TreeNode, to: { parent: TreeNode, index: number, dropOnNode: boolean }) {
-    const fromIndex = node.index;
+    const fromIndex  = node.index;
     const fromParent = node.parent;
 
     if (!canMoveNode(node, fromIndex, to)) {

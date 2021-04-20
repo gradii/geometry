@@ -10,8 +10,10 @@ import { TreeNode } from './tree-node';
 import { ActionMapping } from './tree-options';
 
 export const TREE_ACTIONS = {
-  TOGGLE_SELECTED      : (tree: TreeModel, node: TreeNode, $event: any) => node && node.toggleActivated(),
-  TOGGLE_SELECTED_MULTI: (tree: TreeModel, node: TreeNode, $event: any) => node && node.toggleActivated(true),
+  TOGGLE_SELECTED      : (tree: TreeModel, node: TreeNode,
+                          $event: any) => node && node.toggleActivated(),
+  TOGGLE_SELECTED_MULTI: (tree: TreeModel, node: TreeNode,
+                          $event: any) => node && node.toggleActivated(true),
   SELECT               : (tree: TreeModel, node: TreeNode, $event: any) => node.setActive(true),
   DESELECT             : (tree: TreeModel, node: TreeNode, $event: any) => node.setActive(false),
   FOCUS                : (tree: TreeModel, node: TreeNode, $event: any) => node.focus(),

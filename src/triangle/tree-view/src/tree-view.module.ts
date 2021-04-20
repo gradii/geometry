@@ -5,7 +5,11 @@
  */
 
 import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import {
+  ModuleWithProviders,
+  NgModule
+} from '@angular/core';
+import { TriPseudoCheckboxModule } from '@gradii/triangle/core';
 
 import { TreeLoadingComponent } from './components/tree-loading/tree-loading.component';
 import { TreeNodeChildrenComponent } from './components/tree-node-children/tree-node-children.component';
@@ -20,7 +24,6 @@ import { TreeDragDirective } from './directives/tree-drag.directive';
 import { TreeDropDirective } from './directives/tree-drop.directive';
 import { TreeDraggingTargetService } from './services/tree-dragging-target.service';
 import { VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA } from './services/tree-virtual-scroll.service';
-import { TriPseudoCheckboxModule } from '@gradii/triangle/core';
 
 
 @NgModule({
@@ -47,8 +50,7 @@ import { TriPseudoCheckboxModule } from '@gradii/triangle/core';
     TreeDragDirective,
     TreeDropDirective,
   ],
-  providers: [
-  ]
+  providers   : []
 })
 export class TriTreeViewModule {
   static forRoot(): ModuleWithProviders<TriTreeViewModule> {

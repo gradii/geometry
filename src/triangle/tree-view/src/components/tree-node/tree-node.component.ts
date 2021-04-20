@@ -5,7 +5,6 @@
  */
 
 import {
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   HostBinding,
@@ -14,14 +13,22 @@ import {
   OnInit
 } from '@angular/core';
 import { isFunction } from '@gradii/check-type';
-import { merge, Subscription } from 'rxjs';
+import {
+  merge,
+  Subscription
+} from 'rxjs';
 
-import { TreeEvent, TreeNode, TreeTemplateMapping, TreeUIOptions } from '../../models';
+import {
+  TreeEvent,
+  TreeNode,
+  TreeTemplateMapping,
+  TreeUIOptions
+} from '../../models';
 
 @Component({
-  selector       : 'tri-tree-node',
-  templateUrl    : './tree-node.component.html',
-  styleUrls      : ['../../../style/components/tree-node.component.css'],
+  selector: 'tri-tree-node',
+  templateUrl: './tree-node.component.html',
+  styleUrls: ['../../../style/components/tree-node.component.css'],
 
 })
 export class TreeNodeComponent implements OnInit, OnDestroy {
@@ -31,7 +38,7 @@ export class TreeNodeComponent implements OnInit, OnDestroy {
   @Input() templates: TreeTemplateMapping;
 
   @HostBinding('class.tree-node') className = true;
-  private operationSub = Subscription.EMPTY;
+  private operationSub                      = Subscription.EMPTY;
 
   constructor(private cdRef: ChangeDetectorRef) {
   }
@@ -66,6 +73,7 @@ export class TreeNodeComponent implements OnInit, OnDestroy {
   }
 
   allowDrag(node: TreeNode) {
-    return isFunction(this.options.allowDrag) ? this.options.allowDrag(node) : this.options.allowDrag;
+    return isFunction(this.options.allowDrag) ? this.options.allowDrag(
+      node) : this.options.allowDrag;
   }
 }

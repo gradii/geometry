@@ -144,6 +144,7 @@ export interface RawTreeUIOptions {
   referenceItemHeight?: number;
   auditViewportUpdate?: number;
   selectionType?: 'none' | 'multiple' | 'single';
+
   nodeClass?(node: TreeNode): string;
 }
 

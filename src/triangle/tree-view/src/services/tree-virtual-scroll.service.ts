@@ -4,15 +4,30 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Inject, Injectable, InjectionToken } from '@angular/core';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
-import { filter, scan } from 'rxjs/operators';
-import { TreeModel, TreeNode } from '../models';
+import {
+  Inject,
+  Injectable,
+  InjectionToken
+} from '@angular/core';
+import {
+  BehaviorSubject,
+  Subject,
+  Subscription
+} from 'rxjs';
+import {
+  filter,
+  scan
+} from 'rxjs/operators';
+import {
+  TreeModel,
+  TreeNode
+} from '../models';
 
 const Y_OFFSET_NODE_SIZE = 3;
-let id = 0;
+let id                   = 0;
 
-export const VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA = new InjectionToken('VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA');
+export const VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA = new InjectionToken(
+  'VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA');
 
 export interface PosPair {
   startPos: number;
@@ -26,14 +41,14 @@ function pairIsValid(input: any): input is PosPair {
 @Injectable()
 export class TreeVirtualScroll {
   id: number;
-  averageNodeHeight = 0;
+  averageNodeHeight   = 0;
   hasEnoughNodeHeight = false;
 
   private currentViewport: ClientRect;
   private lastScrollTop = 0;
-  private disabled = false;
+  private disabled      = false;
 
-  private collectionMonitor$ = new BehaviorSubject<PosPair | null>(null);
+  private collectionMonitor$   = new BehaviorSubject<PosPair | null>(null);
   private nodeHeightAnalytics$ = new Subject<number>();
 
   constructor(@Inject(VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA) private quota: number) {
@@ -42,13 +57,13 @@ export class TreeVirtualScroll {
   }
 
   adjustViewport(viewport: ClientRect, scrollTop: number) {
-    this.lastScrollTop = scrollTop;
+    this.lastScrollTop   = scrollTop;
     this.currentViewport = viewport;
 
     const Y_OFFSET = this.averageNodeHeight * Y_OFFSET_NODE_SIZE;
 
     const startPos = scrollTop > Y_OFFSET ? scrollTop - Y_OFFSET : 0;
-    const endPos = viewport.height + scrollTop + Y_OFFSET;
+    const endPos   = viewport.height + scrollTop + Y_OFFSET;
 
     this.collectionMonitor$.next({
       startPos,
@@ -125,9 +140,9 @@ export class TreeVirtualScroll {
     this.nodeHeightAnalytics$
       .pipe(scan<number, number[]>((acc, cur) => {
         const lastAvg = acc[0] / acc[1];
-        const sum = cur + acc[0];
-        const count = acc[1] + 1;
-        const avg = sum / count;
+        const sum     = cur + acc[0];
+        const count   = acc[1] + 1;
+        const avg     = sum / count;
         if (avg / lastAvg > 1.5 || lastAvg / avg > 1.5) {
           return [cur, 1];
         }

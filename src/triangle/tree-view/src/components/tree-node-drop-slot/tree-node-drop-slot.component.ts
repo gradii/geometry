@@ -4,14 +4,21 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  Component,
+  Input
+} from '@angular/core';
 import { isFunction } from '@gradii/check-type';
-import { DragAndDropEvent, TreeNode, TreeUIOptions } from '../../models';
+import {
+  DragAndDropEvent,
+  TreeNode,
+  TreeUIOptions
+} from '../../models';
 
 @Component({
-  selector       : 'tri-tree-node-drop-slot',
-  templateUrl    : './tree-node-drop-slot.component.html',
-  styleUrls      : ['../../../style/components/tree-node-drop-slot.component.css'],
+  selector   : 'tri-tree-node-drop-slot',
+  templateUrl: './tree-node-drop-slot.component.html',
+  styleUrls  : ['../../../style/components/tree-node-drop-slot.component.css'],
 
 })
 export class TreeNodeDropSlotComponent {
