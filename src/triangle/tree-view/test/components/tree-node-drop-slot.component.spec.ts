@@ -19,10 +19,10 @@ import {
 } from '../../src/models/index';
 
 @Directive({
-  selector: '[ngxTreeDrop]',
+  selector: '[triTreeViewDrop]',
 })
 export class FakeTreeDropDirective {
-  @Output('ngxTreeDrop') onDrop$            = new EventEmitter();
+  @Output('treeViewDrop') onDrop$           = new EventEmitter();
   @Output('treeDropDragOver') onDragOver$   = new EventEmitter();
   @Output('treeDropDragLeave') onDragLeave$ = new EventEmitter();
   @Output('treeDropDragEnter') onDragEnter$ = new EventEmitter();
@@ -33,10 +33,10 @@ export class FakeTreeDropDirective {
 }
 
 @Directive({
-  selector: '[ngxTreeDrag]',
+  selector: '[triTreeViewDrag]',
 })
 export class FakeTreeDragDirective {
-  @Input('ngxTreeDrag') draggingTarget: TreeNode;
+  @Input('treeViewDrag') draggingTarget: TreeNode;
   @Input() treeDragEnabled: boolean;
 
   constructor() {

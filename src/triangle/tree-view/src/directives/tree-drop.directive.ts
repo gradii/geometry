@@ -28,10 +28,10 @@ export type AllowDropPredicate = (element: TreeNode | null | undefined,
                                   $event: DragEvent) => boolean;
 
 @Directive({
-  selector: '[ngxTreeDrop]',
+  selector: '[triTreeViewDrop]',
 })
 export class TreeDropDirective implements OnDestroy {
-  @Output('ngxTreeDrop') onDrop$            = new EventEmitter<DragAndDropEvent>();
+  @Output('treeViewDrop') onDrop$            = new EventEmitter<DragAndDropEvent>();
   @Output('treeDropDragOver') onDragOver$   = new EventEmitter<DragAndDropEvent>();
   @Output('treeDropDragLeave') onDragLeave$ = new EventEmitter<DragAndDropEvent>();
   @Output('treeDropDragEnter') onDragEnter$ = new EventEmitter<DragAndDropEvent>();

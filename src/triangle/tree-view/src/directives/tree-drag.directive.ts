@@ -19,10 +19,10 @@ import { TreeDraggingTargetService } from '../services/tree-dragging-target.serv
 const DRAGGING_TARGET_CLASS = 'ngx-tree-dragging-target';
 
 @Directive({
-  selector: '[ngxTreeDrag]',
+  selector: '[triTreeViewDrag]',
 })
 export class TreeDragDirective implements OnChanges {
-  @Input('ngxTreeDrag') draggingTarget: TreeNode;
+  @Input('treeViewDrag') draggingTarget: TreeNode;
   @Input() treeDragEnabled: boolean;
 
   constructor(

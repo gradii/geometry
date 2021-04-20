@@ -9,7 +9,6 @@ import {
   Component,
   ContentChild,
   EventEmitter,
-  HostBinding,
   HostListener,
   Input,
   OnChanges,
@@ -47,6 +46,9 @@ import { TreeViewportComponent } from '../tree-viewport/tree-viewport.component'
   templateUrl    : './tree.component.html',
   styleUrls      : ['../../../style/components/tree.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host           : {
+    '[class.tri-tree-view]': 'true'
+  }
 })
 export class TreeComponent implements OnChanges, OnDestroy {
   emitterMap: EventsMap;
@@ -94,8 +96,6 @@ export class TreeComponent implements OnChanges, OnDestroy {
   @Output() changeFilter   = new EventEmitter<TreeEvent>();
   @Output() addNode        = new EventEmitter<TreeEvent>();
   @Output() removeNode     = new EventEmitter<TreeEvent>();
-
-  @HostBinding('class.ngx-tree') className = true;
 
   @ContentChild('loadingTemplate', {static: false}) loadingTemplate: TemplateRef<any>;
   @ContentChild('expanderTemplate', {static: false}) expanderTemplate: TemplateRef<any>;
@@ -190,7 +190,7 @@ export class TreeComponent implements OnChanges, OnDestroy {
 
   @HostListener('body: mousedown', ['$event'])
   onMousedown($event: MouseEvent) {
-    const insideClick = (<HTMLElement>$event.target)!.closest('ngx-tree');
+    const insideClick = (<HTMLElement>$event.target)!.closest('tri-tree-view');
 
     if (!insideClick) {
       this.treeModel.setFocus(false);
