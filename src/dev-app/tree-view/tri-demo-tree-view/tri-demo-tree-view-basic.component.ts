@@ -1,11 +1,16 @@
-import { Component } from "@angular/core";
-import { TREE_ACTIONS, TreeDataOptions, TreeNode, TreeUIOptions } from "@gradii/triangle/tree-view";
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import { Component } from '@angular/core';
+import { TREE_ACTIONS, TreeDataOptions, TreeNode, TreeUIOptions } from '@gradii/triangle/tree-view';
 
 @Component({
   selector: 'tri-demo-tree-view-basic',
   template: `
     <div>
-      hello tree-view
 
       <tri-tree-view
         [enableAnimation]="true"

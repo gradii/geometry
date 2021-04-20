@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {TREE_ACTIONS, TreeDataOptions, TreeNode, TreeUIOptions} from '@gradii/triangle/tree-view';
 import { Component } from '@angular/core';
 
