@@ -1,21 +1,21 @@
-@import "../../core/style/mixins";
-@import "../../core/style/variables";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
 
-$card-prefix-cls       : "#{$tri-prefix}-card";
+$card-prefix-cls       : "#{v.$tri-prefix}-card";
 $card-padding-base     : 24px;
 $card-padding-wider    : 32px;
 $card-head-height      : 3rem !default;
 $card-head-line-height : 1.5rem !default;
 
 .#{$card-prefix-cls} {
-  border-radius : $border-radius-sm;
-  font-size     : $font-size-base;
+  border-radius : v.$border-radius-sm;
+  font-size     : v.$font-size-base;
   position      : relative;
   display       : block;
   transition    : all .3s;
 
   @at-root &:not(#{&}-no-hovering):hover {
-    box-shadow   : $box-shadow-base;
+    box-shadow   : v.$box-shadow-base;
     border-color : transparent;
   }
 
@@ -26,11 +26,11 @@ $card-head-line-height : 1.5rem !default;
     height        : $card-head-height;
     line-height   : $card-head-line-height;
     padding       : ($card-head-height - $card-head-line-height)/2 ($card-padding-base);
-    border-radius : $border-radius-sm $border-radius-sm 0 0;
+    border-radius : v.$border-radius-sm v.$border-radius-sm 0 0;
     box-sizing    : border-box;
 
     @at-root &-title {
-      font-size     : $font-size-lg;
+      font-size     : v.$font-size-lg;
       display       : inline-block;
       text-overflow : ellipsis;
       width         : 100%;
@@ -51,7 +51,7 @@ $card-head-line-height : 1.5rem !default;
 
   @at-root &-body {
     padding : $card-padding-base;
-    @include clearfix;
+    @include mixins.clearfix;
   }
 
   @at-root &#{&}-compact {
@@ -73,7 +73,7 @@ $card-head-line-height : 1.5rem !default;
     display         : inline-block;
     margin          : 5px 1% 0;
     height          : 14px;
-    border-radius   : $border-radius-sm;
+    border-radius   : v.$border-radius-sm;
     background      : linear-gradient(90deg, rgba(207, 216, 220, .2), rgba(207, 216, 220, .4), rgba(207, 216, 220, .2));
     animation       : card-loading 1.4s ease infinite;
     background-size : 600% 600%;
@@ -94,7 +94,7 @@ $card-head-line-height : 1.5rem !default;
     @at-root &:hover {
       position   : relative;
       z-index    : 1;
-      box-shadow : $box-shadow-base;
+      box-shadow : v.$box-shadow-base;
     }
   }
 

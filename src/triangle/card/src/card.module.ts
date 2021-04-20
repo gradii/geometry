@@ -6,6 +6,20 @@
 
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import {
+  TriCardActions,
+  TriCardAvatar,
+  TriCardContent,
+  TriCardFooter,
+  TriCardImage,
+  TriCardLgImage,
+  TriCardMdImage,
+  TriCardSmImage,
+  TriCardSubtitle,
+  TriCardTitle,
+  TriCardTitleExtra,
+  TriCardXlImage
+} from './card.directive';
 import { CardGridDirective } from './card-grid.directive';
 
 import { CardComponent } from './card.component';
@@ -33,10 +47,37 @@ import { CardComponent } from './card.component';
  * 一种常见的卡片内容区隔模式。
  * <!-- example(tri-demo-card-inner) -->
  */
+
+const CARD_DIRECTIVES = [
+  TriCardContent,
+  TriCardTitle,
+  TriCardTitleExtra,
+  TriCardSubtitle,
+  TriCardActions,
+  TriCardFooter,
+  TriCardImage,
+  TriCardSmImage,
+  TriCardMdImage,
+  TriCardLgImage,
+  TriCardXlImage,
+  TriCardAvatar,
+];
+
+
 @NgModule({
   imports     : [CommonModule],
-  declarations: [CardComponent, CardGridDirective],
-  exports     : [CardComponent, CardGridDirective]
+  declarations: [
+    CardComponent,
+    CardGridDirective,
+
+    ...CARD_DIRECTIVES,
+  ],
+  exports     : [
+    CardComponent,
+    CardGridDirective,
+
+    ...CARD_DIRECTIVES
+  ]
 })
 export class TriCardModule {
 }

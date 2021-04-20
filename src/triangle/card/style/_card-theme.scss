@@ -3,15 +3,24 @@
 @use "../../core/style/theming";
 @use "../../core/style/variables" as v;
 
-$card-prefix-cls : "#{ v.$tri-prefix}-card";
+$foreground            : theme.$foreground;
+$background            : theme.$background;
 
-@mixin tri-card-theme($theme) {
-  $primary    : map.get($theme, primary);
-  $foreground : map.get($theme, foreground);
-  $background : map.get($theme, background);
+$card-prefix-cls       : "#{v.$tri-prefix}-card";
+$card-padding-base     : 24px;
+$card-padding-wider    : 32px;
+$card-head-height      : 3rem !default;
+$card-head-line-height : 1.5rem !default;
+
+$card-head-background  : theming.tri-color($background, component-background) !default;
+$card-head-color       : v.$heading-color;
+
+@mixin tri-card-theme() {
+  $primary : theme.$primary;
+
 
   .#{$card-prefix-cls} {
-    background : theming.tri-color($background, component-background);
+    background : $card-head-background;
 
     @at-root &:not(#{&}-no-hovering):hover {
       box-shadow   : v.$box-shadow-base;

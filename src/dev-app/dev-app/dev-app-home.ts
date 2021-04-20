@@ -21,6 +21,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="radio">radio</a></li>
       <li><a routerLink="drawer">drawer</a></li>
       <li><a routerLink="transfer">transfer</a></li>
+      <li><a routerLink="card">card</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>

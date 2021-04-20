@@ -58,6 +58,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'transfer',
         loadChildren: '/transfer/dev-transfer.module#DevTransferModule'
+      },
+      {
+        path        : 'card',
+        loadChildren: '/card/dev-card.module#DevCardModule'
       }
     ]
   },

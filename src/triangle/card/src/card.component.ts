@@ -7,16 +7,23 @@
 import {
   Component,
   ContentChild,
+  ElementRef,
+  Host,
   HostBinding,
   Input,
   TemplateRef,
   ViewEncapsulation
 } from '@angular/core';
+import {
+  TriCardContent,
+  TriCardTitle,
+  TriCardTitleExtra
+} from '@gradii/triangle/card/src/card.directive';
 
 @Component({
-  selector: 'tri-card',
+  selector     : 'tri-card',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <div class="tri-card-head" *ngIf="!titleTemplate&&title">
       <h3 class="tri-card-head-title">{{title}}</h3>
     </div>
@@ -60,9 +67,13 @@ import {
       </div>
     </div>
   `,
-  styleUrls: ['../style/card.css']
+  styleUrls    : ['../style/card.css']
 })
 export class CardComponent {
+
+  constructor(@Host() private elementRef: ElementRef<HTMLElement>) {
+    elementRef.nativeElement.classList.add('tri-card');
+  }
 
   /**
    * Card title if titleTemplate is not exist.
@@ -76,7 +87,7 @@ export class CardComponent {
    */
   @Input()
   @HostBinding('class.tri-card-bordered')
-  bordered = true;
+  bordered         = true;
   /**
    * Whether show loading
    * 是否显示加载状态
@@ -88,24 +99,26 @@ export class CardComponent {
    */
   @Input()
   @HostBinding('class.tri-card-no-hovering')
-  noHovering = true;
+  noHovering       = true;
 
   /**
    * The card title
    * 卡片标题标识
    */
-  @ContentChild('cardTitleTemplate', {static: false}) titleTemplate: TemplateRef<any>;
+  @ContentChild(TriCardTitle, {static: false, read: TemplateRef})
+  titleTemplate: TemplateRef<any>;
 
   /**
    * The card top right area
    * 卡片右上角的操作区域
    */
-  @ContentChild('cardExtraTemplate', {static: false}) extraTemplate: TemplateRef<any>;
+  @ContentChild(TriCardTitleExtra, {static: false, read: TemplateRef})
+  extraTemplate: TemplateRef<any>;
 
   /**
    * The card content area
    * 卡片内容区域
    */
-  @ContentChild('cardBodyTemplate', {static: false}) bodyTemplate: TemplateRef<any>;
-  @HostBinding('class.tri-card') _card = true;
+  @ContentChild(TriCardContent, {static: false, read: TemplateRef})
+  bodyTemplate: TemplateRef<any>;
 }
