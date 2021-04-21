@@ -1,7 +1,15 @@
-@mixin antCheckboxFn($checkbox-prefix-cls: "#{$tri-prefix}-checkbox") {
-  $primary                   : map-get($theme, primary);
-  $foreground                : map-get($theme, foreground);
-  $background                : map-get($theme, background);
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
+@use "../../core/style/theming";
+@use "../../input/style/input-mixin";
+@use "../../input/style/input-theme";
+@use "../../core/themes/theme";
+
+
+@mixin antCheckboxFn($checkbox-prefix-cls: "#{v.$tri-prefix}-checkbox") {
+  $primary                   : theme.$primary;
+  $foreground                : theme.$foreground;
+  $background                : theme.$background;
 
   $checkbox-size             : 16px;
   $checkbox-inner-prefix-cls : "#{$checkbox-prefix-cls}-inner";
@@ -18,7 +26,7 @@
     @at-root .#{$checkbox-prefix-cls}-wrapper:hover #{&}-inner,
     &:hover #{&}-inner,
     &-input:focus + #{&}-inner {
-      border-color : tri-color($primary);
+      border-color : theming.tri-color($primary);
     }
 
     @at-root &-checked:after {
@@ -27,8 +35,8 @@
       left                : 0;
       width               : 100%;
       height              : 100%;
-      border-radius       : $border-radius-sm;
-      border              : 1px solid tri-color($primary);
+      border-radius       : v.$border-radius-sm;
+      border              : 1px solid theming.tri-color($primary);
       content             : "";
       animation           : antCheckboxEffect 0.36s ease-in-out;
       animation-fill-mode : both;
@@ -45,10 +53,10 @@
       top              : 0;
       left             : 0;
       display          : inline-block;
-      width            : $checkbox-size;
-      height           : $checkbox-size;
-      border           : $border-width-base $border-style-base tri-color($foreground, border-color-base);
-      border-radius    : $border-radius-sm;
+      width            : v.$checkbox-size;
+      height           : v.$checkbox-size;
+      border           : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-base);
+      border-radius    : v.$border-radius-sm;
       background-color : #fff;
       transition       : all .3s;
 
@@ -64,7 +72,7 @@
         border-top  : 0;
         border-left : 0;
         content     : " ";
-        transition  : all .1s $ease-in-back;
+        transition  : all .1s v.$ease-in-back;
       }
     }
 
@@ -95,7 +103,7 @@
   }
 
   .#{$checkbox-prefix-cls}-indeterminate.#{$checkbox-prefix-cls}-disabled .#{$checkbox-inner-prefix-cls}::after {
-    border-color : tri-color($background, disabled-color);
+    border-color : theming.tri-color($background, disabled-color);
   }
 
   // 选中状态
@@ -111,14 +119,14 @@
     border-top  : 0;
     border-left : 0;
     content     : " ";
-    transition  : all .2s $ease-out-back .1s;
+    transition  : all .2s mixins.$ease-out-back .1s;
   }
 
   .#{$checkbox-prefix-cls}-checked,
   .#{$checkbox-prefix-cls}-indeterminate {
     .#{$checkbox-inner-prefix-cls} {
-      background-color : tri-color($primary);
-      border-color     : tri-color($primary);
+      background-color : theming.tri-color($primary);
+      border-color     : theming.tri-color($primary);
     }
   }
 
@@ -128,7 +136,7 @@
     @at-root &.#{$checkbox-prefix-cls}-checked {
       .#{$checkbox-inner-prefix-cls}::after {
         animation-name : none;
-        border-color   : tri-color($background, disabled-color);
+        border-color   : theming.tri-color($background, disabled-color);
       }
     }
 
@@ -137,23 +145,23 @@
     }
 
     .#{$checkbox-inner-prefix-cls} {
-      border-color     : tri-color($foreground, border-color-base) !important;
-      background-color : $input-disabled-bg;
+      border-color     : theming.tri-color($foreground, border-color-base) !important;
+      background-color : input-theme.$input-disabled-bg;
       @at-root &::after {
         animation-name : none;
-        border-color   : $input-disabled-bg;
+        border-color   : input-theme.$input-disabled-bg;
       }
     }
 
     @at-root & + span {
-      color  : tri-color($background, disabled-color);
+      color  : theming.tri-color($background, disabled-color);
       cursor : not-allowed;
     }
   }
 
   .#{$checkbox-prefix-cls}-wrapper {
     cursor    : pointer;
-    font-size : $font-size-base;
+    font-size : mixins.$font-size-base;
     display   : inline-block;
     @at-root &:not(:last-child) {
       margin-right : 8px;
@@ -167,7 +175,7 @@
   }
 
   .#{$checkbox-prefix-cls}-group {
-    font-size : $font-size-base;
+    font-size : mixins.$font-size-base;
     @at-root &-item {
       display : inline-block;
     }

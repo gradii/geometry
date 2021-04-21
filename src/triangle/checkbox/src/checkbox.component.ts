@@ -52,8 +52,11 @@ import { isFunction } from '@gradii/triangle/util';
     }
   ],
   host         : {
-    '[class.tri-checkbox-wrapper]': 'true'
-  }
+    'class': 'tri-checkbox-wrapper'
+  },
+  styleUrls: [
+    '../style/checkbox.css'
+  ]
 })
 export class CheckboxComponent implements ControlValueAccessor {
 

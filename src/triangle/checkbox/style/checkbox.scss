@@ -1,3 +1,6 @@
-@import "./checkbox-mixin";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
+@use "../../input/style/input-mixin";
+@use "./checkbox-mixin";
 
-@include antCheckboxFn();
+@include checkbox-mixin.antCheckboxFn();

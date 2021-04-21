@@ -74,6 +74,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'cascader',
         loadChildren: '/cascader/dev-cascader.module#DevCascaderModule'
+      },
+      {
+        path        : 'checkbox',
+        loadChildren: '/checkbox/dev-checkbox.module#DevCheckboxModule'
       }
     ]
   },

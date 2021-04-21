@@ -31,6 +31,7 @@ ng_module(
         "//src/dev-app/calendar",
         "//src/dev-app/carousel",
         "//src/dev-app/cascader",
+        "//src/dev-app/checkbox",
 
         "//src/triangle/core",
         "@npm//@angular/cdk",
