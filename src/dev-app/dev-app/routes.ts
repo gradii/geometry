@@ -66,6 +66,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'calendar',
         loadChildren: '/calendar/dev-calendar.module#DevCalendarModule'
+      },
+      {
+        path        : 'carousel',
+        loadChildren: '/carousel/dev-carousel.module#DevCarouselModule'
       }
     ]
   },

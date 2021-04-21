@@ -71,5 +71,6 @@
   @include tri-select-theme();
 
 
-  @include tri-card-theme()
+  @include tri-card-theme();
+  @include tri-carousel-theme();
 }

@@ -1,7 +1,7 @@
 @use "../../core/themes/theme";
 @use "../../core/style/variables" as v;
 
-@mixin tri-carousel-theme($theme) {
+@mixin tri-carousel-theme() {
   .slick-vertical .slick-slide {
     border : v.$border-width-base v.$border-style-base transparent;
   }
