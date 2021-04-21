@@ -12,9 +12,13 @@ import { TriCardModule } from '@gradii/triangle/card';
 import { TriDialogModule } from '@gradii/triangle/dialog';
 import { DevDialog } from './dev-dialog';
 import {
-  DialogDummy,
+  DialogBasic,
   TriDemoDialogBasicComponent
 } from './tri-demo-dialog/tri-demo-dialog-basic.component';
+import {
+  DialogCard,
+  TriDemoDialogCardComponent
+} from './tri-demo-dialog/tri-demo-dialog-card.component';
 
 
 @NgModule({
@@ -28,7 +32,8 @@ import {
     RouterModule.forChild([
       {
         path: '', component: DevDialog, children: [
-          {path: 'tri-demo-dialog-basic', component: TriDemoDialogBasicComponent}
+          {path: 'tri-demo-dialog-basic', component: TriDemoDialogBasicComponent},
+          {path: 'tri-demo-dialog-card', component: TriDemoDialogCardComponent}
         ]
       }
     ]),
@@ -37,9 +42,11 @@ import {
   declarations: [
     DevDialog,
 
-    DialogDummy,
+    DialogCard,
+    DialogBasic,
 
-    TriDemoDialogBasicComponent
+    TriDemoDialogBasicComponent,
+    TriDemoDialogCardComponent
   ]
 })
 export class DevDialogModule {

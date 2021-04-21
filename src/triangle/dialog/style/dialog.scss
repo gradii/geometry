@@ -1,7 +1,7 @@
-@import "../../core/style/mixins";
-@import "../../core/style/variables";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
 
-$dialog-prefix-cls  : "#{$tri-prefix}-dialog" !default;
+$dialog-prefix-cls  : "#{v.$tri-prefix}-dialog" !default;
 $zindex-dialog-mask : 100 !default;
 $zindex-dialog      : 1000 !default;
 
@@ -11,9 +11,9 @@ $zindex-dialog      : 1000 !default;
   height          : 100%;
   margin          : 0 auto;
   outline         : 0;
-  @include border-radius($border-radius-base);
+  @include mixins.border-radius(v.$border-radius-base);
   background-clip : padding-box;
-  box-shadow      : $shadow-2;
+  box-shadow      : v.$shadow-2;
 
   @at-root &-wrap {
     position                   : fixed;
@@ -29,7 +29,7 @@ $zindex-dialog      : 1000 !default;
 
   @at-root &-title {
     margin      : 0;
-    font-size   : $font-size-lg;
+    font-size   : v.$font-size-lg;
     line-height : 21px;
     font-weight : 500;
   }
@@ -58,7 +58,7 @@ $zindex-dialog      : 1000 !default;
       width          : 3rem;
       height         : 3rem;
       line-height    : 3rem;
-      font-size      : $font-size-lg;
+      font-size      : v.$font-size-lg;
 
       @at-root &:before {
         content     : "\e633";
@@ -75,20 +75,20 @@ $zindex-dialog      : 1000 !default;
   }
 
   @at-root &-header {
-    @include border-radius(($border-radius-base $border-radius-base 0 0));
+    @include mixins.border-radius((v.$border-radius-base v.$border-radius-base 0 0));
     padding : .8125rem 1rem;
   }
 
   @at-root &-content {
     padding     : 1rem;
-    font-size   : $font-size-base;
+    font-size   : v.$font-size-base;
     line-height : 1.5;
   }
 
   @at-root &-actions {
     padding    : .625rem 1rem .625rem .625rem;
     text-align : right;
-    @include border-radius((0 0 $border-radius-base $border-radius-base));
+    @include mixins.border-radius((0 0 v.$border-radius-base v.$border-radius-base));
     button + button {
       margin-left   : .5rem;
       margin-bottom : 0;
@@ -97,7 +97,7 @@ $zindex-dialog      : 1000 !default;
 
   @at-root &.zoom-enter,
   &.zoom-appear {
-    animation-duration : $animation-duration-slow;
+    animation-duration : v.$animation-duration-slow;
     transform          : none; // reset scale avoid mousePosition bug
     opacity            : 0;
   }
