@@ -32,9 +32,20 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { DEFAULT_DROPDOWN_POSITIONS, DropDownAnimation } from '@gradii/triangle/core';
-import { coerceToArray, isArray, isObject, loop } from '@gradii/triangle/util';
+import {
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR
+} from '@angular/forms';
+import {
+  DEFAULT_DROPDOWN_POSITIONS,
+  DropDownAnimation
+} from '@gradii/triangle/core';
+import {
+  coerceToArray,
+  isArray,
+  isObject,
+  loop
+} from '@gradii/triangle/util';
 
 function arrayEquals<T>(array1: T[], array2: T[]): boolean {
   if (!array1 || !array2 || array1.length !== array2.length) {
@@ -54,7 +65,7 @@ const defaultDisplayRender = (labels: string[], selectedOptions: any[]) => label
 
 export type CascaderExpandTrigger = 'click' | 'hover';
 export type CascaderTriggerType = 'click' | 'hover';
-export type CascaderSize = 'small' | 'large' | 'default' ;
+export type CascaderSize = 'small' | 'large' | 'default';
 
 export interface CascaderOption {
   value?: any;
@@ -83,19 +94,19 @@ export interface ShowSearchOptions {
 
 
 @Component({
-  selector           : 'tri-cascader',
-  animations         : [
+  selector   : 'tri-cascader',
+  animations : [
     DropDownAnimation
   ],
-  templateUrl        : './cascader.component.html',
-  providers          : [
+  templateUrl: './cascader.component.html',
+  providers  : [
     {
       provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => CascaderComponent),
       multi      : true
     }
   ],
-  host               : {
+  host       : {
     '[attr.tabIndex]'                       : '"0"',
     '[class.tri-cascader]'                  : 'true',
     '[class.tri-cascader-picker]'           : 'true',
@@ -106,20 +117,20 @@ export interface ShowSearchOptions {
     '[class.tri-cascader-picker-open]'      : 'menuVisible',
     '[class.tri-cascader-picker-with-value]': '_inputValue && _inputValue.length'
   },
-  styles             : [
+  styles     : [
     `.tri-cascader {
-      display : block;
+      display: block;
     }`,
     `.tri-cascader-menus {
-          margin-top    : 4px;
-          margin-bottom : 4px;
-          top           : 100%;
-          left          : 0;
-          position      : relative;
-          width         : 100%;
-      }`
-  ], 
-  styleUrls: [
+      margin-top: 4px;
+      margin-bottom: 4px;
+      top: 100%;
+      left: 0;
+      position: relative;
+      width: 100%;
+    }`
+  ],
+  styleUrls  : [
     '../style/cascader.css'
   ]
 })
@@ -1027,11 +1038,11 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
       return flag;
     };
     const filter: (inputValue: string, p: CascaderOption[]) => boolean =
-            this.showSearch instanceof Object && (this.showSearch as ShowSearchOptions).filter ?
-              (this.showSearch as ShowSearchOptions).filter :
-              defaultFilter;
+      this.showSearch instanceof Object && (this.showSearch as ShowSearchOptions).filter ?
+        (this.showSearch as ShowSearchOptions).filter :
+        defaultFilter;
     const sorter: (a: CascaderOption[], b: CascaderOption[], inputValue: string) => number =
-            this.showSearch instanceof Object && (this.showSearch as ShowSearchOptions).sorter;
+      this.showSearch instanceof Object && (this.showSearch as ShowSearchOptions).sorter;
     const loopParent = (node: CascaderOption, forceDisabled = false) => {
       const disabled = forceDisabled || node.disabled;
       path.push(node);
