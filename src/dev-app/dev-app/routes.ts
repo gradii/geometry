@@ -78,6 +78,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'checkbox',
         loadChildren: '/checkbox/dev-checkbox.module#DevCheckboxModule'
+      },
+      {
+        path        : 'dialog',
+        loadChildren: '/dialog/dev-dialog.module#DevDialogModule'
       }
     ]
   },

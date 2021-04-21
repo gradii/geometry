@@ -26,6 +26,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="carousel">carousel</a></li>
       <li><a routerLink="cascader">cascader</a></li>
       <li><a routerLink="checkbox">checkbox</a></li>
+      <li><a routerLink="dialog">dialog</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>

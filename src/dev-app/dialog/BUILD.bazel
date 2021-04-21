@@ -1,0 +1,22 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "dialog",
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"],),
+    assets = [
+        "dev-dialog.html",
+        ":dev_dialog_scss",
+    ],
+    deps = [
+        "//src/triangle/dialog",
+        "@npm//@angular/cdk",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_dialog_scss",
+    src = "dev-dialog.scss",
+)
