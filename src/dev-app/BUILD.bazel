@@ -30,6 +30,7 @@ ng_module(
         "//src/dev-app/card",
         "//src/dev-app/calendar",
         "//src/dev-app/carousel",
+        "//src/dev-app/cascader",
 
         "//src/triangle/core",
         "@npm//@angular/cdk",

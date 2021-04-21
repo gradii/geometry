@@ -70,6 +70,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'carousel',
         loadChildren: '/carousel/dev-carousel.module#DevCarouselModule'
+      },
+      {
+        path        : 'cascader',
+        loadChildren: '/cascader/dev-cascader.module#DevCascaderModule'
       }
     ]
   },

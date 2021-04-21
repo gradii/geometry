@@ -1,0 +1,23 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "cascader",
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"],),
+    assets = [
+        "dev-cascader.html",
+        ":dev_cascader_scss",
+    ],
+    deps = [
+        "//src/triangle/grid",
+        "//src/triangle/cascader",
+        "@npm//@angular/cdk",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_cascader_scss",
+    src = "dev-cascader.scss",
+)

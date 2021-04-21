@@ -118,6 +118,9 @@ export interface ShowSearchOptions {
           position      : relative;
           width         : 100%;
       }`
+  ], 
+  styleUrls: [
+    '../style/cascader.css'
   ]
 })
 export class CascaderComponent implements OnDestroy, ControlValueAccessor {
@@ -145,8 +148,7 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
   /** Whether show input box. Defaults to `true`. */
   @Input() showInput: boolean = true;
   /** Whether allow clear. Defaults to `true`. */
-  @Input()
-  allowClear: boolean = true;
+  @Input() allowClear: boolean = true;
   /** Whether auto focus. */
   @Input()
   autoFocus: boolean = false;
