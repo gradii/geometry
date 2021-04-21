@@ -9,7 +9,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { TriDialog } from './dialog';
+import { TriDialogService } from './dialog';
 import { TriDialogContainer } from './dialog-container';
 import { TRI_DIALOG_SCROLL_STRATEGY_PROVIDER } from './dialog-injectors';
 import { DummyDialog } from './dummy-dialog/dummy-dialog';
@@ -42,8 +42,8 @@ import { TriDialogHeader } from './helper/dialog-header';
     DummyDialog
   ],
   providers   : [
-    TriDialog,
-    TRI_DIALOG_SCROLL_STRATEGY_PROVIDER,
+      TriDialogService,
+      TRI_DIALOG_SCROLL_STRATEGY_PROVIDER,
   ],
 })
 export class TriDialogModule {

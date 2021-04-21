@@ -50,7 +50,7 @@ function _applyConfigDefaults(
  * Service to open modal dialogs.
  */
 @Injectable()
-export class TriDialog implements OnDestroy {
+export class TriDialogService implements OnDestroy {
   /**
    * Stream that emits when all open dialog have finished closing.
    * Will emit on subscribe if there are no open dialogs to begin with.
@@ -70,7 +70,7 @@ export class TriDialog implements OnDestroy {
     @Optional() private _location: Location,
     @Optional() @Inject(TRI_DIALOG_DEFAULT_OPTIONS) private _defaultOptions: TriDialogConfig,
     @Inject(TRI_DIALOG_SCROLL_STRATEGY) scrollStrategy: any,
-    @Optional() @SkipSelf() private _parentDialog: TriDialog,
+    @Optional() @SkipSelf() private _parentDialog: TriDialogService,
     private _overlayContainer: OverlayContainer) {
     this._scrollStrategy = scrollStrategy;
   }

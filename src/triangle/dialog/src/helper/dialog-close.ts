@@ -13,7 +13,7 @@ import {
   Optional,
   SimpleChanges
 } from '@angular/core';
-import { TriDialog } from '../dialog';
+import { TriDialogService } from '../dialog';
 import { TriDialogRef } from '../dialog-ref';
 import { getClosestDialog } from './helper';
 
@@ -40,7 +40,7 @@ export class TriDialogClose implements OnInit, OnChanges {
   constructor(
     @Optional() public dialogRef: TriDialogRef<any>,
     private _elementRef: ElementRef<HTMLElement>,
-    private _dialog: TriDialog) {
+    private _dialog: TriDialogService) {
   }
 
   ngOnInit() {

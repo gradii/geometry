@@ -5,7 +5,7 @@
  */
 
 import { Component, ElementRef, Input, OnInit, Optional } from '@angular/core';
-import { TriDialog } from '../dialog';
+import { TriDialogService } from '../dialog';
 import { TriDialogRef } from '../dialog-ref';
 import { getClosestDialog } from './helper';
 
@@ -36,7 +36,7 @@ export class TriDialogHeader implements OnInit {
   constructor(
     @Optional() private _dialogRef: TriDialogRef<any>,
     private _elementRef: ElementRef<HTMLElement>,
-    private _dialog: TriDialog) {
+    private _dialog: TriDialogService) {
   }
 
   ngOnInit() {

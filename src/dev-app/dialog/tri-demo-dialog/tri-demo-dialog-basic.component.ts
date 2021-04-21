@@ -5,15 +5,33 @@
  */
 
 import { Component } from '@angular/core';
+import { TriDialogService } from '@gradii/triangle/dialog';
 
+@Component({
+  selector: 'dialog-dummy',
+  template: `
+    <tri-card title="hello title">
+
+    </tri-card>
+  `
+})
+export class DialogDummy {
+
+}
 
 @Component({
   selector: 'tri-demo-dialog-basic',
   template: `
-    tri-demo-dialog-basic
+    <button tri-button (click)="onOpen()">open dialog</button>
   `
 })
 export class TriDemoDialogBasicComponent {
-  constructor() {
+  constructor(
+    private dialogService: TriDialogService
+  ) {
+  }
+
+  onOpen() {
+    this.dialogService.open(DialogDummy);
   }
 }

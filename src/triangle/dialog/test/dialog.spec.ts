@@ -28,14 +28,14 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { dispatchKeyboardEvent } from '@gradii/triangle/core/testing';
 import {
   TRI_DIALOG_DATA,
-  TriDialog,
+  TriDialogService,
   TriDialogContainer,
   TriDialogModule,
   TriDialogRef
 } from '@gradii/triangle/dialog';
 
 describe('Dialog', () => {
-  let dialog: TriDialog;
+  let dialog: TriDialogService;
   let overlayContainerElement: HTMLElement;
 
   let testViewContainerRef: ViewContainerRef;
@@ -59,7 +59,7 @@ describe('Dialog', () => {
     TestBed.compileComponents();
   }));
 
-  beforeEach(inject([TriDialog, Location], (d: TriDialog, l: Location) => {
+  beforeEach(inject([TriDialogService, Location], (d: TriDialogService, l: Location) => {
     dialog = d;
     mockLocation = l as SpyLocation;
   }));
@@ -951,8 +951,8 @@ describe('Dialog', () => {
 });
 
 describe('Dialog with a parent Dialog', () => {
-  let parentDialog: TriDialog;
-  let childDialog: TriDialog;
+  let parentDialog: TriDialogService;
+  let childDialog: TriDialogService;
   let overlayContainerElement: HTMLElement;
   let fixture: ComponentFixture<ComponentThatProvidesMatDialog>;
 
@@ -974,7 +974,7 @@ describe('Dialog with a parent Dialog', () => {
     TestBed.compileComponents();
   }));
 
-  beforeEach(inject([TriDialog], (d: TriDialog) => {
+  beforeEach(inject([TriDialogService], (d: TriDialogService) => {
     parentDialog = d;
 
     fixture = TestBed.createComponent(ComponentThatProvidesMatDialog);
@@ -1114,10 +1114,10 @@ class ContentElementDialog {
 
 @Component({
   template : '',
-  providers: [TriDialog]
+  providers: [TriDialogService]
 })
 class ComponentThatProvidesMatDialog {
-  constructor(public dialog: TriDialog) {
+  constructor(public dialog: TriDialogService) {
   }
 }
 
