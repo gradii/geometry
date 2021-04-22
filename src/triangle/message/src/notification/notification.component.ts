@@ -43,7 +43,7 @@ import { NotificationContainerComponent } from './notification-container.compone
             <i *ngSwitchCase="'warning'"
                class="tri-notification-notice-icon tri-notification-notice-icon-warning anticon anticon-exclamation-circle-o"></i>
             <i *ngSwitchCase="'error'"
-               class="tri-notification-notice-icon tri-notification-notice-icon-error anticon anticon-cross-circle-o"></i>
+               class="tri-notification-notice-icon tri-notification-notice-icon-error anticon anticon-close-circle-o"></i>
           </ng-container>
           <div class="tri-notification-notice-message">{{message.title}}</div>
           <div class="tri-notification-notice-description">{{message.content}}</div>

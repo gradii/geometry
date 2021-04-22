@@ -9,7 +9,7 @@ $form-feedback-font-size : $font-size-base;
 label {
   position : relative;
 
-  > .#{$iconfont-css-prefix} {
+  > .#{v.$iconfont-css} {
     vertical-align : top;
     font-size      : $font-size-base;
   }

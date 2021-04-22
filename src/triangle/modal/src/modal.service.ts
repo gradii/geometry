@@ -233,7 +233,7 @@ export class ModalService {
     const config = {
       ...{
         confirmType: 'error',
-        iconType   : 'cross-circle'
+        iconType   : 'close-circle'
       },
       ...props
     };

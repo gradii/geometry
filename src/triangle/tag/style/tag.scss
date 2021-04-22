@@ -34,7 +34,7 @@ $tag-font-size  : $font-size-base !default;
     }
   }
 
-  .#{$iconfont-css-prefix}-cross {
+  .#{v.$iconfont-css}-cross {
     @include iconfont-size-under-12px(10px);
     cursor      : pointer;
     font-weight : bold;

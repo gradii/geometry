@@ -29,7 +29,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
             [ngIf]="(status=='active')||(status=='normal')||(_hasFormat)">{{_format(_percent)}}</ng-template>
           <ng-template [ngIf]="((status=='exception')||(status=='success'))&&(!_hasFormat)">
             <i class="anticon"
-               [ngClass]="{'anticon-check-circle':status=='success','anticon-cross-circle':status=='exception'}"></i>
+               [ngClass]="{'anticon-check-circle':status=='success','anticon-close-circle':status=='exception'}"></i>
           </ng-template>
         </span>
       </div>

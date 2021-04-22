@@ -54,7 +54,7 @@ $progress-prefix-cls : "#{$tri-prefix}-progress" !default;
     margin-left    : 0.75em;
     vertical-align : middle;
     display        : inline-block;
-    .#{$iconfont-css-prefix} {
+    .#{v.$iconfont-css} {
       font-size : $font-size-base;
     }
 
@@ -101,7 +101,7 @@ $progress-prefix-cls : "#{$tri-prefix}-progress" !default;
     font-family : tahoma;
     margin      : 0;
 
-    .#{$iconfont-css-prefix} {
+    .#{v.$iconfont-css} {
       font-size : 14 / 12em;
     }
   }

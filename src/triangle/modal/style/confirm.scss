@@ -31,7 +31,7 @@ $confirm-prefix-cls : "#{$tri-prefix}-confirm";
       margin-top  : 8px;
     }
 
-    > .#{$iconfont-css-prefix} {
+    > .#{v.$iconfont-css} {
       font-size    : 24px;
       margin-right : 16px;
       padding      : 0 1px;
@@ -49,20 +49,20 @@ $confirm-prefix-cls : "#{$tri-prefix}-confirm";
     }
   }
 
-  @at-root &-error #{&}-body > .#{$iconfont-css-prefix} {
+  @at-root &-error #{&}-body > .#{v.$iconfont-css} {
     color : $error-color;
   }
 
-  @at-root &-warning #{&}-body > .#{$iconfont-css-prefix},
-  &-confirm #{&}-body > .#{$iconfont-css-prefix} {
+  @at-root &-warning #{&}-body > .#{v.$iconfont-css},
+  &-confirm #{&}-body > .#{v.$iconfont-css} {
     color : $warning-color;
   }
 
-  @at-root &-info #{&}-body > .#{$iconfont-css-prefix} {
+  @at-root &-info #{&}-body > .#{v.$iconfont-css} {
     color : $info-color;
   }
 
-  @at-root &-success #{&}-body > .#{$iconfont-css-prefix} {
+  @at-root &-success #{&}-body > .#{v.$iconfont-css} {
     color : $success-color;
   }
 }

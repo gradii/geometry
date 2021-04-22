@@ -53,8 +53,8 @@ $tag-prefix-cls : "#{ v.$tri-prefix}-tag";
       @at-root &,
       & a,
       & a:hover,
-      & .#{ v.$iconfont-css-prefix}-cross,
-      & .#{ v.$iconfont-css-prefix}-cross:hover {
+      & .#{v.$iconfont-css}-cross,
+      & .#{v.$iconfont-css}-cross:hover {
         color : #fff;
       }
     }

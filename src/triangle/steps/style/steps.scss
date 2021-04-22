@@ -65,7 +65,7 @@ $steps-desciption-max-width : 120px;
     > .#{$steps-prefix-cls}-icon {
       line-height : 1;
       position    : relative;
-      @at-root &.#{$iconfont-css-prefix} {
+      @at-root &.#{v.$iconfont-css} {
         font-size : $font-size-base;
         @at-root &-cross,
         &-check {
@@ -143,7 +143,7 @@ $steps-desciption-max-width : 120px;
       font-size     : $font-size-base;
       margin-right  : 10px;
 
-      > .#{$steps-prefix-cls}-icon.#{$iconfont-css-prefix} {
+      > .#{$steps-prefix-cls}-icon.#{v.$iconfont-css} {
         @include iconfont-size-under-12px(9px);
         top : 0;
       }

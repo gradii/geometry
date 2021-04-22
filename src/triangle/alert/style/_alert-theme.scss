@@ -55,7 +55,7 @@ $alert-prefix-cls : #{ v.$tri-prefix}-alert;
     }
 
     @at-root &-close-icon {
-      .#{ v.$iconfont-css-prefix}-cross {
+      .#{v.$iconfont-css}-cross {
         color : theming.tri-color($foreground, text-color-secondary);
         @at-root &:hover {
           color : #404040;

@@ -1,32 +1,33 @@
-@import "../../core/style/mixins";
-@import "../../core/style/variables";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
+@use "../../core/themes/theme";
 
-$dropdown-prefix-cls : "#{$tri-prefix}-dropdown";
+$dropdown-prefix-cls : "#{v.$tri-prefix}-dropdown";
 
 .#{$dropdown-prefix-cls} {
   position    : absolute;
   left        : -9999px;
   top         : -9999px;
-  z-index     : $zindex-dropdown;
+  z-index     : v.$zindex-dropdown;
   display     : block;
-  font-size   : $font-size-base;
+  font-size   : v.$font-size-base;
   font-weight : normal;
   line-height : 1.5;
 
   @at-root &-wrap {
     position : relative;
 
-    .#{$tri-prefix}-btn > .#{$iconfont-css-prefix}-down {
-      @include iconfont-size-under-12px(10px);
+    .#{v.$tri-prefix}-btn > .#{v.$iconfont-css}-down {
+      @include mixins.iconfont-size-under-12px(10px);
     }
 
-    .#{$iconfont-css-prefix}-down:before {
+    .#{v.$iconfont-css}-down:before {
       transition : transform 0.2s ease;
     }
   }
 
   @at-root &-wrap-open {
-    .#{$iconfont-css-prefix}-down:before {
+    .#{v.$iconfont-css}-down:before {
       transform : rotate(180deg);
     }
   }
@@ -43,8 +44,8 @@ $dropdown-prefix-cls : "#{$tri-prefix}-dropdown";
     padding         : 0;
     margin          : 0;
     text-align      : left;
-    border-radius   : $border-radius-base;
-    box-shadow      : $box-shadow-base;
+    border-radius   : v.$border-radius-base;
+    box-shadow      : v.$box-shadow-base;
     background-clip : padding-box;
 
     @at-root &-item,
@@ -52,7 +53,7 @@ $dropdown-prefix-cls : "#{$tri-prefix}-dropdown";
       padding     : 7px 8px;
       margin      : 0;
       clear       : both;
-      font-size   : $font-size-base;
+      font-size   : v.$font-size-base;
       font-weight : normal;
       white-space : nowrap;
       cursor      : pointer;
@@ -70,17 +71,17 @@ $dropdown-prefix-cls : "#{$tri-prefix}-dropdown";
 
       @at-root &:first-child,
       &:first-child > a {
-        border-radius : $border-radius-base $border-radius-base 0 0;
+        border-radius : v.$border-radius-base v.$border-radius-base 0 0;
       }
 
       @at-root &:last-child,
       &:last-child > a {
-        border-radius : 0 0 $border-radius-base $border-radius-base;
+        border-radius : 0 0 v.$border-radius-base v.$border-radius-base;
       }
 
       @at-root &:only-child,
       &:only-child > a {
-        border-radius : $border-radius-base;
+        border-radius : v.$border-radius-base;
       }
 
       @at-root &-divider {
@@ -96,7 +97,7 @@ $dropdown-prefix-cls : "#{$tri-prefix}-dropdown";
       position    : absolute;
       content     : "\e61f";
       right       : 8px;
-      @include iconfont-size-under-12px(10px);
+      @include mixins.iconfont-size-under-12px(10px);
     }
 
     @at-root &-submenu-vertical {
@@ -113,11 +114,11 @@ $dropdown-prefix-cls : "#{$tri-prefix}-dropdown";
     }
 
     @at-root &-submenu:first-child #{&}-submenu-title {
-      border-radius : $border-radius-base $border-radius-base 0 0;
+      border-radius : v.$border-radius-base v.$border-radius-base 0 0;
     }
 
     @at-root &-submenu:last-child #{&}-submenu-title {
-      border-radius : 0 0 $border-radius-base $border-radius-base;
+      border-radius : 0 0 v.$border-radius-base v.$border-radius-base;
     }
   }
 
@@ -154,18 +155,18 @@ $dropdown-prefix-cls : "#{$tri-prefix}-dropdown";
 
 .#{$dropdown-prefix-cls}-trigger,
 .#{$dropdown-prefix-cls}-link {
-  .#{$iconfont-css-prefix}-down {
-    @include iconfont-size-under-12px(10px);
+  .#{v.$iconfont-css}-down {
+    @include mixins.iconfont-size-under-12px(10px);
   }
 }
 
 .#{$dropdown-prefix-cls}-button {
   white-space : nowrap;
 
-  @at-root &.#{$tri-prefix}-btn-group > .#{$tri-prefix}-btn:last-child:not(:first-child) {
+  @at-root &.#{v.$tri-prefix}-btn-group > .#{v.$tri-prefix}-btn:last-child:not(:first-child) {
     padding-right : 8px;
   }
-  .#{$iconfont-css-prefix}-down {
-    @include iconfont-size-under-12px(10px);
+  .#{v.$iconfont-css}-down {
+    @include mixins.iconfont-size-under-12px(10px);
   }
 }

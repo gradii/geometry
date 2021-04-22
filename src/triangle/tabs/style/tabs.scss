@@ -180,7 +180,7 @@ $tab-prefix-cls : "#{mixins.$tri-prefix}-tabs";
       @at-root &:active {
         color : $primary-7;
       }
-      .#{mixins.$iconfont-css-prefix} {
+      .#{v.$iconfont-css} {
         width        : 14px;
         height       : 14px;
         margin-right : 8px;

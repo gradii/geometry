@@ -43,7 +43,7 @@ $alert-prefix-cls : #{v.$tri-prefix}-alert;
     overflow    : hidden;
     cursor      : pointer;
 
-    .#{v.$iconfont-css-prefix}-cross {
+    .#{v.$iconfont-css}-cross {
       transition : color .3s ease;
     }
   }

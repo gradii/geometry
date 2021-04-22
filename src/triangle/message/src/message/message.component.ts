@@ -4,11 +4,26 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger
+} from '@angular/animations';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 import { MessageConfig } from './message-config';
 import { MessageContainerComponent } from './message-container.component';
-import { MessageDataFilled, MessageDataOptions } from './message.definitions';
+import {
+  MessageDataFilled,
+  MessageDataOptions
+} from './message.definitions';
 
 @Component({
   selector     : 'tri-message',
@@ -34,14 +49,14 @@ import { MessageDataFilled, MessageDataOptions } from './message.definitions';
          (mouseleave)="onLeave()">
       <div class="tri-message-notice-content"
            [ngClass]="'tri-message-' + message.type">
-        <div *ngIf="!message.html" 
+        <div *ngIf="!message.html"
              class="tri-message-custom-content">
           <ng-container [ngSwitch]="message.type">
-            <i *ngSwitchCase="'success'" class="anticon anticon-check-circle"></i>
-            <i *ngSwitchCase="'info'" class="anticon anticon-info-circle"></i>
-            <i *ngSwitchCase="'warning'" class="anticon anticon-exclamation-circle"></i>
-            <i *ngSwitchCase="'error'" class="anticon anticon-cross-circle"></i>
-            <i *ngSwitchCase="'loading'" class="anticon anticon-spin anticon-loading"></i>
+            <tri-icon *ngSwitchCase="'success'" svgIcon="fill:check-circle"></tri-icon>
+            <tri-icon *ngSwitchCase="'info'" svgIcon="fill:info-circle"></tri-icon>
+            <tri-icon *ngSwitchCase="'warning'" svgIcon="fill:exclamation-circle"></tri-icon>
+            <tri-icon *ngSwitchCase="'error'" svgIcon="fill:close-circle"></tri-icon>
+            <tri-icon *ngSwitchCase="'loading'" svgIcon="outline:loading"></tri-icon>
           </ng-container>
           <span>{{message.content}}</span>
         </div>
@@ -49,7 +64,7 @@ import { MessageDataFilled, MessageDataOptions } from './message.definitions';
       </div>
     </div>
   `,
-  styleUrls: [
+  styleUrls    : [
     '../../style/message.css'
   ]
 })
@@ -113,7 +128,7 @@ export class MessageComponent implements OnInit, OnDestroy {
   }
 
   private _initErase() {
-    this._eraseTTL = this._options.duration;
+    this._eraseTTL         = this._options.duration;
     this._eraseTimingStart = Date.now();
   }
 
@@ -126,7 +141,7 @@ export class MessageComponent implements OnInit, OnDestroy {
   private _startEraseTimeout() {
     if (this._eraseTTL > 0) {
       this._clearEraseTimeout(); // To prevent calling _startEraseTimeout() more times to create more timer
-      this._eraseTimer = window.setTimeout(() => this._destroy(), this._eraseTTL);
+      this._eraseTimer       = window.setTimeout(() => this._destroy(), this._eraseTTL);
       this._eraseTimingStart = Date.now();
     } else {
       this._destroy();

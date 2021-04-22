@@ -168,7 +168,7 @@ $menu-font-size       : v.$font-size-base !default;
       @at-root &:after {
         display : none;
       }
-      .#{v.$iconfont-css-prefix} {
+      .#{v.$iconfont-css} {
         font-size   : 16px;
         line-height : 42px;
         margin      : 0;
@@ -183,7 +183,7 @@ $menu-font-size       : v.$font-size-base !default;
 
     @at-root &-tooltip {
       pointer-events : none;
-      .#{v.$iconfont-css-prefix} {
+      .#{v.$iconfont-css} {
         display : none;
       }
     }
@@ -218,7 +218,7 @@ $menu-font-size       : v.$font-size-base !default;
     position    : relative;
     display     : block;
     white-space : nowrap;
-    .#{v.$iconfont-css-prefix} {
+    .#{v.$iconfont-css} {
       min-width    : 14px;
       margin-right : 8px;
       transition   : font-size .15s v.$ease-out, margin .3s v.$ease-in-out;

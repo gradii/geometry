@@ -23,7 +23,7 @@ $breadcrumb-prefix-cls : "#{$tri-prefix}-breadcrumb";
   }
 
   @at-root &-link {
-    > .#{$iconfont-css-prefix} + span {
+    > .#{v.$iconfont-css} + span {
       margin-left : 4px;
     }
   }

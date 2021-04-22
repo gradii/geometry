@@ -128,7 +128,7 @@ $btn-primary-bg         : grey !default;
         $btn-border-radius-sm
     );
 
-    > .#{ v.$iconfont-css-prefix} {
+    > .#{v.$iconfont-css} {
       font-size : v.$font-size-base,
     }
   }
@@ -159,7 +159,7 @@ $btn-primary-bg         : grey !default;
   transition       : all .1s v.$ease-in-out;
   position         : relative;
 
-  > .#{ v.$iconfont-css-prefix} {
+  > .#{v.$iconfont-css} {
     line-height : 1;
   }
 
