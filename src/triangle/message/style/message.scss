@@ -34,8 +34,6 @@ $message-prefix-cls : "#{v.$tri-prefix}-message";
   @at-root &-notice-content {
     padding        : 8px 16px;
     border-radius  : v.$border-radius-base;
-    box-shadow     : v.$shadow-2;
-    background     : theming.tri-color($background, component-background);
     display        : inline-block;
     pointer-events : all;
   }

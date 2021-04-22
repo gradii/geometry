@@ -32,9 +32,10 @@ import { MessageDataFilled, MessageDataOptions } from './message.definitions';
          [@enterLeave]="message.state"
          (mouseenter)="onEnter()"
          (mouseleave)="onLeave()">
-      <div class="tri-message-notice-content">
-        <div *ngIf="!message.html" class="tri-message-custom-content"
-             [ngClass]="'tri-message-' + message.type">
+      <div class="tri-message-notice-content"
+           [ngClass]="'tri-message-' + message.type">
+        <div *ngIf="!message.html" 
+             class="tri-message-custom-content">
           <ng-container [ngSwitch]="message.type">
             <i *ngSwitchCase="'success'" class="anticon anticon-check-circle"></i>
             <i *ngSwitchCase="'info'" class="anticon anticon-info-circle"></i>
@@ -48,6 +49,9 @@ import { MessageDataFilled, MessageDataOptions } from './message.definitions';
       </div>
     </div>
   `,
+  host: {
+    'class' : 'tri-message',
+  },
   styleUrls: [
     '../../style/message.css'
   ]

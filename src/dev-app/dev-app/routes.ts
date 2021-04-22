@@ -90,6 +90,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'message',
         loadChildren: '/message/dev-message.module#DevMessageModule'
+      },
+      {
+        path        : 'pagination',
+        loadChildren: '/pagination/dev-pagination.module#DevPaginationModule'
       }
     ]
   },

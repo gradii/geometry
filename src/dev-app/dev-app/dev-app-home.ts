@@ -29,6 +29,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="dialog">dialog</a></li>
       <li><a routerLink="menu">menu</a></li>
       <li><a routerLink="message">message</a></li>
+      <li><a routerLink="pagination">pagination</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>

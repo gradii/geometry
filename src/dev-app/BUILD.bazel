@@ -35,6 +35,7 @@ ng_module(
         "//src/dev-app/dialog",
         "//src/dev-app/menu",
         "//src/dev-app/message",
+        "//src/dev-app/pagination",
 
         "//src/triangle/core",
         "@npm//@angular/cdk",
