@@ -1,7 +1,0 @@
-@import "../../core/style/mixins";
-@import "../../core/style/variables";
-
-.#{$tri-prefix}-affix {
-  position : fixed;
-  z-index  : $zindex-affix;
-}

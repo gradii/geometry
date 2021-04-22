@@ -1,6 +1,6 @@
 # List of all entry-points of the Angular CDK package.
 TRIANGLE_ENTRYPOINTS = [
-    "affix",
+    # "affix",
     "alert",
     "anchor",
     "autocomplete",
@@ -74,7 +74,7 @@ TRIANGLE_TESTING_ENTRYPOINTS = [
 ]
 
 TRIANGLE_ENTRYPOINTS_WITH_STYLES = [
-    "affix",
+    # "affix",
     "alert",
     "anchor",
     "autocomplete",

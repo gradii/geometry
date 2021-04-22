@@ -35,9 +35,9 @@ const sharpMatcherRegx = /#([^#]+)$/;
   selector           : 'tri-anchor',
   changeDetection    : ChangeDetectionStrategy.OnPush,
   template           : `
-    <tri-affix *ngIf="affix;else content" [offsetTop]="offsetTop">
+    <div *ngIf="affix;else content" style="position:sticky" [style.top.px]="offsetTop">
       <ng-template [ngTemplateOutlet]="content"></ng-template>
-    </tri-affix>
+    </div>
     <ng-template #content>
       <div class="tri-anchor-wrapper" #wrap [ngStyle]="wrapperStyle">
         <div class="tri-anchor" [ngClass]="{'fixed': !affix && !showInkInFixed}">

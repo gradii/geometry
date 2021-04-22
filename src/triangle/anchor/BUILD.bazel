@@ -19,7 +19,7 @@ ng_module(
     assets = [":style/anchor.css"] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/anchor",
     deps = [
-        "//src/triangle/affix",
+        # "//src/triangle/affix",
         "//src/triangle/core",
         "//src/triangle/i18n",
         "//src/triangle/util",
