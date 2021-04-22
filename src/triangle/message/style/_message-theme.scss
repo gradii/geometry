@@ -1,30 +1,42 @@
+@use "../../core/style/mixins";
 @use "../../core/style/variables" as v;
+@use "../../core/style/theming";
+@use "../../core/themes/theme";
 
 $message-prefix-cls : "#{ v.$tri-prefix}-message";
 
-@mixin tri-message-theme($theme) {
+@mixin tri-message-theme() {
   .#{$message-prefix-cls} {
+    $success             : theme.$success;
+    $info                : theme.$info;
+    $warning             : theme.$warning;
+    $error               : theme.$error;
+
+    $primary    : theme.$primary;
+    $foreground : theme.$foreground;
+    $background : theme.$background;
+
     @at-root &-notice-content {
       border-radius : v.$border-radius-base;
       box-shadow    : v.$shadow-2;
-      background    : $component-background;
+      background    : theming.tri-color($background, component-background);
     }
 
     @at-root &-success .#{ v.$iconfont-css-prefix} {
-      color : $success-color;
+      color : theming.tri-color($success);
     }
 
     @at-root &-error .#{ v.$iconfont-css-prefix} {
-      color : $error-color;
+      color : theming.tri-color($error);
     }
 
     @at-root &-warning .#{ v.$iconfont-css-prefix} {
-      color : $warning-color;
+      color : theming.tri-color($warning);
     }
 
     @at-root &-info .#{ v.$iconfont-css-prefix},
     &-loading .#{ v.$iconfont-css-prefix} {
-      color : $info-color;
+      color : theming.tri-color($info);
     }
   }
 }

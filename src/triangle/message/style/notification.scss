@@ -1,5 +1,6 @@
 @use "../../core/style/mixins";
 @use "../../core/style/variables" as v;
+@use "../../core/style/theming";
 @use "../../core/themes/theme";
 
 
@@ -15,6 +16,15 @@ $notification-margin-bottom : 10px;
 }
 
 .#{$notification-prefix-cls} {
+  $success             : theme.$success;
+  $info                : theme.$info;
+  $warning             : theme.$warning;
+  $error               : theme.$error;
+
+  $primary    : theme.$primary;
+  $foreground : theme.$foreground;
+  $background : theme.$background;
+
   position     : fixed;
   z-index      : v.$zindex-notification;
   width        : $notification-width;
@@ -35,7 +45,7 @@ $notification-margin-bottom : 10px;
     padding       : $notification-padding;
     border-radius : v.$border-radius-base;
     box-shadow    : v.$shadow-2;
-    background    : $component-background;
+    background    : theming.tri-color($background, component-background);
     line-height   : 1.5;
     position      : relative;
     margin-bottom : $notification-margin-bottom;
@@ -88,16 +98,16 @@ $notification-margin-bottom : 10px;
       line-height : 32px;
 
       @at-root &-success {
-        color : $success-color;
+        color : theming.tri-color($success);
       }
       @at-root &-info {
-        color : $info-color;
+        color : theming.tri-color($info);
       }
       @at-root &-warning {
-        color : $warning-color;
+        color : theming.tri-color($warning);
       }
       @at-root &-error {
-        color : $error-color;
+        color : theming.tri-color($error);
       }
     }
 
@@ -112,7 +122,7 @@ $notification-margin-bottom : 10px;
       position        : absolute;
       right           : 16px;
       top             : 10px;
-      color           : $text-color-secondary;
+      color           : theming.tri-color($foreground, text-color-secondary);
       outline         : none;
       text-decoration : none;
       @at-root &:hover {
