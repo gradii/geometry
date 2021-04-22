@@ -82,6 +82,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'dialog',
         loadChildren: '/dialog/dev-dialog.module#DevDialogModule'
+      },
+      {
+        path        : 'menu',
+        loadChildren: '/menu/dev-menu.module#DevMenuModule'
       }
     ]
   },

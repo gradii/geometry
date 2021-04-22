@@ -27,6 +27,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="cascader">cascader</a></li>
       <li><a routerLink="checkbox">checkbox</a></li>
       <li><a routerLink="dialog">dialog</a></li>
+      <li><a routerLink="menu">menu</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>

@@ -33,6 +33,7 @@ ng_module(
         "//src/dev-app/cascader",
         "//src/dev-app/checkbox",
         "//src/dev-app/dialog",
+        "//src/dev-app/menu",
 
         "//src/triangle/core",
         "@npm//@angular/cdk",
