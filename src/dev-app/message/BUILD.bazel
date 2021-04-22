@@ -1,0 +1,23 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "message",
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"],),
+    assets = [
+        "dev-message.html",
+        ":dev_message_scss",
+    ],
+    deps = [
+        "//src/triangle/message",
+        
+        "@npm//@angular/cdk",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_message_scss",
+    src = "dev-message.scss",
+)

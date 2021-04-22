@@ -86,6 +86,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'menu',
         loadChildren: '/menu/dev-menu.module#DevMenuModule'
+      },
+      {
+        path        : 'message',
+        loadChildren: '/message/dev-message.module#DevMessageModule'
       }
     ]
   },

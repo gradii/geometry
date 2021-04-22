@@ -34,6 +34,7 @@ ng_module(
         "//src/dev-app/checkbox",
         "//src/dev-app/dialog",
         "//src/dev-app/menu",
+        "//src/dev-app/message",
 
         "//src/triangle/core",
         "@npm//@angular/cdk",
