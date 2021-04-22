@@ -1,4 +1,9 @@
-$notification-prefix-cls    : "#{$tri-prefix}-notification";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
+@use "../../core/themes/theme";
+
+
+$notification-prefix-cls    : "#{v.$tri-prefix}-notification";
 $notification-width         : 335px;
 $notification-padding       : 16px;
 $notification-margin-bottom : 10px;
@@ -6,12 +11,12 @@ $notification-margin-bottom : 10px;
 @mixin notification-fade-effect() {
   animation-duration        : 0.24s;
   animation-fill-mode       : both;
-  animation-timing-function : $ease-in-out;
+  animation-timing-function : v.$ease-in-out;
 }
 
 .#{$notification-prefix-cls} {
   position     : fixed;
-  z-index      : $zindex-notification;
+  z-index      : v.$zindex-notification;
   width        : $notification-width;
   margin-right : 24px;
 
@@ -28,8 +33,8 @@ $notification-margin-bottom : 10px;
 
   @at-root &-notice {
     padding       : $notification-padding;
-    border-radius : $border-radius-base;
-    box-shadow    : $shadow-2;
+    border-radius : v.$border-radius-base;
+    box-shadow    : v.$shadow-2;
     background    : $component-background;
     line-height   : 1.5;
     position      : relative;
@@ -37,8 +42,8 @@ $notification-margin-bottom : 10px;
     overflow      : hidden;
 
     @at-root &-message {
-      font-size     : $font-size-lg;
-      color         : $heading-color;
+      font-size     : v.$font-size-lg;
+      color         : v.$heading-color;
       margin-bottom : 4px;
       line-height   : 20px;
       display       : inline-block;
@@ -59,7 +64,7 @@ $notification-margin-bottom : 10px;
     }
 
     @at-root &-description {
-      font-size : $font-size-base;
+      font-size : v.$font-size-base;
     }
 
     @at-root &-closable #{&}-message {
@@ -67,14 +72,14 @@ $notification-margin-bottom : 10px;
     }
 
     @at-root &-with-icon #{&}-message {
-      font-size     : $font-size-lg;
+      font-size     : v.$font-size-lg;
       margin-left   : 48px;
       margin-bottom : 4px;
     }
 
     @at-root &-with-icon #{&}-description {
       margin-left : 48px;
-      font-size   : $font-size-base;
+      font-size   : v.$font-size-base;
     }
 
     @at-root &-icon {
@@ -97,7 +102,7 @@ $notification-margin-bottom : 10px;
     }
 
     @at-root &-close-x:after {
-      font-size   : $font-size-base;
+      font-size   : v.$font-size-base;
       content     : "\e633";
       font-family : "anticon";
       cursor      : pointer;

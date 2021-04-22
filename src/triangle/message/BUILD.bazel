@@ -43,6 +43,14 @@ sass_binary(
         "//src/triangle/message:message_scss_lib",
     ],
 )
+
+sass_binary(
+    name = "notification_scss",
+    src = "style/notification.scss",
+    deps = [
+        "//src/triangle/message:message_scss_lib",
+    ],
+)
 #
 #ng_test_library(
 #  name = "autocomplete_test_sources",

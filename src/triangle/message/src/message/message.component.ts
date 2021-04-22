@@ -47,7 +47,10 @@ import { MessageDataFilled, MessageDataOptions } from './message.definitions';
         <div *ngIf="message.html" [innerHTML]="message.html"></div>
       </div>
     </div>
-  `
+  `,
+  styleUrls: [
+    '../../style/message.css'
+  ]
 })
 export class MessageComponent implements OnInit, OnDestroy {
   @Input() message: MessageDataFilled;

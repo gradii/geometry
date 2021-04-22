@@ -54,7 +54,10 @@ import { NotificationContainerComponent } from './notification-container.compone
         <span class="tri-notification-notice-close-x"></span>
       </a>
     </div>
-  `
+  `,
+  styleUrls: [
+    '../../style/notification.css'
+  ]
 })
 export class NotificationComponent extends MessageComponent {
   constructor(container: NotificationContainerComponent) {

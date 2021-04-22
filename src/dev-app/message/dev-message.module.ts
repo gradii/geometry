@@ -7,8 +7,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { TriSwitchModule } from '@gradii/triangle/switch';
-import { TriMenuModule } from '@gradii/triangle/menu';
+import { TriMessageModule } from '@gradii/triangle/message';
 import { DevMessage } from './dev-message';
 import { FormsModule } from '@angular/forms';
 import { TriDemoMessageBasicComponent } from './tri-demo-message/tri-demo-message-basic.component';
@@ -22,7 +21,7 @@ import { TriDemoMessageLoadingComponent } from './tri-demo-message/tri-demo-mess
     CommonModule,
     FormsModule,
     
-    TriMenuModule,
+    TriMessageModule,
 
     RouterModule.forChild([
       {
@@ -44,5 +43,5 @@ import { TriDemoMessageLoadingComponent } from './tri-demo-message/tri-demo-mess
     TriDemoMessageLoadingComponent,
   ]
 })
-export class DevMenuModule {
+export class DevMessageModule {
 }

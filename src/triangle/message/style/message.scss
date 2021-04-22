@@ -1,9 +1,13 @@
-$message-prefix-cls : "#{$tri-prefix}-message";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
+@use "../../core/themes/theme";
+
+$message-prefix-cls : "#{v.$tri-prefix}-message";
 
 .#{$message-prefix-cls} {
-  font-size      : $font-size-base;
+  font-size      : v.$font-size-base;
   position       : fixed;
-  z-index        : $zindex-message;
+  z-index        : v.$zindex-message;
   width          : 100%;
   top            : 16px;
   left           : 0;
@@ -19,33 +23,33 @@ $message-prefix-cls : "#{$tri-prefix}-message";
 
   @at-root &-notice-content {
     padding        : 8px 16px;
-    border-radius  : $border-radius-base;
-    box-shadow     : $shadow-2;
+    border-radius  : v.$border-radius-base;
+    box-shadow     : v.$shadow-2;
     background     : $component-background;
     display        : inline-block;
     pointer-events : all;
   }
 
-  @at-root &-success .#{$iconfont-css-prefix} {
+  @at-root &-success .#{v.$iconfont-css-prefix} {
     color : $success-color;
   }
 
-  @at-root &-error .#{$iconfont-css-prefix} {
+  @at-root &-error .#{v.$iconfont-css-prefix} {
     color : $error-color;
   }
 
-  @at-root &-warning .#{$iconfont-css-prefix} {
+  @at-root &-warning .#{v.$iconfont-css-prefix} {
     color : $warning-color;
   }
 
-  @at-root &-info .#{$iconfont-css-prefix},
-  &-loading .#{$iconfont-css-prefix} {
+  @at-root &-info .#{v.$iconfont-css-prefix},
+  &-loading .#{v.$iconfont-css-prefix} {
     color : $info-color;
   }
 
-  .#{$iconfont-css-prefix} {
+  .#{v.$iconfont-css-prefix} {
     margin-right : 8px;
-    font-size    : $font-size-lg;
+    font-size    : v.$font-size-lg;
     top          : 1px;
     position     : relative;
   }
