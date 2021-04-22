@@ -49,9 +49,6 @@ import { MessageDataFilled, MessageDataOptions } from './message.definitions';
       </div>
     </div>
   `,
-  host: {
-    'class' : 'tri-message',
-  },
   styleUrls: [
     '../../style/message.css'
   ]
