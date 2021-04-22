@@ -56,7 +56,7 @@ import {
             <tri-icon *ngSwitchCase="'info'" svgIcon="fill:info-circle"></tri-icon>
             <tri-icon *ngSwitchCase="'warning'" svgIcon="fill:exclamation-circle"></tri-icon>
             <tri-icon *ngSwitchCase="'error'" svgIcon="fill:close-circle"></tri-icon>
-            <tri-icon *ngSwitchCase="'loading'" svgIcon="outline:loading"></tri-icon>
+            <tri-icon *ngSwitchCase="'loading'" class="anticon anticon-spin" svgIcon="outline:loading"></tri-icon>
           </ng-container>
           <span>{{message.content}}</span>
         </div>

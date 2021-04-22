@@ -7,6 +7,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { TriButtonModule } from '@gradii/triangle/button';
 import { TriMessageModule } from '@gradii/triangle/message';
 import { DevMessage } from './dev-message';
 import { FormsModule } from '@angular/forms';
@@ -17,23 +18,24 @@ import { TriDemoMessageLoadingComponent } from './tri-demo-message/tri-demo-mess
 
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    
-    TriMessageModule,
+    imports: [
+        CommonModule,
+        FormsModule,
 
-    RouterModule.forChild([
-      {
-        path: '', component: DevMessage, children: [
-          { path: 'tri-demo-message-basic', component: TriDemoMessageBasicComponent },
-          { path: 'tri-demo-message-duration', component: TriDemoMessageDurationComponent },
-          { path: 'tri-demo-message-icon', component: TriDemoMessageIconComponent },
-          { path: 'tri-demo-message-loading', component: TriDemoMessageLoadingComponent },
-        ]
-      }
-    ]),
-  ],
+        TriMessageModule,
+
+        RouterModule.forChild([
+            {
+                path: '', component: DevMessage, children: [
+                    {path: 'tri-demo-message-basic', component: TriDemoMessageBasicComponent},
+                    {path: 'tri-demo-message-duration', component: TriDemoMessageDurationComponent},
+                    {path: 'tri-demo-message-icon', component: TriDemoMessageIconComponent},
+                    {path: 'tri-demo-message-loading', component: TriDemoMessageLoadingComponent},
+                ]
+            }
+        ]),
+        TriButtonModule,
+    ],
   declarations: [
     DevMessage,
 

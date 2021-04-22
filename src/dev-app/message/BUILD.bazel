@@ -11,7 +11,8 @@ ng_module(
     ],
     deps = [
         "//src/triangle/message",
-        
+        "//src/triangle/button",
+
         "@npm//@angular/cdk",
         "@npm//@angular/router",
     ],
