@@ -31,6 +31,7 @@ ng_module(
         "//src/triangle/button",
         #    "//src/triangle/locale",
         "//src/triangle/tooltip",
+        "//src/triangle/popover",
     ],
 )
 

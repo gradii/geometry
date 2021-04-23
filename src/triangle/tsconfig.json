@@ -16,7 +16,5 @@
       ]
     }
   },
-  "include": [
-    "./**/*.ts"
-  ]
+  "include": ["./**/*.ts", "./dev-mode-types.d.ts"]
 }

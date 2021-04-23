@@ -83,7 +83,7 @@ $popover-distance          : $popover-arrow-width + 0.25rem !default;
   @at-root &-message {
     padding   : 8px 0 16px;
     font-size : $font-size-base;
-    > .#{v.$iconfont-css} {
+    > .#{$iconfont-css} {
       line-height : 17px;
       position    : absolute;
     }

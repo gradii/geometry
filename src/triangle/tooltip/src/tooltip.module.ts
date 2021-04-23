@@ -4,36 +4,32 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { A11yModule } from '@angular/cdk/a11y';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { CdkScrollableModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ToolTipComponent } from './tooltip.component';
-import { TooltipDirective } from './tooltip.directive';
+import { TriCommonModule } from '@gradii/triangle/core';
+import { TriTooltipDirective } from '@gradii/triangle/tooltip/src/tooltip.directive';
+import { TooltipComponent } from './tooltip.component';
+import { TRI_TOOLTIP_SCROLL_STRATEGY_FACTORY_PROVIDER } from './tooltip.service';
 
-/**
- *
- * # Tooltip 文字提示
- * 简单的文字提示气泡框。
- * ### 何时使用
- * 鼠标移入则显示提示，移出消失，气泡浮层不承载复杂文本和操作。
- * 可用来代替系统默认的  `title`  提示，提供一个 `按钮/文字/操作` 的文案解释。
- * ### 代码演示
- *
- * 最简单的用法
- * <!-- example(tri-demo-tooltip-basic) -->
- * 装载模板
- * <!-- example(tri-demo-tooltip-template) -->
- * 位置有 12 个方向。
- * <!-- example(tri-demo-tooltip-position) -->
- * ### 注意
- * 请确保  `Tooltip` 的子元素能接受
- * `onMouseEnter` `onMouseLeave` `onFocus` `onClick` 事件。
- *
- */
 @NgModule({
-  declarations: [ToolTipComponent, TooltipDirective],
-  exports     : [ToolTipComponent, TooltipDirective],
-  imports     : [CommonModule, OverlayModule],
+  imports        : [
+    A11yModule,
+    CommonModule,
+    OverlayModule,
+    TriCommonModule,
+  ],
+  exports        : [
+    TriTooltipDirective,
+    TooltipComponent,
+    TriCommonModule,
+    CdkScrollableModule
+  ],
+  declarations   : [TriTooltipDirective, TooltipComponent],
+  entryComponents: [TooltipComponent],
+  providers      : [TRI_TOOLTIP_SCROLL_STRATEGY_FACTORY_PROVIDER]
 })
-export class TriToolTipModule {
+export class TriTooltipModule {
 }

@@ -94,6 +94,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'pagination',
         loadChildren: '/pagination/dev-pagination.module#DevPaginationModule'
+      },
+      {
+        path        : 'popconfirm',
+        loadChildren: '/popconfirm/dev-popconfirm.module#DevPopconfirmModule'
       }
     ]
   },
