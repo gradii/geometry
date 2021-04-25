@@ -519,34 +519,47 @@ export abstract class _TriTooltipBase<T extends _TooltipComponentBase> implement
 
   /** Updates the class on the overlay panel based on the current position of the tooltip. */
   private _updateCurrentPositionClass(connectionPair: ConnectionPositionPair): void {
-    const {overlayY, originX, originY} = connectionPair;
+    const {overlayX, overlayY, originX, originY} = connectionPair;
     let newPosition: TooltipPosition;
 
     // If the overlay is in the middle along the Y axis,
     // it means that it's either before or after.
-    if (overlayY === 'center') {
-      // Note that since this information is used for styling, we want to
-      // resolve `start` and `end` to their real values, otherwise consumers
-      // would have to remember to do it themselves on each consumption.
-      if (this._dir && this._dir.value === 'rtl') {
-        newPosition = originX === 'end' ? 'left' : 'right';
-      } else {
-        newPosition = originX === 'start' ? 'left' : 'right';
+    // if (overlayY === 'center') {
+    //   // Note that since this information is used for styling, we want to
+    //   // resolve `start` and `end` to their real values, otherwise consumers
+    //   // would have to remember to do it themselves on each consumption.
+    //   if (this._dir && this._dir.value === 'rtl') {
+    //     newPosition = originX === 'end' ? 'left' : 'right';
+    //   } else {
+    //     newPosition = originX === 'start' ? 'left' : 'right';
+    //   }
+    // } else {
+    //   newPosition = overlayY === 'bottom' && originY === 'top' ? 'top' : 'bottom';
+    // }
+
+    const targetMap = this._dir && this._dir.value === 'rtl' ? POSITION_MAP_RTL : POSITION_MAP_LTR;
+
+    for (let [key, target] of Object.entries(targetMap)) {
+      if (target.originX === originX &&
+        target.originY === originY &&
+        target.overlayX === overlayX &&
+        target.overlayY === overlayY
+      ) {
+        newPosition = (key as TooltipPosition);
+        break;
       }
-    } else {
-      newPosition = overlayY === 'bottom' && originY === 'top' ? 'top' : 'bottom';
     }
 
-    if (newPosition !== this._currentPosition) {
+    if (newPosition! !== this._currentPosition) {
       const overlayRef = this._overlayRef;
 
       if (overlayRef) {
         const classPrefix = `${TOOLTIP_PLACEMENT_CLASS}-`;
         overlayRef.removePanelClass(classPrefix + this._currentPosition);
-        overlayRef.addPanelClass(classPrefix + newPosition);
+        overlayRef.addPanelClass(classPrefix + newPosition!);
       }
 
-      this._currentPosition = newPosition;
+      this._currentPosition = newPosition!;
     }
   }
 

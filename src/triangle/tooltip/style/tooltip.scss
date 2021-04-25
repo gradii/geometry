@@ -86,7 +86,7 @@ $tooltip-distance    : $tooltip-arrow-width - 0.0625rem + 0.25rem !default;
   @at-root &-placement-right #{&}-arrow,
   &-placement-rightTop #{&}-arrow,
   &-placement-rightBottom #{&}-arrow {
-    left         : $tooltip-distance - $tooltip-arrow-width;
+    left         : -($tooltip-distance - $tooltip-arrow-width);
     border-width : $tooltip-arrow-width $tooltip-arrow-width $tooltip-arrow-width 0;
   }
 
@@ -106,7 +106,7 @@ $tooltip-distance    : $tooltip-arrow-width - 0.0625rem + 0.25rem !default;
   @at-root &-placement-left #{&}-arrow,
   &-placement-leftTop #{&}-arrow,
   &-placement-leftBottom #{&}-arrow {
-    right        : $tooltip-distance - $tooltip-arrow-width;
+    right        : -($tooltip-distance - $tooltip-arrow-width);
     border-width : $tooltip-arrow-width 0 $tooltip-arrow-width $tooltip-arrow-width;
   }
 
