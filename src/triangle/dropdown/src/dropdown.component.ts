@@ -23,7 +23,7 @@ import {
   Renderer2,
   ViewEncapsulation
 } from '@angular/core';
-import { DEFAULT_DROPDOWN_POSITIONS, DropDownAnimation, POSITION_MAP } from '@gradii/triangle/core';
+import { DEFAULT_DROPDOWN_POSITIONS, DropDownAnimation, POSITION_MAP_LTR } from '@gradii/triangle/core';
 import { MenuComponent } from '@gradii/triangle/menu';
 import { merge, Observable, Observer, Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -147,7 +147,7 @@ export class DropDownComponent implements OnInit, OnDestroy, AfterViewInit {
   set placement(value: Placement) {
     this._placement = value;
     this._dropDownPosition = this.placement.indexOf('top') !== -1 ? 'top' : 'bottom';
-    this._positions.unshift(POSITION_MAP[this._placement] as ConnectionPositionPair);
+    this._positions.unshift(POSITION_MAP_LTR[this._placement] as ConnectionPositionPair);
   }
 
   get _hasBackdrop() {

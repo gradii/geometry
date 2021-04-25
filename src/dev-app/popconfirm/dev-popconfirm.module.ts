@@ -22,7 +22,7 @@ import { TriDemoPopconfirmLocationComponent } from './tri-demo-popconfirm/tri-de
   imports     : [
     CommonModule,
     FormsModule,
-    
+
     TriMessageModule,
     TriPopConfirmModule,
 

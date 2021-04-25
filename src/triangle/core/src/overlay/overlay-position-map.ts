@@ -4,16 +4,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { ConnectedPosition, ConnectionPositionPair } from '@angular/cdk/overlay';
+import {
+  ConnectedPosition,
+  ConnectionPositionPair
+} from '@angular/cdk/overlay';
 
-export const POSITION_MAP: { [key: string]: ConnectedPosition } = {
+export const POSITION_MAP_LTR: { [key: string]: ConnectedPosition } = {
   top         : {
-    originX : 'center',
-    originY : 'top',
-    overlayX: 'center',
-    overlayY: 'bottom'
-  },
-  topCenter   : {
     originX : 'center',
     originY : 'top',
     overlayX: 'center',
@@ -23,6 +20,12 @@ export const POSITION_MAP: { [key: string]: ConnectedPosition } = {
     originX : 'start',
     originY : 'top',
     overlayX: 'start',
+    overlayY: 'bottom'
+  },
+  topCenter   : {
+    originX : 'center',
+    originY : 'top',
+    overlayX: 'center',
     overlayY: 'bottom'
   },
   topRight    : {
@@ -92,16 +95,102 @@ export const POSITION_MAP: { [key: string]: ConnectedPosition } = {
     overlayY: 'bottom'
   }
 };
-export const DEFAULT_4_POSITIONS = _objectValues([
-  POSITION_MAP['top'],
-  POSITION_MAP['right'],
-  POSITION_MAP['bottom'],
-  POSITION_MAP['left']
+export const POSITION_MAP_RTL: { [key: string]: ConnectedPosition } = {
+  top         : {
+    originX : 'center',
+    originY : 'top',
+    overlayX: 'center',
+    overlayY: 'bottom'
+  },
+  topRight    : {
+    originX : 'start',
+    originY : 'top',
+    overlayX: 'start',
+    overlayY: 'bottom'
+  },
+  topCenter   : {
+    originX : 'center',
+    originY : 'top',
+    overlayX: 'center',
+    overlayY: 'bottom'
+  },
+  topLeft     : {
+    originX : 'end',
+    originY : 'top',
+    overlayX: 'end',
+    overlayY: 'bottom'
+  },
+  left        : {
+    originX : 'end',
+    originY : 'center',
+    overlayX: 'start',
+    overlayY: 'center'
+  },
+  leftTop     : {
+    originX : 'end',
+    originY : 'top',
+    overlayX: 'start',
+    overlayY: 'top'
+  },
+  leftBottom  : {
+    originX : 'end',
+    originY : 'bottom',
+    overlayX: 'start',
+    overlayY: 'bottom'
+  },
+  bottom      : {
+    originX : 'center',
+    originY : 'bottom',
+    overlayX: 'center',
+    overlayY: 'top'
+  },
+  bottomCenter: {
+    originX : 'center',
+    originY : 'bottom',
+    overlayX: 'center',
+    overlayY: 'top'
+  },
+  bottomRight : {
+    originX : 'start',
+    originY : 'bottom',
+    overlayX: 'start',
+    overlayY: 'top'
+  },
+  bottomLeft  : {
+    originX : 'end',
+    originY : 'bottom',
+    overlayX: 'end',
+    overlayY: 'top'
+  },
+  right       : {
+    originX : 'start',
+    originY : 'center',
+    overlayX: 'end',
+    overlayY: 'center'
+  },
+  rightTop    : {
+    originX : 'start',
+    originY : 'top',
+    overlayX: 'end',
+    overlayY: 'top'
+  },
+  rightBottom : {
+    originX : 'start',
+    originY : 'bottom',
+    overlayX: 'end',
+    overlayY: 'bottom'
+  }
+};
+export const DEFAULT_4_POSITIONS                                    = _objectValues([
+  POSITION_MAP_LTR['top'],
+  POSITION_MAP_LTR['right'],
+  POSITION_MAP_LTR['bottom'],
+  POSITION_MAP_LTR['left']
 ]);
-export const DEFAULT_DROPDOWN_POSITIONS = _objectValues(
-  [POSITION_MAP['bottomLeft'], POSITION_MAP['topLeft'],
-   POSITION_MAP['bottomRight'], POSITION_MAP['topRight']]);
-export const DEFAULT_DATEPICKER_POSITIONS = [
+export const DEFAULT_DROPDOWN_POSITIONS                             = _objectValues(
+  [POSITION_MAP_LTR['bottomLeft'], POSITION_MAP_LTR['topLeft'],
+   POSITION_MAP_LTR['bottomRight'], POSITION_MAP_LTR['topRight']]);
+export const DEFAULT_DATEPICKER_POSITIONS                           = [
   {
     originX : 'start',
     originY : 'top',
@@ -117,7 +206,7 @@ export const DEFAULT_DATEPICKER_POSITIONS = [
 ] as ConnectionPositionPair[];
 
 function arrayMap(array: any[], iteratee: Function) {
-  let index = -1;
+  let index    = -1;
   const length = array == null ? 0 : array.length,
         result = Array(length);
 

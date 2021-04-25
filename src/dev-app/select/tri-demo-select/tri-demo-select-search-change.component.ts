@@ -17,7 +17,7 @@ import { HttpClient } from '@angular/common/http';
       style="width: 200px;"
       [allowClear]="true"
       [placeHolder]="'input search text'"
- 
+
       [(ngModel)]="selectedOption"
       (searchChange)="searchChange($event)"
       [notFoundContent]="'无法找到'"

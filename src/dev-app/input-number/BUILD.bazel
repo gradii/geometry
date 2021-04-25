@@ -4,7 +4,7 @@ package(default_visibility = ["//visibility:public"])
 
 ng_module(
     name = "input-number",
-    srcs = glob(["**/*.ts"]),
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
     assets = [
         "dev-input-number.html",
         ":dev_input_number_scss",

@@ -4,7 +4,7 @@ package(default_visibility = ["//visibility:public"])
 
 ng_module(
     name = "alert",
-    srcs = glob(["**/*.ts"]),
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
     assets = [
         "dev-alert.html",
         ":dev_alert_scss",

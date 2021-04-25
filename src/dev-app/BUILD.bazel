@@ -36,7 +36,8 @@ ng_module(
         "//src/dev-app/menu",
         "//src/dev-app/message",
         "//src/dev-app/pagination",
-        "//src/dev-app/popconfirm",
+        #  "//src/dev-app/popconfirm",
+        "//src/dev-app/tooltip",
 
         "//src/triangle/core",
         "@npm//@angular/cdk",

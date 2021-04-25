@@ -31,6 +31,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="message">message</a></li>
       <li><a routerLink="pagination">pagination</a></li>
       <li><a routerLink="popconfirm">popconfirm</a></li>
+      <li><a routerLink="tooltip">tooltip</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>

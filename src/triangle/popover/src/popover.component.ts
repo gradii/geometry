@@ -6,7 +6,7 @@
 
 import { Component, ContentChild, Input, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { FadeAnimation } from '@gradii/triangle/core';
-import { ToolTipComponent } from '@gradii/triangle/tooltip';
+// import { ToolTipComponent } from '@gradii/triangle/tooltip';
 import { PopoverDirective } from './popover.directive';
 
 @Component({
@@ -15,7 +15,7 @@ import { PopoverDirective } from './popover.directive';
   animations   : [FadeAnimation],
   template     : `
     <ng-content></ng-content>
-    <ng-template
+    <!--<ng-template
       cdkConnectedOverlay
       [cdkConnectedOverlayOrigin]="origin"
       [cdkConnectedOverlayHasBackdrop]="_hasBackdrop"
@@ -41,14 +41,14 @@ import { PopoverDirective } from './popover.directive';
           </div>
         </div>
       </div>
-    </ng-template>`,
+    </ng-template>-->`,
   styleUrls    : ['../style/popover.css'],
   styles       : [`.tri-popover {
     position: relative;
     margin: 1px;
   }`]
 })
-export class PopoverComponent extends ToolTipComponent {
+export class PopoverComponent /*extends ToolTipComponent*/ {
   _prefix = 'tri-popover-placement';
 
   @ContentChild('popoverTemplate', {static: false}) popoverTemplate: TemplateRef<any>;

@@ -64,7 +64,7 @@ const scenicspots = {
       [(ngModel)]="_value"
       (ngModelChange)="_console($event)"
       (change)="_console($event)"
-     
+
       >
       <!-- [loadData]="loadData($event)" -->
     </tri-cascader>`,

@@ -1,0 +1,26 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "tooltip",
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
+    assets = [
+        "dev-tooltip.html",
+        ":dev_tooltip_scss",
+    ],
+    deps = [
+        "//src/triangle/input",
+        "//src/triangle/button",
+        "//src/triangle/tooltip",
+        "//src/triangle/select",
+        "//src/triangle/core",
+        "@npm//@angular/common",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_tooltip_scss",
+    src = "dev-tooltip.scss",
+)

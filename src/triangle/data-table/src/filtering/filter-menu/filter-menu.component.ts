@@ -6,7 +6,7 @@
 
 import { CdkOverlayOrigin, ConnectedPosition } from '@angular/cdk/overlay';
 import { Component, HostBinding, Input } from '@angular/core';
-import { POSITION_MAP } from '@gradii/triangle/core';
+import { POSITION_MAP_LTR } from '@gradii/triangle/core';
 import { CompositeFilterDescriptor, FilterDescriptor } from '@gradii/triangle/data-query';
 import { isNullOrEmptyString } from '@gradii/triangle/util';
 import { ColumnComponent } from '../../columns/column.component';
@@ -45,10 +45,10 @@ import { FilterService } from '../filter.service';
 export class FilterMenuComponent extends BaseFilterCellComponent {
   _open: boolean = false;
   _positions: ConnectedPosition[] = [
-    POSITION_MAP['bottomLeft'],
-    POSITION_MAP['bottomRight'],
-    POSITION_MAP['topLeft'],
-    POSITION_MAP['topRight'],
+      POSITION_MAP_LTR['bottomLeft'],
+      POSITION_MAP_LTR['bottomRight'],
+      POSITION_MAP_LTR['topLeft'],
+      POSITION_MAP_LTR['topRight'],
   ];
 
   @Input('columnOverlayOrigin') origin: CdkOverlayOrigin;

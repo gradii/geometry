@@ -4,7 +4,7 @@ package(default_visibility = ["//visibility:public"])
 
 ng_module(
     name = "tabs",
-    srcs = glob(["**/*.ts"]),
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
     assets = [
         "dev-tabs.html",
         ":dev_tabs_scss",

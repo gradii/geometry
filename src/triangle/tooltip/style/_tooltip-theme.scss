@@ -4,9 +4,6 @@
 $tooltip-prefix-cls    : #{v.$tri-prefix}-tooltip;
 
 
-// Tooltip
-// ---
-
 //** Tooltip text color
 $tooltip-color         : #fff !default;
 //** Tooltip background color
@@ -15,12 +12,14 @@ $tooltip-bg            : rgba(64, 64, 64, .85) !default;
 //** Tooltip arrow color
 $tooltip-arrow-color   : $tooltip-bg !default;
 
-$tooltip-border-radius : v.$border-radius-base;
+$tooltip-border-radius : v.$border-radius-base !default;
 
-$tooltip-box-shadow    : v.$box-shadow-base;
+$tooltip-box-shadow    : v.$box-shadow-base !default;
 
 
-@mixin tri-tooltip-theme($theme) {
+
+
+@mixin tri-tooltip-theme() {
   // Wrapper for the tooltip content
   .#{$tooltip-prefix-cls}-inner {
     color            : $tooltip-color;

@@ -14,7 +14,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { FadeAnimation } from '@gradii/triangle/core';
-import { ToolTipComponent } from '@gradii/triangle/tooltip';
+// import { ToolTipComponent } from '@gradii/triangle/tooltip';
 import { PopConfirmDirective } from './popconfirm.directive';
 
 @Component({
@@ -23,7 +23,7 @@ import { PopConfirmDirective } from './popconfirm.directive';
   animations: [FadeAnimation],
   template: `
       <ng-content></ng-content>
-      <ng-template
+      <!--<ng-template
               cdkConnectedOverlay
               [cdkConnectedOverlayOrigin]="origin"
               [cdkConnectedOverlayHasBackdrop]="_hasBackdrop"
@@ -60,10 +60,10 @@ import { PopConfirmDirective } from './popconfirm.directive';
                   </div>
               </div>
           </div>
-      </ng-template>`,
+      </ng-template>-->`,
   styleUrls: ['../style/popconfirm.css']
 })
-export class PopConfirmComponent extends ToolTipComponent {
+export class PopConfirmComponent /*extends ToolTipComponent*/ {
   _prefix = 'tri-popover-placement';
   _trigger = 'click';
   _hasBackdrop = true;
@@ -118,20 +118,20 @@ export class PopConfirmComponent extends ToolTipComponent {
   }
 
   show(): void {
-    if (!this._condition) {
-      this.visible = true;
-    } else {
-      this._onConfirm();
-    }
+    // if (!this._condition) {
+    //   this.visible = true;
+    // } else {
+    //   this._onConfirm();
+    // }
   }
 
   _onCancel() {
     this.onCancel.emit();
-    this.visible = false;
+    // this.visible = false;
   }
 
   _onConfirm() {
     this.onConfirm.emit();
-    this.visible = false;
+    // this.visible = false;
   }
 }

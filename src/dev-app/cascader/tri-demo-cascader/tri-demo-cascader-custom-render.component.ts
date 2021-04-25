@@ -58,7 +58,7 @@ const options = [
   template: `
     <!-- [displayRender]="_displayRender" -->
     <tri-cascader
-    
+
       [options]="_options"
       [(ngModel)]="_value"
       (ngModelChange)="_console($event)"

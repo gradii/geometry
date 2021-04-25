@@ -98,6 +98,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'popconfirm',
         loadChildren: '/popconfirm/dev-popconfirm.module#DevPopconfirmModule'
+      },
+      {
+        path        : 'tooltip',
+        loadChildren: '/tooltip/dev-tooltip.module#DevTooltipModule'
       }
     ]
   },

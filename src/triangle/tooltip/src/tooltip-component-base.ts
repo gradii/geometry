@@ -53,6 +53,7 @@ export abstract class _TooltipComponentBase implements OnDestroy {
 
     // Body interactions should cancel the tooltip if there is a delay in showing.
     this._closeOnInteraction = true;
+    // @ts-ignore
     this._showTimeoutId      = setTimeout(() => {
       this._visibility    = 'visible';
       this._showTimeoutId = undefined;
@@ -71,6 +72,7 @@ export abstract class _TooltipComponentBase implements OnDestroy {
     // Cancel the delayed show if it is scheduled
     clearTimeout(this._showTimeoutId);
 
+    // @ts-ignore
     this._hideTimeoutId = setTimeout(() => {
       this._visibility    = 'hidden';
       this._hideTimeoutId = undefined;
@@ -113,11 +115,6 @@ export abstract class _TooltipComponentBase implements OnDestroy {
     }
   }
 
-  /**
-   * Interactions on the HTML body should close the tooltip immediately as defined in the
-   * trierial design spec.
-   * https://material.io/design/components/tooltips.html#behavior
-   */
   _handleBodyInteraction(): void {
     if (this._closeOnInteraction) {
       this.hide(0);

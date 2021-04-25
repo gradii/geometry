@@ -4,7 +4,7 @@ package(default_visibility = ["//visibility:public"])
 
 ng_module(
     name = "transfer",
-    srcs = glob(["**/*.ts"]),
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
     assets = [
         "dev-transfer.html",
         ":dev_transfer_scss",

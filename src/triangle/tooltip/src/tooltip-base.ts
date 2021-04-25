@@ -50,6 +50,11 @@ import {
   OnDestroy,
   ViewContainerRef
 } from '@angular/core';
+import {
+  DEFAULT_4_POSITIONS,
+  POSITION_MAP_LTR,
+  POSITION_MAP_RTL
+} from '@gradii/triangle/core';
 
 import { Subject } from 'rxjs';
 import {
@@ -76,8 +81,9 @@ const LONGPRESS_DELAY = 500;
 const passiveListenerOptions = normalizePassiveListenerOptions({passive: true});
 
 
-const TOOLTIP_TRANSFORM_ORIGIN_CLASS = '.tri-tooltip';
-const TOOLTIP_PANEL_CLASS            = '.tri-tooltip-panel';
+const TOOLTIP_TRANSFORM_ORIGIN_CLASS = 'tri-tooltip';
+const TOOLTIP_PANEL_CLASS            = 'tri-tooltip-panel';
+const TOOLTIP_PLACEMENT_CLASS        = 'tri-tooltip-placement';
 
 @Directive()
 export abstract class _TriTooltipBase<T extends _TooltipComponentBase> implements OnDestroy,
@@ -86,7 +92,7 @@ export abstract class _TriTooltipBase<T extends _TooltipComponentBase> implement
   _tooltipInstance: T | null;
 
   private _portal: ComponentPortal<T>;
-  private _position: TooltipPosition    = 'below';
+  private _position: TooltipPosition    = 'bottom';
   private _disabled: boolean            = false;
   private _tooltipClass: string | string[] | Set<string> | { [key: string]: any };
   private _scrollStrategy: () => ScrollStrategy;
@@ -142,11 +148,6 @@ export abstract class _TriTooltipBase<T extends _TooltipComponentBase> implement
   @Input('triTooltipHideDelay') hideDelay: number = this._defaultOptions.hideDelay;
 
   /**
-   * How touch gestures should be handled by the tooltip. On touch devices the tooltip directive
-   * uses a long press gesture to show and hide, however it can conflict with the native browser
-   * gestures. To work around the conflict, Angular Trierial disables native gestures on the
-   * trigger, but that might not be desirable on particular elements (e.g. inputs and draggable
-   * elements). The different values for this option configure the touch event handling as follows:
    * - `auto` - Enables touch gestures for all elements, but tries to avoid conflicts with native
    *   browser gestures on particular elements. In particular, it allows text selection on inputs
    *   and textareas, and preserves the native browser dragging on elements marked as `draggable`.
@@ -353,7 +354,7 @@ export abstract class _TriTooltipBase<T extends _TooltipComponentBase> implement
     // Create connected position strategy that listens for scroll events to reposition.
     const strategy = this._overlay.position()
       .flexibleConnectedTo(this._elementRef)
-      .withTransformOriginOn(`${TOOLTIP_TRANSFORM_ORIGIN_CLASS}`)
+      .withTransformOriginOn(`.${TOOLTIP_TRANSFORM_ORIGIN_CLASS}`)
       .withFlexibleDimensions(false)
       .withViewportMargin(this._viewportMargin)
       .withScrollableContainers(scrollableAncestors);
@@ -404,7 +405,9 @@ export abstract class _TriTooltipBase<T extends _TooltipComponentBase> implement
 
     position.withPositions([
       this._addOffset({...origin.main, ...overlay.main}),
-      this._addOffset({...origin.fallback, ...overlay.fallback})
+      this._addOffset({...origin.fallback, ...overlay.fallback}),
+      //todo check
+      ...DEFAULT_4_POSITIONS
     ]);
   }
 
@@ -415,33 +418,29 @@ export abstract class _TriTooltipBase<T extends _TooltipComponentBase> implement
 
   /**
    * Returns the origin position and a fallback position based on the user's position preference.
-   * The fallback position is the inverse of the origin (e.g. `'below' -> 'above'`).
+   * The fallback position is the inverse of the origin (e.g. `'bottom' -> 'top'`).
    */
   _getOrigin(): { main: OriginConnectionPosition, fallback: OriginConnectionPosition } {
     const isLtr    = !this._dir || this._dir.value == 'ltr';
     const position = this.position;
     let originPosition: OriginConnectionPosition;
 
-    if (position == 'above' || position == 'below') {
-      originPosition = {originX: 'center', originY: position == 'above' ? 'top' : 'bottom'};
-    } else if (
-      position == 'before' ||
-      (position == 'left' && isLtr) ||
-      (position == 'right' && !isLtr)) {
-      originPosition = {originX: 'start', originY: 'center'};
-    } else if (
-      position == 'after' ||
-      (position == 'right' && isLtr) ||
-      (position == 'left' && !isLtr)) {
-      originPosition = {originX: 'end', originY: 'center'};
-    } else if (typeof ngDevMode === 'undefined' || ngDevMode) {
-      throw getTriTooltipInvalidPositionError(position);
+    if (isLtr) {
+      originPosition = POSITION_MAP_LTR[position];
+    } else {
+      originPosition = POSITION_MAP_RTL[position];
+    }
+
+    if (typeof ngDevMode === 'undefined' || ngDevMode) {
+      if (!originPosition) {
+        throw getTriTooltipInvalidPositionError(position);
+      }
     }
 
     const {x, y} = this._invertPosition(originPosition!.originX, originPosition!.originY);
 
     return {
-      main    : originPosition!,
+      main    : {originX: originPosition.originX, originY: originPosition.originY}!,
       fallback: {originX: x, originY: y}
     };
   }
@@ -452,28 +451,22 @@ export abstract class _TriTooltipBase<T extends _TooltipComponentBase> implement
     const position = this.position;
     let overlayPosition: OverlayConnectionPosition;
 
-    if (position == 'above') {
-      overlayPosition = {overlayX: 'center', overlayY: 'bottom'};
-    } else if (position == 'below') {
-      overlayPosition = {overlayX: 'center', overlayY: 'top'};
-    } else if (
-      position == 'before' ||
-      (position == 'left' && isLtr) ||
-      (position == 'right' && !isLtr)) {
-      overlayPosition = {overlayX: 'end', overlayY: 'center'};
-    } else if (
-      position == 'after' ||
-      (position == 'right' && isLtr) ||
-      (position == 'left' && !isLtr)) {
-      overlayPosition = {overlayX: 'start', overlayY: 'center'};
-    } else if (typeof ngDevMode === 'undefined' || ngDevMode) {
-      throw getTriTooltipInvalidPositionError(position);
+    if (isLtr) {
+      overlayPosition = POSITION_MAP_LTR[position];
+    } else {
+      overlayPosition = POSITION_MAP_RTL[position];
+    }
+
+    if (typeof ngDevMode === 'undefined' || ngDevMode) {
+      if (!overlayPosition) {
+        throw getTriTooltipInvalidPositionError(position);
+      }
     }
 
     const {x, y} = this._invertPosition(overlayPosition!.overlayX, overlayPosition!.overlayY);
 
     return {
-      main    : overlayPosition!,
+      main    : {overlayX: overlayPosition.overlayX, overlayY: overlayPosition.overlayY}!,
       fallback: {overlayX: x, overlayY: y}
     };
   }
@@ -507,7 +500,7 @@ export abstract class _TriTooltipBase<T extends _TooltipComponentBase> implement
 
   /** Inverts an overlay position. */
   private _invertPosition(x: HorizontalConnectionPos, y: VerticalConnectionPos) {
-    if (this.position === 'above' || this.position === 'below') {
+    if (this.position === 'top' || this.position === 'bottom') {
       if (y === 'top') {
         y = 'bottom';
       } else if (y === 'bottom') {
@@ -541,14 +534,14 @@ export abstract class _TriTooltipBase<T extends _TooltipComponentBase> implement
         newPosition = originX === 'start' ? 'left' : 'right';
       }
     } else {
-      newPosition = overlayY === 'bottom' && originY === 'top' ? 'above' : 'below';
+      newPosition = overlayY === 'bottom' && originY === 'top' ? 'top' : 'bottom';
     }
 
     if (newPosition !== this._currentPosition) {
       const overlayRef = this._overlayRef;
 
       if (overlayRef) {
-        const classPrefix = `${TOOLTIP_PANEL_CLASS}-`;
+        const classPrefix = `${TOOLTIP_PLACEMENT_CLASS}-`;
         overlayRef.removePanelClass(classPrefix + this._currentPosition);
         overlayRef.addPanelClass(classPrefix + newPosition);
       }
@@ -582,6 +575,7 @@ export abstract class _TriTooltipBase<T extends _TooltipComponentBase> implement
           // because it can prevent click events from firing on the element.
           this._setupPointerExitEventsIfNeeded();
           clearTimeout(this._touchstartTimeout);
+          // @ts-ignore
           this._touchstartTimeout = setTimeout(() => this.show(), LONGPRESS_DELAY);
         }]);
     }

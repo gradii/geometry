@@ -1,11 +1,9 @@
-load("//src/cdk:config.bzl", "CDK_ENTRYPOINTS")
-load("//src/material:config.bzl", "MATERIAL_ENTRYPOINTS", "MATERIAL_TESTING_ENTRYPOINTS")
+load("//src/triangle:config.bzl", "TRIANGLE_ENTRYPOINTS", "TRIANGLE_TESTING_ENTRYPOINTS")
 load(":generate-guard-tests.bzl", "generate_test_targets")
 
 package(default_visibility = ["//visibility:public"])
 
-golden_files = ["cdk/%s.d.ts" % e for e in CDK_ENTRYPOINTS] + \
-               ["material/%s.d.ts" % e for e in MATERIAL_ENTRYPOINTS + MATERIAL_TESTING_ENTRYPOINTS] + [
+golden_files = ["triangle/%s.d.ts" % e for e in TRIANGLe_ENTRYPOINTS + TRIANGLE_TESTING_ENTRYPOINTS] + [
     # Primary entry-points.
     "cdk/cdk.d.ts",
     "material/material.d.ts",

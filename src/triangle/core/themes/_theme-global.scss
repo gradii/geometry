@@ -69,11 +69,11 @@
   @include tri-radio-theme();
   @include tri-select-theme();
 
-
   @include tri-card-theme();
   @include tri-carousel-theme();
   @include tri-cascader-theme();
   @include tri-dialog-theme();
   @include tri-menu-theme();
   @include tri-message-theme();
+  @include tri-tooltip-theme();
 }

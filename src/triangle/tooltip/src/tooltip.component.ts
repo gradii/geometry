@@ -25,15 +25,14 @@ import { _TooltipComponentBase } from './tooltip-component-base';
 export const SCROLL_THROTTLE_MS = 20;
 
 
-
 /**
  * Internal component that wraps the tooltip's content.
  * @docs-private
  */
 @Component({
-  selector       : 'tri-tooltip-component',
-  templateUrl    : 'tooltip.html',
-  styleUrls      : ['tooltip.css'],
+  selector       : 'tri-tooltip',
+  templateUrl    : 'tooltip.component.html',
+  styleUrls      : ['../style/tooltip.css'],
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations     : [triTooltipAnimations.tooltipState],
@@ -43,6 +42,7 @@ export const SCROLL_THROTTLE_MS = 20;
     '[style.zoom]'   : '_visibility === "visible" ? 1 : null',
     '(body:click)'   : 'this._handleBodyInteraction()',
     '(body:auxclick)': 'this._handleBodyInteraction()',
+    'class'          : 'tri-tooltip',
     'aria-hidden'    : 'true',
   }
 })

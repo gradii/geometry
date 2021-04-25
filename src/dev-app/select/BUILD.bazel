@@ -4,7 +4,7 @@ package(default_visibility = ["//visibility:public"])
 
 ng_module(
     name = "select",
-    srcs = glob(["**/*.ts"]),
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
     assets = [
         "dev-select.html",
         ":dev_select_scss",

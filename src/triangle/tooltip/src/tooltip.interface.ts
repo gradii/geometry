@@ -5,7 +5,21 @@
  */
 
 /** Possible positions for a tooltip. */
-export type TooltipPosition = 'left' | 'right' | 'above' | 'below' | 'before' | 'after';
+export type TooltipPosition =
+  'top' |
+  'topCenter' |
+  'topLeft' |
+  'topRight' |
+  'right' |
+  'rightTop' |
+  'rightBottom' |
+  'bottom' |
+  'bottomCenter' |
+  'bottomLeft' |
+  'bottomRight' |
+  'left' |
+  'leftTop' |
+  'leftBottom';
 
 /**
  * Options for how the tooltip trigger should handle touch gestures.
