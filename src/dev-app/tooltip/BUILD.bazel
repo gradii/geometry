@@ -12,6 +12,7 @@ ng_module(
     deps = [
         "//src/triangle/input",
         "//src/triangle/button",
+        "//src/triangle/checkbox",
         "//src/triangle/tooltip",
         "//src/triangle/select",
         "//src/triangle/core",

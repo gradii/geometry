@@ -61,13 +61,16 @@ import {
   take,
   takeUntil
 } from 'rxjs/operators';
-import { _TooltipComponentBase } from './tooltip-component-base';
+import { _TriTooltipComponentBase } from './tooltip-component-base';
+import {
+  getTriTooltipInvalidPositionError,
+  TriggerType
+} from './tooltip.common';
 import {
   TooltipPosition,
   TooltipTouchGestures,
   TriTooltipDefaultOptions
 } from './tooltip.interface';
-import { getTriTooltipInvalidPositionError } from './tooltip.service';
 
 
 /**
@@ -86,7 +89,7 @@ const TOOLTIP_PANEL_CLASS            = 'tri-tooltip-panel';
 const TOOLTIP_PLACEMENT_CLASS        = 'tri-tooltip-placement';
 
 @Directive()
-export abstract class _TriTooltipBase<T extends _TooltipComponentBase> implements OnDestroy,
+export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implements OnDestroy,
   AfterViewInit {
   _overlayRef: OverlayRef | null;
   _tooltipInstance: T | null;
@@ -190,6 +193,19 @@ export abstract class _TriTooltipBase<T extends _TooltipComponentBase> implement
   }
 
   private _message = '';
+
+  @Input('triTooltipTrigger')
+  get tooltipTrigger() {
+    return this._tooltipTrigger;
+  }
+
+  set tooltipTrigger(value) {
+    this._tooltipTrigger = value;
+  }
+
+  _tooltipTrigger: TriggerType = TriggerType.HOVER;
+
+  // _tooltipTriggerSubscriptions: Subscription[]         = [];
 
   /** Classes to be passed to the tooltip. Supports the same syntax as `ngClass`. */
   @Input('triTooltipClass')
@@ -302,9 +318,12 @@ export abstract class _TriTooltipBase<T extends _TooltipComponentBase> implement
 
     const overlayRef = this._createOverlay();
     this._detach();
-    this._portal          = this._portal ||
+    this._portal                 = this._portal ||
       new ComponentPortal(this._tooltipComponent, this._viewContainerRef);
-    this._tooltipInstance = overlayRef.attach(this._portal).instance;
+    this._tooltipInstance        = overlayRef.attach(this._portal).instance;
+    this._tooltipInstance.config = {
+      triggerType: this._tooltipTrigger
+    };
     this._tooltipInstance.afterHidden()
       .pipe(takeUntil(this._destroyed))
       .subscribe(() => this._detach());
@@ -406,7 +425,7 @@ export abstract class _TriTooltipBase<T extends _TooltipComponentBase> implement
     position.withPositions([
       this._addOffset({...origin.main, ...overlay.main}),
       this._addOffset({...origin.fallback, ...overlay.fallback}),
-      //todo check
+      // todo check
       ...DEFAULT_4_POSITIONS
     ]);
   }

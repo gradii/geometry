@@ -4,6 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { FocusMonitor } from '@angular/cdk/a11y';
 import {
   BreakpointObserver,
   Breakpoints,
@@ -13,12 +14,14 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
+  NgZone,
   ViewEncapsulation,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { triTooltipAnimations } from './tooltip-animations';
-import { _TooltipComponentBase } from './tooltip-component-base';
+import { _TriTooltipComponentBase } from './tooltip-component-base';
 
 
 /** Time in ms to throttle repositioning after scroll events. */
@@ -40,13 +43,13 @@ export const SCROLL_THROTTLE_MS = 20;
     // Forces the element to have a layout in IE and Edge. This fixes issues where the element
     // won't be rendered if the animations are disabled or there is no web animations polyfill.
     '[style.zoom]'   : '_visibility === "visible" ? 1 : null',
-    '(body:click)'   : 'this._handleBodyInteraction()',
-    '(body:auxclick)': 'this._handleBodyInteraction()',
+    '(body:click)'   : 'this._handleBodyInteraction($event)',
+    '(body:auxclick)': 'this._handleBodyInteraction($event)',
     'class'          : 'tri-tooltip',
     'aria-hidden'    : 'true',
   }
 })
-export class TooltipComponent extends _TooltipComponentBase {
+export class TooltipComponent extends _TriTooltipComponentBase {
   /** Stream that emits whether the user has a handset-sized display.  */
   _isHandset: Observable<BreakpointState> = this._breakpointObserver.observe(Breakpoints.Handset);
 

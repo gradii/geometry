@@ -27,7 +27,7 @@ import { TriTooltipDefaultOptions } from './tooltip.interface';
 import {
   TRI_TOOLTIP_DEFAULT_OPTIONS,
   TRI_TOOLTIP_SCROLL_STRATEGY
-} from './tooltip.service';
+} from './tooltip.common';
 
 @Directive({
   selector: '[triTooltip]',
@@ -36,7 +36,7 @@ import {
     'class': 'tri-tooltip-trigger'
   }
 })
-export class TriTooltipDirective extends _TriTooltipBase<TooltipComponent> {
+export class TooltipDirective extends _TriTooltipBase<TooltipComponent> {
   protected readonly _tooltipComponent = TooltipComponent;
 
   constructor(

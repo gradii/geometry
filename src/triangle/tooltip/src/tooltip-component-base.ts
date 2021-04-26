@@ -12,15 +12,21 @@ import {
 } from '@angular/core';
 import {
   Observable,
-  Subject
+  Subject,
+  Subscription
 } from 'rxjs';
+import { TriggerType } from './tooltip.common';
 import { TooltipVisibility } from './tooltip.interface';
 
 
 @Directive()
-export abstract class _TooltipComponentBase implements OnDestroy {
+export abstract class _TriTooltipComponentBase implements OnDestroy {
   /** Message to display in the tooltip */
   message: string;
+
+  config: {
+    triggerType?: TriggerType
+  } = {};
 
   /** Classes to be added to the tooltip. Supports the same syntax as `ngClass`. */
   tooltipClass: string | string[] | Set<string> | { [key: string]: any };
@@ -35,12 +41,15 @@ export abstract class _TooltipComponentBase implements OnDestroy {
   _visibility: TooltipVisibility = 'initial';
 
   /** Whether interactions on the page should close the tooltip */
-  private _closeOnInteraction: boolean = false;
+  protected _closeOnInteraction: boolean = false;
 
   /** Subject for notifying that the tooltip has been hidden from the view */
-  private readonly _onHide: Subject<void> = new Subject();
+  protected readonly _onHide: Subject<void> = new Subject();
 
-  constructor(private _changeDetectorRef: ChangeDetectorRef) {
+  protected _subscription: Subscription;
+
+  protected constructor(protected _changeDetectorRef: ChangeDetectorRef,
+  ) {
   }
 
   /**
@@ -96,6 +105,9 @@ export abstract class _TooltipComponentBase implements OnDestroy {
   ngOnDestroy() {
     clearTimeout(this._showTimeoutId);
     clearTimeout(this._hideTimeoutId);
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
     this._onHide.complete();
   }
 
@@ -115,7 +127,7 @@ export abstract class _TooltipComponentBase implements OnDestroy {
     }
   }
 
-  _handleBodyInteraction(): void {
+  _handleBodyInteraction(event?: MouseEvent): void {
     if (this._closeOnInteraction) {
       this.hide(0);
     }

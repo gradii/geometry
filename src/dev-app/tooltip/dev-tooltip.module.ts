@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TriButtonModule } from '@gradii/triangle/button';
+import { TriCheckboxModule } from '@gradii/triangle/checkbox';
 import { TriInputModule } from '@gradii/triangle/input';
 import { TriSelectModule } from '@gradii/triangle/select';
 import { TriTooltipModule } from '@gradii/triangle/tooltip';
@@ -34,6 +35,7 @@ import { TooltipPositionExample } from './tri-demo-tooltip/tooltip-position/tool
     FormsModule,
     ReactiveFormsModule,
 
+    TriCheckboxModule,
     TriInputModule,
     TriButtonModule,
     TriSelectModule,

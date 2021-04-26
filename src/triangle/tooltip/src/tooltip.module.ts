@@ -10,9 +10,9 @@ import { CdkScrollableModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TriCommonModule } from '@gradii/triangle/core';
-import { TriTooltipDirective } from '@gradii/triangle/tooltip/src/tooltip.directive';
+import { TooltipDirective } from '@gradii/triangle/tooltip/src/tooltip.directive';
 import { TooltipComponent } from './tooltip.component';
-import { TRI_TOOLTIP_SCROLL_STRATEGY_FACTORY_PROVIDER } from './tooltip.service';
+import { TRI_TOOLTIP_SCROLL_STRATEGY_FACTORY_PROVIDER } from './tooltip.common';
 
 @NgModule({
   imports        : [
@@ -22,13 +22,12 @@ import { TRI_TOOLTIP_SCROLL_STRATEGY_FACTORY_PROVIDER } from './tooltip.service'
     TriCommonModule,
   ],
   exports        : [
-    TriTooltipDirective,
+    TooltipDirective,
     TooltipComponent,
     TriCommonModule,
     CdkScrollableModule
   ],
-  declarations   : [TriTooltipDirective, TooltipComponent],
-  entryComponents: [TooltipComponent],
+  declarations   : [TooltipDirective, TooltipComponent],
   providers      : [TRI_TOOLTIP_SCROLL_STRATEGY_FACTORY_PROVIDER]
 })
 export class TriTooltipModule {

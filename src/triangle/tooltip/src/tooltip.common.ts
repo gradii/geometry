@@ -12,6 +12,13 @@ import { InjectionToken } from '@angular/core';
 import { SCROLL_THROTTLE_MS, } from './tooltip.component';
 import { TriTooltipDefaultOptions } from './tooltip.interface';
 
+export const enum TriggerType {
+  CLICK = 'click',
+  HOVER = 'hover',
+  HINT  = 'hint',
+  NOOP  = 'noop'
+}
+
 /**
  * Creates an error to be thrown if the user supplied an invalid tooltip position.
  * @docs-private
@@ -31,8 +38,8 @@ export const TRI_TOOLTIP_DEFAULT_OPTIONS =
 /** @docs-private */
 export function TRI_TOOLTIP_DEFAULT_OPTIONS_FACTORY(): TriTooltipDefaultOptions {
   return {
-    showDelay        : 0,
-    hideDelay        : 0,
+    showDelay        : 100,
+    hideDelay        : 100,
     touchendHideDelay: 1500,
   };
 }
