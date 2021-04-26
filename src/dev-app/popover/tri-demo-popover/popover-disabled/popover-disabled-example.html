@@ -1,0 +1,10 @@
+<button triButton
+        triPopover="Info about the action"
+        [triPopoverDisabled]="disabled.value"
+        aria-label="Button that displays a popover that can be programmatically disabled">
+  Action
+</button>
+
+<tri-checkbox [formControl]="disabled" class="example-disabled-checkbox">
+ Popover disabled
+</tri-checkbox>

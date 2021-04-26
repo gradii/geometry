@@ -102,6 +102,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'tooltip',
         loadChildren: '/tooltip/dev-tooltip.module#DevTooltipModule'
+      },
+      {
+        path        : 'popover',
+        loadChildren: '/popover/dev-popover.module#DevPopoverModule'
       }
     ]
   },

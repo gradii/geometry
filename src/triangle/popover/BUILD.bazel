@@ -23,6 +23,7 @@ ng_module(
         "//src/triangle/i18n",
         "//src/triangle/tooltip",
         "//src/triangle/util",
+        "//src/triangle:dev_mode_types",
         "@npm//@angular/animations",
         "@npm//@angular/cdk",
         "@npm//@angular/common",

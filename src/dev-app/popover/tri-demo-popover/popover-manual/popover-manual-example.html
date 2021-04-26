@@ -1,0 +1,28 @@
+<div>
+  <span> Click the following buttons to... </span>
+  <button triButton
+          (click)="popover.show()"
+          aria-label="Show popover on the button at the end of this section"
+          class="example-action-button">
+    show
+  </button>
+  <button triButton
+          (click)="popover.hide()"
+          aria-label="Hide popover on the button at the end of this section"
+          class="example-action-button">
+    hide
+  </button>
+  <button triButton
+          (click)="popover.toggle()"
+          aria-label="Show/Hide popover on the button at the end of this section"
+          class="example-action-button">
+    toggle show/hide
+  </button>
+</div>
+
+<button triButton #popover="triPopover"
+        triPopover="Info about the action"
+        triPopoverPosition="right"
+        aria-popover="Button that displays and hides a popover triggered by other buttons">
+  Action
+</button>

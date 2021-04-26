@@ -18,26 +18,40 @@ import {
   Directive,
   ElementRef,
   Inject,
+  Input,
   NgZone,
   Optional,
   ViewContainerRef
 } from '@angular/core';
-import {
-  PopoverComponent,
-} from '@gradii/triangle/popover';
-import {
-  TRI_POPOVER_DEFAULT_OPTIONS,
-  TRI_POPOVER_SCROLL_STRATEGY
-} from './popover-common';
+import { PopoverComponent, } from '@gradii/triangle/popover';
 import {
   _TriTooltipBase,
   TriTooltipDefaultOptions
 } from '@gradii/triangle/tooltip';
+import {
+  TRI_POPOVER_DEFAULT_OPTIONS,
+  TRI_POPOVER_SCROLL_STRATEGY
+} from './popover-common';
 
 @Directive({
-  selector: '[triPopover]'
+  selector: '[triPopover]',
+  exportAs: 'triPopover',
+  inputs  : [
+    'position:triPopoverPosition',
+    'disabled:triPopoverDisabled',
+    'showDelay:triPopoverShowDelay',
+    'hideDelay:triPopoverHideDelay',
+    'touchGestures:triPopoverTouchGestures',
+    // 'message:triPopover',
+    'tooltipTrigger:triPopoverTrigger',
+    'tooltipClass:triPopoverClass',
+  ],
+  host    : {
+    'class': 'tri-popover-trigger'
+  }
 })
 export class PopoverDirective extends _TriTooltipBase<PopoverComponent> {
+
   protected readonly _tooltipComponent: ComponentType<PopoverComponent> = PopoverComponent;
 
   constructor(
@@ -58,4 +72,14 @@ export class PopoverDirective extends _TriTooltipBase<PopoverComponent> {
       focusMonitor, scrollStrategy, dir, defaultOptions, _document);
   }
 
+  @Input('triPopover') get content() {
+    return this.message;
+  }
+
+  set content(value) {
+    // this._content = value;
+    this.message = value;
+  }
+
+  // private _content: string
 }

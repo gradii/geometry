@@ -38,6 +38,7 @@ ng_module(
         "//src/dev-app/pagination",
         #  "//src/dev-app/popconfirm",
         "//src/dev-app/tooltip",
+        "//src/dev-app/popover",
 
         "//src/triangle/core",
         "@npm//@angular/cdk",

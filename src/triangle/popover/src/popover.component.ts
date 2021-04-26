@@ -4,6 +4,14 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import {
+  animate,
+  AnimationTriggerMetadata,
+  state,
+  style,
+  transition,
+  trigger
+} from '@angular/animations';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import {
   BreakpointObserver,
@@ -28,18 +36,29 @@ import {
 } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
+
+
+export const PopoverAnimation: AnimationTriggerMetadata = trigger('popoverAnimation', [
+  state('initial', style({opacity: 0})),
+  state('visible', style({opacity: 1})),
+  state('hidden', style({opacity: 0})),
+  transition('* => visible', animate('150ms cubic-bezier(0.0, 0.0, 0.2, 1)')),
+  transition('* => initial', animate('150ms cubic-bezier(0.4, 0.0, 1, 1)'))
+]);
+
+
 @Component({
   selector       : 'tri-popover',
   encapsulation  : ViewEncapsulation.None,
-  animations     : [FadeAnimation],
+  animations     : [PopoverAnimation],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template       : `
     <div class="tri-tooltip-content"
          [ngClass]="tooltipClass"
          [class.tri-tooltip-handset]="(_isHandset | async)?.matches"
-         [@state]="_visibility"
-         (@state.start)="_animationStart()"
-         (@state.done)="_animationDone($event)">
+         [@popoverAnimation]="_visibility"
+         (@popoverAnimation.start)="_animationStart()"
+         (@popoverAnimation.done)="_animationDone($event)">
       <div class="tri-tooltip-arrow">
         <span class="tri-tooltip-arrow-content"></span>
       </div>

@@ -1,0 +1,10 @@
+<!--<mat-form-field class="example-user-input">-->
+<!--  <mat-label>Popover message</mat-label>-->
+  <input tri-input [formControl]="message">
+<!--</mat-form-field>-->
+
+<button triButton
+        [triPopover]="message.value"
+        aria-label="Button that displays a popover with a custom message">
+  Action
+</button>

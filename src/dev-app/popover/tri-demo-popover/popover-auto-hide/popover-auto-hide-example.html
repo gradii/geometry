@@ -1,0 +1,19 @@
+<!--<mat-form-field>-->
+<!--  <mat-label>Popover position</mat-label>-->
+<!--  <mat-select [formControl]="position">-->
+<!--    <mat-option *ngFor="let positionOption of positionOptions" [value]="positionOption">-->
+<!--      {{positionOption}}-->
+<!--    </mat-option>-->
+<!--  </mat-select>-->
+<!--</mat-form-field>-->
+
+<div class="example-container" cdkScrollable>
+  <button triButton #popover="triPopover"
+          triPopover="Info about the action"
+          [triPopoverPosition]="position.value"
+          triPopoverHideDelay="100000"
+          aria-label="Button that displays a popover that hides when scrolled out of the container"
+          class="example-button">
+    Action
+  </button>
+</div>
