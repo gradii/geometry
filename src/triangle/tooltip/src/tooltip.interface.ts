@@ -7,14 +7,12 @@
 /** Possible positions for a tooltip. */
 export type TooltipPosition =
   'top' |
-  'topCenter' |
   'topLeft' |
   'topRight' |
   'right' |
   'rightTop' |
   'rightBottom' |
   'bottom' |
-  'bottomCenter' |
   'bottomLeft' |
   'bottomRight' |
   'left' |

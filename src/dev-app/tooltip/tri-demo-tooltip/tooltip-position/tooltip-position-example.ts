@@ -19,14 +19,12 @@ import { TooltipPosition } from '@gradii/triangle/tooltip';
 export class TooltipPositionExample {
   positionOptions: TooltipPosition[] = [
     'top',
-    'topCenter',
     'topLeft',
     'topRight',
     'right',
     'rightTop',
     'rightBottom',
     'bottom',
-    'bottomCenter',
     'bottomLeft',
     'bottomRight',
     'left',
