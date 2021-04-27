@@ -8,9 +8,11 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TriButtonModule } from '@gradii/triangle/button';
+import { TriCommonModule } from '@gradii/triangle/core';
 import { TriI18nModule } from '@gradii/triangle/i18n';
-import { PopConfirmComponent } from './confirm-popup.component';
-import { PopConfirmDirective } from './confirm-popup.directive';
+import { TriTooltipModule } from '@gradii/triangle/tooltip';
+import { ConfirmPopupComponent } from './confirm-popup.component';
+import { ConfirmPopupDirective } from './confirm-popup.directive';
 
 /**
  *
@@ -34,9 +36,9 @@ import { PopConfirmDirective } from './confirm-popup.directive';
  *
  */
 @NgModule({
-  declarations: [PopConfirmComponent, PopConfirmDirective],
-  exports     : [PopConfirmComponent, PopConfirmDirective],
-  imports     : [CommonModule, TriButtonModule, OverlayModule, TriI18nModule]
+  imports     : [CommonModule, TriButtonModule, OverlayModule, TriI18nModule, TriCommonModule, TriTooltipModule],
+  declarations: [ConfirmPopupComponent, ConfirmPopupDirective],
+  exports     : [ConfirmPopupComponent, ConfirmPopupDirective],
 })
 export class TriPopConfirmModule {
 }

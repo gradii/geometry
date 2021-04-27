@@ -166,7 +166,7 @@
         ".*": "kebab-case"
       }
     ],
-    "no-unescaped-html-tag": true,
+    "no-unescaped-html-tag": false,
     "import-blacklist": [
       true,
       ["^@schematics/angular/.*(ast).*", "^rxjs(?!$|/operators$).*"]
