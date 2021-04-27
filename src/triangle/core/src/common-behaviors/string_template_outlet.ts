@@ -15,9 +15,16 @@ export class StringTemplateOutletDirective {
   private _inputTemplate: TemplateRef<void> | null = null;
   private _inputViewRef: EmbeddedViewRef<void> | null = null;
   private _defaultViewRef: EmbeddedViewRef<void> | null = null;
+  private _outletContext: any;
 
   constructor(private _viewContainer: ViewContainerRef,
-              private _defaultTemplate: TemplateRef<void>) {
+    private _defaultTemplate: TemplateRef<void>) {
+  }
+
+  @Input()
+  set stringTemplateOutletContext(value: any) {
+    this._outletContext = value;
+    this.updateView();
   }
 
   @Input()
@@ -42,14 +49,17 @@ export class StringTemplateOutletDirective {
         }
       }
     } else {
+      // todo check
       // use input template when input is templateRef
-      if (!this._inputViewRef) {
+      // if (!this._inputViewRef) {
         this._viewContainer.clear();
         this._defaultViewRef = null;
         if (this._inputTemplate) {
-          this._inputViewRef = this._viewContainer.createEmbeddedView<void>(this._inputTemplate);
+          this._inputViewRef = this._viewContainer.createEmbeddedView<void>(
+            this._inputTemplate,
+            this._outletContext);
         }
-      }
+      // }
     }
   }
 }

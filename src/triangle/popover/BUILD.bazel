@@ -19,6 +19,7 @@ ng_module(
     assets = [":style/popover.css"] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/popover",
     deps = [
+        "//src/check-type",
         "//src/triangle/core",
         "//src/triangle/i18n",
         "//src/triangle/tooltip",

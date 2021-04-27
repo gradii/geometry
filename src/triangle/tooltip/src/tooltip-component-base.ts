@@ -30,6 +30,8 @@ export abstract class _TriTooltipComponentBase implements OnDestroy {
 
   /** Classes to be added to the tooltip. Supports the same syntax as `ngClass`. */
   tooltipClass: string | string[] | Set<string> | { [key: string]: any };
+  
+  tooltipContext: { [key: string]: any };
 
   /** The timeout ID of any current timer set to show the tooltip */
   _showTimeoutId: number | undefined;

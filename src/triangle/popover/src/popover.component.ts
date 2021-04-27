@@ -7,6 +7,7 @@
 import {
   animate,
   AnimationTriggerMetadata,
+  keyframes,
   state,
   style,
   transition,
@@ -23,8 +24,11 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  Input,
   NgZone,
   OnDestroy,
+  TemplateRef,
+  ViewContainerRef,
   ViewEncapsulation
 } from '@angular/core';
 import { FadeAnimation } from '@gradii/triangle/core';
@@ -36,15 +40,20 @@ import {
   Subscription
 } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
+import { isString } from '@gradii/check-type';
+import { ComponentPortal, ComponentType, TemplatePortal } from '@angular/cdk/portal';
 
 
 
 export const PopoverAnimation: AnimationTriggerMetadata = trigger('popoverAnimation', [
-  state('initial', style({ opacity: 0 })),
-  state('visible', style({ opacity: 1 })),
-  state('hidden', style({ opacity: 0 })),
-  transition('* => visible', animate('150ms cubic-bezier(0.0, 0.0, 0.2, 1)')),
-  transition('* => initial', animate('150ms cubic-bezier(0.4, 0.0, 1, 1)'))
+  state('initial, void, hidden', style({opacity: 0, transform: 'scale(0)'})),
+  state('visible', style({transform: 'scale(1)'})),
+  transition('* => visible', animate('150ms cubic-bezier(0, 0, 0.2, 1)', keyframes([
+    style({opacity: 0, transform: 'scale(0)', offset: 0}),
+    style({opacity: 0.5, transform: 'scale(0.99)', offset: 0.5}),
+    style({opacity: 1, transform: 'scale(1)', offset: 1})
+  ]))),
+  transition('* => hidden', animate('100ms cubic-bezier(0, 0, 0.2, 1)', style({opacity: 0}))),
 ]);
 
 
@@ -63,7 +72,12 @@ export const PopoverAnimation: AnimationTriggerMetadata = trigger('popoverAnimat
       <div class="tri-popover-arrow">
       </div>
       <div class="tri-popover-inner">
-        {{message}}
+        <div class="tri-popover-title">{{title}}</div>
+        <div class="tri-popover-inner-content">
+          <ng-template [stringTemplateOutlet]="message" [stringTemplateOutletContext]="tooltipContext">
+            {{message}}
+          </ng-template>
+        </div>
       </div>
     </div>
 
@@ -109,12 +123,16 @@ export class PopoverComponent extends _TriTooltipComponentBase implements OnDest
 
   protected _subscriptions: Subscription[] = [];
 
+  @Input()
+  title: string;
+
   constructor(
     protected _changeDetectorRef: ChangeDetectorRef,
     protected _elementRef: ElementRef,
     protected _ngZone: NgZone,
     protected _focusMonitor: FocusMonitor,
-    protected _breakpointObserver: BreakpointObserver) {
+    protected _breakpointObserver: BreakpointObserver,
+    protected _viewContainerRef: ViewContainerRef) {
 
     super(_changeDetectorRef);
 
@@ -127,6 +145,7 @@ export class PopoverComponent extends _TriTooltipComponentBase implements OnDest
           tap(() => {
             if (this._hideTimeoutId) {
               _ngZone.run(() => { this.show(0); })
+              this._hideTimeoutId = undefined
             }
           })
         ).subscribe()
@@ -141,6 +160,39 @@ export class PopoverComponent extends _TriTooltipComponentBase implements OnDest
           })
         ).subscribe()
     );
+  }
+
+  // templateMap = new WeakMap();
+
+  // get getTemplate() {
+  //   //@ts-ignore
+  //   if(!this.templateMap.has(this.message)){
+  //         //@ts-ignore
+  //       if (this.message instanceof TemplateRef) {
+  //         this.templateMap.set( this.message, new TemplatePortal(
+  //           this.message,
+  //           this._viewContainerRef
+  //         ))
+  //      }else {
+  //            //@ts-ignore
+  //       this.templateMap.set(this.message, new ComponentPortal(this.message))
+  //      }
+  //   } 
+  //       //@ts-ignore
+  //   return this.templateMap.get(this.message);
+
+  //   // this.componentPortal = new ComponentPortal(ComponentPortalExample);
+  //   // this.templatePortal = new TemplatePortal(
+  //   //   this.templatePortalContent,
+  //   //   this._viewContainerRef
+  //   // );
+  //   // this.domPortal = new DomPortal(this.domPortalContent);
+  //   //@ts-ignore
+  //   // return this.message as (TemplateRef<any> | ComponentType<any>)
+  // }
+
+  _isStringMessage() {
+    return isString(this.message)
   }
 
   _handleBodyInteraction(event?: MouseEvent): void {

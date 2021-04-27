@@ -21,8 +21,10 @@ import {
   Input,
   NgZone,
   Optional,
+  TemplateRef,
   ViewContainerRef
 } from '@angular/core';
+import { isString } from '@gradii/check-type';
 import { PopoverComponent, } from '@gradii/triangle/popover';
 import {
   _TriTooltipBase,
@@ -36,7 +38,7 @@ import {
 @Directive({
   selector: '[triPopover]',
   exportAs: 'triPopover',
-  inputs  : [
+  inputs: [
     'position:triPopoverPosition',
     'disabled:triPopoverDisabled',
     'showDelay:triPopoverShowDelay',
@@ -45,8 +47,9 @@ import {
     // 'message:triPopover',
     'tooltipTrigger:triPopoverTrigger',
     'tooltipClass:triPopoverClass',
+    'tooltipContext:triPopoverContext',
   ],
-  host    : {
+  host: {
     'class': 'tri-popover-trigger'
   }
 })
@@ -73,14 +76,17 @@ export class PopoverDirective extends _TriTooltipBase<PopoverComponent> {
       focusMonitor, scrollStrategy, dir, defaultOptions, _document);
   }
 
+  // protected _content: TemplateRef<any>;
+
   @Input('triPopover')
   get content() {
     return this.message;
   }
 
-  set content(value) {
+  set content(value: string | TemplateRef<any>) {
     // this._content = value;
-    this.message = value;
+    // @ts-ignore
+      this.message = value;
   }
 
   // private _content: string

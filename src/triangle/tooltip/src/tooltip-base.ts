@@ -94,6 +94,7 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
   private _position: TooltipPosition    = 'bottom';
   private _disabled: boolean            = false;
   private _tooltipClass: string | string[] | Set<string> | { [key: string]: any };
+  private _tooltipContext: { [key: string]: any };
   private _scrollStrategy: () => ScrollStrategy;
   private _viewInitialized              = false;
   private _pointerExitEventsInitialized = false;
@@ -171,7 +172,7 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
     // If the message is not a string (e.g. number), convert it to a string and trim it.
     // Must convert with `String(value)`, not `${value}`, otherwise Closure Compiler optimises
     // away the string-conversion: https://github.com/angular/components/issues/20684
-    this._message = value != null ? String(value).trim() : '';
+    this._message = value != null ? value : '';
 
     if (!this._message && this._isTooltipVisible()) {
       this.hide(0);
@@ -215,6 +216,18 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
     this._tooltipClass = value;
     if (this._tooltipInstance) {
       this._setTooltipClass(this._tooltipClass);
+    }
+  }
+
+  @Input('triTooltipContext')
+  get tooltipContext() {
+    return this._tooltipContext;
+  }
+
+  set tooltipContext(value: { [key: string]: any }) {
+    this._tooltipContext = value;
+    if (this._tooltipInstance) {
+      this._setTooltipContext(this._tooltipContext);
     }
   }
 
@@ -326,6 +339,7 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
       .pipe(takeUntil(this._destroyed))
       .subscribe(() => this._detach());
     this._setTooltipClass(this._tooltipClass);
+    this._setTooltipContext(this._tooltipContext);
     this._updateTooltipMessage();
     this._tooltipInstance!.show(delay);
   }
@@ -511,6 +525,13 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
   private _setTooltipClass(tooltipClass: string | string[] | Set<string> | { [key: string]: any }) {
     if (this._tooltipInstance) {
       this._tooltipInstance.tooltipClass = tooltipClass;
+      this._tooltipInstance._markForCheck();
+    }
+  }
+  
+  private _setTooltipContext(tooltipContext: { [key: string]: any }) {
+    if (this._tooltipInstance) {
+      this._tooltipInstance.tooltipContext = tooltipContext;
       this._tooltipInstance._markForCheck();
     }
   }
