@@ -10,11 +10,11 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector   : 'dev-popconfirm',
-  templateUrl: './dev-popconfirm.html',
-  styleUrls  : ['./dev-popconfirm.scss']
+  selector   : 'dev-confirm-popup',
+  templateUrl: './dev-confirm-popup.html',
+  styleUrls  : ['./dev-confirm-popup.scss']
 })
-export class DevPopconfirm implements OnInit {
+export class DevConfirmPopup implements OnInit {
 
   constructor() {
   }

@@ -34,7 +34,7 @@ import {
 } from '@gradii/triangle/tooltip';
 
 @Directive({
-  selector: '[triPopConfirm]'
+  selector: '[triConfirmPopup]'
 })
 export class ConfirmPopupDirective extends _TriTooltipBase<ConfirmPopupComponent> {
 

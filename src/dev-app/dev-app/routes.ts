@@ -106,6 +106,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'popover',
         loadChildren: '/popover/dev-popover.module#DevPopoverModule'
+      },
+      {
+        path        : 'confirm-popup',
+        loadChildren: '/confirm-popup/dev-confirm-popup.module#DevConfirmPopupModule'
       }
     ]
   },

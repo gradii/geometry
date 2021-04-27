@@ -33,6 +33,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="popconfirm">popconfirm</a></li>
       <li><a routerLink="tooltip">tooltip</a></li>
       <li><a routerLink="popover">popover</a></li>
+      <li><a routerLink="confirm-popup">confirm-popup</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>

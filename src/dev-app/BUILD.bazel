@@ -39,6 +39,7 @@ ng_module(
         #  "//src/dev-app/popconfirm",
         "//src/dev-app/tooltip",
         "//src/dev-app/popover",
+        "//src/dev-app/confirm-popup",
 
         "//src/triangle/core",
         "@npm//@angular/cdk",

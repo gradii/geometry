@@ -192,10 +192,10 @@ export class ConfirmPopupComponent extends _TriTooltipComponentBase implements O
   //  */
   // @Output() onConfirm: EventEmitter<any> = new EventEmitter();
   // /**
-  //  * `NzPopConfirmDirective` directive
-  //  * `NzPopConfirmDirective` 指令
+  //  * `NzConfirmPopupDirective` directive
+  //  * `NzConfirmPopupDirective` 指令
   //  */
-  // @ContentChild(PopConfirmDirective, {static: false}) origin;
+  // @ContentChild(ConfirmPopupDirective, {static: false}) origin;
   //
   // _condition = false;
   //

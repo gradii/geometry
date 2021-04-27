@@ -16,7 +16,7 @@ import { ConfirmPopupDirective } from './confirm-popup.directive';
 
 /**
  *
- * # PopConfirm 气泡确认框
+ * # ConfirmPopup 气泡确认框
  * 点击元素，弹出气泡式的确认框。
  * ### 何时使用
  *
@@ -40,5 +40,5 @@ import { ConfirmPopupDirective } from './confirm-popup.directive';
   declarations: [ConfirmPopupComponent, ConfirmPopupDirective],
   exports     : [ConfirmPopupComponent, ConfirmPopupDirective],
 })
-export class TriPopConfirmModule {
+export class TriConfirmPopupModule {
 }
