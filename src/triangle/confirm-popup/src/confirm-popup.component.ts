@@ -15,10 +15,10 @@ import {
 } from '@angular/core';
 import { FadeAnimation } from '@gradii/triangle/core';
 // import { ToolTipComponent } from '@gradii/triangle/tooltip';
-import { PopConfirmDirective } from './popconfirm.directive';
+import { PopConfirmDirective } from './confirm-popup.directive';
 
 @Component({
-  selector: 'tri-popconfirm',
+  selector: 'tri-confirm-popup',
   encapsulation: ViewEncapsulation.None,
   animations: [FadeAnimation],
   template: `
@@ -61,7 +61,7 @@ import { PopConfirmDirective } from './popconfirm.directive';
               </div>
           </div>
       </ng-template>-->`,
-  styleUrls: ['../style/popconfirm.css']
+  styleUrls: ['../style/confirm-popup.css']
 })
 export class PopConfirmComponent /*extends ToolTipComponent*/ {
   _prefix = 'tri-popover-placement';

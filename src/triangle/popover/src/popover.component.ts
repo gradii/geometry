@@ -32,37 +32,37 @@ import { _TriTooltipComponentBase } from '@gradii/triangle/tooltip';
 import {
   fromEvent as observableFromEvent,
   merge,
-  Observable
+  Observable,
+  Subscription
 } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 
 
 
 export const PopoverAnimation: AnimationTriggerMetadata = trigger('popoverAnimation', [
-  state('initial', style({opacity: 0})),
-  state('visible', style({opacity: 1})),
-  state('hidden', style({opacity: 0})),
+  state('initial', style({ opacity: 0 })),
+  state('visible', style({ opacity: 1 })),
+  state('hidden', style({ opacity: 0 })),
   transition('* => visible', animate('150ms cubic-bezier(0.0, 0.0, 0.2, 1)')),
   transition('* => initial', animate('150ms cubic-bezier(0.4, 0.0, 1, 1)'))
 ]);
 
 
 @Component({
-  selector       : 'tri-popover',
-  encapsulation  : ViewEncapsulation.None,
-  animations     : [PopoverAnimation],
+  selector: 'tri-popover',
+  encapsulation: ViewEncapsulation.None,
+  animations: [PopoverAnimation],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template       : `
-    <div class="tri-tooltip-content"
+  template: `
+    <div class="tri-popover-content"
          [ngClass]="tooltipClass"
-         [class.tri-tooltip-handset]="(_isHandset | async)?.matches"
+         [class.tri-popover-handset]="(_isHandset | async)?.matches"
          [@popoverAnimation]="_visibility"
          (@popoverAnimation.start)="_animationStart()"
          (@popoverAnimation.done)="_animationDone($event)">
-      <div class="tri-tooltip-arrow">
-        <span class="tri-tooltip-arrow-content"></span>
+      <div class="tri-popover-arrow">
       </div>
-      <div class="tri-tooltip-inner">
+      <div class="tri-popover-inner">
         {{message}}
       </div>
     </div>
@@ -94,11 +94,11 @@ export const PopoverAnimation: AnimationTriggerMetadata = trigger('popoverAnimat
         </div>
       </div>
     </ng-template>-->`,
-  styleUrls      : ['../style/popover.css'],
-  host           : {
+  styleUrls: ['../style/popover.css'],
+  host: {
     'class': 'tri-popover'
   },
-  styles         : [`:host {
+  styles: [`:host {
     position : relative;
     margin   : 1px;
   }`]
@@ -106,6 +106,8 @@ export const PopoverAnimation: AnimationTriggerMetadata = trigger('popoverAnimat
 export class PopoverComponent extends _TriTooltipComponentBase implements OnDestroy {
 
   _isHandset: Observable<BreakpointState> = this._breakpointObserver.observe(Breakpoints.Handset);
+
+  protected _subscriptions: Subscription[] = [];
 
   constructor(
     protected _changeDetectorRef: ChangeDetectorRef,
@@ -117,15 +119,28 @@ export class PopoverComponent extends _TriTooltipComponentBase implements OnDest
     super(_changeDetectorRef);
 
     _ngZone.runOutsideAngular(() => {
-      this._subscription = merge(
-        observableFromEvent(_elementRef.nativeElement, 'mousemove'),
-        _focusMonitor.monitor(_elementRef).pipe(
-          filter((origin) => !!origin)
-        )
-      ).subscribe(() => {
-        clearTimeout(this._hideTimeoutId);
-      });
-    });
+      this._subscriptions.push(
+        merge(
+          observableFromEvent(_elementRef.nativeElement, 'mousemove'),
+          _focusMonitor.monitor(_elementRef).pipe(filter((origin) => !!origin))
+        ).pipe(
+          tap(() => {
+            if (this._hideTimeoutId) {
+              _ngZone.run(() => { this.show(0); })
+            }
+          })
+        ).subscribe()
+      );
+    })
+
+    this._subscriptions.push(
+      observableFromEvent(_elementRef.nativeElement, 'mouseleave')
+        .pipe(
+          tap(() => {
+            this.hide(0);
+          })
+        ).subscribe()
+    );
   }
 
   _handleBodyInteraction(event?: MouseEvent): void {
@@ -140,8 +155,8 @@ export class PopoverComponent extends _TriTooltipComponentBase implements OnDest
   ngOnDestroy() {
     clearTimeout(this._showTimeoutId);
     clearTimeout(this._hideTimeoutId);
-    if (this._subscription) {
-      this._subscription.unsubscribe();
+    if (this._subscriptions) {
+      this._subscriptions.forEach(it => it.unsubscribe());
     }
     this._onHide.complete();
   }

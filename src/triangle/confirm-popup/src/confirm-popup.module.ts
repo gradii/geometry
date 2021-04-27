@@ -9,8 +9,8 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TriButtonModule } from '@gradii/triangle/button';
 import { TriI18nModule } from '@gradii/triangle/i18n';
-import { PopConfirmComponent } from './popconfirm.component';
-import { PopConfirmDirective } from './popconfirm.directive';
+import { PopConfirmComponent } from './confirm-popup.component';
+import { PopConfirmDirective } from './confirm-popup.directive';
 
 /**
  *
@@ -24,13 +24,13 @@ import { PopConfirmDirective } from './popconfirm.directive';
  * ### 代码演示
  *
  * 最简单的用法。
- * <!-- example(tri-demo-popconfirm-basic) -->
+ * <!-- example(tri-demo-confirm-popup-basic) -->
  * 设置 `okText` `cancelText` 以自定义按钮文字。
- * <!-- example(tri-demo-popconfirm-local) -->
+ * <!-- example(tri-demo-confirm-popup-local) -->
  * 位置有十二个方向
- * <!-- example(tri-demo-popconfirm-location) -->
+ * <!-- example(tri-demo-confirm-popup-location) -->
  * 可以判断是否需要弹出。
- * <!-- example(tri-demo-popconfirm-kick) -->
+ * <!-- example(tri-demo-confirm-popup-kick) -->
  *
  */
 @NgModule({

@@ -11,13 +11,13 @@ load(
 package(default_visibility = ["//visibility:public"])
 
 ng_module(
-    name = "popconfirm",
+    name = "confirm-popup",
     srcs = glob(
         ["**/*.ts"],
         exclude = ["**/*.spec.ts"],
     ),
-    assets = [":style/popconfirm.css"] + glob(["**/*.html"]),
-    module_name = "@gradii/triangle/popconfirm",
+    assets = [":style/confirm-popup.css"] + glob(["**/*.html"]),
+    module_name = "@gradii/triangle/confirm-popup",
     deps = [
         "@npm//@angular/animations",
         "@npm//@angular/common",
@@ -36,16 +36,16 @@ ng_module(
 )
 
 sass_library(
-    name = "popconfirm_scss_lib",
+    name = "confirm_popup_scss_lib",
     srcs = glob(["**/_*.scss"]),
     deps = ["//src/triangle/core:core_scss_lib"],
 )
 
 sass_binary(
-    name = "popconfirm_scss",
-    src = "style/popconfirm.scss",
+    name = "confirm_popup_scss",
+    src = "style/confirm-popup.scss",
     deps = [
-        "//src/triangle/popconfirm:popconfirm_scss_lib",
+        "//src/triangle/confirm-popup:confirm_popup_scss_lib",
     ],
 )
 #

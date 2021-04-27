@@ -84,10 +84,6 @@ const LONGPRESS_DELAY = 500;
 const passiveListenerOptions = normalizePassiveListenerOptions({passive: true});
 
 
-const TOOLTIP_TRANSFORM_ORIGIN_CLASS = 'tri-tooltip';
-const TOOLTIP_PANEL_CLASS            = 'tri-tooltip-panel';
-const TOOLTIP_PLACEMENT_CLASS        = 'tri-tooltip-placement';
-
 @Directive()
 export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implements OnDestroy,
   AfterViewInit {
@@ -104,6 +100,8 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
   protected abstract readonly _tooltipComponent: ComponentType<T>;
   protected _viewportMargin             = 8;
   private _currentPosition: TooltipPosition;
+
+  protected _tooltipPrefix = 'tri-tooltip';
 
   /** Allows the user to define the position of the tooltip relative to the parent element */
   @Input('triTooltipPosition')
@@ -373,7 +371,7 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
     // Create connected position strategy that listens for scroll events to reposition.
     const strategy = this._overlay.position()
       .flexibleConnectedTo(this._elementRef)
-      .withTransformOriginOn(`.${TOOLTIP_TRANSFORM_ORIGIN_CLASS}`)
+      .withTransformOriginOn(`.${this._tooltipPrefix}`)
       .withFlexibleDimensions(false)
       .withViewportMargin(this._viewportMargin)
       .withScrollableContainers(scrollableAncestors);
@@ -393,7 +391,7 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
     this._overlayRef = this._overlay.create({
       direction       : this._dir,
       positionStrategy: strategy,
-      panelClass      : `${TOOLTIP_PANEL_CLASS}`,
+      panelClass      : `${this._tooltipPrefix}-panel`,
       scrollStrategy  : this._scrollStrategy()
     });
 
@@ -573,7 +571,7 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
       const overlayRef = this._overlayRef;
 
       if (overlayRef) {
-        const classPrefix = `${TOOLTIP_PLACEMENT_CLASS}-`;
+        const classPrefix = `${this._tooltipPrefix}-placement-`;
         overlayRef.removePanelClass(classPrefix + this._currentPosition);
         overlayRef.addPanelClass(classPrefix + newPosition!);
       }

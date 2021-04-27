@@ -33,7 +33,7 @@
 @use "../../message/style/message-theme" as *;
 @use "../../modal/style/modal-theme" as *;
 @use "../../pagination/style/pagination-theme" as *;
-@use "../../popconfirm/style/popconfirm-theme" as *;
+@use "../../confirm-popup/style/confirm-popup-theme" as *;
 @use "../../popover/style/popover-theme" as *;
 @use "../../progress/style/progress-theme" as *;
 @use "../../radio/style/radio-theme" as *;
@@ -76,4 +76,5 @@
   @include tri-menu-theme();
   @include tri-message-theme();
   @include tri-tooltip-theme();
+  @include tri-popover-theme();
 }

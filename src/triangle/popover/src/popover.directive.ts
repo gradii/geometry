@@ -51,6 +51,7 @@ import {
   }
 })
 export class PopoverDirective extends _TriTooltipBase<PopoverComponent> {
+  protected _tooltipPrefix = 'tri-popover';
 
   protected readonly _tooltipComponent: ComponentType<PopoverComponent> = PopoverComponent;
 
@@ -72,7 +73,8 @@ export class PopoverDirective extends _TriTooltipBase<PopoverComponent> {
       focusMonitor, scrollStrategy, dir, defaultOptions, _document);
   }
 
-  @Input('triPopover') get content() {
+  @Input('triPopover')
+  get content() {
     return this.message;
   }
 

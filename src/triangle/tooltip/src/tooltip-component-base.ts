@@ -46,8 +46,6 @@ export abstract class _TriTooltipComponentBase implements OnDestroy {
   /** Subject for notifying that the tooltip has been hidden from the view */
   protected readonly _onHide: Subject<void> = new Subject();
 
-  protected _subscription: Subscription;
-
   protected constructor(protected _changeDetectorRef: ChangeDetectorRef,
   ) {
   }
@@ -105,9 +103,6 @@ export abstract class _TriTooltipComponentBase implements OnDestroy {
   ngOnDestroy() {
     clearTimeout(this._showTimeoutId);
     clearTimeout(this._hideTimeoutId);
-    if (this._subscription) {
-      this._subscription.unsubscribe();
-    }
     this._onHide.complete();
   }
 
