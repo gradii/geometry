@@ -1,22 +1,25 @@
 @use "../../core/style/mixins";
 @use "../../core/style/variables" as v;
 
-$tooltip-prefix-cls  : #{v.$tri-prefix}-popover;
+$popover-prefix-cls  : #{v.$tri-prefix}-popover;
 
 //* Tooltip max width
-$tooltip-max-width   : 250px !default;
+$popover-min-width   : 177px !default;
 //** Tooltip arrow width
-$tooltip-arrow-width : 0.3125rem !default;
+$popover-arrow-width : 0.3125rem !default;
 //** Tooltip distance with trigger
-$tooltip-distance    : $tooltip-arrow-width - 0.0625rem + 0.25rem !default;
+$popover-distance    : $popover-arrow-width - 0.0625rem + 0.25rem !default;
 
 // Base class
-.#{$tooltip-prefix-cls} {
-  z-index     : v.$zindex-tooltip;
-  display     : block;
-  visibility  : visible;
+.#{$popover-prefix-cls} {
+  z-index     : v.$zindex-popover;
+  cursor      : auto;
+  user-select : text;
+  white-space : normal;
   font-size   : v.$font-size-base;
   line-height : v.$line-height-base;
+  font-weight : normal;
+  text-align  : left;
 
   @at-root &-hidden {
     display : none;
@@ -25,36 +28,34 @@ $tooltip-distance    : $tooltip-arrow-width - 0.0625rem + 0.25rem !default;
   @at-root &-placement-top,
   &-placement-topLeft,
   &-placement-topRight {
-    padding-bottom : $tooltip-distance;
+    margin-bottom : $popover-distance;
   }
   @at-root &-placement-right,
   &-placement-rightTop,
   &-placement-rightBottom {
-    padding-left : $tooltip-distance;
+    margin-left : $popover-distance;
   }
   @at-root &-placement-bottom,
   &-placement-bottomLeft,
   &-placement-bottomRight {
-    padding-top : $tooltip-distance;
+    margin-top : $popover-distance;
   }
   @at-root &-placement-left,
   &-placement-leftTop,
   &-placement-leftBottom {
-    padding-right : $tooltip-distance;
+    margin-right : $popover-distance;
   }
 }
 
 // Wrapper for the tooltip content
-.#{$tooltip-prefix-cls}-inner {
-  max-width       : $tooltip-max-width;
-  padding         : 8px 10px;
-  text-align      : left;
-  text-decoration : none;
-  min-height      : 34px;
+.#{$popover-prefix-cls}-inner {
+  min-width       : $popover-min-width;
+  background-clip : padding-box;
+  border-radius   : v.$border-radius-base;
 }
 
 // Arrows
-.#{$tooltip-prefix-cls}-arrow {
+.#{$popover-prefix-cls}-arrow {
   position     : absolute;
   width        : 0;
   height       : 0;
@@ -62,12 +63,12 @@ $tooltip-distance    : $tooltip-arrow-width - 0.0625rem + 0.25rem !default;
   border-style : solid;
 }
 
-.#{$tooltip-prefix-cls} {
+.#{$popover-prefix-cls} {
   @at-root &-placement-top #{&}-arrow,
   &-placement-topLeft #{&}-arrow,
   &-placement-topRight #{&}-arrow {
-    bottom       : -($tooltip-distance - $tooltip-arrow-width);
-    border-width : $tooltip-arrow-width $tooltip-arrow-width 0;
+    bottom       : - $popover-arrow-width;
+    border-width : $popover-arrow-width $popover-arrow-width 0;
   }
 
   @at-root &-placement-top #{&}-arrow {
@@ -86,8 +87,8 @@ $tooltip-distance    : $tooltip-arrow-width - 0.0625rem + 0.25rem !default;
   @at-root &-placement-right #{&}-arrow,
   &-placement-rightTop #{&}-arrow,
   &-placement-rightBottom #{&}-arrow {
-    left         : -($tooltip-distance - $tooltip-arrow-width);
-    border-width : $tooltip-arrow-width $tooltip-arrow-width $tooltip-arrow-width 0;
+    left         : - $popover-arrow-width;
+    border-width : $popover-arrow-width $popover-arrow-width $popover-arrow-width 0;
   }
 
   @at-root &-placement-right #{&}-arrow {
@@ -106,8 +107,8 @@ $tooltip-distance    : $tooltip-arrow-width - 0.0625rem + 0.25rem !default;
   @at-root &-placement-left #{&}-arrow,
   &-placement-leftTop #{&}-arrow,
   &-placement-leftBottom #{&}-arrow {
-    right        : -($tooltip-distance - $tooltip-arrow-width);
-    border-width : $tooltip-arrow-width 0 $tooltip-arrow-width $tooltip-arrow-width;
+    right        : - $popover-arrow-width;
+    border-width : $popover-arrow-width 0 $popover-arrow-width $popover-arrow-width;
   }
 
   @at-root &-placement-left #{&}-arrow {
@@ -126,8 +127,8 @@ $tooltip-distance    : $tooltip-arrow-width - 0.0625rem + 0.25rem !default;
   @at-root &-placement-bottom #{&}-arrow,
   &-placement-bottomLeft #{&}-arrow,
   &-placement-bottomRight #{&}-arrow {
-    top          : -($tooltip-distance - $tooltip-arrow-width);
-    border-width : 0 $tooltip-arrow-width $tooltip-arrow-width;
+    top          : - $popover-arrow-width;
+    border-width : 0 $popover-arrow-width $popover-arrow-width;
   }
 
   @at-root &-placement-bottom #{&}-arrow {
