@@ -9,6 +9,7 @@ import {
   FocusMonitor
 } from '@angular/cdk/a11y';
 import { Directionality } from '@angular/cdk/bidi';
+import { NumberInput } from '@angular/cdk/coercion';
 import { Overlay } from '@angular/cdk/overlay';
 import { Platform } from '@angular/cdk/platform';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
@@ -56,4 +57,6 @@ export class TooltipDirective extends _TriTooltipBase<TooltipComponent> {
     super(overlay, elementRef, scrollDispatcher, viewContainerRef, ngZone, platform, ariaDescriber,
       focusMonitor, scrollStrategy, dir, defaultOptions, _document);
   }
+
+  static ngAcceptInputType_content: string;
 }

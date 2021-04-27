@@ -29,6 +29,7 @@ import { PopoverOverviewExample } from './tri-demo-popover/popover-overview/popo
 import { PopoverPlacementsExample } from './tri-demo-popover/popover-placements/popover-placements-example';
 import { PopoverPositionExample } from './tri-demo-popover/popover-position/popover-position-example';
 import { PopoverDynamicContentExample } from './tri-demo-popover/popover-dynamic-content/popover-dynamic-content-example';
+import { PopoverTitleExample } from './tri-demo-popover/popover-title/popover-title-example';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import { PopoverDynamicContentExample } from './tri-demo-popover/popover-dynamic
           {path: 'popover-position', component: PopoverPositionExample},
           {path: 'popover-placements', component: PopoverPlacementsExample},
           {path: 'popover-dynamic-content', component: PopoverDynamicContentExample},
+          {path: 'popover-title-content', component: PopoverTitleExample},
         ]
       }
     ]),
@@ -76,7 +78,8 @@ import { PopoverDynamicContentExample } from './tri-demo-popover/popover-dynamic
     PopoverOverviewExample,
     PopoverPositionExample,
     PopoverPlacementsExample,
-    PopoverDynamicContentExample
+    PopoverDynamicContentExample,
+    PopoverTitleExample
   ]
 })
 export class DevPopoverModule {

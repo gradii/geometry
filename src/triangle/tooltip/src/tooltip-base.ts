@@ -48,8 +48,10 @@ import {
   Input,
   NgZone,
   OnDestroy,
+  TemplateRef,
   ViewContainerRef
 } from '@angular/core';
+import { isString } from '@gradii/check-type';
 import {
   DEFAULT_4_POSITIONS,
   POSITION_MAP_LTR,
@@ -162,36 +164,34 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
 
   /** The message to be displayed in the tooltip */
   @Input('triTooltip')
-  get message() {
-    return this._message;
+  get content() {
+    return this._content;
   }
 
-  set message(value: string) {
-    this._ariaDescriber.removeDescription(this._elementRef.nativeElement, this._message, 'tooltip');
+  set content(value: string | TemplateRef<any>) {
+    if (isString(value)) {
+      this._ariaDescriber.removeDescription(this._elementRef.nativeElement, this._content as string,
+        'tooltip');
+    }
+    this._content = isString(value) ? String(value).trim() : value;
 
-    // If the message is not a string (e.g. number), convert it to a string and trim it.
-    // Must convert with `String(value)`, not `${value}`, otherwise Closure Compiler optimises
-    // away the string-conversion: https://github.com/angular/components/issues/20684
-    this._message = value != null ? value : '';
-
-    if (!this._message && this._isTooltipVisible()) {
+    if (!this._content && this._isTooltipVisible()) {
       this.hide(0);
     } else {
       this._setupPointerEnterEventsIfNeeded();
       this._updateTooltipMessage();
       this._ngZone.runOutsideAngular(() => {
-        // The `AriaDescriber` has some functionality that avoids adding a description if it's the
-        // same as the `aria-label` of an element, however we can't know whether the tooltip trigger
-        // has a data-bound `aria-label` or when it'll be set for the first time. We can avoid the
-        // issue by deferring the description by a tick so Angular has time to set the `aria-label`.
-        Promise.resolve().then(() => {
-          this._ariaDescriber.describe(this._elementRef.nativeElement, this.message, 'tooltip');
-        });
+        if (isString(this._content)) {
+          Promise.resolve().then(() => {
+            this._ariaDescriber.describe(this._elementRef.nativeElement, this._content as string,
+              'tooltip');
+          });
+        }
       });
     }
   }
 
-  private _message = '';
+  private _content: string | TemplateRef<any> = '';
 
   @Input('triTooltipTrigger')
   get tooltipTrigger() {
@@ -316,13 +316,15 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
     this._destroyed.next();
     this._destroyed.complete();
 
-    this._ariaDescriber.removeDescription(nativeElement, this.message, 'tooltip');
+    if (isString(this.content)) {
+      this._ariaDescriber.removeDescription(nativeElement, this.content, 'tooltip');
+    }
     this._focusMonitor.stopMonitoring(nativeElement);
   }
 
   /** Shows the tooltip after the delay in ms, defaults to tooltip-delay-show or 0ms if no input */
   show(delay: number = this.showDelay): void {
-    if (this.disabled || !this.message || (this._isTooltipVisible() &&
+    if (this.disabled || !this.content || (this._isTooltipVisible() &&
       !this._tooltipInstance!._showTimeoutId && !this._tooltipInstance!._hideTimeoutId)) {
       return;
     }
@@ -507,7 +509,7 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
     // Must wait for the message to be painted to the tooltip so that the overlay can properly
     // calculate the correct positioning based on the size of the text.
     if (this._tooltipInstance) {
-      this._tooltipInstance.message = this.message;
+      this._tooltipInstance.content = this.content;
       this._tooltipInstance._markForCheck();
 
       this._ngZone.onMicrotaskEmpty.pipe(
@@ -528,7 +530,7 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
       this._tooltipInstance._markForCheck();
     }
   }
-  
+
   private _setTooltipContext(tooltipContext: { [key: string]: any }) {
     if (this._tooltipInstance) {
       this._tooltipInstance.tooltipContext = tooltipContext;
@@ -604,7 +606,7 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
   /** Binds the pointer events to the tooltip trigger. */
   private _setupPointerEnterEventsIfNeeded() {
     // Optimization: Defer hooking up events if there's no message or the tooltip is disabled.
-    if (this._disabled || !this.message || !this._viewInitialized ||
+    if (this._disabled || !this.content || !this._viewInitialized ||
       this._passiveListeners.length) {
       return;
     }

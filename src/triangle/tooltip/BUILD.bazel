@@ -16,6 +16,7 @@ ng_module(
     assets = [":style/tooltip.css"] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/tooltip",
     deps = [
+        "//src/check-type",
         "//src/triangle/core",
         "//src/triangle/i18n",
         "//src/triangle/util",

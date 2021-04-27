@@ -27,11 +27,9 @@ import {
   Input,
   NgZone,
   OnDestroy,
-  TemplateRef,
   ViewContainerRef,
   ViewEncapsulation
 } from '@angular/core';
-import { FadeAnimation } from '@gradii/triangle/core';
 import { _TriTooltipComponentBase } from '@gradii/triangle/tooltip';
 import {
   fromEvent as observableFromEvent,
@@ -39,13 +37,13 @@ import {
   Observable,
   Subscription
 } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
-import { isString } from '@gradii/check-type';
-import { ComponentPortal, ComponentType, TemplatePortal } from '@angular/cdk/portal';
+import {
+  filter,
+  tap
+} from 'rxjs/operators';
 
 
-
-export const PopoverAnimation: AnimationTriggerMetadata = trigger('popoverAnimation', [
+export const popoverAnimation: AnimationTriggerMetadata = trigger('popoverAnimation', [
   state('initial, void, hidden', style({opacity: 0, transform: 'scale(0)'})),
   state('visible', style({transform: 'scale(1)'})),
   transition('* => visible', animate('150ms cubic-bezier(0, 0, 0.2, 1)', keyframes([
@@ -58,11 +56,11 @@ export const PopoverAnimation: AnimationTriggerMetadata = trigger('popoverAnimat
 
 
 @Component({
-  selector: 'tri-popover',
-  encapsulation: ViewEncapsulation.None,
-  animations: [PopoverAnimation],
+  selector       : 'tri-popover',
+  encapsulation  : ViewEncapsulation.None,
+  animations     : [popoverAnimation],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+  template       : `
     <div class="tri-popover-content"
          [ngClass]="tooltipClass"
          [class.tri-popover-handset]="(_isHandset | async)?.matches"
@@ -72,10 +70,11 @@ export const PopoverAnimation: AnimationTriggerMetadata = trigger('popoverAnimat
       <div class="tri-popover-arrow">
       </div>
       <div class="tri-popover-inner">
-        <div class="tri-popover-title">{{title}}</div>
+        <div *ngIf="title" class="tri-popover-title">{{title}}</div>
         <div class="tri-popover-inner-content">
-          <ng-template [stringTemplateOutlet]="message" [stringTemplateOutletContext]="tooltipContext">
-            {{message}}
+          <ng-template [stringTemplateOutlet]="content"
+                       [stringTemplateOutletContext]="tooltipContext">
+            {{content}}
           </ng-template>
         </div>
       </div>
@@ -108,11 +107,11 @@ export const PopoverAnimation: AnimationTriggerMetadata = trigger('popoverAnimat
         </div>
       </div>
     </ng-template>-->`,
-  styleUrls: ['../style/popover.css'],
-  host: {
+  styleUrls      : ['../style/popover.css'],
+  host           : {
     'class': 'tri-popover'
   },
-  styles: [`:host {
+  styles         : [`:host {
     position : relative;
     margin   : 1px;
   }`]
@@ -144,13 +143,15 @@ export class PopoverComponent extends _TriTooltipComponentBase implements OnDest
         ).pipe(
           tap(() => {
             if (this._hideTimeoutId) {
-              _ngZone.run(() => { this.show(0); })
-              this._hideTimeoutId = undefined
+              _ngZone.run(() => {
+                this.show(0);
+              });
+              this._hideTimeoutId = undefined;
             }
           })
         ).subscribe()
       );
-    })
+    });
 
     this._subscriptions.push(
       observableFromEvent(_elementRef.nativeElement, 'mouseleave')
@@ -160,39 +161,6 @@ export class PopoverComponent extends _TriTooltipComponentBase implements OnDest
           })
         ).subscribe()
     );
-  }
-
-  // templateMap = new WeakMap();
-
-  // get getTemplate() {
-  //   //@ts-ignore
-  //   if(!this.templateMap.has(this.message)){
-  //         //@ts-ignore
-  //       if (this.message instanceof TemplateRef) {
-  //         this.templateMap.set( this.message, new TemplatePortal(
-  //           this.message,
-  //           this._viewContainerRef
-  //         ))
-  //      }else {
-  //            //@ts-ignore
-  //       this.templateMap.set(this.message, new ComponentPortal(this.message))
-  //      }
-  //   } 
-  //       //@ts-ignore
-  //   return this.templateMap.get(this.message);
-
-  //   // this.componentPortal = new ComponentPortal(ComponentPortalExample);
-  //   // this.templatePortal = new TemplatePortal(
-  //   //   this.templatePortalContent,
-  //   //   this._viewContainerRef
-  //   // );
-  //   // this.domPortal = new DomPortal(this.domPortalContent);
-  //   //@ts-ignore
-  //   // return this.message as (TemplateRef<any> | ComponentType<any>)
-  // }
-
-  _isStringMessage() {
-    return isString(this.message)
   }
 
   _handleBodyInteraction(event?: MouseEvent): void {

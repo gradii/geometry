@@ -21,6 +21,7 @@ $popover-border-radius : v.$border-radius-base !default;
 
 $popover-box-shadow    : v.$box-shadow-base !default;
 
+$border-color-split    : theming.tri-color($foreground, border-color-split) !default;
 
 @mixin tri-popover-theme() {
   // Wrapper for the popover content
@@ -29,6 +30,15 @@ $popover-box-shadow    : v.$box-shadow-base !default;
     background-color : $popover-bg;
     border-radius    : $popover-border-radius;
     box-shadow       : $popover-box-shadow;
+  }
+
+  .#{$popover-prefix-cls}-title {
+    border-bottom : 1px solid $border-color-split;
+    color         : $popover-color;
+  }
+
+  .#{$popover-prefix-cls}-inner-content {
+    color : $popover-color;
   }
 
   // Arrows

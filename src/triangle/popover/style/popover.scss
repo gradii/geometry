@@ -20,9 +20,45 @@ $popover-distance    : $popover-arrow-width - 0.0625rem + 0.25rem !default;
   line-height : v.$line-height-base;
   font-weight : normal;
   text-align  : left;
+  display     : flex;
 
   @at-root &-hidden {
     display : none;
+  }
+
+  // Wrapper for the tooltip content
+  @at-root &-inner {
+    min-width       : $popover-min-width;
+    background-clip : padding-box;
+    border-radius   : v.$border-radius-base;
+    display         : flex;
+    flex-direction  : column;
+  }
+
+  @at-root &-title {
+    margin      : 0;
+    padding     : 0 16px;
+    line-height : 32px;
+    height      : 32px;
+    font-weight : 500;
+  }
+
+  @at-root &-inner-content {
+    padding : 8px 16px;
+  }
+
+}
+
+
+.#{$popover-prefix-cls} {
+
+  // Arrows
+  @at-root &-arrow {
+    position     : absolute;
+    width        : 0;
+    height       : 0;
+    border-color : transparent;
+    border-style : solid;
   }
 
   @at-root &-placement-top,
@@ -45,25 +81,7 @@ $popover-distance    : $popover-arrow-width - 0.0625rem + 0.25rem !default;
   &-placement-leftBottom {
     margin-right : $popover-distance;
   }
-}
 
-// Wrapper for the tooltip content
-.#{$popover-prefix-cls}-inner {
-  min-width       : $popover-min-width;
-  background-clip : padding-box;
-  border-radius   : v.$border-radius-base;
-}
-
-// Arrows
-.#{$popover-prefix-cls}-arrow {
-  position     : absolute;
-  width        : 0;
-  height       : 0;
-  border-color : transparent;
-  border-style : solid;
-}
-
-.#{$popover-prefix-cls} {
   @at-root &-placement-top #{&}-arrow,
   &-placement-topLeft #{&}-arrow,
   &-placement-topRight #{&}-arrow {

@@ -10,30 +10,20 @@ import { Component } from '@angular/core';
  * @title Basic popover
  */
 @Component({
-  selector: 'popover-dynamic-content-example',
+  selector: 'popover-title-example',
   template: `
     <button triButton
-            [triPopover]="tpl"
-            [triPopoverContext]="templateContext"
+            triPopover="Tooltip content"
+            [triPopoverTitle]="'Tooltip Title ' + i"
             [triPopoverHideDelay]="100000"
             triPopoverPosition="top"
             aria-label="Button that displays a popover when focused or hovered over">
       Action
     </button>
 
-    <button triButton
-            (click)="onChangeContext()"
-    >Change Context
+    <button triButton (click)="beginDynamicChangeTitle()">
+      Auto Change Tooltip Title
     </button>
-
-    <ng-template #tpl let-title="title">
-      <h5>{{title}}</h5>
-      <ul>
-        <li>sdfsdfsf</li>
-        <li>sdfsdfsf</li>
-        <li>sdfsdfsf</li>
-      </ul>
-    </ng-template>
   `,
   styles  : [`
                :host {
@@ -43,15 +33,13 @@ import { Component } from '@angular/core';
                }
              `]
 })
-export class PopoverDynamicContentExample {
-  templateContext = {
-    title: 'default title'
-  };
+export class PopoverTitleExample {
+  i = 0;
 
-  onChangeContext() {
-    this.templateContext = {
-      title: 'changed title'
-    };
+  beginDynamicChangeTitle() {
+    setInterval(() => {
+      this.i += 1;
+    }, 1000);
   }
 
 }

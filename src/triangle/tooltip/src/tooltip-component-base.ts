@@ -8,12 +8,12 @@ import { AnimationEvent } from '@angular/animations';
 import {
   ChangeDetectorRef,
   Directive,
-  OnDestroy
+  OnDestroy,
+  TemplateRef
 } from '@angular/core';
 import {
   Observable,
-  Subject,
-  Subscription
+  Subject
 } from 'rxjs';
 import { TriggerType } from './tooltip.common';
 import { TooltipVisibility } from './tooltip.interface';
@@ -22,7 +22,7 @@ import { TooltipVisibility } from './tooltip.interface';
 @Directive()
 export abstract class _TriTooltipComponentBase implements OnDestroy {
   /** Message to display in the tooltip */
-  message: string;
+  content: string | TemplateRef<any>;
 
   config: {
     triggerType?: TriggerType
@@ -30,7 +30,7 @@ export abstract class _TriTooltipComponentBase implements OnDestroy {
 
   /** Classes to be added to the tooltip. Supports the same syntax as `ngClass`. */
   tooltipClass: string | string[] | Set<string> | { [key: string]: any };
-  
+
   tooltipContext: { [key: string]: any };
 
   /** The timeout ID of any current timer set to show the tooltip */

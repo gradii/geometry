@@ -21,10 +21,8 @@ import {
   Input,
   NgZone,
   Optional,
-  TemplateRef,
   ViewContainerRef
 } from '@angular/core';
-import { isString } from '@gradii/check-type';
 import { PopoverComponent, } from '@gradii/triangle/popover';
 import {
   _TriTooltipBase,
@@ -38,22 +36,23 @@ import {
 @Directive({
   selector: '[triPopover]',
   exportAs: 'triPopover',
-  inputs: [
+  inputs  : [
     'position:triPopoverPosition',
     'disabled:triPopoverDisabled',
     'showDelay:triPopoverShowDelay',
     'hideDelay:triPopoverHideDelay',
     'touchGestures:triPopoverTouchGestures',
-    // 'message:triPopover',
+    'content:triPopover',
     'tooltipTrigger:triPopoverTrigger',
     'tooltipClass:triPopoverClass',
     'tooltipContext:triPopoverContext',
   ],
-  host: {
+  host    : {
     'class': 'tri-popover-trigger'
   }
 })
 export class PopoverDirective extends _TriTooltipBase<PopoverComponent> {
+
   protected _tooltipPrefix = 'tri-popover';
 
   protected readonly _tooltipComponent: ComponentType<PopoverComponent> = PopoverComponent;
@@ -77,16 +76,31 @@ export class PopoverDirective extends _TriTooltipBase<PopoverComponent> {
   }
 
   // protected _content: TemplateRef<any>;
+  private _title: string;
 
-  @Input('triPopover')
-  get content() {
-    return this.message;
+  @Input('triPopoverTitle')
+  get title(): string {
+    return this._title;
   }
 
-  set content(value: string | TemplateRef<any>) {
-    // this._content = value;
-    // @ts-ignore
-      this.message = value;
+  set title(value: string) {
+    this._title = value;
+    this._updateTitle();
+  }
+
+  show(delay?: number) {
+    super.show(delay);
+
+    if (this._title) {
+      this._updateTitle();
+    }
+  }
+
+  _updateTitle() {
+    if (this._tooltipInstance) {
+      this._tooltipInstance!.title = this._title;
+      this._tooltipInstance!._markForCheck();
+    }
   }
 
   // private _content: string

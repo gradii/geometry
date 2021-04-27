@@ -50,6 +50,7 @@ export const SCROLL_THROTTLE_MS = 20;
   }
 })
 export class TooltipComponent extends _TriTooltipComponentBase {
+  content: string;
   /** Stream that emits whether the user has a handset-sized display.  */
   _isHandset: Observable<BreakpointState> = this._breakpointObserver.observe(Breakpoints.Handset);
 
