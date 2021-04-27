@@ -15,6 +15,7 @@
     <button triButton
           [triPopover]="tpl"
           [triPopoverContext]="templateContext"
+          triPopoverPosition="top"
           aria-label="Button that displays a popover when focused or hovered over">
       Action
     </button>
@@ -31,7 +32,14 @@
         <li>sdfsdfsf</li>
       </ul>
     </ng-template>
-   `
+   `,
+   styles:[ `
+     :host {
+       width: 300px;
+       height: 200px;
+       margin: 50px
+     }
+    `]
  })
 export class PopoverDynamicContentExample {
   templateContext = {
