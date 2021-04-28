@@ -5,7 +5,9 @@
  */
 
 import {
+  ChangeDetectionStrategy,
   Component,
+  DoCheck,
   OnInit
 } from '@angular/core';
 
@@ -13,8 +15,9 @@ import {
  * @title breadcrumb-basic
  */
 @Component({
-  selector: 'tri-demo-breadcrumb-basic',
-  template: `
+  selector       : 'tri-demo-breadcrumb-basic',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template       : `
     <tri-breadcrumb>
       <tri-breadcrumb-item *ngFor="let it of items">
         <ng-container [ngSwitch]="it.type">
@@ -32,9 +35,8 @@ import {
     </tri-breadcrumb>
 
     <button triButton (click)="onChange()">change breadcrumb datasource</button>
-
   `,
-  styles  : []
+  styles         : []
 })
 export class TriDemoBreadcrumbLoopComponent implements OnInit {
   items = [
