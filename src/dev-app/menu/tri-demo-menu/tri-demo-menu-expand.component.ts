@@ -4,7 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+
 /**
  * @title menu-expand
  */
@@ -54,19 +58,19 @@ import { Component, OnInit } from '@angular/core';
         </ul>
       </li>
     </ul>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoMenuExpandComponent implements OnInit {
-  isOpenOne = true;
-  isOpenTwo = false;
+  isOpenOne   = true;
+  isOpenTwo   = false;
   isOpenThree = false;
 
   openChange(value) {
     if (value === 'one') {
-      this.isOpenTwo = false;
+      this.isOpenTwo   = false;
       this.isOpenThree = false;
     } else if (value === 'two') {
-      this.isOpenOne = false;
+      this.isOpenOne   = false;
       this.isOpenThree = false;
     } else if (value === 'three') {
       this.isOpenOne = false;
@@ -74,7 +78,9 @@ export class TriDemoMenuExpandComponent implements OnInit {
     }
   }
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

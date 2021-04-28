@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title breadcrumb-separator
@@ -26,10 +29,12 @@ import { Component, OnInit } from '@angular/core';
         An Application
       </tri-breadcrumb-item>
     </tri-breadcrumb>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoBreadcrumbSeparatorComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

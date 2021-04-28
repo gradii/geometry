@@ -57,6 +57,7 @@ ij_typescript_import_sort_module_name = true
 ij_typescript_spaces_within_imports = true
 ij_typescript_call_parameters_wrap = normal
 ij_typescript_method_parameters_wrap = normal
+# ij_typescript_imports_wrap = normal
 ij_typescript_imports_wrap = split_into_lines
 ij_typescript_import_sort_members = true
 ij_coffeescript_spaces_within_object_braces = true

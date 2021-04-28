@@ -5,7 +5,12 @@
  */
 
 import { Component } from '@angular/core';
-import { TREE_ACTIONS, TreeDataOptions, TreeNode, TreeUIOptions } from '@gradii/triangle/tree-view';
+import {
+  TREE_ACTIONS,
+  TreeDataOptions,
+  TreeNode,
+  TreeUIOptions
+} from '@gradii/triangle/tree-view';
 
 @Component({
   selector : 'tri-demo-tree-view-virtual-scroll',

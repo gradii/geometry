@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title pagination-jump
@@ -13,10 +16,12 @@ import { Component, OnInit } from '@angular/core';
   selector: 'tri-demo-pagination-jump',
   template: `
     <tri-pagination [pageIndex]="2" [total]="500" [showQuickJumper]="true"></tri-pagination>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoPaginationJumpComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

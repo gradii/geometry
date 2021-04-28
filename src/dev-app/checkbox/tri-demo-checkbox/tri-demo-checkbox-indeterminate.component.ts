@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title checkbox-indeterminate
@@ -20,15 +23,15 @@ import { Component, OnInit } from '@angular/core';
     <br>
     <tri-checkbox-group [(ngModel)]="checkOptionsOne" (ngModelChange)="updateSingleChecked()"></tri-checkbox-group>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoCheckboxIndeterminateComponent implements OnInit {
-  allChecked = false;
-  indeterminate = true;
+  allChecked      = false;
+  indeterminate   = true;
   checkOptionsOne = [
-    { label: 'Apple', value: 'Apple', checked: true },
-    { label: 'Pear', value: 'Pear', checked: false },
-    { label: 'Orange', value: 'Orange', checked: false }
+    {label: 'Apple', value: 'Apple', checked: true},
+    {label: 'Pear', value: 'Pear', checked: false},
+    {label: 'Orange', value: 'Orange', checked: false}
   ];
 
   updateAllChecked() {
@@ -42,17 +45,19 @@ export class TriDemoCheckboxIndeterminateComponent implements OnInit {
 
   updateSingleChecked() {
     if (this.checkOptionsOne.every(item => item.checked === false)) {
-      this.allChecked = false;
+      this.allChecked    = false;
       this.indeterminate = false;
     } else if (this.checkOptionsOne.every(item => item.checked === true)) {
-      this.allChecked = true;
+      this.allChecked    = true;
       this.indeterminate = false;
     } else {
       this.indeterminate = true;
     }
   }
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

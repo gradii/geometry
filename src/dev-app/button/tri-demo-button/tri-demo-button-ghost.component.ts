@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title button-ghost
@@ -27,10 +30,12 @@ import { Component, OnInit } from '@angular/core';
       </button>
     </div>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoButtonGhostComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

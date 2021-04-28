@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title radio-button-group-size
@@ -61,12 +64,14 @@ import { Component, OnInit } from '@angular/core';
       </tri-radio-group>
     </div>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoRadioButtonGroupSizeComponent implements OnInit {
   radioValue = 'A';
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

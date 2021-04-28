@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title pagination-mini
@@ -17,16 +20,18 @@ import { Component, OnInit } from '@angular/core';
     <tri-pagination [pageIndex]="_current" [total]="50" [size]="'small'" [showSizeChanger]="true" [showQuickJumper]="true" (pageChange)="onPageChange($event)"></tri-pagination>
     <br>
     <tri-pagination [pageIndex]="_current" [total]="50" [size]="'small'" [showTotal]="true" (pageChange)="onPageChange($event)"></tri-pagination>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoPaginationMiniComponent implements OnInit {
   _current = 1;
 
-  constructor() {}
+  constructor() {
+  }
 
   onPageChange(event) {
 
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

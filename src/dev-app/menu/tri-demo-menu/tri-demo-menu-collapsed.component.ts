@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title menu-collapsed
@@ -59,14 +62,16 @@ import { Component, OnInit } from '@angular/core';
       </ul>
     </div>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoMenuCollapsedComponent implements OnInit {
   isCollapsed = false;
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   toggleCollapsed() {
     this.isCollapsed = !this.isCollapsed;

@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title input-number-digit
@@ -19,7 +22,9 @@ import { Component, OnInit } from '@angular/core';
 export class TriDemoInputNumberDigitComponent implements OnInit {
   demoValue: number;
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

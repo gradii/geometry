@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title badge-standalones
@@ -16,7 +19,7 @@ import { Component, OnInit } from '@angular/core';
     <tri-badge [count]="4" [style]="style2"></tri-badge>
     <tri-badge [count]="109" [style]="style3"></tri-badge>
   `,
-  styles: [
+  styles  : [
     `
     :host ::ng-deep .tri-badge {
       margin-right: 16px;
@@ -29,15 +32,17 @@ export class TriDemoBadgeStandalonesComponent implements OnInit {
 
   style2 = {
     backgroundColor: '#fff',
-    color: '#999',
-    boxShadow: '0 0 0 1px #d9d9d9 inset'
+    color          : '#999',
+    boxShadow      : '0 0 0 1px #d9d9d9 inset'
   };
 
   style3 = {
     backgroundColor: '#87d068'
   };
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

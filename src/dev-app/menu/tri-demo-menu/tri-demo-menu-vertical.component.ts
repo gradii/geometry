@@ -4,7 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+
 /**
  * @title menu-vertical
  */
@@ -54,10 +58,12 @@ import { Component, OnInit } from '@angular/core';
         </ul>
       </li>
     </ul>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoMenuVerticalComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title checkbox-basic
@@ -15,7 +18,7 @@ import { Component, OnInit } from '@angular/core';
     <tri-checkbox [(ngModel)]="_checked" (ngModelChange)="_console($event)">
       <span>Checkbox</span>
     </tri-checkbox>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoCheckboxBasicComponent implements OnInit {
   _checked = true;
@@ -24,7 +27,9 @@ export class TriDemoCheckboxBasicComponent implements OnInit {
     console.log(value);
   }
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

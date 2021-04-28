@@ -5,7 +5,13 @@
  */
 
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, Directive, Host, OnInit, Self } from '@angular/core';
+import {
+  Component,
+  Directive,
+  Host,
+  OnInit,
+  Self
+} from '@angular/core';
 import { IconComponent } from '@gradii/triangle/icon';
 
 @Component({
@@ -27,7 +33,7 @@ export class DevIcon implements OnInit {
 @Directive({
   selector: 'tri-icon',
   host    : {
-    '(click)'     : 'onCopy($event)',
+    '(click)'       : 'onCopy($event)',
     '[style.cursor]': '"pointer"'
   },
 

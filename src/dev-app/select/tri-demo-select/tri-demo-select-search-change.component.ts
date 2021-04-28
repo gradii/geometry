@@ -4,8 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title select-search-change
@@ -29,13 +32,14 @@ import { HttpClient } from '@angular/common/http';
       </tri-option>
     </tri-select>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoSelectSearchChangeComponent implements OnInit {
   selectedOption;
   searchOptions = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   searchChange(searchText) {
     const query = encodeURI(searchText);
@@ -47,5 +51,6 @@ export class TriDemoSelectSearchChangeComponent implements OnInit {
       });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

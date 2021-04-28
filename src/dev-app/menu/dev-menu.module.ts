@@ -6,9 +6,10 @@
 
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { TriSwitchModule } from '@gradii/triangle/switch';
 import { TriMenuModule } from '@gradii/triangle/menu';
+import { TriSwitchModule } from '@gradii/triangle/switch';
 import { DevMenu } from './dev-menu';
 import { TriDemoMenuBasicComponent } from './tri-demo-menu/tri-demo-menu-basic.component';
 import { TriDemoMenuCollapsedComponent } from './tri-demo-menu/tri-demo-menu-collapsed.component';
@@ -17,11 +18,10 @@ import { TriDemoMenuExpandComponent } from './tri-demo-menu/tri-demo-menu-expand
 import { TriDemoMenuInlineComponent } from './tri-demo-menu/tri-demo-menu-inline.component';
 import { TriDemoMenuThemeComponent } from './tri-demo-menu/tri-demo-menu-theme.component';
 import { TriDemoMenuVerticalComponent } from './tri-demo-menu/tri-demo-menu-vertical.component';
-import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
-  imports: [
+  imports     : [
     CommonModule,
     FormsModule,
 
@@ -31,13 +31,13 @@ import { FormsModule } from '@angular/forms';
     RouterModule.forChild([
       {
         path: '', component: DevMenu, children: [
-          { path: 'tri-demo-menu-basic', component: TriDemoMenuBasicComponent },
-          { path: 'tri-demo-menu-collapsed', component: TriDemoMenuCollapsedComponent },
-          { path: 'tri-demo-menu-dynamic', component: TriDemoMenuDynamicComponent },
-          { path: 'tri-demo-menu-expand', component: TriDemoMenuExpandComponent },
-          { path: 'tri-demo-menu-inline', component: TriDemoMenuInlineComponent },
-          { path: 'tri-demo-menu-theme', component: TriDemoMenuThemeComponent },
-          { path: 'tri-demo-menu-vertical', component: TriDemoMenuVerticalComponent },
+          {path: 'tri-demo-menu-basic', component: TriDemoMenuBasicComponent},
+          {path: 'tri-demo-menu-collapsed', component: TriDemoMenuCollapsedComponent},
+          {path: 'tri-demo-menu-dynamic', component: TriDemoMenuDynamicComponent},
+          {path: 'tri-demo-menu-expand', component: TriDemoMenuExpandComponent},
+          {path: 'tri-demo-menu-inline', component: TriDemoMenuInlineComponent},
+          {path: 'tri-demo-menu-theme', component: TriDemoMenuThemeComponent},
+          {path: 'tri-demo-menu-vertical', component: TriDemoMenuVerticalComponent},
         ]
       }
     ]),

@@ -5,12 +5,15 @@
  */
 
 
-import {Component, ViewEncapsulation} from '@angular/core';
+import {
+  Component,
+  ViewEncapsulation
+} from '@angular/core';
 
 /** Root component for the dev-app demos. */
 @Component({
-  selector: 'dev-app',
-  template: '<router-outlet></router-outlet>',
+  selector     : 'dev-app',
+  template     : '<router-outlet></router-outlet>',
   encapsulation: ViewEncapsulation.None,
 })
 export class DevAppComponent {

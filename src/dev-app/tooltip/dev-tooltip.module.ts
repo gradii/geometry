@@ -30,7 +30,7 @@ import { TooltipPlacementsExample } from './tri-demo-tooltip/tooltip-placements/
 import { TooltipPositionExample } from './tri-demo-tooltip/tooltip-position/tooltip-position-example';
 
 @NgModule({
-  imports: [
+  imports     : [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,

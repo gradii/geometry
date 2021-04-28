@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title checkbox-controller
@@ -26,19 +29,21 @@ import { Component, OnInit } from '@angular/core';
       </button>
     </p>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoCheckboxControllerComponent implements OnInit {
-  isCheckedButton = true;
+  isCheckedButton  = true;
   isDisabledButton = false;
-  checkButton = () => {
+  checkButton      = () => {
     this.isCheckedButton = !this.isCheckedButton;
   };
-  disableButton = () => {
+  disableButton    = () => {
     this.isDisabledButton = !this.isDisabledButton;
   };
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

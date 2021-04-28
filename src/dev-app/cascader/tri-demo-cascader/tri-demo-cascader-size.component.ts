@@ -4,42 +4,45 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 const options = [
   {
-    value: 'zhejiang',
-    label: 'Zhejiang',
+    value   : 'zhejiang',
+    label   : 'Zhejiang',
     children: [
       {
-        value: 'hangzhou',
-        label: 'Hangzhou',
+        value   : 'hangzhou',
+        label   : 'Hangzhou',
         children: [
           {
-            value: 'xihu',
-            label: 'West Lake',
+            value : 'xihu',
+            label : 'West Lake',
             isLeaf: true
           }
         ]
       },
       {
-        value: 'ningbo',
-        label: 'Ningbo',
+        value : 'ningbo',
+        label : 'Ningbo',
         isLeaf: true
       }
     ]
   },
   {
-    value: 'jiangsu',
-    label: 'Jiangsu',
+    value   : 'jiangsu',
+    label   : 'Jiangsu',
     children: [
       {
-        value: 'nanjing',
-        label: 'Nanjing',
+        value   : 'nanjing',
+        label   : 'Nanjing',
         children: [
           {
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
+            value : 'zhonghuamen',
+            label : 'Zhong Hua Men',
             isLeaf: true
           }
         ]
@@ -77,7 +80,7 @@ const options = [
       (change)="_console($event)">
     </tri-cascader>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoCascaderSizeComponent implements OnInit {
   /** init data */
@@ -91,7 +94,9 @@ export class TriDemoCascaderSizeComponent implements OnInit {
     console.log(value);
   }
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

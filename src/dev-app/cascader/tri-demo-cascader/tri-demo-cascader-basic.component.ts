@@ -4,42 +4,45 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 const init_options = [
   {
-    value: 'zhejiang',
-    label: 'Zhejiang',
+    value   : 'zhejiang',
+    label   : 'Zhejiang',
     children: [
       {
-        value: 'hangzhou',
-        label: 'Hangzhou',
+        value   : 'hangzhou',
+        label   : 'Hangzhou',
         children: [
           {
-            value: 'xihu',
-            label: 'West Lake',
+            value : 'xihu',
+            label : 'West Lake',
             isLeaf: true
           }
         ]
       },
       {
-        value: 'ningbo',
-        label: 'Ningbo',
+        value : 'ningbo',
+        label : 'Ningbo',
         isLeaf: true
       }
     ]
   },
   {
-    value: 'jiangsu',
-    label: 'Jiangsu',
+    value   : 'jiangsu',
+    label   : 'Jiangsu',
     children: [
       {
-        value: 'nanjing',
-        label: 'Nanjing',
+        value   : 'nanjing',
+        label   : 'Nanjing',
         children: [
           {
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
+            value : 'zhonghuamen',
+            label : 'Zhong Hua Men',
             isLeaf: true
           }
         ]
@@ -50,16 +53,16 @@ const init_options = [
 
 const other_options = [
   {
-    value: 'fujian',
-    label: 'Fujian',
+    value   : 'fujian',
+    label   : 'Fujian',
     children: [
       {
-        value: 'xiamen',
-        label: 'Xiamen',
+        value   : 'xiamen',
+        label   : 'Xiamen',
         children: [
           {
-            value: 'Kulangsu',
-            label: 'Kulangsu',
+            value : 'Kulangsu',
+            label : 'Kulangsu',
             isLeaf: true
           }
         ]
@@ -67,16 +70,16 @@ const other_options = [
     ]
   },
   {
-    value: 'guangxi',
-    label: 'Guangxi',
+    value   : 'guangxi',
+    label   : 'Guangxi',
     children: [
       {
-        value: 'guilin',
-        label: 'Guilin',
+        value   : 'guilin',
+        label   : 'Guilin',
         children: [
           {
-            value: 'Lijiang',
-            label: 'Li Jiang River',
+            value : 'Lijiang',
+            label : 'Li Jiang River',
             isLeaf: true
           }
         ]
@@ -102,7 +105,7 @@ const other_options = [
                 Change Options
               </a>
             `,
-  styles: [
+  styles  : [
     `
       .change-options {
         display: inline-block;
@@ -122,7 +125,8 @@ export class TriDemoCascaderBasicComponent implements OnInit {
     console.log(value);
   }
 
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit() {
     // let's set options in a asynchronous  way

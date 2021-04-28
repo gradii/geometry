@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title radio-group
@@ -26,12 +29,14 @@ import { Component, OnInit } from '@angular/core';
         <span>D</span>
       </label>
     </tri-radio-group>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoRadioGroupComponent implements OnInit {
   radioValue = 'A';
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

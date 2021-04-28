@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title collapse-accordion
@@ -21,31 +24,33 @@ import { Component, OnInit } from '@angular/core';
       </tri-collapse>
     </tri-collapseset>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoCollapseAccordionComponent implements OnInit {
   panels = [
     {
-      active: true,
-      name: 'This is panel header 1',
+      active    : true,
+      name      : 'This is panel header 1',
       childPanel: [
         {
           active: false,
-          name: 'This is panel header 1-1'
+          name  : 'This is panel header 1-1'
         }
       ]
     },
     {
       active: false,
-      name: 'This is panel header 2'
+      name  : 'This is panel header 2'
     },
     {
       active: false,
-      name: 'This is panel header 3'
+      name  : 'This is panel header 3'
     }
   ];
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

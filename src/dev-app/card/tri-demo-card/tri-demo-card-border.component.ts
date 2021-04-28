@@ -4,7 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+
 /**
  * @title card-border
  */
@@ -28,8 +32,9 @@ import { Component, OnInit } from '@angular/core';
     </div>
 
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoCardBorderComponent implements OnInit {
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

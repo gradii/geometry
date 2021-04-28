@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title button-multiple
@@ -33,10 +36,12 @@ import { Component, OnInit } from '@angular/core';
       </ul>
     </tri-dropdown>
 `,
-  styles: []
+  styles  : []
 })
 export class TriDemoButtonMultipleComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

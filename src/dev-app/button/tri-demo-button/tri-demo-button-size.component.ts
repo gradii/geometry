@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title button-size
@@ -38,12 +41,14 @@ import { Component, OnInit } from '@angular/core';
       </button>
     </tri-button-group>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoButtonSizeComponent implements OnInit {
-  size = <const> 'default';
+  size = <const>'default';
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

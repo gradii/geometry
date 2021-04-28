@@ -1,14 +1,17 @@
-import {TestBed, ComponentFixture} from '@angular/core/testing';
-import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
-import {MatTooltipHarness} from '@gradii/triangle/tooltip/testing';
-import {HarnessLoader} from '@angular/cdk/testing';
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import {
+  ComponentFixture,
+  TestBed
+} from '@angular/core/testing';
 import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
-import {MatTooltipModule} from '@gradii/triangle/tooltip';
-import {TooltipHarnessExample} from './tooltip-harness-example';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTooltipModule } from '@gradii/triangle/tooltip';
+import { MatTooltipHarness } from '@gradii/triangle/tooltip/testing';
+import { TooltipHarnessExample } from './tooltip-harness-example';
 
 describe('TooltipHarnessExample', () => {
   let fixture: ComponentFixture<TooltipHarnessExample>;
@@ -20,7 +23,7 @@ describe('TooltipHarnessExample', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatTooltipModule, NoopAnimationsModule],
+      imports     : [MatTooltipModule, NoopAnimationsModule],
       declarations: [TooltipHarnessExample]
     }).compileComponents();
     fixture = TestBed.createComponent(TooltipHarnessExample);

@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title pagination-changer
@@ -13,10 +16,12 @@ import { Component, OnInit } from '@angular/core';
   selector: 'tri-demo-pagination-changer',
   template: `
     <tri-pagination [pageIndex]="3" [total]="500" [showSizeChanger]="true" [pageSize]="40"></tri-pagination>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoPaginationChangerComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

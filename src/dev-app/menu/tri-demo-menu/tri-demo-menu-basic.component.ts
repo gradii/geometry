@@ -4,7 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+
 /**
  * @title menu-basic
  */
@@ -35,10 +39,12 @@ import { Component, OnInit } from '@angular/core';
       </li>
       <li tri-menu-item><a href="https://ng.tri.design" target="_blank" rel="noopener noreferrer">Navigation Four - Link</a></li>
     </ul>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoMenuBasicComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

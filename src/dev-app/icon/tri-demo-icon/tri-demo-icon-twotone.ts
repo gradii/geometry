@@ -162,7 +162,7 @@ import { Component } from '@angular/core';
     <tri-icon svgIcon="twotone:warning"></tri-icon>
 
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoIconTwotone {
 

@@ -4,7 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+
 /**
  * @title menu-theme
  */
@@ -60,12 +64,14 @@ import { Component, OnInit } from '@angular/core';
         </ul>
       </li>
     </ul>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoMenuThemeComponent implements OnInit {
   theme = true;
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

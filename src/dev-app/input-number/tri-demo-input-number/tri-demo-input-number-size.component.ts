@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title input-number-size
@@ -21,7 +24,9 @@ import { Component, OnInit } from '@angular/core';
 export class TriDemoInputNumberSizeComponent implements OnInit {
   demoValue = 3;
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

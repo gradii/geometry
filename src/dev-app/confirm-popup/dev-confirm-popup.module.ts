@@ -20,7 +20,7 @@ import { TriDemoConfirmPopupLocationComponent } from './tri-demo-confirm-popup/t
 
 
 @NgModule({
-  imports: [
+  imports     : [
     CommonModule,
     FormsModule,
 
@@ -31,11 +31,17 @@ import { TriDemoConfirmPopupLocationComponent } from './tri-demo-confirm-popup/t
     RouterModule.forChild([
       {
         path: '', component: DevConfirmPopup, children: [
-          { path: 'tri-demo-confirm-popup-basic', component: TriDemoConfirmPopupBasicComponent },
-          { path: 'tri-demo-confirm-popup-kick', component: TriDemoConfirmPopupKickComponent },
-          { path: 'tri-demo-confirm-popup-locale', component: TriDemoConfirmPopupLocalComponent },
-          { path: 'tri-demo-confirm-popup-location', component: TriDemoConfirmPopupLocationComponent },
-          { path: 'tri-demo-confirm-popup-auto-hide', component: TriDemoConfirmPopupAutoHideComponent },
+          {path: 'tri-demo-confirm-popup-basic', component: TriDemoConfirmPopupBasicComponent},
+          {path: 'tri-demo-confirm-popup-kick', component: TriDemoConfirmPopupKickComponent},
+          {path: 'tri-demo-confirm-popup-locale', component: TriDemoConfirmPopupLocalComponent},
+          {
+            path     : 'tri-demo-confirm-popup-location',
+            component: TriDemoConfirmPopupLocationComponent
+          },
+          {
+            path     : 'tri-demo-confirm-popup-auto-hide',
+            component: TriDemoConfirmPopupAutoHideComponent
+          },
         ]
       }
     ]),

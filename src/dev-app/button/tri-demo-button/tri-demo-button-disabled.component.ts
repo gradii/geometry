@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title button-disabled
@@ -39,7 +42,7 @@ import { Component, OnInit } from '@angular/core';
     <button tri-button [type]="'dashed'" disabled>
       <span>Dashed(disabled)</span>
     </button>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoButtonDisabledComponent implements OnInit {
   constructor() {

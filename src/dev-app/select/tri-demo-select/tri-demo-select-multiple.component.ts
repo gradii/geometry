@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title select-multiple
@@ -25,22 +28,23 @@ import { Component, OnInit } from '@angular/core';
       </tri-option>
     </tri-select>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoSelectMultipleComponent implements OnInit {
   searchOptions;
   selectedMultipleOption;
 
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit() {
     /*模拟服务器异步加载*/
     this.selectedMultipleOption = ['tom', 'jack'];
     setTimeout(_ => {
       this.searchOptions = [
-        { value: 'jack', label: '杰克' },
-        { value: 'lucy', label: '露西' },
-        { value: 'tom', label: '汤姆' }
+        {value: 'jack', label: '杰克'},
+        {value: 'lucy', label: '露西'},
+        {value: 'tom', label: '汤姆'}
       ];
     }, 300);
     setTimeout(_ => {

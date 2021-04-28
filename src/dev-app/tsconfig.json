@@ -8,9 +8,15 @@
     "rootDir": "..",
     "baseUrl": ".",
     "paths": {
-      "@gradii/triangle/*": ["../triangle/*"],
-      "@gradii/triangle-examples/*": ["../triangle-examples/*"]
+      "@gradii/triangle/*": [
+        "../triangle/*"
+      ],
+      "@gradii/triangle-examples/*": [
+        "../triangle-examples/*"
+      ]
     }
   },
-  "include": ["./**/*.ts"]
+  "include": [
+    "./**/*.ts"
+  ]
 }

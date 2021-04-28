@@ -22,11 +22,11 @@ import { MessageService } from '@gradii/triangle/message';
       [cancelText]="'cancel'"
       (onConfirm)="confirm()"
       (onCancel)="cancel()"> -->
-      <a triConfirmPopup="Are you sure？"
-         
-         (onConfirm)="confirm()"
-         (onCancel)="cancel()"
-         >delete</a>
+    <a triConfirmPopup="Are you sure？"
+
+       (onConfirm)="confirm()"
+       (onCancel)="cancel()"
+    >delete</a>
     <!-- </tri-confirm-popup> -->
   `
 })

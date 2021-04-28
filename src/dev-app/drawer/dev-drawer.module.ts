@@ -14,7 +14,7 @@ import { TriDemoDrawerBasicComponent } from './tri-demo-drawer/tri-demo-drawer-b
 
 
 @NgModule({
-  imports: [
+  imports     : [
     CommonModule,
     TriDrawerModule,
 

@@ -4,44 +4,49 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 
 const options = [
   {
-    value: 'zhejiang',
-    label: 'Zhejiang',
+    value   : 'zhejiang',
+    label   : 'Zhejiang',
     children: [
       {
-        value: 'hangzhou',
-        label: 'Hangzhou',
+        value   : 'hangzhou',
+        label   : 'Hangzhou',
         children: [
           {
-            value: 'xihu',
-            label: 'West Lake',
-            code: 752100,
+            value : 'xihu',
+            label : 'West Lake',
+            code  : 752100,
             isLeaf: true
           }
         ]
       },
       {
-        value: 'ningbo',
-        label: 'Ningbo',
+        value : 'ningbo',
+        label : 'Ningbo',
         isLeaf: true
       }
     ]
   },
   {
-    value: 'jiangsu',
-    label: 'Jiangsu',
+    value   : 'jiangsu',
+    label   : 'Jiangsu',
     children: [
       {
-        value: 'nanjing',
-        label: 'Nanjing',
+        value   : 'nanjing',
+        label   : 'Nanjing',
         children: [
           {
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-            code: 453400,
+            value : 'zhonghuamen',
+            label : 'Zhong Hua Men',
+            code  : 453400,
             isLeaf: true
           }
         ]
@@ -73,7 +78,7 @@ const options = [
         </span>
       </ng-container>
     </ng-template>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoCascaderCustomRenderComponent implements OnInit {
   /** init data */
@@ -87,9 +92,11 @@ export class TriDemoCascaderCustomRenderComponent implements OnInit {
     console.log(value);
   }
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   get _displayRender(): Function {
     return this.displayRender.bind(this);

@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title button-group
@@ -74,10 +77,12 @@ import { Component, OnInit } from '@angular/core';
       <button tri-button>Small</button>
       <button tri-button>Small</button>
     </tri-button-group>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoButtonGroupComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

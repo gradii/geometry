@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title calendar-basic
@@ -13,10 +16,12 @@ import { Component, OnInit } from '@angular/core';
   selector: 'tri-demo-calendar-basic',
   template: `
     <tri-calendar></tri-calendar>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoCalendarBasicComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

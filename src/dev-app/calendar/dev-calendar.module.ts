@@ -17,7 +17,7 @@ import { TriDemoCalendarLocaleComponent } from './tri-demo-calendar/tri-demo-cal
 
 
 @NgModule({
-  imports: [
+  imports     : [
     CommonModule,
     TriCalendarModule,
 

@@ -431,7 +431,7 @@ import { Component } from '@angular/core';
     <tri-icon svgIcon="outline:zoom-in"></tri-icon>
     <tri-icon svgIcon="outline:zoom-out"></tri-icon>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoIconOutline {
 

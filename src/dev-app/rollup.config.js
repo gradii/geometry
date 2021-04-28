@@ -1,4 +1,3 @@
-
 module.exports = {
-  output: { name: 'dateFns' },
+  output: {name: 'dateFns'},
 }

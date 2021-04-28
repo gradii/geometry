@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title badge-status
@@ -28,7 +31,7 @@ import { Component, OnInit } from '@angular/core';
     <br>
     <tri-badge [status]="'warning'" [badgeText]="'Warning'"></tri-badge>
   `,
-  styles: [
+  styles  : [
     `
     :host ::ng-deep .tri-badge {
       margin-right: 16px;
@@ -45,7 +48,9 @@ import { Component, OnInit } from '@angular/core';
   ]
 })
 export class TriDemoBadgeStatusComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

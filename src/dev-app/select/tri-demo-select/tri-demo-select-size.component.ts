@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 import { SizeLDSType } from '@gradii/triangle/core';
 
 /**
@@ -63,14 +66,14 @@ import { SizeLDSType } from '@gradii/triangle/core';
 })
 export class TriDemoSelectSizeComponent implements OnInit {
   size: SizeLDSType = 'default';
-  options = [
+  options           = [
     {value: 'jack', label: 'Jack'},
     {value: 'lucy', label: 'Lucy'},
     {value: 'disabled', label: 'Disabled', disabled: true}
   ];
-  single = 'lucy';
-  multiple = ['lucy'];
-  tag = ['lucy'];
+  single            = 'lucy';
+  multiple          = ['lucy'];
+  tag               = ['lucy'];
 
   constructor() {
   }

@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 const provinces = [
   {
@@ -24,12 +27,12 @@ const cities = {
       label: 'Hangzhou'
     },
     {
-      value: 'ningbo',
-      label: 'Ningbo',
+      value : 'ningbo',
+      label : 'Ningbo',
       isLeaf: true
     }
   ],
-  jiangsu: [
+  jiangsu : [
     {
       value: 'nanjing',
       label: 'Nanjing'
@@ -40,15 +43,15 @@ const cities = {
 const scenicspots = {
   hangzhou: [
     {
-      value: 'xihu',
-      label: 'West Lake',
+      value : 'xihu',
+      label : 'West Lake',
       isLeaf: true
     }
   ],
-  nanjing: [
+  nanjing : [
     {
-      value: 'zhonghuamen',
-      label: 'Zhong Hua Men',
+      value : 'zhonghuamen',
+      label : 'Zhong Hua Men',
       isLeaf: true
     }
   ]
@@ -68,7 +71,7 @@ const scenicspots = {
       >
       <!-- [loadData]="loadData($event)" -->
     </tri-cascader>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoCascaderLazyComponent implements OnInit {
   _value: any[] = null;
@@ -77,9 +80,11 @@ export class TriDemoCascaderLazyComponent implements OnInit {
     console.log(value);
   }
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   /** load data async */
   loadData(e: { option: any; index: number; resolve: Function; reject: Function }): void {
@@ -88,7 +93,7 @@ export class TriDemoCascaderLazyComponent implements OnInit {
       return;
     }
 
-    const option = e.option;
+    const option   = e.option;
     option.loading = true;
     if (e.index === 0) {
       setTimeout(() => {

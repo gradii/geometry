@@ -13,14 +13,14 @@ import { TriDemoTransferBasicComponent } from './tri-demo-transfer/tri-demo-tran
 
 
 @NgModule({
-  imports: [
+  imports     : [
     CommonModule,
     TriTransferModule,
 
     RouterModule.forChild([
       {
         path: '', component: DevTransferComponent, children: [
-          { path: 'basic', component: TriDemoTransferBasicComponent }
+          {path: 'basic', component: TriDemoTransferBasicComponent}
         ]
       }
     ])

@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title radio-group-disabled
@@ -30,16 +33,18 @@ import { Component, OnInit } from '@angular/core';
       <button tri-button [type]="'primary'" (click)="toggleDisabled()">Toggle Disabled</button>
     </div>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoRadioGroupDisabledComponent implements OnInit {
-  radioValue = 'A';
-  isDisabled = true;
+  radioValue     = 'A';
+  isDisabled     = true;
   toggleDisabled = () => {
     this.isDisabled = !this.isDisabled;
   };
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

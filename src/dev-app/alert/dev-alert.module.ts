@@ -12,13 +12,13 @@ import { TriDemoAlert4TypeComponent } from './tri-demo-alert/tri-demo-4-type.com
 import { TriDemoAlert4TypeMessageComponent } from './tri-demo-alert/tri-demo-alert-4-type-message.component';
 import { TriDemoAlertBasicComponent } from './tri-demo-alert/tri-demo-alert-basic.component';
 import { TriDemoAlertCloseableComponent } from './tri-demo-alert/tri-demo-alert-closeable.component';
-import { TriDemoAlertIconComponent } from './tri-demo-alert/tri-demo-alert-icon.component';
 import { TriDemoAlertIconCloseComponent } from './tri-demo-alert/tri-demo-alert-icon-close.component';
+import { TriDemoAlertIconComponent } from './tri-demo-alert/tri-demo-alert-icon.component';
 import { TriDemoAlertLongDescriptionComponent } from './tri-demo-alert/tri-demo-alert-long-description.component';
 import { TriDemoAlertSelfCloseComponent } from './tri-demo-alert/tri-demo-alert-self-close.component';
 
 @NgModule({
-  imports: [
+  imports     : [
     TriAlertModule,
 
     RouterModule.forChild([
@@ -30,7 +30,10 @@ import { TriDemoAlertSelfCloseComponent } from './tri-demo-alert/tri-demo-alert-
           {path: 'tri-demo-alert-closeable', component: TriDemoAlertCloseableComponent},
           {path: 'tri-demo-alert-icon', component: TriDemoAlertIconComponent},
           {path: 'tri-demo-alert-icon-close', component: TriDemoAlertIconCloseComponent},
-          {path: 'tri-demo-alert-long-description', component: TriDemoAlertLongDescriptionComponent},
+          {
+            path     : 'tri-demo-alert-long-description',
+            component: TriDemoAlertLongDescriptionComponent
+          },
           {path: 'tri-demo-alert-self-close', component: TriDemoAlertSelfCloseComponent},
         ]
       }

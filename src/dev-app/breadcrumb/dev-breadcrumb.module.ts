@@ -14,7 +14,7 @@ import { TriDemoBreadcrumbIconComponent } from './tri-demo-breadcrumb/tri-demo-b
 import { TriDemoBreadcrumbSeparatorComponent } from './tri-demo-breadcrumb/tri-demo-breadcrumb-separator.component';
 
 @NgModule({
-  imports: [
+  imports     : [
     TriIconModule,
     TriBreadcrumbModule,
 

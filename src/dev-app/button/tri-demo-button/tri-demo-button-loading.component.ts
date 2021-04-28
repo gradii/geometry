@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title button-loading
@@ -30,25 +33,27 @@ import { Component, OnInit } from '@angular/core';
     <button tri-button [loading]="true" [shape]="'circle'"></button>
     <button tri-button [loading]="true" [type]="'primary'" [shape]="'circle'"></button>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoButtonLoadingComponent implements OnInit {
   isLoadingOne = false;
   isLoadingTwo = false;
-  loadOne = value => {
+  loadOne      = value => {
     this.isLoadingOne = true;
     setTimeout(_ => {
       this.isLoadingOne = false;
     }, 5000);
   };
-  loadTwo = value => {
+  loadTwo      = value => {
     this.isLoadingTwo = true;
     setTimeout(_ => {
       this.isLoadingTwo = false;
     }, 5000);
   };
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

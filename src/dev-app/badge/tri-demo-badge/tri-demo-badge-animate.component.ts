@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title badge-animate
@@ -36,7 +39,7 @@ import { Component, OnInit } from '@angular/core';
 
     </div>
   `,
-  styles: [
+  styles  : [
     `
     :host ::ng-deep .tri-badge {
       margin-right: 16px;
@@ -58,11 +61,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TriDemoBadgeAnimateComponent implements OnInit {
   count = 5;
-  dot = true;
+  dot   = true;
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   addCount(): void {
     this.count++;

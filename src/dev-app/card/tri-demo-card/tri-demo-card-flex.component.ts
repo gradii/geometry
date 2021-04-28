@@ -4,7 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+
 /**
  * @title card-flex
  */
@@ -24,7 +28,7 @@ import { Component, OnInit } from '@angular/core';
       </ng-template>
     </tri-card>
   `,
-  styles: [
+  styles  : [
     `
       :host ::ng-deep .custom-image img {
         display: block;
@@ -44,7 +48,8 @@ import { Component, OnInit } from '@angular/core';
   ]
 })
 export class TriDemoCardFlexComponent implements OnInit {
-  bodyStyle = { padding: 0 };
+  bodyStyle = {padding: 0};
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title calendar-locale
@@ -13,10 +16,12 @@ import { Component, OnInit } from '@angular/core';
   selector: 'tri-demo-calendar-locale',
   template: `
     <tri-calendar></tri-calendar>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoCalendarLocaleComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

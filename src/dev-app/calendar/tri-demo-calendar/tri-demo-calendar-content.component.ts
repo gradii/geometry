@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title calendar-content
@@ -21,10 +24,12 @@ import { Component, OnInit } from '@angular/core';
         <tri-badge [status]="'success'" [badgeText]="'This Month is Sep'" *ngIf="month.index==11"></tri-badge>
       </ng-template>
     </tri-calendar>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoCalendarContentComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

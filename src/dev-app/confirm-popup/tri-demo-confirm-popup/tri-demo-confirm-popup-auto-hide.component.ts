@@ -1,11 +1,17 @@
-import { Component } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { TooltipPosition } from "@gradii/triangle/tooltip";
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { TooltipPosition } from '@gradii/triangle/tooltip';
 
 
 @Component({
-    selector: 'tri-demo-confirm-popup-auto-hide',
-    template: `
+  selector: 'tri-demo-confirm-popup-auto-hide',
+  template: `
     <div class="example-container" cdkScrollable>
   <button triButton #ConfirmPopup="triConfirmPopup"
           triConfirmPopup="Info about the action"
@@ -17,7 +23,7 @@ import { TooltipPosition } from "@gradii/triangle/tooltip";
   </button>
 </div>
     `,
-    styles: [`
+  styles  : [`
     .example-button {
         display: block;
         margin: 80px auto 400px;
@@ -31,7 +37,7 @@ import { TooltipPosition } from "@gradii/triangle/tooltip";
     `]
 })
 export class TriDemoConfirmPopupAutoHideComponent {
-    positionOptions: TooltipPosition[] = ['bottom', 'top', 'left', 'right'];
+  positionOptions: TooltipPosition[] = ['bottom', 'top', 'left', 'right'];
 
-    position = new FormControl(this.positionOptions[0]);
+  position = new FormControl(this.positionOptions[0]);
 }

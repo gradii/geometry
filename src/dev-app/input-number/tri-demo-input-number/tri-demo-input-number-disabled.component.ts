@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title input-number-disabled
@@ -22,13 +25,15 @@ import { Component, OnInit } from '@angular/core';
   styles: []
 })
 export class TriDemoInputNumberDisabledComponent implements OnInit {
-  demoValue = 3;
-  isDisabled = false;
+  demoValue      = 3;
+  isDisabled     = false;
   toggleDisabled = () => {
     this.isDisabled = !this.isDisabled;
   };
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

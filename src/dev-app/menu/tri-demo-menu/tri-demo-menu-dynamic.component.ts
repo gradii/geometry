@@ -4,7 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+
 /**
  * @title menu-dynamic
  */
@@ -58,12 +62,14 @@ import { Component, OnInit } from '@angular/core';
         </ul>
       </li>
     </ul>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoMenuDynamicComponent implements OnInit {
   mode = false;
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

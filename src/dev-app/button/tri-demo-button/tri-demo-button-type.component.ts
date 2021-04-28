@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title button-type
@@ -24,10 +27,12 @@ import { Component, OnInit } from '@angular/core';
     <button tri-button [type]="'danger'">
       <span>Danger</span>
     </button>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoButtonTypeComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

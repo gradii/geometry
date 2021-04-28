@@ -1,4 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed
+} from '@angular/core/testing';
 
 import { DevButton } from './dev-button';
 
@@ -14,7 +17,7 @@ describe('DevButton', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DevButton);
+    fixture   = TestBed.createComponent(DevButton);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title checkbox-group
@@ -20,30 +23,32 @@ import { Component, OnInit } from '@angular/core';
     <br>
     <tri-checkbox-group [(ngModel)]="checkOptionsThree" (ngModelChange)="_log(checkOptionsThree)"></tri-checkbox-group>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoCheckboxGroupComponent implements OnInit {
-  checkOptionsOne = [
-    { label: 'Apple', value: 'Apple', checked: true },
-    { label: 'Pear', value: 'Pear' },
-    { label: 'Orange', value: 'Orange' }
+  checkOptionsOne   = [
+    {label: 'Apple', value: 'Apple', checked: true},
+    {label: 'Pear', value: 'Pear'},
+    {label: 'Orange', value: 'Orange'}
   ];
-  checkOptionsTwo = [
-    { label: 'Apple', value: 'Apple' },
-    { label: 'Pear', value: 'Pear', checked: true },
-    { label: 'Orange', value: 'Orange' }
+  checkOptionsTwo   = [
+    {label: 'Apple', value: 'Apple'},
+    {label: 'Pear', value: 'Pear', checked: true},
+    {label: 'Orange', value: 'Orange'}
   ];
   checkOptionsThree = [
-    { label: 'Apple', value: 'Apple', disabled: true, checked: true },
-    { label: 'Pear', value: 'Pear', disabled: true },
-    { label: 'Orange', value: 'Orange' }
+    {label: 'Apple', value: 'Apple', disabled: true, checked: true},
+    {label: 'Pear', value: 'Pear', disabled: true},
+    {label: 'Orange', value: 'Orange'}
   ];
 
   _log(value) {
     console.log(value);
   }
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title card-inner
@@ -25,12 +28,14 @@ import { Component, OnInit } from '@angular/core';
       </ng-template>
     </tri-card>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoCardInnerComponent implements OnInit {
   gridStyle = {
-    width: '25%',
+    width    : '25%',
     textAlign: 'center'
   };
-  ngOnInit() {}
+
+  ngOnInit() {
+  }
 }

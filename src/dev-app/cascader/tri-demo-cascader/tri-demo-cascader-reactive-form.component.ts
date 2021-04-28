@@ -4,43 +4,50 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators
+} from '@angular/forms';
 
 const init_options = [
   {
-    value: 'zhejiang',
-    label: 'Zhejiang',
+    value   : 'zhejiang',
+    label   : 'Zhejiang',
     children: [
       {
-        value: 'hangzhou',
-        label: 'Hangzhou',
+        value   : 'hangzhou',
+        label   : 'Hangzhou',
         children: [
           {
-            value: 'xihu',
-            label: 'West Lake',
+            value : 'xihu',
+            label : 'West Lake',
             isLeaf: true
           }
         ]
       },
       {
-        value: 'ningbo',
-        label: 'Ningbo',
+        value : 'ningbo',
+        label : 'Ningbo',
         isLeaf: true
       }
     ]
   },
   {
-    value: 'jiangsu',
-    label: 'Jiangsu',
+    value   : 'jiangsu',
+    label   : 'Jiangsu',
     children: [
       {
-        value: 'nanjing',
-        label: 'Nanjing',
+        value   : 'nanjing',
+        label   : 'Nanjing',
         children: [
           {
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
+            value : 'zhonghuamen',
+            label : 'Zhong Hua Men',
             isLeaf: true
           }
         ]
@@ -66,7 +73,7 @@ const init_options = [
     <br>
     <button tri-button (click)="_reset()">Reset</button>
     `,
-  styles: [
+  styles  : [
     `
 
     `

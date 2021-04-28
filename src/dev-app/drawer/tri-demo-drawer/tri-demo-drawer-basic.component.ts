@@ -4,7 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { DrawerService } from '@gradii/triangle/drawer';
 
 @Component({

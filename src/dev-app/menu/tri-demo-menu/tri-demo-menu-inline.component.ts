@@ -4,7 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+
 /**
  * @title menu-inline
  */
@@ -55,10 +59,12 @@ import { Component, OnInit } from '@angular/core';
       </li>
     </ul>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoMenuInlineComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

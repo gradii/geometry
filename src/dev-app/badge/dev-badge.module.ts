@@ -20,23 +20,23 @@ import { TriDemoBadgeStandalonesComponent } from './tri-demo-badge/tri-demo-badg
 import { TriDemoBadgeStatusComponent } from './tri-demo-badge/tri-demo-badge-status.component';
 
 @NgModule({
-  imports: [
+  imports     : [
     CommonModule,
-    
+
     TriButtonModule,
     TriBadgeModule,
 
     RouterModule.forChild([
       {
         path: '', component: DevBadgeComponent, children: [
-          { path: 'tri-demo-badge-animate', component: TriDemoBadgeAnimateComponent },
-          { path: 'tri-demo-badge-basic', component: TriDemoBadgeBasicComponent },
-          { path: 'tri-demo-badge-clickable', component: TriDemoBadgeClickableComponent },
-          { path: 'tri-demo-badge-dot', component: TriDemoBadgeDotComponent },
-          { path: 'tri-demo-badge-myceil', component: TriDemoBadgeMyCeilComponent },
-          { path: 'tri-demo-badge-overflow', component: TriDemoBadgeOverflowComponent },
-          { path: 'tri-demo-badge-standalones', component: TriDemoBadgeStandalonesComponent },
-          { path: 'tri-demo-badge-status', component: TriDemoBadgeStatusComponent },
+          {path: 'tri-demo-badge-animate', component: TriDemoBadgeAnimateComponent},
+          {path: 'tri-demo-badge-basic', component: TriDemoBadgeBasicComponent},
+          {path: 'tri-demo-badge-clickable', component: TriDemoBadgeClickableComponent},
+          {path: 'tri-demo-badge-dot', component: TriDemoBadgeDotComponent},
+          {path: 'tri-demo-badge-myceil', component: TriDemoBadgeMyCeilComponent},
+          {path: 'tri-demo-badge-overflow', component: TriDemoBadgeOverflowComponent},
+          {path: 'tri-demo-badge-standalones', component: TriDemoBadgeStandalonesComponent},
+          {path: 'tri-demo-badge-status', component: TriDemoBadgeStatusComponent},
         ]
       }
     ])

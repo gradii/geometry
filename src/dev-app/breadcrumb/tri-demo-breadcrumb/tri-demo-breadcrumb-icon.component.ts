@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title breadcrumb-icon
@@ -26,10 +29,12 @@ import { Component, OnInit } from '@angular/core';
         <a href="">Application</a>
       </tri-breadcrumb-item>
     </tri-breadcrumb>`,
-  styles: []
+  styles  : []
 })
 export class TriDemoBreadcrumbIconComponent implements OnInit {
-  constructor() { }
+  constructor() {
+  }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 }

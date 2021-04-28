@@ -16,7 +16,7 @@ import { MessageService } from '@gradii/triangle/message';
 @Component({
   selector: 'tri-demo-confirm-popup-basic',
   template: `<a triConfirmPopup="确定要删除这个任务吗？"
-                (onConfirm)="confirm()" 
+                (onConfirm)="confirm()"
                 (onCancel)="cancel()"
             >删除</a>
             `

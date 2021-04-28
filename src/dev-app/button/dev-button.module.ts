@@ -4,8 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TriButtonModule } from '@gradii/triangle/button';
@@ -13,8 +13,8 @@ import { TriDropDownModule } from '@gradii/triangle/dropdown';
 import { TriIconModule } from '@gradii/triangle/icon';
 import { TriRadioModule } from '@gradii/triangle/radio';
 import { DevButton } from './dev-button';
-import { TriDemoButtonGhostComponent } from './tri-demo-button/tri-demo-button-ghost.component';
 import { TriDemoButtonDisabledComponent } from './tri-demo-button/tri-demo-button-disabled.component';
+import { TriDemoButtonGhostComponent } from './tri-demo-button/tri-demo-button-ghost.component';
 import { TriDemoButtonGroupComponent } from './tri-demo-button/tri-demo-button-group.component';
 import { TriDemoButtonIconComponent } from './tri-demo-button/tri-demo-button-icon.component';
 import { TriDemoButtonLoadingComponent } from './tri-demo-button/tri-demo-button-loading.component';
@@ -23,7 +23,7 @@ import { TriDemoButtonSizeComponent } from './tri-demo-button/tri-demo-button-si
 import { TriDemoButtonTypeComponent } from './tri-demo-button/tri-demo-button-type.component';
 
 @NgModule({
-  imports: [
+  imports     : [
     CommonModule,
     FormsModule,
 

@@ -1,12 +1,12 @@
 module.exports = {
-  displayName: "dev-app",
-  preset: "../../jest.preset.js",
-  setupFilesAfterEnv: ["<rootDir>/src/test-setup.ts"],
-  globals: {
+  displayName        : "dev-app",
+  preset             : "../../jest.preset.js",
+  setupFilesAfterEnv : ["<rootDir>/src/test-setup.ts"],
+  globals            : {
     "ts-jest": {
-      tsConfig: "<rootDir>/tsconfig.spec.json",
+      tsConfig                 : "<rootDir>/tsconfig.spec.json",
       stringifyContentPathRegex: "\\.(html|svg)$",
-      astTransformers: {
+      astTransformers          : {
         before: [
           "jest-preset-angular/build/InlineFilesTransformer",
           "jest-preset-angular/build/StripStylesTransformer",
@@ -14,7 +14,7 @@ module.exports = {
       },
     },
   },
-  coverageDirectory: "../../coverage/libs/dev-app",
+  coverageDirectory  : "../../coverage/libs/dev-app",
   snapshotSerializers: [
     "jest-preset-angular/build/AngularNoNgAttributesSnapshotSerializer.js",
     "jest-preset-angular/build/AngularSnapshotSerializer.js",

@@ -4,12 +4,15 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 @Component({
-  selector: 'dev-checkbox',
+  selector   : 'dev-checkbox',
   templateUrl: './dev-checkbox.html',
-  styleUrls: ['./dev-checkbox.css']
+  styleUrls  : ['./dev-checkbox.css']
 })
 export class DevCheckbox implements OnInit {
 

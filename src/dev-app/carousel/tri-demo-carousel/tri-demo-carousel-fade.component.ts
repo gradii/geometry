@@ -4,7 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+
 /**
  * @title carousel-fade
  */
@@ -14,7 +18,7 @@ import { Component, OnInit } from '@angular/core';
     <tri-carousel [effect]="'fade'">
       <div triCarouselContent *ngFor="let index of array"><h3>{{index}}</h3></div>
     </tri-carousel>`,
-  styles: [
+  styles  : [
     `:host ::ng-deep .tri-carousel .slick-slide {
       text-align: center;
       height: 160px;
@@ -31,7 +35,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TriDemoCarouselFadeComponent implements OnInit {
   array: number[] = [];
-  constructor() {}
+
+  constructor() {
+  }
 
   ngOnInit() {
     setTimeout(_ => {

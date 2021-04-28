@@ -14,13 +14,14 @@ import { RouterModule } from '@angular/router';
 import { TriButtonModule } from '@gradii/triangle/button';
 import { TriCheckboxModule } from '@gradii/triangle/checkbox';
 import { TriInputModule } from '@gradii/triangle/input';
-import { TriSelectModule } from '@gradii/triangle/select';
 import { TriPopoverModule } from '@gradii/triangle/popover';
+import { TriSelectModule } from '@gradii/triangle/select';
 import { DevPopoverComponent } from './dev-popover.component';
 import { PopoverAutoHideExample } from './tri-demo-popover/popover-auto-hide/popover-auto-hide-example';
 import { PopoverCustomClassExample } from './tri-demo-popover/popover-custom-class/popover-custom-class-example';
 import { PopoverDelayExample } from './tri-demo-popover/popover-delay/popover-delay-example';
 import { PopoverDisabledExample } from './tri-demo-popover/popover-disabled/popover-disabled-example';
+import { PopoverDynamicContentExample } from './tri-demo-popover/popover-dynamic-content/popover-dynamic-content-example';
 import { PopoverHarnessExample } from './tri-demo-popover/popover-harness/popover-harness-example';
 import { PopoverManualExample } from './tri-demo-popover/popover-manual/popover-manual-example';
 import { PopoverMessageExample } from './tri-demo-popover/popover-message/popover-message-example';
@@ -28,11 +29,10 @@ import { PopoverModifiedDefaultsExample } from './tri-demo-popover/popover-modif
 import { PopoverOverviewExample } from './tri-demo-popover/popover-overview/popover-overview-example';
 import { PopoverPlacementsExample } from './tri-demo-popover/popover-placements/popover-placements-example';
 import { PopoverPositionExample } from './tri-demo-popover/popover-position/popover-position-example';
-import { PopoverDynamicContentExample } from './tri-demo-popover/popover-dynamic-content/popover-dynamic-content-example';
 import { PopoverTitleExample } from './tri-demo-popover/popover-title/popover-title-example';
 
 @NgModule({
-  imports: [
+  imports     : [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,

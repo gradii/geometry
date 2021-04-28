@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title select-basic
@@ -41,7 +44,7 @@ export class TriDemoSelectBasicComponent implements OnInit {
   ngOnInit() {
     /*模拟服务器异步加载*/
     setTimeout(_ => {
-      this.options = [
+      this.options        = [
         {value: 'jack', label: 'Jack'},
         {value: 'lucy', label: 'Lucy'},
         {value: 'disabled', label: 'Disabled', disabled: true}

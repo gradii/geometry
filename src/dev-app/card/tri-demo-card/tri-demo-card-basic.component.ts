@@ -4,7 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+
 /**
  * @title card-basic
  */
@@ -25,8 +29,9 @@ import { Component, OnInit } from '@angular/core';
       </ng-template>
     </tri-card>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoCardBasicComponent implements OnInit {
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }
