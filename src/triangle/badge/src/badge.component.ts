@@ -16,15 +16,15 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector     : 'tri-badge',
+  selector: 'tri-badge',
   encapsulation: ViewEncapsulation.None,
-  animations   : [
+  animations: [
     trigger('enterLeave', [
-      transition('void => *', [style({opacity: 0}), animate('0.3s cubic-bezier(0.12, 0.4, 0.29, 1.46)')]),
-      transition('* => void', [style({opacity: 1}), animate('0.3s cubic-bezier(0.12, 0.4, 0.29, 1.46)')])
+      transition('void => *', [style({ opacity: 0 }), animate('0.3s cubic-bezier(0.12, 0.4, 0.29, 1.46)')]),
+      transition('* => void', [style({ opacity: 1 }), animate('0.3s cubic-bezier(0.12, 0.4, 0.29, 1.46)')])
     ])
   ],
-  template     : `
+  template: `
     <ng-template *ngIf="content" [ngTemplateOutlet]="content"></ng-template>
     <span class="tri-badge-status-dot tri-badge-status-{{status}}" *ngIf="status"></span>
     <span class="tri-badge-status-text" *ngIf="badgeText">{{badgeText}}</span>
@@ -51,14 +51,17 @@ import {
       <ng-template [ngIf]="count > overflowCount">{{overflowCount}}+</ng-template>
     </sup>
   `,
-  styleUrls    : ['../style/badge.css']
+  host: {
+    'class': 'tri-badge'
+  },
+  styleUrls: ['../style/badge.css']
 })
 export class BadgeComponent implements OnInit {
   maxNumberArray: any[];
   countArray: any[] = [];
   countSingleArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-  @ContentChild('content', {static: false}) content: TemplateRef<any>;
-  @HostBinding('class.tri-badge') _badge = true;
+  @ContentChild('content', { static: false }) content: TemplateRef<any>;
+
   /**
    * Show the over flow count
    * 展示封顶的数字值
