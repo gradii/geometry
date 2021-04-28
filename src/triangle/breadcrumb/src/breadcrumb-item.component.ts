@@ -6,6 +6,7 @@
 
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   Host
 } from '@angular/core';
@@ -23,10 +24,15 @@ import { BreadcrumbItemInterface } from './breadcrumbItemInterface';
           class="tri-breadcrumb-separator">{{breadCrumbComponent.separator}}</span>`
 })
 export class BreadcrumbItemComponent implements BreadcrumbItemInterface {
-  get isLast() {
-    return this.breadCrumbComponent.breadCrumbItems.last === this;
+  isLast = false;
+
+  constructor(
+    @Host() public breadCrumbComponent: BreadcrumbComponent,
+    private _cdRef: ChangeDetectorRef,
+  ) {
   }
 
-  constructor(@Host() public breadCrumbComponent: BreadcrumbComponent) {
+  _detectChange() {
+    this._cdRef.detectChanges();
   }
 }

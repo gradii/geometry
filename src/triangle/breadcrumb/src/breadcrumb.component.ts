@@ -5,6 +5,7 @@
  */
 
 import {
+  AfterViewChecked,
   ChangeDetectionStrategy,
   Component,
   ContentChildren,
@@ -25,7 +26,7 @@ import { BreadcrumbItemComponent } from './breadcrumb-item.component';
     'class': 'tri-breadcrumb'
   }
 })
-export class BreadcrumbComponent {
+export class BreadcrumbComponent implements AfterViewChecked {
 
   @ContentChildren(BreadcrumbItemComponent, {descendants: false})
   breadCrumbItems: QueryList<BreadcrumbItemComponent>;
@@ -37,5 +38,16 @@ export class BreadcrumbComponent {
   @Input() separator = '/';
 
   constructor() {
+  }
+
+  ngAfterViewChecked() {
+    const length = this.breadCrumbItems.length;
+    this.breadCrumbItems.forEach((it, index) => {
+      const isLast = index === length - 1;
+      if (it.isLast != isLast) {
+        it.isLast = isLast;
+        it._detectChange();
+      }
+    });
   }
 }

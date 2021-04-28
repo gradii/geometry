@@ -10,6 +10,7 @@ ng_module(
         ":dev_breadcrumb_scss",
     ],
     deps = [
+        "//src/triangle/button",
         "//src/triangle/icon",
         "//src/triangle/breadcrumb",
         "@npm//@angular/forms",
