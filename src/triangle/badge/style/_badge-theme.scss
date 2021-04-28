@@ -6,13 +6,20 @@
 $badge-prefix-cls  : "#{ v.$tri-prefix}-badge";
 $number-prefix-cls : "#{ v.$tri-prefix}-scroll-number";
 
-@mixin tri-badge-theme($theme) {
-  $primary : map.get($theme, primary);
+@mixin tri-badge-theme() {
+  $primary : theme.$primary;
+  $highlight : theme.$highlight;
+  $success : theme.$success;
+  $error : theme.$error;
+  $warning : theme.$warning;
+  $foreground : theme.$foreground;
+  $normal-color :  map-get($foreground, 'normal-color');
+  $text-color : map-get($foreground, 'text-color');
 
   .#{$badge-prefix-cls} {
 
     @at-root &-count {
-      background : theming.tri-color(theming.tri-palette($theme, highlight));
+      background : theming.tri-color($highlight);
       color      : #fff;
       a,
       a:hover {
@@ -21,32 +28,33 @@ $number-prefix-cls : "#{ v.$tri-prefix}-scroll-number";
     }
 
     @at-root &-dot {
-      background : theming.tri-color(theming.tri-palette($theme, highlight));
+      background : theming.tri-color($highlight);
       box-shadow : 0 0 0 1px #fff;
     }
 
     @at-root &-status {
       @at-root &-success {
-        background-color : theming.tri-color(theming.tri-palette($theme, success));
+        background-color : theming.tri-color($success);
       }
       @at-root &-processing {
-        background-color : theming.tri-color(theming.tri-palette($theme, primary));
+        background-color : theming.tri-color($primary);
         @at-root &:after {
           border : 1px solid theming.tri-color($primary);
         }
       }
       @at-root &-default {
-        background-color : theming.tri-color(theming.tri-palette($theme, normal-color));
+        background-color : $normal-color;
       }
       @at-root &-error {
-        background-color : theming.tri-color(theming.tri-palette($theme, error));
+        background-color : theming.tri-color($error);
       }
       @at-root &-warning {
-        background-color : theming.tri-color(theming.tri-palette($theme, warning));
+        background-color : theming.tri-color($warning);
       }
       @at-root &-text {
-        color : theming.tri-color(theming.tri-palette($theme, text-color));
+        color : $text-color;
       }
     }
   }
+
 }

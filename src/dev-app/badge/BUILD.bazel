@@ -1,0 +1,23 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "badge",
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
+    assets = [
+        "dev-badge.html",
+        ":dev_badge_scss",
+    ],
+    deps = [
+        "//src/triangle/button",
+        "//src/triangle/badge",
+        "@npm//@angular/forms",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_badge_scss",
+    src = "dev-badge.scss",
+)

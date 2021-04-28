@@ -40,6 +40,7 @@ ng_module(
         "//src/dev-app/tooltip",
         "//src/dev-app/popover",
         "//src/dev-app/confirm-popup",
+        "//src/dev-app/badge",
 
         "//src/triangle/core",
         "@npm//@angular/cdk",

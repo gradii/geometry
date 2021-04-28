@@ -12,7 +12,7 @@ $badge-font-size   : v.$font-size-base !default;
   position       : relative;
   display        : inline-block;
   line-height    : 1;
-  vertical-align : middle;
+  vertical-align : middle;  
 
   @at-root &-count {
     position         : absolute;
@@ -115,6 +115,8 @@ $badge-font-size   : v.$font-size-base !default;
     height     : $badge-height;
     > p {
       height : $badge-height;
+      margin : 0;
+      padding: 0;
     }
   }
 }

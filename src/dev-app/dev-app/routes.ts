@@ -110,6 +110,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'confirm-popup',
         loadChildren: '/confirm-popup/dev-confirm-popup.module#DevConfirmPopupModule'
+      },
+      {
+        path        : 'badge',
+        loadChildren: '/badge/dev-badge.module#DevBadgeModule'
       }
     ]
   },
