@@ -35,6 +35,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="popover">popover</a></li>
       <li><a routerLink="confirm-popup">confirm-popup</a></li>
       <li><a routerLink="badge">badge</a></li>
+      <li><a routerLink="breadcrumb">breadcrumb</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>

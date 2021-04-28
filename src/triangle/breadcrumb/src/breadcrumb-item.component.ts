@@ -4,8 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component } from '@angular/core';
-import { BreadCrumbComponent } from './breadcrumb.component';
+import { Component, Host } from '@angular/core';
+import { BreadcrumbComponent } from './breadcrumb.component';
 
 @Component({
   selector: 'tri-breadcrumb-item',
@@ -15,7 +15,7 @@ import { BreadCrumbComponent } from './breadcrumb.component';
     </span>
     <span class="tri-breadcrumb-separator">{{breadCrumbComponent?.separator}}</span>`
 })
-export class BreadCrumbItemComponent {
-  constructor(public breadCrumbComponent: BreadCrumbComponent) {
+export class BreadcrumbItemComponent {
+  constructor(@Host() public breadCrumbComponent: BreadcrumbComponent) {
   }
 }

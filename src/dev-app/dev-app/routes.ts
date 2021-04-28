@@ -114,6 +114,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'badge',
         loadChildren: '/badge/dev-badge.module#DevBadgeModule'
+      },
+      {
+        path        : 'breadcrumb',
+        loadChildren: '/breadcrumb/dev-breadcrumb.module#DevBreadcrumbModule'
       }
     ]
   },

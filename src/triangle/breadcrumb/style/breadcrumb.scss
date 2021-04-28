@@ -1,10 +1,10 @@
-@import "../../core/style/mixins";
-@import "../../core/style/variables";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
 
-$breadcrumb-prefix-cls : "#{$tri-prefix}-breadcrumb";
+$breadcrumb-prefix-cls : "#{v.$tri-prefix}-breadcrumb";
 
 .#{$breadcrumb-prefix-cls} {
-  font-size : $font-size-base;
+  font-size : v.$font-size-base;
 
   a {
     transition : color .3s;

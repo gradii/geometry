@@ -16,7 +16,7 @@ import { Component, HostBinding, Input, ViewEncapsulation } from '@angular/core'
     display: block;
   }`]
 })
-export class BreadCrumbComponent {
+export class BreadcrumbComponent {
   /**
    * Separator
    * 分隔符自定义

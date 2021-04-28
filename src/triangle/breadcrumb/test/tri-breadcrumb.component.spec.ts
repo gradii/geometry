@@ -3,31 +3,31 @@ import { Component } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import {
-  BreadCrumbComponent,
-  BreadCrumbItemComponent,
-  TriBreadCrumbModule
+  BreadcrumbComponent,
+  BreadcrumbItemComponent,
+  TriBreadcrumbModule
 } from '@gradii/triangle/breadcrumb';
 
 describe('breadcrumb', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports     : [TriBreadCrumbModule],
-        declarations: [WithoutBreadCrumb, WithoutBreadCrumbItem, TestBreadCrumb, TestSeparator],
+        imports     : [TriBreadcrumbModule],
+        declarations: [WithoutBreadcrumb, WithoutBreadcrumbItem, TestBreadcrumb, TestSeparator],
         providers   : []
       }).compileComponents();
     })
   );
-  describe('for BreadCrumb', () => {
-    // it('should throw error if BreadCrumb is not defined', () => {
-    //   const fixture = TestBed.createComponent(WithoutBreadCrumb);
+  describe('for Breadcrumb', () => {
+    // it('should throw error if Breadcrumb is not defined', () => {
+    //   const fixture = TestBed.createComponent(WithoutBreadcrumb);
     //   expect(() => fixture.detectChanges()).not.toThrow();
     // });
 
-    it('should apply class if BreadCrumb is defined', () => {
-      const fixture = TestBed.createComponent(TestBreadCrumb);
+    it('should apply class if Breadcrumb is defined', () => {
+      const fixture = TestBed.createComponent(TestBreadcrumb);
       const testComponent = fixture.debugElement.componentInstance;
-      const debugElement = fixture.debugElement.query(By.directive(BreadCrumbComponent));
+      const debugElement = fixture.debugElement.query(By.directive(BreadcrumbComponent));
 
       testComponent._custormString = 'Home';
       fixture.detectChanges();
@@ -44,9 +44,9 @@ describe('breadcrumb', () => {
       }).not.toThrow();
     });
     it('should should not clear previous defined classes', () => {
-      const fixture = TestBed.createComponent(TestBreadCrumb);
+      const fixture = TestBed.createComponent(TestBreadcrumb);
       const testComponent = fixture.debugElement.componentInstance;
-      const debugElement = fixture.debugElement.query(By.directive(BreadCrumbComponent));
+      const debugElement = fixture.debugElement.query(By.directive(BreadcrumbComponent));
 
       debugElement.nativeElement.classList.add('custom-class');
 
@@ -69,7 +69,7 @@ describe('breadcrumb', () => {
     it('should apply class based on separator attribute ', () => {
       const fixture = TestBed.createComponent(TestSeparator);
       const testComponent = fixture.debugElement.componentInstance;
-      const debugElement = fixture.debugElement.query(By.directive(BreadCrumbComponent));
+      const debugElement = fixture.debugElement.query(By.directive(BreadcrumbComponent));
 
       testComponent._separator = '>';
       fixture.detectChanges();
@@ -86,15 +86,15 @@ describe('breadcrumb', () => {
       }).not.toThrow();
     });
   });
-  describe('for BreadCrumbItem', () => {
-    // it('should throw error if BreadCrumbItem is not defined', () => {
-    //   const fixture = TestBed.createComponent(WithoutBreadCrumbItem);
+  describe('for BreadcrumbItem', () => {
+    // it('should throw error if BreadcrumbItem is not defined', () => {
+    //   const fixture = TestBed.createComponent(WithoutBreadcrumbItem);
     //   expect(() => fixture.detectChanges()).not.toThrow();
     // });
     it('should Custom text content', () => {
-      const fixture = TestBed.createComponent(TestBreadCrumb);
+      const fixture = TestBed.createComponent(TestBreadcrumb);
       const testComponent = fixture.debugElement.componentInstance;
-      const debugElement = fixture.debugElement.query(By.directive(BreadCrumbItemComponent));
+      const debugElement = fixture.debugElement.query(By.directive(BreadcrumbItemComponent));
 
       testComponent._custormString = 'Home2';
       fixture.detectChanges();
@@ -115,7 +115,7 @@ describe('breadcrumb', () => {
     <tri-breadcrumb></tri-breadcrumb>
   `
 })
-class WithoutBreadCrumbItem {
+class WithoutBreadcrumbItem {
 }
 
 @Component({
@@ -126,7 +126,7 @@ class WithoutBreadCrumbItem {
     </tri-breadcrumb-item>
   `
 })
-class WithoutBreadCrumb {
+class WithoutBreadcrumb {
 }
 
 @Component({
@@ -142,7 +142,7 @@ class WithoutBreadCrumb {
     </tri-breadcrumb>
   `
 })
-class TestBreadCrumb {
+class TestBreadcrumb {
   _custormString = 'Home';
 }
 
