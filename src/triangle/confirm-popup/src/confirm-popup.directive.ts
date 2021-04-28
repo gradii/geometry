@@ -17,30 +17,78 @@ import { DOCUMENT } from '@angular/common';
 import {
   Directive,
   ElementRef,
+  EventEmitter,
   Inject,
   Input,
   NgZone,
   Optional,
+  Output,
   ViewContainerRef
 } from '@angular/core';
 import { ConfirmPopupComponent } from '@gradii/triangle/confirm-popup';
 import {
-  TRI_POPOVER_DEFAULT_OPTIONS,
-  TRI_POPOVER_SCROLL_STRATEGY
-} from '@gradii/triangle/popover';
+  TRI_CONFIRM_POPUP_DEFAULT_OPTIONS,
+  TRI_CONFIRM_POPUP_SCROLL_STRATEGY
+} from './confirm-popup-common';
 import {
   _TriTooltipBase,
   TriTooltipDefaultOptions
 } from '@gradii/triangle/tooltip';
+import { PopoverDirective } from '@gradii/triangle/popover';
+import { takeUntil, tap } from 'rxjs/operators';
 
 @Directive({
-  selector: '[triConfirmPopup]'
+  selector: '[triConfirmPopup]',
+  exportAs: 'triConfirmPopup',
+  inputs: [
+    'position:triConfirmPopupPosition',
+    'disabled:triConfirmPopupDisabled',
+    'showDelay:triConfirmPopupShowDelay',
+    'hideDelay:triConfirmPopupHideDelay',
+    'touchGestures:triConfirmPopupTouchGestures',
+    'content:triConfirmPopup',
+    'tooltipTrigger:triConfirmPopupTrigger',
+    'tooltipClass:triConfirmPopupClass',
+    'tooltipContext:triConfirmPopupContext',
+    'title:triConfirmPopupTitle',
+  ],
+  host: {
+    'class': 'tri-confirm-popup-trigger'
+  }
 })
-export class ConfirmPopupDirective extends _TriTooltipBase<ConfirmPopupComponent> {
-
-  protected _tooltipPrefix = 'tri-confirm-popup';
+export class ConfirmPopupDirective extends PopoverDirective {
+  _tooltipInstance: ConfirmPopupComponent | null;
 
   protected readonly _tooltipComponent: ComponentType<ConfirmPopupComponent> = ConfirmPopupComponent;
+
+  protected _okText: string;
+
+  @Input()
+  get okText() {
+    return this._okText;
+  }
+
+  set okText(value: string) {
+    this._okText = value;
+    this._updateCancelText();
+  }
+
+  protected _cancelText: string;
+  @Input()
+  get cancelText() {
+    return this._cancelText;
+  }
+
+  set cancelText(value: string) {
+    this._cancelText = value;
+    this._updateCancelText();
+  }
+
+  @Output()
+  onCancel = new EventEmitter();
+
+  @Output()
+  onConfirm = new EventEmitter();
 
   constructor(
     overlay: Overlay,
@@ -51,40 +99,49 @@ export class ConfirmPopupDirective extends _TriTooltipBase<ConfirmPopupComponent
     platform: Platform,
     ariaDescriber: AriaDescriber,
     focusMonitor: FocusMonitor,
-    @Inject(TRI_POPOVER_SCROLL_STRATEGY) scrollStrategy: any,
+    @Inject(TRI_CONFIRM_POPUP_SCROLL_STRATEGY) scrollStrategy: any,
     @Optional() dir: Directionality,
-    @Optional() @Inject(TRI_POPOVER_DEFAULT_OPTIONS) defaultOptions: TriTooltipDefaultOptions,
+    @Optional() @Inject(TRI_CONFIRM_POPUP_DEFAULT_OPTIONS) defaultOptions: TriTooltipDefaultOptions,
     @Inject(DOCUMENT) _document: any) {
 
     super(overlay, elementRef, scrollDispatcher, viewContainerRef, ngZone, platform, ariaDescriber,
       focusMonitor, scrollStrategy, dir, defaultOptions, _document);
   }
 
-  // protected _content: TemplateRef<any>;
-  private _title: string;
-
-  @Input('triPopoverTitle')
-  get title(): string {
-    return this._title;
-  }
-
-  set title(value: string) {
-    this._title = value;
-    this._updateTitle();
-  }
-
   show(delay?: number) {
     super.show(delay);
 
-    if (this._title) {
+    if (this.title) {
       this._updateTitle();
     }
+
+    this._tooltipInstance?.onCancel.pipe(
+      takeUntil(this._destroyed),
+      tap((it) => {
+        this.onCancel.next(it);
+      })
+    ).subscribe();
+
+    this._tooltipInstance?.onConfirm.pipe(
+      takeUntil(this._destroyed),
+      tap((it) => {
+        this.onConfirm.next(it);
+      })
+    ).subscribe();
   }
 
-  _updateTitle() {
+  _updateOkText() {
     if (this._tooltipInstance) {
-      this._tooltipInstance!.title = this._title;
+      this._tooltipInstance!.okText = this.okText;
       this._tooltipInstance!._markForCheck();
     }
   }
+
+  _updateCancelText() {
+    if (this._tooltipInstance) {
+      this._tooltipInstance!.cancelText = this.cancelText;
+      this._tooltipInstance!._markForCheck();
+    }
+  }
+
 }

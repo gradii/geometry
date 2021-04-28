@@ -6,38 +6,28 @@
 
 import { FocusMonitor } from '@angular/cdk/a11y';
 import {
-  BreakpointObserver,
-  Breakpoints,
-  BreakpointState
+  BreakpointObserver
 } from '@angular/cdk/layout';
 import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   NgZone,
   OnDestroy,
+  Output,
   ViewContainerRef,
   ViewEncapsulation
 } from '@angular/core';
 import { FadeAnimation } from '@gradii/triangle/core';
-import { _TriTooltipComponentBase } from '@gradii/triangle/tooltip';
-import {
-  fromEvent as observableFromEvent,
-  merge,
-  Observable,
-  Subscription
-} from 'rxjs';
-import {
-  filter,
-  tap
-} from 'rxjs/operators';
+import { PopoverComponent } from '@gradii/triangle/popover';
 
 @Component({
-  selector     : 'tri-confirm-popup',
+  selector: 'tri-confirm-popup',
   encapsulation: ViewEncapsulation.None,
-  animations   : [FadeAnimation],
-  template     : `
+  animations: [FadeAnimation],
+  template: `
     <div class="tri-popover-content"
          [ngClass]="tooltipClass"
          [class.tri-popover-handset]="(_isHandset | async)?.matches"
@@ -53,6 +43,14 @@ import {
                        [stringTemplateOutletContext]="tooltipContext">
             {{content}}
           </ng-template>
+
+          <div class="tri-popover-buttons">
+              <button tri-button [size]="'small'" (click)="_onCancel()">
+                  <span>{{cancelText}}</span></button>
+              <button tri-button [size]="'small'" [color]="'primary'"
+                      (click)="_onConfirm()">
+                  <span>{{okText}}</span></button>
+          </div>
         </div>
       </div>
     </div>
@@ -95,16 +93,20 @@ import {
             </div>
         </div>
     </ng-template>-->`,
-  styleUrls    : ['../style/confirm-popup.css']
+  styleUrls: ['../style/confirm-popup.css']
 })
-export class ConfirmPopupComponent extends _TriTooltipComponentBase implements OnDestroy {
-
-  _isHandset: Observable<BreakpointState> = this._breakpointObserver.observe(Breakpoints.Handset);
-
-  protected _subscriptions: Subscription[] = [];
+export class ConfirmPopupComponent extends PopoverComponent implements OnDestroy {
+  @Input()
+  cancelText: string = 'cancel';
 
   @Input()
-  title: string;
+  okText: string = 'ok';
+
+  @Output()
+  onCancel = new EventEmitter()
+
+  @Output()
+  onConfirm = new EventEmitter()
 
   constructor(
     protected _changeDetectorRef: ChangeDetectorRef,
@@ -114,54 +116,25 @@ export class ConfirmPopupComponent extends _TriTooltipComponentBase implements O
     protected _breakpointObserver: BreakpointObserver,
     protected _viewContainerRef: ViewContainerRef) {
 
-    super(_changeDetectorRef);
-
-    _ngZone.runOutsideAngular(() => {
-      this._subscriptions.push(
-        merge(
-          observableFromEvent(_elementRef.nativeElement, 'mousemove'),
-          _focusMonitor.monitor(_elementRef).pipe(filter((origin) => !!origin))
-        ).pipe(
-          tap(() => {
-            if (this._hideTimeoutId) {
-              _ngZone.run(() => {
-                this.show(0);
-              });
-              this._hideTimeoutId = undefined;
-            }
-          })
-        ).subscribe()
-      );
-    });
-
-    this._subscriptions.push(
-      observableFromEvent(_elementRef.nativeElement, 'mouseleave')
-        .pipe(
-          tap(() => {
-            this.hide(0);
-          })
-        ).subscribe()
+    super(
+      _changeDetectorRef,
+      _elementRef,
+      _ngZone,
+      _focusMonitor,
+      _breakpointObserver,
+      _viewContainerRef,
     );
   }
 
-  _handleBodyInteraction(event?: MouseEvent): void {
-    if (this._elementRef.nativeElement.contains(event?.target)) {
-      return;
-    }
-    if (this._closeOnInteraction) {
-      this.hide(0);
-    }
+  _onCancel() {
+    this.onCancel.next();
+    this.hide(0)
   }
 
-  ngOnDestroy() {
-    clearTimeout(this._showTimeoutId);
-    clearTimeout(this._hideTimeoutId);
-    if (this._subscriptions) {
-      this._subscriptions.forEach(it => it.unsubscribe());
-    }
-    this._onHide.complete();
+  _onConfirm() {
+    this.onConfirm.next();
+    this.hide(0)
   }
-
 
   // _prefix = 'tri-popover-placement';
   // _trigger = 'click';

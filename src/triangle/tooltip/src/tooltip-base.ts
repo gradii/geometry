@@ -242,7 +242,7 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
   private _touchstartTimeout: number;
 
   /** Emits when the component is destroyed. */
-  private readonly _destroyed = new Subject<void>();
+  protected readonly _destroyed = new Subject<void>();
 
   constructor(
     private _overlay: Overlay,

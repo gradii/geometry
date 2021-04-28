@@ -16,14 +16,18 @@ import { MessageService } from '@gradii/triangle/message';
 @Component({
   selector: 'tri-demo-confirm-popup-locale',
   template: `
-    <tri-confirm-popup
+    <!-- <tri-confirm-popup
       [title]="'Are you sure？'"
       [okText]="'ok'"
       [cancelText]="'cancel'"
       (onConfirm)="confirm()"
-      (onCancel)="cancel()">
-      <a tri-confirm-popup>delete</a>
-    </tri-confirm-popup>
+      (onCancel)="cancel()"> -->
+      <a triConfirmPopup="Are you sure？"
+         
+         (onConfirm)="confirm()"
+         (onCancel)="cancel()"
+         >delete</a>
+    <!-- </tri-confirm-popup> -->
   `
 })
 export class TriDemoConfirmPopupLocalComponent implements OnInit {

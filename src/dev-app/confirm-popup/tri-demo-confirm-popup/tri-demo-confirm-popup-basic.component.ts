@@ -15,10 +15,10 @@ import { MessageService } from '@gradii/triangle/message';
  */
 @Component({
   selector: 'tri-demo-confirm-popup-basic',
-  template: `
-              <tri-confirm-popup [title]="'确定要删除这个任务吗？'" (onConfirm)="confirm()" (onCancel)="cancel()">
-                <a tri-confirm-popup>删除</a>
-              </tri-confirm-popup>
+  template: `<a triConfirmPopup="确定要删除这个任务吗？"
+                (onConfirm)="confirm()" 
+                (onCancel)="cancel()"
+            >删除</a>
             `
 })
 export class TriDemoConfirmPopupBasicComponent implements OnInit {

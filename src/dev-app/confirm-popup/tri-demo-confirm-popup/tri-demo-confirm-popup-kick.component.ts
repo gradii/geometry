@@ -16,9 +16,11 @@ import { MessageService } from '@gradii/triangle/message';
 @Component({
   selector: 'tri-demo-confirm-popup-kick',
   template: `
-              <tri-confirm-popup [title]="'确定要删除这个任务吗？'" [condition]="switchValue" (onConfirm)="confirm()" (onCancel)="cancel()">
-                <a tri-confirm-popup>删除某任务</a>
-              </tri-confirm-popup>
+              <!-- <tri-confirm-popup [title]="'确定要删除这个任务吗？'" [condition]="switchValue" (onConfirm)="confirm()" (onCancel)="cancel()"> -->
+                <a triConfirmPopup="确定要删除这个任务吗？"
+                   (onConfirm)="confirm()" (onCancel)="cancel()"
+                >删除某任务</a>
+              <!-- </tri-confirm-popup> -->
               <br>
               <br>
               点击是否直接执行

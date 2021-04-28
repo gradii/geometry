@@ -5,12 +5,14 @@
  */
 
 import { OverlayModule } from '@angular/cdk/overlay';
+import { CdkScrollableModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TriButtonModule } from '@gradii/triangle/button';
 import { TriCommonModule } from '@gradii/triangle/core';
 import { TriI18nModule } from '@gradii/triangle/i18n';
-import { TriTooltipModule } from '@gradii/triangle/tooltip';
+import { TriPopoverModule } from '@gradii/triangle/popover';
+import { TRI_CONFIRM_POPUP_SCROLL_STRATEGY_FACTORY_PROVIDER } from './confirm-popup-common';
 import { ConfirmPopupComponent } from './confirm-popup.component';
 import { ConfirmPopupDirective } from './confirm-popup.directive';
 
@@ -36,9 +38,22 @@ import { ConfirmPopupDirective } from './confirm-popup.directive';
  *
  */
 @NgModule({
-  imports     : [CommonModule, TriButtonModule, OverlayModule, TriI18nModule, TriCommonModule, TriTooltipModule],
+  imports: [
+    CommonModule,
+    TriButtonModule,
+    OverlayModule,
+    TriI18nModule,
+    TriCommonModule,
+    TriPopoverModule
+  ],
   declarations: [ConfirmPopupComponent, ConfirmPopupDirective],
-  exports     : [ConfirmPopupComponent, ConfirmPopupDirective],
+  exports: [
+    ConfirmPopupComponent,
+    ConfirmPopupDirective,
+    TriCommonModule,
+    CdkScrollableModule
+  ],
+  providers   : [TRI_CONFIRM_POPUP_SCROLL_STRATEGY_FACTORY_PROVIDER]
 })
 export class TriConfirmPopupModule {
 }

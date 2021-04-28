@@ -17,78 +17,92 @@ import { MessageService } from '@gradii/triangle/message';
   selector: 'tri-demo-confirm-popup-location',
   template: `
     <div style="margin-left: 60px">
-      <tri-confirm-popup [title]="'确定要删除这个任务吗？'" (onConfirm)="confirm()" (onCancel)="cancel()"
-                         [placement]="'topLeft'">
-        <button triConfirmPopup triButton class="ant-btn">上左</button>
-      </tri-confirm-popup>
-      <tri-confirm-popup [title]="'确定要删除这个任务吗？'" (onConfirm)="confirm()" (onCancel)="cancel()"
-                         [placement]="'top'">
-        <button triConfirmPopup triButton class="ant-btn">上边</button>
-      </tri-confirm-popup>
-      <tri-confirm-popup [title]="'确定要删除这个任务吗？'" (onConfirm)="confirm()" (onCancel)="cancel()"
-                         [placement]="'topRight'">
-        <button triConfirmPopup triButton class="ant-btn">上右</button>
-      </tri-confirm-popup>
+      <button triConfirmPopup="确定要删除这个任务吗？"
+              triConfirmPopupPosition="topLeft"
+              triButton
+              (onConfirm)="confirm()" 
+              (onCancel)="cancel()"
+              class="ant-btn">上左</button> 
+      
+      <button triConfirmPopup="确定要删除这个任务吗？"
+              triConfirmPopupPosition="top"
+              triButton
+              (onConfirm)="confirm()" 
+              (onCancel)="cancel()"
+              class="ant-btn">上边</button>
+
+      <button triConfirmPopup="确定要删除这个任务吗？"
+              triConfirmPopupPosition="topRight"
+              triButton
+              (onConfirm)="confirm()" 
+              (onCancel)="cancel()"
+              class="ant-btn">上右</button>
     </div>
     <div style="width: 60px; float: left;">
-      <tri-confirm-popup [title]="'确定要删除这个任务吗？'" (onConfirm)="confirm()" (onCancel)="cancel()"
-                         [placement]="'leftTop'">
-        <button triConfirmPopup triButton class="ant-btn">左上</button>
-      </tri-confirm-popup>
-      <tri-confirm-popup [title]="'确定要删除这个任务吗？'" (onConfirm)="confirm()" (onCancel)="cancel()"
-                         [placement]="'left'">
-        <button triConfirmPopup triButton class="ant-btn">左边</button>
-      </tri-confirm-popup>
-      <tri-confirm-popup [title]="'确定要删除这个任务吗？'" (onConfirm)="confirm()" (onCancel)="cancel()"
-                         [placement]="'leftBottom'">
-        <button triConfirmPopup triButton class="ant-btn">左下</button>
-      </tri-confirm-popup>
+      <button triConfirmPopup="确定要删除这个任务吗？"
+              triConfirmPopupPosition="leftTop"
+              triButton
+              (onConfirm)="confirm()" 
+              (onCancel)="cancel()"
+              class="ant-btn">左上</button> 
+      
+      <button triConfirmPopup="确定要删除这个任务吗？"
+              triConfirmPopupPosition="left"
+              triButton
+              (onConfirm)="confirm()" 
+              (onCancel)="cancel()"
+              class="ant-btn">左边</button>
+
+      <button triConfirmPopup="确定要删除这个任务吗？"
+              triConfirmPopupPosition="leftBottom"
+              triButton
+              (onConfirm)="confirm()" 
+              (onCancel)="cancel()"
+              class="ant-btn">左下</button>
     </div>
     <div style="width: 60px; margin-left: 252px;">
-      <tri-confirm-popup [title]="'确定要删除这个任务吗？'" (onConfirm)="confirm()" (onCancel)="cancel()"
-                         [placement]="'rightTop'">
-        <button triConfirmPopup
-                triButton
-                class="ant-btn">右上
-        </button>
-      </tri-confirm-popup>
-      <tri-confirm-popup [title]="'确定要删除这个任务吗？'" (onConfirm)="confirm()" (onCancel)="cancel()"
-                         [placement]="'right'">
-        <button triConfirmPopup
-                triButton
-                class="ant-btn">右边
-        </button>
-      </tri-confirm-popup>
-      <tri-confirm-popup [title]="'确定要删除这个任务吗？'" (onConfirm)="confirm()" (onCancel)="cancel()"
-                         [placement]="'rightBottom'">
-        <button triConfirmPopup
-                triButton
-                class="ant-btn">右下
-        </button>
-      </tri-confirm-popup>
+      <button triConfirmPopup="确定要删除这个任务吗？"
+              triConfirmPopupPosition="rightTop"
+              triButton
+              (onConfirm)="confirm()" 
+              (onCancel)="cancel()"
+              class="ant-btn">右上</button> 
+      
+      <button triConfirmPopup="确定要删除这个任务吗？"
+              triConfirmPopupPosition="right"
+              triButton
+              (onConfirm)="confirm()" 
+              (onCancel)="cancel()"
+              class="ant-btn">右边</button>
+
+      <button triConfirmPopup="确定要删除这个任务吗？"
+              triConfirmPopupPosition="rightBottom"
+              triButton
+              (onConfirm)="confirm()" 
+              (onCancel)="cancel()"
+              class="ant-btn">右下</button>
     </div>
     <div style="margin-left: 60px; clear: both;">
-      <tri-confirm-popup [title]="'确定要删除这个任务吗？'" (onConfirm)="confirm()" (onCancel)="cancel()"
-                         [placement]="'bottomLeft'">
-        <button triConfirmPopup
-                triButton
-                class="ant-btn">下左
-        </button>
-      </tri-confirm-popup>
-      <tri-confirm-popup [title]="'确定要删除这个任务吗？'" (onConfirm)="confirm()" (onCancel)="cancel()"
-                         [placement]="'bottom'">
-        <button triConfirmPopup
-                triButton
-                class="ant-btn">下边
-        </button>
-      </tri-confirm-popup>
-      <tri-confirm-popup [title]="'确定要删除这个任务吗？'" (onConfirm)="confirm()" (onCancel)="cancel()"
-                         [placement]="'bottomRight'">
-        <button triConfirmPopup
-                triButton
-                class="ant-btn">下右
-        </button>
-      </tri-confirm-popup>
+      <button triConfirmPopup="确定要删除这个任务吗？"
+              triConfirmPopupPosition="bottomLeft"
+              triButton
+              (onConfirm)="confirm()" 
+              (onCancel)="cancel()"
+              class="ant-btn">下左</button> 
+      
+      <button triConfirmPopup="确定要删除这个任务吗？"
+              triConfirmPopupPosition="bottom"
+              triButton
+              (onConfirm)="confirm()" 
+              (onCancel)="cancel()"
+              class="ant-btn">下边</button>
+
+      <button triConfirmPopup="确定要删除这个任务吗？"
+              triConfirmPopupPosition="bottomRight"
+              triButton
+              (onConfirm)="confirm()" 
+              (onCancel)="cancel()"
+              class="ant-btn">下右</button>
     </div>
   `,
   styles  : [
