@@ -115,15 +115,15 @@ export class ConfirmPopupDirective extends PopoverDirective {
       this._updateTitle();
     }
 
-    this._tooltipInstance?.onCancel.pipe(
-      takeUntil(this._destroyed),
+    this._tooltipInstance!.onCancel.pipe(
+      takeUntil(this._tooltipInstance!.afterHidden()),
       tap((it) => {
         this.onCancel.next(it);
       })
     ).subscribe();
 
-    this._tooltipInstance?.onConfirm.pipe(
-      takeUntil(this._destroyed),
+    this._tooltipInstance!.onConfirm.pipe(
+      takeUntil(this._tooltipInstance!.afterHidden()),
       tap((it) => {
         this.onConfirm.next(it);
       })

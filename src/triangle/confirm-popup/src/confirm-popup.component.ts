@@ -25,7 +25,7 @@ import { PopoverComponent } from '@gradii/triangle/popover';
 
 @Component({
   selector: 'tri-confirm-popup',
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.Emulated,
   animations: [FadeAnimation],
   template: `
     <div class="tri-popover-content"

@@ -47,6 +47,14 @@ $popover-distance    : $popover-arrow-width - 0.0625rem + 0.25rem !default;
     padding : 8px 16px;
   }
 
+  @at-root &-buttons {
+    text-align: right;
+    margin-bottom: 8px;
+    button {
+      margin-left: 8px;
+    }
+  }
+
 }
 
 

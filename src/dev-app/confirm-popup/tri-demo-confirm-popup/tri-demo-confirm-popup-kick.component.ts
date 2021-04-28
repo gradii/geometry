@@ -24,7 +24,9 @@ import { MessageService } from '@gradii/triangle/message';
               <br>
               <br>
               点击是否直接执行
-              <tri-switch [(ngModel)]="switchValue"></tri-switch>
+              <tri-switch
+               ngDefaultControl
+               [(ngModel)]="switchValue"></tri-switch>
             `
 })
 export class TriDemoConfirmPopupKickComponent implements OnInit {
