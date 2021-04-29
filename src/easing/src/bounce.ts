@@ -57,7 +57,7 @@ export class BounceOut {
 export class BounceInOut {
 
   public getRatio(p: number): number {
-    let invert: boolean;
+    let invert: boolean = false;
     if (p < 0.5) {
       invert = true;
       p = 1 - (p * 2);
