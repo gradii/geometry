@@ -1,0 +1,32 @@
+load("@npm//scss-bundle:index.bzl", "scss_bundle")
+load(
+    "//src/diagram:config.bzl",
+    "DIAGRAM_ENTRYPOINTS",
+    "DIAGRAM_SCSS_LIBS",
+    "DIAGRAM_TARGETS",
+)
+load("//tools:defaults.bzl", "ng_package", "ts_library")
+
+package(default_visibility = ["//visibility:public"])
+
+ts_library(
+    name = "diagram",
+    srcs = ["index.ts"],
+    module_name = "@gradii/diagram",
+)
+
+# Creates the @angular/material package published to npm.
+ng_package(
+    name = "npm_package",
+    srcs = [
+        "package.json",
+    ],
+    data = [
+        ":README.md"
+    ] + DIAGRAM_SCSS_LIBS,
+    entry_point = ":index.ts",
+    entry_point_name = "diagram",
+    nested_packages = [],
+    tags = ["release-package"],
+    deps = DIAGRAM_TARGETS,
+)

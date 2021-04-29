@@ -1,0 +1,20 @@
+// Configuration for IDEs only.
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "..",
+    "baseUrl": ".",
+    "paths": {
+      "@gradii/check-type": [
+        "../check-type"
+      ],
+      "@gradii/triangle": [
+        "../triangle"
+      ],
+      "@gradii/triangle/*": [
+        "../triangle/*"
+      ]
+    }
+  },
+  "include": ["./**/*.ts", "./dev-mode-types.d.ts"]
+}

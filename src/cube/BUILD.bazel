@@ -1,0 +1,47 @@
+load("@npm//scss-bundle:index.bzl", "scss_bundle")
+load(
+    "//src/cube:config.bzl",
+    "CUBE_ENTRYPOINTS",
+    "CUBE_SCSS_LIBS",
+    "CUBE_TARGETS",
+)
+load("//tools:defaults.bzl", "ng_package", "ts_library")
+
+package(default_visibility = ["//visibility:public"])
+
+ts_library(
+    name = "cube",
+    srcs = ["index.ts"],
+    module_name = "@gradii/cube",
+)
+
+ng_package(
+    name = "npm_package",
+    srcs = [
+        "package.json",
+    ],
+    data = [
+        #        "//src/cube/core:theming_scss_lib",
+        #        "//src/cube/prebuilt-themes:deeppurple-amber",
+        #        "//src/cube/prebuilt-themes:indigo-pink",
+        #        "//src/cube/prebuilt-themes:pink-bluegrey",
+        #        "//src/cube/prebuilt-themes:purple-green",
+    ] + CUBE_SCSS_LIBS,
+    entry_point = ":index.ts",
+    nested_packages = [],
+    tags = ["release-package"],
+    deps = CUBE_TARGETS,
+)
+
+filegroup(
+    name = "overviews",
+    # Only secondary entry-points declare overview files currently. Entry-points
+    # which contain a slash are not in the top-level and do not have an overview.
+    srcs = ["//src/cube/%s:overview" % ep for ep in CUBE_ENTRYPOINTS if not "/" in ep],
+)
+
+
+ts_library(
+    name = "dev_mode_types",
+    srcs = ["dev-mode-types.d.ts"],
+)
