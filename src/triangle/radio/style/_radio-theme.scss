@@ -67,7 +67,7 @@ $radio-button-color      : button-theme.$btn-default-color !default;
     }
 
     @at-root & + span {
-      color : theming.tri-color($background, disabled-color) ;
+      color : theming.tri-color($foreground, disabled-color) ;
     }
   }
 

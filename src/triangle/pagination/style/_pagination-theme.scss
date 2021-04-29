@@ -50,7 +50,7 @@ $pagination-prefix-cls : "#{ v.$tri-prefix}-pagination";
     @at-root &-jump-prev,
     &-jump-next {
       @at-root &:after {
-        color : theming.tri-color($background, disabled-color);
+        color : theming.tri-color($foreground, disabled-color);
       }
     }
 
@@ -83,13 +83,13 @@ $pagination-prefix-cls : "#{ v.$tri-prefix}-pagination";
       @at-root &:hover {
         border-color : theming.tri-color($foreground, border-color-base);
         a {
-          color  : theming.tri-color($background, disabled-color);
+          color  : theming.tri-color($foreground, disabled-color);
           cursor : not-allowed;
         }
       }
       cursor : not-allowed;
       a {
-        color : theming.tri-color($background, disabled-color);
+        color : theming.tri-color($foreground, disabled-color);
       }
     }
 

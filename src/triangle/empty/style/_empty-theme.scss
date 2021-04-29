@@ -10,11 +10,11 @@ $empty-prefix-cls : #{ v.$tri-prefix}-empty;
   .#{$empty-prefix-cls} {
     // antd internal empty style
     &-normal {
-      color : theming.tri-color($background, disabled-color);
+      color : theming.tri-color($foreground, disabled-color);
     }
 
     &-small {
-      color : theming.tri-color($background, disabled-color);
+      color : theming.tri-color($foreground, disabled-color);
     }
   }
 }

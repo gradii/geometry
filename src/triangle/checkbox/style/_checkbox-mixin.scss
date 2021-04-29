@@ -103,7 +103,7 @@
   }
 
   .#{$checkbox-prefix-cls}-indeterminate.#{$checkbox-prefix-cls}-disabled .#{$checkbox-inner-prefix-cls}::after {
-    border-color : theming.tri-color($background, disabled-color);
+    border-color : theming.tri-color($foreground, disabled-color);
   }
 
   // 选中状态
@@ -136,7 +136,7 @@
     @at-root &.#{$checkbox-prefix-cls}-checked {
       .#{$checkbox-inner-prefix-cls}::after {
         animation-name : none;
-        border-color   : theming.tri-color($background, disabled-color);
+        border-color   : theming.tri-color($foreground, disabled-color);
       }
     }
 
@@ -154,7 +154,7 @@
     }
 
     @at-root & + span {
-      color  : theming.tri-color($background, disabled-color);
+      color  : theming.tri-color($foreground, disabled-color);
       cursor : not-allowed;
     }
   }
