@@ -15,7 +15,7 @@ import {
  * @title breadcrumb-basic
  */
 @Component({
-  selector       : 'tri-demo-breadcrumb-basic',
+  selector       : 'tri-demo-breadcrumb-loop',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template       : `
     <tri-breadcrumb>
@@ -30,7 +30,6 @@ import {
             {{it.label}}
           </ng-template>
         </ng-container>
-
       </tri-breadcrumb-item>
     </tri-breadcrumb>
 

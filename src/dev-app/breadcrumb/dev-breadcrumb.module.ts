@@ -24,10 +24,10 @@ import { TriDemoBreadcrumbSeparatorComponent } from './tri-demo-breadcrumb/tri-d
     RouterModule.forChild([
       {
         path: '', component: DevBreadcrumbComponent, children: [
-          {path: 'tri-demo-breadcrumb-basic', component: TriDemoBreadcrumbBasicComponent},
-          {path: 'tri-demo-breadcrumb-icon', component: TriDemoBreadcrumbIconComponent},
-          {path: 'tri-demo-breadcrumb-loop', component: TriDemoBreadcrumbLoopComponent},
-          {path: 'tri-demo-breadcrumb-separator', component: TriDemoBreadcrumbSeparatorComponent},
+          { path: 'tri-demo-breadcrumb-basic', component: TriDemoBreadcrumbBasicComponent },
+          { path: 'tri-demo-breadcrumb-icon', component: TriDemoBreadcrumbIconComponent },
+          { path: 'tri-demo-breadcrumb-loop', component: TriDemoBreadcrumbLoopComponent },
+          { path: 'tri-demo-breadcrumb-separator', component: TriDemoBreadcrumbSeparatorComponent },
         ]
       }
     ]),
@@ -40,7 +40,8 @@ import { TriDemoBreadcrumbSeparatorComponent } from './tri-demo-breadcrumb/tri-d
     TriDemoBreadcrumbBasicComponent,
     TriDemoBreadcrumbIconComponent,
     TriDemoBreadcrumbLoopComponent,
-    TriDemoBreadcrumbSeparatorComponent
+    TriDemoBreadcrumbSeparatorComponent,
+
   ]
 })
 export class DevBreadcrumbModule {
