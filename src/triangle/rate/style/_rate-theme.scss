@@ -3,7 +3,7 @@
 
 $rate-prefix-cls : #{v.$tri-prefix}-rate;
 
-@mixin tri-rate-theme($theme) {
+@mixin tri-rate-theme() {
   // Rate
   // ---
   $rate-star-color : #f5a623 !default;

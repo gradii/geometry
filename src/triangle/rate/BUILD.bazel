@@ -19,9 +19,7 @@ ng_module(
     assets = [":style/rate.css"] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/rate",
     deps = [
-        "//src/triangle/core",
-        "//src/triangle/i18n",
-        "//src/triangle/util",
+        "//src/triangle/icon",
         "@npm//@angular/animations",
         "@npm//@angular/cdk",
         "@npm//@angular/common",

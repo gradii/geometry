@@ -118,6 +118,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'breadcrumb',
         loadChildren: '/breadcrumb/dev-breadcrumb.module#DevBreadcrumbModule'
+      },
+      {
+        path        : 'rate',
+        loadChildren: '/rate/dev-rate.module#DevRateModule'
       }
     ]
   },

@@ -1,7 +1,8 @@
-@import "../../core/style/mixins";
-@import "../../core/style/variables";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
+@use "../../core/themes/theme";
 
-$rate-prefix-cls : "#{$tri-prefix}-rate";
+$rate-prefix-cls : "#{v.$tri-prefix}-rate";
 
 .#{$rate-prefix-cls} {
   margin         : 0;
@@ -56,6 +57,6 @@ $rate-prefix-cls : "#{$tri-prefix}-rate";
     margin-left    : 8px;
     vertical-align : middle;
     display        : inline-block;
-    font-size      : $font-size-base;
+    font-size      : v.$font-size-base;
   }
 }

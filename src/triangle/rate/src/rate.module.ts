@@ -6,7 +6,8 @@
 
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { RateComponent } from './rate.component';
+import { TriIconModule } from '@gradii/triangle/icon';
+import { RateComponent, _RateStarItemComponent } from './rate.component';
 
 /**
  *
@@ -26,9 +27,9 @@ import { RateComponent } from './rate.component';
  * <!-- example(tri-demo-rate-disabled) -->
  */
 @NgModule({
+  imports     : [CommonModule, TriIconModule],
+  declarations: [RateComponent, _RateStarItemComponent],
   exports     : [RateComponent],
-  declarations: [RateComponent],
-  imports     : [CommonModule]
 })
 export class TriRateModule {
 }

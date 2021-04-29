@@ -4,49 +4,106 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, forwardRef, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive, ElementRef, EventEmitter, forwardRef, Input, NgZone, OnInit, Output, ViewEncapsulation, ɵmarkDirty } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { fromEvent, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { clamp } from '@gradii/triangle/util';
+import { LEFT_ARROW, RIGHT_ARROW } from '@angular/cdk/keycodes';
+
 
 @Component({
-  selector           : 'tri-rate',
-  encapsulation      : ViewEncapsulation.None,
-  template           : `
-    <ul class="tri-rate"
-        [class.tri-rate-disabled]="_disabled"
-        (mouseleave)="_leaveRate($event)">
-      <li *ngFor="let star of _starArray; let i = index"
+  selector: 'rate-star-item',
+  template: `
+     <div class="tri-rate-star-first" (mouseover)="_hoverRate($event)"
+             (click)="_clickRate($event)">
+          <tri-icon svgIcon="fill:star"></tri-icon>
+        </div>
+        <div class="tri-rate-star-second" (mouseover)="_hoverRate($event, true)"
+             (click)="_clickRate($event, true)">
+             <tri-icon svgIcon="fill:star"></tri-icon>
+        </div>
+  `,
+  host: {
+    '(mouseover)': '_hoverRate($event, true)',
+    '(click)': '_clickRate($event, true)'
+  }
+})
+export class _RateStarItemComponent {
+  @Input('rateStarItemIndex')
+  index = -1;
+
+  @Output()
+  onHoverRate = new EventEmitter();
+
+  @Output()
+  onClickRate = new EventEmitter();
+
+
+  constructor(
+  ) {
+    // const element = this._elementRef.nativeElement;
+    // _ngZone.runOutsideAngular(() => {
+    //   fromEvent(element, 'mousemove').pipe(
+    //     takeUntil(this.destroy$),
+
+    //   ).subscribe()
+    // })
+
+  }
+
+  _clickRate(e: any, isFull = false): void {
+    e.stopPropagation();
+    this.onClickRate.emit({ index: this.index, isFull });
+  }
+
+  _hoverRate(e: any, isFull = false) {
+    e.stopPropagation();
+    this.onHoverRate.emit({ index: this.index, isFull });
+  }
+
+}
+
+@Component({
+  selector: 'tri-rate',
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+      <rate-star-item *ngFor="let star of _starArray; let i = index"
           class="tri-rate-star"
+          [rateStarItemIndex]="i"
+          (onHoverRate)="_onHoverRate($event)"
+          (onClickRate)="_onClickRate($event)"
           [class.tri-rate-star-full]="i + 1 < _hoverValue || (!_hasHalf && i + 1 === _hoverValue)"
           [class.tri-rate-star-half]="_hasHalf && i + 1 === _hoverValue"
           [class.tri-rate-star-active]="_hasHalf && i + 1 === _hoverValue"
           [class.tri-rate-star-zero]=" i + 1 > _hoverValue"
-
-          (mouseover)="_hoverRate($event, i, true)"
-          (click)="_clickRate($event, i, true)">
-        <div class="tri-rate-star-first" (mouseover)="_hoverRate($event, i)"
-             (click)="_clickRate($event, i)">
-          <i class="anticon anticon-star"></i></div>
-        <div class="tri-rate-star-second" (mouseover)="_hoverRate($event, i, true)"
-             (click)="_clickRate($event, i, true)">
-          <i class="anticon anticon-star"></i></div>
-      </li>
-    </ul>
+        >
+      </rate-star-item>
   `,
-  providers          : [
+  styleUrls: ['../style/rate.css'],
+  host: {
+    'class': 'tri-rate',
+    '[class.tri-rate-disabled]': 'disabled',
+    '[tabindex]': "disabled ? -1 : 0",
+    '(keydown)': "onKeyDown($event)",
+    '(mouseleave)': "_leaveRate($event)"
+  },
+  providers: [
     {
-      provide    : NG_VALUE_ACCESSOR,
+      provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => RateComponent),
-      multi      : true
+      multi: true
     }
   ]
 })
 export class RateComponent implements OnInit, ControlValueAccessor {
-  _prefixCls = 'tri-rate';
   _classMap: any;
   _starArray: Array<any> = new Array();
   _hoverValue = 0; // 鼠标悬浮时的星数，为正整数，和_hasHalf配合使用
   _hasHalf = false;
-  _floatReg: any = /^\d+(\.\d+)?$/;
+
+  _floatReg: any = /^\d+(\.\d+)$/;
   // ngModel Access
   onChange: any = Function.prototype;
   onTouched: any = Function.prototype;
@@ -65,6 +122,8 @@ export class RateComponent implements OnInit, ControlValueAccessor {
 
   _value = 0;
 
+
+  @Input()
   /**
    * Get value
    * 获取值
@@ -79,13 +138,16 @@ export class RateComponent implements OnInit, ControlValueAccessor {
    * @param  value
    */
   set value(value: number) {
+    value = clamp(value, 0, this._count)
     if (this._value === value) {
       return;
     }
     this._value = value;
-    if (this._floatReg.test(value)) {
+    if (this._floatReg.test(`${value}`)) {
       value += 0.5;
       this._hasHalf = true;
+    } else {
+      this._hasHalf = false;
     }
     this._hoverValue = value;
   }
@@ -98,12 +160,8 @@ export class RateComponent implements OnInit, ControlValueAccessor {
    * @param  value
    */
   @Input()
-  set allowHalf(value: boolean | string) {
-    if (value === '') {
-      this._allowHalf = true;
-    } else {
-      this._allowHalf = value as boolean;
-    }
+  set allowHalf(value: boolean) {
+    this._allowHalf = value as boolean;
   }
 
   _disabled = false;
@@ -119,28 +177,6 @@ export class RateComponent implements OnInit, ControlValueAccessor {
     // this.setClassMap();
   }
 
-  /**
-   * Set default value
-   * 设置默认值
-   * @param  value
-   */
-  @Input()
-  set defaultValue(value: number) {
-    this._value = value;
-    if (this._floatReg.test(value)) {
-      value += 0.5;
-      this._hasHalf = true;
-    }
-    this._hoverValue = value;
-  }
-
-  // setClassMap(): void {
-  //   this._classMap = {
-  //     [this._prefixCls]              : true,
-  //     [`${this._prefixCls}-disabled`]: this._disabled
-  //   };
-  // }
-
   setChildrenClassMap(): void {
     let index = 0;
     while (index < this._count) {
@@ -148,8 +184,24 @@ export class RateComponent implements OnInit, ControlValueAccessor {
     }
   }
 
-  _clickRate(e: any, index: number, isFull = false): void {
-    e.stopPropagation();
+
+  onKeyDown(e: KeyboardEvent): void {
+    const oldVal = this.value;
+
+    if (e.keyCode === RIGHT_ARROW) {
+      this.value += this._allowHalf ? 0.5 : 1;
+    } else if (e.keyCode === LEFT_ARROW) {
+      this.value -= this._allowHalf ? 0.5 : 1;
+    }
+
+    if (oldVal !== this.value) {
+      this.onChange(this.value);
+
+      ɵmarkDirty(this);
+    }
+  }
+
+  _onClickRate({ index, isFull }: { index: number, isFull: boolean }): void {
     if (this._disabled) {
       return;
     }
@@ -161,8 +213,7 @@ export class RateComponent implements OnInit, ControlValueAccessor {
     this.onChange(this._value);
   }
 
-  _hoverRate(e: any, index: number, isFull = false): void {
-    e.stopPropagation();
+  _onHoverRate({ index, isFull }: { index: number, isFull: boolean }): void {
     if (this._disabled) {
       return;
     }
@@ -182,12 +233,15 @@ export class RateComponent implements OnInit, ControlValueAccessor {
     if (this._floatReg.test(oldVal)) {
       oldVal += 0.5;
       this._hasHalf = true;
+    }else{
+      this._hasHalf = false;
     }
     this._hoverValue = oldVal;
   }
 
   writeValue(value: any): void {
-    this.value = value;
+    this.value = +value;
+    ɵmarkDirty(this);
   }
 
   registerOnChange(fn: (_: any) => {}): void {
