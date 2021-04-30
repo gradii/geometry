@@ -10,6 +10,7 @@ import {
   NgModule
 } from '@angular/core';
 import { TriPseudoCheckboxModule } from '@gradii/triangle/core';
+import { TriIconModule } from '@gradii/triangle/icon';
 
 import { TreeLoadingComponent } from './components/tree-loading/tree-loading.component';
 import { TreeNodeChildrenComponent } from './components/tree-node-children/tree-node-children.component';
@@ -27,11 +28,12 @@ import { VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA } from './services/tree-virtual-scroll
 
 
 @NgModule({
-  imports     : [
-    CommonModule,
+    imports: [
+        CommonModule,
 
-    TriPseudoCheckboxModule
-  ],
+        TriPseudoCheckboxModule,
+        TriIconModule
+    ],
   declarations: [
     TreeLoadingComponent,
     TreeNodeComponent,

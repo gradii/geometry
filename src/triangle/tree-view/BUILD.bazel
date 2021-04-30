@@ -32,6 +32,7 @@ ng_module(
     deps = [
         "//src/triangle/core",
         "//src/triangle/i18n",
+        "//src/triangle/icon",
         "//src/check-type",
         "@npm//@angular/animations",
         "@npm//@angular/cdk",
