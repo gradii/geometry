@@ -15,10 +15,10 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector           : 'tri-list-item-meta',
-  templateUrl        : './list-item-meta.component.html',
-  changeDetection    : ChangeDetectionStrategy.OnPush,
-  encapsulation      : ViewEncapsulation.None
+  selector       : 'tri-list-item-meta',
+  templateUrl    : './list-item-meta.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation  : ViewEncapsulation.None
 })
 export class ListItemMetaComponent {
   avatarStr = '';

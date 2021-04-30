@@ -27,7 +27,7 @@ import { TriDemoListBasicComponent } from './tri-demo-list/tri-demo-list-basic.c
   ],
   declarations: [
     DevListComponent,
- 
+
     TriDemoListBasicComponent
   ]
 })

@@ -17,6 +17,8 @@ indent_size = 2
 [*.coffee]
 indent_style = space
 indent_size = 2
+ij_coffeescript_spaces_within_object_braces = true
+ij_coffeescript_spaces_within_object_literal_braces = true
 
 [*.less]
 indent_style = space
@@ -60,8 +62,9 @@ ij_typescript_method_parameters_wrap = normal
 # ij_typescript_imports_wrap = normal
 ij_typescript_imports_wrap = split_into_lines
 ij_typescript_import_sort_members = true
-ij_coffeescript_spaces_within_object_braces = true
-ij_coffeescript_spaces_within_object_literal_braces = true
+ij_typescript_array_initializer_wrap = normal
+ij_typescript_array_initializer_new_line_after_left_brace = true
+ij_typescript_array_initializer_right_brace_on_new_line = true
 
 [*.md]
 max_line_length = off

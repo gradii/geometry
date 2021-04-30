@@ -19,9 +19,17 @@ import { ListItemComponent } from './list-item.component';
 import { ListComponent } from './list.component';
 
 @NgModule({
-  imports     : [CommonModule, TriSpinModule, TriGridModule, TriAvatarModule, TriCommonModule, TriEmptyModule],
-  declarations: [ListComponent, ListItemComponent, ListItemMetaComponent, ListEmptyComponent, ListItemMetaTitleComponent],
-  exports     : [ListComponent, ListItemComponent, ListItemMetaComponent, ListEmptyComponent, ListItemMetaTitleComponent]
+  imports     : [
+    CommonModule, TriSpinModule, TriGridModule, TriAvatarModule, TriCommonModule, TriEmptyModule
+  ],
+  declarations: [
+    ListComponent, ListItemComponent, ListItemMetaComponent, ListEmptyComponent,
+    ListItemMetaTitleComponent
+  ],
+  exports     : [
+    ListComponent, ListItemComponent, ListItemMetaComponent, ListEmptyComponent,
+    ListItemMetaTitleComponent
+  ]
 })
 export class TriListModule {
 }

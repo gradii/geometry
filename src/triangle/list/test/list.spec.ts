@@ -1,7 +1,18 @@
-import { Component, DebugElement, TemplateRef, ViewChild } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  Component,
+  DebugElement,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
+import {
+  ComponentFixture,
+  TestBed
+} from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ListComponent, TriListModule } from '@gradii/triangle/list';
+import {
+  ListComponent,
+  TriListModule
+} from '@gradii/triangle/list';
 
 describe('list', () => {
   let fixture: ComponentFixture<TestListComponent>;
@@ -14,7 +25,7 @@ describe('list', () => {
     }).compileComponents();
     fixture = TestBed.createComponent(TestListComponent);
     context = fixture.componentInstance;
-    dl = fixture.debugElement;
+    dl      = fixture.debugElement;
     fixture.detectChanges();
   });
 
@@ -58,16 +69,19 @@ describe('list', () => {
         const fixtureTemp = TestBed.createComponent(TestListWithTemplateComponent);
         fixtureTemp.detectChanges();
         const footerEl = fixtureTemp.debugElement.query(By.css('.tri-list-footer'));
-        expect((footerEl.nativeElement as HTMLDivElement).innerText).toBe(fixtureTemp.componentInstance
-          .footer as string);
+        expect((footerEl.nativeElement as HTMLDivElement).innerText).toBe(
+          fixtureTemp.componentInstance
+            .footer as string);
       });
       it('change string to template', () => {
         const fixtureTemp = TestBed.createComponent(TestListWithTemplateComponent);
         fixtureTemp.detectChanges();
         const footerEl = fixtureTemp.debugElement.query(By.css('.tri-list-footer'));
-        expect((footerEl.nativeElement as HTMLDivElement).innerText).toBe(fixtureTemp.componentInstance
-          .footer as string);
-        (fixtureTemp.debugElement.query(By.css('#change')).nativeElement as HTMLButtonElement).click();
+        expect((footerEl.nativeElement as HTMLDivElement).innerText).toBe(
+          fixtureTemp.componentInstance
+            .footer as string);
+        (fixtureTemp.debugElement.query(
+          By.css('#change')).nativeElement as HTMLButtonElement).click();
         fixtureTemp.detectChanges();
         expect(fixtureTemp.debugElement.query(By.css('.list-footer')) != null).toBe(true);
       });
@@ -108,7 +122,7 @@ describe('list', () => {
 
       it('should be minimum area block when data is empty', () => {
         context.loading = true;
-        context.data = [];
+        context.data    = [];
         fixture.detectChanges();
         expect(dl.query(By.css('.tri-spin-nested-loading'))).not.toBeNull();
       });
@@ -154,13 +168,20 @@ describe('list', () => {
       fixtureTemp.detectChanges();
     });
     it('with string', () => {
-      expect(fixtureTemp.debugElement.query(By.css('#item-string .tri-list-item-content')) != null).toBe(true);
-      expect(fixtureTemp.debugElement.query(By.css('#item-string .tri-list-item-action')) != null).toBe(true);
-      expect(fixtureTemp.debugElement.query(By.css('#item-string .tri-list-item-extra')) != null).toBe(true);
+      expect(
+        fixtureTemp.debugElement.query(By.css('#item-string .tri-list-item-content')) != null).toBe(
+        true);
+      expect(
+        fixtureTemp.debugElement.query(By.css('#item-string .tri-list-item-action')) != null).toBe(
+        true);
+      expect(
+        fixtureTemp.debugElement.query(By.css('#item-string .tri-list-item-extra')) != null).toBe(
+        true);
     });
     it('with custom template of [content]', () => {
       expect(
-        fixtureTemp.debugElement.query(By.css('#item-template .tri-list-item-content .item-content')) != null
+        fixtureTemp.debugElement.query(
+          By.css('#item-template .tri-list-item-content .item-content')) != null
       ).toBe(true);
     });
   });
@@ -172,14 +193,20 @@ describe('list', () => {
       fixtureTemp.detectChanges();
     });
     it('with string', () => {
-      expect(fixtureTemp.debugElement.query(By.css('#item-string .tri-list-item-meta-title')) != null).toBe(true);
-      expect(fixtureTemp.debugElement.query(By.css('#item-string .tri-list-item-meta-description')) != null).toBe(true);
-      expect(fixtureTemp.debugElement.query(By.css('#item-string .tri-list-item-meta-avatar')) != null).toBe(true);
+      expect(fixtureTemp.debugElement.query(
+        By.css('#item-string .tri-list-item-meta-title')) != null).toBe(true);
+      expect(fixtureTemp.debugElement.query(
+        By.css('#item-string .tri-list-item-meta-description')) != null).toBe(true);
+      expect(fixtureTemp.debugElement.query(
+        By.css('#item-string .tri-list-item-meta-avatar')) != null).toBe(true);
     });
     it('with custom template', () => {
-      expect(fixtureTemp.debugElement.query(By.css('#item-template .item-title')) != null).toBe(true);
-      expect(fixtureTemp.debugElement.query(By.css('#item-template .item-desc')) != null).toBe(true);
-      expect(fixtureTemp.debugElement.query(By.css('#item-template .item-avatar')) != null).toBe(true);
+      expect(fixtureTemp.debugElement.query(By.css('#item-template .item-title')) != null).toBe(
+        true);
+      expect(fixtureTemp.debugElement.query(By.css('#item-template .item-desc')) != null).toBe(
+        true);
+      expect(fixtureTemp.debugElement.query(By.css('#item-template .item-avatar')) != null).toBe(
+        true);
     });
   });
 });
@@ -222,13 +249,13 @@ describe('list', () => {
 })
 class TestListComponent {
   @ViewChild('comp', {static: false}) comp: ListComponent;
-  itemLayout = 'horizontal';
-  bordered = false;
-  footer = 'footer';
-  header = 'header';
-  loading = false;
-  size = 'default';
-  split = true;
+  itemLayout      = 'horizontal';
+  bordered        = false;
+  footer          = 'footer';
+  header          = 'header';
+  loading         = false;
+  size            = 'default';
+  split           = true;
   data?: string[] = [
     'Racing car sprays burning fuel into crowd.',
     'Japanese princess to wed commoner.',
@@ -236,7 +263,7 @@ class TestListComponent {
     'Japanese princess to wed commoner.'
   ];
   // tslint:disable-next-line:no-any
-  grid: any = {gutter: 16, span: 12};
+  grid: any       = {gutter: 16, span: 12};
 }
 
 @Component({

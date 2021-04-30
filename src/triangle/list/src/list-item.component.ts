@@ -17,11 +17,11 @@ import {
 import { ListItemMetaComponent } from './list-item-meta.component';
 
 @Component({
-  selector           : 'tri-list-item',
-  templateUrl        : './list-item.component.html',
-  encapsulation      : ViewEncapsulation.None,
-  changeDetection    : ChangeDetectionStrategy.OnPush,
-  host               : {
+  selector       : 'tri-list-item',
+  templateUrl    : './list-item.component.html',
+  encapsulation  : ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host           : {
     'class': 'tri-list-item'
   }
 })
