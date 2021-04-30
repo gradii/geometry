@@ -20,3 +20,8 @@ export * from './src/utils';
 export * from './src/contrast';
 
 export * from './src/data-util';
+
+
+export * from './src/layout/auto-prefixer';
+export * from './src/layout/layout-validator';
+export * from './src/layout/object-extend';

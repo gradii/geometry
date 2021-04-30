@@ -5,22 +5,25 @@
  */
 
 import { NgModule } from '@angular/core';
-import { TriCommonModule, TriLineModule } from '@gradii/triangle/core';
-import { TriGridList } from './grid-list';
+import {
+  TriCommonModule,
+  TriLineModule
+} from '@gradii/triangle/core';
+import { TriGridListComponent } from './grid-list.component';
 import {
   TriGridAvatarCssTriStyler,
-  TriGridTile,
+  TriGridTileComponent,
   TriGridTileFooterCssTriStyler,
   TriGridTileHeaderCssTriStyler,
   TriGridTileText
-} from './grid-tile';
+} from './grid-tile.component';
 
 
 @NgModule({
   imports     : [TriLineModule, TriCommonModule],
   exports     : [
-    TriGridList,
-    TriGridTile,
+    TriGridListComponent,
+    TriGridTileComponent,
     TriGridTileText,
     TriLineModule,
     TriCommonModule,
@@ -29,8 +32,8 @@ import {
     TriGridAvatarCssTriStyler
   ],
   declarations: [
-    TriGridList,
-    TriGridTile,
+    TriGridListComponent,
+    TriGridTileComponent,
     TriGridTileText,
     TriGridTileHeaderCssTriStyler,
     TriGridTileFooterCssTriStyler,

@@ -43,6 +43,7 @@ ng_module(
         "//src/dev-app/badge",
         "//src/dev-app/breadcrumb",
         "//src/dev-app/rate",
+        "//src/dev-app/grid-list",
 
         "//src/triangle/core",
         "@npm//@angular/cdk",

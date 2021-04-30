@@ -1,7 +1,7 @@
-@import "../../core/style/mixins";
-@import "../../core/style/variables";
-@import "../../core/style/legend/list-common";
-@import "../../core/style/legend/layout-common";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
+@use "../../core/style/legend/list-common";
+@use "../../core/style/legend/layout-common";
 
 // height of tile header or footer if it has one line
 $tri-grid-list-one-line-height : 48px;
@@ -21,7 +21,7 @@ $tri-grid-list-text-padding    : 16px;
   overflow : hidden;
 
   .tri-figure {
-    @include layout-fill;
+    @include mixins.layout-fill;
     display         : flex;
 
     align-items     : center;
@@ -35,7 +35,7 @@ $tri-grid-list-text-padding    : 16px;
   // Headers & footers
   .tri-grid-tile-header,
   .tri-grid-tile-footer {
-    @include tri-normalize-text();
+    @include list-common.tri-normalize-text();
 
     display     : flex;
     align-items : center;
@@ -56,7 +56,7 @@ $tri-grid-list-text-padding    : 16px;
   }
 
   .tri-grid-list-text {
-    @include tri-line-wrapper-base();
+    @include list-common.tri-line-wrapper-base();
   }
 
   .tri-grid-tile-header {

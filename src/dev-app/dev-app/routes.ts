@@ -118,6 +118,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'rate',
         loadChildren: '/rate/dev-rate.module#DevRateModule'
+      },
+      {
+        path        : 'grid-list',
+        loadChildren: '/grid-list/dev-grid-list.module#DevGridListModule'
       }
     ]
   },

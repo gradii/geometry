@@ -2,7 +2,7 @@
 @use "../../core/style/legend/list-common";
 @use "../../core/style/legend/layout-common";
 
-@mixin tri-grid-list-theme($theme) {
+@mixin tri-grid-list-theme() {
   .tri-grid-tile {
     // Headers & footers
     .tri-grid-tile-header,

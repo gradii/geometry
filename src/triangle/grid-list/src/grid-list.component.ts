@@ -18,8 +18,8 @@ import {
   QueryList,
   ViewEncapsulation,
 } from '@angular/core';
-import { TRI_GRID_LIST, TriGridListBase } from './grid-list-base';
-import { TriGridTile } from './grid-tile';
+import { TRI_GRID_LIST, TriGridListBase } from './grid-list-base.interface';
+import { TriGridTileComponent } from './grid-tile.component';
 import { TileCoordinator } from './tile-coordinator';
 import { FitTileStyler, FixedTileStyler, RatioTileStyler, TileStyler } from './tile-styler';
 
@@ -33,7 +33,7 @@ const TRI_FIT_MODE = 'fit';
 @Component({
   selector       : 'tri-grid-list',
   exportAs       : 'triGridList',
-  templateUrl    : 'grid-list.html',
+  templateUrl    : 'grid-list.component.html',
   styleUrls      : ['../style/grid-list.css'],
   host           : {
     'class'      : 'tri-grid-list',
@@ -43,15 +43,15 @@ const TRI_FIT_MODE = 'fit';
   },
   providers      : [{
     provide    : TRI_GRID_LIST,
-    useExisting: TriGridList
+    useExisting: TriGridListComponent
   }],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation  : ViewEncapsulation.None,
 })
-export class TriGridList implements TriGridListBase, OnInit, AfterContentChecked {
+export class TriGridListComponent implements TriGridListBase, OnInit, AfterContentChecked {
   static ngAcceptInputType_cols: NumberInput;
   /** Query list of tiles that are being rendered. */
-  @ContentChildren(TriGridTile, {descendants: true}) _tiles: QueryList<TriGridTile>;
+  @ContentChildren(TriGridTileComponent, {descendants: true}) _tiles: QueryList<TriGridTileComponent>;
   /** Used for determiningthe position of each tile in the grid. */
   private _tileCoordinator: TileCoordinator;
   /** The amount of space between tiles. This will be something like '5px' or '2em'. */

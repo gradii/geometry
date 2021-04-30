@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { coerceNumberProperty, NumberInput } from '@angular/cdk/coercion';
+import {
+  coerceNumberProperty,
+  NumberInput
+} from '@angular/cdk/coercion';
 import {
   AfterContentInit,
   ChangeDetectionStrategy,
@@ -18,27 +21,32 @@ import {
   QueryList,
   ViewEncapsulation,
 } from '@angular/core';
-import { setLines, TriLine } from '@gradii/triangle/core';
-import { TRI_GRID_LIST, TriGridListBase } from './grid-list-base';
+import {
+  setLines,
+  TriLine
+} from '@gradii/triangle/core';
+import {
+  TRI_GRID_LIST,
+  TriGridListBase
+} from './grid-list-base.interface';
 
 @Component({
   selector       : 'tri-grid-tile',
   exportAs       : 'triGridTile',
   host           : {
-    'class'         : 'tri-grid-tile',
+    'class': 'tri-grid-tile',
     // Ensures that the "rowspan" and "colspan" input value is reflected in
     // the DOM. This is needed for the grid-tile harness.
     '[attr.rowspan]': 'rowspan',
     '[attr.colspan]': 'colspan'
   },
-  templateUrl    : 'grid-tile.html',
+  templateUrl    : 'grid-tile.component.html',
   styleUrls      : ['../style/grid-list.css'],
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TriGridTile {
-  static ngAcceptInputType_rowspan: NumberInput;
-  static ngAcceptInputType_colspan: NumberInput;
+export class TriGridTileComponent {
+
 
   constructor(
     private _element: ElementRef<HTMLElement>,
@@ -76,11 +84,14 @@ export class TriGridTile {
   _setStyle(property: string, value: any): void {
     (this._element.nativeElement.style as any)[property] = value;
   }
+
+  static ngAcceptInputType_rowspan: NumberInput;
+  static ngAcceptInputType_colspan: NumberInput;
 }
 
 @Component({
   selector       : 'tri-grid-tile-header, tri-grid-tile-footer',
-  templateUrl    : 'grid-tile-text.html',
+  templateUrl    : 'grid-tile-text.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation  : ViewEncapsulation.None,
 })

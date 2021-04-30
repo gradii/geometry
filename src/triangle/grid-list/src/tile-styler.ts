@@ -4,8 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { TriGridList } from './grid-list';
-import { TriGridTile } from './grid-tile';
+import { TriGridListComponent } from './grid-list.component';
+import { TriGridTileComponent } from './grid-tile.component';
 import { TileCoordinator } from './tile-coordinator';
 
 /**
@@ -21,7 +21,7 @@ const cssCalcAllowedValue = /^-?\d+((\.\d+)?[A-Za-z%$]?)+$/;
  */
 export abstract class TileStyler {
   _gutterSize: string;
-  _rows: number = 0;
+  _rows: number    = 0;
   _rowspan: number = 0;
   _cols: number;
   _direction: string;
@@ -37,10 +37,10 @@ export abstract class TileStyler {
    */
   init(gutterSize: string, tracker: TileCoordinator, cols: number, direction: string): void {
     this._gutterSize = normalizeUnits(gutterSize);
-    this._rows = tracker.rowCount;
-    this._rowspan = tracker.rowspan;
-    this._cols = cols;
-    this._direction = direction;
+    this._rows       = tracker.rowCount;
+    this._rowspan    = tracker.rowspan;
+    this._cols       = cols;
+    this._direction  = direction;
   }
 
   /**
@@ -90,7 +90,7 @@ export abstract class TileStyler {
    * @param rowIndex Index of the tile's row.
    * @param colIndex Index of the tile's column.
    */
-  setStyle(tile: TriGridTile, rowIndex: number, colIndex: number): void {
+  setStyle(tile: TriGridTileComponent, rowIndex: number, colIndex: number): void {
     // Percent of the available horizontal space that one column takes up.
     let percentWidthPerTile = 100 / this._cols;
 
@@ -103,7 +103,7 @@ export abstract class TileStyler {
   }
 
   /** Sets the horizontal placement of the tile in the list. */
-  setColStyles(tile: TriGridTile, colIndex: number, percentWidth: number,
+  setColStyles(tile: TriGridTileComponent, colIndex: number, percentWidth: number,
                gutterWidth: number) {
     // Base horizontal size of a column.
     let baseTileWidth = this.getBaseTileSize(percentWidth, gutterWidth);
@@ -135,7 +135,7 @@ export abstract class TileStyler {
    * This method will be implemented by each type of TileStyler.
    * @docs-private
    */
-  abstract setRowStyles(tile: TriGridTile, rowIndex: number, percentWidth: number,
+  abstract setRowStyles(tile: TriGridTileComponent, rowIndex: number, percentWidth: number,
                         gutterWidth: number): void;
 
   /**
@@ -152,7 +152,7 @@ export abstract class TileStyler {
    * @param list Grid list that the styler was attached to.
    * @docs-private
    */
-  abstract reset(list: TriGridList): void;
+  abstract reset(list: TriGridListComponent): void;
 }
 
 
@@ -176,7 +176,7 @@ export class FixedTileStyler extends TileStyler {
     }
   }
 
-  setRowStyles(tile: TriGridTile, rowIndex: number): void {
+  setRowStyles(tile: TriGridTileComponent, rowIndex: number): void {
     tile._setStyle('top', this.getTilePosition(this.fixedRowHeight, rowIndex));
     tile._setStyle('height', calc(this.getTileSize(this.fixedRowHeight, tile.rowspan)));
   }
@@ -187,7 +187,7 @@ export class FixedTileStyler extends TileStyler {
     ];
   }
 
-  reset(list: TriGridList) {
+  reset(list: TriGridListComponent) {
     list._setListStyle(['height', null]);
 
     if (list._tiles) {
@@ -216,10 +216,10 @@ export class RatioTileStyler extends TileStyler {
     this._parseRatio(value);
   }
 
-  setRowStyles(tile: TriGridTile, rowIndex: number, percentWidth: number,
+  setRowStyles(tile: TriGridTileComponent, rowIndex: number, percentWidth: number,
                gutterWidth: number): void {
     let percentHeightPerTile = percentWidth / this.rowHeightRatio;
-    this.baseTileHeight = this.getBaseTileSize(percentHeightPerTile, gutterWidth);
+    this.baseTileHeight      = this.getBaseTileSize(percentHeightPerTile, gutterWidth);
 
     // Use padding-top and margin-top to maintain the given aspect ratio, as
     // a percentage-based value for these properties is applied versus the *width* of the
@@ -234,7 +234,7 @@ export class RatioTileStyler extends TileStyler {
     ];
   }
 
-  reset(list: TriGridList) {
+  reset(list: TriGridListComponent) {
     list._setListStyle(['paddingBottom', null]);
 
     list._tiles.forEach(tile => {
@@ -262,7 +262,7 @@ export class RatioTileStyler extends TileStyler {
  * @docs-private
  */
 export class FitTileStyler extends TileStyler {
-  setRowStyles(tile: TriGridTile, rowIndex: number): void {
+  setRowStyles(tile: TriGridTileComponent, rowIndex: number): void {
     // Percent of the available vertical space that one row takes up.
     let percentHeightPerTile = 100 / this._rowspan;
 
@@ -276,7 +276,7 @@ export class FitTileStyler extends TileStyler {
     tile._setStyle('height', calc(this.getTileSize(baseTileHeight, tile.rowspan)));
   }
 
-  reset(list: TriGridList) {
+  reset(list: TriGridListComponent) {
     if (list._tiles) {
       list._tiles.forEach(tile => {
         tile._setStyle('top', null);

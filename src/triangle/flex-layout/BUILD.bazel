@@ -1,0 +1,64 @@
+load(
+    "//tools:defaults.bzl",
+    "ng_module",
+    "sass_binary",
+    "sass_library",
+    #  "ng_test_library",
+    #  "ng_web_test_suite",
+    #  "markdown_to_html"
+)
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "flex-layout",
+    srcs = glob(
+        ["**/*.ts"],
+        exclude = ["**/*.spec.ts"],
+    ),
+    assets = [] + glob(["**/*.html"]),
+    module_name = "@gradii/triangle/flex-layout",
+    deps = [
+        "//src/triangle/util",
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//rxjs",
+    ],
+)
+
+sass_library(
+    name = "flex-layout_scss_lib",
+    srcs = glob(["**/_*.scss"]),
+    deps = ["//src/triangle/core:core_scss_lib"],
+)
+
+sass_binary(
+    name = "flex-layout_scss",
+    src = "style/flex-layout.scss",
+    deps = [
+        "//src/triangle/flex-layout:flex-layout_scss_lib",
+    ],
+)
+#
+#ng_test_library(
+#  name = "autocomplete_test_sources",
+#  srcs = glob(["**/*.spec.ts"]),
+#  deps = [
+#    "@npm//rxjs",
+#  ]
+#)
+#
+#ng_web_test_suite(
+#  name = "unit_tests",
+#  deps = [":autocomplete_test_sources"],
+#)
+#
+#markdown_to_html(
+#  name = "overview",
+#  srcs = [":affix.md"],
+#)
+
+filegroup(
+    name = "source-files",
+    srcs = glob(["**/*.ts"]),
+)

@@ -53,7 +53,6 @@
 
 
 @mixin gradii-triangle-global() {
-
   @include tri-core-theme();
   @include tri-input-theme();
   @include tri-input-number-theme();
@@ -61,14 +60,10 @@
   @include tri-menu-theme();
   @include tri-layout-theme();
   @include tri-tabs-theme();
-
   @include tri-collapse-theme();
-
   @include tri-button-theme();
-
   @include tri-radio-theme();
   @include tri-select-theme();
-
   @include tri-card-theme();
   @include tri-carousel-theme();
   @include tri-cascader-theme();
@@ -79,4 +74,5 @@
   @include tri-popover-theme();
   @include tri-badge-theme();
   @include tri-rate-theme();
+  @include tri-grid-list-theme();
 }
