@@ -39,7 +39,8 @@ import { ListGrid } from './interface';
     '[class.tri-list-loading]'                  : 'loading',
     '[class.tri-list-grid]'                     : 'grid',
     '[class.tri-list-something-after-last-item]': '!!(loadMore || pagination || footer)'
-  }
+  },
+  styleUrls: ['../style/list.css']
 })
 export class ListComponent {
   // #region fields

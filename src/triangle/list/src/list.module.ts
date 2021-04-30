@@ -12,14 +12,16 @@ import { TriEmptyModule } from '@gradii/triangle/empty';
 import { TriGridModule } from '@gradii/triangle/grid';
 import { TriSpinModule } from '@gradii/triangle/spin';
 
+import { ListEmptyComponent } from './list-empty.component';
+import { ListItemMetaTitleComponent } from './list-item-meta-title.component';
 import { ListItemMetaComponent } from './list-item-meta.component';
 import { ListItemComponent } from './list-item.component';
 import { ListComponent } from './list.component';
 
 @NgModule({
   imports     : [CommonModule, TriSpinModule, TriGridModule, TriAvatarModule, TriCommonModule, TriEmptyModule],
-  declarations: [ListComponent, ListItemComponent, ListItemMetaComponent],
-  exports     : [ListComponent, ListItemComponent, ListItemMetaComponent]
+  declarations: [ListComponent, ListItemComponent, ListItemMetaComponent, ListEmptyComponent, ListItemMetaTitleComponent],
+  exports     : [ListComponent, ListItemComponent, ListItemMetaComponent, ListEmptyComponent, ListItemMetaTitleComponent]
 })
 export class TriListModule {
 }

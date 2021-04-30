@@ -1,0 +1,22 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "list",
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
+    assets = [
+        "dev-list.html",
+        ":dev_list_scss",
+    ],
+    deps = [
+        "//src/triangle/list",
+        "@npm//@angular/forms",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_list_scss",
+    src = "dev-list.scss",
+)

@@ -34,7 +34,7 @@ import {
 })
 export class SpinComponent implements AfterContentInit {
   @Input() spinning = true;
-  @ViewChild('ref', {static: false}) _ref;
+  @ViewChild('ref', {static: true}) _ref;
   _el: HTMLElement;
 
   constructor(private _elementRef: ElementRef, private _renderer: Renderer2) {

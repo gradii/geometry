@@ -13,7 +13,7 @@ ng_module(
     name = "util",
     srcs = glob(
         ["**/*.ts"],
-        exclude = ["**/*.spec.ts"],
+        exclude = ["**/*.spec.ts", "testing/**/*.ts"],
     ),
     assets = [] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/util",

@@ -122,6 +122,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'grid-list',
         loadChildren: '/grid-list/dev-grid-list.module#DevGridListModule'
+      },
+      {
+        path        : 'list',
+        loadChildren: '/list/dev-list.module#DevListModule'
       }
     ]
   },
