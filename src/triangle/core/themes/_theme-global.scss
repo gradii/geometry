@@ -52,7 +52,7 @@
 @use "../../tree/style/tree-theme" as *;
 
 
-@mixin gradii-triangle-global() {
+@mixin gradii-triangle-theme-global() {
   @include tri-core-theme();
   @include tri-input-theme();
   @include tri-input-number-theme();

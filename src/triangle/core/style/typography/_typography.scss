@@ -1,4 +1,5 @@
-@import "typography-utils";
+@use "sass:map";
+@use "typography-utils";
 
 // Represents a typography level from the Material design spec.
 @function tri-typography-level(
@@ -59,35 +60,35 @@
   // Loop through the levels and set the `font-family` of the ones that don't have one to the base.
   // Note that Sass can't modify maps in place, which means that we need to merge and re-assign.
   @each $key, $level in $config {
-    @if map-get($level, font-family) == null {
-      $new-level : map-merge($level, (font-family: $font-family));
-      $config : map-merge($config, ($key: $new-level));
+    @if map.get($level, font-family) == null {
+      $new-level : map.merge($level, (font-family: $font-family));
+      $config : map.merge($config, ($key: $new-level));
     }
   }
 
   // Add the base font family to the config.
-  @return map-merge($config, (font-family: $font-family));
+  @return map.merge($config, (font-family: $font-family));
 }
 
 // Adds the base typography styles, based on a config.
 @mixin tri-base-typography($config, $selector: ".tri-typography") {
   .tri-h1, .tri-headline, #{$selector} h1 {
-    @include tri-typography-level-to-styles($config, headline);
+    @include typography-utils.tri-typography-level-to-styles($config, headline);
     margin : 0 0 16px;
   }
 
   .tri-h2, .tri-title, #{$selector} h2 {
-    @include tri-typography-level-to-styles($config, title);
+    @include typography-utils.tri-typography-level-to-styles($config, title);
     margin : 0 0 16px;
   }
 
   .tri-h3, .tri-subheading-2, #{$selector} h3 {
-    @include tri-typography-level-to-styles($config, subheading-2);
+    @include typography-utils.tri-typography-level-to-styles($config, subheading-2);
     margin : 0 0 16px;
   }
 
   .tri-h4, .tri-subheading-1, #{$selector} h4 {
-    @include tri-typography-level-to-styles($config, subheading-1);
+    @include typography-utils.tri-typography-level-to-styles($config, subheading-1);
     margin : 0 0 16px;
   }
 
@@ -95,35 +96,35 @@
   // consistency. The font sizes come from the Chrome user agent styles which have h5 at 0.83em
   // and h6 at 0.67em.
   .tri-h5, #{$selector} h5 {
-    @include tri-typography-font-shorthand(
+    @include typography-utils.tri-typography-font-shorthand(
       // calc is used here to support css variables
-        calc(#{tri-font-size($config, body-1)} * 0.83),
-        tri-font-weight($config, body-1),
-        tri-line-height($config, body-1),
-        tri-font-family($config, body-1)
+        calc(#{typography-utils.tri-font-size($config, body-1)} * 0.83),
+        typography-utils.tri-font-weight($config, body-1),
+        typography-utils.tri-line-height($config, body-1),
+        typography-utils.tri-font-family($config, body-1)
     );
 
     margin : 0 0 12px;
   }
 
   .tri-h6, #{$selector} h6 {
-    @include tri-typography-font-shorthand(
+    @include typography-utils.tri-typography-font-shorthand(
       // calc is used here to support css variables
-        calc(#{tri-font-size($config, body-1)} * 0.67),
-        tri-font-weight($config, body-1),
-        tri-line-height($config, body-1),
-        tri-font-family($config, body-1)
+        calc(#{typography-utils.tri-font-size($config, body-1)} * 0.67),
+        typography-utils.tri-font-weight($config, body-1),
+        typography-utils.tri-line-height($config, body-1),
+        typography-utils.tri-font-family($config, body-1)
     );
 
     margin : 0 0 12px;
   }
 
   .tri-body-strong, .tri-body-2 {
-    @include tri-typography-level-to-styles($config, body-2);
+    @include typography-utils.tri-typography-level-to-styles($config, body-2);
   }
 
   .tri-body, .tri-body-1, #{$selector} {
-    @include tri-typography-level-to-styles($config, body-1);
+    @include typography-utils.tri-typography-level-to-styles($config, body-1);
 
     p {
       margin : 0 0 12px;
@@ -131,26 +132,26 @@
   }
 
   .tri-small, .tri-caption {
-    @include tri-typography-level-to-styles($config, caption);
+    @include typography-utils.tri-typography-level-to-styles($config, caption);
   }
 
   .tri-display-4, #{$selector} .tri-display-4 {
-    @include tri-typography-level-to-styles($config, display-4);
+    @include typography-utils.tri-typography-level-to-styles($config, display-4);
     margin : 0 0 56px;
   }
 
   .tri-display-3, #{$selector} .tri-display-3 {
-    @include tri-typography-level-to-styles($config, display-3);
+    @include typography-utils.tri-typography-level-to-styles($config, display-3);
     margin : 0 0 64px;
   }
 
   .tri-display-2, #{$selector} .tri-display-2 {
-    @include tri-typography-level-to-styles($config, display-2);
+    @include typography-utils.tri-typography-level-to-styles($config, display-2);
     margin : 0 0 64px;
   }
 
   .tri-display-1, #{$selector} .tri-display-1 {
-    @include tri-typography-level-to-styles($config, display-1);
+    @include typography-utils.tri-typography-level-to-styles($config, display-1);
     margin : 0 0 64px;
   }
 }

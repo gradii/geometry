@@ -2,7 +2,7 @@
 
 // Single side border-radius
 
-@mixin border-radius($radius: $border-radius-base) {
+@mixin border-radius($radius: v.$border-radius-base) {
   @if v.$enable-rounded {
     border-radius : $radius;
   }

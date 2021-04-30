@@ -1,43 +1,43 @@
 @import "./typography";
-@import "../../../autocomplete/style/autocomplete-theme";
-@import "../../../badge/style/badge-theme";
-//@import '../../../bottom-sheet/bottom-sheet-theme';
-@import "../../../button/style/button-theme";
-//@import '../../../button-toggle/button-toggle-theme';
-@import "../../../card/style/card-theme";
-@import "../../../checkbox/style/checkbox-theme";
-//@import '../../../chips/style/chips-theme';
-//@import '../../../table/table-theme';
-//@import '../../../datepicker/datepicker-theme';
-@import "../../../dialog/style/dialog-theme";
-@import "../../../expansion/expansion-theme";
-@import "../../../grid-list/grid-list-theme";
-@import "../../../icon/style/icon-theme";
-@import "../../../input/style/input-theme";
-@import "../../../list/style/list-theme";
-@import "../../../menu/style/menu-theme";
-@import "../../../paginator/paginator-theme";
-@import "../../../progress-bar/progress-bar-theme";
-@import "../../../progress-spinner/progress-spinner-theme";
-@import "../../../radio/style/radio-theme";
-@import "../../../select/style/select-theme";
-@import "../../../sidenav/style/sidenav-theme";
-@import "../../../slide-toggle/slide-toggle-theme";
-@import "../../../slider/style/slider-theme";
-@import "../../../stepper/stepper-theme";
-@import "../../../sort/sort-theme";
-@import "../../../tabs/tabs-theme";
-@import "../../../toolbar/toolbar-theme";
-@import "../../../tooltip/tooltip-theme";
-@import "../../../snack-bar/snack-bar-theme";
+@import "../../autocomplete/style/autocomplete-theme";
+@import "../../badge/style/badge-theme";
+//@import '../../bottom-sheet/bottom-sheet-theme';
+@import "../../button/style/button-theme";
+//@import '../../button-toggle/button-toggle-theme';
+@import "../../card/style/card-theme";
+@import "../../checkbox/style/checkbox-theme";
+//@import '../../chips/style/chips-theme';
+//@import '../../table/table-theme';
+//@import '../../datepicker/datepicker-theme';
+@import "../../dialog/style/dialog-theme";
+@import "../../expansion/expansion-theme";
+@import "../../grid-list/grid-list-theme";
+@import "../../icon/style/icon-theme";
+@import "../../input/style/input-theme";
+@import "../../list/style/list-theme";
+@import "../../menu/style/menu-theme";
+@import "../../paginator/paginator-theme";
+@import "../../progress-bar/progress-bar-theme";
+@import "../../progress-spinner/progress-spinner-theme";
+@import "../../radio/style/radio-theme";
+@import "../../select/style/select-theme";
+@import "../../sidenav/style/sidenav-theme";
+@import "../../slide-toggle/slide-toggle-theme";
+@import "../../slider/style/slider-theme";
+@import "../../stepper/stepper-theme";
+@import "../../sort/sort-theme";
+@import "../../tabs/tabs-theme";
+@import "../../toolbar/toolbar-theme";
+@import "../../tooltip/tooltip-theme";
+@import "../../snack-bar/snack-bar-theme";
 @import "../option/option-theme";
 @import "../option/optgroup-theme";
 @import "../../form-field/form-field-theme";
-@import "../../tree/tree-theme";
+@import "../../tree/style/tree-theme";
 
 
 // Includes all of the typographic styles.
-@mixin triangle-typography($config: null) {
+@mixin gradii-triangle-typography-global($config: null) {
   @if $config == null {
     $config : tri-typography-config();
   }
