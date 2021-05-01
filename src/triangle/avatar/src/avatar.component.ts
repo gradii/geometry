@@ -21,19 +21,19 @@ export type AvatarShape = 'square' | 'circle';
 export type AvatarSize = 'small' | 'large' | 'default';
 
 @Component({
-  selector           : 'tri-avatar',
-  encapsulation      : ViewEncapsulation.None,
-  changeDetection    : ChangeDetectionStrategy.OnPush,
-  template           : `
-    <i class="anticon anticon-{{icon}}" *ngIf="icon && _hasIcon"></i>
+  selector       : 'tri-avatar',
+  encapsulation  : ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template       : `
+    <tri-icon [svgIcon]="icon" *ngIf="icon && _hasIcon"></tri-icon>
     <img [src]="src" *ngIf="src && _hasSrc" (error)="_imgError($event)"/>
     <span class="tri-avatar-string"
           #textEl
           [ngStyle]="textStyles"
           *ngIf="text && _hasText">{{text}}</span>
   `,
-  host               : {
-    '[class.tri-avatar]'       : 'true',
+  host           : {
+    'class'                    : 'tri-avatar',
     '[class.tri-avatar-icon]'  : '!!icon',
     '[class.tri-avatar-image]' : '!!src',
     '[class.tri-avatar-lg]'    : 'size=="large"',
@@ -45,7 +45,7 @@ export type AvatarSize = 'small' | 'large' | 'default';
 export class AvatarComponent implements OnChanges {
   _el: Element;
   _hasText: boolean = false;
-  _hasSrc: boolean = true;
+  _hasSrc: boolean  = true;
   _hasIcon: boolean = false;
   textStyles: {};
 
@@ -79,12 +79,13 @@ export class AvatarComponent implements OnChanges {
    */
   @Input() icon: string;
 
-  constructor(private _elementRef: ElementRef, private _renderer: Renderer2, private _cdRef: ChangeDetectorRef) {
+  constructor(private _elementRef: ElementRef, private _renderer: Renderer2,
+              private _cdRef: ChangeDetectorRef) {
     this._el = _elementRef.nativeElement;
   }
 
-  _imgError(event?) {
-    this._hasSrc = false;
+  _imgError(event?: Event) {
+    this._hasSrc  = false;
     this._hasIcon = false;
     this._hasText = false;
     if (this.icon) {
@@ -100,7 +101,7 @@ export class AvatarComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     this._hasText = !this.src && !!this.text;
     this._hasIcon = !this.src && !!this.icon;
-    this._hasSrc = !!this.src;
+    this._hasSrc  = !!this.src;
 
     this._cdRef.markForCheck();
     this.notifyCalc();
@@ -112,7 +113,8 @@ export class AvatarComponent implements OnChanges {
     }
 
     const childrenWidth = this._textEl.nativeElement.offsetWidth;
-    const avatarWidth = this._el.getBoundingClientRect().width;
+    const avatarWidth   = this._el.getBoundingClientRect().width;
+
     const scale = avatarWidth - 8 < childrenWidth ? (avatarWidth - 8) / childrenWidth : 1;
     if (scale === 1) {
       this.textStyles = {};

@@ -3,10 +3,11 @@
 
 $avatar-prefix-cls : "#{ v.$tri-prefix}-avatar";
 
-@mixin tri-avatar-theme($theme) {
-  // Avatar
-  $avatar-bg    : #ccc !default;
-  $avatar-color : #fff !default;
+// Avatar
+$avatar-bg    : #ccc !default;
+$avatar-color : #fff !default;
+
+@mixin tri-avatar-theme() {
 
   .#{$avatar-prefix-cls} {
     background : $avatar-bg;

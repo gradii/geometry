@@ -45,6 +45,7 @@ ng_module(
         "//src/dev-app/rate",
         "//src/dev-app/grid-list",
         "//src/dev-app/list",
+        "//src/dev-app/avatar",
 
         "//src/triangle/core",
         "@npm//@angular/cdk",

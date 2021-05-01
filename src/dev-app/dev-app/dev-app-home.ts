@@ -38,6 +38,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="rate">rate</a></li>
       <li><a routerLink="grid-list">grid-list</a></li>
       <li><a routerLink="list">list</a></li>
+      <li><a routerLink="avatar">avatar</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>

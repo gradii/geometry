@@ -126,6 +126,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'list',
         loadChildren: '/list/dev-list.module#DevListModule'
+      },
+      {
+        path        : 'avatar',
+        loadChildren: '/avatar/dev-avatar.module#DevAvatarModule'
       }
     ]
   },

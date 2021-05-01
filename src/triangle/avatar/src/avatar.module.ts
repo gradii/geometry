@@ -6,6 +6,7 @@
 
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { TriIconModule } from '@gradii/triangle/icon';
 import { AvatarComponent } from './avatar.component';
 
 /**
@@ -28,7 +29,7 @@ import { AvatarComponent } from './avatar.component';
 @NgModule({
   declarations: [AvatarComponent],
   exports     : [AvatarComponent],
-  imports     : [CommonModule]
+    imports: [CommonModule, TriIconModule]
 })
 export class TriAvatarModule {
 }
