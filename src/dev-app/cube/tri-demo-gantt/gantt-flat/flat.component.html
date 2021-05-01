@@ -10,13 +10,14 @@
   <div class="header-section">
     <span class="header-section-title">是否可拖拽：</span>
     <span class="header-section-content">
-      <input type="checkbox" [(ngModel)]="options.draggable" />
+      <input type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="options.draggable" />
     </span>
   </div>
   <div class="header-section">
     <span class="header-section-title">合并间隔天数：</span>
     <span class="header-section-content">
-      <input type="number" [style.width.px]="50" [(ngModel)]="options.mergeIntervalDays" />
+      <input type="number" [ngModelOptions]="{standalone: true}" [style.width.px]="50"
+             [(ngModel)]="options.mergeIntervalDays" />
     </span>
   </div>
   <div class="header-section">

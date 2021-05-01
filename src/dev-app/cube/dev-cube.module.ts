@@ -10,6 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgxGanttModule } from '@gradii/cube/gantt';
 import { DevCubeComponent } from './dev-cube.component';
+import { AppGanttFlatExampleComponent } from './tri-demo-gantt/gantt-flat/flat.component';
+import { AppGanttRangeExampleComponent } from './tri-demo-gantt/gantt-range/gantt-range.component';
 import { AppGanttExampleComponent } from './tri-demo-gantt/gantt/gantt.component';
 
 @NgModule({
@@ -22,7 +24,9 @@ import { AppGanttExampleComponent } from './tri-demo-gantt/gantt/gantt.component
     RouterModule.forChild([
       {
         path: '', component: DevCubeComponent, children: [
-          {path: 'app-gantt-example-component', component: AppGanttExampleComponent}
+          {path: 'app-gantt-basic-example-component', component: AppGanttExampleComponent},
+          {path: 'app-gantt-flat-example-component', component: AppGanttFlatExampleComponent},
+          {path: 'app-gantt-range-example-component', component: AppGanttRangeExampleComponent},
         ]
       }
     ])
@@ -30,7 +34,9 @@ import { AppGanttExampleComponent } from './tri-demo-gantt/gantt/gantt.component
   declarations: [
     DevCubeComponent,
 
-    AppGanttExampleComponent
+    AppGanttExampleComponent,
+    AppGanttFlatExampleComponent,
+    AppGanttRangeExampleComponent
   ]
 })
 export class DevCubeModule {

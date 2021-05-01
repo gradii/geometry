@@ -1,4 +1,6 @@
-export const mockGroups = [
+import { GanttGroup } from '@gradii/cube/gantt';
+
+export const mockGroups: GanttGroup[] = [
     {
         id: '00001',
         title: 'Project 1',

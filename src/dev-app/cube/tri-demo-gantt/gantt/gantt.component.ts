@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   Component,
   HostBinding,
@@ -16,7 +22,10 @@ import {
   GanttViewOptions,
   GanttViewType
 } from '@gradii/cube/gantt';
-import { of } from 'rxjs';
+import {
+  Observable,
+  of
+} from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
   mockGroups,
@@ -83,11 +92,11 @@ export class AppGanttExampleComponent implements OnInit {
   loadOnScroll(event: GanttLoadOnScrollEvent) {
   }
 
-  getChildren(item: GanttItem) {
+  getChildren(item: GanttItem): Observable<any> {
     return of([
       {
-        id       : new Date().getTime(),
-        title    : new Date().getTime(),
+        id       : `${new Date().getTime()}`,
+        title    : `${new Date().getTime()}`,
         start    : Math.floor(new Date().getTime() / 1000),
         draggable: true,
         linkable : false

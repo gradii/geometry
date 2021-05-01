@@ -130,6 +130,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'avatar',
         loadChildren: '/avatar/dev-avatar.module#DevAvatarModule'
+      },
+      {
+        path        : 'cube',
+        loadChildren: '/cube/dev-cube.module#DevCubeModule'
       }
     ]
   },

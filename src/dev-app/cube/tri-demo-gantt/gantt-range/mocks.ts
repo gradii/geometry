@@ -1,3 +1,5 @@
+import { GanttItemType } from '@gradii/cube/gantt';
+
 export const mockItems = [
     {
         id: 'item-0101',
@@ -5,7 +7,7 @@ export const mockItems = [
         start: 1590035675,
         group_id: '00001',
         color: '#FF0000',
-        type: 'range',
+        type: 'range' as GanttItemType,
         progress: 0.5,
         children: [
             {
