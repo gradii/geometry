@@ -4,8 +4,22 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { ChangeDetectorRef, Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { BaseEntityEvent, BasePositionModel, ENGINE, ListenerHandle } from '@gradii/diagram/canvas-core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges
+} from '@angular/core';
+import {
+  BaseEntityEvent,
+  BasePositionModel,
+  ENGINE,
+  ListenerHandle
+} from '@gradii/diagram/canvas-core';
 import { DiagramEngine } from '../../diagram-engine';
 import { PortModel } from '../port/port-model';
 import { LinkModel } from './link-model';
@@ -30,13 +44,12 @@ import { PointModel } from './point-model';
     <!--    <svg:g [attr.data-link-id]="link.getID()">-->
     <ng-template [ngTemplateOutlet]="engine.generateWidgetForLink(link)"
                  [ngTemplateOutletContext]="{event: {model: link}}">
-      
     </ng-template>
     <ng-template let-labelModel let-index="index" ngFor [ngForOf]="link.getLabels()">
       <svg:g label-widget
-        [attr.key]="labelModel.getID()"
-        [label]="labelModel"
-        [index]="index"
+             [attr.key]="labelModel.getID()"
+             [label]="labelModel"
+             [index]="index"
       ></svg:g>
     </ng-template>
     <!--    </svg:g>-->
@@ -45,7 +58,7 @@ import { PointModel } from './point-model';
     <!--    </peformance_widget>-->
   `
 })
-export class LinkWidget implements OnChanges, OnInit {
+export class LinkWidget implements OnChanges, OnInit, OnDestroy {
 
   @Input() link: LinkModel;
 
@@ -62,7 +75,8 @@ export class LinkWidget implements OnChanges, OnInit {
   //   };
   // }
 
-  constructor(@Inject(ENGINE) public engine: DiagramEngine, public changeDetectRef: ChangeDetectorRef) {
+  constructor(@Inject(ENGINE) public engine: DiagramEngine,
+              public changeDetectRef: ChangeDetectorRef) {
   }
 
   static generateLinePath(firstPoint: PointModel, lastPoint: PointModel): string {
@@ -96,6 +110,7 @@ export class LinkWidget implements OnChanges, OnInit {
     if (!this.link.getTargetPort()) {
       return;
     }
+    // @ts-ignore
     this.targetListener = this.link.getTargetPort().registerListener({
       reportInitialPosition: (event: BaseEntityEvent<BasePositionModel>) => {
         // this.forceUpdate();
@@ -110,6 +125,7 @@ export class LinkWidget implements OnChanges, OnInit {
     if (!this.link.getSourcePort()) {
       return;
     }
+    // @ts-ignore
     this.sourceListener = this.link.getSourcePort().registerListener({
       reportInitialPosition: (event: BaseEntityEvent<BasePositionModel>) => {
         // this.forceUpdate();

@@ -12,7 +12,11 @@ import {
   DeserializeEvent,
   ModelGeometryInterface
 } from '@gradii/diagram/canvas-core';
-import { Point, Polygon, Rectangle } from '@gradii/diagram/geometry';
+import {
+  Point,
+  Polygon,
+  Rectangle
+} from '@gradii/diagram/geometry';
 import * as _ from 'lodash';
 import { DiagramEngine } from '../../diagram-engine';
 import { DiagramModel } from '../../models/diagram-model';
@@ -21,9 +25,9 @@ import { PortModel } from '../port/port-model';
 import { PointModel } from './point-model';
 
 export interface LinkModelListener extends BaseModelListener {
-  sourcePortChanged?(event: BaseEntityEvent<LinkModel> & { port: null | PortModel }): void;
+  sourcePortChanged(event: BaseEntityEvent<LinkModel> & { port: null | PortModel }): void;
 
-  targetPortChanged?(event: BaseEntityEvent<LinkModel> & { port: null | PortModel }): void;
+  targetPortChanged(event: BaseEntityEvent<LinkModel> & { port: null | PortModel }): void;
 }
 
 export interface LinkModelGenerics extends BaseModelGenerics {
@@ -43,7 +47,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
 
   constructor(options: G['OPTIONS']) {
     super(options);
-    this.points = [
+    this.points        = [
       new PointModel({
         link: this
       }),
@@ -51,10 +55,10 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
         link: this
       })
     ];
-    this.sourcePort = null;
-    this.targetPort = null;
+    this.sourcePort    = null;
+    this.targetPort    = null;
     this.renderedPaths = [];
-    this.labels = [];
+    this.labels        = [];
   }
 
   getBoundingBox(): Rectangle {
@@ -84,7 +88,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
     super.deserialize(event);
     this.points = _.map(event.data.points || [], (point) => {
       let p = new PointModel({
-        link: this,
+        link    : this,
         position: new Point(point.x, point.y)
       });
       p.deserialize({
@@ -96,7 +100,8 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
 
     // deserialize labels
     _.forEach(event.data.labels || [], (label: any) => {
-      let labelOb = (event.engine as DiagramEngine).getFactoryForLabel(label.type).generateModel({});
+      let labelOb = (event.engine as DiagramEngine).getFactoryForLabel(label.type).generateModel(
+        {});
       labelOb.deserialize({
         ...event,
         data: label
@@ -131,20 +136,20 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
   serialize() {
     return {
       ...super.serialize(),
-      source: this.sourcePort ? this.sourcePort.getParent().getID() : null,
+      source    : this.sourcePort ? this.sourcePort.getParent().getID() : null,
       sourcePort: this.sourcePort ? this.sourcePort.getID() : null,
-      target: this.targetPort ? this.targetPort.getParent().getID() : null,
+      target    : this.targetPort ? this.targetPort.getParent().getID() : null,
       targetPort: this.targetPort ? this.targetPort.getID() : null,
-      points: _.map(this.points, (point) => {
+      points    : _.map(this.points, (point) => {
         return point.serialize();
       }),
-      labels: _.map(this.labels, (label) => {
+      labels    : _.map(this.labels, (label) => {
         return label.serialize();
       })
     };
   }
 
-  doClone(lookupTable = {}, clone) {
+  doClone(lookupTable = {}, clone: any) {
     clone.setPoints(
       _.map(this.getPoints(), (point: PointModel) => {
         return point.clone(lookupTable);
@@ -302,7 +307,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
 
   generatePoint(x: number = 0, y: number = 0): PointModel {
     return new PointModel({
-      link: this,
+      link    : this,
       position: new Point(x, y)
     });
   }

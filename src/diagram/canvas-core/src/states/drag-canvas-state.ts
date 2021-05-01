@@ -30,7 +30,7 @@ export class DragCanvasState extends AbstractDisplacementState {
     };
   }
 
-  async activated(prev) {
+  async activated(prev: State) {
     super.activated(prev);
     this.engine.getModel().clearSelection();
     await this.engine.repaintCanvas(true);

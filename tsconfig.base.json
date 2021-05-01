@@ -12,7 +12,7 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": false,
-    "strictNullChecks": true,
+    "strictNullChecks": false,
     "noImplicitReturns": true,
     "strictFunctionTypes": true,
     "noImplicitAny": true,
@@ -21,7 +21,7 @@
     "strictBindCallApply": true,
     "target": "es2015",
     "lib": ["es5", "es2015", "dom"],
-    "types": ["jasmine"],
+    "types": [],
     "baseUrl": ".",
     "paths": {
       "@gradii/check-type": ["src/triangle/check-type/public-api.ts"],

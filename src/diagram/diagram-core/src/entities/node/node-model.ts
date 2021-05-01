@@ -11,7 +11,10 @@ import {
   BasePositionModelGenerics,
   DeserializeEvent
 } from '@gradii/diagram/canvas-core';
-import { Point, Rectangle } from '@gradii/diagram/geometry';
+import {
+  Point,
+  Rectangle
+} from '@gradii/diagram/geometry';
 import * as _ from 'lodash';
 import { DiagramEngine } from '../../diagram-engine';
 import { DiagramModel } from '../../models/diagram-model';
@@ -19,7 +22,7 @@ import { LinkModel } from '../link/link-model';
 import { PortModel } from '../port/port-model';
 
 export interface NodeModelListener extends BaseModelListener {
-  positionChanged?(event: BaseEntityEvent<NodeModel>): void;
+  positionChanged(event: BaseEntityEvent<NodeModel>): void;
 }
 
 export interface NodeModelGenerics extends BasePositionModelGenerics {
@@ -35,8 +38,8 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 
   constructor(options: G['OPTIONS']) {
     super(options);
-    this.ports = {};
-    this.width = 0;
+    this.ports  = {};
+    this.width  = 0;
     this.height = 0;
   }
 
@@ -53,7 +56,8 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 
     // also update the port co-ordinates (for make glorious speed)
     _.forEach(this.ports, (port) => {
-      port.setPosition(port.getX() + this.position.x - old.x, port.getY() + this.position.y - old.y);
+      port.setPosition(port.getX() + this.position.x - old.x,
+        port.getY() + this.position.y - old.y);
     });
   }
 
@@ -94,12 +98,13 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
     super.remove();
     _.forEach(this.ports, (port) => {
       _.forEach(port.getLinks(), (link) => {
+        // @ts-ignore
         link.remove();
       });
     });
   }
 
-  getPortFromID(id): PortModel | null {
+  getPortFromID(id: string): PortModel | null {
     for (let i in this.ports) {
       if (this.ports[i].getID() === id) {
         return this.ports[i];
@@ -110,11 +115,13 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 
   getLink(id: string): LinkModel {
     for (let portID in this.ports) {
-      const links = this.ports[portID].getLinks();
-      if (links[id]) {
-        return links[id];
+      const port = this.ports[portID];
+      const link = port.findLink(id);
+      if (link) {
+        return link;
       }
     }
+    return undefined;
   }
 
   getPort(name: string): PortModel | null {
@@ -128,6 +135,7 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
   removePort(port: PortModel) {
     // clear the port from the links
     for (let link of _.values(port.getLinks())) {
+      // @ts-ignore
       link.clearPort(port);
     }
     // clear the parent node reference
@@ -144,7 +152,7 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
   }
 
   updateDimensions({width, height}: { width: number; height: number }) {
-    this.width = width;
+    this.width  = width;
     this.height = height;
   }
 }

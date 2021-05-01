@@ -19,7 +19,7 @@ export interface BaseEventProxy extends BaseEvent {
 /**
  * Listeners are always in the form of an object that contains methods that take events
  */
-export type BaseListener = {
+export interface BaseListener {
   /**
    * Generic event that fires before a specific event was fired
    */
@@ -32,8 +32,8 @@ export type BaseListener = {
   // /**
   //  * Type for other events that will fire
   //  */
-  [key: string]: (event: any) => any;
-};
+  [key: string]: (event?: any) => any;
+}
 
 export interface ListenerHandle {
   /**
@@ -64,7 +64,7 @@ export class BaseObserver<L extends BaseListener = BaseListener> {
 
   fireEvent<K extends keyof L>(event: BaseEvent | any, k: string | number | symbol) {
     event = {
-      firing: true,
+      firing         : true,
       stopPropagation: () => {
         event.firing = false;
       },
@@ -101,8 +101,8 @@ export class BaseObserver<L extends BaseListener = BaseListener> {
     for (let id in this.listeners) {
       if (this.listeners[id] === listener) {
         return {
-          id: id,
-          listener: listener,
+          id        : id,
+          listener  : listener,
           deregister: () => {
             delete this.listeners[id];
           }
@@ -114,11 +114,11 @@ export class BaseObserver<L extends BaseListener = BaseListener> {
   }
 
   registerListener(listener: L): ListenerHandle {
-    const id = Toolkit.UID();
+    const id           = Toolkit.UID();
     this.listeners[id] = listener;
     return {
-      id: id,
-      listener: listener,
+      id        : id,
+      listener  : listener,
       deregister: () => {
         delete this.listeners[id];
       }

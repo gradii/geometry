@@ -4,7 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { BaseEntityEvent, BaseModelOptions, DeserializeEvent } from '@gradii/diagram/canvas-core';
+import {
+  BaseEntityEvent,
+  BaseModelOptions,
+  DeserializeEvent
+} from '@gradii/diagram/canvas-core';
 import {
   LabelModel,
   LinkModel,
@@ -17,9 +21,9 @@ import { BezierCurve } from '@gradii/diagram/geometry';
 import { DefaultLabelModel } from '../label/default-label-model';
 
 export interface DefaultLinkModelListener extends LinkModelListener {
-  colorChanged?(event: BaseEntityEvent<DefaultLinkModel> & { color: null | string }): void;
+  colorChanged(event: BaseEntityEvent<DefaultLinkModel> & { color: null | string }): void;
 
-  widthChanged?(event: BaseEntityEvent<DefaultLinkModel> & { width: 0 | number }): void;
+  widthChanged(event: BaseEntityEvent<DefaultLinkModel> & { width: 0 | number }): void;
 }
 
 export interface DefaultLinkModelOptions extends BaseModelOptions {
@@ -31,19 +35,30 @@ export interface DefaultLinkModelOptions extends BaseModelOptions {
   testName?: string;
 }
 
+export interface LinkModelOptions extends DefaultLinkModelOptions {
+  width: number;
+  color: string;
+  selectedColor: string;
+  curvyness: number;
+  type: string;
+  testName: string;
+}
+
 export interface DefaultLinkModelGenerics extends LinkModelGenerics {
   LISTENER: DefaultLinkModelListener;
   OPTIONS: DefaultLinkModelOptions;
 }
 
 export class DefaultLinkModel extends LinkModel<DefaultLinkModelGenerics> {
+  protected options: LinkModelOptions;
+
   constructor(options: DefaultLinkModelOptions = {}) {
     super({
-      type: 'default',
-      width: options.width || 3,
-      color: options.color || 'gray',
+      type         : 'default',
+      width        : options.width || 3,
+      color        : options.color || 'gray',
       selectedColor: options.selectedColor || 'rgb(0,192,255)',
-      curvyness: 50,
+      curvyness    : 50,
       ...options
     });
   }
@@ -76,23 +91,24 @@ export class DefaultLinkModel extends LinkModel<DefaultLinkModelGenerics> {
       }
       return curve.getSVGCurve();
     }
+    throw new Error('runtime exception');
   }
 
   serialize() {
     return {
       ...super.serialize(),
-      width: this.options.width,
-      color: this.options.color,
-      curvyness: this.options.curvyness,
+      width        : this.options.width,
+      color        : this.options.color,
+      curvyness    : this.options.curvyness,
       selectedColor: this.options.selectedColor
     };
   }
 
   deserialize(event: DeserializeEvent<this>) {
     super.deserialize(event);
-    this.options.color = event.data.color;
-    this.options.width = event.data.width;
-    this.options.curvyness = event.data.curvyness;
+    this.options.color         = event.data.color;
+    this.options.width         = event.data.width;
+    this.options.curvyness     = event.data.curvyness;
     this.options.selectedColor = event.data.selectedColor;
   }
 

@@ -14,7 +14,7 @@ import {
   BaseEntityOptions,
   DeserializeEvent
 } from '../../core-models/base-entity';
-import { BaseModel } from '../../core-models/base-model';
+import { BaseModel, BaseModelListener } from '../../core-models/base-model';
 import { LayerModel } from '../layer/layer-model';
 
 export interface DiagramListener extends BaseEntityListener {
@@ -26,10 +26,10 @@ export interface DiagramListener extends BaseEntityListener {
 }
 
 export interface DiagramModelOptions extends BaseEntityOptions {
-  offsetX?: number;
-  offsetY?: number;
-  zoom?: number;
-  gridSize?: number;
+  offsetX: number;
+  offsetY: number;
+  zoom: number;
+  gridSize: number;
 }
 
 export interface CanvasModelGenerics extends BaseEntityGenerics {
@@ -39,9 +39,9 @@ export interface CanvasModelGenerics extends BaseEntityGenerics {
 }
 
 export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> extends BaseEntity<G> {
-  protected layers: G['LAYER'][];
+  protected layers: LayerModel[];
 
-  constructor(options: G['OPTIONS'] = {}) {
+  constructor(options = {}) {
     super({
       zoom: 100,
       gridSize: 0,
@@ -81,7 +81,7 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
     layer.registerListener({
       entityRemoved: (event: BaseEntityEvent<BaseModel>): void => {
       }
-    });
+    } as BaseModelListener);
     this.layers.push(layer);
   }
 

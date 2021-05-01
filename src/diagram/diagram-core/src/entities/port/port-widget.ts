@@ -49,7 +49,7 @@ export class PortWidget implements OnInit, OnDestroy, DoCheck, AfterViewChecked 
 
   getExtraProps() {
     if (Toolkit.TESTING) {
-      const links = _.keys(this.port.getNode().getPort(this.port.getName()).links).join(',');
+      const links = Object.keys(this.port.getNode().getPort(this.port.getName()).links).join(',');
       return {
         'data-links': links
       };

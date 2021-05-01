@@ -12,16 +12,19 @@ import {
   BasePositionModelListener,
   DeserializeEvent
 } from '@gradii/diagram/canvas-core';
-import { Point, Rectangle } from '@gradii/diagram/geometry';
+import {
+  Point,
+  Rectangle
+} from '@gradii/diagram/geometry';
 import * as _ from 'lodash';
 import { LinkModel } from '../link/link-model';
 import { NodeModel } from '../node/node-model';
 
 export const enum PortModelAlignment {
-  TOP = 'top',
-  LEFT = 'left',
+  TOP    = 'top',
+  LEFT   = 'left',
   BOTTOM = 'bottom',
-  RIGHT = 'right'
+  RIGHT  = 'right'
 }
 
 export interface PortModelListener extends BasePositionModelListener {
@@ -44,7 +47,7 @@ export interface PortModelGenerics extends BasePositionModelGenerics {
 }
 
 export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends BasePositionModel<G> {
-  links: { [id: string]: LinkModel };
+  links: Map<string, LinkModel>;
 
   // calculated post rendering so routing can be done correctly
   width: number;
@@ -53,24 +56,24 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
 
   constructor(options: G['OPTIONS']) {
     super(options);
-    this.links = {};
+    this.links            = new Map();
     this.reportedPosition = false;
   }
 
   deserialize(event: DeserializeEvent<this>) {
     super.deserialize(event);
-    this.reportedPosition = false;
-    this.options.name = event.data.name;
+    this.reportedPosition  = false;
+    this.options.name      = event.data.name;
     this.options.alignment = event.data.alignment;
   }
 
   serialize() {
     return {
       ...super.serialize(),
-      name: this.options.name,
-      alignment: this.options.alignment,
+      name      : this.options.name,
+      alignment : this.options.alignment,
       parentNode: this.parent.getID(),
-      links: _.map(this.links, (link) => {
+      links     : Array.from(this.links.values()).map((link) => {
         return link.getID();
       })
     };
@@ -85,14 +88,14 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
       x = x.x;
     }
     super.setPosition(x, y);
-    _.forEach(this.getLinks(), (link) => {
+    this.getLinks().forEach((link) => {
       let point = link.getPointForPort(this);
       point.setPosition(point.getX() + (x as number) - old.x, point.getY() + (y as number) - old.y);
     });
   }
 
   doClone(lookupTable = {}, clone: any) {
-    clone.links = {};
+    clone.links      = {};
     clone.parentNode = this.getParent().clone(lookupTable);
   }
 
@@ -113,14 +116,18 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
   }
 
   removeLink(link: LinkModel) {
-    delete this.links[link.getID()];
+    this.links.delete(link.getID());
   }
 
   addLink(link: LinkModel) {
-    this.links[link.getID()] = link;
+    this.links.set(link.getID(), link);
   }
 
-  getLinks(): { [id: string]: LinkModel } {
+  findLink(id: string) {
+    return this.links.get(id);
+  }
+
+  getLinks() {
     return this.links;
   }
 
@@ -128,7 +135,7 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
     if (_.isFinite(this.options.maximumLinks)) {
       let numberOfLinks: number = _.size(this.links);
       if (this.options.maximumLinks === 1 && numberOfLinks >= 1) {
-        return _.values(this.links)[0];
+        return Array.from(this.links.values())[0];
       } else if (numberOfLinks >= this.options.maximumLinks) {
         return null;
       }
@@ -138,6 +145,7 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
 
   reportPosition() {
     _.forEach(this.getLinks(), (link) => {
+      // @ts-ignore
       link.getPointForPort(this).setPosition(this.getCenter());
     });
     this.fireEvent(
@@ -153,7 +161,7 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
   }
 
   updateCoords(coords: Rectangle) {
-    this.width = coords.getWidth();
+    this.width  = coords.getWidth();
     this.height = coords.getHeight();
     this.setPosition(coords.getTopLeft());
     this.reportedPosition = true;

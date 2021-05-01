@@ -47,7 +47,8 @@ export class Polygon {
       }
     }
 
-    return new Rectangle(new Point(minX, minY), new Point(maxX, minY), new Point(maxX, maxY), new Point(minX, maxY));
+    return new Rectangle(new Point(minX, minY), new Point(maxX, minY), new Point(maxX, maxY),
+      new Point(minX, maxY));
   }
 
   serialize() {
@@ -84,7 +85,10 @@ export class Polygon {
   }
 
   rotate(degrees: number) {
-    this.transform(Point.createRotateMatrix(degrees / (180 / Math.PI), this.getOrigin()));
+    const origin = this.getOrigin();
+    if (origin) {
+      this.transform(Point.createRotateMatrix(degrees / (180 / Math.PI), origin));
+    }
   }
 
   translate(offsetX: number, offsetY: number) {
@@ -105,7 +109,7 @@ export class Polygon {
     return ob;
   }
 
-  getOrigin(): Point {
+  getOrigin(): Point | null {
     if (this.points.length === 0) {
       return null;
     }
@@ -134,7 +138,8 @@ export class Polygon {
       }
     }
 
-    return new Rectangle(new Point(minX, minY), new Point(maxX, minY), new Point(maxX, maxY), new Point(minX, maxY));
+    return new Rectangle(new Point(minX, minY), new Point(maxX, minY), new Point(maxX, maxY),
+      new Point(minX, maxY));
   }
 }
 
@@ -160,7 +165,10 @@ export class Rectangle extends Polygon {
   }
 
   static pointsFromBounds(x: number, y: number, width: number, height: number): Point[] {
-    return [new Point(x, y), new Point(x + width, y), new Point(x + width, y + height), new Point(x, y + height)];
+    return [
+      new Point(x, y), new Point(x + width, y), new Point(x + width, y + height),
+      new Point(x, y + height)
+    ];
   }
 
   updateDimensions(x: number, y: number, width: number, height: number) {

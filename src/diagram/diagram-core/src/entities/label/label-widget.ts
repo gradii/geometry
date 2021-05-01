@@ -63,6 +63,7 @@ export class LabelWidget implements AfterViewChecked {
     });
   }
 
+  // @ts-ignore
   findPathAndRelativePositionToRenderLabel = (index: number): { path: SVGPathElement; position: number } => {
     // an array to hold all path lengths, making sure we hit the DOM only once to fetch this information
     const link = this.label.getParent();

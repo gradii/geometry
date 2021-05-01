@@ -23,10 +23,11 @@ export class NodeLayerModel<G extends NodeLayerModelGenerics = NodeLayerModelGen
     });
   }
 
-  addModel(model: G['CHILDREN']): void {
+  addModel(model: NodeModel): void {
     if (!(model instanceof NodeModel)) {
       throw new Error('Can only add nodes to this layer');
     }
+    // @ts-ignore
     model.registerListener({
       entityRemoved: () => {
         (this.getParent() as DiagramModel).removeNode(model);

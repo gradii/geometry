@@ -14,7 +14,11 @@ import {
   FactoryBank,
   Toolkit
 } from '@gradii/diagram/canvas-core';
-import { Point, Polygon, Rectangle } from '@gradii/diagram/geometry';
+import {
+  Point,
+  Polygon,
+  Rectangle
+} from '@gradii/diagram/geometry';
 import { LabelModel } from './entities/label/label-model';
 import { LinkModel } from './entities/link/link-model';
 import { NodeModel } from './entities/node/node-model';
@@ -36,14 +40,14 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
     this.maxNumberPointsPerLink = 1000;
 
     // create banks for the different factory types
-    this.nodeFactories = new FactoryBank();
-    this.linkFactories = new FactoryBank();
-    this.portFactories = new FactoryBank();
+    this.nodeFactories  = new FactoryBank();
+    this.linkFactories  = new FactoryBank();
+    this.portFactories  = new FactoryBank();
     this.labelFactories = new FactoryBank();
 
     const setup = (factory: FactoryBank) => {
       factory.registerListener({
-        factoryAdded: (event) => {
+        factoryAdded  : (event) => {
           event.factory.setDiagramEngine(this);
         },
         factoryRemoved: (event) => {
@@ -62,14 +66,15 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
    * Gets a model and element under the mouse cursor
    */
   getMouseElement(event: MouseEvent): BaseModel {
-    let target = event.target as Element;
+    let target       = event.target as Element;
     let diagramModel = this.model;
 
     // is it a port
     let element = Toolkit.closest(target, '.port[data-name]');
     if (element) {
       let nodeElement = Toolkit.closest(target, '.node[data-nodeid]') as HTMLElement;
-      return diagramModel.getNode(nodeElement.getAttribute('data-nodeid')).getPort(element.getAttribute('data-name'));
+      return diagramModel.getNode(nodeElement.getAttribute('data-nodeid')).getPort(
+        element.getAttribute('data-name'));
     }
 
     // look for a point
@@ -187,11 +192,11 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
       element = this.getNodePortElement(port);
     }
     const sourceRect = element.getBoundingClientRect();
-    const point = this.getRelativeMousePoint({
+    const point      = this.getRelativeMousePoint({
       clientX: sourceRect.left,
       clientY: sourceRect.top
     });
-    const zoom = this.model.getZoomLevel() / 100.0;
+    const zoom       = this.model.getZoomLevel() / 100.0;
     return new Rectangle(point.x, point.y, sourceRect.width / zoom, sourceRect.height / zoom);
   }
 
@@ -202,16 +207,16 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
   getNodeDimensions(node: NodeModel): { width: number; height: number } {
     if (!this.canvas) {
       return {
-        width: 0,
+        width : 0,
         height: 0
       };
     }
 
     const nodeElement = this.getNodeElement(node);
-    const nodeRect = nodeElement.getBoundingClientRect();
+    const nodeRect    = nodeElement.getBoundingClientRect();
 
     return {
-      width: nodeRect.width,
+      width : nodeRect.width,
       height: nodeRect.height
     };
   }
@@ -221,11 +226,7 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
    * @returns rectangle points in node layer coordinates
    */
   getBoundingNodesRect(nodes: NodeModel[], margin?: number): Rectangle {
-    if (nodes) {
-      if (nodes.length === 0) {
-        return new Rectangle(0, 0, 0, 0);
-      }
-
+    if (nodes && nodes.length) {
       let boundingBox = Polygon.boundingBoxFromPolygons(nodes.map((node) => node.getBoundingBox()));
       if (margin) {
         return new Rectangle(
@@ -237,6 +238,8 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
       }
       return boundingBox;
     }
+
+    return new Rectangle(0, 0, 0, 0);
   }
 
   zoomToFitNodes(margin?: number) {
@@ -262,8 +265,8 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
 
     if (nodesRect) {
       // there is something we should zoom on
-      let canvasRect = this.canvas.getBoundingClientRect();
-      let canvasTopLeftPoint = {
+      let canvasRect            = this.canvas.getBoundingClientRect();
+      let canvasTopLeftPoint    = {
         x: canvasRect.left,
         y: canvasRect.top
       };
@@ -272,8 +275,8 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
         y: canvasTopLeftPoint.y + this.getModel().getOffsetY()
       };
 
-      const xFactor = this.canvas.clientWidth / nodesRect.getWidth();
-      const yFactor = this.canvas.clientHeight / nodesRect.getHeight();
+      const xFactor    = this.canvas.clientWidth / nodesRect.getWidth();
+      const yFactor    = this.canvas.clientHeight / nodesRect.getHeight();
       const zoomFactor = xFactor < yFactor ? xFactor : yFactor;
 
       this.model.setZoomLevel(zoomFactor * 100);

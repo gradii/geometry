@@ -4,11 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import closest from 'closest';
-
 export class Toolkit {
   static TESTING: boolean = false;
-  static TESTING_UID = 0;
+  static TESTING_UID      = 0;
 
   /**
    * Generats a unique ID (thanks Stack overflow :3)
@@ -30,9 +28,6 @@ export class Toolkit {
    * Finds the closest element as a polyfill
    */
   static closest(element: Element, selector: string) {
-    if (document.body.closest) {
-      return element.closest(selector);
-    }
-    return closest(element, selector);
+    return element.closest(selector);
   }
 }

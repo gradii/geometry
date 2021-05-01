@@ -5,7 +5,13 @@
  */
 
 import { Component, ElementRef, Inject, Input } from '@angular/core';
-import { BaseEntityEvent, BaseModel, ENGINE, ListenerHandle } from '@gradii/diagram/canvas-core';
+import {
+  BaseEntityEvent,
+  BaseModel,
+  BaseModelListener,
+  ENGINE,
+  ListenerHandle
+} from '@gradii/diagram/canvas-core';
 import { DiagramEngine } from '../../diagram-engine';
 import { NodeModel } from './node-model';
 
@@ -67,6 +73,7 @@ export class NodeWidget {
   // }
 
   installSelectionListener() {
+    // @ts-ignore
     this.listener = this.node.registerListener({
       selectionChanged: (event: BaseEntityEvent<BaseModel> & { isSelected: boolean }) => {
         // this.forceUpdate();

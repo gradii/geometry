@@ -75,9 +75,9 @@ export class DefaultLinkWidget implements OnInit, OnDestroy, AfterViewInit, Afte
 
   @Input() selected: boolean = false;
 
-  svgPaths = [];
-  pointPaths = [];
-  linkPaths = [];
+  svgPaths: any[] = [];
+  pointPaths: any[] = [];
+  linkPaths: any[] = [];
 
   constructor(@Inject(ENGINE) public engine: DiagramEngine) {
   }

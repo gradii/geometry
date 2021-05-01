@@ -11,6 +11,7 @@ import {
   CanvasModel,
   CanvasModelGenerics,
   DeserializeEvent,
+  DiagramModelOptions,
   LayerModel
 } from '@gradii/diagram/canvas-core';
 import * as _ from 'lodash';
@@ -33,7 +34,9 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
   protected activeNodeLayer: NodeLayerModel;
   protected activeLinkLayer: LinkLayerModel;
 
-  constructor(options: G['OPTIONS'] = {}) {
+  protected options: DiagramModelOptions;
+
+  constructor(options= {}) {
     super(options);
     this.addLayer(new LinkLayerModel());
     this.addLayer(new NodeLayerModel());
@@ -97,6 +100,7 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
         return model;
       }
     }
+    return undefined;
   }
 
   getLink(link: string): LinkModel {
@@ -106,6 +110,7 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
         return model;
       }
     }
+    return undefined;
   }
 
   addAll(...models: BaseModel[]): BaseModel[] {

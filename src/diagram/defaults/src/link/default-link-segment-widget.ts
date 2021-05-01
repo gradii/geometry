@@ -77,12 +77,12 @@ export class DefaultLinkSegmentWidget {
         this.onSelection(true);
       },
       ...this.extras,
-      ref: null,
+      // ref: null,
       'data-linkid': this.link.getID(),
       strokeOpacity: this.selected ? 0.1 : 0,
       strokeWidth: 20,
       fill: 'none',
-      onContextMenu: () => {
+      onContextMenu: (event: Event) => {
         if (!this.link.isLocked()) {
           event.preventDefault();
           this.link.remove();

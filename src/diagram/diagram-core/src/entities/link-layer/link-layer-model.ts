@@ -28,6 +28,7 @@ export class LinkLayerModel<G extends LinkLayerModelGenerics = LinkLayerModelGen
     if (!(model instanceof LinkModel)) {
       throw new Error('Can only add links to this layer');
     }
+    // @ts-ignore
     model.registerListener({
       entityRemoved: () => {
         (this.getParent() as DiagramModel).removeLink(model);

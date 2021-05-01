@@ -15,9 +15,9 @@ import {
 } from './base-entity';
 
 export interface BaseModelListener extends BaseEntityListener {
-  selectionChanged?(event: BaseEntityEvent<BaseModel> & { isSelected: boolean }): void;
+  selectionChanged?: (event: BaseEntityEvent<BaseModel> & { isSelected: boolean }) => void;
 
-  entityRemoved?(event: BaseEntityEvent<BaseModel>): void;
+  entityRemoved?: (event: BaseEntityEvent<BaseModel>) => void;
 }
 
 export interface BaseModelOptions extends BaseEntityOptions {
