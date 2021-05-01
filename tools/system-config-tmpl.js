@@ -9,6 +9,7 @@
 // converts this template file into the actual SystemJS configuration file.
 
 var TRIANGLE_PACKAGES = $TRIANGLE_ENTRYPOINTS_TMPL;
+var CUBE_PACKAGES = $CUBE_ENTRYPOINTS_TMPL;
 
 /** Map of Angular framework packages and their bundle names. */
 var frameworkPackages = $ANGULAR_PACKAGE_BUNDLES;
@@ -111,6 +112,10 @@ function setupLocalReleasePackages() {
   // Configure all secondary entry-points.
   TRIANGLE_PACKAGES.forEach(function(pkgName) {
     configureEntryPoint('triangle', pkgName);
+  });
+
+  CUBE_PACKAGES.forEach(function(pkgName) {
+    configureEntryPoint('cube', pkgName);
   });
 
   // Private secondary entry-points.

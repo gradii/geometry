@@ -8,8 +8,12 @@ ng_module(
     assets = [
         "dev-cube.html",
         ":dev_cube_scss",
-    ],
+    ] + glob([
+        "**/*.css",
+    ]),
     deps = [
+        "//src/cube/gantt",
+        "@npm//@angular/common",
         "@npm//@angular/forms",
         "@npm//@angular/router",
     ],

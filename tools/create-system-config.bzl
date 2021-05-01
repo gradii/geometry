@@ -1,5 +1,6 @@
 load("//:packages.bzl", "ANGULAR_PACKAGE_BUNDLES")
 load("//src/triangle:config.bzl", "TRIANGLE_ENTRYPOINTS")
+load("//src/cube:config.bzl", "CUBE_ENTRYPOINTS")
 load("//tools:expand_template.bzl", "expand_template")
 
 """
@@ -31,6 +32,7 @@ def create_system_config(
             "$NODE_MODULES_BASE_PATH": node_modules_base_path,
             "$PACKAGES_DIR": packages_dir,
             "$TRIANGLE_ENTRYPOINTS_TMPL": str(TRIANGLE_ENTRYPOINTS),
+            "$CUBE_ENTRYPOINTS_TMPL": str(CUBE_ENTRYPOINTS),
         },
         template = "//tools:system-config-tmpl.js",
     )

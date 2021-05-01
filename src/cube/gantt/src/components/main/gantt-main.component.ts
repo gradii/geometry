@@ -26,7 +26,7 @@ import {
 } from '../../gantt-upper';
 
 @Component({
-  selector: 'gantt-main',
+  selector   : 'gantt-main',
   templateUrl: './gantt-main.component.html'
 })
 export class GanttMainComponent implements OnInit {
@@ -54,7 +54,12 @@ export class GanttMainComponent implements OnInit {
   ngOnInit() {
   }
 
-  trackBy(item: GanttGroupInternal | GanttItemInternal, index: number) {
+
+  tracItemBy(index: number, item: GanttItemInternal): any {
+    return item.id || index;
+  }
+
+  trackGroupBy(index: number, item: GanttGroupInternal): any {
     return item.id || index;
   }
 }

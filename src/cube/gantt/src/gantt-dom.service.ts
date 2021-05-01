@@ -12,6 +12,7 @@ import {
 import {
   fromEvent,
   merge,
+  Observable,
   Subject
 } from 'rxjs';
 import {
@@ -19,7 +20,8 @@ import {
   map,
   pairwise,
   startWith,
-  takeUntil
+  takeUntil,
+  tap
 } from 'rxjs/operators';
 import { isNumber } from './utils/helpers';
 
@@ -85,20 +87,23 @@ export class GanttDomService implements OnDestroy {
 
   private disableBrowserWheelEvent() {
     const container = this.mainContainer as HTMLElement;
-    fromEvent(container, 'wheel')
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((event: WheelEvent) => {
-        const delta = event.deltaX;
-        if (!delta) {
-          return;
-        }
-        if (
-          (container.scrollLeft + container.offsetWidth === container.scrollWidth && delta > 0) ||
-          (container.scrollLeft === 0 && delta < 0)
-        ) {
-          event.preventDefault();
-        }
-      });
+    fromEvent<MouseWheelEvent>(container, 'wheel')
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap((event: WheelEvent) => {
+          const delta = event.deltaX;
+          if (!delta) {
+            return;
+          }
+          if (
+            (container.scrollLeft + container.offsetWidth === container.scrollWidth && delta > 0) ||
+            (container.scrollLeft === 0 && delta < 0)
+          ) {
+            event.preventDefault();
+          }
+        })
+      )
+      .subscribe();
   }
 
   initialize(root: ElementRef<HTMLElement>) {
@@ -112,7 +117,7 @@ export class GanttDomService implements OnDestroy {
     this.disableBrowserWheelEvent();
   }
 
-  getViewerScroll() {
+  getViewerScroll(): Observable<ScrollEvent> {
     return fromEvent<Event>(this.mainContainer, 'scroll').pipe(
       map(() => this.mainContainer.scrollLeft),
       pairwise(),
@@ -136,8 +141,8 @@ export class GanttDomService implements OnDestroy {
     );
   }
 
-  getResize() {
-    return fromEvent(window, 'resize').pipe(auditTime(150));
+  getResize(): Observable<UIEvent>  {
+    return fromEvent<UIEvent>(window, 'resize').pipe(auditTime(150));
   }
 
   scrollMainContainer(left: number) {

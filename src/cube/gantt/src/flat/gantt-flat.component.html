@@ -36,7 +36,9 @@
                 <ng-container *ngFor="let items of group.sprints">
                   <div class="gantt-flat-items" [style.height.px]="styles.lineHeight">
                     <ng-container *ngFor="let item of items; trackBy: trackBy">
-                      <gantt-bar [item]="item" [template]="barTemplate" (barClick)="barClick.emit($event)"></gantt-bar>
+                      <gantt-bar [item]="item"
+                                 [template]="barTemplate"
+                                 (barClick)="barClick.emit($event)"></gantt-bar>
                     </ng-container>
                   </div>
                 </ng-container>

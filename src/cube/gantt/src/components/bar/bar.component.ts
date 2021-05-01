@@ -103,7 +103,7 @@ export class NgxGanttBarComponent extends GanttItemUpper implements OnInit, Afte
 
     for (const key in style) {
       if (style.hasOwnProperty(key)) {
-        contentElement.style[key] = style[key];
+        contentElement.style.setProperty(key, style[key]!);
       }
     }
   }

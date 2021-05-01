@@ -14,7 +14,7 @@ export interface GanttGroup<T = unknown> {
   class?: string;
 }
 
-export class GanttGroupInternal {
+export class GanttGroupInternal{
   id: string;
   title: string;
   origin: GanttGroup;
