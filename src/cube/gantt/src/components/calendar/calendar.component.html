@@ -5,11 +5,13 @@
 
 <svg class="gantt-calendar-overlay-main" [attr.width]="view.width" [attr.height]="headerHeight">
   <g>
-    <text class="primary-text" *ngFor="let point of view.primaryDatePoints; trackBy: trackBy" [attr.x]="point.x" [attr.y]="point.y">
+    <text class="primary-text" *ngFor="let point of view.primaryDatePoints; trackBy: trackBy" [attr.x]="point.x"
+          [attr.y]="point.y">
       {{ point.text }}
     </text>
     <ng-container *ngFor="let point of view.secondaryDatePoints; trackBy: trackBy">
-      <text class="secondary-text" [class.secondary-text-weekend]="point.additions?.isWeekend" [attr.x]="point.x" [attr.y]="point.y">
+      <text class="secondary-text" [class.secondary-text-weekend]="point.additions?.isWeekend" [attr.x]="point.x"
+            [attr.y]="point.y">
         {{ point.text }}
       </text>
     </ng-container>
@@ -26,7 +28,8 @@
     </g>
 
     <g>
-      <line [attr.x1]="0" [attr.x2]="view.width" [attr.y1]="headerHeight" [attr.y2]="headerHeight" class="header-line"></line>
+      <line [attr.x1]="0" [attr.x2]="view.width" [attr.y1]="headerHeight" [attr.y2]="headerHeight"
+            class="header-line"></line>
     </g>
   </g>
   <g>

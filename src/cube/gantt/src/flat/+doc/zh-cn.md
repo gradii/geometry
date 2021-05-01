@@ -1,6 +1,5 @@
 ---
-title: Flat
-order: 1
+title: Flat order: 1
 ---
 
 ## Flat

@@ -47,6 +47,8 @@ ng_module(
         "//src/dev-app/list",
         "//src/dev-app/avatar",
 
+        "//src/dev-app/cube",
+
         "//src/triangle/core",
         "@npm//@angular/cdk",
         "@npm//@angular/router",

@@ -8,7 +8,8 @@
           <span class="group-title">{{ group.title }}</span>
         </div>
         <div class="gantt-group-content" *ngIf="group.expanded">
-          <div class="gantt-group-content-section" [style.height.px]="group.versions.length * styles.lineHeight">版本</div>
+          <div class="gantt-group-content-section" [style.height.px]="group.versions.length * styles.lineHeight">版本
+          </div>
           <div class="gantt-group-content-section" [style.height.px]="group.sprints.length * styles.lineHeight">迭代</div>
         </div>
       </div>

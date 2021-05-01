@@ -1,6 +1,12 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 export const defaultStyles = {
-    lineHeight: 44,
-    barHeight: 22
+  lineHeight: 44,
+  barHeight : 22
 };
 
 export const headerHeight = 44;

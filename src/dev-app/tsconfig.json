@@ -8,6 +8,9 @@
     "rootDir": "..",
     "baseUrl": ".",
     "paths": {
+      "@gradii/cube/*": [
+        "../cube/*"
+      ],
       "@gradii/triangle/*": [
         "../triangle/*"
       ],

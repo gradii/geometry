@@ -1,6 +1,7 @@
 <div class="gantt-table-header gantt-table-row">
   <div class="gantt-table-column" *ngFor="let column of columnList; let i = index" [style.width]="column.columnWidth">
-    <ng-container *ngIf="column.headerTemplateRef; else default" [ngTemplateOutlet]="column.headerTemplateRef"></ng-container>
+    <ng-container *ngIf="column.headerTemplateRef; else default"
+                  [ngTemplateOutlet]="column.headerTemplateRef"></ng-container>
     <ng-template #default>
       {{ column.name }}
     </ng-template>
@@ -68,7 +69,8 @@
       [style.height.px]="gantt.styles.lineHeight"
       [style.lineHeight.px]="gantt.styles.lineHeight"
     >
-      <div class="gantt-table-column" *ngFor="let column of columnList; let first = first" [style.width]="column.columnWidth">
+      <div class="gantt-table-column" *ngFor="let column of columnList; let first = first"
+           [style.width]="column.columnWidth">
         <div *ngIf="first" class="gantt-expand-icon" [style.marginLeft.px]="level * 20">
           <ng-container *ngIf="level < gantt.maxLevel - 1 && item.expandable">
             <gantt-icon

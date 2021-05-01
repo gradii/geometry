@@ -133,6 +133,14 @@ export const DEV_APP_ROUTES: Routes = [
       }
     ]
   },
+  {
+    path: '', component: DevAppHome, children: [
+      {
+        path        : 'cube',
+        loadChildren: '/cube/dev-cube.module#DevCubeModule'
+      }
+    ]
+  },
 
   {path: '**', component: DevApp404},
 ];

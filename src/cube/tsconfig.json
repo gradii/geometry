@@ -8,11 +8,11 @@
       "@gradii/check-type": [
         "../check-type"
       ],
-      "@gradii/triangle": [
-        "../triangle"
+      "@gradii/cube": [
+        "../cube"
       ],
-      "@gradii/triangle/*": [
-        "../triangle/*"
+      "@gradii/cube/*": [
+        "../cube/*"
       ]
     }
   },
