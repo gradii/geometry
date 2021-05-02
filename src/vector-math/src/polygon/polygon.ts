@@ -5,7 +5,6 @@
  */
 
 import { Matrix3 } from '../matrix3';
-import { Quad } from '../quad';
 import { Vector2 } from '../vector2';
 import { Rectangle } from './rectangle';
 
