@@ -713,8 +713,8 @@ export class Matrix3 {
    * @returns
    */
   public translate(v: Vector2) {
-    const x = v[0];
-    const y = v[1];
+    const x = v.x;
+    const y = v.y;
 
     const a00 = this.values[0];
     const a01 = this.values[1];

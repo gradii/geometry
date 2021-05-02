@@ -4,11 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { EPSILON } from './common';
 import { Matrix3 } from './matrix3';
 import { Matrix4 } from './matrix4';
 import { Vector3 } from './vector3';
 import { Vector4 } from './vector4';
-import { EPSILON } from './common';
 
 export class Quaternion {
   private values = new Float32Array(4);
@@ -112,14 +112,14 @@ export class Quaternion {
     }
 
     const q1x = q1.x,
-      q1y = q1.y,
-      q1z = q1.z,
-      q1w = q1.w,
+          q1y = q1.y,
+          q1z = q1.z,
+          q1w = q1.w,
 
-      q2x = q2.x,
-      q2y = q2.y,
-      q2z = q2.z,
-      q2w = q2.w;
+          q2x = q2.x,
+          q2y = q2.y,
+          q2z = q2.z,
+          q2w = q2.w;
 
     out.x = q1x * q2w + q1w * q2x + q1y * q2z - q1z * q2y;
     out.y = q1y * q2w + q1w * q2y + q1z * q2x - q1x * q2z;
@@ -135,14 +135,14 @@ export class Quaternion {
     }
 
     const q1x = q1.x,
-      q1y = q1.y,
-      q1z = q1.z,
-      q1w = q1.w,
+          q1y = q1.y,
+          q1z = q1.z,
+          q1w = q1.w,
 
-      q2x = q2.x,
-      q2y = q2.y,
-      q2z = q2.z,
-      q2w = q2.w;
+          q2x = q2.x,
+          q2y = q2.y,
+          q2z = q2.z,
+          q2w = q2.w;
 
     out.x = q1w * q2z + q1z * q2w + q1x * q2y - q1y * q2x;
     out.y = q1w * q2w - q1x * q2x - q1y * q2y - q1z * q2z;
@@ -152,7 +152,8 @@ export class Quaternion {
     return out;
   }
 
-  public static shortMix(q1: Quaternion, q2: Quaternion, time: number, out: Quaternion = null): Quaternion {
+  public static shortMix(q1: Quaternion, q2: Quaternion, time: number,
+                         out: Quaternion = null): Quaternion {
     if (!out) {
       out = new Quaternion();
     }
@@ -168,7 +169,7 @@ export class Quaternion {
     }
 
     let cos = Quaternion.dot(q1, q2),
-      q2a = q2.copy();
+        q2a = q2.copy();
 
     if (cos < 0.0) {
       q2a.inverse();
@@ -176,13 +177,13 @@ export class Quaternion {
     }
 
     let k0: number,
-      k1: number;
+        k1: number;
 
     if (cos > 0.9999) {
       k0 = 1 - time;
       k1 = 0 + time;
     } else {
-      const sin: number = Math.sqrt(1 - cos * cos);
+      const sin: number   = Math.sqrt(1 - cos * cos);
       const angle: number = Math.atan2(sin, cos);
 
       const oneOverSin: number = 1 / sin;
@@ -199,7 +200,8 @@ export class Quaternion {
     return out;
   }
 
-  public static mix(q1: Quaternion, q2: Quaternion, time: number, out: Quaternion = null): Quaternion {
+  public static mix(q1: Quaternion, q2: Quaternion, time: number,
+                    out: Quaternion = null): Quaternion {
     if (!out) {
       out = new Quaternion();
     }
@@ -212,8 +214,8 @@ export class Quaternion {
       return out;
     }
 
-    const halfTheta = Math.acos(cosHalfTheta),
-      sinHalfTheta = Math.sqrt(1.0 - cosHalfTheta * cosHalfTheta);
+    const halfTheta    = Math.acos(cosHalfTheta),
+          sinHalfTheta = Math.sqrt(1.0 - cosHalfTheta * cosHalfTheta);
 
     if (Math.abs(sinHalfTheta) < 0.001) {
       out.x = q1.x * 0.5 + q2.x * 0.5;
@@ -225,7 +227,7 @@ export class Quaternion {
     }
 
     const ratioA = Math.sin((1 - time) * halfTheta) / sinHalfTheta,
-      ratioB = Math.sin(time * halfTheta) / sinHalfTheta;
+          ratioB = Math.sin(time * halfTheta) / sinHalfTheta;
 
     out.x = q1.x * ratioA + q2.x * ratioB;
     out.y = q1.y * ratioA + q2.y * ratioB;
@@ -255,20 +257,20 @@ export class Quaternion {
     return q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.w * q2.w;
   }
 
-  public static lerp(a: Quaternion, b: Quaternion, t: number, result = null) {
+  public static lerp(a: Quaternion, b: Quaternion, t: number, result?: Quaternion) {
     if (!result) {
       result = new Quaternion();
     }
 
-    const ax = a[0];
-    const ay = a[1];
-    const az = a[2];
-    const aw = a[3];
+    const ax = a.x;
+    const ay = a.y;
+    const az = a.z;
+    const aw = a.w;
 
-    result[0] = ax + t * (b[0] - ax);
-    result[1] = ay + t * (b[1] - ay);
-    result[2] = az + t * (b[2] - az);
-    result[3] = aw + t * (b[3] - aw);
+    result.values[0] = ax + t * (b.x - ax);
+    result.values[1] = ay + t * (b.y - ay);
+    result.values[2] = az + t * (b.z - az);
+    result.values[3] = aw + t * (b.w - aw);
     return result;
   }
 
@@ -288,14 +290,14 @@ export class Quaternion {
       out = new Quaternion();
     }
 
-    const ax = a[0];
-    const ay = a[1];
-    const az = a[2];
-    const aw = a[3];
-    let bx = b[0];
-    let by = b[1];
-    let bz = b[2];
-    let bw = b[3];
+    const ax = a.x;
+    const ay = a.y;
+    const az = a.z;
+    const aw = a.w;
+    let bx   = b.x;
+    let by   = b.y;
+    let bz   = b.z;
+    let bw   = b.w;
 
     let omega;
     let cosom;
@@ -308,16 +310,16 @@ export class Quaternion {
     // adjust signs (if necessary)
     if (cosom < 0.0) {
       cosom = -cosom;
-      bx = -bx;
-      by = -by;
-      bz = -bz;
-      bw = -bw;
+      bx    = -bx;
+      by    = -by;
+      bz    = -bz;
+      bw    = -bw;
     }
     // calculate coefficients
     if (1.0 - cosom > 0.000001) {
       // standard case (slerp)
-      omega = Math.acos(cosom);
-      sinom = Math.sin(omega);
+      omega  = Math.acos(cosom);
+      sinom  = Math.sin(omega);
       scale0 = Math.sin((1.0 - t) * omega) / sinom;
       scale1 = Math.sin(t * omega) / sinom;
     } else {
@@ -327,10 +329,10 @@ export class Quaternion {
       scale1 = t;
     }
     // calculate final values
-    out[0] = scale0 * ax + scale1 * bx;
-    out[1] = scale0 * ay + scale1 * by;
-    out[2] = scale0 * az + scale1 * bz;
-    out[3] = scale0 * aw + scale1 * bw;
+    out.values[0] = scale0 * ax + scale1 * bx;
+    out.values[1] = scale0 * ay + scale1 * by;
+    out.values[2] = scale0 * az + scale1 * bz;
+    out.values[3] = scale0 * aw + scale1 * bw;
 
     return out;
   }
@@ -378,42 +380,42 @@ export class Quaternion {
    * @param  m rotation matrix
    * @returns   out
    */
-  public static fromMatrix3(m: Matrix3, out: Quaternion = null) {
+  public static fromMatrix3(m: Matrix3, out?: Quaternion) {
     // Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
     // article "Quaternion Calculus and Fast Animation".
     if (!out) {
       out = new Quaternion();
     }
 
-    const fTrace = m[0] + m[4] + m[8];
+    const fTrace = m.at(0) + m.at(4) + m.at(8);
     let fRoot;
 
     if (fTrace > 0.0) {
       // |w| > 1/2, may as well choose w > 1/2
-      fRoot = Math.sqrt(fTrace + 1.0); // 2w
-      out[3] = 0.5 * fRoot;
-      fRoot = 0.5 / fRoot; // 1/(4w)
-      out[0] = (m[5] - m[7]) * fRoot;
-      out[1] = (m[6] - m[2]) * fRoot;
-      out[2] = (m[1] - m[3]) * fRoot;
+      fRoot         = Math.sqrt(fTrace + 1.0); // 2w
+      out.values[3] = 0.5 * fRoot;
+      fRoot         = 0.5 / fRoot; // 1/(4w)
+      out.values[0] = (m.at(5) - m.at(7)) * fRoot;
+      out.values[1] = (m.at(6) - m.at(2)) * fRoot;
+      out.values[2] = (m.at(1) - m.at(3)) * fRoot;
     } else {
       // |w| <= 1/2
       let i = 0;
-      if (m[4] > m[0]) {
+      if (m.at(4) > m.at(0)) {
         i = 1;
       }
-      if (m[8] > m[i * 3 + i]) {
+      if (m.at(8) > m.at(i * 3 + i)) {
         i = 2;
       }
       const j = (i + 1) % 3;
       const k = (i + 2) % 3;
 
-      fRoot = Math.sqrt(m[i * 3 + i] - m[j * 3 + j] - m[k * 3 + k] + 1.0);
-      out[i] = 0.5 * fRoot;
-      fRoot = 0.5 / fRoot;
-      out[3] = (m[j * 3 + k] - m[k * 3 + j]) * fRoot;
-      out[j] = (m[j * 3 + i] + m[i * 3 + j]) * fRoot;
-      out[k] = (m[k * 3 + i] + m[i * 3 + k]) * fRoot;
+      fRoot         = Math.sqrt(m.at(i * 3 + i) - m.at(j * 3 + j) - m.at(k * 3 + k) + 1.0);
+      out.values[i] = 0.5 * fRoot;
+      fRoot         = 0.5 / fRoot;
+      out.values[3] = (m.at(j * 3 + k) - m.at(k * 3 + j)) * fRoot;
+      out.values[j] = (m.at(j * 3 + i) + m.at(i * 3 + j)) * fRoot;
+      out.values[k] = (m.at(k * 3 + i) + m.at(i * 3 + k)) * fRoot;
     }
 
     return out;
@@ -443,18 +445,18 @@ export class Quaternion {
 
   public roll(): number {
     const x = this.x,
-      y = this.y,
-      z = this.z,
-      w = this.w;
+          y = this.y,
+          z = this.z,
+          w = this.w;
 
     return Math.atan2(2.0 * (x * y + w * z), w * w + x * x - y * y - z * z);
   }
 
   public pitch(): number {
     const x = this.x,
-      y = this.y,
-      z = this.z,
-      w = this.w;
+          y = this.y,
+          z = this.z,
+          w = this.w;
 
     return Math.atan2(2.0 * (y * z + w * x), w * w - x * x - y * y + z * z);
   }
@@ -511,9 +513,9 @@ export class Quaternion {
 
   public length(): number {
     const x = this.x,
-      y = this.y,
-      z = this.z,
-      w = this.w;
+          y = this.y,
+          z = this.z,
+          w = this.w;
 
     return Math.sqrt(x * x + y * y + z * z + w * w);
   }
@@ -524,9 +526,9 @@ export class Quaternion {
     }
 
     const x = this.x,
-      y = this.y,
-      z = this.z,
-      w = this.w;
+          y = this.y,
+          z = this.z,
+          w = this.w;
 
     let length = Math.sqrt(x * x + y * y + z * z + w * w);
 
@@ -565,14 +567,14 @@ export class Quaternion {
    */
   public multiply(other: Quaternion): Quaternion {
     const q1x = this.x,
-      q1y = this.y,
-      q1z = this.z,
-      q1w = this.w;
+          q1y = this.y,
+          q1z = this.z,
+          q1w = this.w;
 
     const q2x = other.x,
-      q2y = other.y,
-      q2z = other.z,
-      q2w = other.w;
+          q2y = other.y,
+          q2z = other.z,
+          q2w = other.w;
 
     this.x = q1x * q2w + q1w * q2x + q1y * q2z - q1z * q2y;
     this.y = q1y * q2w + q1w * q2y + q1z * q2x - q1x * q2z;
@@ -633,18 +635,18 @@ export class Quaternion {
     }
 
     const x = vector.x,
-      y = vector.y,
-      z = vector.z;
+          y = vector.y,
+          z = vector.z;
 
     const qx = this.x,
-      qy = this.y,
-      qz = this.z,
-      qw = this.w;
+          qy = this.y,
+          qz = this.z,
+          qw = this.w;
 
     const ix = qw * x + qy * z - qz * y,
-      iy = qw * y + qz * x - qx * z,
-      iz = qw * z + qx * y - qy * x,
-      iw = -qx * x - qy * y - qz * z;
+          iy = qw * y + qz * x - qx * z,
+          iz = qw * z + qx * y - qy * x,
+          iw = -qx * x - qy * y - qz * z;
 
     out.x = ix * qw + iw * -qx + iy * -qz - iz * -qy;
     out.y = iy * qw + iw * -qy + iz * -qx - ix * -qz;
@@ -743,23 +745,23 @@ export class Quaternion {
     }
 
     const x = this.x,
-      y = this.y,
-      z = this.z,
-      w = this.w;
+          y = this.y,
+          z = this.z,
+          w = this.w;
 
     const x2 = x + x,
-      y2 = y + y,
-      z2 = z + z;
+          y2 = y + y,
+          z2 = z + z;
 
     const xx = x * x2,
-      xy = x * y2,
-      xz = x * z2,
-      yy = y * y2,
-      yz = y * z2,
-      zz = z * z2,
-      wx = w * x2,
-      wy = w * y2,
-      wz = w * z2;
+          xy = x * y2,
+          xz = x * z2,
+          yy = y * y2,
+          yz = y * z2,
+          zz = z * z2,
+          wx = w * x2,
+          wy = w * y2,
+          wz = w * z2;
 
     out.init([
       1 - (yy + zz),
@@ -783,24 +785,24 @@ export class Quaternion {
       out = new Matrix4();
     }
 
-    const x = this.x,
-      y = this.y,
-      z = this.z,
-      w = this.w,
+    const x  = this.x,
+          y  = this.y,
+          z  = this.z,
+          w  = this.w,
 
-      x2 = x + x,
-      y2 = y + y,
-      z2 = z + z,
+          x2 = x + x,
+          y2 = y + y,
+          z2 = z + z,
 
-      xx = x * x2,
-      xy = x * y2,
-      xz = x * z2,
-      yy = y * y2,
-      yz = y * z2,
-      zz = z * z2,
-      wx = w * x2,
-      wy = w * y2,
-      wz = w * z2;
+          xx = x * x2,
+          xy = x * y2,
+          xz = x * z2,
+          yy = y * y2,
+          yz = y * z2,
+          zz = z * z2,
+          wx = w * x2,
+          wy = w * y2,
+          wz = w * z2;
 
     out.init([
       1 - (yy + zz),
@@ -841,22 +843,14 @@ export class Quaternion {
     view: Vector3,
     right: Vector3,
     up: Vector3
-  ) {
-    const matr = new Matrix3();
+  ): Quaternion {
+    const out = new Matrix3(
+      right.x, up.x, -view.x,
+      right.y, up.y, -view.y,
+      right.z, up.z, -view.z
+    );
 
-    matr[0] = right[0];
-    matr[3] = right[1];
-    matr[6] = right[2];
-
-    matr[1] = up[0];
-    matr[4] = up[1];
-    matr[7] = up[2];
-
-    matr[2] = -view[0];
-    matr[5] = -view[1];
-    matr[8] = -view[2];
-
-    return Quaternion.fromMatrix3(matr).normalize();
+    return Quaternion.fromMatrix3(out, this).normalize();
   }
 
   /**
@@ -868,11 +862,11 @@ export class Quaternion {
    * @returns
    */
   public setAxisAngle(axis: Vector3, rad: number) {
-    rad = rad * 0.5;
-    const s = Math.sin(rad);
-    this.values[0] = s * axis[0];
-    this.values[1] = s * axis[1];
-    this.values[2] = s * axis[2];
+    rad            = rad * 0.5;
+    const s        = Math.sin(rad);
+    this.values[0] = s * axis.x;
+    this.values[1] = s * axis.y;
+    this.values[2] = s * axis.z;
     this.values[3] = Math.cos(rad);
     return this;
   }
@@ -890,7 +884,7 @@ export class Quaternion {
    */
   public getAxisAngle() {
     const rad = Math.acos(this.w) * 2.0;
-    const s = Math.sin(rad / 2.0);
+    const s   = Math.sin(rad / 2.0);
     if (s !== 0.0) {
       return new Vector4([
         this.x / s,
