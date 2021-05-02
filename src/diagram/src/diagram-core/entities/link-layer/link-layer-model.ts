@@ -55,7 +55,7 @@ export class LinkLayerModel<G extends LinkLayerModelGenerics = LinkLayerModelGen
     return this.getModels();
   }
 
-  getChildModelFactoryBank(engine: G['ENGINE']) {
-    return engine.getLinkFactories();
-  }
+  // getChildModelFactoryBank(engine: G['ENGINE']) {
+  //   return engine.getLinkFactories();
+  // }
 }

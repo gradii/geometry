@@ -29,10 +29,10 @@ export interface DiagramListener extends BaseEntityListener {
 }
 
 export interface DiagramModelOptions extends BaseEntityOptions {
-  offsetX: number;
-  offsetY: number;
-  zoom: number;
-  gridSize: number;
+  offsetX?: number;
+  offsetY?: number;
+  zoom?: number;
+  gridSize?: number;
 }
 
 export interface CanvasModelGenerics extends BaseEntityGenerics {
@@ -52,15 +52,20 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 
   // endregion
 
-  constructor(options = {}) {
-    super({
-      zoom    : 100,
-      gridSize: 0,
-      offsetX : 0,
-      offsetY : 0,
-      ...options
-    });
+  constructor({
+                zoom = 100,
+                offsetX = 0,
+                offsetY = 0,
+                gridSize = 0,
+                ...rest
+              }: DiagramModelOptions = {}) {
+    super(rest);
     this.layers = [];
+
+    this.offsetX  = offsetX;
+    this.offsetY  = offsetY;
+    this.zoom     = zoom;
+    this.gridSize = gridSize;
   }
 
   getSelectionEntities(): BaseModel[] {
@@ -110,16 +115,16 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
   }
 
   setGridSize(size: number = 0) {
-    this.options.gridSize = size;
+    this.gridSize = size;
     this.fireEvent({size: size}, 'gridUpdated');
   }
 
   getGridPosition(pos: number) {
-    if (this.options.gridSize === 0) {
+    if (this.gridSize === 0) {
       return pos;
     }
-    return this.options.gridSize * Math.floor(
-      (pos + this.options.gridSize / 2) / this.options.gridSize);
+    return this.gridSize * Math.floor(
+      (pos + this.gridSize / 2) / this.gridSize);
   }
 
   deserializeModel(data: ReturnType<this['serialize']>, engine: CanvasEngine) {
@@ -157,72 +162,71 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
     this.deserialize(event);
   }
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
-    this.options.offsetX  = event.data.offsetX;
-    this.options.offsetY  = event.data.offsetY;
-    this.options.zoom     = event.data.zoom;
-    this.options.gridSize = event.data.gridSize;
-    _.forEach(event.data.layers, (layer) => {
-      const layerOb = event.engine.getFactoryForLayer(layer.type).generateModel({
-        initialConfig: layer
-      });
-      layerOb.deserialize({
-        ...event,
-        data: layer
-      });
-      this.addLayer(layerOb);
-    });
-  }
-
-  serialize() {
-    return {
-      ...super.serialize(),
-      offsetX : this.offsetX || this.options.offsetX,
-      offsetY : this.offsetY || this.options.offsetY,
-      zoom    : this.zoom || this.options.zoom,
-      gridSize: this.gridSize || this.options.gridSize,
-      layers  : _.map(this.layers, (layer) => {
-        return layer.serialize();
-      })
-    };
-  }
+  // deserialize(event: DeserializeEvent<this>) {
+  //   super.deserialize(event);
+  //   this.options.offsetX  = event.data.offsetX;
+  //   this.options.offsetY  = event.data.offsetY;
+  //   this.options.zoom     = event.data.zoom;
+  //   this.options.gridSize = event.data.gridSize;
+  //   _.forEach(event.data.layers, (layer) => {
+  //     const layerOb = event.engine.getFactoryForLayer(layer.type).generateModel({
+  //       initialConfig: layer
+  //     });
+  //     layerOb.deserialize({
+  //       ...event,
+  //       data: layer
+  //     });
+  //     this.addLayer(layerOb);
+  //   });
+  // }
+  //
+  // serialize() {
+  //   return {
+  //     ...super.serialize(),
+  //     offsetX : this.offsetX || this.options.offsetX,
+  //     offsetY : this.offsetY || this.options.offsetY,
+  //     zoom    : this.zoom || this.options.zoom,
+  //     gridSize: this.gridSize || this.options.gridSize,
+  //     layers  : _.map(this.layers, (layer) => {
+  //       return layer.serialize();
+  //     })
+  //   };
+  // }
 
   setZoomLevel(zoom: number) {
     this.zoom = zoom;
-    this.options.zoom = zoom;
     this.fireEvent({zoom}, 'zoomUpdated');
   }
 
   setOffset(offsetX: number, offsetY: number) {
-    this.options.offsetX = offsetX;
-    this.options.offsetY = offsetY;
+    this.offsetX = offsetX;
+    this.offsetY = offsetY;
     this.fireEvent({offsetX, offsetY}, 'offsetUpdated');
   }
 
   setOffsetX(offsetX: number) {
     this.setOffset(
       offsetX,
-      this.offsetY || this.options.offsetY
+      this.offsetY
     );
   }
 
   setOffsetY(offsetY: number) {
     this.setOffset(
-      this.offsetX || this.options.offsetX,
+      this.offsetX,
       offsetY
     );
   }
 
   getOffsetY() {
-    return this.offsetY || this.options.offsetY;
+    return this.offsetY;
   }
 
   getOffsetX() {
-    return this.offsetX || this.options.offsetX;
+    return this.offsetX;
   }
 
   getZoomLevel() {
-    return this.zoom || this.options.zoom;
+    return this.zoom;
   }
 }

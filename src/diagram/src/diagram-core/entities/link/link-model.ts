@@ -10,10 +10,14 @@ import {
   Rectangle
 } from '@gradii/diagram/geometry';
 import * as _ from 'lodash';
-import { BaseEntityEvent, DeserializeEvent } from '../../../canvas-core/core-models/base-entity';
-import { BaseModel, BaseModelGenerics, BaseModelListener } from '../../../canvas-core/core-models/base-model';
+import { BaseEntityEvent } from '../../../canvas-core/core-models/base-entity';
+import {
+  BaseModel,
+  BaseModelGenerics,
+  BaseModelListener,
+  BaseModelOptions
+} from '../../../canvas-core/core-models/base-model';
 import { ModelGeometryInterface } from '../../../canvas-core/core/model-geometry-interface';
-import { DiagramEngine } from '../../diagram-engine';
 import { DiagramModel } from '../../models/diagram-model';
 import { LabelModel } from '../label/label-model';
 import { PortModel } from '../port/port-model';
@@ -40,7 +44,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
 
   protected renderedPaths: SVGPathElement[];
 
-  constructor(options: G['OPTIONS']) {
+  constructor(options: BaseModelOptions) {
     super(options);
     this.points        = [
       new PointModel({
@@ -79,46 +83,46 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
     return super.getSelectionEntities().concat(this.points);
   }
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
-    this.points = _.map(event.data.points || [], (point) => {
-      let p = new PointModel({
-        link    : this,
-        position: new Point(point.x, point.y)
-      });
-      p.deserialize({
-        ...event,
-        data: point
-      });
-      return p;
-    });
-
-    // deserialize labels
-    _.forEach(event.data.labels || [], (label: any) => {
-      let labelOb = (event.engine as DiagramEngine).getFactoryForLabel(label.type).generateModel(
-        {});
-      labelOb.deserialize({
-        ...event,
-        data: label
-      });
-      this.addLabel(labelOb);
-    });
-
-    // these happen async, so we use the promises for these (they need to be done like this without the async keyword
-    // because we need the deserailize method to finish for other methods while this happen
-    if (event.data.target) {
-      event.getModel<PortModel>(event.data.targetPort)
-        .then((model: PortModel) => {
-          this.setTargetPort(model);
-        });
-    }
-    if (event.data.source) {
-      event.getModel<PortModel>(event.data.sourcePort)
-        .then((model: PortModel) => {
-          this.setSourcePort(model);
-        });
-    }
-  }
+  // deserialize(event: DeserializeEvent<this>) {
+  //   super.deserialize(event);
+  //   this.points = _.map(event.data.points || [], (point) => {
+  //     let p = new PointModel({
+  //       link    : this,
+  //       position: new Point(point.x, point.y)
+  //     });
+  //     p.deserialize({
+  //       ...event,
+  //       data: point
+  //     });
+  //     return p;
+  //   });
+  //
+  //   // deserialize labels
+  //   _.forEach(event.data.labels || [], (label: any) => {
+  //     let labelOb = (event.engine as DiagramEngine).getFactoryForLabel(label.type).generateModel(
+  //       {});
+  //     labelOb.deserialize({
+  //       ...event,
+  //       data: label
+  //     });
+  //     this.addLabel(labelOb);
+  //   });
+  //
+  //   // these happen async, so we use the promises for these (they need to be done like this without the async keyword
+  //   // because we need the deserailize method to finish for other methods while this happen
+  //   if (event.data.target) {
+  //     event.getModel<PortModel>(event.data.targetPort)
+  //       .then((model: PortModel) => {
+  //         this.setTargetPort(model);
+  //       });
+  //   }
+  //   if (event.data.source) {
+  //     event.getModel<PortModel>(event.data.sourcePort)
+  //       .then((model: PortModel) => {
+  //         this.setSourcePort(model);
+  //       });
+  //   }
+  // }
 
   getRenderedPath(): SVGPathElement[] {
     return this.renderedPaths;
@@ -128,21 +132,21 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
     this.renderedPaths = paths;
   }
 
-  serialize() {
-    return {
-      ...super.serialize(),
-      source    : this.sourcePort ? this.sourcePort.getParent().getID() : null,
-      sourcePort: this.sourcePort ? this.sourcePort.getID() : null,
-      target    : this.targetPort ? this.targetPort.getParent().getID() : null,
-      targetPort: this.targetPort ? this.targetPort.getID() : null,
-      points    : _.map(this.points, (point) => {
-        return point.serialize();
-      }),
-      labels    : _.map(this.labels, (label) => {
-        return label.serialize();
-      })
-    };
-  }
+  // serialize() {
+  //   return {
+  //     ...super.serialize(),
+  //     source    : this.sourcePort ? this.sourcePort.getParent().getID() : null,
+  //     sourcePort: this.sourcePort ? this.sourcePort.getID() : null,
+  //     target    : this.targetPort ? this.targetPort.getParent().getID() : null,
+  //     targetPort: this.targetPort ? this.targetPort.getID() : null,
+  //     points    : _.map(this.points, (point) => {
+  //       return point.serialize();
+  //     }),
+  //     labels    : _.map(this.labels, (label) => {
+  //       return label.serialize();
+  //     })
+  //   };
+  // }
 
   doClone(lookupTable = {}, clone: any) {
     clone.setPoints(

@@ -6,17 +6,17 @@
 
 import * as _ from 'lodash';
 import { CanvasEngine } from '../../canvas-engine';
-import { DeserializeEvent } from '../../core-models/base-entity';
+// import { DeserializeEvent } from '../../core-models/base-entity';
 import {
   BaseModel,
   BaseModelGenerics,
   BaseModelOptions
 } from '../../core-models/base-model';
-import { AbstractModelFactory } from '../../core/abstract-model-factory';
-import {
-  FactoryBank,
-  FactoryBankListener
-} from '../../core/factory-bank';
+// import { AbstractModelFactory } from '../../core/abstract-model-factory';
+// import {
+//   FactoryBank,
+//   FactoryBankListener
+// } from '../../core/factory-bank';
 import { CanvasModel } from '../canvas/canvas-model';
 
 export interface LayerModelOptions extends BaseModelOptions {
@@ -43,47 +43,50 @@ export abstract class LayerModel<G extends LayerModelGenerics = LayerModelGeneri
 
   //endregion
 
-  constructor(options: G['OPTIONS'] = {}) {
+  constructor(options: LayerModelOptions = {}) {
     super(options);
     this.models         = [];
     this.repaintEnabled = true;
+
+    this.isSvg = options.isSvg;
+    this.transformed = options.transformed;
   }
 
   /**
    * This is used for deserialization
    */
-  abstract getChildModelFactoryBank(engine: G['ENGINE']): FactoryBank<AbstractModelFactory<BaseModel>, FactoryBankListener>;
+  // abstract getChildModelFactoryBank(engine: G['ENGINE']): FactoryBank<AbstractModelFactory<BaseModel>, FactoryBankListener>;
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
-    this.isSvg       = !!event.data.isSvg;
-    this.transformed = !!event.data.transformed;
-
-    this.options.isSvg       = !!event.data.isSvg;
-    this.options.transformed = !!event.data.transformed;
-    _.forEach(event.data.models, (model) => {
-      const modelOb = this.getChildModelFactoryBank(event.engine).getFactory(
-        model.type).generateModel({
-        initialConfig: model
-      });
-      modelOb.deserialize({
-        ...event,
-        data: model
-      });
-      this.addModel(modelOb);
-    });
-  }
-
-  serialize() {
-    return {
-      ...super.serialize(),
-      isSvg      : this.isSvg || this.options.isSvg,
-      transformed: this.transformed || this.options.transformed,
-      models     : this.models.map((model) => {
-        return model.serialize();
-      })
-    };
-  }
+  // deserialize(event: DeserializeEvent<this>) {
+  //   super.deserialize(event);
+  //   this.isSvg       = !!event.data.isSvg;
+  //   this.transformed = !!event.data.transformed;
+  //
+  //   this.options.isSvg       = !!event.data.isSvg;
+  //   this.options.transformed = !!event.data.transformed;
+  //   _.forEach(event.data.models, (model) => {
+  //     const modelOb = this.getChildModelFactoryBank(event.engine).getFactory(
+  //       model.type).generateModel({
+  //       initialConfig: model
+  //     });
+  //     modelOb.deserialize({
+  //       ...event,
+  //       data: model
+  //     });
+  //     this.addModel(modelOb);
+  //   });
+  // }
+  //
+  // serialize() {
+  //   return {
+  //     ...super.serialize(),
+  //     isSvg      : this.isSvg || this.options.isSvg,
+  //     transformed: this.transformed || this.options.transformed,
+  //     models     : this.models.map((model) => {
+  //       return model.serialize();
+  //     })
+  //   };
+  // }
 
   isRepaintEnabled() {
     return this.repaintEnabled;

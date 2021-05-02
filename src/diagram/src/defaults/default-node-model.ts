@@ -5,14 +5,14 @@
  */
 
 import * as _ from 'lodash';
-import { DeserializeEvent } from '../../canvas-core/core-models/base-entity';
-import { BasePositionModelOptions } from '../../canvas-core/core-models/base-position-model';
+import { DeserializeEvent } from '../canvas-core/core-models/base-entity';
+import { BasePositionModelOptions } from '../canvas-core/core-models/base-position-model';
 import {
   NodeModel,
   NodeModelGenerics
-} from '../../diagram-core/entities/node/node-model';
-import { PortModelAlignment } from '../../diagram-core/entities/port/port-model';
-import { DefaultPortModel } from '../port/default-port-model';
+} from '../diagram-core/entities/node/node-model';
+import { PortModelAlignment } from '../diagram-core/entities/port/port-model';
+import { DefaultPortModel } from './default-port-model';
 
 export interface DefaultNodeModelOptions extends BasePositionModelOptions {
   name?: string;
@@ -27,34 +27,46 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
   protected portsIn: DefaultPortModel[];
   protected portsOut: DefaultPortModel[];
 
+  name: string;
+  color: string;
+
+  /**
+   *
+   * @deprecated
+   */
+  protected options: DefaultNodeModelOptions;
+
   constructor(name: string, color: string);
   constructor(options?: DefaultNodeModelOptions);
   constructor(options: any = {}, color?: string) {
     if (typeof options === 'string') {
       options = {
-        name: options,
+        name : options,
         color: color
       };
     }
-    super({
-      type: 'default',
-      name: 'Untitled',
-      color: 'rgb(0,192,255)',
-      ...options
-    });
+    const {
+            type          = 'default',
+            name          = 'Untitled',
+            color: _color = 'rgb(0,192,255)'
+          } = options;
+    super(options);
     this.portsOut = [];
-    this.portsIn = [];
+    this.portsIn  = [];
+
+    this.name  = name;
+    this.color = _color;
   }
 
   doClone(lookupTable: {}, clone: any): void {
-    clone.portsIn = [];
+    clone.portsIn  = [];
     clone.portsOut = [];
     super.doClone(lookupTable, clone);
   }
 
   removePort(port: DefaultPortModel): void {
     super.removePort(port);
-    if (port.getOptions().in) {
+    if (port.in) {
       this.portsIn.splice(this.portsIn.indexOf(port), 1);
     } else {
       this.portsOut.splice(this.portsOut.indexOf(port), 1);
@@ -63,7 +75,7 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 
   addPort<T extends DefaultPortModel>(port: T): T {
     super.addPort(port);
-    if (port.getOptions().in) {
+    if (port.in) {
       if (this.portsIn.indexOf(port) === -1) {
         this.portsIn.push(port);
       }
@@ -77,9 +89,9 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 
   addInPort(label: string, after = true): DefaultPortModel {
     const p = new DefaultPortModel({
-      in: true,
-      name: label,
-      label: label,
+      in       : true,
+      name     : label,
+      label    : label,
       alignment: PortModelAlignment.LEFT
     });
     if (!after) {
@@ -90,9 +102,9 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 
   addOutPort(label: string, after = true): DefaultPortModel {
     const p = new DefaultPortModel({
-      in: false,
-      name: label,
-      label: label,
+      in       : false,
+      name     : label,
+      label    : label,
       alignment: PortModelAlignment.RIGHT
     });
     if (!after) {
@@ -103,12 +115,12 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 
   deserialize(event: DeserializeEvent<this>) {
     super.deserialize(event);
-    this.options.name = event.data.name;
-    this.options.color = event.data.color;
-    this.portsIn = _.map(event.data.portsInOrder, (id) => {
+    this.name  = event.data.name;
+    this.color = event.data.color;
+    this.portsIn       = _.map(event.data.portsInOrder, (id) => {
       return this.getPortFromID(id);
     }) as DefaultPortModel[];
-    this.portsOut = _.map(event.data.portsOutOrder, (id) => {
+    this.portsOut      = _.map(event.data.portsOutOrder, (id) => {
       return this.getPortFromID(id);
     }) as DefaultPortModel[];
   }
@@ -116,9 +128,9 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
   serialize(): any {
     return {
       ...super.serialize(),
-      name: this.options.name,
-      color: this.options.color,
-      portsInOrder: _.map(this.portsIn, (port) => {
+      name         : this.name,
+      color        : this.color,
+      portsInOrder : _.map(this.portsIn, (port) => {
         return port.getID();
       }),
       portsOutOrder: _.map(this.portsOut, (port) => {

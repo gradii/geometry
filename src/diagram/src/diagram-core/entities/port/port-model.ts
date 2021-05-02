@@ -80,16 +80,13 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
 
     this.name      = event.data.name;
     this.alignment = event.data.alignment;
-
-    this.options.name      = event.data.name;
-    this.options.alignment = event.data.alignment;
   }
 
   serialize() {
     return {
       ...super.serialize(),
-      name      : this.name || this.options.name,
-      alignment : this.alignment || this.options.alignment,
+      name      : this.name,
+      alignment : this.alignment,
       parentNode: this.parent.getID(),
       links     : Array.from(this.links.values()).map((link) => {
         return link.getID();
@@ -125,16 +122,15 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
   }
 
   getName(): string {
-    return this.name || this.options.name;
+    return this.name;
   }
 
   getMaximumLinks(): number {
-    return this.maximumLinks || this.options.maximumLinks;
+    return this.maximumLinks;
   }
 
   setMaximumLinks(maximumLinks: number) {
-    this.maximumLinks         = maximumLinks;
-    this.options.maximumLinks = maximumLinks;
+    this.maximumLinks = maximumLinks;
   }
 
   removeLink(link: LinkModel) {
@@ -154,11 +150,11 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
   }
 
   createLinkModel(): LinkModel | null {
-    if (_.isFinite(this.options.maximumLinks)) {
+    if (_.isFinite(this.maximumLinks)) {
       let numberOfLinks: number = _.size(this.links);
-      if (this.options.maximumLinks === 1 && numberOfLinks >= 1) {
+      if (this.maximumLinks === 1 && numberOfLinks >= 1) {
         return Array.from(this.links.values())[0];
-      } else if (numberOfLinks >= this.options.maximumLinks) {
+      } else if (numberOfLinks >= this.maximumLinks) {
         return null;
       }
     }

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DefaultPortModel } from '../../defaults/port/default-port-model';
+import { DefaultPortModel } from '../../defaults/default-port-model';
 import { DiagramEngine } from '../diagram-engine';
 //
 // export interface DefaultPortLabelProps {
@@ -35,14 +35,14 @@ import { DiagramEngine } from '../diagram-engine';
   selector: 'x-port-label-widget',
   template: `
     <div class="portLabel">
-      <ng-container *ngIf="port.getOptions().in">
+      <ng-container *ngIf="port.in">
         <port-widget [port]="port">
           <div class="port"></div>
         </port-widget>
-        <div class="label">{{port.getOptions().label}}</div>
+        <div class="label">{{port.label}}</div>
       </ng-container>
-      <ng-container *ngIf="!port.getOptions().in">
-        <div class="label">{{port.getOptions().label}}</div>
+      <ng-container *ngIf="!port.in">
+        <div class="label">{{port.label}}</div>
         <port-widget [port]="port">
           <div class="port"></div>
         </port-widget>

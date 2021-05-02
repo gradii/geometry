@@ -5,7 +5,7 @@
  */
 
 import { Component, Input } from '@angular/core';
-import { DefaultLabelModel } from '../../defaults/label/default-label-model';
+import { DefaultLabelModel } from '../../defaults/default-label-model';
 
 
 @Component({

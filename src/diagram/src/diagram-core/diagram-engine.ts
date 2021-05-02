@@ -9,14 +9,13 @@ import {
   Polygon,
   Rectangle
 } from '@gradii/diagram/geometry';
-import { Toolkit } from '../canvas-core/toolkit';
-import { CanvasEngine, CanvasEngineListener, CanvasEngineOptions } from '../canvas-core/canvas-engine';
+import {
+  CanvasEngine,
+  CanvasEngineListener,
+  CanvasEngineOptions
+} from '../canvas-core/canvas-engine';
 import { BaseModel } from '../canvas-core/core-models/base-model';
-import { AbstractModelFactory } from '../canvas-core/core/abstract-model-factory';
-import { AbstractReactFactory } from '../canvas-core/core/abstract-react-factory';
-import { FactoryBank } from '../canvas-core/core/factory-bank';
-import { LabelModel } from './entities/label/label-model';
-import { LinkModel } from './entities/link/link-model';
+import { Toolkit } from '../canvas-core/toolkit';
 import { NodeModel } from './entities/node/node-model';
 import { PortModel } from './entities/port/port-model';
 import { DiagramModel } from './models/diagram-model';
@@ -25,37 +24,10 @@ import { DiagramModel } from './models/diagram-model';
 export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
   maxNumberPointsPerLink: number;
   protected model: DiagramModel;
-  protected nodeFactories: FactoryBank<AbstractReactFactory<NodeModel, DiagramEngine>>;
-  protected linkFactories: FactoryBank<AbstractReactFactory<LinkModel, DiagramEngine>>;
-  protected portFactories: FactoryBank<AbstractModelFactory<PortModel, DiagramEngine>>;
-  protected labelFactories: FactoryBank<AbstractReactFactory<LabelModel, DiagramEngine>>;
-
 
   constructor(options: CanvasEngineOptions = {}) {
     super(options);
     this.maxNumberPointsPerLink = 1000;
-
-    // create banks for the different factory types
-    this.nodeFactories  = new FactoryBank();
-    this.linkFactories  = new FactoryBank();
-    this.portFactories  = new FactoryBank();
-    this.labelFactories = new FactoryBank();
-
-    const setup = (factory: FactoryBank) => {
-      factory.registerListener({
-        factoryAdded  : (event) => {
-          event.factory.setDiagramEngine(this);
-        },
-        factoryRemoved: (event) => {
-          event.factory.setDiagramEngine(null);
-        }
-      });
-    };
-
-    setup(this.nodeFactories);
-    setup(this.linkFactories);
-    setup(this.portFactories);
-    setup(this.labelFactories);
   }
 
   /**
@@ -93,60 +65,6 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
     }
 
     return null;
-  }
-
-  // !-------------- FACTORIES ------------
-
-  getNodeFactories() {
-    return this.nodeFactories;
-  }
-
-  getLinkFactories() {
-    return this.linkFactories;
-  }
-
-  getLabelFactories() {
-    return this.labelFactories;
-  }
-
-  getPortFactories() {
-    return this.portFactories;
-  }
-
-  getFactoryForNode<F extends AbstractReactFactory<NodeModel, DiagramEngine>>(node: NodeModel | string) {
-    if (typeof node === 'string') {
-      return this.nodeFactories.getFactory(node);
-    }
-    return this.nodeFactories.getFactory(node.getType());
-  }
-
-  getFactoryForLink<F extends AbstractReactFactory<LinkModel, DiagramEngine>>(link: LinkModel | string) {
-    if (typeof link === 'string') {
-      return this.linkFactories.getFactory<F>(link);
-    }
-    return this.linkFactories.getFactory<F>(link.getType());
-  }
-
-  getFactoryForLabel<F extends AbstractReactFactory<LabelModel, DiagramEngine>>(label: LabelModel) {
-    if (typeof label === 'string') {
-      return this.labelFactories.getFactory(label);
-    }
-    return this.labelFactories.getFactory(label.getType());
-  }
-
-  getFactoryForPort<F extends AbstractModelFactory<PortModel, DiagramEngine>>(port: PortModel) {
-    if (typeof port === 'string') {
-      return this.portFactories.getFactory<F>(port);
-    }
-    return this.portFactories.getFactory<F>(port.getType());
-  }
-
-  generateWidgetForLink(link: LinkModel) {
-    return this.getFactoryForLink(link).generateReactWidget({model: link});
-  }
-
-  generateWidgetForNode(node: NodeModel) {
-    return this.getFactoryForNode(node).generateReactWidget({model: node});
   }
 
   getNodeElement(node: NodeModel): Element {

@@ -6,7 +6,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { LabelWidget } from './diagram-core/entities/label/label-widget';
-import { LinkLayerFactory } from './diagram-core/entities/link-layer/link-layer-factory';
+// import { LinkLayerFactory } from './diagram-core/entities/link-layer/link-layer-factory';
 import { LinkLayerWidget } from './diagram-core/entities/link-layer/link-layer-widget';
 import { LinkWidget } from './diagram-core/entities/link/link-widget';
 // import { NodeLayerFactory } from './diagram-core/entities/node-layer/node-layer-factory';
@@ -22,7 +22,7 @@ import { XPortLabelWidget } from './diagram-core/x/x-port-label-widget';
 import { CanvasWidget } from './canvas-core/entities/canvas/canvas-widget';
 // import { SmartLayerWidget } from './canvas-core/entities/layer/smart-layer-widget';
 import { TransformLayerWidget } from './canvas-core/entities/layer/transform-layer-widget';
-import { SelectionBoxLayerFactory } from './canvas-core/entities/selection/selection-box-layer-factory';
+// import { SelectionBoxLayerFactory } from './canvas-core/entities/selection/selection-box-layer-factory';
 import { SelectionBoxWidget } from './canvas-core/entities/selection/selection-box-widget';
 import { ENGINE_OPTIONS } from './canvas-core/tokens';
 // import { DefaultLabelFactory } from './defaults/label/default-label-factory';
@@ -51,7 +51,7 @@ import { DIAGRAM_STATES } from './tokens';
     DiagramEngineComponent,
 
     TransformLayerWidget,
-    SelectionBoxLayerFactory,
+    // SelectionBoxLayerFactory,
     SelectionBoxWidget,
 
     CanvasWidget,
@@ -82,7 +82,7 @@ import { DIAGRAM_STATES } from './tokens';
 
     LinkWidget,
 
-    LinkLayerFactory,
+    // LinkLayerFactory,
     LinkLayerWidget,
 
     PortWidget,

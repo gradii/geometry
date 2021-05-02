@@ -28,31 +28,28 @@ export class LabelModel<G extends LabelModelGenerics = LabelModelGenerics> exten
   offsetX: number = 0;
   offsetY: number = 0;
 
-  constructor(options: G['OPTIONS']) {
-    super({
-      ...options,
-      offsetX: options.offsetX || 0,
-      offsetY: options.offsetY || 0
-    });
+  constructor({
+                offsetX = 0,
+                offsetY = 0,
+    ...rest
+              }: G['OPTIONS']) {
+    super(rest);
 
-    this.offsetX = this.options.offsetX;
-    this.offsetY = this.options.offsetY;
+    this.offsetX = offsetX;
+    this.offsetY = offsetY;
   }
 
   deserialize(event: DeserializeEvent<this>) {
     super.deserialize(event);
     this.offsetX = event.data.offsetX;
     this.offsetY = event.data.offsetY;
-
-    this.options.offsetX = event.data.offsetX;
-    this.options.offsetY = event.data.offsetY;
   }
 
   serialize() {
     return {
       ...super.serialize(),
-      offsetX: this.offsetX || this.options.offsetX,
-      offsetY: this.offsetX || this.options.offsetY
+      offsetX: this.offsetX,
+      offsetY: this.offsetX
     };
   }
 }

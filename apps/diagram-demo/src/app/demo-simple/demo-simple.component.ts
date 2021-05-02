@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { DefaultLinkModel } from 'src/diagram/src/defaults/link/default-link-model';
-import { DefaultNodeModel } from '../../../../../src/diagram/src/defaults/node/default-node-model';
+import { DefaultLinkModel } from 'src/diagram/src/defaults/default-link-model';
+import { DefaultNodeModel } from '../../../../../src/diagram/src/defaults/default-node-model';
 import { DiagramModel } from '../../../../../src/diagram/src/diagram-core/models/diagram-model';
 
 
@@ -39,7 +39,7 @@ export class DemoSimpleComponent implements AfterViewInit, OnInit {
 
     // link the ports
     let link1 = port1.link<DefaultLinkModel>(port2);
-    link1.getOptions().testName = 'Test';
+    link1.testName = 'Test';
     link1.addLabel('Hello World!');
 
     // 4) add the models to the root graph

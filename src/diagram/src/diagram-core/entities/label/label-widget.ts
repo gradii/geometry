@@ -107,8 +107,8 @@ export class LabelWidget implements AfterViewChecked {
     const pathCentre = path.getPointAtLength(position);
 
     const labelCoordinates = {
-      x: pathCentre.x - labelDimensions.width / 2 + this.label.getOptions().offsetX,
-      y: pathCentre.y - labelDimensions.height / 2 + this.label.getOptions().offsetY
+      x: pathCentre.x - labelDimensions.width / 2 + this.label.offsetX,
+      y: pathCentre.y - labelDimensions.height / 2 + this.label.offsetY
     };
 
     this.ref.nativeElement.style.transform = `translate(${labelCoordinates.x}px, ${labelCoordinates.y}px)`;

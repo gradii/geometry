@@ -46,9 +46,9 @@ export class NodeLayerModel<G extends NodeLayerModelGenerics = NodeLayerModelGen
     super.addModel(model);
   }
 
-  getChildModelFactoryBank(engine: G['ENGINE']) {
-    return engine.getNodeFactories();
-  }
+  // getChildModelFactoryBank(engine: G['ENGINE']) {
+  //   return engine.getNodeFactories();
+  // }
 
   getNodes() {
     return this.getModels();

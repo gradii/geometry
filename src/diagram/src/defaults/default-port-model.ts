@@ -5,16 +5,15 @@
  */
 
 
-import { DeserializeEvent } from '../../canvas-core/core-models/base-entity';
-import { AbstractModelFactory } from '../../canvas-core/core/abstract-model-factory';
-import { LinkModel } from '../../diagram-core/entities/link/link-model';
+// import { AbstractModelFactory } from '../../canvas-core/core/abstract-model-factory';
+import { LinkModel } from '../diagram-core/entities/link/link-model';
 import {
   PortModel,
   PortModelAlignment,
   PortModelGenerics,
   PortModelOptions
-} from '../../diagram-core/entities/port/port-model';
-import { DefaultLinkModel } from '../link/default-link-model';
+} from '../diagram-core/entities/port/port-model';
+import { DefaultLinkModel } from './default-link-model';
 
 export interface DefaultPortModelOptions extends PortModelOptions {
   label?: string;
@@ -26,41 +25,54 @@ export interface DefaultPortModelGenerics extends PortModelGenerics {
 }
 
 export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
+  label: string;
+  in: boolean;
+
+
+  /**
+   * @deprecated
+   */
+  protected options: DefaultPortModelOptions;
+
   constructor(isIn: boolean, name?: string, label?: string);
   constructor(options: DefaultPortModelOptions);
   constructor(options: DefaultPortModelOptions | boolean, name?: string, label?: string) {
     if (!!name) {
       options = {
-        in: !!options,
-        name: name,
+        in   : !!options,
+        name : name,
         label: label
       };
     }
     options = options as DefaultPortModelOptions;
     super({
-      label: options.label || options.name,
+      label    : options.label || options.name,
       alignment: options.in ? PortModelAlignment.LEFT : PortModelAlignment.RIGHT,
-      type: 'default',
+      type     : 'default',
       ...options
     });
+
+    this.label = options.label;
+    this.in    = options.in;
   }
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
-    this.options.in = event.data.in;
-    this.options.label = event.data.label;
-  }
+  //
+  // deserialize(event: DeserializeEvent<this>) {
+  //   super.deserialize(event);
+  //   this.options.in = event.data.in;
+  //   this.options.label = event.data.label;
+  // }
+  //
+  // serialize() {
+  //   return {
+  //     ...super.serialize(),
+  //     in: this.options.in,
+  //     label: this.options.label
+  //   };
+  // }
 
-  serialize() {
-    return {
-      ...super.serialize(),
-      in: this.options.in,
-      label: this.options.label
-    };
-  }
-
-  link<T extends LinkModel>(port: PortModel, factory?: AbstractModelFactory<T>): T {
-    let link = this.createLinkModel(factory);
+  link<T extends LinkModel>(port: PortModel): T {
+    let link = this.createLinkModel();
     link.setSourcePort(this);
     link.setTargetPort(port);
     return link as T;
@@ -68,16 +80,16 @@ export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
 
   canLinkToPort(port: PortModel): boolean {
     if (port instanceof DefaultPortModel) {
-      return this.options.in !== port.getOptions().in;
+      return this.options.in !== port.in;
     }
     return true;
   }
 
-  createLinkModel(factory?: AbstractModelFactory<LinkModel>): LinkModel {
+  createLinkModel(/*factory?: AbstractModelFactory<LinkModel>*/): LinkModel {
     let link = super.createLinkModel();
-    if (!link && factory) {
-      return factory.generateModel({});
-    }
+    // if (!link && factory) {
+    //   return factory.generateModel({});
+    // }
     return link || new DefaultLinkModel();
   }
 }

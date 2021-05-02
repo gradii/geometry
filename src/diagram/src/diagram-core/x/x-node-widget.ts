@@ -6,7 +6,7 @@
 
 import { Component, Inject, Input } from '@angular/core';
 import { ENGINE } from '../../canvas-core/tokens';
-import { DefaultNodeModel } from '../../defaults/node/default-node-model';
+import { DefaultNodeModel } from '../../defaults/default-node-model';
 import { DiagramEngine } from '../diagram-engine';
 
 /**
@@ -18,7 +18,7 @@ import { DiagramEngine } from '../diagram-engine';
   template: `
     <div class="title">
       <div class="titleName">
-        {{node.getOptions().name}}
+        {{node.name}}
       </div>
     </div>
     <div class="ports">
@@ -36,8 +36,8 @@ import { DiagramEngine } from '../diagram-engine';
   `,
   host: {
     '[style.borderColor]': 'node.isSelected() ? "rgb(0,192,255)" : "black"',
-    '[style.backgroundColor]': 'node.getOptions().color',
-    '[attr.dataDefaultNodeName]': 'node.getOptions().name',
+    '[style.backgroundColor]': 'node.color',
+    '[attr.dataDefaultNodeName]': 'node.name',
     '[attr.selected]': 'node.isSelected()',
   },
   styles: [`

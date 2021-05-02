@@ -50,36 +50,23 @@ export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> exten
   protected options: T['OPTIONS'];
 
   // region options area
-  id: string;
+  id: string = Toolkit.UID();
   locked: boolean;
 
   // endregion
 
-  constructor(options: T['OPTIONS'] = {}) {
+  constructor({
+                id = Toolkit.UID(),
+                locked
+              }: T['OPTIONS'] = {}) {
     super();
-    this.options = {
-      id: Toolkit.UID(),
-      ...options
-    };
-
-    this.id     = Toolkit.UID();
-    this.locked = options.locked;
-  }
-
-  /**
-   * @deprecated
-   */
-  getOptions() {
-    return {
-      ...this.options,
-      id    : this.id,
-      locked: this.locked
-    };
+    this.id     = id;
+    this.locked = locked;
   }
 
   getID() {
     return this.id;
-    // return this.options.id;
+    // return this.id;
   }
 
   doClone(lookupTable: { [s: string]: any } = {}, clone: any) {
@@ -88,16 +75,13 @@ export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> exten
 
   clone(lookupTable: { [s: string]: any } = {}) {
     // try and use an existing clone first
-    if (lookupTable[this.options.id]) {
-      return lookupTable[this.options.id];
+    if (lookupTable[this.id]) {
+      return lookupTable[this.id];
     }
     let clone     = _.cloneDeep(this);
-    clone.options = {
-      ...this.options,
-      id: Toolkit.UID()
-    };
+    clone.id = Toolkit.UID();
     clone.clearListeners();
-    lookupTable[this.options.id] = clone;
+    lookupTable[this.id] = clone;
 
     this.doClone(lookupTable, clone);
     return clone;
@@ -108,7 +92,7 @@ export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> exten
   }
 
   deserialize(event: DeserializeEvent<this>) {
-    // this.options.id     = event.data.id;
+    // this.id     = event.data.id;
     // this.options.locked = event.data.locked;
 
     this.id     = event.data.id;
@@ -121,7 +105,7 @@ export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> exten
       // locked: this.locked,
       id    : this.id,
       locked: this.locked,
-      // id    : this.options.id,
+      // id    : this.id,
       // locked: this.options.locked
     };
   }

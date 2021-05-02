@@ -5,7 +5,7 @@
  */
 
 import { AfterViewChecked, AfterViewInit, Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { DefaultLinkModel } from '../../defaults/link/default-link-model';
+import { DefaultLinkModel } from '../../defaults/default-link-model';
 import { ENGINE } from '../../canvas-core/tokens';
 // import { DefaultLinkPointWidget } from '../../defaults/link/default-link-point-widget';
 // import { DefaultLinkSegmentWidget } from '../../defaults/link/default-link-segment-widget';
@@ -65,7 +65,7 @@ export interface DefaultLinkState {
     </ng-template>
   `,
   host: {
-    '[attr.data-default-link-test]': 'link.getOptions().testName'
+    '[attr.data-default-link-test]': 'link.testName'
   }
 })
 export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
@@ -133,8 +133,8 @@ export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewC
       props: {
         key: point.getID(),
         point: point as any,
-        colorSelected: this.link.getOptions().selectedColor,
-        color: this.link.getOptions().color,
+        colorSelected: this.link.selectedColor,
+        color: this.link.color,
       }
     };
   }
@@ -211,8 +211,8 @@ export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewC
         // paths.push(this.generatePoint(points[1]));
         this.pointPaths.push({
           point: points[1] as any,
-          colorSelected: this.link.getOptions().selectedColor,
-          color: this.link.getOptions().color,
+          colorSelected: this.link.selectedColor,
+          color: this.link.color,
         });
       }
     } else {

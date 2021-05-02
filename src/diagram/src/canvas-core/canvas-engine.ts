@@ -11,9 +11,9 @@ import { ZoomCanvasAction } from './actions/zoom-canvas-action';
 import { ActionEventBus } from './core-actions/action-event-bus';
 import { BaseModel } from './core-models/base-model';
 import { StateMachine } from './core-state/state-machine';
-import { AbstractReactFactory } from './core/abstract-react-factory';
+// import { AbstractReactFactory } from './core/abstract-react-factory';
 import { BaseListener, BaseObserver } from './core/base-observer';
-import { FactoryBank, FactoryBankListener } from './core/factory-bank';
+// import { FactoryBank, FactoryBankListener } from './core/factory-bank';
 import { CanvasModel } from './entities/canvas/canvas-model';
 import { LayerModel } from './entities/layer/layer-model';
 
@@ -40,7 +40,7 @@ export interface CanvasEngineOptions {
 export class CanvasEngine<L extends CanvasEngineListener = CanvasEngineListener,
   M extends CanvasModel = CanvasModel> extends BaseObserver<L> {
   protected model: M = null;
-  protected layerFactories: FactoryBank<AbstractReactFactory<LayerModel>, FactoryBankListener>;
+  // protected layerFactories: FactoryBank<AbstractReactFactory<LayerModel>, FactoryBankListener>;
   protected canvas: HTMLDivElement;
   protected eventBus: ActionEventBus;
   protected stateMachine: StateMachine;
@@ -51,8 +51,8 @@ export class CanvasEngine<L extends CanvasEngineListener = CanvasEngineListener,
     this.model = null;
     this.eventBus = new ActionEventBus(this);
     this.stateMachine = new StateMachine(this);
-    this.layerFactories = new FactoryBank();
-    this.registerFactoryBank(this.layerFactories);
+    // this.layerFactories = new FactoryBank();
+    // this.registerFactoryBank(this.layerFactories);
 
     /**
      * Overrides the standard options with the possible given options
@@ -87,32 +87,32 @@ export class CanvasEngine<L extends CanvasEngineListener = CanvasEngineListener,
     const canvasRect = this.canvas.getBoundingClientRect();
     return new Point(x - canvasRect.left, y - canvasRect.top);
   }
-
-  registerFactoryBank(factory: FactoryBank) {
-    factory.registerListener({
-      factoryAdded: (event) => {
-        event.factory.setDiagramEngine(this);
-      },
-      factoryRemoved: (event) => {
-        event.factory.setDiagramEngine(null);
-      }
-    });
-  }
+  //
+  // registerFactoryBank(factory: FactoryBank) {
+  //   factory.registerListener({
+  //     factoryAdded: (event) => {
+  //       event.factory.setDiagramEngine(this);
+  //     },
+  //     factoryRemoved: (event) => {
+  //       event.factory.setDiagramEngine(null);
+  //     }
+  //   });
+  // }
 
   getActionEventBus() {
     return this.eventBus;
   }
 
-  getLayerFactories() {
-    return this.layerFactories;
-  }
-
-  getFactoryForLayer<F extends AbstractReactFactory<LayerModel>>(layer: LayerModel | string) {
-    if (typeof layer === 'string') {
-      return this.layerFactories.getFactory(layer);
-    }
-    return this.layerFactories.getFactory(layer.getType());
-  }
+  // getLayerFactories() {
+  //   return this.layerFactories;
+  // }
+  //
+  // getFactoryForLayer<F extends AbstractReactFactory<LayerModel>>(layer: LayerModel | string) {
+  //   if (typeof layer === 'string') {
+  //     return this.layerFactories.getFactory(layer);
+  //   }
+  //   return this.layerFactories.getFactory(layer.getType());
+  // }
 
   setModel(model: M) {
     this.model = model;

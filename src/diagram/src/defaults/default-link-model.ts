@@ -5,22 +5,19 @@
  */
 
 import { BezierCurve } from '@gradii/diagram/geometry';
-import {
-  BaseEntityEvent,
-  DeserializeEvent
-} from '../../canvas-core/core-models/base-entity';
-import { BaseModelOptions } from '../../canvas-core/core-models/base-model';
-import { LabelModel } from '../../diagram-core/entities/label/label-model';
-import {
-  PortModel,
-  PortModelAlignment
-} from '../../diagram-core/entities/port/port-model';
+import { BaseEntityEvent, } from '../canvas-core/core-models/base-entity';
+import { BaseModelOptions } from '../canvas-core/core-models/base-model';
+import { LabelModel } from '../diagram-core/entities/label/label-model';
 import {
   LinkModel,
   LinkModelGenerics,
   LinkModelListener
-} from '../../diagram-core/entities/link/link-model';
-import { DefaultLabelModel } from '../label/default-label-model';
+} from '../diagram-core/entities/link/link-model';
+import {
+  PortModel,
+  PortModelAlignment
+} from '../diagram-core/entities/port/port-model';
+import { DefaultLabelModel } from './default-label-model';
 
 export interface DefaultLinkModelListener extends LinkModelListener {
   colorChanged(event: BaseEntityEvent<DefaultLinkModel> & { color: null | string }): void;
@@ -52,28 +49,50 @@ export interface DefaultLinkModelGenerics extends LinkModelGenerics {
 }
 
 export class DefaultLinkModel extends LinkModel<DefaultLinkModelGenerics> {
+
+  // region options
+  width: number;
+  color: string;
+  selectedColor: string;
+  curvyness: number;
+  type: string;
+  testName: string;
+  // endregion
+
+  /**
+   *
+   * @deprecated
+   */
   protected options: LinkModelOptions;
 
-  constructor(options: DefaultLinkModelOptions = {}) {
-    super({
-      type         : 'default',
-      width        : options.width || 3,
-      color        : options.color || 'gray',
-      selectedColor: options.selectedColor || 'rgb(0,192,255)',
-      curvyness    : 50,
-      ...options
-    });
+  constructor({
+                type = 'default',
+                width = 3,
+                color = 'gray',
+                selectedColor = 'rgb(0,192,255)',
+                curvyness = 50,
+                testName,
+                ...rest
+              }: DefaultLinkModelOptions = {}) {
+    super(rest);
+
+    this.width         = width;
+    this.color         = color;
+    this.selectedColor = selectedColor;
+    this.curvyness     = curvyness;
+    this.type          = type;
+    this.testName      = testName;
   }
 
   calculateControlOffset(port: PortModel): [number, number] {
-    if (port.getOptions().alignment === PortModelAlignment.RIGHT) {
-      return [this.options.curvyness, 0];
-    } else if (port.getOptions().alignment === PortModelAlignment.LEFT) {
-      return [-this.options.curvyness, 0];
-    } else if (port.getOptions().alignment === PortModelAlignment.TOP) {
-      return [0, -this.options.curvyness];
+    if (port.alignment === PortModelAlignment.RIGHT) {
+      return [this.curvyness, 0];
+    } else if (port.alignment === PortModelAlignment.LEFT) {
+      return [-this.curvyness, 0];
+    } else if (port.alignment === PortModelAlignment.TOP) {
+      return [0, -this.curvyness];
     }
-    return [0, this.options.curvyness];
+    return [0, this.curvyness];
   }
 
   getSVGPath(): string {
@@ -96,23 +115,29 @@ export class DefaultLinkModel extends LinkModel<DefaultLinkModelGenerics> {
     throw new Error('runtime exception');
   }
 
-  serialize() {
-    return {
-      ...super.serialize(),
-      width        : this.options.width,
-      color        : this.options.color,
-      curvyness    : this.options.curvyness,
-      selectedColor: this.options.selectedColor
-    };
-  }
-
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
-    this.options.color         = event.data.color;
-    this.options.width         = event.data.width;
-    this.options.curvyness     = event.data.curvyness;
-    this.options.selectedColor = event.data.selectedColor;
-  }
+  // serialize() {
+  //   return {
+  //     ...super.serialize(),
+  //     width        : this.options.width,
+  //     color        : this.options.color,
+  //     curvyness    : this.options.curvyness,
+  //     selectedColor: this.options.selectedColor
+  //   };
+  // }
+  //
+  // deserialize(event: DeserializeEvent<this>) {
+  //   super.deserialize(event);
+  //   this.options.color         = event.data.color;
+  //   this.options.width         = event.data.width;
+  //   this.options.curvyness     = event.data.curvyness;
+  //   this.options.selectedColor = event.data.selectedColor;
+  //
+  //
+  //   this.color         = event.data.color;
+  //   this.width         = event.data.width;
+  //   this.curvyness     = event.data.curvyness;
+  //   this.selectedColor = event.data.selectedColor;
+  // }
 
   addLabel(label: LabelModel | string) {
     if (label instanceof LabelModel) {
@@ -124,12 +149,12 @@ export class DefaultLinkModel extends LinkModel<DefaultLinkModelGenerics> {
   }
 
   setWidth(width: number) {
-    this.options.width = width;
+    this.width = width;
     this.fireEvent({width}, 'widthChanged');
   }
 
   setColor(color: string) {
-    this.options.color = color;
+    this.color = color;
     this.fireEvent({color}, 'colorChanged');
   }
 }

@@ -10,7 +10,7 @@ import { LayerModel } from './layer-model';
 @Component({
   selector: 'transform-layer-widget',
   template: `
-    <ng-template [ngIf]="layer.getOptions().isSvg" [ngIfElse]="notSvg">
+    <ng-template [ngIf]="layer.isSvg" [ngIfElse]="notSvg">
       <svg class="layer" [ngStyle]="getTransformStyle()">
         <g link-layer-widget [layer]="layer"></g>
       </svg>
@@ -55,7 +55,7 @@ export class TransformLayerWidget {
   }
 
   getTransformStyle() {
-    if (this.layer.getOptions().transformed) {
+    if (this.layer.transformed) {
       return {
         transform: this.getTransform()
       };

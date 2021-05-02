@@ -26,7 +26,7 @@ export class BasePositionModel<G extends BasePositionModelGenerics = BasePositio
   implements ModelGeometryInterface {
   protected position: Point;
 
-  constructor(options: G['OPTIONS']) {
+  constructor(options: BasePositionModelOptions) {
     super(options);
     this.position = options.position || new Point(0, 0);
   }

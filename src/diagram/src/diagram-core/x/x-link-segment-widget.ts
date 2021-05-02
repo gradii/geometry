@@ -11,7 +11,7 @@ import {
   Input,
   Output
 } from '@angular/core';
-import { DefaultLinkModel } from '../../defaults/link/default-link-model';
+import { DefaultLinkModel } from '../../defaults/default-link-model';
 import { DiagramEngine } from '../diagram-engine';
 
 // export interface DefaultLinkSegmentWidgetProps {
@@ -37,8 +37,8 @@ import { DiagramEngine } from '../diagram-engine';
 		    animation: 'animation-selected 1s linear infinite'
       }: null"
       class="path"
-      [attr.stroke]="((selected || link.isSelected()) ? link.getOptions().selectedColor : link.getOptions().color)"
-      [attr.stroke-width]="link.getOptions().width"
+      [attr.stroke]="((selected || link.isSelected()) ? link.selectedColor : link.color)"
+      [attr.stroke-width]="link.width"
       [attr.d]="path"
     >
     </svg:path>
