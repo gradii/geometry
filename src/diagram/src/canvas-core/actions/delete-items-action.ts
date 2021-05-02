@@ -5,7 +5,11 @@
  */
 
 import * as _ from 'lodash';
-import { Action, ActionEvent, InputType } from '../core-actions/action';
+import {
+  Action,
+  ActionEvent,
+  InputType
+} from '../core-actions/action';
 
 export interface DeleteItemsActionOptions {
   keyCodes?: number[];
@@ -22,12 +26,12 @@ export interface DeleteItemsActionOptions {
  */
 export class DeleteItemsAction extends Action {
   constructor(options: DeleteItemsActionOptions = {}) {
-    const keyCodes = options.keyCodes || [46, 8];
+    const keyCodes  = options.keyCodes || [46, 8];
     const modifiers = {
-      ctrlKey: false,
+      ctrlKey : false,
       shiftKey: false,
-      altKey: false,
-      metaKey: false,
+      altKey  : false,
+      metaKey : false,
       ...options.modifiers
     };
 
@@ -36,7 +40,8 @@ export class DeleteItemsAction extends Action {
       fire: (event: ActionEvent<KeyboardEvent>) => {
         const {keyCode, ctrlKey, shiftKey, altKey, metaKey} = event.event;
 
-        if (keyCodes.indexOf(keyCode) !== -1 && _.isEqual({ctrlKey, shiftKey, altKey, metaKey}, modifiers)) {
+        if (keyCodes.indexOf(keyCode) !== -1 && _.isEqual({ctrlKey, shiftKey, altKey, metaKey},
+          modifiers)) {
           _.forEach(this.engine.getModel().getSelectedEntities(), (model) => {
             // only delete items which are not locked
             if (!model.isLocked()) {

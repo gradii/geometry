@@ -32,9 +32,9 @@ import { DIAGRAM_STATES } from './tokens';
   ],
   template : `
     <div defs>
-      <node-layer-factory></node-layer-factory>
-      <link-layer-factory></link-layer-factory>
-      <selection-box-layer-factory></selection-box-layer-factory>
+<!--      <node-layer-factory></node-layer-factory>-->
+<!--      <link-layer-factory></link-layer-factory>-->
+<!--      <selection-box-layer-factory></selection-box-layer-factory>-->
 
 <!--      <default-label-factory></default-label-factory>-->
 <!--      <default-node-factory></default-node-factory>-->

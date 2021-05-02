@@ -4,7 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Action, ActionEvent, InputType } from '../core-actions/action';
+import {
+  Action,
+  ActionEvent,
+  InputType
+} from '../core-actions/action';
 
 export interface ZoomCanvasActionOptions {
   inverseZoom?: boolean;
@@ -24,7 +28,7 @@ export class ZoomCanvasAction extends Action {
         const model = this.engine.getModel();
         event.stopPropagation();
         const oldZoomFactor = this.engine.getModel().getZoomLevel() / 100;
-        let scrollDelta = options.inverseZoom ? -event.deltaY : event.deltaY;
+        let scrollDelta     = options.inverseZoom ? -event.deltaY : event.deltaY;
         // check if it is pinch gesture
         if (event.ctrlKey && scrollDelta % 1 !== 0) {
           /*
@@ -43,14 +47,14 @@ export class ZoomCanvasAction extends Action {
         const zoomFactor = model.getZoomLevel() / 100;
 
         const boundingRect = (event.currentTarget! as Element).getBoundingClientRect();
-        const clientWidth = boundingRect.width;
+        const clientWidth  = boundingRect.width;
         const clientHeight = boundingRect.height;
         // compute difference between rect before and after scroll
-        const widthDiff = clientWidth * zoomFactor - clientWidth * oldZoomFactor;
-        const heightDiff = clientHeight * zoomFactor - clientHeight * oldZoomFactor;
+        const widthDiff    = clientWidth * zoomFactor - clientWidth * oldZoomFactor;
+        const heightDiff   = clientHeight * zoomFactor - clientHeight * oldZoomFactor;
         // compute mouse coords relative to canvas
-        const clientX = event.clientX - boundingRect.left;
-        const clientY = event.clientY - boundingRect.top;
+        const clientX      = event.clientX - boundingRect.left;
+        const clientY      = event.clientY - boundingRect.top;
 
         // compute width and height increment factor
         const xFactor = (clientX - model.getOffsetX()) / oldZoomFactor / clientWidth;

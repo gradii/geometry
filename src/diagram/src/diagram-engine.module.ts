@@ -9,7 +9,7 @@ import { LabelWidget } from './diagram-core/entities/label/label-widget';
 import { LinkLayerFactory } from './diagram-core/entities/link-layer/link-layer-factory';
 import { LinkLayerWidget } from './diagram-core/entities/link-layer/link-layer-widget';
 import { LinkWidget } from './diagram-core/entities/link/link-widget';
-import { NodeLayerFactory } from './diagram-core/entities/node-layer/node-layer-factory';
+// import { NodeLayerFactory } from './diagram-core/entities/node-layer/node-layer-factory';
 import { NodeLayerWidget } from './diagram-core/entities/node-layer/node-layer-widget';
 import { NodeWidget } from './diagram-core/entities/node/node-widget';
 import { PortWidget } from './diagram-core/entities/port/port-widget';
@@ -20,7 +20,7 @@ import { XLinkWidget } from './diagram-core/x/x-link-widget';
 import { XNodeWidget } from './diagram-core/x/x-node-widget';
 import { XPortLabelWidget } from './diagram-core/x/x-port-label-widget';
 import { CanvasWidget } from './canvas-core/entities/canvas/canvas-widget';
-import { SmartLayerWidget } from './canvas-core/entities/layer/smart-layer-widget';
+// import { SmartLayerWidget } from './canvas-core/entities/layer/smart-layer-widget';
 import { TransformLayerWidget } from './canvas-core/entities/layer/transform-layer-widget';
 import { SelectionBoxLayerFactory } from './canvas-core/entities/selection/selection-box-layer-factory';
 import { SelectionBoxWidget } from './canvas-core/entities/selection/selection-box-widget';
@@ -55,7 +55,7 @@ import { DIAGRAM_STATES } from './tokens';
     SelectionBoxWidget,
 
     CanvasWidget,
-    SmartLayerWidget,
+    // SmartLayerWidget,
 
     //
     // DefaultLabelFactory,
@@ -75,7 +75,7 @@ import { DIAGRAM_STATES } from './tokens';
 
     NodeWidget,
 
-    NodeLayerFactory,
+    // NodeLayerFactory,
     NodeLayerWidget,
 
     LabelWidget,

@@ -12,12 +12,12 @@ import { LayerModel } from './layer-model';
   template: `
     <ng-template [ngIf]="layer.getOptions().isSvg" [ngIfElse]="notSvg">
       <svg class="layer" [ngStyle]="getTransformStyle()">
-        <g smart-layer-widget [layer]="layer" [attr.key]="layer.getID()"></g>
+        <g link-layer-widget [layer]="layer"></g>
       </svg>
     </ng-template>
     <ng-template #notSvg>
       <div class="layer" [ngStyle]="getTransformStyle()">
-        <smart-layer-widget [layer]="layer" [attr.key]="layer.getID()"></smart-layer-widget>
+        <node-layer-widget [layer]="layer" [attr.key]="layer.getID()"></node-layer-widget>
       </div>
     </ng-template>
   `,
