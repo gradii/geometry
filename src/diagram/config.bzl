@@ -1,10 +1,6 @@
 # List of all entry-points of the Angular CDK package.
 DIAGRAM_ENTRYPOINTS = [
     "geometry",
-    "canvas-core",
-    "defaults",
-    "diagram-core",
-    "diagram-engine",
 ]
 
 DIAGRAM_TESTING_ENTRYPOINTS = [

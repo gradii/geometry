@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { DefaultLinkModel, DefaultNodeModel } from '../../../../../src/diagram/defaults';
-import { DiagramModel } from '../../../../../src/diagram/diagram-core';
+import { DefaultLinkModel } from 'src/diagram/src/defaults/link/default-link-model';
+import { DefaultNodeModel } from '../../../../../src/diagram/src/defaults/node/default-node-model';
+import { DiagramModel } from '../../../../../src/diagram/src/diagram-core/models/diagram-model';
 
 
 @Component({

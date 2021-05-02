@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { DiagramEngineModule } from '../../../../src/diagram/src/diagram-engine.module';
 
 import { AppComponent } from './app.component';
 import { DemoSimpleComponent } from './demo-simple/demo-simple.component';
-import { DiagramEngineModule } from '@gradii/diagram/diagram-engine';
 
 // import { CanvasEngineModule } from '@gradii/diagram/canvas-core';
 
