@@ -4,22 +4,21 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-
+import { EPSILON } from './common';
 import { Matrix3 } from './matrix3';
 import { Quaternion } from './quaternion';
 import { Vector3 } from './vector3';
 import { Vector4 } from './vector4';
-import { EPSILON } from './common';
 
 export class Matrix4 {
   public static readonly dimension = 4;
   // tslint:disable-next-line
-  public transform = this.transformVector4;
+  public transform                 = this.transformVector4;
   // tslint:disable-next-line
-  public transform3 = this.transformVector3;
+  public transform3                = this.transformVector3;
   // tslint:disable-next-line
-  public rotate3 = this.rotateVector3;
-  private values = new Float32Array(16);
+  public rotate3                   = this.rotateVector3;
+  private values                   = new Float32Array(16);
 
   constructor(values?: number[]);
 
@@ -34,16 +33,16 @@ export class Matrix4 {
         this.init(arguments[0]);
       }
     } else if (arguments.length === 16) {
-      this.values[0] = arguments[0];
-      this.values[1] = arguments[1];
-      this.values[2] = arguments[2];
-      this.values[3] = arguments[3];
-      this.values[4] = arguments[4];
-      this.values[5] = arguments[5];
-      this.values[6] = arguments[6];
-      this.values[7] = arguments[7];
-      this.values[8] = arguments[8];
-      this.values[9] = arguments[9];
+      this.values[0]  = arguments[0];
+      this.values[1]  = arguments[1];
+      this.values[2]  = arguments[2];
+      this.values[3]  = arguments[3];
+      this.values[4]  = arguments[4];
+      this.values[5]  = arguments[5];
+      this.values[6]  = arguments[6];
+      this.values[7]  = arguments[7];
+      this.values[8]  = arguments[8];
+      this.values[9]  = arguments[9];
       this.values[10] = arguments[10];
       this.values[11] = arguments[11];
       this.values[12] = arguments[12];
@@ -51,9 +50,9 @@ export class Matrix4 {
       this.values[14] = arguments[14];
       this.values[15] = arguments[15];
     } else {
-      this.values[0] = this.values[1] = this.values[2] = this.values[3] = 0;
-      this.values[4] = this.values[5] = this.values[6] = this.values[7] = 0;
-      this.values[8] = this.values[9] = this.values[10] = this.values[11] = 0;
+      this.values[0]  = this.values[1] = this.values[2] = this.values[3] = 0;
+      this.values[4]  = this.values[5] = this.values[6] = this.values[7] = 0;
+      this.values[8]  = this.values[9] = this.values[10] = this.values[11] = 0;
       this.values[12] = this.values[13] = this.values[14] = this.values[15] = 0;
     }
   }
@@ -79,24 +78,24 @@ export class Matrix4 {
    * @returns
    */
   public static fromTranslation(v: Vector3) {
-    const out = new Matrix4();
-    out[0] = 1;
-    out[1] = 0;
-    out[2] = 0;
-    out[3] = 0;
-    out[4] = 0;
-    out[5] = 1;
-    out[6] = 0;
-    out[7] = 0;
-    out[8] = 0;
-    out[9] = 0;
-    out[10] = 1;
-    out[11] = 0;
-    out[12] = v[0];
-    out[13] = v[1];
-    out[14] = v[2];
-    out[15] = 1;
-    return out;
+    return new Matrix4(
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      v.x,
+      v.y,
+      v.z,
+      1,
+    );
   }
 
   /**
@@ -111,24 +110,24 @@ export class Matrix4 {
    * @returns
    */
   public static fromScaling(v: Vector3) {
-    const out = new Matrix4();
-    out[0] = v[0];
-    out[1] = 0;
-    out[2] = 0;
-    out[3] = 0;
-    out[4] = 0;
-    out[5] = v[1];
-    out[6] = 0;
-    out[7] = 0;
-    out[8] = 0;
-    out[9] = 0;
-    out[10] = v[2];
-    out[11] = 0;
-    out[12] = 0;
-    out[13] = 0;
-    out[14] = 0;
-    out[15] = 1;
-    return out;
+    return new Matrix4(
+      v.x,
+      0,
+      0,
+      0,
+      0,
+      v.y,
+      0,
+      0,
+      0,
+      0,
+      v.z,
+      0,
+      0,
+      0,
+      0,
+      1
+    );
   }
 
   /**
@@ -146,9 +145,9 @@ export class Matrix4 {
   public static fromRotation(rad: number, axis: Vector3) {
     const out = new Matrix4();
 
-    let x = axis[0];
-    let y = axis[1];
-    let z = axis[2];
+    let x   = axis.x;
+    let y   = axis.y;
+    let z   = axis.z;
     let len = Math.sqrt(x * x + y * y + z * z);
     let s;
     let c;
@@ -168,22 +167,22 @@ export class Matrix4 {
     t = 1 - c;
 
     // Perform rotation-specific matrix multiplication
-    out[0] = x * x * t + c;
-    out[1] = y * x * t + z * s;
-    out[2] = z * x * t - y * s;
-    out[3] = 0;
-    out[4] = x * y * t - z * s;
-    out[5] = y * y * t + c;
-    out[6] = z * y * t + x * s;
-    out[7] = 0;
-    out[8] = x * z * t + y * s;
-    out[9] = y * z * t - x * s;
-    out[10] = z * z * t + c;
-    out[11] = 0;
-    out[12] = 0;
-    out[13] = 0;
-    out[14] = 0;
-    out[15] = 1;
+    out.values[0]  = x * x * t + c;
+    out.values[1]  = y * x * t + z * s;
+    out.values[2]  = z * x * t - y * s;
+    out.values[3]  = 0;
+    out.values[4]  = x * y * t - z * s;
+    out.values[5]  = y * y * t + c;
+    out.values[6]  = z * y * t + x * s;
+    out.values[7]  = 0;
+    out.values[8]  = x * z * t + y * s;
+    out.values[9]  = y * z * t - x * s;
+    out.values[10] = z * z * t + c;
+    out.values[11] = 0;
+    out.values[12] = 0;
+    out.values[13] = 0;
+    out.values[14] = 0;
+    out.values[15] = 1;
     return out;
   }
 
@@ -205,22 +204,22 @@ export class Matrix4 {
     const c = Math.cos(rad);
 
     // Perform axis-specific matrix multiplication
-    out[0] = 1;
-    out[1] = 0;
-    out[2] = 0;
-    out[3] = 0;
-    out[4] = 0;
-    out[5] = c;
-    out[6] = s;
-    out[7] = 0;
-    out[8] = 0;
-    out[9] = -s;
-    out[10] = c;
-    out[11] = 0;
-    out[12] = 0;
-    out[13] = 0;
-    out[14] = 0;
-    out[15] = 1;
+    out.values[0]  = 1;
+    out.values[1]  = 0;
+    out.values[2]  = 0;
+    out.values[3]  = 0;
+    out.values[4]  = 0;
+    out.values[5]  = c;
+    out.values[6]  = s;
+    out.values[7]  = 0;
+    out.values[8]  = 0;
+    out.values[9]  = -s;
+    out.values[10] = c;
+    out.values[11] = 0;
+    out.values[12] = 0;
+    out.values[13] = 0;
+    out.values[14] = 0;
+    out.values[15] = 1;
     return out;
   }
 
@@ -242,22 +241,22 @@ export class Matrix4 {
     const c = Math.cos(rad);
 
     // Perform axis-specific matrix multiplication
-    out[0] = c;
-    out[1] = 0;
-    out[2] = -s;
-    out[3] = 0;
-    out[4] = 0;
-    out[5] = 1;
-    out[6] = 0;
-    out[7] = 0;
-    out[8] = s;
-    out[9] = 0;
-    out[10] = c;
-    out[11] = 0;
-    out[12] = 0;
-    out[13] = 0;
-    out[14] = 0;
-    out[15] = 1;
+    out.values[0]  = c;
+    out.values[1]  = 0;
+    out.values[2]  = -s;
+    out.values[3]  = 0;
+    out.values[4]  = 0;
+    out.values[5]  = 1;
+    out.values[6]  = 0;
+    out.values[7]  = 0;
+    out.values[8]  = s;
+    out.values[9]  = 0;
+    out.values[10] = c;
+    out.values[11] = 0;
+    out.values[12] = 0;
+    out.values[13] = 0;
+    out.values[14] = 0;
+    out.values[15] = 1;
     return out;
   }
 
@@ -279,22 +278,22 @@ export class Matrix4 {
     const c = Math.cos(rad);
 
     // Perform axis-specific matrix multiplication
-    out[0] = c;
-    out[1] = s;
-    out[2] = 0;
-    out[3] = 0;
-    out[4] = -s;
-    out[5] = c;
-    out[6] = 0;
-    out[7] = 0;
-    out[8] = 0;
-    out[9] = 0;
-    out[10] = 1;
-    out[11] = 0;
-    out[12] = 0;
-    out[13] = 0;
-    out[14] = 0;
-    out[15] = 1;
+    out.values[0]  = c;
+    out.values[1]  = s;
+    out.values[2]  = 0;
+    out.values[3]  = 0;
+    out.values[4]  = -s;
+    out.values[5]  = c;
+    out.values[6]  = 0;
+    out.values[7]  = 0;
+    out.values[8]  = 0;
+    out.values[9]  = 0;
+    out.values[10] = 1;
+    out.values[11] = 0;
+    out.values[12] = 0;
+    out.values[13] = 0;
+    out.values[14] = 0;
+    out.values[15] = 1;
     return out;
   }
 
@@ -323,10 +322,10 @@ export class Matrix4 {
     const out = new Matrix4();
 
     // Quaternion math
-    const x = q[0];
-    const y = q[1];
-    const z = q[2];
-    const w = q[3];
+    const x  = q.x;
+    const y  = q.y;
+    const z  = q.z;
+    const w  = q.w;
     const x2 = x + x;
     const y2 = y + y;
     const z2 = z + z;
@@ -340,22 +339,22 @@ export class Matrix4 {
     const wy = w * y2;
     const wz = w * z2;
 
-    out[0] = 1 - (yy + zz);
-    out[1] = xy + wz;
-    out[2] = xz - wy;
-    out[3] = 0;
-    out[4] = xy - wz;
-    out[5] = 1 - (xx + zz);
-    out[6] = yz + wx;
-    out[7] = 0;
-    out[8] = xz + wy;
-    out[9] = yz - wx;
-    out[10] = 1 - (xx + yy);
-    out[11] = 0;
-    out[12] = v[0];
-    out[13] = v[1];
-    out[14] = v[2];
-    out[15] = 1;
+    out.values[0]  = 1 - (yy + zz);
+    out.values[1]  = xy + wz;
+    out.values[2]  = xz - wy;
+    out.values[3]  = 0;
+    out.values[4]  = xy - wz;
+    out.values[5]  = 1 - (xx + zz);
+    out.values[6]  = yz + wx;
+    out.values[7]  = 0;
+    out.values[8]  = xz + wy;
+    out.values[9]  = yz - wx;
+    out.values[10] = 1 - (xx + yy);
+    out.values[11] = 0;
+    out.values[12] = v.x;
+    out.values[13] = v.y;
+    out.values[14] = v.z;
+    out.values[15] = 1;
 
     return out;
   }
@@ -384,10 +383,10 @@ export class Matrix4 {
     const out = new Matrix4();
 
     // Quaternion math
-    const x = q[0];
-    const y = q[1];
-    const z = q[2];
-    const w = q[3];
+    const x  = q.x;
+    const y  = q.y;
+    const z  = q.z;
+    const w  = q.w;
     const x2 = x + x;
     const y2 = y + y;
     const z2 = z + z;
@@ -400,26 +399,26 @@ export class Matrix4 {
     const wx = w * x2;
     const wy = w * y2;
     const wz = w * z2;
-    const sx = s[0];
-    const sy = s[1];
-    const sz = s[2];
+    const sx = s.x;
+    const sy = s.y;
+    const sz = s.z;
 
-    out[0] = (1 - (yy + zz)) * sx;
-    out[1] = (xy + wz) * sx;
-    out[2] = (xz - wy) * sx;
-    out[3] = 0;
-    out[4] = (xy - wz) * sy;
-    out[5] = (1 - (xx + zz)) * sy;
-    out[6] = (yz + wx) * sy;
-    out[7] = 0;
-    out[8] = (xz + wy) * sz;
-    out[9] = (yz - wx) * sz;
-    out[10] = (1 - (xx + yy)) * sz;
-    out[11] = 0;
-    out[12] = v[0];
-    out[13] = v[1];
-    out[14] = v[2];
-    out[15] = 1;
+    out.values[0]  = (1 - (yy + zz)) * sx;
+    out.values[1]  = (xy + wz) * sx;
+    out.values[2]  = (xz - wy) * sx;
+    out.values[3]  = 0;
+    out.values[4]  = (xy - wz) * sy;
+    out.values[5]  = (1 - (xx + zz)) * sy;
+    out.values[6]  = (yz + wx) * sy;
+    out.values[7]  = 0;
+    out.values[8]  = (xz + wy) * sz;
+    out.values[9]  = (yz - wx) * sz;
+    out.values[10] = (1 - (xx + yy)) * sz;
+    out.values[11] = 0;
+    out.values[12] = v.x;
+    out.values[13] = v.y;
+    out.values[14] = v.z;
+    out.values[15] = 1;
 
     return out;
   }
@@ -449,13 +448,12 @@ export class Matrix4 {
     s: Vector3,
     o: Vector3
   ) {
-    const out = new Matrix4();
 
     // Quaternion math
-    const x = q[0];
-    const y = q[1];
-    const z = q[2];
-    const w = q[3];
+    const x  = q.x;
+    const y  = q.y;
+    const z  = q.z;
+    const w  = q.w;
     const x2 = x + x;
     const y2 = y + y;
     const z2 = z + z;
@@ -468,31 +466,48 @@ export class Matrix4 {
     const wx = w * x2;
     const wy = w * y2;
     const wz = w * z2;
-    const sx = s[0];
-    const sy = s[1];
-    const sz = s[2];
-    const ox = o[0];
-    const oy = o[1];
-    const oz = o[2];
+    const sx = s.x;
+    const sy = s.y;
+    const sz = s.z;
+    const ox = o.x;
+    const oy = o.y;
+    const oz = o.z;
 
-    out[0] = (1 - (yy + zz)) * sx;
-    out[1] = (xy + wz) * sx;
-    out[2] = (xz - wy) * sx;
-    out[3] = 0;
-    out[4] = (xy - wz) * sy;
-    out[5] = (1 - (xx + zz)) * sy;
-    out[6] = (yz + wx) * sy;
-    out[7] = 0;
-    out[8] = (xz + wy) * sz;
-    out[9] = (yz - wx) * sz;
-    out[10] = (1 - (xx + yy)) * sz;
-    out[11] = 0;
-    out[12] = v[0] + ox - (out[0] * ox + out[4] * oy + out[8] * oz);
-    out[13] = v[1] + oy - (out[1] * ox + out[5] * oy + out[9] * oz);
-    out[14] = v[2] + oz - (out[2] * ox + out[6] * oy + out[10] * oz);
-    out[15] = 1;
+    const out0  = (1 - (yy + zz)) * sx;
+    const out1  = (xy + wz) * sx;
+    const out2  = (xz - wy) * sx;
+    const out3  = 0;
+    const out4  = (xy - wz) * sy;
+    const out5  = (1 - (xx + zz)) * sy;
+    const out6  = (yz + wx) * sy;
+    const out7  = 0;
+    const out8  = (xz + wy) * sz;
+    const out9  = (yz - wx) * sz;
+    const out10 = (1 - (xx + yy)) * sz;
+    const out11 = 0;
+    const out12 = v.x + ox - (out0 * ox + out4 * oy + out8 * oz);
+    const out13 = v.y + oy - (out1 * ox + out5 * oy + out9 * oz);
+    const out14 = v.z + oz - (out2 * ox + out6 * oy + out10 * oz);
+    const out15 = 1;
 
-    return out;
+    return new Matrix4(
+      out0,
+      out1,
+      out2,
+      out3,
+      out4,
+      out5,
+      out6,
+      out7,
+      out8,
+      out9,
+      out10,
+      out11,
+      out12,
+      out13,
+      out14,
+      out15,
+    );
   }
 
   /**
@@ -505,10 +520,10 @@ export class Matrix4 {
   public static fromQuat(q: Quaternion) {
     const out = new Matrix4();
 
-    const x = q[0];
-    const y = q[1];
-    const z = q[2];
-    const w = q[3];
+    const x  = q.x;
+    const y  = q.y;
+    const z  = q.z;
+    const w  = q.w;
     const x2 = x + x;
     const y2 = y + y;
     const z2 = z + z;
@@ -522,30 +537,31 @@ export class Matrix4 {
     const wy = w * y2;
     const wz = w * z2;
 
-    out[0] = 1 - yy - zz;
-    out[1] = yx + wz;
-    out[2] = zx - wy;
-    out[3] = 0;
+    out.values[0] = 1 - yy - zz;
+    out.values[1] = yx + wz;
+    out.values[2] = zx - wy;
+    out.values[3] = 0;
 
-    out[4] = yx - wz;
-    out[5] = 1 - xx - zz;
-    out[6] = zy + wx;
-    out[7] = 0;
+    out.values[4] = yx - wz;
+    out.values[5] = 1 - xx - zz;
+    out.values[6] = zy + wx;
+    out.values[7] = 0;
 
-    out[8] = zx + wy;
-    out[9] = zy - wx;
-    out[10] = 1 - xx - yy;
-    out[11] = 0;
+    out.values[8]  = zx + wy;
+    out.values[9]  = zy - wx;
+    out.values[10] = 1 - xx - yy;
+    out.values[11] = 0;
 
-    out[12] = 0;
-    out[13] = 0;
-    out[14] = 0;
-    out[15] = 1;
+    out.values[12] = 0;
+    out.values[13] = 0;
+    out.values[14] = 0;
+    out.values[15] = 1;
 
     return out;
   }
 
-  public static frustum(left: number, right: number, bottom: number, top: number, near: number, far: number): Matrix4 {
+  public static frustum(left: number, right: number, bottom: number, top: number, near: number,
+                        far: number): Matrix4 {
     const rl = (right - left);
     const tb = (top - bottom);
     const fn = (far - near);
@@ -574,7 +590,7 @@ export class Matrix4 {
   }
 
   public static perspective(fov: number, aspect: number, near: number, far: number): Matrix4 {
-    const top = near * Math.tan(fov * Math.PI / 360.0);
+    const top   = near * Math.tan(fov * Math.PI / 360.0);
     const right = top * aspect;
 
     return Matrix4.frustum(-right, right, -top, top, near, far);
@@ -600,12 +616,12 @@ export class Matrix4 {
     near: number,
     far: number
   ) {
-    const upTan = Math.tan(fov.upDegrees * Math.PI / 180.0);
-    const downTan = Math.tan(fov.downDegrees * Math.PI / 180.0);
-    const leftTan = Math.tan(fov.leftDegrees * Math.PI / 180.0);
+    const upTan    = Math.tan(fov.upDegrees * Math.PI / 180.0);
+    const downTan  = Math.tan(fov.downDegrees * Math.PI / 180.0);
+    const leftTan  = Math.tan(fov.leftDegrees * Math.PI / 180.0);
     const rightTan = Math.tan(fov.rightDegrees * Math.PI / 180.0);
-    const xScale = 2.0 / (leftTan + rightTan);
-    const yScale = 2.0 / (upTan + downTan);
+    const xScale   = 2.0 / (leftTan + rightTan);
+    const yScale   = 2.0 / (upTan + downTan);
 
     return new Matrix4(
       [
@@ -629,7 +645,8 @@ export class Matrix4 {
     );
   }
 
-  public static orthographic(left: number, right: number, bottom: number, top: number, near: number, far: number): Matrix4 {
+  public static orthographic(left: number, right: number, bottom: number, top: number, near: number,
+                             far: number): Matrix4 {
     const rl = (right - left);
     const tb = (top - bottom);
     const fn = (far - near);
@@ -870,16 +887,16 @@ export class Matrix4 {
     arg13: number,
     arg14: number,
     arg15: number) {
-    this.values[0] = arg0;
-    this.values[1] = arg1;
-    this.values[2] = arg2;
-    this.values[3] = arg3;
-    this.values[4] = arg4;
-    this.values[5] = arg5;
-    this.values[6] = arg6;
-    this.values[7] = arg7;
-    this.values[8] = arg8;
-    this.values[9] = arg9;
+    this.values[0]  = arg0;
+    this.values[1]  = arg1;
+    this.values[2]  = arg2;
+    this.values[3]  = arg3;
+    this.values[4]  = arg4;
+    this.values[5]  = arg5;
+    this.values[6]  = arg6;
+    this.values[7]  = arg7;
+    this.values[8]  = arg8;
+    this.values[9]  = arg9;
     this.values[10] = arg10;
     this.values[11] = arg11;
     this.values[12] = arg12;
@@ -891,16 +908,16 @@ export class Matrix4 {
   }
 
   public setFrom(arg: Matrix4) {
-    this.values[0] = arg.values[0];
-    this.values[1] = arg.values[1];
-    this.values[2] = arg.values[2];
-    this.values[3] = arg.values[3];
-    this.values[4] = arg.values[4];
-    this.values[5] = arg.values[5];
-    this.values[6] = arg.values[6];
-    this.values[7] = arg.values[7];
-    this.values[8] = arg.values[8];
-    this.values[9] = arg.values[9];
+    this.values[0]  = arg.values[0];
+    this.values[1]  = arg.values[1];
+    this.values[2]  = arg.values[2];
+    this.values[3]  = arg.values[3];
+    this.values[4]  = arg.values[4];
+    this.values[5]  = arg.values[5];
+    this.values[6]  = arg.values[6];
+    this.values[7]  = arg.values[7];
+    this.values[8]  = arg.values[8];
+    this.values[9]  = arg.values[9];
     this.values[10] = arg.values[10];
     this.values[11] = arg.values[11];
     this.values[12] = arg.values[12];
@@ -922,38 +939,53 @@ export class Matrix4 {
   }
 
   public determinant(): number {
-    const a00 = this.values[0], a01 = this.values[1], a02 = this.values[2], a03 = this.values[3];
-    const a10 = this.values[4], a11 = this.values[5], a12 = this.values[6], a13 = this.values[7];
-    const a20 = this.values[8], a21 = this.values[9], a22 = this.values[10], a23 = this.values[11];
-    const a30 = this.values[12], a31 = this.values[13], a32 = this.values[14], a33 = this.values[15];
+    const a00 = this.values[0],
+          a01 = this.values[1],
+          a02 = this.values[2],
+          a03 = this.values[3];
+
+    const a10 = this.values[4],
+          a11 = this.values[5],
+          a12 = this.values[6],
+          a13 = this.values[7];
+
+    const a20 = this.values[8],
+          a21 = this.values[9],
+          a22 = this.values[10],
+          a23 = this.values[11];
+
+    const a30 = this.values[12],
+          a31 = this.values[13],
+          a32 = this.values[14],
+          a33 = this.values[15];
 
     const det00 = a00 * a11 - a01 * a10,
-      det01 = a00 * a12 - a02 * a10,
-      det02 = a00 * a13 - a03 * a10,
-      det03 = a01 * a12 - a02 * a11,
-      det04 = a01 * a13 - a03 * a11,
-      det05 = a02 * a13 - a03 * a12,
-      det06 = a20 * a31 - a21 * a30,
-      det07 = a20 * a32 - a22 * a30,
-      det08 = a20 * a33 - a23 * a30,
-      det09 = a21 * a32 - a22 * a31,
-      det10 = a21 * a33 - a23 * a31,
-      det11 = a22 * a33 - a23 * a32;
+          det01 = a00 * a12 - a02 * a10,
+          det02 = a00 * a13 - a03 * a10,
+          det03 = a01 * a12 - a02 * a11,
+          det04 = a01 * a13 - a03 * a11,
+          det05 = a02 * a13 - a03 * a12,
+          det06 = a20 * a31 - a21 * a30,
+          det07 = a20 * a32 - a22 * a30,
+          det08 = a20 * a33 - a23 * a30,
+          det09 = a21 * a32 - a22 * a31,
+          det10 = a21 * a33 - a23 * a31,
+          det11 = a22 * a33 - a23 * a32;
 
     return (det00 * det11 - det01 * det10 + det02 * det09 + det03 * det08 - det04 * det07 + det05 * det06);
   }
 
   public setIdentity(): Matrix4 {
-    this.values[0] = 1;
-    this.values[1] = 0;
-    this.values[2] = 0;
-    this.values[3] = 0;
-    this.values[4] = 0;
-    this.values[5] = 1;
-    this.values[6] = 0;
-    this.values[7] = 0;
-    this.values[8] = 0;
-    this.values[9] = 0;
+    this.values[0]  = 1;
+    this.values[1]  = 0;
+    this.values[2]  = 0;
+    this.values[3]  = 0;
+    this.values[4]  = 0;
+    this.values[5]  = 1;
+    this.values[6]  = 0;
+    this.values[7]  = 0;
+    this.values[8]  = 0;
+    this.values[9]  = 0;
     this.values[10] = 1;
     this.values[11] = 0;
     this.values[12] = 0;
@@ -978,14 +1010,14 @@ export class Matrix4 {
     const temp13 = this.values[7];
     const temp23 = this.values[11];
 
-    this.values[1] = this.values[4];
-    this.values[2] = this.values[8];
-    this.values[3] = this.values[12];
-    this.values[4] = temp01;
-    this.values[6] = this.values[9];
-    this.values[7] = this.values[13];
-    this.values[8] = temp02;
-    this.values[9] = temp12;
+    this.values[1]  = this.values[4];
+    this.values[2]  = this.values[8];
+    this.values[3]  = this.values[12];
+    this.values[4]  = temp01;
+    this.values[6]  = this.values[9];
+    this.values[7]  = this.values[13];
+    this.values[8]  = temp02;
+    this.values[9]  = temp12;
     this.values[11] = this.values[14];
     this.values[12] = temp03;
     this.values[13] = temp13;
@@ -1033,16 +1065,16 @@ export class Matrix4 {
 
     det = 1.0 / det;
 
-    this.values[0] = (a11 * det11 - a12 * det10 + a13 * det09) * det;
-    this.values[1] = (-a01 * det11 + a02 * det10 - a03 * det09) * det;
-    this.values[2] = (a31 * det05 - a32 * det04 + a33 * det03) * det;
-    this.values[3] = (-a21 * det05 + a22 * det04 - a23 * det03) * det;
-    this.values[4] = (-a10 * det11 + a12 * det08 - a13 * det07) * det;
-    this.values[5] = (a00 * det11 - a02 * det08 + a03 * det07) * det;
-    this.values[6] = (-a30 * det05 + a32 * det02 - a33 * det01) * det;
-    this.values[7] = (a20 * det05 - a22 * det02 + a23 * det01) * det;
-    this.values[8] = (a10 * det10 - a11 * det08 + a13 * det06) * det;
-    this.values[9] = (-a00 * det10 + a01 * det08 - a03 * det06) * det;
+    this.values[0]  = (a11 * det11 - a12 * det10 + a13 * det09) * det;
+    this.values[1]  = (-a01 * det11 + a02 * det10 - a03 * det09) * det;
+    this.values[2]  = (a31 * det05 - a32 * det04 + a33 * det03) * det;
+    this.values[3]  = (-a21 * det05 + a22 * det04 - a23 * det03) * det;
+    this.values[4]  = (-a10 * det11 + a12 * det08 - a13 * det07) * det;
+    this.values[5]  = (a00 * det11 - a02 * det08 + a03 * det07) * det;
+    this.values[6]  = (-a30 * det05 + a32 * det02 - a33 * det01) * det;
+    this.values[7]  = (a20 * det05 - a22 * det02 + a23 * det01) * det;
+    this.values[8]  = (a10 * det10 - a11 * det08 + a13 * det06) * det;
+    this.values[9]  = (-a00 * det10 + a01 * det08 - a03 * det06) * det;
     this.values[10] = (a30 * det04 - a31 * det02 + a33 * det00) * det;
     this.values[11] = (-a20 * det04 + a21 * det02 - a23 * det00) * det;
     this.values[12] = (-a10 * det09 + a11 * det07 - a12 * det06) * det;
@@ -1074,47 +1106,47 @@ export class Matrix4 {
     const a32 = this.values[14];
     const a33 = this.values[15];
 
-    this.values[0] =
+    this.values[0]  =
       a11 * (a22 * a33 - a23 * a32) -
       a21 * (a12 * a33 - a13 * a32) +
       a31 * (a12 * a23 - a13 * a22);
-    this.values[1] = -(
+    this.values[1]  = -(
       a01 * (a22 * a33 - a23 * a32) -
       a21 * (a02 * a33 - a03 * a32) +
       a31 * (a02 * a23 - a03 * a22)
     );
-    this.values[2] =
+    this.values[2]  =
       a01 * (a12 * a33 - a13 * a32) -
       a11 * (a02 * a33 - a03 * a32) +
       a31 * (a02 * a13 - a03 * a12);
-    this.values[3] = -(
+    this.values[3]  = -(
       a01 * (a12 * a23 - a13 * a22) -
       a11 * (a02 * a23 - a03 * a22) +
       a21 * (a02 * a13 - a03 * a12)
     );
-    this.values[4] = -(
+    this.values[4]  = -(
       a10 * (a22 * a33 - a23 * a32) -
       a20 * (a12 * a33 - a13 * a32) +
       a30 * (a12 * a23 - a13 * a22)
     );
-    this.values[5] =
+    this.values[5]  =
       a00 * (a22 * a33 - a23 * a32) -
       a20 * (a02 * a33 - a03 * a32) +
       a30 * (a02 * a23 - a03 * a22);
-    this.values[6] = -(
+    this.values[6]  = -(
       a00 * (a12 * a33 - a13 * a32) -
       a10 * (a02 * a33 - a03 * a32) +
       a30 * (a02 * a13 - a03 * a12)
     );
-    this.values[7] =
+    this.values[7]  =
       a00 * (a12 * a23 - a13 * a22) -
       a10 * (a02 * a23 - a03 * a22) +
       a20 * (a02 * a13 - a03 * a12);
-    this.values[8] =
+    this.values[8]  =
       a10 * (a21 * a33 - a23 * a31) -
       a20 * (a11 * a33 - a13 * a31) +
       a30 * (a11 * a23 - a13 * a21);
-    this.values[9] = -(
+    this.values[9]  = -(
       a00 * (a21 * a33 - a23 * a31) -
       a20 * (a01 * a33 - a03 * a31) +
       a30 * (a01 * a23 - a03 * a21)
@@ -1150,15 +1182,19 @@ export class Matrix4 {
   }
 
   public multiply(matrix: Matrix4): Matrix4 {
-    const a00 = this.values[0], a01 = this.values[1], a02 = this.values[2], a03 = this.values[3];
-    const a10 = this.values[4], a11 = this.values[5], a12 = this.values[6], a13 = this.values[7];
-    const a20 = this.values[8], a21 = this.values[9], a22 = this.values[10], a23 = this.values[11];
+    // @formatter:off
+
+    const a00 =  this.values[0], a01 =  this.values[1], a02 =  this.values[2], a03 =  this.values[3];
+    const a10 =  this.values[4], a11 =  this.values[5], a12 =  this.values[6], a13 =  this.values[7];
+    const a20 =  this.values[8], a21 =  this.values[9], a22 = this.values[10], a23 = this.values[11];
     const a30 = this.values[12], a31 = this.values[13], a32 = this.values[14], a33 = this.values[15];
 
+    // @formatter:on
+
     let b0 = matrix.at(0),
-      b1 = matrix.at(1),
-      b2 = matrix.at(2),
-      b3 = matrix.at(3);
+        b1 = matrix.at(1),
+        b2 = matrix.at(2),
+        b3 = matrix.at(3);
 
     this.values[0] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
     this.values[1] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
@@ -1180,8 +1216,8 @@ export class Matrix4 {
     b2 = matrix.at(10);
     b3 = matrix.at(11);
 
-    this.values[8] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
-    this.values[9] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+    this.values[8]  = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+    this.values[9]  = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
     this.values[10] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
     this.values[11] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
 
@@ -1203,10 +1239,10 @@ export class Matrix4 {
   }
 
   public transformVector4(v: Vector4) {
-    const x = v.x,
-      y = v.y,
-      z = v.z,
-      w = v.w;
+    const x  = v.x,
+          y  = v.y,
+          z  = v.z,
+          w  = v.w;
     const _x = this.values[0] * x + this.values[1] * y + this.values[2] * z + this.values[3] * w;
     const _y = this.values[4] * x + this.values[5] * y + this.values[6] * z + this.values[7] * w;
     const _z = this.values[8] * x + this.values[9] * y + this.values[10] * z + this.values[11] * w;
@@ -1220,9 +1256,9 @@ export class Matrix4 {
   /// Returns [arg].
 
   public transformVector3(v: Vector3) {
-    const x = v.x,
-      y = v.y,
-      z = v.z;
+    const x  = v.x,
+          y  = v.y,
+          z  = v.z;
     const _x = this.values[0] * x + this.values[1] * y + this.values[2] * z + this.values[3];
     const _y = this.values[4] * x + this.values[5] * y + this.values[6] * z + this.values[7];
     const _z = this.values[8] * x + this.values[9] * y + this.values[10] * z + this.values[11];
@@ -1373,8 +1409,8 @@ export class Matrix4 {
     this.values[6] = a02 * b10 + a12 * b11 + a22 * b12;
     this.values[7] = a03 * b10 + a13 * b11 + a23 * b12;
 
-    this.values[8] = a00 * b20 + a10 * b21 + a20 * b22;
-    this.values[9] = a01 * b20 + a11 * b21 + a21 * b22;
+    this.values[8]  = a00 * b20 + a10 * b21 + a20 * b22;
+    this.values[9]  = a01 * b20 + a11 * b21 + a21 * b22;
     this.values[10] = a02 * b20 + a12 * b21 + a22 * b22;
     this.values[11] = a03 * b20 + a13 * b21 + a23 * b22;
 
@@ -1388,8 +1424,8 @@ export class Matrix4 {
    * @returns
    */
   public rotateX(rad: number): Matrix4 {
-    const s = Math.sin(rad);
-    const c = Math.cos(rad);
+    const s   = Math.sin(rad);
+    const c   = Math.cos(rad);
     const a10 = this.values[4];
     const a11 = this.values[5];
     const a12 = this.values[6];
@@ -1400,12 +1436,12 @@ export class Matrix4 {
     const a23 = this.values[11];
 
     // Perform axis-specific matrix multiplication
-    this.values[4] = a10 * c + a20 * s;
-    this.values[5] = a11 * c + a21 * s;
-    this.values[6] = a12 * c + a22 * s;
-    this.values[7] = a13 * c + a23 * s;
-    this.values[8] = a20 * c - a10 * s;
-    this.values[9] = a21 * c - a11 * s;
+    this.values[4]  = a10 * c + a20 * s;
+    this.values[5]  = a11 * c + a21 * s;
+    this.values[6]  = a12 * c + a22 * s;
+    this.values[7]  = a13 * c + a23 * s;
+    this.values[8]  = a20 * c - a10 * s;
+    this.values[9]  = a21 * c - a11 * s;
     this.values[10] = a22 * c - a12 * s;
     this.values[11] = a23 * c - a13 * s;
     return this;
@@ -1418,8 +1454,8 @@ export class Matrix4 {
    * @returns
    */
   public rotateY(rad: number) {
-    const s = Math.sin(rad);
-    const c = Math.cos(rad);
+    const s   = Math.sin(rad);
+    const c   = Math.cos(rad);
     const a00 = this.values[0];
     const a01 = this.values[1];
     const a02 = this.values[2];
@@ -1430,12 +1466,12 @@ export class Matrix4 {
     const a23 = this.values[11];
 
     // Perform axis-specific matrix multiplication
-    this.values[0] = a00 * c - a20 * s;
-    this.values[1] = a01 * c - a21 * s;
-    this.values[2] = a02 * c - a22 * s;
-    this.values[3] = a03 * c - a23 * s;
-    this.values[8] = a00 * s + a20 * c;
-    this.values[9] = a01 * s + a21 * c;
+    this.values[0]  = a00 * c - a20 * s;
+    this.values[1]  = a01 * c - a21 * s;
+    this.values[2]  = a02 * c - a22 * s;
+    this.values[3]  = a03 * c - a23 * s;
+    this.values[8]  = a00 * s + a20 * c;
+    this.values[9]  = a01 * s + a21 * c;
     this.values[10] = a02 * s + a22 * c;
     this.values[11] = a03 * s + a23 * c;
     return this;
@@ -1448,8 +1484,8 @@ export class Matrix4 {
    * @returns
    */
   public rotateZ(rad: number) {
-    const s = Math.sin(rad);
-    const c = Math.cos(rad);
+    const s   = Math.sin(rad);
+    const c   = Math.cos(rad);
     const a00 = this.values[0];
     const a01 = this.values[1];
     const a02 = this.values[2];
@@ -1475,7 +1511,7 @@ export class Matrix4 {
    * TODO
    * @param radians
    */
-  public setRotationX(radians) {
+  public setRotationX(radians: number) {
     const c = Math.cos(radians);
     const s = Math.sin(radians);
 
@@ -1487,8 +1523,8 @@ export class Matrix4 {
     this.values[5] = c;
     this.values[6] = -s;
 
-    this.values[8] = 0;
-    this.values[9] = s;
+    this.values[8]  = 0;
+    this.values[9]  = s;
     this.values[10] = c;
 
     this.values[12] = 0;
@@ -1502,7 +1538,7 @@ export class Matrix4 {
    * TODO
    * @param radians
    */
-  public setRotationY(radians) {
+  public setRotationY(radians: number) {
     const c = Math.cos(radians);
     const s = Math.sin(radians);
 
@@ -1516,8 +1552,8 @@ export class Matrix4 {
     this.values[6] = 0;
     this.values[7] = 0;
 
-    this.values[8] = -s;
-    this.values[9] = 0;
+    this.values[8]  = -s;
+    this.values[9]  = 0;
     this.values[10] = c;
     this.values[11] = 0;
 
@@ -1528,7 +1564,7 @@ export class Matrix4 {
    * TODO
    * @param radians
    */
-  public setRotationZ(radians) {
+  public setRotationZ(radians: number) {
     const c = Math.cos(radians);
     const s = Math.sin(radians);
 
@@ -1540,8 +1576,8 @@ export class Matrix4 {
     this.values[5] = c;
     this.values[6] = 0;
 
-    this.values[8] = 0;
-    this.values[9] = 0;
+    this.values[8]  = 0;
+    this.values[9]  = 0;
     this.values[10] = 1;
 
     this.values[12] = 0;
@@ -1576,12 +1612,11 @@ export class Matrix4 {
    * @return
    */
   public getTranslation() {
-    const out = new Vector3();
-    out[0] = this.values[12];
-    out[1] = this.values[13];
-    out[2] = this.values[14];
-
-    return out;
+    return new Vector3(
+      this.values[12],
+      this.values[13],
+      this.values[14]
+    );
   }
 
   /**
@@ -1593,8 +1628,6 @@ export class Matrix4 {
    * @return
    */
   public getScaling() {
-    const out = new Vector3();
-
     const m11 = this.values[0];
     const m12 = this.values[1];
     const m13 = this.values[2];
@@ -1605,11 +1638,11 @@ export class Matrix4 {
     const m32 = this.values[9];
     const m33 = this.values[10];
 
-    out[0] = Math.sqrt(m11 * m11 + m12 * m12 + m13 * m13);
-    out[1] = Math.sqrt(m21 * m21 + m22 * m22 + m23 * m23);
-    out[2] = Math.sqrt(m31 * m31 + m32 * m32 + m33 * m33);
-
-    return out;
+    return new Vector3(
+      Math.sqrt(m11 * m11 + m12 * m12 + m13 * m13),
+      Math.sqrt(m21 * m21 + m22 * m22 + m23 * m23),
+      Math.sqrt(m31 * m31 + m32 * m32 + m33 * m33)
+    );
   }
 
   /**
@@ -1624,28 +1657,28 @@ export class Matrix4 {
 
     // Algorithm taken from http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
     const trace = this.values[0] + this.values[5] + this.values[10];
-    let S = 0;
+    let S       = 0;
 
     if (trace > 0) {
-      S = Math.sqrt(trace + 1.0) * 2;
+      S      = Math.sqrt(trace + 1.0) * 2;
       out[3] = 0.25 * S;
       out[0] = (this.values[6] - this.values[9]) / S;
       out[1] = (this.values[8] - this.values[2]) / S;
       out[2] = (this.values[1] - this.values[4]) / S;
     } else if (this.values[0] > this.values[5] && this.values[0] > this.values[10]) {
-      S = Math.sqrt(1.0 + this.values[0] - this.values[5] - this.values[10]) * 2;
+      S      = Math.sqrt(1.0 + this.values[0] - this.values[5] - this.values[10]) * 2;
       out[3] = (this.values[6] - this.values[9]) / S;
       out[0] = 0.25 * S;
       out[1] = (this.values[1] + this.values[4]) / S;
       out[2] = (this.values[8] + this.values[2]) / S;
     } else if (this.values[5] > this.values[10]) {
-      S = Math.sqrt(1.0 + this.values[5] - this.values[0] - this.values[10]) * 2;
+      S      = Math.sqrt(1.0 + this.values[5] - this.values[0] - this.values[10]) * 2;
       out[3] = (this.values[8] - this.values[2]) / S;
       out[0] = (this.values[1] + this.values[4]) / S;
       out[1] = 0.25 * S;
       out[2] = (this.values[6] + this.values[9]) / S;
     } else {
-      S = Math.sqrt(1.0 + this.values[10] - this.values[0] - this.values[5]) * 2;
+      S      = Math.sqrt(1.0 + this.values[10] - this.values[0] - this.values[5]) * 2;
       out[3] = (this.values[1] - this.values[4]) / S;
       out[0] = (this.values[8] + this.values[2]) / S;
       out[1] = (this.values[6] + this.values[9]) / S;
@@ -1685,16 +1718,16 @@ export class Matrix4 {
    * @returns   out
    */
   public add(matrix: Matrix4) {
-    this.values[0] = this.values[0] + matrix.at(0);
-    this.values[1] = this.values[1] + matrix.at(1);
-    this.values[2] = this.values[2] + matrix.at(2);
-    this.values[3] = this.values[3] + matrix.at(3);
-    this.values[4] = this.values[4] + matrix.at(4);
-    this.values[5] = this.values[5] + matrix.at(5);
-    this.values[6] = this.values[6] + matrix.at(6);
-    this.values[7] = this.values[7] + matrix.at(7);
-    this.values[8] = this.values[8] + matrix.at(8);
-    this.values[9] = this.values[9] + matrix.at(9);
+    this.values[0]  = this.values[0] + matrix.at(0);
+    this.values[1]  = this.values[1] + matrix.at(1);
+    this.values[2]  = this.values[2] + matrix.at(2);
+    this.values[3]  = this.values[3] + matrix.at(3);
+    this.values[4]  = this.values[4] + matrix.at(4);
+    this.values[5]  = this.values[5] + matrix.at(5);
+    this.values[6]  = this.values[6] + matrix.at(6);
+    this.values[7]  = this.values[7] + matrix.at(7);
+    this.values[8]  = this.values[8] + matrix.at(8);
+    this.values[9]  = this.values[9] + matrix.at(9);
     this.values[10] = this.values[10] + matrix.at(10);
     this.values[11] = this.values[11] + matrix.at(11);
     this.values[12] = this.values[12] + matrix.at(12);
@@ -1711,16 +1744,16 @@ export class Matrix4 {
    * @returns
    */
   public subtract(matrix: Matrix4) {
-    this.values[0] = this.values[0] - matrix.at(0);
-    this.values[1] = this.values[1] - matrix.at(1);
-    this.values[2] = this.values[2] - matrix.at(2);
-    this.values[3] = this.values[3] - matrix.at(3);
-    this.values[4] = this.values[4] - matrix.at(4);
-    this.values[5] = this.values[5] - matrix.at(5);
-    this.values[6] = this.values[6] - matrix.at(6);
-    this.values[7] = this.values[7] - matrix.at(7);
-    this.values[8] = this.values[8] - matrix.at(8);
-    this.values[9] = this.values[9] - matrix.at(9);
+    this.values[0]  = this.values[0] - matrix.at(0);
+    this.values[1]  = this.values[1] - matrix.at(1);
+    this.values[2]  = this.values[2] - matrix.at(2);
+    this.values[3]  = this.values[3] - matrix.at(3);
+    this.values[4]  = this.values[4] - matrix.at(4);
+    this.values[5]  = this.values[5] - matrix.at(5);
+    this.values[6]  = this.values[6] - matrix.at(6);
+    this.values[7]  = this.values[7] - matrix.at(7);
+    this.values[8]  = this.values[8] - matrix.at(8);
+    this.values[9]  = this.values[9] - matrix.at(9);
     this.values[10] = this.values[10] - matrix.at(10);
     this.values[11] = this.values[11] - matrix.at(11);
     this.values[12] = this.values[12] - matrix.at(12);
@@ -1737,16 +1770,16 @@ export class Matrix4 {
    * @returns   out
    */
   public multiplyScalar(scalar: number) {
-    this.values[0] = this.values[0] * scalar;
-    this.values[1] = this.values[1] * scalar;
-    this.values[2] = this.values[2] * scalar;
-    this.values[3] = this.values[3] * scalar;
-    this.values[4] = this.values[4] * scalar;
-    this.values[5] = this.values[5] * scalar;
-    this.values[6] = this.values[6] * scalar;
-    this.values[7] = this.values[7] * scalar;
-    this.values[8] = this.values[8] * scalar;
-    this.values[9] = this.values[9] * scalar;
+    this.values[0]  = this.values[0] * scalar;
+    this.values[1]  = this.values[1] * scalar;
+    this.values[2]  = this.values[2] * scalar;
+    this.values[3]  = this.values[3] * scalar;
+    this.values[4]  = this.values[4] * scalar;
+    this.values[5]  = this.values[5] * scalar;
+    this.values[6]  = this.values[6] * scalar;
+    this.values[7]  = this.values[7] * scalar;
+    this.values[8]  = this.values[8] * scalar;
+    this.values[9]  = this.values[9] * scalar;
     this.values[10] = this.values[10] * scalar;
     this.values[11] = this.values[11] * scalar;
     this.values[12] = this.values[12] * scalar;

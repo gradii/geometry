@@ -14,7 +14,7 @@ const degree = Math.PI / 180;
  * @param  radian 弧度
  * @return  角度
  */
-export function toDegree(radian) {
+export function toDegree(radian: number) {
   return radian / degree;
 }
 
@@ -24,7 +24,7 @@ export function toDegree(radian) {
  * @param  m 模
  * @return  返回n 被 m 取模的结果
  */
-export function mod(n, m) {
+export function mod(n: number, m: number) {
   return ((n % m) + m) % m;
 }
 
@@ -52,7 +52,8 @@ export function equals(a: number, b: number) {
 
 /**
  */
-export function clamp(value, min, max) {
+export function clamp(value: number, min: number, max: number) {
+  // tslint:disable-next-line:no-nested-ternary
   return min < max
     ? (value < min ? min : value > max ? max : value)
     : (value < max ? max : value > min ? min : value);

@@ -873,7 +873,7 @@ export class Vector2 {
     return (this.clone().sub(correct)).length;
   }
 
-  public vertical(flag, out?: Vector2) {
+  public vertical(flag: boolean, out?: Vector2) {
     if (!out) {
       out = this;
     }
