@@ -5,9 +5,9 @@
  */
 
 import {
-  Point,
+  Vector2,
   Rectangle
-} from '@gradii/diagram/geometry';
+} from '@gradii/vector-math';
 import * as _ from 'lodash';
 import {
   BaseEntityEvent,
@@ -94,11 +94,11 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
     };
   }
 
-  setPosition(point: Point): void;
+  setPosition(point: Vector2): void;
   setPosition(x: number, y: number): void;
-  setPosition(x: Point | number, y?: number) {
+  setPosition(x: Vector2 | number, y?: number) {
     // let old = this.position;
-    if (x instanceof Point) {
+    if (x instanceof Vector2) {
       y = x.y;
       x = x.x;
     }
@@ -174,8 +174,8 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
     );
   }
 
-  getCenter(): Point {
-    return new Point(this.getX() + this.width / 2, this.getY() + this.height / 2);
+  getCenter(): Vector2 {
+    return new Vector2(this.getX() + this.width / 2, this.getY() + this.height / 2);
   }
 
   updateCoords(coords: Rectangle) {

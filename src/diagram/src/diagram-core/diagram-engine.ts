@@ -5,10 +5,10 @@
  */
 
 import {
-  Point,
+  Vector2,
   Polygon,
   Rectangle
-} from '@gradii/diagram/geometry';
+} from '@gradii/vector-math';
 import {
   CanvasEngine,
   CanvasEngineListener,
@@ -91,7 +91,7 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
     return selector;
   }
 
-  getPortCenter(port: PortModel): Point {
+  getPortCenter(port: PortModel): Vector2 {
     return this.getPortCoords(port).getOrigin();
   }
 

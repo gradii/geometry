@@ -96,6 +96,31 @@ export class Matrix3 {
     return out;
   }
 
+  public static fromTranslate(v: Vector2): Matrix3 {
+    return new Matrix3(
+      1, 0, 0,
+      0, 1, 0,
+      v.x, v.y, 1
+    );
+  }
+
+  public static fromScaling(v: Vector2): Matrix3 {
+    return new Matrix3(
+      v.x, 0, 0,
+      0, v.y, 0,
+      0, 0, 1
+    );
+  }
+
+  public static fromRotate(v: Vector2): Matrix3 {
+    return new Matrix3(
+      1, 0, 0,
+      0, 1, 0,
+      0, 0, 1
+    );
+  }
+
+
   public static absolute(m: Matrix3, out?: Matrix3) {
     if (!out) {
       out = new Matrix3();
@@ -298,6 +323,20 @@ export class Matrix3 {
     return this;
   }
 
+  public setScale(vector: Vector2): this {
+    this.values[0] = vector.x;
+    this.values[1] = 0;
+    this.values[2] = 0;
+    this.values[3] = 0;
+    this.values[4] = vector.y;
+    this.values[5] = 0;
+    this.values[6] = 0;
+    this.values[7] = 0;
+    this.values[8] = 1;
+
+    return this;
+  }
+
   /**
    * Transpose the {@class Matrix3}
    *
@@ -368,6 +407,8 @@ export class Matrix3 {
     this.values[6] = 0;
     this.values[7] = s;
     this.values[8] = c;
+
+    return this;
   }
 
   public setRotationY(radians: number) {
@@ -382,6 +423,8 @@ export class Matrix3 {
     this.values[6] = s;
     this.values[7] = 0;
     this.values[8] = c;
+
+    return this;
   }
 
   public setRotationZ(radians: number) {
@@ -396,6 +439,8 @@ export class Matrix3 {
     this.values[6] = 0;
     this.values[7] = 0;
     this.values[8] = 1;
+
+    return this;
   }
 
   /**
@@ -420,7 +465,7 @@ export class Matrix3 {
     return this;
   }
 
-  public rotateVector3(v: Vector3) {
+  public rotateVector3(v: Vector3): Vector3 {
     v.setValues(
       v.x * this.values[0] + v.y * this.values[1] + v.z * this.values[2],
       v.x * this.values[3] + v.y * this.values[4] + v.z * this.values[5],
@@ -429,7 +474,7 @@ export class Matrix3 {
     return v;
   }
 
-  public rotateVector2(v: Vector2) {
+  public rotateVector2(v: Vector2): Vector2 {
     v.setValues(
       v.x * this.values[0] + v.y * this.values[1],
       v.x * this.values[3] + v.y * this.values[4]
@@ -437,7 +482,7 @@ export class Matrix3 {
     return v;
   }
 
-  public absoluteRotate2(v: Vector2) {
+  public absoluteRotate2(v: Vector2): Vector2 {
     v.setValues(
       v.x * Math.abs(this.values[0]) + v.y * Math.abs(this.values[1]),
       v.x * Math.abs(this.values[3]) + v.y * Math.abs(this.values[4])

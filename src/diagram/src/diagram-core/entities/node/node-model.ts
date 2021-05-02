@@ -6,9 +6,9 @@
 
 
 import {
-  Point,
+  Vector2,
   Rectangle
-} from '@gradii/diagram/geometry';
+} from '@gradii/vector-math';
 import * as _ from 'lodash';
 import { BaseEntityEvent } from '../../../canvas-core/core-models/base-entity';
 import { BaseModelListener } from '../../../canvas-core/core-models/base-model';
@@ -46,9 +46,9 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
     return new Rectangle(this.getPosition(), this.width, this.height);
   }
 
-  setPosition(point: Point): void;
+  setPosition(point: Vector2): void;
   setPosition(x: number, y: number): void;
-  setPosition(x: number | Point, y?: number) {
+  setPosition(x: number | Vector2, y?: number) {
     console.log(x, y);
     let old = this.position;
     super.setPosition(x as number, y);

@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Rectangle } from '@gradii/diagram/geometry';
+import { Rectangle } from '@gradii/vector-math';
 import { AbstractDisplacementState, AbstractDisplacementStateEvent } from '../core-state/abstract-displacement-state';
 import { State } from '../core-state/state';
 import { ModelGeometryInterface } from '../core/model-geometry-interface';

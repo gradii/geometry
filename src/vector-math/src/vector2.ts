@@ -7,6 +7,7 @@
 
 import { clamp, EPSILON } from './common';
 import { Matrix2 } from './matrix2';
+import { Matrix3 } from './matrix3';
 import { Vector3 } from './vector3';
 import { Vector4 } from './vector4';
 
@@ -624,6 +625,18 @@ export class Vector2 {
 
   public static zero() {
     return new Vector2(0, 0);
+  }
+
+  public static createScaleOriginMatrix3(vector: Vector2, origin: Vector2) {
+    return Matrix3.fromTranslate(origin)
+      .multiply(Matrix3.fromScaling(vector))
+      .multiply(Matrix3.fromTranslate(origin.clone().negate()));
+  }
+
+  public static createRotateOriginMatrix3(deg: number, origin: Vector2) {
+    return Matrix3.fromTranslate(origin)
+      .multiply(new Matrix3().setRotationZ(deg))
+      .multiply(Matrix3.fromTranslate(origin.clone().negate()));
   }
 
   public at(index: number): number {

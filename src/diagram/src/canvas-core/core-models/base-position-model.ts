@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Point, Rectangle } from '@gradii/diagram/geometry';
+import { Vector2, Rectangle } from '@gradii/vector-math';
 import { ModelGeometryInterface } from '../core/model-geometry-interface';
 import { BaseEntityEvent, DeserializeEvent } from './base-entity';
 import { BaseModel, BaseModelGenerics, BaseModelListener, BaseModelOptions } from './base-model';
@@ -14,7 +14,7 @@ export interface BasePositionModelListener extends BaseModelListener {
 }
 
 export interface BasePositionModelOptions extends BaseModelOptions {
-  position?: Point;
+  position?: Vector2;
 }
 
 export interface BasePositionModelGenerics extends BaseModelGenerics {
@@ -24,20 +24,20 @@ export interface BasePositionModelGenerics extends BaseModelGenerics {
 
 export class BasePositionModel<G extends BasePositionModelGenerics = BasePositionModelGenerics> extends BaseModel<G>
   implements ModelGeometryInterface {
-  protected position: Point;
+  protected position: Vector2;
 
   constructor(options: BasePositionModelOptions) {
     super(options);
-    this.position = options.position || new Point(0, 0);
+    this.position = options.position || new Vector2(0, 0);
   }
 
-  setPosition(point: Point): void;
+  setPosition(point: Vector2): void;
   setPosition(x: number, y: number): void;
-  setPosition(x: number | Point, y?: number) {
+  setPosition(x: number | Vector2, y?: number) {
     if (typeof x === 'object') {
       this.position = x;
     } else if (typeof x === 'number') {
-      this.position = new Point(x, y);
+      this.position = new Vector2(x, y);
     }
     this.fireEvent({}, 'positionChanged');
   }
@@ -48,7 +48,7 @@ export class BasePositionModel<G extends BasePositionModelGenerics = BasePositio
 
   deserialize(event: DeserializeEvent<this>) {
     super.deserialize(event);
-    this.position = new Point(event.data.x, event.data.y);
+    this.position = new Vector2(event.data.x, event.data.y);
   }
 
   serialize() {
@@ -59,7 +59,7 @@ export class BasePositionModel<G extends BasePositionModelGenerics = BasePositio
     };
   }
 
-  getPosition(): Point {
+  getPosition(): Vector2 {
     return this.position;
   }
 

@@ -5,10 +5,10 @@
  */
 
 import {
-  Point,
+  Vector2,
   Polygon,
   Rectangle
-} from '@gradii/diagram/geometry';
+} from '@gradii/vector-math';
 import * as _ from 'lodash';
 import { BaseEntityEvent } from '../../../canvas-core/core-models/base-entity';
 import {
@@ -307,7 +307,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
   generatePoint(x: number = 0, y: number = 0): PointModel {
     return new PointModel({
       link    : this,
-      position: new Point(x, y)
+      position: new Vector2(x, y)
     });
   }
 }

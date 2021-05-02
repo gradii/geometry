@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Point } from '@gradii/diagram/geometry';
+import { Vector2 } from '@gradii/vector-math';
 import { debounce } from 'lodash';
 import { DeleteItemsAction } from './actions/delete-items-action';
 import { ZoomCanvasAction } from './actions/zoom-canvas-action';
@@ -75,17 +75,17 @@ export class CanvasEngine<L extends CanvasEngineListener = CanvasEngineListener,
     return this.stateMachine;
   }
 
-  getRelativeMousePoint(event: { clientX: number; clientY: number }): Point {
+  getRelativeMousePoint(event: { clientX: number; clientY: number }): Vector2 {
     const point = this.getRelativePoint(event.clientX, event.clientY);
-    return new Point(
+    return new Vector2(
       (point.x - this.model.getOffsetX()) / (this.model.getZoomLevel() / 100.0),
       (point.y - this.model.getOffsetY()) / (this.model.getZoomLevel() / 100.0)
     );
   }
 
-  getRelativePoint(x: number, y: number): Point {
+  getRelativePoint(x: number, y: number): Vector2 {
     const canvasRect = this.canvas.getBoundingClientRect();
-    return new Point(x - canvasRect.left, y - canvasRect.top);
+    return new Vector2(x - canvasRect.left, y - canvasRect.top);
   }
   //
   // registerFactoryBank(factory: FactoryBank) {

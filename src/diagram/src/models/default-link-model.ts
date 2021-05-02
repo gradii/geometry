@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { BezierCurve } from '@gradii/diagram/geometry';
+import { BezierCurve } from '@gradii/vector-math';
 import { BaseEntityEvent, } from '../canvas-core/core-models/base-entity';
 import { BaseModelOptions } from '../canvas-core/core-models/base-model';
 import { LabelModel } from '../diagram-core/entities/label/label-model';

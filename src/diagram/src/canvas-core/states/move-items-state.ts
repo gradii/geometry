@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Point } from '@gradii/diagram/geometry';
+import { Vector2 } from '@gradii/vector-math';
 import { CanvasEngine } from '../canvas-engine';
 import { Action, ActionEvent, InputType } from '../core-actions/action';
 import { BaseModel } from '../core-models/base-model';
@@ -15,7 +15,7 @@ import { State } from '../core-state/state';
 export class MoveItemsState<E extends CanvasEngine = CanvasEngine> extends AbstractDisplacementState<E> {
   initialPositions: {
     [id: string]: {
-      point: Point;
+      point: Vector2;
       item: BaseModel;
     };
   };
