@@ -35,6 +35,12 @@ export interface BaseModelGenerics extends BaseEntityGenerics {
 export class BaseModel<G extends BaseModelGenerics = BaseModelGenerics> extends BaseEntity<G> {
   protected parent: G['PARENT'];
 
+  // region
+  type: string;
+  selected: boolean;
+  extras: any;
+  // endreion
+
   constructor(options: G['OPTIONS']) {
     super(options);
   }
@@ -70,24 +76,29 @@ export class BaseModel<G extends BaseModelGenerics = BaseModelGenerics> extends 
   serialize() {
     return {
       ...super.serialize(),
-      type: this.options.type,
-      selected: this.options.selected,
-      extras: this.options.extras
+      type    : this.type || this.options.type,
+      selected: this.selected || this.options.selected,
+      extras  : this.extras || this.options.extras
     };
   }
 
   deserialize(event: DeserializeEvent<this>) {
     super.deserialize(event);
-    this.options.extras = event.data.extras;
+    this.options.extras   = event.data.extras;
     this.options.selected = event.data.selected;
+
+    this.extras   = event.data.extras;
+    this.selected = event.data.selected;
   }
 
   getType(): string {
-    return this.options.type;
+    return this.type || this.options.type;
+    // return this.options.type;
   }
 
   isSelected(): boolean {
-    return this.options.selected;
+    // return this.options.selected;
+    return this.selected || this.options.selected;
   }
 
   isLocked(): boolean {
@@ -104,7 +115,10 @@ export class BaseModel<G extends BaseModelGenerics = BaseModelGenerics> extends 
   }
 
   setSelected(selected: boolean = true) {
-    if (this.options.selected !== selected) {
+    if (
+      (this.selected || this.options.selected) !== selected
+    ) {
+      this.selected         = selected;
       this.options.selected = selected;
 
       this.fireEvent(

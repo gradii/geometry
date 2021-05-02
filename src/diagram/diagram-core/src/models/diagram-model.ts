@@ -42,6 +42,10 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
     this.addLayer(new NodeLayerModel());
   }
 
+  // getModel(id) {
+  //   return super.getModels()
+  // }
+
   deserialize(event: DeserializeEvent<this>) {
     this.layers = [];
     super.deserialize(event);

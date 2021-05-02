@@ -4,24 +4,33 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, Inject, Input, Optional } from '@angular/core';
-import { ENGINE, ENGINE_OPTIONS, State } from '@gradii/diagram/canvas-core';
+import {
+  Component,
+  Inject,
+  Input,
+  Optional
+} from '@angular/core';
+import {
+  ENGINE,
+  ENGINE_OPTIONS,
+  State
+} from '@gradii/diagram/canvas-core';
 import { DiagramEngine } from '@gradii/diagram/diagram-core';
 import { DIAGRAM_STATES } from './tokens';
 
 
 @Component({
-  selector: 'diagram-engine',
+  selector : 'diagram-engine',
   providers: [
     {
-      provide: ENGINE,
+      provide   : ENGINE,
       useFactory: (options = {}) => new DiagramEngine(options),
-      deps: [
+      deps      : [
         ENGINE_OPTIONS
       ]
     },
   ],
-  template: `
+  template : `
     <div defs>
       <node-layer-factory></node-layer-factory>
       <link-layer-factory></link-layer-factory>
@@ -35,13 +44,12 @@ import { DIAGRAM_STATES } from './tokens';
 
     <canvas-widget></canvas-widget>
   `,
-  styles: [
-      `:host {
+  styles   : [
+    `:host {
       position : relative;
       cursor   : move;
       overflow : hidden;
-    }
-    `
+    }`
   ]
 })
 export class DiagramEngineComponent {

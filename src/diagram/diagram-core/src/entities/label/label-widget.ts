@@ -16,9 +16,10 @@ import { LabelModel } from './label-model';
                        [attr.key]="label.getID()"
     >
       <div class="label" #ref>
-        <ng-template [ngTemplateOutlet]="engine.getFactoryForLabel(this.label).generateReactWidget({model: label})"
-                     [ngTemplateOutletContext]="{event: {model: label}}"
-        ></ng-template>
+        <x-label-widget [model]="label"></x-label-widget>
+<!--        <ng-template [ngTemplateOutlet]="engine.getFactoryForLabel(this.label).generateReactWidget({model: label})"-->
+<!--                     [ngTemplateOutletContext]="{event: {model: label}}"-->
+<!--        ></ng-template>-->
       </div>
     </svg:foreignObject>`,
   styles: [`
@@ -59,7 +60,7 @@ export class LabelWidget implements AfterViewChecked {
 
   ngAfterViewChecked() {
     this.ngZone.runOutsideAngular(() => {
-      window.requestAnimationFrame(this.calculateLabelPosition);
+      this.calculateLabelPosition();
     });
   }
 

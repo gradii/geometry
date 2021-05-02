@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { LayerModel, LayerModelGenerics } from '@gradii/diagram/canvas-core';
+import {
+  LayerModel,
+  LayerModelGenerics
+} from '@gradii/diagram/canvas-core';
 import { DiagramEngine } from '../../diagram-engine';
 import { DiagramModel } from '../../models/diagram-model';
 import { NodeModel } from '../node/node-model';
@@ -15,12 +18,22 @@ export interface NodeLayerModelGenerics extends LayerModelGenerics {
 }
 
 export class NodeLayerModel<G extends NodeLayerModelGenerics = NodeLayerModelGenerics> extends LayerModel<G> {
+  protected models: NodeModel[];
+
   constructor() {
     super({
-      type: 'diagram-nodes',
-      isSvg: false,
+      type       : 'diagram-nodes',
+      isSvg      : false,
       transformed: true
     });
+  }
+
+  getModel(id: string): NodeModel {
+   return super.getModel(id) as NodeModel;
+  }
+
+  getModels(): NodeModel[] {
+    return this.models;
   }
 
   addModel(model: NodeModel): void {

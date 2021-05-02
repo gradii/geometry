@@ -6,7 +6,11 @@
 
 import * as _ from 'lodash';
 import { CanvasEngine } from '../canvas-engine';
-import { BaseEvent, BaseListener, BaseObserver } from '../core/base-observer';
+import {
+  BaseEvent,
+  BaseListener,
+  BaseObserver
+} from '../core/base-observer';
 import { Toolkit } from '../toolkit';
 import { BaseModel } from './base-model';
 
@@ -40,7 +44,16 @@ export interface DeserializeEvent<T extends BaseEntity = BaseEntity> {
 }
 
 export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> extends BaseObserver<T['LISTENER']> {
+  /**
+   * @deprecated
+   */
   protected options: T['OPTIONS'];
+
+  // region options area
+  id: string;
+  locked: boolean;
+
+  // endregion
 
   constructor(options: T['OPTIONS'] = {}) {
     super();
@@ -48,14 +61,25 @@ export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> exten
       id: Toolkit.UID(),
       ...options
     };
+
+    this.id     = Toolkit.UID();
+    this.locked = options.locked;
   }
 
+  /**
+   * @deprecated
+   */
   getOptions() {
-    return this.options;
+    return {
+      ...this.options,
+      id    : this.id,
+      locked: this.locked
+    };
   }
 
   getID() {
-    return this.options.id;
+    return this.id;
+    // return this.options.id;
   }
 
   doClone(lookupTable: { [s: string]: any } = {}, clone: any) {
@@ -67,7 +91,7 @@ export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> exten
     if (lookupTable[this.options.id]) {
       return lookupTable[this.options.id];
     }
-    let clone = _.cloneDeep(this);
+    let clone     = _.cloneDeep(this);
     clone.options = {
       ...this.options,
       id: Toolkit.UID()
@@ -84,14 +108,21 @@ export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> exten
   }
 
   deserialize(event: DeserializeEvent<this>) {
-    this.options.id = event.data.id;
-    this.options.locked = event.data.locked;
+    // this.options.id     = event.data.id;
+    // this.options.locked = event.data.locked;
+
+    this.id     = event.data.id;
+    this.locked = event.data.locked;
   }
 
   serialize() {
     return {
-      id: this.options.id,
-      locked: this.options.locked
+      // id    : this.id,
+      // locked: this.locked,
+      id    : this.id,
+      locked: this.locked,
+      // id    : this.options.id,
+      // locked: this.options.locked
     };
   }
 
@@ -106,11 +137,14 @@ export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> exten
   }
 
   public isLocked(): boolean {
-    return this.options.locked;
+    return this.locked;
+    // return this.options.locked;
   }
 
   public setLocked(locked: boolean = true) {
-    this.options.locked = locked;
+    // this.options.locked = locked;
+    this.locked = locked;
+
     this.fireEvent(
       {
         locked: locked

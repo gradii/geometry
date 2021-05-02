@@ -12,8 +12,8 @@ import {
   Output
 } from '@angular/core';
 import { DiagramEngine } from '@gradii/diagram/diagram-core';
-import { DefaultLinkFactory } from './default-link-factory';
-import { DefaultLinkModel } from './default-link-model';
+import { DefaultLinkFactory } from '../../../defaults/src/link/default-link-factory';
+import { DefaultLinkModel } from '../../../defaults/src/link/default-link-model';
 
 // export interface DefaultLinkSegmentWidgetProps {
 //   path: string;
@@ -28,7 +28,7 @@ import { DefaultLinkModel } from './default-link-model';
 
 
 @Component({
-  selector: 'g[default-link-segment-widget]',
+  selector: 'g[x-link-segment-widget]',
   template: `
 
     <svg:path
@@ -82,7 +82,7 @@ import { DefaultLinkModel } from './default-link-model';
     `
   ]
 })
-export class DefaultLinkSegmentWidget {
+export class XLinkSegmentWidget {
 
   @Input() ref: (ref: SVGPathElement) => void;
   @Input() path: string;

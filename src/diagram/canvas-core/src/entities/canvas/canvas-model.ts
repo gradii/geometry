@@ -14,7 +14,10 @@ import {
   BaseEntityOptions,
   DeserializeEvent
 } from '../../core-models/base-entity';
-import { BaseModel, BaseModelListener } from '../../core-models/base-model';
+import {
+  BaseModel,
+  BaseModelListener
+} from '../../core-models/base-model';
 import { LayerModel } from '../layer/layer-model';
 
 export interface DiagramListener extends BaseEntityListener {
@@ -41,12 +44,20 @@ export interface CanvasModelGenerics extends BaseEntityGenerics {
 export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> extends BaseEntity<G> {
   protected layers: LayerModel[];
 
+  // region options
+  offsetX: number;
+  offsetY: number;
+  zoom: number;
+  gridSize: number;
+
+  // endregion
+
   constructor(options = {}) {
     super({
-      zoom: 100,
+      zoom    : 100,
       gridSize: 0,
-      offsetX: 0,
-      offsetY: 0,
+      offsetX : 0,
+      offsetY : 0,
       ...options
     });
     this.layers = [];
@@ -107,7 +118,8 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
     if (this.options.gridSize === 0) {
       return pos;
     }
-    return this.options.gridSize * Math.floor((pos + this.options.gridSize / 2) / this.options.gridSize);
+    return this.options.gridSize * Math.floor(
+      (pos + this.options.gridSize / 2) / this.options.gridSize);
   }
 
   deserializeModel(data: ReturnType<this['serialize']>, engine: CanvasEngine) {
@@ -122,8 +134,8 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
     } = {};
 
     const event: DeserializeEvent = {
-      data: data,
-      engine: engine,
+      data         : data,
+      engine       : engine,
       registerModel: (model: BaseModel) => {
         models[model.getID()] = model;
         if (resolvers[model.getID()]) {
@@ -147,9 +159,9 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 
   deserialize(event: DeserializeEvent<this>) {
     super.deserialize(event);
-    this.options.offsetX = event.data.offsetX;
-    this.options.offsetY = event.data.offsetY;
-    this.options.zoom = event.data.zoom;
+    this.options.offsetX  = event.data.offsetX;
+    this.options.offsetY  = event.data.offsetY;
+    this.options.zoom     = event.data.zoom;
     this.options.gridSize = event.data.gridSize;
     _.forEach(event.data.layers, (layer) => {
       const layerOb = event.engine.getFactoryForLayer(layer.type).generateModel({
@@ -166,17 +178,18 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
   serialize() {
     return {
       ...super.serialize(),
-      offsetX: this.options.offsetX,
-      offsetY: this.options.offsetY,
-      zoom: this.options.zoom,
-      gridSize: this.options.gridSize,
-      layers: _.map(this.layers, (layer) => {
+      offsetX : this.offsetX || this.options.offsetX,
+      offsetY : this.offsetY || this.options.offsetY,
+      zoom    : this.zoom || this.options.zoom,
+      gridSize: this.gridSize || this.options.gridSize,
+      layers  : _.map(this.layers, (layer) => {
         return layer.serialize();
       })
     };
   }
 
   setZoomLevel(zoom: number) {
+    this.zoom = zoom;
     this.options.zoom = zoom;
     this.fireEvent({zoom}, 'zoomUpdated');
   }
@@ -188,22 +201,28 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
   }
 
   setOffsetX(offsetX: number) {
-    this.setOffset(offsetX, this.options.offsetY);
+    this.setOffset(
+      offsetX,
+      this.offsetY || this.options.offsetY
+    );
   }
 
   setOffsetY(offsetY: number) {
-    this.setOffset(this.options.offsetX, offsetY);
+    this.setOffset(
+      this.offsetX || this.options.offsetX,
+      offsetY
+    );
   }
 
   getOffsetY() {
-    return this.options.offsetY;
+    return this.offsetY || this.options.offsetY;
   }
 
   getOffsetX() {
-    return this.options.offsetX;
+    return this.offsetX || this.options.offsetX;
   }
 
   getZoomLevel() {
-    return this.options.zoom;
+    return this.zoom || this.options.zoom;
   }
 }

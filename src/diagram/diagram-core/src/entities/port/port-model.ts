@@ -47,12 +47,24 @@ export interface PortModelGenerics extends BasePositionModelGenerics {
 }
 
 export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends BasePositionModel<G> {
+
+  /**
+   * @deprecated
+   */
   links: Map<string, LinkModel>;
 
   // calculated post rendering so routing can be done correctly
   width: number;
   height: number;
   reportedPosition: boolean;
+
+
+  // region options
+  alignment: PortModelAlignment;
+  maximumLinks: number;
+  name: string;
+
+  // endregion
 
   constructor(options: G['OPTIONS']) {
     super(options);
@@ -62,7 +74,11 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
 
   deserialize(event: DeserializeEvent<this>) {
     super.deserialize(event);
-    this.reportedPosition  = false;
+    this.reportedPosition = false;
+
+    this.name      = event.data.name;
+    this.alignment = event.data.alignment;
+
     this.options.name      = event.data.name;
     this.options.alignment = event.data.alignment;
   }
@@ -70,8 +86,8 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
   serialize() {
     return {
       ...super.serialize(),
-      name      : this.options.name,
-      alignment : this.options.alignment,
+      name      : this.name || this.options.name,
+      alignment : this.alignment || this.options.alignment,
       parentNode: this.parent.getID(),
       links     : Array.from(this.links.values()).map((link) => {
         return link.getID();
@@ -90,7 +106,10 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
     super.setPosition(x, y);
     this.getLinks().forEach((link) => {
       let point = link.getPointForPort(this);
-      point.setPosition(point.getX() + (x as number) - old.x, point.getY() + (y as number) - old.y);
+      point.setPosition(
+        point.getX() + (x as number) - old.x,
+        point.getY() + (y as number) - old.y
+      );
     });
   }
 
@@ -104,14 +123,15 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
   }
 
   getName(): string {
-    return this.options.name;
+    return this.name || this.options.name;
   }
 
   getMaximumLinks(): number {
-    return this.options.maximumLinks;
+    return this.maximumLinks || this.options.maximumLinks;
   }
 
   setMaximumLinks(maximumLinks: number) {
+    this.maximumLinks         = maximumLinks;
     this.options.maximumLinks = maximumLinks;
   }
 

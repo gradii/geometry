@@ -25,8 +25,9 @@ import { NodeModel } from './node-model';
          [style.top.px]="node.getY()"
          [style.left.px]="node.getX()">
       <!--      <ng-template [ngTemplateOutlet]="engine.generateWIdgetForNode(node)"></ng-template>-->
-      <ng-template [ngTemplateOutlet]="engine.generateWidgetForNode(node)"
-                   [ngTemplateOutletContext]="{event: {model: node}}"></ng-template>
+<!--      <ng-template [ngTemplateOutlet]="engine.generateWidgetForNode(node)"-->
+<!--                   [ngTemplateOutletContext]="{event: {model: node}}"></ng-template>-->
+      <x-node-widget [node]="node"></x-node-widget>
     </div>
   `,
   styles: [`

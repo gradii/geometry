@@ -7,9 +7,16 @@
 import * as _ from 'lodash';
 import { CanvasEngine } from '../../canvas-engine';
 import { DeserializeEvent } from '../../core-models/base-entity';
-import { BaseModel, BaseModelGenerics, BaseModelOptions } from '../../core-models/base-model';
+import {
+  BaseModel,
+  BaseModelGenerics,
+  BaseModelOptions
+} from '../../core-models/base-model';
 import { AbstractModelFactory } from '../../core/abstract-model-factory';
-import { FactoryBank, FactoryBankListener } from '../../core/factory-bank';
+import {
+  FactoryBank,
+  FactoryBankListener
+} from '../../core/factory-bank';
 import { CanvasModel } from '../canvas/canvas-model';
 
 export interface LayerModelOptions extends BaseModelOptions {
@@ -26,12 +33,19 @@ export interface LayerModelGenerics extends BaseModelGenerics {
 
 export abstract class LayerModel<G extends LayerModelGenerics = LayerModelGenerics>
   extends BaseModel<G> {
-  protected models: { [id: string]: G['CHILDREN'] };
+
+  protected models: BaseModel[];
   protected repaintEnabled: boolean;
+
+  //region
+  isSvg: boolean;
+  transformed: boolean;
+
+  //endregion
 
   constructor(options: G['OPTIONS'] = {}) {
     super(options);
-    this.models = {};
+    this.models         = [];
     this.repaintEnabled = true;
   }
 
@@ -42,10 +56,14 @@ export abstract class LayerModel<G extends LayerModelGenerics = LayerModelGeneri
 
   deserialize(event: DeserializeEvent<this>) {
     super.deserialize(event);
-    this.options.isSvg = !!event.data.isSvg;
+    this.isSvg       = !!event.data.isSvg;
+    this.transformed = !!event.data.transformed;
+
+    this.options.isSvg       = !!event.data.isSvg;
     this.options.transformed = !!event.data.transformed;
     _.forEach(event.data.models, (model) => {
-      const modelOb = this.getChildModelFactoryBank(event.engine).getFactory(model.type).generateModel({
+      const modelOb = this.getChildModelFactoryBank(event.engine).getFactory(
+        model.type).generateModel({
         initialConfig: model
       });
       modelOb.deserialize({
@@ -59,9 +77,9 @@ export abstract class LayerModel<G extends LayerModelGenerics = LayerModelGeneri
   serialize() {
     return {
       ...super.serialize(),
-      isSvg: this.options.isSvg,
-      transformed: this.options.transformed,
-      models: _.mapValues(this.models, (model) => {
+      isSvg      : this.isSvg || this.options.isSvg,
+      transformed: this.transformed || this.options.transformed,
+      models     : this.models.map((model) => {
         return model.serialize();
       })
     };
@@ -84,7 +102,7 @@ export abstract class LayerModel<G extends LayerModelGenerics = LayerModelGeneri
 
   addModel(model: G['CHILDREN']) {
     model.setParent(this);
-    this.models[model.getID()] = model;
+    this.models.push(model);
   }
 
   getSelectionEntities(): Array<BaseModel> {
@@ -98,13 +116,14 @@ export abstract class LayerModel<G extends LayerModelGenerics = LayerModelGeneri
   }
 
   getModel(id: string) {
-    return this.models[id];
+    return this.models.find(it => it.getID() === id);
   }
 
   removeModel(id: string | G['CHILDREN']): boolean {
     const _id = typeof id === 'string' ? id : id.getID();
-    if (this.models[_id]) {
-      delete this.models[_id];
+    const idx = this.models.findIndex(it => it.getID() === id);
+    if (idx > -1) {
+      this.models.splice(idx, 1);
       return true;
     }
     return false;

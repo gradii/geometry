@@ -42,9 +42,12 @@ import { PointModel } from './point-model';
     <!--      {() => {-->
     <!--      return (-->
     <!--    <svg:g [attr.data-link-id]="link.getID()">-->
-    <ng-template [ngTemplateOutlet]="engine.generateWidgetForLink(link)"
-                 [ngTemplateOutletContext]="{event: {model: link}}">
-    </ng-template>
+<!--    <ng-template [ngTemplateOutlet]="engine.generateWidgetForLink(link)"-->
+<!--                 [ngTemplateOutletContext]="{event: {model: link}}">-->
+<!--    </ng-template>-->
+
+    <svg:g x-link-widget [link]="link"></svg:g>
+
     <ng-template let-labelModel let-index="index" ngFor [ngForOf]="link.getLabels()">
       <svg:g label-widget
              [attr.key]="labelModel.getID()"

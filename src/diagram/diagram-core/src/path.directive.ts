@@ -7,13 +7,14 @@
 import { Directive, ElementRef, Input, OnInit } from '@angular/core';
 
 @Directive({
-  selector: 'svg:path'
+  selector: 'path'
 })
 export class PathDirective implements OnInit {
   @Input()
   ref: (ref: SVGPathElement) => void;
 
   constructor(public elementRef: ElementRef) {
+    debugger
   }
 
   ngOnInit() {
