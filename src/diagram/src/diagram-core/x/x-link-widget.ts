@@ -7,11 +7,13 @@
 import { AfterViewChecked, AfterViewInit, Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { DefaultLinkModel } from '../../defaults/link/default-link-model';
 import { ENGINE } from '../../canvas-core/tokens';
-import { DefaultLinkPointWidget } from '../../defaults/link/default-link-point-widget';
-import { DefaultLinkSegmentWidget } from '../../defaults/link/default-link-segment-widget';
+// import { DefaultLinkPointWidget } from '../../defaults/link/default-link-point-widget';
+// import { DefaultLinkSegmentWidget } from '../../defaults/link/default-link-segment-widget';
 import { DiagramEngine } from '../diagram-engine';
 import { LinkWidget } from '../entities/link/link-widget';
 import { PointModel } from '../entities/link/point-model';
+import { XLinkPointWidget } from './x-link-point-widget';
+import { XLinkSegmentWidget } from './x-link-segment-widget';
 
 export interface DefaultLinkProps {
   link: DefaultLinkModel;
@@ -33,7 +35,6 @@ export interface DefaultLinkState {
              [ref]="it.ref"
              [path]="link.getSVGPath()"
              [selected]="selected"
-             [factory]="engine.getFactoryForLink(this.link)"
              [link]="link"
              (selection)="selected = $event"
              (mousedown)="addPointToLink($event, 1);"
@@ -128,7 +129,7 @@ export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewC
 
   generatePoint(point: PointModel) {
     return {
-      component: DefaultLinkPointWidget,
+      component: XLinkPointWidget,
       props: {
         key: point.getID(),
         point: point as any,
@@ -143,13 +144,13 @@ export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewC
     // this.refPaths.push(ref);
 
     return {
-      component: DefaultLinkSegmentWidget,
+      component: XLinkSegmentWidget,
       props: {
         key: `link-${id}`,
         path: path,
         selected: this.selected,
         diagramEngine: this.engine,
-        factory: this.engine.getFactoryForLink(this.link),
+        // factory: this.engine.getFactoryForLink(this.link),
         link: this.link,
         // forwardRef: ref,
         onSelection: (selected: boolean) => {

@@ -25,16 +25,16 @@ import { TransformLayerWidget } from './canvas-core/entities/layer/transform-lay
 import { SelectionBoxLayerFactory } from './canvas-core/entities/selection/selection-box-layer-factory';
 import { SelectionBoxWidget } from './canvas-core/entities/selection/selection-box-widget';
 import { ENGINE_OPTIONS } from './canvas-core/tokens';
-import { DefaultLabelFactory } from './defaults/label/default-label-factory';
-import { DefaultLabelWidget } from './defaults/label/default-label-widget';
-import { DefaultLinkFactory } from './defaults/link/default-link-factory';
-import { DefaultLinkPointWidget } from './defaults/link/default-link-point-widget';
-import { DefaultLinkSegmentWidget } from './defaults/link/default-link-segment-widget';
-import { DefaultLinkWidget } from './defaults/link/default-link-widget';
-import { DefaultNodeFactory } from './defaults/node/default-node-factory';
-import { DefaultNodeWidget } from './defaults/node/default-node-widget';
-import { DefaultPortFactory } from './defaults/port/default-port-factory';
-import { DefaultPortLabelWidget } from './defaults/port/default-port-label-widget';
+// import { DefaultLabelFactory } from './defaults/label/default-label-factory';
+// import { DefaultLabelWidget } from './defaults/label/default-label-widget';
+// import { DefaultLinkFactory } from './defaults/link/default-link-factory';
+// import { DefaultLinkPointWidget } from './defaults/link/default-link-point-widget';
+// import { DefaultLinkSegmentWidget } from './defaults/link/default-link-segment-widget';
+// import { DefaultLinkWidget } from './defaults/link/default-link-widget';
+// import { DefaultNodeFactory } from './defaults/node/default-node-factory';
+// import { DefaultNodeWidget } from './defaults/node/default-node-widget';
+// import { DefaultPortFactory } from './defaults/port/default-port-factory';
+// import { DefaultPortLabelWidget } from './defaults/port/default-port-label-widget';
 import { PathDirective } from './diagram-core/path.directive';
 import { DefaultDiagramState } from './diagram-core/states/default-diagram-state';
 import { DiagramEngineComponent } from './diagram-engine.component';
@@ -57,20 +57,20 @@ import { DIAGRAM_STATES } from './tokens';
     CanvasWidget,
     SmartLayerWidget,
 
-
-    DefaultLabelFactory,
-    DefaultLabelWidget,
-
-    DefaultLinkFactory,
-    DefaultLinkWidget,
-    DefaultLinkPointWidget,
-    DefaultLinkSegmentWidget,
-
-    DefaultNodeFactory,
-    DefaultNodeWidget,
-
-    DefaultPortFactory,
-    DefaultPortLabelWidget,
+    //
+    // DefaultLabelFactory,
+    // DefaultLabelWidget,
+    //
+    // DefaultLinkFactory,
+    // DefaultLinkWidget,
+    // DefaultLinkPointWidget,
+    // DefaultLinkSegmentWidget,
+    //
+    // DefaultNodeFactory,
+    // DefaultNodeWidget,
+    //
+    // DefaultPortFactory,
+    // DefaultPortLabelWidget,
 
 
     NodeWidget,
@@ -99,19 +99,19 @@ import { DIAGRAM_STATES } from './tokens';
   exports     : [
     DiagramEngineComponent,
 
-    DefaultLabelFactory,
-    DefaultLabelWidget,
-
-    DefaultLinkFactory,
-    DefaultLinkWidget,
-    DefaultLinkPointWidget,
-    DefaultLinkSegmentWidget,
-
-    DefaultNodeFactory,
-    DefaultNodeWidget,
-
-    DefaultPortFactory,
-    DefaultPortLabelWidget,
+    // DefaultLabelFactory,
+    // DefaultLabelWidget,
+    //
+    // DefaultLinkFactory,
+    // DefaultLinkWidget,
+    // DefaultLinkPointWidget,
+    // DefaultLinkSegmentWidget,
+    //
+    // DefaultNodeFactory,
+    // DefaultNodeWidget,
+    //
+    // DefaultPortFactory,
+    // DefaultPortLabelWidget,
   ],
   providers   : [
     {

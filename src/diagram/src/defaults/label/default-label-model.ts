@@ -20,7 +20,12 @@ export interface DefaultLabelModelGenerics extends LabelModelGenerics {
 }
 
 export class DefaultLabelModel extends LabelModel<DefaultLabelModelGenerics> {
+
+  // region options
   label: string;
+  offsetY = -23;
+
+  // endregion
 
   constructor(options: DefaultLabelModelOptions = {}) {
     super({
@@ -28,6 +33,8 @@ export class DefaultLabelModel extends LabelModel<DefaultLabelModelGenerics> {
       type   : 'default',
       ...options
     });
+
+    this.offsetY = this.options.offsetY;
   }
 
   setLabel(label: string) {

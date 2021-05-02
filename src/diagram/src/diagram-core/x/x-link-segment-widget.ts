@@ -11,7 +11,6 @@ import {
   Input,
   Output
 } from '@angular/core';
-import { DefaultLinkFactory } from '../../defaults/link/default-link-factory';
 import { DefaultLinkModel } from '../../defaults/link/default-link-model';
 import { DiagramEngine } from '../diagram-engine';
 
@@ -44,7 +43,7 @@ import { DiagramEngine } from '../diagram-engine';
     >
     </svg:path>
 
-    <!--   
+    <!--
     <ng-template [ngTemplateOutlet]="factory.generateLinkSegment(
         link,
         selected || link.isSelected(),
@@ -89,7 +88,7 @@ export class XLinkSegmentWidget {
   @Input() link: DefaultLinkModel;
   @Input() selected: boolean;
   @Input() forwardRef: ElementRef<SVGPathElement>;
-  @Input() factory: DefaultLinkFactory;
+  // @Input() factory: DefaultLinkFactory;
   @Input() diagramEngine: DiagramEngine;
   @Input() extras: object;
 

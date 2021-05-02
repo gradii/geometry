@@ -36,10 +36,10 @@ import { DIAGRAM_STATES } from './tokens';
       <link-layer-factory></link-layer-factory>
       <selection-box-layer-factory></selection-box-layer-factory>
 
-      <default-label-factory></default-label-factory>
-      <default-node-factory></default-node-factory>
-      <default-link-factory></default-link-factory>
-      <default-port-factory></default-port-factory>
+<!--      <default-label-factory></default-label-factory>-->
+<!--      <default-node-factory></default-node-factory>-->
+<!--      <default-link-factory></default-link-factory>-->
+<!--      <default-port-factory></default-port-factory>-->
     </div>
 
     <canvas-widget></canvas-widget>
