@@ -21,3 +21,5 @@ export * from './src/triangle';
 export * from './src/vector2';
 export * from './src/vector3';
 export * from './src/vector4';
+
+export * from './src/bezier-curve2';

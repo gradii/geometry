@@ -10,6 +10,9 @@
       ],
       "@gradii/diagram/*": [
         "../diagram/*"
+      ],
+      "@gradii/vector-math": [
+        "../vector-math/public-api"
       ]
     }
   },

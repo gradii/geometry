@@ -178,7 +178,7 @@ export class Matrix2 {
     return this;
   }
 
-  public setValues(arg0, arg1, arg2, arg3) {
+  public setValues(arg0: number, arg1: number, arg2: number, arg3: number) {
     this.values[0] = arg0;
     this.values[1] = arg1;
     this.values[2] = arg2;

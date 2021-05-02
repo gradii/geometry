@@ -5,7 +5,7 @@
  */
 
 
-import { IntersectionResult } from './intersection_result';
+import { IntersectionResult } from './intersection-result';
 import { Matrix4 } from './matrix4';
 import { Obb3 } from './obb3';
 import { Plane } from './plane';
@@ -21,18 +21,18 @@ export class Aabb3 {
   static _quadTriangle0: Triangle = new Triangle(); // tslint:disable-line
   static _quadTriangle1: Triangle = new Triangle(); // tslint:disable-line
   // calculate with temp value, reduce memory;
-  private static _aabbCenter = new Vector3();
-  private static _aabbHalfExtents = new Vector3();
-  private static _v0: Vector3 = new Vector3();
-  private static _v1: Vector3 = new Vector3();
-  private static _v2: Vector3 = new Vector3();
-  private static _f0: Vector3 = new Vector3();
-  private static _f1: Vector3 = new Vector3();
-  private static _f2: Vector3 = new Vector3();
+  private static _aabbCenter           = new Vector3();
+  private static _aabbHalfExtents      = new Vector3();
+  private static _v0: Vector3          = new Vector3();
+  private static _v1: Vector3          = new Vector3();
+  private static _v2: Vector3          = new Vector3();
+  private static _f0: Vector3          = new Vector3();
+  private static _f1: Vector3          = new Vector3();
+  private static _f2: Vector3          = new Vector3();
   private static _trianglePlane: Plane = new Plane();
-  private static _u0: Vector3 = new Vector3([1.0, 0.0, 0.0]);
-  private static _u1: Vector3 = new Vector3([0.0, 1.0, 0.0]);
-  private static _u2: Vector3 = new Vector3([0.0, 0.0, 1.0]);
+  private static _u0: Vector3          = new Vector3([1.0, 0.0, 0.0]);
+  private static _u1: Vector3          = new Vector3([0.0, 1.0, 0.0]);
+  private static _u2: Vector3          = new Vector3([0.0, 0.0, 1.0]);
 
   constructor(min: Vector3, max: Vector3);
 
@@ -177,19 +177,19 @@ export class Aabb3 {
     ray.copyAt(this._max, limitMax);
 
     if (this._max.x < this._min.x) {
-      const temp = this._max.x;
+      const temp  = this._max.x;
       this._max.x = this._min.x;
       this._min.x = temp;
     }
 
     if (this._max.y < this._min.y) {
-      const temp = this._max.y;
+      const temp  = this._max.y;
       this._max.y = this._min.y;
       this._min.y = temp;
     }
 
     if (this._max.z < this._min.z) {
-      const temp = this._max.z;
+      const temp  = this._max.z;
       this._max.z = this._min.z;
       this._min.z = temp;
     }
@@ -225,7 +225,7 @@ export class Aabb3 {
 
   /// Transform [this] by the transform [t].
   public transform(t: Matrix4) {
-    const center: Vector3 = Vector3.zero();
+    const center: Vector3      = Vector3.zero();
     const halfExtents: Vector3 = Vector3.zero();
     this.copyCenterAndHalfExtents(center, halfExtents);
     t.transform3(center);
@@ -241,7 +241,7 @@ export class Aabb3 {
 
   /// Rotate [this] by the rotation matrix [t].
   public rotate(t: Matrix4) {
-    const center: Vector3 = Vector3.zero();
+    const center: Vector3      = Vector3.zero();
     const halfExtents: Vector3 = Vector3.zero();
     this.copyCenterAndHalfExtents(center, halfExtents);
     t.absoluteRotate(halfExtents);
@@ -324,7 +324,7 @@ export class Aabb3 {
   /// Return if [this] contains [other].
   public containsSphere(other: Sphere) {
     const boxExtends: Vector3 = new Vector3(other.radius, other.radius, other.radius);
-    const sphereBox = new Aabb3(other.center, boxExtends);
+    const sphereBox           = new Aabb3(other.center, boxExtends);
 
     return this.containsAabb3(sphereBox);
   }
@@ -361,18 +361,18 @@ export class Aabb3 {
   public intersectsWithSphere(other: Sphere) {
     const center = other.center;
     const radius = other.radius;
-    let d = 0.0;
-    let e = 0.0;
+    let d        = 0.0;
+    let e        = 0.0;
 
     for (let i = 0; i < 3; ++i) {
-      if ((e = center[i] - this._min[i]) < 0.0) {
+      if ((e = center.at(i) - this._min.at(i)) < 0.0) {
         if (e < -radius) {
           return false;
         }
 
         d = d + e * e;
       } else {
-        if ((e = center[i] - this._max[i]) > 0.0) {
+        if ((e = center.at(i) - this._max.at(i)) > 0.0) {
           if (e > radius) {
             return false;
           }
@@ -397,18 +397,18 @@ export class Aabb3 {
   public intersectsWithTriangle(other: Triangle, result: IntersectionResult, epsilon = 1e-3) {
     let p0, p1, p2, r, len;
     let a;
-    const _aabbCenter = Aabb3._aabbCenter,
-      _aabbHalfExtents = Aabb3._aabbHalfExtents,
-      _v0 = Aabb3._v0,
-      _v1 = Aabb3._v1,
-      _v2 = Aabb3._v2,
-      _f0 = Aabb3._f0,
-      _f1 = Aabb3._f1,
-      _f2 = Aabb3._f2,
-      _trianglePlane = Aabb3._trianglePlane,
-      _u0 = Aabb3._u0,
-      _u1 = Aabb3._u1,
-      _u2 = Aabb3._u2;
+    const _aabbCenter      = Aabb3._aabbCenter,
+          _aabbHalfExtents = Aabb3._aabbHalfExtents,
+          _v0              = Aabb3._v0,
+          _v1              = Aabb3._v1,
+          _v2              = Aabb3._v2,
+          _f0              = Aabb3._f0,
+          _f1              = Aabb3._f1,
+          _f2              = Aabb3._f2,
+          _trianglePlane   = Aabb3._trianglePlane,
+          _u0              = Aabb3._u0,
+          _u1              = Aabb3._u1,
+          _u2              = Aabb3._u2;
 
     // This line isn't required if we are using center and half extents to
     // define a aabb
@@ -443,7 +443,7 @@ export class Aabb3 {
       // Ignore tests on degenerate axes.
       p0 = _v0.z * _f0.y - _v0.y * _f0.z;
       p2 = _v2.z * _f0.y - _v2.y * _f0.z;
-      r = _aabbHalfExtents[1] * Math.abs(_f0.z) + _aabbHalfExtents[2] * Math.abs(_f0.y);
+      r  = _aabbHalfExtents.y * Math.abs(_f0.z) + _aabbHalfExtents.z * Math.abs(_f0.y);
       if (Math.max(-Math.max(p0, p2), Math.min(p0, p2)) > r + epsilon) {
         return false; // Axis is a separating axis
       }
@@ -461,7 +461,7 @@ export class Aabb3 {
       // Ignore tests on degenerate axes.
       p0 = _v0.z * _f1.y - _v0.y * _f1.z;
       p1 = _v1.z * _f1.y - _v1.y * _f1.z;
-      r = _aabbHalfExtents[1] * Math.abs(_f1.z) + _aabbHalfExtents[2] * Math.abs(_f1.y);
+      r  = _aabbHalfExtents.y * Math.abs(_f1.z) + _aabbHalfExtents.z * Math.abs(_f1.y);
       if (Math.max(-Math.max(p0, p1), Math.min(p0, p1)) > r + epsilon) {
         return false; // Axis is a separating axis
       }
@@ -479,7 +479,7 @@ export class Aabb3 {
       // Ignore tests on degenerate axes.
       p0 = _v0.z * _f2.y - _v0.y * _f2.z;
       p1 = _v1.z * _f2.y - _v1.y * _f2.z;
-      r = _aabbHalfExtents[1] * Math.abs(_f2.z) + _aabbHalfExtents[2] * Math.abs(_f2.y);
+      r  = _aabbHalfExtents.y * Math.abs(_f2.z) + _aabbHalfExtents.z * Math.abs(_f2.y);
       if (Math.max(-Math.max(p0, p1), Math.min(p0, p1)) > r + epsilon) {
         return false; // Axis is a separating axis
       }
@@ -497,7 +497,7 @@ export class Aabb3 {
       // Ignore tests on degenerate axes.
       p0 = _v0.x * _f0.z - _v0.z * _f0.x;
       p2 = _v2.x * _f0.z - _v2.z * _f0.x;
-      r = _aabbHalfExtents[0] * Math.abs(_f0.z) + _aabbHalfExtents[2] * Math.abs(_f0.x);
+      r  = _aabbHalfExtents.x * Math.abs(_f0.z) + _aabbHalfExtents.z * Math.abs(_f0.x);
       if (Math.max(-Math.max(p0, p2), Math.min(p0, p2)) > r + epsilon) {
         return false; // Axis is a separating axis
       }
@@ -515,7 +515,7 @@ export class Aabb3 {
       // Ignore tests on degenerate axes.
       p0 = _v0.x * _f1.z - _v0.z * _f1.x;
       p1 = _v1.x * _f1.z - _v1.z * _f1.x;
-      r = _aabbHalfExtents[0] * Math.abs(_f1.z) + _aabbHalfExtents[2] * Math.abs(_f1.x);
+      r  = _aabbHalfExtents.x * Math.abs(_f1.z) + _aabbHalfExtents.z * Math.abs(_f1.x);
       if (Math.max(-Math.max(p0, p1), Math.min(p0, p1)) > r + epsilon) {
         return false; // Axis is a separating axis
       }
@@ -533,7 +533,7 @@ export class Aabb3 {
       // Ignore tests on degenerate axes.
       p0 = _v0.x * _f2.z - _v0.z * _f2.x;
       p1 = _v1.x * _f2.z - _v1.z * _f2.x;
-      r = _aabbHalfExtents[0] * Math.abs(_f2.z) + _aabbHalfExtents[2] * Math.abs(_f2.x);
+      r  = _aabbHalfExtents.x * Math.abs(_f2.z) + _aabbHalfExtents.z * Math.abs(_f2.x);
       if (Math.max(-Math.max(p0, p1), Math.min(p0, p1)) > r + epsilon) {
         return false; // Axis is a separating axis
       }
@@ -551,7 +551,7 @@ export class Aabb3 {
       // Ignore tests on degenerate axes.
       p0 = _v0.y * _f0.x - _v0.x * _f0.y;
       p2 = _v2.y * _f0.x - _v2.x * _f0.y;
-      r = _aabbHalfExtents[0] * Math.abs(_f0.y) + _aabbHalfExtents[1] * Math.abs(_f0.x);
+      r  = _aabbHalfExtents.x * Math.abs(_f0.y) + _aabbHalfExtents.y * Math.abs(_f0.x);
       if (Math.max(-Math.max(p0, p2), Math.min(p0, p2)) > r + epsilon) {
         return false; // Axis is a separating axis
       }
@@ -569,7 +569,7 @@ export class Aabb3 {
       // Ignore tests on degenerate axes.
       p0 = _v0.y * _f1.x - _v0.x * _f1.y;
       p1 = _v1.y * _f1.x - _v1.x * _f1.y;
-      r = _aabbHalfExtents[0] * Math.abs(_f1.y) + _aabbHalfExtents[1] * Math.abs(_f1.x);
+      r  = _aabbHalfExtents.x * Math.abs(_f1.y) + _aabbHalfExtents.y * Math.abs(_f1.x);
       if (Math.max(-Math.max(p0, p1), Math.min(p0, p1)) > r + epsilon) {
         return false; // Axis is a separating axis
       }
@@ -587,7 +587,7 @@ export class Aabb3 {
       // Ignore tests on degenerate axes.
       p0 = _v0.y * _f2.x - _v0.x * _f2.y;
       p1 = _v1.y * _f2.x - _v1.x * _f2.y;
-      r = _aabbHalfExtents[0] * Math.abs(_f2.y) + _aabbHalfExtents[1] * Math.abs(_f2.x);
+      r  = _aabbHalfExtents.x * Math.abs(_f2.y) + _aabbHalfExtents.y * Math.abs(_f2.x);
       if (Math.max(-Math.max(p0, p1), Math.min(p0, p1)) > r + epsilon) {
         return false; // Axis is a separating axis
       }
@@ -601,31 +601,31 @@ export class Aabb3 {
 
     // Test the three axes corresponding to the face normals of AABB b (category 1). // Exit if...
     // ... [-e0, e0] and [min(v0.x,v1.x,v2.x), max(v0.x,v1.x,v2.x)] do not overlap
-    if (Math.max(_v0.x, Math.max(_v1.x, _v2.x)) < -_aabbHalfExtents[0] ||
-      Math.min(_v0.x, Math.min(_v1.x, _v2.x)) > _aabbHalfExtents[0]) {
+    if (Math.max(_v0.x, Math.max(_v1.x, _v2.x)) < -_aabbHalfExtents.x ||
+      Math.min(_v0.x, Math.min(_v1.x, _v2.x)) > _aabbHalfExtents.x) {
       return false;
     }
-    a = Math.min(_v0.x, Math.min(_v1.x, _v2.x)) - _aabbHalfExtents[0];
+    a = Math.min(_v0.x, Math.min(_v1.x, _v2.x)) - _aabbHalfExtents.x;
     if (result != null && (result.depth == null || result.depth < a)) {
       result.depth = a;
       result.axis.setFrom(_u0);
     }
     // ... [-e1, e1] and [min(v0.y,v1.y,v2.y), max(v0.y,v1.y,v2.y)] do not overlap
-    if (Math.max(_v0.y, Math.max(_v1.y, _v2.y)) < -_aabbHalfExtents[1] ||
-      Math.min(_v0.y, Math.min(_v1.y, _v2.y)) > _aabbHalfExtents[1]) {
+    if (Math.max(_v0.y, Math.max(_v1.y, _v2.y)) < -_aabbHalfExtents.y ||
+      Math.min(_v0.y, Math.min(_v1.y, _v2.y)) > _aabbHalfExtents.y) {
       return false;
     }
-    a = Math.min(_v0.y, Math.min(_v1.y, _v2.y)) - _aabbHalfExtents[1];
+    a = Math.min(_v0.y, Math.min(_v1.y, _v2.y)) - _aabbHalfExtents.y;
     if (result != null && (result.depth == null || result.depth < a)) {
       result.depth = a;
       result.axis.setFrom(_u1);
     }
     // ... [-e2, e2] and [min(v0.z,v1.z,v2.z), max(v0.z,v1.z,v2.z)] do not overlap
-    if (Math.max(_v0.z, Math.max(_v1.z, _v2.z)) < -_aabbHalfExtents[2] ||
-      Math.min(_v0.z, Math.min(_v1.z, _v2.z)) > _aabbHalfExtents[2]) {
+    if (Math.max(_v0.z, Math.max(_v1.z, _v2.z)) < -_aabbHalfExtents.z ||
+      Math.min(_v0.z, Math.min(_v1.z, _v2.z)) > _aabbHalfExtents.z) {
       return false;
     }
-    a = Math.min(_v0.z, Math.min(_v1.z, _v2.z)) - _aabbHalfExtents[2];
+    a = Math.min(_v0.z, Math.min(_v1.z, _v2.z)) - _aabbHalfExtents.z;
     if (result != null && (result.depth == null || result.depth < a)) {
       result.depth = a;
       result.axis.setFrom(_u2);
@@ -646,9 +646,9 @@ export class Aabb3 {
     this.copyCenterAndHalfExtents(Aabb3._aabbCenter, Aabb3._aabbHalfExtents);
 
     // Compute the projection interval radius of b onto L(t) = b.c + t * p.n
-    const r = Aabb3._aabbHalfExtents[0] * other.normal[0].abs() +
-      Aabb3._aabbHalfExtents[1] * other.normal[1].abs() +
-      Aabb3._aabbHalfExtents[2] * other.normal[2].abs();
+    const r = Aabb3._aabbHalfExtents.x * Math.abs(other.normal.x) +
+      Aabb3._aabbHalfExtents.y * Math.abs(other.normal.y) +
+      Aabb3._aabbHalfExtents.z * Math.abs(other.normal.z);
     // Compute distance of box center from plane
     const s = other.normal.dot(Aabb3._aabbCenter) - other.constant;
     // Intersection occurs when distance s falls within [-r,+r] interval
@@ -670,7 +670,7 @@ export class Aabb3 {
   /// found, result is modified to contain more details about the type of
 
   /// intersection.
-  public intersectsWithQuad(other: Quad, result) {
+  public intersectsWithQuad(other: Quad, result: IntersectionResult) {
     other.copyTriangles(Aabb3._quadTriangle0, Aabb3._quadTriangle1);
 
     return this.intersectsWithTriangle(Aabb3._quadTriangle0, result) ||
