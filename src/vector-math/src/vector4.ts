@@ -188,7 +188,8 @@ export class Vector4 {
     this.values[3] = values[3];
   }
 
-  public static mix(vector: Vector4, vector2: Vector4, time: number, dest: Vector4 = null): Vector4 {
+  public static mix(vector: Vector4, vector2: Vector4, time: number,
+                    dest: Vector4 = null): Vector4 {
     if (!dest) {
       dest = new Vector4();
     }

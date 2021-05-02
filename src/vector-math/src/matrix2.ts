@@ -5,8 +5,8 @@
  */
 
 
-import { Vector2 } from './vector2';
 import { EPSILON } from './common';
+import { Vector2 } from './vector2';
 
 /**
  * use row-major, because such matrix can represent as
@@ -45,15 +45,15 @@ export class Matrix2 {
     );
   }
 
-  public static rotation(radians): Matrix2 {
+  public static rotation(radians: number): Matrix2 {
     return Matrix2.zero().setRotation(radians);
   }
 
   public static product(m1: Matrix2, m2: Matrix2, out: Matrix2 = null): Matrix2 {
     let a11 = m1.at(0),
-      a12 = m1.at(1),
-      a21 = m1.at(2),
-      a22 = m1.at(3);
+        a12 = m1.at(1),
+        a21 = m1.at(2),
+        a22 = m1.at(3);
 
     if (!out) {
       out = new Matrix2();
@@ -130,8 +130,8 @@ export class Matrix2 {
       return 0;
     }
 
-    const invDet = 1 / det;
-    const m2 = arg.values;
+    const invDet   = 1 / det;
+    const m2       = arg.values;
     this.values[0] = m2[3] * invDet;
     this.values[1] = -m2[1] * invDet;
     this.values[2] = -m2[2] * invDet;
@@ -259,28 +259,28 @@ export class Matrix2 {
       let row_norm = 0;
       row_norm += Math.abs(this.values[0]);
       row_norm += Math.abs(this.values[2]);
-      norm = row_norm > norm ? row_norm : norm;
+      norm         = row_norm > norm ? row_norm : norm;
     }
     {
       let row_norm = 0;
       row_norm += Math.abs(this.values[1]);
       row_norm += Math.abs(this.values[3]);
-      norm = row_norm > norm ? row_norm : norm;
+      norm         = row_norm > norm ? row_norm : norm;
     }
     return norm;
   }
 
   public relativeError(correct: Matrix2) {
-    const diff = correct.clone().sub(this);
+    const diff         = correct.clone().sub(this);
     const correct_norm = correct.infinityNorm();
-    const diff_norm = diff.infinityNorm();
+    const diff_norm    = diff.infinityNorm();
     return diff_norm / correct_norm;
   }
 
   public absoluteError(correct: Matrix2) {
-    const this_norm = this.infinityNorm();
+    const this_norm    = this.infinityNorm();
     const correct_norm = correct.infinityNorm();
-    const diff_norm = Math.abs(this_norm - correct_norm);
+    const diff_norm    = Math.abs(this_norm - correct_norm);
     return diff_norm;
   }
 
@@ -306,8 +306,8 @@ export class Matrix2 {
   }
 
   public setRotation(radians: number) {
-    const c = Math.cos(radians);
-    const s = Math.sin(radians);
+    const c        = Math.cos(radians);
+    const s        = Math.sin(radians);
     this.values[0] = c;
     this.values[1] = -s;
     this.values[2] = s;
@@ -316,8 +316,8 @@ export class Matrix2 {
     return this;
   }
 
-  public scaleAdjoint(scale) {
-    const temp = this.values[0];
+  public scaleAdjoint(scale: number) {
+    const temp     = this.values[0];
     this.values[0] = this.values[3] * scale;
     this.values[1] = -this.values[1] * scale;
     this.values[2] = -this.values[2] * scale;
@@ -328,12 +328,12 @@ export class Matrix2 {
 
   public rotate(radians: number): Matrix2 {
     let a11 = this.values[0],
-      a12 = this.values[1],
-      a21 = this.values[2],
-      a22 = this.values[3];
+        a12 = this.values[1],
+        a21 = this.values[2],
+        a22 = this.values[3];
 
     let sin = Math.sin(radians),
-      cos = Math.cos(radians);
+        cos = Math.cos(radians);
 
     this.values[0] = a11 * cos + a12 * sin;
     this.values[1] = a11 * -sin + a12 * cos;
@@ -377,14 +377,14 @@ export class Matrix2 {
   // dot
   public multiply(m: Matrix2): Matrix2 {
     const a11 = this.values[0],
-      a12 = this.values[1],
-      a21 = this.values[2],
-      a22 = this.values[3];
+          a12 = this.values[1],
+          a21 = this.values[2],
+          a22 = this.values[3];
 
     const b11 = m.at(0),
-      b12 = m.at(1),
-      b21 = m.at(2),
-      b22 = m.at(3);
+          b12 = m.at(1),
+          b21 = m.at(2),
+          b22 = m.at(3);
 
     this.values[0] = a11 * b11 + a12 * b21;
     this.values[1] = a11 * b12 + a12 * b22;
@@ -400,7 +400,7 @@ export class Matrix2 {
 
   public transform(vector: Vector2): Vector2 {
     let x = vector.x,
-      y = vector.y;
+        y = vector.y;
 
     vector.setValues(
       x * this.values[0] + y * this.values[1],

@@ -9,8 +9,8 @@ import { clamp, EPSILON } from './common';
 import { Vector2 } from './vector2';
 
 export class Vector3 {
-  public static up = new Vector3([0, 1, 0]);
-  public static right = new Vector3([1, 0, 0]);
+  public static up      = new Vector3([0, 1, 0]);
+  public static right   = new Vector3([1, 0, 0]);
   public static forward = new Vector3([0, 0, 1]);
 
   private values = new Float32Array(3);
@@ -157,7 +157,8 @@ export class Vector3 {
     );
   }
 
-  public static mix(vector: Vector3, vector2: Vector3, time: number, dest: Vector3 = null): Vector3 {
+  public static mix(vector: Vector3, vector2: Vector3, time: number,
+                    dest: Vector3 = null): Vector3 {
     if (!dest) {
       dest = new Vector3();
     }

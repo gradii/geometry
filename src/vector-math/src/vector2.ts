@@ -5,10 +5,7 @@
  */
 
 
-import {
-  clamp,
-  EPSILON
-} from './common';
+import { clamp, EPSILON } from './common';
 import { Matrix2 } from './matrix2';
 import { Vector3 } from './vector3';
 import { Vector4 } from './vector4';

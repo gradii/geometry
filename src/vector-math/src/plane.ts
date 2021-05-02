@@ -15,16 +15,16 @@ export class Plane {
 
   constructor() {
     if (arguments.length === 1 && arguments[0] instanceof Plane) {
-      this._normal = arguments[0]._normal.clone();
+      this._normal   = arguments[0]._normal.clone();
       this._constant = arguments[0]._constant;
     } else if (arguments.length === 4) {
-      this._normal = new Vector3(arguments[0], arguments[1], arguments[2]);
+      this._normal   = new Vector3(arguments[0], arguments[1], arguments[2]);
       this._constant = arguments[3];
     } else if (arguments.length === 2) {
-      this._normal = arguments[0].clone();
+      this._normal   = arguments[0].clone();
       this._constant = arguments[1];
     } else {
-      this._normal = new Vector3();
+      this._normal   = new Vector3();
       this._constant = 0;
     }
   }

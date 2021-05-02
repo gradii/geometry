@@ -6,10 +6,7 @@
 
 
 import { Aabb3 } from './aabb3';
-import {
-  clamp,
-  EPSILON
-} from './common';
+import { clamp, EPSILON } from './common';
 import { Matrix3 } from './matrix3';
 import { Matrix4 } from './matrix4';
 import { Triangle } from './triangle';

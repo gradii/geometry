@@ -7,7 +7,7 @@
 import { Vector3 } from './vector3';
 
 export class Ray {
-  constructor(private _origin: Vector3 = new Vector3(),
+  constructor(private _origin: Vector3    = new Vector3(),
               private _direction: Vector3 = new Vector3()) {
   }
 

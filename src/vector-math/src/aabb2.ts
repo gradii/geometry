@@ -77,7 +77,7 @@ export class Aabb2 {
   }
 
   public transform(m: Matrix3) {
-    const center = new Vector2();
+    const center      = new Vector2();
     const halfExtents = new Vector2();
     this.copyCenterAndHalfExtents(center, halfExtents);
     m.transformVector2(center);
@@ -104,7 +104,7 @@ export class Aabb2 {
   }
 
   public rotate(m: Matrix3) {
-    const center = new Vector2();
+    const center      = new Vector2();
     const halfExtents = new Vector2();
 
     this.copyCenterAndHalfExtents(center, halfExtents);
