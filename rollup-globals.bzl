@@ -1,6 +1,5 @@
 load("//src/triangle:config.bzl", "TRIANGLE_ENTRYPOINTS")
 load("//src/color:config.bzl", "COLOR_ENTRYPOINTS")
-load("//src/diagram:config.bzl", "DIAGRAM_ENTRYPOINTS")
 load("//src/easing:config.bzl", "EASING_ENTRYPOINTS")
 load("//src/interpolate:config.bzl", "INTERPOLATE_ENTRYPOINTS")
 load("//src/vector-math:config.bzl", "VECTOR_MATH_ENTRYPOINTS")
@@ -101,7 +100,6 @@ def create_globals(packageName, entryPoints):
     })
 
 create_globals("triangle", TRIANGLE_ENTRYPOINTS)
-create_globals("diagram", DIAGRAM_ENTRYPOINTS)
 create_globals("color", COLOR_ENTRYPOINTS)
 create_globals("easing", EASING_ENTRYPOINTS)
 create_globals("interpolate", INTERPOLATE_ENTRYPOINTS)
