@@ -134,6 +134,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'cube',
         loadChildren: '/cube/dev-cube.module#DevCubeModule'
+      },
+      {
+        path        : 'diagram',
+        loadChildren: '/diagram/dev-diagram.module#DevDiagramModule'
       }
     ]
   },

@@ -1,0 +1,30 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "diagram",
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
+    assets = [
+        "dev-diagram.html",
+        ":dev_diagram_scss",
+        ":demo_diagram_simple_component_scss"
+    ],
+    deps = [
+        "//src/triangle/diagram",
+        "@npm//@angular/forms",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_diagram_scss",
+    src = "dev-diagram.scss",
+)
+
+
+
+sass_binary(
+    name = "demo_diagram_simple_component_scss",
+    src = "tri-demo-diagram/demo-diagram-simple.component.scss",
+)

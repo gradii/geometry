@@ -28,6 +28,7 @@ var pathMapping = {
   'tslib'      : 'node:tslib/tslib.js',
   'moment'     : 'node:moment/min/moment-with-locales.min.js',
   'html2canvas': 'node:html2canvas/dist/html2canvas.js',
+  'lodash'     : 'node:lodash/lodash.min.js',
   'date-fns'   : 'date-fns_bundle.umd.js',
 
   'rxjs'          : 'node:rxjs/bundles/rxjs.umd.min.js',
@@ -124,6 +125,8 @@ function setupLocalReleasePackages() {
   configureEntryPoint('triangle');
 
   configureEntryPoint('check-type');
+
+  configureEntryPoint('vector-math');
 
   // Configure all secondary entry-points.
   TRIANGLE_PACKAGES.forEach(function (pkgName) {

@@ -49,6 +49,8 @@ ng_module(
 
         "//src/dev-app/cube",
 
+        "//src/dev-app/diagram",
+
         "//src/triangle/core",
         "@npm//@angular/cdk",
         "@npm//@angular/router",

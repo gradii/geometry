@@ -40,6 +40,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="list">list</a></li>
       <li><a routerLink="avatar">avatar</a></li>
       <li><a routerLink="cube">cube</a></li>
+      <li><a routerLink="diagram">diagram</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>
