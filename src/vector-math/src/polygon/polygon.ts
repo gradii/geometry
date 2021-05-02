@@ -5,52 +5,15 @@
  */
 
 import { Matrix3 } from '../matrix3';
+import { Quad } from '../quad';
 import { Vector2 } from '../vector2';
+import { Rectangle } from './rectangle';
 
 export class Polygon {
   protected points: Vector2[];
 
   constructor(points: Vector2[] = []) {
     this.points = points;
-  }
-
-  static boundingBoxFromPolygons(polygons: Polygon[]): Rectangle {
-    return Polygon.boundingBoxFromPoints(
-      polygons.reduce((prev, polygon) => {
-        return prev.concat(polygon.getPoints());
-      }, [])
-    );
-  }
-
-  static boundingBoxFromPoints(points: Vector2[]): Rectangle {
-    if (points.length === 0) {
-      return new Rectangle(0, 0, 0, 0);
-    }
-
-    let minX = points[0].x;
-    let maxX = points[0].x;
-    let minY = points[0].y;
-    let maxY = points[0].y;
-
-    for (let i = 1; i < points.length; i++) {
-      if (points[i].x < minX) {
-        minX = points[i].x;
-      }
-      if (points[i].x > maxX) {
-        maxX = points[i].x;
-      }
-      if (points[i].y < minY) {
-        minY = points[i].y;
-      }
-      if (points[i].y > maxY) {
-        maxY = points[i].y;
-      }
-    }
-
-    return new Rectangle(
-      new Vector2(minX, minY), new Vector2(maxX, minY),
-      new Vector2(maxX, maxY), new Vector2(minX, maxY)
-    );
   }
 
   serialize() {
@@ -148,105 +111,9 @@ export class Polygon {
       }
     }
 
-    return new Rectangle(new Vector2(minX, minY), new Vector2(maxX, minY), new Vector2(maxX, maxY),
-      new Vector2(minX, maxY));
-  }
-}
-
-
-export class Rectangle extends Polygon {
-  constructor(tl: Vector2, tr: Vector2, br: Vector2, bl: Vector2);
-  constructor(position: Vector2, width: number, height: number);
-  constructor(x?: number, y?: number, width?: number, height?: number);
-
-  constructor(a: any = 0, b: any = 0, c: any = 0, d: any = 0) {
-    if (
-      a instanceof Vector2 &&
-      b instanceof Vector2 &&
-      c instanceof Vector2 &&
-      d instanceof Vector2
-    ) {
-      super([a, b, c, d]);
-    } else if (a instanceof Vector2) {
-      super([
-        a,
-        new Vector2(a.x + b, a.y),
-        new Vector2(a.x + b, a.y + c),
-        new Vector2(a.x, a.y + c)
-      ]);
-    } else {
-      super(Rectangle.pointsFromBounds(a, b, c, d));
-    }
-  }
-
-  static pointsFromBounds(x: number, y: number, width: number, height: number): Vector2[] {
-    return [
-      new Vector2(x, y), new Vector2(x + width, y), new Vector2(x + width, y + height),
-      new Vector2(x, y + height)
-    ];
-  }
-
-  updateDimensions(x: number, y: number, width: number, height: number) {
-    this.points = Rectangle.pointsFromBounds(x, y, width, height);
-  }
-
-  setPoints(points: Vector2[]) {
-    if (points.length !== 4) {
-      throw 'Rectangles must always have 4 points';
-    }
-    super.setPoints(points);
-  }
-
-  containsPoint(point: Vector2) {
-    const tl = this.getTopLeft();
-    const br = this.getBottomRight();
-
-    return point.x >= tl.x && point.x <= br.x && point.y >= tl.y && point.y <= br.y;
-  }
-
-  getWidth(): number {
-    return Math.sqrt(
-      Math.pow(this.getTopLeft().x - this.getTopRight().x, 2) +
-      Math.pow(this.getTopLeft().y - this.getTopRight().y, 2)
+    return new Rectangle(
+      new Vector2(minX, minY), new Vector2(maxX, minY),
+      new Vector2(maxX, maxY), new Vector2(minX, maxY)
     );
-  }
-
-  getHeight(): number {
-    return Math.sqrt(
-      Math.pow(this.getBottomLeft().x - this.getTopLeft().x, 2) +
-      Math.pow(this.getBottomLeft().y - this.getTopLeft().y, 2)
-    );
-  }
-
-  getTopMiddle(): Vector2 {
-    return this.vector2Middle(this.getTopLeft(), this.getTopRight());
-  }
-
-  getBottomMiddle(): Vector2 {
-    return this.vector2Middle(this.getBottomLeft(), this.getBottomRight());
-  }
-
-  getLeftMiddle(): Vector2 {
-    return this.vector2Middle(this.getBottomLeft(), this.getTopLeft());
-  }
-
-  getRightMiddle(): Vector2 {
-    return this.vector2Middle(this.getBottomRight(), this.getTopRight());
-  }
-
-  getTopLeft(): Vector2 {
-    return this.points[0];
-  }
-
-  getTopRight(): Vector2 {
-    return this.points[1];
-  }
-
-  getBottomRight(): Vector2 {
-    return this.points[2];
-  }
-
-  getBottomLeft(): Vector2 {
-    return this.points[3];
   }
 }

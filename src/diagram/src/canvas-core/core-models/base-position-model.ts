@@ -43,7 +43,7 @@ export class BasePositionModel<G extends BasePositionModelGenerics = BasePositio
   }
 
   getBoundingBox(): Rectangle {
-    return new Rectangle(this.position, 0, 0);
+    return Rectangle.createFromBounds(this.position.x, this.position.y, 0, 0);
   }
 
   deserialize(event: DeserializeEvent<this>) {

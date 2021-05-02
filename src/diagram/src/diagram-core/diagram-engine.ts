@@ -7,7 +7,7 @@
 import {
   Vector2,
   Polygon,
-  Rectangle
+  Rectangle, boundingBoxFromPolygons
 } from '@gradii/vector-math';
 import {
   CanvasEngine,
@@ -92,7 +92,7 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
   }
 
   getPortCenter(port: PortModel): Vector2 {
-    return this.getPortCoords(port).getOrigin();
+    return this.getPortCoords(port).getCenter();
   }
 
   /**
@@ -111,7 +111,7 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
       clientY: sourceRect.top
     });
     const zoom       = this.model.getZoomLevel() / 100.0;
-    return new Rectangle(point.x, point.y, sourceRect.width / zoom, sourceRect.height / zoom);
+    return Rectangle.createFromBounds(point.x, point.y, sourceRect.width / zoom, sourceRect.height / zoom);
   }
 
   /**
@@ -141,9 +141,9 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
    */
   getBoundingNodesRect(nodes: NodeModel[], margin?: number): Rectangle {
     if (nodes && nodes.length) {
-      let boundingBox = Polygon.boundingBoxFromPolygons(nodes.map((node) => node.getBoundingBox()));
+      let boundingBox = boundingBoxFromPolygons(nodes.map((node) => node.getBoundingBox()));
       if (margin) {
-        return new Rectangle(
+        return Rectangle.createFromBounds(
           boundingBox.getTopLeft().x - margin,
           boundingBox.getTopLeft().y - margin,
           boundingBox.getWidth() + 2 * margin,
@@ -153,7 +153,7 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
       return boundingBox;
     }
 
-    return new Rectangle(0, 0, 0, 0);
+    return Rectangle.createFromBounds(0, 0, 0, 0);
   }
 
   zoomToFitNodes(margin?: number) {

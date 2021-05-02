@@ -26,4 +26,5 @@ export * from './src/bezier-curve2';
 
 export * from './src/polygon/bezier-curve';
 export * from './src/polygon/polygon';
-// export * from './src/polygon/rectangle';
+export * from './src/polygon/rectangle';
+export * from './src/polygon/polygon-helper';

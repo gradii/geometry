@@ -7,7 +7,8 @@
 import {
   Vector2,
   Polygon,
-  Rectangle
+  Rectangle,
+  boundingBoxFromPoints
 } from '@gradii/vector-math';
 import * as _ from 'lodash';
 import { BaseEntityEvent } from '../../../canvas-core/core-models/base-entity';
@@ -61,7 +62,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
   }
 
   getBoundingBox(): Rectangle {
-    return Polygon.boundingBoxFromPoints(
+    return boundingBoxFromPoints(
       _.map(this.points, (point: PointModel) => {
         return point.getPosition();
       })

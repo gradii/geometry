@@ -5,7 +5,9 @@
  */
 
 import { Rectangle } from '@gradii/vector-math';
-import { AbstractDisplacementState, AbstractDisplacementStateEvent } from '../core-state/abstract-displacement-state';
+import {
+  AbstractDisplacementState, AbstractDisplacementStateEvent
+} from '../core-state/abstract-displacement-state';
 import { State } from '../core-state/state';
 import { ModelGeometryInterface } from '../core/model-geometry-interface';
 import { SelectionLayerModel } from '../entities/selection/selection-layer-model';
@@ -35,11 +37,11 @@ export class SelectionBoxState extends AbstractDisplacementState {
     const rel = this.engine.getRelativePoint(event.event.clientX, event.event.clientY);
 
     return {
-      left: rel.x > this.initialXRelative ? this.initialXRelative : rel.x,
-      top: rel.y > this.initialYRelative ? this.initialYRelative : rel.y,
-      width: Math.abs(rel.x - this.initialXRelative),
+      left  : rel.x > this.initialXRelative ? this.initialXRelative : rel.x,
+      top   : rel.y > this.initialYRelative ? this.initialYRelative : rel.y,
+      width : Math.abs(rel.x - this.initialXRelative),
       height: Math.abs(rel.y - this.initialYRelative),
-      right: rel.x < this.initialXRelative ? this.initialXRelative : rel.x,
+      right : rel.x < this.initialXRelative ? this.initialXRelative : rel.x,
       bottom: rel.y < this.initialYRelative ? this.initialYRelative : rel.y
     };
   }
@@ -57,12 +59,15 @@ export class SelectionBoxState extends AbstractDisplacementState {
     if (event.virtualDisplacementY < 0) {
       relative.y -= Math.abs(event.virtualDisplacementY);
     }
-    const rect = new Rectangle(relative, Math.abs(event.virtualDisplacementX), Math.abs(event.virtualDisplacementY));
+
+    const rect = Rectangle.createFromBounds(relative.x, relative.y,
+      Math.abs(event.virtualDisplacementX), Math.abs(event.virtualDisplacementY));
 
     for (let model of this.engine.getModel().getSelectionEntities()) {
       if (((model as unknown) as ModelGeometryInterface).getBoundingBox) {
         const bounds = ((model as unknown) as ModelGeometryInterface).getBoundingBox();
-        if (rect.containsPoint(bounds.getTopLeft()) && rect.containsPoint(bounds.getBottomRight())) {
+        if (rect.containsPoint(bounds.getTopLeft()) && rect.containsPoint(
+          bounds.getBottomRight())) {
           model.setSelected(true);
         } else {
           model.setSelected(false);

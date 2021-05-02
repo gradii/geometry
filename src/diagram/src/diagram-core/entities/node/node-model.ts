@@ -43,7 +43,8 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
   }
 
   getBoundingBox(): Rectangle {
-    return new Rectangle(this.getPosition(), this.width, this.height);
+    const p = this.getPosition();
+    return Rectangle.createFromBounds(p.x, p.y, this.width, this.height);
   }
 
   setPosition(point: Vector2): void;
