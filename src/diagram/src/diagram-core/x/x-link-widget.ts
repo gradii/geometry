@@ -5,7 +5,7 @@
  */
 
 import { AfterViewChecked, AfterViewInit, Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { DefaultLinkModel } from '../../defaults/default-link-model';
+import { DefaultLinkModel } from '../../models/default-link-model';
 import { ENGINE } from '../../canvas-core/tokens';
 // import { DefaultLinkPointWidget } from '../../defaults/link/default-link-point-widget';
 // import { DefaultLinkSegmentWidget } from '../../defaults/link/default-link-segment-widget';

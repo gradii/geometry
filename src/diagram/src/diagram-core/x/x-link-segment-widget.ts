@@ -11,7 +11,7 @@ import {
   Input,
   Output
 } from '@angular/core';
-import { DefaultLinkModel } from '../../defaults/default-link-model';
+import { DefaultLinkModel } from '../../models/default-link-model';
 import { DiagramEngine } from '../diagram-engine';
 
 // export interface DefaultLinkSegmentWidgetProps {
@@ -27,7 +27,7 @@ import { DiagramEngine } from '../diagram-engine';
 
 
 @Component({
-  selector: 'g[x-link-segment-widget]',
+  selector: 'svg:g[x-link-segment-widget]',
   template: `
 
     <svg:path

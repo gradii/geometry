@@ -6,13 +6,16 @@
 
 
 import { BaseModelListener } from '../../../canvas-core/core-models/base-model';
-import { BasePositionModel,
+import {
+  BasePositionModel,
   BasePositionModelGenerics,
-  BasePositionModelOptions } from '../../../canvas-core/core-models/base-position-model';
+  BasePositionModelOptions
+} from '../../../canvas-core/core-models/base-position-model';
 import { LinkModel } from './link-model';
 
 export interface PointModelOptions extends Omit<BasePositionModelOptions, 'type'> {
   link: LinkModel;
+  type?: string
 }
 
 export interface PointModelGenerics {
@@ -23,12 +26,14 @@ export interface PointModelGenerics {
 
 export class PointModel<G extends PointModelGenerics = PointModelGenerics>
   extends BasePositionModel<G & BasePositionModelGenerics> {
-  constructor(options: G['OPTIONS']) {
-    super({
-      ...options,
-      type: 'point'
-    });
-    this.parent = options.link;
+  constructor({
+                link,
+                type = 'point',
+                ...rest
+              }: G['OPTIONS']) {
+    super(rest);
+    this.parent = link;
+    this.type   = type;
   }
 
   setPosition(x: any, y?: any) {

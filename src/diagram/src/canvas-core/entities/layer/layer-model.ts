@@ -43,13 +43,17 @@ export abstract class LayerModel<G extends LayerModelGenerics = LayerModelGeneri
 
   //endregion
 
-  constructor(options: LayerModelOptions = {}) {
-    super(options);
+  constructor({
+                isSvg,
+                transformed,
+                ...rest
+              }: LayerModelOptions = {}) {
+    super(rest);
     this.models         = [];
     this.repaintEnabled = true;
 
-    this.isSvg = options.isSvg;
-    this.transformed = options.transformed;
+    this.isSvg       = isSvg;
+    this.transformed = transformed;
   }
 
   /**

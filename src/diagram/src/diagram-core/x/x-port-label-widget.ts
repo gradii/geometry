@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DefaultPortModel } from '../../defaults/default-port-model';
+import { DefaultPortModel } from '../../models/default-port-model';
 import { DiagramEngine } from '../diagram-engine';
 //
 // export interface DefaultPortLabelProps {

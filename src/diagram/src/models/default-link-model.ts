@@ -50,6 +50,8 @@ export interface DefaultLinkModelGenerics extends LinkModelGenerics {
 
 export class DefaultLinkModel extends LinkModel<DefaultLinkModelGenerics> {
 
+  transform: any;
+
   // region options
   width: number;
   color: string;
@@ -100,16 +102,22 @@ export class DefaultLinkModel extends LinkModel<DefaultLinkModelGenerics> {
       const curve = new BezierCurve();
       curve.setSource(this.getFirstPoint().getPosition());
       curve.setTarget(this.getLastPoint().getPosition());
-      curve.setSourceControl(this.getFirstPoint().getPosition().clone());
-      curve.setTargetControl(this.getLastPoint().getPosition().clone());
 
-      if (this.sourcePort) {
-        curve.getSourceControl().translate(...this.calculateControlOffset(this.getSourcePort()));
-      }
+      const sourceControlPoint = this.getFirstPoint().getPosition().clone();
+      sourceControlPoint.x += 120;
+      const targetControlPoint = this.getLastPoint().getPosition().clone();
+      targetControlPoint.x -= 120;
+      curve.setSourceControl(sourceControlPoint);
+      curve.setTargetControl(targetControlPoint);
 
-      if (this.targetPort) {
-        curve.getTargetControl().translate(...this.calculateControlOffset(this.getTargetPort()));
-      }
+      // if (this.sourcePort) {
+      //   curve.getSourceControl().translate(...this.calculateControlOffset(this.getSourcePort()));
+      // }
+      //
+      // if (this.targetPort) {
+      //   curve.getTargetControl().translate(...this.calculateControlOffset(this.getTargetPort()));
+      // }
+      // console.debug(curve.getPoints());
       return curve.getSVGCurve();
     }
     throw new Error('runtime exception');

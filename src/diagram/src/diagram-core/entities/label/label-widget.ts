@@ -17,9 +17,6 @@ import { LabelModel } from './label-model';
     >
       <div class="label" #ref>
         <x-label-widget [model]="label"></x-label-widget>
-<!--        <ng-template [ngTemplateOutlet]="engine.getFactoryForLabel(this.label).generateReactWidget({model: label})"-->
-<!--                     [ngTemplateOutletContext]="{event: {model: label}}"-->
-<!--        ></ng-template>-->
       </div>
     </svg:foreignObject>`,
   styles: [`

@@ -6,7 +6,7 @@
 
 import { Component, Inject, Input } from '@angular/core';
 import { ENGINE } from '../../canvas-core/tokens';
-import { DefaultNodeModel } from '../../defaults/default-node-model';
+import { DefaultNodeModel } from '../../models/default-node-model';
 import { DiagramEngine } from '../diagram-engine';
 
 /**

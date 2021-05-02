@@ -5,18 +5,16 @@
  */
 
 
-import { clamp, EPSILON } from './common';
+import {
+  clamp,
+  EPSILON
+} from './common';
 import { Matrix2 } from './matrix2';
 import { Vector3 } from './vector3';
 import { Vector4 } from './vector4';
 
 export class Vector2 {
-  // tslint:disable-next-line
-  public sub = this.subtract.bind(this);
-  // tslint:disable-next-line
-  public mul = this.multiply.bind(this);
-  // tslint:disable-next-line
-  public div = this.divide.bind(this);
+
   private values = new Float32Array(2);
 
   constructor(values?: number[]);
@@ -457,7 +455,7 @@ export class Vector2 {
 
   public get squaredLength(): number {
     let x = this.x,
-      y = this.y;
+        y = this.y;
 
     return (x * x + y * y);
   }
@@ -476,18 +474,18 @@ export class Vector2 {
 
   public static squaredDistance(vector: Vector2, vector2: Vector2): number {
     let x = vector2.x - vector.x,
-      y = vector2.y - vector.y;
+        y = vector2.y - vector.y;
 
     return (x * x + y * y);
   }
 
-  public static direction(vector: Vector2, vector2: Vector2, out: Vector2 = null): Vector2 {
+  public static direction(vector: Vector2, vector2: Vector2, out?: Vector2): Vector2 {
     if (!out) {
       out = new Vector2();
     }
 
     let x = vector.x - vector2.x,
-      y = vector.y - vector2.y;
+        y = vector.y - vector2.y;
 
     let length = Math.sqrt(x * x + y * y);
 
@@ -506,16 +504,16 @@ export class Vector2 {
     return out;
   }
 
-  public static mix(vector: Vector2, vector2: Vector2, time: number, out: Vector2 = null): Vector2 {
+  public static mix(vector: Vector2, vector2: Vector2, time: number, out?: Vector2): Vector2 {
     if (!out) {
       out = new Vector2();
     }
 
     let x = vector.x,
-      y = vector.y;
+        y = vector.y;
 
     let x2 = vector2.x,
-      y2 = vector2.y;
+        y2 = vector2.y;
 
     out.x = x + time * (x2 - x);
     out.y = y + time * (y2 - y);
@@ -523,7 +521,7 @@ export class Vector2 {
     return out;
   }
 
-  public static sum(vector: Vector2, vector2: Vector2, out: Vector2 = null): Vector2 {
+  public static sum(vector: Vector2, vector2: Vector2, out?: Vector2): Vector2 {
     if (!out) {
       out = new Vector2();
     }
@@ -534,7 +532,7 @@ export class Vector2 {
     return out;
   }
 
-  public static difference(vector: Vector2, vector2: Vector2, out: Vector2 = null): Vector2 {
+  public static difference(vector: Vector2, vector2: Vector2, out?: Vector2): Vector2 {
     if (!out) {
       out = new Vector2();
     }
@@ -545,7 +543,7 @@ export class Vector2 {
     return out;
   }
 
-  public static product(vector: Vector2, vector2: Vector2, out: Vector2 = null): Vector2 {
+  public static product(vector: Vector2, vector2: Vector2, out?: Vector2): Vector2 {
     if (!out) {
       out = new Vector2();
     }
@@ -556,7 +554,7 @@ export class Vector2 {
     return out;
   }
 
-  public static quotient(vector: Vector2, vector2: Vector2, out: Vector2 = null): Vector2 {
+  public static quotient(vector: Vector2, vector2: Vector2, out?: Vector2): Vector2 {
     if (!out) {
       out = new Vector2();
     }
@@ -575,7 +573,7 @@ export class Vector2 {
    * @param  out the receiving vector
    * @returns   out
    */
-  public static min(a, b, out: Vector2 = null) {
+  public static min(a: Vector2, b: Vector2, out?: Vector2) {
     if (!out) {
       out = new Vector2();
     }
@@ -592,24 +590,21 @@ export class Vector2 {
    * @param  out the receiving vector
    * @returns   out
    */
-  public static max(a, b, out: Vector2 = null) {
-    if (!out) {
-      out = new Vector2();
-    }
+  public static max(a: Vector2, b: Vector2, out?: Vector2) {
     out.x = Math.max(a.x, b.x);
     out.y = Math.max(a.y, b.y);
     return out;
   }
 
-  public static lerp(a: Vector2, b: Vector2, t: number, out: Vector2 = null) {
+  public static lerp(a: Vector2, b: Vector2, t: number, out?: Vector2) {
     if (!out) {
       out = new Vector2();
     }
 
     const ax = a.x;
     const ay = a.y;
-    out.x = ax + t * (b.x - ax);
-    out.y = ay + t * (b.y - ay);
+    out.x    = ax + t * (b.x - ax);
+    out.y    = ay + t * (b.y - ay);
     return out;
   }
 
@@ -731,7 +726,7 @@ export class Vector2 {
    * @param  out the receiving vector
    * @returns   out
    */
-  public ceil(out: Vector2 = null) {
+  public ceil(out?: Vector2) {
     if (!out) {
       out = this;
     }
@@ -746,7 +741,7 @@ export class Vector2 {
    * @param  out the receiving vector
    * @returns   out
    */
-  public floor(out: Vector2 = null) {
+  public floor(out?: Vector2) {
     if (!out) {
       out = this;
     }
@@ -784,7 +779,7 @@ export class Vector2 {
     return this;
   }
 
-  public scale(value: number, out: Vector2 = null): Vector2 {
+  public scale(value: number, out?: Vector2): Vector2 {
     if (!out) {
       out = this;
     }
@@ -799,7 +794,7 @@ export class Vector2 {
     return this.clone().scale(value);
   }
 
-  public normalize(out: Vector2 = null): Vector2 {
+  public normalize(out?: Vector2): Vector2 {
     if (!out) {
       out = this;
     }
@@ -846,7 +841,7 @@ export class Vector2 {
     return Vector2.dot(this, other);
   }
 
-  public multiplyMatrix2(matrix: Matrix2, out: Vector2 = null): Vector2 {
+  public multiplyMatrix2(matrix: Matrix2, out?: Vector2): Vector2 {
     if (!out) {
       this.copy(out);
     }
@@ -867,7 +862,7 @@ export class Vector2 {
    */
   public relativeError(correct: Vector2) {
     const correctNorm = correct.length;
-    const diffNorm = (this.clone().sub(correct)).length;
+    const diffNorm    = (this.clone().sub(correct)).length;
     return diffNorm / correctNorm;
   }
 
@@ -902,3 +897,18 @@ export class Vector2 {
   }
 
 }
+
+export interface Vector2 {
+  sub(vector: Vector2): Vector2;
+
+  mul(vector: Vector2): Vector2;
+
+  div(vector: Vector2): Vector2;
+}
+
+// tslint:disable-next-line
+Vector2.prototype.sub = Vector2.prototype.subtract;
+// tslint:disable-next-line
+Vector2.prototype.mul = Vector2.prototype.multiply;
+// tslint:disable-next-line
+Vector2.prototype.div = Vector2.prototype.divide;

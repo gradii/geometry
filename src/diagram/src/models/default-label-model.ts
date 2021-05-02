@@ -41,15 +41,15 @@ export class DefaultLabelModel extends LabelModel<DefaultLabelModelGenerics> {
     this.label = label;
   }
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
-    this.label = event.data.label;
-  }
-
-  serialize() {
-    return {
-      ...super.serialize(),
-      label: this.label
-    };
-  }
+  // deserialize(event: DeserializeEvent<this>) {
+  //   super.deserialize(event);
+  //   this.label = event.data.label;
+  // }
+  //
+  // serialize() {
+  //   return {
+  //     ...super.serialize(),
+  //     label: this.label
+  //   };
+  // }
 }
