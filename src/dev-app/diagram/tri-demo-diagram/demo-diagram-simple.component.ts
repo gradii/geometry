@@ -43,7 +43,7 @@ export class DemoDiagramSimpleComponent implements AfterViewInit, OnInit {
 
     // link the ports
     let link1 = port1.link<DiagramLinkModel>(port2);
-    link1.testName = 'Test';
+    link1.labelName = 'Test';
     link1.addLabel('Hello World!');
 
     // 4) add the models to the root graph

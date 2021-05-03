@@ -65,7 +65,7 @@ export interface DefaultLinkState {
     </ng-template>
   `,
   host: {
-    '[attr.data-default-link-test]': 'link.testName'
+    '[attr.data-default-link-test]': 'link.labelName'
   }
 })
 export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
@@ -107,7 +107,7 @@ export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewC
 
   addPointToLink(event: MouseEvent, index: number) {
     if (
-      !event.shiftKey &&
+      event.ctrlKey &&
       !this.link.isLocked() &&
       this.link.getPoints().length - 1 <= this.engine.getMaxNumberPointsPerLink()
     ) {

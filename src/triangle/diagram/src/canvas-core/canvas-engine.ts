@@ -22,7 +22,6 @@ export interface CanvasEngineListener extends BaseListener {
 
   repaintCanvas?(): void;
 
-  rendered?(): void;
 }
 
 /**
@@ -127,9 +126,8 @@ export class CanvasEngine<L extends CanvasEngineListener = CanvasEngineListener,
     return this.model;
   }
 
-  repaintCanvas(promise: true): Promise<any>;
   repaintCanvas(): void;
-  repaintCanvas(promise?: boolean): Promise<any> | void {
+  repaintCanvas(): Promise<any> | void {
     const {repaintDebounceMs} = this.options;
 
     /**
@@ -148,18 +146,6 @@ export class CanvasEngine<L extends CanvasEngineListener = CanvasEngineListener,
 
     if (repaintDebounceMs > 0) {
       repaintFn = debounce(repaint, repaintDebounceMs);
-    }
-
-    if (promise) {
-      return new Promise((resolve) => {
-        const l = this.registerListener({
-          rendered: () => {
-            resolve();
-            l.deregister();
-          }
-        } as L);
-        repaintFn();
-      });
     }
 
     repaintFn();

@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { BezierCurve } from '@gradii/vector-math';
+import { BezierCurve, Vector2 } from '@gradii/vector-math';
 import { BaseEntityEvent, } from '../canvas-core/core-models/base-entity';
 import { BaseModelOptions } from '../canvas-core/core-models/base-model';
 import { LabelModel } from '../diagram-core/entities/label/label-model';
@@ -31,7 +31,7 @@ export interface DefaultLinkModelOptions extends BaseModelOptions {
   selectedColor?: string;
   curvyness?: number;
   type?: string;
-  testName?: string;
+  labelName?: string;
 }
 
 export interface LinkModelOptions extends DefaultLinkModelOptions {
@@ -40,7 +40,7 @@ export interface LinkModelOptions extends DefaultLinkModelOptions {
   selectedColor: string;
   curvyness: number;
   type: string;
-  testName: string;
+  labelName: string;
 }
 
 export interface DefaultLinkModelGenerics extends LinkModelGenerics {
@@ -58,7 +58,7 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
   selectedColor: string;
   curvyness: number;
   type: string;
-  testName: string;
+  labelName: string;
   // endregion
 
   /**
@@ -73,7 +73,7 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
                 color = 'gray',
                 selectedColor = 'rgb(0,192,255)',
                 curvyness = 50,
-                testName,
+                labelName,
                 ...rest
               }: DefaultLinkModelOptions = {}) {
     super(rest);
@@ -82,8 +82,8 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
     this.color         = color;
     this.selectedColor = selectedColor;
     this.curvyness     = curvyness;
-    this.type          = type;
-    this.testName      = testName;
+    this.type      = type;
+    this.labelName = labelName;
   }
 
   calculateControlOffset(port: PortModel): [number, number] {
@@ -104,19 +104,19 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
       curve.setTarget(this.getLastPoint().getPosition());
 
       const sourceControlPoint = this.getFirstPoint().getPosition().clone();
-      sourceControlPoint.x += 120;
+      // sourceControlPoint.x += 80;
       const targetControlPoint = this.getLastPoint().getPosition().clone();
-      targetControlPoint.x -= 120;
+      // targetControlPoint.x -= 50;
       curve.setSourceControl(sourceControlPoint);
       curve.setTargetControl(targetControlPoint);
 
-      // if (this.sourcePort) {
-      //   curve.getSourceControl().translate(...this.calculateControlOffset(this.getSourcePort()));
-      // }
-      //
-      // if (this.targetPort) {
-      //   curve.getTargetControl().translate(...this.calculateControlOffset(this.getTargetPort()));
-      // }
+      if (this.sourcePort) {
+        curve.getSourceControl().add(new Vector2(this.calculateControlOffset(this.getSourcePort())));
+      }
+
+      if (this.targetPort) {
+        curve.getTargetControl().add(new Vector2(this.calculateControlOffset(this.getTargetPort())));
+      }
       // console.debug(curve.getPoints());
       return curve.getSVGCurve();
     }

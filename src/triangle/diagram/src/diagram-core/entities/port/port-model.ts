@@ -72,6 +72,9 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
     super(options);
     this.links            = new Map();
     this.reportedPosition = false;
+    this.alignment = options.alignment;
+    this.maximumLinks = options.maximumLinks;
+    this.name = options.name;
   }
 
   deserialize(event: DeserializeEvent<this>) {

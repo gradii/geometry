@@ -4,7 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, ViewChild } from '@angular/core';
+import {
+  AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, ViewChild
+} from '@angular/core';
+import { fromEvent, Subject } from 'rxjs';
+import { takeUntil, tap } from 'rxjs/operators';
 import { PointModel } from '../entities/link/point-model';
 
 @Component({
@@ -25,11 +29,13 @@ import { PointModel } from '../entities/link/point-model';
                 [attr.opacity]="0.0"
     />
   `,
-  styles: [`
-  .pointTop {
-    pointer-events: all;
-  }
-  `]
+  styles  : [
+    `
+      .pointTop {
+        pointer-events : all;
+      }
+    `
+  ]
 })
 export class XLinkPointWidget implements AfterViewInit, OnDestroy {
 
@@ -42,25 +48,43 @@ export class XLinkPointWidget implements AfterViewInit, OnDestroy {
   @ViewChild('circle', {read: ElementRef})
   circleRef: ElementRef<SVGCircleElement>;
 
+  private destroy$ = new Subject();
+
   constructor(private _ngZone: NgZone) {
   }
 
   ngAfterViewInit() {
-    this._ngZone.runOutsideAngular(() => {
-      this.circleRef.nativeElement.addEventListener('mouseenter', this._enterHandler, true);
+    // this._ngZone.runOutsideAngular(() => {
+    fromEvent(this.circleRef.nativeElement, 'mouseenter', {capture: true}).pipe(
+      takeUntil(this.destroy$),
+      tap(() => {
+        this._enterHandler();
+      })
+    ).subscribe();
 
-      this.circleRef.nativeElement.addEventListener('mouseleave', this._leaveHandler, true);
-    });
+    fromEvent(this.circleRef.nativeElement, 'mouseleave', {capture: true}).pipe(
+      takeUntil(this.destroy$),
+      tap(() => {
+        this._leaveHandler();
+      })
+    ).subscribe();
+
+    // this.circleRef.nativeElement.addEventListener('mouseenter', this._enterHandler, true);
+    //
+    // this.circleRef.nativeElement.addEventListener('mouseleave', this._leaveHandler, true);
+    // });
   }
 
-  ngDestroy() {
-    const _element = this.circleRef.nativeElement;
-    _element.removeEventListener('mouseenter', this._enterHandler, true);
-
-    _element.removeEventListener('mouseleave', this._leaveHandler, true);
-  }
+  // ngDestroy() {
+  //   const _element = this.circleRef.nativeElement;
+  //   _element.removeEventListener('mouseenter', this._enterHandler, true);
+  //
+  //   _element.removeEventListener('mouseleave', this._leaveHandler, true);
+  // }
 
   ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private _enterHandler() {

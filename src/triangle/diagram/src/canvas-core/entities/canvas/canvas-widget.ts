@@ -5,22 +5,17 @@
  */
 
 import {
-  AfterViewChecked,
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Host,
-  Inject,
-  NgZone,
-  OnInit
+  AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component,
+  ElementRef, Host, Inject, NgZone, OnDestroy, OnInit
 } from '@angular/core';
+import { fromEvent, Subject } from 'rxjs';
+import { takeUntil, tap } from 'rxjs/operators';
 import { CanvasEngine } from '../../canvas-engine';
 import { ENGINE } from '../../tokens';
 
 @Component({
   selector: 'canvas-widget',
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <ng-template ngFor let-layer [ngForOf]="engine.getModel().getLayers()">
       <transform-layer-widget [layer]="layer"
@@ -28,8 +23,8 @@ import { ENGINE } from '../../tokens';
 
       </transform-layer-widget>
     </ng-template>`,
-  styles: [
-      `
+  styles  : [
+    `
       :host {
         position : absolute;
         height   : 100%;
@@ -38,7 +33,7 @@ import { ENGINE } from '../../tokens';
     `
   ]
 })
-export class CanvasWidget implements OnInit, AfterViewInit, AfterViewChecked {
+export class CanvasWidget implements OnInit, AfterViewInit, OnDestroy {
 
 
   keyUp: any;
@@ -50,6 +45,8 @@ export class CanvasWidget implements OnInit, AfterViewInit, AfterViewChecked {
 
   action: null;
   diagramEngineListener: null;
+
+  subject$ = new Subject();
 
   constructor(@Inject(ENGINE) public engine: CanvasEngine,
               public ngZone: NgZone,
@@ -83,33 +80,65 @@ export class CanvasWidget implements OnInit, AfterViewInit, AfterViewChecked {
 
   registerCanvas() {
     this.engine.setCanvas(this.ref.nativeElement);
-    this.engine.iterateListeners((list) => {
-      if (list.rendered) {
-        list.rendered();
-      }
-    });
   }
 
   ngOnInit(): void {
     this.ngZone.runOutsideAngular(() => {
-      this.ref.nativeElement.addEventListener('wheel', (event) => {
-        this.onWheel(event);
-      });
-      this.ref.nativeElement.addEventListener('mousedown', (event) => {
-        this.onMouseDown(event);
-      });
-      this.ref.nativeElement.addEventListener('mouseup', (event) => {
-        this.onMouseUp(event);
-      });
-      this.ref.nativeElement.addEventListener('mousemove', (event) => {
-        this.onMouseMove(event);
-      });
+
+      fromEvent<WheelEvent>(
+        this.ref.nativeElement,
+        'wheel'
+      ).pipe(
+        takeUntil(this.subject$),
+        tap((event) => {
+          this.onWheel(event);
+        })
+      ).subscribe();
+
+      fromEvent<WheelEvent>(
+        this.ref.nativeElement,
+        'mousedown'
+      ).pipe(
+        takeUntil(this.subject$),
+        tap((event) => {
+          this.onMouseDown(event);
+        })
+      ).subscribe();
+
+      fromEvent<WheelEvent>(
+        this.ref.nativeElement,
+        'mouseup'
+      ).pipe(
+        takeUntil(this.subject$),
+        tap((event) => {
+          this.onMouseUp(event);
+        })
+      ).subscribe();
+
+      fromEvent<WheelEvent>(
+        this.ref.nativeElement,
+        'mousemove'
+      ).pipe(
+        takeUntil(this.subject$),
+        tap((event) => {
+          this.onMouseMove(event);
+        })
+      ).subscribe();
+
+      // this.ref.nativeElement.addEventListener('wheel', (event) => {
+      //   this.onWheel(event);
+      // });
+      // this.ref.nativeElement.addEventListener('mousedown', (event) => {
+      //   this.onMouseDown(event);
+      // });
+      // this.ref.nativeElement.addEventListener('mouseup', (event) => {
+      //   this.onMouseUp(event);
+      // });
+      // this.ref.nativeElement.addEventListener('mousemove', (event) => {
+      //   this.onMouseMove(event);
+      // });
 
     });
-  }
-
-  ngAfterViewChecked() {
-    this.registerCanvas();
   }
 
   ngAfterViewInit() {
@@ -123,7 +152,7 @@ export class CanvasWidget implements OnInit, AfterViewInit, AfterViewChecked {
     this.keyDown = (event: MouseEvent) => {
       this.engine.getActionEventBus().fireAction({event});
     };
-    this.keyUp = (event: MouseEvent) => {
+    this.keyUp   = (event: MouseEvent) => {
       this.engine.getActionEventBus().fireAction({event});
     };
 
@@ -132,7 +161,9 @@ export class CanvasWidget implements OnInit, AfterViewInit, AfterViewChecked {
     this.registerCanvas();
   }
 
-  // ngOnDestroy(): void {
-  // }
+  ngOnDestroy(): void {
+    this.subject$.next();
+    this.subject$.complete();
+  }
 
 }
