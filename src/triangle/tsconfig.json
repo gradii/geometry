@@ -8,6 +8,9 @@
       "@gradii/check-type": [
         "../check-type"
       ],
+      "@gradii/vector-math": [
+        "../vector-math"
+      ],
       "@gradii/triangle": [
         "../triangle"
       ],

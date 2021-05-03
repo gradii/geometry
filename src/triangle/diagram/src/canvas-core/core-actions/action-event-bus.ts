@@ -67,6 +67,7 @@ export class ActionEventBus {
     } else if (event.type === 'mousemove') {
       return this.getActionsForType(InputType.MOUSE_MOVE);
     } else if (event.type === 'wheel') {
+      event.preventDefault();
       return this.getActionsForType(InputType.MOUSE_WHEEL);
     }
     return [];

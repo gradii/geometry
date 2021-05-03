@@ -27,15 +27,6 @@ export class Polygon {
     });
   }
 
-  scale(x: number, y: number, origin: Vector2) {
-    let matrix = Vector2.createScaleOriginMatrix3(new Vector2(x, y), origin);
-
-    this.points.forEach((point) => {
-      matrix.transformVector2(point);
-      // point.transform(matrix);
-    });
-  }
-
   transform(matrix: Matrix3) {
     this.points.forEach((point) => {
       matrix.transformVector2(point);
@@ -50,16 +41,25 @@ export class Polygon {
     return this.points;
   }
 
-  rotate(degrees: number) {
-    const origin = this.getOrigin();
-    if (origin) {
-      this.transform(Vector2.createRotateOriginMatrix3(degrees / (180 / Math.PI), origin));
-    }
-  }
-
   translate(offsetX: number, offsetY: number) {
     this.points.forEach((point) => {
       point.add(new Vector2(offsetX, offsetY));
+    });
+  }
+
+  rotate(degrees: number, origin?: Vector2) {
+    if (!origin) {
+      origin = this.getOrigin();
+    }
+    this.transform(Vector2.createRotateOriginMatrix3(degrees / (180 / Math.PI), origin));
+  }
+
+  scale(x: number, y: number, origin: Vector2) {
+    let matrix = Vector2.createScaleOriginMatrix3(new Vector2(x, y), origin);
+
+    this.points.forEach((point) => {
+      matrix.transformVector2(point);
+      // point.transform(matrix);
     });
   }
 
