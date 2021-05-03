@@ -8,7 +8,9 @@ ng_module(
     assets = [
         "dev-diagram.html",
         ":dev_diagram_scss",
-        ":demo_diagram_simple_component_scss"
+        ":demo_diagram_component_scss",
+        ":demo_diagram_simple_component_scss",
+        ":demo_diagram_drag_and_drop_component_scss"
     ],
     deps = [
         "//src/triangle/diagram",
@@ -22,9 +24,17 @@ sass_binary(
     src = "dev-diagram.scss",
 )
 
-
+sass_binary(
+    name = "demo_diagram_component_scss",
+    src = "tri-demo-diagram/demo-diagram.component.scss",
+)
 
 sass_binary(
     name = "demo_diagram_simple_component_scss",
     src = "tri-demo-diagram/demo-diagram-simple.component.scss",
+)
+
+sass_binary(
+    name = "demo_diagram_drag_and_drop_component_scss",
+    src = "tri-demo-diagram/demo-diagram-drag-and-drop.component.scss",
 )

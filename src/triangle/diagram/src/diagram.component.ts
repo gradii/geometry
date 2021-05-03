@@ -20,7 +20,7 @@ import { DIAGRAM_STATES } from './tokens';
 
 
 @Component({
-  selector : 'diagram-engine',
+  selector : 'tri-diagram',
   providers: [
     {
       provide   : ENGINE,

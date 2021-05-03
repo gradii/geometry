@@ -9,7 +9,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TriDiagramModule } from '@gradii/triangle/diagram';
 import { DevDiagramComponent } from './dev-diagram.component';
-import { TriDemoDiagramSimpleComponent } from './tri-demo-diagram/demo-diagram-simple.component';
+import { DemoDiagramSimpleComponent } from './tri-demo-diagram/demo-diagram-simple.component';
+import { DemoDiagramDragAndDropComponent } from './tri-demo-diagram/demo-diagram-drag-and-drop.component';
 
 @NgModule({
   imports     : [
@@ -21,7 +22,10 @@ import { TriDemoDiagramSimpleComponent } from './tri-demo-diagram/demo-diagram-s
       {
         path: '', component: DevDiagramComponent, children: [
           {
-            path: 'tri-demo-diagram-simple-component', component: TriDemoDiagramSimpleComponent
+            path: 'tri-demo-diagram-simple-component', component: DemoDiagramSimpleComponent
+          },
+          {
+            path: 'tri-demo-diagram-drag-and-drop-component', component: DemoDiagramDragAndDropComponent
           }
         ]
       }
@@ -30,7 +34,8 @@ import { TriDemoDiagramSimpleComponent } from './tri-demo-diagram/demo-diagram-s
   declarations: [
     DevDiagramComponent,
 
-    TriDemoDiagramSimpleComponent
+    DemoDiagramSimpleComponent,
+    DemoDiagramDragAndDropComponent
   ]
 })
 export class DevDiagramModule {

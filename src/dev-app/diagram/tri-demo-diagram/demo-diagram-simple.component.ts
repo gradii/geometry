@@ -7,12 +7,12 @@ import { DefaultLinkModel, DefaultNodeModel, DiagramModel } from '@gradii/triang
   template: `
     <h3>demo simple</h3>
     <div class="container" style="width: 800px; height: 400px">
-      <diagram-engine [engineModel]="model"></diagram-engine>
+      <tri-diagram [engineModel]="model"></tri-diagram>
     </div>
   `,
   styleUrls: ['demo-diagram-simple.component.css']
 })
-export class TriDemoDiagramSimpleComponent implements AfterViewInit, OnInit {
+export class DemoDiagramSimpleComponent implements AfterViewInit, OnInit {
 
   model = new DiagramModel();
 
