@@ -12,7 +12,7 @@ import {
   NodeModelGenerics
 } from '../diagram-core/entities/node/node-model';
 import { PortModelAlignment } from '../diagram-core/entities/port/port-model';
-import { DefaultPortModel } from './default-port-model';
+import { DiagramPortModel } from './diagram-port-model';
 
 export interface DefaultNodeModelOptions extends BasePositionModelOptions {
   name?: string;
@@ -23,9 +23,9 @@ export interface DefaultNodeModelGenerics extends NodeModelGenerics {
   OPTIONS: DefaultNodeModelOptions;
 }
 
-export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
-  protected portsIn: DefaultPortModel[];
-  protected portsOut: DefaultPortModel[];
+export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
+  protected portsIn: DiagramPortModel[];
+  protected portsOut: DiagramPortModel[];
 
   name: string;
   color: string;
@@ -64,7 +64,7 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     super.doClone(lookupTable, clone);
   }
 
-  removePort(port: DefaultPortModel): void {
+  removePort(port: DiagramPortModel): void {
     super.removePort(port);
     if (port.in) {
       this.portsIn.splice(this.portsIn.indexOf(port), 1);
@@ -73,7 +73,7 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     }
   }
 
-  addPort<T extends DefaultPortModel>(port: T): T {
+  addPort<T extends DiagramPortModel>(port: T): T {
     super.addPort(port);
     if (port.in) {
       if (this.portsIn.indexOf(port) === -1) {
@@ -87,8 +87,8 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     return port;
   }
 
-  addInPort(label: string, after = true): DefaultPortModel {
-    const p = new DefaultPortModel({
+  addInPort(label: string, after = true): DiagramPortModel {
+    const p = new DiagramPortModel({
       in       : true,
       name     : label,
       label    : label,
@@ -100,8 +100,8 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     return this.addPort(p);
   }
 
-  addOutPort(label: string, after = true): DefaultPortModel {
-    const p = new DefaultPortModel({
+  addOutPort(label: string, after = true): DiagramPortModel {
+    const p = new DiagramPortModel({
       in       : false,
       name     : label,
       label    : label,
@@ -119,10 +119,10 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     this.color = event.data.color;
     this.portsIn       = _.map(event.data.portsInOrder, (id) => {
       return this.getPortFromID(id);
-    }) as DefaultPortModel[];
+    }) as DiagramPortModel[];
     this.portsOut      = _.map(event.data.portsOutOrder, (id) => {
       return this.getPortFromID(id);
-    }) as DefaultPortModel[];
+    }) as DiagramPortModel[];
   }
 
   serialize(): any {
@@ -139,11 +139,11 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     };
   }
 
-  getInPorts(): DefaultPortModel[] {
+  getInPorts(): DiagramPortModel[] {
     return this.portsIn;
   }
 
-  getOutPorts(): DefaultPortModel[] {
+  getOutPorts(): DiagramPortModel[] {
     return this.portsOut;
   }
 }

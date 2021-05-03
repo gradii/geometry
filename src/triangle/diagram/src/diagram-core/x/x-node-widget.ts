@@ -6,7 +6,7 @@
 
 import { Component, Inject, Input } from '@angular/core';
 import { ENGINE } from '../../canvas-core/tokens';
-import { DefaultNodeModel } from '../../models/default-node-model';
+import { DiagramNodeModel } from '../../models/diagram-node-model';
 import { DiagramEngine } from '../diagram-engine';
 
 /**
@@ -86,7 +86,7 @@ import { DiagramEngine } from '../diagram-engine';
 })
 export class XNodeWidget {
 
-  @Input() node: DefaultNodeModel;
+  @Input() node: DiagramNodeModel;
 
   constructor(@Inject(ENGINE) public engine: DiagramEngine) {
   }

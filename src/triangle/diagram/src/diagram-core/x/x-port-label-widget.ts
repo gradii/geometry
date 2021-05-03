@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DefaultPortModel } from '../../models/default-port-model';
+import { DiagramPortModel } from '../../models/diagram-port-model';
 import { DiagramEngine } from '../diagram-engine';
 //
 // export interface DefaultPortLabelProps {
@@ -74,6 +74,6 @@ import { DiagramEngine } from '../diagram-engine';
   `]
 })
 export class XPortLabelWidget {
-  @Input() port: DefaultPortModel;
+  @Input() port: DiagramPortModel;
   @Input() engine: DiagramEngine;
 }

@@ -5,7 +5,7 @@
  */
 
 import { Component, Input } from '@angular/core';
-import { DefaultLabelModel } from '../../models/default-label-model';
+import { DiagramLabelModel } from '../../models/diagram-label-model';
 import { LabelModel } from '../entities/label/label-model';
 
 
@@ -30,7 +30,7 @@ import { LabelModel } from '../entities/label/label-model';
 })
 export class XLabelWidget {
   @Input()
-  model: DefaultLabelModel;
+  model: DiagramLabelModel;
 
 
   static ngAcceptInputType_model: LabelModel;

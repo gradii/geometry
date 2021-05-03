@@ -1,5 +1,11 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { DefaultLinkModel, DefaultNodeModel, DiagramModel } from '@gradii/triangle/diagram';
+import { DiagramLinkModel, DiagramNodeModel, DiagramModel } from '@gradii/triangle/diagram';
 
 
 @Component({
@@ -23,7 +29,7 @@ export class DemoDiagramSimpleComponent implements AfterViewInit, OnInit {
     const model = this.model;
 
     // 3-A) create a default node
-    let node1 = new DefaultNodeModel({
+    let node1 = new DiagramNodeModel({
       name: 'Node 1',
       color: 'rgb(0,192,255)'
     });
@@ -31,12 +37,12 @@ export class DemoDiagramSimpleComponent implements AfterViewInit, OnInit {
     let port1 = node1.addOutPort('Out');
 
     // 3-B) create another default node
-    let node2 = new DefaultNodeModel('Node 2', 'rgb(192,255,0)');
+    let node2 = new DiagramNodeModel('Node 2', 'rgb(192,255,0)');
     let port2 = node2.addInPort('In');
     node2.setPosition(400, 100);
 
     // link the ports
-    let link1 = port1.link<DefaultLinkModel>(port2);
+    let link1 = port1.link<DiagramLinkModel>(port2);
     link1.testName = 'Test';
     link1.addLabel('Hello World!');
 

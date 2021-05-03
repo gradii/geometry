@@ -5,7 +5,7 @@
  */
 
 import { AfterViewChecked, AfterViewInit, Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { DefaultLinkModel } from '../../models/default-link-model';
+import { DiagramLinkModel } from '../../models/diagram-link-model';
 import { ENGINE } from '../../canvas-core/tokens';
 // import { DefaultLinkPointWidget } from '../../defaults/link/default-link-point-widget';
 // import { DefaultLinkSegmentWidget } from '../../defaults/link/default-link-segment-widget';
@@ -17,7 +17,7 @@ import { XLinkPointWidget } from './x-link-point-widget';
 import { XLinkSegmentWidget } from './x-link-segment-widget';
 
 export interface DefaultLinkProps {
-  link: DefaultLinkModel;
+  link: DiagramLinkModel;
   diagramEngine: DiagramEngine;
   pointAdded?: (point: PointModel, event: MouseEvent) => any;
 }
@@ -72,7 +72,7 @@ export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewC
 
   public refPaths: SVGPathElement[] = [];
 
-  @Input() link: DefaultLinkModel;
+  @Input() link: DiagramLinkModel;
   // @Input() diagramEngine: DiagramEngine;
   @Input() pointAdded?: (point: PointModel, event: MouseEvent) => any;
 

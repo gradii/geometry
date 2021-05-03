@@ -11,7 +11,7 @@ import {
   Input,
   Output
 } from '@angular/core';
-import { DefaultLinkModel } from '../../models/default-link-model';
+import { DiagramLinkModel } from '../../models/diagram-link-model';
 import { DiagramEngine } from '../diagram-engine';
 
 // export interface DefaultLinkSegmentWidgetProps {
@@ -85,7 +85,7 @@ export class XLinkSegmentWidget {
 
   @Input() ref: (ref: SVGPathElement) => void;
   @Input() path: string;
-  @Input() link: DefaultLinkModel;
+  @Input() link: DiagramLinkModel;
   @Input() selected: boolean;
   @Input() forwardRef: ElementRef<SVGPathElement>;
   // @Input() factory: DefaultLinkFactory;

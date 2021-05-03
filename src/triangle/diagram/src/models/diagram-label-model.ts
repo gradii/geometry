@@ -19,7 +19,7 @@ export interface DefaultLabelModelGenerics extends LabelModelGenerics {
   OPTIONS: DefaultLabelModelOptions;
 }
 
-export class DefaultLabelModel extends LabelModel<DefaultLabelModelGenerics> {
+export class DiagramLabelModel extends LabelModel<DefaultLabelModelGenerics> {
 
   // region options
   label: string;

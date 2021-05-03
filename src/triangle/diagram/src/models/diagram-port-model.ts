@@ -13,7 +13,7 @@ import {
   PortModelGenerics,
   PortModelOptions
 } from '../diagram-core/entities/port/port-model';
-import { DefaultLinkModel } from './default-link-model';
+import { DiagramLinkModel } from './diagram-link-model';
 
 export interface DefaultPortModelOptions extends PortModelOptions {
   label?: string;
@@ -24,7 +24,7 @@ export interface DefaultPortModelGenerics extends PortModelGenerics {
   OPTIONS: DefaultPortModelOptions;
 }
 
-export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
+export class DiagramPortModel extends PortModel<DefaultPortModelGenerics> {
   label: string;
   in: boolean;
 
@@ -79,7 +79,7 @@ export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
   }
 
   canLinkToPort(port: PortModel): boolean {
-    if (port instanceof DefaultPortModel) {
+    if (port instanceof DiagramPortModel) {
       return this.options.in !== port.in;
     }
     return true;
@@ -90,6 +90,6 @@ export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
     // if (!link && factory) {
     //   return factory.generateModel({});
     // }
-    return link || new DefaultLinkModel();
+    return link || new DiagramLinkModel();
   }
 }

@@ -1,6 +1,12 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import {
-  DefaultNodeModel, DiagramComponent, DiagramModel, NodeModel
+  DiagramNodeModel, DiagramComponent, DiagramModel, NodeModel
 } from '@gradii/triangle/diagram';
 
 @Component({
@@ -53,7 +59,7 @@ export class DemoDiagramDragAndDropComponent implements AfterViewInit {
   createNode(type: string) {
     const nodeData = this.nodesLibrary.find((nodeLib) => nodeLib.name === type);
     if (nodeData) {
-      const node = new DefaultNodeModel({
+      const node = new DiagramNodeModel({
         name: nodeData.name,
         color: nodeData.color
       });

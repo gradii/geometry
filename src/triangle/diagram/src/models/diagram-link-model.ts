@@ -17,12 +17,12 @@ import {
   PortModel,
   PortModelAlignment
 } from '../diagram-core/entities/port/port-model';
-import { DefaultLabelModel } from './default-label-model';
+import { DiagramLabelModel } from './diagram-label-model';
 
 export interface DefaultLinkModelListener extends LinkModelListener {
-  colorChanged(event: BaseEntityEvent<DefaultLinkModel> & { color: null | string }): void;
+  colorChanged(event: BaseEntityEvent<DiagramLinkModel> & { color: null | string }): void;
 
-  widthChanged(event: BaseEntityEvent<DefaultLinkModel> & { width: 0 | number }): void;
+  widthChanged(event: BaseEntityEvent<DiagramLinkModel> & { width: 0 | number }): void;
 }
 
 export interface DefaultLinkModelOptions extends BaseModelOptions {
@@ -48,7 +48,7 @@ export interface DefaultLinkModelGenerics extends LinkModelGenerics {
   OPTIONS: DefaultLinkModelOptions;
 }
 
-export class DefaultLinkModel extends LinkModel<DefaultLinkModelGenerics> {
+export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
 
   transform: any;
 
@@ -151,7 +151,7 @@ export class DefaultLinkModel extends LinkModel<DefaultLinkModelGenerics> {
     if (label instanceof LabelModel) {
       return super.addLabel(label);
     }
-    let labelOb = new DefaultLabelModel();
+    let labelOb = new DiagramLabelModel();
     labelOb.setLabel(label);
     return super.addLabel(labelOb);
   }

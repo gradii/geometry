@@ -9,7 +9,7 @@ import { BaseEntityEvent } from '../../../canvas-core/core-models/base-entity';
 import { BaseModel } from '../../../canvas-core/core-models/base-model';
 import { ENGINE } from '../../../canvas-core/tokens';
 import { ListenerHandle } from '../../../canvas-core/core/base-observer';
-import { DefaultNodeModel } from '../../../models/default-node-model';
+import { DiagramNodeModel } from '../../../models/diagram-node-model';
 import { DiagramEngine } from '../../diagram-engine';
 import { NodeModel } from './node-model';
 
@@ -43,7 +43,7 @@ export class NodeWidget {
   ref: ElementRef<HTMLDivElement>;
   listener: ListenerHandle;
 
-  @Input() node: DefaultNodeModel;
+  @Input() node: DiagramNodeModel;
   @Input() children?: any;
 
   // @Input() diagramEngine: DiagramEngine;

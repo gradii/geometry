@@ -18,7 +18,6 @@ import { ENGINE } from '../../../canvas-core/tokens';
 import { BaseEntityEvent } from '../../../canvas-core/core-models/base-entity';
 import { BasePositionModel } from '../../../canvas-core/core-models/base-position-model';
 import { ListenerHandle } from '../../../canvas-core/core/base-observer';
-import { DefaultLinkModel } from '../../../models/default-link-model';
 import { DiagramEngine } from '../../diagram-engine';
 import { PortModel } from '../port/port-model';
 import { LinkModel } from './link-model';
@@ -185,4 +184,5 @@ export class LinkWidget implements OnChanges, OnInit, OnDestroy {
       this.targetListener.deregister();
     }
   }
+
 }

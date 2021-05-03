@@ -4,10 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-export * from './src/models/default-node-model';
-export * from './src/models/default-port-model';
-export * from './src/models/default-link-model';
-export * from './src/models/default-label-model';
+export * from './src/models/diagram-node-model';
+export * from './src/models/diagram-port-model';
+export * from './src/models/diagram-link-model';
+export * from './src/models/diagram-label-model';
 export * from './src/tokens';
 export * from './src/diagram.component';
 export * from './src/diagram-core/diagram-engine';
