@@ -7,6 +7,7 @@
 import { Component, Input } from '@angular/core';
 import { LinkLayerModel } from '../../../diagram-core/entities/link-layer/link-layer-model';
 import { NodeLayerModel } from '../../../diagram-core/entities/node-layer/node-layer-model';
+import { SelectionLayerModel } from '../selection/selection-layer-model';
 import { LayerModel } from './layer-model';
 
 @Component({
@@ -19,7 +20,15 @@ import { LayerModel } from './layer-model';
     </ng-template>
     <ng-template #notSvg>
       <div class="layer" [ngStyle]="getTransformStyle()">
-        <node-layer-widget [layer]="nodeLayerModel" [attr.key]="layer.getID()"></node-layer-widget>
+        <ng-container [ngSwitch]="layer.getType()">
+          <ng-template [ngSwitchCase]="'diagram-nodes'">
+            <node-layer-widget [layer]="nodeLayerModel"
+                               [attr.key]="layer.getID()"></node-layer-widget>
+          </ng-template>
+          <ng-template [ngSwitchCase]="'selection'">
+            <selection-box-widget [layer]="selectionLayerModel"></selection-box-widget>
+          </ng-template>
+        </ng-container>
       </div>
     </ng-template>
   `,
@@ -40,6 +49,9 @@ import { LayerModel } from './layer-model';
   ]
 })
 export class TransformLayerWidget {
+  get selectionLayerModel() {
+    return this.layer as SelectionLayerModel;
+  }
 
   get nodeLayerModel() {
     return this.layer as NodeLayerModel;

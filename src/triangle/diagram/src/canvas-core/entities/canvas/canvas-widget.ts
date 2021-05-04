@@ -5,25 +5,24 @@
  */
 
 import {
-  AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component,
-  ElementRef, Host, Inject, NgZone, OnDestroy, OnInit
+  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host, Inject,
+  NgZone, OnDestroy, OnInit
 } from '@angular/core';
-import { fromEvent, Subject } from 'rxjs';
+import { fromEvent, merge, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 import { CanvasEngine } from '../../canvas-engine';
 import { ENGINE } from '../../tokens';
 
 @Component({
-  selector: 'canvas-widget',
+  selector       : 'canvas-widget',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+  template       : `
     <ng-template ngFor let-layer [ngForOf]="engine.getModel().getLayers()">
       <transform-layer-widget [layer]="layer"
                               [attr.key]="layer.getID()">
-
       </transform-layer-widget>
     </ng-template>`,
-  styles  : [
+  styles         : [
     `
       :host {
         position : absolute;
@@ -52,6 +51,7 @@ export class CanvasWidget implements OnInit, AfterViewInit, OnDestroy {
               public ngZone: NgZone,
               public cdRef: ChangeDetectorRef,
               @Host() protected ref: ElementRef<HTMLDivElement>) {
+    cdRef.detach();
   }
 
   onWheel(event: UIEvent) {
@@ -68,14 +68,6 @@ export class CanvasWidget implements OnInit, AfterViewInit, OnDestroy {
 
   onMouseMove(event: UIEvent) {
     this.engine.getActionEventBus().fireAction({event});
-  }
-
-  ngDestroy() {
-    this.engine.deregisterListener(this.canvasListener);
-    this.engine.setCanvas(null);
-
-    document.removeEventListener('keyup', this.keyUp);
-    document.removeEventListener('keydown', this.keyDown);
   }
 
   registerCanvas() {
@@ -141,7 +133,10 @@ export class CanvasWidget implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  // move this detect changes to every typed model
   ngAfterViewInit() {
+    this.cdRef.detectChanges();
+
     this.canvasListener = this.engine.registerListener({
       repaintCanvas: () => {
         // this.forceUpdate(); react
@@ -149,21 +144,43 @@ export class CanvasWidget implements OnInit, AfterViewInit, OnDestroy {
       }
     });
 
-    this.keyDown = (event: MouseEvent) => {
-      this.engine.getActionEventBus().fireAction({event});
-    };
-    this.keyUp   = (event: MouseEvent) => {
-      this.engine.getActionEventBus().fireAction({event});
-    };
+    // this.keyDown = (event: MouseEvent) => {
+    //   this.engine.getActionEventBus().fireAction({event});
+    // };
+    // this.keyUp   = (event: MouseEvent) => {
+    //   this.engine.getActionEventBus().fireAction({event});
+    // };
 
-    document.addEventListener('keyup', this.keyUp);
-    document.addEventListener('keydown', this.keyDown);
+    merge(
+      fromEvent<WheelEvent>(
+        document,
+        'keyup'
+      ),
+      fromEvent<WheelEvent>(
+        document,
+        'keydown'
+      ),
+    ).pipe(
+      takeUntil(this.subject$),
+      tap((event) => {
+        this.engine.getActionEventBus().fireAction({event});
+      })
+    ).subscribe();
+
+    // document.addEventListener('keyup', this.keyUp);
+    // document.addEventListener('keydown', this.keyDown);
     this.registerCanvas();
   }
 
   ngOnDestroy(): void {
     this.subject$.next();
     this.subject$.complete();
+
+    this.engine.deregisterListener(this.canvasListener);
+    this.engine.setCanvas(null);
+
+    // document.removeEventListener('keyup', this.keyUp);
+    // document.removeEventListener('keydown', this.keyDown);
   }
 
 }

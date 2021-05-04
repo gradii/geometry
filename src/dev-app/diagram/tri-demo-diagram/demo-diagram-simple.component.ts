@@ -12,6 +12,9 @@ import { DiagramLinkModel, DiagramNodeModel, DiagramModel } from '@gradii/triang
   selector: 'demo-simple',
   template: `
     <h3>demo simple</h3>
+    <p>
+      hold on \`shift \` to rect select
+    </p>
     <div class="container" style="width: 800px; height: 400px">
       <tri-diagram [engineModel]="model"></tri-diagram>
     </div>

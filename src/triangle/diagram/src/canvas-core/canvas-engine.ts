@@ -63,7 +63,9 @@ export class CanvasEngine<L extends CanvasEngineListener = CanvasEngineListener,
       ...options
     };
     if (this.options.registerDefaultZoomCanvasAction === true) {
-      this.eventBus.registerAction(new ZoomCanvasAction());
+      this.eventBus.registerAction(new ZoomCanvasAction({
+        inverseZoom: true
+      }));
     }
     if (this.options.registerDefaultDeleteItemsAction === true) {
       this.eventBus.registerAction(new DeleteItemsAction());

@@ -4,11 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  Component,
-  Inject,
-  Input
-} from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import { ENGINE } from '../../../canvas-core/tokens';
 import { DiagramEngine } from '../../diagram-engine';
 import { NodeModel } from '../node/node-model';
@@ -28,7 +24,6 @@ export class NodeLayerWidget {
 
   constructor(@Inject(ENGINE) public engine: DiagramEngine) {
   }
-
 
 
   static ngAcceptInputType_node: NodeModel;

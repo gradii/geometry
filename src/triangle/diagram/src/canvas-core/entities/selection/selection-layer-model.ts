@@ -10,6 +10,7 @@
 import { LayerModel } from '../layer/layer-model';
 
 export class SelectionLayerModel extends LayerModel {
+
   box: ClientRect;
 
   constructor() {

@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, Inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Input } from '@angular/core';
 import { ENGINE } from '../../canvas-core/tokens';
 import { DiagramNodeModel } from '../../models/diagram-node-model';
 import { DiagramEngine } from '../diagram-engine';
@@ -34,14 +34,14 @@ import { DiagramEngine } from '../diagram-engine';
       </div>
     </div>
   `,
-  host: {
-    '[style.borderColor]': 'node.isSelected() ? "rgb(0,192,255)" : "black"',
-    '[style.backgroundColor]': 'node.color',
+  host    : {
+    '[style.borderColor]'       : 'node.isSelected() ? "rgb(0,192,255)" : "black"',
+    '[style.backgroundColor]'   : 'node.color',
     '[attr.dataDefaultNodeName]': 'node.name',
-    '[attr.selected]': 'node.isSelected()',
+    '[attr.selected]'           : 'node.isSelected()',
   },
-  styles: [`
-    :host {
+  styles  : [
+    `:host {
       border-radius : 5px;
       font-family   : sans-serif;
       color         : white;
@@ -82,7 +82,8 @@ import { DiagramEngine } from '../diagram-engine';
       margin-right : 0;
     }
 
-  `]
+    `
+  ]
 })
 export class XNodeWidget {
 

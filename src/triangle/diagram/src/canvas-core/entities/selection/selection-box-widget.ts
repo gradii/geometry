@@ -5,29 +5,33 @@
  */
 
 import { Component, Input } from '@angular/core';
+import { SelectionLayerModel } from './selection-layer-model';
 
 @Component({
   selector: 'selection-box-widget',
   template: `
     <div class="selection-box-widget"
          [ngStyle]="{
-          top: rect.top,
-          left: rect.left,
-          width: rect.width,
-          height: rect.height
+          'top.px':      layer.box.top,
+          'left.px':     layer.box.left,
+          'width.px':    layer.box.width,
+          'height.px':   layer.box.height
         }">
     </div>
   `,
-  styles: [`
-    .selection-box-widget {
-      position: absolute;
-      background-color: rgba(0, 192, 255, 0.2);
-      border: solid 2px rgb(0, 192, 255);
-    }
-  `]
+  styles  : [
+    `
+      .selection-box-widget {
+        position         : absolute;
+        background-color : rgba(0, 192, 255, 0.2);
+        border           : solid 2px rgb(0, 192, 255);
+      }
+    `
+  ]
 })
 export class SelectionBoxWidget {
 
   @Input()
-  rect: ClientRect;
+  layer: SelectionLayerModel;
+
 }
