@@ -23,6 +23,7 @@ import { PageChangeEvent } from './event/page-change.event';
   template       : `
     <ul class="tri-pagination tri-pagination-simple" *ngIf="simple">
       <li
+        i18n-title="@@pagination.prev_page"
         [attr.title]="'Pagination.prev_page'|triI18n"
         class="tri-pagination-prev"
         (click)="_jumpRelative(-1)"
