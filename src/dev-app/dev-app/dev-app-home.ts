@@ -41,6 +41,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="avatar">avatar</a></li>
       <li><a routerLink="cube">cube</a></li>
       <li><a routerLink="diagram">diagram</a></li>
+      <li><a routerLink="tree-select">tree-select</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>

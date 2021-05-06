@@ -138,6 +138,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'diagram',
         loadChildren: '/diagram/dev-diagram.module#DevDiagramModule'
+      },
+      {
+        path        : 'tree-select',
+        loadChildren: '/tree-select/dev-tree-select.module#DevTreeSelectModule'
       }
     ]
   },
