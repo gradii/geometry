@@ -14,16 +14,14 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { ToolTipComponent } from '@gradii/triangle/tooltip';
+import { TooltipComponent, TooltipDirective } from '@gradii/triangle/tooltip';
 import { SliderComponent } from './slider.component';
 
 @Component({
   selector: 'tri-slider-handle',
   encapsulation: ViewEncapsulation.None,
   template: `
-    <tri-tooltip *ngIf="tipFormatter !== null" #tooltip [title]="tooltipTitle" [trigger]="null">
-      <div tri-tooltip [class]="className" [ngStyle]="style"></div>
-    </tri-tooltip>
+    <div #tooltip="triTooltip" *ngIf="tipFormatter !== null" [triTooltip]="tooltipTitle" [class]="className" [ngStyle]="style"></div>
     <div *ngIf="tipFormatter === null" [class]="className" [ngStyle]="style"></div>
   `
 })
@@ -35,7 +33,7 @@ export class SliderHandleComponent implements OnInit, OnChanges {
   @Input() value: number; // [For tooltip]
   @Input() tipFormatter: Function; // [For tooltip]
   // Locals
-  @ViewChild('tooltip', {static: false}) tooltip: ToolTipComponent; // [For tooltip]
+  @ViewChild('tooltip', {static: false}) tooltip: TooltipDirective; // [For tooltip]
   tooltipTitle: string; // [For tooltip]
   style: any = {};
 
@@ -63,7 +61,7 @@ export class SliderHandleComponent implements OnInit, OnChanges {
     }
     if (changes.value) {
       this._updateTooltipTitle(); // [For tooltip]
-      this._updateTooltipPosition(); // [For tooltip]
+      // this._updateTooltipPosition(); // [For tooltip]
     }
   }
 
@@ -87,12 +85,12 @@ export class SliderHandleComponent implements OnInit, OnChanges {
     this.tooltipTitle = this.tipFormatter ? this.tipFormatter(this.value) : this.value;
   }
 
-  private _updateTooltipPosition() {
-    // [For tooltip]
-    if (this.tooltip) {
-      window.setTimeout(() => this.tooltip.updatePosition(), 0); // MAY use ngAfterViewChecked? but this will be called so many times.
-    }
-  }
+  // private _updateTooltipPosition() {
+  //   // [For tooltip]
+  //   if (this.tooltip) {
+  //     window.setTimeout(() => this.tooltip.updatePosition(), 0); // MAY use ngAfterViewChecked? but this will be called so many times.
+  //   }
+  // }
 
   private _updateStyle() {
     this.style[this.vertical ? 'bottom' : 'left'] = `${this.offset}%`;

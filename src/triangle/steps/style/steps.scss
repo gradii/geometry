@@ -1,17 +1,17 @@
-@import "../../core/style/mixins";
-@import "../../core/style/variables";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
 
-$steps-prefix-cls           : "#{$tri-prefix}-steps";
+$steps-prefix-cls           : "#{v.$tri-prefix}-steps";
 
-$steps-icon-size            : 26px;
-$steps-small-icon-size      : 18px;
-$steps-dot-size             : 5px;
-$steps-current-dot-size     : 7px;
-$steps-desciption-max-width : 120px;
+$steps-icon-size            : 26px !default;
+$steps-small-icon-size      : 18px !default;
+$steps-dot-size             : 5px !default;
+$steps-current-dot-size     : 7px !default;
+$steps-desciption-max-width : 120px !default;
 
 .#{$steps-prefix-cls} {
   font-size   : 0;
-  line-height : $line-height-base;
+  line-height : v.$line-height-base;
 
   .#{$steps-prefix-cls}-item {
     position       : relative;
@@ -58,7 +58,7 @@ $steps-desciption-max-width : 120px;
     line-height   : 23px;
     text-align    : center;
     border-radius : $steps-icon-size;
-    font-size     : $font-size-lg;
+    font-size     : v.$font-size-lg;
     margin-right  : 8px;
     transition    : background-color 0.3s ease, border-color 0.3s ease;
 
@@ -66,7 +66,7 @@ $steps-desciption-max-width : 120px;
       line-height : 1;
       position    : relative;
       @at-root &.#{v.$iconfont-css} {
-        font-size : $font-size-base;
+        font-size : v.$font-size-base;
         @at-root &-cross,
         &-check {
           font-weight : bold;
@@ -76,7 +76,7 @@ $steps-desciption-max-width : 120px;
   }
 
   .#{$steps-prefix-cls}-title {
-    font-size     : $font-size-lg;
+    font-size     : v.$font-size-lg;
     line-height   : $steps-icon-size;
     font-weight   : bold;
     display       : inline-block;
@@ -95,7 +95,7 @@ $steps-desciption-max-width : 120px;
   }
 
   .#{$steps-prefix-cls}-description {
-    font-size : $font-size-base;
+    font-size : v.$font-size-base;
   }
 
   .#{$steps-prefix-cls}-tail {
@@ -140,11 +140,11 @@ $steps-desciption-max-width : 120px;
       line-height   : 15px;
       text-align    : center;
       border-radius : $steps-small-icon-size;
-      font-size     : $font-size-base;
+      font-size     : v.$font-size-base;
       margin-right  : 10px;
 
       > .#{$steps-prefix-cls}-icon.#{v.$iconfont-css} {
-        @include iconfont-size-under-12px(9px);
+        @include mixins.iconfont-size-under-12px(9px);
         top : 0;
       }
     }
@@ -154,13 +154,13 @@ $steps-desciption-max-width : 120px;
     }
 
     .#{$steps-prefix-cls}-title {
-      font-size   : $font-size-base;
+      font-size   : v.$font-size-base;
       line-height : $steps-small-icon-size;
       font-weight : bold;
     }
 
     .#{$steps-prefix-cls}-description {
-      font-size : $font-size-base;
+      font-size : v.$font-size-base;
     }
 
     .#{$steps-prefix-cls}-tail {
