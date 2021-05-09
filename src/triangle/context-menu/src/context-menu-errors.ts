@@ -6,15 +6,15 @@
 
 
 /**
- * Throws an exception for the case when menu trigger doesn't have a valid mat-menu instance
+ * Throws an exception for the case when menu trigger doesn't have a valid tri-context-menu instance
  * @docs-private
  */
-export function throwMatMenuMissingError() {
-  throw Error(`matMenuTriggerFor: must pass in an mat-menu instance.
+export function throwTriContextMenuMissingError() {
+  throw Error(`triContextMenuTriggerFor: must pass in an tri-context-menu instance.
 
     Example:
-      <mat-menu #menu="matMenu"></mat-menu>
-      <button [matMenuTriggerFor]="menu"></button>`);
+      <tri-context-menu #menu="triContextMenu"></tri-context-menu>
+      <button [triContextMenuTriggerFor]="menu"></button>`);
 }
 
 /**
@@ -22,9 +22,9 @@ export function throwMatMenuMissingError() {
  * In other words, it doesn't match 'before' or 'after'.
  * @docs-private
  */
-export function throwMatMenuInvalidPositionX() {
+export function throwTriContextMenuInvalidPositionX() {
   throw Error(`xPosition value must be either 'before' or after'.
-      Example: <mat-menu xPosition="before" #menu="matMenu"></mat-menu>`);
+      Example: <tri-context-menu xPosition="before" #menu="triContextMenu"></tri-context-menu>`);
 }
 
 /**
@@ -32,9 +32,9 @@ export function throwMatMenuInvalidPositionX() {
  * In other words, it doesn't match 'above' or 'below'.
  * @docs-private
  */
-export function throwMatMenuInvalidPositionY() {
+export function throwTriContextMenuInvalidPositionY() {
   throw Error(`yPosition value must be either 'above' or below'.
-      Example: <mat-menu yPosition="above" #menu="matMenu"></mat-menu>`);
+      Example: <tri-context-menu yPosition="above" #menu="triContextMenu"></tri-context-menu>`);
 }
 
 
@@ -43,7 +43,7 @@ export function throwMatMenuInvalidPositionY() {
  * to a trigger that is placed inside the same menu.
  * @docs-private
  */
-export function throwMatMenuRecursiveError() {
-  throw Error(`matMenuTriggerFor: menu cannot contain its own trigger. Assign a menu that is ` +
+export function throwTriContextMenuRecursiveError() {
+  throw Error(`triContextMenuTriggerFor: menu cannot contain its own trigger. Assign a menu that is ` +
               `not a parent of the trigger or move the trigger outside of the menu.`);
 }

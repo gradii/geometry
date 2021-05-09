@@ -16,6 +16,7 @@ TRIANGLE_ENTRYPOINTS = [
     "cascader",
     "collapse",
     "core",
+    "context-menu",
     #  "data-grid",
     #  "data-iterator",
     #  "data-ix",
@@ -68,7 +69,7 @@ TRIANGLE_ENTRYPOINTS = [
     "transfer",
     "util",
     "tree-view",
-#    "tree-select",
+    "tree-select",
     #  "tree",
 ]
 
@@ -92,6 +93,7 @@ TRIANGLE_ENTRYPOINTS_WITH_STYLES = [
     "carousel",
     "cascader",
     "collapse",
+    "context-menu",
     #  "core",
     #  "data-grid",
     #  "data-store",
@@ -143,7 +145,7 @@ TRIANGLE_ENTRYPOINTS_WITH_STYLES = [
     #  "util",
     #  "tree",
     "tree-view",
-#    "tree-select",
+    "tree-select",
 ]
 
 TRIANGLE_SCSS_LIBS = [

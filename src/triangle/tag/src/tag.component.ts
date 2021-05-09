@@ -5,15 +5,7 @@
  */
 
 import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostBinding,
-  Input,
-  OnInit,
-  Output,
-  Renderer2,
+  AfterViewInit, Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output, Renderer2,
   ViewEncapsulation
 } from '@angular/core';
 import { TagAnimation } from '@gradii/triangle/core';
@@ -40,11 +32,17 @@ import { TagAnimation } from '@gradii/triangle/core';
       <span class="tri-tag-text"><ng-content></ng-content></span>
       <i class="anticon anticon-cross" (click)="_close($event)" *ngIf="closable"></i>
     </span>
-  `
+  `,
+  styles       : [
+    `:host {
+      display : inline-block;
+    }`
+  ],
+  styleUrls: ['../style/tag.css']
 })
 export class TagComponent implements OnInit, AfterViewInit {
   _prefixCls = 'tri-tag';
-  _closed = false;
+  _closed    = false;
 
   /** Whether tag is closable */
   @Input() closable = false;
@@ -90,9 +88,5 @@ export class TagComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-  }
-
-  ngAfterViewInit(): void {
-    this._render.addClass(this._elementRef.nativeElement, `${this._prefixCls}-root`);
   }
 }

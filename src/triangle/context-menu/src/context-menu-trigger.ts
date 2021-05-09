@@ -35,11 +35,11 @@ import {
 import {normalizePassiveListenerOptions} from '@angular/cdk/platform';
 import {asapScheduler, merge, of as observableOf, Subscription} from 'rxjs';
 import {delay, filter, take, takeUntil} from 'rxjs/operators';
-import {MenuCloseReason, _MatMenuBase} from './menu';
-import {throwMatMenuMissingError, throwMatMenuRecursiveError} from './menu-errors';
-import {MatMenuItem} from './menu-item';
-import {MatMenuPanel, MAT_MENU_PANEL} from './menu-panel';
-import {MenuPositionX, MenuPositionY} from './menu-positions';
+import {MenuCloseReason, _TriContextMenuBase} from './context-menu';
+import {throwTriContextMenuMissingError, throwTriContextMenuRecursiveError} from './context-menu-errors';
+import {TriContextMenuItem} from './context-menu-item';
+import {TriContextMenuPanel, TRI_CONTEXT_MENU_PANEL} from './context-menu-panel';
+import {MenuPositionX, MenuPositionY} from './context-menu-positions';
 
 /** Injection token that determines the scroll handling while the menu is open. */
 export const TRI_CONTEXT_MENU_SCROLL_STRATEGY =
@@ -64,7 +64,7 @@ export const MENU_PANEL_TOP_PADDING = 8;
 const passiveEventListenerOptions = normalizePassiveListenerOptions({passive: true});
 
 
-/** Directive applied to an element that should trigger a `mat-menu`. */
+/** Directive applied to an element that should trigger a `tri-context-menu`. */
 @Directive({
   selector: `[tri-context-menu-trigger-for], [triContextMenuTriggerFor]`,
   host: {
@@ -88,10 +88,10 @@ export class TriContextMenuTrigger implements AfterContentInit, OnDestroy {
   private _scrollStrategy: () => ScrollStrategy;
 
   /**
-   * We're specifically looking for a `MatMenu` here since the generic `MatMenuPanel`
+   * We're specifically looking for a `TriContextMenu` here since the generic `TriContextMenuPanel`
    * interface lacks some functionality around nested menus and animations.
    */
-  private _parentMaterialMenu: _MatMenuBase | undefined;
+  private _parentMaterialMenu: _TriContextMenuBase | undefined;
 
   /**
    * Handles touch start events on the trigger.
@@ -108,15 +108,15 @@ export class TriContextMenuTrigger implements AfterContentInit, OnDestroy {
    * @breaking-change 8.0.0
    */
   @Input('tri-context-menu-trigger-for')
-  get _deprecatedMatMenuTriggerFor(): MatMenuPanel { return this.menu; }
-  set _deprecatedMatMenuTriggerFor(v: MatMenuPanel) {
+  get _deprecatedTriContextMenuTriggerFor(): TriContextMenuPanel { return this.menu; }
+  set _deprecatedTriContextMenuTriggerFor(v: TriContextMenuPanel) {
     this.menu = v;
   }
 
   /** References the menu instance that the trigger is associated with. */
-  @Input('matMenuTriggerFor')
+  @Input('triContextMenuTriggerFor')
   get menu() { return this._menu; }
-  set menu(menu: MatMenuPanel) {
+  set menu(menu: TriContextMenuPanel) {
     if (menu === this._menu) {
       return;
     }
@@ -126,7 +126,7 @@ export class TriContextMenuTrigger implements AfterContentInit, OnDestroy {
 
     if (menu) {
       if (menu === this._parentMaterialMenu && (typeof ngDevMode === 'undefined' || ngDevMode)) {
-        throwMatMenuRecursiveError();
+        throwTriContextMenuRecursiveError();
       }
 
       this._menuCloseSubscription = menu.close.subscribe((reason: MenuCloseReason) => {
@@ -139,17 +139,17 @@ export class TriContextMenuTrigger implements AfterContentInit, OnDestroy {
       });
     }
   }
-  private _menu: MatMenuPanel;
+  private _menu: TriContextMenuPanel;
 
   /** Data to be passed along to any lazily-rendered content. */
-  @Input('matMenuTriggerData') menuData: any;
+  @Input('triContextMenuTriggerData') menuData: any;
 
   /**
    * Whether focus should be restored when the menu is closed.
    * Note that disabling this option can have accessibility implications
    * and it's up to you to manage focus, if you decide to turn it off.
    */
-  @Input('matMenuTriggerRestoreFocus') restoreFocus: boolean = true;
+  @Input('triContextMenuTriggerRestoreFocus') restoreFocus: boolean = true;
 
   /** Event emitted when the associated menu is opened. */
   @Output() readonly menuOpened: EventEmitter<void> = new EventEmitter<void>();
@@ -177,16 +177,16 @@ export class TriContextMenuTrigger implements AfterContentInit, OnDestroy {
               private _element: ElementRef<HTMLElement>,
               private _viewContainerRef: ViewContainerRef,
               @Inject(TRI_CONTEXT_MENU_SCROLL_STRATEGY) scrollStrategy: any,
-              @Inject(MAT_MENU_PANEL) @Optional() parentMenu: MatMenuPanel,
-              // `MatMenuTrigger` is commonly used in combination with a `MatMenuItem`.
+              @Inject(TRI_CONTEXT_MENU_PANEL) @Optional() parentMenu: TriContextMenuPanel,
+              // `TriContextMenuTrigger` is commonly used in combination with a `TriContextMenuItem`.
               // tslint:disable-next-line: lightweight-tokens
-              @Optional() @Self() private _menuItemInstance: MatMenuItem,
+              @Optional() @Self() private _menuItemInstance: TriContextMenuItem,
               @Optional() private _dir: Directionality,
               // TODO(crisbeto): make the _focusMonitor required when doing breaking changes.
               // @breaking-change 8.0.0
               private _focusMonitor?: FocusMonitor) {
     this._scrollStrategy = scrollStrategy;
-    this._parentMaterialMenu = parentMenu instanceof _MatMenuBase ? parentMenu : undefined;
+    this._parentMaterialMenu = parentMenu instanceof _TriContextMenuBase ? parentMenu : undefined;
 
     _element.nativeElement.addEventListener('touchstart', this._handleTouchStart,
         passiveEventListenerOptions);
@@ -258,7 +258,7 @@ export class TriContextMenuTrigger implements AfterContentInit, OnDestroy {
     this._closingActionsSubscription = this._menuClosingActions().subscribe(() => this.closeMenu());
     this._initMenu();
 
-    if (this.menu instanceof _MatMenuBase) {
+    if (this.menu instanceof _TriContextMenuBase) {
       this.menu._startAnimation();
     }
   }
@@ -300,7 +300,7 @@ export class TriContextMenuTrigger implements AfterContentInit, OnDestroy {
 
     this._openedBy = undefined;
 
-    if (menu instanceof _MatMenuBase) {
+    if (menu instanceof _TriContextMenuBase) {
       menu._resetAnimation();
 
       if (menu.lazyContent) {
@@ -367,12 +367,12 @@ export class TriContextMenuTrigger implements AfterContentInit, OnDestroy {
   }
 
   /**
-   * This method checks that a valid instance of MatMenu has been passed into
-   * matMenuTriggerFor. If not, an exception is thrown.
+   * This method checks that a valid instance of TriContextMenu has been passed into
+   * triContextMenuTriggerFor. If not, an exception is thrown.
    */
   private _checkMenu() {
     if (!this.menu && (typeof ngDevMode === 'undefined' || ngDevMode)) {
-      throwMatMenuMissingError();
+      throwTriContextMenuMissingError();
     }
   }
 
@@ -388,7 +388,7 @@ export class TriContextMenuTrigger implements AfterContentInit, OnDestroy {
 
       // Consume the `keydownEvents` in order to prevent them from going to another overlay.
       // Ideally we'd also have our keyboard event logic in here, however doing so will
-      // break anybody that may have implemented the `MatMenuPanel` themselves.
+      // break anybody that may have implemented the `TriContextMenuPanel` themselves.
       this._overlayRef.keydownEvents().subscribe();
     }
 
@@ -554,7 +554,7 @@ export class TriContextMenuTrigger implements AfterContentInit, OnDestroy {
         // If the same menu is used between multiple triggers, it might still be animating
         // while the new trigger tries to re-open it. Wait for the animation to finish
         // before doing so. Also interrupt if the user moves to another item.
-        if (this.menu instanceof _MatMenuBase && this.menu._isAnimating) {
+        if (this.menu instanceof _TriContextMenuBase && this.menu._isAnimating) {
           // We need the `delay(0)` here in order to avoid
           // 'changed after checked' errors in some cases. See #12194.
           this.menu._animationDone
@@ -570,7 +570,7 @@ export class TriContextMenuTrigger implements AfterContentInit, OnDestroy {
   private _getPortal(): TemplatePortal {
     // Note that we can avoid this check by keeping the portal on the menu panel.
     // While it would be cleaner, we'd have to introduce another required method on
-    // `MatMenuPanel`, making it harder to consume.
+    // `TriContextMenuPanel`, making it harder to consume.
     if (!this._portal || this._portal.templateRef !== this.menu.templateRef) {
       this._portal = new TemplatePortal(this.menu.templateRef, this._viewContainerRef);
     }

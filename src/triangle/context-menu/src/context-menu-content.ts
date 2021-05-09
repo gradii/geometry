@@ -22,20 +22,20 @@ import {
 import {Subject} from 'rxjs';
 
 /**
- * Injection token that can be used to reference instances of `MatMenuContent`. It serves
- * as alternative token to the actual `MatMenuContent` class which could cause unnecessary
+ * Injection token that can be used to reference instances of `TriContextMenuContent`. It serves
+ * as alternative token to the actual `TriContextMenuContent` class which could cause unnecessary
  * retention of the class and its directive metadata.
  */
-export const MAT_MENU_CONTENT = new InjectionToken<MatMenuContent>('MatMenuContent');
+export const TRI_CONTEXT_MENU_CONTENT = new InjectionToken<TriContextMenuContent>('TriContextMenuContent');
 
 /**
  * Menu content that will be rendered lazily once the menu is opened.
  */
 @Directive({
-  selector: 'ng-template[matMenuContent]',
-  providers: [{provide: MAT_MENU_CONTENT, useExisting: MatMenuContent}],
+  selector: 'ng-template[triContextMenuContent]',
+  providers: [{provide: TRI_CONTEXT_MENU_CONTENT, useExisting: TriContextMenuContent}],
 })
-export class MatMenuContent implements OnDestroy {
+export class TriContextMenuContent implements OnDestroy {
   private _portal: TemplatePortal<any>;
   private _outlet: DomPortalOutlet;
 
@@ -74,11 +74,11 @@ export class MatMenuContent implements OnDestroy {
     // risk it staying attached to a pane that's no longer in the DOM.
     element.parentNode!.insertBefore(this._outlet.outletElement, element);
 
-    // When `MatMenuContent` is used in an `OnPush` component, the insertion of the menu
+    // When `TriContextMenuContent` is used in an `OnPush` component, the insertion of the menu
     // content via `createEmbeddedView` does not cause the content to be seen as "dirty"
     // by Angular. This causes the `@ContentChildren` for menu items within the menu to
     // not be updated by Angular. By explicitly marking for check here, we tell Angular that
-    // it needs to check for new menu items and update the `@ContentChild` in `MatMenu`.
+    // it needs to check for new menu items and update the `@ContentChild` in `TriContextMenu`.
     // @breaking-change 9.0.0 Make change detector ref required
     if (this._changeDetectorRef) {
       this._changeDetectorRef.markForCheck();

@@ -262,13 +262,6 @@ export class InputComponent implements ControlValueAccessor, AfterViewInit {
     }
   }
 
-  /**
-   * @deprecated
-   */
-  @Input() set placeHolder(value: string) {
-    this.placeholder = value;
-  }
-
   @HostListener('compositionstart', ['$event'])
   compositionStart(e): void {
     this._composing = true;

@@ -39,16 +39,16 @@ import {
 } from '@angular/core';
 import {merge, Observable, Subject, Subscription} from 'rxjs';
 import {startWith, switchMap, take} from 'rxjs/operators';
-import {matMenuAnimations} from './context-menu-animations';
-import {MAT_MENU_CONTENT, MatMenuContent} from './context-menu-content';
+import {triContextMenuAnimations} from './context-menu-animations';
+import {TRI_CONTEXT_MENU_CONTENT, TriContextMenuContent} from './context-menu-content';
 import {MenuPositionX, MenuPositionY} from './context-menu-positions';
-import {throwMatMenuInvalidPositionX, throwMatMenuInvalidPositionY} from './context-menu-errors';
-import {MatMenuItem} from './context-menu-item';
-import {MAT_MENU_PANEL, MatMenuPanel} from './context-menu-panel';
+import {throwTriContextMenuInvalidPositionX, throwTriContextMenuInvalidPositionY} from './context-menu-errors';
+import {TriContextMenuItem} from './context-menu-item';
+import {TRI_CONTEXT_MENU_PANEL, TriContextMenuPanel} from './context-menu-panel';
 import {AnimationEvent} from '@angular/animations';
 
-/** Default `mat-menu` options that can be overridden. */
-export interface MatMenuDefaultOptions {
+/** Default `tri-context-menu` options that can be overridden. */
+export interface TriContextMenuDefaultOptions {
   /** The x-axis position of the menu. */
   xPosition: MenuPositionX;
 
@@ -68,15 +68,15 @@ export interface MatMenuDefaultOptions {
   hasBackdrop?: boolean;
 }
 
-/** Injection token to be used to override the default options for `mat-menu`. */
-export const MAT_MENU_DEFAULT_OPTIONS =
-    new InjectionToken<MatMenuDefaultOptions>('tri-context-menu-default-options', {
+/** Injection token to be used to override the default options for `tri-context-menu`. */
+export const TRI_CONTEXT_MENU_DEFAULT_OPTIONS =
+    new InjectionToken<TriContextMenuDefaultOptions>('tri-context-menu-default-options', {
       providedIn: 'root',
-      factory: MAT_MENU_DEFAULT_OPTIONS_FACTORY
+      factory: TRI_CONTEXT_MENU_DEFAULT_OPTIONS_FACTORY
     });
 
 /** @docs-private */
-export function MAT_MENU_DEFAULT_OPTIONS_FACTORY(): MatMenuDefaultOptions {
+export function TRI_CONTEXT_MENU_DEFAULT_OPTIONS_FACTORY(): TriContextMenuDefaultOptions {
   return {
     overlapTrigger: false,
     xPosition: 'after',
@@ -88,7 +88,7 @@ export function MAT_MENU_DEFAULT_OPTIONS_FACTORY(): MatMenuDefaultOptions {
  * Start elevation for the menu panel.
  * @docs-private
  */
-const MAT_MENU_BASE_ELEVATION = 4;
+const TRI_CONTEXT_MENU_BASE_ELEVATION = 4;
 
 let menuPanelUid = 0;
 
@@ -97,20 +97,20 @@ let menuPanelUid = 0;
 export type MenuCloseReason = void | 'click' | 'keydown' | 'tab';
 
 
-/** Base class with all of the `MatMenu` functionality. */
+/** Base class with all of the `TriContextMenu` functionality. */
 @Directive()
-export class _MatMenuBase implements AfterContentInit, MatMenuPanel<MatMenuItem>, OnInit,
+export class _TriContextMenuBase implements AfterContentInit, TriContextMenuPanel<TriContextMenuItem>, OnInit,
   OnDestroy {
-  private _keyManager: FocusKeyManager<MatMenuItem>;
+  private _keyManager: FocusKeyManager<TriContextMenuItem>;
   private _xPosition: MenuPositionX = this._defaultOptions.xPosition;
   private _yPosition: MenuPositionY = this._defaultOptions.yPosition;
   private _previousElevation: string;
 
   /** All items inside the menu. Includes items nested inside another menu. */
-  @ContentChildren(MatMenuItem, {descendants: true}) _allItems: QueryList<MatMenuItem>;
+  @ContentChildren(TriContextMenuItem, {descendants: true}) _allItems: QueryList<TriContextMenuItem>;
 
   /** Only the direct descendant menu items. */
-  private _directDescendantItems = new QueryList<MatMenuItem>();
+  private _directDescendantItems = new QueryList<TriContextMenuItem>();
 
   /** Subscription to tab events on the menu panel */
   private _tabSubscription = Subscription.EMPTY;
@@ -128,7 +128,7 @@ export class _MatMenuBase implements AfterContentInit, MatMenuPanel<MatMenuItem>
   _isAnimating: boolean;
 
   /** Parent menu of the current menu panel. */
-  parentMenu: MatMenuPanel | undefined;
+  parentMenu: TriContextMenuPanel | undefined;
 
   /** Layout direction of the menu. */
   direction: Direction;
@@ -154,7 +154,7 @@ export class _MatMenuBase implements AfterContentInit, MatMenuPanel<MatMenuItem>
   set xPosition(value: MenuPositionX) {
     if (value !== 'before' && value !== 'after' &&
       (typeof ngDevMode === 'undefined' || ngDevMode)) {
-      throwMatMenuInvalidPositionX();
+      throwTriContextMenuInvalidPositionX();
     }
     this._xPosition = value;
     this.setPositionClasses();
@@ -165,7 +165,7 @@ export class _MatMenuBase implements AfterContentInit, MatMenuPanel<MatMenuItem>
   get yPosition(): MenuPositionY { return this._yPosition; }
   set yPosition(value: MenuPositionY) {
     if (value !== 'above' && value !== 'below' && (typeof ngDevMode === 'undefined' || ngDevMode)) {
-      throwMatMenuInvalidPositionY();
+      throwTriContextMenuInvalidPositionY();
     }
     this._yPosition = value;
     this.setPositionClasses();
@@ -179,13 +179,13 @@ export class _MatMenuBase implements AfterContentInit, MatMenuPanel<MatMenuItem>
    * @deprecated
    * @breaking-change 8.0.0
    */
-  @ContentChildren(MatMenuItem, {descendants: false}) items: QueryList<MatMenuItem>;
+  @ContentChildren(TriContextMenuItem, {descendants: false}) items: QueryList<TriContextMenuItem>;
 
   /**
    * Menu content that will be rendered lazily.
    * @docs-private
    */
-  @ContentChild(MAT_MENU_CONTENT) lazyContent: MatMenuContent;
+  @ContentChild(TRI_CONTEXT_MENU_CONTENT) lazyContent: TriContextMenuContent;
 
   /** Whether the menu should overlap its trigger. */
   @Input()
@@ -204,7 +204,7 @@ export class _MatMenuBase implements AfterContentInit, MatMenuPanel<MatMenuItem>
   private _hasBackdrop: boolean | undefined = this._defaultOptions.hasBackdrop;
 
   /**
-   * This method takes classes set on the host mat-menu element and applies them on the
+   * This method takes classes set on the host tri-context-menu element and applies them on the
    * menu template that displays in the overlay container.  Otherwise, it's difficult
    * to style the containing menu from outside the component.
    * @param classes list of class names
@@ -232,7 +232,7 @@ export class _MatMenuBase implements AfterContentInit, MatMenuPanel<MatMenuItem>
   private _previousPanelClass: string;
 
   /**
-   * This method takes classes set on the host mat-menu element and applies them on the
+   * This method takes classes set on the host tri-context-menu element and applies them on the
    * menu template that displays in the overlay container.  Otherwise, it's difficult
    * to style the containing menu from outside the component.
    * @deprecated Use `panelClass` instead.
@@ -257,7 +257,7 @@ export class _MatMenuBase implements AfterContentInit, MatMenuPanel<MatMenuItem>
   constructor(
     private _elementRef: ElementRef<HTMLElement>,
     private _ngZone: NgZone,
-    @Inject(MAT_MENU_DEFAULT_OPTIONS) private _defaultOptions: MatMenuDefaultOptions) { }
+    @Inject(TRI_CONTEXT_MENU_DEFAULT_OPTIONS) private _defaultOptions: TriContextMenuDefaultOptions) { }
 
   ngOnInit() {
     this.setPositionClasses();
@@ -276,7 +276,7 @@ export class _MatMenuBase implements AfterContentInit, MatMenuPanel<MatMenuItem>
     // is internal and we know that it gets completed on destroy.
     this._directDescendantItems.changes.pipe(
       startWith(this._directDescendantItems),
-      switchMap(items => merge<MatMenuItem>(...items.map((item: MatMenuItem) => item._focused)))
+      switchMap(items => merge<TriContextMenuItem>(...items.map((item: TriContextMenuItem) => item._focused)))
     ).subscribe(focusedItem => this._keyManager.updateActiveItem(focusedItem));
   }
 
@@ -287,13 +287,13 @@ export class _MatMenuBase implements AfterContentInit, MatMenuPanel<MatMenuItem>
   }
 
   /** Stream that emits whenever the hovered menu item changes. */
-  _hovered(): Observable<MatMenuItem> {
+  _hovered(): Observable<TriContextMenuItem> {
     // Coerce the `changes` property because Angular types it as `Observable<any>`
-    const itemChanges = this._directDescendantItems.changes as Observable<QueryList<MatMenuItem>>;
+    const itemChanges = this._directDescendantItems.changes as Observable<QueryList<TriContextMenuItem>>;
     return itemChanges.pipe(
       startWith(this._directDescendantItems),
-      switchMap(items => merge(...items.map((item: MatMenuItem) => item._hovered)))
-    ) as Observable<MatMenuItem>;
+      switchMap(items => merge(...items.map((item: TriContextMenuItem) => item._hovered)))
+    ) as Observable<TriContextMenuItem>;
   }
 
   /*
@@ -302,7 +302,7 @@ export class _MatMenuBase implements AfterContentInit, MatMenuPanel<MatMenuItem>
    * @deprecated No longer being used. To be removed.
    * @breaking-change 9.0.0
    */
-  addItem(_item: MatMenuItem) {}
+  addItem(_item: TriContextMenuItem) {}
 
   /**
    * Removes an item from the menu.
@@ -310,7 +310,7 @@ export class _MatMenuBase implements AfterContentInit, MatMenuPanel<MatMenuItem>
    * @deprecated No longer being used. To be removed.
    * @breaking-change 9.0.0
    */
-  removeItem(_item: MatMenuItem) {}
+  removeItem(_item: TriContextMenuItem) {}
 
   /** Handle a keyboard event from the menu, delegating to the appropriate action. */
   _handleKeydown(event: KeyboardEvent) {
@@ -373,7 +373,7 @@ export class _MatMenuBase implements AfterContentInit, MatMenuPanel<MatMenuItem>
     if (!manager.activeItem && this._directDescendantItems.length) {
       let element = this._directDescendantItems.first._getHostElement().parentElement;
 
-      // Because the `mat-menu` is at the DOM insertion point, not inside the overlay, we don't
+      // Because the `tri-context-menu` is at the DOM insertion point, not inside the overlay, we don't
       // have a nice way of getting a hold of the menu panel. We can't use a `ViewChild` either
       // because the panel is inside an `ng-template`. We work around it by starting from one of
       // the items and walking up the DOM.
@@ -403,7 +403,7 @@ export class _MatMenuBase implements AfterContentInit, MatMenuPanel<MatMenuItem>
   setElevation(depth: number): void {
     // The elevation starts at the base and increases by one for each level.
     // Capped at 24 because that's the maximum elevation defined in the Material design spec.
-    const elevation = Math.min(MAT_MENU_BASE_ELEVATION + depth, 24);
+    const elevation = Math.min(TRI_CONTEXT_MENU_BASE_ELEVATION + depth, 24);
     const newElevation = `mat-elevation-z${elevation}`;
     const customElevation = Object.keys(this._classList).find(c => c.startsWith('mat-elevation-z'));
 
@@ -473,7 +473,7 @@ export class _MatMenuBase implements AfterContentInit, MatMenuPanel<MatMenuItem>
   private _updateDirectDescendants() {
     this._allItems.changes
       .pipe(startWith(this._allItems))
-      .subscribe((items: QueryList<MatMenuItem>) => {
+      .subscribe((items: QueryList<TriContextMenuItem>) => {
         this._directDescendantItems.reset(items.filter(item => item._parentMenu === this));
         this._directDescendantItems.notifyOnChanges();
       });
@@ -483,30 +483,30 @@ export class _MatMenuBase implements AfterContentInit, MatMenuPanel<MatMenuItem>
   static ngAcceptInputType_hasBackdrop: BooleanInput;
 }
 
-/** @docs-public MatMenu */
+/** @docs-public TriContextMenu */
 @Component({
-  selector: 'mat-menu',
-  templateUrl: 'menu.html',
-  styleUrls: ['menu.css'],
+  selector: 'tri-context-menu',
+  templateUrl: 'context-menu.html',
+  styleUrls: ['../style/context-menu.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  exportAs: 'matMenu',
+  exportAs: 'triContextMenu',
   host: {
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
     '[attr.aria-describedby]': 'null',
   },
   animations: [
-    matMenuAnimations.transformMenu,
-    matMenuAnimations.fadeInItems
+    triContextMenuAnimations.transformMenu,
+    triContextMenuAnimations.fadeInItems
   ],
   providers: [
-    {provide: MAT_MENU_PANEL, useExisting: MatMenu},
+    {provide: TRI_CONTEXT_MENU_PANEL, useExisting: TriContextMenu},
   ]
 })
-export class MatMenu extends _MatMenuBase {
+export class TriContextMenu extends _TriContextMenuBase {
   constructor(elementRef: ElementRef<HTMLElement>, ngZone: NgZone,
-      @Inject(MAT_MENU_DEFAULT_OPTIONS) defaultOptions: MatMenuDefaultOptions) {
+      @Inject(TRI_CONTEXT_MENU_DEFAULT_OPTIONS) defaultOptions: TriContextMenuDefaultOptions) {
     super(elementRef, ngZone, defaultOptions);
   }
 }

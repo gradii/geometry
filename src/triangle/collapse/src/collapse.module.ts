@@ -31,6 +31,7 @@ import { CollapsesetComponent } from './collapseset.component';
  * <!-- example(tri-demo-collapse-border) -->
  * 自定义各个面板的背景色、圆角和边距。
  * <!-- example(tri-demo-collapse-custom) -->
+ * @deprecated
  */
 @NgModule({
   imports     : [CommonModule, TriIconModule],

@@ -36,7 +36,6 @@ ng_module(
         "//src/dev-app/menu",
         "//src/dev-app/message",
         "//src/dev-app/pagination",
-        #  "//src/dev-app/popconfirm",
         "//src/dev-app/tooltip",
         "//src/dev-app/popover",
         "//src/dev-app/confirm-popup",
@@ -46,7 +45,7 @@ ng_module(
         "//src/dev-app/grid-list",
         "//src/dev-app/list",
         "//src/dev-app/avatar",
-#        "//src/dev-app/tree-select",
+        "//src/dev-app/tree-select",
 
         "//src/dev-app/cube",
 

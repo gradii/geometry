@@ -27,20 +27,20 @@ import {
 } from '@gradii/triangle/core';
 import {Subject} from 'rxjs';
 import {DOCUMENT} from '@angular/common';
-import {MAT_MENU_PANEL, MatMenuPanel} from './context-menu-panel';
+import {TRI_CONTEXT_MENU_PANEL, TriContextMenuPanel} from './context-menu-panel';
 
-// Boilerplate for applying mixins to MatMenuItem.
+// Boilerplate for applying mixins to TriContextMenuItem.
 /** @docs-private */
-class MatMenuItemBase {}
-const _MatMenuItemMixinBase: CanDisableRippleCtor & CanDisableCtor & typeof MatMenuItemBase =
-    mixinDisableRipple(mixinDisabled(MatMenuItemBase));
+class TriContextMenuItemBase {}
+const _TriContextMenuItemMixinBase: CanDisableRippleCtor & CanDisableCtor & typeof TriContextMenuItemBase =
+    mixinDisableRipple(mixinDisabled(TriContextMenuItemBase));
 
 /**
- * Single item inside of a `mat-menu`. Provides the menu item styling and accessibility treatment.
+ * Single item inside of a `tri-context-menu`. Provides the menu item styling and accessibility treatment.
  */
 @Component({
   selector: '[tri-context-menu-item]',
-  exportAs: 'matMenuItem',
+  exportAs: 'triContextMenuItem',
   inputs: ['disabled', 'disableRipple'],
   host: {
     '[attr.role]': 'role',
@@ -56,17 +56,17 @@ const _MatMenuItemMixinBase: CanDisableRippleCtor & CanDisableCtor & typeof MatM
   encapsulation: ViewEncapsulation.None,
   templateUrl: 'context-menu-item.html',
 })
-export class MatMenuItem extends _MatMenuItemMixinBase
+export class TriContextMenuItem extends _TriContextMenuItemMixinBase
     implements FocusableOption, CanDisable, CanDisableRipple, AfterViewInit, OnDestroy {
 
   /** ARIA role for the menu item. */
   @Input() role: 'menuitem' | 'menuitemradio' | 'menuitemcheckbox' = 'menuitem';
 
   /** Stream that emits when the menu item is hovered. */
-  readonly _hovered: Subject<MatMenuItem> = new Subject<MatMenuItem>();
+  readonly _hovered: Subject<TriContextMenuItem> = new Subject<TriContextMenuItem>();
 
   /** Stream that emits when the menu item is focused. */
-  readonly _focused = new Subject<MatMenuItem>();
+  readonly _focused = new Subject<TriContextMenuItem>();
 
   /** Whether the menu item is highlighted. */
   _highlighted: boolean = false;
@@ -82,7 +82,7 @@ export class MatMenuItem extends _MatMenuItemMixinBase
      */
     @Inject(DOCUMENT) _document?: any,
     private _focusMonitor?: FocusMonitor,
-    @Inject(MAT_MENU_PANEL) @Optional() public _parentMenu?: MatMenuPanel<MatMenuItem>) {
+    @Inject(TRI_CONTEXT_MENU_PANEL) @Optional() public _parentMenu?: TriContextMenuPanel<TriContextMenuItem>) {
 
     // @breaking-change 8.0.0 make `_focusMonitor` and `document` required params.
     super();

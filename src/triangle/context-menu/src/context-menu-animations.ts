@@ -15,12 +15,12 @@ import{
 } from '@angular/animations';
 
 /**
- * Animations used by the mat-menu component.
+ * Animations used by the tri-context-menu component.
  * Animation duration and timing values are based on:
  * https://material.io/guidelines/components/menus.html#menus-usage
  * @docs-private
  */
-export const matMenuAnimations: {
+export const triContextMenuAnimations: {
   readonly transformMenu: AnimationTriggerMetadata;
   readonly fadeInItems: AnimationTriggerMetadata;
 } = {
@@ -65,11 +65,11 @@ export const matMenuAnimations: {
  * @breaking-change 8.0.0
  * @docs-private
  */
-export const fadeInItems = matMenuAnimations.fadeInItems;
+export const fadeInItems = triContextMenuAnimations.fadeInItems;
 
 /**
  * @deprecated
  * @breaking-change 8.0.0
  * @docs-private
  */
-export const transformMenu = matMenuAnimations.transformMenu;
+export const transformMenu = triContextMenuAnimations.transformMenu;
