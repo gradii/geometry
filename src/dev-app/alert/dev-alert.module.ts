@@ -12,6 +12,7 @@ import { TriDemoAlert4TypeComponent } from './tri-demo-alert/tri-demo-4-type.com
 import { TriDemoAlert4TypeMessageComponent } from './tri-demo-alert/tri-demo-alert-4-type-message.component';
 import { TriDemoAlertBasicComponent } from './tri-demo-alert/tri-demo-alert-basic.component';
 import { TriDemoAlertCloseableComponent } from './tri-demo-alert/tri-demo-alert-closeable.component';
+import { TriDemoAlertDescriptionUlComponent } from './tri-demo-alert/tri-demo-alert-description-ul.component';
 import { TriDemoAlertIconCloseComponent } from './tri-demo-alert/tri-demo-alert-icon-close.component';
 import { TriDemoAlertIconComponent } from './tri-demo-alert/tri-demo-alert-icon.component';
 import { TriDemoAlertLongDescriptionComponent } from './tri-demo-alert/tri-demo-alert-long-description.component';
@@ -28,6 +29,7 @@ import { TriDemoAlertSelfCloseComponent } from './tri-demo-alert/tri-demo-alert-
           {path: 'tri-demo-alert-4-type-message', component: TriDemoAlert4TypeMessageComponent},
           {path: 'tri-demo-alert-basic', component: TriDemoAlertBasicComponent},
           {path: 'tri-demo-alert-closeable', component: TriDemoAlertCloseableComponent},
+          {path: 'tri-demo-alert-description-ul', component: TriDemoAlertDescriptionUlComponent},
           {path: 'tri-demo-alert-icon', component: TriDemoAlertIconComponent},
           {path: 'tri-demo-alert-icon-close', component: TriDemoAlertIconCloseComponent},
           {
@@ -46,6 +48,7 @@ import { TriDemoAlertSelfCloseComponent } from './tri-demo-alert/tri-demo-alert-
     TriDemoAlert4TypeMessageComponent,
     TriDemoAlertBasicComponent,
     TriDemoAlertCloseableComponent,
+    TriDemoAlertDescriptionUlComponent,
     TriDemoAlertIconComponent,
     TriDemoAlertIconCloseComponent,
     TriDemoAlertLongDescriptionComponent,

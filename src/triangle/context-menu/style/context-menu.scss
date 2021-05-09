@@ -1,0 +1,83 @@
+// TODO(kara): update vars for desktop when MD team responds
+@import '../core/style/button-common';
+@import '../core/style/menu-common';
+@import '../../cdk/a11y/a11y';
+
+$tri-context-menu-vertical-padding: 8px !default;
+$tri-context-menu-border-radius: 4px !default;
+$tri-context-menu-submenu-indicator-size: 10px !default;
+
+.tri-context-menu-panel {
+  @include tri-context-menu-base();
+  max-height: calc(100vh - #{$tri-context-menu-item-height});
+  border-radius: $tri-context-menu-border-radius;
+  outline: 0;
+
+  // Give the menu a minimum height so that the user can't
+  // collapse it to zero when they scroll away.
+  min-height: $tri-context-menu-item-height + $tri-context-menu-vertical-padding * 2;
+
+  // Prevent users from interacting with the panel while it's animating. Note that
+  // people won't be able to click through it, because the overlay pane will catch the click.
+  // This fixes the following issues:
+  //  * Users accidentally opening sub-menus when the `overlapTrigger` option is enabled.
+  //  * Users accidentally tapping on content inside the sub-menu on touch devices, if the
+  //    sub-menu overlaps the trigger. The issue is due to touch devices emulating the
+  //    `mouseenter` event by dispatching it on tap.
+  &.ng-animating {
+    pointer-events: none;
+  }
+
+  @include cdk-high-contrast(active, off) {
+    outline: solid 1px;
+  }
+}
+
+// `:not(:empty)` allows for the menu to collapse to 0x0 when it doesn't have content.
+.tri-context-menu-content:not(:empty) {
+  padding-top: $tri-context-menu-vertical-padding;
+  padding-bottom: $tri-context-menu-vertical-padding;
+}
+
+.tri-context-menu-item {
+  @include mat-button-reset();
+  @include tri-context-menu-item-base();
+  position: relative;
+
+  &[disabled] {
+    // Usually every click inside the menu closes it, however some browsers will stop events
+    // when the user clicks on a disabled item, **except** when the user clicks on a non-disabled
+    // child node of the disabled button. This is inconsistent because some regions of a disabled
+    // button will still cause the menu to close and some won't (see #16694). We make the behavior
+    // more consistent by disabling pointer events and allowing the user to click through.
+    pointer-events: none;
+  }
+
+  @include cdk-high-contrast(active, off) {
+    $outline-width: 1px;
+
+    // We need to move the item 1px down, because Firefox seems to have
+    // an issue rendering the top part of the outline (see #21524).
+    margin-top: $outline-width;
+
+    &.cdk-program-focused,
+    &.cdk-keyboard-focused,
+    &-highlighted {
+      outline: dotted $outline-width;
+    }
+  }
+}
+
+.tri-context-menu-item-submenu-trigger {
+  @include tri-context-menu-item-submenu-trigger($tri-context-menu-side-padding);
+}
+
+button.tri-context-menu-item {
+  width: 100%;
+}
+
+// Increase specificity because ripple styles are part of the `mat-core` mixin and can
+// potentially overwrite the absolute position of the container.
+.tri-context-menu-item .tri-context-menu-ripple {
+  @include tri-context-menu-item-ripple;
+}
