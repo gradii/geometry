@@ -1,6 +1,7 @@
 # List of all entry-points of the Angular CDK package.
 TRIANGLE_ENTRYPOINTS = [
     # "affix",
+    "accordion",
     "alert",
     "anchor",
     "autocomplete",
@@ -67,7 +68,7 @@ TRIANGLE_ENTRYPOINTS = [
     "transfer",
     "util",
     "tree-view",
-    "tree-select",
+#    "tree-select",
     #  "tree",
 ]
 
@@ -77,6 +78,7 @@ TRIANGLE_TESTING_ENTRYPOINTS = [
 
 TRIANGLE_ENTRYPOINTS_WITH_STYLES = [
     # "affix",
+    "accordion",
     "alert",
     "anchor",
     "autocomplete",
@@ -141,7 +143,7 @@ TRIANGLE_ENTRYPOINTS_WITH_STYLES = [
     #  "util",
     #  "tree",
     "tree-view",
-     "tree-select",
+#    "tree-select",
 ]
 
 TRIANGLE_SCSS_LIBS = [
