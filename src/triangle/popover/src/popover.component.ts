@@ -5,42 +5,17 @@
  */
 
 import {
-  animate,
-  AnimationTriggerMetadata,
-  keyframes,
-  state,
-  style,
-  transition,
-  trigger
+  animate, AnimationTriggerMetadata, keyframes, state, style, transition, trigger
 } from '@angular/animations';
 import { FocusMonitor } from '@angular/cdk/a11y';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import {
-  BreakpointObserver,
-  Breakpoints,
-  BreakpointState
-} from '@angular/cdk/layout';
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Input,
-  NgZone,
-  OnDestroy,
-  ViewContainerRef,
-  ViewEncapsulation
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy,
+  ViewContainerRef, ViewEncapsulation
 } from '@angular/core';
 import { _TriTooltipComponentBase } from '@gradii/triangle/tooltip';
-import {
-  fromEvent as observableFromEvent,
-  merge,
-  Observable,
-  Subscription
-} from 'rxjs';
-import {
-  filter,
-  tap
-} from 'rxjs/operators';
+import { fromEvent as observableFromEvent, merge, Observable, Subscription } from 'rxjs';
+import { filter, tap } from 'rxjs/operators';
 
 
 export const popoverAnimation: AnimationTriggerMetadata = trigger('popoverAnimation', [
@@ -111,10 +86,12 @@ export const popoverAnimation: AnimationTriggerMetadata = trigger('popoverAnimat
   host           : {
     'class': 'tri-popover'
   },
-  styles         : [`:host {
-    position : relative;
-    margin   : 1px;
-  }`]
+  styles         : [
+    `:host {
+      position : relative;
+      margin   : 1px;
+    }`
+  ]
 })
 export class PopoverComponent extends _TriTooltipComponentBase implements OnDestroy {
 
@@ -157,7 +134,7 @@ export class PopoverComponent extends _TriTooltipComponentBase implements OnDest
       observableFromEvent(_elementRef.nativeElement, 'mouseleave')
         .pipe(
           tap(() => {
-            this.hide(0);
+            this.hide(this.config.hideDelay || 0);
           })
         ).subscribe()
     );

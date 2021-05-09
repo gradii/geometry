@@ -335,7 +335,9 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
       new ComponentPortal(this._tooltipComponent, this._viewContainerRef);
     this._tooltipInstance        = overlayRef.attach(this._portal).instance;
     this._tooltipInstance.config = {
-      triggerType: this._tooltipTrigger
+      triggerType: this._tooltipTrigger,
+      showDelay: this.showDelay,
+      hideDelay: this.hideDelay
     };
     this._tooltipInstance.afterHidden()
       .pipe(takeUntil(this._destroyed))

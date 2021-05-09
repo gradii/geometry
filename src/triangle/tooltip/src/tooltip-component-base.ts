@@ -25,7 +25,9 @@ export abstract class _TriTooltipComponentBase implements OnDestroy {
   content: string | TemplateRef<any>;
 
   config: {
-    triggerType?: TriggerType
+    triggerType?: TriggerType,
+    showDelay?: number,
+    hideDelay?: number
   } = {};
 
   /** Classes to be added to the tooltip. Supports the same syntax as `ngClass`. */
