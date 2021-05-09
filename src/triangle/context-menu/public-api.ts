@@ -6,15 +6,15 @@
 
 
 export {
-  MatMenuDefaultOptions,
-  MAT_MENU_DEFAULT_OPTIONS,
-  MatMenu,
-  _MatMenuBase,
-} from './src/menu';
-export {MatMenuItem} from './src/menu-item';
-export {MatMenuTrigger, MAT_MENU_SCROLL_STRATEGY} from './src/menu-trigger';
-export {MatMenuPanel, MAT_MENU_PANEL} from './src/menu-panel';
-export * from './src/menu-module';
-export * from './src/menu-animations';
-export * from './src/menu-content';
-export * from './src/menu-positions';
+  TriContextMenuDefaultOptions,
+  TRI_CONTEXT_MENU_DEFAULT_OPTIONS,
+  TriContextMenu,
+  _TriContextMenuBase,
+} from './src/context-menu';
+export {TriContextMenuItem} from './src/context-menu-item';
+export {TriContextMenuTrigger, TRI_CONTEXT_MENU_SCROLL_STRATEGY} from './src/context-menu-trigger';
+export {TriContextMenuPanel, TRI_CONTEXT_MENU_PANEL} from './src/context-menu-panel';
+export * from './src/context-menu-module';
+export * from './src/context-menu-animations';
+export * from './src/context-menu-content';
+export * from './src/context-menu-positions';
