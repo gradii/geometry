@@ -67,12 +67,14 @@ import {
       </div>
     </div>
   `,
+  host: {
+    'class': 'tri-card'
+  },
   styleUrls    : ['../style/card.css']
 })
 export class CardComponent {
 
-  constructor(@Host() private elementRef: ElementRef<HTMLElement>) {
-    elementRef.nativeElement.classList.add('tri-card');
+  constructor() {
   }
 
   /**

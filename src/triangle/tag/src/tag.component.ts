@@ -40,8 +40,7 @@ import { TagAnimation } from '@gradii/triangle/core';
   ],
   styleUrls: ['../style/tag.css']
 })
-export class TagComponent implements OnInit, AfterViewInit {
-  _prefixCls = 'tri-tag';
+export class TagComponent implements OnInit {
   _closed    = false;
 
   /** Whether tag is closable */

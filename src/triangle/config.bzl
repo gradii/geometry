@@ -69,7 +69,7 @@ TRIANGLE_ENTRYPOINTS = [
     "transfer",
     "util",
     "tree-view",
-    "tree-select",
+#    "tree-select",
     #  "tree",
 ]
 
@@ -145,7 +145,7 @@ TRIANGLE_ENTRYPOINTS_WITH_STYLES = [
     #  "util",
     #  "tree",
     "tree-view",
-    "tree-select",
+#    "tree-select",
 ]
 
 TRIANGLE_SCSS_LIBS = [

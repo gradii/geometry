@@ -5,15 +5,8 @@
  */
 
 import {
-  AfterContentInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  HostListener,
-  Input,
-  Renderer2,
-  ViewEncapsulation
+  AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener,
+  Input, Renderer2, ViewEncapsulation
 } from '@angular/core';
 
 export type ButtonColor =
@@ -37,7 +30,7 @@ export type ButtonSize = 'small' | 'large' | 'default';
   `,
   styleUrls          : ['../style/button.css'],
   host               : {
-    '[class.tri-btn]'                 : 'true',
+    'class'                           : 'tri-btn',
     '[class.tri-btn-primary]'         : '_color === "primary"',
     '[class.tri-btn-dashed]'          : '_color === "dashed"',
     '[class.tri-btn-success]'         : '_color === "success"',
