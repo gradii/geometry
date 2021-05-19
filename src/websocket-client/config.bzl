@@ -1,0 +1,4 @@
+WEBSOCKET_CLIENT_ENTRYPOINTS = [
+]
+
+WEBSOCKET_CLIENT_TARGETS = ["//src/websocket-client"]

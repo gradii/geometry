@@ -1,0 +1,43 @@
+load("@npm//scss-bundle:index.bzl", "scss_bundle")
+load(
+    "//src/websocket-client:config.bzl",
+    "WEBSOCKET_CLIENT_TARGETS",
+)
+load("//tools:defaults.bzl", "ng_package", "ts_library")
+
+package(default_visibility = ["//visibility:public"])
+
+
+ts_library(
+    name = "websocket-client",
+    srcs = glob(
+        ["**/*.ts"],
+        exclude = [
+            "test/**/*.ts",
+            "**/*.spec.ts",
+        ],
+    ),
+    deps = [
+      "@npm//nanoid",
+      "@npm//rxjs",
+      "@npm//@angular/core",
+    ],
+    node_modules = "@npm//:node_modules",
+    module_name = "@gradii/websocket-client",
+    tsconfig = ":tsconfig.json",
+)
+
+ng_package(
+    name = "npm_package",
+    srcs = [
+        "package.json",
+        ":README.md"
+    ],
+    data = [
+    ],
+    entry_point = ":index.ts",
+    entry_point_name = "websocket-client",
+    nested_packages = [],
+    tags = ["release-package"],
+    deps = WEBSOCKET_CLIENT_TARGETS,
+)
