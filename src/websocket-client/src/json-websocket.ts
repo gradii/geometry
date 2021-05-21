@@ -5,10 +5,7 @@
  */
 
 import { Subject } from 'rxjs';
-import {
-  take,
-  tap
-} from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 
 export class JsonWebsocket {
   private contentLength: number | null = null;
@@ -100,9 +97,7 @@ export class JsonWebsocket {
       }
       return;
     }
-    if (message.id && message.data) {
-      message.data.id = message.id;
-    }
+
     this.socket.send(JSON.stringify(message));
   }
 
