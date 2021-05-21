@@ -12,6 +12,7 @@ $zindex-dialog      : 1000 !default;
   margin          : 0 auto;
   outline         : 0;
   @include mixins.border-radius(v.$border-radius-base);
+  overflow        : hidden;
   background-clip : padding-box;
   box-shadow      : v.$shadow-2;
 
@@ -27,7 +28,7 @@ $zindex-dialog      : 1000 !default;
     outline                    : 0;
   }
 
-  @at-root &-title {
+  @at-root h3#{&}-title {
     margin      : 0;
     font-size   : v.$font-size-lg;
     line-height : 21px;
