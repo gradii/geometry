@@ -62,7 +62,7 @@ $card-actions-background:  theming.tri-color($background, component-background) 
       //}
     }
 
-    @at-root &-actions {
+    @at-root &-footer, &-actions {
       background-color: $card-actions-background;
       border-top: v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-split);
     }

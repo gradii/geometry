@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 
 @Component({
@@ -13,9 +13,11 @@ import { Component } from '@angular/core';
       <ng-content></ng-content>
   `,
   host    : {
-    'class': 'tri-card-footer'
+    'class': 'tri-card-footer',
+    '[class.tri-card-footer-align-end]': 'align === "end"',
   }
 })
 export class TriCardFooterComponent {
-
+  /** Position of the actions inside the card. */
+  @Input() align: 'start' | 'end' = 'end';
 }

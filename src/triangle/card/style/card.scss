@@ -5,6 +5,7 @@ $card-prefix-cls       : "#{v.$tri-prefix}-card";
 $card-padding-base     : 24px;
 $card-padding-wider    : 32px;
 $card-head-height      : 3rem !default;
+$card-footer-height    : 3rem !default;
 $card-head-line-height : 1.5rem !default;
 $card-border-radius    : v.$border-radius-base !default;
 
@@ -55,6 +56,36 @@ $card-border-radius    : v.$border-radius-base !default;
   @at-root &-body {
     padding : $card-padding-base;
     display : block;
+  }
+
+  @at-root &-footer {
+    padding : .325rem $card-padding-base;
+    display : block;
+
+    &#{&}-align-end {
+      display         : flex;
+      justify-content : flex-end;
+
+      .tri-btn {
+        &:last-child {
+          margin-left  : 0;
+          margin-right : 0;
+        }
+      }
+    }
+
+    &:not(#{&}-align-end ) {
+      .tri-btn {
+        &:first-child {
+          margin-left  : 0;
+          margin-right : 0;
+        }
+      }
+    }
+
+    .tri-btn {
+      margin : 0 .5rem;
+    }
   }
 
   @at-root &-actions {
