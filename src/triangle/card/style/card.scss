@@ -6,13 +6,14 @@ $card-padding-base     : 24px;
 $card-padding-wider    : 32px;
 $card-head-height      : 3rem !default;
 $card-head-line-height : 1.5rem !default;
+$card-border-radius    : v.$border-radius-base !default;
 
 .#{$card-prefix-cls} {
-  border-radius : v.$border-radius-sm;
+  border-radius : $card-border-radius;
   font-size     : v.$font-size-base;
   position      : relative;
   display       : block;
-  transition    : all .3s;
+  transition    : background-color, width, height, padding, margin .3s;
 
   @at-root &:not(#{&}-no-hovering):hover {
     box-shadow   : v.$box-shadow-base;
@@ -22,14 +23,16 @@ $card-head-line-height : 1.5rem !default;
   @at-root &-bordered {
   }
 
-  @at-root &-head {
+  @at-root &-header {
     height        : $card-head-height;
     line-height   : $card-head-line-height;
     padding       : ($card-head-height - $card-head-line-height)/2 ($card-padding-base);
-    border-radius : v.$border-radius-sm v.$border-radius-sm 0 0;
+    border-radius : $card-border-radius $card-border-radius 0 0;
     box-sizing    : border-box;
+    display       : flex;
+    align-items   : stretch;
 
-    @at-root &-title {
+    @at-root #{&}-title {
       font-size     : v.$font-size-lg;
       display       : inline-block;
       text-overflow : ellipsis;
@@ -41,17 +44,41 @@ $card-head-line-height : 1.5rem !default;
       padding       : 0 0 0 5px;
       margin        : 0 0 0 -5px;
     }
-  }
 
-  @at-root &-extra {
-    position : absolute;
-    right    : $card-padding-base;
-    top      : 14px;
+    @at-root #{&}-extra {
+      order       : 1;
+      margin-left : auto;
+      display     : inline-block;
+    }
   }
 
   @at-root &-body {
     padding : $card-padding-base;
-    @include mixins.clearfix;
+    display : block;
+  }
+
+  @at-root &-actions {
+    margin  : 0;
+    padding : 0;
+    display : block;
+    > .tri-btn-group {
+      width : 100%;
+
+      > .tri-btn {
+        border-radius : 0;
+        border-top    : none;
+        border-bottom : none;
+        flex          : 1;
+
+        :first-child {
+          border-left : none;
+        }
+
+        :last-child {
+          border-right : none;
+        }
+      }
+    }
   }
 
   @at-root &#{&}-compact {
@@ -73,29 +100,10 @@ $card-head-line-height : 1.5rem !default;
     display         : inline-block;
     margin          : 5px 1% 0;
     height          : 14px;
-    border-radius   : v.$border-radius-sm;
+    border-radius   : $card-border-radius;
     background      : linear-gradient(90deg, rgba(207, 216, 220, .2), rgba(207, 216, 220, .4), rgba(207, 216, 220, .2));
     animation       : card-loading 1.4s ease infinite;
     background-size : 600% 600%;
-  }
-
-  @at-root &-contain-grid #{&}-body {
-    margin  : -0.5px;
-    padding : 0;
-  }
-
-  @at-root &-grid {
-    border-radius : 0;
-    border        : 0;
-    width         : 33.33%;
-    float         : left;
-    padding       : $card-padding-base;
-    transition    : all .3s;
-    @at-root &:hover {
-      position   : relative;
-      z-index    : 1;
-      box-shadow : v.$box-shadow-base;
-    }
   }
 
   @at-root &-wider-padding #{&}-head {

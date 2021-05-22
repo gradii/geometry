@@ -13,7 +13,7 @@ import {
  * @title card-basic
  */
 @Component({
-  selector: 'tri-demo-card-basic',
+  selector: 'tri-demo-card-footer',
   template: `
     <tri-card style="width:300px;">
       <tri-card-header>
@@ -27,11 +27,14 @@ import {
         <p>Card content</p>
         <p>Card content</p>
       </tri-card-body>
+      <tri-card-footer>
+        <button triButton [ghost]="true">Btn</button>
+      </tri-card-footer>
     </tri-card>
   `,
   styles  : []
 })
-export class TriDemoCardBasicComponent implements OnInit {
+export class TriDemoCardFooterComponent implements OnInit {
   ngOnInit() {
   }
 }

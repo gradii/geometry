@@ -16,12 +16,12 @@ import {
   selector: 'tri-demo-card-loading',
   template: `
     <tri-card style="width:34%;" [loading]="true">
-      <ng-template triCardTitle>
+      <tri-card-header>
         Card title
-      </ng-template>
-      <ng-template triCardBody>
+      </tri-card-header>
+      <tri-card-body>
         Whatever content
-      </ng-template>
+      </tri-card-body>
     </tri-card>
   `,
   styles  : []

@@ -15,6 +15,8 @@ $card-head-line-height : 1.5rem !default;
 $card-head-background  : theming.tri-color($background, component-background) !default;
 $card-head-color       : v.$heading-color;
 
+$card-actions-background:  theming.tri-color($background, component-background) !default;
+
 @mixin tri-card-theme() {
   $primary : theme.$primary;
 
@@ -32,7 +34,7 @@ $card-head-color       : v.$heading-color;
       box-shadow : 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
     }
 
-    @at-root &-head {
+    @at-root &-header {
       background    : $card-head-background;
       border-bottom : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-split);
 
@@ -50,14 +52,19 @@ $card-head-color       : v.$heading-color;
         );
       }
 
-      @at-root &-grid {
-        border     : 0;
-        box-shadow : 0 0 0 0.5px theming.tri-color($foreground, border-color-split),
-        0 0 0 0.5px theming.tri-color($foreground, border-color-split) inset;
-        @at-root &:hover {
-          box-shadow : v.$box-shadow-base;
-        }
-      }
+      //@at-root &-grid {
+      //  border     : 0;
+      //  box-shadow : 0 0 0 0.5px theming.tri-color($foreground, border-color-split),
+      //  0 0 0 0.5px theming.tri-color($foreground, border-color-split) inset;
+      //  @at-root &:hover {
+      //    box-shadow : v.$box-shadow-base;
+      //  }
+      //}
+    }
+
+    @at-root &-actions {
+      background-color: $card-actions-background;
+      border-top: v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-split);
     }
   }
 }

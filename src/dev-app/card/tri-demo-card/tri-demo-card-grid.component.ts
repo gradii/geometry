@@ -4,10 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  Component,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 /**
  * @title card-grid
@@ -19,32 +16,32 @@ import {
       <div tri-row [gutter]="8">
         <div tri-col [span]="8">
           <tri-card>
-            <ng-template triCardTitle>
+            <tri-card-header>
               Card title
-            </ng-template>
-            <ng-template triCardBody>
+            </tri-card-header>
+            <tri-card-body>
               <p>Card content</p>
-            </ng-template>
+            </tri-card-body>
           </tri-card>
         </div>
         <div tri-col [span]="8">
           <tri-card>
-            <ng-template triCardTitle>
+            <tri-card-header>
               Card title
-            </ng-template>
-            <ng-template triCardBody>
+            </tri-card-header>
+            <tri-card-body>
               <p>Card content</p>
-            </ng-template>
+            </tri-card-body>
           </tri-card>
         </div>
         <div tri-col [span]="8">
           <tri-card>
-            <ng-template triCardTitle>
+            <tri-card-header>
               Card title
-            </ng-template>
-            <ng-template triCardBody>
+            </tri-card-header>
+            <tri-card-body>
               <p>Card content</p>
-            </ng-template>
+            </tri-card-body>
           </tri-card>
         </div>
       </div>

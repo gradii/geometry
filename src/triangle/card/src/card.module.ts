@@ -6,23 +6,16 @@
 
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import {
-  TriCardActions,
-  TriCardAvatar,
-  TriCardBody,
-  TriCardFooter,
-  TriCardImage,
-  TriCardLgImage,
-  TriCardMdImage,
-  TriCardSmImage,
-  TriCardSubtitle,
-  TriCardTitle,
-  TriCardTitleExtra,
-  TriCardXlImage
-} from './card.directive';
-import { CardGridDirective } from './card-grid.directive';
+import { TriCardBodyComponent } from './card-body.component';
+import { TriCardFooterComponent } from './card-footer.component';
+import { TriCardHeaderComponent, TriCardHeaderExtraComponent } from './card-header.component';
+import { TriCardLoadingComponent } from './card-loading.component';
 
 import { CardComponent } from './card.component';
+import {
+  TriCardActions, TriCardAvatar, TriCardGrid, TriCardImage, TriCardLgImage, TriCardMdImage,
+  TriCardSmImage, TriCardXlImage
+} from './card.directive';
 
 /**
  *
@@ -49,18 +42,19 @@ import { CardComponent } from './card.component';
  */
 
 const CARD_DIRECTIVES = [
-  TriCardBody,
-  TriCardTitle,
-  TriCardTitleExtra,
-  TriCardSubtitle,
   TriCardActions,
-  TriCardFooter,
   TriCardImage,
   TriCardSmImage,
   TriCardMdImage,
   TriCardLgImage,
   TriCardXlImage,
   TriCardAvatar,
+  TriCardGrid,
+
+  TriCardHeaderComponent,
+  TriCardHeaderExtraComponent,
+  TriCardBodyComponent,
+  TriCardFooterComponent
 ];
 
 
@@ -68,13 +62,12 @@ const CARD_DIRECTIVES = [
   imports     : [CommonModule],
   declarations: [
     CardComponent,
-    CardGridDirective,
+    TriCardLoadingComponent,
 
     ...CARD_DIRECTIVES,
   ],
   exports     : [
     CardComponent,
-    CardGridDirective,
 
     ...CARD_DIRECTIVES
   ]

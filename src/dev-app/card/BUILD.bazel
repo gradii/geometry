@@ -11,6 +11,7 @@ ng_module(
     ],
     deps = [
         "//src/triangle/grid",
+        "//src/triangle/button",
         "//src/triangle/card",
         "@npm//@angular/cdk",
         "@npm//@angular/router",
