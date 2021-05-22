@@ -40,7 +40,7 @@ $card-actions-background:  theming.tri-color($background, component-background) 
 
       @at-root &-title {
         color       : $card-head-color;
-        border-left : 3px solid theming.tri-color($primary);
+        //border-left : 3px solid theming.tri-color($primary);
       }
 
       @at-root &-loading-block {
