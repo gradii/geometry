@@ -10,14 +10,6 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
   selector     : 'tri-card',
   encapsulation: ViewEncapsulation.None,
   template     : `
-    <ng-content select="tri-card-header"></ng-content>
-    <ng-template [ngIf]="loading">
-      <tri-card-loading></tri-card-loading>
-    </ng-template>
-    <ng-template [ngIf]="!loading">
-      <ng-content select="tri-card-body"></ng-content>
-    </ng-template>
-    <ng-content select="tri-card-footer"></ng-content>
     <ng-content></ng-content>
   `,
   host         : {

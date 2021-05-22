@@ -4,13 +4,18 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 
 @Component({
   selector: 'tri-card-body',
   template: `
-    <ng-content></ng-content>
+    <ng-template [ngIf]="loading">
+      <tri-card-loading></tri-card-loading>
+    </ng-template>
+    <ng-template [ngIf]="!loading">
+      <ng-content></ng-content>
+    </ng-template>
   `,
   host    : {
     'class': 'tri-card-body'
@@ -18,4 +23,6 @@ import { Component } from '@angular/core';
 })
 export class TriCardBodyComponent {
 
+  @Input()
+  loading: boolean = false;
 }

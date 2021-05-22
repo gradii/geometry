@@ -17,6 +17,7 @@ import { TriDemoCardBorderComponent } from './tri-demo-card/tri-demo-card-border
 import { TriDemoCardFlexComponent } from './tri-demo-card/tri-demo-card-flex.component';
 import { TriDemoCardFooterComponent } from './tri-demo-card/tri-demo-card-footer.component';
 import { TriDemoCardGridComponent } from './tri-demo-card/tri-demo-card-grid.component';
+import { TriDemoCardImageComponent } from './tri-demo-card/tri-demo-card-image.component';
 // import { TriDemoCardInnerComponent } from './tri-demo-card/tri-demo-card-inner.component';
 import { TriDemoCardLoadingComponent } from './tri-demo-card/tri-demo-card-loading.component';
 import { TriDemoCardSimpleComponent } from './tri-demo-card/tri-demo-card-simple.component';
@@ -37,6 +38,7 @@ import { TriDemoCardSimpleComponent } from './tri-demo-card/tri-demo-card-simple
           {path: 'tri-demo-card-footer', component: TriDemoCardFooterComponent},
           {path: 'tri-demo-card-actions', component: TriDemoCardActionsComponent},
           {path: 'tri-demo-card-grid', component: TriDemoCardGridComponent},
+          {path: 'tri-demo-card-image', component: TriDemoCardImageComponent},
           // {path: 'tri-demo-card-inner', component: TriDemoCardInnerComponent},
           {path: 'tri-demo-card-loading', component: TriDemoCardLoadingComponent},
           {path: 'tri-demo-card-simple', component: TriDemoCardSimpleComponent},
@@ -53,6 +55,7 @@ import { TriDemoCardSimpleComponent } from './tri-demo-card/tri-demo-card-simple
     TriDemoCardBorderComponent,
     TriDemoCardFlexComponent,
     TriDemoCardFooterComponent,
+    TriDemoCardImageComponent,
     TriDemoCardGridComponent,
     // TriDemoCardInnerComponent,
     TriDemoCardLoadingComponent,
