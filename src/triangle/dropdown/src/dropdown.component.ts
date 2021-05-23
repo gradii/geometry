@@ -243,7 +243,7 @@ export class DropDownComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     if (this._menu) {
-      this._menu.setDropDown(true);
+      // this._menu.setDropDown(true);
     }
     setTimeout(() => {
       this.handleTriggerEvt();

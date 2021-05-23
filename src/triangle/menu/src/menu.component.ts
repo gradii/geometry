@@ -5,27 +5,38 @@
  */
 
 import {
-  AfterViewInit, Component, Input, OnChanges, SimpleChanges, ViewEncapsulation
+  AfterViewInit, Component, ContentChild, Input, OnChanges, SimpleChanges, TemplateRef,
+  ViewEncapsulation
 } from '@angular/core';
+import { Mode } from './common';
 import { MenuItemComponent } from './menu-item.component';
+import { MenuItemNodeDefDirective } from './menu.directive';
 import { SubMenuComponent } from './submenu.component';
 
-export type Mode = 'vertical' | 'horizontal' | 'inline';
-
 @Component({
-  selector     : '[tri-menu]',
+  selector     : 'tri-menu, ul[tri-menu]',
   encapsulation: ViewEncapsulation.None,
   template     : `
     <ng-template [ngIf]="!dataSource||dataSource?.length===0">
-        <ng-content></ng-content>
+      <ng-content></ng-content>
     </ng-template>
     <ng-template [ngIf]="dataSource&&dataSource.length>0">
-        <div></div>
+      <tri-menu-item-nest-node
+        [dataSource]="dataSource"
+        [menuItemNodeDef]="menuItemNodeDef"
+      >
+      </tri-menu-item-nest-node>
     </ng-template>
   `,
+  styles       : [
+    `tri-menu {
+      display : block;
+    }`
+  ],
   styleUrls    : [`../style/menu.css`],
   host         : {
     'class'                            : 'tri-menu',
+    '[class.tri-menu-compact]'         : 'compact',
     '[class.tri-menu-vertical]'        : 'mode === "vertical"',
     '[class.tri-menu-horizontal]'      : 'mode === "horizontal"',
     '[class.tri-menu-inline]'          : 'mode === "inline"',
@@ -53,7 +64,11 @@ export class MenuComponent implements OnChanges, AfterViewInit {
   /** opened index of array */
   _subMenusOpenIndex = [];
 
-  @Input() mode: Mode = 'vertical';
+  @Input()
+  compact: boolean = false;
+
+  @Input() mode: Mode = Mode.vertical;
+  static ngAcceptInputType_mode: Mode | 'vertical' | 'horizontal' | 'inline';
 
   /**
    * Theme color `light`   `dark`
@@ -94,7 +109,7 @@ export class MenuComponent implements OnChanges, AfterViewInit {
     if (this._inlineCollapsed) {
       this.hideSubMenus();
       // after the animation is over
-      setTimeout(() => (this.mode = 'vertical'), 150);
+      setTimeout(() => (this.mode = Mode.vertical), 150);
     } else {
       this.reductionSubMenus();
       this.mode = this._tempMode;
@@ -139,18 +154,28 @@ export class MenuComponent implements OnChanges, AfterViewInit {
     this._subMenusOpenIndex = [];
   }
 
-  /** api for dropdown or navigation to set isInDropDown status */
-  setDropDown(value: boolean) {
-    setTimeout(_ => {
-      this.isInDropDown = value;
-      this.menuItems.forEach(menu => (menu.isInDropDown = value));
-      this.subMenus.forEach(subMenu => (subMenu.isInDropDown = value));
+  setHasSubMenu(value: boolean) {
+    setTimeout((_) => {
+      this.hasSubMenu = value;
     });
   }
 
-  setHasSubMenu(value: boolean) {
-    setTimeout(_ => {
-      this.hasSubMenu = value;
-    });
+  @ContentChild(MenuItemNodeDefDirective, {read: TemplateRef, static: true})
+  menuItemNodeDef: TemplateRef<any>;
+
+  onHoverItem(evt: any) {
+
+  }
+
+  onToggleSubMenu(evt: any) {
+
+  }
+
+  onSelectItem(evt: any) {
+
+  }
+
+  onItemClick(evt: any) {
+
   }
 }

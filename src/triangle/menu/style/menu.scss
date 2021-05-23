@@ -16,7 +16,9 @@ $menu-font-size       : v.$font-size-base !default;
   transition    : background .3s v.$ease-in-out, width .15s v.$ease-in-out;
 
   ul, li {
-    list-style: none;
+    list-style     : none;
+    padding-block  : 0;
+    padding-inline : 0;
   }
 
   @at-root &-hidden {
@@ -307,13 +309,6 @@ $menu-font-size       : v.$font-size-base !default;
       > a {
         display : block;
       }
-    }
-
-    &:after {
-      content : "\20";
-      display : block;
-      height  : 0;
-      clear   : both;
     }
   }
 

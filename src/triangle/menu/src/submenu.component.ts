@@ -12,6 +12,7 @@ import {
 
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { Mode } from './common';
 import { MenuComponent } from './menu.component';
 
 @Component({
@@ -49,31 +50,28 @@ import { MenuComponent } from './menu.component';
       (click)="clickSubMenuTitle()"
       [style.paddingLeft.px]="(menuComponent.mode === 'inline')?(level*24):null">
       <ng-content select="[title]"></ng-content>
+      <tri-icon svgIcon="outline:down"></tri-icon>
     </div>
     <ul
       [@fadeAnimation]
       [@expandAnimation]="expandState"
-      class="tri-menu"
-      [class.tri-dropdown-menu-vertical]="isInDropDown"
-      [class.tri-menu-vertical]="(!isInDropDown)&&(menuComponent.mode!=='inline')"
-      [class.tri-menu-inline]="(!isInDropDown)&&(menuComponent.mode==='inline')"
-      [class.tri-dropdown-menu-sub]="isInDropDown"
-      [class.tri-menu-sub]="!isInDropDown"
+      class="tri-menu tri-menu-sub"
+      [class.tri-menu-vertical]="(menuComponent.mode!== 'inline')"
+      [class.tri-menu-inline]="(menuComponent.mode=== 'inline')"
       *ngIf="open"
-      (click)="clickSubMenuDropDown()"
       (mouseleave)="onMouseLeaveEvent($event)"
       (mouseenter)="onMouseEnterEvent($event)">
       <ng-content></ng-content>
     </ul>
   `,
   host      : {
+    'class'                              : 'tri-menu-submenu',
     '[class.tri-menu-submenu-vertical]'  : 'menuComponent.mode === "vertical"',
     '[class.tri-menu-submenu-horizontal]': 'menuComponent.mode === "horizontal"',
     '[class.tri-menu-submenu-inline]'    : 'menuComponent.mode === "inline"',
   }
 })
 export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
-  isInDropDown   = false;
   level          = 1;
   _$mouseSubject = new Subject<boolean>();
   @ContentChildren(SubMenuComponent) subMenus: QueryList<SubMenuComponent>;
@@ -104,7 +102,7 @@ export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get expandState() {
-    if (this.open && this.menuComponent.mode !== 'vertical') {
+    if (this.open && this.menuComponent.mode !== Mode.vertical) {
       return 'expand';
     }
     return null;
@@ -112,12 +110,7 @@ export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @HostBinding('class.tri-menu-submenu-open')
   get setMenuSubmenuOpenClass() {
-    return !this.isInDropDown && this.open;
-  }
-
-  @HostBinding('class.tri-menu-submenu')
-  get setMenuSubmenuClass() {
-    return !this.isInDropDown;
+    return this.open;
   }
 
   @HostBinding('class.tri-menu-submenu-selected')
@@ -126,16 +119,8 @@ export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   clickSubMenuTitle() {
-    if (this.menuComponent.mode === 'inline' || !this.isInDropDown) {
+    if (this.menuComponent.mode === Mode.inline) {
       this.open = !this.open;
-      this.openChange.emit(this.open);
-    }
-  }
-
-  clickSubMenuDropDown() {
-    if (this.isInDropDown || this.menuComponent.mode === 'vertical' || this.menuComponent.mode === 'horizontal') {
-      this._$mouseSubject.next(false);
-      this.open = false;
       this.openChange.emit(this.open);
     }
   }
@@ -143,9 +128,8 @@ export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
   @HostListener('mouseenter', ['$event'])
   onMouseEnterEvent(e: MouseEvent) {
     if (
-      this.menuComponent.mode === 'horizontal' ||
-      this.menuComponent.mode === 'vertical' ||
-      this.isInDropDown
+      this.menuComponent.mode === Mode.horizontal ||
+      this.menuComponent.mode === Mode.vertical
     ) {
       this._$mouseSubject.next(true);
     }
@@ -153,14 +137,15 @@ export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @HostListener('mouseleave', ['$event'])
   onMouseLeaveEvent(e: MouseEvent) {
-    if (this.menuComponent.mode === 'horizontal' || this.menuComponent.mode === 'vertical' || this.isInDropDown) {
+    if (
+      this.menuComponent.mode === Mode.horizontal ||
+      this.menuComponent.mode === Mode.vertical) {
       this._$mouseSubject.next(false);
     }
   }
 
   ngAfterViewInit() {
-    this.isInDropDown = this.menuComponent.isInDropDown;
-    if (this.subMenus.length && this.menuComponent.mode === 'inline') {
+    if (this.subMenus.length && this.menuComponent.mode === Mode.inline) {
       this.subMenus.filter(x => x !== this).forEach(menu => {
         setTimeout(() => {
           menu.level = this.level + 1;
@@ -171,7 +156,7 @@ export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this._$mouseSubject.pipe(debounceTime(300)).subscribe((data: boolean) => {
-      this.open = data;
+      this.open = !!data;
     });
   }
 

@@ -8,10 +8,9 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: '[tri-menu-divider]',
-  template: `
-    <ng-content></ng-content>`,
+  template: `<ng-content></ng-content>`,
   host    : {
-    'class': 'tri-dropdown-menu-item-divider'
+    'class': 'tri-menu-item-divider'
   }
 })
 export class MenuDividerComponent {

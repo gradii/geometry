@@ -71,7 +71,7 @@ $menu-dark-submenu-bg : #333 !default;
     }
 
     @at-root &:not(#{&}-horizontal) #{&}-item-selected {
-      background-color : theming.tri-color($foreground, item-active-bg);
+      background-color : theming.tri-color($background, item-active-bg);
     }
 
     @at-root & > #{&}-item-divider {

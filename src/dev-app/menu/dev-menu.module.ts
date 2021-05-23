@@ -13,6 +13,7 @@ import { TriSwitchModule } from '@gradii/triangle/switch';
 import { DevMenu } from './dev-menu';
 import { TriDemoMenuBasicComponent } from './tri-demo-menu/tri-demo-menu-basic.component';
 import { TriDemoMenuCollapsedComponent } from './tri-demo-menu/tri-demo-menu-collapsed.component';
+import { TriDemoMenuDataSourceComponent } from './tri-demo-menu/tri-demo-menu-data-source.component';
 import { TriDemoMenuDynamicComponent } from './tri-demo-menu/tri-demo-menu-dynamic.component';
 import { TriDemoMenuExpandComponent } from './tri-demo-menu/tri-demo-menu-expand.component';
 import { TriDemoMenuInlineComponent } from './tri-demo-menu/tri-demo-menu-inline.component';
@@ -33,6 +34,7 @@ import { TriDemoMenuVerticalComponent } from './tri-demo-menu/tri-demo-menu-vert
         path: '', component: DevMenu, children: [
           {path: 'tri-demo-menu-basic', component: TriDemoMenuBasicComponent},
           {path: 'tri-demo-menu-collapsed', component: TriDemoMenuCollapsedComponent},
+          {path: 'tri-demo-menu-data-source', component: TriDemoMenuDataSourceComponent},
           {path: 'tri-demo-menu-dynamic', component: TriDemoMenuDynamicComponent},
           {path: 'tri-demo-menu-expand', component: TriDemoMenuExpandComponent},
           {path: 'tri-demo-menu-inline', component: TriDemoMenuInlineComponent},
@@ -47,6 +49,7 @@ import { TriDemoMenuVerticalComponent } from './tri-demo-menu/tri-demo-menu-vert
 
     TriDemoMenuBasicComponent,
     TriDemoMenuCollapsedComponent,
+    TriDemoMenuDataSourceComponent,
     TriDemoMenuDynamicComponent,
     TriDemoMenuExpandComponent,
     TriDemoMenuInlineComponent,
