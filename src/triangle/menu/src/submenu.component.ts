@@ -6,18 +6,8 @@
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ContentChildren,
-  EventEmitter,
-  HostBinding,
-  HostListener,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  QueryList
+  AfterViewInit, ChangeDetectorRef, Component, ContentChildren, EventEmitter, HostBinding,
+  HostListener, Input, OnDestroy, OnInit, Output, QueryList
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
@@ -29,24 +19,31 @@ import { MenuComponent } from './menu.component';
   animations: [
     trigger('fadeAnimation', [
       state('*', style({opacity: 1})),
-      transition('* => void', [animate(150, style({opacity: 0, display: 'none'}))]),
-      transition('void => *', [style({opacity: '0'}), animate(150, style({opacity: 1}))])
+      transition('* => void', [
+        animate(150, style({opacity: 0, display: 'none'}))
+      ]),
+      transition('void => *', [
+        style({opacity: '0'}), animate(150, style({opacity: 1}))
+      ])
     ]),
     trigger('expandAnimation', [
-      transition('expand => void', [style({
-        height  : '*',
-        overflow: 'hidden'
-      }), animate(150, style({height: 0}))]),
-      transition('void => expand', [style({
-        height  : 0,
-        overflow: 'hidden'
-      }), animate(150, style({height: '*'}))])
+      transition('expand => void', [
+        style({
+          height  : '*',
+          overflow: 'hidden'
+        }), animate(150, style({height: 0}))
+      ]),
+      transition('void => expand', [
+        style({
+          height  : 0,
+          overflow: 'hidden'
+        }), animate(150, style({height: '*'}))
+      ])
     ])
   ],
   template  : `
     <div
-      [class.tri-dropdown-menu-submenu-title]="isInDropDown"
-      [class.tri-menu-submenu-title]="!isInDropDown"
+      class="tri-menu-submenu-title"
       (mouseenter)="onMouseEnterEvent($event)"
       (mouseleave)="onMouseLeaveEvent($event)"
       (click)="clickSubMenuTitle()"
@@ -54,10 +51,9 @@ import { MenuComponent } from './menu.component';
       <ng-content select="[title]"></ng-content>
     </div>
     <ul
-      [class.tri-dropdown-menu]="isInDropDown"
       [@fadeAnimation]
       [@expandAnimation]="expandState"
-      [class.tri-menu]="!isInDropDown"
+      class="tri-menu"
       [class.tri-dropdown-menu-vertical]="isInDropDown"
       [class.tri-menu-vertical]="(!isInDropDown)&&(menuComponent.mode!=='inline')"
       [class.tri-menu-inline]="(!isInDropDown)&&(menuComponent.mode==='inline')"
@@ -69,11 +65,16 @@ import { MenuComponent } from './menu.component';
       (mouseenter)="onMouseEnterEvent($event)">
       <ng-content></ng-content>
     </ul>
-  `
+  `,
+  host      : {
+    '[class.tri-menu-submenu-vertical]'  : 'menuComponent.mode === "vertical"',
+    '[class.tri-menu-submenu-horizontal]': 'menuComponent.mode === "horizontal"',
+    '[class.tri-menu-submenu-inline]'    : 'menuComponent.mode === "inline"',
+  }
 })
 export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
-  isInDropDown = false;
-  level = 1;
+  isInDropDown   = false;
+  level          = 1;
   _$mouseSubject = new Subject<boolean>();
   @ContentChildren(SubMenuComponent) subMenus: QueryList<SubMenuComponent>;
 
@@ -109,24 +110,9 @@ export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
     return null;
   }
 
-  @HostBinding('class.tri-dropdown-menu-submenu')
-  get setDropDownSubmenuClass() {
-    return this.isInDropDown;
-  }
-
   @HostBinding('class.tri-menu-submenu-open')
   get setMenuSubmenuOpenClass() {
     return !this.isInDropDown && this.open;
-  }
-
-  @HostBinding('class.tri-dropdown-menu-submenu-vertical')
-  get setDropDownVerticalClass() {
-    return this.isInDropDown && this.menuComponent.mode === 'vertical';
-  }
-
-  @HostBinding('class.tri-dropdown-menu-submenu-horizontal')
-  get setDropDownHorizontalClass() {
-    return this.isInDropDown && this.menuComponent.mode === 'horizontal';
   }
 
   @HostBinding('class.tri-menu-submenu')
@@ -137,21 +123,6 @@ export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
   @HostBinding('class.tri-menu-submenu-selected')
   get setMenuSubmenuSelectedClass() {
     return this.submenuSelected || this.subItemSelected;
-  }
-
-  @HostBinding('class.tri-menu-submenu-vertical')
-  get setMenuVerticalClass() {
-    return !this.isInDropDown && this.menuComponent.mode === 'vertical';
-  }
-
-  @HostBinding('class.tri-menu-submenu-horizontal')
-  get setMenuHorizontalClass() {
-    return !this.isInDropDown && this.menuComponent.mode === 'horizontal';
-  }
-
-  @HostBinding('class.tri-menu-submenu-inline')
-  get setMenuInlineClass() {
-    return !this.isInDropDown && this.menuComponent.mode === 'inline';
   }
 
   clickSubMenuTitle() {
@@ -171,7 +142,11 @@ export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @HostListener('mouseenter', ['$event'])
   onMouseEnterEvent(e: MouseEvent) {
-    if (this.menuComponent.mode === 'horizontal' || this.menuComponent.mode === 'vertical' || this.isInDropDown) {
+    if (
+      this.menuComponent.mode === 'horizontal' ||
+      this.menuComponent.mode === 'vertical' ||
+      this.isInDropDown
+    ) {
       this._$mouseSubject.next(true);
     }
   }

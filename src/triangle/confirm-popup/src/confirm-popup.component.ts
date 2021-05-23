@@ -103,10 +103,10 @@ export class ConfirmPopupComponent extends PopoverComponent implements OnDestroy
   okText: string = 'ok';
 
   @Output()
-  onCancel = new EventEmitter()
+  onCancel = new EventEmitter();
 
   @Output()
-  onConfirm = new EventEmitter()
+  onConfirm = new EventEmitter();
 
   constructor(
     protected _changeDetectorRef: ChangeDetectorRef,
@@ -128,12 +128,12 @@ export class ConfirmPopupComponent extends PopoverComponent implements OnDestroy
 
   _onCancel() {
     this.onCancel.next();
-    this.hide(0)
+    this.hide(0);
   }
 
   _onConfirm() {
     this.onConfirm.next();
-    this.hide(0)
+    this.hide(0);
   }
 
   // _prefix = 'tri-popover-placement';

@@ -12,6 +12,7 @@ import { MenuDividerComponent } from './menu-divider.component';
 import { MenuGroupComponent } from './menu-group.component';
 import { MenuItemComponent } from './menu-item.component';
 import { MenuComponent } from './menu.component';
+import { MenuItemNodeDefDirective } from './menu.directive';
 import { SubMenuComponent } from './submenu.component';
 
 /**
@@ -39,9 +40,15 @@ import { SubMenuComponent } from './submenu.component';
  * <!-- example(tri-demo-menu-dynamic) -->
  */
 @NgModule({
-  imports     : [CommonModule, FormsModule, TriButtonModule],
-  declarations: [MenuComponent, MenuItemComponent, SubMenuComponent, MenuDividerComponent, MenuGroupComponent],
-  exports     : [MenuComponent, MenuItemComponent, SubMenuComponent, MenuDividerComponent, MenuGroupComponent]
+  imports: [CommonModule, FormsModule, TriButtonModule],
+  declarations: [
+    MenuComponent, MenuItemComponent, SubMenuComponent, MenuDividerComponent, MenuGroupComponent,
+    MenuItemNodeDefDirective,
+  ],
+  exports: [
+    MenuComponent, MenuItemComponent, SubMenuComponent, MenuDividerComponent, MenuGroupComponent,
+    MenuItemNodeDefDirective
+  ]
 })
 export class TriMenuModule {
 }

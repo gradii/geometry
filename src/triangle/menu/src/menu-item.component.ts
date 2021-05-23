@@ -5,15 +5,8 @@
  */
 
 import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  HostBinding,
-  HostListener,
-  Input,
-  Optional,
-  Renderer2
+  AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostBinding, HostListener, Input,
+  Optional, Renderer2
 } from '@angular/core';
 import { MenuComponent } from './menu.component';
 import { SubMenuComponent } from './submenu.component';
@@ -23,12 +16,17 @@ export const PADDING_BASE = 24;
 @Component({
   selector: '[tri-menu-item]',
   template: `
-    <ng-content></ng-content>`
+    <ng-content></ng-content>`,
+  host: {
+    'class': 'tri-menu-item',
+    '[class.tri-menu-item-disabled]': 'disable',
+    '[class.tri-menu-item-selected]': '_selected'
+  }
 })
 export class MenuItemComponent implements AfterViewInit {
-  level = 0;
-  padding = null;
-  isInDropDown = false;
+  level            = 0;
+  padding          = null;
+  isInDropDown     = false;
   @Input() disable = false;
 
   constructor(private _renderer: Renderer2,
@@ -60,38 +58,6 @@ export class MenuItemComponent implements AfterViewInit {
   @Input()
   set selected(value: boolean) {
     this._selected = value;
-    if (value) {
-      this._renderer.addClass(
-        this.hostElement.nativeElement,
-        this.isInDropDown ? 'tri-dropdown-menu-item-selected' : 'tri-menu-item-selected'
-      );
-    } else {
-      this._renderer.removeClass(
-        this.hostElement.nativeElement,
-        this.isInDropDown ? 'tri-dropdown-menu-item-selected' : 'tri-menu-item-selected'
-      );
-    }
-  }
-
-  /** define host class */
-  @HostBinding('class.tri-dropdown-menu-item')
-  get _isInDropDownClass() {
-    return this.isInDropDown;
-  }
-
-  @HostBinding('class.tri-menu-item')
-  get _isNotInDropDownClass() {
-    return !this.isInDropDown;
-  }
-
-  @HostBinding('class.tri-dropdown-menu-item-disabled')
-  get setDropDownDisableClass() {
-    return this.isInDropDown && this.disable;
-  }
-
-  @HostBinding('class.tri-menu-item-disabled')
-  get setMenuDisableClass() {
-    return !this.isInDropDown && this.disable;
   }
 
   @HostBinding('style.padding-left.px')
@@ -106,7 +72,9 @@ export class MenuItemComponent implements AfterViewInit {
         return this.padding;
       }
     } else if (this.menuComponent.hasSubMenu && this.menuComponent.mode === 'inline') {
-      /** not in sub menu component but root menu's mode is inline and contains submenu return default padding*/
+      /**
+       * not in sub menu component but root menu's mode is inline and contains submenu return default padding
+       */
       return PADDING_BASE;
     } else {
       return this.padding;

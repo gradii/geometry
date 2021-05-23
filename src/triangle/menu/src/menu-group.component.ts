@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, HostBinding } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: '[tri-menu-group]',
@@ -14,8 +14,10 @@ import { Component, HostBinding } from '@angular/core';
     </div>
     <ul class="tri-menu-item-group-list">
       <ng-content></ng-content>
-    </ul>`
+    </ul>`,
+  host    : {
+    'class': 'tri-menu-item-group'
+  }
 })
 export class MenuGroupComponent {
-  @HostBinding('class.tri-menu-item-group') _menuItemGroup = true;
 }

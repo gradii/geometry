@@ -5,13 +5,7 @@
  */
 
 import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  ViewEncapsulation
+  AfterViewInit, Component, Input, OnChanges, SimpleChanges, ViewEncapsulation
 } from '@angular/core';
 import { MenuItemComponent } from './menu-item.component';
 import { SubMenuComponent } from './submenu.component';
@@ -19,28 +13,48 @@ import { SubMenuComponent } from './submenu.component';
 export type Mode = 'vertical' | 'horizontal' | 'inline';
 
 @Component({
-  selector: '[tri-menu]',
+  selector     : '[tri-menu]',
   encapsulation: ViewEncapsulation.None,
-  template: `
-    <ng-content></ng-content>`,
-  styleUrls: [`../style/menu.css`]
+  template     : `
+    <ng-template [ngIf]="!dataSource||dataSource?.length===0">
+        <ng-content></ng-content>
+    </ng-template>
+    <ng-template [ngIf]="dataSource&&dataSource.length>0">
+        <div></div>
+    </ng-template>
+  `,
+  styleUrls    : [`../style/menu.css`],
+  host         : {
+    'class'                            : 'tri-menu',
+    '[class.tri-menu-vertical]'        : 'mode === "vertical"',
+    '[class.tri-menu-horizontal]'      : 'mode === "horizontal"',
+    '[class.tri-menu-inline]'          : 'mode === "inline"',
+    '[class.tri-menu-inline-collapsed]': 'mode !== "horizontal"',
+  }
 })
 export class MenuComponent implements OnChanges, AfterViewInit {
   /** set when has submenu component */
   hasSubMenu = false;
+
   /** set when in dropdown component */
   isInDropDown = false;
+
   /** collection of menu item */
   menuItems: MenuItemComponent[] = [];
+
   /** collection of sub menu */
   subMenus: SubMenuComponent[] = [];
+
   /** view init flat */
   isInit = false;
+
   /** temporary mode */
   _tempMode: Mode;
   /** opened index of array */
   _subMenusOpenIndex = [];
+
   @Input() mode: Mode = 'vertical';
+
   /**
    * Theme color `light`   `dark`
    * 主题颜色 `light`   `dark`
@@ -51,7 +65,9 @@ export class MenuComponent implements OnChanges, AfterViewInit {
    * Whether select sub menu after click
    * 点击后是否选中子菜单
    */
-  @Input() clickActive = true;
+  @Input() clickActive             = true;
+
+  @Input() dataSource: any[];
 
   /** inlineCollapsed */
   _inlineCollapsed = false;
@@ -85,60 +101,6 @@ export class MenuComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  /** define host class */
-  @HostBinding('class.tri-dropdown-menu')
-  @HostBinding('class.tri-menu-dropdown-vertical')
-  @HostBinding('class.tri-dropdown-menu-root')
-  get _isInDropDownClass() {
-    return this.isInDropDown;
-  }
-
-  @HostBinding('class.tri-menu')
-  @HostBinding('class.tri-menu-root')
-  get _isNotInDropDownClass() {
-    return !this.isInDropDown;
-  }
-
-  @HostBinding('class.tri-dropdown-menu-light')
-  get setDropDownThemeLightClass() {
-    return this.isInDropDown && this.theme === 'light';
-  }
-
-  @HostBinding('class.tri-dropdown-menu-dark')
-  get setDropDownThemeDarkClass() {
-    return this.isInDropDown && this.theme === 'dark';
-  }
-
-  @HostBinding('class.tri-menu-light')
-  get setMenuThemeLightClass() {
-    return !this.isInDropDown && this.theme === 'light';
-  }
-
-  @HostBinding('class.tri-menu-dark')
-  get setMenuThemeDarkClass() {
-    return !this.isInDropDown && this.theme === 'dark';
-  }
-
-  @HostBinding('class.tri-menu-vertical')
-  get setMenuVerticalClass() {
-    return !this.isInDropDown && this.mode === 'vertical';
-  }
-
-  @HostBinding('class.tri-menu-horizontal')
-  get setMenuHorizontalClass() {
-    return !this.isInDropDown && this.mode === 'horizontal';
-  }
-
-  @HostBinding('class.tri-menu-inline')
-  get setMenuInlineClass() {
-    return !this.isInDropDown && this.mode === 'inline';
-  }
-
-  @HostBinding('class.tri-menu-inline-collapsed')
-  get setMenuInlineCollapsedClass() {
-    return !this.isInDropDown && this.mode !== 'horizontal' && this.inlineCollapsed;
-  }
-
   ngOnChanges(changes: SimpleChanges) {
     for (const propName in changes) {
       if (propName === 'mode') {
@@ -153,7 +115,7 @@ export class MenuComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.isInit = true;
+    this.isInit    = true;
     this._tempMode = this.mode;
   }
 

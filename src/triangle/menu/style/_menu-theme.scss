@@ -107,90 +107,90 @@ $menu-dark-submenu-bg : #333 !default;
     }
   }
 
-  // dark theme
-  .#{$menu-prefix-cls} {
-    @at-root &-dark,
-    &-dark #{&}-sub {
-      color      : theming.tri-color($foreground, text-color-secondary-dark);
-      background : $menu-dark-bg;
-    }
-
-    @at-root &-dark #{&}-inline#{&}-sub {
-      background : $menu-dark-submenu-bg;
-    }
-
-    @at-root &-dark#{&}-horizontal {
-      border-bottom-color : $menu-dark-bg;
-    }
-
-    @at-root &-dark#{&}-horizontal > #{&}-item,
-    &-dark#{&}-horizontal > #{&}-submenu {
-      border-color  : $menu-dark-bg;
-      border-bottom : 0;
-    }
-
-    @at-root &-dark #{&}-item,
-    &-dark #{&}-item-group-title,
-    &-dark #{&}-item > a {
-      color : theming.tri-color($foreground, text-color-secondary-dark);
-    }
-
-    @at-root &-dark#{&}-inline,
-    &-dark#{&}-vertical {
-      border-right : 0;
-    }
-
-    @at-root &-dark#{&}-inline #{&}-item,
-    &-dark#{&}-vertical #{&}-item {
-      border-right : 0;
-      margin-left  : 0;
-      left         : 0;
-      @at-root &:after {
-        border-right : 0;
-      }
-    }
-
-    @at-root &-dark #{&}-item:hover,
-    &-dark #{&}-item-active,
-    &-dark #{&}-submenu-active,
-    &-dark:not(#{&}-inline) #{&}-submenu-open,
-    &-dark #{&}-submenu-selected,
-    &-dark #{&}-submenu:hover,
-    &-dark #{&}-submenu-title:hover {
-      background-color : transparent;
-      color            : #fff;
-      > a {
-        color : #fff;
-      }
-    }
-
-    @at-root &-dark #{&}-item-selected {
-      border-right : 0;
-      color        : #fff;
-      @at-root &:after {
-        border-right : 0;
-      }
-      > a,
-      > a:hover {
-        color : #fff;
-      }
-    }
-
-    @at-root &#{&}-dark #{&}-item-selected {
-      background-color : theming.tri-color($foreground, primary-color);
-    }
-
-    // Disabled state sets text to dark gray and nukes hover/tab effects
-    @at-root &-dark #{&}-item-disabled,
-    &-dark #{&}-submenu-disabled {
-      @at-root &,
-      & > a {
-        opacity : 0.8;
-        color   : theming.tri-color($foreground, disabled-color-dark) !important;
-      }
-      > .#{$menu-prefix-cls}-submenu-title {
-        color : theming.tri-color($foreground, disabled-color-dark) !important;
-      }
-    }
-  }
+  //// dark theme
+  //.#{$menu-prefix-cls} {
+  //  @at-root &-dark,
+  //  &-dark #{&}-sub {
+  //    color      : theming.tri-color($foreground, text-color-secondary-dark);
+  //    background : $menu-dark-bg;
+  //  }
+  //
+  //  @at-root &-dark #{&}-inline#{&}-sub {
+  //    background : $menu-dark-submenu-bg;
+  //  }
+  //
+  //  @at-root &-dark#{&}-horizontal {
+  //    border-bottom-color : $menu-dark-bg;
+  //  }
+  //
+  //  @at-root &-dark#{&}-horizontal > #{&}-item,
+  //  &-dark#{&}-horizontal > #{&}-submenu {
+  //    border-color  : $menu-dark-bg;
+  //    border-bottom : 0;
+  //  }
+  //
+  //  @at-root &-dark #{&}-item,
+  //  &-dark #{&}-item-group-title,
+  //  &-dark #{&}-item > a {
+  //    color : theming.tri-color($foreground, text-color-secondary-dark);
+  //  }
+  //
+  //  @at-root &-dark#{&}-inline,
+  //  &-dark#{&}-vertical {
+  //    border-right : 0;
+  //  }
+  //
+  //  @at-root &-dark#{&}-inline #{&}-item,
+  //  &-dark#{&}-vertical #{&}-item {
+  //    border-right : 0;
+  //    margin-left  : 0;
+  //    left         : 0;
+  //    @at-root &:after {
+  //      border-right : 0;
+  //    }
+  //  }
+  //
+  //  @at-root &-dark #{&}-item:hover,
+  //  &-dark #{&}-item-active,
+  //  &-dark #{&}-submenu-active,
+  //  &-dark:not(#{&}-inline) #{&}-submenu-open,
+  //  &-dark #{&}-submenu-selected,
+  //  &-dark #{&}-submenu:hover,
+  //  &-dark #{&}-submenu-title:hover {
+  //    background-color : transparent;
+  //    color            : #fff;
+  //    > a {
+  //      color : #fff;
+  //    }
+  //  }
+  //
+  //  @at-root &-dark #{&}-item-selected {
+  //    border-right : 0;
+  //    color        : #fff;
+  //    @at-root &:after {
+  //      border-right : 0;
+  //    }
+  //    > a,
+  //    > a:hover {
+  //      color : #fff;
+  //    }
+  //  }
+  //
+  //  @at-root &#{&}-dark #{&}-item-selected {
+  //    background-color : theming.tri-color($foreground, primary-color);
+  //  }
+  //
+  //  // Disabled state sets text to dark gray and nukes hover/tab effects
+  //  @at-root &-dark #{&}-item-disabled,
+  //  &-dark #{&}-submenu-disabled {
+  //    @at-root &,
+  //    & > a {
+  //      opacity : 0.8;
+  //      color   : theming.tri-color($foreground, disabled-color-dark) !important;
+  //    }
+  //    > .#{$menu-prefix-cls}-submenu-title {
+  //      color : theming.tri-color($foreground, disabled-color-dark) !important;
+  //    }
+  //  }
+  //}
 }

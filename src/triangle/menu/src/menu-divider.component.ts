@@ -4,13 +4,15 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, HostBinding } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: '[tri-menu-divider]',
   template: `
-    <ng-content></ng-content>`
+    <ng-content></ng-content>`,
+  host    : {
+    'class': 'tri-dropdown-menu-item-divider'
+  }
 })
 export class MenuDividerComponent {
-  @HostBinding('class.tri-dropdown-menu-item-divider') _dropdownMenuItemDivider = true;
 }

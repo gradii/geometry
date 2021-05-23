@@ -16,11 +16,11 @@ import {
   selector: 'tri-demo-card-simple',
   template: `
     <tri-card style="width:300px;">
-      <ng-template triCardBody>
+      <tri-card-body>
         <p>Card content</p>
         <p>Card content</p>
         <p>Card content</p>
-      </ng-template>
+      </tri-card-body>
     </tri-card>
   `,
   styles  : []

@@ -43,4 +43,4 @@ cp('-R', webPackagePath, distPath);
 chmod('-R', 'u+w', distPath);
 
 // Run the Firebase CLI to deploy the hosting target.
-exec(`yarn -s firebase deploy --only hosting`);
+// exec(`yarn -s firebase deploy --only hosting`);

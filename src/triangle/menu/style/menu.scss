@@ -15,6 +15,10 @@ $menu-font-size       : v.$font-size-base !default;
   line-height   : 46px;
   transition    : background .3s v.$ease-in-out, width .15s v.$ease-in-out;
 
+  ul, li {
+    list-style: none;
+  }
+
   @at-root &-hidden {
     display : none;
   }
@@ -379,34 +383,34 @@ $menu-font-size       : v.$font-size-base !default;
   }
 }
 
-// dark theme
-.#{$menu-prefix-cls} {
-
-  @at-root &-dark#{&}-inline #{&}-item,
-  &-dark#{&}-vertical #{&}-item {
-    border-right : 0;
-    margin-left  : 0;
-    left         : 0;
-    @at-root &:after {
-      border-right : 0;
-    }
-  }
-
-  @at-root &-dark #{&}-item-selected {
-    border-right : 0;
-    @at-root &:after {
-      border-right : 0;
-    }
-  }
-
-  // Disabled state sets text to dark gray and nukes hover/tab effects
-  @at-root &-dark #{&}-item-disabled,
-  &-dark #{&}-submenu-disabled {
-    @at-root &,
-    & > a {
-      opacity : 0.8;
-    }
-    > .#{$menu-prefix-cls}-submenu-title {
-    }
-  }
-}
+//// dark theme
+//.#{$menu-prefix-cls} {
+//
+//  @at-root &-dark#{&}-inline #{&}-item,
+//  &-dark#{&}-vertical #{&}-item {
+//    border-right : 0;
+//    margin-left  : 0;
+//    left         : 0;
+//    @at-root &:after {
+//      border-right : 0;
+//    }
+//  }
+//
+//  @at-root &-dark #{&}-item-selected {
+//    border-right : 0;
+//    @at-root &:after {
+//      border-right : 0;
+//    }
+//  }
+//
+//  // Disabled state sets text to dark gray and nukes hover/tab effects
+//  @at-root &-dark #{&}-item-disabled,
+//  &-dark #{&}-submenu-disabled {
+//    @at-root &,
+//    & > a {
+//      opacity : 0.8;
+//    }
+//    > .#{$menu-prefix-cls}-submenu-title {
+//    }
+//  }
+//}

@@ -45,6 +45,13 @@ import {
             <ul>
               <li tri-menu-item>Option 7</li>
               <li tri-menu-item>Option 8</li>
+              <li tri-submenu>
+                <span title>Submenu Nest</span>
+                <ul>
+                  <li tri-menu-item>Option 10</li>
+                  <li tri-menu-item>Option 11</li>
+                </ul>
+              </li>
             </ul>
           </li>
         </ul>
