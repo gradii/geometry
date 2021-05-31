@@ -1,0 +1,31 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "drag-and-drop",
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
+    assets = [
+        "tri-demo-dnd-nest/shared/list-item/list-item.html",
+        "dev-drag-and-drop.html",
+        ":dev_drag_and_drop_scss",
+        ":list_item_scss"
+    ],
+    deps = [
+        "//src/triangle/icon",
+        "@npm//@angular/forms",
+        "@npm//@angular/router",
+        "@npm//@angular/cdk",
+        "@npm//uuid"
+    ],
+)
+
+sass_binary(
+    name = "dev_drag_and_drop_scss",
+    src = "dev-drag-and-drop.scss",
+)
+
+sass_binary(
+    name = "list_item_scss",
+    src = "tri-demo-dnd-nest/shared/list-item/list-item.scss",
+)

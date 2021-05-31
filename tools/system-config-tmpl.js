@@ -29,6 +29,7 @@ var pathMapping = {
   'moment'     : 'node:moment/min/moment-with-locales.min.js',
   'html2canvas': 'node:html2canvas/dist/html2canvas.js',
   'lodash'     : 'node:lodash/lodash.min.js',
+  'uuid'       : 'node:uuid/dist/umd/uuid.min.js',
   'date-fns'   : 'date-fns_bundle.umd.js',
 
   'rxjs'          : 'node:rxjs/bundles/rxjs.umd.min.js',

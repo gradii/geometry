@@ -51,6 +51,8 @@ ng_module(
 
         "//src/dev-app/diagram",
 
+        "//src/dev-app/drag-and-drop",
+
         "//src/triangle/core",
         "@npm//@angular/cdk",
         "@npm//@angular/router",

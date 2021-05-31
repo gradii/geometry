@@ -142,6 +142,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'tree-select',
         loadChildren: '/tree-select/dev-tree-select.module#DevTreeSelectModule'
+      },
+      {
+        path        : 'drag-and-drop',
+        loadChildren: '/drag-and-drop/dev-drag-and-drop.module#DevDragAndDropModule'
       }
     ]
   },
