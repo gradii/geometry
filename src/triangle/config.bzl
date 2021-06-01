@@ -26,6 +26,7 @@ TRIANGLE_ENTRYPOINTS = [
     "desc-list",
     "diagram",
     "dialog",
+    "dnd",
     "draggable",
     "drawer",
     "dropdown",
