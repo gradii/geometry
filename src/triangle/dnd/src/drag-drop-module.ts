@@ -37,5 +37,5 @@ import { DragDrop } from './drag-drop';
     DragDrop,
   ]
 })
-export class DragDropModule {
+export class TriDndModule {
 }

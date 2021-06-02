@@ -45,8 +45,8 @@ export const TRI_DROP_LIST = new InjectionToken<TriDropList>('TriDropList');
 
 /** Container that wraps a set of draggable items. */
 @Directive({
-  selector : '[cdkDropList], tri-drop-list',
-  exportAs : 'cdkDropList',
+  selector : '[triDropList], tri-drop-list',
+  exportAs : 'triDropList',
   providers: [
     // Prevent child drop lists from picking up the same group as their parent.
     {provide: TRI_DROP_LIST_GROUP, useValue: undefined},
@@ -78,14 +78,14 @@ export class TriDropList<T = any> implements OnDestroy {
    * container's items can be transferred. Can either be references to other drop containers,
    * or their unique IDs.
    */
-  @Input('cdkDropListConnectedTo')
+  @Input('triDropListConnectedTo')
   connectedTo: (TriDropList | string)[] | TriDropList | string = [];
 
   /** Arbitrary data to attach to this container. */
-  @Input('cdkDropListData') data: T;
+  @Input('triDropListData') data: T;
 
   /** Direction in which the list is oriented. */
-  @Input('cdkDropListOrientation') orientation: DropListOrientation;
+  @Input('triDropListOrientation') orientation: DropListOrientation;
 
   /**
    * Unique ID for the drop zone. Can be used as a reference
@@ -94,10 +94,10 @@ export class TriDropList<T = any> implements OnDestroy {
   @Input() id: string = `tri-drop-list-${_uniqueIdCounter++}`;
 
   /** Locks the position of the draggable elements inside the container along the specified axis. */
-  @Input('cdkDropListLockAxis') lockAxis: DragAxis;
+  @Input('triDropListLockAxis') lockAxis: DragAxis;
 
   /** Whether starting a dragging sequence from this container is disabled. */
-  @Input('cdkDropListDisabled')
+  @Input('triDropListDisabled')
   get disabled(): boolean {
     return this._disabled || (!!this._group && this._group.disabled);
   }
@@ -113,47 +113,47 @@ export class TriDropList<T = any> implements OnDestroy {
   private _disabled: boolean;
 
   /** Whether sorting within this drop list is disabled. */
-  @Input('cdkDropListSortingDisabled')
+  @Input('triDropListSortingDisabled')
   sortingDisabled: boolean;
 
   /**
    * Function that is used to determine whether an item
    * is allowed to be moved into a drop container.
    */
-  @Input('cdkDropListEnterPredicate')
+  @Input('triDropListEnterPredicate')
   enterPredicate: (drag: TriDrag, drop: TriDropList) => boolean = () => true;
 
   /** Functions that is used to determine whether an item can be sorted into a particular index. */
-  @Input('cdkDropListSortPredicate')
+  @Input('triDropListSortPredicate')
   sortPredicate: (index: number, drag: TriDrag, drop: TriDropList) => boolean = () => true;
 
   /** Whether to auto-scroll the view when the user moves their pointer close to the edges. */
-  @Input('cdkDropListAutoScrollDisabled')
+  @Input('triDropListAutoScrollDisabled')
   autoScrollDisabled: boolean;
 
   /** Number of pixels to scroll for each frame when auto-scrolling an element. */
-  @Input('cdkDropListAutoScrollStep')
+  @Input('triDropListAutoScrollStep')
   autoScrollStep: number;
 
   /** Emits when the user drops an item inside the container. */
-  @Output('cdkDropListDropped')
+  @Output('triDropListDropped')
   readonly dropped: EventEmitter<TriDragDrop<T, any>> = new EventEmitter<TriDragDrop<T, any>>();
 
   /**
    * Emits when the user has moved a new drag item into this container.
    */
-  @Output('cdkDropListEntered')
+  @Output('triDropListEntered')
   readonly entered: EventEmitter<TriDragEnter<T>> = new EventEmitter<TriDragEnter<T>>();
 
   /**
    * Emits when the user removes an item from the container
    * by dragging it into another container.
    */
-  @Output('cdkDropListExited')
+  @Output('triDropListExited')
   readonly exited: EventEmitter<TriDragExit<T>> = new EventEmitter<TriDragExit<T>>();
 
   /** Emits as the user is swapping items while actively dragging. */
-  @Output('cdkDropListSorted')
+  @Output('triDropListSorted')
   readonly sorted: EventEmitter<TriDragSortEvent<T>> = new EventEmitter<TriDragSortEvent<T>>();
 
   /**
@@ -176,7 +176,7 @@ export class TriDropList<T = any> implements OnDestroy {
     @Optional() @Inject(TRI_DRAG_CONFIG) config?: DragDropConfig) {
 
     if (typeof ngDevMode === 'undefined' || ngDevMode) {
-      assertElementNode(element.nativeElement, 'cdkDropList');
+      assertElementNode(element.nativeElement, 'triDropList');
     }
 
     this._dropListRef      = dragDrop.createDropList(element);

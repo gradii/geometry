@@ -11,9 +11,11 @@ ng_module(
         ":dev_drag_and_drop_scss",
         ":list_item_scss",
         ":tri_demo_drag_and_drop_child_groups_with_monkey_patch_scss",
+        ":tri_demo_dnd_not_cdk_component_scss",
     ],
     deps = [
         "//src/triangle/icon",
+        "//src/triangle/dnd",
         "@npm//@angular/forms",
         "@npm//@angular/router",
         "@npm//@angular/cdk",
@@ -36,3 +38,7 @@ sass_binary(
     src = "tri-demo-drag-and-drop-child-groups-with-monkey-patch/tri-demo-drag-and-drop-child-groups-with-monkey-patch.component.scss",
 )
 
+sass_binary(
+    name = "tri_demo_dnd_not_cdk_component_scss",
+    src = "tri-demo-dnd-not-cdk/tri-demo-dnd-not-cdk.component.scss",
+)

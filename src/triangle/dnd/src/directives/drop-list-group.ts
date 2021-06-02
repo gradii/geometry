@@ -17,14 +17,14 @@ export const TRI_DROP_LIST_GROUP =
   new InjectionToken<TriDropListGroup<unknown>>('TriDropListGroup');
 
 /**
- * Declaratively connects sibling `cdkDropList` instances together. All of the `cdkDropList`
- * elements that are placed inside a `cdkDropListGroup` will be connected to each other
- * automatically. Can be used as an alternative to the `cdkDropListConnectedTo` input
- * from `cdkDropList`.
+ * Declaratively connects sibling `triDropList` instances together. All of the `triDropList`
+ * elements that are placed inside a `triDropListGroup` will be connected to each other
+ * automatically. Can be used as an alternative to the `triDropListConnectedTo` input
+ * from `triDropList`.
  */
 @Directive({
-  selector : '[cdkDropListGroup]',
-  exportAs : 'cdkDropListGroup',
+  selector : '[triDropListGroup]',
+  exportAs : 'triDropListGroup',
   providers: [{provide: TRI_DROP_LIST_GROUP, useExisting: TriDropListGroup}],
 })
 export class TriDropListGroup<T> implements OnDestroy {
@@ -32,7 +32,7 @@ export class TriDropListGroup<T> implements OnDestroy {
   readonly _items = new Set<T>();
 
   /** Whether starting a dragging sequence from inside this group is disabled. */
-  @Input('cdkDropListGroupDisabled')
+  @Input('triDropListGroupDisabled')
   get disabled(): boolean {
     return this._disabled;
   }

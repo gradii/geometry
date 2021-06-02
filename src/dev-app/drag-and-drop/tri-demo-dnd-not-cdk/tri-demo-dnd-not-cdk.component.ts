@@ -4,43 +4,36 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem
-} from '@angular/cdk/drag-drop';
 import { Component, QueryList, ViewChildren } from '@angular/core';
+import { moveItemInArray, transferArrayItem, TriDragDrop, TriDropList } from '@gradii/triangle/dnd';
 import { asapScheduler } from 'rxjs';
 
-
-import { installPatch } from './nested-drag-drop-patch';
-
-installPatch();
-
 @Component({
-  selector : 'tri-demo-drag-and-drop-child-groups-with-monkey-patch',
+  selector : 'tri-demo-dnd-not-Tri',
   template : `
-    <div cdkDropListGroup>
+    <div triDropListGroup>
       <div class="example-container">
         <h2>To do</h2>
 
         <div
-          cdkDropList
-          [cdkDropListData]="todo"
+          triDropList
+          [triDropListData]="todo"
           class="example-list"
-          (cdkDropListDropped)="drop($event)"
-          [cdkDropListConnectedTo]="dls"
+          (triDropListDropped)="drop($event)"
+          [triDropListConnectedTo]="dls"
         >
-          <div class="example-box" *ngFor="let item of todo" cdkDrag>
+          <div class="example-box" *ngFor="let item of todo" triDrag>
             <div *ngIf="!isArray(item); else arrayView">{{item}}</div>
             <ng-template #arrayView>
               <div class="example-container">
                 <div
-                  cdkDropList
-                  [cdkDropListData]="item"
+                  triDropList
+                  [triDropListData]="item"
                   class="example-list"
-                  (cdkDropListDropped)="drop($event)"
-                  [cdkDropListConnectedTo]="dls"
+                  (triDropListDropped)="drop($event)"
+                  [triDropListConnectedTo]="dls"
                 >
-                  <div class="example-box" *ngFor="let innerItem of item" cdkDrag>
+                  <div class="example-box" *ngFor="let innerItem of item" triDrag>
                     {{innerItem}}
                   </div>
                 </div>
@@ -50,15 +43,10 @@ installPatch();
         </div>
       </div>
     </div>
-
-    <!-- Copyright 2019 Google Inc. All Rights Reserved.
-        Use of this source code is governed by an MIT-style license that
-        can be found in the LICENSE file at http://angular.io/license -->
-
   `,
-  styleUrls: ['tri-demo-drag-and-drop-child-groups-with-monkey-patch.component.css'],
+  styleUrls: ['tri-demo-dnd-not-cdk.component.css']
 })
-export class TriDemoDragAndDropChildGroupsWithMonkeyPatchComponent {
+export class TriDemoDndNotTriComponent {
   todo = [
     'Get to work',
     [
@@ -78,12 +66,12 @@ export class TriDemoDragAndDropChildGroupsWithMonkeyPatchComponent {
     'Fall asleep'
   ];
 
-  @ViewChildren(CdkDropList)
-  private dlq: QueryList<CdkDropList>;
+  @ViewChildren(TriDropList)
+  private dlq: QueryList<TriDropList>;
 
-  public dls: CdkDropList[] = [];
+  public dls: TriDropList[] = [];
 
-  drop(event: CdkDragDrop<any>) {
+  drop(event: TriDragDrop<any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data as string[], event.previousIndex, event.currentIndex);
     } else {
@@ -99,7 +87,7 @@ export class TriDemoDragAndDropChildGroupsWithMonkeyPatchComponent {
   }
 
   ngAfterViewInit() {
-    const ldls: CdkDropList[] = [];
+    const ldls: TriDropList[] = [];
 
     this.dlq.forEach((dl) => {
       console.log('found DropList ' + dl.id);
