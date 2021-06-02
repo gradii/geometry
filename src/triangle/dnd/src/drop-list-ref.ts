@@ -20,6 +20,7 @@ import { DragRefInternal as DragRef, Point } from './drag-ref';
 import { combineTransforms, DragCSSStyleDeclaration } from './drag-styling';
 import { moveItemInArray } from './utils/drag-utils';
 import { ParentPositionTracker } from './parent-position-tracker';
+import { orderByHierarchy } from './utils/hierarchy';
 
 /**
  * Proximity, as a ratio to width/height, at which a
@@ -828,7 +829,38 @@ export class DropListRef<T = any> {
    * @param y Position of the item along the Y axis.
    */
   _getSiblingContainerFromPosition(item: DragRef, x: number, y: number): DropListRef | undefined {
-    return this._siblings.find(sibling => sibling._canReceive(item, x, y));
+    // Possible targets include siblings and 'this'
+    let targets = [this, ...this._siblings];
+
+    // Only consider targets where the drag postition is within the client rect
+    // (this avoids calling enterPredicate on each possible target)
+    let matchingTargets = targets.filter(ref => {
+      return ref._clientRect && isInsideClientRect(ref._clientRect, x, y);
+    });
+
+    // Stop if no targets match the coordinates
+    if (matchingTargets.length == 0) {
+      return undefined;
+    }
+
+    // Order candidates by DOM hierarchy and z-index
+    let orderedMatchingTargets = orderByHierarchy(matchingTargets);
+
+    // The drop target is the last matching target in the list
+    let matchingTarget = orderedMatchingTargets[orderedMatchingTargets.length - 1];
+
+    // Only return matching target if it is a sibling
+    if (matchingTarget === this) {
+      return undefined;
+    }
+
+    // Can the matching target receive the item?
+    if (!matchingTarget._canReceive(item, x, y)) {
+      return undefined;
+    }
+
+    // Return matching target
+    return matchingTarget;
   }
 
   /**
@@ -933,7 +965,7 @@ export class DropListRef<T = any> {
    */
   private _getShadowRoot(): DocumentOrShadowRoot {
     if (!this._cachedShadowRoot) {
-      const shadowRoot       = _getShadowRoot(coerceElement(this.element));
+      const shadowRoot       = _getShadowRoot(coerceElement(this.element)) as unknown as DocumentOrShadowRoot;
       this._cachedShadowRoot = shadowRoot || this._document;
     }
 
