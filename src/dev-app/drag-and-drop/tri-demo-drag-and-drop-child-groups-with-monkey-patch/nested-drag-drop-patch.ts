@@ -12,6 +12,7 @@ export function installPatch() {
     y: number
   ): DropListRef | undefined {
     // Possible targets include siblings and 'this'
+    // @ts-ignore
     let targets = [this, ...this._siblings];
 
     // Only consider targets where the drag postition is within the client rect
