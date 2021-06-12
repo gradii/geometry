@@ -146,6 +146,14 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'drag-and-drop',
         loadChildren: '/drag-and-drop/dev-drag-and-drop.module#DevDragAndDropModule'
+      },
+      {
+        path        : 'sidenav',
+        loadChildren: '/sidenav/dev-sidenav.module#DevSidenavModule'
+      },
+      {
+        path        : 'navbar',
+        loadChildren: '/navbar/dev-navbar.module#DevNavbarModule'
       }
     ]
   },

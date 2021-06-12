@@ -5,13 +5,7 @@
  */
 
 import {
-  Component,
-  EventEmitter,
-  forwardRef,
-  HostListener,
-  Input,
-  Output,
-  ViewEncapsulation
+  Component, EventEmitter, forwardRef, HostListener, Input, Output, ViewEncapsulation
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { isFunction } from '@gradii/triangle/util';
@@ -28,7 +22,7 @@ import { isFunction } from '@gradii/triangle/util';
             [class.tri-checkbox-checked]="_checked && !indeterminate"
             [class.tri-checkbox-focused]="_focused"
             [class.tri-checkbox-disabled]="disabled"
-            [class.tri-checkbox-indeterminate]="indeterminate">
+            [class.tri-checkbox-indeterminate]="!_checked && indeterminate">
         <span class="tri-checkbox-inner"></span>
         <input type="checkbox"
                class="tri-checkbox-input"
@@ -54,14 +48,14 @@ import { isFunction } from '@gradii/triangle/util';
   host         : {
     'class': 'tri-checkbox-wrapper'
   },
-  styleUrls: [
+  styleUrls    : [
     '../style/checkbox.css'
   ]
 })
 export class CheckboxComponent implements ControlValueAccessor {
 
   _el: HTMLElement;
-  _focused = false;
+  _focused                      = false;
   // ngModel Access
   onChange: Function;
   onTouched: Function;
@@ -69,16 +63,16 @@ export class CheckboxComponent implements ControlValueAccessor {
    * Whether disable
    * 是否禁用
    */
-  @Input() disabled = false;
+  @Input() disabled             = false;
   /**
    * Set indeterminate sate, related to ant-checkbox-indeterminate style
    * 设置 indeterminate 状态，只负责样式控制
    */
-  @Input() indeterminate = false;
+  @Input() indeterminate        = false;
   @Input() label: string;
   @Input() value: any;
-  @Input() initValue: boolean = true;
-  @Output() change = new EventEmitter<any>();
+  @Input() initValue: boolean   = true;
+  @Output() change              = new EventEmitter<any>();
   @Output() indeterminateChange = new EventEmitter<any>();
 
   constructor() {

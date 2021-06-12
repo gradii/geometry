@@ -1,0 +1,26 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "navbar",
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
+    assets = [
+        "dev-navbar.html",
+        ":dev_navbar_scss",
+    ] + glob(["tri-demo-navbar/**/*.html"]),
+    deps = [
+        "//src/triangle/navbar",
+        "//src/triangle/button",
+        "//src/triangle/core",
+        "//src/triangle/icon",
+        "@npm//@angular/common",
+        "@npm//@angular/forms",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_navbar_scss",
+    src = "dev-navbar.scss",
+)

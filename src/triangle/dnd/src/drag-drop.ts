@@ -10,7 +10,7 @@ import { DOCUMENT } from '@angular/common';
 import { ElementRef, Inject, Injectable, NgZone } from '@angular/core';
 import { DragDropRegistry } from './drag-drop-registry';
 import { DragRef, DragRefConfig } from './drag-ref';
-import { DropListRef } from './drop-list-ref';
+import { DropContainerRef } from './drop-container-ref';
 
 /** Default configuration to be used when creating a `DragRef`. */
 const DEFAULT_CONFIG = {
@@ -27,7 +27,7 @@ export class DragDrop {
     @Inject(DOCUMENT) private _document: any,
     private _ngZone: NgZone,
     private _viewportRuler: ViewportRuler,
-    private _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>) {
+    private _dragDropRegistry: DragDropRegistry<DragRef, DropContainerRef>) {
   }
 
   /**
@@ -46,8 +46,8 @@ export class DragDrop {
    * Turns an element into a drop list.
    * @param element Element to which to attach the drop list functionality.
    */
-  createDropList<T = any>(element: ElementRef<HTMLElement> | HTMLElement): DropListRef<T> {
-    return new DropListRef<T>(element, this._dragDropRegistry, this._document, this._ngZone,
+  createDropList<T = any>(element: ElementRef<HTMLElement> | HTMLElement): DropContainerRef<T> {
+    return new DropContainerRef<T>(element, this._dragDropRegistry, this._document, this._ngZone,
       this._viewportRuler);
   }
 }

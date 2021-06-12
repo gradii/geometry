@@ -1,0 +1,32 @@
+<ng-container *ngIf="shouldRun">
+  <tri-navbar class="example-header">Header</tri-navbar>
+
+  <tri-sidenav-container class="example-container">
+    <tri-sidenav #sidenav mode="side" opened class="example-sidenav"
+                 [fixedInViewport]="options.value.fixed" [fixedTopGap]="options.value.top"
+                 [fixedBottomGap]="options.value.bottom">
+      {{options.value.fixed ? 'Fixed' : 'Non-fixed'}} Sidenav
+    </tri-sidenav>
+
+    <tri-sidenav-content [formGroup]="options">
+      <p>
+        <tri-checkbox formControlName="fixed">Fixed</tri-checkbox>
+      </p>
+      <div>
+        <label>Top gap</label>
+        <input triInput type="number" formControlName="top"/>
+      </div>
+      <div>
+        <label>Bottom gap</label>
+        <input triInput type="number" formControlName="bottom"/>
+      </div>
+      <p>
+        <button tri-button (click)="sidenav.toggle()">Toggle</button>
+      </p>
+    </tri-sidenav-content>
+  </tri-sidenav-container>
+
+  <tri-navbar class="example-footer">Footer</tri-navbar>
+</ng-container>
+
+<div *ngIf="!shouldRun">Please open on StackBlitz to see result</div>

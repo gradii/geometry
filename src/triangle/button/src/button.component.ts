@@ -150,16 +150,6 @@ export class ButtonComponent implements AfterContentInit {
     this._ghost = value;
   }
 
-  /**
-   * Set button type, Optional: `primary`, `dashed`, `danger`, `default`
-   * 设置按钮类型，可选值为  `primary`   `dashed`   `danger`   `default`
-   * @param value
-   * @deprecated
-   */
-  @Input('type')
-  set deprecatedType(value: ButtonColor) {
-    this._color = value;
-  }
 
   get _innerIElement() {
     return this._el.querySelector('i');

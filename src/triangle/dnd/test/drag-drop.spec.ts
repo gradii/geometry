@@ -3,7 +3,7 @@ import {fakeAsync, TestBed, inject} from '@angular/core/testing';
 import {DragDropModule} from '../src/drag-drop-module';
 import {DragDrop} from '../src/drag-drop';
 import {DragRef} from '../src/drag-ref';
-import {DropListRef} from '../src/drop-list-ref';
+import {DropContainerRef} from '../src/drop-container-ref';
 
 describe('DragDrop', () => {
   let service: DragDrop;
@@ -34,7 +34,7 @@ describe('DragDrop', () => {
     fixture.detectChanges();
     const ref = service.createDropList(fixture.componentInstance.elementRef);
 
-    expect(ref instanceof DropListRef).toBe(true);
+    expect(ref instanceof DropContainerRef).toBe(true);
   });
 });
 

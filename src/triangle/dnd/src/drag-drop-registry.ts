@@ -21,7 +21,7 @@ const activeCapturingEventOptions = normalizePassiveListenerOptions({
  * instances, and manages global event listeners on the `document`.
  * @docs-private
  */
-// Note: this class is generic, rather than referencing TriDrag and TriDropList directly, in order
+// Note: this class is generic, rather than referencing TriDrag and TriDropContainer directly, in order
 // to avoid circular imports. If we were to reference them here, importing the registry into the
 // classes that are registering themselves will introduce a circular import.
 @Injectable({providedIn: 'root'})

@@ -31,7 +31,9 @@ ng_module(
 sass_library(
     name = "sidenav_scss_lib",
     srcs = glob(["**/_*.scss"]),
-    deps = ["//src/triangle/core:core_scss_lib"],
+    deps = [
+      "//src/triangle/core:core_scss_lib",
+    ],
 )
 
 sass_binary(

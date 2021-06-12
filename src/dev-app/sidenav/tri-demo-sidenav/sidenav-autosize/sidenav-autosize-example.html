@@ -1,0 +1,16 @@
+<tri-drawer-container class="example-container" autosize>
+  <tri-drawer #drawer="triDrawer" class="example-sidenav" mode="side">
+    <p>Auto-resizing sidenav</p>
+    <p *ngIf="showFiller">Lorem, ipsum dolor sit amet consectetur.</p>
+    <button (click)="showFiller = !showFiller" tri-button>
+      Toggle extra text
+    </button>
+  </tri-drawer>
+
+  <div class="example-sidenav-content">
+    <button attr.type="button" tri-button (click)="drawer.toggle()">
+      Toggle sidenav
+    </button>
+  </div>
+
+</tri-drawer-container>

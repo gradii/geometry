@@ -1,0 +1,7 @@
+<tri-sidenav-container class="example-container" *ngIf="shouldRun">
+  <tri-sidenav opened mode="side">Start content</tri-sidenav>
+  <tri-sidenav opened mode="side" position="end">End content</tri-sidenav>
+  Implicit main content
+</tri-sidenav-container>
+
+<div *ngIf="!shouldRun">Please open on Stackblitz to see result</div>

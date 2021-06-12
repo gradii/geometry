@@ -1,0 +1,17 @@
+<tri-sidenav-container class="example-container" *ngIf="shouldRun">
+  <tri-sidenav #sidenav mode="side" [(opened)]="opened" (opened)="events.push('open!')"
+               (closed)="events.push('close!')">
+    Sidenav content
+  </tri-sidenav>
+
+  <tri-sidenav-content>
+    <p><tri-checkbox [(ngModel)]="opened">sidenav.opened</tri-checkbox></p>
+    <p><button tri-button (click)="sidenav.toggle()">sidenav.toggle()</button></p>
+    <p>Events:</p>
+    <div class="example-events">
+      <div *ngFor="let e of events">{{e}}</div>
+    </div>
+  </tri-sidenav-content>
+</tri-sidenav-container>
+
+<div *ngIf="!shouldRun">Please open on Stackblitz to see result</div>

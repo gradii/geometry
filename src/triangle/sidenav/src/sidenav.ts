@@ -121,7 +121,7 @@ export class TriSidenav extends TriDrawer {
   selector       : 'tri-sidenav-container',
   exportAs       : 'triSidenavContainer',
   templateUrl    : 'sidenav-container.html',
-  styleUrls      : ['../style/drawer.css'],
+  styleUrls      : ['../style/sidenav.css'],
   host           : {
     'class'                                         : 'tri-drawer-container tri-sidenav-container',
     '[class.tri-drawer-container-explicit-backdrop]': '_backdropOverride',

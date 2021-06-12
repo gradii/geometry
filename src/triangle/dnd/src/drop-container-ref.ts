@@ -56,17 +56,17 @@ const enum AutoScrollVerticalDirection {NONE, UP, DOWN}
 const enum AutoScrollHorizontalDirection {NONE, LEFT, RIGHT}
 
 /**
- * Internal compile-time-only representation of a `DropListRef`.
- * Used to avoid circular import issues between the `DropListRef` and the `DragRef`.
+ * Internal compile-time-only representation of a `DropContainerRef`.
+ * Used to avoid circular import issues between the `DropContainerRef` and the `DragRef`.
  * @docs-private
  */
-export interface DropListRefInternal extends DropListRef {
+export interface DropContainerRefInternal extends DropContainerRef {
 }
 
 /**
  * Reference to a drop list. Used to manipulate or dispose of the container.
  */
-export class DropListRef<T = any> {
+export class DropContainerRef<T = any> {
   /** Element that the drop list is attached to. */
   element: HTMLElement | ElementRef<HTMLElement>;
 
@@ -92,10 +92,10 @@ export class DropListRef<T = any> {
    * Function that is used to determine whether an item
    * is allowed to be moved into a drop container.
    */
-  enterPredicate: (drag: DragRef, drop: DropListRef) => boolean = () => true;
+  enterPredicate: (drag: DragRef, drop: DropContainerRef) => boolean = () => true;
 
   /** Functions that is used to determine whether an item can be sorted into a particular index. */
-  sortPredicate: (index: number, drag: DragRef, drop: DropListRef) => boolean = () => true;
+  sortPredicate: (index: number, drag: DragRef, drop: DropContainerRef) => boolean = () => true;
 
   /** Emits right before dragging has started. */
   readonly beforeStarted = new Subject<void>();
@@ -103,21 +103,21 @@ export class DropListRef<T = any> {
   /**
    * Emits when the user has moved a new drag item into this container.
    */
-  readonly entered = new Subject<{ item: DragRef, container: DropListRef, currentIndex: number }>();
+  readonly entered = new Subject<{ item: DragRef, container: DropContainerRef, currentIndex: number }>();
 
   /**
    * Emits when the user removes an item from the container
    * by dragging it into another container.
    */
-  readonly exited = new Subject<{ item: DragRef, container: DropListRef }>();
+  readonly exited = new Subject<{ item: DragRef, container: DropContainerRef }>();
 
   /** Emits when the user drops an item inside the container. */
   readonly dropped = new Subject<{
     item: DragRef,
     currentIndex: number,
     previousIndex: number,
-    container: DropListRef,
-    previousContainer: DropListRef,
+    container: DropContainerRef,
+    previousContainer: DropContainerRef,
     isPointerOverContainer: boolean,
     distance: Point;
     dropPoint: Point;
@@ -127,7 +127,7 @@ export class DropListRef<T = any> {
   readonly sorted = new Subject<{
     previousIndex: number,
     currentIndex: number,
-    container: DropListRef,
+    container: DropContainerRef,
     item: DragRef
   }>();
 
@@ -164,13 +164,13 @@ export class DropListRef<T = any> {
   private _draggables: readonly DragRef[] = [];
 
   /** Drop lists that are connected to the current one. */
-  private _siblings: readonly DropListRef[] = [];
+  private _siblings: readonly DropContainerRef[] = [];
 
   /** Direction in which the list is oriented. */
   private _orientation: 'horizontal' | 'vertical' = 'vertical';
 
   /** Connected siblings that currently have a dragged item. */
-  private _activeSiblings = new Set<DropListRef>();
+  private _activeSiblings = new Set<DropContainerRef>();
 
   /** Layout direction of the drop list. */
   private _direction: Direction = 'ltr';
@@ -204,7 +204,7 @@ export class DropListRef<T = any> {
 
   constructor(
     element: ElementRef<HTMLElement> | HTMLElement,
-    private _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>,
+    private _dragDropRegistry: DragDropRegistry<DragRef, DropContainerRef>,
     _document: any,
     private _ngZone: NgZone,
     private _viewportRuler: ViewportRuler) {
@@ -334,7 +334,7 @@ export class DropListRef<T = any> {
    *    container when the item was dropped.
    * @param distance Distance the user has dragged since the start of the dragging sequence.
    */
-  drop(item: DragRef, currentIndex: number, previousIndex: number, previousContainer: DropListRef,
+  drop(item: DragRef, currentIndex: number, previousIndex: number, previousContainer: DropContainerRef,
        isPointerOverContainer: boolean, distance: Point, dropPoint: Point): void {
     this._reset();
     this.dropped.next({
@@ -384,7 +384,7 @@ export class DropListRef<T = any> {
    * connected, the user will be allowed to transfer items between them.
    * @param connectedTo Other containers that the current containers should be connected to.
    */
-  connectedTo(connectedTo: DropListRef[]): this {
+  connectedTo(connectedTo: DropContainerRef[]): this {
     this._siblings = connectedTo.slice();
     return this;
   }
@@ -828,7 +828,7 @@ export class DropListRef<T = any> {
    * @param x Position of the item along the X axis.
    * @param y Position of the item along the Y axis.
    */
-  _getSiblingContainerFromPosition(item: DragRef, x: number, y: number): DropListRef | undefined {
+  _getSiblingContainerFromPosition(item: DragRef, x: number, y: number): DropContainerRef | undefined {
     // Possible targets include siblings and 'this'
     let targets = [this, ...this._siblings];
 
@@ -898,7 +898,7 @@ export class DropListRef<T = any> {
    * Called by one of the connected drop lists when a dragging sequence has started.
    * @param sibling Sibling in which dragging has started.
    */
-  _startReceiving(sibling: DropListRef, items: DragRef[]) {
+  _startReceiving(sibling: DropContainerRef, items: DragRef[]) {
     const activeSiblings = this._activeSiblings;
 
     if (!activeSiblings.has(sibling) && items.every(item => {
@@ -918,7 +918,7 @@ export class DropListRef<T = any> {
    * Called by a connected drop list when dragging has stopped.
    * @param sibling Sibling whose dragging has stopped.
    */
-  _stopReceiving(sibling: DropListRef) {
+  _stopReceiving(sibling: DropContainerRef) {
     this._activeSiblings.delete(sibling);
     this._viewportScrollSubscription.unsubscribe();
   }

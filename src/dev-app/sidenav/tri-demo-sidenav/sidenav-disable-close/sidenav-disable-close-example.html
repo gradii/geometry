@@ -1,0 +1,13 @@
+<tri-sidenav-container
+    class="example-container" (backdropClick)="close('backdrop')" *ngIf="shouldRun">
+  <tri-sidenav #sidenav (keydown.escape)="close('escape')" disableClose>
+    <p><button tri-button (click)="close('toggle button')">Toggle</button></p>
+  </tri-sidenav>
+
+  <tri-sidenav-content>
+    <p><button tri-button (click)="sidenav.open()">Open</button></p>
+    <p>Closed due to: {{reason}}</p>
+  </tri-sidenav-content>
+</tri-sidenav-container>
+
+<div *ngIf="!shouldRun">Please open on Stackblitz to see result</div>

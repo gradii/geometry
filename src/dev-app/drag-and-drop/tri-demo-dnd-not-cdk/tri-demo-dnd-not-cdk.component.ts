@@ -5,7 +5,7 @@
  */
 
 import { Component, QueryList, ViewChildren } from '@angular/core';
-import { moveItemInArray, transferArrayItem, TriDragDrop, TriDropList } from '@gradii/triangle/dnd';
+import { moveItemInArray, transferArrayItem, TriDragDrop, TriDropContainer } from '@gradii/triangle/dnd';
 import { asapScheduler } from 'rxjs';
 
 @Component({
@@ -66,10 +66,10 @@ export class TriDemoDndNotTriComponent {
     'Fall asleep'
   ];
 
-  @ViewChildren(TriDropList)
-  private dlq: QueryList<TriDropList>;
+  @ViewChildren(TriDropContainer)
+  private dlq: QueryList<TriDropContainer>;
 
-  public dls: TriDropList[] = [];
+  public dls: TriDropContainer[] = [];
 
   drop(event: TriDragDrop<any>) {
     if (event.previousContainer === event.container) {
@@ -87,7 +87,7 @@ export class TriDemoDndNotTriComponent {
   }
 
   ngAfterViewInit() {
-    const ldls: TriDropList[] = [];
+    const ldls: TriDropContainer[] = [];
 
     this.dlq.forEach((dl) => {
       console.log('found DropList ' + dl.id);

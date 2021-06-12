@@ -1,0 +1,22 @@
+<tri-drawer-container class="example-container" [hasBackdrop]="hasBackdrop.value">
+  <tri-drawer #drawer="triDrawer" [mode]="mode.value">I'm a drawer</tri-drawer>
+  <tri-drawer-content>
+    <div>
+      <label>Sidenav mode</label>
+      <tri-select #mode value="side">
+        <tri-option value="side">Side</tri-option>
+        <tri-option value="over">Over</tri-option>
+        <tri-option value="push">Push</tri-option>
+      </tri-select>
+    </div>
+    <div>
+      <label>Has backdrop</label>
+      <tri-select #hasBackdrop>
+        <tri-option>Unset</tri-option>
+        <tri-option [value]="true">True</tri-option>
+        <tri-option [value]="false">False</tri-option>
+      </tri-select>
+    </div>
+    <button triButton (click)="drawer.toggle()">Toggle drawer</button>
+  </tri-drawer-content>
+</tri-drawer-container>

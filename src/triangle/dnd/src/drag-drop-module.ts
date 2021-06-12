@@ -11,14 +11,14 @@ import { TriDrag } from './directives/drag';
 import { TriDragHandle } from './directives/drag-handle';
 import { TriDragPlaceholder } from './directives/drag-placeholder';
 import { TriDragPreview } from './directives/drag-preview';
-import { TriDropList } from './directives/drop-list';
-import { TriDropListGroup } from './directives/drop-list-group';
+import { TriDropContainer } from './directives/drop-container';
+import { TriDropContainerGroup } from './directives/drop-container-group';
 import { DragDrop } from './drag-drop';
 
 @NgModule({
   declarations: [
-    TriDropList,
-    TriDropListGroup,
+    TriDropContainer,
+    TriDropContainerGroup,
     TriDrag,
     TriDragHandle,
     TriDragPreview,
@@ -26,8 +26,8 @@ import { DragDrop } from './drag-drop';
   ],
   exports     : [
     CdkScrollableModule,
-    TriDropList,
-    TriDropListGroup,
+    TriDropContainer,
+    TriDropContainerGroup,
     TriDrag,
     TriDragHandle,
     TriDragPreview,

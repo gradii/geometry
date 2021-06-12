@@ -17,7 +17,7 @@ import { DragDropRegistry } from './drag-drop-registry';
 import {
   combineTransforms, extendStyles, toggleNativeDragInteractions, toggleVisibility,
 } from './drag-styling';
-import { DropListRefInternal as DropListRef } from './drop-list-ref';
+import { DropContainerRefInternal as DropContainerRef } from './drop-container-ref';
 import { ParentPositionTracker } from './parent-position-tracker';
 import { getTransformTransitionDurationInMs } from './transition-duration';
 
@@ -61,7 +61,7 @@ const MOUSE_EVENT_IGNORE_TIME = 800;
 
 /**
  * Internal compile-time-only representation of a `DragRef`.
- * Used to avoid circular import issues between the `DragRef` and the `DropListRef`.
+ * Used to avoid circular import issues between the `DragRef` and the `DropContainerRef`.
  * @docs-private
  */
 export interface DragRefInternal extends DragRef {
@@ -154,7 +154,7 @@ export class DragRef<T = any> {
   private _hasMoved: boolean;
 
   /** Drop container in which the DragRef resided when dragging began. */
-  private _initialContainer: DropListRef;
+  private _initialContainer: DropContainerRef;
 
   /** Index at which the item started in its initial container. */
   private _initialIndex: number;
@@ -244,7 +244,7 @@ export class DragRef<T = any> {
   private _disabledHandles = new Set<HTMLElement>();
 
   /** Droppable container that the draggable is a part of. */
-  private _dropContainer?: DropListRef;
+  private _dropContainer?: DropContainerRef;
 
   /** Layout direction of the item. */
   private _direction: Direction = 'ltr';
@@ -301,18 +301,18 @@ export class DragRef<T = any> {
   readonly ended = new Subject<{ source: DragRef, distance: Point, dropPoint: Point }>();
 
   /** Emits when the user has moved the item into a new container. */
-  readonly entered = new Subject<{ container: DropListRef, item: DragRef, currentIndex: number }>();
+  readonly entered = new Subject<{ container: DropContainerRef, item: DragRef, currentIndex: number }>();
 
   /** Emits when the user removes the item its container by dragging it into another container. */
-  readonly exited = new Subject<{ container: DropListRef, item: DragRef }>();
+  readonly exited = new Subject<{ container: DropContainerRef, item: DragRef }>();
 
   /** Emits when the user drops the item inside a container. */
   readonly dropped = new Subject<{
     previousIndex: number;
     currentIndex: number;
     item: DragRef;
-    container: DropListRef;
-    previousContainer: DropListRef;
+    container: DropContainerRef;
+    previousContainer: DropContainerRef;
     distance: Point;
     dropPoint: Point;
     isPointerOverContainer: boolean;
@@ -347,7 +347,7 @@ export class DragRef<T = any> {
     private _document: Document,
     private _ngZone: NgZone,
     private _viewportRuler: ViewportRuler,
-    private _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>) {
+    private _dragDropRegistry: DragDropRegistry<DragRef, DropContainerRef>) {
 
     this.withRootElement(element).withParent(_config.parentDragRef || null);
     this._parentPositions = new ParentPositionTracker(_document, _viewportRuler);
@@ -536,7 +536,7 @@ export class DragRef<T = any> {
   }
 
   /** Sets the container that the item is part of. */
-  _withDropContainer(container: DropListRef) {
+  _withDropContainer(container: DropContainerRef) {
     this._dropContainer = container;
   }
 
@@ -1024,7 +1024,7 @@ export class DragRef<T = any> {
 
     extendStyles(preview.style, {
       // It's important that we disable the pointer events on the preview, because
-      // it can throw off the `document.elementFromPoint` calls in the `TriDropList`.
+      // it can throw off the `document.elementFromPoint` calls in the `TriDropContainer`.
       pointerEvents: 'none',
       // We have to reset the margin, because it can throw off positioning relative to the viewport.
       margin  : '0',

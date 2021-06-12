@@ -28,11 +28,11 @@ import { TRI_DRAG_CONFIG, DragAxis, DragDropConfig, DragStartDelay } from './con
 import { TRI_DRAG_HANDLE, TriDragHandle } from './drag-handle';
 import { TRI_DRAG_PLACEHOLDER, TriDragPlaceholder } from './drag-placeholder';
 import { TRI_DRAG_PREVIEW, TriDragPreview } from './drag-preview';
-import { TRI_DROP_LIST, TriDropListInternal as TriDropList } from './drop-list';
+import { TRI_DROP_LIST, TriDropContainerInternal as TriDropContainer } from './drop-container';
 
 const DRAG_HOST_CLASS = 'tri-drag';
 
-/** Element that can be moved inside a TriDropList container. */
+/** Element that can be moved inside a TriDropContainer container. */
 @Directive({
   selector : '[triDrag]',
   exportAs : 'triDrag',
@@ -178,7 +178,7 @@ export class TriDrag<T = any> implements AfterViewInit, OnChanges, OnDestroy {
     /** Element that the draggable is attached to. */
     public element: ElementRef<HTMLElement>,
     /** Droppable container that the draggable is a part of. */
-    @Inject(TRI_DROP_LIST) @Optional() @SkipSelf() public dropContainer: TriDropList,
+    @Inject(TRI_DROP_LIST) @Optional() @SkipSelf() public dropContainer: TriDropContainer,
     /**
      * @deprecated `_document` parameter no longer being used and will be removed.
      * @breaking-change 12.0.0

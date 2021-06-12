@@ -1,0 +1,24 @@
+<div class="example-container" [class.example-is-mobile]="mobileQuery.matches" *ngIf="shouldRun">
+  <tri-navbar color="primary" class="example-toolbar">
+    <button tri-button (click)="snav.toggle()">
+      <tri-icon>menu</tri-icon>
+    </button>
+    <h1 class="example-app-name">Responsive App</h1>
+  </tri-navbar>
+
+  <tri-sidenav-container class="example-sidenav-container"
+                         [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+    <tri-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
+                 [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+      <ul>
+        <li routerLink="." *ngFor="let nav of fillerNav">{{nav}}</li>
+      </ul>
+    </tri-sidenav>
+
+    <tri-sidenav-content>
+      <p *ngFor="let content of fillerContent">{{content}}</p>
+    </tri-sidenav-content>
+  </tri-sidenav-container>
+</div>
+
+<div *ngIf="!shouldRun">Please open on Stackblitz to see result</div>

@@ -6,7 +6,7 @@
 
 
 import { TriDrag } from '../directives/drag';
-import { TriDropList } from '../directives/drop-list';
+import { TriDropContainer } from '../directives/drop-container';
 
 /** Event emitted when the user starts dragging a draggable. */
 export interface TriDragStart<T = any> {
@@ -33,7 +33,7 @@ export interface TriDragEnd<T = any> {
 /** Event emitted when the user moves an item into a new drop container. */
 export interface TriDragEnter<T = any, I = T> {
   /** Container into which the user has moved the item. */
-  container: TriDropList<T>;
+  container: TriDropContainer<T>;
   /** Item that was moved into the container. */
   item: TriDrag<I>;
   /** Index at which the item has entered the container. */
@@ -46,7 +46,7 @@ export interface TriDragEnter<T = any, I = T> {
  */
 export interface TriDragExit<T = any, I = T> {
   /** Container from which the user has a removed an item. */
-  container: TriDropList<T>;
+  container: TriDropContainer<T>;
   /** Item that was removed from the container. */
   item: TriDrag<I>;
 }
@@ -61,9 +61,9 @@ export interface TriDragDrop<T, O = T> {
   /** Item that is being dropped. */
   item: TriDrag;
   /** Container in which the item was dropped. */
-  container: TriDropList<T>;
+  container: TriDropContainer<T>;
   /** Container from which the item was picked up. Can be the same as the `container`. */
-  previousContainer: TriDropList<O>;
+  previousContainer: TriDropContainer<O>;
   /** Whether the user's pointer was over the container when the item was dropped. */
   isPointerOverContainer: boolean;
   /** Distance in pixels that the user has dragged since the drag sequence started. */
@@ -98,7 +98,7 @@ export interface TriDragSortEvent<T = any, I = T> {
   /** Index that the item is currently in. */
   currentIndex: number;
   /** Container that the item belongs to. */
-  container: TriDropList<T>;
+  container: TriDropContainer<T>;
   /** Item that is being sorted. */
   item: TriDrag<I>;
 }

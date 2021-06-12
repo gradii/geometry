@@ -43,6 +43,8 @@ import { Component } from '@angular/core';
       <li><a routerLink="diagram">diagram</a></li>
       <li><a routerLink="tree-select">tree-select</a></li>
       <li><a routerLink="drag-and-drop">drag-and-drop</a></li>
+      <li><a routerLink="sidenav">sidenav</a></li>
+      <li><a routerLink="navbar">navbar</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>
