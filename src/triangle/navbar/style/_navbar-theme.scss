@@ -17,8 +17,8 @@
 }
 
 @mixin _palette-styles($palette) {
-  background : theming.tri-palette($palette);
-  color      : theming.tri-palette($palette, default-contrast);
+  background : theming.tri-color($palette);
+  color      : theming.tri-color($palette, default-contrast);
 }
 
 @mixin _form-field-overrides {
@@ -49,8 +49,8 @@
   $foreground : theme.$foreground;
 
   .tri-navbar {
-    background : theming.tri-palette($background, app-bar);
-    color      : theming.tri-palette($foreground, text);
+    background : theming.tri-color($background, app-bar);
+    color      : theming.tri-color($foreground, text);
 
     &.tri-primary {
       @include _palette-styles($primary);
@@ -99,7 +99,7 @@
 //  }
 //}
 
-@mixin theme() {
+@mixin tri-navbar-theme() {
   @include color();
   //@include density();
   //@include typography();

@@ -5,7 +5,8 @@
  */
 
 
-export * from './src/navbar-module';
+export * from './src/navbar.module';
 export * from './src/navbar';
+export * from './src/navbar.component';
 
 

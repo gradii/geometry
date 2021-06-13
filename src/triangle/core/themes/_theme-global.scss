@@ -50,6 +50,7 @@
 @use "../../tooltip/style/tooltip-theme" as *;
 @use "../../transfer/style/transfer-theme" as *;
 @use "../../tree/style/tree-theme" as *;
+@use "../../navbar/style/navbar-theme" as *;
 
 
 @mixin gradii-triangle-theme-global() {
@@ -76,4 +77,5 @@
   @include tri-rate-theme();
   @include tri-grid-list-theme();
   @include tri-avatar-theme();
+  @include tri-navbar-theme();
 }

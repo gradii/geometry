@@ -6,7 +6,8 @@
 
 import { NgModule } from '@angular/core';
 import { TriCommonModule } from '@gradii/triangle/core';
-import { TriNavbar, TriNavbarRow } from './navbar';
+import { TriNavbarRow } from './navbar';
+import { TriNavbar } from './navbar.component';
 
 
 @NgModule({

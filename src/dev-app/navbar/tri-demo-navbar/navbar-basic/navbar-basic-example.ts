@@ -4,14 +4,15 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 /**
  * @title Basic navbar
  */
 @Component({
-  selector: 'navbar-basic-example',
+  selector   : 'navbar-basic-example',
   templateUrl: 'navbar-basic-example.html',
-  styleUrls: ['navbar-basic-example.css'],
+  styleUrls  : ['navbar-basic-example.css'],
 })
-export class NavbarBasicExample {}
+export class NavbarBasicExample {
+}
