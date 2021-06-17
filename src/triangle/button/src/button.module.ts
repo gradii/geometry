@@ -7,7 +7,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ButtonGroupComponent } from './button-group.component';
-import { ButtonComponent } from './button.component';
+import { ButtonComponent, TriOutlinedButton, TriRaisedButton, TriRoundedButton, TriTextButton } from './button.component';
 
 /**
  *
@@ -35,8 +35,13 @@ import { ButtonComponent } from './button.component';
  * <!-- example(tri-demo-button-ghost) -->
  */
 @NgModule({
-  declarations: [ButtonComponent, ButtonGroupComponent],
-  exports     : [ButtonComponent, ButtonGroupComponent],
+  declarations: [
+    ButtonComponent, ButtonGroupComponent,
+    TriRaisedButton, TriRoundedButton, TriTextButton, TriOutlinedButton
+  ],
+  exports     : [ButtonComponent, ButtonGroupComponent, 
+    TriRaisedButton, TriRoundedButton, TriTextButton, TriOutlinedButton
+  ],
   imports     : [CommonModule]
 })
 export class TriButtonModule {

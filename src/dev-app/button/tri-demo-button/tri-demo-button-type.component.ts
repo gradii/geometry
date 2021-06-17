@@ -26,7 +26,18 @@ import {
     </button>
     <button tri-button [type]="'danger'">
       <span>Danger</span>
-    </button>`,
+    </button>
+    
+    <h5>raised button</h5>
+    <button triRaisedButton color="primary">
+      raised button
+    </button>
+    
+    <h5>rounded button</h5>
+    <button triRoundedButton color="primary">
+      rounded button
+    </button>
+    `,
   styles  : []
 })
 export class TriDemoButtonTypeComponent implements OnInit {

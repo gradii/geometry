@@ -5,7 +5,7 @@
  */
 
 import {
-  AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener,
+  AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Directive, ElementRef, HostListener,
   Input, Renderer2, ViewEncapsulation
 } from '@angular/core';
 
@@ -20,8 +20,44 @@ export type ButtonColor =
 export type ButtonShape = 'circle' | null;
 export type ButtonSize = 'small' | 'large' | 'default';
 
+@Directive({
+  selector: '[triRaisedButton]',
+  host: {
+    'class': 'tri-btn-raised',
+  }
+})
+export class TriRaisedButton {
+}
+
+@Directive({
+  selector: '[triRoundedButton]',
+  host: {
+    'class': 'tri-btn-rounded'
+  }
+})
+export class TriRoundedButton {
+} 
+
+@Directive({
+  selector: '[triTextButton]',
+  host: {
+    'class': 'tri-btn-text'
+  }
+})
+export class TriTextButton {
+}
+
+@Directive({
+  selector: '[triOutlinedButton]',
+  host: {
+    'class': 'tri-btn-outlined'
+  }
+})
+export class TriOutlinedButton {
+}
+
 @Component({
-  selector           : '[triButton], [tri-button]',
+  selector           : '[triButton], [tri-button], [triRaisedButton], [triRoundedButton], [triTextButton], [triOutlinedButton]',
   changeDetection    : ChangeDetectionStrategy.OnPush,
   encapsulation      : ViewEncapsulation.None,
   template           : `

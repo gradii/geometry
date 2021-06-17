@@ -13,6 +13,7 @@ import { TriDropDownModule } from '@gradii/triangle/dropdown';
 import { TriIconModule } from '@gradii/triangle/icon';
 import { TriRadioModule } from '@gradii/triangle/radio';
 import { DevButton } from './dev-button';
+import { TriDemoButtonColorComponent } from './tri-demo-button/tri-demo-button-color.component';
 import { TriDemoButtonDisabledComponent } from './tri-demo-button/tri-demo-button-disabled.component';
 import { TriDemoButtonGhostComponent } from './tri-demo-button/tri-demo-button-ghost.component';
 import { TriDemoButtonGroupComponent } from './tri-demo-button/tri-demo-button-group.component';
@@ -35,6 +36,7 @@ import { TriDemoButtonTypeComponent } from './tri-demo-button/tri-demo-button-ty
     RouterModule.forChild([
       {
         path: '', component: DevButton, children: [
+          {path: 'tri-demo-button-color', component: TriDemoButtonColorComponent},
           {path: 'tri-demo-button-disabled', component: TriDemoButtonDisabledComponent},
           {path: 'tri-demo-button-ghost', component: TriDemoButtonGhostComponent},
           {path: 'tri-demo-button-group', component: TriDemoButtonGroupComponent},
@@ -50,6 +52,7 @@ import { TriDemoButtonTypeComponent } from './tri-demo-button/tri-demo-button-ty
   declarations: [
     DevButton,
 
+    TriDemoButtonColorComponent,
     TriDemoButtonDisabledComponent,
     TriDemoButtonGhostComponent,
     TriDemoButtonGroupComponent,

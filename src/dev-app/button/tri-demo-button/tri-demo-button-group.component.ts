@@ -58,10 +58,10 @@ import {
     </tri-button-group>
     <tri-button-group>
       <button tri-button [type]="'primary'">
-        <i class=" anticon anticon-cloud"></i>
+        <tri-icon svgIcon="outline:cloud"></tri-icon>
       </button>
       <button tri-button [type]="'primary'">
-        <i class=" anticon anticon-cloud-download"></i>
+        <tri-icon svgIcon="outline:cloud-download"></tri-icon>
       </button>
     </tri-button-group>
     <h4>Size</h4>
