@@ -446,7 +446,7 @@ $btn-primary-bg         : grey !default;
       theming.tri-color-palette($background, 5), //$hover-border,
       $color, //$hover-color,
       theming.tri-color-palette($border-color, 7), //$active-background,
-      theming.tri-color-palette($border-color, 7) //$active-border,
+      theming.tri-color-palette($border-color, 7), //$active-border,
       $color, //$active-color
   );
 }
@@ -460,7 +460,7 @@ $btn-primary-bg         : grey !default;
       $color, //$hover-border,
       $primary-color, //$hover-color,
       theming.tri-color-palette($color, 7), //$active-background,
-      theming.tri-color-palette($color, 7) //$active-border,
+      theming.tri-color-palette($color, 7), //$active-border,
       $primary-color, //$active-color
   );
 }
@@ -474,7 +474,7 @@ $btn-primary-bg         : grey !default;
       theming.tri-color-palette($color, 5), //$hover-border,
       theming.tri-color-palette($color, 5), //$hover-color,
       transparent, //$active-background,
-      theming.tri-color-palette($color, 7) //$active-border,
+      theming.tri-color-palette($color, 7), //$active-border,
       theming.tri-color-palette($color, 7), //$active-color
   );
 }
@@ -488,7 +488,7 @@ $btn-primary-bg         : grey !default;
       $primary-color, //$hover-border,
       $primary-color, //$hover-color,
       theming.tri-color-palette($border-color, 7), //$active-background,
-      theming.tri-color-palette($border-color, 7) //$active-border,
+      theming.tri-color-palette($border-color, 7), //$active-border,
       $color, //$active-color
   );
 }
