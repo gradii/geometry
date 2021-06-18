@@ -71,6 +71,7 @@ TRIANGLE_ENTRYPOINTS = [
     "transfer",
     "util",
     "tree-view",
+    "gridster"
 #    "tree-select",
     #  "tree",
 ]
@@ -148,6 +149,7 @@ TRIANGLE_ENTRYPOINTS_WITH_STYLES = [
     #  "util",
     #  "tree",
     "tree-view",
+    "gridster"
 #    "tree-select",
 ]
 

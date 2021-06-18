@@ -45,6 +45,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="drag-and-drop">drag-and-drop</a></li>
       <li><a routerLink="sidenav">sidenav</a></li>
       <li><a routerLink="navbar">navbar</a></li>
+      <li><a routerLink="gridster">gridster</a></li>
     </ul>
 
     <dev-app-layout></dev-app-layout>

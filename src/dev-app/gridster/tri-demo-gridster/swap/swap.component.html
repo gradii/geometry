@@ -1,0 +1,31 @@
+<div class="options">
+  <a triButton href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/swap"
+     target="_blank" class="source-code-button">
+    <tri-icon svgIcon="outline:plus"></tri-icon>
+    Source
+  </a>
+<!--  <markdown [src]="'assets/swap.md'"></markdown>-->
+</div>
+<div class="options-header">
+  <tri-checkbox [(ngModel)]="options.swap" (ngModelChange)="changedOptions()">
+    Swap Items
+  </tri-checkbox>
+  <tri-checkbox [(ngModel)]="options.swapWhileDragging" (ngModelChange)="changedOptions()">
+    Swap Items While Dragging
+  </tri-checkbox>
+  <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
+    <tri-icon svgIcon="outline:add"></tri-icon>
+  </button>
+</div>
+
+
+<gridster [options]="options">
+  <gridster-item [item]="item" *ngFor="let item of dashboard">
+    <div class="button-holder">
+      <button mat-mini-fab (mousedown)="removeItem($event, item)"
+              (touchstart)="removeItem($event, item)">
+        <tri-icon svgIcon="outline:delete"></tri-icon>
+      </button>
+    </div>
+  </gridster-item>
+</gridster>

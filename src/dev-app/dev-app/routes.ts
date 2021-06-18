@@ -154,6 +154,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'navbar',
         loadChildren: '/navbar/dev-navbar.module#DevNavbarModule'
+      },
+      {
+        path        : 'gridster',
+        loadChildren: '/gridster/dev-gridster.module#DevGridsterModule'
       }
     ]
   },

@@ -1,0 +1,62 @@
+<div class="options">
+  <a mat-raised-button href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/gridTypes"
+     target="_blank" class="source-code-button">
+    <tri-icon>open_in_new</tri-icon>
+    Source
+  </a>
+<!--  <markdown [src]="'assets/gridTypes.md'"></markdown>-->
+</div>
+<div class="options-header">
+  <div class="form-field">
+    <tri-select aria-label="Grid type" [(ngModel)]="options.gridType" (ngModelChange)="changedOptions()"
+                placeholder="Grid Type">
+      <tri-option value="fit">Fit to screen</tri-option>
+      <tri-option value="scrollVertical">Scroll Vertical</tri-option>
+      <tri-option value="scrollHorizontal">Scroll Horizontal</tri-option>
+      <tri-option value="fixed">Fixed</tri-option>
+      <tri-option value="verticalFixed">Vertical Fixed</tri-option>
+      <tri-option value="horizontalFixed">Horizontal Fixed</tri-option>
+    </tri-select>
+  </div>
+  <div class="form-field">
+    <input triInput [(ngModel)]="options.fixedColWidth" type="number" placeholder="Fixed Col Width"
+           (ngModelChange)="changedOptions()">
+  </div>
+  <div class="form-field">
+    <input triInput [(ngModel)]="options.fixedRowHeight" type="number" placeholder="Fixed Row Height"
+           (ngModelChange)="changedOptions()">
+  </div>
+  <div class="form-field">
+    <input (ngModelChange)="changedOptions()" [(ngModel)]="options.rowHeightRatio" triInput
+           placeholder="Row Height Ratio" step="0.1"
+           type="number">
+  </div>
+  <tri-checkbox [(ngModel)]="options.setGridSize" (ngModelChange)="changedOptions()">
+    Set Grid Size
+  </tri-checkbox>
+  <tri-checkbox [(ngModel)]="options.keepFixedHeightInMobile" (ngModelChange)="changedOptions()">
+    Keep Fixed Height In Mobile
+  </tri-checkbox>
+  <tri-checkbox [(ngModel)]="options.keepFixedWidthInMobile" (ngModelChange)="changedOptions()">
+    Keep Fixed Width In Mobile
+  </tri-checkbox>
+  <div class="form-field">
+    <input triInput [(ngModel)]="options.mobileBreakpoint" type="number" placeholder="Mobile Breakpoint"
+           (ngModelChange)="changedOptions()">
+  </div>
+  <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
+    <tri-icon svgIcon="outline:add"></tri-icon>
+  </button>
+</div>
+
+
+<gridster [options]="options">
+  <gridster-item [item]="item" *ngFor="let item of dashboard">
+    <div class="button-holder">
+      <button mat-mini-fab (mousedown)="removeItem($event, item)"
+              (touchstart)="removeItem($event, item)">
+        <tri-icon svgIcon="outline:delete"></tri-icon>
+      </button>
+    </div>
+  </gridster-item>
+</gridster>

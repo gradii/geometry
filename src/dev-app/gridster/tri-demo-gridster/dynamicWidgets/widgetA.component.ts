@@ -1,0 +1,38 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {Subscription} from 'rxjs';
+import {GridsterItem} from '@gradii/triangle/gridster';
+
+
+@Component({
+  selector: 'app-widget-a',
+  template: '{{widget.type}}',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
+})
+export class WidgetAComponent implements OnInit, OnDestroy {
+  @Input()
+  widget;
+  @Input()
+  resizeEvent: EventEmitter<GridsterItem>;
+
+  resizeSub: Subscription;
+
+  ngOnInit(): void {
+    this.resizeSub = this.resizeEvent.subscribe((widget) => {
+      if (widget === this.widget) { // or check id , type or whatever you have there
+        // resize your widget, chart, map , etc.
+        console.log(widget);
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.resizeSub.unsubscribe();
+  }
+}

@@ -1,0 +1,28 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "gridster",
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
+    assets = [
+        "dev-gridster.html",
+        ":dev_gridster_scss",
+    ] + glob(["tri-demo-gridster/**/*.html"]),
+    deps = [
+        "//src/triangle/gridster",
+        "//src/triangle/icon",
+        "//src/triangle/checkbox",
+        "//src/triangle/button",
+        "//src/triangle/input",
+        "//src/triangle/select",
+        "@npm//@angular/forms",
+        "@npm//@angular/core",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_gridster_scss",
+    src = "dev-gridster.scss",
+)

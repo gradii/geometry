@@ -20,6 +20,15 @@ import { Component } from '@angular/core';
         justify-content : center;
         align-items     : center;
       }
+
+      :host ::ng-deep .demo-block {
+        border-radius : 4px;
+        border        : 1px solid #cecece;
+        padding       : 30px;
+        height        : 1000px;
+        display       : block;
+        position      : relative;
+      }
     `
   ]
 })

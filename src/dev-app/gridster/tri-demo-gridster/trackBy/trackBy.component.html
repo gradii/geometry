@@ -1,0 +1,29 @@
+<div class="options">
+  <a class="source-code-button"
+     href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/trackBy"
+     triButton target="_blank">
+    <tri-icon svgIcon="outline:plus"></tri-icon>
+    Source
+  </a>
+<!--  <markdown [src]="'assets/trackBy.md'"></markdown>-->
+</div>
+<div class="options-header">
+  <button (click)="reset()" class="cols-2" color="primary" triButton>
+    Reset
+  </button>
+  <button (click)="addItem()" class="add-button cols-2" mat-mini-fab>
+    <tri-icon svgIcon="outline:add"></tri-icon>
+  </button>
+</div>
+
+
+<gridster [options]="options">
+  <gridster-item *ngFor="let item of dashboard; trackBy: trackBy" [item]="item">
+    <button (mousedown)="removeItem($event, item)" (touchstart)="removeItem($event, item)"
+            mat-mini-fab style="position: absolute; right: 10px; top: 10px">
+      <tri-icon svgIcon="outline:delete"></tri-icon>
+    </button>
+    <app-trackby-item [id]="item.id"></app-trackby-item>
+  </gridster-item>
+</gridster>
+

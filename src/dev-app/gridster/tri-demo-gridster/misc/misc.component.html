@@ -1,0 +1,58 @@
+<div class="options">
+  <a tri-button href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/misc"
+     target="_blank" class="source-code-button">
+    <tri-icon>open_in_new</tri-icon>
+    Source
+  </a>
+  <!--  <markdown [src]="'assets/misc.md'"></markdown>-->
+</div>
+<div class="options-header">
+  <tri-checkbox [(ngModel)]="options.disableWindowResize" (ngModelChange)="changedOptions()">
+    Disable window resize
+  </tri-checkbox>
+  <tri-checkbox (ngModelChange)="changedOptions()" [(ngModel)]="options.setGridSize">
+    Set grid size
+  </tri-checkbox>
+  <tri-checkbox [(ngModel)]="options.scrollToNewItems" (ngModelChange)="changedOptions()">
+    Scroll to new items
+  </tri-checkbox>
+  <tri-checkbox [(ngModel)]="options.disableWarnings" (ngModelChange)="changedOptions()">
+    Disable console warnings
+  </tri-checkbox>
+  <tri-checkbox [(ngModel)]="options.ignoreMarginInRow" (ngModelChange)="changedOptions()">
+    Ignore margin in row
+  </tri-checkbox>
+  <tri-checkbox [(ngModel)]="options.disableAutoPositionOnConflict" (ngModelChange)="changedOptions()">
+    Disable auto position on conflict
+  </tri-checkbox>
+  <div class="form-field">
+    <label>Scale</label>
+    <input (ngModelChange)="changedOptions()" [(ngModel)]="options.scale" triInput type="number">
+  </div>
+  <div class="form-field">
+    <tri-select aria-label="Grid type" [(ngModel)]="options.gridType" (ngModelChange)="changedOptions()"
+                placeholder="Grid Type">
+      <tri-option value="fit">Fit to screen</tri-option>
+      <tri-option value="scrollVertical">Scroll Vertical</tri-option>
+      <tri-option value="scrollHorizontal">Scroll Horizontal</tri-option>
+      <tri-option value="fixed">Fixed</tri-option>
+      <tri-option value="verticalFixed">Vertical Fixed</tri-option>
+      <tri-option value="horizontalFixed">Horizontal Fixed</tri-option>
+    </tri-select>
+  </div>
+  <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
+    <tri-icon svgIcon="outline:add"></tri-icon>
+  </button>
+</div>
+
+
+<gridster [options]="options">
+  <gridster-item [item]="item" *ngFor="let item of dashboard">
+    <div class="button-holder">
+      <button mat-mini-fab (mousedown)="removeItem($event, item)"
+              (touchstart)="removeItem($event, item)">
+        <tri-icon svgIcon="outline:delete"></tri-icon>
+      </button>
+    </div>
+  </gridster-item>
+</gridster>
