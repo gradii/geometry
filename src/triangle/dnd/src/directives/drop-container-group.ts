@@ -17,10 +17,10 @@ export const TRI_DROP_CONTAINER_GROUP =
   new InjectionToken<TriDropContainerGroup<unknown>>('TriDropContainerGroup');
 
 /**
- * Declaratively connects sibling `triDropList` instances together. All of the `triDropList`
+ * Declaratively connects sibling `triDropContainer` instances together. All of the `triDropContainer`
  * elements that are placed inside a `triDropContainerGroup` will be connected to each other
- * automatically. Can be used as an alternative to the `triDropListConnectedTo` input
- * from `triDropList`.
+ * automatically. Can be used as an alternative to the `triDropContainerConnectedTo` input
+ * from `triDropContainer`.
  */
 @Directive({
   selector : '[triDropContainerGroup]',

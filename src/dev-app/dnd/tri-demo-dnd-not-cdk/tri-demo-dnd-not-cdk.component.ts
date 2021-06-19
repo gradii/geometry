@@ -5,33 +5,35 @@
  */
 
 import { Component, QueryList, ViewChildren } from '@angular/core';
-import { moveItemInArray, transferArrayItem, TriDragDrop, TriDropContainer } from '@gradii/triangle/dnd';
+import {
+  moveItemInArray, transferArrayItem, TriDragDrop, TriDropContainer
+} from '@gradii/triangle/dnd';
 import { asapScheduler } from 'rxjs';
 
 @Component({
   selector : 'tri-demo-dnd-not-Tri',
   template : `
-    <div triDropListGroup>
+    <div triDropContainerGroup>
       <div class="example-container">
         <h2>To do</h2>
 
         <div
-          triDropList
-          [triDropListData]="todo"
+          triDropContainer
+          [triDropContainerData]="todo"
           class="example-list"
-          (triDropListDropped)="drop($event)"
-          [triDropListConnectedTo]="dls"
+          (triDropContainerDropped)="drop($event)"
+          [triDropContainerConnectedTo]="dls"
         >
           <div class="example-box" *ngFor="let item of todo" triDrag>
             <div *ngIf="!isArray(item); else arrayView">{{item}}</div>
             <ng-template #arrayView>
               <div class="example-container">
                 <div
-                  triDropList
-                  [triDropListData]="item"
+                  triDropContainer
+                  [triDropContainerData]="item"
                   class="example-list"
-                  (triDropListDropped)="drop($event)"
-                  [triDropListConnectedTo]="dls"
+                  (triDropContainerDropped)="drop($event)"
+                  [triDropContainerConnectedTo]="dls"
                 >
                   <div class="example-box" *ngFor="let innerItem of item" triDrag>
                     {{innerItem}}
@@ -90,7 +92,7 @@ export class TriDemoDndNotTriComponent {
     const ldls: TriDropContainer[] = [];
 
     this.dlq.forEach((dl) => {
-      console.log('found DropList ' + dl.id);
+      console.log('found DropContainer ' + dl.id);
       ldls.push(dl);
     });
 

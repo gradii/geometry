@@ -15,7 +15,7 @@ export * from './src/utils/drag-utils';
 export * from './src/drag-drop-module';
 export * from './src/drag-drop-registry';
 
-export { TriDropContainer, TRI_DROP_LIST } from './src/directives/drop-container';
+export { TriDropContainer, TRI_DROP_CONTAINER } from './src/directives/drop-container';
 export * from './src/directives/config';
 export * from './src/directives/drop-container-group';
 export * from './src/directives/drag';

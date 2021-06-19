@@ -13,7 +13,7 @@ import {
 import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { of as observableOf } from 'rxjs';
 
-import { DragDropModule } from '../drag-drop-module';
+import { TriDndModule } from '../src/drag-drop-module';
 import { CdkDragDrop, CdkDragEnter, CdkDragStart } from '../drag-events';
 import { DragRef, Point, PreviewContainer } from '../drag-ref';
 import { extendStyles } from '../drag-styling';
@@ -34,7 +34,7 @@ describe('CdkDrag', () => {
     extraDeclarations: Type<any>[]                                   = []): ComponentFixture<T> {
     TestBed
       .configureTestingModule({
-        imports     : [DragDropModule, CdkScrollableModule],
+        imports     : [TriDndModule, CdkScrollableModule],
         declarations: [componentType, PassthroughComponent, ...extraDeclarations],
         providers   : [
           {

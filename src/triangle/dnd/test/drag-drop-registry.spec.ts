@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {fakeAsync, TestBed, ComponentFixture, inject} from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { fakeAsync, TestBed, ComponentFixture, inject } from '@angular/core/testing';
 import {
   createMouseEvent,
   dispatchMouseEvent,
@@ -7,8 +7,8 @@ import {
   dispatchTouchEvent,
   dispatchFakeEvent,
 } from '@angular/cdk/testing/private';
-import {DragDropRegistry} from './drag-drop-registry';
-import {DragDropModule} from './drag-drop-module';
+import { DragDropRegistry } from '../src/drag-drop-registry';
+import { TriDndModule } from '../src/drag-drop-module';
 
 describe('DragDropRegistry', () => {
   let fixture: ComponentFixture<BlankComponent>;
@@ -16,7 +16,7 @@ describe('DragDropRegistry', () => {
 
   beforeEach(fakeAsync(() => {
     TestBed.configureTestingModule({
-      imports: [DragDropModule],
+      imports     : [TriDndModule],
       declarations: [BlankComponent],
     }).compileComponents();
 
@@ -61,9 +61,9 @@ describe('DragDropRegistry', () => {
   });
 
   it('should dispatch `mousemove` events after starting to drag via the mouse', () => {
-    const spy = jasmine.createSpy('pointerMove spy');
+    const spy          = jasmine.createSpy('pointerMove spy');
     const subscription = registry.pointerMove.subscribe(spy);
-    const item = new DragItem(true);
+    const item         = new DragItem(true);
     registry.startDragging(item, createMouseEvent('mousedown'));
     dispatchMouseEvent(document, 'mousemove');
 
@@ -73,9 +73,9 @@ describe('DragDropRegistry', () => {
   });
 
   it('should dispatch `touchmove` events after starting to drag via touch', () => {
-    const spy = jasmine.createSpy('pointerMove spy');
+    const spy          = jasmine.createSpy('pointerMove spy');
     const subscription = registry.pointerMove.subscribe(spy);
-    const item = new DragItem(true);
+    const item         = new DragItem(true);
     registry.startDragging(item, createTouchEvent('touchstart') as TouchEvent);
     dispatchTouchEvent(document, 'touchmove');
 
@@ -85,9 +85,9 @@ describe('DragDropRegistry', () => {
   });
 
   it('should dispatch pointer move events if event propagation is stopped', () => {
-    const spy = jasmine.createSpy('pointerMove spy');
+    const spy          = jasmine.createSpy('pointerMove spy');
     const subscription = registry.pointerMove.subscribe(spy);
-    const item = new DragItem(true);
+    const item         = new DragItem(true);
     fixture.nativeElement.addEventListener('mousemove', (e: MouseEvent) => e.stopPropagation());
     registry.startDragging(item, createMouseEvent('mousedown'));
     dispatchMouseEvent(fixture.nativeElement, 'mousemove');
@@ -98,9 +98,9 @@ describe('DragDropRegistry', () => {
   });
 
   it('should dispatch `mouseup` events after ending the drag via the mouse', () => {
-    const spy = jasmine.createSpy('pointerUp spy');
+    const spy          = jasmine.createSpy('pointerUp spy');
     const subscription = registry.pointerUp.subscribe(spy);
-    const item = new DragItem();
+    const item         = new DragItem();
 
     registry.startDragging(item, createMouseEvent('mousedown'));
     dispatchMouseEvent(document, 'mouseup');
@@ -111,9 +111,9 @@ describe('DragDropRegistry', () => {
   });
 
   it('should dispatch `touchend` events after ending the drag via touch', () => {
-    const spy = jasmine.createSpy('pointerUp spy');
+    const spy          = jasmine.createSpy('pointerUp spy');
     const subscription = registry.pointerUp.subscribe(spy);
-    const item = new DragItem();
+    const item         = new DragItem();
 
     registry.startDragging(item, createTouchEvent('touchstart') as TouchEvent);
     dispatchTouchEvent(document, 'touchend');
@@ -124,9 +124,9 @@ describe('DragDropRegistry', () => {
   });
 
   it('should dispatch pointer up events if event propagation is stopped', () => {
-    const spy = jasmine.createSpy('pointerUp spy');
+    const spy          = jasmine.createSpy('pointerUp spy');
     const subscription = registry.pointerUp.subscribe(spy);
-    const item = new DragItem();
+    const item         = new DragItem();
 
     fixture.nativeElement.addEventListener('mouseup', (e: MouseEvent) => e.stopPropagation());
     registry.startDragging(item, createMouseEvent('mousedown'));
@@ -138,9 +138,9 @@ describe('DragDropRegistry', () => {
   });
 
   it('should complete the pointer event streams on destroy', () => {
-    const pointerUpSpy = jasmine.createSpy('pointerUp complete spy');
-    const pointerMoveSpy = jasmine.createSpy('pointerMove complete spy');
-    const pointerUpSubscription = registry.pointerUp.subscribe({complete: pointerUpSpy});
+    const pointerUpSpy            = jasmine.createSpy('pointerUp complete spy');
+    const pointerMoveSpy          = jasmine.createSpy('pointerMove complete spy');
+    const pointerUpSubscription   = registry.pointerUp.subscribe({complete: pointerUpSpy});
     const pointerMoveSubscription = registry.pointerMove.subscribe({complete: pointerMoveSpy});
 
     registry.ngOnDestroy();
@@ -165,10 +165,10 @@ describe('DragDropRegistry', () => {
     // Ensure dragging is over - registry is empty
     expect(registry.isDragging(item)).toBe(false);
 
-    const pointerUpSpy = jasmine.createSpy('pointerUp spy');
+    const pointerUpSpy   = jasmine.createSpy('pointerUp spy');
     const pointerMoveSpy = jasmine.createSpy('pointerMove spy');
 
-    const pointerUpSubscription = registry.pointerUp.subscribe(pointerUpSpy);
+    const pointerUpSubscription   = registry.pointerUp.subscribe(pointerUpSpy);
     const pointerMoveSubscription = registry.pointerMove.subscribe(pointerMoveSpy);
 
     // Second finger keeps moving
@@ -195,13 +195,13 @@ describe('DragDropRegistry', () => {
 
   it('should prevent the default `touchmove` if the item does not consider itself as being ' +
     'dragged yet', () => {
-      const item = new DragItem(false);
-      registry.startDragging(item, createTouchEvent('touchstart') as TouchEvent);
-      expect(dispatchTouchEvent(document, 'touchmove').defaultPrevented).toBe(false);
+    const item = new DragItem(false);
+    registry.startDragging(item, createTouchEvent('touchstart') as TouchEvent);
+    expect(dispatchTouchEvent(document, 'touchmove').defaultPrevented).toBe(false);
 
-      item.shouldBeDragging = true;
-      expect(dispatchTouchEvent(document, 'touchmove').defaultPrevented).toBe(true);
-    });
+    item.shouldBeDragging = true;
+    expect(dispatchTouchEvent(document, 'touchmove').defaultPrevented).toBe(true);
+  });
 
   it('should prevent the default `touchmove` if event propagation is stopped', () => {
     const item = new DragItem(true);
@@ -223,9 +223,9 @@ describe('DragDropRegistry', () => {
   });
 
   it('should dispatch `scroll` events if the viewport is scrolled while dragging', () => {
-    const spy = jasmine.createSpy('scroll spy');
+    const spy          = jasmine.createSpy('scroll spy');
     const subscription = registry.scroll.subscribe(spy);
-    const item = new DragItem();
+    const item         = new DragItem();
 
     registry.startDragging(item, createMouseEvent('mousedown'));
     dispatchFakeEvent(document, 'scroll');
@@ -235,7 +235,7 @@ describe('DragDropRegistry', () => {
   });
 
   it('should not dispatch `scroll` events when not dragging', () => {
-    const spy = jasmine.createSpy('scroll spy');
+    const spy          = jasmine.createSpy('scroll spy');
     const subscription = registry.scroll.subscribe(spy);
 
     dispatchFakeEvent(document, 'scroll');
@@ -245,7 +245,10 @@ describe('DragDropRegistry', () => {
   });
 
   class DragItem {
-    isDragging() { return this.shouldBeDragging; }
+    isDragging() {
+      return this.shouldBeDragging;
+    }
+
     constructor(public shouldBeDragging = false) {
       registry.registerDragItem(this);
     }
@@ -258,5 +261,6 @@ describe('DragDropRegistry', () => {
   }
 
   @Component({template: ``})
-  class BlankComponent {}
+  class BlankComponent {
+  }
 });

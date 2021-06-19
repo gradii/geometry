@@ -18,7 +18,7 @@ export type DragAxis = 'x' | 'y';
 export type DragConstrainPosition = (point: Point, dragRef: DragRef) => Point;
 
 /** Possible orientations for a drop list. */
-export type DropListOrientation = 'horizontal' | 'vertical';
+export type DropContainerOrientation = 'horizontal' | 'vertical';
 
 /**
  * Injection token that can be used to configure the
@@ -40,7 +40,7 @@ export interface DragDropConfig extends Partial<DragRefConfig> {
   draggingDisabled?: boolean;
   sortingDisabled?: boolean;
   listAutoScrollDisabled?: boolean;
-  listOrientation?: DropListOrientation;
+  listOrientation?: DropContainerOrientation;
   zIndex?: number;
   previewContainer?: 'global' | 'parent';
 }

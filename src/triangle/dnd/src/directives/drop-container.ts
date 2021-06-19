@@ -21,7 +21,7 @@ import { TriDragDrop, TriDragEnter, TriDragExit, TriDragSortEvent } from '../eve
 import { DragRef } from '../drag-ref';
 import { DropContainerRef } from '../drop-container-ref';
 import { assertElementNode } from './assertions';
-import { TRI_DRAG_CONFIG, DragAxis, DragDropConfig, DropListOrientation } from './config';
+import { TRI_DRAG_CONFIG, DragAxis, DragDropConfig, DropContainerOrientation } from './config';
 import { TriDrag } from './drag';
 import { TRI_DROP_CONTAINER_GROUP, TriDropContainerGroup } from './drop-container-group';
 
@@ -41,23 +41,23 @@ export interface TriDropContainerInternal extends TriDropContainer {
  * alternative token to the actual `TriDropContainer` class which could cause unnecessary
  * retention of the class and its directive metadata.
  */
-export const TRI_DROP_LIST = new InjectionToken<TriDropContainer>('TriDropContainer');
+export const TRI_DROP_CONTAINER = new InjectionToken<TriDropContainer>('TriDropContainer');
 
 /** Container that wraps a set of draggable items. */
 @Directive({
-  selector : '[triDropList], tri-drop-list',
-  exportAs : 'triDropList',
+  selector : '[triDropContainer], tri-drop-container',
+  exportAs : 'triDropContainer',
   providers: [
     // Prevent child drop lists from picking up the same group as their parent.
     {provide: TRI_DROP_CONTAINER_GROUP, useValue: undefined},
-    {provide: TRI_DROP_LIST, useExisting: TriDropContainer},
+    {provide: TRI_DROP_CONTAINER, useExisting: TriDropContainer},
   ],
   host     : {
-    'class'                          : 'tri-drop-list',
-    '[attr.id]'                      : 'id',
-    '[class.tri-drop-list-disabled]' : 'disabled',
-    '[class.tri-drop-list-dragging]' : '_dropListRef.isDragging()',
-    '[class.tri-drop-list-receiving]': '_dropListRef.isReceiving()',
+    'class'                               : 'tri-drop-container',
+    '[attr.id]'                           : 'id',
+    '[class.tri-drop-container-disabled]' : 'disabled',
+    '[class.tri-drop-container-dragging]' : '_dropContainerRef.isDragging()',
+    '[class.tri-drop-container-receiving]': '_dropContainerRef.isReceiving()',
   }
 })
 export class TriDropContainer<T = any> implements OnDestroy {
@@ -68,36 +68,36 @@ export class TriDropContainer<T = any> implements OnDestroy {
   private _scrollableParentsResolved: boolean;
 
   /** Keeps track of the drop lists that are currently on the page. */
-  private static _dropLists: TriDropContainer[] = [];
+  private static _dropContainers: TriDropContainer[] = [];
 
   /** Reference to the underlying drop list instance. */
-  _dropListRef: DropContainerRef<TriDropContainer<T>>;
+  _dropContainerRef: DropContainerRef<TriDropContainer<T>>;
 
   /**
    * Other draggable containers that this container is connected to and into which the
    * container's items can be transferred. Can either be references to other drop containers,
    * or their unique IDs.
    */
-  @Input('triDropListConnectedTo')
+  @Input('triDropContainerConnectedTo')
   connectedTo: (TriDropContainer | string)[] | TriDropContainer | string = [];
 
   /** Arbitrary data to attach to this container. */
-  @Input('triDropListData') data: T;
+  @Input('triDropContainerData') data: T;
 
   /** Direction in which the list is oriented. */
-  @Input('triDropListOrientation') orientation: DropListOrientation;
+  @Input('triDropContainerOrientation') orientation: DropContainerOrientation;
 
   /**
    * Unique ID for the drop zone. Can be used as a reference
    * in the `connectedTo` of another `TriDropContainer`.
    */
-  @Input() id: string = `tri-drop-list-${_uniqueIdCounter++}`;
+  @Input() id: string = `tri-drop-container-${_uniqueIdCounter++}`;
 
   /** Locks the position of the draggable elements inside the container along the specified axis. */
-  @Input('triDropListLockAxis') lockAxis: DragAxis;
+  @Input('triDropContainerLockAxis') lockAxis: DragAxis;
 
   /** Whether starting a dragging sequence from this container is disabled. */
-  @Input('triDropListDisabled')
+  @Input('triDropContainerDisabled')
   get disabled(): boolean {
     return this._disabled || (!!this._group && this._group.disabled);
   }
@@ -107,53 +107,53 @@ export class TriDropContainer<T = any> implements OnDestroy {
     // a single point of failure and to avoid having to use setters for everything. `disabled` is
     // a special case, because it can prevent the `beforeStarted` event from firing, which can lock
     // the user in a disabled state, so we also need to sync it as it's being set.
-    this._dropListRef.disabled = this._disabled = coerceBooleanProperty(value);
+    this._dropContainerRef.disabled = this._disabled = coerceBooleanProperty(value);
   }
 
   private _disabled: boolean;
 
   /** Whether sorting within this drop list is disabled. */
-  @Input('triDropListSortingDisabled')
+  @Input('triDropContainerSortingDisabled')
   sortingDisabled: boolean;
 
   /**
    * Function that is used to determine whether an item
    * is allowed to be moved into a drop container.
    */
-  @Input('triDropListEnterPredicate')
+  @Input('triDropContainerEnterPredicate')
   enterPredicate: (drag: TriDrag, drop: TriDropContainer) => boolean = () => true;
 
   /** Functions that is used to determine whether an item can be sorted into a particular index. */
-  @Input('triDropListSortPredicate')
+  @Input('triDropContainerSortPredicate')
   sortPredicate: (index: number, drag: TriDrag, drop: TriDropContainer) => boolean = () => true;
 
   /** Whether to auto-scroll the view when the user moves their pointer close to the edges. */
-  @Input('triDropListAutoScrollDisabled')
+  @Input('triDropContainerAutoScrollDisabled')
   autoScrollDisabled: boolean;
 
   /** Number of pixels to scroll for each frame when auto-scrolling an element. */
-  @Input('triDropListAutoScrollStep')
+  @Input('triDropContainerAutoScrollStep')
   autoScrollStep: number;
 
   /** Emits when the user drops an item inside the container. */
-  @Output('triDropListDropped')
+  @Output('triDropContainerDropped')
   readonly dropped: EventEmitter<TriDragDrop<T, any>> = new EventEmitter<TriDragDrop<T, any>>();
 
   /**
    * Emits when the user has moved a new drag item into this container.
    */
-  @Output('triDropListEntered')
+  @Output('triDropContainerEntered')
   readonly entered: EventEmitter<TriDragEnter<T>> = new EventEmitter<TriDragEnter<T>>();
 
   /**
    * Emits when the user removes an item from the container
    * by dragging it into another container.
    */
-  @Output('triDropListExited')
+  @Output('triDropContainerExited')
   readonly exited: EventEmitter<TriDragExit<T>> = new EventEmitter<TriDragExit<T>>();
 
   /** Emits as the user is swapping items while actively dragging. */
-  @Output('triDropListSorted')
+  @Output('triDropContainerSorted')
   readonly sorted: EventEmitter<TriDragSortEvent<T>> = new EventEmitter<TriDragSortEvent<T>>();
 
   /**
@@ -176,28 +176,29 @@ export class TriDropContainer<T = any> implements OnDestroy {
     @Optional() @Inject(TRI_DRAG_CONFIG) config?: DragDropConfig) {
 
     if (typeof ngDevMode === 'undefined' || ngDevMode) {
-      assertElementNode(element.nativeElement, 'triDropList');
+      assertElementNode(element.nativeElement, 'triDropContainer');
     }
 
-    this._dropListRef      = dragDrop.createDropList(element);
-    this._dropListRef.data = this;
+    this._dropContainerRef      = dragDrop.createDropContainer(element);
+    this._dropContainerRef.data = this;
 
     if (config) {
       this._assignDefaults(config);
     }
 
-    this._dropListRef.enterPredicate = (drag: DragRef<TriDrag>, drop: DropContainerRef<TriDropContainer>) => {
+    this._dropContainerRef.enterPredicate = (drag: DragRef<TriDrag>,
+                                             drop: DropContainerRef<TriDropContainer>) => {
       return this.enterPredicate(drag.data, drop.data);
     };
 
-    this._dropListRef.sortPredicate =
+    this._dropContainerRef.sortPredicate =
       (index: number, drag: DragRef<TriDrag>, drop: DropContainerRef<TriDropContainer>) => {
         return this.sortPredicate(index, drag.data, drop.data);
       };
 
-    this._setupInputSyncSubscription(this._dropListRef);
-    this._handleEvents(this._dropListRef);
-    TriDropContainer._dropLists.push(this);
+    this._setupInputSyncSubscription(this._dropContainerRef);
+    this._handleEvents(this._dropContainerRef);
+    TriDropContainer._dropContainers.push(this);
 
     if (_group) {
       _group._items.add(this);
@@ -208,7 +209,7 @@ export class TriDropContainer<T = any> implements OnDestroy {
   addItem(item: TriDrag): void {
     this._unsortedItems.add(item);
 
-    if (this._dropListRef.isDragging()) {
+    if (this._dropContainerRef.isDragging()) {
       this._syncItemsWithRef();
     }
   }
@@ -217,7 +218,7 @@ export class TriDropContainer<T = any> implements OnDestroy {
   removeItem(item: TriDrag): void {
     this._unsortedItems.delete(item);
 
-    if (this._dropListRef.isDragging()) {
+    if (this._dropContainerRef.isDragging()) {
       this._syncItemsWithRef();
     }
   }
@@ -237,10 +238,10 @@ export class TriDropContainer<T = any> implements OnDestroy {
   }
 
   ngOnDestroy() {
-    const index = TriDropContainer._dropLists.indexOf(this);
+    const index = TriDropContainer._dropContainers.indexOf(this);
 
     if (index > -1) {
-      TriDropContainer._dropLists.splice(index, 1);
+      TriDropContainer._dropContainers.splice(index, 1);
     }
 
     if (this._group) {
@@ -248,7 +249,7 @@ export class TriDropContainer<T = any> implements OnDestroy {
     }
 
     this._unsortedItems.clear();
-    this._dropListRef.dispose();
+    this._dropContainerRef.dispose();
     this._destroyed.next();
     this._destroyed.complete();
   }
@@ -264,13 +265,14 @@ export class TriDropContainer<T = any> implements OnDestroy {
     ref.beforeStarted.subscribe(() => {
       const siblings = coerceArray(this.connectedTo).map(drop => {
         if (typeof drop === 'string') {
-          const correspondingDropList = TriDropContainer._dropLists.find(list => list.id === drop);
+          const correspondingDropContainer = TriDropContainer._dropContainers.find(
+            list => list.id === drop);
 
-          if (!correspondingDropList && (typeof ngDevMode === 'undefined' || ngDevMode)) {
+          if (!correspondingDropContainer && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             console.warn(`TriDropContainer could not find connected drop list with id "${drop}"`);
           }
 
-          return correspondingDropList!;
+          return correspondingDropContainer!;
         }
 
         return drop;
@@ -290,7 +292,7 @@ export class TriDropContainer<T = any> implements OnDestroy {
         const scrollableParents = this._scrollDispatcher
           .getAncestorScrollContainers(this.element)
           .map(scrollable => scrollable.getElementRef().nativeElement);
-        this._dropListRef.withScrollableParents(scrollableParents);
+        this._dropContainerRef.withScrollableParents(scrollableParents);
 
         // Only do this once since it involves traversing the DOM and the parents
         // shouldn't be able to change without the drop list being destroyed.
@@ -303,7 +305,8 @@ export class TriDropContainer<T = any> implements OnDestroy {
       ref.autoScrollDisabled = coerceBooleanProperty(this.autoScrollDisabled);
       ref.autoScrollStep     = coerceNumberProperty(this.autoScrollStep, 2);
       ref
-        .connectedTo(siblings.filter(drop => drop && drop !== this).map(list => list._dropListRef))
+        .connectedTo(
+          siblings.filter(drop => drop && drop !== this).map(list => list._dropContainerRef))
         .withOrientation(this.orientation);
     });
   }
@@ -376,7 +379,7 @@ export class TriDropContainer<T = any> implements OnDestroy {
 
   /** Syncs up the registered drag items with underlying drop list ref. */
   private _syncItemsWithRef() {
-    this._dropListRef.withItems(this.getSortedItems().map(item => item._dragRef));
+    this._dropContainerRef.withItems(this.getSortedItems().map(item => item._dragRef));
   }
 
   static ngAcceptInputType_disabled: BooleanInput;

@@ -28,7 +28,7 @@ import { TRI_DRAG_CONFIG, DragAxis, DragDropConfig, DragStartDelay } from './con
 import { TRI_DRAG_HANDLE, TriDragHandle } from './drag-handle';
 import { TRI_DRAG_PLACEHOLDER, TriDragPlaceholder } from './drag-placeholder';
 import { TRI_DRAG_PREVIEW, TriDragPreview } from './drag-preview';
-import { TRI_DROP_LIST, TriDropContainerInternal as TriDropContainer } from './drop-container';
+import { TRI_DROP_CONTAINER, TriDropContainerInternal as TriDropContainer } from './drop-container';
 
 const DRAG_HOST_CLASS = 'tri-drag';
 
@@ -118,7 +118,7 @@ export class TriDrag<T = any> implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * Configures the place into which the preview of the item will be inserted. Can be configured
-   * globally through `TRI_DROP_LIST`. Possible values:
+   * globally through `TRI_DROP_CONTAINER`. Possible values:
    * - `global` - Preview will be inserted at the bottom of the `<body>`. The advantage is that
    * you don't have to worry about `overflow: hidden` or `z-index`, but the item won't retain
    * its inherited styles.
@@ -178,7 +178,7 @@ export class TriDrag<T = any> implements AfterViewInit, OnChanges, OnDestroy {
     /** Element that the draggable is attached to. */
     public element: ElementRef<HTMLElement>,
     /** Droppable container that the draggable is a part of. */
-    @Inject(TRI_DROP_LIST) @Optional() @SkipSelf() public dropContainer: TriDropContainer,
+    @Inject(TRI_DROP_CONTAINER) @Optional() @SkipSelf() public dropContainer: TriDropContainer,
     /**
      * @deprecated `_document` parameter no longer being used and will be removed.
      * @breaking-change 12.0.0
@@ -216,7 +216,7 @@ export class TriDrag<T = any> implements AfterViewInit, OnChanges, OnDestroy {
     // is too late since the two modes save different kinds of information. We work around it by
     // assigning the drop container both from here and the list.
     if (dropContainer) {
-      this._dragRef._withDropContainer(dropContainer._dropListRef);
+      this._dragRef._withDropContainer(dropContainer._dropContainerRef);
       dropContainer.addItem(this);
     }
 

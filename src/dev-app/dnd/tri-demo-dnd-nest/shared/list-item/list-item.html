@@ -1,9 +1,9 @@
-<div cdkDropList
+<div triDropContainer
      class="item-dropzone parent"
      [id]="parentItemId"
-     [cdkDropListData]="parentItem"
-     [cdkDropListConnectedTo]="allDropListsIds"
-     (cdkDropListDropped)="onDragDrop($event)">
+     [triDropContainerData]="parentItem"
+     [triDropContainerConnectedTo]="allDropContainersIds"
+     (triDropContainerDropped)="onDragDrop($event)">
   <div cdkDrag
        [id]="item.uId"
        [cdkDragData]="item"
@@ -22,16 +22,16 @@
       {{item.name}} with {{item.children.length}} child item(s)
     </div>
   </div>
-  <ul cdkDropList
+  <ul triDropContainer
       class="item-dropzone"
       [id]="item.uId"
-      [cdkDropListConnectedTo]="connectedDropListsIds"
-      [cdkDropListData]="item"
-      (cdkDropListDropped)="onDragDrop($event)">
+      [triDropContainerConnectedTo]="connectedDropContainersIds"
+      [triDropContainerData]="item"
+      (triDropContainerDropped)="onDragDrop($event)">
     <li *ngFor="let subItem of item.children">
       <list-item [item]="subItem"
                  [parentItem]="item"
-                 [connectedDropListsIds]="allDropListsIds"
+                 [connectedDropContainersIds]="allDropContainersIds"
                  (itemDrop)="onDragDrop($event)">
       </list-item>
     </li>

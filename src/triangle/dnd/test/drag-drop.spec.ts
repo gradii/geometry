@@ -1,9 +1,9 @@
-import {Component, ElementRef} from '@angular/core';
-import {fakeAsync, TestBed, inject} from '@angular/core/testing';
-import {DragDropModule} from '../src/drag-drop-module';
-import {DragDrop} from '../src/drag-drop';
-import {DragRef} from '../src/drag-ref';
-import {DropContainerRef} from '../src/drop-container-ref';
+import { Component, ElementRef } from '@angular/core';
+import { fakeAsync, TestBed, inject } from '@angular/core/testing';
+import { TriDndModule } from '../src/drag-drop-module';
+import { DragDrop } from '../src/drag-drop';
+import { DragRef } from '../src/drag-ref';
+import { DropContainerRef } from '../src/drop-container-ref';
 
 describe('DragDrop', () => {
   let service: DragDrop;
@@ -11,7 +11,7 @@ describe('DragDrop', () => {
   beforeEach(fakeAsync(() => {
     TestBed.configureTestingModule({
       declarations: [TestComponent],
-      imports: [DragDropModule],
+      imports     : [TriDndModule],
     });
 
     TestBed.compileComponents();
@@ -32,7 +32,7 @@ describe('DragDrop', () => {
   it('should be able to attach a DropListRef to a DOM node', () => {
     const fixture = TestBed.createComponent(TestComponent);
     fixture.detectChanges();
-    const ref = service.createDropList(fixture.componentInstance.elementRef);
+    const ref = service.createDropContainer(fixture.componentInstance.elementRef);
 
     expect(ref instanceof DropContainerRef).toBe(true);
   });
@@ -43,5 +43,6 @@ describe('DragDrop', () => {
   template: '<div></div>'
 })
 class TestComponent {
-  constructor(public elementRef: ElementRef<HTMLElement>) {}
+  constructor(public elementRef: ElementRef<HTMLElement>) {
+  }
 }

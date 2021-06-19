@@ -1,4 +1,10 @@
-import { CdkDragDrop, CdkDragEnter, CdkDragExit, moveItemInArray } from '@angular/cdk/drag-drop';
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import { TriDragDrop, TriDragEnter, TriDragExit, moveItemInArray } from '@gradii/triangle/dnd';
 import { Component } from '@angular/core';
 import { Item } from './shared/models/item';
 
@@ -8,7 +14,7 @@ import { Item } from './shared/models/item';
   template: `
     <div>
       <list-item [item]="parentItem"
-                 [connectedDropListsIds]="connectedDropListsIds"
+                 [connectedDropContainersIds]="connectedDropContainersIds"
                  (itemDrop)="onDragDrop($event)">
       </list-item>
     </div>
@@ -18,7 +24,7 @@ import { Item } from './shared/models/item';
 export class TriDemoDndNestComponent {
   public parentItem: Item;
 
-  public get connectedDropListsIds(): string[] {
+  public get connectedDropContainersIds(): string[] {
     // We reverse ids here to respect items nesting hierarchy
     return this.getIdsRecursive(this.parentItem).reverse();
   }
@@ -51,7 +57,7 @@ export class TriDemoDndNestComponent {
     this.parentItem.children.push(new Item({name: 'test3'}));
   }
 
-  public onDragDrop(event: CdkDragDrop<Item>) {
+  public onDragDrop(event: TriDragDrop<Item>) {
     event.container.element.nativeElement.classList.remove('active');
     if (this.canBeDropped(event)) {
       const movingItem: Item = event.item.data;
@@ -75,7 +81,7 @@ export class TriDemoDndNestComponent {
     return ids;
   }
 
-  private canBeDropped(event: CdkDragDrop<Item, Item>): boolean {
+  private canBeDropped(event: TriDragDrop<Item, Item>): boolean {
     const movingItem: Item = event.item.data;
 
     return event.previousContainer.id !== event.container.id
@@ -83,7 +89,7 @@ export class TriDemoDndNestComponent {
       && !this.hasChild(movingItem, event.container.data);
   }
 
-  private isNotSelfDrop(event: CdkDragDrop<Item> | CdkDragEnter<Item> | CdkDragExit<Item>): boolean {
+  private isNotSelfDrop(event: TriDragDrop<Item> | TriDragEnter<Item> | TriDragExit<Item>): boolean {
     return event.container.data.uId !== event.item.data.uId;
   }
 

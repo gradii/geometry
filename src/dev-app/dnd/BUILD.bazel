@@ -3,7 +3,7 @@ load("//tools:defaults.bzl", "ng_module", "sass_binary")
 package(default_visibility = ["//visibility:public"])
 
 ng_module(
-    name = "drag-and-drop",
+    name = "dnd",
     srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
     assets = [
         "tri-demo-dnd-nest/shared/list-item/list-item.html",
@@ -35,7 +35,7 @@ sass_binary(
 
 sass_binary(
     name = "tri_demo_drag_and_drop_child_groups_with_monkey_patch_scss",
-    src = "tri-demo-drag-and-drop-child-groups-with-monkey-patch/tri-demo-drag-and-drop-child-groups-with-monkey-patch.component.scss",
+    src = "tri-demo-dnd-child-groups-with-monkey-patch/tri-demo-drag-and-drop-child-groups-with-monkey-patch.component.scss",
 )
 
 sass_binary(
