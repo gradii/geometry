@@ -1,0 +1,39 @@
+load("@npm//scss-bundle:index.bzl", "scss_bundle")
+load(
+    "//src/triangle-icons:config.bzl",
+    "TRIANGLE_ICONS_TARGETS",
+)
+load("//tools:defaults.bzl", "ng_package", "ts_library")
+
+package(default_visibility = ["//visibility:public"])
+
+
+ts_library(
+    name = "triangle-icons",
+    srcs = glob(
+        ["**/*.ts"],
+        exclude = [
+            "test/**/*.ts",
+            "**/*.spec.ts",
+        ],
+    ),
+    deps = [
+    ],
+    node_modules = "@npm//:node_modules",
+    module_name = "@gradii/triangle-icons",
+    tsconfig = ":tsconfig.json",
+)
+
+ng_package(
+    name = "npm_package",
+    srcs = [
+        "package.json",
+    ],
+    data = [
+    ],
+    entry_point = ":index.ts",
+    entry_point_name = "triangle-icons",
+    nested_packages = [],
+    tags = ["release-package"],
+    deps = TRIANGLE_ICONS_TARGETS,
+)
