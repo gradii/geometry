@@ -144,8 +144,8 @@ export const DEV_APP_ROUTES: Routes = [
         loadChildren: '/tree-select/dev-tree-select.module#DevTreeSelectModule'
       },
       {
-        path        : 'drag-and-drop',
-        loadChildren: '/drag-and-drop/dev-drag-and-drop.module#DevDragAndDropModule'
+        path        : 'dnd',
+        loadChildren: '/dnd/dev-drag-and-drop.module#DevDragAndDropModule'
       },
       {
         path        : 'sidenav',

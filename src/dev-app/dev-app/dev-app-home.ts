@@ -42,7 +42,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="cube">cube</a></li>
       <li><a routerLink="diagram">diagram</a></li>
       <li><a routerLink="tree-select">tree-select</a></li>
-      <li><a routerLink="drag-and-drop">drag-and-drop</a></li>
+      <li><a routerLink="dnd">dnd</a></li>
       <li><a routerLink="sidenav">sidenav</a></li>
       <li><a routerLink="navbar">navbar</a></li>
       <li><a routerLink="gridster">gridster</a></li>

@@ -29,8 +29,8 @@ import { demoData, TreeNode, DropInfo } from './data';
              (triDropContainerDropped)="drop($event)"
              [triDropContainerSortingDisabled]="true">
 
-          <div *ngFor="let child of node.children" cdkDrag [cdkDragData]="child.id"
-               (cdkDragMoved)="dragMoved($event)">
+          <div *ngFor="let child of node.children" triDrag [triDragData]="child.id"
+               (triDragMoved)="dragMoved($event)">
             <ng-container *ngTemplateOutlet="tmplNode,context:{node:child}"></ng-container>
           </div>
 
@@ -47,8 +47,8 @@ import { demoData, TreeNode, DropInfo } from './data';
          (triDropContainerDropped)="drop($event)"
          [triDropContainerSortingDisabled]="true">
 
-      <div *ngFor="let node of nodes" cdkDrag [cdkDragData]="node.id"
-           (cdkDragMoved)="dragMoved($event)">
+      <div *ngFor="let node of nodes" triDrag [triDragData]="node.id"
+           (triDragMoved)="dragMoved($event)">
 
         <ng-container *ngTemplateOutlet="tmplNode,context:{node:node}"></ng-container>
 

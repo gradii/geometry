@@ -4,13 +4,13 @@
      [triDropContainerData]="parentItem"
      [triDropContainerConnectedTo]="allDropContainersIds"
      (triDropContainerDropped)="onDragDrop($event)">
-  <div cdkDrag
+  <div triDrag
        [id]="item.uId"
-       [cdkDragData]="item"
-       [cdkDragDisabled]="dragDisabled">
+       [triDragData]="item"
+       [triDragDisabled]="dragDisabled">
     <div title="Drag this item with children"
          class="item-drag-handle"
-         cdkDragHandle>
+         triDragHandle>
       {{item.name}}
       <tri-icon *ngIf="!dragDisabled"
                 svgIcon="outline:drag">
@@ -18,7 +18,7 @@
       </tri-icon>
     </div>
     <div class="item-drag-preview"
-         *cdkDragPreview>
+         *triDragPreview>
       {{item.name}} with {{item.children.length}} child item(s)
     </div>
   </div>

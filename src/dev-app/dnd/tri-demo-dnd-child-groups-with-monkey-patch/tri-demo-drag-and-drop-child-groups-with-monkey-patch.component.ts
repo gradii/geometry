@@ -25,7 +25,7 @@ import { asapScheduler } from 'rxjs';
           (triDropContainerDropped)="drop($event)"
           [triDropContainerConnectedTo]="dls"
         >
-          <div class="example-box" *ngFor="let item of todo" cdkDrag>
+          <div class="example-box" *ngFor="let item of todo" triDrag>
             <div *ngIf="!isArray(item); else arrayView">{{item}}</div>
             <ng-template #arrayView>
               <div class="example-container">
@@ -36,7 +36,7 @@ import { asapScheduler } from 'rxjs';
                   (triDropContainerDropped)="drop($event)"
                   [triDropContainerConnectedTo]="dls"
                 >
-                  <div class="example-box" *ngFor="let innerItem of item" cdkDrag>
+                  <div class="example-box" *ngFor="let innerItem of item" triDrag>
                     {{innerItem}}
                   </div>
                 </div>
