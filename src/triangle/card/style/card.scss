@@ -59,7 +59,7 @@ $card-border-radius    : v.$border-radius-base !default;
   }
 
   @at-root &-footer {
-    padding : .325rem $card-padding-base;
+    padding : .75rem $card-padding-base;
     display : block;
 
     &#{&}-align-end {
