@@ -4,12 +4,15 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { CdkTextareaAutosize, TextFieldModule } from '@angular/cdk/text-field';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { TriIconModule } from '@gradii/triangle/icon';
 import { InputGroupComponent } from './input-group.component';
 import { InputComponent } from './input.component';
 import { InputDirective } from './input.directive';
+import { TextareaDirective, TextareaAutosize } from './textarea.directive';
 
 /**
  *
@@ -41,9 +44,13 @@ import { InputDirective } from './input.directive';
  * <!-- example(tri-demo-input-textarea) -->
  */
 @NgModule({
-  declarations: [InputComponent, InputGroupComponent, InputDirective],
-  exports     : [InputComponent, InputGroupComponent, InputDirective],
-  imports     : [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, TriIconModule, TextFieldModule],
+  declarations: [
+    InputComponent, InputGroupComponent, InputDirective, TextareaDirective, TextareaAutosize
+  ],
+  exports: [
+    InputComponent, InputGroupComponent, InputDirective, TextareaDirective, TextareaAutosize
+  ],
 })
 export class TriInputModule {
 }

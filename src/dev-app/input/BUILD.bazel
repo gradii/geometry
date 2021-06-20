@@ -1,0 +1,27 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "input",
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"],),
+    assets = [
+        "dev-input.html",
+        ":dev_input_scss",
+    ],
+    deps = [
+        "//src/triangle/input",
+        "//src/triangle/input-number",
+        "//src/triangle/select",
+        "//src/triangle/grid",
+        "//src/triangle/icon",
+        "@npm//@angular/cdk",
+        "@npm//@angular/router",
+        "@npm//@angular/forms",
+    ],
+)
+
+sass_binary(
+    name = "dev_input_scss",
+    src = "dev-input.scss",
+)

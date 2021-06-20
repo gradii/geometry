@@ -10,6 +10,7 @@ import { Component } from '@angular/core';
 @Component({
   template: `
     <ul>
+      <li><a routerLink="input">input</a></li>
       <li><a routerLink="input-number">input number</a></li>
       <li><a routerLink="alert">alert</a></li>
       <li><a routerLink="tabs">tabs</a></li>

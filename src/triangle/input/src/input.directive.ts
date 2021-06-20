@@ -5,23 +5,24 @@
  */
 
 import { ChangeDetectorRef, Directive, Input } from '@angular/core';
-import { AutoSizeType } from './input.component';
 
 @Directive({
   selector: '[triInput], [tri-input]',
   host    : {
-    '[class.tri-input]'         : 'true',
-    '[class.tri-input-lg]'      : '_size === "large"',
-    '[class.tri-input-sm]'      : '_size === "small"',
-    '[class.tri-input-disabled]': '_disabled',
-    '[disabled]'                : 'disabled',
-    //    '[autosize]': '_autosize',
-    '[readonly]'                : '_readonly'
+    'autocomplete'           : 'off',
+    'class'                       : 'tri-input',
+    '[class.tri-input-lg]'        : '_size === "large"',
+    '[class.tri-input-sm]'        : '_size === "small"',
+    '[class.tri-input-disabled]'  : '_disabled',
+    '[disabled]'             : '_disabled',
+    '[readonly]'             : '_readonly',
+    '[class.tri-input-full-width]': 'fullWidth'
   }
 })
 export class InputDirective {
-  constructor(private _cdRef: ChangeDetectorRef) {
-  }
+
+  @Input()
+  fullWidth: boolean;
 
   _size = 'default';
 
@@ -45,21 +46,6 @@ export class InputDirective {
     this._readonly = value;
   }
 
-  _autosize: boolean | AutoSizeType = false;
-
-  @Input()
-  get autosize() {
-    return this._autosize;
-  }
-
-  set autosize(value: string | boolean | AutoSizeType) {
-    if (typeof value === 'string') {
-      this._autosize = true;
-    } else {
-      this._autosize = <boolean | AutoSizeType>value;
-    }
-  }
-
   _disabled = false;
 
   @Input()
@@ -71,7 +57,6 @@ export class InputDirective {
     this._disabled = value;
   }
 
-  ngOnInit() {
-    this._cdRef.detectChanges();
+  constructor() {
   }
 }

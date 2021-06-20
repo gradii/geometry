@@ -5,35 +5,18 @@
  */
 
 import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ContentChild,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  HostListener,
-  Input,
-  Output,
-  Renderer2,
-  TemplateRef,
-  ViewChild,
-  ViewEncapsulation
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter,
+  forwardRef, HostListener, Input, Output, Renderer2, TemplateRef, ViewChild, ViewEncapsulation
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { calculateNodeHeight } from '@gradii/triangle/util';
-
-export interface AutoSizeType {
-  minRows?: number;
-  maxRows?: number;
-}
 
 export type SizeType = 'large' | 'small' | 'default';
 
 @Component({
-  selector     : 'tri-input',
-  encapsulation: ViewEncapsulation.None,
-  template     : `
+  selector       : 'tri-input',
+  encapsulation  : ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template       : `
     <span class="tri-input-group-addon" *ngIf="_addOnContentBefore">
       <ng-template [ngTemplateOutlet]="_addOnContentBefore">
       </ng-template>
@@ -55,21 +38,23 @@ export type SizeType = 'large' | 'small' | 'default';
         [class.tri-input-lg]="_size=='large'"
         [class.tri-input-disabled]="_disabled"
         [class.tri-input-search]="type==='search'"
-        [ngClass]="_classMap"
         [attr.placeholder]="placeholder"
+        [attr.autocomplete]="'off'"
         [(ngModel)]="value">
     </ng-template>
     <ng-template [ngIf]="type=='textarea'">
       <textarea
         (blur)="_emitBlur($event)"
         (focus)="_emitFocus($event)"
-        (input)="textareaOnChange($event)"
         [attr.id]="id"
         #inputTextarea
+        triTextareaAutosize
         [disabled]="disabled"
         [readonly]="readonly"
         type="textarea"
-        [attr.rows]="rows"
+        [triAutosizeMaxRows]="maxRows"
+        [triAutosizeMinRows]="minRows"
+        [attr.rows]="!autosize && rows"
         [attr.cols]="cols"
         class="tri-input"
         [class.tri-input-sm]="_size=='small'"
@@ -79,7 +64,7 @@ export type SizeType = 'large' | 'small' | 'default';
         [(ngModel)]="value"></textarea>
     </ng-template>
     <span class="tri-input-suffix" *ngIf="(type==='search')||(_suffixContent)">
-      <i class="anticon anticon-search tri-input-search-icon" *ngIf="type==='search'"></i>
+      <tri-icon svgIcon="outline:search" *ngIf="type==='search'"></tri-icon>
       <ng-template [ngTemplateOutlet]="_suffixContent">
       </ng-template>
     </span>
@@ -87,32 +72,35 @@ export type SizeType = 'large' | 'small' | 'default';
       <ng-template [ngTemplateOutlet]="_addOnContentAfter">
       </ng-template>
     </span>`,
-  providers    : [
+  providers      : [
     {
       provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => InputComponent),
       multi      : true
     }
   ],
-  exportAs     : 'triInput',
-  host         : {
+  exportAs       : 'triInput',
+  host           : {
     '[class.tri-input-wrapper]'      : 'type !== "search" && !_prefixContent && !_suffixContent',
     '[class.tri-input-affix-wrapper]': 'type === "search" || _prefixContent || _suffixContent',
-    '[class.tri-input-group]'        : '_addOnContentBefore || _addOnContentAfter'
+    '[class.tri-input-group]'        : '_addOnContentBefore || _addOnContentAfter',
+    '[class.tri-input-full-width]'   : 'fullWidth'
   },
-  styles       : [`:host {
-    display: inline-block;
-    width: 100%;
-  }`],
-  styleUrls: [`../style/input.css`, `../style/search-input.css`]
+  styles         : [
+    `:host {
+      display : inline-block;
+      width   : 100%;
+    }`
+  ],
+  styleUrls      : [`../style/input.css`, `../style/search-input.css`]
 })
-export class InputComponent implements ControlValueAccessor, AfterViewInit {
-  _prefixCls = 'tri-input';
+export class InputComponent implements ControlValueAccessor {
   _composing = false;
-  _classMap;
+
   // ngModel Access
-  onChange: any = Function.prototype;
+  onChange: any  = Function.prototype;
   onTouched: any = Function.prototype;
+
   @Input() placeholder: string;
   /**
    * [must] declare input type, same as the type attribute of the input tag. also, provider `type="textarea"`.
@@ -121,18 +109,21 @@ export class InputComponent implements ControlValueAccessor, AfterViewInit {
    */
   @Input() type = 'text';
   @Input() id: string;
+  @Input() minRows: number;
+  @Input() maxRows: number;
   @Input() rows: number;
   @Input() cols: number;
+
   /**
    * The event of blur
    * 失去焦点回调
    */
-  @Output() blurEvent: EventEmitter<MouseEvent> = new EventEmitter();
+  @Output() blurEvent: EventEmitter<FocusEvent>  = new EventEmitter();
   /**
    * the event of focus
    * 获取焦点回调
    */
-  @Output() focusEvent: EventEmitter<MouseEvent> = new EventEmitter();
+  @Output() focusEvent: EventEmitter<FocusEvent> = new EventEmitter();
   @ViewChild('inputTextarea', {static: false}) textAreaRef: ElementRef;
   /**
    * addon before
@@ -155,7 +146,8 @@ export class InputComponent implements ControlValueAccessor, AfterViewInit {
    */
   @ContentChild('suffix', {static: false}) _suffixContent: any;
 
-  constructor(private _elementRef: ElementRef, private _renderer: Renderer2, private _cdRef: ChangeDetectorRef) {
+  constructor(private _elementRef: ElementRef, private _renderer: Renderer2,
+              private _cdRef: ChangeDetectorRef) {
   }
 
   // _el: HTMLElement;
@@ -239,7 +231,7 @@ export class InputComponent implements ControlValueAccessor, AfterViewInit {
     this._readonly = value;
   }
 
-  _autosize: boolean | AutoSizeType = true;
+  _autosize: boolean = true;
 
   /**
    * Get auto size height
@@ -254,26 +246,29 @@ export class InputComponent implements ControlValueAccessor, AfterViewInit {
    * Set auto size height, can be set to true|false or object `{{'{ minRows: 2, maxRows: 6 }'}}`
    * 自适应内容高度，可设置为 true|false 或对象： `{{'{ minRows: 2, maxRows: 6 }'}}`
    */
-  set autosize(value: boolean | AutoSizeType) {
-    this._autosize = <boolean | AutoSizeType>value;
+  set autosize(value: boolean) {
+    this._autosize = <boolean>value;
 
     if (this._autosize) {
       this.rows = 1;
     }
   }
 
+  @Input()
+  fullWidth: boolean = true;
+
   @HostListener('compositionstart', ['$event'])
-  compositionStart(e): void {
+  compositionStart(e: CompositionEvent): void {
     this._composing = true;
   }
 
   @HostListener('compositionend', ['$event'])
-  compositionEnd(e): void {
+  compositionEnd(e: CompositionEvent): void {
     this._composing = false;
     this.onChange(this._value);
   }
 
-  _emitBlur($event) {
+  _emitBlur($event: FocusEvent) {
     this.blurEvent.emit($event);
     this.onTouched();
   }
@@ -285,25 +280,8 @@ export class InputComponent implements ControlValueAccessor, AfterViewInit {
   //   };
   // }
 
-  _emitFocus($event) {
+  _emitFocus($event: FocusEvent) {
     this.focusEvent.emit($event);
-  }
-
-  resizeTextarea() {
-    const textAreaRef = this.textAreaRef.nativeElement;
-    // eliminate jitter
-    textAreaRef.style.height = 'auto';
-    const maxRows = this.autosize ? (this.autosize as AutoSizeType).maxRows || null : null;
-    const minRows = this.autosize ? (this.autosize as AutoSizeType).minRows || null : null;
-    const textareaStyles = calculateNodeHeight(textAreaRef, false, minRows, maxRows);
-    textAreaRef.style.height = `${textareaStyles.height}px`;
-    textAreaRef.style.overflowY = textareaStyles.overflowY;
-  }
-
-  textareaOnChange(event?) {
-    if (this.type === 'textarea' && this.autosize) {
-      this.resizeTextarea();
-    }
   }
 
   // ngAfterContentInit() {
@@ -317,15 +295,6 @@ export class InputComponent implements ControlValueAccessor, AfterViewInit {
   // }
 
   // }
-  ngOnInit() {
-    this._cdRef.detectChanges();
-  }
-
-  ngAfterViewInit() {
-    if (this.type === 'textarea' && this.autosize) {
-      setTimeout(() => this.resizeTextarea(), 0);
-    }
-  }
 
   writeValue(value: any): void {
     this._value = value;

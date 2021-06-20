@@ -4,9 +4,12 @@
 @use "../../core/style/theming";
 @use "../../core/style/variables" as v;
 
+@use "./input-mixin";
+//@use "./search-input";
 
-$_foreground              : theme.$foreground;
-$_background              : theme.$background;
+
+$_foreground              : theme.$foreground !default;
+$_background              : theme.$background !default;
 
 $input-color              : v.$text-color !default;
 $input-border-width       : v.$border-width-base !default;
@@ -53,11 +56,17 @@ $input-border-color       : map.get($_foreground, border-color-base) !default;
 
 @mixin tri-input-theme() {
 
+  .#{v.$tri-prefix}-input-wrapper {
+    display: inline-block;
+  }
 
   .#{v.$tri-prefix}-input {
     color      : $input-color;
     background : $input-bg none;
-    border     : v.$border-width-base v.$border-style-base theming.tri-color($_foreground, input-border-color);
+    border     : v.$border-width-base v.$border-style-base $input-border-color;
+
+    @include input-mixin.input();
+
     @include compatibility.placeholder();
     transition : all .3s;
 

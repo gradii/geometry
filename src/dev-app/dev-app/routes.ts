@@ -16,6 +16,10 @@ export const DEV_APP_ROUTES: Routes = [
         loadChildren: '/autocomplete/autocomplete-demo-module#AutocompleteDemoModule'
       },
       {
+        path        : 'input',
+        loadChildren: '/input/dev-input.module#DevInputModule'
+      },
+      {
         path        : 'input-number',
         loadChildren: '/input-number/dev-input-number.module#DevInputNumberModule'
       },

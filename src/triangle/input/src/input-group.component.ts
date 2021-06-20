@@ -15,7 +15,7 @@ import { Component, HostBinding, Input, OnInit, ViewEncapsulation } from '@angul
   host         : {
     '[class.tri-input-group]': 'true'
   },
-  styleUrls: [`../style/input-group.css`]
+  styleUrls    : [`../style/input-group.css`]
 })
 export class InputGroupComponent implements OnInit {
   _el: HTMLElement;
@@ -30,7 +30,7 @@ export class InputGroupComponent implements OnInit {
    */
   @Input()
   @HostBinding(`class.tri-input-group-compact`)
-  compact = false;
+  compact = true;
 
   @HostBinding(`class.tri-input-group-lg`)
   get _isLarge(): boolean {

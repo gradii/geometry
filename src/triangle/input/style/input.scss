@@ -5,12 +5,6 @@
 @use "./search-input";
 
 @use "./input-variables";
-
-// Input styles
-.#{v.$tri-prefix}-input {
-  @include input-mixin.input();
-}
-
 // Input with affix: prefix or suffix
 .#{v.$tri-prefix}-input-affix-wrapper {
   @include input-mixin.input-affix-wrapper("#{v.$tri-prefix}-input");
@@ -18,4 +12,9 @@
   .#{v.$tri-prefix}-input {
     min-height : 100%;
   }
+}
+
+.#{v.$tri-prefix}-input-full-width {
+  width: 100%;
+  flex: 1 0 auto;
 }

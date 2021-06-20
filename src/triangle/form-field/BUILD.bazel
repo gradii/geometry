@@ -11,13 +11,13 @@ load(
 package(default_visibility = ["//visibility:public"])
 
 ng_module(
-    name = "textarea",
+    name = "form-field",
     srcs = glob(
         ["**/*.ts"],
         exclude = ["**/*.spec.ts"],
     ),
-    assets = [":style/textarea.css"] + glob(["**/*.html"]),
-    module_name = "@gradii/triangle/textarea",
+    assets = [":style/form-field.css"] + glob(["**/*.html"]),
+    module_name = "@gradii/triangle/form-field",
     deps = [
         "//src/triangle/core",
         "//src/triangle/i18n",
@@ -33,16 +33,16 @@ ng_module(
 )
 
 sass_library(
-    name = "textarea_scss_lib",
+    name = "form_field_scss_lib",
     srcs = glob(["**/_*.scss"]),
     deps = ["//src/triangle/core:core_scss_lib"],
 )
 
 sass_binary(
-    name = "textarea_scss",
-    src = "style/textarea.scss",
+    name = "form_field_scss",
+    src = "style/form-field.scss",
     deps = [
-        "//src/triangle/textarea:textarea_scss_lib",
+        "//src/triangle/form-field:form_field_scss_lib",
     ],
 )
 #

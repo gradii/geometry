@@ -4,7 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-export { calculateNodeHeight } from './src/calculate-node-height';
 export { TriUtilModule } from './src/util.module';
 export { DatePipe } from './src/pipe/date.pipe';
 export { SafeUrlPipe } from './src/pipe/safe-url.pipe';
