@@ -129,22 +129,22 @@ export class InputComponent implements ControlValueAccessor {
    * addon before
    * 设置前置标签
    */
-  @ContentChild('addOnBefore', {static: false}) _addOnContentBefore: TemplateRef<any>;
+  @ContentChild('addOnBefore', {static: true}) _addOnContentBefore: TemplateRef<any>;
   /**
    * addon after
    * 设置后置标签
    */
-  @ContentChild('addOnAfter', {static: false}) _addOnContentAfter: TemplateRef<any>;
+  @ContentChild('addOnAfter', {static: true}) _addOnContentAfter: TemplateRef<any>;
   /**
    * prefix
    * 带有前缀图标的 input
    */
-  @ContentChild('prefix', {static: false}) _prefixContent: any;
+  @ContentChild('prefix', {static: true}) _prefixContent: any;
   /**
    * suffix
    * 带有后缀图标的 input
    */
-  @ContentChild('suffix', {static: false}) _suffixContent: any;
+  @ContentChild('suffix', {static: true}) _suffixContent: any;
 
   constructor(private _elementRef: ElementRef, private _renderer: Renderer2,
               private _cdRef: ChangeDetectorRef) {
@@ -298,6 +298,7 @@ export class InputComponent implements ControlValueAccessor {
 
   writeValue(value: any): void {
     this._value = value;
+    this._cdRef.markForCheck();
   }
 
   registerOnChange(fn: (_: any) => {}): void {

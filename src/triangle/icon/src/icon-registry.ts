@@ -521,6 +521,10 @@ export class IconRegistry implements OnDestroy {
       }
     }
 
+    if (element.hasAttribute('viewBox')) {
+      svg.setAttribute('viewBox', element.getAttribute('viewBox'));
+    }
+
     return svg;
   }
 
