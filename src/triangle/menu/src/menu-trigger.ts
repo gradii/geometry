@@ -4,17 +4,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component } from '@angular/core';
+import { Component, Directive } from '@angular/core';
 
 
-@Component({
-  selector: 'tri-menu-trigger',
-  template: `
-    <div>
-      
-    </div>
-  `
+@Directive({
+  selector: 'triMenuTrigger',
 })
-export class MenuTrigger {
+export class TriMenuTrigger {
 
 }

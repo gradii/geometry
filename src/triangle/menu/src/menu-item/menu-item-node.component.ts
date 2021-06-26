@@ -4,76 +4,69 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, Input, Optional } from '@angular/core';
+import { Component, EventEmitter, Input, Optional, Output } from '@angular/core';
 import { _MenuItemBase } from '../menu-item.component';
 import { MenuComponent } from '../menu.component';
 import { SubMenuComponent } from '../submenu.component';
 
 @Component({
-  selector: '[triMenuItemNode]',
+  selector: 'tri-menu-item-node',
   template: `
     <span *ngIf="menuItem.group">
         <tri-icon class="menu-icon" [svgIcon]="menuItem.icon" *ngIf="menuItem.icon"></tri-icon>
       {{ menuItem.title }}
       </span>
-    <ng-template [ngIf]="!menuItem.children">
-      <a *ngIf="menuItem.link&&!menuItem.url"
-         [routerLink]="menuItem.link"
-         [fragment]="menuItem.fragment"
-         [queryParams]="menuItem.queryParams"
-         [queryParamsHandling]="menuItem.queryParamsHandling"
-         [preserveFragment]="menuItem.preserveFragment"
-         [skipLocationChange]="menuItem.skipLocationChange"
-         [attr.target]="menuItem.target"
-         [attr.title]="menuItem.title"
-         [class.active]="menuItem.selected"
-         (click)="onItemClick(menuItem)"
-         (mouseenter)="onHoverItem(menuItem)"
-      >
-        <tri-icon class="menu-icon" [svgIcon]="menuItem.icon" *ngIf="menuItem.icon"></tri-icon>
-        <span class="menu-title">{{ menuItem.title }}</span>
-        <ng-container *ngIf="badge" [ngTemplateOutlet]="badgeTemplate"></ng-container>
-        {{ menuItem.title }}
-      </a>
-      <a *ngIf="!menuItem.link&&menuItem.url"
-         [attr.href]="menuItem.url"
-         [attr.target]="menuItem.target"
-         [attr.title]="menuItem.title"
-         [class.active]="menuItem.selected"
-         (mouseenter)="onHoverItem(menuItem)"
-         (click)="onSelectItem(menuItem)">
-        <tri-icon class="menu-icon" [svgIcon]="menuItem.icon" *ngIf="menuItem.icon"></tri-icon>
-        <span class="menu-title">{{ menuItem.title }}</span>
-        <ng-container *ngIf="badge" [ngTemplateOutlet]="badgeTemplate"></ng-container>
-      </a>
-      <a *ngIf="!menuItem.link&&!menuItem.url"
-         [attr.target]="menuItem.target"
-         [attr.title]="menuItem.title"
-         [class.active]="menuItem.selected"
-         (mouseenter)="onHoverItem(menuItem)"
-         (click)="onSelectItem(menuItem)">
-        <tri-icon class="menu-icon" [svgIcon]="menuItem.icon" *ngIf="menuItem.icon"></tri-icon>
-        <span class="menu-title">{{ menuItem.title }}</span>
-        <ng-container *ngIf="badge" [ngTemplateOutlet]="badgeTemplate"></ng-container>
-      </a>
-    </ng-template>
+    <a *ngIf="menuItem.link&&!menuItem.url"
+       [routerLink]="menuItem.link"
+       [fragment]="menuItem.fragment"
+       [queryParams]="menuItem.queryParams"
+       [queryParamsHandling]="menuItem.queryParamsHandling"
+       [preserveFragment]="menuItem.preserveFragment"
+       [skipLocationChange]="menuItem.skipLocationChange"
+       [attr.target]="menuItem.target"
+       [attr.title]="menuItem.title"
+       [class.active]="menuItem.selected"
+       (click)="onItemClick(menuItem)"
+       (mouseenter)="onHoverItem(menuItem)"
+    >
+      <tri-icon class="menu-icon" [svgIcon]="menuItem.icon" *ngIf="menuItem.icon"></tri-icon>
+      <span class="menu-title">{{ menuItem.title }}</span>
+      <ng-container *ngIf="badge" [ngTemplateOutlet]="badgeTemplate"></ng-container>
+      {{ menuItem.title }}
+    </a>
+    <a *ngIf="!menuItem.link&&menuItem.url"
+       [attr.href]="menuItem.url"
+       [attr.target]="menuItem.target"
+       [attr.title]="menuItem.title"
+       [class.active]="menuItem.selected"
+       (mouseenter)="onHoverItem(menuItem)"
+       (click)="onSelectItem(menuItem)">
+      <tri-icon class="menu-icon" [svgIcon]="menuItem.icon" *ngIf="menuItem.icon"></tri-icon>
+      <span class="menu-title">{{ menuItem.title }}</span>
+      <ng-container *ngIf="badge" [ngTemplateOutlet]="badgeTemplate"></ng-container>
+    </a>
+    <a *ngIf="!menuItem.link&&!menuItem.url"
+       [attr.target]="menuItem.target"
+       [attr.title]="menuItem.title"
+       [class.active]="menuItem.selected"
+       (mouseenter)="onHoverItem(menuItem)"
+       (click)="onSelectItem(menuItem)">
+      <tri-icon class="menu-icon" [svgIcon]="menuItem.icon" *ngIf="menuItem.icon"></tri-icon>
+      <span class="menu-title">{{ menuItem.title }}</span>
+      <ng-container *ngIf="badge" [ngTemplateOutlet]="badgeTemplate"></ng-container>
+    </a>
+    <!--
     <ng-template [ngIf]="menuItem.children">
-      <a
-        [attr.target]="menuItem.target"
-        [attr.title]="menuItem.title"
-        [class.active]="menuItem.selected"
-        (mouseenter)="onHoverItem(menuItem)"
-        (click)="$event.preventDefault(); onItemClick(menuItem);">
-        <tri-icon class="menu-icon" [svgIcon]="menuItem.icon" *ngIf="menuItem.icon"></tri-icon>
-        <span class="menu-title">{{ menuItem.title }}</span>
-        <ng-container *ngIf="badge" [ngTemplateOutlet]="badgeTemplate"></ng-container>
-      </a>
-      <tri-menu-item-nest-node *ngIf="menuItem.children"
-                               [expanded]="menuItem.expanded"
-                               [dataSource]="menuItem.children">
-      </tri-menu-item-nest-node>
-    </ng-template>
-
+       <tri-menu-item-nest-node
+         *ngIf="menuItem.children"
+         [mode]="mode"
+         [menuItem]="menuItem"
+         [badge]="menuItem.badge"
+         [expanded]="menuItem.expanded"
+         [dataSource]="menuItem.children">
+       </tri-menu-item-nest-node>
+     </ng-template>
+     -->
     <ng-template #badgeTemplate>
       <tri-badge [badgeText]="badge.text" [isDot]="badge.isDot" [status]="badge.status">
       </tri-badge>
@@ -92,10 +85,16 @@ export class MenuItemNodeComponent extends _MenuItemBase {
   open: boolean = true;
 
   @Input()
+  mode: any;
+
+  @Input()
   menuItem: any;
 
   @Input()
   badge: any;
+
+  @Output()
+  selectItem: EventEmitter<any> = new EventEmitter();
 
   constructor(
     protected menuComponent: MenuComponent,

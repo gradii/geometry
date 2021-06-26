@@ -23,7 +23,7 @@ $menu-dark-submenu-bg : #333 !default;
   .#{$menu-prefix-cls} {
     box-shadow : v.$box-shadow-base;
     color      : theming.tri-color($foreground, text-color);
-    background : theming.tri-color($foreground, component-background);
+    background : theming.tri-color($background, component-background);
 
     @at-root &-item-group-title {
       color : theming.tri-color($foreground, text-color-secondary);

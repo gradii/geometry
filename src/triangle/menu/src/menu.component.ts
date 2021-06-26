@@ -21,11 +21,22 @@ import { SubMenuComponent } from './submenu.component';
       <ng-content></ng-content>
     </ng-template>
     <ng-template [ngIf]="dataSource&&dataSource.length>0">
-      <tri-menu-item-nest-node
-        [dataSource]="dataSource"
-        [menuItemNodeDef]="menuItemNodeDef"
-      >
-      </tri-menu-item-nest-node>
+      <ng-template ngFor [ngForOf]="dataSource" let-item>
+        <tri-menu-item-node
+          *ngIf="!item.children"
+          [mode]="mode"
+          [menuItem]="item"
+        >
+        </tri-menu-item-node>
+        <tri-menu-item-nest-node
+          *ngIf="item.children"
+          [mode]="mode"
+          [menuItem]="item"
+          [dataSource]="item.children"
+        >
+        </tri-menu-item-nest-node>
+      </ng-template>
+
     </ng-template>
   `,
   styles       : [
@@ -35,12 +46,12 @@ import { SubMenuComponent } from './submenu.component';
   ],
   styleUrls    : [`../style/menu.css`],
   host         : {
-    'class'                            : 'tri-menu',
-    '[class.tri-menu-compact]'         : 'compact',
-    '[class.tri-menu-vertical]'        : 'mode === "vertical"',
-    '[class.tri-menu-horizontal]'      : 'mode === "horizontal"',
-    '[class.tri-menu-inline]'          : 'mode === "inline"',
-    '[class.tri-menu-inline-collapsed]': 'mode !== "horizontal"',
+    'class'                      : 'tri-menu',
+    '[class.tri-menu-compact]'   : 'compact',
+    '[class.tri-menu-vertical]'  : 'mode === "vertical"',
+    '[class.tri-menu-horizontal]': 'mode === "horizontal"',
+    '[class.tri-menu-inline]'    : 'mode === "inline"',
+    // '[class.tri-menu-inline-collapsed]': 'mode !== "horizontal"',
   }
 })
 export class MenuComponent implements OnChanges, AfterViewInit {

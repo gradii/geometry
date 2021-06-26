@@ -4,16 +4,17 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { TriBadgeModule } from '@gradii/triangle/badge';
 import { TriButtonModule } from '@gradii/triangle/button';
-import { TriBadgeModule } from '../../badge';
-import { TriIconModule } from '../../icon';
+import { TriIconModule } from '@gradii/triangle/icon';
 import { MenuDividerComponent } from './menu-divider.component';
 import { MenuGroupComponent } from './menu-group.component';
-import { _MenuItemBase, MenuItemComponent } from './menu-item.component';
+import { MenuItemComponent } from './menu-item.component';
 import { MenuItemNestNodeComponent } from './menu-item/menu-item-nest-node.component';
 import { MenuItemNodeComponent } from './menu-item/menu-item-node.component';
 import { MenuComponent } from './menu.component';
@@ -45,7 +46,10 @@ import { SubMenuComponent } from './submenu.component';
  * <!-- example(tri-demo-menu-dynamic) -->
  */
 @NgModule({
-  imports: [CommonModule, FormsModule, RouterModule, TriButtonModule, TriIconModule, TriBadgeModule],
+  imports: [
+    CommonModule, FormsModule, RouterModule, TriButtonModule, TriIconModule, TriBadgeModule,
+    OverlayModule
+  ],
   declarations: [
     MenuComponent, MenuItemComponent, SubMenuComponent, MenuDividerComponent, MenuGroupComponent,
     MenuItemNodeDefDirective, MenuItemNestNodeComponent, MenuItemNodeComponent
