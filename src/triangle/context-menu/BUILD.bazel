@@ -1,0 +1,84 @@
+load(
+    "//tools:defaults.bzl",
+    "ng_module",
+    "sass_binary",
+    "sass_library",
+    #  "ng_test_library",
+    #  "ng_web_test_suite",
+    #  "markdown_to_html"
+)
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "context-menu",
+    srcs = glob(
+        ["**/*.ts"],
+        exclude = ["**/*.spec.ts"],
+    ),
+    assets = [":style/context-menu.css"] + glob(["**/*.html"]),
+    module_name = "@gradii/triangle/context-menu",
+    deps = [
+        "@npm//@angular/animations",
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/forms",
+        "@npm//@angular/cdk",
+        "@npm//rxjs",
+        "//src/triangle/core",
+        "//src/triangle/util",
+        "//src/triangle/i18n",
+        "//src/triangle/button",
+        #    "//src/triangle/locale",
+        "//src/triangle/tooltip",
+        "//src/triangle/popover",
+    ],
+)
+
+sass_library(
+    name = "context_menu_scss_lib",
+    srcs = glob(["**/_*.scss"]),
+    deps = ["//src/triangle/core:core_scss_lib"],
+)
+
+sass_binary(
+    name = "context_menu_scss",
+    src = "style/context-menu.scss",
+    deps = [
+        "//src/triangle/context-menu:context_menu_scss_lib",
+    ],
+)
+#
+#ng_test_library(
+#  name = "autocomplete_test_sources",
+#  srcs = glob(["**/*.spec.ts"]),
+#  deps = [
+#    "@npm//@angular/forms",
+#    "@npm//@angular/platform-browser",
+#    "@npm//rxjs",
+#    "//src/cdk/bidi",
+#    "//src/cdk/keycodes",
+#    "//src/cdk/overlay",
+#    "//src/cdk/scrolling",
+#    "//src/cdk/testing",
+#    "//src/lib/core",
+#    "//src/lib/form-field",
+#    "//src/lib/input",
+#    ":autocomplete"
+#  ]
+#)
+#
+#ng_web_test_suite(
+#  name = "unit_tests",
+#  deps = [":autocomplete_test_sources"],
+#)
+#
+#markdown_to_html(
+#  name = "overview",
+#  srcs = [":affix.md"],
+#)
+
+filegroup(
+    name = "source-files",
+    srcs = glob(["**/*.ts"]),
+)
