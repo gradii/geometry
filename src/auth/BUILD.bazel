@@ -1,7 +1,7 @@
 load("@npm//scss-bundle:index.bzl", "scss_bundle")
 load(
     "//src/auth:config.bzl",
-    "ANNOTATION_TARGETS",
+    "AUTH_TARGETS",
 )
 load("//tools:defaults.bzl", "ng_package", "ts_library")
 
@@ -16,6 +16,13 @@ ts_library(
             "**/*.spec.ts",
         ],
     ),
+    deps = [
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/forms",
+        "@npm//@angular/router",
+        "@npm//rxjs",
+    ],
     module_name = "@gradii/auth",
 )
 
@@ -30,5 +37,5 @@ ng_package(
     entry_point_name = "auth",
     nested_packages = [],
     tags = ["release-package"],
-    deps = ANNOTATION_TARGETS,
+    deps = AUTH_TARGETS,
 )

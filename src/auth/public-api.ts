@@ -6,15 +6,6 @@
 
 export * from './src/auth.options';
 export * from './src/auth.module';
-export * from './src/auth.routes';
-
-export * from './src/components/auth.component';
-export * from './src/components/auth-block/auth-block.component';
-export * from './src/components/login/login.component';
-export * from './src/components/logout/logout.component';
-export * from './src/components/register/register.component';
-export * from './src/components/request-password/request-password.component';
-export * from './src/components/reset-password/reset-password.component';
 export * from './src/services/auth.service';
 export * from './src/services/auth-result';
 export * from './src/services/interceptors/jwt-interceptor';

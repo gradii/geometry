@@ -10,7 +10,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of as observableOf } from 'rxjs';
 import { switchMap, map, catchError } from 'rxjs/operators';
-import { NB_WINDOW } from '@nebular/theme';
+import { DOCUMENT } from '@angular/common';
 
 import { NbAuthStrategy } from '../auth-strategy';
 import { NbAuthIllegalTokenError, NbAuthRefreshableToken, NbAuthToken } from '../../services/token/token';
@@ -184,7 +184,7 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
 
   constructor(protected http: HttpClient,
               protected route: ActivatedRoute,
-              @Inject(NB_WINDOW) protected window: any) {
+              @Inject(DOCUMENT) protected document?: Document) {
     super();
   }
 
@@ -262,8 +262,14 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
       );
   }
 
+  get window() {
+    return this.document?.defaultView || window;
+  }
+
   protected authorizeRedirect() {
-    this.window.location.href = this.buildRedirectUrl();
+    if (this.window) {
+      this.window!.location.href = this.buildRedirectUrl();
+    }
   }
 
   protected isRedirectResult(): Observable<boolean> {

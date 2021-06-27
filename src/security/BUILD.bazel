@@ -1,7 +1,7 @@
 load("@npm//scss-bundle:index.bzl", "scss_bundle")
 load(
     "//src/security:config.bzl",
-    "ANNOTATION_TARGETS",
+    "SECURITY_TARGETS",
 )
 load("//tools:defaults.bzl", "ng_package", "ts_library")
 
@@ -16,6 +16,13 @@ ts_library(
             "**/*.spec.ts",
         ],
     ),
+    deps = [
+       "@npm//@angular/common",
+       "@npm//@angular/core",
+       "@npm//@angular/forms",
+       "@npm//@angular/router",
+       "@npm//rxjs",
+    ],
     module_name = "@gradii/security",
 )
 
@@ -30,5 +37,5 @@ ng_package(
     entry_point_name = "security",
     nested_packages = [],
     tags = ["release-package"],
-    deps = ANNOTATION_TARGETS,
+    deps = SECURITY_TARGETS,
 )

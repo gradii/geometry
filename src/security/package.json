@@ -1,6 +1,6 @@
 {
   "name": "@gradii/security",
-  "version": "0.0.0-PLACEHOLDER",
+  "version": "1.0.0",
   "description": "Security Packages",
   "repository": {
     "type": "git",

@@ -11,7 +11,7 @@ import { switchMap } from 'rxjs/operators';
 
 import { NbAuthService } from '../auth.service';
 import { NB_AUTH_INTERCEPTOR_HEADER } from '../../auth.options';
-import { NbAuthJWTToken } from '../token/token';
+import { NbAuthToken } from '../token/token';
 
 @Injectable()
 export class NbAuthSimpleInterceptor implements HttpInterceptor {
@@ -24,7 +24,7 @@ export class NbAuthSimpleInterceptor implements HttpInterceptor {
 
     return this.authService.getToken()
       .pipe(
-        switchMap((token: NbAuthJWTToken) => {
+        switchMap((token: NbAuthToken) => {
           if (token && token.getValue()) {
             req = req.clone({
               setHeaders: {
