@@ -70,6 +70,7 @@ ROLLUP_GLOBALS = {
     # Third-party libraries.
     "closest": "closest",
     "date-fns": "date-fns",
+    "lodash": "lodash",
     "moment": "moment",
     "protractor": "protractor",
     "rxjs": "rxjs",

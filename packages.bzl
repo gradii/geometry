@@ -1,12 +1,19 @@
 # Each individual package uses a placeholder for the version of Angular to ensure they're
 # all in-sync. This map is passed to each ng_package rule to stamp out the appropriate
 # version for the placeholders.
-ANGULAR_PACKAGE_VERSION = "^11.0.0"
-TSLIB_PACKAGE_VERSION = "^2.0.0"
+ANGULAR_PACKAGE_VERSION = "^12.1.0"
+TSLIB_PACKAGE_VERSION = "^2.2.0"
+RXJS_PACKAGE_VERSION = "^6.5.3"
 
 VERSION_PLACEHOLDER_REPLACEMENTS = {
-    "0.0.0-NG": ANGULAR_PACKAGE_VERSION,
-    "0.0.0-TSLIB": TSLIB_PACKAGE_VERSION,
+   # Version of `@angular/core`
+   "0.0.0-NG": ANGULAR_PACKAGE_VERSION,
+   # Version of `tslib`
+   "0.0.0-TSLIB": TSLIB_PACKAGE_VERSION,
+   # Version of the local package being built, generated via the `--workspace_status_command` flag.
+   "0.0.0-PLACEHOLDER": "{BUILD_SCM_VERSION}",
+   # Version of `rxjs`
+   "0.0.0-RXJS": RXJS_PACKAGE_VERSION,
 }
 
 # List of default Angular library UMD bundles which are not processed by ngcc.
