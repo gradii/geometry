@@ -8,8 +8,8 @@ $input-prefix-cls                    : #{ v.$tri-prefix}-input;
 $autocomplete-select-prefix-cls      : #{ v.$tri-prefix}-select;
 $autocomplete-prefix-cls             : #{ v.$tri-prefix}-autocomplete;
 
-$autocomplete-background-color-light : hsl(0, 0, 98%); // background of header and selected item
-$autocomplete-background-color-base  : hsl(0, 0, 96%); // Default grey background color
+$autocomplete-background-color-light : hsl(0deg, 0%, 98%); // background of header and selected item
+$autocomplete-background-color-base  : hsl(0deg, 0%, 96%); // Default grey background color
 
 @mixin tri-autocomplete-theme($theme) {
   $foreground : map.get($theme, foreground);
