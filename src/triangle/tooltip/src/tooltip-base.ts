@@ -4,74 +4,32 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  AriaDescriber,
-  FocusMonitor
-} from '@angular/cdk/a11y';
+import { AriaDescriber, FocusMonitor } from '@angular/cdk/a11y';
 import { Directionality } from '@angular/cdk/bidi';
+import { BooleanInput, coerceBooleanProperty, NumberInput } from '@angular/cdk/coercion';
+import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
 import {
-  BooleanInput,
-  coerceBooleanProperty,
-  NumberInput
-} from '@angular/cdk/coercion';
-import {
-  ESCAPE,
-  hasModifierKey
-} from '@angular/cdk/keycodes';
-import {
-  ConnectedPosition,
-  ConnectionPositionPair,
-  FlexibleConnectedPositionStrategy,
-  HorizontalConnectionPos,
-  OriginConnectionPosition,
-  Overlay,
-  OverlayConnectionPosition,
-  OverlayRef,
-  ScrollStrategy,
-  VerticalConnectionPos
+  ConnectedPosition, ConnectionPositionPair, FlexibleConnectedPositionStrategy,
+  HorizontalConnectionPos, OriginConnectionPosition, Overlay, OverlayConnectionPosition, OverlayRef,
+  ScrollStrategy, VerticalConnectionPos
 } from '@angular/cdk/overlay';
-import {
-  normalizePassiveListenerOptions,
-  Platform
-} from '@angular/cdk/platform';
-import {
-  ComponentPortal,
-  ComponentType
-} from '@angular/cdk/portal';
+import { normalizePassiveListenerOptions, Platform } from '@angular/cdk/platform';
+import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
 import {
-  AfterViewInit,
-  Directive,
-  ElementRef,
-  Inject,
-  Input,
-  NgZone,
-  OnDestroy,
-  TemplateRef,
+  AfterViewInit, Directive, ElementRef, Inject, Input, NgZone, OnDestroy, TemplateRef,
   ViewContainerRef
 } from '@angular/core';
 import { isString } from '@gradii/check-type';
-import {
-  DEFAULT_4_POSITIONS,
-  POSITION_MAP_LTR,
-  POSITION_MAP_RTL
-} from '@gradii/triangle/core';
+import { DEFAULT_4_POSITIONS, POSITION_MAP_LTR, POSITION_MAP_RTL } from '@gradii/triangle/core';
 
 import { Subject } from 'rxjs';
-import {
-  take,
-  takeUntil
-} from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { _TriTooltipComponentBase } from './tooltip-component-base';
+import { getTriTooltipInvalidPositionError, TriggerType } from './tooltip.common';
 import {
-  getTriTooltipInvalidPositionError,
-  TriggerType
-} from './tooltip.common';
-import {
-  TooltipPosition,
-  TooltipTouchGestures,
-  TriTooltipDefaultOptions
+  TooltipPosition, TooltipTouchGestures, TriTooltipDefaultOptions
 } from './tooltip.interface';
 
 
@@ -141,7 +99,9 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
     if (this._disabled) {
       this.hide(0);
     } else {
-      this._setupPointerEnterEventsIfNeeded();
+      if (this._tooltipTrigger === TriggerType.HOVER) {
+        this._setupPointerEnterEventsIfNeeded();
+      }
     }
   }
 
@@ -200,6 +160,12 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
 
   set tooltipTrigger(value) {
     this._tooltipTrigger = value;
+
+    this._passiveListeners.forEach(([event, listener]) => {
+      this._elementRef.nativeElement.removeEventListener(event, listener, passiveListenerOptions);
+    });
+    this._passiveListeners.length = 0;
+    this._setupPointerEnterEventsIfNeeded();
   }
 
   _tooltipTrigger: TriggerType = TriggerType.HOVER;
@@ -288,7 +254,9 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
         if (!origin) {
           this._ngZone.run(() => this.hide(0));
         } else if (origin === 'keyboard') {
-          this._ngZone.run(() => this.show());
+          if (this._tooltipTrigger !== TriggerType.NOOP) {
+            this._ngZone.run(() => this.show());
+          }
         }
       });
   }
@@ -336,8 +304,8 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
     this._tooltipInstance        = overlayRef.attach(this._portal).instance;
     this._tooltipInstance.config = {
       triggerType: this._tooltipTrigger,
-      showDelay: this.showDelay,
-      hideDelay: this.hideDelay
+      showDelay  : this.showDelay,
+      hideDelay  : this.hideDelay
     };
     this._tooltipInstance.afterHidden()
       .pipe(takeUntil(this._destroyed))
@@ -613,26 +581,39 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
       return;
     }
 
-    // The mouse events shouldn't be bound on mobile devices, because they can prevent the
-    // first tap from firing its click event or can cause the tooltip to open for clicks.
-    if (this._platformSupportsMouseEvents()) {
-      this._passiveListeners
-        .push(['mouseenter', () => {
-          this._setupPointerExitEventsIfNeeded();
-          this.show();
-        }]);
-    } else if (this.touchGestures !== 'off') {
-      this._disableNativeGesturesIfNecessary();
+    if (this._tooltipTrigger === TriggerType.HOVER) {
+      // The mouse events shouldn't be bound on mobile devices, because they can prevent the
+      // first tap from firing its click event or can cause the tooltip to open for clicks.
+      if (this._platformSupportsMouseEvents()) {
+        this._passiveListeners
+          .push([
+            'mouseenter', () => {
+              this._setupPointerExitEventsIfNeeded();
+              this.show();
+            }
+          ]);
+      } else if (this.touchGestures !== 'off') {
+        this._disableNativeGesturesIfNecessary();
 
+        this._passiveListeners
+          .push([
+            'touchstart', () => {
+              // Note that it's important that we don't `preventDefault` here,
+              // because it can prevent click events from firing on the element.
+              this._setupPointerExitEventsIfNeeded();
+              clearTimeout(this._touchstartTimeout);
+              // @ts-ignore
+              this._touchstartTimeout = setTimeout(() => this.show(), LONGPRESS_DELAY);
+            }
+          ]);
+      }
+    } else if (this._tooltipTrigger === TriggerType.CLICK) {
       this._passiveListeners
-        .push(['touchstart', () => {
-          // Note that it's important that we don't `preventDefault` here,
-          // because it can prevent click events from firing on the element.
-          this._setupPointerExitEventsIfNeeded();
-          clearTimeout(this._touchstartTimeout);
-          // @ts-ignore
-          this._touchstartTimeout = setTimeout(() => this.show(), LONGPRESS_DELAY);
-        }]);
+        .push([
+          'click', () => {
+            this.toggle();
+          }
+        ]);
     }
 
     this._addListeners(this._passiveListeners);

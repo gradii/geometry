@@ -10,7 +10,7 @@ import { CdkScrollableModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TriCommonModule } from '@gradii/triangle/core';
-import { TooltipDirective } from '@gradii/triangle/tooltip/src/tooltip.directive';
+import { TooltipDirective } from './tooltip.directive';
 import { TooltipComponent } from './tooltip.component';
 import { TRI_TOOLTIP_SCROLL_STRATEGY_FACTORY_PROVIDER } from './tooltip.common';
 

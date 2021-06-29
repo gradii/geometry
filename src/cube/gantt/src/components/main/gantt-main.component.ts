@@ -12,7 +12,8 @@ import {
   Input,
   OnInit,
   Output,
-  TemplateRef
+  TemplateRef,
+  TrackByFunction
 } from '@angular/core';
 import {
   GanttBarClickEvent,
@@ -55,7 +56,8 @@ export class GanttMainComponent implements OnInit {
   }
 
 
-  tracItemBy(index: number, item: GanttItemInternal): any {
+  // @ts-ignore
+  tracItemBy: TrackByFunction<any> = (index: number, item: GanttItemInternal) => {
     return item.id || index;
   }
 

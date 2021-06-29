@@ -1,0 +1,16 @@
+<!--<mat-form-field class="example-user-input">-->
+<!--  <mat-label>Tooltip position</mat-label>-->
+<tri-select [formControl]="trigger">
+  <tri-option *ngFor="let trigger of triggerOptions"
+              [label]="trigger"
+              [value]="trigger">
+  </tri-option>
+</tri-select>
+<!--</mat-form-field>-->
+
+<button triButton
+        triTooltip="Info about the action"
+        [triTooltipTrigger]="trigger.value"
+        aria-label="Button that displays a tooltip in various positions">
+  Action
+</button>

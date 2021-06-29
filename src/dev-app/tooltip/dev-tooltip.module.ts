@@ -28,6 +28,7 @@ import { TooltipModifiedDefaultsExample } from './tri-demo-tooltip/tooltip-modif
 import { TooltipOverviewExample } from './tri-demo-tooltip/tooltip-overview/tooltip-overview-example';
 import { TooltipPlacementsExample } from './tri-demo-tooltip/tooltip-placements/tooltip-placements-example';
 import { TooltipPositionExample } from './tri-demo-tooltip/tooltip-position/tooltip-position-example';
+import { TooltipTriggerExample } from './tri-demo-tooltip/tooltip-trigger/tooltip-trigger-example';
 
 @NgModule({
   imports     : [
@@ -54,6 +55,7 @@ import { TooltipPositionExample } from './tri-demo-tooltip/tooltip-position/tool
           {path: 'tooltip-modified-defaults', component: TooltipModifiedDefaultsExample},
           {path: 'tooltip-overview', component: TooltipOverviewExample},
           {path: 'tooltip-position', component: TooltipPositionExample},
+          {path: 'tooltip-trigger', component: TooltipTriggerExample},
           {path: 'tooltip-placements', component: TooltipPlacementsExample},
         ]
       }
@@ -73,6 +75,7 @@ import { TooltipPositionExample } from './tri-demo-tooltip/tooltip-position/tool
     TooltipModifiedDefaultsExample,
     TooltipOverviewExample,
     TooltipPositionExample,
+    TooltipTriggerExample,
     TooltipPlacementsExample
   ]
 })
