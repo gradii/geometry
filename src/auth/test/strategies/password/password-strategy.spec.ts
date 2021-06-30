@@ -1,19 +1,19 @@
 
 
 import { async, inject, TestBed } from '@angular/core/testing';
-import { NbPasswordAuthStrategy } from './password-strategy';
-import { NbAuthResult } from '../../services/auth-result';
+import { TriPasswordAuthStrategy } from './password-strategy';
+import { TriAuthResult } from '../../services/auth-result';
 
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { nbAuthCreateToken, NbAuthSimpleToken } from '../../services/token/token';
+import { triAuthCreateToken, TriAuthSimpleToken } from '../../services/token/token';
 
 const ownerStrategyName = 'strategy';
 
 describe('password-auth-strategy', () => {
 
-  let strategy: NbPasswordAuthStrategy;
+  let strategy: TriPasswordAuthStrategy;
   let httpMock: HttpTestingController;
 
   const successResponse: any = {
@@ -24,7 +24,7 @@ describe('password-auth-strategy', () => {
     },
   };
 
-  const successToken = nbAuthCreateToken(NbAuthSimpleToken, 'token', ownerStrategyName);
+  const successToken = triAuthCreateToken(TriAuthSimpleToken, 'token', ownerStrategyName);
 
   const noMessageResponse: any = {
     data: {
@@ -42,13 +42,13 @@ describe('password-auth-strategy', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
-        { provide: NbPasswordAuthStrategy, useClass: NbPasswordAuthStrategy },
+        { provide: TriPasswordAuthStrategy, useClass: TriPasswordAuthStrategy },
       ],
     });
   });
 
   beforeEach(async(inject(
-    [NbPasswordAuthStrategy, HttpTestingController],
+    [TriPasswordAuthStrategy, HttpTestingController],
     (_strategy, _httpMock) => {
       strategy = _strategy;
       httpMock = _httpMock;
@@ -69,7 +69,7 @@ describe('password-auth-strategy', () => {
 
     it('authenticate success', (done: DoneFn) => {
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -88,7 +88,7 @@ describe('password-auth-strategy', () => {
 
     it('authenticate fail', (done: DoneFn) => {
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(false);
           expect(result.isFailure()).toBe(true);
@@ -106,7 +106,7 @@ describe('password-auth-strategy', () => {
 
     it('register success', (done: DoneFn) => {
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -124,7 +124,7 @@ describe('password-auth-strategy', () => {
 
     it('register fail', (done: DoneFn) => {
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(false);
           expect(result.isFailure()).toBe(true);
@@ -142,7 +142,7 @@ describe('password-auth-strategy', () => {
 
     it('requestPassword success', (done: DoneFn) => {
       strategy.requestPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -159,7 +159,7 @@ describe('password-auth-strategy', () => {
 
     it('requestPassword fail', (done: DoneFn) => {
       strategy.requestPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(false);
           expect(result.isFailure()).toBe(true);
@@ -177,7 +177,7 @@ describe('password-auth-strategy', () => {
 
     it('resetPassword success', (done: DoneFn) => {
       strategy.resetPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -194,7 +194,7 @@ describe('password-auth-strategy', () => {
 
     it('resetPassword fail', (done: DoneFn) => {
       strategy.resetPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(false);
           expect(result.isFailure()).toBe(true);
@@ -211,7 +211,7 @@ describe('password-auth-strategy', () => {
     });
     it('logout success', (done: DoneFn) => {
       strategy.logout()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -228,7 +228,7 @@ describe('password-auth-strategy', () => {
 
     it('logout fail', (done: DoneFn) => {
       strategy.logout()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(false);
           expect(result.isFailure()).toBe(true);
@@ -246,7 +246,7 @@ describe('password-auth-strategy', () => {
 
     it('refreshToken success', (done: DoneFn) => {
       strategy.refreshToken()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -264,7 +264,7 @@ describe('password-auth-strategy', () => {
 
     it('refreshToken fail', (done: DoneFn) => {
       strategy.refreshToken()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(false);
           expect(result.isFailure()).toBe(true);
@@ -310,7 +310,7 @@ describe('password-auth-strategy', () => {
 
     it('authenticate fail', (done: DoneFn) => {
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(true);
           expect(result.isSuccess()).toBe(false);
@@ -324,7 +324,7 @@ describe('password-auth-strategy', () => {
 
     it('register fail', (done: DoneFn) => {
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(true);
           expect(result.isSuccess()).toBe(false);
@@ -338,7 +338,7 @@ describe('password-auth-strategy', () => {
 
     it('requestPassword fail', (done: DoneFn) => {
       strategy.requestPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(true);
           expect(result.isSuccess()).toBe(false);
@@ -352,7 +352,7 @@ describe('password-auth-strategy', () => {
 
     it('resetPassword fail', (done: DoneFn) => {
       strategy.resetPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(true);
           expect(result.isSuccess()).toBe(false);
@@ -366,7 +366,7 @@ describe('password-auth-strategy', () => {
 
     it('logout fail', (done: DoneFn) => {
       strategy.logout()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(true);
           expect(result.isSuccess()).toBe(false);
@@ -380,7 +380,7 @@ describe('password-auth-strategy', () => {
 
     it('refreshToken fail', (done: DoneFn) => {
       strategy.refreshToken()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(true);
           expect(result.isSuccess()).toBe(false);
@@ -422,7 +422,7 @@ describe('password-auth-strategy', () => {
 
     it('authenticate', (done: DoneFn) => {
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -436,7 +436,7 @@ describe('password-auth-strategy', () => {
 
     it('register', (done: DoneFn) => {
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -450,7 +450,7 @@ describe('password-auth-strategy', () => {
 
     it('requestPassword', (done: DoneFn) => {
       strategy.requestPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -464,7 +464,7 @@ describe('password-auth-strategy', () => {
 
     it('resetPassword', (done: DoneFn) => {
       strategy.resetPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -478,7 +478,7 @@ describe('password-auth-strategy', () => {
 
     it('logout', (done: DoneFn) => {
       strategy.logout()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -492,7 +492,7 @@ describe('password-auth-strategy', () => {
 
     it('refreshToken', (done: DoneFn) => {
       strategy.refreshToken()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -517,7 +517,7 @@ describe('password-auth-strategy', () => {
 
     it('authenticate', (done: DoneFn) => {
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -531,7 +531,7 @@ describe('password-auth-strategy', () => {
 
     it('register', (done: DoneFn) => {
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -545,7 +545,7 @@ describe('password-auth-strategy', () => {
 
     it('requestPassword', (done: DoneFn) => {
       strategy.requestPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -559,7 +559,7 @@ describe('password-auth-strategy', () => {
 
     it('resetPassword', (done: DoneFn) => {
       strategy.resetPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -573,7 +573,7 @@ describe('password-auth-strategy', () => {
 
     it('logout', (done: DoneFn) => {
       strategy.logout()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -596,7 +596,7 @@ describe('password-auth-strategy', () => {
       });
 
       strategy.logout()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -609,7 +609,7 @@ describe('password-auth-strategy', () => {
 
     it('refreshToken', (done: DoneFn) => {
       strategy.refreshToken()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -651,7 +651,7 @@ describe('password-auth-strategy', () => {
 
     it('authenticate', (done: DoneFn) => {
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -665,7 +665,7 @@ describe('password-auth-strategy', () => {
 
     it('register', (done: DoneFn) => {
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -679,7 +679,7 @@ describe('password-auth-strategy', () => {
 
     it('requestPassword', (done: DoneFn) => {
       strategy.requestPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -693,7 +693,7 @@ describe('password-auth-strategy', () => {
 
     it('resetPassword', (done: DoneFn) => {
       strategy.resetPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -707,7 +707,7 @@ describe('password-auth-strategy', () => {
 
     it('logout', (done: DoneFn) => {
       strategy.logout()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -721,7 +721,7 @@ describe('password-auth-strategy', () => {
 
     it('refreshToken', (done: DoneFn) => {
       strategy.refreshToken()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -769,7 +769,7 @@ describe('password-auth-strategy', () => {
 
     it('authenticate success', (done: DoneFn) => {
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getRedirect()).toBe(redirect.success);
 
@@ -782,7 +782,7 @@ describe('password-auth-strategy', () => {
 
     it('authenticate fail', (done: DoneFn) => {
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getRedirect()).toBe(redirect.failure);
 
@@ -795,7 +795,7 @@ describe('password-auth-strategy', () => {
 
     it('register success', (done: DoneFn) => {
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getRedirect()).toBe(redirect.success);
 
@@ -808,7 +808,7 @@ describe('password-auth-strategy', () => {
 
     it('register fail', (done: DoneFn) => {
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getRedirect()).toBe(redirect.failure);
 
@@ -821,7 +821,7 @@ describe('password-auth-strategy', () => {
 
     it('requestPassword success', (done: DoneFn) => {
       strategy.requestPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getRedirect()).toBe(redirect.success);
 
@@ -834,7 +834,7 @@ describe('password-auth-strategy', () => {
 
     it('requestPassword fail', (done: DoneFn) => {
       strategy.requestPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getRedirect()).toBe(redirect.failure);
 
@@ -847,7 +847,7 @@ describe('password-auth-strategy', () => {
 
     it('resetPassword success', (done: DoneFn) => {
       strategy.resetPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getRedirect()).toBe(redirect.success);
 
@@ -860,7 +860,7 @@ describe('password-auth-strategy', () => {
 
     it('resetPassword fail', (done: DoneFn) => {
       strategy.resetPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getRedirect()).toBe(redirect.failure);
 
@@ -873,7 +873,7 @@ describe('password-auth-strategy', () => {
 
     it('logout success', (done: DoneFn) => {
       strategy.logout()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getRedirect()).toBe(redirect.success);
 
@@ -886,7 +886,7 @@ describe('password-auth-strategy', () => {
 
     it('logout fail', (done: DoneFn) => {
       strategy.logout()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getRedirect()).toBe(redirect.failure);
 
@@ -899,7 +899,7 @@ describe('password-auth-strategy', () => {
 
     it('refreshToken success', (done: DoneFn) => {
       strategy.refreshToken()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getRedirect()).toBe(redirect.success);
 
@@ -912,7 +912,7 @@ describe('password-auth-strategy', () => {
 
     it('refreshToken fail', (done: DoneFn) => {
       strategy.refreshToken()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getRedirect()).toBe(redirect.failure);
 
@@ -959,7 +959,7 @@ describe('password-auth-strategy', () => {
 
     it('authenticate success', (done: DoneFn) => {
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getMessages()).toEqual(messages.defaultMessages);
 
@@ -972,7 +972,7 @@ describe('password-auth-strategy', () => {
 
     it('authenticate fail', (done: DoneFn) => {
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getErrors()).toEqual(messages.defaultErrors);
 
@@ -985,7 +985,7 @@ describe('password-auth-strategy', () => {
 
     it('register success', (done: DoneFn) => {
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getMessages()).toEqual(messages.defaultMessages);
 
@@ -998,7 +998,7 @@ describe('password-auth-strategy', () => {
 
     it('register fail', (done: DoneFn) => {
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getErrors()).toEqual(messages.defaultErrors);
 
@@ -1011,7 +1011,7 @@ describe('password-auth-strategy', () => {
 
     it('requestPassword success', (done: DoneFn) => {
       strategy.requestPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getMessages()).toEqual(messages.defaultMessages);
 
@@ -1024,7 +1024,7 @@ describe('password-auth-strategy', () => {
 
     it('requestPassword fail', (done: DoneFn) => {
       strategy.requestPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getErrors()).toEqual(messages.defaultErrors);
 
@@ -1037,7 +1037,7 @@ describe('password-auth-strategy', () => {
 
     it('resetPassword success', (done: DoneFn) => {
       strategy.resetPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getMessages()).toEqual(messages.defaultMessages);
 
@@ -1050,7 +1050,7 @@ describe('password-auth-strategy', () => {
 
     it('resetPassword fail', (done: DoneFn) => {
       strategy.resetPassword(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getErrors()).toEqual(messages.defaultErrors);
 
@@ -1063,7 +1063,7 @@ describe('password-auth-strategy', () => {
 
     it('logout success', (done: DoneFn) => {
       strategy.logout()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getMessages()).toEqual(messages.defaultMessages);
 
@@ -1076,7 +1076,7 @@ describe('password-auth-strategy', () => {
 
     it('logout fail', (done: DoneFn) => {
       strategy.logout()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getErrors()).toEqual(messages.defaultErrors);
 
@@ -1089,7 +1089,7 @@ describe('password-auth-strategy', () => {
 
     it('refreshToken success', (done: DoneFn) => {
       strategy.refreshToken()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getMessages()).toEqual(messages.defaultMessages);
 
@@ -1102,7 +1102,7 @@ describe('password-auth-strategy', () => {
 
     it('refreshToken fail', (done: DoneFn) => {
       strategy.refreshToken()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.getErrors()).toEqual(messages.defaultErrors);
 
@@ -1128,7 +1128,7 @@ describe('password-auth-strategy', () => {
 
     it('authenticate', (done: DoneFn) => {
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -1143,7 +1143,7 @@ describe('password-auth-strategy', () => {
 
     it('register', (done: DoneFn) => {
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -1158,7 +1158,7 @@ describe('password-auth-strategy', () => {
 
     it('refreshToken', (done: DoneFn) => {
       strategy.refreshToken()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -1186,7 +1186,7 @@ describe('password-auth-strategy', () => {
 
     it('authenticate', (done: DoneFn) => {
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -1201,7 +1201,7 @@ describe('password-auth-strategy', () => {
 
     it('register', (done: DoneFn) => {
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -1216,7 +1216,7 @@ describe('password-auth-strategy', () => {
 
     it('refreshToken', (done: DoneFn) => {
       strategy.refreshToken()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -1250,7 +1250,7 @@ describe('password-auth-strategy', () => {
 
     it('authenticate success', (done: DoneFn) => {
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -1265,7 +1265,7 @@ describe('password-auth-strategy', () => {
 
     it('authenticate fail', (done: DoneFn) => {
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(true);
           expect(result.isSuccess()).toBe(false);
@@ -1280,7 +1280,7 @@ describe('password-auth-strategy', () => {
 
     it('register success', (done: DoneFn) => {
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -1295,7 +1295,7 @@ describe('password-auth-strategy', () => {
 
     it('register fail', (done: DoneFn) => {
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(true);
           expect(result.isSuccess()).toBe(false);
@@ -1310,7 +1310,7 @@ describe('password-auth-strategy', () => {
 
     it('refreshToken success', (done: DoneFn) => {
       strategy.refreshToken()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -1325,7 +1325,7 @@ describe('password-auth-strategy', () => {
 
     it('refreshToken fail', (done: DoneFn) => {
       strategy.refreshToken()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(true);
           expect(result.isSuccess()).toBe(false);
@@ -1359,7 +1359,7 @@ describe('password-auth-strategy', () => {
 
     it('authenticate success', (done: DoneFn) => {
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -1374,7 +1374,7 @@ describe('password-auth-strategy', () => {
 
     it('authenticate fail', (done: DoneFn) => {
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(true);
           expect(result.isSuccess()).toBe(false);
@@ -1389,7 +1389,7 @@ describe('password-auth-strategy', () => {
 
     it('register success', (done: DoneFn) => {
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -1404,7 +1404,7 @@ describe('password-auth-strategy', () => {
 
     it('register fail', (done: DoneFn) => {
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(true);
           expect(result.isSuccess()).toBe(false);
@@ -1419,7 +1419,7 @@ describe('password-auth-strategy', () => {
 
     it('refreshToken success', (done: DoneFn) => {
       strategy.refreshToken()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -1434,7 +1434,7 @@ describe('password-auth-strategy', () => {
 
     it('refreshToken fail', (done: DoneFn) => {
       strategy.refreshToken()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(true);
           expect(result.isSuccess()).toBe(false);
@@ -1459,7 +1459,7 @@ describe('password-auth-strategy', () => {
         },
       });
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(true);
           expect(result.isSuccess()).toBe(false);
@@ -1484,7 +1484,7 @@ describe('password-auth-strategy', () => {
       });
 
       strategy.authenticate(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -1506,7 +1506,7 @@ describe('password-auth-strategy', () => {
         },
       });
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(true);
           expect(result.isSuccess()).toBe(false);
@@ -1530,7 +1530,7 @@ describe('password-auth-strategy', () => {
       });
 
       strategy.register(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);
@@ -1552,7 +1552,7 @@ describe('password-auth-strategy', () => {
         },
       });
       strategy.refreshToken(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(true);
           expect(result.isSuccess()).toBe(false);
@@ -1576,7 +1576,7 @@ describe('password-auth-strategy', () => {
       });
 
       strategy.refreshToken(loginData)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isFailure()).toBe(false);
           expect(result.isSuccess()).toBe(true);

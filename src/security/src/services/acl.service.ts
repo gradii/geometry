@@ -6,7 +6,7 @@
 
 
 import { Inject, Injectable, Optional } from '@angular/core';
-import { NB_SECURITY_OPTIONS_TOKEN, NbAclOptions, NbAclRole, NbAccessControl } from '../security.options';
+import { TRI_SECURITY_OPTIONS_TOKEN, NbAclOptions, NbAclRole, TriAccessControl } from '../security.options';
 
 const shallowObjectClone = (o) => Object.assign({}, o);
 const shallowArrayClone = (a) => Object.assign([], a);
@@ -20,13 +20,13 @@ const popParent = (abilities) => {
  * Common acl service.
  */
 @Injectable()
-export class NbAclService {
+export class TriAclService {
 
   private static readonly ANY_RESOURCE = '*';
 
-  private state: NbAccessControl = {};
+  private state: TriAccessControl = {};
 
-  constructor(@Optional() @Inject(NB_SECURITY_OPTIONS_TOKEN) protected settings: NbAclOptions = {}) {
+  constructor(@Optional() @Inject(TRI_SECURITY_OPTIONS_TOKEN) protected settings: NbAclOptions = {}) {
 
     if (settings.accessControl) {
       this.setAccessControl(settings.accessControl);
@@ -35,9 +35,9 @@ export class NbAclService {
 
   /**
    * Set/Reset ACL list
-   * @param {NbAccessControl} list
+   * @param {TriAccessControl} list
    */
-  setAccessControl(list: NbAccessControl) {
+  setAccessControl(list: TriAccessControl) {
     for (const [role, value] of Object.entries(list)) {
       const abilities = shallowObjectClone(value);
       const parent = popParent(abilities);
@@ -109,19 +109,19 @@ export class NbAclService {
 
   private validateRole(role: string) {
     if (!role) {
-      throw new Error('NbAclService: role name cannot be empty');
+      throw new Error('TriAclService: role name cannot be empty');
     }
   }
 
   private validateResource(resource: string) {
-    if (!resource || [NbAclService.ANY_RESOURCE].includes(resource)) {
-      throw new Error(`NbAclService: cannot use empty or bulk '*' resource placeholder with 'can' method`);
+    if (!resource || [TriAclService.ANY_RESOURCE].includes(resource)) {
+      throw new Error(`TriAclService: cannot use empty or bulk '*' resource placeholder with 'can' method`);
     }
   }
 
   private exactCan(role: string, permission: string, resource: string) {
     const resources = this.getRoleResources(role, permission);
-    return resources.includes(resource) || resources.includes(NbAclService.ANY_RESOURCE);
+    return resources.includes(resource) || resources.includes(TriAclService.ANY_RESOURCE);
   }
 
   private getRoleResources(role: string, permission: string): string[] {

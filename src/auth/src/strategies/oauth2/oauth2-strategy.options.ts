@@ -6,32 +6,31 @@
 
 
 
-import { NbAuthOAuth2Token, NbAuthTokenClass } from '../../services/token/token';
-import { NbAuthStrategyOptions } from '../auth-strategy-options';
+import { TriAuthOAuth2Token, TriAuthTokenClass } from '../../services/token/token';
+import { TriAuthStrategyOptions } from '../auth-strategy-options';
 
-export enum NbOAuth2ResponseType {
+export enum TriOAuth2ResponseType {
   CODE = 'code',
   TOKEN = 'token',
 }
 
-// TODO: client_credentials
-export enum NbOAuth2GrantType {
+export enum TriOAuth2GrantType {
   AUTHORIZATION_CODE = 'authorization_code',
   PASSWORD = 'password',
   REFRESH_TOKEN = 'refresh_token',
 }
 
-export enum NbOAuth2ClientAuthMethod {
+export enum TriOAuth2ClientAuthMethod {
   NONE = 'none',
   BASIC = 'basic',
   REQUEST_BODY = 'request-body',
 }
 
-export class NbOAuth2AuthStrategyOptions extends NbAuthStrategyOptions {
+export class TriOAuth2AuthStrategyOptions extends TriAuthStrategyOptions {
   baseEndpoint?: string = '';
   clientId: string = '';
   clientSecret?: string = '';
-  clientAuthMethod?: string = NbOAuth2ClientAuthMethod.NONE;
+  clientAuthMethod?: string = TriOAuth2ClientAuthMethod.NONE;
   redirect?: { success?: string; failure?: string } = {
     success: '/',
     failure: null,
@@ -42,13 +41,13 @@ export class NbOAuth2AuthStrategyOptions extends NbAuthStrategyOptions {
     endpoint?: string;
     redirectUri?: string;
     responseType?: string;
-    requireValidToken?: boolean; // used only with NbOAuth2ResponseType.TOKEN
+    requireValidToken?: boolean; // used only with TriOAuth2ResponseType.TOKEN
     scope?: string;
     state?: string;
     params?: { [key: string]: string };
   } = {
     endpoint: 'authorize',
-    responseType: NbOAuth2ResponseType.CODE,
+    responseType: TriOAuth2ResponseType.CODE,
     requireValidToken: true,
   };
   token?: {
@@ -57,12 +56,12 @@ export class NbOAuth2AuthStrategyOptions extends NbAuthStrategyOptions {
     redirectUri?: string;
     scope?: string; // Used only with 'password' grantType
     requireValidToken?: boolean;
-    class: NbAuthTokenClass,
+    class: TriAuthTokenClass,
   } = {
     endpoint: 'token',
-    grantType: NbOAuth2GrantType.AUTHORIZATION_CODE,
+    grantType: TriOAuth2GrantType.AUTHORIZATION_CODE,
     requireValidToken: true,
-    class: NbAuthOAuth2Token,
+    class: TriAuthOAuth2Token,
   };
   refresh?: {
     endpoint?: string;
@@ -71,9 +70,9 @@ export class NbOAuth2AuthStrategyOptions extends NbAuthStrategyOptions {
     requireValidToken?: boolean;
   } = {
     endpoint: 'token',
-    grantType: NbOAuth2GrantType.REFRESH_TOKEN,
+    grantType: TriOAuth2GrantType.REFRESH_TOKEN,
     requireValidToken: true,
   };
 }
 
-export const auth2StrategyOptions: NbOAuth2AuthStrategyOptions = new NbOAuth2AuthStrategyOptions();
+export const auth2StrategyOptions: TriOAuth2AuthStrategyOptions = new TriOAuth2AuthStrategyOptions();

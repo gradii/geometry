@@ -8,15 +8,15 @@ import { Inject, Injectable, Injector } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { NbAuthToken } from '../token/token';
-import { NbAuthService } from '../auth.service';
-import { NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from '../../auth.options';
+import { TriAuthToken } from '../token/token';
+import { TriAuthService } from '../auth.service';
+import { TRI_AUTH_TOKEN_INTERCEPTOR_FILTER } from '../../auth.options';
 
 @Injectable()
-export class NbAuthJWTInterceptor implements HttpInterceptor {
+export class TriAuthJWTInterceptor implements HttpInterceptor {
 
   constructor(private injector: Injector,
-              @Inject(NB_AUTH_TOKEN_INTERCEPTOR_FILTER) protected filter) {
+              @Inject(TRI_AUTH_TOKEN_INTERCEPTOR_FILTER) protected filter) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -27,7 +27,7 @@ export class NbAuthJWTInterceptor implements HttpInterceptor {
           switchMap(authenticated => {
             if (authenticated) {
               return this.authService.getToken().pipe(
-                switchMap((token: NbAuthToken) => {
+                switchMap((token: TriAuthToken) => {
                   const JWT = `Bearer ${token.getValue()}`;
                   req       = req.clone({
                     setHeaders: {
@@ -49,8 +49,8 @@ export class NbAuthJWTInterceptor implements HttpInterceptor {
     }
   }
 
-  protected get authService(): NbAuthService {
-    return this.injector.get(NbAuthService);
+  protected get authService(): TriAuthService {
+    return this.injector.get(TriAuthService);
   }
 
 }

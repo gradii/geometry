@@ -6,29 +6,29 @@
 
 import { Inject, Injectable, InjectionToken } from '@angular/core';
 
-import { nbAuthCreateToken, NbAuthToken, NbAuthTokenClass } from './token';
-import { NB_AUTH_TOKENS } from '../../auth.options';
+import { triAuthCreateToken, TriAuthToken, TriAuthTokenClass } from './token';
+import { TRI_AUTH_TOKENS } from '../../auth.options';
 
-export interface NbTokenPack {
+export interface TriTokenPack {
   name: string;
   ownerStrategyName: string;
   createdAt: Number;
   value: string;
 }
 
-export const NB_AUTH_FALLBACK_TOKEN = new InjectionToken<NbAuthTokenClass>('Nebular Auth Options');
+export const TRI_AUTH_FALLBACK_TOKEN = new InjectionToken<TriAuthTokenClass>('Nebular Auth Options');
 
 /**
  * Creates a token parcel which could be stored/restored
  */
 @Injectable()
-export class NbAuthTokenParceler {
+export class TriAuthTokenParceler {
 
-  constructor(@Inject(NB_AUTH_FALLBACK_TOKEN) private fallbackClass: NbAuthTokenClass,
-              @Inject(NB_AUTH_TOKENS) private tokenClasses: NbAuthTokenClass[]) {
+  constructor(@Inject(TRI_AUTH_FALLBACK_TOKEN) private fallbackClass: TriAuthTokenClass,
+              @Inject(TRI_AUTH_TOKENS) private tokenClasses: TriAuthTokenClass[]) {
   }
 
-  wrap(token: NbAuthToken): string {
+  wrap(token: TriAuthToken): string {
     return JSON.stringify({
       name: token.getName(),
       ownerStrategyName: token.getOwnerStrategyName(),
@@ -37,13 +37,13 @@ export class NbAuthTokenParceler {
     });
   }
 
-  unwrap(value: string): NbAuthToken {
-    let tokenClass: NbAuthTokenClass = this.fallbackClass;
+  unwrap(value: string): TriAuthToken {
+    let tokenClass: TriAuthTokenClass = this.fallbackClass;
     let tokenValue = '';
     let tokenOwnerStrategyName = '';
     let tokenCreatedAt: Date = null;
 
-    const tokenPack: NbTokenPack = this.parseTokenPack(value);
+    const tokenPack: TriTokenPack = this.parseTokenPack(value);
     if (tokenPack) {
       tokenClass = this.getClassByName(tokenPack.name) || this.fallbackClass;
       tokenValue = tokenPack.value;
@@ -51,18 +51,16 @@ export class NbAuthTokenParceler {
       tokenCreatedAt = new Date(Number(tokenPack.createdAt));
     }
 
-    return nbAuthCreateToken(tokenClass, tokenValue, tokenOwnerStrategyName, tokenCreatedAt);
-
+    return triAuthCreateToken(tokenClass, tokenValue, tokenOwnerStrategyName, tokenCreatedAt);
   }
 
-  // TODO: this could be moved to a separate token registry
-  protected getClassByName(name): NbAuthTokenClass {
-    return this.tokenClasses.find((tokenClass: NbAuthTokenClass) => tokenClass.NAME === name);
+  protected getClassByName(name: string): TriAuthTokenClass {
+    return this.tokenClasses.find((tokenClass: TriAuthTokenClass) => tokenClass.NAME === name);
   }
 
-  protected parseTokenPack(value): NbTokenPack {
+  protected parseTokenPack(value: string): TriTokenPack {
     try {
-      return JSON.parse(value);
+      return JSON.parse(value!) as any;
     } catch (e) { }
     return null;
   }

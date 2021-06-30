@@ -11,25 +11,25 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, of as observableOf } from 'rxjs';
 import { switchMap, map, catchError } from 'rxjs/operators';
 
-import { NbAuthResult } from '../../services/auth-result';
-import { NbAuthStrategy } from '../auth-strategy';
-import { NbAuthStrategyClass } from '../../auth.options';
-import { NbPasswordAuthStrategyOptions, passwordStrategyOptions } from './password-strategy-options';
-import { NbAuthIllegalTokenError } from '../../services/token/token';
+import { TriAuthResult } from '../../services/auth-result';
+import { TriAuthStrategy } from '../auth-strategy';
+import { TriAuthStrategyClass } from '../../auth.options';
+import { TriPasswordAuthStrategyOptions, passwordStrategyOptions } from './password-strategy-options';
+import { TriAuthIllegalTokenError } from '../../services/token/token';
 
 /**
  * The most common authentication provider for email/password strategy.
  *
  * Strategy settings. Note, there is no need to copy over the whole object to change the settings you need.
  * Also, this.getOption call won't work outside of the default options declaration
- * (which is inside of the `NbPasswordAuthStrategy` class), so you have to replace it with a custom helper function
+ * (which is inside of the `TriPasswordAuthStrategy` class), so you have to replace it with a custom helper function
  * if you need it.
  *
  * ```ts
- *export class NbPasswordAuthStrategyOptions extends NbAuthStrategyOptions {
+ *export class TriPasswordAuthStrategyOptions extends TriAuthStrategyOptions {
  *  name: string;
  *  baseEndpoint? = '/api/auth/';
- *  login?: boolean | NbPasswordStrategyModule = {
+ *  login?: boolean | TriPasswordStrategyModule = {
  *    alwaysFail: false,
  *    endpoint: 'login',
  *    method: 'post',
@@ -41,7 +41,7 @@ import { NbAuthIllegalTokenError } from '../../services/token/token';
  *    defaultErrors: ['Login/Email combination is not correct, please try again.'],
  *    defaultMessages: ['You have been successfully logged in.'],
  *  };
- *  register?: boolean | NbPasswordStrategyModule = {
+ *  register?: boolean | TriPasswordStrategyModule = {
  *    alwaysFail: false,
  *    endpoint: 'register',
  *    method: 'post',
@@ -53,7 +53,7 @@ import { NbAuthIllegalTokenError } from '../../services/token/token';
  *    defaultErrors: ['Something went wrong, please try again.'],
  *    defaultMessages: ['You have been successfully registered.'],
  *  };
- *  requestPass?: boolean | NbPasswordStrategyModule = {
+ *  requestPass?: boolean | TriPasswordStrategyModule = {
  *    endpoint: 'request-pass',
  *    method: 'post',
  *    redirect: {
@@ -63,7 +63,7 @@ import { NbAuthIllegalTokenError } from '../../services/token/token';
  *    defaultErrors: ['Something went wrong, please try again.'],
  *    defaultMessages: ['Reset password instructions have been sent to your email.'],
  *  };
- *  resetPass?: boolean | NbPasswordStrategyReset = {
+ *  resetPass?: boolean | TriPasswordStrategyReset = {
  *    endpoint: 'reset-pass',
  *    method: 'put',
  *    redirect: {
@@ -74,7 +74,7 @@ import { NbAuthIllegalTokenError } from '../../services/token/token';
  *    defaultErrors: ['Something went wrong, please try again.'],
  *    defaultMessages: ['Your password has been successfully changed.'],
  *  };
- *  logout?: boolean | NbPasswordStrategyReset = {
+ *  logout?: boolean | TriPasswordStrategyReset = {
  *    alwaysFail: false,
  *    endpoint: 'logout',
  *    method: 'delete',
@@ -85,7 +85,7 @@ import { NbAuthIllegalTokenError } from '../../services/token/token';
  *    defaultErrors: ['Something went wrong, please try again.'],
  *    defaultMessages: ['You have been successfully logged out.'],
  *  };
- *  refreshToken?: boolean | NbPasswordStrategyModule = {
+ *  refreshToken?: boolean | TriPasswordStrategyModule = {
  *    endpoint: 'refresh-token',
  *    method: 'post',
  *    requireValidToken: true,
@@ -96,25 +96,25 @@ import { NbAuthIllegalTokenError } from '../../services/token/token';
  *    defaultErrors: ['Something went wrong, please try again.'],
  *    defaultMessages: ['Your token has been successfully refreshed.'],
  *  };
- *  token?: NbPasswordStrategyToken = {
- *    class: NbAuthSimpleToken,
+ *  token?: TriPasswordStrategyToken = {
+ *    class: TriAuthSimpleToken,
  *    key: 'data.token',
- *    getter: (module: string, res: HttpResponse<Object>, options: NbPasswordAuthStrategyOptions) => getDeepFromObject(
+ *    getter: (module: string, res: HttpResponse<Object>, options: TriPasswordAuthStrategyOptions) => getDeepFromObject(
  *      res.body,
  *      options.token.key,
  *    ),
  *  };
- *  errors?: NbPasswordStrategyMessage = {
+ *  errors?: TriPasswordStrategyMessage = {
  *    key: 'data.errors',
- *    getter: (module: string, res: HttpErrorResponse, options: NbPasswordAuthStrategyOptions) => getDeepFromObject(
+ *    getter: (module: string, res: HttpErrorResponse, options: TriPasswordAuthStrategyOptions) => getDeepFromObject(
  *      res.error,
  *      options.errors.key,
  *      options[module].defaultErrors,
  *    ),
  *  };
- *  messages?: NbPasswordStrategyMessage = {
+ *  messages?: TriPasswordStrategyMessage = {
  *    key: 'data.messages',
- *    getter: (module: string, res: HttpResponse<Object>, options: NbPasswordAuthStrategyOptions) => getDeepFromObject(
+ *    getter: (module: string, res: HttpResponse<Object>, options: TriPasswordAuthStrategyOptions) => getDeepFromObject(
  *      res.body,
  *      options.messages.key,
  *      options[module].defaultMessages,
@@ -142,19 +142,19 @@ import { NbAuthIllegalTokenError } from '../../services/token/token';
  * ```
  */
 @Injectable()
-export class NbPasswordAuthStrategy extends NbAuthStrategy {
+export class TriPasswordAuthStrategy extends TriAuthStrategy {
 
-  protected defaultOptions: NbPasswordAuthStrategyOptions = passwordStrategyOptions;
+  protected defaultOptions: TriPasswordAuthStrategyOptions = passwordStrategyOptions;
 
-  static setup(options: NbPasswordAuthStrategyOptions): [NbAuthStrategyClass, NbPasswordAuthStrategyOptions] {
-    return [NbPasswordAuthStrategy, options];
+  static setup(options: TriPasswordAuthStrategyOptions): [TriAuthStrategyClass, TriPasswordAuthStrategyOptions] {
+    return [TriPasswordAuthStrategy, options];
   }
 
   constructor(protected http: HttpClient, private route: ActivatedRoute) {
     super();
   }
 
-  authenticate(data?: any): Observable<NbAuthResult> {
+  authenticate(data?: any): Observable<TriAuthResult> {
     const module = 'login';
     const method = this.getOption(`${module}.method`);
     const url = this.getActionEndpoint(module);
@@ -168,7 +168,7 @@ export class NbPasswordAuthStrategy extends NbAuthStrategy {
           return res;
         }),
         map((res) => {
-          return new NbAuthResult(
+          return new TriAuthResult(
             true,
             res,
             this.getOption(`${module}.redirect.success`),
@@ -182,7 +182,7 @@ export class NbPasswordAuthStrategy extends NbAuthStrategy {
       );
   }
 
-  register(data?: any): Observable<NbAuthResult> {
+  register(data?: any): Observable<TriAuthResult> {
     const module = 'register';
     const method = this.getOption(`${module}.method`);
     const url = this.getActionEndpoint(module);
@@ -197,7 +197,7 @@ export class NbPasswordAuthStrategy extends NbAuthStrategy {
           return res;
         }),
         map((res) => {
-          return new NbAuthResult(
+          return new TriAuthResult(
             true,
             res,
             this.getOption(`${module}.redirect.success`),
@@ -211,7 +211,7 @@ export class NbPasswordAuthStrategy extends NbAuthStrategy {
       );
   }
 
-  requestPassword(data?: any): Observable<NbAuthResult> {
+  requestPassword(data?: any): Observable<TriAuthResult> {
     const module = 'requestPass';
     const method = this.getOption(`${module}.method`);
     const url = this.getActionEndpoint(module);
@@ -225,7 +225,7 @@ export class NbPasswordAuthStrategy extends NbAuthStrategy {
           return res;
         }),
         map((res) => {
-          return new NbAuthResult(
+          return new TriAuthResult(
             true,
             res,
             this.getOption(`${module}.redirect.success`),
@@ -238,7 +238,7 @@ export class NbPasswordAuthStrategy extends NbAuthStrategy {
       );
   }
 
-  resetPassword(data: any = {}): Observable<NbAuthResult> {
+  resetPassword(data: any = {}): Observable<TriAuthResult> {
 
     const module = 'resetPass';
     const method = this.getOption(`${module}.method`);
@@ -255,7 +255,7 @@ export class NbPasswordAuthStrategy extends NbAuthStrategy {
           return res;
         }),
         map((res) => {
-          return new NbAuthResult(
+          return new TriAuthResult(
             true,
             res,
             this.getOption(`${module}.redirect.success`),
@@ -268,7 +268,7 @@ export class NbPasswordAuthStrategy extends NbAuthStrategy {
       );
   }
 
-  logout(): Observable<NbAuthResult> {
+  logout(): Observable<TriAuthResult> {
 
     const module = 'logout';
     const method = this.getOption(`${module}.method`);
@@ -290,7 +290,7 @@ export class NbPasswordAuthStrategy extends NbAuthStrategy {
           return res;
         }),
         map((res) => {
-          return new NbAuthResult(
+          return new TriAuthResult(
             true,
             res,
             this.getOption(`${module}.redirect.success`),
@@ -303,7 +303,7 @@ export class NbPasswordAuthStrategy extends NbAuthStrategy {
       );
   }
 
-  refreshToken(data?: any): Observable<NbAuthResult> {
+  refreshToken(data?: any): Observable<TriAuthResult> {
 
     const module = 'refreshToken';
     const method = this.getOption(`${module}.method`);
@@ -320,7 +320,7 @@ export class NbPasswordAuthStrategy extends NbAuthStrategy {
           return res;
         }),
         map((res) => {
-          return new NbAuthResult(
+          return new TriAuthResult(
             true,
             res,
             this.getOption(`${module}.redirect.success`),
@@ -334,17 +334,17 @@ export class NbPasswordAuthStrategy extends NbAuthStrategy {
       );
   }
 
-  protected handleResponseError(res: any, module: string): Observable<NbAuthResult> {
+  protected handleResponseError(res: any, module: string): Observable<TriAuthResult> {
     let errors = [];
     if (res instanceof HttpErrorResponse) {
       errors = this.getOption('errors.getter')(module, res, this.options);
-    } else if (res instanceof NbAuthIllegalTokenError) {
+    } else if (res instanceof TriAuthIllegalTokenError) {
       errors.push(res.message);
     } else {
       errors.push('Something went wrong.');
     }
     return observableOf(
-      new NbAuthResult(
+      new TriAuthResult(
         false,
         res,
         this.getOption(`${module}.redirect.failure`),

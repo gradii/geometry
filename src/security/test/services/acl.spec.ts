@@ -3,7 +3,7 @@
 import { TestBed, inject, async } from '@angular/core/testing';
 import { NbAclService } from './acl.service';
 import { NB_SECURITY_OPTIONS_TOKEN } from '../security.options';
-import { deepExtend } from '../../auth/helpers'; // TODO: common module?
+import { deepExtend } from '@gradii/auth';
 
 
 let aclService: NbAclService;

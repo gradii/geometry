@@ -2,16 +2,16 @@
 
 import { async, inject, TestBed } from '@angular/core/testing';
 
-import { NbTokenLocalStorage, NbTokenStorage } from './token-storage';
-import { NB_AUTH_TOKENS } from '../../auth.options';
-import { NbAuthSimpleToken, nbAuthCreateToken } from './token';
-import { NbAuthJWTToken } from '@nebular/auth/services/token/token';
-import { NB_AUTH_FALLBACK_TOKEN, NbAuthTokenParceler } from './token-parceler';
+import { TriTokenLocalStorage, TriTokenStorage } from './token-storage';
+import { TRI_AUTH_TOKENS } from '../../auth.options';
+import { TriAuthSimpleToken, triAuthCreateToken } from './token';
+import { TriAuthJWTToken } from '@nebular/auth/services/token/token';
+import { TRI_AUTH_FALLBACK_TOKEN, TriAuthTokenParceler } from './token-parceler';
 
 describe('token-storage', () => {
 
-  let tokenStorage: NbTokenStorage;
-  let tokenParceler: NbAuthTokenParceler;
+  let tokenStorage: TriTokenStorage;
+  let tokenParceler: TriAuthTokenParceler;
   const testTokenKey = 'auth_app_token';
   const testTokenValue = 'test-token';
   const ownerStrategyName = 'strategy';
@@ -19,16 +19,16 @@ describe('token-storage', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        { provide: NbTokenStorage, useClass: NbTokenLocalStorage },
-        { provide: NB_AUTH_FALLBACK_TOKEN, useValue: NbAuthSimpleToken },
-        { provide: NB_AUTH_TOKENS, useValue: [NbAuthSimpleToken, NbAuthJWTToken] },
-        NbAuthTokenParceler,
+        { provide: TriTokenStorage, useClass: TriTokenLocalStorage },
+        { provide: TRI_AUTH_FALLBACK_TOKEN, useValue: TriAuthSimpleToken },
+        { provide: TRI_AUTH_TOKENS, useValue: [TriAuthSimpleToken, TriAuthJWTToken] },
+        TriAuthTokenParceler,
       ],
     });
   });
 
     beforeEach(async(inject(
-    [NbTokenStorage, NbAuthTokenParceler],
+    [TriTokenStorage, TriAuthTokenParceler],
     (_tokenStorage, _tokenParceler) => {
       tokenStorage = _tokenStorage;
       tokenParceler = _tokenParceler;
@@ -41,7 +41,7 @@ describe('token-storage', () => {
 
 
   it('set test token', () => {
-    const token = nbAuthCreateToken(NbAuthSimpleToken, testTokenValue, ownerStrategyName);
+    const token = triAuthCreateToken(TriAuthSimpleToken, testTokenValue, ownerStrategyName);
 
     tokenStorage.set(token);
     expect(localStorage.getItem(testTokenKey)).toEqual(tokenParceler.wrap(token));
@@ -50,11 +50,11 @@ describe('token-storage', () => {
   it('setter set invalid token to localStorage as empty string', () => {
     let token;
 
-    token = nbAuthCreateToken(NbAuthSimpleToken, null, ownerStrategyName);
+    token = triAuthCreateToken(TriAuthSimpleToken, null, ownerStrategyName);
     tokenStorage.set(token);
     expect(localStorage.getItem(testTokenKey)).toEqual(tokenParceler.wrap(token));
 
-    token = nbAuthCreateToken(NbAuthSimpleToken, undefined, ownerStrategyName);
+    token = triAuthCreateToken(TriAuthSimpleToken, undefined, ownerStrategyName);
     tokenStorage.set(token);
     expect(localStorage.getItem(testTokenKey)).toEqual(tokenParceler.wrap(token));
   });
@@ -66,14 +66,14 @@ describe('token-storage', () => {
   });
 
   it('should return correct value', () => {
-    const token = nbAuthCreateToken(NbAuthSimpleToken, 'test', ownerStrategyName);
+    const token = triAuthCreateToken(TriAuthSimpleToken, 'test', ownerStrategyName);
     localStorage.setItem(testTokenKey, tokenParceler.wrap(token));
 
     expect(tokenStorage.get().getValue()).toEqual(token.getValue());
   });
 
   it('clear remove token', () => {
-    const token = nbAuthCreateToken(NbAuthSimpleToken, 'test', ownerStrategyName);
+    const token = triAuthCreateToken(TriAuthSimpleToken, 'test', ownerStrategyName);
     localStorage.setItem(testTokenKey, tokenParceler.wrap(token));
 
     tokenStorage.clear();
@@ -82,7 +82,7 @@ describe('token-storage', () => {
   });
 
   it('clear remove token only', () => {
-    const token = nbAuthCreateToken(NbAuthSimpleToken, 'test', ownerStrategyName);
+    const token = triAuthCreateToken(TriAuthSimpleToken, 'test', ownerStrategyName);
     localStorage.setItem(testTokenKey, tokenParceler.wrap(token));
     localStorage.setItem(testTokenKey + '2', tokenParceler.wrap(token));
 

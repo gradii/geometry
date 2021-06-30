@@ -5,10 +5,10 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 import { NB_WINDOW } from '@nebular/theme';
-import { NbOAuth2AuthStrategy } from './oauth2-strategy';
-import { NbOAuth2ClientAuthMethod, NbOAuth2GrantType, NbOAuth2ResponseType } from './oauth2-strategy.options';
-import { NbAuthResult } from '../../services/auth-result';
-import { nbAuthCreateToken, NbAuthOAuth2Token } from '../../services/token/token';
+import { TriOAuth2AuthStrategy } from './oauth2-strategy';
+import { TriOAuth2ClientAuthMethod, TriOAuth2GrantType, TriOAuth2ResponseType } from './oauth2-strategy.options';
+import { TriAuthResult } from '../../services/auth-result';
+import { triAuthCreateToken, TriAuthOAuth2Token } from '../../services/token/token';
 function createURL(params: any) {
   return Object.keys(params).map((k) => {
     return `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`;
@@ -25,7 +25,7 @@ function parseQueryParams(params: string): { [key: string]: string } {
 
 describe('oauth2-auth-strategy', () => {
 
-  let strategy: NbOAuth2AuthStrategy;
+  let strategy: TriOAuth2AuthStrategy;
   let httpMock: HttpTestingController;
   let routeMock: any;
   let windowMock: any;
@@ -67,12 +67,12 @@ describe('oauth2-auth-strategy', () => {
     error_uri: 'some',
   };
 
-  const successToken = nbAuthCreateToken(NbAuthOAuth2Token, tokenSuccessResponse,
-    'strategy') as NbAuthOAuth2Token;
-  const refreshedToken = nbAuthCreateToken(NbAuthOAuth2Token, refreshedTokenPayload,
-    'strategy') as NbAuthOAuth2Token;
-  const refreshedTokenWithRefreshToken = nbAuthCreateToken(NbAuthOAuth2Token, refreshedTokenResponse,
-    'strategy') as NbAuthOAuth2Token;
+  const successToken = triAuthCreateToken(TriAuthOAuth2Token, tokenSuccessResponse,
+    'strategy') as TriAuthOAuth2Token;
+  const refreshedToken = triAuthCreateToken(TriAuthOAuth2Token, refreshedTokenPayload,
+    'strategy') as TriAuthOAuth2Token;
+  const refreshedTokenWithRefreshToken = triAuthCreateToken(TriAuthOAuth2Token, refreshedTokenResponse,
+    'strategy') as TriAuthOAuth2Token;
 
   beforeEach(() => {
     windowMock = { location: { href: '' } };
@@ -81,7 +81,7 @@ describe('oauth2-auth-strategy', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
-        NbOAuth2AuthStrategy,
+        TriOAuth2AuthStrategy,
         { provide: ActivatedRoute, useFactory: () => routeMock },
         { provide: NB_WINDOW, useFactory: () => windowMock }, // useValue will clone, we need reference
       ],
@@ -89,7 +89,7 @@ describe('oauth2-auth-strategy', () => {
   });
 
   beforeEach(async(inject(
-    [NbOAuth2AuthStrategy, HttpTestingController],
+    [TriOAuth2AuthStrategy, HttpTestingController],
     (_strategy, _httpMock) => {
       strategy = _strategy;
       httpMock = _httpMock;
@@ -130,7 +130,7 @@ describe('oauth2-auth-strategy', () => {
       routeMock.snapshot.queryParams = { code: 'code' };
 
       strategy.authenticate()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -147,7 +147,7 @@ describe('oauth2-auth-strategy', () => {
           const params = parseQueryParams(req.body);
           return (req.url === 'http://example.com/token'
             && req.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
-            && decodeURIComponent(params['grant_type']) === NbOAuth2GrantType.AUTHORIZATION_CODE
+            && decodeURIComponent(params['grant_type']) === TriOAuth2GrantType.AUTHORIZATION_CODE
             && decodeURIComponent(params['code']) === 'code'
             && decodeURIComponent(params['client_id']) === 'clientId'
             && !params['redirect_uri']);
@@ -160,7 +160,7 @@ describe('oauth2-auth-strategy', () => {
       routeMock.snapshot.queryParams = tokenErrorResponse;
 
       strategy.authenticate()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(false);
           expect(result.isFailure()).toBe(true);
@@ -177,7 +177,7 @@ describe('oauth2-auth-strategy', () => {
       routeMock.snapshot.queryParams = {code: 'code'};
 
       strategy.authenticate()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
 
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(false);
@@ -204,10 +204,10 @@ describe('oauth2-auth-strategy', () => {
       strategy.setOptions({
         ... basicOptions,
         clientSecret: 'clientSecret',
-        clientAuthMethod: NbOAuth2ClientAuthMethod.BASIC,
+        clientAuthMethod: TriOAuth2ClientAuthMethod.BASIC,
       });
       strategy.refreshToken(successToken)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -225,7 +225,7 @@ describe('oauth2-auth-strategy', () => {
           return (req.url === 'http://example.com/token'
             && req.headers.get('Authorization') === authHeader
             && req.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
-            && decodeURIComponent(params['grant_type']) === NbOAuth2GrantType.REFRESH_TOKEN
+            && decodeURIComponent(params['grant_type']) === TriOAuth2GrantType.REFRESH_TOKEN
             && decodeURIComponent(params['refresh_token']) === successToken.getRefreshToken()
             && !params['scope']);
         },
@@ -237,10 +237,10 @@ describe('oauth2-auth-strategy', () => {
       strategy.setOptions({
         ... basicOptions,
         clientSecret: 'clientSecret',
-        clientAuthMethod: NbOAuth2ClientAuthMethod.REQUEST_BODY,
+        clientAuthMethod: TriOAuth2ClientAuthMethod.REQUEST_BODY,
       });
       strategy.refreshToken(successToken)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -257,7 +257,7 @@ describe('oauth2-auth-strategy', () => {
           const params = parseQueryParams(req.body);
           return (req.url === 'http://example.com/token'
             && req.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
-            && decodeURIComponent(params['grant_type']) === NbOAuth2GrantType.REFRESH_TOKEN
+            && decodeURIComponent(params['grant_type']) === TriOAuth2GrantType.REFRESH_TOKEN
             && decodeURIComponent(params['refresh_token']) === successToken.getRefreshToken()
             && decodeURIComponent(params['client_id']) === strategy.getOption('clientId')
             && decodeURIComponent(params['client_secret']) === strategy.getOption('clientSecret')
@@ -270,7 +270,7 @@ describe('oauth2-auth-strategy', () => {
     it('handle refresh token with NO client auth', (done: DoneFn) => {
       strategy.setOptions(basicOptions);
       strategy.refreshToken(successToken)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -287,7 +287,7 @@ describe('oauth2-auth-strategy', () => {
           const params = parseQueryParams(req.body);
           return (req.url === 'http://example.com/token'
             && req.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
-            && decodeURIComponent(params['grant_type']) === NbOAuth2GrantType.REFRESH_TOKEN
+            && decodeURIComponent(params['grant_type']) === TriOAuth2GrantType.REFRESH_TOKEN
             && decodeURIComponent(params['refresh_token']) === successToken.getRefreshToken()
             && !params['scope']);
         },
@@ -298,7 +298,7 @@ describe('oauth2-auth-strategy', () => {
     it('handle refresh token and inserts existing refresh_token if needed', (done: DoneFn) => {
       strategy.setOptions(basicOptions);
       strategy.refreshToken(successToken)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -315,7 +315,7 @@ describe('oauth2-auth-strategy', () => {
           const params = parseQueryParams(req.body);
           return (req.url === 'http://example.com/token'
             && req.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
-            && decodeURIComponent(params['grant_type']) === NbOAuth2GrantType.REFRESH_TOKEN
+            && decodeURIComponent(params['grant_type']) === TriOAuth2GrantType.REFRESH_TOKEN
             && decodeURIComponent(params['refresh_token']) === successToken.getRefreshToken()
             && !params['scope']);
         },
@@ -326,7 +326,7 @@ describe('oauth2-auth-strategy', () => {
     it('Handle refresh-token and leaves refresh_token unchanged if present', (done: DoneFn) => {
       strategy.setOptions(basicOptions);
       strategy.refreshToken(successToken)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -344,7 +344,7 @@ describe('oauth2-auth-strategy', () => {
           const params = parseQueryParams(req.body);
           return (req.url === 'http://example.com/token'
             && req.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
-            && decodeURIComponent(params['grant_type']) === NbOAuth2GrantType.REFRESH_TOKEN
+            && decodeURIComponent(params['grant_type']) === TriOAuth2GrantType.REFRESH_TOKEN
             && decodeURIComponent(params['refresh_token']) === successToken.getRefreshToken()
             && !params['scope']);
         },
@@ -355,7 +355,7 @@ describe('oauth2-auth-strategy', () => {
     it('handle error token refresh response', (done: DoneFn) => {
 
       strategy.refreshToken(successToken)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(false);
           expect(result.isFailure()).toBe(true);
@@ -385,7 +385,7 @@ describe('oauth2-auth-strategy', () => {
       baseEndpoint: 'http://example.com/',
       clientId: 'clientId',
       authorize: {
-        responseType: NbOAuth2ResponseType.TOKEN,
+        responseType: TriOAuth2ResponseType.TOKEN,
       },
     };
 
@@ -411,12 +411,12 @@ describe('oauth2-auth-strategy', () => {
       routeMock.snapshot.fragment = createURL(token);
 
       strategy.authenticate()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
           // tslint:disable-next-line
-          expect(result.getToken().getValue()).toEqual(nbAuthCreateToken(NbAuthOAuth2Token, token, 'strategy').getValue());
+          expect(result.getToken().getValue()).toEqual(triAuthCreateToken(TriAuthOAuth2Token, token, 'strategy').getValue());
           expect(result.getMessages()).toEqual(successMessages);
           expect(result.getErrors()).toEqual([]); // no error message, response is success
           expect(result.getRedirect()).toEqual('/');
@@ -428,7 +428,7 @@ describe('oauth2-auth-strategy', () => {
       routeMock.snapshot.fragment = createURL(tokenErrorResponse);
 
       strategy.authenticate()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(false);
           expect(result.isFailure()).toBe(true);
@@ -495,7 +495,7 @@ describe('oauth2-auth-strategy', () => {
       routeMock.snapshot.queryParams = { code: 'code' };
 
       strategy.authenticate()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -512,7 +512,7 @@ describe('oauth2-auth-strategy', () => {
           const params = parseQueryParams(req.body);
           return (req.url === 'http://example.com/custom'
             && req.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
-            && decodeURIComponent(params['grant_type']) === NbOAuth2GrantType.AUTHORIZATION_CODE
+            && decodeURIComponent(params['grant_type']) === TriOAuth2GrantType.AUTHORIZATION_CODE
             && decodeURIComponent(params['code']) === 'code'
             && decodeURIComponent(params['client_id']) === 'clientId'
             && decodeURIComponent(params['redirect_uri']) === 'http://localhost:4200/callback');
@@ -526,11 +526,11 @@ describe('oauth2-auth-strategy', () => {
       strategy.setOptions({
         ... basicOptions,
         clientSecret: 'clientSecret',
-        clientAuthMethod: NbOAuth2ClientAuthMethod.BASIC,
+        clientAuthMethod: TriOAuth2ClientAuthMethod.BASIC,
       });
 
       strategy.authenticate()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -548,7 +548,7 @@ describe('oauth2-auth-strategy', () => {
           return (req.url === 'http://example.com/custom'
           && req.headers.get('Authorization') === authHeader
             && req.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
-            && decodeURIComponent(params['grant_type']) === NbOAuth2GrantType.AUTHORIZATION_CODE
+            && decodeURIComponent(params['grant_type']) === TriOAuth2GrantType.AUTHORIZATION_CODE
             && decodeURIComponent(params['code']) === 'code'
             && decodeURIComponent(params['client_id']) === 'clientId'
             && decodeURIComponent(params['redirect_uri']) === 'http://localhost:4200/callback');
@@ -562,11 +562,11 @@ describe('oauth2-auth-strategy', () => {
       strategy.setOptions({
         ... basicOptions,
         clientSecret: 'clientSecret',
-        clientAuthMethod: NbOAuth2ClientAuthMethod.REQUEST_BODY,
+        clientAuthMethod: TriOAuth2ClientAuthMethod.REQUEST_BODY,
       });
 
       strategy.authenticate()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -583,7 +583,7 @@ describe('oauth2-auth-strategy', () => {
           const params = parseQueryParams(req.body);
           return (req.url === 'http://example.com/custom'
             && req.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
-            && decodeURIComponent(params['grant_type']) === NbOAuth2GrantType.AUTHORIZATION_CODE
+            && decodeURIComponent(params['grant_type']) === TriOAuth2GrantType.AUTHORIZATION_CODE
             && decodeURIComponent(params['code']) === 'code'
             && decodeURIComponent(params['client_id']) === strategy.getOption('clientId')
             && decodeURIComponent(params['client_secret']) === strategy.getOption('clientSecret')
@@ -597,7 +597,7 @@ describe('oauth2-auth-strategy', () => {
       routeMock.snapshot.queryParams = tokenErrorResponse;
 
       strategy.authenticate()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(false);
           expect(result.isFailure()).toBe(true);
@@ -616,7 +616,7 @@ describe('oauth2-auth-strategy', () => {
       });
 
       strategy.refreshToken(successToken)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -633,7 +633,7 @@ describe('oauth2-auth-strategy', () => {
           const params = parseQueryParams(req.body);
           return (req.url === 'http://example.com/custom'
             && req.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
-            && decodeURIComponent(params['grant_type']) === NbOAuth2GrantType.REFRESH_TOKEN
+            && decodeURIComponent(params['grant_type']) === TriOAuth2GrantType.REFRESH_TOKEN
             && decodeURIComponent(params['refresh_token']) === successToken.getRefreshToken()
             && decodeURIComponent(params['scope']) === 'read'
             && decodeURIComponent(params['client_id']) === 'clientId');
@@ -646,11 +646,11 @@ describe('oauth2-auth-strategy', () => {
       strategy.setOptions({
         ... basicOptions,
         clientSecret: 'clientSecret',
-        clientAuthMethod: NbOAuth2ClientAuthMethod.BASIC,
+        clientAuthMethod: TriOAuth2ClientAuthMethod.BASIC,
       });
 
       strategy.refreshToken(successToken)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -668,7 +668,7 @@ describe('oauth2-auth-strategy', () => {
           return (req.url === 'http://example.com/custom'
             && req.headers.get('Authorization') === authHeader
             && req.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
-            && decodeURIComponent(params['grant_type']) === NbOAuth2GrantType.REFRESH_TOKEN
+            && decodeURIComponent(params['grant_type']) === TriOAuth2GrantType.REFRESH_TOKEN
             && decodeURIComponent(params['refresh_token']) === successToken.getRefreshToken()
             && decodeURIComponent(params['scope']) === 'read');
         },
@@ -680,11 +680,11 @@ describe('oauth2-auth-strategy', () => {
       strategy.setOptions({
         ... basicOptions,
         clientSecret: 'clientSecret',
-        clientAuthMethod: NbOAuth2ClientAuthMethod.REQUEST_BODY,
+        clientAuthMethod: TriOAuth2ClientAuthMethod.REQUEST_BODY,
       });
 
       strategy.refreshToken(successToken)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -701,7 +701,7 @@ describe('oauth2-auth-strategy', () => {
           const params = parseQueryParams(req.body);
           return (req.url === 'http://example.com/custom'
             && req.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
-            && decodeURIComponent(params['grant_type']) === NbOAuth2GrantType.REFRESH_TOKEN
+            && decodeURIComponent(params['grant_type']) === TriOAuth2GrantType.REFRESH_TOKEN
             && decodeURIComponent(params['refresh_token']) === successToken.getRefreshToken()
             && decodeURIComponent(params['client_id']) === strategy.getOption('clientId')
             && decodeURIComponent(params['client_secret']) === strategy.getOption('clientSecret')
@@ -715,7 +715,7 @@ describe('oauth2-auth-strategy', () => {
       routeMock.snapshot.queryParams = { code: 'code' };
 
       strategy.authenticate()
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
 
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(false);
@@ -747,7 +747,7 @@ describe('oauth2-auth-strategy', () => {
       baseEndpoint: 'http://example.com/',
       clientId: 'clientId',
       token: {
-        grantType: NbOAuth2GrantType.PASSWORD,
+        grantType: TriOAuth2GrantType.PASSWORD,
         endpoint: 'token',
         scope: scope,
       },
@@ -760,7 +760,7 @@ describe('oauth2-auth-strategy', () => {
     it('handle success login with NO client auth', (done: DoneFn) => {
       const credentials = { email: 'example@akveo.com', password: '123456' };
       strategy.authenticate(credentials)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -777,7 +777,7 @@ describe('oauth2-auth-strategy', () => {
           const params = parseQueryParams(req.body);
           return (req.url === 'http://example.com/token'
             && req.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
-            && decodeURIComponent(params['grant_type']) === NbOAuth2GrantType.PASSWORD
+            && decodeURIComponent(params['grant_type']) === TriOAuth2GrantType.PASSWORD
             && decodeURIComponent(params['username']) === credentials.email
             && decodeURIComponent(params['password']) === credentials.password
             && decodeURIComponent(params['scope']) === scope);
@@ -791,11 +791,11 @@ describe('oauth2-auth-strategy', () => {
       strategy.setOptions({
         ... basicOptions,
         clientSecret: 'clientSecret',
-        clientAuthMethod: NbOAuth2ClientAuthMethod.BASIC,
+        clientAuthMethod: TriOAuth2ClientAuthMethod.BASIC,
       });
 
       strategy.authenticate(credentials)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -813,7 +813,7 @@ describe('oauth2-auth-strategy', () => {
           return (req.url === 'http://example.com/token'
             && req.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
             && req.headers.get('Authorization') === authHeader
-            && decodeURIComponent(params['grant_type']) === NbOAuth2GrantType.PASSWORD
+            && decodeURIComponent(params['grant_type']) === TriOAuth2GrantType.PASSWORD
             && decodeURIComponent(params['username']) === credentials.email
             && decodeURIComponent(params['password']) === credentials.password
             && decodeURIComponent(params['scope']) === scope);
@@ -826,11 +826,11 @@ describe('oauth2-auth-strategy', () => {
       strategy.setOptions({
         ... basicOptions,
         clientSecret: 'clientSecret',
-        clientAuthMethod: NbOAuth2ClientAuthMethod.REQUEST_BODY,
+        clientAuthMethod: TriOAuth2ClientAuthMethod.REQUEST_BODY,
       });
 
       strategy.authenticate(credentials)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(true);
           expect(result.isFailure()).toBe(false);
@@ -847,7 +847,7 @@ describe('oauth2-auth-strategy', () => {
           const params = parseQueryParams(req.body);
           return (req.url === 'http://example.com/token'
           && req.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
-          && decodeURIComponent(params['grant_type']) === NbOAuth2GrantType.PASSWORD
+          && decodeURIComponent(params['grant_type']) === TriOAuth2GrantType.PASSWORD
           && decodeURIComponent(params['username']) === credentials.email
           && decodeURIComponent(params['password']) === credentials.password
           && decodeURIComponent(params['scope']) === scope
@@ -862,7 +862,7 @@ describe('oauth2-auth-strategy', () => {
       const credentials = { email: 'example@akveo.com', password: '123456' };
 
       strategy.authenticate(credentials)
-        .subscribe((result: NbAuthResult) => {
+        .subscribe((result: TriAuthResult) => {
           expect(result).toBeTruthy();
           expect(result.isSuccess()).toBe(false);
           expect(result.isFailure()).toBe(true);
@@ -879,7 +879,7 @@ describe('oauth2-auth-strategy', () => {
            const params = parseQueryParams(req.body);
            return (req.url === 'http://example.com/token'
              && req.headers.get('Content-Type') === 'application/x-www-form-urlencoded'
-             && decodeURIComponent(params['grant_type']) === NbOAuth2GrantType.PASSWORD
+             && decodeURIComponent(params['grant_type']) === TriOAuth2GrantType.PASSWORD
              && decodeURIComponent(params['username']) === credentials.email
              && decodeURIComponent(params['password']) === credentials.password
              && decodeURIComponent(params['scope']) === scope);

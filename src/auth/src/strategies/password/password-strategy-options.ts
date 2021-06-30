@@ -6,12 +6,12 @@
 
 
 
-import { NbAuthSimpleToken, NbAuthTokenClass } from '../../services/token/token';
-import { NbAuthStrategyOptions } from '../auth-strategy-options';
+import { TriAuthSimpleToken, TriAuthTokenClass } from '../../services/token/token';
+import { TriAuthStrategyOptions } from '../auth-strategy-options';
 import { getDeepFromObject } from '../../helpers';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
-export interface NbPasswordStrategyModule {
+export interface TriPasswordStrategyModule {
   alwaysFail?: boolean;
   endpoint?: string;
   method?: string;
@@ -24,24 +24,24 @@ export interface NbPasswordStrategyModule {
   defaultMessages?: string[];
 }
 
-export interface NbPasswordStrategyReset extends NbPasswordStrategyModule {
+export interface TriPasswordStrategyReset extends TriPasswordStrategyModule {
   resetPasswordTokenKey?: string;
 }
 
-export interface NbPasswordStrategyToken {
-  class?: NbAuthTokenClass;
+export interface TriPasswordStrategyToken {
+  class?: TriAuthTokenClass;
   key?: string;
   getter?: Function;
 }
 
-export interface NbPasswordStrategyMessage {
+export interface TriPasswordStrategyMessage {
   key?: string;
   getter?: Function;
 }
 
-export class NbPasswordAuthStrategyOptions extends NbAuthStrategyOptions {
+export class TriPasswordAuthStrategyOptions extends TriAuthStrategyOptions {
   baseEndpoint?: string = '/api/auth/';
-  login?: boolean | NbPasswordStrategyModule = {
+  login?: boolean | TriPasswordStrategyModule = {
     alwaysFail: false,
     endpoint: 'login',
     method: 'post',
@@ -53,7 +53,7 @@ export class NbPasswordAuthStrategyOptions extends NbAuthStrategyOptions {
     defaultErrors: ['Login/Email combination is not correct, please try again.'],
     defaultMessages: ['You have been successfully logged in.'],
   };
-  register?: boolean | NbPasswordStrategyModule = {
+  register?: boolean | TriPasswordStrategyModule = {
     alwaysFail: false,
     endpoint: 'register',
     method: 'post',
@@ -65,7 +65,7 @@ export class NbPasswordAuthStrategyOptions extends NbAuthStrategyOptions {
     defaultErrors: ['Something went wrong, please try again.'],
     defaultMessages: ['You have been successfully registered.'],
   };
-  requestPass?: boolean | NbPasswordStrategyModule = {
+  requestPass?: boolean | TriPasswordStrategyModule = {
     endpoint: 'request-pass',
     method: 'post',
     redirect: {
@@ -75,7 +75,7 @@ export class NbPasswordAuthStrategyOptions extends NbAuthStrategyOptions {
     defaultErrors: ['Something went wrong, please try again.'],
     defaultMessages: ['Reset password instructions have been sent to your email.'],
   };
-  resetPass?: boolean | NbPasswordStrategyReset = {
+  resetPass?: boolean | TriPasswordStrategyReset = {
     endpoint: 'reset-pass',
     method: 'put',
     redirect: {
@@ -86,7 +86,7 @@ export class NbPasswordAuthStrategyOptions extends NbAuthStrategyOptions {
     defaultErrors: ['Something went wrong, please try again.'],
     defaultMessages: ['Your password has been successfully changed.'],
   };
-  logout?: boolean | NbPasswordStrategyReset = {
+  logout?: boolean | TriPasswordStrategyReset = {
     alwaysFail: false,
     endpoint: 'logout',
     method: 'delete',
@@ -97,7 +97,7 @@ export class NbPasswordAuthStrategyOptions extends NbAuthStrategyOptions {
     defaultErrors: ['Something went wrong, please try again.'],
     defaultMessages: ['You have been successfully logged out.'],
   };
-  refreshToken?: boolean | NbPasswordStrategyModule = {
+  refreshToken?: boolean | TriPasswordStrategyModule = {
     endpoint: 'refresh-token',
     method: 'post',
     requireValidToken: true,
@@ -108,25 +108,25 @@ export class NbPasswordAuthStrategyOptions extends NbAuthStrategyOptions {
     defaultErrors: ['Something went wrong, please try again.'],
     defaultMessages: ['Your token has been successfully refreshed.'],
   };
-  token?: NbPasswordStrategyToken = {
-    class: NbAuthSimpleToken,
+  token?: TriPasswordStrategyToken = {
+    class: TriAuthSimpleToken,
     key: 'data.token',
-    getter: (module: string, res: HttpResponse<Object>, options: NbPasswordAuthStrategyOptions) => getDeepFromObject(
+    getter: (module: string, res: HttpResponse<Object>, options: TriPasswordAuthStrategyOptions) => getDeepFromObject(
       res.body,
       options.token.key,
     ),
   };
-  errors?: NbPasswordStrategyMessage = {
+  errors?: TriPasswordStrategyMessage = {
     key: 'data.errors',
-    getter: (module: string, res: HttpErrorResponse, options: NbPasswordAuthStrategyOptions) => getDeepFromObject(
+    getter: (module: string, res: HttpErrorResponse, options: TriPasswordAuthStrategyOptions) => getDeepFromObject(
       res.error,
       options.errors.key,
       options[module].defaultErrors,
     ),
   };
-  messages?: NbPasswordStrategyMessage = {
+  messages?: TriPasswordStrategyMessage = {
     key: 'data.messages',
-    getter: (module: string, res: HttpResponse<Object>, options: NbPasswordAuthStrategyOptions) => getDeepFromObject(
+    getter: (module: string, res: HttpResponse<Object>, options: TriPasswordAuthStrategyOptions) => getDeepFromObject(
       res.body,
       options.messages.key,
       options[module].defaultMessages,
@@ -152,4 +152,4 @@ export class NbPasswordAuthStrategyOptions extends NbAuthStrategyOptions {
   };
 }
 
-export const passwordStrategyOptions: NbPasswordAuthStrategyOptions = new NbPasswordAuthStrategyOptions();
+export const passwordStrategyOptions: TriPasswordAuthStrategyOptions = new TriPasswordAuthStrategyOptions();

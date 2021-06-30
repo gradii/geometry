@@ -4,14 +4,19 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Directive, Input, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
+import { Directive, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
-import { NbAccessChecker } from '../services/access-checker.service';
+import { TriAccessChecker } from '../services/access-checker.service';
 
-@Directive({selector: '[nbIsGranted]'})
-export class NbIsGrantedDirective implements OnDestroy {
+@Directive({
+  selector: '[triIsGranted]',
+  inputs: [
+    'isGranted:triIsGranted'
+  ]
+})
+export class TriIsGrantedDirective implements OnDestroy {
 
   private destroy$ = new Subject<void>();
 
@@ -19,11 +24,10 @@ export class NbIsGrantedDirective implements OnDestroy {
 
   constructor(private templateRef: TemplateRef<any>,
               private viewContainer: ViewContainerRef,
-              private accessChecker: NbAccessChecker) {
+              private accessChecker: TriAccessChecker) {
   }
 
-  @Input()
-  set nbIsGranted([permission, resource]: [string, string]) {
+  set isGranted([permission, resource]: [string, string]) {
 
     this.accessChecker.isGranted(permission, resource)
       .pipe(

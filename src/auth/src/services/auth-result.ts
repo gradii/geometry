@@ -4,11 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { NbAuthToken } from './token/token';
+import { TriAuthToken } from './token/token';
 
-export class NbAuthResult {
+export class TriAuthResult {
 
-  protected token: NbAuthToken;
+  protected token: TriAuthToken;
   protected errors: string[] = [];
   protected messages: string[] = [];
 
@@ -18,7 +18,7 @@ export class NbAuthResult {
               protected redirect?: any,
               errors?: any,
               messages?: any,
-              token: NbAuthToken = null) {
+              token: TriAuthToken = null) {
 
     this.errors = this.errors.concat([errors]);
     if (errors instanceof Array) {
@@ -37,7 +37,7 @@ export class NbAuthResult {
     return this.response;
   }
 
-  getToken(): NbAuthToken {
+  getToken(): TriAuthToken {
     return this.token;
   }
 

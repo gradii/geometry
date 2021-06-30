@@ -8,26 +8,26 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of as observableOf } from 'rxjs';
 import { filter, share } from 'rxjs/operators';
 
-import { NbTokenStorage } from './token-storage';
-import { NbAuthToken } from './token';
+import { TriTokenStorage } from './token-storage';
+import { TriAuthToken } from './token';
 
 /**
  * Service that allows you to manage authentication token - get, set, clear and also listen to token changes over time.
  */
 @Injectable()
-export class NbTokenService {
+export class TriTokenService {
 
-  protected token$: BehaviorSubject<NbAuthToken> = new BehaviorSubject(null);
+  protected token$: BehaviorSubject<TriAuthToken> = new BehaviorSubject(null);
 
-  constructor(protected tokenStorage: NbTokenStorage) {
+  constructor(protected tokenStorage: TriTokenStorage) {
     this.publishStoredToken();
   }
 
   /**
    * Publishes token when it changes.
-   * @returns {Observable<NbAuthToken>}
+   * @returns {Observable<TriAuthToken>}
    */
-  tokenChange(): Observable<NbAuthToken> {
+  tokenChange(): Observable<TriAuthToken> {
     return this.token$
       .pipe(
         filter(value => !!value),
@@ -36,12 +36,12 @@ export class NbTokenService {
   }
 
   /**
-   * Sets a token into the storage. This method is used by the NbAuthService automatically.
+   * Sets a token into the storage. This method is used by the TriAuthService automatically.
    *
-   * @param {NbAuthToken} token
+   * @param {TriAuthToken} token
    * @returns {Observable<any>}
    */
-  set(token: NbAuthToken): Observable<null> {
+  set(token: TriAuthToken): Observable<null> {
     this.tokenStorage.set(token);
     this.publishStoredToken();
     return observableOf(null);
@@ -49,9 +49,9 @@ export class NbTokenService {
 
   /**
    * Returns observable of current token
-   * @returns {Observable<NbAuthToken>}
+   * @returns {Observable<TriAuthToken>}
    */
-  get(): Observable<NbAuthToken> {
+  get(): Observable<TriAuthToken> {
     const token = this.tokenStorage.get();
     return observableOf(token);
   }

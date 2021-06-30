@@ -5,14 +5,14 @@
  */
 
 
-import { NbAuthTokenClass } from '../services/token/token';
+import { TriAuthTokenClass } from '../services/token/token';
 
-export interface NbStrategyToken {
-  class?: NbAuthTokenClass;
+export interface TriStrategyToken {
+  class?: TriAuthTokenClass;
   [key: string]: any;
 }
 
-export class NbAuthStrategyOptions {
+export class TriAuthStrategyOptions {
   name: string;
-  token?: NbStrategyToken;
+  token?: TriStrategyToken;
 }

@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-export class NbUser {
+export class TriUser {
 
   constructor(public id?: number,
               public email?: string,

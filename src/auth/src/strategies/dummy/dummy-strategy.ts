@@ -9,10 +9,10 @@ import { Injectable } from '@angular/core';
 import { Observable, of as observableOf } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
-import { NbAuthStrategy } from '../auth-strategy';
-import { NbAuthResult } from '../../services/auth-result';
-import { NbDummyAuthStrategyOptions, dummyStrategyOptions } from './dummy-strategy-options';
-import { NbAuthStrategyClass } from '../../auth.options';
+import { TriAuthStrategy } from '../auth-strategy';
+import { TriAuthResult } from '../../services/auth-result';
+import { TriDummyAuthStrategyOptions, dummyStrategyOptions } from './dummy-strategy-options';
+import { TriAuthStrategyClass } from '../../auth.options';
 
 
 /**
@@ -22,10 +22,10 @@ import { NbAuthStrategyClass } from '../../auth.options';
  * Strategy settings.
  *
  * ```ts
- * export class NbDummyAuthStrategyOptions extends NbAuthStrategyOptions {
+ * export class TriDummyAuthStrategyOptions extends TriAuthStrategyOptions {
  *   name = 'dummy';
  *   token = {
- *     class: NbAuthSimpleToken,
+ *     class: TriAuthSimpleToken,
  *   };
  *   delay? = 1000;
  *   alwaysFail? = false;
@@ -33,60 +33,60 @@ import { NbAuthStrategyClass } from '../../auth.options';
  * ```
  */
 @Injectable()
-export class NbDummyAuthStrategy extends NbAuthStrategy {
+export class TriDummyAuthStrategy extends TriAuthStrategy {
 
-  protected defaultOptions: NbDummyAuthStrategyOptions = dummyStrategyOptions;
+  protected defaultOptions: TriDummyAuthStrategyOptions = dummyStrategyOptions;
 
-  static setup(options: NbDummyAuthStrategyOptions): [NbAuthStrategyClass, NbDummyAuthStrategyOptions] {
-    return [NbDummyAuthStrategy, options];
+  static setup(options: TriDummyAuthStrategyOptions): [TriAuthStrategyClass, TriDummyAuthStrategyOptions] {
+    return [TriDummyAuthStrategy, options];
   }
 
-  authenticate(data?: any): Observable<NbAuthResult> {
+  authenticate(data?: any): Observable<TriAuthResult> {
     return observableOf(this.createDummyResult(data))
       .pipe(
         delay(this.getOption('delay')),
       );
   }
 
-  register(data?: any): Observable<NbAuthResult> {
+  register(data?: any): Observable<TriAuthResult> {
     return observableOf(this.createDummyResult(data))
       .pipe(
         delay(this.getOption('delay')),
       );
   }
 
-  requestPassword(data?: any): Observable<NbAuthResult> {
+  requestPassword(data?: any): Observable<TriAuthResult> {
     return observableOf(this.createDummyResult(data))
       .pipe(
         delay(this.getOption('delay')),
       );
   }
 
-  resetPassword(data?: any): Observable<NbAuthResult> {
+  resetPassword(data?: any): Observable<TriAuthResult> {
     return observableOf(this.createDummyResult(data))
       .pipe(
         delay(this.getOption('delay')),
       );
   }
 
-  logout(data?: any): Observable<NbAuthResult> {
+  logout(data?: any): Observable<TriAuthResult> {
     return observableOf(this.createDummyResult(data))
       .pipe(
         delay(this.getOption('delay')),
       );
   }
 
-  refreshToken(data?: any): Observable<NbAuthResult> {
+  refreshToken(data?: any): Observable<TriAuthResult> {
     return observableOf(this.createDummyResult(data))
       .pipe(
         delay(this.getOption('delay')),
       );
   }
 
-  protected createDummyResult(data?: any): NbAuthResult {
+  protected createDummyResult(data?: any): TriAuthResult {
 
     if (this.getOption('alwaysFail')) {
-      return new NbAuthResult(
+      return new TriAuthResult(
         false,
         this.createFailResponse(data),
         null,
@@ -96,7 +96,7 @@ export class NbDummyAuthStrategy extends NbAuthStrategy {
 
     try {
       const token = this.createToken('test token', true);
-      return new NbAuthResult(
+      return new TriAuthResult(
         true,
         this.createSuccessResponse(data),
         '/',
@@ -105,7 +105,7 @@ export class NbDummyAuthStrategy extends NbAuthStrategy {
         token,
       );
     } catch (err) {
-      return new NbAuthResult(
+      return new TriAuthResult(
         false,
         this.createFailResponse(data),
         null,

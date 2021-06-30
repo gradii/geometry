@@ -7,19 +7,19 @@
 
 import { Injectable } from '@angular/core';
 import { NbRoleProvider } from './role.provider';
-import { NbAclService } from './acl.service';
+import { TriAclService } from './acl.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 /**
  * Access checker service.
  *
- * Injects `NbRoleProvider` to determine current user role, and checks access permissions using `NbAclService`
+ * Injects `NbRoleProvider` to determine current user role, and checks access permissions using `TriAclService`
  */
 @Injectable()
-export class NbAccessChecker {
+export class TriAccessChecker {
 
-  constructor(protected roleProvider: NbRoleProvider, protected acl: NbAclService) {
+  constructor(protected roleProvider: NbRoleProvider, protected acl: TriAclService) {
   }
 
   /**

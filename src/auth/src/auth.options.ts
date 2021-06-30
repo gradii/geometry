@@ -6,20 +6,20 @@
 
 import { InjectionToken } from '@angular/core';
 import { HttpRequest } from '@angular/common/http';
-import { NbAuthStrategy } from './strategies/auth-strategy';
-import { NbAuthStrategyOptions } from './strategies/auth-strategy-options';
-import { NbAuthToken, NbAuthTokenClass } from './services/token/token';
+import { TriAuthStrategy } from './strategies/auth-strategy';
+import { TriAuthStrategyOptions } from './strategies/auth-strategy-options';
+import { TriAuthToken, TriAuthTokenClass } from './services/token/token';
 
-export type NbAuthStrategyClass = new (...params: any[]) => NbAuthStrategy;
+export type TriAuthStrategyClass = new (...params: any[]) => TriAuthStrategy;
 
-export type NbAuthStrategies  = [NbAuthStrategyClass, NbAuthStrategyOptions][];
+export type TriAuthStrategies  = [TriAuthStrategyClass, TriAuthStrategyOptions][];
 
-export interface NbAuthOptions {
+export interface TriAuthOptions {
   forms?: any;
-  strategies?: NbAuthStrategies;
+  strategies?: TriAuthStrategies;
 }
 
-export interface NbAuthSocialLink {
+export interface TriAuthSocialLink {
   link?: string;
   url?: string;
   target?: string;
@@ -27,7 +27,7 @@ export interface NbAuthSocialLink {
   icon?: string;
 }
 
-const socialLinks: NbAuthSocialLink[] = [];
+const socialLinks: TriAuthSocialLink[] = [];
 
 export const defaultAuthOptions: any = {
   strategies: [],
@@ -92,11 +92,11 @@ export const defaultAuthOptions: any = {
   },
 };
 
-export const NB_AUTH_OPTIONS = new InjectionToken<NbAuthOptions>('Nebular Auth Options');
-export const NB_AUTH_USER_OPTIONS = new InjectionToken<NbAuthOptions>('Nebular User Auth Options');
-export const NB_AUTH_STRATEGIES = new InjectionToken<NbAuthStrategies>('Nebular Auth Strategies');
-export const NB_AUTH_TOKENS = new InjectionToken<NbAuthTokenClass<NbAuthToken>[]>('Nebular Auth Tokens');
-export const NB_AUTH_INTERCEPTOR_HEADER = new InjectionToken<string>('Nebular Simple Interceptor Header');
-export const NB_AUTH_TOKEN_INTERCEPTOR_FILTER =
+export const TRI_AUTH_OPTIONS = new InjectionToken<TriAuthOptions>('Nebular Auth Options');
+export const TRI_AUTH_USER_OPTIONS = new InjectionToken<TriAuthOptions>('Nebular User Auth Options');
+export const TRI_AUTH_STRATEGIES = new InjectionToken<TriAuthStrategies>('Nebular Auth Strategies');
+export const TRI_AUTH_TOKENS = new InjectionToken<TriAuthTokenClass<TriAuthToken>[]>('Nebular Auth Tokens');
+export const TRI_AUTH_INTERCEPTOR_HEADER = new InjectionToken<string>('Nebular Simple Interceptor Header');
+export const TRI_AUTH_TOKEN_INTERCEPTOR_FILTER =
        new InjectionToken<(req: HttpRequest<any>) => boolean>('Nebular Interceptor Filter');
 

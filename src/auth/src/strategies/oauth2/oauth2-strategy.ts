@@ -12,16 +12,16 @@ import { Observable, of as observableOf } from 'rxjs';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
 
-import { NbAuthStrategy } from '../auth-strategy';
-import { NbAuthIllegalTokenError, NbAuthRefreshableToken, NbAuthToken } from '../../services/token/token';
-import { NbAuthResult } from '../../services/auth-result';
+import { TriAuthStrategy } from '../auth-strategy';
+import { TriAuthIllegalTokenError, TriAuthRefreshableToken, TriAuthToken } from '../../services/token/token';
+import { TriAuthResult } from '../../services/auth-result';
 import {
-  NbOAuth2AuthStrategyOptions,
-  NbOAuth2ResponseType,
+  TriOAuth2AuthStrategyOptions,
+  TriOAuth2ResponseType,
   auth2StrategyOptions,
-  NbOAuth2GrantType, NbOAuth2ClientAuthMethod,
+  TriOAuth2GrantType, TriOAuth2ClientAuthMethod,
 } from './oauth2-strategy.options';
-import { NbAuthStrategyClass } from '../../auth.options';
+import { TriAuthStrategyClass } from '../../auth.options';
 
 
 /**
@@ -30,23 +30,23 @@ import { NbAuthStrategyClass } from '../../auth.options';
  * Strategy settings:
  *
  * ```ts
- * export enum NbOAuth2ResponseType {
+ * export enum TriOAuth2ResponseType {
  *   CODE = 'code',
  *   TOKEN = 'token',
  * }
  *
- * export enum NbOAuth2GrantType {
+ * export enum TriOAuth2GrantType {
  *   AUTHORIZATION_CODE = 'authorization_code',
  *   PASSWORD = 'password',
  *   REFRESH_TOKEN = 'refresh_token',
  * }
  *
- * export class NbOAuth2AuthStrategyOptions {
+ * export class TriOAuth2AuthStrategyOptions {
  *   name: string;
  *   baseEndpoint?: string = '';
  *   clientId: string = '';
  *   clientSecret: string = '';
- *   clientAuthMethod: string = NbOAuth2ClientAuthMethod.NONE;
+ *   clientAuthMethod: string = TriOAuth2ClientAuthMethod.NONE;
  *   redirect?: { success?: string; failure?: string } = {
  *     success: '/',
  *     failure: null,
@@ -63,7 +63,7 @@ import { NbAuthStrategyClass } from '../../auth.options';
  *     params?: { [key: string]: string };
  *   } = {
  *     endpoint: 'authorize',
- *     responseType: NbOAuth2ResponseType.CODE,
+ *     responseType: TriOAuth2ResponseType.CODE,
  *   };
  *   token?: {
  *     endpoint?: string;
@@ -71,11 +71,11 @@ import { NbAuthStrategyClass } from '../../auth.options';
  *     requireValidToken: true,
  *     redirectUri?: string;
  *     scope?: string;
- *     class: NbAuthTokenClass,
+ *     class: TriAuthTokenClass,
  *   } = {
  *     endpoint: 'token',
- *     grantType: NbOAuth2GrantType.AUTHORIZATION_CODE,
- *     class: NbAuthOAuth2Token,
+ *     grantType: TriOAuth2GrantType.AUTHORIZATION_CODE,
+ *     class: TriAuthOAuth2Token,
  *   };
  *   refresh?: {
  *     endpoint?: string;
@@ -84,17 +84,17 @@ import { NbAuthStrategyClass } from '../../auth.options';
  *     requireValidToken: true,
  *   } = {
  *     endpoint: 'token',
- *     grantType: NbOAuth2GrantType.REFRESH_TOKEN,
+ *     grantType: TriOAuth2GrantType.REFRESH_TOKEN,
  *   };
  * }
  * ```
  *
  */
 @Injectable()
-export class NbOAuth2AuthStrategy extends NbAuthStrategy {
+export class TriOAuth2AuthStrategy extends TriAuthStrategy {
 
-  static setup(options: NbOAuth2AuthStrategyOptions): [NbAuthStrategyClass, NbOAuth2AuthStrategyOptions] {
-    return [NbOAuth2AuthStrategy, options];
+  static setup(options: TriOAuth2AuthStrategyOptions): [TriAuthStrategyClass, TriOAuth2AuthStrategyOptions] {
+    return [TriOAuth2AuthStrategy, options];
   }
 
   get responseType() {
@@ -106,7 +106,7 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
   }
 
   protected redirectResultHandlers: { [key: string]: Function } = {
-    [NbOAuth2ResponseType.CODE]: () => {
+    [TriOAuth2ResponseType.CODE]: () => {
       return observableOf(this.route.snapshot.queryParams).pipe(
         switchMap((params: any) => {
           if (params.code) {
@@ -114,7 +114,7 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
           }
 
           return observableOf(
-            new NbAuthResult(
+            new TriAuthResult(
               false,
               params,
               this.getOption('redirect.failure'),
@@ -124,14 +124,14 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
         }),
       );
     },
-    [NbOAuth2ResponseType.TOKEN]: () => {
+    [TriOAuth2ResponseType.TOKEN]: () => {
       const module = 'authorize';
       const requireValidToken = this.getOption(`${module}.requireValidToken`);
       return observableOf(this.route.snapshot.fragment).pipe(
         map(fragment => this.parseHashAsQueryParams(fragment)),
         map((params: any) => {
           if (!params.error) {
-            return new NbAuthResult(
+            return new TriAuthResult(
               true,
               params,
               this.getOption('redirect.success'),
@@ -139,7 +139,7 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
               this.getOption('defaultMessages'),
               this.createToken(params, requireValidToken));
           }
-          return new NbAuthResult(
+          return new TriAuthResult(
             false,
             params,
             this.getOption('redirect.failure'),
@@ -149,13 +149,13 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
         }),
         catchError(err => {
           const errors = [];
-          if (err instanceof NbAuthIllegalTokenError) {
+          if (err instanceof TriAuthIllegalTokenError) {
             errors.push(err.message);
           } else {
             errors.push('Something went wrong.');
           }
           return observableOf(
-            new NbAuthResult(
+            new TriAuthResult(
               false,
               err,
               this.getOption('redirect.failure'),
@@ -167,12 +167,12 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
   };
 
   protected redirectResults: { [key: string]: Function } = {
-    [NbOAuth2ResponseType.CODE]: () => {
+    [TriOAuth2ResponseType.CODE]: () => {
       return observableOf(this.route.snapshot.queryParams).pipe(
         map((params: any) => !!(params && (params.code || params.error))),
       );
     },
-    [NbOAuth2ResponseType.TOKEN]: () => {
+    [TriOAuth2ResponseType.TOKEN]: () => {
       return observableOf(this.route.snapshot.fragment).pipe(
         map(fragment => this.parseHashAsQueryParams(fragment)),
         map((params: any) => !!(params && (params.access_token || params.error))),
@@ -180,7 +180,7 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
     },
   };
 
-  protected defaultOptions: NbOAuth2AuthStrategyOptions = auth2StrategyOptions;
+  protected defaultOptions: TriOAuth2AuthStrategyOptions = auth2StrategyOptions;
 
   constructor(protected http: HttpClient,
               protected route: ActivatedRoute,
@@ -188,9 +188,9 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
     super();
   }
 
-  authenticate(data?: any): Observable<NbAuthResult> {
+  authenticate(data?: any): Observable<TriAuthResult> {
 
-    if (this.getOption('token.grantType') === NbOAuth2GrantType.PASSWORD) {
+    if (this.getOption('token.grantType') === TriOAuth2GrantType.PASSWORD) {
       return this.passwordToken(data.email, data.password);
     } else {
       return this.isRedirectResult()
@@ -198,7 +198,7 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
           switchMap((result: boolean) => {
             if (!result) {
               this.authorizeRedirect();
-              return observableOf(new NbAuthResult(true));
+              return observableOf(new TriAuthResult(true));
             }
             return this.getAuthorizationResult();
           }),
@@ -216,7 +216,7 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
                       only 'token' and 'code' are supported now`);
   }
 
-  refreshToken(token: NbAuthRefreshableToken): Observable<NbAuthResult> {
+  refreshToken(token: TriAuthRefreshableToken): Observable<TriAuthResult> {
     const module = 'refresh';
     const url = this.getActionEndpoint(module);
     const requireValidToken = this.getOption(`${module}.requireValidToken`);
@@ -227,7 +227,7 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
     return this.http.post(url, this.buildRefreshRequestData(token), { headers: headers })
       .pipe(
         map((res) => {
-          return new NbAuthResult(
+          return new TriAuthResult(
             true,
             res,
             this.getOption('redirect.success'),
@@ -239,7 +239,7 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
       );
   }
 
-  passwordToken(username: string, password: string): Observable<NbAuthResult> {
+  passwordToken(username: string, password: string): Observable<TriAuthResult> {
     const module = 'token';
     const url = this.getActionEndpoint(module);
     const requireValidToken = this.getOption(`${module}.requireValidToken`);
@@ -250,7 +250,7 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
     return this.http.post(url, this.buildPasswordRequestData(username, password), { headers: headers })
       .pipe(
         map((res) => {
-          return new NbAuthResult(
+          return new TriAuthResult(
             true,
             res,
             this.getOption('redirect.success'),
@@ -288,7 +288,7 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
     return this.http.post(url, this.buildCodeRequestData(code), { headers: headers })
       .pipe(
         map((res) => {
-          return new NbAuthResult(
+          return new TriAuthResult(
             true,
             res,
             this.getOption('redirect.success'),
@@ -310,7 +310,7 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
     return this.urlEncodeParameters(this.cleanParams(this.addCredentialsToParams(params)));
   }
 
-  protected buildRefreshRequestData(token: NbAuthRefreshableToken): any {
+  protected buildRefreshRequestData(token: TriAuthRefreshableToken): any {
     const params = {
       grant_type: this.getOption('refresh.grantType'),
       refresh_token: token.getRefreshToken(),
@@ -331,7 +331,7 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
   }
 
   protected buildAuthHeader(): any {
-    if (this.clientAuthMethod === NbOAuth2ClientAuthMethod.BASIC) {
+    if (this.clientAuthMethod === TriOAuth2ClientAuthMethod.BASIC) {
       if (this.getOption('clientId') && this.getOption('clientSecret')) {
         return new HttpHeaders(
             {
@@ -352,7 +352,7 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
   }
 
   protected addCredentialsToParams(params: any): any {
-    if (this.clientAuthMethod === NbOAuth2ClientAuthMethod.REQUEST_BODY) {
+    if (this.clientAuthMethod === TriOAuth2ClientAuthMethod.REQUEST_BODY) {
       if (this.getOption('clientId') && this.getOption('clientSecret')) {
         return {
           ... params,
@@ -367,7 +367,7 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
   }
 
 
-  protected handleResponseError(res: any): Observable<NbAuthResult> {
+  protected handleResponseError(res: any): Observable<TriAuthResult> {
     let errors = [];
     if (res instanceof HttpErrorResponse) {
       if (res.error.error_description) {
@@ -375,14 +375,14 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
       } else {
         errors = this.getOption('defaultErrors');
       }
-    }  else if (res instanceof NbAuthIllegalTokenError ) {
+    }  else if (res instanceof TriAuthIllegalTokenError ) {
       errors.push(res.message);
     } else {
         errors.push('Something went wrong.');
     }
 
     return observableOf(
-      new NbAuthResult(
+      new TriAuthResult(
         false,
         res,
         this.getOption('redirect.failure'),
@@ -422,8 +422,8 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
     }).join('&');
   }
 
-  protected createRefreshedToken(res, existingToken: NbAuthRefreshableToken, requireValidToken: boolean): NbAuthToken {
-    type AuthRefreshToken = NbAuthRefreshableToken & NbAuthToken;
+  protected createRefreshedToken(res, existingToken: TriAuthRefreshableToken, requireValidToken: boolean): TriAuthToken {
+    type AuthRefreshToken = TriAuthRefreshableToken & TriAuthToken;
 
     const refreshedToken: AuthRefreshToken = this.createToken<AuthRefreshToken>(res, requireValidToken);
     if (!refreshedToken.getRefreshToken() && existingToken.getRefreshToken()) {
@@ -432,19 +432,19 @@ export class NbOAuth2AuthStrategy extends NbAuthStrategy {
     return refreshedToken;
   }
 
-  register(data?: any): Observable<NbAuthResult> {
-    throw new Error('`register` is not supported by `NbOAuth2AuthStrategy`, use `authenticate`.');
+  register(data?: any): Observable<TriAuthResult> {
+    throw new Error('`register` is not supported by `TriOAuth2AuthStrategy`, use `authenticate`.');
   }
 
-  requestPassword(data?: any): Observable<NbAuthResult> {
-    throw new Error('`requestPassword` is not supported by `NbOAuth2AuthStrategy`, use `authenticate`.');
+  requestPassword(data?: any): Observable<TriAuthResult> {
+    throw new Error('`requestPassword` is not supported by `TriOAuth2AuthStrategy`, use `authenticate`.');
   }
 
-  resetPassword(data: any = {}): Observable<NbAuthResult> {
-    throw new Error('`resetPassword` is not supported by `NbOAuth2AuthStrategy`, use `authenticate`.');
+  resetPassword(data: any = {}): Observable<TriAuthResult> {
+    throw new Error('`resetPassword` is not supported by `TriOAuth2AuthStrategy`, use `authenticate`.');
   }
 
-  logout(): Observable<NbAuthResult> {
-    return observableOf(new NbAuthResult(true));
+  logout(): Observable<TriAuthResult> {
+    return observableOf(new TriAuthResult(true));
   }
 }

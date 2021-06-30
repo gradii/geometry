@@ -7,7 +7,7 @@
 
 import { Observable } from 'rxjs';
 
-export abstract class NbRoleProvider {
+export abstract class TriRoleProvider {
 
   /**
    * Returns current user role

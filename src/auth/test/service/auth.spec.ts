@@ -5,20 +5,20 @@ import { Injector } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { of as observableOf } from 'rxjs';
 import { delay, first } from 'rxjs/operators';
-import { NB_AUTH_OPTIONS, NB_AUTH_USER_OPTIONS, NB_AUTH_STRATEGIES, NB_AUTH_TOKENS } from '../auth.options';
-import { NbAuthService } from './auth.service';
-import { NbDummyAuthStrategy } from '../strategies/dummy/dummy-strategy';
+import { TRI_AUTH_OPTIONS, TRI_AUTH_USER_OPTIONS, TRI_AUTH_STRATEGIES, TRI_AUTH_TOKENS } from '../auth.options';
+import { TriAuthService } from './auth.service';
+import { TriDummyAuthStrategy } from '../strategies/dummy/dummy-strategy';
 import { nbStrategiesFactory, nbOptionsFactory } from '../auth.module';
-import { NbAuthResult } from './auth-result';
-import { NbTokenService } from './token/token.service';
-import { NbAuthSimpleToken, nbAuthCreateToken, NbAuthJWTToken } from './token/token';
-import { NbTokenLocalStorage, NbTokenStorage } from './token/token-storage';
-import { NB_AUTH_FALLBACK_TOKEN, NbAuthTokenParceler } from './token/token-parceler';
+import { TriAuthResult } from './auth-result';
+import { TriTokenService } from './token/token.service';
+import { TriAuthSimpleToken, triAuthCreateToken, TriAuthJWTToken } from './token/token';
+import { TriTokenLocalStorage, TriTokenStorage } from './token/token-storage';
+import { TRI_AUTH_FALLBACK_TOKEN, TriAuthTokenParceler } from './token/token-parceler';
 
 describe('auth-service', () => {
-  let authService: NbAuthService;
-  let tokenService: NbTokenService;
-  let dummyAuthStrategy: NbDummyAuthStrategy;
+  let authService: TriAuthService;
+  let tokenService: TriTokenService;
+  let dummyAuthStrategy: TriDummyAuthStrategy;
   const testTokenValue = 'test-token';
   const ownerStrategyName = 'dummy';
 
@@ -26,41 +26,41 @@ describe('auth-service', () => {
   const resp401 = new HttpResponse<Object>({body: {}, status: 401});
   const resp200 = new HttpResponse<Object>({body: {}, status: 200});
 
-  const testToken = nbAuthCreateToken(NbAuthSimpleToken, testTokenValue, ownerStrategyName);
-  const invalidToken = nbAuthCreateToken(NbAuthSimpleToken, testTokenValue, ownerStrategyName);
-  const emptyToken = nbAuthCreateToken(NbAuthSimpleToken, null, null);
+  const testToken = triAuthCreateToken(TriAuthSimpleToken, testTokenValue, ownerStrategyName);
+  const invalidToken = triAuthCreateToken(TriAuthSimpleToken, testTokenValue, ownerStrategyName);
+  const emptyToken = triAuthCreateToken(TriAuthSimpleToken, null, null);
 
-  const failResult = new NbAuthResult(false,
+  const failResult = new TriAuthResult(false,
     resp401,
     null,
     ['Something went wrong.']);
 
-  const successResult = new NbAuthResult(true,
+  const successResult = new TriAuthResult(true,
     resp200,
     '/',
     [],
     ['Successfully logged in.'],
     testToken);
 
-  const successLogoutResult = new NbAuthResult(true,
+  const successLogoutResult = new TriAuthResult(true,
     resp200,
     '/',
     [],
     ['Successfully logged out.']);
 
-  const successResetPasswordResult = new NbAuthResult(true,
+  const successResetPasswordResult = new TriAuthResult(true,
     resp200,
     '/',
     [],
     ['Successfully reset password.']);
 
-  const successRequestPasswordResult = new NbAuthResult(true,
+  const successRequestPasswordResult = new TriAuthResult(true,
     resp200,
     '/',
     [],
     ['Successfully requested password.']);
 
-  const successRefreshTokenResult = new NbAuthResult(true,
+  const successRefreshTokenResult = new TriAuthResult(true,
     resp200,
     null,
     [],
@@ -70,19 +70,19 @@ describe('auth-service', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        { provide: NB_AUTH_OPTIONS, useValue: {} },
-        { provide: NB_AUTH_FALLBACK_TOKEN, useValue: NbAuthSimpleToken },
-        { provide: NB_AUTH_TOKENS, useValue: [NbAuthSimpleToken, NbAuthJWTToken] },
-        NbAuthTokenParceler,
+        { provide: TRI_AUTH_OPTIONS, useValue: {} },
+        { provide: TRI_AUTH_FALLBACK_TOKEN, useValue: TriAuthSimpleToken },
+        { provide: TRI_AUTH_TOKENS, useValue: [TriAuthSimpleToken, TriAuthJWTToken] },
+        TriAuthTokenParceler,
         {
-          provide: NB_AUTH_USER_OPTIONS, useValue: {
+          provide: TRI_AUTH_USER_OPTIONS, useValue: {
             forms: {
               login: {
                 redirectDelay: 3000,
               },
             },
             strategies: [
-              NbDummyAuthStrategy.setup({
+              TriDummyAuthStrategy.setup({
                 name: 'dummy',
 
                 alwaysFail: true,
@@ -91,17 +91,17 @@ describe('auth-service', () => {
             ],
           },
         },
-        { provide: NB_AUTH_OPTIONS, useFactory: nbOptionsFactory, deps: [NB_AUTH_USER_OPTIONS] },
-        { provide: NB_AUTH_STRATEGIES, useFactory: nbStrategiesFactory, deps: [NB_AUTH_OPTIONS, Injector] },
-        { provide: NbTokenStorage, useClass: NbTokenLocalStorage },
-        NbTokenService,
-        NbAuthService,
-        NbDummyAuthStrategy,
+        { provide: TRI_AUTH_OPTIONS, useFactory: nbOptionsFactory, deps: [TRI_AUTH_USER_OPTIONS] },
+        { provide: TRI_AUTH_STRATEGIES, useFactory: nbStrategiesFactory, deps: [TRI_AUTH_OPTIONS, Injector] },
+        { provide: TriTokenStorage, useClass: TriTokenLocalStorage },
+        TriTokenService,
+        TriAuthService,
+        TriDummyAuthStrategy,
       ],
     });
-    authService = TestBed.inject(NbAuthService);
-    tokenService = TestBed.inject(NbTokenService);
-    dummyAuthStrategy = TestBed.inject(NbDummyAuthStrategy);
+    authService = TestBed.inject(TriAuthService);
+    tokenService = TestBed.inject(TriTokenService);
+    dummyAuthStrategy = TestBed.inject(TriDummyAuthStrategy);
   });
 
   it('get test token before set', () => {
@@ -109,7 +109,7 @@ describe('auth-service', () => {
         .and
         .returnValue(observableOf(testToken));
 
-      authService.getToken().subscribe((val: NbAuthSimpleToken) => {
+      authService.getToken().subscribe((val: TriAuthSimpleToken) => {
         expect(spy).toHaveBeenCalled();
         expect(val.getValue()).toEqual(testTokenValue);
       });
@@ -227,7 +227,7 @@ describe('auth-service', () => {
 
       authService.onTokenChange()
         .pipe(first())
-        .subscribe((token: NbAuthSimpleToken) => {
+        .subscribe((token: TriAuthSimpleToken) => {
           expect(spy).toHaveBeenCalled();
           expect(token.getValue()).toEqual(testTokenValue);
           done();
@@ -243,7 +243,7 @@ describe('auth-service', () => {
             delay(1000),
           ));
 
-      authService.authenticate(ownerStrategyName).subscribe((authRes: NbAuthResult) => {
+      authService.authenticate(ownerStrategyName).subscribe((authRes: TriAuthResult) => {
         expect(spy).toHaveBeenCalled();
         expect(authRes.isFailure()).toBeTruthy();
         expect(authRes.isSuccess()).toBeFalsy();
@@ -270,7 +270,7 @@ describe('auth-service', () => {
         .returnValue(observableOf(null));
 
 
-      authService.authenticate(ownerStrategyName).subscribe((authRes: NbAuthResult) => {
+      authService.authenticate(ownerStrategyName).subscribe((authRes: TriAuthResult) => {
         expect(strategySpy).toHaveBeenCalled();
         expect(tokenServiceSetSpy).toHaveBeenCalled();
 
@@ -295,7 +295,7 @@ describe('auth-service', () => {
             delay(1000),
           ));
 
-      authService.register(ownerStrategyName).subscribe((authRes: NbAuthResult) => {
+      authService.register(ownerStrategyName).subscribe((authRes: TriAuthResult) => {
         expect(spy).toHaveBeenCalled();
         expect(authRes.isFailure()).toBeTruthy();
         expect(authRes.isSuccess()).toBeFalsy();
@@ -321,7 +321,7 @@ describe('auth-service', () => {
         .and
         .returnValue(observableOf(null));
 
-      authService.register(ownerStrategyName).subscribe((authRes: NbAuthResult) => {
+      authService.register(ownerStrategyName).subscribe((authRes: TriAuthResult) => {
         expect(strategySpy).toHaveBeenCalled();
         expect(tokenServiceSetSpy).toHaveBeenCalled();
 
@@ -345,7 +345,7 @@ describe('auth-service', () => {
             delay(1000),
           ));
 
-      authService.logout(ownerStrategyName).subscribe((authRes: NbAuthResult) => {
+      authService.logout(ownerStrategyName).subscribe((authRes: TriAuthResult) => {
         expect(spy).toHaveBeenCalled();
 
         expect(authRes.isFailure()).toBeTruthy();
@@ -369,7 +369,7 @@ describe('auth-service', () => {
           ));
       const tokenServiceClearSpy = spyOn(tokenService, 'clear').and.returnValue(observableOf('STUB'));
 
-      authService.logout(ownerStrategyName).subscribe((authRes: NbAuthResult) => {
+      authService.logout(ownerStrategyName).subscribe((authRes: TriAuthResult) => {
         expect(strategyLogoutSpy).toHaveBeenCalled();
         expect(tokenServiceClearSpy).toHaveBeenCalled();
 
@@ -393,7 +393,7 @@ describe('auth-service', () => {
             delay(1000),
           ));
 
-      authService.requestPassword(ownerStrategyName).subscribe((authRes: NbAuthResult) => {
+      authService.requestPassword(ownerStrategyName).subscribe((authRes: TriAuthResult) => {
         expect(spy).toHaveBeenCalled();
 
         expect(authRes.isFailure()).toBeTruthy();
@@ -416,7 +416,7 @@ describe('auth-service', () => {
             delay(1000),
           ));
 
-      authService.requestPassword(ownerStrategyName).subscribe((authRes: NbAuthResult) => {
+      authService.requestPassword(ownerStrategyName).subscribe((authRes: TriAuthResult) => {
         expect(strategyLogoutSpy).toHaveBeenCalled();
 
         expect(authRes.isFailure()).toBeFalsy();
@@ -439,7 +439,7 @@ describe('auth-service', () => {
             delay(1000),
           ));
 
-      authService.resetPassword(ownerStrategyName).subscribe((authRes: NbAuthResult) => {
+      authService.resetPassword(ownerStrategyName).subscribe((authRes: TriAuthResult) => {
         expect(spy).toHaveBeenCalled();
 
         expect(authRes.isFailure()).toBeTruthy();
@@ -462,7 +462,7 @@ describe('auth-service', () => {
             delay(1000),
           ));
 
-      authService.resetPassword(ownerStrategyName).subscribe((authRes: NbAuthResult) => {
+      authService.resetPassword(ownerStrategyName).subscribe((authRes: TriAuthResult) => {
         expect(strategyLogoutSpy).toHaveBeenCalled();
 
         expect(authRes.isFailure()).toBeFalsy();
@@ -485,7 +485,7 @@ describe('auth-service', () => {
             delay(1000),
           ));
 
-      authService.refreshToken(ownerStrategyName).subscribe((authRes: NbAuthResult) => {
+      authService.refreshToken(ownerStrategyName).subscribe((authRes: TriAuthResult) => {
         expect(spy).toHaveBeenCalled();
         expect(authRes.isFailure()).toBeTruthy();
         expect(authRes.isSuccess()).toBeFalsy();
@@ -511,7 +511,7 @@ describe('auth-service', () => {
         .and
         .returnValue(observableOf(null));
 
-      authService.refreshToken(ownerStrategyName).subscribe((authRes: NbAuthResult) => {
+      authService.refreshToken(ownerStrategyName).subscribe((authRes: TriAuthResult) => {
         expect(strategySpy).toHaveBeenCalled();
         expect(tokenServiceSetSpy).toHaveBeenCalled();
 

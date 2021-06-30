@@ -4,9 +4,9 @@ import { of as observableOf } from 'rxjs';
 
 import { NbRoleProvider } from './role.provider';
 import { NbAclService } from './acl.service';
-import { NbAccessChecker } from './access-checker.service';
+import { TriAccessChecker } from './access-checker.service';
 
-let accessChecker: NbAccessChecker;
+let accessChecker: TriAccessChecker;
 
 function setupAcl(can, roles: string|string[]) {
   beforeEach(() => {
@@ -29,14 +29,14 @@ function setupAcl(can, roles: string|string[]) {
             },
           },
         },
-        NbAccessChecker,
+        TriAccessChecker,
       ],
     });
   });
 
   // Single async inject to save references; which are used in all tests below
   beforeEach(async(inject(
-    [NbAccessChecker],
+    [TriAccessChecker],
     (_accessChecker) => {
       accessChecker = _accessChecker;
     },

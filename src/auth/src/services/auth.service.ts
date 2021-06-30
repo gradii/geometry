@@ -10,28 +10,28 @@ import { Inject, Injectable } from '@angular/core';
 import { Observable, of as observableOf } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 
-import { NbAuthStrategy } from '../strategies/auth-strategy';
-import { NB_AUTH_STRATEGIES } from '../auth.options';
-import { NbAuthResult } from './auth-result';
-import { NbTokenService } from './token/token.service';
-import { NbAuthToken } from './token/token';
+import { TriAuthStrategy } from '../strategies/auth-strategy';
+import { TRI_AUTH_STRATEGIES } from '../auth.options';
+import { TriAuthResult } from './auth-result';
+import { TriTokenService } from './token/token.service';
+import { TriAuthToken } from './token/token';
 
 /**
  * Common authentication service.
  * Should be used to as an interlayer between UI Components and Auth Strategy.
  */
 @Injectable()
-export class NbAuthService {
+export class TriAuthService {
 
-  constructor(protected tokenService: NbTokenService,
-              @Inject(NB_AUTH_STRATEGIES) protected strategies) {
+  constructor(protected tokenService: TriTokenService,
+              @Inject(TRI_AUTH_STRATEGIES) protected strategies) {
   }
 
   /**
    * Retrieves current authenticated token stored
    * @returns {Observable<any>}
    */
-  getToken(): Observable<NbAuthToken> {
+  getToken(): Observable<TriAuthToken> {
     return this.tokenService.get();
   }
 
@@ -41,7 +41,7 @@ export class NbAuthService {
    */
   isAuthenticated(): Observable<boolean> {
     return this.getToken()
-      .pipe(map((token: NbAuthToken) => token.isValid()));
+      .pipe(map((token: TriAuthToken) => token.isValid()));
   }
 
   /**
@@ -72,9 +72,9 @@ export class NbAuthService {
 
   /**
    * Returns tokens stream
-   * @returns {Observable<NbAuthSimpleToken>}
+   * @returns {Observable<TriAuthSimpleToken>}
    */
-  onTokenChange(): Observable<NbAuthToken> {
+  onTokenChange(): Observable<TriAuthToken> {
     return this.tokenService.tokenChange();
   }
 
@@ -84,7 +84,7 @@ export class NbAuthService {
    */
   onAuthenticationChange(): Observable<boolean> {
     return this.onTokenChange()
-      .pipe(map((token: NbAuthToken) => token.isValid()));
+      .pipe(map((token: TriAuthToken) => token.isValid()));
   }
 
   /**
@@ -96,12 +96,12 @@ export class NbAuthService {
    *
    * @param strategyName
    * @param data
-   * @returns {Observable<NbAuthResult>}
+   * @returns {Observable<TriAuthResult>}
    */
-  authenticate(strategyName: string, data?: any): Observable<NbAuthResult> {
+  authenticate(strategyName: string, data?: any): Observable<TriAuthResult> {
     return this.getStrategy(strategyName).authenticate(data)
       .pipe(
-        switchMap((result: NbAuthResult) => {
+        switchMap((result: TriAuthResult) => {
           return this.processResultToken(result);
         }),
       );
@@ -116,12 +116,12 @@ export class NbAuthService {
    *
    * @param strategyName
    * @param data
-   * @returns {Observable<NbAuthResult>}
+   * @returns {Observable<TriAuthResult>}
    */
-  register(strategyName: string, data?: any): Observable<NbAuthResult> {
+  register(strategyName: string, data?: any): Observable<TriAuthResult> {
     return this.getStrategy(strategyName).register(data)
       .pipe(
-        switchMap((result: NbAuthResult) => {
+        switchMap((result: TriAuthResult) => {
           return this.processResultToken(result);
         }),
       );
@@ -135,12 +135,12 @@ export class NbAuthService {
    * logout('email')
    *
    * @param strategyName
-   * @returns {Observable<NbAuthResult>}
+   * @returns {Observable<TriAuthResult>}
    */
-  logout(strategyName: string): Observable<NbAuthResult> {
+  logout(strategyName: string): Observable<TriAuthResult> {
     return this.getStrategy(strategyName).logout()
       .pipe(
-        switchMap((result: NbAuthResult) => {
+        switchMap((result: TriAuthResult) => {
           if (result.isSuccess()) {
             this.tokenService.clear()
               .pipe(map(() => result));
@@ -158,9 +158,9 @@ export class NbAuthService {
    *
    * @param strategyName
    * @param data
-   * @returns {Observable<NbAuthResult>}
+   * @returns {Observable<TriAuthResult>}
    */
-  requestPassword(strategyName: string, data?: any): Observable<NbAuthResult> {
+  requestPassword(strategyName: string, data?: any): Observable<TriAuthResult> {
     return this.getStrategy(strategyName).requestPassword(data);
   }
 
@@ -172,9 +172,9 @@ export class NbAuthService {
    *
    * @param strategyName
    * @param data
-   * @returns {Observable<NbAuthResult>}
+   * @returns {Observable<TriAuthResult>}
    */
-  resetPassword(strategyName: string, data?: any): Observable<NbAuthResult> {
+  resetPassword(strategyName: string, data?: any): Observable<TriAuthResult> {
     return this.getStrategy(strategyName).resetPassword(data);
   }
 
@@ -187,12 +187,12 @@ export class NbAuthService {
    *
    * @param {string} strategyName
    * @param data
-   * @returns {Observable<NbAuthResult>}
+   * @returns {Observable<TriAuthResult>}
    */
-  refreshToken(strategyName: string, data?: any): Observable<NbAuthResult> {
+  refreshToken(strategyName: string, data?: any): Observable<TriAuthResult> {
     return this.getStrategy(strategyName).refreshToken(data)
       .pipe(
-        switchMap((result: NbAuthResult) => {
+        switchMap((result: TriAuthResult) => {
           return this.processResultToken(result);
         }),
       );
@@ -205,10 +205,10 @@ export class NbAuthService {
    * getStrategy('email')
    *
    * @param {string} provider
-   * @returns {NbAbstractAuthProvider}
+   * @returns {TriAbstractAuthProvider}
    */
-  protected getStrategy(strategyName: string): NbAuthStrategy {
-    const found = this.strategies.find((strategy: NbAuthStrategy) => strategy.getName() === strategyName);
+  protected getStrategy(strategyName: string): TriAuthStrategy {
+    const found = this.strategies.find((strategy: TriAuthStrategy) => strategy.getName() === strategyName);
 
     if (!found) {
       throw new TypeError(`There is no Auth Strategy registered under '${strategyName}' name`);
@@ -217,11 +217,11 @@ export class NbAuthService {
     return found;
   }
 
-  private processResultToken(result: NbAuthResult) {
+  private processResultToken(result: TriAuthResult) {
     if (result.isSuccess() && result.getToken()) {
       return this.tokenService.set(result.getToken())
         .pipe(
-          map((token: NbAuthToken) => {
+          map((token: TriAuthToken) => {
             return result;
           }),
         );

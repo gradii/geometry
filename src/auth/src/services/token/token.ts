@@ -6,19 +6,23 @@
 
 import { urlBase64Decode } from '../../helpers';
 
-export abstract class NbAuthToken {
+export abstract class TriAuthToken {
 
   protected payload: any = null;
 
   abstract getValue(): string;
+
   abstract isValid(): boolean;
+
   // the strategy name used to acquire this token (needed for refreshing token)
   abstract getOwnerStrategyName(): string;
+
   abstract getCreatedAt(): Date;
+
   abstract toString(): string;
 
   getName(): string {
-    return (this.constructor as NbAuthTokenClass).NAME;
+    return (this.constructor as TriAuthTokenClass).NAME;
   }
 
   getPayload(): any {
@@ -26,85 +30,87 @@ export abstract class NbAuthToken {
   }
 }
 
-export class NbAuthTokenNotFoundError extends Error {
+export class TriAuthTokenNotFoundError extends Error {
   constructor(message: string) {
     super(message);
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
 
-export class NbAuthIllegalTokenError extends Error {
+export class TriAuthIllegalTokenError extends Error {
   constructor(message: string) {
     super(message);
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
 
-export class NbAuthEmptyTokenError extends NbAuthIllegalTokenError {
+export class TriAuthEmptyTokenError extends TriAuthIllegalTokenError {
   constructor(message: string) {
     super(message);
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
 
-export class NbAuthIllegalJWTTokenError extends NbAuthIllegalTokenError {
+export class TriAuthIllegalJWTTokenError extends TriAuthIllegalTokenError {
   constructor(message: string) {
     super(message);
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
 
-export interface NbAuthRefreshableToken {
+export interface TriAuthRefreshableToken {
   getRefreshToken(): string;
+
   setRefreshToken(refreshToken: string);
 }
 
-export interface NbAuthTokenClass<T = NbAuthToken> {
+export interface TriAuthTokenClass<T = TriAuthToken> {
   NAME: string;
-  new (raw: any, strategyName: string, expDate?: Date): T;
+
+  new(raw: any, strategyName: string, expDate?: Date): T;
 }
 
-export function nbAuthCreateToken<T extends NbAuthToken>(tokenClass: NbAuthTokenClass<T>,
-                                  token: any,
-                                  ownerStrategyName: string,
-                                  createdAt?: Date) {
+export function triAuthCreateToken<T extends TriAuthToken>(tokenClass: TriAuthTokenClass<T>,
+                                                           token: any,
+                                                           ownerStrategyName: string,
+                                                           createdAt?: Date) {
   return new tokenClass(token, ownerStrategyName, createdAt);
 }
 
 export function decodeJwtPayload(payload: string): any {
 
   if (payload.length === 0) {
-    throw new NbAuthEmptyTokenError('Cannot extract from an empty payload.');
+    throw new TriAuthEmptyTokenError('Cannot extract from an empty payload.');
   }
 
   const parts = payload.split('.');
 
   if (parts.length !== 3) {
-    throw new NbAuthIllegalJWTTokenError(
+    throw new TriAuthIllegalJWTTokenError(
       `The payload ${payload} is not valid JWT payload and must consist of three parts.`);
   }
 
-  let decoded;
+  let decoded: string;
   try {
     decoded = urlBase64Decode(parts[1]);
   } catch (e) {
-    throw new NbAuthIllegalJWTTokenError(
+    throw new TriAuthIllegalJWTTokenError(
       `The payload ${payload} is not valid JWT payload and cannot be parsed.`);
   }
 
   if (!decoded) {
-    throw new NbAuthIllegalJWTTokenError(
+    throw new TriAuthIllegalJWTTokenError(
       `The payload ${payload} is not valid JWT payload and cannot be decoded.`);
   }
-  return JSON.parse(decoded);
+  return JSON.parse(decoded) as any;
 }
 
 /**
  * Wrapper for simple (text) token
  */
-export class NbAuthSimpleToken extends NbAuthToken {
+export class TriAuthSimpleToken extends TriAuthToken {
 
-  static NAME = 'nb:auth:simple:token';
+  static NAME = 'tri:auth:simple:token';
 
   constructor(protected readonly token: any,
               protected readonly ownerStrategyName: string,
@@ -113,7 +119,7 @@ export class NbAuthSimpleToken extends NbAuthToken {
     try {
       this.parsePayload();
     } catch (err) {
-      if (!(err instanceof NbAuthTokenNotFoundError)) {
+      if (!(err instanceof TriAuthTokenNotFoundError)) {
         // token is present but has got a problem, including illegal
         throw err;
       }
@@ -169,16 +175,17 @@ export class NbAuthSimpleToken extends NbAuthToken {
 /**
  * Wrapper for JWT token with additional methods.
  */
-export class NbAuthJWTToken extends NbAuthSimpleToken {
+export class TriAuthJWTToken extends TriAuthSimpleToken {
 
-  static NAME = 'nb:auth:jwt:token';
+  static NAME = 'tri:auth:jwt:token';
 
   /**
    * for JWT token, the iat (issued at) field of the token payload contains the creation Date
    */
   protected prepareCreatedAt(date: Date) {
-      const decoded = this.getPayload();
-      return decoded && decoded.iat ? new Date(Number(decoded.iat) * 1000) : super.prepareCreatedAt(date);
+    const decoded = this.getPayload();
+    return decoded && decoded.iat ? new Date(Number(decoded.iat) * 1000) : super.prepareCreatedAt(
+      date);
   }
 
   /**
@@ -187,7 +194,7 @@ export class NbAuthJWTToken extends NbAuthSimpleToken {
    */
   protected parsePayload(): void {
     if (!this.token) {
-      throw new NbAuthTokenNotFoundError('Token not found. ');
+      throw new TriAuthTokenNotFoundError('Token not found. ');
     }
     this.payload = decodeJwtPayload(this.token);
   }
@@ -215,11 +222,12 @@ export class NbAuthJWTToken extends NbAuthSimpleToken {
   }
 }
 
-const prepareOAuth2Token = (data) => {
+const prepareOAuth2Token = (data: string | any) => {
   if (typeof data === 'string') {
     try {
-      return JSON.parse(data);
-    } catch (e) {}
+      return JSON.parse(data) as any;
+    } catch (e) {
+    }
   }
   return data;
 };
@@ -227,13 +235,13 @@ const prepareOAuth2Token = (data) => {
 /**
  * Wrapper for OAuth2 token whose access_token is a JWT Token
  */
-export class NbAuthOAuth2Token extends NbAuthSimpleToken {
+export class TriAuthOAuth2Token extends TriAuthSimpleToken {
 
-  static NAME = 'nb:auth:oauth2:token';
+  static NAME = 'tri:auth:oauth2:token';
 
-  constructor( data: { [key: string]: string|number }|string = {},
-               ownerStrategyName: string,
-               createdAt?: Date) {
+  constructor(data: { [key: string]: string | number } | string = {},
+              ownerStrategyName: string,
+              createdAt?: Date) {
 
     // we may get it as string when retrieving from a storage
     super(prepareOAuth2Token(data), ownerStrategyName, createdAt);
@@ -257,7 +265,7 @@ export class NbAuthOAuth2Token extends NbAuthSimpleToken {
 
   /**
    *  put refreshToken in the token payload
-    * @param refreshToken
+   * @param refreshToken
    */
   setRefreshToken(refreshToken: string) {
     this.token.refresh_token = refreshToken;
@@ -269,10 +277,10 @@ export class NbAuthOAuth2Token extends NbAuthSimpleToken {
    */
   protected parsePayload(): void {
     if (!this.token) {
-      throw new NbAuthTokenNotFoundError('Token not found.');
+      throw new TriAuthTokenNotFoundError('Token not found.');
     } else {
       if (!Object.keys(this.token).length) {
-        throw new NbAuthEmptyTokenError('Cannot extract payload from an empty token.');
+        throw new TriAuthEmptyTokenError('Cannot extract payload from an empty token.');
       }
     }
     this.payload = this.token;
@@ -303,7 +311,7 @@ export class NbAuthOAuth2Token extends NbAuthSimpleToken {
       return null;
     }
     return new Date(this.createdAt.getTime() + Number(this.token.expires_in) * 1000);
-}
+  }
 
   /**
    * Convert to string
@@ -317,9 +325,9 @@ export class NbAuthOAuth2Token extends NbAuthSimpleToken {
 /**
  * Wrapper for OAuth2 token embedding JWT tokens
  */
-export class NbAuthOAuth2JWTToken extends NbAuthOAuth2Token {
+export class TriAuthOAuth2JWTToken extends TriAuthOAuth2Token {
 
-  static NAME = 'nb:auth:oauth2:jwt:token';
+  static NAME = 'tri:auth:oauth2:jwt:token';
 
   protected accessTokenPayload: any;
 
@@ -331,7 +339,7 @@ export class NbAuthOAuth2JWTToken extends NbAuthOAuth2Token {
   protected parseAccessTokenPayload(): any {
     const accessToken = this.getValue();
     if (!accessToken) {
-      throw new NbAuthTokenNotFoundError('access_token key not found.');
+      throw new TriAuthTokenNotFoundError('access_token key not found.');
     }
     this.accessTokenPayload = decodeJwtPayload(accessToken);
   }
@@ -349,7 +357,8 @@ export class NbAuthOAuth2JWTToken extends NbAuthOAuth2Token {
    */
   protected prepareCreatedAt(date: Date) {
     const payload = this.accessTokenPayload;
-    return payload && payload.iat ? new Date(Number(payload.iat) * 1000) : super.prepareCreatedAt(date);
+    return payload && payload.iat ? new Date(Number(payload.iat) * 1000) : super.prepareCreatedAt(
+      date);
   }
 
   /**

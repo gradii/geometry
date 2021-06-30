@@ -2,22 +2,22 @@
 
 import { async, inject, TestBed } from '@angular/core/testing';
 
-import { NbAuthSimpleToken, nbAuthCreateToken, NbAuthJWTToken } from './token';
-import { NB_AUTH_FALLBACK_TOKEN, NbAuthTokenParceler } from './token-parceler';
-import { NB_AUTH_TOKENS } from '../../auth.options';
+import { TriAuthSimpleToken, triAuthCreateToken, TriAuthJWTToken } from './token';
+import { TRI_AUTH_FALLBACK_TOKEN, TriAuthTokenParceler } from './token-parceler';
+import { TRI_AUTH_TOKENS } from '../../auth.options';
 
 describe('token-parceler', () => {
 
-  let tokenParceler: NbAuthTokenParceler;
+  let tokenParceler: TriAuthTokenParceler;
 
   const createdAt = new Date(1532350800000);
-  const simpleToken = nbAuthCreateToken(NbAuthSimpleToken, 'test value', 'strategy', createdAt);
+  const simpleToken = triAuthCreateToken(TriAuthSimpleToken, 'test value', 'strategy', createdAt);
   // tslint:disable-next-line
-  const wrappedSimple = `{"name":"${NbAuthSimpleToken.NAME}","ownerStrategyName":"${simpleToken.getOwnerStrategyName()}","createdAt":${simpleToken.getCreatedAt().getTime()},"value":"${simpleToken.getValue()}"}`;
+  const wrappedSimple = `{"name":"${TriAuthSimpleToken.NAME}","ownerStrategyName":"${simpleToken.getOwnerStrategyName()}","createdAt":${simpleToken.getCreatedAt().getTime()},"value":"${simpleToken.getValue()}"}`;
   // tslint:disable-next-line
-  const jwtToken = nbAuthCreateToken(NbAuthJWTToken, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjZXJlbWEuZnIiLCJpYXQiOjE1MzIzNTA4MDAsImV4cCI6MTUzMjQzNzIwMCwic3ViIjoiQWxhaW4gQ0hBUkxFUyIsImFkbWluIjp0cnVlfQ.iICwNqhvg9KPv3_MSg3HCydyAgAYI9mL3ZejLkY11Ck', 'strategy', createdAt);
+  const jwtToken = triAuthCreateToken(TriAuthJWTToken, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjZXJlbWEuZnIiLCJpYXQiOjE1MzIzNTA4MDAsImV4cCI6MTUzMjQzNzIwMCwic3ViIjoiQWxhaW4gQ0hBUkxFUyIsImFkbWluIjp0cnVlfQ.iICwNqhvg9KPv3_MSg3HCydyAgAYI9mL3ZejLkY11Ck', 'strategy', createdAt);
   // tslint:disable-next-line
-  const wrappedJWT = `{"name":"${NbAuthJWTToken.NAME}","ownerStrategyName":"${jwtToken.getOwnerStrategyName()}","createdAt":${jwtToken.getCreatedAt().getTime()},"value":"${jwtToken.getValue()}"}`;
+  const wrappedJWT = `{"name":"${TriAuthJWTToken.NAME}","ownerStrategyName":"${jwtToken.getOwnerStrategyName()}","createdAt":${jwtToken.getCreatedAt().getTime()},"value":"${jwtToken.getValue()}"}`;
   // tslint:disable-next-line
   const wrappedNonExisting = `{"name":"non-existing","value":"${simpleToken.getValue()}","ownerStrategyName":"${simpleToken.getOwnerStrategyName()}","createdAt":"${createdAt.getTime()}"}`;
   const wrappedInvalid = `{"name":"non-existing"`;
@@ -26,15 +26,15 @@ describe('token-parceler', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         providers: [
-          { provide: NB_AUTH_FALLBACK_TOKEN, useValue: NbAuthSimpleToken },
-          { provide: NB_AUTH_TOKENS, useValue: [NbAuthSimpleToken, NbAuthJWTToken] },
-          NbAuthTokenParceler,
+          { provide: TRI_AUTH_FALLBACK_TOKEN, useValue: TriAuthSimpleToken },
+          { provide: TRI_AUTH_TOKENS, useValue: [TriAuthSimpleToken, TriAuthJWTToken] },
+          TriAuthTokenParceler,
         ],
       });
     });
 
     beforeEach(async(inject(
-      [NbAuthTokenParceler],
+      [TriAuthTokenParceler],
       (_tokenParceler) => {
         tokenParceler = _tokenParceler;
       },
@@ -78,15 +78,15 @@ describe('token-parceler', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         providers: [
-          { provide: NB_AUTH_FALLBACK_TOKEN, useValue: NbAuthSimpleToken },
-          { provide: NB_AUTH_TOKENS, useValue: [] },
-          NbAuthTokenParceler,
+          { provide: TRI_AUTH_FALLBACK_TOKEN, useValue: TriAuthSimpleToken },
+          { provide: TRI_AUTH_TOKENS, useValue: [] },
+          TriAuthTokenParceler,
         ],
       });
     });
 
     beforeEach(async(inject(
-      [NbAuthTokenParceler],
+      [TriAuthTokenParceler],
       (_tokenParceler) => {
         tokenParceler = _tokenParceler;
       },

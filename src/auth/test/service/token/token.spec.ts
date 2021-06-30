@@ -1,27 +1,27 @@
 
 
-import { NbAuthOAuth2Token, NbAuthJWTToken, NbAuthSimpleToken, NbAuthOAuth2JWTToken } from './token';
+import { TriAuthOAuth2Token, TriAuthJWTToken, TriAuthSimpleToken, TriAuthOAuth2JWTToken } from './token';
 
 
 describe('auth token', () => {
-  describe('NbAuthJWTToken', () => {
+  describe('TriAuthJWTToken', () => {
     const now = new Date();
 
     // tslint:disable
-    const simpleToken = new NbAuthSimpleToken('token','strategy');
-    const validJWTToken = new NbAuthJWTToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjZXJlbWEuZnIiLCJpYXQiOjE1MzIzNTA4MDAsImV4cCI6MjUzMjM1MDgwMCwic3ViIjoiQWxhaW4gQ0hBUkxFUyIsImFkbWluIjp0cnVlfQ.Rgkgb4KvxY2wp2niXIyLJNJeapFp9z3tCF-zK6Omc8c', 'strategy');
+    const simpleToken = new TriAuthSimpleToken('token','strategy');
+    const validJWTToken = new TriAuthJWTToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjZXJlbWEuZnIiLCJpYXQiOjE1MzIzNTA4MDAsImV4cCI6MjUzMjM1MDgwMCwic3ViIjoiQWxhaW4gQ0hBUkxFUyIsImFkbWluIjp0cnVlfQ.Rgkgb4KvxY2wp2niXIyLJNJeapFp9z3tCF-zK6Omc8c', 'strategy');
 
-    const noIatJWTToken = new NbAuthJWTToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjZXJlbWEuZnIiLCJleHAiOjE1MzI0MzcyMDAsInN1YiI6IkFsYWluIENIQVJMRVMiLCJhZG1pbiI6dHJ1ZX0.cfwQlKo6xomXkE-U-SOqse2GjdxncOuhdd1VWIOiYzA', 'strategy');
+    const noIatJWTToken = new TriAuthJWTToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjZXJlbWEuZnIiLCJleHAiOjE1MzI0MzcyMDAsInN1YiI6IkFsYWluIENIQVJMRVMiLCJhZG1pbiI6dHJ1ZX0.cfwQlKo6xomXkE-U-SOqse2GjdxncOuhdd1VWIOiYzA', 'strategy');
 
-    const noExpJWTToken = new NbAuthJWTToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjZXJlbWEuZnIiLCJpYXQiOjE1MzIzNTA4MDAsInN1YiI6IkFsYWluIENIQVJMRVMiLCJhZG1pbiI6dHJ1ZX0.heHVXkHexwqbPCPUAvkJlXO6tvxzxTKf4iP0OWBbp7Y','strategy');
+    const noExpJWTToken = new TriAuthJWTToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjZXJlbWEuZnIiLCJpYXQiOjE1MzIzNTA4MDAsInN1YiI6IkFsYWluIENIQVJMRVMiLCJhZG1pbiI6dHJ1ZX0.heHVXkHexwqbPCPUAvkJlXO6tvxzxTKf4iP0OWBbp7Y','strategy');
 
-    const expiredJWTToken = new NbAuthJWTToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzY290Y2guaW8iLCJleHAiOjEzMDA4MTkzODAsIm5hbWUiOiJDaHJpcyBTZXZpbGxlamEiLCJhZG1pbiI6dHJ1ZX0.03f329983b86f7d9a9f5fef85305880101d5e302afafa20154d094b229f75773','strategy');
+    const expiredJWTToken = new TriAuthJWTToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzY290Y2guaW8iLCJleHAiOjEzMDA4MTkzODAsIm5hbWUiOiJDaHJpcyBTZXZpbGxlamEiLCJhZG1pbiI6dHJ1ZX0.03f329983b86f7d9a9f5fef85305880101d5e302afafa20154d094b229f75773','strategy');
 
     // tslint:enable
 
     it('JWT Token constructor, not valid JWT token, must consist of three parts', () => {
       expect(() => {
-        new NbAuthJWTToken('.', 'strategy');
+        new TriAuthJWTToken('.', 'strategy');
       })
         .toThrow(new Error(
           `The payload . is not valid JWT payload and must consist of three parts.`));
@@ -29,7 +29,7 @@ describe('auth token', () => {
 
     it('JWT Token constructor,, not valid JWT token, cannot be decoded', () => {
       expect(() => {
-        new NbAuthJWTToken('..', 'strategy');
+        new TriAuthJWTToken('..', 'strategy');
       })
         .toThrow(new Error(
           `The payload .. is not valid JWT payload and cannot be decoded.`));
@@ -37,7 +37,7 @@ describe('auth token', () => {
 
     it('getPayload, not valid base64 in JWT token, cannot be decoded', () => {
       expect(() => {
-        new NbAuthJWTToken('h%2BHY.h%2BHY.h%2BHY', 'strategy');
+        new TriAuthJWTToken('h%2BHY.h%2BHY.h%2BHY', 'strategy');
       })
         .toThrow(new Error(
           `The payload h%2BHY.h%2BHY.h%2BHY is not valid JWT payload and cannot be parsed.`));
@@ -102,24 +102,24 @@ describe('auth token', () => {
 
     it('isValid fail', () => {
       // without token
-      expect(new NbAuthJWTToken('', 'strategy', new Date()).isValid()).toBeFalsy();
+      expect(new TriAuthJWTToken('', 'strategy', new Date()).isValid()).toBeFalsy();
 
 
       // expired date
       expect(expiredJWTToken.isValid()).toBeFalsy();
     });
 
-    it('NbAuthJWTToken name', () => {
+    it('TriAuthJWTToken name', () => {
       // without token
-      expect(NbAuthJWTToken.NAME).toEqual(validJWTToken.getName());
+      expect(TriAuthJWTToken.NAME).toEqual(validJWTToken.getName());
     });
 
-    it('NbAuthSimpleToken name', () => {
+    it('TriAuthSimpleToken name', () => {
       // without token
-      expect(NbAuthSimpleToken.NAME).toEqual(simpleToken.getName());
+      expect(TriAuthSimpleToken.NAME).toEqual(simpleToken.getName());
     });
 
-    it('NbAuthSimpleToken has payload', () => {
+    it('TriAuthSimpleToken has payload', () => {
       // without token
       expect(simpleToken.getPayload()).toEqual(null);
     });
@@ -130,23 +130,23 @@ describe('auth token', () => {
         .toEqual(JSON.parse('{"iss":"cerema.fr","iat":1532350800,"exp":2532350800,"sub":"Alain CHARLES","admin":true}'));
     });
 
-    it('NbAuthJWTToken name', () => {
+    it('TriAuthJWTToken name', () => {
       // without token
-      expect(NbAuthJWTToken.NAME).toEqual(validJWTToken.getName());
+      expect(TriAuthJWTToken.NAME).toEqual(validJWTToken.getName());
     });
 
-    it('NbAuthSimpleToken name', () => {
+    it('TriAuthSimpleToken name', () => {
       // without token
-      expect(NbAuthSimpleToken.NAME).toEqual(simpleToken.getName());
+      expect(TriAuthSimpleToken.NAME).toEqual(simpleToken.getName());
     });
 
-    it('NbAuthSimpleToken has payload', () => {
+    it('TriAuthSimpleToken has payload', () => {
       // without token
       expect(simpleToken.getPayload()).toEqual(null);
     });
   });
 
-  describe('NbAuthOAuth2Token', () => {
+  describe('TriAuthOAuth2Token', () => {
 
     const token = {
       access_token: '2YotnFZFEjr1zCsicMWpAA',
@@ -157,9 +157,9 @@ describe('auth token', () => {
     };
 
 
-    let validToken = new NbAuthOAuth2Token(token, 'strategy');
+    let validToken = new TriAuthOAuth2Token(token, 'strategy');
 
-    const noExpToken = new NbAuthOAuth2Token({
+    const noExpToken = new TriAuthOAuth2Token({
       access_token: '2YotnFZFEjr1zCsicMWpAA',
       refresh_token: 'tGzv3JOkF0XG5Qx2TlKWIA',
       example_parameter: 'example_value',
@@ -171,7 +171,7 @@ describe('auth token', () => {
 
     it('empty token constructor, not valid token, cannot be decoded', () => {
       expect(() => {
-        new NbAuthOAuth2Token({}, 'strategy');
+        new TriAuthOAuth2Token({}, 'strategy');
       })
         .toThrow(new Error(
           `Cannot extract payload from an empty token.`));
@@ -179,7 +179,7 @@ describe('auth token', () => {
 
     it('getExpDate success', () => {
       // recreate it here if we want to be in the same second
-      validToken = new NbAuthOAuth2Token(token, 'strategy');
+      validToken = new TriAuthOAuth2Token(token, 'strategy');
       const date = new Date();
       date.setTime(date.getTime() + 3600 * 1000);
       expect(validToken.getTokenExpDate().getTime() - date.getTime() < 10);
@@ -210,11 +210,11 @@ describe('auth token', () => {
     });
 
     it('name', () => {
-      expect(NbAuthOAuth2Token.NAME).toEqual(validToken.getName());
+      expect(TriAuthOAuth2Token.NAME).toEqual(validToken.getName());
     });
   });
 
-  describe('NbAuthOAuth2JWTToken', () => {
+  describe('TriAuthOAuth2JWTToken', () => {
 
     const exp = 2532350800;
     const iat = 1532350800;
@@ -262,9 +262,9 @@ describe('auth token', () => {
       example_parameter: 'example_value',
     };
 
-    const validToken = new NbAuthOAuth2JWTToken(validPayload, 'strategy');
-    let noExpButIatToken = new NbAuthOAuth2JWTToken(noExpButIatPayload, 'strategy');
-    const permanentToken = new NbAuthOAuth2JWTToken(permanentPayload, 'strategy');
+    const validToken = new TriAuthOAuth2JWTToken(validPayload, 'strategy');
+    let noExpButIatToken = new TriAuthOAuth2JWTToken(noExpButIatPayload, 'strategy');
+    const permanentToken = new TriAuthOAuth2JWTToken(permanentPayload, 'strategy');
 
     it('getPayload success', () => {
       expect(validToken.getPayload()).toEqual(validPayload);
@@ -276,7 +276,7 @@ describe('auth token', () => {
 
     it('empty token constructor, not valid token, cannot be decoded', () => {
       expect(() => {
-        new NbAuthOAuth2JWTToken({}, 'strategy');
+        new TriAuthOAuth2JWTToken({}, 'strategy');
       })
         .toThrow(new Error(
           `Cannot extract payload from an empty token.`));
@@ -289,7 +289,7 @@ describe('auth token', () => {
     });
 
     it('getCreatedAt success for no iat token', () => {
-      noExpButIatToken = new NbAuthOAuth2JWTToken(noExpButIatPayload, 'strategy');
+      noExpButIatToken = new TriAuthOAuth2JWTToken(noExpButIatPayload, 'strategy');
       const date = new Date();
       expect(noExpButIatToken.getTokenExpDate().getTime() - date.getTime() < 10);
     });
@@ -307,7 +307,7 @@ describe('auth token', () => {
     });
 
     it('getExpDate success when only expires_in is set', () => {
-      const NoExpNoIatToken = new NbAuthOAuth2JWTToken(noExpNoIatPayload, 'strategy');
+      const NoExpNoIatToken = new TriAuthOAuth2JWTToken(noExpNoIatPayload, 'strategy');
       const date = new Date();
       date.setTime(date.getTime() + expires_in * 1000);
       expect(NoExpNoIatToken.getTokenExpDate().getTime() - date.getTime() < 10);
@@ -318,7 +318,7 @@ describe('auth token', () => {
     });
 
     it('name', () => {
-      expect(NbAuthOAuth2JWTToken.NAME).toEqual(validToken.getName());
+      expect(TriAuthOAuth2JWTToken.NAME).toEqual(validToken.getName());
     });
   });
 

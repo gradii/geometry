@@ -3,38 +3,38 @@
 import { async, inject, TestBed } from '@angular/core/testing';
 import { take } from 'rxjs/operators';
 
-import { NbTokenLocalStorage, NbTokenStorage } from './token-storage';
-import { NbAuthSimpleToken, NbAuthToken, nbAuthCreateToken } from './token';
-import { NbTokenService } from './token.service';
-import { NbAuthJWTToken } from '@nebular/auth/services/token/token';
-import { NB_AUTH_FALLBACK_TOKEN, NbAuthTokenParceler } from './token-parceler';
-import { NB_AUTH_TOKENS } from '../../auth.options';
+import { TriTokenLocalStorage, TriTokenStorage } from './token-storage';
+import { TriAuthSimpleToken, TriAuthToken, triAuthCreateToken } from './token';
+import { TriTokenService } from './token.service';
+import { TriAuthJWTToken } from '@nebular/auth/services/token/token';
+import { TRI_AUTH_FALLBACK_TOKEN, TriAuthTokenParceler } from './token-parceler';
+import { TRI_AUTH_TOKENS } from '../../auth.options';
 
 const noop = () => {};
 const ownerStrategyName = 'strategy';
 
 describe('token-service', () => {
 
-  let tokenService: NbTokenService;
-  let tokenStorage: NbTokenLocalStorage;
-  const simpleToken = nbAuthCreateToken(NbAuthSimpleToken, 'test value', ownerStrategyName);
-  const emptyToken = nbAuthCreateToken(NbAuthSimpleToken, '', ownerStrategyName);
+  let tokenService: TriTokenService;
+  let tokenStorage: TriTokenLocalStorage;
+  const simpleToken = triAuthCreateToken(TriAuthSimpleToken, 'test value', ownerStrategyName);
+  const emptyToken = triAuthCreateToken(TriAuthSimpleToken, '', ownerStrategyName);
   const testTokenKey = 'auth_app_token';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        { provide: NbTokenStorage, useClass: NbTokenLocalStorage },
-        { provide: NB_AUTH_FALLBACK_TOKEN, useValue: NbAuthSimpleToken },
-        { provide: NB_AUTH_TOKENS, useValue: [NbAuthSimpleToken, NbAuthJWTToken] },
-        NbAuthTokenParceler,
-        NbTokenService,
+        { provide: TriTokenStorage, useClass: TriTokenLocalStorage },
+        { provide: TRI_AUTH_FALLBACK_TOKEN, useValue: TriAuthSimpleToken },
+        { provide: TRI_AUTH_TOKENS, useValue: [TriAuthSimpleToken, TriAuthJWTToken] },
+        TriAuthTokenParceler,
+        TriTokenService,
       ],
     });
   });
 
     beforeEach(async(inject(
-    [NbTokenService, NbTokenStorage],
+    [TriTokenService, TriTokenStorage],
     (_tokenService, _tokenStorage) => {
       tokenService = _tokenService;
       tokenStorage = _tokenStorage;
@@ -63,7 +63,7 @@ describe('token-service', () => {
       .returnValue(emptyToken);
 
     tokenService.get()
-      .subscribe((token: NbAuthToken) => {
+      .subscribe((token: TriAuthToken) => {
         expect(spy).toHaveBeenCalled();
         expect(token.getValue()).toEqual('');
         expect(token.isValid()).toBe(false);
@@ -74,7 +74,7 @@ describe('token-service', () => {
     tokenService.set(simpleToken).subscribe(noop);
 
     tokenService.get()
-      .subscribe((token: NbAuthToken) => {
+      .subscribe((token: TriAuthToken) => {
         expect(token.getValue()).toEqual(simpleToken.getValue());
       });
   });
@@ -95,12 +95,12 @@ describe('token-service', () => {
   it('token should be published', (done) => {
     tokenService.tokenChange()
       .pipe(take(1))
-      .subscribe((token: NbAuthToken) => {
+      .subscribe((token: TriAuthToken) => {
         expect(token.getValue()).toEqual('');
       });
     tokenService.set(simpleToken).subscribe(noop);
     tokenService.tokenChange()
-      .subscribe((token: NbAuthToken) => {
+      .subscribe((token: TriAuthToken) => {
         expect(token.getValue()).toEqual(simpleToken.getValue());
         done();
       });
@@ -109,18 +109,18 @@ describe('token-service', () => {
   it('clear should be published', (done) => {
     tokenService.tokenChange()
       .pipe(take(1))
-      .subscribe((token: NbAuthToken) => {
+      .subscribe((token: TriAuthToken) => {
         expect(token.getValue()).toEqual('');
       });
     tokenService.set(simpleToken).subscribe(noop);
     tokenService.tokenChange()
       .pipe(take(1))
-      .subscribe((token: NbAuthToken) => {
+      .subscribe((token: TriAuthToken) => {
         expect(token.getValue()).toEqual(simpleToken.getValue());
       });
     tokenService.clear().subscribe(noop);
     tokenService.tokenChange()
-      .subscribe((token: NbAuthToken) => {
+      .subscribe((token: TriAuthToken) => {
         expect(token.getValue()).toEqual('');
         done();
       });

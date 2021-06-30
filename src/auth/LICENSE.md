@@ -1,6 +1,6 @@
 The MIT License
 
-Copyright (c) 2017 Akveo..
+Copyright (c) 2017 Akveo.
 Copyright (c) 2021 Gradii.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

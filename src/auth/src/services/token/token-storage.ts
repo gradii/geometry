@@ -6,13 +6,13 @@
 
 import { Injectable } from '@angular/core';
 
-import { NbAuthToken } from './token';
-import { NbAuthTokenParceler } from './token-parceler';
+import { TriAuthToken } from './token';
+import { TriAuthTokenParceler } from './token-parceler';
 
-export abstract class NbTokenStorage {
+export abstract class TriTokenStorage {
 
-  abstract get(): NbAuthToken;
-  abstract set(token: NbAuthToken);
+  abstract get(): TriAuthToken;
+  abstract set(token: TriAuthToken);
   abstract clear();
 }
 
@@ -21,39 +21,39 @@ export abstract class NbTokenStorage {
  *
  * The token storage is provided into auth module the following way:
  * ```ts
- * { provide: NbTokenStorage, useClass: NbTokenLocalStorage },
+ * { provide: TriTokenStorage, useClass: TriTokenLocalStorage },
  * ```
  *
- * If you need to change the storage behaviour or provide your own - just extend your class from basic `NbTokenStorage`
- * or `NbTokenLocalStorage` and provide in your `app.module`:
+ * If you need to change the storage behaviour or provide your own - just extend your class from basic `TriTokenStorage`
+ * or `TriTokenLocalStorage` and provide in your `app.module`:
  * ```ts
- * { provide: NbTokenStorage, useClass: NbTokenCustomStorage },
+ * { provide: TriTokenStorage, useClass: TriTokenCustomStorage },
  * ```
  *
  */
 @Injectable()
-export class NbTokenLocalStorage extends NbTokenStorage {
+export class TriTokenLocalStorage extends TriTokenStorage {
 
   protected key = 'auth_app_token';
 
-  constructor(private parceler: NbAuthTokenParceler) {
+  constructor(private parceler: TriAuthTokenParceler) {
     super();
   }
 
   /**
    * Returns token from localStorage
-   * @returns {NbAuthToken}
+   * @returns {TriAuthToken}
    */
-  get(): NbAuthToken {
+  get(): TriAuthToken {
     const raw = localStorage.getItem(this.key);
     return this.parceler.unwrap(raw);
   }
 
   /**
    * Sets token to localStorage
-   * @param {NbAuthToken} token
+   * @param {TriAuthToken} token
    */
-  set(token: NbAuthToken) {
+  set(token: TriAuthToken) {
     const raw = this.parceler.wrap(token);
     localStorage.setItem(this.key, raw);
   }

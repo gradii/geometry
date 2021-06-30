@@ -11,12 +11,12 @@ export interface NbAclRole {
   [permission: string]: string|string[]|undefined;
 }
 
-export interface NbAccessControl {
+export interface TriAccessControl {
   [role: string]: NbAclRole;
 }
 
 export interface NbAclOptions {
-  accessControl?: NbAccessControl;
+  accessControl?: TriAccessControl;
 }
 
-export const NB_SECURITY_OPTIONS_TOKEN = new InjectionToken<NbAclOptions>('Nebular Security Options');
+export const TRI_SECURITY_OPTIONS_TOKEN = new InjectionToken<NbAclOptions>('Nebular Security Options');

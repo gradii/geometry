@@ -7,31 +7,31 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of as observableOf } from 'rxjs';
 
 import {
-  NB_AUTH_OPTIONS, NB_AUTH_STRATEGIES,
-  NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
-  NB_AUTH_TOKENS,
-  NB_AUTH_USER_OPTIONS,
+  TRI_AUTH_OPTIONS, TRI_AUTH_STRATEGIES,
+  TRI_AUTH_TOKEN_INTERCEPTOR_FILTER,
+  TRI_AUTH_TOKENS,
+  TRI_AUTH_USER_OPTIONS,
 } from '@nebular/auth/auth.options';
-import { NbAuthJWTInterceptor, NbAuthService } from '@nebular/auth';
-import { NbTokenService } from '@nebular/auth/services/token/token.service';
-import { NbTokenLocalStorage, NbTokenStorage } from '@nebular/auth/services/token/token-storage';
-import { NB_AUTH_FALLBACK_TOKEN, NbAuthTokenParceler } from '@nebular/auth/services/token/token-parceler';
-import { NbDummyAuthStrategy } from '@nebular/auth';
-import { nbOptionsFactory, nbStrategiesFactory } from '@nebular/auth/auth.module';
-import { NbAuthJWTToken, NbAuthSimpleToken} from '@nebular/auth/services/token/token';
+import { TriAuthJWTInterceptor, TriAuthService } from '@nebular/auth';
+import { TriTokenService } from '@nebular/auth/services/token/token.service';
+import { TriTokenLocalStorage, TriTokenStorage } from '@nebular/auth/services/token/token-storage';
+import { TRI_AUTH_FALLBACK_TOKEN, TriAuthTokenParceler } from '@nebular/auth/services/token/token-parceler';
+import { TriDummyAuthStrategy } from '@nebular/auth';
+import { optionsFactory, strategiesFactory } from '@nebular/auth/auth.module';
+import { TriAuthJWTToken, TriAuthSimpleToken} from '@nebular/auth/services/token/token';
 
 
 describe('jwt-interceptor', () => {
 
   // tslint:disable
   const validJWTValue = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjZXJlbWEuZnIiLCJpYXQiOjE1MzIzNTA4MDAsImV4cCI6MjUzMjM1MDgwMCwic3ViIjoiQWxhaW4gQ0hBUkxFUyIsImFkbWluIjp0cnVlfQ.Rgkgb4KvxY2wp2niXIyLJNJeapFp9z3tCF-zK6Omc8c';
-  const validJWTToken = new NbAuthJWTToken(validJWTValue, 'dummy');
-  const expiredJWTToken = new NbAuthJWTToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzY290Y2guaW8iLCJleHAiOjEzMDA4MTkzODAsIm5hbWUiOiJDaHJpcyBTZXZpbGxlamEiLCJhZG1pbiI6dHJ1ZX0.03f329983b86f7d9a9f5fef85305880101d5e302afafa20154d094b229f75773','dummy');
+  const validJWTToken = new TriAuthJWTToken(validJWTValue, 'dummy');
+  const expiredJWTToken = new TriAuthJWTToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzY290Y2guaW8iLCJleHAiOjEzMDA4MTkzODAsIm5hbWUiOiJDaHJpcyBTZXZpbGxlamEiLCJhZG1pbiI6dHJ1ZX0.03f329983b86f7d9a9f5fef85305880101d5e302afafa20154d094b229f75773','dummy');
   const authHeader = 'Bearer ' + validJWTValue;
 
-  let authService: NbAuthService;
-  let tokenService: NbTokenService;
-  let dummyAuthStrategy: NbDummyAuthStrategy;
+  let authService: TriAuthService;
+  let tokenService: TriTokenService;
+  let dummyAuthStrategy: TriDummyAuthStrategy;
 
   let http: HttpClient;
   let httpMock: HttpTestingController;
@@ -45,32 +45,32 @@ describe('jwt-interceptor', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule, HttpClientTestingModule, RouterTestingModule],
       providers: [
-         { provide: NB_AUTH_FALLBACK_TOKEN, useValue: NbAuthSimpleToken },
-         { provide: NB_AUTH_TOKENS, useValue: [NbAuthJWTToken] },
-        NbAuthTokenParceler,
+         { provide: TRI_AUTH_FALLBACK_TOKEN, useValue: TriAuthSimpleToken },
+         { provide: TRI_AUTH_TOKENS, useValue: [TriAuthJWTToken] },
+        TriAuthTokenParceler,
          {
-          provide: NB_AUTH_USER_OPTIONS, useValue: {
+          provide: TRI_AUTH_USER_OPTIONS, useValue: {
             strategies: [
-              NbDummyAuthStrategy.setup({
+              TriDummyAuthStrategy.setup({
                 alwaysFail: false,
                 name: 'dummy',
               }),
             ],
           },
         },
-        { provide: NB_AUTH_OPTIONS, useFactory: nbOptionsFactory, deps: [NB_AUTH_USER_OPTIONS] },
-        { provide: NB_AUTH_STRATEGIES, useFactory: nbStrategiesFactory, deps: [NB_AUTH_OPTIONS, Injector] },
-        { provide: NbTokenStorage, useClass: NbTokenLocalStorage },
-        { provide: HTTP_INTERCEPTORS, useClass: NbAuthJWTInterceptor, multi: true },
-        { provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER, useValue: filterInterceptorRequest },
-        NbTokenService,
-        NbAuthService,
-        NbDummyAuthStrategy,
+        { provide: TRI_AUTH_OPTIONS, useFactory: optionsFactory, deps: [TRI_AUTH_USER_OPTIONS] },
+        { provide: TRI_AUTH_STRATEGIES, useFactory: strategiesFactory, deps: [TRI_AUTH_OPTIONS, Injector] },
+        { provide: TriTokenStorage, useClass: TriTokenLocalStorage },
+        { provide: HTTP_INTERCEPTORS, useClass: TriAuthJWTInterceptor, multi: true },
+        { provide: TRI_AUTH_TOKEN_INTERCEPTOR_FILTER, useValue: filterInterceptorRequest },
+        TriTokenService,
+        TriAuthService,
+        TriDummyAuthStrategy,
       ],
     });
-    authService = TestBed.inject(NbAuthService);
-    tokenService = TestBed.inject(NbTokenService);
-    dummyAuthStrategy = TestBed.inject(NbDummyAuthStrategy);
+    authService = TestBed.inject(TriAuthService);
+    tokenService = TestBed.inject(TriTokenService);
+    dummyAuthStrategy = TestBed.inject(TriDummyAuthStrategy);
   });
 
     beforeEach(async(

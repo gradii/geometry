@@ -20,7 +20,6 @@ export class TooltipTriggerExample {
   triggerOptions: string[] = [
     'click',
     'hover',
-    'hint',
     'noop',
   ];
 
