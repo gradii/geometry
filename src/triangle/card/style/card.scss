@@ -31,7 +31,7 @@ $card-border-radius    : v.$border-radius-base !default;
     padding       : ($card-head-height - $card-head-line-height)/2 ($card-padding-base);
     box-sizing    : border-box;
     display       : flex;
-    align-items   : stretch;
+    align-items   : center;
 
     @at-root #{&}-title {
       font-size     : v.$font-size-lg;

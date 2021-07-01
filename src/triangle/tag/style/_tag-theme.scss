@@ -7,20 +7,18 @@
 $tag-prefix-cls : "#{ v.$tri-prefix}-tag";
 
 
-@mixin make-color-classes($colors) {
-  $i : list.length($colors);
-
-  @if $i > 0 {
-    @include make-color-classes($i - 1);
-    $color      : list.nth($colors, $i);
-    $lightColor : map.get($g-colors, "#{$color}-2");
-    $darkColor  : map.get($g-colors, "#{$color}-6");
-    @at-root &-#{"" + $color} {
+@mixin make-color-classes($colors, $names) {
+  @for $i from 1 through list.length($colors) {
+    $color      : theming.tri-palette(list.nth($colors, $i));
+    $name       : list.nth($names, $i);
+    $lightColor : map.get($color, lighter);
+    $darkColor  : map.get($color, darker);
+    @at-root &-#{"" + $name} {
       color        : $darkColor;
       background   : $lightColor;
       border-color : $lightColor;
     }
-    @at-root &-#{"" + $color}-inverse {
+    @at-root &-#{"" + $name}-inverse {
       background   : $darkColor;
       border-color : $darkColor;
       color        : #fff;
@@ -29,10 +27,10 @@ $tag-prefix-cls : "#{ v.$tri-prefix}-tag";
 }
 
 
-@mixin tri-tag-theme($theme) {
-  $foreground        : map.get($theme, foreground);
+@mixin tri-tag-theme() {
+  $foreground        : theme.$foreground;
+  $primary           : theme.$primary;
 
-  $primary           : map.get($theme, primary);
   $tag-default-bg    : #f3f3f3 !default;
   $tag-default-color : theming.tri-color($foreground, text-color);
 
@@ -63,7 +61,7 @@ $tag-prefix-cls : "#{ v.$tri-prefix}-tag";
       background-color : transparent;
       border-color     : transparent;
       @at-root &:not(#{&}-checked):hover {
-        color : $primary-color;
+        color : theming.tri-color($primary);
       }
       @at-root &:active,
       &-checked {
@@ -77,9 +75,10 @@ $tag-prefix-cls : "#{ v.$tri-prefix}-tag";
       }
     }
 
-    $colors       : pink, red, orange, yellow, cyan, green, blue, purple;
+    $colors       : v.$tri-pink, v.$tri-red, v.$tri-orange, v.$tri-yellow, v.$tri-cyan, v.$tri-green, v.$tri-blue, v.$tri-purple;
+    $color-names  : pink, red, orange, yellow, cyan, green, blue, purple;
     // mixin to iterate over colors and create CSS class for each one
 
-    @include make-color-classes($colors);
+    @include make-color-classes($colors, $color-names);
   }
 }

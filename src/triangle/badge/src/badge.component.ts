@@ -60,7 +60,7 @@ export class BadgeComponent implements OnInit {
   maxNumberArray: any[];
   countArray: any[] = [];
   countSingleArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-  @ContentChild('content', { static: false }) content: TemplateRef<any>;
+  @ContentChild('content', { static: true }) content: TemplateRef<any>;
 
   /**
    * Show the over flow count
