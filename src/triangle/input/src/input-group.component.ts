@@ -24,13 +24,6 @@ export class InputGroupComponent implements OnInit {
    * `tri-input-group`  中所有的  `tri-input`  的大小
    */
   @Input() size: string;
-  /**
-   * Whether use compact mode
-   * 是否用紧凑模式
-   */
-  @Input()
-  @HostBinding(`class.tri-input-group-compact`)
-  compact = true;
 
   @HostBinding(`class.tri-input-group-lg`)
   get _isLarge(): boolean {

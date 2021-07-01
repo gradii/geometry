@@ -41,15 +41,17 @@
     @at-root &:focus {
       z-index : 3;
     }
+    @at-root &:hover {
+      z-index: 4;
+    }
   }
 
   @at-root
   & > .#{mixins.$tri-prefix}-input,
+  & > .#{mixins.$tri-prefix}-input-number,
   & > .#{mixins.$tri-prefix}-input-wrapper,
   & > .#{mixins.$tri-prefix}-select {
-    + .#{mixins.$tri-prefix}-input,
-    + .#{mixins.$tri-prefix}-input-wrapper,
-    + .#{mixins.$tri-prefix}-select {
+    &:not(:first-child){
       margin-left : -(input-variables.$input-border-width);
     }
 
@@ -96,16 +98,6 @@
       }
     }
 
-    // Expand addon icon click area
-    // https://github.com/ant-design/ant-design/issues/3714
-    > i:only-child:after {
-      position : absolute;
-      content  : "";
-      top      : 0;
-      left     : 0;
-      right    : 0;
-      bottom   : 0;
-    }
   }
 
   // Reset rounded corners
@@ -176,7 +168,7 @@
     width : 100%;
   }
 
-  @at-root &#{&}-compact {
+  @at-root & {
     @at-root & > * {
       border-radius  : 0;
       vertical-align : middle;

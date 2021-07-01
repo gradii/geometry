@@ -3,7 +3,7 @@
   "description": "Triangle components for Angular",
   "repository": {
     "type": "git",
-    "url": "https://github.com/LinboLen/triangle.git"
+    "url": "https://github.com/gradii/triangle.git"
   },
   "license": "MIT",
   "engines": {

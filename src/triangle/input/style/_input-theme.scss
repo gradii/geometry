@@ -68,7 +68,6 @@ $input-border-color       : map.get($_foreground, border-color-base) !default;
     @include input-mixin.input();
 
     @include compatibility.placeholder();
-    transition : all .3s;
 
     @at-root &:hover {
       @include tri-input-hover-theme();
