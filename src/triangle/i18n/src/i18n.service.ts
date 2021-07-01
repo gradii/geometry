@@ -11,20 +11,18 @@ import { LoggerService } from '@gradii/triangle/util';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import zh_CN from '../languages/zh_CN';
+import { en_US } from '../public-api';
 import { I18nInterface } from './i18n.interface';
 import { I18N } from './i18n.token';
 
 @Injectable()
 export class I18nService {
-  private _locale: I18nInterface;
-  private _change: BehaviorSubject<I18nInterface>;
+  private _locale: I18nInterface = en_US;
+  private _change: BehaviorSubject<I18nInterface> = new BehaviorSubject<I18nInterface>(en_US);
 
   constructor(@Inject(I18N) locale: I18nInterface,
               private _logger: LoggerService,
               private datePipe: DatePipe) {
-    this.setLocale(locale || zh_CN);
-
-    this._change = new BehaviorSubject<I18nInterface>(this._locale);
   }
 
   get localeChange(): Observable<I18nInterface> {

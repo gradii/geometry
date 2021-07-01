@@ -24,4 +24,6 @@ export * from './src/line/line';
 export * from './src/common-behaviors/index';
 
 export * from './src/ripple/index';
-export * from './src/selection/index'
+export * from './src/selection/index';
+
+export * from './src/datetime/index';

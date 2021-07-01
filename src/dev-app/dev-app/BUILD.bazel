@@ -7,6 +7,7 @@ ng_module(
     srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
     assets = [] + glob(["**/*.html"]),
     deps = [
+        "//src/triangle/core",
         "@npm//@angular/core",
         "@npm//@angular/router",
     ],
