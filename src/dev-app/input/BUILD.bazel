@@ -12,6 +12,7 @@ ng_module(
     deps = [
         "//src/triangle/input",
         "//src/triangle/input-number",
+        "//src/triangle/date-picker",
         "//src/triangle/select",
         "//src/triangle/grid",
         "//src/triangle/icon",

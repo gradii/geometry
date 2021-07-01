@@ -14,53 +14,53 @@ import { Component, OnInit } from '@angular/core';
   template: `
     <tri-input-group [size]="'large'">
       <div tri-col [span]="4">
-        <input [(ngModel)]="_valueOne" tri-input>
+        <input [(ngModel)]="_valueOne" [ngModelOptions]="{standalone: true}" tri-input>
       </div>
       <div tri-col [span]="8">
-        <input [(ngModel)]="_valueTwo" tri-input>
+        <input [(ngModel)]="_valueTwo" [ngModelOptions]="{standalone: true}" tri-input>
       </div>
     </tri-input-group>
     <br>
     <tri-input-group [size]="'large'">
-      <input [(ngModel)]="_valueOne" style="width: 20%;" tri-input>
-      <input [(ngModel)]="_valueTwo" style="width: 30%;" tri-input>
+      <input [(ngModel)]="_valueOne" [ngModelOptions]="{standalone: true}" style="width: 20%;" tri-input>
+      <input [(ngModel)]="_valueTwo" [ngModelOptions]="{standalone: true}" style="width: 30%;" tri-input>
     </tri-input-group>
     <br>
     <tri-input-group [size]="'large'">
-      <tri-select [ngModel]="'Zhejiang'">
+      <tri-select [ngModel]="'Zhejiang'" [ngModelOptions]="{standalone: true}">
         <tri-option [label]="'Zhejiang'" [value]="'Zhejiang'"></tri-option>
         <tri-option [label]="'Jiangsu'" [value]="'Jiangsu'"></tri-option>
       </tri-select>
-      <input [ngModel]="'Xihu District, Hangzhou'" style="width: 50%;" tri-input>
+      <input [ngModel]="'Xihu District, Hangzhou'" [ngModelOptions]="{standalone: true}" style="width: 50%;" tri-input>
     </tri-input-group>
     <br>
     <tri-input-group [size]="'large'">
-      <tri-select [ngModel]="'Option1'">
+      <tri-select [ngModel]="'Option1'" [ngModelOptions]="{standalone: true}">
         <tri-option [label]="'Option1'" [value]="'Option1'"></tri-option>
         <tri-option [label]="'Option2'" [value]="'Option2'"></tri-option>
       </tri-select>
-      <input [ngModel]="'input content'" style="width: 50%;" tri-input>
+      <input [ngModel]="'input content'" [ngModelOptions]="{standalone: true}" style="width: 50%;" tri-input>
       <tri-input-number [ngModel]="1" [min]="1" [max]="10" [step]="1"></tri-input-number>
     </tri-input-group>
     <br>
     <tri-input-group [size]="'large'">
-      <input [ngModel]="'input content'" style="width: 50%;" tri-input>
-      <tri-datepicker [(ngModel)]="date"></tri-datepicker>
+      <input [ngModel]="'input content'" [ngModelOptions]="{standalone: true}" style="width: 50%;" tri-input>
+      <tri-date-picker [(ngModel)]="date" [ngModelOptions]="{standalone: true}"></tri-date-picker>
     </tri-input-group>
     <br>
     <tri-input-group [size]="'large'">
-      <tri-select [ngModel]="'Option1-1'">
+      <tri-select [ngModel]="'Option1-1'" [ngModelOptions]="{standalone: true}">
         <tri-option [label]="'Option1-1'" [value]="'Option1-1'"></tri-option>
         <tri-option [label]="'Option1-2'" [value]="'Option1-2'"></tri-option>
       </tri-select>
-      <tri-select [ngModel]="'Option2-1'">
+      <tri-select [ngModel]="'Option2-1'" [ngModelOptions]="{standalone: true}">
         <tri-option [label]="'Option2-1'" [value]="'Option2-1'"></tri-option>
         <tri-option [label]="'Option2-2'" [value]="'Option2-2'"></tri-option>
       </tri-select>
     </tri-input-group>
     <br>
     <tri-input-group [size]="'large'">
-      <tri-select [ngModel]="'Between'">
+      <tri-select [ngModel]="'Between'" [ngModelOptions]="{standalone: true}">
         <tri-option [label]="'Between'" [value]="'Between'"></tri-option>
         <tri-option [label]="'Except'" [value]="'Except'"></tri-option>
       </tri-select>
@@ -70,7 +70,7 @@ import { Component, OnInit } from '@angular/core';
     </tri-input-group>
     <br>
     <tri-input-group [size]="'large'">
-      <tri-select [ngModel]="'Sign Up'">
+      <tri-select [ngModel]="'Sign Up'" [ngModelOptions]="{standalone: true}">
         <tri-option [label]="'Sign Up'" [value]="'Sign Up'"></tri-option>
         <tri-option [label]="'Sign In'" [value]="'Sign In'"></tri-option>
       </tri-select>

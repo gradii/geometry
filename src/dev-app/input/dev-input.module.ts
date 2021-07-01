@@ -12,6 +12,7 @@ import { TriGridModule } from '@gradii/triangle/grid';
 import { TriIconModule } from '@gradii/triangle/icon';
 import { TriInputModule } from '@gradii/triangle/input';
 import { TriInputNumberModule } from '@gradii/triangle/input-number';
+import { TriDatePickerModule } from '@gradii/triangle/date-picker';
 import { TriSelectModule } from '@gradii/triangle/select';
 import { DevInput } from './dev-input';
 import { TriDemoInputAddOnComponent } from './tri-demo-input/tri-demo-input-add-on.component';
@@ -35,7 +36,8 @@ import { TriDemoInputTextareaComponent } from './tri-demo-input/tri-demo-input-t
     TriInputNumberModule,
     TriGridModule,
     TriIconModule,
-
+    TriDatePickerModule,
+    
     RouterModule.forChild([
       {
         path: '', component: DevInput, children: [
