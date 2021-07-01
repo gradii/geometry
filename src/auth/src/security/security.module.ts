@@ -7,7 +7,7 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TRI_SECURITY_OPTIONS_TOKEN, NbAclOptions } from './security.options';
+import { TRI_SECURITY_OPTIONS_TOKEN, TriAclOptions } from './security.options';
 import { TriAclService } from './services/acl.service';
 import { TriAccessChecker } from './services/access-checker.service';
 import { TriIsGrantedDirective } from './directives/is-granted.directive';
@@ -24,7 +24,7 @@ import { TriIsGrantedDirective } from './directives/is-granted.directive';
   ],
 })
 export class TriSecurityModule {
-  static forRoot(nbSecurityOptions?: NbAclOptions): ModuleWithProviders<TriSecurityModule> {
+  static forRoot(nbSecurityOptions?: TriAclOptions): ModuleWithProviders<TriSecurityModule> {
     return {
       ngModule: TriSecurityModule,
       providers: [

@@ -2,7 +2,7 @@
 
 import { TestBed, inject, async } from '@angular/core/testing';
 import { NbAclService } from './acl.service';
-import { NB_SECURITY_OPTIONS_TOKEN } from '../security.options';
+import { TRI_SECURITY_OPTIONS_TOKEN } from '../security.options';
 import { deepExtend } from '@gradii/auth';
 
 
@@ -334,7 +334,7 @@ describe('acl-service', () => {
       // Configure testbed to prepare services
       TestBed.configureTestingModule({
         providers: [
-          { provide: NB_SECURITY_OPTIONS_TOKEN, useValue: {} },
+          { provide: TRI_SECURITY_OPTIONS_TOKEN, useValue: {} },
           NbAclService,
         ],
       });
@@ -374,7 +374,7 @@ describe('acl-service', () => {
       // Configure testbed to prepare services
       TestBed.configureTestingModule({
         providers: [
-          { provide: NB_SECURITY_OPTIONS_TOKEN, useValue: defaultSettings }, // useValue will clone
+          { provide: TRI_SECURITY_OPTIONS_TOKEN, useValue: defaultSettings }, // useValue will clone
           NbAclService,
         ],
       });
@@ -420,7 +420,7 @@ describe('acl-service', () => {
       // Configure testbed to prepare services
       TestBed.configureTestingModule({
         providers: [
-          { provide: NB_SECURITY_OPTIONS_TOKEN, useFactory: () => defaultSettings },
+          { provide: TRI_SECURITY_OPTIONS_TOKEN, useFactory: () => defaultSettings },
           NbAclService,
         ],
       });
@@ -471,7 +471,7 @@ describe('acl-service', () => {
       // Configure testbed to prepare services
       TestBed.configureTestingModule({
         providers: [
-          { provide: NB_SECURITY_OPTIONS_TOKEN, useFactory: () => defaultSettings }, // will provide a reference
+          { provide: TRI_SECURITY_OPTIONS_TOKEN, useFactory: () => defaultSettings }, // will provide a reference
           NbAclService,
         ],
       });

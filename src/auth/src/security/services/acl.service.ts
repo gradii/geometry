@@ -6,7 +6,7 @@
 
 
 import { Inject, Injectable, Optional } from '@angular/core';
-import { TRI_SECURITY_OPTIONS_TOKEN, NbAclOptions, NbAclRole, TriAccessControl } from '../security.options';
+import { TRI_SECURITY_OPTIONS_TOKEN, TriAclOptions, TriAclRole, TriAccessControl } from '../security.options';
 
 const shallowObjectClone = (o) => Object.assign({}, o);
 const shallowArrayClone = (a) => Object.assign([], a);
@@ -26,7 +26,7 @@ export class TriAclService {
 
   private state: TriAccessControl = {};
 
-  constructor(@Optional() @Inject(TRI_SECURITY_OPTIONS_TOKEN) protected settings: NbAclOptions = {}) {
+  constructor(@Optional() @Inject(TRI_SECURITY_OPTIONS_TOKEN) protected settings: TriAclOptions = {}) {
 
     if (settings.accessControl) {
       this.setAccessControl(settings.accessControl);
@@ -103,7 +103,7 @@ export class TriAclService {
     return parentCan || this.exactCan(role, permission, resource);
   }
 
-  private getRole(role: string): NbAclRole {
+  private getRole(role: string): TriAclRole {
     return this.state[role];
   }
 

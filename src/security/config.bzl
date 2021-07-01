@@ -1,3 +1,0 @@
-SECURITY_ENTRYPOINTS = [
-]
-SECURITY_TARGETS = ["//src/security"]

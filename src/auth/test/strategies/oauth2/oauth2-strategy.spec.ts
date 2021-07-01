@@ -4,7 +4,7 @@ import { async, inject, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
-import { NB_WINDOW } from '@nebular/theme';
+import { TRI_WINDOW } from '@nebular/theme';
 import { TriOAuth2AuthStrategy } from './oauth2-strategy';
 import { TriOAuth2ClientAuthMethod, TriOAuth2GrantType, TriOAuth2ResponseType } from './oauth2-strategy.options';
 import { TriAuthResult } from '../../services/auth-result';
@@ -83,7 +83,7 @@ describe('oauth2-auth-strategy', () => {
       providers: [
         TriOAuth2AuthStrategy,
         { provide: ActivatedRoute, useFactory: () => routeMock },
-        { provide: NB_WINDOW, useFactory: () => windowMock }, // useValue will clone, we need reference
+        { provide: TRI_WINDOW, useFactory: () => windowMock }, // useValue will clone, we need reference
       ],
     });
   });

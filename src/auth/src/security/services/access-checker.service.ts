@@ -6,7 +6,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { NbRoleProvider } from './role.provider';
+import { TriRoleProvider } from './role.provider';
 import { TriAclService } from './acl.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -19,7 +19,7 @@ import { map } from 'rxjs/operators';
 @Injectable()
 export class TriAccessChecker {
 
-  constructor(protected roleProvider: NbRoleProvider, protected acl: TriAclService) {
+  constructor(protected roleProvider: TriRoleProvider, protected acl: TriAclService) {
   }
 
   /**

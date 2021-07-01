@@ -6,17 +6,17 @@
 
 import { InjectionToken } from '@angular/core';
 
-export interface NbAclRole {
+export interface TriAclRole {
   parent?: string;
   [permission: string]: string|string[]|undefined;
 }
 
 export interface TriAccessControl {
-  [role: string]: NbAclRole;
+  [role: string]: TriAclRole;
 }
 
-export interface NbAclOptions {
+export interface TriAclOptions {
   accessControl?: TriAccessControl;
 }
 
-export const TRI_SECURITY_OPTIONS_TOKEN = new InjectionToken<NbAclOptions>('Nebular Security Options');
+export const TRI_SECURITY_OPTIONS_TOKEN = new InjectionToken<TriAclOptions>('Nebular Security Options');
