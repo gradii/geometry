@@ -10,12 +10,14 @@ $tooltip-arrow-width : 0.3125rem !default;
 //** Tooltip distance with trigger
 $tooltip-distance    : $tooltip-arrow-width - 0.0625rem + 0.25rem !default;
 
+$tooltip-font-size   : v.$font-size-base * .875 !default;
+
 // Base class
 .#{$tooltip-prefix-cls} {
   z-index     : v.$zindex-tooltip;
   display     : block;
   visibility  : visible;
-  font-size   : v.$font-size-base;
+  font-size   : $tooltip-font-size;
   line-height : v.$line-height-base;
 
   @at-root &-hidden {
