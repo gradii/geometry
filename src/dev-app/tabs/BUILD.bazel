@@ -10,9 +10,12 @@ ng_module(
         ":dev_tabs_scss",
     ],
     deps = [
+        "//src/triangle/input",
         "//src/triangle/tabs",
         "//src/triangle/core",
+        "//src/triangle/checkbox",
         "//src/triangle/select",
+        "//src/triangle/icon",
         "//src/triangle/input-number",
         "@npm//@angular/common",
         "@npm//@angular/router",

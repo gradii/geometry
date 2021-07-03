@@ -26,12 +26,12 @@ $card-border-radius    : v.$border-radius-base !default;
   }
 
   @at-root &-header {
-    height        : $card-head-height;
-    line-height   : $card-head-line-height;
-    padding       : ($card-head-height - $card-head-line-height)/2 ($card-padding-base);
-    box-sizing    : border-box;
-    display       : flex;
-    align-items   : center;
+    height      : $card-head-height;
+    line-height : $card-head-line-height;
+    padding     : ($card-head-height - $card-head-line-height)/2 ($card-padding-base);
+    box-sizing  : border-box;
+    display     : flex;
+    align-items : center;
 
     @at-root #{&}-title {
       font-size     : v.$font-size-lg;
@@ -49,7 +49,8 @@ $card-border-radius    : v.$border-radius-base !default;
     @at-root #{&}-extra {
       order       : 1;
       margin-left : auto;
-      display     : inline-block;
+      display     : inline-flex;
+      align-items : center;
     }
   }
 

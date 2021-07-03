@@ -1,0 +1,27 @@
+<!--<mat-form-field appearance="fill">-->
+  <label>Selected tab index</label>
+  <input triInput type="number" [formControl]="selected">
+<!--</mat-form-field>-->
+
+<div>
+  <button tri-button
+          class="example-add-tab-button"
+          (click)="addTab(selectAfterAdding.checked)">
+    Add new tab
+  </button>
+  <tri-checkbox #selectAfterAdding> Select tab after adding </tri-checkbox>
+</div>
+
+<tri-tab-group [selectedIndex]="selected.value"
+               (selectedIndexChange)="selected.setValue($event)">
+  <tri-tab *ngFor="let tab of tabs; let index = index" [label]="tab">
+    Contents for {{tab}} tab
+
+    <button mat-raised-button
+            class="example-delete-tab-button"
+            [disabled]="tabs.length === 1"
+            (click)="removeTab(index)">
+      Delete Tab
+    </button>
+  </tri-tab>
+</tri-tab-group>

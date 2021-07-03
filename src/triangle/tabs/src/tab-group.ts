@@ -4,39 +4,18 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { FocusOrigin } from '@angular/cdk/a11y';
 import {
-  BooleanInput,
-  coerceBooleanProperty,
-  coerceNumberProperty,
-  NumberInput
+  BooleanInput, coerceBooleanProperty, coerceNumberProperty, NumberInput
 } from '@angular/cdk/coercion';
 import {
-  AfterContentChecked,
-  AfterContentInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ContentChildren,
-  Directive,
-  ElementRef,
-  EventEmitter,
-  Inject,
-  Input,
-  OnDestroy,
-  Optional,
-  Output,
-  QueryList,
-  ViewChild,
-  ViewEncapsulation,
+  AfterContentChecked, AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component,
+  ContentChildren, Directive, ElementRef, EventEmitter, Inject, Input, OnDestroy, Optional, Output,
+  QueryList, ViewChild, ViewEncapsulation,
 } from '@angular/core';
 import { ANIMATION_MODULE_TYPE } from '@angular/platform-browser/animations';
 import {
-  CanColor,
-  CanColorCtor,
-  CanDisableRipple,
-  CanDisableRippleCtor,
-  mixinColor,
-  mixinDisableRipple,
+  CanColor, CanColorCtor, CanDisableRipple, CanDisableRippleCtor, mixinColor, mixinDisableRipple,
   ThemePalette,
 } from '@gradii/triangle/core';
 import { merge, Subscription } from 'rxjs';
@@ -103,7 +82,7 @@ export abstract class _TriTabGroupBase extends _TriTabGroupMixinBase implements 
 
 
   /** Position of the tab header. */
-  @Input() headerPosition: TriTabHeaderPosition = 'above';
+  @Input() headerPosition: TriTabHeaderPosition                         = 'above';
   /**
    * Whether pagination should be disabled. This can be used to avoid unnecessary
    * layout recalculations if it's known that pagination won't be required.
@@ -111,23 +90,23 @@ export abstract class _TriTabGroupBase extends _TriTabGroupMixinBase implements 
   @Input()
   disablePagination: boolean;
   /** Output to enable support for two-way binding on `[(selectedIndex)]` */
-  @Output() readonly selectedIndexChange: EventEmitter<number> = new EventEmitter<number>();
+  @Output() readonly selectedIndexChange: EventEmitter<number>          = new EventEmitter<number>();
   /** Event emitted when focus has changed within a tab group. */
-  @Output() readonly focusChange: EventEmitter<TriTabChangeEvent> =
+  @Output() readonly focusChange: EventEmitter<TriTabChangeEvent>       =
     new EventEmitter<TriTabChangeEvent>();
   /** Event emitted when the body animation has completed */
-  @Output() readonly animationDone: EventEmitter<void> = new EventEmitter<void>();
+  @Output() readonly animationDone: EventEmitter<void>                  = new EventEmitter<void>();
   /** Event emitted when the tab selection has changed. */
   @Output() readonly selectedTabChange: EventEmitter<TriTabChangeEvent> =
     new EventEmitter<TriTabChangeEvent>(true);
   /** The tab index that should be selected after the content has been checked. */
-  private _indexToSelect: number | null = 0;
+  private _indexToSelect: number | null                                 = 0;
   /** Snapshot of the height of the tab body wrapper before another tab is activated. */
-  private _tabBodyWrapperHeight: number = 0;
+  private _tabBodyWrapperHeight: number                                 = 0;
   /** Subscription to tabs being added/removed. */
-  private _tabsSubscription = Subscription.EMPTY;
+  private _tabsSubscription                                             = Subscription.EMPTY;
   /** Subscription to changes in the tab labels. */
-  private _tabLabelSubscription = Subscription.EMPTY;
+  private _tabLabelSubscription                                         = Subscription.EMPTY;
   private _groupId: number;
 
   constructor(elementRef: ElementRef,
@@ -135,7 +114,7 @@ export abstract class _TriTabGroupBase extends _TriTabGroupMixinBase implements 
               @Inject(TRI_TABS_CONFIG) @Optional() defaultConfig?: TriTabsConfig,
               @Optional() @Inject(ANIMATION_MODULE_TYPE) public _animationMode?: string) {
     super(elementRef);
-    this._groupId = nextId++;
+    this._groupId          = nextId++;
     this.animationDuration = defaultConfig && defaultConfig.animationDuration ?
       defaultConfig.animationDuration : '500ms';
     this.disablePagination = defaultConfig && defaultConfig.disablePagination != null ?
@@ -324,9 +303,9 @@ export abstract class _TriTabGroupBase extends _TriTabGroupMixinBase implements 
 
   /** Removes the height of the tab body wrapper. */
   _removeTabBodyWrapperHeight(): void {
-    const wrapper = this._tabBodyWrapper.nativeElement;
+    const wrapper              = this._tabBodyWrapper.nativeElement;
     this._tabBodyWrapperHeight = wrapper.clientHeight;
-    wrapper.style.height = '';
+    wrapper.style.height       = '';
     this.animationDone.emit();
   }
 
@@ -393,6 +372,14 @@ export abstract class _TriTabGroupBase extends _TriTabGroupMixinBase implements 
     // (since Math.max(NaN, 0) === NaN).
     return Math.min(this._tabs.length - 1, Math.max(index || 0, 0));
   }
+
+  /** Callback for when the focused state of a tab has changed. */
+  _tabFocusChanged(focusOrigin: FocusOrigin, index: number) {
+    if (focusOrigin) {
+      this._tabHeader.focusIndex = index;
+    }
+  }
+
 }
 
 /**
@@ -408,10 +395,12 @@ export abstract class _TriTabGroupBase extends _TriTabGroupMixinBase implements 
   // tslint:disable-next-line:validate-decorators
   changeDetection: ChangeDetectionStrategy.Default,
   inputs         : ['color', 'disableRipple'],
-  providers      : [{
-    provide    : TRI_TAB_GROUP,
-    useExisting: TriTabGroup
-  }],
+  providers      : [
+    {
+      provide    : TRI_TAB_GROUP,
+      useExisting: TriTabGroup
+    }
+  ],
   host           : {
     'class'                                : 'tri-tab-group',
     '[class.tri-tab-group-type-card]'      : 'type==="card"',

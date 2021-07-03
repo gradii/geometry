@@ -4,22 +4,21 @@
                 [disablePagination]="disablePagination"
                 [disableRipple]="disableRipple"
                 [selectedIndex]="selectedIndex || 0">
-  <div (click)="_handleClick(tab, tabHeader, i)" *ngFor="let tab of _tabs; let i = index"
-       [attr.aria-controls]="_getTabContentId(i)" [attr.aria-label]="tab.ariaLabel || null"
-       [attr.aria-labelledby]="(!tab.ariaLabel && tab.ariaLabelledby) ? tab.ariaLabelledby : null"
-       [attr.aria-posinset]="i + 1"
-       [attr.aria-selected]="selectedIndex == i"
-       [attr.aria-setsize]="_tabs.length"
+  <div class="tri-tab-label tri-focus-indicator" role="tab" triTabLabelWrapper tri-ripple cdkMonitorElementFocus
+       *ngFor="let tab of _tabs; let i = index"
+       [id]="_getTabLabelId(i)"
        [attr.tabIndex]="_getTabIndex(tab, i)"
+       [attr.aria-posinset]="i + 1"
+       [attr.aria-setsize]="_tabs.length"
+       [attr.aria-controls]="_getTabContentId(i)"
+       [attr.aria-selected]="selectedIndex == i"
+       [attr.aria-label]="tab.ariaLabel || null"
+       [attr.aria-labelledby]="(!tab.ariaLabel && tab.ariaLabelledby) ? tab.ariaLabelledby : null"
        [class.tri-tab-label-active]="selectedIndex == i"
        [disabled]="tab.disabled"
-       [id]="_getTabLabelId(i)"
        [triRippleDisabled]="tab.disabled || disableRipple"
-       cdkMonitorElementFocus
-       class="tri-tab-label tri-focus-indicator"
-       role="tab"
-       tri-ripple
-       triTabLabelWrapper>
+       (click)="_handleClick(tab, tabHeader, i)"
+       (cdkFocusChange)="_tabFocusChanged($event, i)">
 
 
     <div class="tri-tab-label-content">
