@@ -10,12 +10,14 @@ $card-head-line-height : 1.5rem !default;
 $card-border-radius    : v.$border-radius-base !default;
 
 .#{$card-prefix-cls} {
-  border-radius : $card-border-radius;
-  font-size     : v.$font-size-base;
-  position      : relative;
-  display       : block;
-  overflow      : hidden;
-  transition    : background-color, width, height, padding, margin .3s;
+  border-radius  : $card-border-radius;
+  font-size      : v.$font-size-base;
+  position       : relative;
+  display        : flex;
+  flex-direction : column;
+  align-items    : stretch;
+  overflow       : hidden;
+  transition     : background-color, width, height, padding, margin .3s;
 
   @at-root &:not(#{&}-no-hovering):hover {
     box-shadow   : v.$box-shadow-base;
@@ -56,7 +58,7 @@ $card-border-radius    : v.$border-radius-base !default;
 
   @at-root &-body {
     padding : $card-padding-base;
-    display : block;
+    flex    : 1;
   }
 
   @at-root &-footer {
