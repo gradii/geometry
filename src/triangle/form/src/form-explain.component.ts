@@ -26,8 +26,10 @@ enum ShowFlags {
 export class FormExplainComponent implements OnDestroy, OnInit {
   @Input()
   source: FormControl;
+
   @Input()
   showable: boolean;
+
   private subscriptions;
 
   constructor(private _formItem: FormItemComponent) {

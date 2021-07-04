@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-export * from './src/form.directive';
+export * from './src/form.component';
 export * from './src/form.module';
 export * from './src/form-control.component';
 export * from './src/form-explain.component';

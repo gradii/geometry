@@ -12,6 +12,7 @@ import { TriButtonModule } from '@gradii/triangle/button';
 import { TriDatePickerModule } from '@gradii/triangle/date-picker';
 import { TriFormModule } from '@gradii/triangle/form';
 import { TriGridModule } from '@gradii/triangle/grid';
+import { TriIconModule } from '@gradii/triangle/icon';
 import { TriInputModule } from '@gradii/triangle/input';
 import { TriInputNumberModule } from '@gradii/triangle/input-number';
 import { TriRadioModule } from '@gradii/triangle/radio';
@@ -32,7 +33,7 @@ import { TriDemoFormValidateComponent } from './tri-demo-form/tri-demo-form-vali
 
 
 @NgModule({
-  imports     : [
+  imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -63,6 +64,7 @@ import { TriDemoFormValidateComponent } from './tri-demo-form/tri-demo-form-vali
       }
     ]),
     TriButtonModule,
+    TriIconModule,
   ],
   declarations: [
     DevForm,

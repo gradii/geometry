@@ -7,9 +7,9 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: 'tri-form-extra, [triFormExtra], [tri-form-extra]',
+  selector: 'tri-form-extra',
   host    : {
-    '[class.tri-form-extra]': 'true'
+    'class': 'tri-form-extra'
   }
 })
 export class FormExtraDirective {

@@ -15,31 +15,31 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   template: `
     <form tri-form [layout]="'inline'" [formGroup]="validateForm" (ngSubmit)="_submitForm()">
       <tri-form-item>
-        <div tri-form-control [validateStatus]="validateForm.controls.userName">
+        <tri-form-control [validateStatus]="validateForm.controls.userName">
           <tri-input formControlName="userName" [placeholder]="'Username'" [size]="'large'">
             <ng-template #prefix>
-              <i class="anticon anticon-user"></i>
+              <tri-icon svgIcon="outline:user"></tri-icon>
             </ng-template>
           </tri-input>
           <tri-form-explain
             *ngIf="validateForm.controls.userName.dirty&&validateForm.controls.userName.hasError('required')">
             Please input your username!
           </tri-form-explain>
-        </div>
+        </tri-form-control>
       </tri-form-item>
       <tri-form-item>
-        <div tri-form-control [validateStatus]="validateForm.controls.password">
+        <tri-form-control [validateStatus]="validateForm.controls.password">
           <tri-input formControlName="password" [type]="'password'" [placeholder]="'Password'"
                      [size]="'large'">
             <ng-template #prefix>
-              <i class="anticon anticon-lock"></i>
+              <tri-icon svgIcon="outline:lock"></tri-icon>
             </ng-template>
           </tri-input>
           <tri-form-explain
             *ngIf="validateForm.controls.password.dirty&&validateForm.controls.password.hasError('required')">
             Please input your Password!
           </tri-form-explain>
-        </div>
+        </tri-form-control>
       </tri-form-item>
       <button tri-button [type]="'primary'" [size]="'large'" [disabled]="!validateForm.valid">Log
         in

@@ -4,19 +4,21 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Directive, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
-@Directive({
-  selector: '[tri-form]',
-  host    : {
+@Component({
+  selector     : '[tri-form]',
+  encapsulation: ViewEncapsulation.None,
+  template     : `
+    <ng-content></ng-content>`,
+  styleUrls    : ['../style/form.css'],
+  host         : {
     '[class.tri-form-horizontal]': '_layout == "horizontal"',
     '[class.tri-form-vertical]'  : '_layout == "vertical"',
     '[class.tri-form-inline]'    : '_layout == "inline"',
   }
 })
-export class FormDirective implements OnInit {
-  /** @internal */
-  _el: HTMLElement;
+export class FormComponent implements OnInit {
   @Input()
   fixedLabel: number;
 

@@ -18,7 +18,7 @@ import { FormSplitDirective } from './form-split.directive';
 import { FormTextDirective } from './form-text.directive';
 import { FormValidatorsMessagePipe } from './form-validators-message.pipe';
 
-import { FormDirective } from './form.directive';
+import { FormComponent } from './form.component';
 
 /**
  *
@@ -82,7 +82,7 @@ import { FormDirective } from './form.directive';
   declarations: [
     FormExtraDirective,
     FormLabelDirective,
-    FormDirective,
+    FormComponent,
     FormItemComponent,
     FormControlComponent,
     FormExplainComponent,
@@ -100,7 +100,7 @@ import { FormDirective } from './form.directive';
   exports     : [
     FormExtraDirective,
     FormLabelDirective,
-    FormDirective,
+    FormComponent,
     FormItemComponent,
     FormControlComponent,
     FormExplainComponent,

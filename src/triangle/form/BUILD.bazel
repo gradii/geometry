@@ -16,7 +16,7 @@ ng_module(
         ["**/*.ts"],
         exclude = ["**/*.spec.ts"],
     ),
-    assets = [":form_scss", ":form_item_scss"] + glob(["**/*.html"]),
+    assets = [":style/form.css", ":style/form-item.css"] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/form",
     deps = [
         "//src/triangle/core",

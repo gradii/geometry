@@ -60,7 +60,7 @@ $rfs-base-value-unit              : math.unit($rfs-base-value);
 @if $rfs-base-value-unit == px {
   $rfs-base-value : $rfs-base-value / ($rfs-base-value * 0 + 1);
 } @else if $rfs-base-value-unit == rem {
-  $rfs-base-value : math.div($rfs-base-value, $rfs-base-value * 0 + 1 / $rfs-rem-value)
+  $rfs-base-value : $rfs-base-value / ( $rfs-base-value * 0 + 1 / $rfs-rem-value)
 }
 
 // Cache $rfs-breakpoint unit to prevent multiple calls
