@@ -32,8 +32,7 @@ import { extractFormat } from '../utils';
           }">
         </ng-template>
         <ng-container [ngSwitch]="column.editor" *ngIf="!column.editTemplate">
-          <div tri-form-control
-               [hasFeedback]="true">
+          <tri-form-control [hasFeedback]="true">
 
             <tri-input-number
               *ngSwitchCase="'numeric'"
@@ -72,7 +71,7 @@ import { extractFormat } from '../utils';
               [formControl]="formGroup.get(column.field)"
             ></tri-input>
 
-          </div>
+          </tri-form-control>
         </ng-container>
       </ng-container>
     </ng-container>

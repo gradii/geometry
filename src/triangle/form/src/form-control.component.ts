@@ -8,28 +8,20 @@ import { Component, ContentChild, HostBinding, Input } from '@angular/core';
 import { AbstractControl, NgControl } from '@angular/forms';
 
 @Component({
-  selector: 'tri-form-control, [tri-form-control], [triFormControl]',
+  selector: 'tri-form-control',
   template: `
-    <div class="tri-form-item-control"
-         [class.has-warning]="isWarning"
-         [class.has-error]="isError"
-         [class.has-success]="isSuccess"
-         [class.has-feedback]="hasFeedBack"
-         [class.is-validating]="isValidate"
-    >
-      <span class="tri-form-item-children">
-        <ng-content></ng-content>
-        <span *ngIf="hasFeedback" class="tri-form-item-children-icon">
-          <i class="anticon"
-             [class.anticon-check-circle]="isSuccess"
-             [class.anticon-close-circle]="isError"
-             [class.anticon-exclamation-circle]="isWarning"
-          ></i>
-        </span>
+    <span class="tri-form-item-children">
+      <ng-content></ng-content>
+      <span *ngIf="hasFeedback" class="tri-form-item-children-icon">
+        <i class="anticon"
+           [class.anticon-check-circle]="isSuccess"
+           [class.anticon-close-circle]="isError"
+           [class.anticon-exclamation-circle]="isWarning"
+        ></i>
       </span>
-      <ng-content select="tri-form-explain"></ng-content>
-      <ng-content select="tri-form-extra"></ng-content>
-    </div>
+    </span>
+    <ng-content select="tri-form-explain"></ng-content>
+    <ng-content select="tri-form-extra"></ng-content>
   `,
   host    : {
     '[class.tri-form.item-control-wrapper]': 'true',
@@ -65,11 +57,11 @@ export class FormControlComponent {
   }
 
   @HostBinding(`class.tri-form-item-control-wrapper`)
-  _validateStatus;
+  _validateStatus: string | AbstractControl;
 
   @Input()
   get validateStatus(): string | AbstractControl {
-    return this._validateStatus || this.ngControl.control;
+    return this._validateStatus || this.ngControl && this.ngControl.control;
   }
 
   /**

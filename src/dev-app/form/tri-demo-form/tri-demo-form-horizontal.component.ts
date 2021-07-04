@@ -15,54 +15,53 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
   template: `
     <form tri-form [formGroup]="validateForm" (ngSubmit)="_submitForm()">
       <tri-form-item tri-row>
-        <div tri-form-label tri-col [sm]="6" [xs]="24">
+        <tri-form-label tri-col [sm]="6" [xs]="24">
           <label for="email" tri-form-item-required>E-mail</label>
-        </div>
-        <div tri-form-control tri-col [sm]="14" [xs]="24" [hasFeedback]="true"
-             [validateStatus]="getFormControl('email')">
+        </tri-form-label>
+        <tri-form-control tri-col [sm]="14" [xs]="24" [hasFeedback]="true"
+                          [validateStatus]="getFormControl('email')">
           <tri-input [size]="'large'" formControlName="email" [id]="'email'"></tri-input>
-          <div tri-form-explain
-               *ngIf="getFormControl('email').dirty&&getFormControl('email').hasError('email')">The
+          <tri-form-explain
+            *ngIf="getFormControl('email').dirty&&getFormControl('email').hasError('email')">The
             input is not valid E-mail!
-          </div>
-        </div>
+          </tri-form-explain>
+        </tri-form-control>
       </tri-form-item>
       <tri-form-item tri-row>
-        <div tri-form-label tri-col [sm]="6" [xs]="24">
+        <tri-form-label tri-col [sm]="6" [xs]="24">
           <label for="password" tri-form-item-required>Password</label>
-        </div>
-        <div tri-form-control tri-col [sm]="14" [xs]="24" [hasFeedback]="true"
-             [validateStatus]="getFormControl('password')">
+        </tri-form-label>
+        <tri-form-control tri-col [sm]="14" [xs]="24" [hasFeedback]="true"
+                          [validateStatus]="getFormControl('password')">
           <tri-input [size]="'large'" formControlName="password" [type]="'password'"
-                     [id]="'password'"
-                     (ngModelChange)="updateConfirmValidator()"></tri-input>
-          <div tri-form-explain
-               *ngIf="getFormControl('password').dirty&&getFormControl('password').hasError('required')">
+                     [id]="'password'" (ngModelChange)="updateConfirmValidator()"></tri-input>
+          <tri-form-explain
+            *ngIf="getFormControl('password').dirty&&getFormControl('password').hasError('required')">
             Please input
             your password!
-          </div>
-        </div>
+          </tri-form-explain>
+        </tri-form-control>
       </tri-form-item>
       <tri-form-item tri-row>
-        <div tri-form-label tri-col [sm]="6" [xs]="24">
+        <tri-form-label tri-col [sm]="6" [xs]="24">
           <label for="checkPassword" tri-form-item-required>Confirm Password</label>
-        </div>
-        <div tri-form-control tri-col [sm]="14" [xs]="24" [hasFeedback]="true"
-             [validateStatus]="getFormControl('checkPassword')">
+        </tri-form-label>
+        <tri-form-control tri-col [sm]="14" [xs]="24" [hasFeedback]="true"
+                          [validateStatus]="getFormControl('checkPassword')">
           <tri-input [size]="'large'" formControlName="checkPassword" [type]="'password'"
                      [id]="'checkPassword'"></tri-input>
-          <div tri-form-explain
-               *ngIf="getFormControl('checkPassword').dirty&&getFormControl('checkPassword').hasError('required')">
+          <tri-form-explain
+            *ngIf="getFormControl('checkPassword').dirty&&getFormControl('checkPassword').hasError('required')">
             Please confirm your password!
-          </div>
-          <div tri-form-explain
-               *ngIf="getFormControl('checkPassword').dirty&&getFormControl('checkPassword').hasError('confirm')">
+          </tri-form-explain>
+          <tri-form-explain
+            *ngIf="getFormControl('checkPassword').dirty&&getFormControl('checkPassword').hasError('confirm')">
             Two passwords that you enter is inconsistent!
-          </div>
-        </div>
+          </tri-form-explain>
+        </tri-form-control>
       </tri-form-item>
       <tri-form-item tri-row>
-        <div tri-form-label tri-col [sm]="6" [xs]="24">
+        <tri-form-label tri-col [sm]="6" [xs]="24">
           <label for="nickname" tri-form-item-required>
             <span>
               Nickname
@@ -70,23 +69,23 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
                    class="anticon anticon-question-circle-o"></i>
             </span>
           </label>
-        </div>
-        <div tri-form-control tri-col [sm]="14" [xs]="24" [hasFeedback]="true"
-             [validateStatus]="getFormControl('nickname')">
+        </tri-form-label>
+        <tri-form-control tri-col [sm]="14" [xs]="24" [hasFeedback]="true"
+                          [validateStatus]="getFormControl('nickname')">
           <tri-input [size]="'large'" formControlName="nickname" [id]="'nickname'"></tri-input>
-          <div tri-form-explain
-               *ngIf="getFormControl('nickname').dirty&&getFormControl('nickname').hasError('required')">
+          <tri-form-explain
+            *ngIf="getFormControl('nickname').dirty&&getFormControl('nickname').hasError('required')">
             Please input
             your nickname!
-          </div>
-        </div>
+          </tri-form-explain>
+        </tri-form-control>
       </tri-form-item>
       <tri-form-item tri-row>
-        <div tri-form-label tri-col [sm]="6" [xs]="24">
+        <tri-form-label tri-col [sm]="6" [xs]="24">
           <label for="phoneNumber" tri-form-item-required>Phone Number</label>
-        </div>
-        <div tri-form-control tri-col [sm]="14" [xs]="24" [hasFeedback]="true"
-             [validateStatus]="getFormControl('phoneNumber')">
+        </tri-form-label>
+        <tri-form-control tri-col [sm]="14" [xs]="24" [hasFeedback]="true"
+                          [validateStatus]="getFormControl('phoneNumber')">
           <tri-input-group [size]="'large'">
             <tri-select formControlName="phoneNumberPrefix" style="width: 25%;">
               <tri-option [label]="'+86'" [value]="'+86'"></tri-option>
@@ -94,32 +93,31 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
             </tri-select>
             <input formControlName="phoneNumber" id="'phoneNumber'" tri-input style="width: 75%;">
           </tri-input-group>
-          <div tri-form-explain
-               *ngIf="getFormControl('phoneNumber').dirty&&getFormControl('phoneNumber').hasError('required')">
+          <tri-form-explain
+            *ngIf="getFormControl('phoneNumber').dirty&&getFormControl('phoneNumber').hasError('required')">
             Please
             input your phone number!
-          </div>
-        </div>
+          </tri-form-explain>
+        </tri-form-control>
       </tri-form-item>
       <tri-form-item tri-row>
-        <div tri-form-label tri-col [sm]="6" [xs]="24">
+        <tri-form-label tri-col [sm]="6" [xs]="24">
           <label for="website" tri-form-item-required>Website</label>
-        </div>
-        <div tri-form-control tri-col [sm]="14" [xs]="24" [hasFeedback]="true"
-             [validateStatus]="getFormControl('website')">
+        </tri-form-label>
+        <tri-form-control tri-col [sm]="14" [xs]="24" [hasFeedback]="true"
+                          [validateStatus]="getFormControl('website')">
           <tri-input [size]="'large'" formControlName="website" [id]="'website'"></tri-input>
-          <div tri-form-explain
-               *ngIf="getFormControl('website').dirty&&getFormControl('website').hasError('required')">
+          <tri-form-explain
+            *ngIf="getFormControl('website').dirty&&getFormControl('website').hasError('required')">
             Please input website!
-          </div>
-        </div>
+          </tri-form-explain>
+        </tri-form-control>
       </tri-form-item>
       <tri-form-item tri-row>
-        <div tri-form-label tri-col [sm]="6" [xs]="24">
+        <tri-form-label tri-col [sm]="6" [xs]="24">
           <label for="captcha" tri-form-item-required>Captcha</label>
-        </div>
-        <div tri-form-control tri-col [sm]="14" [xs]="24"
-             [validateStatus]="getFormControl('captcha')">
+        </tri-form-label>
+        <tri-form-control tri-col [sm]="14" [xs]="24" [validateStatus]="getFormControl('captcha')">
           <div tri-row [gutter]="8">
             <div tri-col [span]="12">
               <tri-input [size]="'large'" formControlName="captcha" [id]="'captcha'"></tri-input>
@@ -129,23 +127,23 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
             </div>
           </div>
           <div tri-form-extra>We must make sure that your are a human.</div>
-          <div tri-form-explain
-               *ngIf="getFormControl('captcha').dirty&&getFormControl('captcha').hasError('required')">
+          <tri-form-explain
+            *ngIf="getFormControl('captcha').dirty&&getFormControl('captcha').hasError('required')">
             Please input the captcha you got!
-          </div>
-        </div>
+          </tri-form-explain>
+        </tri-form-control>
       </tri-form-item>
       <tri-form-item tri-row style="margin-bottom:8px;">
-        <div tri-form-control tri-col [span]="14" [offset]="6">
+        <tri-form-control tri-col [span]="14" [offset]="6">
           <tri-checkbox formControlName="agree">
             <span>I have read the <a>agreement</a></span>
           </tri-checkbox>
-        </div>
+        </tri-form-control>
       </tri-form-item>
       <tri-form-item tri-row style="margin-bottom:8px;">
-        <div tri-form-control tri-col [span]="14" [offset]="6">
+        <tri-form-control tri-col [span]="14" [offset]="6">
           <button tri-button [size]="'large'" [type]="'primary'">Register</button>
-        </div>
+        </tri-form-control>
       </tri-form-item>
     </form>`,
 
