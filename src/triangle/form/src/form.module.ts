@@ -11,7 +11,7 @@ import { FormErrorMessageDirective } from './form-error-message.directive';
 import { FormExplainComponent } from './form-explain.component';
 import { FormExtraDirective } from './form-extra.directive';
 import { FormItemRequiredDirective } from './form-item-required.directive';
-import { FormItemDirective } from './form-item.directive';
+import { FormItemComponent } from './form-item.component';
 import { FormLabelDirective } from './form-label.directive';
 import { FormNoFeedbackDirective } from './form-no-feedback.directive';
 import { FormSplitDirective } from './form-split.directive';
@@ -83,7 +83,7 @@ import { FormDirective } from './form.directive';
     FormExtraDirective,
     FormLabelDirective,
     FormDirective,
-    FormItemDirective,
+    FormItemComponent,
     FormControlComponent,
     FormExplainComponent,
     FormExplainComponent,
@@ -95,13 +95,13 @@ import { FormDirective } from './form.directive';
     FormNoFeedbackDirective,
 
     // pipes
-    [FormValidatorsMessagePipe]
+    FormValidatorsMessagePipe
   ],
   exports     : [
     FormExtraDirective,
     FormLabelDirective,
     FormDirective,
-    FormItemDirective,
+    FormItemComponent,
     FormControlComponent,
     FormExplainComponent,
     FormExplainComponent,

@@ -12,7 +12,7 @@ import { RadioOption } from './radio.component';
   selector: '[tri-radio-tile], [triRadioTile]'
 })
 export class RadioTileDirective implements RadioOption, OnChanges, OnDestroy {
-  _focused = false;
+  _focused                     = false;
   @Input() toggleable: boolean = true;
 
   constructor(protected radioGroup: RadioGroupDirective) {
@@ -30,14 +30,14 @@ export class RadioTileDirective implements RadioOption, OnChanges, OnDestroy {
     this._label = value;
   }
 
-  _value: string;
+  _value: string | number | any;
 
   /**
    * Get radio value
    * 获取当前Radio标示
    */
   @Input()
-  get value(): string {
+  get value(): string | number | any {
     return this._value;
   }
 
@@ -46,7 +46,7 @@ export class RadioTileDirective implements RadioOption, OnChanges, OnDestroy {
    * 设置当前Radio标示
    * @param  value
    */
-  set value(value: string) {
+  set value(value: string | number | any) {
     if (this._value === value) {
       return;
     }

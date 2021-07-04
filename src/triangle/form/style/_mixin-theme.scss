@@ -1,30 +1,35 @@
-@import "../../core/style/mixins";
-@import "../../core/style/variables";
-@import "../../input/style/input-theme";
+@use "sass:map";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
+@use "../../core/themes/theme";
+@use "../../core/style/theming";
+@use "../../input/style/input-theme";
 
-@mixin tri-form-control-validation-theme(
-  $theme
+$foreground       : theme.$foreground !default;
+$background       : theme.$background !default;
+
+$text-color       : theming.tri-color($foreground, input-color) !default;
+$border-color     : theming.tri-color($foreground, input-border-color) !default;
+$background-color : theming.tri-color($foreground, input-bg) !default;
+
+@mixin form-control-validation(
+  $text-color: $text-color, $border-color: $border-color, $background-color: $background-color
 ) {
-  $foreground       : map-get($theme, foreground);
-  $background       : map-get($theme, background);
 
-  $text-color       : tri-color($foreground, input-color);
-  $border-color     : tri-color($foreground, input-border-color);
-  $background-color : tri-color($foreground, input-bg);
 
-  .#{$tri-prefix}-form-explain,
-  .#{$tri-prefix}-form-split {
+  .#{v.$tri-prefix}-form-explain,
+  .#{v.$tri-prefix}-form-split {
     color : $text-color;
   }
   // 输入框的不同校验状态
-  .#{$tri-prefix}-input {
+  .#{v.$tri-prefix}-input {
     //@at-root &,
     &:hover {
       border-color : $border-color;
     }
 
     @at-root &:focus {
-      @include tri-input-active-theme($theme, $border-color);
+      @include input-theme.tri-input-active-theme($border-color);
     }
 
     @at-root &:not([disabled]):hover {
@@ -32,20 +37,20 @@
     }
   }
 
-  .#{$tri-prefix}-calendar-picker-open .#{$tri-prefix}-calendar-picker-input {
-    @include tri-input-active-theme($theme, $border-color);
+  .#{v.$tri-prefix}-calendar-picker-open .#{v.$tri-prefix}-calendar-picker-input {
+    @include input-theme.tri-input-active-theme($border-color);
   }
 
-  .#{$tri-prefix}-input-prefix {
+  .#{v.$tri-prefix}-input-prefix {
     color : $text-color,
   }
 
-  .#{$tri-prefix}-input-group-addon {
+  .#{v.$tri-prefix}-input-group-addon {
     //color            : $text-color;
     border-color     : $border-color;
     background-color : $background-color;
 
-    + .#{$tri-prefix}-input {
+    + .#{v.$tri-prefix}-input {
       border-top    : 1px solid $border-color;
       border-bottom : 1px solid $border-color;
     }

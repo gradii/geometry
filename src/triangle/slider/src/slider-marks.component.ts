@@ -112,9 +112,9 @@ export type Mark =
   label: string;
 };
 
-export class Marks {
-  number: Mark;
-}
+export type Marks = {
+  [key: number]: Mark;
+};
 
 export class MarksArray extends Array<any> {
   [index: number]: {

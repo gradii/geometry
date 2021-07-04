@@ -16,7 +16,7 @@ ng_module(
         ["**/*.ts"],
         exclude = ["**/*.spec.ts"],
     ),
-    assets = [] + glob(["**/*.html"]),
+    assets = [":form_scss", ":form_item_scss"] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/form",
     deps = [
         "//src/triangle/core",
@@ -40,6 +40,15 @@ sass_library(
 sass_binary(
     name = "form_scss",
     src = "style/form.scss",
+    deps = [
+        "//src/triangle/form:form_scss_lib",
+    ],
+)
+
+
+sass_binary(
+    name = "form_item_scss",
+    src = "style/form-item.scss",
     deps = [
         "//src/triangle/form:form_scss_lib",
     ],

@@ -5,7 +5,7 @@
  */
 
 import { Component, ContentChild, HostBinding, Input } from '@angular/core';
-import { NgControl } from '@angular/forms';
+import { AbstractControl, NgControl } from '@angular/forms';
 
 @Component({
   selector: 'tri-form-control, [tri-form-control], [triFormControl]',
@@ -50,6 +50,7 @@ export class FormControlComponent {
 
   _hasFeedback = false;
 
+  @Input()
   get hasFeedback() {
     return this._hasFeedback;
   }
@@ -59,7 +60,6 @@ export class FormControlComponent {
    * 当添加该属性时，配合 validateStatus 属性使用，展示校验状态图标，建议只配合 tri-input 组件使用
    * @param  value
    */
-  @Input()
   set hasFeedback(value: boolean) {
     this._hasFeedback = value;
   }
@@ -67,16 +67,16 @@ export class FormControlComponent {
   @HostBinding(`class.tri-form-item-control-wrapper`)
   _validateStatus;
 
-  get validateStatus(): string | NgControl {
-    return this._validateStatus || this.ngControl;
+  @Input()
+  get validateStatus(): string | AbstractControl {
+    return this._validateStatus || this.ngControl.control;
   }
 
   /**
    * Validate status
    * 校验状态，属性定义为当前 `formControl` 名称可以根据异步返回数据自动显示，也可手动定义 可选：'success' 'warning' 'error' 'validating'
    */
-  @Input()
-  set validateStatus(value: string | NgControl) {
+  set validateStatus(value: string | AbstractControl) {
     this._validateStatus = value;
   }
 
@@ -88,7 +88,7 @@ export class FormControlComponent {
     return Boolean(
       this._isDirtyAndError('validating') ||
       this.validateStatus === 'pending' ||
-      (this.validateStatus && (this.validateStatus as NgControl).dirty && (this.validateStatus as NgControl).pending)
+      (this.validateStatus && (this.validateStatus as AbstractControl).dirty && (this.validateStatus as AbstractControl).pending)
     );
   }
 
@@ -96,17 +96,17 @@ export class FormControlComponent {
     return Boolean(
       this.validateStatus === 'error' ||
       (this.validateStatus &&
-        (this.validateStatus as NgControl).dirty &&
-        (this.validateStatus as NgControl).errors &&
-        (this.validateStatus as NgControl).hasError &&
-        !(this.validateStatus as NgControl).hasError('warning'))
+        (this.validateStatus as AbstractControl).dirty &&
+        (this.validateStatus as AbstractControl).errors &&
+        (this.validateStatus as AbstractControl).hasError &&
+        !(this.validateStatus as AbstractControl).hasError('warning'))
     );
   }
 
   get isSuccess(): boolean {
     return Boolean(
       this.validateStatus === 'success' ||
-      (this.validateStatus && (this.validateStatus as NgControl).dirty && (this.validateStatus as NgControl).valid)
+      (this.validateStatus && (this.validateStatus as AbstractControl).dirty && (this.validateStatus as AbstractControl).valid)
     );
   }
 
@@ -118,9 +118,9 @@ export class FormControlComponent {
     return Boolean(
       this.validateStatus === name ||
       (this.validateStatus &&
-        (this.validateStatus as NgControl).dirty &&
-        (this.validateStatus as NgControl).hasError &&
-        (this.validateStatus as NgControl).hasError(name))
+        (this.validateStatus as AbstractControl).dirty &&
+        (this.validateStatus as AbstractControl).hasError &&
+        (this.validateStatus as AbstractControl).hasError(name))
     );
   }
 }

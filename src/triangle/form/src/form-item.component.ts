@@ -4,15 +4,18 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Directive, HostBinding } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 
-@Directive({
-  selector: 'tri-form-item, [triFormItem], [tri-form-item]',
-  host    : {
+@Component({
+  selector : 'tri-form-item',
+  template : `
+    <ng-content></ng-content>`,
+  styleUrls: ['../style/form-item.css'],
+  host     : {
     '[class.tri-form-item]': 'true'
   }
 })
-export class FormItemDirective {
+export class FormItemComponent {
   constructor() {
   }
 

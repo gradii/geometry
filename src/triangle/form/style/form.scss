@@ -1,18 +1,35 @@
-@import "./mixin";
+@use "./mixin";
+@use "./mixin-theme";
+@use "../../core/themes/theme";
+@use "../../core/style/theming";
+@use "../../core/style/variables" as v;
+@use "../../input/style/input-variables";
+@use "../../input/style/input-mixin";
+@use "../../input/style/input-theme";
 
-$form-prefix-cls         : "#{$tri-prefix}-form";
-$form-component-height   : $input-height-base;
-$form-feedback-font-size : $font-size-base;
+$form-prefix-cls         : "#{v.$tri-prefix}-form" !default;
+$form-component-height   : input-variables.$input-height-base !default;
+$form-feedback-font-size : v.$font-size-base !default;
 
-@include reset-form();
+$foreground              : theme.$foreground !default;
+$background              : theme.$background !default;
+$success                 : theme.$success !default;
+$primary                 : theme.$primary !default;
+$error                   : theme.$error !default;
+$warning                 : theme.$warning !default;
+$label-required-color    : theming.tri-color(theme.$highlight) !default;
+
+$form-item-margin-bottom : 1.5rem !default;
+
+$label-color : theming.tri-color($foreground, heading-color) !default;
+$text-color-secondary: theming.tri-color($foreground, text-color-secondary);
+$border-color-base: theming.tri-color($foreground, border-color-base);
+
+
+@include mixin.reset-form();
 
 label {
   position : relative;
-
-  > .#{v.$iconfont-css} {
-    vertical-align : top;
-    font-size      : $font-size-base;
-  }
 }
 
 .#{$form-prefix-cls}-item-required:before {
@@ -21,7 +38,7 @@ label {
   content      : "*";
   font-family  : SimSun;
   line-height  : 1;
-  font-size    : $font-size-base;
+  font-size    : v.$font-size-base;
   color        : $label-required-color;
   @at-root .#{$form-prefix-cls}-hide-required-mark #{&} {
     display : none;
@@ -38,18 +55,18 @@ input[type="checkbox"] {
 }
 
 // These classes are used directly on <label>s
-.#{$tri-prefix}-radio-inline,
-.#{$tri-prefix}-radio-vertical,
-.#{$tri-prefix}-checkbox-inline,
-.#{$tri-prefix}-checkbox-vertical {
+.#{v.$tri-prefix}-radio-inline,
+.#{v.$tri-prefix}-radio-vertical,
+.#{v.$tri-prefix}-checkbox-inline,
+.#{v.$tri-prefix}-checkbox-vertical {
   @at-root &.disabled {
     cursor : not-allowed;
   }
 }
 
 // These classes are used on elements with <label> descendants
-.#{$tri-prefix}-radio,
-.#{$tri-prefix}-checkbox {
+.#{v.$tri-prefix}-radio,
+.#{v.$tri-prefix}-checkbox {
   @at-root &.disabled {
     label {
       cursor : not-allowed;
@@ -60,9 +77,9 @@ input[type="checkbox"] {
 // Form items
 // You should wrap labels and controls in .#{$form-prefix-cls}-item for optimum spacing
 .#{$form-prefix-cls}-item {
-  font-size      : $font-size-base;
+  font-size      : v.$font-size-base;
   margin-bottom  : $form-item-margin-bottom;
-  color          : $text-color;
+  color          : v.$text-color;
   vertical-align : top;
   display        : flex;
 
@@ -76,11 +93,10 @@ input[type="checkbox"] {
     line-height : $form-component-height;
     position    : relative;
     display     : inline-block;
-    @include clearfix;
   }
 
   @at-root &-with-help {
-    margin-bottom : $form-item-margin-bottom - $font-size-base * $line-height-base;
+    margin-bottom : $form-item-margin-bottom - v.$font-size-base * v.$line-height-base;
   }
 
   @at-root &-label {
@@ -96,7 +112,7 @@ input[type="checkbox"] {
       color : $label-color;
 
       @at-root &:after {
-        @if $form-item-trailing-colon {
+        @if v.$form-item-trailing-colon {
           content : ":";
         } @else {
           content : " ";
@@ -108,7 +124,7 @@ input[type="checkbox"] {
     }
   }
 
-  .#{$tri-prefix}-switch {
+  .#{v.$tri-prefix}-switch {
     margin : 4px 0;
   }
 
@@ -148,7 +164,7 @@ input[type="checkbox"] {
     width : 100%;
   }
 
-  .#{$tri-prefix}-input {
+  .#{v.$tri-prefix}-input {
     padding-right : 2rem;
 
   }
@@ -159,28 +175,26 @@ input[type="checkbox"] {
     right    : 0;
   }
 
-  // Fix overlapping between feedback icon and <Select>'s arrow.
-  // https://github.com/ant-design/ant-design/issues/4431
-  > .#{$tri-prefix}-select .#{$tri-prefix}-select-arrow,
-  > .#{$tri-prefix}-select .#{$tri-prefix}-select-selection__clear,
-  :not(.#{$tri-prefix}-input-group-addon) > .#{$tri-prefix}-select .#{$tri-prefix}-select-arrow,
-  :not(.#{$tri-prefix}-input-group-addon) > .#{$tri-prefix}-select .#{$tri-prefix}-select-selection__clear {
+  > .#{v.$tri-prefix}-select .#{v.$tri-prefix}-select-arrow,
+  > .#{v.$tri-prefix}-select .#{v.$tri-prefix}-select-selection__clear,
+  :not(.#{v.$tri-prefix}-input-group-addon) > .#{v.$tri-prefix}-select .#{v.$tri-prefix}-select-arrow,
+  :not(.#{v.$tri-prefix}-input-group-addon) > .#{v.$tri-prefix}-select .#{v.$tri-prefix}-select-selection__clear {
     right : 2rem;
   }
 
-  > .#{$tri-prefix}-select .#{$tri-prefix}-select-selection-selected-value,
-  :not(.#{$tri-prefix}-input-group-addon) > .#{$tri-prefix}-select .#{$tri-prefix}-select-selection-selected-value {
+  > .#{v.$tri-prefix}-select .#{v.$tri-prefix}-select-selection-selected-value,
+  :not(.#{v.$tri-prefix}-input-group-addon) > .#{v.$tri-prefix}-select .#{v.$tri-prefix}-select-selection-selected-value {
     padding-right : 2rem;
   }
 
-  .#{$tri-prefix}-cascader-picker {
+  .#{v.$tri-prefix}-cascader-picker {
     @at-root &-clear {
       right : 2rem;
     }
   }
 
   // Fix issue: https://github.com/ant-design/ant-design/issues/4783
-  .#{$tri-prefix}-calendar-picker {
+  .#{v.$tri-prefix}-calendar-picker {
     @at-root &-icon,
     &-clear {
       right : 2rem;
@@ -200,19 +214,19 @@ input[type="checkbox"] {
 
 // 表单下的输入框尺寸唯一: 大尺寸
 form {
-  > .#{$tri-prefix}-select .#{$tri-prefix}-select-arrow,
-  > .#{$tri-prefix}-select .#{$tri-prefix}-select-selection__clear,
-  :not(.#{$tri-prefix}-input-group-addon) > .#{$tri-prefix}-select .#{$tri-prefix}-select-arrow,
-  :not(.#{$tri-prefix}-input-group-addon) > .#{$tri-prefix}-select .#{$tri-prefix}-select-selection__clear {
+  > .#{v.$tri-prefix}-select .#{v.$tri-prefix}-select-arrow,
+  > .#{v.$tri-prefix}-select .#{v.$tri-prefix}-select-selection__clear,
+  :not(.#{v.$tri-prefix}-input-group-addon) > .#{v.$tri-prefix}-select .#{v.$tri-prefix}-select-arrow,
+  :not(.#{v.$tri-prefix}-input-group-addon) > .#{v.$tri-prefix}-select .#{v.$tri-prefix}-select-selection__clear {
     right : 1rem;
   }
 
-  textarea.#{$tri-prefix}-input {
+  textarea.#{v.$tri-prefix}-input {
     height : auto;
   }
 
   // input[type=file]
-  .#{$tri-prefix}-upload {
+  .#{v.$tri-prefix}-upload {
     background : transparent;
   }
 
@@ -223,8 +237,8 @@ form {
   }
 
   // Radios and checkboxes on same line
-  .#{$tri-prefix}-radio-inline,
-  .#{$tri-prefix}-checkbox-inline {
+  .#{v.$tri-prefix}-radio-inline,
+  .#{v.$tri-prefix}-checkbox-inline {
     display        : inline-block;
     vertical-align : middle;
     font-weight    : normal;
@@ -236,23 +250,23 @@ form {
     }
   }
 
-  .#{$tri-prefix}-checkbox-vertical,
-  .#{$tri-prefix}-radio-vertical {
+  .#{v.$tri-prefix}-checkbox-vertical,
+  .#{v.$tri-prefix}-radio-vertical {
     display : block;
   }
 
-  .#{$tri-prefix}-checkbox-vertical + .#{$tri-prefix}-checkbox-vertical,
-  .#{$tri-prefix}-radio-vertical + .#{$tri-prefix}-radio-vertical {
+  .#{v.$tri-prefix}-checkbox-vertical + .#{v.$tri-prefix}-checkbox-vertical,
+  .#{v.$tri-prefix}-radio-vertical + .#{v.$tri-prefix}-radio-vertical {
     margin-left : 0;
   }
 
-  .#{$tri-prefix}-input-number {
+  .#{v.$tri-prefix}-input-number {
     margin-top   : -1px;
     margin-right : 8px;
   }
 
-  .#{$tri-prefix}-select,
-  .#{$tri-prefix}-cascader-picker {
+  .#{v.$tri-prefix}-select,
+  .#{v.$tri-prefix}-cascader-picker {
     width : 100%;
     // Fix https://github.com/ant-design/ant-design/issues/6097
     @at-root &:only-child {
@@ -261,14 +275,14 @@ form {
   }
 
   // Don't impact select inside input group
-  .#{$tri-prefix}-input-group .#{$tri-prefix}-select,
-  .#{$tri-prefix}-input-group .#{$tri-prefix}-cascader-picker {
+  .#{v.$tri-prefix}-input-group .#{v.$tri-prefix}-select,
+  .#{v.$tri-prefix}-input-group .#{v.$tri-prefix}-cascader-picker {
     width : auto;
   }
 
   // Don't impact select inside input group addon
-  .#{$tri-prefix}-input-group-addon .#{$tri-prefix}-select,
-  .#{$tri-prefix}-input-group-addon .#{$tri-prefix}-cascader-picker {
+  .#{v.$tri-prefix}-input-group-addon .#{v.$tri-prefix}-select,
+  .#{v.$tri-prefix}-input-group-addon .#{v.$tri-prefix}-cascader-picker {
     @at-root &:only-child {
       display : inline-block;
     }
@@ -276,8 +290,8 @@ form {
 }
 
 // Input combined with select
-.#{$tri-prefix}-input-group-wrap {
-  .#{$tri-prefix}-select-selection {
+.#{v.$tri-prefix}-input-group-wrap {
+  .#{v.$tri-prefix}-select-selection {
     border-bottom-left-radius : 0;
     border-top-left-radius    : 0;
     @at-root &:hover {
@@ -285,19 +299,19 @@ form {
     }
   }
 
-  .#{$tri-prefix}-select-selection--single {
+  .#{v.$tri-prefix}-select-selection--single {
     margin-left      : -1px;
-    height           : $input-height-lg;
+    height           : input-variables.$input-height-lg;
     background-color : #eee;
 
-    .#{$tri-prefix}-select-selection__rendered {
+    .#{v.$tri-prefix}-select-selection__rendered {
       padding-left  : 8px;
       padding-right : 25px;
       line-height   : 30px;
     }
   }
 
-  .#{$tri-prefix}-select-open .#{$tri-prefix}-select-selection {
+  .#{v.$tri-prefix}-select-open .#{v.$tri-prefix}-select-selection {
     border-color : $border-color-base;
     box-shadow   : none;
   }
@@ -309,7 +323,7 @@ form {
   padding     : 0 0 8px;
   display     : block;
   text-align  : left;
-  line-height : $line-height-base;
+  line-height : v.$line-height-base;
 
   label:after {
     display : none;
@@ -318,31 +332,31 @@ form {
 
 .#{$form-prefix-cls}-vertical .#{$form-prefix-cls}-item-label,
   // when labelCol is 24, it is a vertical form
-.#{$tri-prefix}-col-24.#{$form-prefix-cls}-item-label,
-.#{$tri-prefix}-col-xl-24.#{$form-prefix-cls}-item-label {
+.#{v.$tri-prefix}-col-24.#{$form-prefix-cls}-item-label,
+.#{v.$tri-prefix}-col-xl-24.#{$form-prefix-cls}-item-label {
   @include make-vertical-layout();
 }
 
-@media (max-width : $screen-xs-max) {
-  .#{$tri-prefix}-col-xs-24.#{$form-prefix-cls}-item-label {
+@media (max-width : v.$screen-xs-max) {
+  .#{v.$tri-prefix}-col-xs-24.#{$form-prefix-cls}-item-label {
     @include make-vertical-layout();
   }
 }
 
-@media (max-width : $screen-sm-max) {
-  .#{$tri-prefix}-col-sm-24.#{$form-prefix-cls}-item-label {
+@media (max-width : v.$screen-sm-max) {
+  .#{v.$tri-prefix}-col-sm-24.#{$form-prefix-cls}-item-label {
     @include make-vertical-layout();
   }
 }
 
-@media (max-width : $screen-md-max) {
-  .#{$tri-prefix}-col-md-24.#{$form-prefix-cls}-item-label {
+@media (max-width : v.$screen-md-max) {
+  .#{v.$tri-prefix}-col-md-24.#{$form-prefix-cls}-item-label {
     @include make-vertical-layout();
   }
 }
 
-@media (max-width : $screen-lg-max) {
-  .#{$tri-prefix}-col-lg-24.#{$form-prefix-cls}-item-label {
+@media (max-width : v.$screen-lg-max) {
+  .#{v.$tri-prefix}-col-lg-24.#{$form-prefix-cls}-item-label {
     @include make-vertical-layout();
   }
 }
@@ -411,233 +425,236 @@ form {
     }
   }
 }
-
-.has-success {
-  @at-root &.has-feedback:after, &.has-feedback .#{$form-prefix-cls}-item-children-icon {
-    animation-name : diffZoomIn1 !important;
-  }
-  .#{$form-prefix-cls}-item-children .#{$form-prefix-cls}-item-children-icon {
-    animation-name : diffZoomIn1 !important;
-
-    i {
-      color : #1bb367;
-    }
-  }
-}
-
-// success时表单项的边框
-.has-success {
-  @include form-control-validation($success-color, $success-color);
-
-  // select
-  .#{$tri-prefix}-select {
-    @at-root &-open .#{$tri-prefix}-select-selection, &-focused #{$tri-prefix}-select-selection {
-      @include tri-input-active-theme($theme, $success-color);
-    }
-  }
-
-  .#{$tri-prefix}-select-selection:hover {
-    //@include active($success-color);
-    border-color : $success-color !important;
-    box-shadow   : none;
-  }
-
-  .#{$tri-prefix}-input-group-addon .#{$tri-prefix}-select {
-    @at-root &-selection {
-      border-color : transparent;
-      box-shadow   : none;
-    }
-  }
-
-  // arrow and icon
-  .#{$tri-prefix}-calendar-picker-icon:after, #{$tri-prefix}-picker-icon:after, .#{$tri-prefix}-select-arrow, .#{$tri-prefix}-cascader-picker-arrow {
-    right : 2rem !important;
-  }
-
-  .#{$tri-prefix}-cascader-picker:focus #{$tri-prefix}-input, .#{$tri-prefix}-cascader:hover {
-    border-color : $success-color !important;
-    box-shadow   : none;
-  }
-
-  // radio-group
-  .#{$tri-prefix}-radio-group label.tri-radio-button-wrapper-checked {
-    border-width : 1px;
-    border-color : $success-color;
-    box-shadow   : -1px 0 0 0 $success-color;
-    @at-root &-focused, &:focus {
-      @include active($success-color);
-    }
-    @at-root &:not([disabled]):hover {
-      border-color : $success-color;
-    }
-  }
-
-  // input-number, timepicker
-  .#{$tri-prefix}-input-number, .#{$tri-prefix}-time-picker-input {
-    @at-root &-focused, &:focus {
-      @include active($success-color);
-    }
-    @at-root &:not([disabled]):hover {
-      border-color : $success-color;
-    }
-  }
-
-  .#{$tri-prefix}-mention-wrapper {
-    .#{$tri-prefix}-mention-editor {
-      @at-root &, &:not([disabled]):hover {
-        @at-root &, &:not([disabled]):hover {
-          border-color : $success-color;
-        }
-      }
-    }
-
-    @at-root &.#{$tri-prefix}-mention-active .#{$tri-prefix}-mention-editor, & .#{$tri-prefix}-mention-editor:not([disabled]):focus {
-      @include active($success-color);
-    }
-  }
-}
-
-.has-error {
-  @at-root &.has-feedback:after, &.has-feedback .#{form-prefix-cls}-item-children-icon {
-    animation-name : diffZoomIn2 !important;
-  }
-  .#{$form-prefix-cls}-item-children .#{$form-prefix-cls}-item-children-icon {
-    i {
-      color : #d93649;
-    }
-  }
-}
-
-.has-warning {
-  @at-root &.has-feedback:after, &.has-warning .#{form-prefix-cls}-item-children-icon {
-    animation-name : diffZoomIn3 !important;
-  }
-  .#{$form-prefix-cls}-item-children .#{$form-prefix-cls}-item-children-icon {
-    i {
-      color : #ffbf00;
-    }
-  }
-}
-
-.has-warning {
-  @include form-control-validation($warning-color, $warning-color);
-
-  //select
-  .#{$tri-prefix}-select {
-    @at-root &-selection {
-      border-color : $warning-color;
-    }
-    @at-root &-open .#{$tri-prefix}-select-selection,
-    &-focused .#{$tri-prefix}-select-selection {
-      @include active($warning-color);
-    }
-  }
-
-  // arrow and icon
-  .#{$tri-prefix}-calendar-picker-icon:after,
-  .#{$tri-prefix}-picker-icon:after,
-  .#{$tri-prefix}-select-arrow,
-  .#{$tri-prefix}-cascader-picker-arrow {
-    color : $warning-color;
-  }
-
-  //input-number, timepicker
-  .#{$tri-prefix}-input-number,
-  .#{$tri-prefix}-time-picker-input {
-    border-color : $warning-color;
-    @at-root &-focused,
-    &:focus {
-      @include active($warning-color);
-    }
-    @at-root &:not([disabled]):hover {
-      border-color : $warning-color;
-    }
-  }
-}
-
-.has-success .has-feedback {
-  color : #444444 !important;
-}
-
-.has-error {
-  @include form-control-validation($error-color, $error-color);
-
-  //select
-  .#{$tri-prefix}-select {
-    @at-root &-selection {
-      border-color : $error-color;
-    }
-    @at-root &-open .#{$tri-prefix}-select-selection,
-    &-focused .#{$tri-prefix}-select-selection {
-      @include active($error-color);
-    }
-  }
-
-  .#{$tri-prefix}-input-group-addon .#{$tri-prefix}-select {
-    @at-root &-selection {
-      border-color : transparent;
-      box-shadow   : none;
-    }
-  }
-
-  // arrow and icon
-  .#{$tri-prefix}-calendar-picker-icon:after,
-  .#{$tri-prefix}-picker-icon:after,
-  .#{$tri-prefix}-select-arrow,
-  .#{$tri-prefix}-cascader-picker-arrow {
-    color : $error-color;
-    right : 2rem !important;
-  }
-
-  //input-number, timepicker
-  .#{$tri-prefix}-input-number,
-  .#{$tri-prefix}-time-picker-input {
-    border-color : $error-color;
-    @at-root &-focused,
-    &:focus {
-      @include active($error-color);
-    }
-    @at-root &:not([disabled]):hover {
-      border-color : $error-color;
-    }
-  }
-
-  .#{$tri-prefix}-mention-wrapper {
-    .#{$tri-prefix}-mention-editor {
-      @at-root &,
-      &:not([disabled]):hover {
-        border-color : $error-color;
-      }
-    }
-
-    @at-root &.#{$tri-prefix}-mention-active .#{$tri-prefix}-mention-editor,
-    & .#{$tri-prefix}-mention-editor:not([disabled]):focus {
-      @include active($error-color);
-    }
-  }
-}
+//
+//.has-success {
+//  @at-root &.has-feedback:after, &.has-feedback .#{$form-prefix-cls}-item-children-icon {
+//    animation-name : diffZoomIn1 !important;
+//  }
+//  .#{$form-prefix-cls}-item-children .#{$form-prefix-cls}-item-children-icon {
+//    animation-name : diffZoomIn1 !important;
+//
+//    i {
+//      color : #1bb367;
+//    }
+//  }
+//}
+//
+//// success时表单项的边框
+//.has-success {
+//  @include mixin-theme.form-control-validation(
+//      theming.tri-color($success),
+//      theming.tri-color($success),
+//  );
+//
+//  // select
+//  .#{v.$tri-prefix}-select {
+//    @at-root &-open .#{v.$tri-prefix}-select-selection, &-focused #{v.$tri-prefix}-select-selection {
+//      @include input-theme.tri-input-active-theme(theming.tri-color($success));
+//    }
+//  }
+//
+//  .#{v.$tri-prefix}-select-selection:hover {
+//    //@include active($success-color);
+//    border-color : theming.tri-color($success) !important;
+//    box-shadow   : none;
+//  }
+//
+//  .#{v.$tri-prefix}-input-group-addon .#{v.$tri-prefix}-select {
+//    @at-root &-selection {
+//      border-color : transparent;
+//      box-shadow   : none;
+//    }
+//  }
+//
+//  // arrow and icon
+//  .#{v.$tri-prefix}-calendar-picker-icon:after, #{v.$tri-prefix}-picker-icon:after, .#{v.$tri-prefix}-select-arrow, .#{v.$tri-prefix}-cascader-picker-arrow {
+//    right : 2rem !important;
+//  }
+//
+//  .#{v.$tri-prefix}-cascader-picker:focus #{v.$tri-prefix}-input, .#{v.$tri-prefix}-cascader:hover {
+//    border-color : theming.tri-color($success) !important;
+//    box-shadow   : none;
+//  }
+//
+//  // radio-group
+//  .#{v.$tri-prefix}-radio-group label.tri-radio-button-wrapper-checked {
+//    border-width : 1px;
+//    border-color : theming.tri-color($success);
+//    box-shadow   : -1px 0 0 0 theming.tri-color($success);
+//    @at-root &-focused, &:focus {
+//      @include input-theme.tri-input-active-theme(theming.tri-color($success));
+//    }
+//    @at-root &:not([disabled]):hover {
+//      border-color : theming.tri-color($success);
+//    }
+//  }
+//
+//  // input-number, timepicker
+//  .#{v.$tri-prefix}-input-number, .#{v.$tri-prefix}-time-picker-input {
+//    @at-root &-focused, &:focus {
+//      @include  input-theme.tri-input-active-theme(theming.tri-color($success));
+//    }
+//    @at-root &:not([disabled]):hover {
+//      border-color : theming.tri-color($success);
+//    }
+//  }
+//
+//  .#{v.$tri-prefix}-mention-wrapper {
+//    .#{v.$tri-prefix}-mention-editor {
+//      @at-root &, &:not([disabled]):hover {
+//        @at-root &, &:not([disabled]):hover {
+//          border-color : theming.tri-color($success);
+//        }
+//      }
+//    }
+//
+//    @at-root &.#{v.$tri-prefix}-mention-active .#{v.$tri-prefix}-mention-editor, & .#{v.$tri-prefix}-mention-editor:not([disabled]):focus {
+//      @include  input-theme.tri-input-active-theme(theming.tri-color($success));
+//    }
+//  }
+//}
+//
+//.has-error {
+//  @at-root &.has-feedback:after, &.has-feedback .#{form-prefix-cls}-item-children-icon {
+//    animation-name : diffZoomIn2 !important;
+//  }
+//  .#{$form-prefix-cls}-item-children .#{$form-prefix-cls}-item-children-icon {
+//    i {
+//      color : #d93649;
+//    }
+//  }
+//}
+//
+//.has-warning {
+//  @at-root &.has-feedback:after, &.has-warning .#{form-prefix-cls}-item-children-icon {
+//    animation-name : diffZoomIn3 !important;
+//  }
+//  .#{$form-prefix-cls}-item-children .#{$form-prefix-cls}-item-children-icon {
+//    i {
+//      color : #ffbf00;
+//    }
+//  }
+//}
+//
+//.has-warning {
+//  @include mixin-theme.form-control-validation($warning-color, $warning-color);
+//
+//  //select
+//  .#{v.$tri-prefix}-select {
+//    @at-root &-selection {
+//      border-color : $warning-color;
+//    }
+//    @at-root &-open .#{v.$tri-prefix}-select-selection,
+//    &-focused .#{v.$tri-prefix}-select-selection {
+//      @include  input-theme.tri-input-active-theme($warning-color);
+//    }
+//  }
+//
+//  // arrow and icon
+//  .#{v.$tri-prefix}-calendar-picker-icon:after,
+//  .#{v.$tri-prefix}-picker-icon:after,
+//  .#{v.$tri-prefix}-select-arrow,
+//  .#{v.$tri-prefix}-cascader-picker-arrow {
+//    color : theming.tri-color($warning);
+//  }
+//
+//  //input-number, timepicker
+//  .#{v.$tri-prefix}-input-number,
+//  .#{v.$tri-prefix}-time-picker-input {
+//    border-color : theming.tri-color($warning);
+//    @at-root &-focused,
+//    &:focus {
+//      @include  input-theme.tri-input-active-theme(theming.tri-color($warning));
+//    }
+//    @at-root &:not([disabled]):hover {
+//      border-color : theming.tri-color($warning);
+//    }
+//  }
+//}
+//
+//.has-success .has-feedback {
+//  color : #444444 !important;
+//}
+//
+//.has-error {
+//  @include mixin-theme.form-control-validation(theming.tri-color($error), theming.tri-color($error));
+//
+//  //select
+//  .#{v.$tri-prefix}-select {
+//    @at-root &-selection {
+//      border-color : theming.tri-color($error);
+//    }
+//    @at-root &-open .#{v.$tri-prefix}-select-selection,
+//    &-focused .#{v.$tri-prefix}-select-selection {
+//      @include  input-theme.tri-input-active-theme(theming.tri-color($error));
+//    }
+//  }
+//
+//  .#{v.$tri-prefix}-input-group-addon .#{v.$tri-prefix}-select {
+//    @at-root &-selection {
+//      border-color : transparent;
+//      box-shadow   : none;
+//    }
+//  }
+//
+//  // arrow and icon
+//  .#{v.$tri-prefix}-calendar-picker-icon:after,
+//  .#{v.$tri-prefix}-picker-icon:after,
+//  .#{v.$tri-prefix}-select-arrow,
+//  .#{v.$tri-prefix}-cascader-picker-arrow {
+//    color : theming.tri-color($error);
+//    right : 2rem !important;
+//  }
+//
+//  //input-number, timepicker
+//  .#{v.$tri-prefix}-input-number,
+//  .#{v.$tri-prefix}-time-picker-input {
+//    border-color : theming.tri-color($error);
+//    @at-root &-focused,
+//    &:focus {
+//      @include  input-theme.tri-input-active-theme(theming.tri-color($error));
+//    }
+//    @at-root &:not([disabled]):hover {
+//      border-color : theming.tri-color($error);
+//    }
+//  }
+//
+//  .#{v.$tri-prefix}-mention-wrapper {
+//    .#{v.$tri-prefix}-mention-editor {
+//      @at-root &,
+//      &:not([disabled]):hover {
+//        border-color : theming.tri-color($error);
+//      }
+//    }
+//
+//    @at-root &.#{v.$tri-prefix}-mention-active .#{v.$tri-prefix}-mention-editor,
+//    & .#{v.$tri-prefix}-mention-editor:not([disabled]):focus {
+//      @include  input-theme.tri-input-active-theme(theming.tri-color($error));
+//    }
+//  }
+//}
 
 .is-validating {
   @at-root &.has-feedback:after {
     display   : inline-block;
     animation : loadingCircle 1s infinite linear;
     content   : "\e64d";
-    color     : $primary-color;
+    color     : theming.tri-color($primary);
   }
   @at-root &.has-feedback .#{form-prefix-cls}-item-children-icon {
     display : inline-block;
-    color   : $primary-color;
+    color   : theming.tri-color($primary);
   }
 }
 
-.#{$tri-prefix}-advanced-search-form {
+.#{v.$tri-prefix}-advanced-search-form {
   .#{$form-prefix-cls}-item {
     margin-bottom : 16px;
   }
 
-  .#{$tri-prefix}-input,
-  .#{$tri-prefix}-input-group .#{$tri-prefix}-input,
-  .#{$tri-prefix}-input-group .#{$tri-prefix}-input-group-addon {
-    height : $input-height-base;
+  .#{v.$tri-prefix}-input,
+  .#{v.$tri-prefix}-input-group .#{v.$tri-prefix}-input,
+  .#{v.$tri-prefix}-input-group .#{v.$tri-prefix}-input-group-addon {
+    height : input-variables.$input-height-base;
   }
 }

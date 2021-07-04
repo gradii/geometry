@@ -159,9 +159,9 @@ describe('range picker component', () => {
       expect(getPickerTrigger().querySelector('input:nth-of-type(1)').getAttribute('placeholder')).toBe(featureKey);
     });
 
-    it('should support placeHolder', () => {
+    it('should support placeholder', () => {
       const featureKey = 'RIGHT_PLACEHOLDER';
-      fixtureInstance.placeHolder = ['Start', featureKey];
+      fixtureInstance.placeholder = ['Start', featureKey];
       fixture.detectChanges();
       expect(getPickerTrigger().querySelector('input:nth-of-type(2)').getAttribute('placeholder')).toBe(featureKey);
     });
@@ -628,7 +628,7 @@ describe('range picker component', () => {
                         [className]="className"
                         [disabledDate]="disabledDate"
                         [locale]="locale"
-                        [placeHolder]="placeHolder"
+                        [placeholder]="placeholder"
                         [popupStyle]="popupStyle"
                         [dropdownClassName]="dropdownClassName"
                         [size]="size"
@@ -676,7 +676,7 @@ class TestRangePickerComponent {
   className;
   disabledDate;
   locale;
-  placeHolder;
+  placeholder;
   popupStyle;
   dropdownClassName;
   size;

@@ -49,6 +49,7 @@ ng_module(
         "//src/dev-app/sidenav",
         "//src/dev-app/navbar",
         "//src/dev-app/gridster",
+        "//src/dev-app/form",
 #        "//src/dev-app/tree-select",
 
         "//src/dev-app/cube",

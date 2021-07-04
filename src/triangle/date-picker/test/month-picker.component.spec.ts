@@ -173,8 +173,8 @@ describe('month picker component', () => {
       expect(getPickerTrigger().getAttribute('placeholder')).toBe(featureKey);
     });
 
-    it('should support placeHolder', () => {
-      const featureKey = fixtureInstance.placeHolder = 'TEST_PLACEHOLDER';
+    it('should support placeholder', () => {
+      const featureKey = fixtureInstance.placeholder = 'TEST_PLACEHOLDER';
       fixture.detectChanges();
       expect(getPickerTrigger().getAttribute('placeholder')).toBe(featureKey);
     });
@@ -416,7 +416,7 @@ describe('month picker component', () => {
         [className]="className"
         [disabledDate]="disabledDate"
         [locale]="locale"
-        [placeHolder]="placeHolder"
+        [placeholder]="placeholder"
         [popupStyle]="popupStyle"
         [dropdownClassName]="dropdownClassName"
         [size]="size"
@@ -453,7 +453,7 @@ class TestMonthPickerComponent {
   className;
   disabledDate;
   locale;
-  placeHolder;
+  placeholder;
   popupStyle;
   dropdownClassName;
   size;

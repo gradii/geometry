@@ -1,5 +1,5 @@
-@import "../../core/style/mixins";
-@import "../../core/style/variables";
+@use "../../core/style/mixins";
+@use "../../core/style/variables";
 
 .#{$form-prefix-cls}-item {
   > label {

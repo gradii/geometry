@@ -3,24 +3,27 @@
 //@import "../grid/mixin";
 @use "sass:map";
 @use "./mixin";
+@use "./mixin-theme";
 @use "../../core/style/theming";
+@use "../../core/themes/theme";
 @use "../../core/style/variables" as v;
 @use "../../input/style/input-theme";
 
 $form-prefix-cls : "#{ v.$tri-prefix}-form";
 @include mixin.reset-form();
 
-@mixin tri-form-theme($theme) {
-  $foreground              : map.get($theme, foreground);
-  $background              : map.get($theme, background);
-  $success                 : map.get($theme, success);
-  $primary                 : map.get($theme, primary);
-  $error                   : map.get($theme, error);
+@mixin tri-form-theme() {
+  $foreground              : theme.$foreground;
+  $background              : theme.$background;
+  $success                 : theme.$success;
+  $primary                 : theme.$primary;
+  $error                   : theme.$error;
+  $warning                 : theme.$warning;
 
   // Form
   // ---
-  $label-required-color    : theming.tri-color($theme, highlight-color);
-  $label-color             : theming.tri-color($theme, heading-color);
+  $label-required-color    : theming.tri-color(theme.$highlight);
+  $label-color             : theming.tri-color($foreground, heading-color);
   $form-item-margin-bottom : 1rem !default;
 
   .#{$form-prefix-cls}-item-required:before {
@@ -79,7 +82,7 @@ $form-prefix-cls : "#{ v.$tri-prefix}-form";
 
   // success时表单项的边框
   .has-success {
-    @include form-control-validation(theming.tri-color($success), theming.tri-color($success));
+    @include mixin-theme.form-control-validation(theming.tri-color($success), theming.tri-color($success));
 
     // select
     .#{ v.$tri-prefix}-select {
@@ -169,7 +172,7 @@ $form-prefix-cls : "#{ v.$tri-prefix}-form";
   }
 
   .has-warning {
-    @include form-control-validation(theming.tri-color($warning), theming.tri-color($warning));
+    @include mixin-theme.form-control-validation(theming.tri-color($warning), theming.tri-color($warning));
     //select
     .#{ v.$tri-prefix}-select {
       @at-root &-selection {
@@ -208,7 +211,7 @@ $form-prefix-cls : "#{ v.$tri-prefix}-form";
   }
 
   .has-error {
-    @include form-control-validation(theming.tri-color($error), theming.tri-color($error));
+    @include mixin-theme.form-control-validation(theming.tri-color($error), theming.tri-color($error));
 
     //select
     .#{ v.$tri-prefix}-select {

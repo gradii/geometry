@@ -1,0 +1,13 @@
+@use "../../core/style/variables" as v;
+
+:host {
+  ::ng-deep {
+    .#{v.$tri-prefix}-form-item-label {
+      min-width : 2rem;
+    }
+
+    .#{v.$tri-prefix}-form-item-control {
+      flex : 1;
+    }
+  }
+}

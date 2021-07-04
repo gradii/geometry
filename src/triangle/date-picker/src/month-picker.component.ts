@@ -27,7 +27,7 @@ import { AbstractPickerComponent } from './abstract-picker.component';
 })
 
 export class MonthPickerComponent extends AbstractPickerComponent implements OnChanges {
-  @Input() placeHolder: string;
+  @Input() placeholder: string;
 
   @Input() renderExtraFooter: TemplateRef<void> | string;
   @Input() defaultValue: CandyDate;

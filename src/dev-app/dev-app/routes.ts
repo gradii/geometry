@@ -162,6 +162,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'gridster',
         loadChildren: '/gridster/dev-gridster.module#DevGridsterModule'
+      },
+      {
+        path        : 'form',
+        loadChildren: '/form/dev-form.module#DevFormModule'
       }
     ]
   },

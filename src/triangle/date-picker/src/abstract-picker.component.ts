@@ -35,7 +35,7 @@ export abstract class AbstractPickerComponent implements OnInit, OnChanges, Cont
   @Input() className: string;
   @Input() disabledDate: (d: Date) => boolean;
   @Input() locale: DatePickerI18nInterface;
-  @Input() placeHolder: string | string[];
+  @Input() placeholder: string | string[];
   @Input() popupStyle: object = POPUP_STYLE_PATCH;
   @Input() dropdownClassName: string;
   @Input() size: 'large' | 'small';
@@ -69,8 +69,8 @@ export abstract class AbstractPickerComponent implements OnInit, OnChanges, Cont
     this.initValue();
 
     // Default placeholder
-    if (!this.placeHolder) {
-      this.placeHolder = this.isRange ? this.locale.lang.rangePlaceholder : this.locale.lang.placeholder;
+    if (!this.placeholder) {
+      this.placeholder = this.isRange ? this.locale.lang.rangePlaceholder : this.locale.lang.placeholder;
     }
   }
 

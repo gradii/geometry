@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Directive, Host, Input } from '@angular/core';
+import { Directive, Host, Input, Optional } from '@angular/core';
 import { FormDirective } from './form.directive';
 
 @Directive({
@@ -17,17 +17,19 @@ import { FormDirective } from './form.directive';
 })
 export class FormLabelDirective {
 
-  constructor(@Host() private form: FormDirective) {
-
+  constructor(@Optional() @Host() private form: FormDirective) {
   }
 
-  protected _fixedLabel;
+  protected _fixedLabel: number;
 
   get fixedLabel() {
     if (this._fixedLabel) {
       return this._fixedLabel;
+    } else if (this.form) {
+      return this.form.fixedLabel;
     }
-    return this.form.fixedLabel;
+
+    return undefined;
   }
 
   @Input()

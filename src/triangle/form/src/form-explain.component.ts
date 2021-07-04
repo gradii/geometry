@@ -6,7 +6,7 @@
 
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, ValidationErrors } from '@angular/forms';
-import { FormItemDirective } from './form-item.directive';
+import { FormItemComponent } from './form-item.component';
 
 enum ShowFlags {
   'dirty',
@@ -30,7 +30,7 @@ export class FormExplainComponent implements OnDestroy, OnInit {
   showable: boolean;
   private subscriptions;
 
-  constructor(private _formItem: FormItemDirective) {
+  constructor(private _formItem: FormItemComponent) {
   }
 
   get explains(): ValidationErrors | null {
