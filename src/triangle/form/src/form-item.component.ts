@@ -4,13 +4,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, Host, Inject, Input, Optional, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Host, Inject, Input, Optional, Output, ViewEncapsulation } from '@angular/core';
 import { FormComponent } from './form.component';
 
 @Component({
-  selector: 'tri-form-item',
+  selector     : 'tri-form-item',
   encapsulation: ViewEncapsulation.None,
-  template: `
+  template     : `
     <ng-content></ng-content>`,
   // changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['../style/form-item.css'],
@@ -23,19 +23,17 @@ import { FormComponent } from './form.component';
   },
 })
 export class FormItemComponent {
-
-  _layout: 'vertical' | 'horizontal';
-
   @Input()
-  get layout(): 'vertical' | 'horizontal' {
-    if (!this._layout && this.form) {
-      return this.form.layout;
-    }
-    return this._layout;
-  }
+  layout: 'vertical' | 'horizontal' | 'inline' | undefined;
 
-  set layout(value: 'vertical' | 'horizontal') {
-    this._layout = value;
+  @Output()
+  layoutChange: EventEmitter<any> = new EventEmitter();
+
+  getLayout(): 'vertical' | 'horizontal' | 'inline' | undefined {
+    if (this.layout && this.form && this.layout !== this.form.layout) {
+      return this.layout;
+    }
+    return undefined;
   }
 
   constructor(@Optional() @Host() @Inject(FormComponent)

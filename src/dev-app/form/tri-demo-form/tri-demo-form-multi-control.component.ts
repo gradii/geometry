@@ -4,14 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-/**
- * @title form-layout
- */
 @Component({
-  selector       : 'tri-demo-form-layout',
+  selector       : 'tri-demo-form-multi-control',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template       : `
     <form tri-form [layout]="validateForm.controls?.formLayout?.value" [formGroup]="validateForm"
@@ -59,11 +56,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
           </tri-form-explain>
         </tri-form-control>
       </tri-form-item>
-    </form>`,
-
-  styles: []
+    </form>
+  `
 })
-export class TriDemoFormLayoutComponent implements OnInit {
+export class TriDemoFormMultiControlComponent {
   validateForm: FormGroup;
 
   submitForm() {

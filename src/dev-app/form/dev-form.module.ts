@@ -28,12 +28,13 @@ import { TriDemoFormInlineComponent } from './tri-demo-form/tri-demo-form-inline
 import { TriDemoFormLayoutComponent } from './tri-demo-form/tri-demo-form-layout.component';
 import { TriDemoFormLoginComponent } from './tri-demo-form/tri-demo-form-login.component';
 import { TriDemoFormMixComponent } from './tri-demo-form/tri-demo-form-mix.component';
+import { TriDemoFormMultiControlComponent } from './tri-demo-form/tri-demo-form-multi-control.component';
 import { TriDemoFormValidateDynamicComponent } from './tri-demo-form/tri-demo-form-validate-dynamic.component';
 import { TriDemoFormValidateComponent } from './tri-demo-form/tri-demo-form-validate.component';
 
 
 @NgModule({
-  imports: [
+  imports     : [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -58,6 +59,7 @@ import { TriDemoFormValidateComponent } from './tri-demo-form/tri-demo-form-vali
           {path: 'tri-demo-form-layout', component: TriDemoFormLayoutComponent},
           {path: 'tri-demo-form-login', component: TriDemoFormLoginComponent},
           {path: 'tri-demo-form-mix', component: TriDemoFormMixComponent},
+          {path: 'tri-demo-form-multi-control', component: TriDemoFormMultiControlComponent},
           {path: 'tri-demo-form-validate', component: TriDemoFormValidateComponent},
           {path: 'tri-demo-form-validate-dynamic', component: TriDemoFormValidateDynamicComponent},
         ]
@@ -76,6 +78,7 @@ import { TriDemoFormValidateComponent } from './tri-demo-form/tri-demo-form-vali
     TriDemoFormLayoutComponent,
     TriDemoFormLoginComponent,
     TriDemoFormMixComponent,
+    TriDemoFormMultiControlComponent,
     TriDemoFormValidateDynamicComponent,
     TriDemoFormValidateComponent,
   ]

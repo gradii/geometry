@@ -77,6 +77,13 @@ input[type="checkbox"] {
   }
 }
 
+.#{$form-prefix-cls}-vertical {
+  .#{$form-prefix-cls}-item {
+    display : flex;
+    flex-direction: column;
+  }
+}
+
 //== Inline Form
 .#{$form-prefix-cls}-inline {
   .#{$form-prefix-cls}-item {

@@ -42,6 +42,11 @@ $border-color-base       : theming.tri-color($foreground, border-color-base);
     margin-bottom : -$form-item-margin-bottom;
   }
 
+  @at-root &#{&}-vertical {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   @at-root &-control {
     line-height : $form-component-height;
     position    : relative;
@@ -87,6 +92,8 @@ $border-color-base       : theming.tri-color($foreground, border-color-base);
     content : " ";
   }
 }
+
+
 
 .#{$form-prefix-cls}-explain,
 .#{$form-prefix-cls}-extra {

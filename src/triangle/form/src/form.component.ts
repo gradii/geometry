@@ -5,6 +5,7 @@
  */
 
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { tolerantClamp } from '@gradii/triangle/form/src/_utils';
 
 @Component({
   selector     : '[tri-form]',
@@ -19,14 +20,27 @@ import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
   }
 })
 export class FormComponent implements OnInit {
+
+  private _labelSize: number = 200;
+
   @Input()
-  fixedLabel: number;
+  get labelSize(): number {
+    return this._labelSize;
+  }
+
+  set labelSize(value: number) {
+    this._labelSize = value;
+  }
 
   constructor() {
   }
 
   /** @internal */
-  _layout = 'horizontal';
+  _layout: 'horizontal' | 'vertical' | 'inline' = 'horizontal';
+
+  public get layout() {
+    return this._layout;
+  }
 
   /**
    * The layout of form
@@ -34,7 +48,7 @@ export class FormComponent implements OnInit {
    * @param value
    */
   @Input()
-  set layout(value) {
+  public set layout(value) {
     this._layout = value;
   }
 
