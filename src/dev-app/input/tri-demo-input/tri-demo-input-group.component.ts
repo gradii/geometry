@@ -65,7 +65,9 @@ import { Component, OnInit } from '@angular/core';
         <tri-option [label]="'Except'" [value]="'Except'"></tri-option>
       </tri-select>
       <input type="text" placeholder="Minimum" tri-input style="width: 100px; text-align: center;">
-      <input type="text" placeholder="~" tri-input style="width: 24px; border-left: 0px; pointer-events: none;">
+      <input type="text" placeholder="~" tri-input style="
+      width: 24px;border-left: 0;border-right: 0;
+      pointer-events: none;margin-right: -1px;z-index: 2;">
       <input type="text" placeholder="Maximum" tri-input style="width: 100px; text-align: center; margin-left: -1px;">
     </tri-input-group>
     <br>
@@ -83,9 +85,11 @@ import { Component, OnInit } from '@angular/core';
 export class TriDemoInputGroupComponent implements OnInit {
   _valueOne = '0571';
   _valueTwo = '26888888';
-  date = new Date();
+  date      = new Date();
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

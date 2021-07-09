@@ -14,7 +14,6 @@ $input-number-prefix-cls : "#{v.$tri-prefix}-input-number";
   font-size     : v.$font-size-base;
   height        : input-v.$input-height-base;
   display       : inline-block;
-  border-radius : v.$border-radius-base;
   width         : 80px;
 
   @at-root &-handler {
@@ -56,7 +55,6 @@ $input-number-prefix-cls : "#{v.$tri-prefix}-input-number";
     height        : v.$form-control-height-base - 2px/v.$root-font-size; //fix for rem calculate missing 1px
     transition    : all 0.3s linear;
     border        : 0;
-    border-radius : v.$border-radius-base;
     padding       : 0 7px;
     display       : block;
   }
