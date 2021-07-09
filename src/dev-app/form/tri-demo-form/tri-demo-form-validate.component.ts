@@ -18,8 +18,7 @@ import { Component, OnInit } from '@angular/core';
           <label>Fail</label>
         </tri-form-label>
         <tri-form-control [validateStatus]="'error'" tri-col [span]="12">
-          <tri-input [ngModel]="'unavailable choice'" [size]="'large'" name="errorValid">
-          </tri-input>
+          <input triInput [ngModel]="'unavailable choice'" [size]="'large'" name="errorValid"/>
           <tri-form-explain>Should be combination of numbers & alphabets</tri-form-explain>
         </tri-form-control>
       </tri-form-item>
@@ -28,8 +27,7 @@ import { Component, OnInit } from '@angular/core';
           <label>Warning</label>
         </tri-form-label>
         <tri-form-control [validateStatus]="'warning'" tri-col [span]="12">
-          <tri-input [ngModel]="'Warning'" [size]="'large'" name="warningValid">
-          </tri-input>
+          <input triInput [ngModel]="'Warning'" [size]="'large'" name="warningValid"/>
         </tri-form-control>
       </tri-form-item>
       <tri-form-item tri-row>
@@ -37,9 +35,8 @@ import { Component, OnInit } from '@angular/core';
           <label>Validating</label>
         </tri-form-label>
         <tri-form-control tri-col [span]="12" [validateStatus]="'validating'" [hasFeedback]="true">
-          <tri-input [ngModel]="'The content is being validating'" [size]="'large'"
-                     name="validating">
-          </tri-input>
+          <input triInput [ngModel]="'The content is being validating'" [size]="'large'"
+                 name="validating"/>
           <tri-form-explain>I'm the content is being validating</tri-form-explain>
         </tri-form-control>
       </tri-form-item>
@@ -48,8 +45,7 @@ import { Component, OnInit } from '@angular/core';
           <label>Success</label>
         </tri-form-label>
         <tri-form-control tri-col [span]="12" [validateStatus]="'success'" [hasFeedback]="true">
-          <tri-input [ngModel]="'The content'" [size]="'large'" name="successValid">
-          </tri-input>
+          <input triInput [ngModel]="'The content'" [size]="'large'" name="successValid"/>
         </tri-form-control>
       </tri-form-item>
       <tri-form-item tri-row>
@@ -57,8 +53,7 @@ import { Component, OnInit } from '@angular/core';
           <label>Warning</label>
         </tri-form-label>
         <tri-form-control tri-col [span]="12" [validateStatus]="'warning'" [hasFeedback]="true">
-          <tri-input [ngModel]="'Warning'" [size]="'large'" name="warningHighValid">
-          </tri-input>
+          <input triInput [ngModel]="'Warning'" [size]="'large'" name="warningHighValid"/>
           <tri-form-explain>Should be combination of numbers & alphabets</tri-form-explain>
         </tri-form-control>
       </tri-form-item>
@@ -67,8 +62,7 @@ import { Component, OnInit } from '@angular/core';
           <label>Fail</label>
         </tri-form-label>
         <tri-form-control tri-col [span]="12" [validateStatus]="'error'" [hasFeedback]="true">
-          <tri-input [ngModel]="'unavailable choice'" [size]="'large'" name="invalidValid">
-          </tri-input>
+          <input triInput [ngModel]="'unavailable choice'" [size]="'large'" name="invalidValid"/>
           <tri-form-explain>Should be combination of numbers & alphabets</tri-form-explain>
         </tri-form-control>
       </tri-form-item>

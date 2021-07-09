@@ -22,9 +22,9 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
               <label [attr.for]="'field'+control.index">Field {{control.index}}</label>
             </tri-form-label>
             <tri-form-control tri-col [span]="19">
-              <tri-input [size]="'large'" [placeholder]="'placeholder'"
-                         [formControlName]="'field'+control.index"
-                         [id]="'field'+control.index"></tri-input>
+              <input triInput [size]="'large'" [placeholder]="'placeholder'"
+                     [formControlName]="'field'+control.index"
+                     [id]="'field'+control.index"/>
             </tri-form-control>
           </tri-form-item>
         </div>
@@ -49,20 +49,20 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
   styles: [
     `
       .tri-advanced-search-form {
-        padding       : 24px;
-        background    : #fbfbfb;
-        border        : 1px solid #d9d9d9;
-        border-radius : 6px;
+        padding: 24px;
+        background: #fbfbfb;
+        border: 1px solid #d9d9d9;
+        border-radius: 6px;
       }
 
       .search-result-list {
-        margin-top       : 16px;
-        border           : 1px dashed #e9e9e9;
-        border-radius    : 6px;
-        background-color : #fafafa;
-        min-height       : 200px;
-        text-align       : center;
-        padding-top      : 80px;
+        margin-top: 16px;
+        border: 1px dashed #e9e9e9;
+        border-radius: 6px;
+        background-color: #fafafa;
+        min-height: 200px;
+        text-align: center;
+        padding-top: 80px;
       }
     `
   ]

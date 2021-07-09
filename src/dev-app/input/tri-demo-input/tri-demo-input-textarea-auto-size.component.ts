@@ -12,14 +12,13 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'tri-demo-input-textarea-auot-size',
   template: `
-    <tri-input [(ngModel)]="inputValueOne" type="textarea" [autosize]="true"
-               placeholder="Autosize height based on content lines"></tri-input>
+    <textarea triTextarea triTextareaAutosize [(ngModel)]="inputValueOne" type="textarea"
+               placeholder="Autosize height based on content lines"></textarea>
     <div style="margin-top: 16px;">
-      <tri-input [(ngModel)]="inputValueTwo" type="textarea"
-                 [autosize]="autosize"
-                 [minRows]="2"
-                 [maxRows]="6"
-                 placeholder="Autosize height with minimum and maximum number of lines"></tri-input>
+      <textarea triTextarea [triTextareaAutosize]="autosize" [(ngModel)]="inputValueTwo" type="textarea"
+                 [triAutosizeMinRows]="2"
+                 [triAutosizeMaxRows]="6"
+                 placeholder="Autosize height with minimum and maximum number of lines"></textarea>
     </div>
   `,
   styles  : []

@@ -10,7 +10,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TriIconModule } from '@gradii/triangle/icon';
 import { InputGroupComponent } from './input-group.component';
-import { InputComponent } from './input.component';
 import { InputDirective } from './input.directive';
 import { TextareaDirective, TextareaAutosize } from './textarea.directive';
 
@@ -44,12 +43,12 @@ import { TextareaDirective, TextareaAutosize } from './textarea.directive';
  * <!-- example(tri-demo-input-textarea) -->
  */
 @NgModule({
-  imports: [CommonModule, FormsModule, TriIconModule, TextFieldModule],
+  imports     : [CommonModule, FormsModule, TriIconModule, TextFieldModule],
   declarations: [
-    InputComponent, InputGroupComponent, InputDirective, TextareaDirective, TextareaAutosize
+    InputGroupComponent, InputDirective, TextareaDirective, TextareaAutosize
   ],
-  exports: [
-    InputComponent, InputGroupComponent, InputDirective, TextareaDirective, TextareaAutosize
+  exports     : [
+    InputGroupComponent, InputDirective, TextareaDirective, TextareaAutosize
   ],
 })
 export class TriInputModule {

@@ -42,13 +42,13 @@
       z-index : 4;
     }
     @at-root &:hover {
-      z-index: 3;
+      z-index : 3;
     }
   }
 
   @at-root
   & > * {
-    &:not(:first-child){
+    &:not(:first-child) {
       margin-left : -(input-variables.$input-border-width);
     }
 
@@ -167,9 +167,7 @@
 
   @at-root & {
     @at-root & > * {
-      border-radius  : 0;
-      vertical-align : middle;
-      display        : inline-block;
+      border-radius : 0;
     }
 
     // reset border for Select, DatePicker, AutoComplete, Cascader, Mention, TimePicker

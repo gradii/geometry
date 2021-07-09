@@ -4,6 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { NumberInput } from '@angular/cdk/coercion';
 import { Directive, Input, OnInit } from '@angular/core';
 
 export type TriJustify = 'start' | 'end' | 'center' | 'space-around' | 'space-between';
@@ -22,7 +23,8 @@ export type RowAlign = 'top' | 'middle' | 'bottom';
     '[class.tri-row-flex-space-around]' : 'justify=="space-around"',
     '[class.tri-row-flex-space-between]': 'justify=="space-between"',
     '[style.margin-left.px]'            : '-_gutter/2',
-    '[style.margin-right.px]'           : '-_gutter/2'
+    '[style.margin-right.px]'           : '-_gutter/2',
+    '[style.gap.px]'                    : 'gap'
   }
 })
 export class RowDirective implements OnInit {
@@ -30,6 +32,9 @@ export class RowDirective implements OnInit {
 
   constructor() {
   }
+
+  @Input()
+  gap: number;
 
   _gutter: number;
 
@@ -93,4 +98,7 @@ export class RowDirective implements OnInit {
   ngOnInit() {
     // this.setClassMap();
   }
+
+  static ngAcceptInputType_gutter: NumberInput;
+  static ngAcceptInputType_gap: NumberInput;
 }

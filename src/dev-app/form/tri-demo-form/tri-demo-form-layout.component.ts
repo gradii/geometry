@@ -39,7 +39,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
           <label>Username</label>
         </tri-form-label>
         <tri-form-control [validateStatus]="validateForm.controls.userName">
-          <tri-input formControlName="userName" [placeholder]="'Username'"></tri-input>
+          <input triInput formControlName="userName" [placeholder]="'Username'"/>
           <tri-form-explain
             *ngIf="validateForm.controls.userName.dirty&&validateForm.controls.userName.hasError('required')">
             Please input your username!
@@ -51,8 +51,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
           <label>Password</label>
         </tri-form-label>
         <tri-form-control [validateStatus]="validateForm.controls.password">
-          <tri-input formControlName="password" [type]="'password'" [placeholder]="'Password'">
-          </tri-input>
+          <input triInput formControlName="password" [type]="'password'" [placeholder]="'Password'"/>
           <tri-form-explain
             *ngIf="validateForm.controls.password.dirty&&validateForm.controls.password.hasError('required')">
             Please input your Password!

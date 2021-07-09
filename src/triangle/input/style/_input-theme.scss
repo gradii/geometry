@@ -5,6 +5,7 @@
 @use "../../core/style/variables" as v;
 
 @use "./input-mixin";
+@use "./input-group-theme";
 //@use "./search-input";
 
 
@@ -57,7 +58,7 @@ $input-border-color       : map.get($_foreground, border-color-base) !default;
 @mixin tri-input-theme() {
 
   .#{v.$tri-prefix}-input-wrapper {
-    display: inline-block;
+    display : inline-block;
   }
 
   .#{v.$tri-prefix}-input {

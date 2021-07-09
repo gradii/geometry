@@ -12,12 +12,14 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'tri-demo-input-add-on',
   template: `
-    <tri-input [(ngModel)]="siteName">
+    <tri-input-group>
+      <input triInput [(ngModel)]="siteName"/>
       <ng-template #addOnBefore>http://</ng-template>
       <ng-template #addOnAfter>.com</ng-template>
-    </tri-input>
+    </tri-input-group>
     <div style="margin-top:16px;">
-      <tri-input [(ngModel)]="siteName">
+      <tri-input-group>
+        <input triInput name="siteName" [(ngModel)]="siteName"/>
         <ng-template #addOnBefore>
           <tri-select style="width: 80px;" [ngModel]="'http://'">
             <tri-option [label]="'http://'" [value]="'http://'"></tri-option>
@@ -32,20 +34,25 @@ import { Component, OnInit } from '@angular/core';
             <tri-option [label]="'.org'" [value]="'.org'"></tri-option>
           </tri-select>
         </ng-template>
-      </tri-input>
+      </tri-input-group>
     </div>
     <div style="margin-top:16px;">
-      <tri-input [(ngModel)]="siteName">
-        <ng-template #addOnAfter><i class="anticon anticon-setting"></i></ng-template>
-      </tri-input>
+      <tri-input-group>
+        <input triInput [(ngModel)]="siteName"/>
+        <ng-template #addOnAfter>
+          <tri-icon svgIcon="fill:setting"></tri-icon>
+        </ng-template>
+      </tri-input-group>
     </div>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoInputAddOnComponent implements OnInit {
   siteName = 'mysite';
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

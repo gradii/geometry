@@ -37,7 +37,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
           <label>Username</label>
         </tri-form-label>
         <tri-form-control [validateStatus]="validateForm.controls.userName">
-          <tri-input formControlName="userName" [placeholder]="'Username'"></tri-input>
+          <input triInput formControlName="userName" [placeholder]="'Username'"/>
           <tri-form-explain
             *ngIf="validateForm.controls.userName.dirty&&validateForm.controls.userName.hasError('required')">
             Please input your username!
@@ -50,8 +50,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
           <label>Password</label>
         </tri-form-label>
         <tri-form-control [validateStatus]="validateForm.controls.password">
-          <tri-input formControlName="password" [type]="'password'" [placeholder]="'Password'">
-          </tri-input>
+          <input triInput formControlName="password" [type]="'password'" [placeholder]="'Password'" />
           <tri-form-explain
             *ngIf="validateForm.controls.password.dirty&&validateForm.controls.password.hasError('required')">
             Please input your Password!
@@ -65,10 +64,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
         </tri-form-label>
         <tri-form-control [validateStatus]="validateForm.controls.address">
           <tri-row [gutter]="8">
-            <tri-input tri-col [span]="12" formControlName="address" [placeholder]="'Address'">
-            </tri-input>
-            <tri-input tri-col [span]="12" formControlName="country" [placeholder]="'Country'">
-            </tri-input>
+            <input triInput tri-col [span]="12" formControlName="address" [placeholder]="'Address'" />
+            <input triInput tri-col [span]="12" formControlName="country" [placeholder]="'Country'" />
           </tri-row>
           <tri-form-explain
             *ngIf="validateForm.controls.address.dirty&&validateForm.controls.address.hasError('required')">

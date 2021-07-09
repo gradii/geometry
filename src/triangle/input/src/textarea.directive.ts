@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { BooleanInput, NumberInput } from '@angular/cdk/coercion';
+import { BooleanInput, coerceBooleanProperty, NumberInput } from '@angular/cdk/coercion';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { Directive, Input } from '@angular/core';
 
@@ -113,7 +113,7 @@ export class TextareaAutosize extends CdkTextareaAutosize {
   }
 
   set triTextareaAutosize(value: boolean) {
-    this.enabled = value;
+    this.enabled = coerceBooleanProperty(value);
   }
 
   static ngAcceptInputType_minRows: NumberInput;

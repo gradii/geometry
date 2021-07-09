@@ -13,9 +13,9 @@ import { Component, OnInit } from '@angular/core';
   selector: 'tri-demo-input-size',
   template: `
     <div>
-      <tri-input [(ngModel)]="inputValue" [placeholder]="'large size'" [size]="'large'"></tri-input>
-      <tri-input [(ngModel)]="inputValue" [placeholder]="'default size'"></tri-input>
-      <tri-input [(ngModel)]="inputValue" [placeholder]="'small size'" [size]="'small'"></tri-input>
+      <input triInput [(ngModel)]="inputValue" [placeholder]="'large size'" [size]="'large'"/>
+      <input triInput [(ngModel)]="inputValue" [placeholder]="'default size'"/>
+      <input triInput [(ngModel)]="inputValue" [placeholder]="'small size'" [size]="'small'"/>
     </div>`,
 
   styles: [
@@ -30,7 +30,9 @@ import { Component, OnInit } from '@angular/core';
 export class TriDemoInputSizeComponent implements OnInit {
   inputValue: string;
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

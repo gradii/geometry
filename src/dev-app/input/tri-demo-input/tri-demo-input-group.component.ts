@@ -13,12 +13,14 @@ import { Component, OnInit } from '@angular/core';
   selector: 'tri-demo-input-group',
   template: `
     <tri-input-group [size]="'large'">
-      <div tri-col [span]="4">
-        <input [(ngModel)]="_valueOne" [ngModelOptions]="{standalone: true}" tri-input>
-      </div>
-      <div tri-col [span]="8">
-        <input [(ngModel)]="_valueTwo" [ngModelOptions]="{standalone: true}" tri-input>
-      </div>
+      <tri-row gap="8">
+        <div tri-col [span]="4">
+          <input [(ngModel)]="_valueOne" [ngModelOptions]="{standalone: true}" tri-input>
+        </div>
+        <div tri-col [span]="8">
+          <input [(ngModel)]="_valueTwo" [ngModelOptions]="{standalone: true}" tri-input>
+        </div>
+      </tri-row>
     </tri-input-group>
     <br>
     <tri-input-group [size]="'large'">

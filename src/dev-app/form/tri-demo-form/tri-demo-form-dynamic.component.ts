@@ -20,10 +20,9 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
         </tri-form-label>
         <tri-form-control tri-col="" [span]="20" [offset]="i==0?0:4"
                           [validateStatus]="getFormControl(control.controlInstance)">
-          <tri-input style="width: 60%; margin-right:8px;" [size]="'large'"
-                     [placeholder]="'placeholder'" [formControlName]="control.controlInstance"
-                     [id]="control.id">
-          </tri-input>
+          <input triInput style="width: 60%; margin-right:8px;" [size]="'large'"
+                 [placeholder]="'placeholder'" [formControlName]="control.controlInstance"
+                 [id]="control.id"/>
           <i class="anticon anticon-minus-circle-o dynamic-delete-button"
              (click)="removeField(control,$event)"></i>
           <tri-form-explain
@@ -52,12 +51,12 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
   styles: [
     `
       .dynamic-delete-button {
-        cursor     : pointer;
-        position   : relative;
-        top        : 4px;
-        font-size  : 24px;
-        color      : #999;
-        transition : all .3s;
+        cursor: pointer;
+        position: relative;
+        top: 4px;
+        font-size: 24px;
+        color: #999;
+        transition: all .3s;
       }
     `
   ]

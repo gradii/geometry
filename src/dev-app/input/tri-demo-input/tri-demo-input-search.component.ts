@@ -12,7 +12,9 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'tri-demo-input-search',
   template: `
-    <tri-input [type]="'search'" [placeholder]="'input search text'" [(ngModel)]="_value" style="width: 200px;"></tri-input>
+    <tri-input-group [type]="'search'" style="width: 200px;">
+      <input triInput [placeholder]="'input search text'" [(ngModel)]="_value"/>
+    </tri-input-group>
   `,
 
   styles: []
@@ -20,7 +22,9 @@ import { Component, OnInit } from '@angular/core';
 export class TriDemoInputSearchComponent implements OnInit {
   _value: string;
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

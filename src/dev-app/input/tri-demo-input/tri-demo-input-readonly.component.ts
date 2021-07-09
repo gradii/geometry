@@ -12,11 +12,11 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'tri-demo-input-basic',
   template: `
-    <tri-input
-      [readonly]="true"
-      [(ngModel)]="inputValue"
-      [placeholder]="'Basic usage'"
-      (ngModelChange)="_console($event)"></tri-input>
+    <input triInput
+           [readonly]="true"
+           [(ngModel)]="inputValue"
+           [placeholder]="'Basic usage'"
+           (ngModelChange)="_console($event)"/>
     <input tri-input [(ngModel)]="inputValue"/>
     <p>{{inputValue}}</p>`,
 

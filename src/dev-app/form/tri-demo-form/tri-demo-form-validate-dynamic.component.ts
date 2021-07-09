@@ -22,9 +22,8 @@ import { Observable } from 'rxjs';
         </tri-form-label>
         <tri-form-control tri-col [span]="12" [validateStatus]="getFormControl('userName')"
                           [hasFeedback]="true">
-          <tri-input formControlName="userName" [type]="'text'"
-                     [placeholder]="'async validate try to write JasonWood'" [size]="'large'">
-          </tri-input>
+          <input triInput formControlName="userName" [type]="'text'"
+                     [placeholder]="'async validate try to write JasonWood'" [size]="'large'" />
           <tri-form-explain
             *ngIf="getFormControl('userName').dirty&&getFormControl('userName').hasError('required')">
             Please input your username!
@@ -45,9 +44,8 @@ import { Observable } from 'rxjs';
         </tri-form-label>
         <tri-form-control tri-col [span]="12" [validateStatus]="getFormControl('email')"
                           [hasFeedback]="true">
-          <tri-input formControlName="email" [placeholder]="'email'" [type]="'email'"
-                     [size]="'large'">
-          </tri-input>
+          <input triInput formControlName="email" [placeholder]="'email'" [type]="'email'"
+                 [size]="'large'"/>
           <tri-form-explain
             *ngIf="getFormControl('email').dirty&&getFormControl('email').hasError('email')">The
             input is not valid E-mail!
@@ -82,9 +80,8 @@ import { Observable } from 'rxjs';
         <div>
           <tri-form-control tri-col [span]="12" [validateStatus]="getFormControl('password')"
                             [hasFeedback]="true">
-            <tri-input formControlName="password" [placeholder]="'password'" [type]="'password'"
-                       [size]="'large'" (ngModelChange)="validateConfirmPassword()">
-            </tri-input>
+            <input triInput formControlName="password" [placeholder]="'password'" [type]="'password'"
+                   [size]="'large'" (ngModelChange)="validateConfirmPassword()"/>
             <tri-form-explain
               *ngIf="getFormControl('password').dirty&&getFormControl('password').hasError('required')">
               Please input your password!
@@ -99,9 +96,8 @@ import { Observable } from 'rxjs';
         <tri-form-control tri-col [span]="12"
                           [validateStatus]="getFormControl('passwordConfirmation')"
                           [hasFeedback]="true">
-          <tri-input formControlName="passwordConfirmation" [type]="'password'"
-                     [placeholder]="'confirm your password'" [size]="'large'">
-          </tri-input>
+          <input triInput formControlName="passwordConfirmation" [type]="'password'"
+                 [placeholder]="'confirm your password'" [size]="'large'"/>
           <tri-form-explain
             *ngIf="getFormControl('passwordConfirmation').dirty&&getFormControl('passwordConfirmation').hasError('required')">
             Please confirm your password!
@@ -117,9 +113,8 @@ import { Observable } from 'rxjs';
           <label tri-form-item-required>Comment</label>
         </tri-form-label>
         <tri-form-control tri-col [span]="12" [validateStatus]="getFormControl('comment')">
-          <tri-input formControlName="comment" [rows]="2" [type]="'textarea'"
-                     [placeholder]="'write any thing'" [size]="'large'">
-          </tri-input>
+          <textarea triTextarea [rows]="2" formControlName="comment"
+                    [placeholder]="'write any thing'" [size]="'large'"></textarea>
           <tri-form-explain
             *ngIf="getFormControl('comment').dirty&&getFormControl('comment').hasError('required')">
             Please write something here!

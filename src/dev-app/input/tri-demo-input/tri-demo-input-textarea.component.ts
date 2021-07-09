@@ -12,9 +12,9 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'tri-demo-input-textarea',
   template: `
-    <tri-input [(ngModel)]="inputValue"
-               [type]="'textarea'" [rows]="4"
-               [placeholder]="''"></tri-input>`,
+    <textarea triTextarea [(ngModel)]="inputValue"
+               [rows]="4"
+               [placeholder]="''"></textarea>`,
   styles  : []
 })
 export class TriDemoInputTextareaComponent implements OnInit {

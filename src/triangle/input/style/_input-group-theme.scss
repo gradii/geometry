@@ -1,36 +1,41 @@
 @use "sass:map";
 @use "../../core/style/mixins";
-@use "../../core/style/variables";
+@use "../../core/style/variables" as v;
 @use "../../core/style/theming";
-@use "input-variables";
+@use "../../core/themes/theme";
+@use "input-variables" as input-v;
 
-@mixin tri-input-group-theme($theme, $inputClass) {
-  $foreground : map.get($theme, foreground);
-  $background : map.get($theme, background);
+$inputClass : #{v.$tri-prefix}-input-group;
 
-  $primary    : map.get($theme, primary);
+@mixin tri-input-group-theme() {
+  .#{$inputClass} {
+    $foreground : theme.$foreground;
+    $background : theme.$background;
 
-  .#{$inputClass}-prefix,
-  .#{$inputClass}-suffix {
-    color : theming.tri-color($foreground, input-color);
-  }
+    $primary    : theme.$primary;
 
-  @at-root &-addon {
-    color            : theming.tri-color($theme, input-addon-color);
-    background-color : theming.tri-color($theme, input-addon-bg);
-    border           : input-variables.$input-border-width mixins.$border-style-base theming.tri-color($theme, input-border-color);
+    .#{$inputClass}-prefix,
+    .#{$inputClass}-suffix {
+      color : theming.tri-color($foreground, input-color);
+    }
 
-    .#{mixins.$tri-prefix}-select {
+    @at-root &-addon {
+      color            : theming.tri-color($foreground, input-addon-color);
+      background-color : input-v.$input-addon-bg;
+      border           : input-v.$input-border-width mixins.$border-style-base input-v.$input-border-color;
 
-      > .#{mixins.$tri-prefix}-select-selection {
-        background-color : inherit;
-        border           : input-variables.$input-border-width mixins.$border-style-base transparent;
-      }
+      .#{mixins.$tri-prefix}-select {
 
-      @at-root &-open,
-      &-focused {
-        .#{mixins.$tri-prefix}-select-selection {
-          color : theming.tri-color($primary);
+        > .#{mixins.$tri-prefix}-select-selection {
+          background-color : inherit;
+          border           : input-v.$input-border-width mixins.$border-style-base transparent;
+        }
+
+        @at-root &-open,
+        &-focused {
+          .#{mixins.$tri-prefix}-select-selection {
+            color : theming.tri-color($primary);
+          }
         }
       }
     }

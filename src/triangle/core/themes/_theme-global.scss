@@ -26,6 +26,7 @@
 @use "../../grid-list/style/grid-list-theme" as *;
 @use "../../icon/style/icon-theme" as *;
 @use "../../input/style/input-theme" as *;
+@use "../../input/style/input-group-theme" as *;
 @use "../../input-number/style/input-number-theme" as *;
 @use "../../layout/style/layout-theme" as *;
 @use "../../list/style/list-theme" as *;
@@ -56,6 +57,7 @@
 @mixin gradii-triangle-theme-global() {
   @include tri-core-theme();
   @include tri-input-theme();
+  @include tri-input-group-theme();
   @include tri-input-number-theme();
   @include tri-alert-theme();
   @include tri-menu-theme();

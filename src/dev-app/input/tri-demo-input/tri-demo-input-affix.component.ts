@@ -12,16 +12,26 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'tri-demo-input-affix',
   template: `
-    <tri-input [type]="'text'" [placeholder]="'Enter your userName'">
+    <tri-input-group>
+      <input triInput [type]="'text'" [placeholder]="'Enter your userName'"/>
       <ng-template #prefix>
         <tri-icon svgIcon="outline:user"></tri-icon>
       </ng-template>
-    </tri-input>
+    </tri-input-group>
+
+    <tri-input-group>
+      <input triInput [type]="'text'" [placeholder]="'Enter your userName'"/>
+      <ng-template #suffix>
+        <tri-icon svgIcon="outline:user"></tri-icon>
+      </ng-template>
+    </tri-input-group>
   `,
-  styles: []
+  styles  : []
 })
 export class TriDemoInputAffixComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

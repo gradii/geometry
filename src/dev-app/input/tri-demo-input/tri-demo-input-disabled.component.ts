@@ -12,11 +12,11 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'tri-demo-input-basic',
   template: `
-    <tri-input
-      [disabled]="true"
-     [(ngModel)]="inputValue"
-     [placeholder]="'Basic usage'"
-     (ngModelChange)="_console($event)"></tri-input>
+    <input triInput
+           [disabled]="true"
+           [(ngModel)]="inputValue"
+           [placeholder]="'Basic usage'"
+           (ngModelChange)="_console($event)"/>
     <p>{{inputValue}}</p>`,
 
   styles: []
@@ -28,7 +28,9 @@ export class TriDemoInputDisabledComponent implements OnInit {
     console.log(value);
   }
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }
