@@ -8,21 +8,19 @@ import { Directive, Input, OnInit } from '@angular/core';
 
 export type TriJustify = 'start' | 'end' | 'center' | 'space-around' | 'space-between';
 export type RowAlign = 'top' | 'middle' | 'bottom';
-export type TriType = 'flex' | 'legacy';
 
 @Directive({
   selector: '[triRow], [tri-row], tri-row',
   host    : {
-    '[class.tri-row]'                   : '!type',
-    '[class.tri-row-flex]'              : 'type=="flex"',
-    '[class.tri-row-flex-top]'          : 'type=="flex"&&align=="top"',
-    '[class.tri-row-flex-middle]'       : 'type=="flex"&&align=="middle"',
-    '[class.tri-row-flex-bottom]'       : 'type=="flex"&&align=="bottom"',
-    '[class.tri-row-flex-start]'        : 'type=="flex"&&justify=="start"',
-    '[class.tri-row-flex-end]'          : 'type=="flex"&&justify=="end"',
-    '[class.tri-row-flex-center]'       : 'type=="flex"&&justify=="center"',
-    '[class.tri-row-flex-space-around]' : 'type=="flex"&&justify=="space-around"',
-    '[class.tri-row-flex-space-between]': 'type=="flex"&&justify=="space-between"',
+    'class'                             : 'tri-row-flex',
+    '[class.tri-row-flex-top]'          : 'align=="top"',
+    '[class.tri-row-flex-middle]'       : 'align=="middle"',
+    '[class.tri-row-flex-bottom]'       : 'align=="bottom"',
+    '[class.tri-row-flex-start]'        : 'justify=="start"',
+    '[class.tri-row-flex-end]'          : 'justify=="end"',
+    '[class.tri-row-flex-center]'       : 'justify=="center"',
+    '[class.tri-row-flex-space-around]' : 'justify=="space-around"',
+    '[class.tri-row-flex-space-between]': 'justify=="space-between"',
     '[style.margin-left.px]'            : '-_gutter/2',
     '[style.margin-right.px]'           : '-_gutter/2'
   }
@@ -49,27 +47,7 @@ export class RowDirective implements OnInit {
    * @param  value
    */
   set gutter(value: number) {
-    this._gutter = value;
-  }
-
-  _type: TriType = 'flex';
-
-  /**
-   * Get the layout type
-   * 获取布局模式
-   */
-  get type(): TriType {
-    return this._type;
-  }
-
-  /**
-   * Set the layout type, optional `flex`
-   * 设置布局模式，可选  `flex` ，现代浏览器下有效
-   * @param  value
-   */
-  @Input()
-  set type(value: TriType) {
-    this._type = value;
+    this._gutter = +value;
   }
 
   _align: RowAlign = 'top';

@@ -31,6 +31,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
           </tri-radio-group>
         </tri-form-control>
       </tri-form-item>
+
       <tri-form-item>
         <tri-form-label>
           <label>Username</label>
@@ -43,6 +44,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
           </tri-form-explain>
         </tri-form-control>
       </tri-form-item>
+
       <tri-form-item>
         <tri-form-label>
           <label>Password</label>
@@ -56,6 +58,25 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
           </tri-form-explain>
         </tri-form-control>
       </tri-form-item>
+
+      <tri-form-item>
+        <tri-form-label>
+          <label>Address</label>
+        </tri-form-label>
+        <tri-form-control [validateStatus]="validateForm.controls.address">
+          <tri-row [gutter]="8">
+            <tri-input tri-col [span]="12" formControlName="address" [placeholder]="'Address'">
+            </tri-input>
+            <tri-input tri-col [span]="12" formControlName="country" [placeholder]="'Country'">
+            </tri-input>
+          </tri-row>
+          <tri-form-explain
+            *ngIf="validateForm.controls.address.dirty&&validateForm.controls.address.hasError('required')">
+            Please input your Address!
+          </tri-form-explain>
+        </tri-form-control>
+      </tri-form-item>
+
     </form>
   `
 })
@@ -79,7 +100,9 @@ export class TriDemoFormMultiControlComponent {
     this.validateForm = this.fb.group({
       formLayout: ['horizontal'],
       userName  : [null, [Validators.required]],
-      password  : [null, [Validators.required]]
+      password  : [null, [Validators.required]],
+      address   : [null, [Validators.required]],
+      country   : [null, [Validators.required]]
     });
   }
 }

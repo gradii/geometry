@@ -255,7 +255,7 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   @Input()
-  fullWidth: boolean = true;
+  fullWidth: boolean = false;
 
   @HostListener('compositionstart', ['$event'])
   compositionStart(e: CompositionEvent): void {

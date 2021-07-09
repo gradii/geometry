@@ -18,7 +18,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
         <tri-form-control [validateStatus]="validateForm.controls.userName">
           <tri-input formControlName="userName" [placeholder]="'Username'" [size]="'large'">
             <ng-template #prefix>
-              <i class="anticon anticon-user"></i>
+              <tri-icon svgIcon="outline:user"></tri-icon>
             </ng-template>
           </tri-input>
           <tri-form-explain
@@ -32,7 +32,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
           <tri-input formControlName="password" [type]="'password'" [placeholder]="'Password'"
                      [size]="'large'">
             <ng-template #prefix>
-              <i class="anticon anticon-lock"></i>
+              <tri-icon svgIcon="fill:lock"></tri-icon>
             </ng-template>
           </tri-input>
           <tri-form-explain
