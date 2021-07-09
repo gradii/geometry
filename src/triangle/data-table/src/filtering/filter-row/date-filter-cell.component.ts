@@ -42,7 +42,7 @@ const dateOperators = localizeOperators({
       <!--[max]="max"-->
       <!--&gt;-->
       <!--</tri-datepicker>-->
-      <tri-input></tri-input>
+      <input triInput/>
     </tri-data-table-filter-wrapper-cell>
   `
 })

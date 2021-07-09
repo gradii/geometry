@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TriIconModule } from '@gradii/triangle/icon';
+import { InputAffixComponent } from '@gradii/triangle/input/src/input-affix.component';
 import { InputGroupComponent } from './input-group.component';
 import { InputDirective } from './input.directive';
 import { TextareaDirective, TextareaAutosize } from './textarea.directive';
@@ -45,10 +46,10 @@ import { TextareaDirective, TextareaAutosize } from './textarea.directive';
 @NgModule({
   imports     : [CommonModule, FormsModule, TriIconModule, TextFieldModule],
   declarations: [
-    InputGroupComponent, InputDirective, TextareaDirective, TextareaAutosize
+    InputGroupComponent, InputAffixComponent, InputDirective, TextareaDirective, TextareaAutosize
   ],
   exports     : [
-    InputGroupComponent, InputDirective, TextareaDirective, TextareaAutosize
+    InputGroupComponent, InputAffixComponent, InputDirective, TextareaDirective, TextareaAutosize
   ],
 })
 export class TriInputModule {

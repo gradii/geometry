@@ -29,7 +29,7 @@ import { FilterService } from '../filter.service';
           <!--[valuePrimitive]="true"-->
           <!--[value]="currentFilter?.value">-->
           <!--</tri-dropdownlist>-->
-          <tri-input></tri-input>
+          <input triInput/>
       </tri-data-table-filter-wrapper-cell>
   `
 })
