@@ -10,20 +10,20 @@ import {
 } from '@angular/core';
 
 /**
- * @title collapse-border
+ * @title accordion-border
  */
 @Component({
-  selector: 'tri-demo-collapse-border',
+  selector: 'tri-demo-accordion-border',
   template: `
-    <tri-collapseset [bordered]="false">
-      <tri-collapse *ngFor="let panel of panels" [title]="panel.name" [active]="panel.active">
+    <tri-accordion [bordered]="false">
+      <tri-accordion-item *ngFor="let panel of panels" [title]="panel.name" [active]="panel.active">
         <p>{{panel.name}} 的内容</p>
-      </tri-collapse>
-    </tri-collapseset>
+      </tri-accordion-item>
+    </tri-accordion>
   `,
   styles  : []
 })
-export class TriDemoCollapseBorderComponent implements OnInit {
+export class TriDemoAccordionBorderComponent implements OnInit {
   panels = [
     {
       active     : true,

@@ -14,7 +14,7 @@ import { Component } from '@angular/core';
       <li><a routerLink="input-number">input number</a></li>
       <li><a routerLink="alert">alert</a></li>
       <li><a routerLink="tabs">tabs</a></li>
-      <li><a routerLink="collapse">collapse</a></li>
+      <li><a routerLink="accordion">accordion</a></li>
       <li><a routerLink="button">button</a></li>
       <li><a routerLink="icon">icon</a></li>
       <li><a routerLink="tree-view">tree view</a></li>

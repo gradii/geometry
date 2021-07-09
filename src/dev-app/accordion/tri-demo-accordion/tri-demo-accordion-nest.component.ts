@@ -10,28 +10,28 @@ import {
 } from '@angular/core';
 
 /**
- * @title collapse-nest
+ * @title accordion-nest
  */
 @Component({
-  selector: 'tri-demo-collapse-nest',
+  selector: 'tri-demo-accordion-nest',
   template: `
-    <tri-collapseset>
-      <tri-collapse *ngFor="let panel of panels" [title]="panel.name" [active]="panel.active">
+    <tri-accordion>
+      <tri-accordion-item *ngFor="let panel of panels" [title]="panel.name" [active]="panel.active">
         <p>{{panel.name}} 的内容</p>
         <div *ngIf="panel.childPanel&&panel.childPanel.length>0">
-          <tri-collapseset>
-            <tri-collapse *ngFor="let childPanel of panel.childPanel" [title]="childPanel.name"
+          <tri-accordion>
+            <tri-accordion-item *ngFor="let childPanel of panel.childPanel" [title]="childPanel.name"
                          [active]="childPanel.active">
               <p>{{childPanel.name}} 的内容</p>
-            </tri-collapse>
-          </tri-collapseset>
+            </tri-accordion-item>
+          </tri-accordion>
         </div>
-      </tri-collapse>
-    </tri-collapseset>
+      </tri-accordion-item>
+    </tri-accordion>
   `,
   styles  : []
 })
-export class TriDemoCollapseNestComponent implements OnInit {
+export class TriDemoAccordionNestComponent implements OnInit {
   panels = [
     {
       active    : true,

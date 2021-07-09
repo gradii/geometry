@@ -10,11 +10,11 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector   : 'dev-collapse',
-  templateUrl: './dev-collapse.html',
-  styleUrls  : ['./dev-collapse.css']
+  selector   : 'dev-accordion',
+  templateUrl: './dev-accordion.html',
+  styleUrls  : ['./dev-accordion.css']
 })
-export class DevCollapse implements OnInit {
+export class DevAccordion implements OnInit {
 
   constructor() {
   }

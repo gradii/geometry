@@ -10,21 +10,21 @@ import {
 } from '@angular/core';
 
 /**
- * @title collapse-custom
+ * @title accordion-custom
  */
 @Component({
-  selector: 'tri-demo-collapse-custom',
+  selector: 'tri-demo-accordion-custom',
   template: `
-    <tri-collapseset  [bordered]="false">
-      <tri-collapse *ngFor="let panel of panels" [title]="panel.name" [active]="panel.active"
+    <tri-accordion  [bordered]="false">
+      <tri-accordion-item *ngFor="let panel of panels" [title]="panel.name" [active]="panel.active"
                    [ngStyle]="panel.customStyle">
         <p>{{panel.name}} 的内容</p>
-      </tri-collapse>
-    </tri-collapseset>
+      </tri-accordion-item>
+    </tri-accordion>
   `,
   styles  : []
 })
-export class TriDemoCollapseCustomComponent implements OnInit {
+export class TriDemoAccordionCustomComponent implements OnInit {
   panels = [
     {
       active     : true,

@@ -10,23 +10,23 @@ import {
 } from '@angular/core';
 
 /**
- * @title collapse-basic
+ * @title accordion-basic
  */
 @Component({
-  selector: 'tri-demo-collapse-basic',
+  selector: 'tri-demo-accordion-basic',
   template: `
-    <tri-collapseset>
-      <tri-collapse *ngFor="let panel of panels"
+    <tri-accordion>
+      <tri-accordion-item *ngFor="let panel of panels"
                     [title]="panel.name"
                     [active]="panel.active"
                     [disabled]="panel.disabled">
         <p>{{panel.name}}内容</p>
-      </tri-collapse>
-    </tri-collapseset>
+      </tri-accordion-item>
+    </tri-accordion>
   `,
   styles  : []
 })
-export class TriDemoCollapseBasicComponent implements OnInit {
+export class TriDemoAccordionBasicComponent implements OnInit {
   panels = [
     {
       active    : true,

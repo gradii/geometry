@@ -3,20 +3,20 @@ load("//tools:defaults.bzl", "ng_module", "sass_binary")
 package(default_visibility = ["//visibility:public"])
 
 ng_module(
-    name = "collapse",
+    name = "accordion",
     srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"],),
     assets = [
-        "dev-collapse.html",
-        ":dev_collapse_scss",
+        "dev-accordion.html",
+        ":dev_accordion_scss",
     ],
     deps = [
-        "//src/triangle/collapse",
+        "//src/triangle/accordion",
         "@npm//@angular/forms",
         "@npm//@angular/router",
     ],
 )
 
 sass_binary(
-    name = "dev_collapse_scss",
-    src = "dev-collapse.scss",
+    name = "dev_accordion_scss",
+    src = "dev-accordion.scss",
 )

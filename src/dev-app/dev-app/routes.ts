@@ -32,8 +32,8 @@ export const DEV_APP_ROUTES: Routes = [
         loadChildren: '/tabs/dev-tabs.module#DevTabsModule'
       },
       {
-        path        : 'collapse',
-        loadChildren: '/collapse/dev-collapse.module#DevCollapseModule'
+        path        : 'accordion',
+        loadChildren: '/accordion/dev-accordion.module#DevAccordionModule'
       },
       {
         path        : 'button',

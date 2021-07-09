@@ -1,6 +1,7 @@
 // Import all the theming functionality. as *
 
 @use "../../core/core-theme" as *;
+@use "../../accordion/style/accordion-theme" as *;
 @use "../../alert/style/alert-theme" as *;
 @use "../../anchor/style/anchor-theme" as *;
 @use "../../autocomplete/style/autocomplete-theme" as *;
@@ -14,7 +15,6 @@
 @use "../../carousel/style/carousel-theme" as *;
 @use "../../cascader/style/cascader-theme" as *;
 @use "../../checkbox/style/checkbox-theme" as *;
-@use "../../collapse/style/collapse-theme" as *;
 @use "../../data-table/style/data-table-theme" as *;
 @use "../../date-picker/style/date-picker-theme" as *;
 @use "../../desc-list/style/desc-list-theme" as *;
@@ -63,7 +63,7 @@
   @include tri-menu-theme();
   @include tri-layout-theme();
   @include tri-tabs-theme();
-  @include tri-collapse-theme();
+  @include tri-accordion-theme();
   @include tri-button-theme();
   @include tri-radio-theme();
   @include tri-select-theme();

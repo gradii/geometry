@@ -3,21 +3,21 @@ import {
   TestBed
 } from '@angular/core/testing';
 
-import { DevCollapse } from './dev-collapse';
+import { DevAccordion } from './dev-accordion';
 
-describe('DevCollapseComponent', () => {
-  let component: DevCollapse;
-  let fixture: ComponentFixture<DevCollapse>;
+describe('DevAccordionComponent', () => {
+  let component: DevAccordion;
+  let fixture: ComponentFixture<DevAccordion>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DevCollapse]
+      declarations: [DevAccordion]
     })
       .compileComponents();
   });
 
   beforeEach(() => {
-    fixture   = TestBed.createComponent(DevCollapse);
+    fixture   = TestBed.createComponent(DevAccordion);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
