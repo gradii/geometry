@@ -4,7 +4,7 @@
 
 
 $primary   : theming.tri-palette(v.$tri-indigo) !default;
-$secondary : theming.tri-palette(v.$tri-green, A200, A100, A400) !default;
+$secondary : theming.tri-palette(v.$tri-gray, A200, A100, A400) !default;
 $info      : theming.tri-palette(v.$tri-blue) !default;
 $success   : theming.tri-palette(v.$tri-green) !default;
 $error     : theming.tri-palette(v.$tri-red) !default;

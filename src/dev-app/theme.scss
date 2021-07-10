@@ -2,10 +2,10 @@
 @use "../triangle/core/style/variables" as v;
 @forward "../triangle/core/themes/theme" with (
   $primary    : theming.tri-palette(v.$tri-indigo),
-  $secondary  : theming.tri-palette(v.$tri-pink, A200, A100, A400),
+  $secondary  : theming.tri-palette(v.$tri-blue-grey, A200, A100, A400),
   $info       : theming.tri-palette(v.$tri-blue, A200, A100, A400),
   $warning    : theming.tri-palette(v.$tri-yellow, A200, A100, A400),
-  $success    : theming.tri-palette(v.$tri-blue, A200, A100, A400),
+  $success    : theming.tri-palette(v.$tri-green, A200, A100, A400),
 );
 
 @use "../triangle/core/themes/theme-global";

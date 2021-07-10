@@ -20,6 +20,7 @@ ng_module(
     module_name = "@gradii/triangle/button",
     deps = [
         "//src/triangle/core",
+        "//src/triangle/icon",
         "//src/triangle/i18n",
         "//src/triangle/util",
         "@npm//@angular/animations",

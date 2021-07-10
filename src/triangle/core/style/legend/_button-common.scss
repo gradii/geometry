@@ -207,7 +207,7 @@ $btn-primary-bg         : grey !default;
 
 // primary button style
 @mixin btn-primary() {
-  @include button-variant-primary($btn-primary-color, $btn-primary-bg);
+  @include button-variant-basic($btn-primary-color, $btn-primary-bg);
 }
 
 // default button style
@@ -428,13 +428,41 @@ $btn-primary-bg         : grey !default;
 
 
 // button variant mixin
-
-@mixin button-variant-primary($color, $background, $border-color: $background) {
+@mixin button-variant-text($color) {
   @include button-variant(
-      $background,
-      $border-color,
-      $color,
-      theming.tri-color-palette($background, 5),
+      transparent, //$background
+      transparent, //$border-color
+      $color, //$color
+      theming.tri-color-palette($color, 1), //$hover-background
+      transparent, //$hover-border,
+      $color, //$hover-color,
+      theming.tri-color-palette($color, 1), //$active-background,
+      transparent, //$active-border,
+      $color, //$active-color
+  );
+}
+
+@mixin button-variant-outlined($color) {
+  @include button-variant(
+      transparent, //$background
+      $color, //$border-color
+      $color, //$color
+      theming.tri-color-palette($color, 1), //$hover-background
+      $color, //$hover-border,
+      $color, //$hover-color,
+      theming.tri-color-palette($color, 1), //$active-background,
+      $color, //$active-border,
+      $color, //$active-color
+  );
+}
+
+
+@mixin button-variant-basic($color, $background, $border-color: $background) {
+  @include button-variant(
+      $background, //$background
+      $border-color, //$border-color
+      $color, //$color
+      theming.tri-color-palette($background, 5), //$hover-background
       theming.tri-color-palette($background, 5), //$hover-border,
       $color, //$hover-color,
       theming.tri-color-palette($border-color, 7), //$active-background,

@@ -95,7 +95,7 @@ $calendar-timepicker-prefix-cls : "#{$tri-prefix}-calendar-time-picker";
 
     .#{$calendar-prefix-cls}-ok-btn {
       @include btn();
-      @include button-variant-primary($btn-primary-color, $btn-primary-bg);
+      @include button-variant-basic($btn-primary-color, $btn-primary-bg);
       @include button-size($btn-height-sm,
         $btn-padding-y-sm, $btn-padding-x-sm, $font-size-base, $btn-line-height-sm, $border-radius-base);
       line-height : $line-height-base;

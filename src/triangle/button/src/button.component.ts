@@ -11,9 +11,11 @@ import {
 
 export type ButtonColor =
   'primary'
-  | 'warning'
+  | 'secondary'
   | 'success'
+  | 'info'
   | 'dashed'
+  | 'warning'
   | 'danger'
   | 'highlight'
   | 'default';
@@ -22,7 +24,7 @@ export type ButtonSize = 'small' | 'large' | 'default';
 
 @Directive({
   selector: '[triRaisedButton]',
-  host: {
+  host    : {
     'class': 'tri-btn-raised',
   }
 })
@@ -31,16 +33,16 @@ export class TriRaisedButton {
 
 @Directive({
   selector: '[triRoundedButton]',
-  host: {
+  host    : {
     'class': 'tri-btn-rounded'
   }
 })
 export class TriRoundedButton {
-} 
+}
 
 @Directive({
   selector: '[triTextButton]',
-  host: {
+  host    : {
     'class': 'tri-btn-text'
   }
 })
@@ -49,7 +51,7 @@ export class TriTextButton {
 
 @Directive({
   selector: '[triOutlinedButton]',
-  host: {
+  host    : {
     'class': 'tri-btn-outlined'
   }
 })
@@ -57,19 +59,21 @@ export class TriOutlinedButton {
 }
 
 @Component({
-  selector           : '[triButton], [tri-button], [triRaisedButton], [triRoundedButton], [triTextButton], [triOutlinedButton]',
-  changeDetection    : ChangeDetectionStrategy.OnPush,
-  encapsulation      : ViewEncapsulation.None,
-  template           : `
-    <i class="anticon anticon-spin anticon-loading" style="display: inline-block" *ngIf="loading"></i>
+  selector       : '[triButton], [tri-button], [triRaisedButton], [triRoundedButton], [triTextButton], [triOutlinedButton]',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation  : ViewEncapsulation.None,
+  template       : `
+    <tri-icon svgIcon="outline:loading" *ngIf="loading"></tri-icon>
     <ng-content></ng-content>
   `,
-  styleUrls          : ['../style/button.css'],
-  host               : {
+  styleUrls      : ['../style/button.css'],
+  host           : {
     'class'                           : 'tri-btn',
     '[class.tri-btn-primary]'         : '_color === "primary"',
+    '[class.tri-btn-secondary]'       : '_color === "secondary"',
     '[class.tri-btn-dashed]'          : '_color === "dashed"',
     '[class.tri-btn-success]'         : '_color === "success"',
+    '[class.tri-btn-info]'            : '_color === "info"',
     '[class.tri-btn-warning]'         : '_color === "warning"',
     '[class.tri-btn-danger]'          : '_color === "danger"',
     '[class.tri-btn-highlight]'       : '_color === "highlight"',
@@ -77,7 +81,6 @@ export class TriOutlinedButton {
     '[class.tri-btn-lg]'              : '_size === "large"',
     '[class.tri-btn-sm]'              : '_size === "small"',
     '[class.tri-btn-loading]'         : '_loading',
-    '[class.tri-btn-clicked]'         : '_clicked',
     '[class.tri-btn-icon-only]'       : '_iconOnly',
     '[class.tri-btn-background-ghost]': '_ghost'
   }
@@ -87,8 +90,6 @@ export class ButtonComponent implements AfterContentInit {
   nativeElement: HTMLElement;
   _iconElement: HTMLElement;
   _iconOnly = false;
-  _clicked = false;
-  _prefixCls = 'tri-btn';
 
   constructor(private _elementRef: ElementRef, private _renderer: Renderer2, private cdRef: ChangeDetectorRef) {
     this._el = this._elementRef.nativeElement;
@@ -189,17 +190,6 @@ export class ButtonComponent implements AfterContentInit {
 
   get _innerIElement() {
     return this._el.querySelector('i');
-  }
-
-  /** toggle button clicked animation */
-  @HostListener('click')
-  _onClick() {
-    this._clicked = true;
-    // this.cdRef.markForCheck();
-    setTimeout(() => {
-      this._clicked = false;
-      // this.cdRef.markForCheck();
-    }, 300);
   }
 
   ngAfterContentInit() {
