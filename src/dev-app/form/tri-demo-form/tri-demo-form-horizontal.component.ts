@@ -87,11 +87,11 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
         <tri-form-control tri-col [sm]="14" [xs]="24" [hasFeedback]="true"
                           [validateStatus]="getFormControl('phoneNumber')">
           <tri-input-group [size]="'large'">
-            <tri-select formControlName="phoneNumberPrefix" style="width: 25%;">
+            <tri-select formControlName="phoneNumberPrefix" size="large" style="width: 25%;">
               <tri-option [label]="'+86'" [value]="'+86'"></tri-option>
               <tri-option [label]="'+87'" [value]="'+87'"></tri-option>
             </tri-select>
-            <input triInput formControlName="phoneNumber" id="'phoneNumber'" style="width: 75%;">
+            <input triInput formControlName="phoneNumber" size="large" id="'phoneNumber'" style="width: 75%;">
           </tri-input-group>
           <tri-form-explain
             *ngIf="getFormControl('phoneNumber').dirty&&getFormControl('phoneNumber').hasError('required')">

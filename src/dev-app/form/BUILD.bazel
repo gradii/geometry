@@ -20,6 +20,7 @@ ng_module(
         "//src/triangle/input-number",
         "//src/triangle/select",
         "//src/triangle/tooltip",
+        "//src/triangle/checkbox",
 
         "@npm//@angular/cdk",
         "@npm//@angular/core",

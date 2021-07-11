@@ -59,8 +59,8 @@ $btn-primary-bg         : grey !default;
 // mixins for button
 // ------------------------
 @mixin button-size($btn-height, $padding-y, $padding-x, $font-size, $line-height, $border-radius) {
-  padding     : $padding-y $padding-x;
   height      : $btn-height;
+  padding     : $padding-y $padding-x;
   line-height : $line-height;
 
   @include rfs.font-size($font-size);
@@ -127,10 +127,11 @@ $btn-primary-bg         : grey !default;
 // Base styles of buttons
 // --------------------------------------------------
 @mixin btn() {
-  display          : inline-block;
-  margin-bottom    : 0;
-  font-weight      : v.$font-weight-normal;
+  display          : inline-flex;
+  align-items      : center;
+  justify-content  : center;
   text-align       : center;
+  font-weight      : v.$font-weight-normal;
   touch-action     : manipulation;
   cursor           : pointer;
   background-image : none;
@@ -148,10 +149,6 @@ $btn-primary-bg         : grey !default;
   vertical-align   : middle;
   transition       : all .1s v.$ease-in-out;
   position         : relative;
-
-  > .#{v.$iconfont-css} {
-    line-height : 1;
-  }
 
   &,
   &:active,
@@ -235,7 +232,7 @@ $btn-primary-bg         : grey !default;
 
 // circle button: the content only contains icon
 @mixin btn-circle($btnClassName: btn) {
-  @include size.square($btn-circle-size);
+  width : $btn-circle-size;
   @include button-size($btn-circle-size,
     0, 0, $btn-font-size-base, $btn-line-height-base, 50%);
 
@@ -329,7 +326,7 @@ $btn-primary-bg         : grey !default;
   $disabled-border: $border-color,
   $disabled-color: $color,
 ) {
-  color        : $color;
+  color  : $color;
   @include gradients.gradient-bg($background);
   border : v.$border-width-base v.$border-style-base $border-color;
   @include box-shadow.box-shadow($btn-box-shadow);

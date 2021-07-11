@@ -27,6 +27,9 @@ import {
     <button tri-button [type]="'danger'">
       <span>Danger</span>
     </button>
+    <a triButton href="//google.com">
+      Link Button
+    </a>
 
     <h5>raised button</h5>
     <button triRaisedButton color="primary">

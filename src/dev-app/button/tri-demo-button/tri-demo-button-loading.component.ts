@@ -4,10 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  Component,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 /**
  * @title button-loading
@@ -15,8 +12,13 @@ import {
 @Component({
   selector: 'tri-demo-button-loading',
   template: `
+    <button tri-button size="large" [type]="'primary'" [loading]="true">
+      <tri-icon svgIcon="outline:poweroff"></tri-icon>
+      <span>Loading</span>
+    </button>
     <button tri-button [type]="'primary'" [loading]="true">
-      <span><i class="anticon anticon-poweroff"></i>Loading</span>
+      <tri-icon svgIcon="outline:poweroff"></tri-icon>
+      <span>Loading</span>
     </button>
     <button tri-button [type]="'primary'" [size]="'small'" [loading]="true">
       <span>Loading</span>
@@ -30,12 +32,50 @@ import {
       <span>Click me!</span>
     </button>
     <br>
+
+    <tri-checkbox [(ngModel)]="loading"></tri-checkbox>
+    <button triIconOnlyButton [triRoundedButton]="false" size="large" [loading]="loading">
+      <tri-icon svgIcon="outline:poweroff"></tri-icon>
+    </button>
+
+    <button triIconOnlyButton triRoundedButton size="large" [loading]="loading">
+      <tri-icon svgIcon="outline:poweroff"></tri-icon>
+    </button>
+
+    <button triIconOnlyButton size="large" [loading]="loading">
+      <tri-icon svgIcon="outline:poweroff"></tri-icon>
+    </button>
+
+
+    <button triIconOnlyButton [triRoundedButton]="false" [loading]="loading">
+      <tri-icon svgIcon="outline:poweroff"></tri-icon>
+    </button>
+
+    <button triIconOnlyButton triRoundedButton [loading]="loading">
+      <tri-icon svgIcon="outline:poweroff"></tri-icon>
+    </button>
+
+    <button triIconOnlyButton [loading]="loading">
+      <tri-icon svgIcon="outline:poweroff"></tri-icon>
+    </button>
+
+
+    <button triRoundedButton [loading]="true">
+      <tri-icon svgIcon="outline:poweroff"></tri-icon>
+    </button>
+
+    <button triIconOnlyButton [loading]="true">
+      <tri-icon svgIcon="outline:poweroff"></tri-icon>
+    </button>
+
     <button tri-button [loading]="true" [shape]="'circle'"></button>
     <button tri-button [loading]="true" [type]="'primary'" [shape]="'circle'"></button>
   `,
   styles  : []
 })
 export class TriDemoButtonLoadingComponent implements OnInit {
+  loading: boolean = true;
+
   isLoadingOne = false;
   isLoadingTwo = false;
   loadOne      = value => {

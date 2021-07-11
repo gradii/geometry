@@ -1,7 +1,7 @@
 @use "../mixins/import-once";
 
 @mixin loading-circle-keyframe() {
-  @include import-once.import-once("core:motion:other", true) {
+  @include import-once.import-once("core:motion:other", false) {
     @keyframes loadingCircle {
       0% {
         transform-origin : 50% 50%;

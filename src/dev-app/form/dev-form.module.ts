@@ -9,6 +9,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TriButtonModule } from '@gradii/triangle/button';
+import { TriCheckboxModule } from '@gradii/triangle/checkbox';
 import { TriDatePickerModule } from '@gradii/triangle/date-picker';
 import { TriFormModule } from '@gradii/triangle/form';
 import { TriGridModule } from '@gradii/triangle/grid';
@@ -48,6 +49,7 @@ import { TriDemoFormValidateComponent } from './tri-demo-form/tri-demo-form-vali
     TriTimePickerModule,
     TriSelectModule,
     TriTooltipModule,
+    TriCheckboxModule,
 
     RouterModule.forChild([
       {

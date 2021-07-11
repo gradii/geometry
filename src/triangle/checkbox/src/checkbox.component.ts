@@ -4,6 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
   Component, EventEmitter, forwardRef, HostListener, Input, Output, ViewEncapsulation
 } from '@angular/core';

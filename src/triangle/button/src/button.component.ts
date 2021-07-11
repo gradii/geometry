@@ -4,9 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
-  AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Directive, ElementRef, HostListener,
-  Input, Renderer2, ViewEncapsulation
+  AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Directive, ElementRef,
+  Input, Renderer2, ViewEncapsulation, ɵmarkDirty
 } from '@angular/core';
 
 export type ButtonColor =
@@ -34,10 +35,23 @@ export class TriRaisedButton {
 @Directive({
   selector: '[triRoundedButton]',
   host    : {
-    'class': 'tri-btn-rounded'
+    'class'                  : 'tri-btn-rounded',
+    '[class.tri-btn-rounded]': '_rounded'
   }
 })
 export class TriRoundedButton {
+  private _rounded: boolean = true;
+
+  @Input('triRoundedButton')
+  get rounded(): boolean {
+    return this._rounded;
+  }
+
+  set rounded(value: boolean) {
+    this._rounded = coerceBooleanProperty(value);
+  }
+
+  static ngAcceptInputType_rounded: BooleanInput;
 }
 
 @Directive({
@@ -58,13 +72,23 @@ export class TriTextButton {
 export class TriOutlinedButton {
 }
 
+@Directive({
+  selector: '[triIconOnlyButton]',
+  host    : {
+    'class': 'tri-btn-icon-only tri-btn-rounded',
+  }
+})
+export class TriIconOnlyButton {
+}
+
 @Component({
-  selector       : '[triButton], [tri-button], [triRaisedButton], [triRoundedButton], [triTextButton], [triOutlinedButton]',
+  selector       : `[triButton], [tri-button],
+  [triRaisedButton], [triRoundedButton], [triTextButton], [triOutlinedButton], [triIconOnlyButton]`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation  : ViewEncapsulation.None,
   template       : `
-    <tri-icon svgIcon="outline:loading" *ngIf="loading"></tri-icon>
-    <ng-content></ng-content>
+    <tri-icon class="tri-icon-spin" svgIcon="outline:loading" *ngIf="loading"></tri-icon>
+    <ng-content *ngIf="!iconOnly || iconOnly&&!loading"></ng-content>
   `,
   styleUrls      : ['../style/button.css'],
   host           : {
@@ -81,21 +105,31 @@ export class TriOutlinedButton {
     '[class.tri-btn-lg]'              : '_size === "large"',
     '[class.tri-btn-sm]'              : '_size === "small"',
     '[class.tri-btn-loading]'         : '_loading',
-    '[class.tri-btn-icon-only]'       : '_iconOnly',
     '[class.tri-btn-background-ghost]': '_ghost'
   }
 })
 export class ButtonComponent implements AfterContentInit {
+
   _el: HTMLElement;
   nativeElement: HTMLElement;
   _iconElement: HTMLElement;
   _iconOnly = false;
 
-  constructor(private _elementRef: ElementRef, private _renderer: Renderer2, private cdRef: ChangeDetectorRef) {
+  constructor(private _elementRef: ElementRef, private _renderer: Renderer2,
+              private cdRef: ChangeDetectorRef) {
     this._el = this._elementRef.nativeElement;
   }
 
   _color: ButtonColor;
+
+  @Input('triIconOnlyButton')
+  get iconOnly(): boolean {
+    return this._iconOnly;
+  }
+
+  set iconOnly(value: boolean) {
+    this._iconOnly = coerceBooleanProperty(value);
+  }
 
   @Input()
   get color(): ButtonColor {
@@ -164,6 +198,7 @@ export class ButtonComponent implements AfterContentInit {
    */
   @Input()
   set loading(value: boolean) {
+    ɵmarkDirty(this);
     this._loading = value;
   }
 
@@ -172,7 +207,9 @@ export class ButtonComponent implements AfterContentInit {
   /**
    * Get ghost
    * 获取幽灵按钮
+   * @deprecated
    */
+  @Input()
   get ghost(): boolean {
     return this._ghost;
   }
@@ -182,7 +219,6 @@ export class ButtonComponent implements AfterContentInit {
    * 设置幽灵按钮
    * @param  value
    */
-  @Input()
   set ghost(value: boolean) {
     this._ghost = value;
   }
@@ -195,8 +231,11 @@ export class ButtonComponent implements AfterContentInit {
   ngAfterContentInit() {
     this._iconElement = this._innerIElement;
     /** check if host children only has i element */
-    if (this._iconElement && this._el.children.length === 1 && this._iconElement.isEqualNode(this._el.children[0])) {
+    if (this._iconElement && this._el.children.length === 1 && this._iconElement.isEqualNode(
+      this._el.children[0])) {
       this._iconOnly = true;
     }
   }
+
+  static ngAcceptInputType_iconOnly: BooleanInput;
 }

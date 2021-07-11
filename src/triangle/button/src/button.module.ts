@@ -6,9 +6,11 @@
 
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { TriRippleModule } from '../../core';
 import { ButtonGroupComponent } from './button-group.component';
 import {
-  ButtonComponent, TriOutlinedButton, TriRaisedButton, TriRoundedButton, TriTextButton
+  ButtonComponent, TriIconOnlyButton, TriOutlinedButton, TriRaisedButton, TriRoundedButton,
+  TriTextButton
 } from './button.component';
 import { TriIconModule } from '@gradii/triangle/icon';
 
@@ -40,13 +42,13 @@ import { TriIconModule } from '@gradii/triangle/icon';
 @NgModule({
   declarations: [
     ButtonComponent, ButtonGroupComponent,
-    TriRaisedButton, TriRoundedButton, TriTextButton, TriOutlinedButton
+    TriRaisedButton, TriRoundedButton, TriTextButton, TriOutlinedButton, TriIconOnlyButton
   ],
   exports     : [
     ButtonComponent, ButtonGroupComponent,
-    TriRaisedButton, TriRoundedButton, TriTextButton, TriOutlinedButton
+    TriRaisedButton, TriRoundedButton, TriTextButton, TriOutlinedButton, TriIconOnlyButton
   ],
-  imports     : [CommonModule, TriIconModule]
+  imports: [CommonModule, TriIconModule, TriRippleModule]
 })
 export class TriButtonModule {
 }

@@ -13,12 +13,12 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 @Component({
   selector: 'tri-demo-form-dynamic',
   template: `
-    <form tri-form="" [formGroup]="validateForm" (ngSubmit)="_submitForm()">
-      <tri-form-item tri-row="" *ngFor="let control of controlArray;let i = index">
-        <tri-form-label tri-col="" [span]="4" *ngIf="i==0">
+    <form tri-form [formGroup]="validateForm" (ngSubmit)="_submitForm()">
+      <tri-form-item tri-row *ngFor="let control of controlArray;let i = index">
+        <tri-form-label tri-col [span]="4" *ngIf="i==0">
           <label [attr.for]="control.controlInstance">Passengers</label>
         </tri-form-label>
-        <tri-form-control tri-col="" [span]="20" [offset]="i==0?0:4"
+        <tri-form-control tri-col [span]="20" [offset]="i==0?0:4"
                           [validateStatus]="getFormControl(control.controlInstance)">
           <input triInput style="width: 60%; margin-right:8px;" [size]="'large'"
                  [placeholder]="'placeholder'" [formControlName]="control.controlInstance"
@@ -31,18 +31,18 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
           </tri-form-explain>
         </tri-form-control>
       </tri-form-item>
-      <tri-form-item tri-row="">
-        <tri-form-control tri-col="" [span]="20" [offset]="4">
-          <button tri-button="" [type]="'dashed'" [size]="'large'" style="width:60%"
+      <tri-form-item tri-row>
+        <tri-form-control tri-col [span]="20" [offset]="4">
+          <button tri-button [type]="'dashed'" [size]="'large'" style="width:60%"
                   (click)="addField($event)">
             <i class="anticon anticon-plus"></i>
             <span> Add field</span>
           </button>
         </tri-form-control>
       </tri-form-item>
-      <tri-form-item tri-row="">
-        <tri-form-control tri-col="" [span]="20" [offset]="4">
-          <button tri-button="" [type]="'primary'" [size]="'large'">Submit</button>
+      <tri-form-item tri-row>
+        <tri-form-control tri-col [span]="20" [offset]="4">
+          <button tri-button [type]="'primary'" [size]="'large'">Submit</button>
         </tri-form-control>
       </tri-form-item>
     </form>

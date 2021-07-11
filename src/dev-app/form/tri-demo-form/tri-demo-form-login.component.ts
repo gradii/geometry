@@ -52,7 +52,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
           <button tri-button class="login-form-button" [type]="'primary'" [size]="'large'">Log in
           </button>
           Or
-          <a href="">register now!</a>
+          <a href>register now!</a>
         </tri-form-control>
       </tri-form-item>
     </form>`,

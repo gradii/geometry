@@ -1,6 +1,7 @@
 @use "../../core/style/mixins";
 @use "../../core/style/variables" as v;
 @use "../../core/themes/theme";
+@use "../../core/style/animations/other";
 
 $btn-prefix-cls         : "#{v.$tri-prefix}-btn";
 
@@ -51,49 +52,51 @@ $btn-circle-size-sm     : $btn-height-sm !default;
 
   @at-root &-circle,
   &-circle-outline {
+    display         : inline-flex;
+    align-items     : center;
+    justify-content : center;
     @include mixins.btn-circle($btn-prefix-cls)
   }
 
   .#{v.$iconfont-css} {
-    transition : margin-left .1s v.$ease-in-out,
-  }
-
-  @at-root &#{&}-loading:before {
-    display : block;
+    display         : inline-flex;
+    justify-content : center;
+    align-items     : center;
+    vertical-align  : middle;
+    margin-left     : 2px;
+    margin-right    : 2px;
+    transition      : margin-left .1s v.$ease-in-out,
   }
 
   @at-root &#{&}-loading:not(#{&}-circle):not(#{&}-circle-outline) {
-    padding-left   : 29px;
     pointer-events : none;
     position       : relative;
-    .#{v.$iconfont-css} {
-      margin-left : -14px;
-    }
-  }
-
-  @at-root &-sm#{&}-loading:not(#{&}-circle):not(#{&}-circle-outline) {
-    padding-left : 24px;
-    .#{v.$iconfont-css} {
-      margin-left : -17px;
-    }
   }
 
   @at-root &-group {
     @include mixins.btn-group($btn-prefix-cls);
   }
 
-  @at-root &:not(#{&}-circle):not(#{&}-circle-outline)#{&+"-icon-only"} {
-    padding-left  : 8px;
-    padding-right : 8px;
+  @at-root &#{&}-icon-only {
+    .#{v.$iconfont-css} {
+      margin  : 0 !important;
+      padding : 0 !important;
+    }
   }
 
-  @at-root &:focus > span,
-  &:active > span {
-    position : relative;
+
+  @at-root &#{&}-icon-only#{&}-rounded {
+    display         : inline-flex;
+    align-items     : center;
+    justify-content : center;
+    @include mixins.btn-circle($btn-prefix-cls)
   }
 
-  > .#{v.$iconfont-css} + span,
-  > span + .#{v.$iconfont-css} {
-    margin-left : 0.5em;
+  &-loading .#{v.$tri-prefix}-icon-spin {
+    margin-left  : 0;
+    margin-right : 4px;
+    animation    : loadingCircle 1s infinite linear;
+
+    @include other.loading-circle-keyframe()
   }
 }
