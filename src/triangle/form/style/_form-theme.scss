@@ -15,7 +15,7 @@ $form-prefix-cls : "#{ v.$tri-prefix}-form";
 @mixin tri-form-theme() {
   $foreground              : theme.$foreground;
   $background              : theme.$background;
-  $success                 : theme.$success;
+  $success                 : theme.$primary;
   $primary                 : theme.$primary;
   $error                   : theme.$error;
   $warning                 : theme.$warning;
@@ -69,14 +69,6 @@ $form-prefix-cls : "#{ v.$tri-prefix}-form";
     .#{ v.$tri-prefix}-select-open .#{ v.$tri-prefix}-select-selection {
       border-color : theming.tri-color($foreground, border-color-base);
       box-shadow   : none;
-    }
-  }
-
-  .has-success {
-    .#{$form-prefix-cls}-item-children .#{$form-prefix-cls}-item-children-icon {
-      i {
-        color : #1bb367;
-      }
     }
   }
 
@@ -155,18 +147,26 @@ $form-prefix-cls : "#{ v.$tri-prefix}-form";
     }
   }
 
+  .has-success {
+    .#{$form-prefix-cls}-item-children-icon {
+      .#{v.$iconfont-css} {
+        color : theming.tri-color($success);
+      }
+    }
+  }
+
   .has-error {
-    .#{$form-prefix-cls}-item-children .#{$form-prefix-cls}-item-children-icon {
-      i {
-        color : #d93649;
+    .#{$form-prefix-cls}-item-children-icon {
+      .#{v.$iconfont-css} {
+        color : theming.tri-color($error);
       }
     }
   }
 
   .has-warning {
-    .#{$form-prefix-cls}-item-children .#{$form-prefix-cls}-item-children-icon {
-      i {
-        color : #ffbf00;
+    .#{$form-prefix-cls}-item-children-icon {
+      .#{v.$iconfont-css} {
+        color : theming.tri-color($warning);
       }
     }
   }

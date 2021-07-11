@@ -38,7 +38,7 @@ export abstract class AbstractPickerComponent implements OnInit, OnChanges, Cont
   @Input() placeholder: string | string[];
   @Input() popupStyle: object = POPUP_STYLE_PATCH;
   @Input() dropdownClassName: string;
-  @Input() size: 'large' | 'small';
+  @Input() size: 'large' | 'small' | 'default';
   @Input() style: object;
   @Output() onOpen = new EventEmitter<boolean>();
 

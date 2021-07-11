@@ -6,6 +6,7 @@
 
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { TriIconModule } from '../../icon';
 import { FormControlComponent } from './form-control.component';
 import { FormErrorMessageDirective } from './form-error-message.directive';
 import { FormExplainComponent } from './form-explain.component';
@@ -111,7 +112,7 @@ import { FormComponent } from './form.component';
     FormErrorMessageDirective,
     FormNoFeedbackDirective
   ],
-  imports     : [CommonModule],
+  imports: [CommonModule, TriIconModule],
   providers   : []
 })
 export class TriFormModule {

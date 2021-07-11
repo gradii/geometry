@@ -12,13 +12,12 @@ import { AbstractControl, NgControl } from '@angular/forms';
   template: `
     <span class="tri-form-item-children">
       <ng-content></ng-content>
-      <span *ngIf="hasFeedback" class="tri-form-item-children-icon">
-        <i class="anticon"
-           [class.anticon-check-circle]="isSuccess"
-           [class.anticon-close-circle]="isError"
-           [class.anticon-exclamation-circle]="isWarning"
-        ></i>
-      </span>
+    </span>
+    <span *ngIf="hasFeedback" class="tri-form-item-children-icon">
+        <tri-icon *ngIf="!isValidating&&isSuccess" svgIcon="outline:check-circle"></tri-icon>
+        <tri-icon *ngIf="!isValidating&&isError" svgIcon="outline:close-circle"></tri-icon>
+        <tri-icon *ngIf="!isValidating&&isWarning" svgIcon="outline:exclamation-circle"></tri-icon>
+        <tri-icon *ngIf="isValidating" svgIcon="outline:loading"></tri-icon>
     </span>
     <ng-content select="tri-form-explain"></ng-content>
     <ng-content select="tri-form-extra"></ng-content>
@@ -30,7 +29,7 @@ import { AbstractControl, NgControl } from '@angular/forms';
     '[class.has-error]'                    : 'isError',
     '[class.has-success]'                  : 'isSuccess',
     '[class.has-feedback]'                 : 'hasFeedBack',
-    '[class.is-validating]'                : 'isValidate',
+    '[class.is-validating]'                : 'isValidating',
   }
 })
 export class FormControlComponent {
@@ -76,7 +75,7 @@ export class FormControlComponent {
     return this._isDirtyAndError('warning');
   }
 
-  get isValidate(): boolean {
+  get isValidating(): boolean {
     return Boolean(
       this._isDirtyAndError('validating') ||
       this.validateStatus === 'pending' ||

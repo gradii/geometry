@@ -10,7 +10,13 @@ import { TriDialogService } from '@gradii/triangle/dialog';
 @Component({
   selector: 'dialog-dummy',
   template: `
-    <tri-card title="hello title">
+    <tri-card>
+      <tri-card-header>
+        hello title
+      </tri-card-header>
+      <tri-card-body>
+        body content
+      </tri-card-body>
     </tri-card>
   `
 })

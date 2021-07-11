@@ -263,8 +263,6 @@ $btn-primary-bg         : grey !default;
 
   .#{$btnClassName}:not(:first-child):not(:last-child) {
     border-radius : 0;
-    padding-left  : 8px;
-    padding-right : 8px;
   }
 
   > .#{$btnClassName}:first-child {
@@ -273,14 +271,12 @@ $btn-primary-bg         : grey !default;
     &:not(:last-child) {
       border-bottom-right-radius : 0;
       border-top-right-radius    : 0;
-      padding-right              : 8px;
     }
   }
 
   > .#{$btnClassName}:last-child:not(:first-child) {
     border-bottom-left-radius : 0;
     border-top-left-radius    : 0;
-    padding-left              : 8px;
   }
 
   & > & {

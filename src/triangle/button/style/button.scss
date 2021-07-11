@@ -63,8 +63,7 @@ $btn-circle-size-sm     : $btn-height-sm !default;
     justify-content : center;
     align-items     : center;
     vertical-align  : middle;
-    margin-left     : 2px;
-    margin-right    : 2px;
+    gap             : .125em;
     transition      : margin-left .1s v.$ease-in-out,
   }
 

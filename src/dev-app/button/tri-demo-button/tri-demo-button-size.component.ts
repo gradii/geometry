@@ -4,10 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  Component,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 /**
  * @title button-size
@@ -23,10 +20,11 @@ import {
     <br>
     <br>
     <button tri-button [type]="'primary'" [size]="size" [shape]="'circle'">
-      <i class="anticon anticon-download"></i>
+      <tri-icon svgIcon="outline:download"></tri-icon>
     </button>
     <button tri-button [type]="'primary'" [size]="size">
-      <i class="anticon anticon-download"></i><span>Download</span>
+      <tri-icon svgIcon="outline:download"></tri-icon>
+      <span>Download</span>
     </button>
     <button tri-button [type]="'primary'" [size]="size">
       <span>Normal</span>
@@ -34,10 +32,12 @@ import {
     <br>
     <tri-button-group [size]="size">
       <button tri-button [type]="'primary'">
-        <i class="anticon anticon-left"></i><span>Backward</span>
+        <tri-icon svgIcon="outline:left"></tri-icon>
+        <span>Backward</span>
       </button>
       <button tri-button [type]="'primary'">
-        <span>Forward</span><i class="anticon anticon-right"></i>
+        <span>Forward</span>
+        <tri-icon svgIcon="outline:right"></tri-icon>
       </button>
     </tri-button-group>
   `,

@@ -4,10 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  Component,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 /**
  * @title button-group
@@ -48,12 +45,12 @@ import {
     <h4>With Icon</h4>
     <tri-button-group>
       <button tri-button [type]="'primary'">
-        <i class=" anticon anticon-left"></i>
+        <tri-icon svgIcon="outline:left"></tri-icon>
         <span>Go back</span>
       </button>
       <button tri-button [type]="'primary'">
         <span>Go forward</span>
-        <i class=" anticon anticon-right"></i>
+        <tri-icon svgIcon="outline:right"></tri-icon>
       </button>
     </tri-button-group>
     <tri-button-group>

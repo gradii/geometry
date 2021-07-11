@@ -43,8 +43,8 @@ $border-color-base       : theming.tri-color($foreground, border-color-base);
   }
 
   @at-root &#{&}-vertical {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction : column;
+    align-items    : flex-start;
   }
 
   @at-root &-control {
@@ -92,7 +92,6 @@ $border-color-base       : theming.tri-color($foreground, border-color-base);
     content : " ";
   }
 }
-
 
 
 .#{$form-prefix-cls}-explain,
@@ -323,37 +322,29 @@ form {
   }
 }
 
-// Validation state
-.has-success,
-.has-warning,
-.has-error,
-.is-validating {
-  // ant-form-item-children-icon的样式
-  @at-root &.has-feedback .#{$form-prefix-cls}-item-children-icon {
-    position       : absolute;
-    top            : 0;
-    right          : 0;
-    visibility     : visible;
-    pointer-events : none;
-    width          : $form-component-height;
-    height         : $form-component-height;
-    line-height    : $form-component-height;
-    text-align     : center;
-    font-size      : $form-feedback-font-size;
-    animation      : zoomIn .3s #{ease-out-back};
-    z-index        : 1;
+.has-feedback .#{$form-prefix-cls}-item-children-icon {
+  position        : absolute;
+  top             : 0;
+  right           : 0;
+  bottom          : 0;
+  margin          : auto;
+  display         : inline-flex;
+  justify-content : center;
+  align-items     : center;
+  visibility      : visible;
+  pointer-events  : none;
+  width           : $form-component-height;
+  height          : $form-component-height;
+  line-height     : $form-component-height;
+  text-align      : center;
+  font-size       : $form-feedback-font-size;
+  animation       : zoomIn .3s #{ease-out-back};
+  z-index         : 1;
 
-    & i {
-      position    : absolute;
-      top         : 0;
-      right       : 0;
-      bottom      : 0;
-      left        : 0;
-      margin      : auto;
-      width       : 2.5rem;
-      height      : 2.5rem;
-      line-height : 2.5rem;
-    }
+  & #{v.$tri-prefix}-icon {
+    width       : 2rem;
+    height      : 2rem;
+    line-height : 2rem;
   }
 }
 
@@ -567,13 +558,11 @@ form {
 //}
 
 .is-validating {
-  @at-root &.has-feedback:after {
+  @at-root &.has-feedback .#{$form-prefix-cls}-item-children-icon .#{v.$tri-prefix}-icon {
     display   : inline-block;
     animation : loadingCircle 1s infinite linear;
-    content   : "\e64d";
-    color     : theming.tri-color($primary);
   }
-  @at-root &.has-feedback .#{form-prefix-cls}-item-children-icon {
+  @at-root &.has-feedback .#{$form-prefix-cls}-item-children-icon {
     display : inline-block;
     color   : theming.tri-color($primary);
   }

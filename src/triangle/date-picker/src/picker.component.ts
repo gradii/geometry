@@ -47,7 +47,7 @@ export class PickerComponent implements OnInit, AfterViewInit {
   @Input() autoFocus: boolean;
   @Input() className: string;
   @Input() format: string;
-  @Input() size: 'large' | 'small';
+  @Input() size: 'large' | 'small' | 'default';
   @Input() style: object;
 
   @Input() value: CandyDate | CandyDate[];
