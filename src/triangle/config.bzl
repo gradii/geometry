@@ -70,7 +70,7 @@ TRIANGLE_ENTRYPOINTS = [
     "transfer",
     "util",
     "tree-view",
-#    "gridster"
+    "gridster",
 #    "tree-select",
     #  "tree",
 ]

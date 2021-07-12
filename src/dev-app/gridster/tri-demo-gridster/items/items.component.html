@@ -42,7 +42,7 @@
   <div class="form-field">
     <input triInput [(ngModel)]="dashboard[0].minItemArea" type="number" placeholder="Min Item Area"
            (ngModelChange)="changedOptions()">
-  <div>
+  </div>
   <tri-checkbox [(ngModel)]="dashboard[0].dragEnabled" (ngModelChange)="changedOptions()">
     Drag
   </tri-checkbox>
@@ -61,7 +61,7 @@
       <tri-option value="compactLeft&Up">Compact Left & Up</tri-option>
       <tri-option value="compactUp&Left">Compact Up & Left</tri-option>
     </tri-select>
-  <div>
+  </div>
   <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
     <tri-icon svgIcon="outline:add"></tri-icon>
   </button>
