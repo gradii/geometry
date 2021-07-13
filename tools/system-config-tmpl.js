@@ -28,13 +28,12 @@ var pathMapping = {
   'tslib'      : 'node:tslib/tslib.js',
   'moment'     : 'node:moment/min/moment-with-locales.min.js',
   'html2canvas': 'node:html2canvas/dist/html2canvas.js',
-  'lodash'     : 'node:lodash/lodash.min.js',
+  'lodash'     : 'node:lodash/lodash.js',
   'uuid'       : 'node:uuid/dist/umd/uuid.min.js',
   'date-fns'   : 'date-fns_bundle.umd.js',
 
   'rxjs'          : 'node:rxjs/bundles/rxjs.umd.min.js',
   'rxjs/operators': 'tools/system-rxjs-operators.js',
-
 };
 
 /** Package configurations that will be used in SystemJS. */

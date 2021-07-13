@@ -31,7 +31,7 @@ export interface DragNewLinkStateOptions {
 }
 
 export class DragNewLinkState extends AbstractDisplacementState<DiagramEngine> {
-  port: PortModel;
+  private port: PortModel;
   link: LinkModel;
   config: DragNewLinkStateOptions;
 

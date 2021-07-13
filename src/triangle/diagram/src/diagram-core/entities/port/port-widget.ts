@@ -5,17 +5,8 @@
  */
 
 import {
-  AfterViewChecked,
-  Component,
-  DoCheck,
-  ElementRef,
-  Inject,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewChild
+  AfterViewChecked, Component, DoCheck, ElementRef, Inject, Input, OnDestroy, OnInit, ViewChild
 } from '@angular/core';
-import * as _ from 'lodash';
 import { ListenerHandle } from '../../../canvas-core/core/base-observer';
 import { ENGINE } from '../../../canvas-core/tokens';
 import { Toolkit } from '../../../canvas-core/toolkit';
@@ -76,7 +67,6 @@ export class PortWidget implements OnInit, OnDestroy, DoCheck, AfterViewChecked 
     // }
   }
 
-
   ngOnInit(): void {
     this.engineListenerHandle = this.engine.registerListener({
       canvasReady: () => {
@@ -94,6 +84,5 @@ export class PortWidget implements OnInit, OnDestroy, DoCheck, AfterViewChecked 
       this.engineListenerHandle = undefined;
     }
   }
-
 
 }

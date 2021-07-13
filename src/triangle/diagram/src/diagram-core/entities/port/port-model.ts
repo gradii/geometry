@@ -165,7 +165,7 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
   }
 
   reportPosition() {
-    _.forEach(this.getLinks(), (link) => {
+   this.getLinks().forEach((link) => {
       // @ts-ignore
       link.getPointForPort(this).setPosition(this.getCenter());
     });
