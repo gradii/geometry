@@ -1,7 +1,7 @@
 <div class="options">
-  <a mat-raised-button href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/rtl"
+  <a triRaisedButton href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/rtl"
     target="_blank" class="source-code-button">
-    <tri-icon>open_in_new</tri-icon>
+     <tri-icon svgIcon="outline:fork"></tri-icon>
     Source
   </a>
 </div>
@@ -59,8 +59,8 @@
     <input triInput [(ngModel)]="options.fixedRowHeight" type="number" placeholder="Fixed Row Height"
       (ngModelChange)="changedOptions()">
   </div>
-  <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
-    <tri-icon svgIcon="outline:add"></tri-icon>
+  <button triIconOnlyButton (click)="addItem()" class="add-button cols-2">
+    <tri-icon svgIcon="outline:plus"></tri-icon>
   </button>
 </div>
 
@@ -74,16 +74,16 @@
         </div>
       </div>
       <div class="item-buttons" *ngIf="item.hasContent">
-        <button tri-icon-button mat-raised-button class="drag-handler">
+        <button tri-icon-button triRaisedButton class="drag-handler">
           <!--          <tri-icon>open_with</tri-icon>-->
         </button>
-        <button tri-icon-button mat-raised-button class="remove-button" (mousedown)="removeItem($event, item)"
+        <button tri-icon-button triRaisedButton class="remove-button" (mousedown)="removeItem($event, item)"
           (touchstart)="removeItem($event, item)">
           <tri-icon svgIcon="outline:delete"></tri-icon>
         </button>
       </div>
       <label *ngIf="!item.hasContent">{{item.label}}</label>
-      <button mat-mini-fab *ngIf="!item.hasContent" (mousedown)="removeItem($event, item)"
+      <button triIconOnlyButton *ngIf="!item.hasContent" (mousedown)="removeItem($event, item)"
         (touchstart)="removeItem($event, item)">
         <tri-icon svgIcon="outline:delete"></tri-icon>
       </button>

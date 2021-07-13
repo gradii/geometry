@@ -1,7 +1,7 @@
 <div class="options">
   <a tri-button href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/misc"
      target="_blank" class="source-code-button">
-    <tri-icon>open_in_new</tri-icon>
+     <tri-icon svgIcon="outline:fork"></tri-icon>
     Source
   </a>
   <!--  <markdown [src]="'assets/misc.md'"></markdown>-->
@@ -40,8 +40,8 @@
       <tri-option value="horizontalFixed">Horizontal Fixed</tri-option>
     </tri-select>
   </div>
-  <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
-    <tri-icon svgIcon="outline:add"></tri-icon>
+  <button triIconOnlyButton (click)="addItem()" class="add-button cols-2">
+    <tri-icon svgIcon="outline:plus"></tri-icon>
   </button>
 </div>
 
@@ -49,7 +49,7 @@
 <gridster [options]="options">
   <gridster-item [item]="item" *ngFor="let item of dashboard">
     <div class="button-holder">
-      <button mat-mini-fab (mousedown)="removeItem($event, item)"
+      <button triIconOnlyButton (mousedown)="removeItem($event, item)"
               (touchstart)="removeItem($event, item)">
         <tri-icon svgIcon="outline:delete"></tri-icon>
       </button>
