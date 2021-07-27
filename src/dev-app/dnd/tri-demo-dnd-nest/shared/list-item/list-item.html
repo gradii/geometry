@@ -1,4 +1,4 @@
-<div triDropContainer
+<div triDropListContainer
      class="item-dropzone parent"
      [id]="parentItemId"
      [triDropContainerData]="parentItem"
@@ -22,7 +22,7 @@
       {{item.name}} with {{item.children.length}} child item(s)
     </div>
   </div>
-  <ul triDropContainer
+  <ul triDropListContainer
       class="item-dropzone"
       [id]="item.uId"
       [triDropContainerConnectedTo]="connectedDropContainersIds"

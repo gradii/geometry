@@ -40,6 +40,11 @@ export function extendStyles(
   return dest;
 }
 
+export function dragDropPosition(element: HTMLElement, relative: boolean = false) {
+  extendStyles(element.style, {
+    position: relative ? 'relative' : 'absolute'
+  });
+}
 
 /**
  * Toggles whether the native drag interactions should be enabled for an element.
@@ -67,9 +72,9 @@ export function toggleNativeDragInteractions(element: HTMLElement, enable: boole
  * @param enable Whether the element should be visible.
  * @docs-private
  */
-export function toggleVisibility(element: HTMLElement, enable: boolean) {
+export function toggleVisibility(element: HTMLElement, enable: boolean, restorePosition?: string) {
   const styles    = element.style;
-  styles.position = enable ? '' : 'fixed';
+  styles.position = enable ? restorePosition || '' : 'fixed';
   styles.top      = styles.opacity = enable ? '' : '0';
   styles.left     = enable ? '' : '-999em';
 }

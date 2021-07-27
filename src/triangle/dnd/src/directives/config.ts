@@ -6,7 +6,7 @@
 
 
 import { InjectionToken } from '@angular/core';
-import { DragRef, DragRefConfig, Point } from '../drag-ref';
+import { DragRef, DragRefConfig, Point } from '../drag-drop-ref/drag-ref';
 
 /** Possible values that can be used to configure the drag start delay. */
 export type DragStartDelay = number | { touch: number, mouse: number };

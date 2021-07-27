@@ -22,7 +22,7 @@ import { demoData, TreeNode, DropInfo } from './data';
         </div>
 
         <div *ngIf="node.isExpanded && node.children.length" class="node-children item-dropzone"
-             triDropContainer
+             triDropListContainer
              [triDropContainerData]="node.children"
              [id]="node.id"
              [triDropContainerConnectedTo]="dropTargetIds"
@@ -39,7 +39,7 @@ import { demoData, TreeNode, DropInfo } from './data';
       </div>
     </ng-template>
 
-    <div triDropContainer
+    <div triDropListContainer
          class="item-dropzone"
          [triDropContainerData]="nodes"
          [id]="'main'"

@@ -6,19 +6,19 @@
 
 import { Component, QueryList, ViewChildren } from '@angular/core';
 import {
-  moveItemInArray, transferArrayItem, TriDragDrop, TriDropContainer
+  moveItemInArray, transferArrayItem, TriDragDrop, TriDropListContainer
 } from '@gradii/triangle/dnd';
 import { asapScheduler } from 'rxjs';
 
 @Component({
-  selector : 'tri-demo-dnd-not-Tri',
+  selector : 'tri-demo-dnd-not-cdk',
   template : `
     <div triDropContainerGroup>
       <div class="example-container">
         <h2>To do</h2>
 
         <div
-          triDropContainer
+          triDropListContainer
           [triDropContainerData]="todo"
           class="example-list"
           (triDropContainerDropped)="drop($event)"
@@ -29,7 +29,7 @@ import { asapScheduler } from 'rxjs';
             <ng-template #arrayView>
               <div class="example-container">
                 <div
-                  triDropContainer
+                  triDropListContainer
                   [triDropContainerData]="item"
                   class="example-list"
                   (triDropContainerDropped)="drop($event)"
@@ -48,7 +48,7 @@ import { asapScheduler } from 'rxjs';
   `,
   styleUrls: ['tri-demo-dnd-not-cdk.component.css']
 })
-export class TriDemoDndNotTriComponent {
+export class TriDemoDndNotCdkComponent {
   todo = [
     'Get to work',
     [
@@ -68,10 +68,10 @@ export class TriDemoDndNotTriComponent {
     'Fall asleep'
   ];
 
-  @ViewChildren(TriDropContainer)
-  private dlq: QueryList<TriDropContainer>;
+  @ViewChildren(TriDropListContainer)
+  private dlq: QueryList<TriDropListContainer>;
 
-  public dls: TriDropContainer[] = [];
+  public dls: TriDropListContainer[] = [];
 
   drop(event: TriDragDrop<any>) {
     if (event.previousContainer === event.container) {
@@ -89,7 +89,7 @@ export class TriDemoDndNotTriComponent {
   }
 
   ngAfterViewInit() {
-    const ldls: TriDropContainer[] = [];
+    const ldls: TriDropListContainer[] = [];
 
     this.dlq.forEach((dl) => {
       console.log('found DropContainer ' + dl.id);

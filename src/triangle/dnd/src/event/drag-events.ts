@@ -5,8 +5,8 @@
  */
 
 
-import { TriDrag } from '../directives/drag';
 import { TriDropContainer } from '../directives/drop-container';
+import { TriDrag } from '../directives/drag';
 
 /** Event emitted when the user starts dragging a draggable. */
 export interface TriDragStart<T = any> {
@@ -37,7 +37,7 @@ export interface TriDragEnter<T = any, I = T> {
   /** Item that was moved into the container. */
   item: TriDrag<I>;
   /** Index at which the item has entered the container. */
-  currentIndex: number;
+  currentIndex?: number;
 }
 
 /**
@@ -55,9 +55,9 @@ export interface TriDragExit<T = any, I = T> {
 /** Event emitted when the user drops a draggable item inside a drop container. */
 export interface TriDragDrop<T, O = T> {
   /** Index of the item when it was picked up. */
-  previousIndex: number;
+  previousIndex?: number;
   /** Current index of the item. */
-  currentIndex: number;
+  currentIndex?: number;
   /** Item that is being dropped. */
   item: TriDrag;
   /** Container in which the item was dropped. */
@@ -101,4 +101,14 @@ export interface TriDragSortEvent<T = any, I = T> {
   container: TriDropContainer<T>;
   /** Item that is being sorted. */
   item: TriDrag<I>;
+}
+
+export interface TriDragReposition<T = any, I = T> extends TriDragSortEvent<T, I> {
+  previousPosition: [number, number];
+  currentPosition: [number, number];
+
+}
+
+export interface TriDragRepositionsEvent<T = any, I = T> {
+  items: TriDragReposition<T, I>[];
 }

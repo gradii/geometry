@@ -4,13 +4,17 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
 import { ElementRef, Inject, Injectable, NgZone } from '@angular/core';
+import { DragContainerRef } from './drag-drop-ref/drag-container-ref';
+import { DragRef, DragRefConfig } from './drag-drop-ref/drag-ref';
+import { DndContainerRef } from './drag-drop-ref/dnd-container-ref';
+import { DropFlexContainerRef } from './drag-drop-ref/drop-flex-container-ref';
+import { DropGridContainerRef } from './drag-drop-ref/drop-grid-container-ref';
+import { DropListContainerRef } from './drag-drop-ref/drop-list-container-ref';
 import { DragDropRegistry } from './drag-drop-registry';
-import { DragRef, DragRefConfig } from './drag-ref';
-import { DropContainerRef } from './drop-container-ref';
+import { SortPositionStrategy } from './position-strategy/sort-position-strategy';
 
 /** Default configuration to be used when creating a `DragRef`. */
 const DEFAULT_CONFIG = {
@@ -27,7 +31,7 @@ export class DragDrop {
     @Inject(DOCUMENT) private _document: any,
     private _ngZone: NgZone,
     private _viewportRuler: ViewportRuler,
-    private _dragDropRegistry: DragDropRegistry<DragRef, DropContainerRef>) {
+    private _dragDropRegistry: DragDropRegistry<DragRef, DndContainerRef>) {
   }
 
   /**
@@ -42,12 +46,56 @@ export class DragDrop {
       this._dragDropRegistry);
   }
 
+  createDragContainerRef<T = any>(element: ElementRef<HTMLElement> | HTMLElement): DragContainerRef<T> {
+    const sortPositionStrategy = new SortPositionStrategy(this._dragDropRegistry);
+    const dropContainerRef     = new DragContainerRef<T>(element, this._dragDropRegistry,
+      this._document, this._ngZone,
+      this._viewportRuler, sortPositionStrategy);
+
+    sortPositionStrategy.dropContainerRef = dropContainerRef;
+    return dropContainerRef;
+  }
+
   /**
    * Turns an element into a drop list.
    * @param element Element to which to attach the drop list functionality.
    */
-  createDropContainer<T = any>(element: ElementRef<HTMLElement> | HTMLElement): DropContainerRef<T> {
-    return new DropContainerRef<T>(element, this._dragDropRegistry, this._document, this._ngZone,
-      this._viewportRuler);
+  createDropListContainerRef<T = any>(element: ElementRef<HTMLElement> | HTMLElement): DropListContainerRef<T> {
+    const sortPositionStrategy = new SortPositionStrategy(this._dragDropRegistry);
+    const dropContainerRef     = new DropListContainerRef<T>(element, this._dragDropRegistry,
+      this._document, this._ngZone,
+      this._viewportRuler, sortPositionStrategy);
+
+    sortPositionStrategy.dropContainerRef = dropContainerRef;
+    return dropContainerRef;
   }
+
+  /**
+   * Turns an element into a drop list.
+   * @param element Element to which to attach the drop list functionality.
+   */
+  createDropGridContainerRef<T = any>(element: ElementRef<HTMLElement> | HTMLElement): DropGridContainerRef<T> {
+    const sortPositionStrategy = new SortPositionStrategy(this._dragDropRegistry);
+    const dropContainerRef     = new DropGridContainerRef<T>(element, this._dragDropRegistry,
+      this._document, this._ngZone,
+      this._viewportRuler, sortPositionStrategy);
+
+    sortPositionStrategy.dropContainerRef = dropContainerRef;
+    return dropContainerRef;
+  }
+
+  /**
+   * Turns an element into a drop list.
+   * @param element Element to which to attach the drop list functionality.
+   */
+  createDropFlexContainerRef<T = any>(element: ElementRef<HTMLElement> | HTMLElement): DndContainerRef<T> {
+    const sortPositionStrategy = new SortPositionStrategy(this._dragDropRegistry);
+    const dropContainerRef     = new DropFlexContainerRef<T>(element, this._dragDropRegistry,
+      this._document, this._ngZone,
+      this._viewportRuler, sortPositionStrategy);
+
+    sortPositionStrategy.dropContainerRef = dropContainerRef;
+    return dropContainerRef;
+  }
+
 }

@@ -6,29 +6,27 @@
 
 
 import { Directionality } from '@angular/cdk/bidi';
-import {
-  BooleanInput, coerceBooleanProperty, coerceElement, coerceNumberProperty
-} from '@angular/cdk/coercion';
+import { BooleanInput, coerceBooleanProperty, coerceElement, coerceNumberProperty } from '@angular/cdk/coercion';
 import { DOCUMENT } from '@angular/common';
 import {
-  AfterViewInit, ChangeDetectorRef, ContentChild, ContentChildren, Directive, ElementRef,
-  EventEmitter, Inject, Input, NgZone, OnChanges, OnDestroy, Optional, Output, QueryList, Self,
-  SimpleChanges, SkipSelf, ViewContainerRef,
+  AfterViewInit, ChangeDetectorRef, ContentChild, ContentChildren, Directive, ElementRef, EventEmitter, Inject, Input,
+  NgZone, OnChanges, OnDestroy, Optional, Output, QueryList, Self, SimpleChanges, SkipSelf, ViewContainerRef,
 } from '@angular/core';
 import { merge, Observable, Observer, Subject } from 'rxjs';
 import { map, startWith, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { DragDrop } from '../drag-drop';
+import { DragRef, Point, PreviewContainer } from '../drag-drop-ref/drag-ref';
+import { TRI_DRAG_PARENT } from '../drag-parent';
 import {
   TriDragDrop, TriDragEnd, TriDragEnter, TriDragExit, TriDragMove, TriDragRelease, TriDragStart,
 } from '../event/drag-events';
-import { TRI_DRAG_PARENT } from '../drag-parent';
-import { DragRef, Point, PreviewContainer } from '../drag-ref';
 import { assertElementNode } from './assertions';
-import { TRI_DRAG_CONFIG, DragAxis, DragDropConfig, DragStartDelay } from './config';
+import { DragAxis, DragDropConfig, DragStartDelay, TRI_DRAG_CONFIG } from './config';
 import { TRI_DRAG_HANDLE, TriDragHandle } from './drag-handle';
 import { TRI_DRAG_PLACEHOLDER, TriDragPlaceholder } from './drag-placeholder';
 import { TRI_DRAG_PREVIEW, TriDragPreview } from './drag-preview';
-import { TRI_DROP_CONTAINER, TriDropContainerInternal as TriDropContainer } from './drop-container';
+import { TRI_DROP_CONTAINER } from './drop-container';
+import { TriDropContainerInternal as TriDropContainer } from './drop-list-container';
 
 const DRAG_HOST_CLASS = 'tri-drag';
 
@@ -91,6 +89,8 @@ export class TriDrag<T = any> implements AfterViewInit, OnChanges, OnDestroy {
    * Can be used to restore the element's position for a returning user.
    */
   @Input('triDragFreeDragPosition') freeDragPosition: { x: number, y: number };
+
+  programDragPosition: { x: number, y: number };
 
   /** Whether starting to drag this element is disabled. */
   @Input('triDragDisabled')
@@ -179,17 +179,13 @@ export class TriDrag<T = any> implements AfterViewInit, OnChanges, OnDestroy {
     public element: ElementRef<HTMLElement>,
     /** Droppable container that the draggable is a part of. */
     @Inject(TRI_DROP_CONTAINER) @Optional() @SkipSelf() public dropContainer: TriDropContainer,
-    /**
-     * @deprecated `_document` parameter no longer being used and will be removed.
-     * @breaking-change 12.0.0
-     */
-    @Inject(DOCUMENT) _document: any, private _ngZone: NgZone,
-    private _viewContainerRef: ViewContainerRef,
+    protected _ngZone: NgZone,
+    protected _viewContainerRef: ViewContainerRef,
     @Optional() @Inject(TRI_DRAG_CONFIG) config: DragDropConfig,
-    @Optional() private _dir: Directionality, dragDrop: DragDrop,
-    private _changeDetectorRef: ChangeDetectorRef,
-    @Optional() @Self() @Inject(TRI_DRAG_HANDLE) private _selfHandle?: TriDragHandle,
-    @Optional() @SkipSelf() @Inject(TRI_DRAG_PARENT) private _parentDrag?: TriDrag) {
+    @Optional() protected _dir: Directionality, dragDrop: DragDrop,
+    protected _changeDetectorRef: ChangeDetectorRef,
+    @Optional() @Self() @Inject(TRI_DRAG_HANDLE) protected _selfHandle?: TriDragHandle,
+    @Optional() @SkipSelf() @Inject(TRI_DRAG_PARENT) protected _parentDrag?: TriDrag) {
     this._dragRef      = dragDrop.createDrag(element, {
       dragStartThreshold             : config && config.dragStartThreshold != null ?
         config.dragStartThreshold : 5,
@@ -293,6 +289,10 @@ export class TriDrag<T = any> implements AfterViewInit, OnChanges, OnDestroy {
 
         if (this.freeDragPosition) {
           this._dragRef.setFreeDragPosition(this.freeDragPosition);
+        }
+
+        if (this.programDragPosition) {
+          this._dragRef.setProgramDragPosition(this.programDragPosition);
         }
       });
   }

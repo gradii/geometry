@@ -7,6 +7,7 @@
 import {
   Component,
   ElementRef,
+  Host,
   HostBinding,
   Inject,
   Input,
@@ -50,7 +51,8 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
     return this.getLayerIndex() + this.gridster.$options.baseLayerIndex;
   }
 
-  constructor(@Inject(ElementRef) el: ElementRef, gridster: GridsterComponent,
+  constructor(@Inject(ElementRef) el: ElementRef,
+              @Host() gridster: GridsterComponent,
               @Inject(Renderer2) public renderer: Renderer2,
               @Inject(NgZone) private zone: NgZone) {
     this.el       = el.nativeElement;

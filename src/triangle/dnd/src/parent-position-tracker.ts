@@ -9,7 +9,7 @@ import { ViewportRuler } from '@angular/cdk/scrolling';
 import { adjustClientRect, getMutableClientRect } from './utils/client-rect';
 
 /** Object holding the scroll position of something. */
-interface ScrollPosition {
+export interface ScrollPosition {
   top: number;
   left: number;
 }
