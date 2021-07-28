@@ -122,7 +122,7 @@ export class CompactPosition {
       if (dragItem.compactEnabled !== false) {
         const moved = this.moveTillCollision(dragItem, direction, delta);
         if (moved) {
-          widgetMoved             = true;
+          widgetMoved         = true;
           dragItem[direction] = dragItem[direction];
           // dragRef.itemChanged();
         }
@@ -134,14 +134,22 @@ export class CompactPosition {
   }
 
   private moveTillCollision(item: TriDragGridItemComponent, direction: 'x' | 'y', delta: number): boolean {
-    item[direction] += delta;
+    direction === 'x' ? this._moveTileX(item, delta) : this._moveTileY(item, delta);
     if (this.ref.checkCollision(item)) {
-      item[direction] -= delta;
+      direction === 'x' ? this._moveTileX(item, -delta) : this._moveTileY(item, -delta);
       return false;
     } else {
       this.moveTillCollision(item, direction, delta);
       return true;
     }
     return true;
+  }
+
+  private _moveTileX(item: TriDragGridItemComponent, delta: number) {
+    item.x += delta;
+  }
+
+  private _moveTileY(item: TriDragGridItemComponent, delta: number) {
+    item.y += delta;
   }
 }

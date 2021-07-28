@@ -64,13 +64,13 @@ import { asapScheduler } from 'rxjs';
                (triDropGridContainerDropped)="onDragDropped($event)"
                [triDropGridContainerConnectedTo]="dls"
                class="example-grid-list">
-            <tri-drag-grid-item *ngFor="let it of dashboard"
+            <tri-drag-grid-item *ngFor="let it of dashboard" #item="triDragGridItem"
                                 [triDragGridItemX]="it.x"
                                 [triDragGridItemY]="it.y"
                                 [triDragGridItemRows]="it.rows"
                                 [triDragGridItemCols]="it.cols"
                                 class="example-grid-box">
-              box0 x:{{it.x}} y:{{it.y}}
+              box0 col: {{it.cols}} row: {{it.rows}} x:{{item.x}} y:{{item.y}}
             </tri-drag-grid-item>
 
           </div>
@@ -87,7 +87,7 @@ export class TriDemoDndGridComponent implements AfterViewInit {
   compactType: CompactType;
 
   dashboard = [
-    {cols: 2, rows: 1, y: 0, x: 0},
+    {cols: 1, rows: 1, y: 1, x: 1},
     {cols: 2, rows: 2, y: 0, x: 2},
     {cols: 1, rows: 1, y: 0, x: 4},
     {cols: 3, rows: 2, y: 1, x: 4},

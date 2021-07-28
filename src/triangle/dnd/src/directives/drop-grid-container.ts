@@ -11,11 +11,8 @@ import {
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import {
   ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, Input, OnDestroy, OnInit, Optional, Output,
-  SimpleChanges, SkipSelf,
-  ViewEncapsulation
+  SimpleChanges, SkipSelf, ViewEncapsulation
 } from '@angular/core';
-import { TriDragGridItemComponent } from '@gradii/triangle/dnd';
-import { CompactPosition } from '@gradii/triangle/dnd/src/drag-grid/compact-position';
 import { Subject } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 import { assertElementNode } from '../directives/assertions';
@@ -24,10 +21,12 @@ import { DragDrop } from '../drag-drop';
 import { DndContainerRef } from '../drag-drop-ref/dnd-container-ref';
 import { DragRef } from '../drag-drop-ref/drag-ref';
 import { DropGridContainerRef } from '../drag-drop-ref/drop-grid-container-ref';
+import { CompactPosition } from '../drag-grid/compact-position';
+import { TriDragGridItemComponent } from '../drag-grid/drag-grid-item.component';
+import { CompactType } from '../enum';
 import { TriDragDrop, TriDragEnter, TriDragExit } from '../event/drag-events';
 import { DragAxis, DragDropConfig, TRI_DRAG_CONFIG } from './config';
 import { TRI_DROP_CONTAINER_GROUP, TriDropContainerGroup } from './drop-container-group';
-import { CompactType } from '../enum';
 
 @Component({
   selector     : '[triDropGridContainer], tri-drop-grid-container',
@@ -94,6 +93,41 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
 
   @Input('triDropGridContainerRows')
   rows: number = 1;
+
+  renderRows: number;
+  renderColumns: number;
+
+  @Input('triDropGridContainerOptions')
+  options: {
+    minCols: number,
+    maxCols: number,
+    minRows: number,
+    maxRows: number,
+    defaultItemCols: number,
+    defaultItemRows: number,
+    maxItemCols: number,
+    maxItemRows: number,
+    minItemCols: number,
+    minItemRows: number,
+    minItemArea: number,
+    maxItemArea: number,
+  } = {
+    // defaultLayerIndex      : 0,
+    // maxLayerIndex          : 2,
+    // baseLayerIndex         : 1,
+    minCols        : 1, // minimum amount of columns in the grid
+    maxCols        : 100, // maximum amount of columns in the grid
+    minRows        : 1, // minimum amount of rows in the grid
+    maxRows        : 100, // maximum amount of rows in the grid
+    defaultItemCols: 1, // default width of an item in columns
+    defaultItemRows: 1, // default height of an item in rows
+    maxItemCols    : 50, // max item number of cols
+    maxItemRows    : 50, // max item number of rows
+    minItemCols    : 1, // min item number of columns
+    minItemRows    : 1, // min item number of rows
+    minItemArea    : 1, // min item area: cols * rows
+    maxItemArea    : 2500, // max item area: cols * rows
+  };
 
   @Input('triDropGridContainerCompactType')
   compactType: CompactType;
@@ -377,6 +411,10 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
       this.compactService.checkCompact(this.compactType);
     }
 
+    this._unsortedItems.forEach(item => {
+      item.updateItemSize();
+    });
+
     // this.setGridDimensions();
     // if (this.$options.outerMargin) {
     //   let marginWidth = -this.$options.margin;
@@ -467,6 +505,68 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     ref.currentRowHeight   = ref.currentHeight / ref.rows;
   }
 
+  checkCollision(item: TriDragGridItemComponent): any | boolean {
+    let collision: any | boolean = false;
+    // if (this.options.itemValidateCallback) {
+    //   collision = !this.options.itemValidateCallback(item);
+    // }
+    if (/*!collision && */this.checkGridCollision(item)) {
+      collision = true;
+    }
+    if (!collision) {
+      const c = this.findItemWithItem(item);
+      if (c) {
+        collision = c;
+      }
+    }
+    return collision;
+  }
+
+  checkGridCollision(item: any): boolean {
+    const noNegativePosition = item.y > -1 && item.x > -1;
+    const maxGridCols        = item.cols + item.x <= this.options.maxCols;
+    const maxGridRows        = item.rows + item.y <= this.options.maxRows;
+    const maxItemCols        = item.maxItemCols === undefined ? this.options.maxItemCols : item.maxItemCols;
+    const minItemCols        = item.minItemCols === undefined ? this.options.minItemCols : item.minItemCols;
+    const maxItemRows        = item.maxItemRows === undefined ? this.options.maxItemRows : item.maxItemRows;
+    const minItemRows        = item.minItemRows === undefined ? this.options.minItemRows : item.minItemRows;
+    const inColsLimits       = item.cols <= maxItemCols && item.cols >= minItemCols;
+    const inRowsLimits       = item.rows <= maxItemRows && item.rows >= minItemRows;
+    const minAreaLimit       = item.minItemArea === undefined ? this.options.minItemArea : item.minItemArea;
+    const maxAreaLimit       = item.maxItemArea === undefined ? this.options.maxItemArea : item.maxItemArea;
+    const area               = item.cols * item.rows;
+    const inMinArea          = minAreaLimit <= area;
+    const inMaxArea          = maxAreaLimit >= area;
+    return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits && inMinArea && inMaxArea);
+  }
+
+  findItemWithItem(item: any): any | boolean {
+    for (const widget of this._unsortedItems) {
+      if (widget !== item && this.checkCollisionTwoItems(widget, item)) {
+        return widget;
+      }
+    }
+    return false;
+  }
+
+  checkCollisionTwoItems(item: any, item2: any): boolean {
+    const collision = item.x < item2.x + item2.cols
+      && item.x + item.cols > item2.x
+      && item.y < item2.y + item2.rows
+      && item.y + item.rows > item2.y;
+    if (!collision) {
+      return false;
+    }
+    return true;
+    // if (!this.options.allowMultiLayer) {
+    //   return true;
+    // }
+    // const defaultLayerIndex = this.$options.defaultLayerIndex;
+    // const layerIndex        = item.layerIndex === undefined ? defaultLayerIndex : item.layerIndex;
+    // const layerIndex2       = item2.layerIndex === undefined ? defaultLayerIndex : item2.layerIndex;
+    // return layerIndex === layerIndex2;
+  }
+
   ngOnDestroy() {
     const index = TriDropContainer._dropContainers.indexOf(this);
 
@@ -490,8 +590,4 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   static ngAcceptInputType_rows: NumberInput;
   static ngAcceptInputType_autoScrollDisabled: BooleanInput;
   static ngAcceptInputType_autoScrollStep: NumberInput;
-
-  checkCollision(item: any) {
-    return true;
-  }
 }

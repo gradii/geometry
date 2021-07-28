@@ -41,17 +41,11 @@ import { TriDragHandle, TRI_DRAG_HANDLE } from '../directives/drag-handle';
   ],
   host     : {
     '[style.position]' : '"absolute"',
-    '[style.width.px]' : 'size.width',
-    '[style.height.px]': 'size.height'
+    '[style.width.px]' : 'width',
+    '[style.height.px]': 'height'
   }
 })
 export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestroy {
-
-  @Input('triDragGridItemRows')
-  rows: number = 1;
-
-  @Input('triDragGridItemCols')
-  cols: number = 1;
 
   @Input('triDragGridItemX')
   x: number;
@@ -59,32 +53,48 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
   @Input('triDragGridItemY')
   y: number;
 
+  @Input('triDragGridItemRows')
+  rows: number = 1;
+
+  @Input('triDragGridItemCols')
+  cols: number = 1;
+
   @Input('triDragGridItemLayerIndex')
   layerIndex?: number;
   // dragEnabled?: boolean;
   // resizeEnabled?: boolean;
   // compactEnabled?: boolean;
-  @Input('triDragGridItemMaxRows')
-  maxRows: number;
-  @Input('triDragGridItemMinRows')
-  minRows: number;
-  @Input('triDragGridItemMaxCols')
-  maxCols: number;
-  @Input('triDragGridItemMinCols')
-  minCols: number;
-  @Input('triDragGridItemMinArea')
-  minArea: number;
-  @Input('triDragGridItemMaxArea')
-  maxArea: number;
+  @Input('triDragGridItemMaxItemRows')
+  maxItemRows: number;
+  @Input('triDragGridItemMinItemRows')
+  minItemRows: number;
+  @Input('triDragGridItemMaxItemCols')
+  maxItemCols: number;
+  @Input('triDragGridItemMinItemCols')
+  minItemCols: number;
+  @Input('triDragGridItemMinItemArea')
+  minItemArea: number;
+  @Input('triDragGridItemMaxItemArea')
+  maxItemArea: number;
+
+  @Input('triDragGridItemDragEnabled')
+  dragEnabled: boolean = true;
+
+  @Input('triDragGridItemResizeEnabled')
+  resizeEnabled: boolean = true;
 
   @Input('triDragGridItemCompactEnabled')
   compactEnabled: boolean = true;
 
-  _position: { x: number, y: number };
-
   programDragPosition: { x: number, y: number };
 
-  size: { width: number, height: number } = {width: 100, height: 100};
+  renderX: number;
+  renderY: number;
+
+  private left: number = 0;
+  private top: number = 0;
+  private width: number = 100;
+  private height: number = 100;
 
   constructor(
     private gridster: TriDropGridContainer,
@@ -110,13 +120,24 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
     super.ngOnChanges(changes);
 
     if (
-      changes['x'] || changes['y'] || changes['rows'] || changes['cols']
+      changes['x'] || changes['y'] ||
+      changes['rows'] || changes['cols']
     ) {
       this.updateItemSize();
     }
   }
 
   updateItemSize(): void {
+    const ref = this.dropContainer._dropContainerRef;
+    if (this.x > -1) {
+      this.left = this.x * ref.currentColumnWidth;
+    }
+    if (this.y > -1) {
+      this.top = this.y * ref.currentRowHeight;
+    }
+    this._dragRef.setProgramDragPosition({x: this.left, y: this.top});
+    this._changeDetectorRef.markForCheck();
+
     // const top    = this.y * this.gridster.curRowHeight;
     // const left   = this.x * this.gridster.curColWidth;
     // const width  = this.cols * this.gridster.curColWidth - this.gridster.$options.margin;
@@ -148,26 +169,27 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
 
   ngOnInit() {
     console.log(this.dropContainer._dropContainerRef);
-    const ref      = this.dropContainer._dropContainerRef;
-    const position = {x: 0, y: 0};
-    if (this.x > 0) {
-      position.x = this.x * ref.currentColumnWidth;
+    const ref = this.dropContainer._dropContainerRef;
+    if (this.x > -1) {
+      this.left = this.x * ref.currentColumnWidth;
     }
-    if (this.y > 0) {
-      position.y = this.y * ref.currentRowHeight;
+    if (this.y > -1) {
+      this.top = this.y * ref.currentRowHeight;
     }
-    if (this.cols > 0) {
-      this.size.width = this.cols * ref.currentColumnWidth;
+    if (this.cols > -1) {
+      this.width = this.cols * ref.currentColumnWidth;
     }
-    if (this.rows > 0) {
-      this.size.height = this.rows * ref.currentRowHeight;
+    if (this.rows > -1) {
+      this.height = this.rows * ref.currentRowHeight;
     }
-    this.programDragPosition = position;
+
+    this.programDragPosition = {x: this.left, y: this.top};
   }
 
   ngAfterViewInit() {
 
     super.ngAfterViewInit();
+
   }
 
 
