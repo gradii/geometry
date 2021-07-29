@@ -10,8 +10,8 @@ export function loop() {
 }
 
 
-export function clamp(x: number, a: number, b: number) {
-  return Math.min(Math.max(x, a), b);
+export function clamp(x: number, min: number, max: number) {
+  return Math.min(Math.max(x, min), max);
 }
 
 export function shallowEqual(objA: any, objB: any): boolean {

@@ -10,7 +10,8 @@ import {
 } from '@angular/cdk/coercion';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import {
-  ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, Input, OnDestroy, OnInit, Optional, Output,
+  ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, InjectionToken, Input, OnDestroy, OnInit, Optional,
+  Output,
   SimpleChanges, SkipSelf, ViewEncapsulation
 } from '@angular/core';
 import { Subject } from 'rxjs';
@@ -27,6 +28,10 @@ import { CompactType } from '../enum';
 import { TriDragDrop, TriDragEnter, TriDragExit } from '../event/drag-events';
 import { DragAxis, DragDropConfig, TRI_DRAG_CONFIG } from './config';
 import { TRI_DROP_CONTAINER_GROUP, TriDropContainerGroup } from './drop-container-group';
+
+
+export const TRI_DROP_GRID_CONTAINER_CONFIG = new InjectionToken('tri drop grid container config');
+
 
 @Component({
   selector     : '[triDropGridContainer], tri-drop-grid-container',
@@ -88,46 +93,29 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   @Input('triDropGridContainerLockAxis')
   lockAxis: DragAxis;
 
+  @Input('triDropGridContainerGutter')
+  gutter: number = 10;
+
   @Input('triDropGridContainerColumns')
-  columns: number = 1;
+  cols: number = 1;
 
   @Input('triDropGridContainerRows')
   rows: number = 1;
 
+  @Input('triDropGridContainerMinCols')
+  minCols: 1;
+
+  @Input('triDropGridContainerMaxCols')
+  maxCols: 100;
+
+  @Input('triDropGridContainerMinRows')
+  minRows: 1;
+
+  @Input('triDropGridContainerMaxRows')
+  maxRows: 100;
+
   renderRows: number;
   renderColumns: number;
-
-  @Input('triDropGridContainerOptions')
-  options: {
-    minCols: number,
-    maxCols: number,
-    minRows: number,
-    maxRows: number,
-    defaultItemCols: number,
-    defaultItemRows: number,
-    maxItemCols: number,
-    maxItemRows: number,
-    minItemCols: number,
-    minItemRows: number,
-    minItemArea: number,
-    maxItemArea: number,
-  } = {
-    // defaultLayerIndex      : 0,
-    // maxLayerIndex          : 2,
-    // baseLayerIndex         : 1,
-    minCols        : 1, // minimum amount of columns in the grid
-    maxCols        : 100, // maximum amount of columns in the grid
-    minRows        : 1, // minimum amount of rows in the grid
-    maxRows        : 100, // maximum amount of rows in the grid
-    defaultItemCols: 1, // default width of an item in columns
-    defaultItemRows: 1, // default height of an item in rows
-    maxItemCols    : 50, // max item number of cols
-    maxItemRows    : 50, // max item number of rows
-    minItemCols    : 1, // min item number of columns
-    minItemRows    : 1, // min item number of rows
-    minItemArea    : 1, // min item area: cols * rows
-    maxItemArea    : 2500, // max item area: cols * rows
-  };
 
   @Input('triDropGridContainerCompactType')
   compactType: CompactType;
@@ -322,8 +310,6 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
 
       ref.disabled           = this.disabled;
       ref.lockAxis           = this.lockAxis;
-      ref.columns            = coerceNumberProperty(this.columns);
-      ref.rows               = coerceNumberProperty(this.rows);
       // ref.sortingDisabled    = coerceBooleanProperty(this.sortingDisabled);
       ref.autoScrollDisabled = coerceBooleanProperty(this.autoScrollDisabled);
       ref.autoScrollStep     = coerceNumberProperty(this.autoScrollStep, 2);
@@ -496,13 +482,13 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   }
 
   ngOnInit() {
-    const ref              = this._dropContainerRef;
-    ref.columns            = coerceNumberProperty(this.columns, 1);
-    ref.rows               = coerceNumberProperty(this.rows, 1);
-    ref.currentWidth       = this.element.nativeElement.clientWidth;
-    ref.currentHeight      = this.element.nativeElement.clientHeight;
-    ref.currentColumnWidth = ref.currentWidth / ref.columns;
-    ref.currentRowHeight   = ref.currentHeight / ref.rows;
+    const ref        = this._dropContainerRef;
+    const clientRect = this.element.nativeElement.getBoundingClientRect();
+
+    ref.currentWidth       = clientRect.width;
+    ref.currentHeight      = clientRect.height;
+    ref.currentColumnWidth = ref.currentWidth / this.cols;
+    ref.currentRowHeight   = ref.currentHeight / this.rows;
   }
 
   checkCollision(item: TriDragGridItemComponent): any | boolean {
@@ -524,19 +510,13 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
 
   checkGridCollision(item: any): boolean {
     const noNegativePosition = item.y > -1 && item.x > -1;
-    const maxGridCols        = item.cols + item.x <= this.options.maxCols;
-    const maxGridRows        = item.rows + item.y <= this.options.maxRows;
-    const maxItemCols        = item.maxItemCols === undefined ? this.options.maxItemCols : item.maxItemCols;
-    const minItemCols        = item.minItemCols === undefined ? this.options.minItemCols : item.minItemCols;
-    const maxItemRows        = item.maxItemRows === undefined ? this.options.maxItemRows : item.maxItemRows;
-    const minItemRows        = item.minItemRows === undefined ? this.options.minItemRows : item.minItemRows;
-    const inColsLimits       = item.cols <= maxItemCols && item.cols >= minItemCols;
-    const inRowsLimits       = item.rows <= maxItemRows && item.rows >= minItemRows;
-    const minAreaLimit       = item.minItemArea === undefined ? this.options.minItemArea : item.minItemArea;
-    const maxAreaLimit       = item.maxItemArea === undefined ? this.options.maxItemArea : item.maxItemArea;
+    const maxGridCols        = item.cols + item.x <= this.maxCols;
+    const maxGridRows        = item.rows + item.y <= this.maxRows;
+    const inColsLimits       = item.cols <= item.maxItemCols && item.cols >= item.minItemCols;
+    const inRowsLimits       = item.rows <= item.maxItemRows && item.rows >= item.minItemRows;
     const area               = item.cols * item.rows;
-    const inMinArea          = minAreaLimit <= area;
-    const inMaxArea          = maxAreaLimit >= area;
+    const inMinArea          = item.minItemArea <= area;
+    const inMaxArea          = item.maxItemArea >= area;
     return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits && inMinArea && inMaxArea);
   }
 

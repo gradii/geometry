@@ -19,8 +19,6 @@ import { SortPositionStrategy } from '../position-strategy/sort-position-strateg
 export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
   currentWidth: number;
   currentHeight: number;
-  columns               = 0;
-  rows                  = 0;
   currentColumnWidth: number;
   currentRowHeight: number;
   gridColumns: number[] = [];

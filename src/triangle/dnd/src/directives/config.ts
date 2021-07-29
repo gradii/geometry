@@ -26,11 +26,24 @@ export type DropContainerOrientation = 'horizontal' | 'vertical';
  */
 export const TRI_DRAG_CONFIG = new InjectionToken<DragDropConfig>('TRI_DRAG_CONFIG');
 
+
+export interface DragGridItemConfig {
+  defaultLayerIndex?: number;
+  defaultItemCols?: number; // default width of an item in columns
+  defaultItemRows?: number; // default height of an item in rows
+  minItemCols?: number; // min item number of columns
+  maxItemCols?: number; // max item number of cols
+  minItemRows?: number; // min item number of rows
+  maxItemRows?: number; // max item number of rows
+  minItemArea?: number; // min item area: cols * rows
+  maxItemArea?: number; // max item area: cols * rows
+}
+
 /**
  * Object that can be used to configure the drag
  * items and drop lists within a module or a component.
  */
-export interface DragDropConfig extends Partial<DragRefConfig> {
+export interface DragDropConfig extends Partial<DragRefConfig>, Partial<DragGridItemConfig> {
   lockAxis?: DragAxis;
   dragStartDelay?: DragStartDelay;
   constrainPosition?: DragConstrainPosition;
@@ -43,4 +56,5 @@ export interface DragDropConfig extends Partial<DragRefConfig> {
   listOrientation?: DropContainerOrientation;
   zIndex?: number;
   previewContainer?: 'global' | 'parent';
+
 }

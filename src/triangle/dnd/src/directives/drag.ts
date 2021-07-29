@@ -478,7 +478,7 @@ export class TriDrag<T = any> implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   /** Assigns the default input values based on a provided config object. */
-  private _assignDefaults(config: DragDropConfig) {
+  protected _assignDefaults(config: DragDropConfig) {
     const {
             lockAxis,
             dragStartDelay,

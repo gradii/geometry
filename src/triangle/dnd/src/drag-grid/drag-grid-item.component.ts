@@ -18,7 +18,7 @@ import { TRI_DROP_CONTAINER } from '../directives/drop-container';
 import { DragDropConfig, TRI_DRAG_CONFIG } from '../directives/config';
 import { DragDrop } from '../drag-drop';
 import { TriDragHandle, TRI_DRAG_HANDLE } from '../directives/drag-handle';
-
+import { clamp } from '@gradii/triangle/util';
 
 @Component({
   selector : 'tri-drag-grid-item',
@@ -64,18 +64,23 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
   // dragEnabled?: boolean;
   // resizeEnabled?: boolean;
   // compactEnabled?: boolean;
-  @Input('triDragGridItemMaxItemRows')
-  maxItemRows: number;
-  @Input('triDragGridItemMinItemRows')
-  minItemRows: number;
-  @Input('triDragGridItemMaxItemCols')
-  maxItemCols: number;
   @Input('triDragGridItemMinItemCols')
-  minItemCols: number;
+  minItemCols: number = 1;
+
+  @Input('triDragGridItemMaxItemCols')
+  maxItemCols: number = 50;
+
+  @Input('triDragGridItemMinItemRows')
+  minItemRows: number = 1;
+
+  @Input('triDragGridItemMaxItemRows')
+  maxItemRows: number = 50;
+
   @Input('triDragGridItemMinItemArea')
-  minItemArea: number;
+  minItemArea: number = 1;
+
   @Input('triDragGridItemMaxItemArea')
-  maxItemArea: number;
+  maxItemArea: number = 2500;
 
   @Input('triDragGridItemDragEnabled')
   dragEnabled: boolean = true;
@@ -88,12 +93,9 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
 
   programDragPosition: { x: number, y: number };
 
-  renderX: number;
-  renderY: number;
-
-  private left: number = 0;
-  private top: number = 0;
-  private width: number = 100;
+  private left: number   = 0;
+  private top: number    = 0;
+  private width: number  = 100;
   private height: number = 100;
 
   constructor(
@@ -114,6 +116,50 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
       element, dropContainer, _ngZone, _viewContainerRef,
       config, _dir, dragDrop, _changeDetectorRef, _selfHandle, _parentDrag
     );
+
+  }
+
+  _assignDefaults(config: DragDropConfig) {
+    super._assignDefaults(config);
+    const {
+            defaultLayerIndex,
+            defaultItemCols,
+            defaultItemRows,
+            minItemCols,
+            maxItemCols,
+            minItemRows,
+            maxItemRows,
+            minItemArea,
+            maxItemArea,
+          } = config;
+
+    if (defaultLayerIndex) {
+      this.layerIndex = defaultLayerIndex;
+    }
+    if (defaultItemCols) {
+      this.cols = defaultItemCols;
+    }
+    if (defaultItemRows) {
+      this.rows = defaultItemRows;
+    }
+    if (minItemCols) {
+      this.minItemCols = minItemCols;
+    }
+    if (maxItemCols) {
+      this.maxItemCols = maxItemCols;
+    }
+    if (minItemRows) {
+      this.minItemRows = minItemRows;
+    }
+    if (maxItemRows) {
+      this.maxItemRows = maxItemRows;
+    }
+    if (minItemArea) {
+      this.minItemArea = minItemArea;
+    }
+    if (maxItemArea) {
+      this.maxItemArea = maxItemArea;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -128,13 +174,33 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
   }
 
   updateItemSize(): void {
-    const ref = this.dropContainer._dropContainerRef;
-    if (this.x > -1) {
-      this.left = this.x * ref.currentColumnWidth;
+    const ref       = this.dropContainer._dropContainerRef;
+    const container = this.dropContainer;
+
+    const withMargin = true;
+    let currentColumnWidth;
+    let currentColumnHeight;
+    if (!withMargin) {
+      currentColumnWidth  = (ref.currentWidth + container.gutter) / container.cols;
+      currentColumnHeight = (ref.currentHeight + container.gutter) / container.rows;
+    } else {
+      currentColumnWidth  = (ref.currentWidth - container.gutter) / container.cols;
+      currentColumnHeight = (ref.currentHeight - container.gutter) / container.rows;
     }
-    if (this.y > -1) {
-      this.top = this.y * ref.currentRowHeight;
+
+    const x = clamp(this.x, 0, this.maxItemCols - 1);
+    const y = clamp(this.y, 0, this.maxItemRows - 1);
+
+    if (!withMargin) {
+      this.left = x * currentColumnWidth;
+      this.top  = y * currentColumnHeight;
+    } else {
+      this.left = x * currentColumnWidth + container.gutter;
+      this.top  = y * currentColumnHeight + container.gutter;
     }
+    this.width  = this.cols * currentColumnWidth - container.gutter;
+    this.height = this.rows * currentColumnHeight - container.gutter;
+
     this._dragRef.setProgramDragPosition({x: this.left, y: this.top});
     this._changeDetectorRef.markForCheck();
 
@@ -168,20 +234,7 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
   }
 
   ngOnInit() {
-    console.log(this.dropContainer._dropContainerRef);
-    const ref = this.dropContainer._dropContainerRef;
-    if (this.x > -1) {
-      this.left = this.x * ref.currentColumnWidth;
-    }
-    if (this.y > -1) {
-      this.top = this.y * ref.currentRowHeight;
-    }
-    if (this.cols > -1) {
-      this.width = this.cols * ref.currentColumnWidth;
-    }
-    if (this.rows > -1) {
-      this.height = this.rows * ref.currentRowHeight;
-    }
+    this.updateItemSize();
 
     this.programDragPosition = {x: this.left, y: this.top};
   }
@@ -189,7 +242,6 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
   ngAfterViewInit() {
 
     super.ngAfterViewInit();
-
   }
 
 
