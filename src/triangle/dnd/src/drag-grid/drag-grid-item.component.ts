@@ -91,6 +91,8 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
   @Input('triDragGridItemCompactEnabled')
   compactEnabled: boolean = true;
 
+  notPlaced: boolean = true;
+
   programDragPosition: { x: number, y: number };
 
   private left: number   = 0;
@@ -177,10 +179,9 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
     const ref       = this.dropContainer._dropContainerRef;
     const container = this.dropContainer;
 
-    const withMargin = true;
     let currentColumnWidth;
     let currentColumnHeight;
-    if (!withMargin) {
+    if (!container.hasPadding) {
       currentColumnWidth  = (ref.currentWidth + container.gutter) / container.cols;
       currentColumnHeight = (ref.currentHeight + container.gutter) / container.rows;
     } else {
@@ -191,7 +192,7 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
     const x = clamp(this.x, 0, this.maxItemCols - 1);
     const y = clamp(this.y, 0, this.maxItemRows - 1);
 
-    if (!withMargin) {
+    if (!container.hasPadding) {
       this.left = x * currentColumnWidth;
       this.top  = y * currentColumnHeight;
     } else {

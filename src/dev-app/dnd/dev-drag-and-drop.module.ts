@@ -20,6 +20,7 @@ import { TriDemoDndNestComponent } from './tri-demo-dnd-nest/tri-demo-dnd-nest.c
 import { TriDemoDndNotCdkComponent } from './tri-demo-dnd-not-cdk/tri-demo-dnd-not-cdk.component';
 import { TriDemoDndStructureComponent } from './tri-demo-dnd-structure/tri-demo-dnd-structure.component';
 import { FormsModule } from '@angular/forms';
+import { TriCheckboxModule } from '@gradii/triangle/checkbox';
 
 @NgModule({
   imports     : [
@@ -31,6 +32,7 @@ import { FormsModule } from '@angular/forms';
     TriIconModule,
     FormsModule,
     TriSelectModule,
+    TriCheckboxModule,
 
     RouterModule.forChild([
       {

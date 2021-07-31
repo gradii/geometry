@@ -1,32 +1,35 @@
 <div class="options">
   <a triRaisedButton href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/gridTypes"
      target="_blank" class="source-code-button">
-     <tri-icon svgIcon="outline:fork"></tri-icon>
+    <tri-icon svgIcon="outline:fork"></tri-icon>
     Source
   </a>
-<!--  <markdown [src]="'assets/gridTypes.md'"></markdown>-->
+  <!--  <markdown [src]="'assets/gridTypes.md'"></markdown>-->
 </div>
 <div class="options-header">
   <div class="form-field">
     <tri-select aria-label="Grid type" [(ngModel)]="options.gridType" (ngModelChange)="changedOptions()"
                 placeholder="Grid Type">
-      <tri-option value="fit">Fit to screen</tri-option>
-      <tri-option value="scrollVertical">Scroll Vertical</tri-option>
-      <tri-option value="scrollHorizontal">Scroll Horizontal</tri-option>
-      <tri-option value="fixed">Fixed</tri-option>
-      <tri-option value="verticalFixed">Vertical Fixed</tri-option>
-      <tri-option value="horizontalFixed">Horizontal Fixed</tri-option>
+      <tri-option label="Fit to screen" value="fit">Fit to screen</tri-option>
+      <tri-option label="Scroll Vertical" value="scrollVertical">Scroll Vertical</tri-option>
+      <tri-option label="Scroll Horizontal" value="scrollHorizontal">Scroll Horizontal</tri-option>
+      <tri-option label="Fixed" value="fixed">Fixed</tri-option>
+      <tri-option label="Vertical Fixed" value="verticalFixed">Vertical Fixed</tri-option>
+      <tri-option label="Horizontal Fixed" value="horizontalFixed">Horizontal Fixed</tri-option>
     </tri-select>
   </div>
   <div class="form-field">
+    <div>Fixed Col Width</div>
     <input triInput [(ngModel)]="options.fixedColWidth" type="number" placeholder="Fixed Col Width"
            (ngModelChange)="changedOptions()">
   </div>
   <div class="form-field">
+    <div>Fixed Row Height</div>
     <input triInput [(ngModel)]="options.fixedRowHeight" type="number" placeholder="Fixed Row Height"
            (ngModelChange)="changedOptions()">
   </div>
   <div class="form-field">
+    <div>Row Height Ratio</div>
     <input (ngModelChange)="changedOptions()" [(ngModel)]="options.rowHeightRatio" triInput
            placeholder="Row Height Ratio" step="0.1"
            type="number">

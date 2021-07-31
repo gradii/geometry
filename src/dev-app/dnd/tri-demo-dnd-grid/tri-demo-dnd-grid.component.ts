@@ -6,7 +6,7 @@
 
 import { AfterViewInit, Component, QueryList, ViewChildren } from '@angular/core';
 import {
-  CompactType, moveItemInArray, transferArrayItem, TRI_DROP_CONTAINER, TriDragDrop, TriDropListContainer
+  CompactType, GridTypes, moveItemInArray, transferArrayItem, TRI_DROP_CONTAINER, TriDragDrop, TriDropListContainer
 } from '@gradii/triangle/dnd';
 import { asapScheduler } from 'rxjs';
 
@@ -18,6 +18,7 @@ import { asapScheduler } from 'rxjs';
         <h2>To do</h2>
 
         <div>
+          <span>has padding</span>
           <tri-select aria-label="Compact type" [(ngModel)]="compactType"
                       placeholder="Compact Type">
             <tri-option label="None" value="none">None</tri-option>
@@ -33,6 +34,21 @@ import { asapScheduler } from 'rxjs';
             <tri-option label="Compact Left & Down" value="compactLeft&Down">Compact Left & Down</tri-option>
             <tri-option label="Compact Down & Right" value="compactDown&Right">Compact Down & Right</tri-option>
             <tri-option label="Compact Right & Down" value="compactRight&Down">Compact Right & Down</tri-option>
+          </tri-select>
+
+          <tri-checkbox [(ngModel)]="hasPadding">has Padding</tri-checkbox>
+        </div>
+
+        <div>
+          <span>gridType</span>
+          <tri-select [(ngModel)]="gridType">
+            <tri-option label="none" value=""></tri-option>
+            <tri-option label="fit" value="fit"></tri-option>
+            <tri-option label="scrollVertical" value="scrollVertical"></tri-option>
+            <tri-option label="scrollHorizontal" value="scrollHorizontal"></tri-option>
+            <tri-option label="fixed" value="fixed"></tri-option>
+            <tri-option label="verticalFixed" value="verticalFixed"></tri-option>
+            <tri-option label="horizontalFixed" value="horizontalFixed"></tri-option>
           </tri-select>
         </div>
 
@@ -56,6 +72,8 @@ import { asapScheduler } from 'rxjs';
           </div>
 
           <div triDropGridContainer
+               [triDropGridContainerGridType]="gridType"
+               [triDropGridContainerHasPadding]="hasPadding"
                [triDropGridContainerCompactType]="compactType"
                [triDropGridContainerRows]="10"
                [triDropGridContainerColumns]="10"
@@ -83,8 +101,9 @@ import { asapScheduler } from 'rxjs';
   styleUrls: ['tri-demo-dnd-grid.component.css']
 })
 export class TriDemoDndGridComponent implements AfterViewInit {
-
+  hasPadding = true;
   compactType: CompactType;
+  gridType: GridTypes;
 
   dashboard = [
     {cols: 1, rows: 1, y: 1, x: 1},

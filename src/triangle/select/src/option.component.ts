@@ -20,7 +20,7 @@ import {
   templateUrl    : './option.component.html'
 })
 export class OptionComponent {
-  @ViewChild(TemplateRef, {static: false}) template: TemplateRef<any>;
+  @ViewChild(TemplateRef, {static: true}) template: TemplateRef<any>;
   @Input() label: string;
   // tslint:disable-next-line:no-any
   @Input() value: any;

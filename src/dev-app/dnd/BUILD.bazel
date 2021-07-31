@@ -19,6 +19,7 @@ ng_module(
         "//src/triangle/icon",
         "//src/triangle/dnd",
         "//src/triangle/select",
+        "//src/triangle/checkbox",
         "@npm//@angular/forms",
         "@npm//@angular/router",
         "@npm//@angular/cdk",

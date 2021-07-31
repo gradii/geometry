@@ -15,7 +15,7 @@ import {
   SimpleChanges, SkipSelf, ViewEncapsulation
 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { startWith, takeUntil } from 'rxjs/operators';
+import { debounceTime, startWith, takeUntil, tap } from 'rxjs/operators';
 import { assertElementNode } from '../directives/assertions';
 import { TRI_DROP_CONTAINER, TriDropContainer } from '../directives/drop-container';
 import { DragDrop } from '../drag-drop';
@@ -24,7 +24,7 @@ import { DragRef } from '../drag-drop-ref/drag-ref';
 import { DropGridContainerRef } from '../drag-drop-ref/drop-grid-container-ref';
 import { CompactPosition } from '../drag-grid/compact-position';
 import { TriDragGridItemComponent } from '../drag-grid/drag-grid-item.component';
-import { CompactType } from '../enum';
+import { CompactType, GridTypes } from '../enum';
 import { TriDragDrop, TriDragEnter, TriDragExit } from '../event/drag-events';
 import { DragAxis, DragDropConfig, TRI_DRAG_CONFIG } from './config';
 import { TRI_DROP_CONTAINER_GROUP, TriDropContainerGroup } from './drop-container-group';
@@ -46,11 +46,15 @@ export const TRI_DROP_GRID_CONTAINER_CONFIG = new InjectionToken('tri drop grid 
     {provide: TRI_DROP_CONTAINER, useExisting: TriDropGridContainer},
   ],
   host         : {
-    'class'                               : 'tri-drop-grid-container',
-    '[attr.id]'                           : 'id',
-    '[class.tri-drop-container-disabled]' : 'disabled',
-    '[class.tri-drop-container-dragging]' : '_dropContainerRef.isDragging()',
-    '[class.tri-drop-container-receiving]': '_dropContainerRef.isReceiving()',
+    'class'                                           : 'tri-drop-grid-container',
+    '[attr.id]'                                       : 'id',
+    '[class.tri-drop-container-disabled]'             : 'disabled',
+    '[class.tri-drop-container-dragging]'             : '_dropContainerRef.isDragging()',
+    '[class.tri-drop-container-receiving]'            : '_dropContainerRef.isReceiving()',
+    '[class.tri-drop-grid-container-fit]'             : 'gridType === "fit"',
+    '[class.tri-drop-grid-container-scrollVertical]'  : 'gridType === "scrollVertical" || gridType === "verticalFixed"',
+    '[class.tri-drop-grid-container-scrollHorizontal]': 'gridType === "scrollHorizontal" || gridType === "horizontalFixed"',
+    '[class.tri-drop-grid-container-fixed]'           : 'gridType === "fixed"',
   },
   styles       : [
     `
@@ -62,6 +66,25 @@ export const TRI_DROP_GRID_CONTAINER_CONFIG = new InjectionToken('tri drop grid 
         height: 100%;
         user-select: none;
         display: block;
+      }
+
+      .tri-drop-grid-container-fit {
+        overflow-x: hidden;
+        overflow-y: hidden;
+      }
+
+      .tri-drop-grid-container-scrollVertical {
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      .tri-drop-grid-container-scrollHorizontal {
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+
+      .tri-drop-grid-container-fixed {
+        overflow: auto;
       }
     `
   ]
@@ -89,6 +112,9 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   @Input('triDropGridContainerData')
   data: T;
 
+  @Input('triDropGridContainerHasPadding')
+  hasPadding: boolean = false;
+
   /** Locks the position of the draggable elements inside the container along the specified axis. */
   @Input('triDropGridContainerLockAxis')
   lockAxis: DragAxis;
@@ -114,12 +140,14 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   @Input('triDropGridContainerMaxRows')
   maxRows: 100;
 
-  renderRows: number;
-  renderColumns: number;
-
   @Input('triDropGridContainerCompactType')
   compactType: CompactType;
 
+  @Input('triDropGridContainerDisableAutoPositionOnConflict')
+  disableAutoPositionOnConflict: boolean;
+
+  @Input('triDropGridContainerGridType')
+  gridType: GridTypes = 'fit';
 
   /** Whether sorting within this drop list is disabled. */
   // @Input('triDropContainerSortingDisabled')
@@ -229,7 +257,25 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
 
   /** Registers an items with the drop list. */
   addItem(item: TriDragGridItemComponent): void {
+
+    if (item.x === -1 || item.y === -1) {
+      this.autoPositionItem(item);
+    } else if (this.checkCollision(item)) {
+      if (ngDevMode) {
+        item.notPlaced = true;
+        console.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
+          JSON.stringify(item, ['cols', 'rows', 'x', 'y']));
+      }
+      if (!this.disableAutoPositionOnConflict) {
+        this.autoPositionItem(item);
+      } else {
+        item.notPlaced = true;
+      }
+    }
+
     this._unsortedItems.add(item);
+
+    // this.calculateLayoutDebounce();
 
     if (this._dropContainerRef.isDragging()) {
       this._syncItemsWithRef();
@@ -244,6 +290,49 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
       this._syncItemsWithRef();
     }
   }
+
+  autoPositionItem(item: TriDragGridItemComponent): void {
+    if (this.getNextPossiblePosition(item)) {
+      item.notPlaced = false;
+    } else {
+      item.notPlaced = true;
+      if (ngDevMode) {
+        console.warn('Can\'t be placed in the bounds of the dashboard!/n' +
+          JSON.stringify(item, ['cols', 'rows', 'x', 'y']));
+      }
+    }
+  }
+
+  getNextPossiblePosition(newItem: TriDragGridItemComponent,
+                          startingFrom: { y?: number, x?: number } = {}): boolean {
+    // this.setGridDimensions();
+    let rowsIndex = startingFrom.y || 0;
+    let colsIndex;
+    for (; rowsIndex < this.rows; rowsIndex++) {
+      newItem.y = rowsIndex;
+      colsIndex = startingFrom.x || 0;
+      for (; colsIndex < this.cols; colsIndex++) {
+        newItem.x = colsIndex;
+        if (!this.checkCollision(newItem)) {
+          return true;
+        }
+      }
+    }
+    const canAddToRows    = this.maxRows >= this.rows + newItem.rows;
+    const canAddToColumns = this.maxCols >= this.cols + newItem.cols;
+    const addToRows       = this.rows <= this.cols && canAddToRows;
+    if (!addToRows && canAddToColumns) {
+      newItem.x = this.cols;
+      newItem.y = 0;
+      return true;
+    } else if (canAddToRows) {
+      newItem.y = this.rows;
+      newItem.x = 0;
+      return true;
+    }
+    return false;
+  }
+
 
   getUnSortedItems() {
     return Array.from(this._unsortedItems);
@@ -392,7 +481,13 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     this._dropContainerRef.withItems(this.getSortedItems().map(item => item._dragRef));
   }
 
-  reCalculateLayout() {
+  private calculateLayout$ = new Subject();
+
+  calculateLayout() {
+    this.calculateLayout$.next();
+  }
+
+  _calculateLayout() {
     if (this.compactService) {
       this.compactService.checkCompact(this.compactType);
     }
@@ -471,13 +566,46 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
 
   }
 
+  //
+  // setGridDimensions(): void {
+  //   this.setGridSize();
+  //   if (!this.mobile && this.$options.mobileBreakpoint > this.curWidth) {
+  //     this.mobile = !this.mobile;
+  //     this.renderer.addClass(this.el, 'mobile');
+  //   } else if (this.mobile && this.$options.mobileBreakpoint < this.curWidth) {
+  //     this.mobile = !this.mobile;
+  //     this.renderer.removeClass(this.el, 'mobile');
+  //   }
+  //   let rows    = this.$options.minRows;
+  //   let columns = this.$options.minCols;
+  //
+  //   let widgetsIndex = this.grid.length - 1;
+  //   let widget;
+  //   for (; widgetsIndex >= 0; widgetsIndex--) {
+  //     widget = this.grid[widgetsIndex];
+  //     if (!widget.notPlaced) {
+  //       rows    = Math.max(rows, widget.$item.y + widget.$item.rows);
+  //       columns = Math.max(columns, widget.$item.x + widget.$item.cols);
+  //     }
+  //   }
+  //
+  //   if (this.columns !== columns || this.rows !== rows) {
+  //     this.columns = columns;
+  //     this.rows    = rows;
+  //     if (this.options.gridSizeChangedCallback) {
+  //       this.options.gridSizeChangedCallback(this);
+  //     }
+  //   }
+  // }
+
   ngOnChanges(changes: SimpleChanges) {
     if (
       changes['x'] || changes['y'] ||
       changes['rows'] || changes['cols'] ||
-      changes['compactType']
+      changes['compactType'] ||
+      changes['hasPadding']
     ) {
-      this.reCalculateLayout();
+      this.calculateLayout();
     }
   }
 
@@ -489,6 +617,15 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     ref.currentHeight      = clientRect.height;
     ref.currentColumnWidth = ref.currentWidth / this.cols;
     ref.currentRowHeight   = ref.currentHeight / this.rows;
+
+    this.calculateLayout$.pipe(
+      takeUntil(this._destroyed),
+      debounceTime(100),
+      tap(() => {
+        this._calculateLayout();
+      })
+    ).subscribe();
+
   }
 
   checkCollision(item: TriDragGridItemComponent): any | boolean {

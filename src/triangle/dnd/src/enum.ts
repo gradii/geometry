@@ -41,3 +41,11 @@ export const enum CompactType {
   CompactDownAndRight = 'compactDown&Right',
   CompactRightAndDown = 'compactRight&Down'
 }
+
+export type GridTypes =
+  'fit'
+  | 'scrollVertical'
+  | 'scrollHorizontal'
+  | 'fixed'
+  | 'verticalFixed'
+  | 'horizontalFixed';

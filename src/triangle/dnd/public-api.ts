@@ -32,4 +32,4 @@ export * from './src/directives/drag';
 export * from './src/directives/drag-handle';
 export * from './src/directives/drag-preview';
 export * from './src/directives/drag-placeholder';
-export { CompactType } from './src/enum';
+export { CompactType, GridTypes } from './src/enum';
