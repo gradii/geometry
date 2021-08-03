@@ -12,7 +12,7 @@ import { DndContainerRef } from '../drag-drop-ref/dnd-container-ref';
 import { CachedItemPosition } from '../drop-container.interface';
 import { findIndex } from '../utils';
 import {
-  adjustClientRect, getMutableClientRect, isInsideClientRect, isPointerNearClientRect
+  adjustClientRect, getMutableClientRect, isInsideClientRect,
 } from '../utils/client-rect';
 import { moveItemInArray } from '../utils/drag-utils';
 import { DragDropRegistry } from '../drag-drop-registry';

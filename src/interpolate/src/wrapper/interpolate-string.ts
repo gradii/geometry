@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { InterpolateString } from '../interpolate/string';
 
 export function interpolateString(a, b) {

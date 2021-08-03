@@ -6,8 +6,8 @@
 
 import { InterpolateDate } from '../interpolate/date';
 
-export function interpolateDate(start, end) {
-  return t => {
+export function interpolateDate(start: number, end: number) {
+  return (t: number) => {
     return new InterpolateDate().interpolate(start, end).getResult(t);
   };
 }

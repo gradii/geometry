@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { InterpolateHsl, InterpolateHslLong } from '../interpolate/hsl';
 
 export function interpolateHsl(start, end) {

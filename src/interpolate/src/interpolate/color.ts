@@ -14,13 +14,13 @@ export class InterpolateColor {
   constructor(public gamma: number = 1) {
   }
 
-  public interpolate(a, b) {
+  public interpolate(a: number, b: number) {
     this.a = a;
     this.b = b;
     return this;
   }
 
-  public getResult(t) {
+  public getResult(t: number) {
     if (this.gamma === 1) {
       if (this.b - this.a) {
         return new InterpolateLinear()

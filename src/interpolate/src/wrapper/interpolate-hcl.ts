@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { InterpolateHcl, InterpolateHclLong } from '../interpolate/hcl';
 
 export function interpolateHcl(start, end) {
