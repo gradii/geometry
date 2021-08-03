@@ -10,7 +10,8 @@ import {
 } from '@angular/cdk/coercion';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import {
-  ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, InjectionToken, Input, OnDestroy, OnInit, Optional,
+  ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, InjectionToken, Input, NgZone, OnDestroy, OnInit,
+  Optional,
   Output,
   SimpleChanges, SkipSelf, ViewEncapsulation
 } from '@angular/core';
@@ -66,6 +67,7 @@ export const TRI_DROP_GRID_CONTAINER_CONFIG = new InjectionToken('tri drop grid 
         height: 100%;
         user-select: none;
         display: block;
+        overflow: hidden;
       }
 
       .tri-drop-grid-container-fit {
@@ -129,16 +131,16 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   rows: number = 1;
 
   @Input('triDropGridContainerMinCols')
-  minCols: 1;
+  minCols: number = 1;
 
   @Input('triDropGridContainerMaxCols')
-  maxCols: 100;
+  maxCols: number = 100;
 
   @Input('triDropGridContainerMinRows')
-  minRows: 1;
+  minRows: number = 1;
 
   @Input('triDropGridContainerMaxRows')
-  maxRows: 100;
+  maxRows: number = 100;
 
   @Input('triDropGridContainerCompactType')
   compactType: CompactType;
@@ -171,6 +173,15 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   /** Number of pixels to scroll for each frame when auto-scrolling an element. */
   @Input('triDropGridContainerAutoScrollStep')
   autoScrollStep: number;
+
+  @Input('triDropGridContainerTileRatio')
+  tileRatio: number = 1;
+
+  @Input('triDropGridContainerFixedWidth')
+  fixedWidth: number;
+
+  @Input('triDropGridContainerFixedHeight')
+  fixedHeight: number;
 
   /** Emits when the user drops an item inside the container. */
   @Output('triDropGridContainerDropped')
@@ -218,10 +229,12 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     public element: ElementRef<HTMLElement>, dragDrop: DragDrop,
     private _changeDetectorRef: ChangeDetectorRef,
     private _scrollDispatcher: ScrollDispatcher,
+    private _ngZone: NgZone,
     @Optional() private _dir?: Directionality,
     @Optional() @Inject(TRI_DROP_CONTAINER_GROUP) @SkipSelf()
     protected _group?: TriDropContainerGroup<TriDropGridContainer>,
-    @Optional() @Inject(TRI_DRAG_CONFIG) config?: DragDropConfig) {
+    @Optional() @Inject(TRI_DRAG_CONFIG) config?: DragDropConfig
+  ) {
     super(_group);
 
     if (typeof ngDevMode === 'undefined' || ngDevMode) {
@@ -253,25 +266,23 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
 
 
     this.compactService = new CompactPosition(this);
+
+
+    this._ngZone.runOutsideAngular(() => {
+      this.calculateLayout$.pipe(
+        takeUntil(this._destroyed),
+        debounceTime(100),
+        tap(() => {
+          this._ngZone.run(() => {
+            this._calculateLayout();
+          });
+        })
+      ).subscribe();
+    });
   }
 
   /** Registers an items with the drop list. */
   addItem(item: TriDragGridItemComponent): void {
-
-    if (item.x === -1 || item.y === -1) {
-      this.autoPositionItem(item);
-    } else if (this.checkCollision(item)) {
-      if (ngDevMode) {
-        item.notPlaced = true;
-        console.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
-          JSON.stringify(item, ['cols', 'rows', 'x', 'y']));
-      }
-      if (!this.disableAutoPositionOnConflict) {
-        this.autoPositionItem(item);
-      } else {
-        item.notPlaced = true;
-      }
-    }
 
     this._unsortedItems.add(item);
 
@@ -291,14 +302,35 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     }
   }
 
+  positionItem(item: TriDragGridItemComponent) {
+    if (item.x === -1 || item.y === -1) {
+      this.autoPositionItem(item);
+    } else if (this.checkCollision(item)) {
+      if (ngDevMode) {
+        item.notPlaced = true;
+        console.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
+          JSON.stringify(item, ['cols', 'rows', 'x', 'y']));
+      }
+      if (!this.disableAutoPositionOnConflict) {
+        this.autoPositionItem(item);
+      } else {
+        item.notPlaced = true;
+      }
+    } else {
+      item.notPlaced = false;
+    }
+
+    this.calculateLayout();
+  }
+
   autoPositionItem(item: TriDragGridItemComponent): void {
     if (this.getNextPossiblePosition(item)) {
       item.notPlaced = false;
     } else {
       item.notPlaced = true;
       if (ngDevMode) {
-        console.warn('Can\'t be placed in the bounds of the dashboard!/n' +
-          JSON.stringify(item, ['cols', 'rows', 'x', 'y']));
+        console.warn(`Can't be placed in the bounds of the dashboard!\n${JSON.stringify(item,
+          ['cols', 'rows', 'x', 'y'])}`);
       }
     }
   }
@@ -402,6 +434,12 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
       // ref.sortingDisabled    = coerceBooleanProperty(this.sortingDisabled);
       ref.autoScrollDisabled = coerceBooleanProperty(this.autoScrollDisabled);
       ref.autoScrollStep     = coerceNumberProperty(this.autoScrollStep, 2);
+
+      ref.hasPadding = this.hasPadding;
+      ref.gutter = this.gutter;
+      ref.currentColumnWidth = this.currentTileWidth;
+      ref.currentRowHeight = this.currentTileHeight;
+
       ref
         .connectedTo(
           siblings.filter(drop => drop && drop !== this).map(list => list._dropContainerRef));
@@ -487,9 +525,24 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     this.calculateLayout$.next();
   }
 
-  _calculateLayout() {
+  currentTileWidth: number;
+  currentTileHeight: number;
+
+  private _calculateLayout() {
     if (this.compactService) {
       this.compactService.checkCompact(this.compactType);
+    }
+
+    this.setGridDimensions();
+
+    const clientRect = this.element.nativeElement.getBoundingClientRect();
+
+    if (!this.hasPadding) {
+      this.currentTileWidth  = (clientRect.width + this.gutter) / this.cols;
+      this.currentTileHeight = (clientRect.height + this.gutter) / this.rows;
+    } else {
+      this.currentTileWidth  = (clientRect.width - this.gutter) / this.cols;
+      this.currentTileHeight = (clientRect.height - this.gutter) / this.rows;
     }
 
     this._unsortedItems.forEach(item => {
@@ -566,6 +619,29 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
 
   }
 
+  setGridDimensions(): void {
+    // this.setGridSize();
+    let rows    = this.minRows;
+    let columns = this.minCols;
+
+    this._unsortedItems.forEach(item => {
+      // item.updateItemSize();
+      if (!item.notPlaced) {
+        rows    = Math.max(rows, item.y + item.rows);
+        columns = Math.max(columns, item.x + item.cols);
+      }
+    });
+
+    if (this.cols !== columns || this.rows !== rows) {
+      this.cols = columns;
+      this.rows = rows;
+      // if (this.options.gridSizeChangedCallback) {
+      //   this.options.gridSizeChangedCallback(this);
+      // }
+    }
+  }
+
+
   //
   // setGridDimensions(): void {
   //   this.setGridSize();
@@ -613,19 +689,17 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     const ref        = this._dropContainerRef;
     const clientRect = this.element.nativeElement.getBoundingClientRect();
 
+    ref.hasPadding         = this.hasPadding;
+    ref.gutter             = this.gutter;
     ref.currentWidth       = clientRect.width;
     ref.currentHeight      = clientRect.height;
-    ref.currentColumnWidth = ref.currentWidth / this.cols;
-    ref.currentRowHeight   = ref.currentHeight / this.rows;
+    ref.currentColumnWidth = this.currentTileWidth;
+    ref.currentRowHeight   = this.currentTileHeight;
 
-    this.calculateLayout$.pipe(
-      takeUntil(this._destroyed),
-      debounceTime(100),
-      tap(() => {
-        this._calculateLayout();
-      })
-    ).subscribe();
+  }
 
+  ngAfterViewInit() {
+    this.calculateLayout();
   }
 
   checkCollision(item: TriDragGridItemComponent): any | boolean {

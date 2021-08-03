@@ -19,6 +19,24 @@
     </tri-select>
   </div>
   <div class="form-field">
+    <tri-select aria-label="Compact type" [(ngModel)]="options.compactType" (ngModelChange)="changedOptions()"
+                placeholder="Compact Type">
+      <tri-option value="none">None</tri-option>
+      <tri-option value="compactUp">Compact Up</tri-option>
+      <tri-option value="compactLeft">Compact Left</tri-option>
+      <tri-option value="compactLeft&Up">Compact Left & Up</tri-option>
+      <tri-option value="compactUp&Left">Compact Up & Left</tri-option>
+      <tri-option value="compactRight">Compact Right</tri-option>
+      <tri-option value="compactUp&Right">Compact Up & Right</tri-option>
+      <tri-option value="compactRight&Up">Compact Right & Up</tri-option>
+      <tri-option value="compactDown">Compact Down</tri-option>
+      <tri-option value="compactDown&Left">Compact Down & Left</tri-option>
+      <tri-option value="compactLeft&Down">Compact Left & Down</tri-option>
+      <tri-option value="compactDown&Right">Compact Down & Right</tri-option>
+      <tri-option value="compactRight&Down">Compact Right & Down</tri-option>
+    </tri-select>
+  </div>
+  <div class="form-field">
     <div>Fixed Col Width</div>
     <input triInput [(ngModel)]="options.fixedColWidth" type="number" placeholder="Fixed Col Width"
            (ngModelChange)="changedOptions()">

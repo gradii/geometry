@@ -1011,7 +1011,9 @@ export class DragRef<T = any> {
     }
 
     this._dndContainerRef!._startScrollingIfNecessary(rawX, rawY);
-    this._dndContainerRef!._arrangeItem(this, x, y, this._pointerDirectionDelta);
+    const elementPositionX = x - this._pickupPositionInElement.x;
+    const elementPositionY = y - this._pickupPositionInElement.y;
+    this._dndContainerRef!._arrangeItem(this, x, y, elementPositionX, elementPositionY, this._pointerDirectionDelta);
     this._applyPreviewTransform(
       x - this._pickupPositionInElement.x, y - this._pickupPositionInElement.y);
   }

@@ -4,23 +4,36 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { coerceElement } from '@angular/cdk/coercion';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { ElementRef, NgZone } from '@angular/core';
+import { combineTransforms, DragCSSStyleDeclaration } from '@gradii/triangle/dnd/src/drag-styling';
+import { adjustClientRect } from '@gradii/triangle/dnd/src/utils/client-rect';
+import { GridPushService } from '../drag-grid/grid-push.service';
+import { GridSwapService } from '../drag-grid/grid-swap.service';
+import { GridPositionStrategy } from '../position-strategy/grid-position-strategy';
 import { CompactType } from '../enum';
 import { Subject } from 'rxjs';
 import { DragDropRegistry } from '../drag-drop-registry';
 import { DragRefInternal as DragRef } from './drag-ref';
 import { DndContainerRef } from './dnd-container-ref';
-import { SortPositionStrategy } from '../position-strategy/sort-position-strategy';
 
 /**
  * Reference to a drop list. Used to manipulate or dispose of the container.
  */
 export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
+  hasPadding: boolean;
+  gutter: number = 0;
   currentWidth: number;
   currentHeight: number;
   currentColumnWidth: number;
   currentRowHeight: number;
+  // viewPort: {
+  //   x: number,
+  //   y: number,
+  //   width: number,
+  //   height: number
+  // };
   gridColumns: number[] = [];
   gridRows: number[]    = [];
 
@@ -42,7 +55,7 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
     _document: any,
     protected _ngZone: NgZone,
     protected _viewportRuler: ViewportRuler,
-    protected positionStrategy: SortPositionStrategy
+    protected positionStrategy: GridPositionStrategy
   ) {
     super(element,
       _dragDropRegistry,
@@ -50,6 +63,9 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
       _ngZone,
       _viewportRuler,
       positionStrategy);
+
+    const pushService = new GridPushService();
+    const swapService = new GridSwapService();
   }
 
   enter(item: DragRef, pointerX: number, pointerY: number): void {
@@ -70,6 +86,10 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
     // } else {
     //   newIndex = index;
     // }
+
+    // const {x: positionX, y: positionY} = this.positionStrategy.pixelsToPosition(item, pointerX, pointerY);
+    // console.log(positionX, positionY);
+
     //
     // const activeDraggables                        = this._activeDraggables;
     // const currentIndex                            = activeDraggables.indexOf(item);
@@ -123,13 +143,49 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
     this.entered.next({item, container: this, currentIndex: this.getItemIndex(item)});
   }
 
+  _arrangeItem(item: DragRef, pointerX: number, pointerY: number,
+               elementPointX: number, elementPointY: number,
+               pointerDelta: { x: number; y: number }) {
+    super._arrangeItem(item, pointerX, pointerY, elementPointX, elementPointY, pointerDelta);
 
-  _arrangeItem(item: DragRef, pointerX: number, pointerY: number, pointerDelta: { x: number; y: number }) {
-    super._arrangeItem(item, pointerX, pointerY, pointerDelta);
+    const positionX = this.positionStrategy.pixelsToPositionX(item, elementPointX);
+    const positionY = this.positionStrategy.pixelsToPositionY(item, elementPointY);
+    console.log(positionX, positionY);
+
+    const placeholderRef = item.getPlaceholderElement();
+
+    let x, y;
+    if (!this.hasPadding) {
+      x = positionX * this.currentColumnWidth;
+      y = positionY * this.currentRowHeight;
+    } else {
+      x = positionX * this.currentColumnWidth + this.gutter;
+      y = positionY * this.currentRowHeight + this.gutter;
+    }
+
+    // this.width  = this.cols * currentColumnWidth - container.gutter;
+    // this.height = this.rows * currentColumnHeight - container.gutter;
+
+
+    placeholderRef.style.transform = `translate3d(${x}px, ${y}px, 0)`;
   }
 
   checkCollision() {
 
+  }
+
+  _reset() {
+    this._isDragging = false;
+
+    this._siblings.forEach(sibling => sibling._stopReceiving(this));
+
+    this.positionStrategy.reset();
+
+    this._activeDraggables = [];
+
+    this._stopScrolling();
+    this._viewportScrollSubscription.unsubscribe();
+    this.scrollingStrategy.reset();
   }
 
   getItemPosition(item: DragRef): string {

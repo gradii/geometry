@@ -21,7 +21,7 @@ import { asapScheduler } from 'rxjs';
           <span>has padding</span>
           <tri-select aria-label="Compact type" [(ngModel)]="compactType"
                       placeholder="Compact Type">
-            <tri-option label="None" value="none">None</tri-option>
+            <tri-option label="None" value="">None</tri-option>
             <tri-option label="Compact Up" value="compactUp">Compact Up</tri-option>
             <tri-option label="Compact Left" value="compactLeft">Compact Left</tri-option>
             <tri-option label="Compact Left & Up" value="compactLeft&Up">Compact Left & Up</tri-option>

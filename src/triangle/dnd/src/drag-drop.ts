@@ -7,6 +7,7 @@
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
 import { ElementRef, Inject, Injectable, NgZone } from '@angular/core';
+import { GridPositionStrategy } from '@gradii/triangle/dnd/src/position-strategy/grid-position-strategy';
 import { DragContainerRef } from './drag-drop-ref/drag-container-ref';
 import { DragRef, DragRefConfig } from './drag-drop-ref/drag-ref';
 import { DndContainerRef } from './drag-drop-ref/dnd-container-ref';
@@ -75,12 +76,12 @@ export class DragDrop {
    * @param element Element to which to attach the drop list functionality.
    */
   createDropGridContainerRef<T = any>(element: ElementRef<HTMLElement> | HTMLElement): DropGridContainerRef<T> {
-    const sortPositionStrategy = new SortPositionStrategy(this._dragDropRegistry);
+    const positionStrategy = new GridPositionStrategy(this._dragDropRegistry);
     const dropContainerRef     = new DropGridContainerRef<T>(element, this._dragDropRegistry,
       this._document, this._ngZone,
-      this._viewportRuler, sortPositionStrategy);
+      this._viewportRuler, positionStrategy);
 
-    sortPositionStrategy.dropContainerRef = dropContainerRef;
+    positionStrategy.dropContainerRef = dropContainerRef;
     return dropContainerRef;
   }
 

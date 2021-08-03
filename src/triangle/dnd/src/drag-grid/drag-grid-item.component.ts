@@ -24,7 +24,7 @@ import { clamp } from '@gradii/triangle/util';
   selector : 'tri-drag-grid-item',
   exportAs : 'triDragGridItem',
   template : `
-    <div>
+    <div style="width: 100%;height: 100%">
       <ng-content></ng-content>
     </div>
     <div class="gridster-item-resizable-handler handle-s"></div>
@@ -41,17 +41,33 @@ import { clamp } from '@gradii/triangle/util';
   ],
   host     : {
     '[style.position]' : '"absolute"',
-    '[style.width.px]' : 'width',
-    '[style.height.px]': 'height'
-  }
+    '[style.display]'  : '_init ? "block": null',
+    '[style.width.px]' : '_init ? width: null',
+    '[style.height.px]': '_init ? height: null'
+  },
+  styles   : [
+    `
+      :host {
+        box-sizing: border-box;
+        z-index: 1;
+        position: absolute;
+        overflow: hidden;
+        transition: .3s;
+        display: none;
+        user-select: text;
+      }
+    `
+  ]
 })
 export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestroy {
+  private lastPositionX: number;
+  private lastPositionY: number;
 
   @Input('triDragGridItemX')
-  x: number;
+  x: number = -1;
 
   @Input('triDragGridItemY')
-  y: number;
+  y: number = -1;
 
   @Input('triDragGridItemRows')
   rows: number = 1;
@@ -91,7 +107,7 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
   @Input('triDragGridItemCompactEnabled')
   compactEnabled: boolean = true;
 
-  notPlaced: boolean = true;
+  notPlaced: boolean = false;
 
   programDragPosition: { x: number, y: number };
 
@@ -99,6 +115,8 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
   private top: number    = 0;
   private width: number  = 100;
   private height: number = 100;
+
+  _init = false;
 
   constructor(
     private gridster: TriDropGridContainer,
@@ -167,15 +185,23 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
   ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
 
+    if (changes['x']) {
+      this.lastPositionX = changes['x'].currentValue;
+    }
+    if (changes['y']) {
+      this.lastPositionY = changes['y'].currentValue;
+    }
+
     if (
       changes['x'] || changes['y'] ||
       changes['rows'] || changes['cols']
     ) {
-      this.updateItemSize();
+      // this.updateItemSize();
     }
   }
 
   updateItemSize(): void {
+    this._init      = true;
     const ref       = this.dropContainer._dropContainerRef;
     const container = this.dropContainer;
 
@@ -235,9 +261,9 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
   }
 
   ngOnInit() {
-    this.updateItemSize();
+    this.dropContainer.positionItem(this);
 
-    this.programDragPosition = {x: this.left, y: this.top};
+    // this.programDragPosition = {x: this.left, y: this.top};
   }
 
   ngAfterViewInit() {

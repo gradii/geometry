@@ -8,12 +8,12 @@ import { Direction } from '@angular/cdk/bidi';
 import { coerceElement } from '@angular/cdk/coercion';
 import { _getShadowRoot } from '@angular/cdk/platform';
 import { ViewportRuler } from '@angular/cdk/scrolling';
-import { ElementRef, NgZone } from '@angular/core';
+import { ElementRef, Injector, NgZone } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { DragDropRegistry } from '../drag-drop-registry';
 import { DragCSSStyleDeclaration } from '../drag-styling';
 import { ParentPositionTracker } from '../parent-position-tracker';
-import { SortPositionStrategy } from '../position-strategy/sort-position-strategy';
+import { PositionStrategy, SortPositionStrategy } from '../position-strategy/sort-position-strategy';
 import { ScrollingStrategy } from '../scrolling-strategy/scrolling-strategy';
 import { adjustClientRect, isInsideClientRect, } from '../utils/client-rect';
 import { orderByHierarchy } from '../utils/hierarchy';
@@ -146,7 +146,7 @@ export class DndContainerRef<T = any> {
     _document: any,
     protected _ngZone: NgZone,
     protected _viewportRuler: ViewportRuler,
-    protected positionStrategy: SortPositionStrategy
+    protected positionStrategy: PositionStrategy,
   ) {
     this.element   = coerceElement(element);
     this._document = _document;
@@ -158,7 +158,7 @@ export class DndContainerRef<T = any> {
       new ParentPositionTracker(_document, _viewportRuler),
       this._ngZone,
       this._viewportRuler,
-      this.autoScrollStep,
+      this,
     );
   }
 
@@ -354,9 +354,12 @@ export class DndContainerRef<T = any> {
    * @param item Item to be sorted.
    * @param pointerX Position of the item along the X axis.
    * @param pointerY Position of the item along the Y axis.
+   * @param elementPointX
+   * @param elementPointY
    * @param pointerDelta Direction in which the pointer is moving along each axis.
    */
   _arrangeItem(item: DragRef, pointerX: number, pointerY: number,
+               elementPointX: number, elementPointY: number,
                pointerDelta: { x: number, y: number }): void {
 
     // this.positionStrategy._sortItem(item, pointerX, pointerY, pointerDelta);

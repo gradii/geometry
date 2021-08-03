@@ -17,7 +17,24 @@ import {
 import { moveItemInArray } from '../utils/drag-utils';
 import { DragDropRegistry } from '../drag-drop-registry';
 
-export class SortPositionStrategy {
+export interface PositionStrategy {
+
+  _itemPositions: CachedItemPosition[];
+
+  _cacheItemPositions(): void;
+
+  _findItemIndex(item: DragRef): number;
+
+  adjustItemPositions(cb: (clientRect: ClientRect) => void): void;
+
+  repositionDraggingItem(): void;
+
+  reset(): void;
+
+  dispose(): void;
+}
+
+export class SortPositionStrategy implements PositionStrategy {
   /** Cache of the dimensions of all the items inside the container. */
   _itemPositions: CachedItemPosition[] = [];
 

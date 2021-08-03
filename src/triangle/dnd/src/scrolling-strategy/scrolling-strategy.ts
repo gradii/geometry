@@ -6,6 +6,7 @@
 
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { NgZone } from '@angular/core';
+import { DndContainerRef } from '@gradii/triangle/dnd';
 import {
   AutoScrollHorizontalDirection, AutoScrollVerticalDirection, DROP_PROXIMITY_THRESHOLD
 } from '../enum';
@@ -17,6 +18,9 @@ import {
 import { isPointerNearClientRect } from '../utils/client-rect';
 import { animationFrameScheduler, interval, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+
+type ContainerConfig = 'autoScrollStep';
 
 /**
  * @license
@@ -47,7 +51,7 @@ export class ScrollingStrategy {
       .pipe(takeUntil(this._stopScrollTimers))
       .subscribe(() => {
         const node       = this._scrollNode;
-        const scrollStep = this.autoScrollStep;
+        const scrollStep = this.refData.autoScrollStep;
 
         if (this._verticalScrollDirection === AutoScrollVerticalDirection.UP) {
           incrementVerticalScroll(node, -scrollStep);
@@ -69,7 +73,7 @@ export class ScrollingStrategy {
     private _parentPositions: ParentPositionTracker,
     private _ngZone: NgZone,
     private _viewportRuler: ViewportRuler,
-    private autoScrollStep: number,
+    private refData: Pick<DndContainerRef, ContainerConfig>,
   ) {
   }
 

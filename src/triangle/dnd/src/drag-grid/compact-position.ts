@@ -4,7 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 import { TriDropGridContainer } from '../directives/drop-grid-container';
-import { DragRef } from '../drag-drop-ref/drag-ref';
 import { TriDragGridItemComponent } from '../drag-grid/drag-grid-item.component';
 import { CompactType } from '../enum';
 
@@ -33,14 +32,13 @@ export interface GridsterItem {
 export class CompactPosition {
   compactType: CompactType;
 
-  constructor(private ref: TriDropGridContainer) {
+  constructor(private ref: Pick<TriDropGridContainer, 'compactType' | 'getUnSortedItems' | 'checkCollision'>) {
   }
 
   destroy(): void {
     // @ts-ignore
     delete this.ref;
   }
-
 
   checkCompact(compactType: CompactType): void {
     this.compactType = compactType;

@@ -131,9 +131,12 @@ export class DropListContainerRef<T = any> extends DndContainerRef<T> {
    * @param item Item to be sorted.
    * @param pointerX Position of the item along the X axis.
    * @param pointerY Position of the item along the Y axis.
+   * @param elementPointX
+   * @param elementPointY
    * @param pointerDelta Direction in which the pointer is moving along each axis.
    */
   _arrangeItem(item: DragRef, pointerX: number, pointerY: number,
+               elementPointX: number, elementPointY: number,
                pointerDelta: { x: number, y: number }): void {
     // Don't sort the item if sorting is disabled or it's out of range.
     if (this.sortingDisabled || !this._clientRect ||
