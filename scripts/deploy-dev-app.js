@@ -6,7 +6,9 @@
  */
 
 const {exec, set, cd, cp, rm, chmod} = require('shelljs');
-const {join} = require('path');
+const {join}                         = require('path');
+const {glob}                         = require("glob");
+const fs                             = require('fs');
 
 // ShellJS should throw if any command fails.
 set('-e');
@@ -44,3 +46,16 @@ chmod('-R', 'u+w', distPath);
 
 // Run the Firebase CLI to deploy the hosting target.
 // exec(`yarn -s firebase deploy --only hosting`);
+
+
+glob(`${distPath}/**/*.js`, {nodir: true}, function (er, files) {
+    files.forEach(file => {
+      try {
+        const content = fs.readFileSync(file, 'utf8').replace(/^\/\/# sourceMappingURL=.+?$/mg, '');
+        fs.writeFileSync(file, content, 'utf8');
+      } catch (e) {
+        debugger
+      }
+    })
+  }
+)

@@ -4,15 +4,15 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { CdkTextareaAutosize, TextFieldModule } from '@angular/cdk/text-field';
+import { TextFieldModule } from '@angular/cdk/text-field';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TriIconModule } from '@gradii/triangle/icon';
-import { InputAffixComponent } from '@gradii/triangle/input/src/input-affix.component';
+import { InputAffixComponent } from './input-affix.component';
 import { InputGroupComponent } from './input-group.component';
 import { InputDirective } from './input.directive';
-import { TextareaDirective, TextareaAutosize } from './textarea.directive';
+import { TextareaAutosize, TextareaDirective } from './textarea.directive';
 
 /**
  *

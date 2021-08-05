@@ -82,6 +82,11 @@ export class DragPreviewRef {
     this.previewElement.style.transform = combineTransforms(transform, initialTransform);
   }
 
+  applySize(width: number, height: number) {
+    this.previewElement.style.width  = `${width}px`;
+    this.previewElement.style.height = `${height}px`;
+  }
+
   calculatePreviewPoint(pointOnPage: { x: number, y: number }) {
     return {
       x: pointOnPage.x - this._pickupPositionInElement.x,

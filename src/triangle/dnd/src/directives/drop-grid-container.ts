@@ -13,7 +13,7 @@ import {
   ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, InjectionToken, Input, NgZone, OnDestroy, OnInit,
   Optional,
   Output,
-  SimpleChanges, SkipSelf, ViewEncapsulation
+  SimpleChanges, SkipSelf, ViewChild, ViewEncapsulation
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, startWith, takeUntil, tap } from 'rxjs/operators';
@@ -38,6 +38,7 @@ export const TRI_DROP_GRID_CONTAINER_CONFIG = new InjectionToken('tri drop grid 
   selector     : '[triDropGridContainer], tri-drop-grid-container',
   exportAs     : 'triDropGridContainer',
   template     : `
+    <div #content style="position: absolute; transition: .3s;visibility: hidden"></div>
     <ng-content></ng-content>
   `,
   encapsulation: ViewEncapsulation.None,
@@ -97,6 +98,9 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
 
   /** Whether the element's scrollable parents have been resolved. */
   private _scrollableParentsResolved: boolean;
+
+  @ViewChild('content')
+  contentElement: ElementRef;
 
 
   /** Reference to the underlying drop list instance. */
@@ -233,7 +237,7 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     @Optional() private _dir?: Directionality,
     @Optional() @Inject(TRI_DROP_CONTAINER_GROUP) @SkipSelf()
     protected _group?: TriDropContainerGroup<TriDropGridContainer>,
-    @Optional() @Inject(TRI_DRAG_CONFIG) config?: DragDropConfig
+    @Optional() @Inject(TRI_DRAG_CONFIG) public config?: DragDropConfig
   ) {
     super(_group);
 
@@ -435,10 +439,10 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
       ref.autoScrollDisabled = coerceBooleanProperty(this.autoScrollDisabled);
       ref.autoScrollStep     = coerceNumberProperty(this.autoScrollStep, 2);
 
-      ref.hasPadding = this.hasPadding;
-      ref.gutter = this.gutter;
+      ref.hasPadding         = this.hasPadding;
+      ref.gutter             = this.gutter;
       ref.currentColumnWidth = this.currentTileWidth;
-      ref.currentRowHeight = this.currentTileHeight;
+      ref.currentRowHeight   = this.currentTileHeight;
 
       ref
         .connectedTo(

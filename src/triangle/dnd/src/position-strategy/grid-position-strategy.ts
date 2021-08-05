@@ -31,22 +31,24 @@ export class GridPositionStrategy implements PositionStrategy {
   }
 
   pixelsToPositionX(item: DragRef, pointerX: number) {
-    const ref  = this.dropContainerRef;
-    const left = ref._clientRect.left;
+    const ref        = this.dropContainerRef;
+    const left       = ref._clientRect.left;
+    const scrollLeft = (ref.element as HTMLElement).scrollLeft;
     if (ref.hasPadding) {
-      return Math.round((pointerX - left - ref.gutter / 2) / ref.currentColumnWidth);
+      return Math.round((pointerX - left + scrollLeft - ref.gutter / 2) / ref.currentColumnWidth);
     } else {
-      return Math.round((pointerX - left + ref.gutter / 2) / ref.currentColumnWidth);
+      return Math.round((pointerX - left + scrollLeft + ref.gutter / 2) / ref.currentColumnWidth);
     }
   }
 
   pixelsToPositionY(item: DragRef, pointerY: number) {
-    const ref = this.dropContainerRef;
-    const top = ref._clientRect.top;
+    const ref       = this.dropContainerRef;
+    const top       = ref._clientRect.top;
+    const scrollTop = (ref.element as HTMLElement).scrollTop;
     if (ref.hasPadding) {
-      return Math.round((pointerY - top - ref.gutter / 2) / ref.currentRowHeight);
+      return Math.round((pointerY - top + scrollTop - ref.gutter / 2) / ref.currentRowHeight);
     } else {
-      return Math.round((pointerY - top + ref.gutter / 2) / ref.currentRowHeight);
+      return Math.round((pointerY - top + scrollTop + ref.gutter / 2) / ref.currentRowHeight);
     }
   }
 

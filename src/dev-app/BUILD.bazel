@@ -76,8 +76,8 @@ rollup_bundle(
 sass_binary(
     name = "theme",
     src = "theme.scss",
-    sourcemap = True,
-    sourcemap_embed_sources = True,
+    sourcemap = False,
+    sourcemap_embed_sources = False,
     include_paths = [
         "external/npm/node_modules",
     ],

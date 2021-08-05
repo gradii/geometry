@@ -1068,6 +1068,7 @@ export class DragRef<T = any> {
 
     // Move the preview to the placeholder position.
     this._applyPreviewTransform(placeholderRect.left, placeholderRect.top);
+    this._applyPreviewSize(placeholderRect.width, placeholderRect.height);
 
     // If the element doesn't have a `transition`, the `transitionend` event won't fire. Since
     // we need to trigger a style recalculation in order for the `tri-drag-animating` class to
@@ -1274,6 +1275,10 @@ export class DragRef<T = any> {
    */
   private _applyPreviewTransform(x: number, y: number) {
     this._previewRef.applyTransform(x, y);
+  }
+
+  private _applyPreviewSize(width: number, height: number) {
+    this._previewRef.applySize(width, height);
   }
 
   /**

@@ -7,6 +7,7 @@
 import { coerceElement } from '@angular/cdk/coercion';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { ElementRef, NgZone } from '@angular/core';
+import { TriDropGridContainer } from '@gradii/triangle/dnd';
 import { combineTransforms, DragCSSStyleDeclaration } from '@gradii/triangle/dnd/src/drag-styling';
 import { adjustClientRect } from '@gradii/triangle/dnd/src/utils/client-rect';
 import { GridPushService } from '../drag-grid/grid-push.service';
@@ -130,8 +131,13 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
     //   placeholder.parentNode.removeChild(placeholder);
     // }
 
+    coerceElement(this.element).appendChild(placeholder);
+
     // The transform needs to be cleared so it doesn't throw off the measurements.
     placeholder.style.transform = '';
+
+    placeholder.style.width  = `${((this.data as unknown as TriDropGridContainer).config?.defaultItemCols || 1) * this.currentColumnWidth - this.gutter}px`;
+    placeholder.style.height = `${((this.data as unknown as TriDropGridContainer).config?.defaultItemRows || 1) * this.currentRowHeight - this.gutter}px`;
 
     // Note that the positions were already cached when we called `start` above,
     // but we need to refresh them since the amount of items has changed and also parent rects.
@@ -143,6 +149,9 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
     this.entered.next({item, container: this, currentIndex: this.getItemIndex(item)});
   }
 
+  lastDragCols = 1;
+  lastDragRows = 1;
+
   _arrangeItem(item: DragRef, pointerX: number, pointerY: number,
                elementPointX: number, elementPointY: number,
                pointerDelta: { x: number; y: number }) {
@@ -153,6 +162,23 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
     console.log(positionX, positionY);
 
     const placeholderRef = item.getPlaceholderElement();
+
+    const maxColumns  = Math.max(positionX + 1, (this.data as unknown as TriDropGridContainer).cols, this.lastDragCols);
+    const maxRows     = Math.max(positionY + 1, (this.data as unknown as TriDropGridContainer).rows, this.lastDragRows);
+    this.lastDragCols = maxColumns;
+    this.lastDragRows = maxRows;
+
+    let contentWidth, contentHeight;
+    if (!this.hasPadding) {
+      contentWidth  = maxColumns * this.currentColumnWidth - this.gutter;
+      contentHeight = maxRows * this.currentRowHeight - this.gutter;
+    } else {
+      contentWidth  = maxColumns * this.currentColumnWidth + this.gutter;
+      contentHeight = maxRows * this.currentRowHeight + this.gutter;
+    }
+
+    (this.data as unknown as TriDropGridContainer).contentElement.nativeElement.style.width  = `${contentWidth}px`;
+    (this.data as unknown as TriDropGridContainer).contentElement.nativeElement.style.height = `${contentHeight}px`;
 
     let x, y;
     if (!this.hasPadding) {
@@ -175,6 +201,12 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
   }
 
   _reset() {
+    (this.data as unknown as TriDropGridContainer).contentElement.nativeElement.style.width  = `0`;
+    (this.data as unknown as TriDropGridContainer).contentElement.nativeElement.style.height = `0`;
+
+
+    // #####################
+
     this._isDragging = false;
 
     this._siblings.forEach(sibling => sibling._stopReceiving(this));

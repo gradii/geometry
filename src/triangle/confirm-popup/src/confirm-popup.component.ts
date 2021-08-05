@@ -25,7 +25,7 @@ import { PopoverComponent } from '@gradii/triangle/popover';
 
 @Component({
   selector: 'tri-confirm-popup',
-  encapsulation: ViewEncapsulation.Emulated,
+  encapsulation: ViewEncapsulation.None,
   animations: [FadeAnimation],
   template: `
     <div class="tri-popover-content"
@@ -53,46 +53,7 @@ import { PopoverComponent } from '@gradii/triangle/popover';
           </div>
         </div>
       </div>
-    </div>
-
-    <!--<ng-template
-            cdkConnectedOverlay
-            [cdkConnectedOverlayOrigin]="origin"
-            [cdkConnectedOverlayHasBackdrop]="_hasBackdrop"
-            (backdropClick)="hide()"
-            (detach)="hide()"
-            (positionChange)="onPositionChange($event)"
-            [cdkConnectedOverlayPositions]="_positions"
-            [cdkConnectedOverlayOpen]="visible$ | async">
-        <div class="tri-popover" [ngClass]="_classMap" [ngStyle]="overlayStyle"
-             [@fadeAnimation]="''+(visible$ | async)"
-             (@fadeAnimation.done)="_afterVisibilityAnimation($event)">
-            <div class="tri-popover-content">
-                <div class="tri-popover-arrow"></div>
-                <div class="tri-popover-inner">
-                    <div>
-                        <div class="tri-popover-inner-content">
-                            <div class="tri-popover-message" *ngIf="!popoverTemplate">
-                                <i class="anticon anticon-exclamation-circle"></i>
-                                <div class="tri-popover-message-title">{{title}}</div>
-                            </div>
-                            <div class="tri-popover-buttons" *ngIf="!popoverTemplate">
-                                <button tri-button [size]="'small'" (click)="_onCancel()">
-                                    <span>{{cancelText}}</span></button>
-                                <button tri-button [size]="'small'" [color]="'primary'"
-                                        (click)="_onConfirm()">
-                                    <span>{{okText}}</span></button>
-                            </div>
-                            <ng-template
-                                    *ngIf="popoverTemplate"
-                                    [ngTemplateOutlet]="popoverTemplate">
-                            </ng-template>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </ng-template>-->`,
+    </div>`,
   styleUrls: ['../style/confirm-popup.css']
 })
 export class ConfirmPopupComponent extends PopoverComponent implements OnDestroy {

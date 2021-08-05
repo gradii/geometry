@@ -5,7 +5,6 @@
  */
 
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { tolerantClamp } from '@gradii/triangle/form/src/_utils';
 
 @Component({
   selector     : '[tri-form]',
