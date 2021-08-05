@@ -4,6 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { Direction } from '@angular/cdk/bidi';
 import { DropListContainerRef } from '../drag-drop-ref/drop-list-container-ref';
 import { Subject } from 'rxjs';
 import { DragRefInternal as DragRef } from '../drag-drop-ref/drag-ref';
@@ -45,7 +46,7 @@ export class SortPositionStrategy implements PositionStrategy {
    */
   _previousSwap = {drag: null as DragRef | null, delta: 0, overlaps: false};
 
-  get _direction() {
+  get _direction(): Direction {
     return this.dropContainerRef._direction;
   }
 
