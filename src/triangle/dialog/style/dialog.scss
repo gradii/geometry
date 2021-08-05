@@ -39,34 +39,12 @@ $zindex-dialog      : 1000 !default;
     cursor          : pointer;
     border          : 0;
     background      : transparent;
-    position        : absolute;
-    right           : 0;
-    top             : 0;
     z-index         : 10;
     font-weight     : 700;
     line-height     : 1;
     text-decoration : none;
     transition      : color .3s ease;
     outline         : 0;
-
-    @at-root &-x {
-      display        : block;
-      font-style     : normal;
-      vertical-align : baseline;
-      text-align     : center;
-      text-transform : none;
-      text-rendering : auto;
-      width          : 3rem;
-      height         : 3rem;
-      line-height    : 3rem;
-      font-size      : v.$font-size-lg;
-
-      @at-root &:before {
-        content     : "\e633";
-        display     : block;
-        font-family : "anticon" !important;
-      }
-    }
 
     @at-root &:focus,
     &:hover {

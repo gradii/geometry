@@ -26,6 +26,7 @@ import { getClosestDialog } from './helper';
   host    : {
     '(click)': 'dialogRef.close(dialogResult)',
     '[attr.aria-label]': 'ariaLabel',
+    'class': 'tri-dialog-close'
   }
 })
 export class TriDialogClose implements OnInit, OnChanges {
