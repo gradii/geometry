@@ -10,7 +10,7 @@ $tri-icon-size : 1em !default;
   fill              : currentColor;
   height            : $tri-icon-size;
   width             : $tri-icon-size;
-  vertical-align    : center;
+  vertical-align    : middle;
 
   &.tri-icon-inline {
     font-size   : inherit;

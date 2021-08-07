@@ -7,13 +7,7 @@
 import { DOCUMENT } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
-  Inject,
-  Injectable,
-  InjectionToken,
-  OnDestroy,
-  Optional,
-  SecurityContext,
-  SkipSelf,
+  Inject, Injectable, InjectionToken, OnDestroy, Optional, SecurityContext, SkipSelf,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
 import { forkJoin, Observable, of as observableOf, throwError as observableThrow } from 'rxjs';
@@ -300,7 +294,7 @@ export class IconRegistry implements OnDestroy {
    */
   getNamedSvgIcon(name: string, namespace: string = ''): Observable<SVGElement> {
     // Return (copy of) cached icon if possible.
-    const key = iconKey(namespace, name);
+    const key    = iconKey(namespace, name);
     const config = this._svgIconConfigs.get(key);
 
     if (config) {
@@ -498,9 +492,9 @@ export class IconRegistry implements OnDestroy {
    * Creates a DOM element from the given SVG string.
    */
   private _svgElementFromString(str: string): SVGElement {
-    const div = this._document.createElement('DIV');
+    const div     = this._document.createElement('DIV');
     div.innerHTML = str;
-    const svg = div.querySelector('svg') as SVGElement;
+    const svg     = div.querySelector('svg') as SVGElement;
 
     if (!svg) {
       throw Error('<svg> tag not found');
@@ -533,8 +527,8 @@ export class IconRegistry implements OnDestroy {
    */
   private _setSvgAttributes(svg: SVGElement, options?: IconOptions): SVGElement {
     svg.setAttribute('fit', '');
-    svg.setAttribute('height', '1em');
-    svg.setAttribute('width', '1em');
+    svg.setAttribute('height', '100%');
+    svg.setAttribute('width', '100%');
     svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     svg.setAttribute('focusable', 'false'); // Disable IE11 default behavior to make SVGs focusable.
 
@@ -625,8 +619,8 @@ export function ICON_REGISTRY_PROVIDER_FACTORY(
 /** @docs-private */
 export const ICON_REGISTRY_PROVIDER = {
   // If there is already an IconRegistry available, use that. Otherwise, provide a new one.
-  provide: IconRegistry,
-  deps: [
+  provide   : IconRegistry,
+  deps      : [
     [new Optional(), new SkipSelf(), IconRegistry],
     [new Optional(), HttpClient],
     DomSanitizer,

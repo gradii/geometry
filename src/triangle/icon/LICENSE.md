@@ -1,1 +1,1 @@
-angular material icon
+mit. angular material icon
