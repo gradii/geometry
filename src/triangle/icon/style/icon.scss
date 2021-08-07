@@ -2,7 +2,7 @@
 @import "../../core/style/variables";
 
 // The width/height of the icon element.
-$tri-icon-size : 1.25em !default;
+$tri-icon-size : 1em !default;
 
 .tri-icon {
   background-repeat : no-repeat;
@@ -10,16 +10,13 @@ $tri-icon-size : 1.25em !default;
   fill              : currentColor;
   height            : $tri-icon-size;
   width             : $tri-icon-size;
+  vertical-align    : center;
 
   &.tri-icon-inline {
     font-size   : inherit;
     height      : inherit;
     line-height : inherit;
     width       : inherit;
-  }
-
-  > svg {
-    vertical-align: -.125em;
   }
 }
 
