@@ -704,4 +704,5 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
   static ngAcceptInputType_disabled: BooleanInput;
   static ngAcceptInputType_hideDelay: NumberInput;
   static ngAcceptInputType_showDelay: NumberInput;
+  static ngAcceptInputType_tooltipTrigger: TriggerType | 'click' | 'hover' | 'noop';
 }
