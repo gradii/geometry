@@ -1,0 +1,11 @@
+
+POST http://10.81.6.5:10087/hack/queryRaseLog
+Content-Type: application/json
+
+{
+  "did": "C9EC441B62B4BEB3502214E87EDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+  "date": "20200830",
+  "redo": 1
+}
+
+
