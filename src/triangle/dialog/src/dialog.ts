@@ -6,32 +6,19 @@
 
 import { Directionality } from '@angular/cdk/bidi';
 import {
-  ComponentType,
-  Overlay,
-  OverlayConfig,
-  OverlayContainer,
-  OverlayRef,
-  ScrollStrategy,
+  ComponentType, Overlay, OverlayConfig, OverlayContainer, OverlayRef, ScrollStrategy,
 } from '@angular/cdk/overlay';
 import { ComponentPortal, PortalInjector, TemplatePortal } from '@angular/cdk/portal';
 import { Location } from '@angular/common';
 import {
-  Inject,
-  Injectable,
-  Injector,
-  OnDestroy,
-  Optional,
-  SkipSelf,
-  TemplateRef
+  Inject, Injectable, Injector, OnDestroy, Optional, SkipSelf, TemplateRef
 } from '@angular/core';
 import { defer, Observable, of as observableOf, Subject } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 import { TriDialogConfig } from './dialog-config';
 import { TriDialogContainer } from './dialog-container';
 import {
-  TRI_DIALOG_DATA,
-  TRI_DIALOG_DEFAULT_OPTIONS,
-  TRI_DIALOG_SCROLL_STRATEGY
+  TRI_DIALOG_DATA, TRI_DIALOG_DEFAULT_OPTIONS, TRI_DIALOG_SCROLL_STRATEGY
 } from './dialog-injectors';
 import { TriDialogRef } from './dialog-ref';
 
@@ -98,7 +85,7 @@ export class TriDialogService implements OnDestroy {
    * @returns Reference to the newly-opened dialog.
    */
   open<T, D = any, R = any>(componentOrTemplateRef: ComponentType<T> | TemplateRef<T>,
-                            config?: TriDialogConfig<D>): TriDialogRef<T, R> {
+                            config?: Partial<TriDialogConfig<Partial<T>, D>>): TriDialogRef<T, R> {
 
     config = _applyConfigDefaults(config, this._defaultOptions || new TriDialogConfig());
 
@@ -238,6 +225,10 @@ export class TriDialogService implements OnDestroy {
       const contentRef = dialogContainer.attachComponentPortal<T>(
         new ComponentPortal(componentOrTemplateRef, undefined, injector));
       dialogRef.componentInstance = contentRef.instance;
+      if (config.context) {
+        // tslint:disable-next-line:ban
+        Object.assign(dialogRef.componentInstance, { ...config.context });
+      }
     }
 
     dialogRef

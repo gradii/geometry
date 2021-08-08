@@ -19,7 +19,7 @@ export interface DialogPosition {
   right?: string;
 }
 
-export class TriDialogConfig<D = any> {
+export class TriDialogConfig<T = any, D = any> {
 
   /**
    * Where the attached component should live in Angular's *logical* component tree.
@@ -70,6 +70,9 @@ export class TriDialogConfig<D = any> {
 
   /** Data being injected into the child component. */
   data?: D | null = null;
+
+  /** the data to assign to component instance. */
+  context?: T;
 
   /** Layout direction for the dialog's content. */
   direction?: Direction;
