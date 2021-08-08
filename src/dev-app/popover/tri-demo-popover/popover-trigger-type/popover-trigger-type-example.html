@@ -1,0 +1,40 @@
+<ul>
+  <li>click.</li>
+  <li>hover.</li>
+  <li>noop. manual to control show/hide</li>
+</ul>
+
+
+<tri-select [(ngModel)]="triggerType">
+  <tri-option value="click" label="click"></tri-option>
+  <tri-option value="hover" label="hover"></tri-option>
+  <tri-option value="noop" label="noop"></tri-option>
+</tri-select>
+
+<button triButton
+        triPopover="Info about the action"
+        [triPopoverTrigger]="triggerType"
+        aria-label="Button that displays a popover when focused or hovered over">
+  Action
+</button>
+
+<button triButton
+        [triPopover]="ref"
+        [triPopoverTrigger]="triggerType"
+        aria-label="Button that displays a popover when focused or hovered over">
+  <ng-template #ref>
+    <tri-select [(ngModel)]="triggerType">
+      <tri-option value="click" label="click"></tri-option>
+      <tri-option value="hover" label="hover"></tri-option>
+      <tri-option value="noop" label="noop"></tri-option>
+    </tri-select>
+    <tri-select [(ngModel)]="triggerType">
+      <tri-option value="click" label="click"></tri-option>
+      <tri-option value="hover" label="hover"></tri-option>
+      <tri-option value="noop" label="noop"></tri-option>
+    </tri-select>
+
+    <button (click)="openDialog()">Open Dialog</button>
+  </ng-template>
+  Action2
+</button>

@@ -5,8 +5,7 @@ package(default_visibility = ["//visibility:public"])
 ng_module(
     name = "popover",
     srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
-    assets = [
-        "dev-popover.html",
+    assets = glob(["**/*.html"]) + [
         ":dev_popover_scss",
     ],
     deps = [
@@ -15,6 +14,7 @@ ng_module(
         "//src/triangle/checkbox",
         "//src/triangle/select",
         "//src/triangle/tooltip",
+        "//src/triangle/dialog",
         "//src/triangle/popover",
         "//src/triangle/core",
         "@npm//@angular/common",

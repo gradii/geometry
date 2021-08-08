@@ -4,31 +4,22 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  AriaDescriber,
-  FocusMonitor
-} from '@angular/cdk/a11y';
+import { AriaDescriber, FocusMonitor } from '@angular/cdk/a11y';
 import { Directionality } from '@angular/cdk/bidi';
-import { NumberInput } from '@angular/cdk/coercion';
 import { Overlay } from '@angular/cdk/overlay';
 import { Platform } from '@angular/cdk/platform';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
 import {
-  Directive,
-  ElementRef,
-  Inject,
-  NgZone,
-  Optional,
-  ViewContainerRef
+  AfterViewInit, Directive, ElementRef, Inject, NgZone, Optional, ViewContainerRef
 } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
 import { _TriTooltipBase } from './tooltip-base';
+import {
+  TRI_TOOLTIP_DEFAULT_OPTIONS, TRI_TOOLTIP_SCROLL_STRATEGY, TriggerType
+} from './tooltip.common';
 import { TooltipComponent, } from './tooltip.component';
 import { TriTooltipDefaultOptions } from './tooltip.interface';
-import {
-  TRI_TOOLTIP_DEFAULT_OPTIONS,
-  TRI_TOOLTIP_SCROLL_STRATEGY
-} from './tooltip.common';
 
 @Directive({
   selector: '[triTooltip]',
@@ -37,7 +28,7 @@ import {
     'class': 'tri-tooltip-trigger'
   }
 })
-export class TooltipDirective extends _TriTooltipBase<TooltipComponent> {
+export class TooltipDirective extends _TriTooltipBase<TooltipComponent> implements AfterViewInit {
   protected readonly _tooltipComponent = TooltipComponent;
 
   constructor(
@@ -56,6 +47,23 @@ export class TooltipDirective extends _TriTooltipBase<TooltipComponent> {
 
     super(overlay, elementRef, scrollDispatcher, viewContainerRef, ngZone, platform, ariaDescriber,
       focusMonitor, scrollStrategy, dir, defaultOptions, _document);
+  }
+
+  ngAfterViewInit() {
+    super.ngAfterViewInit();
+
+    this._focusMonitor.monitor(this._elementRef)
+      .pipe(takeUntil(this._destroyed))
+      .subscribe(origin => {
+        // Note that the focus monitor runs outside the Angular zone.
+        if (!origin) {
+          this._ngZone.run(() => this.hide(50));
+        } else if (origin === 'keyboard') {
+          if (this._tooltipTrigger !== TriggerType.NOOP) {
+            this._ngZone.run(() => this.show());
+          }
+        }
+      });
   }
 
   static ngAcceptInputType_content: string;

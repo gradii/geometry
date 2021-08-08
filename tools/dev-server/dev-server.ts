@@ -31,6 +31,9 @@ export class DevServer {
     port: this.port,
     notify: false,
     ghostMode: false,
+    ui: {
+      port: 3301
+    },
     server: {
       directory: false,
       middleware: [(req, res) => this._bazelMiddleware(req, res)],

@@ -9,6 +9,9 @@ const {exec, set, cd, cp, rm, chmod} = require('shelljs');
 const {join}                         = require('path');
 const {glob}                         = require("glob");
 const fs                             = require('fs');
+const format                         = require('date-fns/format');
+const tar                            = require('tar');
+const path                           = require('path');
 
 // ShellJS should throw if any command fails.
 set('-e');
@@ -59,3 +62,48 @@ glob(`${distPath}/**/*.js`, {nodir: true}, function (er, files) {
     })
   }
 )
+
+
+const dateString = format(new Date, 'yyyyMMdd_HHmmss')
+
+
+
+const fileMap = [
+  {
+    key: 'dev-app-web-pkg',
+    cwd: './dist/dev-app-web-pkg',
+    source: ['./'],
+    output: `dist/build-tar/{key}_${dateString}.tgz`
+  },
+];
+
+const buildTarDir = 'dist/build-tar';
+
+if (!fs.existsSync(buildTarDir)) {
+  fs.mkdirSync(buildTarDir);
+}
+
+fs.readdir(buildTarDir, (err, files) => {
+  if (err) throw err;
+
+  for (const file of files) {
+    fs.unlink(path.join(buildTarDir, file), err => {
+      if (err) throw err;
+    });
+  }
+});
+
+
+//build devops
+for (const val of fileMap) {
+  tar.c(
+    {
+      gzip: true,
+      file: val.output.replace('{key}', val.key),
+      prefix: val.key,
+      cwd: val.cwd,
+    }, val.source
+  ).then(_ => {
+    console.log(`${val.key} .. tarball has been created ..`);
+  });
+}

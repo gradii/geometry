@@ -25,7 +25,7 @@ import { isString } from '@gradii/check-type';
 import { DEFAULT_4_POSITIONS, POSITION_MAP_LTR, POSITION_MAP_RTL } from '@gradii/triangle/core';
 
 import { Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil, tap } from 'rxjs/operators';
 import { _TriTooltipComponentBase } from './tooltip-component-base';
 import { getTriTooltipInvalidPositionError, TriggerType } from './tooltip.common';
 import {
@@ -154,11 +154,11 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
   private _content: string | TemplateRef<any> = '';
 
   @Input('triTooltipTrigger')
-  get tooltipTrigger() {
+  get tooltipTrigger(): TriggerType {
     return this._tooltipTrigger;
   }
 
-  set tooltipTrigger(value) {
+  set tooltipTrigger(value: TriggerType) {
     this._tooltipTrigger = value;
 
     this._passiveListeners.forEach(([event, listener]) => {
@@ -211,14 +211,14 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
   protected readonly _destroyed = new Subject<void>();
 
   constructor(
-    private _overlay: Overlay,
-    private _elementRef: ElementRef<HTMLElement>,
-    private _scrollDispatcher: ScrollDispatcher,
-    private _viewContainerRef: ViewContainerRef,
-    private _ngZone: NgZone,
-    private _platform: Platform,
-    private _ariaDescriber: AriaDescriber,
-    private _focusMonitor: FocusMonitor,
+    protected _overlay: Overlay,
+    protected _elementRef: ElementRef<HTMLElement>,
+    protected _scrollDispatcher: ScrollDispatcher,
+    protected _viewContainerRef: ViewContainerRef,
+    protected _ngZone: NgZone,
+    protected _platform: Platform,
+    protected _ariaDescriber: AriaDescriber,
+    protected _focusMonitor: FocusMonitor,
     scrollStrategy: any,
     protected _dir: Directionality,
     private _defaultOptions: TriTooltipDefaultOptions,
@@ -246,19 +246,6 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
     // This needs to happen after view init so the initial values for all inputs have been set.
     this._viewInitialized = true;
     this._setupPointerEnterEventsIfNeeded();
-
-    this._focusMonitor.monitor(this._elementRef)
-      .pipe(takeUntil(this._destroyed))
-      .subscribe(origin => {
-        // Note that the focus monitor runs outside the Angular zone.
-        if (!origin) {
-          this._ngZone.run(() => this.hide(0));
-        } else if (origin === 'keyboard') {
-          if (this._tooltipTrigger !== TriggerType.NOOP) {
-            this._ngZone.run(() => this.show());
-          }
-        }
-      });
   }
 
   /**
@@ -382,6 +369,15 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
     });
 
     this._updatePosition();
+
+    if (this._tooltipTrigger === TriggerType.HINT) {
+      this._overlayRef.outsidePointerEvents().pipe(
+        takeUntil(this._destroyed),
+        tap(() => {
+          this.hide(50);
+        })
+      ).subscribe();
+    }
 
     this._overlayRef.detachments()
       .pipe(takeUntil(this._destroyed))
@@ -607,7 +603,10 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
             }
           ]);
       }
-    } else if (this._tooltipTrigger === TriggerType.CLICK) {
+    } else if (
+      this._tooltipTrigger === TriggerType.CLICK ||
+      this._tooltipTrigger === TriggerType.HINT
+    ) {
       this._passiveListeners
         .push([
           'click', () => {
@@ -704,5 +703,5 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
   static ngAcceptInputType_disabled: BooleanInput;
   static ngAcceptInputType_hideDelay: NumberInput;
   static ngAcceptInputType_showDelay: NumberInput;
-  static ngAcceptInputType_tooltipTrigger: TriggerType | 'click' | 'hover' | 'noop';
+  static ngAcceptInputType_tooltipTrigger: TriggerType | 'click' | 'hover' | 'noop' | string;
 }

@@ -14,6 +14,7 @@ import { TriTooltipDefaultOptions } from './tooltip.interface';
 
 export const enum TriggerType {
   CLICK = 'click',
+  HINT = 'hint',
   HOVER = 'hover',
   NOOP  = 'noop',
 }

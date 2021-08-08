@@ -13,6 +13,7 @@ import {
 import { RouterModule } from '@angular/router';
 import { TriButtonModule } from '@gradii/triangle/button';
 import { TriCheckboxModule } from '@gradii/triangle/checkbox';
+import { TriDialogModule } from '@gradii/triangle/dialog';
 import { TriInputModule } from '@gradii/triangle/input';
 import { TriPopoverModule } from '@gradii/triangle/popover';
 import { TriSelectModule } from '@gradii/triangle/select';
@@ -30,6 +31,9 @@ import { PopoverOverviewExample } from './tri-demo-popover/popover-overview/popo
 import { PopoverPlacementsExample } from './tri-demo-popover/popover-placements/popover-placements-example';
 import { PopoverPositionExample } from './tri-demo-popover/popover-position/popover-position-example';
 import { PopoverTitleExample } from './tri-demo-popover/popover-title/popover-title-example';
+import {
+  PopoverDialogDemo, PopoverTriggerTypeExample
+} from './tri-demo-popover/popover-trigger-type/popover-trigger-type-example';
 
 @NgModule({
   imports     : [
@@ -42,6 +46,7 @@ import { PopoverTitleExample } from './tri-demo-popover/popover-title/popover-ti
     TriButtonModule,
     TriSelectModule,
     TriPopoverModule,
+    TriDialogModule,
 
     RouterModule.forChild([
       {
@@ -59,6 +64,7 @@ import { PopoverTitleExample } from './tri-demo-popover/popover-title/popover-ti
           {path: 'popover-placements', component: PopoverPlacementsExample},
           {path: 'popover-dynamic-content', component: PopoverDynamicContentExample},
           {path: 'popover-title-content', component: PopoverTitleExample},
+          {path: 'popover-trigger-type', component: PopoverTriggerTypeExample},
         ]
       }
     ]),
@@ -79,7 +85,10 @@ import { PopoverTitleExample } from './tri-demo-popover/popover-title/popover-ti
     PopoverPositionExample,
     PopoverPlacementsExample,
     PopoverDynamicContentExample,
-    PopoverTitleExample
+    PopoverTitleExample,
+    PopoverTriggerTypeExample,
+
+    PopoverDialogDemo
   ]
 })
 export class DevPopoverModule {

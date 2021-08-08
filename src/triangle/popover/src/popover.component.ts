@@ -13,7 +13,7 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy,
   ViewContainerRef, ViewEncapsulation
 } from '@angular/core';
-import { _TriTooltipComponentBase } from '@gradii/triangle/tooltip';
+import { _TriTooltipComponentBase, TriggerType } from '@gradii/triangle/tooltip';
 import { fromEvent as observableFromEvent, merge, Observable, Subscription } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 
@@ -106,7 +106,9 @@ export class PopoverComponent extends _TriTooltipComponentBase implements OnDest
       observableFromEvent(_elementRef.nativeElement, 'mouseleave')
         .pipe(
           tap(() => {
-            this.hide(this.config.hideDelay || 0);
+            if (this.config.triggerType === TriggerType.HOVER) {
+              this.hide(this.config.hideDelay || 0);
+            }
           })
         ).subscribe()
     );
