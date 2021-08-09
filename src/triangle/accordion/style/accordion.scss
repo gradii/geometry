@@ -33,14 +33,13 @@ $accordion-prefix-cls : "#{v.$tri-prefix}-accordion";
 
       .arrow {
         @include accordion-close();
-        @include mixins.iconfont-mixin();
         position       : absolute;
         display        : inline-block;
         font-weight    : bold;
-        line-height    : 40px;
         vertical-align : middle;
         transition     : transform 0.24s;
         top            : 0;
+        bottom         : 0;
         left           : 16px;
       }
     }
