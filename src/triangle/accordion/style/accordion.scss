@@ -40,6 +40,7 @@ $accordion-prefix-cls : "#{v.$tri-prefix}-accordion";
         transition     : transform 0.24s;
         top            : 0;
         bottom         : 0;
+        height         : 100%;
         left           : 16px;
       }
     }

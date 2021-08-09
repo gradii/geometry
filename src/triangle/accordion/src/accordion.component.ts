@@ -10,9 +10,10 @@ import { AccordionItemComponent } from './accordion-item.component';
 @Component({
   selector       : 'tri-accordion',
   encapsulation  : ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template       : `
-    <div class="tri-accordion" [class.tri-accordion-borderless]="!bordered">
+    <div class="tri-accordion"
+         [class.tri-accordion-borderless]="!bordered">
       <ng-content></ng-content>
     </div>
   `,
@@ -44,7 +45,7 @@ export class AccordionComponent {
   constructor() {
   }
 
-  click(accordion) {
+  click(accordion: AccordionItemComponent) {
     if (this.accordion) {
       this.panels.map((item, index) => {
         const curIndex = this.panels.indexOf(accordion);
