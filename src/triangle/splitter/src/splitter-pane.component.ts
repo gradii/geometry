@@ -133,7 +133,7 @@ export class SplitterPaneComponent implements OnChanges {
   }
 
   // 收起时用于改变相邻pane的flex-grow属性来改变非自适应pane的size
-  toggleNearPaneFlexGrow(collapsed) {
+  toggleNearPaneFlexGrow(collapsed: boolean) {
     const flexGrowClass    = 'devui-splitter-pane-grow';
     const hasFlexGrowClass = this.element.classList.contains(flexGrowClass);
     if (hasFlexGrowClass) {

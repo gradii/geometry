@@ -166,6 +166,10 @@ export const DEV_APP_ROUTES: Routes = [
       {
         path        : 'form',
         loadChildren: '/form/dev-form.module#DevFormModule'
+      },
+      {
+        path        : 'splitter',
+        loadChildren: '/splitter/dev-splitter.module#DevSplitterModule'
       }
     ]
   },

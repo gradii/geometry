@@ -1,0 +1,33 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "splitter",
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
+    assets = [
+        "dev-splitter.html",
+        ":dev_splitter_scss",
+    ] + glob([
+        "tri-demo-splitter/**/*.html",
+        "tri-demo-splitter/**/*.css",
+    ]),
+    deps = [
+        "//src/triangle/splitter",
+        "//src/triangle/checkbox",
+        "//src/triangle/radio",
+        "//src/triangle/navbar",
+        "//src/triangle/button",
+        "//src/triangle/input",
+        "//src/triangle/select",
+
+        "@npm//@angular/forms",
+        "@npm//@angular/core",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_splitter_scss",
+    src = "dev-splitter.scss",
+)

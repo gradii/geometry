@@ -52,23 +52,23 @@ export class ResizeDirective implements OnInit, OnDestroy {
     this.bind(element, 'touchstart', this.touchstart);
   }
 
-  mousedown = (e) => {
+  mousedown = (e: MouseEvent) => {
     this.bind(document, 'mousemove', this.mousemove);
     this.bind(document, 'mouseup', this.mouseup);
     this.pressEvent.emit(this.normalizeEvent(e));
   };
 
-  mousemove = (e) => {
+  mousemove = (e: MouseEvent) => {
     this.dragEvent.emit(this.normalizeEvent(e));
   };
 
-  mouseup = (e) => {
+  mouseup = (e: MouseEvent) => {
     this.unbind(document, 'mousemove', this.mousemove);
     this.unbind(document, 'mouseup', this.mouseup);
     this.releaseEvent.emit(this.normalizeEvent(e));
   };
 
-  touchstart = (e) => {
+  touchstart = (e: MouseEvent) => {
     this.bind(document, 'touchmove', this.touchmove);
     this.bind(document, 'touchend', this.touchend);
     if (e.touches.length === 1) {
@@ -76,13 +76,13 @@ export class ResizeDirective implements OnInit, OnDestroy {
     }
   };
 
-  touchmove = (e) => {
+  touchmove = (e: MouseEvent) => {
     if (e.touches.length === 1) {
       this.dragEvent.emit(this.normalizeEvent(e));
     }
   };
 
-  touchend = (e) => {
+  touchend = (e: MouseEvent) => {
     this.unbind(document, 'touchmove', this.touchmove);
     this.unbind(document, 'touchend', this.touchend);
     if (e.touches.length === 0) {

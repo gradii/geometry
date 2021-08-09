@@ -54,7 +54,7 @@ export class SplitterBarComponent implements OnInit, AfterViewInit, OnDestroy {
   // 是否显示展开/收缩按钮
   @Input() showCollapseButton: boolean;
   // 分隔条大小
-  _splitBarSize;
+  _splitBarSize: number;
 
   @Input()
   get splitBarSize() {
@@ -68,7 +68,8 @@ export class SplitterBarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() disabledBarSize;
 
-  @HostBinding('class') get class() {
+  @HostBinding('class') 
+  get class() {
     let bindClass = 'devui-splitter-bar devui-splitter-bar-' + this.orientation;
     if (!this.splitter.isStaticBar(this.index)) {
       bindClass += ' resizable';
@@ -151,17 +152,17 @@ export class SplitterBarComponent implements OnInit, AfterViewInit, OnDestroy {
     this.collapseNextPane(true);
   }
 
-  collapsePrePane(lockStatus?) {
+  collapsePrePane(lockStatus?: boolean) {
     this.splitter.togglePane(this.index, this.index + 1, lockStatus);
     this.toggleResize();
   }
 
-  collapseNextPane(lockStatus?) {
+  collapseNextPane(lockStatus?: boolean) {
     this.splitter.togglePane(this.index + 1, this.index, lockStatus);
     this.toggleResize();
   }
 
-  queryPanes(index, nearIndex) {
+  queryPanes(index: number, nearIndex: number) {
     const pane     = this.splitter.getPane(index);
     const nearPane = this.splitter.getPane(nearIndex);
     return {pane, nearPane};
