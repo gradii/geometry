@@ -56,19 +56,21 @@ import { AlertDescriptionDirective, AlertMessageDirective } from './alert.direct
           </ng-template>
         </div>
       </ng-container>
-      <span class="tri-alert-message" *ngIf="message">
-        <ng-container *ngIf="isMessageString; else messageTemplate">{{ message }}</ng-container>
-        <ng-template #messageTemplate>
-          <ng-template [stringTemplateOutlet]="message"></ng-template>
-        </ng-template>
-      </span>
-      <span class="tri-alert-description" *ngIf="description">
-        <ng-container
-          *ngIf="isDescriptionString; else descriptionTemplate">{{ description }}</ng-container>
-        <ng-template #descriptionTemplate>
-          <ng-template [stringTemplateOutlet]="description"></ng-template>
-        </ng-template>
-      </span>
+      <div>
+        <span class="tri-alert-message" *ngIf="message">
+          <ng-container *ngIf="isMessageString; else messageTemplate">{{ message }}</ng-container>
+          <ng-template #messageTemplate>
+            <ng-template [stringTemplateOutlet]="message"></ng-template>
+          </ng-template>
+        </span>
+        <span class="tri-alert-description" *ngIf="description">
+          <ng-container
+            *ngIf="isDescriptionString; else descriptionTemplate">{{ description }}</ng-container>
+          <ng-template #descriptionTemplate>
+            <ng-template [stringTemplateOutlet]="description"></ng-template>
+          </ng-template>
+        </span>
+      </div>
       <a
         *ngIf="closeable || closeText"
         (click)="closeAlert($event)"
@@ -87,9 +89,6 @@ import { AlertDescriptionDirective, AlertMessageDirective } from './alert.direct
     </div>
   `,
   styleUrls: ['../style/alert.css'],
-  styles: [`.tri-alert {
-    display: block;
-  }`],
 })
 export class AlertComponent {
 

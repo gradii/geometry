@@ -6,19 +6,20 @@ $alert-prefix-cls : #{v.$tri-prefix}-alert;
 
 .#{$alert-prefix-cls} {
   @include mixins.reset-component();
+  display       : flex;
   position      : relative;
-  padding       : .5rem 2.375rem .5rem 1rem;
+  padding       : .5rem 1rem;
   border-radius : v.$border-radius-base;
   font-size     : v.$font-size-base;
   line-height   : v.$line-height-base;
 
   @at-root &#{&}-no-icon {
-    padding : .5rem 2.375rem .5rem 1rem;
+    padding : .5rem 1rem;
   }
 
   @at-root &-icon {
     font-size    : v.$font-size-lg;
-    display      : inline-block;
+    display      : flex;
     margin-right : 4px;
   }
 
@@ -54,21 +55,15 @@ $alert-prefix-cls : #{v.$tri-prefix}-alert;
   }
 
   @at-root &-with-description {
-    padding       : 1rem 1rem 1rem 3.75rem;
+    padding       : 1rem;
     position      : relative;
     border-radius : v.$border-radius-base;
     line-height   : 1.5;
   }
 
-  @at-root &-with-description#{&}-no-icon {
-    padding : 16px;
-  }
-
   @at-root &-with-description #{&}-icon {
-    position  : absolute;
-    top       : 1rem;
-    left      : 1.25rem;
     font-size : 2rem;
+    margin-right: 0.8rem;
   }
 
   @at-root &-with-description #{&}-close-icon {
