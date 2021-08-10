@@ -4,9 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { GridsterComponentInterface } from './gridster.interface';
-import { GridsterItem, GridsterItemComponentInterface } from './gridster-item.interface';
 import { CompactType } from './gridster-config.interface';
+import { GridsterItem, GridsterItemComponentInterface } from './gridster-item.interface';
+import { GridsterComponentInterface } from './gridster.interface';
 
 export class GridsterCompact {
 
@@ -89,21 +89,91 @@ export class GridsterCompact {
     }
   }
 
+  private getSortedItems(direction: string): GridsterItemComponentInterface[] {
+    return this.gridster.grid.sort(
+      (a: GridsterItemComponentInterface, b: GridsterItemComponentInterface) => {
+        if (direction == 'yx') {
+          if (a.$item.x == b.$item.x) {
+            return a.$item.y > b.$item.y ? 1 : -1;
+          } else {
+            return a.$item.x > b.$item.x ? 1 : -1;
+          }
+        } else {
+          if (a.$item.y == b.$item.y) {
+            return a.$item.x > b.$item.x ? 1 : -1;
+          } else {
+            return a.$item.y > b.$item.y ? 1 : -1;
+          }
+        }
+      });
+  }
+
   private checkCompactMovement(direction: 'x' | 'y', delta: number): void {
     let widgetMoved = false;
-    this.gridster.grid.forEach((widget: GridsterItemComponentInterface) => {
-      if (widget.$item.compactEnabled !== false) {
-        const moved = this.moveTillCollision(widget.$item, direction, delta);
-        if (moved) {
-          widgetMoved            = true;
-          widget.item[direction] = widget.$item[direction];
-          widget.itemChanged();
+    if (direction == 'y') {
+      const sorted            = this.getSortedItems('xy');
+      let heightMap: number[] = [];
+      const fn                = (prev: number[], item: GridsterItemComponentInterface) => {
+        const blockWidth  = item.$item.cols;
+        const blockHeight = item.$item.rows;
+        const start       = item.$item.x, end = item.$item.x + blockWidth;
+
+        let currentHeight;
+        const initHeight = delta == -1 ? 0 : -this.gridster.$options.maxCols;
+        if (end > heightMap.length) {
+          heightMap.fill(initHeight, heightMap.length, heightMap.length = end);
         }
-      }
-    });
-    if (widgetMoved) {
-      this.checkCompact();
+        currentHeight = -delta * Math.max(initHeight, ...heightMap.slice(start, end));
+        // if(low)
+        if (delta == -1) {
+          if (item.$item.y != currentHeight) {
+            item.$item.y = currentHeight;
+            widgetMoved  = true;
+          }
+        } else {
+          if (item.$item.y + blockHeight != currentHeight) {
+            item.$item.y = currentHeight - blockHeight;
+            widgetMoved  = true;
+          }
+        }
+        heightMap.fill(-delta * currentHeight + blockHeight, start, end);
+        return heightMap;
+      };
+      delta == -1 ? sorted.reduce(fn, heightMap) : sorted.reduceRight(fn, heightMap);
+    } else {
+      const sorted            = this.getSortedItems('yx');
+      let heightMap: number[] = [];
+      sorted.forEach(item => {
+        const blockWidth  = item.$item.rows;
+        const blockHeight = item.$item.cols;
+        const start       = item.$item.y, end = item.$item.y + blockWidth;
+        if (end > heightMap.length) {
+          heightMap.fill(0, heightMap.length, heightMap.length = end);
+        }
+        const max = Math.max(0, ...heightMap.slice(start, end));
+        // if(low)
+        if (item.$item.x != max) {
+          item.$item.x = max;
+          widgetMoved  = true;
+        }
+        heightMap.fill(max + blockHeight, start, end);
+      });
     }
+
+    // let widgetMoved = false;
+    // this.gridster.grid.forEach((widget: GridsterItemComponentInterface) => {
+    //   if (widget.$item.compactEnabled !== false) {
+    //     const moved = this.moveTillCollision(widget.$item, direction, delta);
+    //     if (moved) {
+    //       widgetMoved            = true;
+    //       widget.item[direction] = widget.$item[direction];
+    //       widget.itemChanged();
+    //     }
+    //   }
+    // });
+    // if (widgetMoved) {
+    //   this.checkCompact();
+    // }
   }
 
   private moveTillCollision(item: GridsterItem, direction: 'x' | 'y', delta: number): boolean {

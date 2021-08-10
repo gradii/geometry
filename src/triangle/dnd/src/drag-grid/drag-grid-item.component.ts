@@ -5,20 +5,20 @@
  */
 
 import { Directionality } from '@angular/cdk/bidi';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, Inject, Input, NgZone, OnDestroy, OnInit, Optional, Self, SimpleChanges,
-  SkipSelf,
-  ViewContainerRef
+  ChangeDetectorRef, Component, ElementRef, Inject, Input, NgZone, OnDestroy, OnInit, Optional,
+  Self, SimpleChanges, SkipSelf, ViewContainerRef
 } from '@angular/core';
-import { TriDropGridContainer } from '../directives/drop-grid-container';
+import { clamp } from '@gradii/triangle/util';
+import { DragDropConfig, TRI_DRAG_CONFIG } from '../directives/config';
 
 import { TriDrag } from '../directives/drag';
-import { TRI_DRAG_PARENT } from '../drag-parent';
+import { TRI_DRAG_HANDLE, TriDragHandle } from '../directives/drag-handle';
 import { TRI_DROP_CONTAINER } from '../directives/drop-container';
-import { DragDropConfig, TRI_DRAG_CONFIG } from '../directives/config';
+import { TriDropGridContainer } from '../directives/drop-grid-container';
 import { DragDrop } from '../drag-drop';
-import { TriDragHandle, TRI_DRAG_HANDLE } from '../directives/drag-handle';
-import { clamp } from '@gradii/triangle/util';
+import { TRI_DRAG_PARENT } from '../drag-parent';
 
 @Component({
   selector : 'tri-drag-grid-item',
@@ -60,6 +60,7 @@ import { clamp } from '@gradii/triangle/util';
   ]
 })
 export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestroy {
+
   private lastPositionX: number;
   private lastPositionY: number;
 
@@ -104,8 +105,17 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
   @Input('triDragGridItemResizeEnabled')
   resizeEnabled: boolean = true;
 
+  private _compactEnabled: boolean = true;
+
   @Input('triDragGridItemCompactEnabled')
-  compactEnabled: boolean = true;
+  get compactEnabled(): boolean {
+    return this._compactEnabled;
+  }
+
+  set compactEnabled(value: boolean) {
+    this._compactEnabled = coerceBooleanProperty(value);
+  }
+
 
   notPlaced: boolean = false;
 

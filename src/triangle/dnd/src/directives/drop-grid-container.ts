@@ -10,10 +10,8 @@ import {
 } from '@angular/cdk/coercion';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import {
-  ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, InjectionToken, Input, NgZone, OnDestroy, OnInit,
-  Optional,
-  Output,
-  SimpleChanges, SkipSelf, ViewChild, ViewEncapsulation
+  ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, InjectionToken, Input, NgZone,
+  OnDestroy, OnInit, Optional, Output, SimpleChanges, SkipSelf, ViewChild, ViewEncapsulation
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, startWith, takeUntil, tap } from 'rxjs/operators';
@@ -29,6 +27,11 @@ import { CompactType, GridTypes } from '../enum';
 import { TriDragDrop, TriDragEnter, TriDragExit } from '../event/drag-events';
 import { DragAxis, DragDropConfig, TRI_DRAG_CONFIG } from './config';
 import { TRI_DROP_CONTAINER_GROUP, TriDropContainerGroup } from './drop-container-group';
+
+export enum Direction {
+  xy = 'xy',
+  yx = 'yx'
+}
 
 
 export const TRI_DROP_GRID_CONTAINER_CONFIG = new InjectionToken('tri drop grid container config');
@@ -61,33 +64,33 @@ export const TRI_DROP_GRID_CONTAINER_CONFIG = new InjectionToken('tri drop grid 
   styles       : [
     `
       .tri-drop-grid-container {
-        position: relative;
-        box-sizing: border-box;
-        background: gray;
-        width: 100%;
-        height: 100%;
-        user-select: none;
-        display: block;
-        overflow: hidden;
+        position    : relative;
+        box-sizing  : border-box;
+        background  : gray;
+        width       : 100%;
+        height      : 100%;
+        user-select : none;
+        display     : block;
+        overflow    : hidden;
       }
 
       .tri-drop-grid-container-fit {
-        overflow-x: hidden;
-        overflow-y: hidden;
+        overflow-x : hidden;
+        overflow-y : hidden;
       }
 
       .tri-drop-grid-container-scrollVertical {
-        overflow-x: hidden;
-        overflow-y: auto;
+        overflow-x : hidden;
+        overflow-y : auto;
       }
 
       .tri-drop-grid-container-scrollHorizontal {
-        overflow-x: auto;
-        overflow-y: hidden;
+        overflow-x : auto;
+        overflow-y : hidden;
       }
 
       .tri-drop-grid-container-fixed {
-        overflow: auto;
+        overflow : auto;
       }
     `
   ]
@@ -128,7 +131,7 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   @Input('triDropGridContainerGutter')
   gutter: number = 10;
 
-  @Input('triDropGridContainerColumns')
+  @Input('triDropGridContainerCols')
   cols: number = 1;
 
   @Input('triDropGridContainerRows')
@@ -164,11 +167,13 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
    * is allowed to be moved into a drop container.
    */
   @Input('triDropGridContainerEnterPredicate')
-  enterPredicate: (drag: TriDragGridItemComponent, drop: TriDropGridContainer) => boolean = () => true;
+  enterPredicate: (drag: TriDragGridItemComponent,
+                   drop: TriDropGridContainer) => boolean = () => true;
 
   /** Functions that is used to determine whether an item can be sorted into a particular index. */
   @Input('triDropGridContainerSortPredicate')
-  sortPredicate: (index: number, drag: TriDragGridItemComponent, drop: TriDropGridContainer) => boolean = () => true;
+  sortPredicate: (index: number, drag: TriDragGridItemComponent,
+                  drop: TriDropGridContainer) => boolean = () => true;
 
   /** Whether to auto-scroll the view when the user moves their pointer close to the edges. */
   @Input('triDropGridContainerAutoScrollDisabled')
@@ -260,7 +265,8 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     };
 
     this._dropContainerRef.sortPredicate =
-      (index: number, drag: DragRef<TriDragGridItemComponent>, drop: DndContainerRef<TriDropGridContainer>) => {
+      (index: number, drag: DragRef<TriDragGridItemComponent>,
+       drop: DndContainerRef<TriDropGridContainer>) => {
         return this.sortPredicate(index, drag.data, drop.data);
       };
 
@@ -375,17 +381,23 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   }
 
   /** Gets the registered items in the list, sorted by their position in the DOM. */
-  getSortedItems(): TriDragGridItemComponent[] {
-    return Array.from(this._unsortedItems).sort((a: TriDragGridItemComponent, b: TriDragGridItemComponent) => {
-      const documentPosition =
-              a._dragRef.getVisibleElement().compareDocumentPosition(
-                b._dragRef.getVisibleElement());
-
-      // `compareDocumentPosition` returns a bitmask so we have to use a bitwise operator.
-      // https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
-      // tslint:disable-next-line:no-bitwise
-      return documentPosition & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
-    });
+  getSortedItems(direction: Direction = Direction.xy): TriDragGridItemComponent[] {
+    return Array.from(this._unsortedItems).sort(
+      (a: TriDragGridItemComponent, b: TriDragGridItemComponent) => {
+        if (direction == Direction.yx) {
+          if (a.x == b.x) {
+            return a.y > b.y ? 1 : -1;
+          } else {
+            return a.x > b.x ? 1 : -1;
+          }
+        } else {
+          if (a.y == b.y) {
+            return a.x > b.x ? 1 : -1;
+          } else {
+            return a.y > b.y ? 1 : -1;
+          }
+        }
+      });
   }
 
   /** Syncs the inputs of the TriDropContainer with the options of the underlying DropContainerRef. */

@@ -6,42 +6,51 @@
 
 import { AfterViewInit, Component, QueryList, ViewChildren } from '@angular/core';
 import {
-  CompactType, GridTypes, moveItemInArray, transferArrayItem, TRI_DROP_CONTAINER, TriDragDrop, TriDropListContainer
+  CompactType, GridTypes, moveItemInArray, transferArrayItem, TRI_DROP_CONTAINER, TriDragDrop,
+  TriDropListContainer
 } from '@gradii/triangle/dnd';
 import { asapScheduler } from 'rxjs';
 
 @Component({
-  selector : 'tri-demo-dnd-grid',
-  template : `
+  selector: 'tri-demo-dnd-grid',
+  template: `
     <div>
       <div class="">
         <h2>To do</h2>
 
         <div>
-          <span>has padding</span>
-          <tri-select aria-label="Compact type" [(ngModel)]="compactType"
+          <tri-select style="min-width: 200px" aria-label="Compact type" [(ngModel)]="compactType"
                       placeholder="Compact Type">
             <tri-option label="None" value="">None</tri-option>
             <tri-option label="Compact Up" value="compactUp">Compact Up</tri-option>
             <tri-option label="Compact Left" value="compactLeft">Compact Left</tri-option>
-            <tri-option label="Compact Left & Up" value="compactLeft&Up">Compact Left & Up</tri-option>
-            <tri-option label="Compact Up & Left" value="compactUp&Left">Compact Up & Left</tri-option>
+            <tri-option label="Compact Left & Up" value="compactLeft&Up">Compact Left & Up
+            </tri-option>
+            <tri-option label="Compact Up & Left" value="compactUp&Left">Compact Up & Left
+            </tri-option>
             <tri-option label="Compact Right" value="compactRight">Compact Right</tri-option>
-            <tri-option label="Compact Up & Right" value="compactUp&Right">Compact Up & Right</tri-option>
-            <tri-option label="Compact Right & Up" value="compactRight&Up">Compact Right & Up</tri-option>
+            <tri-option label="Compact Up & Right" value="compactUp&Right">Compact Up & Right
+            </tri-option>
+            <tri-option label="Compact Right & Up" value="compactRight&Up">Compact Right & Up
+            </tri-option>
             <tri-option label="Compact Down" value="compactDown">Compact Down</tri-option>
-            <tri-option label="Compact Down & Left" value="compactDown&Left">Compact Down & Left</tri-option>
-            <tri-option label="Compact Left & Down" value="compactLeft&Down">Compact Left & Down</tri-option>
-            <tri-option label="Compact Down & Right" value="compactDown&Right">Compact Down & Right</tri-option>
-            <tri-option label="Compact Right & Down" value="compactRight&Down">Compact Right & Down</tri-option>
+            <tri-option label="Compact Down & Left" value="compactDown&Left">Compact Down & Left
+            </tri-option>
+            <tri-option label="Compact Left & Down" value="compactLeft&Down">Compact Left & Down
+            </tri-option>
+            <tri-option label="Compact Down & Right" value="compactDown&Right">Compact Down & Right
+            </tri-option>
+            <tri-option label="Compact Right & Down" value="compactRight&Down">Compact Right & Down
+            </tri-option>
           </tri-select>
 
+          <span>has padding</span>
           <tri-checkbox [(ngModel)]="hasPadding">has Padding</tri-checkbox>
         </div>
 
         <div>
           <span>gridType</span>
-          <tri-select [(ngModel)]="gridType">
+          <tri-select style="min-width: 200px" [(ngModel)]="gridType">
             <tri-option label="none" value=""></tri-option>
             <tri-option label="fit" value="fit"></tri-option>
             <tri-option label="scrollVertical" value="scrollVertical"></tri-option>
@@ -76,7 +85,9 @@ import { asapScheduler } from 'rxjs';
                [triDropGridContainerHasPadding]="hasPadding"
                [triDropGridContainerCompactType]="compactType"
                [triDropGridContainerRows]="10"
-               [triDropGridContainerColumns]="10"
+               [triDropGridContainerCols]="10"
+               [triDropGridContainerMaxRows]="10"
+               [triDropGridContainerMaxCols]="10"
                (triDropGridContainerEntered)="onDragEntered($event)"
                (triDropGridContainerExited)="onDragExited($event)"
                (triDropGridContainerDropped)="onDragDropped($event)"
