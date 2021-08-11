@@ -5,18 +5,16 @@
  */
 
 import { Direction } from '@angular/cdk/bidi';
-import { DropListContainerRef } from '../drag-drop-ref/drop-list-container-ref';
 import { Subject } from 'rxjs';
-import { DragRefInternal as DragRef } from '../drag-drop-ref/drag-ref';
-import { combineTransforms } from '../drag-styling';
 import { DndContainerRef } from '../drag-drop-ref/dnd-container-ref';
+import { DragRefInternal as DragRef } from '../drag-drop-ref/drag-ref';
+import { DropListContainerRef } from '../drag-drop-ref/drop-list-container-ref';
+import { DragDropRegistry } from '../drag-drop-registry';
+import { combineTransforms } from '../drag-styling';
 import { CachedItemPosition } from '../drop-container.interface';
 import { findIndex } from '../utils';
-import {
-  adjustClientRect, getMutableClientRect, isInsideClientRect,
-} from '../utils/client-rect';
+import { adjustClientRect, getMutableClientRect, isInsideClientRect, } from '../utils/client-rect';
 import { moveItemInArray } from '../utils/drag-utils';
-import { DragDropRegistry } from '../drag-drop-registry';
 
 export interface PositionStrategy {
 
@@ -229,7 +227,14 @@ export class SortPositionStrategy implements PositionStrategy {
   _getItemIndexFromPointerPosition(item: DragRef, pointerX: number, pointerY: number,
                                    delta?: { x: number, y: number }): number {
     const isHorizontal = this._orientation === 'horizontal';
-    const index        = findIndex(this._itemPositions, ({drag, clientRect}, _, array) => {
+
+    let heightMap = [];
+    let startIdx, endIdx;
+    for (let i = 0; i < this._itemPositions.length; i++) {
+
+    }
+
+    const index = findIndex(this._itemPositions, ({drag, clientRect}, _, array) => {
       if (drag === item) {
         // If there's only one item left in the container, it must be
         // the dragged item itself so we use it as a reference.
@@ -248,10 +253,9 @@ export class SortPositionStrategy implements PositionStrategy {
         }
       }
 
-      return isHorizontal ?
-        // Round these down since most browsers report client rects with
-        // sub-pixel precision, whereas the pointer coordinates are rounded to pixels.
-        pointerX >= Math.floor(clientRect.left) && pointerX < Math.floor(clientRect.right) :
+      // Round these down since most browsers report client rects with
+      // sub-pixel precision, whereas the pointer coordinates are rounded to pixels.
+      return pointerX >= Math.floor(clientRect.left) && pointerX < Math.floor(clientRect.right) &&
         pointerY >= Math.floor(clientRect.top) && pointerY < Math.floor(clientRect.bottom);
     });
 
@@ -284,8 +288,19 @@ export class SortPositionStrategy implements PositionStrategy {
         clientRect      : getMutableClientRect(elementToMeasure),
       };
     }).sort((a, b) => {
-      return isHorizontal ? a.clientRect.left - b.clientRect.left :
-        a.clientRect.top - b.clientRect.top;
+      if (isHorizontal) {
+        if (Math.floor(a.clientRect.top) == Math.floor(b.clientRect.top)) {
+          return a.clientRect.left - b.clientRect.left;
+        } else {
+          return a.clientRect.top - b.clientRect.top;
+        }
+      } else {
+        if (Math.floor(a.clientRect.left) == Math.floor(b.clientRect.left)) {
+          return a.clientRect.top - b.clientRect.top;
+        } else {
+          return a.clientRect.left - b.clientRect.left;
+        }
+      }
     });
   }
 

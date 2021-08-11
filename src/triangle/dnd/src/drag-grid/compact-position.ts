@@ -81,41 +81,6 @@ export class CompactPosition {
     }
   }
 
-  checkCompactItem(item: TriDragGridItemComponent): void {
-    const compactType = this.ref.compactType;
-
-    if (compactType !== CompactType.None) {
-      if (compactType === CompactType.CompactUp) {
-        this.moveTillCollision(item, 'y', -1);
-      } else if (compactType === CompactType.CompactLeft) {
-        this.moveTillCollision(item, 'x', -1);
-      } else if (compactType === CompactType.CompactUpAndLeft) {
-        this.moveTillCollision(item, 'y', -1);
-        this.moveTillCollision(item, 'x', -1);
-      } else if (compactType === CompactType.CompactLeftAndUp) {
-        this.moveTillCollision(item, 'x', -1);
-        this.moveTillCollision(item, 'y', -1);
-      } else if (compactType === CompactType.CompactUpAndRight) {
-        this.moveTillCollision(item, 'y', -1);
-        this.moveTillCollision(item, 'x', 1);
-      } else if (compactType === CompactType.CompactDown) {
-        this.moveTillCollision(item, 'y', 1);
-      } else if (compactType === CompactType.CompactDownAndLeft) {
-        this.moveTillCollision(item, 'y', 1);
-        this.moveTillCollision(item, 'x', -1);
-      } else if (compactType === CompactType.CompactLeftAndDown) {
-        this.moveTillCollision(item, 'x', -1);
-        this.moveTillCollision(item, 'y', 1);
-      } else if (compactType === CompactType.CompactDownAndRight) {
-        this.moveTillCollision(item, 'y', 1);
-        this.moveTillCollision(item, 'x', 1);
-      } else if (compactType === CompactType.CompactRightAndDown) {
-        this.moveTillCollision(item, 'x', 1);
-        this.moveTillCollision(item, 'y', 1);
-      }
-    }
-  }
-
   private _compactMovement(
     sorted: TriDragGridItemComponent[],
     delta: number,
@@ -195,26 +160,5 @@ export class CompactPosition {
         (item, value) => item.x = value
       );
     }
-  }
-
-  private moveTillCollision(item: TriDragGridItemComponent, direction: 'x' | 'y',
-                            delta: number): boolean {
-    direction === 'x' ? this._moveTileX(item, delta) : this._moveTileY(item, delta);
-    if (this.ref.checkCollision(item)) {
-      direction === 'x' ? this._moveTileX(item, -delta) : this._moveTileY(item, -delta);
-      return false;
-    } else {
-      this.moveTillCollision(item, direction, delta);
-      return true;
-    }
-    return true;
-  }
-
-  private _moveTileX(item: TriDragGridItemComponent, delta: number) {
-    item.x += delta;
-  }
-
-  private _moveTileY(item: TriDragGridItemComponent, delta: number) {
-    item.y += delta;
   }
 }

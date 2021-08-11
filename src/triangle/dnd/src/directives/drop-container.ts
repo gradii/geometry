@@ -72,5 +72,5 @@ export abstract class TriDropContainer<T = any> {
   /** Removes an item from the drop list. */
   abstract removeItem(item: any): void;
 
-
 }
+

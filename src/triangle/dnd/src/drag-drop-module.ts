@@ -32,18 +32,19 @@ import { DragDrop } from './drag-drop';
     TriDragPlaceholder,
     TriDragGridItemComponent
   ],
-  exports: [
-    CdkScrollableModule,
-    TriDropListContainer,
-    TriDropContainerGroup,
-    TriDrag,
-    TriDragHandle,
-    TriDragPreview,
-    TriDragPlaceholder,
-    TriDropGridContainer,
-    TriDragContainer,
-    TriDragGridItemComponent
-  ],
+    exports: [
+        CdkScrollableModule,
+        TriDropListContainer,
+        TriDropContainerGroup,
+        TriDrag,
+        TriDragHandle,
+        TriDragPreview,
+        TriDragPlaceholder,
+        TriDropGridContainer,
+        TriDragContainer,
+        TriDragGridItemComponent,
+        TriDropFlexContainer
+    ],
   providers   : [
     DragDrop,
   ]
