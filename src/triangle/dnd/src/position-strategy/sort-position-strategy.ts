@@ -229,9 +229,22 @@ export class SortPositionStrategy implements PositionStrategy {
     const isHorizontal = this._orientation === 'horizontal';
 
     let heightMap = [];
-    let startIdx, endIdx;
+    let startIdx = 0, endIdx = this._itemPositions.length;
+    let minY = this._itemPositions[0].clientRect.top;
+    const maxY = this._itemPositions[this._itemPositions.length - 1].clientRect.top;
+    pointerY = Math.max(Math.min(maxY, pointerY), minY);
+    let lastY = -Infinity; 
     for (let i = 0; i < this._itemPositions.length; i++) {
-
+      // pointerX
+      const {left, top} = this._itemPositions[i].clientRect;
+      if(Math.floor(pointerY) < Math.floor(top)) {
+        endIdx = i;
+        break; 
+      }
+      if(Math.floor(top) > Math.floor(lastY)){
+        lastY = top;
+        startIdx = i;
+      }
     }
 
     const index = findIndex(this._itemPositions, ({drag, clientRect}, _, array) => {
@@ -239,6 +252,10 @@ export class SortPositionStrategy implements PositionStrategy {
         // If there's only one item left in the container, it must be
         // the dragged item itself so we use it as a reference.
         return array.length < 2;
+      }
+
+      if(_<startIdx || _>=endIdx) {
+        return false;
       }
 
       if (delta) {
@@ -253,9 +270,18 @@ export class SortPositionStrategy implements PositionStrategy {
         }
       }
 
+      if(this._orientation === 'horizontal') {
+        if(_ === startIdx && pointerX < Math.floor(clientRect.left)) {
+          return true;
+        }else if(_ === endIdx -1 &&  pointerX > Math.floor(clientRect.right)) {
+          return true;
+        }
+      }
+
       // Round these down since most browsers report client rects with
       // sub-pixel precision, whereas the pointer coordinates are rounded to pixels.
-      return pointerX >= Math.floor(clientRect.left) && pointerX < Math.floor(clientRect.right) &&
+      return this._orientation === 'horizontal' ?
+        pointerX >= Math.floor(clientRect.left) && pointerX < Math.floor(clientRect.right) :
         pointerY >= Math.floor(clientRect.top) && pointerY < Math.floor(clientRect.bottom);
     });
 
