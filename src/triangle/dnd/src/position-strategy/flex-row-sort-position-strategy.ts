@@ -121,54 +121,55 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
         const isDraggedItem = siblings[i].drag === item;
 
         if (isDraggedItem) {
-          offsetItem.offset += isHorizontal ? offsetX : offsetY;
-          offsetItem.offsetCross += isHorizontal ? offsetY : offsetX;
+          offsetItem.offsetX += offsetX;
+          offsetItem.offsetY += offsetY;
 
-          if (isHorizontal) {
-            item.getPlaceholderElement().style.transform = combineTransforms(
-              `translate3d(${offsetItem.offset}px, ${offsetItem.offsetCross}px, 0)`,
-              offsetItem.initialTransform);
+          item.getPlaceholderElement().style.transform = combineTransforms(
+            `translate3d(${offsetItem.offsetX}px, ${offsetItem.offsetY}px, 0)`,
+            offsetItem.initialTransform);
 
-          } else {
-            item.getPlaceholderElement().style.transform = combineTransforms(
-              `translate3d(${offsetItem.offsetCross}px, ${offsetItem.offset}px, 0)`,
-              offsetItem.initialTransform);
-          }
           adjustClientRect(offsetItem.clientRect, offsetY, offsetX);
 
         } else {
           if (siblings[i].mainAxisLine == currentMainAxisLine &&
             currentIndex < i) {
 
-            offsetItem.offset += mainSiblingOffset;
+            if (isHorizontal) {
+              offsetItem.offsetX += mainSiblingOffset;
+            } else {
+              offsetItem.offsetY += mainSiblingOffset;
+            }
 
             if (isHorizontal) {
               offsetItem.drag.getRootElement().style.transform = combineTransforms(
-                `translate3d(${offsetItem.offset}px, 0px, 0)`,
+                `translate3d(${offsetItem.offsetX}px, 0px, 0)`,
                 offsetItem.initialTransform);
               adjustClientRect(offsetItem.clientRect, 0, mainSiblingOffset);
             } else {
               offsetItem.drag.getRootElement().style.transform = combineTransforms(
-                `translate3d(0px, ${offsetItem.offset}px, 0)`,
+                `translate3d(0px, ${offsetItem.offsetY}px, 0)`,
                 offsetItem.initialTransform);
               adjustClientRect(offsetItem.clientRect, mainSiblingOffset, 0);
-
             }
           }
           if (siblings[i].mainAxisLine == newMainAxisLine &&
             newIndex <= i
           ) {
-            offsetItem.offset += newMainSiblingOffset;
 
             if (isHorizontal) {
+              offsetItem.offsetX += newMainSiblingOffset;
+            } else {
+              offsetItem.offsetY += newMainSiblingOffset;
+            }
 
+            if (isHorizontal) {
               offsetItem.drag.getRootElement().style.transform = combineTransforms(
-                `translate3d(${offsetItem.offset}px, 0px, 0)`,
+                `translate3d(${offsetItem.offsetX}px, 0px, 0)`,
                 offsetItem.initialTransform);
               adjustClientRect(offsetItem.clientRect, 0, newMainSiblingOffset);
             } else {
               offsetItem.drag.getRootElement().style.transform = combineTransforms(
-                `translate3d(0px, ${offsetItem.offset}px, 0)`,
+                `translate3d(0px, ${offsetItem.offsetY}px, 0)`,
                 offsetItem.initialTransform);
               adjustClientRect(offsetItem.clientRect, newMainSiblingOffset, 0);
             }
@@ -206,7 +207,11 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
           sibling.drag.getRootElement();
 
         // Update the offset to reflect the new position.
-        sibling.offset += offset;
+        if (isHorizontal) {
+          sibling.offsetX += offset;
+        } else {
+          sibling.offsetY += offset;
+        }
 
         // Since we're moving the items with a `transform`, we need to adjust their cached
         // client rects to reflect their new position, as well as swap their positions in the cache.
@@ -216,12 +221,12 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
           // Round the transforms since some browsers will
           // blur the elements, for sub-pixel transforms.
           elementToOffset.style.transform = combineTransforms(
-            `translate3d(${Math.round(sibling.offset)}px, ${isDraggedItem ? `${sibling.offsetCross}px` : 0}, 0)`,
+            `translate3d(${Math.round(sibling.offsetX)}px, ${isDraggedItem ? `${sibling.offsetY}px` : 0}, 0)`,
             sibling.initialTransform);
           adjustClientRect(sibling.clientRect, 0, offset);
         } else {
           elementToOffset.style.transform = combineTransforms(
-            `translate3d(${isDraggedItem ? `${sibling.offsetCross}px` : 0}, ${Math.round(sibling.offset)}px, 0)`,
+            `translate3d(${isDraggedItem ? `${sibling.offsetX}px` : 0}, ${Math.round(sibling.offsetY)}px, 0)`,
             sibling.initialTransform);
           adjustClientRect(sibling.clientRect, offset, 0);
         }
@@ -423,8 +428,8 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
       const elementToMeasure = drag.getVisibleElement();
       return {
         drag,
-        offset          : 0,
-        offsetCross     : 0,
+        offsetX         : 0,
+        offsetY         : 0,
         mainAxisLine    : 0,
         crossAxisLine   : 0,
         initialTransform: elementToMeasure.style.transform || '',

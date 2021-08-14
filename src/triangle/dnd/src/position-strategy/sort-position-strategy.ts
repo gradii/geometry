@@ -123,7 +123,7 @@ export class SortPositionStrategy implements PositionStrategy {
         sibling.drag.getRootElement();
 
       // Update the offset to reflect the new position.
-      sibling.offset += offset;
+      sibling.offsetX += offset;
 
       // Since we're moving the items with a `transform`, we need to adjust their cached
       // client rects to reflect their new position, as well as swap their positions in the cache.
@@ -133,11 +133,11 @@ export class SortPositionStrategy implements PositionStrategy {
         // Round the transforms since some browsers will
         // blur the elements, for sub-pixel transforms.
         elementToOffset.style.transform = combineTransforms(
-          `translate3d(${Math.round(sibling.offset)}px, 0, 0)`, sibling.initialTransform);
+          `translate3d(${Math.round(sibling.offsetX)}px, 0, 0)`, sibling.initialTransform);
         adjustClientRect(sibling.clientRect, 0, offset);
       } else {
         elementToOffset.style.transform = combineTransforms(
-          `translate3d(0, ${Math.round(sibling.offset)}px, 0)`, sibling.initialTransform);
+          `translate3d(0, ${Math.round(sibling.offsetX)}px, 0)`, sibling.initialTransform);
         adjustClientRect(sibling.clientRect, offset, 0);
       }
     });
@@ -267,7 +267,8 @@ export class SortPositionStrategy implements PositionStrategy {
       const elementToMeasure = drag.getVisibleElement();
       return {
         drag,
-        offset          : 0,
+        offsetX         : 0,
+        offsetY         : 0,
         initialTransform: elementToMeasure.style.transform || '',
         clientRect      : getMutableClientRect(elementToMeasure),
       };

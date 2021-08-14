@@ -19,9 +19,9 @@ export interface CachedItemPosition {
   mainAxisLine?: number;
 
   /** Amount by which the item has been moved since dragging started. */
-  offset: number;
+  offsetX: number;
 
-  offsetCross?: number;
+  offsetY?: number;
 
   /** Inline transform that the drag item had when dragging started. */
   initialTransform: string;
