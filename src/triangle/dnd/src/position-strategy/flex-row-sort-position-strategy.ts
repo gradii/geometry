@@ -395,6 +395,12 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
         } else if (_ === endIdx - 1 && pointerX > Math.floor(clientRect.right)) {
           return true;
         }
+      } else {
+        if (_ === startIdx && pointerY < Math.floor(clientRect.top)) {
+          return true;
+        } else if (_ === endIdx - 1 && pointerY > Math.floor(clientRect.bottom)) {
+          return true;
+        }
       }
 
       // Round these down since most browsers report client rects with
