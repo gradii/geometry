@@ -90,6 +90,24 @@ export class SortPositionStrategy implements PositionStrategy {
     });
   }
 
+  _debug(element: HTMLElement, clientRect: ClientRect) {
+    const realRect = element.getBoundingClientRect();
+
+    if (realRect.left !== clientRect.left ||
+      realRect.right !== clientRect.right ||
+      realRect.top !== clientRect.top ||
+      realRect.bottom !== clientRect.bottom) {
+      console.assert(realRect.left === clientRect.left,
+        `${realRect.left} === ${clientRect.left}`);
+      console.assert(realRect.right === clientRect.right,
+        `${realRect.right} === ${clientRect.right}`);
+      console.assert(realRect.top === clientRect.top, `${realRect.top} === ${clientRect.top}`);
+      console.assert(realRect.bottom === clientRect.bottom,
+        `${realRect.bottom} === ${clientRect.bottom}`);
+      debugger;
+    }
+  }
+
   _sortItem(item: DragRef, pointerX: number, pointerY: number,
             pointerDelta: { x: number, y: number }): void {
 
@@ -100,15 +118,77 @@ export class SortPositionStrategy implements PositionStrategy {
       return;
     }
 
-    const isHorizontal         = this._orientation === 'horizontal';
-    const currentIndex         = findIndex(siblings, currentItem => currentItem.drag === item);
+    const isHorizontal = this._orientation === 'horizontal';
+    const currentIndex = findIndex(siblings, currentItem => currentItem.drag === item);
+
     const siblingAtNewPosition = siblings[newIndex];
     const currentPosition      = siblings[currentIndex].clientRect;
     const newPosition          = siblingAtNewPosition.clientRect;
     const delta                = currentIndex > newIndex ? 1 : -1;
 
+    const currentMainAxisLine = siblings[currentIndex].mainAxisLine;
+    const newMainAxisLine     = siblings[newIndex].mainAxisLine;
+
+
+    if (currentMainAxisLine != newMainAxisLine) {
+      // change the main axis line
+      siblings[currentIndex].mainAxisLine = newMainAxisLine;
+
+      // How many pixels the item's placeholder should be offset.
+      const [offsetX, offsetY] = this._getItemOffsetPx(currentPosition, newPosition, 1);
+
+      const mainSiblingOffsetX    = this._getSiblingOffsetPx(currentIndex, siblings, -1);
+      const newMainSiblingOffsetX = this._getSiblingOffsetPx(currentIndex, siblings, 1);
+
+
+      for (let i = 0; i < siblings.length; i++) {
+        const offsetItem    = siblings[i];
+        const isDraggedItem = siblings[i].drag === item;
+
+        if (isDraggedItem) {
+          offsetItem.offset += offsetX;
+          offsetItem.offsetCross += offsetY;
+
+          item.getPlaceholderElement().style.transform = combineTransforms(
+            `translate3d(${offsetItem.offset}px, ${offsetItem.offsetCross}px, 0)`,
+            offsetItem.initialTransform);
+          adjustClientRect(offsetItem.clientRect, offsetY, offsetX);
+
+          this._debug(offsetItem.drag.getPlaceholderElement(),
+            offsetItem.clientRect);
+
+        } else {
+          if (siblings[i].mainAxisLine == currentMainAxisLine &&
+            currentIndex < i) {
+
+            offsetItem.offset += mainSiblingOffsetX;
+
+            offsetItem.drag.getRootElement().style.transform = combineTransforms(
+              `translate3d(${offsetItem.offset}px, 0px, 0)`,
+              offsetItem.initialTransform);
+            adjustClientRect(offsetItem.clientRect, 0, mainSiblingOffsetX);
+          }
+          if (siblings[i].mainAxisLine == newMainAxisLine &&
+            newIndex <= i
+          ) {
+            offsetItem.offset += newMainSiblingOffsetX;
+
+            offsetItem.drag.getRootElement().style.transform = combineTransforms(
+              `translate3d(${offsetItem.offset}px, 0px, 0)`,
+              offsetItem.initialTransform);
+            adjustClientRect(offsetItem.clientRect, 0, newMainSiblingOffsetX);
+          }
+        }
+      }
+
+      // Shuffle the array in place. if to < from newIndex can be 0, but it's ok
+      moveItemInArray(siblings, currentIndex,
+        currentIndex < newIndex ? newIndex - 1 : newIndex);
+      return;
+    }
+
     // How many pixels the item's placeholder should be offset.
-    const itemOffset = this._getItemOffsetPx(currentPosition, newPosition, delta);
+    const [itemOffset, itemOffsetY] = this._getItemOffsetPx(currentPosition, newPosition, delta);
 
     // How many pixels all the other items should be offset.
     const siblingOffset = this._getSiblingOffsetPx(currentIndex, siblings, delta);
@@ -149,13 +229,17 @@ export class SortPositionStrategy implements PositionStrategy {
         // Round the transforms since some browsers will
         // blur the elements, for sub-pixel transforms.
         elementToOffset.style.transform = combineTransforms(
-          `translate3d(${Math.round(sibling.offset)}px, 0, 0)`, sibling.initialTransform);
+          `translate3d(${Math.round(
+            sibling.offset)}px, ${isDraggedItem ? sibling.offsetCross : 0}, 0)`,
+          sibling.initialTransform);
         adjustClientRect(sibling.clientRect, 0, offset);
       } else {
         elementToOffset.style.transform = combineTransforms(
           `translate3d(0, ${Math.round(sibling.offset)}px, 0)`, sibling.initialTransform);
         adjustClientRect(sibling.clientRect, offset, 0);
       }
+
+      this._debug(elementToOffset, sibling.clientRect);
     });
 
     // Note that it's important that we do this after the client rects have been adjusted.
@@ -172,16 +256,18 @@ export class SortPositionStrategy implements PositionStrategy {
    */
   private _getItemOffsetPx(currentPosition: ClientRect, newPosition: ClientRect, delta: 1 | -1) {
     const isHorizontal = this._orientation === 'horizontal';
-    let itemOffset     = isHorizontal ? newPosition.left - currentPosition.left :
-      newPosition.top - currentPosition.top;
+    let itemOffsetX    = newPosition.left - currentPosition.left;
+    let itemOffsetY    = newPosition.top - currentPosition.top;
 
     // Account for differences in the item width/height.
     if (delta === -1) {
-      itemOffset += isHorizontal ? newPosition.width - currentPosition.width :
+      itemOffsetX += isHorizontal ? newPosition.width - currentPosition.width :
         newPosition.height - currentPosition.height;
+      // itemOffsetY += isHorizontal ? newPosition.height - currentPosition.height :
+      //   newPosition.width - currentPosition.width;
     }
 
-    return itemOffset;
+    return [itemOffsetX, itemOffsetY];
   }
 
   /**
@@ -228,21 +314,20 @@ export class SortPositionStrategy implements PositionStrategy {
                                    delta?: { x: number, y: number }): number {
     const isHorizontal = this._orientation === 'horizontal';
 
-    let heightMap = [];
     let startIdx = 0, endIdx = this._itemPositions.length;
-    let minY = this._itemPositions[0].clientRect.top;
-    const maxY = this._itemPositions[this._itemPositions.length - 1].clientRect.top;
-    pointerY = Math.max(Math.min(maxY, pointerY), minY);
-    let lastY = -Infinity; 
+    let minY     = this._itemPositions[0].clientRect.top;
+    const maxY   = this._itemPositions[this._itemPositions.length - 1].clientRect.top;
+    pointerY     = Math.max(Math.min(maxY, pointerY), minY);
+    let lastY    = -Infinity;
     for (let i = 0; i < this._itemPositions.length; i++) {
       // pointerX
       const {left, top} = this._itemPositions[i].clientRect;
-      if(Math.floor(pointerY) < Math.floor(top)) {
+      if (Math.floor(pointerY) < Math.floor(top)) {
         endIdx = i;
-        break; 
+        break;
       }
-      if(Math.floor(top) > Math.floor(lastY)){
-        lastY = top;
+      if (Math.floor(top) > Math.floor(lastY)) {
+        lastY    = top;
         startIdx = i;
       }
     }
@@ -254,7 +339,7 @@ export class SortPositionStrategy implements PositionStrategy {
         return array.length < 2;
       }
 
-      if(_<startIdx || _>=endIdx) {
+      if (_ < startIdx || _ >= endIdx) {
         return false;
       }
 
@@ -266,14 +351,15 @@ export class SortPositionStrategy implements PositionStrategy {
         // dragging, we don't consider it a direction swap.
         if (drag === this._previousSwap.drag && this._previousSwap.overlaps &&
           direction === this._previousSwap.delta) {
+          console.log('continuing swap');
           return false;
         }
       }
 
-      if(this._orientation === 'horizontal') {
-        if(_ === startIdx && pointerX < Math.floor(clientRect.left)) {
+      if (this._orientation === 'horizontal') {
+        if (_ === startIdx && pointerX < Math.floor(clientRect.left)) {
           return true;
-        }else if(_ === endIdx -1 &&  pointerX > Math.floor(clientRect.right)) {
+        } else if (_ === endIdx - 1 && pointerX > Math.floor(clientRect.right)) {
           return true;
         }
       }
@@ -310,6 +396,9 @@ export class SortPositionStrategy implements PositionStrategy {
       return {
         drag,
         offset          : 0,
+        offsetCross     : 0,
+        mainAxisLine    : 0,
+        crossAxisLine   : 0,
         initialTransform: elementToMeasure.style.transform || '',
         clientRect      : getMutableClientRect(elementToMeasure),
       };
@@ -327,6 +416,22 @@ export class SortPositionStrategy implements PositionStrategy {
           return a.clientRect.left - b.clientRect.left;
         }
       }
+    });
+
+    this._itemPositions.reduce((prev: CachedItemPosition, curr: CachedItemPosition,
+                                idx: number,
+                                arr: CachedItemPosition[]) => {
+      const previousClientRect = prev.clientRect;
+      const currentClientRect  = curr.clientRect;
+      if (
+        Math.floor(currentClientRect.top) == Math.floor(previousClientRect.top) ||
+        Math.floor(currentClientRect.bottom) == Math.floor(previousClientRect.bottom)
+      ) {
+        curr.mainAxisLine = prev.mainAxisLine;
+      } else {
+        curr.mainAxisLine = prev.mainAxisLine + 1;
+      }
+      return curr;
     });
   }
 

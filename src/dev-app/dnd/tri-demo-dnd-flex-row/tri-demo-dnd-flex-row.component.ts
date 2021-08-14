@@ -85,13 +85,16 @@ export class TriDemoDndFlexRowComponent implements AfterViewInit {
       'Get up',
       'Brush teeth',
       'Take a shower',
+      'Eat Breakfast',
       'Check e-mail',
       'Walk dog',
-      'Naugh cat',
+      'Naughty cat',
       'Nice man',
+      'To Office',
+      'Have Meeting'
     ],
     [
-      
+
       'Preare for work',
       'Drive to office',
       'Üark car'

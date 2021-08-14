@@ -38,9 +38,9 @@ import { TRI_DROP_CONTAINER_GROUP, TriDropContainerGroup } from './drop-containe
   host     : {
     'class'                               : 'tri-drop-container',
     '[attr.id]'                           : 'id',
-    '[class.tri-drop-container-disabled]' : 'disabled',
-    '[class.tri-drop-container-dragging]' : '_dropContainerRef.isDragging()',
-    '[class.tri-drop-container-receiving]': '_dropContainerRef.isReceiving()',
+    '[class.tri-drop-flex-container-disabled]' : 'disabled',
+    '[class.tri-drop-flex-container-dragging]' : '_dropContainerRef.isDragging()',
+    '[class.tri-drop-flex-container-receiving]': '_dropContainerRef.isReceiving()',
   }
 })
 export class TriDropFlexContainer<T = any> extends TriDropContainer implements OnDestroy {
