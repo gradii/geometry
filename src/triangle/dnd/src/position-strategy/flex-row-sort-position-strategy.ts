@@ -74,6 +74,18 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
     });
   }
 
+  _translateItem(offsetItem: CachedItemPosition, isDragItem: boolean, siblingOffsetX: number,
+                 siblingOffsetY: number) {
+    offsetItem.offsetX += siblingOffsetX;
+    offsetItem.offsetY += siblingOffsetY;
+
+    (isDragItem ? offsetItem.drag.getPlaceholderElement() : offsetItem.drag.getRootElement())
+      .style.transform = combineTransforms(
+      `translate3d(${offsetItem.offsetX}px, ${offsetItem.offsetY}px, 0)`,
+      offsetItem.initialTransform);
+    adjustClientRect(offsetItem.clientRect, siblingOffsetY, siblingOffsetX);
+  }
+
   _sortItem(item: DragRef, pointerX: number, pointerY: number,
             pointerDelta: { x: number, y: number }): void {
 
@@ -100,14 +112,16 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
       this._getSiblingGapPx(newIndex, siblings);
 
     if (currentMainAxisLine != newMainAxisLine) {
-      let mainSiblingOffset;
-      let newMainSiblingOffset;
+      let mainSiblingOffsetX    = 0;
+      let newMainSiblingOffsetX = 0;
+      let mainSiblingOffsetY    = 0;
+      let newMainSiblingOffsetY = 0;
       if (isHorizontal) {
-        mainSiblingOffset    = -currentPosition.width + -gap;
-        newMainSiblingOffset = currentPosition.width + gap;
+        mainSiblingOffsetX    = -currentPosition.width + -gap;
+        newMainSiblingOffsetX = currentPosition.width + gap;
       } else {
-        mainSiblingOffset    = -currentPosition.height + -gap;
-        newMainSiblingOffset = currentPosition.height + gap;
+        mainSiblingOffsetY    = -currentPosition.height + -gap;
+        newMainSiblingOffsetY = currentPosition.height + gap;
       }
 
       // change the main axis line
@@ -121,58 +135,16 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
         const isDraggedItem = siblings[i].drag === item;
 
         if (isDraggedItem) {
-          offsetItem.offsetX += offsetX;
-          offsetItem.offsetY += offsetY;
-
-          item.getPlaceholderElement().style.transform = combineTransforms(
-            `translate3d(${offsetItem.offsetX}px, ${offsetItem.offsetY}px, 0)`,
-            offsetItem.initialTransform);
-
-          adjustClientRect(offsetItem.clientRect, offsetY, offsetX);
-
+          this._translateItem(offsetItem, true, offsetX, offsetY);
         } else {
           if (siblings[i].mainAxisLine == currentMainAxisLine &&
             currentIndex < i) {
-
-            if (isHorizontal) {
-              offsetItem.offsetX += mainSiblingOffset;
-            } else {
-              offsetItem.offsetY += mainSiblingOffset;
-            }
-
-            if (isHorizontal) {
-              offsetItem.drag.getRootElement().style.transform = combineTransforms(
-                `translate3d(${offsetItem.offsetX}px, 0px, 0)`,
-                offsetItem.initialTransform);
-              adjustClientRect(offsetItem.clientRect, 0, mainSiblingOffset);
-            } else {
-              offsetItem.drag.getRootElement().style.transform = combineTransforms(
-                `translate3d(0px, ${offsetItem.offsetY}px, 0)`,
-                offsetItem.initialTransform);
-              adjustClientRect(offsetItem.clientRect, mainSiblingOffset, 0);
-            }
+            this._translateItem(offsetItem, false, mainSiblingOffsetX, mainSiblingOffsetY);
           }
           if (siblings[i].mainAxisLine == newMainAxisLine &&
             newIndex <= i
           ) {
-
-            if (isHorizontal) {
-              offsetItem.offsetX += newMainSiblingOffset;
-            } else {
-              offsetItem.offsetY += newMainSiblingOffset;
-            }
-
-            if (isHorizontal) {
-              offsetItem.drag.getRootElement().style.transform = combineTransforms(
-                `translate3d(${offsetItem.offsetX}px, 0px, 0)`,
-                offsetItem.initialTransform);
-              adjustClientRect(offsetItem.clientRect, 0, newMainSiblingOffset);
-            } else {
-              offsetItem.drag.getRootElement().style.transform = combineTransforms(
-                `translate3d(0px, ${offsetItem.offsetY}px, 0)`,
-                offsetItem.initialTransform);
-              adjustClientRect(offsetItem.clientRect, newMainSiblingOffset, 0);
-            }
+            this._translateItem(offsetItem, false, newMainSiblingOffsetX, newMainSiblingOffsetY);
           }
         }
       }
@@ -201,34 +173,13 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
           return;
         }
 
-        const isDraggedItem   = sibling.drag === item;
-        const offset          = isDraggedItem ? itemOffset : siblingOffset;
-        const elementToOffset = isDraggedItem ? item.getPlaceholderElement() :
-          sibling.drag.getRootElement();
+        const isDraggedItem = sibling.drag === item;
+        const offset        = isDraggedItem ? itemOffset : siblingOffset;
 
-        // Update the offset to reflect the new position.
         if (isHorizontal) {
-          sibling.offsetX += offset;
+          this._translateItem(sibling, isDraggedItem, offset, 0);
         } else {
-          sibling.offsetY += offset;
-        }
-
-        // Since we're moving the items with a `transform`, we need to adjust their cached
-        // client rects to reflect their new position, as well as swap their positions in the cache.
-        // Note that we shouldn't use `getBoundingClientRect` here to update the cache, because the
-        // elements may be mid-animation which will give us a wrong result.
-        if (isHorizontal) {
-          // Round the transforms since some browsers will
-          // blur the elements, for sub-pixel transforms.
-          elementToOffset.style.transform = combineTransforms(
-            `translate3d(${Math.round(sibling.offsetX)}px, ${isDraggedItem ? `${sibling.offsetY}px` : 0}, 0)`,
-            sibling.initialTransform);
-          adjustClientRect(sibling.clientRect, 0, offset);
-        } else {
-          elementToOffset.style.transform = combineTransforms(
-            `translate3d(${isDraggedItem ? `${sibling.offsetX}px` : 0}, ${Math.round(sibling.offsetY)}px, 0)`,
-            sibling.initialTransform);
-          adjustClientRect(sibling.clientRect, offset, 0);
+          this._translateItem(sibling, isDraggedItem, 0, offset);
         }
 
       });
@@ -327,12 +278,15 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
     const isHorizontal = this._orientation === 'horizontal';
 
     // get current same axis all items
-    let startIdx     = 0, endIdx = this._itemPositions.length;
-    let minAxisStart = isHorizontal ? this._itemPositions[0].clientRect.top : this._itemPositions[0].clientRect.left;
-    const maxAxisEnd = isHorizontal ? this._itemPositions[this._itemPositions.length - 1].clientRect.top : this._itemPositions[this._itemPositions.length - 1].clientRect.left;
-    let pointer      = isHorizontal ? pointerY : pointerX;
-    pointer          = Math.max(Math.min(maxAxisEnd, pointer), minAxisStart);
-    let lastPointer  = -Infinity;
+    let startIdx = 0, endIdx = this._itemPositions.length;
+    const first  = this._itemPositions[0].clientRect;
+    const last   = this._itemPositions[this._itemPositions.length - 1].clientRect;
+
+    const minAxisStart = isHorizontal ? first.top : first.left;
+    const maxAxisEnd   = isHorizontal ? last.top : last.left;
+    let pointer        = isHorizontal ? pointerY : pointerX;
+    pointer            = Math.max(Math.min(maxAxisEnd, pointer), minAxisStart);
+    let lastPointer    = -Infinity;
     for (let i = 0; i < this._itemPositions.length; i++) {
       // pointerX
       const {left, top}  = this._itemPositions[i].clientRect;
@@ -346,7 +300,6 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
         startIdx    = i;
       }
     }
-
 
     return [startIdx, endIdx];
   }
@@ -384,7 +337,6 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
         // dragging, we don't consider it a direction swap.
         if (drag === this._previousSwap.drag && this._previousSwap.overlaps &&
           direction === this._previousSwap.delta) {
-          console.log('continuing swap');
           return false;
         }
       }
