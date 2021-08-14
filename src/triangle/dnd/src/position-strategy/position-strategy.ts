@@ -7,10 +7,37 @@
 import { Injectable } from '@angular/core';
 import { animationFrameScheduler, interval, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { DragRefInternal as DragRef } from '../drag-drop-ref/drag-ref';
+import { CachedItemPosition } from '../drop-container.interface';
 import { AutoScrollHorizontalDirection, AutoScrollVerticalDirection } from '../enum';
 import { incrementHorizontalScroll, incrementVerticalScroll } from '../utils';
 
-export class PositionStrategy {
+
+export interface PositionStrategy {
+
+  _itemPositions: CachedItemPosition[];
+
+  _cacheItemPositions(): void;
+
+  _sortItem(item: DragRef, pointerX: number, pointerY: number,
+            pointerDelta: { x: number, y: number }): void;
+
+  _findItemIndex(item: DragRef): number;
+
+  _getItemIndexFromPointerPosition(item: DragRef, pointerX: number, pointerY: number,
+                                   delta?: { x: number, y: number }): number;
+
+  adjustItemPositions(cb: (clientRect: ClientRect) => void): void;
+
+  repositionDraggingItem(): void;
+
+  reset(): void;
+
+  dispose(): void;
+}
+
+
+// export class PositionStrategy {
   //
   // /** Node that is being auto-scrolled. */
   // private _scrollNode: HTMLElement | Window;
@@ -80,4 +107,4 @@ export class PositionStrategy {
   // }
   //
 
-}
+// }

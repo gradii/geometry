@@ -15,7 +15,9 @@ import { findIndex } from '../utils';
 import { isPointerNearClientRect } from '../utils/client-rect';
 import { DragRefInternal as DragRef } from './drag-ref';
 import { DndContainerRef } from './dnd-container-ref';
-import { SortPositionStrategy } from '../position-strategy/sort-position-strategy';
+import {
+} from '../position-strategy/sort-position-strategy';
+import { PositionStrategy } from '../position-strategy/position-strategy';
 
 /**
  * Reference to a drop list. Used to manipulate or dispose of the container.
@@ -39,7 +41,7 @@ export class DropFlexContainerRef<T = any> extends DndContainerRef<T> {
     _document: any,
     protected _ngZone: NgZone,
     protected _viewportRuler: ViewportRuler,
-    protected positionStrategy: SortPositionStrategy
+    protected positionStrategy: PositionStrategy
   ) {
     super(element,
       _dragDropRegistry,

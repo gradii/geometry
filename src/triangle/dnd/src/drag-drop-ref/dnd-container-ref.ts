@@ -13,7 +13,7 @@ import { Subject, Subscription } from 'rxjs';
 import { DragDropRegistry } from '../drag-drop-registry';
 import { DragCSSStyleDeclaration } from '../drag-styling';
 import { ParentPositionTracker } from '../parent-position-tracker';
-import { PositionStrategy, SortPositionStrategy } from '../position-strategy/sort-position-strategy';
+import { PositionStrategy } from '../position-strategy/position-strategy';
 import { ScrollingStrategy } from '../scrolling-strategy/scrolling-strategy';
 import { adjustClientRect, isInsideClientRect, } from '../utils/client-rect';
 import { orderByHierarchy } from '../utils/hierarchy';

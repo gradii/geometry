@@ -6,10 +6,10 @@
 
 import { CachedItemPosition } from '@gradii/triangle/dnd/src/drop-container.interface';
 import { DndContainerRef, } from '../drag-drop-ref/dnd-container-ref';
-import { DropGridContainerRef } from '../drag-drop-ref/drop-grid-container-ref';
 import { DragRefInternal as DragRef } from '../drag-drop-ref/drag-ref';
+import { DropGridContainerRef } from '../drag-drop-ref/drop-grid-container-ref';
 import { DragDropRegistry } from '../drag-drop-registry';
-import { PositionStrategy } from './sort-position-strategy';
+import { PositionStrategy } from './position-strategy';
 
 /**
  * @license
@@ -26,8 +26,13 @@ export class GridPositionStrategy implements PositionStrategy {
   constructor(public _dragDropRegistry: DragDropRegistry<DragRef, DndContainerRef>) {
   }
 
-  _getItemIndexFromPointerPosition(item: DragRef, pointerX: number, pointerY: number) {
+  _sortItem(item: DragRef, pointerX: number, pointerY: number,
+            pointerDelta: { x: number; y: number; }): void {
+    throw new Error('Method not implemented.');
+  }
 
+  _getItemIndexFromPointerPosition(item: DragRef, pointerX: number, pointerY: number): number {
+    return -1;
   }
 
   pixelsToPositionX(item: DragRef, pointerX: number) {
