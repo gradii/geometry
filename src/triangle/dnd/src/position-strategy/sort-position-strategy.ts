@@ -90,24 +90,6 @@ export class SortPositionStrategy implements PositionStrategy {
     });
   }
 
-  _debug(element: HTMLElement, clientRect: ClientRect) {
-    const realRect = element.getBoundingClientRect();
-
-    if (realRect.left !== clientRect.left ||
-      realRect.right !== clientRect.right ||
-      realRect.top !== clientRect.top ||
-      realRect.bottom !== clientRect.bottom) {
-      console.assert(realRect.left === clientRect.left,
-        `${realRect.left} === ${clientRect.left}`);
-      console.assert(realRect.right === clientRect.right,
-        `${realRect.right} === ${clientRect.right}`);
-      console.assert(realRect.top === clientRect.top, `${realRect.top} === ${clientRect.top}`);
-      console.assert(realRect.bottom === clientRect.bottom,
-        `${realRect.bottom} === ${clientRect.bottom}`);
-      debugger;
-    }
-  }
-
   _sortItem(item: DragRef, pointerX: number, pointerY: number,
             pointerDelta: { x: number, y: number }): void {
 
@@ -130,16 +112,18 @@ export class SortPositionStrategy implements PositionStrategy {
     const newMainAxisLine     = siblings[newIndex].mainAxisLine;
 
 
+    const gap = this._getSiblingGapPx(currentIndex, siblings) ||
+      this._getSiblingGapPx(newIndex, siblings);
+
     if (currentMainAxisLine != newMainAxisLine) {
+      const mainSiblingOffsetX    = -currentPosition.width + -gap;
+      const newMainSiblingOffsetX = currentPosition.width + gap;
+
       // change the main axis line
       siblings[currentIndex].mainAxisLine = newMainAxisLine;
 
       // How many pixels the item's placeholder should be offset.
-      const [offsetX, offsetY] = this._getItemOffsetPx(currentPosition, newPosition, 1);
-
-      const mainSiblingOffsetX    = this._getSiblingOffsetPx(currentIndex, siblings, -1);
-      const newMainSiblingOffsetX = this._getSiblingOffsetPx(currentIndex, siblings, 1);
-
+      let [offsetX, offsetY] = this._getItemOffsetPx(currentPosition, newPosition, 1);
 
       for (let i = 0; i < siblings.length; i++) {
         const offsetItem    = siblings[i];
@@ -153,9 +137,6 @@ export class SortPositionStrategy implements PositionStrategy {
             `translate3d(${offsetItem.offset}px, ${offsetItem.offsetCross}px, 0)`,
             offsetItem.initialTransform);
           adjustClientRect(offsetItem.clientRect, offsetY, offsetX);
-
-          this._debug(offsetItem.drag.getPlaceholderElement(),
-            offsetItem.clientRect);
 
         } else {
           if (siblings[i].mainAxisLine == currentMainAxisLine &&
@@ -184,21 +165,54 @@ export class SortPositionStrategy implements PositionStrategy {
       // Shuffle the array in place. if to < from newIndex can be 0, but it's ok
       moveItemInArray(siblings, currentIndex,
         currentIndex < newIndex ? newIndex - 1 : newIndex);
-      return;
+    } else {
+      // How many pixels the item's placeholder should be offset.
+      const [itemOffset, itemOffsetY] = this._getItemOffsetPx(currentPosition, newPosition, delta);
+
+      // How many pixels all the other items should be offset.
+      const siblingOffset = this._getSiblingOffsetPx(currentIndex, siblings, delta);
+
+      // Save the previous order of the items before moving the item to its new index.
+      // We use this to check whether an item has been moved as a result of the sorting.
+      const oldOrder = siblings.slice();
+
+      // Shuffle the array in place.
+      moveItemInArray(siblings, currentIndex, newIndex);
+
+      siblings.forEach((sibling, index) => {
+        // Don't do anything if the position hasn't changed.
+        if (oldOrder[index] === sibling) {
+          return;
+        }
+
+        const isDraggedItem   = sibling.drag === item;
+        const offset          = isDraggedItem ? itemOffset : siblingOffset;
+        const elementToOffset = isDraggedItem ? item.getPlaceholderElement() :
+          sibling.drag.getRootElement();
+
+        // Update the offset to reflect the new position.
+        sibling.offset += offset;
+
+        // Since we're moving the items with a `transform`, we need to adjust their cached
+        // client rects to reflect their new position, as well as swap their positions in the cache.
+        // Note that we shouldn't use `getBoundingClientRect` here to update the cache, because the
+        // elements may be mid-animation which will give us a wrong result.
+        if (isHorizontal) {
+          // Round the transforms since some browsers will
+          // blur the elements, for sub-pixel transforms.
+          elementToOffset.style.transform = combineTransforms(
+            `translate3d(${Math.round(
+              sibling.offset)}px, ${isDraggedItem ? `${sibling.offsetCross}px` : 0}, 0)`,
+            sibling.initialTransform);
+          adjustClientRect(sibling.clientRect, 0, offset);
+        } else {
+          elementToOffset.style.transform = combineTransforms(
+            `translate3d(0, ${Math.round(sibling.offset)}px, 0)`, sibling.initialTransform);
+          adjustClientRect(sibling.clientRect, offset, 0);
+        }
+
+      });
     }
-
-    // How many pixels the item's placeholder should be offset.
-    const [itemOffset, itemOffsetY] = this._getItemOffsetPx(currentPosition, newPosition, delta);
-
-    // How many pixels all the other items should be offset.
-    const siblingOffset = this._getSiblingOffsetPx(currentIndex, siblings, delta);
-
-    // Save the previous order of the items before moving the item to its new index.
-    // We use this to check whether an item has been moved as a result of the sorting.
-    const oldOrder = siblings.slice();
-
-    // Shuffle the array in place.
-    moveItemInArray(siblings, currentIndex, newIndex);
 
     this.sorted.next({
       previousIndex: currentIndex,
@@ -207,40 +221,6 @@ export class SortPositionStrategy implements PositionStrategy {
       item
     });
 
-    siblings.forEach((sibling, index) => {
-      // Don't do anything if the position hasn't changed.
-      if (oldOrder[index] === sibling) {
-        return;
-      }
-
-      const isDraggedItem   = sibling.drag === item;
-      const offset          = isDraggedItem ? itemOffset : siblingOffset;
-      const elementToOffset = isDraggedItem ? item.getPlaceholderElement() :
-        sibling.drag.getRootElement();
-
-      // Update the offset to reflect the new position.
-      sibling.offset += offset;
-
-      // Since we're moving the items with a `transform`, we need to adjust their cached
-      // client rects to reflect their new position, as well as swap their positions in the cache.
-      // Note that we shouldn't use `getBoundingClientRect` here to update the cache, because the
-      // elements may be mid-animation which will give us a wrong result.
-      if (isHorizontal) {
-        // Round the transforms since some browsers will
-        // blur the elements, for sub-pixel transforms.
-        elementToOffset.style.transform = combineTransforms(
-          `translate3d(${Math.round(
-            sibling.offset)}px, ${isDraggedItem ? sibling.offsetCross : 0}, 0)`,
-          sibling.initialTransform);
-        adjustClientRect(sibling.clientRect, 0, offset);
-      } else {
-        elementToOffset.style.transform = combineTransforms(
-          `translate3d(0, ${Math.round(sibling.offset)}px, 0)`, sibling.initialTransform);
-        adjustClientRect(sibling.clientRect, offset, 0);
-      }
-
-      this._debug(elementToOffset, sibling.clientRect);
-    });
 
     // Note that it's important that we do this after the client rects have been adjusted.
     this._previousSwap.overlaps = isInsideClientRect(newPosition, pointerX, pointerY);
@@ -270,6 +250,25 @@ export class SortPositionStrategy implements PositionStrategy {
     return [itemOffsetX, itemOffsetY];
   }
 
+  private _getSiblingGapPx(itemIndex: number, siblings: CachedItemPosition[],
+  ) {
+    const isHorizontal    = this._orientation === 'horizontal';
+    const currentItem     = siblings[itemIndex];
+    const currentPosition = currentItem.clientRect;
+
+    if (siblings[itemIndex + 1] && currentItem.mainAxisLine == siblings[itemIndex + 1].mainAxisLine) {
+      const start = isHorizontal ? 'left' : 'top';
+      const end   = isHorizontal ? 'right' : 'bottom';
+      return (siblings[itemIndex + 1].clientRect[start] - currentPosition[end]);
+    } else if (siblings[itemIndex - 1] && currentItem.mainAxisLine == siblings[itemIndex - 1].mainAxisLine) {
+      const start = isHorizontal ? 'left' : 'top';
+      const end   = isHorizontal ? 'right' : 'bottom';
+      return (currentPosition[start] - siblings[itemIndex - 1].clientRect[end]);
+    }
+
+    return 0;
+  }
+
   /**
    * Gets the offset in pixels by which the items that aren't being dragged should be moved.
    * @param currentIndex Index of the item currently being dragged.
@@ -281,7 +280,8 @@ export class SortPositionStrategy implements PositionStrategy {
                               delta: 1 | -1) {
 
     const isHorizontal     = this._orientation === 'horizontal';
-    const currentPosition  = siblings[currentIndex].clientRect;
+    const currentItem      = siblings[currentIndex];
+    const currentPosition  = currentItem.clientRect;
     const immediateSibling = siblings[currentIndex + delta * -1];
     let siblingOffset      = currentPosition[isHorizontal ? 'width' : 'height'] * delta;
 
