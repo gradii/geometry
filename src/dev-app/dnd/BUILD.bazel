@@ -14,6 +14,7 @@ ng_module(
         ":tri_demo_dnd_not_cdk_component_scss",
         ":tri_demo_dnd_grid_component_scss",
         ":tri_demo_dnd_grid_flex_row_component_scss",
+        ":tri_demo_dnd_grid_flex_column_component_scss",
         ":tri_demo_dnd_drag_container_component_scss"
     ],
     deps = [
@@ -56,6 +57,11 @@ sass_binary(
 sass_binary(
     name = "tri_demo_dnd_grid_flex_row_component_scss",
     src = "tri-demo-dnd-flex-row/tri-demo-dnd-flex-row.component.scss",
+)
+
+sass_binary(
+    name = "tri_demo_dnd_grid_flex_column_component_scss",
+    src = "tri-demo-dnd-flex-column/tri-demo-dnd-flex-column.component.scss",
 )
 
 sass_binary(

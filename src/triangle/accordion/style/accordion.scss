@@ -12,6 +12,7 @@ $accordion-prefix-cls : "#{v.$tri-prefix}-accordion";
 }
 
 .#{$accordion-prefix-cls} {
+  display       : block;
   border-radius : v.$border-radius-base;
 
   @at-root & > #{&}-item {
@@ -44,6 +45,16 @@ $accordion-prefix-cls : "#{v.$tri-prefix}-accordion";
         left           : 16px;
       }
     }
+  }
+
+  @at-root &-sm > #{&}-item > #{&}-header {
+    line-height : 1rem;
+    padding     : 4px 0 4px 28px;
+  }
+
+  @at-root &-lg > #{&}-item > #{&}-header {
+    line-height : 2rem;
+    padding     : .75rem 0 .75rem 2rem;
   }
 
   @at-root &-content {

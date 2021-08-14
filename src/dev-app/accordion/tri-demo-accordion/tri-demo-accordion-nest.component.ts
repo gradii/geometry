@@ -15,19 +15,21 @@ import {
 @Component({
   selector: 'tri-demo-accordion-nest',
   template: `
-    <tri-accordion>
-      <tri-accordion-item *ngFor="let panel of panels" [title]="panel.name" [active]="panel.active">
-        <p>{{panel.name}} 的内容</p>
-        <div *ngIf="panel.childPanel&&panel.childPanel.length>0">
-          <tri-accordion>
-            <tri-accordion-item *ngFor="let childPanel of panel.childPanel" [title]="childPanel.name"
-                         [active]="childPanel.active">
-              <p>{{childPanel.name}} 的内容</p>
-            </tri-accordion-item>
-          </tri-accordion>
-        </div>
-      </tri-accordion-item>
-    </tri-accordion>
+      <tri-accordion>
+          <tri-accordion-item *ngFor="let panel of panels" [title]="panel.name"
+                              [expanded]="panel.active">
+              <p>{{panel.name}} 的内容</p>
+              <div *ngIf="panel.childPanel&&panel.childPanel.length>0">
+                  <tri-accordion>
+                      <tri-accordion-item *ngFor="let childPanel of panel.childPanel"
+                                          [title]="childPanel.name"
+                                          [expanded]="childPanel.active">
+                          <p>{{childPanel.name}} 的内容</p>
+                      </tri-accordion-item>
+                  </tri-accordion>
+              </div>
+          </tri-accordion-item>
+      </tri-accordion>
   `,
   styles  : []
 })

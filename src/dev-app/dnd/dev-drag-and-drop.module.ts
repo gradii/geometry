@@ -16,6 +16,7 @@ import { TriSelectModule } from '@gradii/triangle/select';
 import { DevDragAndDropComponent } from './dev-drag-and-drop.component';
 import { TriDemoDragAndDropChildGroupsWithMonkeyPatchComponent } from './tri-demo-dnd-child-groups-with-monkey-patch/tri-demo-drag-and-drop-child-groups-with-monkey-patch.component';
 import { TriDemoDndDragContainerComponent } from './tri-demo-dnd-drag-container/tri-demo-dnd-drag-container.component';
+import { TriDemoDndFlexColumnComponent } from './tri-demo-dnd-flex-column/tri-demo-dnd-flex-column.component';
 import { TriDemoDndFlexRowComponent } from './tri-demo-dnd-flex-row/tri-demo-dnd-flex-row.component';
 import { TriDemoDndGridComponent } from './tri-demo-dnd-grid/tri-demo-dnd-grid.component';
 import { ListItemComponent } from './tri-demo-dnd-nest/shared/list-item/list-item.component';
@@ -46,6 +47,7 @@ import { TriDemoDndStructureComponent } from './tri-demo-dnd-structure/tri-demo-
           },
           {path: 'tri-demo-drag-and-no-cdk', component: TriDemoDndNotCdkComponent},
           {path: 'tri-demo-drag-flex-row', component: TriDemoDndFlexRowComponent},
+          {path: 'tri-demo-drag-flex-column', component: TriDemoDndFlexColumnComponent},
           {path: 'tri-demo-drag-grid', component: TriDemoDndGridComponent},
           {path: 'tri-demo-drag-drag-container', component: TriDemoDndDragContainerComponent},
         ]
@@ -62,6 +64,7 @@ import { TriDemoDndStructureComponent } from './tri-demo-dnd-structure/tri-demo-
     TriDemoDragAndDropChildGroupsWithMonkeyPatchComponent,
     TriDemoDndNotCdkComponent,
     TriDemoDndFlexRowComponent,
+    TriDemoDndFlexColumnComponent,
     TriDemoDndGridComponent,
     TriDemoDndDragContainerComponent
   ]

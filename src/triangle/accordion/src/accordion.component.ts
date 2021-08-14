@@ -4,6 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { AccordionItemComponent } from './accordion-item.component';
 
@@ -12,17 +13,20 @@ import { AccordionItemComponent } from './accordion-item.component';
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template       : `
-    <div class="tri-accordion"
-         [class.tri-accordion-borderless]="!bordered">
-      <ng-content></ng-content>
-    </div>
+    <ng-content></ng-content>
   `,
   styleUrls      : [`../style/accordion.css`],
-  styles         : [`:host {
-    display: block;
-  }`]
+  host           : {
+    'class'                           : 'tri-accordion',
+    '[class.tri-accordion-borderless]': '!bordered',
+    '[class.tri-accordion-sm]'        : 'size === "small"',
+    '[class.tri-accordion-lg]'        : 'size === "large"',
+  }
 })
 export class AccordionComponent {
+
+  private _defaultExpanded = false;
+
   /**
    * all child accordion
    */
@@ -42,6 +46,18 @@ export class AccordionComponent {
    */
   @Input() bordered = true;
 
+  @Input()
+  get defaultExpanded(): boolean {
+    return this._defaultExpanded;
+  }
+
+  set defaultExpanded(value: boolean) {
+    this._defaultExpanded = coerceBooleanProperty(value);
+  }
+
+  @Input()
+  size: string | 'default' | 'large' | 'small';
+
   constructor() {
   }
 
@@ -50,7 +66,7 @@ export class AccordionComponent {
       this.panels.map((item, index) => {
         const curIndex = this.panels.indexOf(accordion);
         if (index !== curIndex) {
-          item.active = false;
+          item.expanded = false;
         }
       });
     }
@@ -58,5 +74,8 @@ export class AccordionComponent {
 
   addTab(accordion: AccordionItemComponent) {
     this.panels.push(accordion);
+    accordion.expanded = this._defaultExpanded;
   }
+
+  static ngAcceptInputType_defaultExpanded: BooleanInput;
 }

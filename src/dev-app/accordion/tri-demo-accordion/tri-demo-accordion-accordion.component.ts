@@ -15,14 +15,14 @@ import {
 @Component({
   selector: 'tri-demo-accordion-accordion',
   template: `
-    <tri-accordion [accordion]="true">
-      <tri-accordion-item
-        *ngFor="let panel of panels"
-        [title]="panel.name"
-        [active]="panel.active">
-        <p>{{panel.name}} 的内容</p>
-      </tri-accordion-item>
-    </tri-accordion>
+      <tri-accordion [accordion]="true">
+          <tri-accordion-item
+                  *ngFor="let panel of panels"
+                  [title]="panel.name"
+                  [expanded]="panel.active">
+              <p>{{panel.name}} 的内容</p>
+          </tri-accordion-item>
+      </tri-accordion>
   `,
   styles  : []
 })

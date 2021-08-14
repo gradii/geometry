@@ -5,6 +5,7 @@
  */
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Component, ElementRef, Host, HostBinding, Input } from '@angular/core';
 import { AccordionComponent } from './accordion.component';
 
@@ -12,9 +13,9 @@ import { AccordionComponent } from './accordion.component';
   selector  : 'tri-accordion-item',
   template  : `
     <div class="tri-accordion-header"
-         [class.expanded]="_active"
-         [class.accordiond]="!_active"
-         [attr.aria-expanded]="_active" (click)="clickHeader($event)"
+         [class.expanded]="_expanded"
+         [class.accordiond]="!_expanded"
+         [attr.aria-expanded]="_expanded" (click)="clickHeader($event)"
          role="tab">
       <tri-icon class="arrow" svgIcon="outline:right"></tri-icon>
       <ng-template [ngIf]="title">
@@ -25,7 +26,7 @@ import { AccordionComponent } from './accordion.component';
       </ng-template>
     </div>
     <div class="tri-accordion-content"
-         [@accordionState]="_active?'active':'inactive'">
+         [@accordionState]="_expanded?'active':'inactive'">
       <div class="tri-accordion-content-box">
         <ng-content></ng-content>
       </div>
@@ -84,29 +85,31 @@ export class AccordionItemComponent {
     this._accordion.addTab(this);
   }
 
-  _active: boolean;
+  _expanded: boolean;
 
   /**
    * Whether current tab is choosed
    * 当前tab是否被选中
    */
   @Input()
-  get active(): boolean {
-    return this._active;
+  get expanded(): boolean {
+    return this._expanded;
   }
 
-  set active(active: boolean) {
-    if (this._active === active) {
+  set expanded(active: boolean) {
+    if (this._expanded === active) {
       return;
     }
     if (!this.disabled) {
-      this._active = active;
+      this._expanded = coerceBooleanProperty(active);
     }
   }
 
   clickHeader($event: any) {
-    this.active = !this.active;
+    this.expanded = !this.expanded;
     /** trigger host accordionSet click event */
     this._accordion.click(this);
   }
+
+  static ngAcceptInputType_expand: BooleanInput;
 }
