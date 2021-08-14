@@ -100,8 +100,15 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
       this._getSiblingGapPx(newIndex, siblings);
 
     if (currentMainAxisLine != newMainAxisLine) {
-      const mainSiblingOffsetX    = -currentPosition.width + -gap;
-      const newMainSiblingOffsetX = currentPosition.width + gap;
+      let mainSiblingOffset;
+      let newMainSiblingOffset;
+      if (isHorizontal) {
+        mainSiblingOffset    = -currentPosition.width + -gap;
+        newMainSiblingOffset = currentPosition.width + gap;
+      } else {
+        mainSiblingOffset    = -currentPosition.height + -gap;
+        newMainSiblingOffset = currentPosition.height + gap;
+      }
 
       // change the main axis line
       siblings[currentIndex].mainAxisLine = newMainAxisLine;
@@ -114,34 +121,57 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
         const isDraggedItem = siblings[i].drag === item;
 
         if (isDraggedItem) {
-          offsetItem.offset += offsetX;
-          offsetItem.offsetCross += offsetY;
+          offsetItem.offset += isHorizontal ? offsetX : offsetY;
+          offsetItem.offsetCross += isHorizontal ? offsetY : offsetX;
 
-          item.getPlaceholderElement().style.transform = combineTransforms(
-            `translate3d(${offsetItem.offset}px, ${offsetItem.offsetCross}px, 0)`,
-            offsetItem.initialTransform);
+          if (isHorizontal) {
+            item.getPlaceholderElement().style.transform = combineTransforms(
+              `translate3d(${offsetItem.offset}px, ${offsetItem.offsetCross}px, 0)`,
+              offsetItem.initialTransform);
+
+          } else {
+            item.getPlaceholderElement().style.transform = combineTransforms(
+              `translate3d(${offsetItem.offsetCross}px, ${offsetItem.offset}px, 0)`,
+              offsetItem.initialTransform);
+          }
           adjustClientRect(offsetItem.clientRect, offsetY, offsetX);
 
         } else {
           if (siblings[i].mainAxisLine == currentMainAxisLine &&
             currentIndex < i) {
 
-            offsetItem.offset += mainSiblingOffsetX;
+            offsetItem.offset += mainSiblingOffset;
 
-            offsetItem.drag.getRootElement().style.transform = combineTransforms(
-              `translate3d(${offsetItem.offset}px, 0px, 0)`,
-              offsetItem.initialTransform);
-            adjustClientRect(offsetItem.clientRect, 0, mainSiblingOffsetX);
+            if (isHorizontal) {
+              offsetItem.drag.getRootElement().style.transform = combineTransforms(
+                `translate3d(${offsetItem.offset}px, 0px, 0)`,
+                offsetItem.initialTransform);
+              adjustClientRect(offsetItem.clientRect, 0, mainSiblingOffset);
+            } else {
+              offsetItem.drag.getRootElement().style.transform = combineTransforms(
+                `translate3d(0px, ${offsetItem.offset}px, 0)`,
+                offsetItem.initialTransform);
+              adjustClientRect(offsetItem.clientRect, mainSiblingOffset, 0);
+
+            }
           }
           if (siblings[i].mainAxisLine == newMainAxisLine &&
             newIndex <= i
           ) {
-            offsetItem.offset += newMainSiblingOffsetX;
+            offsetItem.offset += newMainSiblingOffset;
 
-            offsetItem.drag.getRootElement().style.transform = combineTransforms(
-              `translate3d(${offsetItem.offset}px, 0px, 0)`,
-              offsetItem.initialTransform);
-            adjustClientRect(offsetItem.clientRect, 0, newMainSiblingOffsetX);
+            if (isHorizontal) {
+
+              offsetItem.drag.getRootElement().style.transform = combineTransforms(
+                `translate3d(${offsetItem.offset}px, 0px, 0)`,
+                offsetItem.initialTransform);
+              adjustClientRect(offsetItem.clientRect, 0, newMainSiblingOffset);
+            } else {
+              offsetItem.drag.getRootElement().style.transform = combineTransforms(
+                `translate3d(0px, ${offsetItem.offset}px, 0)`,
+                offsetItem.initialTransform);
+              adjustClientRect(offsetItem.clientRect, newMainSiblingOffset, 0);
+            }
           }
         }
       }
@@ -151,7 +181,8 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
         currentIndex < newIndex ? newIndex - 1 : newIndex);
     } else {
       // How many pixels the item's placeholder should be offset.
-      const [itemOffset, itemOffsetY] = this._getItemOffsetPx(currentPosition, newPosition, delta);
+      let [itemOffset, itemOffsetY] = this._getItemOffsetPx(currentPosition, newPosition, delta);
+      itemOffset                    = isHorizontal ? itemOffset : itemOffsetY;
 
       // How many pixels all the other items should be offset.
       const siblingOffset = this._getSiblingOffsetPx(currentIndex, siblings, delta);
@@ -185,13 +216,13 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
           // Round the transforms since some browsers will
           // blur the elements, for sub-pixel transforms.
           elementToOffset.style.transform = combineTransforms(
-            `translate3d(${Math.round(
-              sibling.offset)}px, ${isDraggedItem ? `${sibling.offsetCross}px` : 0}, 0)`,
+            `translate3d(${Math.round(sibling.offset)}px, ${isDraggedItem ? `${sibling.offsetCross}px` : 0}, 0)`,
             sibling.initialTransform);
           adjustClientRect(sibling.clientRect, 0, offset);
         } else {
           elementToOffset.style.transform = combineTransforms(
-            `translate3d(0, ${Math.round(sibling.offset)}px, 0)`, sibling.initialTransform);
+            `translate3d(${isDraggedItem ? `${sibling.offsetCross}px` : 0}, ${Math.round(sibling.offset)}px, 0)`,
+            sibling.initialTransform);
           adjustClientRect(sibling.clientRect, offset, 0);
         }
 
@@ -225,8 +256,8 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
 
     // Account for differences in the item width/height.
     if (delta === -1) {
-      itemOffsetX += isHorizontal ? newPosition.width - currentPosition.width :
-        newPosition.height - currentPosition.height;
+      itemOffsetX += newPosition.width - currentPosition.width;
+      itemOffsetY += newPosition.height - currentPosition.height;
       // itemOffsetY += isHorizontal ? newPosition.height - currentPosition.height :
       //   newPosition.width - currentPosition.width;
     }
@@ -287,6 +318,34 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
     return siblingOffset;
   }
 
+  _getCurrentSameAxisStartEnd(pointerX: number, pointerY: number) {
+    const isHorizontal = this._orientation === 'horizontal';
+
+    // get current same axis all items
+    let startIdx     = 0, endIdx = this._itemPositions.length;
+    let minAxisStart = isHorizontal ? this._itemPositions[0].clientRect.top : this._itemPositions[0].clientRect.left;
+    const maxAxisEnd = isHorizontal ? this._itemPositions[this._itemPositions.length - 1].clientRect.top : this._itemPositions[this._itemPositions.length - 1].clientRect.left;
+    let pointer      = isHorizontal ? pointerY : pointerX;
+    pointer          = Math.max(Math.min(maxAxisEnd, pointer), minAxisStart);
+    let lastPointer  = -Infinity;
+    for (let i = 0; i < this._itemPositions.length; i++) {
+      // pointerX
+      const {left, top}  = this._itemPositions[i].clientRect;
+      const itemPosition = isHorizontal ? top : left;
+      if (Math.floor(pointer) < Math.floor(itemPosition)) {
+        endIdx = i;
+        break;
+      }
+      if (Math.floor(itemPosition) > Math.floor(lastPointer)) {
+        lastPointer = itemPosition;
+        startIdx    = i;
+      }
+    }
+
+
+    return [startIdx, endIdx];
+  }
+
   /**
    * Gets the index of an item in the drop container, based on the position of the user's pointer.
    * @param item Item that is being sorted.
@@ -298,23 +357,8 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
                                    delta?: { x: number, y: number }): number {
     const isHorizontal = this._orientation === 'horizontal';
 
-    let startIdx = 0, endIdx = this._itemPositions.length;
-    let minY     = this._itemPositions[0].clientRect.top;
-    const maxY   = this._itemPositions[this._itemPositions.length - 1].clientRect.top;
-    pointerY     = Math.max(Math.min(maxY, pointerY), minY);
-    let lastY    = -Infinity;
-    for (let i = 0; i < this._itemPositions.length; i++) {
-      // pointerX
-      const {left, top} = this._itemPositions[i].clientRect;
-      if (Math.floor(pointerY) < Math.floor(top)) {
-        endIdx = i;
-        break;
-      }
-      if (Math.floor(top) > Math.floor(lastY)) {
-        lastY    = top;
-        startIdx = i;
-      }
-    }
+    const [startIdx, endIdx] = this._getCurrentSameAxisStartEnd(pointerX, pointerY);
+
 
     const index = findIndex(this._itemPositions, ({drag, clientRect}, _, array) => {
       if (drag === item) {
@@ -407,10 +451,14 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
                                 arr: CachedItemPosition[]) => {
       const previousClientRect = prev.clientRect;
       const currentClientRect  = curr.clientRect;
-      if (
+      let isSameAxis           = isHorizontal ? (
         Math.floor(currentClientRect.top) == Math.floor(previousClientRect.top) ||
         Math.floor(currentClientRect.bottom) == Math.floor(previousClientRect.bottom)
-      ) {
+      ) : (
+        Math.floor(currentClientRect.left) == Math.floor(previousClientRect.left) ||
+        Math.floor(currentClientRect.right) == Math.floor(previousClientRect.right)
+      );
+      if (isSameAxis) {
         curr.mainAxisLine = prev.mainAxisLine;
       } else {
         curr.mainAxisLine = prev.mainAxisLine + 1;

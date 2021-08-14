@@ -50,7 +50,7 @@ import { asapScheduler } from 'rxjs';
                 <div class="example-container">
                   <div
                     triDropFlexContainer
-                    triDropFlexContainerOrientation="horizontal"
+                    triDropFlexContainerOrientation="vertical"
                     [triDropFlexContainerData]="item"
                     class="example-list container-example-list"
                     (triDropFlexContainerDropped)="drop($event)"
