@@ -7,9 +7,7 @@
 import { coerceElement } from '@angular/cdk/coercion';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { ElementRef, NgZone } from '@angular/core';
-import { TriDropGridContainer } from '@gradii/triangle/dnd';
-import { combineTransforms, DragCSSStyleDeclaration } from '@gradii/triangle/dnd/src/drag-styling';
-import { adjustClientRect } from '@gradii/triangle/dnd/src/utils/client-rect';
+import { TriDropGridContainer } from '../directives/drop-grid-container';
 import { GridPushService } from '../drag-grid/grid-push.service';
 import { GridSwapService } from '../drag-grid/grid-swap.service';
 import { GridPositionStrategy } from '../position-strategy/grid-position-strategy';
@@ -40,6 +38,9 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
 
   compactType: CompactType;
 
+
+  private pushService;
+
   /** Emits as the user is swapping items while actively dragging. */
   readonly arranged = new Subject<{
     previousIndex: number,
@@ -65,7 +66,7 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
       _viewportRuler,
       positionStrategy);
 
-    const pushService = new GridPushService();
+    this.pushService  = new GridPushService(this);
     const swapService = new GridSwapService();
   }
 
@@ -194,6 +195,10 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
 
 
     placeholderRef.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+
+
+    this.pushService._pushItem(item, (this.data as unknown as TriDropGridContainer), positionX, positionY,
+      pointerDelta);
   }
 
   checkCollision() {

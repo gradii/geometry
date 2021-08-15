@@ -233,6 +233,8 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
 
   private compactService;
 
+  private pushService;
+
   constructor(
     /** Element that the drop list is attached to. */
     public element: ElementRef<HTMLElement>, dragDrop: DragDrop,
@@ -276,7 +278,6 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
 
 
     this.compactService = new CompactPosition(this);
-
 
     this._ngZone.runOutsideAngular(() => {
       this.calculateLayout$.pipe(
