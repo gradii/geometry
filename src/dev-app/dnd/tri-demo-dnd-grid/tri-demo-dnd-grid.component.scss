@@ -31,7 +31,8 @@
 
 .example-grid-box {
   //position: absolute;
-  padding       : 20px 10px;
+  //padding       : 20px 10px;
+  overflow: visible;
   border-bottom : solid 1px #ccc;
   color         : rgba(0, 0, 0, 0.87);
   //display         : flex;

@@ -6,7 +6,6 @@
 
 import { CdkScrollableModule } from '@angular/cdk/scrolling';
 import { NgModule } from '@angular/core';
-import { TriDragGridItemComponent } from './drag-grid/drag-grid-item.component';
 import { TriDrag } from './directives/drag';
 import { TriDragContainer } from './directives/drag-container';
 import { TriDragHandle } from './directives/drag-handle';
@@ -17,6 +16,7 @@ import { TriDropFlexContainer } from './directives/drop-flex-container';
 import { TriDropGridContainer } from './directives/drop-grid-container';
 import { TriDropListContainer } from './directives/drop-list-container';
 import { DragDrop } from './drag-drop';
+import { TriDragGridItemComponent, TriDragResizeContainer } from './drag-grid/drag-grid-item.component';
 
 @NgModule({
   declarations: [
@@ -30,21 +30,24 @@ import { DragDrop } from './drag-drop';
     TriDragHandle,
     TriDragPreview,
     TriDragPlaceholder,
-    TriDragGridItemComponent
+    TriDragGridItemComponent,
+
+    TriDragResizeContainer
   ],
-    exports: [
-        CdkScrollableModule,
-        TriDropListContainer,
-        TriDropContainerGroup,
-        TriDrag,
-        TriDragHandle,
-        TriDragPreview,
-        TriDragPlaceholder,
-        TriDropGridContainer,
-        TriDragContainer,
-        TriDragGridItemComponent,
-        TriDropFlexContainer
-    ],
+  exports     : [
+    CdkScrollableModule,
+    TriDropListContainer,
+    TriDropContainerGroup,
+    TriDrag,
+    TriDragHandle,
+    TriDragPreview,
+    TriDragPlaceholder,
+    TriDropGridContainer,
+    TriDragContainer,
+    TriDragGridItemComponent,
+    TriDropFlexContainer,
+
+  ],
   providers   : [
     DragDrop,
   ]
