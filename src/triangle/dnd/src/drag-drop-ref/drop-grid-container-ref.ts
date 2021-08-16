@@ -197,8 +197,8 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
     placeholderRef.style.transform = `translate3d(${x}px, ${y}px, 0)`;
 
 
-    this.pushService._pushItem(item, (this.data as unknown as TriDropGridContainer), positionX, positionY,
-      pointerDelta);
+    // this.pushService._pushItem(item, (this.data as unknown as TriDropGridContainer), positionX, positionY,
+    //   pointerDelta);
   }
 
   checkCollision() {

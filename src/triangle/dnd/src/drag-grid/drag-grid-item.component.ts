@@ -7,6 +7,7 @@
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef, Component, ElementRef, Inject, Input, NgZone, OnDestroy, OnInit, Optional,
   Self, SimpleChanges, SkipSelf, ViewChild, ViewContainerRef
 } from '@angular/core';
@@ -22,59 +23,60 @@ import { TRI_DRAG_PARENT } from '../drag-parent';
 import { TriDragMove } from '../event/drag-events';
 
 @Component({
-  selector : 'tri-drag-resize-container',
-  template : `
-    <div triDrag [style.width.px]="_calculatedWidth"
-         (triDragMoved)="onDragSMoved($event)"
-         triDragLockAxis="y"
-         style="transform: translateY(-50%) translate(0, {{height+outMargin}}px)"
-         class="gridster-item-resizable-handler handle-s"></div>
-    <div triDrag [style.height.px]="_calculatedHeight"
-         (triDragMoved)="onDragEMoved($event)"
-         triDragLockAxis="x"
-         style="transform: translateX(-50%) translate({{_calculatedWidth}}px, 0)"
-         class="gridster-item-resizable-handler handle-e"></div>
-    <div triDrag [style.width.px]="_calculatedWidth"
-         (triDragMoved)="onDragNMoved($event)"
-         triDragLockAxis="y"
-         style="transform: translateY(-50%) translate(0, 0)"
-         class="gridster-item-resizable-handler handle-n"></div>
-    <div triDrag [style.height.px]="_calculatedHeight"
-         (triDragMoved)="onDragWMoved($event)"
-         triDragLockAxis="x"
-         [triDragFreeDragPosition]="{x:0,y:0}"
-         style="transform: translateX(-50%) translate(0, 0)"
-         class="gridster-item-resizable-handler handle-w"></div>
-    <div triDrag
-         (triDragMoved)="onDragSeMoved($event)"
-         style="transform: translate({{_calculatedWidth}}px, {{_calculatedHeight}}px)"
-         class="gridster-item-resizable-handler handle-se"></div>
-    <div triDrag
-         (triDragMoved)="onDragNeMoved($event)"
-         style="transform: translate({{_calculatedWidth}}px, 0px)"
-         class="gridster-item-resizable-handler handle-ne"></div>
-    <div triDrag
-         (triDragMoved)="onDragSwMoved($event)"
-         style="transform: translate(0px, {{_calculatedHeight}}px)"
-         class="gridster-item-resizable-handler handle-sw"></div>
-    <div triDrag
-         (triDragMoved)="onDragNwMoved($event)"
-         style="transform: translate(0px, 0px)"
-         class="gridster-item-resizable-handler handle-nw"></div>
+  selector: 'tri-drag-resize-container',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <div #content style="position: absolute;top: 0;right: 0;bottom: 0;left: 0;" [style.padding.px]="outMargin/2">
+      <ng-content></ng-content>
+    </div>
+    <div>
+      <div triDrag #s 
+          [style.width.px]="x2-x"
+          (triDragMoved)="onDragSMoved($event)"
+          triDragLockAxis="y"
+          style="transform: translateY(-50%) "
+          class="gridster-item-resizable-handler handle-s"></div>
+      <div triDrag #e 
+          [style.height.px]="y2-y"
+          (triDragMoved)="onDragEMoved($event)"
+          triDragLockAxis="x"
+          style="transform: translateX(-50%) "
+          class="gridster-item-resizable-handler handle-e"></div>
+      <div triDrag #n 
+          [style.width.px]="x2-x"
+          (triDragMoved)="onDragNMoved($event)"
+          triDragLockAxis="y"
+          style="transform: translateY(-50%) "
+          class="gridster-item-resizable-handler handle-n"></div>
+      <div triDrag #w 
+          [style.height.px]="y2-y"
+          (triDragMoved)="onDragWMoved($event)"
+          triDragLockAxis="x"
+          class="gridster-item-resizable-handler handle-w"></div>
+      <div triDrag #se
+          (triDragMoved)="onDragSeMoved($event)"
+          class="gridster-item-resizable-handler handle-se"></div>
+      <div triDrag #ne
+          (triDragMoved)="onDragNeMoved($event)"
+          class="gridster-item-resizable-handler handle-ne"></div>
+      <div triDrag #sw
+          (triDragMoved)="onDragSwMoved($event)"
+          class="gridster-item-resizable-handler handle-sw"></div>
+      <div triDrag #nw
+          (triDragMoved)="onDragNwMoved($event)"
+          class="gridster-item-resizable-handler handle-nw"></div>
+    </div>
   `,
   providers: [
     {
       provide: TRI_DROP_CONTAINER, useValue: null
     }
   ],
-  host     : {
-    'class'            : 'tri-drag-resize-container',
-    '[style.top.px]'   : '-outMargin/2',
-    '[style.left.px]'  : '-outMargin/2',
-    '[style.bottom.px]': '-outMargin/2 ',
-    '[style.right.px]' : '-outMargin/2 '
+  host: {
+    'class': 'tri-drag-resize-container',
+    '[style.inset.px]': '-outMargin/2',
   },
-  styles   : [
+  styles: [
     `
       ::ng-deep .tri-drag-placeholder .tri-drag-resize-container {
         display : none;
@@ -170,135 +172,209 @@ export class TriDragResizeContainer {
   x: number = 0;
   y: number = 0;
 
-  private _width: number       = 200;
-  private _height: number      = 100;
-  private _deltaWidth: number  = 0;
-  private _deltaHeight: number = 0;
-  _calculatedHeight: number    = 0;
-  _calculatedWidth: number     = 0;
+  x2: number = 0;
+  y2: number = 0;
+
+  @ViewChild('content', { read: ElementRef })
+  contentElementRef: ElementRef;
+
+
+  @ViewChild('n', { read: TriDrag })
+  northDrag: TriDrag;
+
+  @ViewChild('s', { read: TriDrag })
+  southDrag: TriDrag;
+
+  @ViewChild('e', { read: TriDrag })
+  eastDrag: TriDrag;
+
+  @ViewChild('w', { read: TriDrag })
+  westDrag: TriDrag;
+
+  @ViewChild('se', { read: TriDrag })
+  southEastDrag: TriDrag;
+
+  @ViewChild('ne', { read: TriDrag })
+  northEastDrag: TriDrag;
+
+  @ViewChild('sw', { read: TriDrag })
+  southWestDrag: TriDrag;
+
+  @ViewChild('nw', { read: TriDrag })
+  northWestDrag: TriDrag;
 
   @Input()
-  get width(): number {
-    return this._width;
-  }
-
-  set width(value: number) {
-    this._width = value;
-    this._calculateWidth();
-  }
+  width: number = 0;
 
   @Input()
-  get height(): number {
-    return this._height;
-  }
-
-  set height(value: number) {
-    this._height = value;
-    this._calculateHeight();
-  }
-
-  get deltaWidth(): number {
-    return this._deltaWidth;
-  }
-
-  set deltaWidth(value: number) {
-    this._deltaWidth = value;
-    this._calculateWidth();
-  }
-
-  get deltaHeight(): number {
-    return this._deltaHeight;
-  }
-
-  set deltaHeight(value: number) {
-    this._deltaHeight = value;
-    this._calculateHeight();
-  }
+  height: number = 0;
 
   @Input()
   outMargin: number = 0;
 
-  private _calculateHeight() {
-    this._calculatedHeight = this._height + this._deltaHeight + this.outMargin;
+  constructor(private _cdRef: ChangeDetectorRef) {
+
   }
 
-  private _calculateWidth() {
-    this._calculatedWidth = this._width + this._deltaWidth + this.outMargin;
+  _setDragPosition(drag, pointer) {
+    if (drag && drag._dragRef && !drag._dragRef.isDragging()) {
+      drag._dragRef.setFreeDragPosition(pointer);
+    }
+
+    if (ngDevMode) {
+      console.error('should not call this function when view is not ready');
+    }
   }
 
+  _setItemsPosition() {
+    this.northDrag._dragRef.getRootElement().style.width = `${this.x2 - this.x}px`;
+    this.eastDrag._dragRef.getRootElement().style.height = `${this.y2 - this.y}px`;
+    this.southDrag._dragRef.getRootElement().style.width = `${this.x2 - this.x}px`;
+    this.westDrag._dragRef.getRootElement().style.height = `${this.y2 - this.y}px`;
+
+    this._setDragPosition(this.northDrag, { x: this.x, y: this.y });
+    this._setDragPosition(this.eastDrag, { x: this.x2, y: this.y });
+    this._setDragPosition(this.southDrag, { x: this.x, y: this.y2 });
+    this._setDragPosition(this.westDrag, { x: this.x, y: this.y });
+
+    this._setDragPosition(this.northWestDrag, { x: this.x, y: this.y });
+    this._setDragPosition(this.northEastDrag, { x: this.x2, y: this.y });
+    this._setDragPosition(this.southWestDrag, { x: this.x, y: this.y2 });
+    this._setDragPosition(this.southEastDrag, { x: this.x2, y: this.y2 });
+
+    this.contentElementRef.nativeElement.style.transform = `translate(${this.x}px, ${this.y}px)`;
+    this.contentElementRef.nativeElement.style.width = `${this.x2-this.x}px`;
+    this.contentElementRef.nativeElement.style.height = `${this.y2-this.y}px`;
+
+    // this.northDrag?._dragRef.setFreeDragPosition({x: this.x, y: this.y});
+    // this.eastDrag?._dragRef.setFreeDragPosition({x: this.x + this._calculatedWidth, y: this.y});
+    // this.southDrag?._dragRef.setFreeDragPosition({x: this.x, y: this.y + this._calculatedHeight});
+    // this.westDrag?._dragRef.setFreeDragPosition({x: this.x, y: this.y});
+
+    // // this.northWestDrag?._dragRef.setFreeDragPosition({x: this.x, y: this.y});
+    // this.northEastDrag?._dragRef.setFreeDragPosition({x: this.x + this._calculatedWidth, y: this.y});
+    // // this.southWestDrag?._dragRef.setFreeDragPosition({x: this.x, y: this.y + this._calculatedHeight});
+    // this.southEastDrag?._dragRef.setFreeDragPosition({x: this.x + this._calculatedWidth, y: this.y + this._calculatedHeight});
+  }
 
   onDragSMoved(event: TriDragMove) {
     console.log(event);
-    this.deltaHeight = event.distance.y;
+
+    const dragPosition = event.source._dragRef.getFreeDragPosition();
+    this.y2 = dragPosition.y;
+    this._setItemsPosition()
   }
 
   onDragNMoved(event: TriDragMove) {
     console.log(event);
-    this.y           = event.distance.y;
-    this.deltaHeight = event.distance.y;
+
+    const dragPosition = event.source._dragRef.getFreeDragPosition();
+    this.y = dragPosition.y;
+    this._setItemsPosition()
   }
 
   onDragWMoved(event: TriDragMove) {
     console.log(event);
-    this.x          = event.distance.x;
-    this.deltaWidth = event.distance.x;
+
+    const dragPosition = event.source._dragRef.getFreeDragPosition();
+    this.x = dragPosition.x;
+    this._setItemsPosition()
   }
 
   onDragEMoved(event: TriDragMove) {
     console.log(event);
-    this.deltaWidth = event.distance.x;
+
+    const dragPosition = event.source._dragRef.getFreeDragPosition();
+    this.x2 = dragPosition.x;
+    this._setItemsPosition()
   }
 
   onDragSwMoved(event: TriDragMove) {
     console.log(event);
-    this.x           = event.distance.x;
-    this.deltaHeight = event.distance.y;
-    this.deltaWidth  = event.distance.x;
+
+    const dragPosition = event.source._dragRef.getFreeDragPosition();
+    this.x = dragPosition.x;
+    this.y2 = dragPosition.y;
+    this._setItemsPosition()
   }
 
   onDragNwMoved(event: TriDragMove) {
     console.log(event);
-    this.x           = event.distance.x;
-    this.y           = event.distance.y;
-    this.deltaHeight = event.distance.y;
-    this.deltaWidth  = event.distance.x;
+
+    const dragPosition = event.source._dragRef.getFreeDragPosition();
+    this.x = dragPosition.x;
+    this.y = dragPosition.y;
+    this._setItemsPosition()
   }
 
   onDragSeMoved(event: TriDragMove) {
     console.log(event);
-    this.deltaHeight = event.distance.y;
-    this.deltaWidth  = event.distance.x;
+
+    const dragPosition = event.source._dragRef.getFreeDragPosition();
+    this.x2 = dragPosition.x;
+    this.y2 = dragPosition.y;
+    this._setItemsPosition()
   }
 
   onDragNeMoved(event: TriDragMove) {
     console.log(event);
-    this.y           = event.distance.y;
-    this.deltaHeight = event.distance.y;
-    this.deltaWidth  = event.distance.x;
+
+    const dragPosition = event.source._dragRef.getFreeDragPosition();
+    this.y = dragPosition.y;
+    this.x2 = dragPosition.x;
+    this._setItemsPosition()
+  }
+
+  recalculateXy() {
+    this.x2 = this.x + this.width + this.outMargin;
+    this.y2 = this.y + this.height + this.outMargin;
+  }
+
+  ngOnInit() {
+    this.recalculateXy()
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['height'] && !changes['height'].firstChange ||
+      changes['width'] && !changes['width'].firstChange ||
+      changes['outMargin'] && !changes['outMargin'].firstChange) {
+      this.recalculateXy()
+      this._setItemsPosition()
+    }
+    if (changes['outMargin']) {
+      this._cdRef.detectChanges()
+    }
+  }
+
+  ngAfterViewInit() {
+    this._setItemsPosition();
+    this._cdRef.detach();
   }
 }
 
 
 @Component({
-  selector : 'tri-drag-grid-item',
-  exportAs : 'triDragGridItem',
-  template : `
-    <div triDragHandle class="tri-drag-grid-item-content" style="width: 100%;height: 100%">
-      <ng-content></ng-content>
-    </div>
-    <tri-drag-resize-container [width]="width" [height]="height"
-                               [outMargin]="dropContainer.gutter"></tri-drag-resize-container>
+  selector: 'tri-drag-grid-item',
+  exportAs: 'triDragGridItem',
+  template: `
+    <tri-drag-resize-container 
+        [width]="width" [height]="height"
+        [outMargin]="dropContainer.gutter">
+      <div triDragHandle class="tri-drag-grid-item-content" style="width: 100%;height: 100%">
+        <ng-content></ng-content>
+      </div>
+    </tri-drag-resize-container>
   `,
   providers: [
-    {provide: TRI_DRAG_PARENT, useExisting: TriDragGridItemComponent}
+    { provide: TRI_DRAG_PARENT, useExisting: TriDragGridItemComponent }
   ],
-  host     : {
-    '[style.position]' : '"absolute"',
-    '[style.display]'  : '_init ? "block": null',
-    '[style.width.px]' : '_init ? width: null',
+  host: {
+    '[style.position]': '"absolute"',
+    '[style.display]': '_init ? "block": null',
+    '[style.width.px]': '_init ? width: null',
     '[style.height.px]': '_init ? height: null'
   },
-  styles   : [
+  styles: [
     `
       :host {
         box-sizing  : border-box;
@@ -379,9 +455,9 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
   programDragPosition: { x: number, y: number };
 
   private left: number = 0;
-  private top: number  = 0;
+  private top: number = 0;
 
-  width: number  = 100;
+  width: number = 100;
   height: number = 100;
 
   _init = false;
@@ -413,16 +489,16 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
   _assignDefaults(config: DragDropConfig) {
     super._assignDefaults(config);
     const {
-            defaultLayerIndex,
-            defaultItemCols,
-            defaultItemRows,
-            minItemCols,
-            maxItemCols,
-            minItemRows,
-            maxItemRows,
-            minItemArea,
-            maxItemArea,
-          } = config;
+      defaultLayerIndex,
+      defaultItemCols,
+      defaultItemRows,
+      minItemCols,
+      maxItemCols,
+      minItemRows,
+      maxItemRows,
+      minItemArea,
+      maxItemArea,
+    } = config;
 
     if (defaultLayerIndex) {
       this.layerIndex = defaultLayerIndex;
@@ -472,17 +548,17 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
   }
 
   updateItemSize(): void {
-    this._init      = true;
-    const ref       = this.dropContainer._dropContainerRef;
+    this._init = true;
+    const ref = this.dropContainer._dropContainerRef;
     const container = this.dropContainer;
 
     let currentColumnWidth;
     let currentColumnHeight;
     if (!container.hasPadding) {
-      currentColumnWidth  = (ref.currentWidth + container.gutter) / container.cols;
+      currentColumnWidth = (ref.currentWidth + container.gutter) / container.cols;
       currentColumnHeight = (ref.currentHeight + container.gutter) / container.rows;
     } else {
-      currentColumnWidth  = (ref.currentWidth - container.gutter) / container.cols;
+      currentColumnWidth = (ref.currentWidth - container.gutter) / container.cols;
       currentColumnHeight = (ref.currentHeight - container.gutter) / container.rows;
     }
 
@@ -491,15 +567,15 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
 
     if (!container.hasPadding) {
       this.left = x * currentColumnWidth;
-      this.top  = y * currentColumnHeight;
+      this.top = y * currentColumnHeight;
     } else {
       this.left = x * currentColumnWidth + container.gutter;
-      this.top  = y * currentColumnHeight + container.gutter;
+      this.top = y * currentColumnHeight + container.gutter;
     }
-    this.width  = this.cols * currentColumnWidth - container.gutter;
+    this.width = this.cols * currentColumnWidth - container.gutter;
     this.height = this.rows * currentColumnHeight - container.gutter;
 
-    this._dragRef.setProgramDragPosition({x: this.left, y: this.top});
+    this._dragRef.setProgramDragPosition({ x: this.left, y: this.top });
     this._changeDetectorRef.markForCheck();
 
     // const top    = this.y * this.gridster.curRowHeight;
