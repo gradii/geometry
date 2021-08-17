@@ -13,7 +13,9 @@ import { ElementRef, EmbeddedViewRef, NgZone, TemplateRef, ViewContainerRef } fr
 import { Observable, Subject, Subscription } from 'rxjs';
 import { DragContainerRef } from '../drag-drop-ref/drag-container-ref';
 import { DragDropRegistry } from '../drag-drop-registry';
-import { combineTransforms, toggleNativeDragInteractions, toggleVisibility, } from '../drag-styling';
+import {
+  combineTransforms, toggleNativeDragInteractions, toggleVisibility,
+} from '../drag-styling';
 import { ParentPositionTracker } from '../parent-position-tracker';
 import { getTransformTransitionDurationInMs } from '../transition-duration';
 import { adjustClientRect, getMutableClientRect } from '../utils/client-rect';
@@ -579,7 +581,12 @@ export class DragRef<T = any> {
   }
 
   setProgramDragPosition(value: Point): this {
-    this._applyRootElementTransform(value.x, value.y);
+    this._activeTransform    = {x: 0, y: 0};
+    this._passiveTransform.x = value.x;
+    this._passiveTransform.y = value.y;
+
+    this._initialTransform = getTransform(value.x, value.y);
+    this._rootElement.style.transform = this._initialTransform;
 
     return this;
   }
@@ -1013,7 +1020,8 @@ export class DragRef<T = any> {
     this._dndContainerRef!._startScrollingIfNecessary(rawX, rawY);
     const elementPositionX = x - this._pickupPositionInElement.x;
     const elementPositionY = y - this._pickupPositionInElement.y;
-    this._dndContainerRef!._arrangeItem(this, x, y, elementPositionX, elementPositionY, this._pointerDirectionDelta);
+    this._dndContainerRef!._arrangeItem(this, x, y, elementPositionX, elementPositionY,
+      this._pointerDirectionDelta);
     this._applyPreviewTransform(
       x - this._pickupPositionInElement.x, y - this._pickupPositionInElement.y);
   }

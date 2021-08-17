@@ -290,10 +290,6 @@ export class TriDrag<T = any> implements AfterViewInit, OnChanges, OnDestroy {
         if (this.freeDragPosition) {
           this._dragRef.setFreeDragPosition(this.freeDragPosition);
         }
-
-        if (this.programDragPosition) {
-          this._dragRef.setProgramDragPosition(this.programDragPosition);
-        }
       });
   }
 
