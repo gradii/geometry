@@ -7,8 +7,8 @@
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
-  ChangeDetectorRef, Component, ElementRef, Inject, Input, NgZone, OnDestroy, OnInit, Optional,
-  Self, SimpleChanges, SkipSelf, ViewChild, ViewContainerRef
+  ChangeDetectorRef, Component, ElementRef, Inject, Input, NgZone, OnChanges, OnDestroy, OnInit,
+  Optional, Self, SimpleChanges, SkipSelf, ViewChild, ViewContainerRef
 } from '@angular/core';
 import { clamp } from '@gradii/triangle/util';
 import { DragDropConfig, TRI_DRAG_CONFIG } from '../directives/config';
@@ -28,6 +28,7 @@ import {
   exportAs : 'triDragGridItem',
   template : `
     <tri-drag-resize-container
+      [disabled]="!resizeEnabled"
       [width]="width" [height]="height"
       [outMargin]="dropContainer.gutter"
       (triDragResizeStarted)="onDragResizeStart($event)"
@@ -36,6 +37,7 @@ import {
     >
       <div triDragHandle class="tri-drag-grid-item-content" style="width: 100%;height: 100%">
         <ng-content></ng-content>
+        {{x}} {{y}}
       </div>
     </tri-drag-resize-container>
   `,
@@ -66,10 +68,13 @@ import {
     `
   ]
 })
-export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestroy {
+export class TriDragGridItemComponent extends TriDrag implements OnInit, OnChanges, OnDestroy {
 
   private lastPositionX: number;
   private lastPositionY: number;
+
+  @Input('triDragGridItemIndex')
+  index: number = -1;
 
   @Input('triDragGridItemX')
   x: number = -1;
@@ -110,7 +115,7 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
   dragEnabled: boolean = true;
 
   @Input('triDragGridItemResizeEnabled')
-  resizeEnabled: boolean = true;
+  resizeEnabled: boolean = false;
 
   private _compactEnabled: boolean = true;
 
@@ -257,7 +262,7 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
       changes['x'] || changes['y'] ||
       changes['rows'] || changes['cols']
     ) {
-      // this.updateItemSize();
+      this.dropContainer.positionItem(this);
     }
   }
 
@@ -325,11 +330,6 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
     this.dropContainer.positionItem(this);
 
     // this.programDragPosition = {x: this.left, y: this.top};
-  }
-
-  ngAfterViewInit() {
-
-    super.ngAfterViewInit();
   }
 
 

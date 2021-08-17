@@ -312,6 +312,8 @@ export class DragRef<T = any> {
   readonly dropped = new Subject<{
     previousIndex: number;
     currentIndex: number;
+    elementPositionX: number;
+    elementPositionY: number;
     item: DragRef;
     container: DropContainerRef;
     previousContainer: DropContainerRef;
@@ -585,7 +587,7 @@ export class DragRef<T = any> {
     this._passiveTransform.x = value.x;
     this._passiveTransform.y = value.y;
 
-    this._initialTransform = getTransform(value.x, value.y);
+    this._initialTransform            = getTransform(value.x, value.y);
     this._rootElement.style.transform = this._initialTransform;
 
     return this;
@@ -950,7 +952,7 @@ export class DragRef<T = any> {
     // It's important that we maintain the position, because moving the element around in the DOM
     // can throw off `NgFor` which does smart diffing and re-creates elements only when necessary,
     // while moving the existing elements in all other cases.
-    toggleVisibility(this._rootElement, true, this._dndContainerRef.getItemPosition(this));
+    toggleVisibility(this._rootElement, true, this._initialContainer.getItemPosition(this));
     this._anchor.parentNode!.replaceChild(this._rootElement, this._anchor);
 
     this._destroyPreview();
@@ -966,10 +968,17 @@ export class DragRef<T = any> {
       const isPointerOverContainer = container._isOverContainer(
         pointerPosition.x, pointerPosition.y);
 
+      const {x, y} = this._getConstrainedPointerPosition(pointerPosition);
+
+      const elementPositionX = x - this._pickupPositionInElement.x;
+      const elementPositionY = y - this._pickupPositionInElement.y;
+
       this.ended.next({source: this, distance, dropPoint: pointerPosition});
       this.dropped.next({
         item             : this,
         currentIndex,
+        elementPositionX,
+        elementPositionY,
         previousIndex    : this._initialIndex,
         container        : container,
         previousContainer: this._initialContainer,
@@ -977,7 +986,8 @@ export class DragRef<T = any> {
         distance,
         dropPoint        : pointerPosition
       });
-      container.drop(this, currentIndex, this._initialIndex, this._initialContainer,
+      container.drop(this, currentIndex, elementPositionX, elementPositionY,
+        this._initialIndex, this._initialContainer,
         isPointerOverContainer, distance, pointerPosition);
       this._dndContainerRef = this._initialContainer;
     });

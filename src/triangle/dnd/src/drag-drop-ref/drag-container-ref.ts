@@ -9,24 +9,15 @@ import { coerceElement } from '@angular/cdk/coercion';
 import { _getShadowRoot } from '@angular/cdk/platform';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { ElementRef, NgZone } from '@angular/core';
-import { animationFrameScheduler, interval, Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
 import { DragDropRegistry } from '../drag-drop-registry';
-import { DragRefInternal as DragRef, Point } from './drag-ref';
 import { DragCSSStyleDeclaration } from '../drag-styling';
 import { CachedItemPosition } from '../drop-container.interface';
-import { AutoScrollHorizontalDirection, AutoScrollVerticalDirection, DROP_PROXIMITY_THRESHOLD } from '../enum';
-import { ParentPositionTracker } from '../parent-position-tracker';
 import { SortPositionStrategy } from '../position-strategy/sort-position-strategy';
-import {
-  getElementScrollDirections, getHorizontalScrollDirection, getVerticalScrollDirection,
-  incrementHorizontalScroll, incrementVerticalScroll
-} from '../utils';
-import {
-  adjustClientRect, getMutableClientRect, isInsideClientRect, isPointerNearClientRect,
-} from '../utils/client-rect';
+import { adjustClientRect, isInsideClientRect, } from '../utils/client-rect';
 import { orderByHierarchy } from '../utils/hierarchy';
 import { DndContainerRef } from './dnd-container-ref';
+import { DragRefInternal as DragRef, Point } from './drag-ref';
 
 /**
  * Internal compile-time-only representation of a `DropContainerRef`.
@@ -291,14 +282,18 @@ export class DragContainerRef<T = any> extends DndContainerRef<T> {
    * Drops an item into this container.
    * @param item Item being dropped into the container.
    * @param currentIndex Index at which the item should be inserted.
+   * @param elementPositionX
+   * @param elementPositionY
    * @param previousIndex Index of the item when dragging started.
    * @param previousContainer Container from which the item got dragged in.
    * @param isPointerOverContainer Whether the user's pointer was over the
    *    container when the item was dropped.
    * @param distance Distance the user has dragged since the start of the dragging sequence.
+   * @param dropPoint
    */
-  drop(item: DragRef, currentIndex: number, previousIndex: number,
-       previousContainer: DndContainerRef,
+  drop(item: DragRef, currentIndex: number,
+       elementPositionX: number, elementPositionY: number,
+       previousIndex: number, previousContainer: DndContainerRef,
        isPointerOverContainer: boolean, distance: Point, dropPoint: Point): void {
     this._reset();
     this.dropped.next({
@@ -707,5 +702,9 @@ export class DragContainerRef<T = any> extends DndContainerRef<T> {
   protected _notifyReceivingSiblings() {
     const draggedItems = this._activeDraggables.filter(item => item.isDragging());
     this._siblings.forEach(sibling => sibling._startReceiving(this, draggedItems));
+  }
+
+  getItemPosition() {
+    return '';
   }
 }

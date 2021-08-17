@@ -7,15 +7,15 @@
 import { coerceElement } from '@angular/cdk/coercion';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { ElementRef, NgZone } from '@angular/core';
+import { Subject } from 'rxjs';
 import { TriDropGridContainer } from '../directives/drop-grid-container';
+import { DragDropRegistry } from '../drag-drop-registry';
 import { GridPushService } from '../drag-grid/grid-push.service';
 import { GridSwapService } from '../drag-grid/grid-swap.service';
-import { GridPositionStrategy } from '../position-strategy/grid-position-strategy';
 import { CompactType } from '../enum';
-import { Subject } from 'rxjs';
-import { DragDropRegistry } from '../drag-drop-registry';
-import { DragRefInternal as DragRef } from './drag-ref';
+import { GridPositionStrategy } from '../position-strategy/grid-position-strategy';
 import { DndContainerRef } from './dnd-container-ref';
+import { DragRefInternal, DragRefInternal as DragRef, Point } from './drag-ref';
 
 /**
  * Reference to a drop list. Used to manipulate or dispose of the container.
@@ -164,8 +164,10 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
 
     const placeholderRef = item.getPlaceholderElement();
 
-    const maxColumns  = Math.max(positionX + 1, (this.data as unknown as TriDropGridContainer).cols, this.lastDragCols);
-    const maxRows     = Math.max(positionY + 1, (this.data as unknown as TriDropGridContainer).rows, this.lastDragRows);
+    const maxColumns  = Math.max(positionX + 1, (this.data as unknown as TriDropGridContainer).cols,
+      this.lastDragCols);
+    const maxRows     = Math.max(positionY + 1, (this.data as unknown as TriDropGridContainer).rows,
+      this.lastDragRows);
     this.lastDragCols = maxColumns;
     this.lastDragRows = maxRows;
 
@@ -199,6 +201,36 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
 
     // this.pushService._pushItem(item, (this.data as unknown as TriDropGridContainer), positionX, positionY,
     //   pointerDelta);
+  }
+
+  drop(item: DragRefInternal, currentIndex: number,
+       elementPositionX: number, elementPositionY: number,
+       previousIndex: number, previousContainer: DndContainerRef,
+       isPointerOverContainer: boolean, distance: Point,
+       dropPoint: Point) {
+    this._reset();
+    const positionX = this.positionStrategy.pixelsToPositionX(item, elementPositionX);
+    const positionY = this.positionStrategy.pixelsToPositionY(item, elementPositionY);
+    this.dropped.next({
+      item,
+      currentIndex,
+      positionX,
+      positionY,
+      previousIndex,
+      container: this,
+      previousContainer,
+      isPointerOverContainer,
+      distance,
+      dropPoint
+    });
+  }
+
+  /**
+   * Figures out the index of an item in the container.
+   * @param item Item whose index should be determined.
+   */
+  getItemIndex(item: DragRef): number {
+    return -1;
   }
 
   checkCollision() {

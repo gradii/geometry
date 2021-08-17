@@ -105,7 +105,6 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   @ViewChild('content')
   contentElement: ElementRef;
 
-
   /** Reference to the underlying drop list instance. */
   _dropContainerRef: DropGridContainerRef<TriDropGridContainer<T>>;
 
@@ -232,8 +231,6 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   private el: HTMLElement;
 
   private compactService;
-
-  private pushService;
 
   constructor(
     /** Element that the drop list is attached to. */
@@ -502,6 +499,8 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
       this.dropped.emit({
         previousIndex         : event.previousIndex,
         currentIndex          : event.currentIndex,
+        positionX             : event.positionX,
+        positionY             : event.positionY,
         previousContainer     : event.previousContainer.data,
         container             : event.container.data,
         item                  : event.item.data,

@@ -5,6 +5,7 @@
  */
 
 import { CdkScrollableModule } from '@angular/cdk/scrolling';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TriDrag } from './directives/drag';
 import { TriDragContainer } from './directives/drag-container';
@@ -20,6 +21,9 @@ import { TriDragGridItemComponent } from './drag-grid/drag-grid-item.component';
 import { TriDragResizeContainer } from './drag-grid/drag-resize.component';
 
 @NgModule({
+  imports     : [
+    CommonModule,
+  ],
   declarations: [
     TriDropListContainer,
     TriDropContainerGroup,

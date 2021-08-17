@@ -7,9 +7,10 @@
 import { AfterViewInit, Component, QueryList, ViewChildren } from '@angular/core';
 import {
   CompactType, GridTypes, moveItemInArray, transferArrayItem, TRI_DROP_CONTAINER, TriDragDrop,
-  TriDropListContainer
+  TriDragGridItemComponent, TriDropListContainer
 } from '@gradii/triangle/dnd';
 import { asapScheduler } from 'rxjs';
+
 
 @Component({
   selector : 'tri-demo-dnd-grid',
@@ -81,6 +82,7 @@ import { asapScheduler } from 'rxjs';
           </div>
 
           <div triDropGridContainer
+               [triDropGridContainerData]="dashboard"
                [triDropGridContainerGridType]="gridType"
                [triDropGridContainerHasPadding]="hasPadding"
                [triDropGridContainerCompactType]="compactType"
@@ -93,19 +95,22 @@ import { asapScheduler } from 'rxjs';
                (triDropGridContainerDropped)="onDragDropped($event)"
                [triDropGridContainerConnectedTo]="dls"
                class="example-grid-list">
-            <tri-drag-grid-item *ngFor="let it of dashboard" #item="triDragGridItem"
-                                [triDragGridItemX]="it.x"
-                                [triDragGridItemY]="it.y"
-                                [triDragGridItemRows]="it.rows"
-                                [triDragGridItemCols]="it.cols"
-                                class="example-grid-box">
-              box0 col: {{it.cols}} row: {{it.rows}} x:{{item.x}} y:{{item.y}}
-            </tri-drag-grid-item>
+            <ng-template ngFor let-it let-i="index" [ngForOf]="dashboard">
+              <tri-drag-grid-item #item
+                                  [triDragGridItemIndex]="i"
+                                  [triDragGridItemX]="it.x"
+                                  [triDragGridItemY]="it.y"
+                                  [triDragGridItemRows]="it.rows"
+                                  [triDragGridItemCols]="it.cols"
+                                  class="example-grid-box">
+                <button (click)="item.resizeEnabled=!item.resizeEnabled">toggle resize</button>
+                box0 col: {{it.cols}} row: {{it.rows}}
+              </tri-drag-grid-item>
+            </ng-template>
 
           </div>
 
         </div>
-
       </div>
     </div>
   `,
@@ -183,8 +188,21 @@ export class TriDemoDndGridComponent implements AfterViewInit {
     console.log('exited', event);
   }
 
-  onDragDropped(event) {
+  onDragDropped(event: TriDragDrop<any>) {
     console.log('dropped', event);
+    if (!(event.item instanceof TriDragGridItemComponent)) {
+      this.dashboard.push({
+        x   : event.positionX,
+        y   : event.positionY,
+        cols: 1,
+        rows: 1
+      });
+    } else {
+      const item = this.dashboard[event.item.index];
+
+      item.x = event.positionX;
+      item.y = event.positionY;
+    }
   }
 
   ngAfterViewInit() {

@@ -2,6 +2,8 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output,
   SimpleChanges, ViewChild
 } from '@angular/core';
+import { Subject } from 'rxjs';
+import { debounceTime, tap } from 'rxjs/operators';
 
 import { TriDrag } from '../directives/drag';
 import { TRI_DROP_CONTAINER } from '../directives/drop-container';
@@ -44,9 +46,9 @@ export interface TriDragResizeEnd {
          [style.padding.px]="outMargin/2">
       <ng-content></ng-content>
     </div>
-    <div #placeholder style="position: absolute;inset: 0;"
+    <div #placeholder *ngIf="!disabled" style="position: absolute;inset: 0;"
          class="tri-drag-resize-placeholder"></div>
-    <div>
+    <div *ngIf="!disabled">
       <div triDrag #s
            [style.width.px]="x2-x"
            (triDragStarted)="onDragStarted($event)"
@@ -111,7 +113,7 @@ export interface TriDragResizeEnd {
     '[class.tri-drag-resize-resizing]': 'resizing',
     '[style.inset.px]'                : '-outMargin/2',
   },
-  styleUrls: [`../../style/drag-resize.css`]
+  styleUrls      : [`../../style/drag-resize.css`]
 })
 export class TriDragResizeContainer {
   x: number = 0;
@@ -122,35 +124,38 @@ export class TriDragResizeContainer {
 
   resizing: boolean = false;
 
-  @ViewChild('content', {read: ElementRef})
+  @ViewChild('content', {read: ElementRef, static: false})
   contentElementRef: ElementRef<HTMLElement>;
 
-  @ViewChild('placeholder', {read: ElementRef})
+  @ViewChild('placeholder', {read: ElementRef, static: false})
   placeholderElementRef: ElementRef<HTMLElement>;
 
-  @ViewChild('n', {read: TriDrag})
+  @ViewChild('n', {read: TriDrag, static: false})
   northDrag: TriDrag;
 
-  @ViewChild('s', {read: TriDrag})
+  @ViewChild('s', {read: TriDrag, static: false})
   southDrag: TriDrag;
 
-  @ViewChild('e', {read: TriDrag})
+  @ViewChild('e', {read: TriDrag, static: false})
   eastDrag: TriDrag;
 
-  @ViewChild('w', {read: TriDrag})
+  @ViewChild('w', {read: TriDrag, static: false})
   westDrag: TriDrag;
 
-  @ViewChild('se', {read: TriDrag})
+  @ViewChild('se', {read: TriDrag, static: false})
   southEastDrag: TriDrag;
 
-  @ViewChild('ne', {read: TriDrag})
+  @ViewChild('ne', {read: TriDrag, static: false})
   northEastDrag: TriDrag;
 
-  @ViewChild('sw', {read: TriDrag})
+  @ViewChild('sw', {read: TriDrag, static: false})
   southWestDrag: TriDrag;
 
-  @ViewChild('nw', {read: TriDrag})
+  @ViewChild('nw', {read: TriDrag, static: false})
   northWestDrag: TriDrag;
+
+  @Input()
+  disabled: boolean = true;
 
   @Input()
   width: number = 0;
@@ -192,11 +197,16 @@ export class TriDragResizeContainer {
     }
   }
 
+  _runSetItemsPosition$ = new Subject();
+
   _setItemsPosition() {
-    this.northDrag._dragRef.getRootElement().style.width = `${this.x2 - this.x}px`;
-    this.eastDrag._dragRef.getRootElement().style.height = `${this.y2 - this.y}px`;
-    this.southDrag._dragRef.getRootElement().style.width = `${this.x2 - this.x}px`;
-    this.westDrag._dragRef.getRootElement().style.height = `${this.y2 - this.y}px`;
+    this._runSetItemsPosition$.next();
+  }
+
+  _runSetItemsPosition() {
+    if (this.disabled) {
+      return;
+    }
 
     this._setDragPosition(this.northDrag, {x: this.x, y: this.y});
     this._setDragPosition(this.eastDrag, {x: this.x2, y: this.y});
@@ -208,13 +218,17 @@ export class TriDragResizeContainer {
     this._setDragPosition(this.southWestDrag, {x: this.x, y: this.y2});
     this._setDragPosition(this.southEastDrag, {x: this.x2, y: this.y2});
 
-    this.contentElementRef.nativeElement.style.transform = `translate(${this.x}px, ${this.y}px)`;
-    this.contentElementRef.nativeElement.style.width     = `${this.x2 - this.x}px`;
-    this.contentElementRef.nativeElement.style.height    = `${this.y2 - this.y}px`;
+    if (this.contentElementRef) {
+      this.contentElementRef.nativeElement.style.transform = `translate(${this.x}px, ${this.y}px)`;
+      this.contentElementRef.nativeElement.style.width     = `${this.x2 - this.x}px`;
+      this.contentElementRef.nativeElement.style.height    = `${this.y2 - this.y}px`;
+    }
 
-    this.placeholderElementRef.nativeElement.style.transform = `translate(${this.x}px, ${this.y}px)`;
-    this.placeholderElementRef.nativeElement.style.width     = `${this.x2 - this.x}px`;
-    this.placeholderElementRef.nativeElement.style.height    = `${this.y2 - this.y}px`;
+    if (this.placeholderElementRef) {
+      this.placeholderElementRef.nativeElement.style.transform = `translate(${this.x}px, ${this.y}px)`;
+      this.placeholderElementRef.nativeElement.style.width     = `${this.x2 - this.x}px`;
+      this.placeholderElementRef.nativeElement.style.height    = `${this.y2 - this.y}px`;
+    }
 
     // this.northDrag?._dragRef.setFreeDragPosition({x: this.x, y: this.y});
     // this.eastDrag?._dragRef.setFreeDragPosition({x: this.x + this._calculatedWidth, y: this.y});
@@ -339,22 +353,30 @@ export class TriDragResizeContainer {
 
   ngOnInit() {
     this.recalculateXy();
+
+    this._runSetItemsPosition$.pipe(
+      debounceTime(10),
+      tap(() => {
+        this._runSetItemsPosition();
+      })
+    ).subscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['height'] && !changes['height'].firstChange ||
       changes['width'] && !changes['width'].firstChange ||
-      changes['outMargin'] && !changes['outMargin'].firstChange) {
+      changes['outMargin'] && !changes['outMargin'].firstChange ||
+      changes['disabled']) {
       this.recalculateXy();
       this._setItemsPosition();
     }
-    if (changes['outMargin']) {
-      this._cdRef.detectChanges();
-    }
+    // if (changes['outMargin']) {
+    //   this._cdRef.detectChanges();
+    // }
   }
 
   ngAfterViewInit() {
     this._setItemsPosition();
-    this._cdRef.detach();
+    // this._cdRef.detach();
   }
 }

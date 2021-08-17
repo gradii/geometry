@@ -58,6 +58,10 @@ export interface TriDragDrop<T, O = T> {
   previousIndex?: number;
   /** Current index of the item. */
   currentIndex?: number;
+
+  positionX?: number;
+
+  positionY?: number;
   /** Item that is being dropped. */
   item: TriDrag;
   /** Container in which the item was dropped. */
