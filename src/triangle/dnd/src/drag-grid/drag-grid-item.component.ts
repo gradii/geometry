@@ -7,8 +7,9 @@
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Input, NgZone,
-  OnDestroy, OnInit, Optional, Self, SimpleChanges, SkipSelf, ViewChild, ViewContainerRef
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, Input,
+  NgZone, OnDestroy, OnInit, Optional, Output, Self, SimpleChanges, SkipSelf, ViewChild,
+  ViewContainerRef
 } from '@angular/core';
 import { clamp } from '@gradii/triangle/util';
 import { DragDropConfig, TRI_DRAG_CONFIG } from '../directives/config';
@@ -20,52 +21,90 @@ import { TriDropGridContainer } from '../directives/drop-grid-container';
 import { DragDrop } from '../drag-drop';
 import { Point } from '../drag-drop-ref/drag-ref';
 import { TRI_DRAG_PARENT } from '../drag-parent';
-import { TriDragMove } from '../event/drag-events';
+import { TriDragEnd, TriDragMove, TriDragStart } from '../event/drag-events';
+
+
+export interface TriDragResizeStart {
+  source: TriDragResizeContainer;
+  dragEvent: TriDragStart;
+}
+
+export interface TriDragResize {
+  source: TriDragResizeContainer;
+  dragEvent: TriDragStart;
+  x: number;
+  y: number;
+  x2: number;
+  y2: number;
+  width: number;
+  height: number;
+}
+
+export interface TriDragResizeEnd {
+  source: TriDragResizeContainer;
+  dragEvent: TriDragStart;
+  x: number;
+  y: number;
+  x2: number;
+  y2: number;
+  width: number;
+  height: number;
+}
 
 @Component({
   selector       : 'tri-drag-resize-container',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template       : `
-    <div #content style="position: absolute;top: 0;right: 0;bottom: 0;left: 0;"
+    <div #content style="position: absolute;inset: 0;"
          [style.padding.px]="outMargin/2">
       <ng-content></ng-content>
     </div>
-    <div class="tri-drag-resize-placeholder"></div>
+    <div #placeholder style="position: absolute;inset: 0;"
+         class="tri-drag-resize-placeholder"></div>
     <div>
       <div triDrag #s
            [style.width.px]="x2-x"
+           (triDragStarted)="onDragStarted($event)"
            (triDragMoved)="onDragSMoved($event)"
+           (triDragEnded)="onDragEnded($event)"
            triDragLockAxis="y"
            style="transform: translateY(-50%) "
            class="gridster-item-resizable-handler handle-s"></div>
       <div triDrag #e
            [style.height.px]="y2-y"
+           (triDragStarted)="onDragStarted($event)"
            (triDragMoved)="onDragEMoved($event)"
            triDragLockAxis="x"
            style="transform: translateX(-50%) "
            class="gridster-item-resizable-handler handle-e"></div>
       <div triDrag #n
            [style.width.px]="x2-x"
+           (triDragStarted)="onDragStarted($event)"
            (triDragMoved)="onDragNMoved($event)"
            triDragLockAxis="y"
            style="transform: translateY(-50%) "
            class="gridster-item-resizable-handler handle-n"></div>
       <div triDrag #w
            [style.height.px]="y2-y"
+           (triDragStarted)="onDragStarted($event)"
            (triDragMoved)="onDragWMoved($event)"
            triDragLockAxis="x"
            style="transform: translateX(-50%) "
            class="gridster-item-resizable-handler handle-w"></div>
       <div triDrag #se
+           (triDragStarted)="onDragStarted($event)"
            (triDragMoved)="onDragSeMoved($event)"
            class="gridster-item-resizable-handler handle-se"></div>
       <div triDrag #ne
+           (triDragStarted)="onDragStarted($event)"
            (triDragMoved)="onDragNeMoved($event)"
            class="gridster-item-resizable-handler handle-ne"></div>
       <div triDrag #sw
+           (triDragStarted)="onDragStarted($event)"
            (triDragMoved)="onDragSwMoved($event)"
            class="gridster-item-resizable-handler handle-sw"></div>
       <div triDrag #nw
+           (triDragStarted)="onDragStarted($event)"
            (triDragMoved)="onDragNwMoved($event)"
            class="gridster-item-resizable-handler handle-nw"></div>
     </div>
@@ -105,7 +144,8 @@ import { TriDragMove } from '../event/drag-events';
       }
 
       .tri-drag-resize-placeholder {
-        background : rgba(30, 141, 232, 0.13);
+        z-index    : -1;
+        background : rgba(30, 141, 232, 0.23);
       }
 
       .gridster-item-resizable-handler.handle-n {
@@ -185,6 +225,9 @@ export class TriDragResizeContainer {
   @ViewChild('content', {read: ElementRef})
   contentElementRef: ElementRef;
 
+  @ViewChild('placeholder', {read: ElementRef})
+  placeholderElementRef: ElementRef<HTMLElement>;
+
   @ViewChild('n', {read: TriDrag})
   northDrag: TriDrag;
 
@@ -218,8 +261,21 @@ export class TriDragResizeContainer {
   @Input()
   outMargin: number = 0;
 
+  @Output('triDragResizeStart')
+  resizeStart: EventEmitter<TriDragResizeStart> = new EventEmitter();
+
+  @Output('triDragResize')
+  resize: EventEmitter<TriDragResize> = new EventEmitter();
+
+  @Output('triDragResizeEnd')
+  resizeEnd: EventEmitter<TriDragResizeEnd> = new EventEmitter();
+
   constructor(private _cdRef: ChangeDetectorRef) {
 
+  }
+
+  getPlaceHolderElement() {
+    return this.placeholderElementRef.nativeElement;
   }
 
   _setDragPosition(drag: TriDrag, pointer: Point) {
@@ -252,6 +308,10 @@ export class TriDragResizeContainer {
     this.contentElementRef.nativeElement.style.width     = `${this.x2 - this.x}px`;
     this.contentElementRef.nativeElement.style.height    = `${this.y2 - this.y}px`;
 
+    this.placeholderElementRef.nativeElement.style.transform = `translate(${this.x}px, ${this.y}px)`;
+    this.placeholderElementRef.nativeElement.style.width     = `${this.x2 - this.x}px`;
+    this.placeholderElementRef.nativeElement.style.height    = `${this.y2 - this.y}px`;
+
     // this.northDrag?._dragRef.setFreeDragPosition({x: this.x, y: this.y});
     // this.eastDrag?._dragRef.setFreeDragPosition({x: this.x + this._calculatedWidth, y: this.y});
     // this.southDrag?._dragRef.setFreeDragPosition({x: this.x, y: this.y + this._calculatedHeight});
@@ -263,72 +323,98 @@ export class TriDragResizeContainer {
     // this.southEastDrag?._dragRef.setFreeDragPosition({x: this.x + this._calculatedWidth, y: this.y + this._calculatedHeight});
   }
 
+  onDragStarted(event: TriDragStart) {
+    this.resizeStart.next({
+      source: this, dragEvent: event
+    });
+  }
+
+  onDragResize(event: TriDragMove, from: string) {
+    this.resize.next({
+      source: this, dragEvent: event,
+      x     : this.x, y: this.y,
+      x2    : this.x2, y2: this.y2,
+      width : this.x2 - this.x,
+      height: this.y2 - this.y
+    });
+  }
+
+  onDragEnded(event: TriDragEnd) {
+    this.resizeEnd.next({
+      source: this, dragEvent: event,
+      x     : this.x, y: this.y,
+      x2    : this.x2, y2: this.y2,
+      width : this.x2 - this.x,
+      height: this.y2 - this.y
+    });
+  }
+
   onDragSMoved(event: TriDragMove) {
-    console.log(event);
 
     const dragPosition = event.source._dragRef.getFreeDragPosition();
     this.y2            = dragPosition.y;
     this._setItemsPosition();
+    this.onDragResize(event, 's');
   }
 
   onDragNMoved(event: TriDragMove) {
-    console.log(event);
 
     const dragPosition = event.source._dragRef.getFreeDragPosition();
     this.y             = dragPosition.y;
     this._setItemsPosition();
+    this.onDragResize(event, 'n');
   }
 
   onDragWMoved(event: TriDragMove) {
-    console.log(event);
 
     const dragPosition = event.source._dragRef.getFreeDragPosition();
     this.x             = dragPosition.x;
     this._setItemsPosition();
+    this.onDragResize(event, 'w');
   }
 
   onDragEMoved(event: TriDragMove) {
-    console.log(event);
 
     const dragPosition = event.source._dragRef.getFreeDragPosition();
     this.x2            = dragPosition.x;
     this._setItemsPosition();
+    this.onDragResize(event, 'e');
   }
 
   onDragSwMoved(event: TriDragMove) {
-    console.log(event);
 
     const dragPosition = event.source._dragRef.getFreeDragPosition();
     this.x             = dragPosition.x;
     this.y2            = dragPosition.y;
     this._setItemsPosition();
+    this.onDragResize(event, 'sw');
   }
 
   onDragNwMoved(event: TriDragMove) {
-    console.log(event);
 
     const dragPosition = event.source._dragRef.getFreeDragPosition();
     this.x             = dragPosition.x;
     this.y             = dragPosition.y;
     this._setItemsPosition();
+    this.onDragResize(event, 'nw');
   }
 
   onDragSeMoved(event: TriDragMove) {
-    console.log(event);
 
     const dragPosition = event.source._dragRef.getFreeDragPosition();
     this.x2            = dragPosition.x;
     this.y2            = dragPosition.y;
     this._setItemsPosition();
+    this.onDragResize(event, 'se');
   }
 
   onDragNeMoved(event: TriDragMove) {
-    console.log(event);
 
     const dragPosition = event.source._dragRef.getFreeDragPosition();
     this.y             = dragPosition.y;
     this.x2            = dragPosition.x;
     this._setItemsPosition();
+    this.onDragResize(event, 'ne');
   }
 
   recalculateXy() {
@@ -365,7 +451,11 @@ export class TriDragResizeContainer {
   template : `
     <tri-drag-resize-container
       [width]="width" [height]="height"
-      [outMargin]="dropContainer.gutter">
+      [outMargin]="dropContainer.gutter"
+      (triDragResizeStart)="onDragResizeStart($event)"
+      (triDragResize)="onDragResize($event)"
+      (triDragResizeEnd)="onDragResizeEnd($event)"
+    >
       <div triDragHandle class="tri-drag-grid-item-content" style="width: 100%;height: 100%">
         <ng-content></ng-content>
       </div>
@@ -490,6 +580,34 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnDestr
       config, _dir, dragDrop, _changeDetectorRef, _selfHandle, _parentDrag
     );
 
+  }
+
+  onDragResizeStart(event: TriDragResizeStart) {
+    console.log('resize start', event);
+  }
+
+  onDragResize(event: TriDragResize) {
+    console.log('resizing', event);
+    const x = this.dropContainer.pixelsToPositionX(this.left + event.x, Math.round);
+    const y = this.dropContainer.pixelsToPositionY(this.top + event.y, Math.round);
+
+    const pixelX     = this.dropContainer.positionXToPixels(x);
+    const pixelY     = this.dropContainer.positionYToPixels(y);
+    const translateX = pixelX - this.left;
+    const translateY = pixelY - this.top;
+
+    event.source.getPlaceHolderElement().style.transform = `translate(${translateX}px, ${translateY}px)`;
+
+    const width                                       = Math.round(
+      event.width / this.dropContainer.currentTileWidth) * this.dropContainer.currentTileWidth;
+    const height                                      = Math.round(
+      event.height / this.dropContainer.currentTileHeight) * this.dropContainer.currentTileHeight;
+    event.source.getPlaceHolderElement().style.width  = `${width}px`;
+    event.source.getPlaceHolderElement().style.height = `${height}px`;
+  }
+
+  onDragResizeEnd(event: TriDragResizeEnd) {
+    console.log('resize end', event);
   }
 
   _assignDefaults(config: DragDropConfig) {

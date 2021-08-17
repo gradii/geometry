@@ -691,16 +691,6 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   //   }
   // }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (
-      changes['x'] || changes['y'] ||
-      changes['rows'] || changes['cols'] ||
-      changes['compactType'] ||
-      changes['hasPadding']
-    ) {
-      this.calculateLayout();
-    }
-  }
 
   ngOnInit() {
     const ref        = this._dropContainerRef;
@@ -713,10 +703,6 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     ref.currentColumnWidth = this.currentTileWidth;
     ref.currentRowHeight   = this.currentTileHeight;
 
-  }
-
-  ngAfterViewInit() {
-    this.calculateLayout();
   }
 
   checkCollision(item: TriDragGridItemComponent): any | boolean {
@@ -773,6 +759,48 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     // const layerIndex        = item.layerIndex === undefined ? defaultLayerIndex : item.layerIndex;
     // const layerIndex2       = item2.layerIndex === undefined ? defaultLayerIndex : item2.layerIndex;
     // return layerIndex === layerIndex2;
+  }
+
+
+  pixelsToPositionX(x: number, roundingMethod: (x: number) => number, noLimit?: boolean): number {
+    const position = roundingMethod(x / this.currentTileWidth);
+    if (noLimit) {
+      return position;
+    } else {
+      return Math.max(position, 0);
+    }
+  }
+
+  pixelsToPositionY(y: number, roundingMethod: (x: number) => number, noLimit?: boolean): number {
+    const position = roundingMethod(y / this.currentTileHeight);
+    if (noLimit) {
+      return position;
+    } else {
+      return Math.max(position, 0);
+    }
+  }
+
+  positionXToPixels(x: number): number {
+    return x * this.currentTileWidth;
+  }
+
+  positionYToPixels(y: number): number {
+    return y * this.currentTileHeight;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (
+      changes['x'] || changes['y'] ||
+      changes['rows'] || changes['cols'] ||
+      changes['compactType'] ||
+      changes['hasPadding']
+    ) {
+      this.calculateLayout();
+    }
+  }
+
+  ngAfterViewInit() {
+    this.calculateLayout();
   }
 
   ngOnDestroy() {
