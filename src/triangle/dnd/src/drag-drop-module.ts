@@ -16,7 +16,8 @@ import { TriDropFlexContainer } from './directives/drop-flex-container';
 import { TriDropGridContainer } from './directives/drop-grid-container';
 import { TriDropListContainer } from './directives/drop-list-container';
 import { DragDrop } from './drag-drop';
-import { TriDragGridItemComponent, TriDragResizeContainer } from './drag-grid/drag-grid-item.component';
+import { TriDragGridItemComponent } from './drag-grid/drag-grid-item.component';
+import { TriDragResizeContainer } from './drag-grid/drag-resize.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,7 @@ import { TriDragGridItemComponent, TriDragResizeContainer } from './drag-grid/dr
     TriDragContainer,
     TriDragGridItemComponent,
     TriDropFlexContainer,
-
+    TriDragResizeContainer
   ],
   providers   : [
     DragDrop,

@@ -25,6 +25,7 @@ export { TriDropGridContainer } from './src/directives/drop-grid-container';
 export { TriDropFlexContainer } from './src/directives/drop-flex-container';
 
 export { TriDragGridItemComponent } from './src/drag-grid/drag-grid-item.component';
+export { TriDragResizeContainer } from './src/drag-grid/drag-resize.component';
 
 export * from './src/directives/config';
 export * from './src/directives/drop-container-group';

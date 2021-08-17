@@ -12,8 +12,8 @@ import {
 import { asapScheduler } from 'rxjs';
 
 @Component({
-  selector: 'tri-demo-dnd-grid',
-  template: `
+  selector : 'tri-demo-dnd-grid',
+  template : `
     <div>
       <div class="">
         <h2>To do</h2>

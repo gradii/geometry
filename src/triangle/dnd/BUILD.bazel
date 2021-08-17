@@ -16,7 +16,7 @@ ng_module(
         ["**/*.ts"],
         exclude = ["**/*.spec.ts"],
     ),
-    assets = [] + glob(["**/*.html"]),
+    assets = [":drag_resize_scss", ":dnd_scss"] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/dnd",
     deps = [
         "//src/triangle/core",
@@ -31,19 +31,28 @@ ng_module(
     ],
 )
 
-#sass_library(
-#    name = "dnd_scss_lib",
-#    srcs = glob(["**/_*.scss"]),
-#    deps = ["//src/triangle/core:core_scss_lib"],
-#)
-#
-#sass_binary(
-#    name = "dnd_scss",
-#    src = "style/dnd.scss",
-#    deps = [
-#        "//src/triangle/dnd:dnd_scss_lib",
-#    ],
-#)
+sass_library(
+    name = "dnd_scss_lib",
+    srcs = glob(["**/_*.scss"]),
+    deps = ["//src/triangle/core:core_scss_lib"],
+)
+
+sass_binary(
+    name = "dnd_scss",
+    src = "style/dnd.scss",
+    deps = [
+        "//src/triangle/dnd:dnd_scss_lib",
+    ],
+)
+
+sass_binary(
+    name = "drag_resize_scss",
+    src = "style/drag-resize.scss",
+    deps = [
+        "//src/triangle/dnd:dnd_scss_lib",
+    ],
+)
+
 #
 #ng_test_library(
 #  name = "autocomplete_test_sources",
