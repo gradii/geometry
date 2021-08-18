@@ -179,12 +179,12 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnChang
 
     event.source.getPlaceHolderElement().style.transform = `translate(${translateX}px, ${translateY}px)`;
 
-    const width                                       = Math.round(
-      event.width / this.dropContainer.currentTileWidth) * this.dropContainer.currentTileWidth;
-    const height                                      = Math.round(
-      event.height / this.dropContainer.currentTileHeight) * this.dropContainer.currentTileHeight;
-    event.source.getPlaceHolderElement().style.width  = `${width}px`;
-    event.source.getPlaceHolderElement().style.height = `${height}px`;
+    // const width                                       = Math.round(
+    //   event.width / this.dropContainer.currentTileWidth) * this.dropContainer.currentTileWidth;
+    // const height                                      = Math.round(
+    //   event.height / this.dropContainer.currentTileHeight) * this.dropContainer.currentTileHeight;
+    // event.source.getPlaceHolderElement().style.width  = `${width}px`;
+    // event.source.getPlaceHolderElement().style.height = `${height}px`;
   }
 
   onDragResizeEnd(event: TriDragResizeEnd) {

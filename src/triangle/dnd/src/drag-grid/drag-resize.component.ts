@@ -48,7 +48,7 @@ export interface TriDragResizeEnd {
     </div>
     <div #placeholder *ngIf="!disabled" style="position: absolute;inset: 0;"
          class="tri-drag-resize-placeholder"></div>
-    <div *ngIf="!disabled">
+    <div class="tri-drag-resize-indicator" *ngIf="!disabled">
       <div triDrag #s
            [style.width.px]="x2-x"
            (triDragStarted)="onDragStarted($event)"
@@ -206,6 +206,22 @@ export class TriDragResizeContainer {
   _runSetItemsPosition() {
     if (this.disabled) {
       return;
+    }
+
+    if (this.northDrag) {
+      this.northDrag._dragRef.getRootElement().style.width = `${this.x2 - this.x}px`;
+    }
+
+    if (this.eastDrag) {
+      this.eastDrag._dragRef.getRootElement().style.height = `${this.y2 - this.y}px`;
+    }
+
+    if (this.southDrag) {
+      this.southDrag._dragRef.getRootElement().style.width = `${this.x2 - this.x}px`;
+    }
+
+    if (this.westDrag) {
+      this.westDrag._dragRef.getRootElement().style.height = `${this.y2 - this.y}px`;
     }
 
     this._setDragPosition(this.northDrag, {x: this.x, y: this.y});
@@ -370,13 +386,13 @@ export class TriDragResizeContainer {
       this.recalculateXy();
       this._setItemsPosition();
     }
-    // if (changes['outMargin']) {
-    //   this._cdRef.detectChanges();
-    // }
+    if (changes['outMargin'] || changes['disabled']) {
+      this._cdRef.detectChanges();
+    }
   }
 
   ngAfterViewInit() {
     this._setItemsPosition();
-    // this._cdRef.detach();
+    this._cdRef.detach();
   }
 }
