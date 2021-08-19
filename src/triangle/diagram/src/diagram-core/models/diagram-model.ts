@@ -6,10 +6,15 @@
 
 
 import * as _ from 'lodash';
-import { BaseEntityEvent, BaseEntityListener, DeserializeEvent } from '../../canvas-core/core-models/base-entity';
+import {
+  BaseEntityEvent, BaseEntityListener, DeserializeEvent
+} from '../../canvas-core/core-models/base-entity';
 import { BaseModel } from '../../canvas-core/core-models/base-model';
-import { CanvasModel, CanvasModelGenerics, DiagramModelOptions } from '../../canvas-core/entities/canvas/canvas-model';
+import {
+  CanvasModel, CanvasModelGenerics, DiagramModelOptions
+} from '../../canvas-core/entities/canvas/canvas-model';
 import { LayerModel } from '../../canvas-core/entities/layer/layer-model';
+import { DefaultNodeModelOptions, DiagramNodeModel } from '../../models/diagram-node-model';
 import { LinkLayerModel } from '../entities/link-layer/link-layer-model';
 import { LinkModel } from '../entities/link/link-model';
 import { NodeLayerModel } from '../entities/node-layer/node-layer-model';
@@ -31,7 +36,7 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 
   protected options: DiagramModelOptions;
 
-  constructor(options= {}) {
+  constructor(options = {}) {
     super(options);
     this.addLayer(new LinkLayerModel());
     this.addLayer(new NodeLayerModel());
@@ -90,6 +95,11 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
       }
     }
     return this.activeLinkLayer;
+  }
+
+  createNode(nodeOption: DefaultNodeModelOptions) {
+    const node = new DiagramNodeModel(nodeOption);
+    return this.addNode(node);
   }
 
   getNode(node: string): NodeModel {

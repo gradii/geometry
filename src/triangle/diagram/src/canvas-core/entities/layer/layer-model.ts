@@ -128,7 +128,7 @@ export abstract class LayerModel<G extends LayerModelGenerics = LayerModelGeneri
 
   removeModel(id: string | G['CHILDREN']): boolean {
     const _id = typeof id === 'string' ? id : id.getID();
-    const idx = this.models.findIndex(it => it.getID() === id);
+    const idx = this.models.findIndex(it => it.getID() === _id);
     if (idx > -1) {
       this.models.splice(idx, 1);
       return true;

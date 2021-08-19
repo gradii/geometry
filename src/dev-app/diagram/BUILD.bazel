@@ -10,6 +10,7 @@ ng_module(
         ":dev_diagram_scss",
         ":demo_diagram_component_scss",
         ":demo_diagram_simple_component_scss",
+        ":demo_diagram_workflow_component_scss",
         ":demo_diagram_drag_and_drop_component_scss"
     ],
     deps = [
@@ -37,4 +38,9 @@ sass_binary(
 sass_binary(
     name = "demo_diagram_drag_and_drop_component_scss",
     src = "tri-demo-diagram/demo-diagram-drag-and-drop.component.scss",
+)
+
+sass_binary(
+    name = "demo_diagram_workflow_component_scss",
+    src = "tri-demo-diagram/demo-diagram-workflow.component.scss",
 )

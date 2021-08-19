@@ -21,8 +21,8 @@ import { PointModel } from '../entities/link/point-model';
       [attr.fill]="selected || point.isSelected() ? colorSelected : color"
     />
     <svg:circle #circle class="pointTop point"
-                [attr.dataId]="point.getID()"
-                [attr.dataLinkid]="point.getLink().getID()"
+                [attr.data-id]="point.getID()"
+                [attr.data-linkid]="point.getLink().getID()"
                 [attr.cx]="point.getPosition().x"
                 [attr.cy]="point.getPosition().y"
                 [attr.r]="15"

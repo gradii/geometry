@@ -80,7 +80,7 @@ export class DiagramPortModel extends PortModel<DefaultPortModelGenerics> {
 
   canLinkToPort(port: PortModel): boolean {
     if (port instanceof DiagramPortModel) {
-      return this.options.in !== port.in;
+      return this.in !== port.in;
     }
     return true;
   }

@@ -39,7 +39,7 @@ export class DragNewLinkState extends AbstractDisplacementState<DiagramEngine> {
     super({name: 'drag-new-link'});
 
     this.config = {
-      allowLooseLinks: true,
+      allowLooseLinks: false,
       allowLinksFromLockedPorts: false,
       ...options
     };

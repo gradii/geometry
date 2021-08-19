@@ -4,14 +4,15 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { AfterViewChecked, AfterViewInit, Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { DiagramLinkModel } from '../../models/diagram-link-model';
+import {
+  AfterViewChecked, AfterViewInit, Component, Inject, Input, OnDestroy, OnInit
+} from '@angular/core';
 import { ENGINE } from '../../canvas-core/tokens';
+import { DiagramLinkModel } from '../../models/diagram-link-model';
 // import { DefaultLinkPointWidget } from '../../defaults/link/default-link-point-widget';
 // import { DefaultLinkSegmentWidget } from '../../defaults/link/default-link-segment-widget';
 import { DiagramEngine } from '../diagram-engine';
 import { LinkModel } from '../entities/link/link-model';
-import { LinkWidget } from '../entities/link/link-widget';
 import { PointModel } from '../entities/link/point-model';
 import { XLinkPointWidget } from './x-link-point-widget';
 import { XLinkSegmentWidget } from './x-link-segment-widget';
@@ -64,7 +65,7 @@ export interface DefaultLinkState {
       </svg:g>
     </ng-template>
   `,
-  host: {
+  host    : {
     '[attr.data-default-link-test]': 'link.labelName'
   }
 })
@@ -78,9 +79,9 @@ export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewC
 
   @Input() selected: boolean = false;
 
-  svgPaths: any[] = [];
+  svgPaths: any[]   = [];
   pointPaths: any[] = [];
-  linkPaths: any[] = [];
+  linkPaths: any[]  = [];
 
   constructor(@Inject(ENGINE) public engine: DiagramEngine) {
   }
@@ -112,7 +113,7 @@ export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewC
       this.link.getPoints().length - 1 <= this.engine.getMaxNumberPointsPerLink()
     ) {
       const point = new PointModel({
-        link: this.link,
+        link    : this.link,
         position: this.engine.getRelativeMousePoint(event)
       });
       this.link.addPoint(point, index);
@@ -130,11 +131,11 @@ export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewC
   generatePoint(point: PointModel) {
     return {
       component: XLinkPointWidget,
-      props: {
-        key: point.getID(),
-        point: point as any,
+      props    : {
+        key          : point.getID(),
+        point        : point as any,
         colorSelected: this.link.selectedColor,
-        color: this.link.color,
+        color        : this.link.color,
       }
     };
   }
@@ -145,10 +146,10 @@ export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewC
 
     return {
       component: XLinkSegmentWidget,
-      props: {
-        key: `link-${id}`,
-        path: path,
-        selected: this.selected,
+      props    : {
+        key          : `link-${id}`,
+        path         : path,
+        selected     : this.selected,
         diagramEngine: this.engine,
         // factory: this.engine.getFactoryForLink(this.link),
         link: this.link,
@@ -156,7 +157,7 @@ export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewC
         onSelection: (selected: boolean) => {
           this.selected = selected;
         },
-        extras: extraProps
+        extras     : extraProps
       }
     };
     // return (
@@ -178,80 +179,82 @@ export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewC
 
   ngAfterViewInit() {
     // ensure id is present for all points on the path
-    let points = this.link.getPoints();
-    let paths = [];
+    let points    = this.link.getPoints();
+    let paths     = [];
     this.refPaths = [];
 
-    if (points.length === 2) {
-      // paths.push(
-      //
-      // );
+    // if (points.length === 2) {
+    // paths.push(
+    //
+    // );
 
-      this.svgPaths.push(
-        {
-          ref: (ref: SVGPathElement) => {
-            this.refPaths.push(ref);
-          },
-          path: this.link.getSVGPath(),
-        }
-        // this.generateLink(
-        //   this.link.getSVGPath(),
-        //   {
-        //     onMouseDown: (event: any) => {
-        //       this.addPointToLink(event, 1);
-        //     }
-        //   },
-        //   '0'
-        // )
-      );
-
-
-      // draw the link as dangeling
-      if (this.link.getTargetPort() == null) {
-        // paths.push(this.generatePoint(points[1]));
-        this.pointPaths.push({
-          point: points[1] as any,
-          colorSelected: this.link.selectedColor,
-          color: this.link.color,
-        });
+    this.svgPaths.push(
+      {
+        ref : (ref: SVGPathElement) => {
+          this.refPaths.push(ref);
+        },
+        path: this.link.getSVGPath(),
       }
-    } else {
-      // draw the multiple anchors and complex line instead
-      for (let j = 0; j < points.length - 1; j++) {
-        paths.push(
-          this.generateLink(
-            LinkWidget.generateLinePath(points[j], points[j + 1]),
-            {
-              'data-linkid': this.link.getID(),
-              'data-point': j,
-              onMouseDown: (event: MouseEvent) => {
-                this.addPointToLink(event, j + 1);
-              }
-            },
-            j
-          )
-        );
+      // this.generateLink(
+      //   this.link.getSVGPath(),
+      //   {
+      //     onMouseDown: (event: any) => {
+      //       this.addPointToLink(event, 1);
+      //     }
+      //   },
+      //   '0'
+      // )
+    );
 
-        this.linkPaths.push(
-          {
-            ref: (ref: SVGPathElement) => {
-              this.refPaths.push(ref);
-            },
-            path: LinkWidget.generateLinePath(points[j], points[j + 1]),
-            point: j
-          }
-        );
-      }
 
-      // render the circles
-      for (let i = 1; i < points.length - 1; i++) {
-        paths.push(this.generatePoint(points[i]));
-      }
-
-      if (this.link.getTargetPort() == null) {
-        paths.push(this.generatePoint(points[points.length - 1]));
-      }
+    // draw the link as dangeling
+    // if (this.link.getTargetPort() == null) {
+    //   // paths.push(this.generatePoint(points[1]));
+    for (let it of points) {
+      this.pointPaths.push({
+        point        : it as any,
+        colorSelected: this.link.selectedColor,
+        color        : this.link.color,
+      });
     }
+    // }
+    // } else {
+    //   // draw the multiple anchors and complex line instead
+    //   for (let j = 0; j < points.length - 1; j++) {
+    //     paths.push(
+    //       this.generateLink(
+    //         LinkWidget.generateLinePath(points[j], points[j + 1]),
+    //         {
+    //           'data-linkid': this.link.getID(),
+    //           'data-point': j,
+    //           onMouseDown: (event: MouseEvent) => {
+    //             this.addPointToLink(event, j + 1);
+    //           }
+    //         },
+    //         j
+    //       )
+    //     );
+    //
+    //     this.linkPaths.push(
+    //       {
+    //         ref: (ref: SVGPathElement) => {
+    //           this.refPaths.push(ref);
+    //         },
+    //         path: LinkWidget.generateLinePath(points[j], points[j + 1]),
+    //         point: j
+    //       }
+    //     );
+    //   }
+    //
+    //   // render the circles
+    //   for (let i = 1; i < points.length - 1; i++) {
+    //     paths.push(this.generatePoint(points[i]));
+    //   }
+    //
+    //   if (this.link.getTargetPort() == null) {
+    //     paths.push(this.generatePoint(points[points.length - 1]));
+    //   }
+    // }
 
     // return <g data-default-link-test={this.link.getOptions().testName}>{paths}</g>;
   }

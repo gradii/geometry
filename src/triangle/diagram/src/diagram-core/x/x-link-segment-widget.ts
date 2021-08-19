@@ -31,6 +31,7 @@ import { DiagramEngine } from '../diagram-engine';
   template: `
 
     <svg:path
+      [attr.data-linkid]="this.link.getID()"
       [ref]="ref"
       [ngStyle]="(selected || link.isSelected()) ? {
         strokeDasharray: '10, 2',
