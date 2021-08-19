@@ -24,7 +24,6 @@
     }
   },
   "projects": {
-    "diagram-demo": { "tags": [] },
     "dev-app": { "tags": [] },
     "annotation": { "tags": ["pkg"] },
     "check-type": { "tags": ["pkg"] },
