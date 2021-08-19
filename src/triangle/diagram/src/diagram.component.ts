@@ -55,7 +55,7 @@ import { DIAGRAM_STATES } from './tokens';
 })
 export class DiagramComponent {
   constructor(
-    @Inject(ENGINE) private engine: DiagramEngine,
+    @Inject(ENGINE) public engine: DiagramEngine,
     @Optional() @Inject(DIAGRAM_STATES) private states: State[] = []
   ) {
     states.forEach(state => {

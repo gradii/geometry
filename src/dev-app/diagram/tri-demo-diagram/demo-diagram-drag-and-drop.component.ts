@@ -5,13 +5,11 @@
  */
 
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import {
-  DiagramNodeModel, DiagramComponent, DiagramModel, NodeModel
-} from '@gradii/triangle/diagram';
+import { DiagramComponent, DiagramModel, DiagramNodeModel } from '@gradii/triangle/diagram';
 
 @Component({
-  selector: 'app-root',
-  template: `
+  selector : 'app-root',
+  template : `
     <div class="action-bar">
       <div
         *ngFor="let node of nodesLibrary"
@@ -39,13 +37,13 @@ import {
 })
 export class DemoDiagramDragAndDropComponent implements AfterViewInit {
   diagramModel: DiagramModel;
-  nodesDefaultDimensions = { height: 200, width: 200 };
-  nodesLibrary = [
-    { color: '#AFF8D8', name: 'default' },
-    { color: '#FFB5E8', name: 'default' },
-    { color: '#85E3FF', name: 'default' },
+  nodesDefaultDimensions = {height: 200, width: 200};
+  nodesLibrary           = [
+    {color: '#AFF8D8', name: 'default1'},
+    {color: '#FFB5E8', name: 'default2'},
+    {color: '#85E3FF', name: 'default3'},
   ];
-  @ViewChild(DiagramComponent, { static: true })
+  @ViewChild(DiagramComponent, {static: true})
   diagram?: DiagramComponent;
 
   constructor() {
@@ -60,7 +58,7 @@ export class DemoDiagramDragAndDropComponent implements AfterViewInit {
     const nodeData = this.nodesLibrary.find((nodeLib) => nodeLib.name === type);
     if (nodeData) {
       const node = new DiagramNodeModel({
-        name: nodeData.name,
+        name : nodeData.name,
         color: nodeData.color
       });
       // node.setExtras(nodeData);
@@ -78,6 +76,7 @@ export class DemoDiagramDragAndDropComponent implements AfterViewInit {
     const type = (e.target as HTMLElement).getAttribute('data-type');
     if (e.dataTransfer && type) {
       e.dataTransfer.setData('type', type);
+      e.dataTransfer.setData('color', this.nodesLibrary.find(it => it.name === type).color);
     }
   }
 
@@ -86,22 +85,38 @@ export class DemoDiagramDragAndDropComponent implements AfterViewInit {
    */
   onBlockDropped(e: DragEvent): void | undefined {
     if (e.dataTransfer) {
-      const nodeType = e.dataTransfer.getData('type');
-      const node = this.createNode(nodeType);
-      // const canvasManager = this.diagram?.diagramEngine.getCanvasManager();
-      // if (canvasManager) {
-      //   const droppedPoint = canvasManager.getZoomAwareRelativePoint(e);
-      //
-      //   const coords = {
-      //     x: droppedPoint.x - this.nodesDefaultDimensions.width / 2,
-      //     y: droppedPoint.y - this.nodesDefaultDimensions.height / 2,
-      //   };
-      //
-      //   if (node) {
-      //     node.setCoords(coords);
+      const nodeType      = e.dataTransfer.getData('type');
+      const color         = e.dataTransfer.getData('color');
+      const node          = this.createNode(nodeType);
+      const canvasManager = this.diagram?.engine;
+      if (canvasManager) {
+        const droppedPoint = canvasManager.getRelativeMousePoint(e);
+
+        let nodesCount = 0;
+
+        // const nodePort1 = new DiagramNodeModel('Node ' + (++nodesCount), 'rgb(192,255,0)')
+        //   .addInPort('In');
+        // const nodePort2 = new DiagramNodeModel('Node ' + (++nodesCount), 'rgb(0,192,255)')
+        //   .addOutPort('Out');
+        //
+        // node.addPort(nodePort1);
+        // node.addPort(nodePort2);
+
+        node.addInPort('In');
+        node.addOutPort('Out');
+        node.color = color;
+
+        const coords = {
+          x: droppedPoint.x,
+          y: droppedPoint.y,
+        };
+
+        if (node) {
+          node.setPosition(coords.x, coords.y);
           this.diagramModel.addNode(node);
-        // }
-      // }
+          canvasManager.repaintCanvas();
+        }
+      }
     }
   }
 }
