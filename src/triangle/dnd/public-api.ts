@@ -33,4 +33,15 @@ export * from './src/directives/drag';
 export * from './src/directives/drag-handle';
 export * from './src/directives/drag-preview';
 export * from './src/directives/drag-placeholder';
+
+export * from './src/position-strategy/grid-position-strategy';
+export * from './src/position-strategy/flex-column-position-strategy';
+export * from './src/position-strategy/flex-row-position-strategy';
+export * from './src/position-strategy/flex-row-sort-position-strategy';
+export * from './src/position-strategy/grid-position-strategy';
+export * from './src/position-strategy/horizontal-position-strategy';
+export * from './src/position-strategy/position-strategy';
+export * from './src/position-strategy/sort-position-strategy';
+export * from './src/position-strategy/vertical-position-strategy';
+
 export { CompactType, GridTypes } from './src/enum';
