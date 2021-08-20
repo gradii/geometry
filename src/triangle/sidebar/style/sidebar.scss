@@ -60,13 +60,13 @@
   }
 
   &.fixed.start {
-    @include tri-ltr(left, 0);
-    @include tri-rtl(right, 0);
+    @include mixins.tri-ltr(left, 0);
+    @include mixins.tri-rtl(right, 0);
   }
 
   &.fixed.end {
-    @include tri-ltr(right, 0);
-    @include tri-rtl(left, 0);
+    @include mixins.tri-ltr(right, 0);
+    @include mixins.tri-rtl(left, 0);
   }
 
   ::ng-deep tri-sidebar-footer {
