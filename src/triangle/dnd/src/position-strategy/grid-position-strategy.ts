@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { CachedItemPosition } from '@gradii/triangle/dnd/src/drop-container.interface';
+import { CachedItemPosition } from '../drop-container.interface';
 import { DndContainerRef, } from '../drag-drop-ref/dnd-container-ref';
 import { DragRefInternal as DragRef } from '../drag-drop-ref/drag-ref';
 import { DropGridContainerRef } from '../drag-drop-ref/drop-grid-container-ref';

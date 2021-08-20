@@ -7,10 +7,10 @@
 import { coerceElement } from '@angular/cdk/coercion';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { ElementRef, NgZone } from '@angular/core';
-import { dragDropPosition } from '@gradii/triangle/dnd/src/drag-styling';
-import { DROP_PROXIMITY_THRESHOLD } from '@gradii/triangle/dnd/src/enum';
-import { findIndex } from '@gradii/triangle/dnd/src/utils';
-import { isPointerNearClientRect } from '@gradii/triangle/dnd/src/utils/client-rect';
+import { dragDropPosition } from '../drag-styling';
+import { DROP_PROXIMITY_THRESHOLD } from '../enum';
+import { findIndex } from '../utils';
+import { isPointerNearClientRect } from '../utils/client-rect';
 import { Subject } from 'rxjs';
 import { DragDropRegistry } from '../drag-drop-registry';
 import { DragRefInternal as DragRef } from './drag-ref';

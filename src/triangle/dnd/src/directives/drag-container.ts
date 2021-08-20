@@ -10,7 +10,7 @@ import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import {
   ChangeDetectorRef, Directive, ElementRef, EventEmitter, Inject, Input, Optional, Output, SkipSelf
 } from '@angular/core';
-import { TriDragDrop, TriDragEnter, TriDragExit } from '@gradii/triangle/dnd';
+import { TriDragDrop, TriDragEnter, TriDragExit } from '../event/drag-events';
 import { Subject } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 import { DragDrop } from '../drag-drop';

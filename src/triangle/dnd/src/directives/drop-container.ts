@@ -6,7 +6,6 @@
 
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Directive, ElementRef, InjectionToken, Input } from '@angular/core';
-import { TriDrag } from '@gradii/triangle/dnd';
 import { DndContainerRef } from '../drag-drop-ref/dnd-container-ref';
 import { TriDropContainerGroup } from './drop-container-group';
 import { TriDropListContainer } from './drop-list-container';

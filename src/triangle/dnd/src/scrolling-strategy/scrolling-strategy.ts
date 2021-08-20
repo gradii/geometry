@@ -6,7 +6,7 @@
 
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { NgZone } from '@angular/core';
-import { DndContainerRef } from '@gradii/triangle/dnd';
+import { DndContainerRef } from '../drag-drop-ref/dnd-container-ref';
 import {
   AutoScrollHorizontalDirection, AutoScrollVerticalDirection, DROP_PROXIMITY_THRESHOLD
 } from '../enum';

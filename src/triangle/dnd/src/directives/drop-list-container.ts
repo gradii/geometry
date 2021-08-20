@@ -13,7 +13,6 @@ import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import {
   ChangeDetectorRef, Directive, ElementRef, EventEmitter, Inject, Input, OnDestroy, Optional, Output, SkipSelf,
 } from '@angular/core';
-import { SortPositionStrategy } from '@gradii/triangle/dnd/src/position-strategy/sort-position-strategy';
 import { Subject } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 import { DragDrop } from '../drag-drop';

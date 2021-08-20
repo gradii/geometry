@@ -7,7 +7,7 @@
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
 import { ElementRef, Inject, Injectable, NgZone } from '@angular/core';
-import { GridPositionStrategy } from '@gradii/triangle/dnd/src/position-strategy/grid-position-strategy';
+import { GridPositionStrategy } from './position-strategy/grid-position-strategy';
 import { DragContainerRef } from './drag-drop-ref/drag-container-ref';
 import { DragRef, DragRefConfig } from './drag-drop-ref/drag-ref';
 import { DndContainerRef } from './drag-drop-ref/dnd-container-ref';
