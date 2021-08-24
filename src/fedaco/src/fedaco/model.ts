@@ -7,10 +7,11 @@
 import { pluralStudy } from '../helper/pluralize';
 import { snakeCase } from '../helper/str';
 import { mixinForwardsCalls } from '../mixins/forwards-calls';
+import { NoSuchMethodProxy } from '../proxy/no-such-method-proxy';
 import { QueryBuilder } from '../query-builder/query-builder';
 import { FedacoBuilder } from './fedaco-builder';
+import { mixinHasAttributes } from './mixins/has-attributes';
 import { mixinHasGlobalScopes } from './mixins/has-global-scopes';
-import { NoSuchMethodProxy } from './no-such-method-proxy';
 import { Scope } from './scope';
 
 
@@ -21,23 +22,26 @@ export interface Model extends FedacoBuilder {
 }
 
 @NoSuchMethodProxy()
-export class Model extends mixinHasGlobalScopes(
+export class Model extends mixinHasAttributes(mixinHasGlobalScopes(
   mixinForwardsCalls(class {
-  })) {
+  }))
+) {
   /*Indicates if the model exists.*/
   _exists: boolean = false;
   /*Indicates if the model was inserted during the current request lifecycle.*/
   _wasRecentlyCreated: boolean = false;
   /*The connection name for the model.*/
-  _connection?: string;
+  _connection?: string = undefined;
   /*The table associated with the model.*/
-  _table: string;
+  protected _table: string = undefined;
   /*The table alias for table*/
-  _tableAlias: string;
+  _tableAlias: string = undefined;
   /*The primary key for the model.*/
   _primaryKey: string = 'id';
 
-  _connectionResolver;
+  _connectionResolver = undefined;
+
+  _with = [];
 
   protected _classCastCache: {};
 
@@ -94,7 +98,7 @@ export class Model extends mixinHasGlobalScopes(
 
   /*Create a new instance of the given model.*/
   public newInstance(attributes: any[] = [], exists: boolean = false) {
-    const model = new Model(attributes);
+    const model   = new Model(attributes);
     model._exists = exists;
     model.setConnection(this.getConnectionName());
     model.setTable(this.getTable());
@@ -130,7 +134,9 @@ export class Model extends mixinHasGlobalScopes(
 
   /*Get a new query builder that doesn't have any global scopes.*/
   public newQueryWithoutScopes() {
-    return this.newModelQuery().withRelation(this.with).withCount(this.withCount);
+    return this.newModelQuery()
+      .with(this._with)
+      .withCount(this.withCount);
   }
 
   /*Register the global scopes for this builder instance.*/
@@ -143,15 +149,15 @@ export class Model extends mixinHasGlobalScopes(
 
   /*Fill the model with an array of attributes.*/
   public fill(attributes: any[]) {
-    const totallyGuarded = this.totallyGuarded();
-    for (let [key, value] of Object.entries(this.fillableFromArray(attributes))) {
-      let key = this.removeTableFromKey(key);
-      if (this.isFillable(key)) {
-        this.setAttribute(key, value);
-      } else if (totallyGuarded) {
-        throw new Error(`MassAssignmentException key`);
-      }
-    }
+    // const totallyGuarded = this.totallyGuarded();
+    // for (let [key, value] of Object.entries(this.fillableFromArray(attributes))) {
+    //   key = this.removeTableFromKey(key);
+    //   if (this.isFillable(key)) {
+    //     this.setAttribute(key, value);
+    //   } else if (totallyGuarded) {
+    //     throw new Error(`MassAssignmentException key`);
+    //   }
+    // }
     return this;
   }
 
@@ -163,20 +169,21 @@ export class Model extends mixinHasGlobalScopes(
     //   return false;
     // }
     let saved;
-    if (this._exists) {
-      saved = this.isDirty() ? this.performUpdate(query) : true;
-    } else {
-      saved = this.performInsert(query);
-      if (!this.getConnectionName() && (connection = query.getConnection())) {
-        this.setConnection(connection.getName());
-      }
-    }
+    // if (this._exists) {
+    //   saved = this.isDirty() ? this.performUpdate(query) : true;
+    // } else {
+    //   saved = this.performInsert(query);
+    //
+    //   const connection = query.getConnection();
+    //   if (!this.getConnectionName() && connection) {
+    //     this.setConnection(connection.getName());
+    //   }
+    // }
     if (saved) {
       this._finishSave(options);
     }
     return saved;
   }
-
 
   // @Hooks({
   //   before: ()=>{
@@ -206,7 +213,12 @@ export class Model extends mixinHasGlobalScopes(
     // if (resolver = (this.constructor as unknown as typeof Model).relationResolvers[get_class(this)][method] ?? null) {
     //   return resolver(this);
     // }
-    return this.forwardCallTo(this.newQuery(), method, parameters);
+
+    const info = this.getReflectMetadata(this);
+    info.hasMetadata(Attribute);
+    this.setAttribue(...parameters);
+
+    // return this.forwardCallTo(this.newQuery(), method, parameters);
   }
 
   /*Perform a model insert operation.*/
@@ -257,6 +269,13 @@ export class Model extends mixinHasGlobalScopes(
   /*Get a new query builder instance for the connection.*/
   protected newBaseQueryBuilder() {
     return this.getConnection().query();
+  }
+
+  public qualifyColumn(column: string) {
+    if (column.includes('.')) {
+      return column;
+    }
+    return this.getTable() + '.' + column;
   }
 
   /*Merge the cast class attributes back into the model.*/

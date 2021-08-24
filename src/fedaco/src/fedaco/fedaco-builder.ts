@@ -4,21 +4,25 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  isAnyEmpty,
-  isArray,
-  isBlank,
-  isFunction
-} from '@gradii/check-type';
+import { isAnyEmpty, isArray, isBlank, isFunction, isString } from '@gradii/check-type';
+import { tap } from 'ramda';
 import { mixinBuildQueries } from '../query-builder/mixins/build-query';
 import { QueryBuilder } from '../query-builder/query-builder';
+import { mixinForwardCallToQueryBuilder } from './mixins/forward-call-to-query-builder';
+import { mixinGuardsAttributes } from './mixins/guards-attributes';
+import { mixinQueriesRelationShips } from './mixins/queries-relationships';
 import { Model } from './model';
 import { Scope } from './scope';
-import { tap } from 'ramda';
 
 
-export class FedacoBuilder extends mixinBuildQueries(class {
-}) {
+// @NoSuchMethodProxy()
+export class FedacoBuilder extends mixinGuardsAttributes(
+  mixinQueriesRelationShips(
+    mixinBuildQueries(
+      mixinForwardCallToQueryBuilder(class {
+      })
+    )
+  )) {
 
   /*All of the globally registered builder macros.*/
   protected static macros: any[] = [];
@@ -41,6 +45,7 @@ export class FedacoBuilder extends mixinBuildQueries(class {
   protected _scopes: any[] = [];
   /*Removed global scopes.*/
   protected _removedScopes: any[] = [];
+
 
   public constructor(protected _query: QueryBuilder) {
     super();
@@ -72,15 +77,72 @@ export class FedacoBuilder extends mixinBuildQueries(class {
     return this;
   }
 
+  public qualifyColumn(column: string) {
+    return this._model.qualifyColumn(column);
+  }
+
   /**
    * Execute the query as a "select" statement.
    */
-  public get(columns: any[] | string = ['*']) {
-    // var builder = this.applyScopes();
-    // if (count(models = builder.getModels(columns)) > 0) {
-    //   var models = builder.eagerLoadRelations(models);
+  public get(columns: string[] | string = ['*']) {
+    const builder = this.applyScopes();
+    let models    = builder.getModels(columns);
+    if (models.length > 0) {
+      models = builder.eagerLoadRelations(models);
+    }
+    return models;
+  }
+
+  eagerLoadRelations(models) {
+    throw new Error('not implemented yet');
+    return models;
+  }
+
+  public applyScopes() {
+    if (!this._scopes.length) {
+      return this;
+    }
+    const builder = this.clone();
+    for (const [identifier, scope] of Object.entries(this._scopes)) {
+      if (!(builder._scopes[identifier] !== undefined)) {
+        continue;
+      }
+      builder.callScope(builder => {
+        if (isFunction(scope)) {
+          scope(builder);
+        }
+        if (scope instanceof Scope) {
+          scope.apply(builder, this.getModel());
+        }
+      });
+    }
+    return builder;
+  }
+
+  protected callScope(scope: Function, parameters: any[] = []) {
+    const query              = this.getQuery();
+    // todo fixme
+    const originalWhereCount = isBlank(query._wheres) ? 0 : query._wheres.length;
+    const result             = scope(this, ...parameters) ?? this;
+
+    // no need to add with group
+    // if (query._wheres.length > originalWhereCount) {
+    //   this.addNewWheresWithinGroup(query, originalWhereCount);
     // }
-    // return builder.getModel().newCollection(models);
+    return result;
+  }
+
+  // no need to use use group
+  // protected addNewWheresWithinGroup(query: FedacoBuilder, originalWhereCount: number) {
+  //   const allWheres = query.wheres;
+  //   query.wheres = [];
+  //   this.groupWhereSliceForScope(query, array_slice(allWheres, 0, originalWhereCount));
+  //   this.groupWhereSliceForScope(query, array_slice(allWheres, originalWhereCount));
+  // }
+
+
+  public getModels(columns: string[] | string = ['*']) {
+    return this._query.get(columns);
   }
 
   /**
@@ -93,19 +155,29 @@ export class FedacoBuilder extends mixinBuildQueries(class {
     return this.whereKey(ids).get(columns);
   }
 
-
   /*Find a model by its primary key or throw an exception.*/
   public findOrFail(id: any, columns: any[] = ['*']) {
     const result = this.find(id, columns);
 
-    if (isArray(id)) {
-      if ((result as any[]).length === id.length) {
+    if (isArray(id) && isArray(result)) {
+      if (result.length === id.length) {
         return result;
       }
     } else if (!isBlank(result)) {
       return result;
     }
-    throw new Error(`ModelNotFoundException No query results for model  ${this._model.constructor.name} ${JSON.stringify(id)});`);
+    throw new Error(
+      `ModelNotFoundException No query results for model  ${this._model.constructor.name} ${JSON.stringify(
+        id)});`);
+  }
+
+  public firstOrFail(columns: any[] = ['*']) {
+    const model = this.first(columns);
+    if (!isBlank(model)) {
+      return model;
+    }
+    throw new Error(
+      `ModelNotFoundException No query results for model  ${this._model.constructor.name});`);
   }
 
   /**
@@ -122,16 +194,26 @@ export class FedacoBuilder extends mixinBuildQueries(class {
   /**
    * Add a basic where clause to the query.
    */
-  public where(column: Function | string | any[], operator: any = null, value: any = null,
-               conjunction: 'and' | 'or'                                           = 'and') {
+  public where(column: Function | string | any[],
+               operator: any             = null,
+               value: any                = null,
+               conjunction: 'and' | 'or' = 'and') {
     if (isFunction(column) && isBlank(operator)) {
       const query = this._model.newQueryWithoutRelationships();
       column(query);
       this._query.addNestedWhereQuery(query.getQuery(), conjunction);
     } else {
-      this._query.where.apply(this, arguments);
+      this._query.where(column as any[], operator, value, conjunction);
     }
     return this;
+  }
+
+  /*Get a single column's value from the first result of a query.*/
+  public value(column: string) {
+    const result = this.first([column]);
+    if (result) {
+      return result[column];
+    }
   }
 
   /*Register a new global scope.*/
@@ -182,8 +264,8 @@ export class FedacoBuilder extends mixinBuildQueries(class {
   }
 
   /*Get the first record matching the attributes or instantiate it.*/
-  public firstOrNew(attributes: any, values: any = {}) {
-    const instance = this.where(attributes).first();
+  public firstOrNew(attributes: any, values: any = {}): Model {
+    const instance = this.where(attributes).first() as Model;
     if (!isBlank(instance)) {
       return instance;
     }
@@ -209,5 +291,66 @@ export class FedacoBuilder extends mixinBuildQueries(class {
     }, this.firstOrNew(attributes));
   }
 
+  public with(relations, callback?) {
+    let eagerLoad;
+    if (isFunction(callback)) {
+      eagerLoad = this.parseWithRelations({[relations]: callback});
+    } else {
+      eagerLoad = this.parseWithRelations(isString(relations) ? arguments : relations);
+    }
+    this._eagerLoad = [...this._eagerLoad, ...eagerLoad];
+    return this;
+  }
 
+
+  protected parseWithRelations(relations: any) {
+    let results = [];
+    for (const [name, constraints] of Object.entries(relations)) {
+      // if (isNumber(name)) {
+      //   name = constraints;
+      //
+      //   [name, constraints] = Str.contains(name, ':') ? this.createSelectWithConstraint(name) : [name, () => {
+      //   }];
+      // }
+      results       = this.addNestedWiths(name, results);
+      results[name] = constraints;
+    }
+    return results;
+  }
+
+  protected addNestedWiths(name: string, results: any[]) {
+    const progress = [];
+    for (const segment of name.split('.')) {
+      progress.push(segment);
+      const last = progress.join('.');
+      if (!(results[last] !== undefined)) {
+        results[last] = () => {
+        };
+      }
+    }
+    return results;
+  }
+
+  /*Create a constraint to select the given columns for the relation.*/
+  protected createSelectWithConstraint(name: string) {
+    return [
+      name.split(':')[0], query => {
+        query.select(name.split(':')[1].split(','));
+      }
+    ];
+  }
+
+  __noSuchMethod__(methodName, args) {
+
+    const query = this.getQuery();
+    if (query[methodName]) {
+      return query[methodName](...args);
+    }
+    throw new Error('no method found');
+  }
+
+  clone() {
+    const builder = new FedacoBuilder(this._query.clone());
+    return builder;
+  }
 }

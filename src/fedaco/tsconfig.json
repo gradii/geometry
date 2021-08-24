@@ -5,6 +5,9 @@
     "rootDir": "..",
     "baseUrl": ".",
     "paths": {
+      "@gradii/annotation": [
+        "../annotation"
+      ],
       "@gradii/check-type": [
         "../check-type"
       ]
@@ -12,5 +15,8 @@
   },
   "include": [
     "./**/*.ts"
+  ],
+  "exclude": [
+    "**/*.spec.ts"
   ]
 }

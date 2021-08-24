@@ -16,6 +16,6 @@ export class StubModel extends Model {
   @Column({
     name: 'name'
   })
-  name;
+  name: string;
 
 }

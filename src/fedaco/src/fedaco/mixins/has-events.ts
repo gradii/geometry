@@ -6,7 +6,7 @@
 
 import { Constructor } from '../../helper/constructor';
 import { isAnyEmpty, isArray, isBlank, isObject } from '@gradii/check-type';
-import { uniq } from 'ramda';
+import {uniq} from 'ramda';
 
 
 export function mixinHasEvents<T extends Constructor<any>>(base: T) {

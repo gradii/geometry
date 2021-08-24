@@ -4,6 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { Model } from '../../fedaco/model';
 import { Constructor } from '../../helper/constructor';
 import { QueryBuilder } from '../query-builder';
 
@@ -13,7 +14,7 @@ export interface BuildQueries {
 
   tap(callback: (q: this, condition) => any): this;
 
-  first(columns?: any[] | string): this;
+  first(columns?: any[] | string): Model | any;
 
   unless(value: any, callback: Function, _default?: Function);
 }

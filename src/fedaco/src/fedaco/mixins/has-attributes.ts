@@ -19,8 +19,8 @@
 // import { LogicException } from 'LogicException';
 // import { Constructor } from './constructor';
 
+import { isArray } from '@gradii/check-type';
 import { Constructor } from '../../helper/constructor';
-
 
 /** Mixin to augment a directive with a `disableRipple` property. */
 export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
@@ -58,8 +58,9 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
 
     /*Extract and cache all the mutated attributes of a class.*/
     public static cacheMutatedAttributes(clazz: string) {
-      (this.constructor as unknown as typeof HasAttributes).mutatorCache[clazz] = collect((this.constructor as unknown as typeof HasAttributes).getMutatorMethods(
-        clazz)).map(match => {
+      (this.constructor as unknown as typeof HasAttributes).mutatorCache[clazz] = collect(
+        (this.constructor as unknown as typeof HasAttributes).getMutatorMethods(
+          clazz)).map(match => {
         return lcfirst(
           (this.constructor as unknown as typeof HasAttributes).snakeAttributes ?
             Str.snake(match) :
@@ -70,7 +71,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
 
     /*Get all of the attribute mutator methods.*/
     protected static getMutatorMethods(clazz: any) {
-      preg_match_all('/(?<=^|;)get([^;]+?)Attribute(;|$)/', get_class_methods(clazz).join(';'), matches);
+      preg_match_all('/(?<=^|;)get([^;]+?)Attribute(;|$)/', get_class_methods(clazz).join(';'),
+        matches);
       return matches[1];
     }
 
@@ -78,7 +80,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
     public attributesToArray() {
       let attributes, mutatedAttributes;
       attributes = this.addDateAttributesToArray(attributes = this.getArrayableAttributes());
-      attributes = this.addMutatedAttributesToArray(attributes, mutatedAttributes = this.getMutatedAttributes());
+      attributes = this.addMutatedAttributesToArray(attributes,
+        mutatedAttributes = this.getMutatedAttributes());
       attributes = this.addCastAttributesToArray(attributes, mutatedAttributes);
       for (let key of this.getArrayableAppends()) {
         attributes[key] = this.mutateAttributeForArray(key, null);
@@ -111,8 +114,9 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
       if (!key) {
         return;
       }
-      if (array_key_exists(key, this.attributes) || array_key_exists(key,
-        this.casts) || this.hasGetMutator(key) || this.isClassCastable(key)) {
+      if (array_key_exists(key, this.attributes) ||
+        array_key_exists(key, this.casts) ||
+        this.hasGetMutator(key) || this.isClassCastable(key)) {
         return this.getAttributeValue(key);
       }
       if (method_exists(HasAttributes, key)) {
@@ -132,7 +136,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
         return this.relations[key];
       }
       if (method_exists(this,
-        key) || ((this.constructor as unknown as typeof HasAttributes).relationResolvers[get_class(this)][key] ?? null)) {
+        key) || ((this.constructor as unknown as typeof HasAttributes).relationResolvers[get_class(
+        this)][key] ?? null)) {
         return this.getRelationshipFromMethod(key);
       }
     }
@@ -175,7 +180,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
 
     /*Set a given JSON attribute on the model.*/
     public fillJsonAttribute(key: string, value: any) {
-      const [key, path] = key.split('->');
+      const [key, path]    = key.split('->');
       this.attributes[key] = this.asJson(this.getArrayAttributeWithValue(path, key, value));
       return this;
     }
@@ -261,7 +266,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
 
     /*Get the model's original attribute values.*/
     public getOriginal(key: string | null = null, _default: any = null) {
-      return new HasAttributes().setRawAttributes(this.original, sync = true).getOriginalWithoutRewindingModel(key,
+      return new HasAttributes().setRawAttributes(this.original,
+        sync = true).getOriginalWithoutRewindingModel(key,
         _default);
     }
 
@@ -292,7 +298,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
 
     /*Sync multiple original attribute with their current values.*/
     public syncOriginalAttributes(attributes: any[] | string) {
-      let attributes = isArray(attributes) ? attributes : func_get_args();
+      let attributes      = isArray(attributes) ? attributes : func_get_args();
       let modelAttributes = this.getAttributes();
       for (let attribute of attributes) {
         this.original[attribute] = modelAttributes[attribute];
@@ -318,13 +324,13 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
 
     /*Determine if the model or any of the given attribute(s) have been modified.*/
     public wasChanged(attributes: any[] | string | null = null) {
-      return this.hasChanges(this.getChanges(), isArray(attributes) ? attributes : func_get_args());
+      return this.hasChanges(this.getChanges(), isArray(attributes) ? attributes : arguments);
     }
 
     /*Get the attributes that have been changed since last sync.*/
     public getDirty() {
-      let dirty = [];
-      for (let [key, value] of Object.entries(this.getAttributes())) {
+      const dirty = [];
+      for (const [key, value] of Object.entries(this.getAttributes())) {
         if (!this.originalIsEquivalent(key)) {
           dirty[key] = value;
         }
@@ -343,7 +349,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
         return false;
       }
       let attribute = Arr.get(this.attributes, key);
-      let original = Arr.get(this.original, key);
+      let original  = Arr.get(this.original, key);
       if (attribute === original) {
         return true;
       } else if (isBlank(attribute)) {
@@ -356,8 +362,10 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
         if (attribute === null && original !== null || attribute !== null && original === null) {
           return false;
         }
-        return abs(this.castAttribute(key, attribute) - this.castAttribute(key, original)) < PHP_FLOAT_EPSILON * 4;
-      } else if (this.hasCast(key, (this.constructor as unknown as typeof HasAttributes).primitiveCastTypes)) {
+        return abs(this.castAttribute(key, attribute) - this.castAttribute(key,
+          original)) < PHP_FLOAT_EPSILON * 4;
+      } else if (this.hasCast(key,
+        (this.constructor as unknown as typeof HasAttributes).primitiveCastTypes)) {
         return this.castAttribute(key, attribute) === this.castAttribute(key, original);
       }
       return is_numeric(attribute) && is_numeric(original) && strcmp(
@@ -369,7 +377,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
 
     /*Append attributes to query when building a query.*/
     public append(attributes: any[] | string) {
-      this.appends = array_unique([...this.appends, ...(isString(attributes) ? func_get_args() : attributes)]);
+      this.appends = array_unique(
+        [...this.appends, ...(isString(attributes) ? func_get_args() : attributes)]);
       return this;
     }
 
@@ -428,7 +437,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
         if (attributes[key] && this.isCustomDateTimeCast(value)) {
           attributes[key] = attributes[key].format(value.split(':')[1]);
         }
-        if (attributes[key] && attributes[key] instanceof DateTimeInterface && this.isClassCastable(key)) {
+        if (attributes[key] && attributes[key] instanceof DateTimeInterface && this.isClassCastable(
+          key)) {
           attributes[key] = this.serializeDate(attributes[key]);
         }
         if (attributes[key] instanceof Arrayable) {
@@ -477,9 +487,11 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
       let relation = this.method();
       if (!relation instanceof Relation) {
         if (isBlank(relation)) {
-          throw new LogicException(`${HasAttributes}::${method} must return a relationship instance, but "null" was returned. Was the "return" keyword used?`);
+          throw new LogicException(
+            `${HasAttributes}::${method} must return a relationship instance, but "null" was returned. Was the "return" keyword used?`);
         }
-        throw new LogicException(`${HasAttributes}::${method} must return a relationship instance.`);
+        throw new LogicException(
+          `${HasAttributes}::${method} must return a relationship instance.`);
       }
       return tap(relation.getResults(), results => {
         this.setRelation(method, results);
@@ -553,7 +565,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
         return this.classCastCache[key];
       } else {
         let caster = this.resolveCasterClass(key);
-        let value = caster instanceof CastsInboundAttributes ? value : caster.get(this, key, value, this.attributes);
+        let value  = caster instanceof CastsInboundAttributes ? value : caster.get(this, key, value,
+          this.attributes);
         if (caster instanceof CastsInboundAttributes || !is_object(value)) {
           delete this.classCastCache[key];
         } else {
@@ -598,11 +611,16 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
     protected setClassCastableAttribute(key: string, value: any) {
       let caster = this.resolveCasterClass(key);
       if (isBlank(value)) {
-        this.attributes = [...this.attributes, ...array_map(() => {
-        }, this.normalizeCastClassResponse(key, caster.set(this, key, this[key], this.attributes)))];
+        this.attributes = [
+          ...this.attributes, ...array_map(() => {
+            },
+            this.normalizeCastClassResponse(key, caster.set(this, key, this[key], this.attributes)))
+        ];
       } else {
-        this.attributes = [...this.attributes, ...this.normalizeCastClassResponse(key,
-          caster.set(this, key, value, this.attributes))];
+        this.attributes = [
+          ...this.attributes, ...this.normalizeCastClassResponse(key,
+            caster.set(this, key, value, this.attributes))
+        ];
       }
       if (caster instanceof CastsInboundAttributes || !is_object(value)) {
         delete this.classCastCache[key];
@@ -696,17 +714,18 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
     /*Determine if the given key is cast using a custom class.*/
     protected isClassCastable(key: string) {
       return array_key_exists(key,
-        this.getCasts()) && class_exists(clazz = this.parseCasterClass(this.getCasts()[key])) && !in_array(clazz,
+        this.getCasts()) && class_exists(
+        clazz = this.parseCasterClass(this.getCasts()[key])) && !in_array(clazz,
         (this.constructor as unknown as typeof HasAttributes).primitiveCastTypes);
     }
 
     /*Resolve the custom caster class for a given key.*/
     protected resolveCasterClass(key: string) {
-      let castType = this.getCasts()[key];
+      let castType  = this.getCasts()[key];
       let arguments = [];
       if (isString(castType) && strpos(castType, ':') !== false) {
-        let segments = castType.split(':');
-        let castType = segments[0];
+        let segments  = castType.split(':');
+        let castType  = segments[0];
         let arguments = segments[1].split(',');
       }
       if (is_subclass_of(castType, Castable)) {
@@ -726,10 +745,13 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
     /*Merge the cast class attributes back into the model.*/
     protected mergeAttributesFromClassCasts() {
       for (let [key, value] of Object.entries(this.classCastCache)) {
-        let caster = this.resolveCasterClass(key);
-        this.attributes = [...this.attributes, ...(caster instanceof CastsInboundAttributes ? {} : this.normalizeCastClassResponse(
-          key,
-          caster.set(this, key, value, this.attributes)))];
+        let caster      = this.resolveCasterClass(key);
+        this.attributes = [
+          ...this.attributes,
+          ...(caster instanceof CastsInboundAttributes ? {} : this.normalizeCastClassResponse(
+            key,
+            caster.set(this, key, value, this.attributes)))
+        ];
       }
     }
 
