@@ -20,8 +20,8 @@ export interface ColumnDecorator {
 export interface ColumnDefine {
   isPrimary?: boolean;
   columnName?: string;
-  hasGetter?: boolean;
-  hasSetter?: boolean;
+  // hasGetter?: boolean;
+  // hasSetter?: boolean;
   serializeAs?: string;
   /**
    * Invoked before serializing process happens
