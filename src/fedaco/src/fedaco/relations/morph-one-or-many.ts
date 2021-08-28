@@ -16,10 +16,11 @@ export class MorphOneOrMany extends HasOneOrMany {
   protected morphClass: string;
 
   /*Create a new morph one or many relationship instance.*/
-  public constructor(query: FedacoBuilder, parent: Model, type: string, id: string, localKey: string) {
+  public constructor(query: FedacoBuilder, parent: Model, type: string, id: string,
+                     localKey: string) {
+    super(query, parent, id, localKey);
     this.morphType  = type;
     this.morphClass = parent.getMorphClass();
-    super(query, parent, id, localKey);
   }
 
   /*Set the base constraints on the relation query.*/
@@ -31,7 +32,8 @@ export class MorphOneOrMany extends HasOneOrMany {
   }
 
   /*Get the relationship query.*/
-  public getRelationQuery(query: FedacoBuilder, parent: FedacoBuilder, columns: any[] | any = ['*']) {
+  public getRelationQuery(query: FedacoBuilder, parent: FedacoBuilder,
+                          columns: any[] | any = ['*']) {
     let query = super.getRelationQuery(query, parent, columns);
     return query.where(this.morphType, this.morphClass);
   }
@@ -59,17 +61,19 @@ export class MorphOneOrMany extends HasOneOrMany {
 
   /*Get the first related model record matching the attributes or instantiate it.*/
   public firstOrNew(attributes: any[]) {
-    if (isBlank(instance = this.where(attributes).first())) {
-      let instance = this.related.newInstance(attributes);
+    let instance = this.where(attributes).first();
+    if (isBlank(instance)) {
+      instance = this.related.newInstance(attributes);
       this.setForeignAttributesForCreate(instance);
     }
     return instance;
   }
-
+?>
   /*Get the first related record matching the attributes or create it.*/
   public firstOrCreate(attributes: any[]) {
-    if (isBlank(instance = this.where(attributes).first())) {
-      let instance = this.create(attributes);
+    let instance = this.where(attributes).first();
+    if (isBlank(instance)) {
+      instance = this.create(attributes);
     }
     return instance;
   }

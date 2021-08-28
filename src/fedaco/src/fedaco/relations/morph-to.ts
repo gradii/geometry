@@ -4,9 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { BadMethodCallException } from 'BadMethodCallException';
-import { Builder } from 'Illuminate/Database/Eloquent/Builder';
-import { Collection } from 'Illuminate/Database/Eloquent/Collection';
+import { Collection } from '../../define/collection';
+import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
 import { BelongsTo } from './belongs-to';
 
@@ -21,10 +20,10 @@ export class MorphTo extends BelongsTo {
   protected macroBuffer: any[] = [];
 
   /*Create a new morph to relationship instance.*/
-  public constructor(query: Builder, parent: Model, foreignKey: string, otherKey: string,
+  public constructor(query: FedacoBuilder, parent: Model, foreignKey: string, otherKey: string,
                      type: string, relation: string) {
-    this.morphType = type;
     super(query, parent, foreignKey, otherKey, relation);
+    this.morphType = type;
   }
 
   /*Get the results of the relationship.*/

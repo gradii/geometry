@@ -44,8 +44,10 @@ export class HasOne extends HasOneOrMany {
     if (!this.withDefault) {
       return;
     }
-    let instance = this.related.newInstance().setAttribute(this.getPlainForeignKey(),
-      model.getAttribute(this.localKey));
+    let instance = this.related.newInstance().setAttribute(
+      this.getPlainForeignKey(),
+      model.getAttribute(this.localKey)
+    );
     if (isFunction(this.withDefault)) {
       return this.withDefault(instance) || instance;
     }

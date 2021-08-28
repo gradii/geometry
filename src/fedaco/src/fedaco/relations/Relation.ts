@@ -4,11 +4,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Builder } from 'Illuminate/Database/Eloquent/Builder';
-import { Collection } from 'Illuminate/Database/Eloquent/Collection';
-import { Model } from 'Illuminate/Database/Eloquent/Model';
-import { Expression } from 'Illuminate/Database/Query/Expression';
-import { Arr } from 'Illuminate/Support/Arr';
+import { isArray, isBlank, isObject } from '@gradii/check-type';
+import { uniq } from 'ramda';
+// import { Builder } from 'Illuminate/Database/Eloquent/Builder';
+// import { Collection } from 'Illuminate/Database/Eloquent/Collection';
+// import { Model } from 'Illuminate/Database/Eloquent/Model';
+// import { Expression } from 'Illuminate/Database/Query/Expression';
+// import { Arr } from 'Illuminate/Support/Arr';
 import { mixinForwardCallToQueryBuilder } from '../mixins/forward-call-to-query-builder';
 
 export class Relation extends mixinForwardCallToQueryBuilder(class {
@@ -22,7 +24,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   /*Indicates if the relation is adding constraints.*/
   protected static constraints: boolean = true;
   /*An array to map class names to their morph names in database.*/
-  protected static morphMap: any[] = [];
+  protected static _morphMap: object = {};
 
   /*Create a new relation instance.*/
   public constructor(query: Builder, parent: Model) {
@@ -79,9 +81,10 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   /*Run a callback with constraints disabled on the relation.*/
   public static noConstraints(callback: Function) {
     let previous         = Relation.constraints;
+    let results;
     Relation.constraints = false;
     try {
-      let results = call_user_func(callback);
+      results = callback();
     } finally {
       Relation.constraints = previous;
     }
@@ -90,9 +93,9 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
 
   /*Get all of the primary keys for an array of models.*/
   protected getKeys(models: any[], key: string = null) {
-    return array_unique(array_values(array_map(value => {
+    return uniq(models.map(value => {
       return key ? value.getAttribute(key) : value.getKey();
-    }, models)));
+    }));
   }
 
   /*Get the underlying query for the relation.*/
@@ -141,23 +144,23 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   }
 
   /*Set or get the morph map for polymorphic relations.*/
-  public static morphMap(map: any[] | null = null, merge: boolean = true) {
-    let map = Relation.buildMorphMapFromModels(map);
-    if (is_array(map)) {
-      Relation.morphMap = merge && Relation.morphMap ? [...Relation.morphMap, ...map] : map;
+  public static morphMap(map: object | null = null, merge: boolean = true) {
+    map = Relation.buildMorphMapFromModels(map);
+    if (isObject(map)) {
+      Relation._morphMap = merge && Relation._morphMap ? {...Relation._morphMap, ...map} : map;
     }
-    return Relation.morphMap;
+    return Relation._morphMap;
   }
 
   /*Builds a table-keyed array from model class names.*/
-  protected static buildMorphMapFromModels(models: string[] | null = null) {
-    if (isBlank(models) || Arr.isAssoc(models)) {
+  protected static buildMorphMapFromModels(models: object | null = null) {
+    if (isBlank(models) || isObject(models)) {
       return models;
     }
-    let tables = array_map(model => {
-      return new model().getTable();
-    }, models);
-    return array_combine(tables, models);
+    // let tables = models.map(model => {
+    //   return new model().getTable();
+    // },  {});
+    // return array_combine(tables, models);
   }
 
   // /*Handle dynamic method calls to the relationship.*/

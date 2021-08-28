@@ -3721,12 +3721,12 @@ describe('database query builder test', () => {
         'SELECT * FROM (select *, row_number() over (order by [email] desc) as row_num from [users]) as temp_table where row_num between 11 and 20 ORDER BY row_num');
   });
 
-  // it('test my sql sounds like operator', () => {
-  //   builder = getMySqlBuilder();
-  //   builder.select('*').from('users').where('name', 'sounds like', 'John Doe');
-  //   expect(builder.toSql()).toBe('SELECT * FROM `users` where `name` sounds like ?');
-  //   expect(builder.getBindings()).toStrictEqual(['John Doe']);
-  // });
+  it('test my sql sounds like operator', () => {
+    builder = getMySqlBuilder();
+    builder.select('*').from('users').where('name', 'sounds like', 'John Doe');
+    expect(builder.toSql()).toBe('SELECT * FROM `users` WHERE `name` sounds like ?');
+    expect(builder.getBindings()).toStrictEqual(['John Doe']);
+  });
   //
   // it('test merge wheres can merge wheres and bindings', () => {
   //   let builder    = getBuilder();

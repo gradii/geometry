@@ -4,10 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Builder } from 'Illuminate/Database/Eloquent/Builder';
-import { Collection } from 'Illuminate/Database/Eloquent/Collection';
-import { Model } from 'Illuminate/Database/Eloquent/Model';
 import { Expression } from 'Illuminate/Database/Query/Expression';
+import { Collection } from '../../define/collection';
+import { FedacoBuilder } from '../fedaco-builder';
+import { Model } from '../model';
 import { Relation } from './relation';
 
 export class HasOneOrMany extends Relation {
@@ -19,7 +19,7 @@ export class HasOneOrMany extends Relation {
   protected static selfJoinCount: number = 0;
 
   /*Create a new has one or many relationship instance.*/
-  public constructor(query: Builder, parent: Model, foreignKey: string, localKey: string) {
+  public constructor(query: FedacoBuilder, parent: Model, foreignKey: string, localKey: string) {
     this.localKey   = localKey;
     this.foreignKey = foreignKey;
     super(query, parent);
@@ -34,7 +34,7 @@ export class HasOneOrMany extends Relation {
   }
 
   /*Add the constraints for a relationship query.*/
-  public getRelationQuery(query: Builder, parent: Builder, columns: any[] | any = ['*']) {
+  public getRelationQuery(query: FedacoBuilder, parent: FedacoBuilder, columns: any[] | any = ['*']) {
     if (parent.getQuery().from == query.getQuery().from) {
       return this.getRelationQueryForSelfRelation(query, parent, columns);
     }
@@ -42,7 +42,7 @@ export class HasOneOrMany extends Relation {
   }
 
   /*Add the constraints for a relationship query on the same table.*/
-  public getRelationQueryForSelfRelation(query: Builder, parent: Builder,
+  public getRelationQueryForSelfRelation(query: FedacoBuilder, parent: FedacoBuilder,
                                          columns: any[] | any = ['*']) {
     query.select(columns);
     query.from(query.getModel().getTable() + ' as ' + (hash = this.getRelationCountHash()));

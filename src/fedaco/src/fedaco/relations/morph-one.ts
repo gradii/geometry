@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Collection } from 'Illuminate/Database/Eloquent/Collection';
+import { Collection } from '../../define/collection';
 import { MorphOneOrMany } from './morph-one-or-many';
 
 export class MorphOne extends MorphOneOrMany {

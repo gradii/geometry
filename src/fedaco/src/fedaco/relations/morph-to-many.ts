@@ -4,9 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Builder } from 'Illuminate/Database/Eloquent/Builder';
-import { Model } from 'Illuminate/Database/Eloquent/Model';
-import { Arr } from 'Illuminate/Support/Arr';
+import { FedacoBuilder } from '../fedaco-builder';
+import { Model } from '../model';
 import { BelongsToMany } from './belongs-to-many';
 
 export class MorphToMany extends BelongsToMany {
@@ -20,12 +19,12 @@ export class MorphToMany extends BelongsToMany {
   protected inverse: boolean;
 
   /*Create a new morph to many relationship instance.*/
-  public constructor(query: Builder, parent: Model, name: string, table: string, foreignKey: string,
+  public constructor(query: FedacoBuilder, parent: Model, name: string, table: string, foreignKey: string,
                      otherKey: string, relationName: string = null, inverse: boolean = false) {
+    super(query, parent, table, foreignKey, otherKey, relationName);
     this.inverse    = inverse;
     this.morphType  = name + '_type';
     this.morphClass = inverse ? query.getModel().getMorphClass() : parent.getMorphClass();
-    super(query, parent, table, foreignKey, otherKey, relationName);
   }
 
   /*Set the where clause for the relation query.*/
@@ -36,9 +35,9 @@ export class MorphToMany extends BelongsToMany {
   }
 
   /*Add the constraints for a relationship count query.*/
-  public getRelationQuery(query: Builder, parent: Builder, columns: any[] | any = ['*']) {
-    let query = super.getRelationQuery(query, parent, columns);
-    return query.where(this.table + '.' + this.morphType, this.morphClass);
+  public getRelationQuery(query: FedacoBuilder, parent: FedacoBuilder, columns: any[] | any = ['*']) {
+    query = super.getRelationQuery(query, parent, columns);
+    return query.where(`${this.table}.${this.morphType}`, this.morphClass);
   }
 
   /*Set the constraints for an eager load of the relation.*/

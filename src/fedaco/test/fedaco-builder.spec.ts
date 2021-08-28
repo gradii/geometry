@@ -309,7 +309,8 @@ describe('fedaco builder', () => {
     model   = getModel();
     builder.setModel(model);
 
-    spy1 = jest.spyOn(builder, 'getModels');
+    // @ts-ignore
+    spy1 = jest.spyOn(builder, 'getModels').mockReturnValue(['bar']);
     spy2 = jest.spyOn(builder, 'applyScopes')//.mockReturnThis();
     spy3 = jest.spyOn(builder, 'eagerLoadRelations')//.mockReturnValue(['bar', 'baz']);
     // spy4 = jest.spyOn(builder.getModel(), 'newCollection')//.mockReturnValue(['bar', 'baz']);
@@ -320,9 +321,7 @@ describe('fedaco builder', () => {
     expect(spy1).toReturnWith(['bar']);
     expect(spy2).toReturnWith(builder);
     expect(spy3).toReturnWith(['bar', 'baz']);
-    // expect(spy4).toBeCalledWith(['bar', 'baz']);
-    // expect(spy4).toReturnWith(['bar', 'baz']);
-    expect(results).toBe(['bar', 'baz']);
+    expect(results).toEqual(['bar', 'baz']);
   });
 // public testGetMethodDoesntHydrateEagerRelationsWhenNoResultsAreReturned() {
 //     var builder = m.mock(Builder + "[getModels,eagerLoadRelations]", [this.getMockQueryBuilder()]);
@@ -624,24 +623,66 @@ describe('fedaco builder', () => {
 //     var results = builder.eagerLoadRelations(["models"]);
 //     this.assertEquals(["foo"], results)
 //   }
-// public testRelationshipEagerLoadProcess() {
-//     var builder = m.mock(Builder + "[getRelation]", [this.getMockQueryBuilder()]);
-//     builder.setEagerLoads({
-//       "orders": query => {
-//         _SERVER["__eloquent.constrain"] = query
-//       }
-//     })
-//     var relation = m.mock(stdClass);
-//     relation.shouldReceive("addEagerConstraints").once()._with(["models"])
-//     relation.shouldReceive("initRelation").once()._with(["models"], "orders").andReturn(["models"])
-//     relation.shouldReceive("getEager").once().andReturn(["results"])
-//     relation.shouldReceive("match").once()._with(["models"], ["results"], "orders").andReturn(["models.matched"])
-//     builder.shouldReceive("getRelation").once()._with("orders").andReturn(relation)
-//     var results = builder.eagerLoadRelations(["models"]);
-//     this.assertEquals(["models.matched"], results)
-//     this.assertEquals(relation, _SERVER["__eloquent.constrain"])
-//     delete _SERVER["__eloquent.constrain"]
-//   }
+
+  it('testRelationshipEagerLoadProcess', () => {
+    let spy1, spy2, spy3, spy4, results, _SERVER = {};
+    builder = getBuilder();
+    model   = getModel();
+    builder.setModel(model);
+    builder.setEagerLoads({
+      'orders': query => {
+        _SERVER['__eloquent.constrain'] = query;
+      }
+    });
+
+    const relation = new class {
+      addEagerConstraints() {}
+      initRelation() {}
+      getEager() {}
+      match() {}
+      getRelation() {}
+    };
+
+    // @ts-ignore
+    spy1 = jest.spyOn(builder, 'getRelation').mockReturnValue(['bar']);
+    spy2 = jest.spyOn(builder, 'applyScopes')//.mockReturnThis();
+    spy3 = jest.spyOn(builder, 'eagerLoadRelations')//.mockReturnValue(['bar', 'baz']);
+
+    const spy11 = jest.spyOn(relation, 'addEagerConstraints');
+    const spy12 = jest.spyOn(relation, 'initRelation');
+    const spy13 = jest.spyOn(relation, 'getEager');
+    const spy14 = jest.spyOn(relation, 'match');
+    const spy15 = jest.spyOn(relation, 'getRelation');
+
+
+    results = builder.eagerLoadRelations(['models']);
+
+    expect(spy11).toBeCalledWith(['models']);
+    expect(spy12).toBeCalledWith(['models'], 'orders');
+    expect(spy12).toReturnWith(['models']);
+    expect(spy13).toReturnWith(['results']);
+    expect(spy14).toBeCalledWith(['models'], ['results'], 'orders');
+    expect(spy14).toReturnWith( ['models.matched']);
+    expect(spy15).toBeCalledWith( 'orders');
+    expect(spy15).toReturnWith( relation);
+
+    expect(results).toEqual(['models.matched']);
+    expect(relation).toEqual(_SERVER['__eloquent.constrain']);
+
+
+
+    // relation.shouldReceive('addEagerConstraints').once()._with(['models']);
+    // relation.shouldReceive('initRelation').once()._with(['models'], 'orders').andReturn(['models']);
+    // relation.shouldReceive('getEager').once().andReturn(['results']);
+    // relation.shouldReceive('match').once()._with(['models'], ['results'], 'orders').andReturn(
+    //   ['models.matched']);
+    // builder.shouldReceive('getRelation').once()._with('orders').andReturn(relation);
+    // var results = builder.eagerLoadRelations(['models']);
+    // this.assertEquals(['models.matched'], results);
+    // this.assertEquals(relation, _SERVER['__eloquent.constrain']);
+    // delete _SERVER['__eloquent.constrain'];
+  });
+
 // public testGetRelationProperlySetsNestedRelationships() {
 //     var builder = this.getBuilder();
 //     builder.setModel(this.getMockModel())

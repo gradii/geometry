@@ -4,11 +4,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Builder } from 'Illuminate/Database/Eloquent/Builder';
+import { isBlank } from '@gradii/check-type';
 import { ModelNotFoundException } from 'Illuminate/Database/Eloquent/ModelNotFoundException';
-import { SoftDeletes } from 'Illuminate/Database/Eloquent/SoftDeletes';
 import { Expression } from 'Illuminate/Database/Query/Expression';
 import { Collection } from '../../define/collection';
+import { FedacoBuilder } from '../fedaco-builder';
+import { SoftDeletes } from '../mixins/soft-deletes';
 import { Model } from '../model';
 import { Relation } from './relation';
 
@@ -23,7 +24,7 @@ export class HasManyThrough extends Relation {
   protected localKey: string;
 
   /*Create a new has many through relationship instance.*/
-  public constructor(query: Builder, farParent: Model, parent: Model, firstKey: string,
+  public constructor(query: FedacoBuilder, farParent: Model, parent: Model, firstKey: string,
                      secondKey: string, localKey: string) {
     this.localKey  = localKey;
     this.firstKey  = firstKey;
@@ -43,7 +44,8 @@ export class HasManyThrough extends Relation {
   }
 
   /*Add the constraints for a relationship query.*/
-  public getRelationQuery(query: Builder, parent: Builder, columns: any[] | any = ['*']) {
+  public getRelationQuery(query: FedacoBuilder, parent: FedacoBuilder,
+                          columns: any[] | any = ['*']) {
     let parentTable = this.parent.getTable();
     this.setJoin(query);
     query.select(columns);
@@ -52,7 +54,7 @@ export class HasManyThrough extends Relation {
   }
 
   /*Set the join clause on the query.*/
-  protected setJoin(query: Builder | null = null) {
+  protected setJoin(query: FedacoBuilder | null = null) {
     let query      = query || this.query;
     let foreignKey = this.related.getTable() + '.' + this.secondKey;
     query.join(this.parent.getTable(), this.getQualifiedParentKeyName(), '=', foreignKey);
@@ -116,7 +118,8 @@ export class HasManyThrough extends Relation {
 
   /*Execute the query and get the first result or throw an exception.*/
   public firstOrFail(columns: any[] = ['*']) {
-    if (!isBlank(model = this.first(columns))) {
+    const model = this.first(columns);
+    if (!isBlank(model)) {
       return model;
     }
     throw new ModelNotFoundException().setModel(get_class(this.parent));
@@ -196,7 +199,7 @@ export class HasManyThrough extends Relation {
   }
 
   /*Paginate the given query into a simple paginator.*/
-  public simplePaginate(perPage: number                                = null, columns: any[]         = ['*'],
+  public simplePaginate(perPage: number                                = null, columns: any[] = ['*'],
                         pageName: string = 'page', page: number | null = null) {
     this.query.addSelect(this.getSelectColumns(columns));
     return this.query.simplePaginate(perPage, columns, pageName, page);

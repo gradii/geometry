@@ -19,7 +19,8 @@
 // import { LogicException } from 'LogicException';
 // import { Constructor } from './constructor';
 
-import { isArray } from '@gradii/check-type';
+import { isArray, isBlank } from '@gradii/check-type';
+import { uniq } from 'ramda';
 import { Constructor } from '../../helper/constructor';
 
 /** Mixin to augment a directive with a `disableRipple` property. */
@@ -155,31 +156,47 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
 
     /*Set a given attribute on the model.*/
     public setAttribute(key: string, value: any) {
-      this._attributes[key] = value;
-
       // if (this.hasSetMutator(key)) {
       //   return this.setMutatedAttributeValue(key, value);
-      // } else if (value && this.isDateAttribute(key)) {
-      //   let value = this.fromDateTime(value);
-      // }
-      // if (this.isClassCastable(key)) {
-      //   this.setClassCastableAttribute(key, value);
-      //   return this;
-      // }
-      // if (this.isJsonCastable(key) && !isBlank(value)) {
-      //   let value = this.castAttributeAsJson(key, value);
-      // }
-      // if (Str.contains(key, '->')) {
-      //   return this.fillJsonAttribute(key, value);
-      // }
-      // this.attributes[key] = value;
-      // return this;
+      // } else
+
+      if (value && this.isDateAttribute(key)) {
+        let value = this.fromDateTime(value);
+      }
+      if (this.isClassCastable(key)) {
+        this.setClassCastableAttribute(key, value);
+        return this;
+      }
+      if (this.isJsonCastable(key) && !isBlank(value)) {
+        let value = this.castAttributeAsJson(key, value);
+      }
+      if (key.includes('->')) {
+        return this.fillJsonAttribute(key, value);
+      }
+      this.attributes[key] = value;
+      return this;
     }
 
-    /*Determine if a set mutator exists for an attribute.*/
-    public hasSetMutator(key: string) {
-      // return method_exists(this, 'set' + Str.studly(key) + 'Attribute');
+    /*Determine if the given attribute is a date or date castable.*/
+    protected isDateAttribute(key: string) {
+      return in_array(key, this.getDates(), true) || this.isDateCastable(key);
     }
+    /*Set a given JSON attribute on the model.*/
+    public fillJsonAttribute(key: string, value: any) {
+      const [key, path] = key.split("->");
+      var value = this.asJson(this.getArrayAttributeWithValue(path, key, value));
+      this.attributes[key] = this.isEncryptedCastable(key) ? this.castAttributeAsEncryptedString(key, value) : value;
+      return this;
+    }
+
+    // /*
+    // * @deprecated
+    // * @breaking-change 0.0.0
+    // * Determine if a set mutator exists for an attribute.
+    // */
+    // public hasSetMutator(key: string) {
+    //   // return method_exists(this, 'set' + Str.studly(key) + 'Attribute');
+    // }
 
     /*Set a given JSON attribute on the model.*/
     public fillJsonAttribute(key: string, value: any) {
@@ -216,8 +233,11 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
 
     /*Get the attributes that should be converted to dates.*/
     public getDates() {
-      // let defaults = [this.getCreatedAtColumn(), this.getUpdatedAtColumn()];
-      // return this.usesTimestamps() ? array_unique([...this.dates, ...defaults]) : this.dates;
+      if (!this.usesTimestamps()) {
+        return this.dates;
+      }
+      var defaults = [this.getCreatedAtColumn(), this.getUpdatedAtColumn()];
+      return uniq([...this._dates, ...defaults]);
     }
 
     /*Get the format for database stored dates.*/
