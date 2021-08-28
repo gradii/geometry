@@ -126,4 +126,5 @@ export interface SqlVisitor {
 
   visitWhereClause(node: SqlNode);
 
+  visitLockClause(node: SqlNode);
 }

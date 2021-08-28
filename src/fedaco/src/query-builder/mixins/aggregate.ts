@@ -37,13 +37,14 @@ export type QueryBuilderAggregateCtor = Constructor<QueryBuilderAggregate>;
 export function mixinAggregate<T extends Constructor<any>>(base: T): QueryBuilderAggregateCtor & T {
   return class _Self extends base {
     /*Set the aggregate property without running the query.*/
-    _setAggregate(this: QueryBuilder & _Self, func: string, columns: Array<string | ColumnReferenceExpression>) {
+    _setAggregate(this: QueryBuilder & _Self, func: string,
+                  columns: Array<string | ColumnReferenceExpression>) {
       this._aggregate = new AggregateFragment(
         createIdentifier(func),
         columns.map(it => createColumnReferenceExpression(it))
       );
       if (this._groups.length === 0) {
-        this._orders = [];
+        this._orders            = [];
         this._bindings['order'] = [];
       }
       return this;
@@ -91,7 +92,7 @@ export function mixinAggregate<T extends Constructor<any>>(base: T): QueryBuilde
       if (results[0] === undefined) {
         return 0;
       } else if (isObject(results[0])) {
-        return results[0].aggregate;
+        return (results[0] as any).aggregate;
       }
       return results[0].aggregate;
     }
@@ -113,33 +114,38 @@ export function mixinAggregate<T extends Constructor<any>>(base: T): QueryBuilde
       if (this._groups.length > 0 || this._havings.length > 0) {
         const clone = this._cloneForPaginationCount();
         if (clone._columns.length === 0 && this._joins.length > 0) {
-          clone._columns = [new ColumnReferenceExpression(
-            new PathExpression([
-              this._from,
-              createIdentifier('*')
-            ]))];
+          clone._columns = [
+            new ColumnReferenceExpression(
+              new PathExpression([
+                this._from,
+                createIdentifier('*')
+              ]))
+          ];
         }
         return this.newQuery().from(
           raw('(' + clone.toSql() + ') as ' +
             this._grammar.quoteTableName('aggregate_table')
           )
-        ).mergeBindings(clone).setAggregate('count', this._withoutSelectAliases(columns)).get().all();
+        ).mergeBindings(clone).setAggregate('count',
+          this._withoutSelectAliases(columns)).get().all();
       }
-      const without = this._unions.length > 0 ? ['_orders', '_limit', '_offset'] : ['_columns', '_orders', '_limit', '_offset'];
+      const without = this._unions.length > 0 ? ['_orders', '_limit', '_offset'] : [
+        '_columns', '_orders', '_limit', '_offset'
+      ];
       return this.cloneWithout(without)
         ._setAggregate('count', this._withoutSelectAliases(columns))
         .get();
     }
 
     /*Clone the existing query instance for usage in a pagination subquery.*/
-    protected _cloneForPaginationCount(this: QueryBuilder & _Self, ) {
+    protected _cloneForPaginationCount(this: QueryBuilder & _Self,) {
       return this.cloneWithout(['_orders', '_limit', '_offset']);
     }
 
     /*Remove the column aliases since they will break count queries.*/
     protected _withoutSelectAliases(columns: string[]) {
       return columns.map(it => {
-        const column = SqlParser.createSqlParser(it).parseColumnAlias();
+        const column                            = SqlParser.createSqlParser(it).parseColumnAlias();
         column.fieldAliasIdentificationVariable = undefined;
         return column;
       });

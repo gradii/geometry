@@ -11,7 +11,7 @@ import { Identifier } from './identifier';
 // MultiPartIdentifier
 export class JsonPathExpression extends SqlNode {
 
-  constructor(public paths: Identifier[], ) {
+  constructor(public paths: Identifier[],) {
     super();
   }
 

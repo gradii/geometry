@@ -21,7 +21,8 @@ export interface QueryBuilderHaving {
 
   having(column: string, value?: string | number | boolean | RawExpression): this;
 
-  having(column: string, operator?: string, value?: string | number | boolean | RawExpression, conjunction?: string): this;
+  having(column: string, operator?: string, value?: string | number | boolean | RawExpression,
+         conjunction?: string): this;
 
   havingBetween(column: string, values: any[], conjunction?: string, not?: boolean);
 
@@ -31,7 +32,8 @@ export interface QueryBuilderHaving {
 
   orHaving(column: string, value?: string | number | boolean | RawExpression): this;
 
-  orHaving(column: string, operator?: string, value?: string | number | boolean | RawExpression): this;
+  orHaving(column: string, operator?: string,
+           value?: string | number | boolean | RawExpression): this;
 
   orHavingRaw(sql: string): this;
 
@@ -44,7 +46,8 @@ export type QueryBuilderHavingCtor = Constructor<QueryBuilderHaving>;
 
 export function mixinHaving<T extends Constructor<any>>(base: T): QueryBuilderHavingCtor & T {
   return class _Self extends base {
-    addHaving(this: QueryBuilder & _Self, where: SqlNode, conjunction: 'and' | 'or' | 'andX' | 'orX') {
+    addHaving(this: QueryBuilder & _Self, where: SqlNode,
+              conjunction: 'and' | 'or' | 'andX' | 'orX') {
       if (this._havings.length > 0) {
         if (conjunction === 'and' || conjunction === 'or') {
           const left = this._havings.pop();
@@ -74,7 +77,7 @@ export function mixinHaving<T extends Constructor<any>>(base: T): QueryBuilderHa
       }
       // this._havings.push(compact('type', 'column', 'operator', 'value', 'boolean'));
 
-      const leftNode = SqlParser.createSqlParser(column).parseColumnAlias();
+      const leftNode  = SqlParser.createSqlParser(column).parseColumnAlias();
       const rightNode = ((value as Object) instanceof RawExpression) ?
         // @ts-ignore
         (value as RawExpression) :
@@ -93,12 +96,13 @@ export function mixinHaving<T extends Constructor<any>>(base: T): QueryBuilderHa
     }
 
     /*Add a "having between " clause to the query.*/
-    public havingBetween(this: QueryBuilder & _Self, column: string, values: any[], conjunction: string = 'and', not: boolean = false) {
-      const expression = SqlParser.createSqlParser(column).parseColumnAlias();
+    public havingBetween(this: QueryBuilder & _Self, column: string, values: any[],
+                         conjunction: string = 'and', not: boolean = false) {
+      const expression    = SqlParser.createSqlParser(column).parseColumnAlias();
       const [left, right] = values;
 
       let leftBetween, rightBetween;
-      leftBetween = left instanceof RawExpression ?
+      leftBetween  = left instanceof RawExpression ?
         left :
         new BindingVariable(raw(left), 'having');
       rightBetween = right instanceof RawExpression ?
@@ -118,10 +122,12 @@ export function mixinHaving<T extends Constructor<any>>(base: T): QueryBuilderHa
     }
 
     /*Add a raw having clause to the query.*/
-    public havingRaw(this: QueryBuilder & _Self, sql: string, bindings: any[] = [], conjunction: string = 'and') {
+    public havingRaw(this: QueryBuilder & _Self, sql: string, bindings: any[] = [],
+                     conjunction: string = 'and') {
       this.addHaving(
         // new HavingClause(
-        new RawBindingExpression(raw(sql), bindings.map(it => new BindingVariable(raw(it), 'having'))),
+        new RawBindingExpression(raw(sql),
+          bindings.map(it => new BindingVariable(raw(it), 'having'))),
         conjunction
         // )
       );

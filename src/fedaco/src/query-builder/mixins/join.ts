@@ -23,23 +23,27 @@ export interface QueryBuilderJoin {
 
   join(tableOrJoinSql: string): this;
 
-  joinWhere(table: string, first: Function | string, operator: string, second: string, type?: string): this;
+  joinWhere(table: string, first: Function | string, operator: string, second: string,
+            type?: string): this;
 
-  joinSub(query: Function | QueryBuilder | string, as: string, first: Function | string, operator?: string,
+  joinSub(query: Function | QueryBuilder | string, as: string, first: Function | string,
+          operator?: string,
           second?: string | number, type?: string, where?: boolean): this;
 
   leftJoin(table: string, first: Function | string, operator?: string, second?: string): this;
 
   leftJoinWhere(table: string, first: Function | string, operator: string, second: string): this;
 
-  leftJoinSub(query: Function | QueryBuilder | string, as: string, first: Function | string, operator?: string,
+  leftJoinSub(query: Function | QueryBuilder | string, as: string, first: Function | string,
+              operator?: string,
               second?: string): this;
 
   rightJoin(table: string, first: Function | string, operator?: string, second?: string): this;
 
   rightJoinWhere(table: string, first: Function | string, operator: string, second: string): this;
 
-  rightJoinSub(query: Function | QueryBuilder | string, as: string, first: Function | string, operator?: string,
+  rightJoinSub(query: Function | QueryBuilder | string, as: string, first: Function | string,
+               operator?: string,
                second?: string): this;
 
   crossJoin(table: string, first?: Function | string, operator?: string, second?: string): this;
@@ -76,7 +80,7 @@ export function mixinJoin<T extends Constructor<any>>(base: T): QueryBuilderJoin
         arguments.length === 5 || arguments.length === 6
       ) {
         if (arguments.length === 3) {
-          second = operator;
+          second   = operator;
           operator = '=';
         }
 
@@ -126,7 +130,8 @@ export function mixinJoin<T extends Constructor<any>>(base: T): QueryBuilderJoin
     }
 
     /*Add a "join where" clause to the query.*/
-    public joinWhere(this: QueryBuilder & _Self, table: string, first: Function | string, operator: string,
+    public joinWhere(this: QueryBuilder & _Self, table: string, first: Function | string,
+                     operator: string,
                      second: string, type: string = 'inner') {
       return this.join(table, first, operator, second, type, true);
     }
@@ -136,45 +141,52 @@ export function mixinJoin<T extends Constructor<any>>(base: T): QueryBuilderJoin
                    first: Function | string,
                    operator: string = null, second: string = null, type: string = 'inner',
                    where: boolean                                               = false) {
-      const node = this._createSubQuery('join', query);
-      const expression = new TableReferenceExpression(node, as ? SqlParser.createSqlParser(as).parseUnaryTableColumn() : undefined);
+      const node       = this._createSubQuery('join', query);
+      const expression = new TableReferenceExpression(node,
+        as ? SqlParser.createSqlParser(as).parseUnaryTableColumn() : undefined);
 
       return this.join(expression, first, operator, second, type, where);
     }
 
     /*Add a left join to the query.*/
-    public leftJoin(this: QueryBuilder & _Self, table: string, first: Function | string, operator: string = null,
-                    second: string                                                                        = null) {
+    public leftJoin(this: QueryBuilder & _Self, table: string, first: Function | string,
+                    operator: string = null,
+                    second: string   = null) {
       return this.join(table, first, operator, second, 'left');
     }
 
     /*Add a "join where" clause to the query.*/
-    public leftJoinWhere(this: QueryBuilder & _Self, table: string, first: Function | string, operator: string,
+    public leftJoinWhere(this: QueryBuilder & _Self, table: string, first: Function | string,
+                         operator: string,
                          second: string) {
       return this.joinWhere(table, first, operator, second, 'left');
     }
 
     /*Add a subquery left join to the query.*/
-    public leftJoinSub(this: QueryBuilder & _Self, query: Function | QueryBuilder | string, as: string,
+    public leftJoinSub(this: QueryBuilder & _Self, query: Function | QueryBuilder | string,
+                       as: string,
                        first: Function | string,
                        operator: string = null, second: string = null) {
       return this.joinSub(query, as, first, operator, second, 'left');
     }
 
     /*Add a right join to the query.*/
-    public rightJoin(this: QueryBuilder & _Self, table: string, first: Function | string, operator: string = null,
-                     second: string                                                                        = null) {
+    public rightJoin(this: QueryBuilder & _Self, table: string, first: Function | string,
+                     operator: string = null,
+                     second: string   = null) {
       return this.join(table, first, operator, second, 'right');
     }
 
     /*Add a "right join where" clause to the query.*/
-    public rightJoinWhere(this: QueryBuilder & _Self, table: string, first: Function | string, operator: string,
+    public rightJoinWhere(this: QueryBuilder & _Self, table: string, first: Function | string,
+                          operator: string,
                           second: string) {
       return this.joinWhere(table, first, operator, second, 'right');
     }
 
     /*Add a subquery right join to the query.*/
-    public rightJoinSub(this: QueryBuilder & _Self, query: Function | QueryBuilder | string, as: string,
+    public rightJoinSub(this: QueryBuilder & _Self, query: Function | QueryBuilder | string,
+                        as: string,
                         first: Function | string,
                         operator: string = null, second: string = null) {
       return this.joinSub(query, as, first, operator, second, 'right');

@@ -57,9 +57,9 @@ function newErrorToken(index: number, end: number, message: string): Token {
 export class SqlLexer {
 
   tokenize(text: string): Token[] {
-    const scanner = new _Scanner(text);
+    const scanner         = new _Scanner(text);
     const tokens: Token[] = [];
-    let token = scanner.scanToken();
+    let token             = scanner.scanToken();
     while (token != null) {
       tokens.push(token);
       token = scanner.scanToken();
@@ -72,7 +72,7 @@ export class SqlLexer {
 // tslint:disable-next-line:class-name
 class _Scanner {
   length: number;
-  peek: number = 0;
+  peek: number  = 0;
   index: number = -1;
 
   constructor(public input: string) {
@@ -131,7 +131,8 @@ class _Scanner {
       this.advance();
     }
     const str: string = this.input.substring(start, this.index);
-    return KEYWORDS.indexOf(str.toLowerCase()) > -1 ? newKeywordToken(start, this.index, str.toLowerCase()) :
+    return KEYWORDS.indexOf(str.toLowerCase()) > -1 ? newKeywordToken(start, this.index,
+      str.toLowerCase()) :
       newIdentifierToken(start, this.index, str);
   }
 
@@ -157,7 +158,7 @@ class _Scanner {
       }
       this.advance();
     }
-    const str: string = this.input.substring(start, this.index);
+    const str: string   = this.input.substring(start, this.index);
     const value: number = simple ? parseIntAutoRadix(str) : parseFloat(str);
     return newNumberToken(start, this.index, value);
   }
@@ -172,8 +173,8 @@ class _Scanner {
     const quote: number = this.peek;
     this.advance();  // Skip initial quote.
 
-    let buffer: string = '';
-    let marker: number = this.index;
+    let buffer: string  = '';
+    let marker: number  = this.index;
     const input: string = this.input;
 
     while (this.peek != quote) {
@@ -215,7 +216,7 @@ class _Scanner {
 
   scanToken(): Token | null {
     const input = this.input, length = this.length;
-    let peek = this.peek, index = this.index;
+    let peek    = this.peek, index = this.index;
 
     // Skip whitespace.
     while (peek <= asciiChars.$SPACE) {
@@ -227,7 +228,7 @@ class _Scanner {
       }
     }
 
-    this.peek = peek;
+    this.peek  = peek;
     this.index = index;
 
     if (index >= length) {

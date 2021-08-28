@@ -99,7 +99,7 @@ export class SqliteGrammar extends Grammar implements GrammarInterface {
         )
       )
     ];
-    inBuilder._wheres = builder._wheres;
+    inBuilder._wheres  = builder._wheres;
 
     const ast = new DeleteSpecification(builder._from,
       new WhereClause(

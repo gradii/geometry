@@ -84,7 +84,8 @@ export class SqlserverGrammar extends Grammar implements GrammarInterface {
     );
 
     if (builder._joins.length > 0) {
-      (ast as DeleteSpecification).fromClause = new FromClause(builder._from, builder._joins as JoinedTable[]);
+      (ast as DeleteSpecification).fromClause = new FromClause(builder._from,
+        builder._joins as JoinedTable[]);
     }
 
     if (builder._limit >= 0) {

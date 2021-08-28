@@ -25,7 +25,7 @@
     "baseUrl": ".",
     "paths": {
       "@gradii/annotation": ["src/annotation/public-api.ts"],
-      "@gradii/check-type": ["src/triangle/check-type/public-api.ts"],
+      "@gradii/check-type": ["src/check-type/public-api.ts"],
       "@gradii/diagram/*": ["./src/diagram/*/public-api.ts"],
       "@gradii/vector-math": ["./src/vector-math/public-api.ts"]
     }

@@ -1,9 +1,3 @@
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import { Constructor } from '../helper/constructor';
 
 function throwBadMethodCallException(method: string) {
@@ -12,7 +6,7 @@ function throwBadMethodCallException(method: string) {
 
 /** @docs-private */
 export interface ForwardsCalls {
-  forwardCallTo(object: any, method: string, parameters: any[]);
+  forwardCallTo(object: any, method: string, parameters: any[])
 }
 
 /** @docs-private */
@@ -20,7 +14,7 @@ export type ForwardsCallsCtor = Constructor<ForwardsCalls>;
 
 /** Mixin to augment a directive with a `disableRipple` property. */
 export function mixinForwardsCalls<T extends Constructor<{}>>(base: T): ForwardsCallsCtor & T {
-  // @ts-ignore
+  //@ts-ignore
   return class _Self extends base {
     /*Throw a bad method call exception for the given method.*/
 
@@ -33,4 +27,7 @@ export function mixinForwardsCalls<T extends Constructor<{}>>(base: T): Forwards
       }
     }
   };
+
+
+
 }

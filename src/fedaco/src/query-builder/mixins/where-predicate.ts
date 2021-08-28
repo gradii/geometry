@@ -111,7 +111,8 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
       return this.whereExists(callback, 'or', not);
     }
 
-    public orWhereIn(this: QueryBuilder & WhereCommon & _Self, column: string, values: any[], not = false) {
+    public orWhereIn(this: QueryBuilder & WhereCommon & _Self, column: string, values: any[],
+                     not = false) {
       return this.whereIn(column, values, 'or', not);
     }
 
@@ -156,13 +157,13 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
     public whereBetween(this: QueryBuilder & WhereCommon, column: string, values: any[],
                         conjunction: 'and' | 'or' = 'and',
                         not: boolean              = false) {
-      const expression = SqlParser.createSqlParser(column).parseColumnAlias();
+      const expression    = SqlParser.createSqlParser(column).parseColumnAlias();
       const [left, right] = values;
       let leftBetween, rightBetween;
-      leftBetween = left instanceof RawExpression ?
+      leftBetween         = left instanceof RawExpression ?
         left :
         new BindingVariable(new RawExpression(left), 'where');
-      rightBetween = right instanceof RawExpression ?
+      rightBetween        = right instanceof RawExpression ?
         right :
         new BindingVariable(new RawExpression(right), 'where');
       this.addWhere(
@@ -181,7 +182,8 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
     }
 
     /*Add an exists clause to the query.*/
-    public whereExists(this: QueryBuilder & _Self, callback: Function, boolean: string = 'and', not: boolean = false) {
+    public whereExists(this: QueryBuilder & _Self, callback: Function, boolean: string = 'and',
+                       not: boolean = false) {
       const query = this._forSubQuery();
       callback(query);
       return this.addWhereExistsQuery(query, boolean, not);
@@ -189,7 +191,7 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
 
     public whereIn(this: QueryBuilder & WhereCommon & _Self, column: string, values: any[],
                    conjunction: 'and' | 'or' = 'and', not = false) {
-      const expression = SqlParser.createSqlParser(column).parseUnaryTableColumn();
+      const expression         = SqlParser.createSqlParser(column).parseUnaryTableColumn();
       let subQuery, valueArray = [];
       if (this.isQueryable(values)) {
         subQuery = this._createSubQuery('where', values);
@@ -216,21 +218,24 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
     }
 
     /*Add a "where in raw" clause for integer values to the query.*/
-    public whereIntegerInRaw(this: QueryBuilder & _Self, column: string, values: any[], conjunction: string = 'and', not: boolean = false) {
+    public whereIntegerInRaw(this: QueryBuilder & _Self, column: string, values: any[],
+                             conjunction: string = 'and', not: boolean = false) {
       return this.whereIn(column, values.map(it => {
         return raw(parseInt(it));
       }), conjunction, not);
     }
 
     /*Add a "where not in raw" clause for integer values to the query.*/
-    public whereIntegerNotInRaw(this: QueryBuilder & _Self, column: string, values: any[], conjunction: string = 'and') {
+    public whereIntegerNotInRaw(this: QueryBuilder & _Self, column: string, values: any[],
+                                conjunction: string = 'and') {
       return this.whereIntegerInRaw(column, values, conjunction, true);
     }
 
     /**
      * Add a where not between statement to the query.
      */
-    public whereNotBetween(this: QueryBuilder & _Self, column: string, values: any[], conjuction: string = 'and') {
+    public whereNotBetween(this: QueryBuilder & _Self, column: string, values: any[],
+                           conjuction: string = 'and') {
       return this.whereBetween(column, values, conjuction, true);
     }
 
@@ -239,7 +244,8 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
       return this.whereExists(callback, boolean, true);
     }
 
-    public whereNotIn(this: QueryBuilder & _Self, column: string, values: any[], conjuction: string = 'and') {
+    public whereNotIn(this: QueryBuilder & _Self, column: string, values: any[],
+                      conjuction: string = 'and') {
       return this.whereIn(column, values, conjuction, true);
     }
 

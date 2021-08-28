@@ -4,9 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { isString } from '@gradii/check-type';
 import { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
 import { ComparisonPredicateExpression } from '../../query/ast/expression/comparison-predicate-expression';
 import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
+import { LockClause } from '../../query/ast/lock-clause';
 import { GrammarInterface } from '../grammar.interface';
 import { QueryBuilder } from '../query-builder';
 import { QueryBuilderVisitor } from './query-builder-visitor';
@@ -58,6 +60,18 @@ export class PostgresQueryBuilderVisitor extends QueryBuilderVisitor {
     } else {
       return super.visitColumnReferenceExpression(node).split('.').pop();
     }
+  }
+
+  visitLockClause(node: LockClause) {
+    if (node.value === true) {
+      return `for update`;
+    } else if (node.value === false) {
+      return 'for share';
+    } else if (isString(node.value)) {
+      return node.value;
+    }
+
+    throw new Error('unexpected lock clause');
   }
 
 }

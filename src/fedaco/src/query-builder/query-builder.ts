@@ -56,7 +56,7 @@ export class QueryBuilder extends Builder {
     // todo
     // this._grammar = grammar || connection.getQueryGrammar();
     // this._processor = processor || connection.getPostProcessor();
-    this._grammar = grammar;
+    this._grammar   = grammar;
     this._processor = processor;
 
     this._sqlParser = new SqlParser();
@@ -68,24 +68,24 @@ export class QueryBuilder extends Builder {
   }
 
   public clone() {
-    const cloned = this.newQuery();
-    cloned._sqlParser = this._sqlParser;
+    const cloned        = this.newQuery();
+    cloned._sqlParser   = this._sqlParser;
     // cloned._bindings    = this._bindings;
-    cloned._aggregate = this._aggregate;
-    cloned._columns = this._columns;
-    cloned._distinct = this._distinct;
-    cloned._from = this._from;
-    cloned._joins = this._joins;
-    cloned._wheres = this._wheres;
-    cloned._groups = this._groups;
-    cloned._havings = this._havings;
-    cloned._orders = this._orders;
-    cloned._limit = this._limit;
-    cloned._offset = this._offset;
-    cloned._unions = this._unions;
-    cloned._unionLimit = this._unionLimit;
+    cloned._aggregate   = this._aggregate;
+    cloned._columns     = this._columns;
+    cloned._distinct    = this._distinct;
+    cloned._from        = this._from;
+    cloned._joins       = this._joins;
+    cloned._wheres      = this._wheres;
+    cloned._groups      = this._groups;
+    cloned._havings     = this._havings;
+    cloned._orders      = this._orders;
+    cloned._limit       = this._limit;
+    cloned._offset      = this._offset;
+    cloned._unions      = this._unions;
+    cloned._unionLimit  = this._unionLimit;
     cloned._unionOffset = this._unionOffset;
-    cloned._lock = this._lock;
+    cloned._lock        = this._lock;
     return cloned;
   }
 
@@ -120,7 +120,8 @@ export class QueryBuilder extends Builder {
     return false;
   }
 
-  _newJoinClause(parentQuery: QueryBuilder, type: string, table: string | TableReferenceExpression): JoinQueryBuilder {
+  _newJoinClause(parentQuery: QueryBuilder, type: string,
+                 table: string | TableReferenceExpression): JoinQueryBuilder {
     return new JoinQueryBuilder(parentQuery, type, table);
   }
 
@@ -152,7 +153,8 @@ export class QueryBuilder extends Builder {
     } else if (isString(query)) {
       return new NestedExpression(type, query, []);
     } else {
-      throw new Error('InvalidArgumentException A subquery must be a query builder instance, a Closure, or a string.');
+      throw new Error(
+        'InvalidArgumentException A subquery must be a query builder instance, a Closure, or a string.');
     }
   }
 
@@ -211,7 +213,7 @@ export class QueryBuilder extends Builder {
     //   return collect();
     // }
     column = this.stripTableForPluck(column);
-    key = this.stripTableForPluck(key);
+    key    = this.stripTableForPluck(key);
     return this.pluckFromColumn(
       queryResult,
       column,
@@ -280,7 +282,8 @@ export class QueryBuilder extends Builder {
   public distinct(...args) {
     const columns = args;
     if (columns.length > 0) {
-      this._distinct = isArray(columns[0]) || isBoolean(columns[0]) ? columns[0] as boolean : columns;
+      this._distinct = isArray(columns[0]) || isBoolean(
+        columns[0]) ? columns[0] as boolean : columns;
     } else {
       this._distinct = true;
     }
@@ -413,7 +416,7 @@ export class QueryBuilder extends Builder {
   public select(columns: string[] | { [as: string]: any }): this;
 
   public select(columns, ...cols): this {
-    this._columns = [];
+    this._columns            = [];
     this._bindings['select'] = [];
 
     columns = isArray(columns) ? columns : [columns, ...cols];
@@ -517,6 +520,14 @@ export class QueryBuilder extends Builder {
     ];
   }
 
+  lock(value: boolean | string = true) {
+    this._lock = value;
+    if (!isBlank(this.lock)) {
+      this.useWriteConnection();
+    }
+    return this;
+  }
+
   toSql() {
     this.resetBindings();
     return this._grammar.compileSelect(this);
@@ -543,7 +554,8 @@ export class QueryBuilder extends Builder {
    * Prevents using Null values with invalid operators.
    */
   protected _invalidOperatorAndValue(operator: string, value: any) {
-    return isBlank(value) && this.operators.includes(operator) && !['=', '<>', '!='].includes(operator);
+    return isBlank(value) && this.operators.includes(operator) && !['=', '<>', '!='].includes(
+      operator);
   }
 
   protected onceWithColumns(columns: string[], callback: () => any[]): any[] {
@@ -556,7 +568,7 @@ export class QueryBuilder extends Builder {
         )
       ));
     }
-    const result = callback();
+    const result  = callback();
     this._columns = original;
 
     // todo temp fix array
@@ -572,9 +584,10 @@ export class JoinQueryBuilder extends QueryBuilder {
 
 
   /*Create a new join clause instance.*/
-  public constructor(parentQuery: QueryBuilder, type: string, table: string | TableReferenceExpression) {
+  public constructor(parentQuery: QueryBuilder, type: string,
+                     table: string | TableReferenceExpression) {
     super(parentQuery.getConnection(), parentQuery.getGrammar(), parentQuery.getProcessor());
-    this.type = type;
+    this.type  = type;
     this.table = table;
   }
 
@@ -604,7 +617,8 @@ export class JoinQueryBuilder extends QueryBuilder {
   }
 
   /*Add an "or on" clause to the join.*/
-  public orOn(first: (query?) => any | string, operator: string | null = null, second: string | null = null) {
+  public orOn(first: (query?) => any | string, operator: string | null = null,
+              second: string | null = null) {
     return this.on(first, operator, second, 'or');
   }
 

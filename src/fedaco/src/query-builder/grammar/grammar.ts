@@ -20,6 +20,7 @@ import { InsertSpecification } from '../../query/ast/insert-specification';
 import { JoinExpression } from '../../query/ast/join-expression';
 import { JoinedTable } from '../../query/ast/joined-table';
 import { LimitClause } from '../../query/ast/limit-clause';
+import { LockClause } from '../../query/ast/lock-clause';
 import { OffsetClause } from '../../query/ast/offset-clause';
 import { OrderByClause } from '../../query/ast/order-by-clause';
 import { OrderByElement } from '../../query/ast/order-by-element';
@@ -63,7 +64,8 @@ export abstract class Grammar implements GrammarInterface {
     );
 
     if (builder._joins.length > 0) {
-      (ast as UpdateSpecification).fromClause = new FromClause(builder._from, builder._joins as JoinedTable[]);
+      (ast as UpdateSpecification).fromClause = new FromClause(builder._from,
+        builder._joins as JoinedTable[]);
     }
 
     if (builder._limit >= 0) {
@@ -109,7 +111,7 @@ export abstract class Grammar implements GrammarInterface {
 
   compileInsert(builder: QueryBuilder, values, insertOption = 'into'): string {
     // const ast = this._prepareSelectAst(builder);
-    const keys = Object.keys(values);
+    const keys    = Object.keys(values);
     const sources = Object.values(values);
     const visitor = this._createVisitor(builder);
 
@@ -141,7 +143,7 @@ export abstract class Grammar implements GrammarInterface {
   }
 
   compileInsertUsing(builder: QueryBuilder, columns, nestedExpression: NestedExpression): string {
-    const ast = new InsertSpecification(
+    const ast     = new InsertSpecification(
       'into',
       new ValuesInsertSource(
         false,
@@ -203,7 +205,8 @@ export abstract class Grammar implements GrammarInterface {
 
   compileTruncate(builder: QueryBuilder): { [sql: string]: any[] } {
     return {
-      [`TRUNCATE TABLE ${builder._from.accept(this._createVisitor(builder))}`]: builder.getBindings()
+      [`TRUNCATE TABLE ${builder._from.accept(
+        this._createVisitor(builder))}`]: builder.getBindings()
     };
   }
 
@@ -338,6 +341,12 @@ export abstract class Grammar implements GrammarInterface {
       );
     }
 
+    if (builder._lock !== undefined) {
+      (ast as QuerySpecification).lockClause = new LockClause(
+        builder._lock
+      );
+    }
+
     if (builder._unions.length > 0) {
       for (const it of builder._unions) {
         const rightSql = it.expression.toSql();
@@ -386,7 +395,8 @@ export abstract class Grammar implements GrammarInterface {
     );
 
     if (builder._joins.length > 0) {
-      (ast as DeleteSpecification).fromClause = new FromClause(builder._from, builder._joins as JoinedTable[]);
+      (ast as DeleteSpecification).fromClause = new FromClause(builder._from,
+        builder._joins as JoinedTable[]);
     }
 
     if (builder._limit >= 0) {

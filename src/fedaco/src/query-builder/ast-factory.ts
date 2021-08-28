@@ -26,7 +26,8 @@ export function bindingVariable(value: string | number | boolean | RawExpression
 }
 
 export function rawSqlBindings(value: string | number | boolean, bindings: any[], type = 'where') {
-  return new RawBindingExpression(raw(value), bindings.map(it => new BindingVariable(raw(it), type)));
+  return new RawBindingExpression(raw(value),
+    bindings.map(it => new BindingVariable(raw(it), type)));
 }
 
 

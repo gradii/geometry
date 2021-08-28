@@ -41,7 +41,8 @@ export function mixinOrderBy<T extends Constructor<any>>(base: T): QueryBuilderO
     /**
      * Add an "order by" clause to the query.
      */
-    public orderBy(this: QueryBuilder & _Self, column: Function | QueryBuilder | RawExpression | string,
+    public orderBy(this: QueryBuilder & _Self,
+                   column: Function | QueryBuilder | RawExpression | string,
                    direction: string = 'asc') {
       let columnNode;
 
@@ -93,9 +94,9 @@ export function mixinOrderBy<T extends Constructor<any>>(base: T): QueryBuilderO
 
     /*Remove all existing orders and optionally add a new order.*/
     public reorder(this: QueryBuilder & _Self, column?, direction = 'asc') {
-      this._orders = [];
-      this._unionOrders = [];
-      this._bindings['order'] = [];
+      this._orders                 = [];
+      this._unionOrders            = [];
+      this._bindings['order']      = [];
       this._bindings['unionOrder'] = [];
       if (column) {
         return this.orderBy(column, direction);

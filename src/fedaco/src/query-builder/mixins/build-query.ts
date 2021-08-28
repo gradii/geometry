@@ -14,7 +14,7 @@ export interface BuildQueries {
 
   tap(callback: (q: this, condition) => any): this;
 
-  first(columns?: any[] | string): Model | any;
+  first(columns?: any[] | string): Model | object | null;
 
   unless(value: any, callback: Function, _default?: Function);
 }

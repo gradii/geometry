@@ -43,6 +43,7 @@ import { JoinOnExpression } from '../../query/ast/join-on-expression';
 import { JoinedTable } from '../../query/ast/joined-table';
 import { JsonPathExpression } from '../../query/ast/json-path-expression';
 import { LimitClause } from '../../query/ast/limit-clause';
+import { LockClause } from '../../query/ast/lock-clause';
 import { OffsetClause } from '../../query/ast/offset-clause';
 import { OrderByClause } from '../../query/ast/order-by-clause';
 import { OrderByElement } from '../../query/ast/order-by-element';
@@ -99,6 +100,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
   }
 
   visitDeleteSpecification(node: DeleteSpecification) {
+    // language=SQL format=false
     let sql = `DELETE FROM ${node.target.accept(this)}`;
 
     if (node.fromClause) {
@@ -141,7 +143,9 @@ export class QueryBuilderVisitor implements SqlVisitor {
     if (node.left instanceof BinaryUnionQueryExpression) { // todo check
       sql = `${node.left.accept(this)} UNION${node.all ? ' ALL' : ''} (${node.right.accept(this)})`;
     } else {
-      sql = `(${node.left.accept(this)}) UNION${node.all ? ' ALL' : ''} (${node.right.accept(this)})`;
+      sql = `(${node.left.accept(this)}) UNION${node.all ? ' ALL' : ''} (${
+        node.right.accept(this)
+      })`;
     }
 
     sql += this.visitQueryExpression(node);
@@ -254,7 +258,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
    * @param node
    */
   visitIdentifyVariableDeclaration(node: IdentifyVariableDeclaration): string {
-    let rst = '';
+    let rst                               = '';
     const visitedRangeVariableDeclaration = node.rangeVariableDeclaration.accept(this);
     rst += visitedRangeVariableDeclaration;
     if (node.indexBy) {
@@ -303,8 +307,10 @@ export class QueryBuilderVisitor implements SqlVisitor {
     } else {
       tableName = `${node.name.accept(this)}`;
     }
+
     const sql = `${node.type.toUpperCase()} JOIN ${tableName}${node.on ? ` ON ${node.on.accept(
       this)}` : ''}`;
+
     this.inJoinExpression = false;
     return sql;
   }
@@ -314,7 +320,9 @@ export class QueryBuilderVisitor implements SqlVisitor {
   }
 
   visitJoinOnExpression(node: JoinOnExpression) {
-    return `${node.columnExpression.accept(this)} ${node.operator} ${node.rightExpression.accept(this)}`;
+    return `${node.columnExpression.accept(this)} ${node.operator} ${
+      node.rightExpression.accept(this)
+    }`;
   }
 
   visitJoinedTable(node: JoinedTable) {
@@ -469,6 +477,10 @@ export class QueryBuilderVisitor implements SqlVisitor {
       sql += ` ${node.havingClause.accept(this)}`;
     }
 
+    if (node.lockClause) {
+      sql += ` ${node.lockClause.accept(this)}`;
+    }
+
     sql += this.visitQueryExpression(node);
 
     return sql;
@@ -477,7 +489,8 @@ export class QueryBuilderVisitor implements SqlVisitor {
   visitRangeVariableDeclaration(node: RangeVariableDeclaration) {
     const quoteTableName = this._grammar.quoteTableName(node.abstractSchemaName);
     if (node.aliasIdentificationVariable) {
-      return `${quoteTableName} AS ${this._grammar.quoteTableName(node.aliasIdentificationVariable)}`;
+      return `${quoteTableName} AS ${this._grammar.quoteTableName(
+        node.aliasIdentificationVariable)}`;
     } else {
       return `${quoteTableName}`;
     }
@@ -499,8 +512,8 @@ export class QueryBuilderVisitor implements SqlVisitor {
       const selectExpressions = node.selectExpressions.map(expression => {
         return expression.accept(this);
       });
-      return `SELECT${node.distinct ? ` ${this._grammar.distinct(node.distinct)} ` : ' '}${selectExpressions.join(
-        ', ')}`;
+      return `SELECT${node.distinct ? ` ${
+        this._grammar.distinct(node.distinct)} ` : ' '}${selectExpressions.join(', ')}`;
     } else {
       return `SELECT${node.distinct ? ` ${this._grammar.distinct(node.distinct)} ` : ' '}*`;
     }
@@ -608,5 +621,15 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return `WHERE ${node.conditionExpression.accept(this)}`;
   }
 
+  visitLockClause(node: LockClause) {
+    if (node.value === true) {
+      return `for update`;
+    } else if (node.value === false) {
+      return 'lock in share mode';
+    } else if (isString(node.value)) {
+      return node.value;
+    }
+    throw new Error('unexpected lock clause');
+  }
 }
 

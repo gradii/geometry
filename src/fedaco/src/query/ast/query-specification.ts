@@ -4,11 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { SqlNode } from '../sql-node';
 import { SqlVisitor } from '../sql-visitor';
 import { FromClause } from './from-clause';
 import { GroupByClause } from './group-by-clause';
 import { HavingClause } from './having-clause';
+import { LockClause } from './lock-clause';
 import { QueryExpression } from './query-expression';
 import { SelectClause } from './select-clause';
 import { WhereClause } from './where-clause';
@@ -32,6 +32,7 @@ export class QuerySpecification extends QueryExpression {
     public whereClause?: WhereClause,
     public groupByClause?: GroupByClause,
     public havingClause?: HavingClause,
+    public lockClause?: LockClause,
   ) {
     super();
   }

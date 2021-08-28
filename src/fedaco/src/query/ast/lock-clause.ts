@@ -4,20 +4,18 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-
 import { SqlNode } from '../sql-node';
 import { SqlVisitor } from '../sql-visitor';
-import { OrderByElement } from './order-by-element';
 
 
-export class LimitClause extends SqlNode {
+export class LockClause extends SqlNode {
   constructor(
-    public value: number
+    public value: boolean | string,
   ) {
     super();
   }
 
   accept(visitor: SqlVisitor) {
-    return visitor.visitLimitClause(this);
+    return visitor.visitLockClause(this);
   }
 }

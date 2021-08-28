@@ -25,10 +25,10 @@ import {
 } from './sql-lexer';
 
 export class _SqlParserAst {
-  index: number = 0;
-  private rparensExpected = 0;
+  index: number             = 0;
+  private rparensExpected   = 0;
   private rbracketsExpected = 0;
-  private rbracesExpected = 0;
+  private rbracesExpected   = 0;
 
   constructor(public input: string, public location: any, public absoluteOffset: number,
               public tokens: Token[], public inputLength: number, public parseAction: boolean,
@@ -229,6 +229,7 @@ export class _SqlParserAst {
       const value = this.eat();
       return new StringLiteralExpression(value.strValue);
     }
+    throw new Error('unexpected expression');
   }
 
   parseGtCondition() {
@@ -365,8 +366,10 @@ export class _SqlParserAst {
         this.advance();
         // report error
         return new PathExpression(
-          [createIdentifier(table.strValue),
-           createIdentifier(column.strValue)]
+          [
+            createIdentifier(table.strValue),
+            createIdentifier(column.strValue)
+          ]
         );
       } else {
         return new PathExpression(
