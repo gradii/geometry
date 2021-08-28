@@ -1,22 +1,13 @@
-// Configuration for IDEs only.
 {
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "rootDir": "..",
-    "baseUrl": ".",
-    "paths": {
-      "@gradii/annotation": [
-        "../annotation"
-      ],
-      "@gradii/check-type": [
-        "../check-type"
-      ]
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
     }
-  },
-  "include": [
-    "./**/*.ts"
-  ],
-  "exclude": [
-    "**/*.spec.ts"
   ]
 }

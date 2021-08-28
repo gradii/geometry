@@ -206,20 +206,20 @@ export class Model extends mixinHasAttributes(mixinHasGlobalScopes(
     return this;
   }
 
-  protected __noSuchMethod__(method, parameters) {
-    if (['increment', 'decrement'].includes(method)) {
-      return this[method](...parameters);
-    }
-    // if (resolver = (this.constructor as unknown as typeof Model).relationResolvers[get_class(this)][method] ?? null) {
-    //   return resolver(this);
-    // }
-
-    const info = this.getReflectMetadata(this);
-    info.hasMetadata(Attribute);
-    this.setAttribue(...parameters);
-
-    // return this.forwardCallTo(this.newQuery(), method, parameters);
-  }
+  // protected __noSuchMethod__(method, parameters) {
+  //   if (['increment', 'decrement'].includes(method)) {
+  //     return this[method](...parameters);
+  //   }
+  //   // if (resolver = (this.constructor as unknown as typeof Model).relationResolvers[get_class(this)][method] ?? null) {
+  //   //   return resolver(this);
+  //   // }
+  //
+  //   const info = this.getReflectMetadata(this);
+  //   info.hasMetadata(Attribute);
+  //   this.setAttribue(...parameters);
+  //
+  //   // return this.forwardCallTo(this.newQuery(), method, parameters);
+  // }
 
   /*Perform a model insert operation.*/
   protected _performInsert(query: FedacoBuilder) {

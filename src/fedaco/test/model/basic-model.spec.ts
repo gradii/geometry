@@ -1,4 +1,4 @@
-import { reflector } from '../../../annotation';
+import { reflector } from '@gradii/annotation';
 import { BasicModel } from '../../examples/basic.model';
 
 describe('test basic model', () => {
@@ -7,6 +7,12 @@ describe('test basic model', () => {
     const basic = new BasicModel();
 
     const metadata = reflector.propMetadata(BasicModel);
-    console.log(metadata['name']);
+
+    expect(metadata['name'].length).toBe(1);
+    expect(metadata['name'][0].columnName).toBe('name');
+  });
+
+  it('test basic model 1', () => {
+
   });
 });

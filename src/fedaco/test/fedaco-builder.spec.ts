@@ -74,9 +74,9 @@ describe('fedaco builder', () => {
     spy2 = spyOn(builder, 'get').and.returnValue(['baz']);
 
     result = builder.findMany(['one', 'two'], ['column']);
-    expect(spy1).toBeCalledWith('foo_table.foo', ['one', 'two']);
-    expect(spy2).toBeCalledWith(['column']);
-    expect(result).toStrictEqual(['baz']);
+    expect(spy1).toHaveBeenCalledWith('foo_table.foo', ['one', 'two']);
+    expect(spy2).toHaveBeenCalledWith(['column']);
+    expect(result).toEqual(['baz']);
 
 
     builder = getBuilder();

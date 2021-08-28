@@ -7,11 +7,10 @@
 import { Column } from 'src/annotation/column';
 import { Relation } from 'src/annotation/relation';
 
-// import { Model } from 'src/fedaco/model';
+import { Model } from 'src/fedaco/model';
 
 
-export class BasicModel /*extends Model*/ {
-
+export class BasicModel extends Model {
 
   @Column({
     columnName: 'name'
@@ -29,6 +28,7 @@ export class BasicModel /*extends Model*/ {
   deleted_at: Date;
 
   constructor() {
+    super();
   }
 
 }
