@@ -156,7 +156,10 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
     }
 
     // todo
-    where(this: QueryBuilder & _Self, column, operator?, value?,
+    where(this: QueryBuilder & _Self,
+          column: any[] | object | Function | any,
+          operator?: string,
+          value?: any,
           conjunction: 'and' | 'or' = 'and') {
       if (isArray(column) || isObject(column)) {
         return this._addArrayOfWheres(column, conjunction);

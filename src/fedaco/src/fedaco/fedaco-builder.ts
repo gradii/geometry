@@ -84,7 +84,8 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /**
    * Execute the query as a "select" statement.
    */
-  public get(columns: string[] | string = ['*']) {
+  public get(columns: string[] | string = ['*']): Model[] {
+    return [];
     // const builder = this.applyScopes();
     // let models    = builder.getModels(columns);
     // if (models.length > 0) {

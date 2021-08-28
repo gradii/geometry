@@ -7,7 +7,6 @@
 import { pluralStudy } from '../helper/pluralize';
 import { snakeCase } from '../helper/str';
 import { mixinForwardsCalls } from '../mixins/forwards-calls';
-import { NoSuchMethodProxy } from '../proxy/no-such-method-proxy';
 import { QueryBuilder } from '../query-builder/query-builder';
 import { FedacoBuilder } from './fedaco-builder';
 import { mixinHasAttributes } from './mixins/has-attributes';
@@ -17,14 +16,15 @@ import { Scope } from './scope';
 
 // @ts-ignore
 // tslint:disable-next-line:no-empty-interface
-export interface Model extends FedacoBuilder {
+// export interface Model extends FedacoBuilder {
+//
+// }
 
-}
-
-@NoSuchMethodProxy()
-export class Model extends mixinHasAttributes(mixinHasGlobalScopes(
-  mixinForwardsCalls(class {
-  }))
+// @NoSuchMethodProxy()
+export class Model extends mixinHasAttributes(
+  mixinHasGlobalScopes(
+    mixinForwardsCalls(class {
+    }))
 ) {
   /*Indicates if the model exists.*/
   _exists: boolean = false;
@@ -43,7 +43,11 @@ export class Model extends mixinHasAttributes(mixinHasGlobalScopes(
 
   _with = [];
 
-  protected _classCastCache: {};
+  _withCount: any[] = [];
+
+  _classCastCache: any[];
+
+  static resolver;
 
   /*Create a new Eloquent model instance.*/
   public constructor(attributes: any[] = []) {
@@ -136,7 +140,7 @@ export class Model extends mixinHasAttributes(mixinHasGlobalScopes(
   public newQueryWithoutScopes() {
     return this.newModelQuery()
       .with(this._with)
-      .withCount(this.withCount);
+      .withCount(this._withCount);
   }
 
   /*Register the global scopes for this builder instance.*/

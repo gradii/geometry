@@ -1,12 +1,14 @@
+import { DatabaseManager } from '../src/database-manager';
 import { FedacoBuilder } from '../src/fedaco/fedaco-builder';
 import { Model } from '../src/fedaco/model';
+import { ResolveConnection } from '../src/fedaco/resolve-connection';
 import { ConnectionInterface } from '../src/query-builder/connection-interface';
 import { MysqlGrammar } from '../src/query-builder/grammar/mysql-grammar';
 import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
 
 describe('fedaco builder', () => {
-  let model, builder: FedacoBuilder;
+  let model: Model, builder: FedacoBuilder;
 
   class Conn implements ConnectionInterface {
     select() {
@@ -32,12 +34,20 @@ describe('fedaco builder', () => {
     }
   }
 
+  function resolveModel(model: Model) {
+    // model.
+    model._connectionResolver = new ResolveConnection();
+    (model.constructor as typeof Model).resolver = new DatabaseManager();
+  }
+
   function getModel() {
     const _model = new Model();
 
-    spyOn(_model, 'getKeyName').and.returnValue('foo');
-    spyOn(_model, 'getTable').and.returnValue('foo_table');
-    spyOn(_model, 'getQualifiedKeyName').and.returnValue('foo_table.foo');
+    resolveModel(_model);
+
+    jest.spyOn(_model, 'getKeyName').mockReturnValue('foo');
+    jest.spyOn(_model, 'getTable').mockReturnValue('foo_table');
+    jest.spyOn(_model, 'getQualifiedKeyName').mockReturnValue('foo_table.foo');
     return _model;
   }
 
@@ -50,28 +60,29 @@ describe('fedaco builder', () => {
   }
 
   beforeEach(() => {
-    model = getModel();
-    builder = getBuilder();
+    model          = getModel();
+    builder        = getBuilder();
     // @ts-ignore
     builder._model = model;
   });
 
   it('testFindMethod', () => {
     let spySelect, spyFirst, result;
-    spySelect = spyOn(builder.getQuery(), 'where');
-    spyFirst = spyOn(builder, 'first').and.returnValue('baz');
-    result = builder.find('bar', ['column']);
-    expect(spySelect).toBeCalledWith('foo_table.foo', '=', 'bar');
+    spySelect = jest.spyOn(builder.getQuery(), 'where');
+    spyFirst  = jest.spyOn(builder, 'first').mockReturnValue({name: 'baz'});
+    result    = builder.find('bar', ['column']);
+    expect(spySelect).toBeCalledWith('foo_table.foo', '=', 'bar', 'and');
     expect(spyFirst).toBeCalledWith(['column']);
-    expect(result).toBe('baz');
+    expect(result).toStrictEqual({name: 'baz'});
   });
 
   it('testFindManyMethod', () => {
     let spy1, spy2, result;
     builder = getBuilder();
     builder.setModel(getModel());
-    spy1 = spyOn(builder.getQuery(), 'whereIn');
-    spy2 = spyOn(builder, 'get').and.returnValue(['baz']);
+    spy1 = jest.spyOn(builder.getQuery(), 'whereIn');
+    // @ts-ignore
+    spy2 = jest.spyOn(builder, 'get').mockReturnValue(['baz']);
 
     result = builder.findMany(['one', 'two'], ['column']);
     expect(spy1).toHaveBeenCalledWith('foo_table.foo', ['one', 'two']);
@@ -81,8 +92,8 @@ describe('fedaco builder', () => {
 
     builder = getBuilder();
     builder.setModel(getModel());
-    spy1 = spyOn(builder.getQuery(), 'whereIn');
-    spy2 = spyOn(builder, 'get').and.returnValue(['baz']);
+    spy1 = jest.spyOn(builder.getQuery(), 'whereIn');
+    spy2 = jest.spyOn(builder, 'get').mockReturnValue(['baz' as unknown as Model]);
 
     result = builder.findMany([], ['column']);
     expect(spy1).toBeCalledTimes(0);
@@ -94,18 +105,22 @@ describe('fedaco builder', () => {
   it('testFindOrNewMethodModelFound', () => {
     let spy1, spy2, spy3, result, expected;
     builder = getBuilder();
-    model = getModel();
+    model   = getModel();
     builder.setModel(model);
-    spy1 = spyOn(builder.getQuery(), 'where');
-    spy2 = spyOn(builder.getModel(), 'findOrNew').and.returnValue('baz');
-    spy3 = spyOn(builder, 'first').and.returnValue('baz');
+    const modelQuery = builder.getModel().newQuery();
 
-    expected = model.findOrNew('bar', ['column']);
-    result = builder.find('bar', ['column']);
+    spy1 = jest.spyOn(builder.getQuery(), 'where');
+    // @ts-ignore
+    spy2 = jest.spyOn(modelQuery, 'findOrNew').mockReturnValue('baz');
+    // @ts-ignore
+    spy3 = jest.spyOn(builder, 'first').mockReturnValue('baz');
+
+    expected = modelQuery.findOrNew('bar', ['column']);
+    result   = builder.find('bar', ['column']);
 
     expect(builder.getModel()['findOrNew']).toBe(builder.getModel()['findOrNew']);
 
-    expect(spy1).toBeCalledWith('foo_table.foo', '=', 'bar');
+    expect(spy1).toBeCalledWith('foo_table.foo', '=', 'bar', 'and');
     expect(spy2).toBeCalledTimes(1);
     expect(spy3).toBeCalledWith(['column']);
     expect(result).toBe(expected);
@@ -114,16 +129,17 @@ describe('fedaco builder', () => {
   it('testFindOrNewMethodModelNotFound', () => {
     let spy1, spy2, spy3, result, findResult;
     builder = getBuilder();
-    model = getModel();
+    model   = getModel();
     builder.setModel(model);
+    const modelQuery = builder.getModel().newQuery()
 
-    spy1 = spyOn(builder.getQuery(), 'where');
-    spy2 = spyOn(builder.getModel(), 'findOrNew').and.returnValue(getModel());
-    spy3 = spyOn(builder, 'first').and.returnValue(undefined);
+    spy1 = jest.spyOn(builder.getQuery(), 'where');
+    spy2 = jest.spyOn(modelQuery, 'findOrNew').mockReturnValue(getModel());
+    spy3 = jest.spyOn(builder, 'first').mockReturnValue(undefined);
 
-    result = model.findOrNew('bar', ['column']);
+    result     = modelQuery.findOrNew('bar', ['column']);
     findResult = builder.find('bar', ['column']);
-    expect(spy1).toBeCalledWith('foo_table.foo', '=', 'bar');
+    expect(spy1).toBeCalledWith('foo_table.foo', '=', 'bar', 'and');
     expect(spy2).toBeCalledTimes(1);
     expect(spy3).toBeCalledWith(['column']);
     expect(findResult).toBe(undefined);
@@ -133,16 +149,16 @@ describe('fedaco builder', () => {
   it('testFindOrFailMethodThrowsModelNotFoundException', () => {
     let spy1, spy3;
     builder = getBuilder();
-    model = getModel();
+    model   = getModel();
     builder.setModel(model);
 
-    spy1 = spyOn(builder.getQuery(), 'where');
-    spy3 = spyOn(builder, 'first').and.returnValue(undefined);
+    spy1 = jest.spyOn(builder.getQuery(), 'where');
+    spy3 = jest.spyOn(builder, 'first').mockReturnValue(undefined);
     expect(() => {
       builder.findOrFail('bar', ['column']);
     }).toThrowError('ModelNotFoundException');
 
-    expect(spy1).toBeCalledWith('foo_table.foo', '=', 'bar');
+    expect(spy1).toBeCalledWith('foo_table.foo', '=', 'bar', 'and');
     expect(spy3).toBeCalledWith(['column']);
   });
 // public testFindOrFailMethodWithManyThrowsModelNotFoundException() {
