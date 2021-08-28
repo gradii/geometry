@@ -85,13 +85,12 @@ export class FedacoBuilder extends mixinGuardsAttributes(
    * Execute the query as a "select" statement.
    */
   public get(columns: string[] | string = ['*']): Model[] {
-    return [];
-    // const builder = this.applyScopes();
-    // let models    = builder.getModels(columns);
-    // if (models.length > 0) {
-    //   models = builder.eagerLoadRelations(models);
-    // }
-    // return models;
+    const builder = this.applyScopes();
+    let models    = builder.getModels(columns);
+    if (models.length > 0) {
+      models = builder.eagerLoadRelations(models);
+    }
+    return models;
   }
 
   eagerLoadRelations(models) {
@@ -100,24 +99,24 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   public applyScopes() {
-    // if (!this._scopes.length) {
-    //   return this;
-    // }
-    // const builder = this.clone();
-    // for (const [identifier, scope] of Object.entries(this._scopes)) {
-    //   if (!(builder._scopes[identifier] !== undefined)) {
-    //     continue;
-    //   }
-    //   builder.callScope(builder => {
-    //     if (isFunction(scope)) {
-    //       scope(builder);
-    //     }
-    //     if (scope instanceof Scope) {
-    //       scope.apply(builder, this.getModel());
-    //     }
-    //   });
-    // }
-    // return builder;
+    if (!this._scopes.length) {
+      return this;
+    }
+    const builder = this.clone();
+    for (const [identifier, scope] of Object.entries(this._scopes)) {
+      if (!(builder._scopes[identifier] !== undefined)) {
+        continue;
+      }
+      builder.callScope(builder => {
+        if (isFunction(scope)) {
+          scope(builder);
+        }
+        if (scope instanceof Scope) {
+          scope.apply(builder, this.getModel());
+        }
+      });
+    }
+    return builder;
   }
 
   protected callScope(scope: Function, parameters: any[] = []) {

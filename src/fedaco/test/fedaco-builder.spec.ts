@@ -6,6 +6,7 @@ import { ConnectionInterface } from '../src/query-builder/connection-interface';
 import { MysqlGrammar } from '../src/query-builder/grammar/mysql-grammar';
 import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
+import { StubModel } from './model/stub-model';
 
 describe('fedaco builder', () => {
   let model: Model, builder: FedacoBuilder;
@@ -36,7 +37,7 @@ describe('fedaco builder', () => {
 
   function resolveModel(model: Model) {
     // model.
-    model._connectionResolver = new ResolveConnection();
+    model._connectionResolver                    = new ResolveConnection();
     (model.constructor as typeof Model).resolver = new DatabaseManager();
   }
 
@@ -48,6 +49,17 @@ describe('fedaco builder', () => {
     jest.spyOn(_model, 'getKeyName').mockReturnValue('foo');
     jest.spyOn(_model, 'getTable').mockReturnValue('foo_table');
     jest.spyOn(_model, 'getQualifiedKeyName').mockReturnValue('foo_table.foo');
+    return _model;
+  }
+
+  function getStubModel() {
+    const _model = new StubModel();
+
+    resolveModel(_model);
+
+    // jest.spyOn(_model, 'getKeyName').mockReturnValue('foo');
+    jest.spyOn(_model, 'getTable').mockReturnValue('stub');
+    // jest.spyOn(_model, 'getQualifiedKeyName').mockReturnValue('foo_table.foo');
     return _model;
   }
 
@@ -131,7 +143,7 @@ describe('fedaco builder', () => {
     builder = getBuilder();
     model   = getModel();
     builder.setModel(model);
-    const modelQuery = builder.getModel().newQuery()
+    const modelQuery = builder.getModel().newQuery();
 
     spy1 = jest.spyOn(builder.getQuery(), 'where');
     spy2 = jest.spyOn(modelQuery, 'findOrNew').mockReturnValue(getModel());
@@ -209,52 +221,109 @@ describe('fedaco builder', () => {
     spy1 = jest.spyOn(builder, 'first').mockReturnValue(undefined);
 
     expect(() => {
-      builder.findOrFail([1, 2], ['column']);
+      builder.firstOrFail(['column']);
     }).toThrowError('ModelNotFoundException');
 
     expect(spy1).toBeCalledWith(['column']);
-    expect(spy1).toReturnWith(null);
+    expect(spy1).toReturnWith(undefined);
   });
-// public testFindWithMany() {
-//     var builder = m.mock(Builder + "[get]", [this.getMockQueryBuilder()]);
-//     builder.getQuery().shouldReceive("whereIn").once()._with("foo_table.foo", [1, 2])
-//     builder.setModel(this.getMockModel())
-//     builder.shouldReceive("get")._with(["column"]).andReturn("baz")
-//     var result = builder.find([1, 2], ["column"]);
-//     this.assertSame("baz", result)
-//   }
-// public testFindWithManyUsingCollection() {
-//     var ids = collect([1, 2]);
-//     var builder = m.mock(Builder + "[get]", [this.getMockQueryBuilder()]);
-//     builder.getQuery().shouldReceive("whereIn").once()._with("foo_table.foo", [1, 2])
-//     builder.setModel(this.getMockModel())
-//     builder.shouldReceive("get")._with(["column"]).andReturn("baz")
-//     var result = builder.find(ids, ["column"]);
-//     this.assertSame("baz", result)
-//   }
-// public testFirstMethod() {
-//     var builder = m.mock(Builder + "[get,take]", [this.getMockQueryBuilder()]);
-//     builder.shouldReceive("take")._with(1).andReturnSelf()
-//     builder.shouldReceive("get")._with(["*"]).andReturn(new Collection(["bar"]))
-//     var result = builder.first();
-//     this.assertSame("bar", result)
-//   }
-// public testQualifyColumn() {
-//     var builder = new Builder(m.mock(BaseBuilder));
-//     builder.shouldReceive("from")._with("stub")
-//     builder.setModel(new EloquentModelStub())
-//     this.assertSame("stub.column", builder.qualifyColumn("column"))
-//   }
-// public testGetMethodLoadsModelsAndHydratesEagerRelations() {
-//     var builder = m.mock(Builder + "[getModels,eagerLoadRelations]", [this.getMockQueryBuilder()]);
-//     builder.shouldReceive("applyScopes").andReturnSelf()
-//     builder.shouldReceive("getModels")._with(["foo"]).andReturn(["bar"])
-//     builder.shouldReceive("eagerLoadRelations")._with(["bar"]).andReturn(["bar", "baz"])
-//     builder.setModel(this.getMockModel())
-//     builder.getModel().shouldReceive("newCollection")._with(["bar", "baz"]).andReturn(new Collection(["bar", "baz"]))
-//     var results = builder.get(["foo"]);
-//     this.assertEquals(["bar", "baz"], results.all())
-//   }
+
+  it('testFindWithMany', () => {
+    let spy1, spy3, result;
+    builder = getBuilder();
+    model   = getModel();
+    builder.setModel(model);
+
+    // @ts-ignore
+    spy1 = jest.spyOn(builder, 'get').mockReturnValue('baz');
+    spy3 = jest.spyOn(builder.getQuery(), 'whereIn');
+
+    result = builder.find([1, 2], ['column']);
+
+    expect(spy1).toBeCalledWith(['column']);
+    expect(spy1).toReturnWith('baz');
+    expect(spy3).toBeCalledTimes(1);
+    expect(spy3).toBeCalledWith('foo_table.foo', [1, 2]);
+    expect(result).toBe('baz');
+  });
+
+  xit('testFindWithManyUsingCollection', () => {
+    let spy1, spy3, result;
+    builder = getBuilder();
+    model   = getModel();
+    builder.setModel(model);
+
+    const ids = [1, 2];
+
+    // @ts-ignore
+    spy1 = jest.spyOn(builder, 'get').mockReturnValue('baz');
+    spy3 = jest.spyOn(builder.getQuery(), 'whereIn');
+
+    result = builder.find(ids, ['column']);
+
+    expect(spy1).toBeCalledWith(['column']);
+    expect(spy1).toReturnWith('baz');
+    expect(spy3).toBeCalledTimes(1);
+    expect(spy3).toBeCalledWith('foo_table.foo', [1, 2]);
+    expect(result).toBe('baz');
+  });
+
+  it('testFirstMethod', () => {
+    let spy1, spy2, spy3, result;
+    builder = getBuilder();
+    model   = getModel();
+    builder.setModel(model);
+
+    // @ts-ignore
+    spy1 = jest.spyOn(builder, 'get').mockReturnValue(['bar']);
+    // @ts-ignore
+    spy2 = jest.spyOn(builder, 'take').mockReturnThis();
+
+    result = builder.first();
+
+    expect(spy1).toBeCalledWith(['*']);
+    // expect(spy1).toReturnWith('baz');
+    expect(spy2).toBeCalledWith(1);
+    expect(result).toBe('bar');
+  });
+
+  it('testQualifyColumn', () => {
+    let spy1, spy2, spy3, result;
+    builder = getBuilder();
+    model   = getModel();
+    builder.setModel(model);
+
+    spy1 = jest.spyOn(builder.getQuery(), 'from');
+
+    builder.setModel(getStubModel());
+
+    result = builder.qualifyColumn('column');
+
+    expect(spy1).toBeCalledWith('stub');
+    expect(result).toBe('stub.column');
+  });
+
+  it('testGetMethodLoadsModelsAndHydratesEagerRelations', () => {
+    let spy1, spy2, spy3, spy4, results;
+    builder = getBuilder();
+    model   = getModel();
+    builder.setModel(model);
+
+    spy1 = jest.spyOn(builder, 'getModels');
+    spy2 = jest.spyOn(builder, 'applyScopes')//.mockReturnThis();
+    spy3 = jest.spyOn(builder, 'eagerLoadRelations')//.mockReturnValue(['bar', 'baz']);
+    // spy4 = jest.spyOn(builder.getModel(), 'newCollection')//.mockReturnValue(['bar', 'baz']);
+
+    results = builder.get(['foo']);
+
+    expect(spy1).toBeCalledWith(['foo']);
+    expect(spy1).toReturnWith(['bar']);
+    expect(spy2).toReturnWith(builder);
+    expect(spy3).toReturnWith(['bar', 'baz']);
+    // expect(spy4).toBeCalledWith(['bar', 'baz']);
+    // expect(spy4).toReturnWith(['bar', 'baz']);
+    expect(results).toBe(['bar', 'baz']);
+  });
 // public testGetMethodDoesntHydrateEagerRelationsWhenNoResultsAreReturned() {
 //     var builder = m.mock(Builder + "[getModels,eagerLoadRelations]", [this.getMockQueryBuilder()]);
 //     builder.shouldReceive("applyScopes").andReturnSelf()
