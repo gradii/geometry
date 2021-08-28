@@ -4,25 +4,17 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isArray, isFunction } from '@gradii/check-type';
+import { isBlank } from '@gradii/check-type';
 import { Collection } from '../../define/collection';
 import { Model } from '../model';
 import { HasOneOrMany } from './has-one-or-many';
 
 export class HasOne extends HasOneOrMany {
-  /*Indicates if a default model instance should be used.
-
-  Alternatively, may be a Closure to execute to retrieve default value.*/
-  protected withDefault: Function | boolean;
-
-  /*Return a new model instance in case the relationship does not exist.*/
-  public withDefault(callback: Function | boolean = true) {
-    this.withDefault = callback;
-    return this;
-  }
-
   /*Get the results of the relationship.*/
   public getResults() {
+    if (isBlank(this.getParentKey())) {
+      return this.getDefaultFor(this.parent);
+    }
     return this.query.first() || this.getDefaultFor(this.parent);
   }
 
@@ -39,21 +31,41 @@ export class HasOne extends HasOneOrMany {
     return this.matchOne(models, results, relation);
   }
 
-  /*Get the default value for this relation.*/
-  protected getDefaultFor(model: Model) {
-    if (!this.withDefault) {
-      return;
+  /*Add the constraints for an internal relationship existence query.
+
+  Essentially, these queries compare on column names like "whereColumn".*/
+  public getRelationExistenceQuery(query: Builder, parentQuery: Builder,
+                                   columns: any[] | any = ['*']) {
+    if (this.isOneOfMany()) {
+      this.mergeOneOfManyJoinsTo(query);
     }
-    let instance = this.related.newInstance().setAttribute(
-      this.getPlainForeignKey(),
-      model.getAttribute(this.localKey)
-    );
-    if (isFunction(this.withDefault)) {
-      return this.withDefault(instance) || instance;
-    }
-    if (isArray(this.withDefault)) {
-      instance.forceFill(this.withDefault);
-    }
-    return instance;
+    return super.getRelationExistenceQuery(query, parentQuery, columns);
+  }
+
+  /*Add constraints for inner join subselect for one of many relationships.*/
+  public addOneOfManySubQueryConstraints(query: Builder, column: string | null = null,
+                                         aggregate: string | null = null) {
+    query.addSelect(this.foreignKey);
+  }
+
+  /*Get the columns that should be selected by the one of many subquery.*/
+  public getOneOfManySubQuerySelectColumns() {
+    return this.foreignKey;
+  }
+
+  /*Add join query constraints for one of many relationships.*/
+  public addOneOfManyJoinSubQueryConstraints(join: JoinClause) {
+    join.on(this.qualifySubSelectColumn(this.foreignKey), '=',
+      this.qualifyRelatedColumn(this.foreignKey));
+  }
+
+  /*Make a new related instance for the given model.*/
+  public newRelatedInstanceFor(parent: Model) {
+    return this.related.newInstance().setAttribute(this.getForeignKeyName(), parent[this.localKey]);
+  }
+
+  /*Get the value of the model's foreign key.*/
+  protected getRelatedKeyFrom(model: Model) {
+    return model.getAttribute(this.getForeignKeyName());
   }
 }
