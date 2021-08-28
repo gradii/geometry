@@ -161,29 +161,60 @@ describe('fedaco builder', () => {
     expect(spy1).toBeCalledWith('foo_table.foo', '=', 'bar', 'and');
     expect(spy3).toBeCalledWith(['column']);
   });
-// public testFindOrFailMethodWithManyThrowsModelNotFoundException() {
-//     this.expectException(ModelNotFoundException)
-//     var builder = m.mock(Builder + "[get]", [this.getMockQueryBuilder()]);
-//     builder.setModel(this.getMockModel())
-//     builder.getQuery().shouldReceive("whereIn").once()._with("foo_table.foo", [1, 2])
-//     builder.shouldReceive("get")._with(["column"]).andReturn(new Collection([1]))
-//     builder.findOrFail([1, 2], ["column"])
-//   }
-// public testFindOrFailMethodWithManyUsingCollectionThrowsModelNotFoundException() {
-//     this.expectException(ModelNotFoundException)
-//     var builder = m.mock(Builder + "[get]", [this.getMockQueryBuilder()]);
-//     builder.setModel(this.getMockModel())
-//     builder.getQuery().shouldReceive("whereIn").once()._with("foo_table.foo", [1, 2])
-//     builder.shouldReceive("get")._with(["column"]).andReturn(new Collection([1]))
-//     builder.findOrFail(new Collection([1, 2]), ["column"])
-//   }
-// public testFirstOrFailMethodThrowsModelNotFoundException() {
-//     this.expectException(ModelNotFoundException)
-//     var builder = m.mock(Builder + "[first]", [this.getMockQueryBuilder()]);
-//     builder.setModel(this.getMockModel())
-//     builder.shouldReceive("first")._with(["column"]).andReturn(null)
-//     builder.firstOrFail(["column"])
-//   }
+
+  it('testFindOrFailMethodWithManyThrowsModelNotFoundException', () => {
+    let spy1, spy3;
+    builder = getBuilder();
+    model   = getModel();
+    builder.setModel(model);
+
+    spy1 = jest.spyOn(builder.getQuery(), 'whereIn').mockReturnValue(undefined);
+    // @ts-ignore
+    spy3 = jest.spyOn(builder, 'get').mockReturnValue([1]);
+
+    expect(() => {
+      builder.findOrFail([1, 2], ['column']);
+    }).toThrowError('ModelNotFoundException');
+
+    expect(spy1).toBeCalledWith('foo_table.foo', [1, 2]);
+    expect(spy3).toBeCalledWith(['column']);
+    expect(spy3).lastReturnedWith([1]);
+  });
+
+  xit('testFindOrFailMethodWithManyUsingCollectionThrowsModelNotFoundException', () => {
+    let spy1, spy3;
+    builder = getBuilder();
+    model   = getModel();
+    builder.setModel(model);
+
+    spy1 = jest.spyOn(builder.getQuery(), 'whereIn').mockReturnValue(undefined);
+    // @ts-ignore
+    spy3 = jest.spyOn(builder, 'get').mockReturnValue([1]);
+
+    expect(() => {
+      builder.findOrFail([1, 2], ['column']);
+    }).toThrowError('ModelNotFoundException');
+
+    expect(spy1).toBeCalledWith('foo_table.foo', [1, 2]);
+    expect(spy3).toBeCalledWith(['column']);
+    expect(spy3).lastReturnedWith([1]);
+  });
+
+  it('testFirstOrFailMethodThrowsModelNotFoundException', () => {
+    let spy1, spy3;
+    builder = getBuilder();
+    model   = getModel();
+    builder.setModel(model);
+
+    spy1 = jest.spyOn(builder, 'first').mockReturnValue(undefined);
+
+    expect(() => {
+      builder.findOrFail([1, 2], ['column']);
+    }).toThrowError('ModelNotFoundException');
+
+    expect(spy1).toBeCalledWith(['column']);
+    expect(spy1).toReturnWith(null);
+  });
 // public testFindWithMany() {
 //     var builder = m.mock(Builder + "[get]", [this.getMockQueryBuilder()]);
 //     builder.getQuery().shouldReceive("whereIn").once()._with("foo_table.foo", [1, 2])
