@@ -50,7 +50,7 @@ export class Model extends mixinHasAttributes(
   static resolver;
 
   /*Create a new Eloquent model instance.*/
-  public constructor(attributes: any[] = []) {
+  public constructor(attributes: any = {}) {
     super();
     // this.bootIfNotBooted();
     // this.initializeTraits();

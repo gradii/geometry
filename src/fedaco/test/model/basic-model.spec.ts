@@ -13,6 +13,7 @@ describe('test basic model', () => {
   });
 
   it('test basic model 1', () => {
-
+    const basic = new BasicModel();
+    basic.name  = 'hello';
   });
 });

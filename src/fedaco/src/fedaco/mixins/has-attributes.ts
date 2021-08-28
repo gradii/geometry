@@ -36,7 +36,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
     /*The cache of the mutated attributes for each class.*/
     protected static mutatorCache: any[] = [];
     /*The model's attributes.*/
-    _attributes: any[] = [];
+    _attributes: any = {};
+
     /*The model attribute's original state.*/
     _original: any[] = [];
     /*The changed model attributes.*/
@@ -154,6 +155,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
 
     /*Set a given attribute on the model.*/
     public setAttribute(key: string, value: any) {
+      this._attributes[key] = value;
+
       // if (this.hasSetMutator(key)) {
       //   return this.setMutatedAttributeValue(key, value);
       // } else if (value && this.isDateAttribute(key)) {

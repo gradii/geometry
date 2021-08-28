@@ -5,7 +5,7 @@
  */
 
 import { makePropDecorator } from '@gradii/annotation';
-import { snakeCase } from '../helper/str';
+import { Model } from '../fedaco/model';
 
 export interface ColumnDecorator {
 
@@ -60,11 +60,13 @@ export const Column: ColumnDecorator = makePropDecorator(
         configurable: true
       };
       if (!hasGetter) {
-        propertyDescriptor.get = () => target.getAttribute(name);
+        propertyDescriptor.get = function () {
+          return (this as Model).getAttribute(name);
+        };
       }
       if (!hasSetter) {
-        propertyDescriptor.set = (value) => {
-          target.setAttribute(name, value);
+        propertyDescriptor.set = function (value) {
+          (this as Model).setAttribute(name, value);
         };
       }
       Object.defineProperty(target, name, propertyDescriptor);
