@@ -364,8 +364,8 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /*Create a constraint to select the given columns for the relation.*/
   protected createSelectWithConstraint(name: string) {
     return [
-      name.split(':')[0], query => {
-        query.select(name.split(':')[1].split(','));
+      name.split(':')[0], (q) => {
+        q.select(name.split(':')[1].split(','));
       }
     ];
   }

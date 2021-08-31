@@ -4,12 +4,15 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { isBlank } from '@gradii/check-type';
+import { last, tap } from 'ramda';
 import { Collection } from '../../define/collection';
-import { Model } from '../model';
-import { Relation } from './relation';
 import { FedacoBuilder } from '../fedaco-builder';
+import { Model } from '../model';
+import { mixinInteractsWithDictionary } from './concerns/interacts-with-dictionary';
+import { Relation } from './relation';
 
-export class HasOneOrMany extends Relation {
+export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
   /*The foreign key of the parent model.*/
   protected foreignKey: string;
   /*The local key of the parent model.*/
@@ -24,14 +27,14 @@ export class HasOneOrMany extends Relation {
 
   /*Create and return an un-saved instance of the related model.*/
   public make(attributes: any[] = []) {
-    return tap(this.related.newInstance(attributes), instance => {
+    return tap(instance => {
       this.setForeignAttributesForCreate(instance);
-    });
+    }, this._related.newInstance(attributes));
   }
 
   /*Create and return an un-saved instance of the related models.*/
-  public makeMany(records: iterable) {
-    var instances = this.related.newCollection();
+  public makeMany(records: []) {
+    const instances = this._related.newCollection();
     for (let record of records) {
       instances.push(this.make(record));
     }
@@ -41,7 +44,7 @@ export class HasOneOrMany extends Relation {
   /*Set the base constraints on the relation query.*/
   public addConstraints() {
     if (HasOneOrMany.constraints) {
-      var query = this.getRelationQuery();
+      const query = this.getRelationQuery();
       query.where(this.foreignKey, '=', this.getParentKey());
       query.whereNotNull(this.foreignKey);
     }
@@ -49,7 +52,7 @@ export class HasOneOrMany extends Relation {
 
   /*Set the constraints for an eager load of the relation.*/
   public addEagerConstraints(models: any[]) {
-    var whereIn = this.whereInMethod(this.parent, this.localKey);
+    let whereIn = this.whereInMethod(this._parent, this.localKey);
     this.getRelationQuery()[whereIn](this.foreignKey, this.getKeys(models, this.localKey));
   }
 
@@ -65,10 +68,10 @@ export class HasOneOrMany extends Relation {
 
   /*Match the eagerly loaded results to their many parents.*/
   protected matchOneOrMany(models: any[], results: Collection, relation: string, type: string) {
-    var dictionary = this.buildDictionary(results);
+    let dictionary = this.buildDictionary(results);
     for (let model of models) {
-      if (dictionary[key = this.getDictionaryKey(
-        model.getAttribute(this.localKey))] !== undefined) {
+      const key = this.getDictionaryKey(model.getAttribute(this.localKey));
+      if (dictionary[key] !== undefined) {
         model.setRelation(relation, this.getRelationValue(dictionary, key, type));
       }
     }
@@ -77,22 +80,29 @@ export class HasOneOrMany extends Relation {
 
   /*Get the value of a relationship by one or many type.*/
   protected getRelationValue(dictionary: any[], key: string, type: string) {
-    var value = dictionary[key];
-    return type === 'one' ? reset(value) : this.related.newCollection(value);
+    let value = dictionary[key];
+    return type === 'one' ? reset(value) : this._related.newCollection(value);
   }
 
   /*Build model dictionary keyed by the relation's foreign key.*/
   protected buildDictionary(results: Collection) {
-    var foreign = this.getForeignKeyName();
-    return results.mapToDictionary(result => {
-      return {};
-    }).all();
+    let foreign = this.getForeignKeyName();
+    return results.reduce((prev: any, result) => {
+      // @ts-ignore
+      const key = this.getDictionaryKey(result[foreign]);
+      if (!prev[key]) {
+        prev[key] = [];
+      }
+      prev[key].push(result);
+      return prev;
+    }, {});
   }
 
   /*Find a model by its primary key or return a new instance of the related model.*/
   public findOrNew(id: any, columns: any[] = ['*']) {
-    if (isBlank(instance = this.find(id, columns))) {
-      var instance = this.related.newInstance();
+    let instance = this.find(id, columns);
+    if (isBlank(instance)) {
+      instance = this._related.newInstance();
       this.setForeignAttributesForCreate(instance);
     }
     return instance;
@@ -100,8 +110,9 @@ export class HasOneOrMany extends Relation {
 
   /*Get the first related model record matching the attributes or instantiate it.*/
   public firstOrNew(attributes: any[] = [], values: any[] = []) {
-    if (isBlank(instance = this.where(attributes).first())) {
-      var instance = this.related.newInstance([...attributes, ...values]);
+    let instance = this.where(attributes).first() as Model;
+    if (isBlank(instance)) {
+      instance = this._related.newInstance([...attributes, ...values]);
       this.setForeignAttributesForCreate(instance);
     }
     return instance;
@@ -109,18 +120,19 @@ export class HasOneOrMany extends Relation {
 
   /*Get the first related record matching the attributes or create it.*/
   public firstOrCreate(attributes: any[] = [], values: any[] = []) {
-    if (isBlank(instance = this.where(attributes).first())) {
-      var instance = this.create([...attributes, ...values]);
+    let instance = this.where(attributes).first();
+    if (isBlank(instance)) {
+      instance = this.create([...attributes, ...values]);
     }
     return instance;
   }
 
   /*Create or update a related record matching the attributes, and fill it with values.*/
   public updateOrCreate(attributes: any[], values: any[] = []) {
-    return tap(this.firstOrNew(attributes), instance => {
+    return tap(instance => {
       instance.fill(values);
       instance.save();
-    });
+    }, this.firstOrNew(attributes));
   }
 
   /*Attach a model instance to the parent model.*/
@@ -130,7 +142,7 @@ export class HasOneOrMany extends Relation {
   }
 
   /*Attach a collection of models to the parent instance.*/
-  public saveMany(models: iterable) {
+  public saveMany(models: any[]) {
     for (let model of models) {
       this.save(model);
     }
@@ -139,15 +151,15 @@ export class HasOneOrMany extends Relation {
 
   /*Create a new instance of the related model.*/
   public create(attributes: any[] = []) {
-    return tap(this.related.newInstance(attributes), instance => {
+    return tap(instance => {
       this.setForeignAttributesForCreate(instance);
       instance.save();
-    });
+    }, this._related.newInstance(attributes));
   }
 
   /*Create a Collection of new instances of the related model.*/
-  public createMany(records: iterable) {
-    var instances = this.related.newCollection();
+  public createMany(records: any[]) {
+    let instances = this._related.newCollection();
     for (let record of records) {
       instances.push(this.create(record));
     }
@@ -162,7 +174,9 @@ export class HasOneOrMany extends Relation {
   /*Add the constraints for a relationship query.*/
   public getRelationExistenceQuery(query: FedacoBuilder, parentQuery: FedacoBuilder,
                                    columns: any[] | any = ['*']) {
-    if (query.getQuery().from == parentQuery.getQuery().from) {
+    // if (query.getQuery()._from == parentQuery.getQuery()._from) {
+    // refactor try to use get table
+    if (query.getModel().getTable() == parentQuery.getModel().getTable()) {
       return this.getRelationExistenceQueryForSelfRelation(query, parentQuery, columns);
     }
     return super.getRelationExistenceQuery(query, parentQuery, columns);
@@ -171,10 +185,13 @@ export class HasOneOrMany extends Relation {
   /*Add the constraints for a relationship query on the same table.*/
   public getRelationExistenceQueryForSelfRelation(query: FedacoBuilder, parentQuery: FedacoBuilder,
                                                   columns: any[] | any = ['*']) {
-    query.from(query.getModel().getTable() + ' as ' + (hash = this.getRelationCountHash()));
+    const hash = this.getRelationCountHash();
+    query.from(`${query.getModel().getTable()} as ${hash}`);
     query.getModel().setTable(hash);
-    return query.select(columns).whereColumn(this.getQualifiedParentKeyName(), '=',
-      hash + '.' + this.getForeignKeyName());
+    return query.select(columns).whereColumn(
+      this.getQualifiedParentKeyName(),
+      '=',
+      `${hash}.${this.getForeignKeyName()}`);
   }
 
   /*Get the key for comparing against the parent key in "has" query.*/
@@ -184,18 +201,18 @@ export class HasOneOrMany extends Relation {
 
   /*Get the key value of the parent's local key.*/
   public getParentKey() {
-    return this.parent.getAttribute(this.localKey);
+    return this._parent.getAttribute(this.localKey);
   }
 
   /*Get the fully qualified parent key name.*/
   public getQualifiedParentKeyName() {
-    return this.parent.qualifyColumn(this.localKey);
+    return this._parent.qualifyColumn(this.localKey);
   }
 
   /*Get the plain foreign key.*/
   public getForeignKeyName() {
-    var segments = this.getQualifiedForeignKeyName().split('.');
-    return end(segments);
+    let segments = this.getQualifiedForeignKeyName().split('.');
+    return last(segments);
   }
 
   /*Get the foreign key for the relationship.*/

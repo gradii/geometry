@@ -4,8 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { uniq } from 'ramda';
+import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
 import { BelongsToMany } from './belongs-to-many';
+import { MorphPivot } from './morph-pivot';
 
 export class MorphToMany extends BelongsToMany {
   /*The type of the polymorphic relation.*/
@@ -18,28 +21,31 @@ export class MorphToMany extends BelongsToMany {
   protected inverse: boolean;
 
   /*Create a new morph to many relationship instance.*/
-  public constructor(query: Builder, parent: Model, name: string, table: string,
+  public constructor(query: FedacoBuilder, parent: Model, name: string, table: string,
                      foreignPivotKey: string, relatedPivotKey: string, parentKey: string,
-                     relatedKey: string, relationName: string | null = null,
-                     inverse: boolean                                = false) {
+                     relatedKey: string,
+                     relationName: string | null = null,
+                     inverse: boolean            = false) {
     super(query, parent, table, foreignPivotKey, relatedPivotKey, parentKey, relatedKey,
       relationName);
     this.inverse    = inverse;
     this.morphType  = name + '_type';
-    this.morphClass = inverse ? query.getModel().getMorphClass() : parent.getMorphClass();
+    this.morphClass = inverse ?
+      query.getModel().getMorphClass() :
+      parent.getMorphClass();
   }
 
   /*Set the where clause for the relation query.*/
   protected addWhereConstraints() {
     super.addWhereConstraints();
-    this.query.where(this.qualifyPivotColumn(this.morphType), this.morphClass);
+    this._query.where(this.qualifyPivotColumn(this.morphType), this.morphClass);
     return this;
   }
 
   /*Set the constraints for an eager load of the relation.*/
   public addEagerConstraints(models: any[]) {
     super.addEagerConstraints(models);
-    this.query.where(this.qualifyPivotColumn(this.morphType), this.morphClass);
+    this._query.where(this.qualifyPivotColumn(this.morphType), this.morphClass);
   }
 
   /*Create a new pivot attachment record.*/
@@ -48,7 +54,7 @@ export class MorphToMany extends BelongsToMany {
   }
 
   /*Add the constraints for a relationship count query.*/
-  public getRelationExistenceQuery(query: Builder, parentQuery: Builder,
+  public getRelationExistenceQuery(query: FedacoBuilder, parentQuery: FedacoBuilder,
                                    columns: any[] | any = ['*']) {
     return super.getRelationExistenceQuery(query, parentQuery, columns).where(
       this.qualifyPivotColumn(this.morphType), this.morphClass);
@@ -69,9 +75,9 @@ export class MorphToMany extends BelongsToMany {
 
   /*Create a new pivot model instance.*/
   public newPivot(attributes: any[] = [], exists: boolean = false) {
-    var using = this.using;
-    var pivot = using ? using.fromRawAttributes(this.parent, attributes, this.table,
-      exists) : MorphPivot.fromAttributes(this.parent, attributes, this.table, exists);
+    let using = this._using;
+    let pivot = using ? using.fromRawAttributes(this._parent, attributes, this.table,
+      exists) : MorphPivot.fromAttributes(this._parent, attributes, this.table, exists);
     pivot.setPivotKeys(this.foreignPivotKey, this.relatedPivotKey).setMorphType(
       this.morphType).setMorphClass(this.morphClass);
     return pivot;
@@ -81,10 +87,10 @@ export class MorphToMany extends BelongsToMany {
 
   "pivot_" is prefixed at each column for easy removal later.*/
   protected aliasedPivotColumns() {
-    var defaults = [this.foreignPivotKey, this.relatedPivotKey, this.morphType];
-    return collect([...defaults, ...this.pivotColumns]).map(column => {
+    let defaults = [this.foreignPivotKey, this.relatedPivotKey, this.morphType];
+    return uniq([...defaults, ...this._pivotColumns].map(column => {
       return this.qualifyPivotColumn(column) + ' as pivot_' + column;
-    }).unique().all();
+    }));
   }
 
   /*Get the foreign key "type" name.*/

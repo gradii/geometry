@@ -1,8 +1,55 @@
-/*trait*/ import { isBlank } from '@gradii/check-type';
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import { isBlank } from '@gradii/check-type';
 import { Constructor } from '../../helper/constructor';
-import { FedacoBuilder } from '../fedaco-builder';
+import { Model } from '../model';
+
+export interface HasTimestamps {
+
+  /*Update the model's update timestamp.*/
+  touch(attribute: string): boolean;
+
+  /*Update the creation and update timestamps.*/
+  updateTimestamps(): boolean;
+
+  /*Set the value of the "created at" attribute.*/
+  setCreatedAt(value: any): this;
+
+  /*Set the value of the "updated at" attribute.*/
+  setUpdatedAt(value: any): this;
+
+  /*Get a fresh timestamp for the model.*/
+  freshTimestamp(): Date;
+
+  /*Get a fresh timestamp for the model.*/
+  freshTimestampString(): string;
+
+  /*Determine if the model uses timestamps.*/
+  usesTimestamps(): boolean;
+
+  /*Get the name of the "created at" column.*/
+  getCreatedAtColumn(): string;
+
+  /*Get the name of the "updated at" column.*/
+  getUpdatedAtColumn(): string;
+
+  /*Get the fully qualified "created at" column.*/
+  getQualifiedCreatedAtColumn(this: Model & this): string;
+
+  /*Get the fully qualified "updated at" column.*/
+  getQualifiedUpdatedAtColumn(this: Model & this): string;
+}
+
+
+export type HasTimestampsCtor = Constructor<HasTimestamps>;
+
+
 /** Mixin to augment a directive with a `disableRipple` property. */
-export function mixinHasTimestamps<T extends Constructor<{}>>(base: T) {
+export function mixinHasTimestamps<T extends Constructor<any>>(base: T): HasTimestampsCtor & T {
   // @ts-ignore
   return class _Self extends base {
 
@@ -10,8 +57,9 @@ export function mixinHasTimestamps<T extends Constructor<{}>>(base: T) {
     public timestamps: boolean = true;
 
     /*Update the model's update timestamp.*/
-    public touch(this: FedacoBuilder & _Self, attribute: string | null = null) {
+    public touch(this: Model & _Self, attribute: string = null) {
       if (attribute) {
+        // @ts-ignore
         this[attribute] = this.freshTimestamp();
         return this.save();
       }
@@ -23,13 +71,13 @@ export function mixinHasTimestamps<T extends Constructor<{}>>(base: T) {
     }
 
     /*Update the creation and update timestamps.*/
-    public updateTimestamps() {
-      var time            = this.freshTimestamp();
-      var updatedAtColumn = this.getUpdatedAtColumn();
+    public updateTimestamps(this: Model & _Self) {
+      let time            = this.freshTimestamp();
+      let updatedAtColumn = this.getUpdatedAtColumn();
       if (!isBlank(updatedAtColumn) && !this.isDirty(updatedAtColumn)) {
         this.setUpdatedAt(time);
       }
-      var createdAtColumn = this.getCreatedAtColumn();
+      let createdAtColumn = this.getCreatedAtColumn();
       if (!this.exists && !isBlank(createdAtColumn) && !this.isDirty(createdAtColumn)) {
         this.setCreatedAt(time);
       }
@@ -53,7 +101,7 @@ export function mixinHasTimestamps<T extends Constructor<{}>>(base: T) {
     }
 
     /*Get a fresh timestamp for the model.*/
-    public freshTimestampString(this: FedacoBuilder) {
+    public freshTimestampString(this: Model & this) {
       return this.fromDateTime(this.freshTimestamp());
     }
 
@@ -64,21 +112,21 @@ export function mixinHasTimestamps<T extends Constructor<{}>>(base: T) {
 
     /*Get the name of the "created at" column.*/
     public getCreatedAtColumn() {
-      return HasTimestamps.CREATED_AT;
+      return 'created_at';
     }
 
     /*Get the name of the "updated at" column.*/
     public getUpdatedAtColumn() {
-      return HasTimestamps.UPDATED_AT;
+      return 'updated_at';
     }
 
     /*Get the fully qualified "created at" column.*/
-    public getQualifiedCreatedAtColumn() {
+    public getQualifiedCreatedAtColumn(this: Model & this) {
       return this.qualifyColumn(this.getCreatedAtColumn());
     }
 
     /*Get the fully qualified "updated at" column.*/
-    public getQualifiedUpdatedAtColumn(this: FedacoBuilder) {
+    public getQualifiedUpdatedAtColumn(this: Model & this) {
       return this.qualifyColumn(this.getUpdatedAtColumn());
     }
   };

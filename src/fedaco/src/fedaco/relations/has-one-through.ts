@@ -1,27 +1,40 @@
-import { Collection } from 'Illuminate/Database/Eloquent/Collection';
-import { Model } from 'Illuminate/Database/Eloquent/Model';
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
 
-export class HasOneThrough extends HasManyThrough {
+import { Collection } from '../../define/collection';
+import { Model } from '../model';
+import { mixinInteractsWithDictionary } from './concerns/interacts-with-dictionary';
+import { mixinSupportsDefaultModels } from './concerns/supports-default-models';
+import { HasManyThrough } from './has-many-through';
+
+export class HasOneThrough extends mixinInteractsWithDictionary(
+  mixinSupportsDefaultModels(
+    HasManyThrough
+  )
+) {
   /*Get the results of the relationship.*/
   public getResults() {
-    return this.first() || this.getDefaultFor(this.farParent);
+    return this.first() || this._getDefaultFor(this.farParent);
   }
 
   /*Initialize the relation on a set of models.*/
   public initRelation(models: any[], relation: string) {
     for (let model of models) {
-      model.setRelation(relation, this.getDefaultFor(model));
+      model.setRelation(relation, this._getDefaultFor(model));
     }
     return models;
   }
 
   /*Match the eagerly loaded results to their parents.*/
   public match(models: any[], results: Collection, relation: string) {
-    var dictionary = this.buildDictionary(results);
+    let dictionary = this.buildDictionary(results);
     for (let model of models) {
-      if (dictionary[key = this.getDictionaryKey(
-        model.getAttribute(this.localKey))] !== undefined) {
-        var value = dictionary[key];
+      const key = this.getDictionaryKey(model.getAttribute(this.localKey));
+      if (dictionary[key] !== undefined) {
+        let value = dictionary[key];
         model.setRelation(relation, reset(value));
       }
     }
@@ -30,6 +43,6 @@ export class HasOneThrough extends HasManyThrough {
 
   /*Make a new related instance for the given model.*/
   public newRelatedInstanceFor(parent: Model) {
-    return this.related.newInstance();
+    return this._related.newInstance();
   }
 }

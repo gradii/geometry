@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { isArray } from '@gradii/check-type';
+import { tap } from 'ramda';
 import { FedacoBuilder } from '../fedaco-builder';
+import { Model } from '../model';
 import { Pivot } from './pivot';
 
 export class MorphPivot extends Pivot {
@@ -16,73 +19,86 @@ export class MorphPivot extends Pivot {
 
   Explicitly define this so it's not included in saved attributes.*/
   protected morphClass: string;
+
   /*Set the keys for a save update query.*/
-  protected setKeysForSaveQuery(query: Builder) {
+  protected setKeysForSaveQuery(query: FedacoBuilder): FedacoBuilder {
     query.where(this.morphType, this.morphClass);
-    return super.setKeysForSaveQuery(query);
+    return super._setKeysForSaveQuery(query);
   }
+
   /*Set the keys for a select query.*/
-  protected setKeysForSelectQuery(query: Builder) {
+  protected setKeysForSelectQuery(query: FedacoBuilder): FedacoBuilder {
     query.where(this.morphType, this.morphClass);
     return super.setKeysForSelectQuery(query);
   }
+
   /*Delete the pivot model record from the database.*/
   public delete() {
-    if (this.attributes[this.getKeyName()] !== undefined) {
+    if (this._attributes[this.getKeyName()] !== undefined) {
       return /*cast type int*/ super.delete();
     }
-    if (this.fireModelEvent("deleting") === false) {
+    if (this._fireModelEvent('deleting') === false) {
       return 0;
     }
-    var query = this.getDeleteQuery();
+    let query = this.getDeleteQuery();
     query.where(this.morphType, this.morphClass);
-    return tap(query.delete(), () => {
-      this.fireModelEvent("deleted", false);
-    });
+    return tap(() => {
+      this._fireModelEvent('deleted', false);
+    }, query.delete());
   }
+
   /*Get the morph type for the pivot.*/
   public getMorphType() {
     return this.morphType;
   }
+
   /*Set the morph type for the pivot.*/
   public setMorphType(morphType: string) {
     this.morphType = morphType;
     return this;
   }
+
   /*Set the morph class for the pivot.*/
   public setMorphClass(morphClass: string) {
     this.morphClass = morphClass;
     return this;
   }
+
   /*Get the queueable identity for the entity.*/
   public getQueueableId() {
-    if (this.attributes[this.getKeyName()] !== undefined) {
+    if (this._attributes[this.getKeyName()] !== undefined) {
       return this.getKey();
     }
-    return `${this.foreignKey}:${this.getAttribute(this.foreignKey)}:${this.relatedKey}:${this.getAttribute(this.relatedKey)}:${this.morphType}:${this.morphClass}`;
+    return `${this.foreignKey}:${this.getAttribute(
+      this.foreignKey)}:${this.relatedKey}:${this.getAttribute(
+      this.relatedKey)}:${this.morphType}:${this.morphClass}`;
   }
+
   /*Get a new query to restore one or more models by their queueable IDs.*/
-  public newQueryForRestoration(ids: any[] | number) {
-    if (is_array(ids)) {
+  public newQueryForRestoration(ids: number[] | string[] | string) {
+    if (isArray(ids)) {
       return this.newQueryForCollectionRestoration(ids);
     }
-    if (!Str.contains(ids, ":")) {
+    if (!ids.includes(':')) {
       return super.newQueryForRestoration(ids);
     }
-    var segments = ids.split(":");
-    return this.newQueryWithoutScopes().where(segments[0], segments[1]).where(segments[2], segments[3]).where(segments[4], segments[5]);
+    let segments = ids.split(':');
+    return this.newQueryWithoutScopes().where(segments[0], segments[1]).where(segments[2],
+      segments[3]).where(segments[4], segments[5]);
   }
+
   /*Get a new query to restore multiple models by their queueable IDs.*/
   protected newQueryForCollectionRestoration(ids: any[]) {
-    var ids = array_values(ids);
-    if (!Str.contains(ids[0], ":")) {
+    if (!ids[0].includes(':')) {
       return super.newQueryForRestoration(ids);
     }
-    var query = this.newQueryWithoutScopes();
+    let query = this.newQueryWithoutScopes();
     for (let id of ids) {
-      var segments = id.split(":");
-      query.orWhere(query => {
-        return query.where(segments[0], segments[1]).where(segments[2], segments[3]).where(segments[4], segments[5]);
+      let segments = id.split(':');
+      query.orWhere(q => {
+        return q.where(segments[0], segments[1])
+          .where(segments[2], segments[3])
+          .where(segments[4], segments[5]);
       });
     }
     return query;

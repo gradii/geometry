@@ -11,13 +11,13 @@ import { MorphOneOrMany } from './morph-one-or-many';
 export class MorphMany extends MorphOneOrMany {
   /*Get the results of the relationship.*/
   public getResults() {
-    return !isBlank(this.getParentKey()) ? this.query.get() : this.related.newCollection();
+    return !isBlank(this.getParentKey()) ? this._query.get() : this._related.newCollection();
   }
 
   /*Initialize the relation on a set of models.*/
   public initRelation(models: any[], relation: string) {
     for (let model of models) {
-      model.setRelation(relation, this.related.newCollection());
+      model.setRelation(relation, this._related.newCollection());
     }
     return models;
   }

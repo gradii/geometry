@@ -4,40 +4,46 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isBlank } from '@gradii/check-type';
+import { isArray, isBlank, isObject } from '@gradii/check-type';
+import { last, uniq } from 'ramda';
+import { Collection } from '../../define/collection';
+import { raw } from '../../query-builder/ast-factory';
+import { FedacoBuilder } from '../fedaco-builder';
 // import { Builder } from 'Illuminate/Database/Eloquent/Builder';
 // import { Collection } from 'Illuminate/Database/Eloquent/Collection';
 // import { Model } from 'Illuminate/Database/Eloquent/Model';
 // import { Expression } from 'Illuminate/Database/Query/Expression';
 // import { Arr } from 'Illuminate/Support/Arr';
 import { mixinForwardCallToQueryBuilder } from '../mixins/forward-call-to-query-builder';
+import { Model } from '../model';
 
 export class Relation extends mixinForwardCallToQueryBuilder(class {
 }) {
   /*The Eloquent query builder instance.*/
-  protected query: Builder;
+  _query: FedacoBuilder;
   /*The parent model instance.*/
-  protected parent: Model;
+  _parent: Model;
   /*The related model instance.*/
-  protected related: Model;
+  _related: Model;
   /*Indicates if the relation is adding constraints.*/
   protected static constraints: boolean = true;
   /*An array to map class names to their morph names in the database.*/
-  public static morphMap: any[] = [];
+  public static _morphMap: any[] = [];
   /*The count of self joins.*/
   protected static selfJoinCount: number = 0;
 
   /*Create a new relation instance.*/
-  public constructor(query: Builder, parent: Model) {
-    this.query   = query;
-    this.parent  = parent;
-    this.related = query.getModel();
+  public constructor(query: FedacoBuilder, parent: Model) {
+    super();
+    this._query   = query;
+    this._parent  = parent;
+    this._related = query.getModel();
     this.addConstraints();
   }
 
   /*Run a callback with constraints disabled on the relation.*/
   public static noConstraints(callback: Function) {
-    var previous         = Relation.constraints;
+    let previous         = Relation.constraints;
     Relation.constraints = false;
     try {
       return callback();
@@ -47,19 +53,29 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   }
 
   /*Set the base constraints on the relation query.*/
-  public abstract addConstraints();
+  public addConstraints() {
+    throw new Error('not implemented');
+  }
 
   /*Set the constraints for an eager load of the relation.*/
-  public abstract addEagerConstraints(models: any[]);
+  public addEagerConstraints(models: any[]) {
+    throw new Error('not implemented');
+  }
 
   /*Initialize the relation on a set of models.*/
-  public abstract initRelation(models: any[], relation: string);
+  public initRelation(models: any[], relation: string) {
+    throw new Error('not implemented');
+  }
 
   /*Match the eagerly loaded results to their parents.*/
-  public abstract match(models: any[], results: Collection, relation: string);
+  public match(models: any[], results: Collection, relation: string) {
+    throw new Error('not implemented');
+  }
 
   /*Get the results of the relationship.*/
-  public abstract getResults();
+  public getResults() {
+    throw new Error('not implemented');
+  }
 
   /*Get the relationship for eager loading.*/
   public getEager() {
@@ -68,47 +84,53 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
 
   /*Execute the query and get the first result if it's the sole matching record.*/
   public sole(columns: any[] | string = ['*']) {
-    var result = this.take(2).get(columns);
-    if (result.isEmpty()) {
-      throw new ModelNotFoundException().setModel(get_class(this.related));
+    let result = this.take(2).get(columns);
+    if (!result.length) {
+      throw new Error(`ModelNotFoundException().setModel(get_class(this._related))`);
     }
-    if (result.count() > 1) {
-      throw new MultipleRecordsFoundException();
+    if (result.length > 1) {
+      throw new Error(`MultipleRecordsFoundException()`);
     }
-    return result.first();
+    return result.pop();
   }
 
   /*Execute the query as a "select" statement.*/
   public get(columns: any[] = ['*']) {
-    return this.query.get(columns);
+    return this._query.get(columns);
   }
 
   /*Touch all of the related models for the relationship.*/
   public touch() {
-    var model = this.getRelated();
-    if (!model.isIgnoringTouch()) {
-      this.rawUpdate({});
-    }
+    let model = this.getRelated();
+    // if (!model.isIgnoringTouch()) {
+    this.rawUpdate({
+      [model.getUpdatedAtColumn()]: model.freshTimestampString()
+    });
+    // }
   }
 
   /*Run a raw update against the base query.*/
-  public rawUpdate(attributes: any[] = []) {
-    return this.query.withoutGlobalScopes().update(attributes);
+  public rawUpdate(attributes: any) {
+    return this._query.withoutGlobalScopes().update(attributes);
   }
 
   /*Add the constraints for a relationship count query.*/
-  public getRelationExistenceCountQuery(query: Builder, parentQuery: Builder) {
+  public getRelationExistenceCountQuery(query: FedacoBuilder, parentQuery: FedacoBuilder) {
     return this.getRelationExistenceQuery(query, parentQuery,
-      new Expression('count(*)')).setBindings([], 'select');
+      raw('count(*)')).setBindings([], 'select');
   }
 
   /*Add the constraints for an internal relationship existence query.
 
   Essentially, these queries compare on column names like whereColumn.*/
-  public getRelationExistenceQuery(query: Builder, parentQuery: Builder,
+  public getRelationExistenceQuery(query: FedacoBuilder, parentQuery: FedacoBuilder,
                                    columns: any[] | any = ['*']) {
-    return query.select(columns).whereColumn(this.getQualifiedParentKeyName(), '=',
-      this.getExistenceCompareKey());
+    return query.select(columns)
+      .whereColumn(
+        this.getQualifiedParentKeyName(),
+        '=',
+        this.getExistenceCompareKey()
+      );
   }
 
   /*Get a relationship join table hash.*/
@@ -118,19 +140,19 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
 
   /*Get all of the primary keys for an array of models.*/
   protected getKeys(models: any[], key: string | null = null) {
-    return collect(models).map(value => {
+    return uniq(models.map(value => {
       return key ? value.getAttribute(key) : value.getKey();
-    }).values().unique(null, true).sort().all();
+    })).sort();
   }
 
   /*Get the query builder that will contain the relationship constraints.*/
   protected getRelationQuery() {
-    return this.query;
+    return this._query;
   }
 
   /*Get the underlying query for the relation.*/
   public getQuery() {
-    return this.query;
+    return this._query;
   }
 
   /*Get the base query builder driving the Eloquent builder.*/
@@ -140,57 +162,57 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
 
   /*Get a base query builder instance.*/
   public toBase() {
-    return this.query.getQuery();
+    return this._query.getQuery();
   }
 
   /*Get the parent model of the relation.*/
   public getParent() {
-    return this.parent;
+    return this._parent;
   }
 
   /*Get the fully qualified parent key name.*/
   public getQualifiedParentKeyName() {
-    return this.parent.getQualifiedKeyName();
+    return this._parent.getQualifiedKeyName();
   }
 
   /*Get the related model of the relation.*/
   public getRelated() {
-    return this.related;
+    return this._related;
   }
 
   /*Get the name of the "created at" column.*/
   public createdAt() {
-    return this.parent.getCreatedAtColumn();
+    return this._parent.getCreatedAtColumn();
   }
 
   /*Get the name of the "updated at" column.*/
   public updatedAt() {
-    return this.parent.getUpdatedAtColumn();
+    return this._parent.getUpdatedAtColumn();
   }
 
   /*Get the name of the related model's "updated at" column.*/
   public relatedUpdatedAt() {
-    return this.related.getUpdatedAtColumn();
+    return this._related.getUpdatedAtColumn();
   }
 
   /*Get the name of the "where in" method for eager loading.*/
-  protected whereInMethod(model: Model, key: string) {
-    return model.getKeyName() === last(key.split('.')) && in_array(model.getKeyType(),
-      ['int', 'integer']) ? 'whereIntegerInRaw' : 'whereIn';
+  protected whereInMethod(model: Model, key: string): 'whereIntegerInRaw' | 'whereIn' {
+    return model.getKeyName() === last(key.split('.')) &&
+    ['int', 'integer'].includes(model.getKeyType()) ? 'whereIntegerInRaw' : 'whereIn';
   }
 
   /*Set or get the morph map for polymorphic relations.*/
   public static morphMap(map: any[] | null = null, merge: boolean = true) {
-    var map = Relation.buildMorphMapFromModels(map);
-    if (is_array(map)) {
-      Relation.morphMap = merge && Relation.morphMap ? map + Relation.morphMap : map;
+    const map = Relation.buildMorphMapFromModels(map);
+    if (isArray(map)) {
+      Relation._morphMap = merge && Relation._morphMap ? map + Relation._morphMap : map;
     }
-    return Relation.morphMap;
+    return Relation._morphMap;
   }
 
   /*Builds a table-keyed array from model class names.*/
   protected static buildMorphMapFromModels(models: string[] | null = null) {
-    if (isBlank(models) || Arr.isAssoc(models)) {
+    if (isBlank(models) || isObject(models)) {
       return models;
     }
     return array_combine(array_map(model => {
@@ -200,7 +222,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
 
   /*Get the model associated with a custom polymorphic type.*/
   public static getMorphedModel(alias: string) {
-    return Relation.morphMap[alias] ?? null;
+    return Relation._morphMap[alias] ?? null;
   }
 
   // /*Handle dynamic method calls to the relationship.*/

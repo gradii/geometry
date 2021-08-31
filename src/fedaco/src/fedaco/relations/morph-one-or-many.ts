@@ -4,9 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
 import { HasOneOrMany } from './has-one-or-many';
-import { FedacoBuilder  } from '../fedaco-builder';
 
 export class MorphOneOrMany extends HasOneOrMany {
   /*The foreign key type for the relationship.*/
@@ -15,7 +15,11 @@ export class MorphOneOrMany extends HasOneOrMany {
   protected morphClass: string;
 
   /*Create a new morph one or many relationship instance.*/
-  public constructor(query: FedacoBuilder, parent: Model, type: string, id: string, localKey: string) {
+  public constructor(query: FedacoBuilder,
+                     parent: Model,
+                     type: string,
+                     id: string,
+                     localKey: string) {
     super(query, parent, id, localKey);
     this.morphType  = type;
     this.morphClass = parent.getMorphClass();
@@ -37,8 +41,8 @@ export class MorphOneOrMany extends HasOneOrMany {
 
   /*Set the foreign ID and type for creating a related model.*/
   protected setForeignAttributesForCreate(model: Model) {
-    model[this.getForeignKeyName()] = this.getParentKey();
-    model[this.getMorphType()]      = this.morphClass;
+    model.setAttribute(this.getForeignKeyName(), this.getParentKey());
+    model.setAttribute(this.getMorphType(), this.morphClass);
   }
 
   /*Get the relationship query.*/
@@ -55,7 +59,7 @@ export class MorphOneOrMany extends HasOneOrMany {
 
   /*Get the plain morph type name without the table.*/
   public getMorphType() {
-    return last(this.morphType.split('.'));
+    return this.morphType.split('.').pop();
   }
 
   /*Get the class name of the parent model.*/

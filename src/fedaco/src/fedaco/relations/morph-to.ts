@@ -4,9 +4,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { tap } from 'ramda';
 import { Collection } from '../../define/collection';
 import { Model } from '../model';
 import { BelongsTo } from './belongs-to';
+import { FedacoBuilder } from '../fedaco-builder';
+import { isBlank } from '@gradii/check-type';
 
 export class MorphTo extends BelongsTo {
   /*The type of the polymorphic relation.*/
@@ -25,10 +28,10 @@ export class MorphTo extends BelongsTo {
   protected morphableConstraints: any[] = [];
 
   /*Create a new morph to relationship instance.*/
-  public constructor(query: Builder, parent: Model, foreignKey: string, ownerKey: string,
+  public constructor(query: FedacoBuilder, parent: Model, foreignKey: string, ownerKey: string,
                      type: string, relation: string) {
+    super(query, parent, foreignKey, ownerKey, relation);
     this.morphType = type;
-    super.__construct(query, parent, foreignKey, ownerKey, relation);
   }
 
   /*{@inheritdoc}*/
@@ -69,15 +72,15 @@ export class MorphTo extends BelongsTo {
 
   /*Set the constraints for an eager load of the relation.*/
   public addEagerConstraints(models: any[]) {
-    this.buildDictionary(this.models = Collection.make(models));
+    this.buildDictionary(this.models = models);
   }
 
   /*Build a dictionary with the models.*/
   protected buildDictionary(models: Collection) {
     for (let model of models) {
       if (model[this.morphType]) {
-        var morphTypeKey  = this.getDictionaryKey(model[this.morphType]);
-        var foreignKeyKey = this.getDictionaryKey(model[this.foreignKey]);
+        let morphTypeKey  = this.getDictionaryKey(model[this.morphType]);
+        let foreignKeyKey = this.getDictionaryKey(model[this._foreignKey]);
         this.dictionary[morphTypeKey][foreignKeyKey].push(model);
       }
     }
@@ -95,16 +98,16 @@ export class MorphTo extends BelongsTo {
 
   /*Get all of the relation results for a type.*/
   protected getResultsByType(type: string) {
-    var instance = this.createModelByType(type);
-    var ownerKey = this.ownerKey ?? instance.getKeyName();
-    var query    = this.replayMacros(instance.newQuery()).mergeConstraintsFrom(
+    let instance = this.createModelByType(type);
+    let ownerKey = this.ownerKey ?? instance.getKeyName();
+    let query    = this.replayMacros(instance.newQuery()).mergeConstraintsFrom(
       this.getQuery())._with([
       ...this.getQuery().getEagerLoads(), ...this.morphableEagerLoads[get_class(instance)] ?? []
     ]).withCount(/*cast type array*/ this.morphableEagerLoadCounts[get_class(instance)] ?? []);
     if (callback = this.morphableConstraints[get_class(instance)] ?? null) {
       callback(query);
     }
-    var whereIn = this.whereInMethod(instance, ownerKey);
+    let whereIn = this.whereInMethod(instance, ownerKey);
     return query[whereIn](instance.getTable() + '.' + ownerKey,
       this.gatherKeysByType(type, instance.getKeyType())).get();
   }
@@ -118,12 +121,12 @@ export class MorphTo extends BelongsTo {
 
   /*Create a new model instance by type.*/
   public createModelByType(type: string) {
-    var clazz = Model.getActualClassNameForMorph(type);
-    return tap(new clazz(), instance => {
+    let clazz = Model.getActualClassNameForMorph(type);
+    return tap(instance => {
       if (!instance.getConnectionName()) {
         instance.setConnection(this.getConnection().getName());
       }
-    });
+    }, new clazz());
   }
 
   /*Match the eagerly loaded results to their parents.*/
@@ -134,7 +137,7 @@ export class MorphTo extends BelongsTo {
   /*Match the results for a given type to their parents.*/
   protected matchToMorphParents(type: string, results: Collection) {
     for (let result of results) {
-      var ownerKey = !isBlank(this.ownerKey) ? this.getDictionaryKey(
+      let ownerKey = !isBlank(this.ownerKey) ? this.getDictionaryKey(
         result[this.ownerKey]) : result.getKey();
       if (this.dictionary[type][ownerKey] !== undefined) {
         for (let model of this.dictionary[type][ownerKey]) {
@@ -147,23 +150,23 @@ export class MorphTo extends BelongsTo {
   /*Associate the model instance to the given parent.*/
   public associate(model: Model) {
     if (model instanceof Model) {
-      var foreignKey = this.ownerKey && model[this.ownerKey] ? this.ownerKey : model.getKeyName();
+      let foreignKey = this.ownerKey && model[this.ownerKey] ? this.ownerKey : model.getKeyName();
     }
-    this.parent.setAttribute(this.foreignKey, model instanceof Model ? model[foreignKey] : null);
-    this.parent.setAttribute(this.morphType, model instanceof Model ? model.getMorphClass() : null);
-    return this.parent.setRelation(this.relationName, model);
+    this._parent.setAttribute(this._foreignKey, model instanceof Model ? model[foreignKey] : null);
+    this._parent.setAttribute(this.morphType, model instanceof Model ? model.getMorphClass() : null);
+    return this._parent.setRelation(this.relationName, model);
   }
 
   /*Dissociate previously associated model from the given parent.*/
   public dissociate() {
-    this.parent.setAttribute(this.foreignKey, null);
-    this.parent.setAttribute(this.morphType, null);
-    return this.parent.setRelation(this.relationName, null);
+    this._parent.setAttribute(this._foreignKey, null);
+    this._parent.setAttribute(this.morphType, null);
+    return this._parent.setRelation(this.relationName, null);
   }
 
   /*Touch all of the related models for the relationship.*/
   public touch() {
-    if (!isBlank(this.child[this.foreignKey])) {
+    if (!isBlank(this.child[this._foreignKey])) {
       super.touch();
     }
   }
@@ -202,7 +205,7 @@ export class MorphTo extends BelongsTo {
   }
 
   /*Replay stored macro calls on the actual related instance.*/
-  protected replayMacros(query: Builder) {
+  protected replayMacros(query: FedacoBuilder) {
     for (let macro of this.macroBuffer) {
       query[macro['method']](());
     }
