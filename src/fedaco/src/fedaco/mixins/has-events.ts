@@ -4,9 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Constructor } from '../../helper/constructor';
 import { isAnyEmpty, isArray, isBlank, isObject } from '@gradii/check-type';
-import {uniq} from 'ramda';
+import { uniq } from 'ramda';
+import { Constructor } from '../../helper/constructor';
 
 
 export function mixinHasEvents<T extends Constructor<any>>(base: T) {
@@ -158,7 +158,8 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
 
     /*Remove an observable event name.*/
     public removeObservableEvents(observables: any[] | any) {
-      this._observables = array_diff(this._observables, isArray(observables) ? observables : func_get_args());
+      this._observables = array_diff(this._observables,
+        isArray(observables) ? observables : func_get_args());
     }
 
     /*Register a single observer with the model.*/
@@ -172,7 +173,7 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
     }
 
     /*Fire the given event for the model.*/
-    protected fireModelEvent(event: string, halt: boolean = true) {
+    /*protected*/ _fireModelEvent(event: string, halt: boolean = true) {
       if (!((/*static*/<any>this.constructor).dispatcher !== undefined)) {
         return true;
       }
@@ -181,7 +182,8 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
       if (result === false) {
         return false;
       }
-      return !isAnyEmpty(result) ? result : (/*static*/<any>this.constructor).dispatcher[method]('"eloquent.{$event}: "' + HasEvents,
+      return !isAnyEmpty(result) ? result : (/*static*/<any>this.constructor).dispatcher[method](
+        '"eloquent.{$event}: "' + HasEvents,
         this);
     }
 
@@ -190,7 +192,8 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
       if (!(this._dispatchesEvents[event] !== undefined)) {
         return;
       }
-      const result = (/*static*/<any>this.constructor).dispatcher.method(new this._dispatchesEvents[event](this));
+      const result = (/*static*/<any>this.constructor).dispatcher.method(
+        new this._dispatchesEvents[event](this));
       if (!isBlank(result)) {
         return result;
       }

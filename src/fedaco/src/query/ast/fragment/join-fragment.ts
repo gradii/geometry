@@ -4,14 +4,14 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { JoinQueryBuilder } from '../../../query-builder/query-builder';
+import { JoinClauseBuilder } from '../../../query-builder/query-builder';
 import { SqlNode } from '../../sql-node';
 import { SqlVisitor } from '../../sql-visitor';
 
 
 export class JoinFragment extends SqlNode {
   constructor(
-    public joinQueryBuilder: JoinQueryBuilder
+    public joinQueryBuilder: JoinClauseBuilder
   ) {
     super();
   }

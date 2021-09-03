@@ -12,6 +12,7 @@ import { mixinForwardCallToQueryBuilder } from './mixins/forward-call-to-query-b
 import { mixinGuardsAttributes } from './mixins/guards-attributes';
 import { mixinQueriesRelationShips } from './mixins/queries-relationships';
 import { Model } from './model';
+import { Relation } from './relations/relation';
 import { Scope } from './scope';
 
 
@@ -29,7 +30,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /*The model being queried.*/
   protected _model: Model;
   /*The relationships that should be eager loaded.*/
-  protected _eagerLoad: any[] = [];
+  protected _eagerLoad: { [key: string]: Function} = {};
   /*All of the locally registered builder macros.*/
   protected _localMacros: any[] = [];
   /*A replacement for the typical delete function.*/
@@ -42,7 +43,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
     'getGrammar'
   ];
   /*Applied global scopes.*/
-  protected _scopes: any[] = [];
+  protected _scopes: any = {};
   /*Removed global scopes.*/
   protected _removedScopes: any[] = [];
 
@@ -93,26 +94,55 @@ export class FedacoBuilder extends mixinGuardsAttributes(
     return models;
   }
 
-  eagerLoadRelations(models) {
-    throw new Error('not implemented yet');
+  /*Eager load the relationships for the models.*/
+  public eagerLoadRelations(models: any[]) {
+    for (let [name, constraints] of Object.entries(this._eagerLoad)) {
+      if (name.indexOf('.') > -1) {
+        models = this.eagerLoadRelation(models, name, constraints);
+      }
+    }
     return models;
   }
 
-  public applyScopes() {
+  /*Eagerly load the relationship on a set of models.*/
+  protected eagerLoadRelation(models: any[], name: string, constraints: Function) {
+    const relation = this.getRelation(name);
+    relation.addEagerConstraints(models);
+    constraints(relation);
+    return relation.match(relation.initRelation(models, name), relation.getEager(), name);
+  }
+
+  /*Get the relation instance for the given relation name.*/
+  public getRelation(name: string) {
+    const relation = Relation.noConstraints(() => {
+      try {
+        return this.getModel().newInstance().name();
+      } catch (e) {
+        throw new Error( `RelationNotFoundException`) //(this.getModel(), name);
+      }
+    });
+    const nested = this.relationsNestedUnder(name);
+    if (nested.length > 0) {
+      relation.getQuery()._with(nested);
+    }
+    return relation;
+  }
+
+  public applyScopes(): FedacoBuilder {
     if (!this._scopes.length) {
       return this;
     }
     const builder = this.clone();
     for (const [identifier, scope] of Object.entries(this._scopes)) {
-      if (!(builder._scopes[identifier] !== undefined)) {
+      if (builder._scopes[identifier] == null) {
         continue;
       }
-      builder.callScope(builder => {
+      builder.callScope((_builder: this) => {
         if (isFunction(scope)) {
-          scope(builder);
+          scope(_builder);
         }
         if (scope instanceof Scope) {
-          scope.apply(builder, this.getModel());
+          scope.apply(_builder, this.getModel());
         }
       });
     }
@@ -305,37 +335,37 @@ export class FedacoBuilder extends mixinGuardsAttributes(
 
   protected parseWithRelations(relations: any) {
     let results = [];
-    for (const [name, constraints] of Object.entries(relations)) {
-      // if (isNumber(name)) {
-      //   name = constraints;
-      //
-      //   [name, constraints] = Str.contains(name, ':') ? this.createSelectWithConstraint(name) : [name, () => {
-      //   }];
-      // }
-      results       = this.addNestedWiths(name, results);
-      results[name] = constraints;
-    }
+    // for (const [name, constraints] of Object.entries(relations)) {
+    //   // if (isNumber(name)) {
+    //   //   name = constraints;
+    //   //
+    //   //   [name, constraints] = Str.contains(name, ':') ? this.createSelectWithConstraint(name) : [name, () => {
+    //   //   }];
+    //   // }
+    //   results       = this.addNestedWiths(name, results);
+    //   results[name] = constraints;
+    // }
     return results;
   }
 
   protected addNestedWiths(name: string, results: any[]) {
-    const progress = [];
-    for (const segment of name.split('.')) {
-      progress.push(segment);
-      const last = progress.join('.');
-      if (!(results[last] !== undefined)) {
-        results[last] = () => {
-        };
-      }
-    }
-    return results;
+    // const progress = [];
+    // for (const segment of name.split('.')) {
+    //   progress.push(segment);
+    //   const last = progress.join('.');
+    //   if (!(results[last] !== undefined)) {
+    //     results[last] = () => {
+    //     };
+    //   }
+    // }
+    // return results;
   }
 
   /*Create a constraint to select the given columns for the relation.*/
   protected createSelectWithConstraint(name: string) {
     return [
-      name.split(':')[0], query => {
-        query.select(name.split(':')[1].split(','));
+      name.split(':')[0], (q) => {
+        q.select(name.split(':')[1].split(','));
       }
     ];
   }
@@ -349,8 +379,17 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   //   throw new Error('no method found');
   // }
 
-  // clone() {
-  //   const builder = new FedacoBuilder(this._query.clone());
-  //   return builder;
-  // }
+  /*Get the relationships being eagerly loaded.*/
+  public getEagerLoads() {
+    return this._eagerLoad;
+  }
+  /*Set the relationships being eagerly loaded.*/
+  public setEagerLoads(eagerLoad: any) {
+    this._eagerLoad = eagerLoad;
+    return this;
+  }
+
+  clone(): FedacoBuilder {
+    return new FedacoBuilder(this._query.clone());
+  }
 }

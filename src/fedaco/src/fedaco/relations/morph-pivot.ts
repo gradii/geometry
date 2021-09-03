@@ -4,13 +4,16 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { isArray } from '@gradii/check-type';
+import { tap } from 'ramda';
 import { FedacoBuilder } from '../fedaco-builder';
+import { Model } from '../model';
 import { Pivot } from './pivot';
 
 export class MorphPivot extends Pivot {
   /*The type of the polymorphic relation.
 
-  Explicitly define this so it's not included in saved attributes.*/
+    Explicitly define this so it's not included in saved attributes.*/
   protected morphType: string;
   /*The value of the polymorphic relation.
 
@@ -18,16 +21,35 @@ export class MorphPivot extends Pivot {
   protected morphClass: string;
 
   /*Set the keys for a save update query.*/
-  protected setKeysForSaveQuery(query: FedacoBuilder) {
+  protected setKeysForSaveQuery(query: FedacoBuilder): FedacoBuilder {
     query.where(this.morphType, this.morphClass);
-    return super.setKeysForSaveQuery(query);
+    return super._setKeysForSaveQuery(query);
+  }
+
+  /*Set the keys for a select query.*/
+  protected setKeysForSelectQuery(query: FedacoBuilder): FedacoBuilder {
+    query.where(this.morphType, this.morphClass);
+    return super.setKeysForSelectQuery(query);
   }
 
   /*Delete the pivot model record from the database.*/
   public delete() {
+    if (this._attributes[this.getKeyName()] !== undefined) {
+      return /*cast type int*/ super.delete();
+    }
+    if (this._fireModelEvent('deleting') === false) {
+      return 0;
+    }
     let query = this.getDeleteQuery();
     query.where(this.morphType, this.morphClass);
-    return query.delete();
+    return tap(() => {
+      this._fireModelEvent('deleted', false);
+    }, query.delete());
+  }
+
+  /*Get the morph type for the pivot.*/
+  public getMorphType() {
+    return this.morphType;
   }
 
   /*Set the morph type for the pivot.*/
@@ -40,5 +62,45 @@ export class MorphPivot extends Pivot {
   public setMorphClass(morphClass: string) {
     this.morphClass = morphClass;
     return this;
+  }
+
+  /*Get the queueable identity for the entity.*/
+  public getQueueableId() {
+    if (this._attributes[this.getKeyName()] !== undefined) {
+      return this.getKey();
+    }
+    return `${this.foreignKey}:${this.getAttribute(
+      this.foreignKey)}:${this.relatedKey}:${this.getAttribute(
+      this.relatedKey)}:${this.morphType}:${this.morphClass}`;
+  }
+
+  /*Get a new query to restore one or more models by their queueable IDs.*/
+  public newQueryForRestoration(ids: number[] | string[] | string) {
+    if (isArray(ids)) {
+      return this.newQueryForCollectionRestoration(ids);
+    }
+    if (!ids.includes(':')) {
+      return super.newQueryForRestoration(ids);
+    }
+    let segments = ids.split(':');
+    return this.newQueryWithoutScopes().where(segments[0], segments[1]).where(segments[2],
+      segments[3]).where(segments[4], segments[5]);
+  }
+
+  /*Get a new query to restore multiple models by their queueable IDs.*/
+  protected newQueryForCollectionRestoration(ids: any[]) {
+    if (!ids[0].includes(':')) {
+      return super.newQueryForRestoration(ids);
+    }
+    let query = this.newQueryWithoutScopes();
+    for (let id of ids) {
+      let segments = id.split(':');
+      query.orWhere(q => {
+        return q.where(segments[0], segments[1])
+          .where(segments[2], segments[3])
+          .where(segments[4], segments[5]);
+      });
+    }
+    return query;
   }
 }

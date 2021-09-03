@@ -73,17 +73,17 @@ export class QueryBuilder extends Builder {
     cloned._sqlParser   = this._sqlParser;
     // cloned._bindings    = this._bindings;
     cloned._aggregate   = this._aggregate;
-    cloned._columns     = this._columns;
+    cloned._columns     = [...this._columns];
     cloned._distinct    = this._distinct;
     cloned._from        = this._from;
-    cloned._joins       = this._joins;
-    cloned._wheres      = this._wheres;
-    cloned._groups      = this._groups;
-    cloned._havings     = this._havings;
-    cloned._orders      = this._orders;
+    cloned._joins       = [...this._joins];
+    cloned._wheres      = [...this._wheres];
+    cloned._groups      = [...this._groups];
+    cloned._havings     = [...this._havings];
+    cloned._orders      = [...this._orders];
     cloned._limit       = this._limit;
     cloned._offset      = this._offset;
-    cloned._unions      = this._unions;
+    cloned._unions      = [...this._unions];
     cloned._unionLimit  = this._unionLimit;
     cloned._unionOffset = this._unionOffset;
     cloned._lock        = this._lock;
@@ -122,8 +122,8 @@ export class QueryBuilder extends Builder {
   }
 
   _newJoinClause(parentQuery: QueryBuilder, type: string,
-                 table: string | TableReferenceExpression): JoinQueryBuilder {
-    return new JoinQueryBuilder(parentQuery, type, table);
+                 table: string | TableReferenceExpression): JoinClauseBuilder {
+    return new JoinClauseBuilder(parentQuery, type, table);
   }
 
   /*Creates a subquery and parse it.*/
@@ -275,9 +275,9 @@ export class QueryBuilder extends Builder {
 
   public addSelect(columns: string[] | { [as: string]: any }): this;
 
-  addSelect(columns, ...cols) {
-    columns = isArray(columns) ? columns : [columns, ...cols];
-    for (const column of columns) {
+  public addSelect(columns: string[] | string | { [as: string]: any }, ...cols: string[]) {
+    columns = isArray(columns) ? columns : arguments;
+    for (const column of columns as any[]) {
       if (column instanceof RawExpression) {
         this._columns.push(column);
       } else if (isString(column)) {
@@ -437,7 +437,7 @@ export class QueryBuilder extends Builder {
 
 
   /*Update a record in the database.*/
-  public update(values: any) {
+  public update(values: any = {}) {
     const sql = this._grammar.compileUpdate(this, values);
     return this._connection.update(sql,
       this.getBindings()
@@ -587,7 +587,7 @@ export class QueryBuilder extends Builder {
   }
 }
 
-export class JoinQueryBuilder extends QueryBuilder {
+export class JoinClauseBuilder extends QueryBuilder {
   /*The type of join being performed.*/
   public type: string;
   /*The table the join clause is joining to.*/
@@ -604,7 +604,7 @@ export class JoinQueryBuilder extends QueryBuilder {
 
   /*Get a new instance of the join clause builder.*/
   public newQuery() {
-    return new JoinQueryBuilder(this.newParentQuery(), this.type, this.table);
+    return new JoinClauseBuilder(this.newParentQuery(), this.type, this.table);
   }
 
   /*Add an "on" clause to the join.
@@ -617,7 +617,7 @@ export class JoinQueryBuilder extends QueryBuilder {
   will produce the following SQL:
 
   on `contacts`.`user_id` = `users`.`id` and `contacts`.`info_id` = `info`.`id`*/
-  public on(first: (query?) => any | string,
+  public on(first: ((q?: QueryBuilder) => any) | string,
             operator?: string,
             second?: string,
             conjunction: 'and' | 'or' = 'and') {
@@ -629,7 +629,7 @@ export class JoinQueryBuilder extends QueryBuilder {
 
   /*Add an "or on" clause to the join.*/
   public orOn(first: (query?) => any | string, operator: string | null = null,
-              second: string | null = null) {
+              second: string | null                                    = null) {
     return this.on(first, operator, second, 'or');
   }
 

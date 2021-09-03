@@ -37,7 +37,7 @@ import { SqlVisitor } from '../../query/sql-visitor';
 import { bindingVariable, createIdentifier, raw } from '../ast-factory';
 import { Builder } from '../builder';
 import { GrammarInterface } from '../grammar.interface';
-import { JoinQueryBuilder, QueryBuilder } from '../query-builder';
+import { JoinClauseBuilder, QueryBuilder } from '../query-builder';
 import { QueryBuilderVisitor } from '../visitor/query-builder-visitor';
 
 export abstract class Grammar implements GrammarInterface {
@@ -174,7 +174,7 @@ export abstract class Grammar implements GrammarInterface {
     return ast.accept(visitor);
   }
 
-  compileJoinFragment(builder: JoinQueryBuilder, visitor: SqlVisitor): string {
+  compileJoinFragment(builder: JoinClauseBuilder, visitor: SqlVisitor): string {
     let whereClause;
     if (builder._wheres.length > 0) {
       // todo check

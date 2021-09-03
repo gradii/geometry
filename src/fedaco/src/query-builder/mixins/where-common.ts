@@ -43,7 +43,8 @@ export interface WhereCommon {
 
   orWhereRaw(sql: string, bindings: any[]);
 
-  where(columns: any[], arg1: undefined, arg2: undefined, conjunction?: 'and' | 'or'): this;
+  where(columns: Function | string | any[], arg1: undefined, arg2: undefined,
+        conjunction?: 'and' | 'or' | string): this;
 
   where(where: any[][]): this;
 

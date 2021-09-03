@@ -10,13 +10,13 @@ import { HasOneOrMany } from './has-one-or-many';
 export class HasMany extends HasOneOrMany {
   /*Get the results of the relationship.*/
   public getResults() {
-    return this.query.get();
+    return this._query.get();
   }
 
   /*Initialize the relation on a set of models.*/
   public initRelation(models: any[], relation: string) {
     for (let model of models) {
-      model.setRelation(relation, this.related.newCollection());
+      model.setRelation(relation, this._related.newCollection());
     }
     return models;
   }
