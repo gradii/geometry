@@ -9,7 +9,7 @@ import { SqlVisitor } from '../../sql-visitor';
 
 
 export class RawExpression extends SqlNode {
-  constructor(public value: string | number | boolean) {
+  constructor(public value: string | number | boolean | null) {
     super();
   }
 

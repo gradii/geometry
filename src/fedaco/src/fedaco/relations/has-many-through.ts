@@ -9,8 +9,13 @@ import { uniq } from 'ramda';
 import { Collection } from '../../define/collection';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
-import { mixinInteractsWithDictionary } from './concerns/interacts-with-dictionary';
+import {
+  InteractsWithDictionary, mixinInteractsWithDictionary
+} from './concerns/interacts-with-dictionary';
 import { Relation } from './relation';
+
+export interface HasManyThrough extends InteractsWithDictionary, Relation {
+}
 
 export class HasManyThrough extends mixinInteractsWithDictionary(
   Relation
@@ -142,8 +147,8 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
 
   /*Add a basic where clause to the query, and return the first result.*/
   public firstWhere(column: Function | string | any[],
-                    operator: any   = null,
-                    value: any      = null,
+                    operator: any       = null,
+                    value: any          = null,
                     conjunction: string = 'and') {
     return this.where(column, operator, value, conjunction).first();
   }

@@ -78,8 +78,8 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
         keys.push(value);
       }
     }
-    sort(keys);
-    return array_values(uniq(keys));
+    keys.sort();
+    return uniq(keys);
   }
 
   /*Initialize the relation on a set of models.*/

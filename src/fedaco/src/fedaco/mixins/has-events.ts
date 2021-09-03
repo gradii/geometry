@@ -8,6 +8,12 @@ import { isAnyEmpty, isArray, isBlank, isObject } from '@gradii/check-type';
 import { uniq } from 'ramda';
 import { Constructor } from '../../helper/constructor';
 
+export interface HasEvents {
+
+}
+
+type HasEventsCtor = Constructor<HasEvents>;
+
 
 export function mixinHasEvents<T extends Constructor<any>>(base: T) {
   // @ts-ignore
@@ -173,7 +179,9 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
     }
 
     /*Fire the given event for the model.*/
-    /*protected*/ _fireModelEvent(event: string, halt: boolean = true) {
+
+    /*protected*/
+    _fireModelEvent(event: string, halt: boolean = true) {
       if (!((/*static*/<any>this.constructor).dispatcher !== undefined)) {
         return true;
       }

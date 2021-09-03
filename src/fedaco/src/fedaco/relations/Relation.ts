@@ -17,6 +17,12 @@ import { FedacoBuilder } from '../fedaco-builder';
 import { mixinForwardCallToQueryBuilder } from '../mixins/forward-call-to-query-builder';
 import { Model } from '../model';
 
+
+
+
+/**
+ * select * from table where col = ? and col2 = ?;
+ */
 export class Relation extends mixinForwardCallToQueryBuilder(class {
 }) {
   /*The Eloquent query builder instance.*/
@@ -63,12 +69,12 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   }
 
   /*Initialize the relation on a set of models.*/
-  public initRelation(models: any[], relation: string) {
+  public initRelation(models: any[], relation: string): Model[] {
     throw new Error('not implemented');
   }
 
   /*Match the eagerly loaded results to their parents.*/
-  public match(models: any[], results: Collection, relation: string) {
+  public match(models: any[], results: Collection, relation: string): Model[] {
     throw new Error('not implemented');
   }
 

@@ -24,8 +24,14 @@ const PrimitiveCastTypes: string[] = [
   'immutable_custom_datetime', 'int', 'integer', 'json', 'object', 'real', 'string', 'timestamp'
 ];
 
+export interface HasAttributes {
+
+}
+
+type HasAttributesCtor = Constructor<HasAttributes>;
+
 /** Mixin to augment a directive with a `disableRipple` property. */
-export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
+export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttributesCtor & T {
   // @ts-ignore
   return class _Self extends base {
     /*The model's attributes.*/
@@ -864,12 +870,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T) {
       if (this.hasCast(key)) {
         return this.castAttribute(key, value);
       }
-      if (value !== null && .
-      in_array(key, this.getDates(), false);
-      {
-        ;
-      }
-    )
+      if (value !== null && in_array(key, this.getDates(), false){
       {
         return this.asDateTime(value);
       }

@@ -184,7 +184,19 @@ export class QueryBuilderVisitor implements SqlVisitor {
   }
 
   visitComparisonExpression(node: ComparisonPredicateExpression) {
-    return `${node.left.accept(this)} ${node.operator} ${node.right.accept(this)}`;
+    const left = node.left.accept(this);
+    if (
+      node.right instanceof BindingVariable &&
+      node.right.bindingExpression instanceof RawExpression &&
+      node.right.bindingExpression.value == null
+    ) {
+      if (node.operator === '=') {
+        return `${left} is null`;
+      } else if (node.operator === '!=' || node.operator === '<>') {
+        return `${left} is not null`;
+      }
+    }
+    return `${left} ${node.operator} ${node.right.accept(this)}`;
   }
 
   /**

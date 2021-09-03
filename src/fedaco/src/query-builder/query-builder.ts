@@ -550,6 +550,7 @@ export class QueryBuilder extends Builder {
     }
   }
 
+
   useReadConnection() {
     this._useWriteConnection = false;
     return this;

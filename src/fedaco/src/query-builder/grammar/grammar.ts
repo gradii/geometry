@@ -214,30 +214,7 @@ export abstract class Grammar implements GrammarInterface {
   }
 
   compileSelect(builder: Builder) {
-
-    if (builder._unions && builder._aggregate) {
-      return this.compileUnionAggregate(builder);
-    }
-    // If the query does not have any columns set, we'll set the columns to the
-    // * character to just get all of the columns from the database. Then we
-    // can build the query and concatenate all the pieces together as one.
-    let original = builder._columns;
-    // default value here is []
-    if (builder._columns === null) {
-      builder._columns = ['*'];
-    }
-    // To compile the query, we'll spin through each component of the query and
-    // see if that component exists. If it does we'll just call the compiler
-    // function for the component which is responsible for making the SQL.
-    let sql = this.concatenate(this.compileComponents(builder)).trim();
-    //
-    if (builder._unions) {
-      sql = this.wrapUnion(sql) + ' ' + this.compileUnions(builder);
-    }
-
-    builder._columns = original;
-
-    return sql;
+    return '';
   }
 
   protected wrapUnion(sql: string) {

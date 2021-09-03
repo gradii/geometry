@@ -9,8 +9,10 @@ import { uniq } from 'ramda';
 import { Collection } from '../../define/collection';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
-import { mixinInteractsWithDictionary } from './concerns/interacts-with-dictionary';
-import { mixinInteractsWithPivotTable } from './concerns/interacts-with-pivot-table';
+import { InteractsWithDictionary, mixinInteractsWithDictionary } from './concerns/interacts-with-dictionary';
+import {
+  InteractsWithPivotTable, mixinInteractsWithPivotTable
+} from './concerns/interacts-with-pivot-table';
 // import { Builder } from 'Illuminate/Database/Eloquent/Builder';
 // import { Collection } from 'Illuminate/Database/Eloquent/Collection';
 // import { Model } from 'Illuminate/Database/Eloquent/Model';
@@ -18,6 +20,10 @@ import { mixinInteractsWithPivotTable } from './concerns/interacts-with-pivot-ta
 // import { Collection, Collection as BaseCollection } from 'Illuminate/Support/Collection';
 // import { Str } from 'Illuminate/Support/Str';
 import { Relation } from './relation';
+
+export interface BelongsToMany extends InteractsWithDictionary, InteractsWithPivotTable, Relation {
+
+}
 
 export class BelongsToMany extends mixinInteractsWithDictionary(
   mixinInteractsWithPivotTable(
@@ -145,8 +151,8 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Build model dictionary keyed by the relation's foreign key.*/
-  protected buildDictionary(results: Collection) {
-    let dictionary = {};
+  protected buildDictionary(results: Collection): { [key: string]: any[] } {
+    let dictionary: { [key: string]: any[] } = {};
     for (let result of results) {
       let value = this.getDictionaryKey(result[this.accessor][this.foreignPivotKey]);
       dictionary[value].push(result);

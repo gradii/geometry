@@ -4,14 +4,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isArray, isBlank } from '@gradii/check-type';
-import { pluralStudy } from '../helper/pluralize';
-import { snakeCase } from '../helper/str';
+import { isArray, isBlank, isString } from '@gradii/check-type';
 import { mixinForwardsCalls } from '../mixins/forwards-calls';
 import { FedacoBuilder } from './fedaco-builder';
 import { mixinGuardsAttributes } from './mixins/guards-attributes';
-import { mixinHasAttributes } from './mixins/has-attributes';
-import { mixinHasEvents } from './mixins/has-events';
+import { HasAttributes, mixinHasAttributes } from './mixins/has-attributes';
+import { HasEvents, mixinHasEvents } from './mixins/has-events';
 import { mixinHasGlobalScopes } from './mixins/has-global-scopes';
 import { mixinHasRelationships } from './mixins/has-relationships';
 import { mixinHasTimestamps } from './mixins/has-timestamps';
@@ -20,11 +18,41 @@ import { Pivot } from './relations/pivot';
 import { Scope } from './scope';
 
 
+/*Begin querying the model on a given connection.*/
+export function on(clazz: typeof Model, connection: string | null = null) {
+  let instance = new clazz();
+  instance.setConnection(connection);
+  return instance.newQuery();
+}
+
+/*Begin querying the model on the write connection.*/
+export function onWriteConnection(clazz: typeof Model) {
+  return (new clazz()).newQuery().useWriteConnection();
+}
+
+/*Get all of the models from the database.*/
+export function all(clazz: typeof Model, columns: any[] = ['*']) {
+  return (new clazz()).newQuery().get(columns);
+}
+
+/*Begin querying a model with eager loading.*/
+export function withRelations(clazz: typeof Model, ...relations: string[]) {
+  return (new clazz()).newQuery().with(relations);
+}
+
+
 // @ts-ignore
 // tslint:disable-next-line:no-empty-interface
 // export interface Model extends FedacoBuilder {
 //
 // }
+
+export interface Model extends HasAttributes, HasEvents,
+  HasGlobalScopes, HasRelationships,
+  HasTimestamps, HidesAttributes,
+  GuardsAttributes, ForwardsCalls {
+
+}
 
 // @NoSuchMethodProxy()
 export class Model extends mixinHasAttributes(
@@ -349,8 +377,8 @@ export class Model extends mixinHasAttributes(
       if (this.isFillable(key)) {
         this.setAttribute(key, value);
       } else if (totallyGuarded) {
-        throw new MassAssignmentException(
-          `Add [${key}] to fillable property to allow mass assignment on [${get_class(this)}].`);
+        throw new Error(
+          'MassAssignmentException(`Add [${key}] to fillable property to allow mass assignment on [${get_class(this)}].`)');
       }
     }
     return this;
@@ -397,32 +425,10 @@ export class Model extends mixinHasAttributes(
     return model;
   }
 
-  /*Begin querying the model on a given connection.*/
-  public static on(connection: string | null = null) {
-    let instance = new Model();
-    instance.setConnection(connection);
-    return instance.newQuery();
-  }
-
-  /*Begin querying the model on the write connection.*/
-  public static onWriteConnection() {
-    return Model.query().useWritePdo();
-  }
-
-  /*Get all of the models from the database.*/
-  public static all(columns: any[] | any = ['*']) {
-    return Model.query().get(is_array(columns) ? columns : func_get_args());
-  }
-
-  /*Begin querying a model with eager loading.*/
-  public static _with(relations: any[] | string) {
-    return Model.query()._with(is_string(relations) ? func_get_args() : relations);
-  }
-
   /*Eager load relations on the model.*/
   public load(relations: any[] | string) {
-    let query = this.newQueryWithoutRelationships()._with(
-      is_string(relations) ? func_get_args() : relations);
+    let query = this.newQueryWithoutRelationships().with(
+      isString(relations) ? arguments : relations);
     query.eagerLoadRelations([this]);
     return this;
   }
@@ -439,7 +445,7 @@ export class Model extends mixinHasAttributes(
 
   /*Eager load relations on the model if they are not already eager loaded.*/
   public loadMissing(relations: any[] | string) {
-    let relations = is_string(relations) ? func_get_args() : relations;
+    relations = isString(relations) ? arguments : relations;
     this.newCollection([this]).loadMissing(relations);
     return this;
   }
@@ -452,7 +458,7 @@ export class Model extends mixinHasAttributes(
 
   /*Eager load relation counts on the model.*/
   public loadCount(relations: any[] | string) {
-    let relations = is_string(relations) ? func_get_args() : relations;
+    relations = isString(relations) ? arguments : relations;
     return this.loadAggregate(relations, '*', 'count');
   }
 
@@ -752,7 +758,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Get a new query builder for the model's table.*/
-  public newQuery() {
+  public newQuery(): FedacoBuilder {
     return this.registerGlobalScopes(this.newQueryWithoutScopes());
   }
 

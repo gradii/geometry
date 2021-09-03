@@ -135,5 +135,6 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     tap(...args: any[]) {return this._query.tap(...args); }
     first(...args: any[]) {return this._query.first(...args); }
     unless(...args: any[]) {return this._query.unless(...args); }
+
   };
 }

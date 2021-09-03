@@ -30,7 +30,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /*The model being queried.*/
   protected _model: Model;
   /*The relationships that should be eager loaded.*/
-  protected _eagerLoad: { [key: string]: Function} = {};
+  protected _eagerLoad: { [key: string]: Function } = {};
   /*All of the locally registered builder macros.*/
   protected _localMacros: any[] = [];
   /*A replacement for the typical delete function.*/
@@ -105,7 +105,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Eagerly load the relationship on a set of models.*/
-  protected eagerLoadRelation(models: any[], name: string, constraints: Function) {
+  protected eagerLoadRelation(models: any[], name: string, constraints: Function): Model[] {
     const relation = this.getRelation(name);
     relation.addEagerConstraints(models);
     constraints(relation);
@@ -113,19 +113,35 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Get the relation instance for the given relation name.*/
-  public getRelation(name: string) {
+  public getRelation(name: string): Relation {
     const relation = Relation.noConstraints(() => {
       try {
         return this.getModel().newInstance().name();
       } catch (e) {
-        throw new Error( `RelationNotFoundException`) //(this.getModel(), name);
+        throw new Error(`RelationNotFoundException`); // (this.getModel(), name);
       }
     });
-    const nested = this.relationsNestedUnder(name);
+    const nested   = this.relationsNestedUnder(name);
     if (nested.length > 0) {
-      relation.getQuery()._with(nested);
+      relation.getQuery().with(nested);
     }
     return relation;
+  }
+
+  /*Get the deeply nested relations for a given top-level relation.*/
+  protected relationsNestedUnder(relation: string) {
+    const nested: any = {};
+    for (let [name, constraints] of Object.entries(this._eagerLoad)) {
+      if (this.isNestedUnder(relation, name)) {
+        nested[name.substr((relation + '.').length)] = constraints;
+      }
+    }
+    return nested;
+  }
+
+  /*Determine if the relationship is nested.*/
+  protected isNestedUnder(relation: string, name: string) {
+    return name.includes('.') && name.startsWith(relation + '.');
   }
 
   public applyScopes(): FedacoBuilder {
@@ -240,7 +256,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
 
   /*Get a single column's value from the first result of a query.*/
   public value(column: string) {
-    const result = this.first([column]);
+    const result: Model = this.first([column]) as Model;
     if (result) {
       return result[column];
     }
@@ -308,8 +324,8 @@ export class FedacoBuilder extends mixinGuardsAttributes(
     if (!isBlank(instance)) {
       return instance;
     }
-    return tap(instance => {
-        instance.save();
+    return tap(model => {
+        model.save();
       }, this.newModelInstance({...attributes, ...values})
     );
   }
@@ -321,20 +337,23 @@ export class FedacoBuilder extends mixinGuardsAttributes(
     }, this.firstOrNew(attributes));
   }
 
-  public with(relations, callback?) {
+  public with(...relations: string[]): this;
+  public with(relations: string[]): this;
+  public with(relations: string, callback?: Function): this;
+  public with(relations: string[] | string, callback?: Function | string) {
     let eagerLoad;
     if (isFunction(callback)) {
-      eagerLoad = this.parseWithRelations({[relations]: callback});
+      eagerLoad = this.parseWithRelations({[relations as string]: callback});
     } else {
       eagerLoad = this.parseWithRelations(isString(relations) ? arguments : relations);
     }
-    this._eagerLoad = [...this._eagerLoad, ...eagerLoad];
+    this._eagerLoad = {...this._eagerLoad, ...eagerLoad};
     return this;
   }
 
 
   protected parseWithRelations(relations: any) {
-    let results = [];
+    let results = {};
     // for (const [name, constraints] of Object.entries(relations)) {
     //   // if (isNumber(name)) {
     //   //   name = constraints;
@@ -364,7 +383,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /*Create a constraint to select the given columns for the relation.*/
   protected createSelectWithConstraint(name: string) {
     return [
-      name.split(':')[0], (q) => {
+      name.split(':')[0], (q: QueryBuilder) => {
         q.select(name.split(':')[1].split(','));
       }
     ];
@@ -383,6 +402,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   public getEagerLoads() {
     return this._eagerLoad;
   }
+
   /*Set the relationships being eagerly loaded.*/
   public setEagerLoads(eagerLoad: any) {
     this._eagerLoad = eagerLoad;

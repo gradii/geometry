@@ -10,13 +10,14 @@ import { QueryBuilder } from '../query-builder';
 
 export interface BuildQueries {
 
-  when(condition, callback: (q: this, condition) => any, defaultCallback?): this;
+  when(condition: boolean, callback: (q: this, condition: boolean) => any,
+       defaultCallback?: Function): this;
 
-  tap(callback: (q: this, condition) => any): this;
+  tap(callback: (q: this, condition: boolean) => any): this;
 
   first(columns?: any[] | string): Model | object | null;
 
-  unless(value: any, callback: Function, _default?: Function);
+  unless(value: any, callback: Function, _default?: Function): this;
 }
 
 export type BuildQueriesCtor = Constructor<BuildQueries>;
@@ -52,7 +53,8 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
       return this.take(1).get(columns).pop();
     }
 
-    public when(condition, callback: (q: this, condition) => any, defaultCallback?): this {
+    public when(condition: boolean, callback: (q: this, condition: boolean) => any,
+                defaultCallback?: Function): this {
       if (condition) {
         return callback(this, condition) ?? this;
       }
@@ -63,7 +65,7 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
       return this;
     }
 
-    public tap(callback: (q: this, condition) => any) {
+    public tap(callback: (q: this, condition: boolean) => any) {
       return this.when(true, callback);
     }
 
