@@ -3721,38 +3721,39 @@ describe('database query builder test', () => {
         'SELECT * FROM (select *, row_number() over (order by [email] desc) as row_num from [users]) as temp_table where row_num between 11 and 20 ORDER BY row_num');
   });
 
-  // it('test my sql sounds like operator', () => {
-  //   builder = getMySqlBuilder();
-  //   builder.select('*').from('users').where('name', 'sounds like', 'John Doe');
-  //   expect(builder.toSql()).toBe('SELECT * FROM `users` where `name` sounds like ?');
-  //   expect(builder.getBindings()).toStrictEqual(['John Doe']);
-  // });
-  //
-  // it('test merge wheres can merge wheres and bindings', () => {
-  //   let builder    = getBuilder();
-  //   builder.wheres = ['foo'];
-  //   builder.mergeWheres(['wheres'], {
-  //     12: 'foo',
-  //     13: 'bar'
-  //   });
-  //   this.assertEquals(['foo', 'wheres'], builder.wheres);
-  //   expect(builder.getBindings()).toStrictEqual(['foo', 'bar']);
-  // });
-  //
-  // it('test providing null with operators builds correctly', () => {
-  //   builder = getBuilder();
-  //   builder.select('*').from('users').where('foo', null);
-  //   expect(builder.toSql()).toBe('SELECT * FROM "users" WHERE "foo" is null');
-  //   builder = getBuilder();
-  //   builder.select('*').from('users').where('foo', '=', null);
-  //   expect(builder.toSql()).toBe('SELECT * FROM "users" WHERE "foo" is null');
-  //   builder = getBuilder();
-  //   builder.select('*').from('users').where('foo', '!=', null);
-  //   expect(builder.toSql()).toBe('SELECT * FROM "users" WHERE "foo" is not null');
-  //   builder = getBuilder();
-  //   builder.select('*').from('users').where('foo', '<>', null);
-  //   expect(builder.toSql()).toBe('SELECT * FROM "users" WHERE "foo" is not null');
-  // });
+  it('test my sql sounds like operator', () => {
+    builder = getMySqlBuilder();
+    builder.select('*').from('users').where('name', 'sounds like', 'John Doe');
+    expect(builder.toSql()).toBe('SELECT * FROM `users` WHERE `name` sounds like ?');
+    expect(builder.getBindings()).toStrictEqual(['John Doe']);
+  });
+
+  it('test merge wheres can merge wheres and bindings', () => {
+    builder = getBuilder();
+    builder._wheres = ['foo'];
+    builder.mergeWheres(['wheres'], {
+      12: 'foo',
+      13: 'bar'
+    });
+    // this.assertEquals(['foo', 'wheres'], builder._wheres);
+    expect(builder._wheres).toStrictEqual(['foo', 'wheres']);
+    expect(builder.getBindings()).toStrictEqual(['foo', 'bar']);
+  });
+
+  it('test providing null with operators builds correctly', () => {
+    builder = getBuilder();
+    builder.select('*').from('users').where('foo', null);
+    expect(builder.toSql()).toBe('SELECT * FROM `users` WHERE `foo` is null');
+    builder = getBuilder();
+    builder.select('*').from('users').where('foo', '=', null);
+    expect(builder.toSql()).toBe('SELECT * FROM `users` WHERE `foo` is null');
+    builder = getBuilder();
+    builder.select('*').from('users').where('foo', '!=', null);
+    expect(builder.toSql()).toBe('SELECT * FROM `users` WHERE `foo` is not null');
+    builder = getBuilder();
+    builder.select('*').from('users').where('foo', '<>', null);
+    expect(builder.toSql()).toBe('SELECT * FROM `users` WHERE `foo` is not null');
+  });
   //
   // it('test dynamic where', () => {
   //   let method     = 'whereFooBarAndBazOrQux';

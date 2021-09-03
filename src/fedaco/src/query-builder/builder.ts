@@ -72,7 +72,7 @@ export abstract class Builder extends mixinJoin(
   /*An aggregate function and column to be run.*/
   _aggregate: AggregateFragment;
   /*The columns that should be returned.*/
-  _columns: Array<ColumnReferenceExpression | RawBindingExpression | RawExpression> = [];
+  _columns: Array<ColumnReferenceExpression | RawBindingExpression | RawExpression | '*'> = [];
   /*Indicates if the query returns distinct results.
 
   Occasionally contains the columns that should be distinct.*/

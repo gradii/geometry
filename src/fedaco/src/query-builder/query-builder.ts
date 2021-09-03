@@ -5,6 +5,7 @@
  */
 
 import { isAnyEmpty, isArray, isBlank, isBoolean, isFunction, isString } from '@gradii/check-type';
+import { bind } from 'ramda';
 import { ColumnReferenceExpression } from '../query/ast/column-reference-expression';
 import { ComparisonPredicateExpression } from '../query/ast/expression/comparison-predicate-expression';
 import { RawExpression } from '../query/ast/expression/raw-expression';
@@ -219,6 +220,16 @@ export class QueryBuilder extends Builder {
       column,
       key
     );
+  }
+
+
+  public mergeWheres(_wheres: any[], bindings: object | any[]) {
+    this._wheres = this._wheres.concat(_wheres);
+    let mid = [];
+    if (typeof bindings === 'object') {
+      bindings = Object.values(bindings);
+    }
+    this._bindings['where'] = this._bindings['where'].concat(bindings);
   }
 
   /*Strip off the table name or alias from a column identifier.*/

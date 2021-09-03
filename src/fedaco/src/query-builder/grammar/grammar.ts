@@ -44,6 +44,20 @@ export abstract class Grammar implements GrammarInterface {
   constructor() {
   }
 
+  protected _selectComponents: string[] = [
+    'aggregate',
+    'columns',
+    'from',
+    'joins',
+    'wheres',
+    'groups',
+    'havings',
+    'orders',
+    'limit',
+    'offset',
+    'lock',
+  ];
+
   protected _prepareUpdateAst(builder: QueryBuilder, values: any) {
 
     const columnNodes = [];
@@ -200,6 +214,97 @@ export abstract class Grammar implements GrammarInterface {
   }
 
   compileSelect(builder: Builder) {
+
+    if (builder._unions && builder._aggregate) {
+      return this.compileUnionAggregate(builder);
+    }
+    // If the query does not have any columns set, we'll set the columns to the
+    // * character to just get all of the columns from the database. Then we
+    // can build the query and concatenate all the pieces together as one.
+    let original = builder._columns;
+    // default value here is []
+    if (builder._columns === null) {
+      builder._columns = ['*'];
+    }
+    // To compile the query, we'll spin through each component of the query and
+    // see if that component exists. If it does we'll just call the compiler
+    // function for the component which is responsible for making the SQL.
+    let sql = this.concatenate(this.compileComponents(builder)).trim();
+    //
+    if (builder._unions) {
+      sql = this.wrapUnion(sql) + ' ' + this.compileUnions(builder);
+    }
+
+    builder._columns = original;
+
+    return sql;
+  }
+
+  protected wrapUnion(sql: string) {
+    return '(' + sql + ')';
+  }
+
+  protected compileUnionAggregate(builder: Builder) {
+    return '';
+  }
+
+  protected concatenate(segments: any[]) {
+    return '';
+    // return implode(' ', array_filter($segments, function ($value) {
+    //   return (string) $value !== '';
+    // }));
+  }
+
+  protected compileUnions(builder: Builder) {
+    // $sql = '';
+    //
+    // foreach($query->unions as $union);
+    // {
+    //   $sql. = $this->compileUnion($union);
+    // }
+    //
+    // if (!empty($query->unionOrders)) {
+    //   $sql. = ' '.$this;
+    // ->
+    //   compileOrders($query, $query->unionOrders);
+    // }
+    //
+    // if (isset($query->unionLimit)) {
+    //   $sql. = ' '.$this;
+    // ->
+    //   compileLimit($query, $query->unionLimit);
+    // }
+    //
+    // if (isset($query->unionOffset)) {
+    //   $sql. = ' '.$this;
+    // ->
+    //   compileOffset($query, $query->unionOffset);
+    // }
+    //
+    // return ltrim($sql);
+    return '';
+  }
+
+  /**
+   * Compile the components necessary for a select clause.
+   *
+   * @param  \Illuminate\Database\Query\Builder  $query
+   * @return array
+   */
+  protected compileComponents(builder: Builder) {
+    let sql = [];
+
+    // this._selectComponents.forEach();
+    //
+    // foreach ($this->selectComponents as $component) {
+    // if (isset($query->$component)) {
+    // $method = 'compile'.ucfirst($component);
+//
+//   $sql[$component] = $this->$method($query, $query->$component);
+// }
+// }
+
+// return $sql;
     return '';
   }
 
