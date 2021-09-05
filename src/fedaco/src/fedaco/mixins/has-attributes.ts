@@ -5,13 +5,14 @@
  */
 
 import { reflector } from '@gradii/annotation';
-import { isBlank, isFunction, isNumber, isString } from '@gradii/check-type';
+import { isArray, isBlank, isFunction, isNumber, isString } from '@gradii/check-type';
 import { format, parse } from 'date-fns';
 import { findLast, tap, uniq } from 'ramda';
 import {
   Column, ColumnDefine, DateCastableColumn, DateColumn, EncryptedCastableColumn
 } from '../../annotation/column';
 import { Constructor } from '../../helper/constructor';
+import { snakeCase } from '../../helper/str';
 import { Encrypter } from '../encrypter';
 import { Model } from '../model';
 import { Relation } from '../relations/relation';
@@ -153,7 +154,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
           let relation = value;
         }
         if (HasAttributes.snakeAttributes) {
-          let key = Str.snake(key);
+          let key = snakeCase(key);
         }
         if (relation !== undefined || isBlank(value)) {
           attributes[key] = relation;
@@ -171,10 +172,10 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     /*Get an attribute array of all arrayable values.*/
     protected getArrayableItems(values: any[]) {
       if (this.getVisible().length > 0) {
-        let values = array_intersect_key(values, array_flip(this.getVisible()));
+        values = array_intersect_key(values, array_flip(this.getVisible()));
       }
       if (this.getHidden().length > 0) {
-        let values = array_diff_key(values, array_flip(this.getHidden()));
+        values = array_diff_key(values, array_flip(this.getHidden()));
       }
       return values;
     }
@@ -282,12 +283,12 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     /*Cast an attribute to a native PHP type.*/
     protected castAttribute(key: string, value: any) {
       let castType = this.getCastType(key);
-      if (isBlank(value) && in_array(castType, HasAttributes.primitiveCastTypes)) {
+      if (isBlank(value) && PrimitiveCastTypes.includes(castType)) {
         return value;
       }
       if (this.isEncryptedCastable(key)) {
         let value    = this.fromEncryptedString(value);
-        let castType = Str.after(castType, 'encrypted:');
+        let castType = castType.split('encrypted:').pop();
       }
       switch (castType) {
         case 'int':
@@ -382,13 +383,13 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Determine if the cast type is an immutable custom date time cast.*/
     protected isImmutableCustomDateTimeCast(cast: string) {
-      return strncmp(cast, 'immutable_date:', 15) === 0 || strncmp(cast, 'immutable_datetime:',
-        19) === 0;
+      return strncmp(cast, 'immutable_date:', 15) === 0 ||
+        strncmp(cast, 'immutable_datetime:', 19) === 0;
     }
 
     /*Determine if the cast type is a decimal cast.*/
     protected isDecimalCast(cast: string) {
-      return str_starts_with(cast, 'decimal:');
+      return cast.startsWith('decimal:');
     }
 
     /*Set a given attribute on the model.*/
@@ -397,20 +398,20 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
         return this.setMutatedAttributeValue(key, value);
       } else */
       if (value && this.isDateAttribute(key)) {
-        let value = this.fromDateTime(value);
+        value = this.fromDateTime(value);
       }
       if (this.isClassCastable(key)) {
         this.setClassCastableAttribute(key, value);
         return this;
       }
       if (!isBlank(value) && this.isJsonCastable(key)) {
-        let value = this.castAttributeAsJson(key, value);
+        value = this.castAttributeAsJson(key, value);
       }
-      if (Str.contains(key, '->')) {
+      if (key.includes('->')) {
         return this.fillJsonAttribute(key, value);
       }
       if (!isBlank(value) && this.isEncryptedCastable(key)) {
-        let value = this.castAttributeAsEncryptedString(key, value);
+        value = this.castAttributeAsEncryptedString(key, value);
       }
       this._attributes[key] = value;
       return this;
@@ -802,13 +803,13 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     /*Determine if the model or any of the given attribute(s) have been modified.*/
     public wasChanged(attributes: any[] | string | null = null) {
       return this.hasChanges(this.getChanges(),
-        is_array(attributes) ? attributes : func_get_args());
+        isArray(attributes) ? attributes : func_get_args());
     }
 
     /*Determine if any of the given attributes were changed.*/
     protected hasChanges(changes: any[], attributes: any[] | string | null = null) {
-      if (empty(attributes)) {
-        return count(changes) > 0;
+      if (!attributes.length) {
+        return changes.length > 0;
       }
       for (let attribute of Arr.wrap(attributes)) {
         if (array_key_exists(attribute, changes)) {
@@ -839,8 +840,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
       if (!array_key_exists(key, this.original)) {
         return false;
       }
-      let attribute = Arr.get(this._attributes, key);
-      let original  = Arr.get(this.original, key);
+      var attribute = Arr.get(this.attributes, key);
+      var original  = Arr.get(this.original, key);
       if (attribute === original) {
         return true;
       } else if (isBlank(attribute)) {
@@ -870,8 +871,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
       if (this.hasCast(key)) {
         return this.castAttribute(key, value);
       }
-      if (value !== null && in_array(key, this.getDates(), false){
-      {
+      if (value !== null && in_array(key, this.getDates(), false)) {
         return this.asDateTime(value);
       }
       return value;
@@ -879,20 +879,44 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Append attributes to query when building a query.*/
     public append(attributes: any[] | string) {
-      this.appends = array_unique(
-        [...this.appends, ...(is_string(attributes) ? func_get_args() : attributes)]);
+      this._appends = array_unique(
+        [...this._appends, ...(isString(attributes) ? arguments : attributes)]);
       return this;
     }
 
     /*Set the accessors to append to model arrays.*/
     public setAppends(appends: any[]) {
-      this.appends = appends;
+      this._appends = appends;
       return this;
     }
 
     /*Return whether the accessor attribute has been appended.*/
     public hasAppended(attribute: string) {
-      return in_array(attribute, this.appends);
+      return in_array(attribute, this._appends);
+    }
+
+    /*Get the mutated attributes for a given instance.*/
+    public getMutatedAttributes() {
+      var clazz = HasAttributes;
+      if (!(HasAttributes.mutatorCache[clazz] !== undefined)) {
+        HasAttributes.cacheMutatedAttributes(clazz);
+      }
+      return HasAttributes.mutatorCache[clazz];
+    }
+
+    /*Extract and cache all the mutated attributes of a class.*/
+    public static cacheMutatedAttributes(clazz: string) {
+      HasAttributes.mutatorCache[clazz] = collect(HasAttributes.getMutatorMethods(clazz)).map(
+        match => {
+          return lcfirst(HasAttributes.snakeAttributes ? Str.snake(match) : match);
+        }).all();
+    }
+
+    /*Get all of the attribute mutator methods.*/
+    protected static getMutatorMethods(clazz: any) {
+      preg_match_all('/(?<=^|;)get([^;]+?)Attribute(;|$)/', get_class_methods(clazz).join(';'),
+        matches);
+      return matches[1];
     }
 
     // /*Get the mutated attributes for a given instance.*/

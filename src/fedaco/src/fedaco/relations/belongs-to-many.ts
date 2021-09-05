@@ -7,9 +7,13 @@
 import { isArray, isBlank, isObject } from '@gradii/check-type';
 import { uniq } from 'ramda';
 import { Collection } from '../../define/collection';
+import { pluralStudy } from '../../helper/pluralize';
+import { camelCase } from '../../helper/str';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
-import { InteractsWithDictionary, mixinInteractsWithDictionary } from './concerns/interacts-with-dictionary';
+import {
+  InteractsWithDictionary, mixinInteractsWithDictionary
+} from './concerns/interacts-with-dictionary';
 import {
   InteractsWithPivotTable, mixinInteractsWithPivotTable
 } from './concerns/interacts-with-pivot-table';
@@ -31,38 +35,37 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   )
 ) {
   /*The intermediate table for the relation.*/
-  protected table: string;
+  _table: string;
   /*The foreign key of the parent model.*/
-  protected foreignPivotKey: string;
+  _foreignPivotKey: string;
   /*The associated key of the relation.*/
-  protected relatedPivotKey: string;
+  _relatedPivotKey: string;
   /*The key name of the parent model.*/
-  protected parentKey: string;
+  _parentKey: string;
   /*The key name of the related model.*/
-  protected relatedKey: string;
+  _relatedKey: string;
   /*The "name" of the relationship.*/
-  protected relationName: string;
+  _relationName: string;
   /*The pivot table columns to retrieve.*/
-  /*protected*/
   _pivotColumns: any[] = [];
   /*Any pivot table restrictions for where clauses.*/
-  protected pivotWheres: any[] = [];
+  _pivotWheres: any[] = [];
   /*Any pivot table restrictions for whereIn clauses.*/
-  protected pivotWhereIns: any[] = [];
+  _pivotWhereIns: any[] = [];
   /*Any pivot table restrictions for whereNull clauses.*/
-  protected pivotWhereNulls: any[] = [];
+  _pivotWhereNulls: any[] = [];
   /*The default values for the pivot columns.*/
-  protected pivotValues: any[] = [];
+  _pivotValues: any[] = [];
   /*Indicates if timestamps are available on the pivot table.*/
-  public _withTimestamps: boolean = false;
+  _withTimestamps: boolean = false;
   /*The custom pivot table column for the created_at timestamp.*/
-  protected pivotCreatedAt: string;
+  _pivotCreatedAt: string;
   /*The custom pivot table column for the updated_at timestamp.*/
-  protected pivotUpdatedAt: string;
+  _pivotUpdatedAt: string;
   /*The class name of the custom pivot model to use for the relationship.*/
-  protected _using: string;
+  _using: string;
   /*The name of the accessor to use for the "pivot" relationship.*/
-  protected accessor: string = 'pivot';
+  _accessor: string = 'pivot';
 
   /*Create a new belongs to many relationship instance.*/
   public constructor(query: FedacoBuilder,
@@ -74,16 +77,16 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
                      relatedKey: string,
                      relationName: string | null = null) {
     super(query, parent);
-    this.parentKey       = parentKey;
-    this.relatedKey      = relatedKey;
-    this.relationName    = relationName;
-    this.relatedPivotKey = relatedPivotKey;
-    this.foreignPivotKey = foreignPivotKey;
-    this.table           = table;
+    this._parentKey       = parentKey;
+    this._relatedKey      = relatedKey;
+    this._relationName    = relationName;
+    this._relatedPivotKey = relatedPivotKey;
+    this._foreignPivotKey = foreignPivotKey;
+    this._table           = table;
   }
 
   /*Attempt to resolve the intermediate table name from the given string.*/
-  // protected resolveTableName(table: string) {
+  // _resolveTableName(table: string) {
   //   if (!Str.contains(table, '\\') || !class_exists(table)) {
   //     return table;
   //   }
@@ -99,35 +102,35 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Set the base constraints on the relation query.*/
   public addConstraints() {
-    this.performJoin();
+    this._performJoin();
     if (BelongsToMany.constraints) {
-      this.addWhereConstraints();
+      this._addWhereConstraints();
     }
   }
 
   /*Set the join clause for the relation query.*/
-  protected performJoin(query: FedacoBuilder | null = null) {
+  _performJoin(query: FedacoBuilder | null = null) {
     query = query || this._query;
-    query.join(this.table, this.getQualifiedRelatedKeyName(), '=',
+    query.join(this._table, this.getQualifiedRelatedKeyName(), '=',
       this.getQualifiedRelatedPivotKeyName());
     return this;
   }
 
   /*Set the where clause for the relation query.*/
-  protected addWhereConstraints() {
+  _addWhereConstraints() {
     this._query.where(
       this.getQualifiedForeignPivotKeyName(),
       '=',
-      this._parent[this.parentKey]
+      this._parent[this._parentKey]
     );
     return this;
   }
 
   /*Set the constraints for an eager load of the relation.*/
   public addEagerConstraints(models: any[]) {
-    let whereIn = this.whereInMethod(this._parent, this.parentKey);
+    let whereIn = this.whereInMethod(this._parent, this._parentKey);
     this._query[whereIn](this.getQualifiedForeignPivotKeyName(),
-      this.getKeys(models, this.parentKey));
+      this.getKeys(models, this._parentKey));
   }
 
   /*Initialize the relation on a set of models.*/
@@ -140,9 +143,9 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Match the eagerly loaded results to their parents.*/
   public match(models: any[], results: Collection, relation: string) {
-    let dictionary = this.buildDictionary(results);
+    let dictionary = this._buildDictionary(results);
     for (let model of models) {
-      let key = this.getDictionaryKey(model[this.parentKey]);
+      let key = this._getDictionaryKey(model[this._parentKey]);
       if (dictionary[key] !== undefined) {
         model.setRelation(relation, this._related.newCollection(dictionary[key]));
       }
@@ -151,10 +154,10 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Build model dictionary keyed by the relation's foreign key.*/
-  protected buildDictionary(results: Collection): { [key: string]: any[] } {
+  _buildDictionary(results: Collection): { [key: string]: any[] } {
     let dictionary: { [key: string]: any[] } = {};
     for (let result of results) {
-      let value = this.getDictionaryKey(result[this.accessor][this.foreignPivotKey]);
+      let value = this._getDictionaryKey(result[this._accessor][this._foreignPivotKey]);
       dictionary[value].push(result);
     }
     return dictionary;
@@ -173,16 +176,16 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Specify the custom pivot accessor to use for the relationship.*/
   public as(accessor: string) {
-    this.accessor = accessor;
+    this._accessor = accessor;
     return this;
   }
 
   /*Set a where clause for a pivot table column.*/
   public wherePivot(column: string,
-                    operator: any       = null,
-                    value: any          = null,
-                    conjunction: string = 'and') {
-    this.pivotWheres.push(arguments);
+                    operator: any             = null,
+                    value: any                = null,
+                    conjunction: 'and' | 'or' = 'and') {
+    this._pivotWheres.push(arguments);
     return this.getQuery().where(this.qualifyPivotColumn(column), operator, value, conjunction);
   }
 
@@ -211,7 +214,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   /*Set a "where in" clause for a pivot table column.*/
   public wherePivotIn(column: string, values: any, conjunction: string = 'and',
                       not: boolean                                     = false) {
-    this.pivotWhereIns.push(arguments);
+    this._pivotWhereIns.push(arguments);
     return this.whereIn(this.qualifyPivotColumn(column), values, conjunction, not);
   }
 
@@ -233,7 +236,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
     if (isBlank(value)) {
       throw new Error('InvalidArgumentException The provided value may not be null.');
     }
-    this.pivotValues.push([column, value]);
+    this._pivotValues.push([column, value]);
     return this.wherePivot(column, '=', value);
   }
 
@@ -254,7 +257,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Set a "where null" clause for a pivot table column.*/
   public wherePivotNull(column: string, conjunction: string = 'and', not: boolean = false) {
-    this.pivotWhereNulls.push(arguments);
+    this._pivotWhereNulls.push(arguments);
     return this.whereNull(this.qualifyPivotColumn(column), conjunction, not);
   }
 
@@ -279,8 +282,8 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Find a related model by its primary key or return a new instance of the related model.*/
-  public findOrNew(id: any, columns: any[] = ['*']) {
-    let instance = this.find(id, columns);
+  public findOrNew(id: any, columns: any[] = ['*']): Model {
+    let instance = this.find(id, columns) as Model;
     if (isBlank(instance)) {
       instance = this._related.newInstance();
     }
@@ -325,12 +328,12 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Find a related model by its primary key.*/
-  public find(id: any, columns: any[] = ['*']) {
+  public find(id: any, columns: any[] = ['*']): Model | Model[] {
     if (!(id instanceof Model && (isArray(id) /*|| id instanceof Arrayable*/))) {
       return this.findMany(id, columns);
     }
-    return this.where(this.getRelated().getQualifiedKeyName(), '=', this.parseId(id)).first(
-      columns);
+    return this.where(this.getRelated().getQualifiedKeyName(), '=', this._parseIds(id))
+      .first(columns);
   }
 
   /*Find multiple related models by their primary keys.*/
@@ -338,7 +341,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
     if (!ids.length) {
       return this.getRelated().newCollection();
     }
-    return this.whereIn(this.getRelated().getQualifiedKeyName(), this.parseIds(ids)).get(columns);
+    return this.whereIn(this.getRelated().getQualifiedKeyName(), this._parseIds(ids)).get(columns);
   }
 
   /*Find a related model by its primary key or throw an exception.*/
@@ -364,9 +367,9 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Execute the query and get the first result.*/
-  public first(columns: any[] = ['*']) {
+  public first(columns: any[] = ['*']): Model {
     const results = this.take(1).get(columns);
-    return results.length > 0 ? results.first() : null;
+    return results.length > 0 ? results[0] : null;
   }
 
   /*Execute the query and get the first result or throw an exception.*/
@@ -380,7 +383,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Get the results of the relationship.*/
   public getResults() {
-    return !isBlank(this._parent[this.parentKey]) ? this.get() : this._related.newCollection();
+    return !isBlank(this._parent[this._parentKey]) ? this.get() : this._related.newCollection();
   }
 
   /*Execute the query as a "select" statement.*/
@@ -390,8 +393,8 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
     // models with the result of those columns as a separate model relation.
     let builder = this._query.applyScopes();
     columns     = builder.getQuery()._columns.length ? [] : columns;
-    let models  = builder.addSelect(this.shouldSelect(columns)).getModels();
-    this.hydratePivotRelation(models);
+    let models  = builder.addSelect(this._shouldSelect(columns)).getModels();
+    this._hydratePivotRelation(models);
     if (models.length > 0) {
       models = builder.eagerLoadRelations(models);
     }
@@ -399,18 +402,18 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Get the select columns for the relation query.*/
-  protected shouldSelect(columns: any[] = ['*']) {
+  _shouldSelect(columns: any[] = ['*']) {
     if (columns == ['*']) {
       columns = [`${this._related.getTable()}.*`];
     }
-    return [...columns, ...this.aliasedPivotColumns()];
+    return [...columns, ...this._aliasedPivotColumns()];
   }
 
   /*Get the pivot columns for the relation.
 
   "pivot_" is prefixed ot each column for easy removal later.*/
-  protected aliasedPivotColumns() {
-    let defaults = [this.foreignPivotKey, this.relatedPivotKey];
+  _aliasedPivotColumns() {
+    let defaults = [this._foreignPivotKey, this._relatedPivotKey];
     return uniq([...defaults, ...this._pivotColumns].map(column => {
       return this.qualifyPivotColumn(column) + ' as pivot_' + column;
     }));
@@ -506,19 +509,19 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   // }
 
   /*Prepare the query builder for query execution.*/
-  protected prepareQueryBuilder() {
-    return this._query.addSelect(this.shouldSelect());
+  _prepareQueryBuilder() {
+    return this._query.addSelect(this._shouldSelect());
   }
 
   /*Hydrate the pivot table relationship on the models.*/
-  protected hydratePivotRelation(models: any[]) {
+  _hydratePivotRelation(models: any[]) {
     for (let model of models) {
-      model.setRelation(this.accessor, this.newExistingPivot(this.migratePivotAttributes(model)));
+      model.setRelation(this._accessor, this.newExistingPivot(this._migratePivotAttributes(model)));
     }
   }
 
   /*Get the pivot attributes from a model.*/
-  protected migratePivotAttributes(model: Model) {
+  _migratePivotAttributes(model: Model) {
     let values: any = {};
     for (let [key, value] of Object.entries(model.getAttributes())) {
       if (key.startsWith('pivot_')) {
@@ -531,22 +534,22 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*If we're touching the parent model, touch.*/
   public touchIfTouching() {
-    if (this.touchingParent()) {
+    if (this._touchingParent()) {
       this.getParent().touch();
     }
-    if (this.getParent().touches(this.relationName)) {
+    if (this.getParent().touches(this._relationName)) {
       this.touch();
     }
   }
 
   /*Determine if we should touch the parent on sync.*/
-  protected touchingParent() {
-    return this.getRelated().touches(this.guessInverseRelation());
+  _touchingParent() {
+    return this.getRelated().touches(this._guessInverseRelation());
   }
 
   /*Attempt to guess the name of the inverse of the relation.*/
-  protected guessInverseRelation() {
-    return Str.camel(Str.pluralStudly(class_basename(this.getParent())));
+  _guessInverseRelation() {
+    return camelCase(pluralStudy(this.getParent().constructor.name));
   }
 
   /*Touch all of the related models for the relationship.
@@ -563,7 +566,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Get all of the IDs for the related models.*/
   public allRelatedIds() {
-    return this.newPivotQuery().pluck(this.relatedPivotKey);
+    return this.newPivotQuery().pluck(this._relatedPivotKey);
   }
 
   /*Save a new model and attach it to the parent model.*/
@@ -610,7 +613,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
     if (parentQuery.getQuery().from == query.getQuery().from) {
       return this.getRelationExistenceQueryForSelfJoin(query, parentQuery, columns);
     }
-    this.performJoin(query);
+    this._performJoin(query);
     return super.getRelationExistenceQuery(query, parentQuery, columns);
   }
 
@@ -622,7 +625,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
     const hash = this.getRelationCountHash();
     query.from(`${this._related.getTable()} as ${hash}`);
     this._related.setTable(hash);
-    this.performJoin(query);
+    this._performJoin(query);
     return super.getRelationExistenceQuery(query, parentQuery, columns);
   }
 
@@ -634,74 +637,74 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   /*Specify that the pivot table has creation and update timestamps.*/
   public withTimestamps(createdAt: any = null, updatedAt: any = null) {
     this._withTimestamps = true;
-    this.pivotCreatedAt  = createdAt;
-    this.pivotUpdatedAt  = updatedAt;
+    this._pivotCreatedAt = createdAt;
+    this._pivotUpdatedAt = updatedAt;
     return this.withPivot(this.createdAt(), this.updatedAt());
   }
 
   /*Get the name of the "created at" column.*/
   public createdAt() {
-    return this.pivotCreatedAt || this._parent.getCreatedAtColumn();
+    return this._pivotCreatedAt || this._parent.getCreatedAtColumn();
   }
 
   /*Get the name of the "updated at" column.*/
   public updatedAt() {
-    return this.pivotUpdatedAt || this._parent.getUpdatedAtColumn();
+    return this._pivotUpdatedAt || this._parent.getUpdatedAtColumn();
   }
 
   /*Get the foreign key for the relation.*/
   public getForeignPivotKeyName() {
-    return this.foreignPivotKey;
+    return this._foreignPivotKey;
   }
 
   /*Get the fully qualified foreign key for the relation.*/
   public getQualifiedForeignPivotKeyName() {
-    return this.qualifyPivotColumn(this.foreignPivotKey);
+    return this.qualifyPivotColumn(this._foreignPivotKey);
   }
 
   /*Get the "related key" for the relation.*/
   public getRelatedPivotKeyName() {
-    return this.relatedPivotKey;
+    return this._relatedPivotKey;
   }
 
   /*Get the fully qualified "related key" for the relation.*/
   public getQualifiedRelatedPivotKeyName() {
-    return this.qualifyPivotColumn(this.relatedPivotKey);
+    return this.qualifyPivotColumn(this._relatedPivotKey);
   }
 
   /*Get the parent key for the relationship.*/
   public getParentKeyName() {
-    return this.parentKey;
+    return this._parentKey;
   }
 
   /*Get the fully qualified parent key name for the relation.*/
   public getQualifiedParentKeyName() {
-    return this._parent.qualifyColumn(this.parentKey);
+    return this._parent.qualifyColumn(this._parentKey);
   }
 
   /*Get the related key for the relationship.*/
   public getRelatedKeyName() {
-    return this.relatedKey;
+    return this._relatedKey;
   }
 
   /*Get the fully qualified related key name for the relation.*/
   public getQualifiedRelatedKeyName() {
-    return this._related.qualifyColumn(this.relatedKey);
+    return this._related.qualifyColumn(this._relatedKey);
   }
 
   /*Get the intermediate table for the relationship.*/
   public getTable() {
-    return this.table;
+    return this._table;
   }
 
   /*Get the relationship name for the relationship.*/
   public getRelationName() {
-    return this.relationName;
+    return this._relationName;
   }
 
   /*Get the name of the pivot accessor for this relationship.*/
   public getPivotAccessor() {
-    return this.accessor;
+    return this._accessor;
   }
 
   /*Get the pivot columns for this relationship.*/
@@ -711,6 +714,6 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Qualify the given column name by the pivot table.*/
   public qualifyPivotColumn(column: string) {
-    return column.includes('.') ? column : `${this.table}.${column}`;
+    return column.includes('.') ? column : `${this._table}.${column}`;
   }
 }

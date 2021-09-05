@@ -8,7 +8,13 @@ import { Scope } from '../Scope';
 import { isBlank } from '@gradii/check-type';
 import { Constructor } from '../../helper/constructor';
 
-export function mixinHasGlobalScopes<T extends Constructor<{}>>(base: T) {
+export interface HasGlobalScopes {
+  getGlobalScopes(): any;
+}
+
+type HasGlobalScopesCtor = Constructor<HasGlobalScopes>;
+
+export function mixinHasGlobalScopes<T extends Constructor<{}>>(base: T): HasGlobalScopesCtor & T {
   return class extends base {
     /*Register a new global scope on the model.*/
     public static addGlobalScope(scope: string, implementation: Function) {

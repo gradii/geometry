@@ -5,15 +5,18 @@
  */
 
 import { isArray, isBlank, isString } from '@gradii/check-type';
-import { mixinForwardsCalls } from '../mixins/forwards-calls';
+import { tap, uniq } from 'ramda';
+import { Collection } from '../define/collection';
+import { snakeCase } from '../helper/str';
+import { ForwardsCalls, mixinForwardsCalls } from '../mixins/forwards-calls';
 import { FedacoBuilder } from './fedaco-builder';
-import { mixinGuardsAttributes } from './mixins/guards-attributes';
+import { GuardsAttributes, mixinGuardsAttributes } from './mixins/guards-attributes';
 import { HasAttributes, mixinHasAttributes } from './mixins/has-attributes';
 import { HasEvents, mixinHasEvents } from './mixins/has-events';
-import { mixinHasGlobalScopes } from './mixins/has-global-scopes';
-import { mixinHasRelationships } from './mixins/has-relationships';
-import { mixinHasTimestamps } from './mixins/has-timestamps';
-import { mixinHidesAttributes } from './mixins/hides-attributes';
+import { HasGlobalScopes, mixinHasGlobalScopes } from './mixins/has-global-scopes';
+import { HasRelationships, mixinHasRelationships } from './mixins/has-relationships';
+import { HasTimestamps, mixinHasTimestamps } from './mixins/has-timestamps';
+import { HidesAttributes, mixinHidesAttributes } from './mixins/hides-attributes';
 import { Pivot } from './relations/pivot';
 import { Scope } from './scope';
 
@@ -546,7 +549,7 @@ export class Model extends mixinHasAttributes(
     if (this._fireModelEvent('updating') === false) {
       return false;
     }
-    return tap(this.setKeysForSaveQuery(query)[method](column, amount, extra), () => {
+    return tap(this._setKeysForSaveQuery(query)[method](column, amount, extra), () => {
       this.syncChanges();
       this._fireModelEvent('updated', false);
       this.syncOriginalAttribute(column);
@@ -641,7 +644,7 @@ export class Model extends mixinHasAttributes(
     }
     let dirty = this.getDirty();
     if (dirty.length > 0) {
-      this.setKeysForSaveQuery(query).update(dirty);
+      this._setKeysForSaveQuery(query).update(dirty);
       this.syncChanges();
       this._fireModelEvent('updated', false);
     }
@@ -649,18 +652,18 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Set the keys for a select query.*/
-  protected setKeysForSelectQuery(query: FedacoBuilder): FedacoBuilder {
-    query.where(this.getKeyName(), '=', this.getKeyForSelectQuery());
+  _setKeysForSelectQuery(query: FedacoBuilder): FedacoBuilder {
+    query.where(this.getKeyName(), '=', this._getKeyForSelectQuery());
     return query;
   }
 
   /*Get the primary key value for a select query.*/
-  protected getKeyForSelectQuery() {
+  _getKeyForSelectQuery() {
     return this.original[this.getKeyName()] ?? this.getKey();
   }
 
   /*Set the keys for a save update query.*/
-  protected setKeysForSaveQuery(query: FedacoBuilder): FedacoBuilder {
+  _setKeysForSaveQuery(query: FedacoBuilder): FedacoBuilder {
     query.where(this.getKeyName(), '=', this.getKeyForSaveQuery());
     return query;
   }
@@ -702,13 +705,13 @@ export class Model extends mixinHasAttributes(
   /*Destroy the models for the given IDs.*/
   public static destroy(ids: Collection | any[] | number | string) {
     if (ids instanceof EloquentCollection) {
-      let ids = ids.modelKeys();
+      ids = ids.modelKeys();
     }
     if (ids instanceof BaseCollection) {
-      let ids = ids.all();
+      ids = ids.all();
     }
-    let ids = is_array(ids) ? ids : func_get_args();
-    if (count(ids) === 0) {
+    ids = isArray(ids) ? ids : arguments;
+    if (ids.length === 0) {
       return 0;
     }
     let key   = (instance = new Model()).getKeyName();
@@ -722,10 +725,10 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Delete the model from the database.*/
-  public delete() {
+  public delete(): boolean {
     this.mergeAttributesFromClassCasts();
     if (isBlank(this.getKeyName())) {
-      throw new LogicException('No primary key defined on model.');
+      throw new Error('LogicException No primary key defined on model.');
     }
     if (!this.exists) {
       return;
@@ -808,15 +811,16 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Create a new Eloquent Collection instance.*/
-  public newCollection(models: any[] = []) {
+  public newCollection(models: any[] = []): Model[] {
     return models;
   }
 
   /*Create a new pivot model instance.*/
   public newPivot(parent: Model, attributes: any[], table: string, exists: boolean,
                   using: string | null = null) {
-    return using ? using.fromRawAttributes(parent, attributes, table,
-      exists) : Pivot.fromAttributes(parent, attributes, table, exists);
+    return using ?
+      using.fromRawAttributes(parent, attributes, table, exists) :
+      Pivot.fromAttributes(parent, attributes, table, exists);
   }
 
   /*Determine if the model has a given scope.*/
@@ -853,8 +857,8 @@ export class Model extends mixinHasAttributes(
     if (!this.exists) {
       return;
     }
-    return this.setKeysForSelectQuery(this.newQueryWithoutScopes())._with(
-      is_string(_with) ? func_get_args() : _with).first();
+    return this._setKeysForSelectQuery(this.newQueryWithoutScopes())
+      .with(isString(_with) ? arguments : _with).first();
   }
 
   /*Reload the current model instance with fresh attributes from the database.*/
@@ -863,7 +867,7 @@ export class Model extends mixinHasAttributes(
       return this;
     }
     this.setRawAttributes(
-      this.setKeysForSelectQuery(this.newQueryWithoutScopes()).firstOrFail().attributes);
+      this._setKeysForSelectQuery(this.newQueryWithoutScopes()).firstOrFail().attributes);
     this.load(collect(this._relations).reject(relation => {
       return relation instanceof Pivot || is_object(relation) && in_array(AsPivot,
         class_uses_recursive(relation), true);
@@ -877,17 +881,19 @@ export class Model extends mixinHasAttributes(
     let defaults   = [this.getKeyName(), this.getCreatedAtColumn(), this.getUpdatedAtColumn()];
     let attributes = Arr.except(this.getAttributes(),
       except ? array_unique([...except, ...defaults]) : defaults);
-    return tap(new Model(), instance => {
+    return tap(instance => {
       instance.setRawAttributes(attributes);
       instance.setRelations(this._relations);
       instance.fireModelEvent('replicating', false);
-    });
+    }, new Model());
   }
 
   /*Determine if two models have the same ID and belong to the same table.*/
   public is(model: Model | null) {
-    return !isBlank(
-      model) && this.getKey() === model.getKey() && this.getTable() === model.getTable() && this.getConnectionName() === model.getConnectionName();
+    return !isBlank(model) &&
+      this.getKey() === model.getKey() &&
+      this.getTable() === model.getTable() &&
+      this.getConnectionName() === model.getConnectionName();
   }
 
   /*Determine if two models are not the same.*/
@@ -1011,7 +1017,7 @@ export class Model extends mixinHasAttributes(
         }
       }
     }
-    return array_unique(relations);
+    return uniq(relations);
   }
 
   /*Get the queueable connection for the entity.*/
@@ -1061,9 +1067,11 @@ export class Model extends mixinHasAttributes(
     }
   }
 
-  /*Get the default foreign key name for the model.*/
+  /**
+   * Get the default foreign key name for the model.
+   */
   public getForeignKey() {
-    return Str.snake(class_basename(this)) + '_' + this.getKeyName();
+    return snakeCase(this.constructor.name) + '_' + this.getKeyName();
   }
 
   /*Get the number of models to return per page.*/

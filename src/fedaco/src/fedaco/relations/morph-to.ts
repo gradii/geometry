@@ -97,8 +97,8 @@ export class MorphTo extends BelongsTo {
   }
 
   /*Get all of the relation results for a type.*/
-  protected getResultsByType(type: string) {
-    let instance = this.createModelByType(type);
+  protected getResultsByType(clazz: typeof Model) {
+    let instance = this.createModelByType(clazz);
     let ownerKey = this.ownerKey ?? instance.getKeyName();
     let query    = this.replayMacros(instance.newQuery()).mergeConstraintsFrom(
       this.getQuery())._with([
@@ -120,8 +120,8 @@ export class MorphTo extends BelongsTo {
   }
 
   /*Create a new model instance by type.*/
-  public createModelByType(type: string) {
-    let clazz = Model.getActualClassNameForMorph(type);
+  public createModelByType(clazz: typeof Model) {
+    // let clazz = Model.getActualClassNameForMorph(type);
     return tap(instance => {
       if (!instance.getConnectionName()) {
         instance.setConnection(this.getConnection().getName());

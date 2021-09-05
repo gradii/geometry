@@ -33,6 +33,8 @@ export interface GrammarInterface {
 
   compileUpdate(builder: Builder, values: any): string;
 
+  compileUpsert(builder: Builder, values: any, uniqueBy: any[] | string, update: any[] | null): string;
+
   distinct(distinct: boolean | any[]): string;
 
   getOperators(): string[];
@@ -46,4 +48,6 @@ export interface GrammarInterface {
   quoteTableName(tableName: string): string;
 
   setTablePrefix(prefix: string): void;
+
+  wrap(column: string): string;
 }

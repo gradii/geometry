@@ -10,9 +10,8 @@ import { Constructor } from '../../../helper/constructor';
 import { Relation } from '../relation';
 
 export interface InteractsWithDictionary {
-  getDictionaryKey(attribute: any): string;
+  _getDictionaryKey(attribute: any): string;
 }
-
 
 export type InteractsWithDictionaryCtor = Constructor<InteractsWithDictionary>;
 
@@ -20,7 +19,7 @@ export function mixinInteractsWithDictionary<T extends Constructor<any>>(base: T
   // @ts-ignore
   return class _Self extends base {
     /*Get a dictionary key attribute - casting it to a string if necessary.*/
-    getDictionaryKey(attribute: any) {
+    _getDictionaryKey(attribute: any) {
       if (isObject(attribute)) {
         if ('__toString' in attribute) {
           return (attribute as any).__toString();

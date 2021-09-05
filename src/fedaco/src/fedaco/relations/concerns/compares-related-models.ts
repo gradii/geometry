@@ -7,15 +7,35 @@
 import { isBlank, isNumber } from '@gradii/check-type';
 import { Constructor } from '../../../helper/constructor';
 import { Model } from '../../model';
+import { Relation } from '../Relation';
 
-export function mixinComparesRelatedModels<T extends Constructor<{}>>(base: T) {
+export interface ComparesRelatedModels {
+  is(this: Model & this, model: Model | null): Model;
+
+  /*Determine if the model is not the related instance of the relationship.*/
+  isNot(model: Model | null): Model;
+
+  /*Get the value of the parent model's key.*/
+  getParentKey(): string;
+
+  /*Get the value of the model's related key.*/
+  _getRelatedKeyFrom(model: Model): string;
+
+  /*Compare the parent key with the related key.*/
+  _compareKeys(parentKey: any, relatedKey: any): boolean;
+}
+
+type ComparesRelatedModelsCtor = Constructor<ComparesRelatedModels>;
+
+export function mixinComparesRelatedModels<T extends Constructor<{}>>(base: T): ComparesRelatedModelsCtor & T {
   // @ts-ignore
-  return class ComparesRelatedModels extends base {
+  return class _Self extends base {
 
     /*Determine if the model is the related instance of the relationship.*/
-    public is(this: Model & this, model: Model | null) {
-      const match = !isBlank(model) && this.compareKeys(this.getParentKey(), this.getRelatedKeyFrom(
-        model)) && this.related.getTable() === model.getTable() && this.related.getConnectionName() === model.getConnectionName();
+    public is(this: Relation & this, model: Model | null) {
+      const match = !isBlank(model) && this._compareKeys(this.getParentKey(),
+        this._getRelatedKeyFrom(
+          model)) && this._related.getTable() === model.getTable() && this._related.getConnectionName() === model.getConnectionName();
       if (match && this instanceof SupportsPartialRelations && this.isOneOfMany()) {
         return this._query.whereKey(model.getKey()).exists();
       }
@@ -23,7 +43,7 @@ export function mixinComparesRelatedModels<T extends Constructor<{}>>(base: T) {
     }
 
     /*Determine if the model is not the related instance of the relationship.*/
-    public isNot(model: Model | null) {
+    public isNot(this: Relation & this, model: Model | null) {
       return !this.is(model);
     }
 
@@ -33,12 +53,12 @@ export function mixinComparesRelatedModels<T extends Constructor<{}>>(base: T) {
     }
 
     /*Get the value of the model's related key.*/
-    protected getRelatedKeyFrom(model: Model) {
+    _getRelatedKeyFrom(model: Model) {
       throw new Error('not implemented');
     }
 
     /*Compare the parent key with the related key.*/
-    protected compareKeys(parentKey: any, relatedKey: any) {
+    _compareKeys(parentKey: any, relatedKey: any) {
       if (!parentKey.length || !relatedKey.length) {
         return false;
       }

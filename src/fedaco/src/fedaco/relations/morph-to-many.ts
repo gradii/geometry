@@ -36,8 +36,8 @@ export class MorphToMany extends BelongsToMany {
   }
 
   /*Set the where clause for the relation query.*/
-  protected addWhereConstraints() {
-    super.addWhereConstraints();
+  protected _addWhereConstraints() {
+    super._addWhereConstraints();
     this._query.where(this.qualifyPivotColumn(this.morphType), this.morphClass);
     return this;
   }
@@ -61,8 +61,8 @@ export class MorphToMany extends BelongsToMany {
   }
 
   /*Get the pivot models that are currently attached.*/
-  protected getCurrentlyAttachedPivots() {
-    return super.getCurrentlyAttachedPivots().map(record => {
+  _getCurrentlyAttachedPivots() {
+    return super._getCurrentlyAttachedPivots().map(record => {
       return record instanceof MorphPivot ? record.setMorphType(this.morphType).setMorphClass(
         this.morphClass) : record;
     });
@@ -76,9 +76,9 @@ export class MorphToMany extends BelongsToMany {
   /*Create a new pivot model instance.*/
   public newPivot(attributes: any[] = [], exists: boolean = false) {
     let using = this._using;
-    let pivot = using ? using.fromRawAttributes(this._parent, attributes, this.table,
-      exists) : MorphPivot.fromAttributes(this._parent, attributes, this.table, exists);
-    pivot.setPivotKeys(this.foreignPivotKey, this.relatedPivotKey).setMorphType(
+    let pivot = using ? using.fromRawAttributes(this._parent, attributes, this._table,
+      exists) : MorphPivot.fromAttributes(this._parent, attributes, this._table, exists);
+    pivot.setPivotKeys(this._foreignPivotKey, this._relatedPivotKey).setMorphType(
       this.morphType).setMorphClass(this.morphClass);
     return pivot;
   }
@@ -86,8 +86,8 @@ export class MorphToMany extends BelongsToMany {
   /*Get the pivot columns for the relation.
 
   "pivot_" is prefixed at each column for easy removal later.*/
-  protected aliasedPivotColumns() {
-    let defaults = [this.foreignPivotKey, this.relatedPivotKey, this.morphType];
+  protected _aliasedPivotColumns() {
+    let defaults = [this._foreignPivotKey, this._relatedPivotKey, this.morphType];
     return uniq([...defaults, ...this._pivotColumns].map(column => {
       return this.qualifyPivotColumn(column) + ' as pivot_' + column;
     }));

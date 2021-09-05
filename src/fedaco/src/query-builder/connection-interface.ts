@@ -8,7 +8,7 @@
  *
  */
 export interface ConnectionInterface {
-  select(sql: string, bindings: any[], readConnection: boolean);
+  select(sql: string, bindings: any[], readConnection?: boolean): Promise<any>;
 
   insert(sql: string, bindings: any[]);
 

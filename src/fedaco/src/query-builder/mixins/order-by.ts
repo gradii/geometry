@@ -14,6 +14,9 @@ import { rawSqlBindings } from '../ast-factory';
 import { wrapToArray } from '../ast-helper';
 
 export interface QueryBuilderOrderBy {
+
+  latest(column: string): this;
+
   oldest(column: string): this;
 
   orderBy(column: Function | QueryBuilder | RawExpression | string,
@@ -32,6 +35,9 @@ export type QueryBuilderOrderByCtor = Constructor<QueryBuilderOrderBy>;
 
 export function mixinOrderBy<T extends Constructor<any>>(base: T): QueryBuilderOrderByCtor & T {
   return class _Self extends base {
+    public latest(this: QueryBuilder & _Self, column: string = 'created_at') {
+      return this.orderBy(column, 'desc');
+    }
 
     /*Add an "order by" clause for a timestamp to the query.*/
     public oldest(this: QueryBuilder & _Self, column: string = 'created_at') {

@@ -16,8 +16,8 @@ export class HasOneThrough extends mixinInteractsWithDictionary(
   )
 ) {
   /*Get the results of the relationship.*/
-  public getResults() {
-    return this.first() || this._getDefaultFor(this.farParent);
+  public getResults(): Model {
+    return this.first() || this._getDefaultFor(this._farParent);
   }
 
   /*Initialize the relation on a set of models.*/
@@ -30,12 +30,12 @@ export class HasOneThrough extends mixinInteractsWithDictionary(
 
   /*Match the eagerly loaded results to their parents.*/
   public match(models: any[], results: Collection, relation: string) {
-    let dictionary = this.buildDictionary(results);
+    let dictionary = this._buildDictionary(results);
     for (let model of models) {
-      const key = this.getDictionaryKey(model.getAttribute(this.localKey));
+      const key = this._getDictionaryKey(model.getAttribute(this._localKey));
       if (dictionary[key] !== undefined) {
         let value = dictionary[key];
-        model.setRelation(relation, reset(value));
+        model.setRelation(relation, value);
       }
     }
     return models;

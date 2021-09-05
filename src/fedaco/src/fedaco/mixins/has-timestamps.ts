@@ -57,7 +57,7 @@ export function mixinHasTimestamps<T extends Constructor<any>>(base: T): HasTime
     public timestamps: boolean = true;
 
     /*Update the model's update timestamp.*/
-    public touch(this: Model & _Self, attribute: string = null) {
+    public touch(this: Model & _Self, attribute: string = null): boolean {
       if (attribute) {
         // @ts-ignore
         this[attribute] = this.freshTimestamp();
@@ -71,7 +71,7 @@ export function mixinHasTimestamps<T extends Constructor<any>>(base: T): HasTime
     }
 
     /*Update the creation and update timestamps.*/
-    public updateTimestamps(this: Model & _Self) {
+    public updateTimestamps(this: Model & _Self): void {
       let time            = this.freshTimestamp();
       let updatedAtColumn = this.getUpdatedAtColumn();
       if (!isBlank(updatedAtColumn) && !this.isDirty(updatedAtColumn)) {
@@ -84,19 +84,19 @@ export function mixinHasTimestamps<T extends Constructor<any>>(base: T): HasTime
     }
 
     /*Set the value of the "created at" attribute.*/
-    public setCreatedAt(value: any) {
+    public setCreatedAt(value: any): this {
       this[this.getCreatedAtColumn()] = value;
       return this;
     }
 
     /*Set the value of the "updated at" attribute.*/
-    public setUpdatedAt(value: any) {
+    public setUpdatedAt(value: any): this {
       this[this.getUpdatedAtColumn()] = value;
       return this;
     }
 
     /*Get a fresh timestamp for the model.*/
-    public freshTimestamp() {
+    public freshTimestamp(): number {
       return Date.now();
     }
 
@@ -106,7 +106,7 @@ export function mixinHasTimestamps<T extends Constructor<any>>(base: T): HasTime
     }
 
     /*Determine if the model uses timestamps.*/
-    public usesTimestamps() {
+    public usesTimestamps(): boolean {
       return this.timestamps;
     }
 

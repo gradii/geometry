@@ -4,8 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isAnyEmpty, isArray, isBlank, isBoolean, isFunction, isString } from '@gradii/check-type';
-import { bind } from 'ramda';
+import {
+  isAnyEmpty, isArray, isBlank, isBoolean, isFunction, isNumber, isString
+} from '@gradii/check-type';
 import { ColumnReferenceExpression } from '../query/ast/column-reference-expression';
 import { ComparisonPredicateExpression } from '../query/ast/expression/comparison-predicate-expression';
 import { RawExpression } from '../query/ast/expression/raw-expression';
@@ -15,7 +16,7 @@ import { FromTable } from '../query/ast/from-table';
 import { PathExpression } from '../query/ast/path-expression';
 import { TableReferenceExpression } from '../query/ast/table-reference-expression';
 import { SqlParser } from '../query/parser/sql-parser';
-import { bindingVariable, createIdentifier, rawSqlBindings } from './ast-factory';
+import { bindingVariable, createIdentifier, raw, rawSqlBindings } from './ast-factory';
 import { wrapToArray } from './ast-helper';
 import { Builder } from './builder';
 import { ConnectionInterface } from './connection-interface';
@@ -225,7 +226,7 @@ export class QueryBuilder extends Builder {
 
   public mergeWheres(_wheres: any[], bindings: object | any[]) {
     this._wheres = this._wheres.concat(_wheres);
-    let mid = [];
+    let mid      = [];
     if (typeof bindings === 'object') {
       bindings = Object.values(bindings);
     }
@@ -444,6 +445,26 @@ export class QueryBuilder extends Builder {
     );
   }
 
+  /*Increment a column's value by a given amount.*/
+  public increment(column: string, amount: number | number = 1, extra: any[] = []) {
+    if (!isNumber(amount)) {
+      throw new Error('InvalidArgumentException Non-numeric value passed to increment method.');
+    }
+    let wrapped = this._grammar.wrap(column);
+    let columns = {[column]: raw(`${wrapped} + ${amount}`), ...extra};
+    return this.update(columns);
+  }
+
+  /*Decrement a column's value by a given amount.*/
+  public decrement(column: string, amount: number | number = 1, extra: any[] = []) {
+    if (!isNumber(amount)) {
+      throw new Error('InvalidArgumentException Non-numeric value passed to decrement method.');
+    }
+    let wrapped = this._grammar.wrap(column);
+    let columns = {[column]: raw(`${wrapped} - ${amount}`), ...extra};
+    return this.update(columns);
+  }
+
   /*Delete a record from the database.*/
   public delete(id?: any) {
     if (!isBlank(id)) {
@@ -484,6 +505,35 @@ export class QueryBuilder extends Builder {
       return true;
     }
     return this.limit(1).update(values);
+  }
+
+  /*Insert new records or update the existing ones.*/
+  public upsert(values: any[], uniqueBy: any[] | string, update: any[] | null = null) {
+    if (!values.length) {
+      return 0;
+    } else if (update === []) {
+      return /*cast type int*/ this.insert(values);
+    }
+    if (!isArray(values)) {
+      values = [values];
+    }/* else {
+      for (let [key, value] of Object.entries(values)) {
+        // ksort(value);
+        values[key] = value;
+      }
+    }*/
+    if (isBlank(update)) {
+      update = Object.keys(values[0]);
+    }
+    // this.applyBeforeQueryCallbacks();
+    // var bindings = this.cleanBindings([...Arr.flatten(values, 1), ...collect(update)
+    //   .reject((value, key) => {
+    //   return isNumber(key);
+    // }).all()]);
+    return this._connection.affectingStatement(
+      this._grammar.compileUpsert(this, values, /*cast type array*/ uniqueBy, update),
+      this.getBindings()
+    );
   }
 
   public insert(values: any) {

@@ -69,8 +69,10 @@ export class MorphOne extends mixinCanBeOneOfMany(
       this.qualifySubSelectColumn(this.morphType),
       '=',
       this.qualifyRelatedColumn(this.morphType)
-    ).on(this.qualifySubSelectColumn(this.foreignKey),
-      '=', this.qualifyRelatedColumn(this.foreignKey)
+    ).on(
+      this.qualifySubSelectColumn(this.foreignKey),
+      '=',
+      this.qualifyRelatedColumn(this.foreignKey)
     );
   }
 

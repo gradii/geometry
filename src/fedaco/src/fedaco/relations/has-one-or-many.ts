@@ -81,7 +81,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
   /*Get the value of a relationship by one or many type.*/
   protected getRelationValue(dictionary: any[], key: string, type: string) {
     let value = dictionary[key];
-    return type === 'one' ? reset(value) : this._related.newCollection(value);
+    return type === 'one' ? value : this._related.newCollection(value);
   }
 
   /*Build model dictionary keyed by the relation's foreign key.*/

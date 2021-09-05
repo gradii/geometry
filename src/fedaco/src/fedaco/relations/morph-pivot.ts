@@ -29,7 +29,7 @@ export class MorphPivot extends Pivot {
   /*Set the keys for a select query.*/
   protected setKeysForSelectQuery(query: FedacoBuilder): FedacoBuilder {
     query.where(this.morphType, this.morphClass);
-    return super.setKeysForSelectQuery(query);
+    return super._setKeysForSelectQuery(query);
   }
 
   /*Delete the pivot model record from the database.*/
@@ -65,7 +65,7 @@ export class MorphPivot extends Pivot {
   }
 
   /*Get the queueable identity for the entity.*/
-  public getQueueableId() {
+  public getQueueableId(this: Model & this) {
     if (this._attributes[this.getKeyName()] !== undefined) {
       return this.getKey();
     }
@@ -77,14 +77,17 @@ export class MorphPivot extends Pivot {
   /*Get a new query to restore one or more models by their queueable IDs.*/
   public newQueryForRestoration(ids: number[] | string[] | string) {
     if (isArray(ids)) {
-      return this.newQueryForCollectionRestoration(ids);
+      return this._newQueryForCollectionRestoration(ids);
     }
     if (!ids.includes(':')) {
       return super.newQueryForRestoration(ids);
     }
     let segments = ids.split(':');
-    return this.newQueryWithoutScopes().where(segments[0], segments[1]).where(segments[2],
-      segments[3]).where(segments[4], segments[5]);
+    return this.newQueryWithoutScopes().where(
+      segments[0], segments[1]
+    ).where(
+      segments[2], segments[3]
+    ).where(segments[4], segments[5]);
   }
 
   /*Get a new query to restore multiple models by their queueable IDs.*/

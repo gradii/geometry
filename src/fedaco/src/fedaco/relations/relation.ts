@@ -17,8 +17,11 @@ import { FedacoBuilder } from '../fedaco-builder';
 import { mixinForwardCallToQueryBuilder } from '../mixins/forward-call-to-query-builder';
 import { Model } from '../model';
 
+export interface Relation {
+  newRelatedInstanceFor(parent: Model): Model;
 
-
+  getExistenceCompareKey(): string;
+}
 
 /**
  * select * from table where col = ? and col2 = ?;
@@ -101,7 +104,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   }
 
   /*Execute the query as a "select" statement.*/
-  public get(columns: any[] = ['*']) {
+  public get(columns: string[] | string = ['*']) {
     return this._query.get(columns);
   }
 
@@ -123,7 +126,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   /*Add the constraints for a relationship count query.*/
   public getRelationExistenceCountQuery(query: FedacoBuilder, parentQuery: FedacoBuilder) {
     return this.getRelationExistenceQuery(query, parentQuery,
-      raw('count(*)')).setBindings([], 'select');
+      raw('count(*)'));
   }
 
   /*Add the constraints for an internal relationship existence query.
@@ -208,26 +211,29 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   }
 
   /*Set or get the morph map for polymorphic relations.*/
-  public static morphMap(map: any[] | null = null, merge: boolean = true) {
-    const map = Relation.buildMorphMapFromModels(map);
+  public static morphMap(map: any | null = null, merge: boolean = true) {
+    map = Relation.buildMorphMapFromModels(map);
     if (isArray(map)) {
-      Relation._morphMap = merge && Relation._morphMap ? map + Relation._morphMap : map;
+      Relation._morphMap = merge && Relation._morphMap ? {...map, ...Relation._morphMap} : map;
     }
     return Relation._morphMap;
   }
 
   /*Builds a table-keyed array from model class names.*/
-  protected static buildMorphMapFromModels(models: string[] | null = null) {
+  protected static buildMorphMapFromModels(models: any | Array<typeof Model> | null = null) {
     if (isBlank(models) || isObject(models)) {
       return models;
     }
-    return array_combine(array_map(model => {
-      return new model().getTable();
-    }, models), models);
+    return (models).reduce((prev: any, clazz: typeof Model) => {
+      const table = new clazz().getTable();
+      prev[table] = clazz;
+      return prev;
+    }, {});
   }
 
   /*Get the model associated with a custom polymorphic type.*/
   public static getMorphedModel(alias: string) {
+    // @ts-ignore
     return Relation._morphMap[alias] ?? null;
   }
 

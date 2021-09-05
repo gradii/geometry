@@ -169,8 +169,8 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
     }
 
     /*Register a single observer with the model.*/
-    protected registerObserver(clazz: object | string) {
-      const className = this.resolveObserverClassName(clazz);
+    _registerObserver(clazz: object | string) {
+      const className = this._resolveObserverClassName(clazz);
       for (let event of this.getObservableEvents()) {
         if (method_exists(clazz, event)) {
           (/*static*/<any>this.constructor).registerModelEvent(event, className + '@' + event);
@@ -196,7 +196,7 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
     }
 
     /*Fire a custom model event for the given event.*/
-    protected fireCustomModelEvent(event: string, method: string) {
+    _fireCustomModelEvent(event: string, method: string) {
       if (!(this._dispatchesEvents[event] !== undefined)) {
         return;
       }
@@ -208,7 +208,7 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
     }
 
     /*Filter the model event results.*/
-    protected filterModelEventResults(result: any) {
+    _filterModelEventResults(result: any) {
       if (isArray(result)) {
         result = result.filter(response => !!response);
       }
@@ -216,7 +216,7 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
     }
 
     /*Resolve the observer's class name from an object or string.*/
-    private resolveObserverClassName(clazz: object | string) {
+    _resolveObserverClassName(clazz: object | string) {
       if (isObject(clazz)) {
         return clazz.constructor;
       }

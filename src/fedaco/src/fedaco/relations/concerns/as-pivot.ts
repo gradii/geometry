@@ -10,7 +10,57 @@ import { Constructor } from '../../../helper/constructor';
 import { FedacoBuilder } from '../../fedaco-builder';
 import { Model } from '../../model';
 
-export function mixinAsPivot<T extends Constructor<{}>>(base: T) {
+export interface AsPivot {
+  _setKeysForSelectQuery(query: FedacoBuilder);
+
+  /*Set the keys for a save update query.*/
+  _setKeysForSaveQuery(query: FedacoBuilder);
+
+  /*Delete the pivot model record from the database.*/
+  delete();
+
+  /*Get the query builder for a delete operation on the pivot.*/
+  _getDeleteQuery();
+
+  /*Get the table associated with the model.*/
+  getTable();
+
+  /*Get the foreign key column name.*/
+  getForeignKey();
+
+  /*Get the "related key" column name.*/
+  getRelatedKey();
+
+  /*Get the "related key" column name.*/
+  getOtherKey();
+
+  /*Set the key names for the pivot model instance.*/
+  setPivotKeys(foreignKey: string, relatedKey: string);
+
+  /*Determine if the pivot model or given attributes has timestamp attributes.*/
+  hasTimestampAttributes(attributes?: any[] | null);
+
+  /*Get the name of the "created at" column.*/
+  getCreatedAtColumn();
+
+  /*Get the name of the "updated at" column.*/
+  getUpdatedAtColumn();
+
+  /*Get the queueable identity for the entity.*/
+  getQueueableId();
+
+  /*Get a new query to restore one or more models by their queueable IDs.*/
+  newQueryForRestoration(this: Model & this, ids: number[] | string[] | string);
+
+  /*Get a new query to restore multiple models by their queueable IDs.*/
+  _newQueryForCollectionRestoration(ids: number[] | string[]);
+
+  /*Unset all the loaded relations for the instance.*/
+  unsetRelations();
+}
+
+
+export function mixinAsPivot<T extends Constructor<Model>>(base: T) {
   // @ts-ignore
   return class AsPivot extends base {
     /*The parent model of the relationship.*/
@@ -42,9 +92,9 @@ export function mixinAsPivot<T extends Constructor<{}>>(base: T) {
     // }
 
     /*Set the keys for a select query.*/
-    protected setKeysForSelectQuery(this: Model & this, query: FedacoBuilder) {
+    protected _setKeysForSelectQuery(this: Model & this, query: FedacoBuilder) {
       if (this._attributes[this.getKeyName()] !== undefined) {
-        return super.setKeysForSelectQuery(query);
+        return super._setKeysForSelectQuery(query);
       }
       query.where(this._foreignKey,
         this.getOriginal(this._foreignKey, this.getAttribute(this._foreignKey)));
@@ -54,7 +104,7 @@ export function mixinAsPivot<T extends Constructor<{}>>(base: T) {
 
     /*Set the keys for a save update query.*/
     _setKeysForSaveQuery(this: Model & this, query: FedacoBuilder) {
-      return this.setKeysForSelectQuery(query);
+      return this._setKeysForSelectQuery(query);
     }
 
     /*Delete the pivot model record from the database.*/
@@ -78,7 +128,7 @@ export function mixinAsPivot<T extends Constructor<{}>>(base: T) {
     }
 
     /*Get the table associated with the model.*/
-    public getTable() {
+    public getTable(): string {
       if (!(this.table !== undefined)) {
         this.setTable(str_replace('\\', '', Str.snake(Str.singular(class_basename(this)))));
       }
@@ -134,7 +184,7 @@ export function mixinAsPivot<T extends Constructor<{}>>(base: T) {
     /*Get a new query to restore one or more models by their queueable IDs.*/
     public newQueryForRestoration(this: Model & this, ids: number[] | string[] | string) {
       if (isArray(ids)) {
-        return this.newQueryForCollectionRestoration(ids as any[]);
+        return this._newQueryForCollectionRestoration(ids as any[]);
       }
       if (!ids.includes(':')) {
         return super.newQueryForRestoration(ids);
@@ -145,7 +195,7 @@ export function mixinAsPivot<T extends Constructor<{}>>(base: T) {
     }
 
     /*Get a new query to restore multiple models by their queueable IDs.*/
-    protected newQueryForCollectionRestoration(ids: number[] | string[]) {
+    _newQueryForCollectionRestoration(ids: number[] | string[]) {
       if (!ids[0].includes(':')) {
         return super.newQueryForRestoration(ids);
       }

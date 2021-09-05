@@ -22,9 +22,9 @@ export interface WhereCommon {
   /**
    * Add another query builder as a nested where to the query builder.
    */
-  addNestedWhereQuery(query: QueryBuilder, conjunction: 'and' | 'or'): this;
+  addNestedWhereQuery(query: QueryBuilder, conjunction: 'and' | 'or' | string): this;
 
-  addWhere(where: SqlNode, conjunction?: 'and' | 'or' | 'andX' | 'orX');
+  addWhere(where: SqlNode, conjunction?: 'and' | 'or' | 'andX' | 'orX'): this;
 
   /**
    * Create a new query instance for nested where condition.
@@ -39,9 +39,9 @@ export interface WhereCommon {
 
   orWhere(column: Function | string | any[], operator: any, value: (q: QueryBuilder) => void): this;
 
-  orWhereColumn(first: string | any[], operator?: string, second?: string);
+  orWhereColumn(first: string | any[], operator?: string, second?: string): this;
 
-  orWhereRaw(sql: string, bindings: any[]);
+  orWhereRaw(sql: string, bindings: any[]): this;
 
   where(columns: Function | string | any[], arg1: undefined, arg2: undefined,
         conjunction?: 'and' | 'or' | string): this;
@@ -57,7 +57,6 @@ export interface WhereCommon {
 
   where(left: string, operator: string,
         right: Function | RawExpression | boolean | string | number | Array<string | number>): this;
-
 
   whereColumn(first: string | any[], operator?: string, second?: string, conjunction?: string);
 
