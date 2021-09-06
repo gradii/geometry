@@ -28,7 +28,8 @@ class Conn implements ConnectionInterface {
     return this._query;
   }
 
-  select() {
+  select(sql: string, bindings: any[], readConnection?: boolean): Promise<any> {
+    return Promise.resolve();
   }
 
   insert() {
@@ -47,7 +48,7 @@ class Conn implements ConnectionInterface {
   }
 
   getName() {
-
+    return '';
   }
 }
 

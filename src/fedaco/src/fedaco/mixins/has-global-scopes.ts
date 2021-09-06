@@ -4,12 +4,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Scope } from '../Scope';
 import { isBlank } from '@gradii/check-type';
 import { Constructor } from '../../helper/constructor';
+import { Scope } from '../Scope';
 
 export interface HasGlobalScopes {
-  getGlobalScopes(): any;
+  getGlobalScopes(): { [key: string]: Scope | Function };
 }
 
 type HasGlobalScopesCtor = Constructor<HasGlobalScopes>;

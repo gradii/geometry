@@ -13,6 +13,7 @@ describe('fedaco builder', () => {
 
   class Conn implements ConnectionInterface {
     select() {
+      return Promise.resolve();
     }
 
     insert() {
@@ -31,7 +32,7 @@ describe('fedaco builder', () => {
     }
 
     getName() {
-
+      return '';
     }
   }
 
@@ -81,6 +82,7 @@ describe('fedaco builder', () => {
   it('testFindMethod', () => {
     let spySelect, spyFirst, result;
     spySelect = jest.spyOn(builder.getQuery(), 'where');
+    // @ts-ignore
     spyFirst  = jest.spyOn(builder, 'first').mockReturnValue({name: 'baz'});
     result    = builder.find('bar', ['column']);
     expect(spySelect).toBeCalledWith('foo_table.foo', '=', 'bar', 'and');

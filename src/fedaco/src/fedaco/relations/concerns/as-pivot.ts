@@ -10,6 +10,8 @@ import { Constructor } from '../../../helper/constructor';
 import { FedacoBuilder } from '../../fedaco-builder';
 import { Model } from '../../model';
 
+
+
 export interface AsPivot {
   _setKeysForSelectQuery(query: FedacoBuilder);
 
@@ -62,7 +64,7 @@ export interface AsPivot {
 
 export function mixinAsPivot<T extends Constructor<Model>>(base: T) {
   // @ts-ignore
-  return class AsPivot extends base {
+  return class _Self extends base {
     /*The parent model of the relationship.*/
     public pivotParent: Model;
     /*The name of the foreign key column.*/

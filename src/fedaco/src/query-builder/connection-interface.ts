@@ -21,5 +21,5 @@ export interface ConnectionInterface {
 
   statement(sql: string, bindings: any[]);
 
-  getName();
+  getName():string;
 }

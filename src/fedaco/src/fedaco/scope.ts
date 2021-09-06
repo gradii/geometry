@@ -9,7 +9,7 @@ import { Model } from './Model';
 
 export interface Scope {
   /*Apply the scope to a given Eloquent query builder.*/
-  apply(builder: FedacoBuilder, model: Model);
+  apply(builder: FedacoBuilder, model: Model): any;
 }
 
 export abstract class Scope {

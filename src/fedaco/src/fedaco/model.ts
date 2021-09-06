@@ -4,11 +4,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isArray, isBlank, isString } from '@gradii/check-type';
+import { isAnyEmpty, isArray, isBlank, isString } from '@gradii/check-type';
 import { tap, uniq } from 'ramda';
-import { Collection } from '../define/collection';
-import { snakeCase } from '../helper/str';
+import { plural } from '../helper/pluralize';
+import { camelCase, snakeCase, upperCaseFirst } from '../helper/str';
+import { ConnectionResolverInterface } from '../interface/connection-resolver-interface';
 import { ForwardsCalls, mixinForwardsCalls } from '../mixins/forwards-calls';
+import { QueryBuilder } from '../query-builder/query-builder';
 import { FedacoBuilder } from './fedaco-builder';
 import { GuardsAttributes, mixinGuardsAttributes } from './mixins/guards-attributes';
 import { HasAttributes, mixinHasAttributes } from './mixins/has-attributes';
@@ -17,7 +19,11 @@ import { HasGlobalScopes, mixinHasGlobalScopes } from './mixins/has-global-scope
 import { HasRelationships, mixinHasRelationships } from './mixins/has-relationships';
 import { HasTimestamps, mixinHasTimestamps } from './mixins/has-timestamps';
 import { HidesAttributes, mixinHidesAttributes } from './mixins/hides-attributes';
+import { loadAggregate } from './model-helper';
+import { BelongsToMany } from './relations/belongs-to-many';
+import { HasManyThrough } from './relations/has-many-through';
 import { Pivot } from './relations/pivot';
+import { fromAttributes, fromRawAttributes } from './relations/pivot-helper';
 import { Scope } from './scope';
 
 
@@ -431,36 +437,40 @@ export class Model extends mixinHasAttributes(
   /*Eager load relations on the model.*/
   public load(relations: any[] | string) {
     let query = this.newQueryWithoutRelationships().with(
-      isString(relations) ? arguments : relations);
+      // @ts-ignore
+      isString(relations) ? arguments : relations
+    );
     query.eagerLoadRelations([this]);
     return this;
   }
 
-  /*Eager load relationships on the polymorphic relation of a model.*/
-  public loadMorph(relation: string, relations: any[]) {
-    if (!this[relation]) {
-      return this;
-    }
-    let className = get_class(this[relation]);
-    this[relation].load(relations[className] ?? []);
-    return this;
-  }
+  // /*Eager load relationships on the polymorphic relation of a model.*/
+  // public loadMorph(relation: string, relations: any[]) {
+  //   if (!this[relation]) {
+  //     return this;
+  //   }
+  //   let className = get_class(this[relation]);
+  //   this[relation].load(relations[className] ?? []);
+  //   return this;
+  // }
 
   /*Eager load relations on the model if they are not already eager loaded.*/
   public loadMissing(relations: any[] | string) {
-    relations = isString(relations) ? arguments : relations;
-    this.newCollection([this]).loadMissing(relations);
+    // relations = isString(relations) ? arguments : relations;
+    // this.newCollection([this]).loadMissing(relations);
     return this;
   }
 
   /*Eager load relation's column aggregations on the model.*/
   public loadAggregate(relations: any[] | string, column: string, func: string = null) {
-    this.newCollection([this]).loadAggregate(relations, column, func);
+    // this.newCollection([this]).loadAggregate(relations, column, func);
+    loadAggregate([this], relations, column, func);
     return this;
   }
 
   /*Eager load relation counts on the model.*/
   public loadCount(relations: any[] | string) {
+    // @ts-ignore
     relations = isString(relations) ? arguments : relations;
     return this.loadAggregate(relations, '*', 'count');
   }
@@ -491,38 +501,38 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Eager load relationship column aggregation on the polymorphic relation of a model.*/
-  public loadMorphAggregate(relation: string, relations: any[], column: string,
+  public loadMorphAggregate(relation: string, relations: WeakMap<Model, string[]>, column: string,
                             func: string = null) {
     if (!this[relation]) {
       return this;
     }
-    let className = get_class(this[relation]);
-    this[relation].loadAggregate(relations[className] ?? [], column, func);
+    let className = this[relation].constructor;
+    loadAggregate(this[relation], relations.get(className) ?? [], column, func);
     return this;
   }
 
   /*Eager load relationship counts on the polymorphic relation of a model.*/
-  public loadMorphCount(relation: string, relations: any[]) {
+  public loadMorphCount(relation: string, relations: WeakMap<Model, string[]>) {
     return this.loadMorphAggregate(relation, relations, '*', 'count');
   }
 
   /*Eager load relationship max column values on the polymorphic relation of a model.*/
-  public loadMorphMax(relation: string, relations: any[], column: string) {
+  public loadMorphMax(relation: string, relations: WeakMap<Model, string[]>, column: string) {
     return this.loadMorphAggregate(relation, relations, column, 'max');
   }
 
   /*Eager load relationship min column values on the polymorphic relation of a model.*/
-  public loadMorphMin(relation: string, relations: any[], column: string) {
+  public loadMorphMin(relation: string, relations: WeakMap<Model, string[]>, column: string) {
     return this.loadMorphAggregate(relation, relations, column, 'min');
   }
 
   /*Eager load relationship column summations on the polymorphic relation of a model.*/
-  public loadMorphSum(relation: string, relations: any[], column: string) {
+  public loadMorphSum(relation: string, relations: WeakMap<Model, string[]>, column: string) {
     return this.loadMorphAggregate(relation, relations, column, 'sum');
   }
 
   /*Eager load relationship average column values on the polymorphic relation of a model.*/
-  public loadMorphAvg(relation: string, relations: any[], column: string) {
+  public loadMorphAvg(relation: string, relations: WeakMap<Model, string[]>, column: string) {
     return this.loadMorphAggregate(relation, relations, column, 'avg');
   }
 
@@ -541,6 +551,7 @@ export class Model extends mixinHasAttributes(
                                  method: string) {
     let query = this.newQueryWithoutRelationships();
     if (!this.exists) {
+      // @ts-ignore
       return query[method](column, amount, extra);
     }
     this[column] = this.isClassDeviable(column) ? this.deviateClassCastableAttribute(method, column,
@@ -549,6 +560,7 @@ export class Model extends mixinHasAttributes(
     if (this._fireModelEvent('updating') === false) {
       return false;
     }
+    // @ts-ignore
     return tap(this._setKeysForSaveQuery(query)[method](column, amount, extra), () => {
       this.syncChanges();
       this._fireModelEvent('updated', false);
@@ -557,7 +569,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Update the model in the database.*/
-  public update(attributes: any[] = [], options: any[] = []) {
+  public update(attributes: any[] = [], options: any = {}) {
     if (!this.exists) {
       return false;
     }
@@ -578,8 +590,8 @@ export class Model extends mixinHasAttributes(
       return false;
     }
     for (let models of this._relations) {
-      let models = models instanceof Collection ? models.all() : [models];
-      for (let model of array_filter(models)) {
+      models = isArray(models) ? models : [models];
+      for (let model of models) {
         if (!model.push()) {
           return false;
         }
@@ -589,7 +601,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Save the model to the database without raising any events.*/
-  public saveQuietly(options: any[] = []) {
+  public saveQuietly(options: any = {}) {
     return Model.withoutEvents(() => {
       return this.save(options);
     });
@@ -619,7 +631,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Save the model to the database using transaction.*/
-  public saveOrFail(options: any[] = []) {
+  public saveOrFail(options: any = {}) {
     return this.getConnection().transaction(() => {
       return this.save(options);
     });
@@ -685,7 +697,7 @@ export class Model extends mixinHasAttributes(
     if (this.getIncrementing()) {
       this.insertAndSetId(query, attributes);
     } else {
-      if (empty(attributes)) {
+      if (isAnyEmpty(attributes)) {
         return true;
       }
       query.insert(attributes);
@@ -698,31 +710,32 @@ export class Model extends mixinHasAttributes(
 
   /*Insert the given attributes and set the ID on the model.*/
   protected insertAndSetId(query: FedacoBuilder, attributes: any[]) {
-    let id = query.insertGetId(attributes, keyName = this.getKeyName());
+    const keyName = this.getKeyName();
+    let id        = query.insertGetId(attributes, keyName);
     this.setAttribute(keyName, id);
   }
 
-  /*Destroy the models for the given IDs.*/
-  public static destroy(ids: Collection | any[] | number | string) {
-    if (ids instanceof EloquentCollection) {
-      ids = ids.modelKeys();
-    }
-    if (ids instanceof BaseCollection) {
-      ids = ids.all();
-    }
-    ids = isArray(ids) ? ids : arguments;
-    if (ids.length === 0) {
-      return 0;
-    }
-    let key   = (instance = new Model()).getKeyName();
-    let count = 0;
-    for (let model of instance.whereIn(key, ids).get()) {
-      if (model.delete()) {
-        count++;
-      }
-    }
-    return count;
-  }
+  // /*Destroy the models for the given IDs.*/
+  // public static destroy(ids: Collection | any[] | number | string) {
+  //   if (ids instanceof EloquentCollection) {
+  //     ids = ids.modelKeys();
+  //   }
+  //   if (ids instanceof BaseCollection) {
+  //     ids = ids.all();
+  //   }
+  //   ids = isArray(ids) ? ids : arguments;
+  //   if (ids.length === 0) {
+  //     return 0;
+  //   }
+  //   let key   = (instance = new Model()).getKeyName();
+  //   let count = 0;
+  //   for (let model of instance.whereIn(key, ids).get()) {
+  //     if (model.delete()) {
+  //       count++;
+  //     }
+  //   }
+  //   return count;
+  // }
 
   /*Delete the model from the database.*/
   public delete(): boolean {
@@ -730,8 +743,8 @@ export class Model extends mixinHasAttributes(
     if (isBlank(this.getKeyName())) {
       throw new Error('LogicException No primary key defined on model.');
     }
-    if (!this.exists) {
-      return;
+    if (!this._exists) {
+      return null;
     }
     if (this._fireModelEvent('deleting') === false) {
       return false;
@@ -801,7 +814,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Create a new Eloquent query builder for the model.*/
-  public newEloquentBuilder(query: FedacoBuilder) {
+  public newEloquentBuilder(query: QueryBuilder) {
     return new FedacoBuilder(query);
   }
 
@@ -817,20 +830,20 @@ export class Model extends mixinHasAttributes(
 
   /*Create a new pivot model instance.*/
   public newPivot(parent: Model, attributes: any[], table: string, exists: boolean,
-                  using: string | null = null) {
+                  using: string | typeof Model | null = null): Pivot | any {
     return using ?
-      using.fromRawAttributes(parent, attributes, table, exists) :
-      Pivot.fromAttributes(parent, attributes, table, exists);
+      fromRawAttributes(using as typeof Model, parent, attributes, table, exists) :
+      fromAttributes(Pivot, parent, attributes, table, exists);
   }
 
   /*Determine if the model has a given scope.*/
   public hasNamedScope(scope: string) {
-    return method_exists(this, 'scope' + ucfirst(scope));
+    return `scope${upperCaseFirst(scope)}` in this;
   }
 
   /*Apply the given named scope if possible.*/
   public callNamedScope(scope: string, parameters: any[] = []) {
-    return this['scope' + ucfirst(scope)](());
+    return this['scope' + upperCaseFirst(scope)](...parameters);
   }
 
   /*Convert the model instance to an array.*/
@@ -839,54 +852,54 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Convert the model instance to JSON.*/
-  public toJson(options: number = 0) {
-    let json = json_encode(this.jsonSerialize(), options);
-    if (JSON_ERROR_NONE !== json_last_error()) {
-      throw JsonEncodingException.forModel(this, json_last_error_msg());
-    }
-    return json;
-  }
+  // public toJson(options: number = 0) {
+  //   let json = json_encode(this.jsonSerialize(), options);
+  //   if (JSON_ERROR_NONE !== json_last_error()) {
+  //     throw JsonEncodingException.forModel(this, json_last_error_msg());
+  //   }
+  //   return json;
+  // }
 
   /*Convert the object into something JSON serializable.*/
   public jsonSerialize() {
     return this.toArray();
   }
 
-  /*Reload a fresh model instance from the database.*/
-  public fresh(_with: any[] | string = []) {
-    if (!this.exists) {
-      return;
-    }
-    return this._setKeysForSelectQuery(this.newQueryWithoutScopes())
-      .with(isString(_with) ? arguments : _with).first();
-  }
+  // /*Reload a fresh model instance from the database.*/
+  // public fresh(_with: any[] | string = []) {
+  //   if (!this.exists) {
+  //     return;
+  //   }
+  //   return this._setKeysForSelectQuery(this.newQueryWithoutScopes())
+  //     .with(isString(_with) ? arguments : _with).first();
+  // }
 
-  /*Reload the current model instance with fresh attributes from the database.*/
-  public refresh() {
-    if (!this.exists) {
-      return this;
-    }
-    this.setRawAttributes(
-      this._setKeysForSelectQuery(this.newQueryWithoutScopes()).firstOrFail().attributes);
-    this.load(collect(this._relations).reject(relation => {
-      return relation instanceof Pivot || is_object(relation) && in_array(AsPivot,
-        class_uses_recursive(relation), true);
-    }).keys().all());
-    this.syncOriginal();
-    return this;
-  }
+  // /*Reload the current model instance with fresh attributes from the database.*/
+  // public refresh() {
+  //   if (!this.exists) {
+  //     return this;
+  //   }
+  //   this.setRawAttributes(
+  //     this._setKeysForSelectQuery(this.newQueryWithoutScopes()).firstOrFail().attributes);
+  //   this.load(collect(this._relations).reject(relation => {
+  //     return relation instanceof Pivot || is_object(relation) && in_array(AsPivot,
+  //       class_uses_recursive(relation), true);
+  //   }).keys().all());
+  //   this.syncOriginal();
+  //   return this;
+  // }
 
   /*Clone the model into a new, non-existing instance.*/
-  public replicate(except: any[] | null = null) {
-    let defaults   = [this.getKeyName(), this.getCreatedAtColumn(), this.getUpdatedAtColumn()];
-    let attributes = Arr.except(this.getAttributes(),
-      except ? array_unique([...except, ...defaults]) : defaults);
-    return tap(instance => {
-      instance.setRawAttributes(attributes);
-      instance.setRelations(this._relations);
-      instance.fireModelEvent('replicating', false);
-    }, new Model());
-  }
+  // public replicate(except: any[] | null = null) {
+  //   let defaults   = [this.getKeyName(), this.getCreatedAtColumn(), this.getUpdatedAtColumn()];
+  //   let attributes = Arr.except(this.getAttributes(),
+  //     except ? uniq([...except, ...defaults]) : defaults);
+  //   return tap(instance => {
+  //     instance.setRawAttributes(attributes);
+  //     instance.setRelations(this._relations);
+  //     instance.fireModelEvent('replicating', false);
+  //   }, new Model());
+  // }
 
   /*Determine if two models have the same ID and belong to the same table.*/
   public is(model: Model | null) {
@@ -999,26 +1012,26 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Get the queueable relationships for the entity.*/
-  public getQueueableRelations() {
-    let relations = [];
-    for (let [key, relation] of Object.entries(this.getRelations())) {
-      if (!method_exists(this, key)) {
-        continue;
-      }
-      relations.push(key);
-      if (relation instanceof QueueableCollection) {
-        for (let collectionValue of relation.getQueueableRelations()) {
-          relations.push(key + '.' + collectionValue);
-        }
-      }
-      if (relation instanceof QueueableEntity) {
-        for (let [entityKey, entityValue] of Object.entries(relation.getQueueableRelations())) {
-          relations.push(key + '.' + entityValue);
-        }
-      }
-    }
-    return uniq(relations);
-  }
+  // public getQueueableRelations() {
+  //   let relations = [];
+  //   for (let [key, relation] of Object.entries(this.getRelations())) {
+  //     if (!method_exists(this, key)) {
+  //       continue;
+  //     }
+  //     relations.push(key);
+  //     if (relation instanceof QueueableCollection) {
+  //       for (let collectionValue of relation.getQueueableRelations()) {
+  //         relations.push(key + '.' + collectionValue);
+  //       }
+  //     }
+  //     if (relation instanceof QueueableEntity) {
+  //       for (let [entityKey, entityValue] of Object.entries(relation.getQueueableRelations())) {
+  //         relations.push(key + '.' + entityValue);
+  //       }
+  //     }
+  //   }
+  //   return uniq(relations);
+  // }
 
   /*Get the queueable connection for the entity.*/
   public getQueueableConnection() {
@@ -1058,8 +1071,8 @@ export class Model extends mixinHasAttributes(
 
   /*Retrieve the child model query for a bound value.*/
   protected resolveChildRouteBindingQuery(childType: string, value: any, field: string | null) {
-    let relationship = this[Str.plural(Str.camel(childType))]();
-    let field        = field || relationship.getRelated().getRouteKeyName();
+    let relationship = this[plural(camelCase(childType))]();
+    field            = field || relationship.getRelated().getRouteKeyName();
     if (relationship instanceof HasManyThrough || relationship instanceof BelongsToMany) {
       return relationship.where(relationship.getRelated().getTable() + '.' + field, value);
     } else {
@@ -1085,20 +1098,20 @@ export class Model extends mixinHasAttributes(
     return this;
   }
 
-  /*Determine if lazy loading is disabled.*/
-  public static preventsLazyLoading() {
-    return Model.modelsShouldPreventLazyLoading;
-  }
+  // /*Determine if lazy loading is disabled.*/
+  // public static preventsLazyLoading() {
+  //   return Model.modelsShouldPreventLazyLoading;
+  // }
 
-  /*Get the broadcast channel route definition that is associated with the given entity.*/
-  public broadcastChannelRoute() {
-    return str_replace('\\', '.', get_class(this)) + '.{' + Str.camel(class_basename(this)) + '}';
-  }
-
-  /*Get the broadcast channel name that is associated with the given entity.*/
-  public broadcastChannel() {
-    return str_replace('\\', '.', get_class(this)) + '.' + this.getKey();
-  }
+  // /*Get the broadcast channel route definition that is associated with the given entity.*/
+  // public broadcastChannelRoute() {
+  //   return str_replace('\\', '.', get_class(this)) + '.{' + Str.camel(class_basename(this)) + '}';
+  // }
+  //
+  // /*Get the broadcast channel name that is associated with the given entity.*/
+  // public broadcastChannel() {
+  //   return str_replace('\\', '.', get_class(this)) + '.' + this.getKey();
+  // }
 
   // /*Dynamically retrieve attributes on the model.*/
   // public __get(key: string) {

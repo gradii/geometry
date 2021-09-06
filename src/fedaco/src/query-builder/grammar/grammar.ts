@@ -300,6 +300,10 @@ export abstract class Grammar implements GrammarInterface {
     return ast.accept(visitor);
   }
 
+  compileUpsert(builder: Builder, values: any, uniqueBy: any[] | string, update: any[] | null): string {
+    return '';
+  }
+
   distinct(distinct: boolean | any[]): string {
     return '';
   }

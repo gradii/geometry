@@ -5,7 +5,8 @@
  */
 
 import { isAnyEmpty, isArray, isBlank, isFunction, isNumber, isString } from '@gradii/check-type';
-import { omit, tap } from 'ramda';
+import { nth, omit, pluck, tap } from 'ramda';
+import { wrap } from '../helper/arr';
 import { mixinBuildQueries } from '../query-builder/mixins/build-query';
 import { QueryBuilder } from '../query-builder/query-builder';
 import { SqlNode } from '../query/sql-node';
@@ -182,7 +183,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
     return instance.newCollection(items.map(item => {
       let model = instance.newFromBuilder(item);
       if (items.length > 1) {
-        model.preventsLazyLoading = Model.preventsLazyLoading();
+        // model.preventsLazyLoading = Model.preventsLazyLoading();
       }
       return model;
     }));
@@ -556,11 +557,11 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /*Call the given local model scopes.*/
   public scopes(scopes: any[] | string) {
     let builder = this;
-    for (let [scope, parameters] of Object.entries(Arr.wrap(scopes))) {
+    for (let [scope, parameters] of Object.entries(wrap(scopes))) {
       if (isNumber(scope)) {
         [scope, parameters] = [parameters, []];
       }
-      builder = builder.callNamedScope(scope, Arr.wrap(parameters));
+      builder = builder.callNamedScope(scope, wrap(parameters));
     }
     return builder;
   }
@@ -589,10 +590,10 @@ export class FedacoBuilder extends mixinGuardsAttributes(
 
   /*Apply the given scope on the current builder instance.*/
   protected callScope(scope: Function, parameters: any[] = []) {
-    array_unshift(parameters, this);
+    parameters.unshift(this);
     let query              = this.getQuery();
     let originalWhereCount = !query._wheres.length ? 0 : query._wheres.length;
-    let result             = scope(()) ?? this;
+    let result             = scope(...parameters) ?? this;
     if (/*cast type array*/ query._wheres.length > originalWhereCount) {
       this.addNewWheresWithinGroup(query, originalWhereCount);
     }
@@ -610,15 +611,15 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   protected addNewWheresWithinGroup(query: QueryBuilder, originalWhereCount: number) {
     let allWheres = query._wheres;
     query._wheres = [];
-    this._groupWhereSliceForScope(query, array_slice(allWheres, 0, originalWhereCount));
-    this._groupWhereSliceForScope(query, array_slice(allWheres, originalWhereCount));
+    this._groupWhereSliceForScope(query, allWheres.slice(0, originalWhereCount));
+    this._groupWhereSliceForScope(query, allWheres.slice(originalWhereCount));
   }
 
   /*Slice where conditions at the given offset and add them to the query as a nested condition.*/
   protected _groupWhereSliceForScope(query: QueryBuilder, whereSlice: any[]) {
-    let whereBooleans = whereSlice.pluck('boolean');
-    if (whereBooleans.contains('or')) {
-      query._wheres.push(this._createNestedWhere(whereSlice, whereBooleans.first()));
+    let whereBooleans = pluck('boolean', whereSlice);
+    if (whereBooleans.includes('or')) {
+      query._wheres.push(this._createNestedWhere(whereSlice, nth(0, whereBooleans)));
     } else {
       query._wheres = [...query._wheres, ...whereSlice];
     }
@@ -643,6 +644,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
     if (isFunction(callback)) {
       eagerLoad = this.parseWithRelations([{[relations as string]: callback}]);
     } else {
+      // @ts-ignore
       eagerLoad = this.parseWithRelations(isString(relations) ? arguments : relations);
     }
     this._eagerLoad = {...this._eagerLoad, ...eagerLoad};
@@ -671,15 +673,15 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   protected parseWithRelations(relations: any[]): { [key: string]: any } {
     let results = [];
     for (let [name, constraints] of Object.entries(relations)) {
-      if (isNumber(name)) {
-        name                = constraints;
-        [name, constraints] = name.includes(':') ?
-          this.createSelectWithConstraint(name) :
-          [
-            name, () => {
-          }
-          ];
-      }
+      // if (isNumber(name)) {
+      //   name                = constraints;
+      //   [name, constraints] = name.includes(':') ?
+      //     this.createSelectWithConstraint(name) :
+      //     [
+      //       name, () => {
+      //     }
+      //     ];
+      // }
       results       = this.addNestedWiths(name, results);
       results[name] = constraints;
     }
@@ -701,7 +703,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Parse the nested relationships in a relation.*/
-  protected addNestedWiths(name: string, results: any[]) {
+  protected addNestedWiths(name: string, results: any) {
     let progress = [];
     for (let segment of name.split('.')) {
       progress.push(segment);

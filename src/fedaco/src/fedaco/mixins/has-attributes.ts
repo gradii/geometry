@@ -287,8 +287,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
         return value;
       }
       if (this.isEncryptedCastable(key)) {
-        let value    = this.fromEncryptedString(value);
-        let castType = castType.split('encrypted:').pop();
+         value    = this.fromEncryptedString(value);
+         castType = castType.split('encrypted:').pop();
       }
       switch (castType) {
         case 'int':
@@ -383,8 +383,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Determine if the cast type is an immutable custom date time cast.*/
     protected isImmutableCustomDateTimeCast(cast: string) {
-      return strncmp(cast, 'immutable_date:', 15) === 0 ||
-        strncmp(cast, 'immutable_datetime:', 19) === 0;
+      return cast.startsWith('immutable_date:') ||
+        cast.startsWith('immutable_datetime:');
     }
 
     /*Determine if the cast type is a decimal cast.*/

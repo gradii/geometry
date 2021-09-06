@@ -5,6 +5,7 @@
  */
 
 import { Constructor } from '../../helper/constructor';
+import { ConnectionInterface } from '../../query-builder/connection-interface';
 import { Model } from '../model';
 
 export interface ForwardCallToQueryBuilder {
@@ -30,7 +31,7 @@ export interface ForwardCallToQueryBuilder {
 
   getBindings(...args: any[]): this;
 
-  getConnection(...args: any[]): this;
+  getConnection(...args: any[]): ConnectionInterface;
 
   insertUsing(...args: any[]): this;
 
