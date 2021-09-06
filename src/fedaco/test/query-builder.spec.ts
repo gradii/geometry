@@ -1175,7 +1175,7 @@ describe('database query builder test', () => {
     builder = getPostgresBuilder();
     spySelect = jest.spyOn(builder._connection, 'select'), spyProcessSelect = jest.spyOn(
       builder._processor, 'processSelect');
-    builder.from('posts').union(getPostgresBuilder().from('videos')).count();
+    await builder.from('posts').union(getPostgresBuilder().from('videos')).count();
     expect(spySelect).toBeCalledTimes(1);
     expect(spySelect).toBeCalledWith(expected, [], true);
     expect(spyProcessSelect).toBeCalledTimes(1);
@@ -1184,7 +1184,7 @@ describe('database query builder test', () => {
     builder = getSQLiteBuilder();
     spySelect = jest.spyOn(builder._connection, 'select'), spyProcessSelect = jest.spyOn(
       builder._processor, 'processSelect');
-    builder.from('posts').union(getSQLiteBuilder().from('videos')).count();
+    await builder.from('posts').union(getSQLiteBuilder().from('videos')).count();
     expect(spySelect).toBeCalledTimes(1);
     expect(spySelect).toBeCalledWith(expected, [], true);
     expect(spyProcessSelect).toBeCalledTimes(1);
@@ -1193,7 +1193,7 @@ describe('database query builder test', () => {
     builder = getSqlServerBuilder();
     spySelect = jest.spyOn(builder._connection, 'select'), spyProcessSelect = jest.spyOn(
       builder._processor, 'processSelect');
-    builder.from('posts').union(getSqlServerBuilder().from('videos')).count();
+    await builder.from('posts').union(getSqlServerBuilder().from('videos')).count();
     expect(spySelect).toBeCalledTimes(1);
     expect(spySelect).toBeCalledWith(expected, [], true);
     expect(spyProcessSelect).toBeCalledTimes(1);
@@ -2410,9 +2410,9 @@ describe('database query builder test', () => {
       }
     ]));
     builder.from('users').select('column1', 'column2');
-    count = builder.count();
+    count = await builder.count();
     expect(spySelect).toBeCalledWith('SELECT count(*) AS aggregate FROM `users`', [], true);
-    expect(await count).toBe(1);
+    expect(count).toBe(1);
 
 
     builder = getBuilder();
@@ -2422,7 +2422,7 @@ describe('database query builder test', () => {
       }
     ]));
     builder.from('users').select('column1', 'column2');
-    sum = builder.sum('id');
+    sum = await builder.sum('id');
     expect(spySelect).toBeCalledWith('SELECT sum(`id`) AS aggregate FROM `users`', [], true);
     expect(sum).toBe(2);
 
@@ -2435,7 +2435,7 @@ describe('database query builder test', () => {
       }
     ]));
     builder.from('users').select('column1', 'column2');
-    result = builder.get();
+    result = await builder.get();
     expect(spySelect).toBeCalledWith('SELECT `column1`, `column2` FROM `users`', [], true);
     expect(result).toStrictEqual([
       {
@@ -2468,7 +2468,7 @@ describe('database query builder test', () => {
       }
     ]));
     builder.from('users');
-    result = builder.select('column2', 'column3').get();
+    result = await builder.select('column2', 'column3').get();
     expect(spySelect).toBeCalledWith('SELECT `column2`, `column3` FROM `users`', [], true);
     expect(result).toStrictEqual([
       {

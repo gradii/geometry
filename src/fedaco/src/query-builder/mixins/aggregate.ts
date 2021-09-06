@@ -51,8 +51,8 @@ export function mixinAggregate<T extends Constructor<any>>(base: T): QueryBuilde
     }
 
     /*Execute an aggregate function on the database.*/
-    public aggregate(this: QueryBuilder & _Self, func: string, columns: any[] = ['*']) {
-      const results = this.cloneWithout(
+    public async aggregate(this: QueryBuilder & _Self, func: string, columns: any[] = ['*']) {
+      const results = await this.cloneWithout(
         this._unions.length > 0 ?
           [] :
           ['columns']

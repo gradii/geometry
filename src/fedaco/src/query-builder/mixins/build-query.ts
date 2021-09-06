@@ -47,10 +47,11 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
     }
 
     /*Execute the query and get the first result.*/
-    public first(this: QueryBuilder & _Self, columns: any[] | string = ['*']) {
+    public async first(this: QueryBuilder & _Self, columns: any[] | string = ['*']) {
       // return this.take(1).get(columns).first();
       // todo
-      return this.take(1).get(columns).pop();
+      const results = await this.take(1).get(columns)
+      return results.pop();
     }
 
     public when(condition: boolean, callback: (q: this, condition: boolean) => any,
