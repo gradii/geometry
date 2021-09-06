@@ -8,18 +8,18 @@
  *
  */
 export interface ConnectionInterface {
-  select(sql: string, bindings: any[], readConnection?: boolean): Promise<any>;
+  select(sql: string, bindings: any[], readConnection?: boolean): Promise<any> | any;
 
-  insert(sql: string, bindings: any[]);
+  insert(sql: string, bindings: any[]): Promise<any> | boolean;
 
   /*Run an SQL statement and get the number of rows affected.*/
-  affectingStatement(query: string, bindings: any[]);
+  affectingStatement(query: string, bindings: any[]): Promise<any> | any;
 
-  update(sql: string, bindings: any[]);
+  update(sql: string, bindings: any[]): Promise<any> | any;
 
-  delete(sql: string, bindings: any[]);
+  delete(sql: string, bindings: any[]): Promise<any> | any;
 
-  statement(sql: string, bindings: any[]);
+  statement(sql: string, bindings: any[]): Promise<any> | any;
 
-  getName():string;
+  getName(): string;
 }

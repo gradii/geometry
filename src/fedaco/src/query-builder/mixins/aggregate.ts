@@ -15,13 +15,13 @@ import { wrapToArray } from '../ast-helper';
 import { QueryBuilder } from '../query-builder';
 
 export interface QueryBuilderAggregate {
-  aggregate(func: string, columns: any[]): this;
+  aggregate(func: string, columns: any[]): Promise<any>;
 
-  count(columns?: string): this;
+  count(columns?: string): Promise<number>;
 
-  doesntExist(columns?: string): this;
+  doesntExist(columns?: string): Promise<boolean>;
 
-  exists(columns?: string): this;
+  exists(columns?: string): Promise<boolean>;
 
   getCountForPagination(columns?: string[]): this;
 
@@ -72,23 +72,26 @@ export function mixinAggregate<T extends Constructor<any>>(base: T): QueryBuilde
       return this.aggregate('count', wrapToArray(columns));
     }
 
-    public doesntExist(this: QueryBuilder & _Self, columns: string | string[] = '*') {
-      return !this.exists();
+    public async doesntExist(this: QueryBuilder & _Self, columns: string | string[] = '*') {
+      return !await this.exists();
     }
 
-    public exists(this: QueryBuilder & _Self, columns: string | string[] = '*') {
-      let results = this._connection.select(
+    public async exists(this: QueryBuilder & _Self, columns: string | string[] = '*') {
+      let results = await this._connection.select(
         this._grammar.compileExists(this), this.getBindings(), !this._useWriteConnection
       );
+      // @ts-ignore
       if (results[0] !== undefined) {
+        // @ts-ignore
         results = results[0];
+        // @ts-ignore
         return results['exists'];
       }
       return false;
     }
 
-    public getCountForPagination(this: QueryBuilder & _Self, columns: any[] = ['*']) {
-      const results = this._runPaginationCountQuery(columns);
+    public async getCountForPagination(this: QueryBuilder & _Self, columns: any[] = ['*']) {
+      const results = await this._runPaginationCountQuery(columns);
       if (results[0] === undefined) {
         return 0;
       } else if (isObject(results[0])) {
@@ -110,7 +113,7 @@ export function mixinAggregate<T extends Constructor<any>>(base: T): QueryBuilde
     }
 
     /*Run a pagination count query.*/
-    protected _runPaginationCountQuery(this: QueryBuilder & _Self, columns: any[] = ['*']) {
+    protected async _runPaginationCountQuery(this: QueryBuilder & _Self, columns: any[] = ['*']) {
       if (this._groups.length > 0 || this._havings.length > 0) {
         const clone = this._cloneForPaginationCount();
         if (clone._columns.length === 0 && this._joins.length > 0) {
@@ -122,17 +125,17 @@ export function mixinAggregate<T extends Constructor<any>>(base: T): QueryBuilde
               ]))
           ];
         }
-        return this.newQuery().from(
+        return await this.newQuery().from(
           raw('(' + clone.toSql() + ') as ' +
             this._grammar.quoteTableName('aggregate_table')
           )
         ).mergeBindings(clone).setAggregate('count',
-          this._withoutSelectAliases(columns)).get().all();
+          this._withoutSelectAliases(columns)).get();
       }
       const without = this._unions.length > 0 ? ['_orders', '_limit', '_offset'] : [
         '_columns', '_orders', '_limit', '_offset'
       ];
-      return this.cloneWithout(without)
+      return await this.cloneWithout(without)
         ._setAggregate('count', this._withoutSelectAliases(columns))
         .get();
     }
