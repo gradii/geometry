@@ -36,7 +36,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
   // @ts-ignore
   return class _Self extends base {
     /*The model's attributes.*/
-    _attributes: any[] = [];
+    _attributes: any = {};
     /*The model attribute's original state.*/
     _original: any[] = [];
     /*The changed model attributes.*/
@@ -146,20 +146,18 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Get the model's relationships in array form.*/
     public relationsToArray() {
-      let attributes = [];
+      let attributes: any = {}, relation;
       for (let [key, value] of Object.entries(this.getArrayableRelations())) {
-        if (value instanceof Arrayable) {
-          let relation = value.toArray();
-        } else if (isBlank(value)) {
-          let relation = value;
+        if (isBlank(value)) {
+          relation = value;
         }
-        if (HasAttributes.snakeAttributes) {
-          let key = snakeCase(key);
-        }
+        // if (HasAttributes.snakeAttributes) {
+          // let key = snakeCase(key);
+        // }
         if (relation !== undefined || isBlank(value)) {
           attributes[key] = relation;
         }
-        delete relation;
+        // delete relation;
       }
       return attributes;
     }
@@ -281,7 +279,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Cast an attribute to a native PHP type.*/
-    protected castAttribute(key: string, value: any) {
+    protected castAttribute(this: Model & this, key: string, value: any) {
       let castType = this.getCastType(key);
       if (isBlank(value) && PrimitiveCastTypes.includes(castType)) {
         return value;
@@ -310,8 +308,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
         case 'array':
         case 'json':
           return this.fromJson(value);
-        case 'collection':
-          return new BaseCollection(this.fromJson(value));
+        // case 'collection':
+        //   return new BaseCollection(this.fromJson(value));
         case 'date':
           return this.asDate(value);
         case 'datetime':
@@ -350,7 +348,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     // }
 
     /*Get the type of cast for a model attribute.*/
-    protected getCastType(key: string) {
+    protected getCastType(this: Model & this, key: string) {
       if (this.isCustomDateTimeCast(this.getCasts()[key])) {
         return 'custom_datetime';
       }
@@ -360,7 +358,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
       if (this.isDecimalCast(this.getCasts()[key])) {
         return 'decimal';
       }
-      return trim(this.getCasts()[key].toLowerCase());
+      return this.getCasts()[key].toLowerCase().trim();
     }
 
     /*Increment or decrement the given attribute using the custom cast class.*/
@@ -448,10 +446,11 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Set a given JSON attribute on the model.*/
     public fillJsonAttribute(key: string, value: any) {
-      const [key, path]     = key.split('->');
-      let value             = this.asJson(this.getArrayAttributeWithValue(path, key, value));
-      this._attributes[key] = this.isEncryptedCastable(key) ? this.castAttributeAsEncryptedString(
-        key, value) : value;
+      let path;
+      [key, path]     = key.split('->');
+      value             = this.asJson(this.getArrayAttributeWithValue(path, key, value));
+      this._attributes[key] = this.isEncryptedCastable(key) ? 
+      this.castAttributeAsEncryptedString(key, value) : value;
       return this;
     }
 
@@ -472,7 +471,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     /*Get an array attribute with the given key and value set.*/
     protected getArrayAttributeWithValue(path: string, key: string, value: any) {
       return tap(array => {
-        Arr.set(array, str_replace('->', '.', path), value);
+        Arr.set(array, path.replace('->', '.'), value);
       }, this.getArrayAttributeByKey(key));
     }
 
@@ -487,9 +486,9 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Cast the given attribute to JSON.*/
     protected castAttributeAsJson(key: string, value: any) {
-      let value = this.asJson(value);
+      value = this.asJson(value);
       if (value === false) {
-        throw JsonEncodingException.forAttribute(this, key, json_last_error_msg());
+        throw new Error('JsonEncodingException.forAttribute(this, key, json_last_error_msg())');
       }
       return value;
     }
@@ -535,7 +534,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Return a decimal as string.*/
     protected asDecimal(value: number, decimals: number) {
-      return number_format(value, decimals, '.', '');
+      return value.toFixed(decimals);
     }
 
     /*Return a timestamp as DateTime object with time set to 00:00:00.*/
@@ -558,7 +557,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
       let date;
       try {
         date = Date.createFromFormat(format, value);
-      } catch (e: InvalidArgumentException) {
+      } catch (e) {
         date = false;
       }
       return date || Date.parse(value);
@@ -595,12 +594,12 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Get the format for database stored dates.*/
     public getDateFormat() {
-      return this.dateFormat || this.getConnection().getQueryGrammar().getDateFormat();
+      return this._dateFormat || this.getConnection().getQueryGrammar().getDateFormat();
     }
 
     /*Set the date format used by the model.*/
     public setDateFormat(format: string) {
-      this.dateFormat = format;
+      this._dateFormat = format;
       return this;
     }
 
