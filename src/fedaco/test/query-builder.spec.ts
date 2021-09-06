@@ -1150,14 +1150,14 @@ describe('database query builder test', () => {
   });
 
 
-  it('test union aggregate', () => {
+  it('test union aggregate', async () => {
     let expected, spySelect, spyProcessSelect;
 
     expected = 'SELECT count(*) AS aggregate FROM ((SELECT * FROM `posts`) UNION (SELECT * FROM `videos`)) AS `temp_table`';
     builder = getMySqlBuilder();
     spySelect = jest.spyOn(builder._connection, 'select'), spyProcessSelect = jest.spyOn(
       builder._processor, 'processSelect');
-    builder.from('posts').union(getMySqlBuilder().from('videos')).count();
+    await builder.from('posts').union(getMySqlBuilder().from('videos')).count();
     expect(spySelect).toBeCalledTimes(1);
     expect(spySelect).toBeCalledWith(expected, [], true);
     expect(spyProcessSelect).toBeCalledTimes(1);
@@ -1166,7 +1166,7 @@ describe('database query builder test', () => {
     builder = getMySqlBuilder();
     spySelect = jest.spyOn(builder._connection, 'select'), spyProcessSelect = jest.spyOn(
       builder._processor, 'processSelect');
-    builder.from('posts').select('id').union(getMySqlBuilder().from('videos').select('id')).count();
+    await builder.from('posts').select('id').union(getMySqlBuilder().from('videos').select('id')).count();
     expect(spySelect).toBeCalledTimes(1);
     expect(spySelect).toBeCalledWith(expected, [], true);
     expect(spyProcessSelect).toBeCalledTimes(1);
@@ -1464,7 +1464,7 @@ describe('database query builder test', () => {
 
     builder.from('item');
 
-    result = builder.select(['category', raw('count(*) as `total`')])
+    result = await builder.select(['category', raw('count(*) as `total`')])
       .where('department', '=', 'popular')
       .groupBy('category')
       .having('total', '>', 3)
@@ -1603,12 +1603,12 @@ describe('database query builder test', () => {
     const columns = ['body as post_body', 'teaser', 'posts.created as published'];
     builder.from('posts').select(columns);
 
-    const count = builder.getCountForPagination(columns);
+    const count = await builder.getCountForPagination(columns);
     expect(spySelector)
       .toBeCalledWith('SELECT count(`body`, `teaser`, `posts`.`created`) AS aggregate FROM `posts`',
         [], true);
 
-    expect(await count).toBe(1);
+    expect(count).toBe(1);
   });
 
   it('test get count for pagination with union', async () => {
@@ -1624,13 +1624,13 @@ describe('database query builder test', () => {
       (builder, results) => {
         return results;
       });
-    const count = builder.getCountForPagination();
+    const count = await builder.getCountForPagination();
     expect(spySelector)
       .toBeCalledWith(
         'SELECT count(*) AS aggregate FROM ((SELECT `id` FROM `posts`) UNION (SELECT `id` FROM `videos`)) AS `temp_table`',
         [], true);
 
-    expect(await count).toBe(1);
+    expect(count).toBe(1);
   });
 
   it('test where shortcut', () => {
