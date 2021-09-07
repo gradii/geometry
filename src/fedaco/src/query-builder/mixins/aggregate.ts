@@ -25,11 +25,11 @@ export interface QueryBuilderAggregate {
 
   getCountForPagination(columns?: string[]): this;
 
-  max(columns?: string): this;
+  max(columns?: string): Promise<any>;
 
-  min(columns?: string): this;
+  min(columns?: string): Promise<any>;
 
-  sum(columns?: string): this;
+  sum(columns?: string): Promise<any>;
 }
 
 export type QueryBuilderAggregateCtor = Constructor<QueryBuilderAggregate>;
@@ -141,7 +141,7 @@ export function mixinAggregate<T extends Constructor<any>>(base: T): QueryBuilde
     }
 
     /*Clone the existing query instance for usage in a pagination subquery.*/
-    protected _cloneForPaginationCount(this: QueryBuilder & _Self,) {
+    protected _cloneForPaginationCount(this: QueryBuilder & _Self, ) {
       return this.cloneWithout(['_orders', '_limit', '_offset']);
     }
 
