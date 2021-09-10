@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: build-docker
+  name: triangle-build-docker
 spec:
   inputs:
     resources:

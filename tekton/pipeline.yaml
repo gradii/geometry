@@ -13,7 +13,7 @@ spec:
   tasks:
     - name: build
       taskRef:
-        name: build-docker
+        name: triangle-build-docker
       params:
         - name: BUILDER_IMAGE
           value: $(params.BUILDER_IMAGE)
@@ -24,7 +24,7 @@ spec:
     - name: deploy
       runAfter: [build]
       taskRef:
-        name: deploy-kubectl
+        name: triangle-deploy-kubectl
       resources:
         inputs:
           - name: source
