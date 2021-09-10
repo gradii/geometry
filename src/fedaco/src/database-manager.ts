@@ -28,23 +28,23 @@ class Conn implements ConnectionInterface {
     return this._query;
   }
 
-  select(sql: string, bindings: any[], readConnection?: boolean): Promise<any> {
+  async select(sql: string, bindings: any[], readConnection?: boolean): Promise<any> {
     return Promise.resolve();
   }
 
-  insert() {
+  async insert() {
   }
 
-  update() {
+  async update() {
   }
 
-  delete() {
+  async delete() {
   }
 
   statement() {
   }
 
-  affectingStatement() {
+  async affectingStatement() {
   }
 
   getName() {

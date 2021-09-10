@@ -15,7 +15,7 @@ export interface BuildQueries {
 
   tap(callback: (q: this, condition: boolean) => any): this;
 
-  first(columns?: any[] | string): Model | object | null;
+  first(columns?: any[] | string): Promise<Model | object | null>;
 
   unless(value: any, callback: Function, _default?: Function): this;
 }

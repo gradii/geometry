@@ -32,3 +32,7 @@ export class BasicModel extends Model {
   }
 
 }
+
+export class RelationModel extends Model {
+  
+}
