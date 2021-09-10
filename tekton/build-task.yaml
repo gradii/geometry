@@ -16,7 +16,7 @@ spec:
         default: ./
       - name: BUILDER_IMAGE
         description: The image on which builds will run
-        default: myapp:latest
+        default: triangle:latest
   steps:
     - name: docker
       image: docker

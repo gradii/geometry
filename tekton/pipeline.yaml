@@ -1,12 +1,12 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
-  name: myapp
+  name: triangle
 spec:
   params:
     - name: BUILDER_IMAGE
       description: The image on which builds will run
-      default: myapp:latest
+      default: triangle:latest
   resources:
     - name: source
       type: git
