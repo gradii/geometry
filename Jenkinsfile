@@ -1,6 +1,8 @@
 pipeline {
   agent {
-    docker { image 'cimg/node:12.22' }
+    node {
+      label 'nodejs'
+    }
   }
   stages {
 
