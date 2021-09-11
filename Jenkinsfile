@@ -15,6 +15,14 @@ pipeline {
 //       }
 //     }
 
+    stage('prepare tools') {
+      steps {
+        container('nodejs') {
+          sh 'yum install patch -y'
+        }
+      }
+    }
+
     stage('build & push') {
       steps {
         container('nodejs') {
