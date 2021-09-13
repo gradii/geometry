@@ -6,6 +6,8 @@
     "module": "commonjs",
     "types": ["jest", "node"]
   },
+  "paths": {
+  },
   "include": [
     "**/*.spec.ts",
     "**/*.spec.tsx",

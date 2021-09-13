@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { makePropDecorator, TypeDecorator } from '@gradii/annotation';
 import { Model } from '../fedaco/model';
 import { ColumnDecorator, ColumnDefine } from './column';
@@ -16,7 +22,7 @@ export interface RelationAnnotation {
   name?: string;
 }
 
-const additionalProcessing = (target: any, name: string, columnDefine: ColumnDefine) => {
+const _additionalProcessing = (target: any, name: string, columnDefine: ColumnDefine) => {
   const descriptor = Object.getOwnPropertyDescriptor(target, name);
 
   // columnDefine.isPrimary   = columnDefine.isPrimary || false;
@@ -46,20 +52,50 @@ const additionalProcessing = (target: any, name: string, columnDefine: ColumnDef
   }
 };
 
+
+// ====
+// @RelationColumn({
+//  columnName: 'articles',
+//  onQuery: ()=>{
+//  }
+// })
+// @RelationUsingColumn({
+//  columnName: 'articles',
+//  callback: (model)=>{
+//    return new EloquentResolverRelationStub(builder, $model);
+//  }
+// })
+//
 // tslint:disable-next-line:variable-name
-export const Relation: ColumnDecorator = makePropDecorator(
-  'fedaco orm relation',
-  (p: RelationAnnotation = {}) => ({...p}), undefined,
-  (target: any, name: string, columnDefine) => {
-    additionalProcessing(target, name, columnDefine);
-  }
-);
+export const RelationColumn: ColumnDecorator = makePropDecorator(
+  'fedaco orm relation column',
+  (p: ColumnDefine = {}): ColumnDefine => ({...p, isRelation: true}), undefined,
+  (target: any, name: string, columnDefine: ColumnDefine) => {
+    _additionalProcessing(target, name, columnDefine);
+  });
+
+export const RelationUsingColumn: ColumnDecorator = makePropDecorator(
+  'fedaco orm relation using column',
+  (p: ColumnDefine = {}): ColumnDefine => ({...p, isRelation: true}), undefined,
+  (target: any, name: string, columnDefine: ColumnDefine) => {
+
+  });
+
+
+// // tslint:disable-next-line:variable-name
+// export const Relation: ColumnDecorator = makePropDecorator(
+//   'fedaco orm relation',
+//   (p: RelationAnnotation = {}) => ({...p}), undefined,
+//   (target: any, name: string, columnDefine) => {
+//     additionalProcessing(target, name, columnDefine);
+//   }
+// );
 
 export const ManyToManyRelation: ColumnDecorator = makePropDecorator(
   'fedaco orm many to many relation',
   (p: RelationAnnotation = {}) => ({...p}), undefined,
   (target: any, name: string, columnDefine) => {
-    additionalProcessing(target, name, columnDefine);
+    _additionalProcessing(target, name, columnDefine);
   }
 );
 
@@ -67,6 +103,8 @@ export const OneToManyRelation: ColumnDecorator = makePropDecorator(
   'fedaco orm many to many relation',
   (p: RelationAnnotation = {}) => ({...p}), undefined,
   (target: any, name: string, columnDefine) => {
-    additionalProcessing(target, name, columnDefine);
+    _additionalProcessing(target, name, columnDefine);
   }
 );
+
+

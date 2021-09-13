@@ -6,7 +6,6 @@
 
 import { makePropDecorator } from '@gradii/annotation';
 import { Model } from '../fedaco/model';
-import { Relation } from '../fedaco/relations/relation';
 
 export interface ColumnDecorator {
 
@@ -61,7 +60,7 @@ export interface HasOneColumnDefine extends ColumnDefine {
   // relationsDefinition: Relation;
 }
 
-const additionalProcessing = (target: any, name: string, columnDefine: ColumnDefine) => {
+const _additionalProcessing = (target: any, name: string, columnDefine: ColumnDefine) => {
   const descriptor = Object.getOwnPropertyDescriptor(target, name);
 
   // columnDefine.isPrimary   = columnDefine.isPrimary || false;
@@ -96,7 +95,7 @@ export const Column: ColumnDecorator = makePropDecorator(
   'fedaco orm column',
   (p: ColumnDefine = {}) => ({...p}), undefined,
   (target: any, name: string, columnDefine: ColumnDefine) => {
-    additionalProcessing(target, name, columnDefine);
+    _additionalProcessing(target, name, columnDefine);
   });
 
 // tslint:disable-next-line:variable-name
@@ -104,7 +103,7 @@ export const DateColumn: ColumnDecorator = makePropDecorator(
   'fedaco orm date column',
   (p: ColumnDefine = {}): ColumnDefine => ({...p, isDate: true}), undefined,
   (target: any, name: string, columnDefine: ColumnDefine) => {
-    additionalProcessing(target, name, columnDefine);
+    _additionalProcessing(target, name, columnDefine);
   });
 
 // tslint:disable-next-line:variable-name
@@ -112,7 +111,7 @@ export const DateCastableColumn: ColumnDecorator = makePropDecorator(
   'fedaco orm date castable column',
   (p: ColumnDefine = {}): ColumnDefine => ({...p, isDate: false, isDateCastable: true}), undefined,
   (target: any, name: string, columnDefine: ColumnDefine) => {
-    additionalProcessing(target, name, columnDefine);
+    _additionalProcessing(target, name, columnDefine);
   });
 
 // tslint:disable-next-line:variable-name
@@ -120,34 +119,5 @@ export const EncryptedCastableColumn: ColumnDecorator = makePropDecorator(
   'fedaco orm encrypted castable column',
   (p: ColumnDefine = {}): ColumnDefine => ({...p, isEncryptedCastable: true}), undefined,
   (target: any, name: string, columnDefine: ColumnDefine) => {
-    additionalProcessing(target, name, columnDefine);
+    _additionalProcessing(target, name, columnDefine);
   });
-
-// ====
-// @RelationColumn({
-//  columnName: 'articles',
-//  onQuery: ()=>{
-//  }
-// })
-// @RelationUsingColumn({
-//  columnName: 'articles',
-//  callback: (model)=>{
-//    return new EloquentResolverRelationStub(builder, $model);
-//  }
-// })
-//
-// tslint:disable-next-line:variable-name
-export const RelationColumn: ColumnDecorator = makePropDecorator(
-  'fedaco orm relation column',
-  (p: ColumnDefine = {}): ColumnDefine => ({...p, isRelation: true}), undefined,
-  (target: any, name: string, columnDefine: ColumnDefine) => {
-
-  });
-
-export const RelationUsingColumn: ColumnDecorator = makePropDecorator(
-  'fedaco orm relation using column',
-  (p: ColumnDefine = {}): ColumnDefine => ({...p, isRelation: true}), undefined,
-  (target: any, name: string, columnDefine: ColumnDefine) => {
-
-  });
-
