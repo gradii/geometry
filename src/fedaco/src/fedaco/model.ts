@@ -5,7 +5,7 @@
  */
 
 import { isAnyEmpty, isArray, isBlank, isString } from '@gradii/check-type';
-import { tap, uniq } from 'ramda';
+import { tap } from 'ramda';
 import { plural } from '../helper/pluralize';
 import { camelCase, snakeCase, upperCaseFirst } from '../helper/str';
 import { ConnectionResolverInterface } from '../interface/connection-resolver-interface';
@@ -22,8 +22,6 @@ import { HidesAttributes, mixinHidesAttributes } from './mixins/hides-attributes
 import { loadAggregate } from './model-helper';
 import { BelongsToMany } from './relations/belongs-to-many';
 import { HasManyThrough } from './relations/has-many-through';
-import { Pivot } from './relations/pivot';
-import { fromAttributes, fromRawAttributes } from './relations/pivot-helper';
 import { Scope } from './scope';
 
 
@@ -60,7 +58,6 @@ export interface Model extends HasAttributes, HasEvents,
   HasGlobalScopes, HasRelationships,
   HasTimestamps, HidesAttributes,
   GuardsAttributes, ForwardsCalls {
-
 }
 
 // @NoSuchMethodProxy()
@@ -87,7 +84,7 @@ export class Model extends mixinHasAttributes(
   /*The connection name for the model.*/
   _connection?: string = undefined;
   /*The table associated with the model.*/
-  protected _table: string = undefined;
+  _table: string = undefined;
   /*The table alias for table*/
   _tableAlias: string = undefined;
   /*The primary key for the model.*/
@@ -435,12 +432,12 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Eager load relations on the model.*/
-  public load(relations: any[] | string) {
+  public async load(relations: any[] | string) {
     let query = this.newQueryWithoutRelationships().with(
       // @ts-ignore
       isString(relations) ? arguments : relations
     );
-    query.eagerLoadRelations([this]);
+    await query.eagerLoadRelations([this]);
     return this;
   }
 
@@ -602,9 +599,9 @@ export class Model extends mixinHasAttributes(
 
   /*Save the model to the database without raising any events.*/
   public saveQuietly(options: any = {}) {
-    return Model.withoutEvents(() => {
-      return this.save(options);
-    });
+    // return Model.withoutEvents(() => {
+    return this.save(options);
+    // });
   }
 
   /*Save the model to the database.*/
@@ -828,13 +825,7 @@ export class Model extends mixinHasAttributes(
     return models;
   }
 
-  /*Create a new pivot model instance.*/
-  public newPivot(parent: Model, attributes: any[], table: string, exists: boolean,
-                  using: string | typeof Model | null = null): Pivot | any {
-    return using ?
-      fromRawAttributes(using as typeof Model, parent, attributes, table, exists) :
-      fromAttributes(Pivot, parent, attributes, table, exists);
-  }
+
 
   /*Determine if the model has a given scope.*/
   public hasNamedScope(scope: string) {

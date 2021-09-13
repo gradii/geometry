@@ -131,7 +131,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /**
    * Add a basic where clause to the query.
    */
-  public where(column: Function | string | any[] | SqlNode,
+  public where(column: Function | string | any[] | SqlNode | any,
                operator: any                          = null,
                value: any = null, conjunction: string = 'and') {
     if (isFunction(column) && isBlank(operator)) {
@@ -139,7 +139,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
       column(query);
       this._query.addNestedWhereQuery(query.getQuery(), conjunction);
     } else {
-      this._query.where(column as any[], operator, value, conjunction);
+      this._query.where(column as any[] | any, operator, value, conjunction);
     }
     return this;
   }
@@ -240,8 +240,8 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Get the first record matching the attributes or instantiate it.*/
-  public firstOrNew(attributes: any, values: any = {}): Model {
-    const instance = this.where(attributes).first() as Model;
+  public async firstOrNew(attributes: any, values: any = {}): Promise<Model> {
+    const instance = await this.where(attributes).first() as Model;
     if (!isBlank(instance)) {
       return instance;
     }
@@ -261,10 +261,10 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Create or update a record matching the attributes, and fill it with values.*/
-  public updateOrCreate(attributes: any[], values: any[] = []) {
-    return tap(instance => {
-      instance.fill(values).save();
-    }, this.firstOrNew(attributes));
+  public async updateOrCreate(attributes: any[], values: any[] = []) {
+    const instance = await this.firstOrNew(attributes);
+    await instance.fill(values).save();
+    return instance;
   }
 
   /*Execute the query and get the first result or throw an exception.*/
@@ -300,8 +300,8 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   // }
 
   /*Get a single column's value from the first result of a query.*/
-  public value(column: string) {
-    const result: Model = this.first([column]) as Model;
+  public async value(column: string) {
+    const result: Model = await this.first([column]) as Model;
     if (result) {
       return result[column];
     }
@@ -310,36 +310,36 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /**
    * Execute the query as a "select" statement.
    */
-  public get(columns: string[] | string = ['*']): Model[] {
+  public async get(columns: string[] | string = ['*']): Promise<Model[]> {
     const builder = this.applyScopes();
-    let models    = builder.getModels(columns);
+    let models    = await builder.getModels(columns);
     if (models.length > 0) {
-      models = builder.eagerLoadRelations(models);
+      models = await builder.eagerLoadRelations(models);
     }
     return models;
   }
 
   /*Get the hydrated models without eager loading.*/
-  public getModels(columns: any[] | string = ['*']) {
-    return this._model.hydrate(this._query.get(columns));
+  public async getModels(columns: any[] | string = ['*']) {
+    return this._model.hydrate(await this._query.get(columns));
   }
 
   /*Eager load the relationships for the models.*/
-  public eagerLoadRelations(models: any[]) {
+  public async eagerLoadRelations(models: any[]) {
     for (let [name, constraints] of Object.entries(this._eagerLoad)) {
       if (name.indexOf('.') > -1) {
-        models = this.eagerLoadRelation(models, name, constraints);
+        models = await this.eagerLoadRelation(models, name, constraints);
       }
     }
     return models;
   }
 
   /*Eagerly load the relationship on a set of models.*/
-  protected eagerLoadRelation(models: any[], name: string, constraints: Function) {
+  protected async eagerLoadRelation(models: any[], name: string, constraints: Function) {
     const relation = this.getRelation(name);
     relation.addEagerConstraints(models);
     constraints(relation);
-    return relation.match(relation.initRelation(models, name), relation.getEager(), name);
+    return relation.match(relation.initRelation(models, name), await relation.getEager(), name);
   }
 
   /*Get the relation instance for the given relation name.*/
@@ -454,7 +454,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Update records in the database.*/
-  public update(values: any[]) {
+  public update(values: any) {
     return this.toBase().update(this.addUpdatedAtColumn(values));
   }
 

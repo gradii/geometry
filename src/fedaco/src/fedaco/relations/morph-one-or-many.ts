@@ -8,6 +8,8 @@ import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
 import { HasOneOrMany } from './has-one-or-many';
 
+const morphOneOrManyConstraints = false;
+
 export class MorphOneOrMany extends HasOneOrMany {
   /*The foreign key type for the relationship.*/
   protected morphType: string;
@@ -27,7 +29,7 @@ export class MorphOneOrMany extends HasOneOrMany {
 
   /*Set the base constraints on the relation query.*/
   public addConstraints() {
-    if (MorphOneOrMany.constraints) {
+    if (morphOneOrManyConstraints) {
       super.addConstraints();
       this.getRelationQuery().where(this.morphType, this.morphClass);
     }

@@ -282,8 +282,8 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Find a related model by its primary key or return a new instance of the related model.*/
-  public findOrNew(id: any, columns: any[] = ['*']): Model {
-    let instance = this.find(id, columns) as Model;
+  public async findOrNew(id: any, columns: any[] = ['*']): Promise<Model> {
+    let instance = await this.find(id, columns) as Model;
     if (isBlank(instance)) {
       instance = this._related.newInstance();
     }
@@ -291,8 +291,8 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Get the first related model record matching the attributes or instantiate it.*/
-  public firstOrNew(attributes: any = {}, values: any[] = []) {
-    let instance = this._related.newQuery().where(attributes).first();
+  public async firstOrNew(attributes: any = {}, values: any[] = []) {
+    let instance = await this._related.newQuery().where(attributes).first();
     if (isBlank(instance)) {
       instance = this._related.newInstance([...attributes, ...values]);
     }
@@ -300,11 +300,11 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Get the first related record matching the attributes or create it.*/
-  public firstOrCreate(attributes: any[] = [],
-                       values: any[]     = [],
-                       joining: any[]    = [],
-                       touch: boolean    = true) {
-    let instance = this._related.newQuery().where(attributes).first();
+  public async firstOrCreate(attributes: any[] = [],
+                             values: any[]     = [],
+                             joining: any[]    = [],
+                             touch: boolean    = true) {
+    let instance = await this._related.newQuery().where(attributes).first();
     if (isBlank(instance)) {
       instance = this.create([...attributes, ...values], joining, touch);
     }
@@ -312,11 +312,11 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Create or update a related record matching the attributes, and fill it with values.*/
-  public updateOrCreate(attributes: any[],
-                        values: any[]  = [],
-                        joining: any[] = [],
-                        touch: boolean = true) {
-    const instance = this._related.newQuery().where(attributes).first() as Model;
+  public async updateOrCreate(attributes: any[],
+                              values: any[]  = [],
+                              joining: any[] = [],
+                              touch: boolean = true) {
+    const instance = await this._related.newQuery().where(attributes).first() as Model;
     if (isBlank(instance)) {
       return this.create([...attributes, ...values], joining, touch);
     }
@@ -328,7 +328,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Find a related model by its primary key.*/
-  public find(id: any, columns: any[] = ['*']): Model | Model[] {
+  public async find(id: any, columns: any[] = ['*']): Promise<Model | Model[]> {
     if (!(id instanceof Model && (isArray(id) /*|| id instanceof Arrayable*/))) {
       return this.findMany(id, columns);
     }
@@ -337,7 +337,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Find multiple related models by their primary keys.*/
-  public findMany(ids: any[], columns: any[] = ['*']) {
+  public async findMany(ids: any[], columns: any[] = ['*']) {
     if (!ids.length) {
       return this.getRelated().newCollection();
     }
@@ -345,8 +345,8 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Find a related model by its primary key or throw an exception.*/
-  public findOrFail(id: any, columns: any[] = ['*']) {
-    const result = this.find(id, columns);
+  public async findOrFail(id: any, columns: any[] = ['*']) {
+    const result = await this.find(id, columns);
     // var id     = id instanceof Arrayable ? id.toArray() : id;
     if (isArray(id)) {
       if (result.length === uniq(id).length) {
@@ -367,8 +367,8 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Execute the query and get the first result.*/
-  public first(columns: any[] = ['*']): Model {
-    const results = this.take(1).get(columns);
+  public async first(columns: any[] = ['*']): Promise<Model> {
+    const results = await this.take(1).get(columns);
     return results.length > 0 ? results[0] : null;
   }
 
@@ -382,18 +382,20 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Get the results of the relationship.*/
-  public getResults() {
-    return !isBlank(this._parent[this._parentKey]) ? this.get() : this._related.newCollection();
+  public async getResults() {
+    return !isBlank(this._parent[this._parentKey]) ?
+      await this.get() :
+      this._related.newCollection();
   }
 
   /*Execute the query as a "select" statement.*/
-  public get(columns: any[] = ['*']) {
+  public async get(columns: any[] = ['*']) {
     // First we'll add the proper select columns onto the query so it is run with
     // the proper columns. Then, we will get the results and hydrate our pivot
     // models with the result of those columns as a separate model relation.
     let builder = this._query.applyScopes();
     columns     = builder.getQuery()._columns.length ? [] : columns;
-    let models  = builder.addSelect(this._shouldSelect(columns)).getModels();
+    let models  = await builder.addSelect(this._shouldSelect(columns)).getModels();
     this._hydratePivotRelation(models);
     if (models.length > 0) {
       models = builder.eagerLoadRelations(models);
@@ -557,7 +559,9 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   E.g.: Touch all roles associated with this user.*/
   public touch() {
     let key     = this.getRelated().getKeyName();
-    let columns = {};
+    let columns = {
+      [this._related.getUpdatedAtColumn()]: this._related.freshTimestampString(),
+    };
     const ids   = this.allRelatedIds();
     if (ids.length > 0) {
       this.getRelated().newQueryWithoutRelationships().whereIn(key, ids).update(columns);

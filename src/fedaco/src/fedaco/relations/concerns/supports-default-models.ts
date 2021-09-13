@@ -36,15 +36,15 @@ export function mixinSupportsDefaultModels<T extends Constructor<{}>>(base: T): 
 
     /*Get the default value for this relation.*/
     _getDefaultFor(this: Relation & this, parent: Model): Model {
-      if (!this.withDefault) {
-        return;
+      if (!this._withDefault) {
+        return null;
       }
       let instance = this.newRelatedInstanceFor(parent);
-      if (isFunction(this.withDefault)) {
-        return this.withDefault.call(this, instance, parent) || instance;
+      if (isFunction(this._withDefault)) {
+        return this._withDefault.call(this, instance, parent) || instance;
       }
-      if (isArray(this.withDefault)) {
-        instance.forceFill(this.withDefault);
+      if (isArray(this._withDefault)) {
+        instance.forceFill(this._withDefault as any[]);
       }
       return instance;
     }

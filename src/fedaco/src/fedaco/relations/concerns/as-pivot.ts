@@ -7,63 +7,64 @@
 import { isArray } from '@gradii/check-type';
 import { tap } from 'ramda';
 import { Constructor } from '../../../helper/constructor';
-import { FedacoBuilder } from '../../fedaco-builder';
-import { Model } from '../../model';
+// import { FedacoBuilder } from '../../fedaco-builder';
+// import { Model } from '../../model';
+// import { Relation } from '../relation';
 
-
+type Model = any;
 
 export interface AsPivot {
-  _setKeysForSelectQuery(query: FedacoBuilder);
-
-  /*Set the keys for a save update query.*/
-  _setKeysForSaveQuery(query: FedacoBuilder);
-
-  /*Delete the pivot model record from the database.*/
-  delete();
-
-  /*Get the query builder for a delete operation on the pivot.*/
-  _getDeleteQuery();
-
-  /*Get the table associated with the model.*/
-  getTable();
-
-  /*Get the foreign key column name.*/
-  getForeignKey();
-
-  /*Get the "related key" column name.*/
-  getRelatedKey();
-
-  /*Get the "related key" column name.*/
-  getOtherKey();
-
-  /*Set the key names for the pivot model instance.*/
-  setPivotKeys(foreignKey: string, relatedKey: string);
-
-  /*Determine if the pivot model or given attributes has timestamp attributes.*/
-  hasTimestampAttributes(attributes?: any[] | null);
-
-  /*Get the name of the "created at" column.*/
-  getCreatedAtColumn();
-
-  /*Get the name of the "updated at" column.*/
-  getUpdatedAtColumn();
-
-  /*Get the queueable identity for the entity.*/
-  getQueueableId();
-
-  /*Get a new query to restore one or more models by their queueable IDs.*/
-  newQueryForRestoration(this: Model & this, ids: number[] | string[] | string);
-
-  /*Get a new query to restore multiple models by their queueable IDs.*/
-  _newQueryForCollectionRestoration(ids: number[] | string[]);
-
-  /*Unset all the loaded relations for the instance.*/
-  unsetRelations();
+  // _setKeysForSelectQuery(query: FedacoBuilder);
+  //
+  // /*Set the keys for a save update query.*/
+  // _setKeysForSaveQuery(query: FedacoBuilder): FedacoBuilder;
+  //
+  // /*Delete the pivot model record from the database.*/
+  // delete();
+  //
+  // /*Get the query builder for a delete operation on the pivot.*/
+  // _getDeleteQuery();
+  //
+  // /*Get the table associated with the model.*/
+  // getTable();
+  //
+  // /*Get the foreign key column name.*/
+  // getForeignKey();
+  //
+  // /*Get the "related key" column name.*/
+  // getRelatedKey();
+  //
+  // /*Get the "related key" column name.*/
+  // getOtherKey();
+  //
+  // /*Set the key names for the pivot model instance.*/
+  // setPivotKeys(foreignKey: string, relatedKey: string);
+  //
+  // /*Determine if the pivot model or given attributes has timestamp attributes.*/
+  // hasTimestampAttributes(attributes?: any[] | null);
+  //
+  // /*Get the name of the "created at" column.*/
+  // getCreatedAtColumn();
+  //
+  // /*Get the name of the "updated at" column.*/
+  // getUpdatedAtColumn();
+  //
+  // /*Get the queueable identity for the entity.*/
+  // getQueueableId();
+  //
+  // /*Get a new query to restore one or more models by their queueable IDs.*/
+  // newQueryForRestoration(this: Model & this, ids: number[] | string[] | string);
+  //
+  // /*Get a new query to restore multiple models by their queueable IDs.*/
+  // _newQueryForCollectionRestoration(ids: number[] | string[]);
+  //
+  // /*Unset all the loaded relations for the instance.*/
+  // unsetRelations();
 }
 
+export type AsPivotCtor = Constructor<AsPivot>;
 
-export function mixinAsPivot<T extends Constructor<Model>>(base: T) {
-  // @ts-ignore
+export function mixinAsPivot<T extends Constructor<{}>>(base: T): AsPivotCtor & T {
   return class _Self extends base {
     /*The parent model of the relationship.*/
     public pivotParent: Model;
@@ -93,129 +94,135 @@ export function mixinAsPivot<T extends Constructor<Model>>(base: T) {
     //   return instance;
     // }
 
-    /*Set the keys for a select query.*/
-    protected _setKeysForSelectQuery(this: Model & this, query: FedacoBuilder) {
-      if (this._attributes[this.getKeyName()] !== undefined) {
-        return super._setKeysForSelectQuery(query);
-      }
-      query.where(this._foreignKey,
-        this.getOriginal(this._foreignKey, this.getAttribute(this._foreignKey)));
-      return query.where(this._relatedKey,
-        this.getOriginal(this._relatedKey, this.getAttribute(this._relatedKey)));
-    }
-
-    /*Set the keys for a save update query.*/
-    _setKeysForSaveQuery(this: Model & this, query: FedacoBuilder) {
-      return this._setKeysForSelectQuery(query);
-    }
-
-    /*Delete the pivot model record from the database.*/
-    public delete(this: Model & this) {
-      if (this._attributes[this.getKeyName()] !== undefined) {
-        return /*cast type int*/ super.delete();
-      }
-      if (this._fireModelEvent('deleting') === false) {
-        return 0;
-      }
-      this.touchOwners();
-      return tap(() => {
-        this.exists = false;
-        this._fireModelEvent('deleted', false);
-      }, this._getDeleteQuery().delete());
-    }
-
-    /*Get the query builder for a delete operation on the pivot.*/
-    _getDeleteQuery(this: Model) {
-      return this.newQueryWithoutRelationships().where({});
-    }
-
-    /*Get the table associated with the model.*/
-    public getTable(): string {
-      if (!(this.table !== undefined)) {
-        this.setTable(str_replace('\\', '', Str.snake(Str.singular(class_basename(this)))));
-      }
-      return this.table;
-    }
-
-    /*Get the foreign key column name.*/
-    public getForeignKey() {
-      return this._foreignKey;
-    }
-
-    /*Get the "related key" column name.*/
-    public getRelatedKey() {
-      return this._relatedKey;
-    }
-
-    /*Get the "related key" column name.*/
-    public getOtherKey() {
-      return this.getRelatedKey();
-    }
-
-    /*Set the key names for the pivot model instance.*/
-    public setPivotKeys(foreignKey: string, relatedKey: string) {
-      this._foreignKey = foreignKey;
-      this._relatedKey = relatedKey;
-      return this;
-    }
-
-    /*Determine if the pivot model or given attributes has timestamp attributes.*/
-    public hasTimestampAttributes(attributes: any[] | null = null) {
-      return array_key_exists(this.getCreatedAtColumn(), attributes ?? this.attributes);
-    }
-
-    /*Get the name of the "created at" column.*/
-    public getCreatedAtColumn() {
-      return this.pivotParent ? this.pivotParent.getCreatedAtColumn() : super.getCreatedAtColumn();
-    }
-
-    /*Get the name of the "updated at" column.*/
-    public getUpdatedAtColumn() {
-      return this.pivotParent ? this.pivotParent.getUpdatedAtColumn() : super.getUpdatedAtColumn();
-    }
-
-    /*Get the queueable identity for the entity.*/
-    public getQueueableId() {
-      if (this._attributes[this.getKeyName()] !== undefined) {
-        return this.getKey();
-      }
-      return `${this._foreignKey}:${this.getAttribute(
-        this._foreignKey)}:${this._relatedKey}:${this.getAttribute(this._relatedKey)}`;
-    }
-
-    /*Get a new query to restore one or more models by their queueable IDs.*/
-    public newQueryForRestoration(this: Model & this, ids: number[] | string[] | string) {
-      if (isArray(ids)) {
-        return this._newQueryForCollectionRestoration(ids as any[]);
-      }
-      if (!ids.includes(':')) {
-        return super.newQueryForRestoration(ids);
-      }
-      let segments = ids.split(':');
-      return this.newQueryWithoutScopes().where(segments[0], segments[1]).where(segments[2],
-        segments[3]);
-    }
-
-    /*Get a new query to restore multiple models by their queueable IDs.*/
-    _newQueryForCollectionRestoration(ids: number[] | string[]) {
-      if (!ids[0].includes(':')) {
-        return super.newQueryForRestoration(ids);
-      }
-      let query = this.newQueryWithoutScopes();
-      for (let id of ids) {
-        let segments = id.split(':');
-        query.orWhere(q => {
-          return q.where(segments[0], segments[1]).where(segments[2], segments[3]);
-        });
-      }
-      return query;
-    }
-
-    /*Unset all the loaded relations for the instance.*/
-    public unsetRelations() {
-      this.pivotParent = null;
-      this.relations   = [];
-      return this;
-    }
+    // /*Set the keys for a select query.*/
+    // protected _setKeysForSelectQuery(this: Model & _Self, query: FedacoBuilder) {
+    //   if (this._attributes[this.getKeyName()] !== undefined) {
+    //     // @ts-ignore
+    //     return super._setKeysForSelectQuery(query);
+    //   }
+    //   query.where(this._foreignKey,
+    //     this.getOriginal(this._foreignKey, this.getAttribute(this._foreignKey)));
+    //   return query.where(this._relatedKey,
+    //     this.getOriginal(this._relatedKey, this.getAttribute(this._relatedKey)));
+    // }
+    //
+    // /*Set the keys for a save update query.*/
+    // _setKeysForSaveQuery(this: Model & this, query: FedacoBuilder) {
+    //   return this._setKeysForSelectQuery(query);
+    // }
+    //
+    // /*Delete the pivot model record from the database.*/
+    // public async delete(this: Model & this) {
+    //   if (this._attributes[this.getKeyName()] !== undefined) {
+    //     // @ts-ignore
+    //     return /*cast type int*/ super.delete();
+    //   }
+    //   if (this._fireModelEvent('deleting') === false) {
+    //     return 0;
+    //   }
+    //   this.touchOwners();
+    //   return tap(() => {
+    //     this._exists = false;
+    //     this._fireModelEvent('deleted', false);
+    //   }, await this._getDeleteQuery().delete());
+    // }
+    //
+    // /*Get the query builder for a delete operation on the pivot.*/
+    // _getDeleteQuery(this: Model & _Self) {
+    //   return this.newQueryWithoutRelationships().where({
+    //     [this._foreignKey]: this.getOriginal(this._foreignKey, this.getAttribute(this._foreignKey)),
+    //     [this._relatedKey]: this.getOriginal(this._relatedKey, this.getAttribute(this._relatedKey)),
+    //   });
+    // }
+    //
+    // /*Get the table associated with the model.*/
+    // public getTable(this: Model & _Self): string {
+    //   if (!(this._table !== undefined)) {
+    //     //todo fixme
+    //     // this.setTable(str_replace('\\', '', Str.snake(Str.singular(class_basename(this)))));
+    //   }
+    //   return this._table;
+    // }
+    //
+    // /*Get the foreign key column name.*/
+    // public getForeignKey() {
+    //   return this._foreignKey;
+    // }
+    //
+    // /*Get the "related key" column name.*/
+    // public getRelatedKey() {
+    //   return this._relatedKey;
+    // }
+    //
+    // /*Get the "related key" column name.*/
+    // public getOtherKey() {
+    //   return this.getRelatedKey();
+    // }
+    //
+    // /*Set the key names for the pivot model instance.*/
+    // public setPivotKeys(foreignKey: string, relatedKey: string) {
+    //   this._foreignKey = foreignKey;
+    //   this._relatedKey = relatedKey;
+    //   return this;
+    // }
+    //
+    // /*Determine if the pivot model or given attributes has timestamp attributes.*/
+    // public hasTimestampAttributes(attributes: any[] | null = null) {
+    //   return this.getCreatedAtColumn() in (attributes ?? this.attributes);
+    // }
+    //
+    // /*Get the name of the "created at" column.*/
+    // public getCreatedAtColumn() {
+    //   return this.pivotParent ? this.pivotParent.getCreatedAtColumn() : super.getCreatedAtColumn();
+    // }
+    //
+    // /*Get the name of the "updated at" column.*/
+    // public getUpdatedAtColumn() {
+    //   return this.pivotParent ? this.pivotParent.getUpdatedAtColumn() : super.getUpdatedAtColumn();
+    // }
+    //
+    // /*Get the queueable identity for the entity.*/
+    // public getQueueableId() {
+    //   if (this._attributes[this.getKeyName()] !== undefined) {
+    //     return this.getKey();
+    //   }
+    //   return `${this._foreignKey}:${this.getAttribute(
+    //     this._foreignKey)}:${this._relatedKey}:${this.getAttribute(this._relatedKey)}`;
+    // }
+    //
+    // /*Get a new query to restore one or more models by their queueable IDs.*/
+    // public newQueryForRestoration(this: Model & this, ids: number[] | string[] | string) {
+    //   if (isArray(ids)) {
+    //     return this._newQueryForCollectionRestoration(ids as any[]);
+    //   }
+    //   if (!ids.includes(':')) {
+    //     return super.newQueryForRestoration(ids);
+    //   }
+    //   let segments = ids.split(':');
+    //   return this.newQueryWithoutScopes().where(segments[0], segments[1]).where(segments[2],
+    //     segments[3]);
+    // }
+    //
+    // /*Get a new query to restore multiple models by their queueable IDs.*/
+    // _newQueryForCollectionRestoration(ids: number[] | string[]) {
+    //   if (!ids[0].includes(':')) {
+    //     return super.newQueryForRestoration(ids);
+    //   }
+    //   let query = this.newQueryWithoutScopes();
+    //   for (let id of ids) {
+    //     let segments = id.split(':');
+    //     query.orWhere(q => {
+    //       return q.where(segments[0], segments[1]).where(segments[2], segments[3]);
+    //     });
+    //   }
+    //   return query;
+    // }
+    //
+    // /*Unset all the loaded relations for the instance.*/
+    // public unsetRelations(this: Model & _Self) {
+    //   this.pivotParent = null;
+    //   this._relations  = [];
+    //   return this;
+    // }
   };
 }

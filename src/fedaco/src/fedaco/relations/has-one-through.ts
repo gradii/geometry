@@ -16,8 +16,8 @@ export class HasOneThrough extends mixinInteractsWithDictionary(
   )
 ) {
   /*Get the results of the relationship.*/
-  public getResults(): Model {
-    return this.first() || this._getDefaultFor(this._farParent);
+  public async getResults(): Promise<Model> {
+    return await this.first() || this._getDefaultFor(this._farParent);
   }
 
   /*Initialize the relation on a set of models.*/

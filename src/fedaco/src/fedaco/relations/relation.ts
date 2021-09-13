@@ -82,18 +82,18 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   }
 
   /*Get the results of the relationship.*/
-  public getResults() {
+  public getResults(): Promise<Model | Model[]> {
     throw new Error('not implemented');
   }
 
   /*Get the relationship for eager loading.*/
-  public getEager() {
+  public async getEager() {
     return this.get();
   }
 
   /*Execute the query and get the first result if it's the sole matching record.*/
-  public sole(columns: any[] | string = ['*']) {
-    let result = this.take(2).get(columns);
+  public async sole(columns: any[] | string = ['*']) {
+    let result = await this.take(2).get(columns);
     if (!result.length) {
       throw new Error(`ModelNotFoundException().setModel(get_class(this._related))`);
     }
@@ -104,7 +104,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   }
 
   /*Execute the query as a "select" statement.*/
-  public get(columns: string[] | string = ['*']) {
+  public async get(columns: string[] | string = ['*']): Promise<any | any[]> {
     return this._query.get(columns);
   }
 

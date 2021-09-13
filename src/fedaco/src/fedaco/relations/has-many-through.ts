@@ -17,44 +17,64 @@ import { Relation } from './relation';
 export interface HasManyThrough extends InteractsWithDictionary, Relation {
   /*Set the base constraints on the relation query.*/
   addConstraints();
+
   /*Set the join clause on the query.*/
   _performJoin(query?: FedacoBuilder | null);
+
   /*Get the fully qualified parent key name.*/
   getQualifiedParentKeyName();
+
   /*Determine whether "through" parent of the relation uses Soft Deletes.*/
   throughParentSoftDeletes();
+
   /*Indicate that trashed "through" parents should be included in the query.*/
   withTrashedParents();
+
   /*Set the constraints for an eager load of the relation.*/
   addEagerConstraints(models: any[]);
+
   /*Initialize the relation on a set of models.*/
   initRelation(models: any[], relation: string);
+
   /*Match the eagerly loaded results to their parents.*/
   match(this: Model & this, models: any[], results: Collection, relation: string);
+
   /*Build model dictionary keyed by the relation's foreign key.*/
   _buildDictionary(results: Collection): {
     [key: string]: any[];
   };
+
   /*Get the first related model record matching the attributes or instantiate it.*/
-  firstOrNew(attributes: any[]): Model;
+  firstOrNew(attributes: any[]): Promise<Model>;
+
   /*Create or update a related record matching the attributes, and fill it with values.*/
-  updateOrCreate(attributes: any[], values?: any[]);
+  updateOrCreate(attributes: any[], values?: any[]): Promise<Model>;
+
   /*Add a basic where clause to the query, and return the first result.*/
-  firstWhere(column: Function | string | any[], operator?: any, value?: any, conjunction?: string);
+  firstWhere(column: Function | string | any[], operator?: any, value?: any,
+             conjunction?: string): Promise<Model>;
+
   /*Execute the query and get the first related model.*/
-  first(columns?: any[]): Model;
+  first(columns?: any[]): Promise<Model>;
+
   /*Execute the query and get the first result or throw an exception.*/
-  firstOrFail(columns?: any[]);
+  firstOrFail(columns?: any[]): Promise<Model>;
+
   /*Find a related model by its primary key.*/
-  find(id: any, columns?: any[]): Model | Model[];
+  find(id: any, columns?: any[]): Promise<Model | Model[]>;
+
   /*Find multiple related models by their primary keys.*/
-  findMany(ids: any[], columns?: any[]): Model[];
+  findMany(ids: any[], columns?: any[]): Promise<Model[]>;
+
   /*Find a related model by its primary key or throw an exception.*/
-  findOrFail(id: any | any[], columns?: any[]): Model | Model[];
+  findOrFail(id: any | any[], columns?: any[]): Promise<Model | Model[]>;
+
   /*Get the results of the relationship.*/
-  getResults(): Model | Model[];
+  getResults(): Promise<Model | Model[]>;
+
   /*Execute the query as a "select" statement.*/
-  get(columns?: any[]): Model | Model[];
+  get(columns?: any[]): Promise<Model | Model[]>;
+
   // /*Get a paginator for the "select" statement.*/
   // paginate(perPage: number | null = null, columns: any[] = ['*'], pageName: string = 'page',
   //                 page: number                                                            = null) {
@@ -70,6 +90,7 @@ export interface HasManyThrough extends InteractsWithDictionary, Relation {
   // }
   /*Set the select clause for the relation query.*/
   _shouldSelect(columns?: any[]);
+
   // /*Chunk the results of the query.*/
   // chunk(count: number, callback: Function) {
   //   return this.prepareQueryBuilder().chunk(count, callback);
@@ -109,26 +130,40 @@ export interface HasManyThrough extends InteractsWithDictionary, Relation {
   // }
   /*Prepare the query builder for query execution.*/
   _prepareQueryBuilder(columns?: any[]): FedacoBuilder;
+
   /*Add the constraints for a relationship query.*/
-  getRelationExistenceQuery(query: FedacoBuilder, parentQuery: FedacoBuilder, columns?: any[] | any): FedacoBuilder;
+  getRelationExistenceQuery(query: FedacoBuilder, parentQuery: FedacoBuilder,
+                            columns?: any[] | any): FedacoBuilder;
+
   /*Add the constraints for a relationship query on the same table.*/
-  getRelationExistenceQueryForSelfRelation(query: FedacoBuilder, parentQuery: FedacoBuilder, columns?: any[] | any);
+  getRelationExistenceQueryForSelfRelation(query: FedacoBuilder, parentQuery: FedacoBuilder,
+                                           columns?: any[] | any);
+
   /*Add the constraints for a relationship query on the same table as the through parent.*/
-  getRelationExistenceQueryForThroughSelfRelation(query: FedacoBuilder, parentQuery: FedacoBuilder, columns?: any[] | any);
+  getRelationExistenceQueryForThroughSelfRelation(query: FedacoBuilder, parentQuery: FedacoBuilder,
+                                                  columns?: any[] | any);
+
   /*Get the qualified foreign key on the related model.*/
   getQualifiedFarKeyName();
+
   /*Get the foreign key on the "through" model.*/
   getFirstKeyName();
+
   /*Get the qualified foreign key on the "through" model.*/
   getQualifiedFirstKeyName();
+
   /*Get the foreign key on the related model.*/
   getForeignKeyName();
+
   /*Get the qualified foreign key on the related model.*/
   getQualifiedForeignKeyName();
+
   /*Get the local key on the far parent model.*/
   getLocalKeyName();
+
   /*Get the qualified local key on the far parent model.*/
   getQualifiedLocalKeyName();
+
   /*Get the local key on the intermediary model.*/
   getSecondLocalKeyName();
 
@@ -159,9 +194,9 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
                      localKey: string,
                      secondLocalKey: string) {
     super(query, throughParent);
-    this._localKey = localKey;
-    this._firstKey = firstKey;
-    this._secondKey    = secondKey;
+    this._localKey       = localKey;
+    this._firstKey       = firstKey;
+    this._secondKey      = secondKey;
     this._farParent      = farParent;
     this._throughParent  = throughParent;
     this._secondLocalKey = secondLocalKey;
@@ -247,8 +282,8 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   }
 
   /*Get the first related model record matching the attributes or instantiate it.*/
-  public firstOrNew(attributes: any[]): Model {
-    let instance = this.where(attributes).first() as Model;
+  public async firstOrNew(attributes: any[]): Promise<Model> {
+    let instance = await this.where(attributes).first() as Model;
     if (isBlank(instance)) {
       instance = this._related.newInstance(attributes);
     }
@@ -256,8 +291,8 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   }
 
   /*Create or update a related record matching the attributes, and fill it with values.*/
-  public updateOrCreate(attributes: any[], values: any[] = []) {
-    let instance = this.firstOrNew(attributes) as Model;
+  public async updateOrCreate(attributes: any[], values: any[] = []) {
+    let instance = await this.firstOrNew(attributes) as Model;
     instance.fill(values).save();
     return instance;
   }
@@ -271,14 +306,14 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   }
 
   /*Execute the query and get the first related model.*/
-  public first(columns: any[] = ['*']): Model {
-    const results = this.take(1).get(columns);
+  public async first(columns: any[] = ['*']): Promise<Model> {
+    const results = await this.take(1).get(columns);
     return results.length > 0 ? (results as Model[])[0] : null;
   }
 
   /*Execute the query and get the first result or throw an exception.*/
-  public firstOrFail(columns: any[] = ['*']) {
-    let model = this.first(columns);
+  public async firstOrFail(columns: any[] = ['*']) {
+    let model = await this.first(columns);
     if (!isBlank(model)) {
       return model;
     }
@@ -286,25 +321,27 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   }
 
   /*Find a related model by its primary key.*/
-  public find(id: any, columns: any[] = ['*']): Model | Model[] {
+  public async find(id: any, columns: any[] = ['*']): Promise<Model | Model[]> {
     if (isArray(id)) {
       return this.findMany(id, columns);
     }
-    return this.where(this.getRelated().getQualifiedKeyName(), '=', id).first(columns) as Model;
+    return await this
+      .where(this.getRelated().getQualifiedKeyName(), '=', id)
+      .first(columns) as Model;
   }
 
   /*Find multiple related models by their primary keys.*/
-  public findMany(ids: any[], columns: any[] = ['*']): Model[] {
+  public async findMany(ids: any[], columns: any[] = ['*']): Promise<Model[]> {
     // let ids = ids instanceof Arrayable ? ids.toArray() : ids;
     if (!ids.length) {
       return this.getRelated().newCollection();
     }
-    return this.whereIn(this.getRelated().getQualifiedKeyName(), ids).get(columns);
+    return await this.whereIn(this.getRelated().getQualifiedKeyName(), ids).get(columns) as Model[];
   }
 
   /*Find a related model by its primary key or throw an exception.*/
-  public findOrFail(id: any | any[], columns: any[] = ['*']): Model | Model[] {
-    let result = this.find(id, columns);
+  public async findOrFail(id: any | any[], columns: any[] = ['*']): Promise<Model | Model[]> {
+    let result = await this.find(id, columns);
     // let id     = id instanceof Arrayable ? id.toArray() : id;
     if (isArray(id)) {
       if (result.length === uniq(id).length) {
@@ -317,17 +354,19 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   }
 
   /*Get the results of the relationship.*/
-  public getResults(): Model | Model[] {
+  public async getResults(): Promise<Model | Model[]> {
     // @ts-ignore
-    return !isBlank(this._farParent[this._localKey]) ? this.get() : this._related.newCollection();
+    return !isBlank(this._farParent[this._localKey]) ?
+      await this.get() :
+      this._related.newCollection();
   }
 
   /*Execute the query as a "select" statement.*/
-  public get(columns: any[] = ['*']): Model | Model[] {
+  public async get(columns: any[] = ['*']): Promise<Model | Model[]> {
     const builder = this._prepareQueryBuilder(columns);
-    let models    = builder.getModels();
+    let models    = await builder.getModels();
     if (models.length > 0) {
-      models = builder.eagerLoadRelations(models);
+      models = await builder.eagerLoadRelations(models);
     }
     return this._related.newCollection(models);
   }
@@ -398,7 +437,7 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   /*Prepare the query builder for query execution.*/
   _prepareQueryBuilder(columns: any[] = ['*']): FedacoBuilder {
     let builder = this._query.applyScopes();
-    builder.addSelect(this.shouldSelect(builder.getQuery()._columns.length ? [] : columns));
+    builder.addSelect(this._shouldSelect(builder.getQuery()._columns.length ? [] : columns));
     return builder;
   }
 
@@ -413,7 +452,7 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
     if (parentQuery.getModel().getTable() === this._throughParent.getTable()) {
       return this.getRelationExistenceQueryForThroughSelfRelation(query, parentQuery, columns);
     }
-    this.performJoin(query);
+    this._performJoin(query);
     return query.select(columns).whereColumn(
       this.getQualifiedLocalKeyName(), '=',
       this.getQualifiedFirstKeyName()

@@ -22,6 +22,8 @@ export class MorphOne extends mixinCanBeOneOfMany(
   )
 ) {
 
+  public supportsPartialRelations = true;
+
   /*Get the results of the relationship.*/
   public getResults() {
     if (isBlank(this.getParentKey())) {

@@ -11,7 +11,7 @@ import { Model } from '../model';
 export interface HasTimestamps {
 
   /*Update the model's update timestamp.*/
-  touch(attribute: string): boolean;
+  touch(attribute?: string): boolean;
 
   /*Update the creation and update timestamps.*/
   updateTimestamps(): boolean;

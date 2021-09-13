@@ -21,6 +21,9 @@ export class HasOne extends mixinComparesRelatedModels(
     )
   )
 ) {
+
+  public supportsPartialRelations = true;
+
   /*Get the results of the relationship.*/
   public getResults() {
     if (isBlank(this.getParentKey())) {

@@ -50,7 +50,7 @@ export interface HasRelationships {
 
   /*Define an inverse one-to-one or many relationship.*/
   belongsTo(this: Model & this, related: typeof Model, foreignKey?: string | null,
-            ownerKey?: string | null, relation: string): BelongsTo;
+            ownerKey?: string | null, relation?: string): BelongsTo;
 
   /*Instantiate a new BelongsTo relationship.*/
   _newBelongsTo(query: FedacoBuilder, child: Model, foreignKey: string, ownerKey: string,

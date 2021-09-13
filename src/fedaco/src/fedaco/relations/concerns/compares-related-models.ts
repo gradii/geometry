@@ -7,6 +7,8 @@
 import { isBlank, isNumber } from '@gradii/check-type';
 import { Constructor } from '../../../helper/constructor';
 import { Model } from '../../model';
+import { HasOne } from '../has-one';
+import { MorphOne } from '../morph-one';
 import { Relation } from '../Relation';
 
 export interface ComparesRelatedModels {
@@ -36,7 +38,8 @@ export function mixinComparesRelatedModels<T extends Constructor<{}>>(base: T): 
       const match = !isBlank(model) && this._compareKeys(this.getParentKey(),
         this._getRelatedKeyFrom(
           model)) && this._related.getTable() === model.getTable() && this._related.getConnectionName() === model.getConnectionName();
-      if (match && this instanceof SupportsPartialRelations && this.isOneOfMany()) {
+      // @ts-ignore
+      if (match && (this as HasOne | MorphOne).supportsPartialRelations && this.isOneOfMany()) {
         return this._query.whereKey(model.getKey()).exists();
       }
       return match;
