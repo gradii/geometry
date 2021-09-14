@@ -327,7 +327,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /*Eager load the relationships for the models.*/
   public async eagerLoadRelations(models: any[]) {
     for (let [name, constraints] of Object.entries(this._eagerLoad)) {
-      if (name.indexOf('.') > -1) {
+      if (!name.includes('.')) {
         models = await this.eagerLoadRelation(models, name, constraints);
       }
     }
@@ -346,9 +346,9 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   public getRelation(name: string): Relation {
     const relation = Relation.noConstraints(() => {
       try {
-        return this.getModel().newInstance().name();
+        return this.getModel().newInstance().getRelationMethod(name);
       } catch (e) {
-        throw new Error(`RelationNotFoundException`); // (this.getModel(), name);
+        throw new Error(`RelationNotFoundException ${this.getModel().constructor.name} ${name}`); // (this.getModel(), name);
       }
     });
     const nested   = this.relationsNestedUnder(name);

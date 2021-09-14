@@ -414,8 +414,7 @@ export class Model extends mixinHasAttributes(
 
   /*Create a new instance of the given model.*/
   public newInstance(attributes: any[] = [], exists: boolean = false) {
-    // @ts-ignore
-    let model    = new this.constructor(/*cast type array*/ attributes);
+    let model    = new (<typeof Model>this.constructor)(/*cast type array*/ attributes);
     model.exists = exists;
     model.setConnection(this.getConnectionName());
     model.setTable(this.getTable());

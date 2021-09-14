@@ -22,7 +22,7 @@ export class MemberModel extends Model {
   @HasManyColumn({
     related: ArticleModel
   })
-  articles: any;
+  articles: Promise<any>;
 }
 
 

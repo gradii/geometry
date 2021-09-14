@@ -168,6 +168,8 @@ export interface HasRelationships {
   /*Create a new model instance for a related model.*/
   _newRelatedInstance(this: Model & this, clazz: typeof Model);
 
+  getRelationMethod(relation: string);
+
   /*Get all the loaded relations for the instance.*/
   getRelations();
 
@@ -610,6 +612,14 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
       };
 
       return ins;
+    }
+
+    getRelationMethod(this: Model & _Self, relation: string) {
+      const metadata = this.isRelation(relation);
+      if (metadata) {
+        return metadata._getRelation(this);
+      }
+      return undefined;
     }
 
     /*Get all the loaded relations for the instance.*/

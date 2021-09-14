@@ -11,6 +11,7 @@ import { difference, findLast, intersection, tap, uniq } from 'ramda';
 import {
   Column, ColumnDefine, DateCastableColumn, DateColumn, EncryptedCastableColumn
 } from '../../annotation/column';
+import { HasManyColumn, RelationAnnotation } from '../../annotation/relation';
 import { wrap } from '../../helper/arr';
 import { Constructor } from '../../helper/constructor';
 import { get, set } from '../../helper/obj';
@@ -83,7 +84,7 @@ export interface HasAttributes {
   //   throw new LazyLoadingViolationException(this, key);
   // }
   /*Get a relationship value from a method.*/
-  getRelationshipFromMethod(this: Model & this, method: string);
+  getRelationshipFromMethod(this: Model & this, metadata: any, method: string);
 
   // /*Determine if a get mutator exists for an attribute.*/
   // hasGetMutator(key: string) {
@@ -456,20 +457,26 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
       if (this.relationLoaded(key)) {
         return this._relations[key];
       }
-      if (!this.isRelation(key)) {
+
+      const relationMetadata = this.isRelation(key);
+      if (!relationMetadata) {
         return;
       }
 
       // if (this._preventsLazyLoading) {
       //   this.handleLazyLoadingViolation(key);
       // }
-      return this.getRelationshipFromMethod(key);
+      return this.getRelationshipFromMethod(relationMetadata, key);
     }
 
     /*Determine if the given key is a relationship method on the model.*/
     public isRelation(key: string) {
-      const metadata = this._columnInfo(key);
-      return metadata && (metadata.isRelation || metadata.isRelationUsing);
+      const metadata   = this._columnInfo(key);
+      const isRelation = metadata && (metadata.isRelation || metadata.isRelationUsing);
+      if (isRelation) {
+        return metadata;
+      }
+      return undefined;
       // return method_exists(this, key) ||
       //   (HasAttributes.relationResolvers[get_class(this)][key] ?? null);
     }
@@ -483,8 +490,9 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     // }
 
     /*Get a relationship value from a method.*/
-    protected getRelationshipFromMethod(this: Model & this, method: string) {
-      let relation = this[method]();
+    protected async getRelationshipFromMethod(this: Model & this, metadata: RelationAnnotation,
+                                        method: string) {
+      let relation = metadata._getRelation(this);
       if (!(relation instanceof Relation)) {
         if (isBlank(relation)) {
           throw new Error(
@@ -495,7 +503,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
       }
       return tap(results => {
         this.setRelation(method, results);
-      }, relation.getResults());
+      }, await relation.getResults());
     }
 
     // /*Determine if a get mutator exists for an attribute.*/
@@ -677,7 +685,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
           return Column.isTypeOf(it) ||
             DateColumn.isTypeOf(it) ||
             DateCastableColumn.isTypeOf(it) ||
-            EncryptedCastableColumn.isTypeOf(it);
+            EncryptedCastableColumn.isTypeOf(it) ||
+            HasManyColumn.isTypeOf(it);
         }, meta[key]) as ColumnDefine;
       }
       return undefined;

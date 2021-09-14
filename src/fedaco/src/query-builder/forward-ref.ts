@@ -11,7 +11,6 @@ export function forwardRef(forwardRefFn: ForwardRefFn): ForwardRefFn<any> {
   return (<any>forwardRefFn);
 }
 
-
 export function resolveForwardRef<T>(type: ForwardRefFn<T> | T | undefined): T {
   return isForwardRef(type) ? type() : type;
 }

@@ -130,6 +130,28 @@ describe('model annotation', () => {
     const results = await hasMany.getResults();
 
     expect(results[0] instanceof ArticleModel).toBe(true);
+
+    // tmp test
+    expect(results[0]._attributes['sql']).toBe(
+      'SELECT * FROM `article_models` WHERE `article_models`.`member_model_id` = ? AND `article_models`.`member_model_id` IS NOT NULL');
+    expect(results[0]._attributes['bindings']).toEqual([101]);
   });
+
+  it('test annotation use direct field access', async () => {
+    const memberModel = new MemberModel();
+
+    memberModel.id = 101;
+
+    const results = await memberModel.articles;
+
+    expect(results[0] instanceof ArticleModel).toBe(true);
+
+    // todo fixme tmp test hack code in hasRelationship
+    expect(results[0]._attributes['sql']).toBe(
+      'SELECT * FROM `article_models` WHERE `article_models`.`member_model_id` = ? AND `article_models`.`member_model_id` IS NOT NULL');
+    expect(results[0]._attributes['bindings']).toEqual([101]);
+  });
+
+  // it('test annotation ')
 
 });
