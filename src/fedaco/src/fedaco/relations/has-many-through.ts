@@ -200,6 +200,7 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
     this._farParent      = farParent;
     this._throughParent  = throughParent;
     this._secondLocalKey = secondLocalKey;
+    this.addConstraints();
   }
 
   /*Set the base constraints on the relation query.*/

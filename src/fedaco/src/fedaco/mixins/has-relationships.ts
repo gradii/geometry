@@ -4,11 +4,14 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isArray, isBlank } from '@gradii/check-type';
+import { isBlank } from '@gradii/check-type';
 import { tap } from 'ramda';
 import { Constructor } from '../../helper/constructor';
 import { plural } from '../../helper/pluralize';
 import { snakeCase } from '../../helper/str';
+import { MysqlGrammar } from '../../query-builder/grammar/mysql-grammar';
+import { Processor } from '../../query-builder/processor';
+import { QueryBuilder } from '../../query-builder/query-builder';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
 import { BelongsTo } from '../relations/belongs-to';
@@ -24,6 +27,8 @@ import { MorphToMany } from '../relations/morph-to-many';
 import { Relation } from '../relations/relation';
 
 export interface HasRelationships {
+  _relations: any;
+
   /*Define a one-to-one relationship.*/
   hasOne(this: Model & this, related: typeof Model, foreignKey?: string | null,
          localKey?: string | null): HasOne;
@@ -321,9 +326,9 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
     /*Define a polymorphic, inverse one-to-one or many relationship.*/
     public morphTo(this: _Self & Model & this, name: string,
                    morphToClassMap: { [key: string]: typeof Model } = {},
-                   type: string | null                               = null,
-                   id: string | null                                 = null,
-                   ownerKey: string | null                           = null): MorphTo {
+                   type: string | null                              = null,
+                   id: string | null                                = null,
+                   ownerKey: string | null                          = null): MorphTo {
       // let name         = name || this.guessBelongsToRelation();
       [type, id]     = this._getMorphs(snakeCase(name), type, id);
       const clazzKey = this._getAttributeFromArray(type);
@@ -575,11 +580,36 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
 
     /*Create a new model instance for a related model.*/
     _newRelatedInstance(this: _Self & Model & this, clazz: typeof Model) {
-      return tap(instance => {
+      const ins               = tap(instance => {
         if (!instance.getConnectionName()) {
           instance.setConnection(this._connection);
         }
       }, new clazz());
+      // todo fixme should move to another place
+      ins._connectionResolver = {
+        resolveConnection() {
+          return {
+            query() {
+              const grammar   = new MysqlGrammar();
+              const processor = new Processor();
+
+              // @ts-ignore
+              return new QueryBuilder({
+                getName(): string {
+                  return 'this-is-a-connection-name-placeholder';
+                },
+                select(sql, bindings) {
+                  return {
+                    sql, bindings
+                  };
+                },
+              }, grammar, processor);
+            }
+          };
+        }
+      };
+
+      return ins;
     }
 
     /*Get all the loaded relations for the instance.*/

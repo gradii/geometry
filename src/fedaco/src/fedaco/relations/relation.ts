@@ -47,7 +47,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
     this._query   = query;
     this._parent  = parent;
     this._related = query.getModel();
-    this.addConstraints();
+    // this.addConstraints();
   }
 
   /*Run a callback with constraints disabled on the relation.*/

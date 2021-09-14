@@ -321,7 +321,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
 
   /*Get the hydrated models without eager loading.*/
   public async getModels(columns: any[] | string = ['*']) {
-    return this._model.hydrate(await this._query.get(columns));
+    return this._model.newQuery().hydrate(await this._query.get(columns));
   }
 
   /*Eager load the relationships for the models.*/

@@ -54,12 +54,6 @@ export interface ColumnDefine {
   isRelationUsing?: boolean;
 }
 
-export interface HasOneColumnDefine extends ColumnDefine {
-  isRelation: boolean;
-
-  // relationsDefinition: Relation;
-}
-
 const _additionalProcessing = (target: any, name: string, columnDefine: ColumnDefine) => {
   const descriptor = Object.getOwnPropertyDescriptor(target, name);
 

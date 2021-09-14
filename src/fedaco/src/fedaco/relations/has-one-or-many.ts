@@ -23,6 +23,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
     super(query, parent);
     this.localKey   = localKey;
     this.foreignKey = foreignKey;
+    this.addConstraints();
   }
 
   /*Create and return an un-saved instance of the related model.*/

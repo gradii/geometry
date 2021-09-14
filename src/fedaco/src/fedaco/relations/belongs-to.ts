@@ -41,6 +41,7 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
     this.relationName = relationName;
     this._foreignKey  = foreignKey;
     this.child        = child;
+    this.addConstraints();
   }
 
   /*Get the results of the relationship.*/

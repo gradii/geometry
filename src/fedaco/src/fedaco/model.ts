@@ -6,7 +6,7 @@
 
 import { isAnyEmpty, isArray, isBlank, isString } from '@gradii/check-type';
 import { tap } from 'ramda';
-import { plural } from '../helper/pluralize';
+import { plural, pluralStudy } from '../helper/pluralize';
 import { camelCase, snakeCase, upperCaseFirst } from '../helper/str';
 import { ConnectionResolverInterface } from '../interface/connection-resolver-interface';
 import { ForwardsCalls, mixinForwardsCalls } from '../mixins/forwards-calls';
@@ -414,7 +414,8 @@ export class Model extends mixinHasAttributes(
 
   /*Create a new instance of the given model.*/
   public newInstance(attributes: any[] = [], exists: boolean = false) {
-    let model    = new Model(/*cast type array*/ attributes);
+    // @ts-ignore
+    let model    = new this.constructor(/*cast type array*/ attributes);
     model.exists = exists;
     model.setConnection(this.getConnectionName());
     model.setTable(this.getTable());
@@ -427,7 +428,8 @@ export class Model extends mixinHasAttributes(
     let model = this.newInstance([], true);
     model.setRawAttributes(/*cast type array*/ attributes, true);
     model.setConnection(connection || this.getConnectionName());
-    model._fireModelEvent('retrieved', false);
+    // todo fixme
+    // model._fireModelEvent('retrieved', false);
     return model;
   }
 
@@ -945,7 +947,7 @@ export class Model extends mixinHasAttributes(
 
   /*Get the table associated with the model.*/
   public getTable() {
-    return this._table; // || snakeCase(pluralStudy(this.constructor.name));
+    return this._table || snakeCase(pluralStudy(this.constructor.name));
   }
 
   /*Set the table associated with the model.*/

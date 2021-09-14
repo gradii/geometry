@@ -408,7 +408,7 @@ export class QueryBuilder extends Builder {
   }
 
   async runSelect() {
-    return await this._connection.select(
+    return this._connection.select(
       this.toSql(),
       this.getBindings(),
       !this._useWriteConnection

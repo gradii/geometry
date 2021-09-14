@@ -83,6 +83,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
     this._relatedPivotKey = relatedPivotKey;
     this._foreignPivotKey = foreignPivotKey;
     this._table           = table;
+    this.addConstraints();
   }
 
   /*Attempt to resolve the intermediate table name from the given string.*/
@@ -398,7 +399,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
     let models  = await builder.addSelect(this._shouldSelect(columns)).getModels();
     this._hydratePivotRelation(models);
     if (models.length > 0) {
-      models = builder.eagerLoadRelations(models);
+      models = await builder.eagerLoadRelations(models);
     }
     return this._related.newCollection(models);
   }

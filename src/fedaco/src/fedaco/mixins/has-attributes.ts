@@ -185,7 +185,7 @@ export interface HasAttributes {
   hasCast(this: Model & this, key: string, types?: any[] | string | null);
 
   /*Get the casts array.*/
-  getCasts(this: Model & this): {[key: string]: string};
+  getCasts(this: Model & this): { [key: string]: string };
 
   /*Determine whether a value is Date / DateTime castable for inbound manipulation.*/
   isDateCastable(this: Model & this, key: string);
@@ -469,7 +469,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     /*Determine if the given key is a relationship method on the model.*/
     public isRelation(key: string) {
       const metadata = this._columnInfo(key);
-      return metadata.isRelation || metadata.isRelationUsing;
+      return metadata && (metadata.isRelation || metadata.isRelationUsing);
       // return method_exists(this, key) ||
       //   (HasAttributes.relationResolvers[get_class(this)][key] ?? null);
     }
@@ -672,12 +672,15 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     protected _columnInfo(key: string) {
       const typeOfClazz = this.constructor as typeof Model;
       const meta        = reflector.propMetadata(typeOfClazz);
-      return findLast(it => {
-        return Column.isTypeOf(it) ||
-          DateColumn.isTypeOf(it) ||
-          DateCastableColumn.isTypeOf(it) ||
-          EncryptedCastableColumn.isTypeOf(it);
-      }, meta[key]) as ColumnDefine;
+      if (meta[key] && isArray(meta[key])) {
+        return findLast(it => {
+          return Column.isTypeOf(it) ||
+            DateColumn.isTypeOf(it) ||
+            DateCastableColumn.isTypeOf(it) ||
+            EncryptedCastableColumn.isTypeOf(it);
+        }, meta[key]) as ColumnDefine;
+      }
+      return undefined;
     }
 
     /*Determine if the given attribute is a date or date castable.*/
@@ -1120,9 +1123,9 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Transform a raw model value using mutators, casts, etc.*/
     protected transformModelValue(this: Model & this, key: string, value: any) {
-      if (this.hasGetMutator(key)) {
-        return this.mutateAttribute(key, value);
-      }
+      // if (this.hasGetMutator(key)) {
+      //   return this.mutateAttribute(key, value);
+      // }
       if (this.hasCast(key)) {
         return this.castAttribute(key, value);
       }

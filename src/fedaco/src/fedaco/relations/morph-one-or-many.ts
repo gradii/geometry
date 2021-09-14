@@ -25,6 +25,7 @@ export class MorphOneOrMany extends HasOneOrMany {
     super(query, parent, id, localKey);
     this.morphType  = type;
     this.morphClass = parent.getMorphClass();
+    this.addConstraints();
   }
 
   /*Set the base constraints on the relation query.*/
