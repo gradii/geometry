@@ -1,0 +1,3 @@
+INJECTION_ENTRYPOINTS = [
+]
+INJECTION_TARGETS = ["//src/injection"]

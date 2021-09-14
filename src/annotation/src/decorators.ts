@@ -68,7 +68,8 @@ export function makeDecorator<T>(
       DecoratorFactory.prototype = Object.create(parentClass.prototype);
     }
 
-    DecoratorFactory.prototype.metadataName = name;
+    DecoratorFactory.isTypeOf = (obj: any) => obj && obj.__metadataName === name;
+    DecoratorFactory.prototype.__metadataName = name;
     (DecoratorFactory as any).annotationCls = DecoratorFactory;
     return DecoratorFactory as any;
 }
@@ -118,7 +119,9 @@ export function makeParamDecorator(
     if (parentClass) {
       ParamDecoratorFactory.prototype = Object.create(parentClass.prototype);
     }
-    ParamDecoratorFactory.prototype.metadataName = name;
+
+    ParamDecoratorFactory.isTypeOf = (obj: any) => obj && obj.__metadataName === name;
+    ParamDecoratorFactory.prototype.__metadataName = name;
     (<any>ParamDecoratorFactory).annotationCls = ParamDecoratorFactory;
     return ParamDecoratorFactory;
 }
