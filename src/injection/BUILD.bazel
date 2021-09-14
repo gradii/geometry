@@ -1,7 +1,7 @@
 load("@npm//scss-bundle:index.bzl", "scss_bundle")
 load(
     "//src/injection:config.bzl",
-    "ANNOTATION_TARGETS",
+    "INJECTION_TARGETS",
 )
 load("//tools:defaults.bzl", "ng_package", "ts_library")
 
@@ -16,6 +16,9 @@ ts_library(
             "**/*.spec.ts",
         ],
     ),
+    deps = [
+        "//src/annotation"
+    ],
     module_name = "@gradii/injection",
 )
 
@@ -30,5 +33,5 @@ ng_package(
     entry_point_name = "injection",
     nested_packages = [],
     tags = ["release-package"],
-    deps = ANNOTATION_TARGETS,
+    deps = INJECTION_TARGETS,
 )

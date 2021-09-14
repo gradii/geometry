@@ -4,8 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { ReflectiveInjector } from '../reflective_injector';
-import { ResolvedReflectiveProvider, ResolvedReflectiveFactory, ReflectiveDependency } from '../reflective_provider';
+import { ReflectiveInjector } from '../reflective-injector';
+import { ResolvedReflectiveProvider, ResolvedReflectiveFactory, ReflectiveDependency } from '../reflective-provider';
 
 type Constructor = new (...args: any[]) => any;
 
