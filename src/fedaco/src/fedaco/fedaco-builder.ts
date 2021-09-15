@@ -207,16 +207,16 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /**
    * Find multiple models by their primary keys.
    */
-  public findMany(ids: any[], columns: any[] = ['*']) {
+  public async findMany(ids: any[], columns: any[] = ['*']) {
     if (isAnyEmpty(ids)) {
       return [];
     }
-    return this.whereKey(ids).get(columns);
+    return await this.whereKey(ids).get(columns);
   }
 
   /*Find a model by its primary key or throw an exception.*/
-  public findOrFail(id: any, columns: any[] = ['*']) {
-    const result = this.find(id, columns);
+  public async findOrFail(id: any, columns: any[] = ['*']) {
+    const result = await this.find(id, columns);
 
     if (isArray(id) && isArray(result)) {
       if (result.length === id.length) {
@@ -231,8 +231,8 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Find a model by its primary key or return fresh model instance.*/
-  public findOrNew(id: any, columns: any[] = ['*']) {
-    const model = this.find(id, columns);
+  public async findOrNew(id: any, columns: any[] = ['*']) {
+    const model = await this.find(id, columns);
     if (!isBlank(model)) {
       return model;
     }
@@ -249,15 +249,14 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Get the first record matching the attributes or create it.*/
-  public firstOrCreate(attributes: any, values: any = {}) {
-    const instance = this.where(attributes).first();
+  public async firstOrCreate(attributes: any, values: any = {}) {
+    let instance = await this.where(attributes).first() as Model;
     if (!isBlank(instance)) {
       return instance;
     }
-    return tap(model => {
-        model.save();
-      }, this.newModelInstance({...attributes, ...values})
-    );
+    instance = this.newModelInstance({...attributes, ...values});
+    await instance.save();
+    return instance;
   }
 
   /*Create or update a record matching the attributes, and fill it with values.*/
@@ -268,8 +267,8 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Execute the query and get the first result or throw an exception.*/
-  public firstOrFail(columns: any[] = ['*']) {
-    const model = this.first(columns);
+  public async firstOrFail(columns: any[] = ['*']) {
+    const model = await this.first(columns);
     if (!isBlank(model)) {
       return model;
     }
@@ -278,12 +277,12 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Execute the query and get the first result or call a callback.*/
-  public firstOr(columns: Function | any[] = ['*'], callback: Function | null = null) {
+  public async firstOr(columns: Function | any[] = ['*'], callback: Function | null = null) {
     if (isFunction(columns)) {
       callback = columns;
       columns  = ['*'];
     }
-    const model = this.first(columns);
+    const model = await this.first(columns);
     if (!isBlank(model)) {
       return model;
     }
@@ -327,6 +326,9 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /*Eager load the relationships for the models.*/
   public async eagerLoadRelations(models: any[]) {
     for (let [name, constraints] of Object.entries(this._eagerLoad)) {
+      // For nested eager loads we'll skip loading them here and they will be set as an
+      // eager load on the query to retrieve the relation so that they will be eager
+      // loaded on that query, because that is where they get hydrated as models.
       if (!name.includes('.')) {
         models = await this.eagerLoadRelation(models, name, constraints);
       }
@@ -665,7 +667,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Create a new instance of the model being queried.*/
-  public newModelInstance(attributes: any[] = []) {
+  public newModelInstance(attributes: any[] = []): Model {
     return this._model.newInstance(attributes).setConnection(this._query.getConnection().getName());
   }
 

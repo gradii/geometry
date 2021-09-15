@@ -5,6 +5,7 @@
  */
 
 import { Constructor } from '../../helper/constructor';
+import { Model } from '../model';
 
 export interface GuardsAttributes {
   getFillable(): this;
@@ -28,9 +29,9 @@ export function mixinGuardsAttributes<T extends Constructor<any>>(base: T): Guar
     /*The attributes that aren't mass assignable.*/
     _guarded: string[] = ['*'];
     /*Indicates if all mass assignment is enabled.*/
-    _unguarded: boolean = false;
+    static _unguarded: boolean = false;
     /*The actual columns that exist on the database and can be guarded.*/
-    _guardableColumns: any[];
+    static _guardableColumns: any[];
 
     /*Get the fillable attributes for the model.*/
     public getFillable() {
@@ -67,30 +68,30 @@ export function mixinGuardsAttributes<T extends Constructor<any>>(base: T): Guar
     }
 
     /*Disable all mass assignable restrictions.*/
-    public unguard(state: boolean = true) {
-      this._unguarded = state;
+    public static unguard(state: boolean = true) {
+      (this.constructor as any)._unguarded = state;
     }
 
     /*Enable the mass assignment restrictions.*/
-    public reguard() {
-      this._unguarded = false;
+    public static reguard() {
+      (this.constructor as any)._unguarded = false;
     }
 
     /*Determine if the current state is "unguarded".*/
-    public isUnguarded() {
-      return this._unguarded;
+    public static isUnguarded() {
+      return (this.constructor as any)._unguarded;
     }
 
     /*Run the given callable while being unguarded.*/
-    public unguarded(callback: Function) {
-      if (this._unguarded) {
+    public static unguarded(callback: Function) {
+      if ((this.constructor as any)._unguarded) {
         return callback();
       }
-      this.unguard();
+      (this.constructor as any).unguard();
       try {
         return callback();
       } finally {
-        this.reguard();
+        (this.constructor as any).reguard();
       }
     }
 
