@@ -19,10 +19,11 @@ export interface GuardsAttributes {
   _fillableFromArray(attributes: any): this;
 }
 
-export type GuardsAttributesCtor = Constructor<GuardsAttributes>;
+
+export type GuardsAttributesCtor<M> = Constructor<GuardsAttributes>;
 
 
-export function mixinGuardsAttributes<T extends Constructor<any>>(base: T): GuardsAttributesCtor & T {
+export function mixinGuardsAttributes<T extends Constructor<any>, M>(base: T): GuardsAttributesCtor<M> & T {
   return class _Self extends base {
     /*The attributes that are mass assignable.*/
     _fillable: string[] = [];

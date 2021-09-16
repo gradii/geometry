@@ -276,7 +276,7 @@ export class _SqlParserAst {
   _parseTableAsName(): TableReferenceExpression {
     const tableName = this._parseTableName();
     if (!tableName) {
-      throw new Error('tableName error');
+      throw new Error(`tableName error. table name can't be keyword like "select", "table", "join" etc`);
     }
     let alias;
     if (this.peekKeywordAs()) {

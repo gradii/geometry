@@ -102,7 +102,7 @@ export class Model extends mixinHasAttributes(
 
   _classCastCache: any[];
 
-  static resolver;
+  static resolver: ConnectionResolverInterface;
 
   /*Create a new Eloquent model instance.*/
   public constructor(attributes: any = {}) {
@@ -826,8 +826,6 @@ export class Model extends mixinHasAttributes(
     return models;
   }
 
-
-
   /*Determine if the model has a given scope.*/
   public hasNamedScope(scope: string) {
     return `scope${upperCaseFirst(scope)}` in this;
@@ -908,7 +906,7 @@ export class Model extends mixinHasAttributes(
 
   /*Get the database connection for the model.*/
   public getConnection() {
-    return this._connectionResolver.resolveConnection(
+    return (this.constructor as any).resolveConnection(
       this.constructor, this.getConnectionName()
     );
   }
@@ -926,22 +924,22 @@ export class Model extends mixinHasAttributes(
 
   /*Resolve a connection instance.*/
   public static resolveConnection(connection: string | null = null) {
-    return Model.resolver.connection(connection);
+    return this.resolver.connection(connection);
   }
 
   /*Get the connection resolver instance.*/
   public static getConnectionResolver() {
-    return Model.resolver;
+    return this.resolver;
   }
 
   /*Set the connection resolver instance.*/
   public static setConnectionResolver(resolver: ConnectionResolverInterface) {
-    Model.resolver = resolver;
+    this.resolver = resolver;
   }
 
   /*Unset the connection resolver for models.*/
   public static unsetConnectionResolver() {
-    Model.resolver = null;
+    this.resolver = null;
   }
 
   /*Get the table associated with the model.*/

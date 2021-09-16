@@ -7,6 +7,8 @@
 import { isAnyEmpty, isArray, isBlank, isFunction, isNumber, isString } from '@gradii/check-type';
 import { nth, omit, pluck, tap } from 'ramda';
 import { wrap } from '../helper/arr';
+import { pascalCase } from '../helper/str';
+import { NoSuchMethodProxy } from '../proxy/no-such-method-proxy';
 import { mixinBuildQueries } from '../query-builder/mixins/build-query';
 import { QueryBuilder } from '../query-builder/query-builder';
 import { SqlNode } from '../query/sql-node';
@@ -18,6 +20,30 @@ import { BelongsToMany } from './relations/belongs-to-many';
 import { Relation } from './relations/relation';
 import { Scope } from './scope';
 
+
+// export interface FedacoBuilder<M> {
+//   (...args: any[]): FedacoBuilderScope<M>;
+//
+//   new(...args: any[]): FedacoBuilderScope<M>;
+// }
+
+type SnakeCaseToCamelCase<S extends string> =
+  S extends `${infer FirstWord}_${infer Rest}` ?
+    `${Lowercase<FirstWord>}${SnakeCaseToPascalCase<Rest>}` :
+    `${Lowercase<S>}`;
+
+type SnakeCaseToPascalCase<S extends string> =
+  S extends `${infer FirstWord}_${infer Rest}` ?
+    `${Capitalize<Lowercase<FirstWord>>}${SnakeCaseToPascalCase<Rest>}` :
+    Capitalize<Lowercase<S>>;
+
+
+type ModelScopeMethod<T, M> = T extends `scope${infer Rest}` ?
+  Uncapitalize<`${SnakeCaseToPascalCase<Rest>}`> : never;
+
+export type FedacoBuilderScope<M> = {                 // note type, not interface
+  [K in ModelScopeMethod<keyof M, M>]?: (...args: any[]) => any   // key in
+};
 
 // @NoSuchMethodProxy()
 export class FedacoBuilder extends mixinGuardsAttributes(
@@ -346,15 +372,23 @@ export class FedacoBuilder extends mixinGuardsAttributes(
 
   /*Get the relation instance for the given relation name.*/
   public getRelation(name: string): Relation {
+    // We want to run a relationship query without any constrains so that we will
+    // not have to remove these where clauses manually which gets really hacky
+    // and error prone. We don't want constraints because we add eager ones.
     const relation = Relation.noConstraints(() => {
-      try {
-        return this.getModel().newInstance().getRelationMethod(name);
-      } catch (e) {
+      const _relation = this.getModel().newInstance().getRelationMethod(name);
+      if (!_relation) {
         throw new Error(`RelationNotFoundException ${this.getModel().constructor.name} ${name}`); // (this.getModel(), name);
       }
+      return _relation;
     });
-    const nested   = this.relationsNestedUnder(name);
-    if (nested.length > 0) {
+
+    const nested = this.relationsNestedUnder(name);
+
+    // If there are nested relationships set on the query, we will put those onto
+    // the query instances so that they can be handled after this relationship
+    // is loaded. In this way they will all trickle down as they are loaded.
+    if (!isAnyEmpty(nested)) {
       relation.getQuery().with(nested);
     }
     return relation;
@@ -638,16 +672,18 @@ export class FedacoBuilder extends mixinGuardsAttributes(
     };
   }
 
-  public with(...relations: string[]): this;
+  public with(...relations: Array<{ [key: string]: Function } | string>): this;
+  public with(relations: { [key: string]: Function }): this;
   public with(relations: string[]): this;
   public with(relations: string, callback?: Function): this;
-  public with(relations: string[] | string, callback?: Function | string) {
+  public with(relations: { [key: string]: Function } | string[] | string,
+              callback?: Function | { [key: string]: Function } | string) {
     let eagerLoad;
     if (isFunction(callback)) {
       eagerLoad = this.parseWithRelations([{[relations as string]: callback}]);
     } else {
-      // @ts-ignore
-      eagerLoad = this.parseWithRelations(isString(relations) ? arguments : relations);
+      eagerLoad = this.parseWithRelations(
+        isString(relations) ? [...arguments] : relations as any[]);
     }
     this._eagerLoad = {...this._eagerLoad, ...eagerLoad};
     return this;
@@ -674,18 +710,24 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /*Parse a list of relations into individuals.*/
   protected parseWithRelations(relations: any[]): { [key: string]: any } {
     let results = [];
-    for (let [name, constraints] of Object.entries(relations)) {
-      // if (isNumber(name)) {
-      //   name                = constraints;
-      //   [name, constraints] = name.includes(':') ?
-      //     this.createSelectWithConstraint(name) :
-      //     [
-      //       name, () => {
-      //     }
-      //     ];
-      // }
-      results       = this.addNestedWiths(name, results);
-      results[name] = constraints;
+    if (isArray(relations)) {
+      for (let name of relations) {
+        let constraints;
+        [name, constraints] = name.includes(':') ?
+          this.createSelectWithConstraint(name) :
+          [
+            name, () => {
+          }
+          ];
+
+        results       = this.addNestedWiths(name, results);
+        results[name] = constraints;
+      }
+    } else {
+      for (let [name, constraints] of Object.entries(relations)) {
+        results       = this.addNestedWiths(name, results);
+        results[name] = constraints;
+      }
     }
     return results;
   }
@@ -778,6 +820,16 @@ export class FedacoBuilder extends mixinGuardsAttributes(
     return this._model.qualifyColumns(columns);
   }
 
+  public whereScope(key: string, ...args: any[]) {
+    const metadata = this._model._columnInfo(`scope${pascalCase(key)}`);
+    if (metadata && metadata.isScope) {
+      metadata.query(this, ...args);
+      return this;
+    }
+
+    throw new Error('key is not in model or scope metadata is not exist');
+  }
+
   // /*Get the given macro by name.*/
   // public getMacro(name: string) {
   //   return Arr.get(this.localMacros, name);
@@ -862,15 +914,16 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   //   this.groupWhereSliceForScope(query, array_slice(allWheres, originalWhereCount));
   // }
 
-  // __noSuchMethod__(methodName, args) {
-  //
-  //   const query = this.getQuery();
-  //   if (query[methodName]) {
-  //     return query[methodName](...args);
-  //   }
-  //   throw new Error('no method found');
-  // }
+  __noSuchMethod__(methodName: string, args: any[]) {
+    // todo fixme use hasScope runScope
+    const metadata = this._model._columnInfo(`scope${pascalCase(methodName)}`);
+    if (metadata && metadata.isScope) {
+      metadata.query(this, ...args);
+      return this;
+    }
 
+    throw new Error('no method found');
+  }
 
   clone(): FedacoBuilder {
     return new FedacoBuilder(this._query.clone());

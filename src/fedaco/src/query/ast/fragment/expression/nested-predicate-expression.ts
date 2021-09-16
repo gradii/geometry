@@ -10,6 +10,8 @@ import { Expression } from '../../expression/expression';
 
 
 export class NestedPredicateExpression extends Expression {
+  visited = false;
+
   constructor(
     public query: QueryBuilder | string,
   ) {
@@ -17,6 +19,11 @@ export class NestedPredicateExpression extends Expression {
   }
 
   accept(visitor: SqlVisitor) {
+    if (this.visited) {
+      throw new Error(
+        'NestedPredicateExpression should have different sql node. same sql node found!');
+    }
+    this.visited = true;
     return visitor.visitNestedPredicateExpression(this);
   }
 }

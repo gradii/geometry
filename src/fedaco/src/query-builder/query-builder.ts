@@ -342,6 +342,10 @@ export class QueryBuilder extends Builder {
     });
   }
 
+  // public raw(value) {
+  //   return this._connection.raw(value);
+  // }
+
   public getBindings() {
     const rst = [];
     for (const item of Object.values(this._bindings)) {
@@ -537,27 +541,29 @@ export class QueryBuilder extends Builder {
     );
   }
 
-  public async insert(values: any) {
-    if (isArray(values)) {
-      throw new Error('invalid values');
-    }
-    if (isAnyEmpty(values)) {
+  public async insert(values: any|any[]) {
+    // Since every insert gets treated like a batch insert, we will make sure the
+    // bindings are structured in a way that is convenient when building these
+    // inserts statements by verifying these elements are actually an array.
+    if (isBlank(values)) {
       return true;
     }
-    if (!this._from) {
-      throw new Error('must call from before insert');
+    if (!isArray(values)) {
+      values = [values];
+    } else {
+      // // Here, we will sort the insert keys for every record so that each insert is
+      // // in the same order for the record. We need to make sure this is the case
+      // // so there are not any errors or problems when inserting these records.
+      //
+      // for (let [key, value] of Object.entries(values)) {
+      //   // ksort(value);
+      //   values[key] = value;
+      // }
     }
-    // if (!isArray(values)) {
-    //    values = [values];
-    // } else {
-    //   // for (let [key, value] of Object.entries(values)) {
-    //   //   values[key] = value;
-    //   // }
-    //   throw new Error('not implement yet')
-    // }
 
-    // const insertValues = Object.values(values)
-    return await this._connection.insert(
+    // this.applyBeforeQueryCallbacks();
+
+    return this._connection.insert(
       this._grammar.compileInsert(this, values),
       this.getBindings()
       // this._cleanBindings(insertValues)

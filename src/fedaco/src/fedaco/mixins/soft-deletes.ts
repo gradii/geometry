@@ -8,20 +8,27 @@ import { isBlank } from '@gradii/check-type';
 import { tap } from 'ramda';
 import { Constructor } from '../../helper/constructor';
 import { Model } from '../model';
+import { SoftDeletingScope } from '../scopes/soft-deleting-scope';
 
 export interface SoftDeletes {
   /*Initialize the soft deleting trait for an instance.*/
   initializeSoftDeletes(this: Model & this): void;
+
   /*Force a hard delete on a soft deleted model.*/
   forceDelete(this: Model & this): boolean;
+
   /*Perform the actual delete query on this model instance.*/
   _performDeleteOnModel(this: Model & this): void;
+
   /*Perform the actual delete query on this model instance.*/
   _runSoftDelete(this: Model & this): void;
+
   /*Restore a soft-deleted model instance.*/
   restore(this: Model & this): boolean;
+
   /*Determine if the model instance has been soft-deleted.*/
   trashed(): boolean;
+
   // /*Register a "softDeleted" model event callback with the dispatcher.*/
   // static softDeleted(callback: Function | string) {
   //   SoftDeletes.registerModelEvent('trashed', callback);
@@ -43,8 +50,10 @@ export interface SoftDeletes {
   // }
   /*Determine if the model is currently force deleting.*/
   isForceDeleting(): boolean;
+
   /*Get the name of the "deleted at" column.*/
   getDeletedAtColumn(): string;
+
   /*Get the fully qualified "deleted at" column.*/
   getQualifiedDeletedAtColumn(this: Model & this): string;
 }
@@ -58,10 +67,12 @@ export function mixinSoftDeletes<T extends Constructor<{}>>(base: T): SoftDelete
 
     /*Indicates if the model is currently force deleting.*/
     _forceDeleting: boolean = false;
+
     /*Boot the soft deleting trait for a model.*/
-    // public static bootSoftDeletes() {
-    //     SoftDeletes.addGlobalScope(new SoftDeletingScope());
-    // }
+    public static bootSoftDeletes() {
+      (this.constructor as any).addGlobalScope(new SoftDeletingScope());
+    }
+
     /*Initialize the soft deleting trait for an instance.*/
     public initializeSoftDeletes(this: Model & this): void {
       if (!(this._casts[this.getDeletedAtColumn()] !== undefined)) {
@@ -103,7 +114,7 @@ export function mixinSoftDeletes<T extends Constructor<{}>>(base: T): SoftDelete
         columns[this.getUpdatedAtColumn()] = this.fromDateTime(time);
       }
       query.update(columns);
-      this.syncOriginalAttributes(array_keys(columns));
+      this.syncOriginalAttributes(Object.keys(columns));
       this.fireModelEvent('trashed', false);
     }
 

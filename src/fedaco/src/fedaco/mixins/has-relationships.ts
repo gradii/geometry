@@ -588,8 +588,8 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
         }
       }, new clazz());
       // todo fixme should move to another place
-      ins._connectionResolver = {
-        resolveConnection() {
+      (ins.constructor as any).resolver = {
+        connection() {
           return {
             query() {
               const grammar   = new MysqlGrammar();

@@ -1,17 +1,38 @@
+import { isFunction } from '@gradii/check-type';
 import { DatabaseManager } from '../src/database-manager';
 import { FedacoBuilder } from '../src/fedaco/fedaco-builder';
 import { Model } from '../src/fedaco/model';
 import { ResolveConnection } from '../src/fedaco/resolve-connection';
+import { ConnectionResolverInterface } from '../src/interface/connection-resolver-interface';
 import { ConnectionInterface } from '../src/query-builder/connection-interface';
 import { MysqlGrammar } from '../src/query-builder/grammar/mysql-grammar';
+import { SqliteGrammar } from '../src/query-builder/grammar/sqlite-grammar';
 import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
+import { FedacoBuilderTestNestedStub } from './model/fedaco-builder-test-nested-stub';
+import { FedacoBuilderTestScopeStub } from './model/fedaco-builder-test-scope-stub';
 import { StubModel } from './model/stub-model';
 
 describe('fedaco builder', () => {
   let model: Model, builder: FedacoBuilder;
 
   class Conn implements ConnectionInterface {
+    getQueryGrammar(): any {
+
+    }
+
+    getDatabaseName(): string {
+      return 'default-database';
+    }
+
+    getPostProcessor(): any {
+
+    }
+
+    query(): QueryBuilder {
+      return undefined;
+    }
+
     async select() {
       return await Promise.resolve();
     }
@@ -38,7 +59,7 @@ describe('fedaco builder', () => {
 
   function resolveModel(model: Model) {
     // model.
-    model._connectionResolver                    = new ResolveConnection();
+    // (model.constructor as typeof Model)._connectionResolver                    = new ResolveConnection();
     (model.constructor as typeof Model).resolver = new DatabaseManager();
   }
 
@@ -70,6 +91,30 @@ describe('fedaco builder', () => {
       new MysqlGrammar(),
       new Processor()
     ));
+  }
+
+  function mockConnectionForModel<T extends typeof Model>(modelClazz: any,
+                                                          database) {
+    const grammar    = new SqliteGrammar();
+    const processor  = new Processor();
+    const connection = new Conn();// m::mock(ConnectionInterface::class, ['getQueryGrammar' => $grammar, 'getPostProcessor' => $processor]);
+    jest.spyOn(connection, 'getQueryGrammar').mockReturnValue(grammar);
+    jest.spyOn(connection, 'getPostProcessor').mockReturnValue(processor);
+
+    jest.spyOn(connection, 'query').mockImplementation(() =>
+      new QueryBuilder(connection, grammar, processor));
+    jest.spyOn(connection, 'getDatabaseName').mockReturnValue('database');
+
+    const resolver: ConnectionResolverInterface = {
+      getDefaultConnection(): any {
+      },
+      setDefaultConnection(name: string): any {
+      },
+      connection() {
+        return connection;
+      }
+    };
+    (modelClazz as typeof Model).setConnectionResolver(resolver);
   }
 
   beforeEach(() => {
@@ -324,6 +369,7 @@ describe('fedaco builder', () => {
     expect(spy3).toReturnWith(['bar', 'baz']);
     expect(results).toEqual(['bar', 'baz']);
   });
+
   // public testGetMethodDoesntHydrateEagerRelationsWhenNoResultsAreReturned() {
   //     var builder = m.mock(Builder + "[getModels,eagerLoadRelations]", [this.getMockQueryBuilder()]);
   //     builder.shouldReceive("applyScopes").andReturnSelf()
@@ -334,6 +380,7 @@ describe('fedaco builder', () => {
   //     var results = builder.get(["foo"]);
   //     this.assertEquals([], results.all())
   //   }
+
   // public testValueMethodWithModelFound() {
   //     var builder = m.mock(Builder + "[first]", [this.getMockQueryBuilder()]);
   //     var mockModel = new stdClass();
@@ -610,25 +657,35 @@ describe('fedaco builder', () => {
   //     var models = builder.getModels(["foo"]);
   //     this.assertEquals(models, ["hydrated"])
   //   }
-  // public testEagerLoadRelationsLoadTopLevelRelationships() {
-  //     var builder = m.mock(Builder + "[eagerLoadRelation]", [this.getMockQueryBuilder()]);
-  //     var nop1 = () => {
-  //     };
-  //     var nop2 = () => {
-  //     };
-  //     builder.setEagerLoads({
-  //       "foo": nop1,
-  //       "foo.bar": nop2
-  //     })
-  //     builder.shouldAllowMockingProtectedMethods().shouldReceive("eagerLoadRelation")._with(["models"], "foo", nop1).andReturn(["foo"])
-  //     var results = builder.eagerLoadRelations(["models"]);
-  //     this.assertEquals(["foo"], results)
-  //   }
+
+  it('testEagerLoadRelationsLoadTopLevelRelationships', async () => {
+    builder = getBuilder();
+    model   = getModel();
+    builder.setModel(model);
+    // var builder = m.mock(Builder + '[eagerLoadRelation]', [this.getMockQueryBuilder()]);
+    const nop1 = () => {
+    };
+    const nop2 = () => {
+    };
+    builder.setEagerLoads({
+      'foo'    : nop1,
+      'foo.bar': nop2
+    });
+    // @ts-ignore
+    const spy1 = jest.spyOn(builder, 'eagerLoadRelation').mockReturnValue(['foo']);
+
+    const results = await builder.eagerLoadRelations(['models']);
+
+    expect(spy1).toBeCalledWith(['models'], 'foo', nop1);
+    expect(spy1).toReturnWith(['foo']);
+    expect(results).toEqual(['foo']);
+  });
 
   it('testRelationshipEagerLoadProcess', async () => {
     let spy1, spy2, spy3, spy4, results, _SERVER = {};
-    builder                                      = getBuilder();
-    model                                        = getModel();
+
+    builder = getBuilder();
+    model   = getModel();
     builder.setModel(model);
     builder.setEagerLoads({
       'orders': query => {
@@ -682,146 +739,250 @@ describe('fedaco builder', () => {
     expect(relation).toEqual(global['__eloquent.constrain']);
   });
 
-  // public testGetRelationProperlySetsNestedRelationships() {
-  //     var builder = this.getBuilder();
-  //     builder.setModel(this.getMockModel())
-  //     builder.getModel().shouldReceive("newInstance->orders").once().andReturn(relation = m.mock(stdClass))
-  //     var relationQuery = m.mock(stdClass);
-  //     relation.shouldReceive("getQuery").andReturn(relationQuery)
-  //     relationQuery.shouldReceive("with").once()._with({
-  //       "lines": null,
-  //       "lines.details": null
-  //     })
-  //     builder.setEagerLoads({
-  //       "orders": null,
-  //       "orders.lines": null,
-  //       "orders.lines.details": null
-  //     })
-  //     builder.getRelation("orders")
-  //   }
-  // public testGetRelationProperlySetsNestedRelationshipsWithSimilarNames() {
-  //     var builder = this.getBuilder();
-  //     builder.setModel(this.getMockModel())
-  //     builder.getModel().shouldReceive("newInstance->orders").once().andReturn(relation = m.mock(stdClass))
-  //     builder.getModel().shouldReceive("newInstance->ordersGroups").once().andReturn(groupsRelation = m.mock(stdClass))
-  //     var relationQuery = m.mock(stdClass);
-  //     relation.shouldReceive("getQuery").andReturn(relationQuery)
-  //     var groupRelationQuery = m.mock(stdClass);
-  //     groupsRelation.shouldReceive("getQuery").andReturn(groupRelationQuery)
-  //     groupRelationQuery.shouldReceive("with").once()._with({
-  //       "lines": null,
-  //       "lines.details": null
-  //     })
-  //     builder.setEagerLoads({
-  //       "orders": null,
-  //       "ordersGroups": null,
-  //       "ordersGroups.lines": null,
-  //       "ordersGroups.lines.details": null
-  //     })
-  //     builder.getRelation("orders")
-  //     builder.getRelation("ordersGroups")
-  //   }
-  // public testGetRelationThrowsException() {
-  //     this.expectException(RelationNotFoundException)
-  //     var builder = this.getBuilder();
-  //     builder.setModel(this.getMockModel())
-  //     builder.getRelation("invalid")
-  //   }
-  // public testEagerLoadParsingSetsProperRelationships() {
-  //     var builder = this.getBuilder();
-  //     builder._with(["orders", "orders.lines"])
-  //     var eagers = builder.getEagerLoads();
-  //     this.assertEquals(["orders", "orders.lines"], array_keys(eagers))
-  //     this.assertInstanceOf(Closure, eagers["orders"])
-  //     this.assertInstanceOf(Closure, eagers["orders.lines"])
-  //     var builder = this.getBuilder();
-  //     builder._with("orders", "orders.lines")
-  //     var eagers = builder.getEagerLoads();
-  //     this.assertEquals(["orders", "orders.lines"], array_keys(eagers))
-  //     this.assertInstanceOf(Closure, eagers["orders"])
-  //     this.assertInstanceOf(Closure, eagers["orders.lines"])
-  //     var builder = this.getBuilder();
-  //     builder._with(["orders.lines"])
-  //     var eagers = builder.getEagerLoads();
-  //     this.assertEquals(["orders", "orders.lines"], array_keys(eagers))
-  //     this.assertInstanceOf(Closure, eagers["orders"])
-  //     this.assertInstanceOf(Closure, eagers["orders.lines"])
-  //     var builder = this.getBuilder();
-  //     builder._with({
-  //       "orders": () => {
-  //         return "foo";
-  //       }
-  //     })
-  //     var eagers = builder.getEagerLoads();
-  //     this.assertSame("foo", eagers["orders"]())
-  //     var builder = this.getBuilder();
-  //     builder._with({
-  //       "orders.lines": () => {
-  //         return "foo";
-  //       }
-  //     })
-  //     var eagers = builder.getEagerLoads();
-  //     this.assertInstanceOf(Closure, eagers["orders"])
-  //     this.assertNull(eagers["orders"]())
-  //     this.assertSame("foo", eagers["orders.lines"]())
-  //   }
-  // public testQueryPassThru() {
-  //     var builder = this.getBuilder();
-  //     builder.getQuery().shouldReceive("foobar").once().andReturn("foo")
-  //     this.assertInstanceOf(Builder, builder.foobar())
-  //     var builder = this.getBuilder();
-  //     builder.getQuery().shouldReceive("insert").once()._with(["bar"]).andReturn("foo")
-  //     this.assertSame("foo", builder.insert(["bar"]))
-  //     var builder = this.getBuilder();
-  //     builder.getQuery().shouldReceive("insertOrIgnore").once()._with(["bar"]).andReturn("foo")
-  //     this.assertSame("foo", builder.insertOrIgnore(["bar"]))
-  //     var builder = this.getBuilder();
-  //     builder.getQuery().shouldReceive("insertGetId").once()._with(["bar"]).andReturn("foo")
-  //     this.assertSame("foo", builder.insertGetId(["bar"]))
-  //     var builder = this.getBuilder();
-  //     builder.getQuery().shouldReceive("insertUsing").once()._with(["bar"], "baz").andReturn("foo")
-  //     this.assertSame("foo", builder.insertUsing(["bar"], "baz"))
-  //     var builder = this.getBuilder();
-  //     builder.getQuery().shouldReceive("raw").once()._with("bar").andReturn("foo")
-  //     this.assertSame("foo", builder.raw("bar"))
-  //     var builder = this.getBuilder();
-  //     var grammar = new Grammar();
-  //     builder.getQuery().shouldReceive("getGrammar").once().andReturn(grammar)
-  //     this.assertSame(grammar, builder.getGrammar())
-  //   }
-  // public testQueryScopes() {
-  //     var builder = this.getBuilder();
-  //     builder.getQuery().shouldReceive("from")
-  //     builder.getQuery().shouldReceive("where").once()._with("foo", "bar")
-  //     builder.setModel(model = new EloquentBuilderTestScopeStub())
-  //     var result = builder.approved();
-  //     this.assertEquals(builder, result)
-  //   }
-  // public testNestedWhere() {
-  //     var nestedQuery = m.mock(Builder);
-  //     var nestedRawQuery = this.getMockQueryBuilder();
-  //     nestedQuery.shouldReceive("getQuery").once().andReturn(nestedRawQuery)
-  //     var model = this.getMockModel().makePartial();
-  //     model.shouldReceive("newQueryWithoutRelationships").once().andReturn(nestedQuery)
-  //     var builder = this.getBuilder();
-  //     builder.getQuery().shouldReceive("from")
-  //     builder.setModel(model)
-  //     builder.getQuery().shouldReceive("addNestedWhereQuery").once()._with(nestedRawQuery, "and")
-  //     nestedQuery.shouldReceive("foo").once()
-  //     var result = builder.where(query => {
-  //       query.foo()
-  //     });
-  //     this.assertEquals(builder, result)
-  //   }
-  // public testRealNestedWhereWithScopes() {
-  //     var model = new EloquentBuilderTestNestedStub();
-  //     this.mockConnectionForModel(model, "SQLite")
-  //     var query = model.newQuery().where("foo", "=", "bar").where(query => {
-  //       query.where("baz", ">", 9000)
-  //     });
-  //     this.assertSame("select * from \"table\" where \"foo\" = ? and (\"baz\" > ?) and \"table\".\"deleted_at\" is null", query.toSql())
-  //     this.assertEquals(["bar", 9000], query.getBindings())
-  //   }
+  it('testGetRelationProperlySetsNestedRelationships', () => {
+    let spy1, spy2, spy3;
+
+    builder = getBuilder();
+    model   = getModel();
+    builder.setModel(model);
+    builder.setEagerLoads({
+      orders                : null,
+      'orders.lines'        : null,
+      'orders.lines.details': null
+    });
+
+    const relation = new class {
+      getQuery(): any {
+      }
+    };
+
+    spy1 = jest.spyOn(model.constructor.prototype, 'getRelationMethod').mockReturnValue(relation);
+    // @ts-ignore
+    spy2 = jest.spyOn(builder, 'relationsNestedUnder');
+    spy3 = jest.spyOn(relation, 'getQuery').mockReturnValue({
+      with() {
+      }
+    });
+
+    builder.getRelation('orders');
+
+    expect(spy2).toHaveBeenCalled();
+    expect(spy2).toReturnWith({
+      'lines'        : null,
+      'lines.details': null
+    });
+  });
+
+  it('testGetRelationProperlySetsNestedRelationshipsWithSimilarNames', () => {
+    let spy1, spy2, spy3, spy4;
+    builder = getBuilder();
+    builder.setModel(getModel());
+
+    builder.setEagerLoads({
+      'orders'                    : null,
+      'ordersGroups'              : null,
+      'ordersGroups.lines'        : null,
+      'ordersGroups.lines.details': null
+    });
+
+    const relation   = new class {
+      getQuery(): any {
+      }
+    };
+    const groupQuery = new class {
+      with() {
+      }
+    };
+
+    spy1 = jest.spyOn(model.constructor.prototype, 'getRelationMethod').mockReturnValue(relation);
+    // @ts-ignore
+    spy2 = jest.spyOn(builder, 'relationsNestedUnder');
+    spy3 = jest.spyOn(relation, 'getQuery').mockReturnValue(groupQuery);
+    spy4 = jest.spyOn(groupQuery, 'with');
+
+    builder.getRelation('orders');
+    builder.getRelation('ordersGroups');
+
+    expect(spy3).toBeCalled();
+    expect(spy4).toBeCalledWith({
+      'lines'        : null,
+      'lines.details': null
+    });
+  });
+
+  it('testGetRelationThrowsException', () => {
+    builder = getBuilder();
+    builder.setModel(getModel());
+    try {
+      builder.getRelation('invalid');
+    } catch (e) {
+      expect(e.message).toBe('RelationNotFoundException Model invalid');
+    }
+  });
+
+  it('testEagerLoadParsingSetsProperRelationships', () => {
+    let eagers;
+    builder = getBuilder();
+    builder.setModel(getModel());
+    builder.with(['orders', 'orders.lines']);
+    eagers = builder.getEagerLoads();
+    expect(Object.keys(eagers)).toEqual(['orders', 'orders.lines']);
+
+    builder = getBuilder();
+    builder.with('orders', 'orders.lines');
+    eagers = builder.getEagerLoads();
+    expect(Object.keys(eagers)).toEqual(['orders', 'orders.lines']);
+    expect(isFunction(eagers['orders'])).toBeTruthy();
+    expect(isFunction(eagers['orders.lines'])).toBeTruthy();
+
+    builder = getBuilder();
+    builder.with(['orders.lines']);
+    eagers = builder.getEagerLoads();
+    expect(Object.keys(eagers)).toEqual(['orders', 'orders.lines']);
+    expect(isFunction(eagers['orders'])).toBeTruthy();
+    expect(isFunction(eagers['orders.lines'])).toBeTruthy();
+
+    builder = getBuilder();
+    builder.with({
+      'orders': () => {
+        return 'foo';
+      }
+    });
+    eagers = builder.getEagerLoads();
+    expect(eagers['orders']()).toBe('foo');
+
+    builder = getBuilder();
+    builder.with({
+      'orders.lines': () => {
+        return 'foo';
+      }
+    });
+    eagers = builder.getEagerLoads();
+    expect(isFunction(eagers['orders'])).toBe(true);
+    expect(eagers['orders']()).toBe(undefined);
+    expect(eagers['orders.lines']()).toBe('foo');
+  });
+
+  it('testQueryPassThru', async () => {
+    // builder = getBuilder();
+    // builder.getQuery().shouldReceive('foobar').once().andReturn('foo');
+    // this.assertInstanceOf(Builder, builder.foobar());
+    let spy1, spy2, spy3, result;
+
+    builder = getBuilder();
+    // @ts-ignore
+    spy1    = jest.spyOn(builder.getQuery(), 'insert').mockReturnValue('foo');
+    result  = await builder.insert(['bar']);
+    expect(spy1).toBeCalledWith(['bar']);
+    expect(spy1).toReturnWith('foo');
+    expect(result).toBe('foo');
+
+
+    builder = getBuilder();
+    spy1    = jest.spyOn(builder.getQuery(), 'insertOrIgnore').mockReturnValue('foo');
+    result  = await builder.insertOrIgnore(['bar']);
+    expect(spy1).toBeCalledWith(['bar']);
+    expect(spy1).toReturnWith('foo');
+    expect(result).toBe('foo');
+
+
+    builder = getBuilder();
+    spy1    = jest.spyOn(builder.getQuery(), 'insertGetId').mockReturnValue('foo');
+    result  = await builder.insertGetId(['bar']);
+    expect(spy1).toBeCalledWith(['bar']);
+    expect(spy1).toReturnWith('foo');
+    expect(result).toBe('foo');
+
+
+    builder = getBuilder();
+    spy1    = jest.spyOn(builder.getQuery(), 'insertUsing').mockReturnValue('foo');
+    result  = await builder.insertUsing(['bar'], 'baz');
+    expect(spy1).toBeCalledWith(['bar'], 'baz');
+    expect(spy1).toReturnWith('foo');
+    expect(result).toBe('foo');
+
+
+    // builder      = getBuilder();
+    // spy1         = jest.spyOn(builder.getQuery(), 'raw');
+    // result = await builder.raw('bar');
+    // expect(spy1).toBeCalledWith('bar');
+    // expect(spy1).toReturnWith('foo');
+    // expect(result).toBe('foo');
+
+
+    builder = getBuilder();
+    spy1    = jest.spyOn(builder.getQuery(), 'getGrammar');
+    result  = await builder.getGrammar();
+    expect(spy1).toBeCalled();
+  });
+
+  it('testQueryScopes', () => {
+    let result;
+    builder = getBuilder();
+    const m = new FedacoBuilderTestScopeStub();
+    builder.setModel(m);
+
+    const spy1 = jest.spyOn(builder.getQuery(), 'from');
+    const spy2 = jest.spyOn(builder.getQuery(), 'where');
+
+    result = builder.whereScope('approved');
+
+    expect(spy2).toBeCalledWith('foo', 'bar', null, 'and');
+    expect(builder).toBe(result);
+  });
+
+  // it('testQueryScopes with no such method', () => {
+  //   let result;
+  //   builder = getBuilder();
+  //   const m = new FedacoBuilderTestScopeStub();
+  //   builder.setModel(m);
+  //
+  //   const spy1 = jest.spyOn(builder.getQuery(), 'from');
+  //   const spy2 = jest.spyOn(builder.getQuery(), 'where');
+  //
+  //   // @ts-ignore
+  //   result = builder.approved();
+  //
+  //   expect(spy2).toBeCalledWith('foo', 'bar', null, 'and');
+  //   expect(builder).toBe(result);
+  // });
+
+  it('testNestedWhere', () => {
+    builder = getBuilder();
+    model   = getModel();
+
+    const spy1 = jest.spyOn(builder.getQuery(), 'from');
+    const spy2 = jest.spyOn(builder.getQuery(), 'addNestedWhereQuery').mockReturnThis();
+    const spy3 = jest.spyOn(model, 'newQueryWithoutRelationships').mockReturnValue({
+      // @ts-ignore
+      foo     : jest.fn(),
+      getQuery: jest.fn()
+    });
+
+    builder.setModel(model);
+
+    const result = builder.where(query => {
+      query.foo();
+    });
+    expect(spy1).toBeCalled();
+    expect(spy2).toBeCalled();
+    expect(spy2).toBeCalledWith(undefined, 'and');
+    expect(result).toBe(builder);
+  });
+
+  it('testRealNestedWhereWithScopes', () => {
+    const model1 = new FedacoBuilderTestNestedStub();
+    mockConnectionForModel(FedacoBuilderTestNestedStub, 'SQLite');
+    const query = model1.newQuery()
+      .where('foo', '=', 'bar')
+      .where((q: FedacoBuilder) => {
+        q.where('baz', '>', 9000);
+      });
+    expect(query.toSql()).toBe(
+      'SELECT * FROM "nest_table" WHERE "foo" = ? AND ("baz" > ?) AND "nest_table"."deleted_at" IS NULL');
+    expect(query.getBindings()).toEqual(['bar', 9000]);
+  });
+
   // public testRealNestedWhereWithScopesMacro() {
   //     var model = new EloquentBuilderTestNestedStub();
   //     this.mockConnectionForModel(model, "SQLite")
@@ -1219,6 +1380,5 @@ describe('fedaco builder', () => {
   //       "foo": "bar"
   //     })
   //   }
-
 
 });

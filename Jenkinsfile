@@ -4,6 +4,9 @@ pipeline {
       label 'nodejs'
     }
   }
+  environment {
+    CYPRESS_INSTALL_BINARY = '0'
+  }
   stages {
 
 //     stage('unit test') {

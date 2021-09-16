@@ -54,11 +54,14 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   public static noConstraints(callback: Function) {
     let previous         = Relation.constraints;
     Relation.constraints = false;
+    let rst;
     try {
-      return callback();
+      rst = callback();
     } finally {
       Relation.constraints = previous;
     }
+
+    return rst;
   }
 
   /*Set the base constraints on the relation query.*/

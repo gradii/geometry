@@ -12,6 +12,7 @@ import {
   Column, ColumnDefine, DateCastableColumn, DateColumn, EncryptedCastableColumn
 } from '../../annotation/column';
 import { HasManyColumn, RelationAnnotation } from '../../annotation/relation';
+import { Scope } from '../../annotation/scope';
 import { wrap } from '../../helper/arr';
 import { Constructor } from '../../helper/constructor';
 import { get, set } from '../../helper/obj';
@@ -491,7 +492,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Get a relationship value from a method.*/
     protected async getRelationshipFromMethod(this: Model & this, metadata: RelationAnnotation,
-                                        method: string) {
+                                              method: string) {
       let relation = metadata._getRelation(this);
       if (!(relation instanceof Relation)) {
         if (isBlank(relation)) {
@@ -686,7 +687,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
             DateColumn.isTypeOf(it) ||
             DateCastableColumn.isTypeOf(it) ||
             EncryptedCastableColumn.isTypeOf(it) ||
-            HasManyColumn.isTypeOf(it);
+            HasManyColumn.isTypeOf(it) ||
+            Scope.isTypeOf(it);
         }, meta[key]) as ColumnDefine;
       }
       return undefined;
