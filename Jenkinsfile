@@ -4,9 +4,6 @@ pipeline {
       label 'nodejs'
     }
   }
-  environment {
-    CYPRESS_INSTALL_BINARY = '0'
-  }
   stages {
 
 //     stage('unit test') {
@@ -80,6 +77,7 @@ pipeline {
     DOCKERHUB_NAMESPACE = 'docker_username'
     GITHUB_ACCOUNT = 'kubesphere'
     APP_NAME = 'devops-java-sample'
+    CYPRESS_INSTALL_BINARY = '0'
   }
   parameters {
     string(name: 'TAG_NAME', defaultValue: '', description: '')
