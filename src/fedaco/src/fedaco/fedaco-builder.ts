@@ -8,7 +8,6 @@ import { isAnyEmpty, isArray, isBlank, isFunction, isNumber, isString } from '@g
 import { nth, omit, pluck, tap } from 'ramda';
 import { wrap } from '../helper/arr';
 import { pascalCase } from '../helper/str';
-import { NoSuchMethodProxy } from '../proxy/no-such-method-proxy';
 import { mixinBuildQueries } from '../query-builder/mixins/build-query';
 import { QueryBuilder } from '../query-builder/query-builder';
 import { SqlNode } from '../query/sql-node';
@@ -670,6 +669,10 @@ export class FedacoBuilder extends mixinGuardsAttributes(
       'query'  : whereGroup,
       'boolean': conjunction
     };
+  }
+
+  public pipe(...args: any[]): this {
+    return this;
   }
 
   public with(...relations: Array<{ [key: string]: Function } | string>): this;

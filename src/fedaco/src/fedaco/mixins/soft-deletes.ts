@@ -9,6 +9,7 @@ import { tap } from 'ramda';
 import { Constructor } from '../../helper/constructor';
 import { Model } from '../model';
 import { SoftDeletingScope } from '../scopes/soft-deleting-scope';
+import { HasGlobalScopes } from './has-global-scopes';
 
 export interface SoftDeletes {
   /*Initialize the soft deleting trait for an instance.*/
@@ -68,9 +69,11 @@ export function mixinSoftDeletes<T extends Constructor<{}>>(base: T): SoftDelete
     /*Indicates if the model is currently force deleting.*/
     _forceDeleting: boolean = false;
 
+    static DELETED_AT: string;
+
     /*Boot the soft deleting trait for a model.*/
-    public static bootSoftDeletes() {
-      (this.constructor as any).addGlobalScope(new SoftDeletingScope());
+    public static bootSoftDeletes(this: typeof Model & typeof HasGlobalScopes) {
+      this.addGlobalScope('softDeleting', new SoftDeletingScope());
     }
 
     /*Initialize the soft deleting trait for an instance.*/
@@ -163,8 +166,8 @@ export function mixinSoftDeletes<T extends Constructor<{}>>(base: T): SoftDelete
     }
 
     /*Get the name of the "deleted at" column.*/
-    public getDeletedAtColumn(): string {
-      return 'deleted_at';
+    public getDeletedAtColumn(this: Model & _Self): string {
+      return (this.constructor as any).DELETED_AT || 'deleted_at';
     }
 
     /*Get the fully qualified "deleted at" column.*/

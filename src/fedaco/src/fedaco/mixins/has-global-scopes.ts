@@ -6,35 +6,50 @@
 
 import { isBlank } from '@gradii/check-type';
 import { Constructor } from '../../helper/constructor';
+import { Model } from '../model';
 import { Scope } from '../Scope';
 
-export interface HasGlobalScopes {
+export declare class HasGlobalScopes {
+  static addGlobalScope(scope: string, implementation: Scope | Function): void;
+
   getGlobalScopes(): { [key: string]: Scope | Function };
 }
 
 type HasGlobalScopesCtor = Constructor<HasGlobalScopes>;
 
+const globalScopes = new WeakMap();
+
 export function mixinHasGlobalScopes<T extends Constructor<{}>>(base: T): HasGlobalScopesCtor & T {
-  return class extends base {
+  return class _Self extends base {
     /*Register a new global scope on the model.*/
-    public static addGlobalScope(scope: string, implementation: Function) {
-      // return this.globalScopes[scope] = implementation;
+    public static addGlobalScope(this: typeof Model & typeof _Self, scope: string,
+                                 implementation: Function) {
+      let targetScopes = globalScopes.get(this);
+      if (!targetScopes) {
+        targetScopes = {};
+        globalScopes.set(this, targetScopes);
+      }
+      return targetScopes[scope] = implementation;
     }
 
     /*Determine if a model has a global scope.*/
-    public static hasGlobalScope(scope: Scope | string) {
+    public static hasGlobalScope(scope: string) {
       return !isBlank(this.getGlobalScope(scope));
     }
 
     /*Get a global scope registered with the model.*/
-    public static getGlobalScope(scope: Scope | string) {
-      // return Arr.get(this.globalScopes, HasGlobalScopes + '.' + scope);
+    public static getGlobalScope(scope: string) {
+      const target = globalScopes.get(this);
+      if (target) {
+        return target[scope];
+      }
+      return undefined;
     }
 
     /*Get the global scopes for this class instance.*/
-    public getGlobalScopes() {
-      // return Arr.get(this.constructor.globalScopes, HasGlobalScopes, []);
-      return {};
+    public getGlobalScopes(this: Model & _Self) {
+      const target = globalScopes.get(this);
+      return target || [];
     }
   };
 }

@@ -92,8 +92,6 @@ export class Model extends mixinHasAttributes(
 
   _keyType: any = 'int';
 
-  _connectionResolver = undefined;
-
   _with = [];
 
   _withCount: any[] = [];
@@ -103,6 +101,8 @@ export class Model extends mixinHasAttributes(
   _classCastCache: any[];
 
   static resolver: ConnectionResolverInterface;
+
+  static globalScopes: any;
 
   /*Create a new Eloquent model instance.*/
   public constructor(attributes: any = {}) {
