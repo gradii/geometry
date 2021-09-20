@@ -8,5 +8,6 @@
 export const enum RelationType {
   HasOne  = 'HasOne',
   HasMany = 'HasMany',
-  BelongsTo = 'BelongsTo'
+  BelongsTo = 'BelongsTo',
+  BelongsToMany = 'BelongsToMany',
 }

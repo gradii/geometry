@@ -8,6 +8,7 @@ import { HasManyColumn, RelationAnnotation } from '../src/annotation/relation';
 import { Model } from '../src/fedaco/model';
 import { HasMany } from '../src/fedaco/relations/has-many';
 import { BasicModel, } from './model/basic.model';
+import { FedacoBuilderTestModelParentStub } from './model/fedaco-builder-test-model-parent-stub';
 import { ArticleModel, HasManyRelationModel, MemberModel } from './model/has-many-relation.model';
 import { HasOneRelationModel } from './model/has-one-relation.model';
 import { RelationModel } from './model/relation.model';
@@ -66,6 +67,14 @@ describe('model annotation', () => {
 
     expect(spy1).toBeCalled();
     expect(data).toBe('foo');
+  });
+
+  it('test relation annotation get belongs to many', () => {
+    const relationModel = new FedacoBuilderTestModelParentStub();
+
+    const meta = reflector.propMetadata(FedacoBuilderTestModelParentStub);
+
+    const data = relationModel.roles;
   });
 
   it('test relation annotation set relation should throw exception', () => {

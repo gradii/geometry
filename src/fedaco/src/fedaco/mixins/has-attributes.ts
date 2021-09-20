@@ -8,6 +8,7 @@ import { reflector } from '@gradii/annotation';
 import { isArray, isBlank, isFunction, isNumber, isString } from '@gradii/check-type';
 import { format, getUnixTime, parse, startOfDay } from 'date-fns';
 import { difference, findLast, intersection, tap, uniq } from 'ramda';
+import { BelongsToManyColumn } from '../../annotation/belongs-to-many.relation';
 import {
   Column, ColumnDefine, DateCastableColumn, DateColumn, EncryptedCastableColumn
 } from '../../annotation/column';
@@ -32,7 +33,7 @@ const PrimitiveCastTypes: string[] = [
 
 export interface HasAttributes {
   /*Add the date attributes to the attributes array.*/
-  addDateAttributesToArray(attributes: any[]);
+  addDateAttributesToArray(attributes: any[]) : any;
 
   // /*Add the mutated attributes to the attributes array.*/
   // addMutatedAttributesToArray(attributes: any[], mutatedAttributes: any[]) {
@@ -688,7 +689,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
             DateCastableColumn.isTypeOf(it) ||
             EncryptedCastableColumn.isTypeOf(it) ||
             HasManyColumn.isTypeOf(it) ||
-            Scope.isTypeOf(it);
+            Scope.isTypeOf(it) ||
+            BelongsToManyColumn.isTypeOf(it);
         }, meta[key]) as ColumnDefine;
       }
       return undefined;

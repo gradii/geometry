@@ -4,9 +4,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { BelongsToManyColumn } from '../../src/annotation/belongs-to-many.relation';
 import { BelongsToColumn } from '../../src/annotation/belongs-to.relation';
+import { FedacoBuilder } from '../../src/fedaco/fedaco-builder';
 import { Model } from '../../src/fedaco/model';
 import { BelongsTo } from '../../src/fedaco/relations/belongs-to';
+import { BelongsToMany } from '../../src/fedaco/relations/belongs-to-many';
 
 
 export class FedacoBuilderTestModelCloseRelatedStub extends Model {
@@ -45,9 +48,14 @@ export class FedacoBuilderTestModelParentStub extends Model {
   })
   public activeFoo: any;
 
-  public roles() {
-    return this.belongsToMany(FedacoBuilderTestModelFarRelatedStub, 'user_role', 'self_id',
-      'related_id');
-  }
+
+  @BelongsToManyColumn({
+    related        : FedacoBuilderTestModelCloseRelatedStub,
+    table          : 'user_role',
+    foreignPivotKey: 'self_id',
+    relatedPivotKey: 'related_id'
+  })
+
+  public roles: any;
 }
 
