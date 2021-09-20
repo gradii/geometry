@@ -93,7 +93,7 @@ export const BelongsToColumn: BelongsToColumnDecorator = makePropDecorator(
         foreignKey = `${snakeCase(p.relation)}_${instance.getKeyName()}`;
       }
       const ownerKey = p.ownerKey || instance.getKeyName();
-      const r        = new BelongsTo(instance.newQuery(), this, foreignKey, ownerKey, p.relation);
+      const r        = new BelongsTo(instance.newQuery(), m, foreignKey, ownerKey, p.relation);
       if (p.onQuery) {
         p.onQuery(r);
       }
