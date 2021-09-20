@@ -72,8 +72,8 @@ export function mixinSoftDeletes<T extends Constructor<{}>>(base: T): SoftDelete
     static DELETED_AT: string;
 
     /*Boot the soft deleting trait for a model.*/
-    public static bootSoftDeletes(this: typeof Model & typeof HasGlobalScopes) {
-      this.addGlobalScope('softDeleting', new SoftDeletingScope());
+    public boot() {
+      (this.constructor as any).addGlobalScope('softDeleting', new SoftDeletingScope());
     }
 
     /*Initialize the soft deleting trait for an instance.*/

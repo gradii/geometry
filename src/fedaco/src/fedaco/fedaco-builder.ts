@@ -87,7 +87,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
 
   /*Register a new global scope.*/
   public withGlobalScope(identifier: string, scope: Scope | Function) {
-    // this.scopes[identifier] = scope;
+    this._scopes[identifier] = scope;
     // if (method_exists(scope, "extend")) {
     //   scope.extend(this);
     // }
@@ -95,29 +95,26 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Remove a registered global scope.*/
-  public withoutGlobalScope(scope: Scope | string) {
-    // if (!is_string(scope)) {
-    //   var scope = get_class(scope);
-    // }
-    // delete this.scopes[scope];
-    // this.removedScopes.push(scope);
+  public withoutGlobalScope(scope: string) {
+    delete this._scopes[scope];
+    this._removedScopes.push(scope);
     return this;
   }
 
   /*Remove all or passed registered global scopes.*/
   public withoutGlobalScopes(scopes: any[] | null = null) {
-    // if (!is_array(scopes)) {
-    //   var scopes = array_keys(this.scopes);
-    // }
-    // for (let scope of scopes) {
-    //   this.withoutGlobalScope(scope);
-    // }
+    if (!isArray(scopes)) {
+      scopes = Object.keys(this._scopes);
+    }
+    for (let scope of scopes) {
+      this.withoutGlobalScope(scope);
+    }
     return this;
   }
 
   /*Get an array of global scopes that were removed from the query.*/
   public removedScopes() {
-    return this.removedScopes;
+    return this._removedScopes;
   }
 
   /**
@@ -156,9 +153,17 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /**
    * Add a basic where clause to the query.
    */
+  public where(column: Function | any[] | SqlNode | any): this;
+  public where(column: string | SqlNode | any, value: any): this;
   public where(column: Function | string | any[] | SqlNode | any,
-               operator: any                          = null,
-               value: any = null, conjunction: string = 'and') {
+               operator?: any, value?: any, conjunction?: string): this;
+  public where(column: Function | string | any[] | SqlNode | any,
+               operator?: any,
+               value?: any, conjunction: string = 'and'): this {
+    if (arguments.length === 2) {
+      value    = operator;
+      operator = '=';
+    }
     if (isFunction(column) && isBlank(operator)) {
       const query = this._model.newQueryWithoutRelationships();
       column(query);
@@ -603,7 +608,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
 
   /*Apply the scopes to the Eloquent builder instance and return it.*/
   public applyScopes(): FedacoBuilder {
-    if (!this._scopes.length) {
+    if (isAnyEmpty(this._scopes)) {
       return this;
     }
     const builder = this.clone();
@@ -637,8 +642,8 @@ export class FedacoBuilder extends mixinGuardsAttributes(
 
   /*Apply the given named scope on the current builder instance.*/
   protected callNamedScope(scope: string, parameters: any[] = []) {
-    return this.callScope((parameters: any[]) => {
-      return this._model.callNamedScope(scope, parameters);
+    return this.callScope((params: any[]) => {
+      return this._model.callNamedScope(scope, params);
     }, parameters);
   }
 
@@ -672,7 +677,24 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   public pipe(...args: any[]): this {
+    args.forEach(scopeFn => {
+      scopeFn(this);
+    });
     return this;
+  }
+
+  public scope(scopeFn: string, ...args: any[]) {
+    return this.callNamedScope(scopeFn, args);
+  }
+
+  public whereScope(key: string, ...args: any[]) {
+    const metadata = this._model._columnInfo(`scope${pascalCase(key)}`);
+    if (metadata && metadata.isScope) {
+      metadata.query(this, ...args);
+      return this;
+    }
+
+    throw new Error('key is not in model or scope metadata is not exist');
   }
 
   public with(...relations: Array<{ [key: string]: Function } | string>): this;
@@ -823,15 +845,6 @@ export class FedacoBuilder extends mixinGuardsAttributes(
     return this._model.qualifyColumns(columns);
   }
 
-  public whereScope(key: string, ...args: any[]) {
-    const metadata = this._model._columnInfo(`scope${pascalCase(key)}`);
-    if (metadata && metadata.isScope) {
-      metadata.query(this, ...args);
-      return this;
-    }
-
-    throw new Error('key is not in model or scope metadata is not exist');
-  }
 
   // /*Get the given macro by name.*/
   // public getMacro(name: string) {
@@ -929,6 +942,11 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   clone(): FedacoBuilder {
-    return new FedacoBuilder(this._query.clone());
+    // return this;
+    const builder      = new FedacoBuilder(this._query.clone());
+    builder._scopes    = {...this._scopes};
+    builder._model     = this._model;
+    builder._eagerLoad = {...this._eagerLoad};
+    return builder;
   }
 }

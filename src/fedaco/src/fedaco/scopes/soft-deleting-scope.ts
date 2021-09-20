@@ -9,7 +9,7 @@ import { Scope } from '../scope';
 
 
 export function restore() {
-  return (lift, builder: FedacoBuilder) => {
+  return (builder: FedacoBuilder) => {
     builder.pipe(
       withTrashed()
     );
@@ -18,7 +18,7 @@ export function restore() {
 }
 
 export function withTrashed(withTrashed = true) {
-  return (lift, builder: FedacoBuilder) => {
+  return (builder: FedacoBuilder) => {
     if (!withTrashed) {
       return builder.pipe(
         withoutTrashed()
@@ -29,7 +29,7 @@ export function withTrashed(withTrashed = true) {
 }
 
 export function withoutTrashed() {
-  return (lift, builder: FedacoBuilder) => {
+  return (builder: FedacoBuilder) => {
     let model = builder.getModel();
     builder.withoutGlobalScope('softDeleting')
       .whereNull(model.getQualifiedDeletedAtColumn());
@@ -38,7 +38,7 @@ export function withoutTrashed() {
 }
 
 export function onlyTrashed() {
-  return (lift, builder: FedacoBuilder) => {
+  return (builder: FedacoBuilder) => {
     let model = builder.getModel();
     builder.withoutGlobalScope('softDeleting')
       .whereNotNull(model.getQualifiedDeletedAtColumn());
@@ -49,7 +49,7 @@ export function onlyTrashed() {
 
 // import { Builder } from 'Illuminate/Database/Eloquent/Builder';
 // import { Model } from 'Illuminate/Database/Eloquent/Model';
-export class SoftDeletingScope implements Scope {
+export class SoftDeletingScope extends Scope {
   /*All of the extensions to be added to the builder.*/
   protected extensions: string[] = ['Restore', 'WithTrashed', 'WithoutTrashed', 'OnlyTrashed'];
 

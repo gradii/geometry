@@ -69,6 +69,8 @@ export class Model extends mixinHasAttributes(
           mixinHidesAttributes(
             mixinGuardsAttributes(
               mixinForwardsCalls(class {
+                boot() {
+                }
               })
             )
           )
@@ -104,13 +106,33 @@ export class Model extends mixinHasAttributes(
 
   static globalScopes: any;
 
+  static booted: any = new Map();
+
   /*Create a new Eloquent model instance.*/
   public constructor(attributes: any = {}) {
     super();
-    // this.bootIfNotBooted();
+    this.bootIfNotBooted();
     // this.initializeTraits();
     // this.syncOriginal();
     // this.fill(attributes);
+  }
+
+  bootIfNotBooted() {
+    if (!((this.constructor as typeof Model).booted.has(this.constructor))) {
+      (this.constructor as typeof Model).booted.set(this.consturctor, true);
+      this.fireModelEvent('booting', false);
+      this.boot();
+      this.fireModelEvent('booted', false);
+    }
+  }
+
+  /*Bootstrap the model and its traits.*/
+  boot() {
+    // Model.bootTraits()
+  }
+
+  fireModelEvent(event: string, arg: boolean) {
+    
   }
 
   //
@@ -800,7 +822,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Get a new query instance without a given scope.*/
-  public newQueryWithoutScope(scope: Scope | string) {
+  public newQueryWithoutScope(scope: string) {
     return this.newQuery().withoutGlobalScope(scope);
   }
 
@@ -832,8 +854,8 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Apply the given named scope if possible.*/
-  public callNamedScope(scope: string, parameters: any[] = []) {
-    return this['scope' + upperCaseFirst(scope)](...parameters);
+  public callNamedScope(scope: string, ...parameters: any[]) {
+    return (this['scope' + upperCaseFirst(scope)]).apply(this, parameters);
   }
 
   /*Convert the model instance to an array.*/

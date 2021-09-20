@@ -2,13 +2,15 @@ import { isFunction } from '@gradii/check-type';
 import { DatabaseManager } from '../src/database-manager';
 import { FedacoBuilder } from '../src/fedaco/fedaco-builder';
 import { Model } from '../src/fedaco/model';
-import { ResolveConnection } from '../src/fedaco/resolve-connection';
+import { onlyTrashed, withTrashed } from '../src/fedaco/scopes/soft-deleting-scope';
 import { ConnectionResolverInterface } from '../src/interface/connection-resolver-interface';
 import { ConnectionInterface } from '../src/query-builder/connection-interface';
 import { MysqlGrammar } from '../src/query-builder/grammar/mysql-grammar';
 import { SqliteGrammar } from '../src/query-builder/grammar/sqlite-grammar';
 import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
+import { FedacoBuilderTestHigherOrderWhereScopeStub } from './model/fedaco-builder-test-higher-order-where-scope-stub';
+import { FedacoBuilderTestModelParentStub } from './model/fedaco-builder-test-model-parent-stub';
 import { FedacoBuilderTestNestedStub } from './model/fedaco-builder-test-nested-stub';
 import { FedacoBuilderTestScopeStub } from './model/fedaco-builder-test-scope-stub';
 import { StubModel } from './model/stub-model';
@@ -875,7 +877,7 @@ describe('fedaco builder', () => {
     result  = await builder.insert(['bar']);
     expect(spy1).toBeCalledWith(['bar']);
     expect(spy1).toReturnWith('foo');
-    expect(result).toBe('foo');
+    expect(result).toEqual({'bindings': [], 'result': 'foo'});
 
 
     builder = getBuilder();
@@ -883,7 +885,7 @@ describe('fedaco builder', () => {
     result  = await builder.insertOrIgnore(['bar']);
     expect(spy1).toBeCalledWith(['bar']);
     expect(spy1).toReturnWith('foo');
-    expect(result).toBe('foo');
+    expect(result).toEqual({'bindings': [], 'result': 'foo'});
 
 
     builder = getBuilder();
@@ -891,7 +893,7 @@ describe('fedaco builder', () => {
     result  = await builder.insertGetId(['bar']);
     expect(spy1).toBeCalledWith(['bar']);
     expect(spy1).toReturnWith('foo');
-    expect(result).toBe('foo');
+    expect(result).toEqual({'bindings': [], 'result': 'foo'});
 
 
     builder = getBuilder();
@@ -899,7 +901,7 @@ describe('fedaco builder', () => {
     result  = await builder.insertUsing(['bar'], 'baz');
     expect(spy1).toBeCalledWith(['bar'], 'baz');
     expect(spy1).toReturnWith('foo');
-    expect(result).toBe('foo');
+    expect(result).toEqual({'bindings': [], 'result': 'foo'});
 
 
     // builder      = getBuilder();
@@ -927,7 +929,7 @@ describe('fedaco builder', () => {
 
     result = builder.whereScope('approved');
 
-    expect(spy2).toBeCalledWith('foo', 'bar', null, 'and');
+    expect(spy2).toBeCalledWith('foo', '=', 'bar', 'and');
     expect(builder).toBe(result);
   });
 
@@ -978,69 +980,123 @@ describe('fedaco builder', () => {
       .where((q: FedacoBuilder) => {
         q.where('baz', '>', 9000);
       });
-    expect(query.toSql()).toBe(
+
+    const data = query.toSql();
+    expect(data.result).toBe(
       'SELECT * FROM "nest_table" WHERE "foo" = ? AND ("baz" > ?) AND "nest_table"."deleted_at" IS NULL');
-    expect(query.getBindings()).toEqual(['bar', 9000]);
+    expect(data.bindings).toEqual(['bar', 9000]);
   });
 
-  // public testRealNestedWhereWithScopesMacro() {
-  //     var model = new EloquentBuilderTestNestedStub();
-  //     this.mockConnectionForModel(model, "SQLite")
-  //     var query = model.newQuery().where("foo", "=", "bar").where(query => {
-  //       query.where("baz", ">", 9000).onlyTrashed()
-  //     }).withTrashed();
-  //     this.assertSame("select * from \"table\" where \"foo\" = ? and (\"baz\" > ? and \"table\".\"deleted_at\" is not null)", query.toSql())
-  //     this.assertEquals(["bar", 9000], query.getBindings())
-  //   }
-  // public testRealNestedWhereWithMultipleScopesAndOneDeadScope() {
-  //     var model = new EloquentBuilderTestNestedStub();
-  //     this.mockConnectionForModel(model, "SQLite")
-  //     var query = model.newQuery().empty().where("foo", "=", "bar").empty().where(query => {
-  //       query.empty().where("baz", ">", 9000)
-  //     });
-  //     this.assertSame("select * from \"table\" where \"foo\" = ? and (\"baz\" > ?) and \"table\".\"deleted_at\" is null", query.toSql())
-  //     this.assertEquals(["bar", 9000], query.getBindings())
-  //   }
-  // public testRealQueryHigherOrderOrWhereScopes() {
-  //     var model = new EloquentBuilderTestHigherOrderWhereScopeStub();
-  //     this.mockConnectionForModel(model, "SQLite")
-  //     var query = model.newQuery().one().orWhere.two();
-  //     this.assertSame("select * from \"table\" where \"one\" = ? or (\"two\" = ?)", query.toSql())
-  //   }
-  // public testRealQueryChainedHigherOrderOrWhereScopes() {
-  //     var model = new EloquentBuilderTestHigherOrderWhereScopeStub();
-  //     this.mockConnectionForModel(model, "SQLite")
-  //     var query = model.newQuery().one().orWhere.two().orWhere.three();
-  //     this.assertSame("select * from \"table\" where \"one\" = ? or (\"two\" = ?) or (\"three\" = ?)", query.toSql())
-  //   }
-  // public testSimpleWhere() {
-  //     var builder = this.getBuilder();
-  //     builder.getQuery().shouldReceive("where").once()._with("foo", "=", "bar")
-  //     var result = builder.where("foo", "=", "bar");
-  //     this.assertEquals(result, builder)
-  //   }
-  // public testPostgresOperatorsWhere() {
-  //     var builder = this.getBuilder();
-  //     builder.getQuery().shouldReceive("where").once()._with("foo", "@>", "bar")
-  //     var result = builder.where("foo", "@>", "bar");
-  //     this.assertEquals(result, builder)
-  //   }
-  // public testDeleteOverride() {
-  //     var builder = this.getBuilder();
-  //     builder.onDelete(builder => {
-  //       return {
-  //         "foo": builder
-  //       };
-  //     })
-  //     this.assertEquals({
-  //       "foo": builder
-  //     }, builder.delete())
-  //   }
-  // public testWithCount() {
-  //     var model = new EloquentBuilderTestModelParentStub();
-  //     var builder = model.withCount("foo");
-  //     this.assertSame("select \"eloquent_builder_test_model_parent_stubs\".*, (select count(*) from \"eloquent_builder_test_model_close_related_stubs\" where \"eloquent_builder_test_model_parent_stubs\".\"foo_id\" = \"eloquent_builder_test_model_close_related_stubs\".\"id\") as \"foo_count\" from \"eloquent_builder_test_model_parent_stubs\"", builder.toSql())
-  //   }
+  it('testRealNestedWhereWithScopesMacro', () => {
+    const model1 = new FedacoBuilderTestNestedStub();
+    mockConnectionForModel(FedacoBuilderTestNestedStub, 'SQLite');
+    const query = model1.newQuery()
+      .where('foo', '=', 'bar')
+      .where(q => {
+        q.where('baz', '>', 9000).pipe(
+          onlyTrashed()
+        );
+      }).pipe(
+        withTrashed()
+      );
+    const data  = query.toSql();
+    expect(data.result).toBe(
+      'SELECT * FROM "nest_table" WHERE "foo" = ? AND ("baz" > ? AND "nest_table"."deleted_at" IS NOT NULL)');
+    expect(data.bindings).toEqual(['bar', 9000]);
+  });
+
+  it('testRealNestedWhereWithMultipleScopesAndOneDeadScope', () => {
+    const model1 = new FedacoBuilderTestNestedStub();
+    mockConnectionForModel(FedacoBuilderTestNestedStub, 'SQLite');
+    const query = model1.newQuery()
+      .scope('empty')
+      .where('foo', '=', 'bar')
+      .scope('empty')
+      .where(q => {
+        q.scope('empty').where('baz', '>', 9000);
+      });
+    const data  = query.toSql();
+    expect(data.result).toBe(
+      'SELECT * FROM "nest_table" WHERE "foo" = ? AND ("baz" > ?) AND "nest_table"."deleted_at" IS NULL');
+    expect(data.bindings).toEqual(['bar', 9000]);
+  });
+
+  it('testRealQueryHigherOrderOrWhereScopes', () => {
+    const model1 = new FedacoBuilderTestHigherOrderWhereScopeStub();
+    mockConnectionForModel(FedacoBuilderTestHigherOrderWhereScopeStub, 'SQLite');
+    const query = model1.newQuery()
+      .scope('one')
+      .orWhere(
+        (q) => {
+          q.scope('two');
+        }
+      );
+
+    const data = query.toSql();
+    expect(data.result).toBe('SELECT * FROM "nest_table" WHERE "one" = ? OR ("two" = ?)');
+    expect(data.bindings).toEqual(['foo', 'bar']);
+  });
+
+  it('testRealQueryChainedHigherOrderOrWhereScopes', () => {
+    const model1 = new FedacoBuilderTestHigherOrderWhereScopeStub();
+    mockConnectionForModel(FedacoBuilderTestHigherOrderWhereScopeStub, 'SQLite');
+    const query = model1.newQuery()
+      .scope('one')
+      .orWhere(
+        q => {
+          q.scope('two');
+        }
+      )
+      .orWhere(
+        q => {
+          q.scope('three');
+        }
+      );
+
+    const data = query.toSql();
+    expect(data.result).toBe(
+      'SELECT * FROM "nest_table" WHERE "one" = ? OR ("two" = ?) OR ("three" = ?)');
+    expect(data.bindings).toEqual(['foo', 'bar', 'baz']);
+  });
+
+  it('testSimpleWhere', () => {
+    let spy1, result;
+    builder = getBuilder();
+    spy1    = jest.spyOn(builder.getQuery(), 'where');
+    result  = builder.where('foo', '=', 'bar');
+    expect(spy1).toBeCalledWith('foo', '=', 'bar', 'and');
+    expect(builder).toBe(result);
+  });
+
+  it('testPostgresOperatorsWhere', () => {
+    let spy1, result;
+    builder = getBuilder();
+    spy1    = jest.spyOn(builder.getQuery(), 'where');
+    result  = builder.where('foo', '@>', 'bar');
+    expect(spy1).toBeCalledWith('foo', '@>', 'bar', 'and');
+    expect(builder).toBe(result);
+  });
+
+  it('testDeleteOverride', () => {
+    builder = getBuilder();
+    builder.onDelete(builder => {
+      return {
+        'foo': builder
+      };
+    });
+
+    expect(builder.delete()).toEqual({'foo': builder});
+  });
+
+  it('testWithCount', () => {
+    const model1 = new FedacoBuilderTestModelParentStub();
+    builder      = model1.newQuery().withCount('foo');
+    const result = builder.toSql();
+
+    expect(result.result).toBe(
+      'select "eloquent_builder_test_model_parent_stubs".*, (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id") as "foo_count" from "eloquent_builder_test_model_parent_stubs"');
+  });
+
   // public testWithCountAndSelect() {
   //     var model = new EloquentBuilderTestModelParentStub();
   //     var builder = model.select("id").withCount("foo");

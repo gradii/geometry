@@ -61,13 +61,13 @@ export interface ForwardCallToQueryBuilder {
 
   updateOrInsert(...args: any[]): this;
 
-  insert(...args: any[]): this;
+  insert(...args: any[]): any;
 
   selectSub(...args: any[]): this;
 
   lock(...args: any[]): this;
 
-  toSql(...args: any[]): this;
+  toSql(...args: any[]): any;
 
   resetBindings(...args: any[]): this;
 
@@ -247,10 +247,17 @@ export interface ForwardCallToQueryBuilder {
 
 export type ForwardCallToQueryBuilderCtor = Constructor<ForwardCallToQueryBuilder>;
 
-
 export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base: T): ForwardCallToQueryBuilderCtor & T {
 
   return class _Self extends base {
+    #passThroughToQueryBuilder(method: string, parameters: any[]) {
+      const _query = this.toBase();
+      const result = _query[method].apply(_query, parameters);
+      if (result === _query) {
+        return this;
+      }
+      return {result, bindings: _query.getBindings()};
+    }
 
     #forwardCallToQueryBuilder(method: string, parameters: any[]) {
       const result = this._query[method].apply(this._query, parameters);
@@ -258,6 +265,14 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
         return this;
       }
       return result;
+    }
+
+    average(...args: any[]) {
+      return this.#forwardCallToQueryBuilder('average', args);
+    }
+
+    avg(...args: any[]) {
+      return this.#forwardCallToQueryBuilder('avg', args);
     }
 
     // find(...args){return this.#forwardCallToQueryBuilder('find', args)}
@@ -286,7 +301,7 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     }
 
     insertGetId(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('insertGetId', args);
+      return this.#passThroughToQueryBuilder('insertGetId', args);
     }
 
     from(...args: any[]) {
@@ -310,15 +325,15 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     }
 
     insertUsing(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('insertUsing', args);
+      return this.#passThroughToQueryBuilder('insertUsing', args);
     }
 
     insertOrIgnore(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('insertOrIgnore', args);
+      return this.#passThroughToQueryBuilder('insertOrIgnore', args);
     }
 
     getGrammar(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('getGrammar', args);
+      return this.#passThroughToQueryBuilder('getGrammar', args);
     }
 
     getProcessor(...args: any[]) {
@@ -366,7 +381,7 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     }
 
     insert(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('insert', args);
+      return this.#passThroughToQueryBuilder('insert', args);
     }
 
     selectSub(...args: any[]) {
@@ -378,12 +393,12 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     }
 
     toSql(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('toSql', args);
+      return this.#passThroughToQueryBuilder('toSql', args);
     }
 
-    resetBindings(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('resetBindings', args);
-    }
+    // resetBindings(...args: any[]) {
+    //   return this.#forwardCallToQueryBuilder('resetBindings', args);
+    // }
 
     useReadConnection(...args: any[]) {
       return this.#forwardCallToQueryBuilder('useReadConnection', args);
@@ -562,15 +577,15 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     }
 
     count(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('count', args);
+      return this.#passThroughToQueryBuilder('count', args);
     }
 
     doesntExist(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('doesntExist', args);
+      return this.#passThroughToQueryBuilder('doesntExist', args);
     }
 
     exists(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('exists', args);
+      return this.#passThroughToQueryBuilder('exists', args);
     }
 
     getCountForPagination(...args: any[]) {
@@ -578,15 +593,19 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     }
 
     max(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('max', args);
+      return this.#passThroughToQueryBuilder('max', args);
     }
 
     min(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('min', args);
+      return this.#passThroughToQueryBuilder('min', args);
+    }
+
+    raw(...args: any[]) {
+      return this.#passThroughToQueryBuilder('raw', args);
     }
 
     sum(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('sum', args);
+      return this.#passThroughToQueryBuilder('sum', args);
     }
 
     addWhereExistsQuery(...args: any[]) {

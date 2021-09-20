@@ -48,7 +48,7 @@ export function mixinHasGlobalScopes<T extends Constructor<{}>>(base: T): HasGlo
 
     /*Get the global scopes for this class instance.*/
     public getGlobalScopes(this: Model & _Self) {
-      const target = globalScopes.get(this);
+      const target = globalScopes.get(this.constructor);
       return target || [];
     }
   };
