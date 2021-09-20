@@ -64,12 +64,12 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /*A replacement for the typical delete function.*/
   protected _onDelete: Function;
   /*The methods that should be returned from query builder.*/
-  protected _passthru: any[] = [
-    'insert', 'insertOrIgnore', 'insertGetId', 'insertUsing', 'getBindings',
-    'toSql', 'dump', 'dd', 'exists', 'doesntExist',
-    'count', 'min', 'max', 'avg', 'average', 'sum', 'getConnection', 'raw',
-    'getGrammar'
-  ];
+  // protected _passthru: any[] = [
+  //   'insert', 'insertOrIgnore', 'insertGetId', 'insertUsing', 'getBindings',
+  //   'toSql', 'dump', 'dd', 'exists', 'doesntExist',
+  //   'count', 'min', 'max', 'avg', 'average', 'sum', 'getConnection', 'raw',
+  //   'getGrammar'
+  // ];
   /*Applied global scopes.*/
   protected _scopes: any = {};
   /*Removed global scopes.*/

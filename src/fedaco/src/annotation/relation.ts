@@ -8,12 +8,7 @@ import { makePropDecorator, TypeDecorator } from '@gradii/annotation';
 import { Model } from '../fedaco/model';
 import { HasMany } from '../fedaco/relations/has-many';
 import { ColumnDecorator, ColumnDefine } from './column';
-
-export const enum RelationType {
-  HasOne  = 'HasOne',
-  HasMany = 'HasMany',
-}
-
+import { RelationType } from './enum-relation';
 
 export interface RelationDecorator {
 

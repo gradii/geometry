@@ -3,6 +3,7 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
+import { Injectable } from '@angular/core';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
 import { Scope } from '../scope';

@@ -126,12 +126,12 @@ describe('fedaco builder', () => {
     builder._model = model;
   });
 
-  it('testFindMethod', () => {
+  it('testFindMethod', async () => {
     let spySelect, spyFirst, result;
     spySelect = jest.spyOn(builder.getQuery(), 'where');
     // @ts-ignore
     spyFirst  = jest.spyOn(builder, 'first').mockReturnValue({name: 'baz'});
-    result    = builder.find('bar', ['column']);
+    result    = await builder.find('bar', ['column']);
     expect(spySelect).toBeCalledWith('foo_table.foo', '=', 'bar', 'and');
     expect(spyFirst).toBeCalledWith(['column']);
     expect(result).toStrictEqual({name: 'baz'});
@@ -161,7 +161,7 @@ describe('fedaco builder', () => {
     expect(result).toStrictEqual([]);
   });
 
-  it('testFindOrNewMethodModelFound', () => {
+  it('testFindOrNewMethodModelFound', async () => {
     let spy1, spy2, spy3, result, expected;
     builder = getBuilder();
     model   = getModel();
@@ -174,8 +174,8 @@ describe('fedaco builder', () => {
     // @ts-ignore
     spy3 = jest.spyOn(builder, 'first').mockReturnValue('baz');
 
-    expected = modelQuery.findOrNew('bar', ['column']);
-    result   = builder.find('bar', ['column']);
+    expected = await modelQuery.findOrNew('bar', ['column']);
+    result   = await builder.find('bar', ['column']);
 
     expect(builder.getModel()['findOrNew']).toBe(builder.getModel()['findOrNew']);
 
@@ -197,7 +197,7 @@ describe('fedaco builder', () => {
     spy3 = jest.spyOn(builder, 'first').mockReturnValue(undefined);
 
     result     = await modelQuery.findOrNew('bar', ['column']);
-    findResult = builder.find('bar', ['column']);
+    findResult = await builder.find('bar', ['column']);
     expect(spy1).toBeCalledWith('foo_table.foo', '=', 'bar', 'and');
     expect(spy2).toBeCalledTimes(1);
     expect(spy3).toBeCalledWith(['column']);

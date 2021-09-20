@@ -4,6 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { Scope } from '../../src/annotation/scope';
 import { FedacoBuilder } from '../../src/fedaco/fedaco-builder';
 import { mixinSoftDeletes } from '../../src/fedaco/mixins/soft-deletes';
 import { Model } from '../../src/fedaco/model';
