@@ -7,6 +7,7 @@
 import {
   isAnyEmpty, isArray, isBlank, isBoolean, isFunction, isNumber, isString
 } from '@gradii/check-type';
+import { FedacoBuilder } from '../fedaco/fedaco-builder';
 import { ColumnReferenceExpression } from '../query/ast/column-reference-expression';
 import { ComparisonPredicateExpression } from '../query/ast/expression/comparison-predicate-expression';
 import { RawExpression } from '../query/ast/expression/raw-expression';
@@ -128,7 +129,7 @@ export class QueryBuilder extends Builder {
   }
 
   /*Creates a subquery and parse it.*/
-  _createSubQuery(type, query: Function | QueryBuilder | string) {
+  _createSubQuery(type: 'select' | string, query: Function | QueryBuilder | string) {
     if (isFunction(query)) {
       query(query = this._forSubQuery());
     }
@@ -145,13 +146,16 @@ export class QueryBuilder extends Builder {
   }
 
   /*Parse the subquery into SQL and bindings.*/
-  _parseSub(type, query: any) {
+  _parseSub(type: 'select' | string, query: any) {
     if (
       query instanceof QueryBuilder // ||
       // query instanceof EloquentBuilder || todo
       // query instanceof Relation todo
     ) {
       return new NestedExpression(type, query.toSql(), query.getBindings());
+    } else if (query instanceof FedacoBuilder) {
+      const {result: sql, bindings} = query.toSql();
+      return new NestedExpression(type, sql, bindings);
     } else if (isString(query)) {
       return new NestedExpression(type, query, []);
     } else {
@@ -224,10 +228,8 @@ export class QueryBuilder extends Builder {
     );
   }
 
-
   public mergeWheres(_wheres: any[], bindings: object | any[]) {
     this._wheres = this._wheres.concat(_wheres);
-    let mid      = [];
     if (typeof bindings === 'object') {
       bindings = Object.values(bindings);
     }
@@ -541,7 +543,7 @@ export class QueryBuilder extends Builder {
     );
   }
 
-  public async insert(values: any|any[]) {
+  public async insert(values: any | any[]) {
     // Since every insert gets treated like a batch insert, we will make sure the
     // bindings are structured in a way that is convenient when building these
     // inserts statements by verifying these elements are actually an array.
@@ -580,12 +582,12 @@ export class QueryBuilder extends Builder {
       columnAsNode = SqlParser.createSqlParser(as).parseAsName();
     }
 
-    return this._columns = [
+    return this._columns.push(
       new ColumnReferenceExpression(
         this._createSubQuery('select', query),
         columnAsNode
       )
-    ];
+    );
   }
 
   lock(value: boolean | string = true) {

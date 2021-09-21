@@ -6,7 +6,6 @@
 
 import { makePropDecorator, TypeDecorator } from '@gradii/annotation';
 import { Model } from '../fedaco/model';
-import { HasMany } from '../fedaco/relations/has-many';
 import { ColumnDecorator, ColumnDefine } from './column';
 import { RelationType } from './enum-relation';
 
@@ -27,7 +26,7 @@ export interface RelationAnnotation extends ColumnDefine {
   related?: typeof Model;
   foreignKey?: string;
   localKey?: string;
-  _getRelation?: (m: Model) => any;
+  _getRelation?: (m: Model, relation: string) => any;
 }
 
 const _additionalProcessing = (target: any, name: string, columnDefine: ColumnDefine) => {
@@ -93,85 +92,19 @@ export const RelationUsingColumn: ColumnDecorator = makePropDecorator(
 //     additionalProcessing(target, name, columnDefine);
 //   }
 // );
-
-export const ManyToManyColumn: ColumnDecorator = makePropDecorator(
-  'fedaco orm many to many relation',
-  (p: RelationAnnotation) => ({isRelation: true, ...p}), undefined,
-  (target: any, name: string, columnDefine) => {
-    _additionalProcessing(target, name, columnDefine);
-  }
-);
-
-export const OneToManyColumn: ColumnDecorator = makePropDecorator(
-  'fedaco orm many to many relation',
-  (p: RelationAnnotation) => ({isRelation: true, ...p}), undefined,
-  (target: any, name: string, columnDefine) => {
-    _additionalProcessing(target, name, columnDefine);
-  }
-);
-
-export interface HasOneColumnDecorator {
-
-  (obj?: RelationAnnotation): any;
-
-  isTypeOf(obj: any): obj is RelationAnnotation;
-
-  metadataName: string;
-
-  /**
-   * See the `Pipe` decorator.
-   */
-  new(obj?: RelationAnnotation): RelationAnnotation;
-}
-
-export const HasOneColumn: HasOneColumnDecorator = makePropDecorator(
-  'fedaco orm has one relation',
-  (p: RelationAnnotation) => ({
-    isRelation: true,
-    type      : RelationType.HasOne,
-    ...p
-  }),
-  undefined,
-  (target: any, name: string, columnDefine) => {
-    _additionalProcessing(target, name, columnDefine);
-  }
-);
-
-
-
-export interface HasManyColumnDecorator {
-
-  (obj: RelationAnnotation): any;
-
-  isTypeOf(obj: any): obj is RelationAnnotation;
-
-  metadataName: string;
-
-  /**
-   * See the `Pipe` decorator.
-   */
-  new(obj?: RelationAnnotation): RelationAnnotation;
-}
-export const HasManyColumn: HasManyColumnDecorator = makePropDecorator(
-  'fedaco orm has one relation',
-  (p: RelationAnnotation) => ({
-    isRelation  : true,
-    type        : RelationType.HasMany,
-    _getRelation: function (m: Model) {
-      let instance   = m._newRelatedInstance(p.related);
-      let foreignKey = p.foreignKey || m.getForeignKey();
-      let localKey   = p.localKey || m.getKeyName();
-      return new HasMany(
-        instance.newQuery(),
-        m,
-        `${instance.getTable()}.${foreignKey}`,
-        localKey);
-    },
-    ...p
-  }),
-  undefined,
-  (target: any, name: string, columnDefine) => {
-    _additionalProcessing(target, name, columnDefine);
-  }
-);
-
+//
+// export const ManyToManyColumn: ColumnDecorator = makePropDecorator(
+//   'fedaco orm many to many relation',
+//   (p: RelationAnnotation) => ({isRelation: true, ...p}), undefined,
+//   (target: any, name: string, columnDefine) => {
+//     _additionalProcessing(target, name, columnDefine);
+//   }
+// );
+//
+// export const OneToManyColumn: ColumnDecorator = makePropDecorator(
+//   'fedaco orm many to many relation',
+//   (p: RelationAnnotation) => ({isRelation: true, ...p}), undefined,
+//   (target: any, name: string, columnDefine) => {
+//     _additionalProcessing(target, name, columnDefine);
+//   }
+// );

@@ -5,7 +5,7 @@
  */
 
 import { Column } from '../../src/annotation/column';
-import { HasManyColumn } from '../../src/annotation/relation';
+import { HasManyColumn } from '../../src/annotation/has-many.relation';
 import { Model } from '../../src/fedaco/model';
 
 

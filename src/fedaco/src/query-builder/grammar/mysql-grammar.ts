@@ -50,7 +50,11 @@ export class MysqlGrammar extends Grammar implements GrammarInterface {
     // if(keepSlashQuote) {
     //   return `\`${columnName.replace(/`/g, '``')}\``;
     // }
-    return `\`${columnName.replace(/`/g, '')}\``;
+    if (columnName === '*') {
+      return columnName;
+    } else {
+      return `\`${columnName.replace(/`/g, '')}\``;
+    }
   }
 
   quoteTableName(tableName): string {
@@ -74,7 +78,8 @@ export class MysqlGrammar extends Grammar implements GrammarInterface {
   compileInsert(builder: QueryBuilder, values, insertOption: string = 'into'): string {
     if (isAnyEmpty(values)) {
       const visitor = new QueryBuilderVisitor(builder._grammar, builder);
-      return `INSERT INTO ${builder._from.accept(visitor)} () VALUES ()`;
+      return `INSERT INTO ${builder._from.accept(visitor)} ()
+              VALUES ()`;
     }
 
     return super.compileInsert(builder, values, insertOption);

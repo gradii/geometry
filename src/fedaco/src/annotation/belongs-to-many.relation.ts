@@ -81,15 +81,14 @@ export interface BelongsToManyColumnDecorator {
 }
 
 export const BelongsToManyColumn: BelongsToManyColumnDecorator = makePropDecorator(
-  'fedaco orm belongs to many relations',
+  'Fedaco:BelongsToMany',
   (p: BelongsToManyRelationAnnotation) => ({
     isRelation  : true,
     type        : RelationType.BelongsToMany,
-    _getRelation: function (m: Model) {
-
-      // if (isBlank(relation)) {
-      //    relation = this.guessBelongsToManyRelation();
-      // }
+    _getRelation: function (m: Model, relation: string) {
+      if (!isBlank(p.relation)) {
+        relation = p.relation;
+      }
       let instance          = m._newRelatedInstance(p.related);
       const foreignPivotKey = p.foreignPivotKey || m.getForeignKey();
       const relatedPivotKey = p.relatedPivotKey || instance.getForeignKey();
@@ -101,7 +100,7 @@ export const BelongsToManyColumn: BelongsToManyColumnDecorator = makePropDecorat
         instance.newQuery(), m, table, foreignPivotKey,
         relatedPivotKey, p.parentKey || m.getKeyName(),
         p.relatedKey || instance.getKeyName(),
-        p.relation);
+        relation);
 
       if (p.onQuery) {
         p.onQuery(r);

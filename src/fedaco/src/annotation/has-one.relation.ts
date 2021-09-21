@@ -5,10 +5,8 @@
  */
 
 import { makePropDecorator, TypeDecorator } from '@gradii/annotation';
-import { isBlank } from '@gradii/check-type';
 import { Model } from '../fedaco/model';
-import { BelongsTo } from '../fedaco/relations/belongs-to';
-import { snakeCase } from '../helper/str';
+import { HasOne } from '../fedaco/relations/has-one';
 import { ForwardRefFn, resolveForwardRef } from '../query-builder/forward-ref';
 import { ColumnDefine } from './column';
 import { RelationType } from './enum-relation';
@@ -16,25 +14,24 @@ import { RelationType } from './enum-relation';
 
 export interface RelationDecorator {
 
-  (obj?: BelongsToRelationAnnotation): TypeDecorator;
+  (obj?: HasOneRelationAnnotation): TypeDecorator;
 
   /**
    * See the `Pipe` decorator.
    */
-  new(obj?: BelongsToRelationAnnotation): BelongsToRelationAnnotation;
+  new(obj?: HasOneRelationAnnotation): HasOneRelationAnnotation;
 }
 
-export interface BelongsToRelationAnnotation extends ColumnDefine {
+export interface HasOneRelationAnnotation extends ColumnDefine {
   name?: string;
   isRelation?: boolean;
   type?: RelationType;
 
   related?: typeof Model | ForwardRefFn;
   foreignKey?: string;
-  ownerKey?: string;
-  relation?: string;
+  localKey?: string;
 
-  onQuery?: (q: BelongsTo) => void;
+  onQuery?: (q: HasOne) => void;
 
   _getRelation?: (m: Model) => any;
 }
@@ -64,34 +61,35 @@ const _additionalProcessing = (target: any, name: string, columnDefine: ColumnDe
   }
 };
 
-export interface BelongsToColumnDecorator {
+export interface HasOneColumnDecorator {
 
-  (obj: BelongsToRelationAnnotation): any;
+  (obj: HasOneRelationAnnotation): any;
 
-  isTypeOf(obj: any): obj is BelongsToRelationAnnotation;
+  isTypeOf(obj: any): obj is HasOneRelationAnnotation;
 
   metadataName: string;
 
   /**
    * See the `Pipe` decorator.
    */
-  new(obj?: BelongsToRelationAnnotation): BelongsToRelationAnnotation;
+  new(obj?: HasOneRelationAnnotation): HasOneRelationAnnotation;
 }
 
-export const BelongsToColumn: BelongsToColumnDecorator = makePropDecorator(
-  'Fedaco:BelongsToColumn',
-  (p: BelongsToRelationAnnotation) => ({
+export const HasOneColumn: HasOneColumnDecorator = makePropDecorator(
+  'Fedaco:HasOneColumn',
+  (p: HasOneRelationAnnotation) => ({
     isRelation  : true,
-    type        : RelationType.BelongsTo,
+    type        : RelationType.HasOne,
     _getRelation: function (m: Model, relation: string) {
-      if (!isBlank(p.relation)) {
-        relation = p.relation;
-      }
-
       let instance     = m._newRelatedInstance(resolveForwardRef(p.related));
-      const foreignKey = p.foreignKey || `${snakeCase(relation)}_${instance.getKeyName()}`;
-      const ownerKey   = p.ownerKey || instance.getKeyName();
-      const r          = new BelongsTo(instance.newQuery(), m, foreignKey, ownerKey, relation);
+      const foreignKey = p.foreignKey || m.getForeignKey();
+      const localKey   = p.localKey || m.getKeyName();
+      const r          = new HasOne(
+        instance.newQuery(),
+        m,
+        `${instance.getTable()}.${foreignKey}`,
+        localKey);
+
       if (p.onQuery) {
         p.onQuery(r);
       }

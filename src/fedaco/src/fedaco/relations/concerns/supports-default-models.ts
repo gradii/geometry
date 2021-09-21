@@ -34,8 +34,12 @@ export function mixinSupportsDefaultModels<T extends Constructor<{}>>(base: T): 
       return this;
     }
 
+    newRelatedInstanceFor(parent: Model): Model {
+      throw new Error('not implement');
+    }
+
     /*Get the default value for this relation.*/
-    _getDefaultFor(this: Relation & this, parent: Model): Model {
+    _getDefaultFor(this: Relation & _Self, parent: Model): Model {
       if (!this._withDefault) {
         return null;
       }

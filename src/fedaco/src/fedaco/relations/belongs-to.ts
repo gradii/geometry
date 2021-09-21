@@ -14,6 +14,9 @@ import { mixinInteractsWithDictionary } from './concerns/interacts-with-dictiona
 import { mixinSupportsDefaultModels } from './concerns/supports-default-models';
 import { Relation } from './relation';
 
+export interface BelongsTo extends Relation {
+}
+
 export class BelongsTo extends mixinComparesRelatedModels<any>(
   mixinInteractsWithDictionary(
     mixinSupportsDefaultModels(
@@ -136,11 +139,13 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
   /*Add the constraints for a relationship query.*/
   public getRelationExistenceQuery(query: FedacoBuilder, parentQuery: FedacoBuilder,
                                    columns: any[] | any = ['*']) {
-    if (parentQuery.getQuery().from == query.getQuery().from) {
+    // todo check
+    if (parentQuery.getModel().getTable() == query.getModel().getTable()) {
       return this.getRelationExistenceQueryForSelfRelation(query, parentQuery, columns);
     }
-    return query.select(columns).whereColumn(this.getQualifiedForeignKeyName(), '=',
-      query.qualifyColumn(this.ownerKey));
+    return query.select(columns).whereColumn(
+      this.getQualifiedForeignKeyName(), '=', query.qualifyColumn(this.ownerKey)
+    );
   }
 
   /*Add the constraints for a relationship query on the same table.*/

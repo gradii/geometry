@@ -6,20 +6,24 @@
 
 import { BelongsToManyColumn } from '../../src/annotation/belongs-to-many.relation';
 import { BelongsToColumn } from '../../src/annotation/belongs-to.relation';
-import { FedacoBuilder } from '../../src/fedaco/fedaco-builder';
+import { HasManyColumn } from '../../src/annotation/has-many.relation';
 import { Model } from '../../src/fedaco/model';
 import { BelongsTo } from '../../src/fedaco/relations/belongs-to';
-import { BelongsToMany } from '../../src/fedaco/relations/belongs-to-many';
-
+import { forwardRef } from '../../src/query-builder/forward-ref';
 
 export class FedacoBuilderTestModelCloseRelatedStub extends Model {
-  public bar() {
-    return this.hasMany(FedacoBuilderTestModelFarRelatedStub);
-  }
 
-  public baz() {
-    return this.hasMany(FedacoBuilderTestModelFarRelatedStub);
-  }
+  @HasManyColumn({
+      related: forwardRef(() => FedacoBuilderTestModelFarRelatedStub)
+    }
+  )
+  public bar: any[];
+
+  @HasManyColumn({
+      related: forwardRef(() => FedacoBuilderTestModelFarRelatedStub)
+    }
+  )
+  public baz: any[];
 }
 
 export class FedacoBuilderTestModelFarRelatedStub extends Model {

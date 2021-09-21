@@ -17,12 +17,6 @@ import {
 import {
   InteractsWithPivotTable, mixinInteractsWithPivotTable
 } from './concerns/interacts-with-pivot-table';
-// import { Builder } from 'Illuminate/Database/Eloquent/Builder';
-// import { Collection } from 'Illuminate/Database/Eloquent/Collection';
-// import { Model } from 'Illuminate/Database/Eloquent/Model';
-// import { ModelNotFoundException } from 'Illuminate/Database/Eloquent/ModelNotFoundException';
-// import { Collection, Collection as BaseCollection } from 'Illuminate/Support/Collection';
-// import { Str } from 'Illuminate/Support/Str';
 import { Relation } from './relation';
 
 export interface BelongsToMany extends InteractsWithDictionary, InteractsWithPivotTable, Relation {

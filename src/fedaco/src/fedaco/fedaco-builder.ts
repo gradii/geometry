@@ -601,7 +601,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
       if (isNumber(scope)) {
         [scope, parameters] = [parameters, []];
       }
-      builder = builder.callNamedScope(scope, wrap(parameters));
+      builder = builder._callNamedScope(scope, wrap(parameters));
     }
     return builder;
   }
@@ -616,7 +616,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
       if (builder._scopes[identifier] == null) {
         continue;
       }
-      builder.callScope((_builder: this) => {
+      builder._callScope((_builder: this) => {
         if (isFunction(scope)) {
           scope(_builder);
         }
@@ -629,7 +629,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Apply the given scope on the current builder instance.*/
-  protected callScope(scope: Function, parameters: any[] = []) {
+  _callScope(scope: Function, parameters: any[] = []) {
     parameters.unshift(this);
     let query              = this.getQuery();
     let originalWhereCount = !query._wheres.length ? 0 : query._wheres.length;
@@ -641,8 +641,8 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Apply the given named scope on the current builder instance.*/
-  protected callNamedScope(scope: string, parameters: any[] = []) {
-    return this.callScope((params: any[]) => {
+  _callNamedScope(scope: string, parameters: any[] = []) {
+    return this._callScope((params: any[]) => {
       return this._model.callNamedScope(scope, params);
     }, parameters);
   }
@@ -684,7 +684,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   public scope(scopeFn: string, ...args: any[]) {
-    return this.callNamedScope(scopeFn, args);
+    return this._callNamedScope(scopeFn, args);
   }
 
   public whereScope(key: string, ...args: any[]) {
@@ -735,23 +735,22 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /*Parse a list of relations into individuals.*/
   protected parseWithRelations(relations: any[]): { [key: string]: any } {
     let results = [];
-    if (isArray(relations)) {
-      for (let name of relations) {
-        let constraints;
-        [name, constraints] = name.includes(':') ?
-          this.createSelectWithConstraint(name) :
+    for (let relation of relations) {
+      if (isString(relation)) {
+        const [name, constraints] = relation.includes(':') ?
+          this.createSelectWithConstraint(relation) as [string, (...args: any[]) => void] :
           [
-            name, () => {
+            relation, () => {
           }
           ];
 
         results       = this.addNestedWiths(name, results);
         results[name] = constraints;
-      }
-    } else {
-      for (let [name, constraints] of Object.entries(relations)) {
-        results       = this.addNestedWiths(name, results);
-        results[name] = constraints;
+      } else {
+        for (let [name, constraints] of Object.entries(relation)) {
+          results       = this.addNestedWiths(name, results);
+          results[name] = constraints;
+        }
       }
     }
     return results;

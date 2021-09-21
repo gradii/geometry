@@ -60,6 +60,11 @@ export interface Model extends HasAttributes, HasEvents,
   GuardsAttributes, ForwardsCalls {
 }
 
+// tslint:disable-next-line:no-namespace
+export declare namespace Model {
+  function addGlobalScope(scope: string, implementation: Scope | Function): void;
+}
+
 // @NoSuchMethodProxy()
 export class Model extends mixinHasAttributes(
   mixinHasEvents(
@@ -132,7 +137,7 @@ export class Model extends mixinHasAttributes(
   }
 
   fireModelEvent(event: string, arg: boolean) {
-    
+
   }
 
   //

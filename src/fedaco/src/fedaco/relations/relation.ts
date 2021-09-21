@@ -9,18 +9,12 @@ import { last, uniq } from 'ramda';
 import { Collection } from '../../define/collection';
 import { raw } from '../../query-builder/ast-factory';
 import { FedacoBuilder } from '../fedaco-builder';
-// import { Builder } from 'Illuminate/Database/Eloquent/Builder';
-// import { Collection } from 'Illuminate/Database/Eloquent/Collection';
-// import { Model } from 'Illuminate/Database/Eloquent/Model';
-// import { Expression } from 'Illuminate/Database/Query/Expression';
-// import { Arr } from 'Illuminate/Support/Arr';
-import { mixinForwardCallToQueryBuilder } from '../mixins/forward-call-to-query-builder';
+import {
+  ForwardCallToQueryBuilder, mixinForwardCallToQueryBuilder
+} from '../mixins/forward-call-to-query-builder';
 import { Model } from '../model';
 
-export interface Relation {
-  newRelatedInstanceFor(parent: Model): Model;
-
-  getExistenceCompareKey(): string;
+export interface Relation extends ForwardCallToQueryBuilder {
 }
 
 /**
@@ -51,12 +45,14 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   }
 
   /*Run a callback with constraints disabled on the relation.*/
-  public static noConstraints(callback: Function) {
+  public static noConstraints(callback: Function): Relation {
     let previous         = Relation.constraints;
     Relation.constraints = false;
     let rst;
     try {
       rst = callback();
+    } catch (e) {
+      console.log(e);
     } finally {
       Relation.constraints = previous;
     }
@@ -90,7 +86,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   }
 
   /*Get the relationship for eager loading.*/
-  public async getEager() {
+  public async getEager(): Promise<any | any[]> {
     return this.get();
   }
 
@@ -143,6 +139,10 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
         '=',
         this.getExistenceCompareKey()
       );
+  }
+
+  getExistenceCompareKey() {
+    throw new Error('not implemented');
   }
 
   /*Get a relationship join table hash.*/

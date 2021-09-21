@@ -9,10 +9,13 @@ import { isArray, isBlank, isFunction, isNumber, isString } from '@gradii/check-
 import { format, getUnixTime, parse, startOfDay } from 'date-fns';
 import { difference, findLast, intersection, tap, uniq } from 'ramda';
 import { BelongsToManyColumn } from '../../annotation/belongs-to-many.relation';
+import { BelongsToColumn } from '../../annotation/belongs-to.relation';
 import {
   Column, ColumnDefine, DateCastableColumn, DateColumn, EncryptedCastableColumn
 } from '../../annotation/column';
-import { HasManyColumn, RelationAnnotation } from '../../annotation/relation';
+import { HasManyColumn } from '../../annotation/has-many.relation';
+import { HasOneColumn } from '../../annotation/has-one.relation';
+import { RelationAnnotation } from '../../annotation/relation';
 import { Scope } from '../../annotation/scope';
 import { wrap } from '../../helper/arr';
 import { Constructor } from '../../helper/constructor';
@@ -33,7 +36,7 @@ const PrimitiveCastTypes: string[] = [
 
 export interface HasAttributes {
   /*Add the date attributes to the attributes array.*/
-  addDateAttributesToArray(attributes: any[]) : any;
+  addDateAttributesToArray(attributes: any[]): any;
 
   // /*Add the mutated attributes to the attributes array.*/
   // addMutatedAttributesToArray(attributes: any[], mutatedAttributes: any[]) {
@@ -494,7 +497,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     /*Get a relationship value from a method.*/
     protected async getRelationshipFromMethod(this: Model & this, metadata: RelationAnnotation,
                                               method: string) {
-      let relation = metadata._getRelation(this);
+      let relation = metadata._getRelation(this, method);
       if (!(relation instanceof Relation)) {
         if (isBlank(relation)) {
           throw new Error(
@@ -688,9 +691,11 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
             DateColumn.isTypeOf(it) ||
             DateCastableColumn.isTypeOf(it) ||
             EncryptedCastableColumn.isTypeOf(it) ||
-            HasManyColumn.isTypeOf(it) ||
             Scope.isTypeOf(it) ||
-            BelongsToManyColumn.isTypeOf(it);
+            BelongsToColumn.isTypeOf(it) ||
+            BelongsToManyColumn.isTypeOf(it) ||
+            HasManyColumn.isTypeOf(it) ||
+            HasOneColumn.isTypeOf(it);
         }, meta[key]) as ColumnDefine;
       }
       return undefined;

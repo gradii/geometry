@@ -67,7 +67,7 @@ export interface ForwardCallToQueryBuilder {
 
   lock(...args: any[]): this;
 
-  toSql(...args: any[]): any;
+  toSql(...args: any[]): {result: string, bindings: any[]};
 
   resetBindings(...args: any[]): this;
 

@@ -35,6 +35,11 @@ export function createIdentifier(identifier: string | ForwardRefFn<string>) {
   return new Identifier(identifier);
 }
 
+export function createTableColumn(table, column: string) {
+  return new ColumnReferenceExpression(
+    new PathExpression([table, new Identifier(column)])
+  );
+}
 
 export function createColumnReferenceExpression(column: string | ColumnReferenceExpression) {
   if (column instanceof ColumnReferenceExpression) {

@@ -4,7 +4,8 @@ import { findLast } from 'ramda';
 import {
   Column, ColumnDefine, DateCastableColumn, DateColumn, EncryptedCastableColumn
 } from '../src/annotation/column';
-import { HasManyColumn, RelationAnnotation } from '../src/annotation/relation';
+import { HasManyColumn } from '../src/annotation/has-many.relation';
+import { RelationAnnotation } from '../src/annotation/relation';
 import { Model } from '../src/fedaco/model';
 import { HasMany } from '../src/fedaco/relations/has-many';
 import { BasicModel, } from './model/basic.model';

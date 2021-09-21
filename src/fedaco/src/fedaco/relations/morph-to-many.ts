@@ -4,11 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { uniq } from 'ramda';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
 import { BelongsToMany } from './belongs-to-many';
-import { MorphPivot } from './morph-pivot';
 
 export class MorphToMany extends BelongsToMany {
   /*The type of the polymorphic relation.*/

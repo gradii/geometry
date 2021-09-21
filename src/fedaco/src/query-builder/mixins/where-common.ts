@@ -10,6 +10,7 @@ import { QueryBuilder } from '../../query-builder/query-builder';
 import { BindingVariable } from '../../query/ast/binding-variable';
 import { BinaryExpression } from '../../query/ast/expression/binary-expression';
 import { ComparisonPredicateExpression } from '../../query/ast/expression/comparison-predicate-expression';
+import { Expression } from '../../query/ast/expression/expression';
 import { RawBindingExpression } from '../../query/ast/expression/raw-binding-expression';
 import { RawExpression } from '../../query/ast/expression/raw-expression';
 import { NestedPredicateExpression } from '../../query/ast/fragment/expression/nested-predicate-expression';
@@ -146,7 +147,8 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
     /**
      * Add an "or where" clause comparing two columns to the query.
      */
-    public orWhereColumn(this: QueryBuilder & _Self, first: string | any[], operator?: string,
+    public orWhereColumn(this: QueryBuilder & _Self, first: string | any[] | Expression,
+                         operator?: string,
                          second?: string) {
       return this.whereColumn(first, operator, second, 'or');
     }
@@ -161,7 +163,7 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
           operator?: string,
           value?: any,
           conjunction: 'and' | 'or' = 'and') {
-      if (isArray(column) || isObject(column)) {
+      if ((isArray(column) || isObject(column)) && !(column instanceof RawExpression)) {
         return this._addArrayOfWheres(column, conjunction);
       }
       [value, operator] = this._prepareValueAndOperator(value, operator, arguments.length === 2);
@@ -197,17 +199,21 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
     /**
      * Add a "where" clause comparing two columns to the query.
      */
-    public whereColumn(this: QueryBuilder & _Self, first: string | any[], operator?: string,
-                       second?: string,
+    public whereColumn(this: QueryBuilder & _Self, first: string | any[] | Expression,
+                       operator?: string,
+                       second?: string | Expression,
                        conjunction: 'and' | 'or' = 'and') {
       if (isArray(first)) {
+        conjunction = operator as 'and' | 'or';
         return this._addArrayOfWheres(first, conjunction, 'whereColumn');
       }
       if (this._invalidOperator(operator)) {
         [second, operator] = [operator, '='];
       }
-      const leftNode  = SqlParser.createSqlParser(first).parseUnaryTableColumn();
-      const rightNode = SqlParser.createSqlParser(second).parseUnaryTableColumn();
+      const leftNode  = first instanceof RawExpression ? first :
+        SqlParser.createSqlParser(first).parseUnaryTableColumn();
+      const rightNode = second instanceof RawExpression ? second :
+        SqlParser.createSqlParser(second).parseUnaryTableColumn();
       this.addWhere(
         new ComparisonPredicateExpression(
           leftNode,
