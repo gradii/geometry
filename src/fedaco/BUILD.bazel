@@ -33,6 +33,6 @@ ng_package(
     entry_point = ":index.ts",
     entry_point_name = "fedaco",
     nested_packages = [],
-    tags = ["release-package"],
+#    tags = ["release-package"],
     deps = FEDACO_TARGETS,
 )

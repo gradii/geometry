@@ -18,8 +18,8 @@ ts_library(
         ],
     ),
     deps = [
+      "@npm//@types/node",
     ],
-    node_modules = "@npm//:node_modules",
     module_name = "@gradii/stream-buffer",
     tsconfig = ":tsconfig.json",
 )

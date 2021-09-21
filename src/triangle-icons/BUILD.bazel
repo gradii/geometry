@@ -19,7 +19,6 @@ ts_library(
     ),
     deps = [
     ],
-    node_modules = "@npm//:node_modules",
     module_name = "@gradii/triangle-icons",
     tsconfig = ":tsconfig.json",
 )
