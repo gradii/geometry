@@ -4,10 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isString } from '@gradii/check-type';
+import { isFunction, isString } from '@gradii/check-type';
 import { last } from 'ramda';
 import { Constructor } from '../../../helper/constructor';
-import { JoinClause } from '../../../query/ast/join-clause';
+import { JoinClauseBuilder } from '../../../query-builder/query-builder';
 import { FedacoBuilder } from '../../fedaco-builder';
 import { Relation } from '../relation';
 
@@ -67,8 +67,8 @@ export function mixinCanBeOneOfMany<T extends Constructor<{}>>(base: T) {
     _oneOfManySubQuery: FedacoBuilder | null;
 
     /*Add constraints for inner join subselect for one of many relationships.*/
-    public abstract addOneOfManySubQueryConstraints(
-      query: Builder, column: string | null = null,
+    public addOneOfManySubQueryConstraints(
+      query: FedacoBuilder, column: string | null = null,
       aggregate: string | null              = null
     ) {
       throw new Error('not implement');
@@ -80,30 +80,29 @@ export function mixinCanBeOneOfMany<T extends Constructor<{}>>(base: T) {
     }
 
     /*Add join query constraints for one of many relationships.*/
-    public addOneOfManyJoinSubQueryConstraints(join: JoinClause) {
+    public addOneOfManyJoinSubQueryConstraints(join: JoinClauseBuilder) {
       throw new Error('not implement');
     }
 
     /*Indicate that the relation is a single result of a larger one-to-many relationship.*/
     public ofMany(this: Relation & _Self, column: string | any[] | null = 'id',
                   aggregate: string | Function | null                   = 'MAX',
-                  relation: string) {
+                  relation: string): this {
       this._isOneOfMany  = true;
-      this._relationName = relation || this._getDefaultOneOfManyJoinAlias(
-        this._guessRelationship());
+      this._relationName = relation// || this._getDefaultOneOfManyJoinAlias();
       let keyName        = this._query.getModel().getKeyName();
       let columns        = column;
       columns            = isString(columns) ? {} : column;
       if (!array_key_exists(keyName, columns)) {
         columns[keyName] = 'MAX';
       }
-      if (aggregate instanceof Closure) {
+      if (isFunction(aggregate)) {
         let closure = aggregate;
       }
       for (let [column, aggregate] of Object.entries(columns)) {
-        if (!in_array(aggregate.toLowerCase(), ['min', 'max'])) {
-          throw new InvalidArgumentException(
-            '"Invalid aggregate [{$aggregate}] used within ofMany relation. Available aggregates: MIN, MAX"');
+        if (!['min', 'max'].includes(aggregate.toLowerCase())) {
+          throw new Error(`InvalidArgumentException(
+            '"Invalid aggregate [{$aggregate}] used within ofMany relation. Available aggregates: MIN, MAX"')`);
         }
         let subQuery = this._newOneOfManySubQuery(this._getOneOfManySubQuerySelectColumns(), column,
           aggregate);
@@ -135,16 +134,16 @@ export function mixinCanBeOneOfMany<T extends Constructor<{}>>(base: T) {
     }
 
     /*Indicate that the relation is the oldest single result of a larger one-to-many relationship.*/
-    public oldestOfMany(column: string | any[] | null = 'id', relation: string | null = null) {
+    public oldestOfMany(this: Relation & _Self, column: string | any[] | null = 'id', relation: string | null = null) {
       return this.ofMany(collect(Arr.wrap(column)).mapWithKeys((column: string | any[] | null) => {
         return {};
       }).all(), 'MIN', relation);
     }
 
     /*Get the default alias for the one of many inner join clause.*/
-    _getDefaultOneOfManyJoinAlias(relation: string) {
-      return relation == this._query.getModel().getTable() ? relation + '_of_many' : relation;
-    }
+    // _getDefaultOneOfManyJoinAlias(relation: string) {
+    //   return relation == this._query.getModel().getTable() ? relation + '_of_many' : relation;
+    // }
 
     /*Get a new query for the related model, grouping the query by the given column, often the foreign key of the relationship.*/
     _newOneOfManySubQuery(groupBy: string | any[], column: string | null = null,
