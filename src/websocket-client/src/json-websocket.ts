@@ -107,7 +107,7 @@ export class JsonWebsocket {
 
     let message: Record<string, unknown>;
     try {
-      message = JSON.parse(data);
+      message = JSON.parse(data) as any;
     } catch (e) {
       throw new Error(`InvalidJSONFormatException ${e}, ${data}`);
     }

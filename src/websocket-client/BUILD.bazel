@@ -22,7 +22,6 @@ ts_library(
       "@npm//rxjs",
       "@npm//@angular/core",
     ],
-    node_modules = "@npm//:node_modules",
     module_name = "@gradii/websocket-client",
     tsconfig = ":tsconfig.json",
 )
