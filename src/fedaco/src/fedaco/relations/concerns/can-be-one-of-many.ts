@@ -10,7 +10,7 @@ import { Constructor } from '../../../helper/constructor';
 import { JoinClauseBuilder } from '../../../query-builder/query-builder';
 import { FedacoBuilder } from '../../fedaco-builder';
 import { Relation } from '../relation';
-import { wrap } from '../../../helper/arr';
+import { mapWithKeys, wrap } from '../../../helper/arr';
 
 export interface CanBeOneOfMany {
   ofMany(column?: string | any[] | null, aggregate?: string | Function | null,
@@ -85,7 +85,7 @@ export function mixinCanBeOneOfMany<T extends Constructor<any>>(base: T) {
     }
 
     /*Indicate that the relation is a single result of a larger one-to-many relationship.*/
-    public ofMany(this: Relation & _Self, column: string | any[] | null = 'id',
+    public ofMany(this: Relation & _Self, column: string | any | null = 'id',
                   aggregate: string | Function | null = 'MAX',
                   relation: string): this {
       this._isOneOfMany = true;
@@ -106,12 +106,13 @@ export function mixinCanBeOneOfMany<T extends Constructor<any>>(base: T) {
       const columnsEntries = Object.entries(columns);
       const lastColumn = columnsEntries[columnsEntries.length - 1][0]
       for (const [column, aggregate] of columnsEntries) {
+        // @ts-ignore
         if (!['min', 'max'].includes(aggregate.toLowerCase())) {
           throw new Error(`InvalidArgumentException(
             '"Invalid aggregate [{$aggregate}] used within ofMany relation. Available aggregates: MIN, MAX"')`);
         }
-        const subQuery = this._newOneOfManySubQuery(this._getOneOfManySubQuerySelectColumns(), column,
-          aggregate);
+        // @ts-ignore
+        const subQuery = this._newOneOfManySubQuery(this._getOneOfManySubQuerySelectColumns(), column, aggregate);
         if (previous !== undefined) {
           this._addOneOfManyJoinSubQuery(subQuery, previous['subQuery'], previous['column']);
         } else if (closure !== undefined) {
@@ -129,11 +130,11 @@ export function mixinCanBeOneOfMany<T extends Constructor<any>>(base: T) {
         };
       }
       this.addConstraints();
-      return this;
+      return this as unknown as any;
     }
 
     /*Indicate that the relation is the latest single result of a larger one-to-many relationship.*/
-    public latestOfMany(column: string | any[] | null = 'id', relation: string | null = null) {
+    public latestOfMany(this: Relation & _Self, column: string | any[] | null = 'id', relation: string | null = null) {
       return this.ofMany(
         mapWithKeys(wrap(column), (column: string | any[] | null) => {
           return {column: 'MAX'};
@@ -164,19 +165,20 @@ export function mixinCanBeOneOfMany<T extends Constructor<any>>(base: T) {
         subQuery.selectRaw(aggregate + '(' + subQuery.getQuery().grammar.wrap(
           column) + ') as ' + subQuery.getQuery().grammar.wrap(column));
       }
+      // @ts-ignore
       this.addOneOfManySubQueryConstraints(subQuery, groupBy, column, aggregate);
       return subQuery;
     }
 
     /*Add the join subquery to the given query on the given column and the relationship's foreign key.*/
     _addOneOfManyJoinSubQuery(parent: FedacoBuilder, subQuery: FedacoBuilder, on: string) {
-      parent.beforeQuery((parent: FedacoBuilder) => {
-        subQuery.applyBeforeQueryCallbacks();
-        parent.joinSub(subQuery, this._relationName, join => {
-          join.on(this.qualifySubSelectColumn(on), '=', this.qualifyRelatedColumn(on));
-          this.addOneOfManyJoinSubQueryConstraints(join, on);
-        });
-      });
+      // parent.beforeQuery((parent: FedacoBuilder) => {
+      //   subQuery.applyBeforeQueryCallbacks();
+      //   parent.joinSub(subQuery, this._relationName, join => {
+      //     join.on(this.qualifySubSelectColumn(on), '=', this.qualifyRelatedColumn(on));
+      //     this.addOneOfManyJoinSubQueryConstraints(join, on);
+      //   });
+      // });
     }
 
     /*Merge the relationship query joins to the given query builder.*/

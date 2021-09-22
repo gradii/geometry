@@ -88,8 +88,8 @@ export class MorphTo extends BelongsTo {
   protected buildDictionary(models: Collection) {
     for (const model of models) {
       if (model[this._morphType]) {
-        const morphTypeKey = this.getDictionaryKey(model[this._morphType]);
-        const foreignKeyKey = this.getDictionaryKey(model[this._foreignKey]);
+        const morphTypeKey = this._getDictionaryKey(model[this._morphType]);
+        const foreignKeyKey = this._getDictionaryKey(model[this._foreignKey]);
         this._dictionary.get(morphTypeKey)[foreignKeyKey].push(model);
       }
     }
@@ -151,7 +151,7 @@ export class MorphTo extends BelongsTo {
   /*Match the results for a given type to their parents.*/
   protected matchToMorphParents(clazz: typeof Model, results: Collection) {
     for (const result of results) {
-      const ownerKey = !isBlank(this.ownerKey) ? this.getDictionaryKey(
+      const ownerKey = !isBlank(this.ownerKey) ? this._getDictionaryKey(
         result[this.ownerKey]) : result.getKey();
       if (this._dictionary.get(clazz)[ownerKey] !== undefined) {
         for (const model of this._dictionary.get(clazz)[ownerKey]) {

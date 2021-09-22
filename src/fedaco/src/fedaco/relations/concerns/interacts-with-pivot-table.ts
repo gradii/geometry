@@ -7,10 +7,8 @@
 import { Collection } from '../../../define/collection';
 import { Constructor } from '../../../helper/constructor';
 import { Model } from '../../model';
-import { BelongsToMany } from '../belongs-to-many';
 import { Relation } from '../relation';
 import { isArray, isBlank } from '@gradii/check-type';
-import { Pivot } from '../pivot';
 import { intersection, difference } from 'ramda'
 import { mapWithKeys } from '../../../helper/arr';
 
@@ -91,7 +89,7 @@ export interface InteractsWithPivotTable {
   newPivotQuery();
 
   /*Set the columns on the pivot table to retrieve.*/
-  withPivot(this: BelongsToMany & this, columns: any[] | any, ...cols: any[]);
+  withPivot( columns: any[] | any, ...cols: any[]);
 
   /*Get all of the IDs from the given mixed value.*/
   _parseIds(value: any);
@@ -369,7 +367,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     /*Get the pivot models that are currently attached.*/
     _getCurrentlyAttachedPivots(this: Relation & _Self,) {
       return this.newPivotQuery().get().map(record => {
-        const clazz = this._using || Pivot;
+        const clazz = this._using //todo recovery me || Pivot;
         const pivot = clazz.fromRawAttributes(this.parent, /*cast type array*/ record,
           this.getTable(), true);
         return pivot.setPivotKeys(this.foreignPivotKey, this.relatedPivotKey);
@@ -413,7 +411,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Set the columns on the pivot table to retrieve.*/
-    public withPivot(this: BelongsToMany & this, columns: any[] | any, ...cols: any[]) {
+    public withPivot(this: /*BelongsToMany*/ any & this, columns: any[] | any, ...cols: any[]) {
       this._pivotColumns = [
         ...this._pivotColumns, ...(isArray(columns) ? columns : arguments)
       ];

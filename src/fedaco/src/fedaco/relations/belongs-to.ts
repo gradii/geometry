@@ -100,11 +100,11 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
     const owner      = this.ownerKey;
     const dictionary = [];
     for (const result of results) {
-      const attribute         = this.getDictionaryKey(result.getAttribute(owner));
+      const attribute         = this._getDictionaryKey(result.getAttribute(owner));
       dictionary[attribute] = result;
     }
     for (const model of models) {
-      const attribute = this.getDictionaryKey(model[foreign]);
+      const attribute = this._getDictionaryKey(model[foreign]);
       if (dictionary[attribute] !== undefined) {
         model.setRelation(relation, dictionary[attribute]);
       }

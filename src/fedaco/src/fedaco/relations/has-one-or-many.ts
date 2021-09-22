@@ -71,7 +71,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
   protected matchOneOrMany(models: any[], results: Collection, relation: string, type: string) {
     const dictionary = this.buildDictionary(results);
     for (const model of models) {
-      const key = this.getDictionaryKey(model.getAttribute(this.localKey));
+      const key = this._getDictionaryKey(model.getAttribute(this.localKey));
       if (dictionary[key] !== undefined) {
         model.setRelation(relation, this.getRelationValue(dictionary, key, type));
       }
@@ -90,7 +90,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
     const foreign = this.getForeignKeyName();
     return results.reduce((prev: any, result) => {
       // @ts-ignore
-      const key = this.getDictionaryKey(result[foreign]);
+      const key = this._getDictionaryKey(result[foreign]);
       if (!prev[key]) {
         prev[key] = [];
       }
