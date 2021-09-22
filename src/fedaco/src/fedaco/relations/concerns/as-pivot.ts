@@ -5,8 +5,10 @@
  */
 
 import { Constructor } from '../../../helper/constructor';
-
-type Model = any;
+import { FedacoBuilder } from '../../fedaco-builder';
+import { isArray } from '@gradii/check-type';
+import { tap } from 'ramda'
+import { Model } from '../../model';
 
 export declare class AsPivot {
   // _setKeysForSelectQuery(query: FedacoBuilder);
@@ -59,7 +61,7 @@ export declare class AsPivot {
 
 export type AsPivotCtor = Constructor<AsPivot>;
 
-export function mixinAsPivot<T extends Constructor<{}>>(base: T): AsPivotCtor & T {
+export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor & T {
   return class _Self extends base {
     /*The parent model of the relationship.*/
     public pivotParent: Model;
@@ -70,8 +72,8 @@ export function mixinAsPivot<T extends Constructor<{}>>(base: T): AsPivotCtor & 
 
     /*Create a new pivot model instance.*/
     public static fromAttributes(parent: Model, attributes: any[], table: string,
-                                 exists: boolean = false) {
-      let instance        = new this();
+                                 exists = false) {
+      const instance        = new this();
       instance.timestamps = instance.hasTimestampAttributes(attributes);
       instance.setConnection(parent.getConnectionName()).setTable(table).forceFill(
         attributes).syncOriginal();
@@ -82,8 +84,8 @@ export function mixinAsPivot<T extends Constructor<{}>>(base: T): AsPivotCtor & 
 
     /*Create a new pivot model from raw values returned from a query.*/
     public static fromRawAttributes(parent: Model, attributes: any[], table: string,
-                                    exists: boolean = false) {
-      let instance        = this.fromAttributes(parent, [], table, exists);
+                                    exists = false) {
+      const instance        = this.fromAttributes(parent, [], table, exists);
       instance.timestamps = instance.hasTimestampAttributes(attributes);
       instance.setRawAttributes(attributes, exists);
       return instance;
@@ -92,7 +94,6 @@ export function mixinAsPivot<T extends Constructor<{}>>(base: T): AsPivotCtor & 
     /*Set the keys for a select query.*/
     protected _setKeysForSelectQuery(this: Model & _Self, query: FedacoBuilder) {
       if (this._attributes[this.getKeyName()] !== undefined) {
-        // @ts-ignore
         return super._setKeysForSelectQuery(query);
       }
       query.where(this._foreignKey,
@@ -109,7 +110,6 @@ export function mixinAsPivot<T extends Constructor<{}>>(base: T): AsPivotCtor & 
     /*Delete the pivot model record from the database.*/
     public async delete(this: Model & this) {
       if (this._attributes[this.getKeyName()] !== undefined) {
-        // @ts-ignore
         return /*cast type int*/ super.delete();
       }
       if (this._fireModelEvent('deleting') === false) {
@@ -193,19 +193,19 @@ export function mixinAsPivot<T extends Constructor<{}>>(base: T): AsPivotCtor & 
       if (!ids.includes(':')) {
         return super.newQueryForRestoration(ids);
       }
-      let segments = ids.split(':');
+      const segments = ids.split(':');
       return this.newQueryWithoutScopes().where(segments[0], segments[1]).where(segments[2],
         segments[3]);
     }
 
     /*Get a new query to restore multiple models by their queueable IDs.*/
     _newQueryForCollectionRestoration(ids: number[] | string[]) {
-      if (!ids[0].includes(':')) {
+      if (!(`${ids[0]}`).includes(':')) {
         return super.newQueryForRestoration(ids);
       }
-      let query = this.newQueryWithoutScopes();
-      for (let id of ids) {
-        let segments = id.split(':');
+      const query = this.newQueryWithoutScopes();
+      for (const id of ids as string[]) {
+        const segments = id.split(':');
         query.orWhere(q => {
           return q.where(segments[0], segments[1]).where(segments[2], segments[3]);
         });

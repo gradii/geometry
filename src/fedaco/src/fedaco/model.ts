@@ -20,8 +20,8 @@ import { HasRelationships, mixinHasRelationships } from './mixins/has-relationsh
 import { HasTimestamps, mixinHasTimestamps } from './mixins/has-timestamps';
 import { HidesAttributes, mixinHidesAttributes } from './mixins/hides-attributes';
 import { loadAggregate } from './model-helper';
-import { BelongsToMany } from './relations/belongs-to-many';
-import { HasManyThrough } from './relations/has-many-through';
+// import { BelongsToMany } from './relations/belongs-to-many';
+// import { HasManyThrough } from './relations/has-many-through';
 import { Scope } from './scope';
 
 
@@ -58,6 +58,7 @@ export interface Model extends HasAttributes, HasEvents,
   HasGlobalScopes, HasRelationships,
   HasTimestamps, HidesAttributes,
   GuardsAttributes, ForwardsCalls {
+
 }
 
 // tslint:disable-next-line:no-namespace
@@ -1088,13 +1089,14 @@ export class Model extends mixinHasAttributes(
 
   /*Retrieve the child model query for a bound value.*/
   protected resolveChildRouteBindingQuery(childType: string, value: any, field: string | null) {
-    let relationship = this[plural(camelCase(childType))]();
+    // todo recovery me
+    const relationship = this[plural(camelCase(childType))]();
     field            = field || relationship.getRelated().getRouteKeyName();
-    if (relationship instanceof HasManyThrough || relationship instanceof BelongsToMany) {
-      return relationship.where(relationship.getRelated().getTable() + '.' + field, value);
-    } else {
+    // if (relationship instanceof HasManyThrough || relationship instanceof BelongsToMany) {
+    //   return relationship.where(relationship.getRelated().getTable() + '.' + field, value);
+    // } else {
       return relationship.where(field, value);
-    }
+    // }
   }
 
   /**

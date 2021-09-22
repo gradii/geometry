@@ -124,9 +124,9 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
 
     /*Add a relationship count / exists condition to the query.*/
     public has(relation: Relation | string,
-               operator: string          = '>=',
-               count: number             = 1,
-               conjunction: string       = 'and',
+               operator = '>=',
+               count = 1,
+               conjunction = 'and',
                callback: Function | null = null): FedacoBuilder {
       if (isString(relation)) {
         if (relation.includes('.')) {
@@ -137,11 +137,11 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
       if (relation instanceof MorphTo) {
         return this.hasMorph(relation, ['*'], operator, count, conjunction, callback);
       }
-      let method = this._canUseExistsForExistenceCheck(operator, count) ?
+      const method = this._canUseExistsForExistenceCheck(operator, count) ?
         'getRelationExistenceQuery' :
         'getRelationExistenceCountQuery';
 
-      let hasQuery = (relation as any)[method](
+      const hasQuery = (relation as any)[method](
         (relation as Relation).getRelated().newQueryWithoutRelationships(), this);
 
       if (callback) {
@@ -154,17 +154,17 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
 
     Sets up recursive call to whereHas until we finish the nested relation.*/
     _hasNested(relations: string,
-               operator: string          = '>=',
-               count: number             = 1,
-               conjunction: string       = 'and',
+               operator = '>=',
+               count = 1,
+               conjunction = 'and',
                callback: Function | null = null): FedacoBuilder {
       const splitRelations = relations.split('.');
-      let doesntHave       = operator === '<' && count === 1;
+      const doesntHave = operator === '<' && count === 1;
       if (doesntHave) {
         operator = '>=';
-        count    = 1;
+        count = 1;
       }
-      let closure = (q: FedacoBuilder) => {
+      const closure = (q: FedacoBuilder) => {
         splitRelations.length > 1 ?
           q.whereHas(splitRelations.shift(), closure) :
           q.has(splitRelations.shift(), operator, count, 'and', callback);
@@ -173,13 +173,13 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
     }
 
     /*Add a relationship count / exists condition to the query with an "or".*/
-    public orHas(relation: string, operator: string = '>=', count: number = 1) {
+    public orHas(relation: string, operator = '>=', count = 1) {
       return this.has(relation, operator, count, 'or');
     }
 
     /*Add a relationship count / exists condition to the query.*/
-    public doesntHave(relation: string, conjunction: string = 'and',
-                      callback: Function | null             = null) {
+    public doesntHave(relation: string, conjunction = 'and',
+                      callback: Function | null = null) {
       return this.has(relation, '<', 1, conjunction, callback);
     }
 
@@ -191,16 +191,16 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
     /*Add a relationship count / exists condition to the query with where clauses.*/
     public whereHas(relation: Relation | string,
                     callback: Function | null = null,
-                    operator: string          = '>=',
-                    count: number             = 1) {
+                    operator = '>=',
+                    count = 1) {
       return this.has(relation, operator, count, 'and', callback);
     }
 
     /*Add a relationship count / exists condition to the query with where clauses and an "or".*/
     public orWhereHas(relation: Relation | string,
                       callback: Function | null = null,
-                      operator: string          = '>=',
-                      count: number             = 1) {
+                      operator = '>=',
+                      count = 1) {
       return this.has(relation, operator, count, 'or', callback);
     }
 
@@ -217,9 +217,9 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
     /*Add a polymorphic relationship count / exists condition to the query.*/
     public hasMorph(relation: MorphTo | string,
                     types: string[],
-                    operator: string          = '>=',
-                    count: number             = 1,
-                    conjunction: string       = 'and',
+                    operator = '>=',
+                    count = 1,
+                    conjunction = 'and',
                     callback: Function | null = null) {
       if (isString(relation)) {
         relation = this._getRelationWithoutConstraints(relation) as unknown as MorphTo;
@@ -236,9 +236,9 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
       });
 
       return this.where((query: FedacoBuilder) => {
-        for (let type of morphedTypes) {
+        for (const type of morphedTypes) {
           query.orWhere((q: FedacoBuilder) => {
-            let belongsTo: BelongsTo = this._getBelongsToRelation(relation as MorphTo,
+            const belongsTo: BelongsTo = this._getBelongsToRelation(relation as MorphTo,
               type) as unknown as BelongsTo;
             if (callback) {
               callback = (__q: FedacoBuilder) => {
@@ -255,7 +255,7 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
 
     /*Get the BelongsTo relationship for a single polymorphic type.*/
     _getBelongsToRelation(relation: MorphTo, type: string) {
-      let belongsTo = Relation.noConstraints(() => {
+      const belongsTo = Relation.noConstraints(() => {
         return this.model.belongsTo(type, relation.getForeignKeyName(), relation.getOwnerKeyName());
       });
       belongsTo.getQuery().mergeConstraintsFrom(relation.getQuery());
@@ -265,14 +265,14 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
     /*Add a polymorphic relationship count / exists condition to the query with an "or".*/
     public orHasMorph(relation: MorphTo | string,
                       types: string[],
-                      operator: string = '>=',
-                      count: number    = 1) {
+                      operator = '>=',
+                      count = 1) {
       return this.hasMorph(relation, types, operator, count, 'or');
     }
 
     /*Add a polymorphic relationship count / exists condition to the query.*/
     public doesntHaveMorph(relation: MorphTo | string, types: string[],
-                           conjunction: string       = 'and',
+                           conjunction = 'and',
                            callback: Function | null = null) {
       return this.hasMorph(relation, types, '<', 1, conjunction, callback);
     }
@@ -284,16 +284,16 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
 
     /*Add a polymorphic relationship count / exists condition to the query with where clauses.*/
     public whereHasMorph(relation: MorphTo | string, types: string[],
-                         callback: Function | null = null, operator: string = '>=',
-                         count: number                                      = 1) {
+                         callback: Function | null = null, operator = '>=',
+                         count = 1) {
       return this.hasMorph(relation, types, operator, count, 'and', callback);
     }
 
     /*Add a polymorphic relationship count / exists condition to the query with where clauses and an "or".*/
     public orWhereHasMorph(relation: MorphTo | string, types: string[],
                            callback: Function | null = null,
-                           operator: string          = '>=',
-                           count: number             = 1) {
+                           operator = '>=',
+                           count = 1) {
       return this.hasMorph(relation, types, operator, count, 'or', callback);
     }
 
@@ -310,44 +310,45 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
     }
 
     /*Add subselect queries to include an aggregate value for a relationship.*/
-    public withAggregate(relations: RelationParams, column: string,
+    public withAggregate(this: FedacoBuilder & _Self, relations: RelationParams, column: string,
                          func: string = null) {
       if (isAnyEmpty(relations)) {
         return this;
       }
-      if (!this._query._columns.length) {
-        this._query.select(createTableColumn(this._query._from, '*'));
+      if (!this.getQuery()._columns.length) {
+        this.getQuery().select(createTableColumn(this.getQuery()._from, '*'));
       }
       relations = isArray(relations) ? relations : [relations];
-      for (let [name, constraints] of Object.entries(this.parseWithRelations(relations))) {
-        let segments = name.split(' ');
+      let name: string, constraints: any;
+      for ([name, constraints] of Object.entries(this._parseWithRelations(relations))) {
+        const segments = name.split(' ');
         let alias;
         if (segments.length === 3 && segments[1].toLowerCase() === 'as') {
           [name, alias] = [segments[0], segments[2]];
         }
-        let relation = this._getRelationWithoutConstraints(name);
+        const relation = this._getRelationWithoutConstraints(name);
         let expression;
         if (func) {
           // todo check query from eq query from
-          let hashedColumn = this.getModel().getTable() === relation.getQuery().getModel().getTable() ?
+          const hashedColumn = this.getModel().getTable() === relation.getQuery().getModel().getTable() ?
             `${relation.getRelationCountHash(false)}.${column}` : column;
-          expression       = `${func}(${this.getQuery().getGrammar().wrap(
+          expression = `${func}(${this.getQuery().getGrammar().wrap(
             column === '*' ? column :
               relation.getRelated().qualifyColumn(hashedColumn)
           )})`;
         } else {
           expression = column;
         }
-        let query = relation.getRelationExistenceQuery(
+        const query = relation.getRelationExistenceQuery(
           relation.getRelated().newQuery(), this as unknown as FedacoBuilder, raw(expression)
         );//.setBindings([], 'select');
-        query._callScope(constraints as Function);
+        query._callScope(constraints);
 
         const queryBuilder: QueryBuilder = query.mergeConstraintsFrom(relation.getQuery()).toBase();
-        queryBuilder._orders             = [];
-        queryBuilder._bindings['order']  = [];
+        queryBuilder._orders = [];
+        queryBuilder._bindings['order'] = [];
         if (queryBuilder._columns.length > 1) {
-          queryBuilder._columns            = [queryBuilder._columns[0]];
+          queryBuilder._columns = [queryBuilder._columns[0]];
           queryBuilder._bindings['select'] = [];
         }
         alias = alias ?? snakeCase(
@@ -360,27 +361,27 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
 
     /*Add subselect queries to count the relations.*/
     public withCount(...relations: RelationParam[]): this;
-    public withCount(relations: RelationParam | RelationParams): this {
+    public withCount(this: FedacoBuilder & _Self, relations: RelationParam | RelationParams): this {
       return this.withAggregate(isArray(relations) ? relations : [...arguments], '*', 'count');
     }
 
     /*Add subselect queries to include the max of the relation's column.*/
-    public withMax(relation: RelationParams, column: string): this {
+    public withMax(this: FedacoBuilder & _Self, relation: RelationParams, column: string): this {
       return this.withAggregate(relation, column, 'max');
     }
 
     /*Add subselect queries to include the min of the relation's column.*/
-    public withMin(relation: RelationParams, column: string) {
+    public withMin(this: FedacoBuilder & _Self, relation: RelationParams, column: string) {
       return this.withAggregate(relation, column, 'min');
     }
 
     /*Add subselect queries to include the sum of the relation's column.*/
-    public withSum(relation: RelationParams, column: string) {
+    public withSum(this: FedacoBuilder & _Self, relation: RelationParams, column: string) {
       return this.withAggregate(relation, column, 'sum');
     }
 
     /*Add subselect queries to include the average of the relation's column.*/
-    public withAvg(relation: RelationParams, column: string) {
+    public withAvg(this: FedacoBuilder & _Self, relation: RelationParams, column: string) {
       return this.withAggregate(relation, column, 'avg');
     }
 
@@ -397,8 +398,8 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
 
     /*Merge the where constraints from another query to the current query.*/
     public mergeConstraintsFrom(from: FedacoBuilder) {
-      let whereBindings = from.getQuery().getRawBindings()['where'] ?? [];
-      const fb          = this.withoutGlobalScopes(from.removedScopes());
+      const whereBindings = from.getQuery().getRawBindings()['where'] ?? [];
+      const fb = this.withoutGlobalScopes(from.removedScopes());
       fb.getQuery().mergeWheres(
         from.getQuery()._wheres,
         whereBindings
@@ -408,9 +409,9 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
 
     /*Add a sub-query count clause to this query.*/
     _addWhereCountQuery(query: QueryBuilder,
-                        operator: string    = '>=',
-                        count: number       = 1,
-                        conjunction: string = 'and'): FedacoBuilder {
+                        operator = '>=',
+                        count = 1,
+                        conjunction = 'and'): FedacoBuilder {
       // must call to sql first
       const sql = query.toSql();
       const bindings = query.getBindings();

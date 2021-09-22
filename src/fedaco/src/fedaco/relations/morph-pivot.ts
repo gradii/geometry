@@ -40,7 +40,7 @@ export class MorphPivot extends Pivot {
     if (this._fireModelEvent('deleting') === false) {
       return 0;
     }
-    let query = this.getDeleteQuery();
+    const query = this.getDeleteQuery();
     query.where(this.morphType, this.morphClass);
     return tap(() => {
       this._fireModelEvent('deleted', false);
@@ -82,7 +82,7 @@ export class MorphPivot extends Pivot {
     if (!ids.includes(':')) {
       return super.newQueryForRestoration(ids);
     }
-    let segments = ids.split(':');
+    const segments = ids.split(':');
     return this.newQueryWithoutScopes().where(
       segments[0], segments[1]
     ).where(
@@ -95,9 +95,9 @@ export class MorphPivot extends Pivot {
     if (!ids[0].includes(':')) {
       return super.newQueryForRestoration(ids);
     }
-    let query = this.newQueryWithoutScopes();
-    for (let id of ids) {
-      let segments = id.split(':');
+    const query = this.newQueryWithoutScopes();
+    for (const id of ids) {
+      const segments = id.split(':');
       query.orWhere(q => {
         return q.where(segments[0], segments[1])
           .where(segments[2], segments[3])

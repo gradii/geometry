@@ -7,8 +7,8 @@
 import { Model } from '../model';
 
 export function fromAttributes(clazz: typeof Model, parent: Model, attributes: any[], table: string,
-                               exists: boolean = false) {
-  let instance        = new clazz();
+                               exists = false) {
+  const instance        = new clazz();
   instance.timestamps = instance.hasTimestampAttributes(attributes);
   instance.setConnection(parent.getConnectionName()).setTable(table).forceFill(
     attributes).syncOriginal();
@@ -18,8 +18,8 @@ export function fromAttributes(clazz: typeof Model, parent: Model, attributes: a
 }
 
 export function fromRawAttributes(clazz: typeof Model, parent: Model, attributes: any[], table: string,
-                                  exists: boolean = false) {
-  let instance        = fromAttributes(clazz, parent, [], table, exists);
+                                  exists = false) {
+  const instance        = fromAttributes(clazz, parent, [], table, exists);
   instance.timestamps = instance.hasTimestampAttributes(attributes);
   instance.setRawAttributes(attributes, exists);
   return instance;

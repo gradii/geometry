@@ -23,7 +23,7 @@ export class MorphToMany extends BelongsToMany {
                      foreignPivotKey: string, relatedPivotKey: string, parentKey: string,
                      relatedKey: string,
                      relationName: string | null = null,
-                     inverse: boolean            = false) {
+                     inverse            = false) {
     super(query, parent, table, foreignPivotKey, relatedPivotKey, parentKey, relatedKey,
       relationName);
     this.inverse    = inverse;

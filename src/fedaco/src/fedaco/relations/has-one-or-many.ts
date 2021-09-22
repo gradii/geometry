@@ -36,7 +36,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
   /*Create and return an un-saved instance of the related models.*/
   public makeMany(records: []) {
     const instances = this._related.newCollection();
-    for (let record of records) {
+    for (const record of records) {
       instances.push(this.make(record));
     }
     return instances;
@@ -53,7 +53,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
 
   /*Set the constraints for an eager load of the relation.*/
   public addEagerConstraints(models: any[]) {
-    let whereIn = this.whereInMethod(this._parent, this.localKey);
+    const whereIn = this.whereInMethod(this._parent, this.localKey);
     this.getRelationQuery()[whereIn](this.foreignKey, this.getKeys(models, this.localKey));
   }
 
@@ -69,8 +69,8 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
 
   /*Match the eagerly loaded results to their many parents.*/
   protected matchOneOrMany(models: any[], results: Collection, relation: string, type: string) {
-    let dictionary = this.buildDictionary(results);
-    for (let model of models) {
+    const dictionary = this.buildDictionary(results);
+    for (const model of models) {
       const key = this.getDictionaryKey(model.getAttribute(this.localKey));
       if (dictionary[key] !== undefined) {
         model.setRelation(relation, this.getRelationValue(dictionary, key, type));
@@ -81,13 +81,13 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
 
   /*Get the value of a relationship by one or many type.*/
   protected getRelationValue(dictionary: any[], key: string, type: string) {
-    let value = dictionary[key];
+    const value = dictionary[key];
     return type === 'one' ? value : this._related.newCollection(value);
   }
 
   /*Build model dictionary keyed by the relation's foreign key.*/
   protected buildDictionary(results: Collection) {
-    let foreign = this.getForeignKeyName();
+    const foreign = this.getForeignKeyName();
     return results.reduce((prev: any, result) => {
       // @ts-ignore
       const key = this.getDictionaryKey(result[foreign]);
@@ -144,7 +144,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
 
   /*Attach a collection of models to the parent instance.*/
   public saveMany(models: any[]) {
-    for (let model of models) {
+    for (const model of models) {
       this.save(model);
     }
     return models;
@@ -160,8 +160,8 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
 
   /*Create a Collection of new instances of the related model.*/
   public createMany(records: any[]) {
-    let instances = this._related.newCollection();
-    for (let record of records) {
+    const instances = this._related.newCollection();
+    for (const record of records) {
       instances.push(this.create(record));
     }
     return instances;
@@ -212,7 +212,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
 
   /*Get the plain foreign key.*/
   public getForeignKeyName() {
-    let segments = this.getQualifiedForeignKeyName().split('.');
+    const segments = this.getQualifiedForeignKeyName().split('.');
     return last(segments);
   }
 

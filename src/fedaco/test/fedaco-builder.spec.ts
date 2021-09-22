@@ -10,7 +10,6 @@ import { SqliteGrammar } from '../src/query-builder/grammar/sqlite-grammar';
 import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
 import { FedacoBuilderTestHigherOrderWhereScopeStub } from './model/fedaco-builder-test-higher-order-where-scope-stub';
-import { FedacoBuilderTestModelParentStub } from './model/fedaco-builder-test-model-parent-stub';
 import { FedacoBuilderTestNestedStub } from './model/fedaco-builder-test-nested-stub';
 import { FedacoBuilderTestScopeStub } from './model/fedaco-builder-test-scope-stub';
 import { StubModel } from './model/stub-model';

@@ -11,7 +11,7 @@ export interface Pivot extends Model {
 
 export class Pivot extends mixinAsPivot(Model) {
   /*Indicates if the IDs are auto-incrementing.*/
-  public incrementing: boolean = false;
+  public incrementing = false;
   /*The attributes that aren't mass assignable.*/
   protected guarded: any[] = [];
 }

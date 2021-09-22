@@ -29,11 +29,11 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   /*The related model instance.*/
   _related: Model;
   /*Indicates if the relation is adding constraints.*/
-  protected static constraints: boolean = true;
+  protected static constraints = true;
   /*An array to map class names to their morph names in the database.*/
   public static _morphMap: any[] = [];
   /*The count of self joins.*/
-  protected static selfJoinCount: number = 0;
+  protected static selfJoinCount = 0;
 
   /*Create a new relation instance.*/
   public constructor(query: FedacoBuilder, parent: Model) {
@@ -46,7 +46,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
 
   /*Run a callback with constraints disabled on the relation.*/
   public static noConstraints(callback: Function): Relation {
-    let previous         = Relation.constraints;
+    const previous         = Relation.constraints;
     Relation.constraints = false;
     let rst;
     try {
@@ -92,7 +92,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
 
   /*Execute the query and get the first result if it's the sole matching record.*/
   public async sole(columns: any[] | string = ['*']) {
-    let result = await this.take(2).get(columns);
+    const result = await this.take(2).get(columns);
     if (!result.length) {
       throw new Error(`ModelNotFoundException().setModel(get_class(this._related))`);
     }
@@ -109,7 +109,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
 
   /*Touch all of the related models for the relationship.*/
   public touch() {
-    let model = this.getRelated();
+    const model = this.getRelated();
     // if (!model.isIgnoringTouch()) {
     this.rawUpdate({
       [model.getUpdatedAtColumn()]: model.freshTimestampString()
@@ -146,7 +146,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   }
 
   /*Get a relationship join table hash.*/
-  public getRelationCountHash(incrementJoinCount: boolean = true) {
+  public getRelationCountHash(incrementJoinCount = true) {
     return 'laravel_reserved_' + (incrementJoinCount ? Relation.selfJoinCount++ : Relation.selfJoinCount);
   }
 
@@ -214,7 +214,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   }
 
   /*Set or get the morph map for polymorphic relations.*/
-  public static morphMap(map: any | null = null, merge: boolean = true) {
+  public static morphMap(map: any | null = null, merge = true) {
     map = Relation.buildMorphMapFromModels(map);
     if (isArray(map)) {
       Relation._morphMap = merge && Relation._morphMap ? {...map, ...Relation._morphMap} : map;

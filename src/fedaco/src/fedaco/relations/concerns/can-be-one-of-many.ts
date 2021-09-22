@@ -4,12 +4,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isFunction, isString } from '@gradii/check-type';
+import { isBlank, isFunction, isString } from '@gradii/check-type';
 import { last } from 'ramda';
 import { Constructor } from '../../../helper/constructor';
 import { JoinClauseBuilder } from '../../../query-builder/query-builder';
 import { FedacoBuilder } from '../../fedaco-builder';
 import { Relation } from '../relation';
+import { wrap } from '../../../helper/arr';
 
 export interface CanBeOneOfMany {
   ofMany(column?: string | any[] | null, aggregate?: string | Function | null,
@@ -55,12 +56,11 @@ export interface CanBeOneOfMany {
   getRelationName();
 }
 
-export function mixinCanBeOneOfMany<T extends Constructor<{}>>(base: T) {
-  // @ts-ignore
+export function mixinCanBeOneOfMany<T extends Constructor<any>>(base: T) {
   return class _Self extends base {
 
     /*Determines whether the relationship is one-of-many.*/
-    _isOneOfMany: boolean = false;
+    _isOneOfMany = false;
     /*The name of the relationship.*/
     _relationName: string;
     /*The one of many inner join subselect query builder instance.*/
@@ -69,7 +69,7 @@ export function mixinCanBeOneOfMany<T extends Constructor<{}>>(base: T) {
     /*Add constraints for inner join subselect for one of many relationships.*/
     public addOneOfManySubQueryConstraints(
       query: FedacoBuilder, column: string | null = null,
-      aggregate: string | null              = null
+      aggregate: string | null = null
     ) {
       throw new Error('not implement');
     }
@@ -86,25 +86,31 @@ export function mixinCanBeOneOfMany<T extends Constructor<{}>>(base: T) {
 
     /*Indicate that the relation is a single result of a larger one-to-many relationship.*/
     public ofMany(this: Relation & _Self, column: string | any[] | null = 'id',
-                  aggregate: string | Function | null                   = 'MAX',
+                  aggregate: string | Function | null = 'MAX',
                   relation: string): this {
-      this._isOneOfMany  = true;
+      this._isOneOfMany = true;
       this._relationName = relation// || this._getDefaultOneOfManyJoinAlias();
-      let keyName        = this._query.getModel().getKeyName();
-      let columns        = column;
-      columns            = isString(columns) ? {} : column;
-      if (!array_key_exists(keyName, columns)) {
+      const keyName = this._query.getModel().getKeyName();
+      const columns = isString(column) ? {
+        [column]: aggregate,
+        [keyName]: aggregate,
+      } : column;
+      if (!(keyName in columns)) {
         columns[keyName] = 'MAX';
       }
+      let closure
       if (isFunction(aggregate)) {
-        let closure = aggregate;
+        closure = aggregate;
       }
-      for (let [column, aggregate] of Object.entries(columns)) {
+      let previous
+      const columnsEntries = Object.entries(columns);
+      const lastColumn = columnsEntries[columnsEntries.length - 1][0]
+      for (const [column, aggregate] of columnsEntries) {
         if (!['min', 'max'].includes(aggregate.toLowerCase())) {
           throw new Error(`InvalidArgumentException(
             '"Invalid aggregate [{$aggregate}] used within ofMany relation. Available aggregates: MIN, MAX"')`);
         }
-        let subQuery = this._newOneOfManySubQuery(this._getOneOfManySubQuerySelectColumns(), column,
+        const subQuery = this._newOneOfManySubQuery(this._getOneOfManySubQuerySelectColumns(), column,
           aggregate);
         if (previous !== undefined) {
           this._addOneOfManyJoinSubQuery(subQuery, previous['subQuery'], previous['column']);
@@ -114,12 +120,12 @@ export function mixinCanBeOneOfMany<T extends Constructor<{}>>(base: T) {
         if (!(previous !== undefined)) {
           this._oneOfManySubQuery = subQuery;
         }
-        if (array_key_last(columns) == column) {
+        if (lastColumn == column) {
           this._addOneOfManyJoinSubQuery(this._query, subQuery, column);
         }
-        let previous = {
+        previous = {
           'subQuery': subQuery,
-          'column'  : column
+          'column': column
         };
       }
       this.addConstraints();
@@ -128,16 +134,18 @@ export function mixinCanBeOneOfMany<T extends Constructor<{}>>(base: T) {
 
     /*Indicate that the relation is the latest single result of a larger one-to-many relationship.*/
     public latestOfMany(column: string | any[] | null = 'id', relation: string | null = null) {
-      return this.ofMany(collect(Arr.wrap(column)).mapWithKeys((column: string | any[] | null) => {
-        return {};
-      }).all(), 'MAX', relation );
+      return this.ofMany(
+        mapWithKeys(wrap(column), (column: string | any[] | null) => {
+          return {column: 'MAX'};
+        }), 'MAX', relation);
     }
 
     /*Indicate that the relation is the oldest single result of a larger one-to-many relationship.*/
     public oldestOfMany(this: Relation & _Self, column: string | any[] | null = 'id', relation: string | null = null) {
-      return this.ofMany(collect(Arr.wrap(column)).mapWithKeys((column: string | any[] | null) => {
-        return {};
-      }).all(), 'MIN', relation);
+      return this.ofMany(
+        mapWithKeys(wrap(column), (column: string | any[] | null) => {
+          return {column: 'MIN'};
+        }), 'MIN', relation);
     }
 
     /*Get the default alias for the one of many inner join clause.*/
@@ -147,9 +155,9 @@ export function mixinCanBeOneOfMany<T extends Constructor<{}>>(base: T) {
 
     /*Get a new query for the related model, grouping the query by the given column, often the foreign key of the relationship.*/
     _newOneOfManySubQuery(groupBy: string | any[], column: string | null = null,
-                          aggregate: string | null                       = null) {
-      let subQuery = this.query.getModel().newQuery();
-      for (let group of Arr.wrap(groupBy)) {
+                          aggregate: string | null = null) {
+      const subQuery = this.query.getModel().newQuery();
+      for (const group of wrap(groupBy)) {
         subQuery.groupBy(this.qualifyRelatedColumn(group));
       }
       if (!isBlank(column)) {

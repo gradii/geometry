@@ -5,23 +5,11 @@
  */
 
 import { makePropDecorator, TypeDecorator } from '@gradii/annotation';
-import { ForwardRefFn } from '@gradii/injection';
 import { Model } from '../fedaco/model';
 import { HasMany } from '../fedaco/relations/has-many';
-import { resolveForwardRef } from '../query-builder/forward-ref';
+import { ForwardRefFn, resolveForwardRef } from '../query-builder/forward-ref';
 import { ColumnDefine } from './column';
 import { RelationType } from './enum-relation';
-
-
-export interface RelationDecorator {
-
-  (obj?: HasManyRelationAnnotation): TypeDecorator;
-
-  /**
-   * See the `Pipe` decorator.
-   */
-  new(obj?: HasManyRelationAnnotation): HasManyRelationAnnotation;
-}
 
 export interface HasManyRelationAnnotation extends ColumnDefine {
   name?: string;

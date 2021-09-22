@@ -75,8 +75,8 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
 
   /*Gather the keys from an array of related models.*/
   protected getEagerModelKeys(models: any[]) {
-    let keys = [];
-    for (let model of models) {
+    const keys = [];
+    for (const model of models) {
       const value = model[this._foreignKey];
       if (!isBlank(value)) {
         keys.push(value);
@@ -88,7 +88,7 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
 
   /*Initialize the relation on a set of models.*/
   public initRelation(models: any[], relation: string) {
-    for (let model of models) {
+    for (const model of models) {
       model.setRelation(relation, this.getDefaultFor(model));
     }
     return models;
@@ -96,15 +96,15 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
 
   /*Match the eagerly loaded results to their parents.*/
   public match(models: any[], results: Collection, relation: string) {
-    let foreign    = this._foreignKey;
-    let owner      = this.ownerKey;
-    let dictionary = [];
-    for (let result of results) {
-      let attribute         = this.getDictionaryKey(result.getAttribute(owner));
+    const foreign    = this._foreignKey;
+    const owner      = this.ownerKey;
+    const dictionary = [];
+    for (const result of results) {
+      const attribute         = this.getDictionaryKey(result.getAttribute(owner));
       dictionary[attribute] = result;
     }
-    for (let model of models) {
-      let attribute = this.getDictionaryKey(model[foreign]);
+    for (const model of models) {
+      const attribute = this.getDictionaryKey(model[foreign]);
       if (dictionary[attribute] !== undefined) {
         model.setRelation(relation, dictionary[attribute]);
       }
@@ -114,7 +114,7 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
 
   /*Associate the model instance to the given parent.*/
   public associate(model: Model | number | string) {
-    let ownerKey = model instanceof Model ?
+    const ownerKey = model instanceof Model ?
       model.getAttribute(this.ownerKey) : model;
     this.child.setAttribute(this._foreignKey, ownerKey);
     if (model instanceof Model) {

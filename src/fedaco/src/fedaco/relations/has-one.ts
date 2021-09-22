@@ -34,7 +34,7 @@ export class HasOne extends mixinComparesRelatedModels(
 
   /*Initialize the relation on a set of models.*/
   public initRelation(models: any[], relation: string) {
-    for (let model of models) {
+    for (const model of models) {
       model.setRelation(relation, this._getDefaultFor(model));
     }
     return models;

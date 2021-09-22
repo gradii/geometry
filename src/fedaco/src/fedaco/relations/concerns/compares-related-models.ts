@@ -12,7 +12,7 @@ import { MorphOne } from '../morph-one';
 import { Relation } from '../Relation';
 
 export interface ComparesRelatedModels {
-  is(this: Model & this, model: Model | null): Model;
+  is(model: Model | null): Model;
 
   /*Determine if the model is not the related instance of the relationship.*/
   isNot(model: Model | null): Model;
@@ -29,8 +29,8 @@ export interface ComparesRelatedModels {
 
 type ComparesRelatedModelsCtor = Constructor<ComparesRelatedModels>;
 
-export function mixinComparesRelatedModels<T extends Constructor<{}>>(base: T): ComparesRelatedModelsCtor & T {
-  // @ts-ignore
+export function mixinComparesRelatedModels<T extends Constructor<any>>(base: T): ComparesRelatedModelsCtor & T {
+
   return class _Self extends base {
 
     /*Determine if the model is the related instance of the relationship.*/
@@ -61,7 +61,7 @@ export function mixinComparesRelatedModels<T extends Constructor<{}>>(base: T): 
     }
 
     /*Compare the parent key with the related key.*/
-    _compareKeys(parentKey: any, relatedKey: any) {
+    _compareKeys(parentKey: any, relatedKey: any): boolean {
       if (!parentKey.length || !relatedKey.length) {
         return false;
       }
