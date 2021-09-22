@@ -23,13 +23,13 @@ export function mixinSupportsDefaultModels<T extends Constructor<{}>>(base: T): 
     /*Indicates if a default model instance should be used.
 
     Alternatively, may be a Closure or array.*/
-    _withDefault: (() => void) | any[] | boolean;
+    _withDefault: ((instance: any, parent: any) => any) | any[] | boolean;
 
     /*Make a new related instance for the given model.*/
     // protected abstract newRelatedInstanceFor(parent: Model);
 
     /*Return a new model instance in case the relationship does not exist.*/
-    public withDefault(callback: (() => void) | any[] | boolean = true) {
+    public withDefault(callback: ((instance: any, parent: any) => any) | any[] | boolean = true) {
       this._withDefault = callback;
       return this;
     }

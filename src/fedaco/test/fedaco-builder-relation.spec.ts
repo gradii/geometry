@@ -76,7 +76,7 @@ describe('fedaco builder relation', () => {
     const model1 = new FedacoBuilderTestModelParentStub();
 
     const builder1 = model1.newQuery().withCount('foo');
-    const result = builder1.toSql();
+    const result   = builder1.toSql();
 
     expect(result.result).toBe(
       'SELECT `fedaco_builder_test_model_parent_stubs`.*, (SELECT count(*) FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id`) AS `foo_count` FROM `fedaco_builder_test_model_parent_stubs`');
@@ -86,14 +86,14 @@ describe('fedaco builder relation', () => {
     const model1 = new FedacoBuilderTestModelParentStub();
 
     const builder1 = model1.newQuery().select('id').withCount('foo');
-    const result = builder1.toSql();
+    const result   = builder1.toSql();
 
     expect(result.result).toBe(
       'SELECT `id`, (SELECT count(*) FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id`) AS `foo_count` FROM `fedaco_builder_test_model_parent_stubs`');
   });
 
   it('testWithCountAndMergedWheres', () => {
-    const model = new FedacoBuilderTestModelParentStub();
+    const model   = new FedacoBuilderTestModelParentStub();
     const builder = model.newQuery().select('id').withCount({
       'activeFoo': q => {
         q.where('bam', '>', 'qux');
@@ -125,7 +125,7 @@ describe('fedaco builder relation', () => {
   });
 
   it('testWithCountAndConstraintsAndHaving', () => {
-    const model = new FedacoBuilderTestModelParentStub();
+    const model   = new FedacoBuilderTestModelParentStub();
     // @ts-ignore
     const builder = model.newQuery().where('bar', 'baz');
     builder.withCount({
@@ -145,7 +145,7 @@ describe('fedaco builder relation', () => {
   });
 
   it('testWithCountAndRename', () => {
-    const model = new FedacoBuilderTestModelParentStub();
+    const model   = new FedacoBuilderTestModelParentStub();
     const builder = model.newQuery().withCount('foo as foo_bar');
 
     const result = builder.toSql();
@@ -156,7 +156,7 @@ describe('fedaco builder relation', () => {
   });
 
   it('testWithCountMultipleAndPartialRename', () => {
-    const model = new FedacoBuilderTestModelParentStub();
+    const model   = new FedacoBuilderTestModelParentStub();
     const builder = model.newQuery().withCount(['foo as foo_bar', 'foo']);
 
     const result = builder.toSql();
@@ -165,7 +165,7 @@ describe('fedaco builder relation', () => {
       'SELECT `fedaco_builder_test_model_parent_stubs`.*, (SELECT count(*) FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id`) AS `foo_bar`, (SELECT count(*) FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id`) AS `foo_count` FROM `fedaco_builder_test_model_parent_stubs`');
   });
   it('testHasWithConstraintsAndHavingInSubquery', () => {
-    const model = new FedacoBuilderTestModelParentStub();
+    const model   = new FedacoBuilderTestModelParentStub();
     const builder = model.newQuery().where('bar', 'baz');
     builder.whereHas('foo', q => {
       q.having('bam', '>', 'qux');
@@ -180,7 +180,7 @@ describe('fedaco builder relation', () => {
   });
 
   it('testHasWithConstraintsWithOrWhereAndHavingInSubquery', () => {
-    const model = new FedacoBuilderTestModelParentStub();
+    const model   = new FedacoBuilderTestModelParentStub();
     const builder = model.newQuery().where('name', 'larry');
     builder.whereHas('address', q => {
       q.where(q => {
@@ -199,7 +199,7 @@ describe('fedaco builder relation', () => {
   });
 
   it('testHasWithConstraintsAndJoinAndHavingInSubquery', () => {
-    const model = new FedacoBuilderTestModelParentStub();
+    const model   = new FedacoBuilderTestModelParentStub();
     const builder = model.newQuery().where('bar', 'baz');
     builder.whereHas('foo', q => {
       q.join('quuuux', j => {
@@ -217,7 +217,7 @@ describe('fedaco builder relation', () => {
   });
 
   it('testHasWithConstraintsAndHavingInSubqueryWithCount', () => {
-    const model = new FedacoBuilderTestModelParentStub();
+    const model   = new FedacoBuilderTestModelParentStub();
     const builder = model.newQuery().where('bar', 'baz');
     builder.whereHas('foo', q => {
       q.having('bam', '>', 'qux');
@@ -233,7 +233,7 @@ describe('fedaco builder relation', () => {
   });
 
   it('testWithCountAndConstraintsWithBindingInSelectSub', () => {
-    const model = new FedacoBuilderTestModelParentStub();
+    const model   = new FedacoBuilderTestModelParentStub();
     const builder = model.newQuery();
     builder.withCount({
       'foo': q => {
@@ -255,34 +255,34 @@ describe('fedaco builder relation', () => {
   });
 
   it('testHasNestedWithConstraints', () => {
-    const model = new FedacoBuilderTestModelParentStub();
+    const model   = new FedacoBuilderTestModelParentStub();
     const builder = model.newQuery().whereHas('foo', q => {
       q.whereHas('bar', q => {
         q.where('baz', 'bam');
       });
     }).toSql();
-    const result = model.newQuery().whereHas('foo.bar', q => {
+    const result  = model.newQuery().whereHas('foo.bar', q => {
       q.where('baz', 'bam');
     }).toSql();
     expect(builder.result).toBe(result.result);
   });
 
   it('testHasNested', () => {
-    const model = new FedacoBuilderTestModelParentStub();
+    const model   = new FedacoBuilderTestModelParentStub();
     const builder = model.newQuery().whereHas('foo', q => {
       q.has('bar');
     });
-    const result = model.newQuery().has('foo.bar').toSql();
+    const result  = model.newQuery().has('foo.bar').toSql();
     expect(result).toEqual(builder.toSql());
   });
   it('testOrHasNested', () => {
-    const model = new FedacoBuilderTestModelParentStub();
+    const model   = new FedacoBuilderTestModelParentStub();
     const builder = model.newQuery().whereHas('foo', q => {
       q.has('bar');
     }).orWhereHas('foo', q => {
       q.has('baz');
     });
-    const result = model.newQuery().has('foo.bar').orHas('foo.baz').toSql();
+    const result  = model.newQuery().has('foo.bar').orHas('foo.baz').toSql();
 
     expect(builder.toSql().result).toBe(
       'SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND EXISTS (SELECT * FROM `fedaco_builder_test_model_far_related_stubs` WHERE `fedaco_builder_test_model_close_related_stubs`.`id` = `fedaco_builder_test_model_far_related_stubs`.`fedaco_builder_test_model_close_related_stub_id`)) OR EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND EXISTS (SELECT * FROM `fedaco_builder_test_model_far_related_stubs` WHERE `fedaco_builder_test_model_close_related_stubs`.`id` = `fedaco_builder_test_model_far_related_stubs`.`fedaco_builder_test_model_close_related_stub_id`))'
@@ -290,77 +290,82 @@ describe('fedaco builder relation', () => {
     expect(builder.toSql().result).toBe(result.result);
   });
   it('testSelfHasNested', () => {
-    const model = new FedacoBuilderTestModelSelfRelatedStub();
-    const nestedSql = model.newQuery().whereHas('parentFoo', q => {
+    const model        = new FedacoBuilderTestModelSelfRelatedStub();
+    const nestedSql    = model.newQuery().whereHas('parentFoo', q => {
       q.has('childFoo');
     }).toSql();
-    const dotSql = model.newQuery().has('parentFoo.childFoo').toSql();
-    const alias = 'self_alias_hash';
-    const aliasRegex = /\b(laravel_reserved_\d)(\b|$)/ig;
+    const dotSql       = model.newQuery().has('parentFoo.childFoo').toSql();
+    const alias        = 'self_alias_hash';
+    const aliasRegex   = /\b(laravel_reserved_\d)(\b|$)/ig;
     const nestedSqlStr = nestedSql.result.replace(aliasRegex, alias);
-    const dotSqlStr = dotSql.result.replace(aliasRegex, alias);
+    const dotSqlStr    = dotSql.result.replace(aliasRegex, alias);
     expect(dotSqlStr).toBe(nestedSqlStr);
   });
 
   it('testSelfHasNestedUsesAlias', () => {
-    const model = new FedacoBuilderTestModelSelfRelatedStub();
-    let sql = model.newQuery().has('parentFoo.childFoo').toSql().result;
-    const alias = 'self_alias_hash';
+    const model      = new FedacoBuilderTestModelSelfRelatedStub();
+    let sql          = model.newQuery().has('parentFoo.childFoo').toSql().result;
+    const alias      = 'self_alias_hash';
     const aliasRegex = /\b(laravel_reserved_\d)(\b|$)/ig;
-    sql = sql.replace(aliasRegex, alias);
-    expect(sql).toContain('`self_alias_hash`.`id` = `self_related_stubs`.`parent_id`',)
+    sql              = sql.replace(aliasRegex, alias);
+    expect(sql).toContain('`self_alias_hash`.`id` = `self_related_stubs`.`parent_id`',);
   });
 
   it('testDoesntHave', () => {
-    const model = new FedacoBuilderTestModelParentStub();
+    const model   = new FedacoBuilderTestModelParentStub();
     const builder = model.newQuery().doesntHave('foo');
 
     const result = builder.toSql();
 
-    expect(result.result).toBe('SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id`)')
+    expect(result.result).toBe(
+      'SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id`)');
   });
 
   it('testDoesntHaveNested', () => {
-    const model = new FedacoBuilderTestModelParentStub();
+    const model   = new FedacoBuilderTestModelParentStub();
     const builder = model.newQuery().doesntHave('foo.bar');
 
     const result = builder.toSql();
 
-    expect(result.result).toBe('SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND EXISTS (SELECT * FROM `fedaco_builder_test_model_far_related_stubs` WHERE `fedaco_builder_test_model_close_related_stubs`.`id` = `fedaco_builder_test_model_far_related_stubs`.`fedaco_builder_test_model_close_related_stub_id`))')
+    expect(result.result).toBe(
+      'SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND EXISTS (SELECT * FROM `fedaco_builder_test_model_far_related_stubs` WHERE `fedaco_builder_test_model_close_related_stubs`.`id` = `fedaco_builder_test_model_far_related_stubs`.`fedaco_builder_test_model_close_related_stub_id`))');
   });
 
   it('testOrDoesntHave', () => {
-    const model = new FedacoBuilderTestModelParentStub();
+    const model   = new FedacoBuilderTestModelParentStub();
     const builder = model.newQuery().where('bar', 'baz').orDoesntHave('foo');
 
     const result = builder.toSql();
 
-    expect(result.result).toBe('SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE `bar` = ? OR NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id`)')
-    expect(builder.getBindings()).toEqual(['baz'])
+    expect(result.result).toBe(
+      'SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE `bar` = ? OR NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id`)');
+    expect(builder.getBindings()).toEqual(['baz']);
   });
 
   it('testWhereDoesntHave', () => {
-    const model = new FedacoBuilderTestModelParentStub();
+    const model   = new FedacoBuilderTestModelParentStub();
     const builder = model.newQuery().whereDoesntHave('foo', query => {
-      query.where('bar', 'baz')
+      query.where('bar', 'baz');
     });
 
     const result = builder.toSql();
 
-    expect(result.result).toBe('SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND `bar` = ?)')
-    expect(builder.getBindings()).toEqual(['baz'])
+    expect(result.result).toBe(
+      'SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND `bar` = ?)');
+    expect(builder.getBindings()).toEqual(['baz']);
   });
 
   it('testOrWhereDoesntHave', () => {
-    const model = new FedacoBuilderTestModelParentStub();
+    const model   = new FedacoBuilderTestModelParentStub();
     const builder = model.newQuery().where('bar', 'baz').orWhereDoesntHave('foo', query => {
-      query.where('qux', 'quux')
+      query.where('qux', 'quux');
     });
 
     const result = builder.toSql();
 
-    expect(result.result).toBe('SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE `bar` = ? OR NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND `qux` = ?)')
-    expect(builder.getBindings()).toEqual(['baz', 'quux'])
+    expect(result.result).toBe(
+      'SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE `bar` = ? OR NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND `qux` = ?)');
+    expect(builder.getBindings()).toEqual(['baz', 'quux']);
   });
 
 
