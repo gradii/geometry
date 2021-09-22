@@ -530,7 +530,8 @@ export class FedacoBuilder extends mixinGuardsAttributes(
     }
     const column = this._model.getUpdatedAtColumn();
     values = {
-      [column]: this._model.freshTimestampString(), ...values
+      ...values,
+      [column]: this._model.freshTimestampString()
     };
     // let segments            = preg_split('/\\s+as\\s+/i', this._query.from);
     // let qualifiedColumn     = end(segments) + '.' + column;
@@ -708,7 +709,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
       eagerLoad = this._parseWithRelations([{[relations as string]: callback}]);
     } else {
       eagerLoad = this._parseWithRelations(
-        isString(relations) ? [...arguments] : relations as any[]);
+        isArray(relations) ? relations as any[] : [...arguments]);
     }
     this._eagerLoad = {...this._eagerLoad, ...eagerLoad};
     return this;

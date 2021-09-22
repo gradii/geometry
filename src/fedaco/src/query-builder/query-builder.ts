@@ -23,6 +23,7 @@ import { Builder } from './builder';
 import { ConnectionInterface } from './connection-interface';
 import { GrammarInterface } from './grammar.interface';
 import { ProcessorInterface } from './processor-interface';
+import { Relation } from '../fedaco/relations/relation';
 
 
 export enum BindingType {
@@ -400,11 +401,10 @@ export class QueryBuilder extends Builder {
     return this._bindings;
   }
 
-  // todo
   isQueryable(value): value is (QueryBuilder | Function) {
     return value instanceof QueryBuilder ||
-      // value instanceof EloquentBuilder ||
-      // value instanceof Relation ||
+      value instanceof FedacoBuilder ||
+      value instanceof Relation ||
       isFunction(value);
   }
 
