@@ -13,7 +13,7 @@ export class FedacoBuilderTestModelFarRelatedStub extends Model {
 }
 
 export class FedacoBuilderTestModelSelfRelatedStub extends Model {
-  protected table: any = 'self_related_stubs';
+  _table: any = 'self_related_stubs';
 
   @BelongsToColumn({
     related   : FedacoBuilderTestModelSelfRelatedStub,

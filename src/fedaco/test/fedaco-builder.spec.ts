@@ -1091,4 +1091,165 @@ describe('fedaco builder', () => {
     expect(builder.delete()).toEqual({'foo': builder});
   });
 
+
+
+  it('testWhereKeyMethodWithInt', () => {
+    //     var model = this.getMockModel();
+    //     var builder = this.getBuilder().setModel(model);
+    //     var keyName = model.getQualifiedKeyName();
+    //     var int = 1;
+    //     builder.getQuery().shouldReceive("where").once()._with(keyName, "=", int)
+    //     builder.whereKey(int)
+  });
+  it('testWhereKeyMethodWithArray', () => {
+    //     var model = this.getMockModel();
+    //     var builder = this.getBuilder().setModel(model);
+    //     var keyName = model.getQualifiedKeyName();
+    //     var array = [1, 2, 3];
+    //     builder.getQuery().shouldReceive("whereIn").once()._with(keyName, array)
+    //     builder.whereKey(array)
+  });
+  it('testWhereKeyMethodWithCollection', () => {
+    //     var model = this.getMockModel();
+    //     var builder = this.getBuilder().setModel(model);
+    //     var keyName = model.getQualifiedKeyName();
+    //     var collection = new Collection([1, 2, 3]);
+    //     builder.getQuery().shouldReceive("whereIn").once()._with(keyName, collection)
+    //     builder.whereKey(collection)
+  });
+  it('testWhereKeyNotMethodWithInt', () => {
+    //     var model = this.getMockModel();
+    //     var builder = this.getBuilder().setModel(model);
+    //     var keyName = model.getQualifiedKeyName();
+    //     var int = 1;
+    //     builder.getQuery().shouldReceive("where").once()._with(keyName, "!=", int)
+    //     builder.whereKeyNot(int)
+  });
+  it('testWhereKeyNotMethodWithArray', () => {
+    //     var model = this.getMockModel();
+    //     var builder = this.getBuilder().setModel(model);
+    //     var keyName = model.getQualifiedKeyName();
+    //     var array = [1, 2, 3];
+    //     builder.getQuery().shouldReceive("whereNotIn").once()._with(keyName, array)
+    //     builder.whereKeyNot(array)
+  });
+  it('testWhereKeyNotMethodWithCollection', () => {
+    //     var model = this.getMockModel();
+    //     var builder = this.getBuilder().setModel(model);
+    //     var keyName = model.getQualifiedKeyName();
+    //     var collection = new Collection([1, 2, 3]);
+    //     builder.getQuery().shouldReceive("whereNotIn").once()._with(keyName, collection)
+    //     builder.whereKeyNot(collection)
+  });
+  it('testWhereIn', () => {
+    //     var model = new FedacoBuilderTestNestedStub();
+    //     this.mockConnectionForModel(model, "")
+    //     var query = model.newQuery().withoutGlobalScopes().whereIn("foo", model.newQuery().select("id"));
+    //     var expected = "select * from \"table\" where \"foo\" in (select \"id\" from \"table\" where \"table\".\"deleted_at\" is null)";
+    //     this.assertEquals(expected, query.toSql())
+  });
+  it('testLatestWithoutColumnWithCreatedAt', () => {
+    //     var model = this.getMockModel();
+    //     model.shouldReceive("getCreatedAtColumn").andReturn("foo")
+    //     var builder = this.getBuilder().setModel(model);
+    //     builder.getQuery().shouldReceive("latest").once()._with("foo")
+    //     builder.latest()
+  });
+  it('testLatestWithoutColumnWithoutCreatedAt', () => {
+    //     var model = this.getMockModel();
+    //     model.shouldReceive("getCreatedAtColumn").andReturn(null)
+    //     var builder = this.getBuilder().setModel(model);
+    //     builder.getQuery().shouldReceive("latest").once()._with("created_at")
+    //     builder.latest()
+  });
+  it('testLatestWithColumn', () => {
+    //     var model = this.getMockModel();
+    //     var builder = this.getBuilder().setModel(model);
+    //     builder.getQuery().shouldReceive("latest").once()._with("foo")
+    //     builder.latest("foo")
+  });
+  it('testOldestWithoutColumnWithCreatedAt', () => {
+    //     var model = this.getMockModel();
+    //     model.shouldReceive("getCreatedAtColumn").andReturn("foo")
+    //     var builder = this.getBuilder().setModel(model);
+    //     builder.getQuery().shouldReceive("oldest").once()._with("foo")
+    //     builder.oldest()
+  });
+  it('testOldestWithoutColumnWithoutCreatedAt', () => {
+    //     var model = this.getMockModel();
+    //     model.shouldReceive("getCreatedAtColumn").andReturn(null)
+    //     var builder = this.getBuilder().setModel(model);
+    //     builder.getQuery().shouldReceive("oldest").once()._with("created_at")
+    //     builder.oldest()
+  });
+  it('testOldestWithColumn', () => {
+    //     var model = this.getMockModel();
+    //     var builder = this.getBuilder().setModel(model);
+    //     builder.getQuery().shouldReceive("oldest").once()._with("foo")
+    //     builder.oldest("foo")
+  });
+  it('testUpdate', () => {
+    //     Carbon.setTestNow(now = "2017-10-10 10:10:10")
+    //     var query = new BaseBuilder(m.mock(ConnectionInterface), new Grammar(), m.mock(Processor));
+    //     var builder = new Builder(query);
+    //     var model = new FedacoBuilderTestStub();
+    //     this.mockConnectionForModel(model, "")
+    //     builder.setModel(model)
+    //     builder.getConnection().shouldReceive("update").once()._with("update \"table\" set \"foo\" = ?, \"table\".\"updated_at\" = ?", ["bar", now]).andReturn(1)
+    //     var result = builder.update({
+    //       "foo": "bar"
+    //     });
+    //     this.assertEquals(1, result)
+    //     Carbon.setTestNow(null)
+  });
+  it('testUpdateWithTimestampValue', () => {
+    //     var query = new BaseBuilder(m.mock(ConnectionInterface), new Grammar(), m.mock(Processor));
+    //     var builder = new Builder(query);
+    //     var model = new FedacoBuilderTestStub();
+    //     this.mockConnectionForModel(model, "")
+    //     builder.setModel(model)
+    //     builder.getConnection().shouldReceive("update").once()._with("update \"table\" set \"foo\" = ?, \"table\".\"updated_at\" = ?", ["bar", null]).andReturn(1)
+    //     var result = builder.update({
+    //       "foo": "bar",
+    //       "updated_at": null
+    //     });
+    //     this.assertEquals(1, result)
+  });
+  it('testUpdateWithoutTimestamp', () => {
+    //     var query = new BaseBuilder(m.mock(ConnectionInterface), new Grammar(), m.mock(Processor));
+    //     var builder = new Builder(query);
+    //     var model = new FedacoBuilderTestStubWithoutTimestamp();
+    //     this.mockConnectionForModel(model, "")
+    //     builder.setModel(model)
+    //     builder.getConnection().shouldReceive("update").once()._with("update \"table\" set \"foo\" = ?", ["bar"]).andReturn(1)
+    //     var result = builder.update({
+    //       "foo": "bar"
+    //     });
+    //     this.assertEquals(1, result)
+  });
+  it('testUpdateWithAlias', () => {
+    //     Carbon.setTestNow(now = "2017-10-10 10:10:10")
+    //     var query = new BaseBuilder(m.mock(ConnectionInterface), new Grammar(), m.mock(Processor));
+    //     var builder = new Builder(query);
+    //     var model = new FedacoBuilderTestStub();
+    //     this.mockConnectionForModel(model, "")
+    //     builder.setModel(model)
+    //     builder.getConnection().shouldReceive("update").once()._with("update \"table\" as \"alias\" set \"foo\" = ?, \"alias\".\"updated_at\" = ?", ["bar", now]).andReturn(1)
+    //     var result = builder.from("table as alias").update({
+    //       "foo": "bar"
+    //     });
+    //     this.assertEquals(1, result)
+    //     Carbon.setTestNow(null)
+  });
+  it('testWithCastsMethod', () => {
+    //     var builder = new Builder(this.getMockQueryBuilder());
+    //     var model = this.getMockModel();
+    //     builder.setModel(model)
+    //     model.shouldReceive("mergeCasts")._with({
+    //       "foo": "bar"
+    //     }).once()
+    //     builder.withCasts({
+    //       "foo": "bar"
+    //     })
+  });
 });

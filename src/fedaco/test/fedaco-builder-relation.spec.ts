@@ -303,12 +303,12 @@ describe('fedaco builder relation', () => {
   });
 
   it('testSelfHasNestedUsesAlias', () => {
-    // var model = new EloquentBuilderTestModelSelfRelatedStub();
-    // var sql = model.has("parentFoo.childFoo").toSql();
-    // var alias = "self_alias_hash";
-    // var aliasRegex = "/\\b(laravel_reserved_\\d)(\\b|$)/i";
-    // var sql = preg_replace(aliasRegex, alias, sql);
-    // this.assertStringContainsString("\"self_alias_hash\".\"id\" = \"self_related_stubs\".\"parent_id\"", sql)
+    const model = new FedacoBuilderTestModelSelfRelatedStub();
+    let sql = model.newQuery().has('parentFoo.childFoo').toSql().result;
+    const alias = 'self_alias_hash';
+    const aliasRegex = /\b(laravel_reserved_\d)(\b|$)/ig;
+    sql = sql.replace(aliasRegex, alias);
+    expect(sql).toContain('`self_alias_hash`.`id` = `self_related_stubs`.`parent_id`',)
   });
 
   it('testDoesntHave', () => {
@@ -317,194 +317,51 @@ describe('fedaco builder relation', () => {
 
     const result = builder.toSql();
 
-    expect(result.result).toBe('select * from "fedaco_builder_test_model_parent_stubs" where not exists (select * from "fedaco_builder_test_model_close_related_stubs" where "fedaco_builder_test_model_parent_stubs"."foo_id" = "fedaco_builder_test_model_close_related_stubs"."id")')
+    expect(result.result).toBe('SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id`)')
   });
 
   it('testDoesntHaveNested', () => {
-    //     var model = new EloquentBuilderTestModelParentStub();
-    //     var builder = model.doesntHave("foo.bar");
-    //     this.assertSame("select * from \"fedaco_builder_test_model_parent_stubs\" where not exists (select * from \"fedaco_builder_test_model_close_related_stubs\" where \"fedaco_builder_test_model_parent_stubs\".\"foo_id\" = \"fedaco_builder_test_model_close_related_stubs\".\"id\" and exists (select * from \"fedaco_builder_test_model_far_related_stubs\" where \"fedaco_builder_test_model_close_related_stubs\".\"id\" = \"fedaco_builder_test_model_far_related_stubs\".\"fedaco_builder_test_model_close_related_stub_id\"))", builder.toSql())
+    const model = new FedacoBuilderTestModelParentStub();
+    const builder = model.newQuery().doesntHave('foo.bar');
+
+    const result = builder.toSql();
+
+    expect(result.result).toBe('SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND EXISTS (SELECT * FROM `fedaco_builder_test_model_far_related_stubs` WHERE `fedaco_builder_test_model_close_related_stubs`.`id` = `fedaco_builder_test_model_far_related_stubs`.`fedaco_builder_test_model_close_related_stub_id`))')
   });
+
   it('testOrDoesntHave', () => {
-    //     var model = new EloquentBuilderTestModelParentStub();
-    //     var builder = model.where("bar", "baz").orDoesntHave("foo");
-    //     this.assertSame("select * from \"fedaco_builder_test_model_parent_stubs\" where \"bar\" = ? or not exists (select * from \"fedaco_builder_test_model_close_related_stubs\" where \"fedaco_builder_test_model_parent_stubs\".\"foo_id\" = \"fedaco_builder_test_model_close_related_stubs\".\"id\")", builder.toSql())
-    //     this.assertEquals(["baz"], builder.getBindings())
+    const model = new FedacoBuilderTestModelParentStub();
+    const builder = model.newQuery().where('bar', 'baz').orDoesntHave('foo');
+
+    const result = builder.toSql();
+
+    expect(result.result).toBe('SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE `bar` = ? OR NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id`)')
+    expect(builder.getBindings()).toEqual(['baz'])
   });
+
   it('testWhereDoesntHave', () => {
-    //     var model = new EloquentBuilderTestModelParentStub();
-    //     var builder = model.whereDoesntHave("foo", query => {
-    //       query.where("bar", "baz")
-    //     });
-    //     this.assertSame("select * from \"fedaco_builder_test_model_parent_stubs\" where not exists (select * from \"fedaco_builder_test_model_close_related_stubs\" where \"fedaco_builder_test_model_parent_stubs\".\"foo_id\" = \"fedaco_builder_test_model_close_related_stubs\".\"id\" and \"bar\" = ?)", builder.toSql())
-    //     this.assertEquals(["baz"], builder.getBindings())
+    const model = new FedacoBuilderTestModelParentStub();
+    const builder = model.newQuery().whereDoesntHave('foo', query => {
+      query.where('bar', 'baz')
+    });
+
+    const result = builder.toSql();
+
+    expect(result.result).toBe('SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND `bar` = ?)')
+    expect(builder.getBindings()).toEqual(['baz'])
   });
+
   it('testOrWhereDoesntHave', () => {
-    //     var model = new EloquentBuilderTestModelParentStub();
-    //     var builder = model.where("bar", "baz").orWhereDoesntHave("foo", query => {
-    //       query.where("qux", "quux")
-    //     });
-    //     this.assertSame("select * from \"fedaco_builder_test_model_parent_stubs\" where \"bar\" = ? or not exists (select * from \"fedaco_builder_test_model_close_related_stubs\" where \"fedaco_builder_test_model_parent_stubs\".\"foo_id\" = \"fedaco_builder_test_model_close_related_stubs\".\"id\" and \"qux\" = ?)", builder.toSql())
-    //     this.assertEquals(["baz", "quux"], builder.getBindings())
+    const model = new FedacoBuilderTestModelParentStub();
+    const builder = model.newQuery().where('bar', 'baz').orWhereDoesntHave('foo', query => {
+      query.where('qux', 'quux')
+    });
+
+    const result = builder.toSql();
+
+    expect(result.result).toBe('SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE `bar` = ? OR NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND `qux` = ?)')
+    expect(builder.getBindings()).toEqual(['baz', 'quux'])
   });
-  it('testWhereKeyMethodWithInt', () => {
-    //     var model = this.getMockModel();
-    //     var builder = this.getBuilder().setModel(model);
-    //     var keyName = model.getQualifiedKeyName();
-    //     var int = 1;
-    //     builder.getQuery().shouldReceive("where").once()._with(keyName, "=", int)
-    //     builder.whereKey(int)
-  });
-  it('testWhereKeyMethodWithArray', () => {
-    //     var model = this.getMockModel();
-    //     var builder = this.getBuilder().setModel(model);
-    //     var keyName = model.getQualifiedKeyName();
-    //     var array = [1, 2, 3];
-    //     builder.getQuery().shouldReceive("whereIn").once()._with(keyName, array)
-    //     builder.whereKey(array)
-  });
-  it('testWhereKeyMethodWithCollection', () => {
-    //     var model = this.getMockModel();
-    //     var builder = this.getBuilder().setModel(model);
-    //     var keyName = model.getQualifiedKeyName();
-    //     var collection = new Collection([1, 2, 3]);
-    //     builder.getQuery().shouldReceive("whereIn").once()._with(keyName, collection)
-    //     builder.whereKey(collection)
-  });
-  it('testWhereKeyNotMethodWithInt', () => {
-    //     var model = this.getMockModel();
-    //     var builder = this.getBuilder().setModel(model);
-    //     var keyName = model.getQualifiedKeyName();
-    //     var int = 1;
-    //     builder.getQuery().shouldReceive("where").once()._with(keyName, "!=", int)
-    //     builder.whereKeyNot(int)
-  });
-  it('testWhereKeyNotMethodWithArray', () => {
-    //     var model = this.getMockModel();
-    //     var builder = this.getBuilder().setModel(model);
-    //     var keyName = model.getQualifiedKeyName();
-    //     var array = [1, 2, 3];
-    //     builder.getQuery().shouldReceive("whereNotIn").once()._with(keyName, array)
-    //     builder.whereKeyNot(array)
-  });
-  it('testWhereKeyNotMethodWithCollection', () => {
-    //     var model = this.getMockModel();
-    //     var builder = this.getBuilder().setModel(model);
-    //     var keyName = model.getQualifiedKeyName();
-    //     var collection = new Collection([1, 2, 3]);
-    //     builder.getQuery().shouldReceive("whereNotIn").once()._with(keyName, collection)
-    //     builder.whereKeyNot(collection)
-  });
-  it('testWhereIn', () => {
-    //     var model = new EloquentBuilderTestNestedStub();
-    //     this.mockConnectionForModel(model, "")
-    //     var query = model.newQuery().withoutGlobalScopes().whereIn("foo", model.newQuery().select("id"));
-    //     var expected = "select * from \"table\" where \"foo\" in (select \"id\" from \"table\" where \"table\".\"deleted_at\" is null)";
-    //     this.assertEquals(expected, query.toSql())
-  });
-  it('testLatestWithoutColumnWithCreatedAt', () => {
-    //     var model = this.getMockModel();
-    //     model.shouldReceive("getCreatedAtColumn").andReturn("foo")
-    //     var builder = this.getBuilder().setModel(model);
-    //     builder.getQuery().shouldReceive("latest").once()._with("foo")
-    //     builder.latest()
-  });
-  it('testLatestWithoutColumnWithoutCreatedAt', () => {
-    //     var model = this.getMockModel();
-    //     model.shouldReceive("getCreatedAtColumn").andReturn(null)
-    //     var builder = this.getBuilder().setModel(model);
-    //     builder.getQuery().shouldReceive("latest").once()._with("created_at")
-    //     builder.latest()
-  });
-  it('testLatestWithColumn', () => {
-    //     var model = this.getMockModel();
-    //     var builder = this.getBuilder().setModel(model);
-    //     builder.getQuery().shouldReceive("latest").once()._with("foo")
-    //     builder.latest("foo")
-  });
-  it('testOldestWithoutColumnWithCreatedAt', () => {
-    //     var model = this.getMockModel();
-    //     model.shouldReceive("getCreatedAtColumn").andReturn("foo")
-    //     var builder = this.getBuilder().setModel(model);
-    //     builder.getQuery().shouldReceive("oldest").once()._with("foo")
-    //     builder.oldest()
-  });
-  it('testOldestWithoutColumnWithoutCreatedAt', () => {
-    //     var model = this.getMockModel();
-    //     model.shouldReceive("getCreatedAtColumn").andReturn(null)
-    //     var builder = this.getBuilder().setModel(model);
-    //     builder.getQuery().shouldReceive("oldest").once()._with("created_at")
-    //     builder.oldest()
-  });
-  it('testOldestWithColumn', () => {
-    //     var model = this.getMockModel();
-    //     var builder = this.getBuilder().setModel(model);
-    //     builder.getQuery().shouldReceive("oldest").once()._with("foo")
-    //     builder.oldest("foo")
-  });
-  it('testUpdate', () => {
-    //     Carbon.setTestNow(now = "2017-10-10 10:10:10")
-    //     var query = new BaseBuilder(m.mock(ConnectionInterface), new Grammar(), m.mock(Processor));
-    //     var builder = new Builder(query);
-    //     var model = new EloquentBuilderTestStub();
-    //     this.mockConnectionForModel(model, "")
-    //     builder.setModel(model)
-    //     builder.getConnection().shouldReceive("update").once()._with("update \"table\" set \"foo\" = ?, \"table\".\"updated_at\" = ?", ["bar", now]).andReturn(1)
-    //     var result = builder.update({
-    //       "foo": "bar"
-    //     });
-    //     this.assertEquals(1, result)
-    //     Carbon.setTestNow(null)
-  });
-  it('testUpdateWithTimestampValue', () => {
-    //     var query = new BaseBuilder(m.mock(ConnectionInterface), new Grammar(), m.mock(Processor));
-    //     var builder = new Builder(query);
-    //     var model = new EloquentBuilderTestStub();
-    //     this.mockConnectionForModel(model, "")
-    //     builder.setModel(model)
-    //     builder.getConnection().shouldReceive("update").once()._with("update \"table\" set \"foo\" = ?, \"table\".\"updated_at\" = ?", ["bar", null]).andReturn(1)
-    //     var result = builder.update({
-    //       "foo": "bar",
-    //       "updated_at": null
-    //     });
-    //     this.assertEquals(1, result)
-  });
-  it('testUpdateWithoutTimestamp', () => {
-    //     var query = new BaseBuilder(m.mock(ConnectionInterface), new Grammar(), m.mock(Processor));
-    //     var builder = new Builder(query);
-    //     var model = new EloquentBuilderTestStubWithoutTimestamp();
-    //     this.mockConnectionForModel(model, "")
-    //     builder.setModel(model)
-    //     builder.getConnection().shouldReceive("update").once()._with("update \"table\" set \"foo\" = ?", ["bar"]).andReturn(1)
-    //     var result = builder.update({
-    //       "foo": "bar"
-    //     });
-    //     this.assertEquals(1, result)
-  });
-  it('testUpdateWithAlias', () => {
-    //     Carbon.setTestNow(now = "2017-10-10 10:10:10")
-    //     var query = new BaseBuilder(m.mock(ConnectionInterface), new Grammar(), m.mock(Processor));
-    //     var builder = new Builder(query);
-    //     var model = new EloquentBuilderTestStub();
-    //     this.mockConnectionForModel(model, "")
-    //     builder.setModel(model)
-    //     builder.getConnection().shouldReceive("update").once()._with("update \"table\" as \"alias\" set \"foo\" = ?, \"alias\".\"updated_at\" = ?", ["bar", now]).andReturn(1)
-    //     var result = builder.from("table as alias").update({
-    //       "foo": "bar"
-    //     });
-    //     this.assertEquals(1, result)
-    //     Carbon.setTestNow(null)
-  });
-  it('testWithCastsMethod', () => {
-    //     var builder = new Builder(this.getMockQueryBuilder());
-    //     var model = this.getMockModel();
-    //     builder.setModel(model)
-    //     model.shouldReceive("mergeCasts")._with({
-    //       "foo": "bar"
-    //     }).once()
-    //     builder.withCasts({
-    //       "foo": "bar"
-    //     })
-  });
+
 
 });
