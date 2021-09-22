@@ -1182,7 +1182,7 @@ describe('fedaco builder', () => {
   });
 
   it('testWhereIn', () => {
-    const model = new FedacoBuilderTestNestedStub();
+    model = new FedacoBuilderTestNestedStub();
     mockConnectionForModel(FedacoBuilderTestNestedStub, '');
     const query  = model.newQuery().withoutGlobalScopes().whereIn('foo',
       model.newQuery().select('id'));
@@ -1284,8 +1284,8 @@ describe('fedaco builder', () => {
 
   it('testUpdate', async () => {
     let spy1, spy2, result;
-    const builder = getBuilder();
-    const model   = new FedacoBuilderTestStub();
+    builder = getBuilder();
+    model   = new FedacoBuilderTestStub();
     mockConnectionForModel(FedacoBuilderTestStub, '');
     builder.setModel(model);
 
@@ -1304,8 +1304,8 @@ describe('fedaco builder', () => {
 
   it('testUpdateWithTimestampValue', async () => {
     let spy1, spy2, result;
-    const builder = getBuilder();
-    const model   = new FedacoBuilderTestStub();
+    builder = getBuilder();
+    model   = new FedacoBuilderTestStub();
     mockConnectionForModel(FedacoBuilderTestStub, '');
     builder.setModel(model);
 
@@ -1325,8 +1325,8 @@ describe('fedaco builder', () => {
 
   it('testUpdateWithoutTimestamp', async () => {
     let spy1, spy2, result;
-    const builder = getBuilder();
-    const model   = new FedacoBuilderTestStubWithoutTimestamp();
+    builder = getBuilder();
+    model   = new FedacoBuilderTestStubWithoutTimestamp();
     mockConnectionForModel(FedacoBuilderTestStubWithoutTimestamp, '');
     builder.setModel(model);
 
@@ -1343,8 +1343,8 @@ describe('fedaco builder', () => {
 
   it('testUpdateWithAlias', async () => {
     let spy1, spy2, result;
-    const builder = getBuilder();
-    const model   = new FedacoBuilderTestStub();
+    builder = getBuilder();
+    model   = new FedacoBuilderTestStub();
     mockConnectionForModel(FedacoBuilderTestStub, '');
     builder.setModel(model);
 
