@@ -27,7 +27,7 @@ import { Scope } from './scope';
 
 /*Begin querying the model on a given connection.*/
 export function on(clazz: typeof Model, connection: string | null = null) {
-  let instance = new clazz();
+  const instance = new clazz();
   instance.setConnection(connection);
   return instance.newQuery();
 }
@@ -86,9 +86,9 @@ export class Model extends mixinHasAttributes(
   )
 ) {
   /*Indicates if the model exists.*/
-  _exists: boolean = false;
+  _exists = false;
   /*Indicates if the model was inserted during the current request lifecycle.*/
-  _wasRecentlyCreated: boolean = false;
+  _wasRecentlyCreated = false;
   /*The connection name for the model.*/
   _connection?: string = undefined;
   /*The table associated with the model.*/
@@ -96,7 +96,7 @@ export class Model extends mixinHasAttributes(
   /*The table alias for table*/
   _tableAlias: string = undefined;
   /*The primary key for the model.*/
-  _primaryKey: string = 'id';
+  _primaryKey = 'id';
 
   _keyType: any = 'int';
 
@@ -104,7 +104,7 @@ export class Model extends mixinHasAttributes(
 
   _withCount: any[] = [];
 
-  _preventsLazyLoading: boolean = false;
+  _preventsLazyLoading = false;
 
   _classCastCache: any[];
 
@@ -115,12 +115,17 @@ export class Model extends mixinHasAttributes(
   static booted: any = new Map();
 
   /*Create a new Eloquent model instance.*/
-  public constructor(attributes: any = {}) {
+  public constructor() {
     super();
     this.bootIfNotBooted();
     // this.initializeTraits();
-    // this.syncOriginal();
-    // this.fill(attributes);
+  }
+
+  static initAttributes(attributes: any = {}) {
+    const m = new (this)();
+    m.syncOriginal();
+    m.fill(attributes);
+    return m;
   }
 
   bootIfNotBooted() {
@@ -405,22 +410,22 @@ export class Model extends mixinHasAttributes(
   // }
 
   /*Fill the model with an array of attributes.*/
-  public fill(attributes: any[]) {
-    let totallyGuarded = this.totallyGuarded();
-    for (let [key, value] of Object.entries(this._fillableFromArray(attributes))) {
+  public fill(attributes: Record<string, any>) {
+    const totallyGuarded = this.totallyGuarded();
+    for (const [key, value] of Object.entries(this._fillableFromArray(attributes))) {
       if (this.isFillable(key)) {
         this.setAttribute(key, value);
       } else if (totallyGuarded) {
         throw new Error(
-          'MassAssignmentException(`Add [${key}] to fillable property to allow mass assignment on [${get_class(this)}].`)');
+          `MassAssignmentException(\`Add [${key}] to fillable property to allow mass assignment on [${this.constructor.name}].\`)`);
       }
     }
     return this;
   }
 
   /*Fill the model with an array of attributes. Force mass assignment.*/
-  public forceFill(attributes: any[]) {
-    return this.unguarded(() => {
+  public forceFill(attributes: Record<string, any>) {
+    return (this.constructor as any).unguarded(() => {
       return this.fill(attributes);
     });
   }
@@ -441,18 +446,18 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Create a new instance of the given model.*/
-  public newInstance(attributes: any[] = [], exists: boolean = false) {
-    let model    = new (<typeof Model>this.constructor)(/*cast type array*/ attributes);
-    model.exists = exists;
+  public newInstance(attributes: any = {}, exists = false): this {
+    const model = (<typeof Model>this.constructor).initAttributes(/*cast type array*/ attributes);
+    model._exists = exists;
     model.setConnection(this.getConnectionName());
     model.setTable(this.getTable());
     model.mergeCasts(this._casts);
-    return model;
+    return model as this;
   }
 
   /*Create a new model instance that is existing.*/
   public newFromBuilder(attributes: any[] = [], connection: string | null = null) {
-    let model = this.newInstance([], true);
+    const model = this.newInstance([], true);
     model.setRawAttributes(/*cast type array*/ attributes, true);
     model.setConnection(connection || this.getConnectionName());
     // todo fixme
@@ -462,7 +467,7 @@ export class Model extends mixinHasAttributes(
 
   /*Eager load relations on the model.*/
   public async load(relations: any[] | string) {
-    let query = this.newQueryWithoutRelationships().with(
+    const query = this.newQueryWithoutRelationships().with(
       // @ts-ignore
       isString(relations) ? arguments : relations
     );
@@ -532,7 +537,7 @@ export class Model extends mixinHasAttributes(
     if (!this[relation]) {
       return this;
     }
-    let className = this[relation].constructor;
+    const className = this[relation].constructor;
     loadAggregate(this[relation], relations.get(className) ?? [], column, func);
     return this;
   }
@@ -575,7 +580,7 @@ export class Model extends mixinHasAttributes(
   /*Run the increment or decrement method on the model.*/
   protected incrementOrDecrement(column: string, amount: number | number, extra: any[],
                                  method: string) {
-    let query = this.newQueryWithoutRelationships();
+    const query = this.newQueryWithoutRelationships();
     if (!this.exists) {
       // @ts-ignore
       return query[method](column, amount, extra);
@@ -617,7 +622,7 @@ export class Model extends mixinHasAttributes(
     }
     for (let models of this._relations) {
       models = isArray(models) ? models : [models];
-      for (let model of models) {
+      for (const model of models) {
         if (!model.push()) {
           return false;
         }
@@ -636,7 +641,7 @@ export class Model extends mixinHasAttributes(
   /*Save the model to the database.*/
   public save(options: { touch?: boolean } = {}) {
     this.mergeAttributesFromClassCasts();
-    let query = this.newModelQuery();
+    const query = this.newModelQuery();
     if (this._fireModelEvent('saving') === false) {
       return false;
     }
@@ -644,7 +649,7 @@ export class Model extends mixinHasAttributes(
     if (this.exists) {
       saved = this.isDirty() ? this.performUpdate(query) : true;
     } else {
-      saved            = this.performInsert(query);
+      saved = this.performInsert(query);
       const connection = query.getConnection();
       if (!this.getConnectionName() && connection) {
         this.setConnection(connection.getName());
@@ -680,7 +685,7 @@ export class Model extends mixinHasAttributes(
     if (this.usesTimestamps()) {
       this.updateTimestamps();
     }
-    let dirty = this.getDirty();
+    const dirty = this.getDirty();
     if (dirty.length > 0) {
       this._setKeysForSaveQuery(query).update(dirty);
       this.syncChanges();
@@ -719,7 +724,7 @@ export class Model extends mixinHasAttributes(
     if (this.usesTimestamps()) {
       this.updateTimestamps();
     }
-    let attributes = this.getAttributesForInsert();
+    const attributes = this.getAttributesForInsert();
     if (this.getIncrementing()) {
       this.insertAndSetId(query, attributes);
     } else {
@@ -728,7 +733,7 @@ export class Model extends mixinHasAttributes(
       }
       query.insert(attributes);
     }
-    this.exists             = true;
+    this.exists = true;
     this.wasRecentlyCreated = true;
     this._fireModelEvent('created', false);
     return true;
@@ -737,7 +742,7 @@ export class Model extends mixinHasAttributes(
   /*Insert the given attributes and set the ID on the model.*/
   protected insertAndSetId(query: FedacoBuilder, attributes: any[]) {
     const keyName = this.getKeyName();
-    let id        = query.insertGetId(attributes, keyName);
+    const id = query.insertGetId(attributes, keyName);
     this.setAttribute(keyName, id);
   }
 
@@ -816,7 +821,7 @@ export class Model extends mixinHasAttributes(
 
   /*Register the global scopes for this builder instance.*/
   public registerGlobalScopes(builder: FedacoBuilder) {
-    for (let [identifier, scope] of Object.entries(this.getGlobalScopes())) {
+    for (const [identifier, scope] of Object.entries(this.getGlobalScopes())) {
       builder.withGlobalScope(identifier, scope);
     }
     return builder;
@@ -1015,7 +1020,7 @@ export class Model extends mixinHasAttributes(
 
   /*Set whether IDs are incrementing.*/
   public setIncrementing(value: boolean) {
-    this.incrementing = value;
+    this._incrementing = value;
     return this;
   }
 
@@ -1091,11 +1096,11 @@ export class Model extends mixinHasAttributes(
   protected resolveChildRouteBindingQuery(childType: string, value: any, field: string | null) {
     // todo recovery me
     const relationship = this[plural(camelCase(childType))]();
-    field            = field || relationship.getRelated().getRouteKeyName();
+    field = field || relationship.getRelated().getRouteKeyName();
     // if (relationship instanceof HasManyThrough || relationship instanceof BelongsToMany) {
     //   return relationship.where(relationship.getRelated().getTable() + '.' + field, value);
     // } else {
-      return relationship.where(field, value);
+    return relationship.where(field, value);
     // }
   }
 

@@ -110,6 +110,9 @@ export function isNonEmptyString(value: any): boolean { // tslint:disable-line:n
   return typeof value === 'string' && value !== '';
 }
 
+export function isObjectEmpty(value: any): boolean {
+  return !Object.keys(value).length;
+}
 
 export function isAnyEmpty(value: any): boolean {
   if (isBlank(value)) {

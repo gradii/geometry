@@ -1464,11 +1464,11 @@ describe('test database eloquent integration', () => {
   });
   it('updating child model touches parent', () => {
     let before = Carbon.now();
-    let user   = EloquentTouchingUser.create({
+    let user   = EloquentTouchingUser.initAttributes({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    let post   = EloquentTouchingPost.create({
+    let post   = EloquentTouchingPost.initAttributes({
       'name'   : 'Parent Post',
       'user_id': 1
     });
@@ -1486,11 +1486,11 @@ describe('test database eloquent integration', () => {
   });
   it('multi level touching works', () => {
     let before = Carbon.now();
-    let user   = EloquentTouchingUser.create({
+    let user   = EloquentTouchingUser.initAttributes({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    let post   = EloquentTouchingPost.create({
+    let post   = EloquentTouchingPost.initAttributes({
       'id'     : 1,
       'name'   : 'Parent Post',
       'user_id': 1
@@ -1498,7 +1498,7 @@ describe('test database eloquent integration', () => {
     expect(before.isSameDay(user.updated_at)).toBeTruthy();
     expect(before.isSameDay(post.updated_at)).toBeTruthy();
     Carbon.setTestNow(future = before.copy().addDays(3));
-    EloquentTouchingComment.create({
+    EloquentTouchingComment.initAttributes({
       'content': 'Comment content',
       'post_id': 1
     });
@@ -1510,11 +1510,11 @@ describe('test database eloquent integration', () => {
   });
   it('deleting child model touches parent timestamps', () => {
     let before = Carbon.now();
-    let user   = EloquentTouchingUser.create({
+    let user   = EloquentTouchingUser.initAttributes({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    let post   = EloquentTouchingPost.create({
+    let post   = EloquentTouchingPost.initAttributes({
       'name'   : 'Parent Post',
       'user_id': 1
     });
@@ -1528,11 +1528,11 @@ describe('test database eloquent integration', () => {
   });
   it('touching child model updates parents timestamps', () => {
     let before = Carbon.now();
-    let user   = EloquentTouchingUser.create({
+    let user   = EloquentTouchingUser.initAttributes({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    let post   = EloquentTouchingPost.create({
+    let post   = EloquentTouchingPost.initAttributes({
       'id'     : 1,
       'name'   : 'Parent Post',
       'user_id': 1
@@ -1549,11 +1549,11 @@ describe('test database eloquent integration', () => {
   });
   it('touching child model respects parent no touching', () => {
     let before = Carbon.now();
-    let user   = EloquentTouchingUser.create({
+    let user   = EloquentTouchingUser.initAttributes({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    let post   = EloquentTouchingPost.create({
+    let post   = EloquentTouchingPost.initAttributes({
       'id'     : 1,
       'name'   : 'Parent Post',
       'user_id': 1
@@ -1573,11 +1573,11 @@ describe('test database eloquent integration', () => {
   });
   it('updating child post respects no touching definition', () => {
     let before = Carbon.now();
-    let user   = EloquentTouchingUser.create({
+    let user   = EloquentTouchingUser.initAttributes({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    let post   = EloquentTouchingPost.create({
+    let post   = EloquentTouchingPost.initAttributes({
       'name'   : 'Parent Post',
       'user_id': 1
     });
@@ -1597,11 +1597,11 @@ describe('test database eloquent integration', () => {
   });
   it('updating model in the disabled scope touches its own timestamps', () => {
     let before = Carbon.now();
-    let user   = EloquentTouchingUser.create({
+    let user   = EloquentTouchingUser.initAttributes({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    let post   = EloquentTouchingPost.create({
+    let post   = EloquentTouchingPost.initAttributes({
       'name'   : 'Parent Post',
       'user_id': 1
     });
@@ -1621,11 +1621,11 @@ describe('test database eloquent integration', () => {
   });
   it('deleting child model respects the no touching rule', () => {
     let before = Carbon.now();
-    let user   = EloquentTouchingUser.create({
+    let user   = EloquentTouchingUser.initAttributes({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    let post   = EloquentTouchingPost.create({
+    let post   = EloquentTouchingPost.initAttributes({
       'name'   : 'Parent Post',
       'user_id': 1
     });
@@ -1641,11 +1641,11 @@ describe('test database eloquent integration', () => {
   });
   it('respected multi level touching chain', () => {
     let before = Carbon.now();
-    let user   = EloquentTouchingUser.create({
+    let user   = EloquentTouchingUser.initAttributes({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    let post   = EloquentTouchingPost.create({
+    let post   = EloquentTouchingPost.initAttributes({
       'id'     : 1,
       'name'   : 'Parent Post',
       'user_id': 1
@@ -1654,7 +1654,7 @@ describe('test database eloquent integration', () => {
     expect(before.isSameDay(post.updated_at)).toBeTruthy();
     Carbon.setTestNow(future = before.copy().addDays(3));
     EloquentTouchingUser.withoutTouching(() => {
-      EloquentTouchingComment.create({
+      EloquentTouchingComment.initAttributes({
         'content': 'Comment content',
         'post_id': 1
       });
@@ -1667,11 +1667,11 @@ describe('test database eloquent integration', () => {
   });
   it('touches great parent even when parent is in no touch scope', () => {
     let before = Carbon.now();
-    let user   = EloquentTouchingUser.create({
+    let user   = EloquentTouchingUser.initAttributes({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    let post   = EloquentTouchingPost.create({
+    let post   = EloquentTouchingPost.initAttributes({
       'id'     : 1,
       'name'   : 'Parent Post',
       'user_id': 1
@@ -1680,7 +1680,7 @@ describe('test database eloquent integration', () => {
     expect(before.isSameDay(post.updated_at)).toBeTruthy();
     Carbon.setTestNow(future = before.copy().addDays(3));
     EloquentTouchingPost.withoutTouching(() => {
-      EloquentTouchingComment.create({
+      EloquentTouchingComment.initAttributes({
         'content': 'Comment content',
         'post_id': 1
       });
@@ -1693,11 +1693,11 @@ describe('test database eloquent integration', () => {
   });
   it('can nest calls of no touching', () => {
     let before = Carbon.now();
-    let user   = EloquentTouchingUser.create({
+    let user   = EloquentTouchingUser.initAttributes({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    let post   = EloquentTouchingPost.create({
+    let post   = EloquentTouchingPost.initAttributes({
       'id'     : 1,
       'name'   : 'Parent Post',
       'user_id': 1
@@ -1707,7 +1707,7 @@ describe('test database eloquent integration', () => {
     Carbon.setTestNow(future = before.copy().addDays(3));
     EloquentTouchingUser.withoutTouching(() => {
       EloquentTouchingPost.withoutTouching(() => {
-        EloquentTouchingComment.create({
+        EloquentTouchingComment.initAttributes({
           'content': 'Comment content',
           'post_id': 1
         });
@@ -1721,11 +1721,11 @@ describe('test database eloquent integration', () => {
   });
   it('can pass array of models to ignore', () => {
     let before = Carbon.now();
-    let user   = EloquentTouchingUser.create({
+    let user   = EloquentTouchingUser.initAttributes({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    let post   = EloquentTouchingPost.create({
+    let post   = EloquentTouchingPost.initAttributes({
       'id'     : 1,
       'name'   : 'Parent Post',
       'user_id': 1
@@ -1734,7 +1734,7 @@ describe('test database eloquent integration', () => {
     expect(before.isSameDay(post.updated_at)).toBeTruthy();
     Carbon.setTestNow(future = before.copy().addDays(3));
     Model.withoutTouchingOn([EloquentTouchingUser, EloquentTouchingPost], () => {
-      EloquentTouchingComment.create({
+      EloquentTouchingComment.initAttributes({
         'content': 'Comment content',
         'post_id': 1
       });

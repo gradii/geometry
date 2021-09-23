@@ -105,9 +105,9 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
     // }
     //
     // /*Set the event dispatcher instance.*/
-    // public static setEventDispatcher(dispatcher: Dispatcher) {
-    //   (/*static*/ this).dispatcher = dispatcher;
-    // }
+    public static setEventDispatcher(dispatcher: Dispatcher) {
+      (/*static*/ this).dispatcher = dispatcher;
+    }
     //
     // /*Unset the event dispatcher for models.*/
     // public static unsetEventDispatcher() {

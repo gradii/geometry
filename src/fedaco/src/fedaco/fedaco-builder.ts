@@ -81,7 +81,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Create and return an un-saved model instance.*/
-  public make(attributes: any[] = []) {
+  public make(attributes: Record<string, any>) {
     return this.newModelInstance(attributes);
   }
 
@@ -480,16 +480,16 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   //   return collect(this._query.orders);
   // }
   /*Save a new model and return the instance.*/
-  public create(attributes: any[] = []) {
+  public create(attributes: Record<string, any>) {
     return tap(instance => {
       instance.save();
     }, this.newModelInstance(attributes));
   }
 
   /*Save a new model and return the instance. Allow mass-assignment.*/
-  public forceCreate(attributes: any[]) {
-    return this._model.unguarded(() => {
-      return this.newModelInstance().create(attributes);
+  public forceCreate(attributes: Record<string, any>) {
+    return (this._model.constructor as any).unguarded(() => {
+      return this.newModelInstance().newQuery().create(attributes);
     });
   }
 
@@ -729,7 +729,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Create a new instance of the model being queried.*/
-  public newModelInstance(attributes: any[] = []): Model {
+  public newModelInstance(attributes?: Record<string, any>): Model {
     return this._model.newInstance(attributes).setConnection(this._query.getConnection().getName());
   }
 

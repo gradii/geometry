@@ -119,7 +119,7 @@ describe('model annotation', () => {
 
     expect(isFunction(metaColumnInfo._getRelation)).toBe(true);
 
-    const hasMany = metaColumnInfo._getRelation(relationModel);
+    const hasMany = metaColumnInfo._getRelation(relationModel, 'articles');
 
     expect(hasMany).toBeInstanceOf(HasMany);
   });
@@ -133,7 +133,7 @@ describe('model annotation', () => {
 
     // const spy1 = jest.spyOn(memberModel._connection, 'query');
 
-    const hasMany = metaColumnInfo._getRelation(memberModel);
+    const hasMany = metaColumnInfo._getRelation(memberModel, 'articles');
 
     expect(hasMany).toBeInstanceOf(HasMany);
 

@@ -5,7 +5,24 @@
  */
 
 import { Constructor } from '../../helper/constructor';
-import { Model } from '../model';
+import { reflector } from '@gradii/annotation';
+import { isArray } from '@gradii/check-type';
+import { Column, ColumnDefine, DateCastableColumn, DateColumn, EncryptedCastableColumn } from '../../annotation/column';
+import { Scope } from '../../annotation/scope';
+import { BelongsToColumn } from '../../annotation/belongs-to.relation';
+import { BelongsToManyColumn } from '../../annotation/belongs-to-many.relation';
+import { HasManyColumn } from '../../annotation/has-many.relation';
+import { HasOneColumn } from '../../annotation/has-one.relation';
+import { findLast } from 'ramda'
+
+function isAnyGuarded(guarded: string[]) {
+  return guarded.length === 1 && guarded[0] === '*'
+}
+
+// eslint-disable-next-line @typescript-eslint/no-namespace
+export declare namespace GuardsAttributes {
+  export const _unguarded: boolean
+}
 
 export interface GuardsAttributes {
   getFillable(): this;
@@ -30,7 +47,7 @@ export function mixinGuardsAttributes<T extends Constructor<any>, M>(base: T): G
     /*The attributes that aren't mass assignable.*/
     _guarded: string[] = ['*'];
     /*Indicates if all mass assignment is enabled.*/
-    static _unguarded: boolean = false;
+    static _unguarded = false;
     /*The actual columns that exist on the database and can be guarded.*/
     static _guardableColumns: any[];
 
@@ -70,35 +87,35 @@ export function mixinGuardsAttributes<T extends Constructor<any>, M>(base: T): G
 
     /*Disable all mass assignable restrictions.*/
     public static unguard(state: boolean = true) {
-      (this.constructor as any)._unguarded = state;
+      this._unguarded = state;
     }
 
     /*Enable the mass assignment restrictions.*/
     public static reguard() {
-      (this.constructor as any)._unguarded = false;
+      this._unguarded = false;
     }
 
     /*Determine if the current state is "unguarded".*/
     public static isUnguarded() {
-      return (this.constructor as any)._unguarded;
+      return this._unguarded;
     }
 
     /*Run the given callable while being unguarded.*/
     public static unguarded(callback: Function) {
-      if ((this.constructor as any)._unguarded) {
+      if (this._unguarded) {
         return callback();
       }
-      (this.constructor as any).unguard();
+      this.unguard();
       try {
         return callback();
       } finally {
-        (this.constructor as any).reguard();
+        this.reguard();
       }
     }
 
     /*Determine if the given attribute may be mass assigned.*/
     public isFillable(key: string) {
-      if (this._unguarded) {
+      if ((this.constructor as typeof _Self)._unguarded) {
         return true;
       }
       if (this.getFillable().includes(key)) {
@@ -117,27 +134,48 @@ export function mixinGuardsAttributes<T extends Constructor<any>, M>(base: T): G
       if (!this.getGuarded().length) {
         return false;
       }
-      return this.getGuarded() == ['*'] ||
-        // !empty(preg_grep('/^' + preg_quote(key) + '$/i', this.getGuarded())) ||
+      return isAnyGuarded(this.getGuarded()) ||
+        this.getGuarded().includes(key) ||
         !this._isGuardableColumn(key);
     }
 
     /*Determine if the given column is a valid, guardable column.*/
     _isGuardableColumn(key: string) {
-      if (!(this._guardableColumns != undefined)) {
+      if (this._guardableColumns == undefined) {
         // this._guardableColumns = this.getConnection().getSchemaBuilder().getColumnListing(this.getTable());
+        this._guardableColumns = []
+        const meta = reflector.propMetadata(this.constructor)
+        for (const x of Object.keys(meta)) {
+          if (meta[x] && isArray(meta[x])) {
+            const currentMeta = findLast(it => {
+              return Column.isTypeOf(it) ||
+                DateColumn.isTypeOf(it) ||
+                DateCastableColumn.isTypeOf(it) ||
+                EncryptedCastableColumn.isTypeOf(it) ||
+                Scope.isTypeOf(it) ||
+                BelongsToColumn.isTypeOf(it) ||
+                BelongsToManyColumn.isTypeOf(it) ||
+                HasManyColumn.isTypeOf(it) ||
+                HasOneColumn.isTypeOf(it);
+            }, meta[x]) as ColumnDefine;
+
+            if (currentMeta) {
+              this._guardableColumns.push(x)
+            }
+          }
+        }
       }
       return this._guardableColumns.includes(key);
     }
 
     /*Determine if the model is totally guarded.*/
     public totallyGuarded() {
-      return this.getFillable().length === 0 && this.getGuarded() == ['*'];
+      return this.getFillable().length === 0 && isAnyGuarded(this.getGuarded());
     }
 
     /*Get the fillable attributes of a given array.*/
     _fillableFromArray(attributes: any) {
-      if (this.getFillable().length > 0 && !this._unguarded) {
+      if (this.getFillable().length > 0 && !(this.constructor as typeof _Self)._unguarded) {
         const rst: any = {}, fillable = this.getFillable();
         for (let key of Object.keys(attributes)) {
           if (fillable.includes(key)) {
