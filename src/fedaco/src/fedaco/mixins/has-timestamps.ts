@@ -10,6 +10,12 @@ import { Model } from '../model';
 
 export interface HasTimestamps {
 
+  /**
+   * Indicates if the model should be timestamped.
+   * @deprecated disable timestamps
+   */
+  timestamps: boolean;
+
   /*Update the model's update timestamp.*/
   touch(attribute?: string): boolean;
 
@@ -57,7 +63,7 @@ export function mixinHasTimestamps<T extends Constructor<any>>(base: T): HasTime
     public timestamps: boolean = true;
 
     /*Update the model's update timestamp.*/
-    public touch(this: Model & _Self, attribute: string = null): boolean {
+    public async touch(this: Model & _Self, attribute: string = null): Promise<boolean> {
       if (attribute) {
         // @ts-ignore
         this[attribute] = this.freshTimestamp();

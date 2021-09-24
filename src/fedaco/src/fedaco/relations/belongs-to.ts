@@ -7,6 +7,7 @@
 import { isBlank } from '@gradii/check-type';
 import { uniq } from 'ramda';
 import { Collection } from '../../define/collection';
+import { BaseModel } from '../base-model';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
 import { mixinComparesRelatedModels } from './concerns/compares-related-models';
@@ -114,10 +115,10 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
 
   /*Associate the model instance to the given parent.*/
   public associate(model: Model | number | string) {
-    const ownerKey = model instanceof Model ?
+    const ownerKey = model instanceof BaseModel ?
       model.getAttribute(this.ownerKey) : model;
     this.child.setAttribute(this._foreignKey, ownerKey);
-    if (model instanceof Model) {
+    if (model instanceof BaseModel) {
       this.child.setRelation(this.relationName, model);
     } else {
       this.child.unsetRelation(this.relationName);

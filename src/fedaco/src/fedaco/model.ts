@@ -4,13 +4,14 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isAnyEmpty, isArray, isBlank, isString } from '@gradii/check-type';
+import { isAnyEmpty, isArray, isBlank, isObjectEmpty, isString } from '@gradii/check-type';
 import { tap } from 'ramda';
 import { plural, pluralStudy } from '../helper/pluralize';
 import { camelCase, snakeCase, upperCaseFirst } from '../helper/str';
 import { ConnectionResolverInterface } from '../interface/connection-resolver-interface';
 import { ForwardsCalls, mixinForwardsCalls } from '../mixins/forwards-calls';
 import { QueryBuilder } from '../query-builder/query-builder';
+import { BaseModel } from './base-model';
 import { FedacoBuilder } from './fedaco-builder';
 import { GuardsAttributes, mixinGuardsAttributes } from './mixins/guards-attributes';
 import { HasAttributes, mixinHasAttributes } from './mixins/has-attributes';
@@ -74,10 +75,7 @@ export class Model extends mixinHasAttributes(
         mixinHasTimestamps(
           mixinHidesAttributes(
             mixinGuardsAttributes(
-              mixinForwardsCalls(class {
-                boot() {
-                }
-              })
+              mixinForwardsCalls(BaseModel)
             )
           )
         )
@@ -447,7 +445,7 @@ export class Model extends mixinHasAttributes(
 
   /*Create a new instance of the given model.*/
   public newInstance(attributes: any = {}, exists = false): this {
-    const model = (<typeof Model>this.constructor).initAttributes(/*cast type array*/ attributes);
+    const model   = (<typeof Model>this.constructor).initAttributes(/*cast type array*/ attributes);
     model._exists = exists;
     model.setConnection(this.getConnectionName());
     model.setTable(this.getTable());
@@ -639,7 +637,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Save the model to the database.*/
-  public save(options: { touch?: boolean } = {}) {
+  public async save(options: { touch?: boolean } = {}) {
     this.mergeAttributesFromClassCasts();
     const query = this.newModelQuery();
     if (this._fireModelEvent('saving') === false) {
@@ -647,16 +645,16 @@ export class Model extends mixinHasAttributes(
     }
     let saved;
     if (this.exists) {
-      saved = this.isDirty() ? this.performUpdate(query) : true;
+      saved = this.isDirty() ? await this.performUpdate(query) : true;
     } else {
-      saved = this.performInsert(query);
+      saved            = await this.performInsert(query);
       const connection = query.getConnection();
       if (!this.getConnectionName() && connection) {
         this.setConnection(connection.getName());
       }
     }
     if (saved) {
-      this.finishSave(options);
+     await this.finishSave(options);
     }
     return saved;
   }
@@ -669,16 +667,16 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Perform any actions that are necessary after the model is saved.*/
-  protected finishSave(options: { touch?: boolean }) {
+  protected async finishSave(options: { touch?: boolean }) {
     this._fireModelEvent('saved', false);
     if (this.isDirty() && (options['touch'] ?? true)) {
-      this.touchOwners();
+      await this.touchOwners();
     }
     this.syncOriginal();
   }
 
   /*Perform a model update operation.*/
-  protected performUpdate(query: FedacoBuilder) {
+  protected async performUpdate(query: FedacoBuilder) {
     if (this._fireModelEvent('updating') === false) {
       return false;
     }
@@ -686,8 +684,8 @@ export class Model extends mixinHasAttributes(
       this.updateTimestamps();
     }
     const dirty = this.getDirty();
-    if (dirty.length > 0) {
-      this._setKeysForSaveQuery(query).update(dirty);
+    if (!isObjectEmpty(dirty)) {
+      await this._setKeysForSaveQuery(query).update(dirty);
       this.syncChanges();
       this._fireModelEvent('updated', false);
     }
@@ -713,7 +711,7 @@ export class Model extends mixinHasAttributes(
 
   /*Get the primary key value for a save query.*/
   protected getKeyForSaveQuery() {
-    return this.original[this.getKeyName()] ?? this.getKey();
+    return this._original[this.getKeyName()] ?? this.getKey();
   }
 
   /*Perform a model insert operation.*/
@@ -733,7 +731,7 @@ export class Model extends mixinHasAttributes(
       }
       query.insert(attributes);
     }
-    this.exists = true;
+    this.exists             = true;
     this.wasRecentlyCreated = true;
     this._fireModelEvent('created', false);
     return true;
@@ -742,7 +740,7 @@ export class Model extends mixinHasAttributes(
   /*Insert the given attributes and set the ID on the model.*/
   protected insertAndSetId(query: FedacoBuilder, attributes: any[]) {
     const keyName = this.getKeyName();
-    const id = query.insertGetId(attributes, keyName);
+    const id      = query.insertGetId(attributes, keyName);
     this.setAttribute(keyName, id);
   }
 
@@ -1096,7 +1094,7 @@ export class Model extends mixinHasAttributes(
   protected resolveChildRouteBindingQuery(childType: string, value: any, field: string | null) {
     // todo recovery me
     const relationship = this[plural(camelCase(childType))]();
-    field = field || relationship.getRelated().getRouteKeyName();
+    field              = field || relationship.getRelated().getRouteKeyName();
     // if (relationship instanceof HasManyThrough || relationship instanceof BelongsToMany) {
     //   return relationship.where(relationship.getRelated().getTable() + '.' + field, value);
     // } else {

@@ -4,6 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { isArray } from '@gradii/check-type';
 import { tap } from 'ramda';
 import { Constructor } from '../../helper/constructor';
 import { snakeCase } from '../../helper/str';
@@ -539,18 +540,20 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
       return this.getTouchedRelations().includes(relation);
     }
 
-    // /*Touch the owning relations of the model.*/
-    // public touchOwners() {
-    //   for (let relation of this.getTouchedRelations()) {
-    //     this[relation]().touch();
-    //     if (this[relation] instanceof _Self.constructor) {
-    //       this[relation].fireModelEvent('saved', false);
-    //       this[relation].touchOwners();
-    //     } else if (isArray(this[relation])) {
-    //       this[relation].forEach(it => it.touchOwners());
-    //     }
-    //   }
-    // }
+    /*Touch the owning relations of the model.*/
+    public async touchOwners(this: Model & _Self) {
+      for (let relation of this.getTouchedRelations()) {
+        await this.getRelationMethod(relation).touch();
+        if (this[relation] instanceof this.constructor) {
+          this[relation].fireModelEvent('saved', false);
+          await this[relation].touchOwners();
+        } else if (isArray(this[relation])) {
+          for (const it of this[relation]) {
+            await it.touchOwners();
+          }
+        }
+      }
+    }
 
     /*Get the polymorphic relationship columns.*/
     _getMorphs(name: string, type: string, id: string): string[] {
@@ -569,7 +572,7 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
 
     /*Create a new model instance for a related model.*/
     _newRelatedInstance(this: _Self & Model & this, clazz: typeof Model) {
-      const ins               = tap(instance => {
+      const ins                         = tap(instance => {
         if (!instance.getConnectionName()) {
           instance.setConnection(this._connection);
         }

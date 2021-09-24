@@ -4,13 +4,14 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { isArray, isBlank } from '@gradii/check-type';
+import { difference, intersection } from 'ramda';
 import { Collection } from '../../../define/collection';
+import { mapWithKeys } from '../../../helper/arr';
 import { Constructor } from '../../../helper/constructor';
+import { BaseModel } from '../../base-model';
 import { Model } from '../../model';
 import { Relation } from '../relation';
-import { isArray, isBlank } from '@gradii/check-type';
-import { intersection, difference } from 'ramda'
-import { mapWithKeys } from '../../../helper/arr';
 
 export interface InteractsWithPivotTable {
   /**
@@ -89,7 +90,7 @@ export interface InteractsWithPivotTable {
   newPivotQuery();
 
   /*Set the columns on the pivot table to retrieve.*/
-  withPivot( columns: any[] | any, ...cols: any[]);
+  withPivot(columns: any[] | any, ...cols: any[]);
 
   /*Get all of the IDs from the given mixed value.*/
   _parseIds(value: any);
@@ -124,8 +125,8 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
         attached: [],
         detached: []
       };
-      const records = this._formatRecordsList(this._parseIds(ids));
-      const detach = Object.values(
+      const records      = this._formatRecordsList(this._parseIds(ids));
+      const detach       = Object.values(
         intersection(
           this.newPivotQuery().pluck(this.relatedPivotKey).all(),
           Object.keys(records)
@@ -160,11 +161,11 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
       let changes: any = {
         attached: [],
         detached: [],
-        updated: []
+        updated : []
       };
-      const current = this.getCurrentlyAttachedPivots().pluck(this.relatedPivotKey).all();
-      const records = this._formatRecordsList(this._parseIds(ids))
-      const detach = difference(current, Object.keys(records));
+      const current    = this.getCurrentlyAttachedPivots().pluck(this.relatedPivotKey).all();
+      const records    = this._formatRecordsList(this._parseIds(ids));
+      const detach     = difference(current, Object.keys(records));
       if (detaching && detach.length > 0) {
         this.detach(detach);
         changes['detached'] = this.castKeys(detach);
@@ -193,14 +194,14 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
           const [id, attributes] = [attributes, []];
         }
         return {};
-      })
+      });
     }
 
     /*Attach all of the records that aren't in the given current records.*/
     _attachNew(this: Relation & _Self, records: any[], current: any[], touch = true) {
       const changes = {
         attached: [],
-        updated: []
+        updated : []
       };
       for (const [id, attributes] of Object.entries(records)) {
         if (!current.includes(id)) {
@@ -234,8 +235,9 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Update an existing pivot record on the table via a custom class.*/
-    _updateExistingPivotUsingCustomClass(this: Relation & _Self, id: any, attributes: any[], touch: boolean) {
-      const pivot = this.getCurrentlyAttachedPivots().where(this.foreignPivotKey,
+    _updateExistingPivotUsingCustomClass(this: Relation & _Self, id: any, attributes: any[],
+                                         touch: boolean) {
+      const pivot   = this.getCurrentlyAttachedPivots().where(this.foreignPivotKey,
         this.parent[this.parentKey]).where(this.relatedPivotKey, this.parseId(id)).first();
       const updated = pivot ? pivot.fill(attributes).isDirty() : false;
       if (updated) {
@@ -269,7 +271,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
 
     /*Create an array of records to insert into the pivot table.*/
     _formatAttachRecords(this: Relation & _Self, ids: any[], attributes: any[]) {
-      const records = [];
+      const records       = [];
       const hasTimestamps = this.hasPivotColumn(this.createdAt()) || this.hasPivotColumn(
         this.updatedAt());
       for (const [key, value] of Object.entries(ids)) {
@@ -279,9 +281,9 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Create a full attachment record payload.*/
-    _formatAttachRecord(this: Relation & _Self, key: number|string, value: any, attributes: any[],
+    _formatAttachRecord(this: Relation & _Self, key: number | string, value: any, attributes: any[],
                         hasTimestamps: boolean) {
-      let id
+      let id;
       [id, attributes] = this._extractAttachIdAndAttributes(key, value, attributes);
       return [...this.baseAttachRecord(id, hasTimestamps), ...this.castAttributes(attributes)];
     }
@@ -293,7 +295,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
 
     /*Create a new pivot attachment record.*/
     _baseAttachRecord(this: Relation & _Self, id: number, timed: boolean) {
-      let record = {}
+      let record                   = {};
       record[this.relatedPivotKey] = id;
       record[this.foreignPivotKey] = this.parent[this.parentKey];
       if (timed) {
@@ -310,7 +312,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
       let fresh = this.parent.freshTimestamp();
       if (this.using) {
         const pivotModel = new this.using();
-        fresh = fresh.format(pivotModel.getDateFormat());
+        fresh            = fresh.format(pivotModel.getDateFormat());
       }
       if (!exists && this.hasPivotColumn(this.createdAt())) {
         record[this.createdAt()] = fresh;
@@ -328,7 +330,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
 
     /*Detach models from the relationship.*/
     public detach(this: Relation & _Self, ids: any = null, touch = true) {
-      let results
+      let results;
       if (this.using && ids.length &&
         !this._pivotWheres.length &&
         !this._pivotWhereIns.length &&
@@ -367,7 +369,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     /*Get the pivot models that are currently attached.*/
     _getCurrentlyAttachedPivots(this: Relation & _Self,) {
       return this.newPivotQuery().get().map(record => {
-        const clazz = this._using //todo recovery me || Pivot;
+        const clazz = this._using; //todo recovery me || Pivot;
         const pivot = clazz.fromRawAttributes(this.parent, /*cast type array*/ record,
           this.getTable(), true);
         return pivot.setPivotKeys(this.foreignPivotKey, this.relatedPivotKey);
@@ -419,8 +421,8 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Get all of the IDs from the given mixed value.*/
-    _parseIds(this: Relation & _Self, value: any|any[]) {
-      if (value instanceof Model) {
+    _parseIds(this: Relation & _Self, value: any | any[]) {
+      if (value as Model instanceof BaseModel) {
         return [value[this.relatedKey]];
       }
       // if (value instanceof Collection) {
@@ -434,7 +436,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
 
     /*Get the ID from the given mixed value.*/
     _parseId(this: Relation & _Self, value: any) {
-      return value instanceof Model ? value[this.relatedKey] : value;
+      return value as Model instanceof BaseModel ? value[this.relatedKey] : value;
     }
 
     /*Cast the given keys to integers if they are numeric and string otherwise.*/

@@ -4,24 +4,26 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Constructor } from '../../helper/constructor';
 import { reflector } from '@gradii/annotation';
 import { isArray } from '@gradii/check-type';
-import { Column, ColumnDefine, DateCastableColumn, DateColumn, EncryptedCastableColumn } from '../../annotation/column';
-import { Scope } from '../../annotation/scope';
-import { BelongsToColumn } from '../../annotation/belongs-to.relation';
+import { findLast } from 'ramda';
 import { BelongsToManyColumn } from '../../annotation/belongs-to-many.relation';
+import { BelongsToColumn } from '../../annotation/belongs-to.relation';
+import {
+  Column, ColumnDefine, DateCastableColumn, DateColumn, EncryptedCastableColumn
+} from '../../annotation/column';
 import { HasManyColumn } from '../../annotation/has-many.relation';
 import { HasOneColumn } from '../../annotation/has-one.relation';
-import { findLast } from 'ramda'
+import { Scope } from '../../annotation/scope';
+import { Constructor } from '../../helper/constructor';
 
 function isAnyGuarded(guarded: string[]) {
-  return guarded.length === 1 && guarded[0] === '*'
+  return guarded.length === 1 && guarded[0] === '*';
 }
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export declare namespace GuardsAttributes {
-  export const _unguarded: boolean
+  export const _unguarded: boolean;
 }
 
 export interface GuardsAttributes {
@@ -143,8 +145,8 @@ export function mixinGuardsAttributes<T extends Constructor<any>, M>(base: T): G
     _isGuardableColumn(key: string) {
       if (this._guardableColumns == undefined) {
         // this._guardableColumns = this.getConnection().getSchemaBuilder().getColumnListing(this.getTable());
-        this._guardableColumns = []
-        const meta = reflector.propMetadata(this.constructor)
+        this._guardableColumns = [];
+        const meta             = reflector.propMetadata(this.constructor);
         for (const x of Object.keys(meta)) {
           if (meta[x] && isArray(meta[x])) {
             const currentMeta = findLast(it => {
@@ -160,7 +162,7 @@ export function mixinGuardsAttributes<T extends Constructor<any>, M>(base: T): G
             }, meta[x]) as ColumnDefine;
 
             if (currentMeta) {
-              this._guardableColumns.push(x)
+              this._guardableColumns.push(x);
             }
           }
         }

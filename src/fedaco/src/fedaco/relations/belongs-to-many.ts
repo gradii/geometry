@@ -187,7 +187,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   /*Set a "where between" clause for a pivot table column.*/
   public wherePivotBetween(column: string, values: any[],
                            conjunction = 'and',
-                           not        = false) {
+                           not         = false) {
     return this.getQuery().whereBetween(this.qualifyPivotColumn(column), values, conjunction, not);
   }
 
@@ -208,7 +208,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Set a "where in" clause for a pivot table column.*/
   public wherePivotIn(column: string, values: any, conjunction = 'and',
-                      not                                     = false) {
+                      not                                      = false) {
     this._pivotWhereIns.push(arguments);
     return this.whereIn(this.qualifyPivotColumn(column), values, conjunction, not);
   }
@@ -298,7 +298,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   public async firstOrCreate(attributes: any[] = [],
                              values: any[]     = [],
                              joining: any[]    = [],
-                             touch    = true) {
+                             touch             = true) {
     let instance = await this._related.newQuery().where(attributes).first();
     if (isBlank(instance)) {
       instance = this.create([...attributes, ...values], joining, touch);
@@ -310,7 +310,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   public async updateOrCreate(attributes: any[],
                               values: any[]  = [],
                               joining: any[] = [],
-                              touch = true) {
+                              touch          = true) {
     const instance = await this._related.newQuery().where(attributes).first() as Model;
     if (isBlank(instance)) {
       return this.create([...attributes, ...values], joining, touch);
@@ -324,7 +324,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Find a related model by its primary key.*/
   public async find(id: any, columns: any[] = ['*']): Promise<Model | Model[]> {
-    if (!(id instanceof Model && (isArray(id) /*|| id instanceof Arrayable*/))) {
+    if (isArray(id) /*|| id instanceof Arrayable*/) {
       return this.findMany(id, columns);
     }
     return this.where(this.getRelated().getQualifiedKeyName(), '=', this._parseIds(id))
@@ -389,8 +389,8 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
     // the proper columns. Then, we will get the results and hydrate our pivot
     // models with the result of those columns as a separate model relation.
     const builder = this._query.applyScopes();
-    columns     = builder.getQuery()._columns.length ? [] : columns;
-    let models  = await builder.addSelect(this._shouldSelect(columns)).getModels();
+    columns       = builder.getQuery()._columns.length ? [] : columns;
+    let models    = await builder.addSelect(this._shouldSelect(columns)).getModels();
     this._hydratePivotRelation(models);
     if (models.length > 0) {
       models = await builder.eagerLoadRelations(models);
@@ -552,14 +552,14 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   /*Touch all of the related models for the relationship.
 
   E.g.: Touch all roles associated with this user.*/
-  public touch() {
+  public async touch() {
     const key     = this.getRelated().getKeyName();
     const columns = {
       [this._related.getUpdatedAtColumn()]: this._related.freshTimestampString(),
     };
-    const ids   = this.allRelatedIds();
+    const ids     = this.allRelatedIds();
     if (ids.length > 0) {
-      this.getRelated().newQueryWithoutRelationships().whereIn(key, ids).update(columns);
+      await this.getRelated().newQueryWithoutRelationships().whereIn(key, ids).update(columns);
     }
   }
 

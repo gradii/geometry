@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { makePropDecorator, TypeDecorator } from '@gradii/annotation';
+import { makePropDecorator } from '@gradii/annotation';
 import { Model } from '../fedaco/model';
 import { HasMany } from '../fedaco/relations/has-many';
 import { ForwardRefFn, resolveForwardRef } from '../query-builder/forward-ref';

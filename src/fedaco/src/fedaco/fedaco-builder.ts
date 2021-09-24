@@ -494,7 +494,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Update records in the database.*/
-  public update(values: any) {
+  public async update(values: any): Promise<any> {
     return this.toBase().update(this.addUpdatedAtColumn(values));
   }
 
