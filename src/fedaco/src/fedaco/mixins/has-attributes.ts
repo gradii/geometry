@@ -8,7 +8,7 @@ import { reflector } from '@gradii/annotation';
 import {
   isArray, isBlank, isFunction, isNumber, isObjectEmpty, isString
 } from '@gradii/check-type';
-import { format, getUnixTime, isValid, parse, startOfDay } from 'date-fns';
+import { format, formatISO, getUnixTime, isValid, parse, startOfDay } from 'date-fns';
 import { difference, equals, findLast, intersection, tap, uniq } from 'ramda';
 import { BelongsToManyColumn } from '../../annotation/belongs-to-many.relation';
 import { BelongsToColumn } from '../../annotation/belongs-to.relation';
@@ -511,7 +511,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Determine if the given key is a relationship method on the model.*/
     public isRelation(key: string) {
-      const metadata   = this._columnInfo(key);
+      const metadata = this._columnInfo(key);
       const isRelation = metadata && (metadata.isRelation || metadata.isRelationUsing);
       if (isRelation) {
         return metadata;
@@ -577,7 +577,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
         return value;
       }
       if (this.isEncryptedCastable(key)) {
-        value    = this.fromEncryptedString(value);
+        value = this.fromEncryptedString(value);
         castType = castType.split('encrypted:').pop();
       }
       switch (castType) {
@@ -719,7 +719,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     protected _columnInfo(key: string) {
       const typeOfClazz = this.constructor as typeof Model;
-      const meta        = reflector.propMetadata(typeOfClazz);
+      const meta = reflector.propMetadata(typeOfClazz);
       if (meta[key] && isArray(meta[key])) {
         return findLast(it => {
           return Column.isTypeOf(it) ||
@@ -747,8 +747,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     /*Set a given JSON attribute on the model.*/
     public fillJsonAttribute(key: string, value: any) {
       let path;
-      [key, path]           = key.split('->');
-      value                 = this.asJson(this.getArrayAttributeWithValue(path, key, value));
+      [key, path] = key.split('->');
+      value = this.asJson(this.getArrayAttributeWithValue(path, key, value));
       this._attributes[key] = /*this.isEncryptedCastable(key) ?
         this.castAttributeAsEncryptedString(key, value) :*/ value;
       return this;
@@ -881,7 +881,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Prepare a date for array / JSON serialization.*/
     protected serializeDate(date: Date) {
-      return format(date, `yyyy-MM-dd'T'HH:mm:ssZ`);
+      return format(date, `yyyy-MM-dd HH:mm:ss`);
     }
 
     /*Get the attributes that should be converted to dates.*/
@@ -1047,7 +1047,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     /*Get the model's original attribute values.*/
     protected getOriginalWithoutRewindingModel(this: Model & _Self,
                                                key: string | null = null,
-                                               _default: any      = null) {
+                                               _default: any = null) {
       if (key) {
         return this.transformModelValue(key, get(this._original, key, _default));
       }
@@ -1087,7 +1087,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Sync multiple original attribute with their current values.*/
     public syncOriginalAttributes(attributes: any[] | string) {
-      attributes            = isArray(attributes) ? attributes : arguments as unknown as any[];
+      attributes = isArray(attributes) ? attributes : arguments as unknown as any[];
       const modelAttributes = this.getAttributes();
       for (const attribute of attributes) {
         this._original[attribute] = modelAttributes[attribute];
@@ -1155,7 +1155,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
         return false;
       }
       const attribute = get(this._attributes, key);
-      const original  = get(this._original, key);
+      const original = get(this._original, key);
       if (attribute === original) {
         return true;
       } else if (isBlank(attribute)) {

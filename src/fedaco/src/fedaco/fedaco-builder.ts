@@ -297,9 +297,10 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Execute the query and get the first result or throw an exception.*/
-  public async firstOrFail(columns: any[] = ['*']) {
+  public async firstOrFail(columns: any[] = ['*']): Promise<Model> {
     const model = await this.first(columns);
     if (!isBlank(model)) {
+      // @ts-ignore
       return model;
     }
     throw new Error(
@@ -428,17 +429,22 @@ export class FedacoBuilder extends mixinGuardsAttributes(
     }
   }
 
-  // /*Get an array with the values of a given column.*/
-  // public pluck(column: string | Expression, key: string | null = null) {
-  //   let results = this.toBase().pluck(column, key);
-  //   if (!this.model.hasGetMutator(column) && !this.model.hasCast(column) && !in_array(column,
-  //     this.model.getDates())) {
-  //     return results;
-  //   }
-  //   return results.map(value => {
-  //     return this.model.newFromBuilder({})[column];
-  //   });
-  // }
+  /*Get an array with the values of a given column.*/
+  public pluck(column: string, key: string | null = null) {
+    const results = this.toBase().pluck(column, key);
+    if (
+      !this._model.hasGetMutator(column) &&
+      !this._model.hasCast(column) &&
+      !this._model.getDates().includes(column)
+    ) {
+      return results;
+    }
+    return results.map(value => {
+      return this._model.newFromBuilder({
+        [column]: value
+      })[column];
+    });
+  }
 
   // /*Paginate the given query.*/
   // public paginate(perPage: number | null = null, columns: any[] = ['*'], pageName: string = 'page', page: number | null = null) {
@@ -571,7 +577,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Delete records from the database.*/
-  public delete() {
+  public async delete() {
     if (this._onDelete !== undefined) {
       return this._onDelete.call(this, this);
     }

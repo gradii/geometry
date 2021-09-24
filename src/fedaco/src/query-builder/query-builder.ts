@@ -473,7 +473,7 @@ export class QueryBuilder extends Builder {
   }
 
   /*Delete a record from the database.*/
-  public delete(id?: any) {
+  public async delete(id?: any) {
     if (!isBlank(id)) {
       this.addWhere(
         new ComparisonPredicateExpression(

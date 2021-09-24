@@ -55,7 +55,7 @@ export interface ForwardCallToQueryBuilder {
 
   update(...args: any[]): Promise<any>;
 
-  delete(...args: any[]): this;
+  delete(...args: any[]): Promise<any>;
 
   truncate(...args: any[]): this;
 

@@ -84,7 +84,7 @@ export class Model extends mixinHasAttributes(
   )
 ) {
   /*Indicates if the model exists.*/
-  _exists = false;
+  exists = false;
   /*Indicates if the model was inserted during the current request lifecycle.*/
   _wasRecentlyCreated = false;
   /*The connection name for the model.*/
@@ -97,6 +97,8 @@ export class Model extends mixinHasAttributes(
   _primaryKey = 'id';
 
   _keyType: any = 'int';
+
+  _incrementing = true;
 
   _with = [];
 
@@ -245,7 +247,7 @@ export class Model extends mixinHasAttributes(
   //   //   return false;
   //   // }
   //   let saved;
-  //   // if (this._exists) {
+  //   // if (this.exists) {
   //   //   saved = this.isDirty() ? this.performUpdate(query) : true;
   //   // } else {
   //   //   saved = this.performInsert(query);
@@ -445,7 +447,7 @@ export class Model extends mixinHasAttributes(
 
   /*Create a new instance of the given model.*/
   public newInstance(attributes: any = {}, exists = false): this {
-    const model   = (<typeof Model>this.constructor).initAttributes(/*cast type array*/ attributes);
+    const model = (<typeof Model>this.constructor).initAttributes(/*cast type array*/ attributes);
     model._exists = exists;
     model.setConnection(this.getConnectionName());
     model.setTable(this.getTable());
@@ -614,15 +616,18 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Save the model and all of its relationships.*/
-  public push() {
-    if (!this.save()) {
+  public async push() {
+    if (!await this.save()) {
       return false;
     }
-    for (let models of this._relations) {
+    for (let models of Object.values(this._relations)) {
       models = isArray(models) ? models : [models];
+      // @ts-ignore
       for (const model of models) {
-        if (!model.push()) {
-          return false;
+        if (!isBlank(model)) {
+          if (!await model.push()) {
+            return false;
+          }
         }
       }
     }
@@ -647,14 +652,14 @@ export class Model extends mixinHasAttributes(
     if (this.exists) {
       saved = this.isDirty() ? await this.performUpdate(query) : true;
     } else {
-      saved            = await this.performInsert(query);
+      saved = await this.performInsert(query);
       const connection = query.getConnection();
       if (!this.getConnectionName() && connection) {
         this.setConnection(connection.getName());
       }
     }
     if (saved) {
-     await this.finishSave(options);
+      await this.finishSave(options);
     }
     return saved;
   }
@@ -715,7 +720,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Perform a model insert operation.*/
-  protected performInsert(query: FedacoBuilder) {
+  protected async performInsert(query: FedacoBuilder) {
     if (this._fireModelEvent('creating') === false) {
       return false;
     }
@@ -724,23 +729,23 @@ export class Model extends mixinHasAttributes(
     }
     const attributes = this.getAttributesForInsert();
     if (this.getIncrementing()) {
-      this.insertAndSetId(query, attributes);
+      await this.insertAndSetId(query, attributes);
     } else {
       if (isAnyEmpty(attributes)) {
         return true;
       }
-      query.insert(attributes);
+      await query.insert(attributes);
     }
-    this.exists             = true;
+    this.exists = true;
     this.wasRecentlyCreated = true;
     this._fireModelEvent('created', false);
     return true;
   }
 
   /*Insert the given attributes and set the ID on the model.*/
-  protected insertAndSetId(query: FedacoBuilder, attributes: any[]) {
+  protected async insertAndSetId(query: FedacoBuilder, attributes: any[]) {
     const keyName = this.getKeyName();
-    const id      = query.insertGetId(attributes, keyName);
+    const id = await query.insertGetId(attributes, keyName);
     this.setAttribute(keyName, id);
   }
 
@@ -767,19 +772,19 @@ export class Model extends mixinHasAttributes(
   // }
 
   /*Delete the model from the database.*/
-  public delete(): boolean {
+  public async delete(): Promise<boolean> {
     this.mergeAttributesFromClassCasts();
     if (isBlank(this.getKeyName())) {
       throw new Error('LogicException No primary key defined on model.');
     }
-    if (!this._exists) {
+    if (!this.exists) {
       return null;
     }
     if (this._fireModelEvent('deleting') === false) {
       return false;
     }
-    this.touchOwners();
-    this.performDeleteOnModel();
+    await this.touchOwners();
+    await this.performDeleteOnModel();
     this._fireModelEvent('deleted', false);
     return true;
   }
@@ -787,14 +792,14 @@ export class Model extends mixinHasAttributes(
   /*Force a hard delete on a soft deleted model.
 
   This method protects developers from running forceDelete when the trait is missing.*/
-  public forceDelete() {
+  public async forceDelete() {
     return this.delete();
   }
 
   /*Perform the actual delete query on this model instance.*/
-  protected performDeleteOnModel() {
-    // this.setKeysForSaveQuery(this.newModelQuery()).delete();
-    this._exists = false;
+  protected async performDeleteOnModel() {
+    await this._setKeysForSaveQuery(this.newModelQuery()).delete();
+    this.exists = false;
   }
 
   /*Begin querying the model.*/
@@ -895,20 +900,20 @@ export class Model extends mixinHasAttributes(
   //     .with(isString(_with) ? arguments : _with).first();
   // }
 
-  // /*Reload the current model instance with fresh attributes from the database.*/
-  // public refresh() {
-  //   if (!this.exists) {
-  //     return this;
-  //   }
-  //   this.setRawAttributes(
-  //     this._setKeysForSelectQuery(this.newQueryWithoutScopes()).firstOrFail().attributes);
-  //   this.load(collect(this._relations).reject(relation => {
-  //     return relation instanceof Pivot || is_object(relation) && in_array(AsPivot,
-  //       class_uses_recursive(relation), true);
-  //   }).keys().all());
-  //   this.syncOriginal();
-  //   return this;
-  // }
+  /*Reload the current model instance with fresh attributes from the database.*/
+  public async refresh() {
+    if (!this.exists) {
+      return this;
+    }
+    const result: Model = await this._setKeysForSelectQuery(this.newQueryWithoutScopes()).firstOrFail()
+    this.setRawAttributes(result._attributes);
+    // this.load(this._relations.reject(relation => {
+    //   return relation instanceof Pivot || is_object(relation) && in_array(AsPivot,
+    //     class_uses_recursive(relation), true);
+    // }).keys().all());
+    this.syncOriginal();
+    return this;
+  }
 
   /*Clone the model into a new, non-existing instance.*/
   // public replicate(except: any[] | null = null) {
@@ -1094,7 +1099,7 @@ export class Model extends mixinHasAttributes(
   protected resolveChildRouteBindingQuery(childType: string, value: any, field: string | null) {
     // todo recovery me
     const relationship = this[plural(camelCase(childType))]();
-    field              = field || relationship.getRelated().getRouteKeyName();
+    field = field || relationship.getRelated().getRouteKeyName();
     // if (relationship instanceof HasManyThrough || relationship instanceof BelongsToMany) {
     //   return relationship.where(relationship.getRelated().getTable() + '.' + field, value);
     // } else {
