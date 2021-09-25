@@ -5,13 +5,13 @@
  */
 
 import { makePropDecorator } from '@gradii/annotation';
-import { Model } from '../fedaco/model';
-import { HasManyThrough } from '../fedaco/relations/has-many-through';
-import { ForwardRefFn, resolveForwardRef } from '../query-builder/forward-ref';
-import { _additionalProcessingGetter } from './additional-processing';
-import { FedacoDecorator } from './annotation.interface';
-import { RelationType } from './enum-relation';
-import { RelationColumnAnnotation } from './relation-column';
+import { Model } from '../../fedaco/model';
+import { HasManyThrough } from '../../fedaco/relations/has-many-through';
+import { ForwardRefFn, resolveForwardRef } from '../../query-builder/forward-ref';
+import { _additionalProcessingGetter } from '../additional-processing';
+import { FedacoDecorator } from '../annotation.interface';
+import { RelationType } from '../enum-relation';
+import { RelationColumnAnnotation } from '../relation-column';
 
 export interface HasManyThroughRelationAnnotation extends RelationColumnAnnotation {
   related: typeof Model | ForwardRefFn;

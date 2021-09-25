@@ -4,9 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { BelongsToManyColumn } from '../../src/annotation/belongs-to-many.relation-column';
-import { BelongsToColumn } from '../../src/annotation/belongs-to.relation-column';
-import { HasManyColumn } from '../../src/annotation/has-many.relation-column';
+import { BelongsToManyColumn } from '../../src/annotation/relation-column/belongs-to-many.relation-column';
+import { BelongsToColumn } from '../../src/annotation/relation-column/belongs-to.relation-column';
+import { HasManyColumn } from '../../src/annotation/relation-column/has-many.relation-column';
 import { Model } from '../../src/fedaco/model';
 import { BelongsTo } from '../../src/fedaco/relations/belongs-to';
 import { Relation } from '../../src/fedaco/relations/relation';

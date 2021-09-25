@@ -5,12 +5,12 @@
  */
 
 import { makePropDecorator } from '@gradii/annotation';
-import { Model } from '../fedaco/model';
-import { MorphMany } from '../fedaco/relations/morph-many';
-import { _additionalProcessingGetter } from './additional-processing';
-import { FedacoDecorator } from './annotation.interface';
-import { RelationType } from './enum-relation';
-import { RelationColumnAnnotation } from './relation-column';
+import { Model } from '../../fedaco/model';
+import { MorphMany } from '../../fedaco/relations/morph-many';
+import { _additionalProcessingGetter } from '../additional-processing';
+import { FedacoDecorator } from '../annotation.interface';
+import { RelationType } from '../enum-relation';
+import { RelationColumnAnnotation } from '../relation-column';
 
 
 export interface MorphManyRelationAnnotation extends RelationColumnAnnotation {
