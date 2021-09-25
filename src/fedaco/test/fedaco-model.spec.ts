@@ -3,7 +3,7 @@ import { createHash } from 'crypto';
 import { format } from 'date-fns';
 import { pluck } from 'ramda';
 import { Column, DateColumn } from '../src/annotation/column';
-import { RelationColumn } from '../src/annotation/relation';
+import { RelationColumn } from '../src/annotation/relation-column';
 import { DatabaseManager } from '../src/database-manager';
 import { FedacoBuilder } from '../src/fedaco/fedaco-builder';
 import { Dispatcher } from '../src/fedaco/mixins/has-events';

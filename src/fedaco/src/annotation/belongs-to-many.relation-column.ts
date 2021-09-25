@@ -8,8 +8,8 @@ import { makePropDecorator, TypeDecorator } from '@gradii/annotation';
 import { isBlank } from '@gradii/check-type';
 import { Model } from '../fedaco/model';
 import { BelongsToMany } from '../fedaco/relations/belongs-to-many';
-import { snakeCase } from '../helper/str';
-import { ColumnDefine } from './column';
+import { _additionalProcessingGetter } from './additional-processing';
+import { ColumnAnnotation } from './column';
 import { RelationType } from './enum-relation';
 
 
@@ -23,7 +23,7 @@ export interface RelationDecorator {
   new(obj?: BelongsToManyRelationAnnotation): BelongsToManyRelationAnnotation;
 }
 
-export interface BelongsToManyRelationAnnotation extends ColumnDefine {
+export interface BelongsToManyRelationAnnotation extends ColumnAnnotation {
   name?: string;
   isRelation?: boolean;
   type?: RelationType;
@@ -40,31 +40,6 @@ export interface BelongsToManyRelationAnnotation extends ColumnDefine {
 
   _getRelation?: (m: Model) => any;
 }
-
-const _additionalProcessing = (target: any, name: string, columnDefine: ColumnDefine) => {
-  const descriptor = Object.getOwnPropertyDescriptor(target, name);
-
-  // columnDefine.isPrimary   = columnDefine.isPrimary || false;
-  // columnDefine.columnName  = columnDefine.columnName || snakeCase(name);
-  // columnDefine.serializeAs = columnDefine.serializeAs != null ?
-  //   columnDefine.serializeAs : snakeCase(name);
-
-  const hasGetter = !!(descriptor && descriptor.get);
-
-  if (!hasGetter) {
-    const propertyDescriptor: PropertyDescriptor = {
-      enumerable  : false,
-      configurable: true,
-      get         : function () {
-        return (this as Model).getAttribute(name);
-      },
-      set         : function () {
-        throw new Error('the relation field is readonly');
-      }
-    };
-    Object.defineProperty(target, name, propertyDescriptor);
-  }
-};
 
 export interface BelongsToManyColumnDecorator {
 
@@ -111,7 +86,7 @@ export const BelongsToManyColumn: BelongsToManyColumnDecorator = makePropDecorat
   }),
   undefined,
   (target: any, name: string, columnDefine) => {
-    _additionalProcessing(target, name, columnDefine);
+    _additionalProcessingGetter(target, name, columnDefine);
   }
 );
 

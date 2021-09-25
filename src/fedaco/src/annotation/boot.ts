@@ -7,4 +7,4 @@
 import { makeDecorator } from '@gradii/annotation';
 
 
-export const Boot = makeDecorator('fedaco boot', (args) => ({...args}));
+export const Boot = makeDecorator('Fedaco:boot', (args) => ({...args}));

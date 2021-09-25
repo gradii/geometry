@@ -17,7 +17,7 @@ import {
 } from '../../annotation/column';
 import { HasManyColumn } from '../../annotation/has-many.relation';
 import { HasOneColumn } from '../../annotation/has-one.relation';
-import { RelationAnnotation } from '../../annotation/relation';
+import { RelationAnnotation } from '../../annotation/relation-column';
 import { Scope } from '../../annotation/scope';
 import { wrap } from '../../helper/arr';
 import { Constructor } from '../../helper/constructor';

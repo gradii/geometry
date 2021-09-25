@@ -3,10 +3,10 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
-import { BelongsToManyColumn } from '../../src/annotation/belongs-to-many.relation';
-import { BelongsToColumn } from '../../src/annotation/belongs-to.relation';
-import { HasManyColumn } from '../../src/annotation/has-many.relation';
-import { HasOneColumn } from '../../src/annotation/has-one.relation';
+import { BelongsToManyColumn } from '../../src/annotation/belongs-to-many.relation-column';
+import { BelongsToColumn } from '../../src/annotation/belongs-to.relation-column';
+import { HasManyColumn } from '../../src/annotation/has-many.relation-column';
+import { HasOneColumn } from '../../src/annotation/has-one.relation-column';
 import { Model } from '../../src/fedaco/model';
 
 export class FedacoBuilderTestModelFarRelatedStub extends Model {
