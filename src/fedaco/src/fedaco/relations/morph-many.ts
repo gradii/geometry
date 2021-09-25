@@ -10,8 +10,10 @@ import { MorphOneOrMany } from './morph-one-or-many';
 
 export class MorphMany extends MorphOneOrMany {
   /*Get the results of the relationship.*/
-  public getResults() {
-    return !isBlank(this.getParentKey()) ? this._query.get() : this._related.newCollection();
+  public async getResults() {
+    return !isBlank(this.getParentKey()) ?
+      await this._query.get() :
+      this._related.newCollection();
   }
 
   /*Initialize the relation on a set of models.*/

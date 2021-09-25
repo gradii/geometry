@@ -5,10 +5,8 @@
  */
 
 import { makePropDecorator } from '@gradii/annotation';
-import { isBlank } from '@gradii/check-type';
 import { Model } from '../fedaco/model';
 import { MorphTo } from '../fedaco/relations/morph-to';
-import { snakeCase } from '../helper/str';
 import { _additionalProcessingGetter } from './additional-processing';
 import { FedacoDecorator } from './annotation.interface';
 import { RelationType } from './enum-relation';
@@ -20,8 +18,7 @@ export function morphEagerTo(m: Model, name: string, type: string, id: string, o
 }
 
 /*Define a polymorphic, inverse one-to-one or many relationship.*/
-export function morphInstanceTo(m: Model, target: typeof Model, name: string, type: string,
-                                id: string, ownerKey: string) {
+export function morphInstanceTo(m: Model, target: typeof Model, name: string, type: string, id: string, ownerKey: string) {
   const instance = m.newRelatedInstance(target);
   return new MorphTo(instance.newQuery(), m, id, ownerKey ?? instance.getKeyName(), type, name);
 }
@@ -37,25 +34,15 @@ export interface MorphToRelationAnnotation extends RelationColumnAnnotation {
   ownerKey?: string;
 }
 
-export const MorphToColumn: FedacoDecorator<MorphToRelationAnnotation> = makePropDecorator(
+
+export const MorphEagerToColumn: FedacoDecorator<MorphToRelationAnnotation> = makePropDecorator(
   'Fedaco:MorphToColumn',
   (p: MorphToRelationAnnotation) => ({
     isRelation  : true,
     type        : RelationType.MorphTo,
     _getRelation: function (m: Model, relation: string) {
-      // If no name is provided, we will use the backtrace to get the function name
-      // since that is most likely the name of the polymorphic interface. We can
-      // use that to get both the class and foreign key that will be utilized.
-      const name       = p.name || relation;
-      const [type, id] = this.getMorphs(snakeCase(name), p.type, p.id);
-
-      // If the type value is null it is probably safe to assume we're eager loading
-      // the relationship. In this case we'll just pass in a dummy query where we
-      // need to remove any eager loads that may already be defined on a model.
-      const clazz = p.morphTypeMap[m._getAttributeFromArray(type)];
-      const r     = isBlank(clazz) ?
-        morphEagerTo(m, name, type, id, p.ownerKey) :
-        morphInstanceTo(m, clazz, name, type, id, p.ownerKey);
+      const name = p.name || relation;
+      const r = new MorphTo(this.newQuery().setEagerLoads([]), m, p.id, p.ownerKey, p.type, name);
 
       if (p.onQuery) {
         p.onQuery(r);

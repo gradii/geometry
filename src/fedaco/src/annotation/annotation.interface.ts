@@ -10,7 +10,7 @@ export interface FedacoAnnotation {
 
 export interface FedacoDecorator<T extends FedacoAnnotation> {
 
-  (obj?: T): any;
+  (obj?: Omit<T, '_onRelation'>): any;
 
   isTypeOf(obj: any): obj is T;
 

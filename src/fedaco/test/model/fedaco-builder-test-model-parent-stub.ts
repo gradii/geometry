@@ -9,6 +9,7 @@ import { BelongsToColumn } from '../../src/annotation/belongs-to.relation-column
 import { HasManyColumn } from '../../src/annotation/has-many.relation-column';
 import { Model } from '../../src/fedaco/model';
 import { BelongsTo } from '../../src/fedaco/relations/belongs-to';
+import { Relation } from '../../src/fedaco/relations/relation';
 import { forwardRef } from '../../src/query-builder/forward-ref';
 
 export class FedacoBuilderTestModelCloseRelatedStub extends Model {
@@ -46,7 +47,7 @@ export class FedacoBuilderTestModelParentStub extends Model {
   @BelongsToColumn({
     related   : FedacoBuilderTestModelCloseRelatedStub,
     foreignKey: 'foo_id',
-    onQuery   : (r: BelongsTo) => {
+    onQuery   : (r: Relation) => {
       r.where('active', true);
     }
   })

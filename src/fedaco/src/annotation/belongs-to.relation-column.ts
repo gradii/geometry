@@ -12,26 +12,15 @@ import { snakeCase } from '../helper/str';
 import { ForwardRefFn, resolveForwardRef } from '../query-builder/forward-ref';
 import { _additionalProcessingGetter } from './additional-processing';
 import { FedacoDecorator } from './annotation.interface';
-import { ColumnAnnotation } from './column';
 import { RelationType } from './enum-relation';
-import { FedacoRelationColumn } from './relation-column';
+import { FedacoRelationColumn, RelationColumnAnnotation } from './relation-column';
 
-
-export interface BelongsToRelationAnnotation extends ColumnAnnotation {
-  name?: string;
-  isRelation?: boolean;
-  type?: RelationType;
-
+export interface BelongsToRelationAnnotation extends RelationColumnAnnotation {
   related?: typeof Model | ForwardRefFn;
   foreignKey?: string;
   ownerKey?: string;
   relation?: string;
-
-  onQuery?: (q: BelongsTo) => void;
-
-  _getRelation?: (m: Model) => any;
 }
-
 
 export const BelongsToColumn: FedacoDecorator<BelongsToRelationAnnotation> = makePropDecorator(
   'Fedaco:BelongsToColumn',

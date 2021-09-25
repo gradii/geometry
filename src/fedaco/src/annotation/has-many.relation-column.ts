@@ -10,24 +10,14 @@ import { HasMany } from '../fedaco/relations/has-many';
 import { ForwardRefFn, resolveForwardRef } from '../query-builder/forward-ref';
 import { _additionalProcessingGetter } from './additional-processing';
 import { FedacoDecorator } from './annotation.interface';
-import { ColumnAnnotation } from './column';
 import { RelationType } from './enum-relation';
-import { FedacoRelationColumn } from './relation-column';
+import { FedacoRelationColumn, RelationColumnAnnotation } from './relation-column';
 
-export interface HasManyRelationAnnotation extends ColumnAnnotation {
-  name?: string;
-  isRelation?: boolean;
-  type?: RelationType;
-
+export interface HasManyRelationAnnotation extends RelationColumnAnnotation {
   related?: typeof Model | ForwardRefFn;
   foreignKey?: string;
   localKey?: string;
-
-  onQuery?: (q: HasMany) => void;
-
-  _getRelation?: (m: Model) => any;
 }
-
 
 export const HasManyColumn: FedacoDecorator<HasManyRelationAnnotation> = makePropDecorator(
   'Fedaco:HasManyColumn',

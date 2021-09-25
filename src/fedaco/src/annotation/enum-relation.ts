@@ -8,6 +8,11 @@
 export const enum RelationType {
   HasOne  = 'HasOne',
   HasMany = 'HasMany',
+  HasManyThrough = 'HasManyThrough',
   BelongsTo = 'BelongsTo',
   BelongsToMany = 'BelongsToMany',
+  MorphTo = 'MorphTo',
+  MorphMany = 'MorphMany',
+  MorphToMany = 'MorphToMany',
+  MorphedByMany = 'MorphedByMany'
 }

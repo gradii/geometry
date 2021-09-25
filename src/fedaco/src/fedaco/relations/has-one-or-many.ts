@@ -12,6 +12,9 @@ import { Model } from '../model';
 import { mixinInteractsWithDictionary } from './concerns/interacts-with-dictionary';
 import { Relation } from './relation';
 
+export interface HasOneOrMany extends Relation {
+}
+
 export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
   /*The foreign key of the parent model.*/
   protected foreignKey: string;

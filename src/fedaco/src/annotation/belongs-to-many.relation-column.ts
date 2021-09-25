@@ -4,30 +4,18 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { makePropDecorator, TypeDecorator } from '@gradii/annotation';
+import { makePropDecorator } from '@gradii/annotation';
 import { isBlank } from '@gradii/check-type';
 import { Model } from '../fedaco/model';
 import { BelongsToMany } from '../fedaco/relations/belongs-to-many';
 import { _additionalProcessingGetter } from './additional-processing';
+import { FedacoDecorator } from './annotation.interface';
 import { ColumnAnnotation } from './column';
 import { RelationType } from './enum-relation';
+import { RelationColumnAnnotation } from './relation-column';
 
 
-export interface RelationDecorator {
-
-  (obj?: BelongsToManyRelationAnnotation): TypeDecorator;
-
-  /**
-   * See the `Pipe` decorator.
-   */
-  new(obj?: BelongsToManyRelationAnnotation): BelongsToManyRelationAnnotation;
-}
-
-export interface BelongsToManyRelationAnnotation extends ColumnAnnotation {
-  name?: string;
-  isRelation?: boolean;
-  type?: RelationType;
-
+export interface BelongsToManyRelationAnnotation extends RelationColumnAnnotation {
   related: typeof Model;
   table?: string;
   foreignPivotKey?: string;
@@ -35,27 +23,9 @@ export interface BelongsToManyRelationAnnotation extends ColumnAnnotation {
   parentKey?: string;
   relatedKey?: string;
   relation?: string;
-
-  onQuery?: (q: BelongsToMany) => void;
-
-  _getRelation?: (m: Model) => any;
 }
 
-export interface BelongsToManyColumnDecorator {
-
-  (obj: BelongsToManyRelationAnnotation): any;
-
-  isTypeOf(obj: any): obj is BelongsToManyRelationAnnotation;
-
-  metadataName: string;
-
-  /**
-   * See the `Pipe` decorator.
-   */
-  new(obj?: BelongsToManyRelationAnnotation): BelongsToManyRelationAnnotation;
-}
-
-export const BelongsToManyColumn: BelongsToManyColumnDecorator = makePropDecorator(
+export const BelongsToManyColumn: FedacoDecorator<BelongsToManyRelationAnnotation> = makePropDecorator(
   'Fedaco:BelongsToMany',
   (p: BelongsToManyRelationAnnotation) => ({
     isRelation  : true,

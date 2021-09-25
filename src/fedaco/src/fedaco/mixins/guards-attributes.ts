@@ -7,14 +7,7 @@
 import { reflector } from '@gradii/annotation';
 import { isArray } from '@gradii/check-type';
 import { findLast } from 'ramda';
-import { BelongsToManyColumn } from '../../annotation/belongs-to-many.relation';
-import { BelongsToColumn } from '../../annotation/belongs-to.relation';
-import {
-  Column, ColumnDefine, DateCastableColumn, DateColumn, EncryptedCastableColumn
-} from '../../annotation/column';
-import { HasManyColumn } from '../../annotation/has-many.relation';
-import { HasOneColumn } from '../../annotation/has-one.relation';
-import { Scope } from '../../annotation/scope';
+import { ColumnAnnotation, FedacoColumn } from '../../annotation/column';
 import { Constructor } from '../../helper/constructor';
 
 function isAnyGuarded(guarded: string[]) {
@@ -150,16 +143,8 @@ export function mixinGuardsAttributes<T extends Constructor<any>, M>(base: T): G
         for (const x of Object.keys(meta)) {
           if (meta[x] && isArray(meta[x])) {
             const currentMeta = findLast(it => {
-              return Column.isTypeOf(it) ||
-                DateColumn.isTypeOf(it) ||
-                DateCastableColumn.isTypeOf(it) ||
-                EncryptedCastableColumn.isTypeOf(it) ||
-                Scope.isTypeOf(it) ||
-                BelongsToColumn.isTypeOf(it) ||
-                BelongsToManyColumn.isTypeOf(it) ||
-                HasManyColumn.isTypeOf(it) ||
-                HasOneColumn.isTypeOf(it);
-            }, meta[x]) as ColumnDefine;
+              return FedacoColumn.isTypeMe(it);
+            }, meta[x]) as ColumnAnnotation;
 
             if (currentMeta) {
               this._guardableColumns.push(x);
