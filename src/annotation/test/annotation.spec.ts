@@ -7,9 +7,10 @@ describe('test annotation', () => {
   });
 
   it('child should be parent base type', () => {
-    const meta  = reflector.propMetadata(AnnotationTestStub);
-    const base  = meta['base'][0];
-    const child = meta['child'][0];
+    const meta       = reflector.propMetadata(AnnotationTestStub);
+    const base       = meta['base'][0];
+    const child      = meta['child'][0];
+    const childClazz = meta['childClazz'][0];
 
     expect(base).toBeDefined();
     expect(child).toBeDefined();
@@ -24,17 +25,24 @@ describe('test annotation', () => {
     expect(Child.isTypeOf(child)).toBeTruthy();
 
     expect(Base.isTypeOf(child)).toBeTruthy();
+
+    expect(childClazz instanceof BaseClazz).toBeTruthy();
   });
 
 });
 
+class BaseClazz {
+}
 
 const Base = makePropDecorator('base', (...args) => ({...args}));
 
 const Child = makePropDecorator('child', (...args) => ({...args}), Base);
 
+const ChildExtendClazz = makePropDecorator('child', (...args) => ({...args}), BaseClazz);
+
 
 export class AnnotationTestStub {
   @Base() base: any;
   @Child() child: any;
+  @ChildExtendClazz() childClazz: any;
 }
