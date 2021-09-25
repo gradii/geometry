@@ -9,7 +9,7 @@ import { ConnectionInterface } from '../../query-builder/connection-interface';
 import { Model } from '../model';
 
 export interface ForwardCallToQueryBuilder {
-  pluck(...args: any[]): this;
+  pluck(...args: any[]): Promise<any[]>;
 
   stripTableForPluck(...args: any[]): this;
 

@@ -430,10 +430,10 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Get an array with the values of a given column.*/
-  public pluck(column: string, key: string | null = null) {
-    const results = this.toBase().pluck(column, key);
+  public async pluck(column: string/*, key: string | null = null*/) {
+    const results = await this.toBase().pluck(column/*, key*/);
     if (
-      !this._model.hasGetMutator(column) &&
+      // !this._model.hasGetMutator(column) &&
       !this._model.hasCast(column) &&
       !this._model.getDates().includes(column)
     ) {

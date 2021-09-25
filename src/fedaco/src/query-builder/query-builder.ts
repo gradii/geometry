@@ -8,6 +8,7 @@ import {
   isAnyEmpty, isArray, isBlank, isBoolean, isFunction, isNumber, isString
 } from '@gradii/check-type';
 import { FedacoBuilder } from '../fedaco/fedaco-builder';
+import { Relation } from '../fedaco/relations/relation';
 import { ColumnReferenceExpression } from '../query/ast/column-reference-expression';
 import { ComparisonPredicateExpression } from '../query/ast/expression/comparison-predicate-expression';
 import { RawExpression } from '../query/ast/expression/raw-expression';
@@ -23,7 +24,6 @@ import { Builder } from './builder';
 import { ConnectionInterface } from './connection-interface';
 import { GrammarInterface } from './grammar.interface';
 import { ProcessorInterface } from './processor-interface';
-import { Relation } from '../fedaco/relations/relation';
 
 
 export enum BindingType {
@@ -212,8 +212,8 @@ export class QueryBuilder extends Builder {
 
 
   /*Get an array with the values of a given column.*/
-  public async pluck(column: string, key: string | null = null) {
-    const queryResult = await this.onceWithColumns(isBlank(key) ? [column] : [column, key],
+  public async pluck(column: string/*, key: string | null = null*/) {
+    const queryResult = await this.onceWithColumns([column] /*isBlank(key) ? [column] : [column, key]*/,
       async () => {
         return this._processor.processSelect(this, await this.runSelect());
       });
@@ -221,11 +221,11 @@ export class QueryBuilder extends Builder {
     //   return collect();
     // }
     column = this.stripTableForPluck(column);
-    key    = this.stripTableForPluck(key);
+    // key    = this.stripTableForPluck(key);
     return this.pluckFromColumn(
       queryResult,
       column,
-      key
+      // key
     );
   }
 
@@ -247,19 +247,19 @@ export class QueryBuilder extends Builder {
   }
 
   /*Retrieve column values from rows represented as objects.*/
-  protected pluckFromColumn(queryResult: any[], column: string, key: string) {
-    let results;
-    if (isBlank(key)) {
-      results = [];
-      for (const row of queryResult) {
-        results.push(row[column]);
-      }
-    } else {
-      results = {};
-      for (const row of queryResult) {
-        results[row[key]] = row[column];
-      }
+  protected pluckFromColumn(queryResult: any[], column: string) {
+    let results = [];
+    // if (isBlank(key)) {
+    //   results = [];
+    for (const row of queryResult) {
+      results.push(row[column]);
     }
+    // } else {
+    //   results = {};
+    //   for (const row of queryResult) {
+    //     results[row[key]] = row[column];
+    //   }
+    // }
     return results;
   }
 

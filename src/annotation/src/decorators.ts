@@ -159,7 +159,8 @@ export function makePropDecorator(
       PropDecoratorFactory.prototype = Object.create(parentClass.prototype);
     }
 
-    PropDecoratorFactory.isTypeOf = (obj: any) => obj && obj.__metadataName === name;
+    PropDecoratorFactory.isTypeOf = (obj: any) => obj && (obj.__metadataName === name || obj instanceof PropDecoratorFactory);
+
     PropDecoratorFactory.prototype.__metadataName = name;
     (<any>PropDecoratorFactory).annotationCls = PropDecoratorFactory;
     return PropDecoratorFactory;

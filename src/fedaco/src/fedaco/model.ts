@@ -456,8 +456,8 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Create a new model instance that is existing.*/
-  public newFromBuilder(attributes: any[] = [], connection: string | null = null) {
-    const model = this.newInstance([], true);
+  public newFromBuilder(attributes: any = {}, connection: string | null = null) {
+    const model = this.newInstance({}, true);
     model.setRawAttributes(/*cast type array*/ attributes, true);
     model.setConnection(connection || this.getConnectionName());
     // todo fixme
@@ -874,7 +874,7 @@ export class Model extends mixinHasAttributes(
 
   /*Convert the model instance to an array.*/
   public toArray() {
-    return [...this.attributesToArray(), ...this.relationsToArray()];
+    return {...this.attributesToArray(), ...this.relationsToArray()};
   }
 
   /*Convert the model instance to JSON.*/
@@ -943,7 +943,7 @@ export class Model extends mixinHasAttributes(
   /*Get the database connection for the model.*/
   public getConnection() {
     return (this.constructor as any).resolveConnection(
-      this.constructor, this.getConnectionName()
+      this.getConnectionName()
     );
   }
 

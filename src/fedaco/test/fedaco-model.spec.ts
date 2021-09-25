@@ -1,6 +1,9 @@
-import { isAnyEmpty, isString } from '@gradii/check-type';
+import { isAnyEmpty, isArray, isString } from '@gradii/check-type';
 import { createHash } from 'crypto';
+import { format } from 'date-fns';
+import { pluck } from 'ramda';
 import { Column, DateColumn } from '../src/annotation/column';
+import { RelationColumn } from '../src/annotation/relation';
 import { DatabaseManager } from '../src/database-manager';
 import { FedacoBuilder } from '../src/fedaco/fedaco-builder';
 import { Dispatcher } from '../src/fedaco/mixins/has-events';
@@ -10,8 +13,6 @@ import { ConnectionInterface } from '../src/query-builder/connection-interface';
 import { MysqlGrammar } from '../src/query-builder/grammar/mysql-grammar';
 import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
-import { format } from 'date-fns';
-import { RelationColumn } from '../src/annotation/relation';
 
 class Conn implements ConnectionInterface {
   getQueryGrammar(): any {
@@ -105,7 +106,7 @@ describe('test database eloquent model', () => {
 
   it('attribute manipulation', () => {
     const model = new FedacoModelStub();
-    model.name = 'foo';
+    model.name  = 'foo';
     expect(model.name).toBe('foo');
     expect(model.name).not.toBeUndefined();
     model.unsetAttribute('name');
@@ -140,7 +141,7 @@ describe('test database eloquent model', () => {
   });
 
   it('int and null comparison when dirty', () => {
-    const model = new FedacoModelCastingStub();
+    const model        = new FedacoModelCastingStub();
     model.intAttribute = null;
     model.syncOriginal();
     expect(model.isDirty('intAttribute')).toBeFalsy();
@@ -151,7 +152,7 @@ describe('test database eloquent model', () => {
   });
 
   it('float and null comparison when dirty', () => {
-    const model = new FedacoModelCastingStub();
+    const model          = new FedacoModelCastingStub();
     model.floatAttribute = null;
     model.syncOriginal();
     expect(model.isDirty('floatAttribute')).toBeFalsy();
@@ -164,16 +165,16 @@ describe('test database eloquent model', () => {
   it('dirty on cast or date attributes', () => {
     const model = new FedacoModelCastingStub();
     model.setDateFormat('yyyy-MM-dd HH:mm:ss');
-    model.boolAttribute = 1;
-    model.foo = 1;
-    model.bar = '2017-03-18';
-    model.dateAttribute = '2017-03-18';
+    model.boolAttribute     = 1;
+    model.foo               = 1;
+    model.bar               = '2017-03-18';
+    model.dateAttribute     = '2017-03-18';
     model.datetimeAttribute = '2017-03-23 22:17:00';
     model.syncOriginal();
-    model.boolAttribute = true;
-    model.foo = true;
-    model.bar = '2017-03-18 00:00:00';
-    model.dateAttribute = '2017-03-18 00:00:00';
+    model.boolAttribute     = true;
+    model.foo               = true;
+    model.bar               = '2017-03-18 00:00:00';
+    model.dateAttribute     = '2017-03-18 00:00:00';
     model.datetimeAttribute = null;
     expect(model.isDirty()).toBeTruthy();
     expect(model.isDirty('foo')).toBeTruthy();
@@ -186,11 +187,11 @@ describe('test database eloquent model', () => {
   it('dirty on casted objects', () => {
     const model = new FedacoModelCastingStub();
     model.setRawAttributes({
-      'objectAttribute': '["one", "two", "three"]',
+      'objectAttribute'    : '["one", "two", "three"]',
       'collectionAttribute': '["one", "two", "three"]'
     });
     model.syncOriginal();
-    model.objectAttribute = ['one', 'two', 'three'];
+    model.objectAttribute     = ['one', 'two', 'three'];
     model.collectionAttribute = ['one', 'two', 'three'];
     expect(model.isDirty()).toBeFalsy();
     expect(model.isDirty('objectAttribute')).toBeFalsy();
@@ -230,8 +231,8 @@ describe('test database eloquent model', () => {
   });
 
   it('calculated attributes', () => {
-    const model = new FedacoModelStub();
-    model.password = 'secret';
+    const model      = new FedacoModelStub();
+    model.password   = 'secret';
     const attributes = model.getAttributes();
     expect('password' in attributes).toBeFalsy();
     expect(model.password).toBe('******');
@@ -257,25 +258,25 @@ describe('test database eloquent model', () => {
 //   });
 
   it('only', () => {
-    const model = new FedacoModelStub();
+    const model      = new FedacoModelStub();
     model.first_name = 'taylor';
-    model.last_name = 'otwell';
-    model.project = 'laravel';
+    model.last_name  = 'otwell';
+    model.project    = 'laravel';
     expect(model.only('project')).toEqual({
       'project': 'laravel'
     });
     expect(model.only('first_name', 'last_name')).toEqual({
       'first_name': 'taylor',
-      'last_name': 'otwell'
+      'last_name' : 'otwell'
     });
     expect(model.only(['first_name', 'last_name'])).toEqual({
       'first_name': 'taylor',
-      'last_name': 'otwell'
+      'last_name' : 'otwell'
     });
   });
 
   it('new instance returns new instance with attributes set', () => {
-    const model = new FedacoModelStub();
+    const model                     = new FedacoModelStub();
     const instance: FedacoModelStub = model.newInstance({
       'name': 'general name'
     });
@@ -302,7 +303,7 @@ describe('test database eloquent model', () => {
 
   it('create method saves new model', () => {
     global['__eloquent.saved'] = false;
-    const model = new FedacoModelSaveStub().newQuery().create({
+    const model                = new FedacoModelSaveStub().newQuery().create({
       'name': 'taylor'
     });
     expect(global['__eloquent.saved']).toBeTruthy();
@@ -311,7 +312,7 @@ describe('test database eloquent model', () => {
 
   it('make method does not save new model', () => {
     global['__eloquent.saved'] = false;
-    const model = new FedacoModelSaveStub().newQuery().make({
+    const model                = new FedacoModelSaveStub().newQuery().make({
       'name': 'taylor'
     });
     expect(global['__eloquent.saved']).toBeFalsy();
@@ -320,7 +321,7 @@ describe('test database eloquent model', () => {
 
   it('force create method saves new model with guarded attributes', () => {
     global['__eloquent.saved'] = false;
-    const model = new FedacoModelSaveStub().newQuery().forceCreate({
+    const model                = new FedacoModelSaveStub().newQuery().forceCreate({
       'id': 21
     });
     expect(global['__eloquent.saved']).toBeTruthy();
@@ -352,10 +353,10 @@ describe('test database eloquent model', () => {
   });
 
   it('eager loading with columns', () => {
-    const model = new FedacoModelWithoutRelationStub();
+    const model    = new FedacoModelWithoutRelationStub();
     const instance = model.newInstance().newQuery().with('foo:bar,baz', 'hadi');
-    const builder = getBuilder();
-    const spy1 = jest.spyOn(builder, 'select');
+    const builder  = getBuilder();
+    const spy1     = jest.spyOn(builder, 'select');
     expect(instance.getEagerLoads()['hadi']).not.toBeNull();
     expect(instance.getEagerLoads()['foo']).not.toBeNull();
     const closure = instance.getEagerLoads()['foo'];
@@ -397,10 +398,10 @@ describe('test database eloquent model', () => {
     // @ts-ignore
     const spy6 = jest.spyOn(events, 'dispatch').mockReturnValue(true);
 
-    model.id = 1;
+    model.id  = 1;
     model.foo = 'bar';
     model.syncOriginal();
-    model.name = 'taylor';
+    model.name   = 'taylor';
     model.exists = true;
 
     const result = await model.save();
@@ -448,7 +449,7 @@ describe('test database eloquent model', () => {
     model.syncOriginal();
     model.created_at = 'foo';
     model.updated_at = 'bar';
-    model.exists = true;
+    model.exists     = true;
 
     const result = await model.save();
 
@@ -523,7 +524,7 @@ describe('test database eloquent model', () => {
     const spy5 = jest.spyOn(events, 'dispatch');
 
     model.exists = true;
-    model.foo = 'bar';
+    model.foo    = 'bar';
     const result = await model.save();
 
     expect(result).toBeFalsy();
@@ -576,12 +577,12 @@ describe('test database eloquent model', () => {
     const model = new FedacoModelEventObjectStub();
     const query = getBuilder();
 
-    const spy1 = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
+    const spy1  = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
     const spy11 = jest.spyOn(model, 'updateTimestamps').mockReturnValue(true);
     const spy12 = jest.spyOn(model, 'fireModelEvent');
-    const spy2 = jest.spyOn(query, 'where');
+    const spy2  = jest.spyOn(query, 'where');
     // @ts-ignore
-    const spy3 = jest.spyOn(query, 'update').mockReturnValue(1);
+    const spy3  = jest.spyOn(query, 'update').mockReturnValue(1);
 
     // const events = new Dispatcher();
     const events: Dispatcher = {
@@ -599,9 +600,9 @@ describe('test database eloquent model', () => {
     const spy5 = jest.spyOn(events, 'dispatch');
 
     model.timestamps = false;
-    model.id = 1;
+    model.id         = 1;
     model.syncOriginal();
-    model.name = 'taylor';
+    model.name   = 'taylor';
     model.exists = true;
     const result = await model.save();
 
@@ -621,12 +622,12 @@ describe('test database eloquent model', () => {
     const model = new FedacoModelStub();
     const query = getBuilder();
 
-    const spy1 = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
+    const spy1  = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
     const spy11 = jest.spyOn(model, 'updateTimestamps');/*.mockReturnValue(true);*/
     const spy12 = jest.spyOn(model, 'fireModelEvent');
-    const spy2 = jest.spyOn(query, 'where');
+    const spy2  = jest.spyOn(query, 'where');
     // @ts-ignore
-    const spy3 = jest.spyOn(query, 'update').mockReturnValue(1);
+    const spy3  = jest.spyOn(query, 'update').mockReturnValue(1);
 
     // const events = new Dispatcher();
     const events: Dispatcher = {
@@ -646,8 +647,8 @@ describe('test database eloquent model', () => {
 
     model.id = 1;
     model.syncOriginal();
-    model.id = 2;
-    model.foo = 'bar';
+    model.id     = 2;
+    model.foo    = 'bar';
     model.exists = true;
     const result = await model.save();
 
@@ -657,7 +658,7 @@ describe('test database eloquent model', () => {
     // expect(spy12).toReturnWith(true);
     expect(spy2).toBeCalledWith('id', '=', 1);
     expect(spy3).toBeCalledWith({
-      'id': 2,
+      'id' : 2,
       'foo': 'bar'
     });
     expect(spy3).toReturnWith(1);
@@ -679,7 +680,7 @@ describe('test database eloquent model', () => {
 
   it('timestamps are returned as objects', () => {
     const model = new FedacoDateModelStub();
-    const spy = jest.spyOn(model, 'getDateFormat').mockReturnValue('yyyy-MM-dd');
+    const spy   = jest.spyOn(model, 'getDateFormat').mockReturnValue('yyyy-MM-dd');
     model.setRawAttributes({
       'created_at': '2012-12-04',
       'updated_at': '2012-12-05'
@@ -691,7 +692,7 @@ describe('test database eloquent model', () => {
 
   it('timestamps are returned as objects from plain dates and timestamps', () => {
     const model = new FedacoDateModelStub();
-    const spy = jest.spyOn(model, 'getDateFormat').mockReturnValue('yyyy-MM-dd HH:mm:ss');
+    const spy   = jest.spyOn(model, 'getDateFormat').mockReturnValue('yyyy-MM-dd HH:mm:ss');
     model.setRawAttributes({
       'created_at': '2012-12-04',
       'updated_at': new Date()
@@ -706,7 +707,7 @@ describe('test database eloquent model', () => {
       'created_at': new Date(),
       'updated_at': new Date(),
     };
-    const model = new FedacoDateModelStub();
+    const model      = new FedacoDateModelStub();
     // const resolver = new DatabaseManager();
     // Model.setConnectionResolver(new DatabaseManager());
     // resolver.shouldReceive('connection').andReturn(mockConnection = m.mock(stdClass));
@@ -733,7 +734,7 @@ describe('test database eloquent model', () => {
       'created_at': new Date(),
       'updated_at': new Date(),
     };
-    const model = new FedacoDateModelStub();
+    const model      = new FedacoDateModelStub();
     // const resolver = new DatabaseManager();
     // Model.setConnectionResolver(new DatabaseManager());
     // resolver.shouldReceive('connection').andReturn(mockConnection = m.mock(stdClass));
@@ -749,31 +750,31 @@ describe('test database eloquent model', () => {
     const spy2 = jest.spyOn(conn, 'getQueryGrammar').mockReturnValue(conn);
     const spy3 = jest.spyOn(conn, 'getDateFormat').mockReturnValue('yyyy-MM-dd HH:mm:ss');
 
-    const instance = model.newInstance(timestamps);
+    const instance      = model.newInstance(timestamps);
     instance.created_at = null;
     expect(instance.created_at).toBeNull();
 
   });
 
   it('timestamps are created from strings and integers', () => {
-    let model = new FedacoDateModelStub();
+    let model        = new FedacoDateModelStub();
     model.created_at = '2013-05-22 00:00:00';
     expect(model.created_at).toBeInstanceOf(Date);
-    model = new FedacoDateModelStub();
+    model            = new FedacoDateModelStub();
     model.created_at = new Date();
     expect(model.created_at).toBeInstanceOf(Date);
-    model = new FedacoDateModelStub();
+    model            = new FedacoDateModelStub();
     model.created_at = 0;
     expect(model.created_at).toBeInstanceOf(Date);
-    model = new FedacoDateModelStub();
+    model            = new FedacoDateModelStub();
     model.created_at = '2012-01-01';
     expect(model.created_at).toBeInstanceOf(Date);
   });
 
   it('from date time', () => {
-    let value
+    let value;
     const model = new FedacoModelStub();
-    value = new Date('2015-04-17 22:59:01');
+    value       = new Date('2015-04-17 22:59:01');
     expect(model.fromDateTime(value)).toBe('2015-04-17 22:59:01');
     value = new Date('2015-04-17 22:59:01');
     expect(value).toBeInstanceOf(Date);
@@ -790,7 +791,8 @@ describe('test database eloquent model', () => {
     value = '2015-4-17';
     expect(model.fromDateTime(value)).toBe('2015-04-17 00:00:00');
     value = 1429311541;
-    expect(model.fromDateTime(value)).toBe(format(new Date('2015-04-17T22:59:01Z'), 'yyyy-MM-dd HH:mm:ss'));
+    expect(model.fromDateTime(value)).toBe(
+      format(new Date('2015-04-17T22:59:01Z'), 'yyyy-MM-dd HH:mm:ss'));
     expect(model.fromDateTime(null)).toBeNull();
   });
 
@@ -799,18 +801,18 @@ describe('test database eloquent model', () => {
     const model = new FedacoModelStub();
     const query = getBuilder();
 
-    const spy1 = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
+    const spy1  = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
     const spy11 = jest.spyOn(model, 'updateTimestamps');/*.mockReturnValue(true);*/
     const spy12 = jest.spyOn(model, 'fireModelEvent');
     const spy13 = jest.spyOn(model, 'refresh');/*.mockReturnValue(true);*/
-    const spy2 = jest.spyOn(query, 'where');
+    const spy2  = jest.spyOn(query, 'where');
     const spy22 = jest.spyOn(query, 'getConnection');
     // @ts-ignore
-    const spy3 = jest.spyOn(query, 'insertGetId').mockImplementation((attributes, keyName) => {
+    const spy3  = jest.spyOn(query, 'insertGetId').mockImplementation((attributes, keyName) => {
       expect(attributes).toEqual({
         'name': 'taylor'
-      })
-      expect(keyName).toBe('id')
+      });
+      expect(keyName).toBe('id');
       return 1;
     });
 
@@ -829,7 +831,7 @@ describe('test database eloquent model', () => {
     const spy4 = jest.spyOn(events, 'until');
     const spy5 = jest.spyOn(events, 'dispatch');
 
-    model.name = 'taylor';
+    model.name   = 'taylor';
     model.exists = false;
 
     const result = await model.save();
@@ -844,7 +846,7 @@ describe('test database eloquent model', () => {
     // expect(spy3).toBeCalledWith({
     //   'name': 'taylor'
     // }, 'id');
-    expect(spy22).toBeCalled()
+    expect(spy22).toBeCalled();
     expect(spy3).toReturnWith(1);
 
     expect(spy4.mock.calls).toEqual(
@@ -871,14 +873,14 @@ describe('test database eloquent model', () => {
 
     model.setIncrementing(false);
 
-    const spy1 = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
+    const spy1  = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
     const spy11 = jest.spyOn(model, 'updateTimestamps');/*.mockReturnValue(true);*/
     const spy12 = jest.spyOn(model, 'fireModelEvent');
     const spy13 = jest.spyOn(model, 'refresh');/*.mockReturnValue(true);*/
-    const spy2 = jest.spyOn(query, 'where');
+    const spy2  = jest.spyOn(query, 'where');
     const spy22 = jest.spyOn(query, 'getConnection');
     // @ts-ignore
-    const spy3 = jest.spyOn(query, 'insert').mockReturnValue(1);
+    const spy3  = jest.spyOn(query, 'insert').mockReturnValue(1);
 
     // const events = new Dispatcher();
     const events: Dispatcher = {
@@ -895,7 +897,7 @@ describe('test database eloquent model', () => {
     const spy4 = jest.spyOn(events, 'until');
     const spy5 = jest.spyOn(events, 'dispatch');
 
-    model.name = 'taylor';
+    model.name   = 'taylor';
     model.exists = false;
     const result = await model.save();
 
@@ -929,7 +931,7 @@ describe('test database eloquent model', () => {
     const model = new FedacoModelStub();
     const query = getBuilder();
 
-    const spy1 = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
+    const spy1  = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
     const spy11 = jest.spyOn(model, 'updateTimestamps');/*.mockReturnValue(true);*/
     const spy22 = jest.spyOn(query, 'getConnection');
 
@@ -960,7 +962,7 @@ describe('test database eloquent model', () => {
       ]
     );
 
-    expect(spy5).not.toBeCalled()
+    expect(spy5).not.toBeCalled();
   });
 
   it('delete properly deletes model', async () => {
@@ -971,8 +973,8 @@ describe('test database eloquent model', () => {
     // const spy11 = jest.spyOn(model, 'updateTimestamps');/*.mockReturnValue(true);*/
     // const spy12 = jest.spyOn(model, 'getConnection');
     const spy13 = jest.spyOn(model, 'touchOwners').mockReturnValue(true);
-    const spy2 = jest.spyOn(query, 'where');
-    const spy4 = jest.spyOn(query, 'delete').mockImplementationOnce(async () => {
+    const spy2  = jest.spyOn(query, 'where');
+    const spy4  = jest.spyOn(query, 'delete').mockImplementationOnce(async () => {
     });
 
     // const events = new Dispatcher();
@@ -988,7 +990,7 @@ describe('test database eloquent model', () => {
     FedacoModelStub.setEventDispatcher(events);
 
     model.exists = true;
-    model.id = 1;
+    model.id     = 1;
     await model.delete();
 
     expect(spy2).toBeCalledWith('id', '=', 1);
@@ -1000,22 +1002,22 @@ describe('test database eloquent model', () => {
     const model = new FedacoModelStub();
     const query = getBuilder();
 
-    const spy1 = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
+    const spy1  = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
     const spy11 = jest.spyOn(model, 'updateTimestamps');/*.mockReturnValue(true);*/
     const spy12 = jest.spyOn(model, 'fireModelEvent');
     const spy13 = jest.spyOn(model, 'refresh');/*.mockReturnValue(true);*/
-    const spy2 = jest.spyOn(query, 'where');
+    const spy2  = jest.spyOn(query, 'where');
     const spy22 = jest.spyOn(query, 'getConnection');
     // @ts-ignore
-    const spy3 = jest.spyOn(query, 'insertGetId').mockImplementation((attributes, keyName) => {
+    const spy3  = jest.spyOn(query, 'insertGetId').mockImplementation((attributes, keyName) => {
       expect(attributes).toEqual({
         'name': 'taylor'
-      })
-      expect(keyName).toBe('id')
+      });
+      expect(keyName).toBe('id');
       return 1;
     });
 
-    model.name = 'taylor';
+    model.name   = 'taylor';
     model.exists = false;
     const result = await model.push();
 
@@ -1028,7 +1030,7 @@ describe('test database eloquent model', () => {
     // expect(spy3).toBeCalledWith({
     //   'name': 'taylor'
     // }, 'id');
-    expect(spy22).toBeCalled()
+    expect(spy22).toBeCalled();
     expect(spy3).toReturnWith(1);
 
   });
@@ -1037,22 +1039,22 @@ describe('test database eloquent model', () => {
     const model = new FedacoModelStub();
     const query = getBuilder();
 
-    const spy1 = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
+    const spy1  = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
     const spy11 = jest.spyOn(model, 'updateTimestamps');/*.mockReturnValue(true);*/
     const spy12 = jest.spyOn(model, 'fireModelEvent');
     const spy13 = jest.spyOn(model, 'refresh');/*.mockReturnValue(true);*/
-    const spy2 = jest.spyOn(query, 'where');
+    const spy2  = jest.spyOn(query, 'where');
     const spy22 = jest.spyOn(query, 'getConnection');
     // @ts-ignore
-    const spy3 = jest.spyOn(query, 'insertGetId').mockImplementation((attributes, keyName) => {
+    const spy3  = jest.spyOn(query, 'insertGetId').mockImplementation((attributes, keyName) => {
       expect(attributes).toEqual({
         'name': 'taylor'
-      })
-      expect(keyName).toBe('id')
+      });
+      expect(keyName).toBe('id');
       return 1;
     });
 
-    model.name = 'taylor';
+    model.name   = 'taylor';
     model.exists = false;
     model.setRelation('relationOne', null);
     const result = await model.push();
@@ -1064,44 +1066,44 @@ describe('test database eloquent model', () => {
 
     expect(spy11).toBeCalledTimes(1);
 
-    expect(spy22).toBeCalled()
+    expect(spy22).toBeCalled();
     expect(spy3).toReturnWith(1);
 
   });
 
-  it('push one relation', async() => {
-    setDispatch(FedacoModelStub, true)
+  it('push one relation', async () => {
+    setDispatch(FedacoModelStub, true);
 
     const related1 = new FedacoModelStub();
-    const query = getBuilder();
+    const query    = getBuilder();
 
     const spy1 = jest.spyOn(related1, 'newModelQuery').mockReturnValue(query);
     // @ts-ignore
     const spy3 = jest.spyOn(query, 'insertGetId').mockImplementation((attributes, keyName) => {
       expect(attributes).toEqual({
         'name': 'related1'
-      })
-      expect(keyName).toBe('id')
+      });
+      expect(keyName).toBe('id');
       return 2;
     });
 
-    related1.name = 'related1';
+    related1.name   = 'related1';
     related1.exists = false;
 
     // ######################################## model
-    const model = new FedacoModelStub();
+    const model  = new FedacoModelStub();
     const query2 = getBuilder();
-    const spy2 = jest.spyOn(model, 'newModelQuery').mockReturnValue(query2);
+    const spy2   = jest.spyOn(model, 'newModelQuery').mockReturnValue(query2);
     // @ts-ignore
     const spy3_3 = jest.spyOn(query2, 'insertGetId').mockImplementation((attributes, keyName) => {
       expect(attributes).toEqual({
         'name': 'taylor'
-      })
-      expect(keyName).toBe('id')
+      });
+      expect(keyName).toBe('id');
       return 1;
     });
 
-    model.name = 'taylor';
+    model.name   = 'taylor';
     model.exists = false;
     model.setRelation('relationOne', related1);
 
@@ -1116,23 +1118,23 @@ describe('test database eloquent model', () => {
     expect(related1.exists).toBeTruthy();
   });
 
-  it('push empty many relation', async() => {
+  it('push empty many relation', async () => {
     const model = new FedacoModelStub();
     const query = getBuilder();
 
-    const spy1 = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
+    const spy1  = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
     const spy11 = jest.spyOn(model, 'updateTimestamps');/*.mockReturnValue(true);*/
     const spy22 = jest.spyOn(query, 'getConnection');
     // @ts-ignore
-    const spy3 = jest.spyOn(query, 'insertGetId').mockImplementation((attributes, keyName) => {
+    const spy3  = jest.spyOn(query, 'insertGetId').mockImplementation((attributes, keyName) => {
       expect(attributes).toEqual({
         'name': 'taylor'
-      })
-      expect(keyName).toBe('id')
+      });
+      expect(keyName).toBe('id');
       return 1;
     });
 
-    model.name = 'taylor';
+    model.name   = 'taylor';
     model.exists = false;
     model.setRelation('relationMany', []);
     const result = await model.push();
@@ -1144,50 +1146,50 @@ describe('test database eloquent model', () => {
 
     expect(spy11).toBeCalledTimes(1);
 
-    expect(spy22).toBeCalled()
+    expect(spy22).toBeCalled();
     expect(spy3).toReturnWith(1);
 
   });
 
   it('push many relation', async () => {
-    setDispatch(FedacoModelStub, true)
+    setDispatch(FedacoModelStub, true);
 
     // #### related1
     const related1 = new FedacoModelStub();
-    const query0 = getBuilder();
+    const query0   = getBuilder();
 
     const spy1 = jest.spyOn(related1, 'newModelQuery').mockReturnValue(query0);
     // @ts-ignore
     const spy3 = jest.spyOn(query0, 'insertGetId').mockImplementation((attributes, keyName) => {
       expect(attributes).toEqual({
         'name': 'related1'
-      })
-      expect(keyName).toBe('id')
+      });
+      expect(keyName).toBe('id');
       return 2;
     });
 
-    related1.name = 'related1';
+    related1.name   = 'related1';
     related1.exists = false;
 
     // #### related2
     const related2 = new FedacoModelStub();
-    const query1 = getBuilder();
+    const query1   = getBuilder();
 
     const spy1_1 = jest.spyOn(related2, 'newModelQuery').mockReturnValue(query1);
     // @ts-ignore
     const spy3_1 = jest.spyOn(query1, 'insertGetId').mockImplementation((attributes, keyName) => {
       expect(attributes).toEqual({
         'name': 'related2'
-      })
-      expect(keyName).toBe('id')
+      });
+      expect(keyName).toBe('id');
       return 3;
     });
 
-    related2.name = 'related2';
+    related2.name   = 'related2';
     related2.exists = false;
 
     // #### model
-    const model = new FedacoModelStub();
+    const model  = new FedacoModelStub();
     const query2 = getBuilder();
 
     const spy1_2 = jest.spyOn(model, 'newModelQuery').mockReturnValue(query2);
@@ -1195,12 +1197,12 @@ describe('test database eloquent model', () => {
     const spy3_2 = jest.spyOn(query2, 'insertGetId').mockImplementation((attributes, keyName) => {
       expect(attributes).toEqual({
         'name': 'taylor'
-      })
-      expect(keyName).toBe('id')
+      });
+      expect(keyName).toBe('id');
       return 1;
     });
 
-    model.name = 'taylor';
+    model.name   = 'taylor';
     model.exists = false;
 
     //####
@@ -1211,76 +1213,86 @@ describe('test database eloquent model', () => {
     expect(model.id).toEqual(1);
     expect(model.exists).toBeTruthy();
     expect(model.relationMany.length).toBe(2);
-    expect(model.relationMany.pluck('id')).toEqual([2, 3]);
+    expect(pluck('id')(model.relationMany)).toEqual([2, 3]);
   });
 
-//   it('new query returns eloquent query builder', () => {
-//     let conn = m.mock(Connection);
-//     let grammar = m.mock(Grammar);
-//     let processor = m.mock(Processor);
-//     FedacoModelStub.setConnectionResolver(resolver = m.mock(ConnectionResolverInterface));
-//     conn.shouldReceive('query').andReturnUsing(() => {
-//       return new BaseBuilder(conn, grammar, processor);
-//     });
-//     resolver.shouldReceive('connection').andReturn(conn);
-//     let model = new FedacoModelStub();
-//     let builder = model.newQuery();
-//     expect(builder).toBeInstanceOf(Builder);
-//   });
+  it('get and set table operations', () => {
+    let model = new FedacoModelStub();
+    expect(model.getTable()).toBe('stub');
+    model.setTable('foo');
+    expect(model.getTable()).toBe('foo');
+  });
 
-//   it('get and set table operations', () => {
-//     let model = new FedacoModelStub();
-//     expect(model.getTable()).toBe('stub');
-//     model.setTable('foo');
-//     expect(model.getTable()).toBe('foo');
-//   });
-//   it('get key returns value of primary key', () => {
-//     let model = new FedacoModelStub();
-//     model.id = 1;
-//     expect(model.getKey()).toEqual(1);
-//     expect(model.getKeyName()).toBe('id');
-//   });
-//   it('connection management', () => {
-//     FedacoModelStub.setConnectionResolver(resolver = m.mock(ConnectionResolverInterface));
-//     let model = m.mock(FedacoModelStub + '[getConnectionName,connection]');
-//     let retval = model.setConnection('foo');
-//     expect(model).toEqual(retval);
-//     expect(model.connection).toBe('foo');
-//     model.shouldReceive('getConnectionName').once().andReturn('somethingElse');
-//     resolver.shouldReceive('connection').once()._with('somethingElse').andReturn('bar');
-//     expect(model.getConnection()).toBe('bar');
-//   });
-//   it('to array', () => {
-//     let model = new FedacoModelStub();
-//     model.name = 'foo';
-//     model.age = null;
-//     model.password = 'password1';
-//     model.setHidden(['password']);
-//     model.setRelation('names', new BaseCollection([
-//       new FedacoModelStub({
-//         'bar': 'baz'
-//       }), new FedacoModelStub({
-//         'bam': 'boom'
-//       })
-//     ]));
-//     model.setRelation('partner', new FedacoModelStub({
-//       'name': 'abby'
-//     }));
-//     model.setRelation('group', null);
-//     model.setRelation('multi', new BaseCollection());
-//     let array = model.toArray();
-//     expect(array).toIsArray();
-//     expect(array['name']).toBe('foo');
-//     expect(array['names'][0]['bar']).toBe('baz');
-//     expect(array['names'][1]['bam']).toBe('boom');
-//     expect(array['partner']['name']).toBe('abby');
-//     expect(array['group']).toNull();
-//     expect(array['multi']).toEqual([]);
-//     expect(array['password'] !== undefined).toBeFalsy();
-//     model.setAppends(['appendable']);
-//     let array = model.toArray();
-//     expect(array['appendable']).toBe('appended');
-//   });
+  it('get key returns value of primary key', () => {
+    let model = new FedacoModelStub();
+    model.id  = 1;
+    expect(model.getKey()).toEqual(1);
+    expect(model.getKeyName()).toBe('id');
+  });
+
+  it('connection management', () => {
+    const resolver: ConnectionResolverInterface = {
+      getDefaultConnection(): any {
+      },
+      setDefaultConnection(name: string): any {
+      },
+      connection() {
+        return new Conn();
+      }
+    };
+
+    FedacoModelStub.setConnectionResolver(resolver);
+    let model = new FedacoModelStub();
+
+    const spy1 = jest.spyOn(model, 'getConnectionName').mockReturnValue('somethingElse');
+    const spy3 = jest.spyOn(resolver, 'connection').mockReturnValue('bar');
+
+    let retval = model.setConnection('foo');
+    let result = model.getConnection();
+    expect(model).toEqual(retval);
+    expect(model._connection).toBe('foo');
+
+    // expect(spy1).toBeCalled();
+
+    expect(spy1).toBeCalled();
+    expect(spy3).toBeCalledWith('somethingElse');
+
+    expect(result).toBe('bar');
+  });
+
+  it('to array', () => {
+    let model      = new FedacoModelStub();
+    let array;
+    model.name     = 'foo';
+    model.age      = null;
+    model.password = 'password1';
+    model.setHidden(['password']);
+    model.setRelation('names', [
+      FedacoModelStub.initAttributes({
+        'bar': 'baz'
+      }), FedacoModelStub.initAttributes({
+        'bam': 'boom'
+      })
+    ]);
+    model.setRelation('partner', FedacoModelStub.initAttributes({
+      'name': 'abby'
+    }));
+    model.setRelation('group', null);
+    model.setRelation('multi', []);
+    array = model.toArray();
+    expect(isArray(array)).toBeTruthy();
+    expect(array['name']).toBe('foo');
+    expect(array['names'][0]['bar']).toBe('baz');
+    expect(array['names'][1]['bam']).toBe('boom');
+    expect(array['partner']['name']).toBe('abby');
+    expect(array['group']).toBeNull();
+    expect(array['multi']).toEqual([]);
+    expect(array['password'] !== undefined).toBeFalsy();
+    model.setAppends(['appendable']);
+    array = model.toArray();
+    expect(array['appendable']).toBe('appended');
+  });
+
 //   it('visible creates array whitelist', () => {
 //     let model = new FedacoModelStub();
 //     model.setVisible(['name']);
@@ -2470,10 +2482,10 @@ describe('test database eloquent model', () => {
 // });
 //
 export class FedacoModelStub extends Model {
-  public connection: any;
-  public scopesCalled: any = [];
-  _table: any = 'stub';
-  _guarded: any = [];
+  _connection: any;
+  _scopesCalled: any      = [];
+  _table: any             = 'stub';
+  _guarded: any           = [];
   morph_to_stub_type: any = FedacoModelSaveStub;
 
   _casts: any = {
@@ -2517,8 +2529,8 @@ export class FedacoModelStub extends Model {
   @Column() last_name;
   @Column() project;
 
-  @RelationColumn() relationOne
-  @RelationColumn() relationMany
+  @RelationColumn() relationOne;
+  @RelationColumn() relationMany;
 
   // @Column() created_at;
   // @Column() updated_at;
@@ -2616,7 +2628,7 @@ export class FedacoDateModelStub extends FedacoModelStub {
 }
 
 export class FedacoModelSaveStub extends Model {
-  _table: any = 'save_stub';
+  _table: any   = 'save_stub';
   _guarded: any = ['id'];
 
   @Column() id;
@@ -2636,13 +2648,13 @@ export class FedacoModelSaveStub extends Model {
   }
 
   public getConnection() {
-    const conn = new Conn();
-    const grammar = new MysqlGrammar();
+    const conn      = new Conn();
+    const grammar   = new MysqlGrammar();
     const processor = new Processor();
-    const spy1 = jest.spyOn(conn, 'getQueryGrammar').mockReturnValue(grammar);
-    const spy2 = jest.spyOn(conn, 'getPostProcessor').mockReturnValue(processor);
-    const spy3 = jest.spyOn(conn, 'getName').mockReturnValue('processor');
-    const spy4 = jest.spyOn(conn, 'query').mockImplementation(() => {
+    const spy1      = jest.spyOn(conn, 'getQueryGrammar').mockReturnValue(grammar);
+    const spy2      = jest.spyOn(conn, 'getPostProcessor').mockReturnValue(processor);
+    const spy3      = jest.spyOn(conn, 'getName').mockReturnValue('processor');
+    const spy4      = jest.spyOn(conn, 'query').mockImplementation(() => {
       return new QueryBuilder(conn, grammar, processor);
     });
 
@@ -2690,14 +2702,14 @@ export class FedacoModelWithStub extends Model {
   public newQuery() {
     const builder = getBuilder();
     // @ts-ignore
-    const spy1 = jest.spyOn(builder, 'with').mockReturnValue('foo');
+    const spy1    = jest.spyOn(builder, 'with').mockReturnValue('foo');
     return builder;
   }
 }
 
 export class FedacoModelWithoutRelationStub extends Model {
   public _with: any = ['foo'];
-  _guarded: any = [];
+  _guarded: any     = [];
 
   public getEagerLoads() {
     return this._eagerLoads;
@@ -2765,18 +2777,18 @@ export class FedacoModelAppendsStub extends Model {
 //
 export class FedacoModelCastingStub extends Model {
   _casts: any = {
-    'intAttribute': 'int',
-    'floatAttribute': 'float',
-    'stringAttribute': 'string',
-    'boolAttribute': 'bool',
-    'booleanAttribute': 'boolean',
-    'objectAttribute': 'object',
-    'arrayAttribute': 'array',
-    'jsonAttribute': 'json',
+    'intAttribute'       : 'int',
+    'floatAttribute'     : 'float',
+    'stringAttribute'    : 'string',
+    'boolAttribute'      : 'bool',
+    'booleanAttribute'   : 'boolean',
+    'objectAttribute'    : 'object',
+    'arrayAttribute'     : 'array',
+    'jsonAttribute'      : 'json',
     'collectionAttribute': 'collection',
-    'dateAttribute': 'date',
-    'datetimeAttribute': 'datetime',
-    'timestampAttribute': 'timestamp'
+    'dateAttribute'      : 'date',
+    'datetimeAttribute'  : 'datetime',
+    'timestampAttribute' : 'timestamp'
   };
 
   @Column() foo;
@@ -2850,12 +2862,12 @@ export class FedacoModelEventObjectStub extends Model {
 
 
 export class FedacoModelWithoutTimestamps extends Model {
-  _table: any = 'stub';
+  _table: any            = 'stub';
   public timestamps: any = false;
 }
 
 export class FedacoModelWithUpdatedAtNull extends Model {
-  _table: any = 'stub';
+  _table: any       = 'stub';
   static UPDATED_AT = null;
 }
 
