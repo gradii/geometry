@@ -161,7 +161,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
                operator?: any,
                value?: any, conjunction = 'and'): this {
     if (arguments.length === 2) {
-      value = operator;
+      value    = operator;
       operator = '=';
     }
     if (isFunction(column) && isBlank(operator)) {
@@ -176,14 +176,14 @@ export class FedacoBuilder extends mixinGuardsAttributes(
 
   /*Add a basic where clause to the query, and return the first result.*/
   public firstWhere(column: Function | string | any[] | SqlNode, operator: any = null,
-                    value: any = null,
-                    conjunction = 'and') {
+                    value: any                                                 = null,
+                    conjunction                                                = 'and') {
     return this.where(column, operator, value, conjunction).first();
   }
 
   /*Add an "or where" clause to the query.*/
   public orWhere(column: Function | any[] | string | SqlNode, operator: any = null,
-                 value: any = null) {
+                 value: any                                                 = null) {
     [value, operator] = this._query._prepareValueAndOperator(value, operator,
       arguments.length === 2);
     return this.where(column, operator, value, 'or');
@@ -311,7 +311,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   public async firstOr(columns: Function | any[] = ['*'], callback: Function | null = null) {
     if (isFunction(columns)) {
       callback = columns;
-      columns = ['*'];
+      columns  = ['*'];
     }
     const model = await this.first(columns);
     if (!isBlank(model)) {
@@ -342,7 +342,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
    */
   public async get(columns: string[] | string = ['*']): Promise<Model[]> {
     const builder = this.applyScopes();
-    let models = await builder.getModels(columns);
+    let models    = await builder.getModels(columns);
     if (models.length > 0) {
       models = await builder.eagerLoadRelations(models);
     }
@@ -520,24 +520,26 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Increment a column's value by a given amount.*/
-  public increment(column: string, amount: number | number = 1, extra: any[] = []) {
+  public increment(column: string, amount: number | number = 1, extra: any = {}) {
     return this.toBase().increment(column, amount, this.addUpdatedAtColumn(extra));
   }
 
   /*Decrement a column's value by a given amount.*/
-  public decrement(column: string, amount: number | number = 1, extra: any[] = []) {
+  public decrement(column: string, amount: number | number = 1, extra: any = {}) {
     return this.toBase().decrement(column, amount, this.addUpdatedAtColumn(extra));
   }
 
   /*Add the "updated at" column to an array of values.*/
-  protected addUpdatedAtColumn(values: any[]) {
+  protected addUpdatedAtColumn(values: any) {
     if (!this._model.usesTimestamps() || isBlank(this._model.getUpdatedAtColumn())) {
       return values;
     }
     const column = this._model.getUpdatedAtColumn();
-    values = {
+    values       = {
       ...values,
-      [column]: this._model.freshTimestampString()
+      [column]: column in values ?
+        values[column] :
+        this._model.freshTimestampString(),
     };
     // let segments            = preg_split('/\\s+as\\s+/i', this._query.from);
     // let qualifiedColumn     = end(segments) + '.' + column;
@@ -552,7 +554,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
       return values;
     }
     const timestamp = this._model.freshTimestampString();
-    const columns = [
+    const columns   = [
       this._model.getCreatedAtColumn(),
       this._model.getUpdatedAtColumn()
     ];
@@ -638,9 +640,9 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /*Apply the given scope on the current builder instance.*/
   _callScope(scope: (...args: any[]) => any, parameters: any[] = []) {
     parameters.unshift(this);
-    const query = this.getQuery();
+    const query              = this.getQuery();
     const originalWhereCount = !query._wheres.length ? 0 : query._wheres.length;
-    const result = scope(...parameters) ?? this;
+    const result             = scope(...parameters) ?? this;
     if (/*cast type array*/ query._wheres.length > originalWhereCount) {
       this.addNewWheresWithinGroup(query, originalWhereCount);
     }
@@ -657,7 +659,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /*Nest where conditions by slicing them at the given where count.*/
   protected addNewWheresWithinGroup(query: QueryBuilder, originalWhereCount: number) {
     const allWheres = query._wheres;
-    query._wheres = [];
+    query._wheres   = [];
     this._groupWhereSliceForScope(query, allWheres.slice(0, originalWhereCount));
     this._groupWhereSliceForScope(query, allWheres.slice(originalWhereCount));
   }
@@ -674,11 +676,11 @@ export class FedacoBuilder extends mixinGuardsAttributes(
 
   /*Create a where array with nested where conditions.*/
   protected _createNestedWhere(whereSlice: any[], conjunction = 'and') {
-    const whereGroup = this.getQuery().forNestedWhere();
+    const whereGroup   = this.getQuery().forNestedWhere();
     whereGroup._wheres = whereSlice;
     return {
-      'type': 'Nested',
-      'query': whereGroup,
+      'type'   : 'Nested',
+      'query'  : whereGroup,
       'boolean': conjunction
     };
   }
@@ -751,11 +753,11 @@ export class FedacoBuilder extends mixinGuardsAttributes(
           }
           ];
 
-        results = this.addNestedWiths(name, results);
+        results       = this.addNestedWiths(name, results);
         results[name] = constraints;
       } else {
         for (const [name, constraints] of Object.entries(relation)) {
-          results = this.addNestedWiths(name, results);
+          results       = this.addNestedWiths(name, results);
           results[name] = constraints;
         }
       }
@@ -949,9 +951,9 @@ export class FedacoBuilder extends mixinGuardsAttributes(
 
   clone(): FedacoBuilder {
     // return this;
-    const builder = new FedacoBuilder(this._query.clone());
-    builder._scopes = {...this._scopes};
-    builder._model = this._model;
+    const builder      = new FedacoBuilder(this._query.clone());
+    builder._scopes    = {...this._scopes};
+    builder._model     = this._model;
     builder._eagerLoad = {...this._eagerLoad};
     return builder;
   }

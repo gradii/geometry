@@ -1338,7 +1338,7 @@ describe('fedaco builder', () => {
 
     expect(result).toBe(1);
 
-    expect(spy1).toBeCalledWith('UPDATE `test_table` SET `foo` = ?', ['bar', expect.anything()]);
+    expect(spy1).toBeCalledWith('UPDATE `test_table` SET `foo` = ?', ['bar']);
   });
 
   it('testUpdateWithAlias', async () => {
@@ -1360,6 +1360,8 @@ describe('fedaco builder', () => {
       ['bar', expect.anything()]);
 
   });
+
+
 
   it('testWithCastsMethod', () => {
     // let spy1, spy2, result;

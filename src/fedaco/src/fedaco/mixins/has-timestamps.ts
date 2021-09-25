@@ -60,7 +60,7 @@ export function mixinHasTimestamps<T extends Constructor<any>>(base: T): HasTime
   return class _Self extends base {
 
     /*Indicates if the model should be timestamped.*/
-    public timestamps: boolean = true;
+    public _timestamps: boolean = true;
 
     /*Update the model's update timestamp.*/
     public async touch(this: Model & _Self, attribute: string = null): Promise<boolean> {
@@ -113,17 +113,19 @@ export function mixinHasTimestamps<T extends Constructor<any>>(base: T): HasTime
 
     /*Determine if the model uses timestamps.*/
     public usesTimestamps(): boolean {
-      return this.timestamps;
+      return this._timestamps;
     }
 
     /*Get the name of the "created at" column.*/
     public getCreatedAtColumn() {
-      return 'created_at';
+      return 'CREATED_AT' in (this.constructor as any) ?
+        (this.constructor as any).CREATED_AT : 'created_at';
     }
 
     /*Get the name of the "updated at" column.*/
     public getUpdatedAtColumn() {
-      return 'updated_at';
+      return 'UPDATED_AT' in (this.constructor as any) ?
+        (this.constructor as any).UPDATED_AT : 'updated_at';
     }
 
     /*Get the fully qualified "created at" column.*/
