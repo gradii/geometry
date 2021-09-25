@@ -363,9 +363,9 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     public attributesToArray(this: Model & _Self) {
       let attributes          = this.getArrayableAttributes();
       attributes              = this.addDateAttributesToArray(attributes);
-      const mutatedAttributes = this.getMutatedAttributes();
+      // const mutatedAttributes = this.getMutatedAttributes();
       // attributes              = this.addMutatedAttributesToArray(attributes, mutatedAttributes);
-      attributes              = this.addCastAttributesToArray(attributes, mutatedAttributes);
+      // attributes              = this.addCastAttributesToArray(attributes, mutatedAttributes);
       // for (let key of this.getArrayableAppends()) {
       //   attributes[key] = this.mutateAttributeForArray(key, null);
       // }

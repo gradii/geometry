@@ -1,4 +1,4 @@
-import { isAnyEmpty, isArray, isString } from '@gradii/check-type';
+import { isAnyEmpty, isArray, isObject, isString } from '@gradii/check-type';
 import { createHash } from 'crypto';
 import { format } from 'date-fns';
 import { pluck } from 'ramda';
@@ -1290,7 +1290,7 @@ describe('test database eloquent model', () => {
     model.setRelation('group', null);
     model.setRelation('multi', []);
     array = model.toArray();
-    expect(isArray(array)).toBeTruthy();
+    expect(isObject(array)).toBeTruthy();
     expect(array['name']).toBe('foo');
     expect(array['names'][0]['bar']).toBe('baz');
     expect(array['names'][1]['bam']).toBe('boom');
