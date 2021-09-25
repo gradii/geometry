@@ -20,7 +20,7 @@ export function fromAttributes(clazz: typeof Model, parent: Model, attributes: a
 export function fromRawAttributes(clazz: typeof Model, parent: Model, attributes: any[], table: string,
                                   exists = false) {
   const instance        = fromAttributes(clazz, parent, [], table, exists);
-  instance.timestamps = instance.hasTimestampAttributes(attributes);
+  instance._timestamps = instance.hasTimestampAttributes(attributes);
   instance.setRawAttributes(attributes, exists);
   return instance;
 }

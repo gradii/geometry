@@ -109,7 +109,7 @@ export function mixinSoftDeletes<T extends Constructor<{}>>(base: T): SoftDelete
       let columns                     = {};
       // @ts-ignore
       this[this.getDeletedAtColumn()] = time;
-      if (this.timestamps && !isBlank(this.getUpdatedAtColumn())) {
+      if (this._timestamps && !isBlank(this.getUpdatedAtColumn())) {
         // @ts-ignore
         this[this.getUpdatedAtColumn()]    = time;
         // @ts-ignore

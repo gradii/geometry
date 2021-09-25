@@ -451,7 +451,7 @@ export class Model extends mixinHasAttributes(
     model._exists = exists;
     model.setConnection(this.getConnectionName());
     model.setTable(this.getTable());
-    model.mergeCasts(this._casts);
+    // model.mergeCasts(this._casts); todo remove me
     return model as this;
   }
 

@@ -14,7 +14,7 @@ export interface HasTimestamps {
    * Indicates if the model should be timestamped.
    * @deprecated disable timestamps
    */
-  timestamps: boolean;
+  _timestamps: boolean;
 
   /*Update the model's update timestamp.*/
   touch(attribute?: string): boolean;

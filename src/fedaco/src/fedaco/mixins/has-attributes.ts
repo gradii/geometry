@@ -12,8 +12,21 @@ import { format, getUnixTime, isValid, parse, startOfDay } from 'date-fns';
 import { difference, equals, findLast, intersection, tap, uniq } from 'ramda';
 import { FedacoDecorator } from '../../annotation/annotation.interface';
 import { ColumnAnnotation, FedacoColumn } from '../../annotation/column';
+import { ArrayColumn } from '../../annotation/column/array.column';
+import { BinaryColumn } from '../../annotation/column/binary.column';
+import { BooleanColumn } from '../../annotation/column/boolean.column';
+import { CurrencyColumn } from '../../annotation/column/currency.column';
 import { DateColumn } from '../../annotation/column/date.column';
 import { DatetimeColumn } from '../../annotation/column/datetime.column';
+import { DecimalColumn } from '../../annotation/column/decimal.column';
+import { FloatColumn } from '../../annotation/column/float.column';
+import { IntegerColumn } from '../../annotation/column/integer.column';
+import { JsonColumn } from '../../annotation/column/json.column';
+import { ObjectColumn } from '../../annotation/column/object.column';
+import { PrimaryGeneratedColumn } from '../../annotation/column/primary-generated.column';
+import { PrimaryColumn } from '../../annotation/column/primary.column';
+import { TextColumn } from '../../annotation/column/text.column';
+import { TimestampColumn } from '../../annotation/column/timestamp.column';
 import { FedacoRelationColumn, RelationColumnAnnotation } from '../../annotation/relation-column';
 import { wrap } from '../../helper/arr';
 import { Constructor } from '../../helper/constructor';
@@ -40,7 +53,7 @@ export interface HasAttributes {
   /*The changed model attributes.*/
   _changes: any[];
   /*The attributes that should be cast.*/
-  _casts: { [key: string]: string };
+  // _casts: { [key: string]: string };
   /*The attributes that have been cast using custom classes.*/
   _classCastCache: any[];
 
@@ -471,7 +484,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
       }
       if (
         this._attributes.hasOwnProperty(key) ||
-        this._casts.hasOwnProperty(key) ||
+        // this._casts.hasOwnProperty(key) ||
         // this.hasGetMutator(key) ||
         this.isClassCastable(key)
       ) {
@@ -569,10 +582,11 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     // }
 
     /*Merge new casts with existing casts on the model.*/
-    public mergeCasts(casts: any) {
-      this._casts = {...this._casts, ...casts};
-      return this;
-    }
+    // public mergeCasts(casts: any) {
+    //   // tslint:disable-next-line:ban
+    //   Object.assign(this._casts, casts);
+    //   return this;
+    // }
 
     /*Cast an attribute to a native PHP type.*/
     protected castAttribute(this: Model & this, key: string, value: any) {
@@ -645,12 +659,12 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Get the type of cast for a model attribute.*/
     protected getCastType(this: Model & this, key: string) {
-      if (this.isCustomDateTimeCast(this.getCasts()[key])) {
-        return 'custom_datetime';
-      }
-      if (this.isImmutableCustomDateTimeCast(this.getCasts()[key])) {
-        return 'immutable_custom_datetime';
-      }
+      // if (this.isCustomDateTimeCast(this.getCasts()[key])) {
+      //   return 'custom_datetime';
+      // }
+      // if (this.isImmutableCustomDateTimeCast(this.getCasts()[key])) {
+      //   return 'immutable_custom_datetime';
+      // }
       if (this.isDecimalCast(this.getCasts()[key])) {
         return 'decimal';
       }
@@ -785,7 +799,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     /*Cast the given attribute to JSON.*/
     protected castAttributeAsJson(key: string, value: any) {
       value = this.asJson(value);
-      if (value === false) {
+      if (value == false) {
         throw new Error('JsonEncodingException.forAttribute(this, key, json_last_error_msg())');
       }
       return value;
@@ -911,10 +925,63 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Get the casts array.*/
     public getCasts(this: Model & this) {
-      if (this.getIncrementing()) {
-        return {[this.getKeyName()]: this.getKeyType(), ...this._casts};
+      const typeOfClazz = this.constructor as typeof Model;
+      const metas       = reflector.propMetadata(typeOfClazz);
+      let casts: any    = {};
+      for (let [key, meta] of Object.entries(metas)) {
+        const columnMeta = findLast(it => {
+          return FedacoColumn.isTypeOf(it);
+        }, meta);
+        switch (true) {
+          case PrimaryColumn.isTypeOf(columnMeta):
+            casts[key] = columnMeta.keyType;
+            break;
+          case   PrimaryGeneratedColumn.isTypeOf(columnMeta):
+            casts[key] = 'int';
+            break;
+          case   BinaryColumn.isTypeOf(columnMeta):
+            casts[key] = 'binary';
+            break;
+          case   BooleanColumn.isTypeOf(columnMeta):
+            casts[key] = 'boolean';
+            break;
+          case   CurrencyColumn.isTypeOf(columnMeta):
+            casts[key] = 'currency';
+            break;
+          case   DateColumn.isTypeOf(columnMeta):
+            casts[key] = 'date';
+            break;
+          case   DatetimeColumn.isTypeOf(columnMeta):
+            casts[key] = 'datetime';
+            break;
+          case   DecimalColumn.isTypeOf(columnMeta):
+            casts[key] = 'decimal';
+            break;
+          case   FloatColumn.isTypeOf(columnMeta):
+            casts[key] = 'float';
+            break;
+          case   IntegerColumn.isTypeOf(columnMeta):
+            casts[key] = 'integer';
+            break;
+          case   JsonColumn.isTypeOf(columnMeta):
+            casts[key] = 'json';
+            break;
+          case   ArrayColumn.isTypeOf(columnMeta):
+            casts[key] = 'array';
+            break;
+          case   ObjectColumn.isTypeOf(columnMeta):
+            casts[key] = 'object';
+            break;
+          case   TextColumn.isTypeOf(columnMeta):
+            casts[key] = 'text';
+            break;
+          case   TimestampColumn.isTypeOf(columnMeta):
+            casts[key] = 'timestamp';
+            break;
+        }
       }
-      return this._casts;
+
+      return casts;
     }
 
     /*Determine whether a value is Date / DateTime castable for inbound manipulation.*/

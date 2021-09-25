@@ -2,8 +2,16 @@ import { isAnyEmpty, isArray, isString } from '@gradii/check-type';
 import { createHash } from 'crypto';
 import { format } from 'date-fns';
 import { pluck } from 'ramda';
+import { ArrayColumn } from '../src/annotation/column/array.column';
+import { BooleanColumn } from '../src/annotation/column/boolean.column';
 import { Column } from '../src/annotation/column/column';
 import { DateColumn } from '../src/annotation/column/date.column';
+import { DatetimeColumn } from '../src/annotation/column/datetime.column';
+import { FloatColumn } from '../src/annotation/column/float.column';
+import { IntegerColumn } from '../src/annotation/column/integer.column';
+import { JsonColumn } from '../src/annotation/column/json.column';
+import { ObjectColumn } from '../src/annotation/column/object.column';
+import { TimestampColumn } from '../src/annotation/column/timestamp.column';
 import { HasManyColumn } from '../src/annotation/relation-column/has-many.relation-column';
 import { HasOneColumn } from '../src/annotation/relation-column/has-one.relation-column';
 import { DatabaseManager } from '../src/database-manager';
@@ -189,8 +197,8 @@ describe('test database eloquent model', () => {
   it('dirty on casted objects', () => {
     const model = new FedacoModelCastingStub();
     model.setRawAttributes({
-      'objectAttribute'    : '["one", "two", "three"]',
-      'collectionAttribute': '["one", "two", "three"]'
+      'objectAttribute'    : '["one","two","three"]',
+      'collectionAttribute': '["one","two","three"]'
     });
     model.syncOriginal();
     model.objectAttribute     = ['one', 'two', 'three'];
@@ -293,15 +301,15 @@ describe('test database eloquent model', () => {
     expect(newInstance.getTable()).toBe('test');
   });
 
-  it('new instance returns new instance with merged casts', () => {
-    const model = new FedacoModelStub();
-    model.mergeCasts({
-      'foo': 'date'
-    });
-    const newInstance = model.newInstance();
-    expect('foo' in newInstance.getCasts()).toBeTruthy();
-    expect(newInstance.getCasts()['foo']).toBe('date');
-  });
+  // it('new instance returns new instance with merged casts', () => {
+  //   const model = new FedacoModelStub();
+  //   model.mergeCasts({
+  //     'foo': 'date'
+  //   });
+  //   const newInstance = model.newInstance();
+  //   expect('foo' in newInstance.getCasts()).toBeTruthy();
+  //   expect(newInstance.getCasts()['foo']).toBe('date');
+  // });
 
   it('create method saves new model', () => {
     global['__eloquent.saved'] = false;
@@ -601,7 +609,7 @@ describe('test database eloquent model', () => {
     const spy4 = jest.spyOn(events, 'until');
     const spy5 = jest.spyOn(events, 'dispatch');
 
-    model.timestamps = false;
+    model._timestamps = false;
     model.id         = 1;
     model.syncOriginal();
     model.name   = 'taylor';
@@ -2490,9 +2498,9 @@ export class FedacoModelStub extends Model {
   _guarded: any           = [];
   morph_to_stub_type: any = FedacoModelSaveStub;
 
-  _casts: any = {
-    'castedFloat': 'float'
-  };
+  // _casts: any = {
+  //   'castedFloat': 'float'
+  // };
 
   @Column()
   id;
@@ -2503,7 +2511,7 @@ export class FedacoModelStub extends Model {
   @Column()
   name1;
 
-  @Column()
+  @FloatColumn()
   castedFloat;
 
   @Column()
@@ -2778,36 +2786,36 @@ export class FedacoModelAppendsStub extends Model {
 // }
 //
 export class FedacoModelCastingStub extends Model {
-  _casts: any = {
-    'intAttribute'       : 'int',
-    'floatAttribute'     : 'float',
-    'stringAttribute'    : 'string',
-    'boolAttribute'      : 'bool',
-    'booleanAttribute'   : 'boolean',
-    'objectAttribute'    : 'object',
-    'arrayAttribute'     : 'array',
-    'jsonAttribute'      : 'json',
-    'collectionAttribute': 'collection',
-    'dateAttribute'      : 'date',
-    'datetimeAttribute'  : 'datetime',
-    'timestampAttribute' : 'timestamp'
-  };
+  // _casts: any = {
+  //   'intAttribute'       : 'int',
+  //   'floatAttribute'     : 'float',
+  //   'stringAttribute'    : 'string',
+  //   'boolAttribute'      : 'bool',
+  //   'booleanAttribute'   : 'boolean',
+  //   'objectAttribute'    : 'object',
+  //   'arrayAttribute'     : 'array',
+  //   'jsonAttribute'      : 'json',
+  //   'collectionAttribute': 'collection',
+  //   'dateAttribute'      : 'date',
+  //   'datetimeAttribute'  : 'datetime',
+  //   'timestampAttribute' : 'timestamp'
+  // };
 
   @Column() foo;
   @Column() bar;
 
-  @Column() intAttribute;
-  @Column() floatAttribute;
+  @IntegerColumn() intAttribute;
+  @FloatColumn() floatAttribute;
   @Column() stringAttribute;
-  @Column() boolAttribute;
-  @Column() booleanAttribute;
-  @Column() objectAttribute;
-  @Column() arrayAttribute;
-  @Column() jsonAttribute;
-  @Column() collectionAttribute;
-  @Column() dateAttribute;
-  @Column() datetimeAttribute;
-  @Column() timestampAttribute;
+  @BooleanColumn() boolAttribute;
+  @BooleanColumn() booleanAttribute;
+  @ObjectColumn() objectAttribute;
+  @ArrayColumn() arrayAttribute;
+  @JsonColumn() jsonAttribute;
+  @ArrayColumn() collectionAttribute;
+  @DateColumn() dateAttribute;
+  @DatetimeColumn() datetimeAttribute;
+  @TimestampColumn() timestampAttribute;
 
   public jsonAttributeValue() {
     return this.attributes['jsonAttribute'];
