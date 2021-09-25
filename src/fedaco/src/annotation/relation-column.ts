@@ -6,7 +6,7 @@
 
 import { Model } from '../fedaco/model';
 import { Relation } from '../fedaco/relations/relation';
-import { ColumnAnnotation } from './column';
+import { ColumnAnnotation, FedacoColumn } from './column';
 import { RelationType } from './enum-relation';
 
 export interface RelationColumnAnnotation extends ColumnAnnotation {
@@ -19,7 +19,7 @@ export interface RelationColumnAnnotation extends ColumnAnnotation {
 }
 
 export class FedacoRelationColumn {
-  static isTypeMe(obj: any) {
+  static isTypeOf(obj: any) {
     return obj instanceof FedacoRelationColumn;
   }
 }

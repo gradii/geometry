@@ -5,7 +5,6 @@
  */
 
 import { FedacoBuilder } from '../../src/fedaco/fedaco-builder';
-import { mixinSoftDeletes } from '../../src/fedaco/mixins/soft-deletes';
 import { Model } from '../../src/fedaco/model';
 
 export interface FedacoBuilderTestHigherOrderWhereScopeStub extends Model {

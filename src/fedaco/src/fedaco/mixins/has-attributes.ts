@@ -10,8 +10,11 @@ import {
 } from '@gradii/check-type';
 import { format, getUnixTime, isValid, parse, startOfDay } from 'date-fns';
 import { difference, equals, findLast, intersection, tap, uniq } from 'ramda';
+import { FedacoDecorator } from '../../annotation/annotation.interface';
 import { ColumnAnnotation, FedacoColumn } from '../../annotation/column';
-import { RelationColumnAnnotation } from '../../annotation/relation-column';
+import { DateColumn } from '../../annotation/column/date.column';
+import { DatetimeColumn } from '../../annotation/column/datetime.column';
+import { FedacoRelationColumn, RelationColumnAnnotation } from '../../annotation/relation-column';
 import { wrap } from '../../helper/arr';
 import { Constructor } from '../../helper/constructor';
 import { get, set } from '../../helper/obj';
@@ -70,7 +73,7 @@ export interface HasAttributes {
   getArrayableAttributes();
 
   /*Get all of the appendable values that are arrayable.*/
-  getArrayableAppends();
+  // getArrayableAppends();
 
   /*Get the model's relationships in array form.*/
   relationsToArray();
@@ -348,11 +351,11 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
       let attributes          = this.getArrayableAttributes();
       attributes              = this.addDateAttributesToArray(attributes);
       const mutatedAttributes = this.getMutatedAttributes();
-      attributes              = this.addMutatedAttributesToArray(attributes, mutatedAttributes);
+      // attributes              = this.addMutatedAttributesToArray(attributes, mutatedAttributes);
       attributes              = this.addCastAttributesToArray(attributes, mutatedAttributes);
-      for (let key of this.getArrayableAppends()) {
-        attributes[key] = this.mutateAttributeForArray(key, null);
-      }
+      // for (let key of this.getArrayableAppends()) {
+      //   attributes[key] = this.mutateAttributeForArray(key, null);
+      // }
       return attributes;
     }
 
@@ -368,15 +371,15 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Add the mutated attributes to the attributes array.*/
-    protected addMutatedAttributesToArray(attributes: any[], mutatedAttributes: any[]) {
-      for (let key of mutatedAttributes) {
-        if (!(key in attributes)) {
-          continue;
-        }
-        attributes[key] = this.mutateAttributeForArray(key, attributes[key]);
-      }
-      return attributes;
-    }
+    // protected addMutatedAttributesToArray(attributes: any[], mutatedAttributes: any[]) {
+    //   for (let key of mutatedAttributes) {
+    //     if (!(key in attributes)) {
+    //       continue;
+    //     }
+    //     attributes[key] = this.mutateAttributeForArray(key, attributes[key]);
+    //   }
+    //   return attributes;
+    // }
 
     /*Add the casted attributes to the attributes array.*/
     protected addCastAttributesToArray(this: Model & this, attributes: any,
@@ -416,12 +419,12 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Get all of the appendable values that are arrayable.*/
-    protected getArrayableAppends(this: Model & _Self) {
-      if (!this._appends.length) {
-        return [];
-      }
-      return this.getArrayableItems(this._appends);
-    }
+    // protected getArrayableAppends(this: Model & _Self) {
+    //   if (!this._appends.length) {
+    //     return [];
+    //   }
+    //   return this.getArrayableItems(this._appends);
+    // }
 
     /*Get the model's relationships in array form.*/
     public relationsToArray(this: Model & _Self) {
@@ -510,7 +513,9 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     /*Determine if the given key is a relationship method on the model.*/
     public isRelation(key: string) {
       const metadata   = this._columnInfo(key);
-      const isRelation = metadata && (metadata.isRelation || metadata.isRelationUsing);
+      const isRelation = metadata && (
+        FedacoRelationColumn.isTypeOf(metadata)
+      );
       if (isRelation) {
         return metadata;
       }
@@ -556,12 +561,12 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     // }
 
     /*Get the value of an attribute using its mutator for array conversion.*/
-    protected mutateAttributeForArray(key: string, value: any) {
-      this.isClassCastable(key) ?
-        this.getClassCastableAttributeValue(key, value) :
-        this.mutateAttribute(key, value);
-      return value;
-    }
+    // protected mutateAttributeForArray(key: string, value: any) {
+    //   this.isClassCastable(key) ?
+    //     this.getClassCastableAttributeValue(key, value) :
+    //     this.mutateAttribute(key, value);
+    //   return value;
+    // }
 
     /*Merge new casts with existing casts on the model.*/
     public mergeCasts(casts: any) {
@@ -664,8 +669,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Determine if the cast type is a custom date time cast.*/
     protected isCustomDateTimeCast(cast: string) {
-      const a = this._columnInfo(cast);
-      return a && a.isDateCastable;
+      const a: any = this._columnInfo(cast);
+      return a && (a.isTypeof(DateColumn) || a.isTypeof(DatetimeColumn));
 
       // return str_starts_with(cast, 'date:') || str_starts_with(cast, 'datetime:');
     }
@@ -716,13 +721,14 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     //   return this['set' + Str.studly(key) + 'Attribute'](value);
     // }
 
-    protected _columnInfo(key: string) {
+    protected _columnInfo(key: string): FedacoDecorator<ColumnAnnotation> & ColumnAnnotation {
       const typeOfClazz = this.constructor as typeof Model;
       const meta        = reflector.propMetadata(typeOfClazz);
       if (meta[key] && isArray(meta[key])) {
         return findLast(it => {
-          return FedacoColumn.isTypeMe(it);
-        }, meta[key]) as ColumnAnnotation;
+          return FedacoColumn.isTypeOf(it) ||
+            FedacoRelationColumn.isTypeOf(it);
+        }, meta[key]);
       }
       return undefined;
     }

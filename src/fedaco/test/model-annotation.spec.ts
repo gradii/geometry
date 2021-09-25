@@ -1,11 +1,8 @@
 import { reflector } from '@gradii/annotation';
 import { isFunction } from '@gradii/check-type';
 import { findLast } from 'ramda';
-import {
-  Column, ColumnDefine, DateCastableColumn, DateColumn, EncryptedCastableColumn
-} from '../src/annotation/column';
-import { HasManyColumn } from '../src/annotation/has-many.relation';
-import { RelationAnnotation } from '../src/annotation/relation';
+import { ColumnAnnotation, FedacoColumn } from '../src/annotation/column';
+import { RelationColumnAnnotation } from '../src/annotation/relation-column';
 import { Model } from '../src/fedaco/model';
 import { HasMany } from '../src/fedaco/relations/has-many';
 import { BasicModel, } from './model/basic.model';
@@ -18,12 +15,8 @@ import { RelationModel } from './model/relation.model';
 function _columnInfo(typeOfClazz, key: string) {
   const meta = reflector.propMetadata(typeOfClazz);
   return findLast(it => {
-    return Column.isTypeOf(it) ||
-      DateColumn.isTypeOf(it) ||
-      DateCastableColumn.isTypeOf(it) ||
-      EncryptedCastableColumn.isTypeOf(it) ||
-      HasManyColumn.isTypeOf(it);
-  }, meta[key]) as ColumnDefine;
+    return FedacoColumn.isTypeOf(it);
+  }, meta[key]) as ColumnAnnotation;
 }
 
 describe('model annotation', () => {
@@ -47,7 +40,7 @@ describe('model annotation', () => {
     basic.name  = 'hello';
 
     const meta = reflector.propMetadata(BasicModel);
-    const a    = findLast(it => Column.isTypeOf(it), meta['name']);
+    const a    = findLast(it => FedacoColumn.isTypeOf(it), meta['name']);
   });
 
   it('test relation annoation', () => {
@@ -110,7 +103,7 @@ describe('model annotation', () => {
     expect(meta).toMatchSnapshot('has many');
 
 
-    const metaColumnInfo: RelationAnnotation = _columnInfo(MemberModel, 'articles');
+    const metaColumnInfo: RelationColumnAnnotation = _columnInfo(MemberModel, 'articles');
 
     expect(metaColumnInfo).toMatchObject({
       isRelation: true,
@@ -129,7 +122,7 @@ describe('model annotation', () => {
 
     memberModel.id = 101;
 
-    const metaColumnInfo: RelationAnnotation = _columnInfo(MemberModel, 'articles');
+    const metaColumnInfo: RelationColumnAnnotation = _columnInfo(MemberModel, 'articles');
 
     // const spy1 = jest.spyOn(memberModel._connection, 'query');
 

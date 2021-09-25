@@ -1080,7 +1080,7 @@ describe('fedaco builder', () => {
     expect(builder).toBe(result);
   });
 
-  it('testDeleteOverride', () => {
+  it('testDeleteOverride', async () => {
     builder = getBuilder();
     builder.onDelete(builder => {
       return {
@@ -1088,7 +1088,9 @@ describe('fedaco builder', () => {
       };
     });
 
-    expect(builder.delete()).toEqual({'foo': builder});
+    const result = builder.delete();
+
+    expect(result).toEqual({'foo': builder});
   });
 
   it('testWhereKeyMethodWithInt', () => {
@@ -1360,7 +1362,6 @@ describe('fedaco builder', () => {
       ['bar', expect.anything()]);
 
   });
-
 
 
   it('testWithCastsMethod', () => {

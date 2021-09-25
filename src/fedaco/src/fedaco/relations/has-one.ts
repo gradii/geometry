@@ -25,11 +25,11 @@ export class HasOne extends mixinComparesRelatedModels(
   public supportsPartialRelations = true;
 
   /*Get the results of the relationship.*/
-  public getResults() {
+  public async getResults(): Promise<Model> {
     if (isBlank(this.getParentKey())) {
       return this._getDefaultFor(this._parent);
     }
-    return this._query.first() || this._getDefaultFor(this._parent);
+    return await (this._query.first() as Promise<Model>) || this._getDefaultFor(this._parent);
   }
 
   /*Initialize the relation on a set of models.*/

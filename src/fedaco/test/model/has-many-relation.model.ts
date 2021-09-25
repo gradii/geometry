@@ -4,8 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Column } from '../../src/annotation/column';
-import { HasManyColumn } from '../../src/annotation/has-many.relation';
+import { Column } from '../../src/annotation/column/column';
+import { HasManyColumn } from '../../src/annotation/relation-column/has-many.relation-column';
 import { Model } from '../../src/fedaco/model';
 
 

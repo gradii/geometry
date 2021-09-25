@@ -9,14 +9,15 @@ import { _additionalProcessingGetterSetter } from '../additional-processing';
 import { FedacoDecorator } from '../annotation.interface';
 import { ColumnAnnotation, FedacoColumn } from '../column';
 
-export interface DateColumnAnnotation extends ColumnAnnotation {
-
+export interface BinaryColumnAnnotation extends ColumnAnnotation {
+  length?: number;
+  isEncrypted?: boolean;
 }
 
-export const DateColumn: FedacoDecorator<DateColumnAnnotation> = makePropDecorator(
-  'Fedaco:DateColumn',
-  (p: DateColumnAnnotation = {}): DateColumnAnnotation => ({...p, isDate: true}),
+export const BinaryColumn: FedacoDecorator<BinaryColumnAnnotation> = makePropDecorator(
+  'Fedaco:BinaryColumn',
+  (p: BinaryColumnAnnotation = {}): BinaryColumnAnnotation => ({...p}),
   FedacoColumn,
-  (target: any, name: string, columnDefine: DateColumnAnnotation) => {
+  (target: any, name: string, columnDefine: BinaryColumnAnnotation) => {
     _additionalProcessingGetterSetter(target, name, columnDefine);
   });

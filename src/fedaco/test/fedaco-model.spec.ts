@@ -2,8 +2,10 @@ import { isAnyEmpty, isArray, isString } from '@gradii/check-type';
 import { createHash } from 'crypto';
 import { format } from 'date-fns';
 import { pluck } from 'ramda';
-import { Column, DateColumn } from '../src/annotation/column';
-import { RelationColumn } from '../src/annotation/relation-column';
+import { Column } from '../src/annotation/column/column';
+import { DateColumn } from '../src/annotation/column/date.column';
+import { HasManyColumn } from '../src/annotation/relation-column/has-many.relation-column';
+import { HasOneColumn } from '../src/annotation/relation-column/has-one.relation-column';
 import { DatabaseManager } from '../src/database-manager';
 import { FedacoBuilder } from '../src/fedaco/fedaco-builder';
 import { Dispatcher } from '../src/fedaco/mixins/has-events';
@@ -2529,8 +2531,8 @@ export class FedacoModelStub extends Model {
   @Column() last_name;
   @Column() project;
 
-  @RelationColumn() relationOne;
-  @RelationColumn() relationMany;
+  @HasOneColumn() relationOne;
+  @HasManyColumn() relationMany;
 
   // @Column() created_at;
   // @Column() updated_at;

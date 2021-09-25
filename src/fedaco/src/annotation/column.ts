@@ -30,7 +30,7 @@ export interface ColumnAnnotation extends FedacoAnnotation {
 
   isDate?: boolean;
 
-  isDateCastable?: boolean;
+
 
   isEncryptedCastable?: boolean;
 
@@ -41,7 +41,7 @@ export interface ColumnAnnotation extends FedacoAnnotation {
 
 
 export class FedacoColumn {
-  static isTypeMe(obj: any) {
+  static isTypeOf(obj: any) {
     return obj instanceof FedacoColumn;
   }
 }

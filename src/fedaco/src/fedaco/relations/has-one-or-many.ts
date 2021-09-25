@@ -103,8 +103,8 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
   }
 
   /*Find a model by its primary key or return a new instance of the related model.*/
-  public findOrNew(id: any, columns: any[] = ['*']) {
-    let instance = this.find(id, columns);
+  public async findOrNew(id: any, columns: any[] = ['*']) {
+    let instance = await this.find(id, columns);
     if (isBlank(instance)) {
       instance = this._related.newInstance();
       this.setForeignAttributesForCreate(instance);
@@ -113,8 +113,8 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
   }
 
   /*Get the first related model record matching the attributes or instantiate it.*/
-  public firstOrNew(attributes: any[] = [], values: any[] = []) {
-    let instance = this.where(attributes).first() as Model;
+  public async firstOrNew(attributes: any[] = [], values: any[] = []) {
+    let instance = await this.where(attributes).first() as Model;
     if (isBlank(instance)) {
       instance = this._related.newInstance([...attributes, ...values]);
       this.setForeignAttributesForCreate(instance);
@@ -123,38 +123,39 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
   }
 
   /*Get the first related record matching the attributes or create it.*/
-  public firstOrCreate(attributes: any[] = [], values: any[] = []) {
-    let instance = this.where(attributes).first();
+  public async firstOrCreate(attributes: any[] = [], values: any[] = []) {
+    let instance = await this.where(attributes).first();
     if (isBlank(instance)) {
-      instance = this.create([...attributes, ...values]);
+      instance = await this.create([...attributes, ...values]);
     }
     return instance;
   }
 
   /*Create or update a related record matching the attributes, and fill it with values.*/
-  public updateOrCreate(attributes: any[], values: any[] = []) {
-    return tap(instance => {
-      instance.fill(values);
-      instance.save();
-    }, this.firstOrNew(attributes));
+  public async updateOrCreate(attributes: any[], values: any[] = []) {
+    const instance = await this.firstOrNew(attributes);
+    await instance.fill(values);
+    await instance.save();
+
+    return instance;
   }
 
   /*Attach a model instance to the parent model.*/
-  public save(model: Model) {
+  public async save(model: Model) {
     this.setForeignAttributesForCreate(model);
-    return model.save() ? model : false;
+    return await model.save() ? model : false;
   }
 
   /*Attach a collection of models to the parent instance.*/
-  public saveMany(models: any[]) {
+  public async saveMany(models: any[]) {
     for (const model of models) {
-      this.save(model);
+      await this.save(model);
     }
     return models;
   }
 
   /*Create a new instance of the related model.*/
-  public create(attributes: any[] = []) {
+  public async create(attributes: any[] = []) {
     return tap(instance => {
       this.setForeignAttributesForCreate(instance);
       instance.save();
@@ -162,10 +163,10 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
   }
 
   /*Create a Collection of new instances of the related model.*/
-  public createMany(records: any[]) {
+  public async createMany(records: any[]) {
     const instances = this._related.newCollection();
     for (const record of records) {
-      instances.push(this.create(record));
+      instances.push(await this.create(record));
     }
     return instances;
   }

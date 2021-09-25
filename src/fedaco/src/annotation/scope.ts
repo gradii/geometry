@@ -11,14 +11,14 @@ import { FedacoDecorator } from './annotation.interface';
 import { ColumnAnnotation } from './column';
 
 
-export interface ScopeDefine extends ColumnAnnotation {
+export interface ScopeDefine {
   isScope?: boolean;
   query: (query: FedacoBuilder, ...args: any[]) => void;
 }
 
-export const Scope: FedacoDecorator<ColumnAnnotation> = makePropDecorator(
+export const Scope: FedacoDecorator<ScopeDefine> = makePropDecorator(
   'fedaco orm scope column',
   (p: ScopeDefine): ScopeDefine => ({isScope: true, ...p}), undefined,
-  (target: any, name: string, columnDefine: ScopeDefine) => {
-    _additionalProcessingGetter(target, name, columnDefine);
+  (target: any, name: string, args: any[]) => {
+    _additionalProcessingGetter(target, name, args);
   });

@@ -10,7 +10,6 @@ import { Model } from '../../fedaco/model';
 import { BelongsToMany } from '../../fedaco/relations/belongs-to-many';
 import { _additionalProcessingGetter } from '../additional-processing';
 import { FedacoDecorator } from '../annotation.interface';
-import { ColumnAnnotation } from '../column';
 import { RelationType } from '../enum-relation';
 import { RelationColumnAnnotation } from '../relation-column';
 

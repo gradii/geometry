@@ -9,14 +9,14 @@ import { _additionalProcessingGetterSetter } from '../additional-processing';
 import { FedacoDecorator } from '../annotation.interface';
 import { ColumnAnnotation, FedacoColumn } from '../column';
 
-export interface DateColumnAnnotation extends ColumnAnnotation {
+export interface AutoNumberColumnAnnotation extends ColumnAnnotation {
 
 }
 
-export const DateColumn: FedacoDecorator<DateColumnAnnotation> = makePropDecorator(
-  'Fedaco:DateColumn',
-  (p: DateColumnAnnotation = {}): DateColumnAnnotation => ({...p, isDate: true}),
+export const AutoNumberColumn: FedacoDecorator<AutoNumberColumnAnnotation> = makePropDecorator(
+  'Fedaco:AutoNumberColumn',
+  (p: AutoNumberColumnAnnotation = {}): AutoNumberColumnAnnotation => ({...p, isDate: true}),
   FedacoColumn,
-  (target: any, name: string, columnDefine: DateColumnAnnotation) => {
+  (target: any, name: string, columnDefine: AutoNumberColumnAnnotation) => {
     _additionalProcessingGetterSetter(target, name, columnDefine);
   });

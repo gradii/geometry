@@ -143,7 +143,7 @@ export function mixinGuardsAttributes<T extends Constructor<any>, M>(base: T): G
         for (const x of Object.keys(meta)) {
           if (meta[x] && isArray(meta[x])) {
             const currentMeta = findLast(it => {
-              return FedacoColumn.isTypeMe(it);
+              return FedacoColumn.isTypeOf(it);
             }, meta[x]) as ColumnAnnotation;
 
             if (currentMeta) {

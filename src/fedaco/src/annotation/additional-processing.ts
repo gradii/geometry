@@ -7,7 +7,7 @@
 import { Model } from '../fedaco/model';
 import { ColumnAnnotation } from './column';
 
-export const _additionalProcessingGetter = (target: any, name: string, columnDefine: ColumnAnnotation) => {
+export const _additionalProcessingGetter = (target: any, name: string, define: any) => {
   const descriptor = Object.getOwnPropertyDescriptor(target, name);
 
   const hasGetter = !!(descriptor && descriptor.get);
@@ -27,7 +27,7 @@ export const _additionalProcessingGetter = (target: any, name: string, columnDef
   }
 };
 
-export const _additionalProcessingGetterSetter = (target: any, name: string, columnDefine: ColumnAnnotation) => {
+export const _additionalProcessingGetterSetter = (target: any, name: string, define: any) => {
   const descriptor = Object.getOwnPropertyDescriptor(target, name);
 
   const hasGetter = !!(descriptor && descriptor.get);

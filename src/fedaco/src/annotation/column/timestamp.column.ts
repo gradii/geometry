@@ -9,13 +9,13 @@ import { _additionalProcessingGetterSetter } from '../additional-processing';
 import { ColumnAnnotation, FedacoColumn } from '../column';
 
 
-export interface PrimaryGeneratedColumnAnnotation extends ColumnAnnotation {
+export interface TimestampColumnAnnotation extends ColumnAnnotation {
 }
 
-export const PrimaryGeneratedColumn = makePropDecorator(
-  'Fedaco:PrimaryGeneratedColumn',
-  (p: PrimaryGeneratedColumnAnnotation): PrimaryGeneratedColumnAnnotation => ({...p}),
+export const TimestampColumn = makePropDecorator(
+  'Fedaco:TimestampColumn',
+  (p: TimestampColumnAnnotation): TimestampColumnAnnotation => ({...p}),
   FedacoColumn,
-  (target: any, key: string, columnDefine: PrimaryGeneratedColumnAnnotation) => {
+  (target: any, key: string, columnDefine: TimestampColumnAnnotation) => {
     _additionalProcessingGetterSetter(target, key, columnDefine);
   });

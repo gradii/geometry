@@ -9,7 +9,6 @@ import { tap } from 'ramda';
 import { Constructor } from '../../helper/constructor';
 import { Model } from '../model';
 import { SoftDeletingScope } from '../scopes/soft-deleting-scope';
-import { HasGlobalScopes } from './has-global-scopes';
 
 export interface SoftDeletes {
   /*Initialize the soft deleting trait for an instance.*/
@@ -84,20 +83,20 @@ export function mixinSoftDeletes<T extends Constructor<{}>>(base: T): SoftDelete
     }
 
     /*Force a hard delete on a soft deleted model.*/
-    public forceDelete(this: Model & this): boolean {
+    public async forceDelete(this: Model & this): Promise<boolean> {
       this._forceDeleting = true;
       return tap(deleted => {
         this._forceDeleting = false;
         if (deleted) {
           this._fireModelEvent('forceDeleted', false);
         }
-      }, this.delete());
+      }, await this.delete());
     }
 
     /*Perform the actual delete query on this model instance.*/
-    _performDeleteOnModel(this: Model & this): void {
+    async _performDeleteOnModel(this: Model & this) {
       if (this._forceDeleting) {
-        this._exists = false;
+        this.exists = false;
         return this._setKeysForSaveQuery(this.newModelQuery()).delete();
       }
       return this._runSoftDelete();
@@ -122,14 +121,14 @@ export function mixinSoftDeletes<T extends Constructor<{}>>(base: T): SoftDelete
     }
 
     /*Restore a soft-deleted model instance.*/
-    public restore(this: Model & this): boolean {
+    public async restore(this: Model & this): Promise<boolean> {
       if (this._fireModelEvent('restoring') === false) {
         return false;
       }
       // @ts-ignore
       this[this.getDeletedAtColumn()] = null;
-      this._exists                    = true;
-      let result                      = this.save();
+      this.exists                     = true;
+      let result                      = await this.save();
       this._fireModelEvent('restored', false);
       return result;
     }

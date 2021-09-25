@@ -7,7 +7,6 @@
 
 export * from './src/interface/connection-resolver-interface';
 export * from './src/proxy/no-such-method-proxy';
-export * from './src/proxy/magic-proxy';
 export * from './src/define/collection';
 export * from './src/mixins/forwards-calls';
 export * from './src/fedaco/model-helper-global';
@@ -59,7 +58,6 @@ export * from './src/fedaco/fedaco-manage';
 export * from './src/fedaco/resolve-connection';
 export * from './src/fedaco/encrypter';
 export * from './src/annotation/column';
-export * from './src/annotation/relation';
 export * from './src/database-manager';
 export * from './src/query/sql-node';
 export * from './src/query/expr/functions/function-node';

@@ -9,10 +9,15 @@ import { _additionalProcessingGetterSetter } from '../additional-processing';
 import { FedacoDecorator } from '../annotation.interface';
 import { ColumnAnnotation, FedacoColumn } from '../column';
 
-export const DateCastableColumn: FedacoDecorator<ColumnAnnotation> = makePropDecorator(
-  'Fedaco:DateCastableColumn',
-  (p: ColumnAnnotation = {}): ColumnAnnotation => ({...p, isDate: false, isDateCastable: true}),
+export interface JsonColumnAnnotation extends ColumnAnnotation {
+
+  isEncrypted?: boolean;
+}
+
+export const JsonColumn: FedacoDecorator<JsonColumnAnnotation> = makePropDecorator(
+  'Fedaco:JsonColumn',
+  (p: JsonColumnAnnotation = {}): JsonColumnAnnotation => ({...p}),
   FedacoColumn,
-  (target: any, name: string, columnDefine: ColumnAnnotation) => {
+  (target: any, name: string, columnDefine: JsonColumnAnnotation) => {
     _additionalProcessingGetterSetter(target, name, columnDefine);
   });

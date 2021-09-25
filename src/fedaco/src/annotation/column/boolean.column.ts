@@ -9,10 +9,14 @@ import { _additionalProcessingGetterSetter } from '../additional-processing';
 import { FedacoDecorator } from '../annotation.interface';
 import { ColumnAnnotation, FedacoColumn } from '../column';
 
-export const EncryptedCastableColumn: FedacoDecorator<ColumnAnnotation> = makePropDecorator(
-  'Fedaco:EncryptedCastableColumn',
-  (p: ColumnAnnotation = {}): ColumnAnnotation => ({...p, isEncryptedCastable: true}),
+export interface BooleanColumnAnnotation extends ColumnAnnotation {
+
+}
+
+export const BooleanColumn: FedacoDecorator<BooleanColumnAnnotation> = makePropDecorator(
+  'Fedaco:BooleanColumn',
+  (p: BooleanColumnAnnotation = {}): BooleanColumnAnnotation => ({...p}),
   FedacoColumn,
-  (target: any, name: string, columnDefine: ColumnAnnotation) => {
+  (target: any, name: string, columnDefine: BooleanColumnAnnotation) => {
     _additionalProcessingGetterSetter(target, name, columnDefine);
   });
