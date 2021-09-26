@@ -4,8 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isArray, isBlank, isNumber } from '@gradii/check-type';
-import { assocPath } from 'ramda';
+import { has, isArray, isBlank, isNumber } from '@gradii/check-type';
 import { value } from './fn';
 
 /**
@@ -32,7 +31,7 @@ export function get(target: any[] | any, key: string | number, defaultValue?: an
   if (key.includes('.') === false) {
     return target[key] ?? value(defaultValue);
   }
-  for (let segment of key.split('.')) {
+  for (const segment of key.split('.')) {
     if (segment in target) {
       target = target[segment];
     } else {
@@ -66,6 +65,51 @@ export function get(target: any[] | any, key: string | number, defaultValue?: an
 // }
 
 
+function _assocPath(obj: any, path: string[], val: any) {
+  if (path.length === 0) {
+    return val;
+  }
+
+  const idx = path[0];
+
+  if (path.length > 1) {
+    const nextObj = !isBlank(obj) && has(obj, idx) ?
+      obj[idx] :
+      isNumber(path[1]) ? [] : {};
+
+    val = _assocPath(nextObj, Array.prototype.slice.call(path, 1), val);
+  }
+  obj[idx] = val;
+  return obj;
+}
+
+function _disAssocPath(obj: any, path: string[]) {
+  if (path.length === 0) {
+    return;
+  }
+
+  const idx = path[0];
+
+  if (path.length > 1) {
+    const nextObj = !isBlank(obj) && has(obj, idx) ?
+      obj[idx] :
+      isNumber(path[1]) ? [] : {};
+
+    _disAssocPath(nextObj, Array.prototype.slice.call(path, 1));
+  }
+
+  delete obj[idx];
+  return obj;
+}
+
+
 export function set(target: any, key: string, data: any) {
-  return assocPath(key.split('.'), data, target);
+  return _assocPath(target, key.split('.'), data);
+}
+
+export function except(target: any, keys: string[]) {
+  for (const key of keys) {
+    _disAssocPath(target, key.split('.'));
+  }
+  return target;
 }

@@ -17,6 +17,11 @@ export function isNumber(value: any): value is number {
   return typeof value === 'number' || Object.prototype.toString.call(value) === '[object Number]';
 }
 
+export function isInteger(value: any): value is number {
+  // tslint:disable-next-line:no-bitwise
+  return value << 0 === value;
+}
+
 export function isArray(value: any): value is Array<any> {
   return Array.isArray(value);
 }
@@ -30,7 +35,8 @@ export function isString(value: any): value is string {
 }
 
 export function isObject(item: any): item is object {
-  return item !== null && typeof item === 'object' && Object.prototype.toString.call(item) === '[object Object]';
+  return item !== null && typeof item === 'object' && Object.prototype.toString.call(
+    item) === '[object Object]';
 }
 
 export function isRegex(value: any): value is RegExp {
@@ -112,6 +118,10 @@ export function isNonEmptyString(value: any): boolean { // tslint:disable-line:n
 
 export function isObjectEmpty(value: any): boolean {
   return !Object.keys(value).length;
+}
+
+export function has(obj: any, prop: string) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
 export function isAnyEmpty(value: any): boolean {

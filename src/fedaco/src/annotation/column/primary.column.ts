@@ -11,6 +11,7 @@ import { ColumnAnnotation, FedacoColumn } from '../column';
 
 
 export interface PrimaryColumnAnnotation extends ColumnAnnotation {
+  keyType: string;
 }
 
 export const PrimaryColumn: FedacoDecorator<PrimaryColumnAnnotation> = makePropDecorator(

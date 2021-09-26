@@ -16,10 +16,31 @@ function isAnyGuarded(guarded: string[]) {
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export declare namespace GuardsAttributes {
-  export const _unguarded: boolean;
+  /*Indicates if all mass assignment is enabled.*/
+  export const _unguarded = false;
+  /*The actual columns that exist on the database and can be guarded.*/
+  export const _guardableColumns: any[];
+
+  /*Disable all mass assignable restrictions.*/
+  export function unguard(state: boolean): void;
+
+  /*Enable the mass assignment restrictions.*/
+  export function reguard(): void;
+
+  /*Determine if the current state is "unguarded".*/
+  export function isUnguarded(): boolean;
+
+  /*Run the given callable while being unguarded.*/
+  export function unguarded(callback: Function): any;
+
 }
 
 export interface GuardsAttributes {
+  /*The attributes that are mass assignable.*/
+  _fillable: string[];
+  /*The attributes that aren't mass assignable.*/
+  _guarded: string[];
+
   getFillable(): this;
 
   totallyGuarded(): boolean;
@@ -81,22 +102,22 @@ export function mixinGuardsAttributes<T extends Constructor<any>, M>(base: T): G
     }
 
     /*Disable all mass assignable restrictions.*/
-    public static unguard(state: boolean = true) {
+    public static unguard(state: boolean = true): void {
       this._unguarded = state;
     }
 
     /*Enable the mass assignment restrictions.*/
-    public static reguard() {
+    public static reguard(): void {
       this._unguarded = false;
     }
 
     /*Determine if the current state is "unguarded".*/
-    public static isUnguarded() {
+    public static isUnguarded(): boolean {
       return this._unguarded;
     }
 
     /*Run the given callable while being unguarded.*/
-    public static unguarded(callback: Function) {
+    public static unguarded(callback: Function): any {
       if (this._unguarded) {
         return callback();
       }
@@ -164,7 +185,7 @@ export function mixinGuardsAttributes<T extends Constructor<any>, M>(base: T): G
     _fillableFromArray(attributes: any) {
       if (this.getFillable().length > 0 && !(this.constructor as typeof _Self)._unguarded) {
         const rst: any = {}, fillable = this.getFillable();
-        for (let key of Object.keys(attributes)) {
+        for (const key of Object.keys(attributes)) {
           if (fillable.includes(key)) {
             rst[key] = attributes[key];
           }

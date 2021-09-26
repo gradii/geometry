@@ -9,7 +9,7 @@ import {
   isArray, isBlank, isFunction, isNumber, isObjectEmpty, isString
 } from '@gradii/check-type';
 import { format, getUnixTime, isValid, parse, startOfDay } from 'date-fns';
-import { difference, equals, findLast, intersection, tap, uniq } from 'ramda';
+import { equals, findLast, omit, pick, tap, uniq } from 'ramda';
 import { FedacoDecorator } from '../../annotation/annotation.interface';
 import { ColumnAnnotation, FedacoColumn } from '../../annotation/column';
 import { ArrayColumn } from '../../annotation/column/array.column';
@@ -31,7 +31,8 @@ import { FedacoRelationColumn, RelationColumnAnnotation } from '../../annotation
 import { wrap } from '../../helper/arr';
 import { Constructor } from '../../helper/constructor';
 import { get, set } from '../../helper/obj';
-import { Encrypter } from '../encrypter';
+import { snakeCase } from '../../helper/str';
+import { Crypt, Encrypter } from '../encrypter';
 import { Model } from '../model';
 import { Relation } from '../relations/relation';
 
@@ -44,6 +45,11 @@ const PrimitiveCastTypes: string[] = [
   'encrypted:object', 'float', 'immutable_date', 'immutable_datetime',
   'immutable_custom_datetime', 'int', 'integer', 'json', 'object', 'real', 'string', 'timestamp'
 ];
+
+export declare namespace HasAttributes {
+  export const snakeAttributes: boolean;
+  export const encrypter: Encrypter;
+}
 
 export interface HasAttributes {
   /*The model's attributes.*/
@@ -86,7 +92,7 @@ export interface HasAttributes {
   getArrayableAttributes();
 
   /*Get all of the appendable values that are arrayable.*/
-  // getArrayableAppends();
+  getArrayableAppends();
 
   /*Get the model's relationships in array form.*/
   relationsToArray();
@@ -361,8 +367,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Convert the model's attributes to an array.*/
     public attributesToArray(this: Model & _Self) {
-      let attributes          = this.getArrayableAttributes();
-      attributes              = this.addDateAttributesToArray(attributes);
+      let attributes = this.getArrayableAttributes();
+      attributes     = this.addDateAttributesToArray(attributes);
       // const mutatedAttributes = this.getMutatedAttributes();
       // attributes              = this.addMutatedAttributesToArray(attributes, mutatedAttributes);
       // attributes              = this.addCastAttributesToArray(attributes, mutatedAttributes);
@@ -432,27 +438,29 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Get all of the appendable values that are arrayable.*/
-    // protected getArrayableAppends(this: Model & _Self) {
-    //   if (!this._appends.length) {
-    //     return [];
-    //   }
-    //   return this.getArrayableItems(this._appends);
-    // }
+    protected getArrayableAppends(this: Model & _Self) {
+      if (!this._appends.length) {
+        return [];
+      }
+      return this.getArrayableItems(this._appends);
+    }
 
     /*Get the model's relationships in array form.*/
     public relationsToArray(this: Model & _Self) {
-      let attributes: any = {}, relation;
-      for (const [key, value] of Object.entries(this.getArrayableRelations())) {
-        if (isBlank(value)) {
+      let relation;
+      const attributes: any = {};
+      for (let [key, value] of Object.entries(this.getArrayableRelations())) {
+        if (isArray(value)) {
+          relation = value.map((it: Model) => it.toArray());
+        } else if (value instanceof Model) {
+          relation = value.toArray();
+        } else if (isBlank(value)) {
           relation = value;
         }
-        // if (HasAttributes.snakeAttributes) {
-        // let key = snakeCase(key);
-        // }
-        if (relation !== undefined || isBlank(value)) {
-          attributes[key] = relation;
+        if ((this.constructor as typeof Model).snakeAttributes) {
+          key = snakeCase(key);
         }
-        // delete relation;
+        attributes[key] = relation;
       }
       return attributes;
     }
@@ -463,12 +471,13 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Get an attribute array of all arrayable values.*/
-    protected getArrayableItems(this: Model & _Self, values: string[]): Record<string, any> {
+    protected getArrayableItems(this: Model & _Self,
+                                values: Record<string, any>): Record<string, any> {
       if (this.getVisible().length > 0) {
-        values = intersection(values, this.getVisible());
+        values = pick(this.getVisible(), values);
       }
       if (this.getHidden().length > 0) {
-        values = difference(values, this.getHidden());
+        values = omit(this.getHidden(), values);
       }
       return values;
     }
@@ -756,12 +765,12 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Set a given JSON attribute on the model.*/
-    public fillJsonAttribute(key: string, value: any) {
+    public fillJsonAttribute(this: Model & this, key: string, value: any) {
       let path;
-      [key, path]           = key.split('->');
-      value                 = this.asJson(this.getArrayAttributeWithValue(path, key, value));
-      this._attributes[key] = /*this.isEncryptedCastable(key) ?
-        this.castAttributeAsEncryptedString(key, value) :*/ value;
+      [key, ...path]           = key.split('->');
+      value                 = this.asJson(this.getArrayAttributeWithValue(path.join('->'), key, value));
+      this._attributes[key] = this.isEncryptedCastable(key) ?
+        this.castAttributeAsEncryptedString(key, value) : value;
       return this;
     }
 
@@ -788,8 +797,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Get an array attribute or return an empty array if it is not set.*/
     protected getArrayAttributeByKey(key: string) {
-      if (!(this._attributes[key] !== undefined)) {
-        return [];
+      if (isBlank(this._attributes[key])) {
+        return {};
       }
       // todo encrypted
       return this.fromJson(/*this.isEncryptedCastable(key) ? this.fromEncryptedString(
@@ -820,15 +829,15 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     //   return (HasAttributes.encrypter ?? Crypt.getFacadeRoot()).decrypt(value, false);
     // }
     //
-    // /*Cast the given attribute to an encrypted string.*/
-    // protected castAttributeAsEncryptedString(key: string, value: any) {
-    //   return (HasAttributes.encrypter ?? Crypt.getFacadeRoot()).encrypt(value, false);
-    // }
-    //
-    // /*Set the encrypter instance that will be used to encrypt attributes.*/
-    // public static encryptUsing(encrypter: Encrypter) {
-    //   HasAttributes.encrypter = encrypter;
-    // }
+    /*Cast the given attribute to an encrypted string.*/
+    protected castAttributeAsEncryptedString(key: string, value: any) {
+      return ((this.constructor as any).encrypter ?? Crypt.getCryptor()).encrypt(value, false);
+    }
+
+    /*Set the encrypter instance that will be used to encrypt attributes.*/
+    public static encryptUsing(encrypter: Encrypter) {
+      (this.constructor as any).encrypter = encrypter;
+    }
 
     /*Decode the given float.*/
     public fromFloat(value: any) {
@@ -927,14 +936,14 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     public getCasts(this: Model & this) {
       const typeOfClazz = this.constructor as typeof Model;
       const metas       = reflector.propMetadata(typeOfClazz);
-      let casts: any    = {};
-      for (let [key, meta] of Object.entries(metas)) {
+      const casts: any    = {};
+      for (const [key, meta] of Object.entries(metas)) {
         const columnMeta = findLast(it => {
           return FedacoColumn.isTypeOf(it);
         }, meta);
         switch (true) {
           case PrimaryColumn.isTypeOf(columnMeta):
-            casts[key] = columnMeta.keyType;
+            casts[key] = columnMeta.keyType || 'int';
             break;
           case   PrimaryGeneratedColumn.isTypeOf(columnMeta):
             casts[key] = 'int';

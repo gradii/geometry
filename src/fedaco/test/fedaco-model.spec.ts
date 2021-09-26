@@ -1,4 +1,4 @@
-import { isAnyEmpty, isArray, isObject, isString } from '@gradii/check-type';
+import { isAnyEmpty, isBlank, isObject, isString } from '@gradii/check-type';
 import { createHash } from 'crypto';
 import { format } from 'date-fns';
 import { pluck } from 'ramda';
@@ -11,6 +11,7 @@ import { FloatColumn } from '../src/annotation/column/float.column';
 import { IntegerColumn } from '../src/annotation/column/integer.column';
 import { JsonColumn } from '../src/annotation/column/json.column';
 import { ObjectColumn } from '../src/annotation/column/object.column';
+import { PrimaryColumn } from '../src/annotation/column/primary.column';
 import { TimestampColumn } from '../src/annotation/column/timestamp.column';
 import { HasManyColumn } from '../src/annotation/relation-column/has-many.relation-column';
 import { HasOneColumn } from '../src/annotation/relation-column/has-one.relation-column';
@@ -18,11 +19,13 @@ import { DatabaseManager } from '../src/database-manager';
 import { FedacoBuilder } from '../src/fedaco/fedaco-builder';
 import { Dispatcher } from '../src/fedaco/mixins/has-events';
 import { Model } from '../src/fedaco/model';
+import { Relation } from '../src/fedaco/relations/relation';
 import { ConnectionResolverInterface } from '../src/interface/connection-resolver-interface';
 import { ConnectionInterface } from '../src/query-builder/connection-interface';
 import { MysqlGrammar } from '../src/query-builder/grammar/mysql-grammar';
 import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
+import { FedacoModelNamespacedModel } from './model/fedaco-model-namespaced.model';
 
 class Conn implements ConnectionInterface {
   getQueryGrammar(): any {
@@ -610,7 +613,7 @@ describe('test database eloquent model', () => {
     const spy5 = jest.spyOn(events, 'dispatch');
 
     model._timestamps = false;
-    model.id         = 1;
+    model.id          = 1;
     model.syncOriginal();
     model.name   = 'taylor';
     model.exists = true;
@@ -633,7 +636,7 @@ describe('test database eloquent model', () => {
     const query = getBuilder();
 
     const spy1  = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
-    const spy11 = jest.spyOn(model, 'updateTimestamps');/*.mockReturnValue(true);*/
+    const spy11 = jest.spyOn(model, 'updateTimestamps'); /*.mockReturnValue(true);*/
     const spy12 = jest.spyOn(model, 'fireModelEvent');
     const spy2  = jest.spyOn(query, 'where');
     // @ts-ignore
@@ -812,9 +815,9 @@ describe('test database eloquent model', () => {
     const query = getBuilder();
 
     const spy1  = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
-    const spy11 = jest.spyOn(model, 'updateTimestamps');/*.mockReturnValue(true);*/
+    const spy11 = jest.spyOn(model, 'updateTimestamps'); /*.mockReturnValue(true);*/
     const spy12 = jest.spyOn(model, 'fireModelEvent');
-    const spy13 = jest.spyOn(model, 'refresh');/*.mockReturnValue(true);*/
+    const spy13 = jest.spyOn(model, 'refresh'); /*.mockReturnValue(true);*/
     const spy2  = jest.spyOn(query, 'where');
     const spy22 = jest.spyOn(query, 'getConnection');
     // @ts-ignore
@@ -884,9 +887,9 @@ describe('test database eloquent model', () => {
     model.setIncrementing(false);
 
     const spy1  = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
-    const spy11 = jest.spyOn(model, 'updateTimestamps');/*.mockReturnValue(true);*/
+    const spy11 = jest.spyOn(model, 'updateTimestamps'); /*.mockReturnValue(true);*/
     const spy12 = jest.spyOn(model, 'fireModelEvent');
-    const spy13 = jest.spyOn(model, 'refresh');/*.mockReturnValue(true);*/
+    const spy13 = jest.spyOn(model, 'refresh'); /*.mockReturnValue(true);*/
     const spy2  = jest.spyOn(query, 'where');
     const spy22 = jest.spyOn(query, 'getConnection');
     // @ts-ignore
@@ -942,7 +945,7 @@ describe('test database eloquent model', () => {
     const query = getBuilder();
 
     const spy1  = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
-    const spy11 = jest.spyOn(model, 'updateTimestamps');/*.mockReturnValue(true);*/
+    const spy11 = jest.spyOn(model, 'updateTimestamps'); /*.mockReturnValue(true);*/
     const spy22 = jest.spyOn(query, 'getConnection');
 
     // const events = new Dispatcher();
@@ -1013,9 +1016,9 @@ describe('test database eloquent model', () => {
     const query = getBuilder();
 
     const spy1  = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
-    const spy11 = jest.spyOn(model, 'updateTimestamps');/*.mockReturnValue(true);*/
+    const spy11 = jest.spyOn(model, 'updateTimestamps'); /*.mockReturnValue(true);*/
     const spy12 = jest.spyOn(model, 'fireModelEvent');
-    const spy13 = jest.spyOn(model, 'refresh');/*.mockReturnValue(true);*/
+    const spy13 = jest.spyOn(model, 'refresh'); /*.mockReturnValue(true);*/
     const spy2  = jest.spyOn(query, 'where');
     const spy22 = jest.spyOn(query, 'getConnection');
     // @ts-ignore
@@ -1050,9 +1053,9 @@ describe('test database eloquent model', () => {
     const query = getBuilder();
 
     const spy1  = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
-    const spy11 = jest.spyOn(model, 'updateTimestamps');/*.mockReturnValue(true);*/
+    const spy11 = jest.spyOn(model, 'updateTimestamps'); /*.mockReturnValue(true);*/
     const spy12 = jest.spyOn(model, 'fireModelEvent');
-    const spy13 = jest.spyOn(model, 'refresh');/*.mockReturnValue(true);*/
+    const spy13 = jest.spyOn(model, 'refresh'); /*.mockReturnValue(true);*/
     const spy2  = jest.spyOn(query, 'where');
     const spy22 = jest.spyOn(query, 'getConnection');
     // @ts-ignore
@@ -1133,7 +1136,7 @@ describe('test database eloquent model', () => {
     const query = getBuilder();
 
     const spy1  = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
-    const spy11 = jest.spyOn(model, 'updateTimestamps');/*.mockReturnValue(true);*/
+    const spy11 = jest.spyOn(model, 'updateTimestamps'); /*.mockReturnValue(true);*/
     const spy22 = jest.spyOn(query, 'getConnection');
     // @ts-ignore
     const spy3  = jest.spyOn(query, 'insertGetId').mockImplementation((attributes, keyName) => {
@@ -1215,7 +1218,7 @@ describe('test database eloquent model', () => {
     model.name   = 'taylor';
     model.exists = false;
 
-    //####
+    // ####
     model.setRelation('relationMany', [related1, related2]);
 
     const result = await model.push();
@@ -1227,15 +1230,15 @@ describe('test database eloquent model', () => {
   });
 
   it('get and set table operations', () => {
-    let model = new FedacoModelStub();
+    const model = new FedacoModelStub();
     expect(model.getTable()).toBe('stub');
     model.setTable('foo');
     expect(model.getTable()).toBe('foo');
   });
 
   it('get key returns value of primary key', () => {
-    let model = new FedacoModelStub();
-    model.id  = 1;
+    const model = new FedacoModelStub();
+    model.id    = 1;
     expect(model.getKey()).toEqual(1);
     expect(model.getKeyName()).toBe('id');
   });
@@ -1252,13 +1255,13 @@ describe('test database eloquent model', () => {
     };
 
     FedacoModelStub.setConnectionResolver(resolver);
-    let model = new FedacoModelStub();
+    const model = new FedacoModelStub();
 
     const spy1 = jest.spyOn(model, 'getConnectionName').mockReturnValue('somethingElse');
     const spy3 = jest.spyOn(resolver, 'connection').mockReturnValue('bar');
 
-    let retval = model.setConnection('foo');
-    let result = model.getConnection();
+    const retval = model.setConnection('foo');
+    const result = model.getConnection();
     expect(model).toEqual(retval);
     expect(model._connection).toBe('foo');
 
@@ -1271,7 +1274,7 @@ describe('test database eloquent model', () => {
   });
 
   it('to array', () => {
-    let model      = new FedacoModelStub();
+    const model    = new FedacoModelStub();
     let array;
     model.name     = 'foo';
     model.age      = null;
@@ -1298,559 +1301,596 @@ describe('test database eloquent model', () => {
     expect(array['group']).toBeNull();
     expect(array['multi']).toEqual([]);
     expect(array['password'] !== undefined).toBeFalsy();
-    model.setAppends(['appendable']);
+    // model.setAppends(['appendable']);
     array = model.toArray();
-    expect(array['appendable']).toBe('appended');
+    // expect(array['appendable']).toBe('appended');
   });
 
-//   it('visible creates array whitelist', () => {
-//     let model = new FedacoModelStub();
-//     model.setVisible(['name']);
-//     model.name = 'Taylor';
-//     model.age = 26;
-//     let array = model.toArray();
-//     expect(array).toEqual({
-//       'name': 'Taylor'
-//     });
-//   });
-//   it('hidden can also exclude relationships', () => {
-//     let model = new FedacoModelStub();
-//     model.name = 'Taylor';
-//     model.setRelation('foo', ['bar']);
-//     model.setHidden(['foo', 'list_items', 'password']);
-//     let array = model.toArray();
-//     expect(array).toEqual({
-//       'name': 'Taylor'
-//     });
-//   });
-//   it('get arrayable relations function exclude hidden relationships', () => {
-//     let model = new FedacoModelStub();
-//     let clazz = new ReflectionClass(model);
-//     let method = clazz.getMethod('getArrayableRelations');
-//     method.setAccessible(true);
-//     model.setRelation('foo', ['bar']);
-//     model.setRelation('bam', ['boom']);
-//     model.setHidden(['foo']);
-//     let array = method.invokeArgs(model, []);
-//     expect(array).toEqual({
-//       'bam': ['boom']
-//     });
-//   });
-//   it('to array snake attributes', () => {
-//     let model = new FedacoModelStub();
-//     model.setRelation('namesList', new BaseCollection([
-//       new FedacoModelStub({
-//         'bar': 'baz'
-//       }), new FedacoModelStub({
-//         'bam': 'boom'
-//       })
-//     ]));
-//     let array = model.toArray();
-//     expect(array['names_list'][0]['bar']).toBe('baz');
-//     expect(array['names_list'][1]['bam']).toBe('boom');
-//     let model = new FedacoModelCamelStub();
-//     model.setRelation('namesList', new BaseCollection([
-//       new FedacoModelStub({
-//         'bar': 'baz'
-//       }), new FedacoModelStub({
-//         'bam': 'boom'
-//       })
-//     ]));
-//     let array = model.toArray();
-//     expect(array['namesList'][0]['bar']).toBe('baz');
-//     expect(array['namesList'][1]['bam']).toBe('boom');
-//   });
-//   it('to array uses mutators', () => {
-//     let model = new FedacoModelStub();
-//     model.list_items = [1, 2, 3];
-//     let array = model.toArray();
-//     expect(array['list_items']).toEqual([1, 2, 3]);
-//   });
-//   it('hidden', () => {
-//     let model = new FedacoModelStub({
-//       'name': 'foo',
-//       'age': 'bar',
-//       'id': 'baz'
-//     });
-//     model.setHidden(['age', 'id']);
-//     let array = model.toArray();
-//     expect(array).toArrayHasKey('name');
-//     expect(array).toArrayNotHasKey('age');
-//   });
-//   it('visible', () => {
-//     let model = new FedacoModelStub({
-//       'name': 'foo',
-//       'age': 'bar',
-//       'id': 'baz'
-//     });
-//     model.setVisible(['name', 'id']);
-//     let array = model.toArray();
-//     expect(array).toArrayHasKey('name');
-//     expect(array).toArrayNotHasKey('age');
-//   });
-//   it('dynamic hidden', () => {
-//     let model = new FedacoModelDynamicHiddenStub({
-//       'name': 'foo',
-//       'age': 'bar',
-//       'id': 'baz'
-//     });
-//     let array = model.toArray();
-//     expect(array).toArrayHasKey('name');
-//     expect(array).toArrayNotHasKey('age');
-//   });
-//   it('with hidden', () => {
-//     let model = new FedacoModelStub({
-//       'name': 'foo',
-//       'age': 'bar',
-//       'id': 'baz'
-//     });
-//     model.setHidden(['age', 'id']);
-//     model.makeVisible('age');
-//     let array = model.toArray();
-//     expect(array).toArrayHasKey('name');
-//     expect(array).toArrayHasKey('age');
-//     expect(array).toArrayNotHasKey('id');
-//   });
-//   it('make hidden', () => {
-//     let model = new FedacoModelStub({
-//       'name': 'foo',
-//       'age': 'bar',
-//       'address': 'foobar',
-//       'id': 'baz'
-//     });
-//     let array = model.toArray();
-//     expect(array).toArrayHasKey('name');
-//     expect(array).toArrayHasKey('age');
-//     expect(array).toArrayHasKey('address');
-//     expect(array).toArrayHasKey('id');
-//     let array = model.makeHidden('address').toArray();
-//     expect(array).toArrayNotHasKey('address');
-//     expect(array).toArrayHasKey('name');
-//     expect(array).toArrayHasKey('age');
-//     expect(array).toArrayHasKey('id');
-//     let array = model.makeHidden(['name', 'age']).toArray();
-//     expect(array).toArrayNotHasKey('name');
-//     expect(array).toArrayNotHasKey('age');
-//     expect(array).toArrayNotHasKey('address');
-//     expect(array).toArrayHasKey('id');
-//   });
-//   it('dynamic visible', () => {
-//     let model = new FedacoModelDynamicVisibleStub({
-//       'name': 'foo',
-//       'age': 'bar',
-//       'id': 'baz'
-//     });
-//     let array = model.toArray();
-//     expect(array).toArrayHasKey('name');
-//     expect(array).toArrayNotHasKey('age');
-//   });
-//   it('make visible if', () => {
-//     let model = new FedacoModelStub({
-//       'name': 'foo',
-//       'age': 'bar',
-//       'id': 'baz'
-//     });
-//     model.setHidden(['age', 'id']);
-//     model.makeVisibleIf(true, 'age');
-//     let array = model.toArray();
-//     expect(array).toArrayHasKey('name');
-//     expect(array).toArrayHasKey('age');
-//     expect(array).toArrayNotHasKey('id');
-//     model.setHidden(['age', 'id']);
-//     model.makeVisibleIf(false, 'age');
-//     let array = model.toArray();
-//     expect(array).toArrayHasKey('name');
-//     expect(array).toArrayNotHasKey('age');
-//     expect(array).toArrayNotHasKey('id');
-//     model.setHidden(['age', 'id']);
-//     model.makeVisibleIf(model => {
-//       return !isBlank(model.name);
-//     }, 'age');
-//     let array = model.toArray();
-//     expect(array).toArrayHasKey('name');
-//     expect(array).toArrayHasKey('age');
-//     expect(array).toArrayNotHasKey('id');
-//   });
-//   it('make hidden if', () => {
-//     let model = new FedacoModelStub({
-//       'name': 'foo',
-//       'age': 'bar',
-//       'address': 'foobar',
-//       'id': 'baz'
-//     });
-//     let array = model.toArray();
-//     expect(array).toArrayHasKey('name');
-//     expect(array).toArrayHasKey('age');
-//     expect(array).toArrayHasKey('address');
-//     expect(array).toArrayHasKey('id');
-//     let array = model.makeHiddenIf(true, 'address').toArray();
-//     expect(array).toArrayNotHasKey('address');
-//     expect(array).toArrayHasKey('name');
-//     expect(array).toArrayHasKey('age');
-//     expect(array).toArrayHasKey('id');
-//     model.makeVisible('address');
-//     let array = model.makeHiddenIf(false, ['name', 'age']).toArray();
-//     expect(array).toArrayHasKey('name');
-//     expect(array).toArrayHasKey('age');
-//     expect(array).toArrayHasKey('address');
-//     expect(array).toArrayHasKey('id');
-//     let array = model.makeHiddenIf(model => {
-//       return !isBlank(model.id);
-//     }, ['name', 'age']).toArray();
-//     expect(array).toArrayHasKey('address');
-//     expect(array).toArrayNotHasKey('name');
-//     expect(array).toArrayNotHasKey('age');
-//     expect(array).toArrayHasKey('id');
-//   });
-//   it('fillable', () => {
-//     let model = new FedacoModelStub();
-//     model.fillable(['name', 'age']);
-//     model.fill({
-//       'name': 'foo',
-//       'age': 'bar'
-//     });
-//     expect(model.name).toBe('foo');
-//     expect(model.age).toBe('bar');
-//   });
-//   it('qualify column', () => {
-//     let model = new FedacoModelStub();
-//     expect(model.qualifyColumn('column')).toBe('stub.column');
-//   });
-//   it('force fill method fills guarded attributes', () => {
-//     let model = new FedacoModelSaveStub().forceFill({
-//       'id': 21
-//     });
-//     expect(model.id).toEqual(21);
-//   });
-//   it('filling json attributes', () => {
-//     let model = new FedacoModelStub();
-//     model.fillable(['meta->name', 'meta->price', 'meta->size->width']);
-//     model.fill({
-//       'meta->name': 'foo',
-//       'meta->price': 'bar',
-//       'meta->size->width': 'baz'
-//     });
-//     expect(model.toArray()).toEqual({
-//       'meta': json_encode({
-//         'name': 'foo',
-//         'price': 'bar',
-//         'size': {
-//           'width': 'baz'
-//         }
-//       })
-//     });
-//     let model = new FedacoModelStub({
-//       'meta': json_encode({
-//         'name': 'Taylor'
-//       })
-//     });
-//     model.fillable(['meta->name', 'meta->price', 'meta->size->width']);
-//     model.fill({
-//       'meta->name': 'foo',
-//       'meta->price': 'bar',
-//       'meta->size->width': 'baz'
-//     });
-//     expect(model.toArray()).toEqual({
-//       'meta': json_encode({
-//         'name': 'foo',
-//         'price': 'bar',
-//         'size': {
-//           'width': 'baz'
-//         }
-//       })
-//     });
-//   });
-//   it('unguard allows anything to be set', () => {
-//     let model = new FedacoModelStub();
-//     FedacoModelStub.unguard();
-//     model.guard(['*']);
-//     model.fill({
-//       'name': 'foo',
-//       'age': 'bar'
-//     });
-//     expect(model.name).toBe('foo');
-//     expect(model.age).toBe('bar');
-//     FedacoModelStub.unguard(false);
-//   });
-//   it('underscore properties are not filled', () => {
-//     let model = new FedacoModelStub();
-//     model.fill({
-//       '_method': 'PUT'
-//     });
-//     expect(model.getAttributes()).toEqual([]);
-//   });
-//   it('guarded', () => {
-//     let model = new FedacoModelStub();
-//     model.guard(['name', 'age']);
-//     model.fill({
-//       'name': 'foo',
-//       'age': 'bar',
-//       'foo': 'bar'
-//     });
-//     expect(model.name !== undefined).toBeFalsy();
-//     expect(model.age !== undefined).toBeFalsy();
-//     expect(model.foo).toBe('bar');
-//   });
-//   it('fillable overrides guarded', () => {
-//     let model = new FedacoModelStub();
-//     model.guard(['name', 'age']);
-//     model.fillable(['age', 'foo']);
-//     model.fill({
-//       'name': 'foo',
-//       'age': 'bar',
-//       'foo': 'bar'
-//     });
-//     expect(model.name !== undefined).toBeFalsy();
-//     expect(model.age).toBe('bar');
-//     expect(model.foo).toBe('bar');
-//   });
-//   it('global guarded', () => {
-//     this.expectException(MassAssignmentException);
-//     this.expectExceptionMessage('name');
-//     let model = new FedacoModelStub();
-//     model.guard(['*']);
-//     model.fill({
-//       'name': 'foo',
-//       'age': 'bar',
-//       'votes': 'baz'
-//     });
-//   });
-//   it('unguarded runs callback while being unguarded', () => {
-//     let model = Model.unguarded(() => {
-//       return new FedacoModelStub().guard(['*']).fill({
-//         'name': 'Taylor'
-//       });
-//     });
-//     expect(model.name).toBe('Taylor');
-//     expect(Model.isUnguarded()).toBeFalsy();
-//   });
-//   it('unguarded call does not change unguarded state', () => {
-//     Model.unguard();
-//     let model = Model.unguarded(() => {
-//       return new FedacoModelStub().guard(['*']).fill({
-//         'name': 'Taylor'
-//       });
-//     });
-//     expect(model.name).toBe('Taylor');
-//     expect(Model.isUnguarded()).toBeTruthy();
-//     Model.reguard();
-//   });
-//   it('unguarded call does not change unguarded state on exception', () => {
-//     try {
-//       Model.unguarded(() => {
-//         throw new Exception();
-//       });
-//     } catch (e: Exception) {
-//     }
-//     expect(Model.isUnguarded()).toBeFalsy();
-//   });
-//   it('has one creates proper relation', () => {
-//     let model = new FedacoModelStub();
-//     this.addMockConnection(model);
-//     let relation = model.hasOne(FedacoModelSaveStub);
-//     expect(relation.getQualifiedForeignKeyName()).toBe('save_stub.eloquent_model_stub_id');
-//     let model = new FedacoModelStub();
-//     this.addMockConnection(model);
-//     let relation = model.hasOne(FedacoModelSaveStub, 'foo');
-//     expect(relation.getQualifiedForeignKeyName()).toBe('save_stub.foo');
-//     expect(relation.getParent()).toEqual(model);
-//     expect(relation.getQuery().getModel()).toBeInstanceOf(FedacoModelSaveStub);
-//   });
-//   it('morph one creates proper relation', () => {
-//     let model = new FedacoModelStub();
-//     this.addMockConnection(model);
-//     let relation = model.morphOne(FedacoModelSaveStub, 'morph');
-//     expect(relation.getQualifiedForeignKeyName()).toBe('save_stub.morph_id');
-//     expect(relation.getQualifiedMorphType()).toBe('save_stub.morph_type');
-//     expect(relation.getMorphClass()).toEqual(FedacoModelStub);
-//   });
-//   it('correct morph class is returned', () => {
-//     Relation.morphMap({
-//       'alias': 'AnotherModel'
-//     });
-//     let model = new FedacoModelStub();
-//     try {
-//       expect(model.getMorphClass()).toEqual(FedacoModelStub);
-//     } finally {
-//       Relation.morphMap([], false);
-//     }
-//   });
-//   it('has many creates proper relation', () => {
-//     let model = new FedacoModelStub();
-//     this.addMockConnection(model);
-//     let relation = model.hasMany(FedacoModelSaveStub);
-//     expect(relation.getQualifiedForeignKeyName()).toBe('save_stub.eloquent_model_stub_id');
-//     let model = new FedacoModelStub();
-//     this.addMockConnection(model);
-//     let relation = model.hasMany(FedacoModelSaveStub, 'foo');
-//     expect(relation.getQualifiedForeignKeyName()).toBe('save_stub.foo');
-//     expect(relation.getParent()).toEqual(model);
-//     expect(relation.getQuery().getModel()).toBeInstanceOf(FedacoModelSaveStub);
-//   });
-//   it('morph many creates proper relation', () => {
-//     let model = new FedacoModelStub();
-//     this.addMockConnection(model);
-//     let relation = model.morphMany(FedacoModelSaveStub, 'morph');
-//     expect(relation.getQualifiedForeignKeyName()).toBe('save_stub.morph_id');
-//     expect(relation.getQualifiedMorphType()).toBe('save_stub.morph_type');
-//     expect(relation.getMorphClass()).toEqual(FedacoModelStub);
-//   });
-//   it('belongs to creates proper relation', () => {
-//     let model = new FedacoModelStub();
-//     this.addMockConnection(model);
-//     let relation = model.belongsToStub();
-//     expect(relation.getForeignKeyName()).toBe('belongs_to_stub_id');
-//     expect(relation.getParent()).toEqual(model);
-//     expect(relation.getQuery().getModel()).toBeInstanceOf(FedacoModelSaveStub);
-//     let model = new FedacoModelStub();
-//     this.addMockConnection(model);
-//     let relation = model.belongsToExplicitKeyStub();
-//     expect(relation.getForeignKeyName()).toBe('foo');
-//   });
-//   it('morph to creates proper relation', () => {
-//     let model = new FedacoModelStub();
-//     this.addMockConnection(model);
-//     let relation = model.morphToStub();
-//     expect(relation.getForeignKeyName()).toBe('morph_to_stub_id');
-//     expect(relation.getMorphType()).toBe('morph_to_stub_type');
-//     expect(relation.getRelationName()).toBe('morphToStub');
-//     expect(relation.getParent()).toEqual(model);
-//     expect(relation.getQuery().getModel()).toBeInstanceOf(FedacoModelSaveStub);
-//     let relation2 = model.morphToStubWithKeys();
-//     expect(relation2.getForeignKeyName()).toBe('id');
-//     expect(relation2.getMorphType()).toBe('type');
-//     expect(relation2.getRelationName()).toBe('morphToStubWithKeys');
-//     let relation3 = model.morphToStubWithName();
-//     expect(relation3.getForeignKeyName()).toBe('some_name_id');
-//     expect(relation3.getMorphType()).toBe('some_name_type');
-//     expect(relation3.getRelationName()).toBe('someName');
-//     let relation4 = model.morphToStubWithNameAndKeys();
-//     expect(relation4.getForeignKeyName()).toBe('id');
-//     expect(relation4.getMorphType()).toBe('type');
-//     expect(relation4.getRelationName()).toBe('someName');
-//   });
-//   it('belongs to many creates proper relation', () => {
-//     let model = new FedacoModelStub();
-//     this.addMockConnection(model);
-//     let relation = model.belongsToMany(FedacoModelSaveStub);
-//     expect(relation.getQualifiedForeignPivotKeyName()).toBe(
-//       'eloquent_model_save_stub_eloquent_model_stub.eloquent_model_stub_id');
-//     expect(relation.getQualifiedRelatedPivotKeyName()).toBe(
-//       'eloquent_model_save_stub_eloquent_model_stub.eloquent_model_save_stub_id');
-//     expect(relation.getParent()).toEqual(model);
-//     expect(relation.getQuery().getModel()).toBeInstanceOf(FedacoModelSaveStub);
-//     expect(relation.getRelationName()).toEqual(__FUNCTION__);
-//     let model = new FedacoModelStub();
-//     this.addMockConnection(model);
-//     let relation = model.belongsToMany(FedacoModelSaveStub, 'table', 'foreign', 'other');
-//     expect(relation.getQualifiedForeignPivotKeyName()).toBe('table.foreign');
-//     expect(relation.getQualifiedRelatedPivotKeyName()).toBe('table.other');
-//     expect(relation.getParent()).toEqual(model);
-//     expect(relation.getQuery().getModel()).toBeInstanceOf(FedacoModelSaveStub);
-//   });
-//   it('relations with varied connections', () => {
-//     let model = new FedacoModelStub();
-//     model.setConnection('non_default');
-//     this.addMockConnection(model);
-//     let relation = model.hasOne(EloquentNoConnectionModelStub);
-//     expect(relation.getRelated().getConnectionName()).toBe('non_default');
-//     let model = new FedacoModelStub();
-//     model.setConnection('non_default');
-//     this.addMockConnection(model);
-//     let relation = model.hasOne(EloquentDifferentConnectionModelStub);
-//     expect(relation.getRelated().getConnectionName()).toBe('different_connection');
-//     let model = new FedacoModelStub();
-//     model.setConnection('non_default');
-//     this.addMockConnection(model);
-//     let relation = model.morphOne(EloquentNoConnectionModelStub, 'type');
-//     expect(relation.getRelated().getConnectionName()).toBe('non_default');
-//     let model = new FedacoModelStub();
-//     model.setConnection('non_default');
-//     this.addMockConnection(model);
-//     let relation = model.morphOne(EloquentDifferentConnectionModelStub, 'type');
-//     expect(relation.getRelated().getConnectionName()).toBe('different_connection');
-//     let model = new FedacoModelStub();
-//     model.setConnection('non_default');
-//     this.addMockConnection(model);
-//     let relation = model.belongsTo(EloquentNoConnectionModelStub);
-//     expect(relation.getRelated().getConnectionName()).toBe('non_default');
-//     let model = new FedacoModelStub();
-//     model.setConnection('non_default');
-//     this.addMockConnection(model);
-//     let relation = model.belongsTo(EloquentDifferentConnectionModelStub);
-//     expect(relation.getRelated().getConnectionName()).toBe('different_connection');
-//     let model = new FedacoModelStub();
-//     model.setConnection('non_default');
-//     this.addMockConnection(model);
-//     let relation = model.hasMany(EloquentNoConnectionModelStub);
-//     expect(relation.getRelated().getConnectionName()).toBe('non_default');
-//     let model = new FedacoModelStub();
-//     model.setConnection('non_default');
-//     this.addMockConnection(model);
-//     let relation = model.hasMany(EloquentDifferentConnectionModelStub);
-//     expect(relation.getRelated().getConnectionName()).toBe('different_connection');
-//     let model = new FedacoModelStub();
-//     model.setConnection('non_default');
-//     this.addMockConnection(model);
-//     let relation = model.hasManyThrough(EloquentNoConnectionModelStub, FedacoModelSaveStub);
-//     expect(relation.getRelated().getConnectionName()).toBe('non_default');
-//     let model = new FedacoModelStub();
-//     model.setConnection('non_default');
-//     this.addMockConnection(model);
-//     let relation = model.hasManyThrough(EloquentDifferentConnectionModelStub,
-//       FedacoModelSaveStub);
-//     expect(relation.getRelated().getConnectionName()).toBe('different_connection');
-//     let model = new FedacoModelStub();
-//     model.setConnection('non_default');
-//     this.addMockConnection(model);
-//     let relation = model.belongsToMany(EloquentNoConnectionModelStub);
-//     expect(relation.getRelated().getConnectionName()).toBe('non_default');
-//     let model = new FedacoModelStub();
-//     model.setConnection('non_default');
-//     this.addMockConnection(model);
-//     let relation = model.belongsToMany(EloquentDifferentConnectionModelStub);
-//     expect(relation.getRelated().getConnectionName()).toBe('different_connection');
-//   });
-//   it('models assume their name', () => {
-//     import
-//       let
-//     model = new FedacoModelWithoutTableStub();
-//     expect(model.getTable()).toBe('eloquent_model_without_table_stubs');
-//     let namespacedModel = new FedacoModelNamespacedStub();
-//     expect(namespacedModel.getTable()).toBe('eloquent_model_namespaced_stubs');
-//   });
-//   it('the mutator cache is populated', () => {
-//     let clazz = new FedacoModelStub();
-//     let expectedAttributes = ['list_items', 'password', 'appendable'];
-//     expect(clazz.getMutatedAttributes()).toEqual(expectedAttributes);
-//   });
-//   it('route key is primary key', () => {
-//     let model = new FedacoModelNonIncrementingStub();
-//     model.id = 'foo';
-//     expect(model.getRouteKey()).toBe('foo');
-//   });
-//   it('route name is primary key name', () => {
-//     let model = new FedacoModelStub();
-//     expect(model.getRouteKeyName()).toBe('id');
-//   });
-//   it('clone model makes a fresh copy of the model', () => {
-//     let clazz = new FedacoModelStub();
-//     clazz.id = 1;
-//     clazz.exists = true;
-//     clazz.first = 'taylor';
-//     clazz.last = 'otwell';
-//     clazz.created_at = clazz.freshTimestamp();
-//     clazz.updated_at = clazz.freshTimestamp();
-//     clazz.setRelation('foo', ['bar']);
-//     let clone = clazz.replicate();
-//     expect(clone.id).toNull();
-//     expect(clone.exists).toBeFalsy();
-//     expect(clone.first).toBe('taylor');
-//     expect(clone.last).toBe('otwell');
-//     expect(clone.getAttributes()).toArrayNotHasKey('created_at');
-//     expect(clone.getAttributes()).toArrayNotHasKey('updated_at');
-//     expect(clone.foo).toEqual(['bar']);
-//   });
+  it('visible creates array whitelist', () => {
+    const model = new FedacoModelStub();
+    model.setVisible(['name']);
+    model.name  = 'Taylor';
+    model.age   = 26;
+    const array = model.toArray();
+    expect(array).toEqual({
+      'name': 'Taylor'
+    });
+  });
+
+  it('hidden can also exclude relationships', () => {
+    const model = new FedacoModelStub();
+    model.name  = 'Taylor';
+    model.setRelation('foo', ['bar']);
+    model.setHidden(['foo', 'list_items', 'password']);
+    const array = model.toArray();
+    expect(array).toEqual({
+      'name': 'Taylor'
+    });
+  });
+
+  it('get arrayable relations function exclude hidden relationships', () => {
+    const model = new FedacoModelStub();
+    model.setRelation('foo', ['bar']);
+    model.setRelation('bam', ['boom']);
+    model.setHidden(['foo']);
+    const array = model.getArrayableRelations();
+    expect(array).toEqual({
+      'bam': ['boom']
+    });
+  });
+
+  it('to array snake attributes', () => {
+    let model = new FedacoModelStub();
+    model.setRelation('namesList', [
+      FedacoModelStub.initAttributes({
+        'bar': 'baz'
+      }),
+      FedacoModelStub.initAttributes({
+        'bam': 'boom'
+      })
+    ]);
+    let array = model.toArray();
+    expect(array['names_list'][0]['bar']).toBe('baz');
+    expect(array['names_list'][1]['bam']).toBe('boom');
+    model = new FedacoModelCamelStub();
+    model.setRelation('namesList', [
+      FedacoModelStub.initAttributes({
+        'bar': 'baz'
+      }),
+      FedacoModelStub.initAttributes({
+        'bam': 'boom'
+      })
+    ]);
+    array = model.toArray();
+    expect(array['namesList'][0]['bar']).toBe('baz');
+    expect(array['namesList'][1]['bam']).toBe('boom');
+  });
+
+  it('to array uses mutators', () => {
+    const model      = new FedacoModelStub();
+    model.list_items = [1, 2, 3];
+    const array      = model.toArray();
+    expect(array['list_items']).toEqual([1, 2, 3]);
+  });
+
+  it('hidden', () => {
+    const model = FedacoModelStub.initAttributes({
+      'name': 'foo',
+      'age' : 'bar',
+      'id'  : 'baz'
+    });
+    model.setHidden(['age', 'id']);
+    const array = model.toArray();
+    expect(array).toHaveProperty('name');
+    expect(array).not.toHaveProperty('age');
+  });
+
+  it('visible', () => {
+    const model = FedacoModelStub.initAttributes({
+      'name': 'foo',
+      'age' : 'bar',
+      'id'  : 'baz'
+    });
+    model.setVisible(['name', 'id']);
+    const array = model.toArray();
+    expect(array).toHaveProperty('name');
+    expect(array).not.toHaveProperty('age');
+  });
+
+  it('dynamic hidden', () => {
+    const model = FedacoModelDynamicHiddenStub.initAttributes({
+      'name': 'foo',
+      'age' : 'bar',
+      'id'  : 'baz'
+    });
+    const array = model.toArray();
+    expect(array).toHaveProperty('name');
+    expect(array).not.toHaveProperty('age');
+  });
+
+  it('with hidden', () => {
+    const model = FedacoModelStub.initAttributes({
+      'name': 'foo',
+      'age' : 'bar',
+      'id'  : 'baz'
+    });
+    model.setHidden(['age', 'id']);
+    model.makeVisible('age');
+    const array = model.toArray();
+    expect(array).toHaveProperty('name');
+    expect(array).toHaveProperty('age');
+    expect(array).not.toHaveProperty('id');
+  });
+
+  it('make hidden', () => {
+    const model = FedacoModelStub.initAttributes({
+      'name'   : 'foo',
+      'age'    : 'bar',
+      'address': 'foobar',
+      'id'     : 'baz'
+    });
+    let array   = model.toArray();
+    expect(array).toHaveProperty('name');
+    expect(array).toHaveProperty('age');
+    expect(array).toHaveProperty('address');
+    expect(array).toHaveProperty('id');
+    array = model.makeHidden('address').toArray();
+    expect(array).not.toHaveProperty('address');
+    expect(array).toHaveProperty('name');
+    expect(array).toHaveProperty('age');
+    expect(array).toHaveProperty('id');
+    array = model.makeHidden(['name', 'age']).toArray();
+    expect(array).not.toHaveProperty('name');
+    expect(array).not.toHaveProperty('age');
+    expect(array).not.toHaveProperty('address');
+    expect(array).toHaveProperty('id');
+  });
+
+  it('dynamic visible', () => {
+    const model = FedacoModelDynamicVisibleStub.initAttributes({
+      'name': 'foo',
+      'age' : 'bar',
+      'id'  : 'baz'
+    });
+    const array = model.toArray();
+    expect(array).toHaveProperty('name');
+    expect(array).not.toHaveProperty('age');
+  });
+
+  it('make visible if', () => {
+    const model = FedacoModelStub.initAttributes({
+      'name': 'foo',
+      'age' : 'bar',
+      'id'  : 'baz'
+    });
+    model.setHidden(['age', 'id']);
+    model.makeVisibleIf(true, 'age');
+    let array = model.toArray();
+    expect(array).toHaveProperty('name');
+    expect(array).toHaveProperty('age');
+    expect(array).not.toHaveProperty('id');
+    model.setHidden(['age', 'id']);
+    model.makeVisibleIf(false, 'age');
+    array = model.toArray();
+    expect(array).toHaveProperty('name');
+    expect(array).not.toHaveProperty('age');
+    expect(array).not.toHaveProperty('id');
+    model.setHidden(['age', 'id']);
+    model.makeVisibleIf(model => {
+      return !isBlank(model.name);
+    }, 'age');
+    array = model.toArray();
+    expect(array).toHaveProperty('name');
+    expect(array).toHaveProperty('age');
+    expect(array).not.toHaveProperty('id');
+  });
+
+  it('make hidden if', () => {
+    const model = FedacoModelStub.initAttributes({
+      'name'   : 'foo',
+      'age'    : 'bar',
+      'address': 'foobar',
+      'id'     : 'baz'
+    });
+    let array   = model.toArray();
+    expect(array).toHaveProperty('name');
+    expect(array).toHaveProperty('age');
+    expect(array).toHaveProperty('address');
+    expect(array).toHaveProperty('id');
+    array = model.makeHiddenIf(true, 'address').toArray();
+    expect(array).not.toHaveProperty('address');
+    expect(array).toHaveProperty('name');
+    expect(array).toHaveProperty('age');
+    expect(array).toHaveProperty('id');
+    model.makeVisible('address');
+    array = model.makeHiddenIf(false, ['name', 'age']).toArray();
+    expect(array).toHaveProperty('name');
+    expect(array).toHaveProperty('age');
+    expect(array).toHaveProperty('address');
+    expect(array).toHaveProperty('id');
+    array = model.makeHiddenIf(model => {
+      return !isBlank(model.id);
+    }, ['name', 'age']).toArray();
+    expect(array).toHaveProperty('address');
+    expect(array).not.toHaveProperty('name');
+    expect(array).not.toHaveProperty('age');
+    expect(array).toHaveProperty('id');
+  });
+
+  it('fillable', () => {
+    const model = new FedacoModelStub();
+    model.fillable(['name', 'age']);
+    model.fill({
+      'name': 'foo',
+      'age' : 'bar'
+    });
+    expect(model.name).toBe('foo');
+    expect(model.age).toBe('bar');
+  });
+
+  it('qualify column', () => {
+    const model = new FedacoModelStub();
+    expect(model.qualifyColumn('column')).toBe('stub.column');
+  });
+
+  it('force fill method fills guarded attributes', () => {
+    const model = new FedacoModelSaveStub().forceFill({
+      'id': 21
+    });
+    expect(model.id).toEqual(21);
+  });
+
+  it('filling json attributes', () => {
+    let model: Model = new FedacoModelStub();
+    model.fillable(['meta->name', 'meta->price', 'meta->size->width']);
+    model.fill({
+      'meta->name'       : 'foo',
+      'meta->price'      : 'bar',
+      'meta->size->width': 'baz'
+    });
+    expect(model.toArray()).toEqual({
+      'meta': JSON.stringify({
+        'name' : 'foo',
+        'price': 'bar',
+        'size' : {
+          'width': 'baz'
+        }
+      })
+    });
+    model = FedacoModelStub.initAttributes({
+      'meta': JSON.stringify({
+        'name': 'Taylor'
+      })
+    });
+    model.fillable(['meta->name', 'meta->price', 'meta->size->width']);
+    model.fill({
+      'meta->name'       : 'foo',
+      'meta->price'      : 'bar',
+      'meta->size->width': 'baz'
+    });
+    expect(model.toArray()).toEqual({
+      'meta': JSON.stringify({
+        'name' : 'foo',
+        'price': 'bar',
+        'size' : {
+          'width': 'baz'
+        }
+      })
+    });
+  });
+
+  it('unguard allows anything to be set', () => {
+    const model = new FedacoModelStub();
+    FedacoModelStub.unguard();
+    model.guard(['*']);
+    model.fill({
+      'name': 'foo',
+      'age' : 'bar'
+    });
+    expect(model.name).toBe('foo');
+    expect(model.age).toBe('bar');
+    FedacoModelStub.unguard(false);
+  });
+
+  // xit('underscore properties are not filled', () => {
+  //   const model = new FedacoModelStub();
+  //   model.fill({
+  //     '_method': 'PUT'
+  //   });
+  //   expect(model.getAttributes()).toEqual([]);
+  // });
+
+  it('guarded', () => {
+    const model = new FedacoModelStub();
+    model.guard(['name', 'age']);
+    model.fill({
+      'name': 'foo',
+      'age' : 'bar',
+      'foo' : 'bar'
+    });
+    expect(model.name !== undefined).toBeFalsy();
+    expect(model.age !== undefined).toBeFalsy();
+    expect(model.foo).toBe('bar');
+  });
+
+  it('fillable overrides guarded', () => {
+    const model = new FedacoModelStub();
+    model.guard(['name', 'age']);
+    model.fillable(['age', 'foo']);
+    model.fill({
+      'name': 'foo',
+      'age' : 'bar',
+      'foo' : 'bar'
+    });
+    expect(model.name !== undefined).toBeFalsy();
+    expect(model.age).toBe('bar');
+    expect(model.foo).toBe('bar');
+  });
+
+  it('global guarded', () => {
+    const model = new FedacoModelStub();
+    model.guard(['*']);
+    expect(() => {
+      model.fill({
+        'name' : 'foo',
+        'age'  : 'bar',
+        'votes': 'baz'
+      });
+    }).toThrowError('MassAssignmentException');
+  });
+
+  it('unguarded runs callback while being unguarded', () => {
+    const model = FedacoModelStub.unguarded(() => {
+      return new FedacoModelStub().guard(['*']).fill({
+        'name': 'Taylor'
+      });
+    });
+    expect(model.name).toBe('Taylor');
+    expect(Model.isUnguarded()).toBeFalsy();
+  });
+
+  it('unguarded call does not change unguarded state', () => {
+    FedacoModelStub.unguard();
+    const model = FedacoModelStub.unguarded(() => {
+      return new FedacoModelStub().guard(['*']).fill({
+        'name': 'Taylor'
+      });
+    });
+    expect(model.name).toBe('Taylor');
+    expect(FedacoModelStub.isUnguarded()).toBeTruthy();
+    FedacoModelStub.reguard();
+  });
+
+  it('unguarded call does not change unguarded state on exception', () => {
+    try {
+      Model.unguarded(() => {
+        throw new Error();
+      });
+    } catch (e) {
+    }
+    expect(Model.isUnguarded()).toBeFalsy();
+  });
+
+  xit('has one creates proper relation', () => {
+    let model = new FedacoModelStub();
+    resolveModel(model);
+    let relation = model.hasOne(FedacoModelSaveStub);
+    expect(relation.getQualifiedForeignKeyName()).toBe('save_stub.eloquent_model_stub_id');
+    model = new FedacoModelStub();
+    resolveModel(model);
+    relation = model.hasOne(FedacoModelSaveStub, 'foo');
+    expect(relation.getQualifiedForeignKeyName()).toBe('save_stub.foo');
+    expect(relation.getParent()).toEqual(model);
+    expect(relation.getQuery().getModel()).toBeInstanceOf(FedacoModelSaveStub);
+  });
+
+  xit('morph one creates proper relation', () => {
+    const model = new FedacoModelStub();
+    resolveModel(model);
+    const relation = model.morphOne(FedacoModelSaveStub, 'morph');
+    expect(relation.getQualifiedForeignKeyName()).toBe('save_stub.morph_id');
+    expect(relation.getQualifiedMorphType()).toBe('save_stub.morph_type');
+    expect(relation.getMorphClass()).toEqual(FedacoModelStub);
+  });
+
+  xit('correct morph class is returned', () => {
+    Relation.morphMap({
+      'alias': 'AnotherModel'
+    });
+    const model = new FedacoModelStub();
+    try {
+      expect(model.getMorphClass()).toEqual(FedacoModelStub);
+    } finally {
+      Relation.morphMap([], false);
+    }
+  });
+
+  xit('has many creates proper relation', () => {
+    let model = new FedacoModelStub();
+    resolveModel(model);
+    let relation = model.hasMany(FedacoModelSaveStub);
+    expect(relation.getQualifiedForeignKeyName()).toBe('save_stub.eloquent_model_stub_id');
+    model = new FedacoModelStub();
+    resolveModel(model);
+    relation = model.hasMany(FedacoModelSaveStub, 'foo');
+    expect(relation.getQualifiedForeignKeyName()).toBe('save_stub.foo');
+    expect(relation.getParent()).toEqual(model);
+    expect(relation.getQuery().getModel()).toBeInstanceOf(FedacoModelSaveStub);
+  });
+
+  xit('morph many creates proper relation', () => {
+    const model = new FedacoModelStub();
+    resolveModel(model);
+    const relation = model.morphMany(FedacoModelSaveStub, 'morph');
+    expect(relation.getQualifiedForeignKeyName()).toBe('save_stub.morph_id');
+    expect(relation.getQualifiedMorphType()).toBe('save_stub.morph_type');
+    expect(relation.getMorphClass()).toEqual(FedacoModelStub);
+  });
+
+  xit('belongs to creates proper relation', () => {
+    let model = new FedacoModelStub();
+    resolveModel(model);
+    let relation = model.belongsToStub();
+    expect(relation.getForeignKeyName()).toBe('belongs_to_stub_id');
+    expect(relation.getParent()).toEqual(model);
+    expect(relation.getQuery().getModel()).toBeInstanceOf(FedacoModelSaveStub);
+    model = new FedacoModelStub();
+    resolveModel(model);
+    relation = model.belongsToExplicitKeyStub();
+    expect(relation.getForeignKeyName()).toBe('foo');
+  });
+
+  xit('morph to creates proper relation', () => {
+    const model = new FedacoModelStub();
+    resolveModel(model);
+    const relation = model.morphToStub();
+    expect(relation.getForeignKeyName()).toBe('morph_to_stub_id');
+    expect(relation.getMorphType()).toBe('morph_to_stub_type');
+    expect(relation.getRelationName()).toBe('morphToStub');
+    expect(relation.getParent()).toEqual(model);
+    expect(relation.getQuery().getModel()).toBeInstanceOf(FedacoModelSaveStub);
+    const relation2 = model.morphToStubWithKeys();
+    expect(relation2.getForeignKeyName()).toBe('id');
+    expect(relation2.getMorphType()).toBe('type');
+    expect(relation2.getRelationName()).toBe('morphToStubWithKeys');
+    const relation3 = model.morphToStubWithName();
+    expect(relation3.getForeignKeyName()).toBe('some_name_id');
+    expect(relation3.getMorphType()).toBe('some_name_type');
+    expect(relation3.getRelationName()).toBe('someName');
+    const relation4 = model.morphToStubWithNameAndKeys();
+    expect(relation4.getForeignKeyName()).toBe('id');
+    expect(relation4.getMorphType()).toBe('type');
+    expect(relation4.getRelationName()).toBe('someName');
+  });
+
+  xit('belongs to many creates proper relation', () => {
+    let model = new FedacoModelStub();
+    resolveModel(model);
+    let relation = model.belongsToMany(FedacoModelSaveStub);
+    expect(relation.getQualifiedForeignPivotKeyName()).toBe(
+      'eloquent_model_save_stub_eloquent_model_stub.eloquent_model_stub_id');
+    expect(relation.getQualifiedRelatedPivotKeyName()).toBe(
+      'eloquent_model_save_stub_eloquent_model_stub.eloquent_model_save_stub_id');
+    expect(relation.getParent()).toEqual(model);
+    expect(relation.getQuery().getModel()).toBeInstanceOf(FedacoModelSaveStub);
+    expect(relation.getRelationName()).toEqual('ddddd');
+    model = new FedacoModelStub();
+    resolveModel(model);
+    relation = model.belongsToMany(FedacoModelSaveStub, 'table', 'foreign', 'other');
+    expect(relation.getQualifiedForeignPivotKeyName()).toBe('table.foreign');
+    expect(relation.getQualifiedRelatedPivotKeyName()).toBe('table.other');
+    expect(relation.getParent()).toEqual(model);
+    expect(relation.getQuery().getModel()).toBeInstanceOf(FedacoModelSaveStub);
+  });
+
+  // xit('relations with varied connections', () => {
+  //   let model = new FedacoModelStub();
+  //   model.setConnection('non_default');
+  //   resolveModel(model);
+  //   let relation = model.hasOne(EloquentNoConnectionModelStub);
+  //   expect(relation.getRelated().getConnectionName()).toBe('non_default');
+  //   model = new FedacoModelStub();
+  //   model.setConnection('non_default');
+  //   resolveModel(model);
+  //   relation = model.hasOne(EloquentDifferentConnectionModelStub);
+  //   expect(relation.getRelated().getConnectionName()).toBe('different_connection');
+  //   model = new FedacoModelStub();
+  //   model.setConnection('non_default');
+  //   resolveModel(model);
+  //   relation = model.morphOne(EloquentNoConnectionModelStub, 'type');
+  //   expect(relation.getRelated().getConnectionName()).toBe('non_default');
+  //   model = new FedacoModelStub();
+  //   model.setConnection('non_default');
+  //   resolveModel(model);
+  //   relation = model.morphOne(EloquentDifferentConnectionModelStub, 'type');
+  //   expect(relation.getRelated().getConnectionName()).toBe('different_connection');
+  //   model = new FedacoModelStub();
+  //   model.setConnection('non_default');
+  //   resolveModel(model);
+  //   relation = model.belongsTo(EloquentNoConnectionModelStub);
+  //   expect(relation.getRelated().getConnectionName()).toBe('non_default');
+  //   model = new FedacoModelStub();
+  //   model.setConnection('non_default');
+  //   resolveModel(model);
+  //   relation = model.belongsTo(EloquentDifferentConnectionModelStub);
+  //   expect(relation.getRelated().getConnectionName()).toBe('different_connection');
+  //   model = new FedacoModelStub();
+  //   model.setConnection('non_default');
+  //   resolveModel(model);
+  //   relation = model.hasMany(EloquentNoConnectionModelStub);
+  //   expect(relation.getRelated().getConnectionName()).toBe('non_default');
+  //   model = new FedacoModelStub();
+  //   model.setConnection('non_default');
+  //   resolveModel(model);
+  //   relation = model.hasMany(EloquentDifferentConnectionModelStub);
+  //   expect(relation.getRelated().getConnectionName()).toBe('different_connection');
+  //   model = new FedacoModelStub();
+  //   model.setConnection('non_default');
+  //   resolveModel(model);
+  //   relation = model.hasManyThrough(EloquentNoConnectionModelStub, FedacoModelSaveStub);
+  //   expect(relation.getRelated().getConnectionName()).toBe('non_default');
+  //   model = new FedacoModelStub();
+  //   model.setConnection('non_default');
+  //   resolveModel(model);
+  //   relation = model.hasManyThrough(EloquentDifferentConnectionModelStub,
+  //     FedacoModelSaveStub);
+  //   expect(relation.getRelated().getConnectionName()).toBe('different_connection');
+  //   model = new FedacoModelStub();
+  //   model.setConnection('non_default');
+  //   resolveModel(model);
+  //   relation = model.belongsToMany(EloquentNoConnectionModelStub);
+  //   expect(relation.getRelated().getConnectionName()).toBe('non_default');
+  //   model = new FedacoModelStub();
+  //   model.setConnection('non_default');
+  //   resolveModel(model);
+  //   relation = model.belongsToMany(EloquentDifferentConnectionModelStub);
+  //   expect(relation.getRelated().getConnectionName()).toBe('different_connection');
+  // });
+
+  it('models assume their name', () => {
+    const model = new FedacoModelWithoutTableStub();
+    expect(model.getTable()).toBe('fedaco_model_without_table_stubs');
+    const namespacedModel = new FedacoModelNamespacedModel();
+    expect(namespacedModel.getTable()).toBe('fedaco_model_namespaced_models');
+  });
+
+  // xit('the mutator cache is populated', () => {
+  //   const clazz = new FedacoModelStub();
+  //   const expectedAttributes = ['list_items', 'password', 'appendable'];
+  //   expect(clazz.getMutatedAttributes()).toEqual(expectedAttributes);
+  // });
+
+  it('route key is primary key', () => {
+    const model = new FedacoModelNonIncrementingStub();
+    model.id    = 'foo';
+    expect(model.getRouteKey()).toBe('foo');
+  });
+
+  it('route name is primary key name', () => {
+    const model = new FedacoModelStub();
+    expect(model.getRouteKeyName()).toBe('id');
+  });
+
+  it('clone model makes a fresh copy of the model', () => {
+    const clazz    = new FedacoModelStub();
+    clazz.id     = 1;
+    clazz.exists = true;
+    clazz.first  = 'taylor';
+    clazz.last   = 'otwell';
+
+    clazz.created_at = clazz.freshTimestamp();
+    clazz.updated_at = clazz.freshTimestamp();
+    clazz.setRelation('foo', ['bar']);
+    const clone = clazz.replicate();
+    expect(clone.id).toBeUndefined();
+    expect(clone.exists).toBeFalsy();
+    expect(clone.first).toBe('taylor');
+    expect(clone.last).toBe('otwell');
+    expect(clone.getAttributes()).not.toHaveProperty('created_at');
+    expect(clone.getAttributes()).not.toHaveProperty('updated_at');
+    expect(clone.foo).toEqual(['bar']);
+  });
+
 //   it('model observers can be attached to models', () => {
 //     FedacoModelStub.setEventDispatcher(events = m.mock(Dispatcher));
 //     events.shouldReceive('listen').once()._with(
@@ -2017,18 +2057,19 @@ describe('test database eloquent model', () => {
 //     FedacoModelGetMutatorsStub.snakeAttributes = false;
 //     expect(model.getMutatedAttributes()).toEqual(['firstName', 'middleName', 'lastName']);
 //   });
-//   it('replicate creates a new model instance with same attribute values', () => {
-//     let model = new FedacoModelStub();
-//     model.id = 'id';
-//     model.foo = 'bar';
-//     model.created_at = new DateTime();
-//     model.updated_at = new DateTime();
-//     let replicated = model.replicate();
-//     expect(replicated.id).toNull();
-//     expect(replicated.foo).toBe('bar');
-//     expect(replicated.created_at).toNull();
-//     expect(replicated.updated_at).toNull();
-//   });
+  it('replicate creates a new model instance with same attribute values', () => {
+    let model = new FedacoModelStub();
+    model.id = 'id';
+    model.foo = 'bar';
+    model.created_at = new Date();
+    model.updated_at = new Date();
+    let replicated = model.replicate();
+    expect(replicated.id).toBeUndefined();
+    expect(replicated.foo).toBe('bar');
+    expect(replicated.created_at).toBeUndefined();
+    expect(replicated.updated_at).toBeUndefined();
+  });
+
 //   it('replicating event is fired when replicating model', () => {
 //     let model = new FedacoModelStub();
 //     model.setEventDispatcher(events = m.mock(Dispatcher));
@@ -2245,12 +2286,12 @@ describe('test database eloquent model', () => {
 //   it('merge casts merges casts', () => {
 //     let model = new FedacoModelCastingStub();
 //     let castCount = count(model.getCasts());
-//     expect(model.getCasts()).toArrayNotHasKey('foo');
+//     expect(model.getCasts()).not.toHaveProperty('foo');
 //     model.mergeCasts({
 //       'foo': 'date'
 //     });
 //     expect(model.getCasts()).toCount(castCount + 1);
-//     expect(model.getCasts()).toArrayHasKey('foo');
+//     expect(model.getCasts()).toHaveProperty('foo');
 //   });
 //   it('updating non existent model fails', () => {
 //     let model = new FedacoModelStub();
@@ -2509,7 +2550,13 @@ export class FedacoModelStub extends Model {
   name;
 
   @Column()
-  name1;
+  age;
+
+  @Column()
+  first;
+
+  @Column()
+  last;
 
   @FloatColumn()
   castedFloat;
@@ -2624,10 +2671,10 @@ export class FedacoModelWithDateStub extends FedacoModelStub {
 // export class FedacoModelStubWithTrait extends FedacoModelStub {
 // }
 //
-// export class FedacoModelCamelStub extends FedacoModelStub {
-//   public static snakeAttributes: any = false;
-// }
-//
+export class FedacoModelCamelStub extends FedacoModelStub {
+  public static snakeAttributes: any = false;
+}
+
 export class FedacoDateModelStub extends FedacoModelStub {
   public getDates() {
     return ['created_at', 'updated_at'];
@@ -2827,29 +2874,36 @@ export class FedacoModelCastingStub extends Model {
 }
 
 //
-// export class FedacoModelDynamicHiddenStub extends Model {
-//   protected table: any = 'stub';
-//   protected guarded: any = [];
-//
-//   public getHidden() {
-//     return ['age', 'id'];
-//   }
-// }
-//
-// export class FedacoModelDynamicVisibleStub extends Model {
-//   protected table: any = 'stub';
-//   protected guarded: any = [];
-//
-//   public getVisible() {
-//     return ['name', 'id'];
-//   }
-// }
-//
-// export class FedacoModelNonIncrementingStub extends Model {
-//   protected table: any = 'stub';
-//   protected guarded: any = [];
-//   public incrementing: any = false;
-// }
+export class FedacoModelDynamicHiddenStub extends Model {
+  _table: any   = 'stub';
+  _guarded: any = [];
+
+  public getHidden() {
+    return ['age', 'id'];
+  }
+}
+
+
+export class FedacoModelDynamicVisibleStub extends Model {
+  _table: any   = 'stub';
+  _guarded: any = [];
+
+  @Column()
+
+  public getVisible() {
+    return ['name', 'id'];
+  }
+}
+
+export class FedacoModelNonIncrementingStub extends Model {
+  _table: any        = 'stub';
+  _guarded: any      = [];
+  _incrementing: any = false;
+
+  @PrimaryColumn()
+  id;
+}
+
 //
 // export class EloquentNoConnectionModelStub extends FedacoModelStub {
 // }

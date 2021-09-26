@@ -106,6 +106,7 @@
     "class-list-signatures": true,
     "no-nested-ternary": true,
     "prefer-const-enum": true,
+    "prefer-const": true,
     "coercion-types": [
       true,
       ["coerceBooleanProperty", "coerceCssPixelValue", "coerceNumberProperty"],

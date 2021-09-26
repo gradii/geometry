@@ -5,7 +5,8 @@
  */
 
 import { isAnyEmpty, isArray, isBlank, isObjectEmpty, isString } from '@gradii/check-type';
-import { tap } from 'ramda';
+import { tap, uniq } from 'ramda';
+import { except } from '../helper/obj';
 import { plural, pluralStudy } from '../helper/pluralize';
 import { camelCase, snakeCase, upperCaseFirst } from '../helper/str';
 import { ConnectionResolverInterface } from '../interface/connection-resolver-interface';
@@ -64,7 +65,39 @@ export interface Model extends HasAttributes, HasEvents,
 
 // tslint:disable-next-line:no-namespace
 export declare namespace Model {
-  function addGlobalScope(scope: string, implementation: Scope | Function): void;
+
+  /*Indicates if all mass assignment is enabled.*/
+  export const _unguarded = false;
+  /*The actual columns that exist on the database and can be guarded.*/
+  export const _guardableColumns: any[];
+
+  /**
+   * Disable all mass assignable restrictions.
+   * @link {GuardsAttributes.reguard}
+   */
+  export function unguard(state?: boolean): void;
+
+  /**
+   * Enable the mass assignment restrictions.
+   * @link {GuardsAttributes.reguard}
+   */
+  export function reguard(): void;
+
+  /**
+   * Determine if the current state is "unguarded".
+   * @link {GuardsAttributes.isUnguarded}
+   */
+  export function isUnguarded(): boolean;
+
+  /**
+   * Run the given callable while being unguarded.
+   * @link {GuardsAttributes.unguarded}
+   */
+  export function unguarded(callback: Function): any;
+
+
+  export const snakeAttributes: boolean;
+  export function addGlobalScope(scope: string, implementation: Scope | Function): void;
 }
 
 // @NoSuchMethodProxy()
@@ -121,7 +154,7 @@ export class Model extends mixinHasAttributes(
     // this.initializeTraits();
   }
 
-  static initAttributes(attributes: any = {}) {
+  static initAttributes(attributes: any = {}): Model {
     const m = new (this)();
     m.syncOriginal();
     m.fill(attributes);
@@ -916,16 +949,16 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Clone the model into a new, non-existing instance.*/
-  // public replicate(except: any[] | null = null) {
-  //   let defaults   = [this.getKeyName(), this.getCreatedAtColumn(), this.getUpdatedAtColumn()];
-  //   let attributes = Arr.except(this.getAttributes(),
-  //     except ? uniq([...except, ...defaults]) : defaults);
-  //   return tap(instance => {
-  //     instance.setRawAttributes(attributes);
-  //     instance.setRelations(this._relations);
-  //     instance.fireModelEvent('replicating', false);
-  //   }, new Model());
-  // }
+  public replicate(excepts: any[] | null = null) {
+    const defaults   = [this.getKeyName(), this.getCreatedAtColumn(), this.getUpdatedAtColumn()];
+    const attributes = except(this.getAttributes(),
+      excepts ? uniq([...excepts, ...defaults]) : defaults);
+    return tap(instance => {
+      instance.setRawAttributes(attributes);
+      instance.setRelations(this._relations);
+      instance.fireModelEvent('replicating', false);
+    }, new (this.constructor as any)());
+  }
 
   /*Determine if two models have the same ID and belong to the same table.*/
   public is(model: Model | null) {
