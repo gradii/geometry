@@ -4,6 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { SchemaBuilder } from '../schema/schema-builder';
+import { QueryBuilder } from './query-builder';
+
 /**
  *
  */
@@ -22,4 +25,8 @@ export interface ConnectionInterface {
   statement(sql: string, bindings: any[]): Promise<any> | any;
 
   getName(): string;
+
+  getSchemaBuilder(): SchemaBuilder;
+
+  table(table: Function | QueryBuilder | string, as?: string): QueryBuilder;
 }

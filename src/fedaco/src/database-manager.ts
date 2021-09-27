@@ -1,16 +1,12 @@
-// import { Application } from "Illuminate/Contracts/Foundation/Application";
-// import { ConnectionFactory } from "Illuminate/Database/Connectors/ConnectionFactory";
-// import { Connection } from "Illuminate/Database/Connection";
-// import { ConnectionFactory } from "Illuminate/Database/Connectors/ConnectionFactory";
-// import { Arr } from "Illuminate/Support/Arr";
-// import { ConfigurationUrlParser } from "Illuminate/Support/ConfigurationUrlParser";
-// import { Str } from "Illuminate/Support/Str";
-// import { InvalidArgumentException } from "InvalidArgumentException";
-// import { PDO } from "PDO";
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
 
 import { ConnectionResolverInterface } from './interface/connection-resolver-interface';
 import { ConnectionInterface } from './query-builder/connection-interface';
-import { MysqlGrammar } from './query-builder/grammar/mysql-grammar';
+import { MysqlQueryGrammar } from './query-builder/grammar/mysql-query-grammar';
 import { Processor } from './query-builder/processor';
 import { QueryBuilder } from './query-builder/query-builder';
 
@@ -20,8 +16,9 @@ class Conn implements ConnectionInterface {
   constructor() {
     this._query = new QueryBuilder(
       this,
-      new MysqlGrammar(),
-      new Processor());
+      new MysqlQueryGrammar(),
+      new Processor()
+    );
   }
 
   query() {
@@ -50,44 +47,46 @@ class Conn implements ConnectionInterface {
   getName() {
     return '';
   }
+
+  getSchemaBuilder() {
+
+  }
 }
 
-
-/**/
 export class DatabaseManager implements ConnectionResolverInterface {
   // /*The application instance.*/
   // protected app: Application;
-  // /*The database connection factory instance.*/
-  // protected factory: ConnectionFactory;
-  // /*The active connection instances.*/
-  // protected connections: any[] = [];
+  /*The database connection factory instance.*/
+  protected factory: ConnectionFactory;
+  /*The active connection instances.*/
+  protected connections: any[] = [];
   // /*The custom connection resolvers.*/
   // protected extensions: any[] = [];
-  // /*The callback to be executed to reconnect to a database.*/
-  // protected reconnector: callable;
+  /*The callback to be executed to reconnect to a database.*/
+  protected reconnector: Function;
+
   // /*Create a new database manager instance.*/
-  // public constructor(app: Application, factory: ConnectionFactory) {
-  //     this.app = app;
-  //     this.factory = factory;
-  //     this.reconnector = connection => {
-  //         this.reconnect(connection.getNameWithReadWriteType());
-  //     };
-  // }
+  public constructor(factory: ConnectionFactory) {
+    this.factory = factory;
+    this.reconnector = (connection) => {
+      this.reconnect(connection.getNameWithReadWriteType());
+    };
+  }
+
   /*Get a database connection instance.*/
   public connection(name: string | null = null) {
-    // const [database, type] = this.parseConnectionName(name);
-    // var name = name || database;
-    // if (!(this.connections[name] !== undefined)) {
-    //     this.connections[name] = this.configure(this.makeConnection(database), type);
-    // }
-    // return this.connections[name];
-    return new Conn();
+    const [database, type] = this.parseConnectionName(name);
+    var name               = name || database;
+    if (!(this.connections[name] !== undefined)) {
+      this.connections[name] = this.configure(this.makeConnection(database), type);
+    }
+    return this.connections[name];
   }
 
   /*Parse the connection into an array of the name and read / write type.*/
   protected parseConnectionName(name: string) {
-    // var name = name || this.getDefaultConnection();
-    // return Str.endsWith(name, ["::read", "::write"]) ? name.split("::") : [name, null];
+    var name = name || this.getDefaultConnection();
+    return /(::read|::write)$/.exec(name) ? name.split('::') : [name, null];
   }
 
   /*Make the database connection instance.*/
@@ -202,22 +201,11 @@ export class DatabaseManager implements ConnectionResolverInterface {
 
   /*Return all of the created connections.*/
   public getConnections() {
-    // return this.connections;
+    return this.connections;
   }
 
   /*Set the database reconnector callback.*/
   public setReconnector(reconnector: Function) {
-    // this.reconnector = reconnector;
-  }
-
-  /*Set the application instance used by the manager.*/
-  public setApplication(app) {
-    // this.app = app;
-    // return this;
-  }
-
-  /*Dynamically pass methods to the default connection.*/
-  public __call(method: string, parameters: any[]) {
-    // return this.connection().method(());
+    this.reconnector = reconnector;
   }
 }

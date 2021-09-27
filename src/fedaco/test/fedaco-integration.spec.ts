@@ -21,97 +21,185 @@
 // // import { RuntimeException } from "RuntimeException";
 // import { Model as Fedaco } from '../src/fedaco/model';
 //
-// describe('test database eloquent integration', () => {
-//   it('set up', () => {
-//     let db = new DB();
-//     db.addConnection({
-//       'driver'  : 'sqlite',
-//       'database': ':memory:'
-//     });
-//     db.addConnection({
-//       'driver'  : 'sqlite',
-//       'database': ':memory:'
-//     }, 'second_connection');
-//     db.bootEloquent();
-//     db.setAsGlobal();
-//     this.createSchema();
-//   });
-//   it('create schema', () => {
-//     this.schema('default').create('test_orders', table => {
-//       table.increments('id');
-//       table.string('item_type');
-//       table.integer('item_id');
-//       table.timestamps();
-//     });
-//     this.schema('default').create('with_json', table => {
-//       table.increments('id');
-//       table.text('json')._default(json_encode([]));
-//     });
-//     this.schema('second_connection').create('test_items', table => {
-//       table.increments('id');
-//       table.timestamps();
-//     });
-//     this.schema('default').create('users_with_space_in_colum_name', table => {
-//       table.increments('id');
-//       table.string('name').nullable();
-//       table.string('email address');
-//       table.timestamps();
-//     })[].forEach((connection, index) => {
-//     });
-//     this.schema(connection).create('non_incrementing_users', table => {
-//       table.string('name').nullable();
-//     });
-//   });
-//   it('tear down', () => {
-//     [].forEach((connection, index) => {
-//     });
-//     Relation.morphMap([], false);
-//     Fedaco.unsetConnectionResolver();
-//   });
-//   it('basic model retrieval', () => {
-//     EloquentTestUser.create({
-//       'id'   : 1,
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     EloquentTestUser.create({
-//       'id'   : 2,
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     expect(EloquentTestUser.count()).toEqual(2);
-//     expect(EloquentTestUser.where('email', 'taylorotwell@gmail.com').doesntExist()).toFalse();
-//     expect(EloquentTestUser.where('email', 'mohamed@laravel.com').doesntExist()).toBeTruthy();
-//     let model = EloquentTestUser.where('email', 'taylorotwell@gmail.com').first();
-//     expect(model.email).toBe('taylorotwell@gmail.com');
-//     expect(model.email !== undefined).toBeTruthy();
-//     expect(model.friends !== undefined).toBeTruthy();
-//     let model = EloquentTestUser.find(1);
-//     expect(model).toInstanceOf(EloquentTestUser);
-//     expect(model.id).toEqual(1);
-//     let model = EloquentTestUser.find(2);
-//     expect(model).toInstanceOf(EloquentTestUser);
-//     expect(model.id).toEqual(2);
-//     let missing = EloquentTestUser.find(3);
-//     expect(missing).toNull();
-//     let collection = EloquentTestUser.find([]);
-//     expect(collection).toInstanceOf(Collection);
-//     expect(collection).toCount(0);
-//     let collection = EloquentTestUser.find([1, 2, 3]);
-//     expect(collection).toInstanceOf(Collection);
-//     expect(collection).toCount(2);
-//     let models = EloquentTestUser.where('id', 1).cursor();
-//     for (let model of models) {
-//       expect(model.id).toEqual(1);
-//       expect(model.getConnectionName()).toBe('default');
-//     }
-//     let records = DB.table('users').where('id', 1).cursor();
-//     for (let record of records) {
-//       expect(record.id).toEqual(1);
-//     }
-//     let records = DB.cursor('select * from users where id = ?', [1]);
-//     for (let record of records) {
-//       expect(record.id).toEqual(1);
-//     }
-//   });
+
+import { Db } from '../src/db';
+import { Model } from '../src/fedaco/model';
+
+function connection(connectionName = 'default') {
+  return Model.getConnectionResolver().connection(connectionName);
+}
+
+function schema(connectionName = 'default') {
+  return connection(connectionName).getSchemaBuilder();
+}
+
+function createSchema() {
+  schema('default').create('test_orders', table => {
+    table.increments('id');
+    table.string('item_type');
+    table.integer('item_id');
+    table.timestamps();
+  });
+  schema('default').create('with_json', table => {
+    table.increments('id');
+    table.text('json')._default(JSON.stringify([]));
+  });
+  schema('second_connection').create('test_items', table => {
+    table.increments('id');
+    table.timestamps();
+  });
+  schema('default').create('users_with_space_in_colum_name', table => {
+    table.increments('id');
+    table.string('name').nullable();
+    table.string('email address');
+    table.timestamps();
+  });
+
+  ['default', 'second_connection'].forEach((name, index) => {
+    schema(name).create('users', function (table) {
+      table.increments('id');
+      table.string('name').nullable();
+      table.string('email');
+      table.timestamp('birthday', 6).nullable();
+      table.timestamps();
+    });
+
+    schema(name).create('friends', function (table) {
+      table.integer('user_id');
+      table.integer('friend_id');
+      table.integer('friend_level_id').nullable();
+    });
+
+    schema(name).create('posts', function (table) {
+      table.increments('id');
+      table.integer('user_id');
+      table.integer('parent_id').nullable();
+      table.string('name');
+      table.timestamps();
+    });
+
+    schema(name).create('comments', function (table) {
+      table.increments('id');
+      table.integer('post_id');
+      table.string('content');
+      table.timestamps();
+    });
+
+    schema(name).create('friend_levels', function (table) {
+      table.increments('id');
+      table.string('level');
+      table.timestamps();
+    });
+
+    schema(name).create('photos', function (table) {
+      table.increments('id');
+      table.morphs('imageable');
+      table.string('name');
+      table.timestamps();
+    });
+
+    schema(name).create('soft_deleted_users', function (table) {
+      table.increments('id');
+      table.string('name').nullable();
+      table.string('email');
+      table.timestamps();
+      table.softDeletes();
+    });
+
+    schema(name).create('tags', function (table) {
+      table.increments('id');
+      table.string('name');
+      table.timestamps();
+    });
+
+    schema(name).create('taggables', function (table) {
+      table.integer('tag_id');
+      table.morphs('taggable');
+      table.string('taxonomy').nullable();
+    });
+
+    schema(name).create('non_incrementing_users', table => {
+      table.string('name').nullable();
+    });
+
+  });
+}
+
+describe('test database eloquent integration', () => {
+  beforeAll(() => {
+    const db = new Db();
+    db.addConnection({
+      'driver'  : 'sqlite',
+      'database': ':memory:'
+    });
+    db.addConnection({
+      'driver'  : 'sqlite',
+      'database': ':memory:'
+    }, 'second_connection');
+    db.bootEloquent();
+    db.setAsGlobal();
+    createSchema();
+  });
+
+  afterAll(() => {
+    // [].forEach((connection, index) => {
+    // });
+    // Relation.morphMap([], false);
+    // Fedaco.unsetConnectionResolver();
+  });
+
+  it('basic create model', () => {
+    new EloquentTestUser().newQuery().create({
+      'id'   : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+  });
+
+  // it('basic model retrieval', () => {
+  //   EloquentTestUser.create({
+  //     'id'   : 1,
+  //     'email': 'taylorotwell@gmail.com'
+  //   });
+  //   EloquentTestUser.create({
+  //     'id'   : 2,
+  //     'email': 'abigailotwell@gmail.com'
+  //   });
+  //   expect(EloquentTestUser.count()).toEqual(2);
+  //   expect(EloquentTestUser.where('email', 'taylorotwell@gmail.com').doesntExist()).toFalse();
+  //   expect(EloquentTestUser.where('email', 'mohamed@laravel.com').doesntExist()).toBeTruthy();
+  //   let model = EloquentTestUser.where('email', 'taylorotwell@gmail.com').first();
+  //   expect(model.email).toBe('taylorotwell@gmail.com');
+  //   expect(model.email !== undefined).toBeTruthy();
+  //   expect(model.friends !== undefined).toBeTruthy();
+  //   let model = EloquentTestUser.find(1);
+  //   expect(model).toInstanceOf(EloquentTestUser);
+  //   expect(model.id).toEqual(1);
+  //   let model = EloquentTestUser.find(2);
+  //   expect(model).toInstanceOf(EloquentTestUser);
+  //   expect(model.id).toEqual(2);
+  //   let missing = EloquentTestUser.find(3);
+  //   expect(missing).toNull();
+  //   let collection = EloquentTestUser.find([]);
+  //   expect(collection).toInstanceOf(Collection);
+  //   expect(collection).toCount(0);
+  //   let collection = EloquentTestUser.find([1, 2, 3]);
+  //   expect(collection).toInstanceOf(Collection);
+  //   expect(collection).toCount(2);
+  //   let models = EloquentTestUser.where('id', 1).cursor();
+  //   for (let model of models) {
+  //     expect(model.id).toEqual(1);
+  //     expect(model.getConnectionName()).toBe('default');
+  //   }
+  //   let records = DB.table('users').where('id', 1).cursor();
+  //   for (let record of records) {
+  //     expect(record.id).toEqual(1);
+  //   }
+  //   let records = DB.cursor('select * from users where id = ?', [1]);
+  //   for (let record of records) {
+  //     expect(record.id).toEqual(1);
+  //   }
+  // });
+  //
 //   it('basic model collection retrieval', () => {
 //     EloquentTestUser.create({
 //       'id'   : 1,
@@ -1774,141 +1862,179 @@
 //   it('schema', () => {
 //     return this.connection(connection).getSchemaBuilder();
 //   });
-// });
-// describe('test eloquent test user', () => {
-//   it('friends', () => {
-//     return this.belongsToMany(EloquentTestUser, 'friends', 'user_id', 'friend_id');
-//   });
-//   it('friends one', () => {
-//     return this.belongsToMany(EloquentTestUser, 'friends', 'user_id', 'friend_id').wherePivot(
-//       'user_id', 1);
-//   });
-//   it('friends two', () => {
-//     return this.belongsToMany(EloquentTestUser, 'friends', 'user_id', 'friend_id').wherePivot(
-//       'user_id', 2);
-//   });
-//   it('posts', () => {
-//     return this.hasMany(EloquentTestPost, 'user_id');
-//   });
-//   it('post', () => {
-//     return this.hasOne(EloquentTestPost, 'user_id');
-//   });
-//   it('photos', () => {
-//     return this.morphMany(EloquentTestPhoto, 'imageable');
-//   });
-//   it('post with photos', () => {
-//     return this.post().join('photo', join => {
-//       join.on('photo.imageable_id', 'post.id');
-//       join.where('photo.imageable_type', 'EloquentTestPost');
-//     });
-//   });
-// });
-// describe('test eloquent test user with custom friend pivot', () => {
-//   it('friends', () => {
-//     return this.belongsToMany(EloquentTestUser, 'friends', 'user_id', 'friend_id').using(
-//       EloquentTestFriendPivot).withPivot('user_id', 'friend_id', 'friend_level_id');
-//   });
-// });
-// describe('test eloquent test user with space in column name', () => {
-// });
-// describe('test eloquent test non incrementing', () => {
-// });
-// describe('test eloquent test non incrementing second', () => {
-// });
-// describe('test eloquent test user with global scope', () => {
-//   it('boot', () => {
+});
+
+/*Eloquent Models...*/
+export class EloquentTestUser extends Model {
+  _table: any   = 'users';
+  _dates: any   = ['birthday'];
+  _guarded: any = [];
+
+  // public friends() {
+  //   return this.belongsToMany(EloquentTestUser, 'friends', 'user_id', 'friend_id');
+  // }
+  //
+  // public friendsOne() {
+  //   return this.belongsToMany(EloquentTestUser, 'friends', 'user_id', 'friend_id').wherePivot(
+  //     'user_id', 1);
+  // }
+  //
+  // public friendsTwo() {
+  //   return this.belongsToMany(EloquentTestUser, 'friends', 'user_id', 'friend_id').wherePivot(
+  //     'user_id', 2);
+  // }
+  //
+  // public posts() {
+  //   return this.hasMany(EloquentTestPost, 'user_id');
+  // }
+  //
+  // public post() {
+  //   return this.hasOne(EloquentTestPost, 'user_id');
+  // }
+  //
+  // public photos() {
+  //   return this.morphMany(EloquentTestPhoto, 'imageable');
+  // }
+  //
+  // public postWithPhotos() {
+  //   return this.post().join('photo', join => {
+  //     join.on('photo.imageable_id', 'post.id');
+  //     join.where('photo.imageable_type', 'EloquentTestPost');
+  //   });
+  // }
+}
+
+// export class EloquentTestUserWithCustomFriendPivot extends EloquentTestUser {
+//   public friends() {
+//     return this.belongsToMany(EloquentTestUser, "friends", "user_id", "friend_id").using(EloquentTestFriendPivot).withPivot("user_id", "friend_id", "friend_level_id");
+//   }
+// }
+// export class EloquentTestUserWithSpaceInColumnName extends EloquentTestUser {
+//   protected table: any = "users_with_space_in_colum_name";
+// }
+// export class EloquentTestNonIncrementing extends Eloquent {
+//   protected table: any = "non_incrementing_users";
+//   protected guarded: any = [];
+//   public incrementing: any = false;
+//   public timestamps: any = false;
+// }
+// export class EloquentTestNonIncrementingSecond extends EloquentTestNonIncrementing {
+//   protected connection: any = "second_connection";
+// }
+// export class EloquentTestUserWithGlobalScope extends EloquentTestUser {
+//   public static boot() {
 //     super.boot();
 //     EloquentTestUserWithGlobalScope.addGlobalScope(builder => {
-//       builder._with('posts');
+//       builder._with("posts");
 //     });
-//   });
-// });
-// describe('test eloquent test user with omitting global scope', () => {
-//   it('boot', () => {
+//   }
+// }
+// export class EloquentTestUserWithOmittingGlobalScope extends EloquentTestUser {
+//   public static boot() {
 //     super.boot();
 //     EloquentTestUserWithOmittingGlobalScope.addGlobalScope(builder => {
-//       builder.where('email', '!=', 'taylorotwell@gmail.com');
+//       builder.where("email", "!=", "taylorotwell@gmail.com");
 //     });
-//   });
-// });
-// describe('test eloquent test user with global scope removing other scope', () => {
-//   it('boot', () => {
+//   }
+// }
+// export class EloquentTestUserWithGlobalScopeRemovingOtherScope extends Eloquent {
+//   protected table: any = "soft_deleted_users";
+//   protected guarded: any = [];
+//   public static boot() {
 //     EloquentTestUserWithGlobalScopeRemovingOtherScope.addGlobalScope(builder => {
 //       builder.withoutGlobalScope(SoftDeletingScope);
 //     });
 //     super.boot();
-//   });
-// });
-// describe('test eloquent test post', () => {
-//   it('user', () => {
-//     return this.belongsTo(EloquentTestUser, 'user_id');
-//   });
-//   it('photos', () => {
-//     return this.morphMany(EloquentTestPhoto, 'imageable');
-//   });
-//   it('child posts', () => {
-//     return this.hasMany(EloquentTestPost, 'parent_id');
-//   });
-//   it('parent post', () => {
-//     return this.belongsTo(EloquentTestPost, 'parent_id');
-//   });
-// });
-// describe('test eloquent test friend level', () => {
-// });
-// describe('test eloquent test photo', () => {
-//   it('imageable', () => {
-//     return this.morphTo();
-//   });
-// });
-// describe('test eloquent test user with string cast id', () => {
-// });
-// describe('test eloquent test user with custom date serialization', () => {
-//   it('serialize date', () => {
-//     return date.format('d-m-y');
-//   });
-// });
-// describe('test eloquent test order', () => {
-//   it('item', () => {
-//     return this.morphTo();
-//   });
-// });
-// describe('test eloquent test item', () => {
-// });
-// describe('test eloquent test with json', () => {
-// });
-// describe('test eloquent test friend pivot', () => {
-//   it('user', () => {
-//     return this.belongsTo(EloquentTestUser);
-//   });
-//   it('friend', () => {
-//     return this.belongsTo(EloquentTestUser);
-//   });
-//   it('level', () => {
-//     return this.belongsTo(EloquentTestFriendLevel, 'friend_level_id');
-//   });
-// });
-//
-// export class EloquentTouchingUser extends Fedaco {
-//   protected table: any   = 'users';
-//   protected guarded: any = [];
-// }
-//
-// export class EloquentTouchingPost extends Fedaco {
-//   protected table: any   = 'posts';
-//   protected guarded: any = [];
-//   protected touches: any = ['user'];
-//
-//   public user() {
-//     return this.belongsTo(EloquentTouchingUser, 'user_id');
 //   }
 // }
-//
-// export class EloquentTouchingComment extends Fedaco {
-//   protected table: any   = 'comments';
+// export class EloquentTestPost extends Eloquent {
+//   protected table: any = "posts";
 //   protected guarded: any = [];
-//   protected touches: any = ['post'];
-//
+//   public user() {
+//     return this.belongsTo(EloquentTestUser, "user_id");
+//   }
+//   public photos() {
+//     return this.morphMany(EloquentTestPhoto, "imageable");
+//   }
+//   public childPosts() {
+//     return this.hasMany(EloquentTestPost, "parent_id");
+//   }
+//   public parentPost() {
+//     return this.belongsTo(EloquentTestPost, "parent_id");
+//   }
+// }
+// export class EloquentTestFriendLevel extends Eloquent {
+//   protected table: any = "friend_levels";
+//   protected guarded: any = [];
+// }
+// export class EloquentTestPhoto extends Eloquent {
+//   protected table: any = "photos";
+//   protected guarded: any = [];
+//   public imageable() {
+//     return this.morphTo();
+//   }
+// }
+// export class EloquentTestUserWithStringCastId extends EloquentTestUser {
+//   protected casts: any = {
+//     "id": "string"
+//   };
+// }
+// export class EloquentTestUserWithCustomDateSerialization extends EloquentTestUser {
+//   protected serializeDate(date) {
+//     return date.format("d-m-y");
+//   }
+// }
+// export class EloquentTestOrder extends Eloquent {
+//   protected guarded: any = [];
+//   protected table: any = "test_orders";
+//   protected _with: any = ["item"];
+//   public item() {
+//     return this.morphTo();
+//   }
+// }
+// export class EloquentTestItem extends Eloquent {
+//   protected guarded: any = [];
+//   protected table: any = "test_items";
+//   protected connection: any = "second_connection";
+// }
+// export class EloquentTestWithJSON extends Eloquent {
+//   protected guarded: any = [];
+//   protected table: any = "with_json";
+//   public timestamps: any = false;
+//   protected casts: any = {
+//     "json": "array"
+//   };
+// }
+// export class EloquentTestFriendPivot extends Pivot {
+//   protected table: any = "friends";
+//   protected guarded: any = [];
+//   public user() {
+//     return this.belongsTo(EloquentTestUser);
+//   }
+//   public friend() {
+//     return this.belongsTo(EloquentTestUser);
+//   }
+//   public level() {
+//     return this.belongsTo(EloquentTestFriendLevel, "friend_level_id");
+//   }
+// }
+// export class EloquentTouchingUser extends Eloquent {
+//   protected table: any = "users";
+//   protected guarded: any = [];
+// }
+// export class EloquentTouchingPost extends Eloquent {
+//   protected table: any = "posts";
+//   protected guarded: any = [];
+//   protected touches: any = ["user"];
+//   public user() {
+//     return this.belongsTo(EloquentTouchingUser, "user_id");
+//   }
+// }
+// export class EloquentTouchingComment extends Eloquent {
+//   protected table: any = "comments";
+//   protected guarded: any = [];
+//   protected touches: any = ["post"];
 //   public post() {
-//     return this.belongsTo(EloquentTouchingPost, 'post_id');
+//     return this.belongsTo(EloquentTouchingPost, "post_id");
 //   }
 // }

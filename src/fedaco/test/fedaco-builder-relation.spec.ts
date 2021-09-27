@@ -2,7 +2,7 @@
 import { Model } from '../src/fedaco/model';
 import { ConnectionResolverInterface } from '../src/interface/connection-resolver-interface';
 import { ConnectionInterface } from '../src/query-builder/connection-interface';
-import { MysqlGrammar } from '../src/query-builder/grammar/mysql-grammar';
+import { MysqlQueryGrammar } from '../src/query-builder/grammar/mysql-grammar';
 import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
 import {
@@ -28,7 +28,7 @@ describe('fedaco builder relation', () => {
     query(): QueryBuilder {
       return new QueryBuilder(
         this,
-        new MysqlGrammar(),
+        new MysqlQueryGrammar(),
         new Processor()
       );
     }

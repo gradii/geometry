@@ -22,7 +22,7 @@ import { Model } from '../src/fedaco/model';
 import { Relation } from '../src/fedaco/relations/relation';
 import { ConnectionResolverInterface } from '../src/interface/connection-resolver-interface';
 import { ConnectionInterface } from '../src/query-builder/connection-interface';
-import { MysqlGrammar } from '../src/query-builder/grammar/mysql-grammar';
+import { MysqlQueryGrammar } from '../src/query-builder/grammar/mysql-grammar';
 import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
 import { FedacoModelNamespacedModel } from './model/fedaco-model-namespaced.model';
@@ -43,7 +43,7 @@ class Conn implements ConnectionInterface {
   query(): QueryBuilder {
     return new QueryBuilder(
       this,
-      new MysqlGrammar(),
+      new MysqlQueryGrammar(),
       new Processor()
     );
   }
@@ -75,7 +75,7 @@ class Conn implements ConnectionInterface {
 function getBuilder() {
   return new FedacoBuilder(new QueryBuilder(
     new Conn(),
-    new MysqlGrammar(),
+    new MysqlQueryGrammar(),
     new Processor()
   ));
 }
@@ -2706,7 +2706,7 @@ export class FedacoModelSaveStub extends Model {
 
   public getConnection() {
     const conn      = new Conn();
-    const grammar   = new MysqlGrammar();
+    const grammar   = new MysqlQueryGrammar();
     const processor = new Processor();
     const spy1      = jest.spyOn(conn, 'getQueryGrammar').mockReturnValue(grammar);
     const spy2      = jest.spyOn(conn, 'getPostProcessor').mockReturnValue(processor);

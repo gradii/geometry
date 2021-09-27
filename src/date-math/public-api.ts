@@ -4,4 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-export * from './src/date-math';
+export const VERSION = '0.0.0-PLACEHOLDRER';
+
+export * from './src/format';

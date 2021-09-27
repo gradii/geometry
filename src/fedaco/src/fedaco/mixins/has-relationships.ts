@@ -8,7 +8,7 @@ import { isArray } from '@gradii/check-type';
 import { tap } from 'ramda';
 import { Constructor } from '../../helper/constructor';
 import { snakeCase } from '../../helper/str';
-import { MysqlGrammar } from '../../query-builder/grammar/mysql-grammar';
+import { MysqlQueryGrammar } from '../../query-builder/grammar/mysql-grammar';
 import { Processor } from '../../query-builder/processor';
 import { QueryBuilder } from '../../query-builder/query-builder';
 import { Model } from '../model';
@@ -582,7 +582,7 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
         connection() {
           return {
             query() {
-              const grammar   = new MysqlGrammar();
+              const grammar   = new MysqlQueryGrammar();
               const processor = new Processor();
 
               // @ts-ignore

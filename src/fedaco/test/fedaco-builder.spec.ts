@@ -5,8 +5,8 @@ import { Model } from '../src/fedaco/model';
 import { onlyTrashed, withTrashed } from '../src/fedaco/scopes/soft-deleting-scope';
 import { ConnectionResolverInterface } from '../src/interface/connection-resolver-interface';
 import { ConnectionInterface } from '../src/query-builder/connection-interface';
-import { MysqlGrammar } from '../src/query-builder/grammar/mysql-grammar';
-import { SqliteGrammar } from '../src/query-builder/grammar/sqlite-grammar';
+import { MysqlQueryGrammar } from '../src/query-builder/grammar/mysql-grammar';
+import { SqliteQueryGrammar } from '../src/query-builder/grammar/sqlite-grammar';
 import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
 import { FedacoBuilderTestHigherOrderWhereScopeStub } from './model/fedaco-builder-test-higher-order-where-scope-stub';
@@ -33,7 +33,7 @@ describe('fedaco builder', () => {
     query(): QueryBuilder {
       return new QueryBuilder(
         this,
-        new SqliteGrammar(),
+        new SqliteQueryGrammar(),
         new Processor()
       );
     }
@@ -93,14 +93,14 @@ describe('fedaco builder', () => {
   function getBuilder() {
     return new FedacoBuilder(new QueryBuilder(
       new Conn(),
-      new MysqlGrammar(),
+      new MysqlQueryGrammar(),
       new Processor()
     ));
   }
 
   function mockConnectionForModel<T extends typeof Model>(modelClazz: any,
                                                           database) {
-    const grammar    = new SqliteGrammar();
+    const grammar    = new SqliteQueryGrammar();
     const processor  = new Processor();
     const connection = new Conn();// m::mock(ConnectionInterface::class, ['getQueryGrammar' => $grammar, 'getPostProcessor' => $processor]);
     jest.spyOn(connection, 'getQueryGrammar').mockReturnValue(grammar);

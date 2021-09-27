@@ -1,10 +1,10 @@
 /* tslint:disable:max-line-length */
 import { raw } from '../src/query-builder/ast-factory';
 import { ConnectionInterface } from '../src/query-builder/connection-interface';
-import { MysqlGrammar } from '../src/query-builder/grammar/mysql-grammar';
-import { PostgresGrammar } from '../src/query-builder/grammar/postgres-grammar';
-import { SqliteGrammar } from '../src/query-builder/grammar/sqlite-grammar';
-import { SqlserverGrammar } from '../src/query-builder/grammar/sqlserver-grammar';
+import { MysqlQueryGrammar } from '../src/query-builder/grammar/mysql-grammar';
+import { PostgresQueryGrammar } from '../src/query-builder/grammar/postgres-grammar';
+import { SqliteQueryGrammar } from '../src/query-builder/grammar/sqlite-grammar';
+import { SqlserverQueryGrammar } from '../src/query-builder/grammar/sqlserver-grammar';
 import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
 
@@ -48,7 +48,7 @@ describe('database query builder test', () => {
   }
 
   function getBuilder() {
-    const grammar   = new MysqlGrammar();
+    const grammar   = new MysqlQueryGrammar();
     const processor = new Processor();
 
     const conn = new Conn();
@@ -60,7 +60,7 @@ describe('database query builder test', () => {
   }
 
   function getPostgresBuilder() {
-    const grammar   = new PostgresGrammar();
+    const grammar   = new PostgresQueryGrammar();
     const processor = new Processor();
     const conn      = new Conn();
 
@@ -68,7 +68,7 @@ describe('database query builder test', () => {
   }
 
   function getSqlServerBuilder() {
-    const grammar   = new SqlserverGrammar();
+    const grammar   = new SqlserverQueryGrammar();
     const processor = new Processor();
     const conn      = new Conn();
 
@@ -76,7 +76,7 @@ describe('database query builder test', () => {
   }
 
   function getSQLiteBuilder() {
-    const grammar   = new SqliteGrammar();
+    const grammar   = new SqliteQueryGrammar();
     const processor = new Processor();
     const conn      = new Conn();
 
@@ -3357,7 +3357,7 @@ describe('database query builder test', () => {
     await builder.from('users').truncate();
     expect(spyStatement).toBeCalledWith('TRUNCATE TABLE `users`', []);
 
-    const sqlite = new SqliteGrammar();
+    const sqlite = new SqliteQueryGrammar();
     builder      = getSQLiteBuilder();
     builder.from('usersx');
     expect(sqlite.compileTruncate(builder)).toStrictEqual({

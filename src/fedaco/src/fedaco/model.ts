@@ -107,9 +107,7 @@ export class Model extends mixinHasAttributes(
       mixinHasRelationships(
         mixinHasTimestamps(
           mixinHidesAttributes(
-            mixinGuardsAttributes(
-              mixinForwardsCalls(BaseModel)
-            )
+            mixinGuardsAttributes(BaseModel)
           )
         )
       )

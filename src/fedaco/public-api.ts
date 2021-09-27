@@ -142,7 +142,7 @@ export * from './src/helper/_pluralize-values';
 export * from './src/query-builder/query-builder-resolver-visitor';
 // export * from './src/query-builder/grammar/oracle-grammar';
 export * from './src/query-builder/grammar/mysql-grammar';
-export * from './src/query-builder/grammar/grammar';
+export * from './src/query-builder/grammar/queryGrammar';
 export * from './src/query-builder/grammar/sqlserver-grammar';
 export * from './src/query-builder/grammar/postgres-grammar';
 export * from './src/query-builder/grammar/sqlite-grammar';

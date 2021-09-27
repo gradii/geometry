@@ -1,3 +1,5 @@
+import { QueryBuilder } from './query-builder';
+
 /**
  * @license
  *
@@ -7,5 +9,7 @@
 export interface ProcessorInterface {
   processSelect(queryBuilder, results);
 
-  processInsertGetId(sql, bindings: any[], sequence?);
+  processInsertGetId(query: QueryBuilder, sql: string, values: any[], sequence?: string): number;
+
+  processInsertGetId(sql: string, bindings: any[], sequence?: string): number;
 }
