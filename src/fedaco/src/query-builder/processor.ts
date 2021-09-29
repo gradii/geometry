@@ -13,10 +13,11 @@ export class Processor implements ProcessorInterface {
     return results;
   }
 
-  processInsertGetId(query: QueryBuilder, sql: string, values: any[], sequence: string | null = null) {
-    query.getConnection().insert(sql, values);
-    const id = query.getConnection().getPdo().lastInsertId(sequence);
-    return isNumber(id) ? /*cast type int*/ id : id;
+  async processInsertGetId(query: QueryBuilder, sql: string, values: any[], sequence: string | null = null): Promise<any> {
+    // query.getConnection().insert(sql, values);
+    // const id = query.getConnection().getPdo().lastInsertId(sequence);
+    // return isNumber(id) ? /*cast type int*/ id : id;
+    return -1;
   }
 
   processColumnListing(results: any[]): string[] {

@@ -10,7 +10,6 @@ import { except } from '../helper/obj';
 import { plural, pluralStudy } from '../helper/pluralize';
 import { camelCase, snakeCase, upperCaseFirst } from '../helper/str';
 import { ConnectionResolverInterface } from '../interface/connection-resolver-interface';
-import { ForwardsCalls, mixinForwardsCalls } from '../mixins/forwards-calls';
 import { QueryBuilder } from '../query-builder/query-builder';
 import { BaseModel } from './base-model';
 import { FedacoBuilder } from './fedaco-builder';
@@ -59,7 +58,7 @@ export function withRelations(clazz: typeof Model, ...relations: string[]) {
 export interface Model extends HasAttributes, HasEvents,
   HasGlobalScopes, HasRelationships,
   HasTimestamps, HidesAttributes,
-  GuardsAttributes, ForwardsCalls {
+  GuardsAttributes {
 
 }
 

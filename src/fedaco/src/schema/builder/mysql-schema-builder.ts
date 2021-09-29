@@ -17,24 +17,26 @@ export class MysqlSchemaBuilder extends SchemaBuilder {
   }
 
   /*Determine if the given table exists.*/
-  public hasTable(table: string) {
-    table = this.connection.getTablePrefix() + table;
-    return (this.connection.select(this.grammar.compileTableExists(),
-      [this.connection.getDatabaseName(), table])).length > 0;
+  public async hasTable(table: string): Promise<boolean> {
+    table        = this.connection.getTablePrefix() + table;
+    const result = await this.connection.select(this.grammar.compileTableExists(),
+      [this.connection.getDatabaseName(), table]);
+    return result.length > 0;
   }
 
   /*Get the column listing for a given table.*/
-  public getColumnListing(table: string) {
-    table   = this.connection.getTablePrefix() + table;
-    const results = this.connection.select(this.grammar.compileColumnListing(),
+  public async getColumnListing(table: string) {
+    table         = this.connection.getTablePrefix() + table;
+    const results = await this.connection.select(this.grammar.compileColumnListing(),
       [this.connection.getDatabaseName(), table]);
     return this.connection.getPostProcessor().processColumnListing(results);
   }
 
   /*Drop all tables from the database.*/
-  public dropAllTables() {
+  public async dropAllTables() {
     const tables = [];
-    for (const row of this.getAllTables()) {
+    const result = await this.getAllTables();
+    for (const row of result) {
       tables.push(row);
     }
     if (!tables.length) {
@@ -46,9 +48,10 @@ export class MysqlSchemaBuilder extends SchemaBuilder {
   }
 
   /*Drop all views from the database.*/
-  public dropAllViews() {
-    const views = [];
-    for (const row of this.getAllViews()) {
+  public async dropAllViews() {
+    const views  = [];
+    const result = await this.getAllViews();
+    for (const row of result) {
       views.push(row);
     }
     if (!views.length) {

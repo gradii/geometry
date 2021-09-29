@@ -32,19 +32,26 @@ export class DatabaseMigrationRepository implements MigrationRepositoryInterface
   /*Get list of migrations.*/
   public getMigrations(steps: number) {
     const query = this.table().where('batch', '>=', '1');
-    return query.orderBy('batch', 'desc').orderBy('migration', 'desc').take(steps).get().all();
+    return query
+      .orderBy('batch', 'desc')
+      .orderBy('migration', 'desc')
+      .take(steps)
+      .get().all();
   }
 
   /*Get the last migration batch.*/
   public getLast() {
-    const query = this.table().where('batch', this.getLastBatchNumber());
+    const query = this.table()
+      .where('batch', this.getLastBatchNumber());
     return query.orderBy('migration', 'desc').get().all();
   }
 
   /*Get the completed migrations with their batch numbers.*/
   public getMigrationBatches() {
-    return this.table().orderBy('batch', 'asc').orderBy('migration', 'asc').pluck('batch',
-      'migration').all();
+    return this.table()
+      .orderBy('batch', 'asc')
+      .orderBy('migration', 'asc')
+      .pluck('batch', 'migration').all();
   }
 
   /*Log that a migration was run.*/

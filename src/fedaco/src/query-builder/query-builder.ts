@@ -310,6 +310,7 @@ export class QueryBuilder extends Builder {
   public insertGetId(values: any, sequence: string = 'id') {
     const sql = this._grammar.compileInsertGetId(this, values, sequence);
     return this._processor.processInsertGetId(
+      this,
       sql,
       this.getBindings()
       , sequence);

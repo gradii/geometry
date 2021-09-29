@@ -28,7 +28,7 @@ export interface Dispatcher {
 
   until(): boolean;
 
-  dispatch(): void;
+  dispatch(evt: any): void;
 }
 
 export interface HasEvents {

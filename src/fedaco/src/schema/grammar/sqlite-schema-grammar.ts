@@ -5,8 +5,10 @@
  */
 
 import { isBlank } from '@gradii/check-type';
+import { Connection } from '../../connection';
 import { Blueprint } from '../blueprint';
 import { ColumnDefinition } from '../column-definition';
+import { ForeignKeyDefinition } from '../foreign-key-definition';
 import { SchemaGrammar } from './schema-grammar';
 
 
@@ -25,7 +27,7 @@ export class SqliteSchemaGrammar extends SchemaGrammar {
 
   /*Compile the query to determine the list of columns.*/
   public compileColumnListing(table: string) {
-    return 'pragma table_info(' + this.wrap(str_replace('.', '__', table)) + ')';
+    return 'pragma table_info(' + this.wrap(table.replace('.', '__')) + ')';
   }
 
   /*Compile a create table command.*/
@@ -37,8 +39,8 @@ export class SqliteSchemaGrammar extends SchemaGrammar {
 
   /*Get the foreign key syntax for a table creation statement.*/
   protected addForeignKeys(blueprint: Blueprint) {
-    var foreigns = this.getCommandsByName(blueprint, 'foreign');
-    return collect(foreigns).reduce((sql, foreign) => {
+    const foreigns = this.getCommandsByName(blueprint, 'foreign');
+    return foreigns.reduce((sql, foreign) => {
       sql += this.getForeignKey(foreign);
       if (!isBlank(foreign.onDelete)) {
         sql += '" on delete {$foreign->onDelete}"';
@@ -51,26 +53,28 @@ export class SqliteSchemaGrammar extends SchemaGrammar {
   }
 
   /*Get the SQL for the foreign key.*/
-  protected getForeignKey(foreign: ColumnDefinition) {
+  protected getForeignKey(foreign: ForeignKeyDefinition) {
     return `, foreign key(${this.columnize(foreign.columns)}) references ${this.wrapTable(
       foreign.on)}(${this.columnize(/*cast type array*/ foreign.references)})`;
   }
 
   /*Get the primary key syntax for a table creation statement.*/
   protected addPrimaryKeys(blueprint: Blueprint) {
-    if (!isBlank(primary = this.getCommandByName(blueprint, 'primary'))) {
-      return '", primary key ({$this->columnize($primary->columns)})"';
+    const primary = this.getCommandByName(blueprint, 'primary');
+    if (!isBlank(primary)) {
+      return `, primary key (${this.columnize(primary.columns)})`;
     }
+    return '';
   }
 
   /*Compile alter table commands for adding columns.*/
   public compileAdd(blueprint: Blueprint, command: ColumnDefinition) {
-    var columns = this.prefixArray('add column', this.getColumns(blueprint));
-    return collect(columns).reject(column => {
-      return preg_match('/as \\(.*\\) stored/', column) > 0;
+    const columns = this.prefixArray('add column', this.getColumns(blueprint));
+    return columns.filter(column => {
+      return !(/as \(.*\) stored/.exec(column));
     }).map(column => {
-      return 'alter table ' + this.wrapTable(blueprint) + ' ' + column;
-    }).all();
+      return `alter table ${this.wrapTable(blueprint)} ${column}`;
+    });
   }
 
   /*Compile a unique key command.*/
@@ -104,7 +108,8 @@ export class SqliteSchemaGrammar extends SchemaGrammar {
   }
 
   /*Compile a foreign key command.*/
-  public compileForeign(blueprint: Blueprint, command: ColumnDefinition) {
+  public compileForeign(blueprint: Blueprint, command: ColumnDefinition): string {
+    return '';
   }
 
   /*Compile a drop table command.*/
@@ -139,55 +144,60 @@ export class SqliteSchemaGrammar extends SchemaGrammar {
   /*Compile a drop column command.*/
   public compileDropColumn(blueprint: Blueprint, command: ColumnDefinition,
                            connection: Connection) {
-    var tableDiff = this.getDoctrineTableDiff(blueprint,
-      schema = connection.getDoctrineSchemaManager());
-    for (let name of command.columns) {
-      tableDiff.removedColumns[name] = connection.getDoctrineColumn(
-        this.getTablePrefix() + blueprint.getTable(), name);
-    }
-    return /*cast type array*/ schema.getDatabasePlatform().getAlterTableSQL(tableDiff);
+    // var tableDiff = this.getDoctrineTableDiff(blueprint,
+    //   schema = connection.getDoctrineSchemaManager());
+    // for (let name of command.columns) {
+    //   tableDiff.removedColumns[name] = connection.getDoctrineColumn(
+    //     this.getTablePrefix() + blueprint.getTable(), name);
+    // }
+    // return /*cast type array*/ schema.getDatabasePlatform().getAlterTableSQL(tableDiff);
   }
 
   /*Compile a drop unique key command.*/
   public compileDropUnique(blueprint: Blueprint, command: ColumnDefinition) {
-    var index = this.wrap(command.index);
-    return '"drop index {$index}"';
+    const index = this.wrap(command.index);
+    return `drop
+    index
+    ${index}`;
   }
 
   /*Compile a drop index command.*/
   public compileDropIndex(blueprint: Blueprint, command: ColumnDefinition) {
-    var index = this.wrap(command.index);
-    return '"drop index {$index}"';
+    const index = this.wrap(command.index);
+    return `drop
+    index
+    ${index}`;
   }
 
   /*Compile a drop spatial index command.*/
   public compileDropSpatialIndex(blueprint: Blueprint, command: ColumnDefinition) {
-    throw new RuntimeException('The database driver in use does not support spatial indexes.');
+    throw new Error(
+      'RuntimeException The database driver in use does not support spatial indexes.');
   }
 
   /*Compile a rename table command.*/
   public compileRename(blueprint: Blueprint, command: ColumnDefinition) {
-    var from = this.wrapTable(blueprint);
-    return '"alter table {$from} rename to "' + this.wrapTable(command.to);
+    const from = this.wrapTable(blueprint);
+    return `alter table ${from} rename to ${this.wrapTable(command.to)}`;
   }
 
   /*Compile a rename index command.*/
   public compileRenameIndex(blueprint: Blueprint, command: ColumnDefinition,
                             connection: Connection) {
-    var schemaManager = connection.getDoctrineSchemaManager();
-    var indexes       = schemaManager.listTableIndexes(
-      this.getTablePrefix() + blueprint.getTable());
-    var index         = Arr.get(indexes, command.from);
-    if (!index) {
-      throw new RuntimeException('"Index [{$command->from}] does not exist."');
-    }
-    var newIndex = new Index(command.to, index.getColumns(), index.isUnique(), index.isPrimary(),
-      index.getFlags(), index.getOptions());
-    var platform = schemaManager.getDatabasePlatform();
-    return [
-      platform.getDropIndexSQL(command.from, this.getTablePrefix() + blueprint.getTable()),
-      platform.getCreateIndexSQL(newIndex, this.getTablePrefix() + blueprint.getTable())
-    ];
+    // var schemaManager = connection.getDoctrineSchemaManager();
+    // var indexes       = schemaManager.listTableIndexes(
+    //   this.getTablePrefix() + blueprint.getTable());
+    // var index         = Arr.get(indexes, command.from);
+    // if (!index) {
+    //   throw new RuntimeException('"Index [{$command->from}] does not exist."');
+    // }
+    // var newIndex = new Index(command.to, index.getColumns(), index.isUnique(), index.isPrimary(),
+    //   index.getFlags(), index.getOptions());
+    // var platform = schemaManager.getDatabasePlatform();
+    // return [
+    //   platform.getDropIndexSQL(command.from, this.getTablePrefix() + blueprint.getTable()),
+    //   platform.getCreateIndexSQL(newIndex, this.getTablePrefix() + blueprint.getTable())
+    // ];
   }
 
   /*Compile the command to enable foreign key constraints.*/
@@ -410,28 +420,35 @@ export class SqliteSchemaGrammar extends SchemaGrammar {
 
   /*Get the SQL for a generated virtual column modifier.*/
   protected modifyVirtualAs(blueprint: Blueprint, column: ColumnDefinition) {
-    if (!isBlank(virtualAs = column.virtualAsJson)) {
+    let virtualAs = column.virtualAsJson;
+    if (!isBlank(virtualAs)) {
       if (this.isJsonSelector(virtualAs)) {
-        var virtualAs = this.wrapJsonSelector(virtualAs);
+        virtualAs = this.wrapJsonSelector(virtualAs);
       }
-      return '" as ({$virtualAs})"';
+      return ` as (${virtualAs})`;
     }
-    if (!isBlank(virtualAs = column.virtualAs)) {
-      return '" as ({$virtualAs})"';
+    virtualAs = column.virtualAs;
+    if (!isBlank(virtualAs)) {
+      return ` as (${virtualAs})`;
     }
+
+    return '';
   }
 
   /*Get the SQL for a generated stored column modifier.*/
   protected modifyStoredAs(blueprint: Blueprint, column: ColumnDefinition) {
-    if (!isBlank(storedAs = column.storedAsJson)) {
+    let storedAs = column.storedAsJson;
+    if (!isBlank(storedAs)) {
       if (this.isJsonSelector(storedAs)) {
-        var storedAs = this.wrapJsonSelector(storedAs);
+        storedAs = this.wrapJsonSelector(storedAs);
       }
-      return '" as ({$storedAs}) stored"';
+      return ` as (${storedAs}) stored`;
     }
-    if (!isBlank(storedAs = column.storedAs)) {
-      return '" as ({$column->storedAs}) stored"';
+    storedAs = column.storedAs;
+    if (!isBlank(storedAs)) {
+      return ` as (${column.storedAs}) stored`;
     }
+    return '';
   }
 
   /*Get the SQL for a nullable column modifier.*/
@@ -443,14 +460,17 @@ export class SqliteSchemaGrammar extends SchemaGrammar {
     if (column.nullable === false) {
       return ' not null';
     }
+
+    return '';
   }
 
   /*Get the SQL for a default column modifier.*/
   protected modifyDefault(blueprint: Blueprint, column: ColumnDefinition) {
-    if (!isBlank(column._default) && isBlank(column.virtualAs) && isBlank(
+    if (!isBlank(column.default) && isBlank(column.virtualAs) && isBlank(
       column.virtualAsJson) && isBlank(column.storedAs)) {
-      return ' default ' + this.getDefaultValue(column._default);
+      return ' default ' + this.getDefaultValue(column.default);
     }
+    return '';
   }
 
   /*Get the SQL for an auto-increment column modifier.*/
@@ -458,6 +478,7 @@ export class SqliteSchemaGrammar extends SchemaGrammar {
     if (this.serials.includes(column.type) && column.autoIncrement) {
       return ' primary key autoincrement';
     }
+    return '';
   }
 
   /*Wrap the given JSON selector.*/

@@ -5,6 +5,7 @@
  */
 
 import { isAnyEmpty, isString } from '@gradii/check-type';
+import { BaseGrammar } from '../../base-grammar';
 import { AssignmentSetClause } from '../../query/ast/assignment-set-clause';
 import { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
 import { DeleteSpecification } from '../../query/ast/delete-specification';
@@ -40,8 +41,9 @@ import { GrammarInterface } from '../grammar.interface';
 import { JoinClauseBuilder, QueryBuilder } from '../query-builder';
 import { QueryBuilderVisitor } from '../visitor/query-builder-visitor';
 
-export abstract class QueryGrammar implements GrammarInterface {
+export abstract class QueryGrammar extends BaseGrammar implements GrammarInterface {
   constructor() {
+    super();
   }
 
   protected _selectComponents: string[] = [
@@ -330,7 +332,8 @@ export abstract class QueryGrammar implements GrammarInterface {
     return tableName;
   }
 
-  setTablePrefix(prefix: string): void {
+  setTablePrefix(prefix: string): this {
+    return this;
   }
 
   wrap(column: string) {
@@ -502,5 +505,9 @@ export abstract class QueryGrammar implements GrammarInterface {
     }
 
     return ast;
+  }
+
+  getDateFormat(): string {
+    throw new Error('not implement');
   }
 }

@@ -6,11 +6,14 @@
 
 import { isBlank } from '@gradii/check-type';
 import { Connection } from '../connection';
+import { Driver } from '../driver/driver';
 import { SqlServerDriver } from '../driver/sql-server/sql-server-driver';
 import { SqlserverQueryGrammar } from '../query-builder/grammar/sqlserver-query-grammar';
 import { SqlServerProcessor } from '../query-builder/processor/sql-server-processor';
 import { SqlServerSchemaBuilder } from '../schema/builder/sql-server-schema-builder';
+import { SchemaGrammar } from '../schema/grammar/schema-grammar';
 import { SqlServerSchemaGrammar } from '../schema/grammar/sql-server-schema-grammar';
+import { SchemaBuilder } from '../schema/schema-builder';
 
 export class SqlServerConnection extends Connection {
   /*Execute a Closure within a transaction.*/
@@ -38,7 +41,7 @@ export class SqlServerConnection extends Connection {
   }
 
   /*Get a schema builder instance for the connection.*/
-  public getSchemaBuilder() {
+  public getSchemaBuilder(): SchemaBuilder {
     if (isBlank(this.schemaGrammar)) {
       this.useDefaultSchemaGrammar();
     }
@@ -46,12 +49,12 @@ export class SqlServerConnection extends Connection {
   }
 
   /*Get the default schema grammar instance.*/
-  protected getDefaultSchemaGrammar() {
-    return this.withTablePrefix(new SqlServerSchemaGrammar());
+  protected getDefaultSchemaGrammar(): SchemaGrammar {
+    return this.withTablePrefix(new SqlServerSchemaGrammar()) as SchemaGrammar;
   }
 
   /*Get the schema state for the connection.*/
-  public getSchemaState(files: Filesystem | null = null, processFactory: Function | null = null) {
+  public getSchemaState(files?: any, processFactory?: Function) {
     throw new Error('RuntimeException Schema dumping is not supported when using SQL Server.');
   }
 
@@ -61,7 +64,7 @@ export class SqlServerConnection extends Connection {
   }
 
   /*Get the Doctrine DBAL driver.*/
-  protected getDoctrineDriver() {
+  protected getDoctrineDriver(): Driver {
     return new SqlServerDriver();
   }
 }

@@ -55,21 +55,24 @@ export class SchemaBuilder {
   }
 
   /*Determine if the given table exists.*/
-  public hasTable(table: string) {
-    table = this.connection.getTablePrefix() + table;
-    return this.connection.selectFromWriteConnection(
+  public async hasTable(table: string) {
+    table        = this.connection.getTablePrefix() + table;
+    const result = await this.connection.selectFromWriteConnection(
       this.grammar.compileTableExists(), [table]
-    ).length > 0;
+    );
+    return result.length > 0;
   }
 
   /*Determine if the given table has a given column.*/
-  public hasColumn(table: string, column: string) {
-    return this.getColumnListing(table).map(it => it.toLowerCase()).includes(column.toLowerCase());
+  public async hasColumn(table: string, column: string) {
+    const result = await this.getColumnListing(table);
+    return result.map(it => it.toLowerCase()).includes(column.toLowerCase());
   }
 
   /*Determine if the given table has given columns.*/
-  public hasColumns(table: string, columns: any[]) {
-    const tableColumns = this.getColumnListing(table).map(it => it.toLowerCase());
+  public async hasColumns(table: string, columns: any[]) {
+    const result       = await this.getColumnListing(table);
+    const tableColumns = result.map(it => it.toLowerCase());
     for (const column of columns) {
       if (!tableColumns.includes(column.toLowerCase())) {
         return false;
@@ -79,13 +82,14 @@ export class SchemaBuilder {
   }
 
   /*Get the data type for the given column name.*/
-  public getColumnType(table: string, column: string) {
-    table = this.connection.getTablePrefix() + table;
-    return this.connection.getDoctrineColumn(table, column).getType().getName();
+  public async getColumnType(table: string, column: string) {
+    table        = this.connection.getTablePrefix() + table;
+    const result = await this.connection.getDoctrineColumn(table, column);
+    return result.getType().getName();
   }
 
   /*Get the column listing for a given table.*/
-  public async getColumnListing(table: string): string[] {
+  public async getColumnListing(table: string): Promise<string[]> {
     const results = await this.connection.selectFromWriteConnection(
       this.grammar.compileColumnListing(this.connection.getTablePrefix() + table)
     );
@@ -156,7 +160,7 @@ export class SchemaBuilder {
   }
 
   /*Enable foreign key constraints.*/
-  public enableForeignKeyConstraints() {
+  public async enableForeignKeyConstraints() {
     return this.connection.statement(this.grammar.compileEnableForeignKeyConstraints());
   }
 
@@ -175,22 +179,22 @@ export class SchemaBuilder {
     const prefix = this.connection.getConfig('prefix_indexes') ?
       this.connection.getConfig('prefix') : '';
     if (this.resolver !== undefined) {
-      return call_user_func(this.resolver, table, callback, prefix);
+      return this.resolver(table, callback, prefix);
     }
     return new Blueprint(table, callback, prefix);
   }
 
   /*Register a custom Doctrine mapping type.*/
   public registerCustomDoctrineType(clazz: string, name: string, type: string) {
-    if (!this.connection.isDoctrineAvailable()) {
-      throw new Error(
-        'RuntimeException Registering a custom Doctrine type requires Doctrine DBAL (doctrine/dbal).');
-    }
-    if (!Type.hasType(name)) {
-      Type.addType(name, clazz);
-      this.connection.getDoctrineSchemaManager().getDatabasePlatform().registerDoctrineTypeMapping(
-        type, name);
-    }
+    // if (!this.connection.isDoctrineAvailable()) {
+    //   throw new Error(
+    //     'RuntimeException Registering a custom Doctrine type requires Doctrine DBAL (doctrine/dbal).');
+    // }
+    // if (!Type.hasType(name)) {
+    //   Type.addType(name, clazz);
+    //   this.connection.getDoctrineSchemaManager().getDatabasePlatform().registerDoctrineTypeMapping(
+    //     type, name);
+    // }
   }
 
   /*Get the database connection instance.*/

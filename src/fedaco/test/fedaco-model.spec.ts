@@ -15,6 +15,7 @@ import { PrimaryColumn } from '../src/annotation/column/primary.column';
 import { TimestampColumn } from '../src/annotation/column/timestamp.column';
 import { HasManyColumn } from '../src/annotation/relation-column/has-many.relation-column';
 import { HasOneColumn } from '../src/annotation/relation-column/has-one.relation-column';
+import { ConnectionFactory } from '../src/connector/connection-factory';
 import { DatabaseManager } from '../src/database-manager';
 import { FedacoBuilder } from '../src/fedaco/fedaco-builder';
 import { Dispatcher } from '../src/fedaco/mixins/has-events';
@@ -22,12 +23,29 @@ import { Model } from '../src/fedaco/model';
 import { Relation } from '../src/fedaco/relations/relation';
 import { ConnectionResolverInterface } from '../src/interface/connection-resolver-interface';
 import { ConnectionInterface } from '../src/query-builder/connection-interface';
-import { MysqlQueryGrammar } from '../src/query-builder/grammar/mysql-grammar';
+import { MysqlQueryGrammar } from '../src/query-builder/grammar/mysql-query-grammar';
 import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
+import { SchemaBuilder } from '../src/schema/schema-builder';
 import { FedacoModelNamespacedModel } from './model/fedaco-model-namespaced.model';
 
 class Conn implements ConnectionInterface {
+  getSchemaBuilder(): SchemaBuilder {
+    throw new Error('Method not implemented.');
+  }
+
+  getConfig(){
+
+  }
+
+  table(table: string | Function | QueryBuilder, as?: string): QueryBuilder {
+    throw new Error('Method not implemented.');
+  }
+
+  getPdo() {
+    throw new Error('Method not implemented.');
+  }
+
   getQueryGrammar(): any {
 
   }
@@ -70,6 +88,12 @@ class Conn implements ConnectionInterface {
   getName() {
     return '';
   }
+
+  recordsHaveBeenModified(): any {
+  }
+
+  selectFromWriteConnection(sql: string, values: any): any {
+  }
 }
 
 function getBuilder() {
@@ -83,7 +107,9 @@ function getBuilder() {
 function resolveModel(model: Model) {
   // model.
   // (model.constructor as typeof Model)._connectionResolver                    = new ResolveConnection();
-  (model.constructor as typeof Model).resolver = new DatabaseManager();
+  (model.constructor as typeof Model).resolver = new DatabaseManager(
+    new ConnectionFactory()
+  );
 }
 
 function setDispatch(modelClazz: typeof Model, util: boolean = true) {
@@ -1872,7 +1898,7 @@ describe('test database eloquent model', () => {
   });
 
   it('clone model makes a fresh copy of the model', () => {
-    const clazz    = new FedacoModelStub();
+    const clazz  = new FedacoModelStub();
     clazz.id     = 1;
     clazz.exists = true;
     clazz.first  = 'taylor';
@@ -2058,12 +2084,12 @@ describe('test database eloquent model', () => {
 //     expect(model.getMutatedAttributes()).toEqual(['firstName', 'middleName', 'lastName']);
 //   });
   it('replicate creates a new model instance with same attribute values', () => {
-    let model = new FedacoModelStub();
-    model.id = 'id';
-    model.foo = 'bar';
+    let model        = new FedacoModelStub();
+    model.id         = 'id';
+    model.foo        = 'bar';
     model.created_at = new Date();
     model.updated_at = new Date();
-    let replicated = model.replicate();
+    let replicated   = model.replicate();
     expect(replicated.id).toBeUndefined();
     expect(replicated.foo).toBe('bar');
     expect(replicated.created_at).toBeUndefined();

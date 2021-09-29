@@ -3,8 +3,8 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
+import { Migration } from '../migrations/migration';
 
-import { Migration } from 'Illuminate/Database/Migrations/Migration';
 
 export class MigrationEvent implements MigrationEvent {
   /*A migration instance.*/

@@ -7,9 +7,7 @@ import { QueryBuilder } from './query-builder';
  */
 
 export interface ProcessorInterface {
-  processSelect(queryBuilder, results);
+  processSelect(queryBuilder, results): Promise<any>;
 
-  processInsertGetId(query: QueryBuilder, sql: string, values: any[], sequence?: string): number;
-
-  processInsertGetId(sql: string, bindings: any[], sequence?: string): number;
+  processInsertGetId(query: QueryBuilder, sql: string, values: any[], sequence?: string): Promise<number>;
 }

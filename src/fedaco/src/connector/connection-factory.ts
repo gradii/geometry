@@ -10,6 +10,7 @@ import { MysqlConnection } from '../connection/mysql-connection';
 import { PostgresConnection } from '../connection/postgres-connection';
 import { SqlServerConnection } from '../connection/sql-server-connection';
 import { SqliteConnection } from '../connection/sqlite-connection';
+import { wrap } from '../helper/arr';
 import { MysqlConnector } from './mysql-connector';
 import { PostgresConnector } from './postgres-connector';
 import { SqlServerConnector } from './sql-server-connector';
@@ -73,13 +74,14 @@ export class ConnectionFactory {
   }
 
   /*Get a read / write level configuration.*/
-  protected getReadWriteConfig(config: any[], type: string) {
-    return config[type][0] !== undefined ? Arr.random(config[type]) : config[type];
+  protected getReadWriteConfig(config: any, type: string) {
+    return config[type][0] !== undefined ? config[type][Math.floor(
+      Math.random() * config[type].length)] : config[type];
   }
 
   /*Merge a configuration for a read / write connection.*/
   protected mergeReadWriteConfig(config: any[], merge: any[]) {
-    return Arr.except([...config, ...merge], ['read', 'write']);
+    return [...config, ...merge].filter(it => !['read', 'write'].includes(it));
   }
 
   /*Create a new Closure that resolves to a PDO instance.*/
@@ -89,9 +91,10 @@ export class ConnectionFactory {
   }
 
   /*Create a new Closure that resolves to a PDO instance with a specific host or an array of hosts.*/
-  protected createPdoResolverWithHosts(config: any[]) {
+  protected createPdoResolverWithHosts(config: any) {
     return () => {
-      for (const [key, host] of Object.entries(Arr.shuffle(hosts = this.parseHosts(config)))) {
+      const hosts = this.parseHosts(config).sort(() => .5 - Math.random());
+      for (const [key, host] of Object.entries(hosts)) {
         config['host'] = host;
         try {
           return this.createConnector(config).connect(config);
@@ -99,14 +102,14 @@ export class ConnectionFactory {
           continue;
         }
       }
-      throw e;
+      throw new Error('connect fail');
     };
   }
 
   /*Parse the hosts configuration item into an array.*/
-  protected parseHosts(config: any[]) {
-    const hosts = Arr.wrap(config['host']);
-    if (empty(hosts)) {
+  protected parseHosts(config: any) {
+    const hosts = wrap(config['host']);
+    if (!hosts.length) {
       throw new Error('InvalidArgumentException Database hosts array is empty.');
     }
     return hosts;
@@ -128,20 +131,20 @@ export class ConnectionFactory {
     //   return this.container.make(key);
     // }
     switch (config['driver']) {
-      case 'mysql':
-        return new MysqlConnector();
-      case 'pgsql':
-        return new PostgresConnector();
+      // case 'mysql':
+      //   return new MysqlConnector();
+      // case 'pgsql':
+      //   return new PostgresConnector();
       case 'sqlite':
         return new SqliteConnector();
-      case 'sqlsrv':
-        return new SqlServerConnector();
+      // case 'sqlsrv':
+      //   return new SqlServerConnector();
     }
     throw new Error(`InvalidArgumentException Unsupported driver [${config['driver']}].`);
   }
 
   /*Create a new connection instance.*/
-  protected createConnection(driver: string, connection: PDO | Function, database: string,
+  protected createConnection(driver: string, connection: Function, database: string,
                              prefix: string = '', config: any[] = []) {
     const resolver = Connection.getResolver(driver);
     if (resolver) {

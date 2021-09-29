@@ -1,15 +1,23 @@
-import { InvalidArgumentException } from "InvalidArgumentException";
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import { Connector } from './connector';
+import { ConnectorInterface } from './connector-interface';
+
 export class SqliteConnector extends Connector implements ConnectorInterface {
     /*Establish a database connection.*/
-    public connect(config: any[]) {
-        var options = this.getOptions(config);
-        if (config["database"] === ":memory:") {
-            return this.createConnection("sqlite::memory:", config, options);
+    public async connect(config: any) {
+        const options = this.getOptions(config);
+        if (config['database'] === ':memory:') {
+            return this.createConnection('sqlite::memory:', config, options);
         }
-        var path = realpath(config["database"]);
+        const path = config['database'];
         if (path === false) {
-            throw new InvalidArgumentException("\"Database ({$config['database']}) does not exist.\"");
+            throw new Error(`InvalidArgumentException Database (${config['database']}) does not exist.`);
         }
-        return this.createConnection("\"sqlite:{$path}\"", config, options);
+        return this.createConnection(`sqlite:${path}`, config, options);
     }
 }

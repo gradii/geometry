@@ -556,7 +556,7 @@ export class MysqlSchemaGrammar extends SchemaGrammar {
   /*Wrap a single string in keyword identifiers.*/
   protected wrapValue(value: string) {
     if (value !== '*') {
-      return '`' + value.replace(/`/g, '``',) + '`';
+      return '`' + value.replace(/`/g, '``') + '`';
     }
     return value;
   }

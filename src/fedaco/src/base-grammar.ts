@@ -1,3 +1,7 @@
+import { isArray } from '@gradii/check-type';
+import { RawExpression } from './query/ast/expression/raw-expression';
+import { Blueprint } from './schema/blueprint';
+
 /**
  * @license
  *
@@ -5,7 +9,7 @@
  */
 
 
-export class BaseGrammar {
+export abstract class BaseGrammar {
   /*The grammar table prefix.*/
   protected tablePrefix: string = '';
 
@@ -15,30 +19,30 @@ export class BaseGrammar {
   }
 
   /*Wrap a table in keyword identifiers.*/
-  public wrapTable(table: Expression | string) {
+  public wrapTable(table: RawExpression | Blueprint | string) {
     if (!this.isExpression(table)) {
       return this.wrap(this.tablePrefix + table, true);
     }
-    return this.getValue(table);
+    return this.getValue(table as RawExpression);
   }
 
   /*Wrap a value in keyword identifiers.*/
-  public wrap(value: Expression | string, prefixAlias: boolean = false) {
+  public wrap(value: RawExpression | string, prefixAlias: boolean = false) {
     if (this.isExpression(value)) {
-      return this.getValue(value);
+      return this.getValue(value as RawExpression);
     }
-    if (value.includes(' as ')) {
-      return this.wrapAliasedValue(value, prefixAlias);
+    if ((value as string).includes(' as ')) {
+      return this.wrapAliasedValue(value as string, prefixAlias);
     }
-    if (this.isJsonSelector(value)) {
-      return this.wrapJsonSelector(value);
+    if (this.isJsonSelector(value as string)) {
+      return this.wrapJsonSelector(value as string);
     }
-    return this.wrapSegments(value.split('.'));
+    return this.wrapSegments((value as string).split('.'));
   }
 
   /*Wrap a value that has an alias.*/
-  protected wrapAliasedValue(value: string, prefixAlias: boolean = false) {
-    var segments = preg_split('/\\s+as\\s+/i', value);
+  protected wrapAliasedValue(value: string, prefixAlias: boolean = false): string {
+    const segments = value.split(/\s+as\s+/i);
     if (prefixAlias) {
       segments[1] = this.tablePrefix + segments[1];
     }
@@ -46,16 +50,18 @@ export class BaseGrammar {
   }
 
   /*Wrap the given value segments.*/
-  protected wrapSegments(segments: any[]) {
-    return collect(segments).map((segment, key) => {
-      return key == 0 && count(segments) > 1 ? this.wrapTable(segment) : this.wrapValue(segment);
-    }).implode('.');
+  protected wrapSegments(segments: any[]): string {
+    return segments.map((segment, key) => {
+      return key == 0 && segments.length > 1 ?
+        this.wrapTable(segment) :
+        this.wrapValue(segment);
+    }).join('.');
   }
 
   /*Wrap a single string in keyword identifiers.*/
   protected wrapValue(value: string) {
     if (value !== '*') {
-      return '"' + str_replace('"', '""', value) + '"';
+      return '"' + value.replace('"', '""') + '"';
     }
     return value;
   }
@@ -72,12 +78,12 @@ export class BaseGrammar {
 
   /*Convert an array of column names into a delimited string.*/
   public columnize(columns: any[]) {
-    return array_map([this, 'wrap'], columns).join(', ');
+    return columns.map(it => this.wrap(it)).join(', ');
   }
 
   /*Create query parameter place-holders for an array.*/
   public parameterize(values: any[]) {
-    return array_map([this, 'parameter'], values).join(', ');
+    return values.map(it => this.parameter(it)).join(', ');
   }
 
   /*Get the appropriate query parameter place-holder for a value.*/
@@ -86,21 +92,22 @@ export class BaseGrammar {
   }
 
   /*Quote the given string literal.*/
-  public quoteString(value: string | any[]) {
-    if (is_array(value)) {
-      return array_map([this, __FUNCTION__], value).join(', ');
+  public quoteString(value: string | any[]): string {
+    if (isArray(value)) {
+      return value.map(it => this.quoteString(it)).join(', ');
     }
-    return '"\'$value\'"';
+    return `'${value}'`;
   }
 
   /*Determine if the given value is a raw expression.*/
   public isExpression(value: any) {
-    return value instanceof Expression;
+    return value instanceof RawExpression;
   }
 
   /*Get the value of a raw expression.*/
-  public getValue(expression: Expression) {
-    return expression.getValue();
+  public getValue(expression: RawExpression) {
+    // return expression.getValue();
+    throw new Error('not implemented');
   }
 
   /*Get the format for database stored dates.*/

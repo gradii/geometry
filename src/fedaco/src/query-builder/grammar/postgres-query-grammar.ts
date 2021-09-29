@@ -29,7 +29,7 @@ export class PostgresQueryGrammar extends QueryGrammar implements GrammarInterfa
 
   }
 
-  protected _createVisitor(queryBuilder) {
+  protected _createVisitor(queryBuilder: QueryBuilder) {
     return new QueryBuilderVisitor(queryBuilder._grammar, queryBuilder);
   }
 
@@ -47,7 +47,7 @@ export class PostgresQueryGrammar extends QueryGrammar implements GrammarInterfa
     return ast.accept(visitor);
   }
 
-  quoteSchemaName(quoteSchemaName): string {
+  quoteSchemaName(quoteSchemaName: string): string {
     // if(keepSlashQuote) {
     //   return `\`${tableName.replace(/`/g, '``')}\``;
     // }
@@ -71,7 +71,7 @@ export class PostgresQueryGrammar extends QueryGrammar implements GrammarInterfa
     }
   }
 
-  compileInsertOrIgnore(builder: QueryBuilder, values): string {
+  compileInsertOrIgnore(builder: QueryBuilder, values: any): string {
     return this.compileInsert(builder, values, 'into') + ' ON conflict do nothing';
   }
 
@@ -87,7 +87,7 @@ export class PostgresQueryGrammar extends QueryGrammar implements GrammarInterfa
     return `"${columnName.replace(/`/g, '')}"`;
   }
 
-  quoteTableName(tableName): string {
+  quoteTableName(tableName: string): string {
     // if(keepSlashQuote) {
     //   return `\`${tableName.replace(/`/g, '``')}\``;
     // }
@@ -190,6 +190,7 @@ export class PostgresQueryGrammar extends QueryGrammar implements GrammarInterfa
 
   setTablePrefix(prefix: string) {
     this._tablePrefix = prefix;
+    return this;
   }
 
 }

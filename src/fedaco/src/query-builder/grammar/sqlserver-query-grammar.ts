@@ -55,7 +55,7 @@ export class SqlserverQueryGrammar extends QueryGrammar implements GrammarInterf
     return `[${columnName.replace(/`/g, '')}]`;
   }
 
-  quoteTableName(tableName): string {
+  quoteTableName(tableName: string): string {
     // if(keepSlashQuote) {
     //   return `\`${tableName.replace(/`/g, '``')}\``;
     // }
@@ -64,6 +64,7 @@ export class SqlserverQueryGrammar extends QueryGrammar implements GrammarInterf
 
   setTablePrefix(prefix: string) {
     this._tablePrefix = prefix;
+    return this;
   }
 
   compileInsertGetId(builder: QueryBuilder, values: any, sequence: string): string {
@@ -71,7 +72,7 @@ export class SqlserverQueryGrammar extends QueryGrammar implements GrammarInterf
       sequence)};select scope_identity() as ${this.wrap(sequence)}`;
   }
 
-  protected _createVisitor(queryBuilder) {
+  protected _createVisitor(queryBuilder: QueryBuilder) {
     return new SqlserverQueryBuilderVisitor(queryBuilder._grammar, queryBuilder);
   }
 

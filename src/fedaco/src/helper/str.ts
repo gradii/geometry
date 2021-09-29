@@ -200,8 +200,8 @@ export function noCase(input: string, options: Options = {}) {
     stripRegexp,
     '\0'
   );
-  let start = 0;
-  let end = result.length;
+  let start    = 0;
+  let end      = result.length;
 
   // Trim the delimiter from around the output string.
   while (result.charAt(start) === '\0') {
@@ -224,7 +224,7 @@ export function paramCase(input: string, options: Options = {}) {
 }
 
 export function pascalCaseTransform(input: string, index: number) {
-  const firstChar = input.charAt(0);
+  const firstChar  = input.charAt(0);
   const lowerChars = input.substr(1).toLowerCase();
   if (index > 0 && firstChar >= '0' && firstChar <= '9') {
     return `_${firstChar}${lowerChars}`;
@@ -293,10 +293,10 @@ export function swapCase(input: string) {
 }
 
 
-const SMALL_WORDS = /\b(?:an?d?|a[st]|because|but|by|en|for|i[fn]|neither|nor|o[fnr]|only|over|per|so|some|tha[tn]|the|to|up|upon|vs?\.?|versus|via|when|with|without|yet)\b/i;
-const TOKENS = /[^\s:–—-]+|./g;
-const WHITESPACE = /\s/;
-const IS_MANUAL_CASE = /.(?=[A-Z]|\..)/;
+const SMALL_WORDS          = /\b(?:an?d?|a[st]|because|but|by|en|for|i[fn]|neither|nor|o[fnr]|only|over|per|so|some|tha[tn]|the|to|up|upon|vs?\.?|versus|via|when|with|without|yet)\b/i;
+const TOKENS               = /[^\s:–—-]+|./g;
+const WHITESPACE           = /\s/;
+const IS_MANUAL_CASE       = /.(?=[A-Z]|\..)/;
 const ALPHANUMERIC_PATTERN = /[A-Za-z0-9\u00C0-\u00FF]/;
 
 export function titleCase(input: string) {
@@ -352,4 +352,13 @@ export function upperCase(str: string) {
  */
 export function upperCaseFirst(input: string) {
   return input.charAt(0).toUpperCase() + input.substr(1);
+}
+
+export function replaceArray(subject: string, search: string, replaces: string[]) {
+  const segments = subject.split(search);
+  let result     = segments.shift();
+  for (const segment of segments) {
+    result += (replaces.shift() ?? search) + segment;
+  }
+  return result;
 }

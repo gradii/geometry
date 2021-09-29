@@ -5,7 +5,7 @@
  */
 import { has, isAnyEmpty, isArray, isBlank } from '@gradii/check-type';
 import { Connection } from '../connection';
-import { SqliteConnection } from '../connection/sqlite-connection';
+// import { SqliteConnection } from '../connection/sqlite-connection';
 import { Model } from '../fedaco/model';
 import { upperCaseFirst } from '../helper/str';
 import { raw } from '../query-builder/ast-factory';
@@ -71,16 +71,17 @@ export class Blueprint {
 
   /*Ensure the commands on the blueprint are valid for the connection type.*/
   protected ensureCommandsAreValid(connection: Connection) {
-    if (connection instanceof SqliteConnection) {
-      if (this.commandsNamed(['dropColumn', 'renameColumn']).length > 1) {
-        throw new Error(
-          `BadMethodCallException SQLite doesn't support multiple calls to dropColumn / renameColumn in a single modification.`);
-      }
-      if (this.commandsNamed(['dropForeign']).length > 0) {
-        throw new Error(
-          `BadMethodCallException SQLite doesn't support dropping foreign keys (you would need to re-create the table).`);
-      }
-    }
+    // todo check me
+    // if (connection instanceof SqliteConnection) {
+    //   if (this.commandsNamed(['dropColumn', 'renameColumn']).length > 1) {
+    //     throw new Error(
+    //       `BadMethodCallException SQLite doesn't support multiple calls to dropColumn / renameColumn in a single modification.`);
+    //   }
+    //   if (this.commandsNamed(['dropForeign']).length > 0) {
+    //     throw new Error(
+    //       `BadMethodCallException SQLite doesn't support dropping foreign keys (you would need to re-create the table).`);
+    //   }
+    // }
   }
 
   /*Get all of the commands matching the given names.*/
@@ -764,7 +765,7 @@ export class Blueprint {
   }
 
   /*Get the columns on the blueprint that should be added.*/
-  public getAddedColumns() {
+  public getAddedColumns(): ColumnDefinition[] {
     return this.columns.filter(column => {
       return !column.change;
     });

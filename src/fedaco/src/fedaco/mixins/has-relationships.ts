@@ -8,7 +8,7 @@ import { isArray } from '@gradii/check-type';
 import { tap } from 'ramda';
 import { Constructor } from '../../helper/constructor';
 import { snakeCase } from '../../helper/str';
-import { MysqlQueryGrammar } from '../../query-builder/grammar/mysql-grammar';
+import { MysqlQueryGrammar } from '../../query-builder/grammar/mysql-query-grammar';
 import { Processor } from '../../query-builder/processor';
 import { QueryBuilder } from '../../query-builder/query-builder';
 import { Model } from '../model';

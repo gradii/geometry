@@ -3,7 +3,9 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
+import { ConnectionFactory } from './connector/connection-factory';
 import { DatabaseManager } from './database-manager';
+import { Dispatcher, NullDispatcher } from './fedaco/mixins/has-events';
 import { Model } from './fedaco/model';
 import { ConnectionInterface } from './query-builder/connection-interface';
 import { QueryBuilder } from './query-builder/query-builder';
@@ -32,8 +34,8 @@ export class Db {
 
   /*Build the database manager instance.*/
   protected setupManager() {
-    // const factory = new ConnectionFactory(this.container);
-    this.manager  = new DatabaseManager(/*this.container, factory*/);
+    const factory = new ConnectionFactory();
+    this.manager  = new DatabaseManager(factory);
   }
 
   /*Get a connection instance from the global manager.*/
@@ -50,7 +52,7 @@ export class Db {
 
   /*Get a fluent query builder instance.*/
   public static table(table: Function | QueryBuilder | string, as: string | null = null,
-                      connection: string | null                             = null) {
+                      connection: string | null                                  = null) {
     return (this.instance.constructor as typeof Db)
       .connection(connection)
       .table(table, as);
@@ -81,7 +83,17 @@ export class Db {
   /*Bootstrap Eloquent so it is ready for usage.*/
   public bootEloquent() {
     Model.setConnectionResolver(this.manager);
-    const dispatcher = this.getEventDispatcher();
+    const events: Dispatcher = {
+      forget(event: string): void {
+      },
+      until() {
+        return true;
+      }, dispatch() {
+      }
+    };
+
+    const dispatcher = new NullDispatcher(events);
+
     if (dispatcher) {
       Model.setEventDispatcher(dispatcher);
     }

@@ -56,14 +56,14 @@ export class MysqlQueryGrammar extends QueryGrammar implements GrammarInterface 
     }
   }
 
-  quoteTableName(tableName): string {
+  quoteTableName(tableName: string): string {
     // if(keepSlashQuote) {
     //   return `\`${tableName.replace(/`/g, '``')}\``;
     // }
     return `\`${this._tablePrefix}${tableName.replace(/`/g, '')}\``;
   }
 
-  quoteSchemaName(quoteSchemaName): string {
+  quoteSchemaName(quoteSchemaName: string): string {
     // if(keepSlashQuote) {
     //   return `\`${tableName.replace(/`/g, '``')}\``;
     // }
@@ -72,9 +72,10 @@ export class MysqlQueryGrammar extends QueryGrammar implements GrammarInterface 
 
   setTablePrefix(prefix: string) {
     this._tablePrefix = prefix;
+    return this;
   }
 
-  compileInsert(builder: QueryBuilder, values, insertOption: string = 'into'): string {
+  compileInsert(builder: QueryBuilder, values: any, insertOption: string = 'into'): string {
     if (isAnyEmpty(values)) {
       const visitor = new QueryBuilderVisitor(builder._grammar, builder);
       return `INSERT INTO ${builder._from.accept(visitor)} ()

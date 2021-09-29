@@ -11,21 +11,22 @@ import { MysqlQueryGrammar } from '../query-builder/grammar/mysql-query-grammar'
 import { MysqlProcessor } from '../query-builder/processor/mysql-processor';
 import { MysqlSchemaBuilder } from '../schema/builder/mysql-schema-builder';
 import { MysqlSchemaGrammar } from '../schema/grammar/mysql-schema-grammar';
+import { SchemaGrammar } from '../schema/grammar/schema-grammar';
 import { MySqlSchemaState } from '../schema/mysql-schema-state';
 
 export class MysqlConnection extends Connection {
   /*Determine if the connected database is a MariaDB database.*/
   public isMaria() {
-    return this.getPdo().getAttribute(PDO.ATTR_SERVER_VERSION).includes('MariaDB');
+    return this.getPdo().getAttribute('ATTR_SERVER_VERSION').includes('MariaDB');
   }
 
   /*Get the default query grammar instance.*/
-  protected getDefaultQueryGrammar() {
-    return this.withTablePrefix(new MysqlQueryGrammar());
+  protected getDefaultQueryGrammar(): MysqlQueryGrammar {
+    return this.withTablePrefix(new MysqlQueryGrammar()) as MysqlQueryGrammar;
   }
 
   /*Get a schema builder instance for the connection.*/
-  public getSchemaBuilder() {
+  public getSchemaBuilder(): MysqlSchemaBuilder {
     if (isBlank(this.schemaGrammar)) {
       this.useDefaultSchemaGrammar();
     }
@@ -33,12 +34,12 @@ export class MysqlConnection extends Connection {
   }
 
   /*Get the default schema grammar instance.*/
-  protected getDefaultSchemaGrammar() {
-    return this.withTablePrefix(new MysqlSchemaGrammar());
+  protected getDefaultSchemaGrammar(): SchemaGrammar {
+    return this.withTablePrefix(new MysqlSchemaGrammar()) as SchemaGrammar;
   }
 
   /*Get the schema state for the connection.*/
-  public getSchemaState(files: Filesystem | null = null, processFactory: callable | null = null) {
+  public getSchemaState(files?: any, processFactory?: Function) {
     return new MySqlSchemaState(this, files, processFactory);
   }
 
@@ -48,7 +49,7 @@ export class MysqlConnection extends Connection {
   }
 
   /*Get the Doctrine DBAL driver.*/
-  protected getDoctrineDriver() {
+  protected getDoctrineDriver(): MysqlDriver {
     return new MysqlDriver();
   }
 }

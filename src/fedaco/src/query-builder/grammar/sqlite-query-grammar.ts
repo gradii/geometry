@@ -81,6 +81,7 @@ export class SqliteQueryGrammar extends QueryGrammar implements GrammarInterface
 
   setTablePrefix(prefix: string) {
     this._tablePrefix = prefix;
+    return this;
   }
 
   protected _prepareDeleteAstWithJoins(builder: QueryBuilder) {

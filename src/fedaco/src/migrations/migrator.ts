@@ -4,6 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { isBlank } from '@gradii/check-type';
+import { Connection } from '../connection';
 import { Dispatcher } from '../fedaco/mixins/has-events';
 import { ConnectionResolverInterface } from '../interface/connection-resolver-interface';
 import { MigrationRepositoryInterface } from './migration-repository-interface';
@@ -288,9 +290,10 @@ export class Migrator {
 
   /*Get the schema grammar out of a migration connection.*/
   protected getSchemaGrammar(connection: Connection) {
-    if (isBlank(grammar = connection.getSchemaGrammar())) {
+    let grammar = connection.getSchemaGrammar();
+    if (isBlank(grammar)) {
       connection.useDefaultSchemaGrammar();
-      const grammar = connection.getSchemaGrammar();
+      grammar = connection.getSchemaGrammar();
     }
     return grammar;
   }

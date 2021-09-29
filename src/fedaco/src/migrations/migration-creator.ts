@@ -7,8 +7,7 @@
 import { isBlank } from '@gradii/check-type';
 import { format } from 'date-fns';
 import * as fs from 'fs';
-import { Str } from 'Illuminate/Support/Str';
-import { InvalidArgumentException } from 'InvalidArgumentException';
+import { pluralStudy } from '../helper/pluralize';
 
 export class MigrationCreator {
   /*The filesystem instance.*/
@@ -44,7 +43,7 @@ export class MigrationCreator {
       }
     }
     if (class_exists(className = this.getClassName(name))) {
-      throw new InvalidArgumentException('"A {$className} class already exists."');
+      throw new Error(`InvalidArgumentException A ${className} class already exists.`);
     }
   }
 
@@ -66,14 +65,14 @@ export class MigrationCreator {
   /*Populate the place-holders in the migration stub.*/
   protected populateStub(stub: string, table: string | null) {
     if (!isBlank(table)) {
-      const stub = str_replace(['DummyTable', '{{ table }}', '{{table}}'], table, stub);
+      stub = str_replace(['DummyTable', '{{ table }}', '{{table}}'], table, stub);
     }
     return stub;
   }
 
   /*Get the class name of a migration name.*/
   protected getClassName(name: string) {
-    return Str.studly(name);
+    return pluralStudy(name);
   }
 
   /*Get the full path to the migration.*/

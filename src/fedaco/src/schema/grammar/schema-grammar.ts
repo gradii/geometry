@@ -7,16 +7,21 @@
 import { isBlank, isBoolean } from '@gradii/check-type';
 import { BaseGrammar } from '../../base-grammar';
 import { Connection } from '../../connection';
+import { SchemaManager } from '../../dbal/schema-manager';
+import { upperCaseFirst } from '../../helper/str';
+import { RawExpression } from '../../query/ast/expression/raw-expression';
 import { Blueprint } from '../blueprint';
 import { ColumnDefinition } from '../column-definition';
 import { ForeignKeyDefinition } from '../foreign-key-definition';
-import { ChangeColumn } from './change-column';
-import { RenameColumn } from './rename-column';
+// import { ChangeColumn } from './change-column';
+// import { RenameColumn } from './rename-column';
 
 export class SchemaGrammar extends BaseGrammar {
+
+  protected modifiers: string[];
+
   /*If this Grammar supports schema changes wrapped in a transaction.*/
   protected transactions: boolean = false;
-
   /**
    * The commands to be executed outside of create or alter command.
    */
@@ -77,15 +82,15 @@ export class SchemaGrammar extends BaseGrammar {
     throw new Error('not implement');
   }
 
-  public compileGetAllTables(): string {
+  public compileGetAllTables(...args: any[]): string {
     throw new Error('not implement');
   }
 
-  public compileGetAllViews(): string {
+  public compileGetAllViews(...args: any[]): string {
     throw new Error('not implement');
   }
 
-  public compileDropAllTypes(): string {
+  public compileDropAllTypes(...args: any[]): string {
     throw new Error('not implement');
   }
 
@@ -96,12 +101,12 @@ export class SchemaGrammar extends BaseGrammar {
   /*Compile a rename column command.*/
   public compileRenameColumn(blueprint: Blueprint, command: ColumnDefinition,
                              connection: Connection) {
-    return RenameColumn.compile(this, blueprint, command, connection);
+    // return RenameColumn.compile(this, blueprint, command, connection);
   }
 
   /*Compile a change column command into a series of SQL statements.*/
   public compileChange(blueprint: Blueprint, command: ColumnDefinition, connection: Connection) {
-    return ChangeColumn.compile(this, blueprint, command, connection);
+    // return ChangeColumn.compile(this, blueprint, command, connection);
   }
 
   /*Compile a foreign key command.*/
@@ -123,7 +128,8 @@ export class SchemaGrammar extends BaseGrammar {
   protected getColumns(blueprint: Blueprint) {
     const columns = [];
     for (const column of blueprint.getAddedColumns()) {
-      const sql = this.wrap(column) + ' ' + this.getType(column);
+      // todo check me
+      const sql = this.wrap(column.name) + ' ' + this.getType(column);
       columns.push(this.addModifiers(sql, blueprint, column));
     }
     return columns;
@@ -131,7 +137,8 @@ export class SchemaGrammar extends BaseGrammar {
 
   /*Get the SQL for the column data type.*/
   protected getType(column: ColumnDefinition) {
-    return this['type' + ucfirst(column.type)](column);
+    // @ts-ignore
+    return this['type' + upperCaseFirst(column.type)](column);
   }
 
   /*Create the column definition for a generated, computed column type.*/
@@ -144,6 +151,7 @@ export class SchemaGrammar extends BaseGrammar {
     for (const modifier of this.modifiers) {
       const method = `modify${modifier}`;
       if (method in this) {
+        // @ts-ignore
         sql += this[method](blueprint, column);
       }
     }
@@ -154,7 +162,7 @@ export class SchemaGrammar extends BaseGrammar {
   protected getCommandByName(blueprint: Blueprint, name: string) {
     const commands = this.getCommandsByName(blueprint, name);
     if (commands.length > 0) {
-      return reset(commands);
+      return commands[0];
     }
   }
 
@@ -187,18 +195,20 @@ export class SchemaGrammar extends BaseGrammar {
 
   /*Wrap the given JSON path.*/
   protected wrapJsonPath(value: string, delimiter: string = '->') {
-    const value = preg_replace('/([\\\\]+)?\\\'/', '\'\'', value);
-    return '\'$."' + str_replace(delimiter, '"."', value) + '"\'';
+    value = value.replace(/([\\]+)?'/, `''`);
+    return `'$."${value.replace(delimiter, '"."')}"'`;
   }
 
   /*Wrap a value in keyword identifiers.*/
-  public wrap(value: Expression | string, prefixAlias: boolean = false) {
-    return super.wrap(value instanceof ColumnDefinition ? value.name : value, prefixAlias);
+  public wrap(value: RawExpression | string, prefixAlias: boolean = false) {
+    return super.wrap(value instanceof ColumnDefinition ?
+      value.name : value,
+      prefixAlias);
   }
 
   /*Format a value so that it can be used in "default" clauses.*/
   protected getDefaultValue(value: any) {
-    if (value instanceof Expression) {
+    if (value instanceof RawExpression) {
       return value;
     }
     return isBoolean(value) ?
@@ -206,11 +216,11 @@ export class SchemaGrammar extends BaseGrammar {
   }
 
   /*Create an empty Doctrine DBAL TableDiff from the Blueprint.*/
-  public getDoctrineTableDiff(blueprint: Blueprint, schema: AbstractSchemaManager) {
-    const table = this.getTablePrefix() + blueprint.getTable();
-    return tap(new TableDiff(table), tableDiff => {
-      tableDiff.fromTable = schema.listTableDetails(table);
-    });
+  public getDoctrineTableDiff(blueprint: Blueprint, schema: SchemaManager) {
+    // const table = this.getTablePrefix() + blueprint.getTable();
+    // return tap(new TableDiff(table), tableDiff => {
+    //   tableDiff.fromTable = schema.listTableDetails(table);
+    // });
   }
 
   /**

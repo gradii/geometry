@@ -4,21 +4,37 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isBlank } from '@gradii/check-type';
+import { isBlank, isBoolean, isFunction, isString } from '@gradii/check-type';
+import { format } from 'date-fns';
+import { BaseGrammar } from './base-grammar';
+import { DatabaseTransactionsManager } from './database-transactions-manager';
+import { DbalConnection } from './dbal/connection';
+import { Driver } from './driver/driver';
+import { QueryExecuted } from './events/query-executed';
+import { StatementPrepared } from './events/statement-prepared';
+import { TransactionBeginning } from './events/transaction-beginning';
+import { TransactionCommitted } from './events/transaction-committed';
+import { TransactionRolledBack } from './events/transaction-rolled-back';
 import { Dispatcher } from './fedaco/mixins/has-events';
+import { get } from './helper/obj';
+import { raw } from './query-builder/ast-factory';
 import { ConnectionInterface } from './query-builder/connection-interface';
+import { QueryGrammar } from './query-builder/grammar/query-grammar';
 import { Processor } from './query-builder/processor';
 import { QueryBuilder } from './query-builder/query-builder';
+import { QueryException } from './query-exception';
 import { SchemaGrammar } from './schema/grammar/schema-grammar';
 import { SchemaBuilder } from './schema/schema-builder';
 
 export class Connection implements ConnectionInterface {
   /*The active PDO connection.*/
-  protected pdo: PDO | Function;
+  protected pdo: Function;
   /*The active PDO connection used for reads.*/
-  protected readPdo: PDO | Function;
+  protected readPdo: Function;
   /*The name of the connected database.*/
   protected database: string;
+
+  protected readWriteType: string;
   /*The type of the connection.*/
   protected type: string | null;
   /*The table prefix for the connection.*/
@@ -26,9 +42,9 @@ export class Connection implements ConnectionInterface {
   /*The database connection configuration options.*/
   protected config: any[] = [];
   /*The reconnector instance for the connection.*/
-  protected reconnector: callable;
+  protected reconnector: Function;
   /*The query grammar implementation.*/
-  protected queryGrammar: SchemaGrammar;
+  protected queryGrammar: QueryGrammar;
   /*The schema grammar implementation.*/
   protected schemaGrammar: SchemaGrammar;
   /*The query post processor implementation.*/
@@ -36,7 +52,7 @@ export class Connection implements ConnectionInterface {
   /*The event dispatcher instance.*/
   protected events: Dispatcher;
   /*The default fetch mode of the connection.*/
-  protected fetchMode: number = PDO.FETCH_OBJ;
+  protected fetchMode: number = -1;
   /*The number of active transactions.*/
   protected transactions: number = 0;
   /*The transaction manager instance.*/
@@ -50,15 +66,15 @@ export class Connection implements ConnectionInterface {
   /*Indicates whether queries are being logged.*/
   protected loggingQueries: boolean = false;
   /*Indicates if the connection is in a "dry run".*/
-  protected pretending: boolean = false;
+  protected _pretending: boolean = false;
   /*The instance of Doctrine connection.*/
-  protected doctrineConnection: Connection;
+  protected doctrineConnection: DbalConnection;
   /*The connection resolvers.*/
-  protected static resolvers: any[] = [];
+  protected static resolvers: any = {};
 
   /*Create a new database connection instance.*/
-  public constructor(pdo: PDO | Function, database: string = '', tablePrefix: string = '',
-                     config: any[] = []) {
+  public constructor(pdo: Function, database: string = '', tablePrefix: string = '',
+                     config: any[]                                             = []) {
     this.pdo         = pdo;
     this.database    = database;
     this.tablePrefix = tablePrefix;
@@ -73,8 +89,8 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Get the default query grammar instance.*/
-  protected getDefaultQueryGrammar() {
-    return new QueryGrammar();
+  protected getDefaultQueryGrammar(): QueryGrammar {
+    throw new Error('not implement');
   }
 
   /*Set the schema grammar to the default implementation.*/
@@ -83,7 +99,8 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Get the default schema grammar instance.*/
-  protected getDefaultSchemaGrammar() {
+  protected getDefaultSchemaGrammar(): SchemaGrammar {
+    throw new Error('not implement');
   }
 
   /*Set the query post processor to the default implementation.*/
@@ -97,7 +114,7 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Get a schema builder instance for the connection.*/
-  public getSchemaBuilder() {
+  public getSchemaBuilder(): SchemaBuilder {
     if (isBlank(this.schemaGrammar)) {
       this.useDefaultSchemaGrammar();
     }
@@ -105,41 +122,41 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Begin a fluent query against a database table.*/
-  public table(table: Function | QueryBuilder | string, as: string | null = null) {
+  public table(table: Function | QueryBuilder | string, as: string | null = null): QueryBuilder {
     return this.query().from(table, as);
   }
 
   /*Get a new query builder instance.*/
-  public query() {
+  public query(): QueryBuilder {
     return new QueryBuilder(this, this.getQueryGrammar(), this.getPostProcessor());
   }
 
   /*Run a select statement and return a single result.*/
-  public selectOne(query: string, bindings: any[] = [], useReadPdo: boolean = true) {
-    const records = this.select(query, bindings, useReadPdo);
-    return array_shift(records);
+  public async selectOne(query: string, bindings: any[] = [], useReadPdo: boolean = true) {
+    const records = await this.select(query, bindings, useReadPdo);
+    return records.shift();
   }
 
   /*Run a select statement against the database.*/
-  public selectFromWriteConnection(query: string, bindings: any[] = []) {
+  public async selectFromWriteConnection(query: string, bindings: any[] = []) {
     return this.select(query, bindings, false);
   }
 
   /*Run a select statement against the database.*/
-  public select(query: string, bindings: any[] = [], useReadPdo: boolean = true) {
-    return this.run(query, bindings, (query: string, bindings: any[]) => {
+  public async select(query: string, bindings: any[] = [], useReadPdo: boolean = true) {
+    return await this.run(query, bindings, async (q: string, _bindings: any[]) => {
       if (this.pretending()) {
         return [];
       }
-      const statement = this.prepared(this.getPdoForSelect(useReadPdo).prepare(query));
-      this.bindValues(statement, this.prepareBindings(bindings));
-      statement.execute();
+      const statement = this.prepared(this.getPdoForSelect(useReadPdo).prepare(q));
+      this.bindValues(statement, this.prepareBindings(_bindings));
+      await statement.execute();
       return statement.fetchAll();
     });
   }
 
   /*Configure the PDO prepared statement.*/
-  protected prepared(statement: PDOStatement) {
+  protected prepared(statement: any) {
     statement.setFetchMode(this.fetchMode);
     this.event(new StatementPrepared(this, statement));
     return statement;
@@ -151,7 +168,7 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Run an insert statement against the database.*/
-  public insert(query: string, bindings: any[] = []) {
+  public async insert(query: string, bindings: any[] = []) {
     return this.statement(query, bindings);
   }
 
@@ -166,13 +183,13 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Execute an SQL statement and return the boolean result.*/
-  public statement(query: string, bindings: any[] = []) {
-    return this.run(query, bindings, (query: string, bindings: any[]) => {
+  public async statement(query: string, bindings: any = []) {
+    return this.run(query, bindings, async (q: string, _bindings: any) => {
       if (this.pretending()) {
         return true;
       }
-      const statement = this.getPdo().prepare(query);
-      this.bindValues(statement, this.prepareBindings(bindings));
+      const statement = this.getPdo().prepare(q);
+      this.bindValues(statement, this.prepareBindings(_bindings));
       this.recordsHaveBeenModified();
       return statement.execute();
     });
@@ -180,25 +197,27 @@ export class Connection implements ConnectionInterface {
 
   /*Run an SQL statement and get the number of rows affected.*/
   public affectingStatement(query: string, bindings: any[] = []) {
-    return this.run(query, bindings, (query: string, bindings: any[]) => {
+    return this.run(query, bindings, (q: string, _bindings: any[]) => {
       if (this.pretending()) {
         return 0;
       }
-      const statement = this.getPdo().prepare(query);
-      this.bindValues(statement, this.prepareBindings(bindings));
+      const statement = this.getPdo().prepare(q);
+      this.bindValues(statement, this.prepareBindings(_bindings));
       statement.execute();
-      this.recordsHaveBeenModified((count = statement.rowCount()) > 0);
+      const count = statement.rowCount();
+      this.recordsHaveBeenModified(count > 0);
       return count;
     });
   }
 
   /*Run a raw, unprepared query against the PDO connection.*/
   public unprepared(query: string) {
-    return this.run(query, [], (query: string) => {
+    return this.run(query, [], (q: string) => {
       if (this.pretending()) {
         return true;
       }
-      this.recordsHaveBeenModified(change = this.getPdo().exec(query) !== false);
+      const change = this.getPdo().exec(q) !== false;
+      this.recordsHaveBeenModified(change);
       return change;
     });
   }
@@ -206,9 +225,9 @@ export class Connection implements ConnectionInterface {
   /*Execute the given callback in "dry run" mode.*/
   public pretend(callback: Function) {
     return this.withFreshQueryLog(() => {
-      this.pretending = true;
+      this._pretending = true;
       callback(this);
-      this.pretending = false;
+      this._pretending = false;
       return this.queryLog;
     });
   }
@@ -224,45 +243,46 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Bind values to their parameters in the given statement.*/
-  public bindValues(statement: PDOStatement, bindings: any[]) {
+  public bindValues(statement: any, bindings: any[]) {
     for (const [key, value] of Object.entries(bindings)) {
-      statement.bindValue(is_string(key) ? key : key + 1, value,
-        is_int(value) ? PDO.PARAM_INT : PDO.PARAM_STR);
+      statement.bindValue(isString(key) ? key : key + 1, value,
+        /*is_int(value) ? PDO.PARAM_INT : PDO.PARAM_STR*/);
     }
   }
 
   /*Prepare the query bindings for execution.*/
-  public prepareBindings(bindings: any[]) {
+  public prepareBindings(bindings: any) {
     const grammar = this.getQueryGrammar();
     for (const [key, value] of Object.entries(bindings)) {
-      if (value instanceof DateTimeInterface) {
-        bindings[key] = value.format(grammar.getDateFormat());
-      } else if (is_bool(value)) {
-        bindings[key] = /*cast type int*/ value;
+      if (value instanceof Date) {
+        bindings[key] = format(value, grammar.getDateFormat());
+      } else if (isBoolean(value)) {
+        bindings[key] = /*cast type int*/ value ? 1 : 0;
       }
     }
     return bindings;
   }
 
   /*Run a SQL statement and log its execution context.*/
-  protected run(query: string, bindings: any[], callback: Function) {
+  protected async run(query: string, bindings: any[], callback: Function) {
     this.reconnectIfMissingConnection();
-    const start = microtime(true);
+    const start = +new Date();
+    let result;
     try {
-      const result = this.runQueryCallback(query, bindings, callback);
-    } catch (e: QueryException) {
-      const result = this.handleQueryException(e, query, bindings, callback);
+      result = await this.runQueryCallback(query, bindings, callback);
+    } catch (e) {
+      result = await this.handleQueryException(e, query, bindings, callback);
     }
     this.logQuery(query, bindings, this.getElapsedTime(start));
     return result;
   }
 
   /*Run a SQL statement.*/
-  protected runQueryCallback(query: string, bindings: any[], callback: Function) {
+  protected async runQueryCallback(query: string, bindings: any[], callback: Function) {
     try {
-      return callback(query, bindings);
-    } catch (e) {
-      throw new QueryException(query, this.prepareBindings(bindings), e);
+      return await callback(query, bindings);
+    } catch (e: any) {
+      throw new QueryException(query, this.prepareBindings(bindings), e.message);
     }
   }
 
@@ -270,13 +290,13 @@ export class Connection implements ConnectionInterface {
   public logQuery(query: string, bindings: any[], time: number | null = null) {
     this.event(new QueryExecuted(query, bindings, time, this));
     if (this.loggingQueries) {
-      this.queryLog.push(compact('query', 'bindings', 'time'));
+      this.queryLog.push([query, bindings, time]);
     }
   }
 
   /*Get the elapsed time since a given starting point.*/
   protected getElapsedTime(start: number) {
-    return round((microtime(true) - start) * 1000, 2);
+    return Math.round((+new Date() - start) * 1000);
   }
 
   /*Handle a query exception.*/
@@ -289,22 +309,22 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Handle a query exception that occurred during query execution.*/
-  protected tryAgainIfCausedByLostConnection(e: QueryException, query: string, bindings: any[],
+  protected tryAgainIfCausedByLostConnection(e/*: QueryException*/, query: string, bindings: any[],
                                              callback: Function) {
-    if (this.causedByLostConnection(e.getPrevious())) {
-      this.reconnect();
-      return this.runQueryCallback(query, bindings, callback);
-    }
-    throw e;
+    // if (/*this.causedByLostConnection(e.getPrevious())*/) {
+    this.reconnect();
+    return this.runQueryCallback(query, bindings, callback);
+    // }
+    // throw e;
   }
 
   /*Reconnect to the database.*/
   public reconnect() {
-    if (is_callable(this.reconnector)) {
+    if (isFunction(this.reconnector)) {
       this.doctrineConnection = null;
-      return call_user_func(this.reconnector, this);
+      return this.reconnector.call(this);
     }
-    throw new LogicException('Lost connection and no reconnector available.');
+    throw new Error('LogicException Lost connection and no reconnector available.');
   }
 
   /*Reconnect to the database if a PDO connection is missing.*/
@@ -321,9 +341,9 @@ export class Connection implements ConnectionInterface {
 
   /*Register a database query listener with the connection.*/
   public listen(callback: Function) {
-    if (this.events !== undefined) {
-      this.events.listen(Events.QueryExecuted, callback);
-    }
+    // if (this.events !== undefined) {
+    //   this.events.listen(QueryExecuted, callback);
+    // }
   }
 
   /*Fire an event for this connection.*/
@@ -350,7 +370,7 @@ export class Connection implements ConnectionInterface {
 
   /*Get a new raw query expression.*/
   public raw(value: any) {
-    return new Expression(value);
+    return raw(value);
   }
 
   /*Determine if the database connection has modified any database records.*/
@@ -384,11 +404,11 @@ export class Connection implements ConnectionInterface {
 
   /*Is Doctrine available?*/
   public isDoctrineAvailable() {
-    return class_exists('Doctrine\\DBAL\\Connection');
+    // return class_exists('Doctrine\\DBAL\\Connection');
   }
 
   /*Get a Doctrine Schema Column instance.*/
-  public getDoctrineColumn(table: string, column: string) {
+  public async getDoctrineColumn(table: string, column: string) {
     const schema = this.getDoctrineSchemaManager();
     return schema.listTableDetails(table).getColumn(column);
   }
@@ -402,21 +422,21 @@ export class Connection implements ConnectionInterface {
   /*Get the Doctrine DBAL database connection instance.*/
   public getDoctrineConnection() {
     if (isBlank(this.doctrineConnection)) {
-      const driver            = this.getDoctrineDriver();
-      this.doctrineConnection = new DoctrineConnection(array_filter({
-        'pdo'          : this.getPdo(),
-        'dbname'       : this.getDatabaseName(),
-        'driver'       : driver.getName(),
-        'serverVersion': this.getConfig('server_version')
-      }), driver);
+      const driver = this.getDoctrineDriver();
+
+      this.doctrineConnection = driver.connect();
     }
     return this.doctrineConnection;
   }
 
+  protected getDoctrineDriver(): Driver {
+    throw new Error('not implement');
+  }
+
   /*Get the current PDO connection.*/
   public getPdo() {
-    if (this.pdo instanceof Closure) {
-      return this.pdo = call_user_func(this.pdo);
+    if (isFunction(this.pdo)) {
+      return this.pdo = this.pdo.call(this);
     }
     return this.pdo;
   }
@@ -434,8 +454,8 @@ export class Connection implements ConnectionInterface {
     if (this.readOnWriteConnection || this.recordsModified && this.getConfig('sticky')) {
       return this.getPdo();
     }
-    if (this.readPdo instanceof Closure) {
-      return this.readPdo = call_user_func(this.readPdo);
+    if (isFunction(this.readPdo)) {
+      return this.readPdo = this.readPdo.call(this);
     }
     return this.readPdo || this.getPdo();
   }
@@ -446,20 +466,20 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Set the PDO connection.*/
-  public setPdo(pdo: PDO | Function | null) {
+  public setPdo(pdo: Function | null) {
     this.transactions = 0;
     this.pdo          = pdo;
     return this;
   }
 
   /*Set the PDO connection used for reading.*/
-  public setReadPdo(pdo: PDO | Function | null) {
+  public setReadPdo(pdo: Function | null) {
     this.readPdo = pdo;
     return this;
   }
 
   /*Set the reconnect instance on the connection.*/
-  public setReconnector(reconnector: callable) {
+  public setReconnector(reconnector: Function) {
     this.reconnector = reconnector;
     return this;
   }
@@ -475,8 +495,8 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Get an option from the configuration options.*/
-  public getConfig(option: string | null = null) {
-    return Arr.get(this.config, option);
+  public getConfig(option?: string) {
+    return get(this.config, option);
   }
 
   /*Get the PDO driver name.*/
@@ -490,7 +510,7 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Set the query grammar used by the connection.*/
-  public setQueryGrammar(grammar: SchemaGrammar) {
+  public setQueryGrammar(grammar: QueryGrammar) {
     this.queryGrammar = grammar;
     return this;
   }
@@ -546,7 +566,7 @@ export class Connection implements ConnectionInterface {
 
   /*Determine if the connection is in a "dry run".*/
   public pretending() {
-    return this.pretending === true;
+    return this._pretending === true;
   }
 
   /*Get the connection query log.*/
@@ -604,7 +624,7 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Set the table prefix and return the grammar.*/
-  public withTablePrefix(grammar: SchemaGrammar) {
+  public withTablePrefix<T extends BaseGrammar = BaseGrammar>(grammar: T): T {
     grammar.setTablePrefix(this.tablePrefix);
     return grammar;
   }
@@ -618,4 +638,8 @@ export class Connection implements ConnectionInterface {
   public static getResolver(driver: string) {
     return Connection.resolvers[driver] ?? null;
   }
+
+  transaction(callback: Function) {
+  }
+
 }

@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Type } from './Type';
 
 /*Type that maps a PHP array to a clob SQL type.*/
@@ -17,7 +23,7 @@ export class ArrayType extends Type {
     if (value === null) {
       return null;
     }
-    var value = is_resource(value) ? stream_get_contents(value) : value;
+    let value = is_resource(value) ? stream_get_contents(value) : value;
     set_error_handler((code, message) => {
       throw ConversionException.conversionFailedUnserialization(
         this.getName(),

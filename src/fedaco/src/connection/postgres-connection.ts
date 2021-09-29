@@ -4,32 +4,33 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isBlank, isNumber, isString } from '@gradii/check-type';
+import { isBlank, isString } from '@gradii/check-type';
 import { Connection } from '../connection';
 import { PostgresDriver } from '../driver/postgres/postgres-driver';
 import { PostgresQueryGrammar } from '../query-builder/grammar/postgres-query-grammar';
 import { PostgresProcessor } from '../query-builder/processor/postgres-processor';
 import { PostgresSchemaBuilder } from '../schema/builder/postgres-schema-builder';
 import { PostgresSchemaGrammar } from '../schema/grammar/postgres-schema-grammar';
+import { PostgresSchemaState } from '../schema/postgres-schema-state';
 
 export class PostgresConnection extends Connection {
   /*Bind values to their parameters in the given statement.*/
-  public bindValues(statement: PDOStatement, bindings: any[]) {
+  public bindValues(statement: any, bindings: any[]) {
     for (const [key, value] of Object.entries(bindings)) {
-      if (isNumber(value)) {
-        const pdoParam = PDO.PARAM_INT;
-      } else if (is_resource(value)) {
-        const pdoParam = PDO.PARAM_LOB;
-      } else {
-        const pdoParam = PDO.PARAM_STR;
-      }
-      statement.bindValue(isString(key) ? key : key + 1, value, pdoParam);
+      // if (isNumber(value)) {
+      //   const pdoParam = PDO.PARAM_INT;
+      // } else if (is_resource(value)) {
+      //   const pdoParam = PDO.PARAM_LOB;
+      // } else {
+      //   const pdoParam = PDO.PARAM_STR;
+      // }
+      statement.bindValue(isString(key) ? key : key + 1, value, -1);
     }
   }
 
   /*Get the default query grammar instance.*/
-  protected getDefaultQueryGrammar() {
-    return this.withTablePrefix(new PostgresQueryGrammar());
+  protected getDefaultQueryGrammar(): PostgresQueryGrammar {
+    return this.withTablePrefix(new PostgresQueryGrammar()) as PostgresQueryGrammar;
   }
 
   /*Get a schema builder instance for the connection.*/
@@ -41,12 +42,12 @@ export class PostgresConnection extends Connection {
   }
 
   /*Get the default schema grammar instance.*/
-  protected getDefaultSchemaGrammar() {
+  protected getDefaultSchemaGrammar(): PostgresSchemaGrammar {
     return this.withTablePrefix(new PostgresSchemaGrammar());
   }
 
   /*Get the schema state for the connection.*/
-  public getSchemaState(files: Filesystem | null = null, processFactory: callable | null = null) {
+  public getSchemaState(files?: any, processFactory?: Function) {
     return new PostgresSchemaState(this, files, processFactory);
   }
 
@@ -56,7 +57,7 @@ export class PostgresConnection extends Connection {
   }
 
   /*Get the Doctrine DBAL driver.*/
-  protected getDoctrineDriver() {
+  protected getDoctrineDriver(): PostgresDriver {
     return new PostgresDriver();
   }
 }

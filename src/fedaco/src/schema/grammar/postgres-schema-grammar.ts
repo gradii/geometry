@@ -4,10 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isBlank } from '@gradii/check-type';
+import { isBlank, isString } from '@gradii/check-type';
 import { Connection } from '../../connection';
 import { Blueprint } from '../blueprint';
 import { ColumnDefinition } from '../column-definition';
+import { ForeignKeyDefinition } from '../foreign-key-definition';
 import { SchemaGrammar } from './schema-grammar';
 
 export class PostgresSchemaGrammar extends SchemaGrammar {
@@ -37,45 +38,55 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
 
   /*Compile the query to determine if a table exists.*/
   public compileTableExists() {
-    return 'select * from information_schema.tables where table_catalog = ? and table_schema = ? and table_name = ? and table_type = \'BASE TABLE\'';
+    return `select *
+            from information_schema.tables
+            where table_catalog = ?
+              and table_schema = ?
+              and table_name = ?
+              and table_type = 'BASE TABLE'`;
   }
 
   /*Compile the query to determine the list of columns.*/
   public compileColumnListing() {
-    return 'select column_name from information_schema.columns where table_catalog = ? and table_schema = ? and table_name = ?';
+    return `select column_name
+            from information_schema.columns
+            where table_catalog = ?
+              and table_schema = ?
+              and table_name = ?`;
   }
 
   /*Compile a create table command.*/
   public compileCreate(blueprint: Blueprint, command: ColumnDefinition) {
-    return array_values(array_filter([
+    return ([
       ...[
         `${blueprint.temporary ? 'create temporary' : 'create'} table ${this.wrapTable(
           blueprint)} (${this.getColumns(blueprint).join(', ')})`
       ], ...this.compileAutoIncrementStartingValues(blueprint)
-    ]));
+    ]).filter(it => !!it);
   }
 
   /*Compile a column addition command.*/
   public compileAdd(blueprint: Blueprint, command: ColumnDefinition) {
-    return array_values(array_filter([
+    return ([
       ...[
         `alter table ${this.wrapTable(blueprint)} ${this.prefixArray('add column',
           this.getColumns(blueprint)).join(', ')}`
       ], ...this.compileAutoIncrementStartingValues(blueprint)
-    ]));
+    ]).filter(it => !!it);
   }
 
   /*Compile the auto-incrementing column starting values.*/
   public compileAutoIncrementStartingValues(blueprint: Blueprint) {
-    return collect(blueprint.autoIncrementingStartingValues()).map((value, column) => {
+    return blueprint.autoIncrementingStartingValues().map((value, column) => {
       return 'alter sequence ' + blueprint.getTable() + '_' + column + '_seq restart with ' + value;
-    }).all();
+    });
   }
 
   /*Compile a primary key command.*/
   public compilePrimary(blueprint: Blueprint, command: ColumnDefinition) {
     const columns = this.columnize(command.columns);
-    return `alter table ${this.wrapTable(blueprint)} add primary key (${columns})`;
+    return `alter table ${this.wrapTable(blueprint)}
+      add primary key (${columns})`;
   }
 
   /*Compile a unique key command.*/
@@ -99,7 +110,7 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
 
   /*Compile a foreign key command.*/
   public compileForeign(blueprint: Blueprint, command: ColumnDefinition) {
-    let sql = super.compileForeign(blueprint, command);
+    let sql = super.compileForeign(blueprint, command as ForeignKeyDefinition);
     if (!isBlank(command.deferrable)) {
       sql += command.deferrable ? ' deferrable' : ' not deferrable';
     }
@@ -114,12 +125,12 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
 
   /*Compile a drop table command.*/
   public compileDrop(blueprint: Blueprint, command: ColumnDefinition) {
-    return 'drop table ' + this.wrapTable(blueprint);
+    return `drop table ${this.wrapTable(blueprint)}`;
   }
 
   /*Compile a drop table (if exists) command.*/
   public compileDropIfExists(blueprint: Blueprint, command: ColumnDefinition) {
-    return 'drop table if exists ' + this.wrapTable(blueprint);
+    return `drop table if exists ${this.wrapTable(blueprint)}`;
   }
 
   /*Compile the SQL needed to drop all tables.*/
@@ -129,52 +140,56 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
 
   /*Compile the SQL needed to drop all views.*/
   public compileDropAllViews(views: any[]) {
-    return 'drop view "' + views.join('","') + '" cascade';
+    return `drop view "${views.join(',')}" cascade`;
   }
 
   /*Compile the SQL needed to drop all types.*/
   public compileDropAllTypes(types: any[]) {
-    return 'drop type "' + types.join('","') + '" cascade';
+    return `drop type "${types.join(',')}" cascade`;
   }
 
   /*Compile the SQL needed to retrieve all table names.*/
-  public compileGetAllTables(searchPath: string | any[]) {
-    return 'select tablename from pg_catalog.pg_tables where schemaname in (\'' + searchPath.join(
-      '\',\'') + '\')';
+  public compileGetAllTables(searchPath: string[]) {
+    return `select tablename
+            from pg_catalog.pg_tables
+            where schemaname in ('${searchPath.join('\',\'')}')`;
   }
 
   /*Compile the SQL needed to retrieve all view names.*/
-  public compileGetAllViews(searchPath) {
-    return 'select viewname from pg_catalog.pg_views where schemaname in (\'' + searchPath.join(
-      '\',\'') + '\')';
+  public compileGetAllViews(searchPath: string[]) {
+    return `select viewname
+            from pg_catalog.pg_views
+            where schemaname in ('${searchPath.join('\',\'')}')`;
   }
 
   /*Compile the SQL needed to retrieve all type names.*/
   public compileGetAllTypes() {
-    return 'select distinct pg_type.typname from pg_type inner join pg_enum on pg_enum.enumtypid = pg_type.oid';
+    return `select distinct pg_type.typname
+            from pg_type
+                   inner join pg_enum on pg_enum.enumtypid = pg_type.oid`;
   }
 
   /*Compile a drop column command.*/
   public compileDropColumn(blueprint: Blueprint, command: ColumnDefinition) {
-    let columns = this.prefixArray('drop column', this.wrapArray(command.columns));
-    return 'alter table ' + this.wrapTable(blueprint) + ' ' + columns.join(', ');
+    const columns = this.prefixArray('drop column', this.wrapArray(command.columns));
+    return `alter table ${this.wrapTable(blueprint)} ${columns.join(', ')}`;
   }
 
   /*Compile a drop primary key command.*/
   public compileDropPrimary(blueprint: Blueprint, command: ColumnDefinition) {
-    let index = this.wrap('"{$blueprint->getTable()}_pkey"');
-    return 'alter table ' + this.wrapTable(blueprint) + '" drop constraint {$index}"';
+    const index = this.wrap('"{$blueprint->getTable()}_pkey"');
+    return `alter table ${this.wrapTable(blueprint)} drop constraint ${index}`;
   }
 
   /*Compile a drop unique key command.*/
   public compileDropUnique(blueprint: Blueprint, command: ColumnDefinition) {
-    let index = this.wrap(command.index);
-    return '"alter table {$this->wrapTable($blueprint)} drop constraint {$index}"';
+    const index = this.wrap(command.index);
+    return `alter table ${this.wrapTable(blueprint)} drop constraint ${index}`;
   }
 
   /*Compile a drop index command.*/
   public compileDropIndex(blueprint: Blueprint, command: ColumnDefinition) {
-    return '"drop index {$this->wrap($command->index)}"';
+    return `drop index ${this.wrap(command.index)}`;
   }
 
   /*Compile a drop spatial index command.*/
@@ -184,14 +199,14 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
 
   /*Compile a drop foreign key command.*/
   public compileDropForeign(blueprint: Blueprint, command: ColumnDefinition) {
-    let index = this.wrap(command.index);
-    return '"alter table {$this->wrapTable($blueprint)} drop constraint {$index}"';
+    const index = this.wrap(command.index);
+    return `alter table ${this.wrapTable(blueprint)} drop constraint ${index}`;
   }
 
   /*Compile a rename table command.*/
   public compileRename(blueprint: Blueprint, command: ColumnDefinition) {
-    let from = this.wrapTable(blueprint);
-    return '"alter table {$from} rename to "' + this.wrapTable(command.to);
+    const from = this.wrapTable(blueprint);
+    return `alter table ${from} rename to ${this.wrapTable(command.to)}`;
   }
 
   /*Compile a rename index command.*/
@@ -214,10 +229,13 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
     return 'SET CONSTRAINTS ALL DEFERRED;';
   }
 
-  /*Compile a comment command.*/
+  /**
+   * Compile a comment command.
+   * @todo check me
+   */
   public compileComment(blueprint: Blueprint, command: ColumnDefinition) {
     return `comment on column ${this.wrapTable(blueprint)}.${this.wrap(
-      command.column.name)} is ${'\'' + str_replace('\'', '\'\'', command.value) + '\''}`;
+      command.columnName)} is ${`'${command.columnComment.replace(/'/g, `''`)}'`}`;
   }
 
   /*Create the column definition for a char type.*/
@@ -281,15 +299,15 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
       return type;
     }
     if (column.autoIncrement && isBlank(column.generatedAs)) {
-      return _with({
+      return {
         'integer' : 'serial',
         'bigint'  : 'bigserial',
         'smallint': 'smallserial'
-      })[type];
+      }[type];
     }
     let options = '';
-    if (!is_bool(column.generatedAs) && !empty(column.generatedAs)) {
-      let options = ` (${column.generatedAs})`;
+    if (isString(column.generatedAs) && column.generatedAs.length) {
+      options = ` (${column.generatedAs})`;
     }
     return `${type} generated ${column.always ? 'always' : 'by default'} as identity${options}`;
   }
@@ -456,7 +474,7 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
     if (column.projection !== null) {
       return `geometry(${type}, ${column.projection})`;
     }
-    return '"geometry({$type})"';
+    return `geometry(${type})`;
   }
 
   /*Get the SQL for a collation column modifier.*/
@@ -464,6 +482,7 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
     if (!isBlank(column.collation)) {
       return ' collate ' + this.wrapValue(column.collation);
     }
+    return '';
   }
 
   /*Get the SQL for a nullable column modifier.*/
@@ -473,9 +492,10 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
 
   /*Get the SQL for a default column modifier.*/
   protected modifyDefault(blueprint: Blueprint, column: ColumnDefinition) {
-    if (!isBlank(column._default)) {
-      return ' default ' + this.getDefaultValue(column._default);
+    if (!isBlank(column.default)) {
+      return ` default ${this.getDefaultValue(column.default)}`;
     }
+    return '';
   }
 
   /*Get the SQL for an auto-increment column modifier.*/
@@ -486,6 +506,7 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
     ) && column.autoIncrement) {
       return ' primary key';
     }
+    return '';
   }
 
   /*Get the SQL for a generated virtual column modifier.*/

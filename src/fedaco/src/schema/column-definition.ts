@@ -6,6 +6,13 @@
 import { value } from '../helper/fn';
 import { SqlNode } from '../query/sql-node';
 
+export type PostgresColumnDefineAttributes = {
+  deferrable?: boolean
+  initiallyImmediate?: boolean
+  isGeometry?: boolean
+  projection?: boolean
+};
+
 export type ColumnDefineAttributes = {
   name?: string,
   after?: string,
@@ -46,11 +53,19 @@ export type ColumnDefineAttributes = {
   expression?: string,
   srid?: number,
   [key: string]: any
-};
+} & PostgresColumnDefineAttributes;
 
 export class ColumnDefinition {
 
   constructor(public attributes: ColumnDefineAttributes = {}) {
+  }
+
+  get columnName(): string {
+    throw new Error('todo check me');
+  }
+
+  get columnComment(): string {
+    throw new Error('todo check me');
   }
 
   /**
@@ -64,9 +79,9 @@ export class ColumnDefinition {
     return value(defaultValue);
   }
 
-  public set(key: keyof ColumnDefineAttributes, value?: any) {
-    if (value !== undefined) {
-      this.attributes[key] = value;
+  public set(key: keyof ColumnDefineAttributes, val?: any) {
+    if (val !== undefined) {
+      this.attributes[key] = val;
     } else {
       this.attributes[key] = true;
     }
@@ -225,6 +240,26 @@ export class ColumnDefinition {
 
   public get srid() {
     return this.get('srid');
+  }
+
+  public get deferrable() {
+    return this.get('deferrable');
+  }
+
+  public get initiallyImmediate() {
+    return this.get('initiallyImmediate');
+  }
+
+  public get notValid() {
+    return this.get('notValid');
+  }
+
+  public get isGeometry() {
+    return this.get('isGeometry');
+  }
+
+  public get projection() {
+    return this.get('projection');
   }
 
   //endregion
@@ -522,6 +557,31 @@ export class ColumnDefinition {
 
   withSrid(srid: number) {
     this.attributes['srid'] = srid;
+    return this;
+  }
+
+  withDeferrable() {
+    this.attributes['deferrable'] = true;
+    return this;
+  }
+
+  withInitiallyImmediate() {
+    this.attributes['initiallyImmediate'] = true;
+    return this;
+  }
+
+  withNotValid() {
+    this.attributes['notValid'] = true;
+    return this;
+  }
+
+  withIsGeometry() {
+    this.attributes['isGeometry'] = true;
+    return this;
+  }
+
+  withProjection() {
+    this.attributes['projection'] = true;
     return this;
   }
 

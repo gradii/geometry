@@ -29,4 +29,12 @@ export interface ConnectionInterface {
   getSchemaBuilder(): SchemaBuilder;
 
   table(table: Function | QueryBuilder | string, as?: string): QueryBuilder;
+
+  getPdo(): any;
+
+  recordsHaveBeenModified(): any;
+
+  selectFromWriteConnection(sql: string, values: any): any;
+
+  getConfig(name: string): any;
 }

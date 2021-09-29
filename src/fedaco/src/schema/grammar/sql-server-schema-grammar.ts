@@ -91,23 +91,22 @@ export class SqlServerSchemaGrammar extends SchemaGrammar {
 
   /*Compile a drop table (if exists) command.*/
   public compileDropIfExists(blueprint: Blueprint, command: ColumnDefinition) {
-    return `if exists (select * from sys.sysobjects where id = object_id(${'\'' + str_replace('\'',
-      '\'\'',
-      this.getTablePrefix() + blueprint.getTable()) + '\''}, 'U')) drop table ${this.wrapTable(
-      blueprint)}`;
+    return `if exists (select * from sys.sysobjects where id = object_id(${
+      `'${this.getTablePrefix()}${blueprint.getTable().replace(`'`, `''`)}'`
+    }, 'U')) drop table ${this.wrapTable(blueprint)}`;
   }
 
   /*Compile the SQL needed to drop all tables.*/
   public compileDropAllTables() {
-    return 'EXEC sp_msforeachtable \'DROP TABLE ?\'';
+    return `EXEC sp_msforeachtable 'DROP TABLE ?'`;
   }
 
   /*Compile a drop column command.*/
   public compileDropColumn(blueprint: Blueprint, command: ColumnDefinition) {
     const columns                    = this.wrapArray(command.columns);
     const dropExistingConstraintsSql = this.compileDropDefaultConstraint(blueprint, command) + ';';
-    return dropExistingConstraintsSql + 'alter table ' + this.wrapTable(
-      blueprint) + ' drop column ' + columns.join(', ');
+    return `${dropExistingConstraintsSql}alter table ${this.wrapTable(
+      blueprint)} drop column ${columns.join(', ')}`;
   }
 
   /*Compile a drop default constraint command.*/
@@ -419,8 +418,8 @@ export class SqlServerSchemaGrammar extends SchemaGrammar {
 
   /*Get the SQL for a default column modifier.*/
   protected modifyDefault(blueprint: Blueprint, column: ColumnDefinition) {
-    if (!isBlank(column._default)) {
-      return ' default ' + this.getDefaultValue(column._default);
+    if (!isBlank(column.default)) {
+      return ' default ' + this.getDefaultValue(column.default);
     }
 
     return '';
@@ -445,7 +444,7 @@ export class SqlServerSchemaGrammar extends SchemaGrammar {
   }
 
   /*Wrap a table in keyword identifiers.*/
-  public wrapTable(table: Expression | string) {
+  public wrapTable(table: Blueprint | string) {
     if (table instanceof Blueprint && table.temporary) {
       this.setTablePrefix('#');
     }
