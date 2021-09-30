@@ -6,6 +6,7 @@
 
 import { Connection } from './connection';
 import { ConnectionFactory } from './connector/connection-factory';
+import { DatabaseConfig } from './databaseConfig';
 import { ConnectionResolverInterface } from './interface/connection-resolver-interface';
 import { ConnectionInterface } from './query-builder/connection-interface';
 import { MysqlQueryGrammar } from './query-builder/grammar/mysql-query-grammar';
@@ -110,19 +111,24 @@ export class DatabaseManager implements ConnectionResolverInterface {
 
   /*Make the database connection instance.*/
   protected makeConnection(name: string) {
-    // var config = this.configuration(name);
+    const config = this.configuration(name);
     // if (this.extensions[name] !== undefined) {
     //     return call_user_func(this.extensions[name], config, name);
     // }
     // if (this.extensions[driver = config["driver"]] !== undefined) {
     //     return call_user_func(this.extensions[driver], config, name);
     // }
-    // return this.factory.make(config, name);
+    return this.factory.make(config, name);
   }
 
   /*Get the configuration for a connection.*/
   protected configuration(name: string) {
-    // var name = name || this.getDefaultConnection();
+    name = name || this.getDefaultConnection();
+    // @ts-ignore
+    const config = DatabaseConfig.instance.config;
+    // @ts-ignore
+    return config['database']['connections'][name];
+
     // var connections = this.app["config"]["database.connections"];
     // if (isBlank(config = Arr.get(connections, name))) {
     //     throw new InvalidArgumentException("\"Database connection [{$name}] not configured.\"");
@@ -140,7 +146,7 @@ export class DatabaseManager implements ConnectionResolverInterface {
     //     connection.setTransactionManager(this.app["db.transactions"]);
     // }
     // connection.setReconnector(this.reconnector);
-    // return connection;
+    return connection;
   }
 
   /*Prepare the read / write mode for database connection instance.*/

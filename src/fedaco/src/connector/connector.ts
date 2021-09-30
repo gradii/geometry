@@ -14,7 +14,7 @@ export class Connector {
   protected options: any = {};
 
   /*Create a new PDO connection.*/
-  public createConnection(dsn: string, config: any, options: any[]) {
+  public createConnection(dsn: string, config: any, options: any) {
     const [username, password] = [config['username'] ?? null, config['password'] ?? null];
     try {
       return this.createPdoConnection(dsn, username, password, options);

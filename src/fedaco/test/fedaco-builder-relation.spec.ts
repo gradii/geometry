@@ -2,9 +2,10 @@
 import { Model } from '../src/fedaco/model';
 import { ConnectionResolverInterface } from '../src/interface/connection-resolver-interface';
 import { ConnectionInterface } from '../src/query-builder/connection-interface';
-import { MysqlQueryGrammar } from '../src/query-builder/grammar/mysql-grammar';
+import { MysqlQueryGrammar } from '../src/query-builder/grammar/mysql-query-grammar';
 import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
+import { SchemaBuilder } from '../src/schema/schema-builder';
 import {
   FedacoBuilderTestModelCloseRelatedStub, FedacoBuilderTestModelParentStub
 } from './model/fedaco-builder-test-model-parent-stub';
@@ -54,6 +55,26 @@ describe('fedaco builder relation', () => {
 
     getName() {
       return '';
+    }
+
+    getConfig(name: string): any {
+    }
+
+    getPdo(): any {
+    }
+
+    getSchemaBuilder(): SchemaBuilder {
+      return undefined;
+    }
+
+    recordsHaveBeenModified(): any {
+    }
+
+    selectFromWriteConnection(sql: string, values: any): any {
+    }
+
+    table(table: Function | QueryBuilder | string, as?: string): QueryBuilder {
+      return undefined;
     }
   }
 

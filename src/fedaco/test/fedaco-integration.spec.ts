@@ -1,35 +1,12 @@
-// // import { DateTimeInterface } from "DateTimeInterface";
-// // import { Exception } from "Exception";
-// // import { Manager as DB } from "Illuminate/Database/Capsule/Manager";
-// // import { Builder } from "Illuminate/Database/Eloquent/Builder";
-// // import { Collection } from "Illuminate/Database/Eloquent/Collection";
-// // import { Model } from "Illuminate/Database/Eloquent/Model";
-// // import { Model as Eloquent } from "Illuminate/Database/Eloquent/Model";
-// // import { ModelNotFoundException } from "Illuminate/Database/Eloquent/ModelNotFoundException";
-// // import { Pivot } from "Illuminate/Database/Eloquent/Relations/Pivot";
-// // import { Relation } from "Illuminate/Database/Eloquent/Relations/Relation";
-// // import { SoftDeletes } from "Illuminate/Database/Eloquent/SoftDeletes";
-// // import { SoftDeletingScope } from "Illuminate/Database/Eloquent/SoftDeletingScope";
-// // import { QueryException } from "Illuminate/Database/QueryException";
-// // import { AbstractPaginator as Paginator } from "Illuminate/Pagination/AbstractPaginator";
-// // import { LengthAwarePaginator } from "Illuminate/Pagination/LengthAwarePaginator";
-// // import { Carbon } from "Illuminate/Support/Carbon";
-// // import { Date } from "Illuminate/Support/Facades/Date";
-// // import { Post } from "Illuminate/Tests/Integration/Database/Fixtures/Post";
-// // import { User } from "Illuminate/Tests/Integration/Database/Fixtures/User";
-// // import { TestCase } from "PHPUnit/Framework/TestCase";
-// // import { RuntimeException } from "RuntimeException";
-// import { Model as Fedaco } from '../src/fedaco/model';
-//
-
-import { Db } from '../src/db';
+import { DatabaseConfig } from '../src/databaseConfig';
 import { Model } from '../src/fedaco/model';
+import { SchemaBuilder } from '../src/schema/schema-builder';
 
 function connection(connectionName = 'default') {
   return Model.getConnectionResolver().connection(connectionName);
 }
 
-function schema(connectionName = 'default') {
+function schema(connectionName = 'default'): SchemaBuilder {
   return connection(connectionName).getSchemaBuilder();
 }
 
@@ -42,7 +19,7 @@ function createSchema() {
   });
   schema('default').create('with_json', table => {
     table.increments('id');
-    table.text('json')._default(JSON.stringify([]));
+    table.text('json').withDefault(JSON.stringify([]));
   });
   schema('second_connection').create('test_items', table => {
     table.increments('id');
@@ -50,7 +27,7 @@ function createSchema() {
   });
   schema('default').create('users_with_space_in_colum_name', table => {
     table.increments('id');
-    table.string('name').nullable();
+    table.string('name').withNullable();
     table.string('email address');
     table.timestamps();
   });
@@ -58,22 +35,22 @@ function createSchema() {
   ['default', 'second_connection'].forEach((name, index) => {
     schema(name).create('users', function (table) {
       table.increments('id');
-      table.string('name').nullable();
+      table.string('name').withNullable();
       table.string('email');
-      table.timestamp('birthday', 6).nullable();
+      table.timestamp('birthday', 6).withNullable();
       table.timestamps();
     });
 
     schema(name).create('friends', function (table) {
       table.integer('user_id');
       table.integer('friend_id');
-      table.integer('friend_level_id').nullable();
+      table.integer('friend_level_id').withNullable();
     });
 
     schema(name).create('posts', function (table) {
       table.increments('id');
       table.integer('user_id');
-      table.integer('parent_id').nullable();
+      table.integer('parent_id').withNullable();
       table.string('name');
       table.timestamps();
     });
@@ -100,7 +77,7 @@ function createSchema() {
 
     schema(name).create('soft_deleted_users', function (table) {
       table.increments('id');
-      table.string('name').nullable();
+      table.string('name').withNullable();
       table.string('email');
       table.timestamps();
       table.softDeletes();
@@ -115,19 +92,19 @@ function createSchema() {
     schema(name).create('taggables', function (table) {
       table.integer('tag_id');
       table.morphs('taggable');
-      table.string('taxonomy').nullable();
+      table.string('taxonomy').withNullable();
     });
 
     schema(name).create('non_incrementing_users', table => {
-      table.string('name').nullable();
+      table.string('name').withNullable();
     });
 
   });
 }
 
 describe('test database eloquent integration', () => {
-  beforeAll(() => {
-    const db = new Db();
+  beforeAll(async () => {
+    const db = new DatabaseConfig();
     db.addConnection({
       'driver'  : 'sqlite',
       'database': ':memory:'
@@ -138,7 +115,7 @@ describe('test database eloquent integration', () => {
     }, 'second_connection');
     db.bootEloquent();
     db.setAsGlobal();
-    createSchema();
+    await createSchema();
   });
 
   afterAll(() => {

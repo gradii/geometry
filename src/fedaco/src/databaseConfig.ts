@@ -10,13 +10,15 @@ import { Model } from './fedaco/model';
 import { ConnectionInterface } from './query-builder/connection-interface';
 import { QueryBuilder } from './query-builder/query-builder';
 
-export class Db {
+export class DatabaseConfig {
   config = {
     database: {
       fetch      : 0,
       default    : 'default',
       connections: {
-        default: ''
+        default: {
+
+        }
       }
     }
   };
@@ -24,7 +26,7 @@ export class Db {
   /*The database manager instance.*/
   protected manager: DatabaseManager;
 
-  protected static instance: Db;
+  protected static instance: DatabaseConfig;
 
   /*Create a new database capsule manager.*/
   public constructor(/*container: Container | null = null*/) {
@@ -47,20 +49,20 @@ export class Db {
    * Make this capsule instance available globally.
    */
   public setAsGlobal() {
-    (this.constructor as typeof Db).instance = this;
+    (this.constructor as typeof DatabaseConfig).instance = this;
   }
 
   /*Get a fluent query builder instance.*/
   public static table(table: Function | QueryBuilder | string, as: string | null = null,
                       connection: string | null                                  = null) {
-    return (this.instance.constructor as typeof Db)
+    return (this.instance.constructor as typeof DatabaseConfig)
       .connection(connection)
       .table(table, as);
   }
 
   /*Get a schema builder instance.*/
   public static schema(connection: string | null = null) {
-    return (this.instance.constructor as typeof Db)
+    return (this.instance.constructor as typeof DatabaseConfig)
       .connection(connection)
       .getSchemaBuilder();
   }

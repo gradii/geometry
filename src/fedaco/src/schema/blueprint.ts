@@ -140,7 +140,7 @@ export class Blueprint {
           continue;
         }
         const value = column.get(attributeName);
-        this.addCommand(commandName, [value, column]);
+        this.addCommand(commandName, {value, column});
       }
     }
   }
@@ -175,12 +175,12 @@ export class Blueprint {
   /*Indicate that the given columns should be dropped.*/
   public dropColumn(columns: any[] | any, ...args: any[]) {
     columns = isArray(columns) ? columns : [columns, ...args];
-    return this.addCommand('dropColumn', [columns]);
+    return this.addCommand('dropColumn', {columns});
   }
 
   /*Indicate that the given columns should be renamed.*/
   public renameColumn(from: string, to: string) {
-    return this.addCommand('renameColumn', [from, to]);
+    return this.addCommand('renameColumn', {from, to});
   }
 
   /*Indicate that the given primary key should be dropped.*/
@@ -216,7 +216,7 @@ export class Blueprint {
 
   /*Indicate that the given indexes should be renamed.*/
   public renameIndex(from: string, to: string) {
-    return this.addCommand('renameIndex', [from, to]);
+    return this.addCommand('renameIndex', {from, to});
   }
 
   /*Indicate that the timestamp columns should be dropped.*/
@@ -252,7 +252,7 @@ export class Blueprint {
 
   /*Rename the table to a given name.*/
   public rename(to: string) {
-    return this.addCommand('rename', [to]);
+    return this.addCommand('rename', {to});
   }
 
   /*Specify the primary key(s) for the table.*/
@@ -330,13 +330,13 @@ export class Blueprint {
   /*Create a new char column on the table.*/
   public char(column: string, length: number | null = null) {
     length = length || SchemaBuilder._defaultStringLength;
-    return this.addColumn('char', column, [length]);
+    return this.addColumn('char', column, {length});
   }
 
   /*Create a new string column on the table.*/
   public string(column: string, length: number | null = null) {
     length = length || SchemaBuilder._defaultStringLength;
-    return this.addColumn('string', column, [length]);
+    return this.addColumn('string', column, {length});
   }
 
   /*Create a new tiny text column on the table.*/
@@ -361,27 +361,27 @@ export class Blueprint {
 
   /*Create a new integer (4-byte) column on the table.*/
   public integer(column: string, autoIncrement: boolean = false, unsigned: boolean = false) {
-    return this.addColumn('integer', column, [autoIncrement, unsigned]);
+    return this.addColumn('integer', column, {autoIncrement, unsigned});
   }
 
   /*Create a new tiny integer (1-byte) column on the table.*/
   public tinyInteger(column: string, autoIncrement: boolean = false, unsigned: boolean = false) {
-    return this.addColumn('tinyInteger', column, [autoIncrement, unsigned]);
+    return this.addColumn('tinyInteger', column, {autoIncrement, unsigned});
   }
 
   /*Create a new small integer (2-byte) column on the table.*/
   public smallInteger(column: string, autoIncrement: boolean = false, unsigned: boolean = false) {
-    return this.addColumn('smallInteger', column, [autoIncrement, unsigned]);
+    return this.addColumn('smallInteger', column, {autoIncrement, unsigned});
   }
 
   /*Create a new medium integer (3-byte) column on the table.*/
   public mediumInteger(column: string, autoIncrement: boolean = false, unsigned: boolean = false) {
-    return this.addColumn('mediumInteger', column, [autoIncrement, unsigned]);
+    return this.addColumn('mediumInteger', column, {autoIncrement, unsigned});
   }
 
   /*Create a new big integer (8-byte) column on the table.*/
   public bigInteger(column: string, autoIncrement: boolean = false, unsigned: boolean = false) {
-    return this.addColumn('bigInteger', column, [autoIncrement, unsigned]);
+    return this.addColumn('bigInteger', column, {autoIncrement, unsigned});
   }
 
   /*Create a new unsigned integer (4-byte) column on the table.*/
@@ -432,18 +432,18 @@ export class Blueprint {
 
   /*Create a new float column on the table.*/
   public float(column: string, total: number = 8, places: number = 2, unsigned: boolean = false) {
-    return this.addColumn('float', column, [total, places, unsigned]);
+    return this.addColumn('float', column, {total, places, unsigned});
   }
 
   /*Create a new double column on the table.*/
   public double(column: string, total: number | null = null, places: number | null = null,
                 unsigned: boolean                                                  = false) {
-    return this.addColumn('double', column, [total, places, unsigned]);
+    return this.addColumn('double', column, {total, places, unsigned});
   }
 
   /*Create a new decimal column on the table.*/
   public decimal(column: string, total: number = 8, places: number = 2, unsigned: boolean = false) {
-    return this.addColumn('decimal', column, [total, places, unsigned]);
+    return this.addColumn('decimal', column, {total, places, unsigned});
   }
 
   /*Create a new unsigned float column on the table.*/
@@ -468,12 +468,12 @@ export class Blueprint {
 
   /*Create a new enum column on the table.*/
   public enum(column: string, allowed: any[]) {
-    return this.addColumn('enum', column, [allowed]);
+    return this.addColumn('enum', column, {allowed});
   }
 
   /*Create a new set column on the table.*/
   public set(column: string, allowed: any[]) {
-    return this.addColumn('set', column, [allowed]);
+    return this.addColumn('set', column, {allowed});
   }
 
   /*Create a new json column on the table.*/
@@ -493,38 +493,38 @@ export class Blueprint {
 
   /*Create a new date-time column on the table.*/
   public dateTime(column: string, precision: number = 0) {
-    return this.addColumn('dateTime', column, [precision]);
+    return this.addColumn('dateTime', column, {precision});
   }
 
   /*Create a new date-time column (with time zone) on the table.*/
   public dateTimeTz(column: string, precision: number = 0) {
-    return this.addColumn('dateTimeTz', column, [precision]);
+    return this.addColumn('dateTimeTz', column, {precision});
   }
 
   /*Create a new time column on the table.*/
   public time(column: string, precision: number = 0) {
-    return this.addColumn('time', column, [precision]);
+    return this.addColumn('time', column, {precision});
   }
 
   /*Create a new time column (with time zone) on the table.*/
   public timeTz(column: string, precision: number = 0) {
-    return this.addColumn('timeTz', column, [precision]);
+    return this.addColumn('timeTz', column, {precision});
   }
 
   /*Create a new timestamp column on the table.*/
   public timestamp(column: string, precision: number = 0) {
-    return this.addColumn('timestamp', column, [precision]);
+    return this.addColumn('timestamp', column, {precision});
   }
 
   /*Create a new timestamp (with time zone) column on the table.*/
   public timestampTz(column: string, precision: number = 0) {
-    return this.addColumn('timestampTz', column, [precision]);
+    return this.addColumn('timestampTz', column, {precision});
   }
 
   /*Add nullable creation and update timestamps to the table.*/
   public timestamps(precision: number = 0) {
-    this.timestamp('created_at', precision).nullable();
-    this.timestamp('updated_at', precision).nullable();
+    this.timestamp('created_at', precision).withNullable();
+    this.timestamp('updated_at', precision).withNullable();
   }
 
   /*Add nullable creation and update timestamps to the table.
@@ -536,18 +536,18 @@ export class Blueprint {
 
   /*Add creation and update timestampTz columns to the table.*/
   public timestampsTz(precision: number = 0) {
-    this.timestampTz('created_at', precision).nullable();
-    this.timestampTz('updated_at', precision).nullable();
+    this.timestampTz('created_at', precision).withNullable();
+    this.timestampTz('updated_at', precision).withNullable();
   }
 
   /*Add a "deleted at" timestamp for the table.*/
   public softDeletes(column: string = 'deleted_at', precision: number = 0) {
-    return this.timestamp(column, precision).nullable();
+    return this.timestamp(column, precision).withNullable();
   }
 
   /*Add a "deleted at" timestampTz for the table.*/
   public softDeletesTz(column: string = 'deleted_at', precision: number = 0) {
-    return this.timestampTz(column, precision).nullable();
+    return this.timestampTz(column, precision).withNullable();
   }
 
   /*Create a new year column on the table.*/
@@ -630,7 +630,7 @@ export class Blueprint {
 
   /*Create a new generated, computed column on the table.*/
   public computed(column: string, expression: string) {
-    return this.addColumn('computed', column, [expression]);
+    return this.addColumn('computed', column, {expression});
   }
 
   /*Add the proper columns for a polymorphic table.*/
@@ -660,8 +660,8 @@ export class Blueprint {
 
   /*Add nullable columns for a polymorphic table using numeric IDs (incremental).*/
   public nullableNumericMorphs(name: string, indexName: string | null = null) {
-    this.string(`${name}_type`).nullable();
-    this.unsignedBigInteger(`${name}_id`).nullable();
+    this.string(`${name}_type`).withNullable();
+    this.unsignedBigInteger(`${name}_id`).withNullable();
     this.index([`${name}_type`, `${name}_id`], indexName);
   }
 
@@ -674,21 +674,21 @@ export class Blueprint {
 
   /*Add nullable columns for a polymorphic table using UUIDs.*/
   public nullableUuidMorphs(name: string, indexName: string | null = null) {
-    this.string(`${name}_type`).nullable();
-    this.uuid(`${name}_id`).nullable();
+    this.string(`${name}_type`).withNullable();
+    this.uuid(`${name}_id`).withNullable();
     this.index([`${name}_type`, `${name}_id`], indexName);
   }
 
   /*Adds the `remember_token` column to the table.*/
   public rememberToken() {
-    return this.string('remember_token', 100).nullable();
+    return this.string('remember_token', 100).withNullable();
   }
 
   /*Add a new index command to the blueprint.*/
   protected indexCommand(type: string, columns: any[], index: string,
                          algorithm: string | null = null) {
     index = index || this.createIndexName(type, columns);
-    return this.addCommand(type, [index, columns, algorithm]);
+    return this.addCommand(type, {index, columns, algorithm});
   }
 
   /*Create a new drop index command on the blueprint.*/
@@ -707,7 +707,7 @@ export class Blueprint {
   }
 
   /*Add a new column to the blueprint.*/
-  public addColumn(type: string, name: string, parameters: any[] = []) {
+  public addColumn(type: string, name: string, parameters: Record<string, any> = {}) {
     return this.addColumnDefinition(
       new ColumnDefinition({type, name, ...parameters}));
   }
@@ -738,7 +738,7 @@ export class Blueprint {
   }
 
   /*Add a new command to the blueprint.*/
-  protected addCommand(name: string, parameters: any[] = []) {
+  protected addCommand(name: string, parameters: any = {}) {
     const command = this.createCommand(name, parameters);
     this.commands.push(command);
     return command;

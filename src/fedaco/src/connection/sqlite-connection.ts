@@ -22,15 +22,14 @@ export class SqliteConnection extends Connection {
   public constructor(pdo: any,
                      database: string    = '',
                      tablePrefix: string = '',
-                     config: any[]       = []) {
+                     config: any       = {}) {
     super(pdo, database, tablePrefix, config);
     const enableForeignKeyConstraints = this.getForeignKeyConstraintsConfigurationValue();
-    if (enableForeignKeyConstraints === null) {
-      return;
+    if (!isBlank(enableForeignKeyConstraints)) {
+      enableForeignKeyConstraints ?
+        this.getSchemaBuilder().enableForeignKeyConstraints() :
+        this.getSchemaBuilder().disableForeignKeyConstraints();
     }
-    enableForeignKeyConstraints ?
-      this.getSchemaBuilder().enableForeignKeyConstraints() :
-      this.getSchemaBuilder().disableForeignKeyConstraints();
   }
 
   /*Get the default query grammar instance.*/

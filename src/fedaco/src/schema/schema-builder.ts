@@ -102,7 +102,7 @@ export class SchemaBuilder {
   }
 
   /*Create a new table on the schema.*/
-  public create(table: string, callback: Function) {
+  public create(table: string, callback: (table: Blueprint) => void) {
     this.build(tap(blueprint => {
       blueprint.create();
       callback(blueprint);
