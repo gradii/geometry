@@ -68,7 +68,7 @@ export class Connection implements ConnectionInterface {
   /*Indicates whether queries are being logged.*/
   protected loggingQueries: boolean = false;
   /*Indicates if the connection is in a "dry run".*/
-  protected _pretending: boolean = false;
+  protected _dryRun: boolean = false;
   /*The instance of Doctrine connection.*/
   protected doctrineConnection: DbalConnection;
   /*The connection resolvers.*/
@@ -147,12 +147,12 @@ export class Connection implements ConnectionInterface {
   /*Run a select statement against the database.*/
   public async select(query: string, bindings: any[] = [], useReadPdo: boolean = true) {
     return await this.run(query, bindings, async (q: string, _bindings: any[]) => {
-      if (this.pretending()) {
+      if (this.dryRun()) {
         return [];
       }
       const pdo: SqliteWrappedConnection = await this.getPdoForSelect(useReadPdo);
 
-      const statement = pdo.prepare(q);
+      const statement = await pdo.prepare(q);
       this.bindValues(statement, this.prepareBindings(_bindings));
       return await statement.fetchAll();
     });
@@ -193,35 +193,26 @@ export class Connection implements ConnectionInterface {
   /*Execute an SQL statement and return the boolean result.*/
   public async statement(query: string, bindings: any = []) {
     return this.run(query, bindings, async (q: string, _bindings: any) => {
-      if (this.pretending()) {
+      if (this.dryRun()) {
         return true;
       }
-      const pdo = (await this.getPdo());
-      const rst = await new Promise((ok, fail) => {
-        pdo.run(q, _bindings, (err, rows) => {
-          if (err) {
-            fail(err);
-          } else {
-            ok(rows);
-          }
-        });
-      });
+      const pdo: SqliteWrappedConnection = (await this.getPdo());
 
-      // const statement = (await this.getPdo()).prepare(q);
-      // statement.bindValues(this.prepareBindings(_bindings));
+      const statement = await pdo.prepare(q);
+      statement.bindValues(this.prepareBindings(_bindings));
       this.recordsHaveBeenModified();
-      // return statement.execute();
-      return rst;
+      return await statement.execute();
     });
   }
 
   /*Run an SQL statement and get the number of rows affected.*/
   public async affectingStatement(query: string, bindings: any[] = []) {
     return this.run(query, bindings, async (q: string, _bindings: any[]) => {
-      if (this.pretending()) {
+      if (this.dryRun()) {
         return 0;
       }
-      const statement = (await this.getPdo()).prepare(q);
+      const pdo       = await this.getPdo();
+      const statement = await pdo.prepare(q);
       this.bindValues(statement, this.prepareBindings(_bindings));
       await statement.execute();
       const count = statement.affectCount();
@@ -233,7 +224,7 @@ export class Connection implements ConnectionInterface {
   /*Run a raw, unprepared query against the PDO connection.*/
   public async unprepared(query: string) {
     return this.run(query, [], async (q: string) => {
-      if (this.pretending()) {
+      if (this.dryRun()) {
         return true;
       }
       const change = (await this.getPdo()).exec(q) !== false;
@@ -245,9 +236,9 @@ export class Connection implements ConnectionInterface {
   /*Execute the given callback in "dry run" mode.*/
   public pretend(callback: Function) {
     return this.withFreshQueryLog(() => {
-      this._pretending = true;
+      this._dryRun = true;
       callback(this);
-      this._pretending = false;
+      this._dryRun = false;
       return this.queryLog;
     });
   }
@@ -606,8 +597,8 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Determine if the connection is in a "dry run".*/
-  public pretending() {
-    return this._pretending === true;
+  public dryRun() {
+    return this._dryRun === true;
   }
 
   /*Get the connection query log.*/

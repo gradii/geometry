@@ -32,14 +32,14 @@ export class SqliteWrappedStmt implements WrappedStmt {
         .run(...(bindings ?? this._bindingValues),
           function (this: RunResult, err: string) {
             if (err) {
-              fail(err);
+              throw err;
             }
             _self._lastInsertId = this.lastID;
             _self._affectRows   = this.changes;
           })
         .finalize((err) => {
           if (err) {
-            fail(err);
+            throw err;
           }
           ok(null);
         });
