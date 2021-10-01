@@ -4,9 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isBlank, isBoolean, isFunction, isString } from '@gradii/check-type';
+import { isArray, isBlank, isBoolean, isFunction } from '@gradii/check-type';
 import { format } from 'date-fns';
 import { BaseGrammar } from './base-grammar';
+import { SqliteWrappedConnection } from './connector/sqlite/sqlite-wrapped-connection';
+import { WrappedStmt } from './connector/wrapped-stmt';
 import { DatabaseTransactionsManager } from './database-transactions-manager';
 import { DbalConnection } from './dbal/connection';
 import { Driver } from './driver/driver';
@@ -148,21 +150,11 @@ export class Connection implements ConnectionInterface {
       if (this.pretending()) {
         return [];
       }
-      const pdo = await this.getPdoForSelect(useReadPdo);
-      const rst = await new Promise((ok, fail) => {
-        pdo.get(q, _bindings, (err, rows) => {
-          if (err) {
-            fail(err);
-          } else {
-            ok(rows);
-          }
-        });
-      });
-      return rst;
-      // const statement = this.prepared(pdo.prepare(q));
-      // this.bindValues(statement, this.prepareBindings(_bindings));
-      // await statement.execute();
-      // return statement.fetchAll();
+      const pdo: SqliteWrappedConnection = await this.getPdoForSelect(useReadPdo);
+
+      const statement = pdo.prepare(q);
+      this.bindValues(statement, this.prepareBindings(_bindings));
+      return await statement.fetchAll();
     });
   }
 
@@ -181,6 +173,11 @@ export class Connection implements ConnectionInterface {
   /*Run an insert statement against the database.*/
   public async insert(query: string, bindings: any[] = []) {
     return this.statement(query, bindings);
+  }
+
+  public async insertGetId(query: string, bindings: any[] = []) {
+    await this.statement(query, bindings);
+    return await (await this.getPdo()).lastInsertId();
   }
 
   /*Run an update statement against the database.*/
@@ -227,7 +224,7 @@ export class Connection implements ConnectionInterface {
       const statement = (await this.getPdo()).prepare(q);
       this.bindValues(statement, this.prepareBindings(_bindings));
       await statement.execute();
-      const count = statement.rowCount();
+      const count = statement.affectCount();
       this.recordsHaveBeenModified(count > 0);
       return count;
     });
@@ -267,16 +264,20 @@ export class Connection implements ConnectionInterface {
 
   /**
    * Bind values to their parameters in the given statement.
-   * @deprecated
    * @param statement
    * @param bindings
    */
-  public bindValues(statement: any, bindings: any[]) {
-    throw new Error('should deprecated');
-    for (const [key, value] of Object.entries(bindings)) {
-      statement.bindValue(isString(key) ? key : key + 1, value,
-        /*is_int(value) ? PDO.PARAM_INT : PDO.PARAM_STR*/);
+  public bindValues(statement: WrappedStmt, bindings: any[]) {
+    // throw new Error('should deprecated');
+    if (isArray(bindings)) {
+      statement.bindValues(bindings);
+    } else {
+      throw new Error('not implement');
     }
+    // for (const [key, value] of Object.entries(bindings)) {
+    //   statement.bindValue(isString(key) ? key : key + 1, value,
+    //     /*is_int(value) ? PDO.PARAM_INT : PDO.PARAM_STR*/);
+    // }
   }
 
   /*Prepare the query bindings for execution.*/

@@ -1,6 +1,7 @@
 import { isArray } from '@gradii/check-type';
 import { Column } from '../src/annotation/column/column';
 import { PrimaryColumn } from '../src/annotation/column/primary.column';
+import { BelongsToManyColumn } from '../src/annotation/relation-column/belongs-to-many.relation-column';
 import { DatabaseConfig } from '../src/databaseConfig';
 import { Model } from '../src/fedaco/model';
 import { SchemaBuilder } from '../src/schema/schema-builder';
@@ -12,6 +13,8 @@ function connection(connectionName = 'default') {
 function schema(connectionName = 'default'): SchemaBuilder {
   return connection(connectionName).getSchemaBuilder();
 }
+
+jest.setTimeout(100000);
 
 async function createSchema() {
   await schema('default')
@@ -112,7 +115,7 @@ describe('test database eloquent integration', () => {
     const db = new DatabaseConfig();
     db.addConnection({
       'driver'  : 'sqlite',
-      'database': ':memory:'
+      'database': 'tmp/integration.sqlite'
     });
     db.addConnection({
       'driver'  : 'sqlite',
@@ -123,7 +126,25 @@ describe('test database eloquent integration', () => {
     await createSchema();
   });
 
-  afterAll(() => {
+  afterAll(async () => {
+    for (const it of [
+      'comments',
+      'friend_levels',
+      'friends',
+      'non_incrementing_users',
+      'photos',
+      'posts',
+      'soft_deleted_users',
+      'taggables',
+      'tags',
+      'test_orders',
+      'users',
+      'users_with_space_in_colum_name',
+      'with_json',
+    ]) {
+      await schema('default').drop(it);
+    }
+
     // [].forEach((connection, index) => {
     // });
     // Relation.morphMap([], false);
@@ -155,8 +176,10 @@ describe('test database eloquent integration', () => {
     });
 
     expect(await factory.newQuery().count()).toEqual(2);
-    expect(await factory.newQuery().where('email', 'taylorotwell@gmail.com').doesntExist()).toBeFalsy();
-    expect(await factory.newQuery().where('email', 'mohamed@laravel.com').doesntExist()).toBeTruthy();
+    expect(
+      await factory.newQuery().where('email', 'taylorotwell@gmail.com').doesntExist()).toBeFalsy();
+    expect(
+      await factory.newQuery().where('email', 'mohamed@laravel.com').doesntExist()).toBeTruthy();
     let model: EloquentTestUser = await factory.newQuery()
       .where('email', 'taylorotwell@gmail.com').first();
     expect(model.email).toBe('taylorotwell@gmail.com');
@@ -169,7 +192,7 @@ describe('test database eloquent integration', () => {
     expect(model).toBeInstanceOf(EloquentTestUser);
     expect(model.id).toEqual(2);
     const missing = await factory.newQuery().find(3);
-    expect(missing).toBeNull();
+    expect(missing).toBeUndefined();
     let collection = await factory.newQuery().find([]);
     expect(isArray(collection)).toBeTruthy();
     expect(collection.length).toBe(0);
@@ -1867,7 +1890,12 @@ export class EloquentTestUser extends Model {
   @Column()
   email;
 
-  @Column()
+  @BelongsToManyColumn({
+    related        : EloquentTestUser,
+    table          : 'friends',
+    foreignPivotKey: 'user_id',
+    relatedPivotKey: 'friend_id'
+  })
   friends;
 
   // public friends() {

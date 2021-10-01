@@ -161,9 +161,9 @@ export interface ForwardCallToQueryBuilder {
 
   count(...args: any[]): Promise<number>;
 
-  doesntExist(...args: any[]): this;
+  doesntExist(...args: any[]): Promise<boolean>;
 
-  exists(...args: any[]): this;
+  exists(...args: any[]): Promise<boolean>;
 
   getCountForPagination(...args: any[]): this;
 
@@ -581,11 +581,11 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     }
 
     doesntExist(...args: any[]) {
-      return this.#passThroughToQueryBuilder('doesntExist', args);
+      return this.#forwardCallToQueryBuilder('doesntExist', args);
     }
 
     exists(...args: any[]) {
-      return this.#passThroughToQueryBuilder('exists', args);
+      return this.#forwardCallToQueryBuilder('exists', args);
     }
 
     getCountForPagination(...args: any[]) {

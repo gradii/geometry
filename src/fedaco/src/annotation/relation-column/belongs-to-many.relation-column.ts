@@ -11,7 +11,7 @@ import { BelongsToMany } from '../../fedaco/relations/belongs-to-many';
 import { _additionalProcessingGetter } from '../additional-processing';
 import { FedacoDecorator } from '../annotation.interface';
 import { RelationType } from '../enum-relation';
-import { RelationColumnAnnotation } from '../relation-column';
+import { FedacoRelationColumn, RelationColumnAnnotation } from '../relation-column';
 
 
 export interface BelongsToManyRelationAnnotation extends RelationColumnAnnotation {
@@ -53,7 +53,7 @@ export const BelongsToManyColumn: FedacoDecorator<BelongsToManyRelationAnnotatio
     },
     ...p
   }),
-  undefined,
+  FedacoRelationColumn,
   (target: any, name: string, columnDefine) => {
     _additionalProcessingGetter(target, name, columnDefine);
   }

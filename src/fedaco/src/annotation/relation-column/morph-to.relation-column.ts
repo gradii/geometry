@@ -12,7 +12,7 @@ import { snakeCase } from '../../helper/str';
 import { _additionalProcessingGetter } from '../additional-processing';
 import { FedacoDecorator } from '../annotation.interface';
 import { RelationType } from '../enum-relation';
-import { RelationColumnAnnotation } from '../relation-column';
+import { FedacoRelationColumn, RelationColumnAnnotation } from '../relation-column';
 
 /*Define a polymorphic, inverse one-to-one or many relationship.*/
 export function morphEagerTo(m: Model, name: string, type: string, id: string, ownerKey: string) {
@@ -64,7 +64,7 @@ export const MorphToColumn: FedacoDecorator<MorphToRelationAnnotation> = makePro
     },
     ...p
   }),
-  undefined,
+  FedacoRelationColumn,
   (target: any, name: string, columnDefine) => {
     _additionalProcessingGetter(target, name, columnDefine);
   }

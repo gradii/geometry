@@ -10,7 +10,7 @@ import { ForwardRefFn, resolveForwardRef } from '../../query-builder/forward-ref
 import { _additionalProcessingGetter } from '../additional-processing';
 import { FedacoDecorator } from '../annotation.interface';
 import { RelationType } from '../enum-relation';
-import { RelationColumnAnnotation } from '../relation-column';
+import { FedacoRelationColumn, RelationColumnAnnotation } from '../relation-column';
 
 
 export interface HasOneThroughRelationAnnotation extends RelationColumnAnnotation {
@@ -45,7 +45,7 @@ export const HasOneThroughColumn: FedacoDecorator<HasOneThroughRelationAnnotatio
     },
     ...p
   }),
-  undefined,
+  FedacoRelationColumn,
   (target: any, name: string, columnDefine) => {
     _additionalProcessingGetter(target, name, columnDefine);
   }

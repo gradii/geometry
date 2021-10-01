@@ -85,7 +85,7 @@ export function mixinAggregate<T extends Constructor<any>>(base: T): QueryBuilde
         // @ts-ignore
         results = results[0];
         // @ts-ignore
-        return results['exists'];
+        return !!results['exists'];
       }
       return false;
     }

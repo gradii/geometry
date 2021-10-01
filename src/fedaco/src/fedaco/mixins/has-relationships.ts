@@ -8,9 +8,6 @@ import { isArray } from '@gradii/check-type';
 import { tap } from 'ramda';
 import { Constructor } from '../../helper/constructor';
 import { snakeCase } from '../../helper/str';
-import { MysqlQueryGrammar } from '../../query-builder/grammar/mysql-query-grammar';
-import { Processor } from '../../query-builder/processor';
-import { QueryBuilder } from '../../query-builder/query-builder';
 import { Model } from '../model';
 import { Relation } from '../relations/relation';
 
@@ -572,36 +569,11 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
 
     /*Create a new model instance for a related model.*/
     _newRelatedInstance(this: _Self & Model & this, clazz: typeof Model) {
-      const ins                         = tap(instance => {
+      return tap(instance => {
         if (!instance.getConnectionName()) {
           instance.setConnection(this._connection);
         }
       }, new clazz());
-      // todo fixme should move to another place
-      (ins.constructor as any).resolver = {
-        connection() {
-          return {
-            query() {
-              const grammar   = new MysqlQueryGrammar();
-              const processor = new Processor();
-
-              // @ts-ignore
-              return new QueryBuilder({
-                getName(): string {
-                  return 'this-is-a-connection-name-placeholder';
-                },
-                select(sql, bindings) {
-                  return {
-                    sql, bindings
-                  };
-                },
-              }, grammar, processor);
-            }
-          };
-        }
-      };
-
-      return ins;
     }
 
     getRelationMethod(this: Model & _Self, relation: string) {

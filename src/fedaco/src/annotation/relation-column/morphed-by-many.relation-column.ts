@@ -9,7 +9,7 @@ import { Model } from '../../fedaco/model';
 import { _additionalProcessingGetter } from '../additional-processing';
 import { FedacoDecorator } from '../annotation.interface';
 import { RelationType } from '../enum-relation';
-import { RelationColumnAnnotation } from '../relation-column';
+import { FedacoRelationColumn, RelationColumnAnnotation } from '../relation-column';
 
 
 export interface MorphedByManyRelationAnnotation extends RelationColumnAnnotation {
@@ -42,7 +42,7 @@ export const MorphedByManyColumn: FedacoDecorator<MorphedByManyRelationAnnotatio
     },
     ...p
   }),
-  undefined,
+  FedacoRelationColumn,
   (target: any, name: string, columnDefine) => {
     _additionalProcessingGetter(target, name, columnDefine);
   }
