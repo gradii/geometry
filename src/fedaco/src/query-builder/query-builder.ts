@@ -307,7 +307,7 @@ export class QueryBuilder extends Builder {
   }
 
   /*Insert a new record and get the value of the primary key.*/
-  public insertGetId(values: any, sequence: string = 'id') {
+  public async insertGetId(values: any, sequence: string = 'id') {
     const sql = this._grammar.compileInsertGetId(this, values, sequence);
     return this._processor.processInsertGetId(
       this,

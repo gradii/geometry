@@ -59,7 +59,7 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
   public compileCreate(blueprint: Blueprint, command: ColumnDefinition) {
     return ([
       ...[
-        `${blueprint.temporary ? 'create temporary' : 'create'} table ${this.wrapTable(
+        `${blueprint._temporary ? 'create temporary' : 'create'} table ${this.wrapTable(
           blueprint)} (${this.getColumns(blueprint).join(', ')})`
       ], ...this.compileAutoIncrementStartingValues(blueprint)
     ]).filter(it => !!it);

@@ -148,10 +148,21 @@ export class Connection implements ConnectionInterface {
       if (this.pretending()) {
         return [];
       }
-      const statement = this.prepared(this.getPdoForSelect(useReadPdo).prepare(q));
-      this.bindValues(statement, this.prepareBindings(_bindings));
-      await statement.execute();
-      return statement.fetchAll();
+      const pdo = await this.getPdoForSelect(useReadPdo);
+      const rst = await new Promise((ok, fail) => {
+        pdo.get(q, _bindings, (err, rows) => {
+          if (err) {
+            fail(err);
+          } else {
+            ok(rows);
+          }
+        });
+      });
+      return rst;
+      // const statement = this.prepared(pdo.prepare(q));
+      // this.bindValues(statement, this.prepareBindings(_bindings));
+      // await statement.execute();
+      // return statement.fetchAll();
     });
   }
 
@@ -188,22 +199,34 @@ export class Connection implements ConnectionInterface {
       if (this.pretending()) {
         return true;
       }
-      const statement = this.getPdo().prepare(q);
-      this.bindValues(statement, this.prepareBindings(_bindings));
+      const pdo = (await this.getPdo());
+      const rst = await new Promise((ok, fail) => {
+        pdo.run(q, _bindings, (err, rows) => {
+          if (err) {
+            fail(err);
+          } else {
+            ok(rows);
+          }
+        });
+      });
+
+      // const statement = (await this.getPdo()).prepare(q);
+      // statement.bindValues(this.prepareBindings(_bindings));
       this.recordsHaveBeenModified();
-      return statement.execute();
+      // return statement.execute();
+      return rst;
     });
   }
 
   /*Run an SQL statement and get the number of rows affected.*/
-  public affectingStatement(query: string, bindings: any[] = []) {
-    return this.run(query, bindings, (q: string, _bindings: any[]) => {
+  public async affectingStatement(query: string, bindings: any[] = []) {
+    return this.run(query, bindings, async (q: string, _bindings: any[]) => {
       if (this.pretending()) {
         return 0;
       }
-      const statement = this.getPdo().prepare(q);
+      const statement = (await this.getPdo()).prepare(q);
       this.bindValues(statement, this.prepareBindings(_bindings));
-      statement.execute();
+      await statement.execute();
       const count = statement.rowCount();
       this.recordsHaveBeenModified(count > 0);
       return count;
@@ -211,12 +234,12 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Run a raw, unprepared query against the PDO connection.*/
-  public unprepared(query: string) {
-    return this.run(query, [], (q: string) => {
+  public async unprepared(query: string) {
+    return this.run(query, [], async (q: string) => {
       if (this.pretending()) {
         return true;
       }
-      const change = this.getPdo().exec(q) !== false;
+      const change = (await this.getPdo()).exec(q) !== false;
       this.recordsHaveBeenModified(change);
       return change;
     });
@@ -242,8 +265,14 @@ export class Connection implements ConnectionInterface {
     return result;
   }
 
-  /*Bind values to their parameters in the given statement.*/
+  /**
+   * Bind values to their parameters in the given statement.
+   * @deprecated
+   * @param statement
+   * @param bindings
+   */
   public bindValues(statement: any, bindings: any[]) {
+    throw new Error('should deprecated');
     for (const [key, value] of Object.entries(bindings)) {
       statement.bindValue(isString(key) ? key : key + 1, value,
         /*is_int(value) ? PDO.PARAM_INT : PDO.PARAM_STR*/);
@@ -251,16 +280,20 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Prepare the query bindings for execution.*/
-  public prepareBindings(bindings: any) {
+  public prepareBindings(bindings: any[]) {
+    const rst     = [];
     const grammar = this.getQueryGrammar();
-    for (const [key, value] of Object.entries(bindings)) {
+    for (const value of bindings) {
       if (value instanceof Date) {
-        bindings[key] = format(value, grammar.getDateFormat());
+        // todo should get connection date timezone
+        rst.push(format(value, grammar.getDateFormat()));
       } else if (isBoolean(value)) {
-        bindings[key] = /*cast type int*/ value ? 1 : 0;
+        rst.push( /*cast type int*/ value ? 1 : 0);
+      } else {
+        rst.push(value);
       }
     }
-    return bindings;
+    return rst;
   }
 
   /*Run a SQL statement and log its execution context.*/
@@ -311,11 +344,18 @@ export class Connection implements ConnectionInterface {
   /*Handle a query exception that occurred during query execution.*/
   protected tryAgainIfCausedByLostConnection(e/*: QueryException*/, query: string, bindings: any[],
                                              callback: Function) {
-    // if (/*this.causedByLostConnection(e.getPrevious())*/) {
-    this.reconnect();
-    return this.runQueryCallback(query, bindings, callback);
-    // }
-    // throw e;
+    if (this.causedByLostConnection(e.message)) {
+      this.reconnect();
+      return this.runQueryCallback(query, bindings, callback);
+    }
+    throw e;
+  }
+
+  protected causedByLostConnection(message: string): boolean {
+    if (message.includes('lost connection')) {
+      return true;
+    }
+    return false;
   }
 
   /*Reconnect to the database.*/
@@ -434,9 +474,9 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Get the current PDO connection.*/
-  public getPdo() {
+  public async getPdo() {
     if (isFunction(this.pdo)) {
-      return this.pdo = this.pdo.call(this);
+      return this.pdo = await this.pdo.call(this);
     }
     return this.pdo;
   }

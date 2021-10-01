@@ -102,8 +102,8 @@ export class SchemaBuilder {
   }
 
   /*Create a new table on the schema.*/
-  public create(table: string, callback: (table: Blueprint) => void) {
-    this.build(tap(blueprint => {
+  public async create(table: string, callback: (table: Blueprint) => void) {
+    await this.build(tap(blueprint => {
       blueprint.create();
       callback(blueprint);
     }, this.createBlueprint(table)));
@@ -170,8 +170,8 @@ export class SchemaBuilder {
   }
 
   /*Execute the blueprint to build / modify the table.*/
-  protected build(blueprint: Blueprint) {
-    blueprint.build(this.connection, this.grammar);
+  protected async build(blueprint: Blueprint) {
+    await blueprint.build(this.connection, this.grammar);
   }
 
   /*Create a new command set with a Closure.*/

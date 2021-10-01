@@ -32,7 +32,7 @@ export class SqliteSchemaGrammar extends SchemaGrammar {
 
   /*Compile a create table command.*/
   public compileCreate(blueprint: Blueprint, command: ColumnDefinition) {
-    return `${blueprint.temporary ? 'create temporary' : 'create'} table ${this.wrapTable(
+    return `${blueprint._temporary ? 'create temporary' : 'create'} table ${this.wrapTable(
       blueprint)} (${this.getColumns(blueprint).join(', ')}${this.addForeignKeys(
       blueprint)}${this.addPrimaryKeys(blueprint)})`;
   }

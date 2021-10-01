@@ -14,10 +14,10 @@ export class Processor implements ProcessorInterface {
   }
 
   async processInsertGetId(query: QueryBuilder, sql: string, values: any[], sequence: string | null = null): Promise<any> {
-    // query.getConnection().insert(sql, values);
-    // const id = query.getConnection().getPdo().lastInsertId(sequence);
+    await query.getConnection().insert(sql, values);
+    const id = await (await query.getConnection().getPdo()).lastInsertId();
     // return isNumber(id) ? /*cast type int*/ id : id;
-    return -1;
+    return id;
   }
 
   processColumnListing(results: any[]): string[] {

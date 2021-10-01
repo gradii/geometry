@@ -15,7 +15,7 @@ export interface BuildQueries {
 
   tap(callback: (q: this, condition: boolean) => any): this;
 
-  first(columns?: any[] | string): Promise<Model | object | null>;
+  first(columns?: any[] | string): Promise<Model | /*object |*/ any | null>;
 
   unless(value: any, callback: Function, _default?: Function): this;
 }
@@ -50,7 +50,7 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
     public async first(this: QueryBuilder & _Self, columns: any[] | string = ['*']) {
       // return this.take(1).get(columns).first();
       // todo
-      const results = await this.take(1).get(columns)
+      const results = await this.take(1).get(columns);
       return results.pop();
     }
 

@@ -45,9 +45,9 @@ export class Blueprint {
   }
 
   /*Execute the blueprint against the database.*/
-  public build(connection: Connection, grammar: SchemaGrammar) {
+  public async build(connection: Connection, grammar: SchemaGrammar) {
     for (const statement of this.toSql(connection, grammar)) {
-      connection.statement(statement);
+      await connection.statement(statement);
     }
   }
 
@@ -62,8 +62,10 @@ export class Blueprint {
         // @ts-ignore
         const sql = grammar[method](this, command, connection);
         if (!isBlank(sql)) {
-          statements = [...statements, ...sql];
+          statements = [...statements, sql];
         }
+      } else {
+        throw new Error(`command name ${command.name} is not exist in grammar ${grammar.constructor.name}`);
       }
     }
     return statements;

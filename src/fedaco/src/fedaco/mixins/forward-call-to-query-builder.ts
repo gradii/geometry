@@ -159,7 +159,7 @@ export interface ForwardCallToQueryBuilder {
 
   aggregate(...args: any[]): this;
 
-  count(...args: any[]): this;
+  count(...args: any[]): Promise<number>;
 
   doesntExist(...args: any[]): this;
 
@@ -301,7 +301,7 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     }
 
     insertGetId(...args: any[]) {
-      return this.#passThroughToQueryBuilder('insertGetId', args);
+      return this.#forwardCallToQueryBuilder('insertGetId', args);
     }
 
     from(...args: any[]) {
@@ -577,7 +577,7 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     }
 
     count(...args: any[]) {
-      return this.#passThroughToQueryBuilder('count', args);
+      return this.#forwardCallToQueryBuilder('count', args);
     }
 
     doesntExist(...args: any[]) {

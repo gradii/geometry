@@ -17,18 +17,18 @@ import { SchemaBuilder } from '../schema/schema-builder';
 
 export class SqlServerConnection extends Connection {
   /*Execute a Closure within a transaction.*/
-  public transaction(callback: Function, attempts: number = 1) {
+  public async transaction(callback: Function, attempts: number = 1) {
     for (let a = 1; a <= attempts; a++) {
       if (this.getDriverName() === 'sqlsrv') {
         return super.transaction(callback);
       }
-      this.getPdo().exec('BEGIN TRAN');
+      // await (this.getPdo()).exec('BEGIN TRAN');
       let result;
       try {
         result = callback(this);
-        this.getPdo().exec('COMMIT TRAN');
+        // this.getPdo().exec('COMMIT TRAN');
       } catch (e) {
-        this.getPdo().exec('ROLLBACK TRAN');
+        // this.getPdo().exec('ROLLBACK TRAN');
         throw e;
       }
       return result;

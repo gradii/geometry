@@ -56,7 +56,7 @@ export class MysqlSchemaGrammar extends SchemaGrammar {
   /*Create the main create table clause.*/
   protected compileCreateTable(blueprint: Blueprint, command: ColumnDefinition,
                                connection: Connection) {
-    return (`${blueprint.temporary ? 'create temporary' : 'create'} table ${this.wrapTable(
+    return (`${blueprint._temporary ? 'create temporary' : 'create'} table ${this.wrapTable(
       blueprint)} (${this.getColumns(blueprint).join(', ')})`).trim();
   }
 

@@ -1,3 +1,6 @@
+import { isArray } from '@gradii/check-type';
+import { Column } from '../src/annotation/column/column';
+import { PrimaryColumn } from '../src/annotation/column/primary.column';
 import { DatabaseConfig } from '../src/databaseConfig';
 import { Model } from '../src/fedaco/model';
 import { SchemaBuilder } from '../src/schema/schema-builder';
@@ -10,30 +13,32 @@ function schema(connectionName = 'default'): SchemaBuilder {
   return connection(connectionName).getSchemaBuilder();
 }
 
-function createSchema() {
-  schema('default').create('test_orders', table => {
-    table.increments('id');
-    table.string('item_type');
-    table.integer('item_id');
-    table.timestamps();
-  });
-  schema('default').create('with_json', table => {
+async function createSchema() {
+  await schema('default')
+    .create('test_orders', table => {
+      table.increments('id');
+      table.string('item_type');
+      table.integer('item_id');
+      table.timestamps();
+    });
+  await schema('default').create('with_json', table => {
     table.increments('id');
     table.text('json').withDefault(JSON.stringify([]));
   });
-  schema('second_connection').create('test_items', table => {
+  await schema('second_connection').create('test_items', table => {
     table.increments('id');
     table.timestamps();
   });
-  schema('default').create('users_with_space_in_colum_name', table => {
+  await schema('default').create('users_with_space_in_colum_name', table => {
     table.increments('id');
     table.string('name').withNullable();
     table.string('email address');
     table.timestamps();
   });
 
-  ['default', 'second_connection'].forEach((name, index) => {
-    schema(name).create('users', function (table) {
+  for (const name of ['default', 'second_connection']) {
+    const index = ['default', 'second_connection'].indexOf(name);
+    await schema(name).create('users', function (table) {
       table.increments('id');
       table.string('name').withNullable();
       table.string('email');
@@ -41,13 +46,13 @@ function createSchema() {
       table.timestamps();
     });
 
-    schema(name).create('friends', function (table) {
+    await schema(name).create('friends', function (table) {
       table.integer('user_id');
       table.integer('friend_id');
       table.integer('friend_level_id').withNullable();
     });
 
-    schema(name).create('posts', function (table) {
+    await schema(name).create('posts', function (table) {
       table.increments('id');
       table.integer('user_id');
       table.integer('parent_id').withNullable();
@@ -55,27 +60,27 @@ function createSchema() {
       table.timestamps();
     });
 
-    schema(name).create('comments', function (table) {
+    await schema(name).create('comments', function (table) {
       table.increments('id');
       table.integer('post_id');
       table.string('content');
       table.timestamps();
     });
 
-    schema(name).create('friend_levels', function (table) {
+    await schema(name).create('friend_levels', function (table) {
       table.increments('id');
       table.string('level');
       table.timestamps();
     });
 
-    schema(name).create('photos', function (table) {
+    await schema(name).create('photos', function (table) {
       table.increments('id');
       table.morphs('imageable');
       table.string('name');
       table.timestamps();
     });
 
-    schema(name).create('soft_deleted_users', function (table) {
+    await schema(name).create('soft_deleted_users', function (table) {
       table.increments('id');
       table.string('name').withNullable();
       table.string('email');
@@ -83,23 +88,23 @@ function createSchema() {
       table.softDeletes();
     });
 
-    schema(name).create('tags', function (table) {
+    await schema(name).create('tags', function (table) {
       table.increments('id');
       table.string('name');
       table.timestamps();
     });
 
-    schema(name).create('taggables', function (table) {
+    await schema(name).create('taggables', function (table) {
       table.integer('tag_id');
       table.morphs('taggable');
       table.string('taxonomy').withNullable();
     });
 
-    schema(name).create('non_incrementing_users', table => {
+    await schema(name).create('non_incrementing_users', table => {
       table.string('name').withNullable();
     });
 
-  });
+  }
 }
 
 describe('test database eloquent integration', () => {
@@ -125,58 +130,67 @@ describe('test database eloquent integration', () => {
     // Fedaco.unsetConnectionResolver();
   });
 
-  it('basic create model', () => {
-    new EloquentTestUser().newQuery().create({
+  it('basic create model', async () => {
+    const model = await new EloquentTestUser().newQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
+
+    expect(model.id).toBe(1);
+    expect(model.email).toBe('taylorotwell@gmail.com');
+    await model.delete();
   });
 
-  // it('basic model retrieval', () => {
-  //   EloquentTestUser.create({
-  //     'id'   : 1,
-  //     'email': 'taylorotwell@gmail.com'
-  //   });
-  //   EloquentTestUser.create({
-  //     'id'   : 2,
-  //     'email': 'abigailotwell@gmail.com'
-  //   });
-  //   expect(EloquentTestUser.count()).toEqual(2);
-  //   expect(EloquentTestUser.where('email', 'taylorotwell@gmail.com').doesntExist()).toFalse();
-  //   expect(EloquentTestUser.where('email', 'mohamed@laravel.com').doesntExist()).toBeTruthy();
-  //   let model = EloquentTestUser.where('email', 'taylorotwell@gmail.com').first();
-  //   expect(model.email).toBe('taylorotwell@gmail.com');
-  //   expect(model.email !== undefined).toBeTruthy();
-  //   expect(model.friends !== undefined).toBeTruthy();
-  //   let model = EloquentTestUser.find(1);
-  //   expect(model).toInstanceOf(EloquentTestUser);
-  //   expect(model.id).toEqual(1);
-  //   let model = EloquentTestUser.find(2);
-  //   expect(model).toInstanceOf(EloquentTestUser);
-  //   expect(model.id).toEqual(2);
-  //   let missing = EloquentTestUser.find(3);
-  //   expect(missing).toNull();
-  //   let collection = EloquentTestUser.find([]);
-  //   expect(collection).toInstanceOf(Collection);
-  //   expect(collection).toCount(0);
-  //   let collection = EloquentTestUser.find([1, 2, 3]);
-  //   expect(collection).toInstanceOf(Collection);
-  //   expect(collection).toCount(2);
-  //   let models = EloquentTestUser.where('id', 1).cursor();
-  //   for (let model of models) {
-  //     expect(model.id).toEqual(1);
-  //     expect(model.getConnectionName()).toBe('default');
-  //   }
-  //   let records = DB.table('users').where('id', 1).cursor();
-  //   for (let record of records) {
-  //     expect(record.id).toEqual(1);
-  //   }
-  //   let records = DB.cursor('select * from users where id = ?', [1]);
-  //   for (let record of records) {
-  //     expect(record.id).toEqual(1);
-  //   }
-  // });
-  //
+  it('basic model retrieval', async () => {
+    const factory = new EloquentTestUser();
+
+    await factory.newQuery().create({
+      'id'   : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+
+    await factory.newQuery().create({
+      'id'   : 2,
+      'email': 'abigailotwell@gmail.com'
+    });
+
+    expect(await factory.newQuery().count()).toEqual(2);
+    expect(await factory.newQuery().where('email', 'taylorotwell@gmail.com').doesntExist()).toBeFalsy();
+    expect(await factory.newQuery().where('email', 'mohamed@laravel.com').doesntExist()).toBeTruthy();
+    let model: EloquentTestUser = await factory.newQuery()
+      .where('email', 'taylorotwell@gmail.com').first();
+    expect(model.email).toBe('taylorotwell@gmail.com');
+    expect(model.email !== undefined).toBeTruthy();
+    expect(model.friends !== undefined).toBeTruthy();
+    model = await factory.newQuery().find(1);
+    expect(model).toBeInstanceOf(EloquentTestUser);
+    expect(model.id).toEqual(1);
+    model = await factory.newQuery().find(2);
+    expect(model).toBeInstanceOf(EloquentTestUser);
+    expect(model.id).toEqual(2);
+    const missing = await factory.newQuery().find(3);
+    expect(missing).toBeNull();
+    let collection = await factory.newQuery().find([]);
+    expect(isArray(collection)).toBeTruthy();
+    expect(collection.length).toBe(0);
+    collection = await factory.newQuery().find([1, 2, 3]);
+    expect(isArray(collection)).toBeTruthy();
+    expect(collection.length).toBe(2);
+    const models = await factory.newQuery().where('id', 1).get(); // .cursor();
+    for (const m of models) {
+      expect(m.id).toEqual(1);
+      expect(m.getConnectionName()).toBe('default');
+    }
+    // let records = DB.table('users').where('id', 1).cursor();
+    // for (let record of records) {
+    //   expect(record.id).toEqual(1);
+    // }
+    // let records = DB.cursor('select * from users where id = ?', [1]);
+    // for (let record of records) {
+    //   expect(record.id).toEqual(1);
+    // }
+  });
+
 //   it('basic model collection retrieval', () => {
 //     EloquentTestUser.create({
 //       'id'   : 1,
@@ -1846,6 +1860,15 @@ export class EloquentTestUser extends Model {
   _table: any   = 'users';
   _dates: any   = ['birthday'];
   _guarded: any = [];
+
+  @PrimaryColumn()
+  id;
+
+  @Column()
+  email;
+
+  @Column()
+  friends;
 
   // public friends() {
   //   return this.belongsToMany(EloquentTestUser, 'friends', 'user_id', 'friend_id');

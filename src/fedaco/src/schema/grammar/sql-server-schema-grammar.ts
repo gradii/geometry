@@ -445,7 +445,7 @@ export class SqlServerSchemaGrammar extends SchemaGrammar {
 
   /*Wrap a table in keyword identifiers.*/
   public wrapTable(table: Blueprint | string) {
-    if (table instanceof Blueprint && table.temporary) {
+    if (table instanceof Blueprint && table._temporary) {
       this.setTablePrefix('#');
     }
     return super.wrapTable(table);

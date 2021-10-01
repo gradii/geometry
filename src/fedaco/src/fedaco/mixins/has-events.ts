@@ -16,7 +16,7 @@ export class NullDispatcher {
   }
 
   until(): boolean {
-    return false;
+    return true;
   }
 
   dispatch(): void {
@@ -226,7 +226,7 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
 
     /*Fire a custom model event for the given event.*/
     _fireCustomModelEvent(event: string, method: string) {
-      if (!(this._dispatchesEvents[event] !== undefined)) {
+      if (isBlank(this._dispatchesEvents[event])) {
         return;
       }
       const result = (/*static*/<any>this.constructor).dispatcher[method](

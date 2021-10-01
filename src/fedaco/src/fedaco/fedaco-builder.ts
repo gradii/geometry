@@ -5,7 +5,7 @@
  */
 
 import { isAnyEmpty, isArray, isBlank, isFunction, isNumber, isString } from '@gradii/check-type';
-import { nth, omit, pluck, tap } from 'ramda';
+import { nth, omit, pluck } from 'ramda';
 import { wrap } from '../helper/arr';
 import { pascalCase } from '../helper/str';
 import { mixinBuildQueries } from '../query-builder/mixins/build-query';
@@ -486,10 +486,10 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   //   return collect(this._query.orders);
   // }
   /*Save a new model and return the instance.*/
-  public create(attributes: Record<string, any>) {
-    return tap(instance => {
-      instance.save();
-    }, this.newModelInstance(attributes));
+  public async create(attributes: Record<string, any>) {
+    const instance = this.newModelInstance(attributes);
+    await instance.save();
+    return instance;
   }
 
   /*Save a new model and return the instance. Allow mass-assignment.*/

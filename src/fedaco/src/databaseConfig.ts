@@ -16,9 +16,7 @@ export class DatabaseConfig {
       fetch      : 0,
       default    : 'default',
       connections: {
-        default: {
-
-        }
+        default: {}
       }
     }
   };
@@ -90,7 +88,8 @@ export class DatabaseConfig {
       },
       until() {
         return true;
-      }, dispatch() {
+      },
+      dispatch() {
       }
     };
 

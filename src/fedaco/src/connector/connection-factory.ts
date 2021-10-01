@@ -11,10 +11,7 @@ import { PostgresConnection } from '../connection/postgres-connection';
 import { SqlServerConnection } from '../connection/sql-server-connection';
 import { SqliteConnection } from '../connection/sqlite-connection';
 import { wrap } from '../helper/arr';
-import { MysqlConnector } from './mysql-connector';
-import { PostgresConnector } from './postgres-connector';
-import { SqlServerConnector } from './sql-server-connector';
-import { SqliteConnector } from './sqlite-connector';
+import { SqliteConnector } from './sqlite/sqlite-connector';
 
 export class ConnectionFactory {
   /*The IoC container instance.*/
@@ -48,8 +45,9 @@ export class ConnectionFactory {
   /*Create a single database connection instance.*/
   protected createSingleConnection(config: any) {
     const pdo = this.createPdoResolver(config);
-    return this.createConnection(config['driver'], pdo, config['database'], config['prefix'],
-      config);
+    return this.createConnection(
+      config['driver'], pdo, config['database'], config['prefix'], config
+    );
   }
 
   /*Create a read / write database connection instance.*/
@@ -117,7 +115,7 @@ export class ConnectionFactory {
 
   /*Create a new Closure that resolves to a PDO instance where there is no configured host.*/
   protected createPdoResolverWithoutHosts(config: any[]) {
-    return () => {
+    return async () => {
       return this.createConnector(config).connect(config);
     };
   }

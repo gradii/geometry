@@ -16,8 +16,8 @@ import { MySqlSchemaState } from '../schema/mysql-schema-state';
 
 export class MysqlConnection extends Connection {
   /*Determine if the connected database is a MariaDB database.*/
-  public isMaria() {
-    return this.getPdo().getAttribute('ATTR_SERVER_VERSION').includes('MariaDB');
+  public async isMaria() {
+    return (await this.getPdo()).getAttribute('ATTR_SERVER_VERSION').includes('MariaDB');
   }
 
   /*Get the default query grammar instance.*/
