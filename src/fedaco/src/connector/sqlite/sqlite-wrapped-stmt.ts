@@ -47,6 +47,9 @@ export class SqliteWrappedStmt implements WrappedStmt {
   }
 
   async fetchAll(bindings?: any[]) {
+    // @ts-ignore
+    console.log(`run this ${this.driverStmt.sql}`, bindings ?? this._bindingValues);
+
     return new Promise((ok, fail) => {
       this.driverStmt.all(bindings ?? this._bindingValues,
         function (this: RunResult, err: string, rows) {

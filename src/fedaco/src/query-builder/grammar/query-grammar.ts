@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isAnyEmpty, isString } from '@gradii/check-type';
+import { isAnyEmpty, isArray, isString } from '@gradii/check-type';
 import { BaseGrammar } from '../../base-grammar';
 import { AssignmentSetClause } from '../../query/ast/assignment-set-clause';
 import { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
@@ -125,10 +125,17 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
     return `SELECT exists(${this.compileSelect(builder)}) AS \`exists\``;
   }
 
-  compileInsert(builder: QueryBuilder, values: any, insertOption = 'into'): string {
+  compileInsert(builder: QueryBuilder, values: any | any[], insertOption = 'into'): string {
     // const ast = this._prepareSelectAst(builder);
-    const keys    = Object.keys(values);
-    const sources = Object.values(values);
+    let keys;
+    if (!isArray(values)) {
+      values = [values];
+    }
+    if (values.length > 0) {
+      keys = Object.keys(values[0]);
+    }
+    const sources: any[][] = values.map((it: Record<string, any>) => Object.values(it));
+
     const visitor = this._createVisitor(builder);
 
     if (isAnyEmpty(values)) {
@@ -140,7 +147,9 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
       insertOption,
       new ValuesInsertSource(
         false,
-        sources.map((it: any) => bindingVariable(it, 'insert'))
+        sources.map((columnValues: any[]) => {
+          return columnValues.map(it => bindingVariable(it, 'insert'));
+        })
       ),
       keys.map(it => {
         return SqlParser.createSqlParser(it).parseColumnAlias();
@@ -159,15 +168,17 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
     return this.compileInsert(builder, values, 'ignore into');
   }
 
-  compileInsertUsing(builder: QueryBuilder, columns, nestedExpression: NestedExpression): string {
+  compileInsertUsing(builder: QueryBuilder, columns: string[],
+                     nestedExpression: NestedExpression): string {
     const ast     = new InsertSpecification(
       'into',
+
       new ValuesInsertSource(
         false,
         [],
         nestedExpression
       ),
-      columns.map(it => {
+      columns.map((it: string) => {
         return SqlParser.createSqlParser(it).parseColumnAlias();
       }),
       builder._from
@@ -508,6 +519,8 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
   }
 
   getDateFormat(): string {
-    throw new Error('not implement');
+    return 'yyyy-MM-dd HH:mm:ss';
+    // todo remove me remove the comment
+    // throw new Error('not implement');
   }
 }

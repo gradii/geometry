@@ -4,13 +4,19 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { isArray } from '@gradii/check-type';
+import { tap } from 'ramda';
 import { Constructor } from '../../../helper/constructor';
 import { FedacoBuilder } from '../../fedaco-builder';
-import { isArray } from '@gradii/check-type';
-import { tap } from 'ramda'
 import { Model } from '../../model';
 
-export declare class AsPivot {
+// tslint:disable-next-line:no-namespace
+export declare namespace Aspivot {
+  export function fromRawAttributes(
+    parent: Model, attributes: any[], table: string, exists: boolean): any;
+}
+
+export interface AsPivot {
   // _setKeysForSelectQuery(query: FedacoBuilder);
   //
   // /*Set the keys for a save update query.*/
@@ -73,7 +79,7 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
     /*Create a new pivot model instance.*/
     public static fromAttributes(parent: Model, attributes: any[], table: string,
                                  exists = false) {
-      const instance        = new this();
+      const instance      = new this();
       instance.timestamps = instance.hasTimestampAttributes(attributes);
       instance.setConnection(parent.getConnectionName()).setTable(table).forceFill(
         attributes).syncOriginal();
@@ -85,7 +91,7 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
     /*Create a new pivot model from raw values returned from a query.*/
     public static fromRawAttributes(parent: Model, attributes: any[], table: string,
                                     exists = false) {
-      const instance        = this.fromAttributes(parent, [], table, exists);
+      const instance      = this.fromAttributes(parent, [], table, exists);
       instance.timestamps = instance.hasTimestampAttributes(attributes);
       instance.setRawAttributes(attributes, exists);
       return instance;

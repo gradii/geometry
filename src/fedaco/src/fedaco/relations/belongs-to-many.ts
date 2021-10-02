@@ -11,6 +11,7 @@ import { pluralStudy } from '../../helper/pluralize';
 import { camelCase } from '../../helper/str';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
+import { Aspivot, AsPivot } from './concerns/as-pivot';
 import {
   InteractsWithDictionary, mixinInteractsWithDictionary
 } from './concerns/interacts-with-dictionary';
@@ -57,7 +58,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   /*The custom pivot table column for the updated_at timestamp.*/
   _pivotUpdatedAt: string;
   /*The class name of the custom pivot model to use for the relationship.*/
-  _using: typeof Model;
+  _using: typeof Aspivot & typeof Model;
   /*The name of the accessor to use for the "pivot" relationship.*/
   _accessor = 'pivot';
 
@@ -587,9 +588,9 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Create a new instance of the related model.*/
-  public create(attributes: any[] = [], joining: any[] = [], touch = true) {
+  public async create(attributes: any = {}, joining: any[] = [], touch = true) {
     const instance = this._related.newInstance(attributes);
-    instance.save({
+    await instance.save({
       'touch': false
     });
     this.attach(instance, joining, touch);

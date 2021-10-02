@@ -153,7 +153,7 @@ export interface HasRelationships {
   /*Create a new model instance for a related model.*/
   _newRelatedInstance(this: Model & this, clazz: typeof Model);
 
-  getRelationMethod(relation: string);
+  getRelationMethod(relation: string): Relation;
 
   /*Get all the loaded relations for the instance.*/
   getRelations();
@@ -519,7 +519,7 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
 
     /*Get the joining table name for a many-to-many relation.*/
     public joiningTable(related: typeof Model, instance: Model | null = null): string {
-      let segments = [
+      const segments = [
         instance ? instance.joiningTableSegment() : snakeCase(related.name),
         this.joiningTableSegment()
       ];
@@ -539,7 +539,7 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
 
     /*Touch the owning relations of the model.*/
     public async touchOwners(this: Model & _Self) {
-      for (let relation of this.getTouchedRelations()) {
+      for (const relation of this.getTouchedRelations()) {
         await this.getRelationMethod(relation).touch();
         if (this[relation] instanceof this.constructor) {
           this[relation].fireModelEvent('saved', false);
@@ -559,7 +559,7 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
 
     /*Get the class name for polymorphic relations.*/
     public getMorphClass() {
-      let morphMap = Relation.morphMap();
+      const morphMap = Relation.morphMap();
       if (morphMap.length && morphMap.includes(this.constructor.name)) {
         // @ts-ignore
         return morphMap[this.constructor.name];
@@ -576,7 +576,7 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
       }, new clazz());
     }
 
-    getRelationMethod(this: Model & _Self, relation: string) {
+    getRelationMethod(this: Model & _Self, relation: string): Relation {
       const metadata = this.isRelation(relation);
       if (metadata) {
         return metadata._getRelation(this, relation);
@@ -619,7 +619,7 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
 
     /*Duplicate the instance and unset all the loaded relations.*/
     public withoutRelations(this: _Self & Model & this) {
-      let model = this.clone();
+      const model = this.clone();
       return model.unsetRelations();
     }
 

@@ -1,9 +1,12 @@
 import { isArray } from '@gradii/check-type';
 import { Column } from '../src/annotation/column/column';
+import { CreatedAtColumn } from '../src/annotation/column/created-at.column';
 import { PrimaryColumn } from '../src/annotation/column/primary.column';
+import { UpdatedAtColumn } from '../src/annotation/column/updated-at.column';
 import { BelongsToManyColumn } from '../src/annotation/relation-column/belongs-to-many.relation-column';
 import { DatabaseConfig } from '../src/databaseConfig';
 import { Model } from '../src/fedaco/model';
+import { BelongsToMany } from '../src/fedaco/relations/belongs-to-many';
 import { SchemaBuilder } from '../src/schema/schema-builder';
 
 function connection(connectionName = 'default') {
@@ -184,7 +187,9 @@ describe('test database eloquent integration', () => {
       .where('email', 'taylorotwell@gmail.com').first();
     expect(model.email).toBe('taylorotwell@gmail.com');
     expect(model.email !== undefined).toBeTruthy();
-    expect(model.friends !== undefined).toBeTruthy();
+    const friends = await model.friends;
+    expect(friends !== undefined).toBeTruthy();
+    expect(friends).toEqual([]);
     model = await factory.newQuery().find(1);
     expect(model).toBeInstanceOf(EloquentTestUser);
     expect(model.id).toEqual(1);
@@ -214,120 +219,130 @@ describe('test database eloquent integration', () => {
     // }
   });
 
-//   it('basic model collection retrieval', () => {
-//     EloquentTestUser.create({
-//       'id'   : 1,
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     EloquentTestUser.create({
-//       'id'   : 2,
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     let models = EloquentTestUser.oldest('id').get();
-//     expect(models).toCount(2);
-//     expect(models).toInstanceOf(Collection);
-//     expect(models[0]).toInstanceOf(EloquentTestUser);
-//     expect(models[1]).toInstanceOf(EloquentTestUser);
-//     expect(models[0].email).toBe('taylorotwell@gmail.com');
-//     expect(models[1].email).toBe('abigailotwell@gmail.com');
-//   });
-//   it('paginated model collection retrieval', () => {
-//     EloquentTestUser.create({
-//       'id'   : 1,
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     EloquentTestUser.create({
-//       'id'   : 2,
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     EloquentTestUser.create({
-//       'id'   : 3,
-//       'email': 'foo@gmail.com'
-//     });
-//     Paginator.currentPageResolver(() => {
-//       return 1;
-//     });
-//     let models = EloquentTestUser.oldest('id').paginate(2);
-//     expect(models).toCount(2);
-//     expect(models).toInstanceOf(LengthAwarePaginator);
-//     expect(models[0]).toInstanceOf(EloquentTestUser);
-//     expect(models[1]).toInstanceOf(EloquentTestUser);
-//     expect(models[0].email).toBe('taylorotwell@gmail.com');
-//     expect(models[1].email).toBe('abigailotwell@gmail.com');
-//     Paginator.currentPageResolver(() => {
-//       return 2;
-//     });
-//     let models = EloquentTestUser.oldest('id').paginate(2);
-//     expect(models).toCount(1);
-//     expect(models).toInstanceOf(LengthAwarePaginator);
-//     expect(models[0]).toInstanceOf(EloquentTestUser);
-//     expect(models[0].email).toBe('foo@gmail.com');
-//   });
-//   it('paginated model collection retrieval when no elements', () => {
-//     Paginator.currentPageResolver(() => {
-//       return 1;
-//     });
-//     let models = EloquentTestUser.oldest('id').paginate(2);
-//     expect(models).toCount(0);
-//     expect(models).toInstanceOf(LengthAwarePaginator);
-//     Paginator.currentPageResolver(() => {
-//       return 2;
-//     });
-//     let models = EloquentTestUser.oldest('id').paginate(2);
-//     expect(models).toCount(0);
-//   });
-//   it('paginated model collection retrieval when no elements and default per page', () => {
-//     let models = EloquentTestUser.oldest('id').paginate();
-//     expect(models).toCount(0);
-//     expect(models).toInstanceOf(LengthAwarePaginator);
-//   });
-//   it('count for pagination with grouping', () => {
-//     EloquentTestUser.create({
-//       'id'   : 1,
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     EloquentTestUser.create({
-//       'id'   : 2,
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     EloquentTestUser.create({
-//       'id'   : 3,
-//       'email': 'foo@gmail.com'
-//     });
-//     EloquentTestUser.create({
-//       'id'   : 4,
-//       'email': 'foo@gmail.com'
-//     });
-//     let query = EloquentTestUser.groupBy('email').getQuery();
-//     expect(query.getCountForPagination()).toEqual(3);
-//   });
-//   it('count for pagination with grouping and sub selects', () => {
-//     let user1 = EloquentTestUser.create({
-//       'id'   : 1,
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     EloquentTestUser.create({
-//       'id'   : 2,
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     EloquentTestUser.create({
-//       'id'   : 3,
-//       'email': 'foo@gmail.com'
-//     });
-//     EloquentTestUser.create({
-//       'id'   : 4,
-//       'email': 'foo@gmail.com'
-//     });
-//     user1.friends().create({
-//       'id'   : 5,
-//       'email': 'friend@gmail.com'
-//     });
-//     let query = EloquentTestUser.select({
-//       0              : 'id',
-//       'friends_count': EloquentTestUser.whereColumn('friend_id', 'user_id').count()
-//     }).groupBy('email').getQuery();
-//     expect(query.getCountForPagination()).toEqual(4);
-//   });
+  it('basic model collection retrieval', async () => {
+    await new EloquentTestUser().newQuery().create({
+      'id'   : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+    await new EloquentTestUser().newQuery().create({
+      'id'   : 2,
+      'email': 'abigailotwell@gmail.com'
+    });
+    const models = await new EloquentTestUser().newQuery().oldest('id').get();
+    expect(models.length).toBe(2);
+    expect(isArray(models)).toBeTruthy();
+    expect(models[0]).toBeInstanceOf(EloquentTestUser);
+    expect(models[1]).toBeInstanceOf(EloquentTestUser);
+    expect(models[0].email).toBe('taylorotwell@gmail.com');
+    expect(models[1].email).toBe('abigailotwell@gmail.com');
+  });
+
+  it('paginated model collection retrieval', async () => {
+    await new EloquentTestUser().newQuery().create({
+      'id'   : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+    await new EloquentTestUser().newQuery().create({
+      'id'   : 2,
+      'email': 'abigailotwell@gmail.com'
+    });
+    await new EloquentTestUser().newQuery().create({
+      'id'   : 3,
+      'email': 'foo@gmail.com'
+    });
+    // Paginator.currentPageResolver(() => {
+    //   return 1;
+    // });
+    let models = await new EloquentTestUser().newQuery()
+      .oldest('id').paginate(1, 2);
+    expect(models.items.length).toBe(2);
+    expect(models.items[0]).toBeInstanceOf(EloquentTestUser);
+    expect(models.items[1]).toBeInstanceOf(EloquentTestUser);
+    expect(models.items[0].email).toBe('taylorotwell@gmail.com');
+    expect(models.items[1].email).toBe('abigailotwell@gmail.com');
+    // Paginator.currentPageResolver(() => {
+    //   return 2;
+    // });
+    models = await new EloquentTestUser().newQuery()
+      .oldest('id').paginate(2, 2);
+    expect(models.items.length).toBe(1);
+    expect(models.items[0]).toBeInstanceOf(EloquentTestUser);
+    expect(models.items[0].email).toBe('foo@gmail.com');
+  });
+
+  it('paginated model collection retrieval when no elements', async () => {
+    // Paginator.currentPageResolver(() => {
+    //   return 1;
+    // });
+    let models = await new EloquentTestUser().newQuery().oldest('id').paginate(1, 2);
+    expect(models.items.length).toBe(0);
+    // expect(models).toInstanceOf(LengthAwarePaginator);
+    // Paginator.currentPageResolver(() => {
+    //   return 2;
+    // });
+    models = await new EloquentTestUser().newQuery().oldest('id').paginate(2, 2);
+    expect(models.items.length).toBe(0);
+  });
+
+  it('paginated model collection retrieval when no elements and default per page', async () => {
+    const models = await new EloquentTestUser().newQuery().oldest('id').paginate();
+    expect(models.items.length).toBe(0);
+    // expect(models).toInstanceOf(LengthAwarePaginator);
+  });
+
+  it('count for pagination with grouping', async () => {
+    await EloquentTestUser.creteQuery().create({
+      'id'   : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+    await EloquentTestUser.creteQuery().create({
+      'id'   : 2,
+      'email': 'abigailotwell@gmail.com'
+    });
+    await EloquentTestUser.creteQuery().create({
+      'id'   : 3,
+      'email': 'foo@gmail.com'
+    });
+    await EloquentTestUser.creteQuery().create({
+      'id'   : 4,
+      'email': 'foo@gmail.com'
+    });
+    const query = EloquentTestUser.creteQuery().groupBy('email').getQuery();
+    expect(await query.getCountForPagination()).toEqual(3);
+  });
+
+  it('count for pagination with grouping and sub selects', async () => {
+    const user1 = await EloquentTestUser.creteQuery().create({
+      'id'   : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+    await EloquentTestUser.creteQuery().create({
+      'id'   : 2,
+      'email': 'abigailotwell@gmail.com'
+    });
+    await EloquentTestUser.creteQuery().create({
+      'id'   : 3,
+      'email': 'foo@gmail.com'
+    });
+    await EloquentTestUser.creteQuery().create({
+      'id'   : 4,
+      'email': 'foo@gmail.com'
+    });
+    const friendsRelation = user1.getRelationMethod('friends') as BelongsToMany;
+    await friendsRelation.create({
+      'id'   : 5,
+      'email': 'friend@gmail.com'
+    });
+    const query = await EloquentTestUser.creteQuery().select({
+      0              : 'id',
+      'friends_count': await EloquentTestUser
+        .creteQuery()
+        .whereColumn('friend_id', 'user_id')
+        .count()
+    }).groupBy('email').getQuery();
+    expect(await query.getCountForPagination()).toEqual(4);
+  });
+
 //   it('first or create', () => {
 //     let user1 = EloquentTestUser.firstOrCreate({
 //       'email': 'taylorotwell@gmail.com'
@@ -1897,6 +1912,12 @@ export class EloquentTestUser extends Model {
     relatedPivotKey: 'friend_id'
   })
   friends;
+
+  @CreatedAtColumn()
+  created_at;
+
+  @UpdatedAtColumn()
+  updated_at;
 
   // public friends() {
   //   return this.belongsToMany(EloquentTestUser, 'friends', 'user_id', 'friend_id');

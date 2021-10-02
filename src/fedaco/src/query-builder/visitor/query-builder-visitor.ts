@@ -625,7 +625,9 @@ export class QueryBuilderVisitor implements SqlVisitor {
     } else if (node.select) {
       return ` ${node.select.accept(this)}`;
     } else {
-      return ` VALUES (${node.values.map(it => it.accept(this)).join(', ')})`;
+      return ` VALUES ${node.valuesList.map(
+        values => `(${values.map(it => it.accept(this)).join(', ')})`
+      ).join(', ')}`;
     }
   }
 

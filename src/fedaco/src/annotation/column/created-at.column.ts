@@ -7,16 +7,17 @@
 import { makePropDecorator } from '@gradii/annotation';
 import { _additionalProcessingGetterSetter } from '../additional-processing';
 import { FedacoDecorator } from '../annotation.interface';
-import { ColumnAnnotation, FedacoColumn } from '../column';
+import { ColumnAnnotation } from '../column';
+import { DateColumn } from './date.column';
 
 export interface CreatedAtColumnAnnotation extends ColumnAnnotation {
 
 }
 
 export const CreatedAtColumn: FedacoDecorator<CreatedAtColumnAnnotation> = makePropDecorator(
-  'Fedaco:DatetimeColumn',
+  'Fedaco:CreatedAtColumn',
   (p: CreatedAtColumnAnnotation = {}): CreatedAtColumnAnnotation => ({...p}),
-  FedacoColumn,
+  DateColumn,
   (target: any, name: string, columnDefine: CreatedAtColumnAnnotation) => {
     _additionalProcessingGetterSetter(target, name, columnDefine);
   });

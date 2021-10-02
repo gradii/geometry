@@ -14,7 +14,7 @@ import { NestedExpression } from './fragment/nested-expression';
 export class ValuesInsertSource extends SqlNode {
   constructor(
     public isDefault: boolean,
-    public values: (BindingVariable | RawExpression)[] = [],
+    public valuesList: (BindingVariable | RawExpression)[][] = [],
     public select?: NestedExpression
   ) {
     super();

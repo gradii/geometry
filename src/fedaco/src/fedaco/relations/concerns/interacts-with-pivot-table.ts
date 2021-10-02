@@ -5,13 +5,14 @@
  */
 
 import { isArray, isBlank } from '@gradii/check-type';
-import { difference, intersection } from 'ramda';
+import { difference, intersection, pluck } from 'ramda';
 import { Collection } from '../../../define/collection';
 import { mapWithKeys } from '../../../helper/arr';
 import { Constructor } from '../../../helper/constructor';
+import { QueryBuilder } from '../../../query-builder/query-builder';
 import { BaseModel } from '../../base-model';
 import { Model } from '../../model';
-import { Relation } from '../relation';
+import { BelongsToMany } from '../belongs-to-many';
 
 export interface InteractsWithPivotTable {
   /**
@@ -120,7 +121,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     /*Toggles a model (or models) from the parent.
 
     Each existing model is detached, and non existing ones are attached.*/
-    public toggle(this: Relation & _Self, ids: any, touch = true) {
+    public async toggle(this: BelongsToMany & _Self, ids: any, touch = true) {
       const changes: any = {
         attached: [],
         detached: []
@@ -128,7 +129,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
       const records      = this._formatRecordsList(this._parseIds(ids));
       const detach       = Object.values(
         intersection(
-          this.newPivotQuery().pluck(this.relatedPivotKey).all(),
+          await this.newPivotQuery().pluck(this.relatedPivotKey),
           Object.keys(records)
         )
       );
@@ -152,12 +153,13 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Sync the intermediate tables with a list of IDs without detaching.*/
-    public syncWithoutDetaching(this: Relation & _Self, ids: Collection | Model | any[]) {
+    public syncWithoutDetaching(this: BelongsToMany & _Self, ids: Collection | Model | any[]) {
       return this.sync(ids, false);
     }
 
     /*Sync the intermediate tables with a list of IDs or collection of models.*/
-    public sync(this: Relation & _Self, ids: Collection | Model | any[] | any, detaching = true) {
+    public sync(this: BelongsToMany & _Self, ids: Collection | Model | any[] | any,
+                detaching = true) {
       let changes: any = {
         attached: [],
         detached: [],
@@ -178,7 +180,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Sync the intermediate tables with a list of IDs or collection of models with the given pivot values.*/
-    public syncWithPivotValues(this: Relation & _Self, ids: Model | Model[], values: any[],
+    public syncWithPivotValues(this: BelongsToMany & _Self, ids: Model | Model[], values: any[],
                                detaching = true) {
       return this.sync(
         mapWithKeys(this._parseIds(ids), id => {
@@ -187,7 +189,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Format the sync / toggle record list so that it is keyed by ID.*/
-    _formatRecordsList(this: Relation & _Self, records: any[]) {
+    _formatRecordsList(this: BelongsToMany & _Self, records: any[]) {
       return mapWithKeys(records, (attributes, id) => {
         if (!isArray(attributes)) {
           // @ts-ignore
@@ -198,7 +200,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Attach all of the records that aren't in the given current records.*/
-    _attachNew(this: Relation & _Self, records: any[], current: any[], touch = true) {
+    _attachNew(this: BelongsToMany & _Self, records: any[], current: any[], touch = true) {
       const changes = {
         attached: [],
         updated : []
@@ -215,7 +217,8 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Update an existing pivot record on the table.*/
-    public updateExistingPivot(this: Relation & _Self, id: any, attributes: any[], touch = true) {
+    public updateExistingPivot(this: BelongsToMany & _Self, id: any, attributes: any[],
+                               touch = true) {
       if (this._using &&
         !this._pivotWheres.length &&
         !this._pivotWhereIns.length &&
@@ -235,7 +238,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Update an existing pivot record on the table via a custom class.*/
-    _updateExistingPivotUsingCustomClass(this: Relation & _Self, id: any, attributes: any[],
+    _updateExistingPivotUsingCustomClass(this: BelongsToMany & _Self, id: any, attributes: any[],
                                          touch: boolean) {
       const pivot   = this.getCurrentlyAttachedPivots().where(this.foreignPivotKey,
         this.parent[this.parentKey]).where(this.relatedPivotKey, this.parseId(id)).first();
@@ -250,11 +253,13 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Attach a model to the parent.*/
-    public attach(this: Relation & _Self, id: any, attributes: any[] = [], touch = true) {
-      if (this.using) {
-        this._attachUsingCustomClass(id, attributes);
+    public async attach(this: BelongsToMany & _Self, id: any, attributes: any[] = [],
+                        touch                                                   = true) {
+      if (this._using) {
+        await this._attachUsingCustomClass(id, attributes);
       } else {
-        this.newPivotStatement().insert(this.formatAttachRecords(this._parseIds(id), attributes));
+        await this.newPivotStatement().insert(
+          this._formatAttachRecords(this._parseIds(id), attributes));
       }
       if (touch) {
         this.touchIfTouching();
@@ -262,15 +267,15 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Attach a model to the parent using a custom class.*/
-    _attachUsingCustomClass(this: Relation & _Self, id: any, attributes: any[]) {
+    async _attachUsingCustomClass(this: BelongsToMany & _Self, id: any, attributes: any[]) {
       const records = this._formatAttachRecords(this._parseIds(id), attributes);
       for (const record of records) {
-        this.newPivot(record, false).save();
+        await this.newPivot(record, false).save();
       }
     }
 
     /*Create an array of records to insert into the pivot table.*/
-    _formatAttachRecords(this: Relation & _Self, ids: any[], attributes: any[]) {
+    _formatAttachRecords(this: BelongsToMany & _Self, ids: any[], attributes: any[]) {
       const records       = [];
       const hasTimestamps = this.hasPivotColumn(this.createdAt()) || this.hasPivotColumn(
         this.updatedAt());
@@ -281,34 +286,37 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Create a full attachment record payload.*/
-    _formatAttachRecord(this: Relation & _Self, key: number | string, value: any, attributes: any[],
+    _formatAttachRecord(this: BelongsToMany & _Self, key: number | string, value: any,
+                        attributes: any[],
                         hasTimestamps: boolean) {
       let id;
       [id, attributes] = this._extractAttachIdAndAttributes(key, value, attributes);
-      return [...this.baseAttachRecord(id, hasTimestamps), ...this.castAttributes(attributes)];
+      return {...this._baseAttachRecord(id, hasTimestamps), ...this._castAttributes(attributes)};
     }
 
     /*Get the attach record ID and extra attributes.*/
-    _extractAttachIdAndAttributes(this: Relation & _Self, key: any, value: any, attributes: any[]) {
+    _extractAttachIdAndAttributes(this: BelongsToMany & _Self, key: any, value: any,
+                                  attributes: any[]) {
       return isArray(value) ? [key, [...value, ...attributes]] : [value, attributes];
     }
 
     /*Create a new pivot attachment record.*/
-    _baseAttachRecord(this: Relation & _Self, id: number, timed: boolean) {
-      let record                   = {};
-      record[this.relatedPivotKey] = id;
-      record[this.foreignPivotKey] = this.parent[this.parentKey];
+    _baseAttachRecord(this: BelongsToMany & _Self, id: number, timed: boolean) {
+      let record: Record<string, any> = {};
+      record[this._relatedPivotKey]   = id;
+      record[this._foreignPivotKey]   = this._parent[this._parentKey];
       if (timed) {
         record = this._addTimestampsToAttachment(record);
       }
-      for (const value of this.pivotValues) {
+      for (const value of this._pivotValues) {
         record[value['column']] = value['value'];
       }
       return record;
     }
 
     /*Set the creation and update timestamps on an attach record.*/
-    _addTimestampsToAttachment(this: Relation & _Self, record: Record<any, any>, exists = false) {
+    _addTimestampsToAttachment(this: BelongsToMany & _Self, record: Record<any, any>,
+                               exists = false) {
       let fresh = this.parent.freshTimestamp();
       if (this.using) {
         const pivotModel = new this.using();
@@ -324,12 +332,12 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Determine whether the given column is defined as a pivot column.*/
-    public hasPivotColumn(this: Relation & _Self, column: string) {
+    public hasPivotColumn(this: BelongsToMany & _Self, column: string) {
       return this._pivotColumns.includes(column);
     }
 
     /*Detach models from the relationship.*/
-    public detach(this: Relation & _Self, ids: any = null, touch = true) {
+    public detach(this: BelongsToMany & _Self, ids: any = null, touch = true) {
       let results;
       if (this.using && ids.length &&
         !this._pivotWheres.length &&
@@ -355,7 +363,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Detach models from the relationship using a custom class.*/
-    _detachUsingCustomClass(this: Relation & _Self, ids: any) {
+    _detachUsingCustomClass(this: BelongsToMany & _Self, ids: any) {
       let results = 0;
       for (const id of this._parseIds(ids)) {
         results += this.newPivot({
@@ -367,8 +375,8 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Get the pivot models that are currently attached.*/
-    _getCurrentlyAttachedPivots(this: Relation & _Self,) {
-      return this.newPivotQuery().get().map(record => {
+    async _getCurrentlyAttachedPivots(this: BelongsToMany & _Self) {
+      return (await this.newPivotQuery().get()).map(record => {
         const clazz = this._using; //todo recovery me || Pivot;
         const pivot = clazz.fromRawAttributes(this.parent, /*cast type array*/ record,
           this.getTable(), true);
@@ -377,28 +385,29 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Create a new pivot model instance.*/
-    public newPivot(this: Relation & _Self, attributes: Record<string, any> = {}, exists = false) {
+    public newPivot(this: BelongsToMany & _Self, attributes: Record<string, any> = {},
+                    exists                                                       = false) {
       const pivot = this.related.newPivot(this.parent, attributes, this.table, exists, this.using);
       return pivot.setPivotKeys(this.foreignPivotKey, this.relatedPivotKey);
     }
 
     /*Create a new existing pivot model instance.*/
-    public newExistingPivot(this: Relation & _Self, attributes: any[] = []) {
+    public newExistingPivot(this: BelongsToMany & _Self, attributes: any[] = []) {
       return this.newPivot(attributes, true);
     }
 
     /*Get a new plain query builder for the pivot table.*/
-    public newPivotStatement(this: Relation & _Self,) {
-      return this.query.getQuery().newQuery().from(this.table);
+    public newPivotStatement(this: BelongsToMany & _Self) {
+      return this._query.getQuery().newQuery().from(this._table);
     }
 
     /*Get a new pivot statement for a given "other" ID.*/
-    public newPivotStatementForId(this: Relation & _Self, id: any) {
+    public newPivotStatementForId(this: BelongsToMany & _Self, id: any) {
       return this.newPivotQuery().whereIn(this.relatedPivotKey, this._parseIds(id));
     }
 
     /*Create a new query builder for the pivot table.*/
-    public newPivotQuery(this: Relation & _Self,) {
+    public newPivotQuery(this: BelongsToMany & _Self): QueryBuilder {
       const query = this.newPivotStatement();
       for (const args of this._pivotWheres) {
         query.where(...args);
@@ -421,9 +430,12 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Get all of the IDs from the given mixed value.*/
-    _parseIds(this: Relation & _Self, value: any | any[]) {
+    _parseIds(this: BelongsToMany & _Self, value: any | any[]) {
       if (value as Model instanceof BaseModel) {
-        return [value[this.relatedKey]];
+        return [value[this._relatedKey]];
+      }
+      if (isArray(value)) {
+        return pluck(this._relatedKey, value);
       }
       // if (value instanceof Collection) {
       //   return value.pluck(this.relatedKey).all();
@@ -435,39 +447,39 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Get the ID from the given mixed value.*/
-    _parseId(this: Relation & _Self, value: any) {
+    _parseId(this: BelongsToMany & _Self, value: any) {
       return value as Model instanceof BaseModel ? value[this.relatedKey] : value;
     }
 
     /*Cast the given keys to integers if they are numeric and string otherwise.*/
-    _castKeys(this: Relation & _Self, keys: any[]) {
+    _castKeys(this: BelongsToMany & _Self, keys: any[]) {
       return keys.map(v => {
         return this._castKey(v);
       });
     }
 
     /*Cast the given key to convert to primary key type.*/
-    _castKey(this: Relation & _Self, key: any) {
-      return this.getTypeSwapValue(this.related.getKeyType(), key);
+    _castKey(this: BelongsToMany & _Self, key: any) {
+      return this._getTypeSwapValue(this.related.getKeyType(), key);
     }
 
     /*Cast the given pivot attributes.*/
-    _castAttributes(this: Relation & this, attributes: any[]) {
+    _castAttributes(this: BelongsToMany & _Self, attributes: any[]) {
       return this._using ? this.newPivot().fill(attributes).getAttributes() : attributes;
     }
 
     /*Converts a given value to a given type value.*/
-    _getTypeSwapValue(this: Relation & _Self, type: string, value: any) {
+    _getTypeSwapValue(this: BelongsToMany & _Self, type: string, value: any) {
       switch (type.toLowerCase()) {
         case 'int':
         case 'integer':
-          return /*cast type int*/ value;
+          return /*cast type int*/ +value;
         case 'real':
         case 'float':
         case 'double':
-          return /*cast type float*/ value;
+          return /*cast type float*/ +value;
         case 'string':
-          return /*cast type string*/ value;
+          return /*cast type string*/ `${value}`;
         default:
           return value;
       }

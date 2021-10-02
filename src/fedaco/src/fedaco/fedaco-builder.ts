@@ -446,26 +446,34 @@ export class FedacoBuilder extends mixinGuardsAttributes(
     });
   }
 
-  // /*Paginate the given query.*/
-  // public paginate(perPage: number | null = null, columns: any[] = ['*'], pageName: string = 'page', page: number | null = null) {
-  //   let page = page || Paginator.resolveCurrentPage(pageName);
-  //   let perPage = perPage || this.model.getPerPage();
-  //   let results = (total = this.toBase().getCountForPagination()) ? this.forPage(page, perPage).get(columns) : this.model.newCollection();
-  //   return this.paginator(results, total, perPage, page, {
-  //     'path': Paginator.resolveCurrentPath(),
-  //     'pageName': pageName
-  //   });
-  // }
-  // /*Paginate the given query into a simple paginator.*/
-  // public simplePaginate(perPage: number | null = null, columns: any[] = ['*'], pageName: string = 'page', page: number | null = null) {
-  //   let page = page || Paginator.resolveCurrentPage(pageName);
-  //   let perPage = perPage || this.model.getPerPage();
-  //   this.skip((page - 1) * perPage).take(perPage + 1);
-  //   return this.simplePaginator(this.get(columns), perPage, page, {
-  //     'path': Paginator.resolveCurrentPath(),
-  //     'pageName': pageName
-  //   });
-  // }
+  /*Paginate the given query.*/
+  public async paginate(page: number   = 1,
+                        pageSize?: number,
+                        columns: any[] = ['*'],
+  ) {
+    pageSize      = pageSize || this._model.getPerPage();
+    const total   = await this.toBase().getCountForPagination();
+    const results = total > 0 ? await this.forPage(page, pageSize).get(columns) : [];
+    return {
+      items: results,
+      total,
+      pageSize, page
+    };
+  }
+
+  /*Paginate the given query into a simple paginator.*/
+  public async simplePaginate(page: number   = 1,
+                              pageSize?: number,
+                              columns: any[] = ['*']) {
+    pageSize = pageSize || this._model.getPerPage();
+    this.skip((page - 1) * pageSize).take(pageSize + 1);
+    const results = await this.get(columns);
+    return {
+      items: results,
+      pageSize, page
+    };
+  }
+
   // /*Paginate the given query into a cursor paginator.*/
   // public cursorPaginate(perPage: number | null = null, columns: any[] = ['*'], cursorName: string = 'cursor', cursor: Cursor | string | null = null) {
   //   let perPage = perPage || this.model.getPerPage();

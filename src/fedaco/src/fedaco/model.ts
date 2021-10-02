@@ -96,6 +96,7 @@ export declare namespace Model {
 
 
   export const snakeAttributes: boolean;
+
   export function addGlobalScope(scope: string, implementation: Scope | Function): void;
 }
 
@@ -137,6 +138,8 @@ export class Model extends mixinHasAttributes(
   _preventsLazyLoading = false;
 
   _classCastCache: any[];
+
+  _perPage: number = 10;
 
   static resolver: ConnectionResolverInterface;
 
@@ -477,7 +480,7 @@ export class Model extends mixinHasAttributes(
 
   /*Create a new instance of the given model.*/
   public newInstance(attributes: any = {}, exists = false): this {
-    const model = (<typeof Model>this.constructor).initAttributes(/*cast type array*/ attributes);
+    const model   = (<typeof Model>this.constructor).initAttributes(/*cast type array*/ attributes);
     model._exists = exists;
     model.setConnection(this.getConnectionName());
     model.setTable(this.getTable());
@@ -682,7 +685,7 @@ export class Model extends mixinHasAttributes(
     if (this.exists) {
       saved = this.isDirty() ? await this.performUpdate(query) : true;
     } else {
-      saved = await this.performInsert(query);
+      saved            = await this.performInsert(query);
       const connection = query.getConnection();
       if (!this.getConnectionName() && connection) {
         this.setConnection(connection.getName());
@@ -766,7 +769,7 @@ export class Model extends mixinHasAttributes(
       }
       await query.insert(attributes);
     }
-    this.exists = true;
+    this.exists             = true;
     this.wasRecentlyCreated = true;
     this._fireModelEvent('created', false);
     return true;
@@ -775,7 +778,7 @@ export class Model extends mixinHasAttributes(
   /*Insert the given attributes and set the ID on the model.*/
   protected async insertAndSetId(query: FedacoBuilder, attributes: any[]) {
     const keyName = this.getKeyName();
-    const id = await query.insertGetId(attributes, keyName);
+    const id      = await query.insertGetId(attributes, keyName);
     this.setAttribute(keyName, id);
   }
 
@@ -935,7 +938,8 @@ export class Model extends mixinHasAttributes(
     if (!this.exists) {
       return this;
     }
-    const result: Model = await this._setKeysForSelectQuery(this.newQueryWithoutScopes()).firstOrFail()
+    const result: Model = await this._setKeysForSelectQuery(
+      this.newQueryWithoutScopes()).firstOrFail();
     this.setRawAttributes(result._attributes);
     // this.load(this._relations.reject(relation => {
     //   return relation instanceof Pivot || is_object(relation) && in_array(AsPivot,
@@ -1129,7 +1133,7 @@ export class Model extends mixinHasAttributes(
   protected resolveChildRouteBindingQuery(childType: string, value: any, field: string | null) {
     // todo recovery me
     const relationship = this[plural(camelCase(childType))]();
-    field = field || relationship.getRelated().getRouteKeyName();
+    field              = field || relationship.getRelated().getRouteKeyName();
     // if (relationship instanceof HasManyThrough || relationship instanceof BelongsToMany) {
     //   return relationship.where(relationship.getRelated().getTable() + '.' + field, value);
     // } else {
@@ -1146,12 +1150,12 @@ export class Model extends mixinHasAttributes(
 
   /*Get the number of models to return per page.*/
   public getPerPage() {
-    return this.perPage;
+    return this._perPage;
   }
 
   /*Set the number of models to return per page.*/
   public setPerPage(perPage: number) {
-    this.perPage = perPage;
+    this._perPage = perPage;
     return this;
   }
 
@@ -1235,5 +1239,7 @@ export class Model extends mixinHasAttributes(
   //   this.initializeTraits();
   // }
 
-
+  static creteQuery(): FedacoBuilder {
+    return (new this()).newQuery();
+  }
 }
