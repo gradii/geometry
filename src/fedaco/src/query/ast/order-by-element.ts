@@ -6,7 +6,6 @@
 
 import { SqlNode } from '../sql-node';
 import { SqlVisitor } from '../sql-visitor';
-import { NestedPredicateExpression } from './fragment/expression/nested-predicate-expression';
 import { NestedExpression } from './fragment/nested-expression';
 
 
@@ -18,7 +17,7 @@ export class OrderByElement extends SqlNode {
     super();
   }
 
-  accept(visitor: SqlVisitor) {
-    return visitor.visitOrderByElement(this);
+  accept(visitor: SqlVisitor, ctx?: any) {
+    return visitor.visitOrderByElement(this, ctx);
   }
 }

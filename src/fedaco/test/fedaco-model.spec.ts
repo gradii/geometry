@@ -34,7 +34,7 @@ class Conn implements ConnectionInterface {
     throw new Error('Method not implemented.');
   }
 
-  getConfig(){
+  getConfig() {
 
   }
 
@@ -440,8 +440,8 @@ describe('test database eloquent model', () => {
     model.id  = 1;
     model.foo = 'bar';
     model.syncOriginal();
-    model.name   = 'taylor';
-    model.exists = true;
+    model.name    = 'taylor';
+    model._exists = true;
 
     const result = await model.save();
     expect(result).toBeTruthy();
@@ -488,7 +488,7 @@ describe('test database eloquent model', () => {
     model.syncOriginal();
     model.created_at = 'foo';
     model.updated_at = 'bar';
-    model.exists     = true;
+    model._exists    = true;
 
     const result = await model.save();
 
@@ -530,8 +530,8 @@ describe('test database eloquent model', () => {
     const spy4 = jest.spyOn(events, 'until').mockReturnValue(false);
     const spy5 = jest.spyOn(events, 'dispatch');
 
-    model.exists = true;
-    const result = await model.save();
+    model._exists = true;
+    const result  = await model.save();
 
     expect(result).toBeFalsy();
 
@@ -562,9 +562,9 @@ describe('test database eloquent model', () => {
     const spy4 = jest.spyOn(events, 'until').mockReturnValueOnce(true);
     const spy5 = jest.spyOn(events, 'dispatch');
 
-    model.exists = true;
-    model.foo    = 'bar';
-    const result = await model.save();
+    model._exists = true;
+    model.foo     = 'bar';
+    const result  = await model.save();
 
     expect(result).toBeFalsy();
 
@@ -602,8 +602,8 @@ describe('test database eloquent model', () => {
     const spy4 = jest.spyOn(events, 'until');
     const spy5 = jest.spyOn(events, 'dispatch');
 
-    model.exists = true;
-    const result = await model.save();
+    model._exists = true;
+    const result  = await model.save();
 
     expect(result).toBeFalsy();
 
@@ -641,9 +641,9 @@ describe('test database eloquent model', () => {
     model._timestamps = false;
     model.id          = 1;
     model.syncOriginal();
-    model.name   = 'taylor';
-    model.exists = true;
-    const result = await model.save();
+    model.name    = 'taylor';
+    model._exists = true;
+    const result  = await model.save();
 
     expect(result).toBeTruthy();
 
@@ -686,10 +686,10 @@ describe('test database eloquent model', () => {
 
     model.id = 1;
     model.syncOriginal();
-    model.id     = 2;
-    model.foo    = 'bar';
-    model.exists = true;
-    const result = await model.save();
+    model.id      = 2;
+    model.foo     = 'bar';
+    model._exists = true;
+    const result  = await model.save();
 
     expect(result).toBeTruthy();
 
@@ -870,14 +870,14 @@ describe('test database eloquent model', () => {
     const spy4 = jest.spyOn(events, 'until');
     const spy5 = jest.spyOn(events, 'dispatch');
 
-    model.name   = 'taylor';
-    model.exists = false;
+    model.name    = 'taylor';
+    model._exists = false;
 
     const result = await model.save();
 
     expect(result).toBeTruthy();
     expect(model.id).toEqual(1);
-    expect(model.exists).toBeTruthy();
+    expect(model._exists).toBeTruthy();
 
     expect(spy11).toBeCalledTimes(1);
     // expect(spy12).toReturnWith(true);
@@ -936,13 +936,13 @@ describe('test database eloquent model', () => {
     const spy4 = jest.spyOn(events, 'until');
     const spy5 = jest.spyOn(events, 'dispatch');
 
-    model.name   = 'taylor';
-    model.exists = false;
-    const result = await model.save();
+    model.name    = 'taylor';
+    model._exists = false;
+    const result  = await model.save();
 
     expect(result).toBeTruthy();
     expect(model.id).toBeUndefined();
-    expect(model.exists).toBeTruthy();
+    expect(model._exists).toBeTruthy();
 
     expect(spy11).toBeCalledTimes(1);
     expect(spy3).toBeCalledWith({
@@ -992,7 +992,7 @@ describe('test database eloquent model', () => {
     const result = await model.save();
 
     expect(result).toBeFalsy();
-    expect(model.exists).toBeFalsy();
+    expect(model._exists).toBeFalsy();
 
     expect(spy4.mock.calls).toEqual(
       [
@@ -1028,8 +1028,8 @@ describe('test database eloquent model', () => {
 
     FedacoModelStub.setEventDispatcher(events);
 
-    model.exists = true;
-    model.id     = 1;
+    model._exists = true;
+    model.id      = 1;
     await model.delete();
 
     expect(spy2).toBeCalledWith('id', '=', 1);
@@ -1056,13 +1056,13 @@ describe('test database eloquent model', () => {
       return 1;
     });
 
-    model.name   = 'taylor';
-    model.exists = false;
-    const result = await model.push();
+    model.name    = 'taylor';
+    model._exists = false;
+    const result  = await model.push();
 
     expect(result).toBeTruthy();
     expect(model.id).toEqual(1);
-    expect(model.exists).toBeTruthy();
+    expect(model._exists).toBeTruthy();
 
     expect(spy11).toBeCalledTimes(1);
     // expect(spy12).toReturnWith(true);
@@ -1093,14 +1093,14 @@ describe('test database eloquent model', () => {
       return 1;
     });
 
-    model.name   = 'taylor';
-    model.exists = false;
+    model.name    = 'taylor';
+    model._exists = false;
     model.setRelation('relationOne', null);
     const result = await model.push();
 
     expect(result).toBeTruthy();
     expect(model.id).toEqual(1);
-    expect(model.exists).toBeTruthy();
+    expect(model._exists).toBeTruthy();
     expect(model.relationOne).toBeNull();
 
     expect(spy11).toBeCalledTimes(1);
@@ -1126,8 +1126,8 @@ describe('test database eloquent model', () => {
       return 2;
     });
 
-    related1.name   = 'related1';
-    related1.exists = false;
+    related1.name    = 'related1';
+    related1._exists = false;
 
     // ######################################## model
     const model  = new FedacoModelStub();
@@ -1142,19 +1142,19 @@ describe('test database eloquent model', () => {
       return 1;
     });
 
-    model.name   = 'taylor';
-    model.exists = false;
+    model.name    = 'taylor';
+    model._exists = false;
     model.setRelation('relationOne', related1);
 
     const result = await model.push();
 
     expect(result).toBeTruthy();
     expect(model.id).toEqual(1);
-    expect(model.exists).toBeTruthy();
+    expect(model._exists).toBeTruthy();
     expect(model.relationOne.id).toEqual(2);
     expect(model.relationOne.exists).toBeTruthy();
     expect(related1.id).toEqual(2);
-    expect(related1.exists).toBeTruthy();
+    expect(related1._exists).toBeTruthy();
   });
 
   it('push empty many relation', async () => {
@@ -1173,14 +1173,14 @@ describe('test database eloquent model', () => {
       return 1;
     });
 
-    model.name   = 'taylor';
-    model.exists = false;
+    model.name    = 'taylor';
+    model._exists = false;
     model.setRelation('relationMany', []);
     const result = await model.push();
 
     expect(result).toBeTruthy();
     expect(model.id).toEqual(1);
-    expect(model.exists).toBeTruthy();
+    expect(model._exists).toBeTruthy();
     expect(model.relationMany).toEqual([]);
 
     expect(spy11).toBeCalledTimes(1);
@@ -1207,8 +1207,8 @@ describe('test database eloquent model', () => {
       return 2;
     });
 
-    related1.name   = 'related1';
-    related1.exists = false;
+    related1.name    = 'related1';
+    related1._exists = false;
 
     // #### related2
     const related2 = new FedacoModelStub();
@@ -1224,8 +1224,8 @@ describe('test database eloquent model', () => {
       return 3;
     });
 
-    related2.name   = 'related2';
-    related2.exists = false;
+    related2.name    = 'related2';
+    related2._exists = false;
 
     // #### model
     const model  = new FedacoModelStub();
@@ -1241,8 +1241,8 @@ describe('test database eloquent model', () => {
       return 1;
     });
 
-    model.name   = 'taylor';
-    model.exists = false;
+    model.name    = 'taylor';
+    model._exists = false;
 
     // ####
     model.setRelation('relationMany', [related1, related2]);
@@ -1250,7 +1250,7 @@ describe('test database eloquent model', () => {
     const result = await model.push();
     expect(result).toBeTruthy();
     expect(model.id).toEqual(1);
-    expect(model.exists).toBeTruthy();
+    expect(model._exists).toBeTruthy();
     expect(model.relationMany.length).toBe(2);
     expect(pluck('id')(model.relationMany)).toEqual([2, 3]);
   });
@@ -1898,11 +1898,11 @@ describe('test database eloquent model', () => {
   });
 
   it('clone model makes a fresh copy of the model', () => {
-    const clazz  = new FedacoModelStub();
-    clazz.id     = 1;
-    clazz.exists = true;
-    clazz.first  = 'taylor';
-    clazz.last   = 'otwell';
+    const clazz   = new FedacoModelStub();
+    clazz.id      = 1;
+    clazz._exists = true;
+    clazz.first   = 'taylor';
+    clazz.last    = 'otwell';
 
     clazz.created_at = clazz.freshTimestamp();
     clazz.updated_at = clazz.freshTimestamp();

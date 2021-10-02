@@ -4,7 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isNumber } from '@gradii/check-type';
 import { ColumnReferenceExpression } from '../query/ast/column-reference-expression';
 import { RawBindingExpression } from '../query/ast/expression/raw-binding-expression';
 import { RawExpression } from '../query/ast/expression/raw-expression';
@@ -14,6 +13,7 @@ import { UnionFragment } from '../query/ast/fragment/union-fragment';
 import { FromTable } from '../query/ast/from-table';
 import { JoinExpression } from '../query/ast/join-expression';
 import { JoinedTable } from '../query/ast/joined-table';
+import { OrderByElement } from '../query/ast/order-by-element';
 import { GrammarInterface } from './grammar.interface';
 import { mixinAggregate } from './mixins/aggregate';
 import { mixinBuildQueries } from './mixins/build-query';
@@ -89,7 +89,7 @@ export abstract class Builder extends mixinJoin(
   /*The having constraints for the query.*/
   _havings: any[] = [];
   /*The orderings for the query.*/
-  _orders: any[] = [];
+  _orders: (OrderByElement | RawBindingExpression | RawExpression)[] = [];
   /*The maximum number of records to return.*/
   _limit: number;
   /*The number of records to skip.*/

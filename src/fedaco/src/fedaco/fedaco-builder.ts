@@ -261,7 +261,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Find a model by its primary key or return fresh model instance.*/
-  public async findOrNew(id: any, columns: any[] = ['*']) {
+  public async findOrNew(id: any, columns: any[] = ['*']): Promise<Model> {
     const model = await this.find(id, columns);
     if (!isBlank(model)) {
       return model;
@@ -290,7 +290,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Create or update a record matching the attributes, and fill it with values.*/
-  public async updateOrCreate(attributes: any[], values: any[] = []) {
+  public async updateOrCreate(attributes: any, values: Record<string, any>) {
     const instance = await this.firstOrNew(attributes);
     await instance.fill(values).save();
     return instance;

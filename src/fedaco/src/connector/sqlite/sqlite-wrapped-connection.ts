@@ -3,10 +3,11 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
-import { Database, Statement } from 'sqlite3';
+import { Database } from 'sqlite3';
+import { WrappedConnection } from '../wrapped-connection';
 import { SqliteWrappedStmt } from './sqlite-wrapped-stmt';
 
-export class SqliteWrappedConnection {
+export class SqliteWrappedConnection implements WrappedConnection {
 
   constructor(public driver: Database) {
 
@@ -25,15 +26,15 @@ export class SqliteWrappedConnection {
     // return new SqliteWrappedStmt(this.driver.prepare(sql));
   }
 
-  run(sql: string, bindings: any[], callback: (err: string, rows: any[]) => void) {
-    this.driver.run(sql, bindings, callback);
-  }
+  // run(sql: string, bindings: any[], callback: (err: string, rows: any[]) => void) {
+  //   this.driver.run(sql, bindings, callback);
+  // }
+  //
+  // async get(sql: string, bindings: any[], callback: (err: string, rows: any[]) => void) {
+  //   // return this.driver.get(sql, bindings, callback);
+  // }
 
-  get(sql: string, bindings: any[], callback: (err: string, rows: any[]) => void) {
-    this.driver.get(sql, bindings, callback);
-  }
-
-  async lastInsertId() {
+  async lastInsertId(): Promise<number> {
     return new Promise((ok, fail) => {
       this.driver.get('select last_insert_rowid()', (err, data) => {
         if (err) {

@@ -248,7 +248,7 @@ export class QueryBuilder extends Builder {
 
   /*Retrieve column values from rows represented as objects.*/
   protected pluckFromColumn(queryResult: any[], column: string) {
-    let results = [];
+    const results = [];
     // if (isBlank(key)) {
     //   results = [];
     for (const row of queryResult) {
@@ -454,22 +454,22 @@ export class QueryBuilder extends Builder {
   }
 
   /*Increment a column's value by a given amount.*/
-  public increment(column: string, amount: number | number = 1, extra: any[] = []) {
+  public increment(column: string, amount: number = 1, extra: any[] = []) {
     if (!isNumber(amount)) {
       throw new Error('InvalidArgumentException Non-numeric value passed to increment method.');
     }
-    let wrapped = this._grammar.wrap(column);
-    let columns = {[column]: raw(`${wrapped} + ${amount}`), ...extra};
+    const wrapped = this._grammar.wrap(column);
+    const columns = {[column]: raw(`${wrapped} + ${amount}`), ...extra};
     return this.update(columns);
   }
 
   /*Decrement a column's value by a given amount.*/
-  public decrement(column: string, amount: number | number = 1, extra: any[] = []) {
+  public decrement(column: string, amount: number = 1, extra: any[] = []) {
     if (!isNumber(amount)) {
       throw new Error('InvalidArgumentException Non-numeric value passed to decrement method.');
     }
-    let wrapped = this._grammar.wrap(column);
-    let columns = {[column]: raw(`${wrapped} - ${amount}`), ...extra};
+    const wrapped = this._grammar.wrap(column);
+    const columns = {[column]: raw(`${wrapped} - ${amount}`), ...extra};
     return this.update(columns);
   }
 

@@ -4,8 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { isBlank } from '@gradii/check-type';
 import { Constructor } from '../../helper/constructor';
 import { QueryBuilder } from '../../query-builder/query-builder';
+import { RejectOrderElementExpression } from '../../query/ast/fragment/order/reject-order-element-expression';
+import { Identifier } from '../../query/ast/identifier';
 
 export interface QueryBuilderLimitOffset {
   limit(value: number): this;
@@ -17,6 +20,10 @@ export interface QueryBuilderLimitOffset {
   take(value: number): this;
 
   forPage(pageNo: number, pageSize: number): this;
+
+  forPageBeforeId(perPage?: number, lastId?: number, column ?: string): this;
+
+  forPageAfterId(perPage?: number, lastId?: number, column ?: string): this;
 }
 
 export type QueryBuilderLimitOffsetCtor = Constructor<QueryBuilderLimitOffset>;
@@ -59,6 +66,32 @@ export function mixinLimitOffset<T extends Constructor<any>>(base: T): QueryBuil
 
     public forPage(this: QueryBuilder & _Self, pageNo: number, pageSize: number) {
       return this.offset((pageNo - 1) * pageSize).limit(pageSize);
+    }
+
+    public forPageBeforeId(perPage = 15, lastId = 0, column = 'id'): this {
+      this._orders = this._removeExistingOrdersFor(column);
+      if (!isBlank(lastId)) {
+        this.where(column, '<', lastId);
+      }
+      return this.orderBy(column, 'desc').limit(perPage);
+    }
+
+    public forPageAfterId(perPage = 15, lastId = 0, column = 'id'): this {
+      this._orders = this._removeExistingOrdersFor(column);
+      if (!isBlank(lastId)) {
+        this.where(column, '>', lastId);
+      }
+      return this.orderBy(column, 'asc').limit(perPage);
+    }
+
+    /*Get an array with all orders with a given column removed.*/
+    protected _removeExistingOrdersFor(column: string) {
+      return [
+        new RejectOrderElementExpression(
+          [new Identifier(column)],
+          this._orders
+        )
+      ];
     }
   };
 }

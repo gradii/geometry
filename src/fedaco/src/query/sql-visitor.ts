@@ -90,7 +90,7 @@ export interface SqlVisitor {
 
   visitOrderByClause(node: SqlNode);
 
-  visitOrderByElement(node: SqlNode);
+  visitOrderByElement(node: SqlNode, ctx?: any);
 
   visitParenthesizedExpression(node: SqlNode);
 
@@ -120,11 +120,13 @@ export interface SqlVisitor {
 
   visitUnionFragment(node: SqlNode);
 
-  visitUpdateSpecification(node: SqlNode);
+  visitUpdateSpecification(node: SqlNode): string;
 
   visitValuesInsertSource(node: SqlNode);
 
   visitWhereClause(node: SqlNode);
 
   visitLockClause(node: SqlNode);
+
+  visitRejectOrderElementExpression(node: SqlNode): string;
 }

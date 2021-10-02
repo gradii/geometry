@@ -84,7 +84,7 @@ export function mixinHasTimestamps<T extends Constructor<any>>(base: T): HasTime
         this.setUpdatedAt(time);
       }
       let createdAtColumn = this.getCreatedAtColumn();
-      if (!this.exists && !isBlank(createdAtColumn) && !this.isDirty(createdAtColumn)) {
+      if (!this._exists && !isBlank(createdAtColumn) && !this.isDirty(createdAtColumn)) {
         this.setCreatedAt(time);
       }
     }

@@ -12,7 +12,7 @@ export abstract class SqlNode {
     // return this.dump(this);
   }
 
-  public accept(visitor: SqlVisitor) {
+  public accept(visitor: SqlVisitor, ctx?: any) {
     // throw ASTException.noDispatchForNode(this);
   }
 

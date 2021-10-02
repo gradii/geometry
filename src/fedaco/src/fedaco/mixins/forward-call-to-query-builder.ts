@@ -133,6 +133,10 @@ export interface ForwardCallToQueryBuilder {
 
   forPage(...args: any[]): this;
 
+  forPageBeforeId(...args: any[]): this;
+
+  forPageAfterId(...args: any[]): this;
+
   union(...args: any[]): this;
 
   unionAll(...args: any[]): this;
@@ -376,11 +380,11 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
       return this.#forwardCallToQueryBuilder('truncate', args);
     }
 
-    updateOrInsert(...args: any[]) {
+    async updateOrInsert(...args: any[]) {
       return this.#forwardCallToQueryBuilder('updateOrInsert', args);
     }
 
-    insert(...args: any[]) {
+    async insert(...args: any[]) {
       return this.#passThroughToQueryBuilder('insert', args);
     }
 
@@ -522,6 +526,14 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
 
     forPage(...args: any[]) {
       return this.#forwardCallToQueryBuilder('forPage', args);
+    }
+
+    forPageBeforeId(...args: any[]) {
+      return this.#forwardCallToQueryBuilder('forPageBeforeId', args);
+    }
+
+    forPageAfterId(...args: any[]) {
+      return this.#forwardCallToQueryBuilder('forPageAfterId', args);
     }
 
     union(...args: any[]) {

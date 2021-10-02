@@ -13,7 +13,7 @@ export function fromAttributes(clazz: typeof Model, parent: Model, attributes: a
   instance.setConnection(parent.getConnectionName()).setTable(table).forceFill(
     attributes).syncOriginal();
   instance.pivotParent = parent;
-  instance.exists      = exists;
+  instance._exists      = exists;
   return instance;
 }
 

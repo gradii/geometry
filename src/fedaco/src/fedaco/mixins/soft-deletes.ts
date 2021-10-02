@@ -96,7 +96,7 @@ export function mixinSoftDeletes<T extends Constructor<{}>>(base: T): SoftDelete
     /*Perform the actual delete query on this model instance.*/
     async _performDeleteOnModel(this: Model & this) {
       if (this._forceDeleting) {
-        this.exists = false;
+        this._exists = false;
         return this._setKeysForSaveQuery(this.newModelQuery()).delete();
       }
       return this._runSoftDelete();
@@ -127,7 +127,7 @@ export function mixinSoftDeletes<T extends Constructor<{}>>(base: T): SoftDelete
       }
       // @ts-ignore
       this[this.getDeletedAtColumn()] = null;
-      this.exists                     = true;
+      this._exists                     = true;
       let result                      = await this.save();
       this._fireModelEvent('restored', false);
       return result;

@@ -1,5 +1,5 @@
 import { isArray } from '@gradii/check-type';
-import * as fs from 'fs';
+import { finalize, tap } from 'rxjs/operators';
 import { Column } from '../src/annotation/column/column';
 import { CreatedAtColumn } from '../src/annotation/column/created-at.column';
 import { PrimaryColumn } from '../src/annotation/column/primary.column';
@@ -120,11 +120,13 @@ describe('test database eloquent integration', () => {
       'default': 'tmp/integration.sqlite',
       'second' : 'tmp/integration-second.sqlite'
     };
-    for (const it of Object.values(files)) {
-      if (it !== ':memory:') {
-        fs.unlinkSync(it);
-      }
-    }
+    // for (const it of Object.values(files)) {
+    //   if (it !== ':memory:') {
+    //     if (fs.existsSync(it)) {
+    //       fs.unlinkSync(it);
+    //     }
+    //   }
+    // }
 
     const db = new DatabaseConfig();
     db.addConnection({
@@ -137,7 +139,7 @@ describe('test database eloquent integration', () => {
     }, 'second_connection');
     db.bootEloquent();
     db.setAsGlobal();
-    await createSchema();
+    // await createSchema();
   });
 
   afterEach(async () => {
@@ -235,11 +237,11 @@ describe('test database eloquent integration', () => {
   });
 
   it('basic model collection retrieval', async () => {
-    await new EloquentTestUser().newQuery().create({
+    await EloquentTestUser.createQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    await new EloquentTestUser().newQuery().create({
+    await EloquentTestUser.createQuery().create({
       'id'   : 2,
       'email': 'abigailotwell@gmail.com'
     });
@@ -306,40 +308,40 @@ describe('test database eloquent integration', () => {
   });
 
   it('count for pagination with grouping', async () => {
-    await EloquentTestUser.creteQuery().create({
+    await EloquentTestUser.createQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    await EloquentTestUser.creteQuery().create({
+    await EloquentTestUser.createQuery().create({
       'id'   : 2,
       'email': 'abigailotwell@gmail.com'
     });
-    await EloquentTestUser.creteQuery().create({
+    await EloquentTestUser.createQuery().create({
       'id'   : 3,
       'email': 'foo@gmail.com'
     });
-    await EloquentTestUser.creteQuery().create({
+    await EloquentTestUser.createQuery().create({
       'id'   : 4,
       'email': 'foo@gmail.com'
     });
-    const query = EloquentTestUser.creteQuery().groupBy('email').getQuery();
+    const query = EloquentTestUser.createQuery().groupBy('email').getQuery();
     expect(await query.getCountForPagination()).toEqual(3);
   });
 
   it('count for pagination with grouping and sub selects', async () => {
-    const user1 = await EloquentTestUser.creteQuery().create({
+    const user1 = await EloquentTestUser.createQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    await EloquentTestUser.creteQuery().create({
+    await EloquentTestUser.createQuery().create({
       'id'   : 2,
       'email': 'abigailotwell@gmail.com'
     });
-    await EloquentTestUser.creteQuery().create({
+    await EloquentTestUser.createQuery().create({
       'id'   : 3,
       'email': 'foo@gmail.com'
     });
-    await EloquentTestUser.creteQuery().create({
+    await EloquentTestUser.createQuery().create({
       'id'   : 4,
       'email': 'foo@gmail.com'
     });
@@ -348,139 +350,157 @@ describe('test database eloquent integration', () => {
       'id'   : 5,
       'email': 'friend@gmail.com'
     });
-    const query = await EloquentTestUser.creteQuery().select({
+    const query = await EloquentTestUser.createQuery().select({
       0              : 'id',
       'friends_count': await EloquentTestUser
-        .creteQuery()
+        .createQuery()
         .whereColumn('friend_id', 'user_id')
         .count()
     }).groupBy('email').getQuery();
     expect(await query.getCountForPagination()).toEqual(4);
   });
 
-//   it('first or create', () => {
-//     let user1 = EloquentTestUser.firstOrCreate({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     expect(user1.email).toBe('taylorotwell@gmail.com');
-//     expect(user1.name).toNull();
-//     let user2 = EloquentTestUser.firstOrCreate({
-//       'email': 'taylorotwell@gmail.com'
-//     }, {
-//       'name': 'Taylor Otwell'
-//     });
-//     expect(user2.id).toEqual(user1.id);
-//     expect(user2.email).toBe('taylorotwell@gmail.com');
-//     expect(user2.name).toNull();
-//     let user3 = EloquentTestUser.firstOrCreate({
-//       'email': 'abigailotwell@gmail.com'
-//     }, {
-//       'name': 'Abigail Otwell'
-//     });
-//     expect(user1.id).toNotEquals(user3.id);
-//     expect(user3.email).toBe('abigailotwell@gmail.com');
-//     expect(user3.name).toBe('Abigail Otwell');
-//   });
-//   it('update or create', () => {
-//     let user1 = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     let user2 = EloquentTestUser.updateOrCreate({
-//       'email': 'taylorotwell@gmail.com'
-//     }, {
-//       'name': 'Taylor Otwell'
-//     });
-//     expect(user2.id).toEqual(user1.id);
-//     expect(user2.email).toBe('taylorotwell@gmail.com');
-//     expect(user2.name).toBe('Taylor Otwell');
-//     let user3 = EloquentTestUser.updateOrCreate({
-//       'email': 'themsaid@gmail.com'
-//     }, {
-//       'name': 'Mohamed Said'
-//     });
-//     expect(user3.name).toBe('Mohamed Said');
-//     expect(2).toEqual(EloquentTestUser.count());
-//   });
-//   it('update or create on different connection', () => {
-//     EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     EloquentTestUser.on('second_connection').updateOrCreate({
-//       'email': 'taylorotwell@gmail.com'
-//     }, {
-//       'name': 'Taylor Otwell'
-//     });
-//     EloquentTestUser.on('second_connection').updateOrCreate({
-//       'email': 'themsaid@gmail.com'
-//     }, {
-//       'name': 'Mohamed Said'
-//     });
-//     expect(1).toEqual(EloquentTestUser.count());
-//     expect(2).toEqual(EloquentTestUser.on('second_connection').count());
-//   });
-//   it('check and create methods on multi connections', () => {
-//     EloquentTestUser.create({
-//       'id'   : 1,
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     EloquentTestUser.on('second_connection').find(EloquentTestUser.on('second_connection').insert({
-//       'id'   : 2,
-//       'email': 'themsaid@gmail.com'
-//     }));
-//     let user1 = EloquentTestUser.on('second_connection').findOrNew(1);
-//     let user2 = EloquentTestUser.on('second_connection').findOrNew(2);
-//     expect(user1.exists).toFalse();
-//     expect(user2.exists).toBeTruthy();
-//     expect(user1.getConnectionName()).toBe('second_connection');
-//     expect(user2.getConnectionName()).toBe('second_connection');
-//     let user1 = EloquentTestUser.on('second_connection').firstOrNew({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     let user2 = EloquentTestUser.on('second_connection').firstOrNew({
-//       'email': 'themsaid@gmail.com'
-//     });
-//     expect(user1.exists).toFalse();
-//     expect(user2.exists).toBeTruthy();
-//     expect(user1.getConnectionName()).toBe('second_connection');
-//     expect(user2.getConnectionName()).toBe('second_connection');
-//     expect(EloquentTestUser.on('second_connection').count()).toEqual(1);
-//     let user1 = EloquentTestUser.on('second_connection').firstOrCreate({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     let user2 = EloquentTestUser.on('second_connection').firstOrCreate({
-//       'email': 'themsaid@gmail.com'
-//     });
-//     expect(user1.getConnectionName()).toBe('second_connection');
-//     expect(user2.getConnectionName()).toBe('second_connection');
-//     expect(EloquentTestUser.on('second_connection').count()).toEqual(2);
-//   });
-//   it('creating model with empty attributes', () => {
-//     let model = EloquentTestNonIncrementing.create([]);
-//     expect(model.exists).toFalse();
-//     expect(model.wasRecentlyCreated).toFalse();
-//   });
-//   it('chunk by id with non incrementing key', () => {
-//     EloquentTestNonIncrementingSecond.create({
-//       'name': ' First'
-//     });
-//     EloquentTestNonIncrementingSecond.create({
-//       'name': ' Second'
-//     });
-//     EloquentTestNonIncrementingSecond.create({
-//       'name': ' Third'
-//     });
-//     let i = 0;
-//     EloquentTestNonIncrementingSecond.query().chunkById(2, users => {
-//       if (!i) {
-//         this.assertSame(' First', users[0].name);
-//         this.assertSame(' Second', users[1].name);
-//       } else {
-//         this.assertSame(' Third', users[0].name);
-//       }
-//       i++;
-//     }, 'name');
-//     expect(i).toEqual(2);
-//   });
+  it('first or create', async () => {
+    const user1 = await EloquentTestUser.createQuery().firstOrCreate({
+      'email': 'taylorotwell@gmail.com'
+    });
+    expect(user1.email).toBe('taylorotwell@gmail.com');
+    expect(user1.name).toBeUndefined();
+    const user2 = await EloquentTestUser.createQuery().firstOrCreate({
+      'email': 'taylorotwell@gmail.com'
+    }, {
+      'name': 'Taylor Otwell'
+    });
+    expect(user2.id).toEqual(user1.id);
+    expect(user2.email).toBe('taylorotwell@gmail.com');
+    expect(user2.name).toBeNull();
+    const user3 = await EloquentTestUser.createQuery().firstOrCreate({
+      'email': 'abigailotwell@gmail.com'
+    }, {
+      'name': 'Abigail Otwell'
+    });
+    expect(user1.id).not.toEqual(user3.id);
+    expect(user3.email).toBe('abigailotwell@gmail.com');
+    expect(user3.name).toBe('Abigail Otwell');
+  });
+
+  it('update or create', async () => {
+    const user1 = await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    const user2 = await EloquentTestUser.createQuery().updateOrCreate({
+      'email': 'taylorotwell@gmail.com'
+    }, {
+      'name': 'Taylor Otwell'
+    });
+    expect(user2.id).toEqual(user1.id);
+    expect(user2.email).toBe('taylorotwell@gmail.com');
+    expect(user2.name).toBe('Taylor Otwell');
+    const user3 = await EloquentTestUser.createQuery().updateOrCreate({
+      'email': 'themsaid@gmail.com'
+    }, {
+      'name': 'Mohamed Said'
+    });
+    expect(user3.name).toBe('Mohamed Said');
+    expect(await EloquentTestUser.createQuery().count()).toBe(2);
+  });
+
+  it('update or create on different connection', async () => {
+    await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    await EloquentTestUser.useConnection('second_connection').updateOrCreate({
+      'email': 'taylorotwell@gmail.com'
+    }, {
+      'name': 'Taylor Otwell'
+    });
+    await EloquentTestUser.useConnection('second_connection').updateOrCreate({
+      'email': 'themsaid@gmail.com'
+    }, {
+      'name': 'Mohamed Said'
+    });
+    expect(await EloquentTestUser.createQuery().count()).toBe(1);
+    expect(await EloquentTestUser.useConnection('second_connection').count()).toBe(2);
+  });
+
+  it('check and create methods on multi connections', async () => {
+    await EloquentTestUser.createQuery().create({
+      'id'   : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+    await EloquentTestUser.useConnection('second_connection')
+      .find(
+        EloquentTestUser.useConnection('second_connection').insert({
+          'id'   : 2,
+          'email': 'themsaid@gmail.com'
+        })
+      );
+    let user1 = await EloquentTestUser.useConnection('second_connection').findOrNew(1);
+    let user2 = await EloquentTestUser.useConnection('second_connection').findOrNew(2);
+    expect(user1._exists).toBeFalsy();
+    expect(user2._exists).toBeTruthy();
+    expect(user1.getConnectionName()).toBe('second_connection');
+    expect(user2.getConnectionName()).toBe('second_connection');
+    user1 = await EloquentTestUser.useConnection('second_connection').firstOrNew({
+      'email': 'taylorotwell@gmail.com'
+    });
+    user2 = await EloquentTestUser.useConnection('second_connection').firstOrNew({
+      'email': 'themsaid@gmail.com'
+    });
+    expect(user1._exists).toBeFalsy();
+    expect(user2._exists).toBeTruthy();
+    expect(user1.getConnectionName()).toBe('second_connection');
+    expect(user2.getConnectionName()).toBe('second_connection');
+    expect(await EloquentTestUser.useConnection('second_connection').count()).toEqual(1);
+    user1 = await EloquentTestUser.useConnection('second_connection').firstOrCreate({
+      'email': 'taylorotwell@gmail.com'
+    });
+    user2 = await EloquentTestUser.useConnection('second_connection').firstOrCreate({
+      'email': 'themsaid@gmail.com'
+    });
+    expect(user1.getConnectionName()).toBe('second_connection');
+    expect(user2.getConnectionName()).toBe('second_connection');
+    expect(await EloquentTestUser.useConnection('second_connection').count()).toEqual(2);
+  });
+
+  it('creating model with empty attributes', async () => {
+    const model = await EloquentTestNonIncrementing.createQuery().create({});
+    expect(model._exists).toBeFalsy();
+    expect(model._wasRecentlyCreated).toBeFalsy();
+  });
+
+  it('chunk by id with non incrementing key', async () => {
+    await EloquentTestNonIncrementingSecond.createQuery().create({
+      'name': ' First'
+    });
+    await EloquentTestNonIncrementingSecond.createQuery().create({
+      'name': ' Second'
+    });
+    await EloquentTestNonIncrementingSecond.createQuery().create({
+      'name': ' Third'
+    });
+    let i     = 0;
+    const spy = jest.fn((users) => {
+      if (!i) {
+        expect(users[0].name).toBe(' First');
+        expect(users[1].name).toBe(' Second');
+      } else {
+        expect(users[0].name).toBe(' Third');
+      }
+      i++;
+    });
+    await EloquentTestNonIncrementingSecond.createQuery().chunkById(2, 'name')
+      .pipe(
+        finalize(() => {
+          expect(i).toEqual(2);
+        }),
+        tap(spy)
+      )
+      .toPromise();
+
+    expect(spy).toBeCalled();
+  });
+
 //   it('each by id with non incrementing key', () => {
 //     EloquentTestNonIncrementingSecond.create({
 //       'name': ' First'
@@ -1918,6 +1938,9 @@ export class EloquentTestUser extends Model {
   id;
 
   @Column()
+  name;
+
+  @Column()
   email;
 
   @BelongsToManyColumn({
@@ -1976,23 +1999,26 @@ export class EloquentTestUser extends Model {
 // export class EloquentTestUserWithSpaceInColumnName extends EloquentTestUser {
 //   protected table: any = "users_with_space_in_colum_name";
 // }
-// export class EloquentTestNonIncrementing extends Eloquent {
-//   protected table: any = "non_incrementing_users";
-//   protected guarded: any = [];
-//   public incrementing: any = false;
-//   public timestamps: any = false;
-// }
-// export class EloquentTestNonIncrementingSecond extends EloquentTestNonIncrementing {
-//   protected connection: any = "second_connection";
-// }
-// export class EloquentTestUserWithGlobalScope extends EloquentTestUser {
-//   public static boot() {
-//     super.boot();
-//     EloquentTestUserWithGlobalScope.addGlobalScope(builder => {
-//       builder._with("posts");
-//     });
-//   }
-// }
+export class EloquentTestNonIncrementing extends Model {
+  _table: any               = 'non_incrementing_users';
+  _guarded: any             = [];
+  public _incrementing: any = false;
+  public _timestamps: any   = false;
+}
+
+export class EloquentTestNonIncrementingSecond extends EloquentTestNonIncrementing {
+  _connection: any = 'second_connection';
+}
+
+export class EloquentTestUserWithGlobalScope extends EloquentTestUser {
+  // public static boot() {
+  //   super.boot();
+  //   EloquentTestUserWithGlobalScope.addGlobalScope(builder => {
+  //     builder._with('posts');
+  //   });
+  // }
+}
+
 // export class EloquentTestUserWithOmittingGlobalScope extends EloquentTestUser {
 //   public static boot() {
 //     super.boot();

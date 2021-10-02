@@ -8,6 +8,7 @@ import { isArray, isBlank, isBoolean, isFunction } from '@gradii/check-type';
 import { format } from 'date-fns';
 import { BaseGrammar } from './base-grammar';
 import { SqliteWrappedConnection } from './connector/sqlite/sqlite-wrapped-connection';
+import { WrappedConnection } from './connector/wrapped-connection';
 import { WrappedStmt } from './connector/wrapped-stmt';
 import { DatabaseTransactionsManager } from './database-transactions-manager';
 import { DbalConnection } from './dbal/connection';
@@ -30,7 +31,7 @@ import { SchemaBuilder } from './schema/schema-builder';
 
 export class Connection implements ConnectionInterface {
   /*The active PDO connection.*/
-  protected pdo: Function;
+  protected pdo: WrappedConnection | Function;
   /*The active PDO connection used for reads.*/
   protected readPdo: Function;
   /*The name of the connected database.*/
@@ -192,11 +193,11 @@ export class Connection implements ConnectionInterface {
 
   /*Execute an SQL statement and return the boolean result.*/
   public async statement(query: string, bindings: any = []) {
-    return this.run(query, bindings, async (q: string, _bindings: any) => {
+    return await this.run(query, bindings, async (q: string, _bindings: any) => {
       if (this.dryRun()) {
         return true;
       }
-      const pdo: SqliteWrappedConnection = (await this.getPdo());
+      const pdo: WrappedConnection = (await this.getPdo());
 
       const statement = await pdo.prepare(q);
       statement.bindValues(this.prepareBindings(_bindings));
@@ -221,17 +222,17 @@ export class Connection implements ConnectionInterface {
     });
   }
 
-  /*Run a raw, unprepared query against the PDO connection.*/
-  public async unprepared(query: string) {
-    return this.run(query, [], async (q: string) => {
-      if (this.dryRun()) {
-        return true;
-      }
-      const change = (await this.getPdo()).exec(q) !== false;
-      this.recordsHaveBeenModified(change);
-      return change;
-    });
-  }
+  // /*Run a raw, unprepared query against the PDO connection.*/
+  // public async unprepared(query: string) {
+  //   return this.run(query, [], async (q: string) => {
+  //     if (this.dryRun()) {
+  //       return true;
+  //     }
+  //     const change = (await this.getPdo()).exec(q) !== false;
+  //     this.recordsHaveBeenModified(change);
+  //     return change;
+  //   });
+  // }
 
   /*Execute the given callback in "dry run" mode.*/
   public pretend(callback: Function) {
@@ -296,7 +297,7 @@ export class Connection implements ConnectionInterface {
     try {
       result = await this.runQueryCallback(query, bindings, callback);
     } catch (e) {
-      result = await this.handleQueryException(e, query, bindings, callback);
+      result = this.handleQueryException(e, query, bindings, callback);
     }
     this.logQuery(query, bindings, this.getElapsedTime(start));
     return result;
@@ -466,9 +467,10 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Get the current PDO connection.*/
-  public async getPdo() {
+  public async getPdo(): Promise<WrappedConnection> {
     if (isFunction(this.pdo)) {
-      return this.pdo = await this.pdo.call(this);
+      this.pdo = await this.pdo.call(this);
+      return this.pdo as WrappedConnection;
     }
     return this.pdo;
   }

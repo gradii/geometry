@@ -4,7 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isString } from '@gradii/check-type';
+import { isBlank, isString } from '@gradii/check-type';
+import { uniq } from 'ramda';
 import { AssignmentSetClause } from '../../query/ast/assignment-set-clause';
 import { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
 import { BindingVariable } from '../../query/ast/binding-variable';
@@ -29,6 +30,7 @@ import { NestedPredicateExpression } from '../../query/ast/fragment/expression/n
 import { JoinFragment } from '../../query/ast/fragment/join-fragment';
 import { JsonPathColumn } from '../../query/ast/fragment/json-path-column';
 import { NestedExpression } from '../../query/ast/fragment/nested-expression';
+import { RejectOrderElementExpression } from '../../query/ast/fragment/order/reject-order-element-expression';
 import { UnionFragment } from '../../query/ast/fragment/union-fragment';
 import { FromClause } from '../../query/ast/from-clause';
 import { FromTable } from '../../query/ast/from-table';
@@ -86,7 +88,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return 'hello';
   }
 
-  visitAggregateFragment(node: AggregateFragment) {
+  visitAggregateFragment(node: AggregateFragment): string {
     throw new Error('not implement yet');
     // todo
     // return this._grammar.compileAggregateFragment(
@@ -413,11 +415,23 @@ export class QueryBuilderVisitor implements SqlVisitor {
   }
 
   visitOrderByClause(node: OrderByClause) {
-    return `ORDER BY ${node.elements.map(it => it.accept(this)).join(', ')}`;
+    return `ORDER BY ${node.elements.map(it => it.accept(this))
+      .filter(it => !isBlank(it) && it.length > 0)
+      .join(', ')}`;
   }
 
-  visitOrderByElement(node: OrderByElement) {
-    return `${node.column.accept(this)} ${node.direction.toUpperCase()}`;
+  visitOrderByElement(node: OrderByElement, ctx?: any) {
+    let rejectColumns = [];
+    if (ctx && ctx.rejectColumns) {
+      rejectColumns = ctx.rejectColumns;
+    }
+    const columnName = `${node.column.accept(this)}`;
+    if (rejectColumns.includes(columnName)) {
+      return '';
+    } else {
+      const direction = `${node.direction.toUpperCase()}`;
+      return `${columnName} ${direction}`;
+    }
   }
 
   visitParenthesizedExpression(node: ParenthesizedExpression) {
@@ -592,7 +606,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
     throw new Error('should not run');
   }
 
-  visitUpdateSpecification(node: UpdateSpecification) {
+  visitUpdateSpecification(node: UpdateSpecification): string {
     let sql = `UPDATE ${node.target.accept(this)}`;
 
     sql += ` SET ${node.setClauses.map(
@@ -644,6 +658,14 @@ export class QueryBuilderVisitor implements SqlVisitor {
       return node.value;
     }
     throw new Error('unexpected lock clause');
+  }
+
+  visitRejectOrderElementExpression(node: RejectOrderElementExpression, ctx?: any): string {
+    const parentRejectColumns = ctx && ctx.rejectColumns ? ctx.rejectColumns : [];
+    const rejectColumns       = node.columns.map(it => it.accept(this));
+    return `${node.orderByElements.map(it => it.accept(this, {
+      rejectColumns: uniq([...rejectColumns, ...parentRejectColumns])
+    })).filter(it => !isBlank(it) && it.length > 0).join(', ')}`;
   }
 }
 

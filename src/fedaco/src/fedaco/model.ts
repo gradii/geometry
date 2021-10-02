@@ -115,7 +115,7 @@ export class Model extends mixinHasAttributes(
   )
 ) {
   /*Indicates if the model exists.*/
-  exists = false;
+  _exists = false;
   /*Indicates if the model was inserted during the current request lifecycle.*/
   _wasRecentlyCreated = false;
   /*The connection name for the model.*/
@@ -614,7 +614,7 @@ export class Model extends mixinHasAttributes(
   protected incrementOrDecrement(column: string, amount: number | number, extra: any[],
                                  method: string) {
     const query = this.newQueryWithoutRelationships();
-    if (!this.exists) {
+    if (!this._exists) {
       // @ts-ignore
       return query[method](column, amount, extra);
     }
@@ -634,7 +634,7 @@ export class Model extends mixinHasAttributes(
 
   /*Update the model in the database.*/
   public update(attributes: any[] = [], options: any = {}) {
-    if (!this.exists) {
+    if (!this._exists) {
       return false;
     }
     return this.fill(attributes).save(options);
@@ -642,7 +642,7 @@ export class Model extends mixinHasAttributes(
 
   /*Update the model in the database without raising any events.*/
   public updateQuietly(attributes: any[] = [], options: any[] = []) {
-    if (!this.exists) {
+    if (!this._exists) {
       return false;
     }
     return this.fill(attributes).saveQuietly(options);
@@ -682,7 +682,7 @@ export class Model extends mixinHasAttributes(
       return false;
     }
     let saved;
-    if (this.exists) {
+    if (this._exists) {
       saved = this.isDirty() ? await this.performUpdate(query) : true;
     } else {
       saved            = await this.performInsert(query);
@@ -769,7 +769,7 @@ export class Model extends mixinHasAttributes(
       }
       await query.insert(attributes);
     }
-    this.exists             = true;
+    this._exists            = true;
     this.wasRecentlyCreated = true;
     this._fireModelEvent('created', false);
     return true;
@@ -810,7 +810,7 @@ export class Model extends mixinHasAttributes(
     if (isBlank(this.getKeyName())) {
       throw new Error('LogicException No primary key defined on model.');
     }
-    if (!this.exists) {
+    if (!this._exists) {
       return null;
     }
     if (this._fireModelEvent('deleting') === false) {
@@ -832,7 +832,7 @@ export class Model extends mixinHasAttributes(
   /*Perform the actual delete query on this model instance.*/
   protected async performDeleteOnModel() {
     await this._setKeysForSaveQuery(this.newModelQuery()).delete();
-    this.exists = false;
+    this._exists = false;
   }
 
   /*Begin querying the model.*/
@@ -935,7 +935,7 @@ export class Model extends mixinHasAttributes(
 
   /*Reload the current model instance with fresh attributes from the database.*/
   public async refresh() {
-    if (!this.exists) {
+    if (!this._exists) {
       return this;
     }
     const result: Model = await this._setKeysForSelectQuery(
@@ -1239,7 +1239,14 @@ export class Model extends mixinHasAttributes(
   //   this.initializeTraits();
   // }
 
-  static creteQuery(): FedacoBuilder {
+  public static createQuery(): FedacoBuilder {
     return (new this()).newQuery();
+  }
+
+  /*Begin querying the model on a given connection.*/
+  public static useConnection(connection?: string) {
+    const instance = new this();
+    instance.setConnection(connection);
+    return instance.newQuery();
   }
 }
