@@ -70,7 +70,7 @@ export function mixinLimitOffset<T extends Constructor<any>>(base: T): QueryBuil
 
     public forPageBeforeId(perPage = 15, lastId = 0, column = 'id'): this {
       this._orders = this._removeExistingOrdersFor(column);
-      if (!isBlank(lastId)) {
+      if (lastId !== null) {
         this.where(column, '<', lastId);
       }
       return this.orderBy(column, 'desc').limit(perPage);
@@ -78,7 +78,7 @@ export function mixinLimitOffset<T extends Constructor<any>>(base: T): QueryBuil
 
     public forPageAfterId(perPage = 15, lastId = 0, column = 'id'): this {
       this._orders = this._removeExistingOrdersFor(column);
-      if (!isBlank(lastId)) {
+      if (lastId !== null) {
         this.where(column, '>', lastId);
       }
       return this.orderBy(column, 'asc').limit(perPage);

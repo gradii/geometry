@@ -836,8 +836,8 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Begin querying the model.*/
-  public static query() {
-    return new Model().newQuery();
+  public static createQuery() {
+    return (new this()).newQuery();
   }
 
   /*Get a new query builder for the model's table.*/
@@ -1238,10 +1238,6 @@ export class Model extends mixinHasAttributes(
   //   this.bootIfNotBooted();
   //   this.initializeTraits();
   // }
-
-  public static createQuery(): FedacoBuilder {
-    return (new this()).newQuery();
-  }
 
   /*Begin querying the model on a given connection.*/
   public static useConnection(connection?: string) {

@@ -1,4 +1,5 @@
 import { isArray } from '@gradii/check-type';
+import { Subject } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 import { Column } from '../src/annotation/column/column';
 import { CreatedAtColumn } from '../src/annotation/column/created-at.column';
@@ -480,7 +481,7 @@ describe('test database eloquent integration', () => {
       'name': ' Third'
     });
     let i     = 0;
-    const spy = jest.fn((users) => {
+    const spy = jest.fn(({results: users, page}) => {
       if (!i) {
         expect(users[0].name).toBe(' First');
         expect(users[1].name).toBe(' Second');
@@ -489,7 +490,8 @@ describe('test database eloquent integration', () => {
       }
       i++;
     });
-    await EloquentTestNonIncrementingSecond.createQuery().chunkById(2, 'name')
+    await EloquentTestNonIncrementingSecond.createQuery()
+      .chunkById(2, 'name')
       .pipe(
         finalize(() => {
           expect(i).toEqual(2);
@@ -501,39 +503,86 @@ describe('test database eloquent integration', () => {
     expect(spy).toBeCalled();
   });
 
-//   it('each by id with non incrementing key', () => {
-//     EloquentTestNonIncrementingSecond.create({
-//       'name': ' First'
-//     });
-//     EloquentTestNonIncrementingSecond.create({
-//       'name': ' Second'
-//     });
-//     EloquentTestNonIncrementingSecond.create({
-//       'name': ' Third'
-//     });
-//     let users = [];
-//     EloquentTestNonIncrementingSecond.query().eachById((user, i) => {
-//       users.push([user.name, i]);
-//     }, 2, 'name');
-//     expect(users).toEqual([[' First', 0], [' Second', 1], [' Third', 0]]);
-//   });
-//   it('pluck', () => {
-//     EloquentTestUser.create({
-//       'id'   : 1,
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     EloquentTestUser.create({
-//       'id'   : 2,
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     let simple = EloquentTestUser.oldest('id').pluck('users.email').all();
-//     let keyed  = EloquentTestUser.oldest('id').pluck('users.email', 'users.id').all();
-//     expect(simple).toEqual(['taylorotwell@gmail.com', 'abigailotwell@gmail.com']);
-//     expect(keyed).toEqual({
-//       1: 'taylorotwell@gmail.com',
-//       2: 'abigailotwell@gmail.com'
-//     });
-//   });
+  it('chunk by id with non incrementing key test signal', async () => {
+    await EloquentTestNonIncrementingSecond.createQuery().create({
+      'name': ' First'
+    });
+    await EloquentTestNonIncrementingSecond.createQuery().create({
+      'name': ' Second'
+    });
+    await EloquentTestNonIncrementingSecond.createQuery().create({
+      'name': ' Third'
+    });
+    let i        = 0;
+    const spy    = jest.fn(({results: users, page}) => {
+      if (!i) {
+        // uncomment me test run successful.
+        // try to comment me then test should hang on! works as expect
+        signal.next();
+        expect(users[0].name).toBe(' First');
+        expect(users[1].name).toBe(' Second');
+      } else {
+        expect(users[0].name).toBe(' Third');
+      }
+      i++;
+    });
+    const signal = new Subject();
+    await EloquentTestNonIncrementingSecond.createQuery()
+      .chunkById(2, 'name', undefined, signal)
+      .pipe(
+        finalize(() => {
+          expect(i).toEqual(2);
+        }),
+        tap(spy)
+      )
+      .toPromise();
+
+    expect(spy).toBeCalled();
+  });
+
+  it('each by id with non incrementing key', async () => {
+    await EloquentTestNonIncrementingSecond.createQuery().create({
+      'name': ' First'
+    });
+    await EloquentTestNonIncrementingSecond.createQuery().create({
+      'name': ' Second'
+    });
+    await EloquentTestNonIncrementingSecond.createQuery().create({
+      'name': ' Third'
+    });
+    const users = [];
+    await EloquentTestNonIncrementingSecond.createQuery()
+      .eachById(2, 'name')
+      .pipe(
+        tap(({item: user, index: i}) => {
+          users.push([user.name, i]);
+        })
+      ).toPromise();
+    expect(users).toEqual([[' First', 0], [' Second', 1], [' Third', 2]]);
+  });
+
+  it('pluck', async () => {
+    await EloquentTestUser.createQuery().create({
+      'id'   : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+    await EloquentTestUser.createQuery().create({
+      'id'   : 2,
+      'email': 'abigailotwell@gmail.com'
+    });
+    const simple = await EloquentTestUser.createQuery()
+      .oldest('id')
+      .pluck('users.email');
+    const keyed  = await EloquentTestUser.createQuery()
+      .oldest('id')
+      .pluck('users.email', 'users.id');
+    expect(simple).toEqual(['taylorotwell@gmail.com', 'abigailotwell@gmail.com']);
+    expect(keyed).toEqual({
+      1: 'taylorotwell@gmail.com',
+      2: 'abigailotwell@gmail.com'
+    });
+  });
+
 //   it('pluck with join', () => {
 //     let user1 = EloquentTestUser.create({
 //       'id'   : 1,
@@ -2008,6 +2057,9 @@ export class EloquentTestNonIncrementing extends Model {
 
 export class EloquentTestNonIncrementingSecond extends EloquentTestNonIncrementing {
   _connection: any = 'second_connection';
+
+  @Column()
+  name;
 }
 
 export class EloquentTestUserWithGlobalScope extends EloquentTestUser {

@@ -212,20 +212,17 @@ export class QueryBuilder extends Builder {
 
 
   /*Get an array with the values of a given column.*/
-  public async pluck(column: string/*, key: string | null = null*/) {
-    const queryResult = await this.onceWithColumns([column] /*isBlank(key) ? [column] : [column, key]*/,
+  public async pluck(column: string, key?: string): Promise<any[] | Record<string, any>> {
+    const queryResult = await this.onceWithColumns(isBlank(key) ? [column] : [column, key],
       async () => {
         return this._processor.processSelect(this, await this.runSelect());
       });
-    // if (empty(queryResult)) {
-    //   return collect();
-    // }
     column = this.stripTableForPluck(column);
-    // key    = this.stripTableForPluck(key);
+    key    = this.stripTableForPluck(key);
     return this.pluckFromColumn(
       queryResult,
       column,
-      // key
+      key
     );
   }
 
@@ -247,20 +244,21 @@ export class QueryBuilder extends Builder {
   }
 
   /*Retrieve column values from rows represented as objects.*/
-  protected pluckFromColumn(queryResult: any[], column: string) {
-    const results = [];
-    // if (isBlank(key)) {
-    //   results = [];
-    for (const row of queryResult) {
-      results.push(row[column]);
+  protected pluckFromColumn(queryResult: any[], column: string,
+                            key?: string): any[] | Record<string, any> {
+    if (isBlank(key)) {
+      const results = [];
+      for (const row of queryResult) {
+        results.push(row[column]);
+      }
+      return results;
+    } else {
+      const results: Record<string, any> = {};
+      for (const row of queryResult) {
+        results[row[key]] = row[column];
+      }
+      return results;
     }
-    // } else {
-    //   results = {};
-    //   for (const row of queryResult) {
-    //     results[row[key]] = row[column];
-    //   }
-    // }
-    return results;
   }
 
 
@@ -635,11 +633,7 @@ export class QueryBuilder extends Builder {
     const original = this._columns;
     // todo check
     if (original.length === 0) {
-      this._columns = columns.map(it => new ColumnReferenceExpression(
-        new PathExpression(
-          [createIdentifier(it)]
-        )
-      ));
+      this._columns = columns.map(it => SqlParser.createSqlParser(it).parseColumnAlias());
     }
     const result  = await callback();
     this._columns = original;

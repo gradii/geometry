@@ -6,8 +6,8 @@
 
 import { isBlank } from '@gradii/check-type';
 import { last } from 'ramda';
-import { BehaviorSubject, EMPTY, from, Observable, Subscriber } from 'rxjs';
-import { catchError, concatMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, from, interval, Observable, of, Subscriber } from 'rxjs';
+import { bufferWhen, catchError, concatMap, map, mergeMap, take, tap } from 'rxjs/operators';
 import { Model } from '../../fedaco/model';
 import { Constructor } from '../../helper/constructor';
 import { QueryBuilder } from '../query-builder';
@@ -16,7 +16,13 @@ export interface BuildQueries {
 
   chunkById(count: number,
             column?: string,
-            alias?: string): Observable<any>;
+            alias?: string,
+            signal?: Observable<any>): Observable<{ results: any, page: number }>;
+
+  eachById(count: number,
+           column?: string,
+           alias?: string,
+           signal?: Observable<any>): Observable<{ item: any, index: number }>;
 
   first(columns?: any[] | string): Promise<Model | /*object |*/ any | null>;
 
@@ -45,11 +51,12 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
 
     /**
      * Chunk the results of a query by comparing IDs.
-     * not use callback version. use callback can wait callback finish then emit next
+     * this version doesn't use callback. use callback can wait callback finish then emit next
      */
     public chunkById(this: QueryBuilder & _Self, count: number,
                      column?: string,
-                     alias?: string): Observable<any> {
+                     alias?: string,
+                     signal?: Observable<any>): Observable<any> {
       if (!(count > 0)) {
         return EMPTY;
       }
@@ -58,9 +65,19 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
       const clone = this.clone();
 
       return new Observable((observer: Subscriber<any>) => {
-        let lastId: number;
-        const subject = new BehaviorSubject(1);
+        let lastId: number = null;
+        let isFirst        = true;
+        const subject      = new BehaviorSubject(1);
         subject.pipe(
+          signal ? bufferWhen(() => {
+            // first time emit immediately
+            if (isFirst) {
+              isFirst = false;
+              return interval(10).pipe(take(1));
+            }
+            return signal;
+          }) : map(it => [it]),
+          mergeMap((items: number[]) => of(...items)),
           concatMap((page: number) => {
             return from(
               (clone as QueryBuilder)
@@ -71,8 +88,6 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
                   subject.complete();
                   observer.complete();
                 } else {
-                  observer.next({results, page});
-
                   lastId = last(results)[alias];
 
                   if (isBlank(lastId)) {
@@ -85,15 +100,17 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
               tap((results) => {
                 if (results.length === count && count > 0) {
                   subject.next(page + 1);
+                  observer.next({results, page});
                 } else {
+                  observer.next({results, page});
                   subject.complete();
                   observer.complete();
                 }
               })
             );
           }),
-
           catchError((err, caught) => {
+            subject.complete();
             observer.error(err);
             observer.complete();
             return EMPTY;
@@ -106,8 +123,17 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
       });
     }
 
-    public eachById(callback: Function, count: number                  = 1000,
-                    column: string | null = null, alias: string | null = null) {
+    public eachById(this: QueryBuilder & _Self, count: number = 1000,
+                    column?: string,
+                    alias?: string,
+                    signal?: Observable<any>): Observable<{ item: any, index: number }> {
+      return this.chunkById(count, column, alias, signal).pipe(
+        mergeMap(({results, page}) => {
+          return of(...results.map((it: any, idx: number) => {
+            return {item: it, index: (page - 1) * count + idx};
+          }));
+        })
+      );
     }
 
     /*Execute the query and get the first result.*/

@@ -9,7 +9,7 @@ import { ConnectionInterface } from '../../query-builder/connection-interface';
 import { Model } from '../model';
 
 export interface ForwardCallToQueryBuilder {
-  pluck(...args: any[]): Promise<any[]>;
+  pluck(...args: any[]): Promise<any[] | Record<string, any>>;
 
   stripTableForPluck(...args: any[]): this;
 
@@ -260,7 +260,7 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
       if (result === _query) {
         return this;
       }
-      return {result, bindings: _query.getBindings()};
+      return result;
     }
 
     #forwardCallToQueryBuilder(method: string, parameters: any[]) {
@@ -269,6 +269,11 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
         return this;
       }
       return result;
+    }
+
+    #directToQueryBuilder(method: string, parameters: any[]) {
+      const _query = this.toBase();
+      return _query[method].apply(_query, parameters);
     }
 
     average(...args: any[]) {
@@ -301,11 +306,11 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     }
 
     distinct(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('distinct', args);
+      return this.#directToQueryBuilder('distinct', args);
     }
 
     insertGetId(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('insertGetId', args);
+      return this.#directToQueryBuilder('insertGetId', args);
     }
 
     from(...args: any[]) {
@@ -317,23 +322,23 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     }
 
     get(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('get', args);
+      return this.#directToQueryBuilder('get', args);
     }
 
-    getBindings(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('getBindings', args);
-    }
+    // getBindings(...args: any[]) {
+    //   return this.#forwardCallToQueryBuilder('getBindings', args);
+    // }
 
     getConnection(...args: any[]) {
       return this.#forwardCallToQueryBuilder('getConnection', args);
     }
 
     insertUsing(...args: any[]) {
-      return this.#passThroughToQueryBuilder('insertUsing', args);
+      return this.#directToQueryBuilder('insertUsing', args);
     }
 
     insertOrIgnore(...args: any[]) {
-      return this.#passThroughToQueryBuilder('insertOrIgnore', args);
+      return this.#directToQueryBuilder('insertOrIgnore', args);
     }
 
     getGrammar(...args: any[]) {
@@ -369,23 +374,23 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     }
 
     update(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('update', args);
+      return this.#directToQueryBuilder('update', args);
     }
 
     delete(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('delete', args);
+      return this.#directToQueryBuilder('delete', args);
     }
 
     truncate(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('truncate', args);
+      return this.#directToQueryBuilder('truncate', args);
     }
 
     async updateOrInsert(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('updateOrInsert', args);
+      return this.#directToQueryBuilder('updateOrInsert', args);
     }
 
     async insert(...args: any[]) {
-      return this.#passThroughToQueryBuilder('insert', args);
+      return this.#directToQueryBuilder('insert', args);
     }
 
     selectSub(...args: any[]) {
@@ -397,7 +402,9 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     }
 
     toSql(...args: any[]) {
-      return this.#passThroughToQueryBuilder('toSql', args);
+      const _query = this.toBase();
+      const result = _query.toSql.apply(_query, args);
+      return {result, bindings: _query.getBindings()};
     }
 
     // resetBindings(...args: any[]) {
