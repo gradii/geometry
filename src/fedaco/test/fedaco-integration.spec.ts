@@ -1,4 +1,5 @@
 import { isArray } from '@gradii/check-type';
+import * as fs from 'fs';
 import { Column } from '../src/annotation/column/column';
 import { CreatedAtColumn } from '../src/annotation/column/created-at.column';
 import { PrimaryColumn } from '../src/annotation/column/primary.column';
@@ -115,21 +116,37 @@ async function createSchema() {
 
 describe('test database eloquent integration', () => {
   beforeAll(async () => {
+    const files = {
+      'default': 'tmp/integration.sqlite',
+      'second' : 'tmp/integration-second.sqlite'
+    };
+    for (const it of Object.values(files)) {
+      if (it !== ':memory:') {
+        fs.unlinkSync(it);
+      }
+    }
+
     const db = new DatabaseConfig();
     db.addConnection({
       'driver'  : 'sqlite',
-      'database': 'tmp/integration.sqlite'
+      'database': files.default
     });
     db.addConnection({
       'driver'  : 'sqlite',
-      'database': ':memory:'
+      'database': files.second
     }, 'second_connection');
     db.bootEloquent();
     db.setAsGlobal();
     await createSchema();
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
+    for (const it of ['test_orders', 'with_json', 'users_with_space_in_colum_name']) {
+      await DatabaseConfig.table(it, undefined, 'default').truncate();
+    }
+    for (const it of ['test_items']) {
+      await DatabaseConfig.table(it, undefined, 'second_connection').truncate();
+    }
     for (const it of [
       'comments',
       'friend_levels',
@@ -140,18 +157,16 @@ describe('test database eloquent integration', () => {
       'soft_deleted_users',
       'taggables',
       'tags',
-      'test_orders',
       'users',
-      'users_with_space_in_colum_name',
-      'with_json',
     ]) {
-      await schema('default').drop(it);
+      await DatabaseConfig.table(it, undefined, 'default').truncate();
+      await DatabaseConfig.table(it, undefined, 'second_connection').truncate();
     }
 
     // [].forEach((connection, index) => {
     // });
     // Relation.morphMap([], false);
-    // Fedaco.unsetConnectionResolver();
+    // Model.unsetConnectionResolver();
   });
 
   it('basic create model', async () => {
