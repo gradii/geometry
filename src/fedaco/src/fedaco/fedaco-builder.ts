@@ -245,7 +245,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Find a model by its primary key or throw an exception.*/
-  public async findOrFail(id: any, columns: any[] = ['*']) {
+  public async findOrFail(id: any | any[], columns: any[] = ['*']) {
     const result = await this.find(id, columns);
 
     if (isArray(id) && isArray(result)) {
@@ -256,8 +256,8 @@ export class FedacoBuilder extends mixinGuardsAttributes(
       return result;
     }
     throw new Error(
-      `ModelNotFoundException No query results for model  ${this._model.constructor.name} ${JSON.stringify(
-        id)});`);
+      `ModelNotFoundException No query results for model [${this._model.constructor.name}] ${JSON.stringify(
+        id)}`);
   }
 
   /*Find a model by its primary key or return fresh model instance.*/
@@ -304,7 +304,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
       return model;
     }
     throw new Error(
-      `ModelNotFoundException No query results for model  ${this._model.constructor.name});`);
+      `ModelNotFoundException No query results for model [${this._model.constructor.name}];`);
   }
 
   /*Execute the query and get the first result or call a callback.*/

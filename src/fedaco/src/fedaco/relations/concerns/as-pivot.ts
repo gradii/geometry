@@ -139,7 +139,7 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
     /*Get the table associated with the model.*/
     public getTable(this: Model & _Self): string {
       if (!(this._table !== undefined)) {
-        //todo fixme
+        // todo fixme
         // this.setTable(str_replace('\\', '', Str.snake(Str.singular(class_basename(this)))));
       }
       return this._table;

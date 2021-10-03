@@ -27,10 +27,10 @@ export const MorphManyColumn: FedacoDecorator<MorphManyRelationAnnotation> = mak
     isRelation  : true,
     type        : RelationType.MorphMany,
     _getRelation: function (m: Model, relation: string) {
-      let instance = this.newRelatedInstance(p.related);
+      const instance = this.newRelatedInstance(p.related);
 
       const [type, id] = m.getMorphs(p.name, p.type, p.id);
-      let table        = instance.getTable();
+      const table        = instance.getTable();
       const localKey   = p.localKey || m.getKeyName();
       const r          = new MorphMany(instance.newQuery(), m, `${table}.${type}`,
         `${table}.${id}`, localKey);

@@ -7,7 +7,7 @@
 
 export class DbalConnection {
   getDatabasePlatform() {
-    
+
   }
 }
 

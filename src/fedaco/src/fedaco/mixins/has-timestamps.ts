@@ -78,12 +78,12 @@ export function mixinHasTimestamps<T extends Constructor<any>>(base: T): HasTime
 
     /*Update the creation and update timestamps.*/
     public updateTimestamps(this: Model & _Self): void {
-      let time            = this.freshTimestamp();
-      let updatedAtColumn = this.getUpdatedAtColumn();
+      const time            = this.freshTimestamp();
+      const updatedAtColumn = this.getUpdatedAtColumn();
       if (!isBlank(updatedAtColumn) && !this.isDirty(updatedAtColumn)) {
         this.setUpdatedAt(time);
       }
-      let createdAtColumn = this.getCreatedAtColumn();
+      const createdAtColumn = this.getCreatedAtColumn();
       if (!this._exists && !isBlank(createdAtColumn) && !this.isDirty(createdAtColumn)) {
         this.setCreatedAt(time);
       }

@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Types } from './Types';
 import { TypeRegistry } from './TypeRegistry';
 import { ParameterType } from '../ParameterType';
@@ -128,8 +134,8 @@ export abstract class Type {
   }
 
   private static createTypeRegistry() {
-    var registry = new TypeRegistry();
-    for (let [name, clazz] of Object.entries(Type.BUILTIN_TYPES_MAP)) {
+    const registry = new TypeRegistry();
+    for (const [name, clazz] of Object.entries(Type.BUILTIN_TYPES_MAP)) {
       registry.register(name, new clazz());
     }
     return registry;
@@ -168,10 +174,10 @@ export abstract class Type {
 
   /**/
   public __toString() {
-    var type = Type;
-    var position = strrpos(type, '\\');
+    const type = Type;
+    const position = strrpos(type, '\\');
     if (position !== false) {
-      var type = substr(type, position);
+      const type = substr(type, position);
     }
     return str_replace('Type', '', type);
   }

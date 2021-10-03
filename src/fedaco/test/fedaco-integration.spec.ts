@@ -6,9 +6,13 @@ import { CreatedAtColumn } from '../src/annotation/column/created-at.column';
 import { PrimaryColumn } from '../src/annotation/column/primary.column';
 import { UpdatedAtColumn } from '../src/annotation/column/updated-at.column';
 import { BelongsToManyColumn } from '../src/annotation/relation-column/belongs-to-many.relation-column';
+import { BelongsToColumn } from '../src/annotation/relation-column/belongs-to.relation-column';
+import { HasManyColumn } from '../src/annotation/relation-column/has-many.relation-column';
+import { HasOneColumn } from '../src/annotation/relation-column/has-one.relation-column';
 import { DatabaseConfig } from '../src/databaseConfig';
 import { Model } from '../src/fedaco/model';
 import { BelongsToMany } from '../src/fedaco/relations/belongs-to-many';
+import { forwardRef } from '../src/query-builder/forward-ref';
 import { SchemaBuilder } from '../src/schema/schema-builder';
 
 function connection(connectionName = 'default') {
@@ -40,7 +44,7 @@ async function createSchema() {
   await schema('default').create('users_with_space_in_colum_name', table => {
     table.increments('id');
     table.string('name').withNullable();
-    table.string('email address');
+    table.string('email_address');
     table.timestamps();
   });
 
@@ -583,144 +587,155 @@ describe('test database eloquent integration', () => {
     });
   });
 
-//   it('pluck with join', () => {
-//     let user1 = EloquentTestUser.create({
-//       'id'   : 1,
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     let user2 = EloquentTestUser.create({
-//       'id'   : 2,
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     user2.posts().create({
-//       'id'  : 1,
-//       'name': 'First post'
-//     });
-//     user1.posts().create({
-//       'id'  : 2,
-//       'name': 'Second post'
-//     });
-//     let query = EloquentTestUser.join('posts', 'users.id', '=', 'posts.user_id');
-//     expect(query.pluck('posts.name', 'posts.id').all()).toEqual({
-//       1: 'First post',
-//       2: 'Second post'
-//     });
-//     expect(query.pluck('posts.name', 'users.id').all()).toEqual({
-//       2: 'First post',
-//       1: 'Second post'
-//     });
-//     expect(query.pluck('posts.name', 'users.email AS user_email').all()).toEqual({
-//       'abigailotwell@gmail.com': 'First post',
-//       'taylorotwell@gmail.com' : 'Second post'
-//     });
-//   });
-//   it('pluck with column name containing a space', () => {
-//     EloquentTestUserWithSpaceInColumnName.create({
-//       'id'           : 1,
-//       'email address': 'taylorotwell@gmail.com'
-//     });
-//     EloquentTestUserWithSpaceInColumnName.create({
-//       'id'           : 2,
-//       'email address': 'abigailotwell@gmail.com'
-//     });
-//     let simple = EloquentTestUserWithSpaceInColumnName.oldest('id').pluck(
-//       'users_with_space_in_colum_name.email address').all();
-//     let keyed  = EloquentTestUserWithSpaceInColumnName.oldest('id').pluck('email address',
-//       'id').all();
-//     expect(simple).toEqual(['taylorotwell@gmail.com', 'abigailotwell@gmail.com']);
-//     expect(keyed).toEqual({
-//       1: 'taylorotwell@gmail.com',
-//       2: 'abigailotwell@gmail.com'
-//     });
-//   });
-//   it('find or fail', () => {
-//     EloquentTestUser.create({
-//       'id'   : 1,
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     EloquentTestUser.create({
-//       'id'   : 2,
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     let single   = EloquentTestUser.findOrFail(1);
-//     let multiple = EloquentTestUser.findOrFail([1, 2]);
-//     expect(single).toInstanceOf(EloquentTestUser);
-//     expect(single.email).toBe('taylorotwell@gmail.com');
-//     expect(multiple).toInstanceOf(Collection);
-//     expect(multiple[0]).toInstanceOf(EloquentTestUser);
-//     expect(multiple[1]).toInstanceOf(EloquentTestUser);
-//   });
-//   it('find or fail with single id throws model not found exception', () => {
-//     this.expectException(ModelNotFoundException);
-//     this.expectExceptionMessage(
-//       'No query results for model [Illuminate\\Tests\\Database\\EloquentTestUser] 1');
-//     EloquentTestUser.findOrFail(1);
-//   });
-//   it('find or fail with multiple ids throws model not found exception', () => {
-//     this.expectException(ModelNotFoundException);
-//     this.expectExceptionMessage(
-//       'No query results for model [Illuminate\\Tests\\Database\\EloquentTestUser] 1, 2');
-//     EloquentTestUser.create({
-//       'id'   : 1,
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     EloquentTestUser.findOrFail([1, 2]);
-//   });
-//   it('find or fail with multiple ids using collection throws model not found exception', () => {
-//     this.expectException(ModelNotFoundException);
-//     this.expectExceptionMessage(
-//       'No query results for model [Illuminate\\Tests\\Database\\EloquentTestUser] 1, 2');
-//     EloquentTestUser.create({
-//       'id'   : 1,
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     EloquentTestUser.findOrFail(new Collection([1, 2]));
-//   });
-//   it('one to one relationship', () => {
-//     let user = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     user.post().create({
-//       'name': 'First Post'
-//     });
-//     let post = user.post;
-//     let user = post.user;
-//     expect(user.post.name !== undefined).toBeTruthy();
-//     expect(user).toInstanceOf(EloquentTestUser);
-//     expect(post).toInstanceOf(EloquentTestPost);
-//     expect(user.email).toBe('taylorotwell@gmail.com');
-//     expect(post.name).toBe('First Post');
-//   });
-//   it('isset loads in relationship if it isnt loaded already', () => {
-//     let user = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     user.post().create({
-//       'name': 'First Post'
-//     });
-//     expect(user.post.name !== undefined).toBeTruthy();
-//   });
-//   it('one to many relationship', () => {
-//     let user = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     user.posts().create({
-//       'name': 'First Post'
-//     });
-//     user.posts().create({
-//       'name': 'Second Post'
-//     });
-//     let posts = user.posts;
-//     let post2 = user.posts().where('name', 'Second Post').first();
-//     expect(posts).toInstanceOf(Collection);
-//     expect(posts).toCount(2);
-//     expect(posts[0]).toInstanceOf(EloquentTestPost);
-//     expect(posts[1]).toInstanceOf(EloquentTestPost);
-//     expect(post2).toInstanceOf(EloquentTestPost);
-//     expect(post2.name).toBe('Second Post');
-//     expect(post2.user).toInstanceOf(EloquentTestUser);
-//     expect(post2.user.email).toBe('taylorotwell@gmail.com');
-//   });
+  it('pluck with join', async () => {
+    const user1 = await EloquentTestUser.createQuery().create({
+      'id'   : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+    const user2 = await EloquentTestUser.createQuery().create({
+      'id'   : 2,
+      'email': 'abigailotwell@gmail.com'
+    });
+    await (user2.getRelationMethod('posts') as BelongsToMany).create({
+      'id'  : 1,
+      'name': 'First post'
+    });
+    await (user1.getRelationMethod('posts') as BelongsToMany).create({
+      'id'  : 2,
+      'name': 'Second post'
+    });
+    const query = EloquentTestUser.createQuery().join('posts', 'users.id', '=', 'posts.user_id');
+    expect(await query.pluck('posts.name', 'posts.id')).toEqual({
+      1: 'First post',
+      2: 'Second post'
+    });
+    expect(await query.pluck('posts.name', 'users.id')).toEqual({
+      2: 'First post',
+      1: 'Second post'
+    });
+    expect(await query.pluck('posts.name', 'users.email AS user_email')).toEqual({
+      'abigailotwell@gmail.com': 'First post',
+      'taylorotwell@gmail.com' : 'Second post'
+    });
+  });
+
+  it('pluck with column name containing a space', async () => {
+    await EloquentTestUserWithSpaceInColumnName.createQuery().create({
+      'id'           : 1,
+      'email_address': 'taylorotwell@gmail.com'
+    });
+    await EloquentTestUserWithSpaceInColumnName.createQuery().create({
+      'id'           : 2,
+      'email_address': 'abigailotwell@gmail.com'
+    });
+    const simple = await EloquentTestUserWithSpaceInColumnName.createQuery().oldest('id').pluck(
+      'users_with_space_in_colum_name.email_address');
+    const keyed  = await EloquentTestUserWithSpaceInColumnName.createQuery().oldest('id').pluck(
+      'email_address',
+      'id');
+    expect(simple).toEqual(['taylorotwell@gmail.com', 'abigailotwell@gmail.com']);
+    expect(keyed).toEqual({
+      1: 'taylorotwell@gmail.com',
+      2: 'abigailotwell@gmail.com'
+    });
+  });
+
+  it('find or fail', async () => {
+    await EloquentTestUser.createQuery().create({
+      'id'   : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+    await EloquentTestUser.createQuery().create({
+      'id'   : 2,
+      'email': 'abigailotwell@gmail.com'
+    });
+    const single   = await EloquentTestUser.createQuery().findOrFail(1);
+    const multiple = await EloquentTestUser.createQuery().findOrFail([1, 2]);
+    expect(single).toBeInstanceOf(EloquentTestUser);
+    expect(single.email).toBe('taylorotwell@gmail.com');
+    expect(isArray(multiple)).toBeTruthy();
+    expect(multiple[0]).toBeInstanceOf(EloquentTestUser);
+    expect(multiple[1]).toBeInstanceOf(EloquentTestUser);
+  });
+
+  it('find or fail with single id throws model not found exception', async () => {
+    await expect(async () => {
+      await EloquentTestUser.createQuery().findOrFail(1);
+    }).rejects.toThrowError(
+      'ModelNotFoundException No query results for model [EloquentTestUser] 1)');
+  });
+
+  it('find or fail with multiple ids throws model not found exception', async () => {
+    await EloquentTestUser.createQuery().create({
+      'id'   : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+    await expect(async () => {
+      await EloquentTestUser.createQuery().findOrFail([1, 2]);
+    }).rejects.toThrowError(
+      'ModelNotFoundException No query results for model [EloquentTestUser] [1, 2]');
+  });
+
+  // xit('find or fail with multiple ids using collection throws model not found exception', async () => {
+  //   await EloquentTestUser.createQuery().create({
+  //     'id'   : 1,
+  //     'email': 'taylorotwell@gmail.com'
+  //   });
+  //   await expect(async () => {
+  //     await EloquentTestUser.createQuery().findOrFail([1, 2]);
+  //   }).rejects.toThrowError(
+  //     'ModelNotFoundException No query results for model [EloquentTestUser] [1, 2]');
+  // });
+
+  it('one to one relationship', async () => {
+    let user = await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    await user.getRelationMethod('post').create({
+      'name': 'First Post'
+    });
+    const post = await user.post;
+
+    user = await post.user;
+    expect((await user.post).name).not.toBeUndefined();
+    expect(user).toBeInstanceOf(EloquentTestUser);
+    expect(post).toBeInstanceOf(EloquentTestPost);
+    expect(user.email).toBe('taylorotwell@gmail.com');
+    expect(post.name).toBe('First Post');
+  });
+
+  it('isset loads in relationship if it isnt loaded already', async () => {
+    const user = await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    await user.getRelationMethod('post').create({
+      'name': 'First Post'
+    });
+    expect((await user.post).name).not.toBeUndefined();
+  });
+
+  it('one to many relationship', async () => {
+    const user = await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    await (user.getRelationMethod('posts') as BelongsToMany).create({
+      'name': 'First Post'
+    });
+    await user.getRelationMethod('posts').create({
+      'name': 'Second Post'
+    });
+    const posts = await user.posts;
+    const post2 = await user.getRelationMethod('posts').where('name', 'Second Post').first();
+    expect(isArray(posts)).toBeTruthy();
+    expect(posts.length).toBe(2);
+    expect(posts[0]).toBeInstanceOf(EloquentTestPost);
+    expect(posts[1]).toBeInstanceOf(EloquentTestPost);
+    expect(post2).toBeInstanceOf(EloquentTestPost);
+    expect(post2.name).toBe('Second Post');
+    expect(await post2.user).toBeInstanceOf(EloquentTestUser);
+    expect((await post2.user).email).toBe('taylorotwell@gmail.com');
+  });
+
 //   it('basic model hydration', () => {
 //     let user = new EloquentTestUser({
 //       'email': 'taylorotwell@gmail.com'
@@ -740,6 +755,7 @@ describe('test database eloquent integration', () => {
 //     expect(models[0].getConnectionName()).toBe('second_connection');
 //     expect(models).toCount(1);
 //   });
+
 //   it('has on self referencing belongs to many relationship', () => {
 //     let user = EloquentTestUser.create({
 //       'email': 'taylorotwell@gmail.com'
@@ -2020,13 +2036,18 @@ export class EloquentTestUser extends Model {
   //     'user_id', 2);
   // }
   //
-  // public posts() {
-  //   return this.hasMany(EloquentTestPost, 'user_id');
-  // }
-  //
-  // public post() {
-  //   return this.hasOne(EloquentTestPost, 'user_id');
-  // }
+
+  @HasManyColumn({
+    related   : forwardRef(() => EloquentTestPost),
+    foreignKey: 'user_id',
+  })
+  public posts;
+
+  @HasOneColumn({
+    related   : forwardRef(() => EloquentTestPost),
+    foreignKey: 'user_id',
+  })
+  public post;
   //
   // public photos() {
   //   return this.morphMany(EloquentTestPhoto, 'imageable');
@@ -2045,9 +2066,12 @@ export class EloquentTestUser extends Model {
 //     return this.belongsToMany(EloquentTestUser, "friends", "user_id", "friend_id").using(EloquentTestFriendPivot).withPivot("user_id", "friend_id", "friend_level_id");
 //   }
 // }
-// export class EloquentTestUserWithSpaceInColumnName extends EloquentTestUser {
-//   protected table: any = "users_with_space_in_colum_name";
-// }
+export class EloquentTestUserWithSpaceInColumnName extends EloquentTestUser {
+  _table: any = 'users_with_space_in_colum_name';
+
+
+}
+
 export class EloquentTestNonIncrementing extends Model {
   _table: any               = 'non_incrementing_users';
   _guarded: any             = [];
@@ -2089,22 +2113,35 @@ export class EloquentTestUserWithGlobalScope extends EloquentTestUser {
 //     super.boot();
 //   }
 // }
-// export class EloquentTestPost extends Eloquent {
-//   protected table: any = "posts";
-//   protected guarded: any = [];
-//   public user() {
-//     return this.belongsTo(EloquentTestUser, "user_id");
-//   }
-//   public photos() {
-//     return this.morphMany(EloquentTestPhoto, "imageable");
-//   }
-//   public childPosts() {
-//     return this.hasMany(EloquentTestPost, "parent_id");
-//   }
-//   public parentPost() {
-//     return this.belongsTo(EloquentTestPost, "parent_id");
-//   }
-// }
+export class EloquentTestPost extends Model {
+  _table: any   = 'posts';
+  _guarded: any = [];
+
+  @Column()
+  name;
+
+  @Column()
+  user_id;
+
+  @BelongsToColumn({
+    related   : EloquentTestUser,
+    foreignKey: 'user_id'
+  })
+  public user;
+
+  // public photos() {
+  //   return this.morphMany(EloquentTestPhoto, 'imageable');
+  // }
+  //
+  // public childPosts() {
+  //   return this.hasMany(EloquentTestPost, 'parent_id');
+  // }
+  //
+  // public parentPost() {
+  //   return this.belongsTo(EloquentTestPost, 'parent_id');
+  // }
+}
+
 // export class EloquentTestFriendLevel extends Eloquent {
 //   protected table: any = "friend_levels";
 //   protected guarded: any = [];

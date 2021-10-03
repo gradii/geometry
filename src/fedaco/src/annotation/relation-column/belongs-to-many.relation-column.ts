@@ -33,7 +33,7 @@ export const BelongsToManyColumn: FedacoDecorator<BelongsToManyRelationAnnotatio
       if (!isBlank(p.relation)) {
         relation = p.relation;
       }
-      let instance          = m._newRelatedInstance(p.related);
+      const instance          = m._newRelatedInstance(p.related);
       const foreignPivotKey = p.foreignPivotKey || m.getForeignKey();
       const relatedPivotKey = p.relatedPivotKey || instance.getForeignKey();
       let table             = p.table;

@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Type } from './Type';
 import { Types } from './Types';
 import { PhpDateTimeMappingType } from './PhpDateTimeMappingType';
@@ -34,12 +40,12 @@ export class DateTimeType extends Type implements PhpDateTimeMappingType {
     if (value === null || value instanceof DateTimeInterface) {
       return value;
     }
-    var val = DateTime.createFromFormat(
+    let val = DateTime.createFromFormat(
       platform.getDateTimeFormatString(),
       value
     );
     if (!val) {
-      var val = date_create(value);
+      let val = date_create(value);
     }
     if (!val) {
       throw ConversionException.conversionFailedFormat(

@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Types } from './Types';
 import { Type } from './Type';
 
@@ -16,7 +22,7 @@ export class FloatType extends Type {
   public convertToPHPValue(value, platform) {
     return value === null
       ? null
-      : //cast type float
+      : // cast type float
       value;
   }
 }

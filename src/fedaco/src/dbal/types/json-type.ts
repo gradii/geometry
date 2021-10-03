@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {
   is_resource,
   json_decode,
@@ -37,7 +43,7 @@ export class JsonType extends Type {
       return null;
     }
     if (is_resource(value)) {
-      var value = stream_get_contents(value);
+      let value = stream_get_contents(value);
     }
     const val = json_decode(value, true);
     if (json_last_error() !== JSON_ERROR_NONE) {

@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 export class DatabaseTransactionRecord {
     /*The name of the database connection.*/
     public connection: string;
@@ -16,7 +22,7 @@ export class DatabaseTransactionRecord {
     }
     /*Execute all of the callbacks.*/
     public executeCallbacks() {
-        for (let callback of this.callbacks) {
+        for (const callback of this.callbacks) {
             call_user_func(callback);
         }
     }

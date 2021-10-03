@@ -283,7 +283,7 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
    * @return array
    */
   protected compileComponents(builder: Builder) {
-    let sql = [];
+    const sql = [];
 
     // this._selectComponents.forEach();
     //

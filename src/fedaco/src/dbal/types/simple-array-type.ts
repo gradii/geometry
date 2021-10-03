@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Type } from './Type';
 import { Types } from './Types';
 
@@ -23,7 +29,7 @@ export class SimpleArrayType extends Type {
     if (value === null) {
       return [];
     }
-    var value = is_resource(value) ? stream_get_contents(value) : value;
+    let value = is_resource(value) ? stream_get_contents(value) : value;
     return value.split(',');
   }
 

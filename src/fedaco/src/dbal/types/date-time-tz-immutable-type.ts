@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { DateTimeImmutable } from 'ROOT';
 import { DateTimeTzType } from './DateTimeTzType';
 import { Types } from './Types';
@@ -30,7 +36,7 @@ export class DateTimeTzImmutableType extends DateTimeTzType {
     if (value === null || value instanceof DateTimeImmutable) {
       return value;
     }
-    var dateTime = DateTimeImmutable.createFromFormat(
+    let dateTime = DateTimeImmutable.createFromFormat(
       platform.getDateTimeTzFormatString(),
       value
     );

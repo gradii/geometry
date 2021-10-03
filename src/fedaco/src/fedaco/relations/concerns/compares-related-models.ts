@@ -50,16 +50,6 @@ export function mixinComparesRelatedModels<T extends Constructor<any>>(base: T):
       return !this.is(model);
     }
 
-    /*Get the value of the parent model's key.*/
-    public getParentKey() {
-      throw new Error('not implemented');
-    }
-
-    /*Get the value of the model's related key.*/
-    _getRelatedKeyFrom(model: Model) {
-      throw new Error('not implemented');
-    }
-
     /*Compare the parent key with the related key.*/
     _compareKeys(parentKey: any, relatedKey: any): boolean {
       if (!parentKey.length || !relatedKey.length) {

@@ -117,12 +117,7 @@ export class Blueprint {
           this[index](column.name);
           column.set(index, false);
           break;
-        }
-
-          // If the index has been specified on the given column, and it has a string
-          // value, we'll go ahead and call the index method and pass the name for
-        // the index since the developer specified the explicit name for this.
-        else if (has(column, index)) {
+        } else if (has(column, index)) {
           // @ts-ignore
           this[index](column.name, column.get(index));
           column.set(index, false);

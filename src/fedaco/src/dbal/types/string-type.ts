@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Type } from './Type';
 import { Types } from './Types';
 import { AbstractPlatform } from '../platforms/AbstractPlatform';

@@ -23,7 +23,7 @@ export class ArrayType extends Type {
     if (value === null) {
       return null;
     }
-    let value = is_resource(value) ? stream_get_contents(value) : value;
+    const value = is_resource(value) ? stream_get_contents(value) : value;
     set_error_handler((code, message) => {
       throw ConversionException.conversionFailedUnserialization(
         this.getName(),

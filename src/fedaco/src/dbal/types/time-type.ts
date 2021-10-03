@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { DateTime, DateTimeInterface } from 'ROOT';
 import { ConversionException } from './ConversionException';
 import { Types } from './Types';

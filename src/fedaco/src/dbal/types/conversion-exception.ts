@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { DBALException } from '../DBALException';
 
 /*Conversion Exception is thrown when the database to PHP conversion fails.*/
@@ -8,7 +14,7 @@ export class ConversionException extends DBALException {
     toType: string,
     previous = null
   ) {
-    var value = strlen(value) > 32 ? `${substr(value, 0, 20)}...` : value;
+    let value = strlen(value) > 32 ? `${substr(value, 0, 20)}...` : value;
     return new ConversionException(
       `Could not convert database value "${value}" to Doctrine Type ${toType}`,
       0,
@@ -24,7 +30,7 @@ export class ConversionException extends DBALException {
     expectedFormat: string,
     previous = null
   ) {
-    var value = strlen(value) > 32 ? `${substr(value, 0, 20)}...` : value;
+    let value = strlen(value) > 32 ? `${substr(value, 0, 20)}...` : value;
     return new ConversionException(
       `Could not convert database value "${value}" to Doctrine Type ${toType}. Expected format: ${expectedFormat}`,
       0,
@@ -39,7 +45,7 @@ export class ConversionException extends DBALException {
     possibleTypes: string[],
     previous = null
   ) {
-    var actualType = is_object(value) ? get_class(value) : gettype(value);
+    let actualType = is_object(value) ? get_class(value) : gettype(value);
     if (is_scalar(value)) {
       return new ConversionException(
         sprintf(
@@ -71,7 +77,7 @@ export class ConversionException extends DBALException {
     format: string,
     error: string
   ) {
-    var actualType = is_object(value) ? get_class(value) : gettype(value);
+    let actualType = is_object(value) ? get_class(value) : gettype(value);
     return new ConversionException(
       sprintf(
         `Could not convert PHP type '%s' to '%s', as an '%s' error was triggered by the serialization`,

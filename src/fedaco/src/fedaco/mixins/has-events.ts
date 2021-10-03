@@ -196,7 +196,7 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
     /*Register a single observer with the model.*/
     _registerObserver(clazz: typeof _Self) {
       // const className = this._resolveObserverClassName(clazz);
-      for (let event of this.getObservableEvents()) {
+      for (const event of this.getObservableEvents()) {
         if (event in clazz) {
           (/*static*/<any>this.constructor)._registerModelEvent(event,
             (...args: any[]) => clazz.prototype[event].apply()

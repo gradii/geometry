@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { date_create, DateTime } from 'ROOT';
 
 /*Variable DateTime Type using date_create() instead of DateTime::createFromFormat().
@@ -11,7 +17,7 @@ export class VarDateTimeType extends DateTimeType {
     if (value === null || value instanceof DateTime) {
       return value;
     }
-    var val = date_create(value);
+    let val = date_create(value);
     if (!val) {
       throw ConversionException.conversionFailed(value, this.getName());
     }

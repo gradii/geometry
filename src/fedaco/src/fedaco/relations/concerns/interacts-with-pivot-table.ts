@@ -377,7 +377,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     /*Get the pivot models that are currently attached.*/
     async _getCurrentlyAttachedPivots(this: BelongsToMany & _Self) {
       return (await this.newPivotQuery().get()).map(record => {
-        const clazz = this._using; //todo recovery me || Pivot;
+        const clazz = this._using; // todo recovery me || Pivot;
         const pivot = clazz.fromRawAttributes(this.parent, /*cast type array*/ record,
           this.getTable(), true);
         return pivot.setPivotKeys(this.foreignPivotKey, this.relatedPivotKey);

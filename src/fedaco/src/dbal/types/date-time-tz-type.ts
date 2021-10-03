@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { DateTime, DateTimeInterface } from 'ROOT';
 import { Type } from './Type';
 import { Types } from './Types';
@@ -49,7 +55,7 @@ export class DateTimeTzType extends Type implements PhpDateTimeMappingType {
     if (value === null || value instanceof DateTimeInterface) {
       return value;
     }
-    var val = DateTime.createFromFormat(
+    let val = DateTime.createFromFormat(
       platform.getDateTimeTzFormatString(),
       value
     );

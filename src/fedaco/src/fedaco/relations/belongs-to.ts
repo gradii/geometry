@@ -58,8 +58,8 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
 
   /*Set the base constraints on the relation query.*/
   public addConstraints() {
-    if (BelongsTo.constraints) {
-      const table = this.related.getTable();
+    if ((this.constructor as typeof BelongsTo).constraints) {
+      const table = this._related.getTable();
       this._query.where(
         `${table}.${this.ownerKey}`,
         '=',
@@ -101,7 +101,7 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
     const owner      = this.ownerKey;
     const dictionary = [];
     for (const result of results) {
-      const attribute         = this._getDictionaryKey(result.getAttribute(owner));
+      const attribute       = this._getDictionaryKey(result.getAttribute(owner));
       dictionary[attribute] = result;
     }
     for (const model of models) {

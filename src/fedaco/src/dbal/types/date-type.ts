@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Type } from './Type';
 import { Types } from './Types';
 
@@ -33,7 +39,7 @@ export class DateType extends Type {
     if (value === null || value instanceof DateTimeInterface) {
       return value;
     }
-    var val = DateTime.createFromFormat(
+    let val = DateTime.createFromFormat(
       '!' + platform.getDateFormatString(),
       value
     );

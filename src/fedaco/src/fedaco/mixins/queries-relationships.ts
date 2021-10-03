@@ -341,7 +341,7 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
         }
         const query = relation.getRelationExistenceQuery(
           relation.getRelated().newQuery(), this as unknown as FedacoBuilder, raw(expression)
-        );//.setBindings([], 'select');
+        ); // .setBindings([], 'select');
         query._callScope(constraints);
 
         const queryBuilder: QueryBuilder = query.mergeConstraintsFrom(relation.getQuery()).toBase();

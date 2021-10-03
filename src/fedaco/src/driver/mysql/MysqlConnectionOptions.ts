@@ -1,5 +1,11 @@
-import {BaseConnectionOptions} from "../../connection/BaseConnectionOptions";
-import {MysqlConnectionCredentialsOptions} from "./MysqlConnectionCredentialsOptions";
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import {BaseConnectionOptions} from '../../connection/BaseConnectionOptions';
+import {MysqlConnectionCredentialsOptions} from './MysqlConnectionCredentialsOptions';
 
 /**
  * MySQL specific connection options.
@@ -11,7 +17,7 @@ export interface MysqlConnectionOptions extends BaseConnectionOptions, MysqlConn
     /**
      * Database type.
      */
-    readonly type: "mysql"|"mariadb";
+    readonly type: 'mysql'|'mariadb';
 
     /**
      * The charset for the connection. This is called "collation" in the SQL-level of MySQL (like utf8_general_ci).
@@ -36,7 +42,7 @@ export interface MysqlConnectionOptions extends BaseConnectionOptions, MysqlConn
      * The milliseconds before a timeout occurs during the initial connection to the MySQL server. (Default: 10000)
      * This difference between connectTimeout and acquireTimeout is subtle and is described in the mysqljs/mysql docs
      * https://github.com/mysqljs/mysql/tree/master#pool-options
-     */ 
+     */
     readonly acquireTimeout?: number;
 
     /**
@@ -132,7 +138,7 @@ export interface MysqlConnectionOptions extends BaseConnectionOptions, MysqlConn
          * RANDOM: Select the node by random function.
          * ORDER: Select the first node available unconditionally.
          */
-        readonly selector?: "RR"|"RANDOM"|"ORDER";
+        readonly selector?: 'RR'|'RANDOM'|'ORDER';
 
     };
 

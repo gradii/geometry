@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Type } from './Type';
 import { Types } from './Types';
 import { ParameterType } from '../ParameterType';
@@ -19,7 +25,7 @@ export class SmallIntType extends Type implements PhpIntegerMappingType {
   public convertToPHPValue(value, platform) {
     return value === null
       ? null
-      : //cast type int
+      : // cast type int
       value;
   }
 

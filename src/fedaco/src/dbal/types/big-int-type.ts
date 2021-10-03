@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Types } from './Types';
 import { Type } from './Type';
 import { ParameterType } from '../ParameterType';
@@ -23,7 +29,7 @@ export class BigIntType extends Type implements PhpIntegerMappingType {
   public convertToPHPValue(value, platform) {
     return value === null
       ? null
-      : //cast type string
+      : // cast type string
       value;
   }
 }

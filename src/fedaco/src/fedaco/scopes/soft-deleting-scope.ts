@@ -30,7 +30,7 @@ export function withTrashed(withTrashed = true) {
 
 export function withoutTrashed() {
   return (builder: FedacoBuilder) => {
-    let model = builder.getModel();
+    const model = builder.getModel();
     builder.withoutGlobalScope('softDeleting')
       .whereNull(model.getQualifiedDeletedAtColumn());
     return builder;
@@ -39,7 +39,7 @@ export function withoutTrashed() {
 
 export function onlyTrashed() {
   return (builder: FedacoBuilder) => {
-    let model = builder.getModel();
+    const model = builder.getModel();
     builder.withoutGlobalScope('softDeleting')
       .whereNotNull(model.getQualifiedDeletedAtColumn());
     return builder;

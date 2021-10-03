@@ -1,4 +1,10 @@
 /**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
  * MySQL specific connection credential options.
  *
  * @see https://github.com/mysqljs/mysql#connection-options

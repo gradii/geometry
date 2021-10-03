@@ -12,20 +12,12 @@ import { _additionalProcessingGetter } from '../additional-processing';
 import { FedacoDecorator } from '../annotation.interface';
 import { ColumnAnnotation } from '../column';
 import { RelationType } from '../enum-relation';
-import { FedacoRelationColumn } from '../relation-column';
+import { FedacoRelationColumn, RelationColumnAnnotation } from '../relation-column';
 
-export interface HasOneRelationAnnotation extends ColumnAnnotation {
-  name?: string;
-  isRelation?: boolean;
-  type?: RelationType;
-
+export interface HasOneRelationAnnotation extends RelationColumnAnnotation {
   related?: typeof Model | ForwardRefFn;
   foreignKey?: string;
   localKey?: string;
-
-  onQuery?: (q: HasOne) => void;
-
-  _getRelation?: (m: Model) => any;
 }
 
 export const HasOneColumn: FedacoDecorator<HasOneRelationAnnotation> = makePropDecorator(
@@ -34,7 +26,7 @@ export const HasOneColumn: FedacoDecorator<HasOneRelationAnnotation> = makePropD
     isRelation  : true,
     type        : RelationType.HasOne,
     _getRelation: function (m: Model, relation: string) {
-      let instance     = m._newRelatedInstance(resolveForwardRef(p.related));
+      const instance     = m._newRelatedInstance(resolveForwardRef(p.related));
       const foreignKey = p.foreignKey || m.getForeignKey();
       const localKey   = p.localKey || m.getKeyName();
       const r          = new HasOne(

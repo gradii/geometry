@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 // import { AbstractSchemaManager } from 'Doctrine/DBAL/Schema/AbstractSchemaManager';
 // import { Column } from 'Doctrine/DBAL/Schema/Column';
 // import { TableDiff } from 'Doctrine/DBAL/Schema/TableDiff';

@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { DBALException } from '../DBALException';
 import { Type } from './Type';
 
@@ -17,7 +23,7 @@ export class TypeRegistry {
 
   /*Finds a name for the given type.*/
   public lookupName(type) {
-    var name = this.findTypeName(type);
+    let name = this.findTypeName(type);
     if (name === null) {
       throw DBALException.typeNotRegistered(type);
     }
@@ -57,7 +63,7 @@ export class TypeRegistry {
   }
 
   private findTypeName(type) {
-    var name = array_search(type, this.instances, true);
+    let name = array_search(type, this.instances, true);
     if (name === false) {
       return null;
     }

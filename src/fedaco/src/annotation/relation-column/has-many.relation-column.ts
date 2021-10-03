@@ -25,9 +25,9 @@ export const HasManyColumn: FedacoDecorator<HasManyRelationAnnotation> = makePro
     isRelation  : true,
     type        : RelationType.HasMany,
     _getRelation: function (m: Model) {
-      let instance   = m._newRelatedInstance(resolveForwardRef(p.related));
-      let foreignKey = p.foreignKey || m.getForeignKey();
-      let localKey   = p.localKey || m.getKeyName();
+      const instance   = m._newRelatedInstance(resolveForwardRef(p.related));
+      const foreignKey = p.foreignKey || m.getForeignKey();
+      const localKey   = p.localKey || m.getKeyName();
       return new HasMany(
         instance.newQuery(),
         m,

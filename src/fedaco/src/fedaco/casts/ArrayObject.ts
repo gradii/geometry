@@ -1,6 +1,12 @@
-import { ArrayObject as BaseArrayObject } from "ArrayObject";
-import { Arrayable } from "Illuminate/Contracts/Support/Arrayable";
-import { JsonSerializable } from "JsonSerializable";
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import { ArrayObject as BaseArrayObject } from 'ArrayObject';
+import { Arrayable } from 'Illuminate/Contracts/Support/Arrayable';
+import { JsonSerializable } from 'JsonSerializable';
 export class ArrayObject extends BaseArrayObject implements Arrayable, JsonSerializable {
     /*Get a collection containing the underlying array.*/
     public collect() {

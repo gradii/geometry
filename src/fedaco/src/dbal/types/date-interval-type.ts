@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { DateInterval, substr } from 'ROOT';
 
 /*Type that maps interval string to a PHP DateInterval Object.*/
@@ -35,13 +41,13 @@ export class DateIntervalType extends Type {
     if (value === null || value instanceof DateInterval) {
       return value;
     }
-    var negative = false;
+    let negative = false;
     if (value[0] !== undefined && (value[0] === '+' || value[0] === '-')) {
-      var negative = value[0] === '-';
-      var value = substr(value, 1);
+      let negative = value[0] === '-';
+      let value = substr(value, 1);
     }
     try {
-      var interval = new DateInterval(value);
+      let interval = new DateInterval(value);
       if (negative) {
         interval.invert = 1;
       }

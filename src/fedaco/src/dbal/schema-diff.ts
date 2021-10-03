@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { AbstractPlatform } from 'Doctrine/DBAL/Platforms';
 
 /*Schema Diff.*/
@@ -54,14 +60,14 @@ export class SchemaDiff {
 
   /**/
   protected _toSql(platform, saveMode: boolean = false) {
-    var sql = [];
+    let sql = [];
     if (platform.supportsSchemas()) {
-      for (let newNamespace of this.newNamespaces) {
+      for (const newNamespace of this.newNamespaces) {
         sql.push(platform.getCreateSchemaSQL(newNamespace));
       }
     }
     if (platform.supportsForeignKeyConstraints() && saveMode === false) {
-      for (let orphanedForeignKey of this.orphanedForeignKeys) {
+      for (const orphanedForeignKey of this.orphanedForeignKeys) {
         sql.push(
           platform.getDropForeignKeySQL(
             orphanedForeignKey,
@@ -71,39 +77,39 @@ export class SchemaDiff {
       }
     }
     if (platform.supportsSequences() === true) {
-      for (let sequence of this.changedSequences) {
+      for (const sequence of this.changedSequences) {
         sql.push(platform.getAlterSequenceSQL(sequence));
       }
       if (saveMode === false) {
-        for (let sequence of this.removedSequences) {
+        for (const sequence of this.removedSequences) {
           sql.push(platform.getDropSequenceSQL(sequence));
         }
       }
-      for (let sequence of this.newSequences) {
+      for (const sequence of this.newSequences) {
         sql.push(platform.getCreateSequenceSQL(sequence));
       }
     }
-    var foreignKeySql = [];
-    for (let table of this.newTables) {
-      var sql = [
+    const foreignKeySql = [];
+    for (const table of this.newTables) {
+      const sql = [
         ...sql,
         ...platform.getCreateTableSQL(table, AbstractPlatform.CREATE_INDEXES)
       ];
       if (!platform.supportsForeignKeyConstraints()) {
         continue;
       }
-      for (let foreignKey of table.getForeignKeys()) {
+      for (const foreignKey of table.getForeignKeys()) {
         foreignKeySql.push(platform.getCreateForeignKeySQL(foreignKey, table));
       }
     }
-    var sql = [...sql, ...foreignKeySql];
+    const sql = [...sql, ...foreignKeySql];
     if (saveMode === false) {
-      for (let table of this.removedTables) {
+      for (const table of this.removedTables) {
         sql.push(platform.getDropTableSQL(table));
       }
     }
-    for (let tableDiff of this.changedTables) {
-      var sql = [...sql, ...platform.getAlterTableSQL(tableDiff)];
+    for (const tableDiff of this.changedTables) {
+      const sql = [...sql, ...platform.getAlterTableSQL(tableDiff)];
     }
     return sql;
   }

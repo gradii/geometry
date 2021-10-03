@@ -30,14 +30,14 @@ export const MorphToManyColumn: FedacoDecorator<MorphToManyRelationAnnotation> =
     type        : RelationType.MorphToMany,
     _getRelation: function (m: Model, relation: string) {
 
-      let caller          = relation;
-      let instance        = m.newRelatedInstance(p.related);
-      let foreignPivotKey = p.foreignPivotKey || p.name + '_id';
-      let relatedPivotKey = p.relatedPivotKey || instance.getForeignKey();
+      const caller          = relation;
+      const instance        = m.newRelatedInstance(p.related);
+      const foreignPivotKey = p.foreignPivotKey || p.name + '_id';
+      const relatedPivotKey = p.relatedPivotKey || instance.getForeignKey();
       let table = p.table;
       if (!table) {
-        let words    = p.name.split('_');
-        let lastWord = words.pop();
+        const words    = p.name.split('_');
+        const lastWord = words.pop();
         table    = words.join('') + plural(lastWord);
       }
       const r = m.newMorphToMany(instance.newQuery(), this, p.name, table, foreignPivotKey,

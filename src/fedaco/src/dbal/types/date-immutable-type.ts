@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { DateTimeImmutable } from 'ROOT';
 import { Types } from './Types';
 import { DateType } from './DateType';
@@ -29,7 +35,7 @@ export class DateImmutableType extends DateType {
     if (value === null || value instanceof DateTimeImmutable) {
       return value;
     }
-    var dateTime = DateTimeImmutable.createFromFormat(
+    let dateTime = DateTimeImmutable.createFromFormat(
       '!' + platform.getDateFormatString(),
       value
     );

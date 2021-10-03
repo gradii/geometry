@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 // import { PDO } from "PDO";
 import { Connector } from './connector';
 import { ConnectorInterface } from './connector-interface';

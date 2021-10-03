@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { AbstractAsset } from './AbstractAsset';
 import { Constraint } from './Constraint';
 
@@ -26,15 +32,15 @@ export class Index extends AbstractAsset implements Constraint {
     options: any[]     = []
   ) {
     super();
-    var isUnique = isUnique || isPrimary;
+    const isUnique = isUnique || isPrimary;
     this._setName(indexName);
     this._isUnique = isUnique;
     this._isPrimary = isPrimary;
     this.options = options;
-    for (let column of columns) {
+    for (const column of columns) {
       this._addColumn(column);
     }
-    for (let flag of flags) {
+    for (const flag of flags) {
       this.addFlag(flag);
     }
   }
@@ -46,14 +52,14 @@ export class Index extends AbstractAsset implements Constraint {
 
   /*{@inheritdoc}*/
   public getQuotedColumns(platform) {
-    var subParts =
+    const subParts =
           platform.supportsColumnLengthIndexes() && this.hasOption('lengths')
             ? this.getOption('lengths')
             : [];
-    var columns = [];
-    for (let column of this._columns) {
-      var length = array_shift(subParts);
-      var quotedColumn = column.getQuotedName(platform);
+    const columns = [];
+    for (const column of this._columns) {
+      const length = array_shift(subParts);
+      let quotedColumn = column.getQuotedName(platform);
       if (length !== null) {
         quotedColumn += '(' + length + ')';
       }
@@ -84,16 +90,16 @@ export class Index extends AbstractAsset implements Constraint {
 
   /**/
   public hasColumnAtPosition(columnName: string, pos: number = 0) {
-    var columnName = this.trimQuotes(columnName.toLowerCase());
-    var indexColumns = array_map('strtolower', this.getUnquotedColumns());
+    const columnName = this.trimQuotes(columnName.toLowerCase());
+    const indexColumns = array_map('strtolower', this.getUnquotedColumns());
     return array_search(columnName, indexColumns) === pos;
   }
 
   /*Checks if this index exactly spans the given column names in the correct order.*/
   public spansColumns(columnNames: string[]) {
-    var columns = this.getColumns();
-    var numberOfColumns = count(columns);
-    var sameColumns = true;
+    const columns = this.getColumns();
+    const numberOfColumns = count(columns);
+    const sameColumns = true;
     for (let i = 0; i < numberOfColumns; i++) {
       if (
         columnNames[i] !== undefined &&
@@ -102,7 +108,7 @@ export class Index extends AbstractAsset implements Constraint {
       ) {
         continue;
       }
-      var sameColumns = false;
+      const sameColumns = false;
     }
     return sameColumns;
   }
@@ -112,7 +118,7 @@ export class Index extends AbstractAsset implements Constraint {
     if (count(other.getColumns()) !== count(this.getColumns())) {
       return false;
     }
-    var sameColumns = this.spansColumns(other.getColumns());
+    const sameColumns = this.spansColumns(other.getColumns());
     if (sameColumns) {
       if (!this.samePartialIndex(other)) {
         return false;
@@ -204,7 +210,7 @@ export class Index extends AbstractAsset implements Constraint {
 
   /*Returns whether the index has the same column lengths as the other*/
   private hasSameColumnLengths(other) {
-    var filter = (length) => {
+    const filter = (length) => {
       return length !== null;
     };
     return (

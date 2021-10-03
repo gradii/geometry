@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isArray, isBlank, isBoolean, isFunction } from '@gradii/check-type';
+import { isArray, isBlank, isBoolean, isFunction, isPromise } from '@gradii/check-type';
 import { format } from 'date-fns';
 import { BaseGrammar } from './base-grammar';
 import { SqliteWrappedConnection } from './connector/sqlite/sqlite-wrapped-connection';
@@ -468,6 +468,9 @@ export class Connection implements ConnectionInterface {
 
   /*Get the current PDO connection.*/
   public async getPdo(): Promise<WrappedConnection> {
+    if (isPromise(this.pdo)) {
+      throw new Error('pdo should not be promise');
+    }
     if (isFunction(this.pdo)) {
       this.pdo = await this.pdo.call(this);
       return this.pdo as WrappedConnection;

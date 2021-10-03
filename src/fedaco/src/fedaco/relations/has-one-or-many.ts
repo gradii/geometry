@@ -47,7 +47,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
 
   /*Set the base constraints on the relation query.*/
   public addConstraints() {
-    if (HasOneOrMany.constraints) {
+    if ((this.constructor as typeof HasOneOrMany).constraints) {
       const query = this.getRelationQuery();
       query.where(this.foreignKey, '=', this.getParentKey());
       query.whereNotNull(this.foreignKey);
@@ -155,11 +155,14 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
   }
 
   /*Create a new instance of the related model.*/
-  public async create(attributes: any[] = []) {
-    return tap(instance => {
-      this.setForeignAttributesForCreate(instance);
-      instance.save();
-    }, this._related.newInstance(attributes));
+  public async create(attributes: any = {}) {
+    const instance = this._related.newInstance(attributes);
+    this.setForeignAttributesForCreate(instance);
+    return instance.save();
+    // return tap(async instance => {
+    //   this.setForeignAttributesForCreate(instance);
+    //   instance.save();
+    // }, this._related.newInstance(attributes));
   }
 
   /*Create a Collection of new instances of the related model.*/

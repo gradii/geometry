@@ -24,10 +24,18 @@ export class SqliteConnector extends Connector implements ConnectorInterface {
     return this.createConnection(`${path}`, config, options);
   }
 
-  createConnection(database: string, config: any, options: any) {
+  async createConnection(database: string, config: any, options: any) {
     const [username, password] = [config['username'] ?? null, config['password'] ?? null];
     try {
-      return new SqliteWrappedConnection(new sqlite3.Database(database));
+      return new Promise((ok, fail) => {
+       const db = new sqlite3.Database(database, (err) => {
+          if (err) {
+            return fail(err);
+          }
+          ok(new SqliteWrappedConnection(db));
+        });
+      });
+
     } catch (e) {
       return this.tryAgainIfCausedByLostConnection(e, database, username, password, options);
     }

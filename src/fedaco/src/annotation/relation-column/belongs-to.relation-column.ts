@@ -16,12 +16,15 @@ import { RelationType } from '../enum-relation';
 import { FedacoRelationColumn, RelationColumnAnnotation } from '../relation-column';
 
 export interface BelongsToRelationAnnotation extends RelationColumnAnnotation {
-  related?: typeof Model | ForwardRefFn;
+  related: typeof Model | ForwardRefFn;
   foreignKey?: string;
   ownerKey?: string;
   relation?: string;
 }
 
+/**
+ * todo if foreign key is not defined in model. should mark foreign key as attribute can be accessed
+ */
 export const BelongsToColumn: FedacoDecorator<BelongsToRelationAnnotation> = makePropDecorator(
   'Fedaco:BelongsToColumn',
   (p: BelongsToRelationAnnotation) => ({
@@ -32,7 +35,7 @@ export const BelongsToColumn: FedacoDecorator<BelongsToRelationAnnotation> = mak
         relation = p.relation;
       }
 
-      let instance     = m._newRelatedInstance(resolveForwardRef(p.related));
+      const instance     = m._newRelatedInstance(resolveForwardRef(p.related));
       const foreignKey = p.foreignKey || `${snakeCase(relation)}_${instance.getKeyName()}`;
       const ownerKey   = p.ownerKey || instance.getKeyName();
       const r          = new BelongsTo(instance.newQuery(), m, foreignKey, ownerKey, relation);
