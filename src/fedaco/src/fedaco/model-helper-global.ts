@@ -11,8 +11,8 @@ import { fromAttributes, fromRawAttributes } from './relations/pivot-helper';
 
 
 /*Create a new pivot model instance.*/
-export function newPivot(parent: Model, attributes: any[], table: string, exists: boolean,
-                         using: string | typeof Model | null = null): Pivot | any {
+export function newPivot(parent: Model, attributes: any, table: string, exists: boolean,
+                         using?: typeof Model): Pivot | any {
   return using ?
     fromRawAttributes(using as typeof Model, parent, attributes, table, exists) :
     fromAttributes(Pivot, parent, attributes, table, exists);

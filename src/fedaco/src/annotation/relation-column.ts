@@ -6,7 +6,7 @@
 
 import { Model } from '../fedaco/model';
 import { Relation } from '../fedaco/relations/relation';
-import { ColumnAnnotation, FedacoColumn } from './column';
+import { ColumnAnnotation } from './column';
 import { RelationType } from './enum-relation';
 
 export interface RelationColumnAnnotation extends ColumnAnnotation {
@@ -14,7 +14,7 @@ export interface RelationColumnAnnotation extends ColumnAnnotation {
   isRelation?: boolean;
   relationType?: RelationType;
 
-  onQuery?: (q: Relation) => void;
+  onQuery?: (q: any) => void;
   _getRelation?: (m: Model, relation: string) => any;
 }
 

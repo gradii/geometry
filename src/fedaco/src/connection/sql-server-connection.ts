@@ -20,12 +20,12 @@ export class SqlServerConnection extends Connection {
   public async transaction(callback: Function, attempts: number = 1) {
     for (let a = 1; a <= attempts; a++) {
       if (this.getDriverName() === 'sqlsrv') {
-        return super.transaction(callback);
+        return await super.transaction(callback);
       }
       // await (this.getPdo()).exec('BEGIN TRAN');
       let result;
       try {
-        result = callback(this);
+        result = await callback(this);
         // this.getPdo().exec('COMMIT TRAN');
       } catch (e) {
         // this.getPdo().exec('ROLLBACK TRAN');

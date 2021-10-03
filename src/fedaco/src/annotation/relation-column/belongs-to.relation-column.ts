@@ -31,14 +31,14 @@ export const BelongsToColumn: FedacoDecorator<BelongsToRelationAnnotation> = mak
     isRelation  : true,
     type        : RelationType.BelongsTo,
     _getRelation: function (m: Model, relation: string) {
-      if (!isBlank(p.relation)) {
-        relation = p.relation;
+      if (isBlank(p.relation)) {
+        p.relation = relation;
       }
 
-      const instance     = m._newRelatedInstance(resolveForwardRef(p.related));
-      const foreignKey = p.foreignKey || `${snakeCase(relation)}_${instance.getKeyName()}`;
-      const ownerKey   = p.ownerKey || instance.getKeyName();
-      const r          = new BelongsTo(instance.newQuery(), m, foreignKey, ownerKey, relation);
+      const instance = m._newRelatedInstance(resolveForwardRef(p.related));
+      p.foreignKey   = p.foreignKey || `${snakeCase(p.relation)}_${instance.getKeyName()}`;
+      p.ownerKey     = p.ownerKey || instance.getKeyName();
+      const r        = new BelongsTo(instance.newQuery(), m, p.foreignKey, p.ownerKey, p.relation);
       if (p.onQuery) {
         p.onQuery(r);
       }
@@ -47,7 +47,7 @@ export const BelongsToColumn: FedacoDecorator<BelongsToRelationAnnotation> = mak
     ...p
   }),
   FedacoRelationColumn,
-  (target: any, name: string, columnDefine) => {
-    _additionalProcessingGetter(target, name, columnDefine);
+  (target: any, name: string, columnAnnotation) => {
+    _additionalProcessingGetter(target, name, columnAnnotation);
   }
 );

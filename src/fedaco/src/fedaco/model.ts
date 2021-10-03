@@ -633,7 +633,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Update the model in the database.*/
-  public update(attributes: any[] = [], options: any = {}) {
+  public update(attributes: any = {}, options: any = {}) {
     if (!this._exists) {
       return false;
     }
@@ -698,8 +698,8 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Save the model to the database using transaction.*/
-  public saveOrFail(options: any = {}) {
-    return this.getConnection().transaction(() => {
+  public async saveOrFail(options: any = {}) {
+    return this.getConnection().transaction(async () => {
       return this.save(options);
     });
   }

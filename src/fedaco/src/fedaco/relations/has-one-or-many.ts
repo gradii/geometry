@@ -15,7 +15,7 @@ import { Relation } from './relation';
 export interface HasOneOrMany extends Relation {
 }
 
-export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
+export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   /*The foreign key of the parent model.*/
   protected foreignKey: string;
   /*The local key of the parent model.*/
@@ -158,11 +158,8 @@ export class HasOneOrMany extends mixinInteractsWithDictionary<any>(Relation) {
   public async create(attributes: any = {}) {
     const instance = this._related.newInstance(attributes);
     this.setForeignAttributesForCreate(instance);
-    return instance.save();
-    // return tap(async instance => {
-    //   this.setForeignAttributesForCreate(instance);
-    //   instance.save();
-    // }, this._related.newInstance(attributes));
+    await instance.save();
+    return instance;
   }
 
   /*Create a Collection of new instances of the related model.*/

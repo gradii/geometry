@@ -4,9 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { makePropDecorator } from '@gradii/annotation';
-import { _additionalProcessingGetterSetter } from '../additional-processing';
-import { FedacoDecorator } from '../annotation.interface';
+import { makeDecorator } from '@gradii/annotation';
+import { Model } from '../../fedaco/model';
 import { FedacoColumn } from '../column';
 
 export interface TableAnnotation {
@@ -14,6 +13,19 @@ export interface TableAnnotation {
    * the database table name
    */
   tableName?: string;
+
+  /**
+   * the morph type name is used for morphOne morphMany.
+   * this value is stored in morphTo table's morphType column
+   */
+  morphTypeName?: string;
+
+  // /**
+  //  * todo does it need to defined on table ? not the morphTo field?
+  //  * the morph type map is used for morphTo.
+  //  * the value map can decode the string the real Model.
+  //  */
+  // morphTypeMap?: Record<string, typeof Model>;
 
   /**
    * Indicates if the model should be timestamped.
@@ -39,10 +51,18 @@ export interface TableAnnotation {
   deleted_at?: string;
 }
 
-export const Table: FedacoDecorator<TableAnnotation> = makePropDecorator(
+export interface InjectableDecorator<T extends TableAnnotation> {
+  (options?: T): any;
+
+  isTypeOf(obj: any): obj is T;
+
+  metadataName: string;
+
+  new(options?: T): T;
+}
+
+export const Table: InjectableDecorator<TableAnnotation> = makeDecorator(
   'Fedaco:Table',
   (p?: TableAnnotation): TableAnnotation => ({...p}),
   FedacoColumn,
-  (target: any, name: string, args: any[]) => {
-    _additionalProcessingGetterSetter(target, name, args);
-  });
+);

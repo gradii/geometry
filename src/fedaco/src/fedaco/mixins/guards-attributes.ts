@@ -14,7 +14,7 @@ function isAnyGuarded(guarded: string[]) {
   return guarded.length === 1 && guarded[0] === '*';
 }
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
+// tslint:disable-next-line:no-namespace eslint-disable-next-line @typescript-eslint/no-namespace
 export declare namespace GuardsAttributes {
   /*Indicates if all mass assignment is enabled.*/
   export const _unguarded = false;

@@ -4,8 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isArray } from '@gradii/check-type';
-import { tap } from 'ramda';
+import { reflector } from '@gradii/annotation';
+import { isArray, isString } from '@gradii/check-type';
+import { findLast, tap } from 'ramda';
+import { Table, TableAnnotation } from '../../annotation/table/table';
 import { Constructor } from '../../helper/constructor';
 import { snakeCase } from '../../helper/str';
 import { Model } from '../model';
@@ -574,10 +576,20 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
 
     /*Get the class name for polymorphic relations.*/
     public getMorphClass() {
-      const morphMap = Relation.morphMap();
-      if (morphMap.length && morphMap.includes(this.constructor.name)) {
-        // @ts-ignore
-        return morphMap[this.constructor.name];
+
+
+      const metas                 = reflector.annotations(this.constructor);
+      const meta: TableAnnotation = findLast(it => Table.isTypeOf(it), metas);
+
+      if (meta && isString(meta.morphTypeName)) {
+        return meta.morphTypeName;
+      } else {
+        const morphMap: Record<string, any> = Relation.morphMap();
+        for (const [key, value] of Object.entries(morphMap)) {
+          if (this.constructor === value) {
+            return key;
+          }
+        }
       }
       return this.constructor.name;
     }

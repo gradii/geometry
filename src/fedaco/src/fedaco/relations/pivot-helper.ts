@@ -6,7 +6,7 @@
 
 import { Model } from '../model';
 
-export function fromAttributes(clazz: typeof Model, parent: Model, attributes: any[], table: string,
+export function fromAttributes(clazz: typeof Model, parent: Model, attributes: any, table: string,
                                exists = false) {
   const instance        = new clazz();
   instance.timestamps = instance.hasTimestampAttributes(attributes);
@@ -17,7 +17,7 @@ export function fromAttributes(clazz: typeof Model, parent: Model, attributes: a
   return instance;
 }
 
-export function fromRawAttributes(clazz: typeof Model, parent: Model, attributes: any[], table: string,
+export function fromRawAttributes(clazz: typeof Model, parent: Model, attributes: any, table: string,
                                   exists = false) {
   const instance        = fromAttributes(clazz, parent, [], table, exists);
   instance._timestamps = instance.hasTimestampAttributes(attributes);

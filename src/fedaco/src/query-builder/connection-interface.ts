@@ -13,7 +13,7 @@ import { QueryBuilder } from './query-builder';
 export interface ConnectionInterface {
   select(sql: string, bindings: any[], readConnection?: boolean): Promise<any> | any;
 
-  insert(sql: string, bindings: any[]): Promise<any> | boolean;
+  insert(sql: string, bindings: any[]): Promise<boolean>;
 
   // todo implement me
   // insertGetId(sql: string, bindings: any[]): Promise<any> | boolean;

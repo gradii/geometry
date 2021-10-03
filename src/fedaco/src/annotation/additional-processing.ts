@@ -4,6 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { has } from '@gradii/check-type';
 import { Model } from '../fedaco/model';
 import { ColumnAnnotation } from './column';
 

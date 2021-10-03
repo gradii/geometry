@@ -1,6 +1,9 @@
-import { isArray } from '@gradii/check-type';
+import { isArray, isNumber } from '@gradii/check-type';
+import { format } from 'date-fns';
+import { head } from 'ramda';
 import { Subject } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
+import { ArrayColumn } from '../src/annotation/column/array.column';
 import { Column } from '../src/annotation/column/column';
 import { CreatedAtColumn } from '../src/annotation/column/created-at.column';
 import { PrimaryColumn } from '../src/annotation/column/primary.column';
@@ -9,9 +12,14 @@ import { BelongsToManyColumn } from '../src/annotation/relation-column/belongs-t
 import { BelongsToColumn } from '../src/annotation/relation-column/belongs-to.relation-column';
 import { HasManyColumn } from '../src/annotation/relation-column/has-many.relation-column';
 import { HasOneColumn } from '../src/annotation/relation-column/has-one.relation-column';
+import { MorphManyColumn } from '../src/annotation/relation-column/morph-many.relation-column';
+import { MorphToColumn } from '../src/annotation/relation-column/morph-to.relation-column';
+import { Table } from '../src/annotation/table/table';
 import { DatabaseConfig } from '../src/databaseConfig';
+import { FedacoBuilder } from '../src/fedaco/fedaco-builder';
 import { Model } from '../src/fedaco/model';
 import { BelongsToMany } from '../src/fedaco/relations/belongs-to-many';
+import { Relation } from '../src/fedaco/relations/relation';
 import { forwardRef } from '../src/query-builder/forward-ref';
 import { SchemaBuilder } from '../src/schema/schema-builder';
 
@@ -736,569 +744,653 @@ describe('test database eloquent integration', () => {
     expect((await post2.user).email).toBe('taylorotwell@gmail.com');
   });
 
-//   it('basic model hydration', () => {
-//     let user = new EloquentTestUser({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     user.setConnection('second_connection');
-//     user.save();
-//     let user = new EloquentTestUser({
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     user.setConnection('second_connection');
-//     user.save();
-//     let models = EloquentTestUser.on('second_connection').fromQuery(
-//       'SELECT * FROM users WHERE email = ?', ['abigailotwell@gmail.com']);
-//     expect(models).toInstanceOf(Collection);
-//     expect(models[0]).toInstanceOf(EloquentTestUser);
-//     expect(models[0].email).toBe('abigailotwell@gmail.com');
-//     expect(models[0].getConnectionName()).toBe('second_connection');
-//     expect(models).toCount(1);
-//   });
+  it('basic model hydration', async () => {
+    let user = EloquentTestUser.initAttributes({
+      'email': 'taylorotwell@gmail.com'
+    });
+    user.setConnection('second_connection');
+    await user.save();
+    user = EloquentTestUser.initAttributes({
+      'email': 'abigailotwell@gmail.com'
+    });
+    user.setConnection('second_connection');
+    await user.save();
+    const models = await EloquentTestUser.useConnection('second_connection').fromQuery(
+      'SELECT * FROM users WHERE email = ?', ['abigailotwell@gmail.com']);
+    expect(isArray(models)).toBeTruthy();
+    expect(models[0]).toBeInstanceOf(EloquentTestUser);
+    expect(models[0].email).toBe('abigailotwell@gmail.com');
+    expect(models[0].getConnectionName()).toBe('second_connection');
+    expect(models.length).toBe(1);
+  });
 
-//   it('has on self referencing belongs to many relationship', () => {
-//     let user = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     user.friends().create({
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     expect(user.friends[0].id !== undefined).toBeTruthy();
-//     let results = EloquentTestUser.has('friends').get();
-//     expect(results).toCount(1);
-//     expect(results.first().email).toBe('taylorotwell@gmail.com');
-//   });
-//   it('where has on self referencing belongs to many relationship', () => {
-//     let user = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     user.friends().create({
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     let results = EloquentTestUser.whereHas('friends', query => {
-//       query.where('email', 'abigailotwell@gmail.com');
-//     }).get();
-//     expect(results).toCount(1);
-//     expect(results.first().email).toBe('taylorotwell@gmail.com');
-//   });
-//   it('has on nested self referencing belongs to many relationship', () => {
-//     let user   = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     let friend = user.friends().create({
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     friend.friends().create({
-//       'email': 'foo@gmail.com'
-//     });
-//     let results = EloquentTestUser.has('friends.friends').get();
-//     expect(results).toCount(1);
-//     expect(results.first().email).toBe('taylorotwell@gmail.com');
-//   });
-//   it('where has on nested self referencing belongs to many relationship', () => {
-//     let user   = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     let friend = user.friends().create({
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     friend.friends().create({
-//       'email': 'foo@gmail.com'
-//     });
-//     let results = EloquentTestUser.whereHas('friends.friends', query => {
-//       query.where('email', 'foo@gmail.com');
-//     }).get();
-//     expect(results).toCount(1);
-//     expect(results.first().email).toBe('taylorotwell@gmail.com');
-//   });
-//   it('has on self referencing belongs to many relationship with where pivot', () => {
-//     let user = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     user.friends().create({
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     let results = EloquentTestUser.has('friendsOne').get();
-//     expect(results).toCount(1);
-//     expect(results.first().email).toBe('taylorotwell@gmail.com');
-//   });
-//   it('has on nested self referencing belongs to many relationship with where pivot', () => {
-//     let user   = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     let friend = user.friends().create({
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     friend.friends().create({
-//       'email': 'foo@gmail.com'
-//     });
-//     let results = EloquentTestUser.has('friendsOne.friendsTwo').get();
-//     expect(results).toCount(1);
-//     expect(results.first().email).toBe('taylorotwell@gmail.com');
-//   });
-//   it('has on self referencing belongs to relationship', () => {
-//     let parentPost = EloquentTestPost.create({
-//       'name'   : 'Parent Post',
-//       'user_id': 1
-//     });
-//     EloquentTestPost.create({
-//       'name'     : 'Child Post',
-//       'parent_id': parentPost.id,
-//       'user_id'  : 2
-//     });
-//     let results = EloquentTestPost.has('parentPost').get();
-//     expect(results).toCount(1);
-//     expect(results.first().name).toBe('Child Post');
-//   });
-//   it('aggregated values of datetime field', () => {
-//     EloquentTestUser.create({
-//       'id'        : 1,
-//       'email'     : 'test1@test.test',
-//       'created_at': '2016-08-10 09:21:00',
-//       'updated_at': Carbon.now()
-//     });
-//     EloquentTestUser.create({
-//       'id'        : 2,
-//       'email'     : 'test2@test.test',
-//       'created_at': '2016-08-01 12:00:00',
-//       'updated_at': Carbon.now()
-//     });
-//     expect(EloquentTestUser.max('created_at')).toBe('2016-08-10 09:21:00');
-//     expect(EloquentTestUser.min('created_at')).toBe('2016-08-01 12:00:00');
-//   });
-//   it('where has on self referencing belongs to relationship', () => {
-//     let parentPost = EloquentTestPost.create({
-//       'name'   : 'Parent Post',
-//       'user_id': 1
-//     });
-//     EloquentTestPost.create({
-//       'name'     : 'Child Post',
-//       'parent_id': parentPost.id,
-//       'user_id'  : 2
-//     });
-//     let results = EloquentTestPost.whereHas('parentPost', query => {
-//       query.where('name', 'Parent Post');
-//     }).get();
-//     expect(results).toCount(1);
-//     expect(results.first().name).toBe('Child Post');
-//   });
-//   it('has on nested self referencing belongs to relationship', () => {
-//     let grandParentPost = EloquentTestPost.create({
-//       'name'   : 'Grandparent Post',
-//       'user_id': 1
-//     });
-//     let parentPost      = EloquentTestPost.create({
-//       'name'     : 'Parent Post',
-//       'parent_id': grandParentPost.id,
-//       'user_id'  : 2
-//     });
-//     EloquentTestPost.create({
-//       'name'     : 'Child Post',
-//       'parent_id': parentPost.id,
-//       'user_id'  : 3
-//     });
-//     let results = EloquentTestPost.has('parentPost.parentPost').get();
-//     expect(results).toCount(1);
-//     expect(results.first().name).toBe('Child Post');
-//   });
-//   it('where has on nested self referencing belongs to relationship', () => {
-//     let grandParentPost = EloquentTestPost.create({
-//       'name'   : 'Grandparent Post',
-//       'user_id': 1
-//     });
-//     let parentPost      = EloquentTestPost.create({
-//       'name'     : 'Parent Post',
-//       'parent_id': grandParentPost.id,
-//       'user_id'  : 2
-//     });
-//     EloquentTestPost.create({
-//       'name'     : 'Child Post',
-//       'parent_id': parentPost.id,
-//       'user_id'  : 3
-//     });
-//     let results = EloquentTestPost.whereHas('parentPost.parentPost', query => {
-//       query.where('name', 'Grandparent Post');
-//     }).get();
-//     expect(results).toCount(1);
-//     expect(results.first().name).toBe('Child Post');
-//   });
-//   it('has on self referencing has many relationship', () => {
-//     let parentPost = EloquentTestPost.create({
-//       'name'   : 'Parent Post',
-//       'user_id': 1
-//     });
-//     EloquentTestPost.create({
-//       'name'     : 'Child Post',
-//       'parent_id': parentPost.id,
-//       'user_id'  : 2
-//     });
-//     let results = EloquentTestPost.has('childPosts').get();
-//     expect(results).toCount(1);
-//     expect(results.first().name).toBe('Parent Post');
-//   });
-//   it('where has on self referencing has many relationship', () => {
-//     let parentPost = EloquentTestPost.create({
-//       'name'   : 'Parent Post',
-//       'user_id': 1
-//     });
-//     EloquentTestPost.create({
-//       'name'     : 'Child Post',
-//       'parent_id': parentPost.id,
-//       'user_id'  : 2
-//     });
-//     let results = EloquentTestPost.whereHas('childPosts', query => {
-//       query.where('name', 'Child Post');
-//     }).get();
-//     expect(results).toCount(1);
-//     expect(results.first().name).toBe('Parent Post');
-//   });
-//   it('has on nested self referencing has many relationship', () => {
-//     let grandParentPost = EloquentTestPost.create({
-//       'name'   : 'Grandparent Post',
-//       'user_id': 1
-//     });
-//     let parentPost      = EloquentTestPost.create({
-//       'name'     : 'Parent Post',
-//       'parent_id': grandParentPost.id,
-//       'user_id'  : 2
-//     });
-//     EloquentTestPost.create({
-//       'name'     : 'Child Post',
-//       'parent_id': parentPost.id,
-//       'user_id'  : 3
-//     });
-//     let results = EloquentTestPost.has('childPosts.childPosts').get();
-//     expect(results).toCount(1);
-//     expect(results.first().name).toBe('Grandparent Post');
-//   });
-//   it('where has on nested self referencing has many relationship', () => {
-//     let grandParentPost = EloquentTestPost.create({
-//       'name'   : 'Grandparent Post',
-//       'user_id': 1
-//     });
-//     let parentPost      = EloquentTestPost.create({
-//       'name'     : 'Parent Post',
-//       'parent_id': grandParentPost.id,
-//       'user_id'  : 2
-//     });
-//     EloquentTestPost.create({
-//       'name'     : 'Child Post',
-//       'parent_id': parentPost.id,
-//       'user_id'  : 3
-//     });
-//     let results = EloquentTestPost.whereHas('childPosts.childPosts', query => {
-//       query.where('name', 'Child Post');
-//     }).get();
-//     expect(results).toCount(1);
-//     expect(results.first().name).toBe('Grandparent Post');
-//   });
-//   it('has with non where bindings', () => {
-//     let user = EloquentTestUser.create({
-//       'id'   : 1,
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     user.posts().create({
-//       'name': 'Post 2'
-//     }).photos().create({
-//       'name': 'photo.jpg'
-//     });
-//     let query              = EloquentTestUser.has('postWithPhotos');
-//     let bindingsCount      = count(query.getBindings());
-//     let questionMarksCount = substr_count(query.toSql(), '?');
-//     expect(bindingsCount).toEqual(questionMarksCount);
-//   });
-//   it('has on morph to relationship', () => {
-//     this.expectException(RuntimeException);
-//     EloquentTestPhoto.has('imageable').get();
-//   });
-//   it('belongs to many relationship models are properly hydrated over chunked request', () => {
-//     let user   = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     let friend = user.friends().create({
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     EloquentTestUser.first().friends().chunk(2, friends => {
-//       this.assertCount(1, friends);
-//       this.assertSame('abigailotwell@gmail.com', friends.first().email);
-//       this.assertEquals(user.id, friends.first().pivot.user_id);
-//       this.assertEquals(friend.id, friends.first().pivot.friend_id);
-//     });
-//   });
-//   it('belongs to many relationship models are properly hydrated over each request', () => {
-//     let user   = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     let friend = user.friends().create({
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     EloquentTestUser.first().friends().each(result => {
-//       this.assertSame('abigailotwell@gmail.com', result.email);
-//       this.assertEquals(user.id, result.pivot.user_id);
-//       this.assertEquals(friend.id, result.pivot.friend_id);
-//     });
-//   });
-//   it('belongs to many relationship models are properly hydrated over cursor request', () => {
-//     let user   = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     let friend = user.friends().create({
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     for (let result of EloquentTestUser.first().friends().cursor()) {
-//       expect(result.email).toBe('abigailotwell@gmail.com');
-//       expect(result.pivot.user_id).toEqual(user.id);
-//       expect(result.pivot.friend_id).toEqual(friend.id);
-//     }
-//   });
-//   it('basic has many eager loading', () => {
-//     let user = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     user.posts().create({
-//       'name': 'First Post'
-//     });
-//     let user = EloquentTestUser._with('posts').where('email', 'taylorotwell@gmail.com').first();
-//     expect(user.posts.first().name).toBe('First Post');
-//     let post = EloquentTestPost._with('user').where('name', 'First Post').get();
-//     expect(post.first().user.email).toBe('taylorotwell@gmail.com');
-//   });
-//   it('basic nested self referencing has many eager loading', () => {
-//     let user = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     let post = user.posts().create({
-//       'name': 'First Post'
-//     });
-//     post.childPosts().create({
-//       'name'   : 'Child Post',
-//       'user_id': user.id
-//     });
-//     let user = EloquentTestUser._with('posts.childPosts').where('email',
-//       'taylorotwell@gmail.com').first();
-//     expect(user.posts.first()).toNotNull();
-//     expect(user.posts.first().name).toBe('First Post');
-//     expect(user.posts.first().childPosts.first()).toNotNull();
-//     expect(user.posts.first().childPosts.first().name).toBe('Child Post');
-//     let post = EloquentTestPost._with('parentPost.user').where('name', 'Child Post').get();
-//     expect(post.first().parentPost).toNotNull();
-//     expect(post.first().parentPost.user).toNotNull();
-//     expect(post.first().parentPost.user.email).toBe('taylorotwell@gmail.com');
-//   });
-//   it('basic morph many relationship', () => {
-//     let user = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     user.photos().create({
-//       'name': 'Avatar 1'
-//     });
-//     user.photos().create({
-//       'name': 'Avatar 2'
-//     });
-//     let post = user.posts().create({
-//       'name': 'First Post'
-//     });
-//     post.photos().create({
-//       'name': 'Hero 1'
-//     });
-//     post.photos().create({
-//       'name': 'Hero 2'
-//     });
-//     expect(user.photos).toInstanceOf(Collection);
-//     expect(user.photos[0]).toInstanceOf(EloquentTestPhoto);
-//     expect(post.photos).toInstanceOf(Collection);
-//     expect(post.photos[0]).toInstanceOf(EloquentTestPhoto);
-//     expect(user.photos).toCount(2);
-//     expect(post.photos).toCount(2);
-//     expect(user.photos[0].name).toBe('Avatar 1');
-//     expect(user.photos[1].name).toBe('Avatar 2');
-//     expect(post.photos[0].name).toBe('Hero 1');
-//     expect(post.photos[1].name).toBe('Hero 2');
-//     let photos = EloquentTestPhoto.orderBy('name').get();
-//     expect(photos).toInstanceOf(Collection);
-//     expect(photos).toCount(4);
-//     expect(photos[0].imageable).toInstanceOf(EloquentTestUser);
-//     expect(photos[2].imageable).toInstanceOf(EloquentTestPost);
-//     expect(photos[1].imageable.email).toBe('taylorotwell@gmail.com');
-//     expect(photos[3].imageable.name).toBe('First Post');
-//   });
-//   it('morph map is used for creating and fetching through relation', () => {
-//     Relation.morphMap({
-//       'user': EloquentTestUser,
-//       'post': EloquentTestPost
-//     });
-//     let user = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     user.photos().create({
-//       'name': 'Avatar 1'
-//     });
-//     user.photos().create({
-//       'name': 'Avatar 2'
-//     });
-//     let post = user.posts().create({
-//       'name': 'First Post'
-//     });
-//     post.photos().create({
-//       'name': 'Hero 1'
-//     });
-//     post.photos().create({
-//       'name': 'Hero 2'
-//     });
-//     expect(user.photos).toInstanceOf(Collection);
-//     expect(user.photos[0]).toInstanceOf(EloquentTestPhoto);
-//     expect(post.photos).toInstanceOf(Collection);
-//     expect(post.photos[0]).toInstanceOf(EloquentTestPhoto);
-//     expect(user.photos).toCount(2);
-//     expect(post.photos).toCount(2);
-//     expect(user.photos[0].name).toBe('Avatar 1');
-//     expect(user.photos[1].name).toBe('Avatar 2');
-//     expect(post.photos[0].name).toBe('Hero 1');
-//     expect(post.photos[1].name).toBe('Hero 2');
-//     expect(user.photos[0].imageable_type).toBe('user');
-//     expect(user.photos[1].imageable_type).toBe('user');
-//     expect(post.photos[0].imageable_type).toBe('post');
-//     expect(post.photos[1].imageable_type).toBe('post');
-//   });
-//   it('morph map is used when fetching parent', () => {
-//     Relation.morphMap({
-//       'user': EloquentTestUser,
-//       'post': EloquentTestPost
-//     });
-//     let user = EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     user.photos().create({
-//       'name': 'Avatar 1'
-//     });
-//     let photo = EloquentTestPhoto.first();
-//     expect(photo.imageable_type).toBe('user');
-//     expect(photo.imageable).toInstanceOf(EloquentTestUser);
-//   });
-//   it('morph map is merged by default', () => {
-//     let map1 = {
-//       'user': EloquentTestUser
-//     };
-//     let map2 = {
-//       'post': EloquentTestPost
-//     };
-//     Relation.morphMap(map1);
-//     Relation.morphMap(map2);
-//     expect(Relation.morphMap()).toEqual([...map1, ...map2]);
-//   });
-//   it('morph map overwrites current map', () => {
-//     let map1 = {
-//       'user': EloquentTestUser
-//     };
-//     let map2 = {
-//       'post': EloquentTestPost
-//     };
-//     Relation.morphMap(map1, false);
-//     expect(Relation.morphMap()).toEqual(map1);
-//     Relation.morphMap(map2, false);
-//     expect(Relation.morphMap()).toEqual(map2);
-//   });
-//   it('empty morph to relationship', () => {
-//     let photo = new EloquentTestPhoto();
-//     expect(photo.imageable).toNull();
-//   });
-//   it('save or fail', () => {
-//     let date = '1970-01-01';
-//     let post = new EloquentTestPost({
-//       'user_id'   : 1,
-//       'name'      : 'Post',
-//       'created_at': date,
-//       'updated_at': date
-//     });
-//     expect(post.saveOrFail()).toBeTruthy();
-//     expect(EloquentTestPost.count()).toEqual(1);
-//   });
-//   it('saving json fields', () => {
-//     let model = EloquentTestWithJSON.create({
-//       'json': {
-//         'x': 0
-//       }
-//     });
-//     expect(model.json).toEqual({
-//       'x': 0
-//     });
-//     model.fillable(['json->y', 'json->a->b']);
-//     model.update({
-//       'json->y': '1'
-//     });
-//     expect(model.toArray()).toArrayNotHasKey('json->y');
-//     expect(model.json).toEqual({
-//       'x': 0,
-//       'y': 1
-//     });
-//     model.update({
-//       'json->a->b': '3'
-//     });
-//     expect(model.toArray()).toArrayNotHasKey('json->a->b');
-//     expect(model.json).toEqual({
-//       'x': 0,
-//       'y': 1,
-//       'a': {
-//         'b': 3
-//       }
-//     });
-//   });
-//   it('save or fail with duplicated entry', () => {
-//     this.expectException(QueryException);
-//     this.expectExceptionMessage('SQLSTATE[23000]:');
-//     let date = '1970-01-01';
-//     EloquentTestPost.create({
-//       'id'        : 1,
-//       'user_id'   : 1,
-//       'name'      : 'Post',
-//       'created_at': date,
-//       'updated_at': date
-//     });
-//     let post = new EloquentTestPost({
-//       'id'        : 1,
-//       'user_id'   : 1,
-//       'name'      : 'Post',
-//       'created_at': date,
-//       'updated_at': date
-//     });
-//     post.saveOrFail();
-//   });
-//   it('multi inserts with different values', () => {
-//     let date   = '1970-01-01';
-//     let result = EloquentTestPost.insert([
-//       {
-//         'user_id'   : 1,
-//         'name'      : 'Post',
-//         'created_at': date,
-//         'updated_at': date
-//       }, {
-//         'user_id'   : 2,
-//         'name'      : 'Post',
-//         'created_at': date,
-//         'updated_at': date
-//       }
-//     ]);
-//     expect(result).toBeTruthy();
-//     expect(EloquentTestPost.count()).toEqual(2);
-//   });
-//   it('multi inserts with same values', () => {
-//     let date   = '1970-01-01';
-//     let result = EloquentTestPost.insert([
-//       {
-//         'user_id'   : 1,
-//         'name'      : 'Post',
-//         'created_at': date,
-//         'updated_at': date
-//       }, {
-//         'user_id'   : 1,
-//         'name'      : 'Post',
-//         'created_at': date,
-//         'updated_at': date
-//       }
-//     ]);
-//     expect(result).toBeTruthy();
-//     expect(EloquentTestPost.count()).toEqual(2);
-//   });
+  it('has on self referencing belongs to many relationship', async () => {
+    const user = await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    await user.getRelationMethod('friends').create({
+      'email': 'abigailotwell@gmail.com'
+    });
+    expect((await user.friends)[0].id !== undefined).toBeTruthy();
+    const results = await EloquentTestUser.createQuery().has('friends').get();
+    expect(results.length).toBe(1);
+    expect(head(results).email).toBe('taylorotwell@gmail.com');
+  });
+
+  it('where has on self referencing belongs to many relationship', async () => {
+    const user = await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    await user.getRelationMethod('friends').create({
+      'email': 'abigailotwell@gmail.com'
+    });
+    const results: EloquentTestUser[] = await EloquentTestUser.createQuery()
+      .whereHas('friends', query => {
+        query.where('email', 'abigailotwell@gmail.com');
+      }).get();
+    expect(results.length).toBe(1);
+    expect(head(results).email).toBe('taylorotwell@gmail.com');
+  });
+
+  it('has on nested self referencing belongs to many relationship', async () => {
+    const user   = await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    const friend = await user.getRelationMethod('friends').create({
+      'email': 'abigailotwell@gmail.com'
+    });
+    await friend.getRelationMethod('friends').create({
+      'email': 'foo@gmail.com'
+    });
+    const results = await EloquentTestUser.createQuery().has('friends.friends').get();
+    expect(results.length).toBe(1);
+    expect(head(results).email).toBe('taylorotwell@gmail.com');
+  });
+
+  it('where has on nested self referencing belongs to many relationship', async () => {
+    const user   = await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    const friend = await user.getRelationMethod('friends').create({
+      'email': 'abigailotwell@gmail.com'
+    });
+    await friend.getRelationMethod('friends').create({
+      'email': 'foo@gmail.com'
+    });
+    const results: EloquentTestUser[] = await EloquentTestUser.createQuery()
+      .whereHas('friends.friends', query => {
+        query.where('email', 'foo@gmail.com');
+      }).get();
+    expect(results.length).toBe(1);
+    expect(head(results).email).toBe('taylorotwell@gmail.com');
+  });
+
+  it('has on self referencing belongs to many relationship with where pivot', async () => {
+    const user = await EloquentTestUser.createQuery().create({
+      id     : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+    await user.getRelationMethod('friends').create({
+      id     : 2,
+      'email': 'abigailotwell@gmail.com'
+    });
+    const results = await EloquentTestUser.createQuery().has('friendsOne').get();
+    expect(results.length).toBe(1);
+    expect(head(results).email).toBe('taylorotwell@gmail.com');
+  });
+
+  it('has on nested self referencing belongs to many relationship with where pivot', async () => {
+    const user   = await EloquentTestUser.createQuery().create({
+      id     : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+    const friend = await user.getRelationMethod('friends').create({
+      id     : 2,
+      'email': 'abigailotwell@gmail.com'
+    });
+    await friend.getRelationMethod('friends').create({
+      id     : 3,
+      'email': 'foo@gmail.com'
+    });
+    const results = await EloquentTestUser.createQuery().has('friendsOne.friendsTwo').get();
+    expect(results.length).toBe(1);
+    expect(head(results).email).toBe('taylorotwell@gmail.com');
+  });
+
+  it('has on self referencing belongs to relationship', async () => {
+    const parentPost = await EloquentTestPost.createQuery().create({
+      'name'   : 'Parent Post',
+      'user_id': 1
+    });
+    await EloquentTestPost.createQuery().create({
+      'name'     : 'Child Post',
+      'parent_id': parentPost.id,
+      'user_id'  : 2
+    });
+    const results = await EloquentTestPost.createQuery().has('parentPost').get();
+    expect(results.length).toBe(1);
+    expect(head(results).name).toBe('Child Post');
+  });
+
+  it('aggregated values of datetime field', async () => {
+    await EloquentTestUser.createQuery().create({
+      'id'        : 1,
+      'email'     : 'test1@test.test',
+      'created_at': '2021-08-10 09:21:00',
+      'updated_at': new Date()
+    });
+    await EloquentTestUser.createQuery().create({
+      'id'        : 2,
+      'email'     : 'test2@test.test',
+      'created_at': '2021-08-01 12:00:00',
+      'updated_at': new Date()
+    });
+    expect(await EloquentTestUser.createQuery().max('created_at')).toBe('2021-08-10 09:21:00');
+    expect(await EloquentTestUser.createQuery().min('created_at')).toBe('2021-08-01 12:00:00');
+  });
+
+  it('where has on self referencing belongs to relationship', async () => {
+    const parentPost = await EloquentTestPost.createQuery().create({
+      'name'   : 'Parent Post',
+      'user_id': 1
+    });
+    await EloquentTestPost.createQuery().create({
+      'name'     : 'Child Post',
+      'parent_id': parentPost.id,
+      'user_id'  : 2
+    });
+    const results: EloquentTestPost[] = await EloquentTestPost.createQuery().whereHas('parentPost',
+      query => {
+        query.where('name', 'Parent Post');
+      }).get();
+    expect(results.length).toBe(1);
+    expect(head(results).name).toBe('Child Post');
+  });
+
+  it('has on nested self referencing belongs to relationship', async () => {
+    const grandParentPost = await EloquentTestPost.createQuery().create({
+      'name'   : 'Grandparent Post',
+      'user_id': 1
+    });
+    const parentPost      = await EloquentTestPost.createQuery().create({
+      'name'     : 'Parent Post',
+      'parent_id': grandParentPost.id,
+      'user_id'  : 2
+    });
+    await EloquentTestPost.createQuery().create({
+      'name'     : 'Child Post',
+      'parent_id': parentPost.id,
+      'user_id'  : 3
+    });
+    // @ts-ignore
+    const results: EloquentTestPost[] = await EloquentTestPost.createQuery().has(
+      'parentPost.parentPost').get();
+    expect(results.length).toBe(1);
+    expect(head(results).name).toBe('Child Post');
+  });
+
+  it('where has on nested self referencing belongs to relationship', async () => {
+    const grandParentPost = await EloquentTestPost.createQuery().create({
+      'name'   : 'Grandparent Post',
+      'user_id': 1
+    });
+    const parentPost      = await EloquentTestPost.createQuery().create({
+      'name'     : 'Parent Post',
+      'parent_id': grandParentPost.id,
+      'user_id'  : 2
+    });
+    await EloquentTestPost.createQuery().create({
+      'name'     : 'Child Post',
+      'parent_id': parentPost.id,
+      'user_id'  : 3
+    });
+    // @ts-ignore
+    const results: EloquentTestPost[] = await EloquentTestPost.createQuery().whereHas(
+      'parentPost.parentPost', query => {
+        query.where('name', 'Grandparent Post');
+      }).get();
+    expect(results.length).toBe(1);
+    expect(head(results).name).toBe('Child Post');
+  });
+
+  it('has on self referencing has many relationship', async () => {
+    const parentPost = await EloquentTestPost.createQuery().create({
+      'name'   : 'Parent Post',
+      'user_id': 1
+    });
+    await EloquentTestPost.createQuery().create({
+      'name'     : 'Child Post',
+      'parent_id': parentPost.id,
+      'user_id'  : 2
+    });
+    // @ts-ignore
+    const results: EloquentTestPost[] = await EloquentTestPost.createQuery().has(
+      'childPosts').get();
+    expect(results.length).toBe(1);
+    expect(head(results).name).toBe('Parent Post');
+  });
+
+  it('where has on self referencing has many relationship', async () => {
+    const parentPost = await EloquentTestPost.createQuery().create({
+      'name'   : 'Parent Post',
+      'user_id': 1
+    });
+    await EloquentTestPost.createQuery().create({
+      'name'     : 'Child Post',
+      'parent_id': parentPost.id,
+      'user_id'  : 2
+    });
+    // @ts-ignore
+    const results: EloquentTestPost[] = await EloquentTestPost.createQuery().whereHas('childPosts',
+      query => {
+        query.where('name', 'Child Post');
+      }).get();
+    expect(results.length).toBe(1);
+    expect(head(results).name).toBe('Parent Post');
+  });
+
+  it('has on nested self referencing has many relationship', async () => {
+    const grandParentPost = await EloquentTestPost.createQuery().create({
+      'name'   : 'Grandparent Post',
+      'user_id': 1
+    });
+    const parentPost      = await EloquentTestPost.createQuery().create({
+      'name'     : 'Parent Post',
+      'parent_id': grandParentPost.id,
+      'user_id'  : 2
+    });
+    await EloquentTestPost.createQuery().create({
+      'name'     : 'Child Post',
+      'parent_id': parentPost.id,
+      'user_id'  : 3
+    });
+    // @ts-ignore
+    const results: EloquentTestPost[] = await EloquentTestPost.createQuery().has(
+      'childPosts.childPosts').get();
+    expect(results.length).toBe(1);
+    expect(head(results).name).toBe('Grandparent Post');
+  });
+
+  it('where has on nested self referencing has many relationship', async () => {
+    const grandParentPost = await EloquentTestPost.createQuery().create({
+      'name'   : 'Grandparent Post',
+      'user_id': 1
+    });
+    const parentPost      = await EloquentTestPost.createQuery().create({
+      'name'     : 'Parent Post',
+      'parent_id': grandParentPost.id,
+      'user_id'  : 2
+    });
+    await EloquentTestPost.createQuery().create({
+      'name'     : 'Child Post',
+      'parent_id': parentPost.id,
+      'user_id'  : 3
+    });
+    // @ts-ignore
+    const results: EloquentTestPost[] = await EloquentTestPost.createQuery().whereHas(
+      'childPosts.childPosts', query => {
+        query.where('name', 'Child Post');
+      }).get();
+
+    expect(results.length).toBe(1);
+    expect(head(results).name).toBe('Grandparent Post');
+  });
+
+  it('has with non where bindings', async () => {
+    const user = await EloquentTestUser.createQuery().create({
+      'id'   : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+    await (
+      await user.getRelationMethod('posts').create({
+        'name': 'Post 2'
+      })
+    ).getRelationMethod('photos').create({
+      'name': 'photo.jpg'
+    });
+    const query                   = await EloquentTestUser.createQuery().has('postWithPhotos');
+    const {result: sql, bindings} = query.toSql();
+    const bindingsCount           = bindings.length;
+    const questionMarksCount      = sql.match(/\?/g)?.length || 0;
+    expect(bindingsCount).toEqual(questionMarksCount);
+  });
+
+  it('has on morph to relationship', async () => {
+    await expect(async () => {
+      await EloquentTestUser.createQuery().has('imageable').get();
+    }).rejects.toThrowError(
+      `the relation [imageable] can't acquired. try to define a relation like\n@HasManyColumn()\npublic readonly imageable;\n`);
+  });
+
+  it('belongs to many relationship models are properly hydrated over chunked request', async () => {
+    const user                    = await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    const friend                  = await user.getRelationMethod('friends').create({
+      'email': 'abigailotwell@gmail.com'
+    });
+    const user1: EloquentTestUser = await EloquentTestUser.createQuery().first();
+    await user1.getRelationMethod('friends')
+      .chunk(2)
+      .pipe(
+        tap(({results: friends}) => {
+          expect(friends.length).toBe(1);
+          expect(head(friends).email).toBe('abigailotwell@gmail.com');
+          expect(head(friends).getRelation('pivot').getAttribute('user_id')).toBe(user.id);
+          expect(head(friends).getRelation('pivot').getAttribute('friend_id')).toBe(friend.id);
+        })
+      ).toPromise();
+  });
+
+  it('belongs to many relationship models are properly hydrated over each request', async () => {
+    const user   = await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    const friend = await user.getRelationMethod('friends').create({
+      'email': 'abigailotwell@gmail.com'
+    });
+    await (await EloquentTestUser.createQuery().first()).getRelationMethod('friends')
+      .each()
+      .pipe(
+        tap(({item: result, index}) => {
+          expect(result.email).toBe('abigailotwell@gmail.com');
+          expect(result.getAttribute('user_id')).toBe(user.id);
+          expect(result.getAttribute('friend_id')).toBe(friend.id);
+        })
+      ).toPromise();
+  });
+
+  xit('belongs to many relationship models are properly hydrated over cursor request', async () => {
+    const user   = await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    const friend = await user.getRelationMethod('friends').create({
+      'email': 'abigailotwell@gmail.com'
+    });
+    for (const result of await (await EloquentTestUser.createQuery().first()).getRelationMethod(
+      'friends').get()) {
+      expect(result.email).toBe('abigailotwell@gmail.com');
+      expect(result.getRelation('pivot').getAttribute('user_id')).toEqual(user.id);
+      expect(result.getRelation('pivot').getAttribute('friend_id')).toEqual(friend.id);
+    }
+  });
+
+  it('basic has many eager loading', async () => {
+    // @ts-ignore
+    let user: EloquentTestUser = await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    await user.getRelationMethod('posts').create({
+      'name': 'First Post'
+    });
+    user = await EloquentTestUser.createQuery()
+      .with('posts')
+      .where('email', 'taylorotwell@gmail.com')
+      .first();
+    expect(head(await user.posts).name).toBe('First Post');
+    const post = await EloquentTestPost.createQuery().with('user').where('name',
+      'First Post').get();
+    expect(head(post).user.email).toBe('taylorotwell@gmail.com');
+  });
+
+  it('basic nested self referencing has many eager loading', async () => {
+    // @ts-ignore
+    let user: EloquentTestUser   = await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    // @ts-ignore
+    const post: EloquentTestPost = await user.getRelationMethod('posts').create({
+      'name': 'First Post'
+    });
+    await post.getRelationMethod('childPosts').create({
+      'name'   : 'Child Post',
+      'user_id': user.id
+    });
+    user = await EloquentTestUser.createQuery().with('posts.childPosts').where('email',
+      'taylorotwell@gmail.com').first();
+    expect(head(await user.posts)).not.toBeNull();
+    expect(head(await user.posts).name).toBe('First Post');
+    expect(head(await head(await user.posts).childPosts)).not.toBeNull();
+    expect(head(await head(await user.posts).childPosts as any[]).name).toBe('Child Post');
+    // @ts-ignore
+    const posts: EloquentTestPost[] = await EloquentTestPost.createQuery()
+      .with('parentPost.user')
+      .where('name', 'Child Post').get();
+    expect((await head(posts).parentPost)).not.toBeNull();
+    expect((await head(posts).parentPost).user).not.toBeNull();
+    expect((await head(posts).parentPost).user.email).toBe('taylorotwell@gmail.com');
+  });
+
+  it('basic morph many relationship', async () => {
+    const user = await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    await user.getRelationMethod('photos').create({
+      'name': 'Avatar 1'
+    });
+    await user.getRelationMethod('photos').create({
+      'name': 'Avatar 2'
+    });
+    const post = await user.getRelationMethod('posts').create({
+      'name': 'First Post'
+    });
+    await post.getRelationMethod('photos').create({
+      'name': 'Hero 1'
+    });
+    await post.getRelationMethod('photos').create({
+      'name': 'Hero 2'
+    });
+
+    const userPhotos = await user.photos;
+    expect(userPhotos.length).toBe(2);
+
+    expect(isArray(await user.photos)).toBe(true);
+    expect((await user.photos)[0]).toBeInstanceOf(EloquentTestPhoto);
+    expect(isArray(await post.photos)).toBe(true);
+    expect((await post.photos)[0]).toBeInstanceOf(EloquentTestPhoto);
+    expect((await user.photos).length).toBe(2);
+    expect((await post.photos).length).toBe(2);
+    expect((await user.photos)[0].name).toBe('Avatar 1');
+    expect((await user.photos)[1].name).toBe('Avatar 2');
+    expect((await post.photos)[0].name).toBe('Hero 1');
+    expect((await post.photos)[1].name).toBe('Hero 2');
+    const photos = await EloquentTestPhoto.createQuery().orderBy('name').get();
+    expect(isArray(photos)).toBeTruthy();
+    expect(photos.length).toBe(4);
+    expect(await photos[0].imageable).toBeInstanceOf(EloquentTestUser);
+    expect(await photos[2].imageable).toBeInstanceOf(EloquentTestPost);
+    expect((await photos[1].imageable).email).toBe('taylorotwell@gmail.com');
+    expect((await photos[3].imageable).name).toBe('First Post');
+  });
+
+  it('morph map is used for creating and fetching through relation', async () => {
+    Relation.morphMap({
+      'user': EloquentTestUser,
+      'post': EloquentTestPost
+    });
+    const user = await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    await user.getRelationMethod('photos').create({
+      'name': 'Avatar 1'
+    });
+    await user.getRelationMethod('photos').create({
+      'name': 'Avatar 2'
+    });
+    const post = await user.getRelationMethod('posts').create({
+      'name': 'First Post'
+    });
+    await post.getRelationMethod('photos').create({
+      'name': 'Hero 1'
+    });
+    await post.getRelationMethod('photos').create({
+      'name': 'Hero 2'
+    });
+    expect(isArray(await user.photos)).toBeTruthy();
+    expect((await user.photos)[0]).toBeInstanceOf(EloquentTestPhoto);
+    expect(isArray(await post.photos)).toBeTruthy();
+    expect((await post.photos)[0]).toBeInstanceOf(EloquentTestPhoto);
+    expect((await user.photos).length).toBe(2);
+    expect((await post.photos).length).toBe(2);
+    expect((await user.photos)[0].name).toBe('Avatar 1');
+    expect((await user.photos)[1].name).toBe('Avatar 2');
+    expect((await post.photos)[0].name).toBe('Hero 1');
+    expect((await post.photos)[1].name).toBe('Hero 2');
+    expect((await user.photos)[0].getAttribute('imageable_type')).toBe('user');
+    expect((await user.photos)[1].getAttribute('imageable_type')).toBe('user');
+    expect((await post.photos)[0].getAttribute('imageable_type')).toBe('post');
+    expect((await post.photos)[1].getAttribute('imageable_type')).toBe('post');
+  });
+
+  it('morph map is used when fetching parent', async () => {
+    Relation.morphMap({
+      'user': EloquentTestUser,
+      'post': EloquentTestPost
+    });
+    const user = await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    await user.getRelationMethod('photos').create({
+      'name': 'Avatar 1'
+    });
+    const photo = await EloquentTestPhoto.createQuery().first();
+    expect(photo.getAttribute('imageable_type')).toBe('user');
+    expect(await photo.imageable).toBeInstanceOf(EloquentTestUser);
+  });
+
+  it('morph map is merged by default', () => {
+    const map1 = {
+      'user': EloquentTestUser
+    };
+    const map2 = {
+      'post': EloquentTestPost
+    };
+    Relation.morphMap(map1);
+    Relation.morphMap(map2);
+    expect(Relation.morphMap()).toEqual({...map1, ...map2});
+  });
+
+  it('morph map overwrites current map', () => {
+    const map1 = {
+      'user': EloquentTestUser
+    };
+    const map2 = {
+      'post': EloquentTestPost
+    };
+    Relation.morphMap(map1, false);
+    expect(Relation.morphMap()).toEqual(map1);
+    Relation.morphMap(map2, false);
+    expect(Relation.morphMap()).toEqual(map2);
+  });
+
+  it('empty morph to relationship', async () => {
+    const photo = new EloquentTestPhoto();
+    expect(await photo.imageable).toBeNull();
+  });
+
+  it('save or fail', async () => {
+    const date = '1970-01-01';
+    const post = EloquentTestPost.initAttributes({
+      'user_id'   : 1,
+      'name'      : 'Post',
+      'created_at': date,
+      'updated_at': date
+    });
+    expect(await post.saveOrFail()).toBeTruthy();
+    expect(await EloquentTestPost.createQuery().count()).toEqual(1);
+  });
+
+  it('saving json fields', async () => {
+    const model = await EloquentTestWithJSON.createQuery().create({
+      'json': {
+        'x': 0
+      }
+    });
+    expect(model.json).toEqual({
+      'x': 0
+    });
+    model.fillable(['json->y', 'json->a->b']);
+    await model.update({
+      'json->y': '1'
+    });
+    expect('json->y' in model.toArray()).toBeFalsy();
+    expect(model.json).toEqual({
+      'x': 0,
+      'y': '1'
+    });
+    await model.update({
+      'json->a->b': '3'
+    });
+    expect('json->a->b' in model.toArray()).toBeFalsy();
+    expect(model.json).toEqual({
+      'x': 0,
+      'y': '1',
+      'a': {
+        'b': '3'
+      }
+    });
+  });
+
+  it('save or fail with duplicated entry', async () => {
+    const date = '1970-01-01';
+    EloquentTestPost.initAttributes({
+      'id'        : 1,
+      'user_id'   : 1,
+      'name'      : 'Post',
+      'created_at': date,
+      'updated_at': date
+    });
+    const post = EloquentTestPost.initAttributes({
+      'id'        : 1,
+      'user_id'   : 1,
+      'name'      : 'Post',
+      'created_at': date,
+      'updated_at': date
+    });
+
+    await expect(async () => {
+      await post.saveOrFail();
+    }).rejects.toThrowError('SQLSTATE[23000]:');
+  });
+
+  it('multi inserts with different values', async () => {
+    const date   = '1970-01-01';
+    const result = await EloquentTestPost.createQuery().insert([
+      {
+        'user_id'   : 1,
+        'name'      : 'Post',
+        'created_at': date,
+        'updated_at': date
+      }, {
+        'user_id'   : 2,
+        'name'      : 'Post',
+        'created_at': date,
+        'updated_at': date
+      }
+    ]);
+    expect(result).toBeTruthy();
+    expect(await EloquentTestPost.createQuery().count()).toEqual(2);
+  });
+
+  it('multi inserts with same values', async () => {
+    const date   = '1970-01-01';
+    const result = await EloquentTestPost.createQuery().insert([
+      {
+        'user_id'   : 1,
+        'name'      : 'Post',
+        'created_at': date,
+        'updated_at': date
+      }, {
+        'user_id'   : 1,
+        'name'      : 'Post',
+        'created_at': date,
+        'updated_at': date
+      }
+    ]);
+    expect(result).toBeTruthy();
+    expect(await EloquentTestPost.createQuery().count()).toEqual(2);
+  });
+
 //   it('nested transactions', () => {
 //     let user = EloquentTestUser.create({
 //       'email': 'taylor@laravel.com'
@@ -1316,6 +1408,7 @@ describe('test database eloquent integration', () => {
 //       this.assertSame('taylor@laravel.com', user.email);
 //     });
 //   });
+
 //   it('nested transactions using save or fail will succeed', () => {
 //     let user = EloquentTestUser.create({
 //       'email': 'taylor@laravel.com'
@@ -1347,50 +1440,56 @@ describe('test database eloquent integration', () => {
 //       this.assertEquals(1, user.id);
 //     });
 //   });
-//   it('to array includes default formatted timestamps', () => {
-//     let model = new EloquentTestUser();
-//     model.setRawAttributes({
-//       'created_at': '2012-12-04',
-//       'updated_at': '2012-12-05'
-//     });
-//     let array = model.toArray();
-//     expect(array['created_at']).toBe('2012-12-04T00:00:00.000000Z');
-//     expect(array['updated_at']).toBe('2012-12-05T00:00:00.000000Z');
-//   });
-//   it('to array includes custom formatted timestamps', () => {
-//     let model = new EloquentTestUserWithCustomDateSerialization();
-//     model.setRawAttributes({
-//       'created_at': '2012-12-04',
-//       'updated_at': '2012-12-05'
-//     });
-//     let array = model.toArray();
-//     expect(array['created_at']).toBe('04-12-12');
-//     expect(array['updated_at']).toBe('05-12-12');
-//   });
-//   it('incrementing primary keys are cast to integers by default', () => {
-//     EloquentTestUser.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     let user = EloquentTestUser.first();
-//     expect(user.id).toIsInt();
-//   });
-//   it('default incrementing primary key integer cast can be overwritten', () => {
-//     EloquentTestUserWithStringCastId.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     let user = EloquentTestUserWithStringCastId.first();
-//     expect(user.id).toIsString();
-//   });
-//   it('relations are preloaded in global scope', () => {
-//     let user = EloquentTestUserWithGlobalScope.create({
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     user.posts().create({
-//       'name': 'My Post'
-//     });
-//     let result = EloquentTestUserWithGlobalScope.first();
-//     expect(result.getRelations()).toCount(1);
-//   });
+
+  it('to array includes default formatted timestamps', () => {
+    const model = new EloquentTestUser();
+    model.setRawAttributes({
+      'created_at': '2012-12-04',
+      'updated_at': '2012-12-05'
+    });
+    const array = model.toArray();
+    expect(array['created_at']).toBe('2012-12-04T00:00:00.000000Z');
+    expect(array['updated_at']).toBe('2012-12-05T00:00:00.000000Z');
+  });
+
+  it('to array includes custom formatted timestamps', () => {
+    const model = new EloquentTestUserWithCustomDateSerialization();
+    model.setRawAttributes({
+      'created_at': '2012-12-04',
+      'updated_at': '2012-12-05'
+    });
+    const array = model.toArray();
+    expect(array['created_at']).toBe('04-12-12');
+    expect(array['updated_at']).toBe('05-12-12');
+  });
+
+  it('incrementing primary keys are cast to integers by default', async () => {
+    await EloquentTestUser.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    const user = await EloquentTestUser.createQuery().first();
+    expect(isNumber(user.id)).toBeTruthy();
+  });
+
+  // it('default incrementing primary key integer cast can be overwritten', async () => {
+  //   await EloquentTestUserWithStringCastId.createQuery().create({
+  //     'email': 'taylorotwell@gmail.com'
+  //   });
+  //   const user = await EloquentTestUserWithStringCastId.createQuery().first();
+  //   expect(isString(user.id)).toBeTruthy();
+  // });
+
+  it('relations are preloaded in global scope', async () => {
+    const user = await EloquentTestUserWithGlobalScope.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
+    });
+    await user.getRelationMethod('posts').create({
+      'name': 'My Post'
+    });
+    const result: EloquentTestUserWithGlobalScope = await EloquentTestUserWithGlobalScope.createQuery().first();
+    expect(Object.keys(result.getRelations())).toHaveLength(1);
+  });
+
 //   it('model ignored by global scope can be refreshed', () => {
 //     let user = EloquentTestUserWithOmittingGlobalScope.create({
 //       'id'   : 1,
@@ -1398,6 +1497,7 @@ describe('test database eloquent integration', () => {
 //     });
 //     expect(user.fresh()).toNotNull();
 //   });
+
 //   it('global scope can be removed by other global scope', () => {
 //     let user = EloquentTestUserWithGlobalScopeRemovingOtherScope.create({
 //       'id'   : 1,
@@ -1406,54 +1506,59 @@ describe('test database eloquent integration', () => {
 //     user.delete();
 //     expect(EloquentTestUserWithGlobalScopeRemovingOtherScope.find(user.id)).toNotNull();
 //   });
-//   it('for page before id correctly paginates', () => {
-//     EloquentTestUser.create({
-//       'id'   : 1,
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     EloquentTestUser.create({
-//       'id'   : 2,
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     let results = EloquentTestUser.forPageBeforeId(15, 2);
-//     expect(results).toInstanceOf(Builder);
-//     expect(results.first().id).toEqual(1);
-//     let results = EloquentTestUser.orderBy('id', 'desc').forPageBeforeId(15, 2);
-//     expect(results).toInstanceOf(Builder);
-//     expect(results.first().id).toEqual(1);
-//   });
-//   it('for page after id correctly paginates', () => {
-//     EloquentTestUser.create({
-//       'id'   : 1,
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     EloquentTestUser.create({
-//       'id'   : 2,
-//       'email': 'abigailotwell@gmail.com'
-//     });
-//     let results = EloquentTestUser.forPageAfterId(15, 1);
-//     expect(results).toInstanceOf(Builder);
-//     expect(results.first().id).toEqual(2);
-//     let results = EloquentTestUser.orderBy('id', 'desc').forPageAfterId(15, 1);
-//     expect(results).toInstanceOf(Builder);
-//     expect(results.first().id).toEqual(2);
-//   });
-//   it('morph to relations across database connections', () => {
-//     let item = null;
-//     EloquentTestItem.create({
-//       'id': 1
-//     });
-//     EloquentTestOrder.create({
-//       'id'       : 1,
-//       'item_type': EloquentTestItem,
-//       'item_id'  : 1
-//     });
-//     try {
-//       let item = EloquentTestOrder.first().item;
-//     } catch (e: Exception) {
-//     }
-//     expect(item).toInstanceOf(EloquentTestItem);
-//   });
+
+  it('for page before id correctly paginates', async () => {
+    await EloquentTestUser.createQuery().create({
+      'id'   : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+    await EloquentTestUser.createQuery().create({
+      'id'   : 2,
+      'email': 'abigailotwell@gmail.com'
+    });
+    let results = await EloquentTestUser.createQuery().forPageBeforeId(15, 2);
+    expect(results).toBeInstanceOf(FedacoBuilder);
+    expect((await results.first()).id).toEqual(1);
+    results = await EloquentTestUser.createQuery().orderBy('id', 'desc').forPageBeforeId(15, 2);
+    expect(results).toBeInstanceOf(FedacoBuilder);
+    expect((await results.first()).id).toEqual(1);
+  });
+
+  it('for page after id correctly paginates', async () => {
+    await EloquentTestUser.createQuery().create({
+      'id'   : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+    await EloquentTestUser.createQuery().create({
+      'id'   : 2,
+      'email': 'abigailotwell@gmail.com'
+    });
+    let results = await EloquentTestUser.createQuery().forPageAfterId(15, 1);
+    expect(results).toBeInstanceOf(FedacoBuilder);
+    expect((await results.first()).id).toEqual(2);
+    results = EloquentTestUser.createQuery().orderBy('id', 'desc').forPageAfterId(15, 1);
+    expect(results).toBeInstanceOf(FedacoBuilder);
+    expect((await results.first()).id).toEqual(2);
+  });
+
+  it('morph to relations across database connections', async () => {
+    let item = null;
+    await EloquentTestItem.createQuery().create({
+      'id': 1
+    });
+    await EloquentTestOrder.createQuery().create({
+      'id'       : 1,
+      'item_type': 'EloquentTestItem',
+      'item_id'  : 1
+    });
+    try {
+      const order = await EloquentTestOrder.createQuery().first();
+      item        = await (order).item;
+    } catch (e) {
+    }
+    expect(item).toBeInstanceOf(EloquentTestItem);
+  });
+
 //   it('eager loaded morph to relations on another database connection', () => {
 //     EloquentTestPost.create({
 //       'id'     : 1,
@@ -1985,15 +2090,12 @@ describe('test database eloquent integration', () => {
 //     expect(User.isIgnoringTouch()).toFalse();
 //     expect(Model.isIgnoringTouch()).toFalse();
 //   });
-//   it('connection', () => {
-//     return Fedaco.getConnectionResolver().connection(connection);
-//   });
-//   it('schema', () => {
-//     return this.connection(connection).getSchemaBuilder();
-//   });
 });
 
 /*Eloquent Models...*/
+@Table({
+  morphTypeName: 'user'
+})
 export class EloquentTestUser extends Model {
   _table: any   = 'users';
   _dates: any   = ['birthday'];
@@ -2008,6 +2110,12 @@ export class EloquentTestUser extends Model {
   @Column()
   email;
 
+  @CreatedAtColumn()
+  created_at;
+
+  @UpdatedAtColumn()
+  updated_at;
+
   @BelongsToManyColumn({
     related        : EloquentTestUser,
     table          : 'friends',
@@ -2016,49 +2124,59 @@ export class EloquentTestUser extends Model {
   })
   friends;
 
-  @CreatedAtColumn()
-  created_at;
+  @BelongsToManyColumn({
+    related        : EloquentTestUser,
+    table          : 'friends',
+    foreignPivotKey: 'user_id',
+    relatedPivotKey: 'friend_id',
+    // @ts-ignore
+    onQuery: (q: BelongsToMany) => {
+      q.wherePivot('user_id', 1);
+    }
+  })
+  friendsOne;
 
-  @UpdatedAtColumn()
-  updated_at;
-
-  // public friends() {
-  //   return this.belongsToMany(EloquentTestUser, 'friends', 'user_id', 'friend_id');
-  // }
-  //
-  // public friendsOne() {
-  //   return this.belongsToMany(EloquentTestUser, 'friends', 'user_id', 'friend_id').wherePivot(
-  //     'user_id', 1);
-  // }
-  //
-  // public friendsTwo() {
-  //   return this.belongsToMany(EloquentTestUser, 'friends', 'user_id', 'friend_id').wherePivot(
-  //     'user_id', 2);
-  // }
-  //
+  @BelongsToManyColumn({
+    related        : EloquentTestUser,
+    table          : 'friends',
+    foreignPivotKey: 'user_id',
+    relatedPivotKey: 'friend_id',
+    // @ts-ignore
+    onQuery: (q: BelongsToMany) => {
+      q.wherePivot('user_id', 2);
+    }
+  })
+  friendsTwo;
 
   @HasManyColumn({
     related   : forwardRef(() => EloquentTestPost),
     foreignKey: 'user_id',
   })
-  public posts;
+  public posts: Promise<any[]>;
 
   @HasOneColumn({
     related   : forwardRef(() => EloquentTestPost),
     foreignKey: 'user_id',
   })
   public post;
-  //
-  // public photos() {
-  //   return this.morphMany(EloquentTestPhoto, 'imageable');
-  // }
-  //
-  // public postWithPhotos() {
-  //   return this.post().join('photo', join => {
-  //     join.on('photo.imageable_id', 'post.id');
-  //     join.where('photo.imageable_type', 'EloquentTestPost');
-  //   });
-  // }
+
+  @MorphManyColumn({
+    related  : forwardRef(() => EloquentTestPhoto),
+    morphName: 'imageable',
+  })
+  public photos;
+
+  @HasOneColumn({
+    related   : forwardRef(() => EloquentTestPost),
+    foreignKey: 'user_id',
+    onQuery   : (q => {
+      q.join('photo', join => {
+        join.on('photo.imageable_id', 'post.id');
+        join.where('photo.imageable_type', 'EloquentTestPost');
+      });
+    })
+  })
+  public postWithPhotos;
 }
 
 // export class EloquentTestUserWithCustomFriendPivot extends EloquentTestUser {
@@ -2090,7 +2208,7 @@ export class EloquentTestUserWithGlobalScope extends EloquentTestUser {
   // public static boot() {
   //   super.boot();
   //   EloquentTestUserWithGlobalScope.addGlobalScope(builder => {
-  //     builder._with('posts');
+  //     builder.with('posts');
   //   });
   // }
 }
@@ -2113,15 +2231,21 @@ export class EloquentTestUserWithGlobalScope extends EloquentTestUser {
 //     super.boot();
 //   }
 // }
+@Table({
+  morphTypeName: 'post',
+})
 export class EloquentTestPost extends Model {
   _table: any   = 'posts';
   _guarded: any = [];
 
+  @PrimaryColumn()
+  id;
+
   @Column()
   name;
 
-  @Column()
-  user_id;
+  // @Column()
+  // user_id; no need to define this since BelongsToColumn dynamic add foreign user_id
 
   @BelongsToColumn({
     related   : EloquentTestUser,
@@ -2129,14 +2253,37 @@ export class EloquentTestPost extends Model {
   })
   public user;
 
+  @MorphManyColumn({
+    related  : forwardRef(() => EloquentTestPhoto),
+    morphName: 'imageable',
+  })
+  photos;
+
   // public photos() {
   //   return this.morphMany(EloquentTestPhoto, 'imageable');
   // }
-  //
+
+  // @Column()
+  // parent_id; no need to define this since BelongsToColumn dynamic add foreign user_id
+
+
+  @HasManyColumn({
+    related   : forwardRef(() => EloquentTestPost),
+    foreignKey: 'parent_id',
+  })
+  childPosts: Promise<any[]>;
+
   // public childPosts() {
   //   return this.hasMany(EloquentTestPost, 'parent_id');
   // }
   //
+
+  @BelongsToColumn({
+    related   : forwardRef(() => EloquentTestPost),
+    foreignKey: 'parent_id',
+  })
+  parentPost;
+
   // public parentPost() {
   //   return this.belongsTo(EloquentTestPost, 'parent_id');
   // }
@@ -2146,44 +2293,81 @@ export class EloquentTestPost extends Model {
 //   protected table: any = "friend_levels";
 //   protected guarded: any = [];
 // }
-// export class EloquentTestPhoto extends Eloquent {
-//   protected table: any = "photos";
-//   protected guarded: any = [];
-//   public imageable() {
-//     return this.morphTo();
-//   }
-// }
-// export class EloquentTestUserWithStringCastId extends EloquentTestUser {
-//   protected casts: any = {
-//     "id": "string"
-//   };
-// }
-// export class EloquentTestUserWithCustomDateSerialization extends EloquentTestUser {
-//   protected serializeDate(date) {
-//     return date.format("d-m-y");
-//   }
-// }
-// export class EloquentTestOrder extends Eloquent {
-//   protected guarded: any = [];
-//   protected table: any = "test_orders";
-//   protected _with: any = ["item"];
-//   public item() {
-//     return this.morphTo();
-//   }
-// }
-// export class EloquentTestItem extends Eloquent {
-//   protected guarded: any = [];
-//   protected table: any = "test_items";
-//   protected connection: any = "second_connection";
-// }
-// export class EloquentTestWithJSON extends Eloquent {
-//   protected guarded: any = [];
-//   protected table: any = "with_json";
-//   public timestamps: any = false;
-//   protected casts: any = {
-//     "json": "array"
-//   };
-// }
+@Table({})
+export class EloquentTestPhoto extends Model {
+  _table: any   = 'photos';
+  _guarded: any = [];
+
+  @Column()
+  name;
+
+  @MorphToColumn({
+    morphTypeMap: {
+      'EloquentTestUser': EloquentTestUser,
+      'EloquentTestPost': EloquentTestPost,
+      'user'            : EloquentTestUser,
+      'post'            : EloquentTestPost,
+    }
+  })
+  public imageable;
+  // public imageable() {
+  //   return this.morphTo();
+  // }
+}
+
+export class EloquentTestUserWithStringCastId extends EloquentTestUser {
+  // protected casts: any = {
+  //   "id": "string"
+  // };
+
+  @Column()
+  id: string;
+
+}
+
+export class EloquentTestUserWithCustomDateSerialization extends EloquentTestUser {
+  serializeDate(date) {
+    return format(date, 'yyyy-MM-dd');
+  }
+}
+
+export class EloquentTestOrder extends Model {
+  _table: any   = 'test_orders';
+  _guarded: any = [];
+  _with: any[]  = ['item'];
+
+  @PrimaryColumn()
+  id;
+
+  @MorphToColumn({
+    morphTypeMap: {
+      EloquentTestItem: forwardRef(() => EloquentTestItem)
+    }
+  })
+  public item;
+}
+
+export class EloquentTestItem extends Model {
+  _table: any      = 'test_items';
+  _guarded: any    = [];
+  _connection: any = 'second_connection';
+
+
+}
+
+export class EloquentTestWithJSON extends Model {
+  _table: any   = 'with_json';
+  _guarded: any = [];
+
+  public _timestamps: any = false;
+  // protected casts: any   = {
+  //   'json': 'array'
+  // };
+
+  @ArrayColumn()
+  json;
+}
+
 // export class EloquentTestFriendPivot extends Pivot {
 //   protected table: any = "friends";
 //   protected guarded: any = [];

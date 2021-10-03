@@ -33,7 +33,8 @@ class Conn implements ConnectionInterface {
     return Promise.resolve();
   }
 
-  async insert() {
+  async insert(): Promise<boolean> {
+    return false;
   }
 
   async update() {

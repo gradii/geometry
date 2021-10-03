@@ -676,7 +676,8 @@ export class Connection implements ConnectionInterface {
     return Connection.resolvers[driver] ?? null;
   }
 
-  transaction(callback: Function) {
+  async transaction(callback: Function) {
+
   }
 
 }

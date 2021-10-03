@@ -30,9 +30,9 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
   /*The foreign key of the parent model.*/
   protected _foreignKey: string;
   /*The associated key on the parent model.*/
-  protected ownerKey: string;
+  protected _ownerKey: string;
   /*The name of the relationship.*/
-  protected relationName: string;
+  protected _relationName: string;
 
   /*Create a new belongs to relationship instance.*/
   public constructor(query: FedacoBuilder,
@@ -41,19 +41,19 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
                      ownerKey: string,
                      relationName: string) {
     super(query, child);
-    this.ownerKey     = ownerKey;
-    this.relationName = relationName;
-    this._foreignKey  = foreignKey;
+    this._ownerKey     = ownerKey;
+    this._relationName = relationName;
+    this._foreignKey   = foreignKey;
     this.child        = child;
     this.addConstraints();
   }
 
   /*Get the results of the relationship.*/
-  public getResults() {
+  public async getResults() {
     if (isBlank(this.child.getAttribute(this._foreignKey))) {
       return this._getDefaultFor(this._parent);
     }
-    return this._query.first() || this._getDefaultFor(this._parent);
+    return await this._query.first() || this._getDefaultFor(this._parent);
   }
 
   /*Set the base constraints on the relation query.*/
@@ -61,16 +61,16 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
     if ((this.constructor as typeof BelongsTo).constraints) {
       const table = this._related.getTable();
       this._query.where(
-        `${table}.${this.ownerKey}`,
+        `${table}.${this._ownerKey}`,
         '=',
-        this.child[this._foreignKey]);
+        this.child.getAttribute(this._foreignKey));
     }
   }
 
   /*Set the constraints for an eager load of the relation.*/
   public addEagerConstraints(this: Model & this, models: any[]) {
-    const key     = `${this.related.getTable()}.${this.ownerKey}`;
-    const whereIn = this.whereInMethod(this.related, this.ownerKey);
+    const key     = `${this._related.getTable()}.${this._ownerKey}`;
+    const whereIn = this.whereInMethod(this._related, this._ownerKey);
     this._query[whereIn](key, this.getEagerModelKeys(models));
   }
 
@@ -78,7 +78,7 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
   protected getEagerModelKeys(models: any[]) {
     const keys = [];
     for (const model of models) {
-      const value = model[this._foreignKey];
+      const value = model.getAttribute(this._foreignKey);
       if (!isBlank(value)) {
         keys.push(value);
       }
@@ -90,7 +90,7 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
   /*Initialize the relation on a set of models.*/
   public initRelation(models: any[], relation: string) {
     for (const model of models) {
-      model.setRelation(relation, this.getDefaultFor(model));
+      model.setRelation(relation, this._getDefaultFor(model));
     }
     return models;
   }
@@ -98,14 +98,14 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
   /*Match the eagerly loaded results to their parents.*/
   public match(models: any[], results: Collection, relation: string) {
     const foreign    = this._foreignKey;
-    const owner      = this.ownerKey;
+    const owner      = this._ownerKey;
     const dictionary = [];
     for (const result of results) {
       const attribute       = this._getDictionaryKey(result.getAttribute(owner));
       dictionary[attribute] = result;
     }
     for (const model of models) {
-      const attribute = this._getDictionaryKey(model[foreign]);
+      const attribute = this._getDictionaryKey(model.getAttribute(foreign));
       if (dictionary[attribute] !== undefined) {
         model.setRelation(relation, dictionary[attribute]);
       }
@@ -116,12 +116,12 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
   /*Associate the model instance to the given parent.*/
   public associate(model: Model | number | string) {
     const ownerKey = model instanceof BaseModel ?
-      model.getAttribute(this.ownerKey) : model;
+      model.getAttribute(this._ownerKey) : model;
     this.child.setAttribute(this._foreignKey, ownerKey);
     if (model instanceof BaseModel) {
-      this.child.setRelation(this.relationName, model);
+      this.child.setRelation(this._relationName, model);
     } else {
-      this.child.unsetRelation(this.relationName);
+      this.child.unsetRelation(this._relationName);
     }
     return this.child;
   }
@@ -129,7 +129,7 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
   /*Dissociate previously associated model from the given parent.*/
   public dissociate() {
     this.child.setAttribute(this._foreignKey, null);
-    return this.child.setRelation(this.relationName, null);
+    return this.child.setRelation(this._relationName, null);
   }
 
   /*Alias of "dissociate" method.*/
@@ -145,7 +145,7 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
       return this.getRelationExistenceQueryForSelfRelation(query, parentQuery, columns);
     }
     return query.select(columns).whereColumn(
-      this.getQualifiedForeignKeyName(), '=', query.qualifyColumn(this.ownerKey)
+      this.getQualifiedForeignKeyName(), '=', query.qualifyColumn(this._ownerKey)
     );
   }
 
@@ -155,17 +155,17 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
     const hash = this.getRelationCountHash();
     query.select(columns).from(query.getModel().getTable() + ' as ' + hash);
     query.getModel().setTable(hash);
-    return query.whereColumn(`${hash}.${this.ownerKey}`, '=', this.getQualifiedForeignKeyName());
+    return query.whereColumn(`${hash}.${this._ownerKey}`, '=', this.getQualifiedForeignKeyName());
   }
 
   /*Determine if the related model has an auto-incrementing ID.*/
   protected relationHasIncrementingId() {
-    return this.related.getIncrementing() && ['int', 'integer'].includes(this.related.getKeyType());
+    return this._related.getIncrementing() && ['int', 'integer'].includes(this._related.getKeyType());
   }
 
   /*Make a new related instance for the given model.*/
   protected newRelatedInstanceFor(parent: Model) {
-    return this.related.newInstance();
+    return this._related.newInstance();
   }
 
   /*Get the child of the relationship.*/
@@ -190,21 +190,21 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
 
   /*Get the associated key of the relationship.*/
   public getOwnerKeyName() {
-    return this.ownerKey;
+    return this._ownerKey;
   }
 
   /*Get the fully qualified associated key of the relationship.*/
   public getQualifiedOwnerKeyName() {
-    return this.related.qualifyColumn(this.ownerKey);
+    return this._related.qualifyColumn(this._ownerKey);
   }
 
   /*Get the value of the model's associated key.*/
   protected getRelatedKeyFrom(model: Model) {
-    return model[this.ownerKey];
+    return model[this._ownerKey];
   }
 
   /*Get the name of the relationship.*/
   public getRelationName() {
-    return this.relationName;
+    return this._relationName;
   }
 }

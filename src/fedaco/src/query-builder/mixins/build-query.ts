@@ -6,13 +6,19 @@
 
 import { isBlank } from '@gradii/check-type';
 import { last } from 'ramda';
-import { BehaviorSubject, EMPTY, from, interval, Observable, of, Subscriber } from 'rxjs';
-import { bufferWhen, catchError, concatMap, map, mergeMap, take, tap } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, from, interval, Observable, of, Subject, Subscriber } from 'rxjs';
+import {
+  bufferWhen, catchError, concatMap, finalize, map, mergeMap, take, tap
+} from 'rxjs/operators';
 import { Model } from '../../fedaco/model';
 import { Constructor } from '../../helper/constructor';
 import { QueryBuilder } from '../query-builder';
 
 export interface BuildQueries {
+
+  chunk(count: number, signal?: Observable<any>): Observable<{ results: any[], page: number }>;
+
+  each(count?: number, signal?: Observable<any>): Observable<{ item: any, index: number }>;
 
   chunkById(count: number,
             column?: string,
@@ -41,12 +47,68 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
 
   return class _Self extends base {
 
-    public chunk(count: number, callback: Function) {
+    public chunk(count: number,
+                 signal?: Observable<any>): Observable<{ results: any[], page: number }> {
+      if (!(count > 0)) {
+        return EMPTY;
+      }
+      const clone = this.clone();
 
+      return new Observable((observer: Subscriber<any>) => {
+        let isFirst   = true;
+        const subject = new BehaviorSubject(1);
+        subject.pipe(
+          signal ? bufferWhen(() => {
+            // first time emit immediately
+            if (isFirst) {
+              isFirst = false;
+              return interval(10).pipe(take(1));
+            }
+            return signal;
+          }) : map(it => [it]),
+          mergeMap((items: number[]) => of(...items)),
+          concatMap((page: number) => {
+            return from(
+              (clone as QueryBuilder)
+                .forPage(page, count).get()
+            ).pipe(
+              tap((results: any[]) => {
+                if (!results || results.length == 0) {
+                  subject.complete();
+                  observer.complete();
+                } else if (results.length === count) {
+                  subject.next(page + 1);
+                  observer.next({results, page});
+                } else {
+                  observer.next({results, page});
+                  subject.complete();
+                  observer.complete();
+                }
+              })
+            );
+          }),
+          catchError((err, caught) => {
+            subject.complete();
+            observer.error(err);
+            observer.complete();
+            return EMPTY;
+          })
+        ).subscribe();
+
+        return () => {
+          subject.complete();
+        };
+      });
     }
 
-    public each(callback: Function, count: number = 1000) {
-
+    public each(count: number = 1000, signal?: Observable<any>) {
+      return this.chunk(count, signal).pipe(
+        mergeMap(({results, page}) => {
+          return of(...results.map((it: any, idx: number) => {
+            return {item: it, index: (page - 1) * count + idx};
+          }));
+        })
+      );
     }
 
     /**
@@ -98,13 +160,15 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
                 }
               }),
               tap((results) => {
-                if (results.length === count && count > 0) {
-                  subject.next(page + 1);
-                  observer.next({results, page});
-                } else {
-                  observer.next({results, page});
-                  subject.complete();
-                  observer.complete();
+                if (results.length > 0) {
+                  if (results.length === count) {
+                    subject.next(page + 1);
+                    observer.next({results, page});
+                  } else {
+                    observer.next({results, page});
+                    subject.complete();
+                    observer.complete();
+                  }
                 }
               })
             );

@@ -6,12 +6,14 @@
 
 import { isArray, isBlank, isObject } from '@gradii/check-type';
 import { uniq } from 'ramda';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { Collection } from '../../define/collection';
 import { pluralStudy } from '../../helper/pluralize';
 import { camelCase } from '../../helper/str';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
-import { Aspivot, AsPivot } from './concerns/as-pivot';
+import { Aspivot } from './concerns/as-pivot';
 import {
   InteractsWithDictionary, mixinInteractsWithDictionary
 } from './concerns/interacts-with-dictionary';
@@ -178,9 +180,22 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Set a where clause for a pivot table column.*/
   public wherePivot(column: string,
-                    operator: any             = null,
-                    value: any                = null,
-                    conjunction: 'and' | 'or' = 'and') {
+                    value: any): FedacoBuilder;
+  // public wherePivot(column: string,
+  //                   value: any,
+  //                   conjunction?): QueryBuilder;
+  public wherePivot(column: string,
+                    operator?: string,
+                    value?: any,
+                    conjunction?: 'and' | 'or' | string): FedacoBuilder;
+  public wherePivot(column: string,
+                    operator?: any,
+                    value?: any,
+                    conjunction: 'and' | 'or' = 'and'): FedacoBuilder {
+    if (arguments.length === 2) {
+      value    = operator;
+      operator = '=';
+    }
     this._pivotWheres.push(arguments);
     return this.getQuery().where(this.qualifyPivotColumn(column), operator, value, conjunction);
   }
@@ -417,94 +432,54 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
     }));
   }
 
-  // /*Get a paginator for the "select" statement.*/
-  // public paginate(perPage: number | null = null, columns: any[] = ['*'], pageName: string = 'page',
-  //                 page: number | null                                                     = null) {
-  //   this._query.addSelect(this.shouldSelect(columns));
-  //   return tap(paginator => {
-  //     this.hydratePivotRelation(paginator.items());
-  //   }, this._query.paginate(perPage, columns, pageName, page));
-  // }
-  //
-  // /*Paginate the given query into a simple paginator.*/
-  // public simplePaginate(perPage: number | null                         = null, columns: any[]  = ['*'],
-  //                       pageName: string = 'page', page: number | null = null) {
-  //   this._query.addSelect(this.shouldSelect(columns));
-  //   return tap(this._query.simplePaginate(perPage, columns, pageName, page), paginator => {
-  //     this.hydratePivotRelation(paginator.items());
-  //   });
-  // }
+  /*Get a paginator for the "select" statement.*/
+  public async paginate(page: number   = 1,
+                        pageSize?: number,
+                        columns: any[] = ['*']) {
+    this._prepareQueryBuilder();
+    const results = await this._query.paginate(page, pageSize, columns);
+    this._hydratePivotRelation(results.items);
+    return results;
+  }
 
-  // /*Paginate the given query into a cursor paginator.*/
-  // public cursorPaginate(perPage: number | null                               = null, columns: any[] = ['*'],
-  //                       cursorName: string = 'cursor', cursor: string | null = null) {
-  //   this._query.addSelect(this.shouldSelect(columns));
-  //   return tap(this._query.cursorPaginate(perPage, columns, cursorName, cursor), paginator => {
-  //     this.hydratePivotRelation(paginator.items());
-  //   });
-  // }
+  /*Chunk the results of the query.*/
+  public chunk(count: number,
+               signal?: Observable<any>): Observable<{ results: any[], page: number }> {
+    this._prepareQueryBuilder();
+    return this._query
+      .chunk(count)
+      .pipe(
+        tap(({results, page}) => {
+          this._hydratePivotRelation(results);
+        })
+      );
+  }
 
-  // /*Chunk the results of the query.*/
-  // public chunk(count: number, callback: Function) {
-  //   return this.prepareQueryBuilder()
-  //     .chunk(count, (results, page) => {
-  //       this.hydratePivotRelation(results.all());
-  //       return callback(results, page);
-  //     });
-  // }
-  //
-  // /*Chunk the results of a query by comparing numeric IDs.*/
-  // public chunkById(count: number,
-  //                  callback: Function,
-  //                  column: string | null = null,
-  //                  alias: string | null  = null) {
-  //   this.prepareQueryBuilder();
-  //   column = column ?? this.getRelated().qualifyColumn(this.getRelatedKeyName());
-  //   alias  = alias ?? this.getRelatedKeyName();
-  //   return this._query.chunkById(count, results => {
-  //     this.hydratePivotRelation(results.all());
-  //     return callback(results);
-  //   }, column, alias);
-  // }
+  /*Chunk the results of a query by comparing numeric IDs.*/
+  public chunkById(count: number,
+                   column?: string,
+                   alias?: string,
+                   signal?: Observable<any>): Observable<{ results: any, page: number }> {
+    this._prepareQueryBuilder();
+    column = column ?? this.getRelated().qualifyColumn(this.getRelatedKeyName());
+    alias  = alias ?? this.getRelatedKeyName();
+    return this._query.chunkById(count, column, alias).pipe(
+      tap(({results}) => {
+        this._hydratePivotRelation(results);
+      })
+    );
+  }
 
-  // /*Execute a callback over each item while chunking.*/
-  // public each(callback: Function, count: number = 1000) {
-  //   return this._query.chunk(count, results => {
-  //     for (let [key, value] of Object.entries(results)) {
-  //       if (callback(value, key) === false) {
-  //         return false;
-  //       }
-  //     }
-  //   });
-  // }
-
-  // /*Query lazily, by chunks of the given size.*/
-  // public lazy(chunkSize: number = 1000) {
-  //   return this.prepareQueryBuilder().lazy(chunkSize).map(model => {
-  //     this.hydratePivotRelation([model]);
-  //     return model;
-  //   });
-  // }
-  //
-  // /*Query lazily, by chunking the results of a query by comparing IDs.*/
-  // public lazyById(chunkSize             = 1000,
-  //                 column: string | null = null,
-  //                 alias: string | null  = null) {
-  //   column = column ?? this.getRelated().qualifyColumn(this.getRelatedKeyName());
-  //   alias  = alias ?? this.getRelatedKeyName();
-  //   return this.prepareQueryBuilder().lazyById(chunkSize, column, alias).map(model => {
-  //     this.hydratePivotRelation([model]);
-  //     return model;
-  //   });
-  // }
-
-  // /*Get a lazy collection for the given query.*/
-  // public cursor() {
-  //   return this.prepareQueryBuilder().cursor().map(model => {
-  //     this.hydratePivotRelation([model]);
-  //     return model;
-  //   });
-  // }
+  /*Execute a callback over each item while chunking.*/
+  public each(count: number = 1000, signal?: Observable<any>) {
+    return this._prepareQueryBuilder()
+      .each(count, signal)
+      .pipe(
+        tap(({item, index}) => {
+          this._hydratePivotRelation([item]);
+        })
+      );
+  }
 
   /*Prepare the query builder for query execution.*/
   _prepareQueryBuilder() {
@@ -514,6 +489,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   /*Hydrate the pivot table relationship on the models.*/
   _hydratePivotRelation(models: any[]) {
     for (const model of models) {
+      // _additionalProcessingGetter(model.constructor, 'pivot', undefined, true);
       model.setRelation(this._accessor, this.newExistingPivot(this._migratePivotAttributes(model)));
     }
   }

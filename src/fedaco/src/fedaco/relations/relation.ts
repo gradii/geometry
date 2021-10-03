@@ -31,7 +31,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   /*Indicates if the relation is adding constraints.*/
   protected static constraints = true;
   /*An array to map class names to their morph names in the database.*/
-  public static _morphMap: any[] = [];
+  public static _morphMap: any = {};
   /*The count of self joins.*/
   protected static selfJoinCount = 0;
 
@@ -216,7 +216,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   /*Set or get the morph map for polymorphic relations.*/
   public static morphMap(map: any | null = null, merge = true) {
     map = Relation.buildMorphMapFromModels(map);
-    if (isArray(map)) {
+    if (isObject(map)) {
       Relation._morphMap = merge && Relation._morphMap ? {...map, ...Relation._morphMap} : map;
     }
     return Relation._morphMap;

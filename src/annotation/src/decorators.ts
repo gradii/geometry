@@ -30,8 +30,13 @@ export const PROP_METADATA = '__prop__metadata__';
 export function makeDecorator<T>(
     name: string, props?: (...args: any[]) => any, parentClass?: any,
     additionalProcessing?: (type: any) => void,
-    typeFn?: (type: any, ...args: any[]) => void):
-    {new (...args: any[]): any; (...args: any[]): any; (...args: any[]): (cls: any) => any;} {
+    typeFn?: (type: any, ...args: any[]) => void): {
+      new (...args: any[]): any;
+      (...args: any[]): any;
+      (...args: any[]): (cls: any) => any;
+      isTypeOf: (obj: any) => obj is T;
+      metadataName: string
+    } {
     const metaCtor = makeMetadataCtor(props);
 
     function DecoratorFactory(
@@ -68,7 +73,7 @@ export function makeDecorator<T>(
       DecoratorFactory.prototype = Object.create(parentClass.prototype);
     }
 
-    DecoratorFactory.isTypeOf = (obj: any) => obj && obj.__metadataName === name;
+  DecoratorFactory.isTypeOf = (obj: any) => obj && obj.__metadataName === name  || obj instanceof DecoratorFactory;
     DecoratorFactory.prototype.__metadataName = name;
     (DecoratorFactory as any).annotationCls = DecoratorFactory;
     return DecoratorFactory as any;

@@ -4,12 +4,19 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { reflector } from '@gradii/annotation';
 import { isBlank } from '@gradii/check-type';
 import { tap } from 'ramda';
 import { Collection } from '../../define/collection';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
 import { BelongsTo } from './belongs-to';
+import { Relation } from './relation';
+
+function getActualClassNameForMorph(key) {
+  Relation.morphMap(), key
+}
+
 
 export class MorphTo extends BelongsTo {
   /*The type of the polymorphic relation.*/
@@ -17,7 +24,7 @@ export class MorphTo extends BelongsTo {
   /*The models whose relations are being eager loaded.*/
   protected _models: Collection;
   /*All of the models keyed by ID.*/
-  protected _dictionary: Map<any, any> = new Map();
+  protected _dictionary: Record<any, any> = {};
   /*A buffer of dynamic calls to query macros.*/
   protected _macroBuffer: any[] = [];
   /*A map of relations to load for each individual morph type.*/
@@ -87,10 +94,23 @@ export class MorphTo extends BelongsTo {
   /*Build a dictionary with the models.*/
   protected buildDictionary(models: Collection) {
     for (const model of models) {
-      if (model[this._morphType]) {
-        const morphTypeKey = this._getDictionaryKey(model[this._morphType]);
-        const foreignKeyKey = this._getDictionaryKey(model[this._foreignKey]);
-        this._dictionary.get(morphTypeKey)[foreignKeyKey].push(model);
+      if (model._getAttributeFromArray(this._morphType)) {
+        const morphTypeKey  = this._getDictionaryKey(
+          model._getAttributeFromArray(this._morphType)
+        );
+        const foreignKeyKey = this._getDictionaryKey(
+          model._getAttributeFromArray(this._foreignKey)
+        );
+
+        let obj: Record<string, any> = this._dictionary[morphTypeKey];
+        if (!obj) {
+          obj = {};
+          this._dictionary[morphTypeKey] = obj;
+          if (!obj[foreignKeyKey]) {
+            obj[foreignKeyKey] = [];
+          }
+        }
+        obj[foreignKeyKey].push(model);
       }
     }
   }
@@ -107,10 +127,10 @@ export class MorphTo extends BelongsTo {
   }
 
   /*Get all of the relation results for a type.*/
-  protected async getResultsByType(clazz: typeof Model) {
+  protected async getResultsByType(clazz: string) {
     const instance = this.createModelByType(clazz);
-    const ownerKey = this.ownerKey ?? instance.getKeyName();
-    const query = this.replayMacros(instance.newQuery()).mergeConstraintsFrom(
+    const ownerKey = this._ownerKey ?? instance.getKeyName();
+    const query    = this.replayMacros(instance.newQuery()).mergeConstraintsFrom(
       this.getQuery())._with({
       ...this.getQuery().getEagerLoads(),
       ...this._morphableEagerLoads.get(instance.constructor) ?? {}
@@ -125,17 +145,19 @@ export class MorphTo extends BelongsTo {
   }
 
   /*Gather all of the foreign keys for a given type.*/
-  protected gatherKeysByType(clazz: typeof Model, keyType: string) {
+  protected gatherKeysByType(type: string, keyType: string) {
     return keyType !== 'string' ?
-      Object.keys(this._dictionary.get(clazz)) :
-      Object.keys(this._dictionary.get(clazz)).map(modelId => {
+      Object.keys(this._dictionary[type]) :
+      Object.keys(this._dictionary[type]).map(modelId => {
         return /*cast type string*/ modelId;
       });
   }
 
   /*Create a new model instance by type.*/
-  public createModelByType(clazz: typeof Model) {
-    // let clazz = Model.getActualClassNameForMorph(type);
+  public createModelByType(type: string) {
+    // const clazz = getActualClassNameForMorph(type);
+    // reflector.propMetadata(this._models)
+
     return tap(instance => {
       if (!instance.getConnectionName()) {
         instance.setConnection(this.getConnection().getName());
@@ -149,13 +171,13 @@ export class MorphTo extends BelongsTo {
   }
 
   /*Match the results for a given type to their parents.*/
-  protected matchToMorphParents(clazz: typeof Model, results: Collection) {
+  protected matchToMorphParents(type: string, results: Collection) {
     for (const result of results) {
-      const ownerKey = !isBlank(this.ownerKey) ? this._getDictionaryKey(
-        result[this.ownerKey]) : result.getKey();
-      if (this._dictionary.get(clazz)[ownerKey] !== undefined) {
-        for (const model of this._dictionary.get(clazz)[ownerKey]) {
-          model.setRelation(this.relationName, result);
+      const ownerKey = !isBlank(this._ownerKey) ? this._getDictionaryKey(
+        result[this._ownerKey]) : result.getKey();
+      if (this._dictionary[type][ownerKey] !== undefined) {
+        for (const model of this._dictionary[type][ownerKey]) {
+          model.setRelation(this._relationName, result);
         }
       }
     }
@@ -165,24 +187,24 @@ export class MorphTo extends BelongsTo {
   public associate(model: Model) {
     let foreignKey;
     if (model instanceof Model) {
-      foreignKey = this.ownerKey && model[this.ownerKey] ? this.ownerKey : model.getKeyName();
+      foreignKey = this._ownerKey && model[this._ownerKey] ? this._ownerKey : model.getKeyName();
     }
     this._parent.setAttribute(this._foreignKey, model instanceof Model ? model[foreignKey] : null);
     this._parent.setAttribute(this._morphType,
       model instanceof Model ? model.getMorphClass() : null);
-    return this._parent.setRelation(this.relationName, model);
+    return this._parent.setRelation(this._relationName, model);
   }
 
   /*Dissociate previously associated model from the given parent.*/
   public dissociate() {
     this._parent.setAttribute(this._foreignKey, null);
     this._parent.setAttribute(this._morphType, null);
-    return this._parent.setRelation(this.relationName, null);
+    return this._parent.setRelation(this._relationName, null);
   }
 
   /*Touch all of the related models for the relationship.*/
   public touch() {
-    if (!isBlank(this.child[this._foreignKey])) {
+    if (!isBlank(this.child._getAttributeFromArray(this._foreignKey))) {
       super.touch();
     }
   }

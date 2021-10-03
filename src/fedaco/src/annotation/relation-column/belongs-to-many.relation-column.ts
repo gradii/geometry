@@ -8,6 +8,7 @@ import { makePropDecorator } from '@gradii/annotation';
 import { isBlank } from '@gradii/check-type';
 import { Model } from '../../fedaco/model';
 import { BelongsToMany } from '../../fedaco/relations/belongs-to-many';
+import { ForwardRefFn, resolveForwardRef } from '../../query-builder/forward-ref';
 import { _additionalProcessingGetter } from '../additional-processing';
 import { FedacoDecorator } from '../annotation.interface';
 import { RelationType } from '../enum-relation';
@@ -15,7 +16,7 @@ import { FedacoRelationColumn, RelationColumnAnnotation } from '../relation-colu
 
 
 export interface BelongsToManyRelationAnnotation extends RelationColumnAnnotation {
-  related: typeof Model;
+  related: typeof Model | ForwardRefFn<typeof Model>;
   table?: string;
   foreignPivotKey?: string;
   relatedPivotKey?: string;
@@ -33,12 +34,13 @@ export const BelongsToManyColumn: FedacoDecorator<BelongsToManyRelationAnnotatio
       if (!isBlank(p.relation)) {
         relation = p.relation;
       }
-      const instance          = m._newRelatedInstance(p.related);
+      const resolvedRelatedClazz = resolveForwardRef(p.related);
+      const instance          = m._newRelatedInstance(resolvedRelatedClazz);
       const foreignPivotKey = p.foreignPivotKey || m.getForeignKey();
       const relatedPivotKey = p.relatedPivotKey || instance.getForeignKey();
       let table             = p.table;
       if (isBlank(table)) {
-        table = m.joiningTable(p.related, instance);
+        table = m.joiningTable(resolvedRelatedClazz, instance);
       }
       const r = new BelongsToMany(
         instance.newQuery(), m, table, foreignPivotKey,

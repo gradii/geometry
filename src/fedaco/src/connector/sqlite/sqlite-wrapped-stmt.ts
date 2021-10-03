@@ -41,7 +41,7 @@ export class SqliteWrappedStmt implements WrappedStmt {
           if (err) {
             return fail(err);
           }
-          ok(null);
+          ok(true);
         });
     });
   }

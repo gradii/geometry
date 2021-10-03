@@ -4,6 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { Observable } from 'rxjs';
 import { Constructor } from '../../helper/constructor';
 import { ConnectionInterface } from '../../query-builder/connection-interface';
 import { Model } from '../model';
@@ -61,13 +62,15 @@ export interface ForwardCallToQueryBuilder {
 
   updateOrInsert(...args: any[]): this;
 
-  insert(...args: any[]): any;
+  insert(...args: any[]): Promise<any>;
 
   selectSub(...args: any[]): this;
 
   lock(...args: any[]): this;
 
-  toSql(...args: any[]): {result: string, bindings: any[]};
+  toSql(...args: any[]): { result: string, bindings: any[] };
+
+  find(...args: any[]): Promise<any | any[]>;
 
   resetBindings(...args: any[]): this;
 
@@ -240,11 +243,23 @@ export interface ForwardCallToQueryBuilder {
 
   whereRaw(...args: any[]): this;
 
+  chunk(count: number, signal?: Observable<any>): Observable<{ results: any[], page: number }>;
+
+  chunkById(count: number,
+            column?: string,
+            alias?: string,
+            signal?: Observable<any>): Observable<{ results: any, page: number }>;
+
+  eachById(count: number,
+           column?: string,
+           alias?: string,
+           signal?: Observable<any>): Observable<{ item: any, index: number }>;
+
+  first(...args: any[]): Promise<Model>;
+
   when(...args: any[]): this;
 
   tap(...args: any[]): this;
-
-  first(...args: any[]): Promise<Model>;
 
   unless(...args: any[]): this;
 }
@@ -390,7 +405,7 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     }
 
     async insert(...args: any[]) {
-      return this.#directToQueryBuilder('insert', args);
+      return this.#passThroughToQueryBuilder('insert', args);
     }
 
     selectSub(...args: any[]) {
@@ -752,16 +767,28 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
       return this.#forwardCallToQueryBuilder('whereRaw', args);
     }
 
+    chunk(...args: any[]) {
+      return this.#forwardCallToQueryBuilder('chunk', args);
+    }
+
+    chunkById(...args: any[]) {
+      return this.#forwardCallToQueryBuilder('chunkById', args);
+    }
+
+    eachById(...args: any[]) {
+      return this.#forwardCallToQueryBuilder('eachById', args);
+    }
+
+    first(...args: any[]) {
+      return this.#forwardCallToQueryBuilder('first', args);
+    }
+
     when(...args: any[]) {
       return this.#forwardCallToQueryBuilder('when', args);
     }
 
     tap(...args: any[]) {
       return this.#forwardCallToQueryBuilder('tap', args);
-    }
-
-    first(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('first', args);
     }
 
     unless(...args: any[]) {
