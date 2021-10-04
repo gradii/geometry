@@ -805,7 +805,7 @@ export class Model extends mixinHasAttributes(
   // }
 
   /*Delete the model from the database.*/
-  public async delete(): Promise<boolean> {
+  public async delete(): Promise<boolean|number> {
     this.mergeAttributesFromClassCasts();
     if (isBlank(this.getKeyName())) {
       throw new Error('LogicException No primary key defined on model.');
@@ -874,7 +874,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Get a new query to restore one or more models by their queueable IDs.*/
-  public newQueryForRestoration(ids: any[] | number) {
+  public newQueryForRestoration(ids: any[] | number | string) {
     return isArray(ids) ?
       this.newQueryWithoutScopes().whereIn(this.getQualifiedKeyName(), ids) :
       this.newQueryWithoutScopes().whereKey(ids);
@@ -1013,7 +1013,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Get the table associated with the model.*/
-  public getTable() {
+  public getTable(): string {
     return this._table || snakeCase(pluralStudy(this.constructor.name));
   }
 

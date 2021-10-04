@@ -110,7 +110,7 @@ export interface HasAttributes {
   getAttribute(key: string);
 
   /*Get a plain attribute (not a relationship).*/
-  getAttributeValue(key: string);
+  getAttributeValue(key: string): any;
 
   /*Get an attribute from the $attributes array.*/
   _getAttributeFromArray(key: string);
@@ -506,7 +506,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Get a plain attribute (not a relationship).*/
-    public getAttributeValue(this: Model & _Self, key: string) {
+    public getAttributeValue(this: Model & _Self, key: string): any {
       return this.transformModelValue(key, this._getAttributeFromArray(key));
     }
 

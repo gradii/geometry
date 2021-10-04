@@ -754,8 +754,8 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Parse a list of relations into individuals.*/
-  _parseWithRelations(relations: any[]): { [key: string]: any } {
-    let results = [];
+  _parseWithRelations(relations: any[]): { [key: string]: Function } {
+    let results: Record<string, Function> = {};
     for (const relation of relations) {
       if (isString(relation)) {
         const [name, constraints] = relation.includes(':') ?
@@ -769,8 +769,8 @@ export class FedacoBuilder extends mixinGuardsAttributes(
         results[name] = constraints;
       } else {
         for (const [name, constraints] of Object.entries(relation)) {
-          results       = this.addNestedWiths(name, results);
-          results[name] = constraints;
+          this.addNestedWiths(name, results);
+          results[name] = constraints as Function;
         }
       }
     }
@@ -792,7 +792,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Parse the nested relationships in a relation.*/
-  protected addNestedWiths(name: string, results: any) {
+  protected addNestedWiths(name: string, results: Record<string, Function>) {
     const progress = [];
     for (const segment of name.split('.')) {
       progress.push(segment);

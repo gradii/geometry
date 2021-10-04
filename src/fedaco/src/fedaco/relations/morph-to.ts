@@ -6,16 +6,14 @@
 
 import { reflector } from '@gradii/annotation';
 import { isBlank } from '@gradii/check-type';
-import { tap } from 'ramda';
+import { findLast, tap } from 'ramda';
+import { MorphToColumn } from '../../annotation/relation-column/morph-to.relation-column';
 import { Collection } from '../../define/collection';
+import { resolveForwardRef } from '../../query-builder/forward-ref';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
 import { BelongsTo } from './belongs-to';
 import { Relation } from './relation';
-
-function getActualClassNameForMorph(key) {
-  Relation.morphMap(), key
-}
 
 
 export class MorphTo extends BelongsTo {
@@ -104,7 +102,7 @@ export class MorphTo extends BelongsTo {
 
         let obj: Record<string, any> = this._dictionary[morphTypeKey];
         if (!obj) {
-          obj = {};
+          obj                            = {};
           this._dictionary[morphTypeKey] = obj;
           if (!obj[foreignKeyKey]) {
             obj[foreignKeyKey] = [];
@@ -130,8 +128,9 @@ export class MorphTo extends BelongsTo {
   protected async getResultsByType(clazz: string) {
     const instance = this.createModelByType(clazz);
     const ownerKey = this._ownerKey ?? instance.getKeyName();
-    const query    = this.replayMacros(instance.newQuery()).mergeConstraintsFrom(
-      this.getQuery())._with({
+    const query    = this.replayMacros(instance.newQuery())
+      .mergeConstraintsFrom(this.getQuery())
+      .with({
       ...this.getQuery().getEagerLoads(),
       ...this._morphableEagerLoads.get(instance.constructor) ?? {}
     }).withCount(/*cast type array*/this._morphableEagerLoadCounts.get(instance.constructor) ?? []);
@@ -153,9 +152,28 @@ export class MorphTo extends BelongsTo {
       });
   }
 
+  _getActualClassNameForMorph(key: string) {
+    const morphMap = Relation.morphMap();
+    if (key in morphMap) {
+      return morphMap[key];
+    }
+    // todo fixme this morphType can be custom defined in annotation
+    const metas = reflector.propMetadata(this._child.constructor)[this._morphType.replace(/_type$/, '')];
+    if (metas) {
+      const meta         = findLast(it => MorphToColumn.isTypeOf(it), metas);
+      const morphTypeMap = meta['morphTypeMap'];
+      if (morphTypeMap && morphTypeMap[key]) {
+        return resolveForwardRef(morphTypeMap[key]);
+      }
+    }
+
+    throw new Error(
+      `can't found morph map from [${key}] from Relation.morphMap and column decoration`);
+  }
+
   /*Create a new model instance by type.*/
   public createModelByType(type: string) {
-    // const clazz = getActualClassNameForMorph(type);
+    const clazz = this._getActualClassNameForMorph(type);
     // reflector.propMetadata(this._models)
 
     return tap(instance => {
@@ -204,7 +222,7 @@ export class MorphTo extends BelongsTo {
 
   /*Touch all of the related models for the relationship.*/
   public touch() {
-    if (!isBlank(this.child._getAttributeFromArray(this._foreignKey))) {
+    if (!isBlank(this._child._getAttributeFromArray(this._foreignKey))) {
       super.touch();
     }
   }

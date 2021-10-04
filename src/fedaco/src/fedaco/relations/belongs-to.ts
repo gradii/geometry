@@ -26,7 +26,7 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
   )
 ) {
   /*The child model instance of the relation.*/
-  protected child: Model;
+  protected _child: Model;
   /*The foreign key of the parent model.*/
   protected _foreignKey: string;
   /*The associated key on the parent model.*/
@@ -43,14 +43,14 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
     super(query, child);
     this._ownerKey     = ownerKey;
     this._relationName = relationName;
-    this._foreignKey   = foreignKey;
-    this.child        = child;
+    this._foreignKey = foreignKey;
+    this._child      = child;
     this.addConstraints();
   }
 
   /*Get the results of the relationship.*/
   public async getResults() {
-    if (isBlank(this.child.getAttribute(this._foreignKey))) {
+    if (isBlank(this._child.getAttribute(this._foreignKey))) {
       return this._getDefaultFor(this._parent);
     }
     return await this._query.first() || this._getDefaultFor(this._parent);
@@ -63,7 +63,7 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
       this._query.where(
         `${table}.${this._ownerKey}`,
         '=',
-        this.child.getAttribute(this._foreignKey));
+        this._child.getAttribute(this._foreignKey));
     }
   }
 
@@ -117,19 +117,19 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
   public associate(model: Model | number | string) {
     const ownerKey = model instanceof BaseModel ?
       model.getAttribute(this._ownerKey) : model;
-    this.child.setAttribute(this._foreignKey, ownerKey);
+    this._child.setAttribute(this._foreignKey, ownerKey);
     if (model instanceof BaseModel) {
-      this.child.setRelation(this._relationName, model);
+      this._child.setRelation(this._relationName, model);
     } else {
-      this.child.unsetRelation(this._relationName);
+      this._child.unsetRelation(this._relationName);
     }
-    return this.child;
+    return this._child;
   }
 
   /*Dissociate previously associated model from the given parent.*/
   public dissociate() {
-    this.child.setAttribute(this._foreignKey, null);
-    return this.child.setRelation(this._relationName, null);
+    this._child.setAttribute(this._foreignKey, null);
+    return this._child.setRelation(this._relationName, null);
   }
 
   /*Alias of "dissociate" method.*/
@@ -170,7 +170,7 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
 
   /*Get the child of the relationship.*/
   public getChild() {
-    return this.child;
+    return this._child;
   }
 
   /*Get the foreign key of the relationship.*/
@@ -180,12 +180,12 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
 
   /*Get the fully qualified foreign key of the relationship.*/
   public getQualifiedForeignKeyName() {
-    return this.child.qualifyColumn(this._foreignKey);
+    return this._child.qualifyColumn(this._foreignKey);
   }
 
   /*Get the key value of the child's foreign key.*/
   public getParentKey() {
-    return this.child[this._foreignKey];
+    return this._child[this._foreignKey];
   }
 
   /*Get the associated key of the relationship.*/

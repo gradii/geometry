@@ -9,12 +9,12 @@ import { Relation } from '../fedaco/relations/relation';
 import { ColumnAnnotation } from './column';
 import { RelationType } from './enum-relation';
 
-export interface RelationColumnAnnotation extends ColumnAnnotation {
+export interface RelationColumnAnnotation<T extends Relation = Relation> extends ColumnAnnotation {
   name?: string;
   isRelation?: boolean;
   relationType?: RelationType;
 
-  onQuery?: (q: any) => void;
+  onQuery?: (q: T | Relation | any) => void;
   _getRelation?: (m: Model, relation: string) => any;
 }
 

@@ -4,9 +4,21 @@
  * Use of this source code is governed by an MIT-style license
  */
 import { Model } from '../model';
-import { mixinAsPivot } from './concerns/as-pivot';
+import { AsPivot, mixinAsPivot } from './concerns/as-pivot';
 
-export interface Pivot extends Model {
+// tslint:disable-next-line:no-namespace
+export declare namespace Pivot {
+  /*Create a new pivot model instance.*/
+  export function fromAttributes(parent: Model, attributes: any[], table: string,
+                                 exists?: boolean): any;
+
+  /*Create a new pivot model from raw values returned from a query.*/
+  export function fromRawAttributes(
+    parent: Model, attributes: any[], table: string, exists: boolean): any;
+}
+
+// @ts-ignore
+export interface Pivot extends AsPivot, Omit<Model, keyof AsPivot> {
 }
 
 export class Pivot extends mixinAsPivot(Model) {

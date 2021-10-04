@@ -13,7 +13,7 @@ import { pluralStudy } from '../../helper/pluralize';
 import { camelCase } from '../../helper/str';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
-import { Aspivot } from './concerns/as-pivot';
+import { AsPivot } from './concerns/as-pivot';
 import {
   InteractsWithDictionary, mixinInteractsWithDictionary
 } from './concerns/interacts-with-dictionary';
@@ -60,7 +60,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   /*The custom pivot table column for the updated_at timestamp.*/
   _pivotUpdatedAt: string;
   /*The class name of the custom pivot model to use for the relationship.*/
-  _using: typeof Aspivot & typeof Model;
+  _using: typeof AsPivot;
   /*The name of the accessor to use for the "pivot" relationship.*/
   _accessor = 'pivot';
 
@@ -155,7 +155,12 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   _buildDictionary(results: Collection): { [key: string]: any[] } {
     const dictionary: { [key: string]: any[] } = {};
     for (const result of results) {
-      const value = this._getDictionaryKey(result[this._accessor][this._foreignPivotKey]);
+      const value = this._getDictionaryKey(
+        (result.getRelation(this._accessor) as Model).getAttributeValue(this._foreignPivotKey)
+      );
+      if (!isArray(dictionary[value])) {
+        dictionary[value] = [];
+      }
       dictionary[value].push(result);
     }
     return dictionary;
@@ -167,10 +172,10 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   // }
 
   /*Specify the custom pivot model to use for the relationship.*/
-  // public using(clazz: string) {
-  //   this._using = clazz;
-  //   return this;
-  // }
+  public using(clazz: typeof AsPivot) {
+    this._using = clazz;
+    return this;
+  }
 
   /*Specify the custom pivot accessor to use for the relationship.*/
   public as(accessor: string) {

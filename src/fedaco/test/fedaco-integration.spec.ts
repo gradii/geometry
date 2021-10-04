@@ -19,6 +19,8 @@ import { DatabaseConfig } from '../src/databaseConfig';
 import { FedacoBuilder } from '../src/fedaco/fedaco-builder';
 import { Model } from '../src/fedaco/model';
 import { BelongsToMany } from '../src/fedaco/relations/belongs-to-many';
+import { HasMany } from '../src/fedaco/relations/has-many';
+import { Pivot } from '../src/fedaco/relations/pivot';
 import { Relation } from '../src/fedaco/relations/relation';
 import { forwardRef } from '../src/query-builder/forward-ref';
 import { SchemaBuilder } from '../src/schema/schema-builder';
@@ -604,11 +606,11 @@ describe('test database eloquent integration', () => {
       'id'   : 2,
       'email': 'abigailotwell@gmail.com'
     });
-    await (user2.getRelationMethod('posts') as BelongsToMany).create({
+    await (user2.getRelationMethod('posts') as HasMany).create({
       'id'  : 1,
       'name': 'First post'
     });
-    await (user1.getRelationMethod('posts') as BelongsToMany).create({
+    await (user1.getRelationMethod('posts') as HasMany).create({
       'id'  : 2,
       'name': 'Second post'
     });
@@ -726,7 +728,7 @@ describe('test database eloquent integration', () => {
     const user = await EloquentTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    await (user.getRelationMethod('posts') as BelongsToMany).create({
+    await (user.getRelationMethod('posts') as HasMany).create({
       'name': 'First Post'
     });
     await user.getRelationMethod('posts').create({
@@ -1553,96 +1555,105 @@ describe('test database eloquent integration', () => {
     });
     try {
       const order = await EloquentTestOrder.createQuery().first();
-      item        = await (order).item;
+      item        = order.item;
     } catch (e) {
+      console.log(e);
     }
     expect(item).toBeInstanceOf(EloquentTestItem);
   });
 
-//   it('eager loaded morph to relations on another database connection', () => {
-//     EloquentTestPost.create({
-//       'id'     : 1,
-//       'name'   : 'Default Connection Post',
-//       'user_id': 1
-//     });
-//     EloquentTestPhoto.create({
-//       'id'            : 1,
-//       'imageable_type': EloquentTestPost,
-//       'imageable_id'  : 1,
-//       'name'          : 'Photo'
-//     });
-//     EloquentTestPost.on('second_connection').create({
-//       'id'     : 1,
-//       'name'   : 'Second Connection Post',
-//       'user_id': 1
-//     });
-//     EloquentTestPhoto.on('second_connection').create({
-//       'id'            : 1,
-//       'imageable_type': EloquentTestPost,
-//       'imageable_id'  : 1,
-//       'name'          : 'Photo'
-//     });
-//     let defaultConnectionPost = EloquentTestPhoto._with('imageable').first().imageable;
-//     let secondConnectionPost  = EloquentTestPhoto.on('second_connection')._with(
-//       'imageable').first().imageable;
-//     expect('Default Connection Post').toEqual(defaultConnectionPost.name);
-//     expect('Second Connection Post').toEqual(secondConnectionPost.name);
-//   });
-//   it('belongs to many custom pivot', () => {
-//     let john = EloquentTestUserWithCustomFriendPivot.create({
-//       'id'   : 1,
-//       'name' : 'John Doe',
-//       'email': 'johndoe@example.com'
-//     });
-//     let jane = EloquentTestUserWithCustomFriendPivot.create({
-//       'id'   : 2,
-//       'name' : 'Jane Doe',
-//       'email': 'janedoe@example.com'
-//     });
-//     let jack = EloquentTestUserWithCustomFriendPivot.create({
-//       'id'   : 3,
-//       'name' : 'Jack Doe',
-//       'email': 'jackdoe@example.com'
-//     });
-//     let jule = EloquentTestUserWithCustomFriendPivot.create({
-//       'id'   : 4,
-//       'name' : 'Jule Doe',
-//       'email': 'juledoe@example.com'
-//     });
-//     EloquentTestFriendLevel.create({
-//       'id'   : 1,
-//       'level': 'acquaintance'
-//     });
-//     EloquentTestFriendLevel.create({
-//       'id'   : 2,
-//       'level': 'friend'
-//     });
-//     EloquentTestFriendLevel.create({
-//       'id'   : 3,
-//       'level': 'bff'
-//     });
-//     john.friends().attach(jane, {
-//       'friend_level_id': 1
-//     });
-//     john.friends().attach(jack, {
-//       'friend_level_id': 2
-//     });
-//     john.friends().attach(jule, {
-//       'friend_level_id': 3
-//     });
-//     let johnWithFriends = EloquentTestUserWithCustomFriendPivot._with('friends').find(1);
-//     expect(johnWithFriends.friends).toCount(3);
-//     expect(johnWithFriends.friends.find(3).pivot.level.level).toBe('friend');
-//     expect(johnWithFriends.friends.find(4).pivot.friend.name).toBe('Jule Doe');
-//   });
-//   it('is after retrieving the same model', () => {
-//     let saved     = EloquentTestUser.create({
-//       'id'   : 1,
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     let retrieved = EloquentTestUser.find(1);
-//     expect(saved.is(retrieved)).toBeTruthy();
-//   });
+  it('eager loaded morph to relations on another database connection', async () => {
+    await EloquentTestPost.createQuery().create({
+      'id'     : 1,
+      'name'   : 'Default Connection Post',
+      'user_id': 1
+    });
+    await EloquentTestPhoto.createQuery().create({
+      'id'            : 1,
+      'imageable_type': 'post',
+      'imageable_id'  : 1,
+      'name'          : 'Photo'
+    });
+    await EloquentTestPost.useConnection('second_connection').create({
+      'id'     : 1,
+      'name'   : 'Second Connection Post',
+      'user_id': 1
+    });
+    await EloquentTestPhoto.useConnection('second_connection').create({
+      'id'            : 1,
+      'imageable_type': 'post',
+      'imageable_id'  : 1,
+      'name'          : 'Photo'
+    });
+    const defaultConnectionPost = (
+      await EloquentTestPhoto.createQuery().with('imageable').first()
+    ).imageable;
+    const secondConnectionPost  = (
+      await EloquentTestPhoto.useConnection('second_connection').with('imageable').first()
+    ).imageable;
+    expect('Default Connection Post').toEqual(defaultConnectionPost.name);
+    expect('Second Connection Post').toEqual(secondConnectionPost.name);
+  });
+
+  it('belongs to many custom pivot', async () => {
+    const john = await EloquentTestUserWithCustomFriendPivot.createQuery().create({
+      'id'   : 1,
+      'name' : 'John Doe',
+      'email': 'johndoe@example.com'
+    });
+    const jane = await EloquentTestUserWithCustomFriendPivot.createQuery().create({
+      'id'   : 2,
+      'name' : 'Jane Doe',
+      'email': 'janedoe@example.com'
+    });
+    const jack = await EloquentTestUserWithCustomFriendPivot.createQuery().create({
+      'id'   : 3,
+      'name' : 'Jack Doe',
+      'email': 'jackdoe@example.com'
+    });
+    const jule = await EloquentTestUserWithCustomFriendPivot.createQuery().create({
+      'id'   : 4,
+      'name' : 'Jule Doe',
+      'email': 'juledoe@example.com'
+    });
+    await EloquentTestFriendLevel.createQuery().create({
+      'id'   : 1,
+      'level': 'acquaintance'
+    });
+    await EloquentTestFriendLevel.createQuery().create({
+      'id'   : 2,
+      'level': 'friend'
+    });
+    await EloquentTestFriendLevel.createQuery().create({
+      'id'   : 3,
+      'level': 'bff'
+    });
+    await john.getRelationMethod('friends').attach(jane, {
+      'friend_level_id': 1
+    });
+    await john.getRelationMethod('friends').attach(jack, {
+      'friend_level_id': 2
+    });
+    await john.getRelationMethod('friends').attach(jule, {
+      'friend_level_id': 3
+    });
+
+    const johnWithFriends = await EloquentTestUserWithCustomFriendPivot.createQuery()
+      .with('friends').find(1);
+    expect(johnWithFriends.friends.length).toBe(3);
+    expect(await (await johnWithFriends.friends.find(it => it.id === 3).getAttribute('pivot').level).level).toBe('friend');
+    expect((await johnWithFriends.friends.find(it => it.id === 4).getAttribute('pivot').friend).name).toBe('Jule Doe');
+  });
+
+  it('is after retrieving the same model', async () => {
+    const saved     = await EloquentTestUser.createQuery().create({
+      'id'   : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+    const retrieved = await EloquentTestUser.createQuery().find(1);
+    expect(saved.is(retrieved)).toBeTruthy();
+  });
+
 //   it('fresh method on model', () => {
 //     let now                        = Carbon.now();
 //     let nowSerialized              = now.startOfSecond().toJSON();
@@ -2179,14 +2190,21 @@ export class EloquentTestUser extends Model {
   public postWithPhotos;
 }
 
-// export class EloquentTestUserWithCustomFriendPivot extends EloquentTestUser {
-//   public friends() {
-//     return this.belongsToMany(EloquentTestUser, "friends", "user_id", "friend_id").using(EloquentTestFriendPivot).withPivot("user_id", "friend_id", "friend_level_id");
-//   }
-// }
+export class EloquentTestUserWithCustomFriendPivot extends EloquentTestUser {
+  @BelongsToManyColumn({
+    related        : EloquentTestUser,
+    table          : 'friends',
+    foreignPivotKey: 'user_id',
+    relatedPivotKey: 'friend_id',
+    onQuery        : (q: BelongsToMany) => {
+      q.using(EloquentTestFriendPivot).withPivot('user_id', 'friend_id', 'friend_level_id');
+    }
+  })
+  friends;
+}
+
 export class EloquentTestUserWithSpaceInColumnName extends EloquentTestUser {
   _table: any = 'users_with_space_in_colum_name';
-
 
 }
 
@@ -2289,10 +2307,14 @@ export class EloquentTestPost extends Model {
   // }
 }
 
-// export class EloquentTestFriendLevel extends Eloquent {
-//   protected table: any = "friend_levels";
-//   protected guarded: any = [];
-// }
+export class EloquentTestFriendLevel extends Model {
+  _table: any   = 'friend_levels';
+  _guarded: any = [];
+
+  @Column()
+  level;
+}
+
 @Table({})
 export class EloquentTestPhoto extends Model {
   _table: any   = 'photos';
@@ -2310,9 +2332,6 @@ export class EloquentTestPhoto extends Model {
     }
   })
   public imageable;
-  // public imageable() {
-  //   return this.morphTo();
-  // }
 }
 
 export class EloquentTestUserWithStringCastId extends EloquentTestUser {
@@ -2368,19 +2387,27 @@ export class EloquentTestWithJSON extends Model {
   json;
 }
 
-// export class EloquentTestFriendPivot extends Pivot {
-//   protected table: any = "friends";
-//   protected guarded: any = [];
-//   public user() {
-//     return this.belongsTo(EloquentTestUser);
-//   }
-//   public friend() {
-//     return this.belongsTo(EloquentTestUser);
-//   }
-//   public level() {
-//     return this.belongsTo(EloquentTestFriendLevel, "friend_level_id");
-//   }
-// }
+export class EloquentTestFriendPivot extends Pivot {
+  _table: any   = 'friends';
+  _guarded: any = [];
+
+  @BelongsToColumn({
+    related: EloquentTestUser
+  })
+  public user;
+
+  @BelongsToColumn({
+    related: EloquentTestUser
+  })
+  public friend;
+
+  @BelongsToColumn({
+    related   : EloquentTestFriendLevel,
+    foreignKey: 'friend_level_id'
+  })
+  public level;
+}
+
 // export class EloquentTouchingUser extends Eloquent {
 //   protected table: any = "users";
 //   protected guarded: any = [];

@@ -5,9 +5,11 @@
  */
 
 import { Model } from '../model';
+import { AsPivot } from './concerns/as-pivot';
 
-export function fromAttributes(clazz: typeof Model, parent: Model, attributes: any, table: string,
+export function fromAttributes(clazz: typeof AsPivot, parent: Model, attributes: any, table: string,
                                exists = false) {
+  // @ts-ignore
   const instance        = new clazz();
   instance.timestamps = instance.hasTimestampAttributes(attributes);
   instance.setConnection(parent.getConnectionName()).setTable(table).forceFill(
@@ -17,7 +19,7 @@ export function fromAttributes(clazz: typeof Model, parent: Model, attributes: a
   return instance;
 }
 
-export function fromRawAttributes(clazz: typeof Model, parent: Model, attributes: any, table: string,
+export function fromRawAttributes(clazz: typeof AsPivot, parent: Model, attributes: any, table: string,
                                   exists = false) {
   const instance        = fromAttributes(clazz, parent, [], table, exists);
   instance._timestamps = instance.hasTimestampAttributes(attributes);

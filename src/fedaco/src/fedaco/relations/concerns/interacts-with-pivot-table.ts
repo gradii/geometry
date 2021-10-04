@@ -44,7 +44,7 @@ export interface InteractsWithPivotTable {
   _updateExistingPivotUsingCustomClass(id: any, attributes: any[], touch: boolean);
 
   /*Attach a model to the parent.*/
-  attach(id: any, attributes?: any[], touch?: boolean);
+  attach(id: any, attributes?: any, touch?: boolean);
 
   /*Attach a model to the parent using a custom class.*/
   _attachUsingCustomClass(id: any, attributes: any[]);
@@ -254,8 +254,10 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Attach a model to the parent.*/
-    public async attach(this: BelongsToMany & _Self, id: any, attributes: any[] = [],
-                        touch                                                   = true) {
+    public async attach(this: BelongsToMany & _Self,
+                        id: any,
+                        attributes: any = {},
+                        touch             = true) {
       if (this._using) {
         await this._attachUsingCustomClass(id, attributes);
       } else {
@@ -320,6 +322,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
                                exists = false) {
       let fresh = this.parent.freshTimestamp();
       if (this.using) {
+        // @ts-ignore
         const pivotModel = new this._using();
         fresh            = fresh.format(pivotModel.getDateFormat());
       }
