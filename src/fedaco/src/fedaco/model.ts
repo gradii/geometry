@@ -5,7 +5,7 @@
  */
 
 import { isAnyEmpty, isArray, isBlank, isObjectEmpty, isString } from '@gradii/check-type';
-import { tap, uniq } from 'ramda';
+import { difference, tap, uniq } from 'ramda';
 import { except } from '../helper/obj';
 import { plural, pluralStudy } from '../helper/pluralize';
 import { camelCase, snakeCase, upperCaseFirst } from '../helper/str';
@@ -145,6 +145,11 @@ export class Model extends mixinHasAttributes(
 
   static globalScopes: any;
 
+  /**
+   * The list of models classes that should not be affected with touch.
+   */
+  static ignoreOnTouch: any[] = [];
+
   static booted: any = new Map();
 
   /*Create a new Eloquent model instance.*/
@@ -178,269 +183,6 @@ export class Model extends mixinHasAttributes(
   fireModelEvent(event: string, arg: boolean) {
 
   }
-
-  //
-  // /*Get the primary key for the model.*/
-  // public getKeyName() {
-  //   return this._primaryKey;
-  // }
-  //
-  // getQualifiedKeyName() {
-  //   return '';
-  // }
-  //
-  //
-  // /*Merge new casts with existing casts on the model.*/
-  // public mergeCasts(casts: any[]) {
-  //   // this._casts = [...this._casts, ...casts];
-  // }
-  //
-  // /*Create a new Eloquent Collection instance.*/
-  // public newCollection(models: any[] = []) {
-  //   // return new Collection(models);
-  //   return models;
-  // }
-  //
-  // /*Create a new Eloquent query builder for the model.*/
-  // public newEloquentBuilder(query: QueryBuilder) {
-  //   return new FedacoBuilder(query);
-  // }
-  //
-  // /*Create a new instance of the given model.*/
-  // public newInstance(attributes: any[] = [], exists: boolean = false) {
-  //   const model   = new Model(attributes);
-  //   model._exists = exists;
-  //   model.setConnection(this.getConnectionName());
-  //   model.setTable(this.getTable());
-  //   // model.mergeCasts(this._casts);
-  //   return model;
-  // }
-  //
-  // /*Get a new query builder that doesn't have any global scopes or eager loading.*/
-  // public newModelQuery() {
-  //   return this.newEloquentBuilder(this.newBaseQueryBuilder()).setModel(this);
-  // }
-  //
-  // /*Get a new query builder for the model's table.*/
-  // public newQuery() {
-  //   return this.registerGlobalScopes(this.newQueryWithoutScopes());
-  // }
-  //
-  // /*Get a new query to restore one or more models by their queueable IDs.*/
-  // public newQueryForRestoration(ids: any[] | number) {
-  //   // return isArray(ids) ? this.newQueryWithoutScopes().whereIn(this.getQualifiedKeyName(),
-  //   //   ids) : this.newQueryWithoutScopes().whereKey(ids);
-  // }
-  //
-  // /*Get a new query builder with no relationships loaded.*/
-  // public newQueryWithoutRelationships() {
-  //   return this.registerGlobalScopes(this.newModelQuery());
-  // }
-  //
-  // /*Get a new query instance without a given scope.*/
-  // public newQueryWithoutScope(scope: Scope | string) {
-  //   return this.newQuery().withoutGlobalScope(scope);
-  // }
-  //
-  // /*Get a new query builder that doesn't have any global scopes.*/
-  // public newQueryWithoutScopes() {
-  //   return this.newModelQuery()
-  //     .with(this._with)
-  //     .withCount(this._withCount);
-  // }
-  //
-  // /*Register the global scopes for this builder instance.*/
-  // public registerGlobalScopes(builder: FedacoBuilder): FedacoBuilder {
-  //   for (const [identifier, scope] of Object.entries(this.getGlobalScopes())) {
-  //     builder.withGlobalScope(identifier, scope as Scope);
-  //   }
-  //   return builder;
-  // }
-  //
-  // /*Fill the model with an array of attributes.*/
-  // public fill(attributes: any[]) {
-  //   // const totallyGuarded = this.totallyGuarded();
-  //   // for (let [key, value] of Object.entries(this.fillableFromArray(attributes))) {
-  //   //   key = this.removeTableFromKey(key);
-  //   //   if (this.isFillable(key)) {
-  //   //     this.setAttribute(key, value);
-  //   //   } else if (totallyGuarded) {
-  //   //     throw new Error(`MassAssignmentException key`);
-  //   //   }
-  //   // }
-  //   return this;
-  // }
-
-  //
-  // /*Save the model to the database.*/
-  // public save(options: any = {}) {
-  //   // this._mergeAttributesFromClassCasts();
-  //   const query = this.newModelQuery();
-  //   // if (this.fireModelEvent('saving') === false) {
-  //   //   return false;
-  //   // }
-  //   let saved;
-  //   // if (this.exists) {
-  //   //   saved = this.isDirty() ? this.performUpdate(query) : true;
-  //   // } else {
-  //   //   saved = this.performInsert(query);
-  //   //
-  //   //   const connection = query.getConnection();
-  //   //   if (!this.getConnectionName() && connection) {
-  //   //     this.setConnection(connection.getName());
-  //   //   }
-  //   // }
-  //   if (saved) {
-  //     this._finishSave(options);
-  //   }
-  //   return saved;
-  // }
-
-  // @Hooks({
-  //   before: ()=>{
-  //
-  //   },
-  //   after: ()=>{
-  //
-  //   }
-  // })
-
-  // protected __noSuchMethod__(method, parameters) {
-  //   if (['increment', 'decrement'].includes(method)) {
-  //     return this[method](...parameters);
-  //   }
-  //   // if (resolver = (this.constructor as unknown as typeof Model).relationResolvers[get_class(this)][method] ?? null) {
-  //   //   return resolver(this);
-  //   // }
-  //
-  //   const info = this.getReflectMetadata(this);
-  //   info.hasMetadata(Attribute);
-  //   this.setAttribue(...parameters);
-  //
-  //   // return this.forwardCallTo(this.newQuery(), method, parameters);
-  // }
-
-  /*Perform a model insert operation.*/
-  protected _performInsert(query: FedacoBuilder) {
-    // if (this.fireModelEvent('creating') === false) {
-    //   return false;
-    // }
-    // if (this.usesTimestamps()) {
-    //   this.updateTimestamps();
-    // }
-    // var attributes = this.getAttributes();
-    // if (this.getIncrementing()) {
-    //   this._insertAndSetId(query, attributes);
-    // } else {
-    //   if (empty(attributes)) {
-    //     return true;
-    //   }
-    //   query.insert(attributes);
-    // }
-    // this.exists = true;
-    // this.wasRecentlyCreated = true;
-    // this.fireModelEvent('created', false);
-    return true;
-  }
-
-  /*Insert the given attributes and set the ID on the model.*/
-  protected _insertAndSetId(query: FedacoBuilder, attributes: any[]) {
-    // const keyName = this.getKeyName()
-    // var id = query.insertGetId(attributes, keyName);
-    // this.setAttribute(keyName, id);
-  }
-
-  /*Perform any actions that are necessary after the model is saved.*/
-  protected _finishSave(options: any[]) {
-    // this.fireModelEvent('saved', false);
-    // if (this.isDirty() && (options['touch'] ?? true)) {
-    //   this.touchOwners();
-    // }
-    // this.syncOriginal();
-  }
-
-  // /*Get a new query builder instance for the connection.*/
-  // protected newBaseQueryBuilder() {
-  //   return this.getConnection().query();
-  // }
-  //
-  // public qualifyColumn(column: string) {
-  //   if (column.includes('.')) {
-  //     return column;
-  //   }
-  //   return this.getTable() + '.' + column;
-  // }
-
-  /*Merge the cast class attributes back into the model.*/
-  // protected _mergeAttributesFromClassCasts() {
-  //   for (let [key, value] of Object.entries(this._classCastCache)) {
-  //     var caster = this.resolveCasterClass(key);
-  //     this.attributes = [
-  //       ...this.attributes,
-  //       ...(caster instanceof CastsInboundAttributes ? {} : this.normalizeCastClassResponse(
-  //         key,
-  //         caster.set(this, key, value, this.attributes)
-  //       )
-  //     )];
-  //   }
-  // }
-
-
-  // /*Initialize any initializable traits on the model.*/
-  // protected initializeTraits() {
-  //   for (let method of Model.traitInitializers[Model]) {
-  //     this[method]();
-  //   }
-  // }
-
-  // /*Perform any actions required after the model boots.*/
-  // protected static booted() {
-  // }
-  //
-  // /*Clear the list of booted models so they will be re-booted.*/
-  // public static clearBootedModels() {
-  //   Model.booted       = [];
-  //   Model.globalScopes = [];
-  // }
-  //
-  // /*Disables relationship model touching for the current class during given callback scope.*/
-  // public static withoutTouching(callback: callable) {
-  //   Model.withoutTouchingOn([Model], callback);
-  // }
-  //
-  // /*Disables relationship model touching for the given model classes during given callback scope.*/
-  // public static withoutTouchingOn(models: any[], callback: callable) {
-  //   Model.ignoreOnTouch = array_values([...Model.ignoreOnTouch, ...models]);
-  //   try {
-  //     callback();
-  //   } finally {
-  //     Model.ignoreOnTouch = array_values(array_diff(Model.ignoreOnTouch, models));
-  //   }
-  // }
-  //
-  // /*Determine if the given model is ignoring touches.*/
-  // public static isIgnoringTouch(clazz: string | null = null) {
-  //   let clazz = clazz || Model;
-  //   if (!get_class_vars(clazz)['timestamps'] || !clazz.UPDATED_AT) {
-  //     return true;
-  //   }
-  //   for (let ignoredClass of Model.ignoreOnTouch) {
-  //     if (clazz === ignoredClass || is_subclass_of(clazz, ignoredClass)) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
-  //
-  // /*Prevent model relationships from being lazy loaded.*/
-  // public static preventLazyLoading(value: boolean = true) {
-  //   Model.modelsShouldPreventLazyLoading = value;
-  // }
-  //
-  // /*Register a callback that is responsible for handling lazy loading violations.*/
-  // public static handleLazyLoadingViolationUsing(callback: callable) {
-  //   Model.lazyLoadingViolationCallback = callback;
-  // }
 
   /*Fill the model with an array of attributes.*/
   public fill(attributes: Record<string, any>) {
@@ -1164,85 +906,40 @@ export class Model extends mixinHasAttributes(
   //   return Model.modelsShouldPreventLazyLoading;
   // }
 
-  // /*Get the broadcast channel route definition that is associated with the given entity.*/
-  // public broadcastChannelRoute() {
-  //   return str_replace('\\', '.', get_class(this)) + '.{' + Str.camel(class_basename(this)) + '}';
-  // }
-  //
-  // /*Get the broadcast channel name that is associated with the given entity.*/
-  // public broadcastChannel() {
-  //   return str_replace('\\', '.', get_class(this)) + '.' + this.getKey();
-  // }
-
-  // /*Dynamically retrieve attributes on the model.*/
-  // public __get(key: string) {
-  //   return this.getAttribute(key);
-  // }
-  // /*Dynamically set attributes on the model.*/
-  // public __set(key: string, value: any) {
-  //   this.setAttribute(key, value);
-  // }
-  // /*Determine if the given attribute exists.*/
-  // public offsetExists(offset: any) {
-  //   return !isBlank(this.getAttribute(offset));
-  // }
-  // /*Get the value for a given offset.*/
-  // public offsetGet(offset: any) {
-  //   return this.getAttribute(offset);
-  // }
-  // /*Set the value for a given offset.*/
-  // public offsetSet(offset: any, value: any) {
-  //   this.setAttribute(offset, value);
-  // }
-  // /*Unset the value for a given offset.*/
-  // public offsetUnset(offset: any) {
-  //   {
-  //     delete this._attributes[offset];
-  //     delete this.relations[offset];
-  //   }
-  // }
-  // /*Determine if an attribute or relation exists on the model.*/
-  // public __isset(key: string) {
-  //   return this.offsetExists(key);
-  // }
-  // /*Unset an attribute on the model.*/
-  // public __unset(key: string) {
-  //   this.offsetUnset(key);
-  // }
-  // /*Handle dynamic method calls into the model.*/
-  // public __call(method: string, parameters: any[]) {
-  //   if (in_array(method, ["increment", "decrement"])) {
-  //     return this.method(());
-  //   }
-  //   if (resolver = Model.relationResolvers[get_class(this)][method] ?? null) {
-  //     return resolver(this);
-  //   }
-  //   return this.forwardCallTo(this.newQuery(), method, parameters);
-  // }
-  // /*Handle dynamic static method calls into the model.*/
-  // public static __callStatic(method: string, parameters: any[]) {
-  //   return new Model().method(());
-  // }
-  // /*Convert the model to its string representation.*/
-  // public __toString() {
-  //   return this.toJson();
-  // }
-  // /*Prepare the object for serialization.*/
-  // public __sleep() {
-  //   this.mergeAttributesFromClassCasts();
-  //   this.classCastCache = [];
-  //   return array_keys(get_object_vars(this));
-  // }
-  // /*When a model is being unserialized, check if it needs to be booted.*/
-  // public __wakeup() {
-  //   this.bootIfNotBooted();
-  //   this.initializeTraits();
-  // }
-
   /*Begin querying the model on a given connection.*/
   public static useConnection(connection?: string) {
     const instance = new this();
     instance.setConnection(connection);
     return instance.newQuery();
+  }
+
+  /*Disables relationship model touching for the current class during given callback scope.*/
+  public static withoutTouching(callback: Function) {
+    Model.withoutTouchingOn([Model], callback);
+  }
+  /*Disables relationship model touching for the given model classes during given callback scope.*/
+  public static withoutTouchingOn(models: any[], callback: Function) {
+    Model.ignoreOnTouch = [...Model.ignoreOnTouch, ...models];
+    try {
+      callback();
+    }
+    finally {
+      Model.ignoreOnTouch = difference(Model.ignoreOnTouch, models);
+    }
+  }
+  /*Determine if the given model is ignoring touches.*/
+  public static isIgnoringTouch(clazz?: typeof Model) {
+    clazz = clazz || Model;
+    // if (!clazz['_timestamps']) {
+    //   return true;
+    // }
+    // reflector define table is ignoring
+
+    for (const ignoredClass of Model.ignoreOnTouch) {
+      if (clazz === ignoredClass || ignoredClass.constructor instanceof clazz.constructor) {
+        return true;
+      }
+    }
+    return false;
   }
 }

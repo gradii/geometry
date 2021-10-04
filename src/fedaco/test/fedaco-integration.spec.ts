@@ -1,5 +1,5 @@
 import { isArray, isNumber } from '@gradii/check-type';
-import { format } from 'date-fns';
+import { format, formatISO, startOfSecond } from 'date-fns';
 import { head } from 'ramda';
 import { Subject } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
@@ -24,6 +24,8 @@ import { Pivot } from '../src/fedaco/relations/pivot';
 import { Relation } from '../src/fedaco/relations/relation';
 import { forwardRef } from '../src/query-builder/forward-ref';
 import { SchemaBuilder } from '../src/schema/schema-builder';
+import { Post } from './fixtures/post.model';
+import { User } from './fixtures/user.model';
 
 function connection(connectionName = 'default') {
   return Model.getConnectionResolver().connection(connectionName);
@@ -1641,8 +1643,10 @@ describe('test database eloquent integration', () => {
     const johnWithFriends = await EloquentTestUserWithCustomFriendPivot.createQuery()
       .with('friends').find(1);
     expect(johnWithFriends.friends.length).toBe(3);
-    expect(await (await johnWithFriends.friends.find(it => it.id === 3).getAttribute('pivot').level).level).toBe('friend');
-    expect((await johnWithFriends.friends.find(it => it.id === 4).getAttribute('pivot').friend).name).toBe('Jule Doe');
+    expect(await (await johnWithFriends.friends.find(it => it.id === 3).getAttribute(
+      'pivot').level).level).toBe('friend');
+    expect((await johnWithFriends.friends.find(it => it.id === 4).getAttribute(
+      'pivot').friend).name).toBe('Jule Doe');
   });
 
   it('is after retrieving the same model', async () => {
@@ -1654,75 +1658,75 @@ describe('test database eloquent integration', () => {
     expect(saved.is(retrieved)).toBeTruthy();
   });
 
-//   it('fresh method on model', () => {
-//     let now                        = Carbon.now();
-//     let nowSerialized              = now.startOfSecond().toJSON();
-//     let nowWithFractionsSerialized = now.toJSON();
-//     Carbon.setTestNow(now);
-//     let storedUser1 = EloquentTestUser.create({
-//       'id'      : 1,
-//       'email'   : 'taylorotwell@gmail.com',
-//       'birthday': now
-//     });
-//     storedUser1.newQuery().update({
-//       'email': 'dev@mathieutu.ovh',
-//       'name' : 'Mathieu TUDISCO'
-//     });
-//     let freshStoredUser1 = storedUser1.fresh();
-//     let storedUser2      = EloquentTestUser.create({
-//       'id'      : 2,
-//       'email'   : 'taylorotwell@gmail.com',
-//       'birthday': now
-//     });
-//     storedUser2.newQuery().update({
-//       'email': 'dev@mathieutu.ovh'
-//     });
-//     let freshStoredUser2   = storedUser2.fresh();
-//     let notStoredUser      = new EloquentTestUser({
-//       'id'      : 3,
-//       'email'   : 'taylorotwell@gmail.com',
-//       'birthday': now
-//     });
-//     let freshNotStoredUser = notStoredUser.fresh();
-//     expect(storedUser1.toArray()).toEqual({
-//       'id'        : 1,
-//       'email'     : 'taylorotwell@gmail.com',
-//       'birthday'  : nowWithFractionsSerialized,
-//       'created_at': nowSerialized,
-//       'updated_at': nowSerialized
-//     });
-//     expect(freshStoredUser1.toArray()).toEqual({
-//       'id'        : 1,
-//       'name'      : 'Mathieu TUDISCO',
-//       'email'     : 'dev@mathieutu.ovh',
-//       'birthday'  : nowWithFractionsSerialized,
-//       'created_at': nowSerialized,
-//       'updated_at': nowSerialized
-//     });
-//     expect(storedUser1).toInstanceOf(EloquentTestUser);
-//     expect(storedUser2.toArray()).toEqual({
-//       'id'        : 2,
-//       'email'     : 'taylorotwell@gmail.com',
-//       'birthday'  : nowWithFractionsSerialized,
-//       'created_at': nowSerialized,
-//       'updated_at': nowSerialized
-//     });
-//     expect(freshStoredUser2.toArray()).toEqual({
-//       'id'        : 2,
-//       'name'      : null,
-//       'email'     : 'dev@mathieutu.ovh',
-//       'birthday'  : nowWithFractionsSerialized,
-//       'created_at': nowSerialized,
-//       'updated_at': nowSerialized
-//     });
-//     expect(storedUser2).toInstanceOf(EloquentTestUser);
-//     expect(notStoredUser.toArray()).toEqual({
-//       'id'      : 3,
-//       'email'   : 'taylorotwell@gmail.com',
-//       'birthday': nowWithFractionsSerialized
-//     });
-//     expect(freshNotStoredUser).toNull();
-//   });
+  it('fresh method on model', async () => {
+    const now                        = new Date();
+    const nowSerialized              = formatISO(startOfSecond(now));
+    const nowWithFractionsSerialized = now.toJSON();
+    // Carbon.setTestNow(now);
+    const storedUser1                = await EloquentTestUser.createQuery().create({
+      'id'      : 1,
+      'email'   : 'taylorotwell@gmail.com',
+      'birthday': now
+    });
+    await storedUser1.newQuery().update({
+      'email': 'dev@mathieutu.ovh',
+      'name' : 'Mathieu TUDISCO'
+    });
+    const freshStoredUser1 = await storedUser1.fresh();
+    const storedUser2      = await EloquentTestUser.createQuery().create({
+      'id'      : 2,
+      'email'   : 'taylorotwell@gmail.com',
+      'birthday': now
+    });
+    await storedUser2.newQuery().update({
+      'email': 'dev@mathieutu.ovh'
+    });
+    const freshStoredUser2   = await storedUser2.fresh();
+    const notStoredUser      = EloquentTestUser.initAttributes({
+      'id'      : 3,
+      'email'   : 'taylorotwell@gmail.com',
+      'birthday': now
+    });
+    const freshNotStoredUser = await notStoredUser.fresh();
+    expect(storedUser1.toArray()).toEqual({
+      'id'        : 1,
+      'email'     : 'taylorotwell@gmail.com',
+      'birthday'  : nowWithFractionsSerialized,
+      'created_at': nowSerialized,
+      'updated_at': nowSerialized
+    });
+    expect(freshStoredUser1.toArray()).toEqual({
+      'id'        : 1,
+      'name'      : 'Mathieu TUDISCO',
+      'email'     : 'dev@mathieutu.ovh',
+      'birthday'  : nowWithFractionsSerialized,
+      'created_at': nowSerialized,
+      'updated_at': nowSerialized
+    });
+    expect(storedUser1).toBeInstanceOf(EloquentTestUser);
+    expect(storedUser2.toArray()).toEqual({
+      'id'        : 2,
+      'email'     : 'taylorotwell@gmail.com',
+      'birthday'  : nowWithFractionsSerialized,
+      'created_at': nowSerialized,
+      'updated_at': nowSerialized
+    });
+    expect(freshStoredUser2.toArray()).toEqual({
+      'id'        : 2,
+      'name'      : null,
+      'email'     : 'dev@mathieutu.ovh',
+      'birthday'  : nowWithFractionsSerialized,
+      'created_at': nowSerialized,
+      'updated_at': nowSerialized
+    });
+    expect(storedUser2).toBeInstanceOf(EloquentTestUser);
+    expect(notStoredUser.toArray()).toEqual({
+      'id'      : 3,
+      'email'   : 'taylorotwell@gmail.com',
+      'birthday': nowWithFractionsSerialized
+    });
+    expect(freshNotStoredUser).toBeNull();
+  });
 //   it('fresh method on collection', () => {
 //     EloquentTestUser.create({
 //       'id'   : 1,
@@ -1746,55 +1750,58 @@ describe('test database eloquent integration', () => {
 //     let users = new Collection();
 //     expect(users.fresh()).toEqual(users.map.fresh());
 //   });
-//   it('timestamps using default date format', () => {
-//     let model = new EloquentTestUser();
-//     model.setDateFormat('Y-m-d H:i:s');
-//     model.setRawAttributes({
-//       'created_at': '2017-11-14 08:23:19'
-//     });
-//     expect(model.fromDateTime(model.getAttribute('created_at'))).toBe('2017-11-14 08:23:19');
-//   });
-//   it('timestamps using default sql server date format', () => {
-//     let model = new EloquentTestUser();
-//     model.setDateFormat('Y-m-d H:i:s.v');
-//     model.setRawAttributes({
-//       'created_at': '2017-11-14 08:23:19.000',
-//       'updated_at': '2017-11-14 08:23:19.734'
-//     });
-//     expect(model.fromDateTime(model.getAttribute('created_at'))).toBe('2017-11-14 08:23:19.000');
-//     expect(model.fromDateTime(model.getAttribute('updated_at'))).toBe('2017-11-14 08:23:19.734');
-//   });
-//   it('timestamps using custom date format', () => {
-//     let model = new EloquentTestUser();
-//     model.setDateFormat('Y-m-d H:i:s.u');
-//     model.setRawAttributes({
-//       'created_at': '2017-11-14 08:23:19.0000',
-//       'updated_at': '2017-11-14 08:23:19.7348'
-//     });
-//     expect(model.fromDateTime(model.getAttribute('created_at'))).toBe('2017-11-14 08:23:19.000000');
-//     expect(model.fromDateTime(model.getAttribute('updated_at'))).toBe('2017-11-14 08:23:19.734800');
-//   });
-//   it('timestamps using old sql server date format', () => {
-//     let model = new EloquentTestUser();
-//     model.setDateFormat('Y-m-d H:i:s.000');
-//     model.setRawAttributes({
-//       'created_at': '2017-11-14 08:23:19.000'
-//     });
-//     expect(model.fromDateTime(model.getAttribute('created_at'))).toBe('2017-11-14 08:23:19.000');
-//   });
-//   it('timestamps using old sql server date format fallback to default parsing', () => {
-//     let model = new EloquentTestUser();
-//     model.setDateFormat('Y-m-d H:i:s.000');
-//     model.setRawAttributes({
-//       'updated_at': '2017-11-14 08:23:19.734'
-//     });
-//     let date = model.getAttribute('updated_at');
-//     expect('the date should contains the precision').toBe('2017-11-14 08:23:19.734',
-//       date.format('Y-m-d H:i:s.v'));
-//     expect('the format should trims it').toBe('2017-11-14 08:23:19.000', model.fromDateTime(date));
-//     expect(Date.hasFormat('2017-11-14 08:23:19.000', model.getDateFormat())).toBeTruthy();
-//     expect(Date.hasFormat('2017-11-14 08:23:19.734', model.getDateFormat())).toFalse();
-//   });
+
+  it('timestamps using default date format', () => {
+    const model = new EloquentTestUser();
+    model.setDateFormat('yyyy-MM-dd HH:mm:ss');
+    model.setRawAttributes({
+      'created_at': '2017-11-14 08:23:19'
+    });
+    expect(model.fromDateTime(model.getAttribute('created_at'))).toBe('2017-11-14 08:23:19');
+  });
+
+  it('timestamps using default sql server date format', () => {
+    const model = new EloquentTestUser();
+    model.setDateFormat('yyyy-MM-dd HH:mm:ss.SSS');
+    model.setRawAttributes({
+      'created_at': '2017-11-14 08:23:19.000',
+      'updated_at': '2017-11-14 08:23:19.734'
+    });
+    expect(model.fromDateTime(model.getAttribute('created_at'))).toBe('2017-11-14 08:23:19.000');
+    expect(model.fromDateTime(model.getAttribute('updated_at'))).toBe('2017-11-14 08:23:19.734');
+  });
+
+  it('timestamps using custom date format', () => {
+    const model = new EloquentTestUser();
+    model.setDateFormat('yyyy-MM-dd HH:mm:ss.SSSS');
+    model.setRawAttributes({
+      'created_at': '2017-11-14 08:23:19.0000',
+      'updated_at': '2017-11-14 08:23:19.7348'
+    });
+    expect(model.fromDateTime(model.getAttribute('created_at'))).toBe('2017-11-14 08:23:19.000000');
+    expect(model.fromDateTime(model.getAttribute('updated_at'))).toBe('2017-11-14 08:23:19.734800');
+  });
+  it('timestamps using old sql server date format', () => {
+    const model = new EloquentTestUser();
+    model.setDateFormat('yyyy-MM-dd HH:mm:ss.000');
+    model.setRawAttributes({
+      'created_at': '2017-11-14 08:23:19.000'
+    });
+    expect(model.fromDateTime(model.getAttribute('created_at'))).toBe('2017-11-14 08:23:19.000');
+  });
+  // it('timestamps using old sql server date format fallback to default parsing', () => {
+  //   let model = new EloquentTestUser();
+  //   model.setDateFormat('Y-m-d H:i:s.000');
+  //   model.setRawAttributes({
+  //     'updated_at': '2017-11-14 08:23:19.734'
+  //   });
+  //   let date = model.getAttribute('updated_at');
+  //   expect('the date should contains the precision').toBe('2017-11-14 08:23:19.734',
+  //     date.format('Y-m-d H:i:s.v'));
+  //   expect('the format should trims it').toBe('2017-11-14 08:23:19.000', model.fromDateTime(date));
+  //   expect(Date.hasFormat('2017-11-14 08:23:19.000', model.getDateFormat())).toBeTruthy();
+  //   expect(Date.hasFormat('2017-11-14 08:23:19.734', model.getDateFormat())).toFalse();
+  // });
 //   it('updating child model touches parent', () => {
 //     let before = Carbon.now();
 //     let user   = EloquentTouchingUser.initAttributes({
@@ -2078,29 +2085,31 @@ describe('test database eloquent integration', () => {
 //       before.isSameDay(user.fresh().updated_at));
 //     Carbon.setTestNow(before);
 //   });
-//   it('when base model is ignored all child models are ignored', () => {
-//     expect(Model.isIgnoringTouch()).toFalse();
-//     expect(User.isIgnoringTouch()).toFalse();
-//     Model.withoutTouching(() => {
-//       this.assertTrue(Model.isIgnoringTouch());
-//       this.assertTrue(User.isIgnoringTouch());
-//     });
-//     expect(User.isIgnoringTouch()).toFalse();
-//     expect(Model.isIgnoringTouch()).toFalse();
-//   });
-//   it('child models are ignored', () => {
-//     expect(Model.isIgnoringTouch()).toFalse();
-//     expect(User.isIgnoringTouch()).toFalse();
-//     expect(Post.isIgnoringTouch()).toFalse();
-//     User.withoutTouching(() => {
-//       this.assertFalse(Model.isIgnoringTouch());
-//       this.assertFalse(Post.isIgnoringTouch());
-//       this.assertTrue(User.isIgnoringTouch());
-//     });
-//     expect(Post.isIgnoringTouch()).toFalse();
-//     expect(User.isIgnoringTouch()).toFalse();
-//     expect(Model.isIgnoringTouch()).toFalse();
-//   });
+
+  it('when base model is ignored all child models are ignored', () => {
+    expect(Model.isIgnoringTouch()).toBeFalsy();
+    expect(User.isIgnoringTouch()).toBeFalsy();
+    Model.withoutTouching(() => {
+      expect(Model.isIgnoringTouch()).toBeTruthy();
+      expect(User.isIgnoringTouch()).toBeTruthy();
+    });
+    expect(User.isIgnoringTouch()).toBeFalsy();
+    expect(Model.isIgnoringTouch()).toBeFalsy();
+  });
+
+  it('child models are ignored', () => {
+    expect(Model.isIgnoringTouch()).toBeFalsy();
+    expect(User.isIgnoringTouch()).toBeFalsy();
+    expect(Post.isIgnoringTouch()).toBeFalsy();
+    User.withoutTouching(() => {
+      expect(Model.isIgnoringTouch()).toBeFalsy();
+      expect(Post.isIgnoringTouch()).toBeFalsy();
+      expect(User.isIgnoringTouch()).toBeTruthy();
+    });
+    expect(Model.isIgnoringTouch()).toBeFalsy();
+    expect(Post.isIgnoringTouch()).toBeFalsy();
+    expect(User.isIgnoringTouch()).toBeFalsy();
+  });
 });
 
 /*Eloquent Models...*/
