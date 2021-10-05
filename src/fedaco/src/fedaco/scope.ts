@@ -5,7 +5,7 @@
  */
 
 import { FedacoBuilder } from './fedaco-builder';
-import { Model } from './Model';
+import { Model } from './model';
 
 export interface Scope {
   /*Apply the scope to a given Eloquent query builder.*/

@@ -42,9 +42,9 @@ export class MysqlSchemaBuilder extends SchemaBuilder {
     if (!tables.length) {
       return;
     }
-    this.disableForeignKeyConstraints();
-    this.connection.statement(this.grammar.compileDropAllTables(tables));
-    this.enableForeignKeyConstraints();
+    await this.disableForeignKeyConstraints();
+    await this.connection.statement(this.grammar.compileDropAllTables(tables));
+    await this.enableForeignKeyConstraints();
   }
 
   /*Drop all views from the database.*/

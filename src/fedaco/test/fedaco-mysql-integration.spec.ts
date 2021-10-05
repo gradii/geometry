@@ -30,6 +30,11 @@ function schema(connectionName = 'default'): SchemaBuilder {
 jest.setTimeout(100000);
 
 async function createSchema() {
+  // await schema('default')
+  //   .dropAllTables();
+  // await schema('second_connection')
+  //   .dropAllTables();
+
   await schema('default')
     .create('test_orders', table => {
       table.increments('id');
@@ -128,14 +133,18 @@ describe('test database eloquent integration', () => {
     const db = new DatabaseConfig();
     db.addConnection({
       'driver'  : 'mysql',
+      'host'    : '127.0.0.1',
+      'port'    : 3306,
       'database': 'fedaco_test',
-      'user': 'root',
+      'username': 'root',
       'password': '123456'
     });
     db.addConnection({
       'driver'  : 'mysql',
+      'host'    : '127.0.0.1',
+      'port'    : 3306,
       'database': 'fedaco_second_test',
-      'user': 'root',
+      'username': 'root',
       'password': '123456'
     }, 'second_connection');
     db.bootEloquent();

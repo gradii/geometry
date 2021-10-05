@@ -8,7 +8,7 @@ import { Connection } from '../../connection';
 import { DbalConnection } from '../../dbal/connection';
 import { SchemaManager } from '../../dbal/schema-manager';
 import { MysqlSchemaManager } from '../../dbal/schema-manager/mysql-schema-manager';
-import { Driver } from '../Driver';
+import { Driver } from '../driver';
 import { MysqlConnectionOptions } from './MysqlConnectionOptions';
 
 /**

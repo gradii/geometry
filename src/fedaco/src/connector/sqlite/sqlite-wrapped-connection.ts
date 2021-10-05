@@ -10,7 +10,18 @@ import { SqliteWrappedStmt } from './sqlite-wrapped-stmt';
 export class SqliteWrappedConnection implements WrappedConnection {
 
   constructor(public driver: Database) {
+  }
 
+  execute(sql: string, bindings?: any[]): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const stmt = this.driver.run(sql, bindings, (err: string) => {
+        if (err) {
+          return reject(err);
+        }
+
+        resolve();
+      });
+    });
   }
 
   async prepare(sql: string): Promise<SqliteWrappedStmt> {
@@ -45,5 +56,6 @@ export class SqliteWrappedConnection implements WrappedConnection {
       });
     });
   }
+
 
 }

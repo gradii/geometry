@@ -9,4 +9,8 @@ export interface WrappedStmt {
   bindValues(bindings: any[]): this;
 
   bindValue(): this;
+
+  execute(bindings?: any[]): Promise<any>;
+
+  affectCount(): number;
 }

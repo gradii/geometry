@@ -70,7 +70,8 @@ class Conn implements ConnectionInterface {
     return await Promise.resolve();
   }
 
-  async insert() {
+  async insert(sql: string, bindings: any[]): Promise<boolean> {
+    return false;
   }
 
   async update() {
@@ -340,9 +341,9 @@ describe('test database eloquent model', () => {
   //   expect(newInstance.getCasts()['foo']).toBe('date');
   // });
 
-  it('create method saves new model', () => {
+  it('create method saves new model', async () => {
     global['__eloquent.saved'] = false;
-    const model                = new FedacoModelSaveStub().newQuery().create({
+    const model                = await new FedacoModelSaveStub().newQuery().create({
       'name': 'taylor'
     });
     expect(global['__eloquent.saved']).toBeTruthy();
@@ -2623,7 +2624,7 @@ export class FedacoModelStub extends Model {
   }
 
   public set password(value) {
-    this._attributes['password_hash'] = createHash('sha1').update(value, 'binary').digest('hex');
+    this._attributes['password_hash'] = createHash('sha1').update(value, 'bytes').digest('hex');
   }
 
   public publicIncrement(column, amount = 1, extra = []) {

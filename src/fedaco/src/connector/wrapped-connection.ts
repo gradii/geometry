@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { SqliteWrappedStmt } from './sqlite/sqlite-wrapped-stmt';
+import { WrappedStmt } from './wrapped-stmt';
 
 /**
  * @license
@@ -13,11 +13,14 @@ import { SqliteWrappedStmt } from './sqlite/sqlite-wrapped-stmt';
  */
 
 export interface WrappedConnection {
-  prepare(sql: string): Promise<SqliteWrappedStmt>;
+  prepare(sql: string): Promise<WrappedStmt>;
+
+  execute(sql: string, bindings?: any[]): Promise<any>;
 
   // run(sql: string, bindings: any[], callback: (err: string, rows: any[]) => void): Promise<void>;
   //
   // get(sql: string, bindings: any[], callback: (err: string, rows: any[]) => void): Promise<any[]>;
 
   lastInsertId(): Promise<number>;
+
 }

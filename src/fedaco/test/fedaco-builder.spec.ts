@@ -1,4 +1,5 @@
 import { isFunction } from '@gradii/check-type';
+import { ConnectionFactory } from '../src/connector/connection-factory';
 import { DatabaseManager } from '../src/database-manager';
 import { FedacoBuilder } from '../src/fedaco/fedaco-builder';
 import { Model } from '../src/fedaco/model';
@@ -9,6 +10,7 @@ import { MysqlQueryGrammar } from '../src/query-builder/grammar/mysql-query-gram
 import { SqliteQueryGrammar } from '../src/query-builder/grammar/sqlite-query-grammar';
 import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
+import { SchemaBuilder } from '../src/schema/schema-builder';
 import { FedacoBuilderTestHigherOrderWhereScopeStub } from './model/fedaco-builder-test-higher-order-where-scope-stub';
 import { FedacoBuilderTestNestedStub } from './model/fedaco-builder-test-nested-stub';
 import { FedacoBuilderTestScopeStub } from './model/fedaco-builder-test-scope-stub';
@@ -42,7 +44,8 @@ describe('fedaco builder', () => {
       return await Promise.resolve();
     }
 
-    async insert() {
+    async insert(sql: string, bindings: any[]): Promise<boolean> {
+      return false;
     }
 
     async update() {
@@ -60,12 +63,34 @@ describe('fedaco builder', () => {
     getName() {
       return '';
     }
+
+    getConfig(name: string): any {
+    }
+
+    getPdo(): any {
+    }
+
+    getSchemaBuilder(): SchemaBuilder {
+      throw new Error('not implemented');
+    }
+
+    recordsHaveBeenModified(): any {
+    }
+
+    selectFromWriteConnection(sql: string, values: any): any {
+    }
+
+    table(table: Function | QueryBuilder | string, as?: string): QueryBuilder {
+      return undefined;
+    }
   }
 
   function resolveModel(model: Model) {
     // model.
     // (model.constructor as typeof Model)._connectionResolver                    = new ResolveConnection();
-    (model.constructor as typeof Model).resolver = new DatabaseManager();
+    (model.constructor as typeof Model).resolver = new DatabaseManager(
+      new ConnectionFactory()
+    );
   }
 
   function getModel() {
@@ -892,7 +917,8 @@ describe('fedaco builder', () => {
 
 
     builder = getBuilder();
-    spy1    = jest.spyOn(builder.getQuery(), 'insertGetId').mockReturnValue('foo');
+    // @ts-ignore
+    spy1    = jest.spyOn(builder.getQuery(), 'insertGetId').mockReturnValue(Promise.resolve('foo'));
     result  = await builder.insertGetId(['bar']);
     expect(spy1).toBeCalledWith(['bar']);
     expect(spy1).toReturnWith('foo');
@@ -900,7 +926,7 @@ describe('fedaco builder', () => {
 
 
     builder = getBuilder();
-    spy1    = jest.spyOn(builder.getQuery(), 'insertUsing').mockReturnValue('foo');
+    spy1    = jest.spyOn(builder.getQuery(), 'insertUsing').mockReturnValue(Promise.resolve('foo'));
     result  = await builder.insertUsing(['bar'], 'baz');
     expect(spy1).toBeCalledWith(['bar'], 'baz');
     expect(spy1).toReturnWith('foo');

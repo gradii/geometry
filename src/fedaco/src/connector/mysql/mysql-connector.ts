@@ -4,15 +4,17 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Connector } from './connector';
-import { ConnectorInterface } from './connector-interface';
+import { createConnection } from 'mysql2';
+import { Connector } from '../connector';
+import { ConnectorInterface } from '../connector-interface';
+import { MysqlWrappedConnection } from './mysql-wrapped-connection';
 
 export class MysqlConnector extends Connector implements ConnectorInterface {
   /*Establish a database connection.*/
   public async connect(config: any) {
     const dsn        = this.getDsn(config);
     const options    = this.getOptions(config);
-    const connection = this.createConnection(dsn, config, options);
+    const connection = await this.createConnection(dsn, config, options);
     if (config['database'].length) {
       await connection.exec(`use \`${config['database']}\`;`);
     }
@@ -21,6 +23,25 @@ export class MysqlConnector extends Connector implements ConnectorInterface {
     this.configureTimezone(connection, config);
     this.setModes(connection, config);
     return connection;
+  }
+
+  async createConnection(database: string, config: any, options: any): Promise<MysqlWrappedConnection> {
+    const [username, password] = [config['username'] ?? null, config['password'] ?? null];
+    try {
+      return Promise.resolve(
+        new MysqlWrappedConnection(createConnection({
+          host    : config['host'],
+          port    : config['port'],
+          user    : username,
+          password: password,
+          database: config['database'],
+        }))
+      );
+
+    } catch (e) {
+      throw e;
+      // return this.tryAgainIfCausedByLostConnection(e, database, username, password, options);
+    }
   }
 
   /*Set the connection transaction isolation level.*/

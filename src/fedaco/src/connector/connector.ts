@@ -4,6 +4,15 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { MysqlWrappedConnection } from './mysql/mysql-wrapped-connection';
+import { WrappedConnection } from './wrapped-connection';
+
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 // import { PDOConnection } from "Doctrine/DBAL/Driver/PDOConnection";
 // import { Exception } from "Exception";
 // import { DetectsLostConnections } from "Illuminate/Database/DetectsLostConnections";

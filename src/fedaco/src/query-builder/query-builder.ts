@@ -363,7 +363,7 @@ export class QueryBuilder extends Builder {
   }
 
   /*Insert new records into the table using a subquery.*/
-  public insertUsing(columns: any[], query: Function | QueryBuilder | string) {
+  public async insertUsing(columns: any[], query: Function | QueryBuilder | string) {
     if (!this.isQueryable(query)) {
       throw new Error('InvalidArgumentException');
     }

@@ -36,4 +36,8 @@ export class QueryException extends Error {
   public getBindings() {
     return this.bindings;
   }
+
+  toString() {
+    return this.message;
+  }
 }

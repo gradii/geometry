@@ -9,7 +9,7 @@ import { Constructor } from '../../../helper/constructor';
 import { Model } from '../../model';
 import { HasOne } from '../has-one';
 import { MorphOne } from '../morph-one';
-import { Relation } from '../Relation';
+import { Relation } from '../relation';
 
 export interface ComparesRelatedModels {
   is(model: Model | null): Model;

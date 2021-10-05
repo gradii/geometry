@@ -7,7 +7,7 @@
 import { isBlank } from '@gradii/check-type';
 import { Constructor } from '../../helper/constructor';
 import { Model } from '../model';
-import { Scope } from '../Scope';
+import { Scope } from '../scope';
 
 export declare class HasGlobalScopes {
   static addGlobalScope(scope: string, implementation: Scope | Function): void;
