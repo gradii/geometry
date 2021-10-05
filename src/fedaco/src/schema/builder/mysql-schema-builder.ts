@@ -34,10 +34,10 @@ export class MysqlSchemaBuilder extends SchemaBuilder {
 
   /*Drop all tables from the database.*/
   public async dropAllTables() {
-    const tables = [];
+    const tables: string[] = [];
     const result = await this.getAllTables();
     for (const row of result) {
-      tables.push(row);
+      tables.push(Object.values(row)[0] as string);
     }
     if (!tables.length) {
       return;
