@@ -72,6 +72,10 @@ class Conn implements ConnectionInterface {
   table(table: Function | QueryBuilder | string, as?: string): QueryBuilder {
     return undefined;
   }
+
+  insertGetId(sql: string, bindings: any[], sequence?: string): Promise<any> | boolean {
+    return undefined;
+  }
 }
 
 export class DatabaseManager implements ConnectionResolverInterface {

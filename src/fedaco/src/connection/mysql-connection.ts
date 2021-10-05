@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isBlank } from '@gradii/check-type';
+import { isArray, isBlank } from '@gradii/check-type';
 import { Connection } from '../connection';
 import { MysqlDriver } from '../driver/mysql/mysql-driver';
 import { MysqlQueryGrammar } from '../query-builder/grammar/mysql-query-grammar';
@@ -52,5 +52,10 @@ export class MysqlConnection extends Connection {
   /*Get the Doctrine DBAL driver.*/
   protected getDoctrineDriver(): MysqlDriver {
     return new MysqlDriver();
+  }
+
+  public async insertGetId(query: string, bindings: any[] = [], sequence: string) {
+    const data = await this.statement(query, bindings);
+    return isArray(data) && data.length === 1 ? data[0][sequence] : null;
   }
 }

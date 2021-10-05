@@ -53,7 +53,7 @@ export class MysqlWrappedConnection implements WrappedConnection {
         if (err) {
           fail(err);
         } else {
-          ok(data && data.length === 1 && data[0]['`LAST_INSERT_ID()`']);
+          ok(data && data.length === 1 && data[0]['LAST_INSERT_ID()']);
         }
       });
     });

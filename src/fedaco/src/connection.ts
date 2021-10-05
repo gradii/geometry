@@ -176,7 +176,7 @@ export class Connection implements ConnectionInterface {
     return this.statement(query, bindings);
   }
 
-  public async insertGetId(query: string, bindings: any[] = []) {
+  public async insertGetId(query: string, bindings: any[] = [], sequence?: string) {
     await this.statement(query, bindings);
     return await (await this.getPdo()).lastInsertId();
   }

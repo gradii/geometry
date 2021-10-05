@@ -5,6 +5,7 @@
  */
 
 import { isBlank } from '@gradii/check-type';
+import { getUnixTime } from 'date-fns';
 import { Constructor } from '../../helper/constructor';
 import { Model } from '../model';
 
@@ -79,13 +80,14 @@ export function mixinHasTimestamps<T extends Constructor<any>>(base: T): HasTime
     /*Update the creation and update timestamps.*/
     public updateTimestamps(this: Model & _Self): void {
       const time            = this.freshTimestamp();
-      const updatedAtColumn = this.getUpdatedAtColumn();
-      if (!isBlank(updatedAtColumn) && !this.isDirty(updatedAtColumn)) {
-        this.setUpdatedAt(time);
-      }
       const createdAtColumn = this.getCreatedAtColumn();
       if (!this._exists && !isBlank(createdAtColumn) && !this.isDirty(createdAtColumn)) {
         this.setCreatedAt(time);
+      }
+
+      const updatedAtColumn = this.getUpdatedAtColumn();
+      if (!isBlank(updatedAtColumn) && !this.isDirty(updatedAtColumn)) {
+        this.setUpdatedAt(time);
       }
     }
 
@@ -103,7 +105,7 @@ export function mixinHasTimestamps<T extends Constructor<any>>(base: T): HasTime
 
     /*Get a fresh timestamp for the model.*/
     public freshTimestamp(): number {
-      return Date.now();
+      return getUnixTime(new Date());
     }
 
     /*Get a fresh timestamp for the model.*/

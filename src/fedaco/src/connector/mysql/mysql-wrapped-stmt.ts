@@ -4,6 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { isArray, isObject } from '@gradii/check-type';
 import { Connection, FieldPacket } from 'mysql2';
 import { QueryError } from 'mysql2/typings/mysql/lib/protocol/sequences/Query';
 import { WrappedStmt } from '../wrapped-stmt';
@@ -37,7 +38,11 @@ export class MysqlWrappedStmt implements WrappedStmt {
           ok(result);
 
           // _self._lastInsertId = this.lastID;
-          this._affectRows = fields.length;
+          if (isObject(result) && 'affectedRows' in result) {
+            this._affectRows = result.affectedRows;
+          } else {
+            // this._affectRows = isArray(fields) ? fields.length : fields;
+          }
         }
       );
     });

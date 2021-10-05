@@ -15,8 +15,7 @@ export interface ConnectionInterface {
 
   insert(sql: string, bindings: any[]): Promise<boolean>;
 
-  // todo implement me
-  // insertGetId(sql: string, bindings: any[]): Promise<any> | boolean;
+  insertGetId(sql: string, bindings: any[], sequence?: string): Promise<any> | boolean;
 
   /*Run an SQL statement and get the number of rows affected.*/
   affectingStatement(query: string, bindings: any[]): Promise<any> | any;

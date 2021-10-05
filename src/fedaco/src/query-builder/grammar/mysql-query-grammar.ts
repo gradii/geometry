@@ -84,4 +84,8 @@ export class MysqlQueryGrammar extends QueryGrammar implements GrammarInterface 
 
     return super.compileInsert(builder, values, insertOption);
   }
+
+  compileInsertGetId(builder: QueryBuilder, values: any, sequence: string): string {
+    return `${this.compileInsert(builder, values, 'into')} returning ${this.wrap(sequence)}`;
+  }
 }
