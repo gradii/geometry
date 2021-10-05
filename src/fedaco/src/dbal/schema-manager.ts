@@ -8,7 +8,7 @@ import { Table } from './table';
 
 export abstract class SchemaManager {
   listTableDetails(table: string): Table {
-    return new Table(table);
+    throw new Error('not implement');
   }
 
   getDatabasePlatform() {

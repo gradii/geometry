@@ -6,9 +6,13 @@
 
 
 /*Object representation of a database column.*/
+import { isNumber } from '@gradii/check-type';
+// import { Type } from './types/type';
+
 export class Column {
   /**/
-  protected _type: Type;
+  protected _name: any;
+  protected _type: any;
   /**/
   protected _length: number | null = null;
   /**/
@@ -26,20 +30,24 @@ export class Column {
   /**/
   protected _autoincrement: boolean = false;
   /**/
-  protected _platformOptions: any[] = [];
+  protected _platformOptions: Record<string, any> = {};
   /**/
   protected _columnDefinition: string | null = null;
   /**/
   protected _comment: string | null = null;
   /**/
-  protected _customSchemaOptions: any[] = [];
+  protected _customSchemaOptions: any = {};
 
   /*Creates a new Column.*/
-  public constructor(columnName: string, type, options: any[] = []) {
-    super();
-    this._setName(columnName);
+  public constructor(columnName: string, type: any, options: any = {}) {
+    this.setName(columnName);
     this.setType(type);
     this.setOptions(options);
+  }
+
+  public setName(name: string) {
+    this._name = name;
+    return this;
   }
 
   /**/
@@ -47,18 +55,18 @@ export class Column {
     for (const [name, value] of Object.entries(options)) {
       const method = 'set' + name;
 
-      if (typeof this[method] !== 'function') {
-        trigger_error(`The "${name}" column option is not supported, setting it is deprecated and will cause an error in Doctrine DBAL 3.0`,
-          E_USER_DEPRECATED);
-        continue;
+      if (method in this) {
+        // @ts-ignore
+        this[method](value);
+      } else {
+        throw new Error (`The "${name}" column option is not supported`);
       }
-      this[method](value);
     }
     return this;
   }
 
   /**/
-  public setType(type) {
+  public setType(type: any) {
     this._type = type;
     return this;
   }
@@ -77,47 +85,37 @@ export class Column {
 
   /**/
   public setPrecision(precision: number) {
-    if (!is_numeric(precision)) {
-      const precision = 10;
+    if (!isNumber(precision)) {
+      precision = 10;
     }
-    this._precision =
-      // cast type int
-      precision;
+    this._precision = +precision;
     return this;
   }
 
   /**/
   public setScale(scale: number) {
-    if (!is_numeric(scale)) {
-      const scale = 0;
+    if (!isNumber(scale)) {
+      scale = 0;
     }
-    this._scale =
-      // cast type int
-      scale;
+    this._scale = +scale;
     return this;
   }
 
   /**/
   public setUnsigned(unsigned: boolean) {
-    this._unsigned =
-      // cast type bool
-      unsigned;
+    this._unsigned = Boolean(unsigned);
     return this;
   }
 
   /**/
   public setFixed(fixed: boolean) {
-    this._fixed =
-      // cast type bool
-      fixed;
+    this._fixed = Boolean(fixed);
     return this;
   }
 
   /**/
   public setNotnull(notnull: boolean) {
-    this._notnull =
-      // cast type bool
-      notnull;
+    this._notnull = Boolean(notnull);
     return this;
   }
 

@@ -5,18 +5,15 @@
  */
 
 import {
-  defaultIrregularPlurals,
-  defaultIrregularSingles,
-  defaultPluralRules,
-  defaultSingularRules,
+  defaultIrregularPlurals, defaultIrregularSingles, defaultPluralRules, defaultSingularRules,
   defaultUncountables
 } from './_pluralize-values';
 import { noCase } from './str';
 
 
-const pluralRules: any[] = defaultPluralRules;
-const singularRules: any[] = defaultSingularRules;
-const uncountables: any = defaultUncountables;
+const pluralRules: any[]    = defaultPluralRules;
+const singularRules: any[]  = defaultSingularRules;
+const uncountables: any     = defaultUncountables;
 const irregularPlurals: any = defaultIrregularPlurals;
 const irregularSingles: any = defaultIrregularSingles;
 
@@ -188,7 +185,7 @@ function restoreCase(word: string, token: string) {
  * @return a string
  */
 function interpolate(str: string, args: IArguments) {
-  return str.replace(/\$(\d{1,2})/g, (match, index) => {
+  return str.replace(/\$(\d{1,2})/g, function (match, index) {
     return args[index] || '';
   });
 }
@@ -201,7 +198,7 @@ function interpolate(str: string, args: IArguments) {
  * @return string
  */
 function replace(word: string, rule: any[]) {
-  return word.replace(rule[0], (match, index) => {
+  return word.replace(rule[0], function (match, index) {
     const result = interpolate(rule[1], arguments);
     if (match === '') {
       return restoreCase(word[index - 1], result);

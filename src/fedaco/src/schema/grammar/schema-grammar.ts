@@ -5,14 +5,16 @@
  */
 
 import { isBlank, isBoolean } from '@gradii/check-type';
+import { tap } from 'ramda';
 import { BaseGrammar } from '../../base-grammar';
 import { Connection } from '../../connection';
-import { SchemaManager } from '../../dbal/schema-manager';
+import { TableDiff } from '../../dbal/table-diff';
 import { upperCaseFirst } from '../../helper/str';
 import { RawExpression } from '../../query/ast/expression/raw-expression';
 import { Blueprint } from '../blueprint';
 import { ColumnDefinition } from '../column-definition';
 import { ForeignKeyDefinition } from '../foreign-key-definition';
+import { SchemaBuilder } from '../schema-builder';
 // import { ChangeColumn } from './change-column';
 // import { RenameColumn } from './rename-column';
 
@@ -21,7 +23,7 @@ export class SchemaGrammar extends BaseGrammar {
   protected modifiers: string[];
 
   /*If this Grammar supports schema changes wrapped in a transaction.*/
-  protected transactions: boolean = false;
+  protected transactions: boolean    = false;
   /**
    * The commands to be executed outside of create or alter command.
    */
@@ -111,8 +113,8 @@ export class SchemaGrammar extends BaseGrammar {
 
   /*Compile a foreign key command.*/
   public compileForeign(blueprint: Blueprint, command: ForeignKeyDefinition) {
-    let sql = `alter table ${this.wrapTable(blueprint)}
-      add constraint ${this.wrap(command.index)} `;
+    let sql = `alter table ` + `${this.wrapTable(blueprint)} add constraint ${this.wrap(
+      command.index)} `;
     sql += `foreign key (${this.columnize(command.columns)}) references ${this.wrapTable(
       command.on)} (${this.columnize(/*cast type array*/ command.references)})`;
     if (!isBlank(command.onDelete)) {
@@ -137,8 +139,13 @@ export class SchemaGrammar extends BaseGrammar {
 
   /*Get the SQL for the column data type.*/
   protected getType(column: ColumnDefinition) {
-    // @ts-ignore
-    return this['type' + upperCaseFirst(column.type)](column);
+    const fn = 'type' + upperCaseFirst(column.type);
+    if (fn in this) {
+      // @ts-ignore
+      return this[fn](column);
+    } else {
+      throw new Error(`Must define [${fn}] in ${this.constructor.name}`);
+    }
   }
 
   /*Create the column definition for a generated, computed column type.*/
@@ -209,18 +216,62 @@ export class SchemaGrammar extends BaseGrammar {
   /*Format a value so that it can be used in "default" clauses.*/
   protected getDefaultValue(value: any) {
     if (value instanceof RawExpression) {
-      return value;
+      return value.value;
     }
     return isBoolean(value) ?
       `'${/*cast type int*/ value}'` : `'${/*cast type string*/ value}'`;
   }
 
   /*Create an empty Doctrine DBAL TableDiff from the Blueprint.*/
-  public getDoctrineTableDiff(blueprint: Blueprint, schema: SchemaManager) {
-    // const table = this.getTablePrefix() + blueprint.getTable();
-    // return tap(new TableDiff(table), tableDiff => {
-    //   tableDiff.fromTable = schema.listTableDetails(table);
-    // });
+  public async getTableDiff(blueprint: Blueprint, schema: SchemaBuilder) {
+    const table     = this.getTablePrefix() + blueprint.getTable();
+    const fromTable = await schema.listTableDetails(table);
+    return tap(tableDiff => {
+      tableDiff.fromTable = fromTable;
+    }, new TableDiff(table));
+  }
+
+
+  getListDatabasesSQL(): string {
+    throw new Error('not implement');
+  }
+
+  getListNamespacesSQL(): string {
+    throw new Error('not implement');
+  }
+
+  getListSequencesSQL(database: string): string {
+    throw new Error('not implement');
+  }
+
+  getListTableColumnsSQL(table: string, database: string): string {
+    throw new Error('not implement');
+  }
+
+  getListTableIndexesSQL(table: string, database: string): string {
+    throw new Error('not implement');
+  }
+
+  getListTableForeignKeysSQL(table: string, database?: string): string {
+    throw new Error('not implement');
+  }
+
+  getListTablesSQL(): string {
+    throw new Error('not implement');
+  }
+
+  /*Quotes a literal string.
+ This method is NOT meant to fix SQL injections!
+ It is only meant to escape this platform's string literal
+ quote character inside the given literal string.*/
+  public quoteStringLiteral(str: string) {
+    const c = this.getStringLiteralQuoteCharacter();
+    return c + str.replace(new RegExp(c, 'g'), c + c) + c;
+  }
+
+  /*Gets the character used for string literal quoting.*/
+  public getStringLiteralQuoteCharacter() {
+    return '\'';
   }
 
   /**
@@ -238,5 +289,13 @@ export class SchemaGrammar extends BaseGrammar {
   /*Check if this Grammar supports schema changes wrapped in a transaction.*/
   public supportsSchemaTransactions() {
     return this.transactions;
+  }
+
+  public supportsForeignKeyConstraints() {
+    return false;
+  }
+
+  public getTypeMapping(type: string) {
+    return type
   }
 }

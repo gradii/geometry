@@ -98,7 +98,7 @@ export abstract class BaseGrammar {
   }
 
   /*Quote the given string literal.*/
-  public quoteString(value: string | any[]): string {
+  public quoteString(value: any[] | string): string {
     if (isArray(value)) {
       return value.map(it => this.quoteString(it)).join(', ');
     }
@@ -112,8 +112,7 @@ export abstract class BaseGrammar {
 
   /*Get the value of a raw expression.*/
   public getValue(expression: RawExpression) {
-    // return expression.getValue();
-    throw new Error('not implemented');
+    return expression.value;
   }
 
   /*Get the format for database stored dates.*/

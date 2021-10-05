@@ -5,34 +5,34 @@
  */
 
 import { Types } from './Types';
-import { TypeRegistry } from './TypeRegistry';
-import { ParameterType } from '../ParameterType';
-import { AbstractPlatform } from '../platforms/AbstractPlatform';
-import { ArrayType } from './ArrayType';
-import { BigIntType } from './BigIntType';
-import { BinaryType } from './BinaryType';
-import { BlobType } from './BlobType';
-import { BooleanType } from './BooleanType';
-import { DateType } from './DateType';
-import { DateImmutableType } from './DateImmutableType';
-import { DateIntervalType } from './DateIntervalType';
-import { DateTimeType } from './DateTimeType';
-import { DateTimeImmutableType } from './DateTimeImmutableType';
-import { DateTimeTzType } from './DateTimeTzType';
-import { DateTimeTzImmutableType } from './DateTimeTzImmutableType';
-import { DecimalType } from './DecimalType';
-import { FloatType } from './FloatType';
-import { GuidType } from './GuidType';
-import { IntegerType } from './IntegerType';
-import { JsonType } from './JsonType';
-import { JsonArrayType } from './JsonArrayType';
-import { ObjectType } from './ObjectType';
-import { SimpleArrayType } from './SimpleArrayType';
-import { SmallIntType } from './SmallIntType';
-import { StringType } from './StringType';
-import { TextType } from './TextType';
-import { TimeType } from './TimeType';
-import { TimeImmutableType } from './TimeImmutableType';
+import { TypeRegistry } from './type-registry';
+// import { ParameterType } from '../parameter-type';
+// import { AbstractPlatform } from '../platforms/abstract-platform';
+import { ArrayType } from './array-type';
+import { BigIntType } from './big-int-type';
+import { BinaryType } from './binary-type';
+import { BlobType } from './blob-type';
+import { BooleanType } from './boolean-type';
+import { DateType } from './date-type';
+import { DateImmutableType } from './date-immutable-type';
+import { DateIntervalType } from './date-interval-type';
+import { DateTimeType } from './date-time-type';
+import { DateTimeImmutableType } from './date-time-immutable-type';
+import { DateTimeTzType } from './date-time-tz-type';
+import { DateTimeTzImmutableType } from './date-time-tz-immutable-type';
+import { DecimalType } from './decimal-type';
+import { FloatType } from './float-type';
+import { GuidType } from './guid-type';
+import { IntegerType } from './integer-type';
+import { JsonType } from './json-type';
+import { JsonArrayType } from './json-array-type';
+import { ObjectType } from './object-type';
+import { SimpleArrayType } from './simple-array-type';
+import { SmallIntType } from './small-int-type';
+import { StringType } from './string-type';
+import { TextType } from './text-type';
+import { TimeType } from './time-type';
+import { TimeImmutableType } from './time-immutable-type';
 
 /*The base class for so-called Doctrine mapping types.
 

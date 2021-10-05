@@ -23,7 +23,11 @@ export class Table {
   // /**/
   // private implicitIndexes: Index[] = [];
 
-  constructor(public tableName: string) {
+  constructor(public tableName: string,
+              public columns: any[],
+              public indexes: any,
+              public foreignKeys: any[]
+  ) {
   }
 
   // /**/

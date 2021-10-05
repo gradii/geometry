@@ -3,11 +3,12 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
-import { has, isAnyEmpty, isArray, isBlank } from '@gradii/check-type';
+import { has, isAnyEmpty, isArray, isBlank, isString } from '@gradii/check-type';
 import { Connection } from '../connection';
 // import { SqliteConnection } from '../connection/sqlite-connection';
 import { Model } from '../fedaco/model';
-import { upperCaseFirst } from '../helper/str';
+import { wrap } from '../helper/arr';
+import { lowerCaseFirst, upperCaseFirst } from '../helper/str';
 import { raw } from '../query-builder/ast-factory';
 import { ColumnDefinition } from './column-definition';
 import { ForeignIdColumnDefinition } from './foreign-id-column-definition';
@@ -46,7 +47,7 @@ export class Blueprint {
 
   /*Execute the blueprint against the database.*/
   public async build(connection: Connection, grammar: SchemaGrammar) {
-    for (const statement of this.toSql(connection, grammar)) {
+    for (const statement of await this.toSql(connection, grammar)) {
       await connection.statement(statement);
     }
   }
@@ -61,11 +62,14 @@ export class Blueprint {
       if (method in grammar) {
         // @ts-ignore
         const sql = grammar[method](this, command, connection);
-        if (!isBlank(sql)) {
-          statements = [...statements, sql];
+        if (isArray(sql) && sql.length > 0) {
+          statements = [...statements, ...sql];
+        } else if (isString(sql) && sql.length > 0) {
+          statements.push(sql);
         }
       } else {
-        throw new Error(`command name ${command.name} is not exist in grammar ${grammar.constructor.name}`);
+        throw new Error(
+          `command name ${command.name} is not exist in grammar ${grammar.constructor.name}`);
       }
     }
     return statements;
@@ -114,12 +118,12 @@ export class Blueprint {
         // index method can be called without a name and it will generate one.
         if (column.get(index) === true) {
           // @ts-ignore
-          this[index](column.name);
+          this[index]([column.name]);
           column.set(index, false);
           break;
         } else if (has(column, index)) {
           // @ts-ignore
-          this[index](column.name, column.get(index));
+          this[index]([column.name], column.get(index));
           column.set(index, false);
 
           break;
@@ -132,8 +136,8 @@ export class Blueprint {
   public addFluentCommands(grammar: SchemaGrammar) {
     for (const column of this.columns) {
       for (const commandName of grammar.getFluentCommands()) {
-        const attributeName = upperCaseFirst(commandName);
-        if (column.get(attributeName) === undefined) {
+        const attributeName = lowerCaseFirst(commandName);
+        if (!column.isset(attributeName)) {
           continue;
         }
         const value = column.get(attributeName);
@@ -253,25 +257,25 @@ export class Blueprint {
   }
 
   /*Specify the primary key(s) for the table.*/
-  public primary(columns: any[], name: string | null = null,
-                 algorithm: string | null            = null) {
+  public primary(columns: any[] | string, name: string | null = null,
+                 algorithm: string | null                     = null) {
     return this.indexCommand('primary', columns, name, algorithm);
   }
 
   /*Specify a unique index for the table.*/
-  public unique(columns: any[], name: string | null = null,
-                algorithm: string | null            = null) {
+  public unique(columns: any[] | string, name: string | null = null,
+                algorithm: string | null                     = null) {
     return this.indexCommand('unique', columns, name, algorithm);
   }
 
   /*Specify an index for the table.*/
-  public index(columns: any[], name: string | null = null,
-               algorithm: string | null            = null) {
+  public index(columns: any[] | string, name: string | null = null,
+               algorithm: string | null                     = null) {
     return this.indexCommand('index', columns, name, algorithm);
   }
 
   /*Specify a spatial index for the table.*/
-  public spatialIndex(columns: any[], name: string | null = null) {
+  public spatialIndex(columns: any[] | string, name: string | null = null) {
     return this.indexCommand('spatialIndex', columns, name);
   }
 
@@ -281,7 +285,7 @@ export class Blueprint {
   }
 
   /*Specify a foreign key for the table.*/
-  public foreign(columns: any[], name: string | null = null) {
+  public foreign(columns: any[] | string, name: string | null = null) {
     const command = new ForeignKeyDefinition(
       this.indexCommand('foreign', columns, name).getAttributes());
 
@@ -407,7 +411,7 @@ export class Blueprint {
   }
 
   /*Create a new unsigned big integer (8-byte) column on the table.*/
-  public foreignId(column: string) {
+  public foreignId(column: string): ForeignIdColumnDefinition {
     return this.addColumnDefinition(new ForeignIdColumnDefinition(this, {
       'type'         : 'bigInteger',
       'name'         : column,
@@ -587,12 +591,12 @@ export class Blueprint {
 
   /*Create a new point column on the table.*/
   public point(column: string, srid: number | null = null) {
-    return this.addColumn('point', column, [srid]);
+    return this.addColumn('point', column, {srid});
   }
 
   /*Create a new linestring column on the table.*/
   public lineString(column: string) {
-    return this.addColumn('linestring', column);
+    return this.addColumn('lineString', column);
   }
 
   /*Create a new polygon column on the table.*/
@@ -602,27 +606,27 @@ export class Blueprint {
 
   /*Create a new geometrycollection column on the table.*/
   public geometryCollection(column: string) {
-    return this.addColumn('geometrycollection', column);
+    return this.addColumn('geometryCollection', column);
   }
 
   /*Create a new multipoint column on the table.*/
   public multiPoint(column: string) {
-    return this.addColumn('multipoint', column);
+    return this.addColumn('multiPoint', column);
   }
 
   /*Create a new multilinestring column on the table.*/
   public multiLineString(column: string) {
-    return this.addColumn('multilinestring', column);
+    return this.addColumn('multiLineString', column);
   }
 
   /*Create a new multipolygon column on the table.*/
   public multiPolygon(column: string) {
-    return this.addColumn('multipolygon', column);
+    return this.addColumn('multiPolygon', column);
   }
 
   /*Create a new multipolygon column on the table.*/
   public multiPolygonZ(column: string) {
-    return this.addColumn('multipolygonz', column);
+    return this.addColumn('multiPolygonZ', column);
   }
 
   /*Create a new generated, computed column on the table.*/
@@ -682,9 +686,10 @@ export class Blueprint {
   }
 
   /*Add a new index command to the blueprint.*/
-  protected indexCommand(type: string, columns: any[], index: string,
+  protected indexCommand(type: string, columns: any[] | any, index: string,
                          algorithm: string | null = null) {
-    index = index || this.createIndexName(type, columns);
+    columns = wrap(columns);
+    index   = index || this.createIndexName(type, columns);
     return this.addCommand(type, {index, columns, algorithm});
   }
 
@@ -704,13 +709,16 @@ export class Blueprint {
   }
 
   /*Add a new column to the blueprint.*/
-  public addColumn(type: string, name: string, parameters: Record<string, any> = {}) {
+  public addColumn(type: 'ipAddress' | 'macAddress' | 'geometry' | 'point' | 'lineString' |
+                     'polygon' | 'geometryCollection' | 'multiPoint' | 'multiLineString' |
+                     'multiPolygon' | 'multiPolygonZ' | 'computed' | string,
+                   name: string, parameters: Record<string, any> = {}) {
     return this.addColumnDefinition(
       new ColumnDefinition({type, name, ...parameters}));
   }
 
   /*Add a new column definition to the blueprint.*/
-  protected addColumnDefinition(definition: ColumnDefinition) {
+  protected addColumnDefinition<T extends ColumnDefinition = ColumnDefinition>(definition: T): T {
     this.columns.push(definition);
     if (this._after) {
       definition.after(this._after);

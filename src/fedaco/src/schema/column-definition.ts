@@ -31,7 +31,7 @@ export type ColumnDefineAttributes = {
   total?: number,
   places?: number,
   first?: boolean,
-  generatedAs?: string | SqlNode,
+  generatedAs?: string | SqlNode | boolean,
   index?: string,
   nullable?: boolean,
   persisted?: boolean,
@@ -58,14 +58,6 @@ export type ColumnDefineAttributes = {
 export class ColumnDefinition {
 
   constructor(public attributes: ColumnDefineAttributes = {}) {
-  }
-
-  get columnName(): string {
-    throw new Error('todo check me');
-  }
-
-  get columnComment(): string {
-    throw new Error('todo check me');
   }
 
   /**
@@ -416,7 +408,7 @@ export class ColumnDefinition {
    * Create a SQL compliant identity column (PostgreSQL)
    * @param string|SqlNode
    */
-  withGeneratedAs(expression: string | SqlNode) {
+  withGeneratedAs(expression: string | SqlNode | boolean = true) {
     this.attributes['generatedAs'] = expression;
     return this;
   }

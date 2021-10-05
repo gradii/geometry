@@ -152,5 +152,6 @@ export function isIterable(x: any) {
   if (isArray(x)) {
     return true;
   }
-  return isObject(x) && isFunction(x[Symbol.iterator]);
+  // @ts-ignore
+  return isObject(x) && Symbol.iterator in x && isFunction(x[Symbol.iterator]);
 }

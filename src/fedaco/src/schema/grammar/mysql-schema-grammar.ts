@@ -112,7 +112,7 @@ export class MysqlSchemaGrammar extends SchemaGrammar {
 
   /*Compile a primary key command.*/
   public compilePrimary(blueprint: Blueprint, command: ColumnDefinition) {
-    command.name(null);
+    command.withName(null);
     return this.compileKey(blueprint, command, 'primary key');
   }
 
@@ -133,10 +133,10 @@ export class MysqlSchemaGrammar extends SchemaGrammar {
 
   /*Compile an index creation command.*/
   protected compileKey(blueprint: Blueprint, command: ColumnDefinition, type: string) {
-    return `alter table ${this.wrapTable(blueprint)}
-      add ${type} ${this.wrap(
-        command.index)}${command.algorithm ? ' using ' + command.algorithm : ''}(${this.columnize(
-        command.columns)})`;
+    return `alter table ` + `${this.wrapTable(blueprint)} add ${type} ${
+      this.wrap(command.index)}${command.algorithm ?
+      ` using ${command.algorithm}` : ''
+    }(${this.columnize(command.columns)})`;
   }
 
   /*Compile a drop table command.*/
@@ -163,13 +163,13 @@ export class MysqlSchemaGrammar extends SchemaGrammar {
   /*Compile a drop unique key command.*/
   public compileDropUnique(blueprint: Blueprint, command: ColumnDefinition) {
     const index = this.wrap(command.index);
-    return '"alter table {$this->wrapTable($blueprint)} drop index {$index}"';
+    return `alter table ${this.wrapTable(blueprint)} drop index ${index}`;
   }
 
   /*Compile a drop index command.*/
   public compileDropIndex(blueprint: Blueprint, command: ColumnDefinition) {
     const index = this.wrap(command.index);
-    return '"alter table {$this->wrapTable($blueprint)} drop index {$index}"';
+    return `alter table ${this.wrapTable(blueprint)} drop index ${index}`;
   }
 
   /*Compile a drop spatial index command.*/
@@ -180,13 +180,13 @@ export class MysqlSchemaGrammar extends SchemaGrammar {
   /*Compile a drop foreign key command.*/
   public compileDropForeign(blueprint: Blueprint, command: ColumnDefinition) {
     const index = this.wrap(command.index);
-    return '"alter table {$this->wrapTable($blueprint)} drop foreign key {$index}"';
+    return `alter table ${this.wrapTable(blueprint)} drop foreign key ${index}`;
   }
 
   /*Compile a rename table command.*/
   public compileRename(blueprint: Blueprint, command: ColumnDefinition) {
     const from = this.wrapTable(blueprint);
-    return '"rename table {$from} to "' + this.wrapTable(command.to);
+    return `rename table ${from} to ${this.wrapTable(command.to)}`;
   }
 
   /*Compile a rename index command.*/
@@ -295,7 +295,7 @@ export class MysqlSchemaGrammar extends SchemaGrammar {
 
   /*Create the column definition for a decimal type.*/
   protected typeDecimal(column: ColumnDefinition) {
-    return '"decimal({$column->total}, {$column->places})"';
+    return `decimal(${column.total}, ${column.places})`;
   }
 
   /*Create the column definition for a boolean type.*/
@@ -330,7 +330,7 @@ export class MysqlSchemaGrammar extends SchemaGrammar {
 
   /*Create the column definition for a date-time type.*/
   protected typeDateTime(column: ColumnDefinition) {
-    let columnType = column.precision ? `datetime(${column.precision})" ` : 'datetime';
+    let columnType = column.precision ? `datetime(${column.precision})` : 'datetime';
     const current  = column.precision ? `CURRENT_TIMESTAMP(${column.precision})` : 'CURRENT_TIMESTAMP';
     columnType     = column.useCurrent ? `${columnType} default ${current}` : columnType;
     return column.useCurrentOnUpdate ? `${columnType} on update ${current}` : columnType;

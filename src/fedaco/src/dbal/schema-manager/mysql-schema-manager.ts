@@ -8,8 +8,8 @@ import { Table } from '../table';
 
 
 export class MysqlSchemaManager extends SchemaManager {
-  listTableDetails(table: string) {
-    return new Table(table);
+  listTableDetails(table: string): Table {
+    throw new Error('not implement');
   }
 
   getDatabasePlatform(): void {

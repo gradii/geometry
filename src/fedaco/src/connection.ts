@@ -77,7 +77,7 @@ export class Connection implements ConnectionInterface {
 
   /*Create a new database connection instance.*/
   public constructor(pdo: Function, database: string = '', tablePrefix: string = '',
-                     config: any[]                                             = []) {
+                     config: any                                             = {}) {
     this.pdo         = pdo;
     this.database    = database;
     this.tablePrefix = tablePrefix;

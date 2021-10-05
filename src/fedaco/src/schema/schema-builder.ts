@@ -3,8 +3,10 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
-import { tap } from 'ramda';
+import { intersection, tap } from 'ramda';
 import { Connection } from '../connection';
+import { Table } from '../dbal/table';
+import { wrap } from '../helper/arr';
 import { Blueprint } from './blueprint';
 import { SchemaGrammar } from './grammar/schema-grammar';
 
@@ -97,8 +99,8 @@ export class SchemaBuilder {
   }
 
   /*Modify a table on the schema.*/
-  public table(table: string, callback: Function) {
-    this.build(this.createBlueprint(table, callback));
+  public async table(table: string, callback: Function) {
+    await this.build(this.createBlueprint(table, callback));
   }
 
   /*Create a new table on the schema.*/
@@ -110,22 +112,22 @@ export class SchemaBuilder {
   }
 
   /*Drop a table from the schema.*/
-  public drop(table: string) {
-    this.build(tap(blueprint => {
+  public async drop(table: string) {
+    await this.build(tap(blueprint => {
       blueprint.drop();
     }, this.createBlueprint(table)));
   }
 
   /*Drop a table from the schema if it exists.*/
-  public dropIfExists(table: string) {
-    this.build(tap(blueprint => {
+  public async dropIfExists(table: string) {
+    await this.build(tap(blueprint => {
       blueprint.dropIfExists();
     }, this.createBlueprint(table)));
   }
 
   /*Drop columns from a table schema.*/
-  public dropColumns(table: string, columns: string | any[]) {
-    this.table(table, (blueprint: Blueprint) => {
+  public async dropColumns(table: string, columns: string | any[]) {
+    await this.table(table, (blueprint: Blueprint) => {
       blueprint.dropColumn(columns);
     });
   }
@@ -165,7 +167,7 @@ export class SchemaBuilder {
   }
 
   /*Disable foreign key constraints.*/
-  public disableForeignKeyConstraints() {
+  public async disableForeignKeyConstraints() {
     return this.connection.statement(this.grammar.compileDisableForeignKeyConstraints());
   }
 
@@ -173,6 +175,365 @@ export class SchemaBuilder {
   protected async build(blueprint: Blueprint) {
     await blueprint.build(this.connection, this.grammar);
   }
+
+  //region database info
+  /*Methods for filtering return values of list*() methods to convert
+      the native DBMS data definition to a portable Doctrine definition*/
+
+  /**/
+  protected _getPortableDatabasesList(databases: any[]) {
+    const list = [];
+    for (let value of databases) {
+      value = this._getPortableDatabaseDefinition(value);
+      if (!value) {
+        continue;
+      }
+      list.push(value);
+    }
+    return list;
+  }
+
+  /*Converts a list of namespace names from the native DBMS data definition to a portable Doctrine definition.*/
+  protected getPortableNamespacesList(namespaces: string[]) {
+    const namespacesList = [];
+    for (const namespace of namespaces) {
+      namespacesList.push(this.getPortableNamespaceDefinition(namespace));
+    }
+    return namespacesList;
+  }
+
+  /**/
+  protected _getPortableDatabaseDefinition(database: any) {
+    return database;
+  }
+
+  /*Converts a namespace definition from the native DBMS data definition to a portable Doctrine definition.*/
+  protected getPortableNamespaceDefinition(namespace: string) {
+    return namespace;
+  }
+
+  /**/
+  protected _getPortableFunctionsList(functions: any[][]) {
+    const list = [];
+    for (let value of functions) {
+      value = this._getPortableFunctionDefinition(value);
+      if (!value) {
+        continue;
+      }
+      list.push(value);
+    }
+    return list;
+  }
+
+  /**/
+  protected _getPortableFunctionDefinition(func: any[]) {
+    return func;
+  }
+
+  /**/
+  protected _getPortableTriggersList(triggers: any[][]) {
+    const list = [];
+    for (let value of triggers) {
+      value = this._getPortableTriggerDefinition(value);
+      if (!value) {
+        continue;
+      }
+      list.push(value);
+    }
+    return list;
+  }
+
+  /**/
+  protected _getPortableTriggerDefinition(trigger: any[]) {
+    return trigger;
+  }
+
+  /**/
+  protected _getPortableSequencesList(sequences: any[][]) {
+    const list = [];
+    for (const value of sequences) {
+      list.push(this._getPortableSequenceDefinition(value));
+    }
+    return list;
+  }
+
+  /**/
+  protected _getPortableSequenceDefinition(sequence: any[]) {
+    throw new Error('notSupported Sequences');
+  }
+
+  /*Independent of the database the keys of the column list result are lowercased.
+
+  The name of the created column instance however is kept in its case.*/
+  protected _getPortableTableColumnList(table: string, database: string, tableColumns: any[][]) {
+    // var eventManager = this.grammar.getEventManager();
+    const list = [];
+    for (const tableColumn of tableColumns) {
+      let column = null;
+      // let defaultPrevented = false;
+      // if (eventManager !== null && eventManager.hasListeners(Events.onSchemaColumnDefinition)) {
+      //   var eventArgs = new SchemaColumnDefinitionEventArgs(tableColumn, table, database, this._conn);
+      //   eventManager.dispatchEvent(Events.onSchemaColumnDefinition, eventArgs);
+      //   defaultPrevented = eventArgs.isDefaultPrevented();
+      //   column = eventArgs.getColumn();
+      // }
+      // if (!defaultPrevented) {
+      column = this._getPortableTableColumnDefinition(tableColumn);
+      // }
+      if (!column) {
+        continue;
+      }
+      const name = column.getQuotedName(this.grammar).toLowerCase();
+      list[name] = column;
+    }
+    return list;
+  }
+
+  /*Gets Table Column Definition.*/
+  protected _getPortableTableColumnDefinition(tableColumn: any): any {
+    throw new Error('not implement');
+  }
+
+  /*Aggregates and groups the index results according to the required data result.*/
+  protected _getPortableTableIndexesList(tableIndexRows: any[], tableName: string | null = null) {
+    const result = [];
+    for (const tableIndex of tableIndexRows) {
+      let keyName;
+      const indexName = keyName = tableIndex['key_name'];
+      if (tableIndex['primary']) {
+        keyName = 'primary';
+      }
+      keyName = keyName.toLowerCase();
+      if (!(result[keyName] !== undefined)) {
+        const options: Record<string, any> = {
+          'lengths': []
+        };
+        if (tableIndex['where'] !== undefined) {
+          options['where'] = tableIndex['where'];
+        }
+        result[keyName] = {
+          'name'   : indexName,
+          'columns': [],
+          'unique' : !tableIndex['non_unique'],
+          'primary': tableIndex['primary'],
+          'flags'  : tableIndex['flags'] ?? [],
+          'options': options
+        };
+      }
+      result[keyName]['columns'].push(tableIndex['column_name']);
+      result[keyName]['options']['lengths'].push(tableIndex['length'] ?? null);
+    }
+    // const eventManager = this.grammar.getEventManager();
+    const indexes: Record<string, any> = {};
+    for (const [indexKey, data] of Object.entries(result)) {
+      let index = null;
+      // var defaultPrevented = false;
+      // if (eventManager !== null && eventManager.hasListeners(Events.onSchemaIndexDefinition)) {
+      //   var eventArgs = new SchemaIndexDefinitionEventArgs(data, tableName, this._conn);
+      //   eventManager.dispatchEvent(Events.onSchemaIndexDefinition, eventArgs);
+      //   var defaultPrevented = eventArgs.isDefaultPrevented();
+      //   var index            = eventArgs.getIndex();
+      // }
+      // if (!defaultPrevented) {
+      index = {
+        name   : data['name'],
+        columns: data['columns'],
+        unique : data['unique'],
+        primary: data['primary'],
+        flags  : data['flags'],
+        options: data['options']
+      };
+      // }
+      if (!index) {
+        continue;
+      }
+      indexes[indexKey] = index;
+    }
+    return indexes;
+  }
+
+  /**/
+  protected _getPortableTablesList(tables: any[]) {
+    const list = [];
+    for (let value of tables) {
+      value = this._getPortableTableDefinition(value);
+      if (!value) {
+        continue;
+      }
+      list.push(value);
+    }
+    return list;
+  }
+
+  /**/
+  protected _getPortableTableDefinition(table: any) {
+    return table;
+  }
+
+  /**/
+  protected _getPortableUsersList(users: any[][]) {
+    const list = [];
+    for (let value of users) {
+      value = this._getPortableUserDefinition(value);
+      if (!value) {
+        continue;
+      }
+      list.push(value);
+    }
+    return list;
+  }
+
+  /**/
+  protected _getPortableUserDefinition(user: string[]) {
+    return user;
+  }
+
+  /**/
+  // protected _getPortableViewsList(views: any[][]) {
+  //   const list = [];
+  //   for (const value of views) {
+  //     const view = this._getPortableViewDefinition(value);
+  //     if (!view) {
+  //       continue;
+  //     }
+  //     const viewName   = view.getQuotedName(this.grammar).toLowerCase();
+  //     list[viewName] = view;
+  //   }
+  //   return list;
+  // }
+
+  /**/
+  protected _getPortableViewDefinition(view: any[]) {
+    return false;
+  }
+
+  /*Lists the available databases for this connection.*/
+  public async listDatabases() {
+    const sql       = this.grammar.getListDatabasesSQL();
+    const databases = await this.connection.select(sql);
+    return this._getPortableDatabasesList(databases);
+  }
+
+  /*Returns a list of all namespaces in the current database.*/
+  public async listNamespaceNames() {
+    const sql        = this.grammar.getListNamespacesSQL();
+    const namespaces = await this.connection.select(sql);
+    return this.getPortableNamespacesList(namespaces);
+  }
+
+  /*Lists the available sequences for this connection.*/
+  public async listSequences(database: string | null = null) {
+    if (database === null) {
+      database = this.connection.getDatabaseName();
+    }
+    const sql       = this.grammar.getListSequencesSQL(database);
+    const sequences = await this.connection.select(sql);
+    return this.filterAssetNames(this._getPortableSequencesList(sequences));
+  }
+
+  /*Lists the columns for a given table.
+  In contrast to other libraries and to the old version of Doctrine,
+  this column definition does try to contain the 'primary' field for
+  the reason that it is not portable across different RDBMS. Use
+  {@see listTableIndexes($tableName)} to retrieve the primary key
+  of a table. Where a RDBMS specifies more details, these are held
+  in the platformDetails array.*/
+  public async listTableColumns(table: string, database?: string) {
+    if (!database) {
+      database = this.connection.getDatabaseName();
+    }
+    const sql          = this.grammar.getListTableColumnsSQL(table, database);
+    const tableColumns = await this.connection.select(sql);
+    return this._getPortableTableColumnList(table, database, tableColumns);
+  }
+
+  /*Lists the indexes for a given table returning an array of Index instances.
+
+  Keys of the portable indexes list are all lower-cased.*/
+  public async listTableIndexes(table: string): Promise<Record<string, any>> {
+    const sql          = this.grammar.getListTableIndexesSQL(table,
+      this.connection.getDatabaseName());
+    const tableIndexes = await this.connection.select(sql);
+    return this._getPortableTableIndexesList(tableIndexes, table);
+  }
+
+  /*Returns true if all the given tables exist.
+
+  The usage of a string $tableNames is deprecated. Pass a one-element array instead.*/
+  public async tablesExist(tableNames: string | string[]) {
+    tableNames = wrap(tableNames).map(it => it.toLowerCase());
+    return tableNames.length === intersection(
+      tableNames,
+      (await this.listTableNames()).map(it => it.toLowerCase())
+    ).length;
+  }
+
+  /*Returns a list of all tables in the current database.*/
+  public async listTableNames() {
+    const sql        = this.grammar.getListTablesSQL();
+    const tables     = await this.connection.select(sql);
+    const tableNames = this._getPortableTablesList(tables);
+    return this.filterAssetNames(tableNames);
+  }
+
+  /*Filters asset names if they are configured to return only a subset of all
+  the found elements.*/
+  protected filterAssetNames(assetNames: any[]) {
+    const filter = this.connection.getConfig().getSchemaAssetsFilter();
+    if (!filter) {
+      return assetNames;
+    }
+    return assetNames.filter(filter);
+  }
+
+  /**/
+  protected getFilterSchemaAssetsExpression() {
+    return this.connection.getConfig().getFilterSchemaAssetsExpression();
+  }
+
+  /*Lists the tables for this connection.*/
+  public async listTables() {
+    const tableNames = await this.listTableNames();
+    const tables     = [];
+    for (const tableName of tableNames) {
+      tables.push(this.listTableDetails(tableName));
+    }
+    return tables;
+  }
+
+  public async listTableDetails(tableName: string): Promise<Table> {
+    const columns   = await this.listTableColumns(tableName);
+    let foreignKeys = [];
+    if (this.grammar.supportsForeignKeyConstraints()) {
+      foreignKeys = await this.listTableForeignKeys(tableName);
+    }
+    const indexes = await this.listTableIndexes(tableName);
+    return new Table(tableName, columns, indexes, foreignKeys);
+  }
+
+  /*Lists the foreign keys for the given table.*/
+  public async listTableForeignKeys(table: string, database: string | null = null) {
+    if (database === null) {
+      database = this.connection.getDatabaseName();
+    }
+    const sql              = this.grammar.getListTableForeignKeysSQL(table, database);
+    const tableForeignKeys = await this.connection.select(sql);
+    return this._getPortableTableForeignKeysList(tableForeignKeys);
+  }
+
+  protected _getPortableTableForeignKeysList(tableForeignKeys: any[][]) {
+    const list = [];
+    for (const value of tableForeignKeys) {
+      list.push(this._getPortableTableForeignKeyDefinition(value));
+    }
+    return list;
+  }
+
+  protected _getPortableTableForeignKeyDefinition(tableForeignKey: any) {
+    return tableForeignKey;
+  }
+
+  //endregion
 
   /*Create a new command set with a Closure.*/
   protected createBlueprint(table: string, callback: Function | null = null) {

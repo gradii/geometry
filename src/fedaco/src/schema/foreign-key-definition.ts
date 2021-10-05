@@ -3,6 +3,7 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
+import { wrap } from '../helper/arr';
 import { ColumnDefineAttributes, ColumnDefinition } from './column-definition';
 
 
@@ -87,27 +88,27 @@ export class ForeignKeyDefinition extends ColumnDefinition {
    * Specify the referenced column(s)
    */
   withReferences(columns: string | string[]) {
-    this.attributes['references'] = columns;
+    this.attributes['references'] = wrap(columns);
     return this;
   }
 
   /*Indicate that updates should cascade.*/
-  public cascadeOnUpdate() {
-    return this.onUpdate('cascade');
+  public withCascadeOnUpdate() {
+    return this.withOnUpdate('cascade');
   }
 
   /*Indicate that deletes should cascade.*/
-  public cascadeOnDelete() {
-    return this.onDelete('cascade');
+  public withCascadeOnDelete() {
+    return this.withOnDelete('cascade');
   }
 
   /*Indicate that deletes should be restricted.*/
-  public restrictOnDelete() {
-    return this.onDelete('restrict');
+  public withRestrictOnDelete() {
+    return this.withOnDelete('restrict');
   }
 
   /*Indicate that deletes should set the foreign key value to null.*/
-  public nullOnDelete() {
-    return this.onDelete('set null');
+  public withNullOnDelete() {
+    return this.withOnDelete('set null');
   }
 }

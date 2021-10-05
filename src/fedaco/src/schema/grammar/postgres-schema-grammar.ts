@@ -23,6 +23,7 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
     'bigInteger', 'integer', 'mediumInteger', 'smallInteger', 'tinyInteger'
   ];
   /*The commands to be executed outside of create or alter command.*/
+  protected fluentCommands: string[] = ['Comment'];
   protected ColumnDefinitionCommands: string[] = ['Comment'];
 
   /*Compile a create database command.*/
@@ -85,21 +86,22 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
   /*Compile a primary key command.*/
   public compilePrimary(blueprint: Blueprint, command: ColumnDefinition) {
     const columns = this.columnize(command.columns);
-    return `alter table ${this.wrapTable(blueprint)}
-      add primary key (${columns})`;
+    return 'alter table ' + `${this.wrapTable(blueprint)} add primary key (${columns})`;
   }
 
   /*Compile a unique key command.*/
   public compileUnique(blueprint: Blueprint, command: ColumnDefinition) {
-    return `alter table ${this.wrapTable(blueprint)}
-      add constraint ${this.wrap(command.index)} unique (${this.columnize(command.columns)})`;
+    return 'alter table ' + `${this.wrapTable(blueprint)} add constraint ${this.wrap(
+      command.index)} unique (${this.columnize(command.columns)})`;
   }
 
   /*Compile a plain index key command.*/
   public compileIndex(blueprint: Blueprint, command: ColumnDefinition) {
     // language=SQL format=false
-    return `create index ${this.wrap(command.index)} on ${this.wrapTable(blueprint)}
-    ${command.algorithm ? ' using ' + command.algorithm : ''} (${this.columnize(command.columns)})`;
+    return 'create index ' + `${this.wrap(command.index)} on ${
+      this.wrapTable(blueprint)
+    }${command.algorithm ? ' using ' + command.algorithm : ''
+    } (${this.columnize(command.columns)})`;
   }
 
   /*Compile a spatial index key command.*/
@@ -135,17 +137,17 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
 
   /*Compile the SQL needed to drop all tables.*/
   public compileDropAllTables(tables: any[]) {
-    return `drop table "${tables.join(',')}" cascade`;
+    return `drop table "${tables.join('","')}" cascade`;
   }
 
   /*Compile the SQL needed to drop all views.*/
   public compileDropAllViews(views: any[]) {
-    return `drop view "${views.join(',')}" cascade`;
+    return `drop view "${views.join('","')}" cascade`;
   }
 
   /*Compile the SQL needed to drop all types.*/
   public compileDropAllTypes(types: any[]) {
-    return `drop type "${types.join(',')}" cascade`;
+    return `drop type "${types.join('","')}" cascade`;
   }
 
   /*Compile the SQL needed to retrieve all table names.*/
@@ -177,7 +179,7 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
 
   /*Compile a drop primary key command.*/
   public compileDropPrimary(blueprint: Blueprint, command: ColumnDefinition) {
-    const index = this.wrap('"{$blueprint->getTable()}_pkey"');
+    const index = this.wrap(`${blueprint.getTable()}_pkey`);
     return `alter table ${this.wrapTable(blueprint)} drop constraint ${index}`;
   }
 
@@ -189,7 +191,7 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
 
   /*Compile a drop index command.*/
   public compileDropIndex(blueprint: Blueprint, command: ColumnDefinition) {
-    return `drop index ${this.wrap(command.index)}`;
+    return 'drop index ' + `${this.wrap(command.index)}`;
   }
 
   /*Compile a drop spatial index command.*/
@@ -200,23 +202,18 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
   /*Compile a drop foreign key command.*/
   public compileDropForeign(blueprint: Blueprint, command: ColumnDefinition) {
     const index = this.wrap(command.index);
-    return `alter table ${this.wrapTable(blueprint)} drop constraint ${index}`;
+    return 'alter table ' + `${this.wrapTable(blueprint)} drop constraint ${index}`;
   }
 
   /*Compile a rename table command.*/
   public compileRename(blueprint: Blueprint, command: ColumnDefinition) {
     const from = this.wrapTable(blueprint);
-    return `alter table ${from} rename to ${this.wrapTable(command.to)}`;
+    return 'alter table ' + `${from} rename to ${this.wrapTable(command.to)}`;
   }
 
   /*Compile a rename index command.*/
   public compileRenameIndex(blueprint: Blueprint, command: ColumnDefinition) {
-    return `alter
-    index
-    ${this.wrap(command.from)}
-    rename
-    to
-    ${this.wrap(command.to)}`;
+    return 'alter index ' + `${this.wrap(command.from)} rename to ${this.wrap(command.to)}`;
   }
 
   /*Compile the command to enable foreign key constraints.*/
@@ -235,17 +232,17 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
    */
   public compileComment(blueprint: Blueprint, command: ColumnDefinition) {
     return `comment on column ${this.wrapTable(blueprint)}.${this.wrap(
-      command.columnName)} is ${`'${command.columnComment.replace(/'/g, `''`)}'`}`;
+      command.get('column').name)} is ${`'${command.get('column').comment.replace(/'/g, `''`)}'`}`;
   }
 
   /*Create the column definition for a char type.*/
   protected typeChar(column: ColumnDefinition) {
-    return '"char({$column->length})"';
+    return `char(${column.length})`;
   }
 
   /*Create the column definition for a string type.*/
   protected typeString(column: ColumnDefinition) {
-    return '"varchar({$column->length})"';
+    return `varchar(${column.length})`;
   }
 
   /*Create the column definition for a tiny text type.*/
@@ -329,7 +326,7 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
 
   /*Create the column definition for a decimal type.*/
   protected typeDecimal(column: ColumnDefinition) {
-    return '"decimal({$column->total}, {$column->places})"';
+    return `decimal(${column.total}, ${column.places})`;
   }
 
   /*Create the column definition for a boolean type.*/
@@ -369,14 +366,18 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
 
   /*Create the column definition for a time type.*/
   protected typeTime(column: ColumnDefinition) {
-    return 'time' + (isBlank(
-      column.precision) ? '' : '"($column->precision)"') + ' without time zone';
+    return `time${
+      isBlank(column.precision) ?
+        '' : `(${column.precision})`
+    } without time zone`;
   }
 
   /*Create the column definition for a time (with time zone) type.*/
   protected typeTimeTz(column: ColumnDefinition) {
-    return 'time' + (isBlank(
-      column.precision) ? '' : '"($column->precision)"') + ' with time zone';
+    return `time${
+      isBlank(column.precision) ?
+        '' : `(${column.precision})`
+    } with time zone`;
   }
 
   /*Create the column definition for a timestamp type.*/
@@ -520,7 +521,7 @@ export class PostgresSchemaGrammar extends SchemaGrammar {
   /*Get the SQL for a generated stored column modifier.*/
   protected modifyStoredAs(blueprint: Blueprint, column: ColumnDefinition) {
     if (column.storedAs !== null) {
-      return '" generated always as ({$column->storedAs}) stored"';
+      return ` generated always as (${column.storedAs}) stored`;
     }
     return '';
   }

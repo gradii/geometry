@@ -156,7 +156,7 @@ describe('test database eloquent integration', () => {
     }, 'second_connection');
     db.bootEloquent();
     db.setAsGlobal();
-    // await createSchema();
+    await createSchema();
   });
 
   afterEach(async () => {

@@ -4,7 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { date_create_immutable, DateTimeImmutable } from 'ROOT';
 import { DateTimeType } from './DateTimeType';
 import { ConversionException } from './ConversionException';
 import { Types } from './Types';

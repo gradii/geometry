@@ -27,7 +27,7 @@ export class SqliteSchemaGrammar extends SchemaGrammar {
 
   /*Compile the query to determine the list of columns.*/
   public compileColumnListing(table: string) {
-    return 'pragma table_info(' + this.wrap(table.replace('.', '__')) + ')';
+    return 'pragma table_info(' + this.wrap(table.replace(/\./g, '__')) + ')';
   }
 
   /*Compile a create table command.*/
@@ -79,26 +79,16 @@ export class SqliteSchemaGrammar extends SchemaGrammar {
 
   /*Compile a unique key command.*/
   public compileUnique(blueprint: Blueprint, command: ColumnDefinition) {
-    return `create
-    unique index
-    ${this.wrap(command.index)}
-    on
-    ${this.wrapTable(blueprint)}
-    (
-    ${this.columnize(command.columns)}
-    )`;
+    return 'create unique index ' + `${
+      this.wrap(command.index)
+    } on ${this.wrapTable(blueprint)} (${this.columnize(command.columns)})`;
   }
 
   /*Compile a plain index key command.*/
   public compileIndex(blueprint: Blueprint, command: ColumnDefinition) {
-    return `create
-    index
-    ${this.wrap(command.index)}
-    on
-    ${this.wrapTable(blueprint)}
-    (
-    ${this.columnize(command.columns)}
-    )`;
+    return 'create index ' + `${
+      this.wrap(command.index)
+    } on ${this.wrapTable(blueprint)} (${this.columnize(command.columns)})`;
   }
 
   /*Compile a spatial index key command.*/
@@ -124,16 +114,12 @@ export class SqliteSchemaGrammar extends SchemaGrammar {
 
   /*Compile the SQL needed to drop all tables.*/
   public compileDropAllTables() {
-    return `delete
-            from sqlite_master
-            where type in ('table', 'index', 'trigger')`;
+    return 'delete from sqlite_master where type in ' + `('table', 'index', 'trigger')`;
   }
 
   /*Compile the SQL needed to drop all views.*/
   public compileDropAllViews() {
-    return `delete
-            from sqlite_master
-            where type in ('view')`;
+    return 'delete from sqlite_master where type in ' + `('view')`;
   }
 
   /*Compile the SQL needed to rebuild the database.*/
@@ -142,31 +128,31 @@ export class SqliteSchemaGrammar extends SchemaGrammar {
   }
 
   /*Compile a drop column command.*/
-  public compileDropColumn(blueprint: Blueprint, command: ColumnDefinition,
+  public async compileDropColumn(blueprint: Blueprint, command: ColumnDefinition,
                            connection: Connection) {
-    // var tableDiff = this.getDoctrineTableDiff(blueprint,
-    //   schema = connection.getDoctrineSchemaManager());
-    // for (let name of command.columns) {
-    //   tableDiff.removedColumns[name] = connection.getDoctrineColumn(
-    //     this.getTablePrefix() + blueprint.getTable(), name);
-    // }
-    // return /*cast type array*/ schema.getDatabasePlatform().getAlterTableSQL(tableDiff);
+    const schema    = connection.getSchemaBuilder();
+    const tableDiff = await this.getTableDiff(blueprint, schema);
+    for (const name of command.columns) {
+      tableDiff.removedColumns[name] = connection.getDoctrineColumn(
+        this.getTablePrefix() + blueprint.getTable(), name);
+    }
+    return /*cast type array*/ this.getAlterTableSQL(tableDiff);
   }
 
   /*Compile a drop unique key command.*/
   public compileDropUnique(blueprint: Blueprint, command: ColumnDefinition) {
     const index = this.wrap(command.index);
-    return `drop
-    index
-    ${index}`;
+    return 'drop index ' + `${index}`;
   }
 
   /*Compile a drop index command.*/
   public compileDropIndex(blueprint: Blueprint, command: ColumnDefinition) {
     const index = this.wrap(command.index);
-    return `drop
-    index
-    ${index}`;
+    return 'drop index ' + `${index}`;
+  }
+
+  public compilePrimary(blueprint: Blueprint, command: ColumnDefinition): string {
+    return null;
   }
 
   /*Compile a drop spatial index command.*/
@@ -485,5 +471,33 @@ export class SqliteSchemaGrammar extends SchemaGrammar {
   protected wrapJsonSelector(value: string) {
     const [field, path] = this.wrapJsonFieldAndPath(value);
     return 'json_extract(' + field + path + ')';
+  }
+
+  getListTableColumnsSQL(table: string, database: string): string {
+    table = table.replace(/\./g, '__');
+    return `PRAGMA table_info(${this.quoteStringLiteral(table)})`;
+  }
+
+  getListTableForeignKeysSQL(table: string, database?: string) {
+    table = table.replace(/\./g, '__');
+    return `PRAGMA foreign_key_list(${this.quoteStringLiteral(table)})`;
+  }
+
+  getListTablesSQL(): string {
+    return `SELECT name
+            FROM sqlite_master
+            WHERE type = 'table'
+              AND name != 'sqlite_sequence'
+              AND name != 'geometry_columns'
+              AND name != 'spatial_ref_sys'
+            UNION ALL
+    SELECT name
+    FROM sqlite_temp_master
+    WHERE type = 'table'
+    ORDER BY name`;
+  }
+
+  getAlterTableSQL(tableDiff) {
+    return 'undo sql';
   }
 }

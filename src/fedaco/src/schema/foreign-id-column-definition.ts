@@ -20,13 +20,17 @@ export class ForeignIdColumnDefinition extends ColumnDefinition {
   }
 
   /*Create a foreign key constraint on this column referencing the "id" column of the conventionally related table.*/
-  public constrained(table: string | null = null, column: string = 'id') {
-    return this.references(column).on(table ??
-      plural(this.name.replace('_' + column, '')));
+  public withConstrained(table: string | null = null, column: string = 'id') {
+    return this.withReferences(column).withOn(table ??
+      plural(
+        this.name.lastIndexOf(`_${column}`) > 0 ?
+          this.name.substring(0, this.name.lastIndexOf(`_${column}`)) : this.name
+      )
+    );
   }
 
   /*Specify which column this foreign ID references on another table.*/
-  public references(column: string) {
-    return this.blueprint.foreign(this.name).references(column);
+  public withReferences(column: string) {
+    return this.blueprint.foreign(this.name).withReferences(column);
   }
 }

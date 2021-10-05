@@ -43,39 +43,38 @@ export class SqlServerSchemaGrammar extends SchemaGrammar {
   /*Compile a create table command.*/
   public compileCreate(blueprint: Blueprint, command: ColumnDefinition) {
     const columns = this.getColumns(blueprint).join(', ');
-    return `create table ${this.wrapTable(blueprint)}" ($columns)"`;
+    return `create table ` + `${this.wrapTable(blueprint)} (${columns})`;
   }
 
   /*Compile a column addition table command.*/
   public compileAdd(blueprint: Blueprint, command: ColumnDefinition) {
-    return `alter table ${this.wrapTable(blueprint)}
-      add ${this.getColumns(blueprint).join(', ')}`;
+    // language=SQL format=false
+    return `alter table ` + `${this.wrapTable(blueprint)} add ${
+      this.getColumns(blueprint).join(', ')
+    }`;
   }
 
   /*Compile a primary key command.*/
   public compilePrimary(blueprint: Blueprint, command: ColumnDefinition) {
-    return `alter table ${this.wrapTable(blueprint)}
-      add constraint ${this.wrap(command.index)} primary key (${this.columnize(command.columns)})`;
+    // language=SQL format=false
+    return `alter table ` + `${this.wrapTable(blueprint)} add constraint ${
+      this.wrap(command.index)
+    } primary key (${this.columnize(command.columns)})`;
   }
 
   /*Compile a unique key command.*/
   public compileUnique(blueprint: Blueprint, command: ColumnDefinition) {
     // language=SQL format=false
-    return `create unique index ${this.wrap(command.index)} on ${
+    return `create unique index ` + `${this.wrap(command.index)} on ${
       this.wrapTable(blueprint)
     } (${this.columnize(command.columns)})`;
   }
 
   /*Compile a plain index key command.*/
   public compileIndex(blueprint: Blueprint, command: ColumnDefinition) {
-    return `create
-    index
-    ${this.wrap(command.index)}
-    on
-    ${this.wrapTable(blueprint)}
-    (
-    ${this.columnize(command.columns)}
-    )`;
+    // language=SQL format=false
+    return 'create index ' + `${this.wrap(command.index)} on ${this.wrapTable(
+      blueprint)} (${this.columnize(command.columns)})`;
   }
 
   /*Compile a spatial index key command.*/
@@ -105,13 +104,13 @@ export class SqlServerSchemaGrammar extends SchemaGrammar {
   public compileDropColumn(blueprint: Blueprint, command: ColumnDefinition) {
     const columns                    = this.wrapArray(command.columns);
     const dropExistingConstraintsSql = this.compileDropDefaultConstraint(blueprint, command) + ';';
-    return `${dropExistingConstraintsSql}alter table ${this.wrapTable(
+    return `${dropExistingConstraintsSql}` + `alter table ${this.wrapTable(
       blueprint)} drop column ${columns.join(', ')}`;
   }
 
   /*Compile a drop default constraint command.*/
   public compileDropDefaultConstraint(blueprint: Blueprint, command: ColumnDefinition) {
-    const columns   = '\'' + command.columns.join('\',\'') + '\'';
+    const columns   = `'${command.columns.join('\',\'')}'`;
     const tableName = this.getTablePrefix() + blueprint.getTable();
     let sql         = 'DECLARE @sql NVARCHAR(MAX) = \'\';';
     sql += `SELECT @sql += 'ALTER TABLE [dbo].[${tableName}] DROP CONSTRAINT ' + OBJECT_NAME([default_object_id]) + ';' `;
@@ -124,27 +123,19 @@ export class SqlServerSchemaGrammar extends SchemaGrammar {
   /*Compile a drop primary key command.*/
   public compileDropPrimary(blueprint: Blueprint, command: ColumnDefinition) {
     const index = this.wrap(command.index);
-    return `alter table ${this.wrapTable(blueprint)} drop constraint {index}`;
+    return `alter table ${this.wrapTable(blueprint)} drop constraint ${index}`;
   }
 
   /*Compile a drop unique key command.*/
   public compileDropUnique(blueprint: Blueprint, command: ColumnDefinition) {
     const index = this.wrap(command.index);
-    return `drop
-    index
-    ${index}
-    on
-    ${this.wrapTable(blueprint)}`;
+    return `drop ` + `index ${index} on ${this.wrapTable(blueprint)}`;
   }
 
   /*Compile a drop index command.*/
   public compileDropIndex(blueprint: Blueprint, command: ColumnDefinition) {
     const index = this.wrap(command.index);
-    return `drop
-    index
-    ${index}
-    on
-    ${this.wrapTable(blueprint)}`;
+    return `drop ` + `index ${index} on ${this.wrapTable(blueprint)}`;
   }
 
   /*Compile a drop spatial index command.*/
@@ -155,7 +146,7 @@ export class SqlServerSchemaGrammar extends SchemaGrammar {
   /*Compile a drop foreign key command.*/
   public compileDropForeign(blueprint: Blueprint, command: ColumnDefinition) {
     const index = this.wrap(command.index);
-    return `alter table ${this.wrapTable(blueprint)} drop constraint {$index}`;
+    return `alter table ` + `${this.wrapTable(blueprint)} drop constraint ${index}`;
   }
 
   /*Compile a rename table command.*/
@@ -204,12 +195,12 @@ export class SqlServerSchemaGrammar extends SchemaGrammar {
 
   /*Create the column definition for a char type.*/
   protected typeChar(column: ColumnDefinition) {
-    return '"nchar({$column->length})"';
+    return `nchar(${column.length})`;
   }
 
   /*Create the column definition for a string type.*/
   protected typeString(column: ColumnDefinition) {
-    return '"nvarchar({$column->length})"';
+    return `nvarchar(${column.length})`;
   }
 
   /*Create the column definition for a tiny text type.*/
@@ -452,9 +443,9 @@ export class SqlServerSchemaGrammar extends SchemaGrammar {
   }
 
   /*Quote the given string literal.*/
-  public quoteString(value: string | any[]) {
+  public quoteString(value: any[] | string): string {
     if (isArray(value)) {
-      return value.map(it => it.quoteString(it)).join(', ');
+      return value.map(it => this.quoteString(it)).join(', ');
     }
     return `N'${value}'`;
   }
