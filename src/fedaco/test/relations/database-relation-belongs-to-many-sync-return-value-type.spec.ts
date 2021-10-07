@@ -1,45 +1,78 @@
 import { Manager as DB } from "Illuminate/Database/Capsule/Manager";
 import { Model as Eloquent } from "Illuminate/Database/Eloquent/Model";
+import { BelongsToManyColumn } from "src/fedaco/src/annotation/relation-column/belongs-to-many.relation-column";
+import { Model } from "src/fedaco/src/fedaco/model";
 
+
+function connection(connectionName = 'default') {
+    return Model.getConnectionResolver().connection(connectionName);
+}
+
+function schema(connectionName = 'default'): SchemaBuilder {
+    return connection(connectionName).getSchemaBuilder();
+}
+
+jest.setTimeout(100000);
+
+function createSchema() {
+    schema().create("users", table => {
+        table.increments("id");
+        table.string("email").unique();
+    });
+    schema().create("articles", table => {
+        table.string("id");
+        table.string("title");
+        table.primary("id");
+    });
+    schema().create("article_user", table => {
+        table.string("article_id");
+        table.foreign("article_id").references("id").on("articles");
+        table.integer("user_id").unsigned();
+        table.foreign("user_id").references("id").on("users");
+    });
+}
+
+async function seedData() {
+    var user = await BelongsToManyChunkByIdTestTestUser.createQuery().create({
+        "id": 1,
+        "email": "taylorotwell@gmail.com"
+    });
+    await BelongsToManyChunkByIdTestTestArticle.createQuery().insert([{
+        "aid": 1,
+        "title": "Another title"
+    }, {
+        "aid": 2,
+        "title": "Another title"
+    }, {
+        "aid": 3,
+        "title": "Another title"
+    }]);
+    user.articles().sync([3, 1, 2]);
+}
 describe("test database eloquent belongs to many sync return value type", () => {
-    it("set up", () => {
-        var db = new DB();
+    beforeAll(() => {
+        var db = new DatabaseConfig();
         db.addConnection({
             "driver": "sqlite",
             "database": ":memory:"
         });
         db.bootEloquent();
         db.setAsGlobal();
-        this.createSchema();
+        createSchema();
     });
-    it("create schema", () => {
-        this.schema().create("users", table => {
-            table.increments("id");
-            table.string("email").unique();
-        });
-        this.schema().create("articles", table => {
-            table.string("id");
-            table.string("title");
-            table.primary("id");
-        });
-        this.schema().create("article_user", table => {
-            table.string("article_id");
-            table.foreign("article_id").references("id").on("articles");
-            table.integer("user_id").unsigned();
-            table.foreign("user_id").references("id").on("users");
-        });
-    });
-    it("tear down", () => {
-        this.schema().drop("users");
-        this.schema().drop("articles");
-        this.schema().drop("article_user");
-    });
-    it("seed data", () => {
-        BelongsToManySyncTestTestUser.create({
+
+    afterAll(() => {
+        schema().drop("users");
+        schema().drop("articles");
+        schema().drop("article_user");
+    })
+
+    it("seed data", async () => {
+        await BelongsToManySyncTestTestUser.createQuery().create({
             "id": 1,
             "email": "taylorotwell@gmail.com"
         });
-        BelongsToManySyncTestTestArticle.insert([{
+        await BelongsToManySyncTestTestArticle.createQuery().insert([{
                 "id": "7b7306ae-5a02-46fa-a84c-9538f45c7dd4",
                 "title": "uuid title"
             }, {
@@ -59,22 +92,22 @@ describe("test database eloquent belongs to many sync return value type", () => 
             this.assertSame(gettype(id), new BelongsToManySyncTestTestArticle().getKeyType());
         });
     });
-    it("connection", () => {
-        return Eloquent.getConnectionResolver().connection();
-    });
-    it("schema", () => {
-        return this.connection().getSchemaBuilder();
-    });
 });
-export class BelongsToManySyncTestTestUser extends Eloquent {
+
+export class BelongsToManySyncTestTestUser extends Model {
     protected table: any = "users";
     protected fillable: any = ["id", "email"];
     public timestamps: any = false;
-    public articles() {
-        return this.belongsToMany(BelongsToManySyncTestTestArticle, "article_user", "user_id", "article_id");
-    }
+
+    @BelongsToManyColumn({
+        related: BelongsToManySyncTestTestArticle,
+        table: 'article_user',
+        foreignPivotKey: 'user_id',
+        relatedPivotKey: 'article_id'
+    })
+    public articles;
 }
-export class BelongsToManySyncTestTestArticle extends Eloquent {
+export class BelongsToManySyncTestTestArticle extends Model {
     protected table: any = "articles";
     protected keyType: any = "string";
     public incrementing: any = false;
