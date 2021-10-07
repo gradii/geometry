@@ -3,6 +3,7 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
+
 import { Direction, TriDropGridContainer } from '../directives/drop-grid-container';
 import { TriDragGridItemComponent } from '../drag-grid/drag-grid-item.component';
 import { CompactType } from '../enum';

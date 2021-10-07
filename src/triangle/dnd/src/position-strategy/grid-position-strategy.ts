@@ -11,12 +11,6 @@ import { DropGridContainerRef } from '../drag-drop-ref/drop-grid-container-ref';
 import { DragDropRegistry } from '../drag-drop-registry';
 import { PositionStrategy } from './position-strategy';
 
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 export class GridPositionStrategy implements PositionStrategy {
 
   _itemPositions: CachedItemPosition[] = [];
