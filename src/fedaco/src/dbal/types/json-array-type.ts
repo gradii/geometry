@@ -15,7 +15,7 @@ export class JsonArrayType extends JsonType {
       return [];
     }
     // var value = is_resource(value) ? stream_get_contents(value) : value;
-    return JSON.parse(value);
+    return JSON.parse(value) as any[];
   }
 
   /*{@inheritdoc}*/

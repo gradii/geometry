@@ -6,4 +6,6 @@
 import { MigrationEvent } from './migration-event';
 
 export class MigrationsStarted implements MigrationEvent {
+  method: string;
+  migration: any;
 }

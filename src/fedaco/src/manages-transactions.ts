@@ -1,11 +1,17 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 export class ManagesTransactions {
   /*Execute a Closure within a transaction.*/
   public transaction(callback: Function, attempts: number = 1) {
     for (let currentAttempt = 1; currentAttempt <= attempts; currentAttempt++) {
       this.beginTransaction();
       try {
-        var callbackResult = callback(this);
-      } catch (e: Throwable) {
+        let callbackResult = callback(this);
+      } catch (e) {
         this.handleTransactionException(e, currentAttempt, attempts);
         continue;
       }
@@ -17,7 +23,7 @@ export class ManagesTransactions {
         if (this.transactions == 0) {
           optional(this.transactionsManager).commit(this.getName());
         }
-      } catch (e: Throwable) {
+      } catch (e: Error) {
         this.handleCommitTransactionException(e, currentAttempt, attempts);
         continue;
       }
@@ -104,7 +110,7 @@ export class ManagesTransactions {
 
   /*Rollback the active database transaction.*/
   public rollBack(toLevel: number | null = null) {
-    var toLevel = isBlank(toLevel) ? this.transactions - 1 : toLevel;
+    let toLevel = isBlank(toLevel) ? this.transactions - 1 : toLevel;
     if (toLevel < 0 || toLevel >= this.transactions) {
       return;
     }

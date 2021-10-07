@@ -294,7 +294,7 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   /*Create or update a related record matching the attributes, and fill it with values.*/
   public async updateOrCreate(attributes: any[], values: any[] = []) {
     const instance = await this.firstOrNew(attributes) as Model;
-    instance.fill(values).save();
+    await instance.fill(values).save();
     return instance;
   }
 

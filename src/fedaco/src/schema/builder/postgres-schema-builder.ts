@@ -41,7 +41,7 @@ export class PostgresSchemaBuilder extends SchemaBuilder {
     if (!tables.length) {
       return;
     }
-    this.connection.statement(this.grammar.compileDropAllTables(tables));
+    await this.connection.statement(this.grammar.compileDropAllTables(tables));
   }
 
   /*Drop all views from the database.*/
@@ -55,7 +55,7 @@ export class PostgresSchemaBuilder extends SchemaBuilder {
     if (!views.length) {
       return;
     }
-    this.connection.statement(this.grammar.compileDropAllViews(views));
+    await this.connection.statement(this.grammar.compileDropAllViews(views));
   }
 
   /*Drop all types from the database.*/
@@ -69,7 +69,7 @@ export class PostgresSchemaBuilder extends SchemaBuilder {
     if (!types.length) {
       return;
     }
-    this.connection.statement(this.grammar.compileDropAllTypes(types));
+    await this.connection.statement(this.grammar.compileDropAllTypes(types));
   }
 
   /*Get all of the table names for the database.*/

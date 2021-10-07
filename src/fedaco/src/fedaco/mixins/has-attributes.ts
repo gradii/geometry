@@ -821,7 +821,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Decode the given JSON back into an array or object.*/
     public fromJson(value: string) {
-      return JSON.parse(value);
+      return JSON.parse(value) as any;
     }
 
     // /*Decrypt the given encrypted string.*/

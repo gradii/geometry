@@ -337,7 +337,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
       return this.create([...attributes, ...values], joining, touch);
     }
     instance.fill(values);
-    instance.save({
+    await instance.save({
       'touch': false
     });
     return instance;

@@ -335,7 +335,7 @@ export class Connection implements ConnectionInterface {
   }
 
   /*Handle a query exception that occurred during query execution.*/
-  protected tryAgainIfCausedByLostConnection(e/*: QueryException*/, query: string, bindings: any[],
+  protected tryAgainIfCausedByLostConnection(e: Error/*: QueryException*/, query: string, bindings: any[],
                                              callback: Function) {
     if (this.causedByLostConnection(e.message)) {
       this.reconnect();
