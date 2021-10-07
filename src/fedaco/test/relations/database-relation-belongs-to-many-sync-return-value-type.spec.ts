@@ -1,6 +1,6 @@
 import { Manager as DB } from "Illuminate/Database/Capsule/Manager";
 import { Model as Eloquent } from "Illuminate/Database/Eloquent/Model";
-import { TestCase } from "PHPUnit/Framework/TestCase";
+
 describe("test database eloquent belongs to many sync return value type", () => {
     it("set up", () => {
         var db = new DB();
