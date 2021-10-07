@@ -18,6 +18,7 @@ ts_library(
     ),
     deps = [
        "@npm//date-fns",
+       "//src/annotation",
        "//src/check-type:check-type",
     ],
     module_name = "@gradii/fedaco",
