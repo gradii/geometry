@@ -89,27 +89,27 @@ describe('test database eloquent polymorphic relations integration', () => {
 });
 
 /*Eloquent Models...*/
-export class EloquentManyToManyPolymorphicTestPost extends Eloquent {
-  protected table: any   = 'posts';
-  protected guarded: any = [];
+export class EloquentManyToManyPolymorphicTestPost extends Model {
+  _table: any   = 'posts';
+  _guarded: any = [];
 
   public tags() {
     return this.morphToMany(EloquentManyToManyPolymorphicTestTag, 'taggable');
   }
 }
 
-export class EloquentManyToManyPolymorphicTestImage extends Eloquent {
-  protected table: any   = 'images';
-  protected guarded: any = [];
+export class EloquentManyToManyPolymorphicTestImage extends Model {
+  _table: any   = 'images';
+  _guarded: any = [];
 
   public tags() {
     return this.morphToMany(EloquentManyToManyPolymorphicTestTag, 'taggable');
   }
 }
 
-export class EloquentManyToManyPolymorphicTestTag extends Eloquent {
-  protected table: any   = 'tags';
-  protected guarded: any = [];
+export class EloquentManyToManyPolymorphicTestTag extends Model {
+  _table: any   = 'tags';
+  _guarded: any = [];
 
   public posts() {
     return this.morphedByMany(EloquentManyToManyPolymorphicTestPost, 'taggable');

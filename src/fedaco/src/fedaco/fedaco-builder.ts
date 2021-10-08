@@ -381,7 +381,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
     // not have to remove these where clauses manually which gets really hacky
     // and error prone. We don't want constraints because we add eager ones.
     const relation = Relation.noConstraints(() => {
-      const _relation = this.getModel().newInstance().getRelationMethod(name);
+      const _relation = this.getModel().newInstance().newRelation(name);
       if (!_relation) {
         throw new Error(`RelationNotFoundException ${this.getModel().constructor.name} ${name}`); // (this.getModel(), name);
       }

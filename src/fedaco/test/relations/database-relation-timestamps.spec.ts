@@ -68,21 +68,21 @@ describe('test database eloquent timestamps', () => {
 });
 
 /*Eloquent Models...*/
-export class UserWithCreatedAndUpdated extends Eloquent {
-  protected table: any   = 'users';
-  protected guarded: any = [];
+export class UserWithCreatedAndUpdated extends Model {
+  _table: any   = 'users';
+  _guarded: any = [];
 }
 
-export class UserWithCreated extends Eloquent {
+export class UserWithCreated extends Model {
   static UPDATED_AT         = null;
-  protected table: any      = 'users_created_at';
-  protected guarded: any    = [];
+  _table: any      = 'users_created_at';
+  _guarded: any    = [];
   protected dateFormat: any = 'U';
 }
 
-export class UserWithUpdated extends Eloquent {
+export class UserWithUpdated extends Model {
   static CREATED_AT         = null;
-  protected table: any      = 'users_updated_at';
-  protected guarded: any    = [];
+  _table: any      = 'users_updated_at';
+  _guarded: any    = [];
   protected dateFormat: any = 'U';
 }

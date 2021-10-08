@@ -1,86 +1,227 @@
-import { Manager as DB } from 'Illuminate/Database/Capsule/Manager';
-import { Model as Eloquent } from 'Illuminate/Database/Eloquent/Model';
-import { ModelNotFoundException } from 'Illuminate/Database/Eloquent/ModelNotFoundException';
-import { SoftDeletes } from 'Illuminate/Database/Eloquent/SoftDeletes';
-import { Collection } from 'Illuminate/Support/Collection';
-import { LazyCollection } from 'Illuminate/Support/LazyCollection';
-import { TestCase } from 'PHPUnit/Framework/TestCase';
+import { BelongsToColumn } from '../../src/annotation/relation-column/belongs-to.relation-column';
+import { HasManyThroughColumn } from '../../src/annotation/relation-column/has-many-through.relation-column';
+import { HasManyColumn } from '../../src/annotation/relation-column/has-many.relation-column';
+import { DatabaseConfig } from '../../src/database-config';
+import { Model } from '../../src/fedaco/model';
+import { SchemaBuilder } from '../../src/schema/schema-builder';
+
+function connection(connectionName = 'default') {
+  return Model.getConnectionResolver().connection(connectionName);
+}
+
+function schema(connectionName = 'default'): SchemaBuilder {
+  return connection(connectionName).getSchemaBuilder();
+}
+
+async function createSchema() {
+  await schema().create('users', table => {
+    table.increments('id');
+    table.string('email').unique();
+    table.unsignedInteger('country_id');
+    table.string('country_short');
+    table.timestamps();
+    table.softDeletes();
+  });
+  await schema().create('posts', table => {
+    table.increments('id');
+    table.integer('user_id');
+    table.string('title');
+    table.text('body');
+    table.string('email');
+    table.timestamps();
+  });
+  await schema().create('countries', table => {
+    table.increments('id');
+    table.string('name');
+    table.string('shortname');
+    table.timestamps();
+  });
+}
+
+async function seedData() {
+  (
+    await HasManyThroughTestCountry.createQuery().create({
+      'id'       : 1,
+      'name'     : 'United States of America',
+      'shortname': 'us'
+    })
+  ).users().create({
+    'id'           : 1,
+    'email'        : 'taylorotwell@gmail.com',
+    'country_short': 'us'
+  }).posts().createMany([
+    {
+      'title': 'A title',
+      'body' : 'A body',
+      'email': 'taylorotwell@gmail.com'
+    }, {
+      'title': 'Another title',
+      'body' : 'Another body',
+      'email': 'taylorotwell@gmail.com'
+    }
+  ]);
+}
+
+async function seedDataExtended() {
+  const country = await HasManyThroughTestCountry.createQuery().create({
+    'id'       : 2,
+    'name'     : 'United Kingdom',
+    'shortname': 'uk'
+  });
+
+  const user = await country.newRelation('users').create({
+    'id'           : 2,
+    'email'        : 'example1@gmail.com',
+    'country_short': 'uk'
+  });
+
+  await user.newRelation('posts').createMany([
+    {
+      'title': 'Example1 title1',
+      'body' : 'Example1 body1',
+      'email': 'example1post1@gmail.com'
+    }, {
+      'title': 'Example1 title2',
+      'body' : 'Example1 body2',
+      'email': 'example1post2@gmail.com'
+    }
+  ]);
+
+  country.users().create({
+    'id'           : 3,
+    'email'        : 'example2@gmail.com',
+    'country_short': 'uk'
+  }).posts().createMany([
+    {
+      'title': 'Example2 title1',
+      'body' : 'Example2 body1',
+      'email': 'example2post1@gmail.com'
+    }, {
+      'title': 'Example2 title2',
+      'body' : 'Example2 body2',
+      'email': 'example2post2@gmail.com'
+    }
+  ]);
+  country.users().create({
+    'id'           : 4,
+    'email'        : 'example3@gmail.com',
+    'country_short': 'uk'
+  }).posts().createMany([
+    {
+      'title': 'Example3 title1',
+      'body' : 'Example3 body1',
+      'email': 'example3post1@gmail.com'
+    }, {
+      'title': 'Example3 title2',
+      'body' : 'Example3 body2',
+      'email': 'example3post2@gmail.com'
+    }
+  ]);
+}
+
+async function seedDefaultData() {
+  const r = await HasManyThroughDefaultTestCountry.createQuery().create({
+    'id'  : 1,
+    'name': 'United States of America'
+  });
+  const u = await r.users().create({
+    'id'   : 1,
+    'email': 'taylorotwell@gmail.com'
+  });
+  await u.posts().createMany([
+    {
+      'title': 'A title',
+      'body' : 'A body'
+    }, {
+      'title': 'Another title',
+      'body' : 'Another body'
+    }
+  ]);
+}
+
+async function resetDefault() {
+  await schema().drop('users_default');
+  await schema().drop('posts_default');
+  await schema().drop('countries_default');
+}
+
+async function migrateDefault() {
+  await schema().create('users_default', table => {
+    table.increments('id');
+    table.string('email').unique();
+    table.unsignedInteger('has_many_through_default_test_country_id');
+    table.timestamps();
+  });
+  await schema().create('posts_default', table => {
+    table.increments('id');
+    table.integer('has_many_through_default_test_user_id');
+    table.string('title');
+    table.text('body');
+    table.timestamps();
+  });
+  await schema().create('countries_default', table => {
+    table.increments('id');
+    table.string('name');
+    table.timestamps();
+  });
+}
 
 describe('test database eloquent has many through integration', () => {
-  it('set up', () => {
-    var db = new DB();
+  beforeEach(async () => {
+    const db = new DatabaseConfig();
     db.addConnection({
       'driver'  : 'sqlite',
       'database': ':memory:'
     });
     db.bootEloquent();
     db.setAsGlobal();
-    this.createSchema();
+    await createSchema();
   });
-  it('create schema', () => {
-    this.schema().create('users', table => {
-      table.increments('id');
-      table.string('email').unique();
-      table.unsignedInteger('country_id');
-      table.string('country_short');
-      table.timestamps();
-      table.softDeletes();
-    });
-    this.schema().create('posts', table => {
-      table.increments('id');
-      table.integer('user_id');
-      table.string('title');
-      table.text('body');
-      table.string('email');
-      table.timestamps();
-    });
-    this.schema().create('countries', table => {
-      table.increments('id');
-      table.string('name');
-      table.string('shortname');
-      table.timestamps();
-    });
+
+  afterEach(async () => {
+    await schema().drop('users');
+    await schema().drop('posts');
+    await schema().drop('countries');
   });
-  it('tear down', () => {
-    this.schema().drop('users');
-    this.schema().drop('posts');
-    this.schema().drop('countries');
-  });
-  it('it loads a has many through relation with custom keys', () => {
-    this.seedData();
-    var posts = HasManyThroughTestCountry.first().posts;
+
+  it('it loads a has many through relation with custom keys', async () => {
+    await seedData();
+    const posts = await (await HasManyThroughTestCountry.createQuery().first()).posts;
     expect(posts[0].title).toBe('A title');
-    expect(posts).toCount(2);
+    expect(posts).toHaveLength(2);
   });
-  it('it loads a default has many through relation', () => {
-    this.migrateDefault();
-    this.seedDefaultData();
-    var posts = HasManyThroughDefaultTestCountry.first().posts;
+
+  it('it loads a default has many through relation', async () => {
+    await migrateDefault();
+    await seedDefaultData();
+    const posts = await (await HasManyThroughDefaultTestCountry.createQuery().first()).posts;
     expect(posts[0].title).toBe('A title');
-    expect(posts).toCount(2);
-    this.resetDefault();
+    expect(posts).toHaveLength(2);
+    await resetDefault();
   });
-  it('it loads a relation with custom intermediate and local key', () => {
-    this.seedData();
-    var posts = HasManyThroughIntermediateTestCountry.first().posts;
+  it('it loads a relation with custom intermediate and local key', async () => {
+    await seedData();
+    const posts = await (await HasManyThroughIntermediateTestCountry.createQuery().first()).posts;
     expect(posts[0].title).toBe('A title');
-    expect(posts).toCount(2);
+    expect(posts).toHaveLength(2);
   });
-  it('eager loading a relation with custom intermediate and local key', () => {
-    this.seedData();
-    var posts = HasManyThroughIntermediateTestCountry._with('posts').first().posts;
+  it('eager loading a relation with custom intermediate and local key', async () => {
+    await seedData();
+    const posts = await (await HasManyThroughIntermediateTestCountry.createQuery().with('posts').first()).posts;
     expect(posts[0].title).toBe('A title');
-    expect(posts).toCount(2);
+    expect(posts).toHaveLength(2);
   });
-  it('where has on a relation with custom intermediate and local key', () => {
-    this.seedData();
-    var country = HasManyThroughIntermediateTestCountry.whereHas('posts', query => {
-      query.where('title', 'A title');
-    }).get();
-    expect(country).toCount(1);
+  it('where has on a relation with custom intermediate and local key', async () => {
+    await seedData();
+    const country = await HasManyThroughIntermediateTestCountry.createQuery()
+      .whereHas('posts', query => {
+        query.where('title', 'A title');
+      })
+      .get();
+    expect(country).toHaveLength(1);
   });
-  it('find method', () => {
-    HasManyThroughTestCountry.create({
+  it('find method', async () => {
+    HasManyThroughTestCountry.createQuery().create({
       'id'       : 1,
       'name'     : 'United States of America',
       'shortname': 'us'
@@ -101,12 +242,12 @@ describe('test database eloquent has many through integration', () => {
         'email': 'taylorotwell@gmail.com'
       }
     ]);
-    var country = HasManyThroughTestCountry.first();
-    var post    = country.posts().find(1);
+    const country = HasManyThroughTestCountry.first();
+    const post    = country.posts().find(1);
     expect(post).toNotNull();
     expect(post.title).toBe('A title');
-    expect(country.posts().find([1, 2])).toCount(2);
-    expect(country.posts().find(new Collection([1, 2]))).toCount(2);
+    expect(country.posts().find([1, 2])).toHaveLength(2);
+    expect(country.posts().find(new Collection([1, 2]))).toHaveLength(2);
   });
   it('find many method', () => {
     HasManyThroughTestCountry.create({
@@ -130,9 +271,9 @@ describe('test database eloquent has many through integration', () => {
         'email': 'taylorotwell@gmail.com'
       }
     ]);
-    var country = HasManyThroughTestCountry.first();
-    expect(country.posts().findMany([1, 2])).toCount(2);
-    expect(country.posts().findMany(new Collection([1, 2]))).toCount(2);
+    const country = HasManyThroughTestCountry.first();
+    expect(country.posts().findMany([1, 2])).toHaveLength(2);
+    expect(country.posts().findMany(new Collection([1, 2]))).toHaveLength(2);
   });
   it('first or fail throws an exception', () => {
     this.expectException(ModelNotFoundException);
@@ -204,27 +345,27 @@ describe('test database eloquent has many through integration', () => {
   });
   it('first retrieves first record', () => {
     this.seedData();
-    var post = HasManyThroughTestCountry.first().posts().first();
+    const post = HasManyThroughTestCountry.first().posts().first();
     expect(post).toNotNull();
     expect(post.title).toBe('A title');
   });
   it('all columns are retrieved by default', () => {
     this.seedData();
-    var post = HasManyThroughTestCountry.first().posts().first();
+    const post = HasManyThroughTestCountry.first().posts().first();
     expect(array_keys(post.getAttributes())).toEqual(
       ['id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at', 'laravel_through_key']);
   });
   it('only proper columns are selected if provided', () => {
     this.seedData();
-    var post = HasManyThroughTestCountry.first().posts().first(['title', 'body']);
+    const post = HasManyThroughTestCountry.first().posts().first(['title', 'body']);
     expect(array_keys(post.getAttributes())).toEqual(['title', 'body', 'laravel_through_key']);
   });
   it('chunk returns correct models', () => {
     this.seedData();
     this.seedDataExtended();
-    var country = HasManyThroughTestCountry.find(2);
+    const country = HasManyThroughTestCountry.find(2);
     country.posts().chunk(10, postsChunk => {
-      var post = postsChunk.first();
+      const post = postsChunk.first();
       this.assertEquals(['id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at', 'laravel_through_key'],
         array_keys(post.getAttributes()));
     });
@@ -232,9 +373,9 @@ describe('test database eloquent has many through integration', () => {
   it('chunk by id', () => {
     this.seedData();
     this.seedDataExtended();
-    var country = HasManyThroughTestCountry.find(2);
-    var i       = 0;
-    var count   = 0;
+    const country = HasManyThroughTestCountry.find(2);
+    let i         = 0;
+    let count     = 0;
     country.posts().chunkById(2, collection => {
       i++;
       count += collection.count();
@@ -245,10 +386,10 @@ describe('test database eloquent has many through integration', () => {
   it('cursor returns correct models', () => {
     this.seedData();
     this.seedDataExtended();
-    var country = HasManyThroughTestCountry.find(2);
-    var posts   = country.posts().cursor();
+    const country = HasManyThroughTestCountry.find(2);
+    const posts   = country.posts().cursor();
     expect(posts).toInstanceOf(LazyCollection);
-    for (let post of posts) {
+    for (const post of posts) {
       expect(array_keys(post.getAttributes())).toEqual(
         ['id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at', 'laravel_through_key']);
     }
@@ -256,218 +397,113 @@ describe('test database eloquent has many through integration', () => {
   it('each returns correct models', () => {
     this.seedData();
     this.seedDataExtended();
-    var country = HasManyThroughTestCountry.find(2);
+    const country = HasManyThroughTestCountry.find(2);
     country.posts().each(post => {
       this.assertEquals(['id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at', 'laravel_through_key'],
         array_keys(post.getAttributes()));
     });
   });
-  it('intermediate soft deletes are ignored', () => {
-    this.seedData();
-    HasManyThroughSoftDeletesTestUser.first().delete();
-    var posts = HasManyThroughSoftDeletesTestCountry.first().posts;
+  it('intermediate soft deletes are ignored', async () => {
+    await seedData();
+    HasManyThroughSoftDeletesTestUser.createQuery().first().delete();
+    const posts = HasManyThroughSoftDeletesTestCountry.first().posts;
     expect(posts[0].title).toBe('A title');
-    expect(posts).toCount(2);
+    expect(posts).toHaveLength(2);
   });
-  it('eager loading loads related models correctly', () => {
-    this.seedData();
-    var country = HasManyThroughSoftDeletesTestCountry._with('posts').first();
+  it('eager loading loads related models correctly', async () => {
+    await seedData();
+    const country = HasManyThroughSoftDeletesTestCountry.createQuery().with('posts').first();
     expect(country.shortname).toBe('us');
     expect(country.posts[0].title).toBe('A title');
-    expect(country.posts).toCount(2);
+    expect(country.posts).toHaveLength(2);
   });
-  it('seed data', () => {
-    HasManyThroughTestCountry.create({
-      'id'       : 1,
-      'name'     : 'United States of America',
-      'shortname': 'us'
-    }).users().create({
-      'id'           : 1,
-      'email'        : 'taylorotwell@gmail.com',
-      'country_short': 'us'
-    }).posts().createMany([
-      {
-        'title': 'A title',
-        'body' : 'A body',
-        'email': 'taylorotwell@gmail.com'
-      }, {
-        'title': 'Another title',
-        'body' : 'Another body',
-        'email': 'taylorotwell@gmail.com'
-      }
-    ]);
-  });
-  it('seed data extended', () => {
-    var country = HasManyThroughTestCountry.create({
-      'id'       : 2,
-      'name'     : 'United Kingdom',
-      'shortname': 'uk'
-    });
-    country.users().create({
-      'id'           : 2,
-      'email'        : 'example1@gmail.com',
-      'country_short': 'uk'
-    }).posts().createMany([
-      {
-        'title': 'Example1 title1',
-        'body' : 'Example1 body1',
-        'email': 'example1post1@gmail.com'
-      }, {
-        'title': 'Example1 title2',
-        'body' : 'Example1 body2',
-        'email': 'example1post2@gmail.com'
-      }
-    ]);
-    country.users().create({
-      'id'           : 3,
-      'email'        : 'example2@gmail.com',
-      'country_short': 'uk'
-    }).posts().createMany([
-      {
-        'title': 'Example2 title1',
-        'body' : 'Example2 body1',
-        'email': 'example2post1@gmail.com'
-      }, {
-        'title': 'Example2 title2',
-        'body' : 'Example2 body2',
-        'email': 'example2post2@gmail.com'
-      }
-    ]);
-    country.users().create({
-      'id'           : 4,
-      'email'        : 'example3@gmail.com',
-      'country_short': 'uk'
-    }).posts().createMany([
-      {
-        'title': 'Example3 title1',
-        'body' : 'Example3 body1',
-        'email': 'example3post1@gmail.com'
-      }, {
-        'title': 'Example3 title2',
-        'body' : 'Example3 body2',
-        'email': 'example3post2@gmail.com'
-      }
-    ]);
-  });
-  it('seed default data', () => {
-    HasManyThroughDefaultTestCountry.create({
-      'id'  : 1,
-      'name': 'United States of America'
-    }).users().create({
-      'id'   : 1,
-      'email': 'taylorotwell@gmail.com'
-    }).posts().createMany([
-      {
-        'title': 'A title',
-        'body' : 'A body'
-      }, {
-        'title': 'Another title',
-        'body' : 'Another body'
-      }
-    ]);
-  });
-  it('reset default', () => {
-    this.schema().drop('users_default');
-    this.schema().drop('posts_default');
-    this.schema().drop('countries_default');
-  });
-  it('migrate default', () => {
-    this.schema().create('users_default', table => {
-      table.increments('id');
-      table.string('email').unique();
-      table.unsignedInteger('has_many_through_default_test_country_id');
-      table.timestamps();
-    });
-    this.schema().create('posts_default', table => {
-      table.increments('id');
-      table.integer('has_many_through_default_test_user_id');
-      table.string('title');
-      table.text('body');
-      table.timestamps();
-    });
-    this.schema().create('countries_default', table => {
-      table.increments('id');
-      table.string('name');
-      table.timestamps();
-    });
-  });
-  it('connection', () => {
-    return Eloquent.getConnectionResolver().connection();
-  });
-  it('schema', () => {
-    return this.connection().getSchemaBuilder();
-  });
+
 });
 
 /*Eloquent Models...*/
-export class HasManyThroughTestUser extends Eloquent {
-  protected table: any   = 'users';
-  protected guarded: any = [];
+export class HasManyThroughTestUser extends Model {
+  _table: any   = 'users';
+  _guarded: any = [];
 
-  public posts() {
-    return this.hasMany(HasManyThroughTestPost, 'user_id');
-  }
+  @HasManyColumn({
+    related   : HasManyThroughTestPost,
+    foreignKey: 'user_id'
+  })
+  public posts;
 }
 
 /*Eloquent Models...*/
-export class HasManyThroughTestPost extends Eloquent {
-  protected table: any   = 'posts';
-  protected guarded: any = [];
+export class HasManyThroughTestPost extends Model {
+  _table: any   = 'posts';
+  _guarded: any = [];
 
-  public owner() {
-    return this.belongsTo(HasManyThroughTestUser, 'user_id');
-  }
+  @BelongsToColumn({
+    related   : HasManyThroughTestUser,
+    foreignKey: 'user_id'
+  })
+  public owner;
 }
 
-export class HasManyThroughTestCountry extends Eloquent {
-  protected table: any   = 'countries';
-  protected guarded: any = [];
+export class HasManyThroughTestCountry extends Model {
+  _table: any   = 'countries';
+  _guarded: any = [];
 
-  public posts() {
-    return this.hasManyThrough(HasManyThroughTestPost, HasManyThroughTestUser, 'country_id', 'user_id');
-  }
+  @HasManyThroughColumn({
+    related  : HasManyThroughTestPost,
+    through  : HasManyThroughTestUser,
+    firstKey : 'country_id',
+    secondKey: 'user_id'
+  })
+  public posts;
 
-  public users() {
-    return this.hasMany(HasManyThroughTestUser, 'country_id');
-  }
+  @HasManyColumn({
+    related   : HasManyThroughTestUser,
+    foreignKey: 'country_id'
+  })
+  public users;
 }
 
 /*Eloquent Models...*/
-export class HasManyThroughDefaultTestUser extends Eloquent {
-  protected table: any   = 'users_default';
-  protected guarded: any = [];
+export class HasManyThroughDefaultTestUser extends Model {
+  _table: any   = 'users_default';
+  _guarded: any = [];
 
-  public posts() {
-    return this.hasMany(HasManyThroughDefaultTestPost);
-  }
+  @HasManyColumn({
+    related: HasManyThroughDefaultTestPost
+  })
+  public posts;
 }
 
 /*Eloquent Models...*/
-export class HasManyThroughDefaultTestPost extends Eloquent {
-  protected table: any   = 'posts_default';
-  protected guarded: any = [];
+export class HasManyThroughDefaultTestPost extends Model {
+  _table: any   = 'posts_default';
+  _guarded: any = [];
 
-  public owner() {
-    return this.belongsTo(HasManyThroughDefaultTestUser);
-  }
+  @BelongsToColumn({
+    related: HasManyThroughDefaultTestUser
+  })
+  public owner;
 }
 
-export class HasManyThroughDefaultTestCountry extends Eloquent {
-  protected table: any   = 'countries_default';
-  protected guarded: any = [];
+export class HasManyThroughDefaultTestCountry extends Model {
+  _table: any   = 'countries_default';
+  _guarded: any = [];
 
-  public posts() {
-    return this.hasManyThrough(HasManyThroughDefaultTestPost, HasManyThroughDefaultTestUser);
-  }
+  @HasManyThroughColumn({
+    related: HasManyThroughDefaultTestPost,
+    through: HasManyThroughDefaultTestUser
+  })
+  public posts;
 
-  public users() {
-    return this.hasMany(HasManyThroughDefaultTestUser);
-  }
+  @HasManyColumn({
+    related: HasManyThroughDefaultTestUser
+  })
+  public users;
 }
 
-export class HasManyThroughIntermediateTestCountry extends Eloquent {
-  protected table: any   = 'countries';
-  protected guarded: any = [];
+export class HasManyThroughIntermediateTestCountry extends Model {
+  _table: any   = 'countries';
+  _guarded: any = [];
 
   public posts() {
     return this.hasManyThrough(HasManyThroughTestPost, HasManyThroughTestUser, 'country_short', 'email', 'shortname',
@@ -479,9 +515,9 @@ export class HasManyThroughIntermediateTestCountry extends Eloquent {
   }
 }
 
-export class HasManyThroughSoftDeletesTestUser extends Eloquent {
-  protected table: any   = 'users';
-  protected guarded: any = [];
+export class HasManyThroughSoftDeletesTestUser extends Model {
+  _table: any   = 'users';
+  _guarded: any = [];
 
   public posts() {
     return this.hasMany(HasManyThroughSoftDeletesTestPost, 'user_id');
@@ -489,24 +525,32 @@ export class HasManyThroughSoftDeletesTestUser extends Eloquent {
 }
 
 /*Eloquent Models...*/
-export class HasManyThroughSoftDeletesTestPost extends Eloquent {
-  protected table: any   = 'posts';
-  protected guarded: any = [];
+export class HasManyThroughSoftDeletesTestPost extends Model {
+  _table: any   = 'posts';
+  _guarded: any = [];
 
-  public owner() {
-    return this.belongsTo(HasManyThroughSoftDeletesTestUser, 'user_id');
-  }
+  @BelongsToColumn({
+    related   : HasManyThroughSoftDeletesTestUser,
+    foreignKey: 'user_id'
+  })
+  public owner;
 }
 
-export class HasManyThroughSoftDeletesTestCountry extends Eloquent {
-  protected table: any   = 'countries';
-  protected guarded: any = [];
+export class HasManyThroughSoftDeletesTestCountry extends Model {
+  _table: any   = 'countries';
+  _guarded: any = [];
 
-  public posts() {
-    return this.hasManyThrough(HasManyThroughSoftDeletesTestPost, HasManyThroughTestUser, 'country_id', 'user_id');
-  }
+  @HasManyThroughColumn({
+    related  : HasManyThroughSoftDeletesTestPost,
+    through  : HasManyThroughTestUser,
+    firstKey : 'country_id',
+    secondKey: 'user_id',
+  })
+  public posts;
 
-  public users() {
-    return this.hasMany(HasManyThroughSoftDeletesTestUser, 'country_id');
-  }
+  @HasManyColumn({
+    related   : HasManyThroughSoftDeletesTestUser,
+    foreignKey: 'country_id'
+  })
+  public users;
 }

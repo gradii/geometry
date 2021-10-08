@@ -5,7 +5,6 @@ import { MorphMany } from 'Illuminate/Database/Eloquent/Relations/MorphMany';
 import { MorphOne } from 'Illuminate/Database/Eloquent/Relations/MorphOne';
 import { Relation } from 'Illuminate/Database/Eloquent/Relations/Relation';
 import { Mockery as m } from 'Mockery';
-import { TestCase } from 'PHPUnit/Framework/TestCase';
 
 describe('test database eloquent morph', () => {
   it('tear down', () => {

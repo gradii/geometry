@@ -430,7 +430,7 @@ public readonly ${relation};
     /*Get the "has relation" base query instance.*/
     _getRelationWithoutConstraints(relation: string): Relation {
       return Relation.noConstraints(() => {
-        return this.getModel().getRelationMethod(relation);
+        return this.getModel().newRelation(relation);
       });
     }
 

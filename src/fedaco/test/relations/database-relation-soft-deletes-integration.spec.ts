@@ -559,9 +559,9 @@ describe('test database eloquent soft deletes integration', () => {
 });
 
 /*Eloquent Models...*/
-export class TestUserWithoutSoftDelete extends Eloquent {
-  protected table: any   = 'users';
-  protected guarded: any = [];
+export class TestUserWithoutSoftDelete extends Model {
+  _table: any   = 'users';
+  _guarded: any = [];
 
   public posts() {
     return this.hasMany(SoftDeletesTestPost, 'user_id');
@@ -569,9 +569,9 @@ export class TestUserWithoutSoftDelete extends Eloquent {
 }
 
 /*Eloquent Models...*/
-export class SoftDeletesTestUser extends Eloquent {
-  protected table: any   = 'users';
-  protected guarded: any = [];
+export class SoftDeletesTestUser extends Model {
+  _table: any   = 'users';
+  _guarded: any = [];
 
   public posts() {
     return this.hasMany(SoftDeletesTestPost, 'user_id');
@@ -586,9 +586,9 @@ export class SoftDeletesTestUser extends Eloquent {
   }
 }
 
-export class SoftDeletesTestUserWithTrashedPosts extends Eloquent {
-  protected table: any   = 'users';
-  protected guarded: any = [];
+export class SoftDeletesTestUserWithTrashedPosts extends Model {
+  _table: any   = 'users';
+  _guarded: any = [];
 
   public posts() {
     return this.hasMany(SoftDeletesTestPost, 'user_id').withTrashed();
@@ -596,9 +596,9 @@ export class SoftDeletesTestUserWithTrashedPosts extends Eloquent {
 }
 
 /*Eloquent Models...*/
-export class SoftDeletesTestPost extends Eloquent {
-  protected table: any   = 'posts';
-  protected guarded: any = [];
+export class SoftDeletesTestPost extends Model {
+  _table: any   = 'posts';
+  _guarded: any = [];
 
   public comments() {
     return this.hasMany(SoftDeletesTestComment, 'post_id');
@@ -606,9 +606,9 @@ export class SoftDeletesTestPost extends Eloquent {
 }
 
 /*Eloquent Models...*/
-export class TestCommentWithoutSoftDelete extends Eloquent {
-  protected table: any   = 'comments';
-  protected guarded: any = [];
+export class TestCommentWithoutSoftDelete extends Model {
+  _table: any   = 'comments';
+  _guarded: any = [];
 
   public owner() {
     return this.morphTo();
@@ -616,18 +616,18 @@ export class TestCommentWithoutSoftDelete extends Eloquent {
 }
 
 /*Eloquent Models...*/
-export class SoftDeletesTestComment extends Eloquent {
-  protected table: any   = 'comments';
-  protected guarded: any = [];
+export class SoftDeletesTestComment extends Model {
+  _table: any   = 'comments';
+  _guarded: any = [];
 
   public owner() {
     return this.morphTo();
   }
 }
 
-export class SoftDeletesTestCommentWithTrashed extends Eloquent {
-  protected table: any   = 'comments';
-  protected guarded: any = [];
+export class SoftDeletesTestCommentWithTrashed extends Model {
+  _table: any   = 'comments';
+  _guarded: any = [];
 
   public owner() {
     return this.morphTo();
@@ -635,15 +635,15 @@ export class SoftDeletesTestCommentWithTrashed extends Eloquent {
 }
 
 /*Eloquent Models...*/
-export class SoftDeletesTestAddress extends Eloquent {
-  protected table: any   = 'addresses';
-  protected guarded: any = [];
+export class SoftDeletesTestAddress extends Model {
+  _table: any   = 'addresses';
+  _guarded: any = [];
 }
 
 /*Eloquent Models...*/
-export class SoftDeletesTestGroup extends Eloquent {
-  protected table: any   = 'groups';
-  protected guarded: any = [];
+export class SoftDeletesTestGroup extends Model {
+  _table: any   = 'groups';
+  _guarded: any = [];
 
   public users() {
     this.hasMany(SoftDeletesTestUser);

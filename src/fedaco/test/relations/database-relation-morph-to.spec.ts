@@ -1,11 +1,8 @@
-import { Builder } from 'Illuminate/Database/Eloquent/Builder';
-import { Model } from 'Illuminate/Database/Eloquent/Model';
-import { MorphTo } from 'Illuminate/Database/Eloquent/Relations/MorphTo';
+import { MorphToColumn } from '../../src/annotation/relation-column/morph-to.relation-column';
+import { Model } from '../../src/fedaco/model';
 
 describe('test database eloquent morph to', () => {
-  it('tear down', () => {
-    m.close();
-  });
+
   it('lookup dictionary is properly constructed', () => {
     var relation = this.getRelation();
     relation.addEagerConstraints([
@@ -120,13 +117,14 @@ describe('test database eloquent morph to', () => {
 
 export class EloquentMorphToModelStub extends Model {
   public foreign_key: any = 'foreign.value';
-  public table: any       = 'eloquent_morph_to_model_stubs';
+  _table: any       = 'eloquent_morph_to_model_stubs';
 
-  public relation() {
-    return this.morphTo();
-  }
+  @MorphToColumn({
+    morphTypeMap: {}
+  })
+  public relation;
 }
 
 export class EloquentMorphToRelatedStub extends Model {
-  public table: any = 'eloquent_morph_to_related_stubs';
+  _table: any = 'eloquent_morph_to_related_stubs';
 }

@@ -214,7 +214,7 @@ describe('test database eloquent relation', () => {
 });
 
 export class EloquentRelationResetModelStub extends Model {
-  protected table: any = 'reset';
+  _table: any = 'reset';
 
   public getQuery() {
     return this.newQuery().getQuery();
@@ -239,7 +239,7 @@ export class EloquentRelationStub extends Relation {
 }
 
 export class EloquentNoTouchingModelStub extends Model {
-  protected table: any      = 'table';
+  _table: any      = 'table';
   protected attributes: any = {
     'id': 1
   };
@@ -249,7 +249,7 @@ export class EloquentNoTouchingChildModelStub extends EloquentNoTouchingModelStu
 }
 
 export class EloquentNoTouchingAnotherModelStub extends Model {
-  protected table: any      = 'another_table';
+  _table: any      = 'another_table';
   protected attributes: any = {
     'id': 2
   };

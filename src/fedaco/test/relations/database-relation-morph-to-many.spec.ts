@@ -1,14 +1,7 @@
-import { Builder } from 'Illuminate/Database/Eloquent/Builder';
-import { Model } from 'Illuminate/Database/Eloquent/Model';
-import { MorphToMany } from 'Illuminate/Database/Eloquent/Relations/MorphToMany';
-import { Mockery as m } from 'Mockery';
-import { TestCase } from 'PHPUnit/Framework/TestCase';
-import { stdClass } from 'stdClass';
+import { Model } from '../../src/fedaco/model';
+
 
 describe('test database eloquent morph to many', () => {
-  it('tear down', () => {
-    m.close();
-  });
   it('eager constraints are properly added', () => {
     var relation = this.getRelation();
     relation.getParent().shouldReceive('getKeyName').andReturn('id');
@@ -95,5 +88,5 @@ describe('test database eloquent morph to many', () => {
 });
 
 export class EloquentMorphToManyModelStub extends Model {
-  protected guarded: any = [];
+  _guarded: any = [];
 }

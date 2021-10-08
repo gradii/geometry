@@ -1,6 +1,6 @@
 import { SchemaBuilder } from '../../src/schema/schema-builder';
 import { Model } from '../../src/fedaco/model';
-import { DatabaseConfig } from '../../src/databaseConfig';
+import { DatabaseConfig } from '../../src/database-config';
 import { MorphedByManyColumn } from '../../src/annotation/relation-column/morphed-by-many.relation-column';
 import { MorphToManyColumn } from '../../src/annotation/relation-column/morph-to-many.relation-column';
 import { BelongsToManyColumn } from '../../src/annotation/relation-column/belongs-to-many.relation-column';
@@ -78,7 +78,7 @@ describe('test database eloquent irregular plural', () => {
     const human    = await IrregularPluralHuman.createQuery().first();
     const tokenIds = await IrregularPluralToken.createQuery().pluck('id');
     // Carbon.setTestNow('2018-05-01 15:16:17');
-    await human.getRelationMethod('irregularPluralTokens').sync(tokenIds);
+    await human.newRelation('irregularPluralTokens').sync(tokenIds);
     await human.refresh();
     expect(/*cast type string*/ human.created_at).toBe('2018-05-01 12:13:14');
     expect(/*cast type string*/ human.updated_at).toBe('2018-05-01 15:16:17');
@@ -88,7 +88,7 @@ describe('test database eloquent irregular plural', () => {
     const human = await IrregularPluralHuman.createQuery().create({
       'email': 'bobby@example.com'
     });
-    await human.getRelationMethod('mottoes').create({
+    await human.newRelation('mottoes').create({
       'name': 'Real eyes realize real lies'
     });
     const motto = await IrregularPluralMotto.createQuery().first();

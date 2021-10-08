@@ -52,7 +52,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   /*Any pivot table restrictions for whereNull clauses.*/
   _pivotWhereNulls: any[] = [];
   /*The default values for the pivot columns.*/
-  _pivotValues: any[] = [];
+  _pivotValues: { column: string, value: any }[] = [];
   /*Indicates if timestamps are available on the pivot table.*/
   _withTimestamps = false;
   /*The custom pivot table column for the created_at timestamp.*/
@@ -252,7 +252,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
     if (isBlank(value)) {
       throw new Error('InvalidArgumentException The provided value may not be null.');
     }
-    this._pivotValues.push([column, value]);
+    this._pivotValues.push({column, value});
     return this.wherePivot(column, '=', value);
   }
 

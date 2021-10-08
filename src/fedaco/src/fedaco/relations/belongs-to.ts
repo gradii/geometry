@@ -68,7 +68,7 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
   }
 
   /*Set the constraints for an eager load of the relation.*/
-  public addEagerConstraints(this: Model & this, models: any[]) {
+  public addEagerConstraints(models: any[]) {
     const key     = `${this._related.getTable()}.${this._ownerKey}`;
     const whereIn = this.whereInMethod(this._related, this._ownerKey);
     this._query[whereIn](key, this.getEagerModelKeys(models));
@@ -83,7 +83,7 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
         keys.push(value);
       }
     }
-    keys.sort();
+    // keys.sort();
     return uniq(keys);
   }
 

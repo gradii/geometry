@@ -362,7 +362,7 @@ describe('test database eloquent integration', () => {
       'id'   : 4,
       'email': 'foo@gmail.com'
     });
-    const friendsRelation = user1.getRelationMethod('friends') as BelongsToMany;
+    const friendsRelation = user1.newRelation('friends') as BelongsToMany;
     await friendsRelation.create({
       'id'   : 5,
       'email': 'friend@gmail.com'
@@ -608,11 +608,11 @@ describe('test database eloquent integration', () => {
       'id'   : 2,
       'email': 'abigailotwell@gmail.com'
     });
-    await (user2.getRelationMethod('posts') as HasMany).create({
+    await (user2.newRelation('posts') as HasMany).create({
       'id'  : 1,
       'name': 'First post'
     });
-    await (user1.getRelationMethod('posts') as HasMany).create({
+    await (user1.newRelation('posts') as HasMany).create({
       'id'  : 2,
       'name': 'Second post'
     });
@@ -703,7 +703,7 @@ describe('test database eloquent integration', () => {
     let user = await EloquentTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    await user.getRelationMethod('post').create({
+    await user.newRelation('post').create({
       'name': 'First Post'
     });
     const post = await user.post;
@@ -720,7 +720,7 @@ describe('test database eloquent integration', () => {
     const user = await EloquentTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    await user.getRelationMethod('post').create({
+    await user.newRelation('post').create({
       'name': 'First Post'
     });
     expect((await user.post).name).not.toBeUndefined();
@@ -730,14 +730,14 @@ describe('test database eloquent integration', () => {
     const user = await EloquentTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    await (user.getRelationMethod('posts') as HasMany).create({
+    await (user.newRelation('posts') as HasMany).create({
       'name': 'First Post'
     });
-    await user.getRelationMethod('posts').create({
+    await user.newRelation('posts').create({
       'name': 'Second Post'
     });
     const posts = await user.posts;
-    const post2 = await user.getRelationMethod('posts').where('name', 'Second Post').first();
+    const post2 = await user.newRelation('posts').where('name', 'Second Post').first();
     expect(isArray(posts)).toBeTruthy();
     expect(posts.length).toBe(2);
     expect(posts[0]).toBeInstanceOf(EloquentTestPost);
@@ -772,7 +772,7 @@ describe('test database eloquent integration', () => {
     const user = await EloquentTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    await user.getRelationMethod('friends').create({
+    await user.newRelation('friends').create({
       'email': 'abigailotwell@gmail.com'
     });
     expect((await user.friends)[0].id !== undefined).toBeTruthy();
@@ -785,7 +785,7 @@ describe('test database eloquent integration', () => {
     const user = await EloquentTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    await user.getRelationMethod('friends').create({
+    await user.newRelation('friends').create({
       'email': 'abigailotwell@gmail.com'
     });
     const results: EloquentTestUser[] = await EloquentTestUser.createQuery()
@@ -800,10 +800,10 @@ describe('test database eloquent integration', () => {
     const user   = await EloquentTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    const friend = await user.getRelationMethod('friends').create({
+    const friend = await user.newRelation('friends').create({
       'email': 'abigailotwell@gmail.com'
     });
-    await friend.getRelationMethod('friends').create({
+    await friend.newRelation('friends').create({
       'email': 'foo@gmail.com'
     });
     const results = await EloquentTestUser.createQuery().has('friends.friends').get();
@@ -815,10 +815,10 @@ describe('test database eloquent integration', () => {
     const user   = await EloquentTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    const friend = await user.getRelationMethod('friends').create({
+    const friend = await user.newRelation('friends').create({
       'email': 'abigailotwell@gmail.com'
     });
-    await friend.getRelationMethod('friends').create({
+    await friend.newRelation('friends').create({
       'email': 'foo@gmail.com'
     });
     const results: EloquentTestUser[] = await EloquentTestUser.createQuery()
@@ -834,7 +834,7 @@ describe('test database eloquent integration', () => {
       id     : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    await user.getRelationMethod('friends').create({
+    await user.newRelation('friends').create({
       id     : 2,
       'email': 'abigailotwell@gmail.com'
     });
@@ -848,11 +848,11 @@ describe('test database eloquent integration', () => {
       id     : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    const friend = await user.getRelationMethod('friends').create({
+    const friend = await user.newRelation('friends').create({
       id     : 2,
       'email': 'abigailotwell@gmail.com'
     });
-    await friend.getRelationMethod('friends').create({
+    await friend.newRelation('friends').create({
       id     : 3,
       'email': 'foo@gmail.com'
     });
@@ -1046,10 +1046,10 @@ describe('test database eloquent integration', () => {
       'email': 'taylorotwell@gmail.com'
     });
     await (
-      await user.getRelationMethod('posts').create({
+      await user.newRelation('posts').create({
         'name': 'Post 2'
       })
-    ).getRelationMethod('photos').create({
+    ).newRelation('photos').create({
       'name': 'photo.jpg'
     });
     const query                   = await EloquentTestUser.createQuery().has('postWithPhotos');
@@ -1070,11 +1070,11 @@ describe('test database eloquent integration', () => {
     const user                    = await EloquentTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    const friend                  = await user.getRelationMethod('friends').create({
+    const friend                  = await user.newRelation('friends').create({
       'email': 'abigailotwell@gmail.com'
     });
     const user1: EloquentTestUser = await EloquentTestUser.createQuery().first();
-    await user1.getRelationMethod('friends')
+    await user1.newRelation('friends')
       .chunk(2)
       .pipe(
         tap(({results: friends}) => {
@@ -1090,10 +1090,10 @@ describe('test database eloquent integration', () => {
     const user   = await EloquentTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    const friend = await user.getRelationMethod('friends').create({
+    const friend = await user.newRelation('friends').create({
       'email': 'abigailotwell@gmail.com'
     });
-    await (await EloquentTestUser.createQuery().first()).getRelationMethod('friends')
+    await (await EloquentTestUser.createQuery().first()).newRelation('friends')
       .each()
       .pipe(
         tap(({item: result, index}) => {
@@ -1108,10 +1108,10 @@ describe('test database eloquent integration', () => {
     const user   = await EloquentTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    const friend = await user.getRelationMethod('friends').create({
+    const friend = await user.newRelation('friends').create({
       'email': 'abigailotwell@gmail.com'
     });
-    for (const result of await (await EloquentTestUser.createQuery().first()).getRelationMethod(
+    for (const result of await (await EloquentTestUser.createQuery().first()).newRelation(
       'friends').get()) {
       expect(result.email).toBe('abigailotwell@gmail.com');
       expect(result.getRelation('pivot').getAttribute('user_id')).toEqual(user.id);
@@ -1124,7 +1124,7 @@ describe('test database eloquent integration', () => {
     let user: EloquentTestUser = await EloquentTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    await user.getRelationMethod('posts').create({
+    await user.newRelation('posts').create({
       'name': 'First Post'
     });
     user = await EloquentTestUser.createQuery()
@@ -1143,10 +1143,10 @@ describe('test database eloquent integration', () => {
       'email': 'taylorotwell@gmail.com'
     });
     // @ts-ignore
-    const post: EloquentTestPost = await user.getRelationMethod('posts').create({
+    const post: EloquentTestPost = await user.newRelation('posts').create({
       'name': 'First Post'
     });
-    await post.getRelationMethod('childPosts').create({
+    await post.newRelation('childPosts').create({
       'name'   : 'Child Post',
       'user_id': user.id
     });
@@ -1169,19 +1169,19 @@ describe('test database eloquent integration', () => {
     const user = await EloquentTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    await user.getRelationMethod('photos').create({
+    await user.newRelation('photos').create({
       'name': 'Avatar 1'
     });
-    await user.getRelationMethod('photos').create({
+    await user.newRelation('photos').create({
       'name': 'Avatar 2'
     });
-    const post = await user.getRelationMethod('posts').create({
+    const post = await user.newRelation('posts').create({
       'name': 'First Post'
     });
-    await post.getRelationMethod('photos').create({
+    await post.newRelation('photos').create({
       'name': 'Hero 1'
     });
-    await post.getRelationMethod('photos').create({
+    await post.newRelation('photos').create({
       'name': 'Hero 2'
     });
 
@@ -1215,19 +1215,19 @@ describe('test database eloquent integration', () => {
     const user = await EloquentTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    await user.getRelationMethod('photos').create({
+    await user.newRelation('photos').create({
       'name': 'Avatar 1'
     });
-    await user.getRelationMethod('photos').create({
+    await user.newRelation('photos').create({
       'name': 'Avatar 2'
     });
-    const post = await user.getRelationMethod('posts').create({
+    const post = await user.newRelation('posts').create({
       'name': 'First Post'
     });
-    await post.getRelationMethod('photos').create({
+    await post.newRelation('photos').create({
       'name': 'Hero 1'
     });
-    await post.getRelationMethod('photos').create({
+    await post.newRelation('photos').create({
       'name': 'Hero 2'
     });
     expect(isArray(await user.photos)).toBeTruthy();
@@ -1254,7 +1254,7 @@ describe('test database eloquent integration', () => {
     const user = await EloquentTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    await user.getRelationMethod('photos').create({
+    await user.newRelation('photos').create({
       'name': 'Avatar 1'
     });
     const photo = await EloquentTestPhoto.createQuery().first();
@@ -1487,7 +1487,7 @@ describe('test database eloquent integration', () => {
     const user = await EloquentTestUserWithGlobalScope.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    await user.getRelationMethod('posts').create({
+    await user.newRelation('posts').create({
       'name': 'My Post'
     });
     const result: EloquentTestUserWithGlobalScope = await EloquentTestUserWithGlobalScope.createQuery().first();
@@ -1630,13 +1630,13 @@ describe('test database eloquent integration', () => {
       'id'   : 3,
       'level': 'bff'
     });
-    await john.getRelationMethod('friends').attach(jane, {
+    await john.newRelation('friends').attach(jane, {
       'friend_level_id': 1
     });
-    await john.getRelationMethod('friends').attach(jack, {
+    await john.newRelation('friends').attach(jack, {
       'friend_level_id': 2
     });
-    await john.getRelationMethod('friends').attach(jule, {
+    await john.newRelation('friends').attach(jule, {
       'friend_level_id': 3
     });
 

@@ -5,12 +5,9 @@ import { HasOne } from 'Illuminate/Database/Eloquent/Relations/HasOne';
 import { Builder as BaseBuilder } from 'Illuminate/Database/Query/Builder';
 import { Expression } from 'Illuminate/Database/Query/Expression';
 import { Mockery as m } from 'Mockery';
-import { TestCase } from 'PHPUnit/Framework/TestCase';
 
 describe('test database eloquent has one', () => {
-  it('tear down', () => {
-    m.close();
-  });
+
   it('has one with default', () => {
     var relation = this.getRelation().withDefault();
     this.builder.shouldReceive('first').once().andReturnNull();

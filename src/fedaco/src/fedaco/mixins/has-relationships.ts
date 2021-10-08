@@ -168,7 +168,7 @@ export interface HasRelationships {
   /*Create a new model instance for a related model.*/
   _newRelatedInstance(this: Model & this, clazz: typeof Model);
 
-  getRelationMethod<T extends BelongsTo & BelongsToMany & HasMany & HasManyThrough &
+  newRelation<T extends BelongsTo & BelongsToMany & HasMany & HasManyThrough &
     HasOne & HasOneOrMany & HasOneThrough & MorphMany & MorphOne & MorphOneOrMany & MorphPivot &
     MorphTo & MorphToMany, K extends keyof this>(relation: K): T;
 
@@ -557,7 +557,7 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
     /*Touch the owning relations of the model.*/
     public async touchOwners(this: Model & _Self) {
       for (const relation of this.getTouchedRelations()) {
-        await this.getRelationMethod(relation).touch();
+        await this.newRelation(relation).touch();
         if (this[relation] instanceof this.constructor) {
           this[relation].fireModelEvent('saved', false);
           await this[relation].touchOwners();
@@ -603,7 +603,7 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
       }, new clazz());
     }
 
-    getRelationMethod(this: Model & _Self, relation: string): Relation {
+    newRelation(this: Model & _Self, relation: string): Relation {
       const metadata = this.isRelation(relation);
       if (metadata) {
         return metadata._getRelation(this, relation);

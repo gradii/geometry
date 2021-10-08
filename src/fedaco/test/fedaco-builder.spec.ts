@@ -83,6 +83,10 @@ describe('fedaco builder', () => {
     table(table: Function | QueryBuilder | string, as?: string): QueryBuilder {
       return undefined;
     }
+
+    insertGetId(sql: string, bindings: any[], sequence?: string): Promise<any> | boolean {
+      return undefined;
+    }
   }
 
   function resolveModel(model: Model) {
@@ -786,7 +790,7 @@ describe('fedaco builder', () => {
       }
     };
 
-    spy1 = jest.spyOn(model.constructor.prototype, 'getRelationMethod').mockReturnValue(relation);
+    spy1 = jest.spyOn(model.constructor.prototype, 'newRelation').mockReturnValue(relation);
     // @ts-ignore
     spy2 = jest.spyOn(builder, 'relationsNestedUnder');
     spy3 = jest.spyOn(relation, 'getQuery').mockReturnValue({
@@ -824,7 +828,7 @@ describe('fedaco builder', () => {
       }
     };
 
-    spy1 = jest.spyOn(model.constructor.prototype, 'getRelationMethod').mockReturnValue(relation);
+    spy1 = jest.spyOn(model.constructor.prototype, 'newRelation').mockReturnValue(relation);
     // @ts-ignore
     spy2 = jest.spyOn(builder, 'relationsNestedUnder');
     spy3 = jest.spyOn(relation, 'getQuery').mockReturnValue(groupQuery);

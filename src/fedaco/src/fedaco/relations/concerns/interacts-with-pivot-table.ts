@@ -7,7 +7,7 @@
 import { isArray, isBlank } from '@gradii/check-type';
 import { difference, intersection, pluck } from 'ramda';
 import { Collection } from '../../../define/collection';
-import { mapWithKeys } from '../../../helper/arr';
+import { mapWithKeys, wrap } from '../../../helper/arr';
 import { Constructor } from '../../../helper/constructor';
 import { QueryBuilder } from '../../../query-builder/query-builder';
 import { BaseModel } from '../../base-model';
@@ -241,8 +241,10 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     /*Update an existing pivot record on the table via a custom class.*/
     _updateExistingPivotUsingCustomClass(this: BelongsToMany & _Self, id: any, attributes: any[],
                                          touch: boolean) {
-      const pivot   = this._getCurrentlyAttachedPivots().where(this._foreignPivotKey,
-        this._parent[this._parentKey]).where(this._relatedPivotKey, this._parseId(id)).first();
+      const pivot   = this._getCurrentlyAttachedPivots()
+        .where(this._foreignPivotKey, this._parent.getAttribute(this._parentKey))
+        .where(this._relatedPivotKey, this._parseId(id))
+        .first();
       const updated = pivot ? pivot.fill(attributes).isDirty() : false;
       if (updated) {
         pivot.save();
@@ -257,7 +259,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     public async attach(this: BelongsToMany & _Self,
                         id: any,
                         attributes: any = {},
-                        touch             = true) {
+                        touch           = true) {
       if (this._using) {
         await this._attachUsingCustomClass(id, attributes);
       } else {
@@ -307,7 +309,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     _baseAttachRecord(this: BelongsToMany & _Self, id: number, timed: boolean) {
       let record: Record<string, any> = {};
       record[this._relatedPivotKey]   = id;
-      record[this._foreignPivotKey]   = this._parent[this._parentKey];
+      record[this._foreignPivotKey]   = this._parent.getAttribute(this._parentKey);
       if (timed) {
         record = this._addTimestampsToAttachment(record);
       }
@@ -371,7 +373,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
       let results = 0;
       for (const id of this._parseIds(ids)) {
         results += this.newPivot({
-          [this._foreignPivotKey]: this._parent[this._parentKey],
+          [this._foreignPivotKey]: this._parent.getAttribute(this._parentKey),
           [this._relatedPivotKey]: id,
         }, true).delete();
       }
@@ -423,7 +425,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
       for (const args of this._pivotWhereNulls) {
         query.whereNull(...args);
       }
-      return query.where(this.getQualifiedForeignPivotKeyName(), this._parent[this._parentKey]);
+      return query.where(this.getQualifiedForeignPivotKeyName(), this._parent.getAttribute(this._parentKey));
     }
 
     /*Set the columns on the pivot table to retrieve.*/
@@ -440,7 +442,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
         return [value.getAttribute(this._relatedKey)];
       }
       if (isArray(value)) {
-        return value.map(it=>it.getAttribute(this._relatedKey));
+        return value.map(it => it.getAttribute(this._relatedKey));
       }
       // if (value instanceof Collection) {
       //   return value.pluck(this.relatedKey).all();
@@ -448,12 +450,12 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
       // if (value instanceof BaseCollection) {
       //   return value.toArray();
       // }
-      return /*cast type array*/ value;
+      return /*cast type array*/ wrap(value);
     }
 
     /*Get the ID from the given mixed value.*/
     _parseId(this: BelongsToMany & _Self, value: any) {
-      return value as Model instanceof BaseModel ? value[this._relatedKey] : value;
+      return value as Model instanceof BaseModel ? value.getAttribute(this._relatedKey) : value;
     }
 
     /*Cast the given keys to integers if they are numeric and string otherwise.*/

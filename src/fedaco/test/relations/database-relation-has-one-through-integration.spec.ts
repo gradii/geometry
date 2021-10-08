@@ -1,8 +1,6 @@
 import { Manager as DB } from 'Illuminate/Database/Capsule/Manager';
 import { Model as Eloquent } from 'Illuminate/Database/Eloquent/Model';
 import { ModelNotFoundException } from 'Illuminate/Database/Eloquent/ModelNotFoundException';
-import { SoftDeletes } from 'Illuminate/Database/Eloquent/SoftDeletes';
-import { TestCase } from 'PHPUnit/Framework/TestCase';
 
 describe('test database eloquent has one through integration', () => {
   it('set up', () => {
@@ -236,9 +234,9 @@ describe('test database eloquent has one through integration', () => {
 });
 
 /*Eloquent Models...*/
-export class HasOneThroughTestUser extends Eloquent {
-  protected table: any   = 'users';
-  protected guarded: any = [];
+export class HasOneThroughTestUser extends Model {
+  _table: any   = 'users';
+  _guarded: any = [];
 
   public contract() {
     return this.hasOne(HasOneThroughTestContract, 'user_id');
@@ -246,18 +244,18 @@ export class HasOneThroughTestUser extends Eloquent {
 }
 
 /*Eloquent Models...*/
-export class HasOneThroughTestContract extends Eloquent {
-  protected table: any   = 'contracts';
-  protected guarded: any = [];
+export class HasOneThroughTestContract extends Model {
+  _table: any   = 'contracts';
+  _guarded: any = [];
 
   public owner() {
     return this.belongsTo(HasOneThroughTestUser, 'user_id');
   }
 }
 
-export class HasOneThroughTestPosition extends Eloquent {
-  protected table: any   = 'positions';
-  protected guarded: any = [];
+export class HasOneThroughTestPosition extends Model {
+  _table: any   = 'positions';
+  _guarded: any = [];
 
   public contract() {
     return this.hasOneThrough(HasOneThroughTestContract, HasOneThroughTestUser, 'position_id', 'user_id');
@@ -269,9 +267,9 @@ export class HasOneThroughTestPosition extends Eloquent {
 }
 
 /*Eloquent Models...*/
-export class HasOneThroughDefaultTestUser extends Eloquent {
-  protected table: any   = 'users_default';
-  protected guarded: any = [];
+export class HasOneThroughDefaultTestUser extends Model {
+  _table: any   = 'users_default';
+  _guarded: any = [];
 
   public contract() {
     return this.hasOne(HasOneThroughDefaultTestContract);
@@ -279,18 +277,18 @@ export class HasOneThroughDefaultTestUser extends Eloquent {
 }
 
 /*Eloquent Models...*/
-export class HasOneThroughDefaultTestContract extends Eloquent {
-  protected table: any   = 'contracts_default';
-  protected guarded: any = [];
+export class HasOneThroughDefaultTestContract extends Model {
+  _table: any   = 'contracts_default';
+  _guarded: any = [];
 
   public owner() {
     return this.belongsTo(HasOneThroughDefaultTestUser);
   }
 }
 
-export class HasOneThroughDefaultTestPosition extends Eloquent {
-  protected table: any   = 'positions_default';
-  protected guarded: any = [];
+export class HasOneThroughDefaultTestPosition extends Model {
+  _table: any   = 'positions_default';
+  _guarded: any = [];
 
   public contract() {
     return this.hasOneThrough(HasOneThroughDefaultTestContract, HasOneThroughDefaultTestUser);
@@ -301,9 +299,9 @@ export class HasOneThroughDefaultTestPosition extends Eloquent {
   }
 }
 
-export class HasOneThroughIntermediateTestPosition extends Eloquent {
-  protected table: any   = 'positions';
-  protected guarded: any = [];
+export class HasOneThroughIntermediateTestPosition extends Model {
+  _table: any   = 'positions';
+  _guarded: any = [];
 
   public contract() {
     return this.hasOneThrough(HasOneThroughTestContract, HasOneThroughTestUser, 'position_short', 'email', 'shortname',
@@ -315,9 +313,9 @@ export class HasOneThroughIntermediateTestPosition extends Eloquent {
   }
 }
 
-export class HasOneThroughSoftDeletesTestUser extends Eloquent {
-  protected table: any   = 'users';
-  protected guarded: any = [];
+export class HasOneThroughSoftDeletesTestUser extends Model {
+  _table: any   = 'users';
+  _guarded: any = [];
 
   public contract() {
     return this.hasOne(HasOneThroughSoftDeletesTestContract, 'user_id');
@@ -325,18 +323,18 @@ export class HasOneThroughSoftDeletesTestUser extends Eloquent {
 }
 
 /*Eloquent Models...*/
-export class HasOneThroughSoftDeletesTestContract extends Eloquent {
-  protected table: any   = 'contracts';
-  protected guarded: any = [];
+export class HasOneThroughSoftDeletesTestContract extends Model {
+  _table: any   = 'contracts';
+  _guarded: any = [];
 
   public owner() {
     return this.belongsTo(HasOneThroughSoftDeletesTestUser, 'user_id');
   }
 }
 
-export class HasOneThroughSoftDeletesTestPosition extends Eloquent {
-  protected table: any   = 'positions';
-  protected guarded: any = [];
+export class HasOneThroughSoftDeletesTestPosition extends Model {
+  _table: any   = 'positions';
+  _guarded: any = [];
 
   public contract() {
     return this.hasOneThrough(HasOneThroughSoftDeletesTestContract, HasOneThroughTestUser, 'position_id', 'user_id');

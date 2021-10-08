@@ -1,8 +1,10 @@
+import { head } from 'ramda';
+import { tap } from 'rxjs/operators';
 import { BelongsToManyColumn } from '../../src/annotation/relation-column/belongs-to-many.relation-column';
 import { Model } from '../../src/fedaco/model';
 import { forwardRef } from '../../src/query-builder/forward-ref';
 import { SchemaBuilder } from '../../src/schema/schema-builder';
-import { DatabaseConfig } from '../../src/databaseConfig';
+import { DatabaseConfig } from '../../src/database-config';
 
 function connection(connectionName = 'default') {
   return Model.getConnectionResolver().connection(connectionName);
@@ -14,20 +16,20 @@ function schema(connectionName = 'default'): SchemaBuilder {
 
 jest.setTimeout(100000);
 
-function createSchema() {
-  schema().create('users', table => {
+async function createSchema() {
+  await schema().create('users', table => {
     table.increments('id');
-    table.string('email').unique();
+    table.string('email').withUnique();
   });
-  schema().create('articles', table => {
+  await schema().create('articles', table => {
     table.increments('aid');
     table.string('title');
   });
-  schema().create('article_user', table => {
-    table.integer('article_id').unsigned();
-    table.foreign('article_id').references('aid').on('articles');
-    table.integer('user_id').unsigned();
-    table.foreign('user_id').references('id').on('users');
+  await schema().create('article_user', table => {
+    table.integer('article_id').withUnsigned();
+    table.foreign('article_id').withReferences('aid').withOn('articles');
+    table.integer('user_id').withUnsigned();
+    table.foreign('user_id').withReferences('id').withOn('users');
   });
 }
 
@@ -48,11 +50,11 @@ async function seedData() {
       'title': 'Another title'
     }
   ]);
-  user.articles().sync([3, 1, 2]);
+  await user.newRelation('articles').sync([3, 1, 2]);
 }
 
 describe('test database eloquent belongs to many chunk by id', () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     const db = new DatabaseConfig();
     db.addConnection({
       'driver'  : 'sqlite',
@@ -60,31 +62,33 @@ describe('test database eloquent belongs to many chunk by id', () => {
     });
     db.bootEloquent();
     db.setAsGlobal();
-    createSchema();
+    await createSchema();
   });
 
-  afterAll(() => {
-    schema().drop('users');
-    schema().drop('articles');
-    schema().drop('article_user');
+  afterAll(async () => {
+    await schema().drop('users');
+    await schema().drop('articles');
+    await schema().drop('article_user');
   });
 
   it('belongs to chunk by id', async () => {
-
-    const user = await BelongsToManyChunkByIdTestTestUser.createQuery().first();
-    let i      = 0;
-    user.getRelationMethod('articles').chunkById(1, collection => {
-      i++;
-      expect(collection.first().aid).toBe(i);
-    });
+    await seedData();
+    const user: BelongsToManyChunkByIdTestTestUser = await BelongsToManyChunkByIdTestTestUser.createQuery().first();
+    let i                                          = 0;
+    await user.newRelation('articles').chunkById(1).pipe(
+      tap(({results: collection}: {results: any[]}) => {
+        i++;
+        expect(head(collection).aid).toBe(i);
+      })
+    ).toPromise();
     expect(i).toEqual(3);
   });
 });
 
 export class BelongsToManyChunkByIdTestTestUser extends Model {
-  protected table: any    = 'users';
-  protected fillable: any = ['id', 'email'];
-  public timestamps: any  = false;
+  _table: any            = 'users';
+  _fillable: any         = ['id', 'email'];
+  public timestamps: any = false;
 
   @BelongsToManyColumn({
     related        : forwardRef(() => BelongsToManyChunkByIdTestTestArticle),

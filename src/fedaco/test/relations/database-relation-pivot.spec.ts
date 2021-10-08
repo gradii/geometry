@@ -1,8 +1,6 @@
-import { Model } from 'Illuminate/Database/Eloquent/Model';
-import { Pivot } from 'Illuminate/Database/Eloquent/Relations/Pivot';
-import { Mockery as m } from 'Mockery';
-import { TestCase } from 'PHPUnit/Framework/TestCase';
-import { stdClass } from 'stdClass';
+import { Model } from '../../src/fedaco/model';
+import { Pivot } from '../../src/fedaco/relations/pivot';
+
 
 describe('test database eloquent pivot', () => {
   it('tear down', () => {

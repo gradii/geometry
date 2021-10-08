@@ -6,7 +6,7 @@
 
 import { Connection } from './connection';
 import { ConnectionFactory } from './connector/connection-factory';
-import { DatabaseConfig } from './databaseConfig';
+import { DatabaseConfig } from './database-config';
 import { ConnectionResolverInterface } from './interface/connection-resolver-interface';
 import { ConnectionInterface } from './query-builder/connection-interface';
 import { MysqlQueryGrammar } from './query-builder/grammar/mysql-query-grammar';

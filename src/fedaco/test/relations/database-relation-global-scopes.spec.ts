@@ -1,49 +1,46 @@
-import { Manager as DB } from 'Illuminate/Database/Capsule/Manager';
-import { Builder } from 'Illuminate/Database/Eloquent/Builder';
-import { Model } from 'Illuminate/Database/Eloquent/Model';
-import { Scope } from 'Illuminate/Database/Eloquent/Scope';
-import { Mockery as m } from 'Mockery';
-import { TestCase } from 'PHPUnit/Framework/TestCase';
+import { Scope } from '../../src/fedaco/scope';
+import { DatabaseConfig } from '../../src/database-config';
+import { Model } from '../../src/fedaco/model';
 
 describe('test database eloquent global scopes', () => {
-  it('set up', () => {
-    super.setUp();
-    tap(new DB()).addConnection({
+  beforeEach(() => {
+    const db = new DatabaseConfig();
+    db.addConnection({
       'driver'  : 'sqlite',
       'database': ':memory:'
-    }).bootEloquent();
+    });
+    db.bootEloquent();
   });
-  it('tear down', () => {
-    m.close();
+  afterAll(() => {
     Model.unsetConnectionResolver();
   });
   it('global scope is applied', () => {
-    var model = new EloquentGlobalScopesTestModel();
-    var query = model.newQuery();
+    const model = new EloquentGlobalScopesTestModel();
+    const query = model.newQuery();
     expect(query.toSql()).toBe('select * from "table" where "active" = ?');
     expect(query.getBindings()).toEqual([1]);
   });
   it('global scope can be removed', () => {
-    var model = new EloquentGlobalScopesTestModel();
-    var query = model.newQuery().withoutGlobalScope(ActiveScope);
+    const model = new EloquentGlobalScopesTestModel();
+    const query = model.newQuery().withoutGlobalScope(ActiveScope);
     expect(query.toSql()).toBe('select * from "table"');
     expect(query.getBindings()).toEqual([]);
   });
   it('closure global scope is applied', () => {
-    var model = new EloquentClosureGlobalScopesTestModel();
-    var query = model.newQuery();
+    const model = new EloquentClosureGlobalScopesTestModel();
+    const query = model.newQuery();
     expect(query.toSql()).toBe('select * from "table" where "active" = ? order by "name" asc');
     expect(query.getBindings()).toEqual([1]);
   });
   it('closure global scope can be removed', () => {
-    var model = new EloquentClosureGlobalScopesTestModel();
-    var query = model.newQuery().withoutGlobalScope('active_scope');
+    const model = new EloquentClosureGlobalScopesTestModel();
+    const query = model.newQuery().withoutGlobalScope('active_scope');
     expect(query.toSql()).toBe('select * from "table" order by "name" asc');
     expect(query.getBindings()).toEqual([]);
   });
   it('global scope can be removed after the query is executed', () => {
-    var model = new EloquentClosureGlobalScopesTestModel();
-    var query = model.newQuery();
+    const model = new EloquentClosureGlobalScopesTestModel();
+    const query = model.newQuery();
     expect(query.toSql()).toBe('select * from "table" where "active" = ? order by "name" asc');
     expect(query.getBindings()).toEqual([1]);
     query.withoutGlobalScope('active_scope');
@@ -51,50 +48,50 @@ describe('test database eloquent global scopes', () => {
     expect(query.getBindings()).toEqual([]);
   });
   it('all global scopes can be removed', () => {
-    var model = new EloquentClosureGlobalScopesTestModel();
-    var query = model.newQuery().withoutGlobalScopes();
+    const model = new EloquentClosureGlobalScopesTestModel();
+    let query = model.newQuery().withoutGlobalScopes();
     expect(query.toSql()).toBe('select * from "table"');
     expect(query.getBindings()).toEqual([]);
-    var query = EloquentClosureGlobalScopesTestModel.withoutGlobalScopes();
+    query = EloquentClosureGlobalScopesTestModel.withoutGlobalScopes();
     expect(query.toSql()).toBe('select * from "table"');
     expect(query.getBindings()).toEqual([]);
   });
   it('global scopes with or where conditions are nested', () => {
-    var model = new EloquentClosureGlobalScopesWithOrTestModel();
-    var query = model.newQuery();
+    const model = new EloquentClosureGlobalScopesWithOrTestModel();
+    let query = model.newQuery();
     expect(query.toSql()).toBe(
       'select "email", "password" from "table" where ("email" = ? or "email" = ?) and "active" = ? order by "name" asc');
     expect(query.getBindings()).toEqual(['taylor@gmail.com', 'someone@else.com', 1]);
-    var query = model.newQuery().where('col1', 'val1').orWhere('col2', 'val2');
+    query = model.newQuery().where('col1', 'val1').orWhere('col2', 'val2');
     expect(query.toSql()).toBe(
       'select "email", "password" from "table" where ("col1" = ? or "col2" = ?) and ("email" = ? or "email" = ?) and "active" = ? order by "name" asc');
     expect(query.getBindings()).toEqual(['val1', 'val2', 'taylor@gmail.com', 'someone@else.com', 1]);
   });
   it('regular scopes with or where conditions are nested', () => {
-    var query = EloquentClosureGlobalScopesTestModel.withoutGlobalScopes().where('foo', 'foo').orWhere('bar',
+    const query = EloquentClosureGlobalScopesTestModel.withoutGlobalScopes().where('foo', 'foo').orWhere('bar',
       'bar').approved();
     expect(query.toSql()).toBe(
       'select * from "table" where ("foo" = ? or "bar" = ?) and ("approved" = ? or "should_approve" = ?)');
     expect(query.getBindings()).toEqual(['foo', 'bar', 1, 0]);
   });
   it('scopes starting with or boolean are preserved', () => {
-    var query = EloquentClosureGlobalScopesTestModel.withoutGlobalScopes().where('foo', 'foo').orWhere('bar',
+    const query = EloquentClosureGlobalScopesTestModel.withoutGlobalScopes().where('foo', 'foo').orWhere('bar',
       'bar').orApproved();
     expect(query.toSql()).toBe(
       'select * from "table" where ("foo" = ? or "bar" = ?) or ("approved" = ? or "should_approve" = ?)');
     expect(query.getBindings()).toEqual(['foo', 'bar', 1, 0]);
   });
   it('has query where both models have global scopes', () => {
-    var query     = EloquentGlobalScopesWithRelationModel.has('related').where('bar', 'baz');
-    var subQuery  = 'select * from "table" where "table2"."id" = "table"."related_id" and "foo" = ? and "active" = ?';
-    var mainQuery = 'select * from "table2" where exists (' + subQuery + ') and "bar" = ? and "active" = ? order by "name" asc';
+    const query     = EloquentGlobalScopesWithRelationModel.has('related').where('bar', 'baz');
+    const subQuery  = 'select * from "table" where "table2"."id" = "table"."related_id" and "foo" = ? and "active" = ?';
+    const mainQuery = 'select * from "table2" where exists (' + subQuery + ') and "bar" = ? and "active" = ? order by "name" asc';
     expect(query.toSql()).toEqual(mainQuery);
     expect(query.getBindings()).toEqual(['bar', 1, 'baz', 1]);
   });
 });
 
 export class EloquentClosureGlobalScopesTestModel extends Model {
-  protected table: any = 'table';
+  _table: any = 'table';
 
   public static boot() {
     EloquentClosureGlobalScopesTestModel.addGlobalScope(query => {
@@ -116,7 +113,7 @@ export class EloquentClosureGlobalScopesTestModel extends Model {
 }
 
 export class EloquentGlobalScopesWithRelationModel extends EloquentClosureGlobalScopesTestModel {
-  protected table: any = 'table2';
+  _table: any = 'table2';
 
   public related() {
     return this.hasMany(EloquentGlobalScopesTestModel, 'related_id').where('foo', 'bar');
@@ -136,7 +133,7 @@ export class EloquentClosureGlobalScopesWithOrTestModel extends EloquentClosureG
 }
 
 export class EloquentGlobalScopesTestModel extends Model {
-  protected table: any = 'table';
+  _table: any = 'table';
 
   public static boot() {
     EloquentGlobalScopesTestModel.addGlobalScope(new ActiveScope());

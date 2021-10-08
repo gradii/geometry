@@ -1,22 +1,8 @@
-import { BadMethodCallException } from 'BadMethodCallException';
-import { ConnectionInterface } from 'Illuminate/Database/ConnectionInterface';
-import { ConnectionResolverInterface } from 'Illuminate/Database/ConnectionResolverInterface';
-import { Builder } from 'Illuminate/Database/Eloquent/Builder';
-import { Collection } from 'Illuminate/Database/Eloquent/Collection';
-import { Model } from 'Illuminate/Database/Eloquent/Model';
-import { ModelNotFoundException } from 'Illuminate/Database/Eloquent/ModelNotFoundException';
-import { RelationNotFoundException } from 'Illuminate/Database/Eloquent/RelationNotFoundException';
-import { Builder as BaseBuilder } from 'Illuminate/Database/Query/Builder';
-import { Grammar } from 'Illuminate/Database/Query/Grammars/Grammar';
-import { Processor } from 'Illuminate/Database/Query/Processors/Processor';
-import { Carbon } from 'Illuminate/Support/Carbon';
-import { Collection as BaseCollection } from 'Illuminate/Support/Collection';
-import { Mockery as m } from 'Mockery';
+import { BelongsToManyColumn } from '../../src/annotation/relation-column/belongs-to-many.relation-column';
+import { HasManyColumn } from '../../src/annotation/relation-column/has-many.relation-column';
+import { Model } from '../../src/fedaco/model';
 
 describe('test database eloquent builder', () => {
-  it('tear down', () => {
-    m.close();
-  });
 
   it('find method', () => {
     var builder = m.mock(Builder + '[first]', [this.getMockQueryBuilder()]);
@@ -1051,7 +1037,7 @@ describe('test database eloquent builder', () => {
 });
 
 export class EloquentBuilderTestStub extends Model {
-  protected table: any = 'table';
+  _table: any = 'table';
 }
 
 export class EloquentBuilderTestScopeStub extends Model {
@@ -1061,7 +1047,7 @@ export class EloquentBuilderTestScopeStub extends Model {
 }
 
 export class EloquentBuilderTestHigherOrderWhereScopeStub extends Model {
-  protected table: any = 'table';
+  _table: any = 'table';
 
   public scopeOne(query) {
     query.where('one', 'foo');
@@ -1077,7 +1063,7 @@ export class EloquentBuilderTestHigherOrderWhereScopeStub extends Model {
 }
 
 export class EloquentBuilderTestNestedStub extends Model {
-  protected table: any = 'table';
+  _table: any = 'table';
 
   public scopeEmpty(query) {
     return query;
@@ -1136,7 +1122,7 @@ export class EloquentBuilderTestModelFarRelatedStub extends Model {
 }
 
 export class EloquentBuilderTestModelSelfRelatedStub extends Model {
-  protected table: any = 'self_related_stubs';
+  _table: any = 'self_related_stubs';
 
   public parentFoo() {
     return this.belongsTo(EloquentBuilderTestModelSelfRelatedStub, 'parent_id', 'id', 'parent');
@@ -1146,26 +1132,42 @@ export class EloquentBuilderTestModelSelfRelatedStub extends Model {
     return this.hasOne(EloquentBuilderTestModelSelfRelatedStub, 'parent_id', 'id');
   }
 
+  @HasManyColumn({
+    related: EloquentBuilderTestModelSelfRelatedStub,
+    foreignKey: 'parent_id',
+    localKey: 'id'
+  })
   public childFoos() {
     return this.hasMany(EloquentBuilderTestModelSelfRelatedStub, 'parent_id', 'id', 'children');
   }
 
-  public parentBars() {
-    return this.belongsToMany(EloquentBuilderTestModelSelfRelatedStub, 'self_pivot', 'child_id', 'parent_id',
-      'parent_bars');
-  }
+  @BelongsToManyColumn({
+    related        : EloquentBuilderTestModelSelfRelatedStub,
+    table          : 'self_pivot',
+    foreignPivotKey: 'child_id',
+    relatedPivotKey: 'parent_id',
+    parentKey      : 'parent_bars'
+  })
+  public parentBars;
 
-  public childBars() {
-    return this.belongsToMany(EloquentBuilderTestModelSelfRelatedStub, 'self_pivot', 'parent_id', 'child_id',
-      'child_bars');
-  }
+  @BelongsToManyColumn({
+    related        : EloquentBuilderTestModelSelfRelatedStub,
+    table          : 'self_pivot',
+    foreignPivotKey: 'parent_id',
+    relatedPivotKey: 'child_id',
+    parentKey      : 'child_bars'
+  })
+  public childBars;
 
-  public bazes() {
-    return this.hasMany(EloquentBuilderTestModelFarRelatedStub, 'foreign_key', 'id', 'bar');
-  }
+  @HasManyColumn({
+    related   : EloquentBuilderTestModelFarRelatedStub,
+    foreignKey: 'foreign_key',
+    localKey  : 'id'
+  })
+  public bazes;
 }
 
 export class EloquentBuilderTestStubWithoutTimestamp extends Model {
-  static UPDATED_AT    = null;
-  protected table: any = 'table';
+  static UPDATED_AT = null;
+  _table: any       = 'table';
 }
