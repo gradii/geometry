@@ -6,8 +6,6 @@
 
 import { isBlank } from '@gradii/check-type';
 import { Connection } from '../connection';
-import { Driver } from '../driver/driver';
-import { SqlServerDriver } from '../driver/sql-server/sql-server-driver';
 import { SqlserverQueryGrammar } from '../query-builder/grammar/sqlserver-query-grammar';
 import { SqlServerProcessor } from '../query-builder/processor/sql-server-processor';
 import { SqlServerSchemaBuilder } from '../schema/builder/sql-server-schema-builder';
@@ -64,7 +62,6 @@ export class SqlServerConnection extends Connection {
   }
 
   /*Get the Doctrine DBAL driver.*/
-  protected getDoctrineDriver(): Driver {
-    return new SqlServerDriver();
+  protected getDoctrineDriver() {
   }
 }

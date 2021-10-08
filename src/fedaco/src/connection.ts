@@ -12,7 +12,6 @@ import { WrappedConnection } from './connector/wrapped-connection';
 import { WrappedStmt } from './connector/wrapped-stmt';
 import { DatabaseTransactionsManager } from './database-transactions-manager';
 import { DbalConnection } from './dbal/connection';
-import { Driver } from './driver/driver';
 import { QueryExecuted } from './events/query-executed';
 import { StatementPrepared } from './events/statement-prepared';
 import { TransactionBeginning } from './events/transaction-beginning';
@@ -442,27 +441,27 @@ export class Connection implements ConnectionInterface {
 
   /*Get a Doctrine Schema Column instance.*/
   public async getDoctrineColumn(table: string, column: string) {
-    const schema = this.getDoctrineSchemaManager();
-    return schema.listTableDetails(table).getColumn(column);
+    // const schema = this.getDoctrineSchemaManager();
+    // return schema.listTableDetails(table).getColumn(column);
   }
 
   /*Get the Doctrine DBAL schema manager for the connection.*/
   public getDoctrineSchemaManager() {
-    const connection = this.getDoctrineConnection();
-    return this.getDoctrineDriver().getSchemaManager(connection, connection.getDatabasePlatform());
+    // const connection = this.getDoctrineConnection();
+    // return this.getDoctrineDriver().getSchemaManager(connection, connection.getDatabasePlatform());
   }
 
   /*Get the Doctrine DBAL database connection instance.*/
   public getDoctrineConnection() {
-    if (isBlank(this.doctrineConnection)) {
-      const driver = this.getDoctrineDriver();
-
-      this.doctrineConnection = driver.connect();
-    }
-    return this.doctrineConnection;
+    // if (isBlank(this.doctrineConnection)) {
+    //   const driver = this.getDoctrineDriver();
+    //
+    //   this.doctrineConnection = driver.connect();
+    // }
+    // return this.doctrineConnection;
   }
 
-  protected getDoctrineDriver(): Driver {
+  protected getDoctrineDriver() {
     throw new Error('not implement');
   }
 

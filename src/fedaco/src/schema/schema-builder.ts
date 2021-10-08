@@ -85,9 +85,9 @@ export class SchemaBuilder {
 
   /*Get the data type for the given column name.*/
   public async getColumnType(table: string, column: string) {
-    table        = this.connection.getTablePrefix() + table;
-    const result = await this.connection.getDoctrineColumn(table, column);
-    return result.getType().getName();
+    // table        = this.connection.getTablePrefix() + table;
+    // const result = await this.connection.getDoctrineColumn(table, column);
+    // return result.getType().getName();
   }
 
   /*Get the column listing for a given table.*/

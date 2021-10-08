@@ -10,10 +10,11 @@ import { _additionalProcessingGetter } from '../additional-processing';
 import { FedacoDecorator } from '../annotation.interface';
 import { RelationType } from '../enum-relation';
 import { FedacoRelationColumn, RelationColumnAnnotation } from '../relation-column';
+import { ForwardRefFn } from '../../query-builder/forward-ref';
 
 
 export interface MorphedByManyRelationAnnotation extends RelationColumnAnnotation {
-  related: string;
+  related: typeof Model | ForwardRefFn<typeof Model>;
   name: string;
   table?: string;
   foreignPivotKey?: string;

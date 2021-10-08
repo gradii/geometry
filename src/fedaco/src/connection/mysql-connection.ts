@@ -6,7 +6,6 @@
 
 import { isArray, isBlank } from '@gradii/check-type';
 import { Connection } from '../connection';
-import { MysqlDriver } from '../driver/mysql/mysql-driver';
 import { MysqlQueryGrammar } from '../query-builder/grammar/mysql-query-grammar';
 import { MysqlProcessor } from '../query-builder/processor/mysql-processor';
 import { MysqlSchemaBuilder } from '../schema/builder/mysql-schema-builder';
@@ -50,8 +49,8 @@ export class MysqlConnection extends Connection {
   }
 
   /*Get the Doctrine DBAL driver.*/
-  protected getDoctrineDriver(): MysqlDriver {
-    return new MysqlDriver();
+  protected getDoctrineDriver() {
+    // return new MysqlDriver();
   }
 
   public async insertGetId(query: string, bindings: any[] = [], sequence: string) {

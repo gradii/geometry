@@ -6,7 +6,6 @@
 
 import { isBlank, isString } from '@gradii/check-type';
 import { Connection } from '../connection';
-import { PostgresDriver } from '../driver/postgres/postgres-driver';
 import { PostgresQueryGrammar } from '../query-builder/grammar/postgres-query-grammar';
 import { PostgresProcessor } from '../query-builder/processor/postgres-processor';
 import { PostgresSchemaBuilder } from '../schema/builder/postgres-schema-builder';
@@ -57,7 +56,7 @@ export class PostgresConnection extends Connection {
   }
 
   /*Get the Doctrine DBAL driver.*/
-  protected getDoctrineDriver(): PostgresDriver {
-    return new PostgresDriver();
+  protected getDoctrineDriver() {
+    // return new PostgresDriver();
   }
 }

@@ -1,100 +1,130 @@
-import { Manager as DB } from "Illuminate/Database/Capsule/Manager";
-import { Model } from "Illuminate/Database/Eloquent/Model";
-import { Carbon } from "Illuminate/Support/Carbon";
-import { TestCase } from "PHPUnit/Framework/TestCase";
-describe("test database eloquent irregular plural", () => {
-    it("set up", () => {
-        var db = new DB();
-        db.addConnection({
-            "driver": "sqlite",
-            "database": ":memory:"
-        });
-        db.bootEloquent();
-        db.setAsGlobal();
-        this.createSchema();
+import { SchemaBuilder } from '../../src/schema/schema-builder';
+import { Model } from '../../src/fedaco/model';
+import { DatabaseConfig } from '../../src/databaseConfig';
+import { MorphedByManyColumn } from '../../src/annotation/relation-column/morphed-by-many.relation-column';
+import { MorphToManyColumn } from '../../src/annotation/relation-column/morph-to-many.relation-column';
+import { BelongsToManyColumn } from '../../src/annotation/relation-column/belongs-to-many.relation-column';
+import { forwardRef } from '../../src/query-builder/forward-ref';
+
+function connection(connectionName = 'default') {
+  return Model.getConnectionResolver().connection(connectionName);
+}
+
+function schema(connectionName = 'default'): SchemaBuilder {
+  return connection(connectionName).getSchemaBuilder();
+}
+
+jest.setTimeout(100000);
+
+async function createSchema() {
+  await schema().create('irregular_plural_humans', table => {
+    table.increments('id');
+    table.string('email').withUnique();
+    table.timestamps();
+  });
+  await schema().create('irregular_plural_tokens', table => {
+    table.increments('id');
+    table.string('title');
+  });
+  await schema().create('irregular_plural_human_irregular_plural_token', table => {
+    table.integer('irregular_plural_human_id').withUnsigned();
+    table.integer('irregular_plural_token_id').withUnsigned();
+  });
+  await schema().create('irregular_plural_mottos', table => {
+    table.increments('id');
+    table.string('name');
+  });
+  await schema().create('cool_mottos', table => {
+    table.integer('irregular_plural_motto_id');
+    table.integer('cool_motto_id');
+    table.string('cool_motto_type');
+  });
+}
+
+describe('test database eloquent irregular plural', () => {
+  beforeEach(async () => {
+    const db = new DatabaseConfig();
+    db.addConnection({
+      'driver': 'sqlite',
+      'database': ':memory:'
     });
-    it("create schema", () => {
-        this.schema().create("irregular_plural_humans", table => {
-            table.increments("id");
-            table.string("email").unique();
-            table.timestamps();
-        });
-        this.schema().create("irregular_plural_tokens", table => {
-            table.increments("id");
-            table.string("title");
-        });
-        this.schema().create("irregular_plural_human_irregular_plural_token", table => {
-            table.integer("irregular_plural_human_id").unsigned();
-            table.integer("irregular_plural_token_id").unsigned();
-        });
-        this.schema().create("irregular_plural_mottoes", table => {
-            table.increments("id");
-            table.string("name");
-        });
-        this.schema().create("cool_mottoes", table => {
-            table.integer("irregular_plural_motto_id");
-            table.integer("cool_motto_id");
-            table.string("cool_motto_type");
-        });
+    db.bootEloquent();
+    db.setAsGlobal();
+    await createSchema();
+  });
+
+  afterEach(async () => {
+    await schema().drop('irregular_plural_tokens');
+    await schema().drop('irregular_plural_humans');
+    await schema().drop('irregular_plural_human_irregular_plural_token');
+  });
+
+  it('it pluralizes the table name', async () => {
+    const model = new IrregularPluralHuman();
+    expect(model.getTable()).toBe('irregular_plural_humans');
+  });
+
+  it('it touches the parent with an irregular plural', async () => {
+    // Carbon.setTestNow('2018-05-01 12:13:14');
+
+    await IrregularPluralHuman.createQuery().create({
+      'email': 'taylorotwell@gmail.com'
     });
-    it("tear down", () => {
-        this.schema().drop("irregular_plural_tokens");
-        this.schema().drop("irregular_plural_humans");
-        this.schema().drop("irregular_plural_human_irregular_plural_token");
+    await IrregularPluralToken.createQuery().insert([{
+      'title': 'The title'
+    }]);
+    const human = await IrregularPluralHuman.createQuery().first();
+    const tokenIds = await IrregularPluralToken.createQuery().pluck('id');
+    // Carbon.setTestNow('2018-05-01 15:16:17');
+    await human.getRelationMethod('irregularPluralTokens').sync(tokenIds);
+    await human.refresh();
+    expect(/*cast type string*/ human.created_at).toBe('2018-05-01 12:13:14');
+    expect(/*cast type string*/ human.updated_at).toBe('2018-05-01 15:16:17');
+  });
+
+  it('it pluralizes morph to many relationships', async () => {
+    const human = await IrregularPluralHuman.createQuery().create({
+      'email': 'bobby@example.com'
     });
-    it("schema", () => {
-        var connection = Model.getConnectionResolver().connection();
-        return connection.getSchemaBuilder();
+    await human.getRelationMethod('mottoes').create({
+      'name': 'Real eyes realize real lies'
     });
-    it("it pluralizes the table name", () => {
-        var model = new IrregularPluralHuman();
-        expect(model.getTable()).toBe("irregular_plural_humans");
-    });
-    it("it touches the parent with an irregular plural", () => {
-        Carbon.setTestNow("2018-05-01 12:13:14");
-        IrregularPluralHuman.create({
-            "email": "taylorotwell@gmail.com"
-        });
-        IrregularPluralToken.insert([{
-                "title": "The title"
-            }]);
-        var human = IrregularPluralHuman.query().first();
-        var tokenIds = IrregularPluralToken.pluck("id");
-        Carbon.setTestNow("2018-05-01 15:16:17");
-        human.irregularPluralTokens().sync(tokenIds);
-        human.refresh();
-        expect(/*cast type string*/ human.created_at).toBe("2018-05-01 12:13:14");
-        expect(/*cast type string*/ human.updated_at).toBe("2018-05-01 15:16:17");
-    });
-    it("it pluralizes morph to many relationships", () => {
-        var human = IrregularPluralHuman.create({
-            "email": "bobby@example.com"
-        });
-        human.mottoes().create({
-            "name": "Real eyes realize real lies"
-        });
-        var motto = IrregularPluralMotto.query().first();
-        expect(motto.name).toBe("Real eyes realize real lies");
-    });
+    const motto = await IrregularPluralMotto.createQuery().first();
+    expect(motto.name).toBe('Real eyes realize real lies');
+  });
 });
+
 export class IrregularPluralHuman extends Model {
-    protected guarded: any = [];
-    public irregularPluralTokens() {
-        return this.belongsToMany(IrregularPluralToken, "irregular_plural_human_irregular_plural_token", "irregular_plural_token_id", "irregular_plural_human_id");
-    }
-    public mottoes() {
-        return this.morphToMany(IrregularPluralMotto, "cool_motto");
-    }
+  _guarded: any = [];
+
+  @BelongsToManyColumn({
+    related: forwardRef(() => IrregularPluralToken),
+    table: 'irregular_plural_human_irregular_plural_token',
+    foreignPivotKey: 'irregular_plural_token_id',
+    relatedPivotKey: 'irregular_plural_human_id'
+  })
+  public irregularPluralTokens;
+
+  @MorphToManyColumn({
+    related: forwardRef(() => IrregularPluralMotto),
+    name: 'cool_motto'
+  })
+  public mottoes;
 }
+
 export class IrregularPluralToken extends Model {
-    protected guarded: any = [];
-    public timestamps: any = false;
-    protected touches: any = ["irregularPluralHumans"];
+  _guarded: any = [];
+  public timestamps: any = false;
+  touches: any = ['irregularPluralHumans'];
 }
+
 export class IrregularPluralMotto extends Model {
-    protected guarded: any = [];
-    public timestamps: any = false;
-    public irregularPluralHumans() {
-        return this.morphedByMany(IrregularPluralHuman, "cool_motto");
-    }
+  _guarded: any = [];
+  public timestamps: any = false;
+
+  @MorphedByManyColumn({
+    related: IrregularPluralHuman,
+    name: 'cool_motto'
+  })
+  public irregularPluralHumans;
 }

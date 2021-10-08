@@ -437,10 +437,10 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     /*Get all of the IDs from the given mixed value.*/
     _parseIds(this: BelongsToMany & _Self, value: any | any[]) {
       if (value as Model instanceof BaseModel) {
-        return [value[this._relatedKey]];
+        return [value.getAttribute(this._relatedKey)];
       }
       if (isArray(value)) {
-        return pluck(this._relatedKey, value);
+        return value.map(it=>it.getAttribute(this._relatedKey));
       }
       // if (value instanceof Collection) {
       //   return value.pluck(this.relatedKey).all();

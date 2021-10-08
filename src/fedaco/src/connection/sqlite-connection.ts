@@ -5,9 +5,7 @@
  */
 
 import { isBlank } from '@gradii/check-type';
-import { BaseGrammar } from '../base-grammar';
 import { Connection } from '../connection';
-import { SqliteDriver } from '../driver/sqlite/sqlite-driver';
 import { QueryGrammar } from '../query-builder/grammar/query-grammar';
 import { SqliteQueryGrammar } from '../query-builder/grammar/sqlite-query-grammar';
 import { SqliteProcessor } from '../query-builder/processor/sqlite-processor';
@@ -61,8 +59,8 @@ export class SqliteConnection extends Connection {
   }
 
   /*Get the Doctrine DBAL driver.*/
-  protected getDoctrineDriver(): SqliteDriver {
-    return new SqliteDriver();
+  protected getDoctrineDriver() {
+    // return new SqliteDriver();
   }
 
   /*Get the database connection foreign key constraints configuration option.*/
