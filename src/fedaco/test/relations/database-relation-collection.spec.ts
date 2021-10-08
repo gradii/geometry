@@ -20,7 +20,8 @@ describe('test database eloquent collection', () => {
       'foo': 10
     }, /*cast type object*/ {
       'foo': 20
-    }]);
+    }
+    ]);
     expect(c.max('foo')).toEqual(20);
   });
   it('getting min items from collection', () => {
@@ -28,15 +29,18 @@ describe('test database eloquent collection', () => {
       'foo': 10
     }, /*cast type object*/ {
       'foo': 20
-    }]);
+    }
+    ]);
     expect(c.min('foo')).toEqual(10);
   });
   it('contains with multiple arguments', () => {
-    var c = new Collection([{
-      'id': 1
-    }, {
-      'id': 2
-    }]);
+    var c = new Collection([
+      {
+        'id': 1
+      }, {
+        'id': 2
+      }
+    ]);
     expect(c.contains('id', 1)).toBeTruthy();
     expect(c.contains('id', '>=', 2)).toBeTruthy();
     expect(c.contains('id', '>', 2)).toBeFalsy();
@@ -70,7 +74,7 @@ describe('test database eloquent collection', () => {
   it('contains indicates if keyed model in array', () => {
     var mockModel = m.mock(Model);
     mockModel.shouldReceive('getKey').andReturn('1');
-    var c = new Collection([mockModel]);
+    var c          = new Collection([mockModel]);
     var mockModel2 = m.mock(Model);
     mockModel2.shouldReceive('getKey').andReturn('2');
     c.add(mockModel2);
@@ -120,7 +124,7 @@ describe('test database eloquent collection', () => {
     var model3 = new TestEloquentCollectionModel().forceFill({
       'id': 3
     });
-    var c = new Collection();
+    var c      = new Collection();
     expect(c.find([])).toInstanceOf(Collection);
     expect(c.find([1])).toCount(0);
     c.push(model1);
@@ -136,7 +140,7 @@ describe('test database eloquent collection', () => {
     expect(c.find([2, 3, 4]).pluck('id').all()).toEqual([2, 3]);
   });
   it('load method eager loads given relationships', () => {
-    var c = this.getMockBuilder(Collection).setMethods(['first']).setConstructorArgs([['foo']]).getMock();
+    var c        = this.getMockBuilder(Collection).setMethods(['first']).setConstructorArgs([['foo']]).getMock();
     var mockItem = m.mock(stdClass);
     c.expects(this.once()).method('first').willReturn(mockItem);
     mockItem.shouldReceive('newQueryWithoutRelationships').once().andReturn(mockItem);
@@ -167,9 +171,9 @@ describe('test database eloquent collection', () => {
     expect(c1.merge(c2)).toEqual(new Collection([one, two, three]));
   });
   it('map', () => {
-    var one = m.mock(Model);
-    var two = m.mock(Model);
-    var c = new Collection([one, two]);
+    var one       = m.mock(Model);
+    var two       = m.mock(Model);
+    var c         = new Collection([one, two]);
     var cAfterMap = c.map(item => {
       return item;
     });
@@ -179,7 +183,7 @@ describe('test database eloquent collection', () => {
   it('mapping to non models returns a base collection', () => {
     var one = m.mock(Model);
     var two = m.mock(Model);
-    var c = new Collection([one, two]).map(item => {
+    var c   = new Collection([one, two]).map(item => {
       return 'not-a-model';
     });
     expect(get_class(c)).toEqual(BaseCollection);
@@ -196,19 +200,19 @@ describe('test database eloquent collection', () => {
     expect(c1.diff(c2)).toEqual(new Collection([one]));
   });
   it('collection returns duplicate based only on keys', () => {
-    var one = new TestEloquentCollectionModel();
-    var two = new TestEloquentCollectionModel();
-    var three = new TestEloquentCollectionModel();
-    var four = new TestEloquentCollectionModel();
-    one.id = 1;
-    one.someAttribute = '1';
-    two.id = 1;
-    two.someAttribute = '2';
-    three.id = 1;
+    var one             = new TestEloquentCollectionModel();
+    var two             = new TestEloquentCollectionModel();
+    var three           = new TestEloquentCollectionModel();
+    var four            = new TestEloquentCollectionModel();
+    one.id              = 1;
+    one.someAttribute   = '1';
+    two.id              = 1;
+    two.someAttribute   = '2';
+    three.id            = 1;
     three.someAttribute = '3';
-    four.id = 2;
-    four.someAttribute = '4';
-    var duplicates = Collection.make([one, two, three, four]).duplicates().all();
+    four.id             = 2;
+    four.someAttribute  = '4';
+    var duplicates      = Collection.make([one, two, three, four]).duplicates().all();
     expect(duplicates).toEqual({
       1: two,
       2: three
@@ -249,19 +253,19 @@ describe('test database eloquent collection', () => {
     expect(c.unique()).toEqual(new Collection([one, two]));
   });
   it('collection returns unique strict based on keys only', () => {
-    var one = new TestEloquentCollectionModel();
-    var two = new TestEloquentCollectionModel();
-    var three = new TestEloquentCollectionModel();
-    var four = new TestEloquentCollectionModel();
-    one.id = 1;
-    one.someAttribute = '1';
-    two.id = 1;
-    two.someAttribute = '2';
-    three.id = 1;
+    var one             = new TestEloquentCollectionModel();
+    var two             = new TestEloquentCollectionModel();
+    var three           = new TestEloquentCollectionModel();
+    var four            = new TestEloquentCollectionModel();
+    one.id              = 1;
+    one.someAttribute   = '1';
+    two.id              = 1;
+    two.someAttribute   = '2';
+    three.id            = 1;
     three.someAttribute = '3';
-    four.id = 2;
-    four.someAttribute = '4';
-    var uniques = Collection.make([one, two, three, four]).unique().all();
+    four.id             = 2;
+    four.someAttribute  = '4';
+    var uniques         = Collection.make([one, two, three, four]).unique().all();
     expect(uniques).toEqual([three, four]);
     var uniques = Collection.make([one, two, three, four]).unique(null, true).all();
     expect(uniques).toEqual([three, four]);
@@ -308,11 +312,13 @@ describe('test database eloquent collection', () => {
     });
   });
   it('non model related methods', () => {
-    var a = new Collection([{
-      'foo': 'bar'
-    }, {
-      'foo': 'baz'
-    }]);
+    var a = new Collection([
+      {
+        'foo': 'bar'
+      }, {
+        'foo': 'baz'
+      }
+    ]);
     var b = new Collection(['a', 'b', 'c']);
     expect(get_class(a.pluck('foo'))).toEqual(BaseCollection);
     expect(get_class(a.keys())).toEqual(BaseCollection);
@@ -334,9 +340,11 @@ describe('test database eloquent collection', () => {
   it('queueable collection implementation throws exception on multiple model types', () => {
     this.expectException(LogicException);
     this.expectExceptionMessage('Queueing collections with multiple model types is not supported.');
-    var c = new Collection([new TestEloquentCollectionModel(), /*cast type object*/ {
-      'id': 'something'
-    }]);
+    var c = new Collection([
+      new TestEloquentCollectionModel(), /*cast type object*/ {
+        'id': 'something'
+      }
+    ]);
     c.getQueueableClass();
   });
   it('queueable relationships returns only relations common to all models', () => {
@@ -352,7 +360,7 @@ describe('test database eloquent collection', () => {
     one.shouldReceive('getKey').andReturn(1);
     var two = m.mock(Model);
     two.shouldReceive('getKey').andReturn(2);
-    var c = new Collection([one, two]);
+    var c          = new Collection([one, two]);
     var mocBuilder = m.mock(Builder);
     one.shouldReceive('newModelQuery').once().andReturn(mocBuilder);
     mocBuilder.shouldReceive('whereKey').once()._with(c.modelKeys()).andReturn(mocBuilder);
@@ -367,7 +375,7 @@ describe('test database eloquent collection', () => {
 
 export class TestEloquentCollectionModel extends Model {
   protected visible: any = ['visible'];
-  protected hidden: any = ['hidden'];
+  protected hidden: any  = ['hidden'];
 
   public getTestAttribute() {
     return 'test';

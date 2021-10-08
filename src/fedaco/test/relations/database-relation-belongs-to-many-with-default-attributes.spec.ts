@@ -4,24 +4,28 @@ import { BelongsToMany } from '../../src/fedaco/relations/belongs-to-many';
 describe('test database eloquent belongs to many with default attributes', () => {
 
   it('with pivot value method sets where conditions for fetching', () => {
-    const relation = this.getMockBuilder(BelongsToMany).setMethods(['touchIfTouching']).setConstructorArgs(this.getRelationArguments()).getMock();
+    const relation = this.getMockBuilder(BelongsToMany).setMethods(['touchIfTouching']).setConstructorArgs(
+      this.getRelationArguments()).getMock();
     relation.withPivotValue({
       'is_admin': 1
     });
   });
 
   it('with pivot value method sets default arguments for insertion', () => {
-    const relation = this.getMockBuilder(BelongsToMany).setMethods(['touchIfTouching']).setConstructorArgs(this.getRelationArguments()).getMock();
+    const relation = this.getMockBuilder(BelongsToMany).setMethods(['touchIfTouching']).setConstructorArgs(
+      this.getRelationArguments()).getMock();
     relation.withPivotValue({
       'is_admin': 1
     });
     const query = m.mock(stdClass);
     query.shouldReceive('from').once()._with('club_user').andReturn(query);
-    query.shouldReceive('insert').once()._with([{
-      'club_id': 1,
-      'user_id': 1,
-      'is_admin': 1
-    }]).andReturn(true);
+    query.shouldReceive('insert').once()._with([
+      {
+        'club_id' : 1,
+        'user_id' : 1,
+        'is_admin': 1
+      }
+    ]).andReturn(true);
     relation.getQuery().shouldReceive('getQuery').andReturn(mockQueryBuilder = m.mock(stdClass));
     mockQueryBuilder.shouldReceive('newQuery').once().andReturn(query);
     relation.attach(1);

@@ -45,7 +45,7 @@ describe('test database eloquent irregular plural', () => {
   beforeEach(async () => {
     const db = new DatabaseConfig();
     db.addConnection({
-      'driver': 'sqlite',
+      'driver'  : 'sqlite',
       'database': ':memory:'
     });
     db.bootEloquent();
@@ -70,10 +70,12 @@ describe('test database eloquent irregular plural', () => {
     await IrregularPluralHuman.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    await IrregularPluralToken.createQuery().insert([{
-      'title': 'The title'
-    }]);
-    const human = await IrregularPluralHuman.createQuery().first();
+    await IrregularPluralToken.createQuery().insert([
+      {
+        'title': 'The title'
+      }
+    ]);
+    const human    = await IrregularPluralHuman.createQuery().first();
     const tokenIds = await IrregularPluralToken.createQuery().pluck('id');
     // Carbon.setTestNow('2018-05-01 15:16:17');
     await human.getRelationMethod('irregularPluralTokens').sync(tokenIds);
@@ -98,8 +100,8 @@ export class IrregularPluralHuman extends Model {
   _guarded: any = [];
 
   @BelongsToManyColumn({
-    related: forwardRef(() => IrregularPluralToken),
-    table: 'irregular_plural_human_irregular_plural_token',
+    related        : forwardRef(() => IrregularPluralToken),
+    table          : 'irregular_plural_human_irregular_plural_token',
     foreignPivotKey: 'irregular_plural_token_id',
     relatedPivotKey: 'irregular_plural_human_id'
   })
@@ -107,24 +109,24 @@ export class IrregularPluralHuman extends Model {
 
   @MorphToManyColumn({
     related: forwardRef(() => IrregularPluralMotto),
-    name: 'cool_motto'
+    name   : 'cool_motto'
   })
   public mottoes;
 }
 
 export class IrregularPluralToken extends Model {
-  _guarded: any = [];
+  _guarded: any          = [];
   public timestamps: any = false;
-  touches: any = ['irregularPluralHumans'];
+  touches: any           = ['irregularPluralHumans'];
 }
 
 export class IrregularPluralMotto extends Model {
-  _guarded: any = [];
+  _guarded: any          = [];
   public timestamps: any = false;
 
   @MorphedByManyColumn({
     related: IrregularPluralHuman,
-    name: 'cool_motto'
+    name   : 'cool_motto'
   })
   public irregularPluralHumans;
 }

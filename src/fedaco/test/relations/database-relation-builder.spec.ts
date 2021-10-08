@@ -35,7 +35,7 @@ describe('test database eloquent builder', () => {
     var result = builder.findMany(['one', 'two'], ['column']);
     expect(result).toEqual(['baz']);
     var builder = m.mock(Builder + '[get]', [this.getMockQueryBuilder()]);
-    var model = this.getMockModel();
+    var model   = this.getMockModel();
     model.shouldReceive('newCollection').once().withNoArgs().andReturn('emptycollection');
     builder.setModel(model);
     builder.getQuery().shouldNotReceive('whereIn');
@@ -43,7 +43,7 @@ describe('test database eloquent builder', () => {
     var result = builder.findMany([], ['column']);
     expect(result).toBe('emptycollection');
     var builder = m.mock(Builder + '[get]', [this.getMockQueryBuilder()]);
-    var model = this.getMockModel();
+    var model   = this.getMockModel();
     model.shouldReceive('newCollection').once().withNoArgs().andReturn('emptycollection');
     builder.setModel(model);
     builder.getQuery().shouldNotReceive('whereIn');
@@ -59,7 +59,7 @@ describe('test database eloquent builder', () => {
     builder.getQuery().shouldReceive('where').once()._with('foo_table.foo', '=', 'bar');
     builder.shouldReceive('first')._with(['column']).andReturn('baz');
     var expected = model.findOrNew('bar', ['column']);
-    var result = builder.find('bar', ['column']);
+    var result   = builder.find('bar', ['column']);
     expect(result).toEqual(expected);
   });
   it('find or new method model not found', () => {
@@ -69,7 +69,7 @@ describe('test database eloquent builder', () => {
     builder.setModel(model);
     builder.getQuery().shouldReceive('where').once()._with('foo_table.foo', '=', 'bar');
     builder.shouldReceive('first')._with(['column']).andReturn(null);
-    var result = model.findOrNew('bar', ['column']);
+    var result     = model.findOrNew('bar', ['column']);
     var findResult = builder.find('bar', ['column']);
     expect(findResult).toNull();
     expect(result).toInstanceOf(Model);
@@ -114,7 +114,7 @@ describe('test database eloquent builder', () => {
     expect(result).toBe('baz');
   });
   it('find with many using collection', () => {
-    var ids = collect([1, 2]);
+    var ids     = collect([1, 2]);
     var builder = m.mock(Builder + '[get]', [this.getMockQueryBuilder()]);
     builder.getQuery().shouldReceive('whereIn').once()._with('foo_table.foo', [1, 2]);
     builder.setModel(this.getMockModel());
@@ -156,8 +156,8 @@ describe('test database eloquent builder', () => {
     expect(results.all()).toEqual([]);
   });
   it('value method with model found', () => {
-    var builder = m.mock(Builder + '[first]', [this.getMockQueryBuilder()]);
-    var mockModel = new stdClass();
+    var builder    = m.mock(Builder + '[first]', [this.getMockQueryBuilder()]);
+    var mockModel  = new stdClass();
     mockModel.name = 'foo';
     builder.shouldReceive('first')._with(['name']).andReturn(mockModel);
     expect(builder.value('name')).toBe('foo');
@@ -170,7 +170,7 @@ describe('test database eloquent builder', () => {
   it('chunk with last chunk complete', () => {
     var builder = m.mock(Builder + '[forPage,get]', [this.getMockQueryBuilder()]);
     builder.getQuery().orders.push({
-      'column': 'foobar',
+      'column'   : 'foobar',
       'direction': 'asc'
     });
     var chunk1 = new Collection(['foo1', 'foo2']);
@@ -191,7 +191,7 @@ describe('test database eloquent builder', () => {
   it('chunk with last chunk partial', () => {
     var builder = m.mock(Builder + '[forPage,get]', [this.getMockQueryBuilder()]);
     builder.getQuery().orders.push({
-      'column': 'foobar',
+      'column'   : 'foobar',
       'direction': 'asc'
     });
     var chunk1 = new Collection(['foo1', 'foo2']);
@@ -209,7 +209,7 @@ describe('test database eloquent builder', () => {
   it('chunk can be stopped by returning false', () => {
     var builder = m.mock(Builder + '[forPage,get]', [this.getMockQueryBuilder()]);
     builder.getQuery().orders.push({
-      'column': 'foobar',
+      'column'   : 'foobar',
       'direction': 'asc'
     });
     var chunk1 = new Collection(['foo1', 'foo2']);
@@ -228,7 +228,7 @@ describe('test database eloquent builder', () => {
   it('chunk with count zero', () => {
     var builder = m.mock(Builder + '[forPage,get]', [this.getMockQueryBuilder()]);
     builder.getQuery().orders.push({
-      'column': 'foobar',
+      'column'   : 'foobar',
       'direction': 'asc'
     });
     var chunk = new Collection([]);
@@ -243,19 +243,21 @@ describe('test database eloquent builder', () => {
   it('chunk paginates using id with last chunk complete', () => {
     var builder = m.mock(Builder + '[forPageAfterId,get]', [this.getMockQueryBuilder()]);
     builder.getQuery().orders.push({
-      'column': 'foobar',
+      'column'   : 'foobar',
       'direction': 'asc'
     });
     var chunk1 = new Collection([/*cast type object*/ {
       'someIdField': 1
     }, /*cast type object*/ {
       'someIdField': 2
-    }]);
+    }
+    ]);
     var chunk2 = new Collection([/*cast type object*/ {
       'someIdField': 10
     }, /*cast type object*/ {
       'someIdField': 11
-    }]);
+    }
+    ]);
     var chunk3 = new Collection([]);
     builder.shouldReceive('forPageAfterId').once()._with(2, 0, 'someIdField').andReturnSelf();
     builder.shouldReceive('forPageAfterId').once()._with(2, 2, 'someIdField').andReturnSelf();
@@ -272,17 +274,19 @@ describe('test database eloquent builder', () => {
   it('chunk paginates using id with last chunk partial', () => {
     var builder = m.mock(Builder + '[forPageAfterId,get]', [this.getMockQueryBuilder()]);
     builder.getQuery().orders.push({
-      'column': 'foobar',
+      'column'   : 'foobar',
       'direction': 'asc'
     });
     var chunk1 = new Collection([/*cast type object*/ {
       'someIdField': 1
     }, /*cast type object*/ {
       'someIdField': 2
-    }]);
+    }
+    ]);
     var chunk2 = new Collection([/*cast type object*/ {
       'someIdField': 10
-    }]);
+    }
+    ]);
     builder.shouldReceive('forPageAfterId').once()._with(2, 0, 'someIdField').andReturnSelf();
     builder.shouldReceive('forPageAfterId').once()._with(2, 2, 'someIdField').andReturnSelf();
     builder.shouldReceive('get').times(2).andReturn(chunk1, chunk2);
@@ -296,7 +300,7 @@ describe('test database eloquent builder', () => {
   it('chunk paginates using id with count zero', () => {
     var builder = m.mock(Builder + '[forPageAfterId,get]', [this.getMockQueryBuilder()]);
     builder.getQuery().orders.push({
-      'column': 'foobar',
+      'column'   : 'foobar',
       'direction': 'asc'
     });
     var chunk = new Collection([]);
@@ -345,7 +349,8 @@ describe('test database eloquent builder', () => {
   });
   it('pluck returns the date attributes of a model', () => {
     var builder = this.getBuilder();
-    builder.getQuery().shouldReceive('pluck')._with('created_at', '').andReturn(new BaseCollection(['2010-01-01 00:00:00', '2011-01-01 00:00:00']));
+    builder.getQuery().shouldReceive('pluck')._with('created_at', '').andReturn(
+      new BaseCollection(['2010-01-01 00:00:00', '2011-01-01 00:00:00']));
     builder.setModel(this.getMockModel());
     builder.getModel().shouldReceive('hasGetMutator')._with('created_at').andReturn(false);
     builder.getModel().shouldReceive('hasCast')._with('created_at').andReturn(false);
@@ -403,11 +408,11 @@ describe('test database eloquent builder', () => {
     var builder = m.mock(Builder + '[get]', [this.getMockQueryBuilder()]);
     records.push({
       'name': 'taylor',
-      'age': 26
+      'age' : 26
     });
     records.push({
       'name': 'dayle',
-      'age': 28
+      'age' : 28
     });
     builder.getQuery().shouldReceive('get').once()._with(['foo']).andReturn(new BaseCollection(records));
     var model = m.mock(Model + '[getTable,hydrate]');
@@ -419,15 +424,16 @@ describe('test database eloquent builder', () => {
   });
   it('eager load relations load top level relationships', () => {
     var builder = m.mock(Builder + '[eagerLoadRelation]', [this.getMockQueryBuilder()]);
-    var nop1 = () => {
+    var nop1    = () => {
     };
-    var nop2 = () => {
+    var nop2    = () => {
     };
     builder.setEagerLoads({
-      'foo': nop1,
+      'foo'    : nop1,
       'foo.bar': nop2
     });
-    builder.shouldAllowMockingProtectedMethods().shouldReceive('eagerLoadRelation')._with(['models'], 'foo', nop1).andReturn(['foo']);
+    builder.shouldAllowMockingProtectedMethods().shouldReceive('eagerLoadRelation')._with(['models'], 'foo',
+      nop1).andReturn(['foo']);
     var results = builder.eagerLoadRelations(['models']);
     expect(results).toEqual(['foo']);
   });
@@ -456,12 +462,12 @@ describe('test database eloquent builder', () => {
     var relationQuery = m.mock(stdClass);
     relation.shouldReceive('getQuery').andReturn(relationQuery);
     relationQuery.shouldReceive('with').once()._with({
-      'lines': null,
+      'lines'        : null,
       'lines.details': null
     });
     builder.setEagerLoads({
-      'orders': null,
-      'orders.lines': null,
+      'orders'              : null,
+      'orders.lines'        : null,
       'orders.lines.details': null
     });
     builder.getRelation('orders');
@@ -476,13 +482,13 @@ describe('test database eloquent builder', () => {
     var groupRelationQuery = m.mock(stdClass);
     groupsRelation.shouldReceive('getQuery').andReturn(groupRelationQuery);
     groupRelationQuery.shouldReceive('with').once()._with({
-      'lines': null,
+      'lines'        : null,
       'lines.details': null
     });
     builder.setEagerLoads({
-      'orders': null,
-      'ordersGroups': null,
-      'ordersGroups.lines': null,
+      'orders'                    : null,
+      'ordersGroups'              : null,
+      'ordersGroups.lines'        : null,
       'ordersGroups.lines.details': null
     });
     builder.getRelation('orders');
@@ -565,7 +571,7 @@ describe('test database eloquent builder', () => {
     expect(result).toEqual(builder);
   });
   it('nested where', () => {
-    var nestedQuery = m.mock(Builder);
+    var nestedQuery    = m.mock(Builder);
     var nestedRawQuery = this.getMockQueryBuilder();
     nestedQuery.shouldReceive('getQuery').once().andReturn(nestedRawQuery);
     var model = this.getMockModel().makePartial();
@@ -586,7 +592,8 @@ describe('test database eloquent builder', () => {
     var query = model.newQuery().where('foo', '=', 'bar').where(query => {
       query.where('baz', '>', 9000);
     });
-    expect(query.toSql()).toBe('select * from "table" where "foo" = ? and ("baz" > ?) and "table"."deleted_at" is null');
+    expect(query.toSql()).toBe(
+      'select * from "table" where "foo" = ? and ("baz" > ?) and "table"."deleted_at" is null');
     expect(query.getBindings()).toEqual(['bar', 9000]);
   });
   it('real nested where with scopes macro', () => {
@@ -595,7 +602,8 @@ describe('test database eloquent builder', () => {
     var query = model.newQuery().where('foo', '=', 'bar').where(query => {
       query.where('baz', '>', 9000).onlyTrashed();
     }).withTrashed();
-    expect(query.toSql()).toBe('select * from "table" where "foo" = ? and ("baz" > ? and "table"."deleted_at" is not null)');
+    expect(query.toSql()).toBe(
+      'select * from "table" where "foo" = ? and ("baz" > ? and "table"."deleted_at" is not null)');
     expect(query.getBindings()).toEqual(['bar', 9000]);
   });
   it('real nested where with multiple scopes and one dead scope', () => {
@@ -604,7 +612,8 @@ describe('test database eloquent builder', () => {
     var query = model.newQuery().empty().where('foo', '=', 'bar').empty().where(query => {
       query.empty().where('baz', '>', 9000);
     });
-    expect(query.toSql()).toBe('select * from "table" where "foo" = ? and ("baz" > ?) and "table"."deleted_at" is null');
+    expect(query.toSql()).toBe(
+      'select * from "table" where "foo" = ? and ("baz" > ?) and "table"."deleted_at" is null');
     expect(query.getBindings()).toEqual(['bar', 9000]);
   });
   it('real query higher order or where scopes', () => {
@@ -643,23 +652,26 @@ describe('test database eloquent builder', () => {
     });
   });
   it('with count', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.withCount('foo');
-    expect(builder.toSql()).toBe('select "eloquent_builder_test_model_parent_stubs".*, (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id") as "foo_count" from "eloquent_builder_test_model_parent_stubs"');
+    expect(builder.toSql()).toBe(
+      'select "eloquent_builder_test_model_parent_stubs".*, (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id") as "foo_count" from "eloquent_builder_test_model_parent_stubs"');
   });
   it('with count and select', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.select('id').withCount('foo');
-    expect(builder.toSql()).toBe('select "id", (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id") as "foo_count" from "eloquent_builder_test_model_parent_stubs"');
+    expect(builder.toSql()).toBe(
+      'select "id", (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id") as "foo_count" from "eloquent_builder_test_model_parent_stubs"');
   });
   it('with count and merged wheres', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.select('id').withCount({
       'activeFoo': q => {
         q.where('bam', '>', 'qux');
       }
     });
-    expect(builder.toSql()).toBe('select "id", (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" and "bam" > ? and "active" = ?) as "active_foo_count" from "eloquent_builder_test_model_parent_stubs"');
+    expect(builder.toSql()).toBe(
+      'select "id", (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" and "bam" > ? and "active" = ?) as "active_foo_count" from "eloquent_builder_test_model_parent_stubs"');
     expect(builder.getBindings()).toEqual(['qux', true]);
   });
   it('with count and global scope', () => {
@@ -670,51 +682,57 @@ describe('test database eloquent builder', () => {
     var builder = model.select('id').withCount(['foo']);
     EloquentBuilderTestModelCloseRelatedStub.addGlobalScope('withCount', query => {
     });
-    expect(builder.toSql()).toBe('select "id", (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id") as "foo_count" from "eloquent_builder_test_model_parent_stubs"');
+    expect(builder.toSql()).toBe(
+      'select "id", (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id") as "foo_count" from "eloquent_builder_test_model_parent_stubs"');
   });
   it('with count and constraints and having', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.where('bar', 'baz');
     builder.withCount({
       'foo': q => {
         q.where('bam', '>', 'qux');
       }
     }).having('foo_count', '>=', 1);
-    expect(builder.toSql()).toBe('select "eloquent_builder_test_model_parent_stubs".*, (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" and "bam" > ?) as "foo_count" from "eloquent_builder_test_model_parent_stubs" where "bar" = ? having "foo_count" >= ?');
+    expect(builder.toSql()).toBe(
+      'select "eloquent_builder_test_model_parent_stubs".*, (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" and "bam" > ?) as "foo_count" from "eloquent_builder_test_model_parent_stubs" where "bar" = ? having "foo_count" >= ?');
     expect(builder.getBindings()).toEqual(['qux', 'baz', 1]);
   });
   it('with count and rename', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.withCount('foo as foo_bar');
-    expect(builder.toSql()).toBe('select "eloquent_builder_test_model_parent_stubs".*, (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id") as "foo_bar" from "eloquent_builder_test_model_parent_stubs"');
+    expect(builder.toSql()).toBe(
+      'select "eloquent_builder_test_model_parent_stubs".*, (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id") as "foo_bar" from "eloquent_builder_test_model_parent_stubs"');
   });
   it('with count multiple and partial rename', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.withCount(['foo as foo_bar', 'foo']);
-    expect(builder.toSql()).toBe('select "eloquent_builder_test_model_parent_stubs".*, (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id") as "foo_bar", (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id") as "foo_count" from "eloquent_builder_test_model_parent_stubs"');
+    expect(builder.toSql()).toBe(
+      'select "eloquent_builder_test_model_parent_stubs".*, (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id") as "foo_bar", (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id") as "foo_count" from "eloquent_builder_test_model_parent_stubs"');
   });
   it('has with constraints and having in subquery', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.where('bar', 'baz');
     builder.whereHas('foo', q => {
       q.having('bam', '>', 'qux');
     }).where('quux', 'quuux');
-    expect(builder.toSql()).toBe('select * from "eloquent_builder_test_model_parent_stubs" where "bar" = ? and exists (select * from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" having "bam" > ?) and "quux" = ?');
+    expect(builder.toSql()).toBe(
+      'select * from "eloquent_builder_test_model_parent_stubs" where "bar" = ? and exists (select * from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" having "bam" > ?) and "quux" = ?');
     expect(builder.getBindings()).toEqual(['baz', 'qux', 'quuux']);
   });
   it('has with constraints with or where and having in subquery', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.where('name', 'larry');
     builder.whereHas('address', q => {
       q.where('zipcode', '90210');
       q.orWhere('zipcode', '90220');
       q.having('street', '=', 'fooside dr');
     }).where('age', 29);
-    expect(builder.toSql()).toBe('select * from "eloquent_builder_test_model_parent_stubs" where "name" = ? and exists (select * from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" and ("zipcode" = ? or "zipcode" = ?) having "street" = ?) and "age" = ?');
+    expect(builder.toSql()).toBe(
+      'select * from "eloquent_builder_test_model_parent_stubs" where "name" = ? and exists (select * from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" and ("zipcode" = ? or "zipcode" = ?) having "street" = ?) and "age" = ?');
     expect(builder.getBindings()).toEqual(['larry', '90210', '90220', 'fooside dr', 29]);
   });
   it('has with constraints and join and having in subquery', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.where('bar', 'baz');
     builder.whereHas('foo', q => {
       q.join('quuuux', j => {
@@ -722,155 +740,163 @@ describe('test database eloquent builder', () => {
       });
       q.having('bam', '>', 'qux');
     }).where('quux', 'quuux');
-    expect(builder.toSql()).toBe('select * from "eloquent_builder_test_model_parent_stubs" where "bar" = ? and exists (select * from "eloquent_builder_test_model_close_related_stubs" inner join "quuuux" on "quuuuux" = ? where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" having "bam" > ?) and "quux" = ?');
+    expect(builder.toSql()).toBe(
+      'select * from "eloquent_builder_test_model_parent_stubs" where "bar" = ? and exists (select * from "eloquent_builder_test_model_close_related_stubs" inner join "quuuux" on "quuuuux" = ? where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" having "bam" > ?) and "quux" = ?');
     expect(builder.getBindings()).toEqual(['baz', 'quuuuuux', 'qux', 'quuux']);
   });
   it('has with constraints and having in subquery with count', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.where('bar', 'baz');
     builder.whereHas('foo', q => {
       q.having('bam', '>', 'qux');
     }, '>=', 2).where('quux', 'quuux');
-    expect(builder.toSql()).toBe('select * from "eloquent_builder_test_model_parent_stubs" where "bar" = ? and (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" having "bam" > ?) >= 2 and "quux" = ?');
+    expect(builder.toSql()).toBe(
+      'select * from "eloquent_builder_test_model_parent_stubs" where "bar" = ? and (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" having "bam" > ?) >= 2 and "quux" = ?');
     expect(builder.getBindings()).toEqual(['baz', 'qux', 'quuux']);
   });
   it('with count and constraints with binding in select sub', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.newQuery();
     builder.withCount({
       'foo': q => {
         q.selectSub(model.newQuery().where('bam', '=', 3).selectRaw('count(0)'), 'bam_3_count');
       }
     });
-    expect(builder.toSql()).toBe('select "eloquent_builder_test_model_parent_stubs".*, (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id") as "foo_count" from "eloquent_builder_test_model_parent_stubs"');
+    expect(builder.toSql()).toBe(
+      'select "eloquent_builder_test_model_parent_stubs".*, (select count(*) from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id") as "foo_count" from "eloquent_builder_test_model_parent_stubs"');
     expect(builder.getBindings()).toEqual([]);
   });
   it('has nested with constraints', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.whereHas('foo', q => {
       q.whereHas('bar', q => {
         q.where('baz', 'bam');
       });
     }).toSql();
-    var result = model.whereHas('foo.bar', q => {
+    var result  = model.whereHas('foo.bar', q => {
       q.where('baz', 'bam');
     }).toSql();
     expect(result).toEqual(builder);
   });
   it('has nested', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.whereHas('foo', q => {
       q.has('bar');
     });
-    var result = model.has('foo.bar').toSql();
+    var result  = model.has('foo.bar').toSql();
     expect(result).toEqual(builder.toSql());
   });
   it('or has nested', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.whereHas('foo', q => {
       q.has('bar');
     }).orWhereHas('foo', q => {
       q.has('baz');
     });
-    var result = model.has('foo.bar').orHas('foo.baz').toSql();
+    var result  = model.has('foo.bar').orHas('foo.baz').toSql();
     expect(result).toEqual(builder.toSql());
   });
   it('self has nested', () => {
-    var model = new EloquentBuilderTestModelSelfRelatedStub();
-    var nestedSql = model.whereHas('parentFoo', q => {
+    var model      = new EloquentBuilderTestModelSelfRelatedStub();
+    var nestedSql  = model.whereHas('parentFoo', q => {
       q.has('childFoo');
     }).toSql();
-    var dotSql = model.has('parentFoo.childFoo').toSql();
-    var alias = 'self_alias_hash';
+    var dotSql     = model.has('parentFoo.childFoo').toSql();
+    var alias      = 'self_alias_hash';
     var aliasRegex = '/\\b(laravel_reserved_\\d)(\\b|$)/i';
-    var nestedSql = preg_replace(aliasRegex, alias, nestedSql);
-    var dotSql = preg_replace(aliasRegex, alias, dotSql);
+    var nestedSql  = preg_replace(aliasRegex, alias, nestedSql);
+    var dotSql     = preg_replace(aliasRegex, alias, dotSql);
     expect(dotSql).toEqual(nestedSql);
   });
   it('self has nested uses alias', () => {
-    var model = new EloquentBuilderTestModelSelfRelatedStub();
-    var sql = model.has('parentFoo.childFoo').toSql();
-    var alias = 'self_alias_hash';
+    var model      = new EloquentBuilderTestModelSelfRelatedStub();
+    var sql        = model.has('parentFoo.childFoo').toSql();
+    var alias      = 'self_alias_hash';
     var aliasRegex = '/\\b(laravel_reserved_\\d)(\\b|$)/i';
-    var sql = preg_replace(aliasRegex, alias, sql);
+    var sql        = preg_replace(aliasRegex, alias, sql);
     expect(sql).toStringContainsString('"self_alias_hash"."id" = "self_related_stubs"."parent_id"');
   });
   it('doesnt have', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.doesntHave('foo');
-    expect(builder.toSql()).toBe('select * from "eloquent_builder_test_model_parent_stubs" where not exists (select * from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id")');
+    expect(builder.toSql()).toBe(
+      'select * from "eloquent_builder_test_model_parent_stubs" where not exists (select * from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id")');
   });
   it('doesnt have nested', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.doesntHave('foo.bar');
-    expect(builder.toSql()).toBe('select * from "eloquent_builder_test_model_parent_stubs" where not exists (select * from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" and exists (select * from "eloquent_builder_test_model_far_related_stubs" where "eloquent_builder_test_model_close_related_stubs"."id" = "eloquent_builder_test_model_far_related_stubs"."eloquent_builder_test_model_close_related_stub_id"))');
+    expect(builder.toSql()).toBe(
+      'select * from "eloquent_builder_test_model_parent_stubs" where not exists (select * from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" and exists (select * from "eloquent_builder_test_model_far_related_stubs" where "eloquent_builder_test_model_close_related_stubs"."id" = "eloquent_builder_test_model_far_related_stubs"."eloquent_builder_test_model_close_related_stub_id"))');
   });
   it('or doesnt have', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.where('bar', 'baz').orDoesntHave('foo');
-    expect(builder.toSql()).toBe('select * from "eloquent_builder_test_model_parent_stubs" where "bar" = ? or not exists (select * from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id")');
+    expect(builder.toSql()).toBe(
+      'select * from "eloquent_builder_test_model_parent_stubs" where "bar" = ? or not exists (select * from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id")');
     expect(builder.getBindings()).toEqual(['baz']);
   });
   it('where doesnt have', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.whereDoesntHave('foo', query => {
       query.where('bar', 'baz');
     });
-    expect(builder.toSql()).toBe('select * from "eloquent_builder_test_model_parent_stubs" where not exists (select * from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" and "bar" = ?)');
+    expect(builder.toSql()).toBe(
+      'select * from "eloquent_builder_test_model_parent_stubs" where not exists (select * from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" and "bar" = ?)');
     expect(builder.getBindings()).toEqual(['baz']);
   });
   it('or where doesnt have', () => {
-    var model = new EloquentBuilderTestModelParentStub();
+    var model   = new EloquentBuilderTestModelParentStub();
     var builder = model.where('bar', 'baz').orWhereDoesntHave('foo', query => {
       query.where('qux', 'quux');
     });
-    expect(builder.toSql()).toBe('select * from "eloquent_builder_test_model_parent_stubs" where "bar" = ? or not exists (select * from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" and "qux" = ?)');
+    expect(builder.toSql()).toBe(
+      'select * from "eloquent_builder_test_model_parent_stubs" where "bar" = ? or not exists (select * from "eloquent_builder_test_model_close_related_stubs" where "eloquent_builder_test_model_parent_stubs"."foo_id" = "eloquent_builder_test_model_close_related_stubs"."id" and "qux" = ?)');
     expect(builder.getBindings()).toEqual(['baz', 'quux']);
   });
   it('where key method with int', () => {
-    var model = this.getMockModel();
+    var model   = this.getMockModel();
     var builder = this.getBuilder().setModel(model);
     var keyName = model.getQualifiedKeyName();
-    var int = 1;
+    var int     = 1;
     builder.getQuery().shouldReceive('where').once()._with(keyName, '=', int);
     builder.whereKey(int);
   });
   it('where key method with array', () => {
-    var model = this.getMockModel();
+    var model   = this.getMockModel();
     var builder = this.getBuilder().setModel(model);
     var keyName = model.getQualifiedKeyName();
-    var array = [1, 2, 3];
+    var array   = [1, 2, 3];
     builder.getQuery().shouldReceive('whereIn').once()._with(keyName, array);
     builder.whereKey(array);
   });
   it('where key method with collection', () => {
-    var model = this.getMockModel();
-    var builder = this.getBuilder().setModel(model);
-    var keyName = model.getQualifiedKeyName();
+    var model      = this.getMockModel();
+    var builder    = this.getBuilder().setModel(model);
+    var keyName    = model.getQualifiedKeyName();
     var collection = new Collection([1, 2, 3]);
     builder.getQuery().shouldReceive('whereIn').once()._with(keyName, collection);
     builder.whereKey(collection);
   });
   it('where key not method with int', () => {
-    var model = this.getMockModel();
+    var model   = this.getMockModel();
     var builder = this.getBuilder().setModel(model);
     var keyName = model.getQualifiedKeyName();
-    var int = 1;
+    var int     = 1;
     builder.getQuery().shouldReceive('where').once()._with(keyName, '!=', int);
     builder.whereKeyNot(int);
   });
   it('where key not method with array', () => {
-    var model = this.getMockModel();
+    var model   = this.getMockModel();
     var builder = this.getBuilder().setModel(model);
     var keyName = model.getQualifiedKeyName();
-    var array = [1, 2, 3];
+    var array   = [1, 2, 3];
     builder.getQuery().shouldReceive('whereNotIn').once()._with(keyName, array);
     builder.whereKeyNot(array);
   });
   it('where key not method with collection', () => {
-    var model = this.getMockModel();
-    var builder = this.getBuilder().setModel(model);
-    var keyName = model.getQualifiedKeyName();
+    var model      = this.getMockModel();
+    var builder    = this.getBuilder().setModel(model);
+    var keyName    = model.getQualifiedKeyName();
     var collection = new Collection([1, 2, 3]);
     builder.getQuery().shouldReceive('whereNotIn').once()._with(keyName, collection);
     builder.whereKeyNot(collection);
@@ -878,7 +904,7 @@ describe('test database eloquent builder', () => {
   it('where in', () => {
     var model = new EloquentBuilderTestNestedStub();
     this.mockConnectionForModel(model, '');
-    var query = model.newQuery().withoutGlobalScopes().whereIn('foo', model.newQuery().select('id'));
+    var query    = model.newQuery().withoutGlobalScopes().whereIn('foo', model.newQuery().select('id'));
     var expected = 'select * from "table" where "foo" in (select "id" from "table" where "table"."deleted_at" is null)';
     expect(query.toSql()).toEqual(expected);
   });
@@ -897,7 +923,7 @@ describe('test database eloquent builder', () => {
     builder.latest();
   });
   it('latest with column', () => {
-    var model = this.getMockModel();
+    var model   = this.getMockModel();
     var builder = this.getBuilder().setModel(model);
     builder.getQuery().shouldReceive('latest').once()._with('foo');
     builder.latest('foo');
@@ -917,19 +943,20 @@ describe('test database eloquent builder', () => {
     builder.oldest();
   });
   it('oldest with column', () => {
-    var model = this.getMockModel();
+    var model   = this.getMockModel();
     var builder = this.getBuilder().setModel(model);
     builder.getQuery().shouldReceive('oldest').once()._with('foo');
     builder.oldest('foo');
   });
   it('update', () => {
     Carbon.setTestNow(now = '2017-10-10 10:10:10');
-    var query = new BaseBuilder(m.mock(ConnectionInterface), new Grammar(), m.mock(Processor));
+    var query   = new BaseBuilder(m.mock(ConnectionInterface), new Grammar(), m.mock(Processor));
     var builder = new Builder(query);
-    var model = new EloquentBuilderTestStub();
+    var model   = new EloquentBuilderTestStub();
     this.mockConnectionForModel(model, '');
     builder.setModel(model);
-    builder.getConnection().shouldReceive('update').once()._with('update "table" set "foo" = ?, "table"."updated_at" = ?', ['bar', now]).andReturn(1);
+    builder.getConnection().shouldReceive('update').once()._with(
+      'update "table" set "foo" = ?, "table"."updated_at" = ?', ['bar', now]).andReturn(1);
     var result = builder.update({
       'foo': 'bar'
     });
@@ -937,22 +964,23 @@ describe('test database eloquent builder', () => {
     Carbon.setTestNow(null);
   });
   it('update with timestamp value', () => {
-    var query = new BaseBuilder(m.mock(ConnectionInterface), new Grammar(), m.mock(Processor));
+    var query   = new BaseBuilder(m.mock(ConnectionInterface), new Grammar(), m.mock(Processor));
     var builder = new Builder(query);
-    var model = new EloquentBuilderTestStub();
+    var model   = new EloquentBuilderTestStub();
     this.mockConnectionForModel(model, '');
     builder.setModel(model);
-    builder.getConnection().shouldReceive('update').once()._with('update "table" set "foo" = ?, "table"."updated_at" = ?', ['bar', null]).andReturn(1);
+    builder.getConnection().shouldReceive('update').once()._with(
+      'update "table" set "foo" = ?, "table"."updated_at" = ?', ['bar', null]).andReturn(1);
     var result = builder.update({
-      'foo': 'bar',
+      'foo'       : 'bar',
       'updated_at': null
     });
     expect(result).toEqual(1);
   });
   it('update without timestamp', () => {
-    var query = new BaseBuilder(m.mock(ConnectionInterface), new Grammar(), m.mock(Processor));
+    var query   = new BaseBuilder(m.mock(ConnectionInterface), new Grammar(), m.mock(Processor));
     var builder = new Builder(query);
-    var model = new EloquentBuilderTestStubWithoutTimestamp();
+    var model   = new EloquentBuilderTestStubWithoutTimestamp();
     this.mockConnectionForModel(model, '');
     builder.setModel(model);
     builder.getConnection().shouldReceive('update').once()._with('update "table" set "foo" = ?', ['bar']).andReturn(1);
@@ -963,12 +991,13 @@ describe('test database eloquent builder', () => {
   });
   it('update with alias', () => {
     Carbon.setTestNow(now = '2017-10-10 10:10:10');
-    var query = new BaseBuilder(m.mock(ConnectionInterface), new Grammar(), m.mock(Processor));
+    var query   = new BaseBuilder(m.mock(ConnectionInterface), new Grammar(), m.mock(Processor));
     var builder = new Builder(query);
-    var model = new EloquentBuilderTestStub();
+    var model   = new EloquentBuilderTestStub();
     this.mockConnectionForModel(model, '');
     builder.setModel(model);
-    builder.getConnection().shouldReceive('update').once()._with('update "table" as "alias" set "foo" = ?, "alias"."updated_at" = ?', ['bar', now]).andReturn(1);
+    builder.getConnection().shouldReceive('update').once()._with(
+      'update "table" as "alias" set "foo" = ?, "alias"."updated_at" = ?', ['bar', now]).andReturn(1);
     var result = builder.from('table as alias').update({
       'foo': 'bar'
     });
@@ -977,7 +1006,7 @@ describe('test database eloquent builder', () => {
   });
   it('with casts method', () => {
     var builder = new Builder(this.getMockQueryBuilder());
-    var model = this.getMockModel();
+    var model   = this.getMockModel();
     builder.setModel(model);
     model.shouldReceive('mergeCasts')._with({
       'foo': 'bar'
@@ -987,12 +1016,12 @@ describe('test database eloquent builder', () => {
     });
   });
   it('mock connection for model', () => {
-    var grammarClass = 'Illuminate\\Database\\Query\\Grammars\\' + database + 'Grammar';
+    var grammarClass   = 'Illuminate\\Database\\Query\\Grammars\\' + database + 'Grammar';
     var processorClass = 'Illuminate\\Database\\Query\\Processors\\' + database + 'Processor';
-    var grammar = new grammarClass();
-    var processor = new processorClass();
-    var connection = m.mock(ConnectionInterface, {
-      'getQueryGrammar': grammar,
+    var grammar        = new grammarClass();
+    var processor      = new processorClass();
+    var connection     = m.mock(ConnectionInterface, {
+      'getQueryGrammar' : grammar,
       'getPostProcessor': processor
     });
     connection.shouldReceive('query').andReturnUsing(() => {
@@ -1001,7 +1030,7 @@ describe('test database eloquent builder', () => {
     var resolver = m.mock(ConnectionResolverInterface, {
       'connection': connection
     });
-    var clazz = get_class(model);
+    var clazz    = get_class(model);
     clazz.setConnectionResolver(resolver);
   });
   it('get builder', () => {
@@ -1122,11 +1151,13 @@ export class EloquentBuilderTestModelSelfRelatedStub extends Model {
   }
 
   public parentBars() {
-    return this.belongsToMany(EloquentBuilderTestModelSelfRelatedStub, 'self_pivot', 'child_id', 'parent_id', 'parent_bars');
+    return this.belongsToMany(EloquentBuilderTestModelSelfRelatedStub, 'self_pivot', 'child_id', 'parent_id',
+      'parent_bars');
   }
 
   public childBars() {
-    return this.belongsToMany(EloquentBuilderTestModelSelfRelatedStub, 'self_pivot', 'parent_id', 'child_id', 'child_bars');
+    return this.belongsToMany(EloquentBuilderTestModelSelfRelatedStub, 'self_pivot', 'parent_id', 'child_id',
+      'child_bars');
   }
 
   public bazes() {
@@ -1135,6 +1166,6 @@ export class EloquentBuilderTestModelSelfRelatedStub extends Model {
 }
 
 export class EloquentBuilderTestStubWithoutTimestamp extends Model {
-  static UPDATED_AT = null;
+  static UPDATED_AT    = null;
   protected table: any = 'table';
 }

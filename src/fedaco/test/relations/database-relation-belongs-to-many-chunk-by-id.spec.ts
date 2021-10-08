@@ -33,19 +33,21 @@ function createSchema() {
 
 async function seedData() {
   const user = await BelongsToManyChunkByIdTestTestUser.createQuery().create({
-    'id': 1,
+    'id'   : 1,
     'email': 'taylorotwell@gmail.com'
   });
-  await BelongsToManyChunkByIdTestTestArticle.createQuery().insert([{
-    'aid': 1,
-    'title': 'Another title'
-  }, {
-    'aid': 2,
-    'title': 'Another title'
-  }, {
-    'aid': 3,
-    'title': 'Another title'
-  }]);
+  await BelongsToManyChunkByIdTestTestArticle.createQuery().insert([
+    {
+      'aid'  : 1,
+      'title': 'Another title'
+    }, {
+      'aid'  : 2,
+      'title': 'Another title'
+    }, {
+      'aid'  : 3,
+      'title': 'Another title'
+    }
+  ]);
   user.articles().sync([3, 1, 2]);
 }
 
@@ -53,7 +55,7 @@ describe('test database eloquent belongs to many chunk by id', () => {
   beforeAll(() => {
     const db = new DatabaseConfig();
     db.addConnection({
-      'driver': 'sqlite',
+      'driver'  : 'sqlite',
       'database': ':memory:'
     });
     db.bootEloquent();
@@ -65,28 +67,28 @@ describe('test database eloquent belongs to many chunk by id', () => {
     schema().drop('users');
     schema().drop('articles');
     schema().drop('article_user');
-  })
+  });
 
   it('belongs to chunk by id', async () => {
 
     const user = await BelongsToManyChunkByIdTestTestUser.createQuery().first();
-    let i = 0;
+    let i      = 0;
     user.getRelationMethod('articles').chunkById(1, collection => {
       i++;
-      expect(collection.first().aid).toBe(i)
+      expect(collection.first().aid).toBe(i);
     });
     expect(i).toEqual(3);
   });
 });
 
 export class BelongsToManyChunkByIdTestTestUser extends Model {
-  protected table: any = 'users';
+  protected table: any    = 'users';
   protected fillable: any = ['id', 'email'];
-  public timestamps: any = false;
+  public timestamps: any  = false;
 
   @BelongsToManyColumn({
-    related: forwardRef(() => BelongsToManyChunkByIdTestTestArticle),
-    table: 'article_user',
+    related        : forwardRef(() => BelongsToManyChunkByIdTestTestArticle),
+    table          : 'article_user',
     foreignPivotKey: 'user_id',
     relatedPivotKey: 'article_id'
   })
@@ -94,10 +96,10 @@ export class BelongsToManyChunkByIdTestTestUser extends Model {
 }
 
 export class BelongsToManyChunkByIdTestTestArticle extends Model {
-  _primaryKey: any = 'aid';
-  _table: any = 'articles';
-  _keyType: any = 'string';
+  _primaryKey: any         = 'aid';
+  _table: any              = 'articles';
+  _keyType: any            = 'string';
   public incrementing: any = false;
-  public timestamps: any = false;
-  protected fillable: any = ['aid', 'title'];
+  public timestamps: any   = false;
+  protected fillable: any  = ['aid', 'title'];
 }

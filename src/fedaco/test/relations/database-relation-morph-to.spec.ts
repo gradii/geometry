@@ -8,16 +8,18 @@ describe('test database eloquent morph to', () => {
   });
   it('lookup dictionary is properly constructed', () => {
     var relation = this.getRelation();
-    relation.addEagerConstraints([one = /*cast type object*/ {
-      'morph_type': 'morph_type_1',
-      'foreign_key': 'foreign_key_1'
-    }, two = /*cast type object*/ {
-      'morph_type': 'morph_type_1',
-      'foreign_key': 'foreign_key_1'
-    }, three = /*cast type object*/ {
-      'morph_type': 'morph_type_2',
-      'foreign_key': 'foreign_key_2'
-    }]);
+    relation.addEagerConstraints([
+      one = /*cast type object*/ {
+        'morph_type' : 'morph_type_1',
+        'foreign_key': 'foreign_key_1'
+      }, two = /*cast type object*/ {
+        'morph_type' : 'morph_type_1',
+        'foreign_key': 'foreign_key_1'
+      }, three = /*cast type object*/ {
+        'morph_type' : 'morph_type_2',
+        'foreign_key': 'foreign_key_2'
+      }
+    ]);
     var dictionary = relation.getDictionary();
     expect(dictionary).toEqual({
       'morph_type_1': {
@@ -39,9 +41,9 @@ describe('test database eloquent morph to', () => {
       newModel.username = 'taylor';
     });
     this.builder.shouldReceive('first').once().andReturnNull();
-    var newModel = new EloquentMorphToModelStub();
+    var newModel      = new EloquentMorphToModelStub();
     newModel.username = 'taylor';
-    var result = relation.getResults();
+    var result        = relation.getResults();
     expect(result).toEqual(newModel);
     expect(result.username).toBe('taylor');
   });
@@ -50,24 +52,24 @@ describe('test database eloquent morph to', () => {
       'username': 'taylor'
     });
     this.builder.shouldReceive('first').once().andReturnNull();
-    var newModel = new EloquentMorphToModelStub();
+    var newModel      = new EloquentMorphToModelStub();
     newModel.username = 'taylor';
-    var result = relation.getResults();
+    var result        = relation.getResults();
     expect(result).toEqual(newModel);
     expect(result.username).toBe('taylor');
   });
   it('morph to with specified class default', () => {
-    var parent = new EloquentMorphToModelStub();
+    var parent           = new EloquentMorphToModelStub();
     parent.relation_type = EloquentMorphToRelatedStub;
-    var relation = parent.relation().withDefault();
-    var newModel = new EloquentMorphToRelatedStub();
-    var result = relation.getResults();
+    var relation         = parent.relation().withDefault();
+    var newModel         = new EloquentMorphToRelatedStub();
+    var result           = relation.getResults();
     expect(result).toEqual(newModel);
   });
   it('associate method sets foreign key and type on model', () => {
     var parent = m.mock(Model);
     parent.shouldReceive('getAttribute').once()._with('foreign_key').andReturn('foreign.value');
-    var relation = this.getRelationAssociate(parent);
+    var relation  = this.getRelationAssociate(parent);
     var associate = m.mock(Model);
     associate.shouldReceive('getKey').once().andReturn(1);
     associate.shouldReceive('getMorphClass').once().andReturn('Model');
@@ -111,13 +113,14 @@ describe('test database eloquent morph to', () => {
     this.related.shouldReceive('getTable').andReturn('relation');
     this.builder.shouldReceive('getModel').andReturn(this.related);
     var parent = parent || new EloquentMorphToModelStub();
-    return m.mock(MorphTo + '[createModelByType]', [this.builder, parent, 'foreign_key', 'id', 'morph_type', 'relation']);
+    return m.mock(MorphTo + '[createModelByType]',
+      [this.builder, parent, 'foreign_key', 'id', 'morph_type', 'relation']);
   });
 });
 
 export class EloquentMorphToModelStub extends Model {
   public foreign_key: any = 'foreign.value';
-  public table: any = 'eloquent_morph_to_model_stubs';
+  public table: any       = 'eloquent_morph_to_model_stubs';
 
   public relation() {
     return this.morphTo();

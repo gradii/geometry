@@ -36,26 +36,28 @@ function createSchema() {
 
 async function seedData() {
   await BelongsToManySyncTestTestUser.createQuery().create({
-    'id': 1,
+    'id'   : 1,
     'email': 'taylorotwell@gmail.com'
   });
-  await BelongsToManySyncTestTestArticle.createQuery().insert([{
-    'id': '7b7306ae-5a02-46fa-a84c-9538f45c7dd4',
-    'title': 'uuid title'
-  }, {
-    'id': /*cast type string*/ PHP_INT_MAX + 1,
-    'title': 'Another title'
-  }, {
-    'id': '1',
-    'title': 'Another title'
-  }]);
+  await BelongsToManySyncTestTestArticle.createQuery().insert([
+    {
+      'id'   : '7b7306ae-5a02-46fa-a84c-9538f45c7dd4',
+      'title': 'uuid title'
+    }, {
+      'id'   : /*cast type string*/ PHP_INT_MAX + 1,
+      'title': 'Another title'
+    }, {
+      'id'   : '1',
+      'title': 'Another title'
+    }
+  ]);
 }
 
 describe('test database eloquent belongs to many sync return value type', () => {
   beforeAll(() => {
     var db = new DatabaseConfig();
     db.addConnection({
-      'driver': 'sqlite',
+      'driver'  : 'sqlite',
       'database': ':memory:'
     });
     db.bootEloquent();
@@ -67,29 +69,31 @@ describe('test database eloquent belongs to many sync return value type', () => 
     schema().drop('users');
     schema().drop('articles');
     schema().drop('article_user');
-  })
+  });
 
   it('seed data', async () => {
     await BelongsToManySyncTestTestUser.createQuery().create({
-      'id': 1,
+      'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    await BelongsToManySyncTestTestArticle.createQuery().insert([{
-      'id': '7b7306ae-5a02-46fa-a84c-9538f45c7dd4',
-      'title': 'uuid title'
-    }, {
-      'id': /*cast type string*/ PHP_INT_MAX + 1,
-      'title': 'Another title'
-    }, {
-      'id': '1',
-      'title': 'Another title'
-    }]);
+    await BelongsToManySyncTestTestArticle.createQuery().insert([
+      {
+        'id'   : '7b7306ae-5a02-46fa-a84c-9538f45c7dd4',
+        'title': 'uuid title'
+      }, {
+        'id'   : /*cast type string*/ PHP_INT_MAX + 1,
+        'title': 'Another title'
+      }, {
+        'id'   : '1',
+        'title': 'Another title'
+      }
+    ]);
   });
   it('sync return value type', () => {
     this.seedData();
-    var user = BelongsToManySyncTestTestUser.query().first();
+    var user       = BelongsToManySyncTestTestUser.query().first();
     var articleIDs = BelongsToManySyncTestTestArticle.all().pluck('id').toArray();
-    var changes = user.articles().sync(articleIDs);
+    var changes    = user.articles().sync(articleIDs);
     collect(changes['attached']).map(id => {
       this.assertSame(gettype(id), new BelongsToManySyncTestTestArticle().getKeyType());
     });
@@ -97,13 +101,13 @@ describe('test database eloquent belongs to many sync return value type', () => 
 });
 
 export class BelongsToManySyncTestTestUser extends Model {
-  protected table: any = 'users';
+  protected table: any    = 'users';
   protected fillable: any = ['id', 'email'];
-  public timestamps: any = false;
+  public timestamps: any  = false;
 
   @BelongsToManyColumn({
-    related: forwardRef(() => BelongsToManySyncTestTestArticle),
-    table: 'article_user',
+    related        : forwardRef(() => BelongsToManySyncTestTestArticle),
+    table          : 'article_user',
     foreignPivotKey: 'user_id',
     relatedPivotKey: 'article_id'
   })
@@ -111,9 +115,9 @@ export class BelongsToManySyncTestTestUser extends Model {
 }
 
 export class BelongsToManySyncTestTestArticle extends Model {
-  protected table: any = 'articles';
-  protected keyType: any = 'string';
+  protected table: any     = 'articles';
+  protected keyType: any   = 'string';
   public incrementing: any = false;
-  public timestamps: any = false;
-  protected fillable: any = ['id', 'title'];
+  public timestamps: any   = false;
+  protected fillable: any  = ['id', 'title'];
 }
