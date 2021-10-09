@@ -1,12 +1,3 @@
-import { Exception } from 'Exception';
-import { Builder } from 'Illuminate/Database/Eloquent/Builder';
-import { Collection } from 'Illuminate/Database/Eloquent/Collection';
-import { Model } from 'Illuminate/Database/Eloquent/Model';
-import { HasOne } from 'Illuminate/Database/Eloquent/Relations/HasOne';
-import { Relation } from 'Illuminate/Database/Eloquent/Relations/Relation';
-import { Carbon } from 'Illuminate/Support/Carbon';
-import { Mockery as m } from 'Mockery';
-import { TestCase } from 'PHPUnit/Framework/TestCase';
 
 describe('test database eloquent relation', () => {
   it('tear down', () => {

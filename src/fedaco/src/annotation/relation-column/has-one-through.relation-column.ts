@@ -6,6 +6,7 @@
 
 import { makePropDecorator } from '@gradii/annotation';
 import { Model } from '../../fedaco/model';
+import { HasOneThrough } from '../../fedaco/relations/has-one-through';
 import { ForwardRefFn, resolveForwardRef } from '../../query-builder/forward-ref';
 import { _additionalProcessingGetter } from '../additional-processing';
 import { FedacoDecorator } from '../annotation.interface';
@@ -29,12 +30,15 @@ export const HasOneThroughColumn: FedacoDecorator<HasOneThroughRelationAnnotatio
     type        : RelationType.HasOneThrough,
     _getRelation: function (m: Model, relation: string) {
       // @ts-ignore
-      const through   = new resolveForwardRef(p.through)();
-      const firstKey  = p.firstKey || m.getForeignKey();
-      const secondKey = p.secondKey || through.getForeignKey();
-      const r         = m.newHasOneThrough(
-        this.newRelatedInstance(p.related).newQuery(),
-        this, through, firstKey, secondKey,
+      const throughClazz = resolveForwardRef(p.through);
+      const through      = new throughClazz();
+      const firstKey     = p.firstKey || m.getForeignKey();
+      const secondKey    = p.secondKey || through.getForeignKey();
+      const clazz        = resolveForwardRef(p.related);
+
+      const r = new HasOneThrough(
+        m._newRelatedInstance(clazz).newQuery(),
+        m, through, firstKey, secondKey,
         p.localKey || m.getKeyName(), p.secondLocalKey || through.getKeyName()
       );
 

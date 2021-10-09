@@ -1,6 +1,8 @@
+import { isArray } from '@gradii/check-type';
 import { DatabaseConfig } from '../../src/database-config';
 import { Model } from '../../src/fedaco/model';
 import { SchemaBuilder } from '../../src/schema/schema-builder';
+import { EloquentTestUser } from '../fedaco-integration.spec';
 
 function connection(connectionName = 'default') {
   return Model.getConnectionResolver().connection(connectionName);
@@ -11,7 +13,7 @@ function schema(connectionName = 'default'): SchemaBuilder {
 }
 
 async function createSchema() {
- await schema('default').create('users', table => {
+  await schema('default').create('users', table => {
     table.increments('id');
     table.string('email');
     table.timestamps();
@@ -44,35 +46,23 @@ describe('test database eloquent integration with table prefix', () => {
     });
     db.bootEloquent();
     db.setAsGlobal();
-    Eloquent.getConnectionResolver().connection().setTablePrefix('prefix_');
+    Model.getConnectionResolver().connection().setTablePrefix('prefix_');
     await createSchema();
   });
-  it('create schema', () => {
 
-  });
-  it('tear down', () => {
-    [].forEach((connection, index) => {
-    });
-    Relation.morphMap([], false);
-  });
-  it('basic model hydration', () => {
-    EloquentTestUser.create({
+  it('basic model hydration', async () => {
+    await EloquentTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    EloquentTestUser.create({
+    await EloquentTestUser.createQuery().create({
       'email': 'abigailotwell@gmail.com'
     });
-    const models = EloquentTestUser.fromQuery('SELECT * FROM prefix_users WHERE email = ?',
+    const models = EloquentTestUser.createQuery().fromQuery(
+      'SELECT * FROM prefix_users WHERE email = ?',
       ['abigailotwell@gmail.com']);
-    expect(models).toInstanceOf(Collection);
-    expect(models[0]).toInstanceOf(EloquentTestUser);
+    expect(isArray(models)).toBeTruthy();
+    expect(models[0]).toBeInstanceOf(EloquentTestUser);
     expect(models[0].email).toBe('abigailotwell@gmail.com');
-    expect(models).toCount(1);
-  });
-  it('connection', () => {
-    return Eloquent.getConnectionResolver().connection(connection);
-  });
-  it('schema', () => {
-    return this.connection(connection).getSchemaBuilder();
+    expect(models).toHaveLength(1);
   });
 });

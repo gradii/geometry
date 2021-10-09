@@ -6,7 +6,7 @@
 
 export interface ConnectionResolverInterface {
   /*Get a database connection instance.*/
-  connection(name: string | null): any;
+  connection(name?: string): any;
 
   /*Get the default connection name.*/
   getDefaultConnection(): any;

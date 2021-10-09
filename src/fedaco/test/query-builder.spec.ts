@@ -1,10 +1,10 @@
 /* tslint:disable:max-line-length */
 import { raw } from '../src/query-builder/ast-factory';
 import { ConnectionInterface } from '../src/query-builder/connection-interface';
-import { MysqlQueryGrammar } from '../src/query-builder/grammar/mysql-grammar';
-import { PostgresQueryGrammar } from '../src/query-builder/grammar/postgres-grammar';
-import { SqliteQueryGrammar } from '../src/query-builder/grammar/sqlite-grammar';
-import { SqlserverQueryGrammar } from '../src/query-builder/grammar/sqlserver-grammar';
+import { MysqlQueryGrammar } from '../src/query-builder/grammar/mysql-query-grammar';
+import { PostgresQueryGrammar } from '../src/query-builder/grammar/postgres-query-grammar';
+import { SqliteQueryGrammar } from '../src/query-builder/grammar/sqlite-query-grammar';
+import { SqlserverQueryGrammar } from '../src/query-builder/grammar/sqlserver-query-grammar';
 import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
 

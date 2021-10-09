@@ -213,7 +213,7 @@ export class TestLikeWithSingleWith extends Model {
 export class TestLikeWithNestedWith extends Model {
   _table: any          = 'likes';
   _guarded: any        = [];
-  protected _with: any = ['likeable.owner'];
+  _with: any = ['likeable.owner'];
 
   @MorphToColumn({
     morphTypeMap: {}

@@ -5,11 +5,13 @@ import { Pivot } from '../../src/fedaco/relations/pivot';
 describe('test database eloquent pivot', () => {
 
   it('properties are set correctly', () => {
-    var parent = m.mock(Model + '[getConnectionName]');
-    parent.shouldReceive('getConnectionName').twice().andReturn('connection');
-    parent.getConnection().getQueryGrammar().shouldReceive('getDateFormat').andReturn('Y-m-d H:i:s');
+    const parent = new Model();
+    jest.spyOn(parent, 'getConnectionName').mockReturnValue('connection');
+
+    parent.getConnection().getQueryGrammar().shouldReceive('getDateFormat').andReturn(
+      'Y-m-d H:i:s');
     parent.setDateFormat('Y-m-d H:i:s');
-    var pivot = Pivot.fromAttributes(parent, {
+    const pivot = Pivot.fromAttributes(parent, {
       'foo'       : 'bar',
       'created_at': '2015-09-12'
     }, 'table', true);
@@ -22,18 +24,18 @@ describe('test database eloquent pivot', () => {
     expect(pivot.exists).toBeTruthy();
   });
   it('mutators are called from constructor', () => {
-    var parent = m.mock(Model + '[getConnectionName]');
-    parent.shouldReceive('getConnectionName').once().andReturn('connection');
-    var pivot = DatabaseEloquentPivotTestMutatorStub.fromAttributes(parent, {
+    const parent = new Model();
+    jest.spyOn(parent, 'getConnectionName').mockReturnValue('connection');
+    const pivot = DatabaseEloquentPivotTestMutatorStub.fromAttributes(parent, {
       'foo': 'bar'
     }, 'table', true);
     expect(pivot.getMutatorCalled()).toBeTruthy();
   });
   it('from raw attributes does not double mutate', () => {
-    var parent = m.mock(Model + '[getConnectionName]');
-    parent.shouldReceive('getConnectionName').once().andReturn('connection');
-    var pivot = DatabaseEloquentPivotTestJsonCastStub.fromRawAttributes(parent, {
-      'foo': json_encode({
+    const parent = new Model();
+    jest.spyOn(parent, 'getConnectionName').mockReturnValue('connection');
+    const pivot = DatabaseEloquentPivotTestJsonCastStub.fromRawAttributes(parent, {
+      'foo': JSON.stringify({
         'name': 'Taylor'
       })
     }, 'table', true);
@@ -42,26 +44,26 @@ describe('test database eloquent pivot', () => {
     });
   });
   it('from raw attributes does not mutate', () => {
-    var parent = m.mock(Model + '[getConnectionName]');
-    parent.shouldReceive('getConnectionName').once().andReturn('connection');
-    var pivot = DatabaseEloquentPivotTestMutatorStub.fromRawAttributes(parent, {
+    const parent = new Model();
+    jest.spyOn(parent, 'getConnectionName').mockReturnValue('connection');
+    const pivot = DatabaseEloquentPivotTestMutatorStub.fromRawAttributes(parent, {
       'foo': 'bar'
     }, 'table', true);
-    expect(pivot.getMutatorCalled()).toFalse();
+    expect(pivot.getMutatorCalled()).toBeFalsy();
   });
   it('properties unchanged are not dirty', () => {
-    var parent = m.mock(Model + '[getConnectionName]');
-    parent.shouldReceive('getConnectionName').once().andReturn('connection');
-    var pivot = Pivot.fromAttributes(parent, {
+    const parent = new Model();
+    jest.spyOn(parent, 'getConnectionName').mockReturnValue('connection');
+    const pivot = Pivot.fromAttributes(parent, {
       'foo'  : 'bar',
       'shimy': 'shake'
     }, 'table', true);
     expect(pivot.getDirty()).toEqual([]);
   });
   it('properties changed are dirty', () => {
-    var parent = m.mock(Model + '[getConnectionName]');
-    parent.shouldReceive('getConnectionName').once().andReturn('connection');
-    var pivot   = Pivot.fromAttributes(parent, {
+    const parent = new Model();
+    jest.spyOn(parent, 'getConnectionName').mockReturnValue('connection');
+    const pivot = Pivot.fromAttributes(parent, {
       'foo'  : 'bar',
       'shimy': 'shake'
     }, 'table', true);
@@ -71,32 +73,34 @@ describe('test database eloquent pivot', () => {
     });
   });
   it('timestamp property is set if created at in attributes', () => {
-    var parent = m.mock(Model + '[getConnectionName,getDates]');
-    parent.shouldReceive('getConnectionName').andReturn('connection');
-    parent.shouldReceive('getDates').andReturn([]);
-    var pivot = DatabaseEloquentPivotTestDateStub.fromAttributes(parent, {
+    const parent = new Model();
+    jest.spyOn(parent, 'getConnectionName').mockReturnValue('connection');
+    jest.spyOn(parent, 'getDates').mockReturnValue([]);
+    let pivot = DatabaseEloquentPivotTestDateStub.fromAttributes(parent, {
       'foo'       : 'bar',
       'created_at': 'foo'
     }, 'table');
     expect(pivot.timestamps).toBeTruthy();
-    var pivot = DatabaseEloquentPivotTestDateStub.fromAttributes(parent, {
+    pivot = DatabaseEloquentPivotTestDateStub.fromAttributes(parent, {
       'foo': 'bar'
     }, 'table');
-    expect(pivot.timestamps).toFalse();
+    expect(pivot.timestamps).toBeFalsy();
   });
   it('timestamp property is true when creating from raw attributes', () => {
-    var parent = m.mock(Model + '[getConnectionName,getDates]');
-    parent.shouldReceive('getConnectionName').andReturn('connection');
-    var pivot = Pivot.fromRawAttributes(parent, {
+    const parent = new Model();
+    jest.spyOn(parent, 'getConnectionName').mockReturnValue('connection');
+    jest.spyOn(parent, 'getDates').mockReturnValue([]);
+
+    const pivot = Pivot.fromRawAttributes(parent, {
       'foo'       : 'bar',
       'created_at': 'foo'
     }, 'table');
     expect(pivot.timestamps).toBeTruthy();
   });
   it('keys can be set properly', () => {
-    var parent = m.mock(Model + '[getConnectionName]');
-    parent.shouldReceive('getConnectionName').once().andReturn('connection');
-    var pivot = Pivot.fromAttributes(parent, {
+    const parent = new Model();
+    jest.spyOn(parent, 'getConnectionName').mockReturnValue('connection');
+    const pivot = Pivot.fromAttributes(parent, {
       'foo': 'bar'
     }, 'table');
     pivot.setPivotKeys('foreign', 'other');
@@ -104,55 +108,68 @@ describe('test database eloquent pivot', () => {
     expect(pivot.getOtherKey()).toBe('other');
   });
   it('delete method deletes model by keys', () => {
-    var pivot = this.getMockBuilder(Pivot).setMethods(['newQueryWithoutRelationships']).getMock();
+    const pivot = new Pivot();
+    const spy1  = jest.spyOn(pivot, 'newQueryWithoutRelationships');
     pivot.setPivotKeys('foreign', 'other');
     pivot.foreign = 'foreign.value';
     pivot.other   = 'other.value';
-    var query     = m.mock(stdClass);
-    query.shouldReceive('where').once()._with({
-      'foreign': 'foreign.value',
-      'other'  : 'other.value'
-    }).andReturn(query);
-    query.shouldReceive('delete').once().andReturn(true);
-    pivot.expects(this.once()).method('newQueryWithoutRelationships').willReturn(query);
-    var rowsAffected = pivot.delete();
+    const query   = {
+      where(arg: any): any {
+        throw new Error('not implement');
+      },
+      delete(): boolean {
+        throw new Error('not implement');
+      }
+    };
+    jest.spyOn(query, 'where').mockImplementationOnce((arg: any): any => {
+      expect(arg).toEqual({
+        'foreign': 'foreign.value',
+        'other'  : 'other.value'
+      });
+    }).mockReturnValue(query);
+    jest.spyOn(query, 'delete').mockReturnValue(true);
+
+    expect(spy1).toReturnWith(query);
+    const rowsAffected = pivot.delete();
     expect(rowsAffected).toEqual(1);
   });
   it('pivot model table name is singular', () => {
-    var pivot = new Pivot();
+    const pivot = new Pivot();
     expect(pivot.getTable()).toBe('pivot');
   });
   it('pivot model with parent returns parents timestamp columns', () => {
-    var parent = m.mock(Model);
-    parent.shouldReceive('getCreatedAtColumn').andReturn('parent_created_at');
-    parent.shouldReceive('getUpdatedAtColumn').andReturn('parent_updated_at');
-    var pivotWithParent         = new Pivot();
+    const parent = new Model();
+    jest.spyOn(parent, 'getCreatedAtColumn').mockReturnValue('parent_created_at');
+    jest.spyOn(parent, 'getUpdatedAtColumn').mockReturnValue('parent_updated_at');
+    const pivotWithParent       = new Pivot();
     pivotWithParent.pivotParent = parent;
     expect(pivotWithParent.getCreatedAtColumn()).toBe('parent_created_at');
     expect(pivotWithParent.getUpdatedAtColumn()).toBe('parent_updated_at');
   });
   it('pivot model without parent returns model timestamp columns', () => {
-    var model              = new DummyModel();
-    var pivotWithoutParent = new Pivot();
+    const model              = new DummyModel();
+    const pivotWithoutParent = new Pivot();
     expect(pivotWithoutParent.getCreatedAtColumn()).toEqual(model.getCreatedAtColumn());
     expect(pivotWithoutParent.getUpdatedAtColumn()).toEqual(model.getUpdatedAtColumn());
   });
   it('without relations', () => {
-    var original         = new Pivot();
-    original.pivotParent = 'foo';
+    const original       = new Pivot();
+    // @ts-ignore
+    original.pivotParent = class foo {
+    };
     original.setRelation('bar', 'baz');
     expect(original.getRelation('bar')).toBe('baz');
-    var pivot = original.withoutRelations();
-    expect(pivot).toInstanceOf(Pivot);
-    expect(original).toNotSame(pivot);
-    expect(original.pivotParent).toBe('foo');
-    expect(pivot.pivotParent).toNull();
+    let pivot = original.withoutRelations();
+    expect(pivot).toBeInstanceOf(Pivot);
+    expect(original).not.toBe(pivot);
+    // expect(original.pivotParent).toBe('foo');
+    expect(pivot.pivotParent).toBeNull();
     expect(original.relationLoaded('bar')).toBeTruthy();
-    expect(pivot.relationLoaded('bar')).toFalse();
-    var pivot = original.unsetRelations();
+    expect(pivot.relationLoaded('bar')).toBeFalsy();
+    pivot = original.unsetRelations();
     expect(original).toEqual(pivot);
-    expect(pivot.pivotParent).toNull();
-    expect(pivot.relationLoaded('bar')).toFalse();
+    expect(pivot.pivotParent).toBeNull();
+    expect(pivot.relationLoaded('bar')).toBeFalsy();
   });
 });
 
