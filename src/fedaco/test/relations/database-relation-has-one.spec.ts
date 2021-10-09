@@ -1,4 +1,22 @@
 import { Model } from '../../src/fedaco/model';
+import { MorphToMany } from '../../src/fedaco/relations/morph-to-many';
+import { getBuilder } from './relation-testing-helper';
+
+
+function getRelation() {
+  this.builder = m.mock(Builder);
+  this.builder.shouldReceive('whereNotNull')._with('table.foreign_key');
+  this.builder.shouldReceive('where')._with('table.foreign_key', '=', 1);
+  this.related = m.mock(Model);
+  this.builder.shouldReceive('getModel').andReturn(this.related);
+  this.parent = m.mock(Model);
+  this.parent.shouldReceive('getAttribute')._with('id').andReturn(1);
+  this.parent.shouldReceive('getAttribute')._with('username').andReturn('taylor');
+  this.parent.shouldReceive('getCreatedAtColumn').andReturn('created_at');
+  this.parent.shouldReceive('getUpdatedAtColumn').andReturn('updated_at');
+  this.parent.shouldReceive('newQueryWithoutScopes').andReturn(this.builder);
+  return new HasOne(this.builder, this.parent, 'table.foreign_key', 'id');
+}
 
 describe('test database eloquent has one', () => {
 
@@ -109,7 +127,7 @@ describe('test database eloquent has one', () => {
     var models          = relation.match([model1, model2, model3], new Collection([result1, result2]), 'foo');
     expect(models[0].foo.foreign_key).toEqual(1);
     expect(models[1].foo.foreign_key).toEqual(2);
-    expect(models[2].foo).toNull();
+    expect(models[2].foo).toBeNull();
   });
   it('relation count query can be built', () => {
     var relation     = this.getRelation();
@@ -125,20 +143,6 @@ describe('test database eloquent has one', () => {
     builder.shouldReceive('whereColumn').once()._with('table.id', '=', 'table.foreign_key').andReturn(baseQuery);
     baseQuery.shouldReceive('setBindings').once()._with([], 'select');
     relation.getRelationExistenceCountQuery(builder, builder);
-  });
-  it('get relation', () => {
-    this.builder = m.mock(Builder);
-    this.builder.shouldReceive('whereNotNull')._with('table.foreign_key');
-    this.builder.shouldReceive('where')._with('table.foreign_key', '=', 1);
-    this.related = m.mock(Model);
-    this.builder.shouldReceive('getModel').andReturn(this.related);
-    this.parent = m.mock(Model);
-    this.parent.shouldReceive('getAttribute')._with('id').andReturn(1);
-    this.parent.shouldReceive('getAttribute')._with('username').andReturn('taylor');
-    this.parent.shouldReceive('getCreatedAtColumn').andReturn('created_at');
-    this.parent.shouldReceive('getUpdatedAtColumn').andReturn('updated_at');
-    this.parent.shouldReceive('newQueryWithoutScopes').andReturn(this.builder);
-    return new HasOne(this.builder, this.parent, 'table.foreign_key', 'id');
   });
 });
 

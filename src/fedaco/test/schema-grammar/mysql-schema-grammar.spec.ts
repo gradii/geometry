@@ -1,5 +1,5 @@
 /* tslint:disable:max-line-length */
-import { raw } from 'src/fedaco/src/query-builder/ast-factory';
+import { raw } from '../../src/query-builder/ast-factory';
 import { Connection } from '../../src/connection';
 import { WrappedConnection } from '../../src/connector/wrapped-connection';
 import { ConnectionInterface } from '../../src/query-builder/connection-interface';

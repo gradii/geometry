@@ -15,29 +15,42 @@ import {
 import { Relation } from './relation';
 
 export interface HasManyThrough extends InteractsWithDictionary, Relation {
+  /*The "through" parent model instance.*/
+  _throughParent: Model;
+  /*The far parent model instance.*/
+  _farParent: Model;
+  /*The near key on the relationship.*/
+  _firstKey: string;
+  /*The far key on the relationship.*/
+  _secondKey: string;
+  /*The local key on the relationship.*/
+  _localKey: string;
+  /*The local key on the intermediary model.*/
+  _secondLocalKey: string;
+
   /*Set the base constraints on the relation query.*/
-  addConstraints();
+  addConstraints(): void;
 
   /*Set the join clause on the query.*/
-  _performJoin(query?: FedacoBuilder | null);
+  _performJoin(query?: FedacoBuilder | null): void;
 
   /*Get the fully qualified parent key name.*/
-  getQualifiedParentKeyName();
+  getQualifiedParentKeyName(): string;
 
   /*Determine whether "through" parent of the relation uses Soft Deletes.*/
-  throughParentSoftDeletes();
+  throughParentSoftDeletes(): boolean;
 
   /*Indicate that trashed "through" parents should be included in the query.*/
-  withTrashedParents();
+  withTrashedParents(): this;
 
   /*Set the constraints for an eager load of the relation.*/
-  addEagerConstraints(models: any[]);
+  addEagerConstraints(models: any[]): void;
 
   /*Initialize the relation on a set of models.*/
-  initRelation(models: any[], relation: string);
+  initRelation(models: any[], relation: string): Model[];
 
   /*Match the eagerly loaded results to their parents.*/
-  match(this: Model & this, models: any[], results: Collection, relation: string);
+  match(this: Model & this, models: any[], results: Collection, relation: string): Model[];
 
   /*Build model dictionary keyed by the relation's foreign key.*/
   _buildDictionary(results: Collection): {
@@ -52,7 +65,7 @@ export interface HasManyThrough extends InteractsWithDictionary, Relation {
 
   /*Add a basic where clause to the query, and return the first result.*/
   firstWhere(column: Function | string | any[], operator?: any, value?: any,
-             conjunction?: string): Promise<Model>;
+             conjunction?: 'and' | 'or' | string): Promise<Model>;
 
   /*Execute the query and get the first related model.*/
   first(columns?: any[]): Promise<Model>;
@@ -75,59 +88,9 @@ export interface HasManyThrough extends InteractsWithDictionary, Relation {
   /*Execute the query as a "select" statement.*/
   get(columns?: any[]): Promise<Model | Model[]>;
 
-  // /*Get a paginator for the "select" statement.*/
-  // paginate(perPage: number | null = null, columns: any[] = ['*'], pageName: string = 'page',
-  //                 page: number                                                            = null) {
-  //   this._query.addSelect(this.shouldSelect(columns));
-  //   return this._query.paginate(perPage, columns, pageName, page);
-  // }
-  //
-  // /*Paginate the given query into a simple paginator.*/
-  // simplePaginate(perPage: number | null                         = null, columns: any[] = ['*'],
-  //                       pageName: string = 'page', page: number | null = null) {
-  //   this._query.addSelect(this.shouldSelect(columns));
-  //   return this._query.simplePaginate(perPage, columns, pageName, page);
-  // }
   /*Set the select clause for the relation query.*/
-  _shouldSelect(columns?: any[]);
+  _shouldSelect(columns?: any[]): string[];
 
-  // /*Chunk the results of the query.*/
-  // chunk(count: number, callback: Function) {
-  //   return this.prepareQueryBuilder().chunk(count, callback);
-  // }
-  //
-  // /*Chunk the results of a query by comparing numeric IDs.*/
-  // chunkById(count: number, callback: Function, column: string | null = null,
-  //                  alias: string | null                                     = null) {
-  //   column = column ?? this.getRelated().getQualifiedKeyName();
-  //   alias  = alias ?? this.getRelated().getKeyName();
-  //   return this.prepareQueryBuilder().chunkById(count, callback, column, alias);
-  // }
-  // /*Get a generator for the given query.*/
-  // cursor() {
-  //   return this.prepareQueryBuilder().cursor();
-  // }
-  // /*Execute a callback over each item while chunking.*/
-  // each(callback: Function, count: number = 1000) {
-  //   return this.chunk(count, results => {
-  //     for (let [key, value] of Object.entries(results)) {
-  //       if (callback(value, key) === false) {
-  //         return false;
-  //       }
-  //     }
-  //   });
-  // }
-  // /*Query lazily, by chunks of the given size.*/
-  // lazy(chunkSize: number = 1000) {
-  //   return this.prepareQueryBuilder().lazy(chunkSize);
-  // }
-  //
-  // /*Query lazily, by chunking the results of a query by comparing IDs.*/
-  // lazyById(chunkSize = 1000, column: string | null = null, alias: string | null = null) {
-  //   column = column ?? this.getRelated().getQualifiedKeyName();
-  //   alias  = alias ?? this.getRelated().getKeyName();
-  //   return this.prepareQueryBuilder().lazyById(chunkSize, column, alias);
-  // }
   /*Prepare the query builder for query execution.*/
   _prepareQueryBuilder(columns?: any[]): FedacoBuilder;
 
@@ -137,36 +100,35 @@ export interface HasManyThrough extends InteractsWithDictionary, Relation {
 
   /*Add the constraints for a relationship query on the same table.*/
   getRelationExistenceQueryForSelfRelation(query: FedacoBuilder, parentQuery: FedacoBuilder,
-                                           columns?: any[] | any);
+                                           columns?: any[] | any): FedacoBuilder;
 
   /*Add the constraints for a relationship query on the same table as the through parent.*/
   getRelationExistenceQueryForThroughSelfRelation(query: FedacoBuilder, parentQuery: FedacoBuilder,
-                                                  columns?: any[] | any);
+                                                  columns?: any[] | any): FedacoBuilder;
 
   /*Get the qualified foreign key on the related model.*/
-  getQualifiedFarKeyName();
+  getQualifiedFarKeyName(): string;
 
   /*Get the foreign key on the "through" model.*/
-  getFirstKeyName();
+  getFirstKeyName(): string;
 
   /*Get the qualified foreign key on the "through" model.*/
-  getQualifiedFirstKeyName();
+  getQualifiedFirstKeyName(): string;
 
   /*Get the foreign key on the related model.*/
-  getForeignKeyName();
+  getForeignKeyName(): string;
 
   /*Get the qualified foreign key on the related model.*/
-  getQualifiedForeignKeyName();
+  getQualifiedForeignKeyName(): string;
 
   /*Get the local key on the far parent model.*/
-  getLocalKeyName();
+  getLocalKeyName(): string;
 
   /*Get the qualified local key on the far parent model.*/
-  getQualifiedLocalKeyName();
+  getQualifiedLocalKeyName(): string;
 
   /*Get the local key on the intermediary model.*/
-  getSecondLocalKeyName();
-
+  getSecondLocalKeyName(): string;
 }
 
 export class HasManyThrough extends mixinInteractsWithDictionary(
@@ -204,9 +166,9 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   }
 
   /*Set the base constraints on the relation query.*/
-  public addConstraints() {
+  public addConstraints(): void {
     // @ts-ignore
-    const localValue = this._farParent[this._localKey];
+    const localValue = this._farParent.getAttribute(this._localKey);
     this._performJoin();
     if (HasManyThrough.constraints) {
       this._query.where(this.getQualifiedFirstKeyName(), '=', localValue);
@@ -214,8 +176,8 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   }
 
   /*Set the join clause on the query.*/
-  _performJoin(query: FedacoBuilder | null = null) {
-    query      = query || this._query;
+  _performJoin(query: FedacoBuilder | null = null): void {
+    query        = query || this._query;
     const farKey = this.getQualifiedFarKeyName();
     query.join(this._throughParent.getTable(), this.getQualifiedParentKeyName(), '=', farKey);
     if (this.throughParentSoftDeletes()) {
@@ -232,26 +194,26 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   }
 
   /*Determine whether "through" parent of the relation uses Soft Deletes.*/
-  public throughParentSoftDeletes() {
+  public throughParentSoftDeletes(): boolean {
     // @ts-ignore
     return this._throughParent.isTypeofSoftDeletes;
     // return in_array(SoftDeletes, class_uses_recursive(this.throughParent));
   }
 
   /*Indicate that trashed "through" parents should be included in the query.*/
-  public withTrashedParents() {
+  public withTrashedParents(): this {
     this._query.withoutGlobalScope('SoftDeletableHasManyThrough');
     return this;
   }
 
   /*Set the constraints for an eager load of the relation.*/
-  public addEagerConstraints(models: any[]) {
+  public addEagerConstraints(models: any[]): void {
     const whereIn = this.whereInMethod(this._farParent, this._localKey);
     this._query[whereIn](this.getQualifiedFirstKeyName(), this.getKeys(models, this._localKey));
   }
 
   /*Initialize the relation on a set of models.*/
-  public initRelation(models: any[], relation: string) {
+  public initRelation(models: any[], relation: string): Model[] {
     for (const model of models) {
       model.setRelation(relation, this._related.newCollection());
     }
@@ -259,7 +221,7 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   }
 
   /*Match the eagerly loaded results to their parents.*/
-  public match(this: Model & this, models: any[], results: Collection, relation: string) {
+  public match(this: Model & this, models: any[], results: Collection, relation: string): Model[] {
     const dictionary = this._buildDictionary(results);
     for (const model of models) {
       const key = this._getDictionaryKey(model.getAttribute(this._localKey));
@@ -274,10 +236,10 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   _buildDictionary(results: Collection): { [key: string]: any[] } {
     const dictionary: any = {};
     for (const result of results) {
-      if (!dictionary[result.laravel_through_key]) {
-        dictionary[result.laravel_through_key] = [];
+      if (!dictionary[result.getAttribute('laravel_through_key')]) {
+        dictionary[result.getAttribute('laravel_through_key')] = [];
       }
-      dictionary[result.laravel_through_key].push(result);
+      dictionary[result.getAttribute('laravel_through_key')].push(result);
     }
     return dictionary;
   }
@@ -292,17 +254,17 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   }
 
   /*Create or update a related record matching the attributes, and fill it with values.*/
-  public async updateOrCreate(attributes: any[], values: any[] = []) {
+  public async updateOrCreate(attributes: any[], values: any[] = []): Promise<Model> {
     const instance = await this.firstOrNew(attributes) as Model;
     await instance.fill(values).save();
     return instance;
   }
 
   /*Add a basic where clause to the query, and return the first result.*/
-  public firstWhere(column: Function | string | any[],
-                    operator: any       = null,
-                    value: any          = null,
-                    conjunction = 'and') {
+  public async firstWhere(column: Function | string | any[],
+                          operator: any = null,
+                          value: any    = null,
+                          conjunction   = 'and'): Promise<Model> {
     return this.where(column, operator, value, conjunction).first();
   }
 
@@ -313,12 +275,12 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   }
 
   /*Execute the query and get the first result or throw an exception.*/
-  public async firstOrFail(columns: any[] = ['*']) {
+  public async firstOrFail(columns: any[] = ['*']): Promise<Model> {
     const model = await this.first(columns);
     if (!isBlank(model)) {
       return model;
     }
-    throw new Error(`ModelNotFoundException().setModel(get_class(this._related))`);
+    throw new Error(`ModelNotFoundException No query results for model [${this._related.constructor.name}].`);
   }
 
   /*Find a related model by its primary key.*/
@@ -351,13 +313,13 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
     } else if (!isBlank(result)) {
       return result;
     }
-    throw new Error(`ModelNotFoundException().setModel(get_class(this._related), id)`);
+    throw new Error(`ModelNotFoundException No query results for model [${this._related.constructor.name}] [${id}]`);
   }
 
   /*Get the results of the relationship.*/
   public async getResults(): Promise<Model | Model[]> {
     // @ts-ignore
-    return !isBlank(this._farParent[this._localKey]) ?
+    return !isBlank(this._farParent.getAttribute(this._localKey)) ?
       await this.get() :
       this._related.newCollection();
   }
@@ -387,7 +349,7 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   // }
 
   /*Set the select clause for the relation query.*/
-  _shouldSelect(columns: any[] = ['*']) {
+  _shouldSelect(columns: any[] = ['*']): string[] {
     if (columns.includes('*')) {
       columns = [this._related.getTable() + '.*'];
     }
@@ -463,7 +425,7 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   /*Add the constraints for a relationship query on the same table.*/
   public getRelationExistenceQueryForSelfRelation(query: FedacoBuilder,
                                                   parentQuery: FedacoBuilder,
-                                                  columns: any[] | any = ['*']) {
+                                                  columns: any[] | any = ['*']): FedacoBuilder {
     const hash = this.getRelationCountHash();
     query.from(`${query.getModel().getTable()} as ${hash}`);
     query.join(this._throughParent.getTable(), this.getQualifiedParentKeyName(), '=',
@@ -480,9 +442,9 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   /*Add the constraints for a relationship query on the same table as the through parent.*/
   public getRelationExistenceQueryForThroughSelfRelation(query: FedacoBuilder,
                                                          parentQuery: FedacoBuilder,
-                                                         columns: any[] | any = ['*']) {
-    const hash = this.getRelationCountHash();
-    const table  = `${this._throughParent.getTable()} as ${hash}`;
+                                                         columns: any[] | any = ['*']): FedacoBuilder {
+    const hash  = this.getRelationCountHash();
+    const table = `${this._throughParent.getTable()} as ${hash}`;
     query.join(table, `${hash}.${this._secondLocalKey}`, '=', this.getQualifiedFarKeyName());
     if (this.throughParentSoftDeletes()) {
       query.whereNull(`${hash}.${this._throughParent.getDeletedAtColumn()}`);
@@ -493,7 +455,7 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   }
 
   /*Get the qualified foreign key on the related model.*/
-  public getQualifiedFarKeyName() {
+  public getQualifiedFarKeyName(): string {
     return this.getQualifiedForeignKeyName();
   }
 

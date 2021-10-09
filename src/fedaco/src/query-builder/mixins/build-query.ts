@@ -6,10 +6,8 @@
 
 import { isBlank } from '@gradii/check-type';
 import { last } from 'ramda';
-import { BehaviorSubject, EMPTY, from, interval, Observable, of, Subject, Subscriber } from 'rxjs';
-import {
-  bufferWhen, catchError, concatMap, finalize, map, mergeMap, take, tap
-} from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, from, interval, Observable, of, Subscriber } from 'rxjs';
+import { bufferWhen, catchError, concatMap, map, mergeMap, take, tap } from 'rxjs/operators';
 import { Model } from '../../fedaco/model';
 import { Constructor } from '../../helper/constructor';
 import { QueryBuilder } from '../query-builder';
@@ -101,7 +99,8 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
       });
     }
 
-    public each(count: number = 1000, signal?: Observable<any>) {
+    public each(count: number = 1000,
+                signal?: Observable<any>): Observable<{ item: any, index: number }> {
       return this.chunk(count, signal).pipe(
         mergeMap(({results, page}) => {
           return of(...results.map((it: any, idx: number) => {

@@ -245,6 +245,8 @@ export interface ForwardCallToQueryBuilder {
 
   chunk(count: number, signal?: Observable<any>): Observable<{ results: any[], page: number }>;
 
+  each(count: number, signal?: Observable<any>): Observable<{ item: any, index: number }>;
+
   chunkById(count: number,
             column?: string,
             alias?: string,
@@ -769,6 +771,10 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
 
     chunk(...args: any[]) {
       return this.#forwardCallToQueryBuilder('chunk', args);
+    }
+
+    each(...args: any[]) {
+      return this.#forwardCallToQueryBuilder('each', args);
     }
 
     chunkById(...args: any[]) {

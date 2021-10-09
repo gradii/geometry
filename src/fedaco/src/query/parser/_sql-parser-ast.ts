@@ -18,11 +18,7 @@ import { PathExpression } from '../ast/path-expression';
 import { TableName } from '../ast/table-name';
 import { TableReferenceExpression } from '../ast/table-reference-expression';
 import * as asciiChars from './ascii-chars';
-import {
-  EOF,
-  SyntaxKind,
-  Token
-} from './sql-lexer';
+import { EOF, SyntaxKind, Token } from './sql-lexer';
 
 export class _SqlParserAst {
   index: number             = 0;
@@ -276,7 +272,8 @@ export class _SqlParserAst {
   _parseTableAsName(): TableReferenceExpression {
     const tableName = this._parseTableName();
     if (!tableName) {
-      throw new Error(`tableName error. table name can't be keyword like "select", "table", "join" etc`);
+      throw new Error(
+        `tableName error. table name can't be keyword like "select", "table", "join" etc`);
     }
     let alias;
     if (this.peekKeywordAs()) {
@@ -312,6 +309,8 @@ export class _SqlParserAst {
           const t = this.next;
           this.advance();
           paths.push(createIdentifier(t.strValue));
+        } else if (this.next.isOperator('*')) {
+          paths.push(createIdentifier('*'));
         } else {
           throw new Error('invalid table name after period');
         }

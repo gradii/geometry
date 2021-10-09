@@ -1,3 +1,4 @@
+import { isArray } from '@gradii/check-type';
 import { Model } from '../../src/fedaco/model';
 
 describe('test database eloquent has many', () => {
@@ -243,7 +244,7 @@ describe('test database eloquent has many', () => {
       'name': 'colin'
     });
     const instances = relation.createMany(records);
-    expect(instances).toInstanceOf(Collection);
+    expect(isArray(instances)).toBeTruthy();
     expect(instances[0]).toEqual(taylor);
     expect(instances[1]).toEqual(colin);
   });

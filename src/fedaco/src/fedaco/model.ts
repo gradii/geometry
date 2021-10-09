@@ -559,7 +559,7 @@ export class Model extends mixinHasAttributes(
       return false;
     }
     await this.touchOwners();
-    await this.performDeleteOnModel();
+    await this._performDeleteOnModel();
     this._fireModelEvent('deleted', false);
     return true;
   }
@@ -572,7 +572,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Perform the actual delete query on this model instance.*/
-  protected async performDeleteOnModel() {
+  protected async _performDeleteOnModel() {
     await this._setKeysForSaveQuery(this.newModelQuery()).delete();
     this._exists = false;
   }

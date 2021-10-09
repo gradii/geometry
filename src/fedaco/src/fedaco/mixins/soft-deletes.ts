@@ -90,7 +90,7 @@ export function mixinSoftDeletes<T extends Constructor<{}>>(base: T): SoftDelete
         if (deleted) {
           this._fireModelEvent('forceDeleted', false);
         }
-      }, await this.delete());
+      }, await this.delete() as boolean);
     }
 
     /*Perform the actual delete query on this model instance.*/
@@ -104,9 +104,11 @@ export function mixinSoftDeletes<T extends Constructor<{}>>(base: T): SoftDelete
 
     /*Perform the actual delete query on this model instance.*/
     _runSoftDelete(this: Model & this): void {
-      const query                       = this._setKeysForSaveQuery(this.newModelQuery());
-      const time                        = this.freshTimestamp();
-      const columns                     = {};
+      const query                     = this._setKeysForSaveQuery(this.newModelQuery());
+      const time                      = this.freshTimestamp();
+      const columns                   = {
+        [this.getDeletedAtColumn()]:  this.fromDateTime(time)
+      };
       // @ts-ignore
       this[this.getDeletedAtColumn()] = time;
       if (this._timestamps && !isBlank(this.getUpdatedAtColumn())) {
@@ -127,8 +129,8 @@ export function mixinSoftDeletes<T extends Constructor<{}>>(base: T): SoftDelete
       }
       // @ts-ignore
       this[this.getDeletedAtColumn()] = null;
-      this._exists                     = true;
-      const result                      = await this.save();
+      this._exists                    = true;
+      const result                    = await this.save();
       this._fireModelEvent('restored', false);
       return result;
     }
