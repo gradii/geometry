@@ -30,7 +30,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   }
 
   /*Create and return an un-saved instance of the related model.*/
-  public make(attributes: any[] = []) {
+  public make(attributes: any = {}) {
     return tap(instance => {
       this.setForeignAttributesForCreate(instance);
     }, this._related.newInstance(attributes));
@@ -113,7 +113,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   }
 
   /*Get the first related model record matching the attributes or instantiate it.*/
-  public async firstOrNew(attributes: any[] = [], values: any[] = []) {
+  public async firstOrNew(attributes: any = {}, values: any = {}) {
     let instance = await this.where(attributes).first() as Model;
     if (isBlank(instance)) {
       instance = this._related.newInstance([...attributes, ...values]);

@@ -51,6 +51,18 @@ async function createSchema() {
   });
 }
 
+async function createUsers() {
+  const taylor = await SoftDeletesTestUser.createQuery().create({
+    'id'   : 1,
+    'email': 'taylorotwell@gmail.com'
+  });
+  await SoftDeletesTestUser.createQuery().create({
+    'id'   : 2,
+    'email': 'abigailotwell@gmail.com'
+  });
+  await taylor.delete();
+}
+
 describe('test database eloquent soft deletes integration', () => {
   beforeEach(async () => {
     Carbon.setTestNow(Carbon.now());
@@ -63,30 +75,27 @@ describe('test database eloquent soft deletes integration', () => {
     db.setAsGlobal();
     await createSchema();
   });
-  it('create schema', () => {
-
-  });
-  it('tear down', () => {
+  afterEach(async () => {
     Carbon.setTestNow(null);
-    schema().drop('users');
-    schema().drop('posts');
-    schema().drop('comments');
+    await schema().drop('users');
+    await schema().drop('posts');
+    await schema().drop('comments');
   });
-  it('soft deletes are not retrieved', () => {
-    this.createUsers();
-    const users = SoftDeletesTestUser.all();
-    expect(users).toCount(1);
+  it('soft deletes are not retrieved', async () => {
+    createUsers();
+    const users = await SoftDeletesTestUser.createQuery().get();
+    expect(users).toHaveLength(1);
     expect(users.first().id).toEqual(2);
-    expect(SoftDeletesTestUser.find(1)).toNull();
+    expect(SoftDeletesTestUser.createQuery().find(1)).toBeNull();
   });
   it('soft deletes are not retrieved from base query', () => {
-    this.createUsers();
+    createUsers();
     const query = SoftDeletesTestUser.query().toBase();
     expect(query).toInstanceOf(Builder);
-    expect(query.get()).toCount(1);
+    expect(query.get()).toHaveLength(1);
   });
   it('soft deletes are not retrieved from builder helpers', () => {
-    this.createUsers();
+    createUsers();
     let count = 0;
     let query = SoftDeletesTestUser.query();
     query.chunk(2, user => {
@@ -94,66 +103,66 @@ describe('test database eloquent soft deletes integration', () => {
     });
     expect(count).toEqual(1);
     let query = SoftDeletesTestUser.query();
-    expect(query.pluck('email').all()).toCount(1);
+    expect(query.pluck('email').all()).toHaveLength(1);
     Paginator.currentPageResolver(() => {
       return 1;
     });
     let query = SoftDeletesTestUser.query();
-    expect(query.paginate(2).all()).toCount(1);
+    expect(query.paginate(2).all()).toHaveLength(1);
     const query = SoftDeletesTestUser.query();
-    expect(query.simplePaginate(2).all()).toCount(1);
+    expect(query.simplePaginate(2).all()).toHaveLength(1);
     expect(SoftDeletesTestUser.where('email', 'taylorotwell@gmail.com').increment('id')).toEqual(0);
     expect(SoftDeletesTestUser.where('email', 'taylorotwell@gmail.com').decrement('id')).toEqual(0);
   });
   it('with trashed returns all records', () => {
-    this.createUsers();
-    expect(SoftDeletesTestUser.withTrashed().get()).toCount(2);
+    createUsers();
+    expect(SoftDeletesTestUser.withTrashed().get()).toHaveLength(2);
     expect(SoftDeletesTestUser.withTrashed().find(1)).toInstanceOf(Eloquent);
   });
   it('with trashed accepts an argument', () => {
-    this.createUsers();
-    expect(SoftDeletesTestUser.withTrashed(false).get()).toCount(1);
-    expect(SoftDeletesTestUser.withTrashed(true).get()).toCount(2);
+    createUsers();
+    expect(SoftDeletesTestUser.withTrashed(false).get()).toHaveLength(1);
+    expect(SoftDeletesTestUser.withTrashed(true).get()).toHaveLength(2);
   });
   it('delete sets deleted column', () => {
-    this.createUsers();
+    createUsers();
     expect(SoftDeletesTestUser.withTrashed().find(1).deleted_at).toInstanceOf(Carbon);
     expect(SoftDeletesTestUser.find(2).deleted_at).toNull();
   });
   it('force delete actually deletes records', () => {
-    this.createUsers();
+    createUsers();
     SoftDeletesTestUser.find(2).forceDelete();
     const users = SoftDeletesTestUser.withTrashed().get();
-    expect(users).toCount(1);
+    expect(users).toHaveLength(1);
     expect(users.first().id).toEqual(1);
   });
   it('restore restores records', () => {
-    this.createUsers();
+    createUsers();
     const taylor = SoftDeletesTestUser.withTrashed().find(1);
     expect(taylor.trashed()).toBeTruthy();
     taylor.restore();
     const users = SoftDeletesTestUser.all();
-    expect(users).toCount(2);
+    expect(users).toHaveLength(2);
     expect(users.find(1).deleted_at).toNull();
     expect(users.find(2).deleted_at).toNull();
   });
   it('only trashed only returns trashed records', () => {
-    this.createUsers();
+    createUsers();
     const users = SoftDeletesTestUser.onlyTrashed().get();
-    expect(users).toCount(1);
+    expect(users).toHaveLength(1);
     expect(users.first().id).toEqual(1);
   });
   it('only without trashed only returns trashed records', () => {
-    this.createUsers();
+    createUsers();
     let users = SoftDeletesTestUser.withoutTrashed().get();
-    expect(users).toCount(1);
+    expect(users).toHaveLength(1);
     expect(users.first().id).toEqual(2);
     const users = SoftDeletesTestUser.withTrashed().withoutTrashed().get();
-    expect(users).toCount(1);
+    expect(users).toHaveLength(1);
     expect(users.first().id).toEqual(2);
   });
   it('first or new', () => {
-    this.createUsers();
+    createUsers();
     let result = SoftDeletesTestUser.firstOrNew({
       'email': 'taylorotwell@gmail.com'
     });
@@ -164,29 +173,29 @@ describe('test database eloquent soft deletes integration', () => {
     expect(result.id).toEqual(1);
   });
   it('find or new', () => {
-    this.createUsers();
+    createUsers();
     let result = SoftDeletesTestUser.findOrNew(1);
     expect(result.id).toNull();
     const result = SoftDeletesTestUser.withTrashed().findOrNew(1);
     expect(result.id).toEqual(1);
   });
   it('first or create', () => {
-    this.createUsers();
+    createUsers();
     let result = SoftDeletesTestUser.withTrashed().firstOrCreate({
       'email': 'taylorotwell@gmail.com'
     });
     expect(result.email).toBe('taylorotwell@gmail.com');
-    expect(SoftDeletesTestUser.all()).toCount(1);
+    expect(SoftDeletesTestUser.all()).toHaveLength(1);
     const result = SoftDeletesTestUser.firstOrCreate({
       'email': 'foo@bar.com'
     });
     expect(result.email).toBe('foo@bar.com');
-    expect(SoftDeletesTestUser.all()).toCount(2);
-    expect(SoftDeletesTestUser.withTrashed().get()).toCount(3);
+    expect(SoftDeletesTestUser.all()).toHaveLength(2);
+    expect(SoftDeletesTestUser.withTrashed().get()).toHaveLength(3);
   });
   it('update model after soft deleting', () => {
     const now = Carbon.now();
-    this.createUsers();
+    createUsers();
     /**/
     const userModel = SoftDeletesTestUser.find(2);
     userModel.delete();
@@ -195,7 +204,7 @@ describe('test database eloquent soft deletes integration', () => {
     expect(SoftDeletesTestUser.withTrashed().find(2)).toEqual(userModel);
   });
   it('restore after soft delete', () => {
-    this.createUsers();
+    createUsers();
     /**/
     const userModel = SoftDeletesTestUser.find(2);
     userModel.delete();
@@ -203,7 +212,7 @@ describe('test database eloquent soft deletes integration', () => {
     expect(SoftDeletesTestUser.find(2).id).toEqual(userModel.id);
   });
   it('soft delete after restoring', () => {
-    this.createUsers();
+    createUsers();
     /**/
     const userModel = SoftDeletesTestUser.withTrashed().find(1);
     userModel.restore();
@@ -216,7 +225,7 @@ describe('test database eloquent soft deletes integration', () => {
       userModel.getOriginal('deleted_at'));
   });
   it('modifying before soft deleting and restoring', () => {
-    this.createUsers();
+    createUsers();
     /**/
     const userModel = SoftDeletesTestUser.find(2);
     userModel.email = 'foo@bar.com';
@@ -226,25 +235,25 @@ describe('test database eloquent soft deletes integration', () => {
     expect(SoftDeletesTestUser.find(2).email).toBe('foo@bar.com');
   });
   it('update or create', () => {
-    this.createUsers();
+    createUsers();
     let result = SoftDeletesTestUser.updateOrCreate({
       'email': 'foo@bar.com'
     }, {
       'email': 'bar@baz.com'
     });
     expect(result.email).toBe('bar@baz.com');
-    expect(SoftDeletesTestUser.all()).toCount(2);
+    expect(SoftDeletesTestUser.all()).toHaveLength(2);
     const result = SoftDeletesTestUser.withTrashed().updateOrCreate({
       'email': 'taylorotwell@gmail.com'
     }, {
       'email': 'foo@bar.com'
     });
     expect(result.email).toBe('foo@bar.com');
-    expect(SoftDeletesTestUser.all()).toCount(2);
-    expect(SoftDeletesTestUser.withTrashed().get()).toCount(3);
+    expect(SoftDeletesTestUser.all()).toHaveLength(2);
+    expect(SoftDeletesTestUser.withTrashed().get()).toHaveLength(3);
   });
   it('has one relationship can be soft deleted', () => {
-    this.createUsers();
+    createUsers();
     let abigail = SoftDeletesTestUser.where('email', 'abigailotwell@gmail.com').first();
     abigail.address().create({
       'address': 'Laravel avenue 43'
@@ -265,7 +274,7 @@ describe('test database eloquent soft deletes integration', () => {
     expect(abigail.address).toNull();
   });
   it('belongs to relationship can be soft deleted', () => {
-    this.createUsers();
+    createUsers();
     let abigail = SoftDeletesTestUser.where('email', 'abigailotwell@gmail.com').first();
     const group = SoftDeletesTestGroup.create({
       'name': 'admin'
@@ -288,7 +297,7 @@ describe('test database eloquent soft deletes integration', () => {
     expect(abigail.group().withTrashed().first()).toNull();
   });
   it('has many relationship can be soft deleted', () => {
-    this.createUsers();
+    createUsers();
     let abigail = SoftDeletesTestUser.where('email', 'abigailotwell@gmail.com').first();
     abigail.posts().create({
       'title': 'First Title'
@@ -298,19 +307,19 @@ describe('test database eloquent soft deletes integration', () => {
     });
     abigail.posts().where('title', 'Second Title').delete();
     let abigail = abigail.fresh();
-    expect(abigail.posts).toCount(1);
+    expect(abigail.posts).toHaveLength(1);
     expect(abigail.posts.first().title).toBe('First Title');
-    expect(abigail.posts().withTrashed().get()).toCount(2);
+    expect(abigail.posts().withTrashed().get()).toHaveLength(2);
     abigail.posts().withTrashed().restore();
     let abigail = abigail.fresh();
-    expect(abigail.posts).toCount(2);
+    expect(abigail.posts).toHaveLength(2);
     abigail.posts().where('title', 'Second Title').forceDelete();
     const abigail = abigail.fresh();
-    expect(abigail.posts).toCount(1);
-    expect(abigail.posts().withTrashed().get()).toCount(1);
+    expect(abigail.posts).toHaveLength(1);
+    expect(abigail.posts().withTrashed().get()).toHaveLength(1);
   });
   it('second level relationship can be soft deleted', () => {
-    this.createUsers();
+    createUsers();
     let abigail = SoftDeletesTestUser.where('email', 'abigailotwell@gmail.com').first();
     const post  = abigail.posts().create({
       'title': 'First Title'
@@ -320,58 +329,58 @@ describe('test database eloquent soft deletes integration', () => {
     });
     abigail.posts().first().comments().delete();
     const abigail = abigail.fresh();
-    expect(abigail.posts().first().comments).toCount(0);
-    expect(abigail.posts().first().comments().withTrashed().get()).toCount(1);
+    expect(abigail.posts().first().comments).toHaveLength(0);
+    expect(abigail.posts().first().comments().withTrashed().get()).toHaveLength(1);
   });
   it('where has with deleted relationship', () => {
-    this.createUsers();
+    createUsers();
     const abigail = SoftDeletesTestUser.where('email', 'abigailotwell@gmail.com').first();
     const post    = abigail.posts().create({
       'title': 'First Title'
     });
     let users     = SoftDeletesTestUser.where('email', 'taylorotwell@gmail.com').has('posts').get();
-    expect(users).toCount(0);
+    expect(users).toHaveLength(0);
     let users = SoftDeletesTestUser.where('email', 'abigailotwell@gmail.com').has('posts').get();
-    expect(users).toCount(1);
+    expect(users).toHaveLength(1);
     let users = SoftDeletesTestUser.where('email', 'doesnt@exist.com').orHas('posts').get();
-    expect(users).toCount(1);
+    expect(users).toHaveLength(1);
     let users = SoftDeletesTestUser.whereHas('posts', query => {
       query.where('title', 'First Title');
     }).get();
-    expect(users).toCount(1);
+    expect(users).toHaveLength(1);
     let users = SoftDeletesTestUser.whereHas('posts', query => {
       query.where('title', 'Another Title');
     }).get();
-    expect(users).toCount(0);
+    expect(users).toHaveLength(0);
     let users = SoftDeletesTestUser.where('email', 'doesnt@exist.com').orWhereHas('posts',
       query => {
         query.where('title', 'First Title');
       }).get();
-    expect(users).toCount(1);
+    expect(users).toHaveLength(1);
     post.delete();
     const users = SoftDeletesTestUser.has('posts').get();
-    expect(users).toCount(0);
+    expect(users).toHaveLength(0);
   });
   it('where has with nested deleted relationship and only trashed condition', () => {
-    this.createUsers();
+    createUsers();
     const abigail = SoftDeletesTestUser.where('email', 'abigailotwell@gmail.com').first();
     const post    = abigail.posts().create({
       'title': 'First Title'
     });
     post.delete();
     let users = SoftDeletesTestUser.has('posts').get();
-    expect(users).toCount(0);
+    expect(users).toHaveLength(0);
     let users = SoftDeletesTestUser.whereHas('posts', q => {
       q.onlyTrashed();
     }).get();
-    expect(users).toCount(1);
+    expect(users).toHaveLength(1);
     const users = SoftDeletesTestUser.whereHas('posts', q => {
       q.withTrashed();
     }).get();
-    expect(users).toCount(1);
+    expect(users).toHaveLength(1);
   });
   it('where has with nested deleted relationship', () => {
-    this.createUsers();
+    createUsers();
     const abigail = SoftDeletesTestUser.where('email', 'abigailotwell@gmail.com').first();
     const post    = abigail.posts().create({
       'title': 'First Title'
@@ -381,17 +390,17 @@ describe('test database eloquent soft deletes integration', () => {
     });
     comment.delete();
     let users = SoftDeletesTestUser.has('posts.comments').get();
-    expect(users).toCount(0);
+    expect(users).toHaveLength(0);
     const users = SoftDeletesTestUser.doesntHave('posts.comments').get();
-    expect(users).toCount(1);
+    expect(users).toHaveLength(1);
   });
   it('where doesnt have with nested deleted relationship', () => {
-    this.createUsers();
+    createUsers();
     const users = SoftDeletesTestUser.doesntHave('posts.comments').get();
-    expect(users).toCount(1);
+    expect(users).toHaveLength(1);
   });
   it('where has with nested deleted relationship and with trashed condition', () => {
-    this.createUsers();
+    createUsers();
     const abigail = SoftDeletesTestUserWithTrashedPosts.where('email',
       'abigailotwell@gmail.com').first();
     const post    = abigail.posts().create({
@@ -399,10 +408,10 @@ describe('test database eloquent soft deletes integration', () => {
     });
     post.delete();
     const users = SoftDeletesTestUserWithTrashedPosts.has('posts').get();
-    expect(users).toCount(1);
+    expect(users).toHaveLength(1);
   });
   it('with count with nested deleted relationship and only trashed condition', () => {
-    this.createUsers();
+    createUsers();
     const abigail = SoftDeletesTestUser.where('email', 'abigailotwell@gmail.com').first();
     const post1   = abigail.posts().create({
       'title': 'First Title'
@@ -442,13 +451,13 @@ describe('test database eloquent soft deletes integration', () => {
     expect(user.posts_count).toEqual(0);
   });
   it('or where with soft delete constraint', () => {
-    this.createUsers();
+    createUsers();
     const users = SoftDeletesTestUser.where('email', 'taylorotwell@gmail.com').orWhere('email',
       'abigailotwell@gmail.com');
     expect(users.pluck('email').all()).toEqual(['abigailotwell@gmail.com']);
   });
   it('morph to with trashed', () => {
-    this.createUsers();
+    createUsers();
     const abigail = SoftDeletesTestUser.where('email', 'abigailotwell@gmail.com').first();
     const post1   = abigail.posts().create({
       'title': 'First Title'
@@ -480,7 +489,7 @@ describe('test database eloquent soft deletes integration', () => {
   });
   it('morph to with bad method call', () => {
     this.expectException(BadMethodCallException);
-    this.createUsers();
+    createUsers();
     const abigail = SoftDeletesTestUser.where('email', 'abigailotwell@gmail.com').first();
     const post1   = abigail.posts().create({
       'title': 'First Title'
@@ -497,7 +506,7 @@ describe('test database eloquent soft deletes integration', () => {
     }).first();
   });
   it('morph to with constraints', () => {
-    this.createUsers();
+    createUsers();
     const abigail = SoftDeletesTestUser.where('email', 'abigailotwell@gmail.com').first();
     const post1   = abigail.posts().create({
       'title': 'First Title'
@@ -515,7 +524,7 @@ describe('test database eloquent soft deletes integration', () => {
     expect(comment.owner).toNull();
   });
   it('morph to without constraints', () => {
-    this.createUsers();
+    createUsers();
     const abigail = SoftDeletesTestUser.where('email', 'abigailotwell@gmail.com').first();
     const post1   = abigail.posts().create({
       'title': 'First Title'
@@ -550,23 +559,7 @@ describe('test database eloquent soft deletes integration', () => {
     const comment = SoftDeletesTestCommentWithTrashed._with('owner').first();
     expect(comment.owner).toNull();
   });
-  it('create users', () => {
-    const taylor = SoftDeletesTestUser.create({
-      'id'   : 1,
-      'email': 'taylorotwell@gmail.com'
-    });
-    SoftDeletesTestUser.create({
-      'id'   : 2,
-      'email': 'abigailotwell@gmail.com'
-    });
-    taylor.delete();
-  });
-  it('connection', () => {
-    return Eloquent.getConnectionResolver().connection();
-  });
-  it('schema', () => {
-    return this.connection().getSchemaBuilder();
-  });
+
 });
 
 /*Eloquent Models...*/

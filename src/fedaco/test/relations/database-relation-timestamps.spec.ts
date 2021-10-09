@@ -1,69 +1,71 @@
-import { Manager as DB } from 'Illuminate/Database/Capsule/Manager';
-import { Model as Eloquent } from 'Illuminate/Database/Eloquent/Model';
-import { Carbon } from 'Illuminate/Support/Carbon';
-import { TestCase } from 'PHPUnit/Framework/TestCase';
+import { Database } from 'sqlite3';
+import { DatabaseConfig } from '../../src/database-config';
+import { Model } from '../../src/fedaco/model';
+import { SchemaBuilder } from '../../src/schema/schema-builder';
+function connection(connectionName = 'default') {
+  return Model.getConnectionResolver().connection(connectionName);
+}
+
+function schema(connectionName = 'default'): SchemaBuilder {
+  return connection(connectionName).getSchemaBuilder();
+}
+
+async function createSchema() {
+  await schema().create('users', table => {
+    table.increments('id');
+    table.string('email').unique();
+    table.timestamps();
+  });
+  await schema().create('users_created_at', table => {
+    table.increments('id');
+    table.string('email').unique();
+    table.string('created_at');
+  });
+  await schema().create('users_updated_at', table => {
+    table.increments('id');
+    table.string('email').unique();
+    table.string('updated_at');
+  });
+}
 
 describe('test database eloquent timestamps', () => {
-  it('set up', () => {
-    var db = new DB();
+  beforeEach(async() => {
+    const db = new DatabaseConfig();
     db.addConnection({
       'driver'  : 'sqlite',
       'database': ':memory:'
     });
     db.bootEloquent();
     db.setAsGlobal();
-    this.createSchema();
+    await createSchema();
     Carbon.setTestNow(Carbon.now());
   });
-  it('create schema', () => {
-    this.schema().create('users', table => {
-      table.increments('id');
-      table.string('email').unique();
-      table.timestamps();
-    });
-    this.schema().create('users_created_at', table => {
-      table.increments('id');
-      table.string('email').unique();
-      table.string('created_at');
-    });
-    this.schema().create('users_updated_at', table => {
-      table.increments('id');
-      table.string('email').unique();
-      table.string('updated_at');
-    });
-  });
-  it('tear down', () => {
-    this.schema().drop('users');
-    this.schema().drop('users_created_at');
-    this.schema().drop('users_updated_at');
+  afterEach( async () => {
+    await schema().drop('users');
+    await schema().drop('users_created_at');
+    await schema().drop('users_updated_at');
   });
   it('user with created at and updated at', () => {
-    var now  = Carbon.now();
-    var user = UserWithCreatedAndUpdated.create({
+    const now  = Carbon.now();
+    const user = UserWithCreatedAndUpdated.create({
       'email': 'test@test.com'
     });
     expect(user.created_at.toDateTimeString()).toEqual(now.toDateTimeString());
     expect(user.updated_at.toDateTimeString()).toEqual(now.toDateTimeString());
   });
   it('user with created at', () => {
-    var now  = Carbon.now();
-    var user = UserWithCreated.create({
+    const now  = Carbon.now();
+    const user = UserWithCreated.create({
       'email': 'test@test.com'
     });
     expect(user.created_at.toDateTimeString()).toEqual(now.toDateTimeString());
   });
   it('user with updated at', () => {
-    var now  = Carbon.now();
-    var user = UserWithUpdated.create({
+    const now  = Carbon.now();
+    const user = UserWithUpdated.create({
       'email': 'test@test.com'
     });
     expect(user.updated_at.toDateTimeString()).toEqual(now.toDateTimeString());
-  });
-  it('connection', () => {
-    return Eloquent.getConnectionResolver().connection();
-  });
-  it('schema', () => {
-    return this.connection().getSchemaBuilder();
   });
 });
 
