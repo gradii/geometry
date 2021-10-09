@@ -95,6 +95,10 @@ class Conn implements ConnectionInterface {
 
   selectFromWriteConnection(sql: string, values: any): any {
   }
+
+  insertGetId(sql: string, bindings: any[], sequence?: string): Promise<any> | boolean {
+    return undefined;
+  }
 }
 
 function getBuilder() {

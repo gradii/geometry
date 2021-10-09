@@ -7,6 +7,7 @@ import { SqliteQueryGrammar } from '../src/query-builder/grammar/sqlite-query-gr
 import { SqlserverQueryGrammar } from '../src/query-builder/grammar/sqlserver-query-grammar';
 import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
+import { SchemaBuilder } from '../src/schema/schema-builder';
 
 
 /**
@@ -27,7 +28,8 @@ describe('database query builder test', () => {
     async select() {
     }
 
-    async insert() {
+    async insert(sql: string, bindings: any[]): Promise<boolean> {
+      throw new Error('not implement');
     }
 
     async update() {
@@ -44,6 +46,30 @@ describe('database query builder test', () => {
 
     getName() {
       return '';
+    }
+
+    getConfig(name: string): any {
+    }
+
+    getPdo(): any {
+    }
+
+    getSchemaBuilder(): SchemaBuilder {
+      return undefined;
+    }
+
+    insertGetId(sql: string, bindings: any[], sequence?: string): Promise<any> | boolean {
+      return undefined;
+    }
+
+    recordsHaveBeenModified(): any {
+    }
+
+    selectFromWriteConnection(sql: string, values: any): any {
+    }
+
+    table(table: Function | QueryBuilder | string, as?: string): QueryBuilder {
+      return undefined;
     }
   }
 
