@@ -3,9 +3,7 @@ import { Pivot } from '../../src/fedaco/relations/pivot';
 
 
 describe('test database eloquent pivot', () => {
-  it('tear down', () => {
-    m.close();
-  });
+
   it('properties are set correctly', () => {
     var parent = m.mock(Model + '[getConnectionName]');
     parent.shouldReceive('getConnectionName').twice().andReturn('connection');

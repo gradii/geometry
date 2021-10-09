@@ -15,7 +15,7 @@ import { HasOneColumn } from '../src/annotation/relation-column/has-one.relation
 import { MorphManyColumn } from '../src/annotation/relation-column/morph-many.relation-column';
 import { MorphToColumn } from '../src/annotation/relation-column/morph-to.relation-column';
 import { Table } from '../src/annotation/table/table';
-import { DatabaseConfig } from '../src/databaseConfig';
+import { DatabaseConfig } from '../src/database-config';
 import { FedacoBuilder } from '../src/fedaco/fedaco-builder';
 import { Model } from '../src/fedaco/model';
 import { BelongsToMany } from '../src/fedaco/relations/belongs-to-many';

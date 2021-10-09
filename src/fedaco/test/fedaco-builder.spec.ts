@@ -158,7 +158,7 @@ describe('fedaco builder', () => {
     builder._model = model;
   });
 
-  it('testFindMethod', async () => {
+  it('find method', async () => {
     let spySelect, spyFirst, result;
     spySelect = jest.spyOn(builder.getQuery(), 'where');
     // @ts-ignore
@@ -169,7 +169,7 @@ describe('fedaco builder', () => {
     expect(result).toStrictEqual({name: 'baz'});
   });
 
-  it('testFindManyMethod', async () => {
+  it('find many method', async () => {
     let spy1, spy2, result;
     builder = getBuilder();
     builder.setModel(getModel());
@@ -193,7 +193,7 @@ describe('fedaco builder', () => {
     expect(result).toStrictEqual([]);
   });
 
-  it('testFindOrNewMethodModelFound', async () => {
+  it('find or new method model found', async () => {
     let spy1, spy2, spy3, result, expected;
     builder = getBuilder();
     model   = getModel();
@@ -217,7 +217,7 @@ describe('fedaco builder', () => {
     expect(result).toBe(expected);
   });
 
-  it('testFindOrNewMethodModelNotFound', async () => {
+  it('find or new method model not found', async () => {
     let spy1, spy2, spy3, result, findResult;
     builder = getBuilder();
     model   = getModel();
@@ -237,7 +237,7 @@ describe('fedaco builder', () => {
     expect(result instanceof Model).toBe(true);
   });
 
-  it('testFindOrFailMethodThrowsModelNotFoundException', async () => {
+  it('find or fail method throws model not found exception', async () => {
     let spy1, spy3;
     builder = getBuilder();
     model   = getModel();
@@ -253,7 +253,7 @@ describe('fedaco builder', () => {
     expect(spy3).toBeCalledWith(['column']);
   });
 
-  it('testFindOrFailMethodWithManyThrowsModelNotFoundException', async () => {
+  it('find or fail method with many throws model not found exception', async () => {
     let spy1, spy3;
     builder = getBuilder();
     model   = getModel();
@@ -272,7 +272,7 @@ describe('fedaco builder', () => {
     expect(spy3).lastReturnedWith([1]);
   });
 
-  xit('testFindOrFailMethodWithManyUsingCollectionThrowsModelNotFoundException', () => {
+  xit('find or fail method with many using collection throws model not found exception', () => {
     let spy1, spy3;
     builder = getBuilder();
     model   = getModel();
@@ -291,7 +291,7 @@ describe('fedaco builder', () => {
     expect(spy3).lastReturnedWith([1]);
   });
 
-  it('testFirstOrFailMethodThrowsModelNotFoundException', async () => {
+  it('first or fail method throws model not found exception', async () => {
     let spy1, spy3;
     builder = getBuilder();
     model   = getModel();
@@ -307,7 +307,7 @@ describe('fedaco builder', () => {
     expect(spy1).toReturnWith(undefined);
   });
 
-  it('testFindWithMany', async () => {
+  it('find with many', async () => {
     let spy1, spy3, result;
     builder = getBuilder();
     model   = getModel();
@@ -326,7 +326,7 @@ describe('fedaco builder', () => {
     expect(result).toBe('baz');
   });
 
-  xit('testFindWithManyUsingCollection', () => {
+  xit('find with many using collection', () => {
     let spy1, spy3, result;
     builder = getBuilder();
     model   = getModel();
@@ -347,7 +347,7 @@ describe('fedaco builder', () => {
     expect(result).toBe('baz');
   });
 
-  it('testFirstMethod', async () => {
+  it('first method', async () => {
     let spy1, spy2, spy3, result;
     builder = getBuilder();
     model   = getModel();
@@ -366,7 +366,7 @@ describe('fedaco builder', () => {
     expect(result).toBe('bar');
   });
 
-  it('testQualifyColumn', () => {
+  it('qualify column', () => {
     let spy1, spy2, spy3, result;
     builder = getBuilder();
     model   = getModel();
@@ -382,7 +382,7 @@ describe('fedaco builder', () => {
     expect(result).toBe('stub.column');
   });
 
-  it('testGetMethodLoadsModelsAndHydratesEagerRelations', async () => {
+  it('get method loads models and hydrates eager relations', async () => {
     let spy1, spy2, spy3, spy4, results;
     builder = getBuilder();
     model   = getModel();
@@ -692,7 +692,7 @@ describe('fedaco builder', () => {
   //     this.assertEquals(models, ["hydrated"])
   //   }
 
-  it('testEagerLoadRelationsLoadTopLevelRelationships', async () => {
+  it('eager load relations load top level relationships', async () => {
     builder = getBuilder();
     model   = getModel();
     builder.setModel(model);
@@ -715,7 +715,7 @@ describe('fedaco builder', () => {
     expect(results).toEqual(['foo']);
   });
 
-  it('testRelationshipEagerLoadProcess', async () => {
+  it('relationship eager load process', async () => {
     let spy1, spy2, spy3, spy4, results, _SERVER = {};
 
     builder = getBuilder();
@@ -773,7 +773,7 @@ describe('fedaco builder', () => {
     expect(relation).toEqual(global['__eloquent.constrain']);
   });
 
-  it('testGetRelationProperlySetsNestedRelationships', () => {
+  it('get relation properly sets nested relationships', () => {
     let spy1, spy2, spy3;
 
     builder = getBuilder();
@@ -807,7 +807,7 @@ describe('fedaco builder', () => {
     });
   });
 
-  it('testGetRelationProperlySetsNestedRelationshipsWithSimilarNames', () => {
+  it('get relation properly sets nested relationships with similar names', () => {
     let spy1, spy2, spy3, spy4;
     builder = getBuilder();
     builder.setModel(getModel());
@@ -844,7 +844,7 @@ describe('fedaco builder', () => {
     });
   });
 
-  it('testGetRelationThrowsException', () => {
+  it('get relation throws exception', () => {
     builder = getBuilder();
     builder.setModel(getModel());
     try {
@@ -854,7 +854,7 @@ describe('fedaco builder', () => {
     }
   });
 
-  it('testEagerLoadParsingSetsProperRelationships', () => {
+  it('eager load parsing sets proper relationships', () => {
     let eagers;
     builder = getBuilder();
     builder.setModel(getModel());
@@ -897,7 +897,7 @@ describe('fedaco builder', () => {
     expect(eagers['orders.lines']()).toBe('foo');
   });
 
-  it('testQueryPassThru', async () => {
+  it('query pass thru', async () => {
     // builder = getBuilder();
     // builder.getQuery().shouldReceive('foobar').once().andReturn('foo');
     // this.assertInstanceOf(Builder, builder.foobar());
@@ -951,7 +951,7 @@ describe('fedaco builder', () => {
     expect(spy1).toBeCalled();
   });
 
-  it('testQueryScopes', () => {
+  it('query scopes', () => {
     let result;
     builder = getBuilder();
     const m = new FedacoBuilderTestScopeStub();
@@ -966,7 +966,7 @@ describe('fedaco builder', () => {
     expect(builder).toBe(result);
   });
 
-  // it('testQueryScopes with no such method', () => {
+  // it('query scopes with no such method', () => {
   //   let result;
   //   builder = getBuilder();
   //   const m = new FedacoBuilderTestScopeStub();
@@ -982,7 +982,7 @@ describe('fedaco builder', () => {
   //   expect(builder).toBe(result);
   // });
 
-  it('testNestedWhere', () => {
+  it('nested where', () => {
     builder = getBuilder();
     model   = getModel();
 
@@ -1005,7 +1005,7 @@ describe('fedaco builder', () => {
     expect(result).toBe(builder);
   });
 
-  it('testRealNestedWhereWithScopes', () => {
+  it('real nested where with scopes', () => {
     const model1 = new FedacoBuilderTestNestedStub();
     mockConnectionForModel(FedacoBuilderTestNestedStub, 'SQLite');
     const query = model1.newQuery()
@@ -1020,7 +1020,7 @@ describe('fedaco builder', () => {
     expect(data.bindings).toEqual(['bar', 9000]);
   });
 
-  it('testRealNestedWhereWithScopesMacro', () => {
+  it('real nested where with scopes macro', () => {
     const model1 = new FedacoBuilderTestNestedStub();
     mockConnectionForModel(FedacoBuilderTestNestedStub, 'SQLite');
     const query = model1.newQuery()
@@ -1038,7 +1038,7 @@ describe('fedaco builder', () => {
     expect(data.bindings).toEqual(['bar', 9000]);
   });
 
-  it('testRealNestedWhereWithMultipleScopesAndOneDeadScope', () => {
+  it('real nested where with multiple scopes and one dead scope', () => {
     const model1 = new FedacoBuilderTestNestedStub();
     mockConnectionForModel(FedacoBuilderTestNestedStub, 'SQLite');
     const query = model1.newQuery()
@@ -1054,7 +1054,7 @@ describe('fedaco builder', () => {
     expect(data.bindings).toEqual(['bar', 9000]);
   });
 
-  it('testRealQueryHigherOrderOrWhereScopes', () => {
+  it('real query higher order or where scopes', () => {
     const model1 = new FedacoBuilderTestHigherOrderWhereScopeStub();
     mockConnectionForModel(FedacoBuilderTestHigherOrderWhereScopeStub, 'SQLite');
     const query = model1.newQuery()
@@ -1070,7 +1070,7 @@ describe('fedaco builder', () => {
     expect(data.bindings).toEqual(['foo', 'bar']);
   });
 
-  it('testRealQueryChainedHigherOrderOrWhereScopes', () => {
+  it('real query chained higher order or where scopes', () => {
     const model1 = new FedacoBuilderTestHigherOrderWhereScopeStub();
     mockConnectionForModel(FedacoBuilderTestHigherOrderWhereScopeStub, 'SQLite');
     const query = model1.newQuery()
@@ -1092,7 +1092,7 @@ describe('fedaco builder', () => {
     expect(data.bindings).toEqual(['foo', 'bar', 'baz']);
   });
 
-  it('testSimpleWhere', () => {
+  it('simple where', () => {
     let spy1, result;
     builder = getBuilder();
     spy1    = jest.spyOn(builder.getQuery(), 'where');
@@ -1101,7 +1101,7 @@ describe('fedaco builder', () => {
     expect(builder).toBe(result);
   });
 
-  it('testPostgresOperatorsWhere', () => {
+  it('postgres operators where', () => {
     let spy1, result;
     builder = getBuilder();
     spy1    = jest.spyOn(builder.getQuery(), 'where');
@@ -1110,7 +1110,7 @@ describe('fedaco builder', () => {
     expect(builder).toBe(result);
   });
 
-  it('testDeleteOverride', async () => {
+  it('delete override', async () => {
     builder = getBuilder();
     builder.onDelete(builder => {
       return {
@@ -1123,7 +1123,7 @@ describe('fedaco builder', () => {
     expect(result).toEqual({'foo': builder});
   });
 
-  it('testWhereKeyMethodWithInt', () => {
+  it('where key method with int', () => {
     let spy1, result;
     builder = getBuilder();
     model   = getModel();
@@ -1137,7 +1137,7 @@ describe('fedaco builder', () => {
     expect(spy1).toBeCalledWith(keyName, '=', int, 'and');
   });
 
-  it('testWhereKeyMethodWithArray', () => {
+  it('where key method with array', () => {
     let spy1, result;
     builder = getBuilder();
     model   = getModel();
@@ -1152,7 +1152,7 @@ describe('fedaco builder', () => {
     expect(spy1).toBeCalledWith(keyName, array);
   });
 
-  xit('testWhereKeyMethodWithCollection', () => {
+  xit('where key method with collection', () => {
     let spy1, result;
     builder = getBuilder();
     model   = getModel();
@@ -1167,7 +1167,7 @@ describe('fedaco builder', () => {
     expect(spy1).toBeCalledWith(keyName, collection);
   });
 
-  it('testWhereKeyNotMethodWithInt', () => {
+  it('where key not method with int', () => {
     let spy1, result;
     builder = getBuilder();
     model   = getModel();
@@ -1183,7 +1183,7 @@ describe('fedaco builder', () => {
 
   });
 
-  it('testWhereKeyNotMethodWithArray', () => {
+  it('where key not method with array', () => {
     let spy1, result;
     builder = getBuilder();
     model   = getModel();
@@ -1198,7 +1198,7 @@ describe('fedaco builder', () => {
     expect(spy1).toBeCalledWith(keyName, array);
   });
 
-  xit('testWhereKeyNotMethodWithCollection', () => {
+  xit('where key not method with collection', () => {
     let spy1, result;
     builder = getBuilder();
     model   = getModel();
@@ -1213,7 +1213,7 @@ describe('fedaco builder', () => {
     expect(spy1).toBeCalledWith(keyName, collection);
   });
 
-  it('testWhereIn', () => {
+  it('where in', () => {
     model = new FedacoBuilderTestNestedStub();
     mockConnectionForModel(FedacoBuilderTestNestedStub, '');
     const query  = model.newQuery().withoutGlobalScopes().whereIn('foo',
@@ -1224,7 +1224,7 @@ describe('fedaco builder', () => {
       'SELECT * FROM "nest_table" WHERE "foo" IN (SELECT "id" FROM "nest_table" WHERE "nest_table"."deleted_at" IS NULL)');
   });
 
-  it('testLatestWithoutColumnWithCreatedAt', () => {
+  it('latest without column with created at', () => {
     let spy1, spy2, result;
     builder = getBuilder();
     model   = getModel();
@@ -1240,7 +1240,7 @@ describe('fedaco builder', () => {
 
   });
 
-  it('testLatestWithoutColumnWithoutCreatedAt', () => {
+  it('latest without column without created at', () => {
     let spy1, spy2, result;
     builder = getBuilder();
     model   = getModel();
@@ -1256,7 +1256,7 @@ describe('fedaco builder', () => {
 
   });
 
-  it('testLatestWithColumn', () => {
+  it('latest with column', () => {
     let spy1, spy2, result;
     builder = getBuilder();
     model   = getModel();
@@ -1270,7 +1270,7 @@ describe('fedaco builder', () => {
     expect(spy1).toBeCalledWith('foo');
   });
 
-  it('testOldestWithoutColumnWithCreatedAt', () => {
+  it('oldest without column with created at', () => {
     let spy1, spy2, result;
     builder = getBuilder();
     model   = getModel();
@@ -1285,7 +1285,7 @@ describe('fedaco builder', () => {
     expect(spy2).toBeCalledWith('foo');
   });
 
-  it('testOldestWithoutColumnWithoutCreatedAt', () => {
+  it('oldest without column without created at', () => {
     let spy1, spy2, result;
     builder = getBuilder();
     model   = getModel();
@@ -1300,7 +1300,7 @@ describe('fedaco builder', () => {
     expect(spy2).toBeCalledWith('created_at');
   });
 
-  it('testOldestWithColumn', () => {
+  it('oldest with column', () => {
     let spy1, spy2, result;
     builder = getBuilder();
     model   = getModel();
@@ -1314,7 +1314,7 @@ describe('fedaco builder', () => {
     expect(spy1).toBeCalledWith('foo');
   });
 
-  it('testUpdate', async () => {
+  it('update', async () => {
     let spy1, spy2, result;
     builder = getBuilder();
     model   = new FedacoBuilderTestStub();
@@ -1334,7 +1334,7 @@ describe('fedaco builder', () => {
       ['bar', expect.anything()]);
   });
 
-  it('testUpdateWithTimestampValue', async () => {
+  it('update with timestamp value', async () => {
     let spy1, spy2, result;
     builder = getBuilder();
     model   = new FedacoBuilderTestStub();
@@ -1355,7 +1355,7 @@ describe('fedaco builder', () => {
       ['bar', null]);
   });
 
-  it('testUpdateWithoutTimestamp', async () => {
+  it('update without timestamp', async () => {
     let spy1, spy2, result;
     builder = getBuilder();
     model   = new FedacoBuilderTestStubWithoutTimestamp();
@@ -1373,7 +1373,7 @@ describe('fedaco builder', () => {
     expect(spy1).toBeCalledWith('UPDATE `test_table` SET `foo` = ?', ['bar']);
   });
 
-  it('testUpdateWithAlias', async () => {
+  it('update with alias', async () => {
     let spy1, spy2, result;
     builder = getBuilder();
     model   = new FedacoBuilderTestStub();
@@ -1394,7 +1394,7 @@ describe('fedaco builder', () => {
   });
 
 
-  it('testWithCastsMethod', () => {
+  it('with casts method', () => {
     // let spy1, spy2, result;
     // builder = getBuilder();
     // model = getModel();

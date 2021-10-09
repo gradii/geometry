@@ -1,37 +1,50 @@
-import { Manager as DB } from 'Illuminate/Database/Capsule/Manager';
-import { Model as Eloquent } from 'Illuminate/Database/Eloquent/Model';
-import { Relation } from 'Illuminate/Database/Eloquent/Relations/Relation';
-import { TestCase } from 'PHPUnit/Framework/TestCase';
+import { MorphToManyColumn } from '../../src/annotation/relation-column/morph-to-many.relation-column';
+import { MorphedByManyColumn } from '../../src/annotation/relation-column/morphed-by-many.relation-column';
+import { DatabaseConfig } from '../../src/database-config';
+import { Model } from '../../src/fedaco/model';
+import { Relation } from '../../src/fedaco/relations/relation';
+import { SchemaBuilder } from '../../src/schema/schema-builder';
+
+function connection(connectionName = 'default') {
+  return Model.getConnectionResolver().connection(connectionName);
+}
+
+function schema(connectionName = 'default'): SchemaBuilder {
+  return connection(connectionName).getSchemaBuilder();
+}
+
+jest.setTimeout(100000);
+
+async function createSchema() {
+ await schema('default').create('posts', table => {
+    table.increments('id');
+    table.timestamps();
+  });
+  await  schema('default').create('images', table => {
+    table.increments('id');
+    table.timestamps();
+  });
+  await schema('default').create('tags', table => {
+    table.increments('id');
+    table.timestamps();
+  });
+  await schema('default').create('taggables', table => {
+    table.integer('eloquent_many_to_many_polymorphic_test_tag_id');
+    table.integer('taggable_id');
+    table.string('taggable_type');
+  });
+}
 
 describe('test database eloquent polymorphic relations integration', () => {
-  it('set up', () => {
-    var db = new DB();
+  it('set up', async () => {
+    const db = new DatabaseConfig();
     db.addConnection({
       'driver'  : 'sqlite',
       'database': ':memory:'
     });
     db.bootEloquent();
     db.setAsGlobal();
-    this.createSchema();
-  });
-  it('create schema', () => {
-    this.schema('default').create('posts', table => {
-      table.increments('id');
-      table.timestamps();
-    });
-    this.schema('default').create('images', table => {
-      table.increments('id');
-      table.timestamps();
-    });
-    this.schema('default').create('tags', table => {
-      table.increments('id');
-      table.timestamps();
-    });
-    this.schema('default').create('taggables', table => {
-      table.integer('eloquent_many_to_many_polymorphic_test_tag_id');
-      table.integer('taggable_id');
-      table.string('taggable_type');
-    });
+    await createSchema();
   });
   it('tear down', () => {
     [].forEach((connection, index) => {
@@ -39,10 +52,10 @@ describe('test database eloquent polymorphic relations integration', () => {
     Relation.morphMap([], false);
   });
   it('creation', () => {
-    var post  = EloquentManyToManyPolymorphicTestPost.create();
-    var image = EloquentManyToManyPolymorphicTestImage.create();
-    var tag   = EloquentManyToManyPolymorphicTestTag.create();
-    var tag2  = EloquentManyToManyPolymorphicTestTag.create();
+    let post  = EloquentManyToManyPolymorphicTestPost.create();
+    let image = EloquentManyToManyPolymorphicTestImage.create();
+    let tag   = EloquentManyToManyPolymorphicTestTag.create();
+    let tag2  = EloquentManyToManyPolymorphicTestTag.create();
     post.tags().attach(tag.id);
     post.tags().attach(tag2.id);
     image.tags().attach(tag.id);
@@ -54,24 +67,24 @@ describe('test database eloquent polymorphic relations integration', () => {
     expect(tag2.images).toCount(0);
   });
   it('eager loading', () => {
-    var post = EloquentManyToManyPolymorphicTestPost.create();
-    var tag  = EloquentManyToManyPolymorphicTestTag.create();
+    let post = EloquentManyToManyPolymorphicTestPost.create();
+    let tag  = EloquentManyToManyPolymorphicTestTag.create();
     post.tags().attach(tag.id);
-    var post = EloquentManyToManyPolymorphicTestPost._with('tags').whereId(1).first();
-    var tag  = EloquentManyToManyPolymorphicTestTag._with('posts').whereId(1).first();
+    let post = EloquentManyToManyPolymorphicTestPost._with('tags').whereId(1).first();
+    let tag  = EloquentManyToManyPolymorphicTestTag._with('posts').whereId(1).first();
     expect(post.relationLoaded('tags')).toBeTruthy();
     expect(tag.relationLoaded('posts')).toBeTruthy();
     expect(post.tags.first().id).toEqual(tag.id);
     expect(tag.posts.first().id).toEqual(post.id);
   });
   it('chunk by id', () => {
-    var post = EloquentManyToManyPolymorphicTestPost.create();
-    var tag1 = EloquentManyToManyPolymorphicTestTag.create();
-    var tag2 = EloquentManyToManyPolymorphicTestTag.create();
-    var tag3 = EloquentManyToManyPolymorphicTestTag.create();
+    let post = EloquentManyToManyPolymorphicTestPost.create();
+    let tag1 = EloquentManyToManyPolymorphicTestTag.create();
+    let tag2 = EloquentManyToManyPolymorphicTestTag.create();
+    let tag3 = EloquentManyToManyPolymorphicTestTag.create();
     post.tags().attach([tag1.id, tag2.id, tag3.id]);
-    var count      = 0;
-    var iterations = 0;
+    let count      = 0;
+    let iterations = 0;
     post.tags().chunkById(2, tags => {
       this.assertInstanceOf(EloquentManyToManyPolymorphicTestTag, tags.first());
       count += tags.count();
@@ -93,29 +106,37 @@ export class EloquentManyToManyPolymorphicTestPost extends Model {
   _table: any   = 'posts';
   _guarded: any = [];
 
-  public tags() {
-    return this.morphToMany(EloquentManyToManyPolymorphicTestTag, 'taggable');
-  }
+  @MorphToManyColumn({
+    related: EloquentManyToManyPolymorphicTestTag,
+    name   : 'taggable'
+  })
+  public tags;
 }
 
 export class EloquentManyToManyPolymorphicTestImage extends Model {
   _table: any   = 'images';
   _guarded: any = [];
 
-  public tags() {
-    return this.morphToMany(EloquentManyToManyPolymorphicTestTag, 'taggable');
-  }
+  @MorphToManyColumn({
+    related: EloquentManyToManyPolymorphicTestTag,
+    name   : 'taggable'
+  })
+  public tags;
 }
 
 export class EloquentManyToManyPolymorphicTestTag extends Model {
   _table: any   = 'tags';
   _guarded: any = [];
 
-  public posts() {
-    return this.morphedByMany(EloquentManyToManyPolymorphicTestPost, 'taggable');
-  }
+  @MorphedByManyColumn({
+    related: EloquentManyToManyPolymorphicTestPost,
+    name   : 'taggable'
+  })
+  public posts;
 
-  public images() {
-    return this.morphedByMany(EloquentManyToManyPolymorphicTestImage, 'taggable');
-  }
+  @MorphedByManyColumn({
+    related: EloquentManyToManyPolymorphicTestImage,
+    name   : 'taggable'
+  })
+  public images;
 }

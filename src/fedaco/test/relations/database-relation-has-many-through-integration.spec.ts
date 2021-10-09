@@ -207,7 +207,8 @@ describe('test database eloquent has many through integration', () => {
   });
   it('eager loading a relation with custom intermediate and local key', async () => {
     await seedData();
-    const posts = await (await HasManyThroughIntermediateTestCountry.createQuery().with('posts').first()).posts;
+    const posts = await (await HasManyThroughIntermediateTestCountry.createQuery().with(
+      'posts').first()).posts;
     expect(posts[0].title).toBe('A title');
     expect(posts).toHaveLength(2);
   });
@@ -221,77 +222,85 @@ describe('test database eloquent has many through integration', () => {
     expect(country).toHaveLength(1);
   });
   it('find method', async () => {
-    HasManyThroughTestCountry.createQuery().create({
+    const country = await HasManyThroughTestCountry.createQuery().create({
       'id'       : 1,
       'name'     : 'United States of America',
       'shortname': 'us'
-    }).users().create({
-      'id'           : 1,
-      'email'        : 'taylorotwell@gmail.com',
-      'country_short': 'us'
-    }).posts().createMany([
-      {
-        'id'   : 1,
-        'title': 'A title',
-        'body' : 'A body',
-        'email': 'taylorotwell@gmail.com'
-      }, {
-        'id'   : 2,
-        'title': 'Another title',
-        'body' : 'Another body',
-        'email': 'taylorotwell@gmail.com'
-      }
-    ]);
-    const country = HasManyThroughTestCountry.first();
-    const post    = country.posts().find(1);
-    expect(post).toNotNull();
-    expect(post.title).toBe('A title');
-    expect(country.posts().find([1, 2])).toHaveLength(2);
-    expect(country.posts().find(new Collection([1, 2]))).toHaveLength(2);
-  });
-  it('find many method', () => {
-    HasManyThroughTestCountry.create({
-      'id'       : 1,
-      'name'     : 'United States of America',
-      'shortname': 'us'
-    }).users().create({
-      'id'           : 1,
-      'email'        : 'taylorotwell@gmail.com',
-      'country_short': 'us'
-    }).posts().createMany([
-      {
-        'id'   : 1,
-        'title': 'A title',
-        'body' : 'A body',
-        'email': 'taylorotwell@gmail.com'
-      }, {
-        'id'   : 2,
-        'title': 'Another title',
-        'body' : 'Another body',
-        'email': 'taylorotwell@gmail.com'
-      }
-    ]);
-    const country = HasManyThroughTestCountry.first();
-    expect(country.posts().findMany([1, 2])).toHaveLength(2);
-    expect(country.posts().findMany(new Collection([1, 2]))).toHaveLength(2);
-  });
-  it('first or fail throws an exception', () => {
-    this.expectException(ModelNotFoundException);
-    this.expectExceptionMessage('No query results for model [Illuminate\\Tests\\Database\\HasManyThroughTestPost].');
-    HasManyThroughTestCountry.create({
-      'id'       : 1,
-      'name'     : 'United States of America',
-      'shortname': 'us'
-    }).users().create({
+    });
+    const user    = await country.newRelation('users').create({
       'id'           : 1,
       'email'        : 'taylorotwell@gmail.com',
       'country_short': 'us'
     });
-    HasManyThroughTestCountry.first().posts().firstOrFail();
+    await user.newRelation('posts').createMany([
+      {
+        'id'   : 1,
+        'title': 'A title',
+        'body' : 'A body',
+        'email': 'taylorotwell@gmail.com'
+      }, {
+        'id'   : 2,
+        'title': 'Another title',
+        'body' : 'Another body',
+        'email': 'taylorotwell@gmail.com'
+      }
+    ]);
+    const country1 = await HasManyThroughTestCountry.createQuery().first();
+    const post     = country1.newRelation('posts').find(1);
+    expect(post).not.toBeNull();
+    expect(post.title).toBe('A title');
+    expect(country1.posts().find([1, 2])).toHaveLength(2);
+    expect(country1.posts().find([1, 2])).toHaveLength(2);
+  });
+  it('find many method', async () => {
+    const country = await HasManyThroughTestCountry.createQuery().create({
+      'id'       : 1,
+      'name'     : 'United States of America',
+      'shortname': 'us'
+    });
+    const user    = await country.newRelation('users').create({
+      'id'           : 1,
+      'email'        : 'taylorotwell@gmail.com',
+      'country_short': 'us'
+    });
+    await user.newRelation('posts').createMany([
+      {
+        'id'   : 1,
+        'title': 'A title',
+        'body' : 'A body',
+        'email': 'taylorotwell@gmail.com'
+      }, {
+        'id'   : 2,
+        'title': 'Another title',
+        'body' : 'Another body',
+        'email': 'taylorotwell@gmail.com'
+      }
+    ]);
+    const country1 = await HasManyThroughTestCountry.createQuery().first();
+    expect(country1.posts().findMany([1, 2])).toHaveLength(2);
+    expect(country1.posts().findMany([1, 2])).toHaveLength(2);
+  });
+  it('first or fail throws an exception', async () => {
+    const country = await HasManyThroughTestCountry.createQuery().create({
+      'id'       : 1,
+      'name'     : 'United States of America',
+      'shortname': 'us'
+    });
+    await country.newRelation('users').create({
+      'id'           : 1,
+      'email'        : 'taylorotwell@gmail.com',
+      'country_short': 'us'
+    });
+    expect(async () => {
+      await (await HasManyThroughTestCountry.createQuery().first()).newRelation('posts').firstOrFail();
+    }).rejects.toThrowError(
+      'ModelNotFoundException No query results for model [Illuminate\\Tests\\Database\\HasManyThroughTestPost].');
+
   });
   it('find or fail throws an exception', () => {
     this.expectException(ModelNotFoundException);
-    this.expectExceptionMessage('No query results for model [Illuminate\\Tests\\Database\\HasManyThroughTestPost] 1');
+    this.expectExceptionMessage(
+      'No query results for model [Illuminate\\Tests\\Database\\HasManyThroughTestPost] 1');
     HasManyThroughTestCountry.create({
       'id'       : 1,
       'name'     : 'United States of America',
@@ -353,7 +362,9 @@ describe('test database eloquent has many through integration', () => {
     this.seedData();
     const post = HasManyThroughTestCountry.first().posts().first();
     expect(array_keys(post.getAttributes())).toEqual(
-      ['id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at', 'laravel_through_key']);
+      [
+        'id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at', 'laravel_through_key'
+      ]);
   });
   it('only proper columns are selected if provided', () => {
     this.seedData();
@@ -366,7 +377,9 @@ describe('test database eloquent has many through integration', () => {
     const country = HasManyThroughTestCountry.find(2);
     country.posts().chunk(10, postsChunk => {
       const post = postsChunk.first();
-      this.assertEquals(['id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at', 'laravel_through_key'],
+      this.assertEquals([
+          'id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at', 'laravel_through_key'
+        ],
         array_keys(post.getAttributes()));
     });
   });
@@ -391,7 +404,10 @@ describe('test database eloquent has many through integration', () => {
     expect(posts).toInstanceOf(LazyCollection);
     for (const post of posts) {
       expect(array_keys(post.getAttributes())).toEqual(
-        ['id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at', 'laravel_through_key']);
+        [
+          'id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at',
+          'laravel_through_key'
+        ]);
     }
   });
   it('each returns correct models', () => {
@@ -399,7 +415,9 @@ describe('test database eloquent has many through integration', () => {
     this.seedDataExtended();
     const country = HasManyThroughTestCountry.find(2);
     country.posts().each(post => {
-      this.assertEquals(['id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at', 'laravel_through_key'],
+      this.assertEquals([
+          'id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at', 'laravel_through_key'
+        ],
         array_keys(post.getAttributes()));
     });
   });
@@ -506,7 +524,8 @@ export class HasManyThroughIntermediateTestCountry extends Model {
   _guarded: any = [];
 
   public posts() {
-    return this.hasManyThrough(HasManyThroughTestPost, HasManyThroughTestUser, 'country_short', 'email', 'shortname',
+    return this.hasManyThrough(HasManyThroughTestPost, HasManyThroughTestUser, 'country_short',
+      'email', 'shortname',
       'email');
   }
 

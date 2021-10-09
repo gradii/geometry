@@ -1,10 +1,4 @@
-import { Builder } from 'Illuminate/Database/Eloquent/Builder';
-import { Collection } from 'Illuminate/Database/Eloquent/Collection';
-import { Model } from 'Illuminate/Database/Eloquent/Model';
-import { HasOne } from 'Illuminate/Database/Eloquent/Relations/HasOne';
-import { Builder as BaseBuilder } from 'Illuminate/Database/Query/Builder';
-import { Expression } from 'Illuminate/Database/Query/Expression';
-import { Mockery as m } from 'Mockery';
+import { Model } from '../../src/fedaco/model';
 
 describe('test database eloquent has one', () => {
 

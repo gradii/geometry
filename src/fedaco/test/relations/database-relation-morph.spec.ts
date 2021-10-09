@@ -1,10 +1,5 @@
-import { EloquentModelNamespacedStub } from 'Foo/Bar/EloquentModelNamespacedStub';
-import { Builder } from 'Illuminate/Database/Eloquent/Builder';
-import { Model } from 'Illuminate/Database/Eloquent/Model';
-import { MorphMany } from 'Illuminate/Database/Eloquent/Relations/MorphMany';
-import { MorphOne } from 'Illuminate/Database/Eloquent/Relations/MorphOne';
-import { Relation } from 'Illuminate/Database/Eloquent/Relations/Relation';
-import { Mockery as m } from 'Mockery';
+import { Model } from '../../src/fedaco/model';
+import { Relation } from '../../src/fedaco/relations/relation';
 
 describe('test database eloquent morph', () => {
   it('tear down', () => {

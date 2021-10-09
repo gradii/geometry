@@ -1,9 +1,9 @@
-import { forwardRef } from '../../src/query-builder/forward-ref';
 import { BelongsToColumn } from '../../src/annotation/relation-column/belongs-to.relation-column';
 import { MorphManyColumn } from '../../src/annotation/relation-column/morph-many.relation-column';
 import { MorphToColumn } from '../../src/annotation/relation-column/morph-to.relation-column';
 import { DatabaseConfig } from '../../src/database-config';
 import { Model } from '../../src/fedaco/model';
+import { forwardRef } from '../../src/query-builder/forward-ref';
 import { SchemaBuilder } from '../../src/schema/schema-builder';
 
 function connection(connectionName = 'default') {
@@ -12,6 +12,22 @@ function connection(connectionName = 'default') {
 
 function schema(connectionName = 'default'): SchemaBuilder {
   return connection(connectionName).getSchemaBuilder();
+}
+
+async function seedData() {
+  const taylor  = await TestUser.createQuery().create({
+    'id'   : 1,
+    'email': 'taylorotwell@gmail.com'
+  });
+  const post    = await taylor.newRelation('posts').create({
+    'title': 'A title',
+    'body' : 'A body'
+  });
+  const comment = await post.newRelation('comments').create({
+    'body'   : 'A comment body',
+    'user_id': 1
+  });
+  await comment.newRelation('likes').create([]);
 }
 
 async function createSchema() {
@@ -62,34 +78,34 @@ describe('test database eloquent polymorphic integration', () => {
     schema().drop('posts');
     schema().drop('comments');
   });
-  it('it loads relationships automatically', () => {
-    this.seedData();
+  it('it loads relationships automatically', async () => {
+    await seedData();
     const like = TestLikeWithSingleWith.first();
     expect(like.relationLoaded('likeable')).toBeTruthy();
     expect(like.likeable).toEqual(TestComment.first());
   });
-  it('it loads chained relationships automatically', () => {
-    this.seedData();
+  it('it loads chained relationships automatically', async () => {
+    await seedData();
     const like = TestLikeWithSingleWith.first();
     expect(like.likeable.relationLoaded('commentable')).toBeTruthy();
     expect(like.likeable.commentable).toEqual(TestPost.first());
   });
-  it('it loads nested relationships automatically', () => {
-    this.seedData();
+  it('it loads nested relationships automatically', async () => {
+    await seedData();
     const like = TestLikeWithNestedWith.first();
     expect(like.relationLoaded('likeable')).toBeTruthy();
     expect(like.likeable.relationLoaded('owner')).toBeTruthy();
     expect(like.likeable.owner).toEqual(TestUser.first());
   });
-  it('it loads nested relationships on demand', () => {
-    this.seedData();
+  it('it loads nested relationships on demand', async () => {
+    await seedData();
     const like = TestLike._with('likeable.owner').first();
     expect(like.relationLoaded('likeable')).toBeTruthy();
     expect(like.likeable.relationLoaded('owner')).toBeTruthy();
     expect(like.likeable.owner).toEqual(TestUser.first());
   });
-  it('it loads nested morph relationships on demand', () => {
-    this.seedData();
+  it('it loads nested morph relationships on demand', async () => {
+    await seedData();
     TestPost.first().likes().create([]);
     const likes = TestLike._with('likeable.owner').get().loadMorph('likeable', {});
     expect(likes[0].relationLoaded('likeable')).toBeTruthy();
@@ -99,11 +115,11 @@ describe('test database eloquent polymorphic integration', () => {
     expect(likes[1].likeable.relationLoaded('owner')).toBeTruthy();
     expect(likes[1].likeable.relationLoaded('comments')).toBeTruthy();
   });
-  it('it loads nested morph relationship counts on demand', () => {
-    this.seedData();
-    TestPost.first().likes().create([]);
-    TestComment.first().likes().create([]);
-    const likes = TestLike._with('likeable.owner').get().loadMorphCount('likeable', {});
+  it('it loads nested morph relationship counts on demand', async () => {
+    await seedData();
+    TestPost.createQuery().first().likes().create([]);
+    TestComment.createQuery().first().likes().create([]);
+    const likes = TestLike.createQuery().with('likeable.owner').get().loadMorphCount('likeable', {});
     expect(likes[0].relationLoaded('likeable')).toBeTruthy();
     expect(likes[0].likeable.relationLoaded('owner')).toBeTruthy();
     expect(likes[0].likeable.likes_count).toEqual(2);
@@ -113,25 +129,6 @@ describe('test database eloquent polymorphic integration', () => {
     expect(likes[2].relationLoaded('likeable')).toBeTruthy();
     expect(likes[2].likeable.relationLoaded('owner')).toBeTruthy();
     expect(likes[2].likeable.likes_count).toEqual(2);
-  });
-  it('seed data', () => {
-    const taylor = TestUser.create({
-      'id'   : 1,
-      'email': 'taylorotwell@gmail.com'
-    });
-    taylor.posts().create({
-      'title': 'A title',
-      'body' : 'A body'
-    }).comments().create({
-      'body'   : 'A comment body',
-      'user_id': 1
-    }).likes().create([]);
-  });
-  it('connection', () => {
-    return Eloquent.getConnectionResolver().connection();
-  });
-  it('schema', () => {
-    return this.connection().getSchemaBuilder();
   });
 });
 
@@ -150,17 +147,23 @@ export class TestPost extends Model {
   _table: any   = 'posts';
   _guarded: any = [];
 
-  public comments() {
-    return this.morphMany(TestComment, 'commentable');
-  }
+  @MorphManyColumn({
+    related  : TestComment,
+    morphName: 'commentable'
+  })
+  public comments;
 
-  public owner() {
-    return this.belongsTo(TestUser, 'user_id');
-  }
+  @BelongsToColumn({
+    related   : TestUser,
+    foreignKey: 'user_id'
+  })
+  public owner;
 
-  public likes() {
-    return this.morphMany(TestLike, 'likeable');
-  }
+  @MorphManyColumn({
+    related  : TestLike,
+    morphName: 'likeable'
+  })
+  public likes;
 }
 
 /*Eloquent Models...*/
