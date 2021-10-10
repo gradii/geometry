@@ -1,6 +1,6 @@
 {
   "name": "@gradii/fedaco",
-  "version": "0.0.1-beta.5",
+  "version": "0.0.1-beta.6",
   "description": "fedaco orm",
   "repository": {
     "type": "git",
@@ -20,4 +20,3 @@
   },
   "sideEffects": false
 }
-
