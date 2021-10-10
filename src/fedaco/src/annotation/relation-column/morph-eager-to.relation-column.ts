@@ -42,7 +42,7 @@ export const MorphEagerToColumn: FedacoDecorator<MorphToRelationAnnotation> = ma
     type        : RelationType.MorphTo,
     _getRelation: function (m: Model, relation: string) {
       const name = p.name || relation;
-      const r = new MorphTo(this.newQuery().setEagerLoads([]), m, p.id, p.ownerKey, p.type, name);
+      const r = new MorphTo(m.newQuery().setEagerLoads([]), m, p.id, p.ownerKey, p.type, name);
 
       if (p.onQuery) {
         p.onQuery(r);
