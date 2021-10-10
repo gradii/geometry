@@ -1,10 +1,13 @@
+import { head } from 'ramda';
 import { BelongsToColumn } from '../../src/annotation/relation-column/belongs-to.relation-column';
 import { HasManyColumn } from '../../src/annotation/relation-column/has-many.relation-column';
 import { HasOneColumn } from '../../src/annotation/relation-column/has-one.relation-column';
 import { MorphToColumn } from '../../src/annotation/relation-column/morph-to.relation-column';
 import { DatabaseConfig } from '../../src/database-config';
-import { mixinSoftDeletes } from '../../src/fedaco/mixins/soft-deletes';
+import { FedacoBuilder } from '../../src/fedaco/fedaco-builder';
+import { mixinSoftDeletes, SoftDeletes } from '../../src/fedaco/mixins/soft-deletes';
 import { Model } from '../../src/fedaco/model';
+import { onlyTrashed, withoutTrashed, withTrashed } from '../../src/fedaco/scopes/soft-deleting-scope';
 import { forwardRef } from '../../src/query-builder/forward-ref';
 import { SchemaBuilder } from '../../src/schema/schema-builder';
 
@@ -71,7 +74,7 @@ async function createUsers() {
 
 describe('test database eloquent soft deletes integration', () => {
   beforeEach(async () => {
-    Carbon.setTestNow(Carbon.now());
+    // Carbon.setTestNow(Carbon.now());
     const db = new DatabaseConfig();
     db.addConnection({
       'driver'  : 'sqlite',
@@ -82,7 +85,7 @@ describe('test database eloquent soft deletes integration', () => {
     await createSchema();
   });
   afterEach(async () => {
-    Carbon.setTestNow(null);
+    // Carbon.setTestNow(null);
     await schema().drop('users');
     await schema().drop('posts');
     await schema().drop('comments');
@@ -91,106 +94,133 @@ describe('test database eloquent soft deletes integration', () => {
     await createUsers();
     const users = await SoftDeletesTestUser.createQuery().get();
     expect(users).toHaveLength(1);
-    expect(users.first().id).toEqual(2);
+    expect(head(users).id).toEqual(2);
     expect(SoftDeletesTestUser.createQuery().find(1)).toBeNull();
   });
   it('soft deletes are not retrieved from base query', () => {
     createUsers();
-    const query = SoftDeletesTestUser.createQuery().query().toBase();
-    expect(query).toBeInstanceOf(Builder);
+    const query = SoftDeletesTestUser.createQuery().toBase();
+    expect(query).toBeInstanceOf(FedacoBuilder);
     expect(query.get()).toHaveLength(1);
   });
-  it('soft deletes are not retrieved from builder helpers', () => {
-    createUsers();
-    let count = 0;
-    let query = SoftDeletesTestUser.createQuery();
-    query.chunk(2, user => {
-      count += count(user);
-    });
-    expect(count).toEqual(1);
-    let query = SoftDeletesTestUser.createQuery();
-    expect(query.pluck('email').all()).toHaveLength(1);
-    Paginator.currentPageResolver(() => {
-      return 1;
-    });
-    let query = SoftDeletesTestUser.createQuery();
-    expect(query.paginate(2).all()).toHaveLength(1);
-    const query = SoftDeletesTestUser.createQuery();
-    expect(query.simplePaginate(2).all()).toHaveLength(1);
-    expect(SoftDeletesTestUser.createQuery().where('email', 'taylorotwell@gmail.com').increment(
-      'id')).toEqual(0);
-    expect(SoftDeletesTestUser.createQuery().where('email', 'taylorotwell@gmail.com').decrement(
-      'id')).toEqual(0);
+  // it('soft deletes are not retrieved from builder helpers', () => {
+  //   createUsers();
+  //   let count = 0;
+  //   let query = SoftDeletesTestUser.createQuery();
+  //   query.chunk(2, user => {
+  //     count += count(user);
+  //   });
+  //   expect(count).toEqual(1);
+  //   query = SoftDeletesTestUser.createQuery();
+  //   expect(query.pluck('email').all()).toHaveLength(1);
+  //   // Paginator.currentPageResolver(() => {
+  //   //   return 1;
+  //   // });
+  //    query = SoftDeletesTestUser.createQuery();
+  //   expect(query.paginate(2).all()).toHaveLength(1);
+  //    query = SoftDeletesTestUser.createQuery();
+  //   expect(query.simplePaginate(2).all()).toHaveLength(1);
+  //   expect(SoftDeletesTestUser.createQuery().where('email', 'taylorotwell@gmail.com').increment(
+  //     'id')).toEqual(0);
+  //   expect(SoftDeletesTestUser.createQuery().where('email', 'taylorotwell@gmail.com').decrement(
+  //     'id')).toEqual(0);
+  // });
+  it('with trashed returns all records', async () => {
+    await createUsers();
+    expect(SoftDeletesTestUser.createQuery().pipe(
+      withTrashed()
+    ).get()).toHaveLength(2);
+    expect(SoftDeletesTestUser.createQuery().pipe(
+      withTrashed()
+    ).find(1)).toBeInstanceOf(Model);
   });
-  it('with trashed returns all records', () => {
-    createUsers();
-    expect(SoftDeletesTestUser.createQuery().withTrashed().get()).toHaveLength(2);
-    expect(SoftDeletesTestUser.createQuery().withTrashed().find(1)).toBeInstanceOf(Eloquent);
+
+  it('with trashed accepts an argument', async () => {
+    await createUsers();
+    expect(SoftDeletesTestUser.createQuery().pipe(
+      withTrashed(false)
+    ).get()).toHaveLength(1);
+    expect(SoftDeletesTestUser.createQuery().pipe(
+      withTrashed(true)
+    ).get()).toHaveLength(2);
   });
-  it('with trashed accepts an argument', () => {
-    createUsers();
-    expect(SoftDeletesTestUser.createQuery().withTrashed(false).get()).toHaveLength(1);
-    expect(SoftDeletesTestUser.createQuery().withTrashed(true).get()).toHaveLength(2);
-  });
-  it('delete sets deleted column', () => {
-    createUsers();
-    expect(SoftDeletesTestUser.createQuery().withTrashed().find(1).deleted_at).toBeInstanceOf(
-      Carbon);
+
+  it('delete sets deleted column', async () => {
+    await createUsers();
+    expect(SoftDeletesTestUser.createQuery().pipe(
+      withTrashed()
+    ).find(1).deleted_at).toBeInstanceOf(Date);
     expect(SoftDeletesTestUser.createQuery().find(2).deleted_at).toBeNull();
   });
-  it('force delete actually deletes records', () => {
-    createUsers();
-    SoftDeletesTestUser.find(2).forceDelete();
-    const users = SoftDeletesTestUser.createQuery().withTrashed().get();
+
+  it('force delete actually deletes records', async () => {
+    await createUsers();
+    (await SoftDeletesTestUser.createQuery().find(2)).forceDelete();
+    const users = await SoftDeletesTestUser.createQuery().pipe(
+      withTrashed()
+    ).get();
     expect(users).toHaveLength(1);
-    expect(users.first().id).toEqual(1);
+    expect(head(users).id).toEqual(1);
   });
-  it('restore restores records', () => {
-    createUsers();
-    const taylor = SoftDeletesTestUser.createQuery().withTrashed().find(1);
+
+  it('restore restores records', async () => {
+    await createUsers();
+    const taylor = await SoftDeletesTestUser.createQuery().pipe(withTrashed()).find(1);
     expect(taylor.trashed()).toBeTruthy();
     taylor.restore();
-    const users = SoftDeletesTestUser.createQuery().get();
+    const users = await SoftDeletesTestUser.createQuery().get();
     expect(users).toHaveLength(2);
-    expect(users.find(1).deleted_at).toBeNull();
-    expect(users.find(2).deleted_at).toBeNull();
+    expect(users.find(it => it.id === 1).deleted_at).toBeNull();
+    expect(users.find(it => it.id === 2).deleted_at).toBeNull();
   });
-  it('only trashed only returns trashed records', () => {
-    createUsers();
-    const users = SoftDeletesTestUser.createQuery().onlyTrashed().get();
+
+  it('only trashed only returns trashed records', async () => {
+    await createUsers();
+    const users = await SoftDeletesTestUser.createQuery().pipe(
+      onlyTrashed()
+    ).get();
     expect(users).toHaveLength(1);
-    expect(users.first().id).toEqual(1);
+    expect(head(users).id).toEqual(1);
   });
-  it('only without trashed only returns trashed records', () => {
-    createUsers();
-    let users = SoftDeletesTestUser.createQuery().withoutTrashed().get();
+
+  it('only without trashed only returns trashed records', async() => {
+    await createUsers();
+    let users = SoftDeletesTestUser.createQuery().pipe(withoutTrashed()).get();
     expect(users).toHaveLength(1);
     expect(users.first().id).toEqual(2);
-    const users = SoftDeletesTestUser.createQuery().withTrashed().withoutTrashed().get();
+    users = await SoftDeletesTestUser.createQuery().pipe(
+      withTrashed(),
+      withoutTrashed()
+    ).get();
     expect(users).toHaveLength(1);
-    expect(users.first().id).toEqual(2);
+    expect(head(users).id).toEqual(2);
   });
-  it('first or new', () => {
-    createUsers();
+
+  it('first or new', async () => {
+    await createUsers();
     let result = await SoftDeletesTestUser.createQuery().firstOrNew({
       'email': 'taylorotwell@gmail.com'
     });
     expect(result.id).toBeNull();
-    const result = SoftDeletesTestUser.createQuery().withTrashed().firstOrNew({
+    result = SoftDeletesTestUser.createQuery().pipe(
+      withTrashed()
+    ).firstOrNew({
       'email': 'taylorotwell@gmail.com'
     });
     expect(result.id).toEqual(1);
   });
-  it('find or new', () => {
-    createUsers();
+
+  it('find or new', async () => {
+    await createUsers();
     let result = SoftDeletesTestUser.createQuery().findOrNew(1);
     expect(result.id).toBeNull();
-    const result = SoftDeletesTestUser.createQuery().withTrashed().findOrNew(1);
+    result = SoftDeletesTestUser.createQuery().pipe(withTrashed()).findOrNew(1);
     expect(result.id).toEqual(1);
   });
-  it('first or create', () => {
-    createUsers();
-    let result = SoftDeletesTestUser.createQuery().withTrashed().firstOrCreate({
+
+  it('first or create', async () => {
+    await createUsers();
+    let result = SoftDeletesTestUser.createQuery().pipe(withTrashed()).firstOrCreate({
       'email': 'taylorotwell@gmail.com'
     });
     expect(result.email).toBe('taylorotwell@gmail.com');
@@ -200,30 +230,30 @@ describe('test database eloquent soft deletes integration', () => {
     });
     expect(result.email).toBe('foo@bar.com');
     expect(SoftDeletesTestUser.createQuery().get()).toHaveLength(2);
-    expect(SoftDeletesTestUser.createQuery().withTrashed().get()).toHaveLength(3);
+    expect(SoftDeletesTestUser.createQuery().pipe(withTrashed()).get()).toHaveLength(3);
   });
-  it('update model after soft deleting', () => {
+  it('update model after soft deleting', async () => {
     const now = Carbon.now();
-    createUsers();
+    await createUsers();
     /**/
-    const userModel = SoftDeletesTestUser.find(2);
+    const userModel = SoftDeletesTestUser.createQuery().find(2);
     userModel.delete();
     expect(userModel.getOriginal('deleted_at')).toEqual(now.toDateTimeString());
-    expect(SoftDeletesTestUser.find(2)).toBeNull();
-    expect(SoftDeletesTestUser.withTrashed().find(2)).toEqual(userModel);
+    expect(SoftDeletesTestUser.createQuery().find(2)).toBeNull();
+    expect(SoftDeletesTestUser.createQuery().pipe(withTrashed()).find(2)).toEqual(userModel);
   });
   it('restore after soft delete', () => {
     createUsers();
     /**/
-    const userModel = SoftDeletesTestUser.find(2);
+    const userModel = SoftDeletesTestUser.createQuery().find(2);
     userModel.delete();
     userModel.restore();
-    expect(SoftDeletesTestUser.find(2).id).toEqual(userModel.id);
+    expect(SoftDeletesTestUser.createQuery().find(2).id).toEqual(userModel.id);
   });
-  it('soft delete after restoring', () => {
+  it('soft delete after restoring', async () => {
     createUsers();
     /**/
-    const userModel = SoftDeletesTestUser.withTrashed().find(1);
+    const userModel = await SoftDeletesTestUser.createQuery().withTrashed().find(1);
     userModel.restore();
     expect(SoftDeletesTestUser.find(1).deleted_at).toEqual(userModel.deleted_at);
     expect(SoftDeletesTestUser.find(1).deleted_at).toEqual(userModel.getOriginal('deleted_at'));
@@ -596,7 +626,8 @@ export class TestUserWithoutSoftDelete extends Model {
 }
 
 /*Eloquent Models...*/
-export class SoftDeletesTestUser extends (mixinSoftDeletes<any>(Model) as typeof Model) {
+export class SoftDeletesTestUser extends (mixinSoftDeletes<any>(
+  Model) as typeof Model & { new(...args: any[]): SoftDeletes }) {
   _table: any   = 'users';
   _guarded: any = [];
 
@@ -627,7 +658,9 @@ export class SoftDeletesTestUserWithTrashedPosts extends Model {
     related   : forwardRef(() => SoftDeletesTestPost),
     foreignKey: 'user_id',
     onQuery   : (q => {
-      q.withTrashed();
+      q.pipe(
+        withTrashed()
+      );
     })
   })
   public posts;

@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isAnyEmpty, isArray, isBlank, isFunction, isNumber, isString } from '@gradii/check-type';
+import { isAnyEmpty, isArray, isBlank, isFunction, isNumber, isObject, isString } from '@gradii/check-type';
 import { nth, omit, pluck } from 'ramda';
 import { wrap } from '../helper/arr';
 import { pascalCase } from '../helper/str';
@@ -88,9 +88,10 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /*Register a new global scope.*/
   public withGlobalScope(identifier: string, scope: Scope | Function) {
     this._scopes[identifier] = scope;
-    // if (method_exists(scope, "extend")) {
-    //   scope.extend(this);
-    // }
+    if (isObject(scope) && 'extend' in scope) {
+      // @ts-ignore
+      scope.extend(this);
+    }
     return this;
   }
 
