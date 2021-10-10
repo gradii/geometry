@@ -116,6 +116,15 @@ function applyPatches() {
           "strictTemplates": True,`,
       'node_modules/@angular/bazel/src/ng_module.bzl');
 
+  applyPatch(path.join(__dirname, './rollup_browser_disable.patch'));
+
+  searchAndReplace(
+    /"\/\/rollup-plugin-sourcemaps",/, `"//rollup-plugin-sourcemaps",
+
+        "//rollup-plugin-node-builtins",`,
+    'node_modules/@angular/bazel/src/ng_package/BUILD.bazel'
+  )
+
   // More info in https://github.com/angular/angular/pull/33786
   shelljs.rm('-rf', [
     'node_modules/rxjs/add/',

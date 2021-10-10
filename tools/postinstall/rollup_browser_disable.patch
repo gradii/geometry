@@ -1,0 +1,74 @@
+diff --git node_modules/@angular/bazel/src/ng_package/ng_package.bzl node_modules/@angular/bazel/src/ng_package/ng_package.bzl
+index 310043dc35..70a3cae309 100644
+--- node_modules/@angular/bazel/src/ng_package/ng_package.bzl
++++ node_modules/@angular/bazel/src/ng_package/ng_package.bzl
+@@ -156,7 +156,8 @@ def _write_rollup_config(
+         root_dir,
+         filename = "_%s.rollup.conf.js",
+         include_tslib = False,
+-        downlevel_to_es5 = False):
++        downlevel_to_es5 = False,
++        nodejs_platform = False):
+     """Generate a rollup config file.
+
+     Args:
+@@ -204,6 +205,7 @@ def _write_rollup_config(
+             "TMPL_external": ", ".join(["'%s'" % e for e in external]),
+             "TMPL_globals": ", ".join(["'%s': '%s'" % g for g in globals.items()]),
+             "TMPL_downlevel_to_es5": "true" if downlevel_to_es5 else "false",
++            "TMPL_nodejs_platform": "true" if ctx.attr.nodejs_platform else "false",
+         },
+     )
+
+@@ -663,6 +665,11 @@ _NG_PACKAGE_ATTRS = dict(PKG_NPM_ATTRS, **{
+         default = Label(_DEFAULT_ROLLUP_CONFIG_TMPL),
+         allow_single_file = True,
+     ),
++    "nodejs_platform": attr.bool(
++        default=False,
++        doc='disable rollup node resolve browser main field',
++        mandatory=False
++    )
+ })
+
+ # Angular wants these named after the entry_point,
+diff --git node_modules/@angular/bazel/src/ng_package/rollup.config.js node_modules/@angular/bazel/src/ng_package/rollup.config.js
+index efcafcb02f..fc38b9989f 100644
+--- node_modules/@angular/bazel/src/ng_package/rollup.config.js
++++ node_modules/@angular/bazel/src/ng_package/rollup.config.js
+@@ -12,6 +12,7 @@
+ const nodeResolve = require('rollup-plugin-node-resolve');
+ const sourcemaps = require('rollup-plugin-sourcemaps');
+ const commonjs = require('rollup-plugin-commonjs');
++const builtins = require('rollup-plugin-node-builtins');
+ const path = require('path');
+ const fs = require('fs');
+ const ts = require('typescript');
+@@ -28,6 +29,7 @@ const stampData = TMPL_stamp_data;
+ const moduleMappings = TMPL_module_mappings;
+ const downlevelToEs5 = TMPL_downlevel_to_es5;
+ const nodeModulesRoot = 'TMPL_node_modules_root';
++const nodejsPlatform = TMPL_nodejs_platform;
+
+ log_verbose(`running with
+   cwd: ${process.cwd()}
+@@ -177,12 +179,18 @@ const plugins = [
+   nodeResolve({
+     mainFields: ['browser', 'es2015', 'module', 'jsnext:main', 'main'],
+     jail: process.cwd(),
+-    customResolveOptions: {moduleDirectory: nodeModulesRoot}
++    customResolveOptions: {moduleDirectory: nodeModulesRoot},
++    browser: !nodejsPlatform,
++    preferBuiltins: !nodejsPlatform
+   }),
+   commonjs({ignoreGlobal: true}),
+   sourcemaps(),
+ ];
+
++if(nodejsPlatform) {
++  plugins.push(builtins());
++}
++
+ // If downleveling to ES5 is enabled, set up the downlevel rollup plugin.
+ if (downlevelToEs5) {
+   plugins.push(downlevelToEs5Plugin);

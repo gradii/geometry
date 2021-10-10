@@ -1,9 +1,9 @@
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
 
+
+# Check Type
+
+### Implement
+```typescript
 
 export function isPresent(value: any) {
   return value !== null && value !== undefined;
@@ -83,7 +83,7 @@ export function isPromise<T = any>(obj: any): obj is Promise<T> {
   // allow any Promise/A+ compliant thenable.
   // It's up to the caller to ensure that obj.then conforms to the spec
   return !!obj && typeof obj.then === 'function';
-}
+
 
 export function isInfinite(result: any) {
   return result === Number.POSITIVE_INFINITY || result === Number.NEGATIVE_INFINITY;
@@ -147,3 +147,5 @@ export function isIterable(x: any) {
   // @ts-ignore
   return isObject(x) && Symbol.iterator in x && isFunction(x[Symbol.iterator]);
 }
+
+```

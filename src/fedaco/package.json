@@ -1,6 +1,6 @@
 {
   "name": "@gradii/fedaco",
-  "version": "0.0.1-beta.2",
+  "version": "0.0.1-beta.4",
   "description": "fedaco orm",
   "repository": {
     "type": "git",
@@ -11,6 +11,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@gradii/annotation": "^1.1.2",
     "@gradii/check-type": "^1.1.2",
     "ramda": "^0.27.1"
   },
