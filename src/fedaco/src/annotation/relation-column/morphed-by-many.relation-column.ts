@@ -34,7 +34,6 @@ export const MorphedByManyColumn: FedacoDecorator<MorphedByManyRelationAnnotatio
       p.foreignPivotKey = p.foreignPivotKey || m.getForeignKey();
       p.relatedPivotKey = p.relatedPivotKey || p.name + '_id';
 
-      const caller   = relation;
       const instance = m._newRelatedInstance(resolveForwardRef(p.related));
 
       p.parentKey  = p.parentKey || m.getKeyName();
@@ -49,7 +48,7 @@ export const MorphedByManyColumn: FedacoDecorator<MorphedByManyRelationAnnotatio
       const r = new MorphToMany(instance.newQuery(), m, p.name, p.table,
         p.foreignPivotKey, p.relatedPivotKey,
         p.parentKey, p.relatedKey,
-        caller, true);
+        relation, true);
 
       if (p.onQuery) {
         p.onQuery(r);
