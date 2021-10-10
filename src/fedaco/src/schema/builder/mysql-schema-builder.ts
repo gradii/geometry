@@ -57,7 +57,7 @@ export class MysqlSchemaBuilder extends SchemaBuilder {
     if (!views.length) {
       return;
     }
-    this.connection.statement(this.grammar.compileDropAllViews(views));
+    await this.connection.statement(this.grammar.compileDropAllViews(views));
   }
 
   /*Get all of the table names for the database.*/

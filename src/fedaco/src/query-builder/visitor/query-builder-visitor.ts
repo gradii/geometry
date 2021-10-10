@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isBlank, isString } from '@gradii/check-type';
+import { isBlank, isBoolean, isString } from '@gradii/check-type';
 import { uniq } from 'ramda';
 import { AssignmentSetClause } from '../../query/ast/assignment-set-clause';
 import { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
@@ -14,6 +14,7 @@ import { DeleteSpecification } from '../../query/ast/delete-specification';
 import { AsExpression } from '../../query/ast/expression/as-expression';
 import { BetweenPredicateExpression } from '../../query/ast/expression/between-predicate-expression';
 import { BinaryExpression } from '../../query/ast/expression/binary-expression';
+import { CommonValueExpression } from '../../query/ast/expression/common-value-expression';
 import { ComparisonPredicateExpression } from '../../query/ast/expression/comparison-predicate-expression';
 import { ConditionExpression } from '../../query/ast/expression/condition-expression';
 import { ExistsPredicateExpression } from '../../query/ast/expression/exists-predicate-expression';
@@ -46,6 +47,7 @@ import { JoinedTable } from '../../query/ast/joined-table';
 import { JsonPathExpression } from '../../query/ast/json-path-expression';
 import { LimitClause } from '../../query/ast/limit-clause';
 import { LockClause } from '../../query/ast/lock-clause';
+import { NodePart } from '../../query/ast/node-part';
 import { OffsetClause } from '../../query/ast/offset-clause';
 import { OrderByClause } from '../../query/ast/order-by-clause';
 import { OrderByElement } from '../../query/ast/order-by-element';
@@ -56,6 +58,7 @@ import { RangeVariableDeclaration } from '../../query/ast/range-variable-declara
 import { SelectClause } from '../../query/ast/select-clause';
 import { SelectInsertSource } from '../../query/ast/select-insert-source';
 import { SelectScalarExpression } from '../../query/ast/select-scalar-expression';
+import { SetClause } from '../../query/ast/set-clause';
 import { TableName } from '../../query/ast/table-name';
 import { TableReferenceExpression } from '../../query/ast/table-reference-expression';
 import { UpdateSpecification } from '../../query/ast/update-specification';
@@ -71,8 +74,6 @@ import { QueryBuilder } from '../query-builder';
 export class QueryBuilderVisitor implements SqlVisitor {
   protected inJoinExpression: boolean = false;
   protected explicitBindingType: string;
-
-  public updateTarget;
 
   constructor(
     protected _grammar: GrammarInterface,
@@ -97,11 +98,11 @@ export class QueryBuilderVisitor implements SqlVisitor {
     // );
   }
 
-  visitAsExpression(node: AsExpression) {
+  visitAsExpression(node: AsExpression): string {
     return `${node.name.accept(this)} AS ${node.as.accept(this)}`;
   }
 
-  visitDeleteSpecification(node: DeleteSpecification) {
+  visitDeleteSpecification(node: DeleteSpecification): string {
     // language=SQL format=false
     let sql = `DELETE FROM ${node.target.accept(this)}`;
 
@@ -125,22 +126,22 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return sql;
   }
 
-  visitAssignmentSetClause(node: AssignmentSetClause) {
+  visitAssignmentSetClause(node: AssignmentSetClause): string {
     return `${node.column.accept(this)} = ${node.value.accept(this)}`;
   }
 
-  visitBetweenPredicateExpression(node: BetweenPredicateExpression) {
+  visitBetweenPredicateExpression(node: BetweenPredicateExpression): string {
     return `${
       node.expression.accept(this)}${node.not ? ' NOT' : ''
     } BETWEEN ${node.leftBetween.accept(this)} AND ${node.rightBetween.accept(this)}`;
   }
 
-  visitBinaryExpression(node: BinaryExpression) {
+  visitBinaryExpression(node: BinaryExpression): string {
     // 'and' | 'or'
     return `${node.left.accept(this)} ${node.operator.toUpperCase()} ${node.right.accept(this)}`;
   }
 
-  visitBinaryUnionQueryExpression(node: BinaryUnionQueryExpression) {
+  visitBinaryUnionQueryExpression(node: BinaryUnionQueryExpression): string {
     let sql;
     if (node.left instanceof BinaryUnionQueryExpression) { // todo check
       sql = `${node.left.accept(this)} UNION${node.all ? ' ALL' : ''} (${node.right.accept(this)})`;
@@ -160,7 +161,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
    * generate a placeholder for sql
    * @param node
    */
-  visitBindingVariable(node: BindingVariable) {
+  visitBindingVariable(node: BindingVariable): string {
     this._queryBuilder.addBinding(
       node.bindingExpression.accept(this),
       this.explicitBindingType ??
@@ -170,7 +171,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return `?`;
   }
 
-  visitColumnReferenceExpression(node: ColumnReferenceExpression) {
+  visitColumnReferenceExpression(node: ColumnReferenceExpression): string {
     const columnName = resolveIdentifier(node.fieldAliasIdentificationVariable);
     if (columnName) {
       return `${node.expression.accept(this)} AS ${this._grammar.quoteColumnName(
@@ -181,11 +182,11 @@ export class QueryBuilderVisitor implements SqlVisitor {
     }
   }
 
-  visitCommonValueExpression(node: SqlNode) {
+  visitCommonValueExpression(node: CommonValueExpression): string {
     throw new Error('Method not implemented.');
   }
 
-  visitComparisonExpression(node: ComparisonPredicateExpression) {
+  visitComparisonExpression(node: ComparisonPredicateExpression): string {
     const left = node.left.accept(this);
     if (
       node.right instanceof BindingVariable &&
@@ -205,23 +206,23 @@ export class QueryBuilderVisitor implements SqlVisitor {
    * todo `AND` is not right here.
    * @param node
    */
-  visitConditionExpression(node: ConditionExpression) {
+  visitConditionExpression(node: ConditionExpression): string {
     return node.conditionTerms.map(it => it.accept(this)).join(' AND ');
   }
 
-  visitConditionTermExpression(node: SqlNode) {
+  visitConditionTermExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitExistsPredicateExpression(node: ExistsPredicateExpression) {
+  visitExistsPredicateExpression(node: ExistsPredicateExpression): string {
     return `${node.not ? 'NOT EXISTS' : 'EXISTS'} ${node.expression.accept(this)}`;
   }
 
-  visitFieldAsExpression(node: SqlNode) {
+  visitFieldAsExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitFromClause(node: FromClause) {
+  visitFromClause(node: FromClause): string {
     if (node.joins.length > 0) {
       const joins = node.joins.map(it => it.accept(this));
       return `FROM ${node.from.accept(this)} ${joins.join(' ')}`;
@@ -231,7 +232,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
 
   }
 
-  visitFromTable(node: FromTable) {
+  visitFromTable(node: FromTable): string {
     let rst;
     // if (node.table instanceof Identifier) {
     //   const tableName = node.table.accept(this);
@@ -246,21 +247,21 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return rst;
   }
 
-  visitFunctionCallExpression(node: FunctionCallExpression) {
+  visitFunctionCallExpression(node: FunctionCallExpression): string {
     return `${node.name.accept(this)}(${
       node.parameters.map(it => it.accept(this)).join(', ')
     })`;
   }
 
-  visitGroupByClause(node: GroupByClause) {
+  visitGroupByClause(node: GroupByClause): string {
     return `GROUP BY ${node.groups.map(it => it.accept(this)).join(', ')}`;
   }
 
-  visitHavingClause(node: HavingClause) {
+  visitHavingClause(node: HavingClause): string {
     return `HAVING ${node.expressions.map(it => it.accept(this)).join(',')}`;
   }
 
-  visitIdentifier(node: Identifier) {
+  visitIdentifier(node: Identifier): string {
     if (isString(node.name)) {
       return node.name;
     }
@@ -282,7 +283,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return rst;
   }
 
-  visitInPredicateExpression(node: InPredicateExpression) {
+  visitInPredicateExpression(node: InPredicateExpression): string {
     if (node.subQuery) {
       return `${node.expression.accept(this)}${node.not ? ' NOT' : ''
       } IN ${node.subQuery.accept(this)}`;
@@ -299,18 +300,18 @@ export class QueryBuilderVisitor implements SqlVisitor {
     } IN (${node.values.map(it => it.accept(this)).join(', ')})`;
   }
 
-  visitInsertSpecification(node: InsertSpecification) {
+  visitInsertSpecification(node: InsertSpecification): string {
     let sql = `INSERT ${node.insertOption.toUpperCase()} ${node.target.accept(this)}`;
     sql += ` (${node.columns.map(it => it.accept(this)).join(', ')})`;
     sql += `${node.insertSource.accept(this)}`;
     return sql;
   }
 
-  visitJoinClause(node: JoinClause) {
+  visitJoinClause(node: JoinClause): string {
     throw new Error('not implement');
   }
 
-  visitJoinExpression(node: JoinExpression) {
+  visitJoinExpression(node: JoinExpression): string {
     this.inJoinExpression = true;
     // todo remove identifier check
     let tableName;
@@ -329,33 +330,33 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return sql;
   }
 
-  visitJoinFragment(node: JoinFragment) {
+  visitJoinFragment(node: JoinFragment): string {
     return this._grammar.compileJoinFragment(node.joinQueryBuilder, this);
   }
 
-  visitJoinOnExpression(node: JoinOnExpression) {
+  visitJoinOnExpression(node: JoinOnExpression): string {
     return `${node.columnExpression.accept(this)} ${node.operator} ${
       node.rightExpression.accept(this)
     }`;
   }
 
-  visitJoinedTable(node: JoinedTable) {
+  visitJoinedTable(node: JoinedTable): string {
     return `${node.from.accept(this)} ${node.joinExpressions.map(it => it.accept(this)).join(' ')}`;
   }
 
-  visitJsonPathColumn(node: JsonPathColumn) {
+  visitJsonPathColumn(node: JsonPathColumn): string {
     return `json_extract(${node.columns.accept(this)}, ${node.jsonPaths.accept(this)})`;
   }
 
-  visitJsonPathExpression(node: JsonPathExpression) {
+  visitJsonPathExpression(node: JsonPathExpression): string {
     return `'$.${node.paths.map(it => `"${it.accept(this)}"`).join('.')}'`;
   }
 
-  visitLimitClause(node: LimitClause) {
+  visitLimitClause(node: LimitClause): string {
     return `LIMIT ${node.value}`;
   }
 
-  visitNestedExpression(node: NestedExpression) {
+  visitNestedExpression(node: NestedExpression): string {
 
     let sql;
     if (node.expression instanceof QueryBuilder) {
@@ -382,7 +383,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return sql;
   }
 
-  visitNestedPredicateExpression(node: NestedPredicateExpression) {
+  visitNestedPredicateExpression(node: NestedPredicateExpression): string {
     if (node.query instanceof QueryBuilder) {
       return this._grammar.compileNestedPredicate(node.query, this);
     } else {
@@ -390,11 +391,11 @@ export class QueryBuilderVisitor implements SqlVisitor {
     }
   }
 
-  visitNodePart(node: SqlNode) {
+  visitNodePart(node: NodePart): string {
     return 'node part';
   }
 
-  visitNullPredicateExpression(node: NullPredicateExpression) {
+  visitNullPredicateExpression(node: NullPredicateExpression): string {
     if (node.expression.expression instanceof JsonPathColumn) {
       const sql = node.expression.accept(this);
       if (node.not) {
@@ -406,21 +407,21 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return `${node.expression.accept(this)}${node.not ? ' IS NOT NULL' : ' IS NULL'}`;
   }
 
-  visitNumberLiteralExpression(node: NumberLiteralExpression) {
+  visitNumberLiteralExpression(node: NumberLiteralExpression): string {
     return `${node.value}`;
   }
 
-  visitOffsetClause(node: OffsetClause) {
+  visitOffsetClause(node: OffsetClause): string {
     return `OFFSET ${node.offset}`;
   }
 
-  visitOrderByClause(node: OrderByClause) {
+  visitOrderByClause(node: OrderByClause): string {
     return `ORDER BY ${node.elements.map(it => it.accept(this))
       .filter(it => !isBlank(it) && it.length > 0)
       .join(', ')}`;
   }
 
-  visitOrderByElement(node: OrderByElement, ctx?: any) {
+  visitOrderByElement(node: OrderByElement, ctx?: any): string {
     let rejectColumns = [];
     if (ctx && ctx.rejectColumns) {
       rejectColumns = ctx.rejectColumns;
@@ -434,11 +435,11 @@ export class QueryBuilderVisitor implements SqlVisitor {
     }
   }
 
-  visitParenthesizedExpression(node: ParenthesizedExpression) {
+  visitParenthesizedExpression(node: ParenthesizedExpression): string {
     return `(${node.expression.accept(this)})`;
   }
 
-  visitPathExpression(node: PathExpression) {
+  visitPathExpression(node: PathExpression): string {
     const columns = [];
     for (let i = 0; i < node.paths.length; i++) {
       const identifier = node.paths[i];
@@ -467,7 +468,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return columns.join('.');
   }
 
-  visitQueryExpression(node: QueryExpression) {
+  visitQueryExpression(node: QueryExpression): string {
     let sql = '';
     if (node.orderByClause) {
       sql += ` ${node.orderByClause.accept(this)}`;
@@ -484,7 +485,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return sql;
   }
 
-  visitQuerySpecification(node: QuerySpecification) {
+  visitQuerySpecification(node: QuerySpecification): string {
     let sql = `${node.selectClause.accept(this)}`;
 
     if (node.fromClause) {
@@ -512,7 +513,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return sql;
   }
 
-  visitRangeVariableDeclaration(node: RangeVariableDeclaration) {
+  visitRangeVariableDeclaration(node: RangeVariableDeclaration): string {
     const quoteTableName = this._grammar.quoteTableName(node.abstractSchemaName);
     if (node.aliasIdentificationVariable) {
       return `${quoteTableName} AS ${this._grammar.quoteTableName(
@@ -522,18 +523,22 @@ export class QueryBuilderVisitor implements SqlVisitor {
     }
   }
 
-  visitRawBindingExpression(node: RawBindingExpression) {
+  visitRawBindingExpression(node: RawBindingExpression): string {
     node.bindings.forEach(it => {
       it.accept(this);
     });
     return `${node.raw.accept(this)}`;
   }
 
-  visitRawExpression(node: RawExpression) {
-    return node.value;
+  visitRawExpression(node: RawExpression): string {
+    if (isBoolean(node.value)) {
+      return node.value ? '1' : '0';
+    } else {
+      return `${node.value}`;
+    }
   }
 
-  visitSelectClause(node: SelectClause) {
+  visitSelectClause(node: SelectClause): string {
     if (node.selectExpressions.length > 0) {
       const selectExpressions = node.selectExpressions.map(expression => {
         return expression.accept(this);
@@ -545,22 +550,23 @@ export class QueryBuilderVisitor implements SqlVisitor {
     }
   }
 
-  visitSelectInsertSource(node: SelectInsertSource) {
-  }
-
-  visitSelectScalarExpression(node: SelectScalarExpression) {
-    return `${node.expression.accept(this)} AS ${node.columnName.accept(this)}`;
-  }
-
-  visitSetClause(node: SqlNode) {
+  visitSelectInsertSource(node: SelectInsertSource): string {
     throw new Error('Method not implemented.');
   }
 
-  visitStringLiteralExpression(node: StringLiteralExpression) {
+  visitSelectScalarExpression(node: SelectScalarExpression): string {
+    return `${node.expression.accept(this)} AS ${node.columnName.accept(this)}`;
+  }
+
+  visitSetClause(node: SetClause): string {
+    throw new Error('Method not implemented.');
+  }
+
+  visitStringLiteralExpression(node: StringLiteralExpression): string {
     return `"${node.value}"`;
   }
 
-  visitTableName(node: TableName) {
+  visitTableName(node: TableName): string {
     const tableName = [];
     if (node.serverIdentifier) {
       tableName.push(node.serverIdentifier.accept(this));
@@ -581,7 +587,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return tableName.join('.');
   }
 
-  visitTableReferenceExpression(node: TableReferenceExpression) {
+  visitTableReferenceExpression(node: TableReferenceExpression): string {
     let name;
     if (node.expression instanceof Identifier) {
       name = this._grammar.quoteTableName(node.expression.accept(this));
@@ -601,7 +607,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
     }
   }
 
-  visitUnionFragment(node: UnionFragment) {
+  visitUnionFragment(node: UnionFragment): string {
     // return ` UNION${node.all ? ' ALL' : ''}`;
     throw new Error('should not run');
   }
@@ -633,7 +639,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return sql;
   }
 
-  visitValuesInsertSource(node: ValuesInsertSource) {
+  visitValuesInsertSource(node: ValuesInsertSource): string {
     if (node.isDefault) {
       return ' DEFAULT VALUES';
     } else if (node.select) {
@@ -645,11 +651,11 @@ export class QueryBuilderVisitor implements SqlVisitor {
     }
   }
 
-  visitWhereClause(node: WhereClause) {
+  visitWhereClause(node: WhereClause): string {
     return `WHERE ${node.conditionExpression.accept(this)}`;
   }
 
-  visitLockClause(node: LockClause) {
+  visitLockClause(node: LockClause): string {
     if (node.value === true) {
       return `for update`;
     } else if (node.value === false) {

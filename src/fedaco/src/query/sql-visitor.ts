@@ -12,121 +12,121 @@ export interface SqlVisitor {
   // visit(node: SqlNode) {
   // }
 
-  visitAggregateFragment(node: SqlNode);
+  visitAggregateFragment(node: SqlNode): string;
 
-  visitAsExpression(node: SqlNode);
+  visitAsExpression(node: SqlNode): string;
 
-  visitDeleteSpecification(node: SqlNode);
+  visitDeleteSpecification(node: SqlNode): string;
 
-  visitAssignmentSetClause(node: SqlNode);
+  visitAssignmentSetClause(node: SqlNode): string;
 
-  visitBetweenPredicateExpression(node: SqlNode);
+  visitBetweenPredicateExpression(node: SqlNode): string;
 
-  visitBinaryExpression(node: SqlNode);
+  visitBinaryExpression(node: SqlNode): string;
 
-  visitBinaryUnionQueryExpression(node: SqlNode);
+  visitBinaryUnionQueryExpression(node: SqlNode): string;
 
-  visitBindingVariable(node: SqlNode);
+  visitBindingVariable(node: SqlNode): string;
 
-  visitColumnReferenceExpression(node: SqlNode);
+  visitColumnReferenceExpression(node: SqlNode): string;
 
-  visitCommonValueExpression(node: SqlNode);
+  visitCommonValueExpression(node: SqlNode): string;
 
-  visitComparisonExpression(node: SqlNode);
+  visitComparisonExpression(node: SqlNode): string;
 
-  visitConditionExpression(node: SqlNode);
+  visitConditionExpression(node: SqlNode): string;
 
-  visitConditionTermExpression(node: SqlNode);
+  visitConditionTermExpression(node: SqlNode): string;
 
-  visitExistsPredicateExpression(node: SqlNode);
+  visitExistsPredicateExpression(node: SqlNode): string;
 
-  visitFieldAsExpression(node: SqlNode);
+  visitFieldAsExpression(node: SqlNode): string;
 
-  visitFromClause(node: SqlNode);
+  visitFromClause(node: SqlNode): string;
 
-  visitFromTable(node: SqlNode);
+  visitFromTable(node: SqlNode): string;
 
-  visitFunctionCallExpression(node: SqlNode);
+  visitFunctionCallExpression(node: SqlNode): string;
 
-  visitGroupByClause(node: SqlNode);
+  visitGroupByClause(node: SqlNode): string;
 
-  visitHavingClause(node: SqlNode);
+  visitHavingClause(node: SqlNode): string;
 
-  visitIdentifier(node: SqlNode);
+  visitIdentifier(node: SqlNode): string;
 
-  visitIdentifyVariableDeclaration(node: SqlNode);
+  visitIdentifyVariableDeclaration(node: SqlNode): string;
 
-  visitInPredicateExpression(node: SqlNode);
+  visitInPredicateExpression(node: SqlNode): string;
 
-  visitInsertSpecification(node: SqlNode);
+  visitInsertSpecification(node: SqlNode): string;
 
-  visitJoinClause(node: SqlNode);
+  visitJoinClause(node: SqlNode): string;
 
-  visitJoinExpression(node: SqlNode);
+  visitJoinExpression(node: SqlNode): string;
 
-  visitJoinFragment(node: SqlNode);
+  visitJoinFragment(node: SqlNode): string;
 
-  visitJoinOnExpression(node: SqlNode);
+  visitJoinOnExpression(node: SqlNode): string;
 
-  visitJoinedTable(node: SqlNode);
+  visitJoinedTable(node: SqlNode): string;
 
-  visitJsonPathColumn(node: SqlNode);
+  visitJsonPathColumn(node: SqlNode): string;
 
-  visitJsonPathExpression(node: SqlNode);
+  visitJsonPathExpression(node: SqlNode): string;
 
-  visitLimitClause(node: SqlNode);
+  visitLimitClause(node: SqlNode): string;
 
-  visitNestedExpression(node: SqlNode);
+  visitNestedExpression(node: SqlNode): string;
 
-  visitNestedPredicateExpression(node: SqlNode);
+  visitNestedPredicateExpression(node: SqlNode): string;
 
-  visitNodePart(node: SqlNode);
+  visitNodePart(node: SqlNode): string;
 
-  visitNullPredicateExpression(node: SqlNode);
+  visitNullPredicateExpression(node: SqlNode): string;
 
-  visitNumberLiteralExpression(node: SqlNode);
+  visitNumberLiteralExpression(node: SqlNode): string;
 
-  visitOffsetClause(node: SqlNode);
+  visitOffsetClause(node: SqlNode): string;
 
-  visitOrderByClause(node: SqlNode);
+  visitOrderByClause(node: SqlNode): string;
 
-  visitOrderByElement(node: SqlNode, ctx?: any);
+  visitOrderByElement(node: SqlNode, ctx?: any): string;
 
-  visitParenthesizedExpression(node: SqlNode);
+  visitParenthesizedExpression(node: SqlNode): string;
 
-  visitPathExpression(node: SqlNode);
+  visitPathExpression(node: SqlNode): string;
 
-  visitQuerySpecification(node: SqlNode);
+  visitQuerySpecification(node: SqlNode): string;
 
-  visitRangeVariableDeclaration(node: SqlNode);
+  visitRangeVariableDeclaration(node: SqlNode): string;
 
-  visitRawBindingExpression(node: SqlNode);
+  visitRawBindingExpression(node: SqlNode): string;
 
-  visitRawExpression(node: SqlNode);
+  visitRawExpression(node: SqlNode): string;
 
-  visitSelectClause(node: SqlNode);
+  visitSelectClause(node: SqlNode): string;
 
-  visitSelectInsertSource(node: SqlNode);
+  visitSelectInsertSource(node: SqlNode): string;
 
-  visitSelectScalarExpression(node: SqlNode);
+  visitSelectScalarExpression(node: SqlNode): string;
 
-  visitSetClause(node: SqlNode);
+  visitSetClause(node: SqlNode): string;
 
-  visitStringLiteralExpression(node: SqlNode);
+  visitStringLiteralExpression(node: SqlNode): string;
 
-  visitTableName(node: SqlNode);
+  visitTableName(node: SqlNode): string;
 
-  visitTableReferenceExpression(node: SqlNode);
+  visitTableReferenceExpression(node: SqlNode): string;
 
-  visitUnionFragment(node: SqlNode);
+  visitUnionFragment(node: SqlNode): string;
 
   visitUpdateSpecification(node: SqlNode): string;
 
-  visitValuesInsertSource(node: SqlNode);
+  visitValuesInsertSource(node: SqlNode): string;
 
-  visitWhereClause(node: SqlNode);
+  visitWhereClause(node: SqlNode): string;
 
-  visitLockClause(node: SqlNode);
+  visitLockClause(node: SqlNode): string;
 
   visitRejectOrderElementExpression(node: SqlNode): string;
 }

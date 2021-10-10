@@ -271,6 +271,8 @@ export type ForwardCallToQueryBuilderCtor = Constructor<ForwardCallToQueryBuilde
 export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base: T): ForwardCallToQueryBuilderCtor & T {
 
   return class _Self extends base {
+
+    // @ts-ignore
     #passThroughToQueryBuilder(method: string, parameters: any[]) {
       const _query = this.toBase();
       const result = _query[method].apply(_query, parameters);
@@ -280,6 +282,7 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
       return result;
     }
 
+    // @ts-ignore
     #forwardCallToQueryBuilder(method: string, parameters: any[]) {
       const result = this._query[method].apply(this._query, parameters);
       if (result === this._query) {
@@ -288,6 +291,7 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
       return result;
     }
 
+    // @ts-ignore
     #directToQueryBuilder(method: string, parameters: any[]) {
       const _query = this.toBase();
       return _query[method].apply(_query, parameters);

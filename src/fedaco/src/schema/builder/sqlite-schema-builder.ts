@@ -6,7 +6,6 @@
 
 import * as fs from 'fs';
 import { Column } from '../../dbal/column';
-import { Type } from '../../dbal/types/type';
 import { SchemaBuilder } from '../schema-builder';
 
 export class SqliteSchemaBuilder extends SchemaBuilder {
@@ -107,6 +106,7 @@ export class SqliteSchemaBuilder extends SchemaBuilder {
     return new Column(tableColumn['name'], type, options);
   }
 
+  // @ts-ignore
   async #getCreateTableSQL(table: string) {
     return await this.connection
       .select(`SELECT sql

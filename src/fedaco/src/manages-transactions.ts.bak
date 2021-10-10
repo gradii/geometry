@@ -33,7 +33,7 @@ export class ManagesTransactions {
   }
 
   /*Handle an exception encountered when running a transacted statement.*/
-  protected handleTransactionException(e: Throwable, currentAttempt: number, maxAttempts: number) {
+  protected handleTransactionException(e: Error, currentAttempt: number, maxAttempts: number) {
     if (this.causedByConcurrencyError(e) && this.transactions > 1) {
       this.transactions--;
       optional(this.transactionsManager).rollback(this.getName(), this.transactions);

@@ -26,9 +26,10 @@ export class SqliteQueryBuilderVisitor extends QueryBuilderVisitor {
     super(_grammar, _queryBuilder);
   }
 
-  visitBinaryUnionQueryExpression(node: BinaryUnionQueryExpression) {
-    let sql = `SELECT * FROM (${node.left.accept(
-      this)}) UNION${node.all ? ' ALL' : ''} SELECT * FROM (${node.right.accept(this)})`;
+  visitBinaryUnionQueryExpression(node: BinaryUnionQueryExpression): string {
+    let sql = 'SELECT * FROM ' + `(${
+      node.left.accept(this)
+    }) UNION${node.all ? ' ALL' : ''} SELECT * FROM (${node.right.accept(this)})`;
 
     sql += this.visitQueryExpression(node);
     return sql;

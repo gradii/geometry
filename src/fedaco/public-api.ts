@@ -6,9 +6,7 @@
 
 
 export * from './src/interface/connection-resolver-interface';
-export * from './src/proxy/no-such-method-proxy';
 export * from './src/define/collection';
-export * from './src/mixins/forwards-calls';
 export * from './src/fedaco/model-helper-global';
 export * from './src/fedaco/fedaco-builder';
 export * from './src/fedaco/fedaco-event-manage';
@@ -47,11 +45,6 @@ export * from './src/fedaco/mixins/has-relationships';
 export * from './src/fedaco/mixins/forward-call-to-query-builder';
 export * from './src/fedaco/mixins/has-events';
 export * from './src/fedaco/mixins/has-attributes';
-export * from './src/fedaco/casts/ArrayObject';
-export * from './src/fedaco/casts/AsArrayObject';
-export * from './src/fedaco/casts/AsEncryptedArrayObject';
-export * from './src/fedaco/casts/AsEncryptedCollection';
-export * from './src/fedaco/casts/AsCollection';
 export * from './src/fedaco/model-helper';
 export * from './src/fedaco/model';
 export * from './src/fedaco/fedaco-manage';
@@ -141,11 +134,11 @@ export * from './src/helper/constructor';
 export * from './src/helper/_pluralize-values';
 export * from './src/query-builder/query-builder-resolver-visitor';
 // export * from './src/query-builder/grammar/oracle-grammar';
-export * from './src/query-builder/grammar/mysql-grammar';
-export * from './src/query-builder/grammar/queryGrammar';
-export * from './src/query-builder/grammar/sqlserver-grammar';
-export * from './src/query-builder/grammar/postgres-grammar';
-export * from './src/query-builder/grammar/sqlite-grammar';
+export * from './src/query-builder/grammar/mysql-query-grammar';
+export * from './src/query-builder/grammar/query-grammar';
+export * from './src/query-builder/grammar/sqlserver-query-grammar';
+export * from './src/query-builder/grammar/postgres-query-grammar';
+export * from './src/query-builder/grammar/sqlite-query-grammar';
 export * from './src/query-builder/ast-factory';
 export * from './src/query-builder/mixins/union';
 export * from './src/query-builder/mixins/having';

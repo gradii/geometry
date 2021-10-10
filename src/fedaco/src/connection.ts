@@ -10,8 +10,7 @@ import { BaseGrammar } from './base-grammar';
 import { SqliteWrappedConnection } from './connector/sqlite/sqlite-wrapped-connection';
 import { WrappedConnection } from './connector/wrapped-connection';
 import { WrappedStmt } from './connector/wrapped-stmt';
-import { DatabaseTransactionsManager } from './database-transactions-manager';
-import { DbalConnection } from './dbal/connection';
+// import { DatabaseTransactionsManager } from './database-transactions-manager';
 import { QueryExecuted } from './events/query-executed';
 import { StatementPrepared } from './events/statement-prepared';
 import { TransactionBeginning } from './events/transaction-beginning';
@@ -58,7 +57,7 @@ export class Connection implements ConnectionInterface {
   /*The number of active transactions.*/
   protected transactions: number = 0;
   /*The transaction manager instance.*/
-  protected transactionsManager: DatabaseTransactionsManager;
+  // protected transactionsManager: DatabaseTransactionsManager;
   /*Indicates if changes have been made to the database.*/
   protected recordsModified: boolean = false;
   /*Indicates if the connection should use the "write" PDO connection.*/
@@ -70,7 +69,7 @@ export class Connection implements ConnectionInterface {
   /*Indicates if the connection is in a "dry run".*/
   protected _dryRun: boolean = false;
   /*The instance of Doctrine connection.*/
-  protected doctrineConnection: DbalConnection;
+  // protected doctrineConnection: DbalConnection;
   /*The connection resolvers.*/
   protected static resolvers: any = {};
 
@@ -353,7 +352,7 @@ export class Connection implements ConnectionInterface {
   /*Reconnect to the database.*/
   public reconnect() {
     if (isFunction(this.reconnector)) {
-      this.doctrineConnection = null;
+      // this.doctrineConnection = null;
       return this.reconnector.call(this);
     }
     throw new Error('LogicException Lost connection and no reconnector available.');
@@ -589,16 +588,16 @@ export class Connection implements ConnectionInterface {
     this.events = null;
   }
 
-  /*Set the transaction manager instance on the connection.*/
-  public setTransactionManager(manager: DatabaseTransactionsManager) {
-    this.transactionsManager = manager;
-    return this;
-  }
-
-  /*Unset the transaction manager for this connection.*/
-  public unsetTransactionManager() {
-    this.transactionsManager = null;
-  }
+  // /*Set the transaction manager instance on the connection.*/
+  // public setTransactionManager(manager: DatabaseTransactionsManager) {
+  //   this.transactionsManager = manager;
+  //   return this;
+  // }
+  //
+  // /*Unset the transaction manager for this connection.*/
+  // public unsetTransactionManager() {
+  //   this.transactionsManager = null;
+  // }
 
   /*Determine if the connection is in a "dry run".*/
   public dryRun() {

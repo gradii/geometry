@@ -17,197 +17,240 @@ export class QueryBuilderResolverVisitor implements SqlVisitor {
 
   }
 
-  visitAggregateFragment(node: SqlNode) {
+  visitDeleteSpecification(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitInsertSpecification(node: SqlNode) {
+  visitAssignmentSetClause(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitBetweenPredicateExpression(node: SqlNode) {
+  visitSelectInsertSource(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitBinaryExpression(node: SqlNode) {
+  visitSetClause(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitBinaryUnionQueryExpression(node: SqlNode) {
+  visitUpdateSpecification(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitBindingVariable(node: SqlNode) {
+  visitValuesInsertSource(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitCommonValueExpression(node: SqlNode) {
+  visitLockClause(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitComparisonExpression(node: SqlNode) {
+  visitRejectOrderElementExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitConditionExpression(node: SqlNode) {
+  visitAggregateFragment(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitConditionTermExpression(node: SqlNode) {
+  visitInsertSpecification(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitExistsPredicateExpression(node: SqlNode) {
+  visitBetweenPredicateExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitFieldAsExpression(node: SqlNode) {
+  visitBinaryExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitFromTable(node: SqlNode) {
+  visitBinaryUnionQueryExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitFunctionCallExpression(node: SqlNode) {
+  visitBindingVariable(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitGroupByClause(node: SqlNode) {
+  visitCommonValueExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitHavingClause(node: SqlNode) {
+  visitComparisonExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitInPredicateExpression(node: SqlNode) {
+  visitConditionExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitJoinExpression(node: SqlNode) {
+  visitConditionTermExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitJoinFragment(node: SqlNode) {
+  visitExistsPredicateExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitJoinOnExpression(node: SqlNode) {
+  visitFieldAsExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitJoinedTable(node: SqlNode) {
+  visitFromTable(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitJsonPathColumn(node: SqlNode) {
+  visitFunctionCallExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitJsonPathExpression(node: SqlNode) {
+  visitGroupByClause(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitLimitClause(node: SqlNode) {
+  visitHavingClause(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitNestedExpression(node: SqlNode) {
+  visitInPredicateExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitNestedPredicateExpression(node: SqlNode) {
+  visitJoinExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitNullPredicateExpression(node: SqlNode) {
+  visitJoinFragment(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitNumberLiteralExpression(node: SqlNode) {
+  visitJoinOnExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitOffsetClause(node: SqlNode) {
+  visitJoinedTable(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitOrderByClause(node: SqlNode) {
+  visitJsonPathColumn(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitOrderByElement(node: SqlNode) {
+  visitJsonPathExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitParenthesizedExpression(node: SqlNode) {
+  visitLimitClause(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitRawBindingExpression(node: SqlNode) {
+  visitNestedExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitRawExpression(node: SqlNode) {
+  visitNestedPredicateExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitSelectScalarExpression(node: SqlNode) {
+  visitNullPredicateExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitStringLiteralExpression(node: SqlNode) {
+  visitNumberLiteralExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitTableName(node: SqlNode) {
+  visitOffsetClause(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitTableReferenceExpression(node: SqlNode) {
+  visitOrderByClause(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitUnionFragment(node: SqlNode) {
+  visitOrderByElement(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitWhereClause(node: SqlNode) {
+  visitParenthesizedExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 
-  visitAsExpression(node: SqlNode) {
+  visitRawBindingExpression(node: SqlNode): string {
+    throw new Error('Method not implemented.');
   }
 
-  visitFromClause(node: SqlNode) {
+  visitRawExpression(node: SqlNode): string {
+    throw new Error('Method not implemented.');
   }
 
-  visitIdentifier(node: SqlNode) {
+  visitSelectScalarExpression(node: SqlNode): string {
+    throw new Error('Method not implemented.');
   }
 
-  visitIdentifyVariableDeclaration(node: SqlNode) {
+  visitStringLiteralExpression(node: SqlNode): string {
+    throw new Error('Method not implemented.');
   }
 
-  visitJoinClause(node: SqlNode) {
+  visitTableName(node: SqlNode): string {
+    throw new Error('Method not implemented.');
   }
 
-  visitNodePart(node: SqlNode) {
+  visitTableReferenceExpression(node: SqlNode): string {
+    throw new Error('Method not implemented.');
   }
 
-  visitPathExpression(node: SqlNode) {
+  visitUnionFragment(node: SqlNode): string {
+    throw new Error('Method not implemented.');
   }
 
-  visitRangeVariableDeclaration(node: SqlNode) {
+  visitWhereClause(node: SqlNode): string {
+    throw new Error('Method not implemented.');
   }
 
-  visitSelectClause(node: SqlNode) {
+  visitAsExpression(node: SqlNode): string {
+    throw new Error('Method not implemented.');
   }
 
-  visitColumnReferenceExpression(node: SqlNode) {
+  visitFromClause(node: SqlNode): string {
+    throw new Error('Method not implemented.');
   }
 
-  visitQuerySpecification(node: SqlNode) {
+  visitIdentifier(node: SqlNode): string {
+    throw new Error('Method not implemented.');
+  }
+
+  visitIdentifyVariableDeclaration(node: SqlNode): string {
+    throw new Error('Method not implemented.');
+  }
+
+  visitJoinClause(node: SqlNode): string {
+    throw new Error('Method not implemented.');
+  }
+
+  visitNodePart(node: SqlNode): string {
+    throw new Error('Method not implemented.');
+  }
+
+  visitPathExpression(node: SqlNode): string {
+    throw new Error('Method not implemented.');
+  }
+
+  visitRangeVariableDeclaration(node: SqlNode): string {
+    throw new Error('Method not implemented.');
+  }
+
+  visitSelectClause(node: SqlNode): string {
+    throw new Error('Method not implemented.');
+  }
+
+  visitColumnReferenceExpression(node: SqlNode): string {
+    throw new Error('Method not implemented.');
+  }
+
+  visitQuerySpecification(node: SqlNode): string {
+    throw new Error('Method not implemented.');
   }
 
 

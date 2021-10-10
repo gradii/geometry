@@ -4,9 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isArray, isObject } from '@gradii/check-type';
-import { Connection, FieldPacket } from 'mysql2';
-import { QueryError } from 'mysql2/typings/mysql/lib/protocol/sequences/Query';
+import { isObject } from '@gradii/check-type';
+import { Connection, FieldPacket, QueryError } from 'mysql2';
 import { WrappedStmt } from '../wrapped-stmt';
 
 export class MysqlWrappedStmt implements WrappedStmt {

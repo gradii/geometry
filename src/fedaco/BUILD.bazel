@@ -18,6 +18,11 @@ ts_library(
     ),
     deps = [
        "@npm//date-fns",
+       "@npm//ramda",
+       "@npm//rxjs",
+       "@npm//mysql2",
+       "@npm//@types/sqlite3",
+       "@npm//@types/node",
        "//src/annotation",
        "//src/check-type:check-type",
     ],
@@ -35,5 +40,5 @@ ng_package(
     entry_point_name = "fedaco",
     nested_packages = [],
 #    tags = ["release-package"],
-    deps = FEDACO_TARGETS,
+    deps = FEDACO_TARGETS
 )

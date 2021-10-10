@@ -12,24 +12,25 @@ import { ConnectorInterface } from './connector-interface';
 export class SqlServerConnector extends Connector implements ConnectorInterface {
   /*The PDO connection options.*/
   protected options: any = {};
-  //
-  // /*Establish a database connection.*/
-  // public connect(config: any[]) {
-  //   const options = this.getOptions(config);
-  //   return this.createConnection(this.getDsn(config), config, options);
-  // }
-  //
-  // /*Create a DSN string from a configuration.*/
-  // protected getDsn(config: any[]) {
-  //   if (this.prefersOdbc(config)) {
-  //     return this.getOdbcDsn(config);
-  //   }
-  //   if (in_array('sqlsrv', this.getAvailableDrivers())) {
-  //     return this.getSqlSrvDsn(config);
-  //   } else {
-  //     return this.getDblibDsn(config);
-  //   }
-  // }
+
+  /*Establish a database connection.*/
+  public connect(config: any[]) {
+    const options = this.getOptions(config);
+    return this.createConnection(this.getDsn(config), config, options);
+  }
+
+  /*Create a DSN string from a configuration.*/
+  protected getDsn(config: any) {
+    return `${config.host}`;
+    // if (this.prefersOdbc(config)) {
+    //   return this.getOdbcDsn(config);
+    // }
+    // if (in_array('sqlsrv', this.getAvailableDrivers())) {
+    //   return this.getSqlSrvDsn(config);
+    // } else {
+    //   return this.getDblibDsn(config);
+    // }
+  }
   //
   // /*Determine if the database configuration prefers ODBC.*/
   // protected prefersOdbc(config: any[]) {
