@@ -80,34 +80,34 @@ describe('test database eloquent polymorphic integration', () => {
   });
   it('it loads relationships automatically', async () => {
     await seedData();
-    const like = TestLikeWithSingleWith.first();
+    const like = await TestLikeWithSingleWith.createQuery().first();
     expect(like.relationLoaded('likeable')).toBeTruthy();
-    expect(like.likeable).toEqual(TestComment.first());
+    expect(like.likeable).toEqual(TestComment.createQuery().first());
   });
   it('it loads chained relationships automatically', async () => {
     await seedData();
-    const like = TestLikeWithSingleWith.first();
+    const like = await TestLikeWithSingleWith.createQuery().first();
     expect(like.likeable.relationLoaded('commentable')).toBeTruthy();
-    expect(like.likeable.commentable).toEqual(TestPost.first());
+    expect(like.likeable.commentable).toEqual(await TestPost.createQuery().first());
   });
   it('it loads nested relationships automatically', async () => {
     await seedData();
-    const like = TestLikeWithNestedWith.first();
+    const like = await TestLikeWithNestedWith.createQuery().first();
     expect(like.relationLoaded('likeable')).toBeTruthy();
     expect(like.likeable.relationLoaded('owner')).toBeTruthy();
-    expect(like.likeable.owner).toEqual(TestUser.first());
+    expect(like.likeable.owner).toEqual(TestUser.createQuery().first());
   });
   it('it loads nested relationships on demand', async () => {
     await seedData();
-    const like = TestLike._with('likeable.owner').first();
+    const like = await TestLike.createQuery().with('likeable.owner').first();
     expect(like.relationLoaded('likeable')).toBeTruthy();
     expect(like.likeable.relationLoaded('owner')).toBeTruthy();
-    expect(like.likeable.owner).toEqual(TestUser.first());
+    expect(like.likeable.owner).toEqual(await TestUser.createQuery().first());
   });
   it('it loads nested morph relationships on demand', async () => {
     await seedData();
-    TestPost.first().likes().create([]);
-    const likes = TestLike._with('likeable.owner').get().loadMorph('likeable', {});
+    (await TestPost.createQuery().first()).newRelation('likes').create([]);
+    const likes = TestLike.createQuery().with('likeable.owner').get().loadMorph('likeable', {});
     expect(likes[0].relationLoaded('likeable')).toBeTruthy();
     expect(likes[0].likeable.relationLoaded('owner')).toBeTruthy();
     expect(likes[0].likeable.relationLoaded('commentable')).toBeTruthy();
@@ -117,9 +117,10 @@ describe('test database eloquent polymorphic integration', () => {
   });
   it('it loads nested morph relationship counts on demand', async () => {
     await seedData();
-    TestPost.createQuery().first().likes().create([]);
-    TestComment.createQuery().first().likes().create([]);
-    const likes = TestLike.createQuery().with('likeable.owner').get().loadMorphCount('likeable', {});
+    (await TestPost.createQuery().first()).newRelation('likes').create([]);
+    (await TestComment.createQuery().first()).newRelation('likes').create([]);
+    const likes = TestLike.createQuery().with('likeable.owner').get().loadMorphCount('likeable',
+      {});
     expect(likes[0].relationLoaded('likeable')).toBeTruthy();
     expect(likes[0].likeable.relationLoaded('owner')).toBeTruthy();
     expect(likes[0].likeable.likes_count).toEqual(2);
@@ -148,7 +149,7 @@ export class TestPost extends Model {
   _guarded: any = [];
 
   @MorphManyColumn({
-    related  : TestComment,
+    related  : forwardRef(() => TestComment),
     morphName: 'commentable'
   })
   public comments;
@@ -160,7 +161,7 @@ export class TestPost extends Model {
   public owner;
 
   @MorphManyColumn({
-    related  : TestLike,
+    related  : forwardRef(() => TestLike),
     morphName: 'likeable'
   })
   public likes;
@@ -168,9 +169,9 @@ export class TestPost extends Model {
 
 /*Eloquent Models...*/
 export class TestComment extends Model {
-  _table: any          = 'comments';
-  _guarded: any        = [];
-  protected _with: any = ['commentable'];
+  _table: any   = 'comments';
+  _guarded: any = [];
+  _with: any    = ['commentable'];
 
   @BelongsToColumn({
     related   : TestUser,
@@ -194,15 +195,14 @@ export class TestLike extends Model {
   _table: any   = 'likes';
   _guarded: any = [];
 
-  public likeable() {
-    return this.morphTo();
-  }
+  @MorphToColumn()
+  public likeable;
 }
 
 export class TestLikeWithSingleWith extends Model {
-  _table: any          = 'likes';
-  _guarded: any        = [];
-  protected _with: any = ['likeable'];
+  _table: any   = 'likes';
+  _guarded: any = [];
+  _with: any    = ['likeable'];
 
   @MorphToColumn({
     morphTypeMap: {}
@@ -211,9 +211,9 @@ export class TestLikeWithSingleWith extends Model {
 }
 
 export class TestLikeWithNestedWith extends Model {
-  _table: any          = 'likes';
-  _guarded: any        = [];
-  _with: any = ['likeable.owner'];
+  _table: any   = 'likes';
+  _guarded: any = [];
+  _with: any    = ['likeable.owner'];
 
   @MorphToColumn({
     morphTypeMap: {}

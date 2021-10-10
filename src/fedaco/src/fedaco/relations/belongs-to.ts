@@ -10,12 +10,21 @@ import { Collection } from '../../define/collection';
 import { BaseModel } from '../base-model';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
-import { mixinComparesRelatedModels } from './concerns/compares-related-models';
-import { mixinInteractsWithDictionary } from './concerns/interacts-with-dictionary';
-import { mixinSupportsDefaultModels } from './concerns/supports-default-models';
+import {
+  ComparesRelatedModels, mixinComparesRelatedModels
+} from './concerns/compares-related-models';
+import {
+  InteractsWithDictionary, mixinInteractsWithDictionary
+} from './concerns/interacts-with-dictionary';
+import {
+  mixinSupportsDefaultModels, SupportsDefaultModels
+} from './concerns/supports-default-models';
 import { Relation } from './relation';
 
-export interface BelongsTo extends Relation {
+export interface BelongsTo extends ComparesRelatedModels,
+  InteractsWithDictionary,
+  SupportsDefaultModels,
+  Relation {
 }
 
 export class BelongsTo extends mixinComparesRelatedModels<any>(
@@ -43,8 +52,8 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
     super(query, child);
     this._ownerKey     = ownerKey;
     this._relationName = relationName;
-    this._foreignKey = foreignKey;
-    this._child      = child;
+    this._foreignKey   = foreignKey;
+    this._child        = child;
     this.addConstraints();
   }
 
@@ -160,7 +169,8 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
 
   /*Determine if the related model has an auto-incrementing ID.*/
   protected relationHasIncrementingId() {
-    return this._related.getIncrementing() && ['int', 'integer'].includes(this._related.getKeyType());
+    return this._related.getIncrementing() && ['int', 'integer'].includes(
+      this._related.getKeyType());
   }
 
   /*Make a new related instance for the given model.*/

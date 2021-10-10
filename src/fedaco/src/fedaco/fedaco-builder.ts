@@ -498,7 +498,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   //   return collect(this._query.orders);
   // }
   /*Save a new model and return the instance.*/
-  public async create(attributes: Record<string, any>) {
+  public async create(attributes?: Record<string, any>) {
     const instance = this.newModelInstance(attributes);
     await instance.save();
     return instance;

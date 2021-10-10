@@ -1,3 +1,4 @@
+import { FedacoBuilder } from '../../src/fedaco/fedaco-builder';
 import { Model } from '../../src/fedaco/model';
 import { MorphToMany } from '../../src/fedaco/relations/morph-to-many';
 import { getBuilder } from './relation-testing-helper';
@@ -26,7 +27,7 @@ function getRelationArguments() {
 
 function getRelation() {
   const [builder, parent] = getRelationArguments();
-  return new MorphToMany(builder, parent, 'taggable', 'taggables', 'taggable_id', 'tag_id', 'id',
+  return new MorphToMany(builder as FedacoBuilder, parent as Model, 'taggable', 'taggables', 'taggable_id', 'tag_id', 'id',
     'id');
 }
 
@@ -48,7 +49,7 @@ describe('test database eloquent morph to many', () => {
   it('attach inserts pivot table record', () => {
     const args   = getRelationArguments();
     const relation = new MorphToMany(
-      args[0], args[1], args[2],
+      args[0] as FedacoBuilder, args[1] as Model, args[2],
       args[3], args[4], args[5],
       args[6], args[7], args[8],
     );
