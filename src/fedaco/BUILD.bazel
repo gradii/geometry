@@ -34,6 +34,7 @@ ng_package(
     srcs = [
         "package.json",
     ],
+    readme_md = ":README.md",
     data = [
     ],
     entry_point = ":index.ts",
