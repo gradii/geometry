@@ -11,7 +11,7 @@ describe('test database eloquent global scopes', () => {
       'driver'  : 'sqlite',
       'database': ':memory:'
     });
-    db.bootEloquent();
+    db.bootFedaco();
     db.setAsGlobal();
   });
   afterAll(() => {

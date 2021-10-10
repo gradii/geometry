@@ -187,7 +187,7 @@ describe('test database eloquent has many through integration', () => {
       // 'database': ':memory:'
       'database': 'tmp/integration-has-many-through.sqlite'
     });
-    db.bootEloquent();
+    db.bootFedaco();
     db.setAsGlobal();
     await createSchema();
   });

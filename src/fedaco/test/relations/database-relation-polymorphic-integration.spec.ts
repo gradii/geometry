@@ -66,7 +66,7 @@ describe('test database eloquent polymorphic integration', () => {
       'driver'  : 'sqlite',
       'database': ':memory:'
     });
-    db.bootEloquent();
+    db.bootFedaco();
     db.setAsGlobal();
     await createSchema();
   });

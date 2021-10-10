@@ -81,7 +81,7 @@ export class DatabaseConfig {
   }
 
   /*Bootstrap Eloquent so it is ready for usage.*/
-  public bootEloquent() {
+  public bootFedaco() {
     Model.setConnectionResolver(this.manager);
     const events: Dispatcher = {
       forget(event: string): void {

@@ -80,7 +80,7 @@ describe('test database eloquent soft deletes integration', () => {
       'driver'  : 'sqlite',
       'database': ':memory:'
     });
-    db.bootEloquent();
+    db.bootFedaco();
     db.setAsGlobal();
     await createSchema();
   });

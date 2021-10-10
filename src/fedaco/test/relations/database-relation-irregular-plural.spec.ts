@@ -48,7 +48,7 @@ describe('test database eloquent irregular plural', () => {
       'driver'  : 'sqlite',
       'database': ':memory:'
     });
-    db.bootEloquent();
+    db.bootFedaco();
     db.setAsGlobal();
     await createSchema();
   });

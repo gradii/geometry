@@ -44,7 +44,7 @@ describe('test database eloquent integration with table prefix', () => {
       'driver'  : 'sqlite',
       'database': ':memory:'
     });
-    db.bootEloquent();
+    db.bootFedaco();
     db.setAsGlobal();
     Model.getConnectionResolver().connection().setTablePrefix('prefix_');
     await createSchema();

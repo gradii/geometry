@@ -147,7 +147,7 @@ describe('test database eloquent integration', () => {
       'username': 'root',
       'password': '123456'
     }, 'second_connection');
-    db.bootEloquent();
+    db.bootFedaco();
     db.setAsGlobal();
     // await createSchema();
   });

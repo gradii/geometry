@@ -154,7 +154,7 @@ describe('test database eloquent integration', () => {
       'driver'  : 'sqlite',
       'database': files.second
     }, 'second_connection');
-    db.bootEloquent();
+    db.bootFedaco();
     db.setAsGlobal();
     await createSchema();
   });

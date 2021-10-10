@@ -59,7 +59,7 @@ describe('test database eloquent belongs to many sync return value type', () => 
       'driver'  : 'sqlite',
       'database': ':memory:'
     });
-    db.bootEloquent();
+    db.bootFedaco();
     db.setAsGlobal();
     await createSchema();
   });

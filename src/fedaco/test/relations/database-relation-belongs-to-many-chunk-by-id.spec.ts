@@ -60,7 +60,7 @@ describe('test database eloquent belongs to many chunk by id', () => {
       'driver'  : 'sqlite',
       'database': ':memory:'
     });
-    db.bootEloquent();
+    db.bootFedaco();
     db.setAsGlobal();
     await createSchema();
   });
