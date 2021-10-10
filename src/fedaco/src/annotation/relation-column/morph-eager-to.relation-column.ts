@@ -13,17 +13,17 @@ import { RelationType } from '../enum-relation';
 import { FedacoRelationColumn, RelationColumnAnnotation } from '../relation-column';
 
 /*Define a polymorphic, inverse one-to-one or many relationship.*/
-export function morphEagerTo(m: Model, name: string, type: string, id: string, ownerKey: string) {
+function morphEagerTo(m: Model, name: string, type: string, id: string, ownerKey: string) {
   return new MorphTo(m.newQuery().setEagerLoads([]), m, id, ownerKey, type, name);
 }
 
 /*Define a polymorphic, inverse one-to-one or many relationship.*/
-export function morphInstanceTo(m: Model, target: typeof Model, name: string, type: string, id: string, ownerKey: string) {
+function morphInstanceTo(m: Model, target: typeof Model, name: string, type: string, id: string, ownerKey: string) {
   const instance = m.newRelatedInstance(target);
   return new MorphTo(instance.newQuery(), m, id, ownerKey ?? instance.getKeyName(), type, name);
 }
 
-export interface MorphToRelationAnnotation extends RelationColumnAnnotation {
+export interface MorphEagerToRelationAnnotation extends RelationColumnAnnotation {
   name: string;
   /**
    * the type of class to use morph to
@@ -35,9 +35,9 @@ export interface MorphToRelationAnnotation extends RelationColumnAnnotation {
 }
 
 
-export const MorphEagerToColumn: FedacoDecorator<MorphToRelationAnnotation> = makePropDecorator(
+export const MorphEagerToColumn: FedacoDecorator<MorphEagerToRelationAnnotation> = makePropDecorator(
   'Fedaco:MorphToColumn',
-  (p: MorphToRelationAnnotation) => ({
+  (p: MorphEagerToRelationAnnotation) => ({
     isRelation  : true,
     type        : RelationType.MorphTo,
     _getRelation: function (m: Model, relation: string) {
