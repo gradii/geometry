@@ -19,6 +19,6 @@ export interface ScopeDefine {
 export const Scope: FedacoDecorator<ScopeDefine> = makePropDecorator(
   'fedaco orm scope column',
   (p: ScopeDefine): ScopeDefine => ({isScope: true, ...p}), undefined,
-  (target: any, name: string, args: any[]) => {
-    _additionalProcessingGetter(target, name, args);
+  (target: any, name: string, decorator: any) => {
+    _additionalProcessingGetter(target, name, decorator);
   });

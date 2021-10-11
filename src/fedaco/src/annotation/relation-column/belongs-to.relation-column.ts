@@ -47,7 +47,7 @@ export const BelongsToColumn: FedacoDecorator<BelongsToRelationAnnotation> = mak
     ...p
   }),
   FedacoRelationColumn,
-  (target: any, name: string, columnAnnotation) => {
-    _additionalProcessingGetter(target, name, columnAnnotation);
+  (target: any, name: string, decorator) => {
+    _additionalProcessingGetter(target, name, decorator);
   }
 );

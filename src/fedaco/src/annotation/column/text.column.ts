@@ -18,6 +18,6 @@ export const TextColumn = makePropDecorator(
   'Fedaco:TextColumn',
   (p: TextColumnAnnotation): TextColumnAnnotation => ({...p}),
   FedacoColumn,
-  (target: any, key: string, columnDefine: TextColumnAnnotation) => {
-    _additionalProcessingGetterSetter(target, key, columnDefine);
+  (target: any, key: string, decorator: TextColumnAnnotation) => {
+    _additionalProcessingGetterSetter(target, key, decorator);
   });

@@ -18,6 +18,6 @@ export const PrimaryColumn: FedacoDecorator<PrimaryColumnAnnotation> = makePropD
   'Fedaco:PrimaryColumn',
   (p: PrimaryColumnAnnotation): PrimaryColumnAnnotation => ({...p}),
   FedacoColumn,
-  (target: any, key: string, columnDefine: PrimaryColumnAnnotation) => {
-    _additionalProcessingGetterSetter(target, key, columnDefine);
+  (target: any, key: string, decorator: any) => {
+    _additionalProcessingGetterSetter(target, key, decorator);
   });

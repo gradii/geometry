@@ -29,7 +29,7 @@ export const PROP_METADATA = '__prop__metadata__';
  */
 export function makeDecorator<T>(
     name: string, props?: (...args: any[]) => any, parentClass?: any,
-    additionalProcessing?: (type: any) => void,
+    additionalProcessing?: (type: any, decorator: Readonly<any>) => void,
     typeFn?: (type: any, ...args: any[]) => void): {
       new (...args: any[]): any;
       (...args: any[]): any;
@@ -63,7 +63,9 @@ export function makeDecorator<T>(
         annotations.push(annotationInstance);
 
 
-        if (additionalProcessing) additionalProcessing(cls);
+        if (additionalProcessing) {
+          additionalProcessing(cls, annotationInstance);
+        }
 
         return cls;
       };
@@ -133,7 +135,7 @@ export function makeParamDecorator(
 
 export function makePropDecorator(
     name: string, props?: (...args: any[]) => any, parentClass?: any,
-    additionalProcessing?: (target: any, name: string, ...args: any[]) => void): any {
+    additionalProcessing?: (target: any, name: string, decorator: Readonly<any>) => void): any {
     const metaCtor = makeMetadataCtor(props);
 
     function PropDecoratorFactory(this: unknown|typeof PropDecoratorFactory, ...args: any[]): any {
@@ -144,17 +146,19 @@ export function makePropDecorator(
 
       const decoratorInstance = new (<any>PropDecoratorFactory)(...args);
 
-      function PropDecorator(target: any, name: string) {
+      function PropDecorator(target: any, propName: string) {
         const constructor = target.constructor;
         // Use of Object.defineProperty is important because it creates a non-enumerable property
         // which prevents the property from being copied during subclassing.
         const meta = constructor.hasOwnProperty(PROP_METADATA) ?
             (constructor as any)[PROP_METADATA] :
             Object.defineProperty(constructor, PROP_METADATA, {value: {}})[PROP_METADATA];
-        meta[name] = meta.hasOwnProperty(name) && meta[name] || [];
-        meta[name].unshift(decoratorInstance);
+        meta[propName] = meta.hasOwnProperty(propName) && meta[propName] || [];
+        meta[propName].unshift(decoratorInstance);
 
-        if (additionalProcessing) additionalProcessing(target, name, ...args);
+        if (additionalProcessing) {
+          additionalProcessing(target, propName, decoratorInstance);
+        }
       }
 
       return PropDecorator;

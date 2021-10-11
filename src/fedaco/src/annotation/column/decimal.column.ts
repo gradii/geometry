@@ -17,6 +17,6 @@ export const DecimalColumn: FedacoDecorator<DecimalColumnAnnotation> = makePropD
   'Fedaco:DecimalColumn',
   (p: DecimalColumnAnnotation = {}): DecimalColumnAnnotation => ({...p}),
   FedacoColumn,
-  (target: any, name: string, columnDefine: DecimalColumnAnnotation) => {
-    _additionalProcessingGetterSetter(target, name, columnDefine);
+  (target: any, name: string, decorator: DecimalColumnAnnotation) => {
+    _additionalProcessingGetterSetter(target, name, decorator);
   });

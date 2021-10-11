@@ -13,6 +13,6 @@ export const Column: FedacoDecorator<ColumnAnnotation> = makePropDecorator(
   'Fedaco:Column',
   (p: ColumnAnnotation = {}): ColumnAnnotation => ({...p}),
   FedacoColumn,
-  (target: any, name: string, columnDefine: ColumnAnnotation) => {
-    _additionalProcessingGetterSetter(target, name, columnDefine);
+  (target: any, name: string, decorator: ColumnAnnotation) => {
+    _additionalProcessingGetterSetter(target, name, decorator);
   });

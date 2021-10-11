@@ -17,6 +17,6 @@ export const FloatColumn: FedacoDecorator<FloatColumnAnnotation> = makePropDecor
   'Fedaco:FloatColumn',
   (p: FloatColumnAnnotation = {}): FloatColumnAnnotation => ({...p}),
   FedacoColumn,
-  (target: any, name: string, columnDefine: FloatColumnAnnotation) => {
-    _additionalProcessingGetterSetter(target, name, columnDefine);
+  (target: any, name: string, decorator: FloatColumnAnnotation) => {
+    _additionalProcessingGetterSetter(target, name, decorator);
   });

@@ -17,6 +17,6 @@ export const CurrencyColumn: FedacoDecorator<CurrencyColumnAnnotation> = makePro
   'Fedaco:CurrencyColumn',
   (p: CurrencyColumnAnnotation = {}): CurrencyColumnAnnotation => ({...p}),
   FedacoColumn,
-  (target: any, name: string, columnDefine: CurrencyColumnAnnotation) => {
-    _additionalProcessingGetterSetter(target, name, columnDefine);
+  (target: any, name: string, decorator: CurrencyColumnAnnotation) => {
+    _additionalProcessingGetterSetter(target, name, decorator);
   });

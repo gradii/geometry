@@ -42,8 +42,8 @@ export const HasManyColumn: FedacoDecorator<HasManyRelationAnnotation> = makePro
     ...p
   }),
   FedacoRelationColumn,
-  (target: any, name: string, columnDefine) => {
-    _additionalProcessingGetter(target, name, columnDefine);
+  (target: any, name: string, decorator) => {
+    _additionalProcessingGetter(target, name, decorator);
   }
 );
 

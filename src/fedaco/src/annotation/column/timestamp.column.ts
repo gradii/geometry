@@ -16,6 +16,6 @@ export const TimestampColumn = makePropDecorator(
   'Fedaco:TimestampColumn',
   (p: TimestampColumnAnnotation): TimestampColumnAnnotation => ({...p}),
   FedacoColumn,
-  (target: any, key: string, columnDefine: TimestampColumnAnnotation) => {
-    _additionalProcessingGetterSetter(target, key, columnDefine);
+  (target: any, key: string, decorator: TimestampColumnAnnotation) => {
+    _additionalProcessingGetterSetter(target, key, decorator);
   });

@@ -18,6 +18,6 @@ export const BinaryColumn: FedacoDecorator<BinaryColumnAnnotation> = makePropDec
   'Fedaco:BinaryColumn',
   (p: BinaryColumnAnnotation = {}): BinaryColumnAnnotation => ({...p}),
   FedacoColumn,
-  (target: any, name: string, columnDefine: BinaryColumnAnnotation) => {
-    _additionalProcessingGetterSetter(target, name, columnDefine);
+  (target: any, name: string, decorator: BinaryColumnAnnotation) => {
+    _additionalProcessingGetterSetter(target, name, decorator);
   });

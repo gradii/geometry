@@ -18,6 +18,6 @@ export const CreatedAtColumn: FedacoDecorator<CreatedAtColumnAnnotation> = makeP
   'Fedaco:CreatedAtColumn',
   (p: CreatedAtColumnAnnotation = {}): CreatedAtColumnAnnotation => ({...p}),
   DateColumn,
-  (target: any, name: string, columnDefine: CreatedAtColumnAnnotation) => {
-    _additionalProcessingGetterSetter(target, name, columnDefine);
+  (target: any, name: string, decorator: CreatedAtColumnAnnotation) => {
+    _additionalProcessingGetterSetter(target, name, decorator);
   });

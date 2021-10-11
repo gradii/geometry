@@ -8,12 +8,12 @@ import { has } from '@gradii/check-type';
 import { Model } from '../fedaco/model';
 import { ColumnAnnotation } from './column';
 
-export const _additionalProcessingGetter = (target: any, name: string, define: any) => {
+export const _additionalProcessingGetter = (target: any, name: string, decorator: any) => {
   const descriptor = Object.getOwnPropertyDescriptor(target, name);
 
   const hasGetter = !!(descriptor && descriptor.get);
 
-  const field = define.field || name;
+  const field = decorator.field || name;
 
   if (!hasGetter) {
     const propertyDescriptor: PropertyDescriptor = {
@@ -30,13 +30,13 @@ export const _additionalProcessingGetter = (target: any, name: string, define: a
   }
 };
 
-export const _additionalProcessingGetterSetter = (target: any, name: string, define: any) => {
+export const _additionalProcessingGetterSetter = (target: any, name: string, decorator: any) => {
   const descriptor = Object.getOwnPropertyDescriptor(target, name);
 
   const hasGetter = !!(descriptor && descriptor.get);
   const hasSetter = !!(descriptor && descriptor.set);
 
-  const field = define.field || name;
+  const field = decorator.field || name;
 
   if (!hasGetter || !hasSetter) {
     const propertyDescriptor: PropertyDescriptor = {

@@ -18,6 +18,6 @@ export const ObjectColumn: FedacoDecorator<ObjectColumnAnnotation> = makePropDec
   'Fedaco:ObjectColumn',
   (p: ObjectColumnAnnotation = {}): ObjectColumnAnnotation => ({...p}),
   FedacoColumn,
-  (target: any, name: string, columnDefine: ObjectColumnAnnotation) => {
-    _additionalProcessingGetterSetter(target, name, columnDefine);
+  (target: any, name: string, decorator: ObjectColumnAnnotation) => {
+    _additionalProcessingGetterSetter(target, name, decorator);
   });

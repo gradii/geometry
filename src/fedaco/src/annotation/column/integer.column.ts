@@ -16,6 +16,6 @@ export const IntegerColumn: FedacoDecorator<IntegerColumnAnnotation> = makePropD
   'Fedaco:IntegerColumn',
   (p: IntegerColumnAnnotation = {}): IntegerColumnAnnotation => ({...p}),
   FedacoColumn,
-  (target: any, name: string, columnDefine: IntegerColumnAnnotation) => {
-    _additionalProcessingGetterSetter(target, name, columnDefine);
+  (target: any, name: string, decorator: IntegerColumnAnnotation) => {
+    _additionalProcessingGetterSetter(target, name, decorator);
   });

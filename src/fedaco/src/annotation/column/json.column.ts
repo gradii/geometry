@@ -18,6 +18,6 @@ export const JsonColumn: FedacoDecorator<JsonColumnAnnotation> = makePropDecorat
   'Fedaco:JsonColumn',
   (p: JsonColumnAnnotation = {}): JsonColumnAnnotation => ({...p}),
   FedacoColumn,
-  (target: any, name: string, columnDefine: JsonColumnAnnotation) => {
-    _additionalProcessingGetterSetter(target, name, columnDefine);
+  (target: any, name: string, decorator: JsonColumnAnnotation) => {
+    _additionalProcessingGetterSetter(target, name, decorator);
   });

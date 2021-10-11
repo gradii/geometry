@@ -16,6 +16,6 @@ export const PrimaryGeneratedColumn = makePropDecorator(
   'Fedaco:PrimaryGeneratedColumn',
   (p: PrimaryGeneratedColumnAnnotation): PrimaryGeneratedColumnAnnotation => ({...p}),
   FedacoColumn,
-  (target: any, key: string, columnDefine: PrimaryGeneratedColumnAnnotation) => {
-    _additionalProcessingGetterSetter(target, key, columnDefine);
+  (target: any, key: string, decorator: PrimaryGeneratedColumnAnnotation) => {
+    _additionalProcessingGetterSetter(target, key, decorator);
   });
