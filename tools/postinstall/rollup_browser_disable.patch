@@ -36,15 +36,7 @@ diff --git node_modules/@angular/bazel/src/ng_package/rollup.config.js node_modu
 index efcafcb02f..fc38b9989f 100644
 --- node_modules/@angular/bazel/src/ng_package/rollup.config.js
 +++ node_modules/@angular/bazel/src/ng_package/rollup.config.js
-@@ -12,6 +12,7 @@
- const nodeResolve = require('rollup-plugin-node-resolve');
- const sourcemaps = require('rollup-plugin-sourcemaps');
- const commonjs = require('rollup-plugin-commonjs');
-+const builtins = require('rollup-plugin-node-builtins');
- const path = require('path');
- const fs = require('fs');
- const ts = require('typescript');
-@@ -28,6 +29,7 @@ const stampData = TMPL_stamp_data;
+@@ -28,6 +28,7 @@ const stampData = TMPL_stamp_data;
  const moduleMappings = TMPL_module_mappings;
  const downlevelToEs5 = TMPL_downlevel_to_es5;
  const nodeModulesRoot = 'TMPL_node_modules_root';
@@ -52,7 +44,7 @@ index efcafcb02f..fc38b9989f 100644
 
  log_verbose(`running with
    cwd: ${process.cwd()}
-@@ -177,12 +179,18 @@ const plugins = [
+@@ -177,7 +178,9 @@ const plugins = [
    nodeResolve({
      mainFields: ['browser', 'es2015', 'module', 'jsnext:main', 'main'],
      jail: process.cwd(),
@@ -63,12 +55,3 @@ index efcafcb02f..fc38b9989f 100644
    }),
    commonjs({ignoreGlobal: true}),
    sourcemaps(),
- ];
-
-+if(nodejsPlatform) {
-+  plugins.push(builtins());
-+}
-+
- // If downleveling to ES5 is enabled, set up the downlevel rollup plugin.
- if (downlevelToEs5) {
-   plugins.push(downlevelToEs5Plugin);
