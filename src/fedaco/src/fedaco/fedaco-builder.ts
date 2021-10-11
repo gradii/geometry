@@ -15,7 +15,7 @@ import { mixinForwardCallToQueryBuilder } from './mixins/forward-call-to-query-b
 import { mixinGuardsAttributes } from './mixins/guards-attributes';
 import { mixinQueriesRelationShips } from './mixins/queries-relationships';
 import { Model } from './model';
-import { BelongsToMany } from './relations/belongs-to-many';
+// import { BelongsToMany } from './relations/belongs-to-many';
 import { Relation } from './relations/relation';
 import { Scope } from './scope';
 
@@ -786,7 +786,8 @@ export class FedacoBuilder extends mixinGuardsAttributes(
           if (column.includes('.')) {
             return column;
           }
-          return query instanceof BelongsToMany ? query.getRelated().getTable() + '.' + column : column;
+          // @ts-ignore
+          return query instanceof Relation.BelongsToMany ? query.getRelated().getTable() + '.' + column : column;
         }));
       }
     ];

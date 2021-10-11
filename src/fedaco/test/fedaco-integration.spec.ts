@@ -133,10 +133,10 @@ async function createSchema() {
 
 describe('test database eloquent integration', () => {
   beforeAll(async () => {
-    const files = {
-      'default': 'tmp/integration.sqlite',
-      'second' : 'tmp/integration-second.sqlite'
-    };
+    // const files = {
+    //   'default': 'tmp/integration.sqlite',
+    //   'second' : 'tmp/integration-second.sqlite'
+    // };
     // for (const it of Object.values(files)) {
     //   if (it !== ':memory:') {
     //     if (fs.existsSync(it)) {
@@ -148,11 +148,13 @@ describe('test database eloquent integration', () => {
     const db = new DatabaseConfig();
     db.addConnection({
       'driver'  : 'sqlite',
-      'database': files.default
+      // 'database': files.default
+      'database': ':memory:'
     });
     db.addConnection({
       'driver'  : 'sqlite',
-      'database': files.second
+      // 'database': files.second
+      'database': ':memory:'
     }, 'second_connection');
     db.bootFedaco();
     db.setAsGlobal();
@@ -674,7 +676,7 @@ describe('test database eloquent integration', () => {
     await expect(async () => {
       await EloquentTestUser.createQuery().findOrFail(1);
     }).rejects.toThrowError(
-      'ModelNotFoundException No query results for model [EloquentTestUser] 1)');
+      'ModelNotFoundException No query results for model [EloquentTestUser] 1');
   });
 
   it('find or fail with multiple ids throws model not found exception', async () => {
@@ -685,7 +687,7 @@ describe('test database eloquent integration', () => {
     await expect(async () => {
       await EloquentTestUser.createQuery().findOrFail([1, 2]);
     }).rejects.toThrowError(
-      'ModelNotFoundException No query results for model [EloquentTestUser] [1, 2]');
+      'ModelNotFoundException No query results for model [EloquentTestUser] [1,2]');
   });
 
   // xit('find or fail with multiple ids using collection throws model not found exception', async () => {

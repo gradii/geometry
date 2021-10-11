@@ -38,7 +38,8 @@ describe('fedaco builder relation', () => {
       return await Promise.resolve();
     }
 
-    async insert() {
+    async insert(sql: string, bindings: any[]): Promise<boolean> {
+      throw new Error('not implement');
     }
 
     async update() {
@@ -74,6 +75,10 @@ describe('fedaco builder relation', () => {
     }
 
     table(table: Function | QueryBuilder | string, as?: string): QueryBuilder {
+      return undefined;
+    }
+
+    insertGetId(sql: string, bindings: any[], sequence?: string): Promise<any> | boolean {
       return undefined;
     }
   }
@@ -123,9 +128,10 @@ describe('fedaco builder relation', () => {
 
     const result = builder.toSql();
 
-    expect(result.result).toBe(
-      'SELECT `id`, (SELECT count(*) FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND `bam` > ? AND `active` = ?) AS `active_foo_count` FROM `fedaco_builder_test_model_parent_stubs`');
-    expect(builder.getBindings()).toEqual(['qux', true]);
+    expect(result).toBe({
+      result:  'SELECT `id`, (SELECT count(*) FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND `bam` > ? AND `active` = ?) AS `active_foo_count` FROM `fedaco_builder_test_model_parent_stubs`',
+      bindings: ['qux', true]
+    });
   });
 
   it('testWithCountAndGlobalScope', () => {
@@ -358,9 +364,10 @@ describe('fedaco builder relation', () => {
 
     const result = builder.toSql();
 
-    expect(result.result).toBe(
-      'SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE `bar` = ? OR NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id`)');
-    expect(builder.getBindings()).toEqual(['baz']);
+    expect(result).toEqual({
+      result  : 'SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE `bar` = ? OR NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id`)',
+      bindings: ['baz']
+    });
   });
 
   it('testWhereDoesntHave', () => {
@@ -371,9 +378,11 @@ describe('fedaco builder relation', () => {
 
     const result = builder.toSql();
 
-    expect(result.result).toBe(
-      'SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND `bar` = ?)');
-    expect(builder.getBindings()).toEqual(['baz']);
+    expect(result).toEqual(
+      {
+        result  : 'SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND `bar` = ?)',
+        bindings: ['baz']
+      });
   });
 
   it('testOrWhereDoesntHave', () => {
@@ -384,9 +393,11 @@ describe('fedaco builder relation', () => {
 
     const result = builder.toSql();
 
-    expect(result.result).toBe(
-      'SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE `bar` = ? OR NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND `qux` = ?)');
-    expect(builder.getBindings()).toEqual(['baz', 'quux']);
+    expect(result).toEqual(
+      {
+        result  : 'SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE `bar` = ? OR NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND `qux` = ?)',
+        bindings: ['baz', 'quux']
+      });
   });
 
 

@@ -15,6 +15,6 @@ export function newPivot(parent: Model, attributes: any, table: string, exists: 
                          using?: typeof AsPivot | ForwardRefFn<typeof AsPivot>): Pivot | any {
   return using ?
     fromRawAttributes(using as typeof AsPivot, parent, attributes, table, exists) :
-  // @ts-ignore
-    fromAttributes(require('./relations/pivot').Pivot, parent, attributes, table, exists);
+
+    fromAttributes(Pivot, parent, attributes, table, exists);
 }

@@ -698,3 +698,6 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
     return column.includes('.') ? column : `${this._table}.${column}`;
   }
 }
+
+// @ts-ignore
+Relation.BelongsToMany = BelongsToMany;

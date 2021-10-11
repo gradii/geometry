@@ -92,8 +92,8 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
     /*Create a new pivot model instance.*/
     public static fromAttributes(parent: Model, attributes: any[], table: string,
                                  exists = false) {
-      const instance      = new this();
-      instance.timestamps = instance.hasTimestampAttributes(attributes);
+      const instance: Model = new this();
+      instance._timestamps  = instance.hasTimestampAttributes(attributes);
       instance.setConnection(parent.getConnectionName()).setTable(table).forceFill(
         attributes).syncOriginal();
       instance.pivotParent = parent;
@@ -104,8 +104,8 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
     /*Create a new pivot model from raw values returned from a query.*/
     public static fromRawAttributes(parent: Model, attributes: any[], table: string,
                                     exists = false) {
-      const instance      = this.fromAttributes(parent, [], table, exists);
-      instance.timestamps = instance.hasTimestampAttributes(attributes);
+      const instance: Model = this.fromAttributes(parent, [], table, exists);
+      instance._timestamps  = instance.hasTimestampAttributes(attributes);
       instance.setRawAttributes(attributes, exists);
       return instance;
     }
