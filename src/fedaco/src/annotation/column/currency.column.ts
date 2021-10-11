@@ -15,7 +15,7 @@ export interface CurrencyColumnAnnotation extends ColumnAnnotation {
 
 export const CurrencyColumn: FedacoDecorator<CurrencyColumnAnnotation> = makePropDecorator(
   'Fedaco:CurrencyColumn',
-  (p: CurrencyColumnAnnotation = {}): CurrencyColumnAnnotation => ({...p, isDate: true}),
+  (p: CurrencyColumnAnnotation = {}): CurrencyColumnAnnotation => ({...p}),
   FedacoColumn,
   (target: any, name: string, columnDefine: CurrencyColumnAnnotation) => {
     _additionalProcessingGetterSetter(target, name, columnDefine);

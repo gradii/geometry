@@ -5,6 +5,7 @@
  */
 
 import { createConnection } from 'mysql2';
+import { MysqlConnection } from '../../connection/mysql-connection';
 import { Connector } from '../connector';
 import { ConnectorInterface } from '../connector-interface';
 import { MysqlWrappedConnection } from './mysql-wrapped-connection';
@@ -20,12 +21,13 @@ export class MysqlConnector extends Connector implements ConnectorInterface {
     }
     this.configureIsolationLevel(connection, config);
     this.configureEncoding(connection, config);
-    this.configureTimezone(connection, config);
+    await this.configureTimezone(connection, config);
     this.setModes(connection, config);
     return connection;
   }
 
-  async createConnection(database: string, config: any, options: any): Promise<MysqlWrappedConnection> {
+  async createConnection(database: string, config: any,
+                         options: any): Promise<MysqlWrappedConnection> {
     const [username, password] = [config['username'] ?? null, config['password'] ?? null];
     try {
       return Promise.resolve(
@@ -68,9 +70,10 @@ export class MysqlConnector extends Connector implements ConnectorInterface {
   }
 
   /*Set the timezone on the connection.*/
-  protected configureTimezone(connection: any, config: any) {
+  protected async configureTimezone(connection: MysqlWrappedConnection, config: any) {
     if (config['timezone'] !== undefined) {
-      connection.prepare(`set time_zone="${config['timezone']}"`).execute();
+      const stmt = await connection.prepare(`set time_zone="${config['timezone']}"`);
+      await stmt.execute();
     }
   }
 

@@ -137,7 +137,8 @@ describe('test database eloquent integration', () => {
       'port'    : 3306,
       'database': 'fedaco_test',
       'username': 'root',
-      'password': '123456'
+      'password': '123456',
+      'timezone': '+08:00'
     });
     db.addConnection({
       'driver'  : 'mysql',

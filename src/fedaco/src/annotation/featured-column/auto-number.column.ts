@@ -15,7 +15,7 @@ export interface AutoNumberColumnAnnotation extends ColumnAnnotation {
 
 export const AutoNumberColumn: FedacoDecorator<AutoNumberColumnAnnotation> = makePropDecorator(
   'Fedaco:AutoNumberColumn',
-  (p: AutoNumberColumnAnnotation = {}): AutoNumberColumnAnnotation => ({...p, isDate: true}),
+  (p: AutoNumberColumnAnnotation = {}): AutoNumberColumnAnnotation => ({...p}),
   FedacoColumn,
   (target: any, name: string, columnDefine: AutoNumberColumnAnnotation) => {
     _additionalProcessingGetterSetter(target, name, columnDefine);

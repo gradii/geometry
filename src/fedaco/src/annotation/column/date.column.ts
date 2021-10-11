@@ -15,7 +15,7 @@ export interface DateColumnAnnotation extends ColumnAnnotation {
 
 export const DateColumn: FedacoDecorator<DateColumnAnnotation> = makePropDecorator(
   'Fedaco:DateColumn',
-  (p: DateColumnAnnotation = {}): DateColumnAnnotation => ({...p, isDate: true}),
+  (p: DateColumnAnnotation = {}): DateColumnAnnotation => ({...p}),
   FedacoColumn,
   (target: any, name: string, columnDefine: DateColumnAnnotation) => {
     _additionalProcessingGetterSetter(target, name, columnDefine);

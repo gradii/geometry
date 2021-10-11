@@ -7,6 +7,9 @@
 import { FedacoAnnotation } from './annotation.interface';
 
 export interface ColumnAnnotation extends FedacoAnnotation {
+  field?: string;
+
+  unique?: boolean;
   // isPrimary?: boolean;
   //
   // columnName?: string;
