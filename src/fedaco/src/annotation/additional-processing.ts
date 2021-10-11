@@ -13,12 +13,14 @@ export const _additionalProcessingGetter = (target: any, name: string, define: a
 
   const hasGetter = !!(descriptor && descriptor.get);
 
+  const field = define.field || name;
+
   if (!hasGetter) {
     const propertyDescriptor: PropertyDescriptor = {
       enumerable  : false,
       configurable: true,
       get         : function () {
-        return (this as Model).getAttribute(name);
+        return (this as Model).getAttribute(field);
       },
       set         : function () {
         throw new Error('the relation field is readonly');
@@ -34,6 +36,8 @@ export const _additionalProcessingGetterSetter = (target: any, name: string, def
   const hasGetter = !!(descriptor && descriptor.get);
   const hasSetter = !!(descriptor && descriptor.set);
 
+  const field = define.field || name;
+
   if (!hasGetter || !hasSetter) {
     const propertyDescriptor: PropertyDescriptor = {
       enumerable  : false,
@@ -41,12 +45,12 @@ export const _additionalProcessingGetterSetter = (target: any, name: string, def
     };
     if (!hasGetter) {
       propertyDescriptor.get = function () {
-        return (this as Model).getAttribute(name);
+        return (this as Model).getAttribute(field);
       };
     }
     if (!hasSetter) {
       propertyDescriptor.set = function (value) {
-        (this as Model).setAttribute(name, value);
+        (this as Model).setAttribute(field, value);
       };
     }
     Object.defineProperty(target, name, propertyDescriptor);
