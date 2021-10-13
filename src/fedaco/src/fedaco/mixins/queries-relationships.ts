@@ -21,88 +21,90 @@ export type RelationParams = RelationParam[] | RelationParam;
 export interface QueriesRelationShips {
   /*Add a relationship count / exists condition to the query.*/
   has(relation: Relation | string, operator?: string, count?: number, conjunction?: string,
-      callback?: Function | null): FedacoBuilder;
+      callback?: Function | null): this;
 
   /*Add nested relationship count / exists conditions to the query.
 
   Sets up recursive call to whereHas until we finish the nested relation.*/
   _hasNested(relations: string, operator?: string, count?: number, conjunction?: string,
-             callback?: Function | null);
+             callback?: Function | null): this;
 
   /*Add a relationship count / exists condition to the query with an "or".*/
-  orHas(relation: string, operator?: string, count?: number);
+  orHas(relation: string, operator?: string, count?: number): this;
 
   /*Add a relationship count / exists condition to the query.*/
-  doesntHave(relation: string, conjunction?: string, callback?: Function | null);
+  doesntHave(relation: string, conjunction?: string, callback?: Function | null): this;
 
   /*Add a relationship count / exists condition to the query with an "or".*/
-  orDoesntHave(relation: string);
+  orDoesntHave(relation: string): this;
 
   /*Add a relationship count / exists condition to the query with where clauses.*/
   whereHas(relation: string | Relation, callback?: Function | null, operator?: string,
-           count?: number);
+           count?: number): this;
 
   /*Add a relationship count / exists condition to the query with where clauses and an "or".*/
-  orWhereHas(relation: string, callback?: Function | null, operator?: string, count?: number);
+  orWhereHas(relation: string, callback?: Function | null, operator?: string, count?: number): this;
 
   /*Add a relationship count / exists condition to the query with where clauses.*/
-  whereDoesntHave(relation: string, callback?: Function | null);
+  whereDoesntHave(relation: string, callback?: Function | null): this;
 
   /*Add a relationship count / exists condition to the query with where clauses and an "or".*/
-  orWhereDoesntHave(relation: string, callback?: Function | null);
+  orWhereDoesntHave(relation: string, callback?: Function | null): this;
 
   /*Add a polymorphic relationship count / exists condition to the query.*/
   hasMorph(relation: MorphTo | string, types: string[], operator?: string, count?: number,
-           conjunction?: string, callback?: Function | null);
+           conjunction?: string, callback?: Function | null): this;
 
   /*Get the BelongsTo relationship for a single polymorphic type.*/
   getBelongsToRelation(relation: MorphTo, type: string);
 
   /*Add a polymorphic relationship count / exists condition to the query with an "or".*/
-  orHasMorph(relation: MorphTo | string, types: string[], operator?: string, count?: number);
+  orHasMorph(relation: MorphTo | string, types: string[], operator?: string, count?: number): this;
 
   /*Add a polymorphic relationship count / exists condition to the query.*/
   doesntHaveMorph(relation: MorphTo | string, types: string[], conjunction?: string,
-                  callback?: Function | null);
+                  callback?: Function): this;
 
   /*Add a polymorphic relationship count / exists condition to the query with an "or".*/
-  orDoesntHaveMorph(relation: MorphTo | string, types: string[]);
+  orDoesntHaveMorph(relation: MorphTo | string, types: string[]): this;
 
   /*Add a polymorphic relationship count / exists condition to the query with where clauses.*/
   whereHasMorph(relation: MorphTo | string, types: string[], callback?: Function | null,
-                operator?: string, count?: number);
+                operator?: string, count?: number): this;
 
   /*Add a polymorphic relationship count / exists condition to the query with where clauses and an "or".*/
   orWhereHasMorph(relation: MorphTo | string, types: string[], callback?: Function | null,
-                  operator?: string, count?: number);
+                  operator?: string, count?: number): this;
 
   /*Add a polymorphic relationship count / exists condition to the query with where clauses.*/
-  whereDoesntHaveMorph(relation: MorphTo | string, types: string[], callback?: Function | null);
+  whereDoesntHaveMorph(relation: MorphTo | string, types: string[],
+                       callback?: Function | null): this;
 
   /*Add a polymorphic relationship count / exists condition to the query with where clauses and an "or".*/
-  orWhereDoesntHaveMorph(relation: MorphTo | string, types: string[], callback?: Function | null);
+  orWhereDoesntHaveMorph(relation: MorphTo | string, types: string[],
+                         callback?: Function | null): this;
 
   /*Add subselect queries to include an aggregate value for a relationship.*/
-  withAggregate(relations: any, column: string, func?: string);
+  withAggregate(relations: any, column: string, func?: string): this;
 
   /*Add subselect queries to count the relations.*/
-  withCount(relations: any);
+  withCount(relations: any): this;
 
   /*Add subselect queries to include the max of the relation's column.*/
-  withMax(relation: string | any[], column: string);
+  withMax(relation: string | any[], column: string): this;
 
   /*Add subselect queries to include the min of the relation's column.*/
-  withMin(relation: string | any[], column: string);
+  withMin(relation: string | any[], column: string): this;
 
   /*Add subselect queries to include the sum of the relation's column.*/
-  withSum(relation: string | any[], column: string);
+  withSum(relation: string | any[], column: string): this;
 
   /*Add subselect queries to include the average of the relation's column.*/
-  withAvg(relation: string | any[], column: string);
+  withAvg(relation: string | any[], column: string): this;
 
   /*Add the "has" condition where clause to the query.*/
   addHasWhere(hasQuery: FedacoBuilder, relation: Relation, operator: string, count: number,
-              conjunction: string);
+              conjunction: string): this;
 
   /*Merge the where constraints from another query to the current query.*/
   mergeConstraintsFrom(from: FedacoBuilder);
@@ -127,7 +129,7 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
                operator                  = '>=',
                count                     = 1,
                conjunction               = 'and',
-               callback: Function | null = null): FedacoBuilder {
+               callback: Function | null = null): this {
       if (isString(relation)) {
         if (relation.includes('.')) {
           return this._hasNested(relation, operator, count, conjunction, callback);
@@ -165,7 +167,7 @@ public readonly ${relation};
                operator                  = '>=',
                count                     = 1,
                conjunction               = 'and',
-               callback: Function | null = null): FedacoBuilder {
+               callback: Function | null = null): this {
       const splitRelations = relations.split('.');
       const doesntHave     = operator === '<' && count === 1;
       if (doesntHave) {
@@ -181,18 +183,18 @@ public readonly ${relation};
     }
 
     /*Add a relationship count / exists condition to the query with an "or".*/
-    public orHas(relation: string, operator = '>=', count = 1) {
+    public orHas(relation: string, operator = '>=', count = 1): this {
       return this.has(relation, operator, count, 'or');
     }
 
     /*Add a relationship count / exists condition to the query.*/
     public doesntHave(relation: string, conjunction = 'and',
-                      callback: Function | null     = null) {
+                      callback: Function | null     = null): this {
       return this.has(relation, '<', 1, conjunction, callback);
     }
 
     /*Add a relationship count / exists condition to the query with an "or".*/
-    public orDoesntHave(relation: string) {
+    public orDoesntHave(relation: string): this {
       return this.doesntHave(relation, 'or');
     }
 
@@ -200,7 +202,7 @@ public readonly ${relation};
     public whereHas(relation: Relation | string,
                     callback: Function | null = null,
                     operator                  = '>=',
-                    count                     = 1) {
+                    count                     = 1): this {
       return this.has(relation, operator, count, 'and', callback);
     }
 
@@ -208,17 +210,17 @@ public readonly ${relation};
     public orWhereHas(relation: Relation | string,
                       callback: Function | null = null,
                       operator                  = '>=',
-                      count                     = 1) {
+                      count                     = 1): this {
       return this.has(relation, operator, count, 'or', callback);
     }
 
     /*Add a relationship count / exists condition to the query with where clauses.*/
-    public whereDoesntHave(relation: string, callback: Function | null = null) {
+    public whereDoesntHave(relation: string, callback: Function | null = null): this {
       return this.doesntHave(relation, 'and', callback);
     }
 
     /*Add a relationship count / exists condition to the query with where clauses and an "or".*/
-    public orWhereDoesntHave(relation: string, callback: Function | null = null) {
+    public orWhereDoesntHave(relation: string, callback: Function | null = null): this {
       return this.doesntHave(relation, 'or', callback);
     }
 
@@ -228,7 +230,7 @@ public readonly ${relation};
                     operator                  = '>=',
                     count                     = 1,
                     conjunction               = 'and',
-                    callback: Function | null = null) {
+                    callback: Function | null = null): this {
       if (isString(relation)) {
         relation = this._getRelationWithoutConstraints(relation) as unknown as MorphTo;
       }
@@ -274,26 +276,26 @@ public readonly ${relation};
     public orHasMorph(relation: MorphTo | string,
                       types: string[],
                       operator = '>=',
-                      count    = 1) {
+                      count    = 1): this {
       return this.hasMorph(relation, types, operator, count, 'or');
     }
 
     /*Add a polymorphic relationship count / exists condition to the query.*/
     public doesntHaveMorph(relation: MorphTo | string, types: string[],
                            conjunction               = 'and',
-                           callback: Function | null = null) {
+                           callback: Function | null = null): this {
       return this.hasMorph(relation, types, '<', 1, conjunction, callback);
     }
 
     /*Add a polymorphic relationship count / exists condition to the query with an "or".*/
-    public orDoesntHaveMorph(relation: MorphTo | string, types: string[]) {
+    public orDoesntHaveMorph(relation: MorphTo | string, types: string[]): this {
       return this.doesntHaveMorph(relation, types, 'or');
     }
 
     /*Add a polymorphic relationship count / exists condition to the query with where clauses.*/
     public whereHasMorph(relation: MorphTo | string, types: string[],
                          callback: Function | null = null, operator = '>=',
-                         count                                      = 1) {
+                         count                                      = 1): this {
       return this.hasMorph(relation, types, operator, count, 'and', callback);
     }
 
@@ -301,25 +303,25 @@ public readonly ${relation};
     public orWhereHasMorph(relation: MorphTo | string, types: string[],
                            callback: Function | null = null,
                            operator                  = '>=',
-                           count                     = 1) {
+                           count                     = 1): this {
       return this.hasMorph(relation, types, operator, count, 'or', callback);
     }
 
     /*Add a polymorphic relationship count / exists condition to the query with where clauses.*/
     public whereDoesntHaveMorph(relation: MorphTo | string, types: string[],
-                                callback: Function | null = null) {
+                                callback: Function | null = null): this {
       return this.doesntHaveMorph(relation, types, 'and', callback);
     }
 
     /*Add a polymorphic relationship count / exists condition to the query with where clauses and an "or".*/
     public orWhereDoesntHaveMorph(relation: MorphTo | string, types: string[],
-                                  callback: Function | null = null) {
+                                  callback: Function | null = null): this {
       return this.doesntHaveMorph(relation, types, 'or', callback);
     }
 
     /*Add subselect queries to include an aggregate value for a relationship.*/
     public withAggregate(this: FedacoBuilder & _Self, relations: RelationParams, column: string,
-                         func: string = null) {
+                         func: string = null): FedacoBuilder {
       if (isAnyEmpty(relations)) {
         return this;
       }
@@ -368,28 +370,33 @@ public readonly ${relation};
     }
 
     /*Add subselect queries to count the relations.*/
-    public withCount(...relations: RelationParam[]): this;
-    public withCount(this: FedacoBuilder & _Self, relations: RelationParam | RelationParams): this {
+    public withCount(...relations: RelationParam[]): FedacoBuilder;
+    public withCount(this: FedacoBuilder & _Self,
+                     relations: RelationParam | RelationParams): FedacoBuilder {
       return this.withAggregate(isArray(relations) ? relations : [...arguments], '*', 'count');
     }
 
     /*Add subselect queries to include the max of the relation's column.*/
-    public withMax(this: FedacoBuilder & _Self, relation: RelationParams, column: string): this {
+    public withMax(this: FedacoBuilder & _Self, relation: RelationParams,
+                   column: string): FedacoBuilder {
       return this.withAggregate(relation, column, 'max');
     }
 
     /*Add subselect queries to include the min of the relation's column.*/
-    public withMin(this: FedacoBuilder & _Self, relation: RelationParams, column: string) {
+    public withMin(this: FedacoBuilder & _Self, relation: RelationParams,
+                   column: string): FedacoBuilder {
       return this.withAggregate(relation, column, 'min');
     }
 
     /*Add subselect queries to include the sum of the relation's column.*/
-    public withSum(this: FedacoBuilder & _Self, relation: RelationParams, column: string) {
+    public withSum(this: FedacoBuilder & _Self, relation: RelationParams,
+                   column: string): FedacoBuilder {
       return this.withAggregate(relation, column, 'sum');
     }
 
     /*Add subselect queries to include the average of the relation's column.*/
-    public withAvg(this: FedacoBuilder & _Self, relation: RelationParams, column: string) {
+    public withAvg(this: FedacoBuilder & _Self, relation: RelationParams,
+                   column: string): FedacoBuilder {
       return this.withAggregate(relation, column, 'avg');
     }
 
@@ -397,7 +404,7 @@ public readonly ${relation};
     _addHasWhere(hasQuery: FedacoBuilder,
                  relation: Relation, operator: string,
                  count: number,
-                 conjunction: string): FedacoBuilder {
+                 conjunction: string): this {
       hasQuery.mergeConstraintsFrom(relation.getQuery());
       return this._canUseExistsForExistenceCheck(operator, count) ?
         this.addWhereExistsQuery(hasQuery.toBase(), conjunction, operator === '<' && count === 1) :
@@ -419,7 +426,7 @@ public readonly ${relation};
     _addWhereCountQuery(query: QueryBuilder,
                         operator    = '>=',
                         count       = 1,
-                        conjunction = 'and'): FedacoBuilder {
+                        conjunction = 'and'): this {
       // must call to sql first
       const sql      = query.toSql();
       const bindings = query.getBindings();
