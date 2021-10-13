@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { mouseMoveTrigger } from '../utils/testing/event-helper';
-import { SplitterComponent } from './splitter.component';
-import { SplitterModule } from './splitter.module';
-import { SplitterService } from './splitter.service';
+import { SplitterComponent } from '../src/splitter.component';
+import { SplitterModule } from '../src/splitter.module';
+import { SplitterService } from '../src/splitter.service';
+
 @Component({
   template: `
     <section>
-      <d-splitter [orientation]="orientation" [splitBarSize]="splitBarSize" style="height: 300px; border: 1px solid #E3E5E9;">
-        <d-splitter-pane [size]="size" [minSize]="minSize" [maxSize]="maxSize"
+      <tri-splitter [orientation]="orientation" [splitBarSize]="splitBarSize" style="height: 300px; border: 1px solid #E3E5E9;">
+        <tri-splitter-pane [size]="size" [minSize]="minSize" [maxSize]="maxSize"
         [collapsible]="collapsible"
         [collapsed]="collapsed"
         (sizeChange)="sizeChange($event)">
@@ -17,20 +17,20 @@ import { SplitterService } from './splitter.service';
             <h2>左侧面板</h2>
             <div>左侧内容区域，宽度30%, 最小宽度20%</div>
           </div>
-        </d-splitter-pane>
-        <d-splitter-pane size="50px">
+        </tri-splitter-pane>
+        <tri-splitter-pane size="50px">
           <div class="pane-content">
             <h2>中间面板</h2>
             <div>中间内容区域</div>
           </div>
-        </d-splitter-pane>
-        <d-splitter-pane>
+        </tri-splitter-pane>
+        <tri-splitter-pane>
           <div class="pane-content">
             <h2>右侧面板</h2>
             <div>右侧内容区域</div>
           </div>
-        </d-splitter-pane>
-      </d-splitter>
+        </tri-splitter-pane>
+      </tri-splitter>
     </section>
   `,
 })
@@ -53,13 +53,13 @@ class TestSplitterComponent {
 @Component({
   template: `
     <section>
-      <d-splitter [orientation]="orientation" style="height: 500px; border: 1px solid #E3E5E9;">
-        <d-splitter-pane>
+      <tri-splitter [orientation]="orientation" style="height: 500px; border: 1px solid #E3E5E9;">
+        <tri-splitter-pane>
           <div class="pane-content">
             <h2>上面板</h2>
             <div>内容区域</div>
           </div>
-        </d-splitter-pane>
+        </tri-splitter-pane>
         <d-splitter-pane [size]="size" [minSize]="minSize" [maxSize]="maxSize">
           <div class="pane-content">
             <h2>下面板</h2>
@@ -72,7 +72,7 @@ class TestSplitterComponent {
             <div>内容区域</div>
           </div>
         </d-splitter-pane>
-      </d-splitter>
+      </tri-splitter>
     </section>
   `,
 })
