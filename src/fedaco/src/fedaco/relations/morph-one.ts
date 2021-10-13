@@ -68,11 +68,11 @@ export class MorphOne extends mixinCanBeOneOfMany(
   /*Add join query constraints for one of many relationships.*/
   public addOneOfManyJoinSubQueryConstraints(join: JoinClauseBuilder) {
     join.on(
-      this.qualifySubSelectColumn(this.morphType),
+      this._qualifySubSelectColumn(this.morphType),
       '=',
       this.qualifyRelatedColumn(this.morphType)
     ).on(
-      this.qualifySubSelectColumn(this.foreignKey),
+      this._qualifySubSelectColumn(this.foreignKey),
       '=',
       this.qualifyRelatedColumn(this.foreignKey)
     );
@@ -86,7 +86,7 @@ export class MorphOne extends mixinCanBeOneOfMany(
   }
 
   /*Get the value of the model's foreign key.*/
-  protected getRelatedKeyFrom(model: Model) {
+  protected _getRelatedKeyFrom(model: Model) {
     return model.getAttribute(this.getForeignKeyName());
   }
 }

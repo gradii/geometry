@@ -18,7 +18,7 @@ import { SqlParser } from '../../query/parser/sql-parser';
 import { SqlNode } from '../../query/sql-node';
 import { forwardRef } from '../forward-ref';
 
-export interface WhereCommon {
+export interface QueryBuilderWhereCommon {
 
   /**
    * Add another query builder as a nested where to the query builder.
@@ -66,7 +66,7 @@ export interface WhereCommon {
   whereRaw(sql: string, bindings: any[], conjunction?: 'and' | 'or'): this;
 }
 
-export type WhereCommonCtor = Constructor<WhereCommon>;
+export type WhereCommonCtor = Constructor<QueryBuilderWhereCommon>;
 
 export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereCommonCtor & T {
   return class _Self extends base {

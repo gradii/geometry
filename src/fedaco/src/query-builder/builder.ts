@@ -104,4 +104,9 @@ export abstract class Builder extends mixinJoin(
   _unionOrders: any[] = [];
   /*Indicates whether row locking is being used.*/
   _lock: string | boolean;
+  /**
+   * The callbacks that should be invoked before the query is executed.
+   * cloned
+   */
+  _beforeQueryCallbacks: Array<(...args: any[]) => any> = [];
 }

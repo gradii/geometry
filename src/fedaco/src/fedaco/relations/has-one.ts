@@ -29,7 +29,7 @@ export class HasOne extends mixinComparesRelatedModels(
     if (isBlank(this.getParentKey())) {
       return this._getDefaultFor(this._parent);
     }
-    return await (this._query.first() as Promise<Model>) || this._getDefaultFor(this._parent);
+    return (await this._query.first() as Model) || this._getDefaultFor(this._parent);
   }
 
   /*Initialize the relation on a set of models.*/
@@ -51,7 +51,7 @@ export class HasOne extends mixinComparesRelatedModels(
   public getRelationExistenceQuery(query: FedacoBuilder, parentQuery: FedacoBuilder,
                                    columns: any[] | any = ['*']) {
     if (this.isOneOfMany()) {
-      this.mergeOneOfManyJoinsTo(query);
+      this._mergeOneOfManyJoinsTo(query);
     }
     return super.getRelationExistenceQuery(query, parentQuery, columns);
   }
@@ -69,8 +69,8 @@ export class HasOne extends mixinComparesRelatedModels(
 
   /*Add join query constraints for one of many relationships.*/
   public addOneOfManyJoinSubQueryConstraints(join: JoinClauseBuilder) {
-    join.on(this.qualifySubSelectColumn(this.foreignKey), '=',
-      this.qualifyRelatedColumn(this.foreignKey));
+    join.on(this._qualifySubSelectColumn(this.foreignKey), '=',
+      this._qualifyRelatedColumn(this.foreignKey));
   }
 
   /*Make a new related instance for the given model.*/
@@ -82,7 +82,7 @@ export class HasOne extends mixinComparesRelatedModels(
   }
 
   /*Get the value of the model's foreign key.*/
-  protected getRelatedKeyFrom(model: Model) {
+  _getRelatedKeyFrom(model: Model) {
     return model.getAttribute(this.getForeignKeyName());
   }
 }

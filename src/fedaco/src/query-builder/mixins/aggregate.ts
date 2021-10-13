@@ -10,9 +10,7 @@ import { ColumnReferenceExpression } from '../../query/ast/column-reference-expr
 import { AggregateFragment } from '../../query/ast/fragment/aggregate-fragment';
 import { PathExpression } from '../../query/ast/path-expression';
 import { SqlParser } from '../../query/parser/sql-parser';
-import {
-  createColumnReferenceExpression, createIdentifier, raw, rawSqlBindings
-} from '../ast-factory';
+import { createColumnReferenceExpression, createIdentifier, rawSqlBindings } from '../ast-factory';
 import { wrapToArray } from '../ast-helper';
 import { QueryBuilder } from '../query-builder';
 
@@ -79,6 +77,8 @@ export function mixinAggregate<T extends Constructor<any>>(base: T): QueryBuilde
     }
 
     public async exists(this: QueryBuilder & _Self, columns: string | string[] = '*') {
+      this.applyBeforeQueryCallbacks();
+
       let results = await this._connection.select(
         this._grammar.compileExists(this), this.getBindings(), !this._useWriteConnection
       );
@@ -127,12 +127,12 @@ export function mixinAggregate<T extends Constructor<any>>(base: T): QueryBuilde
               ]))
           ];
         }
-        const clonedSql = clone.toSql();
+        const clonedSql      = clone.toSql();
         const clonedBindings = clone.getBindings();
         return await this.newQuery().from(
           rawSqlBindings('(' + clonedSql + ') as ' +
             this._grammar.quoteTableName('aggregate_table')
-          , clonedBindings, 'from')
+            , clonedBindings, 'from')
         )._setAggregate('count',
           this._withoutSelectAliases(columns)).get();
       }
@@ -145,7 +145,7 @@ export function mixinAggregate<T extends Constructor<any>>(base: T): QueryBuilde
     }
 
     /*Clone the existing query instance for usage in a pagination subquery.*/
-    protected _cloneForPaginationCount(this: QueryBuilder & _Self, ) {
+    protected _cloneForPaginationCount(this: QueryBuilder & _Self,) {
       return this.cloneWithout(['_orders', '_limit', '_offset']);
     }
 

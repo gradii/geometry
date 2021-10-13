@@ -34,7 +34,7 @@ export function mixinComparesRelatedModels<T extends Constructor<any>>(base: T):
   return class _Self extends base {
 
     /*Determine if the model is the related instance of the relationship.*/
-    public is(this: Relation & this, model: Model | null) {
+    public async is(this: Relation & this, model: Model | null) {
       const match = !isBlank(model) && this._compareKeys(this.getParentKey(),
         this._getRelatedKeyFrom(
           model)) && this._related.getTable() === model.getTable() && this._related.getConnectionName() === model.getConnectionName();
@@ -46,13 +46,13 @@ export function mixinComparesRelatedModels<T extends Constructor<any>>(base: T):
     }
 
     /*Determine if the model is not the related instance of the relationship.*/
-    public isNot(this: Relation & this, model: Model | null) {
-      return !this.is(model);
+    public async isNot(this: Relation & this, model: Model | null) {
+      return !(await this.is(model));
     }
 
     /*Compare the parent key with the related key.*/
     _compareKeys(parentKey: any, relatedKey: any): boolean {
-      if (!parentKey.length || !relatedKey.length) {
+      if (isBlank(parentKey) || isBlank(relatedKey)) {
         return false;
       }
       if (isNumber(parentKey) || isNumber(relatedKey)) {

@@ -578,12 +578,13 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Begin querying the model.*/
-  public static createQuery() {
-    return (new this()).newQuery();
+  public static createQuery<T extends typeof Model>(this: T): FedacoBuilder<InstanceType<T>> {
+    return (new this() as InstanceType<T>).newQuery<InstanceType<T>>();
   }
 
   /*Get a new query builder for the model's table.*/
-  public newQuery(): FedacoBuilder {
+  public newQuery<T extends Model>(this: T): FedacoBuilder<T> {
+    // @ts-ignore
     return this.registerGlobalScopes(this.newQueryWithoutScopes());
   }
 
@@ -624,7 +625,7 @@ export class Model extends mixinHasAttributes(
 
   /*Create a new Eloquent query builder for the model.*/
   public newEloquentBuilder(query: QueryBuilder) {
-    return new FedacoBuilder(query);
+    return new FedacoBuilder<this>(query);
   }
 
   /*Get a new query builder instance for the connection.*/

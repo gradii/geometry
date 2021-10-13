@@ -591,11 +591,11 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     // }
 
     /*Merge new casts with existing casts on the model.*/
-    // public mergeCasts(casts: any) {
-    //   // tslint:disable-next-line:ban
-    //   Object.assign(this._casts, casts);
-    //   return this;
-    // }
+    public mergeCasts(casts: any) {
+      // tslint:disable-next-line:ban
+      Object.assign(this._casts, casts);
+      return this;
+    }
 
     /*Cast an attribute to a native PHP type.*/
     protected castAttribute(this: Model & this, key: string, value: any) {
@@ -946,6 +946,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
             casts[key] = columnMeta.keyType || 'int';
             break;
           case   PrimaryGeneratedColumn.isTypeOf(columnMeta):
+            // todo check not encrypted. not guid
             casts[key] = 'int';
             break;
           case   BinaryColumn.isTypeOf(columnMeta):

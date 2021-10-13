@@ -15,7 +15,7 @@ import { RawExpression } from '../../query/ast/expression/raw-expression';
 import { SqlParser } from '../../query/parser/sql-parser';
 import { createIdentifier } from '../ast-factory';
 
-export interface WhereDate {
+export interface QueryBuilderWhereDate {
 
   /**
    *  Add a date based (year, month, day, time) statement to the query.
@@ -86,7 +86,7 @@ export interface WhereDate {
 
 }
 
-export type WhereDateCtor = Constructor<WhereDate>;
+export type WhereDateCtor = Constructor<QueryBuilderWhereDate>;
 
 export function mixinWhereDate<T extends Constructor<any>>(base: T): WhereDateCtor & T {
   return class _Self extends base {

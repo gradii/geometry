@@ -19,33 +19,7 @@ import { Model } from './model';
 import { Relation } from './relations/relation';
 import { Scope } from './scope';
 
-
-// export interface FedacoBuilder<M> {
-//   (...args: any[]): FedacoBuilderScope<M>;
-//
-//   new(...args: any[]): FedacoBuilderScope<M>;
-// }
-
-type SnakeCaseToCamelCase<S extends string> =
-  S extends `${infer FirstWord}_${infer Rest}` ?
-    `${Lowercase<FirstWord>}${SnakeCaseToPascalCase<Rest>}` :
-    `${Lowercase<S>}`;
-
-type SnakeCaseToPascalCase<S extends string> =
-  S extends `${infer FirstWord}_${infer Rest}` ?
-    `${Capitalize<Lowercase<FirstWord>>}${SnakeCaseToPascalCase<Rest>}` :
-    Capitalize<Lowercase<S>>;
-
-
-type ModelScopeMethod<T, M> = T extends `scope${infer Rest}` ?
-  Uncapitalize<`${SnakeCaseToPascalCase<Rest>}`> : never;
-
-export type FedacoBuilderScope<M> = {                 // note type, not interface
-  [K in ModelScopeMethod<keyof M, M>]?: (...args: any[]) => any   // key in
-};
-
-// @NoSuchMethodProxy()
-export class FedacoBuilder extends mixinGuardsAttributes(
+export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttributes(
   mixinQueriesRelationShips(
     mixinBuildQueries(
       mixinForwardCallToQueryBuilder(class {
@@ -56,7 +30,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /*All of the globally registered builder macros.*/
   protected static macros: any[] = [];
   /*The model being queried.*/
-  protected _model: Model;
+  protected _model: T;
   /*The relationships that should be eager loaded.*/
   protected _eagerLoad: { [key: string]: Function } = {};
   /*All of the locally registered builder macros.*/
@@ -332,7 +306,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
 
   /*Get a single column's value from the first result of a query.*/
   public async value(column: string) {
-    const result: Model = await this.first([column]) as Model;
+    const result: T = await this.first([column]) as T;
     if (result) {
       return result[column];
     }
@@ -341,22 +315,24 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   /**
    * Execute the query as a "select" statement.
    */
-  public async get(columns: string[] | string = ['*']): Promise<Model[]> {
+  public async get(columns: string[] | string = ['*']): Promise<T[]> {
     const builder = this.applyScopes();
     let models    = await builder.getModels(columns);
     if (models.length > 0) {
       models = await builder.eagerLoadRelations(models);
     }
+    // @ts-ignore
     return models;
   }
 
   /*Get the hydrated models without eager loading.*/
-  public async getModels(columns: any[] | string = ['*']) {
+  public async getModels(columns: any[] | string = ['*']): Promise<T[]> {
+    // @ts-ignore
     return this._model.newQuery().hydrate(await this._query.get(columns));
   }
 
   /*Eager load the relationships for the models.*/
-  public async eagerLoadRelations(models: any[]) {
+  public async eagerLoadRelations(models: any[]): Promise<T[]> {
     for (const [name, constraints] of Object.entries(this._eagerLoad)) {
       // For nested eager loads we'll skip loading them here and they will be set as an
       // eager load on the query to retrieve the relation so that they will be eager
@@ -369,10 +345,11 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Eagerly load the relationship on a set of models.*/
-  protected async eagerLoadRelation(models: any[], name: string, constraints: Function) {
+  protected async eagerLoadRelation(models: any[], name: string, constraints: Function): Promise<T[]> {
     const relation = this.getRelation(name);
     relation.addEagerConstraints(models);
     constraints(relation);
+    // @ts-ignore
     return relation.match(relation.initRelation(models, name), await relation.getEager(), name);
   }
 
@@ -480,7 +457,10 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   // /*Paginate the given query into a cursor paginator.*/
-  // public cursorPaginate(perPage: number | null = null, columns: any[] = ['*'], cursorName: string = 'cursor', cursor: Cursor | string | null = null) {
+  // public cursorPaginate(perPage: number | null = null,
+  //    columns: any[] = ['*'],
+  //    cursorName: string = 'cursor',
+  //    cursor: Cursor | string | null = null) {
   //   let perPage = perPage || this.model.getPerPage();
   //   return this.paginateUsingCursor(perPage, columns, cursorName, cursor);
   // }
@@ -499,7 +479,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   //   return collect(this._query.orders);
   // }
   /*Save a new model and return the instance.*/
-  public async create(attributes?: Record<string, any>) {
+  public async create(attributes?: Record<string, any>): Promise<T> {
     const instance = this.newModelInstance(attributes);
     await instance.save();
     return instance;
@@ -750,7 +730,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Create a new instance of the model being queried.*/
-  public newModelInstance(attributes?: Record<string, any>): Model {
+  public newModelInstance(attributes?: Record<string, any>): T {
     return this._model.newInstance(attributes).setConnection(this._query.getConnection().getName());
   }
 
@@ -808,7 +788,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Apply query-time casts to the model instance.*/
-  public withCasts(casts: any[]) {
+  public withCasts(casts: any) {
     this._model.mergeCasts(casts);
     return this;
   }
@@ -851,7 +831,7 @@ export class FedacoBuilder extends mixinGuardsAttributes(
   }
 
   /*Set a model instance for the model being queried.*/
-  public setModel(model: Model) {
+  public setModel(model: T) {
     this._model = model;
     this._query.from(model.getTable());
     return this;

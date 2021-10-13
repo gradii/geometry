@@ -35,14 +35,14 @@ export class MorphOneOrMany extends HasOneOrMany {
     }
     if ((this.constructor as typeof Relation).constraints) {
       super.addConstraints();
-      this.getRelationQuery().where(this.morphType, this.morphClass);
+      this._getRelationQuery().where(this.morphType, this.morphClass);
     }
   }
 
   /*Set the constraints for an eager load of the relation.*/
   public addEagerConstraints(models: any[]) {
     super.addEagerConstraints(models);
-    this.getRelationQuery().where(this.morphType, this.morphClass);
+    this._getRelationQuery().where(this.morphType, this.morphClass);
   }
 
   /*Set the foreign ID and type for creating a related model.*/

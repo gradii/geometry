@@ -7,9 +7,14 @@
 import { isAnyEmpty, isArray, isBlank, isNumber, isString } from '@gradii/check-type';
 import { Constructor } from '../../helper/constructor';
 import { snakeCase } from '../../helper/str';
-import { createTableColumn, raw, rawSqlBindings } from '../../query-builder/ast-factory';
+import {
+  createIdentifier, createTableColumn, raw, rawSqlBindings
+} from '../../query-builder/ast-factory';
 import { Builder } from '../../query-builder/builder';
 import { QueryBuilder } from '../../query-builder/query-builder';
+import { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
+import { ExistsPredicateExpression } from '../../query/ast/expression/exists-predicate-expression';
+import { NestedExpression } from '../../query/ast/fragment/nested-expression';
 import { FedacoBuilder } from '../fedaco-builder';
 import { BelongsTo } from '../relations/belongs-to';
 import { MorphTo } from '../relations/morph-to';
@@ -101,6 +106,9 @@ export interface QueriesRelationShips {
 
   /*Add subselect queries to include the average of the relation's column.*/
   withAvg(relation: string | any[], column: string): this;
+
+  /*Add subselect queries to include the existence of related models.*/
+  withExists(relation: RelationParams): this;
 
   /*Add the "has" condition where clause to the query.*/
   addHasWhere(hasQuery: FedacoBuilder, relation: Relation, operator: string, count: number,
@@ -342,10 +350,13 @@ public readonly ${relation};
           // todo check query from eq query from
           const hashedColumn = this.getModel().getTable() === relation.getQuery().getModel().getTable() ?
             `${relation.getRelationCountHash(false)}.${column}` : column;
-          expression         = `${func}(${this.getQuery().getGrammar().wrap(
+
+          const wrappedColumn = this.getQuery().getGrammar().wrap(
             column === '*' ? column :
               relation.getRelated().qualifyColumn(hashedColumn)
-          )})`;
+          );
+
+          expression = func === 'exists' ? wrappedColumn : `${func}(${wrappedColumn})`;
         } else {
           expression = column;
         }
@@ -364,7 +375,24 @@ public readonly ${relation};
         alias = alias ?? snakeCase(
           `${name} ${func} ${column}`.replace(/^[0-9A-Za-z]\s+_/u, '')
         );
-        this.selectSub(func ? queryBuilder : queryBuilder.limit(1), alias);
+        if (func === 'exists') {
+          const sql = query.toSql();
+            this.selectRaw(
+              `exists(${sql.result}) as ${this.getQuery()._grammar.wrap(alias)}`,
+              sql.bindings
+            ).withCasts({[alias]: 'boolean'});
+
+          // this.select(
+          //   new ColumnReferenceExpression(
+          //     new ExistsPredicateExpression(
+          //       new NestedExpression('select', query, []),
+          //     ),
+          //     createIdentifier(alias)
+          //   )
+          // ).withCasts({[alias]: 'boolean'});
+        } else {
+          this.selectSub(func ? queryBuilder : queryBuilder.limit(1), alias);
+        }
       }
       return this;
     }
@@ -398,6 +426,11 @@ public readonly ${relation};
     public withAvg(this: FedacoBuilder & _Self, relation: RelationParams,
                    column: string): FedacoBuilder {
       return this.withAggregate(relation, column, 'avg');
+    }
+
+    /*Add subselect queries to include the existence of related models.*/
+    public withExists(this: FedacoBuilder & _Self, relation: RelationParams): FedacoBuilder {
+      return this.withAggregate(relation, '*', 'exists');
     }
 
     /*Add the "has" condition where clause to the query.*/

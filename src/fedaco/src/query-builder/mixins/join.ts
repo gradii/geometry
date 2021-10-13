@@ -12,7 +12,7 @@ import { JoinExpression } from '../../query/ast/join-expression';
 import { JoinOnExpression } from '../../query/ast/join-on-expression';
 import { TableReferenceExpression } from '../../query/ast/table-reference-expression';
 import { SqlParser } from '../../query/parser/sql-parser';
-import { bindingVariable } from '../ast-factory';
+import { bindingVariable, createColumnReferenceExpression, createIdentifier } from '../ast-factory';
 
 export interface QueryBuilderJoin {
   join(table: string, first, operator, second, type?, where?): this;
@@ -143,7 +143,7 @@ export function mixinJoin<T extends Constructor<any>>(base: T): QueryBuilderJoin
                    where: boolean                                               = false) {
       const node       = this._createSubQuery('join', query);
       const expression = new TableReferenceExpression(node,
-        as ? SqlParser.createSqlParser(as).parseUnaryTableColumn() : undefined);
+        as ? createIdentifier(as) : undefined);
 
       return this.join(expression, first, operator, second, type, where);
     }

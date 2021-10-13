@@ -10,8 +10,8 @@ export function wrap(value: any[] | any) {
   return isArray(value) ? value : [value];
 }
 
-export function mapWithKeys(items, callback) {
-  const result = {};
+export function mapWithKeys(items: Record<string, any>, callback) {
+  const result: Record<string, any> = {};
 
   for (const [key, value] of Object.entries(items)) {
     const assoc = callback(value, key);

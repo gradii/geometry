@@ -4,12 +4,27 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Observable } from 'rxjs';
 import { Constructor } from '../../helper/constructor';
 import { ConnectionInterface } from '../../query-builder/connection-interface';
+import { QueryBuilderAggregate } from '../../query-builder/mixins/aggregate';
+import { BuildQueries } from '../../query-builder/mixins/build-query';
+import { QueryBuilderGroupBy } from '../../query-builder/mixins/group-by';
+import { QueryBuilderHaving } from '../../query-builder/mixins/having';
+import { QueryBuilderJoin } from '../../query-builder/mixins/join';
+import { QueryBuilderLimitOffset } from '../../query-builder/mixins/limit-offset';
+import { QueryBuilderOrderBy } from '../../query-builder/mixins/order-by';
+import { QueryBuilderUnion } from '../../query-builder/mixins/union';
+import { QueryBuilderWhereCommon } from '../../query-builder/mixins/where-common';
+import { QueryBuilderWhereDate } from '../../query-builder/mixins/where-date';
+import { QueryBuilderWherePredicate } from '../../query-builder/mixins/where-predicate';
+import { QueryBuilder } from '../../query-builder/query-builder';
+import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
 
-export interface ForwardCallToQueryBuilder {
+export interface ForwardCallToQueryBuilder extends QueryBuilderJoin, QueryBuilderOrderBy,
+  QueryBuilderGroupBy, QueryBuilderHaving, QueryBuilderLimitOffset, QueryBuilderUnion,
+  QueryBuilderWhereDate, QueryBuilderAggregate, QueryBuilderWherePredicate, QueryBuilderWhereCommon,
+  BuildQueries, Pick<QueryBuilder, 'beforeQuery' | 'applyBeforeQueryCallbacks'> {
   pluck(...args: any[]): Promise<any[] | Record<string, any>>;
 
   stripTableForPluck(...args: any[]): this;
@@ -80,190 +95,11 @@ export interface ForwardCallToQueryBuilder {
 
   onceWithColumns(...args: any[]): this;
 
-  join(...args: any[]): this;
-
-  joinWhere(...args: any[]): this;
-
-  joinSub(...args: any[]): this;
-
-  leftJoin(...args: any[]): this;
-
-  leftJoinWhere(...args: any[]): this;
-
-  leftJoinSub(...args: any[]): this;
-
-  rightJoin(...args: any[]): this;
-
-  rightJoinWhere(...args: any[]): this;
-
-  rightJoinSub(...args: any[]): this;
-
-  crossJoin(...args: any[]): this;
-
-  oldest(...args: any[]): this;
-
-  orderBy(...args: any[]): this;
-
-  orderByDesc(...args: any[]): this;
-
-  orderByRaw(...args: any[]): this;
-
-  reorder(...args: any[]): this;
-
-  groupBy(...args: any[]): this;
-
-  groupByRaw(...args: any[]): this;
-
-  addHaving(...args: any[]): this;
-
-  having(...args: any[]): this;
-
-  havingBetween(...args: any[]): this;
-
-  havingRaw(...args: any[]): this;
-
-  orHaving(...args: any[]): this;
-
-  orHavingRaw(...args: any[]): this;
-
-  limit(...args: any[]): this;
-
-  skip(...args: any[]): this;
-
-  offset(...args: any[]): this;
-
-  take(...args: any[]): this;
-
-  forPage(...args: any[]): this;
-
-  forPageBeforeId(...args: any[]): this;
-
-  forPageAfterId(...args: any[]): this;
-
-  union(...args: any[]): this;
-
-  unionAll(...args: any[]): this;
-
-  orWhereDate(...args: any[]): this;
-
-  orWhereDay(...args: any[]): this;
-
-  orWhereMonth(...args: any[]): this;
-
-  orWhereTime(...args: any[]): this;
-
-  orWhereYear(...args: any[]): this;
-
-  whereDate(...args: any[]): this;
-
-  whereDay(...args: any[]): this;
-
-  whereMonth(...args: any[]): this;
-
-  whereTime(...args: any[]): this;
-
-  whereYear(...args: any[]): this;
-
-  aggregate(...args: any[]): this;
-
-  count(...args: any[]): Promise<number>;
-
-  doesntExist(...args: any[]): Promise<boolean>;
-
-  exists(...args: any[]): Promise<boolean>;
-
-  getCountForPagination(...args: any[]): this;
-
-  max(...args: any[]): this;
-
-  min(...args: any[]): this;
-
-  sum(...args: any[]): this;
-
-  addWhereExistsQuery(...args: any[]): this;
-
-  orWhereBetween(...args: any[]): this;
-
-  orWhereExists(...args: any[]): this;
-
-  orWhereIn(...args: any[]): this;
-
-  orWhereIntegerInRaw(...args: any[]): this;
-
-  orWhereIntegerNotInRaw(...args: any[]): this;
-
-  orWhereNotBetween(...args: any[]): this;
-
-  orWhereNotExists(...args: any[]): this;
-
-  orWhereNotIn(...args: any[]): this;
-
-  orWhereNotNull(...args: any[]): this;
-
-  orWhereNull(...args: any[]): this;
-
-  where(...args: any[]): this;
-
-  whereBetween(...args: any[]): this;
-
-  whereExists(...args: any[]): this;
-
-  whereIn(...args: any[]): this;
-
-  whereIntegerInRaw(...args: any[]): this;
-
-  whereIntegerNotInRaw(...args: any[]): this;
-
-  whereNotBetween(...args: any[]): this;
-
-  whereNotExists(...args: any[]): this;
-
-  whereNotIn(...args: any[]): this;
-
-  whereNotNull(...args: any[]): this;
-
-  whereNull(...args: any[]): this;
-
-  addNestedWhereQuery(...args: any[]): this;
-
-  addWhere(...args: any[]): this;
-
-  forNestedWhere(...args: any[]): this;
-
-  orWhere(...args: any[]): this;
-
-  orWhereColumn(...args: any[]): this;
-
-  orWhereRaw(...args: any[]): this;
-
-  // where(...args){return this.#forwardCallToQueryBuilder('where', args): this}
-  whereColumn(...args: any[]): this;
-
-  whereNested(...args: any[]): this;
-
-  whereRaw(...args: any[]): this;
-
-  chunk(count: number, signal?: Observable<any>): Observable<{ results: any[], page: number }>;
-
-  each(count: number, signal?: Observable<any>): Observable<{ item: any, index: number }>;
-
-  chunkById(count: number,
-            column?: string,
-            alias?: string,
-            signal?: Observable<any>): Observable<{ results: any, page: number }>;
-
-  eachById(count: number,
-           column?: string,
-           alias?: string,
-           signal?: Observable<any>): Observable<{ item: any, index: number }>;
-
   first(...args: any[]): Promise<Model>;
 
-  when(...args: any[]): this;
-
-  tap(...args: any[]): this;
-
-  unless(...args: any[]): this;
+  joinSub(query: Function | QueryBuilder | FedacoBuilder | string, as: string, first: Function | string,
+          operator?: string,
+          second?: string | number, type?: string, where?: boolean): this;
 }
 
 export type ForwardCallToQueryBuilderCtor = Constructor<ForwardCallToQueryBuilder>;
@@ -617,7 +453,7 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     }
 
     count(...args: any[]) {
-      return this.#forwardCallToQueryBuilder('count', args);
+      return this.#passThroughToQueryBuilder('count', args);
     }
 
     doesntExist(...args: any[]) {
@@ -805,5 +641,15 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
       return this.#forwardCallToQueryBuilder('unless', args);
     }
 
+    // region specify query builder
+    beforeQuery(...args: any[]) {
+      return this.#directToQueryBuilder('beforeQuery', args);
+    }
+
+    applyBeforeQueryCallbacks(...args: any[]) {
+      return this.#directToQueryBuilder('applyBeforeQueryCallbacks', args);
+    }
+
+    //endregion
   };
 }

@@ -48,7 +48,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   /*Set the base constraints on the relation query.*/
   public addConstraints() {
     if ((this.constructor as typeof HasOneOrMany).constraints) {
-      const query = this.getRelationQuery();
+      const query = this._getRelationQuery();
       query.where(this.foreignKey, '=', this.getParentKey());
       query.whereNotNull(this.foreignKey);
     }
@@ -57,7 +57,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   /*Set the constraints for an eager load of the relation.*/
   public addEagerConstraints(models: any[]) {
     const whereIn = this.whereInMethod(this._parent, this.localKey);
-    this.getRelationQuery()[whereIn](this.foreignKey, this.getKeys(models, this.localKey));
+    this._getRelationQuery()[whereIn](this.foreignKey, this.getKeys(models, this.localKey));
   }
 
   /*Match the eagerly loaded results to their single parents.*/
@@ -85,7 +85,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   /*Get the value of a relationship by one or many type.*/
   protected getRelationValue(dictionary: any, key: string, type: string) {
     const value = dictionary[key];
-    return type === 'one' ? value : this._related.newCollection(value);
+    return type === 'one' ? value[0] : this._related.newCollection(value);
   }
 
   /*Build model dictionary keyed by the relation's foreign key.*/
@@ -93,7 +93,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
     const foreign = this.getForeignKeyName();
     return results.reduce((prev: any, result) => {
       // @ts-ignore
-      const key = this._getDictionaryKey(result[foreign]);
+      const key = this._getDictionaryKey(result.getAttribute(foreign));
       if (!prev[key]) {
         prev[key] = [];
       }

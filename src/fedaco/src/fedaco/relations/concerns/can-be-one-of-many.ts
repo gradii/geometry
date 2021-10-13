@@ -41,7 +41,7 @@ export interface CanBeOneOfMany {
   getOneOfManySubQuery();
 
   /*Get the qualified column name for the one-of-many relationship using the subselect join query's alias.*/
-  qualifySubSelectColumn(column: string);
+  _qualifySubSelectColumn(column: string);
 
   /*Qualify related column using the related table name if it is not already qualified.*/
   _qualifyRelatedColumn(column: string);
@@ -64,7 +64,7 @@ export function mixinCanBeOneOfMany<T extends Constructor<any>>(base: T) {
     /*The name of the relationship.*/
     _relationName: string;
     /*The one of many inner join subselect query builder instance.*/
-    _oneOfManySubQuery: FedacoBuilder | null;
+    _oneOfManySubQuery?: FedacoBuilder;
 
     /*Add constraints for inner join subselect for one of many relationships.*/
     public addOneOfManySubQueryConstraints(
@@ -85,8 +85,8 @@ export function mixinCanBeOneOfMany<T extends Constructor<any>>(base: T) {
     }
 
     /*Indicate that the relation is a single result of a larger one-to-many relationship.*/
-    public ofMany(this: Relation & _Self, column: string | any | null = 'id',
-                  aggregate: string | Function | null = 'MAX',
+    public ofMany(column: string | any = 'id',
+                  aggregate: string | Function = 'MAX',
                   relation: string): this {
       this._isOneOfMany = true;
       this._relationName = relation;// || this._getDefaultOneOfManyJoinAlias();
@@ -105,14 +105,13 @@ export function mixinCanBeOneOfMany<T extends Constructor<any>>(base: T) {
       let previous;
       const columnsEntries = Object.entries(columns);
       const lastColumn = columnsEntries[columnsEntries.length - 1][0];
-      for (const [column, aggregate] of columnsEntries) {
+      for (const [_column, _aggregate] of columnsEntries) {
         // @ts-ignore
-        if (!['min', 'max'].includes(aggregate.toLowerCase())) {
-          throw new Error(`InvalidArgumentException(
-            '"Invalid aggregate [{$aggregate}] used within ofMany relation. Available aggregates: MIN, MAX"')`);
+        if (!['min', 'max'].includes(_aggregate.toLowerCase())) {
+          throw new Error(`InvalidArgumentException Invalid aggregate [${_aggregate}] used within ofMany relation. Available aggregates: MIN, MAX`);
         }
         // @ts-ignore
-        const subQuery = this._newOneOfManySubQuery(this._getOneOfManySubQuerySelectColumns(), column, aggregate);
+        const subQuery = this._newOneOfManySubQuery(this.getOneOfManySubQuerySelectColumns(), _column, _aggregate);
         if (previous !== undefined) {
           this._addOneOfManyJoinSubQuery(subQuery, previous['subQuery'], previous['column']);
         } else if (closure !== undefined) {
@@ -121,12 +120,12 @@ export function mixinCanBeOneOfMany<T extends Constructor<any>>(base: T) {
         if (!(previous !== undefined)) {
           this._oneOfManySubQuery = subQuery;
         }
-        if (lastColumn == column) {
-          this._addOneOfManyJoinSubQuery(this._query, subQuery, column);
+        if (lastColumn == _column) {
+          this._addOneOfManyJoinSubQuery(this._query, subQuery, _column);
         }
         previous = {
           'subQuery': subQuery,
-          'column': column
+          'column': _column
         };
       }
       this.addConstraints();
@@ -134,19 +133,21 @@ export function mixinCanBeOneOfMany<T extends Constructor<any>>(base: T) {
     }
 
     /*Indicate that the relation is the latest single result of a larger one-to-many relationship.*/
-    public latestOfMany(this: Relation & _Self, column: string | any[] | null = 'id', relation: string | null = null) {
+    public latestOfMany(column: string[] | string = 'id', relation: string = '_latestOfMany'): this {
       return this.ofMany(
-        mapWithKeys(wrap(column), (column: string | any[] | null) => {
-          return {column: 'MAX'};
-        }), 'MAX', relation);
+        wrap(column).reduce((prev, col: string) => {
+           prev[col] = 'MAX';
+           return prev;
+        }, {}), 'MAX', relation);
     }
 
     /*Indicate that the relation is the oldest single result of a larger one-to-many relationship.*/
-    public oldestOfMany(this: Relation & _Self, column: string | any[] | null = 'id', relation: string | null = null) {
+    public oldestOfMany(column: string[] | string = 'id', relation: string = '_oldestOfMany'): this {
       return this.ofMany(
-        mapWithKeys(wrap(column), (column: string | any[] | null) => {
-          return {column: 'MIN'};
-        }), 'MIN', relation);
+        wrap(column).reduce((prev, col: string) => {
+          prev[col] = 'MIN';
+          return prev;
+        }, {}), 'MIN', relation);
     }
 
     /*Get the default alias for the one of many inner join clause.*/
@@ -155,15 +156,16 @@ export function mixinCanBeOneOfMany<T extends Constructor<any>>(base: T) {
     // }
 
     /*Get a new query for the related model, grouping the query by the given column, often the foreign key of the relationship.*/
-    _newOneOfManySubQuery(groupBy: string | any[], column: string | null = null,
-                          aggregate: string | null = null) {
-      const subQuery = this.query.getModel().newQuery();
+    _newOneOfManySubQuery(groupBy: string | any[], column?: string,
+                          aggregate?: string) {
+      const subQuery = this._query.getModel().newQuery();
       for (const group of wrap(groupBy)) {
-        subQuery.groupBy(this.qualifyRelatedColumn(group));
+        subQuery.groupBy(this._qualifyRelatedColumn(group));
       }
       if (!isBlank(column)) {
-        subQuery.selectRaw(aggregate + '(' + subQuery.getQuery().grammar.wrap(
-          column) + ') as ' + subQuery.getQuery().grammar.wrap(column));
+        subQuery.selectRaw(`${aggregate}(${
+          subQuery.getQuery()._grammar.wrap(column)
+        }) AS ${subQuery.getQuery()._grammar.wrap(column)}`);
       }
       // @ts-ignore
       this.addOneOfManySubQueryConstraints(subQuery, groupBy, column, aggregate);
@@ -172,18 +174,18 @@ export function mixinCanBeOneOfMany<T extends Constructor<any>>(base: T) {
 
     /*Add the join subquery to the given query on the given column and the relationship's foreign key.*/
     _addOneOfManyJoinSubQuery(parent: FedacoBuilder, subQuery: FedacoBuilder, on: string) {
-      // parent.beforeQuery((parent: FedacoBuilder) => {
-      //   subQuery.applyBeforeQueryCallbacks();
-      //   parent.joinSub(subQuery, this._relationName, join => {
-      //     join.on(this.qualifySubSelectColumn(on), '=', this.qualifyRelatedColumn(on));
-      //     this.addOneOfManyJoinSubQueryConstraints(join, on);
-      //   });
-      // });
+      parent.beforeQuery((parent: FedacoBuilder) => {
+        subQuery.applyBeforeQueryCallbacks();
+        parent.joinSub(subQuery, this._relationName, join => {
+          join.on(this._qualifySubSelectColumn(on), '=', this._qualifyRelatedColumn(on));
+          this.addOneOfManyJoinSubQueryConstraints(join);
+        });
+      });
     }
 
     /*Merge the relationship query joins to the given query builder.*/
     _mergeOneOfManyJoinsTo(query) {
-      query.getQuery().beforeQueryCallbacks = this.query.getQuery().beforeQueryCallbacks;
+      query.getQuery()._beforeQueryCallbacks = this._query.getQuery()._beforeQueryCallbacks;
       query.applyBeforeQueryCallbacks();
     }
 
@@ -198,7 +200,7 @@ export function mixinCanBeOneOfMany<T extends Constructor<any>>(base: T) {
     }
 
     /*Get the qualified column name for the one-of-many relationship using the subselect join query's alias.*/
-    public qualifySubSelectColumn(column: string) {
+    public _qualifySubSelectColumn(column: string) {
       return `${this.getRelationName()}.${last(column.split('.'))}`;
     }
 

@@ -209,7 +209,7 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
   }
 
   /*Get the value of the model's associated key.*/
-  protected getRelatedKeyFrom(model: Model) {
+  _getRelatedKeyFrom(model: Model) {
     return model[this._ownerKey];
   }
 

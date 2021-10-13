@@ -16,9 +16,9 @@ import { SqlParser } from '../../query/parser/sql-parser';
 import { raw } from '../ast-factory';
 import { wrapToArray } from '../ast-helper';
 import { QueryBuilder } from '../query-builder';
-import { WhereCommon } from './where-common';
+import { QueryBuilderWhereCommon } from './where-common';
 
-export interface WherePredicate {
+export interface QueryBuilderWherePredicate {
 
   addWhereExistsQuery(query: QueryBuilder, boolean?: string, not?: boolean): void;
 
@@ -75,7 +75,7 @@ export interface WherePredicate {
   whereNull(column: string): this;
 }
 
-export type WherePredicateCtor = Constructor<WherePredicate>;
+export type WherePredicateCtor = Constructor<QueryBuilderWherePredicate>;
 
 export function mixinWherePredicate<T extends Constructor<any>>(base: T): WherePredicateCtor & T {
 
@@ -111,7 +111,7 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
       return this.whereExists(callback, 'or', not);
     }
 
-    public orWhereIn(this: QueryBuilder & WhereCommon & _Self, column: string, values: any[],
+    public orWhereIn(this: QueryBuilder & QueryBuilderWhereCommon & _Self, column: string, values: any[],
                      not = false) {
       return this.whereIn(column, values, 'or', not);
     }
@@ -138,7 +138,7 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
       return this.orWhereExists(callback, true);
     }
 
-    public orWhereNotIn(this: QueryBuilder & WhereCommon & _Self, column: string, values: any[]) {
+    public orWhereNotIn(this: QueryBuilder & QueryBuilderWhereCommon & _Self, column: string, values: any[]) {
       return this.whereNotIn(column, values, 'or');
     }
 
@@ -154,7 +154,7 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
     /**
      * Add a where between statement to the query.
      */
-    public whereBetween(this: QueryBuilder & WhereCommon, column: string, values: any[],
+    public whereBetween(this: QueryBuilder & QueryBuilderWhereCommon, column: string, values: any[],
                         conjunction: 'and' | 'or' = 'and',
                         not: boolean              = false) {
       const expression    = SqlParser.createSqlParser(column).parseColumnAlias();
@@ -189,7 +189,7 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
       return this.addWhereExistsQuery(query, boolean, not);
     }
 
-    public whereIn(this: QueryBuilder & WhereCommon & _Self, column: string, values: any[],
+    public whereIn(this: QueryBuilder & QueryBuilderWhereCommon & _Self, column: string, values: any[],
                    conjunction: 'and' | 'or' = 'and', not = false) {
       const expression         = SqlParser.createSqlParser(column).parseUnaryTableColumn();
       let subQuery, valueArray = [];

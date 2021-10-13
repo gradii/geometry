@@ -14,7 +14,7 @@ import { RelationType } from '../enum-relation';
 import { FedacoRelationColumn, RelationColumnAnnotation } from '../relation-column';
 
 export interface HasManyRelationAnnotation extends RelationColumnAnnotation {
-  related?: typeof Model | ForwardRefFn;
+  related: typeof Model | ForwardRefFn;
   foreignKey?: string;
   localKey?: string;
 }

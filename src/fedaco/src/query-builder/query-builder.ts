@@ -90,6 +90,8 @@ export class QueryBuilder extends Builder {
     cloned._unionLimit  = this._unionLimit;
     cloned._unionOffset = this._unionOffset;
     cloned._lock        = this._lock;
+
+    cloned._beforeQueryCallbacks = [...this._beforeQueryCallbacks];
     return cloned;
   }
 
@@ -217,8 +219,8 @@ export class QueryBuilder extends Builder {
       async () => {
         return this._processor.processSelect(this, await this.runSelect());
       });
-    column = this.stripTableForPluck(column);
-    key    = this.stripTableForPluck(key);
+    column            = this.stripTableForPluck(column);
+    key               = this.stripTableForPluck(key);
     return this.pluckFromColumn(
       queryResult,
       column,
@@ -306,6 +308,8 @@ export class QueryBuilder extends Builder {
 
   /*Insert a new record and get the value of the primary key.*/
   public async insertGetId(values: any, sequence: string = 'id') {
+    this.applyBeforeQueryCallbacks();
+
     const sql = this._grammar.compileInsertGetId(this, values, sequence);
     return this._processor.processInsertGetId(
       this,
@@ -364,6 +368,8 @@ export class QueryBuilder extends Builder {
 
   /*Insert new records into the table using a subquery.*/
   public async insertUsing(columns: any[], query: Function | QueryBuilder | string) {
+    this.applyBeforeQueryCallbacks();
+
     if (!this.isQueryable(query)) {
       throw new Error('InvalidArgumentException');
     }
@@ -380,6 +386,8 @@ export class QueryBuilder extends Builder {
     if (isAnyEmpty(values)) {
       return 0;
     }
+
+    this.applyBeforeQueryCallbacks();
 
     return this._connection.affectingStatement(
       this._grammar.compileInsertOrIgnore(this, values),
@@ -445,6 +453,8 @@ export class QueryBuilder extends Builder {
 
   /*Update a record in the database.*/
   public async update(values: any = {}) {
+    this.applyBeforeQueryCallbacks();
+
     const sql = this._grammar.compileUpdate(this, values);
     return await this._connection.update(sql,
       this.getBindings()
@@ -489,6 +499,9 @@ export class QueryBuilder extends Builder {
         )
       );
     }
+
+    this.applyBeforeQueryCallbacks();
+
     return this._connection.delete(
       this._grammar.compileDelete(this),
       this.getBindings()
@@ -497,6 +510,8 @@ export class QueryBuilder extends Builder {
 
   /*Run a truncate statement on the table.*/
   public truncate() {
+    this.applyBeforeQueryCallbacks();
+
     for (const [sql, bindings] of Object.entries(this._grammar.compileTruncate(this))) {
       this._connection.statement(sql, this.getBindings());
     }
@@ -531,7 +546,9 @@ export class QueryBuilder extends Builder {
     if (isBlank(update)) {
       update = Object.keys(values[0]);
     }
-    // this.applyBeforeQueryCallbacks();
+
+    this.applyBeforeQueryCallbacks();
+
     // var bindings = this.cleanBindings([...Arr.flatten(values, 1), ...collect(update)
     //   .reject((value, key) => {
     //   return isNumber(key);
@@ -562,7 +579,7 @@ export class QueryBuilder extends Builder {
       // }
     }
 
-    // this.applyBeforeQueryCallbacks();
+    this.applyBeforeQueryCallbacks();
 
     return this._connection.insert(
       this._grammar.compileInsert(this, values),
@@ -597,7 +614,30 @@ export class QueryBuilder extends Builder {
     return this;
   }
 
+  /**
+   * Register a closure to be invoked before the query is executed.
+   * @param callback
+   */
+  beforeQuery(callback: (...args: any[]) => any) {
+    this._beforeQueryCallbacks.push(callback);
+
+    return this;
+  }
+
+  /**
+   * Invoke the "before query" modification callbacks.
+   */
+  public applyBeforeQueryCallbacks() {
+    for (const callback of this._beforeQueryCallbacks) {
+      callback(this);
+    }
+
+    this._beforeQueryCallbacks = [];
+  }
+
   toSql() {
+    this.applyBeforeQueryCallbacks();
+
     this.resetBindings();
     return this._grammar.compileSelect(this);
   }

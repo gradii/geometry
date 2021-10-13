@@ -126,6 +126,13 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
   }
 
   compileInsert(builder: QueryBuilder, values: any | any[], insertOption = 'into'): string {
+    const visitor = this._createVisitor(builder);
+
+    if (isAnyEmpty(values)) {
+      return `INSERT INTO ${builder._from.accept(visitor)} DEFAULT
+              VALUES`;
+    }
+
     // const ast = this._prepareSelectAst(builder);
     let keys;
     if (!isArray(values)) {
@@ -135,13 +142,6 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
       keys = Object.keys(values[0]);
     }
     const sources: any[][] = values.map((it: Record<string, any>) => Object.values(it));
-
-    const visitor = this._createVisitor(builder);
-
-    if (isAnyEmpty(values)) {
-      return `INSERT INTO ${builder._from.accept(visitor)} DEFAULT
-              VALUES`;
-    }
 
     const ast = new InsertSpecification(
       insertOption,
@@ -348,6 +348,9 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
   }
 
   wrap(column: string) {
+    if (column === '*') {
+      return '*';
+    }
     return this.quoteColumnName(column.replace(/\s|'|"|`/g, ''));
   }
 

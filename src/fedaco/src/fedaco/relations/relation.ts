@@ -141,7 +141,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
       );
   }
 
-  getExistenceCompareKey() {
+  getExistenceCompareKey(): string {
     throw new Error('not implemented');
   }
 
@@ -158,7 +158,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   }
 
   /*Get the query builder that will contain the relationship constraints.*/
-  protected getRelationQuery() {
+  protected _getRelationQuery() {
     return this._query;
   }
 
@@ -211,6 +211,11 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   protected whereInMethod(model: Model, key: string): 'whereIntegerInRaw' | 'whereIn' {
     return model.getKeyName() === last(key.split('.')) &&
     ['int', 'integer'].includes(model.getKeyType()) ? 'whereIntegerInRaw' : 'whereIn';
+  }
+
+  public whereKey(id: any) {
+    this._query.whereKey(id);
+    return this;
   }
 
   /*Set or get the morph map for polymorphic relations.*/
