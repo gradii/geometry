@@ -58,6 +58,7 @@ ng_module(
         "//src/dev-app/diagram",
 
         "//src/dev-app/dnd",
+        "//src/dev-app/splitter",
 
         "//src/triangle/core",
         "@npm//@angular/cdk",

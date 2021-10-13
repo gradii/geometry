@@ -73,6 +73,7 @@ TRIANGLE_ENTRYPOINTS = [
     "gridster",
 #    "tree-select",
     #  "tree",
+     "splitter",
 ]
 
 TRIANGLE_TESTING_ENTRYPOINTS = [
@@ -147,8 +148,9 @@ TRIANGLE_ENTRYPOINTS_WITH_STYLES = [
     #  "util",
     #  "tree",
     "tree-view",
-    "gridster"
+    "gridster",
 #    "tree-select",
+    "splitter",
 ]
 
 TRIANGLE_SCSS_LIBS = [

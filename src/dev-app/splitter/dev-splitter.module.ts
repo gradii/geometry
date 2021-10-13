@@ -8,26 +8,40 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { SplitterDemoBasicComponent } from './basic/splitter-demo-basic.component';
-import { SplitterDemoDirectionComponent } from './direction/splitter-demo-direction.component';
-import { SplitterDemoMultiComponent } from './multi/splitter-demo-multi.component';
-import { SplitterDemoMenuFoldComponent } from './shrink/shrink.component';
-import { SplitterDemoComponent } from './dev-splitter.component';
-import { SplitterDemoVerticalComponent } from './vertical/splitter-demo-vertical.component';
+import { TriAccordionModule } from '@gradii/triangle/accordion';
+import { SplitterModule } from '@gradii/triangle/splitter';
+import { TriTooltipModule } from '@gradii/triangle/tooltip';
+import { DevSplitter } from './dev-splitter';
+import { SplitterDemoBasicComponent } from './tri-demo-splitter/basic/splitter-demo-basic.component';
+import { SplitterDemoDirectionComponent } from './tri-demo-splitter/direction/splitter-demo-direction.component';
+import { SplitterDemoMultiComponent } from './tri-demo-splitter/multi/splitter-demo-multi.component';
+import { SplitterDemoMenuFoldComponent } from './tri-demo-splitter/shrink/shrink.component';
+import { SplitterDemoVerticalComponent } from './tri-demo-splitter/vertical/splitter-demo-vertical.component';
 
 @NgModule({
-  imports: [
+  imports     : [
     CommonModule,
     FormsModule,
-    
+
     RouterModule.forChild([
-      {path: '', redirectTo: 'demo'},
-      {path: 'demo', component: SplitterDemoComponent},
-    ])
+      {
+        path: '', component: DevSplitter, children: [
+          {path: 'tri-demo-splitter-basic', component: SplitterDemoBasicComponent},
+          {path: 'tri-demo-splitter-direction', component: SplitterDemoDirectionComponent},
+          {path: 'tri-demo-splitter-multi', component: SplitterDemoMultiComponent},
+          {path: 'tri-demo-splitter-shrink', component: SplitterDemoMenuFoldComponent},
+          {path: 'tri-demo-splitter-vertical', component: SplitterDemoVerticalComponent},
+        ]
+      },
+    ]),
+
+    SplitterModule,
+    TriTooltipModule,
+    TriAccordionModule
   ],
-  exports: [SplitterDemoComponent],
+  exports     : [DevSplitter],
   declarations: [
-    SplitterDemoComponent,
+    DevSplitter,
     SplitterDemoBasicComponent,
     SplitterDemoVerticalComponent,
     SplitterDemoMultiComponent,
@@ -35,5 +49,5 @@ import { SplitterDemoVerticalComponent } from './vertical/splitter-demo-vertical
     SplitterDemoMenuFoldComponent
   ],
 })
-export class SplitterDemoModule {
+export class DevSplitterModule {
 }

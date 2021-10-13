@@ -11,8 +11,12 @@ import {
 import { Subscription } from 'rxjs';
 import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { ResizeDirective } from './resize.directive';
+import { SplitterPaneComponent } from './splitter-pane.component';
 import { SplitterService } from './splitter.service';
 import { SplitterOrientation } from './splitter.types';
+
+
+type DragEventData = { pageX: number, pageY: number, originalX: number, originalY: number };
 
 @Component({
   selector       : 'tri-splitter-bar',
@@ -22,10 +26,8 @@ import { SplitterOrientation } from './splitter.types';
       *ngIf="showCollapseButton"
       triPopover
       [triPopoverTrigger]="'hover'"
-      [controlled]="true"
       [ngClass]="prevClass"
-      [content]="preTip"
-      [showAnimate]="false"
+      [triPopoverTitle]="preTip"
       (click)="collapsePrePane()"
       (touchstart)="collapsePrePane()"
     ></div>
@@ -35,15 +37,14 @@ import { SplitterOrientation } from './splitter.types';
       *ngIf="showCollapseButton"
       triPopover
       [triPopoverTrigger]="'hover'"
-      [controlled]="true"
       [ngClass]="nextClass"
-      [content]="nextTip"
+      [triPopoverTitle]="nextTip"
       (click)="collapseNextPane()"
       (touchstart)="collapseNextPane()"
     ></div>
 
   `,
-  styleUrls      : ['./splitter-bar.component.scss'],
+  styleUrls      : ['../style/splitter-bar.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SplitterBarComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -54,7 +55,7 @@ export class SplitterBarComponent implements OnInit, AfterViewInit, OnDestroy {
   // 是否显示展开/收缩按钮
   @Input() showCollapseButton: boolean;
   // 分隔条大小
-  _splitBarSize: number;
+  _splitBarSize: number | string;
 
   @Input()
   get splitBarSize() {
@@ -66,9 +67,9 @@ export class SplitterBarComponent implements OnInit, AfterViewInit, OnDestroy {
     this.renderer.setStyle(this.el.nativeElement, 'flex-basis', size);
   }
 
-  @Input() disabledBarSize;
+  @Input() disabledBarSize: string;
 
-  @HostBinding('class') 
+  @HostBinding('class')
   get class() {
     let bindClass = 'devui-splitter-bar devui-splitter-bar-' + this.orientation;
     if (!this.splitter.isStaticBar(this.index)) {
@@ -85,8 +86,8 @@ export class SplitterBarComponent implements OnInit, AfterViewInit, OnDestroy {
     collapse: 'collapse'
   };
   // 提示内容
-  preTip;
-  nextTip;
+  preTip: string;
+  nextTip: string;
   subscriptions           = new Subscription();
   // 移动的时候，阻止事件冒泡
   private stopPropagation = ({originalEvent: event}) => {
@@ -97,16 +98,19 @@ export class SplitterBarComponent implements OnInit, AfterViewInit, OnDestroy {
   };
 
   // 处理移动过程中的数据流, 合并到pressEvent事件流中
-  private moveStream = resize => mouseDown =>
-    resize.dragEvent.pipe(
-      takeUntil(resize.releaseEvent),
-      map(({pageX, pageY}) => ({
-        originalX: mouseDown.pageX,
-        originalY: mouseDown.pageY,
-        pageX,
-        pageY
-      }))
-    );
+  private moveStream = (resize: ResizeDirective) => {
+    return (mouseDown: MouseEvent) => {
+      return resize.dragEvent.pipe(
+        takeUntil(resize.releaseEvent),
+        map<any, DragEventData>(({pageX, pageY}) => ({
+          originalX: mouseDown.pageX,
+          originalY: mouseDown.pageY,
+          pageX,
+          pageY
+        }))
+      );
+    };
+  };
 
   constructor(private el: ElementRef,
               private splitter: SplitterService,
@@ -123,12 +127,14 @@ export class SplitterBarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    let state;
+    let state: any;
     const resizeListener = this.resize.pressEvent
       .pipe(
         tap(this.stopPropagation),
         filter(() => this.splitter.isResizable(this.index)),
-        tap(() => state = this.splitter.dragState(this.index)),
+        tap((event: any) => {
+          state = this.splitter.dragState(this.index);
+        }),
         switchMap(this.moveStream(this.resize))
       )
       .subscribe(({pageX, pageY, originalX, originalY}) => {
@@ -198,12 +204,12 @@ export class SplitterBarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // 生成拼接样式
-  generateClass(classes) {
+  generateClass(classes: any) {
     return Object.keys(classes).filter(c => classes[c]).join(' ');
   }
 
   // 根据当前状态生成收起按钮样式
-  generateCollapseClass(pane, nearPane, showIcon) {
+  generateCollapseClass(pane: SplitterPaneComponent, nearPane: any, showIcon: boolean) {
     // 是否允许收起
     const isCollapsible       = pane.collapsible && showIcon;
     // 当前收起状态

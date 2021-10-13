@@ -39,10 +39,13 @@ export class ResizeDirective implements OnInit, OnDestroy {
     }
   }
 
-  bind = (el, event, callback) => el.addEventListener && el.addEventListener(event, callback);
+  bind = (el: Element | Document, event: any,
+          callback: (...args: any[]) => void
+  ) => el.addEventListener && el.addEventListener(event, callback);
 
-  unbind = (el, event, callback) => el && el.removeEventListener && el.removeEventListener(event,
-    callback);
+  unbind = (el: Element | Document, event: any,
+            callback: (...args: any[]) => void
+  ) => el && el.removeEventListener && el.removeEventListener(event, callback);
 
   bindEvent() {
     const element = this.el.nativeElement;
@@ -68,7 +71,7 @@ export class ResizeDirective implements OnInit, OnDestroy {
     this.releaseEvent.emit(this.normalizeEvent(e));
   };
 
-  touchstart = (e: MouseEvent) => {
+  touchstart = (e: TouchEvent) => {
     this.bind(document, 'touchmove', this.touchmove);
     this.bind(document, 'touchend', this.touchend);
     if (e.touches.length === 1) {
@@ -76,13 +79,13 @@ export class ResizeDirective implements OnInit, OnDestroy {
     }
   };
 
-  touchmove = (e: MouseEvent) => {
+  touchmove = (e: TouchEvent) => {
     if (e.touches.length === 1) {
       this.dragEvent.emit(this.normalizeEvent(e));
     }
   };
 
-  touchend = (e: MouseEvent) => {
+  touchend = (e: TouchEvent) => {
     this.unbind(document, 'touchmove', this.touchmove);
     this.unbind(document, 'touchend', this.touchend);
     if (e.touches.length === 0) {
@@ -91,7 +94,7 @@ export class ResizeDirective implements OnInit, OnDestroy {
   };
 
   // 返回常用位置信息
-  normalizeEvent(e) {
+  normalizeEvent(e: any) {
     // 判断事件类型，用于计算位置坐标
     if (e.type.match(/touch/)) {
       return {

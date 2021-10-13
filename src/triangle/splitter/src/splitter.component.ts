@@ -34,10 +34,11 @@ import { SplitterOrientation } from './splitter.types';
     </ng-container>
 
   `,
-  styleUrls      : ['./splitter.component.scss'],
+  styleUrls      : ['../style/splitter.css'],
   host           : {
-    '[class.devui-splitter devui-splitter-vertical]'  : 'orientation === "vertical"',
-    '[class.devui-splitter devui-splitter-horizontal]': 'orientation === "horizontal"',
+    'class'  : 'devui-splitter',
+    '[class.devui-splitter-vertical]'  : 'orientation === "vertical"',
+    '[class.devui-splitter-horizontal]': 'orientation === "horizontal"',
   },
   providers      : [
     SplitterService

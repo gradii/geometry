@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'd-splitter-demo-shrink',
   templateUrl: './shrink.component.html',
-  styleUrls: ['./shrink.component.scss'],
+  styleUrls: ['./shrink.component.css'],
 })
 export class SplitterDemoMenuFoldComponent implements OnInit {
   // splitter input

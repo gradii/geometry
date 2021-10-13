@@ -7,6 +7,7 @@ ng_module(
     srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
     assets = [
         "dev-splitter.html",
+        ":shrink_component_scss",
         ":dev_splitter_scss",
     ] + glob([
         "tri-demo-splitter/**/*.html",
@@ -20,6 +21,7 @@ ng_module(
         "//src/triangle/button",
         "//src/triangle/input",
         "//src/triangle/select",
+        "//src/triangle/accordion",
 
         "@npm//@angular/forms",
         "@npm//@angular/core",
@@ -30,4 +32,9 @@ ng_module(
 sass_binary(
     name = "dev_splitter_scss",
     src = "dev-splitter.scss",
+)
+
+sass_binary(
+    name = "shrink_component_scss",
+    src = "tri-demo-splitter/shrink/shrink.component.scss",
 )

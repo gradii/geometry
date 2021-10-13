@@ -16,12 +16,17 @@ ng_module(
         ["**/*.ts"],
         exclude = ["**/*.spec.ts"],
     ),
-    assets = [":style/splitter.css"] + glob(["**/*.html"]),
+    assets = [
+      ":style/splitter.css",
+      ":style/splitter-bar.css",
+      ":style/splitter-pane.css",
+    ] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/splitter",
     deps = [
         "//src/triangle/core",
         "//src/triangle/i18n",
         "//src/triangle/util",
+        "//src/triangle/popover",
         "@npm//@angular/animations",
         "@npm//@angular/cdk",
         "@npm//@angular/common",
@@ -40,6 +45,22 @@ sass_library(
 sass_binary(
     name = "splitter_scss",
     src = "style/splitter.scss",
+    deps = [
+        "//src/triangle/splitter:splitter_scss_lib",
+    ],
+)
+
+sass_binary(
+    name = "splitter_bar_scss",
+    src = "style/splitter-bar.scss",
+    deps = [
+        "//src/triangle/splitter:splitter_scss_lib",
+    ],
+)
+
+sass_binary(
+    name = "splitter_pane_scss",
+    src = "style/splitter-pane.scss",
     deps = [
         "//src/triangle/splitter:splitter_scss_lib",
     ],
