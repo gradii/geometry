@@ -5,8 +5,8 @@
  */
 
 import {
-  AfterViewChecked, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostBinding,
-  Input, OnChanges, Output, Renderer2, SimpleChanges
+  ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostBinding, Input, OnChanges,
+  Output, Renderer2, SimpleChanges
 } from '@angular/core';
 import { SplitterService } from './splitter.service';
 import { CollapseDirection, SplitterOrientation } from './splitter.types';
@@ -18,7 +18,7 @@ import { CollapseDirection, SplitterOrientation } from './splitter.types';
   styleUrls      : ['../style/splitter-pane.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host           : {
-    '[class.devui-splitter-pane-fixed]': '!size && !resizable'
+    '[class.tri-splitter-pane-fixed]': '!size && !resizable'
   }
 })
 
@@ -39,9 +39,9 @@ export class SplitterPaneComponent implements OnChanges {
   @Input() collapsed                            = false;
   // 非边缘面板折叠方向，before只生成向前折叠的按钮，after生成向后折叠按钮，both生成两个
   @Input() collapseDirection: CollapseDirection = 'both';
-  widthBeforeShrink;
+  widthBeforeShrink: string;
   // pane初始化大小
-  _size;
+  _size: string;
 
   @Input()
   get size() {
@@ -52,7 +52,7 @@ export class SplitterPaneComponent implements OnChanges {
     this._size             = newSize;
     this.widthBeforeShrink = newSize;
     this.renderer.setStyle(this.element, 'flex-basis', newSize);
-    const paneFixedClass = 'devui-splitter-pane-fixed';
+    const paneFixedClass = 'tri-splitter-pane-fixed';
     if (this.size) {
       // 设置 flex-grow 和 flex-shrink
       this.renderer.addClass(this.element, paneFixedClass);
@@ -70,19 +70,19 @@ export class SplitterPaneComponent implements OnChanges {
   // 收缩和展开事件
   @Output() shrinkStatusChange = new EventEmitter<boolean>();
 
-  @HostBinding('class.devui-splitter-pane') paneClass = true;
+  @HostBinding('class.tri-splitter-pane') paneClass = true;
 
   orientation: SplitterOrientation; // 分割条方向
   _order = 0; // flex布局下pane位置
   element; // nativeElement句柄
 
+  get order() {
+    return this._order;
+  }
+
   set order(paneOrder) {
     this._order = paneOrder;
     this.setOrderStyles();
-  }
-
-  get order() {
-    return this._order;
   }
 
   constructor(private splitter: SplitterService, private el: ElementRef,
@@ -114,7 +114,7 @@ export class SplitterPaneComponent implements OnChanges {
 
   // 收起时隐藏当前pane
   toggleCollapseClass() {
-    const paneHiddenClass = 'devui-splitter-pane-hidden';
+    const paneHiddenClass = 'tri-splitter-pane-hidden';
 
     if (!this.collapsed) {
       this.renderer.removeClass(this.element, paneHiddenClass);
@@ -134,7 +134,7 @@ export class SplitterPaneComponent implements OnChanges {
 
   // 收起时用于改变相邻pane的flex-grow属性来改变非自适应pane的size
   toggleNearPaneFlexGrow(collapsed: boolean) {
-    const flexGrowClass    = 'devui-splitter-pane-grow';
+    const flexGrowClass    = 'tri-splitter-pane-grow';
     const hasFlexGrowClass = this.element.classList.contains(flexGrowClass);
     if (hasFlexGrowClass) {
       this.renderer.removeClass(this.element, flexGrowClass);

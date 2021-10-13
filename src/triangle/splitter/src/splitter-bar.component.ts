@@ -71,7 +71,7 @@ export class SplitterBarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @HostBinding('class')
   get class() {
-    let bindClass = 'devui-splitter-bar devui-splitter-bar-' + this.orientation;
+    let bindClass = 'tri-splitter-bar tri-splitter-bar-' + this.orientation;
     if (!this.splitter.isStaticBar(this.index)) {
       bindClass += ' resizable';
     } else {
@@ -217,7 +217,7 @@ export class SplitterBarComponent implements OnInit, AfterViewInit, OnDestroy {
     // 一个pane收起的时候，隐藏相邻pane的收起按钮
     const isNearPaneCollapsed = nearPane.collapsed;
     return this.generateClass({
-      'devui-collapse': isCollapsible,
+      'tri-splitter-collapse': isCollapsible,
       'collapsed'     : isCollapsed,
       'hidden'        : isNearPaneCollapsed
     });

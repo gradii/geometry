@@ -1,11 +1,21 @@
 //@import '../style/theme/color';
 //@import '../style/theme/corner';
+@use "sass:map";
+@use "../../core/themes/theme";
+@use "../../core/style/theming";
+@use "../../core/style/variables" as v;
+
+@import "../../core/style/mixins";
+@import "../../core/style/variables";
+
 
 $border-radius-feedback : 0.25rem;
+$dividing-line-color:  theming.tri-color(theme.$primary);
+$brand-hover-color:  theming.tri-color(theme.$primary, lighter);
 
 :host {
-  &.devui-splitter-bar {
-    //background-color: $devui-dividing-line;
+  &.tri-splitter-bar {
+    background-color: $dividing-line-color;
     display: flex;
     position: relative;
     align-items: center;
@@ -13,8 +23,8 @@ $border-radius-feedback : 0.25rem;
     flex-grow: 0;
     flex-shrink: 0;
 
-    .devui-collapse {
-      //background-color: $devui-dividing-line;
+    .tri-splitter-collapse {
+      background-color: $dividing-line-color;
       position: absolute;
       z-index: 15;
       cursor: pointer;
@@ -30,12 +40,12 @@ $border-radius-feedback : 0.25rem;
       }
 
       &:hover {
-        //background-color: $devui-brand-hover;
+        background-color: $brand-hover-color;
       }
     }
 
     &-horizontal {
-      .devui-collapse {
+      .tri-splitter-collapse {
         width: 12px;
         height: 30px;
 
@@ -115,7 +125,7 @@ $border-radius-feedback : 0.25rem;
     }
 
     &-vertical {
-      .devui-collapse {
+      .tri-splitter-collapse {
         height: 12px;
         width: 30px;
 

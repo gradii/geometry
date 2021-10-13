@@ -36,9 +36,9 @@ import { SplitterOrientation } from './splitter.types';
   `,
   styleUrls      : ['../style/splitter.css'],
   host           : {
-    'class'  : 'devui-splitter',
-    '[class.devui-splitter-vertical]'  : 'orientation === "vertical"',
-    '[class.devui-splitter-horizontal]': 'orientation === "horizontal"',
+    'class'  : 'tri-splitter',
+    '[class.tri-splitter-vertical]'  : 'orientation === "vertical"',
+    '[class.tri-splitter-horizontal]': 'orientation === "horizontal"',
   },
   providers      : [
     SplitterService
