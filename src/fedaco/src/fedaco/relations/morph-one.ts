@@ -86,7 +86,7 @@ export class MorphOne extends mixinCanBeOneOfMany(
   }
 
   /*Get the value of the model's foreign key.*/
-  protected _getRelatedKeyFrom(model: Model) {
+  _getRelatedKeyFrom(model: Model) {
     return model.getAttribute(this.getForeignKeyName());
   }
 }
