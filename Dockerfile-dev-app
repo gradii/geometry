@@ -2,6 +2,6 @@ FROM nginx:alpine
 
 WORKDIR /var/www
 
-COPY dist/releases/dev-app /var/www
+COPY dist/dev-app-web-pkg /var/www
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
