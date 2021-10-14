@@ -1,7 +1,3 @@
-def packageJSON = readJSON file: 'package.json'
-def packageJSONVersion = packageJSON.version
-echo packageJSONVersion
-
 pipeline {
   agent {
     node {
@@ -23,7 +19,6 @@ pipeline {
     APP_NAME = 'triangle'
     BRANCH_NAME =  "${BRANCH_NAME.replace('/', '-')}"
     CYPRESS_INSTALL_BINARY = '0'
-    PACKAGE_JSON_VERSION="$packageJSONVersion"
   }
 
   stages {
