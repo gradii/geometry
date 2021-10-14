@@ -37,9 +37,9 @@ pipeline {
         container('nodejs') {
           sh 'yum install patch -y'
         }
-//         container('nodejs') {
-//           sh 'yarn install'
-//         }
+        container('nodejs') {
+          sh 'yarn install'
+        }
       }
     }
 
