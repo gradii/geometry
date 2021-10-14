@@ -22,13 +22,27 @@ spec:
         component: $APP_NAME-$BRANCH_NAME
         tier: backend
     spec:
+      volumes:
+        - name: volume-$APP_NAME-$BRANCH_NAME-$BUILD_NUMBER
+          configMap:
+            name: $APP_NAME-$BRANCH_NAME-nginx-conf
+            defaultMode: 420
       containers:
-        - env:
+        - name: $APP_NAME
+          image: $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$BUILD_NUMBER
+          ports:
+            - name: http-80
+              containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - name: volume-$APP_NAME-$BRANCH_NAME-$BUILD_NUMBER
+              readOnly: true
+              mountPath: /etc/nginx/conf.d/
+          env:
             - name: CACHE_IGNORE
               value: js|html
             - name: CACHE_PUBLIC_EXPIRATION
               value: 3d
-          image: $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$BUILD_NUMBER
           readinessProbe:
             httpGet:
               path: /
@@ -37,10 +51,6 @@ spec:
             failureThreshold: 30
             periodSeconds: 5
           imagePullPolicy: Always
-          name: $APP_NAME
-          ports:
-            - containerPort: 80
-              protocol: TCP
           resources:
             limits:
               cpu: 100m
