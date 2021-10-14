@@ -1,0 +1,7 @@
+FROM nginx:alpine
+
+WORKDIR /var/www
+
+COPY dist/releases/dev-app /var/www
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
