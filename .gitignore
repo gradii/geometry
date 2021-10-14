@@ -3,7 +3,7 @@
 # compiled output
 /dist
 /tmp
-/deploy
+#/deploy
 /bazel-out
 
 # Example module file will be auto-generated.
