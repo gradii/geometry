@@ -6,21 +6,18 @@
  * deployed to the currently configured Firebase project.
  */
 
-const {exec, set, cd, cp, rm, chmod} = require('shelljs');
-const {join}                         = require('path');
-const fs                             = require('fs');
-const fse                            = require('fs-extra');
-const tar                            = require('tar');
-const {createHash}                   = require('crypto');
-
-// ShellJS should throw if any command fails.
-set('-e');
+const {join}       = require('path');
+const fs           = require('fs');
+const fse          = require('fs-extra');
+const tar          = require('tar');
+const {execSync}   = require("child_process");
+const {createHash} = require('crypto');
 
 /** Path to the project directory. */
 const projectDirPath = join(__dirname, '../');
 
 // Go to project directory.
-cd(projectDirPath);
+process.chdir(projectDirPath);
 
 const yarnLockContent = fs.readFileSync('yarn.lock');
 const yarnLockHash    = createHash('sha1').update(yarnLockContent).digest('hex');
@@ -68,7 +65,7 @@ function checkCacheExist() {
 }
 
 function runYarnInstall() {
-  exec(`yarn install`).stdout.trim();
+  execSync(`yarn install`, {stdio: 'inherit'});
 }
 
 try {
@@ -78,6 +75,7 @@ try {
   } else {
     console.log('cache not exist. build first...')
     runYarnInstall();
+    console.log('compress node_modules...')
     buildCache().then();
   }
 
