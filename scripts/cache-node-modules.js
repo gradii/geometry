@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 
 /**
@@ -56,7 +55,8 @@ async function buildCache() {
 
 async function extractCache() {
   await tar.extract({
-    file: outputTgz
+    file: outputTgz,
+    strip: 1,
   })
 }
 
