@@ -17,10 +17,12 @@ const projectDirPath = join(__dirname, '../');
 // Go to project directory.
 process.chdir(projectDirPath);
 
+const PROJECT_NAME = 'triangle'
+
 const yarnLockContent = fs.readFileSync('yarn.lock');
 const yarnLockHash    = createHash('sha1').update(yarnLockContent).digest('hex');
-const buildTarDir     = `${process.env.HOME}/.cache/node-modules-tar`;
-const outputTgz       = `${buildTarDir}/triangle_${yarnLockHash}.tgz`
+const buildTarDir     = `${process.env.HOME}/.cache/node-modules-tar/${PROJECT_NAME}`;
+const outputTgz       = `${buildTarDir}/${PROJECT_NAME}_${yarnLockHash}.tgz`
 
 console.log(`outputTgz: ${outputTgz}`)
 
@@ -29,7 +31,7 @@ async function buildCache() {
 
   const fileMap = [
     {
-      key   : 'triangle-node-modules',
+      key   : `${PROJECT_NAME}-node-modules`,
       cwd   : './',
       source: ['node_modules'],
       output: outputTgz
@@ -37,7 +39,7 @@ async function buildCache() {
   ];
 
   fs.rmdirSync(buildTarDir, {recursive: true, force: true});
-  fs.mkdirSync(buildTarDir);
+  fs.mkdirSync(buildTarDir, {recursive: true});
 
   for (const val of fileMap) {
     process.chdir(val.cwd);
@@ -61,7 +63,7 @@ function runYarnInstall() {
 }
 
 try {
-  if(fs.existsSync('node_modules/@angular/core')) {
+  if (fs.existsSync('node_modules/@angular/core')) {
     console.log('node_modules exist. exit...')
     return;
   }
