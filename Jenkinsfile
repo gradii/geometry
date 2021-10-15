@@ -99,6 +99,11 @@ pipeline {
     }
 
     stage('build fedaco') {
+      when {
+        anyOf {
+          branch 'release'
+        }
+      }
       steps {
         container('nodejs') {
           withCredentials([usernamePassword(passwordVariable : 'NPM_PASSWORD' ,usernameVariable : 'NPM_USERNAME' ,credentialsId : "$NPM_CREDENTIAL_ID" ,)]) {
