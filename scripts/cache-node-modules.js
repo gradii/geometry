@@ -8,8 +8,6 @@
 
 const {join}       = require('path');
 const fs           = require('fs');
-const fse          = require('fs-extra');
-const tar          = require('tar');
 const {execSync}   = require("child_process");
 const {createHash} = require('crypto');
 
@@ -38,31 +36,24 @@ async function buildCache() {
     },
   ];
 
-  fse.emptyDirSync(buildTarDir);
+  fs.rmdirSync(buildTarDir, {recursive: true, force: true});
+  fs.mkdirSync(buildTarDir);
 
   for (const val of fileMap) {
-    await tar.c(
-      {
-        gzip  : true,
-        file  : val.output,
-        prefix: val.key,
-        cwd   : val.cwd,
-      }, val.source
-    )
+    process.chdir(val.cwd);
+    execSync(`tar cvzf ${val.output} ${val.source.join(' ')}`, {stdio: 'inherit'})
 
     console.log(`${val.key} .. tarball has been created ..`);
   }
 }
 
 async function extractCache() {
-  await tar.extract({
-    file: outputTgz,
-    strip: 1,
-  })
+  execSync(`tar zxf ${outputTgz} --strip-components=1`, {stdio: 'inherit'});
+  console.log(`${outputTgz} .. success ..`);
 }
 
 function checkCacheExist() {
-  return fse.existsSync(outputTgz)
+  return fs.existsSync(outputTgz)
 }
 
 function runYarnInstall() {
@@ -70,7 +61,7 @@ function runYarnInstall() {
 }
 
 try {
-  if(fse.existsSync('node_modules/@angular/core')) {
+  if(fs.existsSync('node_modules/@angular/core')) {
     console.log('node_modules exist. exit...')
     return;
   }

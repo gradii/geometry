@@ -39,11 +39,6 @@ pipeline {
           sh 'yum install patch -y'
         }
         container('nodejs') {
-          sh 'mv package.json package.json.bak'
-          sh 'mv yarn.lock yarn.lock.bak'
-          sh 'yarn add fs-extra tar'
-          sh 'mv package.json.bak package.json'
-          sh 'mv yarn.lock.bak yarn.lock'
           sh 'yarn node scripts/cache-node-modules.js'
           sh 'yarn install'
         }
@@ -103,12 +98,14 @@ pipeline {
 
     stage('build fedaco') {
       when {
-        anyOf {
+        allOf {
           not {
             branch 'release'
           }
           anyOf {
-            changeset "src/fedaco"
+            changeset "src/annotation/**"
+            changeset "src/check-type/**"
+            changeset "src/fedaco/**"
           }
         }
       }
