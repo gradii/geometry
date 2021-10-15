@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 
 
 /**
@@ -61,7 +62,7 @@ async function extractCache() {
 }
 
 function checkCacheExist() {
-  return fse.existsSync(outputTgz);
+  return fse.existsSync(outputTgz)
 }
 
 function runYarnInstall() {
@@ -69,6 +70,10 @@ function runYarnInstall() {
 }
 
 try {
+  if(fse.existsSync('node_modules/@angular/core')) {
+    console.log('node_modules exist. exit...')
+    return;
+  }
   if (checkCacheExist()) {
     console.log('found cached node_modules. extract...')
     extractCache().then();
