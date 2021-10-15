@@ -39,10 +39,10 @@ pipeline {
           sh 'yum install patch -y'
         }
         container('nodejs') {
-          sh 'mv package.json package.json.bak & mv yarn.lock yarn.lock.bak'
-          sh 'yarn add fs-extra tar'
+          sh 'mv package.json package.json.bak & mv yarn.lock yarn.lock.bak' +
+             '& yarn add fs-extra tar' +
+             '& rm package.json yarn.lock & mv package.json.bak package.json & mv yarn.lock.bak yarn.lock'
           sh 'yarn node scripts/cache-node-modules.js'
-          sh 'rm package.json yarn.lock & mv package.json.bak package.json & mv yarn.lock.bak yarn.lock'
           sh 'yarn install'
         }
       }
