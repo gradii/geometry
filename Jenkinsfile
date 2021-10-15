@@ -71,10 +71,15 @@ pipeline {
     stage('deploy dev-app') {
       when {
 //         branch 'master'
-         anyOf {
-            changeset "src/annotation/**"
-            changeset "src/check-type/**"
-            changeset "src/dev-app/**"
+         allOf {
+           not {
+              branch 'release'
+           }
+           anyOf {
+              changeset "src/annotation/**"
+              changeset "src/check-type/**"
+              changeset "src/dev-app/**"
+           }
          }
       }
       steps {
@@ -91,21 +96,19 @@ pipeline {
           sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
           sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
         }
-      }
-    }
-
-    stage('deploy to dev') {
-      steps {
-//         input(id: 'deploy-to-dev', message: 'deploy to dev?')
+        //'deploy to dev'
         kubernetesDeploy(configs: 'deploy/dev-ol/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
       }
     }
 
     stage('build fedaco') {
       when {
-        not {
-          anyOf {
+        anyOf {
+          not {
             branch 'release'
+          }
+          anyOf {
+            changeset "src/fedaco"
           }
         }
       }
