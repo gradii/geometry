@@ -36,7 +36,7 @@ const distPath = join(projectDirPath, 'dist/releases/fedaco');
 fse.ensureDirSync(distPath);
 
 // Build web package output.
-exec('yarn -s bazel build //src/fedaco:npm_package');
+exec('yarn -s bazel build //src/fedaco:npm_package --config=snapshot');
 
 // Clear previous deployment artifacts.
 rm('-Rf', distPath);

@@ -13,6 +13,7 @@ pipeline {
     DOCKER_CREDENTIAL_ID = 'private-registry-id'
     GITHUB_CREDENTIAL_ID = 'github-id'
     KUBECONFIG_CREDENTIAL_ID = 'kubeconfig-triangle-id'
+    NPM_CREDENTIAL_ID = 'npm-registry-id'
     REGISTRY = 'registry.cn-hangzhou.aliyuncs.com'
     DOCKERHUB_NAMESPACE = 'gradii'
     GITHUB_ACCOUNT = 'linpolen'
@@ -94,6 +95,21 @@ pipeline {
       steps {
 //         input(id: 'deploy-to-dev', message: 'deploy to dev?')
         kubernetesDeploy(configs: 'deploy/dev-ol/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+      }
+    }
+
+    stage('build fedaco') {
+      steps {
+        container('nodejs') {
+          withCredentials([usernamePassword(passwordVariable : 'NPM_PASSWORD' ,usernameVariable : 'NPM_USERNAME' ,credentialsId : "$NPM_CREDENTIAL_ID" ,)]) {
+            sh 'npm config set @gradii:registry https://npm.pkg.github.com/'
+            sh 'npm config set //npm.pkg.github.com/:_authToken $NPM_PASSWORD'
+          }
+          sh 'yarn run deploy-fedaco'
+          sh 'cd dist/releases/fedaco'
+
+          sh 'yarn publish dist/releases/fedaco'
+        }
       }
     }
 //
