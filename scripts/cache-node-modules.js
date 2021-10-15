@@ -78,5 +78,5 @@ try {
   }
 
 } catch (e) {
-  throw e
+  process.exit(-1);
 }
