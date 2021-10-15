@@ -112,10 +112,9 @@ pipeline {
             sh 'npm config set @gradii:registry https://npm.pkg.github.com/'
             sh 'npm config set //npm.pkg.github.com/:_authToken $NPM_PASSWORD'
           }
-          sh 'yarn run deploy-fedaco'
-          sh 'cd dist/releases/fedaco'
+          sh 'sh scripts/git-run-if-changes.sh src/fedaco -- yarn run deploy-fedaco'
 
-          sh 'yarn publish dist/releases/fedaco'
+          sh 'sh scripts/git-run-if-changes.sh src/fedaco -- yarn publish dist/releases/fedaco'
         }
       }
     }
