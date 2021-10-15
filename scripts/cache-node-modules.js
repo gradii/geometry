@@ -41,7 +41,7 @@ async function buildCache() {
 
   for (const val of fileMap) {
     process.chdir(val.cwd);
-    execSync(`tar cvzf ${val.output} ${val.source.join(' ')}`, {stdio: 'inherit'})
+    execSync(`tar czf ${val.output} ${val.source.join(' ')}`, {stdio: 'inherit'})
 
     console.log(`${val.key} .. tarball has been created ..`);
   }
