@@ -44,7 +44,6 @@ pipeline {
              '& yarn add fs-extra tar' +
              '& mv package.json.bak package.json ' +
              '& mv yarn.lock.bak yarn.lock'
-          sh 'npm ls'
           sh 'yarn node scripts/cache-node-modules.js'
           sh 'yarn install'
         }
