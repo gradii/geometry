@@ -18,7 +18,7 @@ pipeline {
     DOCKERHUB_NAMESPACE = 'gradii'
     GITHUB_ACCOUNT = 'linpolen'
     APP_NAME = 'triangle'
-    BRANCH_NAME =  "${BRANCH_NAME.replace('/', '-')}"
+    BRANCH_NAME =  "${BRANCH_NAME.replaceAll(/[^0-9a-zA-Z\-]/, '-').replaceAll(/-{2,}/, '-').toLowerCase()}"
     CYPRESS_INSTALL_BINARY = '0'
   }
 
