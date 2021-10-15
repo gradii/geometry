@@ -50,7 +50,7 @@ async function buildCache() {
 }
 
 async function extractCache() {
-  execSync(`tar zxf ${outputTgz} --strip-components=1`, {stdio: 'inherit'});
+  execSync(`tar zxf ${outputTgz}`, {stdio: 'inherit'});
   console.log(`${outputTgz} .. success ..`);
 }
 
