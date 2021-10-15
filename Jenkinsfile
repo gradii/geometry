@@ -100,8 +100,10 @@ pipeline {
 
     stage('build fedaco') {
       when {
-        anyOf {
-          branch 'release'
+        not {
+          anyOf {
+            branch 'release'
+          }
         }
       }
       steps {
