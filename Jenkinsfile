@@ -87,12 +87,7 @@ pipeline {
           }
         }
       }
-    }
-
-    stage('push latest') {
-//       when {
-//         branch 'master'
-//       }
+      //'push latest'
       steps {
         container('nodejs') {
           sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
