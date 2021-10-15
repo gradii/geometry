@@ -41,7 +41,7 @@ async function buildCache() {
     },
   ];
 
-  fse.ensureDirSync(buildTarDir);
+  fse.emptyDirSync(buildTarDir);
 
   for (const val of fileMap) {
     await tar.c(
