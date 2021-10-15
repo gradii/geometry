@@ -22,19 +22,22 @@ const projectDirPath = join(__dirname, '../');
 // Go to project directory.
 cd(projectDirPath);
 
-//build devops
-async function build() {
-  const yarnLockContent = fs.readFileSync('yarn.lock');
-  const yarnLockHash    = createHash('sha1').update(yarnLockContent).digest('hex');
+const yarnLockContent = fs.readFileSync('yarn.lock');
+const yarnLockHash    = createHash('sha1').update(yarnLockContent).digest('hex');
+const buildTarDir     = `${process.env.HOME}/.cache/node-modules-tar`;
+const outputTgz       = `${buildTarDir}/triangle_${yarnLockHash}.tgz`
 
-  const buildTarDir = 'dist/node-modules-tar';
+console.log(`outputTgz: ${outputTgz}`)
+
+//build devops
+async function buildCache() {
 
   const fileMap = [
     {
-      key   : 'fedaco-node-modules',
+      key   : 'triangle-node-modules',
       cwd   : './',
       source: ['node_modules'],
-      output: `${buildTarDir}/{key}_${yarnLockHash}.tgz`
+      output: outputTgz
     },
   ];
 
@@ -44,7 +47,7 @@ async function build() {
     await tar.c(
       {
         gzip  : true,
-        file  : val.output.replace('{key}', val.key),
+        file  : val.output,
         prefix: val.key,
         cwd   : val.cwd,
       }, val.source
@@ -54,8 +57,30 @@ async function build() {
   }
 }
 
+async function extractCache() {
+  await tar.extract({
+    file: outputTgz
+  })
+}
+
+function checkCacheExist() {
+  return fse.existsSync(outputTgz);
+}
+
+function runYarnInstall() {
+  exec(`yarn install`).stdout.trim();
+}
+
 try {
-  build().then();
+  if (checkCacheExist()) {
+    console.log('found cached node_modules. extract...')
+    extractCache().then();
+  } else {
+    console.log('cache not exist. build first...')
+    runYarnInstall();
+    buildCache().then();
+  }
+
 } catch (e) {
   throw e
 }
