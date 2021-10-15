@@ -69,9 +69,14 @@ pipeline {
     }
 
     stage('deploy dev-app') {
-//       when {
+      when {
 //         branch 'master'
-//       }
+         anyOf {
+            changeset "src/annotation/**"
+            changeset "src/check-type/**"
+            changeset "src/dev-app/**"
+         }
+      }
       steps {
         container('nodejs') {
           sh 'yarn run deploy-dev-app'
