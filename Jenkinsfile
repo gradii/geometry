@@ -81,6 +81,9 @@ pipeline {
           }
         }
       }
+      options {
+        timeout(time: 10, unit: "MINUTES")
+      }
       steps {
         container('nodejs') {
           withCredentials([usernamePassword(passwordVariable : 'NPM_PASSWORD' ,usernameVariable : 'NPM_USERNAME' ,credentialsId : "$NPM_CREDENTIAL_ID" ,)]) {
@@ -103,7 +106,7 @@ pipeline {
             sh 'git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/gradii/fedaco.git fedaco-tmp'
             sh 'git config --global user.email "xsilen@gradii.com" '
             sh 'git config --global user.name "xsilen" '
-            sh 'cp dist/releases/fedaco/esm2015/src/* fedaco-tmp/libs/fedaco/orm/src/'
+            sh 'cp -r dist/releases/fedaco/esm2015/src/* fedaco-tmp/libs/fedaco/orm/src/'
             sh 'cd fedaco-tmp & git commit -m "chore: update fedaco"'
             //sh 'git tag -a $TAG_NAME -m "$TAG_NAME" '
             sh 'cd fedaco-tmp & git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/gradii/fedaco.git'
