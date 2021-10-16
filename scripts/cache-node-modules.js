@@ -49,7 +49,7 @@ async function buildCache() {
     process.chdir(val.cwd);
     execSync(`tar czf ${val.output} ${val.source.join(' ')}`, { stdio: 'inherit' });
 
-    console.log(`${val.key} .. tarball has been created ..`);
+    console.log(`${val.key} .. ${outputTgz} tarball has been created ..`);
   }
 }
 
