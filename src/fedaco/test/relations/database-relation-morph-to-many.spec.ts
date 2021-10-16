@@ -45,7 +45,7 @@ describe('test database eloquent morph to many', () => {
     model1.id    = 1;
     const model2 = new EloquentMorphToManyModelStub();
     model2.id    = 2;
-    
+
     relation.addEagerConstraints([model1, model2]);
 
     expect(spy3).toBeCalledWith('taggables.taggable_id', [1, 2]);
@@ -60,6 +60,10 @@ describe('test database eloquent morph to many', () => {
       args[6], args[7], args[8],
     );
     const query    = {};
+
+    const spy1 = jest.spyOn(query, 'from').mockReturnValue(query);
+    const spy2 = jest.spyOn(query, 'insert').mockReturnValue(true);
+
     query.shouldReceive('from').once()._with('taggables').andReturn(query);
     query.shouldReceive('insert').once()._with([
       {
@@ -75,6 +79,16 @@ describe('test database eloquent morph to many', () => {
     relation.attach(2, {
       'foo': 'bar'
     });
+
+    expect(spy1).toBeCalledWith('taggables');
+    expect(spy2).toBeCalledWith([
+      {
+        'taggable_id'  : 1,
+        'taggable_type': get_class(relation.getParent()),
+        'tag_id'       : 2,
+        'foo'          : 'bar'
+      }
+    ]);
   });
   it('detach removes pivot table record', () => {
     const relation = this.getMockBuilder(MorphToMany).setMethods(
