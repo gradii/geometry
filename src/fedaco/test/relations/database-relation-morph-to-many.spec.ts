@@ -64,15 +64,6 @@ describe('test database eloquent morph to many', () => {
     const spy1 = jest.spyOn(query, 'from').mockReturnValue(query);
     const spy2 = jest.spyOn(query, 'insert').mockReturnValue(true);
 
-    query.shouldReceive('from').once()._with('taggables').andReturn(query);
-    query.shouldReceive('insert').once()._with([
-      {
-        'taggable_id'  : 1,
-        'taggable_type': get_class(relation.getParent()),
-        'tag_id'       : 2,
-        'foo'          : 'bar'
-      }
-    ]).andReturn(true);
     relation.getQuery().shouldReceive('getQuery').andReturn(mockQueryBuilder = m.mock(stdClass));
     mockQueryBuilder.shouldReceive('newQuery').once().andReturn(query);
     relation.expects(this.once()).method('touchIfTouching');
