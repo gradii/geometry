@@ -38,7 +38,7 @@ pipeline {
         container('nodejs') {
           sh 'yum install patch -y'
         }
-        container('nodejs') {
+        container('nodejs-large') {
           sh 'yarn node scripts/cache-node-modules.js'
           sh 'yarn install'
         }
