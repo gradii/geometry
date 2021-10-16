@@ -35,17 +35,21 @@ function getRelation() {
 describe('test database eloquent morph to many', () => {
   it('eager constraints are properly added', () => {
     const relation = getRelation();
-    relation.getParent().shouldReceive('getKeyName').andReturn('id');
-    relation.getParent().shouldReceive('getKeyType').once().andReturn('int');
-    relation.getQuery().shouldReceive('whereIntegerInRaw').once()._with('taggables.taggable_id',
-      [1, 2]);
-    relation.getQuery().shouldReceive('where').once()._with('taggables.taggable_type',
-      get_class(relation.getParent()));
+
+    const spy1 = jest.spyOn(relation.getParent(), 'getKeyName').mockReturnValue('id');
+    const spy2 = jest.spyOn(relation.getParent(), 'getKeyType').mockReturnValue('int');
+    const spy3 = jest.spyOn(relation.getQuery(), 'whereIntegerInRaw');
+    const spy4 = jest.spyOn(relation.getQuery(), 'where');
+
     const model1 = new EloquentMorphToManyModelStub();
     model1.id    = 1;
     const model2 = new EloquentMorphToManyModelStub();
     model2.id    = 2;
     relation.addEagerConstraints([model1, model2]);
+
+    expect(spy3).toBeCalledWith('taggables.taggable_id', [1, 2]);
+    expect(spy4).toBeCalledWith('taggables.taggable_type', relation.getParent().constructor);
+
   });
   it('attach inserts pivot table record', () => {
     const args     = getRelationArguments();
