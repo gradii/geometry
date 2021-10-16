@@ -45,6 +45,7 @@ describe('test database eloquent morph to many', () => {
     model1.id    = 1;
     const model2 = new EloquentMorphToManyModelStub();
     model2.id    = 2;
+    
     relation.addEagerConstraints([model1, model2]);
 
     expect(spy3).toBeCalledWith('taggables.taggable_id', [1, 2]);

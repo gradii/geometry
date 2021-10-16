@@ -119,7 +119,7 @@ pipeline {
             sh 'git config --global user.email "xsilen@gradii.com" '
             sh 'git config --global user.name "xsilen" '
             sh 'cp -r dist/releases/fedaco/esm2015/src/* fedaco-tmp/libs/fedaco/orm/src/'
-            sh 'cd fedaco-tmp & git commit -m "chore: update fedaco"'
+            sh 'cd fedaco-tmp & git commit -am "chore: update fedaco"'
             //sh 'git tag -a $TAG_NAME -m "$TAG_NAME" '
             sh 'cd fedaco-tmp & git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/gradii/fedaco.git'
           }
