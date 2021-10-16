@@ -81,9 +81,7 @@ pipeline {
           }
         }
       }
-      options {
-        timeout(time: 10, unit: "MINUTES")
-      }
+
       steps {
         container('nodejs') {
           withCredentials([usernamePassword(passwordVariable : 'NPM_PASSWORD' ,usernameVariable : 'NPM_USERNAME' ,credentialsId : "$NPM_CREDENTIAL_ID" ,)]) {
@@ -96,7 +94,21 @@ pipeline {
         }
 
         container('nodejs') {
-          input(id: 'push fedaco', message: 'push fedaco to github?')
+          script {
+            try {
+              timeout(time:30, unit:'SECONDS') {
+                input(id: 'push fedaco', message: 'push fedaco to github?')
+              }
+            } catch(err) { // timeout reached or input Aborted
+              def user = err.getCauses()[0].getUser()
+              if('SYSTEM' == user.toString()) { // SYSTEM means timeout
+              } else {
+                echo "Input aborted by: [${user}]"
+                error("Pipeline aborted by: [${user}]")
+              }
+            }
+          }
+
           //withCredentials([sshUserPrivateKey(credentialsId: "yourkeyid", keyFileVariable: 'keyfile')]) {
           //   stage('scp-f/b') {
           //    sh "scp -i ${keyfile} do sth here"
