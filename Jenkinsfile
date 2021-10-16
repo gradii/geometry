@@ -68,98 +68,104 @@ pipeline {
       }
     }
 
-    stage('build fedaco') {
-      when {
-        allOf {
-          not {
-            branch 'release'
-          }
-          anyOf {
-            changeset 'src/annotation/**'
-            changeset 'src/check-type/**'
-            changeset 'src/fedaco/**'
-          }
-        }
-      }
-
-      steps {
-        container('nodejs') {
-          withCredentials([usernamePassword(passwordVariable : 'NPM_PASSWORD' ,usernameVariable : 'NPM_USERNAME' ,credentialsId : "$NPM_CREDENTIAL_ID" ,)]) {
-            sh 'npm config set @gradii:registry https://npm.pkg.github.com/'
-            sh 'npm config set //npm.pkg.github.com/:_authToken $NPM_PASSWORD'
-          }
-          sh 'yarn run deploy-fedaco'
-
-          sh 'yarn publish dist/releases/fedaco'
-        }
-
-        container('nodejs') {
-          script {
-            try {
-              timeout(time:30, unit:'SECONDS') {
-                input(id: 'push fedaco', message: 'push fedaco to github?')
+    stage('build') {
+      parallel {
+        stage('deploy dev-app') {
+          when {
+            // branch 'master'
+            allOf {
+              not {
+                branch 'release'
               }
-            } catch(err) { // timeout reached or input Aborted
-              def user = err.getCauses()[0].getUser()
-              if('SYSTEM' == user.toString()) { // SYSTEM means timeout
-              } else {
-                echo "Input aborted by: [${user}]"
-                error("Pipeline aborted by: [${user}]")
+              anyOf {
+                changeset 'src/annotation/**'
+                changeset 'src/check-type/**'
+                changeset 'src/dev-app/**'
+              }
+            }
+          }
+          steps {
+            container('nodejs') {
+              sh 'yarn run deploy-dev-app'
+              sh 'docker build -f Dockerfile-dev-app -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$BUILD_NUMBER .'
+              withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
+                sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
+                sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$BUILD_NUMBER'
+              }
+            }
+            //'push latest'
+            container('nodejs') {
+              sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
+              sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
+            }
+            //'deploy to dev'
+            kubernetesDeploy(configs: 'deploy/dev-ol/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+          }
+        }
+
+        stage('build fedaco') {
+          when {
+            allOf {
+              not {
+                branch 'release'
+              }
+              anyOf {
+                changeset 'src/annotation/**'
+                changeset 'src/check-type/**'
+                changeset 'src/fedaco/**'
               }
             }
           }
 
-          //withCredentials([sshUserPrivateKey(credentialsId: "yourkeyid", keyFileVariable: 'keyfile')]) {
-          //   stage('scp-f/b') {
-          //    sh "scp -i ${keyfile} do sth here"
-          //   }
-          //}
-          withCredentials([usernamePassword(credentialsId: "$GITHUB_CREDENTIAL_ID", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-            sh 'git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/gradii/fedaco.git fedaco-tmp'
-            sh 'git config --global user.email "xsilen@gradii.com" '
-            sh 'git config --global user.name "xsilen" '
-            sh 'cp -r dist/releases/fedaco/esm2015/src/* fedaco-tmp/libs/fedaco/orm/src/'
-            dir("fedaco-tmp") {
-              sh 'git commit -am "chore: update fedaco"'
-              sh 'git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/gradii/fedaco.git'
+          steps {
+            container('nodejs') {
+              withCredentials([usernamePassword(passwordVariable : 'NPM_PASSWORD' ,usernameVariable : 'NPM_USERNAME' ,credentialsId : "$NPM_CREDENTIAL_ID" ,)]) {
+                sh 'npm config set @gradii:registry https://npm.pkg.github.com/'
+                sh 'npm config set //npm.pkg.github.com/:_authToken $NPM_PASSWORD'
+              }
+              sh 'yarn run deploy-fedaco'
+
+              sh 'yarn publish dist/releases/fedaco'
+            }
+
+            container('nodejs') {
+              script {
+                try {
+                  timeout(time:30, unit:'SECONDS') {
+                    input(id: 'push fedaco', message: 'push fedaco to github?')
+                  }
+                } catch(err) { // timeout reached or input Aborted
+                  def user = err.getCauses()[0].getUser()
+                  if('SYSTEM' == user.toString()) { // SYSTEM means timeout
+                  } else {
+                    echo "Input aborted by: [${user}]"
+                    error("Pipeline aborted by: [${user}]")
+                  }
+                }
+              }
+
+              //withCredentials([sshUserPrivateKey(credentialsId: "yourkeyid", keyFileVariable: 'keyfile')]) {
+              //   stage('scp-f/b') {
+              //    sh "scp -i ${keyfile} do sth here"
+              //   }
+              //}
+              withCredentials([usernamePassword(credentialsId: "$GITHUB_CREDENTIAL_ID", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                sh 'git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/gradii/fedaco.git fedaco-tmp'
+                sh 'git config --global user.email "xsilen@gradii.com" '
+                sh 'git config --global user.name "xsilen" '
+                sh 'cp -r dist/releases/fedaco/esm2015/src/* fedaco-tmp/libs/fedaco/orm/src/'
+                dir("fedaco-tmp") {
+                  sh 'git commit -am "chore: update fedaco"'
+                  sh 'git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/gradii/fedaco.git'
+                }
+              }
             }
           }
         }
       }
     }
 
-    stage('deploy dev-app') {
-      when {
-        // branch 'master'
-        allOf {
-          not {
-            branch 'release'
-          }
-          anyOf {
-            changeset 'src/annotation/**'
-            changeset 'src/check-type/**'
-            changeset 'src/dev-app/**'
-          }
-        }
-      }
-      steps {
-        container('nodejs') {
-          sh 'yarn run deploy-dev-app'
-          sh 'docker build -f Dockerfile-dev-app -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$BUILD_NUMBER .'
-          withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
-            sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
-            sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$BUILD_NUMBER'
-          }
-        }
-        //'push latest'
-        container('nodejs') {
-          sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
-          sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
-        }
-        //'deploy to dev'
-        kubernetesDeploy(configs: 'deploy/dev-ol/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
-      }
-    }
+
   }
 //
 //     stage('deploy to production') {
