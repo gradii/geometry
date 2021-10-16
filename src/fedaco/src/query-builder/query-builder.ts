@@ -519,6 +519,9 @@ export class QueryBuilder extends Builder {
 
   /*Insert or update a record matching the attributes, and fill it with values.*/
   public async updateOrInsert(attributes: object, values: object = {}) {
+    if (isBlank(this._from)) {
+      throw new Error('must call from before insert');
+    }
     if (!await this.where(attributes).exists()) {
       return await this.insert({...attributes, ...values});
     }

@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isBlank, isBoolean, isString } from '@gradii/check-type';
+import { isArray, isBlank, isBoolean, isNumber, isString } from '@gradii/check-type';
 import { uniq } from 'ramda';
 import { AssignmentSetClause } from '../../query/ast/assignment-set-clause';
 import { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
@@ -20,6 +20,7 @@ import { ConditionExpression } from '../../query/ast/expression/condition-expres
 import { ExistsPredicateExpression } from '../../query/ast/expression/exists-predicate-expression';
 import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
 import { InPredicateExpression } from '../../query/ast/expression/in-predicate-expression';
+import { NotExpression } from '../../query/ast/expression/not-expression';
 import { NullPredicateExpression } from '../../query/ast/expression/null-predicate-expression';
 import { NumberLiteralExpression } from '../../query/ast/expression/number-literal-expression';
 import { ParenthesizedExpression } from '../../query/ast/expression/parenthesized-expression';
@@ -244,11 +245,13 @@ export class QueryBuilderVisitor implements SqlVisitor {
       // const indexBy = this._grammar.indexby(node.indexBy.dispatch(this));
       // result += indexBy;
     }
-    return rst;
+    return `${rst}`;
   }
 
   visitFunctionCallExpression(node: FunctionCallExpression): string {
-    return `${node.name.accept(this)}(${
+    let funcName = node.name.accept(this);
+    funcName = this._grammar.compilePredicateFuncName(funcName);
+    return `${funcName}(${
       node.parameters.map(it => it.accept(this)).join(', ')
     })`;
   }
@@ -530,9 +533,15 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return `${node.raw.accept(this)}`;
   }
 
-  visitRawExpression(node: RawExpression): string {
+  visitRawExpression(node: RawExpression): string | number {
     if (isBoolean(node.value)) {
-      return node.value ? '1' : '0';
+      return node.value ? 1 : 0;
+    } else if (isNumber(node.value)) {
+      return +node.value;
+    } else if (isArray(node.value)) {
+      return node.value;
+    } else if (isBlank(node.value)) {
+      return null;
     } else {
       return `${node.value}`;
     }
@@ -672,6 +681,10 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return `${node.orderByElements.map(it => it.accept(this, {
       rejectColumns: uniq([...rejectColumns, ...parentRejectColumns])
     })).filter(it => !isBlank(it) && it.length > 0).join(', ')}`;
+  }
+
+  visitNotExpression(node: NotExpression): string {
+    return `not ${node.expression.accept(this)}`;
   }
 }
 

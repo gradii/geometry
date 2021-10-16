@@ -33,7 +33,10 @@ export interface GrammarInterface {
 
   compileUpdate(builder: Builder, values: any): string;
 
-  compileUpsert(builder: Builder, values: any, uniqueBy: any[] | string, update: any[] | null): string;
+  compileUpsert(builder: Builder, values: any, uniqueBy: any[] | string,
+                update: any[] | null): string;
+
+  compilePredicateFuncName(funcName: string): string;
 
   distinct(distinct: boolean | any[]): string;
 

@@ -181,7 +181,7 @@ export class QueryBuilderResolverVisitor implements SqlVisitor {
     throw new Error('Method not implemented.');
   }
 
-  visitRawExpression(node: SqlNode): string {
+  visitRawExpression(node: SqlNode): string | number {
     throw new Error('Method not implemented.');
   }
 
@@ -250,6 +250,10 @@ export class QueryBuilderResolverVisitor implements SqlVisitor {
   }
 
   visitQuerySpecification(node: SqlNode): string {
+    throw new Error('Method not implemented.');
+  }
+
+  visitNotExpression(node: SqlNode): string {
     throw new Error('Method not implemented.');
   }
 

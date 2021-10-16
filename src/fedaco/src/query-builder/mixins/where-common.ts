@@ -44,9 +44,6 @@ export interface QueryBuilderWhereCommon {
 
   orWhereRaw(sql: string, bindings: any[]): this;
 
-  where(columns: Function | string | any[], arg1: undefined, arg2: undefined,
-        conjunction?: 'and' | 'or' | string): this;
-
   where(where: any[][]): this;
 
   where(where: { [key: string]: any }): this;
@@ -59,9 +56,15 @@ export interface QueryBuilderWhereCommon {
   where(left: string, operator: string,
         right: Function | RawExpression | boolean | string | number | Array<string | number>): this;
 
-  whereColumn(first: string | any[], operator?: string, second?: string, conjunction?: string);
+  where(left: string, operator: string,
+        right: Function | RawExpression | boolean | string | number | Array<string | number>,
+        conjunction: 'and' | 'or' | string
+  ): this;
 
-  whereNested(callback: (query?) => void, conjunction?: 'and' | 'or'): this;
+  whereColumn(first: string | any[], operator?: string, second?: string,
+              conjunction?: string): this;
+
+  whereNested(callback: (query?: QueryBuilder) => void, conjunction?: 'and' | 'or'): this;
 
   whereRaw(sql: string, bindings: any[], conjunction?: 'and' | 'or'): this;
 }

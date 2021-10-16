@@ -25,6 +25,7 @@ import { mixinOrderBy } from './mixins/order-by';
 import { mixinUnion } from './mixins/union';
 import { mixinWhereCommon } from './mixins/where-common';
 import { mixinWhereDate } from './mixins/where-date';
+import { mixinWhereJson } from './mixins/where-json';
 import { mixinWherePredicate } from './mixins/where-predicate';
 
 
@@ -34,12 +35,14 @@ export abstract class Builder extends mixinJoin(
       mixinHaving(
         mixinLimitOffset(
           mixinUnion(
-            mixinWhereDate(
-              mixinAggregate(
-                mixinWherePredicate(
-                  mixinWhereCommon(
-                    mixinBuildQueries(class {
-                    })
+            mixinWhereJson(
+              mixinWhereDate(
+                mixinAggregate(
+                  mixinWherePredicate(
+                    mixinWhereCommon(
+                      mixinBuildQueries(class {
+                      })
+                    )
                   )
                 )
               )

@@ -319,6 +319,13 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
     return '';
   }
 
+  compilePredicateFuncName(funcName: string) {
+    if (funcName === 'JsonContains') {
+      return 'json_contains';
+    }
+    return funcName;
+  }
+
   distinct(distinct: boolean | any[]): string {
     return '';
   }
