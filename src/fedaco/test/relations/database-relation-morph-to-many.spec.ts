@@ -84,7 +84,7 @@ describe('test database eloquent morph to many', () => {
     expect(spy2).toBeCalledWith([
       {
         'taggable_id'  : 1,
-        'taggable_type': get_class(relation.getParent()),
+        'taggable_type': relation.getParent().constructor,
         'tag_id'       : 2,
         'foo'          : 'bar'
       }
