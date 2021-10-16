@@ -23,7 +23,6 @@ pipeline {
   }
 
   stages {
-
 //     stage('unit test') {
 //       steps {
 //         container('maven') {
@@ -35,9 +34,9 @@ pipeline {
 
     stage('prepare tools') {
       steps {
-        container('nodejs') {
-          sh 'yum install patch -y'
-        }
+        //         container('nodejs') {
+        //           sh 'yum install patch -y'
+        //         }
         container('nodejs') {
           sh 'yarn node scripts/cache-node-modules.js'
           sh 'yarn install'
@@ -45,11 +44,11 @@ pipeline {
       }
     }
 
-    stage('store yarn.lock') {
-      steps {
-          archiveArtifacts 'yarn.lock'
-        }
-    }
+//     stage('store yarn.lock') {
+//       steps {
+//           archiveArtifacts 'yarn.lock'
+//       }
+//     }
 
     stage('build & push npm package') {
       when {
@@ -60,45 +59,12 @@ pipeline {
       steps {
         container('nodejs') {
           sh 'yarn run build'
-//           sh 'docker build -f Dockerfile-online -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER .'
-//           withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
-//             sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
-//             sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER'
-//           }
+        //           sh 'docker build -f Dockerfile-online -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER .'
+        //           withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
+        //             sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
+        //             sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER'
+        //           }
         }
-      }
-    }
-
-    stage('deploy dev-app') {
-      when {
-//         branch 'master'
-         allOf {
-           not {
-              branch 'release'
-           }
-           anyOf {
-              changeset "src/annotation/**"
-              changeset "src/check-type/**"
-              changeset "src/dev-app/**"
-           }
-         }
-      }
-      steps {
-        container('nodejs') {
-          sh 'yarn run deploy-dev-app'
-          sh 'docker build -f Dockerfile-dev-app -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$BUILD_NUMBER .'
-          withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
-            sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
-            sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$BUILD_NUMBER'
-          }
-        }
-      //'push latest'
-        container('nodejs') {
-          sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
-          sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
-        }
-        //'deploy to dev'
-        kubernetesDeploy(configs: 'deploy/dev-ol/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
       }
     }
 
@@ -109,9 +75,9 @@ pipeline {
             branch 'release'
           }
           anyOf {
-            changeset "src/annotation/**"
-            changeset "src/check-type/**"
-            changeset "src/fedaco/**"
+            changeset 'src/annotation/**'
+            changeset 'src/check-type/**'
+            changeset 'src/fedaco/**'
           }
         }
       }
@@ -128,24 +94,57 @@ pipeline {
 
         container('nodejs') {
           input(id: 'push fedaco', message: 'push fedaco to github?')
-//           withCredentials([sshUserPrivateKey(credentialsId: "yourkeyid", keyFileVariable: 'keyfile')]) {
-//              stage('scp-f/b') {
-//               sh "scp -i ${keyfile} do sth here"
-//              }
-//           }
+          //withCredentials([sshUserPrivateKey(credentialsId: "yourkeyid", keyFileVariable: 'keyfile')]) {
+          //   stage('scp-f/b') {
+          //    sh "scp -i ${keyfile} do sth here"
+          //   }
+          //}
           withCredentials([usernamePassword(credentialsId: "$GITHUB_CREDENTIAL_ID", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
             sh 'git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/gradii/fedaco.git fedaco-tmp'
             sh 'git config --global user.email "xsilen@gradii.com" '
             sh 'git config --global user.name "xsilen" '
             sh 'cp dist/releases/fedaco/esm2015/src/* fedaco-tmp/libs/fedaco/orm/src/'
             sh 'cd fedaco-tmp & git commit -m "chore: update fedaco"'
-//             sh 'git tag -a $TAG_NAME -m "$TAG_NAME" '
+            //sh 'git tag -a $TAG_NAME -m "$TAG_NAME" '
             sh 'cd fedaco-tmp & git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/gradii/fedaco.git'
           }
         }
       }
     }
 
+    stage('deploy dev-app') {
+      when {
+        // branch 'master'
+        allOf {
+          not {
+            branch 'release'
+          }
+          anyOf {
+            changeset 'src/annotation/**'
+            changeset 'src/check-type/**'
+            changeset 'src/dev-app/**'
+          }
+        }
+      }
+      steps {
+        container('nodejs') {
+          sh 'yarn run deploy-dev-app'
+          sh 'docker build -f Dockerfile-dev-app -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$BUILD_NUMBER .'
+          withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
+            sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
+            sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$BUILD_NUMBER'
+          }
+        }
+        //'push latest'
+        container('nodejs') {
+          sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
+          sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
+        }
+        //'deploy to dev'
+        kubernetesDeploy(configs: 'deploy/dev-ol/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+      }
+    }
+  }
 //
 //     stage('deploy to production') {
 //       steps {
@@ -153,7 +152,4 @@ pipeline {
 //         kubernetesDeploy(configs: 'deploy/prod-ol/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
 //       }
 //     }
-
-  }
-
 }

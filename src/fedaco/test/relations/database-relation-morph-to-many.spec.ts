@@ -27,7 +27,8 @@ function getRelationArguments() {
 
 function getRelation() {
   const [builder, parent] = getRelationArguments();
-  return new MorphToMany(builder as FedacoBuilder, parent as Model, 'taggable', 'taggables', 'taggable_id', 'tag_id', 'id',
+  return new MorphToMany(builder as FedacoBuilder, parent as Model, 'taggable', 'taggables',
+    'taggable_id', 'tag_id', 'id',
     'id');
 }
 
@@ -41,13 +42,13 @@ describe('test database eloquent morph to many', () => {
     relation.getQuery().shouldReceive('where').once()._with('taggables.taggable_type',
       get_class(relation.getParent()));
     const model1 = new EloquentMorphToManyModelStub();
-    model1.id  = 1;
+    model1.id    = 1;
     const model2 = new EloquentMorphToManyModelStub();
-    model2.id  = 2;
+    model2.id    = 2;
     relation.addEagerConstraints([model1, model2]);
   });
   it('attach inserts pivot table record', () => {
-    const args   = getRelationArguments();
+    const args     = getRelationArguments();
     const relation = new MorphToMany(
       args[0] as FedacoBuilder, args[1] as Model, args[2],
       args[3], args[4], args[5],
