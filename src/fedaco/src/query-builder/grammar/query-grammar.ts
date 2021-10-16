@@ -338,6 +338,10 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
     return '';
   }
 
+  prepareBindingForJsonContains(value: any): string {
+    return JSON.stringify(value);
+  }
+
   quoteColumnName(columnName: string): string {
     return '';
   }

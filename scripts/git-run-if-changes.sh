@@ -8,7 +8,7 @@ while [ "$1" != "--" ]; do
 done
 shift
 
-if git diff --quiet --exit-code "${BASE_BRANCH:-origin/master}"..HEAD ${paths[@]}; then
+if git diff --quiet --exit-code "${BASE_BRANCH:-origin/master}"..HEAD^ ${paths[@]}; then
     echo "No changes in ${paths[@]}, skipping $@..." 1>&2
     exit 0
 fi

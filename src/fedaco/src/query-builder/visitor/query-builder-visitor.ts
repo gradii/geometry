@@ -251,6 +251,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
   visitFunctionCallExpression(node: FunctionCallExpression): string {
     let funcName = node.name.accept(this);
     funcName = this._grammar.compilePredicateFuncName(funcName);
+
     return `${funcName}(${
       node.parameters.map(it => it.accept(this)).join(', ')
     })`;

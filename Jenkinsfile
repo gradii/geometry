@@ -121,12 +121,31 @@ pipeline {
             sh 'npm config set @gradii:registry https://npm.pkg.github.com/'
             sh 'npm config set //npm.pkg.github.com/:_authToken $NPM_PASSWORD'
           }
-          sh 'sh scripts/git-run-if-changes.sh src/fedaco -- yarn run deploy-fedaco'
+          sh 'yarn run deploy-fedaco'
 
-          sh 'sh scripts/git-run-if-changes.sh src/fedaco -- yarn publish dist/releases/fedaco'
+          sh 'yarn publish dist/releases/fedaco'
+        }
+
+        container('nodejs') {
+          input(id: 'push fedaco', message: 'push fedaco to github?')
+//           withCredentials([sshUserPrivateKey(credentialsId: "yourkeyid", keyFileVariable: 'keyfile')]) {
+//              stage('scp-f/b') {
+//               sh "scp -i ${keyfile} do sth here"
+//              }
+//           }
+          withCredentials([usernamePassword(credentialsId: "$GITHUB_CREDENTIAL_ID", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+            sh 'git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/gradii/fedaco.git fedaco-tmp'
+            sh 'git config --global user.email "xsilen@gradii.com" '
+            sh 'git config --global user.name "xsilen" '
+            sh 'cp dist/releases/fedaco/esm2015/src/* fedaco-tmp/libs/fedaco/orm/src/'
+            sh 'cd fedaco-tmp & git commit -m "chore: update fedaco"'
+//             sh 'git tag -a $TAG_NAME -m "$TAG_NAME" '
+            sh 'cd fedaco-tmp & git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/gradii/fedaco.git'
+          }
         }
       }
     }
+
 //
 //     stage('deploy to production') {
 //       steps {

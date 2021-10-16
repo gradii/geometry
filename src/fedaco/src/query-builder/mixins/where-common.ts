@@ -61,6 +61,11 @@ export interface QueryBuilderWhereCommon {
         conjunction: 'and' | 'or' | string
   ): this;
 
+  where(left: Function | string | any[], operator: string,
+        right: Function | RawExpression | boolean | string | number | Array<string | number>,
+        conjunction: 'and' | 'or' | string
+  ): this;
+
   whereColumn(first: string | any[], operator?: string, second?: string,
               conjunction?: string): this;
 

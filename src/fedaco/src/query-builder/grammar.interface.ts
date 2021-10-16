@@ -44,6 +44,8 @@ export interface GrammarInterface {
 
   prepareBindingsForUpdate(builder: Builder, visitor: SqlVisitor): string;
 
+  prepareBindingForJsonContains(value: any): string;
+
   quoteColumnName(columnName: string): string;
 
   quoteSchemaName(tableName: string): string;

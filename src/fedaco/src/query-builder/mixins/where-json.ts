@@ -12,7 +12,8 @@ import { FunctionCallExpression } from '../../query/ast/expression/function-call
 import { NotExpression } from '../../query/ast/expression/not-expression';
 import { RawExpression } from '../../query/ast/expression/raw-expression';
 import { SqlParser } from '../../query/parser/sql-parser';
-import { createIdentifier } from '../ast-factory';
+import { createIdentifier, raw } from '../ast-factory';
+import { QueryBuilder } from '../query-builder';
 
 export interface QueryBuilderWhereJson {
   whereJsonContains(column: any, value: any, conjunction?: 'and' | 'or' | string,
@@ -38,7 +39,9 @@ export function mixinWhereJson<T extends Constructor<any>>(base: T): WhereJsonCt
       if (value instanceof RawExpression) {
         rightNode = value;
       } else {
-        rightNode = new BindingVariable(new RawExpression(value), 'where');
+        rightNode = new BindingVariable(
+          raw((this as unknown as QueryBuilder)._grammar.prepareBindingForJsonContains(value)),
+          'where');
       }
 
       let ast: Expression = new FunctionCallExpression(

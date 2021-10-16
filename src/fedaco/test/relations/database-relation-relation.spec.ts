@@ -1,6 +1,7 @@
 import { Model } from '../../src/fedaco/model';
 import { HasOne } from '../../src/fedaco/relations/has-one';
 import { Relation } from '../../src/fedaco/relations/relation';
+import { getBuilder } from './relation-testing-helper';
 
 describe('test database eloquent relation', () => {
 
@@ -11,6 +12,7 @@ describe('test database eloquent relation', () => {
     parent.setRelation('foo', 'bar');
     expect(parent.toArray()).not.toHaveProperty('foo');
   });
+
   it('unset existing relation', () => {
     const parent   = new EloquentRelationResetModelStub();
     const relation = new EloquentRelationResetModelStub();
@@ -18,8 +20,9 @@ describe('test database eloquent relation', () => {
     parent.unsetRelation('foo');
     expect(parent.relationLoaded('foo')).toBeFalsy();
   });
+
   it('touch method updates related timestamps', () => {
-    const builder = m.mock(Builder);
+    const builder = getBuilder();
     const parent  = m.mock(Model);
     parent.shouldReceive('getAttribute')._with('id').andReturn(1);
     const related = m.mock(EloquentNoTouchingModelStub).makePartial();
@@ -30,13 +33,14 @@ describe('test database eloquent relation', () => {
     const relation = new HasOne(builder, parent, 'foreign_key', 'id');
     related.shouldReceive('getTable').andReturn('table');
     related.shouldReceive('getUpdatedAtColumn').andReturn('updated_at');
-    const now = Carbon.now();
+    const now = new Date();
     related.shouldReceive('freshTimestampString').andReturn(now);
     builder.shouldReceive('update').once()._with({
       'updated_at': now
     });
     relation.touch();
   });
+
   it('can disable parent touching for all models', () => {
     /**/
     const related = m.mock(EloquentNoTouchingModelStub).makePartial();
@@ -45,7 +49,7 @@ describe('test database eloquent relation', () => {
     expect(related.isIgnoringTouch()).toBeFalsy();
     Model.withoutTouching(() => {
       this.assertTrue(related.isIgnoringTouch());
-      const builder = m.mock(Builder);
+      const builder = getBuilder();
       const parent  = m.mock(Model);
       parent.shouldReceive('getAttribute')._with('id').andReturn(1);
       builder.shouldReceive('getModel').andReturn(related);
@@ -58,6 +62,7 @@ describe('test database eloquent relation', () => {
     });
     expect(related.isIgnoringTouch()).toBeFalsy();
   });
+
   it('can disable touching for specific model', () => {
     const related = m.mock(EloquentNoTouchingModelStub).makePartial();
     related.shouldReceive('getUpdatedAtColumn').never();
@@ -68,7 +73,7 @@ describe('test database eloquent relation', () => {
     EloquentNoTouchingModelStub.withoutTouching(() => {
       this.assertTrue(related.isIgnoringTouch());
       this.assertFalse(anotherRelated.isIgnoringTouch());
-      const builder = m.mock(Builder);
+      const builder = getBuilder();
       const parent  = m.mock(Model);
       parent.shouldReceive('getAttribute')._with('id').andReturn(1);
       builder.shouldReceive('getModel').andReturn(related);
@@ -78,7 +83,7 @@ describe('test database eloquent relation', () => {
       const relation = new HasOne(builder, parent, 'foreign_key', 'id');
       builder.shouldReceive('update').never();
       relation.touch();
-      const anotherBuilder = m.mock(Builder);
+      const anotherBuilder = getBuilder();
       const anotherParent  = m.mock(Model);
       anotherParent.shouldReceive('getAttribute')._with('id').andReturn(2);
       anotherBuilder.shouldReceive('getModel').andReturn(anotherRelated);
@@ -96,6 +101,7 @@ describe('test database eloquent relation', () => {
     expect(related.isIgnoringTouch()).toBeFalsy();
     expect(anotherRelated.isIgnoringTouch()).toBeFalsy();
   });
+
   it('parent model is not touched when child model is ignored', () => {
     const related = m.mock(EloquentNoTouchingModelStub).makePartial();
     related.shouldReceive('getUpdatedAtColumn').never();
@@ -108,7 +114,7 @@ describe('test database eloquent relation', () => {
     EloquentNoTouchingModelStub.withoutTouching(() => {
       this.assertTrue(related.isIgnoringTouch());
       this.assertTrue(relatedChild.isIgnoringTouch());
-      const builder = m.mock(Builder);
+      const builder = getBuilder();
       const parent  = m.mock(Model);
       parent.shouldReceive('getAttribute')._with('id').andReturn(1);
       builder.shouldReceive('getModel').andReturn(related);
@@ -118,7 +124,7 @@ describe('test database eloquent relation', () => {
       const relation = new HasOne(builder, parent, 'foreign_key', 'id');
       builder.shouldReceive('update').never();
       relation.touch();
-      const anotherBuilder = m.mock(Builder);
+      const anotherBuilder = getBuilder();
       const anotherParent  = m.mock(Model);
       anotherParent.shouldReceive('getAttribute')._with('id').andReturn(2);
       anotherBuilder.shouldReceive('getModel').andReturn(relatedChild);
@@ -132,24 +138,23 @@ describe('test database eloquent relation', () => {
     expect(related.isIgnoringTouch()).toBeFalsy();
     expect(relatedChild.isIgnoringTouch()).toBeFalsy();
   });
+
   it('ignored models state is reset when there are exceptions', () => {
-    const related = m.mock(EloquentNoTouchingModelStub).makePartial();
-    related.shouldReceive('getUpdatedAtColumn').never();
-    related.shouldReceive('freshTimestampString').never();
-    const relatedChild = m.mock(EloquentNoTouchingChildModelStub).makePartial();
-    relatedChild.shouldReceive('getUpdatedAtColumn').never();
-    relatedChild.shouldReceive('freshTimestampString').never();
+    const related      = new EloquentNoTouchingModelStub();
+    const spy1         = jest.spyOn(related, 'getUpdatedAtColumn');
+    const spy2         = jest.spyOn(related, 'freshTimestampString');
+    const relatedChild = new EloquentNoTouchingChildModelStub();
+    const spy3         = jest.spyOn(relatedChild, 'getUpdatedAtColumn');
+    const spy4         = jest.spyOn(relatedChild, 'freshTimestampString');
     expect(related.isIgnoringTouch()).toBeFalsy();
     expect(relatedChild.isIgnoringTouch()).toBeFalsy();
-    try {
+    expect(() => {
       EloquentNoTouchingModelStub.withoutTouching(() => {
-        this.assertTrue(related.isIgnoringTouch());
-        this.assertTrue(relatedChild.isIgnoringTouch());
-        throw new Exception();
+        expect(related.isIgnoringTouch()).toBeTruthy();
+        expect(relatedChild.isIgnoringTouch()).toBeTruthy();
+        throw new Error();
       });
-      this.fail('Exception was not thrown');
-    } catch (exception: Exception) {
-    }
+    }).not.toThrowError('Exception was not thrown');
     expect(related.isIgnoringTouch()).toBeFalsy();
     expect(relatedChild.isIgnoringTouch()).toBeFalsy();
   });
@@ -193,7 +198,7 @@ describe('test database eloquent relation', () => {
   });
   it('relation resolvers', () => {
     const model   = new EloquentRelationResetModelStub();
-    const builder = m.mock(Builder);
+    const builder = getBuilder();
     builder.shouldReceive('getModel').andReturn(model);
     EloquentRelationResetModelStub.resolveRelationUsing('customer', model => {
       return new EloquentResolverRelationStub(builder, model);
@@ -231,7 +236,7 @@ export class EloquentRelationStub extends Relation {
 }
 
 export class EloquentNoTouchingModelStub extends Model {
-  _table: any      = 'table';
+  _table: any               = 'table';
   protected attributes: any = {
     'id': 1
   };
@@ -241,7 +246,7 @@ export class EloquentNoTouchingChildModelStub extends EloquentNoTouchingModelStu
 }
 
 export class EloquentNoTouchingAnotherModelStub extends Model {
-  _table: any      = 'another_table';
+  _table: any               = 'another_table';
   protected attributes: any = {
     'id': 2
   };
