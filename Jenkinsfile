@@ -45,6 +45,12 @@ pipeline {
       }
     }
 
+    stage('store yarn.lock') {
+      steps {
+          archiveArtifacts 'yarn.lock'
+        }
+    }
+
     stage('build & push npm package') {
       when {
         anyOf {
