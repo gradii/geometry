@@ -32,7 +32,6 @@ export declare namespace GuardsAttributes {
 
   /*Run the given callable while being unguarded.*/
   export function unguarded(callback: Function): any;
-
 }
 
 export interface GuardsAttributes {

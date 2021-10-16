@@ -85,36 +85,73 @@ describe('test database eloquent morph to many', () => {
     const relation = this.getMockBuilder(MorphToMany).setMethods(
       ['touchIfTouching']).setConstructorArgs(
       this.getRelationArguments()).getMock();
-    const query    = m.mock(stdClass);
-    query.shouldReceive('from').once()._with('taggables').andReturn(query);
-    query.shouldReceive('where').once()._with('taggable_id', 1).andReturn(query);
-    query.shouldReceive('where').once()._with('taggable_type',
-      get_class(relation.getParent())).andReturn(query);
-    query.shouldReceive('whereIn').once()._with('tag_id', [1, 2, 3]);
-    query.shouldReceive('delete').once().andReturn(true);
-    relation.getQuery().shouldReceive('getQuery').andReturn(mockQueryBuilder = m.mock(stdClass));
-    mockQueryBuilder.shouldReceive('newQuery').once().andReturn(query);
-    relation.expects(this.once()).method('touchIfTouching');
+    const query    = {};
+
+
+    const spy1             = jest.spyOn(query, 'from').mockReturnValue(query);
+    const spy2             = jest.spyOn(query, 'where').mockreturnValue(query);
+    const spy3             = jest.spyOn(query, 'whereIn');
+    const spy4             = jest.spyOn(query, 'delete').mockReturnValue(true);
+    const mockQueryBuilder = {};
+    const spy5             = jest.spyOn(relation.getQuery(), 'getQuery').mockReturnValue(
+      mockQueryBuilder);
+    const spy6             = jest.spyOn(mockQueryBuilder, 'newQuery').mockReturnValue(query);
+    const spy7             = jest.spyOn(relation, 'touchIfTouching');
+
+
+    // query.shouldReceive('from').once()._with('taggables').andReturn(query);
+    // query.shouldReceive('where').once()._with('taggable_id', 1).andReturn(query);
+    // query.shouldReceive('where').once()._with('taggable_type',
+    //   get_class(relation.getParent())).andReturn(query);
+    // query.shouldReceive('whereIn').once()._with('tag_id', [1, 2, 3]);
+    // query.shouldReceive('delete').once().andReturn(true);
+    // relation.getQuery().shouldReceive('getQuery').andReturn(mockQueryBuilder = m.mock(stdClass));
+    // mockQueryBuilder.shouldReceive('newQuery').once().andReturn(query);
+    // relation.expects(this.once()).method('touchIfTouching');
+
     expect(relation.detach([1, 2, 3])).toBeTruthy();
+
+    expect(spy1).toBeCalledWith('taggables');
+    expect(spy2).toBeCalledWith([
+      ['taggable_id', 1],
+      ['taggable_type', relation.getParent().constructor]
+    ]);
+    expect(spy3).toBeCalledWith('tag_id', [1, 2, 3]);
+    expect(spy4).toBeCalled();
+    expect(spy7).toBeCalled();
+
   });
   it('detach method clears all pivot records when no i ds are given', () => {
-    const relation = this.getMockBuilder(MorphToMany).setMethods(
-      ['touchIfTouching']).setConstructorArgs(
-      this.getRelationArguments()).getMock();
-    const query    = m.mock(stdClass);
-    query.shouldReceive('from').once()._with('taggables').andReturn(query);
-    query.shouldReceive('where').once()._with('taggable_id', 1).andReturn(query);
-    query.shouldReceive('where').once()._with('taggable_type',
-      get_class(relation.getParent())).andReturn(query);
-    query.shouldReceive('whereIn').never();
-    query.shouldReceive('delete').once().andReturn(true);
-    relation.getQuery().shouldReceive('getQuery').andReturn(mockQueryBuilder = m.mock(stdClass));
-    mockQueryBuilder.shouldReceive('newQuery').once().andReturn(query);
-    relation.expects(this.once()).method('touchIfTouching');
-    expect(relation.detach()).toBeTruthy();
+    const relation = new MorphToMany;
+    const spy1     = jest.spyOn(query, 'from').mockReturnValue(query);
+    const spy2     = jest.spyOn(query, 'where').mockReturnValue(query);
+    const spy3     = jest.spyOn(query, 'whereIn').mockReturnValue(query);
+    const spy4     = jest.spyOn(query, 'delete').mockReturnValue(ture);
+    const spy5     = jest.spyOn(relation.getQuery(), 'getQuery').mockReturnValue(mockQueryBuilder);
+    const spy6     = jest.spyOn(mockQueryBuilder, 'newQuery');
+    const spy7     = jest.spyOn(relation, 'touchIfTouching');
+// this('taggables').andReturn(query);
+    // query.shouldReceive('where').once()._with('taggable_id', 1).andReturn(query);
+    // query.shouldReceive('where').once()._with('taggable_type',
+    //   get_class(relation.getParent())).andReturn(query);
+    // query.shouldReceive('whereIn').never();
+    // query.shouldReceive('from').once()._wi
+    // query.shouldReceive('delete').once().andReturn(true);
+    // relation.getQuery().shouldReceive('getQuery').andReturn(mockQueryBuilder = m.mock(stdClass));
+    // mockQueryBuilder.shouldReceive('newQuery').once().andReturn(query);
+    // relation.expects(this.once()).method('touchIfTouching');
+    // expect(relation.detach()).toBeTruthy();
+
+    expect(spy1).toBeCalledWith('taggables');
+    expect(spy2).toBeCalledWith([
+      ['taggable_id', 1],
+      'taggable_type',
+      relation.getParent().constructor
+
+    ]);
+    expect(spy3).not.toBeCalled();
+    expect(spy4).toBeCalledWith();
   });
-
-
 });
 
 export class EloquentMorphToManyModelStub extends Model {

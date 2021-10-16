@@ -6,7 +6,6 @@
 
 import { Constructor } from '../../helper/constructor';
 import { BindingVariable } from '../../query/ast/binding-variable';
-import { ComparisonPredicateExpression } from '../../query/ast/expression/comparison-predicate-expression';
 import { Expression } from '../../query/ast/expression/expression';
 import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
 import { NotExpression } from '../../query/ast/expression/not-expression';
@@ -21,9 +20,16 @@ export interface QueryBuilderWhereJson {
 
   orWhereJsonContains(column: any, value: any): this;
 
-  whereJsonDoesntContain(column: any, value: any, conjunction: 'and' | 'or' | string,): this;
+  whereJsonDoesntContain(column: any, value: any, conjunction?: 'and' | 'or' | string): this;
 
   orWhereJsonDoesntContain(column: any, value: any): this;
+
+  whereJsonLength(column: any, operator: any, value?: any,
+                  conjunction?: 'and' | 'or' | string): this;
+
+  orWhereJsonLength(column: any, operator: any, value?: any): this
+
+
 }
 
 export type WhereJsonCtor = Constructor<QueryBuilderWhereJson>;
@@ -45,9 +51,9 @@ export function mixinWhereJson<T extends Constructor<any>>(base: T): WhereJsonCt
       }
 
       let ast: Expression = new FunctionCallExpression(
-          createIdentifier(type),
-          [leftNode, rightNode]
-        );
+        createIdentifier(type),
+        [leftNode, rightNode]
+      );
       if (not) {
         ast = new NotExpression(ast);
       }
@@ -83,5 +89,19 @@ export function mixinWhereJson<T extends Constructor<any>>(base: T): WhereJsonCt
       return this.whereJsonDoesntContain(column, value, 'or');
     }
 
+    public whereJsonLength(column, operator, value?, conjunction = 'and') {
+      // var type = "JsonLength";
+      // const [value, operator] = this.prepareValueAndOperator(value, operator, func_num_args() === 2);
+      // this.wheres.push(compact("type", "column", "operator", "value", "boolean"));
+      // if (!value instanceof Expression) {
+      //   this.addBinding(/*cast type int*/ this.flattenValue(value));
+      // }
+      return this;
+    }
+
+    public orWhereJsonLength(column: any, operator: any, value?: any) {
+      // const [value, operator] = this.prepareValueAndOperator(value, operator, func_num_args() === 2);
+      return this.whereJsonLength(column, operator, value, 'or');
+    }
   };
 }
