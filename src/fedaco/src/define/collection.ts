@@ -7,4 +7,4 @@
 import { Model } from '../fedaco/model';
 
 
-export type Collection = Model[];
+export type Collection<T extends Model = Model> = T[];

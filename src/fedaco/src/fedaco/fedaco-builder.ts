@@ -22,8 +22,275 @@ import { Relation } from './relations/relation';
 import { Scope } from './scope';
 
 export interface FedacoBuilder<T extends Model = Model> extends GuardsAttributes, QueriesRelationShips,
-  Omit<BuildQueries & ForwardCallToQueryBuilder, 'first' | 'latest' | 'oldest' | 'orWhere' | 'where'> {
+  Omit<BuildQueries, 'first' | 'latest' | 'oldest' | 'orWhere' | 'where'>,
+  ForwardCallToQueryBuilder {
   first(columns?: any[] | string): Promise<T>;
+
+  /*Create and return an un-saved model instance.*/
+  make(attributes: Record<string, any>): T;
+
+  /*Register a new global scope.*/
+  withGlobalScope(identifier: string, scope: Scope | Function): this;
+
+  /*Remove a registered global scope.*/
+  withoutGlobalScope(scope: string): this;
+
+  /*Remove all or passed registered global scopes.*/
+  withoutGlobalScopes(scopes?: any[] | null): this;
+
+  /*Get an array of global scopes that were removed from the query.*/
+  removedScopes(): any[];
+
+  /**
+   * Add a where clause on the primary key to the query.
+   */
+  whereKey(id: any): this;
+
+  /*Add a where clause on the primary key to the query.*/
+  whereKeyNot(id: any): this;
+
+  /**
+   * Add a basic where clause to the query.
+   */
+  where(column: Function | any[] | SqlNode | any): this;
+
+  where(column: string | SqlNode | any, value: any): this;
+
+  where(column: Function | string | any[] | SqlNode | any, operator?: any, value?: any, conjunction?: string): this;
+
+  /*Add a basic where clause to the query, and return the first result.*/
+  firstWhere(column: Function | string | any[] | SqlNode, operator?: any, value?: any,
+             conjunction?: string): Promise<T>;
+
+  /*Add an "or where" clause to the query.*/
+  orWhere(column: Function | any[] | string | SqlNode, operator?: any, value?: any): this;
+
+  /*Add an "order by" clause for a timestamp to the query.*/
+  latest(column?: string): this;
+
+  /*Add an "order by" clause for a timestamp to the query.*/
+  oldest(column?: string): this;
+
+  /*Create a collection of models from plain arrays.*/
+  hydrate(items: any[]): T[];
+
+  /*Create a collection of models from a raw query.*/
+  fromQuery(query: string, bindings?: any[]): Promise<T[]>;
+
+  /**
+   * Find a model by its primary key.
+   */
+  find(id: any | any[], columns?: any[]): Promise<T | T[]>;
+
+  /**
+   * Find multiple models by their primary keys.
+   */
+  findMany(ids: any[], columns?: any[]): Promise<T[]>;
+
+  /*Find a model by its primary key or throw an exception.*/
+  findOrFail(id: any | any[], columns?: any[]): Promise<T | T[]>;
+
+  /*Find a model by its primary key or return fresh model instance.*/
+  findOrNew(id: any, columns?: any[]): Promise<T>;
+
+  /*Get the first record matching the attributes or instantiate it.*/
+  firstOrNew(attributes: any, values?: any): Promise<T>;
+
+  /*Get the first record matching the attributes or create it.*/
+  firstOrCreate(attributes: any, values?: any): Promise<T>;
+
+  /*Create or update a record matching the attributes, and fill it with values.*/
+  updateOrCreate(attributes: any, values: Record<string, any>): Promise<T>;
+
+  /*Execute the query and get the first result or throw an exception.*/
+  firstOrFail(columns?: any[]): Promise<T>;
+
+  /*Execute the query and get the first result or call a callback.*/
+  firstOr(columns?: Function | any[], callback?: Function | null): Promise<T>;
+
+  /*Get a single column's value from the first result of a query.*/
+  value<K extends keyof T>(column: K): Promise<T[K] | void>;
+
+  /**
+   * Execute the query as a "select" statement.
+   */
+  get(columns?: string[] | string): Promise<T[]>;
+
+  /*Get the hydrated models without eager loading.*/
+  getModels(columns?: any[] | string): Promise<T[]>;
+
+  /*Eager load the relationships for the models.*/
+  eagerLoadRelations(models: any[]): Promise<T[]>;
+
+  /*Eagerly load the relationship on a set of models.*/
+  _eagerLoadRelation(models: any[], name: string, constraints: Function): Promise<T[]>;
+
+  /*Get the relation instance for the given relation name.*/
+  getRelation(name: string): Relation;
+
+  /*Get the deeply nested relations for a given top-level relation.*/
+  _relationsNestedUnder(relation: string): Record<string, any>;
+
+  /*Determine if the relationship is nested.*/
+  _isNestedUnder(relation: string, name: string): boolean;
+
+  /*Add a generic "order by" clause if the query doesn't already have one.*/
+  // _enforceOrderBy();
+
+  /*Get an array with the values of a given column.*/
+  pluck(column: string, key?: string): Promise<any[] | Record<string, any>>;
+
+  /*Paginate the given query.*/
+  paginate(page?: number, pageSize?: number, columns?: any[]): Promise<{
+    items: any[];
+    total: number;
+    pageSize: number;
+    page: number;
+  }>;
+
+  /*Paginate the given query into a simple paginator.*/
+  simplePaginate(page?: number, pageSize?: number,
+                 columns?: any[]): Promise<{ items: any[], pageSize: number, page: number }>;
+
+  /*Save a new model and return the instance.*/
+  create(attributes?: Record<string, any>): Promise<T>;
+
+  /*Save a new model and return the instance. Allow mass-assignment.*/
+  forceCreate(attributes: Record<string, any>): Promise<T>;
+
+  /*Update records in the database.*/
+  update(values: any): Promise<any>;
+
+  /*Insert new records or update the existing ones.*/
+  upsert(values: any[], uniqueBy: any[] | string, update?: any[]): Promise<any>;
+
+  /*Increment a column's value by a given amount.*/
+  increment(column: string, amount?: number, extra?: any): Promise<any>;
+
+  /*Decrement a column's value by a given amount.*/
+  decrement(column: string, amount?: number, extra?: any): Promise<any>;
+
+  /*Add the "updated at" column to an array of values.*/
+  _addUpdatedAtColumn(values: any): Record<string, any>;
+
+  /*Add timestamps to the inserted values.*/
+  // _addTimestampsToUpsertValues(values: any[]);
+
+  /*Add the "updated at" column to the updated columns.*/
+  // _addUpdatedAtToUpsertColumns(update: string[]);
+
+  /*Delete records from the database.*/
+  delete(): Promise<any>;
+
+  /*Run the default delete function on the builder.
+
+  Since we do not apply scopes here, the row will actually be deleted.*/
+  forceDelete(): Promise<boolean>;
+
+  /*Register a replacement for the default delete function.*/
+  onDelete(callback: Function): void;
+
+  /*Determine if the given model has a scope.*/
+  hasNamedScope(scope: string): boolean;
+
+  /*Call the given local model scopes.*/
+  scopes(scopes: any[] | string): this;
+
+  /*Apply the scopes to the Eloquent builder instance and return it.*/
+  applyScopes(): FedacoBuilder<T>;
+
+  /*Apply the given scope on the current builder instance.*/
+  callScope(scope: (...args: any[]) => any | void, parameters?: any[]): any | void;
+
+  /*Apply the given named scope on the current builder instance.*/
+  callNamedScope(scope: string, parameters?: any[]): any | void;
+
+  /*Nest where conditions by slicing them at the given where count.*/
+  _addNewWheresWithinGroup(query: QueryBuilder, originalWhereCount: number): void;
+
+  /*Slice where conditions at the given offset and add them to the query as a nested condition.*/
+  _groupWhereSliceForScope(query: QueryBuilder, whereSlice: any[]): void;
+
+  /*Create a where array with nested where conditions.*/
+
+  // _createNestedWhere(whereSlice: any[], conjunction?);
+
+  pipe(...args: any[]): this;
+
+  scope(scopeFn: string, ...args: any[]): this;
+
+  whereScope(key: string, ...args: any[]): this;
+
+  with(...relations: Array<{
+    [key: string]: Function;
+  } | string>): this;
+
+  with(relations: {
+    [key: string]: Function;
+  }): this;
+
+  with(relations: string[]): this;
+
+  with(relations: string, callback?: Function): this;
+
+  with(relations: {
+    [key: string]: Function;
+  } | string[] | string, callback?: Function | {
+    [key: string]: Function;
+  } | string): this;
+
+  /*Prevent the specified relations from being eager loaded.*/
+  without(relations: any): this;
+
+  /*Set the relationships that should be eager loaded while removing any previously added eager loading specifications.*/
+  withOnly(relations: any): this;
+
+  /*Create a new instance of the model being queried.*/
+  newModelInstance(attributes?: Record<string, any>): T;
+
+  /*Parse a list of relations into individuals.*/
+  _parseWithRelations(relations: any[]): {
+    [key: string]: Function;
+  };
+
+  /*Create a constraint to select the given columns for the relation.*/
+  _createSelectWithConstraint(name: string): [string, Function];
+
+  /*Parse the nested relationships in a relation.*/
+  _addNestedWiths(name: string, results: Record<string, Function>): Record<string, Function>;
+
+  /*Apply query-time casts to the model instance.*/
+  withCasts(casts: any): this;
+
+  /*Get the underlying query builder instance.*/
+  getQuery(): QueryBuilder;
+
+  /*Set the underlying query builder instance.*/
+  setQuery(query: QueryBuilder): this;
+
+  /*Get a base query builder instance.*/
+  toBase(): QueryBuilder;
+
+  /*Get the relationships being eagerly loaded.*/
+  getEagerLoads(): { [key: string]: Function };
+
+  /*Set the relationships being eagerly loaded.*/
+  setEagerLoads(eagerLoad: any): this;
+
+  /*Get the default key name of the table.*/
+  _defaultKeyName(): string;
+
+  /*Get the model instance being queried.*/
+  getModel(): T;
+
+  /*Set a model instance for the model being queried.*/
+  setModel(model: T): this;
+
+  /*Qualify the given column name by the model's table.*/
+  qualifyColumn(column: string): string;
+
+  /*Qualify the given columns with the model's table.*/
+  qualifyColumns(columns: any[]): string[];
 }
 
 export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttributes(
@@ -62,12 +329,12 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Create and return an un-saved model instance.*/
-  public make(attributes: Record<string, any>) {
+  public make(attributes: Record<string, any>): T {
     return this.newModelInstance(attributes);
   }
 
   /*Register a new global scope.*/
-  public withGlobalScope(identifier: string, scope: Scope | Function) {
+  public withGlobalScope(identifier: string, scope: Scope | Function): this {
     this._scopes[identifier] = scope;
     if (isObject(scope) && 'extend' in scope) {
       // @ts-ignore
@@ -77,7 +344,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Remove a registered global scope.*/
-  public withoutGlobalScope(scope: string) {
+  public withoutGlobalScope(scope: string): this {
     delete this._scopes[scope];
     this._removedScopes.push(scope);
     return this;
@@ -95,14 +362,14 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Get an array of global scopes that were removed from the query.*/
-  public removedScopes() {
+  public removedScopes(): any[] {
     return this._removedScopes;
   }
 
   /**
    * Add a where clause on the primary key to the query.
    */
-  public whereKey(id: any) {
+  public whereKey(id: any): this {
     if (id instanceof Model) {
       id = id.getKey();
     }
@@ -157,22 +424,24 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Add a basic where clause to the query, and return the first result.*/
-  public firstWhere(column: Function | string | any[] | SqlNode, operator: any = null,
-                    value: any                                                 = null,
-                    conjunction                                                = 'and') {
+  public firstWhere(column: Function | string | any[] | SqlNode,
+                    operator: any = null,
+                    value: any    = null,
+                    conjunction   = 'and'): Promise<T> {
     return this.where(column, operator, value, conjunction).first();
   }
 
   /*Add an "or where" clause to the query.*/
-  public orWhere(column: Function | any[] | string | SqlNode, operator: any = null,
-                 value: any                                                 = null) {
+  public orWhere(column: Function | any[] | string | SqlNode,
+                 operator: any = null,
+                 value: any    = null): this {
     [value, operator] = this._query._prepareValueAndOperator(value, operator,
       arguments.length === 2);
     return this.where(column, operator, value, 'or');
   }
 
   /*Add an "order by" clause for a timestamp to the query.*/
-  public latest(column: string = null) {
+  public latest(column?: string): this {
     if (isBlank(column)) {
       column = this._model.getCreatedAtColumn() ?? 'created_at';
     }
@@ -181,7 +450,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Add an "order by" clause for a timestamp to the query.*/
-  public oldest(column: string = null) {
+  public oldest(column?: string): this {
     if (isBlank(column)) {
       column = this._model.getCreatedAtColumn() ?? 'created_at';
     }
@@ -190,7 +459,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Create a collection of models from plain arrays.*/
-  public hydrate(items: any[]) {
+  public hydrate(items: any[]): T[] {
     const instance = this.newModelInstance();
     return instance.newCollection(items.map(item => {
       const model = instance.newFromBuilder(item);
@@ -202,14 +471,14 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Create a collection of models from a raw query.*/
-  public async fromQuery(query: string, bindings: any[] = []) {
+  public async fromQuery(query: string, bindings: any[] = []): Promise<T[]> {
     return this.hydrate(await this._query.getConnection().select(query, bindings));
   }
 
   /**
    * Find a model by its primary key.
    */
-  public find(id: any, columns: any[] = ['*']) {
+  public find(id: any | any[], columns: any[] = ['*']): Promise<T | T[]> {
     if (isArray(id)) {
       return this.findMany(id, columns);
     }
@@ -219,7 +488,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   /**
    * Find multiple models by their primary keys.
    */
-  public async findMany(ids: any[], columns: any[] = ['*']) {
+  public async findMany(ids: any[], columns: any[] = ['*']): Promise<T[]> {
     if (isAnyEmpty(ids)) {
       return [];
     }
@@ -227,7 +496,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Find a model by its primary key or throw an exception.*/
-  public async findOrFail(id: any | any[], columns: any[] = ['*']) {
+  public async findOrFail(id: any | any[], columns: any[] = ['*']): Promise<T | T[]> {
     const result = await this.find(id, columns);
 
     if (isArray(id) && isArray(result)) {
@@ -261,8 +530,8 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Get the first record matching the attributes or create it.*/
-  public async firstOrCreate(attributes: any, values: any = {}) {
-    let instance = await this.where(attributes).first() as Model;
+  public async firstOrCreate(attributes: any, values: any = {}): Promise<T> {
+    let instance = await this.where(attributes).first() as T;
     if (!isBlank(instance)) {
       return instance;
     }
@@ -272,14 +541,14 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Create or update a record matching the attributes, and fill it with values.*/
-  public async updateOrCreate(attributes: any, values: Record<string, any>) {
+  public async updateOrCreate(attributes: any, values: Record<string, any>): Promise<T> {
     const instance = await this.firstOrNew(attributes);
     await instance.fill(values).save();
     return instance;
   }
 
   /*Execute the query and get the first result or throw an exception.*/
-  public async firstOrFail(columns: any[] = ['*']): Promise<Model> {
+  public async firstOrFail(columns: any[] = ['*']): Promise<T> {
     const model = await this.first(columns);
     if (!isBlank(model)) {
       // @ts-ignore
@@ -290,7 +559,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Execute the query and get the first result or call a callback.*/
-  public async firstOr(columns: Function | any[] = ['*'], callback: Function | null = null) {
+  public async firstOr(columns: Function | any[] = ['*'], callback: Function | null = null): Promise<T> {
     if (isFunction(columns)) {
       callback = columns;
       columns  = ['*'];
@@ -312,7 +581,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   // }
 
   /*Get a single column's value from the first result of a query.*/
-  public async value(column: string) {
+  public async value<K extends keyof T>(column: K): Promise<T[K] | void> {
     const result: T = await this.first([column]) as T;
     if (result) {
       return result[column];
@@ -345,14 +614,14 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
       // eager load on the query to retrieve the relation so that they will be eager
       // loaded on that query, because that is where they get hydrated as models.
       if (!name.includes('.')) {
-        models = await this.eagerLoadRelation(models, name, constraints);
+        models = await this._eagerLoadRelation(models, name, constraints);
       }
     }
     return models;
   }
 
   /*Eagerly load the relationship on a set of models.*/
-  protected async eagerLoadRelation(models: any[], name: string, constraints: Function): Promise<T[]> {
+  async _eagerLoadRelation(models: any[], name: string, constraints: Function): Promise<T[]> {
     const relation = this.getRelation(name);
     relation.addEagerConstraints(models);
     constraints(relation);
@@ -373,7 +642,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
       return _relation;
     });
 
-    const nested = this.relationsNestedUnder(name);
+    const nested = this._relationsNestedUnder(name);
 
     // If there are nested relationships set on the query, we will put those onto
     // the query instances so that they can be handled after this relationship
@@ -385,10 +654,10 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Get the deeply nested relations for a given top-level relation.*/
-  protected relationsNestedUnder(relation: string) {
+  _relationsNestedUnder(relation: string): Record<string, any> {
     const nested: any = {};
     for (const [name, constraints] of Object.entries(this._eagerLoad)) {
-      if (this.isNestedUnder(relation, name)) {
+      if (this._isNestedUnder(relation, name)) {
         nested[name.substr((relation + '.').length)] = constraints;
       }
     }
@@ -396,7 +665,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Determine if the relationship is nested.*/
-  protected isNestedUnder(relation: string, name: string) {
+  _isNestedUnder(relation: string, name: string): boolean {
     return name.includes('.') && name.startsWith(relation + '.');
   }
 
@@ -408,7 +677,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   // }
 
   /*Add a generic "order by" clause if the query doesn't already have one.*/
-  protected enforceOrderBy() {
+  _enforceOrderBy() {
     if (!this._query._orders.length && !this._query._unionOrders.length) {
       this.orderBy(this._model.getQualifiedKeyName(), 'asc');
     }
@@ -439,7 +708,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   public async paginate(page: number   = 1,
                         pageSize?: number,
                         columns: any[] = ['*'],
-  ) {
+  ): Promise<{ items: any[], total: number, pageSize: number, page: number }> {
     pageSize      = pageSize || this._model.getPerPage();
     const total   = await this.toBase().getCountForPagination();
     const results = total > 0 ? await this.forPage(page, pageSize).get(columns) : [];
@@ -453,7 +722,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   /*Paginate the given query into a simple paginator.*/
   public async simplePaginate(page: number   = 1,
                               pageSize?: number,
-                              columns: any[] = ['*']) {
+                              columns: any[] = ['*']): Promise<{ items: any[], pageSize: number, page: number }> {
     pageSize = pageSize || this._model.getPerPage();
     this.skip((page - 1) * pageSize).take(pageSize + 1);
     const results = await this.get(columns);
@@ -493,19 +762,19 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Save a new model and return the instance. Allow mass-assignment.*/
-  public forceCreate(attributes: Record<string, any>) {
-    return (this._model.constructor as any).unguarded(() => {
+  public async forceCreate(attributes: Record<string, any>) {
+    return (this._model.constructor as typeof Model).unguarded(() => {
       return this.newModelInstance().newQuery().create(attributes);
     });
   }
 
   /*Update records in the database.*/
   public async update(values: any): Promise<any> {
-    return this.toBase().update(this.addUpdatedAtColumn(values));
+    return this.toBase().update(this._addUpdatedAtColumn(values));
   }
 
   /*Insert new records or update the existing ones.*/
-  public upsert(values: any[], uniqueBy: any[] | string, update: any[] | null = null) {
+  public upsert(values: any[], uniqueBy: any[] | string, update?: any[]): Promise<number> | number {
     if (!values.length) {
       return 0;
     }
@@ -520,17 +789,17 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Increment a column's value by a given amount.*/
-  public increment(column: string, amount: number | number = 1, extra: any = {}) {
-    return this.toBase().increment(column, amount, this.addUpdatedAtColumn(extra));
+  public increment(column: string, amount: number = 1, extra: any = {}): Promise<any> {
+    return this.toBase().increment(column, amount, this._addUpdatedAtColumn(extra));
   }
 
   /*Decrement a column's value by a given amount.*/
-  public decrement(column: string, amount: number | number = 1, extra: any = {}) {
-    return this.toBase().decrement(column, amount, this.addUpdatedAtColumn(extra));
+  public decrement(column: string, amount: number = 1, extra: any = {}): Promise<any> {
+    return this.toBase().decrement(column, amount, this._addUpdatedAtColumn(extra));
   }
 
   /*Add the "updated at" column to an array of values.*/
-  protected addUpdatedAtColumn(values: any) {
+  _addUpdatedAtColumn(values: any): Record<string, any> {
     if (!this._model.usesTimestamps() || isBlank(this._model.getUpdatedAtColumn())) {
       return values;
     }
@@ -567,7 +836,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Add the "updated at" column to the updated columns.*/
-  protected _addUpdatedAtToUpsertColumns(update: string[]) {
+  _addUpdatedAtToUpsertColumns(update: string[]) {
     if (!this._model.usesTimestamps()) {
       return update;
     }
@@ -589,34 +858,34 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   /*Run the default delete function on the builder.
 
   Since we do not apply scopes here, the row will actually be deleted.*/
-  public forceDelete() {
+  public forceDelete(): Promise<boolean> {
     return this._query.delete();
   }
 
   /*Register a replacement for the default delete function.*/
-  public onDelete(callback: Function) {
+  public onDelete(callback: Function): void {
     this._onDelete = callback;
   }
 
   /*Determine if the given model has a scope.*/
-  public hasNamedScope(scope: string) {
+  public hasNamedScope(scope: string): boolean {
     return this._model && this._model.hasNamedScope(scope);
   }
 
   /*Call the given local model scopes.*/
-  public scopes(scopes: any[] | string) {
+  public scopes(scopes: any[] | string): this {
     let builder = this;
     for (let [scope, parameters] of Object.entries(wrap(scopes))) {
       if (isNumber(scope)) {
         [scope, parameters] = [parameters, []];
       }
-      builder = builder._callNamedScope(scope, wrap(parameters));
+      builder = builder.callNamedScope(scope, wrap(parameters));
     }
     return builder;
   }
 
   /*Apply the scopes to the Eloquent builder instance and return it.*/
-  public applyScopes(): FedacoBuilder {
+  public applyScopes(): FedacoBuilder<T> {
     if (isAnyEmpty(this._scopes)) {
       return this;
     }
@@ -625,7 +894,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
       if (builder._scopes[identifier] == null) {
         continue;
       }
-      builder._callScope((_builder: this) => {
+      builder.callScope((_builder: FedacoBuilder<T>) => {
         if (isFunction(scope)) {
           scope(_builder);
         }
@@ -638,26 +907,26 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Apply the given scope on the current builder instance.*/
-  _callScope(scope: (...args: any[]) => any, parameters: any[] = []) {
+  callScope(scope: (...args: any[]) => any | void, parameters: any[] = []): any | void {
     parameters.unshift(this);
     const query              = this.getQuery();
     const originalWhereCount = !query._wheres.length ? 0 : query._wheres.length;
     const result             = scope(...parameters) ?? this;
     if (/*cast type array*/ query._wheres.length > originalWhereCount) {
-      this.addNewWheresWithinGroup(query, originalWhereCount);
+      this._addNewWheresWithinGroup(query, originalWhereCount);
     }
     return result;
   }
 
   /*Apply the given named scope on the current builder instance.*/
-  _callNamedScope(scope: string, parameters: any[] = []) {
-    return this._callScope((params: any[]) => {
+  callNamedScope(scope: string, parameters: any[] = []): any | void {
+    return this.callScope((params: any[]) => {
       return this._model.callNamedScope(scope, params);
     }, parameters);
   }
 
   /*Nest where conditions by slicing them at the given where count.*/
-  protected addNewWheresWithinGroup(query: QueryBuilder, originalWhereCount: number) {
+  _addNewWheresWithinGroup(query: QueryBuilder, originalWhereCount: number): void {
     const allWheres = query._wheres;
     query._wheres   = [];
     this._groupWhereSliceForScope(query, allWheres.slice(0, originalWhereCount));
@@ -665,7 +934,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Slice where conditions at the given offset and add them to the query as a nested condition.*/
-  protected _groupWhereSliceForScope(query: QueryBuilder, whereSlice: any[]) {
+  _groupWhereSliceForScope(query: QueryBuilder, whereSlice: any[]): void {
     const whereBooleans = pluck('boolean', whereSlice);
     if (whereBooleans.includes('or')) {
       query._wheres.push(this._createNestedWhere(whereSlice, nth(0, whereBooleans)));
@@ -675,7 +944,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Create a where array with nested where conditions.*/
-  protected _createNestedWhere(whereSlice: any[], conjunction = 'and') {
+  _createNestedWhere(whereSlice: any[], conjunction = 'and') {
     const whereGroup   = this.getQuery().forNestedWhere();
     whereGroup._wheres = whereSlice;
     return {
@@ -692,11 +961,11 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
     return this;
   }
 
-  public scope(scopeFn: string, ...args: any[]) {
-    return this._callNamedScope(scopeFn, args);
+  public scope(scopeFn: string, ...args: any[]): this {
+    return this.callNamedScope(scopeFn, args);
   }
 
-  public whereScope(key: string, ...args: any[]) {
+  public whereScope(key: string, ...args: any[]): this {
     const metadata = this._model._columnInfo(`scope${pascalCase(key)}`);
     if (metadata && metadata.isScope) {
       metadata.query(this, ...args);
@@ -711,7 +980,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   public with(relations: string[]): this;
   public with(relations: string, callback?: Function): this;
   public with(relations: { [key: string]: Function } | string[] | string,
-              callback?: Function | { [key: string]: Function } | string) {
+              callback?: Function | { [key: string]: Function } | string): this {
     let eagerLoad;
     if (isFunction(callback)) {
       eagerLoad = this._parseWithRelations([{[relations as string]: callback}]);
@@ -724,14 +993,14 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Prevent the specified relations from being eager loaded.*/
-  public without(relations: any) {
+  public without(relations: any): this {
     this._eagerLoad = omit(isString(relations) ? arguments : relations,
       this._eagerLoad);
     return this;
   }
 
   /*Set the relationships that should be eager loaded while removing any previously added eager loading specifications.*/
-  public withOnly(relations: any) {
+  public withOnly(relations: any): this {
     this._eagerLoad = {};
     return this.with(relations);
   }
@@ -747,17 +1016,17 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
     for (const relation of relations) {
       if (isString(relation)) {
         const [name, constraints] = relation.includes(':') ?
-          this.createSelectWithConstraint(relation) as [string, (...args: any[]) => void] :
+          this._createSelectWithConstraint(relation) as [string, (...args: any[]) => void] :
           [
             relation, () => {
           }
           ];
 
-        results       = this.addNestedWiths(name, results);
+        results       = this._addNestedWiths(name, results);
         results[name] = constraints;
       } else {
         for (const [name, constraints] of Object.entries(relation)) {
-          this.addNestedWiths(name, results);
+          this._addNestedWiths(name, results);
           results[name] = constraints as Function;
         }
       }
@@ -766,7 +1035,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Create a constraint to select the given columns for the relation.*/
-  protected createSelectWithConstraint(name: string) {
+  _createSelectWithConstraint(name: string): [string, Function] {
     return [
       name.split(':')[0], (query: any) => {
         query.select(name.split(':')[1].split(',').map(column => {
@@ -781,7 +1050,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Parse the nested relationships in a relation.*/
-  protected addNestedWiths(name: string, results: Record<string, Function>) {
+  _addNestedWiths(name: string, results: Record<string, Function>): Record<string, Function> {
     const progress = [];
     for (const segment of name.split('.')) {
       progress.push(segment);
@@ -795,7 +1064,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Apply query-time casts to the model instance.*/
-  public withCasts(casts: any) {
+  public withCasts(casts: any): this {
     this._model.mergeCasts(casts);
     return this;
   }
@@ -806,51 +1075,51 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Set the underlying query builder instance.*/
-  public setQuery(query: QueryBuilder) {
+  public setQuery(query: QueryBuilder): this {
     this._query = query;
     return this;
   }
 
   /*Get a base query builder instance.*/
-  public toBase() {
+  public toBase(): QueryBuilder {
     return this.applyScopes().getQuery();
   }
 
   /*Get the relationships being eagerly loaded.*/
-  public getEagerLoads() {
+  public getEagerLoads(): { [key: string]: Function } {
     return this._eagerLoad;
   }
 
   /*Set the relationships being eagerly loaded.*/
-  public setEagerLoads(eagerLoad: any) {
+  public setEagerLoads(eagerLoad: any): this {
     this._eagerLoad = eagerLoad;
     return this;
   }
 
   /*Get the default key name of the table.*/
-  protected defaultKeyName() {
+  _defaultKeyName(): string {
     return this.getModel().getKeyName();
   }
 
   /*Get the model instance being queried.*/
-  public getModel() {
+  public getModel(): T {
     return this._model;
   }
 
   /*Set a model instance for the model being queried.*/
-  public setModel(model: T) {
+  public setModel(model: T): this {
     this._model = model;
     this._query.from(model.getTable());
     return this;
   }
 
   /*Qualify the given column name by the model's table.*/
-  public qualifyColumn(column: string) {
+  public qualifyColumn(column: string): string {
     return this._model.qualifyColumn(column);
   }
 
   /*Qualify the given columns with the model's table.*/
-  public qualifyColumns(columns: any[]) {
+  public qualifyColumns(columns: any[]): string[] {
     return this._model.qualifyColumns(columns);
   }
 
@@ -939,20 +1208,9 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   //   this.groupWhereSliceForScope(query, array_slice(allWheres, originalWhereCount));
   // }
 
-  __noSuchMethod__(methodName: string, args: any[]) {
-    // todo fixme use hasScope runScope
-    const metadata = this._model._columnInfo(`scope${pascalCase(methodName)}`);
-    if (metadata && metadata.isScope) {
-      metadata.query(this, ...args);
-      return this;
-    }
-
-    throw new Error('no method found');
-  }
-
-  clone(): FedacoBuilder {
+  clone(): FedacoBuilder<T> {
     // return this;
-    const builder      = new FedacoBuilder(this._query.clone());
+    const builder      = new FedacoBuilder<T>(this._query.clone());
     builder._scopes    = {...this._scopes};
     builder._model     = this._model;
     builder._eagerLoad = {...this._eagerLoad};

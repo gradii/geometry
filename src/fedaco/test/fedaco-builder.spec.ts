@@ -706,7 +706,7 @@ describe('fedaco builder', () => {
       'foo.bar': nop2
     });
     // @ts-ignore
-    const spy1 = jest.spyOn(builder, 'eagerLoadRelation').mockReturnValue(['foo']);
+    const spy1 = jest.spyOn(builder, '_eagerLoadRelation').mockReturnValue(['foo']);
 
     const results = await builder.eagerLoadRelations(['models']);
 
@@ -792,7 +792,7 @@ describe('fedaco builder', () => {
 
     spy1 = jest.spyOn(model.constructor.prototype, 'newRelation').mockReturnValue(relation);
     // @ts-ignore
-    spy2 = jest.spyOn(builder, 'relationsNestedUnder');
+    spy2 = jest.spyOn(builder, '_relationsNestedUnder');
     spy3 = jest.spyOn(relation, 'getQuery').mockReturnValue({
       with() {
       }
@@ -830,7 +830,7 @@ describe('fedaco builder', () => {
 
     spy1 = jest.spyOn(model.constructor.prototype, 'newRelation').mockReturnValue(relation);
     // @ts-ignore
-    spy2 = jest.spyOn(builder, 'relationsNestedUnder');
+    spy2 = jest.spyOn(builder, '_relationsNestedUnder');
     spy3 = jest.spyOn(relation, 'getQuery').mockReturnValue(groupQuery);
     spy4 = jest.spyOn(groupQuery, 'with');
 

@@ -134,10 +134,10 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
 
     /*Add a relationship count / exists condition to the query.*/
     public has(relation: Relation | string,
-               operator                  = '>=',
-               count                     = 1,
-               conjunction               = 'and',
-               callback: Function | null = null): this {
+               operator    = '>=',
+               count       = 1,
+               conjunction = 'and',
+               callback?: Function): this {
       if (isString(relation)) {
         if (relation.includes('.')) {
           return this._hasNested(relation, operator, count, conjunction, callback);
@@ -159,11 +159,11 @@ public readonly ${relation};
         'getRelationExistenceQuery' :
         'getRelationExistenceCountQuery';
 
-      const hasQuery = (relation as any)[method](
+      const hasQuery: FedacoBuilder = (relation as any)[method](
         (relation as Relation).getRelated().newQueryWithoutRelationships(), this);
 
       if (callback) {
-        hasQuery._callScope(callback);
+        hasQuery.callScope(callback as any);
       }
       return this._addHasWhere(hasQuery, relation as Relation, operator, count, conjunction);
     }
@@ -363,7 +363,7 @@ public readonly ${relation};
         const query = relation.getRelationExistenceQuery(
           relation.getRelated().newQuery(), this as unknown as FedacoBuilder, raw(expression)
         ); // .setBindings([], 'select');
-        query._callScope(constraints);
+        query.callScope(constraints);
 
         const queryBuilder: QueryBuilder = query.mergeConstraintsFrom(relation.getQuery()).toBase();
         queryBuilder._orders             = [];
@@ -377,10 +377,10 @@ public readonly ${relation};
         );
         if (func === 'exists') {
           const sql = query.toSql();
-            this.selectRaw(
-              `exists(${sql.result}) as ${this.getQuery()._grammar.wrap(alias)}`,
-              sql.bindings
-            ).withCasts({[alias]: 'boolean'});
+          this.selectRaw(
+            `exists(${sql.result}) as ${this.getQuery()._grammar.wrap(alias)}`,
+            sql.bindings
+          ).withCasts({[alias]: 'boolean'});
 
           // this.select(
           //   new ColumnReferenceExpression(

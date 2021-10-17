@@ -7,6 +7,7 @@
 import { isArray, isBlank } from '@gradii/check-type';
 import { uniq } from 'ramda';
 import { Collection } from '../../define/collection';
+import { Constructor } from '../../helper/constructor';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
 import {
@@ -14,7 +15,7 @@ import {
 } from './concerns/interacts-with-dictionary';
 import { Relation } from './relation';
 
-export interface HasManyThrough extends InteractsWithDictionary, Relation {
+export interface HasManyThrough extends InteractsWithDictionary, Constructor<Relation> {
   /*The "through" parent model instance.*/
   _throughParent: Model;
   /*The far parent model instance.*/
@@ -208,7 +209,7 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
 
   /*Set the constraints for an eager load of the relation.*/
   public addEagerConstraints(models: any[]): void {
-    const whereIn = this.whereInMethod(this._farParent, this._localKey);
+    const whereIn = this._whereInMethod(this._farParent, this._localKey);
     this._query[whereIn](this.getQualifiedFirstKeyName(), this.getKeys(models, this._localKey));
   }
 

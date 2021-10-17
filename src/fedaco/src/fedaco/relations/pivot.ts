@@ -3,10 +3,11 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
+
+/* tslint:disable:no-namespace */
 import { Model } from '../model';
 import { AsPivot, mixinAsPivot } from './concerns/as-pivot';
 
-// tslint:disable-next-line:no-namespace
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export declare namespace Pivot {
   /*Create a new pivot model instance.*/

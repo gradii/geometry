@@ -1,8 +1,9 @@
+import { FedacoBuilder } from '../../src/fedaco/fedaco-builder';
 import { Model } from '../../src/fedaco/model';
 import { HasOne } from '../../src/fedaco/relations/has-one';
 import { getBuilder } from './relation-testing-helper';
 
-let builder, related;
+let builder: FedacoBuilder, related;
 
 function getRelation() {
   builder = getBuilder();

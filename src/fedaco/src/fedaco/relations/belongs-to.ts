@@ -7,6 +7,7 @@
 import { isBlank } from '@gradii/check-type';
 import { uniq } from 'ramda';
 import { Collection } from '../../define/collection';
+import { Constructor } from '../../helper/constructor';
 import { BaseModel } from '../base-model';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
@@ -21,13 +22,14 @@ import {
 } from './concerns/supports-default-models';
 import { Relation } from './relation';
 
-export interface BelongsTo extends ComparesRelatedModels,
-  InteractsWithDictionary,
-  SupportsDefaultModels,
-  Relation {
+export interface BelongsTo extends ComparesRelatedModels, InteractsWithDictionary,
+  SupportsDefaultModels, Constructor<Relation> {
+
+  getRelationExistenceQuery(query: FedacoBuilder, parentQuery: FedacoBuilder,
+                            columns: any[] | any): FedacoBuilder;
 }
 
-export class BelongsTo extends mixinComparesRelatedModels<any>(
+export class BelongsTo extends mixinComparesRelatedModels(
   mixinInteractsWithDictionary(
     mixinSupportsDefaultModels(
       Relation
@@ -79,7 +81,7 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
   /*Set the constraints for an eager load of the relation.*/
   public addEagerConstraints(models: any[]) {
     const key     = `${this._related.getTable()}.${this._ownerKey}`;
-    const whereIn = this.whereInMethod(this._related, this._ownerKey);
+    const whereIn = this._whereInMethod(this._related, this._ownerKey);
     this._query[whereIn](key, this.getEagerModelKeys(models));
   }
 
@@ -148,7 +150,7 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
 
   /*Add the constraints for a relationship query.*/
   public getRelationExistenceQuery(query: FedacoBuilder, parentQuery: FedacoBuilder,
-                                   columns: any[] | any = ['*']) {
+                                   columns: any[] | any = ['*']): FedacoBuilder {
     // todo check
     if (parentQuery.getModel().getTable() == query.getModel().getTable()) {
       return this.getRelationExistenceQueryForSelfRelation(query, parentQuery, columns);
@@ -160,11 +162,11 @@ export class BelongsTo extends mixinComparesRelatedModels<any>(
 
   /*Add the constraints for a relationship query on the same table.*/
   public getRelationExistenceQueryForSelfRelation(query: FedacoBuilder, parentQuery: FedacoBuilder,
-                                                  columns: any[] | any = ['*']) {
+                                                  columns: any[] | any = ['*']): FedacoBuilder {
     const hash = this.getRelationCountHash();
     query.select(columns).from(query.getModel().getTable() + ' as ' + hash);
     query.getModel().setTable(hash);
-    return query.whereColumn(`${hash}.${this._ownerKey}`, '=', this.getQualifiedForeignKeyName());
+    return (query as FedacoBuilder).whereColumn(`${hash}.${this._ownerKey}`, '=', this.getQualifiedForeignKeyName());
   }
 
   /*Determine if the related model has an auto-incrementing ID.*/

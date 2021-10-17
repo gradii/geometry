@@ -360,8 +360,12 @@ export class Model extends mixinHasAttributes(
       // @ts-ignore
       return query[method](column, amount, extra);
     }
-    this[column] = this.isClassDeviable(column) ? this.deviateClassCastableAttribute(method, column,
-      amount) : this[column] + (method === 'increment' ? amount : amount * -1);
+    if (this.isClassDeviable(column)) {
+      this[column] = this.deviateClassCastableAttribute(method, column,
+        amount);
+    } else {
+      this[column] = this[column] + (method === 'increment' ? amount : amount * -1);
+    }
     this.forceFill(extra);
     if (this._fireModelEvent('updating') === false) {
       return false;
@@ -634,7 +638,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Create a new Eloquent Collection instance.*/
-  public newCollection(models: any[] = []): Model[] {
+  public newCollection(models: any[] = []): this[] {
     return models;
   }
 

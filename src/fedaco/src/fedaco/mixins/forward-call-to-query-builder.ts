@@ -95,7 +95,7 @@ export interface ForwardCallToQueryBuilder extends Omit<QueryBuilderJoin, 'joinS
 
   onceWithColumns(...args: any[]): this;
 
-  first(...args: any[]): Promise<this>;
+  first(...args: any[]): Promise<any>;
 
   joinSub(query: Function | QueryBuilder | FedacoBuilder | string, as: string, first: Function | string,
           operator?: string,

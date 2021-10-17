@@ -7,12 +7,13 @@
 import { isBlank } from '@gradii/check-type';
 import { last, tap } from 'ramda';
 import { Collection } from '../../define/collection';
+import { Constructor } from '../../helper/constructor';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
 import { mixinInteractsWithDictionary } from './concerns/interacts-with-dictionary';
 import { Relation } from './relation';
 
-export interface HasOneOrMany extends Relation {
+export interface HasOneOrMany extends Constructor<Relation> {
   // foreignKey: string;
   // localKey: string;
   make(attributes?: any): any;
@@ -32,7 +33,7 @@ export interface HasOneOrMany extends Relation {
   saveMany(models: any[]): Promise<any[]>;
   create(attributes?: any): Promise<any>;
   createMany(records: any[]): Promise<any>;
-  setForeignAttributesForCreate(model: Model): void;
+  _setForeignAttributesForCreate(model: Model): void;
   getRelationExistenceQuery(query: FedacoBuilder, parentQuery: FedacoBuilder, columns?: any[] | any): any;
   getRelationExistenceQueryForSelfRelation(query: FedacoBuilder, parentQuery: FedacoBuilder, columns?: any[] | any): any;
   getExistenceCompareKey(): string;
@@ -60,7 +61,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   /*Create and return an un-saved instance of the related model.*/
   public make(attributes: any = {}) {
     return tap(instance => {
-      this.setForeignAttributesForCreate(instance);
+      this._setForeignAttributesForCreate(instance);
     }, this._related.newInstance(attributes));
   }
 
@@ -84,7 +85,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
 
   /*Set the constraints for an eager load of the relation.*/
   public addEagerConstraints(models: any[]) {
-    const whereIn = this.whereInMethod(this._parent, this.localKey);
+    const whereIn = this._whereInMethod(this._parent, this.localKey);
     this._getRelationQuery()[whereIn](this.foreignKey, this.getKeys(models, this.localKey));
   }
 
@@ -135,7 +136,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
     let instance = await this.find(id, columns);
     if (isBlank(instance)) {
       instance = this._related.newInstance();
-      this.setForeignAttributesForCreate(instance);
+      this._setForeignAttributesForCreate(instance);
     }
     return instance;
   }
@@ -145,7 +146,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
     let instance = await this.where(attributes).first() as Model;
     if (isBlank(instance)) {
       instance = this._related.newInstance({...attributes, ...values});
-      this.setForeignAttributesForCreate(instance);
+      this._setForeignAttributesForCreate(instance);
     }
     return instance;
   }
@@ -170,7 +171,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
 
   /*Attach a model instance to the parent model.*/
   public async save(model: Model) {
-    this.setForeignAttributesForCreate(model);
+    this._setForeignAttributesForCreate(model);
     return await model.save() ? model : false;
   }
 
@@ -185,7 +186,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   /*Create a new instance of the related model.*/
   public async create(attributes: any = {}) {
     const instance = this._related.newInstance(attributes);
-    this.setForeignAttributesForCreate(instance);
+    this._setForeignAttributesForCreate(instance);
     await instance.save();
     return instance;
   }

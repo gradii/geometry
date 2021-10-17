@@ -74,7 +74,7 @@ describe('test database eloquent global scopes', () => {
   it('regular scopes with or where conditions are nested', () => {
     const query = EloquentClosureGlobalScopesTestModel.createQuery().withoutGlobalScopes().where(
       'foo', 'foo').orWhere('bar',
-      'bar')._callNamedScope('approved');
+      'bar').callNamedScope('approved');
     expect(query.toSql()).toEqual(
       {
         result  : 'SELECT * FROM "_table" WHERE "foo" = ? OR "bar" = ? AND "approved" = ? OR "should_approve" = ?',
@@ -85,7 +85,7 @@ describe('test database eloquent global scopes', () => {
     const query = EloquentClosureGlobalScopesTestModel.createQuery().withoutGlobalScopes().where(
       'foo', 'foo')
       .orWhere('bar', 'bar')
-      ._callNamedScope('orApproved');
+      .callNamedScope('orApproved');
     expect(query.toSql()).toEqual(
       {
         result  : 'SELECT * FROM "_table" WHERE "foo" = ? OR "bar" = ? OR "approved" = ? OR "should_approve" = ?',

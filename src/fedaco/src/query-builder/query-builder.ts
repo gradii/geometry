@@ -280,7 +280,7 @@ export class QueryBuilder extends Builder {
 
   public addSelect(columns: string[] | { [as: string]: any }): this;
 
-  public addSelect(columns: string[] | string | { [as: string]: any }, ...cols: string[]) {
+  public addSelect(columns: string[] | string | { [as: string]: any }, ...cols: string[]): this {
     columns = isArray(columns) ? columns : arguments;
     for (const column of columns as any[]) {
       if (column instanceof RawExpression) {
@@ -295,7 +295,7 @@ export class QueryBuilder extends Builder {
     return this;
   }
 
-  public distinct(...args) {
+  public distinct(...args: (string | boolean)[]): this {
     const columns = args;
     if (columns.length > 0) {
       this._distinct = isArray(columns[0]) || isBoolean(
@@ -332,7 +332,7 @@ export class QueryBuilder extends Builder {
     return this;
   }
 
-  public fromSub(table, as) {
+  public fromSub(table: any, as: string): this {
     return this;
   }
 
@@ -408,7 +408,7 @@ export class QueryBuilder extends Builder {
     return this._bindings;
   }
 
-  isQueryable(value): value is (QueryBuilder | Function) {
+  isQueryable(value: QueryBuilder | FedacoBuilder | Relation | Function | any): value is (QueryBuilder | Function) {
     return value instanceof QueryBuilder ||
       value instanceof FedacoBuilder ||
       value instanceof Relation ||
@@ -462,7 +462,7 @@ export class QueryBuilder extends Builder {
   }
 
   /*Increment a column's value by a given amount.*/
-  public increment(column: string, amount: number = 1, extra: any[] = []) {
+  public increment(column: string, amount: number = 1, extra: any = {}): Promise<any> {
     if (!isNumber(amount)) {
       throw new Error('InvalidArgumentException Non-numeric value passed to increment method.');
     }
@@ -472,7 +472,7 @@ export class QueryBuilder extends Builder {
   }
 
   /*Decrement a column's value by a given amount.*/
-  public decrement(column: string, amount: number = 1, extra: any[] = []) {
+  public decrement(column: string, amount: number = 1, extra: any = {}): Promise<any> {
     if (!isNumber(amount)) {
       throw new Error('InvalidArgumentException Non-numeric value passed to decrement method.');
     }
@@ -482,7 +482,7 @@ export class QueryBuilder extends Builder {
   }
 
   /*Delete a record from the database.*/
-  public async delete(id?: any) {
+  public delete(id?: any) {
     if (!isBlank(id)) {
       this.addWhere(
         new ComparisonPredicateExpression(

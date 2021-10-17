@@ -9,6 +9,7 @@ import { uniq } from 'ramda';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Collection } from '../../define/collection';
+import { Constructor } from '../../helper/constructor';
 import { pluralStudy } from '../../helper/pluralize';
 import { camelCase } from '../../helper/str';
 import { FedacoBuilder } from '../fedaco-builder';
@@ -22,7 +23,7 @@ import {
 } from './concerns/interacts-with-pivot-table';
 import { Relation } from './relation';
 
-export interface BelongsToMany extends InteractsWithDictionary, InteractsWithPivotTable, Relation {
+export interface BelongsToMany extends InteractsWithDictionary, InteractsWithPivotTable, Constructor<Relation> {
 
 }
 
@@ -126,7 +127,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Set the constraints for an eager load of the relation.*/
   public addEagerConstraints(models: any[]) {
-    const whereIn = this.whereInMethod(this._parent, this._parentKey);
+    const whereIn = this._whereInMethod(this._parent, this._parentKey);
     this._query[whereIn](this.getQualifiedForeignPivotKeyName(),
       this.getKeys(models, this._parentKey));
   }

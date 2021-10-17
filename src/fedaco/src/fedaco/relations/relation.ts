@@ -8,14 +8,26 @@ import { isArray, isBlank, isObject } from '@gradii/check-type';
 import { last, uniq } from 'ramda';
 import { Collection } from '../../define/collection';
 import { raw } from '../../query-builder/ast-factory';
+import { QueryBuilderAggregate } from '../../query-builder/mixins/aggregate';
+import { BuildQueries } from '../../query-builder/mixins/build-query';
+import { QueryBuilderGroupBy } from '../../query-builder/mixins/group-by';
+import { QueryBuilderHaving } from '../../query-builder/mixins/having';
+import { QueryBuilderJoin } from '../../query-builder/mixins/join';
+import { QueryBuilderLimitOffset } from '../../query-builder/mixins/limit-offset';
+import { QueryBuilderOrderBy } from '../../query-builder/mixins/order-by';
+import { QueryBuilderUnion } from '../../query-builder/mixins/union';
+import { QueryBuilderWhereCommon } from '../../query-builder/mixins/where-common';
+import { QueryBuilderWhereDate } from '../../query-builder/mixins/where-date';
+import { QueryBuilderWherePredicate } from '../../query-builder/mixins/where-predicate';
+import { QueryBuilder } from '../../query-builder/query-builder';
 import { FedacoBuilder } from '../fedaco-builder';
 import {
   ForwardCallToQueryBuilder, mixinForwardCallToQueryBuilder
 } from '../mixins/forward-call-to-query-builder';
 import { Model } from '../model';
 
-export interface Relation extends ForwardCallToQueryBuilder {
-}
+// export interface Relation extends ForwardCallToQueryBuilder {
+// }
 
 /**
  * select * from table where col = ? and col2 = ?;
@@ -46,7 +58,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
 
   /*Run a callback with constraints disabled on the relation.*/
   public static noConstraints(callback: Function): Relation {
-    const previous         = Relation.constraints;
+    const previous       = Relation.constraints;
     Relation.constraints = false;
     let rst;
     try {
@@ -132,7 +144,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
 
   Essentially, these queries compare on column names like whereColumn.*/
   public getRelationExistenceQuery(query: FedacoBuilder, parentQuery: FedacoBuilder,
-                                   columns: any[] | any = ['*']) {
+                                   columns: any[] | any = ['*']): FedacoBuilder {
     return query.select(columns)
       .whereColumn(
         this.getQualifiedParentKeyName(),
@@ -151,14 +163,16 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   }
 
   /*Get all of the primary keys for an array of models.*/
-  protected getKeys(models: any[], key: string | null = null) {
+
+  /*protected */
+  getKeys(models: any[], key: string | null = null) {
     return uniq(models.map(value => {
       return key ? value.getAttribute(key) : value.getKey();
     })).sort();
   }
 
   /*Get the query builder that will contain the relationship constraints.*/
-  protected _getRelationQuery() {
+  _getRelationQuery() {
     return this._query;
   }
 
@@ -208,7 +222,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   }
 
   /*Get the name of the "where in" method for eager loading.*/
-  protected whereInMethod(model: Model, key: string): 'whereIntegerInRaw' | 'whereIn' {
+  _whereInMethod(model: Model, key: string): 'whereIntegerInRaw' | 'whereIn' {
     return model.getKeyName() === last(key.split('.')) &&
     ['int', 'integer'].includes(model.getKeyType()) ? 'whereIntegerInRaw' : 'whereIn';
   }

@@ -46,7 +46,7 @@ export class MorphOneOrMany extends HasOneOrMany {
   }
 
   /*Set the foreign ID and type for creating a related model.*/
-  protected setForeignAttributesForCreate(model: Model) {
+  _setForeignAttributesForCreate(model: Model) {
     model.setAttribute(this.getForeignKeyName(), this.getParentKey());
     model.setAttribute(this.getMorphType(), this.morphClass);
   }
