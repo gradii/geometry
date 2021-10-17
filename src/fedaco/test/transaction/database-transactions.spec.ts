@@ -4,7 +4,7 @@ import { DatabaseTransactionsManager } from 'Illuminate/Database/DatabaseTransac
 
 describe('test database transactions', () => {
   it('set up', () => {
-    var db = new DB();
+    const db = new DB();
     db.addConnection({
       'driver'  : 'sqlite',
       'database': ':memory:'
@@ -26,7 +26,7 @@ describe('test database transactions', () => {
     m.close();
   });
   it('transaction is recorded and committed', () => {
-    var transactionManager = m.mock(new DatabaseTransactionsManager());
+    const transactionManager = m.mock(new DatabaseTransactionsManager());
     transactionManager.shouldReceive('begin').once()._with('default', 1);
     transactionManager.shouldReceive('commit').once()._with('default');
     this.connection().setTransactionManager(transactionManager);
@@ -43,7 +43,7 @@ describe('test database transactions', () => {
     });
   });
   it('transaction is recorded and committed using the separate methods', () => {
-    var transactionManager = m.mock(new DatabaseTransactionsManager());
+    const transactionManager = m.mock(new DatabaseTransactionsManager());
     transactionManager.shouldReceive('begin').once()._with('default', 1);
     transactionManager.shouldReceive('commit').once()._with('default');
     this.connection().setTransactionManager(transactionManager);
@@ -60,7 +60,7 @@ describe('test database transactions', () => {
     this.connection().commit();
   });
   it('nested transaction is recorded and committed', () => {
-    var transactionManager = m.mock(new DatabaseTransactionsManager());
+    const transactionManager = m.mock(new DatabaseTransactionsManager());
     transactionManager.shouldReceive('begin').once()._with('default', 1);
     transactionManager.shouldReceive('begin').once()._with('default', 2);
     transactionManager.shouldReceive('commit').once()._with('default');
@@ -85,7 +85,7 @@ describe('test database transactions', () => {
     });
   });
   it('nested transaction is recorde for different connectionsd and committed', () => {
-    var transactionManager = m.mock(new DatabaseTransactionsManager());
+    const transactionManager = m.mock(new DatabaseTransactionsManager());
     transactionManager.shouldReceive('begin').once()._with('default', 1);
     transactionManager.shouldReceive('begin').once()._with('second_connection', 1);
     transactionManager.shouldReceive('begin').once()._with('second_connection', 2);
@@ -120,7 +120,7 @@ describe('test database transactions', () => {
     });
   });
   it('transaction is rolled back', () => {
-    var transactionManager = m.mock(new DatabaseTransactionsManager());
+    const transactionManager = m.mock(new DatabaseTransactionsManager());
     transactionManager.shouldReceive('begin').once()._with('default', 1);
     transactionManager.shouldReceive('rollback').once()._with('default', 0);
     transactionManager.shouldNotReceive('commit');
@@ -142,7 +142,7 @@ describe('test database transactions', () => {
     }
   });
   it('transaction is rolled back using separate methods', () => {
-    var transactionManager = m.mock(new DatabaseTransactionsManager());
+    const transactionManager = m.mock(new DatabaseTransactionsManager());
     transactionManager.shouldReceive('begin').once()._with('default', 1);
     transactionManager.shouldReceive('rollback').once()._with('default', 0);
     transactionManager.shouldNotReceive('commit');
@@ -160,7 +160,7 @@ describe('test database transactions', () => {
     this.connection().rollBack();
   });
   it('nested transactions are rolled back', () => {
-    var transactionManager = m.mock(new DatabaseTransactionsManager());
+    const transactionManager = m.mock(new DatabaseTransactionsManager());
     transactionManager.shouldReceive('begin').once()._with('default', 1);
     transactionManager.shouldReceive('begin').once()._with('default', 2);
     transactionManager.shouldReceive('rollback').once()._with('default', 1);

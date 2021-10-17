@@ -24,9 +24,9 @@ export class DatabaseTransactionRecord {
   }
 
   /*Execute all of the callbacks.*/
-  public executeCallbacks() {
+  public async executeCallbacks() {
     for (const callback of this.callbacks) {
-      callback();
+      await callback();
     }
   }
 

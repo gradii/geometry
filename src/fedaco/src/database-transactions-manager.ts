@@ -4,11 +4,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { partition } from 'ramda';
 import { DatabaseTransactionRecord } from './database-transaction-record';
 
 export class DatabaseTransactionsManager {
   /*All of the recorded transactions.*/
-  protected transactions: any[] = [];
+  protected transactions: DatabaseTransactionRecord[] = [];
 
   /*Create a new database transactions manager instance.*/
   public constructor() {
@@ -27,12 +28,16 @@ export class DatabaseTransactionsManager {
   }
 
   /*Commit the active database transaction.*/
-  public commit(connection: string) {
-    const [forThisConnection, forOtherConnections] = this.transactions.partition(transaction => {
+  public async commit(connection: string) {
+    const [forThisConnection, forOtherConnections] = partition((transaction => {
       return transaction.connection == connection;
-    });
-    this.transactions                              = forOtherConnections.values();
-    forThisConnection.map.executeCallbacks();
+    }), this.transactions);
+
+    this.transactions = forOtherConnections;
+
+    for (const conn of forThisConnection) {
+      await conn.executeCallbacks();
+    }
   }
 
   /*Register a transaction callback.*/

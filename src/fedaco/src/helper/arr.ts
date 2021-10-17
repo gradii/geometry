@@ -21,3 +21,11 @@ export function mapWithKeys(items: Record<string, any>, callback) {
   }
   return result;
 }
+
+function valueRetriever() {
+
+}
+
+function operatorForWhere() {
+
+}

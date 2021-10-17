@@ -23,4 +23,6 @@ export interface WrappedConnection {
 
   lastInsertId(): Promise<number>;
 
+  commit(): Promise<any>;
+
 }

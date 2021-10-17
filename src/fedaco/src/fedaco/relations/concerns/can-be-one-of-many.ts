@@ -6,11 +6,10 @@
 
 import { isBlank, isFunction, isString } from '@gradii/check-type';
 import { last } from 'ramda';
+import { wrap } from '../../../helper/arr';
 import { Constructor } from '../../../helper/constructor';
 import { JoinClauseBuilder } from '../../../query-builder/query-builder';
 import { FedacoBuilder } from '../../fedaco-builder';
-import { Relation } from '../relation';
-import { mapWithKeys, wrap } from '../../../helper/arr';
 
 export interface CanBeOneOfMany {
   ofMany(column?: string | any[] | null, aggregate?: string | Function | null,

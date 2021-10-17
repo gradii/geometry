@@ -10,6 +10,7 @@ import { BaseGrammar } from './base-grammar';
 import { SqliteWrappedConnection } from './connector/sqlite/sqlite-wrapped-connection';
 import { WrappedConnection } from './connector/wrapped-connection';
 import { WrappedStmt } from './connector/wrapped-stmt';
+import { DatabaseTransactionsManager } from './database-transactions-manager';
 // import { DatabaseTransactionsManager } from './database-transactions-manager';
 import { QueryExecuted } from './events/query-executed';
 import { StatementPrepared } from './events/statement-prepared';
@@ -18,6 +19,7 @@ import { TransactionCommitted } from './events/transaction-committed';
 import { TransactionRolledBack } from './events/transaction-rolled-back';
 import { Dispatcher } from './fedaco/mixins/has-events';
 import { get } from './helper/obj';
+import { mixinManagesTransactions } from './manages-transactions';
 import { raw } from './query-builder/ast-factory';
 import { ConnectionInterface } from './query-builder/connection-interface';
 import { QueryGrammar } from './query-builder/grammar/query-grammar';
@@ -27,7 +29,8 @@ import { QueryException } from './query-exception';
 import { SchemaGrammar } from './schema/grammar/schema-grammar';
 import { SchemaBuilder } from './schema/schema-builder';
 
-export class Connection implements ConnectionInterface {
+export class Connection extends mixinManagesTransactions(class {
+}) implements ConnectionInterface {
   /*The active PDO connection.*/
   protected pdo: WrappedConnection | Function;
   /*The active PDO connection used for reads.*/
@@ -54,10 +57,6 @@ export class Connection implements ConnectionInterface {
   protected events: Dispatcher;
   /*The default fetch mode of the connection.*/
   protected fetchMode: number = -1;
-  /*The number of active transactions.*/
-  protected transactions: number = 0;
-  /*The transaction manager instance.*/
-  // protected transactionsManager: DatabaseTransactionsManager;
   /*Indicates if changes have been made to the database.*/
   protected recordsModified: boolean = false;
   /*Indicates if the connection should use the "write" PDO connection.*/
@@ -75,7 +74,8 @@ export class Connection implements ConnectionInterface {
 
   /*Create a new database connection instance.*/
   public constructor(pdo: Function, database: string = '', tablePrefix: string = '',
-                     config: any                                             = {}) {
+                     config: any                                               = {}) {
+    super();
     this.pdo         = pdo;
     this.database    = database;
     this.tablePrefix = tablePrefix;
@@ -326,7 +326,7 @@ export class Connection implements ConnectionInterface {
   /*Handle a query exception.*/
   protected handleQueryException(e: QueryException, query: string, bindings: any[],
                                  callback: Function) {
-    if (this.transactions >= 1) {
+    if (this._transactions >= 1) {
       throw e;
     }
     return this.tryAgainIfCausedByLostConnection(e, query, bindings, callback);
@@ -483,7 +483,7 @@ export class Connection implements ConnectionInterface {
 
   /*Get the current PDO connection used for reading.*/
   public getReadPdo() {
-    if (this.transactions > 0) {
+    if (this._transactions > 0) {
       return this.getPdo();
     }
     if (this.readOnWriteConnection || this.recordsModified && this.getConfig('sticky')) {
@@ -502,8 +502,8 @@ export class Connection implements ConnectionInterface {
 
   /*Set the PDO connection.*/
   public setPdo(pdo: Function | null) {
-    this.transactions = 0;
-    this.pdo          = pdo;
+    this._transactions = 0;
+    this.pdo           = pdo;
     return this;
   }
 
@@ -587,17 +587,6 @@ export class Connection implements ConnectionInterface {
   public unsetEventDispatcher() {
     this.events = null;
   }
-
-  // /*Set the transaction manager instance on the connection.*/
-  // public setTransactionManager(manager: DatabaseTransactionsManager) {
-  //   this.transactionsManager = manager;
-  //   return this;
-  // }
-  //
-  // /*Unset the transaction manager for this connection.*/
-  // public unsetTransactionManager() {
-  //   this.transactionsManager = null;
-  // }
 
   /*Determine if the connection is in a "dry run".*/
   public dryRun() {

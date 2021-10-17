@@ -2,8 +2,6 @@ import { Container } from 'Illuminate/Container/Container';
 import { Manager as DB } from 'Illuminate/Database/Capsule/Manager';
 import { ConnectionFactory } from 'Illuminate/Database/Connectors/ConnectionFactory';
 import { InvalidArgumentException } from 'InvalidArgumentException';
-import { Mockery as m } from 'Mockery';
-import { PDO } from 'PDO';
 import { ReflectionProperty } from 'ReflectionProperty';
 
 describe('test database connection factory', () => {

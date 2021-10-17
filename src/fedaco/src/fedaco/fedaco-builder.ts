@@ -80,7 +80,11 @@ export interface FedacoBuilder<T extends Model = Model> extends GuardsAttributes
   /**
    * Find a model by its primary key.
    */
-  find(id: any | any[], columns?: any[]): Promise<T | T[]>;
+  find(id: string | number, columns?: any[]): Promise<T>;
+
+  find(id: any, columns?: any[]): Promise<T>;
+
+  find(id: any[], columns?: any[]): Promise<T[]>;
 
   /**
    * Find multiple models by their primary keys.
