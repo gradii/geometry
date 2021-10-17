@@ -107,7 +107,7 @@ export interface HasAttributes {
   unsetAttribute(key: string);
 
   /*Get an attribute from the model.*/
-  getAttribute(key: string);
+  getAttribute<K extends Extract<keyof this, string>>(key: K | string): any | Promise<any>;
 
   /*Get a plain attribute (not a relationship).*/
   getAttributeValue(key: string): any;
@@ -767,7 +767,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     /*Set a given JSON attribute on the model.*/
     public fillJsonAttribute(this: Model & this, key: string, value: any) {
       let path;
-      [key, ...path]           = key.split('->');
+      [key, ...path]        = key.split('->');
       value                 = this.asJson(this.getArrayAttributeWithValue(path.join('->'), key, value));
       this._attributes[key] = this.isEncryptedCastable(key) ?
         this.castAttributeAsEncryptedString(key, value) : value;
@@ -936,7 +936,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     public getCasts(this: Model & this) {
       const typeOfClazz = this.constructor as typeof Model;
       const metas       = reflector.propMetadata(typeOfClazz);
-      const casts: any    = {};
+      const casts: any  = {};
       for (const [key, meta] of Object.entries(metas)) {
         const columnMeta = findLast(it => {
           return FedacoColumn.isTypeOf(it);

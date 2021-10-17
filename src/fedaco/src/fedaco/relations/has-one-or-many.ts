@@ -33,7 +33,7 @@ export interface HasOneOrMany extends Constructor<Relation> {
   saveMany(models: any[]): Promise<any[]>;
   create(attributes?: any): Promise<any>;
   createMany(records: any[]): Promise<any>;
-  _setForeignAttributesForCreate(model: Model): void;
+  // _setForeignAttributesForCreate(model: Model): void;
   getRelationExistenceQuery(query: FedacoBuilder, parentQuery: FedacoBuilder, columns?: any[] | any): any;
   getRelationExistenceQueryForSelfRelation(query: FedacoBuilder, parentQuery: FedacoBuilder, columns?: any[] | any): any;
   getExistenceCompareKey(): string;
@@ -201,7 +201,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   }
 
   /*Set the foreign ID for creating a related model.*/
-  /*protected*/ setForeignAttributesForCreate(model: Model) {
+  _setForeignAttributesForCreate(model: Model) {
     model.setAttribute(this.getForeignKeyName(), this.getParentKey());
   }
 

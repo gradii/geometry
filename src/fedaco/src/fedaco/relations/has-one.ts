@@ -77,7 +77,7 @@ export class HasOne extends mixinComparesRelatedModels(
   public newRelatedInstanceFor(parent: Model) {
     return this._related.newInstance()
       .setAttribute(
-        this.getForeignKeyName(), parent[this._localKey]
+        this.getForeignKeyName(), parent.getAttribute(this._localKey)
       );
   }
 
