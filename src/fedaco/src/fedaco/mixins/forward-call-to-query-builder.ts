@@ -24,7 +24,8 @@ import { Model } from '../model';
 export interface ForwardCallToQueryBuilder extends Omit<QueryBuilderJoin, 'joinSub'>, QueryBuilderOrderBy,
   QueryBuilderGroupBy, QueryBuilderHaving, QueryBuilderLimitOffset, QueryBuilderUnion,
   QueryBuilderWhereDate, QueryBuilderAggregate, QueryBuilderWherePredicate, QueryBuilderWhereCommon,
-  Omit<BuildQueries, 'first'>, Pick<QueryBuilder, 'beforeQuery' | 'find' | 'applyBeforeQueryCallbacks'> {
+  Constructor<Omit<BuildQueries, 'first'>>,
+  Pick<QueryBuilder, 'beforeQuery' | 'find' | 'applyBeforeQueryCallbacks'> {
   pluck(...args: any[]): Promise<any[] | Record<string, any>>;
 
   stripTableForPluck(...args: any[]): this;

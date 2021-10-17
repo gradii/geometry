@@ -317,13 +317,13 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Get the first related record matching the attributes or create it.*/
-  public async firstOrCreate(attributes: any[] = [],
-                             values: any[]     = [],
-                             joining: any[]    = [],
-                             touch             = true) {
+  public async firstOrCreate(attributes: any = {},
+                             values: any     = {},
+                             joining: any[]  = [],
+                             touch           = true) {
     let instance = await this._related.newQuery().where(attributes).first();
     if (isBlank(instance)) {
-      instance = this.create([...attributes, ...values], joining, touch);
+      instance = await this.create({...attributes, ...values}, joining, touch);
     }
     return instance;
   }

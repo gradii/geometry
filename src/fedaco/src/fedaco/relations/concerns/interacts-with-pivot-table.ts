@@ -26,10 +26,10 @@ export interface InteractsWithPivotTable {
   }>;
 
   /*Sync the intermediate tables with a list of IDs without detaching.*/
-  syncWithoutDetaching(ids: Collection | Model | any[]): Promise<PivotTableData>
+  syncWithoutDetaching(ids: Collection | Model | any[]): Promise<PivotTableData>;
 
   /*Sync the intermediate tables with a list of IDs or collection of models.*/
-  sync(ids: Collection | Model | any[], detaching?: boolean): Promise<PivotTableData>
+  sync(ids: Collection | Model | any[], detaching?: boolean): Promise<PivotTableData>;
 
   /*Sync the intermediate tables with a list of IDs or collection of models with the given pivot values.*/
   syncWithPivotValues(ids: Collection | Model | any[], values: any[],
@@ -128,9 +128,10 @@ type PivotTableData = {
 export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T): InteractsWithPivotTableCtor & T {
 
   return class _Self extends base {
-    /*Toggles a model (or models) from the parent.
-
-    Each existing model is detached, and non existing ones are attached.*/
+    /*
+    * Toggles a model (or models) from the parent.
+    * Each existing model is detached, and non existing ones are attached.
+    */
     public async toggle(this: BelongsToMany & _Self, ids: any, touch = true): Promise<PivotTableData> {
       const changes: any = {
         attached: [],
@@ -157,7 +158,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
         changes['detached'].length
       )
       ) {
-        this.touchIfTouching();
+        await this.touchIfTouching();
       }
       return changes;
     }
