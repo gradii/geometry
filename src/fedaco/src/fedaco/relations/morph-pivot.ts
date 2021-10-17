@@ -65,13 +65,13 @@ export class MorphPivot extends Pivot {
   }
 
   /*Get the queueable identity for the entity.*/
-  public getQueueableId(this: Model & this) {
+  public getQueueableId() {
     if (this._attributes[this.getKeyName()] !== undefined) {
       return this.getKey();
     }
-    return `${this.foreignKey}:${this.getAttribute(
-      this.foreignKey)}:${this.relatedKey}:${this.getAttribute(
-      this.relatedKey)}:${this.morphType}:${this.morphClass}`;
+    return `${this._foreignKey}:${this.getAttribute(
+      this._foreignKey)}:${this._relatedKey}:${this.getAttribute(
+      this._relatedKey)}:${this.morphType}:${this.morphClass}`;
   }
 
   /*Get a new query to restore one or more models by their queueable IDs.*/

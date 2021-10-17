@@ -46,15 +46,15 @@ export interface HasOneOrMany extends Constructor<Relation> {
 
 export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   /*The foreign key of the parent model.*/
-  protected foreignKey: string;
+  protected _foreignKey: string;
   /*The local key of the parent model.*/
-  protected localKey: string;
+  protected _localKey: string;
 
   /*Create a new has one or many relationship instance.*/
   public constructor(query: FedacoBuilder, parent: Model, foreignKey: string, localKey: string) {
     super(query, parent);
-    this.localKey   = localKey;
-    this.foreignKey = foreignKey;
+    this._localKey   = localKey;
+    this._foreignKey = foreignKey;
     this.addConstraints();
   }
 
@@ -78,15 +78,15 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   public addConstraints() {
     if ((this.constructor as typeof HasOneOrMany).constraints) {
       const query = this._getRelationQuery();
-      query.where(this.foreignKey, '=', this.getParentKey());
-      query.whereNotNull(this.foreignKey);
+      query.where(this._foreignKey, '=', this.getParentKey());
+      query.whereNotNull(this._foreignKey);
     }
   }
 
   /*Set the constraints for an eager load of the relation.*/
   public addEagerConstraints(models: any[]) {
-    const whereIn = this._whereInMethod(this._parent, this.localKey);
-    this._getRelationQuery()[whereIn](this.foreignKey, this.getKeys(models, this.localKey));
+    const whereIn = this._whereInMethod(this._parent, this._localKey);
+    this._getRelationQuery()[whereIn](this._foreignKey, this.getKeys(models, this._localKey));
   }
 
   /*Match the eagerly loaded results to their single parents.*/
@@ -103,7 +103,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   /*protected*/ matchOneOrMany(models: any[], results: Collection, relation: string, type: string) {
     const dictionary = this.buildDictionary(results);
     for (const model of models) {
-      const key = this._getDictionaryKey(model.getAttribute(this.localKey));
+      const key = this._getDictionaryKey(model.getAttribute(this._localKey));
       if (dictionary[key] !== undefined) {
         model.setRelation(relation, this.getRelationValue(dictionary, key, type));
       }
@@ -235,12 +235,12 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
 
   /*Get the key value of the parent's local key.*/
   public getParentKey() {
-    return this._parent.getAttribute(this.localKey);
+    return this._parent.getAttribute(this._localKey);
   }
 
   /*Get the fully qualified parent key name.*/
   public getQualifiedParentKeyName() {
-    return this._parent.qualifyColumn(this.localKey);
+    return this._parent.qualifyColumn(this._localKey);
   }
 
   /*Get the plain foreign key.*/
@@ -251,11 +251,11 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
 
   /*Get the foreign key for the relationship.*/
   public getQualifiedForeignKeyName() {
-    return this.foreignKey;
+    return this._foreignKey;
   }
 
   /*Get the local key for the relationship.*/
   public getLocalKeyName() {
-    return this.localKey;
+    return this._localKey;
   }
 }

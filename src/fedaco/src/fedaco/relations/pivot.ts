@@ -4,9 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { Constructor } from '../../helper/constructor';
 /* tslint:disable:no-namespace */
 import { Model } from '../model';
-import { AsPivot, mixinAsPivot } from './concerns/as-pivot';
+import { AsPivot, AsPivotCtor, mixinAsPivot } from './concerns/as-pivot';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export declare namespace Pivot {
@@ -20,7 +21,7 @@ export declare namespace Pivot {
 }
 
 // @ts-ignore
-export interface Pivot extends AsPivot, Omit<Model, keyof AsPivot> {
+export interface Pivot extends AsPivotCtor, Omit<Model, keyof AsPivot>, Constructor<Model> {
 }
 
 export class Pivot extends mixinAsPivot(Model) {

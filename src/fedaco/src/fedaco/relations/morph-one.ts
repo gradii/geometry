@@ -57,12 +57,12 @@ export class MorphOne extends mixinCanBeOneOfMany(
   /*Add constraints for inner join subselect for one of many relationships.*/
   public addOneOfManySubQueryConstraints(query: FedacoBuilder, column: string | null = null,
                                          aggregate: string | null                    = null) {
-    query.addSelect(this.foreignKey, this.morphType);
+    query.addSelect(this._foreignKey, this.morphType);
   }
 
   /*Get the columns that should be selected by the one of many subquery.*/
   public getOneOfManySubQuerySelectColumns() {
-    return [this.foreignKey, this.morphType];
+    return [this._foreignKey, this.morphType];
   }
 
   /*Add join query constraints for one of many relationships.*/
@@ -72,16 +72,16 @@ export class MorphOne extends mixinCanBeOneOfMany(
       '=',
       this.qualifyRelatedColumn(this.morphType)
     ).on(
-      this._qualifySubSelectColumn(this.foreignKey),
+      this._qualifySubSelectColumn(this._foreignKey),
       '=',
-      this.qualifyRelatedColumn(this.foreignKey)
+      this.qualifyRelatedColumn(this._foreignKey)
     );
   }
 
   /*Make a new related instance for the given model.*/
   public newRelatedInstanceFor(parent: Model) {
     return this._related.newInstance()
-      .setAttribute(this.getForeignKeyName(), parent[this.localKey])
+      .setAttribute(this.getForeignKeyName(), parent[this._localKey])
       .setAttribute(this.getMorphType(), this.morphClass);
   }
 
