@@ -122,7 +122,7 @@ describe('test database eloquent morph to many', () => {
 
   });
   it('detach method clears all pivot records when no i ds are given', () => {
-    const relation = new MorphToMany;
+    const relation = new MorphToMany();
     const spy1     = jest.spyOn(query, 'from').mockReturnValue(query);
     const spy2     = jest.spyOn(query, 'where').mockReturnValue(query);
     const spy3     = jest.spyOn(query, 'whereIn').mockReturnValue(query);
@@ -130,7 +130,8 @@ describe('test database eloquent morph to many', () => {
     const spy5     = jest.spyOn(relation.getQuery(), 'getQuery').mockReturnValue(mockQueryBuilder);
     const spy6     = jest.spyOn(mockQueryBuilder, 'newQuery');
     const spy7     = jest.spyOn(relation, 'touchIfTouching');
-// this('taggables').andReturn(query);
+
+    // this('taggables').andReturn(query);
     // query.shouldReceive('where').once()._with('taggable_id', 1).andReturn(query);
     // query.shouldReceive('where').once()._with('taggable_type',
     //   get_class(relation.getParent())).andReturn(query);

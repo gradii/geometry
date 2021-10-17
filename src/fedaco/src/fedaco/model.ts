@@ -667,14 +667,14 @@ export class Model extends mixinHasAttributes(
     return this.toArray();
   }
 
-  // /*Reload a fresh model instance from the database.*/
-  // public fresh(_with: any[] | string = []) {
-  //   if (!this.exists) {
-  //     return;
-  //   }
-  //   return this._setKeysForSelectQuery(this.newQueryWithoutScopes())
-  //     .with(isString(_with) ? arguments : _with).first();
-  // }
+  /*Reload a fresh model instance from the database.*/
+  public fresh(_with: any[] | string = []) {
+    if (!this._exists) {
+      return void 0;
+    }
+    return this._setKeysForSelectQuery(this.newQueryWithoutScopes())
+      .with(isString(_with) ? [...arguments] : _with).first();
+  }
 
   /*Reload the current model instance with fresh attributes from the database.*/
   public async refresh() {

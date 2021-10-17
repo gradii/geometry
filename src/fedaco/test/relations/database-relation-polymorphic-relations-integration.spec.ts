@@ -66,10 +66,10 @@ describe('test database eloquent polymorphic relations integration', () => {
     let post = await EloquentManyToManyPolymorphicTestPost.createQuery().create();
     let tag  = await EloquentManyToManyPolymorphicTestTag.createQuery().create();
     post.tags().attach(tag.id);
-    post = await EloquentManyToManyPolymorphicTestPost.createQuery().with('tags').whereId(
-      1).first();
-    tag  = await EloquentManyToManyPolymorphicTestTag.createQuery().with('posts').whereId(
-      1).first();
+    post = await EloquentManyToManyPolymorphicTestPost.createQuery().with('tags')
+      .whereColumn('id', 1).first();
+    tag  = await EloquentManyToManyPolymorphicTestTag.createQuery().with('posts')
+      .whereColumn('id', 1).first();
     expect(post.relationLoaded('tags')).toBeTruthy();
     expect(tag.relationLoaded('posts')).toBeTruthy();
     expect(post.tags.first().id).toEqual(tag.id);

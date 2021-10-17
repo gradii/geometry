@@ -21,10 +21,10 @@ import { QueryBuilder } from '../../query-builder/query-builder';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
 
-export interface ForwardCallToQueryBuilder extends QueryBuilderJoin, QueryBuilderOrderBy,
+export interface ForwardCallToQueryBuilder extends Omit<QueryBuilderJoin, 'joinSub'>, QueryBuilderOrderBy,
   QueryBuilderGroupBy, QueryBuilderHaving, QueryBuilderLimitOffset, QueryBuilderUnion,
   QueryBuilderWhereDate, QueryBuilderAggregate, QueryBuilderWherePredicate, QueryBuilderWhereCommon,
-  BuildQueries, Pick<QueryBuilder, 'beforeQuery' | 'applyBeforeQueryCallbacks'> {
+  Omit<BuildQueries, 'first'>, Pick<QueryBuilder, 'beforeQuery' | 'find' | 'applyBeforeQueryCallbacks'> {
   pluck(...args: any[]): Promise<any[] | Record<string, any>>;
 
   stripTableForPluck(...args: any[]): this;
@@ -95,7 +95,7 @@ export interface ForwardCallToQueryBuilder extends QueryBuilderJoin, QueryBuilde
 
   onceWithColumns(...args: any[]): this;
 
-  first(...args: any[]): Promise<Model>;
+  first(...args: any[]): Promise<this>;
 
   joinSub(query: Function | QueryBuilder | FedacoBuilder | string, as: string, first: Function | string,
           operator?: string,
@@ -141,7 +141,6 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
       return this.#forwardCallToQueryBuilder('avg', args);
     }
 
-    // find(...args){return this.#forwardCallToQueryBuilder('find', args)}
     pluck(...args: any[]) {
       return this.#forwardCallToQueryBuilder('pluck', args);
     }
@@ -262,6 +261,10 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
       const _query = this.toBase();
       const result = _query.toSql.apply(_query, args);
       return {result, bindings: _query.getBindings()};
+    }
+
+    find(...args: any[]) {
+      return this.#forwardCallToQueryBuilder('find', args);
     }
 
     // resetBindings(...args: any[]) {

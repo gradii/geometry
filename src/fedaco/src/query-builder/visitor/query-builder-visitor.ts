@@ -534,9 +534,9 @@ export class QueryBuilderVisitor implements SqlVisitor {
     return `${node.raw.accept(this)}`;
   }
 
-  visitRawExpression(node: RawExpression): string | number {
+  visitRawExpression(node: RawExpression): string | number | boolean {
     if (isBoolean(node.value)) {
-      return node.value ? 1 : 0;
+      return node.value;
     } else if (isNumber(node.value)) {
       return +node.value;
     } else if (isArray(node.value)) {

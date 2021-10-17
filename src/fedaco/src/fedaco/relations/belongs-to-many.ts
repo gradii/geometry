@@ -512,12 +512,12 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*If we're touching the parent model, touch.*/
-  public touchIfTouching() {
+  public async touchIfTouching() {
     if (this._touchingParent()) {
-      this.getParent().touch();
+      await this.getParent().touch();
     }
     if (this.getParent().touches(this._relationName)) {
-      this.touch();
+      await this.touch();
     }
   }
 

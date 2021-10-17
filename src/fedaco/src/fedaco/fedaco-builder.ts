@@ -7,24 +7,31 @@
 import { isAnyEmpty, isArray, isBlank, isFunction, isNumber, isObject, isString } from '@gradii/check-type';
 import { nth, omit, pluck } from 'ramda';
 import { wrap } from '../helper/arr';
+import { Constructor } from '../helper/constructor';
 import { pascalCase } from '../helper/str';
-import { mixinBuildQueries } from '../query-builder/mixins/build-query';
+import { BuildQueries, BuildQueriesCtor, mixinBuildQueries } from '../query-builder/mixins/build-query';
 import { QueryBuilder } from '../query-builder/query-builder';
 import { SqlNode } from '../query/sql-node';
-import { mixinForwardCallToQueryBuilder } from './mixins/forward-call-to-query-builder';
-import { mixinGuardsAttributes } from './mixins/guards-attributes';
-import { mixinQueriesRelationShips } from './mixins/queries-relationships';
+import {
+  ForwardCallToQueryBuilder, ForwardCallToQueryBuilderCtor, mixinForwardCallToQueryBuilder
+} from './mixins/forward-call-to-query-builder';
+import { GuardsAttributes, mixinGuardsAttributes } from './mixins/guards-attributes';
+import { mixinQueriesRelationShips, QueriesRelationShips } from './mixins/queries-relationships';
 import { Model } from './model';
-// import { BelongsToMany } from './relations/belongs-to-many';
 import { Relation } from './relations/relation';
 import { Scope } from './scope';
+
+export interface FedacoBuilder<T extends Model = Model> extends GuardsAttributes, QueriesRelationShips,
+  Omit<BuildQueries & ForwardCallToQueryBuilder, 'first' | 'latest' | 'oldest' | 'orWhere' | 'where'> {
+  first(columns?: any[] | string): Promise<T>;
+}
 
 export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttributes(
   mixinQueriesRelationShips(
     mixinBuildQueries(
       mixinForwardCallToQueryBuilder(class {
       })
-    )
+    ) as Constructor<Omit<BuildQueriesCtor & ForwardCallToQueryBuilderCtor, 'first'>>
   )) {
 
   /*All of the globally registered builder macros.*/
@@ -236,8 +243,8 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Find a model by its primary key or return fresh model instance.*/
-  public async findOrNew(id: any, columns: any[] = ['*']): Promise<Model> {
-    const model = await this.find(id, columns);
+  public async findOrNew(id: any, columns: any[] = ['*']): Promise<T> {
+    const model = await this.find(id, columns) as T;
     if (!isBlank(model)) {
       return model;
     }
@@ -245,8 +252,8 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Get the first record matching the attributes or instantiate it.*/
-  public async firstOrNew(attributes: any, values: any = {}): Promise<Model> {
-    const instance = await this.where(attributes).first() as Model;
+  public async firstOrNew(attributes: any, values: any = {}): Promise<T> {
+    const instance = await this.where(attributes).first() as T;
     if (!isBlank(instance)) {
       return instance;
     }

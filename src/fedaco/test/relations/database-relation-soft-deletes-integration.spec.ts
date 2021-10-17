@@ -1,4 +1,6 @@
 import { head } from 'ramda';
+import { Column } from '../../src/annotation/column/column';
+import { PrimaryGeneratedColumn } from '../../src/annotation/column/primary-generated.column';
 import { BelongsToColumn } from '../../src/annotation/relation-column/belongs-to.relation-column';
 import { HasManyColumn } from '../../src/annotation/relation-column/has-many.relation-column';
 import { HasOneColumn } from '../../src/annotation/relation-column/has-one.relation-column';
@@ -183,7 +185,7 @@ describe('test database eloquent soft deletes integration', () => {
     expect(head(users).id).toEqual(1);
   });
 
-  it('only without trashed only returns trashed records', async() => {
+  it('only without trashed only returns trashed records', async () => {
     await createUsers();
     let users = SoftDeletesTestUser.createQuery().pipe(withoutTrashed()).get();
     expect(users).toHaveLength(1);
@@ -574,11 +576,12 @@ describe('test database eloquent soft deletes integration', () => {
     }).first();
     expect(comment.owner).toBeNull();
   });
-  it('morph to without constraints', () => {
+  it('morph to without constraints', async () => {
     createUsers();
-    const abigail = SoftDeletesTestUser.createQuery().where('email',
-      'abigailotwell@gmail.com').first();
-    const post1   = abigail.posts().create({
+    const abigail = await SoftDeletesTestUser.createQuery()
+      .where('email', 'abigailotwell@gmail.com')
+      .first();
+    const post1   = abigail.newRelation('posts').create({
       'title': 'First Title'
     });
     post1.comments().create({
@@ -586,10 +589,10 @@ describe('test database eloquent soft deletes integration', () => {
       'owner_type': SoftDeletesTestUser,
       'owner_id'  : abigail.id
     });
-    let comment = SoftDeletesTestCommentWithTrashed.createQuery().with('owner').first();
+    let comment = await SoftDeletesTestCommentWithTrashed.createQuery().with('owner').first();
     expect(comment.owner.email).toEqual(abigail.email);
     abigail.delete();
-    const comment = SoftDeletesTestCommentWithTrashed._with('owner').first();
+    comment = SoftDeletesTestCommentWithTrashed._with('owner').first();
     expect(comment.owner).toBeNull();
   });
   it('morph to non soft deleting model', async () => {
@@ -630,6 +633,9 @@ export class SoftDeletesTestUser extends (mixinSoftDeletes<any>(
   Model) as typeof Model & { new(...args: any[]): SoftDeletes }) {
   _table: any   = 'users';
   _guarded: any = [];
+
+  @PrimaryGeneratedColumn()
+  id;
 
   @HasManyColumn({
     related   : forwardRef(() => SoftDeletesTestPost),
@@ -703,6 +709,9 @@ export class SoftDeletesTestComment extends Model {
 export class SoftDeletesTestCommentWithTrashed extends Model {
   _table: any   = 'comments';
   _guarded: any = [];
+
+  @Column()
+  comment;
 
   @MorphToColumn({
     morphTypeMap: {}

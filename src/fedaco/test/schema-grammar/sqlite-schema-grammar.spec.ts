@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 import { Connection } from '../../src/connection';
 import { WrappedConnection } from '../../src/connector/wrapped-connection';
-import { DatabaseConfig } from '../../src/databaseConfig';
+import { DatabaseConfig } from '../../src/database-config';
 import { ConnectionInterface } from '../../src/query-builder/connection-interface';
 import { QueryGrammar } from '../../src/query-builder/grammar/query-grammar';
 import { SqliteQueryGrammar } from '../../src/query-builder/grammar/sqlite-query-grammar';

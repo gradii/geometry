@@ -102,7 +102,7 @@ export interface SqlVisitor {
 
   visitRawBindingExpression(node: SqlNode): string;
 
-  visitRawExpression(node: SqlNode): string | number;
+  visitRawExpression(node: SqlNode): string | number | boolean;
 
   visitSelectClause(node: SqlNode): string;
 

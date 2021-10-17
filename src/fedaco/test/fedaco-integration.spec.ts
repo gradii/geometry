@@ -147,12 +147,12 @@ describe('test database eloquent integration', () => {
 
     const db = new DatabaseConfig();
     db.addConnection({
-      'driver'  : 'sqlite',
+      'driver': 'sqlite',
       // 'database': files.default
       'database': ':memory:'
     });
     db.addConnection({
-      'driver'  : 'sqlite',
+      'driver': 'sqlite',
       // 'database': files.second
       'database': ':memory:'
     }, 'second_connection');
@@ -1339,7 +1339,7 @@ describe('test database eloquent integration', () => {
 
   it('save or fail with duplicated entry', async () => {
     const date = '1970-01-01';
-    EloquentTestPost.initAttributes({
+    await EloquentTestPost.createQuery().create({
       'id'        : 1,
       'user_id'   : 1,
       'name'      : 'Post',
@@ -1496,13 +1496,13 @@ describe('test database eloquent integration', () => {
     expect(Object.keys(result.getRelations())).toHaveLength(1);
   });
 
-//   it('model ignored by global scope can be refreshed', () => {
-//     let user = EloquentTestUserWithOmittingGlobalScope.create({
-//       'id'   : 1,
-//       'email': 'taylorotwell@gmail.com'
-//     });
-//     expect(user.fresh()).toNotNull();
-//   });
+  it('model ignored by global scope can be refreshed', async() => {
+    const user = await EloquentTestUserWithOmittingGlobalScope.createQuery().create({
+      'id'   : 1,
+      'email': 'taylorotwell@gmail.com'
+    });
+    expect(await user.fresh()).not.toBeNull();
+  });
 
 //   it('global scope can be removed by other global scope', () => {
 //     let user = EloquentTestUserWithGlobalScopeRemovingOtherScope.create({
@@ -2234,22 +2234,23 @@ export class EloquentTestNonIncrementingSecond extends EloquentTestNonIncrementi
 }
 
 export class EloquentTestUserWithGlobalScope extends EloquentTestUser {
-  // public static boot() {
-  //   super.boot();
-  //   EloquentTestUserWithGlobalScope.addGlobalScope(builder => {
-  //     builder.with('posts');
-  //   });
-  // }
+  public boot() {
+    super.boot();
+    EloquentTestUserWithGlobalScope.addGlobalScope('withPosts', builder => {
+      builder.with('posts');
+    });
+  }
 }
 
-// export class EloquentTestUserWithOmittingGlobalScope extends EloquentTestUser {
-//   public static boot() {
-//     super.boot();
-//     EloquentTestUserWithOmittingGlobalScope.addGlobalScope(builder => {
-//       builder.where("email", "!=", "taylorotwell@gmail.com");
-//     });
-//   }
-// }
+export class EloquentTestUserWithOmittingGlobalScope extends EloquentTestUser {
+  public boot() {
+    super.boot();
+    EloquentTestUserWithOmittingGlobalScope.addGlobalScope('notEmail', builder => {
+      builder.where('email', '!=', 'taylorotwell@gmail.com');
+    });
+  }
+}
+
 // export class EloquentTestUserWithGlobalScopeRemovingOtherScope extends Eloquent {
 //   protected table: any = "soft_deleted_users";
 //   protected guarded: any = [];
@@ -2357,7 +2358,7 @@ export class EloquentTestUserWithStringCastId extends EloquentTestUser {
 
 export class EloquentTestUserWithCustomDateSerialization extends EloquentTestUser {
   serializeDate(date) {
-    return format(date, 'yyyy-MM-dd');
+    return format(date, 'dd-MM-yy');
   }
 }
 

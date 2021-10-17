@@ -4,19 +4,21 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isArray, isFunction, isObject, isString } from '@gradii/check-type';
-import { Constructor } from '../../helper/constructor';
-import { QueryBuilder } from '../../query-builder/query-builder';
-import { BindingVariable } from '../../query/ast/binding-variable';
-import { BinaryExpression } from '../../query/ast/expression/binary-expression';
-import { ComparisonPredicateExpression } from '../../query/ast/expression/comparison-predicate-expression';
-import { Expression } from '../../query/ast/expression/expression';
-import { RawBindingExpression } from '../../query/ast/expression/raw-binding-expression';
-import { RawExpression } from '../../query/ast/expression/raw-expression';
-import { NestedPredicateExpression } from '../../query/ast/fragment/expression/nested-predicate-expression';
-import { SqlParser } from '../../query/parser/sql-parser';
-import { SqlNode } from '../../query/sql-node';
-import { forwardRef } from '../forward-ref';
+import {isArray, isFunction, isObject, isString} from '@gradii/check-type';
+import {Constructor} from '../../helper/constructor';
+import {QueryBuilder} from '../../query-builder/query-builder';
+import {BindingVariable} from '../../query/ast/binding-variable';
+import {BinaryExpression} from '../../query/ast/expression/binary-expression';
+import {ComparisonPredicateExpression} from '../../query/ast/expression/comparison-predicate-expression';
+import {Expression} from '../../query/ast/expression/expression';
+import {RawBindingExpression} from '../../query/ast/expression/raw-binding-expression';
+import {RawExpression} from '../../query/ast/expression/raw-expression';
+import {NestedPredicateExpression} from '../../query/ast/fragment/expression/nested-predicate-expression';
+import {SqlParser} from '../../query/parser/sql-parser';
+import {SqlNode} from '../../query/sql-node';
+import {forwardRef} from '../forward-ref';
+import {FedacoBuilder} from '../../fedaco/fedaco-builder';
+
 
 export interface QueryBuilderWhereCommon {
 
@@ -66,10 +68,15 @@ export interface QueryBuilderWhereCommon {
         conjunction: 'and' | 'or' | string
   ): this;
 
+  whereColumn(first: any[], conjunction?: string): this;
+
+  whereColumn(first: string | Expression, second?: string | number | boolean,
+              conjunction?: string): this;
+
   whereColumn(first: string | any[], operator?: string, second?: string,
               conjunction?: string): this;
 
-  whereNested(callback: (query?: QueryBuilder) => void, conjunction?: 'and' | 'or'): this;
+  whereNested(callback: (query?: QueryBuilder) => void, conjunction?: 'and' | 'or' | string): this;
 
   whereRaw(sql: string, bindings: any[], conjunction?: 'and' | 'or'): this;
 }
@@ -82,15 +89,17 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
     /**
      * Add an array of where clauses to the query.
      */
-    _addArrayOfWheres(this: QueryBuilder & _Self, column: object | any[], conjunction: 'and' | 'or',
-                      method: string = 'where') {
+    _addArrayOfWheres(this: QueryBuilder & _Self, column: object | any[], conjunction: 'and' | 'or' | string,
+                      method: string = 'where'): QueryBuilder & _Self {
       return this.whereNested(query => {
         if (isArray(column)) {
           for (const it of column) {
+            // @ts-ignore
             query[method](...it);
           }
         } else if (isObject(column)) {
           for (const [key, value] of Object.entries(column)) {
+            // @ts-ignore
             query[method](key, '=', value, conjunction);
           }
         }
@@ -204,38 +213,48 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
       return this;
     }
 
+    public whereColumn(this: QueryBuilder & _Self, first: any[],
+                       conjunction?: 'and' | 'or' | string): QueryBuilder & _Self;
+    public whereColumn(this: QueryBuilder & _Self, first: string | any[] | Expression,
+                       second?: string | Expression,
+                       conjunction?: 'and' | 'or' | string): QueryBuilder & _Self;
+    public whereColumn(this: QueryBuilder & _Self, first: string | any[] | Expression,
+                       operator?: string,
+                       second?: string | Expression,
+                       conjunction?: 'and' | 'or' | string): QueryBuilder & _Self;
     /**
      * Add a "where" clause comparing two columns to the query.
      */
     public whereColumn(this: QueryBuilder & _Self, first: string | any[] | Expression,
-                       operator?: string,
-                       second?: string | Expression,
-                       conjunction: 'and' | 'or' = 'and') {
+                       operator?: string | Expression | 'and' | 'or',
+                       second?: string | Expression | 'and' | 'or',
+                       conjunction: 'and' | 'or' | string = 'and'): QueryBuilder & _Self {
       if (isArray(first)) {
         conjunction = operator as 'and' | 'or';
         return this._addArrayOfWheres(first, conjunction, 'whereColumn');
       }
       if (this._invalidOperator(operator)) {
+        conjunction = second as 'and' | 'or';
         [second, operator] = [operator, '='];
       }
-      const leftNode  = first instanceof RawExpression ? first :
+      const leftNode = first instanceof RawExpression ? first :
         SqlParser.createSqlParser(first).parseUnaryTableColumn();
       const rightNode = second instanceof RawExpression ? second :
         SqlParser.createSqlParser(second).parseUnaryTableColumn();
       this.addWhere(
         new ComparisonPredicateExpression(
           leftNode,
-          operator,
+          operator as string,
           rightNode
         ),
-        conjunction
+        conjunction as 'and' | 'or'
       );
 
       return this;
     }
 
-    whereNested(this: QueryBuilder & _Self, callback: (query) => void,
-                conjunction: 'and' | 'or' = 'and') {
+    whereNested(this: QueryBuilder & _Self, callback: (query: QueryBuilder | FedacoBuilder) => void,
+                conjunction: 'and' | 'or' | string = 'and') {
       const query = this.forNestedWhere();
       callback(query);
       return this.addNestedWhereQuery(query, conjunction);

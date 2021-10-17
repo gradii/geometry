@@ -118,7 +118,7 @@ export class QueryBuilder extends Builder {
     return [value, operator];
   }
 
-  _invalidOperator(operator: string): boolean {
+  _invalidOperator(operator: string | any): boolean {
     if (isString(operator)) {
       return !this.operators.includes(operator.toLowerCase()) &&
         !this._grammar.getOperators().includes(operator.toLowerCase());

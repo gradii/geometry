@@ -13,6 +13,34 @@ import { mixinInteractsWithDictionary } from './concerns/interacts-with-dictiona
 import { Relation } from './relation';
 
 export interface HasOneOrMany extends Relation {
+  // foreignKey: string;
+  // localKey: string;
+  make(attributes?: any): any;
+  makeMany(records: []): any;
+  addConstraints(): void;
+  addEagerConstraints(models: any[]): void;
+  matchOne(models: any[], results: Collection, relation: string): any[];
+  matchMany(models: any[], results: Collection, relation: string): any[];
+  matchOneOrMany(models: any[], results: Collection, relation: string, type: string): any[];
+  getRelationValue(dictionary: any, key: string, type: string): any;
+  buildDictionary(results: Collection): any;
+  findOrNew(id: any, columns?: any[]): Promise<any>;
+  firstOrNew(attributes?: any, values?: any): Promise<any>;
+  firstOrCreate(attributes?: any, values?: any): Promise<any>;
+  updateOrCreate(attributes: any, values?: any): Promise<any>;
+  save(model: Model): Promise<any>;
+  saveMany(models: any[]): Promise<any[]>;
+  create(attributes?: any): Promise<any>;
+  createMany(records: any[]): Promise<any>;
+  setForeignAttributesForCreate(model: Model): void;
+  getRelationExistenceQuery(query: FedacoBuilder, parentQuery: FedacoBuilder, columns?: any[] | any): any;
+  getRelationExistenceQueryForSelfRelation(query: FedacoBuilder, parentQuery: FedacoBuilder, columns?: any[] | any): any;
+  getExistenceCompareKey(): string;
+  getParentKey(): any;
+  getQualifiedParentKeyName(): any;
+  getForeignKeyName(): any;
+  getQualifiedForeignKeyName(): string;
+  getLocalKeyName(): string;
 }
 
 export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
@@ -71,7 +99,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   }
 
   /*Match the eagerly loaded results to their many parents.*/
-  protected matchOneOrMany(models: any[], results: Collection, relation: string, type: string) {
+  /*protected*/ matchOneOrMany(models: any[], results: Collection, relation: string, type: string) {
     const dictionary = this.buildDictionary(results);
     for (const model of models) {
       const key = this._getDictionaryKey(model.getAttribute(this.localKey));
@@ -83,13 +111,13 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   }
 
   /*Get the value of a relationship by one or many type.*/
-  protected getRelationValue(dictionary: any, key: string, type: string) {
+  /*protected*/ getRelationValue(dictionary: any, key: string, type: string) {
     const value = dictionary[key];
     return type === 'one' ? value[0] : this._related.newCollection(value);
   }
 
   /*Build model dictionary keyed by the relation's foreign key.*/
-  protected buildDictionary(results: Collection) {
+  /*protected*/ buildDictionary(results: Collection) {
     const foreign = this.getForeignKeyName();
     return results.reduce((prev: any, result) => {
       // @ts-ignore
@@ -116,23 +144,23 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   public async firstOrNew(attributes: any = {}, values: any = {}) {
     let instance = await this.where(attributes).first() as Model;
     if (isBlank(instance)) {
-      instance = this._related.newInstance([...attributes, ...values]);
+      instance = this._related.newInstance({...attributes, ...values});
       this.setForeignAttributesForCreate(instance);
     }
     return instance;
   }
 
   /*Get the first related record matching the attributes or create it.*/
-  public async firstOrCreate(attributes: any[] = [], values: any[] = []) {
+  public async firstOrCreate(attributes: any = {}, values: any = {}) {
     let instance = await this.where(attributes).first();
     if (isBlank(instance)) {
-      instance = await this.create([...attributes, ...values]);
+      instance = await this.create({...attributes, ...values});
     }
     return instance;
   }
 
   /*Create or update a related record matching the attributes, and fill it with values.*/
-  public async updateOrCreate(attributes: any[], values: any[] = []) {
+  public async updateOrCreate(attributes: any, values: any = {}) {
     const instance = await this.firstOrNew(attributes);
     await instance.fill(values);
     await instance.save();
@@ -172,7 +200,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   }
 
   /*Set the foreign ID for creating a related model.*/
-  protected setForeignAttributesForCreate(model: Model) {
+  /*protected*/ setForeignAttributesForCreate(model: Model) {
     model.setAttribute(this.getForeignKeyName(), this.getParentKey());
   }
 

@@ -20,16 +20,20 @@ export interface InteractsWithPivotTable {
    * Toggles a model (or models) from the parent.
    * Each existing model is detached, and non existing ones are attached.
    */
-  toggle(ids: any, touch?: boolean);
+  toggle(ids: any, touch?: boolean): Promise<{
+    attached: any[],
+    detached: any[]
+  }>;
 
   /*Sync the intermediate tables with a list of IDs without detaching.*/
-  syncWithoutDetaching(ids: Collection | Model | any[]);
+  syncWithoutDetaching(ids: Collection | Model | any[]): Promise<PivotTableData>
 
   /*Sync the intermediate tables with a list of IDs or collection of models.*/
-  sync(ids: Collection | Model | any[], detaching?: boolean);
+  sync(ids: Collection | Model | any[], detaching?: boolean): Promise<PivotTableData>
 
   /*Sync the intermediate tables with a list of IDs or collection of models with the given pivot values.*/
-  syncWithPivotValues(ids: Collection | Model | any[], values: any[], detaching?: boolean);
+  syncWithPivotValues(ids: Collection | Model | any[], values: any[],
+                      detaching?: boolean): Promise<Record<string, any>>;
 
   /*Format the sync / toggle record list so that it is keyed by ID.*/
   _formatRecordsList(records: any[]);
@@ -115,6 +119,11 @@ export interface InteractsWithPivotTable {
 
 type InteractsWithPivotTableCtor = Constructor<InteractsWithPivotTable>;
 
+type PivotTableData = {
+  attached: any[],
+  detached: any[],
+  updated?: any[],
+};
 
 export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T): InteractsWithPivotTableCtor & T {
 
@@ -122,7 +131,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     /*Toggles a model (or models) from the parent.
 
     Each existing model is detached, and non existing ones are attached.*/
-    public async toggle(this: BelongsToMany & _Self, ids: any, touch = true) {
+    public async toggle(this: BelongsToMany & _Self, ids: any, touch = true): Promise<PivotTableData> {
       const changes: any = {
         attached: [],
         detached: []
@@ -154,13 +163,13 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Sync the intermediate tables with a list of IDs without detaching.*/
-    public syncWithoutDetaching(this: BelongsToMany & _Self, ids: Collection | Model | any[]) {
+    public syncWithoutDetaching(this: BelongsToMany & _Self, ids: Collection | Model | any[]): Promise<PivotTableData> {
       return this.sync(ids, false);
     }
 
     /*Sync the intermediate tables with a list of IDs or collection of models.*/
-    public sync(this: BelongsToMany & _Self, ids: Collection | Model | any[] | any,
-                detaching = true) {
+    public async sync(this: BelongsToMany & _Self, ids: Collection | Model | any[] | any,
+                      detaching = true): Promise<PivotTableData> {
       let changes: any = {
         attached: [],
         detached: [],
@@ -175,17 +184,17 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
       }
       changes = [...changes, ...this._attachNew(records, current, false)];
       if (changes['attached'].length || changes['updated'].length || changes['detached'].length) {
-        this.touchIfTouching();
+        await this.touchIfTouching();
       }
       return changes;
     }
 
     /*Sync the intermediate tables with a list of IDs or collection of models with the given pivot values.*/
-    public syncWithPivotValues(this: BelongsToMany & _Self, ids: Model | Model[], values: any[],
-                               detaching = true) {
+    public async syncWithPivotValues(this: BelongsToMany & _Self, ids: Model | Model[], values: any[],
+                                     detaching = true): Promise<PivotTableData> {
       return this.sync(
         mapWithKeys(this._parseIds(ids), id => {
-          return {id: values};
+          return {[id]: values};
         }), detaching);
     }
 
@@ -201,8 +210,8 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Attach all of the records that aren't in the given current records.*/
-    _attachNew(this: BelongsToMany & _Self, records: any[], current: any[], touch = true) {
-      const changes = {
+    _attachNew(this: BelongsToMany & _Self, records: any[], current: any[], touch = true): PivotTableData {
+      const changes: any = {
         attached: [],
         updated : []
       };
@@ -239,18 +248,18 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     }
 
     /*Update an existing pivot record on the table via a custom class.*/
-    _updateExistingPivotUsingCustomClass(this: BelongsToMany & _Self, id: any, attributes: any[],
-                                         touch: boolean) {
+    async _updateExistingPivotUsingCustomClass(this: BelongsToMany & _Self, id: any, attributes: any[],
+                                               touch: boolean) {
       const pivot   = this._getCurrentlyAttachedPivots()
         .where(this._foreignPivotKey, this._parent.getAttribute(this._parentKey))
         .where(this._relatedPivotKey, this._parseId(id))
         .first();
       const updated = pivot ? pivot.fill(attributes).isDirty() : false;
       if (updated) {
-        pivot.save();
+        await pivot.save();
       }
       if (touch) {
-        this.touchIfTouching();
+        await this.touchIfTouching();
       }
       return /*cast type int*/ updated;
     }
@@ -267,7 +276,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
           this._formatAttachRecords(this._parseIds(id), attributes));
       }
       if (touch) {
-        this.touchIfTouching();
+        await this.touchIfTouching();
       }
     }
 
