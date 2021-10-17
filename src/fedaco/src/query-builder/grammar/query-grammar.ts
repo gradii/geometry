@@ -532,6 +532,10 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
     return ast;
   }
 
+  supportsSavepoints(): boolean {
+    return false;
+  }
+
   getDateFormat(): string {
     return 'yyyy-MM-dd HH:mm:ss';
     // todo remove me remove the comment

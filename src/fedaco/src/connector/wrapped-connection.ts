@@ -25,4 +25,8 @@ export interface WrappedConnection {
 
   commit(): Promise<any>;
 
+  beginTransaction(): Promise<any>;
+
+  rollBack(): Promise<any>;
+
 }

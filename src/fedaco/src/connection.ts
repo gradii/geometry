@@ -48,7 +48,7 @@ export class Connection extends mixinManagesTransactions(class {
   /*The reconnector instance for the connection.*/
   protected reconnector: Function;
   /*The query grammar implementation.*/
-  protected queryGrammar: QueryGrammar;
+  _queryGrammar: QueryGrammar;
   /*The schema grammar implementation.*/
   protected schemaGrammar: SchemaGrammar;
   /*The query post processor implementation.*/
@@ -86,7 +86,7 @@ export class Connection extends mixinManagesTransactions(class {
 
   /*Set the query grammar to the default implementation.*/
   public useDefaultQueryGrammar() {
-    this.queryGrammar = this.getDefaultQueryGrammar();
+    this._queryGrammar = this.getDefaultQueryGrammar();
   }
 
   /*Get the default query grammar instance.*/
@@ -289,7 +289,7 @@ export class Connection extends mixinManagesTransactions(class {
 
   /*Run a SQL statement and log its execution context.*/
   protected async run(query: string, bindings: any[], callback: Function) {
-    this.reconnectIfMissingConnection();
+    this._reconnectIfMissingConnection();
     const start = +new Date();
     let result;
     try {
@@ -359,7 +359,7 @@ export class Connection extends mixinManagesTransactions(class {
   }
 
   /*Reconnect to the database if a PDO connection is missing.*/
-  protected reconnectIfMissingConnection() {
+  _reconnectIfMissingConnection() {
     if (isBlank(this.pdo)) {
       this.reconnect();
     }
@@ -378,7 +378,7 @@ export class Connection extends mixinManagesTransactions(class {
   }
 
   /*Fire an event for this connection.*/
-  protected fireConnectionEvent(event: string) {
+  _fireConnectionEvent(event: string) {
     if (!(this.events !== undefined)) {
       return;
     }
@@ -541,12 +541,12 @@ export class Connection extends mixinManagesTransactions(class {
 
   /*Get the query grammar used by the connection.*/
   public getQueryGrammar() {
-    return this.queryGrammar;
+    return this._queryGrammar;
   }
 
   /*Set the query grammar used by the connection.*/
   public setQueryGrammar(grammar: QueryGrammar) {
-    this.queryGrammar = grammar;
+    this._queryGrammar = grammar;
     return this;
   }
 

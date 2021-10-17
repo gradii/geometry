@@ -21,7 +21,7 @@ export class DatabaseTransactionsManager {
   }
 
   /*Rollback the active database transaction.*/
-  public rollback(connection: string, level: number) {
+  public rollback(connection: string, level: number): void {
     this.transactions = this.transactions.filter(transaction => {
       return !(transaction.connection == connection && transaction.level > level);
     });
