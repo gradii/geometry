@@ -126,7 +126,7 @@ describe('test database eloquent relation', () => {
       builder.shouldReceive('withoutGlobalScopes').andReturnSelf();
       const relation = new HasOne(builder, parent, 'foreign_key', 'id');
       builder.shouldReceive('update').never();
-      relation.touch();
+      relation.touch();jjj
       const anotherBuilder = getBuilder();
       const anotherParent  = m.mock(Model);
       anotherParent.shouldReceive('getAttribute')._with('id').andReturn(2);
