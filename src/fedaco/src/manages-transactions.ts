@@ -124,9 +124,9 @@ export function mixinManagesTransactions<T extends Constructor<any>>(base: T): M
     }
 
     /*Create a save point within the database.*/
-    protected async _createSavepoint() {
-      await (await this.getPdo()).exec(
-        this.queryGrammar.compileSavepoint('trans' + (this._transactions + 1)));
+    protected async _createSavepoint(this: Connection & this) {
+      await (await this.getPdo()).execute(
+        this._queryGrammar.compileSavepoint('trans' + (this._transactions + 1)));
     }
 
     /*Handle an exception from a transaction beginning.*/
@@ -181,16 +181,16 @@ export function mixinManagesTransactions<T extends Constructor<any>>(base: T): M
       if (this._transactionsManager) {
         this._transactionsManager.rollback(this.getName(), this._transactions);
       }
-      this.fireConnectionEvent('rollingBack');
+      this._fireConnectionEvent('rollingBack');
     }
 
     /*Perform a rollback within the database.*/
     protected async performRollBack(this: Connection & this, toLevel: number): Promise<void> {
       if (toLevel == 0) {
         await (await this.getPdo()).rollBack();
-      } else if (this.queryGrammar.supportsSavepoints()) {
+      } else if (this._queryGrammar.supportsSavepoints()) {
         await (await this.getPdo()).execute(
-          this.queryGrammar.compileSavepointRollBack('trans' + (toLevel + 1)));
+          this._queryGrammar.compileSavepointRollBack('trans' + (toLevel + 1)));
       }
     }
 

@@ -130,4 +130,8 @@ export abstract class BaseGrammar {
     this.tablePrefix = prefix;
     return this;
   }
+
+  public compileSavepoint() {
+    throw new Error('not implemented');
+  }
 }

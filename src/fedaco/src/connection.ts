@@ -653,6 +653,28 @@ export class Connection extends mixinManagesTransactions(class {
     return grammar;
   }
 
+  causedByConcurrencyError(e: Error) {
+    console.warn(`catch an error check whether is concurrency error.
+    if it's raised in transaction you can report this error ${e.message} to make this function more better.`);
+    // @ts-ignore
+    if (e.code === '40001') {
+      return true;
+    }
+
+    const msgs = [
+      'Deadlock found when trying to get lock',
+      'deadlock detected',
+      'The database file is locked',
+      'database is locked',
+      'database table is locked',
+      'A table in the database is locked',
+      'has been chosen as the deadlock victim',
+      'Lock wait timeout exceeded; try restarting transaction',
+      'WSREP detected deadlock/conflict and aborted the transaction. Try restarting the transaction',
+    ];
+    return msgs.find(it => e.message.includes(it));
+  }
+
   /*Register a connection resolver.*/
   public static resolverFor(driver: string, callback: Function) {
     Connection.resolvers[driver] = callback;

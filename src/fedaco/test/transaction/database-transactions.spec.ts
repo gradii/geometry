@@ -151,8 +151,8 @@ describe('test database transactions', () => {
     expect(spy1).toHaveBeenNthCalledWith(3, 'second_connection', 2);
     expect(spy1).toBeCalledTimes(3);
 
-    expect(spy2).toHaveBeenNthCalledWith(1, 'default');
-    expect(spy2).toHaveBeenNthCalledWith(2, 'second_connection');
+    expect(spy2).toHaveBeenNthCalledWith(1, 'second_connection');
+    expect(spy2).toHaveBeenNthCalledWith(2, 'default');
     expect(spy2).toBeCalledTimes(2);
 
   });
@@ -194,7 +194,6 @@ describe('test database transactions', () => {
     const spy2 = jest.spyOn(transactionManager, 'rollback');
     const spy3 = jest.spyOn(transactionManager, 'commit');
 
-
     connection().setTransactionManager(transactionManager);
     await connection().table('users').insert({
       'name' : 'zain',
@@ -213,6 +212,7 @@ describe('test database transactions', () => {
 
     expect(spy3).not.toBeCalled();
   });
+
   it('nested transactions are rolled back', async () => {
     const transactionManager = new DatabaseTransactionsManager();
 
@@ -244,14 +244,10 @@ describe('test database transactions', () => {
     } catch (e) {
     }
 
-    expect(spy1).toBeCalledWith([
-      ['default', 1],
-      ['default', 2],
-    ]);
-    expect(spy2).toBeCalledWith([
-      ['default', 1],
-      ['default', 0],
-    ]);
+    expect(spy1).toHaveBeenNthCalledWith(1, 'default', 1);
+    expect(spy1).toHaveBeenNthCalledWith(2, 'default', 2);
+    expect(spy2).toHaveBeenNthCalledWith(1, 'default', 1);
+    expect(spy2).toHaveBeenNthCalledWith(2, 'default', 0);
 
     expect(spy3).not.toBeCalled();
   });

@@ -60,7 +60,7 @@ describe('test database transactions manager', () => {
     expect(manager.getTransactions()[1].getCallbacks()).toHaveLength(0);
     expect(manager.getTransactions()[2].getCallbacks()).toHaveLength(1);
   });
-  it('committing transactions executes callbacks', () => {
+  it('committing transactions executes callbacks', async() => {
     const callbacks = [];
     const manager   = new DatabaseTransactionsManager();
     manager.begin('default', 1);
@@ -72,11 +72,12 @@ describe('test database transactions manager', () => {
       callbacks.push(['default', 2]);
     });
     manager.begin('admin', 1);
-    manager.commit('default');
+    await manager.commit('default');
     expect(callbacks).toHaveLength(2);
     expect(callbacks[0]).toEqual(['default', 1]);
     expect(callbacks[1]).toEqual(['default', 2]);
   });
+
   it('committing executes only callbacks of the connection', () => {
     const callbacks = [];
     const manager   = new DatabaseTransactionsManager();
