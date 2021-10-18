@@ -59,4 +59,16 @@ export class MysqlWrappedConnection implements WrappedConnection {
     });
   }
 
+  beginTransaction(): Promise<any> {
+    return Promise.resolve(undefined);
+  }
+
+  commit(): Promise<any> {
+    return Promise.resolve(undefined);
+  }
+
+  rollBack(): Promise<any> {
+    return Promise.resolve(undefined);
+  }
+
 }

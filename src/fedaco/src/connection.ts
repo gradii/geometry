@@ -663,8 +663,4 @@ export class Connection extends mixinManagesTransactions(class {
     return Connection.resolvers[driver] ?? null;
   }
 
-  async transaction(callback: Function) {
-
-  }
-
 }

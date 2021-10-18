@@ -15,7 +15,7 @@ import { SchemaBuilder } from '../schema/schema-builder';
 
 export class SqlServerConnection extends Connection {
   /*Execute a Closure within a transaction.*/
-  public async transaction(callback: Function, attempts: number = 1) {
+  public async transaction(callback: (...args: any[]) => Promise<any>, attempts: number = 1) {
     for (let a = 1; a <= attempts; a++) {
       if (this.getDriverName() === 'sqlsrv') {
         return await super.transaction(callback);

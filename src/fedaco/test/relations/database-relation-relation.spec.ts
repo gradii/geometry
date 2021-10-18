@@ -64,7 +64,8 @@ describe('test database eloquent relation', () => {
   });
 
   it('can disable touching for specific model', () => {
-    const related = m.mock(EloquentNoTouchingModelStub).makePartial();
+    const related = new EloquentNoTouchingModelStub();
+    const spy1 = jest.spyOn(related, 'getUpdatedAtColumn');
     related.shouldReceive('getUpdatedAtColumn').never();
     related.shouldReceive('freshTimestampString').never();
     const anotherRelated = m.mock(EloquentNoTouchingAnotherModelStub).makePartial();
@@ -100,6 +101,8 @@ describe('test database eloquent relation', () => {
     });
     expect(related.isIgnoringTouch()).toBeFalsy();
     expect(anotherRelated.isIgnoringTouch()).toBeFalsy();
+
+    expect(spy1).not.toBeCalled();
   });
 
   it('parent model is not touched when child model is ignored', () => {

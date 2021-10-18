@@ -15,7 +15,8 @@ export interface ManagesTransactions {
   _transactionsManager: DatabaseTransactionsManager;
 
   /*Execute a Closure within a transaction.*/
-  transaction(callback: Function, attempts?: number): Promise<any>;
+  transaction(callback: (...args: any[]) => Promise<any | void>,
+              attempts?: number): Promise<any>;
 
   /*Start a new database transaction.*/
   beginTransaction(): Promise<void>;
@@ -49,7 +50,9 @@ export function mixinManagesTransactions<T extends Constructor<any>>(base: T): M
     protected _transactionsManager: DatabaseTransactionsManager;
 
     /*Execute a Closure within a transaction.*/
-    public async transaction(this: Connection & this, callback: Function, attempts: number = 1): Promise<any> {
+    public async transaction(this: Connection & this,
+                             callback: (...args: any[]) => Promise<any | void>,
+                             attempts: number = 1): Promise<any> {
       let callbackResult;
       for (let currentAttempt = 1; currentAttempt <= attempts; currentAttempt++) {
         await this.beginTransaction();
@@ -122,7 +125,8 @@ export function mixinManagesTransactions<T extends Constructor<any>>(base: T): M
 
     /*Create a save point within the database.*/
     protected async _createSavepoint() {
-      await (await this.getPdo()).exec(this.queryGrammar.compileSavepoint('trans' + (this._transactions + 1)));
+      await (await this.getPdo()).exec(
+        this.queryGrammar.compileSavepoint('trans' + (this._transactions + 1)));
     }
 
     /*Handle an exception from a transaction beginning.*/
@@ -185,7 +189,8 @@ export function mixinManagesTransactions<T extends Constructor<any>>(base: T): M
       if (toLevel == 0) {
         await (await this.getPdo()).rollBack();
       } else if (this.queryGrammar.supportsSavepoints()) {
-        await (await this.getPdo()).execute(this.queryGrammar.compileSavepointRollBack('trans' + (toLevel + 1)));
+        await (await this.getPdo()).execute(
+          this.queryGrammar.compileSavepointRollBack('trans' + (toLevel + 1)));
       }
     }
 

@@ -7,6 +7,7 @@
 import { Connection } from './connection';
 import { ConnectionFactory } from './connector/connection-factory';
 import { DatabaseConfig } from './database-config';
+import { DatabaseTransactionsManager } from './database-transactions-manager';
 import { ConnectionResolverInterface } from './interface/connection-resolver-interface';
 import { ConnectionInterface } from './query-builder/connection-interface';
 import { MysqlQueryGrammar } from './query-builder/grammar/mysql-query-grammar';
@@ -75,6 +76,40 @@ class Conn implements ConnectionInterface {
 
   insertGetId(sql: string, bindings: any[], sequence?: string): Promise<any> | boolean {
     return undefined;
+  }
+
+  _transactions: number;
+  _transactionsManager: DatabaseTransactionsManager;
+
+  afterCommit(callback: Function): Promise<void> {
+    return Promise.resolve(undefined);
+  }
+
+  beginTransaction(): Promise<void> {
+    return Promise.resolve(undefined);
+  }
+
+  commit(): Promise<void> {
+    return Promise.resolve(undefined);
+  }
+
+  rollBack(toLevel?: number | null): Promise<void> {
+    return Promise.resolve(undefined);
+  }
+
+  setTransactionManager(manager: DatabaseTransactionsManager): this {
+    return undefined;
+  }
+
+  transaction(callback: (...args: any[]) => Promise<any>, attempts?: number): Promise<any> {
+    return Promise.resolve(undefined);
+  }
+
+  transactionLevel(): number {
+    return 0;
+  }
+
+  unsetTransactionManager(): void {
   }
 }
 
