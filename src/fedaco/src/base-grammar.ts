@@ -131,7 +131,4 @@ export abstract class BaseGrammar {
     return this;
   }
 
-  public compileSavepoint() {
-    throw new Error('not implemented');
-  }
 }

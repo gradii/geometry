@@ -532,13 +532,27 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
     return ast;
   }
 
-  supportsSavepoints(): boolean {
-    return false;
-  }
-
   getDateFormat(): string {
     return 'yyyy-MM-dd HH:mm:ss';
     // todo remove me remove the comment
     // throw new Error('not implement');
+  }
+
+  /**
+   * Determine if the grammar supports savepoints.
+   */
+  public supportsSavepoints() {
+    return true;
+  }
+
+  public compileSavepoint(name: string) {
+    return 'SAVEPOINT ' + name;
+  }
+
+  /**
+   * Compile the SQL statement to execute a savepoint rollback.
+   */
+  public compileSavepointRollBack(name: string) {
+    return `ROLLBACK TO SAVEPOINT ${name}`;
   }
 }
