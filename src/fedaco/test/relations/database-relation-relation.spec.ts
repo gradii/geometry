@@ -23,19 +23,19 @@ describe('test database eloquent relation', () => {
 
   it('touch method updates related timestamps', () => {
     const builder = getBuilder();
-    const parent  = m.mock(Model);
+    const parent  = new(Model);
     parent.shouldReceive('getAttribute')._with('id').andReturn(1);
-    const related = m.mock(EloquentNoTouchingModelStub).makePartial();
-    builder.shouldReceive('getModel').andReturn(related);
-    builder.shouldReceive('whereNotNull');
-    builder.shouldReceive('where');
-    builder.shouldReceive('withoutGlobalScopes').andReturn(builder);
+    const related = new(EloquentNoTouchingModelStub).makePartial();
+    const spy1= ('getModel').andReturn(related);
+    const spy2('whereNotNull');
+    const spy3('where');
+    const spy4('withoutGlobalScopes').andReturn(builder);
     const relation = new HasOne(builder, parent, 'foreign_key', 'id');
     related.shouldReceive('getTable').andReturn('table');
     related.shouldReceive('getUpdatedAtColumn').andReturn('updated_at');
     const now = new Date();
     related.shouldReceive('freshTimestampString').andReturn(now);
-    builder.shouldReceive('update').once()._with({
+    const spy1('update').once()._with({
       'updated_at': now
     });
     relation.touch();
@@ -77,24 +77,26 @@ describe('test database eloquent relation', () => {
       const builder = getBuilder();
       const parent  = m.mock(Model);
       parent.shouldReceive('getAttribute')._with('id').andReturn(1);
-      builder.shouldReceive('getModel').andReturn(related);
-      builder.shouldReceive('whereNotNull');
-      builder.shouldReceive('where');
-      builder.shouldReceive('withoutGlobalScopes').andReturnSelf();
+      const spy1         = jest.spyOn(related, 'getModel');
+      const spy1 jest.spyOn(related, 'getModel');andReturn(related);
+      const jest.spyOn(related, 'whereNotNull');andReturn(related);
+      ('whereNotNull');
+      builder.spy1('where');
+      builder.spy1('withoutGlobalScopes').andReturnSelf();
       const relation = new HasOne(builder, parent, 'foreign_key', 'id');
-      builder.shouldReceive('update').never();
+      builder.spy1('update').never();
       relation.touch();
       const anotherBuilder = getBuilder();
-      const anotherParent  = m.mock(Model);
+      const anotherParent  = new(Model);
       anotherParent.shouldReceive('getAttribute')._with('id').andReturn(2);
-      anotherBuilder.shouldReceive('getModel').andReturn(anotherRelated);
-      anotherBuilder.shouldReceive('whereNotNull');
-      anotherBuilder.shouldReceive('where');
-      anotherBuilder.shouldReceive('withoutGlobalScopes').andReturnSelf();
+      anotherBuilder.spy1('getModel').andReturn(anotherRelated);
+      anotherBuilder.spy1('whereNotNull');
+      anotherBuilder.spy1('where');
+      anotherBuilder.spy1('withoutGlobalScopes').andReturnSelf();
       const anotherRelation = new HasOne(anotherBuilder, anotherParent, 'foreign_key', 'id');
       const now             = Carbon.now();
       anotherRelated.shouldReceive('freshTimestampString').andReturn(now);
-      anotherBuilder.shouldReceive('update').once()._with({
+      anotherBuilder.spy1('update').once()._with({
         'updated_at': now
       });
       anotherRelation.touch();
@@ -106,10 +108,10 @@ describe('test database eloquent relation', () => {
   });
 
   it('parent model is not touched when child model is ignored', () => {
-    const related = m.mock(EloquentNoTouchingModelStub).makePartial();
+    const related = new(EloquentNoTouchingModelStub).makePartial();
     related.shouldReceive('getUpdatedAtColumn').never();
     related.shouldReceive('freshTimestampString').never();
-    const relatedChild = m.mock(EloquentNoTouchingChildModelStub).makePartial();
+    const relatedChild = new(EloquentNoTouchingChildModelStub).makePartial();
     relatedChild.shouldReceive('getUpdatedAtColumn').never();
     relatedChild.shouldReceive('freshTimestampString').never();
     expect(related.isIgnoringTouch()).toBeFalsy();
