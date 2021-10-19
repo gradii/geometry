@@ -13,7 +13,7 @@ import { QueryBuilder } from './query-builder';
  */
 
 export interface ProcessorInterface {
-  processSelect(queryBuilder, results): Promise<any>;
+  processSelect(queryBuilder: QueryBuilder, results: any): Promise<any>;
 
   processInsertGetId(query: QueryBuilder, sql: string, values: any[], sequence?: string): Promise<number>;
 }

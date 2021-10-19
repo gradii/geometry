@@ -333,7 +333,7 @@ export class QueryBuilder extends Builder {
   }
 
   public fromSub(table: any, as: string): this {
-    if (table instanceof QueryBuilder || table instanceof FedacoBuilder) {
+    if (table instanceof QueryBuilder || isFunction(table)) {
       this._from = new FromTable(new TableReferenceExpression(this._createSubQuery('from', table) as NestedExpression,
         createIdentifier(as))
       );
