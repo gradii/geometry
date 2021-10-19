@@ -1,8 +1,7 @@
-
-
 # Fedaco Orm
 
 ### How To Use It
+
 - setup a connection
   ```typescript
   const db = new DatabaseConfig();
@@ -41,12 +40,15 @@
   ```
 
 ### Create Table
-  #### create a user table.
+
+#### create a user table.
+
   ```typescript
   const schemaBuilder = Model.getConnectionResolver()
     .connection(connectionName)
-    .getSchemaBuilder();;
-
+    .getSchemaBuilder();
+  ;
+  
   await schemaBuilder().create('users', table => {
     table.increments('id');
     table.string('email').withUnique();
@@ -55,4 +57,16 @@
   });
   ```
 
+### Features
+- wrapped driver. unify all driver query api
+- compile query builder to sql
+- decorate to define model
+- soft delete
+- use relationship to link model
+- relation can set dynamic constrain
+- sqlite and mysql support
+
+### Progressing
+- [ ] postgres full support
+- [ ] mssql full support
 
