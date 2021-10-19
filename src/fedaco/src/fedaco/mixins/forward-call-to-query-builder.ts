@@ -76,6 +76,8 @@ export interface ForwardCallToQueryBuilder extends Omit<QueryBuilderJoin, 'joinS
 
   forceDelete(...args: any[]): Promise<any>;
 
+  // withoutGlobalScope(...args: any[]): this;
+
   truncate(...args: any[]): this;
 
   updateOrInsert(...args: any[]): this;
@@ -250,6 +252,10 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     forceDelete(...args: any[]) {
       return this.#directToBuilder('forceDelete', args);
     }
+    //
+    // withoutGlobalScope(...args: any[]) {
+    //   return this.#directToBuilder('withoutGlobalScope', args);
+    // }
 
     truncate(...args: any[]) {
       return this.#directToQueryBuilder('truncate', args);

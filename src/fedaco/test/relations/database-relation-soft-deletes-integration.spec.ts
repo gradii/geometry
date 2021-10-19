@@ -494,32 +494,34 @@ describe('test database eloquent soft deletes integration', () => {
         q.pipe(onlyTrashed());
       }
     }).orderBy('postsCount', 'desc').first();
-    expect(user.posts_count).toEqual(1);
+    expect(user.getAttribute('posts_count')).toEqual(1);
     user = await SoftDeletesTestUser.createQuery().withCount({
       'posts': q => {
         q.pipe(withTrashed());
       }
     }).orderBy('postsCount', 'desc').first();
-    expect(user.posts_count).toEqual(3);
+    expect(user.getAttribute('posts_count')).toEqual(3);
     user = await SoftDeletesTestUser.createQuery().withCount({
       'posts': q => {
         q.pipe(withTrashed()).where('title', 'First Title');
       }
     }).orderBy('postsCount', 'desc').first();
-    expect(user.posts_count).toEqual(1);
+    expect(user.getAttribute('posts_count')).toEqual(1);
     user = await SoftDeletesTestUser.createQuery().withCount({
       'posts': q => {
         q.where('title', 'First Title');
       }
     }).orderBy('postsCount', 'desc').first();
-    expect(user.posts_count).toEqual(0);
+    expect(user.getAttribute('posts_count')).toEqual(0);
   });
 
   it('or where with soft delete constraint', async () => {
     await createUsers();
-    const users = SoftDeletesTestUser.createQuery().where('email',
-      'taylorotwell@gmail.com').orWhere('email',
-      'abigailotwell@gmail.com');
+    const users = SoftDeletesTestUser.createQuery().where(q => {
+      q.where('email',
+        'taylorotwell@gmail.com').orWhere('email',
+        'abigailotwell@gmail.com');
+    })
     expect(await users.pluck('email')).toEqual(['abigailotwell@gmail.com']);
   });
 
@@ -532,14 +534,14 @@ describe('test database eloquent soft deletes integration', () => {
     });
     await post1.newRelation('comments').create({
       'body': 'Comment Body',
-      'owner_type': SoftDeletesTestUser,
+      'owner_type': 'SoftDeletesTestUser',
       'owner_id': abigail.id
     });
     await abigail.delete();
     let comment = await SoftDeletesTestCommentWithTrashed.createQuery().with({
       'owner': q => {
         // q.withoutGlobalScope(SoftDeletingScope);
-        q.withoutGlobalScope('softDeleting');
+        q.getQuery().withoutGlobalScope('softDeleting');
       }
     }).first();
     expect(comment.owner.email).toEqual(abigail.email);
