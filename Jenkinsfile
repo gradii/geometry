@@ -137,6 +137,7 @@ pipeline {
                 } catch(err) { // timeout reached or input Aborted
                   def user = err.getCauses()[0].getUser()
                   if('SYSTEM' == user.toString()) { // SYSTEM means timeout
+                    currentBuild.result = "SUCCESS"
                   } else {
                     echo "Input aborted by: [${user}]"
                     error("Pipeline aborted by: [${user}]")
