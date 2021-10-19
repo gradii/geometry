@@ -128,13 +128,13 @@ export function mixinGuardsAttributes<T extends Constructor<any>, M>(base: T): G
       try {
         const rst = callback();
         if (isPromise(rst)) {
-          rst.finally(() => {
+          return rst.finally(() => {
             this.reguard();
           });
         } else {
-          this.reguard();
+          return rst;
         }
-      } catch (e) {
+      } finally {
         this.reguard();
       }
     }
