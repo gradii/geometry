@@ -111,6 +111,9 @@ class Conn implements ConnectionInterface {
 
   unsetTransactionManager(): void {
   }
+
+  setTablePrefix(prefix: string): any {
+  }
 }
 
 export class DatabaseManager implements ConnectionResolverInterface {

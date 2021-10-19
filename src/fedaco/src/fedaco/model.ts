@@ -477,7 +477,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Set the keys for a select query.*/
-  _setKeysForSelectQuery(query: FedacoBuilder): FedacoBuilder {
+  _setKeysForSelectQuery(query: FedacoBuilder<this>): FedacoBuilder<this> {
     query.where(this.getKeyName(), '=', this._getKeyForSelectQuery());
     return query;
   }
@@ -593,7 +593,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Get a new query builder that doesn't have any global scopes or eager loading.*/
-  public newModelQuery() {
+  public newModelQuery(): FedacoBuilder<this> {
     return this.newEloquentBuilder(this.newBaseQueryBuilder()).setModel(this);
   }
 
@@ -611,7 +611,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Get a new query builder that doesn't have any global scopes.*/
-  public newQueryWithoutScopes() {
+  public newQueryWithoutScopes(): FedacoBuilder<this> {
     return this.newModelQuery().with(this._with).withCount(this._withCount);
   }
 

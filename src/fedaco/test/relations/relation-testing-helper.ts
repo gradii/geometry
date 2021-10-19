@@ -5,6 +5,7 @@ import { Processor } from '../../src/query-builder/processor';
 import { SchemaBuilder } from '../../src/schema/schema-builder';
 import { FedacoBuilder } from '../../src/fedaco/fedaco-builder';
 import { MysqlQueryGrammar } from '../../src/query-builder/grammar/mysql-query-grammar';
+import {DatabaseTransactionsManager} from '../../src/database-transactions-manager';
 
 let builder, related;
 
@@ -76,6 +77,40 @@ class Conn implements ConnectionInterface {
 
   insertGetId(sql: string, bindings: any[], sequence?: string): Promise<any> | boolean {
     return undefined;
+  }
+
+  _transactions: number;
+  _transactionsManager: DatabaseTransactionsManager;
+
+  afterCommit(callback: Function): Promise<void> {
+    return Promise.resolve(undefined);
+  }
+
+  beginTransaction(): Promise<void> {
+    return Promise.resolve(undefined);
+  }
+
+  commit(): Promise<void> {
+    return Promise.resolve(undefined);
+  }
+
+  rollBack(toLevel?: number | null): Promise<void> {
+    return Promise.resolve(undefined);
+  }
+
+  setTransactionManager(manager: DatabaseTransactionsManager): this {
+    return undefined;
+  }
+
+  transaction(callback: (...args: any[]) => Promise<any>, attempts?: number): Promise<any> {
+    return Promise.resolve(undefined);
+  }
+
+  transactionLevel(): number {
+    return 0;
+  }
+
+  unsetTransactionManager(): void {
   }
 }
 

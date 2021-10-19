@@ -4,19 +4,20 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Constructor } from '../../helper/constructor';
-import { BindingVariable } from '../../query/ast/binding-variable';
-import { BetweenPredicateExpression } from '../../query/ast/expression/between-predicate-expression';
-import { ExistsPredicateExpression } from '../../query/ast/expression/exists-predicate-expression';
-import { InPredicateExpression } from '../../query/ast/expression/in-predicate-expression';
-import { NullPredicateExpression } from '../../query/ast/expression/null-predicate-expression';
-import { RawExpression } from '../../query/ast/expression/raw-expression';
-import { NestedExpression } from '../../query/ast/fragment/nested-expression';
-import { SqlParser } from '../../query/parser/sql-parser';
-import { raw } from '../ast-factory';
-import { wrapToArray } from '../ast-helper';
-import { QueryBuilder } from '../query-builder';
-import { QueryBuilderWhereCommon } from './where-common';
+import {Constructor} from '../../helper/constructor';
+import {BindingVariable} from '../../query/ast/binding-variable';
+import {BetweenPredicateExpression} from '../../query/ast/expression/between-predicate-expression';
+import {ExistsPredicateExpression} from '../../query/ast/expression/exists-predicate-expression';
+import {InPredicateExpression} from '../../query/ast/expression/in-predicate-expression';
+import {NullPredicateExpression} from '../../query/ast/expression/null-predicate-expression';
+import {RawExpression} from '../../query/ast/expression/raw-expression';
+import {NestedExpression} from '../../query/ast/fragment/nested-expression';
+import {SqlParser} from '../../query/parser/sql-parser';
+import {raw} from '../ast-factory';
+import {wrapToArray} from '../ast-helper';
+import {QueryBuilder} from '../query-builder';
+import {QueryBuilderWhereCommon} from './where-common';
+import {FedacoBuilder} from '../../fedaco/fedaco-builder';
 
 export interface QueryBuilderWherePredicate {
 
@@ -53,6 +54,8 @@ export interface QueryBuilderWherePredicate {
 
   whereIn(column: string, q: (q: this) => this | void): this;
 
+  whereIn(column: string, q: FedacoBuilder): this;
+
   whereIn(column: string, values: any[], conjunction?: string, not?: boolean): this;
 
   whereIntegerInRaw(column: string, values: any[], conjunction?: string, not?: boolean): this;
@@ -84,7 +87,7 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
     /*Add an exists clause to the query.*/
     public addWhereExistsQuery(this: QueryBuilder & _Self, query: QueryBuilder,
                                conjunction: 'and' | 'or' = 'and',
-                               not: boolean              = false) {
+                               not = false) {
       // const type = not ? 'NotExists' : 'Exists';
       // this.qWheres.push(compact('type', 'query', 'boolean'));
       // this.addBinding(query.getBindings(), 'where');
@@ -107,7 +110,7 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
     }
 
     /*Add an or exists clause to the query.*/
-    public orWhereExists(this: QueryBuilder & _Self, callback: Function, not: boolean = false) {
+    public orWhereExists(this: QueryBuilder & _Self, callback: Function, not = false) {
       return this.whereExists(callback, 'or', not);
     }
 
@@ -156,14 +159,13 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
      */
     public whereBetween(this: QueryBuilder & QueryBuilderWhereCommon, column: string, values: any[],
                         conjunction: 'and' | 'or' = 'and',
-                        not: boolean              = false) {
-      const expression    = SqlParser.createSqlParser(column).parseColumnAlias();
+                        not = false) {
+      const expression = SqlParser.createSqlParser(column).parseColumnAlias();
       const [left, right] = values;
-      let leftBetween, rightBetween;
-      leftBetween         = left instanceof RawExpression ?
+      const leftBetween = left instanceof RawExpression ?
         left :
         new BindingVariable(new RawExpression(left), 'where');
-      rightBetween        = right instanceof RawExpression ?
+      const rightBetween = right instanceof RawExpression ?
         right :
         new BindingVariable(new RawExpression(right), 'where');
       this.addWhere(
@@ -182,8 +184,8 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
     }
 
     /*Add an exists clause to the query.*/
-    public whereExists(this: QueryBuilder & _Self, callback: Function, boolean: string = 'and',
-                       not: boolean = false) {
+    public whereExists(this: QueryBuilder & _Self, callback: Function, boolean = 'and',
+                       not = false) {
       const query = this._forSubQuery();
       callback(query);
       return this.addWhereExistsQuery(query, boolean, not);
@@ -191,7 +193,7 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
 
     public whereIn(this: QueryBuilder & QueryBuilderWhereCommon & _Self, column: string, values: any[],
                    conjunction: 'and' | 'or' = 'and', not = false) {
-      const expression         = SqlParser.createSqlParser(column).parseUnaryTableColumn();
+      const expression = SqlParser.createSqlParser(column).parseUnaryTableColumn();
       let subQuery, valueArray = [];
       if (this.isQueryable(values)) {
         subQuery = this._createSubQuery('where', values);
@@ -219,7 +221,7 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
 
     /*Add a "where in raw" clause for integer values to the query.*/
     public whereIntegerInRaw(this: QueryBuilder & _Self, column: string, values: any[],
-                             conjunction: string = 'and', not: boolean = false) {
+                             conjunction = 'and', not = false) {
       return this.whereIn(column, values.map(it => {
         return raw(parseInt(it));
       }), conjunction, not);
@@ -227,7 +229,7 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
 
     /*Add a "where not in raw" clause for integer values to the query.*/
     public whereIntegerNotInRaw(this: QueryBuilder & _Self, column: string, values: any[],
-                                conjunction: string = 'and') {
+                                conjunction = 'and') {
       return this.whereIntegerInRaw(column, values, conjunction, true);
     }
 
@@ -235,27 +237,27 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
      * Add a where not between statement to the query.
      */
     public whereNotBetween(this: QueryBuilder & _Self, column: string, values: any[],
-                           conjuction: string = 'and') {
+                           conjuction = 'and') {
       return this.whereBetween(column, values, conjuction, true);
     }
 
     /*Add a where not exists clause to the query.*/
-    public whereNotExists(this: QueryBuilder & _Self, callback: Function, boolean: string = 'and') {
+    public whereNotExists(this: QueryBuilder & _Self, callback: Function, boolean = 'and') {
       return this.whereExists(callback, boolean, true);
     }
 
     public whereNotIn(this: QueryBuilder & _Self, column: string, values: any[],
-                      conjuction: string = 'and') {
+                      conjuction = 'and') {
       return this.whereIn(column, values, conjuction, true);
     }
 
     /*Add a "where not null" clause to the query.*/
-    public whereNotNull(columns: string | any[], boolean: string = 'and') {
+    public whereNotNull(columns: string | any[], boolean = 'and') {
       return this.whereNull(columns, boolean, true);
     }
 
     /*Add a "where null" clause to the query.*/
-    public whereNull(columns: string | any[], conjunction: string = 'and', not: boolean = false) {
+    public whereNull(columns: string | any[], conjunction = 'and', not = false) {
       for (const column of wrapToArray(columns)) {
         const ast = SqlParser.createSqlParser(column).parseColumnAlias();
         this.addWhere(

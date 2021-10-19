@@ -40,4 +40,6 @@ export interface ConnectionInterface extends ManagesTransactions {
   selectFromWriteConnection(sql: string, values: any): any;
 
   getConfig(name: string): any;
+
+  setTablePrefix(prefix: string): any;
 }

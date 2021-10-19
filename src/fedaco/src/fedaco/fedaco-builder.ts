@@ -4,22 +4,22 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isAnyEmpty, isArray, isBlank, isFunction, isNumber, isObject, isString } from '@gradii/check-type';
-import { nth, omit, pluck } from 'ramda';
-import { wrap } from '../helper/arr';
-import { Constructor } from '../helper/constructor';
-import { pascalCase } from '../helper/str';
-import { BuildQueries, BuildQueriesCtor, mixinBuildQueries } from '../query-builder/mixins/build-query';
-import { QueryBuilder } from '../query-builder/query-builder';
-import { SqlNode } from '../query/sql-node';
+import {isAnyEmpty, isArray, isBlank, isFunction, isNumber, isObject, isString} from '@gradii/check-type';
+import {nth, omit, pluck} from 'ramda';
+import {wrap} from '../helper/arr';
+import {Constructor} from '../helper/constructor';
+import {pascalCase} from '../helper/str';
+import {BuildQueries, BuildQueriesCtor, mixinBuildQueries} from '../query-builder/mixins/build-query';
+import {QueryBuilder} from '../query-builder/query-builder';
+import {SqlNode} from '../query/sql-node';
 import {
   ForwardCallToQueryBuilder, ForwardCallToQueryBuilderCtor, mixinForwardCallToQueryBuilder
 } from './mixins/forward-call-to-query-builder';
-import { GuardsAttributes, mixinGuardsAttributes } from './mixins/guards-attributes';
-import { mixinQueriesRelationShips, QueriesRelationShips } from './mixins/queries-relationships';
-import { Model } from './model';
-import { Relation } from './relations/relation';
-import { Scope } from './scope';
+import {GuardsAttributes, mixinGuardsAttributes} from './mixins/guards-attributes';
+import {mixinQueriesRelationShips, QueriesRelationShips} from './mixins/queries-relationships';
+import {Model} from './model';
+import {Relation} from './relations/relation';
+import {Scope} from './scope';
 
 export interface FedacoBuilder<T extends Model = Model> extends GuardsAttributes, QueriesRelationShips,
   Omit<BuildQueries, 'first' | 'latest' | 'oldest' | 'orWhere' | 'where'>,
@@ -92,7 +92,7 @@ export interface FedacoBuilder<T extends Model = Model> extends GuardsAttributes
   findMany(ids: any[], columns?: any[]): Promise<T[]>;
 
   /*Find a model by its primary key or throw an exception.*/
-  findOrFail(id: any | any[], columns?: any[]): Promise<T | T[]>;
+  findOrFail<P extends (any[] | any)>(id: P, columns?: any[]): Promise<P extends any[] ? T[] : T>;
 
   /*Find a model by its primary key or return fresh model instance.*/
   findOrNew(id: any, columns?: any[]): Promise<T>;
@@ -414,7 +414,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
                operator?: any,
                value?: any, conjunction = 'and'): this {
     if (arguments.length === 2) {
-      value    = operator;
+      value = operator;
       operator = '=';
     }
     if (isFunction(column) && isBlank(operator)) {
@@ -430,15 +430,15 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   /*Add a basic where clause to the query, and return the first result.*/
   public firstWhere(column: Function | string | any[] | SqlNode,
                     operator: any = null,
-                    value: any    = null,
-                    conjunction   = 'and'): Promise<T> {
+                    value: any = null,
+                    conjunction = 'and'): Promise<T> {
     return this.where(column, operator, value, conjunction).first();
   }
 
   /*Add an "or where" clause to the query.*/
   public orWhere(column: Function | any[] | string | SqlNode,
                  operator: any = null,
-                 value: any    = null): this {
+                 value: any = null): this {
     [value, operator] = this._query._prepareValueAndOperator(value, operator,
       arguments.length === 2);
     return this.where(column, operator, value, 'or');
@@ -479,8 +479,8 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
     return this.hydrate(await this._query.getConnection().select(query, bindings));
   }
 
-  public find(id: any, columns: any[]): Promise<T> 
-  public find(id: any[], columns: any[]): Promise<T[]> 
+  public find(id: any, columns: any[]): Promise<T>
+  public find(id: any[], columns: any[]): Promise<T[]>
   /**
    * Find a model by its primary key.
    */
@@ -502,6 +502,8 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Find a model by its primary key or throw an exception.*/
+  public findOrFail(id: any , columns: any[] ): Promise<T>
+  public findOrFail(id: any[], columns: any[] ): Promise<T[]>
   public async findOrFail(id: any | any[], columns: any[] = ['*']): Promise<T | T[]> {
     const result = await this.find(id, columns);
 
@@ -568,7 +570,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   public async firstOr(columns: Function | any[] = ['*'], callback: Function | null = null): Promise<T> {
     if (isFunction(columns)) {
       callback = columns;
-      columns  = ['*'];
+      columns = ['*'];
     }
     const model = await this.first(columns);
     if (!isBlank(model)) {
@@ -599,7 +601,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
    */
   public async get(columns: string[] | string = ['*']): Promise<T[]> {
     const builder = this.applyScopes();
-    let models    = await builder.getModels(columns);
+    let models = await builder.getModels(columns);
     if (models.length > 0) {
       models = await builder.eagerLoadRelations(models);
     }
@@ -711,12 +713,12 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Paginate the given query.*/
-  public async paginate(page: number   = 1,
+  public async paginate(page: number = 1,
                         pageSize?: number,
                         columns: any[] = ['*'],
   ): Promise<{ items: any[], total: number, pageSize: number, page: number }> {
-    pageSize      = pageSize || this._model.getPerPage();
-    const total   = await this.toBase().getCountForPagination();
+    pageSize = pageSize || this._model.getPerPage();
+    const total = await this.toBase().getCountForPagination();
     const results = total > 0 ? await this.forPage(page, pageSize).get(columns) : [];
     return {
       items: results,
@@ -726,7 +728,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Paginate the given query into a simple paginator.*/
-  public async simplePaginate(page: number   = 1,
+  public async simplePaginate(page: number = 1,
                               pageSize?: number,
                               columns: any[] = ['*']): Promise<{ items: any[], pageSize: number, page: number }> {
     pageSize = pageSize || this._model.getPerPage();
@@ -810,7 +812,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
       return values;
     }
     const column = this._model.getUpdatedAtColumn();
-    values       = {
+    values = {
       ...values,
       [column]: column in values ?
         values[column] :
@@ -829,7 +831,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
       return values;
     }
     const timestamp = this._model.freshTimestampString();
-    const columns   = [
+    const columns = [
       this._model.getCreatedAtColumn(),
       this._model.getUpdatedAtColumn()
     ];
@@ -915,9 +917,9 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   /*Apply the given scope on the current builder instance.*/
   callScope(scope: (...args: any[]) => any | void, parameters: any[] = []): any | void {
     parameters.unshift(this);
-    const query              = this.getQuery();
+    const query = this.getQuery();
     const originalWhereCount = !query._wheres.length ? 0 : query._wheres.length;
-    const result             = scope(...parameters) ?? this;
+    const result = scope(...parameters) ?? this;
     if (/*cast type array*/ query._wheres.length > originalWhereCount) {
       this._addNewWheresWithinGroup(query, originalWhereCount);
     }
@@ -934,7 +936,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   /*Nest where conditions by slicing them at the given where count.*/
   _addNewWheresWithinGroup(query: QueryBuilder, originalWhereCount: number): void {
     const allWheres = query._wheres;
-    query._wheres   = [];
+    query._wheres = [];
     this._groupWhereSliceForScope(query, allWheres.slice(0, originalWhereCount));
     this._groupWhereSliceForScope(query, allWheres.slice(originalWhereCount));
   }
@@ -951,11 +953,11 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
 
   /*Create a where array with nested where conditions.*/
   _createNestedWhere(whereSlice: any[], conjunction = 'and') {
-    const whereGroup   = this.getQuery().forNestedWhere();
+    const whereGroup = this.getQuery().forNestedWhere();
     whereGroup._wheres = whereSlice;
     return {
-      'type'   : 'Nested',
-      'query'  : whereGroup,
+      'type': 'Nested',
+      'query': whereGroup,
       'boolean': conjunction
     };
   }
@@ -1028,7 +1030,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
           }
           ];
 
-        results       = this._addNestedWiths(name, results);
+        results = this._addNestedWiths(name, results);
         results[name] = constraints;
       } else {
         for (const [name, constraints] of Object.entries(relation)) {
@@ -1216,9 +1218,9 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
 
   clone(): FedacoBuilder<T> {
     // return this;
-    const builder      = new FedacoBuilder<T>(this._query.clone());
-    builder._scopes    = {...this._scopes};
-    builder._model     = this._model;
+    const builder = new FedacoBuilder<T>(this._query.clone());
+    builder._scopes = {...this._scopes};
+    builder._model = this._model;
     builder._eagerLoad = {...this._eagerLoad};
     return builder;
   }

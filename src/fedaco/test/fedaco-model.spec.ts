@@ -28,8 +28,36 @@ import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
 import { SchemaBuilder } from '../src/schema/schema-builder';
 import { FedacoModelNamespacedModel } from './model/fedaco-model-namespaced.model';
+import {ManagesTransactions} from '../src/manages-transactions';
+import { DatabaseTransactionsManager } from '../src/database-transactions-manager';
 
 class Conn implements ConnectionInterface {
+  _transactions: number;
+  _transactionsManager: DatabaseTransactionsManager;
+  transaction(callback: (...args: any[]) => Promise<any>, attempts?: number): Promise<any> {
+      throw new Error('Method not implemented.');
+  }
+  beginTransaction(): Promise<void> {
+      throw new Error('Method not implemented.');
+  }
+  commit(): Promise<void> {
+      throw new Error('Method not implemented.');
+  }
+  rollBack(toLevel?: number): Promise<void> {
+      throw new Error('Method not implemented.');
+  }
+  transactionLevel(): number {
+      throw new Error('Method not implemented.');
+  }
+  afterCommit(callback: Function): Promise<void> {
+      throw new Error('Method not implemented.');
+  }
+  setTransactionManager(manager: DatabaseTransactionsManager): this {
+      throw new Error('Method not implemented.');
+  }
+  unsetTransactionManager(): void {
+      throw new Error('Method not implemented.');
+  }
   getSchemaBuilder(): SchemaBuilder {
     throw new Error('Method not implemented.');
   }
@@ -99,9 +127,12 @@ class Conn implements ConnectionInterface {
   insertGetId(sql: string, bindings: any[], sequence?: string): Promise<any> | boolean {
     return undefined;
   }
+
+  setTablePrefix(prefix: string): any {
+  }
 }
 
-function getBuilder() {
+function getBuilder(): FedacoBuilder {
   return new FedacoBuilder(new QueryBuilder(
     new Conn(),
     new MysqlQueryGrammar(),
@@ -2628,7 +2659,7 @@ export class FedacoModelStub extends Model {
   }
 
   public set password(value) {
-    this._attributes['password_hash'] = createHash('sha1').update(value, 'bytes').digest('hex');
+    this._attributes['password_hash'] = createHash('sha1').update(value, 'utf8').digest('hex');
   }
 
   public publicIncrement(column, amount = 1, extra = []) {
