@@ -1,20 +1,17 @@
-import { Container } from 'Illuminate/Container/Container';
-import { Manager as DB } from 'Illuminate/Database/Capsule/Manager';
-import { ConnectionFactory } from 'Illuminate/Database/Connectors/ConnectionFactory';
-import { InvalidArgumentException } from 'InvalidArgumentException';
-import { ReflectionProperty } from 'ReflectionProperty';
+import { DatabaseConfig } from '../../src/database-config';
+
 
 describe('test database connection factory', () => {
-  it('set up', () => {
-    this.db = new DB();
-    this.db.addConnection({
+  beforeEach(() => {
+    const db = new DatabaseConfig();
+    db.addConnection({
       'driver'  : 'sqlite',
       'database': ':memory:'
     });
-    this.db.addConnection({
+    db.addConnection({
       'url': 'sqlite:///:memory:'
     }, 'url');
-    this.db.addConnection({
+    db.addConnection({
       'driver': 'sqlite',
       'read'  : {
         'database': ':memory:'
@@ -23,11 +20,9 @@ describe('test database connection factory', () => {
         'database': ':memory:'
       }
     }, 'read_write');
-    this.db.setAsGlobal();
+    db.setAsGlobal();
   });
-  it('tear down', () => {
-    m.close();
-  });
+
   it('connection can be created', () => {
     expect(this.db.getConnection().getPdo()).toInstanceOf(PDO);
     expect(this.db.getConnection().getReadPdo()).toInstanceOf(PDO);
@@ -37,7 +32,7 @@ describe('test database connection factory', () => {
     expect(this.db.getConnection('url').getReadPdo()).toInstanceOf(PDO);
   });
   it('connection from url has proper config', () => {
-    this.db.addConnection({
+    db.addConnection({
       'url'           : 'mysql://root:pass@db/local?strict=true',
       'unix_socket'   : '',
       'charset'       : 'utf8mb4',

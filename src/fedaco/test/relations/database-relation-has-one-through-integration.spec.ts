@@ -325,7 +325,6 @@ export class HasOneThroughTestPosition extends Model {
   })
   public contract;
 
-
   @HasOneColumn({
     related   : HasOneThroughTestUser,
     foreignKey: 'position_id'

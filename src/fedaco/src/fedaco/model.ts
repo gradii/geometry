@@ -307,38 +307,39 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Eager load relationship column aggregation on the polymorphic relation of a model.*/
-  public loadMorphAggregate(relation: string, relations: WeakMap<Model, string[]>, column: string,
+  public loadMorphAggregate(relation: string, relations: Record<string, string[]>, column: string,
                             func: string = null) {
     if (!this[relation]) {
       return this;
     }
-    const className = this[relation].constructor;
-    loadAggregate(this[relation], relations.get(className) ?? [], column, func);
+    //todo checkme
+    const className = this[relation].constructor.name;
+    loadAggregate(this[relation], relations[className] ?? [], column, func);
     return this;
   }
 
   /*Eager load relationship counts on the polymorphic relation of a model.*/
-  public loadMorphCount(relation: string, relations: WeakMap<Model, string[]>) {
+  public loadMorphCount(relation: string, relations: Record<string, string[]>) {
     return this.loadMorphAggregate(relation, relations, '*', 'count');
   }
 
   /*Eager load relationship max column values on the polymorphic relation of a model.*/
-  public loadMorphMax(relation: string, relations: WeakMap<Model, string[]>, column: string) {
+  public loadMorphMax(relation: string, relations: Record<string, string[]>, column: string) {
     return this.loadMorphAggregate(relation, relations, column, 'max');
   }
 
   /*Eager load relationship min column values on the polymorphic relation of a model.*/
-  public loadMorphMin(relation: string, relations: WeakMap<Model, string[]>, column: string) {
+  public loadMorphMin(relation: string, relations: Record<string, string[]>, column: string) {
     return this.loadMorphAggregate(relation, relations, column, 'min');
   }
 
   /*Eager load relationship column summations on the polymorphic relation of a model.*/
-  public loadMorphSum(relation: string, relations: WeakMap<Model, string[]>, column: string) {
+  public loadMorphSum(relation: string, relations: Record<string, string[]>, column: string) {
     return this.loadMorphAggregate(relation, relations, column, 'sum');
   }
 
   /*Eager load relationship average column values on the polymorphic relation of a model.*/
-  public loadMorphAvg(relation: string, relations: WeakMap<Model, string[]>, column: string) {
+  public loadMorphAvg(relation: string, relations: Record<string, string[]>, column: string) {
     return this.loadMorphAggregate(relation, relations, column, 'avg');
   }
 

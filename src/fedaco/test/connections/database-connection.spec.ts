@@ -1,26 +1,9 @@
 import { isNumber } from '@gradii/check-type';
-import { DateTime } from 'DateTime';
-import { ErrorException } from 'ErrorException';
-import { Exception } from 'Exception';
-import { Dispatcher } from 'Illuminate/Contracts/Events/Dispatcher';
-import { Connection } from 'Illuminate/Database/Connection';
-import { QueryExecuted } from 'Illuminate/Database/Events/QueryExecuted';
-import { Builder as BaseBuilder } from 'Illuminate/Database/Query/Builder';
-import { Grammar } from 'Illuminate/Database/Query/Grammars/Grammar';
-import { Processor } from 'Illuminate/Database/Query/Processors/Processor';
-import { QueryException } from 'Illuminate/Database/QueryException';
-import { Builder } from 'Illuminate/Database/Schema/Builder';
-import { Mockery as m } from 'Mockery';
-import { ReflectionClass } from 'ReflectionClass';
-import { stdClass } from 'stdClass';
 import { TransactionBeginning } from '../../src/events/transaction-beginning';
 import { TransactionCommitted } from '../../src/events/transaction-committed';
 import { TransactionRolledBack } from '../../src/events/transaction-rolled-back';
 
 describe('test database connection', () => {
-  it('tear down', () => {
-    m.close();
-  });
   it('setting default calls get default grammar', () => {
     const connection = this.getMockConnection();
     const mock       = m.mock(stdClass);

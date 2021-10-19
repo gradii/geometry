@@ -63,6 +63,7 @@ describe('test database eloquent morph to many', () => {
 
     const spy1 = jest.spyOn(query, 'from').mockReturnValue(query);
     const spy2 = jest.spyOn(query, 'insert').mockReturnValue(true);
+    const spy3 = jest.spyOn(relation.getQuery(), 'getQuery').mockReturnValue(true);
 
     relation.getQuery().shouldReceive('getQuery').andReturn(mockQueryBuilder = m.mock(stdClass));
     mockQueryBuilder.shouldReceive('newQuery').once().andReturn(query);

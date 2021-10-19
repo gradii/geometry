@@ -1,4 +1,5 @@
 /* tslint:disable:max-line-length */
+import { DatabaseTransactionsManager } from '../src/database-transactions-manager';
 import { raw } from '../src/query-builder/ast-factory';
 import { ConnectionInterface } from '../src/query-builder/connection-interface';
 import { MysqlQueryGrammar } from '../src/query-builder/grammar/mysql-query-grammar';
@@ -70,6 +71,43 @@ describe('database query builder test', () => {
 
     table(table: Function | QueryBuilder | string, as?: string): QueryBuilder {
       return undefined;
+    }
+
+    _transactions: number;
+    _transactionsManager: DatabaseTransactionsManager;
+
+    afterCommit(callback: Function): Promise<void> {
+      return Promise.resolve(undefined);
+    }
+
+    beginTransaction(): Promise<void> {
+      return Promise.resolve(undefined);
+    }
+
+    commit(): Promise<void> {
+      return Promise.resolve(undefined);
+    }
+
+    rollBack(toLevel?: number | null): Promise<void> {
+      return Promise.resolve(undefined);
+    }
+
+    setTablePrefix(prefix: string): any {
+    }
+
+    setTransactionManager(manager: DatabaseTransactionsManager): this {
+      return undefined;
+    }
+
+    transaction(callback: (...args: any[]) => Promise<any>, attempts?: number): Promise<any> {
+      return Promise.resolve(undefined);
+    }
+
+    transactionLevel(): number {
+      return 0;
+    }
+
+    unsetTransactionManager(): void {
     }
   }
 

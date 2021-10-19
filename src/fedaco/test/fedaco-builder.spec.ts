@@ -1,6 +1,7 @@
 import { isFunction } from '@gradii/check-type';
 import { ConnectionFactory } from '../src/connector/connection-factory';
 import { DatabaseManager } from '../src/database-manager';
+import { DatabaseTransactionsManager } from '../src/database-transactions-manager';
 import { FedacoBuilder } from '../src/fedaco/fedaco-builder';
 import { Model } from '../src/fedaco/model';
 import { onlyTrashed, withTrashed } from '../src/fedaco/scopes/soft-deleting-scope';
@@ -86,6 +87,43 @@ describe('fedaco builder', () => {
 
     insertGetId(sql: string, bindings: any[], sequence?: string): Promise<any> | boolean {
       return undefined;
+    }
+
+    _transactions: number;
+    _transactionsManager: DatabaseTransactionsManager;
+
+    afterCommit(callback: Function): Promise<void> {
+      return Promise.resolve(undefined);
+    }
+
+    beginTransaction(): Promise<void> {
+      return Promise.resolve(undefined);
+    }
+
+    commit(): Promise<void> {
+      return Promise.resolve(undefined);
+    }
+
+    rollBack(toLevel?: number | null): Promise<void> {
+      return Promise.resolve(undefined);
+    }
+
+    setTablePrefix(prefix: string): any {
+    }
+
+    setTransactionManager(manager: DatabaseTransactionsManager): this {
+      return undefined;
+    }
+
+    transaction(callback: (...args: any[]) => Promise<any>, attempts?: number): Promise<any> {
+      return Promise.resolve(undefined);
+    }
+
+    transactionLevel(): number {
+      return 0;
+    }
+
+    unsetTransactionManager(): void {
     }
   }
 

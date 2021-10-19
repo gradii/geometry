@@ -1,7 +1,10 @@
-import { Database } from 'sqlite3';
+import { format } from 'date-fns';
+import { CreatedAtColumn } from '../../src/annotation/column/created-at.column';
+import { UpdatedAtColumn } from '../../src/annotation/column/updated-at.column';
 import { DatabaseConfig } from '../../src/database-config';
 import { Model } from '../../src/fedaco/model';
 import { SchemaBuilder } from '../../src/schema/schema-builder';
+
 function connection(connectionName = 'default') {
   return Model.getConnectionResolver().connection(connectionName);
 }
@@ -13,23 +16,23 @@ function schema(connectionName = 'default'): SchemaBuilder {
 async function createSchema() {
   await schema().create('users', table => {
     table.increments('id');
-    table.string('email').unique();
+    table.string('email').withUnique();
     table.timestamps();
   });
   await schema().create('users_created_at', table => {
     table.increments('id');
-    table.string('email').unique();
+    table.string('email').withUnique();
     table.string('created_at');
   });
   await schema().create('users_updated_at', table => {
     table.increments('id');
-    table.string('email').unique();
+    table.string('email').withUnique();
     table.string('updated_at');
   });
 }
 
 describe('test database eloquent timestamps', () => {
-  beforeEach(async() => {
+  beforeEach(async () => {
     const db = new DatabaseConfig();
     db.addConnection({
       'driver'  : 'sqlite',
@@ -38,34 +41,37 @@ describe('test database eloquent timestamps', () => {
     db.bootFedaco();
     db.setAsGlobal();
     await createSchema();
-    Carbon.setTestNow(Carbon.now());
   });
-  afterEach( async () => {
+
+  afterEach(async () => {
     await schema().drop('users');
     await schema().drop('users_created_at');
     await schema().drop('users_updated_at');
   });
-  it('user with created at and updated at', () => {
-    const now  = Carbon.now();
-    const user = UserWithCreatedAndUpdated.create({
+
+  it('user with created at and updated at', async () => {
+    const now  = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    const user = await UserWithCreatedAndUpdated.createQuery().create({
       'email': 'test@test.com'
     });
-    expect(user.created_at.toDateTimeString()).toEqual(now.toDateTimeString());
-    expect(user.updated_at.toDateTimeString()).toEqual(now.toDateTimeString());
+    expect(user.created_at).toEqual(now);
+    expect(user.updated_at).toEqual(now);
   });
-  it('user with created at', () => {
-    const now  = Carbon.now();
-    const user = UserWithCreated.create({
+
+  it('user with created at', async () => {
+    const now  = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    const user = await UserWithCreated.createQuery().create({
       'email': 'test@test.com'
     });
-    expect(user.created_at.toDateTimeString()).toEqual(now.toDateTimeString());
+    expect(user.created_at).toEqual(now);
   });
-  it('user with updated at', () => {
-    const now  = Carbon.now();
-    const user = UserWithUpdated.create({
+
+  it('user with updated at', async () => {
+    const now  = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    const user = await UserWithUpdated.createQuery().create({
       'email': 'test@test.com'
     });
-    expect(user.updated_at.toDateTimeString()).toEqual(now.toDateTimeString());
+    expect(user.updated_at).toEqual(now);
   });
 });
 
@@ -73,18 +79,36 @@ describe('test database eloquent timestamps', () => {
 export class UserWithCreatedAndUpdated extends Model {
   _table: any   = 'users';
   _guarded: any = [];
+
+  @CreatedAtColumn()
+  created_at;
+
+  @UpdatedAtColumn()
+  updated_at;
 }
 
 export class UserWithCreated extends Model {
   static UPDATED_AT         = null;
-  _table: any      = 'users_created_at';
-  _guarded: any    = [];
-  protected dateFormat: any = 'U';
+  _table: any               = 'users_created_at';
+  _guarded: any             = [];
+  protected dateFormat: any = 't';
+
+  @CreatedAtColumn()
+  created_at;
+
+  @UpdatedAtColumn()
+  updated_at;
 }
 
 export class UserWithUpdated extends Model {
   static CREATED_AT         = null;
-  _table: any      = 'users_updated_at';
-  _guarded: any    = [];
-  protected dateFormat: any = 'U';
+  _table: any               = 'users_updated_at';
+  _guarded: any             = [];
+  protected dateFormat: any = 't';
+
+  @CreatedAtColumn()
+  created_at;
+
+  @UpdatedAtColumn()
+  updated_at;
 }

@@ -9,7 +9,7 @@ import { Model } from '../../src/fedaco/model';
 export class BasicModel extends Model {
 
   @Column({
-    columnName: 'name'
+    field: 'name'
   })
   name = '132';
 

@@ -1,10 +1,11 @@
-import { BelongsToColumn } from '../../src/annotation/relation-column/belongs-to.relation-column';
-import { MorphManyColumn } from '../../src/annotation/relation-column/morph-many.relation-column';
-import { MorphToColumn } from '../../src/annotation/relation-column/morph-to.relation-column';
-import { DatabaseConfig } from '../../src/database-config';
-import { Model } from '../../src/fedaco/model';
-import { forwardRef } from '../../src/query-builder/forward-ref';
-import { SchemaBuilder } from '../../src/schema/schema-builder';
+import {BelongsToColumn} from '../../src/annotation/relation-column/belongs-to.relation-column';
+import {MorphManyColumn} from '../../src/annotation/relation-column/morph-many.relation-column';
+import {MorphToColumn} from '../../src/annotation/relation-column/morph-to.relation-column';
+import {DatabaseConfig} from '../../src/database-config';
+import {Model} from '../../src/fedaco/model';
+import {forwardRef} from '../../src/query-builder/forward-ref';
+import {SchemaBuilder} from '../../src/schema/schema-builder';
+import {HasManyColumn} from '../../src/annotation/relation-column/has-many.relation-column';
 
 function connection(connectionName = 'default') {
   return Model.getConnectionResolver().connection(connectionName);
@@ -15,16 +16,16 @@ function schema(connectionName = 'default'): SchemaBuilder {
 }
 
 async function seedData() {
-  const taylor  = await TestUser.createQuery().create({
-    'id'   : 1,
+  const taylor = await TestUser.createQuery().create({
+    'id': 1,
     'email': 'taylorotwell@gmail.com'
   });
-  const post    = await taylor.newRelation('posts').create({
+  const post = await taylor.newRelation('posts').create({
     'title': 'A title',
-    'body' : 'A body'
+    'body': 'A body'
   });
   const comment = await post.newRelation('comments').create({
-    'body'   : 'A comment body',
+    'body': 'A comment body',
     'user_id': 1
   });
   await comment.newRelation('likes').create([]);
@@ -63,16 +64,14 @@ describe('test database eloquent polymorphic integration', () => {
   beforeEach(async () => {
     const db = new DatabaseConfig();
     db.addConnection({
-      'driver'  : 'sqlite',
+      'driver': 'sqlite',
       'database': ':memory:'
     });
     db.bootFedaco();
     db.setAsGlobal();
     await createSchema();
   });
-  it('create schema', () => {
 
-  });
   it('tear down', () => {
     schema().drop('users');
     schema().drop('posts');
@@ -116,53 +115,61 @@ describe('test database eloquent polymorphic integration', () => {
   //   expect(likes[1].likeable.relationLoaded('owner')).toBeTruthy();
   //   expect(likes[1].likeable.relationLoaded('comments')).toBeTruthy();
   // });
-  // it('it loads nested morph relationship counts on demand', async () => {
-  //   await seedData();
-  //   (await TestPost.createQuery().first()).newRelation('likes').create([]);
-  //   (await TestComment.createQuery().first()).newRelation('likes').create([]);
-  //   const likes = TestLike.createQuery().with('likeable.owner').get().loadMorphCount('likeable',
-  //     {});
-  //   expect(likes[0].relationLoaded('likeable')).toBeTruthy();
-  //   expect(likes[0].likeable.relationLoaded('owner')).toBeTruthy();
-  //   expect(likes[0].likeable.likes_count).toEqual(2);
-  //   expect(likes[1].relationLoaded('likeable')).toBeTruthy();
-  //   expect(likes[1].likeable.relationLoaded('owner')).toBeTruthy();
-  //   expect(likes[1].likeable.comments_count).toEqual(1);
-  //   expect(likes[2].relationLoaded('likeable')).toBeTruthy();
-  //   expect(likes[2].likeable.relationLoaded('owner')).toBeTruthy();
-  //   expect(likes[2].likeable.likes_count).toEqual(2);
-  // });
+
+  it('it loads nested morph relationship counts on demand', async () => {
+    await seedData();
+    await (await TestPost.createQuery().first()).newRelation('likes').create([]);
+    await (await TestComment.createQuery().first()).newRelation('likes').create([]);
+    const likes = await Promise.all(
+      (await TestLike.createQuery().with('likeable.owner').get())
+        .map(it => it.loadMorphCount('likeable', {
+          'TestComment': ['likes'],
+          'TestPost': 'comments',
+        })));
+    expect(likes[0].relationLoaded('likeable')).toBeTruthy();
+    expect(likes[0].likeable.relationLoaded('owner')).toBeTruthy();
+    expect(likes[0].likeable.likes_count).toEqual(2);
+    expect(likes[1].relationLoaded('likeable')).toBeTruthy();
+    expect(likes[1].likeable.relationLoaded('owner')).toBeTruthy();
+    expect(likes[1].likeable.comments_count).toEqual(1);
+    expect(likes[2].relationLoaded('likeable')).toBeTruthy();
+    expect(likes[2].likeable.relationLoaded('owner')).toBeTruthy();
+    expect(likes[2].likeable.likes_count).toEqual(2);
+  });
+
 });
 
 /*Eloquent Models...*/
 export class TestUser extends Model {
-  _table: any   = 'users';
+  _table: any = 'users';
   _guarded: any = [];
 
-  public posts() {
-    return this.hasMany(TestPost, 'user_id');
-  }
+  @HasManyColumn({
+    related: forwardRef(() => TestPost),
+    foreignKey: 'user_id'
+  })
+  public posts;
 }
 
 /*Eloquent Models...*/
 export class TestPost extends Model {
-  _table: any   = 'posts';
+  _table: any = 'posts';
   _guarded: any = [];
 
   @MorphManyColumn({
-    related  : forwardRef(() => TestComment),
+    related: forwardRef(() => TestComment),
     morphName: 'commentable'
   })
   public comments;
 
   @BelongsToColumn({
-    related   : TestUser,
+    related: TestUser,
     foreignKey: 'user_id'
   })
   public owner;
 
   @MorphManyColumn({
-    related  : forwardRef(() => TestLike),
+    related: forwardRef(() => TestLike),
     morphName: 'likeable'
   })
   public likes;
@@ -170,12 +177,12 @@ export class TestPost extends Model {
 
 /*Eloquent Models...*/
 export class TestComment extends Model {
-  _table: any   = 'comments';
+  _table: any = 'comments';
   _guarded: any = [];
-  _with: any    = ['commentable'];
+  _with: any = ['commentable'];
 
   @BelongsToColumn({
-    related   : TestUser,
+    related: TestUser,
     foreignKey: 'user_id'
   })
   public owner;
@@ -186,14 +193,14 @@ export class TestComment extends Model {
   public commentable;
 
   @MorphManyColumn({
-    related  : forwardRef(() => TestLike),
+    related: forwardRef(() => TestLike),
     morphName: 'likeable'
   })
   public likes;
 }
 
 export class TestLike extends Model {
-  _table: any   = 'likes';
+  _table: any = 'likes';
   _guarded: any = [];
 
   @MorphToColumn()
@@ -201,9 +208,9 @@ export class TestLike extends Model {
 }
 
 export class TestLikeWithSingleWith extends Model {
-  _table: any   = 'likes';
+  _table: any = 'likes';
   _guarded: any = [];
-  _with: any    = ['likeable'];
+  _with: any = ['likeable'];
 
   @MorphToColumn({
     morphTypeMap: {}
@@ -212,9 +219,9 @@ export class TestLikeWithSingleWith extends Model {
 }
 
 export class TestLikeWithNestedWith extends Model {
-  _table: any   = 'likes';
+  _table: any = 'likes';
   _guarded: any = [];
-  _with: any    = ['likeable.owner'];
+  _with: any = ['likeable.owner'];
 
   @MorphToColumn({
     morphTypeMap: {}
