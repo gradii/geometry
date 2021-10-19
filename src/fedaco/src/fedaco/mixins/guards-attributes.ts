@@ -5,7 +5,7 @@
  */
 
 import { reflector } from '@gradii/annotation';
-import { isArray } from '@gradii/check-type';
+import { isArray, isPromise } from '@gradii/check-type';
 import { findLast } from 'ramda';
 import { ColumnAnnotation, FedacoColumn } from '../../annotation/column';
 import { Constructor } from '../../helper/constructor';
@@ -47,6 +47,10 @@ export interface GuardsAttributes {
   isFillable(key: string): boolean;
 
   getGuarded(): this;
+
+  guard(guarded: any[]): this;
+
+  mergeGuarded(guarded: any[]): this;
 
   _fillableFromArray(attributes: any): this;
 }
@@ -118,12 +122,19 @@ export function mixinGuardsAttributes<T extends Constructor<any>, M>(base: T): G
     /*Run the given callable while being unguarded.*/
     public static async unguarded(callback: (...args: any[]) => Promise<any> | any): Promise<any> {
       if (this._unguarded) {
-        return await callback();
+        return callback();
       }
       this.unguard();
       try {
-        return await callback();
-      } finally {
+        const rst = callback();
+        if (isPromise(rst)) {
+          rst.finally(() => {
+            this.reguard();
+          });
+        } else {
+          this.reguard();
+        }
+      } catch (e) {
         this.reguard();
       }
     }

@@ -94,8 +94,7 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
                                  exists = false) {
       const instance: Model = new this();
       instance._timestamps  = instance.hasTimestampAttributes(attributes);
-      instance.setConnection(parent.getConnectionName()).setTable(table).forceFill(
-        attributes).syncOriginal();
+      instance.setConnection(parent.getConnectionName()).setTable(table).forceFill(attributes).syncOriginal();
       instance.pivotParent = parent;
       instance.exists      = exists;
       return instance;

@@ -637,7 +637,7 @@ describe('database query builder test', () => {
       .whereDate('created_at', raw('NOW()'))
       .where('admin', true);
     builder.toSql();
-    expect(builder.getBindings()).toStrictEqual([1]);
+    expect(builder.getBindings()).toStrictEqual([true]);
 
     builder = getBuilder();
     builder.select('*').from('users')
@@ -1423,7 +1423,7 @@ describe('database query builder test', () => {
     builder = getBuilder();
     builder.select('*').from('users').orderByRaw('?', [true]);
     builder.toSql();
-    expect(builder.getBindings()).toStrictEqual([1]);
+    expect(builder.getBindings()).toStrictEqual([true]);
     builder.reorder();
     builder.toSql();
     expect(builder.getBindings()).toStrictEqual([]);
@@ -2026,7 +2026,7 @@ describe('database query builder test', () => {
     expect(builder.toSql())
       .toBe(
         'SELECT * FROM `users` LEFT JOIN `contacts` ON `users`.`id` = `contacts`.`id` AND EXISTS (SELECT 1 FROM `contact_types` WHERE contact_types.id = contacts.contact_type_id AND `category_id` = ? AND `deleted_at` IS NULL AND `level_id` IN (SELECT `id` FROM `levels` WHERE `is_active` = ?))');
-    expect(builder.getBindings()).toStrictEqual(['1', 1]);
+    expect(builder.getBindings()).toStrictEqual(['1', true]);
   });
 
   it('test joins with nested joins', () => {
@@ -4633,7 +4633,7 @@ describe('database query builder test', () => {
     }, 'sessions').where('bar', '<', '10');
     expect(builder.toSql())
       .toBe(
-        'SELECT * FROM (select max(last_seen_at) as last_seen_at from "user_sessions" where "foo" = ?) as "sessions" where "bar" < ?');
+        'SELECT * FROM (SELECT max(last_seen_at) as last_seen_at FROM `user_sessions` WHERE `foo` = ?) AS `sessions` WHERE `bar` < ?');
     expect(builder.getBindings()).toStrictEqual(['1', '10']);
 
     builder = getBuilder();
@@ -4651,7 +4651,7 @@ describe('database query builder test', () => {
     }, 'sessions').where('bar', '<', '10');
     expect(builder.toSql())
       .toBe(
-        'SELECT * FROM (select max(last_seen_at) as last_seen_at from "prefix_user_sessions" where "foo" = ?) as "prefix_sessions" where "bar" < ?');
+        'SELECT * FROM (SELECT max(last_seen_at) as last_seen_at FROM `prefix_user_sessions` WHERE `foo` = ?) AS `prefix_sessions` WHERE `bar` < ?');
     expect(builder.getBindings()).toStrictEqual(['1', '10']);
   });
 
@@ -4662,7 +4662,7 @@ describe('database query builder test', () => {
     }, 'sessions');
     expect(builder.toSql())
       .toBe(
-        'SELECT * FROM (select max(last_seen_at) as last_seen_at from "user_sessions") as "sessions"');
+        'SELECT * FROM (SELECT max(last_seen_at) as last_seen_at FROM `user_sessions`) AS `sessions`');
     expect(() => {
         getBuilder();
         builder.fromSub(['invalid'], 'sessions');
@@ -4671,10 +4671,8 @@ describe('database query builder test', () => {
     expect(() => {
       builder = getBuilder();
       builder.fromSub(['invalid'], 'sessions');
-    }).toThrowError('InvalidArgumentException')
+    }).toThrowError('InvalidArgumentException');
 
-    builder = getBuilder();
-    builder.fromSub(['invalid'], 'sessions');
   });
 
   // it('test from raw', () => {

@@ -28,36 +28,44 @@ import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
 import { SchemaBuilder } from '../src/schema/schema-builder';
 import { FedacoModelNamespacedModel } from './model/fedaco-model-namespaced.model';
-import {ManagesTransactions} from '../src/manages-transactions';
 import { DatabaseTransactionsManager } from '../src/database-transactions-manager';
 
 class Conn implements ConnectionInterface {
   _transactions: number;
   _transactionsManager: DatabaseTransactionsManager;
+
   transaction(callback: (...args: any[]) => Promise<any>, attempts?: number): Promise<any> {
-      throw new Error('Method not implemented.');
+    throw new Error('Method not implemented.');
   }
+
   beginTransaction(): Promise<void> {
-      throw new Error('Method not implemented.');
+    throw new Error('Method not implemented.');
   }
+
   commit(): Promise<void> {
-      throw new Error('Method not implemented.');
+    throw new Error('Method not implemented.');
   }
+
   rollBack(toLevel?: number): Promise<void> {
-      throw new Error('Method not implemented.');
+    throw new Error('Method not implemented.');
   }
+
   transactionLevel(): number {
-      throw new Error('Method not implemented.');
+    throw new Error('Method not implemented.');
   }
+
   afterCommit(callback: Function): Promise<void> {
-      throw new Error('Method not implemented.');
+    throw new Error('Method not implemented.');
   }
+
   setTransactionManager(manager: DatabaseTransactionsManager): this {
-      throw new Error('Method not implemented.');
+    throw new Error('Method not implemented.');
   }
+
   unsetTransactionManager(): void {
-      throw new Error('Method not implemented.');
+    throw new Error('Method not implemented.');
   }
+
   getSchemaBuilder(): SchemaBuilder {
     throw new Error('Method not implemented.');
   }
@@ -132,7 +140,7 @@ class Conn implements ConnectionInterface {
   }
 }
 
-function getBuilder(): FedacoBuilder {
+function getBuilder(): FedacoBuilder<any> {
   return new FedacoBuilder(new QueryBuilder(
     new Conn(),
     new MysqlQueryGrammar(),
@@ -141,11 +149,21 @@ function getBuilder(): FedacoBuilder {
 }
 
 function resolveModel(model: Model) {
+
+  const connection = new Conn();
+
+  const resolver: ConnectionResolverInterface = {
+    getDefaultConnection(): any {
+    },
+    setDefaultConnection(name: string): any {
+    },
+    connection() {
+      return connection;
+    }
+  };
   // model.
   // (model.constructor as typeof Model)._connectionResolver                    = new ResolveConnection();
-  (model.constructor as typeof Model).resolver = new DatabaseManager(
-    new ConnectionFactory()
-  );
+  (model.constructor as typeof Model).resolver = resolver;
 }
 
 function setDispatch(modelClazz: typeof Model, util: boolean = true) {
@@ -394,9 +412,9 @@ describe('test database eloquent model', () => {
     expect(model.name).toBe('taylor');
   });
 
-  it('force create method saves new model with guarded attributes', () => {
+  it('force create method saves new model with guarded attributes', async () => {
     global['__eloquent.saved'] = false;
-    const model                = new FedacoModelSaveStub().newQuery().forceCreate({
+    const model                = await new FedacoModelSaveStub().newQuery().forceCreate({
       'id': 21
     });
     expect(global['__eloquent.saved']).toBeTruthy();
@@ -793,6 +811,7 @@ describe('test database eloquent model', () => {
         return 'yyyy-MM-dd HH:mm:ss';
       }
     };
+    // @ts-ignore
     const spy1 = jest.spyOn(FedacoDateModelStub.resolver, 'connection').mockReturnValue(conn);
     // @ts-ignore
     const spy2 = jest.spyOn(conn, 'getQueryGrammar').mockReturnValue(conn);
@@ -820,6 +839,7 @@ describe('test database eloquent model', () => {
         return 'yyyy-MM-dd HH:mm:ss';
       }
     };
+    // @ts-ignore
     const spy1 = jest.spyOn(FedacoDateModelStub.resolver, 'connection').mockReturnValue(conn);
     // @ts-ignore
     const spy2 = jest.spyOn(conn, 'getQueryGrammar').mockReturnValue(conn);
@@ -1188,7 +1208,7 @@ describe('test database eloquent model', () => {
     expect(model.id).toEqual(1);
     expect(model._exists).toBeTruthy();
     expect(model.relationOne.id).toEqual(2);
-    expect(model.relationOne.exists).toBeTruthy();
+    expect(model.relationOne._exists).toBeTruthy();
     expect(related1.id).toEqual(2);
     expect(related1._exists).toBeTruthy();
   });
@@ -1320,6 +1340,7 @@ describe('test database eloquent model', () => {
     const model = new FedacoModelStub();
 
     const spy1 = jest.spyOn(model, 'getConnectionName').mockReturnValue('somethingElse');
+    // @ts-ignore
     const spy3 = jest.spyOn(resolver, 'connection').mockReturnValue('bar');
 
     const retval = model.setConnection('foo');
@@ -1595,8 +1616,8 @@ describe('test database eloquent model', () => {
     expect(model.qualifyColumn('column')).toBe('stub.column');
   });
 
-  it('force fill method fills guarded attributes', () => {
-    const model = new FedacoModelSaveStub().forceFill({
+  it('force fill method fills guarded attributes', async () => {
+    const model = await new FedacoModelSaveStub().forceFill({
       'id': 21
     });
     expect(model.id).toEqual(21);
@@ -1701,8 +1722,8 @@ describe('test database eloquent model', () => {
     }).toThrowError('MassAssignmentException');
   });
 
-  it('unguarded runs callback while being unguarded', () => {
-    const model = FedacoModelStub.unguarded(() => {
+  it('unguarded runs callback while being unguarded', async () => {
+    const model = await FedacoModelStub.unguarded(async () => {
       return new FedacoModelStub().guard(['*']).fill({
         'name': 'Taylor'
       });
@@ -1711,9 +1732,9 @@ describe('test database eloquent model', () => {
     expect(Model.isUnguarded()).toBeFalsy();
   });
 
-  it('unguarded call does not change unguarded state', () => {
+  it('unguarded call does not change unguarded state', async () => {
     FedacoModelStub.unguard();
-    const model = FedacoModelStub.unguarded(() => {
+    const model = await FedacoModelStub.unguarded(async () => {
       return new FedacoModelStub().guard(['*']).fill({
         'name': 'Taylor'
       });
@@ -2120,12 +2141,12 @@ describe('test database eloquent model', () => {
 //     expect(model.getMutatedAttributes()).toEqual(['firstName', 'middleName', 'lastName']);
 //   });
   it('replicate creates a new model instance with same attribute values', () => {
-    let model        = new FedacoModelStub();
+    const model        = new FedacoModelStub();
     model.id         = 'id';
     model.foo        = 'bar';
     model.created_at = new Date();
     model.updated_at = new Date();
-    let replicated   = model.replicate();
+    const replicated   = model.replicate();
     expect(replicated.id).toBeUndefined();
     expect(replicated.foo).toBe('bar');
     expect(replicated.created_at).toBeUndefined();

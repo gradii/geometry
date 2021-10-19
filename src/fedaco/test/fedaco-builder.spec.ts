@@ -947,7 +947,7 @@ describe('fedaco builder', () => {
     result  = await builder.insert(['bar']);
     expect(spy1).toBeCalledWith(['bar']);
     expect(spy1).toReturnWith('foo');
-    expect(result).toEqual({'bindings': [], 'result': 'foo'});
+    expect(result).toEqual('foo');
 
 
     builder = getBuilder();
@@ -955,7 +955,7 @@ describe('fedaco builder', () => {
     result  = await builder.insertOrIgnore(['bar']);
     expect(spy1).toBeCalledWith(['bar']);
     expect(spy1).toReturnWith('foo');
-    expect(result).toEqual({'bindings': [], 'result': 'foo'});
+    expect(result).toEqual('foo');
 
 
     builder = getBuilder();
@@ -963,16 +963,16 @@ describe('fedaco builder', () => {
     spy1    = jest.spyOn(builder.getQuery(), 'insertGetId').mockReturnValue(Promise.resolve('foo'));
     result  = await builder.insertGetId(['bar']);
     expect(spy1).toBeCalledWith(['bar']);
-    expect(spy1).toReturnWith('foo');
-    expect(result).toEqual({'bindings': [], 'result': 'foo'});
+    // expect(spy1).toReturnWith('foo');
+    expect(result).toEqual('foo');
 
 
     builder = getBuilder();
     spy1    = jest.spyOn(builder.getQuery(), 'insertUsing').mockReturnValue(Promise.resolve('foo'));
     result  = await builder.insertUsing(['bar'], 'baz');
     expect(spy1).toBeCalledWith(['bar'], 'baz');
-    expect(spy1).toReturnWith('foo');
-    expect(result).toEqual({'bindings': [], 'result': 'foo'});
+    // expect(spy1).toReturnWith('foo');
+    expect(result).toEqual('foo');
 
 
     // builder      = getBuilder();
@@ -1156,7 +1156,7 @@ describe('fedaco builder', () => {
       };
     });
 
-    const result = builder.delete();
+    const result = await builder.delete();
 
     expect(result).toEqual({'foo': builder});
   });
@@ -1368,7 +1368,7 @@ describe('fedaco builder', () => {
     expect(result).toBe(1);
 
     expect(spy1).toBeCalledWith(
-      'UPDATE `test_table` SET `test_table`.`foo` = ?, `test_table`.`updated_at` = ?',
+      'UPDATE `test_table` SET `foo` = ?, `updated_at` = ?',
       ['bar', expect.anything()]);
   });
 
@@ -1389,7 +1389,7 @@ describe('fedaco builder', () => {
     expect(result).toBe(1);
 
     expect(spy1).toBeCalledWith(
-      'update `test_table` set `test_table`.`foo` = ?, `test_table`.`updated_at` = ?',
+      'UPDATE `test_table` SET `foo` = ?, `updated_at` = ?',
       ['bar', null]);
   });
 
@@ -1430,7 +1430,6 @@ describe('fedaco builder', () => {
       ['bar', expect.anything()]);
 
   });
-
 
   it('with casts method', () => {
     // let spy1, spy2, result;

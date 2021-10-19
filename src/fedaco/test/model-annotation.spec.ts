@@ -32,7 +32,7 @@ describe('model annotation', () => {
     const metadata = reflector.propMetadata(BasicModel);
 
     expect(metadata['name'].length).toBe(1);
-    expect(metadata['name'][0].columnName).toBe('name');
+    expect(metadata['name'][0].field).toBe('name');
   });
 
   it('test basic model', () => {

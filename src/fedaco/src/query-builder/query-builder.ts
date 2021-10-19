@@ -333,6 +333,16 @@ export class QueryBuilder extends Builder {
   }
 
   public fromSub(table: any, as: string): this {
+    if (table instanceof QueryBuilder || table instanceof FedacoBuilder) {
+      this._from = new FromTable(new TableReferenceExpression(this._createSubQuery('from', table) as NestedExpression,
+        createIdentifier(as))
+      );
+    } else if (isString(table)) {
+      this.from(table);
+    } else {
+      throw new Error('InvalidArgumentException');
+    }
+
     return this;
   }
 

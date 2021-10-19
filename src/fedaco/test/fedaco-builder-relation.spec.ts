@@ -1,4 +1,5 @@
 /* tslint:disable:max-line-length */
+import { DatabaseTransactionsManager } from '../src/database-transactions-manager';
 import { Model } from '../src/fedaco/model';
 import { ConnectionResolverInterface } from '../src/interface/connection-resolver-interface';
 import { ConnectionInterface } from '../src/query-builder/connection-interface';
@@ -80,6 +81,43 @@ describe('fedaco builder relation', () => {
 
     insertGetId(sql: string, bindings: any[], sequence?: string): Promise<any> | boolean {
       return undefined;
+    }
+
+    _transactions: number;
+    _transactionsManager: DatabaseTransactionsManager;
+
+    afterCommit(callback: Function): Promise<void> {
+      return Promise.resolve(undefined);
+    }
+
+    beginTransaction(): Promise<void> {
+      return Promise.resolve(undefined);
+    }
+
+    commit(): Promise<void> {
+      return Promise.resolve(undefined);
+    }
+
+    rollBack(toLevel?: number | null): Promise<void> {
+      return Promise.resolve(undefined);
+    }
+
+    setTablePrefix(prefix: string): any {
+    }
+
+    setTransactionManager(manager: DatabaseTransactionsManager): this {
+      return undefined;
+    }
+
+    transaction(callback: (...args: any[]) => Promise<any>, attempts?: number): Promise<any> {
+      return Promise.resolve(undefined);
+    }
+
+    transactionLevel(): number {
+      return 0;
+    }
+
+    unsetTransactionManager(): void {
     }
   }
 

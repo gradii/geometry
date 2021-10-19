@@ -28,6 +28,7 @@ import { PrimaryColumn } from '../../annotation/column/primary.column';
 import { TextColumn } from '../../annotation/column/text.column';
 import { TimestampColumn } from '../../annotation/column/timestamp.column';
 import { FedacoRelationColumn, RelationColumnAnnotation } from '../../annotation/relation-column';
+import { Scope, ScopeAnnotation } from '../../annotation/scope';
 import { wrap } from '../../helper/arr';
 import { Constructor } from '../../helper/constructor';
 import { get, set } from '../../helper/obj';
@@ -167,6 +168,8 @@ export interface HasAttributes {
 
   /*Set a given attribute on the model.*/
   setAttribute(this: Model & this, key: string, value: any);
+
+  _scopeInfo(key: string);
 
   _columnInfo(key: string);
 
@@ -743,6 +746,17 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     // protected setMutatedAttributeValue(key: string, value: any) {
     //   return this['set' + Str.studly(key) + 'Attribute'](value);
     // }
+
+    protected _scopeInfo(key: string): FedacoDecorator<ColumnAnnotation> & ScopeAnnotation {
+      const typeOfClazz = this.constructor as typeof Model;
+      const meta        = reflector.propMetadata(typeOfClazz);
+      if (meta[key] && isArray(meta[key])) {
+        return findLast(it => {
+          return Scope.isTypeOf(it)
+        }, meta[key]);
+      }
+      return undefined;
+    }
 
     protected _columnInfo(key: string): FedacoDecorator<ColumnAnnotation> & ColumnAnnotation {
       const typeOfClazz = this.constructor as typeof Model;

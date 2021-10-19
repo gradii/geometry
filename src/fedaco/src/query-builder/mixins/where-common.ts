@@ -42,6 +42,8 @@ export interface QueryBuilderWhereCommon {
 
   orWhere(column: Function | string | any[], operator: any, value: (q: QueryBuilder) => void): this;
 
+  orWhereColumn(first: string | any[], second?: string): this;
+
   orWhereColumn(first: string | any[], operator?: string, second?: string): this;
 
   orWhereRaw(sql: string, bindings: any[]): this;
@@ -89,8 +91,8 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
     /**
      * Add an array of where clauses to the query.
      */
-    _addArrayOfWheres(this: QueryBuilder & _Self, column: object | any[], conjunction: 'and' | 'or' | string,
-                      method: string = 'where'): QueryBuilder & _Self {
+    _addArrayOfWheres(column: object | any[], conjunction: 'and' | 'or' | string,
+                      method: string = 'where'): this {
       return this.whereNested(query => {
         if (isArray(column)) {
           for (const it of column) {
@@ -109,8 +111,7 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
     /**
      * Add another query builder as a nested where to the query builder.
      */
-    public addNestedWhereQuery(this: QueryBuilder & _Self, query: QueryBuilder,
-                               conjunction: 'and' | 'or' = 'and') {
+    public addNestedWhereQuery(query: QueryBuilder, conjunction: 'and' | 'or' | string = 'and'): this {
       if (query._wheres.length > 0) {
         // const type = 'Nested';
         // this.qWheres.push(compact('type', 'query', 'boolean'));
@@ -124,7 +125,7 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
       return this;
     }
 
-    addWhere(where: SqlNode, conjunction: 'and' | 'or' | 'andX' | 'orX') {
+    addWhere(where: SqlNode, conjunction: 'and' | 'or' | 'andX' | 'orX' | string) {
       if (this._wheres.length > 0) {
         if (conjunction === 'and' || conjunction === 'or') {
           const left = this._wheres.pop();
@@ -148,8 +149,9 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
     /**
      * Create a new query instance for nested where condition.
      */
-    public forNestedWhere(this: QueryBuilder & _Self) {
-      return this.newQuery().from(forwardRef(() => this._from));
+    public forNestedWhere() {
+      // @ts-ignore
+      return (this as QueryBuilder & _Self).newQuery().from(forwardRef(() => this._from));
     }
 
     /**
@@ -164,9 +166,15 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
     /**
      * Add an "or where" clause comparing two columns to the query.
      */
-    public orWhereColumn(this: QueryBuilder & _Self, first: string | any[] | Expression,
+    public orWhereColumn(first: string | any[] | Expression,
+                         second?: string): this;
+    public orWhereColumn(first: string | any[] | Expression,
                          operator?: string,
-                         second?: string) {
+                         second?: string): this {
+      if (arguments.length === 2) {
+        second = operator;
+        operator = '=';
+      }
       return this.whereColumn(first, operator, second, 'or');
     }
 
@@ -213,22 +221,22 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
       return this;
     }
 
-    public whereColumn(this: QueryBuilder & _Self, first: any[],
-                       conjunction?: 'and' | 'or' | string): QueryBuilder & _Self;
-    public whereColumn(this: QueryBuilder & _Self, first: string | any[] | Expression,
+    public whereColumn(first: any[],
+                       conjunction?: 'and' | 'or' | string): this;
+    public whereColumn(first: string | any[] | Expression,
                        second?: string | Expression,
-                       conjunction?: 'and' | 'or' | string): QueryBuilder & _Self;
-    public whereColumn(this: QueryBuilder & _Self, first: string | any[] | Expression,
+                       conjunction?: 'and' | 'or' | string): this;
+    public whereColumn(first: string | any[] | Expression,
                        operator?: string,
                        second?: string | Expression,
-                       conjunction?: 'and' | 'or' | string): QueryBuilder & _Self;
+                       conjunction?: 'and' | 'or' | string): this;
     /**
      * Add a "where" clause comparing two columns to the query.
      */
-    public whereColumn(this: QueryBuilder & _Self, first: string | any[] | Expression,
+    public whereColumn(first: string | any[] | Expression,
                        operator?: string | Expression | 'and' | 'or',
                        second?: string | Expression | 'and' | 'or',
-                       conjunction: 'and' | 'or' | string = 'and'): QueryBuilder & _Self {
+                       conjunction: 'and' | 'or' | string = 'and'): this {
       if (isArray(first)) {
         conjunction = operator as 'and' | 'or';
         return this._addArrayOfWheres(first, conjunction, 'whereColumn');
@@ -253,8 +261,8 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
       return this;
     }
 
-    whereNested(this: QueryBuilder & _Self, callback: (query: QueryBuilder | FedacoBuilder) => void,
-                conjunction: 'and' | 'or' | string = 'and') {
+    whereNested(callback: (query: QueryBuilder | FedacoBuilder) => void,
+                conjunction: 'and' | 'or' | string = 'and'): this {
       const query = this.forNestedWhere();
       callback(query);
       return this.addNestedWhereQuery(query, conjunction);

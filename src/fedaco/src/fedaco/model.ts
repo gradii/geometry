@@ -92,7 +92,7 @@ export declare namespace Model {
    * Run the given callable while being unguarded.
    * @link {GuardsAttributes.unguarded}
    */
-  export function unguarded(callback: Function): any;
+  export function unguarded<R extends Promise<any> | any>(callback: () => R): R;
 
 
   export const snakeAttributes: boolean;
@@ -200,7 +200,7 @@ export class Model extends mixinHasAttributes(
 
   /*Fill the model with an array of attributes. Force mass assignment.*/
   public forceFill(attributes: Record<string, any>) {
-    return (this.constructor as any).unguarded(() => {
+    return (this.constructor as typeof Model).unguarded(() => {
       return this.fill(attributes);
     });
   }
@@ -552,7 +552,7 @@ export class Model extends mixinHasAttributes(
   // }
 
   /*Delete the model from the database.*/
-  public async delete(): Promise<boolean|number> {
+  public async delete(): Promise<boolean | number> {
     this.mergeAttributesFromClassCasts();
     if (isBlank(this.getKeyName())) {
       throw new Error('LogicException No primary key defined on model.');
@@ -923,16 +923,17 @@ export class Model extends mixinHasAttributes(
   public static withoutTouching(callback: Function) {
     Model.withoutTouchingOn([Model], callback);
   }
+
   /*Disables relationship model touching for the given model classes during given callback scope.*/
   public static withoutTouchingOn(models: any[], callback: Function) {
     Model.ignoreOnTouch = [...Model.ignoreOnTouch, ...models];
     try {
       callback();
-    }
-    finally {
+    } finally {
       Model.ignoreOnTouch = difference(Model.ignoreOnTouch, models);
     }
   }
+
   /*Determine if the given model is ignoring touches.*/
   public static isIgnoringTouch(clazz?: typeof Model) {
     clazz = clazz || Model;
