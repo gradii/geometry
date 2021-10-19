@@ -7,6 +7,9 @@ import { PostgresQueryGrammar } from '../src/query-builder/grammar/postgres-quer
 import { SqliteQueryGrammar } from '../src/query-builder/grammar/sqlite-query-grammar';
 import { SqlserverQueryGrammar } from '../src/query-builder/grammar/sqlserver-query-grammar';
 import { Processor } from '../src/query-builder/processor';
+import { MysqlProcessor } from '../src/query-builder/processor/mysql-processor';
+import { PostgresProcessor } from '../src/query-builder/processor/postgres-processor';
+import { SqlServerProcessor } from '../src/query-builder/processor/sql-server-processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
 import { SchemaBuilder } from '../src/schema/schema-builder';
 
@@ -30,7 +33,7 @@ describe('database query builder test', () => {
     }
 
     async insert(sql: string, bindings: any[]): Promise<boolean> {
-      throw new Error('not implement');
+      return false;
     }
 
     async update() {
@@ -113,7 +116,7 @@ describe('database query builder test', () => {
 
   function getBuilder() {
     const grammar   = new MysqlQueryGrammar();
-    const processor = new Processor();
+    const processor = new MysqlProcessor();
 
     const conn = new Conn();
     return new QueryBuilder(conn, grammar, processor);
@@ -125,7 +128,7 @@ describe('database query builder test', () => {
 
   function getPostgresBuilder() {
     const grammar   = new PostgresQueryGrammar();
-    const processor = new Processor();
+    const processor = new PostgresProcessor();
     const conn      = new Conn();
 
     return new QueryBuilder(conn, grammar, processor);
@@ -133,7 +136,7 @@ describe('database query builder test', () => {
 
   function getSqlServerBuilder() {
     const grammar   = new SqlserverQueryGrammar();
-    const processor = new Processor();
+    const processor = new SqlServerProcessor();
     const conn      = new Conn();
 
     return new QueryBuilder(conn, grammar, processor);
@@ -2734,7 +2737,7 @@ describe('database query builder test', () => {
     result = await builder.from('users').insertGetId({
       'email': 'foo'
     }, 'id');
-    expect(spyInsert).toBeCalledWith('INSERT INTO `users` (`email`) VALUES (?)', ['foo'], 'id');
+    expect(spyInsert).toBeCalledWith(builder, 'INSERT INTO `users` (`email`) VALUES (?) returning `id`', ['foo'], 'id');
     expect(result).toBe(1);
   });
 
@@ -2748,7 +2751,7 @@ describe('database query builder test', () => {
       'email': 'foo',
       'bar'  : raw('bar')
     }, 'id');
-    expect(spyInsert).toBeCalledWith('INSERT INTO `users` (`email`, `bar`) VALUES (?, bar)',
+    expect(spyInsert).toBeCalledWith(builder, 'INSERT INTO `users` (`email`, `bar`) VALUES (?, bar) returning `id`',
       ['foo'], 'id');
     expect(result).toBe(1);
   });
@@ -2759,19 +2762,19 @@ describe('database query builder test', () => {
     builder   = getMySqlBuilder();
     spyInsert = jest.spyOn(builder._processor, 'processInsertGetId');
     await builder.from('users').insertGetId([]);
-    expect(spyInsert).toBeCalledWith('INSERT INTO `users` () VALUES ()', [], 'id');
+    expect(spyInsert).toBeCalledWith(builder, 'INSERT INTO `users` () VALUES () returning `id`', [], 'id');
 
 
     builder   = getPostgresBuilder();
     spyInsert = jest.spyOn(builder._processor, 'processInsertGetId');
     await builder.from('users').insertGetId([]);
-    expect(spyInsert).toBeCalledWith('INSERT INTO "users" DEFAULT VALUES returning "id"', [], 'id');
+    expect(spyInsert).toBeCalledWith(builder, 'INSERT INTO "users" DEFAULT VALUES returning "id"', [], 'id');
 
 
     builder   = getSQLiteBuilder();
     spyInsert = jest.spyOn(builder._processor, 'processInsertGetId');
     await builder.from('users').insertGetId([]);
-    expect(spyInsert).toBeCalledWith('INSERT INTO "users" DEFAULT VALUES', [], 'id');
+    expect(spyInsert).toBeCalledWith(builder, 'INSERT INTO "users" DEFAULT VALUES', [], 'id');
 
     builder   = getSqlServerBuilder();
     spyInsert = jest.spyOn(builder._processor, 'processInsertGetId');
@@ -3439,7 +3442,7 @@ describe('database query builder test', () => {
     result         = await builder.from('users').insertGetId({
       'email': 'foo'
     }, 'id');
-    expect(spyInsertGetId).toBeCalledWith('INSERT INTO "users" ("email") VALUES (?) returning "id"',
+    expect(spyInsertGetId).toBeCalledWith(builder, 'INSERT INTO "users" ("email") VALUES (?) returning "id"',
       ['foo'], 'id');
     expect(result).toBe(1);
   });
@@ -3452,7 +3455,7 @@ describe('database query builder test', () => {
     result         = await builder.from('users').insertGetId({
       'email': 'foo'
     }, 'id');
-    expect(spyInsertGetId).toBeCalledWith(
+    expect(spyInsertGetId).toBeCalledWith(builder,
       'set nocount on;INSERT INTO [users] ([email]) VALUES (?);select scope_identity() as [id]',
       ['foo'], 'id');
     expect(result).toBe(1);
@@ -4394,7 +4397,7 @@ describe('database query builder test', () => {
     builder = getMySqlBuilder();
     builder.select('*').from('users').whereJsonContains('users.options->languages', ['en']);
     expect(builder.toSql()).toBe(
-      'SELECT * FROM `users` where json_contains(`users`.`options`, ?, \'$."languages"\')');
+      'SELECT * FROM `users` WHERE json_contains(`users`.`options`, ?, \'$."languages"\')');
     expect(builder.getBindings()).toStrictEqual(['["en"]']);
     builder = getMySqlBuilder();
     builder.select('*')

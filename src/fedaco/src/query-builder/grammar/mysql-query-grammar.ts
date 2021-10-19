@@ -78,8 +78,7 @@ export class MysqlQueryGrammar extends QueryGrammar implements GrammarInterface 
   compileInsert(builder: QueryBuilder, values: any, insertOption: string = 'into'): string {
     if (isAnyEmpty(values)) {
       const visitor = new QueryBuilderVisitor(builder._grammar, builder);
-      return `INSERT INTO ${builder._from.accept(visitor)} ()
-              VALUES ()`;
+      return 'INSERT INTO ' + `${builder._from.accept(visitor)} () VALUES ()`;
     }
 
     return super.compileInsert(builder, values, insertOption);
