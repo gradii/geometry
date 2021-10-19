@@ -2783,7 +2783,6 @@ describe('database query builder test', () => {
       .toBeCalledWith(
         'set nocount on;INSERT INTO [users] DEFAULT VALUES;select scope_identity() as [id]', [],
         'id');
-
   });
 
   it('test insert method respects raw bindings', async () => {
