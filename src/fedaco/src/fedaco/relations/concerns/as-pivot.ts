@@ -30,10 +30,10 @@ export interface AsPivot extends Model {
   _relatedKey: string;
 
   /*Set the keys for a select query.*/
-  _setKeysForSelectQuery(query: FedacoBuilder): FedacoBuilder;
+  _setKeysForSelectQuery(query: FedacoBuilder<this>): FedacoBuilder<this>;
 
   /*Set the keys for a save update query.*/
-  _setKeysForSaveQuery(query: FedacoBuilder): FedacoBuilder;
+  _setKeysForSaveQuery(query: FedacoBuilder<this>): FedacoBuilder<this>;
 
   /*Delete the pivot model record from the database.*/
   delete(): Promise<number | boolean>;

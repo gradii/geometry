@@ -21,13 +21,13 @@ export class MorphPivot extends Pivot {
   protected morphClass: string;
 
   /*Set the keys for a save update query.*/
-  protected setKeysForSaveQuery(query: FedacoBuilder): FedacoBuilder {
+  _setKeysForSaveQuery(query: FedacoBuilder<this>): FedacoBuilder<this> {
     query.where(this.morphType, this.morphClass);
     return super._setKeysForSaveQuery(query);
   }
 
   /*Set the keys for a select query.*/
-  protected setKeysForSelectQuery(query: FedacoBuilder): FedacoBuilder {
+  _setKeysForSelectQuery(query: FedacoBuilder<this>): FedacoBuilder<this> {
     query.where(this.morphType, this.morphClass);
     return super._setKeysForSelectQuery(query);
   }
