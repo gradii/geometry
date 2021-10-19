@@ -100,7 +100,7 @@ describe('test database eloquent has one of many', () => {
     relation.addEagerConstraints([user]);
     expect(relation.getOneOfManySubQuery().toSql()).toEqual({
       result  : 'SELECT MAX("id") AS "id", "logins"."user_id" FROM "logins" WHERE "logins"."user_id" = ? AND "logins"."user_id" IS NOT NULL AND "logins"."user_id" IN (1) GROUP BY "logins"."user_id"',
-      bindings: ['1']
+      bindings: [1]
     });
   });
 

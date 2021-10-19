@@ -479,6 +479,8 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
     return this.hydrate(await this._query.getConnection().select(query, bindings));
   }
 
+  public find(id: any, columns: any[]): Promise<T> 
+  public find(id: any[], columns: any[]): Promise<T[]> 
   /**
    * Find a model by its primary key.
    */
