@@ -484,7 +484,7 @@ export class Model extends mixinHasAttributes(
 
   /*Get the primary key value for a select query.*/
   _getKeyForSelectQuery() {
-    return this.original[this.getKeyName()] ?? this.getKey();
+    return this._original[this.getKeyName()] ?? this.getKey();
   }
 
   /*Set the keys for a save update query.*/

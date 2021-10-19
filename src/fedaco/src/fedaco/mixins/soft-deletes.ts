@@ -24,7 +24,7 @@ export interface SoftDeletes {
   _runSoftDelete(this: Model & this): void;
 
   /*Restore a soft-deleted model instance.*/
-  restore(this: Model & this): boolean;
+  restore(this: Model & this): Promise<boolean>;
 
   /*Determine if the model instance has been soft-deleted.*/
   trashed(): boolean;

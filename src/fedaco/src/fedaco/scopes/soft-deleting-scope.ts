@@ -13,7 +13,9 @@ export function restore() {
     builder.pipe(
       withTrashed()
     );
-    return builder.update({});
+    return builder.update({
+      [builder.getModel().getDeletedAtColumn()]: null
+    });
   };
 }
 
@@ -59,15 +61,17 @@ export class SoftDeletingScope extends Scope {
   }
 
   /*Extend the query builder with the needed functions.*/
-  // public extend(builder: FedacoBuilder) {
-  //   for (let extension of this.extensions) {
-  //     this['"add{$extension}"'](builder);
-  //   }
-  //   builder.onDelete((builder: FedacoBuilder) => {
-  //     let column = this.getDeletedAtColumn(builder);
-  //     return builder.update({});
-  //   });
-  // }
+  public extend(builder: FedacoBuilder) {
+    // for (let extension of this.extensions) {
+    //   this['"add{$extension}"'](builder);
+    // }
+    builder.onDelete((builder: FedacoBuilder) => {
+      const column = this.getDeletedAtColumn(builder);
+      return builder.update({
+        [column]: builder.getModel().freshTimestampString()
+      });
+    });
+  }
 
   /*Get the "deleted at" column for the builder.*/
   protected getDeletedAtColumn(builder: FedacoBuilder) {

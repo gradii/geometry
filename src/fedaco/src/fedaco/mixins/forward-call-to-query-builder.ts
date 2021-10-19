@@ -74,6 +74,8 @@ export interface ForwardCallToQueryBuilder extends Omit<QueryBuilderJoin, 'joinS
 
   delete(...args: any[]): Promise<any>;
 
+  forceDelete(...args: any[]): Promise<any>;
+
   truncate(...args: any[]): this;
 
   updateOrInsert(...args: any[]): this;
@@ -101,6 +103,8 @@ export interface ForwardCallToQueryBuilder extends Omit<QueryBuilderJoin, 'joinS
   joinSub(query: Function | QueryBuilder | FedacoBuilder | string, as: string, first: Function | string,
           operator?: string,
           second?: string | number, type?: string, where?: boolean): this;
+
+  pipe(...args: any[]): this;
 }
 
 export type ForwardCallToQueryBuilderCtor = Constructor<ForwardCallToQueryBuilder>;
@@ -132,6 +136,11 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     #directToQueryBuilder(method: string, parameters: any[]) {
       const _query = this.toBase();
       return _query[method].apply(_query, parameters);
+    }
+
+    // @ts-ignore
+    #directToBuilder(method: string, parameters: any[]) {
+      return this._query[method](...parameters);
     }
 
     average(...args: any[]) {
@@ -235,7 +244,11 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     }
 
     delete(...args: any[]) {
-      return this.#directToQueryBuilder('delete', args);
+      return this.#directToBuilder('delete', args);
+    }
+
+    forceDelete(...args: any[]) {
+      return this.#directToBuilder('forceDelete', args);
     }
 
     truncate(...args: any[]) {
@@ -643,6 +656,10 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
 
     unless(...args: any[]) {
       return this.#forwardCallToQueryBuilder('unless', args);
+    }
+
+    pipe(...args: any[]){
+      return this.#forwardCallToQueryBuilder('pipe', args);
     }
 
     // region specify query builder
