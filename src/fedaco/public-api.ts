@@ -266,4 +266,8 @@ export * from './src/query-builder/forward-ref';
 export * from './src/query-builder/query-builder';
 export * from './src/query-builder/ast-helper';
 export * from './src/database-config';
+export * from './src/database-manager';
+export * from './src/database-transaction-record';
+export * from './src/database-transactions-manager';
+export * from './src/manages-transactions';
 export * from './src/query-exception';
