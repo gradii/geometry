@@ -361,7 +361,7 @@ describe('fedaco builder relation', () => {
     }).toSql();
     const dotSql       = model.newQuery().has('parentFoo.childFoo').toSql();
     const alias        = 'self_alias_hash';
-    const aliasRegex   = /\b(laravel_reserved_\d)(\b|$)/ig;
+    const aliasRegex   = /\b(fedaco_reserved_\d)(\b|$)/ig;
     const nestedSqlStr = nestedSql.result.replace(aliasRegex, alias);
     const dotSqlStr    = dotSql.result.replace(aliasRegex, alias);
     expect(dotSqlStr).toBe(nestedSqlStr);
@@ -371,7 +371,7 @@ describe('fedaco builder relation', () => {
     const model      = new FedacoBuilderTestModelSelfRelatedStub();
     let sql          = model.newQuery().has('parentFoo.childFoo').toSql().result;
     const alias      = 'self_alias_hash';
-    const aliasRegex = /\b(laravel_reserved_\d)(\b|$)/ig;
+    const aliasRegex = /\b(fedaco_reserved_\d)(\b|$)/ig;
     sql              = sql.replace(aliasRegex, alias);
     expect(sql).toContain('`self_alias_hash`.`id` = `self_related_stubs`.`parent_id`',);
   });

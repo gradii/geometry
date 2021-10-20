@@ -159,7 +159,7 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
 
   /*Get a relationship join table hash.*/
   public getRelationCountHash(incrementJoinCount = true) {
-    return 'laravel_reserved_' + (incrementJoinCount ? Relation.selfJoinCount++ : Relation.selfJoinCount);
+    return 'fedaco_reserved_' + (incrementJoinCount ? Relation.selfJoinCount++ : Relation.selfJoinCount);
   }
 
   /*Get all of the primary keys for an array of models.*/
