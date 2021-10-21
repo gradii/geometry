@@ -920,15 +920,15 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Disables relationship model touching for the current class during given callback scope.*/
-  public static withoutTouching(callback: Function) {
-    Model.withoutTouchingOn([Model], callback);
+  public static async withoutTouching(callback: () => Promise<any> | any) {
+    await Model.withoutTouchingOn([Model], callback);
   }
 
   /*Disables relationship model touching for the given model classes during given callback scope.*/
-  public static withoutTouchingOn(models: any[], callback: Function) {
+  public static async withoutTouchingOn(models: any[], callback: () => Promise<any> | any) {
     Model.ignoreOnTouch = [...Model.ignoreOnTouch, ...models];
     try {
-      callback();
+      await callback();
     } finally {
       Model.ignoreOnTouch = difference(Model.ignoreOnTouch, models);
     }

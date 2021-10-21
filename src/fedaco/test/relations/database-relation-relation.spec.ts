@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+import { Column } from '../../src/annotation/column/column';
 import { Model } from '../../src/fedaco/model';
 import { HasOne } from '../../src/fedaco/relations/has-one';
 import { Relation } from '../../src/fedaco/relations/relation';
@@ -22,84 +24,105 @@ describe('test database eloquent relation', () => {
   });
 
   it('touch method updates related timestamps', () => {
-    const builder = getBuilder();
-    const parent  = new(Model);
-    parent.shouldReceive('getAttribute')._with('id').andReturn(1);
-    const related = new(EloquentNoTouchingModelStub).makePartial();
-    const spy1= ('getModel').andReturn(related);
-    const spy2('whereNotNull');
-    const spy3('where');
-    const spy4('withoutGlobalScopes').andReturn(builder);
+    const builder  = getBuilder();
+    const parent   = new (Model);
+    const spy1     = jest.spyOn(parent, 'getAttribute').mockReturnValue(1);
+    // parent.shouldReceive('getAttribute')._with('id').andReturn(1);
+    const related  = new (EloquentNoTouchingModelStub);
+    const spy2     = jest.spyOn(builder, 'getModel').mockReturnValue(related);
+    const spy3     = jest.spyOn(builder, 'whereNotNull');
+    const spy4     = jest.spyOn(builder, 'where');
+    const spy5     = jest.spyOn(builder, 'withoutGlobalScopes').mockReturnValue(builder);
     const relation = new HasOne(builder, parent, 'foreign_key', 'id');
-    related.shouldReceive('getTable').andReturn('table');
-    related.shouldReceive('getUpdatedAtColumn').andReturn('updated_at');
-    const now = new Date();
-    related.shouldReceive('freshTimestampString').andReturn(now);
-    const spy1('update').once()._with({
-      'updated_at': now
-    });
+    const spy6     = jest.spyOn(related, 'getTable').mockReturnValue('table');
+    const spy7     = jest.spyOn(related, 'getUpdatedAtColumn').mockReturnValue('updated_at');
+    const now      = new Date();
+    const spy8     = jest.spyOn(related, 'freshTimestampString').mockReturnValue(
+      format(now, 'yyyy-MM-dd HH:mm:ss')
+    );
+
+    const spy9 = jest.spyOn(builder, 'update');
+
     relation.touch();
+    expect(spy9).toBeCalledWith({'updated_at': now});
   });
 
-  it('can disable parent touching for all models', () => {
-    /**/
-    const related = m.mock(EloquentNoTouchingModelStub).makePartial();
-    related.shouldReceive('getUpdatedAtColumn').never();
-    related.shouldReceive('freshTimestampString').never();
-    expect(related.isIgnoringTouch()).toBeFalsy();
-    Model.withoutTouching(() => {
-      this.assertTrue(related.isIgnoringTouch());
+  it('can disable parent touching for all models', async () => {
+    const related = new EloquentNoTouchingModelStub();
+    const spy1    = jest.spyOn(related, 'getUpdatedAtColumn').mockReturnValue('updated_at');
+    const spy2    = jest.spyOn(related, 'freshTimestampString').mockReturnValue('');
+    expect(EloquentNoTouchingModelStub.isIgnoringTouch()).toBeFalsy();
+    await Model.withoutTouching(async () => {
+      expect(EloquentNoTouchingModelStub.isIgnoringTouch()).toBeTruthy();
       const builder = getBuilder();
-      const parent  = m.mock(Model);
-      parent.shouldReceive('getAttribute')._with('id').andReturn(1);
-      builder.shouldReceive('getModel').andReturn(related);
-      builder.shouldReceive('whereNotNull');
-      builder.shouldReceive('where');
-      builder.shouldReceive('withoutGlobalScopes').andReturn(builder);
+      const parent  = new (Model);
+      const spy11   = jest.spyOn(parent, 'getAttribute').mockReturnValue(1);
+      const spy2    = jest.spyOn(builder, 'getModel').mockReturnValue(related);
+      const spy3    = jest.spyOn(builder, 'whereNotNull');
+      const spy4    = jest.spyOn(builder, 'where');
+      const spy5    = jest.spyOn(builder, 'withoutGlobalScopes').mockReturnValue(builder);
+
       const relation = new HasOne(builder, parent, 'foreign_key', 'id');
-      builder.shouldReceive('update').never();
-      relation.touch();
+
+      const spy6 = jest.spyOn(builder, 'update');
+      await relation.touch();
+
+      expect(spy11).toBeCalledWith('id');
+      expect(spy6).not.toBeCalled();
     });
     expect(related.isIgnoringTouch()).toBeFalsy();
+
+    expect(spy1).not.toBeCalled();
+    expect(spy2).not.toBeCalled();
   });
 
   it('can disable touching for specific model', () => {
-    const related = new EloquentNoTouchingModelStub();
-    const spy1 = jest.spyOn(related, 'getUpdatedAtColumn');
-    related.shouldReceive('getUpdatedAtColumn').never();
-    related.shouldReceive('freshTimestampString').never();
-    const anotherRelated = m.mock(EloquentNoTouchingAnotherModelStub).makePartial();
-    expect(related.isIgnoringTouch()).toBeFalsy();
-    expect(anotherRelated.isIgnoringTouch()).toBeFalsy();
+    const related        = new EloquentNoTouchingModelStub();
+    const spy1           = jest.spyOn(related, 'getUpdatedAtColumn');
+    const spy2           = jest.spyOn(related, 'freshTimestampString');
+    const anotherRelated = new EloquentNoTouchingAnotherModelStub();
+    expect(EloquentNoTouchingModelStub.isIgnoringTouch()).toBeFalsy();
+    expect(EloquentNoTouchingAnotherModelStub.isIgnoringTouch()).toBeFalsy();
     EloquentNoTouchingModelStub.withoutTouching(() => {
-      this.assertTrue(related.isIgnoringTouch());
-      this.assertFalse(anotherRelated.isIgnoringTouch());
+      expect(EloquentNoTouchingModelStub.isIgnoringTouch()).toBeTruthy();
+      expect(EloquentNoTouchingAnotherModelStub.isIgnoringTouch()).toBeFalsy();
       const builder = getBuilder();
-      const parent  = m.mock(Model);
-      parent.shouldReceive('getAttribute')._with('id').andReturn(1);
-      const spy1         = jest.spyOn(related, 'getModel');
-      const spy1 jest.spyOn(related, 'getModel');andReturn(related);
-      const jest.spyOn(related, 'whereNotNull');andReturn(related);
-      ('whereNotNull');
-      builder.spy1('where');
-      builder.spy1('withoutGlobalScopes').andReturnSelf();
+      const parent  = new Model;
+      const spy10   = jest.spyOn(parent, 'getAttribute').mockReturnValue(1);
+      const spy11   = jest.spyOn(related, 'getModel').mockReturnValue(related);
+      const spy12   = jest.spyOn(related, 'whereNotNull').mockReturnValue(related);
+      const spy13   = jest.spyOn(related, 'where');
+      const spy14   = jest.spyOn(related, 'withoutGlobalScopes').mockReturnThis();
+
       const relation = new HasOne(builder, parent, 'foreign_key', 'id');
-      builder.spy1('update').never();
+      const spy15    = jest.spyOn(builder, 'update');
       relation.touch();
+
+      expect(spy15).not.toBeCalled();
+
       const anotherBuilder = getBuilder();
-      const anotherParent  = new(Model);
-      anotherParent.shouldReceive('getAttribute')._with('id').andReturn(2);
-      anotherBuilder.spy1('getModel').andReturn(anotherRelated);
-      anotherBuilder.spy1('whereNotNull');
-      anotherBuilder.spy1('where');
-      anotherBuilder.spy1('withoutGlobalScopes').andReturnSelf();
+      const anotherParent  = new Model();
+      const spy16          = jest.spyOn(anotherParent, 'getAttribute').mockReturnValue(2);
+      const spy17          = jest.spyOn(anotherParent, 'getModel').mockReturnValue(anotherRelated);
+      const spy18          = jest.spyOn(anotherParent, 'whereNotNull');
+      const spy19          = jest.spyOn(anotherParent, 'where');
+      const spy20          = jest.spyOn(anotherParent, 'withoutGlobalScopes').mockReturnThis();
+
       const anotherRelation = new HasOne(anotherBuilder, anotherParent, 'foreign_key', 'id');
-      const now             = Carbon.now();
-      anotherRelated.shouldReceive('freshTimestampString').andReturn(now);
-      anotherBuilder.spy1('update').once()._with({
+      const now             = new Date();
+
+      const spy21 = jest.spyOn(anotherRelated, 'freshTimestampString').mockReturnValue(
+        format(now, 'yyyy-MM-dd HH:mm:ss')
+      );
+      const spy22 = jest.spyOn(anotherBuilder, 'update');
+
+      anotherRelation.touch();
+
+      expect(spy10).toBeCalledWith('id');
+      expect(spy16).toBeCalledWith('id');
+      expect(spy22).toBeCalledWith({
         'updated_at': now
       });
-      anotherRelation.touch();
     });
     expect(related.isIgnoringTouch()).toBeFalsy();
     expect(anotherRelated.isIgnoringTouch()).toBeFalsy();
@@ -108,37 +131,60 @@ describe('test database eloquent relation', () => {
   });
 
   it('parent model is not touched when child model is ignored', () => {
-    const related = new(EloquentNoTouchingModelStub).makePartial();
-    related.shouldReceive('getUpdatedAtColumn').never();
-    related.shouldReceive('freshTimestampString').never();
-    const relatedChild = new(EloquentNoTouchingChildModelStub).makePartial();
-    relatedChild.shouldReceive('getUpdatedAtColumn').never();
-    relatedChild.shouldReceive('freshTimestampString').never();
+    const related = new EloquentNoTouchingModelStub();
+    const spy1    = jest.spyOn(related, 'getUpdatedAtColumn');
+    const spy2    = jest.spyOn(related, 'freshTimestampString');
+
+    const relatedChild = new EloquentNoTouchingChildModelStub();
+
+    const spy3 = jest.spyOn(relatedChild, 'getUpdatedAtColumn');
+    const spy4 = jest.spyOn(relatedChild, 'freshTimestampString');
     expect(related.isIgnoringTouch()).toBeFalsy();
     expect(relatedChild.isIgnoringTouch()).toBeFalsy();
+
+    expect(spy1).not.toBeCalled();
+    expect(spy2).not.toBeCalled();
+    expect(spy3).not.toBeCalled();
+    expect(spy4).not.toBeCalled();
+
     EloquentNoTouchingModelStub.withoutTouching(() => {
-      this.assertTrue(related.isIgnoringTouch());
-      this.assertTrue(relatedChild.isIgnoringTouch());
+      expect(related.isIgnoringTouch()).toBeTruthy();
+      expect(relatedChild.isIgnoringTouch()).toBeTruthy();
       const builder = getBuilder();
-      const parent  = new(Model);
-      parent.shouldReceive('getAttribute')._with('id').andReturn(1);
-      const jest 'getModel' = new(EloquentNoTouchingChildModelStub)..andReturn(related);
-      builder.shouldReceive('whereNotNull');
-      builder.shouldReceive('where');
-      builder.shouldReceive('withoutGlobalScopes').andReturnSelf();
+      const parent  = new Model();
+
+      const spy11 = jest.spyOn(parent, 'getAttribute').mockReturnValue(1);
+      const spy12 = jest.spyOn(builder, 'getModel').mockReturnValue(related);
+      const spy13 = jest.spyOn(builder, 'whereNotNull');
+      const spy14 = jest.spyOn(builder, 'where');
+      const spy15 = jest.spyOn(builder, 'withoutGlobalScopes').mockReturnThis();
+
+      // parent.shouldReceive('getAttribute')._with('id').andReturn(1);
+      // builder.shouldReceive('whereNotNull');
+      // builder.shouldReceive('where');
+      // builder.shouldReceive('withoutGlobalScopes').andReturnSelf();
       const relation = new HasOne(builder, parent, 'foreign_key', 'id');
-      builder.shouldReceive('update').never();
-      relation.touch();jjj
+      const spy16    = jest.spyOn(builder, 'update');
+
+      // builder.shouldReceive('update').never();
+      relation.touch();
+      expect(spy11).toBeCalledWith('id');
+      expect(spy16).not.toBeCalled();
+
       const anotherBuilder = getBuilder();
-      const anotherParent  = m.mock(Model);
-      anotherParent.shouldReceive('getAttribute')._with('id').andReturn(2);
-      anotherBuilder.shouldReceive('getModel').andReturn(relatedChild);
-      anotherBuilder.shouldReceive('whereNotNull');
-      anotherBuilder.shouldReceive('where');
-      anotherBuilder.shouldReceive('withoutGlobalScopes').andReturnSelf();
+      const anotherParent  = new Model();
+
+      const spy17           = jest.spyOn(anotherParent, 'getAttribute').mockReturnValue(2);
+      const spy18           = jest.spyOn(anotherParent, 'getModel').mockReturnValue(relatedChild);
+      const spy19           = jest.spyOn(anotherParent, 'whereNotNull');
+      const spy20           = jest.spyOn(anotherParent, 'where');
+      const spy21           = jest.spyOn(anotherParent, 'withoutGlobalScopes').mockReturnThis();
       const anotherRelation = new HasOne(anotherBuilder, anotherParent, 'foreign_key', 'id');
-      anotherBuilder.shouldReceive('update').never();
+      const spy22           = jest.spyOn(anotherBuilder, 'update');
       anotherRelation.touch();
+
+      expect(spy17).toBeCalledWith('id');
+      expect(spy22).not.toBeCalled();
     });
     expect(related.isIgnoringTouch()).toBeFalsy();
     expect(relatedChild.isIgnoringTouch()).toBeFalsy();
@@ -146,7 +192,7 @@ describe('test database eloquent relation', () => {
 
   it('ignored models state is reset when there are exceptions', () => {
     const related      = new EloquentNoTouchingModelStub();
-    const spy       = jest.spyOn(related, 'getUpdatedAtColumn');
+    const spy          = jest.spyOn(related, 'getUpdatedAtColumn');
     const spy2         = jest.spyOn(related, 'freshTimestampString');
     const relatedChild = new EloquentNoTouchingChildModelStub();
     const spy3         = jest.spyOn(relatedChild, 'getUpdatedAtColumn');
@@ -163,6 +209,7 @@ describe('test database eloquent relation', () => {
     expect(related.isIgnoringTouch()).toBeFalsy();
     expect(relatedChild.isIgnoringTouch()).toBeFalsy();
   });
+
   it('setting morph map with numeric array uses the table names', () => {
     Relation.morphMap([EloquentRelationResetModelStub]);
     expect(Relation.morphMap()).toEqual({
@@ -170,6 +217,7 @@ describe('test database eloquent relation', () => {
     });
     Relation.morphMap([], false);
   });
+
   it('setting morph map with numeric keys', () => {
     Relation.morphMap({
       1: 'App\\User'
@@ -179,40 +227,43 @@ describe('test database eloquent relation', () => {
     });
     Relation.morphMap([], false);
   });
+
   it('without relations', () => {
     const original = new EloquentNoTouchingModelStub();
     original.setRelation('foo', 'baz');
     expect(original.getRelation('foo')).toBe('baz');
     let model = original.withoutRelations();
-    expect(model).toInstanceOf(EloquentNoTouchingModelStub);
+    expect(model).toBeInstanceOf(EloquentNoTouchingModelStub);
     expect(original.relationLoaded('foo')).toBeTruthy();
     expect(model.relationLoaded('foo')).toBeFalsy();
-    const model = original.unsetRelations();
-    expect(model).toInstanceOf(EloquentNoTouchingModelStub);
+    model = original.unsetRelations();
+    expect(model).toBeInstanceOf(EloquentNoTouchingModelStub);
     expect(original.relationLoaded('foo')).toBeFalsy();
     expect(model.relationLoaded('foo')).toBeFalsy();
   });
-  it('macroable', () => {
-    Relation.macro('foo', () => {
-      return 'foo';
-    });
-    const model    = new EloquentRelationResetModelStub();
-    const relation = new EloquentRelationStub(model.newQuery(), model);
-    const result   = relation.foo();
-    expect(result).toBe('foo');
-  });
-  it('relation resolvers', () => {
-    const model   = new EloquentRelationResetModelStub();
-    const builder = getBuilder();
-    builder.shouldReceive('getModel').andReturn(model);
-    EloquentRelationResetModelStub.resolveRelationUsing('customer', model => {
-      return new EloquentResolverRelationStub(builder, model);
-    });
-    expect(model.customer()).toInstanceOf(EloquentResolverRelationStub);
-    expect(model.customer).toEqual({
-      'key': 'value'
-    });
-  });
+
+  // it('macroable', () => {
+  //   Relation.macro('foo', () => {
+  //     return 'foo';
+  //   });
+  //   const model    = new EloquentRelationResetModelStub();
+  //   const relation = new EloquentRelationStub(model.newQuery(), model);
+  //   const result   = relation.foo();
+  //   expect(result).toBe('foo');
+  // });
+
+  // it('relation resolvers', () => {
+  //   const model   = new EloquentRelationResetModelStub();
+  //   const builder = getBuilder();
+  //   const spy1    = jest.spyOn(builder, 'getModel').mockReturnValue(model);
+  //   EloquentRelationResetModelStub.resolveRelationUsing('customer', model => {
+  //     return new EloquentResolverRelationStub(builder, model);
+  //   });
+  //   expect(model.customer()).toBeInstanceOf(EloquentResolverRelationStub);
+  //   expect(model.customer).toEqual({
+  //     'key': 'value'
+  //   });
+  // });
 });
 
 export class EloquentRelationResetModelStub extends Model {
@@ -230,14 +281,14 @@ export class EloquentRelationStub extends Relation {
   public addEagerConstraints(models) {
   }
 
-  public initRelation(models, relation) {
-  }
-
-  public match(models, results, relation) {
-  }
-
-  public getResults() {
-  }
+  // public initRelation(models, relation) {
+  // }
+  //
+  // public match(models, results, relation) {
+  // }
+  //
+  // public getResults() {
+  // }
 }
 
 export class EloquentNoTouchingModelStub extends Model {
@@ -251,14 +302,15 @@ export class EloquentNoTouchingChildModelStub extends EloquentNoTouchingModelStu
 }
 
 export class EloquentNoTouchingAnotherModelStub extends Model {
-  _table: any               = 'another_table';
-  protected attributes: any = {
-    'id': 2
-  };
+  _table: any = 'another_table';
+
+  @Column()
+  id = 2;
 }
 
 export class EloquentResolverRelationStub extends EloquentRelationStub {
-  public getResults() {
+  // @ts-ignore
+  public async getResults() {
     return {
       'key': 'value'
     };
