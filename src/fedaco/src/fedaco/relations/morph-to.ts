@@ -221,9 +221,9 @@ export class MorphTo extends BelongsTo {
   }
 
   /*Touch all of the related models for the relationship.*/
-  public touch() {
+  public async touch() {
     if (!isBlank(this._child._getAttributeFromArray(this._foreignKey))) {
-      super.touch();
+      await super.touch();
     }
   }
 

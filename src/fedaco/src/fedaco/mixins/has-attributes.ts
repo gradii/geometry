@@ -450,9 +450,9 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Get the model's relationships in array form.*/
     public relationsToArray(this: Model & _Self) {
-      let relation;
       const attributes: any = {};
       for (let [key, value] of Object.entries(this.getArrayableRelations())) {
+        let relation;
         if (isArray(value)) {
           relation = value.map((it: Model) => it.toArray());
         } else if (value instanceof Model) {
@@ -463,7 +463,9 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
         if ((this.constructor as typeof Model).snakeAttributes) {
           key = snakeCase(key);
         }
-        attributes[key] = relation;
+        if (relation !== undefined || isBlank(value)) {
+          attributes[key] = relation;
+        }
       }
       return attributes;
     }
@@ -752,7 +754,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
       const meta        = reflector.propMetadata(typeOfClazz);
       if (meta[key] && isArray(meta[key])) {
         return findLast(it => {
-          return Scope.isTypeOf(it)
+          return Scope.isTypeOf(it);
         }, meta[key]);
       }
       return undefined;
@@ -782,7 +784,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     public fillJsonAttribute(this: Model & this, key: string, value: any) {
       let path;
       [key, ...path]        = key.split('->');
-      value                 = this.asJson(this.getArrayAttributeWithValue(path.join('->'), key, value));
+      value                 = this.asJson(
+        this.getArrayAttributeWithValue(path.join('->'), key, value));
       this._attributes[key] = this.isEncryptedCastable(key) ?
         this.castAttributeAsEncryptedString(key, value) : value;
       return this;

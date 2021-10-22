@@ -10,6 +10,10 @@ import { Constructor } from '../../helper/constructor';
 import { value } from '../../helper/fn';
 
 export interface HidesAttributes {
+  _hidden: any[];
+
+  _visible: any[];
+
   getHidden(): any[];
 
   /*Set the hidden attributes for the model.*/

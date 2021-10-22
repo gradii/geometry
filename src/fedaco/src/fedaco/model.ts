@@ -907,6 +907,19 @@ export class Model extends mixinHasAttributes(
     return this;
   }
 
+  public clone() {
+    const cloned = new (this.constructor as typeof Model)();
+
+    cloned._table      = this._table;
+    cloned._guarded    = [...this._guarded];
+    cloned._visible    = [...this._visible];
+    cloned._hidden     = [...this._hidden];
+    cloned._attributes = {...this._attributes};
+    cloned._relations  = {...this._relations};
+
+    return cloned;
+  }
+
   // /*Determine if lazy loading is disabled.*/
   // public static preventsLazyLoading() {
   //   return Model.modelsShouldPreventLazyLoading;
@@ -921,16 +934,25 @@ export class Model extends mixinHasAttributes(
 
   /*Disables relationship model touching for the current class during given callback scope.*/
   public static async withoutTouching(callback: () => Promise<any> | any) {
-    await Model.withoutTouchingOn([Model], callback);
+    await (this as typeof Model).withoutTouchingOn(
+      [(this as typeof Model)],
+      callback
+    );
   }
 
   /*Disables relationship model touching for the given model classes during given callback scope.*/
   public static async withoutTouchingOn(models: any[], callback: () => Promise<any> | any) {
-    Model.ignoreOnTouch = [...Model.ignoreOnTouch, ...models];
+    (this as typeof Model).ignoreOnTouch = [
+      ...(this as typeof Model).ignoreOnTouch,
+      ...models
+    ];
     try {
       await callback();
     } finally {
-      Model.ignoreOnTouch = difference(Model.ignoreOnTouch, models);
+      (this as typeof Model).ignoreOnTouch = difference(
+        (this as typeof Model).ignoreOnTouch,
+        models
+      );
     }
   }
 
@@ -942,7 +964,7 @@ export class Model extends mixinHasAttributes(
     // }
     // reflector define table is ignoring
 
-    for (const ignoredClass of Model.ignoreOnTouch) {
+    for (const ignoredClass of (this as typeof Model).ignoreOnTouch) {
       if (clazz === ignoredClass || ignoredClass.constructor instanceof clazz.constructor) {
         return true;
       }

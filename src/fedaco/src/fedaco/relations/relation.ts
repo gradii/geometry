@@ -4,26 +4,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isArray, isBlank, isObject } from '@gradii/check-type';
+import { isBlank, isObject } from '@gradii/check-type';
 import { last, uniq } from 'ramda';
 import { Collection } from '../../define/collection';
 import { raw } from '../../query-builder/ast-factory';
-import { QueryBuilderAggregate } from '../../query-builder/mixins/aggregate';
-import { BuildQueries } from '../../query-builder/mixins/build-query';
-import { QueryBuilderGroupBy } from '../../query-builder/mixins/group-by';
-import { QueryBuilderHaving } from '../../query-builder/mixins/having';
-import { QueryBuilderJoin } from '../../query-builder/mixins/join';
-import { QueryBuilderLimitOffset } from '../../query-builder/mixins/limit-offset';
-import { QueryBuilderOrderBy } from '../../query-builder/mixins/order-by';
-import { QueryBuilderUnion } from '../../query-builder/mixins/union';
-import { QueryBuilderWhereCommon } from '../../query-builder/mixins/where-common';
-import { QueryBuilderWhereDate } from '../../query-builder/mixins/where-date';
-import { QueryBuilderWherePredicate } from '../../query-builder/mixins/where-predicate';
-import { QueryBuilder } from '../../query-builder/query-builder';
 import { FedacoBuilder } from '../fedaco-builder';
-import {
-  ForwardCallToQueryBuilder, mixinForwardCallToQueryBuilder
-} from '../mixins/forward-call-to-query-builder';
+import { mixinForwardCallToQueryBuilder } from '../mixins/forward-call-to-query-builder';
 import { Model } from '../model';
 
 // export interface Relation extends ForwardCallToQueryBuilder {
@@ -120,13 +106,13 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   }
 
   /*Touch all of the related models for the relationship.*/
-  public touch() {
+  public async touch() {
     const model = this.getRelated();
-    // if (!model.isIgnoringTouch()) {
-    this.rawUpdate({
-      [model.getUpdatedAtColumn()]: model.freshTimestampString()
-    });
-    // }
+    if (!(model.constructor as typeof Model).isIgnoringTouch()) {
+      await this.rawUpdate({
+        [model.getUpdatedAtColumn()]: model.freshTimestampString()
+      });
+    }
   }
 
   /*Run a raw update against the base query.*/

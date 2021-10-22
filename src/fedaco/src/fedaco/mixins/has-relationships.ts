@@ -191,7 +191,7 @@ export interface HasRelationships {
   setRelations(relations: any[]): this;
 
   /*Duplicate the instance and unset all the loaded relations.*/
-  withoutRelations();
+  withoutRelations(): this;
 
   /*Unset all the loaded relations for the instance.*/
   unsetRelations(): this;
