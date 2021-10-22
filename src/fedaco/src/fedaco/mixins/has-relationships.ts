@@ -577,7 +577,6 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
     /*Get the class name for polymorphic relations.*/
     public getMorphClass() {
 
-
       const metas                 = reflector.annotations(this.constructor);
       const meta: TableAnnotation = findLast(it => Table.isTypeOf(it), metas);
 

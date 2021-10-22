@@ -7,32 +7,23 @@ let builder, related;
 
 function getOneRelation() {
   builder = getBuilder();
-  // builder.shouldReceive('whereNotNull').once().with('table.morph_id');
-  // builder.shouldReceive('where').once().with('table.morph_id', '=', 1);
   related = new Model();
-  builder.shouldReceive('getModel').andReturn(related);
+  jest.spyOn(builder, 'getModel').mockReturnValue(related);
   const parent = new Model();
   jest.spyOn(parent, 'getAttribute').mockReturnValue(1);
-  jest.spyOn(parent, 'getMorphClass').mockReturnValue(parent);
-  // jest.spyOn(builder, 'where').mockReturnValue(parent);
-  // parent.shouldReceive('getAttribute').with('id').andReturn(1);
-  // parent.shouldReceive('getMorphClass').andReturn(get_class(parent));
-  // builder.shouldReceive('where').once().with('table.morph_type', get_class(parent));
-  return new MorphOne(builder, parent, 'table.morph_type', 'table.morph_id', 'id');
+  jest.spyOn(parent, 'getMorphClass').mockReturnValue('parent-model');
+  jest.spyOn(builder, 'where').mockReturnValue(parent);
+  return new MorphOne(builder, parent, '_table.morph_type', '_table.morph_id', 'id');
 }
 
 function getManyRelation() {
   builder = getBuilder();
-  // builder.shouldReceive('whereNotNull').once()._with('table.morph_id');
-  // builder.shouldReceive('where').once()._with('table.morph_id', '=', 1);
   related = new Model();
-  builder.shouldReceive('getModel').andReturn(related);
+  jest.spyOn(builder, 'getModel').mockReturnValue(related);
   const parent = new Model();
-  // parent.shouldReceive('getAttribute')._with('id').andReturn(1);
   jest.spyOn(parent, 'getAttribute').mockReturnValue(1);
-  // parent.shouldReceive('getMorphClass').andReturn(get_class(parent));
-  // builder.shouldReceive('where').once()._with('table.morph_type', get_class(parent));
-  return new MorphMany(builder, parent, 'table.morph_type', 'table.morph_id', 'id');
+  jest.spyOn(parent, 'getMorphClass').mockReturnValue('parent-model');
+  return new MorphMany(builder, parent, '_table.morph_type', '_table.morph_id', 'id');
 }
 
 function getNamespacedRelation(alias) {
@@ -51,7 +42,7 @@ function getNamespacedRelation(alias) {
   // parent.shouldReceive('getAttribute')._with('id').andReturn(1);
   // parent.shouldReceive('getMorphClass').andReturn(alias);
   // builder.shouldReceive('where').once()._with('table.morph_type', alias);
-  return new MorphOne(builder, parent, 'table.morph_type', 'table.morph_id', 'id');
+  return new MorphOne(builder, parent, '_table.morph_type', '_table.morph_id', 'id');
 }
 
 describe('test database eloquent morph', () => {
@@ -59,10 +50,10 @@ describe('test database eloquent morph', () => {
   it('morph one eager constraints are properly added', () => {
     const relation = getOneRelation();
 
-    jest.spyOn(relation.getParent(), 'getKeyName').mockReturnValue('id');
-    jest.spyOn(relation.getParent(), 'getKeyType').mockReturnValue('string');
-    jest.spyOn(relation.getQuery(), 'whereIn');
-    jest.spyOn(relation.getQuery(), 'where');
+    const spy1 = jest.spyOn(relation.getParent(), 'getKeyName').mockReturnValue('id');
+    const spy2 = jest.spyOn(relation.getParent(), 'getKeyType').mockReturnValue('string');
+    const spy3 = jest.spyOn(relation.getQuery(), 'whereIn');
+    const spy4 = jest.spyOn(relation.getQuery(), 'where');
     // relation.getParent().shouldReceive('getKeyName').once().andReturn('id');
     // relation.getParent().shouldReceive('getKeyType').once().andReturn('string');
     // relation.getQuery().shouldReceive('whereIn').once()._with('table.morph_id', [1, 2]);
@@ -74,13 +65,14 @@ describe('test database eloquent morph', () => {
     model2.id    = 2;
     relation.addEagerConstraints([model1, model2]);
   });
+
   it('morph many eager constraints are properly added', () => {
     const relation = getManyRelation();
 
     jest.spyOn(relation.getParent(), 'getKeyName').mockReturnValue('id');
     jest.spyOn(relation.getParent(), 'getKeyType').mockReturnValue('int');
-    jest.spyOn(relation.getParent(), 'whereIntegerInRaw');
-    jest.spyOn(relation.getParent(), 'where');
+    jest.spyOn(relation.getQuery(), 'whereIntegerInRaw');
+    jest.spyOn(relation.getQuery(), 'where');
     // relation.getParent().shouldReceive('getKeyName').once().andReturn('id');
     // relation.getParent().shouldReceive('getKeyType').once().andReturn('int');
     // relation.getQuery().shouldReceive('whereIntegerInRaw').once()._with('table.morph_id', [1, 2]);
@@ -92,6 +84,7 @@ describe('test database eloquent morph', () => {
     model2.id    = 2;
     relation.addEagerConstraints([model1, model2]);
   });
+
   it('make function on morph', () => {
     // _SERVER['__eloquent.saved'] = false;
     const relation = getOneRelation();
@@ -110,32 +103,38 @@ describe('test database eloquent morph', () => {
     })).toEqual(instance);
   });
 
-  it('create function on morph', () => {
+  it('create function on morph', async () => {
     const relation = getOneRelation();
     const created  = new Model();
-    created.shouldReceive('setAttribute').once()._with('morph_id', 1);
-    created.shouldReceive('setAttribute').once()._with('morph_type',
-      get_class(relation.getParent()));
-    relation.getRelated().shouldReceive('newInstance').once()._with({
-      'name': 'taylor'
-    }).andReturn(created);
-    created.shouldReceive('save').once().andReturn(true);
-    expect(relation.create({
+
+    const spy1 = jest.spyOn(created, 'setAttribute');
+    const spy2 = jest.spyOn(relation.getRelated(), 'newInstance').mockReturnValue(created);
+    const spy3 = jest.spyOn(created, 'save').mockReturnValue(Promise.resolve(true));
+
+    expect(await relation.create({
       'name': 'taylor'
     })).toEqual(created);
+
+    expect(spy1).toHaveBeenNthCalledWith(1, 'morph_id', 1);
+    expect(spy1).toHaveBeenNthCalledWith(2, 'morph_type', relation.getParent().constructor.name);
+    expect(spy2).toBeCalledWith({
+      'name': 'taylor'
+    });
   });
 
-  it('find or new method finds model', () => {
+  it('find or new method finds model', async () => {
     const relation = getOneRelation();
     const model    = new Model();
-    jest.spyOn(relation.getQuery(), 'find').mockReturnValue(model);
-    // relation.getQuery().shouldReceive('find').once()._with('foo', ['*']).andReturn(
-    //   model = m.mock(Model));
-    // relation.getRelated().shouldReceive('newInstance').never();
-    jest.spyOn(relation.getRelated(), 'newInstance');
-    model.shouldReceive('setAttribute').never();
-    model.shouldReceive('save').never();
+    const spy1     = jest.spyOn(relation.getQuery(), 'find').mockReturnValue(
+      Promise.resolve([model]));
+    const spy2     = jest.spyOn(relation.getRelated(), 'newInstance');
+    const spy3     = jest.spyOn(model, 'setAttribute');
+    const spy4     = jest.spyOn(model, 'save');
     expect(relation.findOrNew('foo')).toBeInstanceOf(Model);
+
+    expect(spy1).toBeCalledWith('foo', ['*']);
+    expect(spy3).not.toBeCalled();
+    expect(spy4).not.toBeCalled();
   });
 
   it('find or new method returns new model with morph keys set', () => {
@@ -148,7 +147,6 @@ describe('test database eloquent morph', () => {
     jest.spyOn(relation.getRelated(), 'newInstance').mockReturnValue(model);
     jest.spyOn(model, 'setAttribute');
     jest.spyOn(model, 'save');
-
 
     // const relation = getOneRelation();
     // relation.getQuery().shouldReceive('find').once()._with('foo', ['*']).andReturn(null);
@@ -330,7 +328,7 @@ describe('test database eloquent morph', () => {
     const spy3 = jest.spyOn(relation.getRelated(), 'newInstance').mockReturnValue(model);
 
     const spy4 = jest.spyOn(model, 'setAttribute');
-    const spy5 = jest.spyOn(model, 'save').mockReturnValue(true);
+    const spy5 = jest.spyOn(model, 'save').mockReturnValue(Promise.resolve(true));
 
     expect(await relation.firstOrCreate(['foo'])).toBeInstanceOf(Model);
 
@@ -400,7 +398,7 @@ describe('test database eloquent morph', () => {
     const spy3  = jest.spyOn(relation.getRelated(), 'newInstance').mockReturnValue(model);
 
     const spy4 = jest.spyOn(model, 'setAttribute');
-    const spy5 = jest.spyOn(model, 'save').mockReturnValue(true);
+    const spy5 = jest.spyOn(model, 'save').mockReturnValue(Promise.resolve(true));
     const spy6 = jest.spyOn(model, 'fill');
 
     expect(relation.updateOrCreate(['foo'], ['bar'])).toBeInstanceOf(Model);
@@ -420,7 +418,7 @@ describe('test database eloquent morph', () => {
 
     const spy1 = jest.spyOn(created, 'setAttribute');
     const spy2 = jest.spyOn(relation.getRelated(), 'newInstance').mockReturnValue(created);
-    const spy3 = jest.spyOn(relation.getRelated(), 'save').mockReturnValue(true);
+    const spy3 = jest.spyOn(relation.getRelated(), 'save').mockReturnValue(Promise.resolve(true));
 
     expect(await relation.create({
       'name': 'taylor'
@@ -440,5 +438,4 @@ export class EloquentMorphResetModelStub extends Model {
 }
 
 class EloquentModelNamespacedStub extends Model {
-
 }
