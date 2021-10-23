@@ -117,7 +117,7 @@ export class ConfigurationUrlParser {
       return value;
     }
     try {
-      return JSON.parse(value);
+      return JSON.parse(value) as any[] | any;
     } catch (e) {
       return value;
     }
