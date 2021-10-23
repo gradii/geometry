@@ -34,7 +34,7 @@ export function isString(value: any): value is string {
   return typeof value === 'string';
 }
 
-export function isObject(item: any): item is object {
+export function isObject(item: any): item is Record<string, any> {
   return item !== null && typeof item === 'object' && Object.prototype.toString.call(
     item) === '[object Object]';
 }
@@ -110,6 +110,10 @@ export function isNonEmptyString(value: any): boolean { // tslint:disable-line:n
 
 export function isObjectEmpty(value: any): boolean {
   return !Object.keys(value).length;
+}
+
+export function isStringEmpty(value: any): boolean {
+  return !(isString(value) && value.length > 0);
 }
 
 export function has(obj: any, prop: string) {

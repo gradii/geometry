@@ -32,10 +32,12 @@ describe('test database connection factory', () => {
     expect(await db.getConnection().getPdo()).toBeInstanceOf(SqliteWrappedConnection);
     expect(await db.getConnection().getReadPdo()).toBeInstanceOf(SqliteWrappedConnection);
     expect(await db.getConnection('read_write').getPdo()).toBeInstanceOf(SqliteWrappedConnection);
-    expect(await db.getConnection('read_write').getReadPdo()).toBeInstanceOf(SqliteWrappedConnection);
+    expect(await db.getConnection('read_write').getReadPdo()).toBeInstanceOf(
+      SqliteWrappedConnection);
     expect(await db.getConnection('url').getPdo()).toBeInstanceOf(SqliteWrappedConnection);
     expect(await db.getConnection('url').getReadPdo()).toBeInstanceOf(SqliteWrappedConnection);
   });
+
   it('connection from url has proper config', () => {
     db.addConnection({
       'url'           : 'mysql://root:pass@db/local?strict=true',
@@ -66,23 +68,28 @@ describe('test database connection factory', () => {
 
   it('single connection not created until needed', () => {
     const connection = db.getConnection();
-    expect(connection.pdo.getValue(connection)).not.toBeInstanceOf(PDO);
-    expect(connection.readPdo.getValue(connection)).not.toBeInstanceOf(PDO);
+    expect(connection.pdo).not.toBeInstanceOf(PDO);
+    expect(connection.readPdo).not.toBeInstanceOf(PDO);
   });
 
   it('read write connections not created until needed', () => {
     const connection = db.getConnection('read_write');
-    expect(connection.pdo.getValue(connection)).not.toBeInstanceOf(PDO);
-    expect(connection.readPdo.getValue(connection)).not.toBeInstanceOf(PDO);
+    expect(connection.pdo).not.toBeInstanceOf(PDO);
+    expect(connection.readPdo).not.toBeInstanceOf(PDO);
   });
 
-  it('sqlite foreign key constraints', () => {
+  it('sqlite foreign key constraints', async () => {
     db.addConnection({
       'url': 'sqlite:///:memory:?foreign_key_constraints=true'
     }, 'constraints_set');
-    expect(db.getConnection().select('PRAGMA foreign_keys')[0].foreign_keys).toEqual(0);
-    expect(db.getConnection('constraints_set').select(
+
+    // init has a not important statement. it must be called
+    db.getConnection('constraints_set');
+
+    expect((await db.getConnection().select('PRAGMA foreign_keys'))[0].foreign_keys).toEqual(0);
+    expect((await db.getConnection('constraints_set').select(
       'PRAGMA foreign_keys'
-    )[0].foreign_keys).toEqual(1);
+    ))[0].foreign_keys).toEqual(1);
   });
+
 });

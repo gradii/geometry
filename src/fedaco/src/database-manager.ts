@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isBlank } from '@gradii/check-type';
+import { isAnyEmpty, isBlank } from '@gradii/check-type';
 import { Connection } from './connection';
 import { ConnectionFactory } from './connector/connection-factory';
 import { ConnectionConfig, DatabaseConfig } from './database-config';
@@ -175,7 +175,7 @@ export class DatabaseManager implements ConnectionResolverInterface {
     // @ts-ignore
     const connectionConfig: ConnectionConfig = config['database']['connections'][name];
 
-    if (isBlank(connectionConfig['name'])) {
+    if (isAnyEmpty(connectionConfig)) {
       throw new Error(`InvalidArgumentException Database connection [${name}] not configured.`);
     }
     return new ConfigurationUrlParser().parseConfiguration(connectionConfig);

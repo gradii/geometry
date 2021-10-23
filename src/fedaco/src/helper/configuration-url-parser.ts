@@ -3,7 +3,7 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
-import { isArray, isBlank, isString } from '@gradii/check-type';
+import { isArray, isBlank, isObject, isString, isStringEmpty } from '@gradii/check-type';
 import { filter } from 'ramda';
 import { ConnectionConfig } from '../database-config';
 
@@ -27,23 +27,24 @@ export class ConfigurationUrlParser {
       };
     }
     const url = config['url'];
+    delete config['url'];
     if (!url) {
       return config;
     }
     const rawComponents     = this.parseUrl(url);
-    const data = {
-      hash: rawComponents.hash,
-      host: rawComponents.host,
-      hostname: rawComponents.hostname,
-      href: rawComponents.href,
-      origin: rawComponents.origin,
-      password: rawComponents.password,
-      pathname: rawComponents.pathname,
-      port: rawComponents.port,
-      protocol: rawComponents.protocol,
-      search: rawComponents.search,
+    const data              = {
+      hash        : rawComponents.hash,
+      host        : rawComponents.host,
+      hostname    : rawComponents.hostname,
+      href        : rawComponents.href,
+      origin      : rawComponents.origin,
+      password    : rawComponents.password,
+      pathname    : rawComponents.pathname,
+      port        : rawComponents.port,
+      protocol    : rawComponents.protocol,
+      search      : rawComponents.search,
       searchParams: Object.fromEntries(rawComponents.searchParams),
-      username: rawComponents.username,
+      username    : rawComponents.username,
     };
     const decodedComponents = this.parseStringsToNativeTypes(data);
     return {
@@ -61,15 +62,15 @@ export class ConfigurationUrlParser {
       'driver'  : this.getDriver(url),
       'database': this.getDatabase(url),
       'host'    : url['host'] ?? null,
-      'port'    : url['port'] ?? null,
-      'username': url['user'] ?? null,
-      'password': url['pass'] ?? null
+      'port'    : !isStringEmpty(url['port']) ? +url['port'] : null,
+      'username': url['username'] ?? null,
+      'password': url['password'] ?? null
     });
   }
 
   /*Get the database driver from the URL.*/
   protected getDriver(url: any) {
-    const alias = url['scheme'] ?? null;
+    const alias = url['protocol'].replace(/:$/, '') ?? null;
     if (!alias) {
       return;
     }
@@ -78,17 +79,17 @@ export class ConfigurationUrlParser {
 
   /*Get the database name from the URL.*/
   protected getDatabase(url: any) {
-    const path = url['path'] ?? null;
+    const path = url['pathname'] ?? null;
     return path && path !== '/' ? path.substring(1) : null;
   }
 
   /*Get all of the additional database options from the query string.*/
   protected getQueryOptions(url: any) {
-    const queryString = url['query'] ?? null;
+    const queryString = url['searchParams'] ?? null;
     if (!queryString) {
-      return [];
+      return {};
     }
-    const query = Object.fromEntries(new URLSearchParams());
+    const query = Object.fromEntries(new URLSearchParams(queryString));
     return this.parseStringsToNativeTypes(query);
   }
 
@@ -103,9 +104,14 @@ export class ConfigurationUrlParser {
   }
 
   /*Convert string casted values to their native types.*/
-  protected parseStringsToNativeTypes(value: Record<string, string|any>): Record<string, any> {
+  protected parseStringsToNativeTypes(value: Record<string, string | any>): Record<string, any> | any {
     if (isArray(value)) {
       return value.map(it => this.parseStringsToNativeTypes(it));
+    }
+    if (isObject(value)) {
+      for (const [key, val] of Object.entries(value)) {
+        value[key] = this.parseStringsToNativeTypes(val) as any;
+      }
     }
     if (!isString(value)) {
       return value;
