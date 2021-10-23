@@ -10,13 +10,29 @@ import { Model } from './fedaco/model';
 import { ConnectionInterface } from './query-builder/connection-interface';
 import { QueryBuilder } from './query-builder/query-builder';
 
+export type ConnectionConfig = {
+  database?: string,
+  name?: string,
+  driver?: string,
+  url?: string,
+  username?: string,
+  password?: string
+};
+
 export class DatabaseConfig {
-  config = {
+  config: {
+    database: {
+      fetch?: number,
+      default?: string,
+      connections: {
+        [key: string]: ConnectionConfig
+      }
+    }
+  } = {
     database: {
       fetch      : 0,
       default    : 'default',
       connections: {
-        default: {}
       }
     }
   };

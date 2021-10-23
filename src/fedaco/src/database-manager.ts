@@ -4,10 +4,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { isBlank } from '@gradii/check-type';
 import { Connection } from './connection';
 import { ConnectionFactory } from './connector/connection-factory';
-import { DatabaseConfig } from './database-config';
+import { ConnectionConfig, DatabaseConfig } from './database-config';
 import { DatabaseTransactionsManager } from './database-transactions-manager';
+import { ConfigurationUrlParser } from './helper/configuration-url-parser';
 import { ConnectionResolverInterface } from './interface/connection-resolver-interface';
 import { ConnectionInterface } from './query-builder/connection-interface';
 import { MysqlQueryGrammar } from './query-builder/grammar/mysql-query-grammar';
@@ -165,18 +167,18 @@ export class DatabaseManager implements ConnectionResolverInterface {
   }
 
   /*Get the configuration for a connection.*/
-  protected configuration(name: string) {
-    name = name || this.getDefaultConnection();
+  protected configuration(name: string): ConnectionConfig {
+    name         = name || this.getDefaultConnection();
     // @ts-ignore
     const config = DatabaseConfig.instance.config;
-    // @ts-ignore
-    return config['database']['connections'][name];
 
-    // var connections = this.app["config"]["database.connections"];
-    // if (isBlank(config = Arr.get(connections, name))) {
-    //     throw new InvalidArgumentException("\"Database connection [{$name}] not configured.\"");
-    // }
-    // return new ConfigurationUrlParser().parseConfiguration(config);
+    // @ts-ignore
+    const connectionConfig: ConnectionConfig = config['database']['connections'][name];
+
+    if (isBlank(connectionConfig['name'])) {
+      throw new Error(`InvalidArgumentException Database connection [${name}] not configured.`);
+    }
+    return new ConfigurationUrlParser().parseConfiguration(connectionConfig);
   }
 
   /*Prepare the database connection instance.*/

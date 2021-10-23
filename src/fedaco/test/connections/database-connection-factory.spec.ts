@@ -1,9 +1,14 @@
+import { SqliteWrappedConnection } from '../../src/connector/sqlite/sqlite-wrapped-connection';
 import { DatabaseConfig } from '../../src/database-config';
 
+let db;
+
+class PDO {
+}
 
 describe('test database connection factory', () => {
   beforeEach(() => {
-    const db = new DatabaseConfig();
+    db = new DatabaseConfig();
     db.addConnection({
       'driver'  : 'sqlite',
       'database': ':memory:'
@@ -23,13 +28,13 @@ describe('test database connection factory', () => {
     db.setAsGlobal();
   });
 
-  it('connection can be created', () => {
-    expect(this.db.getConnection().getPdo()).toInstanceOf(PDO);
-    expect(this.db.getConnection().getReadPdo()).toInstanceOf(PDO);
-    expect(this.db.getConnection('read_write').getPdo()).toInstanceOf(PDO);
-    expect(this.db.getConnection('read_write').getReadPdo()).toInstanceOf(PDO);
-    expect(this.db.getConnection('url').getPdo()).toInstanceOf(PDO);
-    expect(this.db.getConnection('url').getReadPdo()).toInstanceOf(PDO);
+  it('connection can be created', async () => {
+    expect(await db.getConnection().getPdo()).toBeInstanceOf(SqliteWrappedConnection);
+    expect(await db.getConnection().getReadPdo()).toBeInstanceOf(SqliteWrappedConnection);
+    expect(await db.getConnection('read_write').getPdo()).toBeInstanceOf(SqliteWrappedConnection);
+    expect(await db.getConnection('read_write').getReadPdo()).toBeInstanceOf(SqliteWrappedConnection);
+    expect(await db.getConnection('url').getPdo()).toBeInstanceOf(SqliteWrappedConnection);
+    expect(await db.getConnection('url').getReadPdo()).toBeInstanceOf(SqliteWrappedConnection);
   });
   it('connection from url has proper config', () => {
     db.addConnection({
@@ -42,7 +47,7 @@ describe('test database connection factory', () => {
       'strict'        : false,
       'engine'        : null
     }, 'url-config');
-    expect(this.db.getConnection('url-config').getConfig()).toEqual({
+    expect(db.getConnection('url-config').getConfig()).toEqual({
       'name'          : 'url-config',
       'driver'        : 'mysql',
       'database'      : 'local',
@@ -58,53 +63,26 @@ describe('test database connection factory', () => {
       'engine'        : null
     });
   });
+
   it('single connection not created until needed', () => {
-    var connection = this.db.getConnection();
-    var pdo        = new ReflectionProperty(get_class(connection), 'pdo');
-    pdo.setAccessible(true);
-    var readPdo = new ReflectionProperty(get_class(connection), 'readPdo');
-    readPdo.setAccessible(true);
-    expect(pdo.getValue(connection)).toNotInstanceOf(PDO);
-    expect(readPdo.getValue(connection)).toNotInstanceOf(PDO);
+    const connection = db.getConnection();
+    expect(connection.pdo.getValue(connection)).not.toBeInstanceOf(PDO);
+    expect(connection.readPdo.getValue(connection)).not.toBeInstanceOf(PDO);
   });
+
   it('read write connections not created until needed', () => {
-    var connection = this.db.getConnection('read_write');
-    var pdo        = new ReflectionProperty(get_class(connection), 'pdo');
-    pdo.setAccessible(true);
-    var readPdo = new ReflectionProperty(get_class(connection), 'readPdo');
-    readPdo.setAccessible(true);
-    expect(pdo.getValue(connection)).toNotInstanceOf(PDO);
-    expect(readPdo.getValue(connection)).toNotInstanceOf(PDO);
+    const connection = db.getConnection('read_write');
+    expect(connection.pdo.getValue(connection)).not.toBeInstanceOf(PDO);
+    expect(connection.readPdo.getValue(connection)).not.toBeInstanceOf(PDO);
   });
-  it('if driver isnt set exception is thrown', () => {
-    this.expectException(InvalidArgumentException);
-    this.expectExceptionMessage('A driver must be specified.');
-    var factory = new ConnectionFactory(container = m.mock(Container));
-    factory.createConnector(['foo']);
-  });
-  it('exception is thrown on unsupported driver', () => {
-    this.expectException(InvalidArgumentException);
-    this.expectExceptionMessage('Unsupported driver [foo]');
-    var factory = new ConnectionFactory(container = m.mock(Container));
-    container.shouldReceive('bound').once().andReturn(false);
-    factory.createConnector({
-      'driver': 'foo'
-    });
-  });
-  it('custom connectors can be resolved via container', () => {
-    var factory = new ConnectionFactory(container = m.mock(Container));
-    container.shouldReceive('bound').once()._with('db.connector.foo').andReturn(true);
-    container.shouldReceive('make').once()._with('db.connector.foo').andReturn('connector');
-    expect(factory.createConnector({
-      'driver': 'foo'
-    })).toBe('connector');
-  });
+
   it('sqlite foreign key constraints', () => {
-    this.db.addConnection({
+    db.addConnection({
       'url': 'sqlite:///:memory:?foreign_key_constraints=true'
     }, 'constraints_set');
-    expect(this.db.getConnection().select('PRAGMA foreign_keys')[0].foreign_keys).toEqual(0);
-    expect(this.db.getConnection('constraints_set').select(
-      'PRAGMA foreign_keys')[0].foreign_keys).toEqual(1);
+    expect(db.getConnection().select('PRAGMA foreign_keys')[0].foreign_keys).toEqual(0);
+    expect(db.getConnection('constraints_set').select(
+      'PRAGMA foreign_keys'
+    )[0].foreign_keys).toEqual(1);
   });
 });

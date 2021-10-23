@@ -80,7 +80,12 @@ export class ConnectionFactory {
 
   /*Merge a configuration for a read / write connection.*/
   protected mergeReadWriteConfig(config: any[], merge: any[]) {
-    return [...config, ...merge].filter(it => !['read', 'write'].includes(it));
+    config = {...config, ...merge};
+    // @ts-ignore
+    delete config.read;
+    // @ts-ignore
+    delete config.write;
+    return config;
   }
 
   /*Create a new Closure that resolves to a PDO instance.*/
@@ -159,6 +164,6 @@ export class ConnectionFactory {
       case 'sqlsrv':
         return new SqlServerConnection(connection, database, prefix, config);
     }
-    throw new Error('InvalidArgumentException "Unsupported driver [{$driver}]."');
+    throw new Error(`InvalidArgumentException "Unsupported driver [${driver}]."`);
   }
 }

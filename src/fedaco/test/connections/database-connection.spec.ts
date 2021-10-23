@@ -3,10 +3,14 @@ import { TransactionBeginning } from '../../src/events/transaction-beginning';
 import { TransactionCommitted } from '../../src/events/transaction-committed';
 import { TransactionRolledBack } from '../../src/events/transaction-rolled-back';
 
+function getMockConnection() {
+
+}
+
 describe('test database connection', () => {
   it('setting default calls get default grammar', () => {
-    const connection = this.getMockConnection();
-    const mock       = m.mock(stdClass);
+    const connection = getMockConnection();
+    const mock       = {};
     connection.expects(this.once()).method('getDefaultQueryGrammar').willReturn(mock);
     connection.useDefaultQueryGrammar();
     expect(connection.getQueryGrammar()).toEqual(mock);
@@ -372,12 +376,12 @@ describe('test database connection', () => {
   });
 });
 
-export class DatabaseConnectionTestMockPDO extends PDO {
+export class DatabaseConnectionTestMockPDO {
   public constructor() {
   }
 }
 
-export class DatabaseConnectionTestMockPDOException extends PDOException {
+export class DatabaseConnectionTestMockPDOException {
   /*Overrides Exception::__construct, which casts $code to integer, so that we can create
   an exception with a string $code consistent with the real PDOException behavior.*/
   public constructor(message: string | null = null, code: string | null = null) {
