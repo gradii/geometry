@@ -116,7 +116,7 @@ describe('test database eloquent morph', () => {
     })).toEqual(created);
 
     expect(spy1).toHaveBeenNthCalledWith(1, 'morph_id', 1);
-    expect(spy1).toHaveBeenNthCalledWith(2, 'morph_type', relation.getParent().constructor.name);
+    expect(spy1).toHaveBeenNthCalledWith(2, 'morph_type', 'parent-model');
     expect(spy2).toBeCalledWith({
       'name': 'taylor'
     });
@@ -125,19 +125,20 @@ describe('test database eloquent morph', () => {
   it('find or new method finds model', async () => {
     const relation = getOneRelation();
     const model    = new Model();
-    const spy1     = jest.spyOn(relation.getQuery(), 'find').mockReturnValue(
-      Promise.resolve([model]));
+    const spy1     = jest.spyOn(relation.getQuery(), 'find')
+      // @ts-ignore
+      .mockReturnValue(Promise.resolve(model));
     const spy2     = jest.spyOn(relation.getRelated(), 'newInstance');
     const spy3     = jest.spyOn(model, 'setAttribute');
     const spy4     = jest.spyOn(model, 'save');
-    expect(relation.findOrNew('foo')).toBeInstanceOf(Model);
+    expect(await relation.findOrNew('foo')).toBeInstanceOf(Model);
 
     expect(spy1).toBeCalledWith('foo', ['*']);
     expect(spy3).not.toBeCalled();
     expect(spy4).not.toBeCalled();
   });
 
-  it('find or new method returns new model with morph keys set', () => {
+  it('find or new method returns new model with morph keys set', async () => {
     const relation = getOneRelation();
     const model    = new Model();
     jest.spyOn(relation.getQuery(), 'find').mockReturnValue(null);
@@ -155,10 +156,10 @@ describe('test database eloquent morph', () => {
     // model.shouldReceive('setAttribute').once()._with('morph_id', 1);
     // model.shouldReceive('setAttribute').once()._with('morph_type', get_class(relation.getParent()));
     // model.shouldReceive('save').never();
-    expect(relation.findOrNew('foo')).toBeInstanceOf(Model);
+    expect(await relation.findOrNew('foo')).toBeInstanceOf(Model);
   });
 
-  it('first or new method finds first model', () => {
+  it('first or new method finds first model', async () => {
     const relation = getOneRelation();
     const model    = new Model();
 
@@ -175,7 +176,7 @@ describe('test database eloquent morph', () => {
     // model.shouldReceive('setAttribute').never();
     // model.shouldReceive('save').never();
 
-    expect(relation.firstOrNew(['foo'])).toBeInstanceOf(Model);
+    expect(await relation.firstOrNew(['foo'])).toBeInstanceOf(Model);
 
     expect(spy1).toBeCalledWith(['foo']);
     expect(spy2).toBeCalledWith();
@@ -367,7 +368,7 @@ describe('test database eloquent morph', () => {
     expect(spy5).toBeCalled();
   });
 
-  it('update or create method finds first model and updates', () => {
+  it('update or create method finds first model and updates', async() => {
     const relation = getOneRelation();
 
     const model = new Model();
@@ -379,7 +380,7 @@ describe('test database eloquent morph', () => {
     const spy5 = jest.spyOn(model, 'fill');
     const spy6 = jest.spyOn(model, 'save');
 
-    expect(relation.updateOrCreate(['foo'], ['bar'])).toBeInstanceOf(Model);
+    expect(await relation.updateOrCreate(['foo'], ['bar'])).toBeInstanceOf(Model);
 
     expect(spy1).toBeCalledWith(['foo']);
     expect(spy2).toBeCalledWith();
@@ -389,7 +390,7 @@ describe('test database eloquent morph', () => {
     expect(spy6).toBeCalled();
   });
 
-  it('update or create method creates new morph model', () => {
+  it('update or create method creates new morph model', async() => {
     const relation = getOneRelation();
 
     const model = new Model();
@@ -401,7 +402,7 @@ describe('test database eloquent morph', () => {
     const spy5 = jest.spyOn(model, 'save').mockReturnValue(Promise.resolve(true));
     const spy6 = jest.spyOn(model, 'fill');
 
-    expect(relation.updateOrCreate(['foo'], ['bar'])).toBeInstanceOf(Model);
+    expect(await relation.updateOrCreate(['foo'], ['bar'])).toBeInstanceOf(Model);
 
     expect(spy1).toBeCalledWith(['foo']);
     expect(spy2).toBeCalledWith();
