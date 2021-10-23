@@ -364,7 +364,7 @@ describe('test database eloquent morph', () => {
       'baz': 'qux'
     });
     expect(spy4).toBeCalledWith('morph_id', 1);
-    expect(spy4).toBeCalledWith('morph_type', relation.getParent().constructor);
+    expect(spy4).toBeCalledWith('morph_type', 'parent-model');
     expect(spy5).toBeCalled();
   });
 
