@@ -85,6 +85,8 @@ export class DndContainerRef<T = any> {
     isPointerOverContainer: boolean,
     distance: Point;
     dropPoint: Point;
+    elementPosition?: Point;
+    elementRelativePosition?: Point;
   }>();
 
   /** Arbitrary data that can be attached to the drop list. */
@@ -240,7 +242,7 @@ export class DndContainerRef<T = any> {
   drop(item: DragRef, currentIndex: number,
        elementPositionX: number, elementPositionY: number,
        previousIndex: number, previousContainer: DndContainerRef,
-       isPointerOverContainer: boolean, distance: Point, dropPoint: Point): void {
+       isPointerOverContainer: boolean, distance: Point, dropPoint: Point, elementRelativePosition?: Point): void {
     this._reset();
     this.dropped.next({
       item,
@@ -250,7 +252,9 @@ export class DndContainerRef<T = any> {
       previousContainer,
       isPointerOverContainer,
       distance,
-      dropPoint
+      dropPoint,
+      elementPosition: {x: elementPositionX, y: elementPositionY},
+      elementRelativePosition,
     });
   }
 

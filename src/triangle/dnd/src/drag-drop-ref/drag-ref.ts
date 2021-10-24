@@ -320,6 +320,7 @@ export class DragRef<T = any> {
     distance: Point;
     dropPoint: Point;
     isPointerOverContainer: boolean;
+    elementRelativePosition?: Point
   }>();
 
   /**
@@ -972,6 +973,13 @@ export class DragRef<T = any> {
 
       const elementPositionX = x - this._pickupPositionInElement.x;
       const elementPositionY = y - this._pickupPositionInElement.y;
+      let elementRelativePosition;
+      if (isPointerOverContainer) {
+        elementRelativePosition = {
+          x: elementPositionX - container._clientRect.left,
+          y: elementPositionY - container._clientRect.top,
+        };
+      }
 
       this.ended.next({source: this, distance, dropPoint: pointerPosition});
       this.dropped.next({
@@ -984,11 +992,12 @@ export class DragRef<T = any> {
         previousContainer: this._initialContainer,
         isPointerOverContainer,
         distance,
-        dropPoint        : pointerPosition
+        dropPoint        : pointerPosition,
+        elementRelativePosition,
       });
       container.drop(this, currentIndex, elementPositionX, elementPositionY,
         this._initialIndex, this._initialContainer,
-        isPointerOverContainer, distance, pointerPosition);
+        isPointerOverContainer, distance, pointerPosition, elementRelativePosition);
       this._dndContainerRef = this._initialContainer;
     });
   }

@@ -11,17 +11,18 @@ import {
 } from '@angular/cdk/coercion';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import {
-  ChangeDetectorRef, Directive, ElementRef, EventEmitter, Inject, Input, OnDestroy, Optional, Output, SkipSelf,
+  ChangeDetectorRef, Directive, ElementRef, EventEmitter, Inject, Input, OnDestroy, Optional,
+  Output, SkipSelf,
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 import { DragDrop } from '../drag-drop';
 import { DndContainerRef } from '../drag-drop-ref/dnd-container-ref';
 import { DragRef } from '../drag-drop-ref/drag-ref';
-import { DragFreeContainerRef } from '../drag-drop-ref/drag-free-container-ref';
-import { TriDragDrop, TriDragEnter, TriDragExit, TriDragSortEvent } from '../event/drag-events';
+import { DropFreeContainerRef } from '../drag-drop-ref/drop-free-container-ref';
+import { TriDragDrop, TriDragEnter, TriDragExit } from '../event/drag-events';
 import { assertElementNode } from './assertions';
-import { DragAxis, DragDropConfig, DropContainerOrientation, TRI_DRAG_CONFIG } from './config';
+import { DragAxis, DragDropConfig, TRI_DRAG_CONFIG } from './config';
 import { TriDrag } from './drag';
 import { TRI_DROP_CONTAINER, TriDropContainer } from './drop-container';
 import { TRI_DROP_CONTAINER_GROUP, TriDropContainerGroup } from './drop-container-group';
@@ -37,12 +38,12 @@ export interface TriDropContainerInternal extends TriDropContainer {
 
 /** Container that wraps a set of draggable items. */
 @Directive({
-  selector : '[triDragFreeContainer], tri-drop-free-container',
-  exportAs : 'triDragFreeContainer',
+  selector : '[triDropFreeContainer], tri-drop-free-container',
+  exportAs : 'triDropFreeContainer',
   providers: [
     // Prevent child drop lists from picking up the same group as their parent.
     {provide: TRI_DROP_CONTAINER_GROUP, useValue: undefined},
-    {provide: TRI_DROP_CONTAINER, useExisting: TriDragFreeContainer},
+    {provide: TRI_DROP_CONTAINER, useExisting: TriDropFreeContainer},
   ],
   host     : {
     'class'                               : 'tri-drop-container',
@@ -52,7 +53,7 @@ export interface TriDropContainerInternal extends TriDropContainer {
     '[class.tri-drop-container-receiving]': '_dropContainerRef.isReceiving()',
   }
 })
-export class TriDragFreeContainer<T = any> extends TriDropContainer implements OnDestroy {
+export class TriDropFreeContainer<T = any> extends TriDropContainer implements OnDestroy {
   /** Emits when the list has been destroyed. */
   protected readonly _destroyed = new Subject<void>();
 
@@ -61,78 +62,62 @@ export class TriDragFreeContainer<T = any> extends TriDropContainer implements O
 
 
   /** Reference to the underlying drop list instance. */
-  // _dropContainerRef: DragFreeContainerRef<TriDragFreeContainer<T>>;
+  _dropContainerRef: DropFreeContainerRef<TriDropFreeContainer<T>>;
 
   /**
    * Other draggable containers that this container is connected to and into which the
    * container's items can be transferred. Can either be references to other drop containers,
    * or their unique IDs.
    */
-  @Input('triDropContainerConnectedTo')
-  connectedTo: (TriDragFreeContainer | string)[] | TriDragFreeContainer | string = [];
+  @Input('triDropFreeContainerConnectedTo')
+  connectedTo: (TriDropFreeContainer | string)[] | TriDropFreeContainer | string = [];
 
   /** Arbitrary data to attach to this container. */
-  @Input('triDropContainerData')
+  @Input('triDropFreeContainerData')
   data: T;
 
-  /** Direction in which the list is oriented. */
-  @Input('triDropContainerOrientation')
-  orientation: DropContainerOrientation;
-
   /** Locks the position of the draggable elements inside the container along the specified axis. */
-  @Input('triDropContainerLockAxis')
+  @Input('triDropFreeContainerLockAxis')
   lockAxis: DragAxis;
 
-
-  /** Whether sorting within this drop list is disabled. */
-  @Input('triDropContainerSortingDisabled')
-  sortingDisabled: boolean;
 
   /**
    * Function that is used to determine whether an item
    * is allowed to be moved into a drop container.
    */
-  @Input('triDropContainerEnterPredicate')
-  enterPredicate: (drag: TriDrag, drop: TriDragFreeContainer) => boolean = () => true;
+  @Input('triDropFreeContainerEnterPredicate')
+  enterPredicate: (drag: TriDrag, drop: TriDropFreeContainer) => boolean = () => true;
 
   /** Functions that is used to determine whether an item can be sorted into a particular index. */
-  @Input('triDropContainerSortPredicate')
-  sortPredicate: (index: number, drag: TriDrag, drop: TriDragFreeContainer) => boolean = () => true;
+  @Input('triDropFreeContainerSortPredicate')
+  sortPredicate: (index: number, drag: TriDrag, drop: TriDropFreeContainer) => boolean = () => true;
 
   /** Whether to auto-scroll the view when the user moves their pointer close to the edges. */
-  @Input('triDropContainerAutoScrollDisabled')
+  @Input('triDropFreeContainerAutoScrollDisabled')
   autoScrollDisabled: boolean;
 
   /** Number of pixels to scroll for each frame when auto-scrolling an element. */
-  @Input('triDropContainerAutoScrollStep')
+  @Input('triDropFreeContainerAutoScrollStep')
   autoScrollStep: number;
 
   /** Emits when the user drops an item inside the container. */
-  @Output('triDropContainerDropped')
+  @Output('triDropFreeContainerDropped')
   readonly dropped: EventEmitter<TriDragDrop<T, any>> = new EventEmitter<TriDragDrop<T, any>>();
 
   /**
    * Emits when the user has moved a new drag item into this container.
    */
-  @Output('triDropContainerEntered')
+  @Output('triDropFreeContainerEntered')
   readonly entered: EventEmitter<TriDragEnter<T>> = new EventEmitter<TriDragEnter<T>>();
 
   /**
    * Emits when the user removes an item from the container
    * by dragging it into another container.
    */
-  @Output('triDropContainerExited')
+  @Output('triDropFreeContainerExited')
   readonly exited: EventEmitter<TriDragExit<T>> = new EventEmitter<TriDragExit<T>>();
 
-  /**
-   * @deprecated will use position strategy. use reposition event
-   * @breaking-change 1.13.0
-   */
-  /** Emits as the user is swapping items while actively dragging. */
-  @Output('triDropContainerSorted')
-  readonly sorted: EventEmitter<TriDragSortEvent<T>> = new EventEmitter<TriDragSortEvent<T>>();
-
-  @Output('triDropContainerRepositioned')
+  @Output('triDropFreeContainerRepositioned')
   readonly repositioned: EventEmitter<any> = new EventEmitter<any>();
 
   /**
@@ -151,7 +136,7 @@ export class TriDragFreeContainer<T = any> extends TriDropContainer implements O
     protected _scrollDispatcher: ScrollDispatcher,
     @Optional() protected _dir?: Directionality,
     @Optional() @Inject(TRI_DROP_CONTAINER_GROUP) @SkipSelf()
-    protected _group?: TriDropContainerGroup<TriDragFreeContainer>,
+    protected _group?: TriDropContainerGroup<TriDropFreeContainer>,
     @Optional() @Inject(TRI_DRAG_CONFIG) config?: DragDropConfig) {
     super(_group);
 
@@ -159,7 +144,7 @@ export class TriDragFreeContainer<T = any> extends TriDropContainer implements O
       assertElementNode(element.nativeElement, 'triDropContainer');
     }
 
-    this._dropContainerRef      = dragDrop.createDragFreeContainerRef(element);
+    this._dropContainerRef      = dragDrop.createDropFreeContainerRef(element);
     this._dropContainerRef.data = this;
 
     if (config) {
@@ -167,17 +152,17 @@ export class TriDragFreeContainer<T = any> extends TriDropContainer implements O
     }
 
     this._dropContainerRef.enterPredicate = (drag: DragRef<TriDrag>,
-                                             drop: DndContainerRef<TriDragFreeContainer>) => {
+                                             drop: DndContainerRef<TriDropFreeContainer>) => {
       return this.enterPredicate(drag.data, drop.data);
     };
 
     this._dropContainerRef.sortPredicate =
-      (index: number, drag: DragRef<TriDrag>, drop: DndContainerRef<TriDragFreeContainer>) => {
+      (index: number, drag: DragRef<TriDrag>, drop: DndContainerRef<TriDropFreeContainer>) => {
         return this.sortPredicate(index, drag.data, drop.data);
       };
 
-    this._setupInputSyncSubscription(this._dropContainerRef as DragFreeContainerRef);
-    this._handleEvents(this._dropContainerRef as DragFreeContainerRef);
+    this._setupInputSyncSubscription(this._dropContainerRef as DropFreeContainerRef);
+    this._handleEvents(this._dropContainerRef as DropFreeContainerRef);
     TriDropContainer._dropContainers.push(this);
   }
 
@@ -201,20 +186,11 @@ export class TriDragFreeContainer<T = any> extends TriDropContainer implements O
 
   /** Gets the registered items in the list, sorted by their position in the DOM. */
   getSortedItems(): TriDrag[] {
-    return Array.from(this._unsortedItems).sort((a: TriDrag, b: TriDrag) => {
-      const documentPosition =
-              a._dragRef.getVisibleElement().compareDocumentPosition(
-                b._dragRef.getVisibleElement());
-
-      // `compareDocumentPosition` returns a bitmask so we have to use a bitwise operator.
-      // https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
-      // tslint:disable-next-line:no-bitwise
-      return documentPosition & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
-    });
+    return Array.from(this._unsortedItems);
   }
 
   /** Syncs the inputs of the TriDropContainer with the options of the underlying DropContainerRef. */
-  protected _setupInputSyncSubscription(ref: DragFreeContainerRef<TriDragFreeContainer>) {
+  protected _setupInputSyncSubscription(ref: DropFreeContainerRef<TriDropFreeContainer>) {
     if (this._dir) {
       this._dir.change
         .pipe(startWith(this._dir.value), takeUntil(this._destroyed))
@@ -264,9 +240,7 @@ export class TriDragFreeContainer<T = any> extends TriDropContainer implements O
       ref.autoScrollStep     = coerceNumberProperty(this.autoScrollStep, 2);
       ref
         .connectedTo(
-          siblings.filter(drop => drop && drop !== this).map(list => list._dropContainerRef))
-        .withOrientation(this.orientation)
-        .withPositionStrategy(this.orientation);
+          siblings.filter(drop => drop && drop !== this).map(list => list._dropContainerRef));
     });
   }
 
@@ -274,7 +248,7 @@ export class TriDragFreeContainer<T = any> extends TriDropContainer implements O
    * todo remove me specify drop list event
    */
   /** Handles events from the underlying DropContainerRef. */
-  protected _handleEvents(ref: DragFreeContainerRef<TriDragFreeContainer>) {
+  protected _handleEvents(ref: DropFreeContainerRef<TriDropFreeContainer>) {
     ref.beforeStarted.subscribe(() => {
       this._syncItemsWithRef();
       this._changeDetectorRef.markForCheck();
@@ -282,9 +256,8 @@ export class TriDragFreeContainer<T = any> extends TriDropContainer implements O
 
     ref.entered.subscribe(event => {
       this.entered.emit({
-        container   : this,
-        item        : event.item.data,
-        currentIndex: event.currentIndex
+        container: this,
+        item     : event.item.data,
       });
     });
 
@@ -298,14 +271,14 @@ export class TriDragFreeContainer<T = any> extends TriDropContainer implements O
 
     ref.dropped.subscribe(event => {
       this.dropped.emit({
-        previousIndex         : event.previousIndex,
-        currentIndex          : event.currentIndex,
-        previousContainer     : event.previousContainer.data,
-        container             : event.container.data,
-        item                  : event.item.data,
-        isPointerOverContainer: event.isPointerOverContainer,
-        distance              : event.distance,
-        dropPoint             : event.dropPoint
+        previousContainer      : event.previousContainer.data,
+        container              : event.container.data,
+        item                   : event.item.data,
+        isPointerOverContainer : event.isPointerOverContainer,
+        distance               : event.distance,
+        dropPoint              : event.dropPoint,
+        elementPosition        : event.elementPosition,
+        elementRelativePosition: event.elementRelativePosition!,
       });
 
       // Mark for check since all of these events run outside of change
@@ -321,9 +294,7 @@ export class TriDragFreeContainer<T = any> extends TriDropContainer implements O
           } = config;
 
     this.disabled           = draggingDisabled == null ? false : draggingDisabled;
-    this.sortingDisabled    = sortingDisabled == null ? false : sortingDisabled;
     this.autoScrollDisabled = listAutoScrollDisabled == null ? false : listAutoScrollDisabled;
-    this.orientation        = listOrientation || 'vertical';
 
     if (lockAxis) {
       this.lockAxis = lockAxis;
@@ -353,7 +324,6 @@ export class TriDragFreeContainer<T = any> extends TriDropContainer implements O
   }
 
   static ngAcceptInputType_disabled: BooleanInput;
-  static ngAcceptInputType_sortingDisabled: BooleanInput;
   static ngAcceptInputType_autoScrollDisabled: BooleanInput;
   static ngAcceptInputType_autoScrollStep: NumberInput;
 }

@@ -74,6 +74,10 @@ export interface TriDragDrop<T, O = T> {
   distance: { x: number, y: number };
   /** Position where the pointer was when the item was dropped */
   dropPoint: { x: number, y: number };
+
+  elementPosition?: { x: number, y: number };
+
+  elementRelativePosition?: { x: number, y: number };
 }
 
 /** Event emitted as the user is dragging a draggable item. */

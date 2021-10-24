@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TriDrag } from './directives/drag';
 import { TriDragContainer } from './directives/drag-container';
+import { TriDropFreeContainer } from './directives/drop-free-container';
 import { TriDragHandle } from './directives/drag-handle';
 import { TriDragPlaceholder } from './directives/drag-placeholder';
 import { TriDragPreview } from './directives/drag-preview';
@@ -31,6 +32,7 @@ import { TriDragResizeContainer } from './drag-grid/drag-resize.component';
     TriDropGridContainer,
 
     TriDragContainer,
+    TriDropFreeContainer,
     TriDrag,
     TriDragHandle,
     TriDragPreview,
@@ -49,6 +51,7 @@ import { TriDragResizeContainer } from './drag-grid/drag-resize.component';
     TriDragPlaceholder,
     TriDropGridContainer,
     TriDragContainer,
+    TriDropFreeContainer,
     TriDragGridItemComponent,
     TriDropFlexContainer,
     TriDragResizeContainer

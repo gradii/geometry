@@ -8,6 +8,8 @@
 export { DragDrop } from './src/drag-drop';
 export { DragRef, DragRefConfig, Point, PreviewContainer } from './src/drag-drop-ref/drag-ref';
 export { DndContainerRef } from './src/drag-drop-ref/dnd-container-ref';
+export { DragContainerRef } from './src/drag-drop-ref/drag-container-ref';
+export { DropFreeContainerRef } from './src/drag-drop-ref/drop-free-container-ref';
 export { DropListContainerRef } from './src/drag-drop-ref/drop-list-container-ref';
 export { DropGridContainerRef } from './src/drag-drop-ref/drop-grid-container-ref';
 export { DropFlexContainerRef } from './src/drag-drop-ref/drop-flex-container-ref';
@@ -20,6 +22,7 @@ export * from './src/drag-drop-registry';
 
 export { TRI_DROP_CONTAINER } from './src/directives/drop-container';
 export { TriDragContainer } from './src/directives/drag-container';
+export { TriDropFreeContainer } from './src/directives/drop-free-container';
 export { TriDropListContainer } from './src/directives/drop-list-container';
 export { TriDropGridContainer } from './src/directives/drop-grid-container';
 export { TriDropFlexContainer } from './src/directives/drop-flex-container';

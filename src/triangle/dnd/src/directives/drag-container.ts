@@ -226,15 +226,6 @@ export class TriDragContainer<T = any> extends TriDropContainer<T> {
       this._changeDetectorRef.markForCheck();
     });
 
-    // ref.sorted.subscribe(event => {
-    //   this.sorted.emit({
-    //     previousIndex: event.previousIndex,
-    //     currentIndex : event.currentIndex,
-    //     container    : this,
-    //     item         : event.item.data
-    //   });
-    // });
-
     ref.dropped.subscribe(event => {
       this.dropped.emit({
         // previousIndex         : event.previousIndex,

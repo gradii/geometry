@@ -63,9 +63,9 @@ import { TriDragDrop, TriDragEnter } from '@gradii/triangle/dnd';
                 </tri-tab-group>
               </div>
 
-              <div triDropListContainer
-                   (triDropContainerEntered)="onDragEnter($event)"
-                   (triDropContainerDropped)="onDropped($event)"
+              <div triDropFreeContainer
+                   (triDropFreeContainerEntered)="onDragEnter($event)"
+                   (triDropFreeContainerDropped)="onDropped($event)"
               >
                 <div class="container" style="width: 800px; height: 400px">
                   <tri-diagram [engineModel]="model"
@@ -245,10 +245,9 @@ export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
   onDropped(evt: TriDragDrop<any>) {
     const canvasManager = this.diagram?.engine;
     if (canvasManager) {
-      const freeDragPoint = evt.item._dragRef.getFreeDragPosition();
       const pointer       = {
-        clientX: evt.dropPoint.x,
-        clientY: evt.dropPoint.y
+        clientX: evt.elementPosition.x,
+        clientY: evt.elementPosition.y
       };
       const droppedPoint  = canvasManager.getRelativeMousePoint(pointer);
 

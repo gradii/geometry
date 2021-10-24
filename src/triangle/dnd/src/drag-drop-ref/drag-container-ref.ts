@@ -402,7 +402,7 @@ export class DragContainerRef<T = any> extends DndContainerRef<T> {
    * @param pointerDelta Direction in which the pointer is moving along each axis.
    */
   _arrangeItem(item: DragRef, pointerX: number, pointerY: number,
-               elementPointX, elementPointY,
+               elementPointX: number, elementPointY: number,
                pointerDelta: { x: number, y: number }): void {
 
     // this.positionStrategy._sortItem(item, pointerX, pointerY, pointerDelta);

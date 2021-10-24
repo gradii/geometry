@@ -50,7 +50,6 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
   setPosition(point: Vector2): void;
   setPosition(x: number, y: number): void;
   setPosition(x: number | Vector2, y?: number) {
-    console.log(x, y);
     let old = this.position;
     super.setPosition(x as number, y);
 
