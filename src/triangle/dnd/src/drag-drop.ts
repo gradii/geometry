@@ -17,6 +17,7 @@ import { DropListContainerRef } from './drag-drop-ref/drop-list-container-ref';
 import { DragDropRegistry } from './drag-drop-registry';
 import { FlexRowSortPositionStrategy } from './position-strategy/flex-row-sort-position-strategy';
 import { SortPositionStrategy } from './position-strategy/sort-position-strategy';
+import { DragFreeContainerRef } from './drag-drop-ref/drag-free-container-ref';
 
 /** Default configuration to be used when creating a `DragRef`. */
 const DEFAULT_CONFIG = {
@@ -51,6 +52,16 @@ export class DragDrop {
   createDragContainerRef<T = any>(element: ElementRef<HTMLElement> | HTMLElement): DragContainerRef<T> {
     const sortPositionStrategy = new SortPositionStrategy(this._dragDropRegistry);
     const dropContainerRef     = new DragContainerRef<T>(element, this._dragDropRegistry,
+      this._document, this._ngZone,
+      this._viewportRuler, sortPositionStrategy);
+
+    sortPositionStrategy.dropContainerRef = dropContainerRef;
+    return dropContainerRef;
+  }
+
+  createDragFreeContainerRef<T = any>(element: ElementRef<HTMLElement> | HTMLElement): DndContainerRef<T> {
+    const sortPositionStrategy = new FlexRowSortPositionStrategy(this._dragDropRegistry);
+    const dropContainerRef     = new DragFreeContainerRef<T>(element, this._dragDropRegistry,
       this._document, this._ngZone,
       this._viewportRuler, sortPositionStrategy);
 
@@ -99,5 +110,6 @@ export class DragDrop {
     sortPositionStrategy.dropContainerRef = dropContainerRef;
     return dropContainerRef;
   }
+
 
 }

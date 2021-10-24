@@ -116,7 +116,7 @@ export abstract class _TriTabGroupBase extends _TriTabGroupMixinBase implements 
     super(elementRef);
     this._groupId          = nextId++;
     this.animationDuration = defaultConfig && defaultConfig.animationDuration ?
-      defaultConfig.animationDuration : '500ms';
+      defaultConfig.animationDuration : '200ms';
     this.disablePagination = defaultConfig && defaultConfig.disablePagination != null ?
       defaultConfig.disablePagination : false;
   }
@@ -394,7 +394,7 @@ export abstract class _TriTabGroupBase extends _TriTabGroupMixinBase implements 
   encapsulation: ViewEncapsulation.None,
   // tslint:disable-next-line:validate-decorators
   changeDetection: ChangeDetectionStrategy.Default,
-  inputs         : ['color', 'disableRipple'],
+  inputs         : ['color'],
   providers      : [
     {
       provide    : TRI_TAB_GROUP,
@@ -414,6 +414,9 @@ export class TriTabGroup extends _TriTabGroupBase {
   @ContentChildren(TriTab, {descendants: true}) _allTabs: QueryList<TriTab>;
   @ViewChild('tabBodyWrapper') _tabBodyWrapper: ElementRef;
   @ViewChild('tabHeader') _tabHeader: TriTabGroupBaseHeader;
+
+  @Input()
+  disableRipple = true;
 
   constructor(elementRef: ElementRef,
               changeDetectorRef: ChangeDetectorRef,

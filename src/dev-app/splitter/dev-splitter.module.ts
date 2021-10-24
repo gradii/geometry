@@ -9,7 +9,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TriAccordionModule } from '@gradii/triangle/accordion';
-import { SplitterModule } from '@gradii/triangle/splitter';
+import { TriSplitterModule } from '@gradii/triangle/splitter';
 import { TriTooltipModule } from '@gradii/triangle/tooltip';
 import { DevSplitter } from './dev-splitter';
 import { SplitterDemoBasicComponent } from './tri-demo-splitter/basic/splitter-demo-basic.component';
@@ -35,7 +35,7 @@ import { SplitterDemoVerticalComponent } from './tri-demo-splitter/vertical/spli
       },
     ]),
 
-    SplitterModule,
+    TriSplitterModule,
     TriTooltipModule,
     TriAccordionModule
   ],

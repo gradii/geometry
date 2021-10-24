@@ -7,17 +7,25 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { TriButtonModule } from '@gradii/triangle/button';
 import { TriDiagramModule } from '@gradii/triangle/diagram';
+import { TriDndModule } from '@gradii/triangle/dnd';
+import { TriSplitterModule } from '@gradii/triangle/splitter';
+import { TriTabsModule } from '@gradii/triangle/tabs';
 import { DevDiagramComponent } from './dev-diagram.component';
 import { DemoDiagramDragAndDropComponent } from './tri-demo-diagram/demo-diagram-drag-and-drop.component';
 import { DemoDiagramSimpleComponent } from './tri-demo-diagram/demo-diagram-simple.component';
 import { DemoDiagramWorkflowComponent } from './tri-demo-diagram/demo-diagram-workflow.component';
 
 @NgModule({
-  imports     : [
+  imports: [
     CommonModule,
 
+    TriSplitterModule,
     TriDiagramModule,
+    TriTabsModule,
+    TriDndModule,
+    TriButtonModule,
 
     RouterModule.forChild([
       {
@@ -36,7 +44,9 @@ import { DemoDiagramWorkflowComponent } from './tri-demo-diagram/demo-diagram-wo
           }
         ]
       }
-    ])
+    ]),
+    TriButtonModule,
+
   ],
   declarations: [
     DevDiagramComponent,

@@ -33,4 +33,4 @@ import { SplitterComponent } from './splitter.component';
   ],
   providers: []
 })
-export class SplitterModule {}
+export class TriSplitterModule {}

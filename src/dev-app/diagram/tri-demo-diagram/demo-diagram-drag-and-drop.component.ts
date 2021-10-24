@@ -30,6 +30,15 @@ import { DiagramComponent, DiagramModel, DiagramNodeModel } from '@gradii/triang
       (dragover)="$event.preventDefault()"
     ></tri-diagram>
   `,
+  styles   : [
+    `
+      :host {
+        height: 800px;
+        width: 800px;
+        display: block;
+      }
+    `
+  ],
   styleUrls: [
     'demo-diagram.component.css',
     'demo-diagram-drag-and-drop.component.css',

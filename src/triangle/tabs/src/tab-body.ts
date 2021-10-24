@@ -127,7 +127,7 @@ export abstract class _TriTabBodyBase implements OnInit, OnDestroy {
   @Input() origin: number | null;
   // anyway to prevent the animations module from throwing an error if the body is used on its own.
   /** Duration for the tab's animation. */
-  @Input() animationDuration: string = '500ms';
+  @Input() animationDuration: string = '200ms';
   /** Current position of the tab-body in the tab-group. Zero means that the tab is visible. */
   private _positionIndex: number;
   /** Subscription to the directionality change observable. */

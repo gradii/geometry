@@ -30,13 +30,14 @@ import { TriTabLabelWrapper } from './tab-label-wrapper';
     A11yModule,
   ],
   // Don't export all components because some are only to be used internally.
-  exports     : [
-    TriCommonModule,
-    TriTabGroup,
-    TriTabLabel,
-    TriTab,
-    TriTabContent,
-  ],
+    exports: [
+        TriCommonModule,
+        TriTabGroup,
+        TriTabLabel,
+        TriTab,
+        TriTabContent,
+        TriTabHeader,
+    ],
   declarations: [
     TriTabGroup,
     TriTabLabel,

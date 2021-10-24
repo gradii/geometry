@@ -1,3 +1,17 @@
+.pane-content {
+  padding: 0 10px;
+  overflow: hidden;
+}
+
+.node-drag {
+  display: block;
+  cursor: grab;
+  background-color: white;
+  border-radius: 30px;
+  padding: 5px 15px;
+}
+
+
 //$color            : rgba(255, 255, 255, 0.05);
 //$background-color : rgb(60, 60, 60);
 //

@@ -15,6 +15,10 @@ ng_module(
     ],
     deps = [
         "//src/triangle/diagram",
+        "//src/triangle/splitter",
+        "//src/triangle/tabs",
+        "//src/triangle/dnd",
+        "//src/triangle/button",
         "@npm//@angular/forms",
         "@npm//@angular/router",
     ],
