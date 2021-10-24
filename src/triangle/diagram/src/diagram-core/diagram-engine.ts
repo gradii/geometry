@@ -6,7 +6,6 @@
 
 import {
   Vector2,
-  Polygon,
   Rectangle, boundingBoxFromPolygons
 } from '@gradii/vector-math';
 import {
@@ -34,13 +33,13 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
    * Gets a model and element under the mouse cursor
    */
   getMouseElement(event: MouseEvent): BaseModel {
-    let target       = event.target as Element;
-    let diagramModel = this.model;
+    const target       = event.target as Element;
+    const diagramModel = this.model;
 
     // is it a port
     let element = Toolkit.closest(target, '.port[data-name]');
     if (element) {
-      let nodeElement = Toolkit.closest(target, '.node[data-nodeid]') as HTMLElement;
+      const nodeElement = Toolkit.closest(target, '.node[data-nodeid]') as HTMLElement;
       return diagramModel.getNode(nodeElement.getAttribute('data-nodeid')).getPort(
         element.getAttribute('data-name'));
     }
@@ -76,7 +75,7 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
   }
 
   getNodePortElement(port: PortModel): any {
-    let selector = this.canvas.querySelector(
+    const selector = this.canvas.querySelector(
       `.port[data-name="${port.getName()}"][data-nodeid="${port.getParent().getID()}"]`
     );
     if (selector === null) {
@@ -141,7 +140,7 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
    */
   getBoundingNodesRect(nodes: NodeModel[], margin?: number): Rectangle {
     if (nodes && nodes.length) {
-      let boundingBox = boundingBoxFromPolygons(nodes.map((node) => node.getBoundingBox()));
+      const boundingBox = boundingBoxFromPolygons(nodes.map((node) => node.getBoundingBox()));
       if (margin) {
         return Rectangle.createFromBounds(
           boundingBox.getTopLeft().x - margin,
@@ -158,14 +157,14 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
 
   zoomToFitNodes(margin?: number) {
     let nodesRect; // nodes bounding rectangle
-    let selectedNodes = this.model
+    const selectedNodes = this.model
       .getSelectedEntities()
       .filter((entity) => entity instanceof NodeModel)
       .map((node) => node) as NodeModel[];
 
     // no node selected
     if (selectedNodes.length == 0) {
-      let allNodes = this.model
+      const allNodes = this.model
         .getSelectionEntities()
         .filter((entity) => entity instanceof NodeModel)
         .map((node) => node) as NodeModel[];
@@ -179,12 +178,12 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
 
     if (nodesRect) {
       // there is something we should zoom on
-      let canvasRect            = this.canvas.getBoundingClientRect();
-      let canvasTopLeftPoint    = {
+      const canvasRect            = this.canvas.getBoundingClientRect();
+      const canvasTopLeftPoint    = {
         x: canvasRect.left,
         y: canvasRect.top
       };
-      let nodeLayerTopLeftPoint = {
+      const nodeLayerTopLeftPoint = {
         x: canvasTopLeftPoint.x + this.getModel().getOffsetX(),
         y: canvasTopLeftPoint.y + this.getModel().getOffsetY()
       };
@@ -195,7 +194,7 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
 
       this.model.setZoomLevel(zoomFactor * 100);
 
-      let nodesRectTopLeftPoint = {
+      const nodesRectTopLeftPoint = {
         x: nodeLayerTopLeftPoint.x + nodesRect.getTopLeft().x * zoomFactor,
         y: nodeLayerTopLeftPoint.y + nodesRect.getTopLeft().y * zoomFactor
       };

@@ -7,7 +7,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { LabelWidget } from './diagram-core/entities/label/label-widget';
 // import { LinkLayerFactory } from './diagram-core/entities/link-layer/link-layer-factory';
-import { LinkLayerWidget } from './diagram-core/entities/link-layer/link-layer-widget';
 import { LinkWidget } from './diagram-core/entities/link/link-widget';
 // import { NodeLayerFactory } from './diagram-core/entities/node-layer/node-layer-factory';
 import { NodeLayerWidget } from './diagram-core/entities/node-layer/node-layer-widget';
@@ -81,9 +80,6 @@ import { DIAGRAM_STATES } from './tokens';
     LabelWidget,
 
     LinkWidget,
-
-    // LinkLayerFactory,
-    LinkLayerWidget,
 
     PortWidget,
 

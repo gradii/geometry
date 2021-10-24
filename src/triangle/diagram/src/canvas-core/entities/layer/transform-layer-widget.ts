@@ -15,7 +15,9 @@ import { LayerModel } from './layer-model';
   template: `
     <ng-template [ngIf]="layer.isSvg" [ngIfElse]="notSvg">
       <svg class="layer" [ngStyle]="getTransformStyle()">
-        <g link-layer-widget [layer]="linkLayerModel"></g>
+        <ng-container *ngFor="let item of linkLayerModel.getLinks()">
+          <svg:g link-widget [attr.key]="item?.getID()" [link]="item"></svg:g>
+        </ng-container>
       </svg>
     </ng-template>
     <ng-template #notSvg>

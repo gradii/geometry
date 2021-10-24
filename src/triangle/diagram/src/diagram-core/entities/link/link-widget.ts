@@ -5,19 +5,12 @@
  */
 
 import {
-  ChangeDetectorRef,
-  Component,
-  Inject,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges
+  ChangeDetectorRef, Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges
 } from '@angular/core';
-import { ENGINE } from '../../../canvas-core/tokens';
 import { BaseEntityEvent } from '../../../canvas-core/core-models/base-entity';
 import { BasePositionModel } from '../../../canvas-core/core-models/base-position-model';
 import { ListenerHandle } from '../../../canvas-core/core/base-observer';
+import { ENGINE } from '../../../canvas-core/tokens';
 import { DiagramEngine } from '../../diagram-engine';
 import { PortModel } from '../port/port-model';
 import { LinkModel } from './link-model';
@@ -36,28 +29,26 @@ import { PointModel } from './point-model';
 @Component({
   selector: 'link-widget, g[link-widget]',
   template: `
-    <!--    <peformance-widget model={this.link} serialized={this.link.serialize()}>-->
-    <!--      {() => {-->
-    <!--      return (-->
-    <!--    <svg:g [attr.data-link-id]="link.getID()">-->
-<!--    <ng-template [ngTemplateOutlet]="engine.generateWidgetForLink(link)"-->
-<!--                 [ngTemplateOutletContext]="{event: {model: link}}">-->
-<!--    </ng-template>-->
-
     <svg:g x-link-widget [link]="link"></svg:g>
 
     <ng-template let-labelModel let-index="index" ngFor [ngForOf]="link.getLabels()">
-      <svg:g label-widget
-             [attr.key]="labelModel.getID()"
-             [label]="labelModel"
-             [index]="index"
-      ></svg:g>
+      <svg:foreignObject class="foreignObject" [attr.key]="labelModel.getID()">
+        <label-widget  [label]="labelModel"
+                       [index]="index"></label-widget>
+      </svg:foreignObject>
     </ng-template>
-    <!--    </svg:g>-->
-    <!--      );-->
-    <!--      }}-->
-    <!--    </peformance_widget>-->
-  `
+  `,
+  styles  : [
+    `.foreignObject {
+      pointer-events : none;
+      overflow       : visible;
+      x              : 0;
+      y              : 0;
+      width          : 100%;
+      height         : 100%;
+    }
+    `
+  ]
 })
 export class LinkWidget implements OnChanges, OnInit, OnDestroy {
 

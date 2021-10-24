@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import * as _ from 'lodash';
+import { equals, forEach } from 'ramda';
 import {
   Action,
   ActionEvent,
@@ -40,14 +40,14 @@ export class DeleteItemsAction extends Action {
       fire: (event: ActionEvent<KeyboardEvent>) => {
         const {keyCode, ctrlKey, shiftKey, altKey, metaKey} = event.event;
 
-        if (keyCodes.indexOf(keyCode) !== -1 && _.isEqual({ctrlKey, shiftKey, altKey, metaKey},
+        if (keyCodes.indexOf(keyCode) !== -1 && equals({ctrlKey, shiftKey, altKey, metaKey},
           modifiers)) {
-          _.forEach(this.engine.getModel().getSelectedEntities(), (model) => {
+          forEach((model) => {
             // only delete items which are not locked
             if (!model.isLocked()) {
               model.remove();
             }
-          });
+          }, this.engine.getModel().getSelectedEntities());
           this.engine.repaintCanvas();
         }
       }

@@ -21,7 +21,7 @@ export class ZoomCanvasAction extends Action {
       fire: (actionEvent: ActionEvent<WheelEvent>) => {
         const {event} = actionEvent;
         // we can block layer rendering because we are only targeting the transforms
-        for (let layer of this.engine.getModel().getLayers()) {
+        for (const layer of this.engine.getModel().getLayers()) {
           layer.allowRepaint(false);
         }
 
@@ -67,7 +67,7 @@ export class ZoomCanvasAction extends Action {
         this.engine.repaintCanvas();
 
         // re-enable rendering
-        for (let layer of this.engine.getModel().getLayers()) {
+        for (const layer of this.engine.getModel().getLayers()) {
           layer.allowRepaint(true);
         }
       }

@@ -4,27 +4,20 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { AfterViewChecked, Component, ElementRef, Inject, Input, NgZone, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked, Component, ElementRef, Inject, Input, NgZone, ViewChild
+} from '@angular/core';
 import { ENGINE } from '../../../canvas-core/tokens';
 import { DiagramEngine } from '../../diagram-engine';
 import { LabelModel } from './label-model';
 
 @Component({
-  selector: 'label-widget, g[label-widget]',
+  selector: 'label-widget',
   template: `
-    <svg:foreignObject class="foreignObject"
-                       [attr.key]="label.getID()"
-    >
-      <div class="label" #ref>
-        <x-label-widget [model]="label"></x-label-widget>
-      </div>
-    </svg:foreignObject>`,
+    <div class="label" #ref>
+      <x-label-widget [model]="label"></x-label-widget>
+    </div>`,
   styles: [`
-    .foreignObject {
-      pointer-events: none;
-      overflow: visible;
-    }
-
     .label {
       display: inline-block;
       position: absolute;

@@ -7,15 +7,13 @@
 
 import { BaseModelListener } from '../../../canvas-core/core-models/base-model';
 import {
-  BasePositionModel,
-  BasePositionModelGenerics,
-  BasePositionModelOptions
+  BasePositionModel, BasePositionModelGenerics, BasePositionModelOptions
 } from '../../../canvas-core/core-models/base-position-model';
 import { LinkModel } from './link-model';
 
 export interface PointModelOptions extends Omit<BasePositionModelOptions, 'type'> {
   link: LinkModel;
-  type?: string
+  type?: string;
 }
 
 export interface PointModelGenerics {

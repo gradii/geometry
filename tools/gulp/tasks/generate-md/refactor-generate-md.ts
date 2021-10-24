@@ -8,9 +8,11 @@ export function refactorGenerateMd<T extends ts.Node>(/*typeChecker: TypeChecker
       if (ts.isDecorator(node)) {
         return undefined;
       }
+
       if (ts.isImportDeclaration(node)) {
         return undefined;
       }
+
       if (
         ts.isCallExpression(node) &&
         ts.isIdentifier(node.expression) &&

@@ -26,7 +26,6 @@ export * from './src/diagram-core/entities/node-layer/node-layer-model';
 export * from './src/diagram-core/entities/node-layer/node-layer-widget';
 export * from './src/diagram-core/entities/label/label-model';
 export * from './src/diagram-core/entities/label/label-widget';
-export * from './src/diagram-core/entities/link-layer/link-layer-widget';
 export * from './src/diagram-core/entities/link-layer/link-layer-model';
 export * from './src/diagram-core/entities/link/link-widget';
 export * from './src/diagram-core/entities/link/link-model';
