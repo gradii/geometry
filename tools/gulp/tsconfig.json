@@ -9,6 +9,7 @@
     "outDir": "../../dist/tools/gulp",
     "strictNullChecks": true,
     "noImplicitReturns": true,
+    "esModuleInterop": true,
     "strictFunctionTypes": true,
     "noImplicitThis": true,
     "noEmitOnError": true,
@@ -17,7 +18,10 @@
     "types": [
       "node"
     ],
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+
+    }
   },
   "files": [
     "gulpfile.ts"

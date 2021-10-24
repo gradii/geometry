@@ -1,4 +1,4 @@
-import {dest, src, task} from 'gulp';
+import {dest, series, src, task} from 'gulp';
 import {join} from 'path';
 import {BuildPackage} from '../build-package';
 import {inlineResourcesForDirectory} from '../inline-resources';
@@ -51,7 +51,7 @@ export function createPackageBuildTasks(buildPackage: BuildPackage, preBuildTask
     `${taskName}:assets:html`
   ];
 
-  task(`${taskName}:assets`, assetTasks);
+  task(`${taskName}:assets`, series(assetTasks));
 
   task(`${taskName}:assets:scss`, () => {
     return buildScssPipeline(buildPackage.sourceDir)
