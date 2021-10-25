@@ -22,7 +22,6 @@ import { PortModel } from './port-model';
       [attr.data-name]="port.getName()"
       [attr.data-nodeid]="port.getNode().getID()"
     >
-      <!--      {...this.getExtraProps()}>-->
       <ng-content></ng-content>
     </div>
   `

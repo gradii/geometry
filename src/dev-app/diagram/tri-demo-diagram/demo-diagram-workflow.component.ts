@@ -74,8 +74,8 @@ import { TriDragDrop, TriDragEnter } from '@gradii/triangle/dnd';
                   ></tri-diagram>
                 </div>
               </div>
-            </div>
 
+            </div>
           </div>
         </tri-splitter-pane>
         <tri-splitter-pane minSize="15%">
@@ -245,15 +245,15 @@ export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
   onDropped(evt: TriDragDrop<any>) {
     const canvasManager = this.diagram?.engine;
     if (canvasManager) {
-      const pointer       = {
+      const pointer      = {
         clientX: evt.elementPosition.x,
         clientY: evt.elementPosition.y
       };
-      const droppedPoint  = canvasManager.getRelativeMousePoint(pointer);
+      const droppedPoint = canvasManager.getRelativeMousePoint(pointer);
 
-      const nodeType      = 'default1'
-      const color         = '#d085ff'
-      const node          = this.createNode(nodeType);
+      const nodeType = 'default1';
+      const color    = '#d085ff';
+      const node     = this.createNode(nodeType);
 
       node.addInPort('In');
       node.addOutPort('Out');

@@ -8,10 +8,7 @@
 // import { AbstractModelFactory } from '../../canvas-core/core/abstract-model-factory';
 import { LinkModel } from '../diagram-core/entities/link/link-model';
 import {
-  PortModel,
-  PortModelAlignment,
-  PortModelGenerics,
-  PortModelOptions
+  PortModel, PortModelAlignment, PortModelGenerics, PortModelOptions
 } from '../diagram-core/entities/port/port-model';
 import { DiagramLinkModel } from './diagram-link-model';
 
@@ -52,8 +49,8 @@ export class DiagramPortModel extends PortModel<DefaultPortModelGenerics> {
       ...options
     });
 
-    this.label = options.label;
-    this.in    = options.in;
+    this.label  = options.label;
+    this.in     = options.in;
   }
 
   //
@@ -80,7 +77,14 @@ export class DiagramPortModel extends PortModel<DefaultPortModelGenerics> {
 
   canLinkToPort(port: PortModel): boolean {
     if (port instanceof DiagramPortModel) {
-      return this.in !== port.in;
+      if (this.in === port.in) {
+        return false;
+      }
+    }
+    for (const [key, link] of this.links.entries()) {
+      if (link.getTargetPort() === port) {
+        return false;
+      }
     }
     return true;
   }

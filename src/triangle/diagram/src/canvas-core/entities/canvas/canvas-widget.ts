@@ -23,13 +23,11 @@ import { ENGINE } from '../../tokens';
       </transform-layer-widget>
     </ng-template>`,
   styles         : [
-    `
-      :host {
-        position : absolute;
-        height   : 100%;
-        width    : 100%;
-      }
-    `
+    `:host {
+      position : absolute;
+      height   : 100%;
+      width    : 100%;
+    }`
   ]
 })
 export class CanvasWidget implements OnInit, AfterViewInit, OnDestroy {
@@ -116,20 +114,6 @@ export class CanvasWidget implements OnInit, AfterViewInit, OnDestroy {
           this.onMouseMove(event);
         })
       ).subscribe();
-
-      // this.ref.nativeElement.addEventListener('wheel', (event) => {
-      //   this.onWheel(event);
-      // });
-      // this.ref.nativeElement.addEventListener('mousedown', (event) => {
-      //   this.onMouseDown(event);
-      // });
-      // this.ref.nativeElement.addEventListener('mouseup', (event) => {
-      //   this.onMouseUp(event);
-      // });
-      // this.ref.nativeElement.addEventListener('mousemove', (event) => {
-      //   this.onMouseMove(event);
-      // });
-
     });
   }
 

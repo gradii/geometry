@@ -9,7 +9,7 @@ const {exec, set, cd, cp, rm, chmod} = require('shelljs');
 const {join}                         = require('path');
 const {glob}                         = require("glob");
 const fs                             = require('fs');
-const fse                             = require('fs-extra');
+const fse                            = require('fs-extra');
 const format                         = require('date-fns/format');
 const tar                            = require('tar');
 const path                           = require('path');
@@ -33,7 +33,7 @@ const webPackagePath = join(bazelBinPath, 'src/dev-app/web_package');
 const distPath = join(projectDirPath, 'dist/dev-app-web-pkg');
 
 // Build web package output.
-exec('yarn -s bazel build //src/dev-app:web_package --config release');
+exec('yarn -s bazel build //src/dev-app:web_package --config snapshot');
 
 // Clear previous deployment artifacts.
 rm('-Rf', distPath);

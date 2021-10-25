@@ -7,11 +7,8 @@
 import * as _ from 'lodash';
 import { DeserializeEvent } from '../canvas-core/core-models/base-entity';
 import { BasePositionModelOptions } from '../canvas-core/core-models/base-position-model';
-import {
-  NodeModel,
-  NodeModelGenerics
-} from '../diagram-core/entities/node/node-model';
-import { PortModelAlignment } from '../diagram-core/entities/port/port-model';
+import { NodeModel, NodeModelGenerics } from '../diagram-core/entities/node/node-model';
+import { PortModelAlignment, PortModelAnchor } from '../diagram-core/entities/port/port-model';
 import { DiagramPortModel } from './diagram-port-model';
 
 export interface DefaultNodeModelOptions extends BasePositionModelOptions {
@@ -92,7 +89,8 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
       in       : true,
       name     : label,
       label    : label,
-      alignment: PortModelAlignment.LEFT
+      alignment: PortModelAlignment.LEFT,
+      anchor   : PortModelAnchor.leftCenter,
     });
     if (!after) {
       this.portsIn.splice(0, 0, p);
@@ -105,7 +103,8 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
       in       : false,
       name     : label,
       label    : label,
-      alignment: PortModelAlignment.RIGHT
+      alignment: PortModelAlignment.RIGHT,
+      anchor   : PortModelAnchor.rightCenter,
     });
     if (!after) {
       this.portsOut.splice(0, 0, p);

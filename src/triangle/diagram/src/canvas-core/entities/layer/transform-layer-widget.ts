@@ -46,8 +46,7 @@ import { LayerModel } from './layer-model';
       width            : 100%;
       height           : 100%;
       overflow         : visible;
-    }
-    `
+    }`
   ]
 })
 export class TransformLayerWidget {

@@ -4,20 +4,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  Vector2,
-  Rectangle
-} from '@gradii/vector-math';
+import { Rectangle, Vector2 } from '@gradii/vector-math';
 import * as _ from 'lodash';
-import {
-  BaseEntityEvent,
-  DeserializeEvent
-} from '../../../canvas-core/core-models/base-entity';
+import { BaseEntityEvent, DeserializeEvent } from '../../../canvas-core/core-models/base-entity';
 import { BaseModelOptions } from '../../../canvas-core/core-models/base-model';
 import {
-  BasePositionModel,
-  BasePositionModelGenerics,
-  BasePositionModelListener
+  BasePositionModel, BasePositionModelGenerics, BasePositionModelListener
 } from '../../../canvas-core/core-models/base-position-model';
 import { LinkModel } from '../link/link-model';
 import { NodeModel } from '../node/node-model';
@@ -27,6 +19,18 @@ export const enum PortModelAlignment {
   LEFT   = 'left',
   BOTTOM = 'bottom',
   RIGHT  = 'right'
+}
+
+export const enum PortModelAnchor {
+  topLeft      = 'topLeft',
+  topCenter    = 'topCenter',
+  topRight     = 'topRight',
+  leftCenter   = 'leftCenter',
+  center       = 'center',
+  rightCenter  = 'rightCenter',
+  bottomLeft   = 'bottomLeft',
+  bottomCenter = 'bottomCenter',
+  bottomRight  = 'bottomRight',
 }
 
 export interface PortModelListener extends BasePositionModelListener {
@@ -40,6 +44,7 @@ export interface PortModelOptions extends BaseModelOptions {
   alignment?: PortModelAlignment;
   maximumLinks?: number;
   name: string;
+  anchor?: PortModelAnchor;
 }
 
 export interface PortModelGenerics extends BasePositionModelGenerics {
@@ -60,6 +65,7 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
   height: number;
   reportedPosition: boolean;
 
+  anchor: PortModelAnchor;
 
   // region options
   alignment: PortModelAlignment;
@@ -72,9 +78,10 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
     super(options);
     this.links            = new Map();
     this.reportedPosition = false;
-    this.alignment = options.alignment;
-    this.maximumLinks = options.maximumLinks;
-    this.name = options.name;
+    this.alignment        = options.alignment;
+    this.maximumLinks     = options.maximumLinks;
+    this.name             = options.name;
+    this.anchor           = options.anchor;
   }
 
   deserialize(event: DeserializeEvent<this>) {
@@ -165,9 +172,9 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
   }
 
   reportPosition() {
-   this.getLinks().forEach((link) => {
+    this.getLinks().forEach((link) => {
       // @ts-ignore
-      link.getPointForPort(this).setPosition(this.getCenter());
+      link.getPointForPort(this).setPosition(this.getAnchor());
     });
     this.fireEvent(
       {
@@ -175,6 +182,37 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
       },
       'reportInitialPosition'
     );
+  }
+
+  getAnchor() {
+    if (this.anchor) {
+      const x      = this.getX();
+      const y      = this.getY();
+      const width  = this.width;
+      const height = this.height;
+      switch (this.anchor) {
+        case PortModelAnchor.topLeft:
+          return new Vector2(x, y);
+        case PortModelAnchor.topCenter:
+          return new Vector2(x + width / 2, y);
+        case PortModelAnchor.topRight:
+          return new Vector2(x + width, y);
+        case PortModelAnchor.leftCenter:
+          return new Vector2(x, y + height / 2);
+        case PortModelAnchor.center:
+          return new Vector2(x + width / 2, y + height / 2);
+        case PortModelAnchor.rightCenter:
+          return new Vector2(x + width, y + height / 2);
+        case PortModelAnchor.bottomLeft:
+          return new Vector2(x, y + height);
+        case PortModelAnchor.bottomCenter:
+          return new Vector2(x + width / 2, y + height);
+        case PortModelAnchor.bottomRight:
+          return new Vector2(x + width, y + height);
+      }
+    } else {
+      return this.getCenter();
+    }
   }
 
   getCenter(): Vector2 {
