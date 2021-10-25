@@ -17,12 +17,14 @@ import { LabelModel } from './label-model';
     <div class="label" #ref>
       <x-label-widget [model]="label"></x-label-widget>
     </div>`,
-  styles: [`
-    .label {
-      display: inline-block;
-      position: absolute;
-    }
-  `]
+  styles  : [
+    `
+      .label {
+        display  : inline-block;
+        position : absolute;
+      }
+    `
+  ]
 })
 export class LabelWidget implements AfterViewChecked {
   @ViewChild('ref', {read: ElementRef, static: true})
@@ -57,20 +59,20 @@ export class LabelWidget implements AfterViewChecked {
   // @ts-ignore
   findPathAndRelativePositionToRenderLabel = (index: number): { path: SVGPathElement; position: number } => {
     // an array to hold all path lengths, making sure we hit the DOM only once to fetch this information
-    const link = this.label.getParent();
+    const link    = this.label.getParent();
     const lengths = link.getRenderedPath().map((path) => path.getTotalLength());
 
     // calculate the point where we want to display the label
     let labelPosition =
-      lengths.reduce((previousValue, currentValue) => previousValue + currentValue, 0) *
-      (index / (link.getLabels().length + 1));
+          lengths.reduce((previousValue, currentValue) => previousValue + currentValue, 0) *
+          (index / (link.getLabels().length + 1));
 
     // find the path where the label will be rendered and calculate the relative position
     let pathIndex = 0;
     while (pathIndex < link.getRenderedPath().length) {
       if (labelPosition - lengths[pathIndex] < 0) {
         return {
-          path: link.getRenderedPath()[pathIndex],
+          path    : link.getRenderedPath()[pathIndex],
           position: labelPosition
         };
       }
@@ -90,7 +92,7 @@ export class LabelWidget implements AfterViewChecked {
     const {path, position} = found;
 
     const labelDimensions = {
-      width: this.ref.nativeElement.offsetWidth,
+      width : this.ref.nativeElement.offsetWidth,
       height: this.ref.nativeElement.offsetHeight
     };
 

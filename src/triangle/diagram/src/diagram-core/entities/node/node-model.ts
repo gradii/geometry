@@ -10,12 +10,13 @@ import {
   Rectangle
 } from '@gradii/vector-math';
 import * as _ from 'lodash';
-import { BaseEntityEvent } from '../../../canvas-core/core-models/base-entity';
+import { BaseEntityEvent, DeserializeEvent } from '../../../canvas-core/core-models/base-entity';
 import { BaseModelListener } from '../../../canvas-core/core-models/base-model';
 import {
   BasePositionModel,
   BasePositionModelGenerics
 } from '../../../canvas-core/core-models/base-position-model';
+import { DiagramEngine } from '../../diagram-engine';
 import { DiagramModel } from '../../models/diagram-model';
 import { LinkModel } from '../link/link-model';
 import { PortModel } from '../port/port-model';
@@ -55,8 +56,10 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 
     // also update the port co-ordinates (for make glorious speed)
     _.forEach(this.ports, (port) => {
-      port.setPosition(port.getX() + this.position.x - old.x,
-        port.getY() + this.position.y - old.y);
+      port.setPosition(
+        port.getX() + this.position.x - old.x,
+        port.getY() + this.position.y - old.y
+      );
     });
   }
 

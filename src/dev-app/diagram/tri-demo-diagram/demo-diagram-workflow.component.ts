@@ -30,6 +30,9 @@ import { TriDragDrop, TriDragEnter } from '@gradii/triangle/dnd';
           <div class="pane-content">
             <div triDropContainerGroup>
               <div>
+                <div>
+                  <button triButton (click)="onClick()">serialize</button>
+                </div>
                 <tri-tab-group>
                   <tri-tab label="html native dnd">
                     <div style="display: flex">
@@ -136,20 +139,20 @@ export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
       color: 'rgb(0,192,255)'
     });
     node1.setPosition(100, 50);
-    let port1 = node1.addOutPort('Out');
+    let port1 = node1.addOutPort('Out01');
 
 
     let node10 = new DiagramNodeModel({
       name : 'Start',
       color: 'rgb(205,20,79)'
     });
-    let port11 = node10.addOutPort('Out');
+    let port11 = node10.addOutPort('Out02');
     node10.setPosition(100, 100);
 
     // 3-B) create another default node
     let node2 = new DiagramNodeModel('Node 2', 'rgb(192,255,0)');
 
-    let port2 = node2.addInPort('In');
+    let port2 = node2.addInPort('In01');
     node2.setPosition(400, 100);
 
     let node3  = new DiagramNodeModel('Node 2', 'rgb(192,255,0)');
@@ -271,6 +274,10 @@ export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
       }
     }
     console.log(evt);
+  }
+
+  onClick() {
+    console.log(this.model.serialize())
   }
 
   ngAfterViewInit() {

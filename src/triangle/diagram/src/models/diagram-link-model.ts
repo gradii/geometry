@@ -120,7 +120,7 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
       // console.debug(curve.getPoints());
       return curve.getSVGCurve();
     }
-    throw new Error('runtime exception');
+    throw new Error('runtime exception, currently only support two points in link');
   }
 
   // serialize() {

@@ -107,7 +107,7 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
   setPosition(point: Vector2): void;
   setPosition(x: number, y: number): void;
   setPosition(x: Vector2 | number, y?: number) {
-    // let old = this.position;
+    let old = this.position;
     if (x instanceof Vector2) {
       y = x.y;
       x = x.x;
@@ -116,9 +116,10 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
     this.getLinks().forEach((link) => {
       let point = link.getPointForPort(this);
       point.setPosition(
-        /*point.getX() + */(x as number) /*- old.x*/,
-        /*point.getY() + */(y as number) /*- old.y*/
+        point.getX() + (x as number) - old.x,
+        point.getY() + (y as number) - old.y
       );
+      link.reportPosition();
     });
   }
 

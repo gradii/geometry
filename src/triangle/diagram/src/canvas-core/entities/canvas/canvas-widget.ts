@@ -151,8 +151,6 @@ export class CanvasWidget implements OnInit, AfterViewInit, OnDestroy {
       })
     ).subscribe();
 
-    // document.addEventListener('keyup', this.keyUp);
-    // document.addEventListener('keydown', this.keyDown);
     this.registerCanvas();
   }
 
@@ -162,9 +160,6 @@ export class CanvasWidget implements OnInit, AfterViewInit, OnDestroy {
 
     this.engine.deregisterListener(this.canvasListener);
     this.engine.setCanvas(null);
-
-    // document.removeEventListener('keyup', this.keyUp);
-    // document.removeEventListener('keydown', this.keyDown);
   }
 
 }
