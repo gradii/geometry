@@ -4,6 +4,7 @@ load("//tools:create-system-config.bzl", "create_system_config")
 load("//tools:defaults.bzl", "ng_module", "sass_binary")
 load("//tools:es5-module-output.bzl", "es5_module_output")
 load("//tools/dev-server:index.bzl", "dev_server")
+load("//:packages.bzl", "VERSION_PLACEHOLDER_REPLACEMENTS", "getAngularUmdTargets")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -149,5 +150,6 @@ pkg_web(
     additional_root_paths = [
         "npm/node_modules",
     ],
+    substitutions = VERSION_PLACEHOLDER_REPLACEMENTS,
     tags = ["manual"],
 )

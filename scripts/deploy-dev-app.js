@@ -33,7 +33,7 @@ const webPackagePath = join(bazelBinPath, 'src/dev-app/web_package');
 const distPath = join(projectDirPath, 'dist/dev-app-web-pkg');
 
 // Build web package output.
-exec('yarn -s bazel build //src/dev-app:web_package');
+exec('yarn -s bazel build //src/dev-app:web_package --config release');
 
 // Clear previous deployment artifacts.
 rm('-Rf', distPath);
