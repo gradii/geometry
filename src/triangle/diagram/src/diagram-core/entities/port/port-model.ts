@@ -107,14 +107,14 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
   setPosition(point: Vector2): void;
   setPosition(x: number, y: number): void;
   setPosition(x: Vector2 | number, y?: number) {
-    let old = this.position;
+    const old = this.position;
     if (x instanceof Vector2) {
       y = x.y;
       x = x.x;
     }
     super.setPosition(x, y);
     this.getLinks().forEach((link) => {
-      let point = link.getPointForPort(this);
+      const point = link.getPointForPort(this);
       point.setPosition(
         point.getX() + (x as number) - old.x,
         point.getY() + (y as number) - old.y
@@ -162,7 +162,7 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
 
   createLinkModel(): LinkModel | null {
     if (_.isFinite(this.maximumLinks)) {
-      let numberOfLinks: number = _.size(this.links);
+      const numberOfLinks: number = _.size(this.links);
       if (this.maximumLinks === 1 && numberOfLinks >= 1) {
         return Array.from(this.links.values())[0];
       } else if (numberOfLinks >= this.maximumLinks) {

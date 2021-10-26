@@ -13,7 +13,6 @@ import { Polygon } from '../polygon/polygon';
 import { Vector2 } from '../vector2';
 
 export class BezierCurve {
-  _length: number;
   protected points: Vector2[];
 
   constructor() {
@@ -21,11 +20,8 @@ export class BezierCurve {
   }
 
   public getTotalLength() {
-    if (!this._length) {
-      const points = this._getPoints();
-      this._length = this._getArcLength(points, 1);
-    }
-    return this._length;
+    const points = this._getPoints();
+    return this._getArcLength(points, 1);
   }
 
   public getPointAtLength(length: number) {

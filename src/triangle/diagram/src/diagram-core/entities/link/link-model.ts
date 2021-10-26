@@ -235,6 +235,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
       this.sourcePort.removeLink(this);
     }
     this.sourcePort = port;
+    this.reportPosition();
     this.fireEvent({port}, 'sourcePortChanged');
   }
 
@@ -254,6 +255,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
       this.targetPort.removeLink(this);
     }
     this.targetPort = port;
+    this.reportPosition();
     this.fireEvent({port}, 'targetPortChanged');
   }
 
@@ -279,29 +281,36 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
       point.setParent(this);
     });
     this.points = points;
+    this.reportPosition();
   }
 
   removePoint(pointModel: PointModel) {
     this.points.splice(this.getPointIndex(pointModel), 1);
+    this.reportPosition();
   }
 
   removePointsBefore(pointModel: PointModel) {
     this.points.splice(0, this.getPointIndex(pointModel));
+    this.reportPosition();
   }
 
   removePointsAfter(pointModel: PointModel) {
     this.points.splice(this.getPointIndex(pointModel) + 1);
+    this.reportPosition();
   }
 
   removeMiddlePoints() {
     if (this.points.length > 2) {
       this.points.splice(0, this.points.length - 2);
+      this.reportPosition();
     }
   }
 
   addPoint<P extends PointModel>(pointModel: P, index = 1): P {
     pointModel.setParent(this);
     this.points.splice(index, 0, pointModel);
+
+    this.reportPosition();
     return pointModel;
   }
 
@@ -310,5 +319,8 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
       link    : this,
       position: new Vector2(x, y)
     });
+  }
+
+  reportPosition() {
   }
 }

@@ -66,6 +66,7 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
    * @deprecated
    */
   protected options: LinkModelOptions;
+  private curve: BezierCurve;
 
   constructor({
                 type = 'default',
@@ -82,8 +83,8 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
     this.color         = color;
     this.selectedColor = selectedColor;
     this.curvyness     = curvyness;
-    this.type      = type;
-    this.labelName = labelName;
+    this.type          = type;
+    this.labelName     = labelName;
   }
 
   calculateControlOffset(port: PortModel): [number, number] {
@@ -97,9 +98,12 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
     return [0, this.curvyness];
   }
 
-  getSVGPath(): string {
+  calculateBezierCurve() {
     if (this.points.length == 2) {
-      const curve = new BezierCurve();
+      if (!this.curve) {
+        this.curve = new BezierCurve();
+      }
+      const curve = this.curve;
       curve.setSource(this.getFirstPoint().getPosition());
       curve.setTarget(this.getLastPoint().getPosition());
 
@@ -117,8 +121,17 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
       if (this.targetPort) {
         curve.getTargetControl().add(new Vector2(this.calculateControlOffset(this.getTargetPort())));
       }
-      // console.debug(curve.getPoints());
-      return curve.getSVGCurve();
+
+      this.curve = curve;
+    }
+  }
+
+  getSVGPath(): string {
+    if (this.points.length == 2) {
+      if (!this.curve) {
+        this.calculateBezierCurve();
+      }
+      return this.curve.getSVGCurve();
     }
     throw new Error('runtime exception, currently only support two points in link');
   }
@@ -151,7 +164,7 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
     if (label instanceof LabelModel) {
       return super.addLabel(label);
     }
-    let labelOb = new DiagramLabelModel();
+    const labelOb = new DiagramLabelModel();
     labelOb.setLabel(label);
     return super.addLabel(labelOb);
   }
@@ -164,5 +177,10 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
   setColor(color: string) {
     this.color = color;
     this.fireEvent({color}, 'colorChanged');
+  }
+
+  reportPosition() {
+    this.calculateBezierCurve();
+    console.log(this.curve.getTotalLength());
   }
 }
