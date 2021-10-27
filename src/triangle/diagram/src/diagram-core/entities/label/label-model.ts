@@ -49,7 +49,7 @@ export class LabelModel<G extends LabelModelGenerics = LabelModelGenerics> exten
     return {
       ...super.serialize(),
       offsetX: this.offsetX,
-      offsetY: this.offsetX
+      offsetY: this.offsetY
     };
   }
 }

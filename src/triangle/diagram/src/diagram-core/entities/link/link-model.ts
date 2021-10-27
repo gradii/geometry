@@ -133,21 +133,21 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
     this.renderedPaths = paths;
   }
 
-  // serialize() {
-  //   return {
-  //     ...super.serialize(),
-  //     source    : this.sourcePort ? this.sourcePort.getParent().getID() : null,
-  //     sourcePort: this.sourcePort ? this.sourcePort.getID() : null,
-  //     target    : this.targetPort ? this.targetPort.getParent().getID() : null,
-  //     targetPort: this.targetPort ? this.targetPort.getID() : null,
-  //     points    : _.map(this.points, (point) => {
-  //       return point.serialize();
-  //     }),
-  //     labels    : _.map(this.labels, (label) => {
-  //       return label.serialize();
-  //     })
-  //   };
-  // }
+  serialize() {
+    return {
+      ...super.serialize(),
+      source    : this.sourcePort ? this.sourcePort.getParent().getID() : null,
+      sourcePort: this.sourcePort ? this.sourcePort.getID() : null,
+      target    : this.targetPort ? this.targetPort.getParent().getID() : null,
+      targetPort: this.targetPort ? this.targetPort.getID() : null,
+      points    : _.map(this.points, (point) => {
+        return point.serialize();
+      }),
+      labels    : _.map(this.labels, (label) => {
+        return label.serialize();
+      })
+    };
+  }
 
   doClone(lookupTable = {}, clone: any) {
     clone.setPoints(
@@ -235,7 +235,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
       this.sourcePort.removeLink(this);
     }
     this.sourcePort = port;
-    this.reportPosition();
+    this.attach();
     this.fireEvent({port}, 'sourcePortChanged');
   }
 
@@ -255,7 +255,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
       this.targetPort.removeLink(this);
     }
     this.targetPort = port;
-    this.reportPosition();
+    this.attach();
     this.fireEvent({port}, 'targetPortChanged');
   }
 
@@ -281,28 +281,28 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
       point.setParent(this);
     });
     this.points = points;
-    this.reportPosition();
+    this.attach();
   }
 
   removePoint(pointModel: PointModel) {
     this.points.splice(this.getPointIndex(pointModel), 1);
-    this.reportPosition();
+    this.attach();
   }
 
   removePointsBefore(pointModel: PointModel) {
     this.points.splice(0, this.getPointIndex(pointModel));
-    this.reportPosition();
+    this.attach();
   }
 
   removePointsAfter(pointModel: PointModel) {
     this.points.splice(this.getPointIndex(pointModel) + 1);
-    this.reportPosition();
+    this.attach();
   }
 
   removeMiddlePoints() {
     if (this.points.length > 2) {
       this.points.splice(0, this.points.length - 2);
-      this.reportPosition();
+      this.attach();
     }
   }
 
@@ -310,7 +310,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
     pointModel.setParent(this);
     this.points.splice(index, 0, pointModel);
 
-    this.reportPosition();
+    this.attach();
     return pointModel;
   }
 
@@ -321,6 +321,6 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
     });
   }
 
-  reportPosition() {
+  attach() {
   }
 }

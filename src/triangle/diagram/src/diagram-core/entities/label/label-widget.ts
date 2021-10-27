@@ -7,7 +7,9 @@
 import {
   AfterViewChecked, Component, ElementRef, Inject, Input, NgZone, ViewChild
 } from '@angular/core';
+import { BezierCurve } from '@gradii/vector-math';
 import { ENGINE } from '../../../canvas-core/tokens';
+import { DiagramLinkModel } from '../../../models/diagram-link-model';
 import { DiagramEngine } from '../../diagram-engine';
 import { LabelModel } from './label-model';
 
@@ -57,9 +59,17 @@ export class LabelWidget implements AfterViewChecked {
   }
 
   // @ts-ignore
-  findPathAndRelativePositionToRenderLabel = (index: number): { path: SVGPathElement; position: number } => {
+  findPathAndRelativePositionToRenderLabel (index: number): { path: SVGPathElement | BezierCurve; position: number } {
     // an array to hold all path lengths, making sure we hit the DOM only once to fetch this information
     const link    = this.label.getParent();
+    if(link instanceof DiagramLinkModel) {
+      const totalLength = link.curve.getTotalLength();
+      return {
+        path: link.curve,
+        position: totalLength/2,
+      }
+    }
+
     const lengths = link.getRenderedPath().map((path) => path.getTotalLength());
 
     // calculate the point where we want to display the label

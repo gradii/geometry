@@ -53,9 +53,9 @@ import { TriDragDrop, TriDragEnter } from '@gradii/triangle/dnd';
                       <div style="display: flex">
                         <div
                           triDrag
+                          [triDragData]="node"
                           *ngFor="let node of nodesLibrary"
                           class="node-drag"
-                          [attr.data-type]="node.name"
                           [ngStyle]="{ 'background-color': node.color }"
                         >
                           {{ node.name }}
@@ -111,9 +111,9 @@ export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
   maxSize = '60%';
 
   nodesLibrary = [
-    {color: '#AFF8D8', name: 'default1'},
-    {color: '#FFB5E8', name: 'default2'},
-    {color: '#85E3FF', name: 'default3'},
+    {color: '#AFF8D8', name: 'default1', type: 'audit'},
+    {color: '#FFB5E8', name: 'default2', type: 'audit-person'},
+    {color: '#85E3FF', name: 'default3', type: 'audit-department'},
   ];
 
   constructor() {
@@ -229,6 +229,7 @@ export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
     const nodeData = this.nodesLibrary.find((nodeLib) => nodeLib.name === type);
     if (nodeData) {
       const node = new DiagramNodeModel({
+        type: nodeData.type,
         name : nodeData.name,
         color: nodeData.color
       });
@@ -254,8 +255,8 @@ export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
       };
       const droppedPoint = canvasManager.getRelativeMousePoint(pointer);
 
-      const nodeType = 'default1';
-      const color    = '#d085ff';
+      const nodeType = evt.item.data.name;
+      const color    = evt.item.data.color;
       const node     = this.createNode(nodeType);
 
       node.addInPort('In');

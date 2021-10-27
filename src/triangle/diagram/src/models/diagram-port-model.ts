@@ -59,14 +59,14 @@ export class DiagramPortModel extends PortModel<DefaultPortModelGenerics> {
   //   this.options.in = event.data.in;
   //   this.options.label = event.data.label;
   // }
-  //
-  // serialize() {
-  //   return {
-  //     ...super.serialize(),
-  //     in: this.options.in,
-  //     label: this.options.label
-  //   };
-  // }
+
+  serialize() {
+    return {
+      ...super.serialize(),
+      in: this.in,
+      label: this.label
+    };
+  }
 
   link<T extends LinkModel>(port: PortModel): T {
     let link = this.createLinkModel();

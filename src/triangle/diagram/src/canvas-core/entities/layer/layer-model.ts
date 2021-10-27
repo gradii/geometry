@@ -80,17 +80,17 @@ export abstract class LayerModel<G extends LayerModelGenerics = LayerModelGeneri
   //     this.addModel(modelOb);
   //   });
   // }
-  //
-  // serialize() {
-  //   return {
-  //     ...super.serialize(),
-  //     isSvg      : this.isSvg || this.options.isSvg,
-  //     transformed: this.transformed || this.options.transformed,
-  //     models     : this.models.map((model) => {
-  //       return model.serialize();
-  //     })
-  //   };
-  // }
+
+  serialize() {
+    return {
+      ...super.serialize(),
+      isSvg      : this.isSvg,
+      transformed: this.transformed,
+      models     : this.models.map((model) => {
+        return model.serialize();
+      })
+    };
+  }
 
   isRepaintEnabled() {
     return this.repaintEnabled;

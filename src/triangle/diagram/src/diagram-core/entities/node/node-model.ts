@@ -78,15 +78,15 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
   //     this.addPort(portOb);
   //   });
   // }
-  //
-  // serialize() {
-  //   return {
-  //     ...super.serialize(),
-  //     ports: _.map(this.ports, (port) => {
-  //       return port.serialize();
-  //     })
-  //   };
-  // }
+
+  serialize() {
+    return {
+      ...super.serialize(),
+      ports: _.map(this.ports, (port) => {
+        return port.serialize();
+      })
+    };
+  }
 
   doClone(lookupTable = {}, clone: any) {
     // also clone the ports

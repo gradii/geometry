@@ -6,11 +6,7 @@
 
 import { CanvasModel } from '../entities/canvas/canvas-model';
 import {
-  BaseEntity,
-  BaseEntityEvent,
-  BaseEntityGenerics,
-  BaseEntityListener,
-  BaseEntityOptions
+  BaseEntity, BaseEntityEvent, BaseEntityGenerics, BaseEntityListener, BaseEntityOptions
 } from './base-entity';
 
 export interface BaseModelListener extends BaseEntityListener {
@@ -82,15 +78,15 @@ export class BaseModel<G extends BaseModelGenerics = BaseModelGenerics> extends 
     return [this];
   }
 
-  // serialize() {
-  //   return {
-  //     ...super.serialize(),
-  //     type    : this.type || this.options.type,
-  //     selected: this.selected || this.options.selected,
-  //     extras  : this.extras || this.options.extras
-  //   };
-  // }
-  //
+  serialize() {
+    return {
+      ...super.serialize(),
+      type    : this.type,
+      selected: this.selected,
+      extras  : this.extras,
+    };
+  }
+
   // deserialize(event: DeserializeEvent<this>) {
   //   super.deserialize(event);
   //   this.options.extras   = event.data.extras;

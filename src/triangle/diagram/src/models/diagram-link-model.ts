@@ -9,14 +9,9 @@ import { BaseEntityEvent, } from '../canvas-core/core-models/base-entity';
 import { BaseModelOptions } from '../canvas-core/core-models/base-model';
 import { LabelModel } from '../diagram-core/entities/label/label-model';
 import {
-  LinkModel,
-  LinkModelGenerics,
-  LinkModelListener
+  LinkModel, LinkModelGenerics, LinkModelListener
 } from '../diagram-core/entities/link/link-model';
-import {
-  PortModel,
-  PortModelAlignment
-} from '../diagram-core/entities/port/port-model';
+import { PortModel, PortModelAlignment } from '../diagram-core/entities/port/port-model';
 import { DiagramLabelModel } from './diagram-label-model';
 
 export interface DefaultLinkModelListener extends LinkModelListener {
@@ -66,7 +61,7 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
    * @deprecated
    */
   protected options: LinkModelOptions;
-  private curve: BezierCurve;
+  public curve: BezierCurve;
 
   constructor({
                 type = 'default',
@@ -115,11 +110,13 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
       curve.setTargetControl(targetControlPoint);
 
       if (this.sourcePort) {
-        curve.getSourceControl().add(new Vector2(this.calculateControlOffset(this.getSourcePort())));
+        curve.getSourceControl().add(
+          new Vector2(this.calculateControlOffset(this.getSourcePort())));
       }
 
       if (this.targetPort) {
-        curve.getTargetControl().add(new Vector2(this.calculateControlOffset(this.getTargetPort())));
+        curve.getTargetControl().add(
+          new Vector2(this.calculateControlOffset(this.getTargetPort())));
       }
 
       this.curve = curve;
@@ -179,8 +176,10 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
     this.fireEvent({color}, 'colorChanged');
   }
 
-  reportPosition() {
+  attach() {
     this.calculateBezierCurve();
     console.log(this.curve.getTotalLength());
+    const total = this.curve.getTotalLength();
+    console.log(this.curve.getPointAtLength(total / 2));
   }
 }

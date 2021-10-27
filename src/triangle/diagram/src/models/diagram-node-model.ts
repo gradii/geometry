@@ -51,6 +51,7 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     this.portsOut = [];
     this.portsIn  = [];
 
+    this.type = type;
     this.name  = name;
     this.color = _color;
   }

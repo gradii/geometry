@@ -5,19 +5,13 @@
  */
 
 import * as _ from 'lodash';
+import * as R from 'ramda';
 import { CanvasEngine } from '../../canvas-engine';
 import {
-  BaseEntity,
-  BaseEntityEvent,
-  BaseEntityGenerics,
-  BaseEntityListener,
-  BaseEntityOptions,
+  BaseEntity, BaseEntityEvent, BaseEntityGenerics, BaseEntityListener, BaseEntityOptions,
   DeserializeEvent
 } from '../../core-models/base-entity';
-import {
-  BaseModel,
-  BaseModelListener
-} from '../../core-models/base-model';
+import { BaseModel, BaseModelListener } from '../../core-models/base-model';
 import { LayerModel } from '../layer/layer-model';
 
 export interface DiagramListener extends BaseEntityListener {
@@ -179,19 +173,19 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
   //     this.addLayer(layerOb);
   //   });
   // }
-  //
-  // serialize() {
-  //   return {
-  //     ...super.serialize(),
-  //     offsetX : this.offsetX || this.options.offsetX,
-  //     offsetY : this.offsetY || this.options.offsetY,
-  //     zoom    : this.zoom || this.options.zoom,
-  //     gridSize: this.gridSize || this.options.gridSize,
-  //     layers  : _.map(this.layers, (layer) => {
-  //       return layer.serialize();
-  //     })
-  //   };
-  // }
+
+  serialize() {
+    return {
+      ...super.serialize(),
+      offsetX : this.offsetX,
+      offsetY : this.offsetY,
+      zoom    : this.zoom,
+      gridSize: this.gridSize,
+      layers  : R.map((layer) => {
+        return layer.serialize();
+      }, this.layers)
+    };
+  }
 
   setZoomLevel(zoom: number) {
     this.zoom = zoom;

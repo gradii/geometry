@@ -36,6 +36,7 @@ export class PointModel<G extends PointModelGenerics = PointModelGenerics>
 
   setPosition(x: any, y?: any) {
     super.setPosition(x, y);
+    this.parent.attach();
   }
 
   isConnectedToPort(): boolean {

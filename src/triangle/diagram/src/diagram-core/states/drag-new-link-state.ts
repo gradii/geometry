@@ -112,6 +112,7 @@ export class DragNewLinkState extends AbstractDisplacementState<DiagramEngine> {
     const linkNextY = portPos.y - engineOffsetY + (initialYRelative - portPos.y) + event.virtualDisplacementY;
 
     this.link.getLastPoint().setPosition(linkNextX, linkNextY);
+    this.link.attach();
     this.engine.repaintCanvas();
   }
 }
