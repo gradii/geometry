@@ -6,7 +6,8 @@
 
 import { CanvasModel } from '../entities/canvas/canvas-model';
 import {
-  BaseEntity, BaseEntityEvent, BaseEntityGenerics, BaseEntityListener, BaseEntityOptions
+  BaseEntity, BaseEntityEvent, BaseEntityGenerics, BaseEntityListener, BaseEntityOptions,
+  DeserializeEvent
 } from './base-entity';
 
 export interface BaseModelListener extends BaseEntityListener {
@@ -87,14 +88,13 @@ export class BaseModel<G extends BaseModelGenerics = BaseModelGenerics> extends 
     };
   }
 
-  // deserialize(event: DeserializeEvent<this>) {
-  //   super.deserialize(event);
-  //   this.options.extras   = event.data.extras;
-  //   this.options.selected = event.data.selected;
-  //
-  //   this.extras   = event.data.extras;
-  //   this.selected = event.data.selected;
-  // }
+  deserialize(event: DeserializeEvent<this>) {
+    super.deserialize(event);
+
+    this.type     = event.data.type;
+    this.extras   = event.data.extras;
+    this.selected = event.data.selected;
+  }
 
   getType(): string {
     return this.type;
