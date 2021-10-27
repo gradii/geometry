@@ -6,6 +6,7 @@
 
 import * as _ from 'lodash';
 import { CanvasEngine } from '../../canvas-engine';
+import { DeserializeEvent } from '../../core-models/base-entity';
 // import { DeserializeEvent } from '../../core-models/base-entity';
 import {
   BaseModel,
@@ -61,25 +62,14 @@ export abstract class LayerModel<G extends LayerModelGenerics = LayerModelGeneri
    */
   // abstract getChildModelFactoryBank(engine: G['ENGINE']): FactoryBank<AbstractModelFactory<BaseModel>, FactoryBankListener>;
 
-  // deserialize(event: DeserializeEvent<this>) {
-  //   super.deserialize(event);
-  //   this.isSvg       = !!event.data.isSvg;
-  //   this.transformed = !!event.data.transformed;
-  //
-  //   this.options.isSvg       = !!event.data.isSvg;
-  //   this.options.transformed = !!event.data.transformed;
-  //   _.forEach(event.data.models, (model) => {
-  //     const modelOb = this.getChildModelFactoryBank(event.engine).getFactory(
-  //       model.type).generateModel({
-  //       initialConfig: model
-  //     });
-  //     modelOb.deserialize({
-  //       ...event,
-  //       data: model
-  //     });
-  //     this.addModel(modelOb);
-  //   });
-  // }
+  deserialize(event: DeserializeEvent<this>) {
+    super.deserialize(event);
+    this.isSvg       = !!event.data.isSvg;
+    this.transformed = !!event.data.transformed;
+
+    this.isSvg       = !!event.data.isSvg;
+    this.transformed = !!event.data.transformed;
+  }
 
   serialize() {
     return {

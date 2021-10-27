@@ -5,9 +5,7 @@
  */
 import { DeserializeEvent } from '../canvas-core/core-models/base-entity';
 import {
-  LabelModel,
-  LabelModelGenerics,
-  LabelModelOptions
+  LabelModel, LabelModelGenerics, LabelModelOptions
 } from '../diagram-core/entities/label/label-model';
 
 
@@ -34,6 +32,7 @@ export class DiagramLabelModel extends LabelModel<DefaultLabelModelGenerics> {
               }: DefaultLabelModelOptions = {}) {
     super(rest);
 
+    this.type    = type;
     this.offsetY = offsetY;
   }
 
@@ -41,15 +40,15 @@ export class DiagramLabelModel extends LabelModel<DefaultLabelModelGenerics> {
     this.label = label;
   }
 
-  // deserialize(event: DeserializeEvent<this>) {
-  //   super.deserialize(event);
-  //   this.label = event.data.label;
-  // }
-  //
-  // serialize() {
-  //   return {
-  //     ...super.serialize(),
-  //     label: this.label
-  //   };
-  // }
+  deserialize(event: DeserializeEvent<this>) {
+    super.deserialize(event);
+    this.label = event.data.label;
+  }
+
+  serialize() {
+    return {
+      ...super.serialize(),
+      label: this.label
+    };
+  }
 }

@@ -5,7 +5,8 @@
  */
 
 import { BezierCurve, Vector2 } from '@gradii/vector-math';
-import { BaseEntityEvent, } from '../canvas-core/core-models/base-entity';
+import * as _ from 'lodash';
+import { BaseEntityEvent, DeserializeEvent, } from '../canvas-core/core-models/base-entity';
 import { BaseModelOptions } from '../canvas-core/core-models/base-model';
 import { LabelModel } from '../diagram-core/entities/label/label-model';
 import {
@@ -74,11 +75,12 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
               }: DefaultLinkModelOptions = {}) {
     super(rest);
 
+    this.type = type;
+
     this.width         = width;
     this.color         = color;
     this.selectedColor = selectedColor;
     this.curvyness     = curvyness;
-    this.type          = type;
     this.labelName     = labelName;
   }
 
@@ -133,29 +135,55 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
     throw new Error('runtime exception, currently only support two points in link');
   }
 
-  // serialize() {
-  //   return {
-  //     ...super.serialize(),
-  //     width        : this.options.width,
-  //     color        : this.options.color,
-  //     curvyness    : this.options.curvyness,
-  //     selectedColor: this.options.selectedColor
-  //   };
-  // }
-  //
-  // deserialize(event: DeserializeEvent<this>) {
-  //   super.deserialize(event);
-  //   this.options.color         = event.data.color;
-  //   this.options.width         = event.data.width;
-  //   this.options.curvyness     = event.data.curvyness;
-  //   this.options.selectedColor = event.data.selectedColor;
-  //
-  //
-  //   this.color         = event.data.color;
-  //   this.width         = event.data.width;
-  //   this.curvyness     = event.data.curvyness;
-  //   this.selectedColor = event.data.selectedColor;
-  // }
+  deserialize(event: DeserializeEvent<this>) {
+    super.deserialize(event);
+
+    this.color         = event.data.color;
+    this.width         = event.data.width;
+    this.curvyness     = event.data.curvyness;
+    this.selectedColor = event.data.selectedColor;
+
+    // deserialize labels
+    _.forEach(event.data.labels || [], (label: any) => {
+      let labelOb;
+      if (label.type === 'default') {
+        labelOb = new DiagramLabelModel();
+      } else {
+        throw new Error(`${label.type} not support, only "default" type label available`);
+      }
+      labelOb.deserialize({
+        ...event,
+        data: label
+      });
+      this.addLabel(labelOb);
+    });
+
+    // these happen async, so we use the promises for these (they need to be done like this without the async keyword
+    // because we need the deserailize method to finish for other methods while this happen
+    if (event.data.target) {
+      event.getModel<PortModel>(event.data.targetPort)
+        .then((model: PortModel) => {
+          this.setTargetPort(model);
+        });
+    }
+    if (event.data.source) {
+      event.getModel<PortModel>(event.data.sourcePort)
+        .then((model: PortModel) => {
+          this.setSourcePort(model);
+        });
+    }
+  }
+
+  serialize() {
+    return {
+      ...super.serialize(),
+      color        : this.color,
+      width        : this.width,
+      curvyness    : this.curvyness,
+      selectedColor: this.selectedColor
+    };
+  }
+
 
   addLabel(label: LabelModel | string) {
     if (label instanceof LabelModel) {

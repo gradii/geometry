@@ -48,10 +48,12 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
             color: _color = 'rgb(0,192,255)'
           } = options;
     super(options);
+
+    this.type = type;
+
     this.portsOut = [];
     this.portsIn  = [];
 
-    this.type = type;
     this.name  = name;
     this.color = _color;
   }
@@ -115,12 +117,30 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 
   deserialize(event: DeserializeEvent<this>) {
     super.deserialize(event);
-    this.name  = event.data.name;
-    this.color = event.data.color;
-    this.portsIn       = _.map(event.data.portsInOrder, (id) => {
+
+    // deserialize ports
+    _.forEach(event.data.ports, (port: any) => {
+      let portOb;
+      if (port.type === 'default') {
+        portOb = new DiagramPortModel(port.in);
+      } else {
+        throw new Error('support "default" node port type only');
+      }
+      portOb.deserialize({
+        ...event,
+        data: port
+      });
+      // the links need these
+      event.registerModel(portOb);
+      this.addPort(portOb);
+    });
+
+    this.name     = event.data.name;
+    this.color    = event.data.color;
+    this.portsIn  = _.map(event.data.portsInOrder, (id) => {
       return this.getPortFromID(id);
     }) as DiagramPortModel[];
-    this.portsOut      = _.map(event.data.portsOutOrder, (id) => {
+    this.portsOut = _.map(event.data.portsOutOrder, (id) => {
       return this.getPortFromID(id);
     }) as DiagramPortModel[];
   }

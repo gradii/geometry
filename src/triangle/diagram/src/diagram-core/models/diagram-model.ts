@@ -49,6 +49,19 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
   deserialize(event: DeserializeEvent<this>) {
     this.layers = [];
     super.deserialize(event);
+    _.forEach(event.data.layers, (layer) => {
+      let layerOb;
+      if (layer.type === 'diagram-nodes') {
+        layerOb = new NodeLayerModel();
+      } else if(layer.type === 'diagram-links') {
+        layerOb = new LinkLayerModel();
+      }
+      layerOb.deserialize({
+        ...event,
+        data: layer
+      });
+      this.addLayer(layerOb);
+    });
   }
 
   addLayer(layer: LayerModel): void {

@@ -4,7 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import * as _ from 'lodash';
+import { DeserializeEvent } from '../../../canvas-core/core-models/base-entity';
 import { LayerModel, LayerModelGenerics } from '../../../canvas-core/entities/layer/layer-model';
+import { DiagramLinkModel } from '../../../models/diagram-link-model';
+import { DiagramNodeModel } from '../../../models/diagram-node-model';
 import { DiagramEngine } from '../../diagram-engine';
 import { DiagramModel } from '../../models/diagram-model';
 import { NodeModel } from '../node/node-model';
@@ -23,6 +27,22 @@ export class NodeLayerModel<G extends NodeLayerModelGenerics = NodeLayerModelGen
       isSvg      : false,
       transformed: true
     });
+  }
+
+  deserialize(event: DeserializeEvent<this>) {
+    super.deserialize(event);
+    _.forEach(event.data.models, (model) => {
+      const modelOb = new DiagramNodeModel();
+      modelOb.deserialize({
+        ...event,
+        data: model
+      });
+      this.addModel(modelOb);
+    });
+  }
+
+  serialize(): any {
+    return super.serialize();
   }
 
   getModel(id: string): NodeModel {

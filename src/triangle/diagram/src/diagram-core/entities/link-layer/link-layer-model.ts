@@ -4,10 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  LayerModel,
-  LayerModelGenerics
-} from '../../../canvas-core/entities/layer/layer-model';
+import * as _ from 'lodash';
+import { DeserializeEvent } from '../../../canvas-core/core-models/base-entity';
+import { LayerModel, LayerModelGenerics } from '../../../canvas-core/entities/layer/layer-model';
+import { DiagramLinkModel } from '../../../models/diagram-link-model';
 import { DiagramEngine } from '../../diagram-engine';
 import { DiagramModel } from '../../models/diagram-model';
 import { LinkModel } from '../link/link-model';
@@ -53,6 +53,22 @@ export class LinkLayerModel<G extends LinkLayerModelGenerics = LinkLayerModelGen
 
   getLinks() {
     return this.getModels();
+  }
+
+  deserialize(event: DeserializeEvent<this>) {
+    super.deserialize(event);
+    _.forEach(event.data.models, (model) => {
+      const modelOb = new DiagramLinkModel();
+      modelOb.deserialize({
+        ...event,
+        data: model
+      });
+      this.addModel(modelOb);
+    });
+  }
+
+  serialize(): any {
+    return super.serialize();
   }
 
   // getChildModelFactoryBank(engine: G['ENGINE']) {

@@ -5,6 +5,7 @@
  */
 
 
+import { DeserializeEvent } from '../canvas-core/core-models/base-entity';
 // import { AbstractModelFactory } from '../../canvas-core/core/abstract-model-factory';
 import { LinkModel } from '../diagram-core/entities/link/link-model';
 import {
@@ -27,7 +28,7 @@ export class DiagramPortModel extends PortModel<DefaultPortModelGenerics> {
 
 
   /**
-   * @deprecated
+   * @deprecated remove options use property instead
    */
   protected options: DefaultPortModelOptions;
 
@@ -49,21 +50,23 @@ export class DiagramPortModel extends PortModel<DefaultPortModelGenerics> {
       ...options
     });
 
-    this.label  = options.label;
-    this.in     = options.in;
+    // this.type = type;
+
+    this.label = options.label;
+    this.in    = options.in;
   }
 
-  //
-  // deserialize(event: DeserializeEvent<this>) {
-  //   super.deserialize(event);
-  //   this.options.in = event.data.in;
-  //   this.options.label = event.data.label;
-  // }
+
+  deserialize(event: DeserializeEvent<this>) {
+    super.deserialize(event);
+    this.in    = event.data.in;
+    this.label = event.data.label;
+  }
 
   serialize() {
     return {
       ...super.serialize(),
-      in: this.in,
+      in   : this.in,
       label: this.label
     };
   }

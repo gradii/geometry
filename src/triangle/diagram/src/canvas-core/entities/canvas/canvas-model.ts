@@ -156,23 +156,14 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
     this.deserialize(event);
   }
 
-  // deserialize(event: DeserializeEvent<this>) {
-  //   super.deserialize(event);
-  //   this.options.offsetX  = event.data.offsetX;
-  //   this.options.offsetY  = event.data.offsetY;
-  //   this.options.zoom     = event.data.zoom;
-  //   this.options.gridSize = event.data.gridSize;
-  //   _.forEach(event.data.layers, (layer) => {
-  //     const layerOb = event.engine.getFactoryForLayer(layer.type).generateModel({
-  //       initialConfig: layer
-  //     });
-  //     layerOb.deserialize({
-  //       ...event,
-  //       data: layer
-  //     });
-  //     this.addLayer(layerOb);
-  //   });
-  // }
+  deserialize(event: DeserializeEvent<this>) {
+    super.deserialize(event);
+    this.offsetX  = event.data.offsetX;
+    this.offsetY  = event.data.offsetY;
+    this.zoom     = event.data.zoom;
+    this.gridSize = event.data.gridSize;
+    //layers
+  }
 
   serialize() {
     return {

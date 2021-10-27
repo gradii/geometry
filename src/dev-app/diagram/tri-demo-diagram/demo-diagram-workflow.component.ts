@@ -4,11 +4,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import {
   DiagramComponent, DiagramLinkModel, DiagramModel, DiagramNodeModel
 } from '@gradii/triangle/diagram';
 import { TriDragDrop, TriDragEnter } from '@gradii/triangle/dnd';
+import { take, tap } from 'rxjs/operators';
 
 
 @Component({
@@ -32,6 +33,8 @@ import { TriDragDrop, TriDragEnter } from '@gradii/triangle/dnd';
               <div>
                 <div>
                   <button triButton (click)="onClick()">serialize</button>
+                  <button triButton (click)="onDeserialize()">deserialize</button>
+
                 </div>
                 <tri-tab-group>
                   <tri-tab label="html native dnd">
@@ -116,7 +119,7 @@ export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
     {color: '#85E3FF', name: 'default3', type: 'audit-department'},
   ];
 
-  constructor() {
+  constructor(private ngZone: NgZone) {
   }
 
   sizeChange(size) {
@@ -229,7 +232,7 @@ export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
     const nodeData = this.nodesLibrary.find((nodeLib) => nodeLib.name === type);
     if (nodeData) {
       const node = new DiagramNodeModel({
-        type: nodeData.type,
+        type : nodeData.type,
         name : nodeData.name,
         color: nodeData.color
       });
@@ -277,8 +280,31 @@ export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
     console.log(evt);
   }
 
+  serialized: any;
+
   onClick() {
-    console.log(this.model.serialize())
+    this.serialized = this.model.serialize();
+    console.log(this.serialized);
+  }
+
+  onDeserialize() {
+    var str = JSON.stringify(this.model.serialize());
+
+    //!------------- DESERIALIZING ----------------
+
+    var model2 = new DiagramModel();
+    model2.deserializeModel(JSON.parse(str), this.diagram.engine);
+
+    this.ngZone.onStable.pipe(
+      take(1),
+      tap(() => {
+        console.log(model2.serialize());
+        // model2.offsetX += -20;
+        // model2.zoom *= 0.9;
+
+        this.model = model2;
+      })
+    ).subscribe();
   }
 
   ngAfterViewInit() {

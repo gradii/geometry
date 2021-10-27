@@ -63,21 +63,9 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
     });
   }
 
-  // deserialize(event: DeserializeEvent<this>) {
-  //   super.deserialize(event);
-  //
-  //   // deserialize ports
-  //   _.forEach(event.data.ports, (port: any) => {
-  //     let portOb = (event.engine as DiagramEngine).getFactoryForPort(port.type).generateModel({});
-  //     portOb.deserialize({
-  //       ...event,
-  //       data: port
-  //     });
-  //     // the links need these
-  //     event.registerModel(portOb);
-  //     this.addPort(portOb);
-  //   });
-  // }
+  deserialize(event: DeserializeEvent<this>) {
+    super.deserialize(event);
+  }
 
   serialize() {
     return {
