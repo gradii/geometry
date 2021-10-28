@@ -5,12 +5,7 @@
  */
 
 import {
-  animate,
-  AnimationTriggerMetadata,
-  state,
-  style,
-  transition,
-  trigger,
+  animate, AnimationTriggerMetadata, state, style, transition, trigger,
 } from '@angular/animations';
 
 /**

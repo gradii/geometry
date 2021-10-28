@@ -3,9 +3,6 @@ load(
     "ng_module",
     "sass_binary",
     "sass_library",
-    #  "ng_test_library",
-    #  "ng_web_test_suite",
-    #  "markdown_to_html"
 )
 
 package(default_visibility = ["//visibility:public"])
@@ -14,18 +11,16 @@ ng_module(
     name = "drawer",
     srcs = glob(
         ["**/*.ts"],
-        exclude = ["**/*.spec.ts"],
+        exclude = ["**/*.spec.ts", "testing/**/*.ts"],
     ),
     assets = [":style/drawer.css"] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/drawer",
     deps = [
-        "//src/triangle/button",
         "//src/triangle/core",
         "//src/triangle/i18n",
-        "//src/triangle/menu",
+        "//src/triangle/icon",
         "//src/triangle/util",
         "@npm//@angular/animations",
-        "@npm//@angular/cdk",
         "@npm//@angular/common",
         "@npm//@angular/core",
         "@npm//@angular/forms",
@@ -36,7 +31,9 @@ ng_module(
 sass_library(
     name = "drawer_scss_lib",
     srcs = glob(["**/_*.scss"]),
-    deps = ["//src/triangle/core:core_scss_lib"],
+    deps = [
+      "//src/triangle/core:core_scss_lib",
+    ],
 )
 
 sass_binary(

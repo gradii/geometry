@@ -19,8 +19,10 @@ import {
   QueryList,
   ViewEncapsulation,
 } from '@angular/core';
-import { TRI_DRAWER_CONTAINER, TriDrawer, TriDrawerContainer, TriDrawerContent } from './drawer';
-import { triDrawerAnimations } from './drawer-animations';
+import {
+  TriDrawer, triDrawerAnimations, TriDrawerContainer, TriDrawerContent
+} from '@gradii/triangle/drawer';
+import { TRI_DRAWER_CONTAINER } from '../../drawer/src/drawer';
 
 
 @Component({
@@ -49,7 +51,7 @@ export class TriSidenavContent extends TriDrawerContent {
 @Component({
   selector       : 'tri-sidenav',
   exportAs       : 'triSidenav',
-  templateUrl    : 'drawer.html',
+  templateUrl    : 'sidenav.html',
   animations     : [triDrawerAnimations.transformDrawer],
   host           : {
     'class'                    : 'tri-drawer tri-sidenav',

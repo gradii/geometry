@@ -139,7 +139,7 @@ export class DatabaseManager implements ConnectionResolverInterface {
   }
 
   /*Get a database connection instance.*/
-  public connection(name?: string) {
+  public connection(name: string= 'default') {
     const [database, type] = this.parseConnectionName(name);
     name                   = name || database;
     if (!(this.connections[name] !== undefined)) {

@@ -5,7 +5,16 @@
     "module": "commonjs",
     "types": ["node"],
     "emitDecoratorMetadata": true,
-    "target": "es2015"
+    "noImplicitAny": false,
+    "target": "es2015",
+    "paths": {
+      "@gradii/annotation": ["src/annotation/public-api.ts"],
+      "@gradii/check-type": ["src/check-type/public-api.ts"],
+      "@gradii/diagram/*": ["src/diagram/*/public-api.ts"],
+      "@gradii/injection": ["src/injection/public-api.ts"],
+      "@gradii/fedaco": ["src/fedaco/public-api.ts"],
+      "@gradii/vector-math": ["src/vector-math/public-api.ts"]
+    }
   },
   "exclude": ["**/*.spec.ts"],
   "include": ["**/*.ts"]

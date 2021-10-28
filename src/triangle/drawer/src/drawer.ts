@@ -495,7 +495,7 @@ export class TriDrawer implements AfterContentInit, AfterContentChecked, OnDestr
   selector       : 'tri-drawer-container',
   exportAs       : 'triDrawerContainer',
   templateUrl    : 'drawer-container.html',
-  styleUrls      : ['../style/sidenav.css'],
+  styleUrls      : ['../style/drawer.css'],
   host           : {
     'class'                                         : 'tri-drawer-container',
     '[class.tri-drawer-container-explicit-backdrop]': '_backdropOverride',

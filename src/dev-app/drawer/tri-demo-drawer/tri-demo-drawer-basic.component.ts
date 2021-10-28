@@ -9,7 +9,6 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import { DrawerService } from '@gradii/triangle/drawer';
 
 @Component({
   selector: 'tri-demo-drawer-basic',
@@ -31,15 +30,15 @@ export class TriDemoDrawerBasicComponent {
   @ViewChild('tem', {read: TemplateRef})
   tem: TemplateRef<any>;
 
-  constructor(private drawerService: DrawerService) {
+  constructor() {
   }
 
   onOpenDrawer() {
-    const ins = this.drawerService.create({
-      content: this.tem
-    });
-    setTimeout(() => {
-      ins.open();
-    });
+    // const ins = this.drawerService.create({
+    //   content: this.tem
+    // });
+    // setTimeout(() => {
+    //   ins.open();
+    // });
   }
 }

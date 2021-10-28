@@ -9,7 +9,7 @@ import { CdkScrollableModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TriCommonModule } from '@gradii/triangle/core';
-import { TriSidenav, TriSidenavContainer, TriSidenavContent } from './sidenav';
+import { TriDrawer, TriDrawerContainer, TriDrawerContent } from './drawer';
 
 
 @NgModule({
@@ -22,15 +22,15 @@ import { TriSidenav, TriSidenavContainer, TriSidenavContent } from './sidenav';
   exports     : [
     CdkScrollableModule,
     TriCommonModule,
-    TriSidenav,
-    TriSidenavContainer,
-    TriSidenavContent,
+    TriDrawer,
+    TriDrawerContainer,
+    TriDrawerContent,
   ],
   declarations: [
-    TriSidenav,
-    TriSidenavContainer,
-    TriSidenavContent,
+    TriDrawer,
+    TriDrawerContainer,
+    TriDrawerContent,
   ],
 })
-export class TriSidenavModule {
+export class TriDrawerModule {
 }

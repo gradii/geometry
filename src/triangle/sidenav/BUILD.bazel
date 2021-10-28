@@ -16,6 +16,7 @@ ng_module(
     assets = [":style/sidenav.css"] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/sidenav",
     deps = [
+        "//src/triangle/drawer",
         "//src/triangle/core",
         "//src/triangle/i18n",
         "//src/triangle/icon",

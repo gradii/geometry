@@ -4,8 +4,15 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-export * from './src/drawer.component';
-export * from './src/drawer.module';
-export * from './src/drawer.service';
-export * from './src/drawer-options';
-export * from './src/drawer-ref';
+export * from './src/drawer-module';
+export {
+  throwMatDuplicatedDrawerError,
+  TriDrawerToggleResult,
+  TRI_DRAWER_DEFAULT_AUTOSIZE,
+  TRI_DRAWER_DEFAULT_AUTOSIZE_FACTORY,
+  TriDrawerContent,
+  TriDrawer,
+  TriDrawerContainer,
+  TriDrawerMode,
+} from './src/drawer';
+export * from './src/drawer-animations';
