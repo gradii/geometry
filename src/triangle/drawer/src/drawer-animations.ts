@@ -10,7 +10,6 @@ import {
 
 /**
  * Animations used by the Material drawers.
- * @docs-private
  */
 export const triDrawerAnimations: {
   readonly transformDrawer: AnimationTriggerMetadata;
