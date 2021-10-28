@@ -159,13 +159,10 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "tsConfig": [
-              "apps/triangle-api/tsconfig.app.json",
-              "apps/triangle-api/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!apps/triangle-api/**/*"]
+            "lintFilePatterns": ["apps/triangle-api/**/*.ts"]
           }
         },
         "test": {
@@ -229,10 +226,10 @@
     },
     "@nrwl/nest": {
       "application": {
-        "linter": "tslint"
+        "linter": "eslint"
       },
       "library": {
-        "linter": "tslint"
+        "linter": "eslint"
       }
     },
     "@nrwl/express": {
