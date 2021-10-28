@@ -1,9 +1,14 @@
 {
   "npmScope": "applications",
-  "affected": { "defaultBase": "master" },
+  "affected": {
+    "defaultBase": "master"
+  },
   "implicitDependencies": {
     "angular.json": "*",
-    "package.json": { "dependencies": "*", "devDependencies": "*" },
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
     "tsconfig.base.json": "*",
     "tslint.json": "*",
     ".eslintrc.json": "*",
@@ -24,11 +29,26 @@
     }
   },
   "projects": {
-    "dev-app": { "tags": [] },
-    "annotation": { "tags": ["pkg"] },
-    "check-type": { "tags": ["pkg"] },
-    "date-math": { "tags": ["pkg"] },
-    "vector-math": { "tags": ["pkg"] },
-    "fedaco": { "tags": ["pkg"] }
+    "annotation": {
+      "tags": ["pkg"]
+    },
+    "check-type": {
+      "tags": ["pkg"]
+    },
+    "date-math": {
+      "tags": ["pkg"]
+    },
+    "dev-app": {
+      "tags": []
+    },
+    "fedaco": {
+      "tags": ["pkg"]
+    },
+    "triangle-api": {
+      "tags": []
+    },
+    "vector-math": {
+      "tags": ["pkg"]
+    }
   }
 }

@@ -1,29 +1,6 @@
 {
   "version": 1,
   "projects": {
-    "dev-app": {
-      "projectType": "library",
-      "root": "src/dev-app",
-      "sourceRoot": "src/dev-app",
-      "prefix": "",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["src/dev-app/tsconfig.json"],
-            "exclude": ["**/node_modules/**", "!src/dev-app/**/*"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/src/dev-app"],
-          "options": {
-            "jestConfig": "src/dev-app/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "annotation": {
       "projectType": "library",
       "root": "src/annotation",
@@ -99,26 +76,24 @@
         }
       }
     },
-    "vector-math": {
+    "dev-app": {
       "projectType": "library",
-      "root": "src/vector-math",
-      "sourceRoot": "src/vector-math/src",
-      "prefix": "applications",
+      "root": "src/dev-app",
+      "sourceRoot": "src/dev-app",
+      "prefix": "",
       "architect": {
         "lint": {
-          "builder": "@nrwl/linter:eslint",
+          "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "lintFilePatterns": [
-              "src/vector-math/src/**/*.ts",
-              "src/vector-math/src/**/*.html"
-            ]
+            "tsConfig": ["src/dev-app/tsconfig.json"],
+            "exclude": ["**/node_modules/**", "!src/dev-app/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/src/vector-math"],
+          "outputs": ["coverage/src/dev-app"],
           "options": {
-            "jestConfig": "src/vector-math/jest.config.js",
+            "jestConfig": "src/dev-app/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -144,6 +119,85 @@
           "outputs": ["coverage/src/fedaco"],
           "options": {
             "jestConfig": "src/fedaco/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "triangle-api": {
+      "root": "apps/triangle-api",
+      "sourceRoot": "apps/triangle-api/src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/triangle-api",
+            "main": "apps/triangle-api/src/main.ts",
+            "tsConfig": "apps/triangle-api/tsconfig.app.json",
+            "assets": ["apps/triangle-api/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/triangle-api/src/environments/environment.ts",
+                  "with": "apps/triangle-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "triangle-api:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/triangle-api/tsconfig.app.json",
+              "apps/triangle-api/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/triangle-api/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/triangle-api"],
+          "options": {
+            "jestConfig": "apps/triangle-api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "vector-math": {
+      "projectType": "library",
+      "root": "src/vector-math",
+      "sourceRoot": "src/vector-math/src",
+      "prefix": "applications",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "src/vector-math/src/**/*.ts",
+              "src/vector-math/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/src/vector-math"],
+          "options": {
+            "jestConfig": "src/vector-math/jest.config.js",
             "passWithNoTests": true
           }
         }
