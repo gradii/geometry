@@ -45,3 +45,4 @@ testem.log
 /.bazelrc.user
 __ngcc_entry_points__.json
 /.theia
+.env

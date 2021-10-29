@@ -18,7 +18,7 @@ export class AppModule implements OnModuleInit{
       'host': 'aliyun-sh.gradii.com',
       'port': 8979,
       'username': process.env.DB_USER_NAME || 'dev',
-      'password': process.env.DB_PASSWORD || 'dev#7895123'
+      'password': process.env.DB_PASSWORD || 'dev'
     });
     db.bootFedaco();
     db.setAsGlobal();

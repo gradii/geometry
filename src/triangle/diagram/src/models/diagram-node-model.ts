@@ -87,10 +87,10 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     return port;
   }
 
-  addInPort(label: string, after = true): DiagramPortModel {
+  addInPort(name: string, label: string = name, after = true): DiagramPortModel {
     const p = new DiagramPortModel({
       in       : true,
-      name     : label,
+      name     : name,
       label    : label,
       alignment: PortModelAlignment.LEFT,
       anchor   : PortModelAnchor.leftCenter,
@@ -101,10 +101,10 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     return this.addPort(p);
   }
 
-  addOutPort(label: string, after = true): DiagramPortModel {
+  addOutPort(name: string, label: string = name, after = true): DiagramPortModel {
     const p = new DiagramPortModel({
       in       : false,
-      name     : label,
+      name     : name,
       label    : label,
       alignment: PortModelAlignment.RIGHT,
       anchor   : PortModelAnchor.rightCenter,

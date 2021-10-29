@@ -136,7 +136,11 @@
             "outputPath": "dist/apps/triangle-api",
             "main": "apps/triangle-api/src/main.ts",
             "tsConfig": "apps/triangle-api/tsconfig.app.json",
-            "assets": ["apps/triangle-api/src/assets"]
+            "assets": [
+              "apps/triangle-api/src/assets",
+              "apps/triangle-api/src/.env.sample",
+              "apps/triangle-api/src/package.json"
+            ]
           },
           "configurations": {
             "production": {

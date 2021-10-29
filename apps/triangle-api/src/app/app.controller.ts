@@ -12,7 +12,7 @@ export class AppController {
     return this.appService.getData();
   }
 
-  @Get()
+  @Get('/list')
   getList(): any[] {
     return [];
   }

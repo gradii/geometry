@@ -3,6 +3,10 @@
  * This is only a minimal backend to get started.
  */
 
+import { config } from 'dotenv';
+
+config();
+
 import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 
@@ -21,3 +25,4 @@ async function bootstrap() {
 }
 
 bootstrap();
+
