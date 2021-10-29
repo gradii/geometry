@@ -10,6 +10,12 @@ import {
   DeserializeEvent
 } from './base-entity';
 
+export interface BaseModelEvent<T extends BaseEntity = BaseEntity> extends BaseEntityEvent<T> {
+  modelFiring: boolean,
+  stopModelPropagation: () => void
+}
+
+
 export interface BaseModelListener extends BaseEntityListener {
   selectionChanged?: (event: BaseEntityEvent<BaseModel> & { isSelected: boolean }) => void;
 
@@ -136,5 +142,23 @@ export class BaseModel<G extends BaseModelGenerics = BaseModelGenerics> extends 
 
   remove() {
     this.fireEvent({}, 'entityRemoved');
+  }
+
+  fireEvent<L extends Partial<BaseEntityEvent> & object>(event: L, k: keyof G['LISTENER']) {
+    const firedEvent = {
+      modelFiring         : true,
+      stopModelPropagation: () => {
+        firedEvent.modelFiring = false;
+      },
+      entity              : this,
+      ...event
+    } as BaseModelEvent;
+    super.fireEvent(
+      firedEvent,
+      k
+    );
+    if (this.parent && firedEvent.modelFiring) {
+      this.parent.fireEvent(firedEvent, k as string);
+    }
   }
 }

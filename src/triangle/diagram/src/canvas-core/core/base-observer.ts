@@ -8,8 +8,8 @@ import { Directive } from '@angular/core';
 import { Toolkit } from '../toolkit';
 
 export interface BaseEvent {
-  firing: boolean;
-  stopPropagation: () => any;
+  firing?: boolean;
+  stopPropagation?: () => any;
 }
 
 export interface BaseEventProxy extends BaseEvent {

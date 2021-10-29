@@ -75,6 +75,7 @@ import { take, tap } from 'rxjs/operators';
               >
                 <div class="container" style="width: 800px; height: 400px">
                   <tri-diagram [engineModel]="model"
+                               (selection)="onSelectionChanged($event)"
                                (drop)="onBlockDropped($event)"
                                (dragover)="$event.preventDefault()"
                   ></tri-diagram>
@@ -305,6 +306,10 @@ export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
         this.model = model2;
       })
     ).subscribe();
+  }
+
+  onSelectionChanged(event: any) {
+    console.log(event);
   }
 
   ngAfterViewInit() {

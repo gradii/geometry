@@ -36,6 +36,11 @@ export class MoveItemsState<E extends CanvasEngine = CanvasEngine> extends Abstr
             this.engine.getModel().clearSelection();
           }
           element.setSelected(true);
+
+          this.engine.fireEvent({
+            selection: [element]
+          }, 'selection');
+
           this.engine.repaintCanvas();
         }
       })

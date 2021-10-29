@@ -15,6 +15,7 @@ import {
 } from '../../canvas-core/entities/canvas/canvas-model';
 import { LayerModel } from '../../canvas-core/entities/layer/layer-model';
 import { DefaultNodeModelOptions, DiagramNodeModel } from '../../models/diagram-node-model';
+import { DiagramEngine } from '../diagram-engine';
 import { LinkLayerModel } from '../entities/link-layer/link-layer-model';
 import { LinkModel } from '../entities/link/link-model';
 import { NodeLayerModel } from '../entities/node-layer/node-layer-model';
@@ -35,6 +36,8 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
   protected activeLinkLayer: LinkLayerModel;
 
   protected options: DiagramModelOptions;
+
+  engine: DiagramEngine;
 
   constructor(options = {}) {
     super(options);

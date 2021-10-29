@@ -116,6 +116,7 @@ export class CanvasEngine<L extends CanvasEngineListener = CanvasEngineListener,
   // }
 
   setModel(model: M) {
+    model.engine = this;
     this.model = model;
     if (this.canvas) {
       requestAnimationFrame(() => {

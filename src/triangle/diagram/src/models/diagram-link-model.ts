@@ -206,8 +206,6 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
 
   attach() {
     this.calculateBezierCurve();
-    console.log(this.curve.getTotalLength());
     const total = this.curve.getTotalLength();
-    console.log(this.curve.getPointAtLength(total / 2));
   }
 }

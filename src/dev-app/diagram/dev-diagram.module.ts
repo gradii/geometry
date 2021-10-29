@@ -14,6 +14,7 @@ import { TriSplitterModule } from '@gradii/triangle/splitter';
 import { TriTabsModule } from '@gradii/triangle/tabs';
 import { DevDiagramComponent } from './dev-diagram.component';
 import { DemoDiagramDragAndDropComponent } from './tri-demo-diagram/demo-diagram-drag-and-drop.component';
+import { DemoDiagramSettingsComponent } from './tri-demo-diagram/demo-diagram-settings.component';
 import { DemoDiagramSimpleComponent } from './tri-demo-diagram/demo-diagram-simple.component';
 import { DemoDiagramWorkflowComponent } from './tri-demo-diagram/demo-diagram-workflow.component';
 
@@ -41,6 +42,10 @@ import { DemoDiagramWorkflowComponent } from './tri-demo-diagram/demo-diagram-wo
           {
             path     : 'tri-demo-diagram-workflow-component',
             component: DemoDiagramWorkflowComponent
+          },
+          {
+            path     : 'tri-demo-diagram-settings-component',
+            component: DemoDiagramSettingsComponent
           }
         ]
       }
@@ -53,7 +58,8 @@ import { DemoDiagramWorkflowComponent } from './tri-demo-diagram/demo-diagram-wo
 
     DemoDiagramSimpleComponent,
     DemoDiagramWorkflowComponent,
-    DemoDiagramDragAndDropComponent
+    DemoDiagramDragAndDropComponent,
+    DemoDiagramSettingsComponent
   ]
 })
 export class DevDiagramModule {

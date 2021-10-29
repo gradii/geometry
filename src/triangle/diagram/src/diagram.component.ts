@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, Inject, Input, Optional } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Optional, Output } from '@angular/core';
 import { State } from './canvas-core/core-state/state';
 import { ENGINE, ENGINE_OPTIONS } from './canvas-core/tokens';
 import { DiagramEngine } from './diagram-core/diagram-engine';
@@ -86,6 +86,15 @@ export class DiagramComponent {
   // @ContentChild('selection-box')
   // selectionBox
 
+  @Output()
+  entityRemoved: EventEmitter<any> = new EventEmitter();
+
+  @Output()
+  positionChanged: EventEmitter<any> = new EventEmitter();
+
+  @Output()
+  selection: EventEmitter<any> = new EventEmitter();
+
   constructor(
     @Inject(ENGINE) public engine: DiagramEngine,
     @Optional() @Inject(DIAGRAM_STATES) private states: State[] = []
@@ -93,6 +102,23 @@ export class DiagramComponent {
     states.forEach(state => {
       engine.getStateMachine().pushState(state);
     });
+
+    this.bindEngine();
+  }
+
+  bindEngine() {
+    this.engine.registerListener({
+        entityRemoved   : (value) => {
+          this.entityRemoved.emit(value.entity);
+        },
+        positionChanged : (value) => {
+          this.positionChanged.emit(value.entity);
+        },
+        selection: (value) => {
+          this.selection.emit(value.selection);
+        },
+      }
+    );
   }
 
 

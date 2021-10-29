@@ -5,6 +5,7 @@
  */
 
 import { Rectangle } from '@gradii/vector-math';
+import { BaseModel } from '../core-models/base-model';
 import {
   AbstractDisplacementState, AbstractDisplacementStateEvent
 } from '../core-state/abstract-displacement-state';
@@ -15,6 +16,8 @@ import { SelectionLayerModel } from '../entities/selection/selection-layer-model
 export class SelectionBoxState extends AbstractDisplacementState {
   layer: SelectionLayerModel;
 
+  boxSelection: Set<BaseModel> = new Set();
+
   constructor() {
     super({
       name: 'selection-box'
@@ -23,12 +26,21 @@ export class SelectionBoxState extends AbstractDisplacementState {
 
   activated(previous: State) {
     super.activated(previous);
+    this.boxSelection.clear()
+
     this.layer = new SelectionLayerModel();
     this.engine.getModel().addLayer(this.layer);
   }
 
   deactivated(next: State) {
     super.deactivated(next);
+
+    this.engine.fireEvent({
+      selection: Array.from(this.boxSelection),
+    }, 'selection');
+
+    this.boxSelection.clear()
+
     this.layer.remove();
     this.engine.repaintCanvas();
   }
@@ -69,8 +81,10 @@ export class SelectionBoxState extends AbstractDisplacementState {
         if (rect.containsPoint(bounds.getTopLeft()) && rect.containsPoint(
           bounds.getBottomRight())) {
           model.setSelected(true);
+          this.boxSelection.add(model);
         } else {
           model.setSelected(false);
+          this.boxSelection.delete(model);
         }
       }
     }

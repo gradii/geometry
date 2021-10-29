@@ -34,10 +34,15 @@ export class DragCanvasState extends AbstractDisplacementState {
     super.activated(prev);
     this.engine.getModel().clearSelection();
 
+    this.engine.fireEvent({
+      selection: []
+    }, 'selection');
+
     // we can block layer rendering because we are only targeting the transforms
     for (let layer of this.engine.getModel().getLayers()) {
       layer.allowRepaint(false);
     }
+    this.engine.repaintCanvas();
 
     this.initialCanvasX = this.engine.getModel().getOffsetX();
     this.initialCanvasY = this.engine.getModel().getOffsetY();

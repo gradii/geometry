@@ -46,6 +46,8 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 
   // endregion
 
+  engine: CanvasEngine;
+
   constructor({
                 zoom = 100,
                 offsetX = 0,
@@ -60,6 +62,10 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
     this.offsetY  = offsetY;
     this.zoom     = zoom;
     this.gridSize = gridSize;
+  }
+
+  attachEngine(engine: CanvasEngine) {
+    this.engine = engine;
   }
 
   getSelectionEntities(): BaseModel[] {
@@ -213,5 +219,15 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 
   getZoomLevel() {
     return this.zoom;
+  }
+
+  fireEvent<L extends Partial<BaseEntityEvent> & object>(event: L, k: keyof G['LISTENER']) {
+    super.fireEvent(
+      event,
+      k
+    );
+    if (this.engine) {
+      this.engine.fireEvent(event, k as string);
+    }
   }
 }

@@ -19,7 +19,7 @@ export interface BaseEntityEvent<T extends BaseEntity = BaseEntity> extends Base
 }
 
 export interface BaseEntityListener<T extends BaseEntity = BaseEntity> extends BaseListener {
-  lockChanged(event: BaseEntityEvent<T> & { locked: boolean }): void;
+  lockChanged?: (event: BaseEntityEvent<T> & { locked: boolean }) => void;
 }
 
 export type BaseEntityType = 'node' | 'link' | 'port' | 'point';

@@ -24,7 +24,7 @@ import { SelectionLayerModel } from './selection-layer-model';
       .selection-box-widget {
         position         : absolute;
         background-color : rgba(0, 192, 255, 0.2);
-        border           : solid 2px rgb(0, 192, 255);
+        border           : dashed 2px rgb(0, 192, 255);
       }
     `
   ]
