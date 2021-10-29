@@ -6,7 +6,7 @@
 
 import { Overlay, ScrollStrategy, } from '@angular/cdk/overlay';
 import { InjectionToken } from '@angular/core';
-import { TriDialogConfig } from './dialog-config';
+import { TriDialogConfig } from './dialog.types';
 
 /** Injection token that can be used to access the data that was passed in to a dialog. */
 export const TRI_DIALOG_DATA = new InjectionToken<any>('DialogData');

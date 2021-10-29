@@ -22,7 +22,7 @@ import { distinctUntilChanged, filter, map, mapTo, take, takeUntil, } from 'rxjs
 import { TRI_DRAWER_CONTAINER } from './common';
 import { triDrawerAnimations } from './drawer-animations';
 import { TriDrawerContainer } from './drawer-container';
-import { AutoFocusTarget, TriDrawerMode, TriDrawerToggleResult } from './interface';
+import { AutoFocusTarget, TriDrawerMode, TriDrawerToggleResult } from './drawer.types';
 
 /**
  * This component corresponds to a drawer that can be opened on the drawer container.
@@ -50,6 +50,7 @@ export class TriDrawer implements AfterContentInit, AfterContentChecked, OnDestr
   static ngAcceptInputType_disableClose: BooleanInput;
   static ngAcceptInputType_autoFocus: AutoFocusTarget | string | BooleanInput;
   static ngAcceptInputType_opened: BooleanInput;
+
   /** Emits whenever the drawer has started animating. */
   readonly _animationStarted                                       = new Subject<AnimationEvent>();
   /** Emits whenever the drawer is done animating. */

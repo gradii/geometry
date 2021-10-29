@@ -9,7 +9,9 @@ import { CdkScrollableModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TriCommonModule } from '@gradii/triangle/core';
-import { TriDrawer, TriDrawerContainer, TriDrawerContent } from './drawer';
+import { TriDrawer, } from './drawer';
+import { TriDrawerContainer } from './drawer-container';
+import { TriDrawerContent } from './drawer-content';
 
 
 @NgModule({

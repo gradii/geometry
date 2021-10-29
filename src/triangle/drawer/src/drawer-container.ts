@@ -26,7 +26,7 @@ import { TriDrawerContent } from './drawer-content';
   selector       : 'tri-drawer-container',
   exportAs       : 'triDrawerContainer',
   templateUrl    : 'drawer-container.html',
-  styleUrls      : ['drawer.css'],
+  styleUrls      : ['../style/drawer.css'],
   host           : {
     'class'                                         : 'tri-drawer-container',
     '[class.tri-drawer-container-explicit-backdrop]': '_backdropOverride',

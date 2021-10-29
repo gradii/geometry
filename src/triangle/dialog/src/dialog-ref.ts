@@ -9,7 +9,7 @@ import { GlobalPositionStrategy, OverlayRef, OverlaySizeConfig } from '@angular/
 import { Location } from '@angular/common';
 import { Observable, Subject } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
-import { DialogPosition } from './dialog-config';
+import { DialogPosition } from './dialog.types';
 import { TriDialogContainer } from './dialog-container';
 
 

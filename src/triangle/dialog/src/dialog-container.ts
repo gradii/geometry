@@ -27,7 +27,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { triDialogAnimations } from './dialog-animations';
-import { TriDialogConfig } from './dialog-config';
+import { TriDialogConfig } from './dialog.types';
 
 
 /**

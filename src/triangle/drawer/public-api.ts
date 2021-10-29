@@ -5,14 +5,13 @@
  */
 
 export * from './src/drawer-module';
+export { TriDrawer } from './src/drawer';
 export {
-  throwMatDuplicatedDrawerError,
-  TriDrawerToggleResult,
+  throwDuplicatedDrawerError,
   TRI_DRAWER_DEFAULT_AUTOSIZE,
   TRI_DRAWER_DEFAULT_AUTOSIZE_FACTORY,
-  TriDrawerContent,
-  TriDrawer,
-  TriDrawerContainer,
-  TriDrawerMode,
-} from './src/drawer';
+} from './src/common';
+export { TriDrawerContent } from './src/drawer-content';
+export { TriDrawerContainer } from './src/drawer-container';
+export { TriDrawerMode, TriDrawerToggleResult } from './src/drawer.types';
 export * from './src/drawer-animations';

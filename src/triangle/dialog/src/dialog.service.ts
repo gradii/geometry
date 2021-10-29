@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { defer, Observable, of as observableOf, Subject } from 'rxjs';
 import { startWith } from 'rxjs/operators';
-import { TriDialogConfig } from './dialog-config';
+import { TriDialogConfig } from './dialog.types';
 import { TriDialogContainer } from './dialog-container';
 import {
   TRI_DIALOG_DATA, TRI_DIALOG_DEFAULT_OPTIONS, TRI_DIALOG_SCROLL_STRATEGY

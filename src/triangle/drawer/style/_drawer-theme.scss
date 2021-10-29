@@ -1,16 +1,17 @@
 @use "sass:color";
 @use "sass:map";
 @use "sass:meta";
+@use "../../core/themes/theme";
 @use "../../core/style/legend/elevation";
 @use "../../core/style/theming";
+@use "../../core/style/mixins";
 
-
-@mixin tri-sidenav-theme($theme) {
-  $primary                           : map.get($theme, primary);
-  $accent                            : map.get($theme, accent);
-  $warn                              : map.get($theme, warn);
-  $background                        : map.get($theme, background);
-  $foreground                        : map.get($theme, foreground);
+@mixin tri-drawer-theme() {
+  $primary                           : theme.$primary;
+  $accent                            : theme.$secondary;
+  $warn                              : theme.$warning;
+  $background                        : theme.$background;
+  $foreground                        : theme.$foreground;
 
   $drawer-background-color           : theming.tri-color($background, dialog);
   $drawer-container-background-color : theming.tri-color($background, background);
@@ -33,7 +34,7 @@
     &:not(.tri-drawer-side) {
       // The elevation of z-16 is noted in the design specifications.
       // See https://material.io/design/components/navigation-drawer.html
-      @include _tri-theme-elevation(16, $theme);
+      @include mixins.tri-theme-elevation(16);
     }
   }
 
@@ -74,4 +75,4 @@
   }
 }
 
-@mixin tri-sidenav-typography($config) { }
+@mixin tri-drawer-typography($config) { }

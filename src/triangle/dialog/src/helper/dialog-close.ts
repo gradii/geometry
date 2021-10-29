@@ -13,7 +13,7 @@ import {
   Optional,
   SimpleChanges
 } from '@angular/core';
-import { TriDialogService } from '../dialog';
+import { TriDialogService } from '../dialog.service';
 import { TriDialogRef } from '../dialog-ref';
 import { getClosestDialog } from './helper';
 
