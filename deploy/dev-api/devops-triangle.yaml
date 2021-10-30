@@ -23,6 +23,10 @@ spec:
         tier: backend
     spec:
       volumes:
+        - name: env-$APP_NAME-$BRANCH_NAME-$BUILD_NUMBER
+          secret:
+            secretName: $APP_NAME-$BRANCH_NAME-env
+            defaultMode: 420
         - name: volume-data-$APP_NAME-$BRANCH_NAME-$BUILD_NUMBER
           persistentVolumeClaim:
             claimName: $APP_NAME
@@ -34,6 +38,10 @@ spec:
               containerPort: 80
               protocol: TCP
           volumeMounts:
+            - name: env-$APP_NAME-$BRANCH_NAME-$BUILD_NUMBER
+              readOnly: true
+              mountPath: /var/www/.env
+              subPath: .env
             - name: volume-data-$APP_NAME-$BRANCH_NAME-$BUILD_NUMBER
               readOnly: false
               mountPath: /data
