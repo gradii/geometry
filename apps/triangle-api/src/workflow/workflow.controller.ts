@@ -52,10 +52,4 @@ export class WorkflowController {
     });
   }
 
-  @Get('/member-list')
-  async getMemberList(): Promise<any[]> {
-    const list = await MemberModel.useConnection('ucenter').select().get();
-    return list.map(it => it.toArray());
-  }
-
 }
