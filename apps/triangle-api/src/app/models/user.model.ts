@@ -6,11 +6,11 @@ import {
 import { WorkflowModel } from './workflow.model';
 
 @Table({
-  tableName: 'member',
+  tableName: 'user',
   hidden: ['password', 'created_at', 'updated_at', 'deleted_at'],
   connection: 'ucenter'
 })
-export class MemberModel extends mixinSoftDeletes(Model) {
+export class UserModel extends mixinSoftDeletes(Model) {
   // _table = 'workflows';
 
   @PrimaryGeneratedColumn()

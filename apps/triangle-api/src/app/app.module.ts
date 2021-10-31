@@ -5,7 +5,7 @@ import { WorkflowModule } from '../workflow/workflow.module';
 
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { MemberModel } from './models/member.model';
+import { UserModel } from './models/user.model';
 
 @Module({
   imports: [

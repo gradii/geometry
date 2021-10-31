@@ -9,6 +9,7 @@ import { isBlank } from '@gradii/check-type';
 import { findLast, tap } from 'ramda';
 import { MorphToColumn } from '../../annotation/relation-column/morph-to.relation-column';
 import { Collection } from '../../define/collection';
+import { camelCase } from '../../helper/str';
 import { resolveForwardRef } from '../../query-builder/forward-ref';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
@@ -158,7 +159,8 @@ export class MorphTo extends BelongsTo {
       return morphMap[key];
     }
     // todo fixme this morphType can be custom defined in annotation
-    const metas = reflector.propMetadata(this._child.constructor)[this._morphType.replace(/_type$/, '')];
+    const propertyKey =  camelCase(this._morphType.replace(/_type$/, ''));
+    const metas = reflector.propMetadata(this._child.constructor)[propertyKey];
     if (metas) {
       const meta         = findLast(it => MorphToColumn.isTypeOf(it), metas);
       const morphTypeMap = meta['morphTypeMap'];

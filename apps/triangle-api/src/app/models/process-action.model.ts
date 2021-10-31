@@ -1,15 +1,15 @@
 import {
-  BelongsToColumn, Column, CreatedAtColumn, DeletedAtColumn, forwardRef, HasManyColumn, JsonColumn,
+  BelongsToColumn, Column, CreatedAtColumn, DeletedAtColumn, forwardRef, JsonColumn,
   mixinSoftDeletes, Model, PrimaryGeneratedColumn, Table, UpdatedAtColumn
 } from '@gradii/fedaco';
 import { ProcessModel } from './process.model';
-import { UserModel } from './user.model';
+import { WorkflowModel } from './workflow.model';
 
 @Table({
-  tableName: 'workflow',
+  tableName: 'process_actions',
   hidden   : ['deleted_at']
 })
-export class WorkflowModel extends mixinSoftDeletes(Model) {
+export class ProcessActionModel extends mixinSoftDeletes(Model) {
 
   @PrimaryGeneratedColumn()
   id;
@@ -17,22 +17,25 @@ export class WorkflowModel extends mixinSoftDeletes(Model) {
   @Column()
   name: string;
 
+  @Column()
+  description: number;
+
   @JsonColumn()
-  config: any;
+  data;
 
   @BelongsToColumn({
-    related   : forwardRef(() => UserModel),
-    foreignKey: 'created_by',
+    related   : forwardRef(() => ProcessModel),
+    foreignKey: 'process_id',
     ownerKey  : 'id',
   })
-  createdBy;
+  process;
 
-  @HasManyColumn({
-    related   : ProcessModel,
+  @BelongsToColumn({
+    related   : forwardRef(() => WorkflowModel),
     foreignKey: 'workflow_id',
-    localKey  : 'id'
+    ownerKey  : 'id',
   })
-  processes;
+  workflow;
 
   @CreatedAtColumn()
   created_at;

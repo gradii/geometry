@@ -781,7 +781,11 @@ export class Model extends mixinHasAttributes(
         return Table.isTypeOf(it);
       }, metas);
       if (meta) {
-        this.setTable(pluralStudy(meta.tableName));
+        if(!meta.noPluralTable) {
+          this.setTable(pluralStudy(meta.tableName));
+        }else{
+          this.setTable(snakeCase(meta.tableName));
+        }
       } else {
         throw new Error('must define table in annotation or `_table` property');
       }

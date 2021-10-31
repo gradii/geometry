@@ -16,7 +16,9 @@ export interface DeletedAtColumnAnnotation extends ColumnAnnotation {
 
 export const DeletedAtColumn: FedacoDecorator<DeletedAtColumnAnnotation> = makePropDecorator(
   'Fedaco:DeletedAtColumn',
-  (p: DeletedAtColumnAnnotation = {}): DeletedAtColumnAnnotation => ({...p}),
+  (p: DeletedAtColumnAnnotation = {
+    hidden: true
+  }): DeletedAtColumnAnnotation => ({...p}),
   DateColumn,
   (target: any, name: string, decorator: DeletedAtColumnAnnotation) => {
     _additionalProcessingGetterSetter(target, name, decorator);

@@ -14,6 +14,7 @@ export interface TableAnnotation {
    */
   tableName?: string;
 
+  noPluralTable?:boolean;
   /**
    * the morph type name is used for morphOne morphMany.
    * this value is stored in morphTo table's morphType column

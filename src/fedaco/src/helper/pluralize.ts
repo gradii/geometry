@@ -36,7 +36,7 @@ export function pluralStudy(word: string): string {
       }
       return part;
     },
-    delimiter: ''
+    delimiter: '_'
   });
 }
 

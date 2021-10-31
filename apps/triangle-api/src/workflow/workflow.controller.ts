@@ -1,7 +1,6 @@
 import { Controller, Get, HttpException, HttpStatus, Param, ParseIntPipe } from '@nestjs/common';
 import { ApiParam } from '@nestjs/swagger';
 import { createHash } from 'crypto';
-import { MemberModel } from '../app/models/member.model';
 import { WorkflowModel } from '../app/models/workflow.model';
 import { RequiredPipe } from '../app/shared/pipes/required.pipe';
 
@@ -31,7 +30,15 @@ export class WorkflowController {
   @Get('/id/:workflow')
   async findId(@Param('workflow', RequiredPipe, ParseIntPipe) workflowId) {
     const workflow = await WorkflowModel.createQuery().select()
-      .with('createdBy')
+      .with(
+        'createdBy',
+        'processes',
+        'processes.processTarget',
+        'processes.actions',
+        'processes.transitions',
+        'processes.transitions.fromAction',
+        'processes.transitions.toAction',
+      )
       .where('id', workflowId)
       .first();
     if (workflow) {

@@ -1,9 +1,9 @@
 import { Module } from "@nestjs/common";
-import { MemberController } from './member.controller';
+import { UserController } from './user.controller';
 
 @Module({
   controllers: [
-    MemberController
+    UserController
   ]
 })
 export class UcenterModule {}

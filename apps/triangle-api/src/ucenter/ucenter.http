@@ -9,7 +9,7 @@ Accept: application/json
 
 ###
 
-GET {{host}}/api/member/list
+GET {{host}}/api/user/list
 Accept: application/json
 
 ###

@@ -5,38 +5,37 @@
  */
 
 import { makePropDecorator } from '@gradii/annotation';
+import { MorphOne } from '@gradii/fedaco';
 import { Model } from '../../fedaco/model';
-import { MorphMany } from '../../fedaco/relations/morph-many';
 import { ForwardRefFn, resolveForwardRef } from '../../query-builder/forward-ref';
 import { _additionalProcessingGetter } from '../additional-processing';
 import { FedacoDecorator } from '../annotation.interface';
 import { RelationType } from '../enum-relation';
 import { FedacoRelationColumn, RelationColumnAnnotation } from '../relation-column';
 
-
-export interface MorphManyRelationAnnotation extends RelationColumnAnnotation {
-  related: typeof Model | ForwardRefFn<typeof Model>;
+export interface MorphOneRelationAnnotation extends RelationColumnAnnotation<MorphOne> {
+  related?: typeof Model | ForwardRefFn;
   morphName: string;
   type?: string;
   id?: string;
   localKey?: string;
 }
 
-export const MorphManyColumn: FedacoDecorator<MorphManyRelationAnnotation> = makePropDecorator(
-  'Fedaco:MorphMany',
-  (p: MorphManyRelationAnnotation) => ({
+export const MorphOneColumn: FedacoDecorator<MorphOneRelationAnnotation> = makePropDecorator(
+  'Fedaco:MorphOneColumn',
+  (p: MorphOneRelationAnnotation) => ({
     isRelation  : true,
-    type        : RelationType.MorphMany,
+    type        : RelationType.MorphOne,
     _getRelation: function (m: Model, relation: string) {
       const instance = m._newRelatedInstance(resolveForwardRef(p.related));
 
       const [type, id] = m._getMorphs(p.morphName, p.type, p.id);
-      const table      = instance.getTable();
       const localKey   = p.localKey || m.getKeyName();
-      const r          = new MorphMany(
+      const r          = new MorphOne(
         instance.newQuery(), m,
-        `${table}.${type}`,
-        `${table}.${id}`, localKey);
+        `${instance.getTable()}.${type}`,
+        `${instance.getTable()}.${id}`,
+        localKey);
 
       if (p.onQuery) {
         p.onQuery(r);

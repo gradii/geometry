@@ -90,6 +90,7 @@ export * from './src/annotation/featured-column/auto-number.column';
 // export * from './src/annotation/featured-column/paragraph.column';
 export * from './src/annotation/relation-column';
 export * from './src/annotation/relation-column/has-many-through.relation-column';
+export * from './src/annotation/relation-column/morph-one.relation-column';
 export * from './src/annotation/relation-column/morph-many.relation-column';
 export * from './src/annotation/relation-column/morph-to-many.relation-column';
 export * from './src/annotation/relation-column/belongs-to.relation-column';
