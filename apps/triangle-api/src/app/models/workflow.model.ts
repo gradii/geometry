@@ -1,12 +1,12 @@
 import {
-  Column, CreatedAtColumn, DeletedAtColumn, JsonColumn, mixinSoftDeletes, Model,
-  PrimaryGeneratedColumn, Table,
-  UpdatedAtColumn
+  BelongsToColumn, Column, CreatedAtColumn, DeletedAtColumn, forwardRef, JsonColumn,
+  mixinSoftDeletes, Model, PrimaryGeneratedColumn, Table, UpdatedAtColumn
 } from '@gradii/fedaco';
+import { MemberModel } from './member.model';
 
 @Table({
   tableName: 'workflows',
-  hidden: ['deleted_at']
+  hidden   : ['deleted_at']
 })
 export class WorkflowModel extends mixinSoftDeletes(Model) {
   // _table = 'workflows';
@@ -22,6 +22,13 @@ export class WorkflowModel extends mixinSoftDeletes(Model) {
 
   @JsonColumn()
   config: any;
+
+  @BelongsToColumn({
+    related   : forwardRef(() => MemberModel),
+    foreignKey: 'created_by',
+    ownerKey  : 'id',
+  })
+  createdBy;
 
   @CreatedAtColumn()
   created_at;

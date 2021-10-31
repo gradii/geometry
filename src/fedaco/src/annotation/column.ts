@@ -10,6 +10,10 @@ export interface ColumnAnnotation extends FedacoAnnotation {
   field?: string;
 
   unique?: boolean;
+
+  // visible?: boolean;
+
+  hidden?: boolean;
   // isPrimary?: boolean;
   //
   // columnName?: string;
