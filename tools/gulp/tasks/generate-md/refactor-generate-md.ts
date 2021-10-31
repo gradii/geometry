@@ -1,9 +1,11 @@
 import * as ts from 'typescript';
 
 
-export function refactorGenerateMd<T extends ts.Node>(/*typeChecker: TypeChecker*/): ts.TransformerFactory<T> {
+export function refactorGenerateMd<T extends ts.Node>(/*typeChecker: TypeChecker*/
+                                                      generateContext: any): ts.TransformerFactory<T> {
+  generateContext.files = [];
+
   return (context) => {
-    let parent;
     const visit: ts.Visitor = (node) => {
       if (ts.isDecorator(node)) {
         return undefined;
@@ -14,19 +16,14 @@ export function refactorGenerateMd<T extends ts.Node>(/*typeChecker: TypeChecker
       }
 
       if (
-        ts.isCallExpression(node) &&
-        ts.isIdentifier(node.expression) &&
-        node.expression.text === 'array_merge'
+        ts.isExpressionStatement(node) &&
+        ts.isCallExpression(node.expression) &&
+        node.expression.arguments.length === 2 &&
+        ts.isStringLiteral(node.expression.arguments[0])
       ) {
-
-        return ts.createArrayLiteral(
-          node.arguments.map(it => {
-            return ts.createSpread(
-              ts.isConditionalExpression(it) ? ts.createParen(it) : it
-            );
-          }),
-          node.arguments.length > 2
-        );
+        generateContext.files.push({
+          fileName: node.expression.arguments[0].text
+        });
       }
 
       return ts.visitEachChild(node, (child) => visit(child), context);
