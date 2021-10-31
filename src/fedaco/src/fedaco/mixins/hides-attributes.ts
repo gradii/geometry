@@ -4,10 +4,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isArray } from '@gradii/check-type';
-import { difference } from 'ramda';
+import { reflector } from '@gradii/annotation';
+import { isArray, isBlank } from '@gradii/check-type';
+import { difference, findLast } from 'ramda';
+import { Table, TableAnnotation } from '../../annotation/table/table';
 import { Constructor } from '../../helper/constructor';
 import { value } from '../../helper/fn';
+import { pluralStudy } from '../../helper/pluralize';
 
 export interface HidesAttributes {
   _hidden: any[];
@@ -44,12 +47,23 @@ export function mixinHidesAttributes<T extends Constructor<{}>>(base: T): HidesA
   // @ts-ignore
   return class _Self extends base {
     /*The attributes that should be hidden for serialization.*/
-    _hidden: any[] = [];
+    _hidden: any[];
     /*The attributes that should be visible in serialization.*/
-    _visible: any[] = [];
+    _visible: any[];
 
     /*Get the hidden attributes for the model.*/
     public getHidden(): any[] {
+      if(isBlank(this._hidden)) {
+        const metas                 = reflector.annotations(this.constructor);
+        const meta: TableAnnotation = findLast((it) => {
+          return Table.isTypeOf(it);
+        }, metas);
+        if (meta && isArray(meta.hidden)) {
+          this._hidden = meta.hidden
+        } else {
+          this._hidden = [];
+        }
+      }
       return this._hidden;
     }
 
@@ -61,6 +75,17 @@ export function mixinHidesAttributes<T extends Constructor<{}>>(base: T): HidesA
 
     /*Get the visible attributes for the model.*/
     public getVisible(): any[] {
+      if(isBlank(this._visible)) {
+        const metas                 = reflector.annotations(this.constructor);
+        const meta: TableAnnotation = findLast((it) => {
+          return Table.isTypeOf(it);
+        }, metas);
+        if (meta && isArray(meta.visible)) {
+          this._visible = meta.visible
+        } else {
+          this._visible = [];
+        }
+      }
       return this._visible;
     }
 

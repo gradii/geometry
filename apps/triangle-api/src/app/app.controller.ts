@@ -1,6 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 
 import { AppService } from './app.service';
+import { WorkflowModel } from './models/workflow.model';
 
 @Controller()
 export class AppController {
@@ -12,8 +13,4 @@ export class AppController {
     return this.appService.getData();
   }
 
-  @Get('/list')
-  getList(): any[] {
-    return [];
-  }
 }

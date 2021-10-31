@@ -4,10 +4,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { reflector } from '@gradii/annotation';
 import { isAnyEmpty, isArray, isBlank, isObjectEmpty, isString } from '@gradii/check-type';
-import { difference, tap, uniq } from 'ramda';
+import { difference, findLast, tap, uniq } from 'ramda';
+import { Table, TableAnnotation } from '../annotation/table/table';
 import { except } from '../helper/obj';
-import { plural, pluralStudy } from '../helper/pluralize';
+import { plural, pluralStudy, singular } from '../helper/pluralize';
 import { camelCase, snakeCase, upperCaseFirst } from '../helper/str';
 import { ConnectionResolverInterface } from '../interface/connection-resolver-interface';
 import { QueryBuilder } from '../query-builder/query-builder';
@@ -131,7 +133,7 @@ export class Model extends mixinHasAttributes(
 
   _incrementing = true;
 
-  _with = [];
+  _with: any[] = [];
 
   _withCount: any[] = [];
 
@@ -762,7 +764,18 @@ export class Model extends mixinHasAttributes(
 
   /*Get the table associated with the model.*/
   public getTable(): string {
-    return this._table || snakeCase(pluralStudy(this.constructor.name));
+    if (isBlank(this._table)) {
+      const metas                 = reflector.annotations(this.constructor);
+      const meta: TableAnnotation = findLast((it) => {
+        return Table.isTypeOf(it);
+      }, metas);
+      if (meta) {
+        this.setTable(pluralStudy(meta.tableName));
+      } else {
+        throw new Error('must define table in annotation or `_table` property');
+      }
+    }
+    return this._table;
   }
 
   /*Set the table associated with the model.*/
@@ -905,6 +918,10 @@ export class Model extends mixinHasAttributes(
   public setPerPage(perPage: number) {
     this._perPage = perPage;
     return this;
+  }
+
+  public toJSON() {
+    return this.toArray();
   }
 
   public clone() {

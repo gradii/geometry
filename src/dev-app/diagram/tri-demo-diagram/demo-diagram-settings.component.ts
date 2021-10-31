@@ -74,7 +74,11 @@ export class DemoDiagramSettingsComponent implements AfterViewInit, OnInit {
     node1.setPosition(100, 100);
     let port1 = node1.addOutPort('Out1', 'out1');
 
-    let node2 = new DiagramNodeModel('End', 'rgb(200,255,36)');
+    let node2 = new DiagramNodeModel({
+      name: 'End',
+      color: 'rgb(200,255,36)',
+      type: 'end'
+    });
     let port2 = node2.addInPort('In1', 'in1');
     node2.setPosition(400, 100);
 

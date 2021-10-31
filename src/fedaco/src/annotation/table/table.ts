@@ -32,6 +32,9 @@ export interface TableAnnotation {
    */
   timestamped?: boolean;
 
+  hidden?: string[];
+  visible?: string[];
+
   /**
    * specify the created_at column when timestamped.
    * default is created_at

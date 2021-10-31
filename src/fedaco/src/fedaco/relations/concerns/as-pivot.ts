@@ -4,8 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isArray } from '@gradii/check-type';
-import { tap } from 'ramda';
+import { reflector } from '@gradii/annotation';
+import { isArray, isBlank } from '@gradii/check-type';
+import { findLast, tap } from 'ramda';
+import { singular } from 'src/fedaco/src/helper/pluralize';
+import { Table, TableAnnotation } from '../../../annotation/table/table';
 import { Constructor } from '../../../helper/constructor';
 import { FedacoBuilder } from '../../fedaco-builder';
 import { Model } from '../../model';
@@ -94,7 +97,8 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
                                  exists = false) {
       const instance: Model = new this();
       instance._timestamps  = instance.hasTimestampAttributes(attributes);
-      instance.setConnection(parent.getConnectionName()).setTable(table).forceFill(attributes).syncOriginal();
+      instance.setConnection(parent.getConnectionName()).setTable(table).forceFill(
+        attributes).syncOriginal();
       instance.pivotParent = parent;
       instance.exists      = exists;
       return instance;
@@ -150,9 +154,18 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
 
     /*Get the table associated with the model.*/
     public getTable(this: Model & _Self): string {
-      if (!(this._table !== undefined)) {
+      if (isBlank(this._table)) {
         // todo fixme
         // this.setTable(str_replace('\\', '', Str.snake(Str.singular(class_basename(this)))));
+        const metas                 = reflector.annotations(this.constructor);
+        const meta: TableAnnotation = findLast((it) => {
+          return Table.isTypeOf(it);
+        }, metas);
+        if (meta) {
+          return singular(meta.tableName);
+        }else{
+          throw new Error('must define table in annotation or `_table` property')
+        }
       }
       return this._table;
     }

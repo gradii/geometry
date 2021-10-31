@@ -374,7 +374,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
       attributes     = this.addDateAttributesToArray(attributes);
       // const mutatedAttributes = this.getMutatedAttributes();
       // attributes              = this.addMutatedAttributesToArray(attributes, mutatedAttributes);
-      // attributes              = this.addCastAttributesToArray(attributes, mutatedAttributes);
+      attributes = this.addCastAttributesToArray(attributes);
       // for (let key of this.getArrayableAppends()) {
       //   attributes[key] = this.mutateAttributeForArray(key, null);
       // }
@@ -404,10 +404,9 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     // }
 
     /*Add the casted attributes to the attributes array.*/
-    protected addCastAttributesToArray(this: Model & this, attributes: any,
-                                       mutatedAttributes: any[]) {
+    protected addCastAttributesToArray(this: Model & this, attributes: any) {
       for (const [key, value] of Object.entries(this.getCasts())) {
-        if (!Object.keys(attributes).includes(key) || mutatedAttributes.includes(key)) {
+        if (!Object.keys(attributes).includes(key)) {
           continue;
         }
         attributes[key] = this.castAttribute(key, attributes[key]);
@@ -951,64 +950,67 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Get the casts array.*/
     public getCasts(this: Model & this) {
-      const typeOfClazz = this.constructor as typeof Model;
-      const metas       = reflector.propMetadata(typeOfClazz);
-      const casts: any  = {};
-      for (const [key, meta] of Object.entries(metas)) {
-        const columnMeta = findLast(it => {
-          return FedacoColumn.isTypeOf(it);
-        }, meta);
-        switch (true) {
-          case PrimaryColumn.isTypeOf(columnMeta):
-            casts[key] = columnMeta.keyType || 'int';
-            break;
-          case   PrimaryGeneratedColumn.isTypeOf(columnMeta):
-            // todo check not encrypted. not guid
-            casts[key] = 'int';
-            break;
-          case   BinaryColumn.isTypeOf(columnMeta):
-            casts[key] = 'binary';
-            break;
-          case   BooleanColumn.isTypeOf(columnMeta):
-            casts[key] = 'boolean';
-            break;
-          case   CurrencyColumn.isTypeOf(columnMeta):
-            casts[key] = 'currency';
-            break;
-          case   DateColumn.isTypeOf(columnMeta):
-            casts[key] = 'date';
-            break;
-          case   DatetimeColumn.isTypeOf(columnMeta):
-            casts[key] = 'datetime';
-            break;
-          case   DecimalColumn.isTypeOf(columnMeta):
-            casts[key] = 'decimal';
-            break;
-          case   FloatColumn.isTypeOf(columnMeta):
-            casts[key] = 'float';
-            break;
-          case   IntegerColumn.isTypeOf(columnMeta):
-            casts[key] = 'integer';
-            break;
-          case   JsonColumn.isTypeOf(columnMeta):
-            casts[key] = 'json';
-            break;
-          case   ArrayColumn.isTypeOf(columnMeta):
-            casts[key] = 'array';
-            break;
-          case   ObjectColumn.isTypeOf(columnMeta):
-            casts[key] = 'object';
-            break;
-          case   TextColumn.isTypeOf(columnMeta):
-            casts[key] = 'text';
-            break;
-          case   TimestampColumn.isTypeOf(columnMeta):
-            casts[key] = 'timestamp';
-            break;
+      if (isObjectEmpty(this._casts)) {
+        const typeOfClazz = this.constructor as typeof Model;
+        const metas       = reflector.propMetadata(typeOfClazz);
+        const casts: any  = {};
+        for (const [key, meta] of Object.entries(metas)) {
+          const columnMeta = findLast(it => {
+            return FedacoColumn.isTypeOf(it);
+          }, meta);
+          switch (true) {
+            case PrimaryColumn.isTypeOf(columnMeta):
+              casts[key] = columnMeta.keyType || 'int';
+              break;
+            case   PrimaryGeneratedColumn.isTypeOf(columnMeta):
+              // todo check not encrypted. not guid
+              casts[key] = 'int';
+              break;
+            case   BinaryColumn.isTypeOf(columnMeta):
+              casts[key] = 'binary';
+              break;
+            case   BooleanColumn.isTypeOf(columnMeta):
+              casts[key] = 'boolean';
+              break;
+            case   CurrencyColumn.isTypeOf(columnMeta):
+              casts[key] = 'currency';
+              break;
+            case   DateColumn.isTypeOf(columnMeta):
+              casts[key] = 'date';
+              break;
+            case   DatetimeColumn.isTypeOf(columnMeta):
+              casts[key] = 'datetime';
+              break;
+            case   DecimalColumn.isTypeOf(columnMeta):
+              casts[key] = 'decimal';
+              break;
+            case   FloatColumn.isTypeOf(columnMeta):
+              casts[key] = 'float';
+              break;
+            case   IntegerColumn.isTypeOf(columnMeta):
+              casts[key] = 'integer';
+              break;
+            case   JsonColumn.isTypeOf(columnMeta):
+              casts[key] = 'json';
+              break;
+            case   ArrayColumn.isTypeOf(columnMeta):
+              casts[key] = 'array';
+              break;
+            case   ObjectColumn.isTypeOf(columnMeta):
+              casts[key] = 'object';
+              break;
+            case   TextColumn.isTypeOf(columnMeta):
+              casts[key] = 'text';
+              break;
+            case   TimestampColumn.isTypeOf(columnMeta):
+              casts[key] = 'timestamp';
+              break;
+          }
         }
-      }
 
-      return casts;
+        this._casts = casts;
+      }
+      return this._casts;
     }
 
     /*Determine whether a value is Date / DateTime castable for inbound manipulation.*/

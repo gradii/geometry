@@ -1,11 +1,14 @@
 import { Module, OnModuleInit } from '@nestjs/common';
 import { DatabaseConfig } from '@gradii/fedaco';
+import { WorkflowModule } from '../workflow/workflow.module';
 
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 
 @Module({
-  imports: [],
+  imports: [
+    WorkflowModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
