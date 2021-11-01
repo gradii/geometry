@@ -37,7 +37,7 @@ async function createSchema() {
   });
 }
 
-describe('test database eloquent integration with table prefix', () => {
+describe('test database fedaco integration with table prefix', () => {
   beforeEach(async () => {
     const db = new DatabaseConfig();
     db.addConnection({

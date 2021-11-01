@@ -2100,8 +2100,8 @@ describe('database query builder test', () => {
     builder = getBuilder();
 
     // todo support
-    // let eloquentBuilder = new EloquentBuilder(getBuilder().from('contacts'));
-    // builder.from('users').joinSub(eloquentBuilder, 'sub', 'users.id', '=', 'sub.id');
+    // let fedacoBuilder = new EloquentBuilder(getBuilder().from('contacts'));
+    // builder.from('users').joinSub(fedacoBuilder, 'sub', 'users.id', '=', 'sub.id');
     // expect(builder.toSql())
     //   .toBe('SELECT * FROM `users` inner join (SELECT * FROM `contacts`) as `sub` on `users`.`id` = `sub`.`id`');
 

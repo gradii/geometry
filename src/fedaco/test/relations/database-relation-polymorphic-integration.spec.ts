@@ -60,7 +60,7 @@ async function createSchema() {
   });
 }
 
-describe('test database eloquent polymorphic integration', () => {
+describe('test database fedaco polymorphic integration', () => {
   beforeEach(async () => {
     const db = new DatabaseConfig();
     db.addConnection({

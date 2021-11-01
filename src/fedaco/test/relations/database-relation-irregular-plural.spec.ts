@@ -41,7 +41,7 @@ async function createSchema() {
   });
 }
 
-describe('test database eloquent irregular plural', () => {
+describe('test database fedaco irregular plural', () => {
   beforeEach(async () => {
     const db = new DatabaseConfig();
     db.addConnection({

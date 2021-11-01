@@ -31,7 +31,7 @@ function getRelation() {
   return new HasOne(builder, parent, '_table.foreign_key', 'id');
 }
 
-describe('test database eloquent has one', () => {
+describe('test database fedaco has one', () => {
 
   it('has one with default', async () => {
     const relation = getRelation().withDefault();

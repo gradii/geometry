@@ -26,7 +26,7 @@ function getRelationAssociate(parent) {
   return new MorphTo(builder, parent, 'foreign_key', 'id', 'morph_type', 'relation');
 }
 
-describe('test database eloquent morph to', () => {
+describe('test database fedaco morph to', () => {
 
   it('lookup dictionary is properly constructed', () => {
     const relation = getRelation();
@@ -142,7 +142,7 @@ describe('test database eloquent morph to', () => {
 
 export class EloquentMorphToModelStub extends Model {
   public foreign_key: any = 'foreign.value';
-  _table: any             = 'eloquent_morph_to_model_stubs';
+  _table: any             = 'fedaco_morph_to_model_stubs';
 
   @MorphToColumn({
     morphTypeMap: {}
@@ -151,5 +151,5 @@ export class EloquentMorphToModelStub extends Model {
 }
 
 export class EloquentMorphToRelatedStub extends Model {
-  _table: any = 'eloquent_morph_to_related_stubs';
+  _table: any = 'fedaco_morph_to_related_stubs';
 }

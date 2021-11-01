@@ -29,13 +29,13 @@ async function createSchema() {
     table.timestamps();
   });
   await schema('default').create('taggables', table => {
-    table.integer('eloquent_many_to_many_polymorphic_test_tag_id');
+    table.integer('fedaco_many_to_many_polymorphic_test_tag_id');
     table.integer('taggable_id');
     table.string('taggable_type');
   });
 }
 
-describe('test database eloquent polymorphic relations integration', () => {
+describe('test database fedaco polymorphic relations integration', () => {
   beforeEach(async () => {
     const db = new DatabaseConfig();
     db.addConnection({

@@ -128,7 +128,7 @@ async function createSchema() {
   }
 }
 
-describe('test database eloquent integration', () => {
+describe('test database fedaco integration', () => {
   beforeAll(async () => {
     const db = new DatabaseConfig();
     db.addConnection({

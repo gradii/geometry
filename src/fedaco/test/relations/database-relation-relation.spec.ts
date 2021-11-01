@@ -5,7 +5,7 @@ import { HasOne } from '../../src/fedaco/relations/has-one';
 import { Relation } from '../../src/fedaco/relations/relation';
 import { getBuilder } from './relation-testing-helper';
 
-describe('test database eloquent relation', () => {
+describe('test database fedaco relation', () => {
 
   it('set relation fail', () => {
     const parent   = new EloquentRelationResetModelStub();

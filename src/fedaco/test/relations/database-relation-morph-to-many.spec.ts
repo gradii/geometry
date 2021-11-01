@@ -32,7 +32,7 @@ function getRelation() {
     'id');
 }
 
-describe('test database eloquent morph to many', () => {
+describe('test database fedaco morph to many', () => {
   it('eager constraints are properly added', () => {
     const relation = getRelation();
 

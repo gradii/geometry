@@ -43,7 +43,7 @@ async function createSchema() {
   });
 }
 
-describe('test database eloquent has one of many', () => {
+describe('test database fedaco has one of many', () => {
   beforeEach(async () => {
     const db = new DatabaseConfig();
     db.addConnection({

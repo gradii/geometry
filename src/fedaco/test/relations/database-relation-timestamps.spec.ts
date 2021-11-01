@@ -31,7 +31,7 @@ async function createSchema() {
   });
 }
 
-describe('test database eloquent timestamps', () => {
+describe('test database fedaco timestamps', () => {
   beforeEach(async () => {
     const db = new DatabaseConfig();
     db.addConnection({

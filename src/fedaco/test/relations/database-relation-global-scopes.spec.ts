@@ -4,7 +4,7 @@ import { Model } from '../../src/fedaco/model';
 import { Scope } from '../../src/fedaco/scope';
 import { forwardRef } from '../../src/query-builder/forward-ref';
 
-describe('test database eloquent global scopes', () => {
+describe('test database fedaco global scopes', () => {
   beforeEach(() => {
     const db = new DatabaseConfig();
     db.addConnection({

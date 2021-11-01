@@ -17,7 +17,7 @@ function getRelation(parent?, keyType = 'int') {
   return new BelongsTo(builder, parent, 'foreignKey', 'id', 'relation');
 }
 
-describe('test database eloquent belongs to', () => {
+describe('test database fedaco belongs to', () => {
 
   it('belongs to with default', async () => {
     const relation = getRelation().withDefault();

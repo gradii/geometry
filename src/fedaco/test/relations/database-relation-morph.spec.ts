@@ -45,7 +45,7 @@ function getNamespacedRelation(alias) {
   return new MorphOne(builder, parent, '_table.morph_type', '_table.morph_id', 'id');
 }
 
-describe('test database eloquent morph', () => {
+describe('test database fedaco morph', () => {
 
   it('morph one eager constraints are properly added', () => {
     const relation = getOneRelation();
@@ -86,7 +86,7 @@ describe('test database eloquent morph', () => {
   });
 
   it('make function on morph', () => {
-    // _SERVER['__eloquent.saved'] = false;
+    // _SERVER['__fedaco.saved'] = false;
     const relation = getOneRelation();
     const instance = new Model();
     jest.spyOn(instance, 'setAttribute');

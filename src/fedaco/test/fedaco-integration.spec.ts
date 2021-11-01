@@ -131,7 +131,7 @@ async function createSchema() {
   }
 }
 
-describe('test database eloquent integration', () => {
+describe('test database fedaco integration', () => {
   beforeAll(async () => {
     // const files = {
     //   'default': 'tmp/integration.sqlite',
@@ -191,7 +191,7 @@ describe('test database eloquent integration', () => {
   });
 
   it('basic create model', async () => {
-    const model = await new EloquentTestUser().newQuery().create({
+    const model = await new FedacoTestUser().newQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
@@ -202,7 +202,7 @@ describe('test database eloquent integration', () => {
   });
 
   it('basic model retrieval', async () => {
-    const factory = new EloquentTestUser();
+    const factory = new FedacoTestUser();
 
     await factory.newQuery().create({
       'id'   : 1,
@@ -219,7 +219,7 @@ describe('test database eloquent integration', () => {
       await factory.newQuery().where('email', 'taylorotwell@gmail.com').doesntExist()).toBeFalsy();
     expect(
       await factory.newQuery().where('email', 'mohamed@laravel.com').doesntExist()).toBeTruthy();
-    let model: EloquentTestUser = await factory.newQuery()
+    let model: FedacoTestUser = await factory.newQuery()
       .where('email', 'taylorotwell@gmail.com').first();
     expect(model.email).toBe('taylorotwell@gmail.com');
     expect(model.email !== undefined).toBeTruthy();
@@ -227,10 +227,10 @@ describe('test database eloquent integration', () => {
     expect(friends !== undefined).toBeTruthy();
     expect(friends).toEqual([]);
     model = await factory.newQuery().find(1);
-    expect(model).toBeInstanceOf(EloquentTestUser);
+    expect(model).toBeInstanceOf(FedacoTestUser);
     expect(model.id).toEqual(1);
     model = await factory.newQuery().find(2);
-    expect(model).toBeInstanceOf(EloquentTestUser);
+    expect(model).toBeInstanceOf(FedacoTestUser);
     expect(model.id).toEqual(2);
     const missing = await factory.newQuery().find(3);
     expect(missing).toBeUndefined();
@@ -256,53 +256,53 @@ describe('test database eloquent integration', () => {
   });
 
   it('basic model collection retrieval', async () => {
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 2,
       'email': 'abigailotwell@gmail.com'
     });
-    const models = await new EloquentTestUser().newQuery().oldest('id').get();
+    const models = await new FedacoTestUser().newQuery().oldest('id').get();
     expect(models.length).toBe(2);
     expect(isArray(models)).toBeTruthy();
-    expect(models[0]).toBeInstanceOf(EloquentTestUser);
-    expect(models[1]).toBeInstanceOf(EloquentTestUser);
+    expect(models[0]).toBeInstanceOf(FedacoTestUser);
+    expect(models[1]).toBeInstanceOf(FedacoTestUser);
     expect(models[0].email).toBe('taylorotwell@gmail.com');
     expect(models[1].email).toBe('abigailotwell@gmail.com');
   });
 
   it('paginated model collection retrieval', async () => {
-    await new EloquentTestUser().newQuery().create({
+    await new FedacoTestUser().newQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    await new EloquentTestUser().newQuery().create({
+    await new FedacoTestUser().newQuery().create({
       'id'   : 2,
       'email': 'abigailotwell@gmail.com'
     });
-    await new EloquentTestUser().newQuery().create({
+    await new FedacoTestUser().newQuery().create({
       'id'   : 3,
       'email': 'foo@gmail.com'
     });
     // Paginator.currentPageResolver(() => {
     //   return 1;
     // });
-    let models = await new EloquentTestUser().newQuery()
+    let models = await new FedacoTestUser().newQuery()
       .oldest('id').paginate(1, 2);
     expect(models.items.length).toBe(2);
-    expect(models.items[0]).toBeInstanceOf(EloquentTestUser);
-    expect(models.items[1]).toBeInstanceOf(EloquentTestUser);
+    expect(models.items[0]).toBeInstanceOf(FedacoTestUser);
+    expect(models.items[1]).toBeInstanceOf(FedacoTestUser);
     expect(models.items[0].email).toBe('taylorotwell@gmail.com');
     expect(models.items[1].email).toBe('abigailotwell@gmail.com');
     // Paginator.currentPageResolver(() => {
     //   return 2;
     // });
-    models = await new EloquentTestUser().newQuery()
+    models = await new FedacoTestUser().newQuery()
       .oldest('id').paginate(2, 2);
     expect(models.items.length).toBe(1);
-    expect(models.items[0]).toBeInstanceOf(EloquentTestUser);
+    expect(models.items[0]).toBeInstanceOf(FedacoTestUser);
     expect(models.items[0].email).toBe('foo@gmail.com');
   });
 
@@ -310,57 +310,57 @@ describe('test database eloquent integration', () => {
     // Paginator.currentPageResolver(() => {
     //   return 1;
     // });
-    let models = await new EloquentTestUser().newQuery().oldest('id').paginate(1, 2);
+    let models = await new FedacoTestUser().newQuery().oldest('id').paginate(1, 2);
     expect(models.items.length).toBe(0);
     // expect(models).toInstanceOf(LengthAwarePaginator);
     // Paginator.currentPageResolver(() => {
     //   return 2;
     // });
-    models = await new EloquentTestUser().newQuery().oldest('id').paginate(2, 2);
+    models = await new FedacoTestUser().newQuery().oldest('id').paginate(2, 2);
     expect(models.items.length).toBe(0);
   });
 
   it('paginated model collection retrieval when no elements and default per page', async () => {
-    const models = await new EloquentTestUser().newQuery().oldest('id').paginate();
+    const models = await new FedacoTestUser().newQuery().oldest('id').paginate();
     expect(models.items.length).toBe(0);
     // expect(models).toInstanceOf(LengthAwarePaginator);
   });
 
   it('count for pagination with grouping', async () => {
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 2,
       'email': 'abigailotwell@gmail.com'
     });
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 3,
       'email': 'foo@gmail.com'
     });
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 4,
       'email': 'foo@gmail.com'
     });
-    const query = EloquentTestUser.createQuery().groupBy('email').getQuery();
+    const query = FedacoTestUser.createQuery().groupBy('email').getQuery();
     expect(await query.getCountForPagination()).toEqual(3);
   });
 
   it('count for pagination with grouping and sub selects', async () => {
-    const user1 = await EloquentTestUser.createQuery().create({
+    const user1 = await FedacoTestUser.createQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 2,
       'email': 'abigailotwell@gmail.com'
     });
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 3,
       'email': 'foo@gmail.com'
     });
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 4,
       'email': 'foo@gmail.com'
     });
@@ -369,9 +369,9 @@ describe('test database eloquent integration', () => {
       'id'   : 5,
       'email': 'friend@gmail.com'
     });
-    const query = await EloquentTestUser.createQuery().select({
+    const query = await FedacoTestUser.createQuery().select({
       0              : 'id',
-      'friends_count': await EloquentTestUser
+      'friends_count': await FedacoTestUser
         .createQuery()
         .whereColumn('friend_id', 'user_id')
         .count()
@@ -380,12 +380,12 @@ describe('test database eloquent integration', () => {
   });
 
   it('first or create', async () => {
-    const user1 = await EloquentTestUser.createQuery().firstOrCreate({
+    const user1 = await FedacoTestUser.createQuery().firstOrCreate({
       'email': 'taylorotwell@gmail.com'
     });
     expect(user1.email).toBe('taylorotwell@gmail.com');
     expect(user1.name).toBeUndefined();
-    const user2 = await EloquentTestUser.createQuery().firstOrCreate({
+    const user2 = await FedacoTestUser.createQuery().firstOrCreate({
       'email': 'taylorotwell@gmail.com'
     }, {
       'name': 'Taylor Otwell'
@@ -393,7 +393,7 @@ describe('test database eloquent integration', () => {
     expect(user2.id).toEqual(user1.id);
     expect(user2.email).toBe('taylorotwell@gmail.com');
     expect(user2.name).toBeNull();
-    const user3 = await EloquentTestUser.createQuery().firstOrCreate({
+    const user3 = await FedacoTestUser.createQuery().firstOrCreate({
       'email': 'abigailotwell@gmail.com'
     }, {
       'name': 'Abigail Otwell'
@@ -404,10 +404,10 @@ describe('test database eloquent integration', () => {
   });
 
   it('update or create', async () => {
-    const user1 = await EloquentTestUser.createQuery().create({
+    const user1 = await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    const user2 = await EloquentTestUser.createQuery().updateOrCreate({
+    const user2 = await FedacoTestUser.createQuery().updateOrCreate({
       'email': 'taylorotwell@gmail.com'
     }, {
       'name': 'Taylor Otwell'
@@ -415,87 +415,87 @@ describe('test database eloquent integration', () => {
     expect(user2.id).toEqual(user1.id);
     expect(user2.email).toBe('taylorotwell@gmail.com');
     expect(user2.name).toBe('Taylor Otwell');
-    const user3 = await EloquentTestUser.createQuery().updateOrCreate({
+    const user3 = await FedacoTestUser.createQuery().updateOrCreate({
       'email': 'themsaid@gmail.com'
     }, {
       'name': 'Mohamed Said'
     });
     expect(user3.name).toBe('Mohamed Said');
-    expect(await EloquentTestUser.createQuery().count()).toBe(2);
+    expect(await FedacoTestUser.createQuery().count()).toBe(2);
   });
 
   it('update or create on different connection', async () => {
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    await EloquentTestUser.useConnection('second_connection').updateOrCreate({
+    await FedacoTestUser.useConnection('second_connection').updateOrCreate({
       'email': 'taylorotwell@gmail.com'
     }, {
       'name': 'Taylor Otwell'
     });
-    await EloquentTestUser.useConnection('second_connection').updateOrCreate({
+    await FedacoTestUser.useConnection('second_connection').updateOrCreate({
       'email': 'themsaid@gmail.com'
     }, {
       'name': 'Mohamed Said'
     });
-    expect(await EloquentTestUser.createQuery().count()).toBe(1);
-    expect(await EloquentTestUser.useConnection('second_connection').count()).toBe(2);
+    expect(await FedacoTestUser.createQuery().count()).toBe(1);
+    expect(await FedacoTestUser.useConnection('second_connection').count()).toBe(2);
   });
 
   it('check and create methods on multi connections', async () => {
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    await EloquentTestUser.useConnection('second_connection')
+    await FedacoTestUser.useConnection('second_connection')
       .find(
-        EloquentTestUser.useConnection('second_connection').insert({
+        FedacoTestUser.useConnection('second_connection').insert({
           'id'   : 2,
           'email': 'themsaid@gmail.com'
         })
       );
-    let user1 = await EloquentTestUser.useConnection('second_connection').findOrNew(1);
-    let user2 = await EloquentTestUser.useConnection('second_connection').findOrNew(2);
+    let user1 = await FedacoTestUser.useConnection('second_connection').findOrNew(1);
+    let user2 = await FedacoTestUser.useConnection('second_connection').findOrNew(2);
     expect(user1._exists).toBeFalsy();
     expect(user2._exists).toBeTruthy();
     expect(user1.getConnectionName()).toBe('second_connection');
     expect(user2.getConnectionName()).toBe('second_connection');
-    user1 = await EloquentTestUser.useConnection('second_connection').firstOrNew({
+    user1 = await FedacoTestUser.useConnection('second_connection').firstOrNew({
       'email': 'taylorotwell@gmail.com'
     });
-    user2 = await EloquentTestUser.useConnection('second_connection').firstOrNew({
+    user2 = await FedacoTestUser.useConnection('second_connection').firstOrNew({
       'email': 'themsaid@gmail.com'
     });
     expect(user1._exists).toBeFalsy();
     expect(user2._exists).toBeTruthy();
     expect(user1.getConnectionName()).toBe('second_connection');
     expect(user2.getConnectionName()).toBe('second_connection');
-    expect(await EloquentTestUser.useConnection('second_connection').count()).toEqual(1);
-    user1 = await EloquentTestUser.useConnection('second_connection').firstOrCreate({
+    expect(await FedacoTestUser.useConnection('second_connection').count()).toEqual(1);
+    user1 = await FedacoTestUser.useConnection('second_connection').firstOrCreate({
       'email': 'taylorotwell@gmail.com'
     });
-    user2 = await EloquentTestUser.useConnection('second_connection').firstOrCreate({
+    user2 = await FedacoTestUser.useConnection('second_connection').firstOrCreate({
       'email': 'themsaid@gmail.com'
     });
     expect(user1.getConnectionName()).toBe('second_connection');
     expect(user2.getConnectionName()).toBe('second_connection');
-    expect(await EloquentTestUser.useConnection('second_connection').count()).toEqual(2);
+    expect(await FedacoTestUser.useConnection('second_connection').count()).toEqual(2);
   });
 
   it('creating model with empty attributes', async () => {
-    const model = await EloquentTestNonIncrementing.createQuery().create({});
+    const model = await FedacoTestNonIncrementing.createQuery().create({});
     expect(model._exists).toBeFalsy();
     expect(model._wasRecentlyCreated).toBeFalsy();
   });
 
   it('chunk by id with non incrementing key', async () => {
-    await EloquentTestNonIncrementingSecond.createQuery().create({
+    await FedacoTestNonIncrementingSecond.createQuery().create({
       'name': ' First'
     });
-    await EloquentTestNonIncrementingSecond.createQuery().create({
+    await FedacoTestNonIncrementingSecond.createQuery().create({
       'name': ' Second'
     });
-    await EloquentTestNonIncrementingSecond.createQuery().create({
+    await FedacoTestNonIncrementingSecond.createQuery().create({
       'name': ' Third'
     });
     let i     = 0;
@@ -508,7 +508,7 @@ describe('test database eloquent integration', () => {
       }
       i++;
     });
-    await EloquentTestNonIncrementingSecond.createQuery()
+    await FedacoTestNonIncrementingSecond.createQuery()
       .chunkById(2, 'name')
       .pipe(
         finalize(() => {
@@ -522,13 +522,13 @@ describe('test database eloquent integration', () => {
   });
 
   it('chunk by id with non incrementing key test signal', async () => {
-    await EloquentTestNonIncrementingSecond.createQuery().create({
+    await FedacoTestNonIncrementingSecond.createQuery().create({
       'name': ' First'
     });
-    await EloquentTestNonIncrementingSecond.createQuery().create({
+    await FedacoTestNonIncrementingSecond.createQuery().create({
       'name': ' Second'
     });
-    await EloquentTestNonIncrementingSecond.createQuery().create({
+    await FedacoTestNonIncrementingSecond.createQuery().create({
       'name': ' Third'
     });
     let i        = 0;
@@ -545,7 +545,7 @@ describe('test database eloquent integration', () => {
       i++;
     });
     const signal = new Subject();
-    await EloquentTestNonIncrementingSecond.createQuery()
+    await FedacoTestNonIncrementingSecond.createQuery()
       .chunkById(2, 'name', undefined, signal)
       .pipe(
         finalize(() => {
@@ -559,17 +559,17 @@ describe('test database eloquent integration', () => {
   });
 
   it('each by id with non incrementing key', async () => {
-    await EloquentTestNonIncrementingSecond.createQuery().create({
+    await FedacoTestNonIncrementingSecond.createQuery().create({
       'name': ' First'
     });
-    await EloquentTestNonIncrementingSecond.createQuery().create({
+    await FedacoTestNonIncrementingSecond.createQuery().create({
       'name': ' Second'
     });
-    await EloquentTestNonIncrementingSecond.createQuery().create({
+    await FedacoTestNonIncrementingSecond.createQuery().create({
       'name': ' Third'
     });
     const users = [];
-    await EloquentTestNonIncrementingSecond.createQuery()
+    await FedacoTestNonIncrementingSecond.createQuery()
       .eachById(2, 'name')
       .pipe(
         tap(({item: user, index: i}) => {
@@ -580,18 +580,18 @@ describe('test database eloquent integration', () => {
   });
 
   it('pluck', async () => {
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 2,
       'email': 'abigailotwell@gmail.com'
     });
-    const simple = await EloquentTestUser.createQuery()
+    const simple = await FedacoTestUser.createQuery()
       .oldest('id')
       .pluck('users.email');
-    const keyed  = await EloquentTestUser.createQuery()
+    const keyed  = await FedacoTestUser.createQuery()
       .oldest('id')
       .pluck('users.email', 'users.id');
     expect(simple).toEqual(['taylorotwell@gmail.com', 'abigailotwell@gmail.com']);
@@ -602,11 +602,11 @@ describe('test database eloquent integration', () => {
   });
 
   it('pluck with join', async () => {
-    const user1 = await EloquentTestUser.createQuery().create({
+    const user1 = await FedacoTestUser.createQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    const user2 = await EloquentTestUser.createQuery().create({
+    const user2 = await FedacoTestUser.createQuery().create({
       'id'   : 2,
       'email': 'abigailotwell@gmail.com'
     });
@@ -618,7 +618,7 @@ describe('test database eloquent integration', () => {
       'id'  : 2,
       'name': 'Second post'
     });
-    const query = EloquentTestUser.createQuery().join('posts', 'users.id', '=', 'posts.user_id');
+    const query = FedacoTestUser.createQuery().join('posts', 'users.id', '=', 'posts.user_id');
     expect(await query.pluck('posts.name', 'posts.id')).toEqual({
       1: 'First post',
       2: 'Second post'
@@ -634,17 +634,17 @@ describe('test database eloquent integration', () => {
   });
 
   it('pluck with column name containing a space', async () => {
-    await EloquentTestUserWithSpaceInColumnName.createQuery().create({
+    await FedacoTestUserWithSpaceInColumnName.createQuery().create({
       'id'           : 1,
       'email_address': 'taylorotwell@gmail.com'
     });
-    await EloquentTestUserWithSpaceInColumnName.createQuery().create({
+    await FedacoTestUserWithSpaceInColumnName.createQuery().create({
       'id'           : 2,
       'email_address': 'abigailotwell@gmail.com'
     });
-    const simple = await EloquentTestUserWithSpaceInColumnName.createQuery().oldest('id').pluck(
+    const simple = await FedacoTestUserWithSpaceInColumnName.createQuery().oldest('id').pluck(
       'users_with_space_in_colum_name.email_address');
-    const keyed  = await EloquentTestUserWithSpaceInColumnName.createQuery().oldest('id').pluck(
+    const keyed  = await FedacoTestUserWithSpaceInColumnName.createQuery().oldest('id').pluck(
       'email_address',
       'id');
     expect(simple).toEqual(['taylorotwell@gmail.com', 'abigailotwell@gmail.com']);
@@ -655,54 +655,54 @@ describe('test database eloquent integration', () => {
   });
 
   it('find or fail', async () => {
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 2,
       'email': 'abigailotwell@gmail.com'
     });
-    const single   = await EloquentTestUser.createQuery().findOrFail(1);
-    const multiple = await EloquentTestUser.createQuery().findOrFail([1, 2]);
-    expect(single).toBeInstanceOf(EloquentTestUser);
+    const single   = await FedacoTestUser.createQuery().findOrFail(1);
+    const multiple = await FedacoTestUser.createQuery().findOrFail([1, 2]);
+    expect(single).toBeInstanceOf(FedacoTestUser);
     expect(single.email).toBe('taylorotwell@gmail.com');
     expect(isArray(multiple)).toBeTruthy();
-    expect(multiple[0]).toBeInstanceOf(EloquentTestUser);
-    expect(multiple[1]).toBeInstanceOf(EloquentTestUser);
+    expect(multiple[0]).toBeInstanceOf(FedacoTestUser);
+    expect(multiple[1]).toBeInstanceOf(FedacoTestUser);
   });
 
   it('find or fail with single id throws model not found exception', async () => {
     await expect(async () => {
-      await EloquentTestUser.createQuery().findOrFail(1);
+      await FedacoTestUser.createQuery().findOrFail(1);
     }).rejects.toThrowError(
-      'ModelNotFoundException No query results for model [EloquentTestUser] 1');
+      'ModelNotFoundException No query results for model [FedacoTestUser] 1');
   });
 
   it('find or fail with multiple ids throws model not found exception', async () => {
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
     await expect(async () => {
-      await EloquentTestUser.createQuery().findOrFail([1, 2]);
+      await FedacoTestUser.createQuery().findOrFail([1, 2]);
     }).rejects.toThrowError(
-      'ModelNotFoundException No query results for model [EloquentTestUser] [1,2]');
+      'ModelNotFoundException No query results for model [FedacoTestUser] [1,2]');
   });
 
   // xit('find or fail with multiple ids using collection throws model not found exception', async () => {
-  //   await EloquentTestUser.createQuery().create({
+  //   await FedacoTestUser.createQuery().create({
   //     'id'   : 1,
   //     'email': 'taylorotwell@gmail.com'
   //   });
   //   await expect(async () => {
-  //     await EloquentTestUser.createQuery().findOrFail([1, 2]);
+  //     await FedacoTestUser.createQuery().findOrFail([1, 2]);
   //   }).rejects.toThrowError(
-  //     'ModelNotFoundException No query results for model [EloquentTestUser] [1, 2]');
+  //     'ModelNotFoundException No query results for model [FedacoTestUser] [1, 2]');
   // });
 
   it('one to one relationship', async () => {
-    let user = await EloquentTestUser.createQuery().create({
+    let user = await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
     await user.newRelation('post').create({
@@ -712,14 +712,14 @@ describe('test database eloquent integration', () => {
 
     user = await post.user;
     expect((await user.post).name).not.toBeUndefined();
-    expect(user).toBeInstanceOf(EloquentTestUser);
-    expect(post).toBeInstanceOf(EloquentTestPost);
+    expect(user).toBeInstanceOf(FedacoTestUser);
+    expect(post).toBeInstanceOf(FedacoTestPost);
     expect(user.email).toBe('taylorotwell@gmail.com');
     expect(post.name).toBe('First Post');
   });
 
   it('isset loads in relationship if it isnt loaded already', async () => {
-    const user = await EloquentTestUser.createQuery().create({
+    const user = await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
     await user.newRelation('post').create({
@@ -729,7 +729,7 @@ describe('test database eloquent integration', () => {
   });
 
   it('one to many relationship', async () => {
-    const user = await EloquentTestUser.createQuery().create({
+    const user = await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
     await (user.newRelation('posts') as HasMany).create({
@@ -742,55 +742,55 @@ describe('test database eloquent integration', () => {
     const post2 = await user.newRelation('posts').where('name', 'Second Post').first();
     expect(isArray(posts)).toBeTruthy();
     expect(posts.length).toBe(2);
-    expect(posts[0]).toBeInstanceOf(EloquentTestPost);
-    expect(posts[1]).toBeInstanceOf(EloquentTestPost);
-    expect(post2).toBeInstanceOf(EloquentTestPost);
+    expect(posts[0]).toBeInstanceOf(FedacoTestPost);
+    expect(posts[1]).toBeInstanceOf(FedacoTestPost);
+    expect(post2).toBeInstanceOf(FedacoTestPost);
     expect(post2.name).toBe('Second Post');
-    expect(await post2.user).toBeInstanceOf(EloquentTestUser);
+    expect(await post2.user).toBeInstanceOf(FedacoTestUser);
     expect((await post2.user).email).toBe('taylorotwell@gmail.com');
   });
 
   it('basic model hydration', async () => {
-    let user = EloquentTestUser.initAttributes({
+    let user = FedacoTestUser.initAttributes({
       'email': 'taylorotwell@gmail.com'
     });
     user.setConnection('second_connection');
     await user.save();
-    user = EloquentTestUser.initAttributes({
+    user = FedacoTestUser.initAttributes({
       'email': 'abigailotwell@gmail.com'
     });
     user.setConnection('second_connection');
     await user.save();
-    const models = await EloquentTestUser.useConnection('second_connection').fromQuery(
+    const models = await FedacoTestUser.useConnection('second_connection').fromQuery(
       'SELECT * FROM users WHERE email = ?', ['abigailotwell@gmail.com']);
     expect(isArray(models)).toBeTruthy();
-    expect(models[0]).toBeInstanceOf(EloquentTestUser);
+    expect(models[0]).toBeInstanceOf(FedacoTestUser);
     expect(models[0].email).toBe('abigailotwell@gmail.com');
     expect(models[0].getConnectionName()).toBe('second_connection');
     expect(models.length).toBe(1);
   });
 
   it('has on self referencing belongs to many relationship', async () => {
-    const user = await EloquentTestUser.createQuery().create({
+    const user = await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
     await user.newRelation('friends').create({
       'email': 'abigailotwell@gmail.com'
     });
     expect((await user.friends)[0].id !== undefined).toBeTruthy();
-    const results = await EloquentTestUser.createQuery().has('friends').get();
+    const results = await FedacoTestUser.createQuery().has('friends').get();
     expect(results.length).toBe(1);
     expect(head(results).email).toBe('taylorotwell@gmail.com');
   });
 
   it('where has on self referencing belongs to many relationship', async () => {
-    const user = await EloquentTestUser.createQuery().create({
+    const user = await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
     await user.newRelation('friends').create({
       'email': 'abigailotwell@gmail.com'
     });
-    const results: EloquentTestUser[] = await EloquentTestUser.createQuery()
+    const results: FedacoTestUser[] = await FedacoTestUser.createQuery()
       .whereHas('friends', query => {
         query.where('email', 'abigailotwell@gmail.com');
       }).get();
@@ -799,7 +799,7 @@ describe('test database eloquent integration', () => {
   });
 
   it('has on nested self referencing belongs to many relationship', async () => {
-    const user   = await EloquentTestUser.createQuery().create({
+    const user   = await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
     const friend = await user.newRelation('friends').create({
@@ -808,13 +808,13 @@ describe('test database eloquent integration', () => {
     await friend.newRelation('friends').create({
       'email': 'foo@gmail.com'
     });
-    const results = await EloquentTestUser.createQuery().has('friends.friends').get();
+    const results = await FedacoTestUser.createQuery().has('friends.friends').get();
     expect(results.length).toBe(1);
     expect(head(results).email).toBe('taylorotwell@gmail.com');
   });
 
   it('where has on nested self referencing belongs to many relationship', async () => {
-    const user   = await EloquentTestUser.createQuery().create({
+    const user   = await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
     const friend = await user.newRelation('friends').create({
@@ -823,7 +823,7 @@ describe('test database eloquent integration', () => {
     await friend.newRelation('friends').create({
       'email': 'foo@gmail.com'
     });
-    const results: EloquentTestUser[] = await EloquentTestUser.createQuery()
+    const results: FedacoTestUser[] = await FedacoTestUser.createQuery()
       .whereHas('friends.friends', query => {
         query.where('email', 'foo@gmail.com');
       }).get();
@@ -832,7 +832,7 @@ describe('test database eloquent integration', () => {
   });
 
   it('has on self referencing belongs to many relationship with where pivot', async () => {
-    const user = await EloquentTestUser.createQuery().create({
+    const user = await FedacoTestUser.createQuery().create({
       id     : 1,
       'email': 'taylorotwell@gmail.com'
     });
@@ -840,13 +840,13 @@ describe('test database eloquent integration', () => {
       id     : 2,
       'email': 'abigailotwell@gmail.com'
     });
-    const results = await EloquentTestUser.createQuery().has('friendsOne').get();
+    const results = await FedacoTestUser.createQuery().has('friendsOne').get();
     expect(results.length).toBe(1);
     expect(head(results).email).toBe('taylorotwell@gmail.com');
   });
 
   it('has on nested self referencing belongs to many relationship with where pivot', async () => {
-    const user   = await EloquentTestUser.createQuery().create({
+    const user   = await FedacoTestUser.createQuery().create({
       id     : 1,
       'email': 'taylorotwell@gmail.com'
     });
@@ -858,54 +858,54 @@ describe('test database eloquent integration', () => {
       id     : 3,
       'email': 'foo@gmail.com'
     });
-    const results = await EloquentTestUser.createQuery().has('friendsOne.friendsTwo').get();
+    const results = await FedacoTestUser.createQuery().has('friendsOne.friendsTwo').get();
     expect(results.length).toBe(1);
     expect(head(results).email).toBe('taylorotwell@gmail.com');
   });
 
   it('has on self referencing belongs to relationship', async () => {
-    const parentPost = await EloquentTestPost.createQuery().create({
+    const parentPost = await FedacoTestPost.createQuery().create({
       'name'   : 'Parent Post',
       'user_id': 1
     });
-    await EloquentTestPost.createQuery().create({
+    await FedacoTestPost.createQuery().create({
       'name'     : 'Child Post',
       'parent_id': parentPost.id,
       'user_id'  : 2
     });
-    const results = await EloquentTestPost.createQuery().has('parentPost').get();
+    const results = await FedacoTestPost.createQuery().has('parentPost').get();
     expect(results.length).toBe(1);
     expect(head(results).name).toBe('Child Post');
   });
 
   it('aggregated values of datetime field', async () => {
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'        : 1,
       'email'     : 'test1@test.test',
       'created_at': '2021-08-10 09:21:00',
       'updated_at': new Date()
     });
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'        : 2,
       'email'     : 'test2@test.test',
       'created_at': '2021-08-01 12:00:00',
       'updated_at': new Date()
     });
-    expect(await EloquentTestUser.createQuery().max('created_at')).toBe('2021-08-10 09:21:00');
-    expect(await EloquentTestUser.createQuery().min('created_at')).toBe('2021-08-01 12:00:00');
+    expect(await FedacoTestUser.createQuery().max('created_at')).toBe('2021-08-10 09:21:00');
+    expect(await FedacoTestUser.createQuery().min('created_at')).toBe('2021-08-01 12:00:00');
   });
 
   it('where has on self referencing belongs to relationship', async () => {
-    const parentPost = await EloquentTestPost.createQuery().create({
+    const parentPost = await FedacoTestPost.createQuery().create({
       'name'   : 'Parent Post',
       'user_id': 1
     });
-    await EloquentTestPost.createQuery().create({
+    await FedacoTestPost.createQuery().create({
       'name'     : 'Child Post',
       'parent_id': parentPost.id,
       'user_id'  : 2
     });
-    const results: EloquentTestPost[] = await EloquentTestPost.createQuery().whereHas('parentPost',
+    const results: FedacoTestPost[] = await FedacoTestPost.createQuery().whereHas('parentPost',
       query => {
         query.where('name', 'Parent Post');
       }).get();
@@ -914,44 +914,44 @@ describe('test database eloquent integration', () => {
   });
 
   it('has on nested self referencing belongs to relationship', async () => {
-    const grandParentPost = await EloquentTestPost.createQuery().create({
+    const grandParentPost = await FedacoTestPost.createQuery().create({
       'name'   : 'Grandparent Post',
       'user_id': 1
     });
-    const parentPost      = await EloquentTestPost.createQuery().create({
+    const parentPost      = await FedacoTestPost.createQuery().create({
       'name'     : 'Parent Post',
       'parent_id': grandParentPost.id,
       'user_id'  : 2
     });
-    await EloquentTestPost.createQuery().create({
+    await FedacoTestPost.createQuery().create({
       'name'     : 'Child Post',
       'parent_id': parentPost.id,
       'user_id'  : 3
     });
     // @ts-ignore
-    const results: EloquentTestPost[] = await EloquentTestPost.createQuery().has(
+    const results: FedacoTestPost[] = await FedacoTestPost.createQuery().has(
       'parentPost.parentPost').get();
     expect(results.length).toBe(1);
     expect(head(results).name).toBe('Child Post');
   });
 
   it('where has on nested self referencing belongs to relationship', async () => {
-    const grandParentPost = await EloquentTestPost.createQuery().create({
+    const grandParentPost = await FedacoTestPost.createQuery().create({
       'name'   : 'Grandparent Post',
       'user_id': 1
     });
-    const parentPost      = await EloquentTestPost.createQuery().create({
+    const parentPost      = await FedacoTestPost.createQuery().create({
       'name'     : 'Parent Post',
       'parent_id': grandParentPost.id,
       'user_id'  : 2
     });
-    await EloquentTestPost.createQuery().create({
+    await FedacoTestPost.createQuery().create({
       'name'     : 'Child Post',
       'parent_id': parentPost.id,
       'user_id'  : 3
     });
     // @ts-ignore
-    const results: EloquentTestPost[] = await EloquentTestPost.createQuery().whereHas(
+    const results: FedacoTestPost[] = await FedacoTestPost.createQuery().whereHas(
       'parentPost.parentPost', query => {
         query.where('name', 'Grandparent Post');
       }).get();
@@ -960,34 +960,34 @@ describe('test database eloquent integration', () => {
   });
 
   it('has on self referencing has many relationship', async () => {
-    const parentPost = await EloquentTestPost.createQuery().create({
+    const parentPost = await FedacoTestPost.createQuery().create({
       'name'   : 'Parent Post',
       'user_id': 1
     });
-    await EloquentTestPost.createQuery().create({
+    await FedacoTestPost.createQuery().create({
       'name'     : 'Child Post',
       'parent_id': parentPost.id,
       'user_id'  : 2
     });
     // @ts-ignore
-    const results: EloquentTestPost[] = await EloquentTestPost.createQuery().has(
+    const results: FedacoTestPost[] = await FedacoTestPost.createQuery().has(
       'childPosts').get();
     expect(results.length).toBe(1);
     expect(head(results).name).toBe('Parent Post');
   });
 
   it('where has on self referencing has many relationship', async () => {
-    const parentPost = await EloquentTestPost.createQuery().create({
+    const parentPost = await FedacoTestPost.createQuery().create({
       'name'   : 'Parent Post',
       'user_id': 1
     });
-    await EloquentTestPost.createQuery().create({
+    await FedacoTestPost.createQuery().create({
       'name'     : 'Child Post',
       'parent_id': parentPost.id,
       'user_id'  : 2
     });
     // @ts-ignore
-    const results: EloquentTestPost[] = await EloquentTestPost.createQuery().whereHas('childPosts',
+    const results: FedacoTestPost[] = await FedacoTestPost.createQuery().whereHas('childPosts',
       query => {
         query.where('name', 'Child Post');
       }).get();
@@ -996,44 +996,44 @@ describe('test database eloquent integration', () => {
   });
 
   it('has on nested self referencing has many relationship', async () => {
-    const grandParentPost = await EloquentTestPost.createQuery().create({
+    const grandParentPost = await FedacoTestPost.createQuery().create({
       'name'   : 'Grandparent Post',
       'user_id': 1
     });
-    const parentPost      = await EloquentTestPost.createQuery().create({
+    const parentPost      = await FedacoTestPost.createQuery().create({
       'name'     : 'Parent Post',
       'parent_id': grandParentPost.id,
       'user_id'  : 2
     });
-    await EloquentTestPost.createQuery().create({
+    await FedacoTestPost.createQuery().create({
       'name'     : 'Child Post',
       'parent_id': parentPost.id,
       'user_id'  : 3
     });
     // @ts-ignore
-    const results: EloquentTestPost[] = await EloquentTestPost.createQuery().has(
+    const results: FedacoTestPost[] = await FedacoTestPost.createQuery().has(
       'childPosts.childPosts').get();
     expect(results.length).toBe(1);
     expect(head(results).name).toBe('Grandparent Post');
   });
 
   it('where has on nested self referencing has many relationship', async () => {
-    const grandParentPost = await EloquentTestPost.createQuery().create({
+    const grandParentPost = await FedacoTestPost.createQuery().create({
       'name'   : 'Grandparent Post',
       'user_id': 1
     });
-    const parentPost      = await EloquentTestPost.createQuery().create({
+    const parentPost      = await FedacoTestPost.createQuery().create({
       'name'     : 'Parent Post',
       'parent_id': grandParentPost.id,
       'user_id'  : 2
     });
-    await EloquentTestPost.createQuery().create({
+    await FedacoTestPost.createQuery().create({
       'name'     : 'Child Post',
       'parent_id': parentPost.id,
       'user_id'  : 3
     });
     // @ts-ignore
-    const results: EloquentTestPost[] = await EloquentTestPost.createQuery().whereHas(
+    const results: FedacoTestPost[] = await FedacoTestPost.createQuery().whereHas(
       'childPosts.childPosts', query => {
         query.where('name', 'Child Post');
       }).get();
@@ -1043,7 +1043,7 @@ describe('test database eloquent integration', () => {
   });
 
   it('has with non where bindings', async () => {
-    const user = await EloquentTestUser.createQuery().create({
+    const user = await FedacoTestUser.createQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
@@ -1054,7 +1054,7 @@ describe('test database eloquent integration', () => {
     ).newRelation('photos').create({
       'name': 'photo.jpg'
     });
-    const query                   = await EloquentTestUser.createQuery().has('postWithPhotos');
+    const query                   = await FedacoTestUser.createQuery().has('postWithPhotos');
     const {result: sql, bindings} = query.toSql();
     const bindingsCount           = bindings.length;
     const questionMarksCount      = sql.match(/\?/g)?.length || 0;
@@ -1063,19 +1063,19 @@ describe('test database eloquent integration', () => {
 
   it('has on morph to relationship', async () => {
     await expect(async () => {
-      await EloquentTestUser.createQuery().has('imageable').get();
+      await FedacoTestUser.createQuery().has('imageable').get();
     }).rejects.toThrowError(
       `the relation [imageable] can't acquired. try to define a relation like\n@HasManyColumn()\npublic readonly imageable;\n`);
   });
 
   it('belongs to many relationship models are properly hydrated over chunked request', async () => {
-    const user                    = await EloquentTestUser.createQuery().create({
+    const user                    = await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
     const friend                  = await user.newRelation('friends').create({
       'email': 'abigailotwell@gmail.com'
     });
-    const user1: EloquentTestUser = await EloquentTestUser.createQuery().first();
+    const user1: FedacoTestUser = await FedacoTestUser.createQuery().first();
     await user1.newRelation('friends')
       .chunk(2)
       .pipe(
@@ -1089,13 +1089,13 @@ describe('test database eloquent integration', () => {
   });
 
   it('belongs to many relationship models are properly hydrated over each request', async () => {
-    const user   = await EloquentTestUser.createQuery().create({
+    const user   = await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
     const friend = await user.newRelation('friends').create({
       'email': 'abigailotwell@gmail.com'
     });
-    await (await EloquentTestUser.createQuery().first()).newRelation('friends')
+    await (await FedacoTestUser.createQuery().first()).newRelation('friends')
       .each()
       .pipe(
         tap(({item: result, index}) => {
@@ -1107,13 +1107,13 @@ describe('test database eloquent integration', () => {
   });
 
   xit('belongs to many relationship models are properly hydrated over cursor request', async () => {
-    const user   = await EloquentTestUser.createQuery().create({
+    const user   = await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
     const friend = await user.newRelation('friends').create({
       'email': 'abigailotwell@gmail.com'
     });
-    for (const result of await (await EloquentTestUser.createQuery().first()).newRelation(
+    for (const result of await (await FedacoTestUser.createQuery().first()).newRelation(
       'friends').get()) {
       expect(result.email).toBe('abigailotwell@gmail.com');
       expect(result.getRelation('pivot').getAttribute('user_id')).toEqual(user.id);
@@ -1123,43 +1123,43 @@ describe('test database eloquent integration', () => {
 
   it('basic has many eager loading', async () => {
     // @ts-ignore
-    let user: EloquentTestUser = await EloquentTestUser.createQuery().create({
+    let user: FedacoTestUser = await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
     await user.newRelation('posts').create({
       'name': 'First Post'
     });
-    user = await EloquentTestUser.createQuery()
+    user = await FedacoTestUser.createQuery()
       .with('posts')
       .where('email', 'taylorotwell@gmail.com')
       .first();
     expect(head(await user.posts).name).toBe('First Post');
-    const post = await EloquentTestPost.createQuery().with('user').where('name',
+    const post = await FedacoTestPost.createQuery().with('user').where('name',
       'First Post').get();
     expect(head(post).user.email).toBe('taylorotwell@gmail.com');
   });
 
   it('basic nested self referencing has many eager loading', async () => {
     // @ts-ignore
-    let user: EloquentTestUser   = await EloquentTestUser.createQuery().create({
+    let user: FedacoTestUser   = await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
     // @ts-ignore
-    const post: EloquentTestPost = await user.newRelation('posts').create({
+    const post: FedacoTestPost = await user.newRelation('posts').create({
       'name': 'First Post'
     });
     await post.newRelation('childPosts').create({
       'name'   : 'Child Post',
       'user_id': user.id
     });
-    user = await EloquentTestUser.createQuery().with('posts.childPosts').where('email',
+    user = await FedacoTestUser.createQuery().with('posts.childPosts').where('email',
       'taylorotwell@gmail.com').first();
     expect(head(await user.posts)).not.toBeNull();
     expect(head(await user.posts).name).toBe('First Post');
     expect(head(await head(await user.posts).childPosts)).not.toBeNull();
     expect(head(await head(await user.posts).childPosts as any[]).name).toBe('Child Post');
     // @ts-ignore
-    const posts: EloquentTestPost[] = await EloquentTestPost.createQuery()
+    const posts: FedacoTestPost[] = await FedacoTestPost.createQuery()
       .with('parentPost.user')
       .where('name', 'Child Post').get();
     expect((await head(posts).parentPost)).not.toBeNull();
@@ -1168,7 +1168,7 @@ describe('test database eloquent integration', () => {
   });
 
   it('basic morph many relationship', async () => {
-    const user = await EloquentTestUser.createQuery().create({
+    const user = await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
     await user.newRelation('photos').create({
@@ -1191,30 +1191,30 @@ describe('test database eloquent integration', () => {
     expect(userPhotos.length).toBe(2);
 
     expect(isArray(await user.photos)).toBe(true);
-    expect((await user.photos)[0]).toBeInstanceOf(EloquentTestPhoto);
+    expect((await user.photos)[0]).toBeInstanceOf(FedacoTestPhoto);
     expect(isArray(await post.photos)).toBe(true);
-    expect((await post.photos)[0]).toBeInstanceOf(EloquentTestPhoto);
+    expect((await post.photos)[0]).toBeInstanceOf(FedacoTestPhoto);
     expect((await user.photos).length).toBe(2);
     expect((await post.photos).length).toBe(2);
     expect((await user.photos)[0].name).toBe('Avatar 1');
     expect((await user.photos)[1].name).toBe('Avatar 2');
     expect((await post.photos)[0].name).toBe('Hero 1');
     expect((await post.photos)[1].name).toBe('Hero 2');
-    const photos = await EloquentTestPhoto.createQuery().orderBy('name').get();
+    const photos = await FedacoTestPhoto.createQuery().orderBy('name').get();
     expect(isArray(photos)).toBeTruthy();
     expect(photos.length).toBe(4);
-    expect(await photos[0].imageable).toBeInstanceOf(EloquentTestUser);
-    expect(await photos[2].imageable).toBeInstanceOf(EloquentTestPost);
+    expect(await photos[0].imageable).toBeInstanceOf(FedacoTestUser);
+    expect(await photos[2].imageable).toBeInstanceOf(FedacoTestPost);
     expect((await photos[1].imageable).email).toBe('taylorotwell@gmail.com');
     expect((await photos[3].imageable).name).toBe('First Post');
   });
 
   it('morph map is used for creating and fetching through relation', async () => {
     Relation.morphMap({
-      'user': EloquentTestUser,
-      'post': EloquentTestPost
+      'user': FedacoTestUser,
+      'post': FedacoTestPost
     });
-    const user = await EloquentTestUser.createQuery().create({
+    const user = await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
     await user.newRelation('photos').create({
@@ -1233,9 +1233,9 @@ describe('test database eloquent integration', () => {
       'name': 'Hero 2'
     });
     expect(isArray(await user.photos)).toBeTruthy();
-    expect((await user.photos)[0]).toBeInstanceOf(EloquentTestPhoto);
+    expect((await user.photos)[0]).toBeInstanceOf(FedacoTestPhoto);
     expect(isArray(await post.photos)).toBeTruthy();
-    expect((await post.photos)[0]).toBeInstanceOf(EloquentTestPhoto);
+    expect((await post.photos)[0]).toBeInstanceOf(FedacoTestPhoto);
     expect((await user.photos).length).toBe(2);
     expect((await post.photos).length).toBe(2);
     expect((await user.photos)[0].name).toBe('Avatar 1');
@@ -1250,26 +1250,26 @@ describe('test database eloquent integration', () => {
 
   it('morph map is used when fetching parent', async () => {
     Relation.morphMap({
-      'user': EloquentTestUser,
-      'post': EloquentTestPost
+      'user': FedacoTestUser,
+      'post': FedacoTestPost
     });
-    const user = await EloquentTestUser.createQuery().create({
+    const user = await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
     await user.newRelation('photos').create({
       'name': 'Avatar 1'
     });
-    const photo = await EloquentTestPhoto.createQuery().first();
+    const photo = await FedacoTestPhoto.createQuery().first();
     expect(photo.getAttribute('imageable_type')).toBe('user');
-    expect(await photo.imageable).toBeInstanceOf(EloquentTestUser);
+    expect(await photo.imageable).toBeInstanceOf(FedacoTestUser);
   });
 
   it('morph map is merged by default', () => {
     const map1 = {
-      'user': EloquentTestUser
+      'user': FedacoTestUser
     };
     const map2 = {
-      'post': EloquentTestPost
+      'post': FedacoTestPost
     };
     Relation.morphMap(map1);
     Relation.morphMap(map2);
@@ -1278,10 +1278,10 @@ describe('test database eloquent integration', () => {
 
   it('morph map overwrites current map', () => {
     const map1 = {
-      'user': EloquentTestUser
+      'user': FedacoTestUser
     };
     const map2 = {
-      'post': EloquentTestPost
+      'post': FedacoTestPost
     };
     Relation.morphMap(map1, false);
     expect(Relation.morphMap()).toEqual(map1);
@@ -1290,24 +1290,24 @@ describe('test database eloquent integration', () => {
   });
 
   it('empty morph to relationship', async () => {
-    const photo = new EloquentTestPhoto();
+    const photo = new FedacoTestPhoto();
     expect(await photo.imageable).toBeNull();
   });
 
   it('save or fail', async () => {
     const date = '1970-01-01';
-    const post = EloquentTestPost.initAttributes({
+    const post = FedacoTestPost.initAttributes({
       'user_id'   : 1,
       'name'      : 'Post',
       'created_at': date,
       'updated_at': date
     });
     expect(await post.saveOrFail()).toBeTruthy();
-    expect(await EloquentTestPost.createQuery().count()).toEqual(1);
+    expect(await FedacoTestPost.createQuery().count()).toEqual(1);
   });
 
   it('saving json fields', async () => {
-    const model = await EloquentTestWithJSON.createQuery().create({
+    const model = await FedacoTestWithJSON.createQuery().create({
       'json': {
         'x': 0
       }
@@ -1339,14 +1339,14 @@ describe('test database eloquent integration', () => {
 
   it('save or fail with duplicated entry', async () => {
     const date = '1970-01-01';
-    await EloquentTestPost.createQuery().create({
+    await FedacoTestPost.createQuery().create({
       'id'        : 1,
       'user_id'   : 1,
       'name'      : 'Post',
       'created_at': date,
       'updated_at': date
     });
-    const post = EloquentTestPost.initAttributes({
+    const post = FedacoTestPost.initAttributes({
       'id'        : 1,
       'user_id'   : 1,
       'name'      : 'Post',
@@ -1361,7 +1361,7 @@ describe('test database eloquent integration', () => {
 
   it('multi inserts with different values', async () => {
     const date   = '1970-01-01';
-    const result = await EloquentTestPost.createQuery().insert([
+    const result = await FedacoTestPost.createQuery().insert([
       {
         'user_id'   : 1,
         'name'      : 'Post',
@@ -1375,12 +1375,12 @@ describe('test database eloquent integration', () => {
       }
     ]);
     expect(result).toBeTruthy();
-    expect(await EloquentTestPost.createQuery().count()).toEqual(2);
+    expect(await FedacoTestPost.createQuery().count()).toEqual(2);
   });
 
   it('multi inserts with same values', async () => {
     const date   = '1970-01-01';
-    const result = await EloquentTestPost.createQuery().insert([
+    const result = await FedacoTestPost.createQuery().insert([
       {
         'user_id'   : 1,
         'name'      : 'Post',
@@ -1394,11 +1394,11 @@ describe('test database eloquent integration', () => {
       }
     ]);
     expect(result).toBeTruthy();
-    expect(await EloquentTestPost.createQuery().count()).toEqual(2);
+    expect(await FedacoTestPost.createQuery().count()).toEqual(2);
   });
 
 //   it('nested transactions', () => {
-//     let user = EloquentTestUser.create({
+//     let user = FedacoTestUser.create({
 //       'email': 'taylor@laravel.com'
 //     });
 //     this.connection().transaction(() => {
@@ -1410,13 +1410,13 @@ describe('test database eloquent integration', () => {
 //         });
 //       } catch (e: Exception) {
 //       }
-//       let user = EloquentTestUser.first();
+//       let user = FedacoTestUser.first();
 //       this.assertSame('taylor@laravel.com', user.email);
 //     });
 //   });
 
 //   it('nested transactions using save or fail will succeed', () => {
-//     let user = EloquentTestUser.create({
+//     let user = FedacoTestUser.create({
 //       'email': 'taylor@laravel.com'
 //     });
 //     this.connection().transaction(() => {
@@ -1425,13 +1425,13 @@ describe('test database eloquent integration', () => {
 //         user.saveOrFail();
 //       } catch (e: Exception) {
 //       }
-//       let user = EloquentTestUser.first();
+//       let user = FedacoTestUser.first();
 //       this.assertSame('otwell@laravel.com', user.email);
 //       this.assertEquals(1, user.id);
 //     });
 //   });
 //   it('nested transactions using save or fail will fails', () => {
-//     let user = EloquentTestUser.create({
+//     let user = FedacoTestUser.create({
 //       'email': 'taylor@laravel.com'
 //     });
 //     this.connection().transaction(() => {
@@ -1441,14 +1441,14 @@ describe('test database eloquent integration', () => {
 //         user.saveOrFail();
 //       } catch (e: Exception) {
 //       }
-//       let user = EloquentTestUser.first();
+//       let user = FedacoTestUser.first();
 //       this.assertSame('taylor@laravel.com', user.email);
 //       this.assertEquals(1, user.id);
 //     });
 //   });
 
   it('to array includes default formatted timestamps', () => {
-    const model = new EloquentTestUser();
+    const model = new FedacoTestUser();
     model.setRawAttributes({
       'created_at': '2012-12-04',
       'updated_at': '2012-12-05'
@@ -1459,7 +1459,7 @@ describe('test database eloquent integration', () => {
   });
 
   it('to array includes custom formatted timestamps', () => {
-    const model = new EloquentTestUserWithCustomDateSerialization();
+    const model = new FedacoTestUserWithCustomDateSerialization();
     model.setRawAttributes({
       'created_at': '2012-12-04',
       'updated_at': '2012-12-05'
@@ -1470,34 +1470,34 @@ describe('test database eloquent integration', () => {
   });
 
   it('incrementing primary keys are cast to integers by default', async () => {
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
-    const user = await EloquentTestUser.createQuery().first();
+    const user = await FedacoTestUser.createQuery().first();
     expect(isNumber(user.id)).toBeTruthy();
   });
 
   // it('default incrementing primary key integer cast can be overwritten', async () => {
-  //   await EloquentTestUserWithStringCastId.createQuery().create({
+  //   await FedacoTestUserWithStringCastId.createQuery().create({
   //     'email': 'taylorotwell@gmail.com'
   //   });
-  //   const user = await EloquentTestUserWithStringCastId.createQuery().first();
+  //   const user = await FedacoTestUserWithStringCastId.createQuery().first();
   //   expect(isString(user.id)).toBeTruthy();
   // });
 
   it('relations are preloaded in global scope', async () => {
-    const user = await EloquentTestUserWithGlobalScope.createQuery().create({
+    const user = await FedacoTestUserWithGlobalScope.createQuery().create({
       'email': 'taylorotwell@gmail.com'
     });
     await user.newRelation('posts').create({
       'name': 'My Post'
     });
-    const result: EloquentTestUserWithGlobalScope = await EloquentTestUserWithGlobalScope.createQuery().first();
+    const result: FedacoTestUserWithGlobalScope = await FedacoTestUserWithGlobalScope.createQuery().first();
     expect(Object.keys(result.getRelations())).toHaveLength(1);
   });
 
   it('model ignored by global scope can be refreshed', async() => {
-    const user = await EloquentTestUserWithOmittingGlobalScope.createQuery().create({
+    const user = await FedacoTestUserWithOmittingGlobalScope.createQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
@@ -1505,130 +1505,130 @@ describe('test database eloquent integration', () => {
   });
 
 //   it('global scope can be removed by other global scope', () => {
-//     let user = EloquentTestUserWithGlobalScopeRemovingOtherScope.create({
+//     let user = FedacoTestUserWithGlobalScopeRemovingOtherScope.create({
 //       'id'   : 1,
 //       'email': 'taylorotwell@gmail.com'
 //     });
 //     user.delete();
-//     expect(EloquentTestUserWithGlobalScopeRemovingOtherScope.find(user.id)).toNotNull();
+//     expect(FedacoTestUserWithGlobalScopeRemovingOtherScope.find(user.id)).toNotNull();
 //   });
 
   it('for page before id correctly paginates', async () => {
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 2,
       'email': 'abigailotwell@gmail.com'
     });
-    let results = await EloquentTestUser.createQuery().forPageBeforeId(15, 2);
+    let results = await FedacoTestUser.createQuery().forPageBeforeId(15, 2);
     expect(results).toBeInstanceOf(FedacoBuilder);
     expect((await results.first()).id).toEqual(1);
-    results = await EloquentTestUser.createQuery().orderBy('id', 'desc').forPageBeforeId(15, 2);
+    results = await FedacoTestUser.createQuery().orderBy('id', 'desc').forPageBeforeId(15, 2);
     expect(results).toBeInstanceOf(FedacoBuilder);
     expect((await results.first()).id).toEqual(1);
   });
 
   it('for page after id correctly paginates', async () => {
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    await EloquentTestUser.createQuery().create({
+    await FedacoTestUser.createQuery().create({
       'id'   : 2,
       'email': 'abigailotwell@gmail.com'
     });
-    let results = await EloquentTestUser.createQuery().forPageAfterId(15, 1);
+    let results = await FedacoTestUser.createQuery().forPageAfterId(15, 1);
     expect(results).toBeInstanceOf(FedacoBuilder);
     expect((await results.first()).id).toEqual(2);
-    results = EloquentTestUser.createQuery().orderBy('id', 'desc').forPageAfterId(15, 1);
+    results = FedacoTestUser.createQuery().orderBy('id', 'desc').forPageAfterId(15, 1);
     expect(results).toBeInstanceOf(FedacoBuilder);
     expect((await results.first()).id).toEqual(2);
   });
 
   it('morph to relations across database connections', async () => {
     let item = null;
-    await EloquentTestItem.createQuery().create({
+    await FedacoTestItem.createQuery().create({
       'id': 1
     });
-    await EloquentTestOrder.createQuery().create({
+    await FedacoTestOrder.createQuery().create({
       'id'       : 1,
-      'item_type': 'EloquentTestItem',
+      'item_type': 'FedacoTestItem',
       'item_id'  : 1
     });
     try {
-      const order = await EloquentTestOrder.createQuery().first();
+      const order = await FedacoTestOrder.createQuery().first();
       item        = order.item;
     } catch (e) {
       console.log(e);
     }
-    expect(item).toBeInstanceOf(EloquentTestItem);
+    expect(item).toBeInstanceOf(FedacoTestItem);
   });
 
   it('eager loaded morph to relations on another database connection', async () => {
-    await EloquentTestPost.createQuery().create({
+    await FedacoTestPost.createQuery().create({
       'id'     : 1,
       'name'   : 'Default Connection Post',
       'user_id': 1
     });
-    await EloquentTestPhoto.createQuery().create({
+    await FedacoTestPhoto.createQuery().create({
       'id'            : 1,
       'imageable_type': 'post',
       'imageable_id'  : 1,
       'name'          : 'Photo'
     });
-    await EloquentTestPost.useConnection('second_connection').create({
+    await FedacoTestPost.useConnection('second_connection').create({
       'id'     : 1,
       'name'   : 'Second Connection Post',
       'user_id': 1
     });
-    await EloquentTestPhoto.useConnection('second_connection').create({
+    await FedacoTestPhoto.useConnection('second_connection').create({
       'id'            : 1,
       'imageable_type': 'post',
       'imageable_id'  : 1,
       'name'          : 'Photo'
     });
     const defaultConnectionPost = (
-      await EloquentTestPhoto.createQuery().with('imageable').first()
+      await FedacoTestPhoto.createQuery().with('imageable').first()
     ).imageable;
     const secondConnectionPost  = (
-      await EloquentTestPhoto.useConnection('second_connection').with('imageable').first()
+      await FedacoTestPhoto.useConnection('second_connection').with('imageable').first()
     ).imageable;
     expect('Default Connection Post').toEqual(defaultConnectionPost.name);
     expect('Second Connection Post').toEqual(secondConnectionPost.name);
   });
 
   it('belongs to many custom pivot', async () => {
-    const john = await EloquentTestUserWithCustomFriendPivot.createQuery().create({
+    const john = await FedacoTestUserWithCustomFriendPivot.createQuery().create({
       'id'   : 1,
       'name' : 'John Doe',
       'email': 'johndoe@example.com'
     });
-    const jane = await EloquentTestUserWithCustomFriendPivot.createQuery().create({
+    const jane = await FedacoTestUserWithCustomFriendPivot.createQuery().create({
       'id'   : 2,
       'name' : 'Jane Doe',
       'email': 'janedoe@example.com'
     });
-    const jack = await EloquentTestUserWithCustomFriendPivot.createQuery().create({
+    const jack = await FedacoTestUserWithCustomFriendPivot.createQuery().create({
       'id'   : 3,
       'name' : 'Jack Doe',
       'email': 'jackdoe@example.com'
     });
-    const jule = await EloquentTestUserWithCustomFriendPivot.createQuery().create({
+    const jule = await FedacoTestUserWithCustomFriendPivot.createQuery().create({
       'id'   : 4,
       'name' : 'Jule Doe',
       'email': 'juledoe@example.com'
     });
-    await EloquentTestFriendLevel.createQuery().create({
+    await FedacoTestFriendLevel.createQuery().create({
       'id'   : 1,
       'level': 'acquaintance'
     });
-    await EloquentTestFriendLevel.createQuery().create({
+    await FedacoTestFriendLevel.createQuery().create({
       'id'   : 2,
       'level': 'friend'
     });
-    await EloquentTestFriendLevel.createQuery().create({
+    await FedacoTestFriendLevel.createQuery().create({
       'id'   : 3,
       'level': 'bff'
     });
@@ -1642,7 +1642,7 @@ describe('test database eloquent integration', () => {
       'friend_level_id': 3
     });
 
-    const johnWithFriends = await EloquentTestUserWithCustomFriendPivot.createQuery()
+    const johnWithFriends = await FedacoTestUserWithCustomFriendPivot.createQuery()
       .with('friends').find(1);
     expect(johnWithFriends.friends.length).toBe(3);
     expect(await (await johnWithFriends.friends.find(it => it.id === 3).getAttribute(
@@ -1652,11 +1652,11 @@ describe('test database eloquent integration', () => {
   });
 
   it('is after retrieving the same model', async () => {
-    const saved     = await EloquentTestUser.createQuery().create({
+    const saved     = await FedacoTestUser.createQuery().create({
       'id'   : 1,
       'email': 'taylorotwell@gmail.com'
     });
-    const retrieved = await EloquentTestUser.createQuery().find(1);
+    const retrieved = await FedacoTestUser.createQuery().find(1);
     expect(saved.is(retrieved)).toBeTruthy();
   });
 
@@ -1665,7 +1665,7 @@ describe('test database eloquent integration', () => {
     const nowSerialized              = formatISO(startOfSecond(now));
     const nowWithFractionsSerialized = now.toJSON();
     // Carbon.setTestNow(now);
-    const storedUser1                = await EloquentTestUser.createQuery().create({
+    const storedUser1                = await FedacoTestUser.createQuery().create({
       'id'      : 1,
       'email'   : 'taylorotwell@gmail.com',
       'birthday': now
@@ -1675,7 +1675,7 @@ describe('test database eloquent integration', () => {
       'name' : 'Mathieu TUDISCO'
     });
     const freshStoredUser1 = await storedUser1.fresh();
-    const storedUser2      = await EloquentTestUser.createQuery().create({
+    const storedUser2      = await FedacoTestUser.createQuery().create({
       'id'      : 2,
       'email'   : 'taylorotwell@gmail.com',
       'birthday': now
@@ -1684,7 +1684,7 @@ describe('test database eloquent integration', () => {
       'email': 'dev@mathieutu.ovh'
     });
     const freshStoredUser2   = await storedUser2.fresh();
-    const notStoredUser      = EloquentTestUser.initAttributes({
+    const notStoredUser      = FedacoTestUser.initAttributes({
       'id'      : 3,
       'email'   : 'taylorotwell@gmail.com',
       'birthday': now
@@ -1705,7 +1705,7 @@ describe('test database eloquent integration', () => {
       'created_at': nowSerialized,
       'updated_at': nowSerialized
     });
-    expect(storedUser1).toBeInstanceOf(EloquentTestUser);
+    expect(storedUser1).toBeInstanceOf(FedacoTestUser);
     expect(storedUser2.toArray()).toEqual({
       'id'        : 2,
       'email'     : 'taylorotwell@gmail.com',
@@ -1721,7 +1721,7 @@ describe('test database eloquent integration', () => {
       'created_at': nowSerialized,
       'updated_at': nowSerialized
     });
-    expect(storedUser2).toBeInstanceOf(EloquentTestUser);
+    expect(storedUser2).toBeInstanceOf(FedacoTestUser);
     expect(notStoredUser.toArray()).toEqual({
       'id'      : 3,
       'email'   : 'taylorotwell@gmail.com',
@@ -1730,22 +1730,22 @@ describe('test database eloquent integration', () => {
     expect(freshNotStoredUser).toBeNull();
   });
 //   it('fresh method on collection', () => {
-//     EloquentTestUser.create({
+//     FedacoTestUser.create({
 //       'id'   : 1,
 //       'email': 'taylorotwell@gmail.com'
 //     });
-//     EloquentTestUser.create({
+//     FedacoTestUser.create({
 //       'id'   : 2,
 //       'email': 'taylorotwell@gmail.com'
 //     });
-//     let users = EloquentTestUser.all().add(new EloquentTestUser({
+//     let users = FedacoTestUser.all().add(new FedacoTestUser({
 //       'id'   : 3,
 //       'email': 'taylorotwell@gmail.com'
 //     }));
-//     EloquentTestUser.find(1).update({
+//     FedacoTestUser.find(1).update({
 //       'name': 'Mathieu TUDISCO'
 //     });
-//     EloquentTestUser.find(2).update({
+//     FedacoTestUser.find(2).update({
 //       'email': 'dev@mathieutu.ovh'
 //     });
 //     expect(users.fresh()).toEqual(users.map.fresh());
@@ -1754,7 +1754,7 @@ describe('test database eloquent integration', () => {
 //   });
 
   it('timestamps using default date format', () => {
-    const model = new EloquentTestUser();
+    const model = new FedacoTestUser();
     model.setDateFormat('yyyy-MM-dd HH:mm:ss');
     model.setRawAttributes({
       'created_at': '2017-11-14 08:23:19'
@@ -1763,7 +1763,7 @@ describe('test database eloquent integration', () => {
   });
 
   it('timestamps using default sql server date format', () => {
-    const model = new EloquentTestUser();
+    const model = new FedacoTestUser();
     model.setDateFormat('yyyy-MM-dd HH:mm:ss.SSS');
     model.setRawAttributes({
       'created_at': '2017-11-14 08:23:19.000',
@@ -1774,7 +1774,7 @@ describe('test database eloquent integration', () => {
   });
 
   it('timestamps using custom date format', () => {
-    const model = new EloquentTestUser();
+    const model = new FedacoTestUser();
     model.setDateFormat('yyyy-MM-dd HH:mm:ss.SSSS');
     model.setRawAttributes({
       'created_at': '2017-11-14 08:23:19.0000',
@@ -1784,7 +1784,7 @@ describe('test database eloquent integration', () => {
     expect(model.fromDateTime(model.getAttribute('updated_at'))).toBe('2017-11-14 08:23:19.734800');
   });
   it('timestamps using old sql server date format', () => {
-    const model = new EloquentTestUser();
+    const model = new FedacoTestUser();
     model.setDateFormat('yyyy-MM-dd HH:mm:ss.000');
     model.setRawAttributes({
       'created_at': '2017-11-14 08:23:19.000'
@@ -1792,7 +1792,7 @@ describe('test database eloquent integration', () => {
     expect(model.fromDateTime(model.getAttribute('created_at'))).toBe('2017-11-14 08:23:19.000');
   });
   // it('timestamps using old sql server date format fallback to default parsing', () => {
-  //   let model = new EloquentTestUser();
+  //   let model = new FedacoTestUser();
   //   model.setDateFormat('Y-m-d H:i:s.000');
   //   model.setRawAttributes({
   //     'updated_at': '2017-11-14 08:23:19.734'
@@ -1806,11 +1806,11 @@ describe('test database eloquent integration', () => {
   // });
 //   it('updating child model touches parent', () => {
 //     let before = Carbon.now();
-//     let user   = EloquentTouchingUser.initAttributes({
+//     let user   = FedacoTouchingUser.initAttributes({
 //       'id'   : 1,
 //       'email': 'taylorotwell@gmail.com'
 //     });
-//     let post   = EloquentTouchingPost.initAttributes({
+//     let post   = FedacoTouchingPost.initAttributes({
 //       'name'   : 'Parent Post',
 //       'user_id': 1
 //     });
@@ -1828,11 +1828,11 @@ describe('test database eloquent integration', () => {
 //   });
 //   it('multi level touching works', () => {
 //     let before = Carbon.now();
-//     let user   = EloquentTouchingUser.initAttributes({
+//     let user   = FedacoTouchingUser.initAttributes({
 //       'id'   : 1,
 //       'email': 'taylorotwell@gmail.com'
 //     });
-//     let post   = EloquentTouchingPost.initAttributes({
+//     let post   = FedacoTouchingPost.initAttributes({
 //       'id'     : 1,
 //       'name'   : 'Parent Post',
 //       'user_id': 1
@@ -1840,7 +1840,7 @@ describe('test database eloquent integration', () => {
 //     expect(before.isSameDay(user.updated_at)).toBeTruthy();
 //     expect(before.isSameDay(post.updated_at)).toBeTruthy();
 //     Carbon.setTestNow(future = before.copy().addDays(3));
-//     EloquentTouchingComment.initAttributes({
+//     FedacoTouchingComment.initAttributes({
 //       'content': 'Comment content',
 //       'post_id': 1
 //     });
@@ -1852,11 +1852,11 @@ describe('test database eloquent integration', () => {
 //   });
 //   it('deleting child model touches parent timestamps', () => {
 //     let before = Carbon.now();
-//     let user   = EloquentTouchingUser.initAttributes({
+//     let user   = FedacoTouchingUser.initAttributes({
 //       'id'   : 1,
 //       'email': 'taylorotwell@gmail.com'
 //     });
-//     let post   = EloquentTouchingPost.initAttributes({
+//     let post   = FedacoTouchingPost.initAttributes({
 //       'name'   : 'Parent Post',
 //       'user_id': 1
 //     });
@@ -1870,11 +1870,11 @@ describe('test database eloquent integration', () => {
 //   });
 //   it('touching child model updates parents timestamps', () => {
 //     let before = Carbon.now();
-//     let user   = EloquentTouchingUser.initAttributes({
+//     let user   = FedacoTouchingUser.initAttributes({
 //       'id'   : 1,
 //       'email': 'taylorotwell@gmail.com'
 //     });
-//     let post   = EloquentTouchingPost.initAttributes({
+//     let post   = FedacoTouchingPost.initAttributes({
 //       'id'     : 1,
 //       'name'   : 'Parent Post',
 //       'user_id': 1
@@ -1891,11 +1891,11 @@ describe('test database eloquent integration', () => {
 //   });
 //   it('touching child model respects parent no touching', () => {
 //     let before = Carbon.now();
-//     let user   = EloquentTouchingUser.initAttributes({
+//     let user   = FedacoTouchingUser.initAttributes({
 //       'id'   : 1,
 //       'email': 'taylorotwell@gmail.com'
 //     });
-//     let post   = EloquentTouchingPost.initAttributes({
+//     let post   = FedacoTouchingPost.initAttributes({
 //       'id'     : 1,
 //       'name'   : 'Parent Post',
 //       'user_id': 1
@@ -1903,7 +1903,7 @@ describe('test database eloquent integration', () => {
 //     expect(before.isSameDay(user.updated_at)).toBeTruthy();
 //     expect(before.isSameDay(post.updated_at)).toBeTruthy();
 //     Carbon.setTestNow(future = before.copy().addDays(3));
-//     EloquentTouchingUser.withoutTouching(() => {
+//     FedacoTouchingUser.withoutTouching(() => {
 //       post.touch();
 //     });
 //     expect('It is not touching model own timestamps in withoutTouching scope.').toBeTruthy(
@@ -1915,18 +1915,18 @@ describe('test database eloquent integration', () => {
 //   });
 //   it('updating child post respects no touching definition', () => {
 //     let before = Carbon.now();
-//     let user   = EloquentTouchingUser.initAttributes({
+//     let user   = FedacoTouchingUser.initAttributes({
 //       'id'   : 1,
 //       'email': 'taylorotwell@gmail.com'
 //     });
-//     let post   = EloquentTouchingPost.initAttributes({
+//     let post   = FedacoTouchingPost.initAttributes({
 //       'name'   : 'Parent Post',
 //       'user_id': 1
 //     });
 //     expect(before.isSameDay(user.updated_at)).toBeTruthy();
 //     expect(before.isSameDay(post.updated_at)).toBeTruthy();
 //     Carbon.setTestNow(future = before.copy().addDays(3));
-//     EloquentTouchingUser.withoutTouching(() => {
+//     FedacoTouchingUser.withoutTouching(() => {
 //       post.update({
 //         'name': 'Updated'
 //       });
@@ -1939,11 +1939,11 @@ describe('test database eloquent integration', () => {
 //   });
 //   it('updating model in the disabled scope touches its own timestamps', () => {
 //     let before = Carbon.now();
-//     let user   = EloquentTouchingUser.initAttributes({
+//     let user   = FedacoTouchingUser.initAttributes({
 //       'id'   : 1,
 //       'email': 'taylorotwell@gmail.com'
 //     });
-//     let post   = EloquentTouchingPost.initAttributes({
+//     let post   = FedacoTouchingPost.initAttributes({
 //       'name'   : 'Parent Post',
 //       'user_id': 1
 //     });
@@ -1963,18 +1963,18 @@ describe('test database eloquent integration', () => {
 //   });
 //   it('deleting child model respects the no touching rule', () => {
 //     let before = Carbon.now();
-//     let user   = EloquentTouchingUser.initAttributes({
+//     let user   = FedacoTouchingUser.initAttributes({
 //       'id'   : 1,
 //       'email': 'taylorotwell@gmail.com'
 //     });
-//     let post   = EloquentTouchingPost.initAttributes({
+//     let post   = FedacoTouchingPost.initAttributes({
 //       'name'   : 'Parent Post',
 //       'user_id': 1
 //     });
 //     expect(before.isSameDay(user.updated_at)).toBeTruthy();
 //     expect(before.isSameDay(post.updated_at)).toBeTruthy();
 //     Carbon.setTestNow(future = before.copy().addDays(3));
-//     EloquentTouchingUser.withoutTouching(() => {
+//     FedacoTouchingUser.withoutTouching(() => {
 //       post.delete();
 //     });
 //     expect('It is touching models when it should be disabled.').toBeTruthy(
@@ -1983,11 +1983,11 @@ describe('test database eloquent integration', () => {
 //   });
 //   it('respected multi level touching chain', () => {
 //     let before = Carbon.now();
-//     let user   = EloquentTouchingUser.initAttributes({
+//     let user   = FedacoTouchingUser.initAttributes({
 //       'id'   : 1,
 //       'email': 'taylorotwell@gmail.com'
 //     });
-//     let post   = EloquentTouchingPost.initAttributes({
+//     let post   = FedacoTouchingPost.initAttributes({
 //       'id'     : 1,
 //       'name'   : 'Parent Post',
 //       'user_id': 1
@@ -1995,8 +1995,8 @@ describe('test database eloquent integration', () => {
 //     expect(before.isSameDay(user.updated_at)).toBeTruthy();
 //     expect(before.isSameDay(post.updated_at)).toBeTruthy();
 //     Carbon.setTestNow(future = before.copy().addDays(3));
-//     EloquentTouchingUser.withoutTouching(() => {
-//       EloquentTouchingComment.initAttributes({
+//     FedacoTouchingUser.withoutTouching(() => {
+//       FedacoTouchingComment.initAttributes({
 //         'content': 'Comment content',
 //         'post_id': 1
 //       });
@@ -2009,11 +2009,11 @@ describe('test database eloquent integration', () => {
 //   });
 //   it('touches great parent even when parent is in no touch scope', () => {
 //     let before = Carbon.now();
-//     let user   = EloquentTouchingUser.initAttributes({
+//     let user   = FedacoTouchingUser.initAttributes({
 //       'id'   : 1,
 //       'email': 'taylorotwell@gmail.com'
 //     });
-//     let post   = EloquentTouchingPost.initAttributes({
+//     let post   = FedacoTouchingPost.initAttributes({
 //       'id'     : 1,
 //       'name'   : 'Parent Post',
 //       'user_id': 1
@@ -2021,8 +2021,8 @@ describe('test database eloquent integration', () => {
 //     expect(before.isSameDay(user.updated_at)).toBeTruthy();
 //     expect(before.isSameDay(post.updated_at)).toBeTruthy();
 //     Carbon.setTestNow(future = before.copy().addDays(3));
-//     EloquentTouchingPost.withoutTouching(() => {
-//       EloquentTouchingComment.initAttributes({
+//     FedacoTouchingPost.withoutTouching(() => {
+//       FedacoTouchingComment.initAttributes({
 //         'content': 'Comment content',
 //         'post_id': 1
 //       });
@@ -2035,11 +2035,11 @@ describe('test database eloquent integration', () => {
 //   });
 //   it('can nest calls of no touching', () => {
 //     let before = Carbon.now();
-//     let user   = EloquentTouchingUser.initAttributes({
+//     let user   = FedacoTouchingUser.initAttributes({
 //       'id'   : 1,
 //       'email': 'taylorotwell@gmail.com'
 //     });
-//     let post   = EloquentTouchingPost.initAttributes({
+//     let post   = FedacoTouchingPost.initAttributes({
 //       'id'     : 1,
 //       'name'   : 'Parent Post',
 //       'user_id': 1
@@ -2047,9 +2047,9 @@ describe('test database eloquent integration', () => {
 //     expect(before.isSameDay(user.updated_at)).toBeTruthy();
 //     expect(before.isSameDay(post.updated_at)).toBeTruthy();
 //     Carbon.setTestNow(future = before.copy().addDays(3));
-//     EloquentTouchingUser.withoutTouching(() => {
-//       EloquentTouchingPost.withoutTouching(() => {
-//         EloquentTouchingComment.initAttributes({
+//     FedacoTouchingUser.withoutTouching(() => {
+//       FedacoTouchingPost.withoutTouching(() => {
+//         FedacoTouchingComment.initAttributes({
 //           'content': 'Comment content',
 //           'post_id': 1
 //         });
@@ -2063,11 +2063,11 @@ describe('test database eloquent integration', () => {
 //   });
 //   it('can pass array of models to ignore', () => {
 //     let before = Carbon.now();
-//     let user   = EloquentTouchingUser.initAttributes({
+//     let user   = FedacoTouchingUser.initAttributes({
 //       'id'   : 1,
 //       'email': 'taylorotwell@gmail.com'
 //     });
-//     let post   = EloquentTouchingPost.initAttributes({
+//     let post   = FedacoTouchingPost.initAttributes({
 //       'id'     : 1,
 //       'name'   : 'Parent Post',
 //       'user_id': 1
@@ -2075,8 +2075,8 @@ describe('test database eloquent integration', () => {
 //     expect(before.isSameDay(user.updated_at)).toBeTruthy();
 //     expect(before.isSameDay(post.updated_at)).toBeTruthy();
 //     Carbon.setTestNow(future = before.copy().addDays(3));
-//     Model.withoutTouchingOn([EloquentTouchingUser, EloquentTouchingPost], () => {
-//       EloquentTouchingComment.initAttributes({
+//     Model.withoutTouchingOn([FedacoTouchingUser, FedacoTouchingPost], () => {
+//       FedacoTouchingComment.initAttributes({
 //         'content': 'Comment content',
 //         'post_id': 1
 //       });
@@ -2114,11 +2114,11 @@ describe('test database eloquent integration', () => {
   });
 });
 
-/*Eloquent Models...*/
+/*Fedaco Models...*/
 @Table({
   morphTypeName: 'user'
 })
-export class EloquentTestUser extends Model {
+export class FedacoTestUser extends Model {
   _table: any   = 'users';
   _dates: any   = ['birthday'];
   _guarded: any = [];
@@ -2139,7 +2139,7 @@ export class EloquentTestUser extends Model {
   updated_at;
 
   @BelongsToManyColumn({
-    related        : EloquentTestUser,
+    related        : FedacoTestUser,
     table          : 'friends',
     foreignPivotKey: 'user_id',
     relatedPivotKey: 'friend_id'
@@ -2147,7 +2147,7 @@ export class EloquentTestUser extends Model {
   friends;
 
   @BelongsToManyColumn({
-    related        : EloquentTestUser,
+    related        : FedacoTestUser,
     table          : 'friends',
     foreignPivotKey: 'user_id',
     relatedPivotKey: 'friend_id',
@@ -2159,7 +2159,7 @@ export class EloquentTestUser extends Model {
   friendsOne;
 
   @BelongsToManyColumn({
-    related        : EloquentTestUser,
+    related        : FedacoTestUser,
     table          : 'friends',
     foreignPivotKey: 'user_id',
     relatedPivotKey: 'friend_id',
@@ -2171,91 +2171,91 @@ export class EloquentTestUser extends Model {
   friendsTwo;
 
   @HasManyColumn({
-    related   : forwardRef(() => EloquentTestPost),
+    related   : forwardRef(() => FedacoTestPost),
     foreignKey: 'user_id',
   })
   public posts: Promise<any[]>;
 
   @HasOneColumn({
-    related   : forwardRef(() => EloquentTestPost),
+    related   : forwardRef(() => FedacoTestPost),
     foreignKey: 'user_id',
   })
   public post;
 
   @MorphManyColumn({
-    related  : forwardRef(() => EloquentTestPhoto),
+    related  : forwardRef(() => FedacoTestPhoto),
     morphName: 'imageable',
   })
   public photos;
 
   @HasOneColumn({
-    related   : forwardRef(() => EloquentTestPost),
+    related   : forwardRef(() => FedacoTestPost),
     foreignKey: 'user_id',
     onQuery   : (q => {
       q.join('photo', join => {
         join.on('photo.imageable_id', 'post.id');
-        join.where('photo.imageable_type', 'EloquentTestPost');
+        join.where('photo.imageable_type', 'FedacoTestPost');
       });
     })
   })
   public postWithPhotos;
 }
 
-export class EloquentTestUserWithCustomFriendPivot extends EloquentTestUser {
+export class FedacoTestUserWithCustomFriendPivot extends FedacoTestUser {
   @BelongsToManyColumn({
-    related        : EloquentTestUser,
+    related        : FedacoTestUser,
     table          : 'friends',
     foreignPivotKey: 'user_id',
     relatedPivotKey: 'friend_id',
     onQuery        : (q: BelongsToMany) => {
-      q.using(EloquentTestFriendPivot).withPivot('user_id', 'friend_id', 'friend_level_id');
+      q.using(FedacoTestFriendPivot).withPivot('user_id', 'friend_id', 'friend_level_id');
     }
   })
   friends;
 }
 
-export class EloquentTestUserWithSpaceInColumnName extends EloquentTestUser {
+export class FedacoTestUserWithSpaceInColumnName extends FedacoTestUser {
   _table: any = 'users_with_space_in_colum_name';
 
 }
 
-export class EloquentTestNonIncrementing extends Model {
+export class FedacoTestNonIncrementing extends Model {
   _table: any               = 'non_incrementing_users';
   _guarded: any             = [];
   public _incrementing: any = false;
   public _timestamps: any   = false;
 }
 
-export class EloquentTestNonIncrementingSecond extends EloquentTestNonIncrementing {
+export class FedacoTestNonIncrementingSecond extends FedacoTestNonIncrementing {
   _connection: any = 'second_connection';
 
   @Column()
   name;
 }
 
-export class EloquentTestUserWithGlobalScope extends EloquentTestUser {
+export class FedacoTestUserWithGlobalScope extends FedacoTestUser {
   public boot() {
     super.boot();
-    EloquentTestUserWithGlobalScope.addGlobalScope('withPosts', builder => {
+    FedacoTestUserWithGlobalScope.addGlobalScope('withPosts', builder => {
       builder.with('posts');
     });
   }
 }
 
-export class EloquentTestUserWithOmittingGlobalScope extends EloquentTestUser {
+export class FedacoTestUserWithOmittingGlobalScope extends FedacoTestUser {
   public boot() {
     super.boot();
-    EloquentTestUserWithOmittingGlobalScope.addGlobalScope('notEmail', builder => {
+    FedacoTestUserWithOmittingGlobalScope.addGlobalScope('notEmail', builder => {
       builder.where('email', '!=', 'taylorotwell@gmail.com');
     });
   }
 }
 
-// export class EloquentTestUserWithGlobalScopeRemovingOtherScope extends Eloquent {
+// export class FedacoTestUserWithGlobalScopeRemovingOtherScope extends Fedaco {
 //   protected table: any = "soft_deleted_users";
 //   protected guarded: any = [];
 //   public static boot() {
-//     EloquentTestUserWithGlobalScopeRemovingOtherScope.addGlobalScope(builder => {
+//     FedacoTestUserWithGlobalScopeRemovingOtherScope.addGlobalScope(builder => {
 //       builder.withoutGlobalScope(SoftDeletingScope);
 //     });
 //     super.boot();
@@ -2264,7 +2264,7 @@ export class EloquentTestUserWithOmittingGlobalScope extends EloquentTestUser {
 @Table({
   morphTypeName: 'post',
 })
-export class EloquentTestPost extends Model {
+export class FedacoTestPost extends Model {
   _table: any   = 'posts';
   _guarded: any = [];
 
@@ -2278,19 +2278,19 @@ export class EloquentTestPost extends Model {
   // user_id; no need to define this since BelongsToColumn dynamic add foreign user_id
 
   @BelongsToColumn({
-    related   : EloquentTestUser,
+    related   : FedacoTestUser,
     foreignKey: 'user_id'
   })
   public user;
 
   @MorphManyColumn({
-    related  : forwardRef(() => EloquentTestPhoto),
+    related  : forwardRef(() => FedacoTestPhoto),
     morphName: 'imageable',
   })
   photos;
 
   // public photos() {
-  //   return this.morphMany(EloquentTestPhoto, 'imageable');
+  //   return this.morphMany(FedacoTestPhoto, 'imageable');
   // }
 
   // @Column()
@@ -2298,28 +2298,28 @@ export class EloquentTestPost extends Model {
 
 
   @HasManyColumn({
-    related   : forwardRef(() => EloquentTestPost),
+    related   : forwardRef(() => FedacoTestPost),
     foreignKey: 'parent_id',
   })
   childPosts: Promise<any[]>;
 
   // public childPosts() {
-  //   return this.hasMany(EloquentTestPost, 'parent_id');
+  //   return this.hasMany(FedacoTestPost, 'parent_id');
   // }
   //
 
   @BelongsToColumn({
-    related   : forwardRef(() => EloquentTestPost),
+    related   : forwardRef(() => FedacoTestPost),
     foreignKey: 'parent_id',
   })
   parentPost;
 
   // public parentPost() {
-  //   return this.belongsTo(EloquentTestPost, 'parent_id');
+  //   return this.belongsTo(FedacoTestPost, 'parent_id');
   // }
 }
 
-export class EloquentTestFriendLevel extends Model {
+export class FedacoTestFriendLevel extends Model {
   _table: any   = 'friend_levels';
   _guarded: any = [];
 
@@ -2328,7 +2328,7 @@ export class EloquentTestFriendLevel extends Model {
 }
 
 @Table({})
-export class EloquentTestPhoto extends Model {
+export class FedacoTestPhoto extends Model {
   _table: any   = 'photos';
   _guarded: any = [];
 
@@ -2337,16 +2337,16 @@ export class EloquentTestPhoto extends Model {
 
   @MorphToColumn({
     morphTypeMap: {
-      'EloquentTestUser': EloquentTestUser,
-      'EloquentTestPost': EloquentTestPost,
-      'user'            : EloquentTestUser,
-      'post'            : EloquentTestPost,
+      'FedacoTestUser': FedacoTestUser,
+      'FedacoTestPost': FedacoTestPost,
+      'user'            : FedacoTestUser,
+      'post'            : FedacoTestPost,
     }
   })
   public imageable;
 }
 
-export class EloquentTestUserWithStringCastId extends EloquentTestUser {
+export class FedacoTestUserWithStringCastId extends FedacoTestUser {
   // protected casts: any = {
   //   "id": "string"
   // };
@@ -2356,13 +2356,13 @@ export class EloquentTestUserWithStringCastId extends EloquentTestUser {
 
 }
 
-export class EloquentTestUserWithCustomDateSerialization extends EloquentTestUser {
+export class FedacoTestUserWithCustomDateSerialization extends FedacoTestUser {
   serializeDate(date) {
     return format(date, 'dd-MM-yy');
   }
 }
 
-export class EloquentTestOrder extends Model {
+export class FedacoTestOrder extends Model {
   _table: any   = 'test_orders';
   _guarded: any = [];
   _with: any[]  = ['item'];
@@ -2372,13 +2372,13 @@ export class EloquentTestOrder extends Model {
 
   @MorphToColumn({
     morphTypeMap: {
-      EloquentTestItem: forwardRef(() => EloquentTestItem)
+      FedacoTestItem: forwardRef(() => FedacoTestItem)
     }
   })
   public item;
 }
 
-export class EloquentTestItem extends Model {
+export class FedacoTestItem extends Model {
   _table: any      = 'test_items';
   _guarded: any    = [];
   _connection: any = 'second_connection';
@@ -2386,7 +2386,7 @@ export class EloquentTestItem extends Model {
 
 }
 
-export class EloquentTestWithJSON extends Model {
+export class FedacoTestWithJSON extends Model {
   _table: any   = 'with_json';
   _guarded: any = [];
 
@@ -2399,44 +2399,44 @@ export class EloquentTestWithJSON extends Model {
   json;
 }
 
-export class EloquentTestFriendPivot extends Pivot {
+export class FedacoTestFriendPivot extends Pivot {
   _table: any   = 'friends';
   _guarded: any = [];
 
   @BelongsToColumn({
-    related: EloquentTestUser
+    related: FedacoTestUser
   })
   public user;
 
   @BelongsToColumn({
-    related: EloquentTestUser
+    related: FedacoTestUser
   })
   public friend;
 
   @BelongsToColumn({
-    related   : EloquentTestFriendLevel,
+    related   : FedacoTestFriendLevel,
     foreignKey: 'friend_level_id'
   })
   public level;
 }
 
-// export class EloquentTouchingUser extends Eloquent {
+// export class FedacoTouchingUser extends Fedaco {
 //   protected table: any = "users";
 //   protected guarded: any = [];
 // }
-// export class EloquentTouchingPost extends Eloquent {
+// export class FedacoTouchingPost extends Fedaco {
 //   protected table: any = "posts";
 //   protected guarded: any = [];
 //   protected touches: any = ["user"];
 //   public user() {
-//     return this.belongsTo(EloquentTouchingUser, "user_id");
+//     return this.belongsTo(FedacoTouchingUser, "user_id");
 //   }
 // }
-// export class EloquentTouchingComment extends Eloquent {
+// export class FedacoTouchingComment extends Fedaco {
 //   protected table: any = "comments";
 //   protected guarded: any = [];
 //   protected touches: any = ["post"];
 //   public post() {
-//     return this.belongsTo(EloquentTouchingPost, "post_id");
+//     return this.belongsTo(FedacoTouchingPost, "post_id");
 //   }
 // }

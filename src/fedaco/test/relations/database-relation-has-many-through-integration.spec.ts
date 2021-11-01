@@ -179,7 +179,7 @@ async function migrateDefault() {
   });
 }
 
-describe('test database eloquent has many through integration', () => {
+describe('test database fedaco has many through integration', () => {
   beforeEach(async () => {
     const db = new DatabaseConfig();
     db.addConnection({

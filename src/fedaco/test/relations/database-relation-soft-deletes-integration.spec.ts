@@ -76,7 +76,7 @@ async function createUsers() {
   await taylor.delete();
 }
 
-describe('test database eloquent soft deletes integration', () => {
+describe('test database fedaco soft deletes integration', () => {
   beforeEach(async () => {
     // Carbon.setTestNow(Carbon.now());
     const db = new DatabaseConfig();

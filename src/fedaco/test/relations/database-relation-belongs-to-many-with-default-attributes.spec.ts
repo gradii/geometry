@@ -18,7 +18,7 @@ function getRelationArguments() {
   return [builder, parent, 'club_user', 'club_id', 'user_id', 'id', 'id', null, false];
 }
 
-describe('test database eloquent belongs to many with default attributes', () => {
+describe('test database fedaco belongs to many with default attributes', () => {
 
   it('with pivot value method sets where conditions for fetching', () => {
     const args     = getRelationArguments();

@@ -52,7 +52,7 @@ async function seedData() {
   ]);
 }
 
-describe('test database eloquent belongs to many sync return value type', () => {
+describe('test database fedaco belongs to many sync return value type', () => {
   beforeAll(async () => {
     const db = new DatabaseConfig();
     db.addConnection({

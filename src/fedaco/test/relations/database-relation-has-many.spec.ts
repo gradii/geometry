@@ -43,7 +43,7 @@ function expectCreatedModel(relation, attributes) {
   return model;
 }
 
-describe('test database eloquent has many', () => {
+describe('test database fedaco has many', () => {
   it('find or new method finds model', async () => {
     const relation = getRelation();
 

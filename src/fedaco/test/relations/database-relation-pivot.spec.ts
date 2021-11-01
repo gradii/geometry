@@ -2,7 +2,7 @@ import { Model } from '../../src/fedaco/model';
 import { Pivot } from '../../src/fedaco/relations/pivot';
 
 
-describe('test database eloquent pivot', () => {
+describe('test database fedaco pivot', () => {
 
   it('properties are set correctly', () => {
     const parent = new Model();

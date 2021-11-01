@@ -1,5 +1,6 @@
-import {task, src} from 'gulp';
-import {buildConfig} from '../../package-tools';
+import { src, task } from 'gulp';
+import path from 'path';
+import { buildConfig } from '../../package-tools';
 
 // This import lacks type definitions.
 const gulpClean = require('gulp-clean');

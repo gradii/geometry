@@ -761,7 +761,7 @@ describe('fedaco builder', () => {
     builder.setModel(model);
     builder.setEagerLoads({
       'orders': query => {
-        global['__eloquent.constrain'] = query;
+        global['__fedaco.constrain'] = query;
       }
     });
 
@@ -808,7 +808,7 @@ describe('fedaco builder', () => {
     expect(spy15).toReturnWith(relation);
 
     expect(results).toEqual(['models.matched']);
-    expect(relation).toEqual(global['__eloquent.constrain']);
+    expect(relation).toEqual(global['__fedaco.constrain']);
   });
 
   it('get relation properly sets nested relationships', () => {

@@ -53,7 +53,7 @@ async function seedData() {
   await user.newRelation('articles').sync([3, 1, 2]);
 }
 
-describe('test database eloquent belongs to many chunk by id', () => {
+describe('test database fedaco belongs to many chunk by id', () => {
   beforeAll(async () => {
     const db = new DatabaseConfig();
     db.addConnection({

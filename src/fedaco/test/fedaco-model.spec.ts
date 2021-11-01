@@ -180,7 +180,7 @@ function setDispatch(modelClazz: typeof Model, util: boolean = true) {
   modelClazz.setEventDispatcher(events);
 }
 
-describe('test database eloquent model', () => {
+describe('test database fedaco model', () => {
 
   beforeAll(() => {
     const connection = new Conn();
@@ -395,29 +395,29 @@ describe('test database eloquent model', () => {
   // });
 
   it('create method saves new model', async () => {
-    global['__eloquent.saved'] = false;
+    global['__fedaco.saved'] = false;
     const model                = await new FedacoModelSaveStub().newQuery().create({
       'name': 'taylor'
     });
-    expect(global['__eloquent.saved']).toBeTruthy();
+    expect(global['__fedaco.saved']).toBeTruthy();
     expect(model.name).toBe('taylor');
   });
 
   it('make method does not save new model', () => {
-    global['__eloquent.saved'] = false;
+    global['__fedaco.saved'] = false;
     const model                = new FedacoModelSaveStub().newQuery().make({
       'name': 'taylor'
     });
-    expect(global['__eloquent.saved']).toBeFalsy();
+    expect(global['__fedaco.saved']).toBeFalsy();
     expect(model.name).toBe('taylor');
   });
 
   it('force create method saves new model with guarded attributes', async () => {
-    global['__eloquent.saved'] = false;
+    global['__fedaco.saved'] = false;
     const model                = await new FedacoModelSaveStub().newQuery().forceCreate({
       'id': 21
     });
-    expect(global['__eloquent.saved']).toBeTruthy();
+    expect(global['__fedaco.saved']).toBeTruthy();
     expect(model.id).toEqual(21);
   });
 
@@ -504,12 +504,12 @@ describe('test database eloquent model', () => {
     expect(spy2).toBeCalledWith({'name': 'taylor'});
 
     expect(spy5.mock.calls).toEqual([
-      ['eloquent.saving: FedacoModelStub', model],
-      ['eloquent.updating: FedacoModelStub', model]
+      ['fedaco.saving: FedacoModelStub', model],
+      ['fedaco.updating: FedacoModelStub', model]
     ]);
     expect(spy6.mock.calls).toEqual([
-      ['eloquent.updated: FedacoModelStub', model],
-      ['eloquent.saved: FedacoModelStub', model]
+      ['fedaco.updated: FedacoModelStub', model],
+      ['fedaco.saved: FedacoModelStub', model]
     ]);
   });
 
@@ -589,7 +589,7 @@ describe('test database eloquent model', () => {
 
     expect(result).toBeFalsy();
 
-    expect(spy4).toBeCalledWith(`eloquent.saving: FedacoModelStub`, model);
+    expect(spy4).toBeCalledWith(`fedaco.saving: FedacoModelStub`, model);
   });
 
   it('update is canceled if updating event returns false', async () => {
@@ -624,8 +624,8 @@ describe('test database eloquent model', () => {
 
     expect(spy4.mock.calls).toEqual(
       [
-        [`eloquent.saving: FedacoModelStub`, model],
-        [`eloquent.updating: FedacoModelStub`, model]
+        [`fedaco.saving: FedacoModelStub`, model],
+        [`fedaco.updating: FedacoModelStub`, model]
       ]
     );
     expect(spy4).toHaveNthReturnedWith(1, true);
@@ -662,7 +662,7 @@ describe('test database eloquent model', () => {
     expect(result).toBeFalsy();
 
     expect(spy4).toBeCalledWith(
-      'eloquent.saving: FedacoModelEventObjectStub', model);
+      'fedaco.saving: FedacoModelEventObjectStub', model);
     expect(spy4).toHaveReturnedWith(false);
   });
 
@@ -758,15 +758,15 @@ describe('test database eloquent model', () => {
 
     expect(spy4.mock.calls).toEqual(
       [
-        [`eloquent.saving: FedacoModelStub`, model],
-        [`eloquent.updating: FedacoModelStub`, model]
+        [`fedaco.saving: FedacoModelStub`, model],
+        [`fedaco.updating: FedacoModelStub`, model]
       ]
     );
 
     expect(spy5.mock.calls).toEqual(
       [
-        [`eloquent.updated: FedacoModelStub`, model],
-        [`eloquent.saved: FedacoModelStub`, model]
+        [`fedaco.updated: FedacoModelStub`, model],
+        [`fedaco.saved: FedacoModelStub`, model]
       ]
     );
   });
@@ -946,15 +946,15 @@ describe('test database eloquent model', () => {
 
     expect(spy4.mock.calls).toEqual(
       [
-        [`eloquent.saving: FedacoModelStub`, model],
-        [`eloquent.creating: FedacoModelStub`, model]
+        [`fedaco.saving: FedacoModelStub`, model],
+        [`fedaco.creating: FedacoModelStub`, model]
       ]
     );
 
     expect(spy5.mock.calls).toEqual(
       [
-        [`eloquent.created: FedacoModelStub`, model],
-        [`eloquent.saved: FedacoModelStub`, model]
+        [`fedaco.created: FedacoModelStub`, model],
+        [`fedaco.saved: FedacoModelStub`, model]
       ]
     );
 
@@ -1008,15 +1008,15 @@ describe('test database eloquent model', () => {
 
     expect(spy4.mock.calls).toEqual(
       [
-        [`eloquent.saving: FedacoModelStub`, model],
-        [`eloquent.creating: FedacoModelStub`, model]
+        [`fedaco.saving: FedacoModelStub`, model],
+        [`fedaco.creating: FedacoModelStub`, model]
       ]
     );
 
     expect(spy5.mock.calls).toEqual(
       [
-        [`eloquent.created: FedacoModelStub`, model],
-        [`eloquent.saved: FedacoModelStub`, model]
+        [`fedaco.created: FedacoModelStub`, model],
+        [`fedaco.saved: FedacoModelStub`, model]
       ]
     );
 
@@ -1052,8 +1052,8 @@ describe('test database eloquent model', () => {
 
     expect(spy4.mock.calls).toEqual(
       [
-        [`eloquent.saving: FedacoModelStub`, model],
-        [`eloquent.creating: FedacoModelStub`, model]
+        [`fedaco.saving: FedacoModelStub`, model],
+        [`fedaco.creating: FedacoModelStub`, model]
       ]
     );
 
@@ -1758,7 +1758,7 @@ describe('test database eloquent model', () => {
     let model = new FedacoModelStub();
     resolveModel(model);
     let relation = model.hasOne(FedacoModelSaveStub);
-    expect(relation.getQualifiedForeignKeyName()).toBe('save_stub.eloquent_model_stub_id');
+    expect(relation.getQualifiedForeignKeyName()).toBe('save_stub.fedaco_model_stub_id');
     model = new FedacoModelStub();
     resolveModel(model);
     relation = model.hasOne(FedacoModelSaveStub, 'foo');
@@ -1792,7 +1792,7 @@ describe('test database eloquent model', () => {
     let model = new FedacoModelStub();
     resolveModel(model);
     let relation = model.hasMany(FedacoModelSaveStub);
-    expect(relation.getQualifiedForeignKeyName()).toBe('save_stub.eloquent_model_stub_id');
+    expect(relation.getQualifiedForeignKeyName()).toBe('save_stub.fedaco_model_stub_id');
     model = new FedacoModelStub();
     resolveModel(model);
     relation = model.hasMany(FedacoModelSaveStub, 'foo');
@@ -1851,9 +1851,9 @@ describe('test database eloquent model', () => {
     resolveModel(model);
     let relation = model.belongsToMany(FedacoModelSaveStub);
     expect(relation.getQualifiedForeignPivotKeyName()).toBe(
-      'eloquent_model_save_stub_eloquent_model_stub.eloquent_model_stub_id');
+      'fedaco_model_save_stub_fedaco_model_stub.fedaco_model_stub_id');
     expect(relation.getQualifiedRelatedPivotKeyName()).toBe(
-      'eloquent_model_save_stub_eloquent_model_stub.eloquent_model_save_stub_id');
+      'fedaco_model_save_stub_fedaco_model_stub.fedaco_model_save_stub_id');
     expect(relation.getParent()).toEqual(model);
     expect(relation.getQuery().getModel()).toBeInstanceOf(FedacoModelSaveStub);
     expect(relation.getRelationName()).toEqual('ddddd');
@@ -1977,10 +1977,10 @@ describe('test database eloquent model', () => {
 //   it('model observers can be attached to models', () => {
 //     FedacoModelStub.setEventDispatcher(events = m.mock(Dispatcher));
 //     events.shouldReceive('listen').once()._with(
-//       'eloquent.creating: Illuminate\\Tests\\Database\\FedacoModelStub',
+//       'fedaco.creating: Illuminate\\Tests\\Database\\FedacoModelStub',
 //       EloquentTestObserverStub + '@creating');
 //     events.shouldReceive('listen').once()._with(
-//       'eloquent.saved: Illuminate\\Tests\\Database\\FedacoModelStub',
+//       'fedaco.saved: Illuminate\\Tests\\Database\\FedacoModelStub',
 //       EloquentTestObserverStub + '@saved');
 //     events.shouldReceive('forget');
 //     FedacoModelStub.observe(new EloquentTestObserverStub());
@@ -1989,10 +1989,10 @@ describe('test database eloquent model', () => {
 //   it('model observers can be attached to models with string', () => {
 //     FedacoModelStub.setEventDispatcher(events = m.mock(Dispatcher));
 //     events.shouldReceive('listen').once()._with(
-//       'eloquent.creating: Illuminate\\Tests\\Database\\FedacoModelStub',
+//       'fedaco.creating: Illuminate\\Tests\\Database\\FedacoModelStub',
 //       EloquentTestObserverStub + '@creating');
 //     events.shouldReceive('listen').once()._with(
-//       'eloquent.saved: Illuminate\\Tests\\Database\\FedacoModelStub',
+//       'fedaco.saved: Illuminate\\Tests\\Database\\FedacoModelStub',
 //       EloquentTestObserverStub + '@saved');
 //     events.shouldReceive('forget');
 //     FedacoModelStub.observe(EloquentTestObserverStub);
@@ -2001,10 +2001,10 @@ describe('test database eloquent model', () => {
 //   it('model observers can be attached to models through an array', () => {
 //     FedacoModelStub.setEventDispatcher(events = m.mock(Dispatcher));
 //     events.shouldReceive('listen').once()._with(
-//       'eloquent.creating: Illuminate\\Tests\\Database\\FedacoModelStub',
+//       'fedaco.creating: Illuminate\\Tests\\Database\\FedacoModelStub',
 //       EloquentTestObserverStub + '@creating');
 //     events.shouldReceive('listen').once()._with(
-//       'eloquent.saved: Illuminate\\Tests\\Database\\FedacoModelStub',
+//       'fedaco.saved: Illuminate\\Tests\\Database\\FedacoModelStub',
 //       EloquentTestObserverStub + '@saved');
 //     events.shouldReceive('forget');
 //     FedacoModelStub.observe([EloquentTestObserverStub]);
@@ -2021,16 +2021,16 @@ describe('test database eloquent model', () => {
 //   it('model observers can be attached to models through calling observe method only once', () => {
 //     FedacoModelStub.setEventDispatcher(events = m.mock(Dispatcher));
 //     events.shouldReceive('listen').once()._with(
-//       'eloquent.creating: Illuminate\\Tests\\Database\\FedacoModelStub',
+//       'fedaco.creating: Illuminate\\Tests\\Database\\FedacoModelStub',
 //       EloquentTestObserverStub + '@creating');
 //     events.shouldReceive('listen').once()._with(
-//       'eloquent.saved: Illuminate\\Tests\\Database\\FedacoModelStub',
+//       'fedaco.saved: Illuminate\\Tests\\Database\\FedacoModelStub',
 //       EloquentTestObserverStub + '@saved');
 //     events.shouldReceive('listen').once()._with(
-//       'eloquent.creating: Illuminate\\Tests\\Database\\FedacoModelStub',
+//       'fedaco.creating: Illuminate\\Tests\\Database\\FedacoModelStub',
 //       EloquentTestAnotherObserverStub + '@creating');
 //     events.shouldReceive('listen').once()._with(
-//       'eloquent.saved: Illuminate\\Tests\\Database\\FedacoModelStub',
+//       'fedaco.saved: Illuminate\\Tests\\Database\\FedacoModelStub',
 //       EloquentTestAnotherObserverStub + '@saved');
 //     events.shouldReceive('forget');
 //     FedacoModelStub.observe([EloquentTestObserverStub, EloquentTestAnotherObserverStub]);
@@ -2039,10 +2039,10 @@ describe('test database eloquent model', () => {
 //   it('without event dispatcher', () => {
 //     FedacoModelSaveStub.setEventDispatcher(events = m.mock(Dispatcher));
 //     events.shouldReceive('listen').once()._with(
-//       'eloquent.creating: Illuminate\\Tests\\Database\\FedacoModelSaveStub',
+//       'fedaco.creating: Illuminate\\Tests\\Database\\FedacoModelSaveStub',
 //       EloquentTestObserverStub + '@creating');
 //     events.shouldReceive('listen').once()._with(
-//       'eloquent.saved: Illuminate\\Tests\\Database\\FedacoModelSaveStub',
+//       'fedaco.saved: Illuminate\\Tests\\Database\\FedacoModelSaveStub',
 //       EloquentTestObserverStub + '@saved');
 //     events.shouldNotReceive('until');
 //     events.shouldNotReceive('dispatch');
@@ -2058,9 +2058,9 @@ describe('test database eloquent model', () => {
 //       model.save();
 //     });
 //     events.shouldReceive('until').once()._with(
-//       'eloquent.saving: Illuminate\\Tests\\Database\\FedacoModelSaveStub', model);
+//       'fedaco.saving: Illuminate\\Tests\\Database\\FedacoModelSaveStub', model);
 //     events.shouldReceive('dispatch').once()._with(
-//       'eloquent.saved: Illuminate\\Tests\\Database\\FedacoModelSaveStub', model);
+//       'fedaco.saved: Illuminate\\Tests\\Database\\FedacoModelSaveStub', model);
 //     model.last_name = 'Otwell';
 //     model.save();
 //     FedacoModelSaveStub.flushEventListeners();
@@ -2156,7 +2156,7 @@ describe('test database eloquent model', () => {
 //   it('replicating event is fired when replicating model', () => {
 //     let model = new FedacoModelStub();
 //     model.setEventDispatcher(events = m.mock(Dispatcher));
-//     events.shouldReceive('dispatch').once()._with('eloquent.replicating: ' + get_class(model),
+//     events.shouldReceive('dispatch').once()._with('fedaco.replicating: ' + get_class(model),
 //       m.on(m => {
 //         return model.is(m);
 //       }));
@@ -2602,13 +2602,13 @@ describe('test database eloquent model', () => {
 //     expect(user.name).toNull();
 //   });
 });
-// describe('test eloquent test observer stub', () => {
+// describe('test fedaco test observer stub', () => {
 //   it('creating', () => {
 //   });
 //   it('saved', () => {
 //   });
 // });
-// describe('test eloquent test another observer stub', () => {
+// describe('test fedaco test another observer stub', () => {
 //   it('creating', () => {
 //   });
 //   it('saved', () => {
@@ -2778,7 +2778,7 @@ export class FedacoModelSaveStub extends Model {
     // if (this.fireModelEvent('saving') === false) {
     //   return false;
     // }
-    global['__eloquent.saved'] = true;
+    global['__fedaco.saved'] = true;
     this.fireModelEvent('saved', false);
   }
 
@@ -2861,7 +2861,7 @@ export class FedacoModelWithoutTableStub extends Model {
 }
 
 //
-// describe('test eloquent model booting test stub', () => {
+// describe('test fedaco model booting test stub', () => {
 //   it('unboot', () => {
 //     delete FedacoModelBootingTestStub.booted[FedacoModelBootingTestStub];
 //   });
