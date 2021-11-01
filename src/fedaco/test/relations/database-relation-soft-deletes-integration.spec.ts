@@ -67,11 +67,11 @@ async function createSchema() {
 async function createUsers() {
   const taylor = await SoftDeletesTestUser.createQuery().create({
     'id': 1,
-    'email': 'taylorotwell@gmail.com'
+    'email': 'linbolen@gradii.com'
   });
   await SoftDeletesTestUser.createQuery().create({
     'id': 2,
-    'email': 'abigailotwell@gmail.com'
+    'email': 'xsilen@gradii.com'
   });
   await taylor.delete();
 }
@@ -124,9 +124,9 @@ describe('test database fedaco soft deletes integration', () => {
   //   expect(query.paginate(2).all()).toHaveLength(1);
   //    query = SoftDeletesTestUser.createQuery();
   //   expect(query.simplePaginate(2).all()).toHaveLength(1);
-  //   expect(SoftDeletesTestUser.createQuery().where('email', 'taylorotwell@gmail.com').increment(
+  //   expect(SoftDeletesTestUser.createQuery().where('email', 'linbolen@gradii.com').increment(
   //     'id')).toEqual(0);
-  //   expect(SoftDeletesTestUser.createQuery().where('email', 'taylorotwell@gmail.com').decrement(
+  //   expect(SoftDeletesTestUser.createQuery().where('email', 'linbolen@gradii.com').decrement(
   //     'id')).toEqual(0);
   // });
   it('with trashed returns all records', async () => {
@@ -203,13 +203,13 @@ describe('test database fedaco soft deletes integration', () => {
   it('first or new', async () => {
     await createUsers();
     let result = await SoftDeletesTestUser.createQuery().firstOrNew({
-      'email': 'taylorotwell@gmail.com'
+      'email': 'linbolen@gradii.com'
     });
     expect(result.id).toBeUndefined();
     result = await SoftDeletesTestUser.createQuery().pipe(
       withTrashed()
     ).firstOrNew({
-      'email': 'taylorotwell@gmail.com'
+      'email': 'linbolen@gradii.com'
     });
     expect(result.id).toEqual(1);
   });
@@ -225,9 +225,9 @@ describe('test database fedaco soft deletes integration', () => {
   it('first or create', async () => {
     await createUsers();
     let result = await SoftDeletesTestUser.createQuery().pipe(withTrashed()).firstOrCreate({
-      'email': 'taylorotwell@gmail.com'
+      'email': 'linbolen@gradii.com'
     });
-    expect(result.email).toBe('taylorotwell@gmail.com');
+    expect(result.email).toBe('linbolen@gradii.com');
     expect(await SoftDeletesTestUser.createQuery().get()).toHaveLength(1);
     result = await SoftDeletesTestUser.createQuery().firstOrCreate({
       'email': 'foo@bar.com'
@@ -291,7 +291,7 @@ describe('test database fedaco soft deletes integration', () => {
     expect(result.email).toBe('bar@baz.com');
     expect(await SoftDeletesTestUser.createQuery().get()).toHaveLength(2);
     result = await SoftDeletesTestUser.createQuery().pipe(withTrashed()).updateOrCreate({
-      'email': 'taylorotwell@gmail.com'
+      'email': 'linbolen@gradii.com'
     }, {
       'email': 'foo@bar.com'
     });
@@ -302,7 +302,7 @@ describe('test database fedaco soft deletes integration', () => {
 
   it('has one relationship can be soft deleted', async () => {
     await createUsers();
-    let abigail = await SoftDeletesTestUser.createQuery().where('email', 'abigailotwell@gmail.com').first();
+    let abigail = await SoftDeletesTestUser.createQuery().where('email', 'xsilen@gradii.com').first();
     await abigail.newRelation('address').create({
       'address': 'Laravel avenue 43'
     });
@@ -324,7 +324,7 @@ describe('test database fedaco soft deletes integration', () => {
 
   it('belongs to relationship can be soft deleted', async () => {
     await createUsers();
-    let abigail = await SoftDeletesTestUser.createQuery().where('email', 'abigailotwell@gmail.com').first();
+    let abigail = await SoftDeletesTestUser.createQuery().where('email', 'xsilen@gradii.com').first();
     const group = await SoftDeletesTestGroup.createQuery().create({
       'name': 'admin'
     });
@@ -348,7 +348,7 @@ describe('test database fedaco soft deletes integration', () => {
 
   it('has many relationship can be soft deleted', async () => {
     await createUsers();
-    let abigail = await SoftDeletesTestUser.createQuery().where('email', 'abigailotwell@gmail.com').first();
+    let abigail = await SoftDeletesTestUser.createQuery().where('email', 'xsilen@gradii.com').first();
     await abigail.newRelation('posts').create({
       'title': 'First Title'
     });
@@ -371,7 +371,7 @@ describe('test database fedaco soft deletes integration', () => {
 
   it('second level relationship can be soft deleted', async () => {
     await createUsers();
-    let abigail = await SoftDeletesTestUser.createQuery().where('email', 'abigailotwell@gmail.com').first();
+    let abigail = await SoftDeletesTestUser.createQuery().where('email', 'xsilen@gradii.com').first();
     const post = await abigail.newRelation('posts').create({
       'title': 'First Title'
     });
@@ -387,15 +387,15 @@ describe('test database fedaco soft deletes integration', () => {
   it('where has with deleted relationship', async () => {
     await createUsers();
     const abigail = await SoftDeletesTestUser.createQuery().where('email',
-      'abigailotwell@gmail.com').first();
+      'xsilen@gradii.com').first();
     const post = await abigail.newRelation('posts').create({
       'title': 'First Title'
     });
     let users = await SoftDeletesTestUser.createQuery().where('email',
-      'taylorotwell@gmail.com').has('posts').get();
+      'linbolen@gradii.com').has('posts').get();
     expect(users).toHaveLength(0);
     users = await SoftDeletesTestUser.createQuery().where('email',
-      'abigailotwell@gmail.com').has('posts').get();
+      'xsilen@gradii.com').has('posts').get();
     expect(users).toHaveLength(1);
     users = await SoftDeletesTestUser.createQuery().where('email', 'doesnt@exist.com').orHas(
       'posts').get();
@@ -422,7 +422,7 @@ describe('test database fedaco soft deletes integration', () => {
   it('where has with nested deleted relationship and only trashed condition', async () => {
     await createUsers();
     const abigail = await SoftDeletesTestUser.createQuery().where('email',
-      'abigailotwell@gmail.com').first();
+      'xsilen@gradii.com').first();
     const post = await abigail.newRelation('posts').create({
       'title': 'First Title'
     });
@@ -442,7 +442,7 @@ describe('test database fedaco soft deletes integration', () => {
   it('where has with nested deleted relationship', async () => {
     await createUsers();
     const abigail = await SoftDeletesTestUser.createQuery().where('email',
-      'abigailotwell@gmail.com').first();
+      'xsilen@gradii.com').first();
     const post = await abigail.newRelation('posts').create({
       'title': 'First Title'
     });
@@ -463,7 +463,7 @@ describe('test database fedaco soft deletes integration', () => {
   it('where has with nested deleted relationship and with trashed condition', async () => {
     await createUsers();
     const abigail = await SoftDeletesTestUserWithTrashedPosts.createQuery().where('email',
-      'abigailotwell@gmail.com').first();
+      'xsilen@gradii.com').first();
     const post = await abigail.newRelation('posts').create({
       'title': 'First Title'
     });
@@ -475,7 +475,7 @@ describe('test database fedaco soft deletes integration', () => {
   it('with count with nested deleted relationship and only trashed condition', async () => {
     await createUsers();
     const abigail = await SoftDeletesTestUser.createQuery().where('email',
-      'abigailotwell@gmail.com').first();
+      'xsilen@gradii.com').first();
     const post1 = await abigail.newRelation('posts').create({
       'title': 'First Title'
     });
@@ -519,16 +519,16 @@ describe('test database fedaco soft deletes integration', () => {
     await createUsers();
     const users = SoftDeletesTestUser.createQuery().where(q => {
       q.where('email',
-        'taylorotwell@gmail.com').orWhere('email',
-        'abigailotwell@gmail.com');
+        'linbolen@gradii.com').orWhere('email',
+        'xsilen@gradii.com');
     })
-    expect(await users.pluck('email')).toEqual(['abigailotwell@gmail.com']);
+    expect(await users.pluck('email')).toEqual(['xsilen@gradii.com']);
   });
 
   it('morph to with trashed', async () => {
     await createUsers();
     const abigail = await SoftDeletesTestUser.createQuery().where('email',
-      'abigailotwell@gmail.com').first();
+      'xsilen@gradii.com').first();
     const post1 = await abigail.newRelation('posts').create({
       'title': 'First Title'
     });
@@ -561,7 +561,7 @@ describe('test database fedaco soft deletes integration', () => {
 
   it('morph to with bad method call', async () => {
     await createUsers();
-    const abigail = await SoftDeletesTestUser.createQuery().where('email', 'abigailotwell@gmail.com').first();
+    const abigail = await SoftDeletesTestUser.createQuery().where('email', 'xsilen@gradii.com').first();
     const post1 = await abigail.newRelation('posts').create({
       'title': 'First Title'
     });
@@ -582,7 +582,7 @@ describe('test database fedaco soft deletes integration', () => {
   it('morph to with constraints', async () => {
     await createUsers();
     const abigail = await SoftDeletesTestUser.createQuery().where('email',
-      'abigailotwell@gmail.com').first();
+      'xsilen@gradii.com').first();
     const post1 = await abigail.newRelation('posts').create({
       'title': 'First Title'
     });
@@ -593,7 +593,7 @@ describe('test database fedaco soft deletes integration', () => {
     });
     const comment = await SoftDeletesTestCommentWithTrashed.createQuery().with({
       'owner': q => {
-        q.where('email', 'taylorotwell@gmail.com');
+        q.where('email', 'linbolen@gradii.com');
       }
     }).first();
     expect(comment.owner).toBeNull();
@@ -602,7 +602,7 @@ describe('test database fedaco soft deletes integration', () => {
   it('morph to without constraints', async () => {
     await createUsers();
     const abigail = await SoftDeletesTestUser.createQuery()
-      .where('email', 'abigailotwell@gmail.com')
+      .where('email', 'xsilen@gradii.com')
       .first();
     const post1 = await abigail.newRelation('posts').create({
       'title': 'First Title'
@@ -622,7 +622,7 @@ describe('test database fedaco soft deletes integration', () => {
   it('morph to non soft deleting model', async () => {
     const taylor = await TestUserWithoutSoftDelete.createQuery().create({
       'id': 1,
-      'email': 'taylorotwell@gmail.com'
+      'email': 'linbolen@gradii.com'
     });
     const post1 = await taylor.newRelation('posts').create({
       'title': 'First Title'

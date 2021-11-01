@@ -18,7 +18,7 @@ function schema(connectionName = 'default'): SchemaBuilder {
 async function seedData() {
   const taylor = await TestUser.createQuery().create({
     'id': 1,
-    'email': 'taylorotwell@gmail.com'
+    'email': 'linbolen@gradii.com'
   });
   const post = await taylor.newRelation('posts').create({
     'title': 'A title',

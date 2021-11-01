@@ -185,11 +185,11 @@ describe('test database fedaco integration', () => {
   it('basic create model', async () => {
     const model = await new EloquentTestUser().newQuery().create({
       'id'   : 1,
-      'email': 'taylorotwell@gmail.com'
+      'email': 'linbolen@gradii.com'
     });
 
     expect(model.id).toBe(1);
-    expect(model.email).toBe('taylorotwell@gmail.com');
+    expect(model.email).toBe('linbolen@gradii.com');
     await model.delete();
   });
 
@@ -198,22 +198,22 @@ describe('test database fedaco integration', () => {
 
     await factory.newQuery().create({
       'id'   : 1,
-      'email': 'taylorotwell@gmail.com'
+      'email': 'linbolen@gradii.com'
     });
 
     await factory.newQuery().create({
       'id'   : 2,
-      'email': 'abigailotwell@gmail.com'
+      'email': 'xsilen@gradii.com'
     });
 
     expect(await factory.newQuery().count()).toEqual(2);
     expect(
-      await factory.newQuery().where('email', 'taylorotwell@gmail.com').doesntExist()).toBeFalsy();
+      await factory.newQuery().where('email', 'linbolen@gradii.com').doesntExist()).toBeFalsy();
     expect(
       await factory.newQuery().where('email', 'mohamed@laravel.com').doesntExist()).toBeTruthy();
     let model: EloquentTestUser = await factory.newQuery()
-      .where('email', 'taylorotwell@gmail.com').first();
-    expect(model.email).toBe('taylorotwell@gmail.com');
+      .where('email', 'linbolen@gradii.com').first();
+    expect(model.email).toBe('linbolen@gradii.com');
     expect(model.email !== undefined).toBeTruthy();
     const friends = await model.friends;
     expect(friends !== undefined).toBeTruthy();
@@ -381,7 +381,7 @@ export class EloquentTestUserWithGlobalScope extends EloquentTestUser {
 //   public static boot() {
 //     super.boot();
 //     EloquentTestUserWithOmittingGlobalScope.addGlobalScope(builder => {
-//       builder.where("email", "!=", "taylorotwell@gmail.com");
+//       builder.where("email", "!=", "linbolen@gradii.com");
 //     });
 //   }
 // }

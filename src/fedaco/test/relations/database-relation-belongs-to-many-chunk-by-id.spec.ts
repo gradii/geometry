@@ -36,7 +36,7 @@ async function createSchema() {
 async function seedData() {
   const user = await BelongsToManyChunkByIdTestTestUser.createQuery().create({
     'id'   : 1,
-    'email': 'taylorotwell@gmail.com'
+    'email': 'linbolen@gradii.com'
   });
   await BelongsToManyChunkByIdTestTestArticle.createQuery().insert([
     {

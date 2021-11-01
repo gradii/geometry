@@ -52,17 +52,17 @@ describe('test database fedaco integration with table prefix', () => {
 
   it('basic model hydration', async () => {
     await EloquentTestUser.createQuery().create({
-      'email': 'taylorotwell@gmail.com'
+      'email': 'linbolen@gradii.com'
     });
     await EloquentTestUser.createQuery().create({
-      'email': 'abigailotwell@gmail.com'
+      'email': 'xsilen@gradii.com'
     });
     const models = EloquentTestUser.createQuery().fromQuery(
       'SELECT * FROM prefix_users WHERE email = ?',
-      ['abigailotwell@gmail.com']);
+      ['xsilen@gradii.com']);
     expect(isArray(models)).toBeTruthy();
     expect(models[0]).toBeInstanceOf(EloquentTestUser);
-    expect(models[0].email).toBe('abigailotwell@gmail.com');
+    expect(models[0].email).toBe('xsilen@gradii.com');
     expect(models).toHaveLength(1);
   });
 });

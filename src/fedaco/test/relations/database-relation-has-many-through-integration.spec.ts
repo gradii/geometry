@@ -55,18 +55,18 @@ async function seedData() {
 
   const user = await country.newRelation('users').create({
     'id'           : 1,
-    'email'        : 'taylorotwell@gmail.com',
+    'email'        : 'linbolen@gradii.com',
     'country_short': 'us'
   });
   const post = await user.newRelation('posts').createMany([
     {
       'title': 'A title',
       'body' : 'A body',
-      'email': 'taylorotwell@gmail.com'
+      'email': 'linbolen@gradii.com'
     }, {
       'title': 'Another title',
       'body' : 'Another body',
-      'email': 'taylorotwell@gmail.com'
+      'email': 'linbolen@gradii.com'
     }
   ]);
 }
@@ -139,7 +139,7 @@ async function seedDefaultData() {
   });
   const u = await r.newRelation('users').create({
     'id'   : 1,
-    'email': 'taylorotwell@gmail.com'
+    'email': 'linbolen@gradii.com'
   });
   await u.newRelation('posts').createMany([
     {
@@ -247,7 +247,7 @@ describe('test database fedaco has many through integration', () => {
     });
     const user    = await country.newRelation('users').create({
       'id'           : 1,
-      'email'        : 'taylorotwell@gmail.com',
+      'email'        : 'linbolen@gradii.com',
       'country_short': 'us'
     });
     await user.newRelation('posts').createMany([
@@ -255,12 +255,12 @@ describe('test database fedaco has many through integration', () => {
         'id'   : 1,
         'title': 'A title',
         'body' : 'A body',
-        'email': 'taylorotwell@gmail.com'
+        'email': 'linbolen@gradii.com'
       }, {
         'id'   : 2,
         'title': 'Another title',
         'body' : 'Another body',
-        'email': 'taylorotwell@gmail.com'
+        'email': 'linbolen@gradii.com'
       }
     ]);
     const country1 = await HasManyThroughTestCountry.createQuery().first();
@@ -279,7 +279,7 @@ describe('test database fedaco has many through integration', () => {
     });
     const user    = await country.newRelation('users').create({
       'id'           : 1,
-      'email'        : 'taylorotwell@gmail.com',
+      'email'        : 'linbolen@gradii.com',
       'country_short': 'us'
     });
     await user.newRelation('posts').createMany([
@@ -287,12 +287,12 @@ describe('test database fedaco has many through integration', () => {
         'id'   : 1,
         'title': 'A title',
         'body' : 'A body',
-        'email': 'taylorotwell@gmail.com'
+        'email': 'linbolen@gradii.com'
       }, {
         'id'   : 2,
         'title': 'Another title',
         'body' : 'Another body',
-        'email': 'taylorotwell@gmail.com'
+        'email': 'linbolen@gradii.com'
       }
     ]);
     const country1 = await HasManyThroughTestCountry.createQuery().first();
@@ -308,7 +308,7 @@ describe('test database fedaco has many through integration', () => {
     });
     await country.newRelation('users').create({
       'id'           : 1,
-      'email'        : 'taylorotwell@gmail.com',
+      'email'        : 'linbolen@gradii.com',
       'country_short': 'us'
     });
     await expect(async () => {
@@ -326,7 +326,7 @@ describe('test database fedaco has many through integration', () => {
     });
     await country.newRelation('users').create({
       'id'           : 1,
-      'email'        : 'taylorotwell@gmail.com',
+      'email'        : 'linbolen@gradii.com',
       'country_short': 'us'
     });
     const user = await HasManyThroughTestCountry.createQuery().first();
@@ -345,14 +345,14 @@ describe('test database fedaco has many through integration', () => {
     });
     const user    = await country.newRelation('users').create({
       'id'           : 1,
-      'email'        : 'taylorotwell@gmail.com',
+      'email'        : 'linbolen@gradii.com',
       'country_short': 'us'
     });
     const post    = await user.newRelation('posts').create({
       'id'   : 1,
       'title': 'A title',
       'body' : 'A body',
-      'email': 'taylorotwell@gmail.com'
+      'email': 'linbolen@gradii.com'
     });
 
     await expect(async () => {

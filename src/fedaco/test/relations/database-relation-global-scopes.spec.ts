@@ -62,13 +62,13 @@ describe('test database fedaco global scopes', () => {
     expect(query.toSql()).toEqual(
       {
         result  : 'SELECT "email", "password" FROM "_table" WHERE "email" = ? OR "email" = ? AND "active" = ? ORDER BY "name" ASC',
-        bindings: ['taylor@gmail.com', 'someone@else.com', 1]
+        bindings: ['thirstyzebra@gradii.com', 'someone@else.com', 1]
       });
     query = model.newQuery().where('col1', 'val1').orWhere('col2', 'val2');
     expect(query.toSql()).toEqual(
       {
         result  : 'SELECT "email", "password" FROM "_table" WHERE "col1" = ? OR "col2" = ? AND "email" = ? OR "email" = ? AND "active" = ? ORDER BY "name" ASC',
-        bindings: ['val1', 'val2', 'taylor@gmail.com', 'someone@else.com', 1]
+        bindings: ['val1', 'val2', 'thirstyzebra@gradii.com', 'someone@else.com', 1]
       });
   });
   it('regular scopes with or where conditions are nested', () => {
@@ -141,7 +141,7 @@ export class EloquentGlobalScopesWithRelationModel extends EloquentClosureGlobal
 export class EloquentClosureGlobalScopesWithOrTestModel extends EloquentClosureGlobalScopesTestModel {
   public boot() {
     EloquentClosureGlobalScopesWithOrTestModel.addGlobalScope('or_scope', query => {
-      query.where('email', 'taylor@gmail.com').orWhere('email', 'someone@else.com');
+      query.where('email', 'thirstyzebra@gradii.com').orWhere('email', 'someone@else.com');
     });
     EloquentClosureGlobalScopesWithOrTestModel.addGlobalScope('email_password', query => {
       query.select('email', 'password');

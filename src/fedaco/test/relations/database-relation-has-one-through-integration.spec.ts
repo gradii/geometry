@@ -55,13 +55,13 @@ async function seedData() {
   });
   const user     = await position.newRelation('user').create({
     'id'            : 1,
-    'email'         : 'taylorotwell@gmail.com',
+    'email'         : 'linbolen@gradii.com',
     'position_short': 'ps'
   });
   await user.newRelation('contract').create({
     'title': 'A title',
     'body' : 'A body',
-    'email': 'taylorotwell@gmail.com'
+    'email': 'linbolen@gradii.com'
   });
 }
 
@@ -90,7 +90,7 @@ async function seedDefaultData() {
   });
   const user     = await position.newRelation('user').create({
     'id'   : 1,
-    'email': 'taylorotwell@gmail.com'
+    'email': 'linbolen@gradii.com'
   });
   await user.newRelation('contract').create({
     'title': 'A title',
@@ -183,7 +183,7 @@ describe('test database fedaco has one through integration', () => {
     });
     await position.newRelation('user').create({
       'id'            : 1,
-      'email'         : 'taylorotwell@gmail.com',
+      'email'         : 'linbolen@gradii.com',
       'position_short': 'ps'
     });
     await expect(async () => {
@@ -199,7 +199,7 @@ describe('test database fedaco has one through integration', () => {
     });
     await position.newRelation('user').create({
       'id'            : 1,
-      'email'         : 'taylorotwell@gmail.com',
+      'email'         : 'linbolen@gradii.com',
       'position_short': 'ps'
     });
     await expect(async () => {

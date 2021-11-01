@@ -68,7 +68,7 @@ describe('test database fedaco irregular plural', () => {
     // Carbon.setTestNow('2018-05-01 12:13:14');
 
     await IrregularPluralHuman.createQuery().create({
-      'email': 'taylorotwell@gmail.com'
+      'email': 'linbolen@gradii.com'
     });
     await IrregularPluralToken.createQuery().insert([
       {
