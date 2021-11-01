@@ -28,9 +28,6 @@ export class ProcessModel extends mixinSoftDeletes(Model) {
     },
     type        : 'process_target_type',
     id          : 'process_target_id',
-    onQuery     : q => {
-      q.where('id', '1');
-    }
   })
   processTarget;
 
