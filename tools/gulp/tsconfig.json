@@ -7,20 +7,32 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "../../dist/tools/gulp",
-    "strictNullChecks": true,
+    "strictNullChecks": false,
     "noImplicitReturns": true,
     "esModuleInterop": true,
     "strictFunctionTypes": true,
     "noImplicitThis": true,
     "noEmitOnError": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
+    "downlevelIteration": true,
     "target": "es5",
     "types": [
       "node"
     ],
     "baseUrl": ".",
     "paths": {
-
+      "@gradii/annotation": [
+        "src/annotation/public-api.ts",
+        "../../src/annotation/public-api.ts"
+      ],
+      "@gradii/check-type": [
+        "src/check-type/public-api.ts",
+        "../../src/check-type/public-api.ts"
+      ],
+      "@gradii/fedaco": [
+        "src/fedaco/public-api.ts",
+        "../../src/fedaco/public-api.ts"
+      ]
     }
   },
   "files": [

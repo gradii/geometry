@@ -123,7 +123,7 @@ export class Connection extends mixinManagesTransactions(class {
   }
 
   /*Begin a fluent query against a database table.*/
-  public table(table: Function | QueryBuilder | string, as: string | null = null): QueryBuilder {
+  public table(table: Function | QueryBuilder | string, as?: string): QueryBuilder {
     return this.query().from(table, as);
   }
 
@@ -501,14 +501,14 @@ export class Connection extends mixinManagesTransactions(class {
   }
 
   /*Set the PDO connection.*/
-  public setPdo(pdo: Function | null) {
+  public setPdo(pdo?: Function) {
     this._transactions = 0;
     this.pdo           = pdo;
     return this;
   }
 
   /*Set the PDO connection used for reading.*/
-  public setReadPdo(pdo: Function | null) {
+  public setReadPdo(pdo?: Function) {
     this.readPdo = pdo;
     return this;
   }
@@ -630,7 +630,7 @@ export class Connection extends mixinManagesTransactions(class {
   }
 
   /*Set the read / write type of the connection.*/
-  public setReadWriteType(readWriteType: string | null) {
+  public setReadWriteType(readWriteType?: string) {
     this.readWriteType = readWriteType;
     return this;
   }

@@ -13,6 +13,7 @@ import './tasks/clean';
 import './tasks/unit-test';
 import './tasks/ci';
 import './tasks/fedaco-gen-doc';
+import './tasks/generate-md-using-ts-morph';
 
 // createPackageBuildTasks(cdkPackage);
 // createPackageBuildTasks(cdkExperimentalPackage);

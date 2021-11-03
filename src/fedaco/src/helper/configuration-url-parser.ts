@@ -43,6 +43,7 @@ export class ConfigurationUrlParser {
       port        : rawComponents.port,
       protocol    : rawComponents.protocol,
       search      : rawComponents.search,
+      //@ts-ignore
       searchParams: Object.fromEntries(rawComponents.searchParams),
       username    : rawComponents.username,
     };
@@ -89,6 +90,7 @@ export class ConfigurationUrlParser {
     if (!queryString) {
       return {};
     }
+    //@ts-ignore
     const query = Object.fromEntries(new URLSearchParams(queryString));
     return this.parseStringsToNativeTypes(query);
   }

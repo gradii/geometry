@@ -13,7 +13,7 @@ import { value } from './fn';
  * Use of this source code is governed by an MIT-style license
  */
 
-export function get(target: any[] | any, key: string | number, defaultValue?: any) {
+export function get(target: any[] | any, key?: string | number, defaultValue?: any) {
   if (isBlank(key)) {
     return target;
   }

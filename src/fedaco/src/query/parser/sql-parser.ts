@@ -16,7 +16,7 @@ export class SqlParser {
   constructor() {
   }
 
-  static createSqlParser(sqlString) {
+  static createSqlParser(sqlString: string) {
     const _lexer: SqlLexer = new SqlLexer();
     const tokens           = _lexer.tokenize(sqlString);
     return new _SqlParserAst(
@@ -39,7 +39,7 @@ export class SqlParser {
     this.index++;
   }
 
-  beginParse(target) {
+  beginParse(target: string) {
 
   }
 
@@ -54,7 +54,7 @@ export class SqlParser {
    * condition ::= columnReference"."fieldReference "=" columnReference"."fieldReference
    * @param joinStr
    */
-  parseJoin(joinStr) {
+  parseJoin(joinStr: string) {
 
   }
 
@@ -81,7 +81,7 @@ export class SqlParser {
     return parserAst.parseJoin();
   }
 
-  parseOrderBy(orderBy) {
+  parseOrderBy(orderBy: string) {
     const tokens = this._lexer.tokenize(orderBy);
 
     console.log(tokens.map(it => it.toString()));

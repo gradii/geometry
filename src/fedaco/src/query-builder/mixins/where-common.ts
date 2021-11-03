@@ -246,9 +246,9 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
         [second, operator] = [operator, '='];
       }
       const leftNode = first instanceof RawExpression ? first :
-        SqlParser.createSqlParser(first).parseUnaryTableColumn();
+        SqlParser.createSqlParser(first as string).parseUnaryTableColumn();
       const rightNode = second instanceof RawExpression ? second :
-        SqlParser.createSqlParser(second).parseUnaryTableColumn();
+        SqlParser.createSqlParser(second as string).parseUnaryTableColumn();
       this.addWhere(
         new ComparisonPredicateExpression(
           leftNode,

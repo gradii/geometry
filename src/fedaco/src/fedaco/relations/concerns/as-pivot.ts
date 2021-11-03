@@ -7,7 +7,7 @@
 import { reflector } from '@gradii/annotation';
 import { isArray, isBlank } from '@gradii/check-type';
 import { findLast, tap } from 'ramda';
-import { singular } from 'src/fedaco/src/helper/pluralize';
+import { singular } from '../../../helper/pluralize';
 import { Table, TableAnnotation } from '../../../annotation/table/table';
 import { Constructor } from '../../../helper/constructor';
 import { FedacoBuilder } from '../../fedaco-builder';

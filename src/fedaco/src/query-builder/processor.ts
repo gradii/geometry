@@ -9,7 +9,7 @@ import { ProcessorInterface } from './processor-interface';
 import { QueryBuilder } from './query-builder';
 
 export class Processor implements ProcessorInterface {
-  processSelect(queryBuilder, results) {
+  processSelect(queryBuilder: QueryBuilder, results: any | any[]) {
     return results;
   }
 

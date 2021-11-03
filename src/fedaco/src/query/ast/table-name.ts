@@ -32,7 +32,7 @@ export class TableName extends SqlNode {
     super();
   }
 
-  protected ChooseIdentifier(modifier): Identifier {
+  protected ChooseIdentifier(modifier: number): Identifier {
     const index = this.identifiers.length - modifier;
     return index < 0 ? undefined : this.identifiers[index];
   }

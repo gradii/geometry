@@ -35,7 +35,8 @@ task('fedaco-gen-doc:dist', async () => {
 
           const transformationResult = ts.transform(sourceFile, [
             refactorGenerateMd(generateContext, sourceFile),
-          ],);
+          ]);
+
           // console.log(generateContext);
 
           // const transformedSourceFile = transformationResult.transformed[0];
