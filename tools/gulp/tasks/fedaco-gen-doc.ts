@@ -31,7 +31,11 @@ task('fedaco-gen-doc:dist', async () => {
             filename, code, ts.ScriptTarget.Latest, true
           );
 
-          const generateContext: { path: '', files: any[] } = {path: '', files: []};
+          const generateContext: { path: '', files: any[], prerequisites: { type: string, text?: string, code?: string }[] } = {
+            path         : '',
+            files        : [],
+            prerequisites: []
+          };
 
           const transformationResult = ts.transform(sourceFile, [
             refactorGenerateMd(generateContext, sourceFile),
@@ -48,13 +52,43 @@ task('fedaco-gen-doc:dist', async () => {
           //   transformedSourceFile
           // );
 
+          if (generateContext.prerequisites.length > 0) {
+            this.push(
+              new VinylFile(
+                {
+                  base    : base,
+                  path    : path.join(base, generateContext.path, 'prerequisite' + '.md'),
+                  contents: Buffer.from(
+                    '# Prerequisites\n' +
+                    generateContext.prerequisites.map(it => {
+                      if (it.type === 'code') {
+                        return `\`\`\`typescript
+${it.code.trim().replace(/^\{(.+)\}/s, '$1')}
+\`\`\``;
+                      } else if (it.type === 'text') {
+                        return `${it.text.trim()}\n`;
+                      }
+                      throw new Error('unknown type ');
+                    }).join('\n')
+
+
+                  )
+                }
+              )
+            );
+          }
           for (let file of generateContext.files) {
             this.push(
               new VinylFile(
                 {
                   base    : base,
                   path    : path.join(base, generateContext.path, file.fileName + '.md'),
-                  contents: Buffer.from(file.content)
+                  contents: Buffer.from(
+                    `${file.content}\n\n
+----
+see also [prerequisites](./prerequisite.md)
+`
+                  )
                 }
               )
             );

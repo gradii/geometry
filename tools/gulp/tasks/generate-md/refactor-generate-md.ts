@@ -1,7 +1,11 @@
+import { capitalCase } from '@gradii/fedaco';
+import { factory } from 'typescript';
 import * as ts from 'typescript';
 
+const prettier = require('prettier');
+
 class VisitTestCase {
-  public codes: Array<{ code?: string, expect?: string, val?: string }> = [];
+  public codes: Array<{ code?: string, expect?: string, predicate?: string, val?: string }> = [];
 
   currentPrint = -1;
 
@@ -48,7 +52,24 @@ class VisitTestCase {
         this.advance();
       } else if (this.curr.code) {
         this.write('```typescript');
+
+        const bak   = this.output;
+        // this.output = [`funcion ()=>{`];
+        this.output = [];
         this.printCodeStatement();
+        // this.output.push(`};`)
+        const codes = this.output.join('\n');
+
+        const formated = prettier.format(codes, {
+          parser       : 'babel-ts',
+          trailingComma: 'none',
+          tabWidth     : 2,
+          semi         : true,
+          singleQuote  : true,
+        }).replace(/\/\/ @ts-ignore\n/g, '');
+        bak.push(formated.trim());
+        this.output = bak;
+
         this.write('```');
       } else if (this.curr.expect) {
         this.writeLn();
@@ -73,7 +94,8 @@ class VisitTestCase {
 
   private printExpect() {
     while (this.curr && this.curr.expect) {
-      this.output.push(`> | ${this.curr.expect} | ----- | ${this.curr.val} |`);
+      this.output.push(
+        `> | \`${this.curr.expect}\` | ${this.curr.predicate} | \`${this.curr.val}\` |`);
       this.advance();
     }
   }
@@ -95,7 +117,27 @@ class VisitTestCase {
         ts.isCallExpression(statement.expression)
       ) {
         if (/^expect/.exec(code)) {
-          this.codes.push({expect: 'xxx', val: 'yyy'});
+          const predicateMap             = {
+            '.toBe'          : 'exactly match',
+            '.toBeFalsy'     : 'exactly match false',
+            '.not.toBe'      : 'exactly not match',
+            '.toBeInstanceOf': 'type exactly match',
+            '.toEqual'       : 'match',
+          };
+          const valueMap                 = {
+            'Truthy();': 'true',
+            'Falsy();' : 'false',
+          };
+          let [expect, predicate, value] = code.split(
+            /(\.toBeFalsy|\.toBeInstanceOf|\.not.toBe|\.toBe|\.toEqual)/g);
+          expect                         = expect.replace(/^expect\((.+)\)$/s, '$1').replace('\n',
+            '');
+
+          predicate = predicateMap[predicate] || predicate;
+          value     = value.replace(/^\((.+)\);?$/, '$1');
+          value     = valueMap[value] || value;
+
+          this.codes.push({expect: expect, predicate, val: value});
           continue;
         }
       }
@@ -109,7 +151,7 @@ class VisitTestCase {
 export function refactorGenerateMd<T extends ts.Node>(/*typeChecker: TypeChecker*/
                                                       generateContext: any,
                                                       sourceFile: ts.SourceFile): ts.TransformerFactory<T> {
-  generateContext.path = '';
+  generateContext.path  = '';
   generateContext.files = [];
 
   return (context) => {
@@ -134,6 +176,25 @@ export function refactorGenerateMd<T extends ts.Node>(/*typeChecker: TypeChecker
         ).trim() === 'describe'
       ) {
         generateContext.path = node.expression.arguments[0].text.replace(/^test\s*|\s*test$/, '');
+
+        const statements = node.parent.statements.slice(node.parent.statements.indexOf(node) + 1);
+        const printer    = ts.createPrinter({removeComments: true});
+
+        statements.forEach(it => {
+          if (ts.isClassDeclaration(it)) {
+
+            const result = printer.printNode(
+              ts.EmitHint.Unspecified,
+              it,
+              node.parent as ts.SourceFile
+            );
+            generateContext.prerequisites.push(
+              {type: 'text', text: `### Define For ${capitalCase(it.name.text)}`},
+              {type: 'code', code: result.trim()}
+            );
+          }
+        });
+
       }
 
       if (
