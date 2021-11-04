@@ -129,21 +129,21 @@ pipeline {
             }
 
             container('nodejs') {
-              script {
-                try {
-                  timeout(time:30, unit:'SECONDS') {
-                    input(id: 'push fedaco', message: 'push fedaco to github?')
-                  }
-                } catch(err) { // timeout reached or input Aborted
-                  def user = err.getCauses()[0].getUser()
-                  if('SYSTEM' == user.toString()) { // SYSTEM means timeout
-                    currentBuild.result = "SUCCESS"
-                  } else {
-                    echo "Input aborted by: [${user}]"
-                    error("Pipeline aborted by: [${user}]")
-                  }
-                }
-              }
+//               script {
+//                 try {
+//                   timeout(time:30, unit:'SECONDS') {
+//                     input(id: 'push fedaco', message: 'push fedaco to github?')
+//                   }
+//                 } catch(err) { // timeout reached or input Aborted
+//                   def user = err.getCauses()[0].getUser()
+//                   if('SYSTEM' == user.toString()) { // SYSTEM means timeout
+//                     currentBuild.result = "SUCCESS"
+//                   } else {
+//                     echo "Input aborted by: [${user}]"
+//                     error("Pipeline aborted by: [${user}]")
+//                   }
+//                 }
+//               }
 
               //withCredentials([sshUserPrivateKey(credentialsId: "yourkeyid", keyFileVariable: 'keyfile')]) {
               //   stage('scp-f/b') {
@@ -155,7 +155,7 @@ pipeline {
                 sh 'git config --global user.email "xsilen@gradii.com" '
                 sh 'git config --global user.name "xsilen" '
                 sh 'cp -r dist/releases/fedaco/esm2015/src/* fedaco-tmp/libs/fedaco/orm/src/'
-                sh 'cp -rf dist/releases/fedaco/README.md fedaco-tmp/'
+                sh 'cp -r dist/releases/fedaco/README.md fedaco-tmp/'
                 dir("fedaco-tmp") {
                   sh 'git commit -am "chore: update fedaco"'
                   sh 'git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/gradii/fedaco.git'
@@ -182,7 +182,7 @@ pipeline {
           }
           steps {
             container('nodejs') {
-              sh ' yarn nx build triangle-api'
+              sh 'yarn nx build triangle-api'
               sh 'docker build -f Dockerfile-triangle-api -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$BRANCH_NAME-$BUILD_NUMBER .'
               withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
                 sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
