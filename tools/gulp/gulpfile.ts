@@ -14,6 +14,7 @@ import './tasks/unit-test';
 import './tasks/ci';
 import './tasks/fedaco-gen-doc';
 import './tasks/generate-md-using-ts-morph';
+import './tasks/concat-functions';
 
 // createPackageBuildTasks(cdkPackage);
 // createPackageBuildTasks(cdkExperimentalPackage);

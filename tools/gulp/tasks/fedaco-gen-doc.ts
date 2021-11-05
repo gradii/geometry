@@ -8,6 +8,10 @@ import { buildConfig } from '../../package-tools';
 import { refactorGenerateMd } from './generate-md/refactor-generate-md';
 
 
+const testFileNamespace = {
+  'database fedaco integration': 'model-functions'
+}
+
 const projectDir = buildConfig.projectDir;
 const outputDir  = join(buildConfig.outputDir, 'output-generate-md');
 
@@ -28,7 +32,7 @@ task('fedaco-gen-doc:dist', async () => {
           const code     = file.contents.toString();
 
           const sourceFile = ts.createSourceFile(
-            filename, code, ts.ScriptTarget.Latest, true
+            filename, code, ts.ScriptTarget.ES2020, true
           );
 
           const generateContext: { path: '', files: any[], prerequisites: { type: string, text?: string, code?: string }[] } = {
@@ -82,11 +86,13 @@ ${it.code.trim().replace(/^\{(.+)\}/s, '$1')}
               new VinylFile(
                 {
                   base    : base,
-                  path    : path.join(base, generateContext.path, file.fileName + '.md'),
+                  path    : file.namedKey ?
+                    path.join(base, (testFileNamespace[generateContext.path] || 'functions') + '/' + file.namedKey, file.fileName + '.md') :
+                    path.join(base, generateContext.path, file.fileName + '.md'),
                   contents: Buffer.from(
                     `${file.content}\n\n
 ----
-see also [prerequisites](./prerequisite.md)
+see also [prerequisites]("./${file.namedKey ? '../' + generateContext.path + '/' : ''}prerequisite.md")
 `
                   )
                 }
