@@ -1,0 +1,11 @@
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "files",
+    srcs = [
+        "BUILD.bazel",
+        "expand_template.bzl",
+        "//tools/dev-infra-angular/bazel/browsers:files",
+        "//tools/dev-infra-angular/bazel/remote-execution:files",
+    ],
+)
