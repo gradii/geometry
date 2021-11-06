@@ -39,7 +39,5 @@ export class AppModule implements OnModuleInit{
     db.setAsGlobal();
 
     const list = await db.getConnection('default').select('show tables;', []);
-    console.log(list);
-
   }
 }
