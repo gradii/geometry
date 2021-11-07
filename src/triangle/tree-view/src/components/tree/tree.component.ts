@@ -22,6 +22,7 @@ import {
   isAnyEmpty,
   isBlank
 } from '@gradii/check-type';
+import { TreeNodeChildrenComponent } from '../tree-node/tree-node.component';
 import {
   EventsMap,
   TREE_EVENTS
@@ -38,7 +39,6 @@ import {
   TreeUIOptions,
 } from '../../models';
 import { TreeDraggingTargetService } from '../../services/tree-dragging-target.service';
-import { TreeNodeChildrenComponent } from '../tree-node-children/tree-node-children.component';
 import { TreeViewportComponent } from '../tree-viewport/tree-viewport.component';
 
 @Component({

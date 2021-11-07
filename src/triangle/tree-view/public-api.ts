@@ -5,12 +5,11 @@
  */
 
 import { TreeLoadingComponent } from './src/components/tree-loading/tree-loading.component';
-import { TreeNodeChildrenComponent } from './src/components/tree-node-children/tree-node-children.component';
 import { TreeNodeContentComponent } from './src/components/tree-node-content/tree-node-content.component';
 import { TreeNodeDropSlotComponent } from './src/components/tree-node-drop-slot/tree-node-drop-slot.component';
 import { TreeNodeExpanderComponent } from './src/components/tree-node-expander/tree-node-expander.component';
 import { TreeNodeWrapperComponent } from './src/components/tree-node-wrapper/tree-node-wrapper.component';
-import { TreeNodeComponent } from './src/components/tree-node/tree-node.component';
+import { TreeNodeChildrenComponent, TreeNodeComponent } from './src/components/tree-node/tree-node.component';
 import { TreeViewportComponent } from './src/components/tree-viewport/tree-viewport.component';
 import { TreeComponent } from './src/components/tree/tree.component';
 export * from './src/models/index';
