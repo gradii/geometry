@@ -19,6 +19,13 @@ import { adjustClientRect, isInsideClientRect, } from '../utils/client-rect';
 import { orderByHierarchy } from '../utils/hierarchy';
 import { DragRefInternal as DragRef, Point } from './drag-ref';
 
+export type RootNode = DocumentOrShadowRoot & {
+  // As of TS 4.4 the built in DOM typings don't include `elementFromPoint` on `ShadowRoot`,
+  // even though it exists (see https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot).
+  // This type is a utility to avoid having to add casts everywhere.
+  elementFromPoint(x: number, y: number): Element | null;
+};
+
 /**
  * Internal compile-time-only representation of a `DropContainerRef`.
  * Used to avoid circular import issues between the `DropContainerRef` and the `DragRef`.
@@ -131,7 +138,7 @@ export class DndContainerRef<T = any> {
   protected _viewportScrollSubscription = Subscription.EMPTY;
 
   /** Shadow root of the current element. Necessary for `elementFromPoint` to resolve correctly. */
-  protected _cachedShadowRoot: DocumentOrShadowRoot | null = null;
+  protected _cachedShadowRoot: RootNode | null = null;
 
   /** Reference to the document. */
   protected _document: Document;
@@ -626,12 +633,10 @@ export class DndContainerRef<T = any> {
    * in order to ensure that the element has been moved into the shadow DOM. Doing it inside the
    * constructor might be too early if the element is inside of something like `ngFor` or `ngIf`.
    */
-  protected _getShadowRoot(): DocumentOrShadowRoot {
+  protected _getShadowRoot(): RootNode {
     if (!this._cachedShadowRoot) {
-      const shadowRoot = _getShadowRoot(
-        coerceElement(this.element)) as unknown as DocumentOrShadowRoot;
-
-      this._cachedShadowRoot = shadowRoot || this._document;
+      const shadowRoot = _getShadowRoot(coerceElement(this.element));
+      this._cachedShadowRoot = (shadowRoot || this._document) as RootNode;
     }
 
     return this._cachedShadowRoot;

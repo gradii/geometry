@@ -16,7 +16,7 @@ import { DragDropConfig, TRI_DRAG_CONFIG } from '../directives/config';
 import { TriDrag } from '../directives/drag';
 import { TRI_DRAG_HANDLE, TriDragHandle } from '../directives/drag-handle';
 import { TRI_DROP_CONTAINER } from '../directives/drop-container';
-import { TriDropGridContainer } from '../directives/drop-grid-container';
+import type { TriDropGridContainer } from '../directives/drop-grid-container';
 import { DragDrop } from '../drag-drop';
 import { TRI_DRAG_PARENT } from '../drag-parent';
 import {
@@ -143,6 +143,7 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnChang
   dragResizeContainer: TriDragResizeContainer;
 
   constructor(
+    @Inject(TRI_DROP_CONTAINER)
     private gridster: TriDropGridContainer,
     /** Element that the draggable is attached to. */
     public element: ElementRef<HTMLElement>,
@@ -153,8 +154,8 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnChang
     @Optional() @Inject(TRI_DRAG_CONFIG) config: DragDropConfig,
     @Optional() protected _dir: Directionality, dragDrop: DragDrop,
     protected _changeDetectorRef: ChangeDetectorRef,
-    @Optional() @Self() @Inject(TRI_DRAG_HANDLE) protected _selfHandle?: TriDragHandle,
-    @Optional() @SkipSelf() @Inject(TRI_DRAG_PARENT) protected _parentDrag?: TriDrag
+    @Optional() @Self() @Inject(TRI_DRAG_HANDLE) protected override _selfHandle?: TriDragHandle,
+    @Optional() @SkipSelf() @Inject(TRI_DRAG_PARENT) protected override _parentDrag?: TriDrag
   ) {
     super(
       element, dropContainer, _ngZone, _viewContainerRef,

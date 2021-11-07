@@ -6,9 +6,10 @@
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
-  AfterViewInit, ChangeDetectorRef, Component, ContentChildren, EventEmitter, HostBinding,
+  AfterViewInit, ChangeDetectorRef, Component, ContentChildren, EventEmitter, forwardRef, HostBinding,
   HostListener, Input, OnDestroy, OnInit, Output, QueryList
 } from '@angular/core';
+import { TRI_INTERNAL_SUB_MENU } from './menu.types';
 
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -41,6 +42,9 @@ import { MenuComponent } from './menu.component';
         }), animate(150, style({height: '*'}))
       ])
     ])
+  ],
+  providers: [
+    {provide: TRI_INTERNAL_SUB_MENU, useExisting: forwardRef(()=>SubMenuComponent)}
   ],
   template  : `
     <div

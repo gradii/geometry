@@ -19,6 +19,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { TRI_INTERNAL_SLIDER } from '@gradii/triangle/slider/src/slider.types';
 import { fromEvent, merge, Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, pluck, takeUntil, tap } from 'rxjs/operators';
 import { Marks, MarksArray } from './slider-marks.component';
@@ -36,6 +37,7 @@ export class SliderHandle {
   selector     : 'tri-slider',
   encapsulation: ViewEncapsulation.None,
   providers    : [
+    {provide: TRI_INTERNAL_SLIDER, useExisting: forwardRef(() => SliderComponent)},
     {
       provide    : NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => SliderComponent),

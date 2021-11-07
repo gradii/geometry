@@ -4,7 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, Inject, Optional, ViewEncapsulation } from '@angular/core';
+import { Component, forwardRef, Inject, Optional, ViewEncapsulation } from '@angular/core';
+import { TRI_INTERNAL_MESSAGE_CONTAINER } from '../message/message.types';
 import { MessageContainerComponent } from '../message/message-container.component';
 import {
   NOTIFICATION_CONFIG,
@@ -15,6 +16,9 @@ import {
 @Component({
   selector: 'tri-notification-container',
   encapsulation: ViewEncapsulation.None,
+  providers: [
+    {provide: TRI_INTERNAL_MESSAGE_CONTAINER, useExisting: forwardRef(()=>NotificationContainerComponent)}
+  ],
   template: `
     <div class="tri-notification" [style.top]="config.top" [style.right]="config.right">
       <tri-notification *ngFor="let message of messages; let i = index" [message]="message" [index]="i"></tri-notification>

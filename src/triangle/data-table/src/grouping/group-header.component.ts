@@ -6,7 +6,7 @@
 
 import { Component, HostBinding, Input, QueryList } from '@angular/core';
 import { GroupDescriptor } from '@gradii/triangle/data-query';
-import { ColumnBase } from '@gradii/triangle/data-table';
+import { ColumnBase } from '../columns/column-base';
 import { columnsSpan } from '../helper/column-common';
 import { GroupRow } from '../row-column/group-row';
 import { GroupInfoService } from './group-info.service';

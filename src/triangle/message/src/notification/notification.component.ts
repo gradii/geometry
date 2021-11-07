@@ -5,10 +5,10 @@
  */
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
-/* tslint:disable:no-access-missing-member */
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, ViewEncapsulation } from '@angular/core';
+import { TRI_INTERNAL_MESSAGE_CONTAINER } from '../message/message.types';
 import { MessageComponent } from '../message/message.component';
-import { NotificationContainerComponent } from './notification-container.component';
+import type { NotificationContainerComponent } from './notification-container.component';
 
 @Component({
   selector     : 'tri-notification',
@@ -16,15 +16,19 @@ import { NotificationContainerComponent } from './notification-container.compone
   animations   : [
     trigger('enterLeave', [
       state('enter', style({opacity: 1, transform: 'translateX(0)'})),
-      transition('* => enter', [style({
-        opacity  : 0,
-        transform: 'translateX(5%)'
-      }), animate('100ms linear')]),
+      transition('* => enter', [
+        style({
+          opacity  : 0,
+          transform: 'translateX(5%)'
+        }), animate('100ms linear')
+      ]),
       state('leave', style({opacity: 0, transform: 'translateY(-10%)'})),
-      transition('* => leave', [style({
-        opacity  : 1,
-        transform: 'translateY(0)'
-      }), animate('100ms linear')])
+      transition('* => leave', [
+        style({
+          opacity  : 1,
+          transform: 'translateY(0)'
+        }), animate('100ms linear')
+      ])
     ])
   ],
   template     : `
@@ -55,12 +59,12 @@ import { NotificationContainerComponent } from './notification-container.compone
       </a>
     </div>
   `,
-  styleUrls: [
+  styleUrls    : [
     '../../style/notification.css'
   ]
 })
 export class NotificationComponent extends MessageComponent {
-  constructor(container: NotificationContainerComponent) {
+  constructor(@Inject(TRI_INTERNAL_MESSAGE_CONTAINER) container: NotificationContainerComponent) {
     super(container);
   }
 

@@ -1,5 +1,13 @@
 /**
  * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+/**
+ * @license
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -69,7 +77,7 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
     );
   }
 
-  getSelectionEntities(): Array<BaseModel> {
+  getSelectionEntities(): BaseModel[] {
     if (this.getTargetPort() && this.getSourcePort()) {
       return super.getSelectionEntities().concat(_.slice(this.points, 0, this.points.length));
     }

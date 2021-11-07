@@ -4,8 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Directive, ElementRef, Input, OnDestroy, Optional, Renderer2 } from '@angular/core';
-import { DataTableComponent } from '../data-table.component';
+import { Directive, ElementRef, Inject, Input, OnDestroy, Optional, Renderer2 } from '@angular/core';
+import { TRI_INTERNAL_DATA_TABLE } from '@gradii/triangle/data-table/src/data-table.types';
+import type { DataTableComponent } from '../data-table.component';
 
 @Directive({
   selector: '[triGridResizableContainer], [tri-grid-resizable-container]'
@@ -17,7 +18,9 @@ export class ResizableContainerDirective implements OnDestroy {
   private enabled;
   private resizeSubscription;
 
-  constructor(el: ElementRef, renderer: Renderer2, @Optional() grid?: DataTableComponent) {
+  constructor(el: ElementRef, renderer: Renderer2,
+    @Inject(TRI_INTERNAL_DATA_TABLE)
+    @Optional() grid?: DataTableComponent) {
     this.el = el;
     this.renderer = renderer;
     this.grid = grid;

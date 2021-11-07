@@ -8,7 +8,7 @@ import { coerceElement } from '@angular/cdk/coercion';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { ElementRef, NgZone } from '@angular/core';
 import { Subject } from 'rxjs';
-import { TriDropGridContainer } from '../directives/drop-grid-container';
+import type { TriDropGridContainer } from '../directives/drop-grid-container';
 import { DragDropRegistry } from '../drag-drop-registry';
 import { GridPushService } from '../drag-grid/grid-push.service';
 import { GridSwapService } from '../drag-grid/grid-swap.service';

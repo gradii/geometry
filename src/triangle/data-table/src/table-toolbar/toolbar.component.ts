@@ -4,8 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, HostBinding, TemplateRef } from '@angular/core';
-import { DataTableComponent } from '../data-table.component';
+import { Component, HostBinding, Inject, TemplateRef } from '@angular/core';
+import { TRI_INTERNAL_DATA_TABLE } from '@gradii/triangle/data-table/src/data-table.types';
+import type { DataTableComponent } from '../data-table.component';
 
 @Component({
   selector: 'tri-data-table-toolbar',
@@ -21,7 +22,9 @@ import { DataTableComponent } from '../data-table.component';
   }
 })
 export class ToolbarComponent {
-  constructor(private grid: DataTableComponent) {
+  constructor(
+    @Inject(TRI_INTERNAL_DATA_TABLE)
+    private grid: DataTableComponent) {
   }
 
   @HostBinding('class')

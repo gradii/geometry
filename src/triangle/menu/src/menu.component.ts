@@ -5,9 +5,10 @@
  */
 
 import {
-  AfterViewInit, Component, ContentChild, Input, OnChanges, SimpleChanges, TemplateRef,
+  AfterViewInit, Component, ContentChild, forwardRef, Input, OnChanges, SimpleChanges, TemplateRef,
   ViewEncapsulation
 } from '@angular/core';
+import { TRI_INTERNAL_MENU } from './menu.types';
 import { Mode } from './common';
 import { MenuItemComponent } from './menu-item.component';
 import { MenuItemNodeDefDirective } from './menu.directive';
@@ -16,6 +17,12 @@ import { SubMenuComponent } from './submenu.component';
 @Component({
   selector     : 'tri-menu, ul[tri-menu]',
   encapsulation: ViewEncapsulation.None,
+  providers: [
+    {
+      provide: TRI_INTERNAL_MENU,
+      useExisting: forwardRef(()=>MenuComponent)
+    }
+  ],
   template     : `
     <ng-template [ngIf]="!dataSource||dataSource?.length===0">
       <ng-content></ng-content>
@@ -28,13 +35,13 @@ import { SubMenuComponent } from './submenu.component';
           [menuItem]="item"
         >
         </tri-menu-item-node>
-        <tri-menu-item-nest-node
+        <!--<tri-menu-item-nest-node
           *ngIf="item.children"
           [mode]="mode"
           [menuItem]="item"
           [dataSource]="item.children"
         >
-        </tri-menu-item-nest-node>
+        </tri-menu-item-nest-node>-->
       </ng-template>
 
     </ng-template>

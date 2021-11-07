@@ -4,26 +4,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger
-} from '@angular/animations';
-import {
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Component, Inject, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MessageConfig } from './message-config';
-import { MessageContainerComponent } from './message-container.component';
-import {
-  MessageDataFilled,
-  MessageDataOptions
-} from './message.definitions';
+import { TRI_INTERNAL_MESSAGE_CONTAINER } from './message.types';
+import type { MessageContainerComponent } from './message-container.component';
+import type { MessageDataFilled, MessageDataOptions } from './message.definitions';
 
 @Component({
   selector     : 'tri-message',
@@ -31,15 +17,19 @@ import {
   animations   : [
     trigger('enterLeave', [
       state('enter', style({opacity: 1, transform: 'translateY(0)'})),
-      transition('* => enter', [style({
-        opacity  : 0,
-        transform: 'translateY(-50%)'
-      }), animate('100ms linear')]),
+      transition('* => enter', [
+        style({
+          opacity  : 0,
+          transform: 'translateY(-50%)'
+        }), animate('100ms linear')
+      ]),
       state('leave', style({opacity: 0, transform: 'translateY(-50%)'})),
-      transition('* => leave', [style({
-        opacity  : 1,
-        transform: 'translateY(0)'
-      }), animate('100ms linear')])
+      transition('* => leave', [
+        style({
+          opacity  : 1,
+          transform: 'translateY(0)'
+        }), animate('100ms linear')
+      ])
     ])
   ],
   template     : `
@@ -56,7 +46,8 @@ import {
             <tri-icon *ngSwitchCase="'info'" svgIcon="fill:info-circle"></tri-icon>
             <tri-icon *ngSwitchCase="'warning'" svgIcon="fill:exclamation-circle"></tri-icon>
             <tri-icon *ngSwitchCase="'error'" svgIcon="fill:close-circle"></tri-icon>
-            <tri-icon *ngSwitchCase="'loading'" class="anticon anticon-spin" svgIcon="outline:loading"></tri-icon>
+            <tri-icon *ngSwitchCase="'loading'" class="anticon anticon-spin"
+                      svgIcon="outline:loading"></tri-icon>
           </ng-container>
           <span>{{message.content}}</span>
         </div>
@@ -80,7 +71,7 @@ export class MessageComponent implements OnInit, OnDestroy {
   private _eraseTimingStart: number;
   private _eraseTTL: number; // Time to live
 
-  constructor(private _messageContainer: MessageContainerComponent<MessageConfig>) {
+  constructor(@Inject(TRI_INTERNAL_MESSAGE_CONTAINER)  private _messageContainer: MessageContainerComponent<MessageConfig>) {
   }
 
   ngOnInit() {

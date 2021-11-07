@@ -114,7 +114,7 @@ export class PopoverComponent extends _TriTooltipComponentBase implements OnDest
     );
   }
 
-  _handleBodyInteraction(event?: MouseEvent): void {
+  override _handleBodyInteraction(event?: MouseEvent): void {
     if (this._elementRef.nativeElement.contains(event?.target)) {
       return;
     }
@@ -123,7 +123,7 @@ export class PopoverComponent extends _TriTooltipComponentBase implements OnDest
     }
   }
 
-  ngOnDestroy() {
+  override ngOnDestroy() {
     clearTimeout(this._showTimeoutId);
     clearTimeout(this._hideTimeoutId);
     if (this._subscriptions) {

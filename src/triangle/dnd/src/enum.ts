@@ -26,6 +26,12 @@ export const SCROLL_PROXIMITY_THRESHOLD = 0.05;
 export const DROP_PROXIMITY_THRESHOLD = 0.05;
 
 
+export enum Direction {
+  xy = 'xy',
+  yx = 'yx'
+}
+
+
 export const enum CompactType {
   None                = 'none',
   CompactUp           = 'compactUp',

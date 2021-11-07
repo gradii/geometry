@@ -26,7 +26,7 @@ import { DateRangePickerComponent } from './date-range-picker.component';
 })
 
 export class WeekPickerComponent extends DateRangePickerComponent {
-  showWeek: boolean = true;
+  override showWeek: boolean = true;
 
   constructor(i18n: I18nService, logger: LoggerService) {
     super(i18n, logger);

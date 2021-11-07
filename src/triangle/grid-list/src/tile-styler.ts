@@ -167,7 +167,7 @@ export class FixedTileStyler extends TileStyler {
     super();
   }
 
-  init(gutterSize: string, tracker: TileCoordinator, cols: number, direction: string) {
+  override init(gutterSize: string, tracker: TileCoordinator, cols: number, direction: string) {
     super.init(gutterSize, tracker, cols, direction);
     this.fixedRowHeight = normalizeUnits(this.fixedRowHeight);
 
@@ -181,7 +181,7 @@ export class FixedTileStyler extends TileStyler {
     tile._setStyle('height', calc(this.getTileSize(this.fixedRowHeight, tile.rowspan)));
   }
 
-  getComputedHeight(): [string, string] {
+  override getComputedHeight(): [string, string] {
     return [
       'height', calc(`${this.getTileSpan(this.fixedRowHeight)} + ${this.getGutterSpan()}`)
     ];
@@ -228,7 +228,7 @@ export class RatioTileStyler extends TileStyler {
     tile._setStyle('paddingTop', calc(this.getTileSize(this.baseTileHeight, tile.rowspan)));
   }
 
-  getComputedHeight(): [string, string] {
+  override getComputedHeight(): [string, string] {
     return [
       'paddingBottom', calc(`${this.getTileSpan(this.baseTileHeight)} + ${this.getGutterSpan()}`)
     ];

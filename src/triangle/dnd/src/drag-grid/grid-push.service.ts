@@ -4,11 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Direction, TriDropGridContainer } from '../directives/drop-grid-container';
-import { DragRefInternal as DragRef } from '../drag-drop-ref/drag-ref';
-import { DropGridContainerRef } from '../drag-drop-ref/drop-grid-container-ref';
-import { TriDragGridItemComponent } from '../drag-grid/drag-grid-item.component';
-import { CompactType } from '../enum';
+import type { TriDropGridContainer } from '../directives/drop-grid-container';
+import type { DragRefInternal as DragRef } from '../drag-drop-ref/drag-ref';
+import type { DropGridContainerRef } from '../drag-drop-ref/drop-grid-container-ref';
+import type { TriDragGridItemComponent } from '../drag-grid/drag-grid-item.component';
+import { CompactType, Direction } from '../enum';
 
 export interface GridsterItem {
   x: number;

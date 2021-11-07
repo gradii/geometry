@@ -105,7 +105,7 @@ export class ScrollingStrategy {
     // Otherwise check if we can start scrolling the viewport.
     if (!verticalScrollDirection && !horizontalScrollDirection) {
       const {width, height}     = this._viewportRuler.getViewportSize();
-      const clientRect          = {width, height, top: 0, right: width, bottom: height, left: 0};
+      const clientRect          = {width, height, top: 0, right: width, bottom: height, left: 0} as ClientRect;
       verticalScrollDirection   = getVerticalScrollDirection(clientRect, pointerY);
       horizontalScrollDirection = getHorizontalScrollDirection(clientRect, pointerX);
       scrollNode                = window;

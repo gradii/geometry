@@ -11,6 +11,7 @@ import { _getShadowRoot, normalizePassiveListenerOptions } from '@angular/cdk/pl
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { ElementRef, EmbeddedViewRef, NgZone, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Observable, Subject, Subscription } from 'rxjs';
+import { DragCSSStyleDeclaration } from '../drag-styling';
 import { DragContainerRef } from '../drag-drop-ref/drag-container-ref';
 import { DragDropRegistry } from '../drag-drop-registry';
 import {
@@ -781,7 +782,7 @@ export class DragRef<T = any> {
     this._toggleNativeDragInteractions();
 
     if (this._handles) {
-      this._rootElement.style.webkitTapHighlightColor = this._rootElementTapHighlight;
+      (this._rootElement.style as DragCSSStyleDeclaration).webkitTapHighlightColor = this._rootElementTapHighlight;
     }
 
     if (!this._hasStartedDragging) {
@@ -913,8 +914,8 @@ export class DragRef<T = any> {
     // otherwise iOS will still add it, even though all the drag interactions on the handle
     // are disabled.
     if (this._handles.length) {
-      this._rootElementTapHighlight             = rootElement.style.webkitTapHighlightColor || '';
-      rootElement.style.webkitTapHighlightColor = 'transparent';
+      this._rootElementTapHighlight             = (rootElement.style as any).webkitTapHighlightColor || '';
+        (rootElement.style as any).webkitTapHighlightColor = 'transparent';
     }
 
     this._hasStartedDragging = this._hasMoved = false;
@@ -953,7 +954,7 @@ export class DragRef<T = any> {
     // It's important that we maintain the position, because moving the element around in the DOM
     // can throw off `NgFor` which does smart diffing and re-creates elements only when necessary,
     // while moving the existing elements in all other cases.
-    toggleVisibility(this._rootElement, true, this._initialContainer.getItemPosition(this));
+    toggleVisibility(this._rootElement, true, undefined, this._initialContainer.getItemPosition(this));
     this._anchor.parentNode!.replaceChild(this._rootElement, this._anchor);
 
     this._destroyPreview();

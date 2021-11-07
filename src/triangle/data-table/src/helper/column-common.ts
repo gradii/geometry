@@ -6,7 +6,7 @@
 
 import { QueryList } from '@angular/core';
 import { orderBy } from '@gradii/triangle/data-query';
-import { ColumnComponent } from '@gradii/triangle/data-table';
+import { ColumnComponent } from '../columns/column.component';
 import { isNullOrEmptyString, isTruthy } from '@gradii/triangle/util';
 import { ColumnBase } from '../columns/column-base';
 import { isSpanColumnComponent } from '../columns/span-column.component';

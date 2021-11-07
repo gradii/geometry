@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { ConnectedPosition } from '@angular/cdk/overlay/position/flexible-connected-position-strategy';
+import { ConnectedPosition } from '@angular/cdk/overlay';
 import { Component, Input, TemplateRef } from '@angular/core';
 import { POSITION_MAP_LTR } from '@gradii/triangle/core';
 
@@ -17,6 +17,7 @@ const listOfVerticalPositions = [
   POSITION_MAP_LTR.leftBottom
 ];
 
+// ts-ignore
 @Component({
   selector: 'tri-menu-item-nest-node',
   template: `

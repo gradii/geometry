@@ -416,7 +416,7 @@ export class TriTabGroup extends _TriTabGroupBase {
   @ViewChild('tabHeader') _tabHeader: TriTabGroupBaseHeader;
 
   @Input()
-  disableRipple = true;
+  override disableRipple = true;
 
   constructor(elementRef: ElementRef,
               changeDetectorRef: ChangeDetectorRef,

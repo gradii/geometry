@@ -696,7 +696,7 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
       }
 
       style.touchAction             = 'none';
-      style.webkitTapHighlightColor = 'transparent';
+      (style as any).webkitTapHighlightColor = 'transparent';
     }
   }
 

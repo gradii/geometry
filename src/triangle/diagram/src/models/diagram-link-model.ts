@@ -1,5 +1,13 @@
 /**
  * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+/**
+ * @license
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -62,7 +70,7 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
    * @deprecated
    */
   protected options: LinkModelOptions;
-  public curve: BezierCurve;
+  curve: BezierCurve;
 
   constructor({
                 type = 'default',
@@ -174,7 +182,7 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
     }
   }
 
-  serialize() {
+  override serialize() {
     return {
       ...super.serialize(),
       color        : this.color,
@@ -184,8 +192,7 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
     };
   }
 
-
-  addLabel(label: LabelModel | string) {
+  override addLabel(label: LabelModel | string) {
     if (label instanceof LabelModel) {
       return super.addLabel(label);
     }
@@ -204,7 +211,7 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
     this.fireEvent({color}, 'colorChanged');
   }
 
-  attach() {
+  override attach() {
     this.calculateBezierCurve();
     const total = this.curve.getTotalLength();
   }

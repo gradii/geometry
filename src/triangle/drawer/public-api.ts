@@ -10,6 +10,7 @@ export {
   throwDuplicatedDrawerError,
   TRI_DRAWER_DEFAULT_AUTOSIZE,
   TRI_DRAWER_DEFAULT_AUTOSIZE_FACTORY,
+  TRI_DRAWER_CONTAINER,
 } from './src/common';
 export { TriDrawerContent } from './src/drawer-content';
 export { TriDrawerContainer } from './src/drawer-container';

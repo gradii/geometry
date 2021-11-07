@@ -6,7 +6,7 @@
 
 import { Component, Input } from '@angular/core';
 import { CompositeFilterDescriptor } from '@gradii/triangle/data-query';
-import { ColumnBase } from '@gradii/triangle/data-table';
+import { ColumnBase } from '../../columns/column-base';
 import { isNullOrEmptyString, isPresent } from '@gradii/triangle/util';
 
 @Component({

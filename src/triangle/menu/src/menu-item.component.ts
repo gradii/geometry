@@ -5,11 +5,12 @@
  */
 
 import {
-  ChangeDetectorRef, Component, ElementRef, Injectable, Input, Optional, Renderer2
+  ChangeDetectorRef, Component, ElementRef, Inject, Injectable, Input, Optional, Renderer2
 } from '@angular/core';
+import { TRI_INTERNAL_MENU, TRI_INTERNAL_SUB_MENU } from './menu.types';
 import { Mode } from './common';
-import { MenuComponent } from './menu.component';
-import { SubMenuComponent } from './submenu.component';
+import type { MenuComponent } from './menu.component';
+import type { SubMenuComponent } from './submenu.component';
 
 export const PADDING_BASE = 24;
 
@@ -20,7 +21,9 @@ export class _MenuItemBase {
   padding = null;
 
   constructor(
+    @Inject(TRI_INTERNAL_MENU)
     protected menuComponent: MenuComponent,
+    @Inject(TRI_INTERNAL_SUB_MENU)
     @Optional() public subMenuComponent: SubMenuComponent) {
   }
 
@@ -93,10 +96,13 @@ export class MenuItemComponent {
   @Input() disable = false;
 
   constructor(private _renderer: Renderer2,
-              public cd: ChangeDetectorRef,
-              private menuComponent: MenuComponent,
-              @Optional() public subMenuComponent: SubMenuComponent,
-              private hostElement: ElementRef) {
+    public cd: ChangeDetectorRef,
+    @Inject(TRI_INTERNAL_MENU)
+    private menuComponent: MenuComponent,
+    @Inject(TRI_INTERNAL_SUB_MENU)
+    @Optional() public subMenuComponent: SubMenuComponent,
+    private hostElement: ElementRef
+  ) {
     this.menuComponent.menuItems.push(this);
     /** store origin padding in padding */
     if (this.hostElement.nativeElement.style['padding-left']) {

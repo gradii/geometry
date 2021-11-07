@@ -6,7 +6,7 @@
 
 import { Component, Input, OnChanges, QueryList, SimpleChanges } from '@angular/core';
 import { GroupDescriptor } from '@gradii/triangle/data-query';
-import { DataCollection } from '@gradii/triangle/data-table';
+import { DataCollection } from '../data-collection/data.collection';
 import { isPresent } from '@gradii/triangle/util';
 import {
   ColumnBase,

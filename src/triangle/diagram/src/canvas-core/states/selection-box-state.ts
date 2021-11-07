@@ -1,5 +1,13 @@
 /**
  * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+/**
+ * @license
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -12,6 +20,13 @@ import {
 import { State } from '../core-state/state';
 import { ModelGeometryInterface } from '../core/model-geometry-interface';
 import { SelectionLayerModel } from '../entities/selection/selection-layer-model';
+
+export type ParticleClientRect = Pick<ClientRect, 'left' |
+    'top'|
+    'width'|
+    'height'|
+    'right'|
+    'bottom'>;
 
 export class SelectionBoxState extends AbstractDisplacementState {
   layer: SelectionLayerModel;
@@ -45,7 +60,7 @@ export class SelectionBoxState extends AbstractDisplacementState {
     this.engine.repaintCanvas();
   }
 
-  getBoxDimensions(event: AbstractDisplacementStateEvent): ClientRect {
+  getBoxDimensions(event: AbstractDisplacementStateEvent): ParticleClientRect {
     const rel = this.engine.getRelativePoint(event.event.clientX, event.event.clientY);
 
     return {

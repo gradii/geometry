@@ -5,23 +5,18 @@
  */
 
 import {
-  Component,
-  HostListener,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-  ViewChild,
-  ViewEncapsulation
+  Component, HostListener, Inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ViewEncapsulation
 } from '@angular/core';
-import { TooltipComponent, TooltipDirective } from '@gradii/triangle/tooltip';
-import { SliderComponent } from './slider.component';
+import { TRI_INTERNAL_SLIDER } from '@gradii/triangle/slider/src/slider.types';
+import { TooltipDirective } from '@gradii/triangle/tooltip';
+import type { SliderComponent } from './slider.component';
 
 @Component({
-  selector: 'tri-slider-handle',
+  selector     : 'tri-slider-handle',
   encapsulation: ViewEncapsulation.None,
-  template: `
-    <div #tooltip="triTooltip" *ngIf="tipFormatter !== null" [triTooltip]="tooltipTitle" [class]="className" [ngStyle]="style"></div>
+  template     : `
+    <div #tooltip="triTooltip" *ngIf="tipFormatter !== null" [triTooltip]="tooltipTitle" [class]="className"
+         [ngStyle]="style"></div>
     <div *ngIf="tipFormatter === null" [class]="className" [ngStyle]="style"></div>
   `
 })
@@ -37,7 +32,7 @@ export class SliderHandleComponent implements OnInit, OnChanges {
   tooltipTitle: string; // [For tooltip]
   style: any = {};
 
-  constructor(private _slider: SliderComponent) {
+  constructor(@Inject(TRI_INTERNAL_SLIDER) private _slider: SliderComponent) {
   }
 
   @Input()

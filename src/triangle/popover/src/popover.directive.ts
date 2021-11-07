@@ -38,9 +38,9 @@ import { TRI_POPOVER_DEFAULT_OPTIONS, TRI_POPOVER_SCROLL_STRATEGY } from './popo
 })
 export class PopoverDirective extends _TriTooltipBase<PopoverComponent> {
 
-  protected _tooltipPrefix = 'tri-popover';
+  protected override _tooltipPrefix = 'tri-popover';
 
-  protected readonly _tooltipComponent: ComponentType<PopoverComponent> = PopoverComponent;
+  protected override readonly _tooltipComponent: ComponentType<PopoverComponent> = PopoverComponent;
 
   constructor(
     overlay: Overlay,
@@ -73,7 +73,7 @@ export class PopoverDirective extends _TriTooltipBase<PopoverComponent> {
     this._updateTitle();
   }
 
-  show(delay?: number) {
+  override show(delay?: number) {
     if (this._tooltipInstance) {
       this._tooltipInstance.show(0);
     } else {

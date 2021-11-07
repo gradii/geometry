@@ -20,7 +20,7 @@ import {
   GroupDescriptor,
   SortDescriptor
 } from '@gradii/triangle/data-query';
-import { CheckboxColumnComponent } from '@gradii/triangle/data-table';
+import { CheckboxColumnComponent } from '../columns/checkbox-column.component';
 import { I18nService } from '@gradii/triangle/i18n';
 import { isNullOrEmptyString, isPresent, isTruthy } from '@gradii/triangle/util';
 import { merge, Observable, of, Subscription } from 'rxjs';

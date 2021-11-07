@@ -1,5 +1,13 @@
 /**
  * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+/**
+ * @license
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -69,7 +77,7 @@ export interface DefaultLinkState {
 })
 export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
 
-  public refPaths: SVGPathElement[] = [];
+  refPaths: SVGPathElement[] = [];
 
   @Input() link: DiagramLinkModel;
   // @Input() diagramEngine: DiagramEngine;
@@ -105,7 +113,7 @@ export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewC
   }
 
   addPointToLink(event: MouseEvent, index: number) {
-    return; //not support
+    return; // not support
 
     if (
       (event.ctrlKey || event.metaKey) &&

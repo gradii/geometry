@@ -25,7 +25,7 @@ import { DateRangePickerComponent } from './date-range-picker.component';
 })
 
 export class RangePickerComponent extends DateRangePickerComponent {
-  isRange: boolean = true;
+  override isRange: boolean = true;
 
   constructor(i18n: I18nService, logger: LoggerService) {
     super(i18n, logger);

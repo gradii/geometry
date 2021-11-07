@@ -4,13 +4,20 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, Inject, OnInit, Optional, ViewEncapsulation } from '@angular/core';
+import { Component, forwardRef, Inject, OnInit, Optional, ViewEncapsulation } from '@angular/core';
+import { TRI_INTERNAL_MESSAGE_CONTAINER } from './message.types';
 import { MESSAGE_CONFIG, MESSAGE_DEFAULT_CONFIG, MessageConfig } from './message-config';
 import { MessageDataFilled, MessageDataOptions } from './message.definitions';
 
 @Component({
   selector     : 'tri-message-container',
   encapsulation: ViewEncapsulation.None,
+  providers: [
+    {
+      provide: TRI_INTERNAL_MESSAGE_CONTAINER,
+      useExisting: forwardRef(()=>MessageContainerComponent)
+    }
+  ],
   template     : `
   <div class="tri-message">
     <tri-message *ngFor="let message of messages; let i = index" [message]="message"

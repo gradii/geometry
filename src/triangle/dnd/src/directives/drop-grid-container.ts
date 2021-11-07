@@ -10,7 +10,7 @@ import {
 } from '@angular/cdk/coercion';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import {
-  ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, InjectionToken, Input, NgZone,
+  ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Inject, InjectionToken, Input, NgZone,
   OnDestroy, OnInit, Optional, Output, SimpleChanges, SkipSelf, ViewChild, ViewEncapsulation
 } from '@angular/core';
 import { Subject } from 'rxjs';
@@ -23,16 +23,10 @@ import { DragRef } from '../drag-drop-ref/drag-ref';
 import { DropGridContainerRef } from '../drag-drop-ref/drop-grid-container-ref';
 import { CompactPosition } from '../drag-grid/compact-position';
 import { TriDragGridItemComponent } from '../drag-grid/drag-grid-item.component';
-import { CompactType, GridTypes } from '../enum';
+import { CompactType, Direction, GridTypes } from '../enum';
 import { TriDragDrop, TriDragEnter, TriDragExit } from '../event/drag-events';
 import { DragAxis, DragDropConfig, TRI_DRAG_CONFIG } from './config';
 import { TRI_DROP_CONTAINER_GROUP, TriDropContainerGroup } from './drop-container-group';
-
-export enum Direction {
-  xy = 'xy',
-  yx = 'yx'
-}
-
 
 export const TRI_DROP_GRID_CONTAINER_CONFIG = new InjectionToken('tri drop grid container config');
 
@@ -48,7 +42,7 @@ export const TRI_DROP_GRID_CONTAINER_CONFIG = new InjectionToken('tri drop grid 
   providers    : [
     // Prevent child drop lists from picking up the same group as their parent.
     {provide: TRI_DROP_CONTAINER_GROUP, useValue: undefined},
-    {provide: TRI_DROP_CONTAINER, useExisting: TriDropGridContainer},
+    {provide: TRI_DROP_CONTAINER, useExisting: forwardRef(()=>TriDropGridContainer)},
   ],
   host         : {
     'class'                                           : 'tri-drop-grid-container',

@@ -1,5 +1,13 @@
 /**
  * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+/**
+ * @license
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -120,12 +128,12 @@ export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> exten
     );
   }
 
-  public isLocked(): boolean {
+  isLocked(): boolean {
     return this.locked;
     // return this.options.locked;
   }
 
-  public setLocked(locked: boolean = true) {
+  setLocked(locked: boolean = true) {
     // this.options.locked = locked;
     this.locked = locked;
 

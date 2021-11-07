@@ -49,7 +49,7 @@ export class TooltipDirective extends _TriTooltipBase<TooltipComponent> implemen
       focusMonitor, scrollStrategy, dir, defaultOptions, _document);
   }
 
-  ngAfterViewInit() {
+  override ngAfterViewInit() {
     super.ngAfterViewInit();
 
     this._focusMonitor.monitor(this._elementRef)

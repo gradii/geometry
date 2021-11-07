@@ -26,7 +26,8 @@ import {
   ViewChild
 } from '@angular/core';
 import { GroupDescriptor } from '@gradii/triangle/data-query';
-import { DataCollection, SelectableSettings } from '@gradii/triangle/data-table';
+import { DataCollection } from './data-collection/data.collection';
+import { SelectableSettings } from './selection/selectable-settings';
 import { isPresent } from '@gradii/triangle/util';
 import { fromEvent, Subject } from 'rxjs';
 

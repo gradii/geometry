@@ -1,28 +1,26 @@
+import {BooleanInput, coerceBooleanProperty, coerceNumberProperty, NumberInput} from '@angular/cdk/coercion';
+import {ScrollDispatcher} from '@angular/cdk/scrolling';
 import {
-  BooleanInput,
-  coerceBooleanProperty,
-  coerceNumberProperty,
-  NumberInput
-} from '@angular/cdk/coercion';
-import { ScrollDispatcher } from '@angular/cdk/scrolling';
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ContentChild,
-  ContentChildren,
-  ElementRef,
-  forwardRef,
-  Inject,
-  Input,
-  NgZone,
-  QueryList,
-  ViewEncapsulation,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ContentChild,
+    ContentChildren,
+    ElementRef,
+    forwardRef,
+    Inject,
+    Input,
+    NgZone,
+    QueryList,
+    ViewEncapsulation,
 } from '@angular/core';
 import {
-  TriDrawer, triDrawerAnimations, TriDrawerContainer, TriDrawerContent
+    TRI_DRAWER_CONTAINER,
+    TriDrawer,
+    triDrawerAnimations,
+    TriDrawerContainer,
+    TriDrawerContent
 } from '@gradii/triangle/drawer';
-import { TRI_DRAWER_CONTAINER } from '../../drawer/src/drawer';
 
 
 @Component({

@@ -1,5 +1,13 @@
 /**
  * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+/**
+ * @license
  *
  * Use of this source code is governed by an MIT-style license
  */
@@ -102,7 +110,7 @@ export abstract class LayerModel<G extends LayerModelGenerics = LayerModelGeneri
     this.models.push(model);
   }
 
-  getSelectionEntities(): Array<BaseModel> {
+  getSelectionEntities(): BaseModel[] {
     return _.flatMap(this.models, (model) => {
       return model.getSelectionEntities();
     });

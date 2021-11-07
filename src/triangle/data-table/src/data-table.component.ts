@@ -13,7 +13,7 @@ import {
   ContentChild,
   ContentChildren,
   ElementRef,
-  EventEmitter,
+  EventEmitter, forwardRef,
   Input,
   isDevMode,
   NgZone,
@@ -33,6 +33,7 @@ import {
   GroupResult,
   SortDescriptor
 } from '@gradii/triangle/data-query';
+import { TRI_INTERNAL_DATA_TABLE } from '@gradii/triangle/data-table/src/data-table.types';
 import {
   isArray,
   isBoolean,
@@ -204,6 +205,10 @@ export type fieldFilterMapFn = (fieldKey: string) => 'text' | 'numeric' | 'boole
     ColumnReorderService,
     IdService,
     SortService,
+    {
+      provide: TRI_INTERNAL_DATA_TABLE,
+      useExisting: forwardRef(()=>DataTableComponent)
+    }
   ],
   host               : {
     '[class.tri-data-table-wrapper]': 'true',

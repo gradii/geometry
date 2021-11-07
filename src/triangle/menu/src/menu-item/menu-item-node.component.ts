@@ -4,10 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, EventEmitter, Input, Optional, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Optional, Output } from '@angular/core';
+import { TRI_INTERNAL_MENU, TRI_INTERNAL_SUB_MENU } from '../menu.types';
 import { _MenuItemBase } from '../menu-item.component';
-import { MenuComponent } from '../menu.component';
-import { SubMenuComponent } from '../submenu.component';
+import type { MenuComponent } from '../menu.component';
+import type { SubMenuComponent } from '../submenu.component';
 
 @Component({
   selector: 'tri-menu-item-node',
@@ -97,8 +98,9 @@ export class MenuItemNodeComponent extends _MenuItemBase {
   selectItem: EventEmitter<any> = new EventEmitter();
 
   constructor(
+    @Inject(TRI_INTERNAL_MENU)
     protected menuComponent: MenuComponent,
-    @Optional() public subMenuComponent: SubMenuComponent) {
+    @Optional() @Inject(TRI_INTERNAL_SUB_MENU) public subMenuComponent: SubMenuComponent) {
     super(menuComponent, subMenuComponent);
   }
 

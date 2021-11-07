@@ -56,7 +56,7 @@ export class DateRangePickerComponent extends AbstractPickerComponent implements
     return !this.isRange && this.showToday;
   }
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
     super.ngOnInit();
 
     // Default format when it's empty
@@ -69,7 +69,7 @@ export class DateRangePickerComponent extends AbstractPickerComponent implements
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  override ngOnChanges(changes: SimpleChanges): void {
     super.ngOnChanges(changes);
 
     if (changes.renderExtraFooter) {
@@ -78,7 +78,7 @@ export class DateRangePickerComponent extends AbstractPickerComponent implements
   }
 
   // If has no timepicker and the user select a date by date panel, then close picker
-  onValueChange(value: CandyDate | CandyDate[]): void {
+  override onValueChange(value: CandyDate | CandyDate[]): void {
     super.onValueChange(value);
 
     if (!this.showTime) {
@@ -112,7 +112,7 @@ export class DateRangePickerComponent extends AbstractPickerComponent implements
     this.closeOverlay();
   }
 
-  onOpenChange(open: boolean): void {
+  override onOpenChange(open: boolean): void {
     this.onOpen.emit(open);
   }
 }

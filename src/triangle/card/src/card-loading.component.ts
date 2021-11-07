@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'tri-card-loading',
   template: `
-    <tri-card-body>
+    <div>
       <p class="tri-card-loading-block" style="width: 94%;"></p>
       <p>
         <span class="tri-card-loading-block" style="width: 28%;"></span>
@@ -28,7 +28,7 @@ import { Component } from '@angular/core';
         <span class="tri-card-loading-block" style="width: 15%;"></span>
         <span class="tri-card-loading-block" style="width: 40%;"></span>
       </p>
-    </tri-card-body>
+    </div>
   `
 })
 export class TriCardLoadingComponent {

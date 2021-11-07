@@ -16,7 +16,7 @@ import { CachedItemPosition } from '../drop-container.interface';
 import { SortPositionStrategy } from '../position-strategy/sort-position-strategy';
 import { adjustClientRect, isInsideClientRect, } from '../utils/client-rect';
 import { orderByHierarchy } from '../utils/hierarchy';
-import { DndContainerRef } from './dnd-container-ref';
+import { DndContainerRef, RootNode } from './dnd-container-ref';
 import { DragRefInternal as DragRef, Point } from './drag-ref';
 
 /**
@@ -136,7 +136,7 @@ export class DragContainerRef<T = any> extends DndContainerRef<T> {
   protected readonly _stopScrollTimers = new Subject<void>();
 
   /** Shadow root of the current element. Necessary for `elementFromPoint` to resolve correctly. */
-  protected _cachedShadowRoot: DocumentOrShadowRoot | null = null;
+  protected _cachedShadowRoot: RootNode | null = null;
 
   /** Reference to the document. */
   protected _document: Document;
@@ -687,12 +687,10 @@ export class DragContainerRef<T = any> extends DndContainerRef<T> {
    * in order to ensure that the element has been moved into the shadow DOM. Doing it inside the
    * constructor might be too early if the element is inside of something like `ngFor` or `ngIf`.
    */
-  protected _getShadowRoot(): DocumentOrShadowRoot {
+  protected _getShadowRoot(): RootNode {
     if (!this._cachedShadowRoot) {
-      const shadowRoot = _getShadowRoot(
-        coerceElement(this.element)) as unknown as DocumentOrShadowRoot;
-
-      this._cachedShadowRoot = shadowRoot || this._document;
+      const shadowRoot = _getShadowRoot(coerceElement(this.element));
+      this._cachedShadowRoot = (shadowRoot || this._document) as RootNode;
     }
 
     return this._cachedShadowRoot;

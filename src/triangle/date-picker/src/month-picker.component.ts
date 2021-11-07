@@ -27,11 +27,11 @@ import { AbstractPickerComponent } from './abstract-picker.component';
 })
 
 export class MonthPickerComponent extends AbstractPickerComponent implements OnChanges {
-  @Input() placeholder: string;
+  @Input() override placeholder: string;
 
   @Input() renderExtraFooter: TemplateRef<void> | string;
   @Input() defaultValue: CandyDate;
-  @Input() format: string = 'yyyy-MM';
+  @Input() override format: string = 'yyyy-MM';
 
   panelMode: PanelMode = 'month';
   extraFooter: TemplateRef<void> | string;
@@ -40,7 +40,7 @@ export class MonthPickerComponent extends AbstractPickerComponent implements OnC
     super(i18n);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  override ngOnChanges(changes: SimpleChanges): void {
     super.ngOnChanges(changes);
 
     if (changes.renderExtraFooter) {
@@ -54,13 +54,13 @@ export class MonthPickerComponent extends AbstractPickerComponent implements OnC
     }
   }
 
-  onValueChange(value: CandyDate | CandyDate[]): void {
+  override onValueChange(value: CandyDate | CandyDate[]): void {
     super.onValueChange(value);
 
     this.closeOverlay();
   }
 
-  onOpenChange(open: boolean): void {
+  override onOpenChange(open: boolean): void {
     if (!open) {
       this.cleanUp();
     }
