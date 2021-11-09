@@ -39,7 +39,7 @@ pipeline {
         //         }
         container('nodejs') {
 
-          sh 'yarn node scripts/cache-node-modules.js'
+          sh 'yarn node scripts/cache-node-modules.js $APP_NAME'
           sh 'yarn install'
         }
       }
