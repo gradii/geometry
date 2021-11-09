@@ -100,7 +100,10 @@ pipeline {
               sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
             }
             //'deploy to dev'
-            kubernetesDeploy(configs: 'deploy/dev-ol/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+            container('jnlp') {
+              sh 'kubectl apply -f deploy/dev-ol/**'
+            }
+//             kubernetesDeploy(configs: 'deploy/dev-ol/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
           }
         }
 
@@ -197,7 +200,10 @@ pipeline {
               sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
             }
             //'deploy to dev'
-            kubernetesDeploy(configs: 'deploy/dev-api/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+            container('jnlp') {
+              sh 'kubectl apply -f deploy/dev-api/**'
+            }
+//             kubernetesDeploy(configs: 'deploy/dev-api/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
           }
         }
       }
