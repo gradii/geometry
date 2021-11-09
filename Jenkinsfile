@@ -69,6 +69,24 @@ pipeline {
       }
     }
 
+    stage('install & init kubectl') {
+      steps {
+        container('nodejs') {
+          sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
+          sh 'install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl'
+          sh 'kubectl version --client'
+          withCredentials([kubeconfigContent(credentialsId : "$KUBECONFIG_CREDENTIAL_ID" ,variable : 'KUBECONFIG')]) {
+            sh '''
+              set +x
+              mkdir ~/.kube
+              echo "$KUBECONFIG" > ~/.kube/config
+            '''
+          }
+          sh 'kubectl cluster-info'
+        }
+      }
+    }
+
     stage('build') {
       parallel {
         stage('deploy dev-app') {
@@ -100,8 +118,13 @@ pipeline {
               sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
             }
             //'deploy to dev'
-            container('jnlp') {
-              sh 'kubectl apply -f deploy/dev-ol/**'
+            container('nodejs') {
+              sh '''
+              find deploy/dev-ol -type f |while read FILE; \
+              do envsubst < "$FILE" > "$FILE".tmp&&mv "$FILE".tmp "$FILE"; \
+              done;
+              '''
+              sh 'kubectl apply -f deploy/dev-ol'
             }
 //             kubernetesDeploy(configs: 'deploy/dev-ol/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
           }
@@ -200,8 +223,13 @@ pipeline {
               sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
             }
             //'deploy to dev'
-            container('jnlp') {
-              sh 'kubectl apply -f deploy/dev-api/**'
+            container('nodejs') {
+              sh '''
+              find deploy/dev-api -type f |while read FILE; \
+              do envsubst < "$FILE" > "$FILE".tmp&&mv "$FILE".tmp "$FILE"; \
+              done;
+              '''
+              sh 'kubectl apply -f deploy/dev-api'
             }
 //             kubernetesDeploy(configs: 'deploy/dev-api/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
           }
