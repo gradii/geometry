@@ -1,624 +1,845 @@
-/**
- * @license
- * Copyright Akveo. All Rights Reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- */
 import {
-  Component,
-  DebugElement,
-  Input,
-  QueryList,
-  ViewChild,
-  ViewChildren,
-  Injectable,
-} from '@angular/core';
-import { Location } from '@angular/common';
-import { Router, Routes } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { TestBed } from '@angular/core/testing';
-import { NbMenuModule } from './menu.module';
-import { NbMenuBag, NbMenuInternalService, NbMenuItem, NbMenuService } from './menu.service';
-import { NbThemeModule } from '../../theme.module';
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+  flush,
+  waitForAsync,
+} from '@angular/core/testing';
+import {Component, ViewChild, ViewChildren, QueryList, ElementRef} from '@angular/core';
+import {TAB} from '@angular/cdk/keycodes';
 import {
-  getFragmentPartOfUrl,
-  isFragmentContain,
-  isFragmentEqual,
-  isUrlPathContain,
-  isUrlPathEqual,
-  getPathPartOfUrl,
-} from './url-matching-helpers';
-import { pairwise, take } from 'rxjs/operators';
-import { NbMenuComponent } from './menu.component';
-import {
-  NbIconComponent,
-  NbIconLibraries,
-  NbLayoutDirection,
-  NbLayoutDirectionService,
-} from '@nebular/theme';
-import { SpyLocation } from '@angular/common/testing';
+  dispatchKeyboardEvent,
+  dispatchMouseEvent,
+  createMouseEvent,
+  dispatchEvent,
+} from '../../cdk/testing/private';
+import {By} from '@angular/platform-browser';
+import {CdkMenu} from './menu';
+import {CdkMenuModule} from './menu-module';
+import {CdkMenuItemCheckbox} from './menu-item-checkbox';
+import {CdkMenuItem} from './menu-item';
+import {CdkMenuPanel} from './menu-panel';
+import {MenuStack} from './menu-stack';
 
-@Component({ template: '' })
-export class NoopComponent {}
+describe('Menu', () => {
+  describe('as checkbox group', () => {
+    let fixture: ComponentFixture<MenuCheckboxGroup>;
+    let menuItems: CdkMenuItemCheckbox[];
+
+    beforeEach(
+      waitForAsync(() => {
+        TestBed.configureTestingModule({
+          imports: [CdkMenuModule],
+          declarations: [MenuCheckboxGroup],
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(MenuCheckboxGroup);
+        fixture.detectChanges();
+
+        fixture.componentInstance.panel._menuStack = new MenuStack();
+        fixture.componentInstance.trigger.getMenuTrigger()?.toggle();
+        fixture.detectChanges();
+
+        menuItems = fixture.debugElement
+          .queryAll(By.directive(CdkMenuItemCheckbox))
+          .map(element => element.injector.get(CdkMenuItemCheckbox));
+      }),
+    );
+
+    it('should toggle menuitemcheckbox', () => {
+      expect(menuItems[0].checked).toBeTrue();
+      expect(menuItems[1].checked).toBeFalse();
+
+      menuItems[1].trigger();
+      expect(menuItems[0].checked).toBeTrue(); // checkbox should not change
+
+      menuItems[0].trigger();
+
+      expect(menuItems[0].checked).toBeFalse();
+      expect(menuItems[1].checked).toBeTrue();
+    });
+  });
+
+  describe('checkbox change events', () => {
+    let fixture: ComponentFixture<MenuCheckboxGroup>;
+    let menuItems: CdkMenuItemCheckbox[];
+
+    beforeEach(
+      waitForAsync(() => {
+        TestBed.configureTestingModule({
+          imports: [CdkMenuModule],
+          declarations: [MenuCheckboxGroup],
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(MenuCheckboxGroup);
+        fixture.detectChanges();
+
+        fixture.componentInstance.panel._menuStack = new MenuStack();
+        fixture.componentInstance.trigger.getMenuTrigger()?.toggle();
+        fixture.detectChanges();
+
+        menuItems = fixture.debugElement
+          .queryAll(By.directive(CdkMenuItemCheckbox))
+          .map(element => element.injector.get(CdkMenuItemCheckbox));
+      }),
+    );
+
+    it('should emit on click', () => {
+      const spy = jasmine.createSpy('cdkMenu change spy');
+      fixture.debugElement.query(By.directive(CdkMenu)).injector.get(CdkMenu).change.subscribe(spy);
+
+      menuItems[0].trigger();
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(menuItems[0]);
+    });
+  });
+
+  describe('with inner group', () => {
+    let fixture: ComponentFixture<MenuWithNestedGroup>;
+    let menuItems: CdkMenuItemCheckbox[];
+    let menu: CdkMenu;
+
+    beforeEach(
+      waitForAsync(() => {
+        TestBed.configureTestingModule({
+          imports: [CdkMenuModule],
+          declarations: [MenuWithNestedGroup],
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(MenuWithNestedGroup);
+        fixture.detectChanges();
+
+        fixture.componentInstance.panel._menuStack = new MenuStack();
+        fixture.componentInstance.trigger.getMenuTrigger()?.toggle();
+        fixture.detectChanges();
+
+        menu = fixture.debugElement.query(By.directive(CdkMenu)).injector.get(CdkMenu);
+
+        menuItems = fixture.debugElement
+          .queryAll(By.directive(CdkMenuItemCheckbox))
+          .map(element => element.injector.get(CdkMenuItemCheckbox));
+      }),
+    );
+
+    it('should not emit change from root menu ', () => {
+      const spy = jasmine.createSpy('changeSpy for root menu');
+      menu.change.subscribe(spy);
+
+      for (let menuItem of menuItems) {
+        menuItem.trigger();
+      }
+
+      expect(spy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('with inner group render delayed', () => {
+    let fixture: ComponentFixture<MenuWithConditionalGroup>;
+    let menuItems: CdkMenuItemCheckbox[];
+    let menu: CdkMenu;
+
+    const getMenuItems = () => {
+      return fixture.debugElement
+        .queryAll(By.directive(CdkMenuItemCheckbox))
+        .map(element => element.injector.get(CdkMenuItemCheckbox));
+    };
+
+    beforeEach(
+      waitForAsync(() => {
+        TestBed.configureTestingModule({
+          imports: [CdkMenuModule],
+          declarations: [MenuWithConditionalGroup],
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(MenuWithConditionalGroup);
+        fixture.detectChanges();
+
+        fixture.componentInstance.panel._menuStack = new MenuStack();
+        fixture.componentInstance.trigger.getMenuTrigger()?.toggle();
+        fixture.detectChanges();
+
+        menu = fixture.debugElement.query(By.directive(CdkMenu)).injector.get(CdkMenu);
+        menuItems = getMenuItems();
+      }),
+    );
+
+    it('should not emit after the menu group element renders', () => {
+      const spy = jasmine.createSpy('cdkMenu change');
+      menu.change.subscribe(spy);
+
+      menuItems[0].trigger();
+      fixture.componentInstance.renderInnerGroup = true;
+      fixture.detectChanges();
+
+      menuItems = getMenuItems();
+      menuItems[1].trigger();
+      fixture.detectChanges();
+
+      expect(spy).withContext('Expected initial trigger only').toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('when configured inline', () => {
+    let fixture: ComponentFixture<InlineMenu>;
+    let nativeMenu: HTMLElement;
+    let nativeMenuItems: HTMLElement[];
+
+    beforeEach(
+      waitForAsync(() => {
+        TestBed.configureTestingModule({
+          imports: [CdkMenuModule],
+          declarations: [InlineMenu],
+        }).compileComponents();
+      }),
+    );
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(InlineMenu);
+      fixture.detectChanges();
+
+      nativeMenu = fixture.debugElement.query(By.directive(CdkMenu)).nativeElement;
+      nativeMenuItems = fixture.debugElement
+        .queryAll(By.directive(CdkMenuItem))
+        .map(e => e.nativeElement);
+    });
+
+    it('should have its tabindex set to 0', () => {
+      const item = fixture.debugElement.query(By.directive(CdkMenu)).nativeElement;
+      expect(item.getAttribute('tabindex')).toBe('0');
+    });
+
+    it('should focus the first menu item when it gets tabbed in', () => {
+      dispatchKeyboardEvent(document, 'keydown', TAB);
+      nativeMenu.focus();
+
+      expect(document.querySelector(':focus')).toEqual(nativeMenuItems[0]);
+    });
+  });
+
+  describe('menu aim', () => {
+    /** A coordinate in the browser window */
+    type Point = {x: number; y: number};
+
+    /** Calculate the slope between two points. */
+    function getSlope(from: Point, to: Point) {
+      return (to.y - from.y) / (to.x - from.x);
+    }
+
+    /** Calculate the y intercept based on some slope and point. */
+    function getYIntercept(slope: number, point: Point) {
+      return point.y - slope * point.x;
+    }
+
+    /** Dispatch a mouseout event. */
+    function mouseout(mouseOutOf: HTMLElement) {
+      dispatchMouseEvent(mouseOutOf, 'mouseout');
+    }
+
+    /** Dispatch a mouseenter event. */
+    function mouseenter(element: HTMLElement, point: Point) {
+      dispatchEvent(element, createMouseEvent('mouseenter', point.x, point.y));
+    }
+
+    /** Dispatch a mousemove event. */
+    function mousemove(inElement: HTMLElement, point: Point) {
+      dispatchEvent(inElement, createMouseEvent('mousemove', point.x, point.y));
+    }
+
+    /** Return the element at the specified point. */
+    function getElementAt(point: Point) {
+      return document.elementFromPoint(point.x, point.y) as HTMLElement;
+    }
+
+    describe('with ltr layout and menu at top of page moving down and right', () => {
+      let fixture: ComponentFixture<WithComplexNestedMenus>;
+      let nativeFileTrigger: HTMLElement;
+      let nativeFileButtons: HTMLElement[] | undefined;
+
+      let nativeEditTrigger: HTMLElement | undefined;
+      let nativeEditButtons: HTMLElement[] | undefined;
+
+      let nativeShareTrigger: HTMLElement | undefined;
+
+      let nativeMenus: HTMLElement[];
+
+      beforeEach(
+        waitForAsync(() => {
+          TestBed.configureTestingModule({
+            imports: [CdkMenuModule],
+            declarations: [WithComplexNestedMenus],
+          }).compileComponents();
+        }),
+      );
+
+      beforeEach(() => {
+        fixture = TestBed.createComponent(WithComplexNestedMenus);
+        detectChanges();
+      });
+
+      /** Get the test elements from the component. */
+      function grabElementsForTesting() {
+        nativeFileTrigger = fixture.componentInstance.nativeFileTrigger?.nativeElement;
+        nativeFileButtons = fixture.debugElement
+          .query(By.css('#file_menu'))
+          ?.nativeElement.querySelectorAll('button');
+
+        nativeEditTrigger = fixture.componentInstance.nativeEditTrigger?.nativeElement;
+        nativeEditButtons = fixture.debugElement
+          .query(By.css('#edit_menu'))
+          ?.nativeElement.querySelectorAll('button');
+
+        nativeShareTrigger = fixture.componentInstance.nativeShareTrigger?.nativeElement;
+
+        nativeMenus = fixture.componentInstance.menus.map(m => m._elementRef.nativeElement);
+      }
+
+      /** Run change detection and extract the set of rendered elements. */
+      function detectChanges() {
+        fixture.detectChanges();
+        grabElementsForTesting();
+      }
+
+      /** Open the file menu. */
+      function openFileMenu() {
+        dispatchMouseEvent(nativeFileTrigger, 'mouseenter');
+        dispatchMouseEvent(nativeFileTrigger, 'click');
+        dispatchMouseEvent(nativeFileTrigger, 'mouseenter');
+        detectChanges();
+      }
+      /** Using a fake hover event, open the specified menu given a reference to its trigger. */
+      function openMenuOnHover(menuElement?: HTMLElement) {
+        if (menuElement) {
+          dispatchMouseEvent(menuElement, 'mouseenter');
+          detectChanges();
+        } else {
+          throw Error('No element trigger provided. Is it visible in the DOM?');
+        }
+      }
+
+      /**
+       * Fakes mouse hover events from some source point to some target point. Along the way, emits
+       * mouse move events and mouse enter events when the element under the mouse changes.
+       *
+       * It assumes that moves will occur left to right and down.
+       * @param from the starting point
+       * @param to where to end
+       * @param inMenu the menu which uses the menu-aim under test
+       * @param duration time in ms the full hover event should take
+       *
+       * @return the number of elements the mouse entered into.
+       */
+      function hover(from: Point, to: Point, inMenu: HTMLElement, duration: number) {
+        const getNextPoint = getNextPointIterator(from, to);
+
+        let currPoint: Point | null = from;
+        let currElement = getElementAt(currPoint);
+
+        const timeout = duration / (to.x - from.x);
+
+        let numEnters = 0;
+        while (currPoint) {
+          mousemove(inMenu, currPoint);
+          const nextElement = getElementAt(currPoint);
+          if (nextElement !== currElement && nextElement instanceof HTMLButtonElement) {
+            numEnters++;
+            mouseout(currElement);
+            mouseenter(nextElement, currPoint);
+            currElement = nextElement;
+            fixture.detectChanges();
+          }
+          currPoint = getNextPoint();
+          tick(timeout);
+        }
+        return numEnters;
+      }
+
+      /**
+       * Get a function which determines the next point to generate when moving from one point to
+       * another.
+       */
+      function getNextPointIterator(from: Point, to: Point) {
+        let x = from.x;
+        const m = getSlope(from, to);
+        const b = getYIntercept(m, to);
+        return () => {
+          if (x > to.x) {
+            return null;
+          }
+          const y = m * x + b;
+          return {x: Math.floor(x++), y: Math.floor(y)};
+        };
+      }
+
+      it(
+        'should close the edit menu when hovering directly down from the edit menu trigger to' +
+          ' the print item without waiting',
+        fakeAsync(() => {
+          openFileMenu();
+          openMenuOnHover(nativeEditTrigger!);
+          const editPosition = nativeEditTrigger!.getBoundingClientRect();
+          const printPosition = nativeFileButtons![4].getBoundingClientRect();
+
+          const numEnterEvents = hover(
+            editPosition,
+            {x: printPosition.x + 5, y: printPosition.y + 1},
+            nativeMenus[0],
+            100,
+          );
+          detectChanges();
+
+          expect(numEnterEvents).toBe(4);
+          expect(nativeMenus.length).toBe(1);
+        }),
+      );
+
+      it('should close the edit menu after moving towards submenu and stopping', fakeAsync(() => {
+        openFileMenu();
+        openMenuOnHover(nativeEditTrigger!);
+        const editPosition = nativeEditTrigger!.getBoundingClientRect();
+        const sharePosition = nativeShareTrigger!.getBoundingClientRect();
+
+        const numEnters = hover(
+          {
+            x: editPosition.x + editPosition.width / 2,
+            y: editPosition.y + editPosition.height - 10,
+          },
+          {
+            x: sharePosition.x + sharePosition.width - 10,
+            y: sharePosition.y + sharePosition.height - 10,
+          },
+          nativeMenus[0],
+          100,
+        );
+        tick(2000);
+        detectChanges();
+
+        expect(numEnters).toBe(1);
+        expect(nativeMenus.length).toBe(2);
+        expect(nativeMenus[1].id).toBe('share_menu');
+      }));
+
+      it('should not close the edit submenu when hovering into its items in time', fakeAsync(() => {
+        openFileMenu();
+        openMenuOnHover(nativeEditTrigger!);
+        const editPosition = nativeEditTrigger!.getBoundingClientRect();
+        const pastePosition = nativeEditButtons![4].getBoundingClientRect();
+
+        const numEnters = hover(editPosition, pastePosition, nativeMenus[0], 100);
+        detectChanges();
+        flush();
+
+        expect(numEnters).toBeGreaterThan(2);
+        expect(nativeMenus.length).toBe(2);
+        expect(nativeMenus[1].id).toBe('edit_menu');
+      }));
+
+      it('should close the edit menu when hovering into its items slowly', fakeAsync(() => {
+        openFileMenu();
+        openMenuOnHover(nativeEditTrigger!);
+        const editPosition = nativeEditTrigger!.getBoundingClientRect();
+        const pastePosition = nativeEditButtons![4].getBoundingClientRect();
+
+        const numEnters = hover(editPosition, pastePosition, nativeMenus[0], 4000);
+        detectChanges();
+        flush();
+
+        expect(numEnters).toBeGreaterThan(2);
+        expect(nativeMenus.length).toBe(1);
+      }));
+    });
+
+    describe('with rtl layout and menu at bottom of page moving up and left', () => {
+      let fixture: ComponentFixture<WithComplexNestedMenusOnBottom>;
+      let nativeFileTrigger: HTMLElement;
+      let nativeFileButtons: HTMLElement[] | undefined;
+
+      let nativeEditTrigger: HTMLElement | undefined;
+      let nativeEditButtons: HTMLElement[] | undefined;
+
+      let nativeShareTrigger: HTMLElement | undefined;
+
+      let nativeMenus: HTMLElement[];
+
+      beforeEach(
+        waitForAsync(() => {
+          TestBed.configureTestingModule({
+            imports: [CdkMenuModule],
+            declarations: [WithComplexNestedMenusOnBottom],
+          }).compileComponents();
+        }),
+      );
+
+      beforeEach(() => {
+        fixture = TestBed.createComponent(WithComplexNestedMenusOnBottom);
+        detectChanges();
+      });
+
+      beforeAll(() => {
+        document.dir = 'rtl';
+      });
+
+      afterAll(() => {
+        document.dir = 'ltr';
+      });
+
+      /** Get the test elements from the component. */
+      function grabElementsForTesting() {
+        nativeFileTrigger = fixture.componentInstance.nativeFileTrigger?.nativeElement;
+        nativeFileButtons = fixture.debugElement
+          .query(By.css('#file_menu'))
+          ?.nativeElement.querySelectorAll('button');
+
+        nativeEditTrigger = fixture.componentInstance.nativeEditTrigger?.nativeElement;
+        nativeEditButtons = fixture.debugElement
+          .query(By.css('#edit_menu'))
+          ?.nativeElement.querySelectorAll('button');
+
+        nativeShareTrigger = fixture.componentInstance.nativeShareTrigger?.nativeElement;
+
+        nativeMenus = fixture.componentInstance.menus.map(m => m._elementRef.nativeElement);
+      }
+
+      /** Run change detection and extract the set the rendered elements. */
+      function detectChanges() {
+        fixture.detectChanges();
+        grabElementsForTesting();
+      }
+
+      /** Open the file menu. */
+      function openFileMenu() {
+        dispatchMouseEvent(nativeFileTrigger, 'mouseenter');
+        dispatchMouseEvent(nativeFileTrigger, 'click');
+        dispatchMouseEvent(nativeFileTrigger, 'mouseenter');
+        detectChanges();
+      }
+
+      /** Using a fake hover event, open the specified menu given a reference to its trigger. */
+      function openMenuOnHover(menuElement?: HTMLElement) {
+        if (menuElement) {
+          dispatchMouseEvent(menuElement, 'mouseenter');
+          detectChanges();
+        } else {
+          throw Error('No element trigger provided. Is it visible in the DOM?');
+        }
+      }
+
+      /**
+       * Fakes mouse hover events from some source point to some target point. Along the way, emits
+       * mouse move events and mouse enter events when the element under the mouse changes.
+       *
+       * It assumes that moves will occur right to left and up.
+       * @param from the starting point
+       * @param to where to end
+       * @param inMenu the menu which uses the menu-aim under test
+       * @param duration time in ms the full hover event should take
+       *
+       * @return the number of elements the mouse entered into.
+       */
+      function hover(from: Point, to: Point, inMenu: HTMLElement, duration: number) {
+        const getNextPoint = getNextPointIterator(from, to);
+
+        let currPoint: Point | null = from;
+        let currElement = getElementAt(currPoint);
+
+        const timeout = duration / (to.x - from.x);
+
+        let numEnters = 0;
+        while (currPoint) {
+          mousemove(inMenu, currPoint);
+          const nextElement = getElementAt(currPoint);
+          if (nextElement !== currElement && nextElement instanceof HTMLButtonElement) {
+            numEnters++;
+            mouseout(currElement);
+            mouseenter(nextElement, currPoint);
+            currElement = nextElement;
+            fixture.detectChanges();
+          }
+          currPoint = getNextPoint();
+          tick(timeout);
+        }
+        return numEnters;
+      }
+
+      /**
+       * Get a function which determines the next point to generate when moving from one point to
+       * another.
+       */
+      function getNextPointIterator(from: Point, to: Point) {
+        let x = from.x;
+        const m = getSlope(from, to);
+        const b = getYIntercept(m, to);
+        return () => {
+          if (x < to.x) {
+            return null;
+          }
+          const y = m * x + b;
+          return {x: Math.floor(x--), y: Math.floor(y)};
+        };
+      }
+
+      it(
+        'should close the edit menu when hovering directly up from the edit menu trigger to' +
+          ' the print item without waiting',
+        fakeAsync(() => {
+          openFileMenu();
+          openMenuOnHover(nativeEditTrigger!);
+
+          const editPosition = nativeEditTrigger!.getBoundingClientRect();
+          const printPosition = nativeFileButtons![0].getBoundingClientRect();
+
+          const numEnterEvents = hover(
+            {x: editPosition.x + editPosition.width / 2, y: editPosition.y + 5},
+            {x: printPosition.x + 10, y: printPosition.y - 10},
+            nativeMenus[0],
+            100,
+          );
+          detectChanges();
+          flush();
+
+          expect(numEnterEvents).toBe(4);
+          expect(nativeMenus.length).toBe(1);
+        }),
+      );
+
+      it('should close the edit menu after moving towards submenu and stopping', fakeAsync(() => {
+        openFileMenu();
+        openMenuOnHover(nativeEditTrigger!);
+        const editPosition = nativeEditTrigger!.getBoundingClientRect();
+        const sharePosition = nativeShareTrigger!.getBoundingClientRect();
+
+        const numEnters = hover(
+          {x: editPosition.x + editPosition.width / 2, y: editPosition.y + 5},
+          {
+            x: sharePosition.x + 10,
+            y: sharePosition.y + 10,
+          },
+          nativeMenus[0],
+          100,
+        );
+        tick(2000);
+        detectChanges();
+
+        expect(numEnters).toBe(1);
+        expect(nativeMenus.length).toBe(2);
+        expect(nativeMenus[1].id).toBe('share_menu');
+      }));
+
+      it('should not close the edit submenu when hovering into its items in time', fakeAsync(() => {
+        openFileMenu();
+        openMenuOnHover(nativeEditTrigger!);
+        const editPosition = nativeEditTrigger!.getBoundingClientRect();
+        const undoPosition = nativeEditButtons![0].getBoundingClientRect();
+
+        const numEnters = hover(editPosition, undoPosition, nativeMenus[0], 100);
+        detectChanges();
+        flush();
+
+        expect(numEnters).toBeGreaterThan(2);
+        expect(nativeMenus.length).toBe(2);
+        expect(nativeMenus[1].id).toBe('edit_menu');
+      }));
+    });
+  });
+});
 
 @Component({
-  template: `<nb-menu [items]="items" [tag]="menuTag"></nb-menu>`,
+  template: `
+    <div cdkMenuBar>
+      <button cdkMenuItem [cdkMenuTriggerFor]="panel"></button>
+    </div>
+    <ng-template cdkMenuPanel #panel="cdkMenuPanel">
+      <ul cdkMenu [cdkMenuPanel]="panel">
+        <li role="none">
+          <button checked="true" cdkMenuItemCheckbox>first</button>
+        </li>
+        <li role="none">
+          <button cdkMenuItemCheckbox>second</button>
+        </li>
+      </ul>
+    </ng-template>
+  `,
 })
-export class SingleMenuTestComponent {
-  constructor (public menuPublicService: NbMenuService) {}
-  @Input() items: NbMenuItem[];
-  @Input() menuTag: string;
-  @ViewChild(NbMenuComponent) menuComponent: NbMenuComponent;
+class MenuCheckboxGroup {
+  @ViewChild(CdkMenuItem) readonly trigger: CdkMenuItem;
+  @ViewChild(CdkMenuPanel) readonly panel: CdkMenuPanel;
 }
 
 @Component({
   template: `
-    <nb-menu [items]="firstMenuItems" [tag]="firstMenuTag"></nb-menu>
-    <nb-menu [items]="secondMenuItems" [tag]="secondMenuTag"></nb-menu>
+    <div cdkMenuBar>
+      <button cdkMenuItem [cdkMenuTriggerFor]="panel"></button>
+    </div>
+    <ng-template cdkMenuPanel #panel="cdkMenuPanel">
+      <ul cdkMenu [cdkMenuPanel]="panel">
+        <li>
+          <ul cdkMenuGroup>
+            <li><button cdkMenuCheckbox>first</button></li>
+          </ul>
+        </li>
+      </ul>
+    </ng-template>
   `,
 })
-export class DoubleMenusTestComponent {
-  constructor (public menuPublicService: NbMenuService) {}
-  @Input() firstMenuItems: NbMenuItem[];
-  @Input() secondMenuItems: NbMenuItem[];
-  @Input() firstMenuTag: string;
-  @Input() secondMenuTag: string;
-  @ViewChildren(NbMenuComponent) menuComponent: QueryList<NbMenuComponent>;
+class MenuWithNestedGroup {
+  @ViewChild(CdkMenuItem) readonly trigger: CdkMenuItem;
+  @ViewChild(CdkMenuPanel) readonly panel: CdkMenuPanel;
 }
 
-
-// Overrides SpyLocation path method to take into account `includeHash` parameter.
-// Original SpyLocation ignores parameters and always returns path with hash which is different
-// from Location.
-@Injectable()
-export class SpyLocationPathParameter extends SpyLocation {
-  path(includeHash: boolean = false): string {
-    const path = super.path();
-
-    if (includeHash) {
-      return path;
-    }
-
-    return getPathPartOfUrl(path);
-  }
+@Component({
+  template: `
+    <div cdkMenuBar>
+      <button cdkMenuItem [cdkMenuTriggerFor]="panel"></button>
+    </div>
+    <ng-template cdkMenuPanel #panel="cdkMenuPanel">
+      <ul cdkMenu [cdkMenuPanel]="panel">
+        <li><button cdkMenuItemCheckbox>first</button></li>
+        <div *ngIf="renderInnerGroup">
+          <ul cdkMenuGroup>
+            <li><button cdkMenuItemCheckbox>second</button></li>
+          </ul>
+        </div>
+      </ul>
+    </ng-template>
+  `,
+})
+class MenuWithConditionalGroup {
+  renderInnerGroup = false;
+  @ViewChild(CdkMenuItem) readonly trigger: CdkMenuItem;
+  @ViewChild(CdkMenuPanel) readonly panel: CdkMenuPanel;
 }
 
-function createTestBed(routes: Routes = []) {
-  TestBed.configureTestingModule({
-    imports: [
-      NbThemeModule.forRoot(),
-      NbMenuModule.forRoot(),
-      RouterTestingModule.withRoutes(routes),
-      NoopAnimationsModule,
-    ],
-    declarations: [SingleMenuTestComponent, DoubleMenusTestComponent, NoopComponent],
-    providers: [NbMenuService],
-  });
+@Component({
+  template: `
+    <div cdkMenu>
+      <button cdkMenuItem>Inbox</button>
+      <button cdkMenuItem>Starred</button>
+    </div>
+  `,
+})
+class InlineMenu {}
 
-  TestBed.overrideProvider(Location, { useValue: new SpyLocationPathParameter() });
+@Component({
+  template: `
+    <div cdkTargetMenuAim cdkMenuBar>
+      <button #file_trigger cdkMenuItem [cdkMenuTriggerFor]="file">File</button>
+    </div>
 
-  const iconLibs: NbIconLibraries = TestBed.inject(NbIconLibraries);
-  iconLibs.registerSvgPack('test', { 'some-icon': '<svg>some-icon</svg>' });
-  iconLibs.setDefaultPack('test')
+    <ng-template cdkMenuPanel #file="cdkMenuPanel">
+      <div
+        id="file_menu"
+        style="display: flex; flex-direction: column;"
+        cdkMenu
+        cdkTargetMenuAim
+        [cdkMenuPanel]="file"
+      >
+        <button #edit_trigger cdkMenuItem [cdkMenuTriggerFor]="edit">Edit</button>
+        <button #share_trigger cdkMenuItem [cdkMenuTriggerFor]="share">Share</button>
+        <button cdkMenuItem>Open</button>
+        <button cdkMenuItem>Rename</button>
+        <button cdkMenuItem>Print</button>
+      </div>
+    </ng-template>
+
+    <ng-template cdkMenuPanel #edit="cdkMenuPanel">
+      <div
+        id="edit_menu"
+        style="display: flex; flex-direction: column;"
+        cdkMenu
+        cdkTargetMenuAim
+        [cdkMenuPanel]="edit"
+        id="edit_menu"
+      >
+        <button cdkMenuItem>Undo</button>
+        <button cdkMenuItem>Redo</button>
+        <button cdkMenuItem>Cut</button>
+        <button cdkMenuItem>Copy</button>
+        <button cdkMenuItem>Paste</button>
+      </div>
+    </ng-template>
+
+    <ng-template cdkMenuPanel #share="cdkMenuPanel">
+      <div
+        id="share_menu"
+        style="display: flex; flex-direction: column;"
+        cdkMenu
+        cdkTargetMenuAim
+        [cdkMenuPanel]="share"
+      >
+        <button cdkMenuItem>GVC</button>
+        <button cdkMenuItem>Gmail</button>
+        <button cdkMenuItem>Twitter</button>
+      </div>
+    </ng-template>
+  `,
+})
+class WithComplexNestedMenus {
+  @ViewChild('file_trigger', {read: ElementRef}) nativeFileTrigger: ElementRef<HTMLElement>;
+  @ViewChild('edit_trigger', {read: ElementRef}) nativeEditTrigger?: ElementRef<HTMLElement>;
+  @ViewChild('share_trigger', {read: ElementRef}) nativeShareTrigger?: ElementRef<HTMLElement>;
+
+  @ViewChildren(CdkMenu) menus: QueryList<CdkMenu>;
 }
+@Component({
+  template: `
+    <div cdkMenuBar cdkTargetMenuAim style="position: fixed; bottom: 0">
+      <button #file_trigger cdkMenuItem [cdkMenuTriggerFor]="file">File</button>
+    </div>
 
-function createSingleMenuComponent(menuItems, menuTag = 'menu') {
-  createTestBed();
-  const fixture = TestBed.createComponent( SingleMenuTestComponent );
-  fixture.componentInstance.items = menuItems;
-  fixture.componentInstance.menuTag = menuTag;
-  const menuService = fixture.componentInstance.menuPublicService;
-  fixture.detectChanges();
-  return { fixture, menuService };
+    <ng-template cdkMenuPanel #file="cdkMenuPanel">
+      <div
+        id="file_menu"
+        style="display: flex; flex-direction: column"
+        cdkMenu
+        cdkTargetMenuAim
+        [cdkMenuPanel]="file"
+      >
+        <button cdkMenuItem>Print</button>
+        <button cdkMenuItem>Rename</button>
+        <button cdkMenuItem>Open</button>
+        <button #share_trigger cdkMenuItem [cdkMenuTriggerFor]="share">Share</button>
+        <button #edit_trigger cdkMenuItem [cdkMenuTriggerFor]="edit">Edit</button>
+      </div>
+    </ng-template>
+
+    <ng-template cdkMenuPanel #edit="cdkMenuPanel">
+      <div
+        id="edit_menu"
+        style="display: flex; flex-direction: column"
+        cdkMenu
+        cdkTargetMenuAim
+        [cdkMenuPanel]="edit"
+        id="edit_menu"
+      >
+        <button cdkMenuItem>Undo</button>
+        <button cdkMenuItem>Redo</button>
+        <button cdkMenuItem>Cut</button>
+        <button cdkMenuItem>Copy</button>
+        <button cdkMenuItem>Paste</button>
+      </div>
+    </ng-template>
+
+    <ng-template cdkMenuPanel #share="cdkMenuPanel">
+      <div
+        id="share_menu"
+        style="display: flex; flex-direction: column"
+        cdkMenu
+        cdkTargetMenuAim
+        [cdkMenuPanel]="share"
+      >
+        <button cdkMenuItem>GVC</button>
+        <button cdkMenuItem>Gmail</button>
+        <button cdkMenuItem>Twitter</button>
+        <button cdkMenuItem>Facebook</button>
+      </div>
+    </ng-template>
+  `,
+})
+class WithComplexNestedMenusOnBottom {
+  @ViewChild('file_trigger', {read: ElementRef}) nativeFileTrigger: ElementRef<HTMLElement>;
+  @ViewChild('edit_trigger', {read: ElementRef}) nativeEditTrigger?: ElementRef<HTMLElement>;
+  @ViewChild('share_trigger', {read: ElementRef}) nativeShareTrigger?: ElementRef<HTMLElement>;
+
+  @ViewChildren(CdkMenu) menus: QueryList<CdkMenu>;
 }
-
-function createDoubleMenuComponent( firstMenuItems, firstMenuTag, secondMenuItems, secondMenuTag ) {
-  createTestBed();
-  const fixture = TestBed.createComponent( DoubleMenusTestComponent );
-  fixture.componentInstance.firstMenuItems = firstMenuItems;
-  fixture.componentInstance.secondMenuItems = secondMenuItems;
-  fixture.componentInstance.firstMenuTag = firstMenuTag;
-  fixture.componentInstance.secondMenuTag = secondMenuTag;
-  const menuService = fixture.componentInstance.menuPublicService;
-  fixture.detectChanges();
-  return { fixture, menuService };
-}
-
-function createMenuItems(items: Partial<NbMenuItem>[], menuInternaleService: NbMenuInternalService): NbMenuItem[] {
-  menuInternaleService.prepareItems(items as NbMenuItem[]);
-  return items as NbMenuItem[];
-}
-
-describe('NbMenuItem', () => {
-
-  it('should set tag attribute for menu services', () => {
-    const { fixture } = createSingleMenuComponent([{ title: 'Home' }], 'menu');
-    const nbMenuTag = fixture.componentInstance.menuComponent.tag;
-    expect(nbMenuTag).toEqual('menu');
-  });
-
-  it('should set icon to menu item', () => {
-    const { fixture } = createSingleMenuComponent([{ title: 'Home', icon: 'some-icon' }]);
-    const iconWrapper = fixture.nativeElement.querySelector('.menu-icon');
-    expect(iconWrapper.textContent).toContain('some-icon');
-  });
-
-  it('should set title to menu item', () => {
-    const { fixture } = createSingleMenuComponent([{ title: 'Test title' }]);
-    const titleWrapper = fixture.nativeElement.querySelector('.menu-title').innerHTML;
-    expect(titleWrapper).toEqual('Test title');
-  });
-
-  it('should set link target to menu item', () => {
-    const { fixture } = createSingleMenuComponent([
-      { title: 'Link with _blank target', target: '_blank' },
-      { title: 'Link with _self target', target: '_self' },
-      { title: 'Link with any not valid target', target: 'anyNotValid' },
-    ]);
-    const menuLinks = fixture.nativeElement.querySelectorAll('a');
-    expect(menuLinks[0].getAttribute('target')).toEqual('_blank');
-    expect(menuLinks[1].getAttribute('target')).toEqual('_self');
-    expect(menuLinks[2].getAttribute('target')).toEqual('anyNotValid');
-  });
-
-  it('should have only span, without link on group element', () => {
-    const { fixture } = createSingleMenuComponent([{ title: 'Group item', group: true }]);
-    const menuItem = fixture.nativeElement.querySelector('.menu-item');
-    expect(menuItem.querySelector('a')).toBeNull();
-    expect(menuItem.querySelector('span')).not.toBeNull();
-  });
-
-  it('should not render hidden element', () => {
-    const { fixture } = createSingleMenuComponent([
-      { title: 'Visible item' },
-      { title: 'Hidden item', hidden: true },
-      { title: 'Visible item' },
-    ]);
-    const menuList = fixture.nativeElement.querySelectorAll('.menu-item');
-    expect(menuList.length).toEqual(2);
-  });
-
-  it('should set child menu items', () => {
-    const { fixture } = createSingleMenuComponent([
-      {
-        title: 'Parent item',
-        expanded: true,
-        children: [{ title: 'Child item' }],
-      },
-    ]);
-    const parentItem = fixture.nativeElement.querySelector('.menu-item');
-    expect(parentItem.querySelector('ul.menu-items')).not.toBeNull();
-  });
-
-  it('should expand child menu items', () => {
-    const { fixture } = createSingleMenuComponent([
-      { title: 'Parent item', expanded: true, children: [{  title: 'Child item' }] },
-    ]);
-    const childList = fixture.nativeElement.querySelector('.menu-item > ul.menu-items');
-    expect(childList.classList).toContain('expanded');
-  });
-
-  it('should set URL', () => {
-    const { fixture } = createSingleMenuComponent([{ title: 'Menu Item with link', url: 'https://test.link' }]);
-    const menuItem = fixture.nativeElement.querySelector('.menu-item');
-    expect(menuItem.querySelector('a').getAttribute('href')).toEqual('https://test.link');
-  });
-
-  it('should set selected item', () => {
-    const selectedItem = { title: 'Menu item selected', selected: true };
-    const { fixture } = createSingleMenuComponent([
-      { title: 'Menu item not selected' }, selectedItem,
-    ]);
-    const activeItem = fixture.nativeElement.querySelector('a.active');
-    expect(activeItem.querySelector('span').innerHTML).toEqual(selectedItem.title);
-  });
-
-  it('should change arrow direction when document direction changes', () => {
-    const menuItems = [{ title: '', children: [{ title: '' }] }];
-    const { fixture } = createSingleMenuComponent(menuItems);
-    const iconComponent = fixture.debugElement.query(By.directive(NbIconComponent)) as DebugElement;
-    const directionService: NbLayoutDirectionService = TestBed.inject(NbLayoutDirectionService);
-
-    expect(iconComponent.componentInstance.icon).toEqual('chevron-left-outline');
-
-    directionService.setDirection(NbLayoutDirection.RTL);
-    fixture.detectChanges();
-
-    expect(iconComponent.componentInstance.icon).toEqual('chevron-right-outline');
-  });
-
-});
-
-describe('menu services', () => {
-
-  it('should operate with menu by tag', () => {
-    const { fixture, menuService } = createDoubleMenuComponent(
-      [{ title: 'Home'}],
-      'menuFirst',
-      [{ title: 'Home'}],
-      'menuSecond' );
-    const itemToAdd = { title: 'Added item' };
-    const initialFirstMenuItemsCount = fixture.nativeElement
-      .querySelector('nb-menu:first-child')
-      .querySelectorAll('.menu-item')
-      .length;
-    const initialSecondMenuItemsCount = fixture.nativeElement
-      .querySelector('nb-menu:last-child')
-      .querySelectorAll('.menu-item')
-      .length;
-    menuService.addItems([itemToAdd], 'menuFirst');
-    fixture.detectChanges();
-    const afterAddFirstMenuItemsCount = fixture.nativeElement
-      .querySelector('nb-menu:first-child')
-      .querySelectorAll('.menu-item')
-      .length;
-    const afterAddSecondMenuItemsCount = fixture.nativeElement
-      .querySelector('nb-menu:last-child')
-      .querySelectorAll('.menu-item')
-      .length;
-    expect(afterAddFirstMenuItemsCount).toEqual(initialFirstMenuItemsCount + 1);
-    expect(afterAddSecondMenuItemsCount).toEqual(initialSecondMenuItemsCount);
-  });
-
-  it('should add new items to DOM', () => {
-    const { fixture, menuService } = createSingleMenuComponent([{ title: 'Existing item' }]);
-    const itemToAdd = { title: 'Added item' };
-    const menuListOnInit = fixture.nativeElement.querySelectorAll('li').length;
-    menuService.addItems([itemToAdd], 'menu');
-    fixture.detectChanges();
-    const menuListItemAdded = fixture.nativeElement.querySelectorAll('li').length;
-    expect(menuListItemAdded).toEqual(menuListOnInit + 1);
-  });
-
-  it('should get selected menu item', (done) => {
-    const selectedItem = { title: 'Menu item selected', selected: true };
-    const { menuService } = createSingleMenuComponent([{ title: 'Menu item not selected' }, selectedItem ]);
-    menuService.getSelectedItem('menu')
-      .pipe(take(1))
-      .subscribe((menuBag: NbMenuBag) => {
-        expect(menuBag.item.title).toEqual(selectedItem.title);
-        done();
-      });
-  }, 1000);
-
-  it('should hide all expanded menu items', (done) => {
-    const { fixture, menuService } = createSingleMenuComponent([
-      {
-        title: 'Menu item collapsed',
-        children: [{ title: 'Menu item inner' }],
-      },
-      {
-        title: 'Menu item expanded 1',
-        expanded: true,
-        children: [{ title: 'Menu item inner' }],
-      },
-      {
-        title: 'Menu item expanded 2',
-        expanded: true,
-        children: [{ title: 'Menu item inner' }],
-      },
-    ]);
-    menuService.onSubmenuToggle()
-      .pipe(pairwise(), take(1))
-      .subscribe(([menuBagFirstCollapsed, menuBagSecondCollapsed]: NbMenuBag[]) => {
-        expect(menuBagFirstCollapsed.item.title).toEqual('Menu item expanded 1');
-        expect(menuBagSecondCollapsed.item.title).toEqual('Menu item expanded 2');
-        done();
-      });
-    menuService.collapseAll();
-    fixture.detectChanges();
-  }, 1000);
-
-});
-
-describe('NbMenuInternalService', () => {
-  let router: Router;
-  let menuInternalService: NbMenuInternalService;
-
-  beforeEach(() => {
-    const routes = [
-      { path: 'menu-1', component: NoopComponent },
-      { path: 'menu-1/2', component: NoopComponent },
-      {
-        path: 'menu-2',
-        component: NoopComponent,
-        children: [{ path: 'menu-2-level-2', component: NoopComponent }],
-      },
-    ];
-    createTestBed(routes);
-    router = TestBed.inject(Router);
-    menuInternalService = TestBed.inject(NbMenuInternalService);
-  });
-
-  describe('selectFromUrl pathMatch full', () => {
-
-    it('should select menu item with matching path', (done) => {
-      const items: Partial<NbMenuItem>[] = [{ link: '/menu-1' }];
-      const menuItems: NbMenuItem[] = createMenuItems(items, menuInternalService);
-      const menuItem: NbMenuItem = menuItems[0];
-
-      expect(menuItem.selected).toBeFalsy();
-
-      router.navigate([menuItem.link])
-        .then(() => {
-          menuInternalService.selectFromUrl(menuItems, '');
-          expect(menuItem.selected).toEqual(true);
-          done();
-        });
-    });
-
-    it('should select menu item with matching path and fragment', (done) => {
-      const items: Partial<NbMenuItem>[] = [{ link: '/menu-1', fragment: '1' }];
-      const menuItems: NbMenuItem[] = createMenuItems(items, menuInternalService);
-      const menuItem: NbMenuItem = menuItems[0];
-
-      expect(menuItem.selected).toBeFalsy();
-
-      router.navigate([menuItem.link], { fragment: menuItem.fragment })
-        .then(() => {
-          menuInternalService.selectFromUrl(menuItems, '');
-          expect(menuItem.selected).toEqual(true);
-          done();
-        });
-    });
-
-    it('should select child menu item and its parent', (done) => {
-      const items: Partial<NbMenuItem>[] = [{
-        link: '/menu-2',
-        children: [{ link: '/menu-2/menu-2-level-2' }] as NbMenuItem[],
-      }];
-      const menuItems: NbMenuItem[] = createMenuItems(items, menuInternalService);
-      const parentMenuItem: NbMenuItem = menuItems[0];
-      const childMenuItem: NbMenuItem = parentMenuItem.children[0];
-
-      expect(parentMenuItem.selected).toBeFalsy();
-      expect(childMenuItem.selected).toBeFalsy();
-
-      router.navigate([childMenuItem.link])
-        .then(() => {
-          menuInternalService.selectFromUrl(menuItems, '');
-          expect(parentMenuItem.selected).toEqual(true);
-          expect(childMenuItem.selected).toEqual(true);
-          done();
-        });
-    });
-
-    it('should select child menu item with fragment', (done) => {
-      const items: Partial<NbMenuItem>[] = [{
-        link: '/menu-2',
-        children: [{ link: '/menu-2/menu-2-level-2', fragment: '22' }] as NbMenuItem[],
-      }];
-      const menuItems: NbMenuItem[] = createMenuItems(items, menuInternalService);
-      const parentMenuItem: NbMenuItem = menuItems[0];
-      const childMenuItem: NbMenuItem = parentMenuItem.children[0];
-
-      expect(parentMenuItem.selected).toBeFalsy();
-      expect(childMenuItem.selected).toBeFalsy();
-
-      router.navigate([childMenuItem.link], { fragment: childMenuItem.fragment })
-        .then(() => {
-          menuInternalService.selectFromUrl(menuItems, '');
-          expect(parentMenuItem.selected).toEqual(true);
-          expect(childMenuItem.selected).toEqual(true);
-          done();
-        });
-    });
-
-    it('should not select menu item with matching path if fragment doesn\'t match', function(done) {
-      const items: Partial<NbMenuItem>[] = [{ link: '/menu-1', fragment: '1' }];
-      const menuItems: NbMenuItem[] = createMenuItems(items, menuInternalService);
-      const menuItem: NbMenuItem = menuItems[0];
-
-      expect(menuItem.selected).toBeFalsy();
-
-      router.navigate([menuItem.link], { fragment: menuItem.fragment + 'random-fragment' })
-        .then(() => {
-          menuInternalService.selectFromUrl(menuItems, '');
-          expect(menuItem.selected).toBeFalsy();
-          done();
-        });
-    });
-
-    it('should not select menu item with matching fragment if path doesn\'t match', function(done) {
-      const items: Partial<NbMenuItem>[] = [{ link: '/menu-1', fragment: '1' }];
-      const menuItems: NbMenuItem[] = createMenuItems(items, menuInternalService);
-      const menuItem: NbMenuItem = menuItems[0];
-
-      expect(menuItem.selected).toBeFalsy();
-
-      const url = menuItem.link + '/2';
-      router.navigate([url], { fragment: menuItem.fragment })
-        .then(() => {
-          menuInternalService.selectFromUrl(menuItems, '');
-          expect(menuItem.selected).toBeFalsy();
-          done();
-        });
-    });
-
-    it('should not select menu item with fragment if no fragment in url', (done) => {
-      const items: Partial<NbMenuItem>[] = [{ link: '/menu-1', fragment: '1' }];
-      const menuItems: NbMenuItem[] = createMenuItems(items, menuInternalService);
-      const menuItem: NbMenuItem = menuItems[0];
-
-      expect(menuItem.selected).toBeFalsy();
-
-      router.navigate([menuItem.link])
-        .then(() => {
-          menuInternalService.selectFromUrl(menuItems, '');
-          expect(menuItem.selected).toBeFalsy();
-          done();
-        });
-    });
-
-    it('should not select menu item if path not matches fully', (done) => {
-      const items: Partial<NbMenuItem>[] = [{ link: '/menu-1', fragment: '1' }];
-      const menuItems: NbMenuItem[] = createMenuItems(items, menuInternalService);
-      const menuItem: NbMenuItem = menuItems[0];
-
-      expect(menuItem.selected).toBeFalsy();
-
-      const url = menuItem.link + '/2';
-      router.navigate([url], { fragment: menuItem.fragment })
-        .then(() => {
-          menuInternalService.selectFromUrl(menuItems, '');
-          expect(menuItem.selected).toBeFalsy();
-          done();
-        });
-    });
-
-    it('should not select menu item if path and fragment not matches fully', (done) => {
-      const items: Partial<NbMenuItem>[] = [{ link: '/menu-1', fragment: '1' }];
-      const menuItems: NbMenuItem[] = createMenuItems(items, menuInternalService);
-      const menuItem: NbMenuItem = menuItems[0];
-
-      expect(menuItem.selected).toBeFalsy();
-
-      router.navigate([menuItem.link], { fragment: menuItem.fragment + '1' })
-        .then(() => {
-          menuInternalService.selectFromUrl(menuItems, '');
-          expect(menuItem.selected).toBeFalsy();
-          done();
-        });
-    });
-  });
-
-  describe('selectFromUrl pathMatch prefix', () => {
-
-    it('should select menu item if url contains menu link', function(done) {
-      const items: Partial<NbMenuItem>[] = [{ link: '/menu-1', pathMatch: 'prefix' }];
-      const menuItems: NbMenuItem[] = createMenuItems(items, menuInternalService);
-      const menuItem: NbMenuItem = menuItems[0];
-
-      expect(menuItem.selected).toBeFalsy();
-
-      const url = menuItem.link + '/2';
-      router.navigate([url])
-        .then(() => {
-          menuInternalService.selectFromUrl(menuItems, '');
-          expect(menuItem.selected).toEqual(true);
-          done();
-        });
-    });
-
-    it('should select menu item if url contains menu link and fragment', function(done) {
-      const items: Partial<NbMenuItem>[] = [{ link: '/menu-1', fragment: '1', pathMatch: 'prefix' }];
-      const menuItems: NbMenuItem[] = createMenuItems(items, menuInternalService);
-      const menuItem: NbMenuItem = menuItems[0];
-
-      expect(menuItem.selected).toBeFalsy();
-
-      router.navigate([menuItem.link], { fragment: menuItem.fragment + '1' })
-        .then(() => {
-          menuInternalService.selectFromUrl(menuItems, '');
-          expect(menuItem.selected).toEqual(true);
-          done();
-        });
-    });
-
-    it('should not select menu item if url contains link without fragment', function(done) {
-      const items: Partial<NbMenuItem>[] = [{ link: '/menu-1', fragment: '1', pathMatch: 'prefix' }];
-      const menuItems: NbMenuItem[] = createMenuItems(items, menuInternalService);
-      const menuItem: NbMenuItem = menuItems[0];
-
-      expect(menuItem.selected).toBeFalsy();
-
-      router.navigate([menuItem.link])
-        .then(() => {
-          menuInternalService.selectFromUrl(menuItems, '');
-          expect(menuItem.selected).toBeFalsy();
-          done();
-        });
-    });
-
-    it('should not select menu item if url contains fragment without link', function(done) {
-      const items: Partial<NbMenuItem>[] = [{ link: '/menu-1', fragment: '1', pathMatch: 'prefix' }];
-      const menuItems: NbMenuItem[] = createMenuItems(items, menuInternalService);
-      const menuItem: NbMenuItem = menuItems[0];
-
-      expect(menuItem.selected).toBeFalsy();
-
-      router.navigate(['menu-2'], { fragment: menuItem.fragment })
-        .then(() => {
-          menuInternalService.selectFromUrl(menuItems, '');
-          expect(menuItem.selected).toBeFalsy();
-          done();
-        });
-    });
-  });
-});
-
-describe('menu URL helpers', () => {
-
-  it('isUrlPathContain should work by url segments', () => {
-    expect(isUrlPathContain('/a/ba', '/a/b')).toBeFalsy();
-    expect(isUrlPathContain('/a/b/c', '/a/b')).toBeTruthy();
-  });
-
-  it('isUrlPathContain should work for url with fragments', () => {
-    expect(isUrlPathContain('/a/b#fragment', '/a/b')).toBeTruthy();
-  });
-
-  it('isUrlPathContain should work for url with query strings', () => {
-    expect(isUrlPathContain('/a/b?a=1;b=2&c=3', '/a/b')).toBeTruthy();
-  });
-
-  it('isUrlPathEqual should work for identical paths', () => {
-    expect(isUrlPathEqual('/a/b/c', '/a/b')).toBeFalsy();
-    expect(isUrlPathEqual('/a/b/c', '/a/b/c')).toBeTruthy();
-  });
-
-  it('isUrlPathEqual should work for url with fragments', () => {
-    expect(isUrlPathEqual('/a/b/c#fragment', '/a/b/c')).toBeTruthy();
-  });
-
-  it('isUrlPathEqual should work for url with query strings', () => {
-    expect(isUrlPathEqual('/a/b/c?a=1;b=2&c=3', '/a/b/c')).toBeTruthy();
-  });
-
-  it('getFragmentPartOfUrl should return empty string for path without fragment', () => {
-    expect(getFragmentPartOfUrl('/a/b')).toBeFalsy();
-    expect(getFragmentPartOfUrl('/a/b/c?a=1;b=2&c=3')).toBeFalsy();
-  });
-
-  it('getFragmentPartOfUrl should return fragment part when it presented', () => {
-    expect(getFragmentPartOfUrl('/a/b#f')).toEqual('f');
-    expect(getFragmentPartOfUrl('/a/b/c?a=1;b=2&c=3#fragment')).toEqual('fragment');
-  });
-
-  it('isFragmentEqual should return false for path without fragments', () => {
-    expect(isFragmentEqual('/a/b', 'fragment')).toBeFalsy();
-    expect(isFragmentEqual('/a/b/c?a=1;b=2&c=3', 'fragment')).toBeFalsy();
-  });
-
-  it('isFragmentEqual should return false for path with different fragments', () => {
-    expect(isFragmentEqual('/a/b#f', 'fragment')).toBeFalsy();
-    expect(isFragmentEqual('/a/b/c?a=1;b=2&c=3#f', 'fragment')).toBeFalsy();
-  });
-
-  it('isFragmentEqual should return true for path with same fragments', () => {
-    expect(isFragmentEqual('/a/b#fragment', 'fragment')).toBeTruthy();
-    expect(isFragmentEqual('/a/b/c?a=1;b=2&c=3#fragment', 'fragment')).toBeTruthy();
-  });
-
-  it('isFragmentContain should return true for url with exact fragment', () => {
-    expect(isFragmentContain('/a/b#1', '1')).toBeTruthy();
-    expect(isFragmentContain('/#2', '2')).toBeTruthy();
-  });
-
-  it('isFragmentContain should return true for url containing fragments', () => {
-    expect(isFragmentContain('/a/b#12', '1')).toBeTruthy();
-    expect(isFragmentContain('/a/b?a=1;b=2&c=3#21', '1')).toBeTruthy();
-  });
-
-  it('isFragmentContain should return false for url without fragment', () => {
-    expect(isFragmentContain('/a1/b', '1')).toBeFalsy();
-    expect(isFragmentContain('/a1/b?a=1;b=2&c=3', '1')).toBeFalsy();
-  });
-
-  it('isFragmentContain should return false for url with different fragment', () => {
-    expect(isFragmentContain('/a1/b#222', '1')).toBeFalsy();
-    expect(isFragmentContain('/a1/b?a=1;b=2&c=3#222', '1')).toBeFalsy();
-  });
-
-});

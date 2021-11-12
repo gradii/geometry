@@ -1,0 +1,66 @@
+<div triMenuBar>
+  <button class="example-menu-bar-item" triMenuItem [triMenuTriggerFor]="file">File</button>
+  <button class="example-menu-bar-item" triMenuItem [triMenuTriggerFor]="edit">Edit</button>
+  <button class="example-menu-bar-item" triMenuItem [triMenuTriggerFor]="format">Format</button>
+</div>
+
+<ng-template triMenuPanel #file="triMenuPanel">
+  <div class="example-menu" triMenu [triMenuPanel]="file">
+    <button class="example-menu-item" triMenuItem>Share</button>
+    <hr />
+    <button class="example-menu-item" triMenuItem [triMenuTriggerFor]="new">
+      New <span>&#10148;</span>
+    </button>
+    <button class="example-menu-item" triMenuItem>Open</button>
+    <button class="example-menu-item" triMenuItem>Make a Copy</button>
+    <hr />
+    <button class="example-menu-item" triMenuItem [triMenuTriggerFor]="download">
+      Download <span>&#10148;</span>
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #edit="triMenuPanel" triMenuPanel>
+  <div class="example-menu" triMenu [triMenuPanel]="edit">
+    <button class="example-menu-item" triMenuItem>Undo</button>
+    <button class="example-menu-item" triMenuItem>Redo</button>
+    <hr />
+    <button class="example-menu-item" triMenuItem>Cut</button>
+    <button class="example-menu-item" triMenuItem>Copy</button>
+    <button class="example-menu-item" triMenuItem>Paste</button>
+  </div>
+</ng-template>
+
+<ng-template #format="triMenuPanel" triMenuPanel>
+  <div class="example-menu" triMenu [triMenuPanel]="format">
+    <div class="example-menu-group" triMenuGroup>
+      <button class="example-menu-item" checked id="bf" triMenuItemCheckbox>Bold</button>
+      <button class="example-menu-item" id="if" triMenuItemCheckbox>Italic</button>
+    </div>
+    <hr />
+    <div class="example-menu-group" triMenuGroup>
+      <button class="example-menu-item" id="small" triMenuItemRadio>Small</button>
+      <button class="example-menu-item" checked id="normal" triMenuItemRadio>Normal</button>
+      <button class="example-menu-item" id="large" triMenuItemRadio>Big</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #new="triMenuPanel" triMenuPanel>
+  <div class="example-menu" triMenu [triMenuPanel]="new">
+    <button class="example-menu-item" triMenuItem>Document</button>
+    <button class="example-menu-item" triMenuItem>From template</button>
+    <hr />
+    <button class="example-menu-item" triMenuItem>Spreadsheet</button>
+    <button class="example-menu-item" triMenuItem>Presentation</button>
+    <button class="example-menu-item" triMenuItem>Form</button>
+  </div>
+</ng-template>
+
+<ng-template #download="triMenuPanel" triMenuPanel>
+  <div class="example-menu" triMenu [triMenuPanel]="download">
+    <button class="example-menu-item" triMenuItem>Microsoft Word</button>
+    <button class="example-menu-item" triMenuItem>PDF</button>
+    <button class="example-menu-item" triMenuItem>Plain text</button>
+  </div>
+</ng-template>

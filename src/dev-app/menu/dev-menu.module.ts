@@ -9,16 +9,13 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TriMenuModule } from '@gradii/triangle/menu';
-import { TriSwitchModule } from '@gradii/triangle/switch';
 import { DevMenu } from './dev-menu';
-import { TriDemoMenuBasicComponent } from './tri-demo-menu/tri-demo-menu-basic.component';
-import { TriDemoMenuCollapsedComponent } from './tri-demo-menu/tri-demo-menu-collapsed.component';
-import { TriDemoMenuDataSourceComponent } from './tri-demo-menu/tri-demo-menu-data-source.component';
-import { TriDemoMenuDynamicComponent } from './tri-demo-menu/tri-demo-menu-dynamic.component';
-import { TriDemoMenuExpandComponent } from './tri-demo-menu/tri-demo-menu-expand.component';
-import { TriDemoMenuInlineComponent } from './tri-demo-menu/tri-demo-menu-inline.component';
-import { TriDemoMenuThemeComponent } from './tri-demo-menu/tri-demo-menu-theme.component';
-import { TriDemoMenuVerticalComponent } from './tri-demo-menu/tri-demo-menu-vertical.component';
+import { TriDemoMenuBasicExample } from './tri-demo-menu-basic/menu-basic-example';
+import { TriDemoMenuContextExample } from './tri-demo-menu-context/menu-context-example';
+import { TriDemoMenuInlineExample } from './tri-demo-menu-inline/menu-inline-example';
+import { TriDemoMenuMenubarExample } from './tri-demo-menu-menubar/menu-menubar-example';
+import { TriDemoMenuStandaloneMenuExample } from './tri-demo-menu-standalone-menu/menu-standalone-menu-example';
+import { TriDemoMenuStandaloneStatefulMenuExample } from './tri-demo-menu-standalone-stateful-menu/menu-standalone-stateful-menu-example';
 
 
 @NgModule({
@@ -26,35 +23,35 @@ import { TriDemoMenuVerticalComponent } from './tri-demo-menu/tri-demo-menu-vert
     CommonModule,
     FormsModule,
 
-    TriSwitchModule,
     TriMenuModule,
 
     RouterModule.forChild([
       {
         path: '', component: DevMenu, children: [
-          {path: 'tri-demo-menu-basic', component: TriDemoMenuBasicComponent},
-          {path: 'tri-demo-menu-collapsed', component: TriDemoMenuCollapsedComponent},
-          {path: 'tri-demo-menu-data-source', component: TriDemoMenuDataSourceComponent},
-          {path: 'tri-demo-menu-dynamic', component: TriDemoMenuDynamicComponent},
-          {path: 'tri-demo-menu-expand', component: TriDemoMenuExpandComponent},
-          {path: 'tri-demo-menu-inline', component: TriDemoMenuInlineComponent},
-          {path: 'tri-demo-menu-theme', component: TriDemoMenuThemeComponent},
-          {path: 'tri-demo-menu-vertical', component: TriDemoMenuVerticalComponent},
+          {path: 'tri-demo-menu-basic', component: TriDemoMenuBasicExample},
+          {path: 'tri-demo-menu-context', component: TriDemoMenuContextExample},
+          {path: 'tri-demo-menu-inline', component: TriDemoMenuInlineExample},
+          {path: 'tri-demo-menu-menubar', component: TriDemoMenuMenubarExample},
+          {path: 'tri-demo-menu-standalone-menu', component: TriDemoMenuStandaloneMenuExample},
+          {
+            path     : 'tri-demo-menu-standalone-stateful-menu',
+            component: TriDemoMenuStandaloneStatefulMenuExample
+          },
+
         ]
       }
     ]),
   ],
   declarations: [
     DevMenu,
+    
+    TriDemoMenuBasicExample,
+    TriDemoMenuContextExample,
+    TriDemoMenuInlineExample,
+    TriDemoMenuMenubarExample,
+    TriDemoMenuStandaloneMenuExample,
+    TriDemoMenuStandaloneStatefulMenuExample,
 
-    TriDemoMenuBasicComponent,
-    TriDemoMenuCollapsedComponent,
-    TriDemoMenuDataSourceComponent,
-    TriDemoMenuDynamicComponent,
-    TriDemoMenuExpandComponent,
-    TriDemoMenuInlineComponent,
-    TriDemoMenuThemeComponent,
-    TriDemoMenuVerticalComponent,
   ]
 })
 export class DevMenuModule {

@@ -1,0 +1,30 @@
+<button triMenuItem [triMenuTriggerFor]="menu" class="example-standalone-item">Click me!</button>
+
+<ng-template triMenuPanel #menu="triMenuPanel">
+  <div class="example-menu" triMenu [triMenuPanel]="menu">
+    <button
+      class="example-menu-item"
+      [checked]="bold"
+      (triMenuItemToggled)="bold = !bold"
+      triMenuItemCheckbox
+    >
+      Bold
+    </button>
+    <button
+      class="example-menu-item"
+      [checked]="italic"
+      (triMenuItemToggled)="italic = !italic"
+      triMenuItemCheckbox
+    >
+      Italic
+    </button>
+    <hr />
+    <div triMenuGroup (change)="onSizeChange($event)">
+      <button class="example-menu-item" [checked]="size === 'Small'" triMenuItemRadio>Small</button>
+      <button class="example-menu-item" [checked]="size === 'Normal'" triMenuItemRadio>
+        Normal
+      </button>
+      <button class="example-menu-item" [checked]="size === 'Large'" triMenuItemRadio>Large</button>
+    </div>
+  </div>
+</ng-template>

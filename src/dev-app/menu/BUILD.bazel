@@ -6,13 +6,12 @@ ng_module(
     name = "menu",
     srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"],),
     assets = [
-        "dev-menu.html",
+#        "dev-menu.html",
         ":dev_menu_scss",
-    ],
+    ] + glob(["**/*.html", "**/*.css"]),
     deps = [
-        "//src/triangle/switch",
         "//src/triangle/menu",
-        
+
         "@npm//@angular/cdk",
         "@npm//@angular/router",
     ],

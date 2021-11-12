@@ -19,12 +19,7 @@ ng_module(
     assets = [":style/menu.css"] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/menu",
     deps = [
-        "//src/triangle/button",
-        "//src/triangle/core",
-        "//src/triangle/i18n",
-        "//src/triangle/util",
-        "//src/triangle/icon",
-        "//src/triangle/badge",
+        "//src:dev_mode_types",
         "@npm//@angular/animations",
         "@npm//@angular/cdk",
         "@npm//@angular/common",
