@@ -82,6 +82,13 @@ export class Connection extends mixinManagesTransactions(class {
     this.config      = config;
     this.useDefaultQueryGrammar();
     this.useDefaultPostProcessor();
+
+    if (isFunction(pdo)) {
+      this.reconnector = () => {
+        this.pdo = pdo;
+        return this.getPdo();
+      };
+    }
   }
 
   /*Set the query grammar to the default implementation.*/
@@ -333,24 +340,27 @@ export class Connection extends mixinManagesTransactions(class {
   }
 
   /*Handle a query exception that occurred during query execution.*/
-  protected tryAgainIfCausedByLostConnection(e: QueryException, query: string, bindings: any[],
+  protected async tryAgainIfCausedByLostConnection(e: QueryException, query: string, bindings: any[],
                                              callback: Function) {
     if (this.causedByLostConnection(e.message)) {
-      this.reconnect();
+      await this.reconnect();
       return this.runQueryCallback(query, bindings, callback);
     }
     throw e;
   }
 
   protected causedByLostConnection(message: string): boolean {
-    if (message.includes('lost connection')) {
+    if ([
+      'lost connection', // pdo
+      'Can\'t add new command when connection is in closed state', // mysql2 driver
+    ].find(it => message.includes(it))) {
       return true;
     }
     return false;
   }
 
   /*Reconnect to the database.*/
-  public reconnect() {
+  public async reconnect() {
     if (isFunction(this.reconnector)) {
       // this.doctrineConnection = null;
       return this.reconnector.call(this);

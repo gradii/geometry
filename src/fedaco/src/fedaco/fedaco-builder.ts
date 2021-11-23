@@ -4,12 +4,16 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isAnyEmpty, isArray, isBlank, isFunction, isNumber, isObject, isString } from '@gradii/check-type';
+import {
+  isAnyEmpty, isArray, isBlank, isFunction, isNumber, isObject, isString
+} from '@gradii/check-type';
 import { nth, omit, pluck } from 'ramda';
 import { wrap } from '../helper/arr';
 import { Constructor } from '../helper/constructor';
 import { pascalCase } from '../helper/str';
-import { BuildQueries, BuildQueriesCtor, mixinBuildQueries } from '../query-builder/mixins/build-query';
+import {
+  BuildQueries, BuildQueriesCtor, mixinBuildQueries
+} from '../query-builder/mixins/build-query';
 import { QueryBuilder } from '../query-builder/query-builder';
 import { SqlNode } from '../query/sql-node';
 import {
@@ -56,7 +60,8 @@ export interface FedacoBuilder<T extends Model = Model> extends GuardsAttributes
 
   where(column: string | SqlNode | any, value: any): this;
 
-  where(column: Function | string | any[] | SqlNode | any, operator?: any, value?: any, conjunction?: string): this;
+  where(column: Function | string | any[] | SqlNode | any, operator?: any, value?: any,
+        conjunction?: string): this;
 
   /*Add a basic where clause to the query, and return the first result.*/
   firstWhere(column: Function | string | any[] | SqlNode, operator?: any, value?: any,
@@ -479,8 +484,8 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
     return this.hydrate(await this._query.getConnection().select(query, bindings));
   }
 
-  public find(id: any, columns: any[]): Promise<T>
-  public find(id: any[], columns: any[]): Promise<T[]>
+  public find(id: any, columns: any[]): Promise<T>;
+  public find(id: any[], columns: any[]): Promise<T[]>;
   /**
    * Find a model by its primary key.
    */
@@ -567,7 +572,8 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Execute the query and get the first result or call a callback.*/
-  public async firstOr(columns: Function | any[] = ['*'], callback: Function | null = null): Promise<T> {
+  public async firstOr(columns: Function | any[] = ['*'],
+                       callback: Function | null = null): Promise<T> {
     if (isFunction(columns)) {
       callback = columns;
       columns  = ['*'];
@@ -782,13 +788,18 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Insert new records or update the existing ones.*/
-  public upsert(values: any[], uniqueBy: any[] | string, update?: any[]): Promise<number> | number {
-    if (!values.length) {
-      return 0;
-    }
+  public upsert(values: any[] | any, uniqueBy?: any[] | string,
+                update?: any[] | any): Promise<number> | number {
     if (!isArray(values)) {
       values = [values];
     }
+
+    if (!values.length) {
+      return 0;
+    } else if (isAnyEmpty(update)) {
+      return this.insert(values);
+    }
+
     if (isBlank(update)) {
       update = Object.keys(values);
     }

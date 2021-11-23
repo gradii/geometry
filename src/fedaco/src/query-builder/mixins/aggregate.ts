@@ -145,7 +145,7 @@ export function mixinAggregate<T extends Constructor<any>>(base: T): QueryBuilde
     }
 
     /*Clone the existing query instance for usage in a pagination subquery.*/
-    protected _cloneForPaginationCount(this: QueryBuilder & _Self,) {
+    protected _cloneForPaginationCount(this: QueryBuilder & _Self, ) {
       return this.cloneWithout(['_orders', '_limit', '_offset']);
     }
 

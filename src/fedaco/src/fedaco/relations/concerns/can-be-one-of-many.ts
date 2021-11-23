@@ -88,7 +88,7 @@ export function mixinCanBeOneOfMany<T extends Constructor<any>>(base: T) {
                   aggregate: string | Function = 'MAX',
                   relation: string): this {
       this._isOneOfMany = true;
-      this._relationName = relation;// || this._getDefaultOneOfManyJoinAlias();
+      this._relationName = relation; // || this._getDefaultOneOfManyJoinAlias();
       const keyName = this._query.getModel().getKeyName();
       const columns = isString(column) ? {
         [column]: aggregate,

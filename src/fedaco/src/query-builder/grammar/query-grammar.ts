@@ -316,7 +316,7 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
 
   compileUpsert(builder: Builder, values: any, uniqueBy: any[] | string,
                 update: any[] | null): string {
-    return '';
+    throw new Error('RuntimeException This database engine does not support upserts.');
   }
 
   compilePredicateFuncName(funcName: string) {

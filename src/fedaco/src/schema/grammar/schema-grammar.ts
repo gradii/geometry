@@ -296,6 +296,6 @@ export class SchemaGrammar extends BaseGrammar {
   }
 
   public getTypeMapping(type: string) {
-    return type
+    return type;
   }
 }

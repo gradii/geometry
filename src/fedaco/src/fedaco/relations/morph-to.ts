@@ -105,9 +105,9 @@ export class MorphTo extends BelongsTo {
         if (!obj) {
           obj                            = {};
           this._dictionary[morphTypeKey] = obj;
-          if (!obj[foreignKeyKey]) {
-            obj[foreignKeyKey] = [];
-          }
+        }
+        if (!obj[foreignKeyKey]) {
+          obj[foreignKeyKey] = [];
         }
         obj[foreignKeyKey].push(model);
       }
@@ -132,9 +132,9 @@ export class MorphTo extends BelongsTo {
     const query    = this.replayMacros(instance.newQuery())
       .mergeConstraintsFrom(this.getQuery())
       .with({
-      ...this.getQuery().getEagerLoads(),
-      ...this._morphableEagerLoads.get(instance.constructor) ?? {}
-    }).withCount(/*cast type array*/this._morphableEagerLoadCounts.get(instance.constructor) ?? []);
+        ...this.getQuery().getEagerLoads(),
+        ...this._morphableEagerLoads.get(instance.constructor) ?? {}
+      }).withCount(/*cast type array*/this._morphableEagerLoadCounts.get(instance.constructor) ?? []);
     const callback = this._morphableConstraints.get(instance.constructor) ?? null;
     if (callback) {
       callback(query);
@@ -159,8 +159,8 @@ export class MorphTo extends BelongsTo {
       return morphMap[key];
     }
     // todo fixme this morphType can be custom defined in annotation
-    const propertyKey =  camelCase(this._morphType.replace(/_type$/, ''));
-    const metas = reflector.propMetadata(this._child.constructor)[propertyKey];
+    const propertyKey = camelCase(this._morphType.replace(/_type$/, ''));
+    const metas       = reflector.propMetadata(this._child.constructor)[propertyKey];
     if (metas) {
       const meta         = findLast(it => MorphToColumn.isTypeOf(it), metas);
       const morphTypeMap = meta['morphTypeMap'];

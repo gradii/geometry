@@ -27,7 +27,7 @@ export interface QueryBuilderWhereJson {
   whereJsonLength(column: any, operator: any, value?: any,
                   conjunction?: 'and' | 'or' | string): this;
 
-  orWhereJsonLength(column: any, operator: any, value?: any): this
+  orWhereJsonLength(column: any, operator: any, value?: any): this;
 
 
 }

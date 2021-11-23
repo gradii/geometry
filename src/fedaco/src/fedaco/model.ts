@@ -9,7 +9,7 @@ import { isAnyEmpty, isArray, isBlank, isObjectEmpty, isString } from '@gradii/c
 import { difference, findLast, tap, uniq } from 'ramda';
 import { Table, TableAnnotation } from '../annotation/table/table';
 import { except } from '../helper/obj';
-import { plural, pluralStudy, singular } from '../helper/pluralize';
+import { plural, pluralStudy } from '../helper/pluralize';
 import { camelCase, snakeCase, upperCaseFirst } from '../helper/str';
 import { ConnectionResolverInterface } from '../interface/connection-resolver-interface';
 import { QueryBuilder } from '../query-builder/query-builder';
@@ -314,7 +314,7 @@ export class Model extends mixinHasAttributes(
     if (!this[relation]) {
       return this;
     }
-    //todo checkme
+    // todo checkme
     const className = this[relation].constructor.name;
     loadAggregate(this[relation], relations[className] ?? [], column, func);
     return this;
@@ -660,6 +660,10 @@ export class Model extends mixinHasAttributes(
     return {...this.attributesToArray(), ...this.relationsToArray()};
   }
 
+  public toArray2() {
+    return {...this.attributesToArray2(), ...this.relationsToArray2()};
+  }
+
   /*Convert the model instance to JSON.*/
   // public toJson(options: number = 0) {
   //   let json = json_encode(this.jsonSerialize(), options);
@@ -731,17 +735,21 @@ export class Model extends mixinHasAttributes(
     );
   }
 
+  static connectionName: string;
+
   /*Get the current connection name for the model.*/
   public getConnectionName() {
-    if(isBlank(this._connection)){
+    if (isBlank(this._connection)) {
       const metas                 = reflector.annotations(this.constructor);
       const meta: TableAnnotation = findLast((it) => {
         return Table.isTypeOf(it);
       }, metas);
       if (meta) {
         this._connection = meta.connection;
-      }else{
-        this._connection = 'default'
+      } else if ((this.constructor as typeof Model).connectionName) {
+        this._connection = (this.constructor as typeof Model).connectionName;
+      } else {
+        this._connection = 'default';
       }
     }
     return this._connection;
@@ -781,9 +789,9 @@ export class Model extends mixinHasAttributes(
         return Table.isTypeOf(it);
       }, metas);
       if (meta) {
-        if(!meta.noPluralTable) {
+        if (!meta.noPluralTable) {
           this.setTable(pluralStudy(meta.tableName));
-        }else{
+        } else {
           this.setTable(snakeCase(meta.tableName));
         }
       } else {

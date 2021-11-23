@@ -4,7 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isAnyEmpty } from '@gradii/check-type';
+import { isAnyEmpty, isArray, isObject } from '@gradii/check-type';
+import { wrap } from '../../helper/arr';
 import { GrammarInterface } from '../grammar.interface';
 import { QueryBuilder } from '../query-builder';
 import { MysqlQueryBuilderVisitor } from '../visitor/mysql-query-builder-visitor';
@@ -35,6 +36,23 @@ export class MysqlQueryGrammar extends QueryGrammar implements GrammarInterface 
     const visitor = new MysqlQueryBuilderVisitor(builder._grammar, builder);
 
     return ast.accept(visitor);
+  }
+
+  compileUpsert(builder: QueryBuilder, values: any, uniqueBy: any[] | string,
+                update: any[] | null): string {
+    const sql = this.compileInsert(builder, values) + ' on duplicate key update ';
+
+    const columns: string[] = [];
+    if (isObject(update)) {
+      for (const [key, val] of Object.entries(update)) {
+        columns.push(wrap(key) + ' = ' + this.parameter(val));
+      }
+    } else if (isArray(update)) {
+      (update as any[]).forEach(val => {
+        columns.push(`${wrap(val)} = values(${wrap(val)})`);
+      });
+    }
+    return sql + columns.join(', ');
   }
 
   distinct(distinct: boolean | any[]): string {

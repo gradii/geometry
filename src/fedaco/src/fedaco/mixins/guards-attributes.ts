@@ -120,7 +120,7 @@ export function mixinGuardsAttributes<T extends Constructor<any>, M>(base: T): G
     }
 
     /*Run the given callable while being unguarded.*/
-    public static async unguarded(callback: (...args: any[]) => Promise<any> | any): Promise<any> {
+    public static unguarded(callback: (...args: any[]) => Promise<any> | any): Promise<any> | any {
       if (this._unguarded) {
         return callback();
       }

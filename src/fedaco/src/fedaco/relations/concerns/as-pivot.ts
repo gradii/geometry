@@ -163,8 +163,8 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
         }, metas);
         if (meta) {
           return singular(meta.tableName);
-        }else{
-          throw new Error('must define table in annotation or `_table` property')
+        } else {
+          throw new Error('must define table in annotation or `_table` property');
         }
       }
       return this._table;

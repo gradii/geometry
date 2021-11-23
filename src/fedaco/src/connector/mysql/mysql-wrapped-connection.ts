@@ -8,9 +8,12 @@ import { WrappedConnection } from '../wrapped-connection';
 import { MysqlWrappedStmt } from './mysql-wrapped-stmt';
 
 export class MysqlWrappedConnection implements WrappedConnection {
+  lastError: string;
 
   constructor(public driver: MysqlConnection) {
-
+    driver.on('error', (e: any) => {
+      this.lastError = e.message;
+    });
   }
 
   async prepare(sql: string): Promise<MysqlWrappedStmt> {

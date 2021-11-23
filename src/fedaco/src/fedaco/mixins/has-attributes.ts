@@ -72,6 +72,7 @@ export interface HasAttributes {
   _appends: any[];
 
   attributesToArray(): any;
+  attributesToArray2(): any;
 
   /*Add the date attributes to the attributes array.*/
   addDateAttributesToArray(attributes: any[]): any;
@@ -97,6 +98,7 @@ export interface HasAttributes {
 
   /*Get the model's relationships in array form.*/
   relationsToArray();
+  relationsToArray2();
 
   /*Get an attribute array of all arrayable relations.*/
   getArrayableRelations();
@@ -381,6 +383,19 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
       return attributes;
     }
 
+    /*Convert the model's attributes to an array.*/
+    public attributesToArray2(this: Model & _Self) {
+      let attributes = this.getArrayableAttributes();
+      attributes     = this.addDateAttributesToArray(attributes);
+      // const mutatedAttributes = this.getMutatedAttributes();
+      // attributes              = this.addMutatedAttributesToArray(attributes, mutatedAttributes);
+      attributes = this.addCastAttributesToArray(attributes);
+      // for (let key of this.getArrayableAppends()) {
+      //   attributes[key] = this.mutateAttributeForArray(key, null);
+      // }
+      return attributes;
+    }
+
     /*Add the date attributes to the attributes array.*/
     protected addDateAttributesToArray(this: Model & _Self, attributes: any[]) {
       for (const key of this.getDates()) {
@@ -449,6 +464,28 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Get the model's relationships in array form.*/
     public relationsToArray(this: Model & _Self) {
+      const attributes: any = {};
+      for (let [key, value] of Object.entries(this.getArrayableRelations())) {
+        let relation;
+        if (isArray(value)) {
+          relation = value.map((it: Model) => it.toArray());
+        } else if (value instanceof Model) {
+          relation = value.toArray();
+        } else if (isBlank(value)) {
+          relation = value;
+        }
+        if ((this.constructor as typeof Model).snakeAttributes) {
+          key = snakeCase(key);
+        }
+        if (relation !== undefined || isBlank(value)) {
+          attributes[key] = relation;
+        }
+      }
+      return attributes;
+    }
+
+    /*Get the model's relationships in array form.*/
+    public relationsToArray2(this: Model & _Self) {
       const attributes: any = {};
       for (let [key, value] of Object.entries(this.getArrayableRelations())) {
         let relation;

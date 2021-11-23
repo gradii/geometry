@@ -664,7 +664,7 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
       return this.#forwardCallToQueryBuilder('unless', args);
     }
 
-    pipe(...args: any[]){
+    pipe(...args: any[]) {
       return this.#forwardCallToQueryBuilder('pipe', args);
     }
 

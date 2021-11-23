@@ -15,8 +15,10 @@ export function fromAttributes(clazz: typeof AsPivot | ForwardRefFn<typeof AsPiv
   // @ts-ignore
   const instance: Model & Pivot = new clazz();
   instance._timestamps = instance.hasTimestampAttributes(attributes);
-  instance.setConnection(parent.getConnectionName()).setTable(table).forceFill(
-    attributes).syncOriginal();
+  instance.setConnection(parent.getConnectionName())
+    .setTable(table)
+    .forceFill(attributes)
+    .syncOriginal();
   instance.pivotParent = parent;
   instance._exists = exists;
   return instance;
