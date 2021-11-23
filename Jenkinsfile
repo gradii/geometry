@@ -7,6 +7,11 @@ pipeline {
 
   parameters {
     string(name: 'TAG_NAME', defaultValue: '', description: '')
+    booleanParam(
+            name: 'FORCE_DEPLOY_GITHUB',
+            defaultValue: false,
+            description: '强制部署到github ?'
+        )
   }
 
   environment {
@@ -132,14 +137,17 @@ pipeline {
 
         stage('build fedaco') {
           when {
-            allOf {
-              not {
-                branch 'release'
-              }
-              anyOf {
-                changeset 'src/annotation/**'
-                changeset 'src/check-type/**'
-                changeset 'src/fedaco/**'
+            anyOf {
+              expression { params.FORCE_DEPLOY_GITHUB ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/ }
+              allOf {
+                not {
+                  branch 'release'
+                }
+                anyOf {
+                  changeset 'src/annotation/**'
+                  changeset 'src/check-type/**'
+                  changeset 'src/fedaco/**'
+                }
               }
             }
           }
