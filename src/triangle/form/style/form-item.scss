@@ -35,6 +35,7 @@ $border-color-base       : theming.tri-color($foreground, border-color-base);
   color          : v.$text-color;
   vertical-align : top;
   display        : flex;
+  gap            : .5rem;
 
   // nested FormItem
   @at-root & > #{&},
