@@ -107,7 +107,7 @@ pipeline {
         stage('deploy dev-app') {
           when {
             anyOf {
-              expression { params.FORCE_DEPLOY_GITHUB ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/ }
+              expression { params.FORCE_DEPLOY_DEV_APP ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/ }
               allOf {
                 not {
                   branch 'release'
