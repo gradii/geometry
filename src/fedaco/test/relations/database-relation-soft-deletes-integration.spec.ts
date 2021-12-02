@@ -238,7 +238,7 @@ describe('test database fedaco soft deletes integration', () => {
   });
 
   it('update model after soft deleting', async () => {
-    const now = new Date()
+    const now = new Date();
     await createUsers();
     /**/
     const userModel = await SoftDeletesTestUser.createQuery().find(2);
@@ -310,7 +310,7 @@ describe('test database fedaco soft deletes integration', () => {
     abigail = await abigail.fresh();
     expect(await abigail.address).toBeNull();
     expect((await abigail.newRelation('address').getQuery().pipe(withTrashed()).first()).address).toBe('Laravel avenue 43');
-    await abigail.newRelation('address').getQuery().pipe(withTrashed(), restore())
+    await abigail.newRelation('address').getQuery().pipe(withTrashed(), restore());
     abigail = await abigail.fresh();
     expect(await (await abigail.address).address).toBe('Laravel avenue 43');
     await (await abigail.address).delete();
@@ -521,7 +521,7 @@ describe('test database fedaco soft deletes integration', () => {
       q.where('email',
         'linbolen@gradii.com').orWhere('email',
         'xsilen@gradii.com');
-    })
+    });
     expect(await users.pluck('email')).toEqual(['xsilen@gradii.com']);
   });
 
@@ -576,7 +576,7 @@ describe('test database fedaco soft deletes integration', () => {
           q.thisMethodDoesNotExist();
         }
       }).first();
-    }).rejects.toThrowError('q.thisMethodDoesNotExist is not a function')
+    }).rejects.toThrowError('q.thisMethodDoesNotExist is not a function');
   });
 
   it('morph to with constraints', async () => {

@@ -373,7 +373,7 @@ describe('fedaco builder relation', () => {
     const alias      = 'self_alias_hash';
     const aliasRegex = /\b(fedaco_reserved_\d)(\b|$)/ig;
     sql              = sql.replace(aliasRegex, alias);
-    expect(sql).toContain('`self_alias_hash`.`id` = `self_related_stubs`.`parent_id`',);
+    expect(sql).toContain('`self_alias_hash`.`id` = `self_related_stubs`.`parent_id`', );
   });
 
   it('test doesnt have', () => {

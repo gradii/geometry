@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { ConnectionInterface } from '../../src/query-builder/connection-interface';
 import { QueryBuilder } from '../../src/query-builder/query-builder';
 import { SqliteQueryGrammar } from '../../src/query-builder/grammar/sqlite-query-grammar';

@@ -169,7 +169,7 @@ describe('fedaco builder', () => {
                                                           database) {
     const grammar    = new SqliteQueryGrammar();
     const processor  = new Processor();
-    const connection = new Conn();// m::mock(ConnectionInterface::class, ['getQueryGrammar' => $grammar, 'getPostProcessor' => $processor]);
+    const connection = new Conn(); // m::mock(ConnectionInterface::class, ['getQueryGrammar' => $grammar, 'getPostProcessor' => $processor]);
     jest.spyOn(connection, 'getQueryGrammar').mockReturnValue(grammar);
     jest.spyOn(connection, 'getPostProcessor').mockReturnValue(processor);
 
@@ -784,8 +784,8 @@ describe('fedaco builder', () => {
 
     // @ts-ignore
     spy1 = jest.spyOn(builder, 'getRelation').mockReturnValue(relation);
-    spy2 = jest.spyOn(builder, 'applyScopes');//.mockReturnThis();
-    spy3 = jest.spyOn(builder, 'eagerLoadRelations');//.mockReturnValue(['bar', 'baz']);
+    spy2 = jest.spyOn(builder, 'applyScopes'); // .mockReturnThis();
+    spy3 = jest.spyOn(builder, 'eagerLoadRelations'); // .mockReturnValue(['bar', 'baz']);
 
     const spy11 = jest.spyOn(relation, 'addEagerConstraints');
     // @ts-ignore

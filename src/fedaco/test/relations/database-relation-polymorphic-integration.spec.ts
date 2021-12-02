@@ -103,7 +103,7 @@ describe('test database fedaco polymorphic integration', () => {
     expect(like.likeable.relationLoaded('owner')).toBeTruthy();
     expect(like.likeable.owner).toEqual(await TestUser.createQuery().first());
   });
-  //todo
+  // todo
   // it('it loads nested morph relationships on demand', async () => {
   //   await seedData();
   //   (await TestPost.createQuery().first()).newRelation('likes').create([]);
