@@ -17,6 +17,11 @@ pipeline {
             defaultValue: false,
             description: '强制部署Triangle到github package ?'
         )
+    booleanParam(
+            name: 'FORCE_DEPLOY_DEV_APP',
+            defaultValue: false,
+            description: '强制部署dev app?'
+        )
   }
 
   environment {
@@ -101,15 +106,17 @@ pipeline {
       parallel {
         stage('deploy dev-app') {
           when {
-            // branch 'master'
-            allOf {
-              not {
-                branch 'release'
-              }
-              anyOf {
-                changeset 'src/annotation/**'
-                changeset 'src/check-type/**'
-                changeset 'src/dev-app/**'
+            anyOf {
+              expression { params.FORCE_DEPLOY_GITHUB ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/ }
+              allOf {
+                not {
+                  branch 'release'
+                }
+                anyOf {
+                  changeset 'src/annotation/**'
+                  changeset 'src/check-type/**'
+                  changeset 'src/dev-app/**'
+                }
               }
             }
           }
