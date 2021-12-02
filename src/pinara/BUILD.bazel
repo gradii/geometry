@@ -1,0 +1,55 @@
+load("@npm//scss-bundle:index.bzl", "scss_bundle")
+load(
+    "//src/pinara:config.bzl",
+    "PINARA_TARGETS",
+)
+load("//tools:defaults.bzl",
+  "ng_package",
+  "ts_library",
+  "ng_test_library",
+  "ng_web_test_suite"
+)
+
+package(default_visibility = ["//visibility:public"])
+
+ts_library(
+    name = "pinara",
+    srcs = glob(
+        ["**/*.ts"],
+        exclude = [
+            "test/**/*.ts",
+            "**/*.spec.ts",
+        ],
+    ),
+    module_name = "@gradii/pinara",
+)
+
+ng_package(
+    name = "npm_package",
+    srcs = [
+        "package.json",
+    ],
+    data = [
+    ],
+    entry_point = ":index.ts",
+    entry_point_name = "pinara",
+    nested_packages = [],
+    tags = ["release-package"],
+    deps = PINARA_TARGETS,
+)
+
+ng_test_library(
+    name = "unit_test_sources",
+    srcs = glob(
+        ["**/*.spec.ts"],
+        exclude = ["**/*.e2e.spec.ts"],
+    ),
+    deps = [
+      ":pinara"
+    ],
+)
+
+ng_web_test_suite(
+    name = "unit_tests",
+    deps = [":unit_test_sources"],
+)
