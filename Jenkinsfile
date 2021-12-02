@@ -12,6 +12,11 @@ pipeline {
             defaultValue: false,
             description: '强制部署到github ?'
         )
+    booleanParam(
+            name: 'FORCE_DEPLOY_TRIANGLE',
+            defaultValue: false,
+            description: '强制部署Triangle到github package ?'
+        )
   }
 
   environment {
@@ -77,7 +82,7 @@ pipeline {
     stage('install & init kubectl') {
       steps {
         container('nodejs') {
-          sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
+          sh 'curl -LO "https://cdn.ks.reiki-punch.com/kubeneters/kubectl"'
           sh 'install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl'
           sh 'kubectl version --client'
           withCredentials([kubeconfigContent(credentialsId : "$KUBECONFIG_CREDENTIAL_ID" ,variable : 'KUBECONFIG')]) {
