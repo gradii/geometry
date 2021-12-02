@@ -21,7 +21,7 @@ describe('align directive', () => {
   let mediaController: MockMatchMedia;
   let styler: StyleUtils;
   let shouldRun = true;
-  let createTestComponent = (template: string) => {
+  const createTestComponent = (template: string) => {
     shouldRun = true;
     fixture = makeCreateTestComponent(() => TestAlignComponent)(template);
 
@@ -326,7 +326,7 @@ class TestAlignComponent implements OnInit {
   crossAxis = 'end';
 
   set alignBy(style) {
-    let vals = style.split(' ');
+    const vals = style.split(' ');
     this.mainAxis = vals[0];
     this.crossAxis = vals.length > 1 ? vals[1] : '';
   }

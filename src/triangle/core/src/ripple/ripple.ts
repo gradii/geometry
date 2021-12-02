@@ -19,7 +19,7 @@ import {
 import { ANIMATION_MODULE_TYPE } from '@angular/platform-browser/animations';
 import { RippleRef } from './ripple-ref';
 import {
-  RippleAnitriionConfig,
+  RippleAnimationConfig,
   RippleConfig,
   RippleRenderer,
   RippleTarget
@@ -34,21 +34,21 @@ export interface RippleGlobalOptions {
   disabled?: boolean;
 
   /**
-   * Configuration for the anitriion duration of the ripples. There are two phases with different
-   * durations for the ripples. The anitriion durations will be overwritten if the
-   * `NoopAnitriionsModule` is being used.
+   * Configuration for the animation duration of the ripples. There are two phases with different
+   * durations for the ripples. The animation durations will be overwritten if the
+   * `NoopAnimationsModule` is being used.
    */
-  anitriion?: RippleAnitriionConfig;
+  animation?: RippleAnimationConfig;
 
   /**
    * Whether ripples should start fading out immediately after the mouse or touch is released. By
-   * default, ripples will wait for the enter anitriion to complete and for mouse or touch release.
+   * default, ripples will wait for the enter animation to complete and for mouse or touch release.
    */
   terminateOnPointerUp?: boolean;
 }
 
 /** Injection token that can be used to specify the global ripple options. */
-export const MAT_RIPPLE_GLOBAL_OPTIONS =
+export const TRI_RIPPLE_GLOBAL_OPTIONS =
   new InjectionToken<RippleGlobalOptions>('tri-ripple-global-options');
 
 @Directive({
@@ -81,11 +81,11 @@ export class TriRipple implements OnInit, OnDestroy, RippleTarget {
   @Input('triRippleRadius') radius: number = 0;
 
   /**
-   * Configuration for the ripple anitriion. Allows modifying the enter and exit anitriion
-   * duration of the ripples. The anitriion durations will be overwritten if the
-   * `NoopAnitriionsModule` is being used.
+   * Configuration for the ripple animation. Allows modifying the enter and exit animation
+   * duration of the ripples. The animation durations will be overwritten if the
+   * `NoopAnimationsModule` is being used.
    */
-  @Input('triRippleAnitriion') anitriion: RippleAnitriionConfig;
+  @Input('triRippleAnimation') animation: RippleAnimationConfig;
   /** Renderer for the ripple DOM manipulations. */
   private _rippleRenderer: RippleRenderer;
   /** Options that are set globally for all ripples. */
@@ -96,14 +96,14 @@ export class TriRipple implements OnInit, OnDestroy, RippleTarget {
   constructor(private _elementRef: ElementRef<HTMLElement>,
               ngZone: NgZone,
               platform: Platform,
-              @Optional() @Inject(MAT_RIPPLE_GLOBAL_OPTIONS) globalOptions?: RippleGlobalOptions,
-              @Optional() @Inject(ANIMATION_MODULE_TYPE) anitriionMode?: string) {
+              @Optional() @Inject(TRI_RIPPLE_GLOBAL_OPTIONS) globalOptions?: RippleGlobalOptions,
+              @Optional() @Inject(ANIMATION_MODULE_TYPE) animationMode?: string) {
 
     this._globalOptions = globalOptions || {};
     this._rippleRenderer = new RippleRenderer(this, ngZone, _elementRef, platform);
 
-    if (anitriionMode === 'NoopAnitriions') {
-      this._globalOptions.anitriion = {enterDuration: 0, exitDuration: 0};
+    if (animationMode === 'NoopAnimations') {
+      this._globalOptions.animation = {enterDuration: 0, exitDuration: 0};
     }
   }
 
@@ -148,7 +148,7 @@ export class TriRipple implements OnInit, OnDestroy, RippleTarget {
       centered            : this.centered,
       radius              : this.radius,
       color               : this.color,
-      anitriion           : {...this._globalOptions.anitriion, ...this.anitriion},
+      animation           : {...this._globalOptions.animation, ...this.animation},
       terminateOnPointerUp: this._globalOptions.terminateOnPointerUp,
     };
   }

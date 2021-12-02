@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -96,7 +102,7 @@ export class BaseObserver<L extends BaseListener = BaseListener> {
   }
 
   iterateListeners(cb: (listener: L) => any) {
-    for (let id in this.listeners) {
+    for (const id in this.listeners) {
       const res = cb(this.listeners[id]);
       // cancel itteration on false
       if (res === false) {
@@ -106,7 +112,7 @@ export class BaseObserver<L extends BaseListener = BaseListener> {
   }
 
   getListenerHandle(listener: L): ListenerHandle {
-    for (let id in this.listeners) {
+    for (const id in this.listeners) {
       if (this.listeners[id] === listener) {
         return {
           id        : id,

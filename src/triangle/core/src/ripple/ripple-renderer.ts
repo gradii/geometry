@@ -15,20 +15,21 @@ export type RippleConfig = {
   centered?: boolean;
   radius?: number;
   persistent?: boolean;
-  anitriion?: RippleAnitriionConfig;
+  animation?: RippleAnimationConfig;
   terminateOnPointerUp?: boolean;
 };
 
 /**
- * Interface that describes the configuration for the anitriion of a ripple.
- * There are two anitriion phases with different durations for the ripples.
+ * Interface that describes the configuration for the animation of a ripple.
+ * There are two animation phases with different durations for the ripples.
  */
-export interface RippleAnitriionConfig {
-  /** Duration in milliseconds for the enter anitriion (expansion from point of contact). */
+export interface RippleAnimationConfig {
+  /** Duration in milliseconds for the enter animation (expansion from point of contact). */
   enterDuration?: number;
-  /** Duration in milliseconds for the exit anitriion (fade-out). */
+  /** Duration in milliseconds for the exit animation (fade-out). */
   exitDuration?: number;
 }
+
 
 /**
  * Interface that describes the target for launching ripples.
@@ -43,10 +44,10 @@ export interface RippleTarget {
 }
 
 /**
- * Default ripple anitriion configuration for ripples without an explicit
- * anitriion config specified.
+ * Default ripple animation configuration for ripples without an explicit
+ * animation config specified.
  */
-export const defaultRippleAnitriionConfig = {
+export const defaultRippleAnimationConfig = {
   enterDuration: 450,
   exitDuration : 400
 };
@@ -63,7 +64,7 @@ const passiveEventOptions = normalizePassiveListenerOptions({passive: true});
 /**
  * Helper service that performs DOM manipulations. Not intended to be used outside this module.
  * The constructor takes a reference to the ripple directive's host element and a map of DOM
- * event handlers to be installed on the element that triggers ripple anitriions.
+ * event handlers to be installed on the element that triggers ripple animations.
  * This will eventually become a custom renderer once Angular support exists.
  * @docs-private
  */
@@ -125,7 +126,7 @@ export class RippleRenderer {
   fadeInRipple(x: number, y: number, config: RippleConfig = {}): RippleRef {
     const containerRect = this._containerRect =
       this._containerRect || this._containerElement.getBoundingClientRect();
-    const anitriionConfig = {...defaultRippleAnitriionConfig, ...config.anitriion};
+    const animationConfig = {...defaultRippleAnimationConfig, ...config.animation};
 
     if (config.centered) {
       x = containerRect.left + containerRect.width / 2;
@@ -135,7 +136,7 @@ export class RippleRenderer {
     const radius = config.radius || distanceToFurthestCorner(x, y, containerRect);
     const offsetX = x - containerRect.left;
     const offsetY = y - containerRect.top;
-    const duration = anitriionConfig.enterDuration;
+    const duration = animationConfig.enterDuration;
 
     const ripple = document.createElement('div');
     ripple.classList.add('tri-ripple-element');
@@ -183,7 +184,7 @@ export class RippleRenderer {
       // When the timer runs out while the user has kept their pointer down, we want to
       // keep only the persistent ripples and the latest transient ripple. We do this,
       // because we don't want stacked transient ripples to appear after their enter
-      // anitriion has finished.
+      // animation has finished.
       if (!config.persistent && (!isMostRecentTransientRipple || !this._isPointerDown)) {
         rippleRef.fadeOut();
       }
@@ -205,15 +206,15 @@ export class RippleRenderer {
       this._containerRect = null;
     }
 
-    // For ripples that are not active anymore, don't re-run the fade-out anitriion.
+    // For ripples that are not active anymore, don't re-run the fade-out animation.
     if (!wasActive) {
       return;
     }
 
     const rippleEl = rippleRef.element;
-    const anitriionConfig = {...defaultRippleAnitriionConfig, ...rippleRef.config.anitriion};
+    const animationConfig = {...defaultRippleAnimationConfig, ...rippleRef.config.animation};
 
-    rippleEl.style.transitionDuration = `${anitriionConfig.exitDuration}ms`;
+    rippleEl.style.transitionDuration = `${animationConfig.exitDuration}ms`;
     rippleEl.style.opacity = '0';
     rippleRef.state = RippleState.FADING_OUT;
 
@@ -221,7 +222,7 @@ export class RippleRenderer {
     this._runTimeoutOutsideZone(() => {
       rippleRef.state = RippleState.HIDDEN;
       rippleEl.parentNode!.removeChild(rippleEl);
-    }, anitriionConfig.exitDuration);
+    }, animationConfig.exitDuration);
   }
 
   /** Fades out all currently active ripples. */

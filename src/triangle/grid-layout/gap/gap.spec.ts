@@ -22,7 +22,7 @@ describe('grid gap directive', () => {
   let mediaController: MockMatchMedia;
   let platform: Platform;
   let shouldRun = true;
-  let createTestComponent = (template: string, styles?: any) => {
+  const createTestComponent = (template: string, styles?: any) => {
     shouldRun = true;
     fixture = makeCreateTestComponent(() => TestLayoutGapComponent)(template, styles);
     inject([StyleUtils, MatchMedia, Platform],
@@ -54,7 +54,7 @@ describe('grid gap directive', () => {
 
   describe('with static features', () => {
     it('should add gap styles for a parent', () => {
-      let template = `
+      const template = `
               <div gdGap="10px">
                   <div></div>
               </div>
@@ -73,15 +73,15 @@ describe('grid gap directive', () => {
         }, styler);
       } else {
         expectNativeEl(fixture).toHaveStyle({'display': 'grid'}, styler);
-        let gapStyle = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
+        const gapStyle = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
           'grid-gap');
-        let correctGap = gapStyle === '10px' || gapStyle == '10px 10px';
+        const correctGap = gapStyle === '10px' || gapStyle == '10px 10px';
         expect(correctGap).toBe(true);
       }
     });
 
     it('should add gap styles with multiple values for a parent', () => {
-      let template = `
+      const template = `
               <div gdGap="10px 15px">
                   <div></div>
               </div>
@@ -112,7 +112,7 @@ describe('grid gap directive', () => {
     });
 
     it('should add dynamic gap styles', () => {
-      let template = `
+      const template = `
               <div [gdGap]='gap'>
                   <div></div>
                   <div></div>
@@ -133,9 +133,9 @@ describe('grid gap directive', () => {
         }, styler);
       } else {
         fixture.detectChanges();
-        let gapStyle = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
+        const gapStyle = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
           'grid-gap');
-        let correctGap = gapStyle === '8px' || gapStyle == '8px 8px';
+        const correctGap = gapStyle === '8px' || gapStyle == '8px 8px';
         expect(correctGap).toBe(true);
       }
 
@@ -149,15 +149,15 @@ describe('grid gap directive', () => {
         }, styler);
       } else {
         fixture.detectChanges();
-        let gapStyle = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
+        const gapStyle = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
           'grid-gap');
-        let correctGap = gapStyle === '16px' || gapStyle == '16px 16px';
+        const correctGap = gapStyle === '16px' || gapStyle == '16px 16px';
         expect(correctGap).toBe(true);
       }
     });
 
     it('should add inline grid css style', () => {
-      let template = `
+      const template = `
               <div gdGap="10px" gdInline>
                   <div></div>
               </div>
@@ -176,9 +176,9 @@ describe('grid gap directive', () => {
         }, styler);
       } else {
         expectNativeEl(fixture).toHaveStyle({'display': 'inline-grid'}, styler);
-        let gapStyle = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
+        const gapStyle = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
           'grid-gap');
-        let correctGap = gapStyle === '10px' || gapStyle == '10px 10px';
+        const correctGap = gapStyle === '10px' || gapStyle == '10px 10px';
         expect(correctGap).toBe(true);
       }
     });
@@ -186,7 +186,7 @@ describe('grid gap directive', () => {
 
   describe('with responsive features', () => {
     it('should add gap styles for a parent', () => {
-      let template = `
+      const template = `
               <div gdGap="10px" gdGap.xs="16px">
                   <div></div>
               </div>
@@ -205,9 +205,9 @@ describe('grid gap directive', () => {
         }, styler);
       } else {
         expectNativeEl(fixture).toHaveStyle({'display': 'grid'}, styler);
-        let gapStyle = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
+        const gapStyle = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
           'grid-gap');
-        let correctGap = gapStyle === '10px' || gapStyle == '10px 10px';
+        const correctGap = gapStyle === '10px' || gapStyle == '10px 10px';
         expect(correctGap).toBe(true);
       }
 
@@ -220,9 +220,9 @@ describe('grid gap directive', () => {
         }, styler);
       } else {
         expectNativeEl(fixture).toHaveStyle({'display': 'grid'}, styler);
-        let gapStyle = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
+        const gapStyle = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
           'grid-gap');
-        let correctGap = gapStyle === '16px' || gapStyle == '16px 16px';
+        const correctGap = gapStyle === '16px' || gapStyle == '16px 16px';
         expect(correctGap).toBe(true);
       }
 
@@ -235,9 +235,9 @@ describe('grid gap directive', () => {
         }, styler);
       } else {
         expectNativeEl(fixture).toHaveStyle({'display': 'grid'}, styler);
-        let gapStyle = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
+        const gapStyle = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
           'grid-gap');
-        let correctGap = gapStyle === '10px' || gapStyle == '10px 10px';
+        const correctGap = gapStyle === '10px' || gapStyle == '10px 10px';
         expect(correctGap).toBe(true);
       }
     });

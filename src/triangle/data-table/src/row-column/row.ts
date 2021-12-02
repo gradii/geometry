@@ -91,7 +91,7 @@ export class Row extends DataGridModel {
       collapsed && r.hasChildren || // 折叠则折叠全部
       !collapsed && r.hasChildren && !r.isCollapsed // 展开则只展开未折叠的
     ) {
-      for (let sr of r.children) {
+      for (const sr of r.children) {
         Row._recursiveParentCollapsed(sr, collapsed);
       }
     }
@@ -100,7 +100,7 @@ export class Row extends DataGridModel {
   // // sets the collapsed/expanded state of a group row
   _setCollapsed(collapsed: boolean) {
     this._setFlag(RowColFlags.Collapsed, collapsed);
-    for (let r of this.children) {
+    for (const r of this.children) {
       Row._recursiveParentCollapsed(r, collapsed);
     }
   }

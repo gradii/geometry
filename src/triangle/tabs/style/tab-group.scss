@@ -25,6 +25,7 @@
   position   : relative;
   overflow   : hidden;
   display    : flex;
+  flex-basis : 100%;
   transition : height tabs-common.$tri-tab-animation-duration mixins.$ease-in-out-curve-function;
 }
 

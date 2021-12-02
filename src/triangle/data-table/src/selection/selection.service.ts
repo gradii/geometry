@@ -123,7 +123,7 @@ export class SelectionService {
     this.currentSelection = [];
     if (settings.selectable && settings.selectable.enabled !== false) {
       const iterator = this.getIterator();
-      for (let item of iterator) {
+      for (const item of iterator) {
         if (item instanceof Row) {
           const rowArgs = {
             dataItem: item.dataItem,
@@ -169,7 +169,7 @@ export class SelectionService {
     if (this.selectAllChecked && this.isSelected(index)) {
       this.selectAllChecked = false;
     }
-    for (let item of iterator) {
+    for (const item of iterator) {
       if (item instanceof Row && item.index === index) {
         const itemToToggle = {
           data : item.dataItem,
@@ -231,7 +231,7 @@ export class SelectionService {
     const end = Math.max(this.lastSelectionStartIndex, item.index);
     const iterator = this.getIterator();
 
-    for (let item of iterator) {
+    for (const item of iterator) {
       if (item instanceof Row) {
         const idx = item.index;
         if ((idx < start || idx > end) && this.isSelected(idx)) {
@@ -253,7 +253,7 @@ export class SelectionService {
     const selectedRows = [];
     const deselectedRows = [];
     const iterator = this.getIterator();
-    for (let item of iterator) {
+    for (const item of iterator) {
       if (item instanceof Row) {
         const idx = item.index;
         if (this.isSelected(idx) && !selectAllChecked) {

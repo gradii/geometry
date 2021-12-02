@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { AnimationEvent } from '@angular/animations';
 import { Directionality } from '@angular/cdk/bidi';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';

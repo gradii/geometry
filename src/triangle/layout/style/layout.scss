@@ -43,6 +43,7 @@ $layout-zero-trigger-height : 42px !default;
 
     @at-root &-content {
       flex : auto;
+      min-height: 0;
     }
 
     @at-root &-sider {

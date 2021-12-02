@@ -311,7 +311,7 @@ export class AutocompleteTrigger implements ControlValueAccessor, OnDestroy {
   }
 
   _handleInput(event: KeyboardEvent): void {
-    let target = event.target as HTMLInputElement;
+    const target = event.target as HTMLInputElement;
     let value: number | string | null = target.value;
 
     // Based on `NumberValueAccessor` from forms.

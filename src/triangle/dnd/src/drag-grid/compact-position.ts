@@ -96,7 +96,7 @@ export class CompactPosition {
     setDirectionValue: (item: TriDragGridItemComponent,
                         value: number) => void) {
     let widgetMoved         = false;
-    let heightMap: number[] = [];
+    const heightMap: number[] = [];
     const fn                = (prev: number[], item: TriDragGridItemComponent) => {
       const {
               rowPosition, columnPosition,

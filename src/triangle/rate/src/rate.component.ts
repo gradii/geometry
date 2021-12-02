@@ -85,9 +85,9 @@ export class _RateStarItemComponent {
   host: {
     'class': 'tri-rate',
     '[class.tri-rate-disabled]': 'disabled',
-    '[tabindex]': "disabled ? -1 : 0",
-    '(keydown)': "onKeyDown($event)",
-    '(mouseleave)': "_leaveRate($event)"
+    '[tabindex]': 'disabled ? -1 : 0',
+    '(keydown)': 'onKeyDown($event)',
+    '(mouseleave)': '_leaveRate($event)'
   },
   providers: [
     {
@@ -138,7 +138,7 @@ export class RateComponent implements OnInit, ControlValueAccessor {
    * @param  value
    */
   set value(value: number) {
-    value = clamp(value, 0, this._count)
+    value = clamp(value, 0, this._count);
     if (this._value === value) {
       return;
     }
@@ -233,7 +233,7 @@ export class RateComponent implements OnInit, ControlValueAccessor {
     if (this._floatReg.test(oldVal)) {
       oldVal += 0.5;
       this._hasHalf = true;
-    }else{
+    } else {
       this._hasHalf = false;
     }
     this._hoverValue = oldVal;

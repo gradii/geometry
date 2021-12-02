@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -83,7 +89,7 @@ export class ActionEventBus {
 
   fireAction(actionEvent: ActionEvent<any>) {
     const actions = this.getActionsForEvent(actionEvent);
-    for (let action of actions) {
+    for (const action of actions) {
       action.options.fire(actionEvent as any);
     }
   }

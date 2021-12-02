@@ -350,7 +350,7 @@ export class TriDrawer implements AfterContentInit, AfterContentChecked, OnDestr
    * @param selector The CSS selector for the element to set focus to.
    */
   private _focusByCssSelector(selector: string, options?: FocusOptions) {
-    let elementToFocus =
+    const elementToFocus =
           this._elementRef.nativeElement.querySelector(selector) as HTMLElement | null;
     if (elementToFocus) {
       this._forceFocus(elementToFocus, options);

@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 
 /** Options for where to set focus to automatically on dialog open */
 export type AutoFocusTarget = 'dialog' | 'first-tabbable' | 'first-heading';

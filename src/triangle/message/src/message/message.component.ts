@@ -40,7 +40,7 @@ import type { MessageDataFilled, MessageDataOptions } from './message.definition
       <div class="tri-message-notice-content"
            [ngClass]="'tri-message-' + message.type">
         <div *ngIf="!message.html"
-             class="tri-message-custom-content">
+             class="tri-message-content">
           <ng-container [ngSwitch]="message.type">
             <tri-icon *ngSwitchCase="'success'" svgIcon="fill:check-circle"></tri-icon>
             <tri-icon *ngSwitchCase="'info'" svgIcon="fill:info-circle"></tri-icon>
@@ -51,7 +51,9 @@ import type { MessageDataFilled, MessageDataOptions } from './message.definition
           </ng-container>
           <span>{{message.content}}</span>
         </div>
-        <div *ngIf="message.html" [innerHTML]="message.html"></div>
+        <div *ngIf="message.html"
+             class="tri-message-custom-content"
+             [innerHTML]="message.html"></div>
       </div>
     </div>
   `,

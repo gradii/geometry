@@ -92,11 +92,11 @@ export abstract class TileStyler {
    */
   setStyle(tile: TriGridTileComponent, rowIndex: number, colIndex: number): void {
     // Percent of the available horizontal space that one column takes up.
-    let percentWidthPerTile = 100 / this._cols;
+    const percentWidthPerTile = 100 / this._cols;
 
     // Fraction of the vertical gutter size that each column takes up.
     // For example, if there are 5 columns, each column uses 4/5 = 0.8 times the gutter width.
-    let gutterWidthFractionPerTile = (this._cols - 1) / this._cols;
+    const gutterWidthFractionPerTile = (this._cols - 1) / this._cols;
 
     this.setColStyles(tile, colIndex, percentWidthPerTile, gutterWidthFractionPerTile);
     this.setRowStyles(tile, rowIndex, percentWidthPerTile, gutterWidthFractionPerTile);
@@ -106,11 +106,11 @@ export abstract class TileStyler {
   setColStyles(tile: TriGridTileComponent, colIndex: number, percentWidth: number,
                gutterWidth: number) {
     // Base horizontal size of a column.
-    let baseTileWidth = this.getBaseTileSize(percentWidth, gutterWidth);
+    const baseTileWidth = this.getBaseTileSize(percentWidth, gutterWidth);
 
     // The width and horizontal position of each tile is always calculated the same way, but the
     // height and vertical position depends on the rowMode.
-    let side = this._direction === 'rtl' ? 'right' : 'left';
+    const side = this._direction === 'rtl' ? 'right' : 'left';
     tile._setStyle(side, this.getTilePosition(baseTileWidth, colIndex));
     tile._setStyle('width', calc(this.getTileSize(baseTileWidth, tile.colspan)));
   }
@@ -218,7 +218,7 @@ export class RatioTileStyler extends TileStyler {
 
   setRowStyles(tile: TriGridTileComponent, rowIndex: number, percentWidth: number,
                gutterWidth: number): void {
-    let percentHeightPerTile = percentWidth / this.rowHeightRatio;
+    const percentHeightPerTile = percentWidth / this.rowHeightRatio;
     this.baseTileHeight      = this.getBaseTileSize(percentHeightPerTile, gutterWidth);
 
     // Use padding-top and margin-top to maintain the given aspect ratio, as
@@ -264,13 +264,13 @@ export class RatioTileStyler extends TileStyler {
 export class FitTileStyler extends TileStyler {
   setRowStyles(tile: TriGridTileComponent, rowIndex: number): void {
     // Percent of the available vertical space that one row takes up.
-    let percentHeightPerTile = 100 / this._rowspan;
+    const percentHeightPerTile = 100 / this._rowspan;
 
     // Fraction of the horizontal gutter size that each column takes up.
-    let gutterHeightPerTile = (this._rows - 1) / this._rows;
+    const gutterHeightPerTile = (this._rows - 1) / this._rows;
 
     // Base vertical size of a column.
-    let baseTileHeight = this.getBaseTileSize(percentHeightPerTile, gutterHeightPerTile);
+    const baseTileHeight = this.getBaseTileSize(percentHeightPerTile, gutterHeightPerTile);
 
     tile._setStyle('top', this.getTilePosition(baseTileHeight, rowIndex));
     tile._setStyle('height', calc(this.getTileSize(baseTileHeight, tile.rowspan)));

@@ -223,18 +223,18 @@ describe('NativeDateAdapter', () => {
   });
 
   it('should parse number', () => {
-    let timestamp = new Date().getTime();
+    const timestamp = new Date().getTime();
     expect(adapter.parse(timestamp)).toEqual(new Date(timestamp));
   });
 
   it ('should parse Date', () => {
-    let date = new Date(2017, JAN, 1);
+    const date = new Date(2017, JAN, 1);
     expect(adapter.parse(date)).toEqual(date);
     expect(adapter.parse(date)).not.toBe(date);
   });
 
   it('should parse invalid value as invalid', () => {
-    let d = adapter.parse('hello');
+    const d = adapter.parse('hello');
     expect(d).not.toBeNull();
     expect(adapter.isDateInstance(d))
         .toBe(true, 'Expected string to have been fed through Date.parse');
@@ -311,13 +311,13 @@ describe('NativeDateAdapter', () => {
   });
 
   it('should clone', () => {
-    let date = new Date(2017, JAN, 1);
+    const date = new Date(2017, JAN, 1);
     expect(adapter.clone(date)).toEqual(date);
     expect(adapter.clone(date)).not.toBe(date);
   });
 
   it('should preserve time when cloning', () => {
-    let date = new Date(2017, JAN, 1, 4, 5, 6);
+    const date = new Date(2017, JAN, 1, 4, 5, 6);
     expect(adapter.clone(date)).toEqual(date);
     expect(adapter.clone(date)).not.toBe(date);
   });
@@ -359,24 +359,24 @@ describe('NativeDateAdapter', () => {
   });
 
   it('should count today as a valid date instance', () => {
-    let d = new Date();
+    const d = new Date();
     expect(adapter.isValid(d)).toBe(true);
     expect(adapter.isDateInstance(d)).toBe(true);
   });
 
   it('should count an invalid date as an invalid date instance', () => {
-    let d = new Date(NaN);
+    const d = new Date(NaN);
     expect(adapter.isValid(d)).toBe(false);
     expect(adapter.isDateInstance(d)).toBe(true);
   });
 
   it('should count a string as not a date instance', () => {
-    let d = '1/1/2017';
+    const d = '1/1/2017';
     expect(adapter.isDateInstance(d)).toBe(false);
   });
 
   it('should provide a method to return a valid date or null', () => {
-    let d = new Date();
+    const d = new Date();
     expect(adapter.getValidDateOrNull(d)).toBe(d);
     expect(adapter.getValidDateOrNull(new Date(NaN))).toBeNull();
     expect(adapter.getValidDateOrNull(null)).toBeNull();

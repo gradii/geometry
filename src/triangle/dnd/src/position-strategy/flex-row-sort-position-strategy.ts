@@ -128,7 +128,7 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
       siblings[currentIndex].mainAxisLine = newMainAxisLine;
 
       // How many pixels the item's placeholder should be offset.
-      let [offsetX, offsetY] = this._getItemOffsetPx(currentPosition, newPosition, 1);
+      const [offsetX, offsetY] = this._getItemOffsetPx(currentPosition, newPosition, 1);
 
       for (let i = 0; i < siblings.length; i++) {
         const offsetItem    = siblings[i];
@@ -275,6 +275,9 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
   }
 
   _getCurrentSameAxisStartEnd(pointerX: number, pointerY: number) {
+    if (this._itemPositions.length === 0) {
+      return [-1, -1];
+    }
     const isHorizontal = this._orientation === 'horizontal';
 
     // get current same axis all items
@@ -376,7 +379,7 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
   }
 
   trackActivePositions(activeDraggables) {
-    //_cacheItemPositions
+    // _cacheItemPositions
   }
 
   _cacheItemPositions() {
@@ -409,25 +412,28 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
       }
     });
 
-    this._itemPositions.reduce((prev: CachedItemPosition, curr: CachedItemPosition,
-                                idx: number,
-                                arr: CachedItemPosition[]) => {
-      const previousClientRect = prev.clientRect;
-      const currentClientRect  = curr.clientRect;
-      let isSameAxis           = isHorizontal ? (
-        Math.floor(currentClientRect.top) == Math.floor(previousClientRect.top) ||
-        Math.floor(currentClientRect.bottom) == Math.floor(previousClientRect.bottom)
-      ) : (
-        Math.floor(currentClientRect.left) == Math.floor(previousClientRect.left) ||
-        Math.floor(currentClientRect.right) == Math.floor(previousClientRect.right)
-      );
-      if (isSameAxis) {
-        curr.mainAxisLine = prev.mainAxisLine;
-      } else {
-        curr.mainAxisLine = prev.mainAxisLine + 1;
-      }
-      return curr;
-    });
+    if (this._itemPositions.length > 0) {
+      this._itemPositions.reduce((prev: CachedItemPosition, curr: CachedItemPosition,
+                                  idx: number,
+                                  arr: CachedItemPosition[]) => {
+        const previousClientRect = prev.clientRect;
+        const currentClientRect  = curr.clientRect;
+
+        const isSameAxis = isHorizontal ? (
+          Math.floor(currentClientRect.top) == Math.floor(previousClientRect.top) ||
+          Math.floor(currentClientRect.bottom) == Math.floor(previousClientRect.bottom)
+        ) : (
+          Math.floor(currentClientRect.left) == Math.floor(previousClientRect.left) ||
+          Math.floor(currentClientRect.right) == Math.floor(previousClientRect.right)
+        );
+        if (isSameAxis) {
+          curr.mainAxisLine = prev.mainAxisLine;
+        } else {
+          curr.mainAxisLine = prev.mainAxisLine + 1;
+        }
+        return curr;
+      });
+    }
   }
 
   /**

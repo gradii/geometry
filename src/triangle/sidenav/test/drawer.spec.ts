@@ -151,18 +151,18 @@ describe('TriDrawer', () => {
 
     it('does not throw when created without a drawer', fakeAsync(() => {
       expect(() => {
-        let fixture = TestBed.createComponent(BasicTestApp);
+        const fixture = TestBed.createComponent(BasicTestApp);
         fixture.detectChanges();
         tick();
       }).not.toThrow();
     }));
 
     it('should emit the backdropClick event when the backdrop is clicked', fakeAsync(() => {
-      let fixture = TestBed.createComponent(BasicTestApp);
+      const fixture = TestBed.createComponent(BasicTestApp);
       fixture.detectChanges();
 
-      let testComponent: BasicTestApp = fixture.debugElement.componentInstance;
-      let openButtonElement = fixture.debugElement.query(By.css('.open'))!.nativeElement;
+      const testComponent: BasicTestApp = fixture.debugElement.componentInstance;
+      const openButtonElement = fixture.debugElement.query(By.css('.open'))!.nativeElement;
 
       openButtonElement.click();
       fixture.detectChanges();
@@ -188,12 +188,12 @@ describe('TriDrawer', () => {
     }));
 
     it('should close when pressing escape', fakeAsync(() => {
-      let fixture = TestBed.createComponent(BasicTestApp);
+      const fixture = TestBed.createComponent(BasicTestApp);
 
       fixture.detectChanges();
 
-      let testComponent: BasicTestApp = fixture.debugElement.componentInstance;
-      let drawer = fixture.debugElement.query(By.directive(TriDrawer))!;
+      const testComponent: BasicTestApp = fixture.debugElement.componentInstance;
+      const drawer = fixture.debugElement.query(By.directive(TriDrawer))!;
 
       drawer.componentInstance.open();
       fixture.detectChanges();
@@ -214,12 +214,12 @@ describe('TriDrawer', () => {
     }));
 
     it('should not close when pressing escape with a modifier', fakeAsync(() => {
-      let fixture = TestBed.createComponent(BasicTestApp);
+      const fixture = TestBed.createComponent(BasicTestApp);
 
       fixture.detectChanges();
 
-      let testComponent: BasicTestApp = fixture.debugElement.componentInstance;
-      let drawer = fixture.debugElement.query(By.directive(TriDrawer))!;
+      const testComponent: BasicTestApp = fixture.debugElement.componentInstance;
+      const drawer = fixture.debugElement.query(By.directive(TriDrawer))!;
 
       drawer.componentInstance.open();
       fixture.detectChanges();
@@ -240,7 +240,7 @@ describe('TriDrawer', () => {
     }));
 
     it('should fire the open event when open on init', fakeAsync(() => {
-      let fixture = TestBed.createComponent(DrawerSetToOpenedTrue);
+      const fixture = TestBed.createComponent(DrawerSetToOpenedTrue);
 
       fixture.detectChanges();
       tick();
@@ -249,9 +249,9 @@ describe('TriDrawer', () => {
     }));
 
     it('should not close by pressing escape when disableClose is set', fakeAsync(() => {
-      let fixture = TestBed.createComponent(BasicTestApp);
-      let testComponent = fixture.debugElement.componentInstance;
-      let drawer = fixture.debugElement.query(By.directive(TriDrawer))!;
+      const fixture = TestBed.createComponent(BasicTestApp);
+      const testComponent = fixture.debugElement.componentInstance;
+      const drawer = fixture.debugElement.query(By.directive(TriDrawer))!;
 
       drawer.componentInstance.disableClose = true;
       drawer.componentInstance.open();
@@ -267,9 +267,9 @@ describe('TriDrawer', () => {
     }));
 
     it('should not close by clicking on the backdrop when disableClose is set', fakeAsync(() => {
-      let fixture = TestBed.createComponent(BasicTestApp);
-      let testComponent = fixture.debugElement.componentInstance;
-      let drawer = fixture.debugElement.query(By.directive(TriDrawer))!.componentInstance;
+      const fixture = TestBed.createComponent(BasicTestApp);
+      const testComponent = fixture.debugElement.componentInstance;
+      const drawer = fixture.debugElement.query(By.directive(TriDrawer))!.componentInstance;
 
       drawer.disableClose = true;
       drawer.open();
@@ -285,13 +285,13 @@ describe('TriDrawer', () => {
     }));
 
     it('should restore focus on close if focus is inside drawer', fakeAsync(() => {
-      let fixture = TestBed.createComponent(BasicTestApp);
+      const fixture = TestBed.createComponent(BasicTestApp);
 
       fixture.detectChanges();
 
-      let drawer = fixture.debugElement.query(By.directive(TriDrawer))!.componentInstance;
-      let openButton = fixture.componentInstance.openButton.nativeElement;
-      let drawerButton = fixture.componentInstance.drawerButton.nativeElement;
+      const drawer = fixture.debugElement.query(By.directive(TriDrawer))!.componentInstance;
+      const openButton = fixture.componentInstance.openButton.nativeElement;
+      const drawerButton = fixture.componentInstance.drawerButton.nativeElement;
 
       openButton.focus();
       drawer.open();
@@ -330,13 +330,13 @@ describe('TriDrawer', () => {
     }));
 
     it('should not restore focus on close if focus is outside drawer', fakeAsync(() => {
-      let fixture = TestBed.createComponent(BasicTestApp);
-      let drawer: TriDrawer = fixture.debugElement
+      const fixture = TestBed.createComponent(BasicTestApp);
+      const drawer: TriDrawer = fixture.debugElement
           .query(By.directive(TriDrawer))!.componentInstance;
       fixture.detectChanges();
 
-      let openButton = fixture.componentInstance.openButton.nativeElement;
-      let closeButton = fixture.componentInstance.closeButton.nativeElement;
+      const openButton = fixture.componentInstance.openButton.nativeElement;
+      const closeButton = fixture.componentInstance.closeButton.nativeElement;
 
       openButton.focus();
       drawer.open();
@@ -396,21 +396,21 @@ describe('TriDrawer', () => {
 
   describe('attributes', () => {
     it('should correctly parse opened="false"', () => {
-      let fixture = TestBed.createComponent(DrawerSetToOpenedFalse);
+      const fixture = TestBed.createComponent(DrawerSetToOpenedFalse);
 
       fixture.detectChanges();
 
-      let drawer = fixture.debugElement.query(By.directive(TriDrawer))!.componentInstance;
+      const drawer = fixture.debugElement.query(By.directive(TriDrawer))!.componentInstance;
 
       expect((drawer as TriDrawer).opened).toBe(false);
     });
 
     it('should correctly parse opened="true"', () => {
-      let fixture = TestBed.createComponent(DrawerSetToOpenedTrue);
+      const fixture = TestBed.createComponent(DrawerSetToOpenedTrue);
 
       fixture.detectChanges();
 
-      let drawer = fixture.debugElement.query(By.directive(TriDrawer))!.componentInstance;
+      const drawer = fixture.debugElement.query(By.directive(TriDrawer))!.componentInstance;
 
       expect((drawer as TriDrawer).opened).toBe(true);
     });
@@ -457,7 +457,7 @@ describe('TriDrawer', () => {
       const fixture = TestBed.createComponent(DrawerOpenBinding);
       fixture.detectChanges();
 
-      let drawer: TriDrawer = fixture.debugElement
+      const drawer: TriDrawer = fixture.debugElement
           .query(By.directive(TriDrawer))!.componentInstance;
 
       drawer.open();

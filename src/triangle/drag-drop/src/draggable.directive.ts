@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 
 function matches(element: HTMLElement, selector: string): boolean {
-  let p = Element.prototype;
+  const p = Element.prototype;
   // @ts-ignore
   const f = p['matches'] || p.webkitMatchesSelector || p['mozMatchesSelector'] || p['msMatchesSelector'] || function (s) {
     // @ts-ignore

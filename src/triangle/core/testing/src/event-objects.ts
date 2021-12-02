@@ -54,8 +54,8 @@ export function createTouchEvent(type: string, pageX = 0, pageY = 0) {
 
 /** Dispatches a keydown event from an element. */
 export function createKeyboardEvent(type: string, keyCode: number, target?: Element, key?: string) {
-  let event = document.createEvent('KeyboardEvent') as any;
-  let originalPreventDefault = event.preventDefault;
+  const event = document.createEvent('KeyboardEvent') as any;
+  const originalPreventDefault = event.preventDefault;
 
   // Firefox does not support `initKeyboardEvent`, but supports `initKeyEvent`.
   if (event.initKeyEvent) {

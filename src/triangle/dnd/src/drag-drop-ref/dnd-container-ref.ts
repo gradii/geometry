@@ -249,13 +249,14 @@ export class DndContainerRef<T = any> {
   drop(item: DragRef, currentIndex: number,
        elementPositionX: number, elementPositionY: number,
        previousIndex: number, previousContainer: DndContainerRef,
-       isPointerOverContainer: boolean, distance: Point, dropPoint: Point, elementRelativePosition?: Point): void {
+       isPointerOverContainer: boolean, distance: Point, dropPoint: Point,
+       elementRelativePosition?: Point): void {
     this._reset();
     this.dropped.next({
       item,
       currentIndex,
       previousIndex,
-      container: this,
+      container      : this,
       previousContainer,
       isPointerOverContainer,
       distance,
@@ -512,7 +513,7 @@ export class DndContainerRef<T = any> {
   _getSiblingContainerFromPosition(item: DragRef, x: number,
                                    y: number): DndContainerRef | undefined {
     // Possible targets include siblings and 'this'
-    let targets = [this, ...this._siblings];
+    const targets = [this, ...this._siblings];
 
     // Only consider targets where the drag postition is within the client rect
     // (this avoids calling enterPredicate on each possible target)
@@ -525,11 +526,12 @@ export class DndContainerRef<T = any> {
       return undefined;
     }
 
-    // Order candidates by DOM hierarchy and z-index
-    let orderedMatchingTargets = orderByHierarchy(matchingTargets);
-
+    if (matchingTargets.length > 1) {
+      // Order candidates by DOM hierarchy and z-index
+      matchingTargets = orderByHierarchy(matchingTargets);
+    }
     // The drop target is the last matching target in the list
-    let matchingTarget = orderedMatchingTargets[orderedMatchingTargets.length - 1];
+    const matchingTarget = matchingTargets.pop();
 
     // Only return matching target if it is a sibling
     if (matchingTarget === this) {
@@ -635,7 +637,7 @@ export class DndContainerRef<T = any> {
    */
   protected _getShadowRoot(): RootNode {
     if (!this._cachedShadowRoot) {
-      const shadowRoot = _getShadowRoot(coerceElement(this.element));
+      const shadowRoot       = _getShadowRoot(coerceElement(this.element));
       this._cachedShadowRoot = (shadowRoot || this._document) as RootNode;
     }
 

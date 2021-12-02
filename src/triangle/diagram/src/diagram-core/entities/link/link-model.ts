@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -19,7 +25,7 @@ import {
   boundingBoxFromPoints
 } from '@gradii/vector-math';
 import * as _ from 'lodash';
-import { BaseEntityEvent, DeserializeEvent } from '../../../canvas-core/core-models/base-entity';
+import { BaseEntityEvent, DeserializeContext } from '../../../canvas-core/core-models/base-entity';
 import {
   BaseModel,
   BaseModelGenerics,
@@ -92,17 +98,14 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics> extends 
     return super.getSelectionEntities().concat(this.points);
   }
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
-    this.points = _.map(event.data.points || [], (point) => {
-      let p = new PointModel({
+  deserialize(data: ReturnType<this['serialize']>, context: DeserializeContext<this>) {
+    super.deserialize(data, context);
+    this.points = _.map(data.points || [], (point) => {
+      const p = new PointModel({
         link    : this,
         position: new Vector2(point.x, point.y)
       });
-      p.deserialize({
-        ...event,
-        data: point
-      });
+      p.deserialize(point, context);
       return p;
     });
   }

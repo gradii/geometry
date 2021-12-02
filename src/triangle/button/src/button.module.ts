@@ -6,13 +6,13 @@
 
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { TriRippleModule } from '../../core';
+import { TriRippleModule } from '@gradii/triangle/core';
+import { TriIconModule } from '@gradii/triangle/icon';
 import { ButtonGroupComponent } from './button-group.component';
 import {
   ButtonComponent, TriIconOnlyButton, TriOutlinedButton, TriRaisedButton, TriRoundedButton,
   TriTextButton
 } from './button.component';
-import { TriIconModule } from '@gradii/triangle/icon';
 
 /**
  *

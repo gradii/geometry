@@ -48,7 +48,7 @@ describe('ScrollService', () => {
     });
 
     it(`should scroll to dom element ${TOP} x`, () => {
-      let el = new MockElement();
+      const el = new MockElement();
       scrollService.setScrollTop(<any>el, TOP);
       expect(el.scrollTop).toBe(TOP);
     });

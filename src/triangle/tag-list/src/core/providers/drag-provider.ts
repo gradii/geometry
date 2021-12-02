@@ -1,4 +1,10 @@
-import { TagInputComponent } from '../../components/tag-input/tag-input';
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import { TagInputComponent } from '../../components/tag-input';
 import { TagModel } from '../accessor';
 
 import { Injectable } from '@angular/core';
@@ -9,7 +15,7 @@ export declare interface DraggedTag {
     zone: string;
 }
 
-import { DRAG_AND_DROP_KEY } from '../../core/constants';
+import { DRAG_AND_DROP_KEY } from '../constants';
 
 export declare interface State {
     dragging: boolean;

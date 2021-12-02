@@ -852,6 +852,7 @@ export class DragRef<T = any> {
 
       // if trag start in drag container
       if (dndContainer instanceof DragContainerRef) {
+        removeNode(placeholder);
       } else {
         // We move the element out at the end of the body and we make it hidden, because keeping it in
         // place will throw off the consumer's `:last-child` selectors. We can't remove the element

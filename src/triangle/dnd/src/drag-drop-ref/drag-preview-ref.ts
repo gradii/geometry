@@ -116,13 +116,13 @@ export class DragPreviewRef {
     extendStyles(preview.style, {
       // It's important that we disable the pointer events on the preview, because
       // it can throw off the `document.elementFromPoint` calls in the `TriDropContainer`.
-      pointerEvents: 'none',
+      'pointer-events': 'none',
       // We have to reset the margin, because it can throw off positioning relative to the viewport.
       margin  : '0',
       position: 'fixed',
       top     : '0',
       left    : '0',
-      zIndex  : `${zIndex || 1000}`
+      'z-index'  : `${zIndex || 1000}`
     });
 
     toggleNativeDragInteractions(preview, false);

@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -47,7 +53,7 @@ export class DragCanvasState extends AbstractDisplacementState {
     }, 'selection');
 
     // we can block layer rendering because we are only targeting the transforms
-    for (let layer of this.engine.getModel().getLayers()) {
+    for (const layer of this.engine.getModel().getLayers()) {
       layer.allowRepaint(false);
     }
     this.engine.repaintCanvas();
@@ -58,7 +64,7 @@ export class DragCanvasState extends AbstractDisplacementState {
 
   deactivated(next: State) {
     super.deactivated(next);
-    for (let layer of this.engine.getModel().getLayers()) {
+    for (const layer of this.engine.getModel().getLayers()) {
       layer.allowRepaint(true);
     }
   }

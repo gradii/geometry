@@ -16,9 +16,17 @@ ng_module(
         ["**/*.ts"],
         exclude = ["**/*.spec.ts"],
     ),
-    assets = [":style/diagram.css"] + glob(["**/*.html"]),
+    assets = [
+      ":style/diagram.css",
+      ":style/node-widget.css"
+    ] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/diagram",
     deps = [
+        "//src/triangle/menu",
+        "//src/triangle/input",
+        "//src/triangle/confirm-popup",
+        "//src/triangle/dialog",
+        "//src/triangle/card",
         "//src/triangle/core",
         "//src/triangle/i18n",
         "//src/triangle/util",
@@ -44,6 +52,14 @@ sass_library(
 sass_binary(
     name = "diagram_scss",
     src = "style/diagram.scss",
+    deps = [
+        "//src/triangle/diagram:diagram_scss_lib",
+    ],
+)
+
+sass_binary(
+    name = "node_widget_scss",
+    src = "style/node-widget.scss",
     deps = [
         "//src/triangle/diagram:diagram_scss_lib",
     ],

@@ -27,7 +27,7 @@ describe('grid area child directive', () => {
   let mediaController: MockMatchMedia;
   let platform: Platform;
   let shouldRun = true;
-  let createTestComponent = (template: string, styles?: any) => {
+  const createTestComponent = (template: string, styles?: any) => {
     shouldRun = true;
     fixture = makeCreateTestComponent(() => TestGridAreaComponent)(template, styles);
     inject([StyleUtils, MatchMedia, Platform],
@@ -59,7 +59,7 @@ describe('grid area child directive', () => {
 
   describe('with static features', () => {
     it('should add area styles for children', () => {
-      let template = `
+      const template = `
               <div gdAuto>
                   <div gdArea="heather / sophia"></div>
                   <div gdArea="grace / sarah"></div>
@@ -74,7 +74,7 @@ describe('grid area child directive', () => {
 
       fixture.detectChanges();
 
-      let nodes = queryFor(fixture, '[gdArea]');
+      const nodes = queryFor(fixture, '[gdArea]');
       expect(nodes.length).toBe(3);
       if (platform.WEBKIT) {
         expectEl(nodes[1]).toHaveStyle({
@@ -84,15 +84,15 @@ describe('grid area child directive', () => {
           'grid-column-end': 'sarah',
         }, styler);
       } else {
-        let areaStyles = styler.lookupStyle(nodes[1].nativeElement, 'grid-area');
-        let correctArea = areaStyles === 'grace / sarah' ||
+        const areaStyles = styler.lookupStyle(nodes[1].nativeElement, 'grid-area');
+        const correctArea = areaStyles === 'grace / sarah' ||
           areaStyles === 'grace / sarah / grace / sarah';
         expect(correctArea).toBe(true);
       }
     });
 
     it('should add dynamic area styles', () => {
-      let template = `
+      const template = `
             <div [gdArea]='area'></div>
           `;
       createTestComponent(template);
@@ -110,9 +110,9 @@ describe('grid area child directive', () => {
         }, styler);
       } else {
         fixture.detectChanges();
-        let areaStyles = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
+        const areaStyles = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
           'grid-area');
-        let correctArea = areaStyles === 'sidebar' ||
+        const correctArea = areaStyles === 'sidebar' ||
           areaStyles === 'sidebar / sidebar / sidebar / sidebar';
         expect(correctArea).toBe(true);
       }
@@ -129,9 +129,9 @@ describe('grid area child directive', () => {
         }, styler);
       } else {
         fixture.detectChanges();
-        let areaStyles = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
+        const areaStyles = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
           'grid-area');
-        let correctArea = areaStyles === 'header' ||
+        const correctArea = areaStyles === 'header' ||
           areaStyles === 'header / header / header / header';
         expect(correctArea).toBe(true);
       }
@@ -140,7 +140,7 @@ describe('grid area child directive', () => {
 
   describe('with responsive features', () => {
     it('should add row styles for a child', () => {
-      let template = `
+      const template = `
               <div gdArea="sidebar" gdArea.xs="footer"></div>
           `;
       createTestComponent(template);
@@ -158,9 +158,9 @@ describe('grid area child directive', () => {
         }, styler);
       } else {
         fixture.detectChanges();
-        let areaStyles = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
+        const areaStyles = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
           'grid-area');
-        let correctArea = areaStyles === 'sidebar' ||
+        const correctArea = areaStyles === 'sidebar' ||
           areaStyles === 'sidebar / sidebar / sidebar / sidebar';
         expect(correctArea).toBe(true);
       }
@@ -174,9 +174,9 @@ describe('grid area child directive', () => {
           'grid-column-end': 'footer',
         }, styler);
       } else {
-        let areaStyles = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
+        const areaStyles = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
           'grid-area');
-        let correctArea = areaStyles === 'footer' ||
+        const correctArea = areaStyles === 'footer' ||
           areaStyles === 'footer / footer / footer / footer';
         expect(correctArea).toBe(true);
       }
@@ -190,9 +190,9 @@ describe('grid area child directive', () => {
           'grid-column-end': 'sidebar',
         }, styler);
       } else {
-        let areaStyles = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
+        const areaStyles = styler.lookupStyle(fixture.debugElement.children[0].nativeElement,
           'grid-area');
-        let correctArea = areaStyles === 'sidebar' ||
+        const correctArea = areaStyles === 'sidebar' ||
           areaStyles === 'sidebar / sidebar / sidebar / sidebar';
         expect(correctArea).toBe(true);
       }

@@ -554,11 +554,11 @@ export class DragContainerRef<T = any> extends DndContainerRef<T> {
   _getSiblingContainerFromPosition(item: DragRef, x: number,
                                    y: number): DndContainerRef | undefined {
     // Possible targets include siblings and 'this'
-    let targets = [this, ...this._siblings];
+    const targets = [this, ...this._siblings];
 
     // Only consider targets where the drag postition is within the client rect
     // (this avoids calling enterPredicate on each possible target)
-    let matchingTargets = targets.filter(ref => {
+    const matchingTargets = targets.filter(ref => {
       return ref._clientRect && isInsideClientRect(ref._clientRect, x, y);
     });
 
@@ -568,10 +568,10 @@ export class DragContainerRef<T = any> extends DndContainerRef<T> {
     }
 
     // Order candidates by DOM hierarchy and z-index
-    let orderedMatchingTargets = orderByHierarchy(matchingTargets);
+    const orderedMatchingTargets = orderByHierarchy(matchingTargets);
 
     // The drop target is the last matching target in the list
-    let matchingTarget = orderedMatchingTargets[orderedMatchingTargets.length - 1];
+    const matchingTarget = orderedMatchingTargets[orderedMatchingTargets.length - 1];
 
     // Only return matching target if it is a sibling
     if (matchingTarget === this) {

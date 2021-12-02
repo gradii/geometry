@@ -4,11 +4,11 @@
 $accordion-prefix-cls : "#{v.$tri-prefix}-accordion";
 
 @mixin accordion-close() {
-  @include mixins.iconfont-size-under-12px(9px, 0);
+  @include mixins.iconfont-size-under-12px(6px, 0);
 }
 
 @mixin accordion-open() {
-  @include mixins.iconfont-size-under-12px(9px, 90deg);
+  @include mixins.iconfont-size-under-12px(6px, 90deg);
 }
 
 .#{$accordion-prefix-cls} {
@@ -27,22 +27,22 @@ $accordion-prefix-cls : "#{v.$tri-prefix}-accordion";
 
     > .#{$accordion-prefix-cls}-header {
       line-height : 22px;
-      padding     : 8px 0 8px 32px;
+      padding     : 8px 0 8px 8px;
       cursor      : pointer;
       position    : relative;
       transition  : all .3s;
 
+      display: flex;
+      align-items: center;
+
       .arrow {
         @include accordion-close();
-        position       : absolute;
         display        : inline-block;
         font-weight    : bold;
         vertical-align : middle;
         transition     : transform 0.24s;
-        top            : 0;
-        bottom         : 0;
-        height         : 100%;
-        left           : 16px;
+        height         : 1.5rem;
+        width: 1.5rem;
       }
     }
   }
@@ -68,6 +68,14 @@ $accordion-prefix-cls : "#{v.$tri-prefix}-accordion";
 
     @at-root &-inactive {
       display : none;
+    }
+  }
+
+  @at-root &#{&}-borderless {
+    > .#{$accordion-prefix-cls}-item:last-child {
+      > .#{$accordion-prefix-cls}-header {
+        border-radius: 0;
+      }
     }
   }
 

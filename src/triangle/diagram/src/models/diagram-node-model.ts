@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -13,7 +19,7 @@
  */
 
 import * as _ from 'lodash';
-import { DeserializeEvent } from '../canvas-core/core-models/base-entity';
+import { DeserializeContext } from '../canvas-core/core-models/base-entity';
 import { BasePositionModelOptions } from '../canvas-core/core-models/base-position-model';
 import { NodeModel, NodeModelGenerics } from '../diagram-core/entities/node/node-model';
 import { PortModelAlignment, PortModelAnchor } from '../diagram-core/entities/port/port-model';
@@ -34,6 +40,7 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 
   name: string;
   color: string;
+  description: string;
 
   /**
    *
@@ -46,28 +53,30 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
   constructor(options: any = {}, color?: string) {
     if (typeof options === 'string') {
       options = {
-        name : options,
+        name: options,
         color: color
       };
     }
     const {
-            type          = 'default',
-            name          = 'Untitled',
-            color: _color = 'rgb(0,192,255)'
-          } = options;
+      type = 'default',
+      name = 'Untitled',
+      description = '',
+      color: _color = 'rgb(0,192,255)'
+    } = options;
     super(options);
 
     this.type = type;
 
     this.portsOut = [];
-    this.portsIn  = [];
+    this.portsIn = [];
 
-    this.name  = name;
+    this.name = name;
+    this.description = description;
     this.color = _color;
   }
 
   doClone(lookupTable: {}, clone: any): void {
-    clone.portsIn  = [];
+    clone.portsIn = [];
     clone.portsOut = [];
     super.doClone(lookupTable, clone);
   }
@@ -79,6 +88,14 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     } else {
       this.portsOut.splice(this.portsOut.indexOf(port), 1);
     }
+  }
+
+  getPort(name: string) {
+    return this.ports[name];
+  }
+
+  existPort<T extends DiagramPortModel>(port: T): boolean {
+    return port.getName() in this.ports;
   }
 
   addPort<T extends DiagramPortModel>(port: T): T {
@@ -96,12 +113,16 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
   }
 
   addInPort(name: string, label: string = name, after = true): DiagramPortModel {
-    const p = new DiagramPortModel({
-      in       : true,
-      name     : name,
-      label    : label,
+    let p: DiagramPortModel = this.getPort(name) as DiagramPortModel;
+    if (p) {
+      return p;
+    }
+    p = new DiagramPortModel({
+      in: true,
+      name: name,
+      label: label,
       alignment: PortModelAlignment.LEFT,
-      anchor   : PortModelAnchor.leftCenter,
+      anchor: PortModelAnchor.leftCenter,
     });
     if (!after) {
       this.portsIn.splice(0, 0, p);
@@ -110,12 +131,16 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
   }
 
   addOutPort(name: string, label: string = name, after = true): DiagramPortModel {
-    const p = new DiagramPortModel({
-      in       : false,
-      name     : name,
-      label    : label,
+    let p: DiagramPortModel = this.getPort(name) as DiagramPortModel;
+    if (p) {
+      return p;
+    }
+    p = new DiagramPortModel({
+      in: false,
+      name: name,
+      label: label,
       alignment: PortModelAlignment.RIGHT,
-      anchor   : PortModelAnchor.rightCenter,
+      anchor: PortModelAnchor.rightCenter,
     });
     if (!after) {
       this.portsOut.splice(0, 0, p);
@@ -123,32 +148,29 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     return this.addPort(p);
   }
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
+  deserialize(data: ReturnType<this['serialize']>, context: DeserializeContext<this>) {
+    super.deserialize(data, context);
 
     // deserialize ports
-    _.forEach(event.data.ports, (port: any) => {
+    _.forEach(data.ports, (port: any) => {
       let portOb;
       if (port.type === 'default') {
         portOb = new DiagramPortModel(port.in);
       } else {
         throw new Error('support "default" node port type only');
       }
-      portOb.deserialize({
-        ...event,
-        data: port
-      });
+      portOb.deserialize(port, context);
       // the links need these
-      event.registerModel(portOb);
+      context.registerModel(portOb);
       this.addPort(portOb);
     });
 
-    this.name     = event.data.name;
-    this.color    = event.data.color;
-    this.portsIn  = _.map(event.data.portsInOrder, (id) => {
+    this.name = data.name;
+    this.color = data.color;
+    this.portsIn = _.map(data.portsInOrder, (id) => {
       return this.getPortFromID(id);
     }) as DiagramPortModel[];
-    this.portsOut = _.map(event.data.portsOutOrder, (id) => {
+    this.portsOut = _.map(data.portsOutOrder, (id) => {
       return this.getPortFromID(id);
     }) as DiagramPortModel[];
   }
@@ -156,9 +178,9 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
   override serialize(): any {
     return {
       ...super.serialize(),
-      name         : this.name,
-      color        : this.color,
-      portsInOrder : _.map(this.portsIn, (port) => {
+      name: this.name,
+      color: this.color,
+      portsInOrder: _.map(this.portsIn, (port) => {
         return port.getID();
       }),
       portsOutOrder: _.map(this.portsOut, (port) => {

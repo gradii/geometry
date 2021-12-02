@@ -19,12 +19,6 @@ ng_module(
     assets = [":style/confirm-popup.css"] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/confirm-popup",
     deps = [
-        "@npm//@angular/animations",
-        "@npm//@angular/common",
-        "@npm//@angular/core",
-        "@npm//@angular/forms",
-        "@npm//@angular/cdk",
-        "@npm//rxjs",
         "//src/triangle/core",
         "//src/triangle/util",
         "//src/triangle/i18n",
@@ -32,6 +26,12 @@ ng_module(
         #    "//src/triangle/locale",
         "//src/triangle/tooltip",
         "//src/triangle/popover",
+        "@npm//@angular/animations",
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/forms",
+        "@npm//@angular/cdk",
+        "@npm//rxjs",
     ],
 )
 

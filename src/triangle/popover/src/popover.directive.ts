@@ -14,7 +14,7 @@ import { DOCUMENT } from '@angular/common';
 import {
   Directive, ElementRef, Inject, Input, NgZone, Optional, ViewContainerRef
 } from '@angular/core';
-import { PopoverComponent, } from '@gradii/triangle/popover';
+import { PopoverComponent, } from './popover.component';
 import { _TriTooltipBase, TriTooltipDefaultOptions } from '@gradii/triangle/tooltip';
 import { TRI_POPOVER_DEFAULT_OPTIONS, TRI_POPOVER_SCROLL_STRATEGY } from './popover-common';
 
@@ -31,6 +31,12 @@ import { TRI_POPOVER_DEFAULT_OPTIONS, TRI_POPOVER_SCROLL_STRATEGY } from './popo
     'tooltipTrigger:triPopoverTrigger',
     'tooltipClass:triPopoverClass',
     'tooltipContext:triPopoverContext',
+    'width:triPopoverWidth',
+    'maxWidth:triPopoverMaxWidth',
+    'minWidth:triPopoverMinWidth',
+    'height:triPopoverHeight',
+    'maxHeight:triPopoverMaxHeight',
+    'minHeight:triPopoverMinHeight',
   ],
   host    : {
     'class': 'tri-popover-trigger'

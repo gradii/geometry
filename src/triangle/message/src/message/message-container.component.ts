@@ -15,7 +15,7 @@ import { MessageDataFilled, MessageDataOptions } from './message.definitions';
   providers: [
     {
       provide: TRI_INTERNAL_MESSAGE_CONTAINER,
-      useExisting: forwardRef(()=>MessageContainerComponent)
+      useExisting: forwardRef(() => MessageContainerComponent)
     }
   ],
   template     : `

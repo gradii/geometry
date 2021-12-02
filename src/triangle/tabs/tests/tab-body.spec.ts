@@ -17,7 +17,7 @@ import { TriTabBody, TriTabBodyPortal } from '../src/tab-body';
 
 describe('TriTabBody', () => {
   let dir: Direction = 'ltr';
-  let dirChange: Subject<Direction> = new Subject<Direction>();
+  const dirChange: Subject<Direction> = new Subject<Direction>();
 
   beforeEach(async(() => {
     dir = 'ltr';

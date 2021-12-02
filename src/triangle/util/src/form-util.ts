@@ -7,10 +7,10 @@
 import { FormGroup } from '@angular/forms';
 
 export function getDirtyValues(formGroup: FormGroup) {
-  let dirtyValues: any = {};  // initialize empty object
+  const dirtyValues: any = {};  // initialize empty object
   Object.keys(formGroup.controls).forEach((c) => {
 
-    let currentControl = formGroup.get(c);
+    const currentControl = formGroup.get(c);
 
     if (currentControl) {
       if (currentControl.dirty) {

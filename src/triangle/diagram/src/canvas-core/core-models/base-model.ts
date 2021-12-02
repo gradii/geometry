@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -15,12 +21,12 @@
 import { CanvasModel } from '../entities/canvas/canvas-model';
 import {
   BaseEntity, BaseEntityEvent, BaseEntityGenerics, BaseEntityListener, BaseEntityOptions,
-  DeserializeEvent
+  DeserializeContext
 } from './base-entity';
 
 export interface BaseModelEvent<T extends BaseEntity = BaseEntity> extends BaseEntityEvent<T> {
-  modelFiring: boolean,
-  stopModelPropagation: () => void
+  modelFiring: boolean;
+  stopModelPropagation: () => void;
 }
 
 
@@ -102,12 +108,12 @@ export class BaseModel<G extends BaseModelGenerics = BaseModelGenerics> extends 
     };
   }
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
+  deserialize(data: ReturnType<this['serialize']>, context: DeserializeContext<this>) {
+    super.deserialize(data, context);
 
-    this.type     = event.data.type;
-    this.extras   = event.data.extras;
-    this.selected = event.data.selected;
+    this.type     = data.type;
+    this.extras   = data.extras;
+    this.selected = data.selected;
   }
 
   getType(): string {

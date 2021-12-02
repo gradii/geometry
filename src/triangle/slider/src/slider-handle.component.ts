@@ -7,7 +7,7 @@
 import {
   Component, HostListener, Inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ViewEncapsulation
 } from '@angular/core';
-import { TRI_INTERNAL_SLIDER } from '@gradii/triangle/slider/src/slider.types';
+import { TRI_INTERNAL_SLIDER } from './slider.types';
 import { TooltipDirective } from '@gradii/triangle/tooltip';
 import type { SliderComponent } from './slider.component';
 

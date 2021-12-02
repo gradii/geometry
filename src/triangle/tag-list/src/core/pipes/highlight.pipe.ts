@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {Pipe, PipeTransform} from '@angular/core';
 
 const escape = s => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');

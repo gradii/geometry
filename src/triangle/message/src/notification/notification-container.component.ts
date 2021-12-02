@@ -17,7 +17,7 @@ import {
   selector: 'tri-notification-container',
   encapsulation: ViewEncapsulation.None,
   providers: [
-    {provide: TRI_INTERNAL_MESSAGE_CONTAINER, useExisting: forwardRef(()=>NotificationContainerComponent)}
+    {provide: TRI_INTERNAL_MESSAGE_CONTAINER, useExisting: forwardRef(() => NotificationContainerComponent)}
   ],
   template: `
     <div class="tri-notification" [style.top]="config.top" [style.right]="config.right">

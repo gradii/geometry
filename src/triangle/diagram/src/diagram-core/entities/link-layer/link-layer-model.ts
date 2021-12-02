@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -13,7 +19,7 @@
  */
 
 import * as _ from 'lodash';
-import { DeserializeEvent } from '../../../canvas-core/core-models/base-entity';
+import { DeserializeContext } from '../../../canvas-core/core-models/base-entity';
 import { LayerModel, LayerModelGenerics } from '../../../canvas-core/entities/layer/layer-model';
 import { DiagramLinkModel } from '../../../models/diagram-link-model';
 import { DiagramEngine } from '../../diagram-engine';
@@ -63,14 +69,11 @@ export class LinkLayerModel<G extends LinkLayerModelGenerics = LinkLayerModelGen
     return this.getModels();
   }
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
-    _.forEach(event.data.models, (model) => {
+  deserialize(data: ReturnType<this['serialize']>, context: DeserializeContext<this>) {
+    super.deserialize(data, context);
+    _.forEach(data.models, (model) => {
       const modelOb = new DiagramLinkModel();
-      modelOb.deserialize({
-        ...event,
-        data: model
-      });
+      modelOb.deserialize(model, context);
       this.addModel(modelOb);
     });
   }

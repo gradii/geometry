@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Observable } from 'rxjs';
 import { ValidatorFn, AsyncValidatorFn } from '@angular/forms';
 

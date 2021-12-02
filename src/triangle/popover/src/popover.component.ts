@@ -75,14 +75,13 @@ export class PopoverComponent extends _TriTooltipComponentBase implements OnDest
   title: string;
 
   constructor(
-    protected _changeDetectorRef: ChangeDetectorRef,
     protected _elementRef: ElementRef,
     protected _ngZone: NgZone,
     protected _focusMonitor: FocusMonitor,
     protected _breakpointObserver: BreakpointObserver,
     protected _viewContainerRef: ViewContainerRef) {
 
-    super(_changeDetectorRef);
+    super();
 
     _ngZone.runOutsideAngular(() => {
       this._subscriptions.push(

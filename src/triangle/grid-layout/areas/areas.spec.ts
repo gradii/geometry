@@ -22,7 +22,7 @@ describe('grid area parent directive', () => {
   let mediaController: MockMatchMedia;
   let platform: Platform;
   let shouldRun = true;
-  let createTestComponent = (template: string, styles?: any) => {
+  const createTestComponent = (template: string, styles?: any) => {
     shouldRun = true;
     fixture = makeCreateTestComponent(() => TestGridAreaComponent)(template, styles);
     inject([StyleUtils, MatchMedia, Platform],
@@ -54,7 +54,7 @@ describe('grid area parent directive', () => {
 
   describe('with static features', () => {
     it('should add area styles for parent', () => {
-      let template = `
+      const template = `
               <div gdAreas="header | header | sidebar | footer">
                   <div gdArea="header"></div>
                   <div gdArea="sidebar"></div>
@@ -80,7 +80,7 @@ describe('grid area parent directive', () => {
     });
 
     it('should work with inline grid', () => {
-      let template = `
+      const template = `
               <div gdAreas="header | header | sidebar | footer" gdInline>
                   <div gdArea="header"></div>
                   <div gdArea="sidebar"></div>
@@ -106,7 +106,7 @@ describe('grid area parent directive', () => {
     });
 
     it('should work with weird spacing', () => {
-      let template = `
+      const template = `
               <div gdAreas="header| header |sidebar | footer       ">
                   <div gdArea="header"></div>
                   <div gdArea="sidebar"></div>
@@ -132,7 +132,7 @@ describe('grid area parent directive', () => {
     });
 
     it('should add dynamic area styles', () => {
-      let template = `
+      const template = `
             <div [gdAreas]='areas'></div>
           `;
       createTestComponent(template);
@@ -162,7 +162,7 @@ describe('grid area parent directive', () => {
 
   describe('with responsive features', () => {
     it('should add row styles for a child', () => {
-      let template = `
+      const template = `
               <div gdAreas="header header header | sidebar content content | footer footer footer"
                    gdAreas.xs="header header | sidebar content | footer footer"></div>
           `;

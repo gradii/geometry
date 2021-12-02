@@ -170,7 +170,7 @@ export class NativeDateAdapter extends DateAdapter<Date> {
       }
     }
 
-    let result = this._createDateWithOverflow(year, month, date);
+    const result = this._createDateWithOverflow(year, month, date);
     // Check that the date wasn't above the upper bound for the month, causing the month to overflow
     if (result.getMonth() != month && (typeof ngDevMode === 'undefined' || ngDevMode)) {
       throw Error(`Invalid date "${date}" for month with index "${month}".`);
@@ -258,7 +258,7 @@ export class NativeDateAdapter extends DateAdapter<Date> {
       // The `Date` constructor accepts formats other than ISO 8601, so we need to make sure the
       // string is the right format first.
       if (ISO_8601_REGEX.test(value)) {
-        let date = new Date(value);
+        const date = new Date(value);
         if (this.isValid(date)) {
           return date;
         }

@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -11,7 +17,7 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
-import { DeserializeEvent } from '../canvas-core/core-models/base-entity';
+import { DeserializeContext } from '../canvas-core/core-models/base-entity';
 import {
   LabelModel, LabelModelGenerics, LabelModelOptions
 } from '../diagram-core/entities/label/label-model';
@@ -48,9 +54,9 @@ export class DiagramLabelModel extends LabelModel<DefaultLabelModelGenerics> {
     this.label = label;
   }
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
-    this.label = event.data.label;
+  deserialize(data: ReturnType<this['serialize']>, context: DeserializeContext<this>) {
+    super.deserialize(data, context);
+    this.label = data.label;
   }
 
   serialize() {

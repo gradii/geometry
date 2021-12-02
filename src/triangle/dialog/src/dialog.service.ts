@@ -312,7 +312,7 @@ export class TriDialogService implements OnDestroy {
       const siblings = overlayContainer.parentElement.children;
 
       for (let i = siblings.length - 1; i > -1; i--) {
-        let sibling = siblings[i];
+        const sibling = siblings[i];
 
         if (sibling !== overlayContainer &&
           sibling.nodeName !== 'SCRIPT' &&

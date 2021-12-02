@@ -5,7 +5,7 @@
  */
 
 import { Component, HostBinding, Inject, TemplateRef } from '@angular/core';
-import { TRI_INTERNAL_DATA_TABLE } from '@gradii/triangle/data-table/src/data-table.types';
+import { TRI_INTERNAL_DATA_TABLE } from '../data-table.types';
 import type { DataTableComponent } from '../data-table.component';
 
 @Component({

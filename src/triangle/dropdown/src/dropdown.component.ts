@@ -24,7 +24,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { DEFAULT_DROPDOWN_POSITIONS, DropDownAnimation, POSITION_MAP_LTR } from '@gradii/triangle/core';
-import { MenuComponent } from '@gradii/triangle/menu';
+// import { MenuComponent } from '@gradii/triangle/menu';
 import { merge, Observable, Observer, Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { DropDownDirective } from './dropdown.directive';
@@ -106,7 +106,7 @@ export class DropDownComponent implements OnInit, OnDestroy, AfterViewInit {
    * 用于定位触发下拉菜单的元素
    */
   @ContentChild(DropDownDirective, {static: false}) _origin: DropDownDirective;
-  @ContentChild(MenuComponent, {static: false}) _menu: MenuComponent;
+  // @ContentChild(Menu, {static: false}) _menu: MenuComponent;
   /**
    * the behavior of trigger dropdown.
    * 触发下拉的行为
@@ -242,9 +242,9 @@ export class DropDownComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    if (this._menu) {
-      // this._menu.setDropDown(true);
-    }
+    // if (this._menu) {
+    //   // this._menu.setDropDown(true);
+    // }
     setTimeout(() => {
       this.handleTriggerEvt();
     }, 300);

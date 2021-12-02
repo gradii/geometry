@@ -26,7 +26,7 @@ describe('grid column child directive', () => {
   let mediaController: MockMatchMedia;
   let platform: Platform;
   let shouldRun = true;
-  let createTestComponent = (template: string, styles?: any) => {
+  const createTestComponent = (template: string, styles?: any) => {
     shouldRun = true;
     fixture = makeCreateTestComponent(() => TestGridColumnComponent)(template, styles);
     inject([StyleUtils, MatchMedia, Platform],
@@ -58,7 +58,7 @@ describe('grid column child directive', () => {
 
   describe('with static features', () => {
     it('should add column styles for children', () => {
-      let template = `
+      const template = `
               <div gdAuto>
                   <div gdColumn="span 3 / 6"></div>
                   <div gdColumn="span 2 / 6"></div>
@@ -73,7 +73,7 @@ describe('grid column child directive', () => {
 
       fixture.detectChanges();
 
-      let nodes = queryFor(fixture, '[gdColumn]');
+      const nodes = queryFor(fixture, '[gdColumn]');
       expect(nodes.length).toBe(3);
 
       if (platform.WEBKIT) {
@@ -87,7 +87,7 @@ describe('grid column child directive', () => {
     });
 
     it('should add dynamic column styles', () => {
-      let template = `
+      const template = `
             <div [gdColumn]='col'></div>
           `;
       createTestComponent(template);
@@ -117,7 +117,7 @@ describe('grid column child directive', () => {
 
   describe('with responsive features', () => {
     it('should add row styles for a child', () => {
-      let template = `
+      const template = `
               <div gdColumn="sidebar" gdColumn.xs="footer"></div>
           `;
       createTestComponent(template);

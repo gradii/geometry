@@ -1,13 +1,19 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TriCommonModule } from '@gradii/triangle/core';
 import { TriIconModule } from '@gradii/triangle/icon';
-import { OptionContainerComponent } from '@gradii/triangle/tree-select/src/option-container.component';
-import { SelectTopControlComponent } from '@gradii/triangle/tree-select/src/select-top-control.component';
-import { SelectUnselectableDirective } from '@gradii/triangle/tree-select/src/select-unselectable.directive';
-import { SelectComponent } from '@gradii/triangle/tree-select/src/select.component';
+import { OptionContainerComponent } from './option-container.component';
+import { SelectTopControlComponent } from './select-top-control.component';
+import { SelectComponent } from './select.component';
+import { SelectUnselectableDirective } from '@gradii/triangle/select';
 
 @NgModule({
     imports: [

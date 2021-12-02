@@ -32,5 +32,5 @@ export class ContentViewPort {
   viewportPixelYToContent(y: number) {
     return y - this.top;
   }
-  
+
 }

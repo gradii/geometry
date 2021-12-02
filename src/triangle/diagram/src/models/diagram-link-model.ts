@@ -1,10 +1,9 @@
 /**
  * @license
- * Copyright Google LLC All Rights Reserved.
  *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * Use of this source code is governed by an MIT-style license
  */
+
 
 /**
  * @license
@@ -14,7 +13,7 @@
 
 import { BezierCurve, Vector2 } from '@gradii/vector-math';
 import * as _ from 'lodash';
-import { BaseEntityEvent, DeserializeEvent, } from '../canvas-core/core-models/base-entity';
+import { BaseEntityEvent, DeserializeContext, } from '../canvas-core/core-models/base-entity';
 import { BaseModelOptions } from '../canvas-core/core-models/base-model';
 import { LabelModel } from '../diagram-core/entities/label/label-model';
 import {
@@ -143,42 +142,37 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
     throw new Error('runtime exception, currently only support two points in link');
   }
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
+  deserialize(data: ReturnType<this['serialize']>, context: DeserializeContext<this>) {
+    super.deserialize(data, context);
 
-    this.color         = event.data.color;
-    this.width         = event.data.width;
-    this.curvyness     = event.data.curvyness;
-    this.selectedColor = event.data.selectedColor;
+    this.color         = data.color;
+    this.width         = data.width;
+    this.curvyness     = data.curvyness;
+    this.selectedColor = data.selectedColor;
 
     // deserialize labels
-    _.forEach(event.data.labels || [], (label: any) => {
+    _.forEach(data.labels || [], (label: any) => {
       let labelOb;
       if (label.type === 'default') {
         labelOb = new DiagramLabelModel();
       } else {
         throw new Error(`${label.type} not support, only "default" type label available`);
       }
-      labelOb.deserialize({
-        ...event,
-        data: label
-      });
+      labelOb.deserialize(label, context);
       this.addLabel(labelOb);
     });
 
     // these happen async, so we use the promises for these (they need to be done like this without the async keyword
     // because we need the deserailize method to finish for other methods while this happen
-    if (event.data.target) {
-      event.getModel<PortModel>(event.data.targetPort)
-        .then((model: PortModel) => {
-          this.setTargetPort(model);
-        });
+    if (data.target) {
+      context.getModel<PortModel>(data.targetPort, (model: PortModel) => {
+        this.setTargetPort(model);
+      });
     }
-    if (event.data.source) {
-      event.getModel<PortModel>(event.data.sourcePort)
-        .then((model: PortModel) => {
-          this.setSourcePort(model);
-        });
+    if (data.source) {
+      context.getModel<PortModel>(data.sourcePort, (model: PortModel) => {
+        this.setSourcePort(model);
+      });
     }
   }
 
@@ -203,12 +197,12 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
 
   setWidth(width: number) {
     this.width = width;
-    this.fireEvent({width}, 'widthChanged');
+    this.fireEvent({ width }, 'widthChanged');
   }
 
   setColor(color: string) {
     this.color = color;
-    this.fireEvent({color}, 'colorChanged');
+    this.fireEvent({ color }, 'colorChanged');
   }
 
   override attach() {

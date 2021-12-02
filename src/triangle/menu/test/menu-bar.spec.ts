@@ -191,7 +191,7 @@ describe('MenuBar', () => {
           dispatchKeyboardEvent(nativeMenuBar, 'keydown', END);
           detectChanges();
 
-          let event = createKeyboardEvent('keydown', HOME, '', {control: true});
+          const event = createKeyboardEvent('keydown', HOME, '', {control: true});
           dispatchEvent(nativeMenuBar, event);
           detectChanges();
 

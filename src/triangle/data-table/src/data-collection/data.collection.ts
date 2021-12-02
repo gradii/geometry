@@ -63,7 +63,7 @@ export class DataCollection<T> {
   }
 
   * [Symbol.iterator](): Iterator<T> {
-    for (let item of this.accessor) {
+    for (const item of this.accessor) {
       yield item;
     }
 

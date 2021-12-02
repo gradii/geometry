@@ -16,3 +16,7 @@ export * from './src/form-split.directive';
 export * from './src/form-text.directive';
 export * from './src/form-error-message.directive';
 export * from './src/form-no-feedback.directive';
+
+export * from './src/directive/trim.directive';
+export * from './src/validators/email-validator.directive';
+export * from './src/validators/password-validator.directive';

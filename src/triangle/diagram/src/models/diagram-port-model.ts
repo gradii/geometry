@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -13,7 +19,7 @@
  */
 
 
-import { DeserializeEvent } from '../canvas-core/core-models/base-entity';
+import { DeserializeContext } from '../canvas-core/core-models/base-entity';
 // import { AbstractModelFactory } from '../../canvas-core/core/abstract-model-factory';
 import { LinkModel } from '../diagram-core/entities/link/link-model';
 import {
@@ -65,10 +71,10 @@ export class DiagramPortModel extends PortModel<DefaultPortModelGenerics> {
   }
 
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
-    this.in    = event.data.in;
-    this.label = event.data.label;
+  deserialize(data: ReturnType<this['serialize']>, context: DeserializeContext<this>) {
+    super.deserialize(data, context);
+    this.in    = data.in;
+    this.label = data.label;
   }
 
   serialize() {
@@ -80,7 +86,7 @@ export class DiagramPortModel extends PortModel<DefaultPortModelGenerics> {
   }
 
   link<T extends LinkModel>(port: PortModel): T {
-    let link = this.createLinkModel();
+    const link = this.createLinkModel();
     link.setSourcePort(this);
     link.setTargetPort(port);
     return link as T;
@@ -101,7 +107,7 @@ export class DiagramPortModel extends PortModel<DefaultPortModelGenerics> {
   }
 
   createLinkModel(/*factory?: AbstractModelFactory<LinkModel>*/): LinkModel {
-    let link = super.createLinkModel();
+    const link = super.createLinkModel();
     // if (!link && factory) {
     //   return factory.generateModel({});
     // }

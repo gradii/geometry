@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -76,7 +82,7 @@ export abstract class State<E extends CanvasEngine = CanvasEngine> {
   }
 
   findStateToActivate(keys: string[]) {
-    for (let child of this.childStates) {
+    for (const child of this.childStates) {
       if (child.isKeysFullfilled(keys)) {
         return child;
       }
@@ -115,7 +121,7 @@ export abstract class State<E extends CanvasEngine = CanvasEngine> {
       })
     );
 
-    for (let action of this.actions) {
+    for (const action of this.actions) {
       this.engine.getActionEventBus().registerAction(action);
     }
   }
@@ -128,7 +134,7 @@ export abstract class State<E extends CanvasEngine = CanvasEngine> {
       this.handler2();
     }
     // if this happens, we are going into heirachial state machine mode
-    for (let action of this.actions) {
+    for (const action of this.actions) {
       this.engine.getActionEventBus().deregisterAction(action);
     }
   }

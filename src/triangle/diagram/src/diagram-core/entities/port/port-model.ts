@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -14,7 +20,7 @@
 
 import { Rectangle, Vector2 } from '@gradii/vector-math';
 import * as _ from 'lodash';
-import { BaseEntityEvent, DeserializeEvent } from '../../../canvas-core/core-models/base-entity';
+import { BaseEntityEvent, DeserializeContext } from '../../../canvas-core/core-models/base-entity';
 import { BaseModelOptions } from '../../../canvas-core/core-models/base-model';
 import {
   BasePositionModel, BasePositionModelGenerics, BasePositionModelListener
@@ -92,12 +98,14 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
     this.anchor           = options.anchor;
   }
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
+  deserialize(data: ReturnType<this['serialize']>, context: DeserializeContext<this>) {
+    super.deserialize(data, context);
     this.reportedPosition = false;
 
-    this.name      = event.data.name;
-    this.alignment = event.data.alignment;
+    this.name      = data.name;
+    this.alignment = data.alignment;
+    this.maximumLinks = data.maximumLinks;
+    this.anchor = data.anchor;
   }
 
   serialize() {
@@ -105,6 +113,8 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
       ...super.serialize(),
       name      : this.name,
       alignment : this.alignment,
+      maximumLinks: this.maximumLinks,
+      anchor    : this.anchor,
       parentNode: this.parent.getID(),
       links     : Array.from(this.links.values()).map((link) => {
         return link.getID();

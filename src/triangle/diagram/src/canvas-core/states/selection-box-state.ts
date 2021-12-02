@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -41,7 +47,7 @@ export class SelectionBoxState extends AbstractDisplacementState {
 
   activated(previous: State) {
     super.activated(previous);
-    this.boxSelection.clear()
+    this.boxSelection.clear();
 
     this.layer = new SelectionLayerModel();
     this.engine.getModel().addLayer(this.layer);
@@ -54,7 +60,7 @@ export class SelectionBoxState extends AbstractDisplacementState {
       selection: Array.from(this.boxSelection),
     }, 'selection');
 
-    this.boxSelection.clear()
+    this.boxSelection.clear();
 
     this.layer.remove();
     this.engine.repaintCanvas();
@@ -90,7 +96,7 @@ export class SelectionBoxState extends AbstractDisplacementState {
     const rect = Rectangle.createFromBounds(relative.x, relative.y,
       Math.abs(event.virtualDisplacementX), Math.abs(event.virtualDisplacementY));
 
-    for (let model of this.engine.getModel().getSelectionEntities()) {
+    for (const model of this.engine.getModel().getSelectionEntities()) {
       if (((model as unknown) as ModelGeometryInterface).getBoundingBox) {
         const bounds = ((model as unknown) as ModelGeometryInterface).getBoundingBox();
         if (rect.containsPoint(bounds.getTopLeft()) && rect.containsPoint(

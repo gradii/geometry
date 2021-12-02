@@ -64,6 +64,15 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
 
   protected _tooltipPrefix = 'tri-tooltip';
 
+  @Input('triTooltipWidth') width: number;
+  @Input('triTooltipMaxWidth') maxWidth: number;
+  @Input('triTooltipMinWidth') minWidth: number;
+
+  @Input('triTooltipHeight') height: number;
+  @Input('triTooltipMaxHeight') maxHeight: number;
+  @Input('triTooltipMinHeight') minHeight: number;
+
+
   /** Allows the user to define the position of the tooltip relative to the parent element */
   @Input('triTooltipPosition')
   get position(): TooltipPosition {
@@ -365,7 +374,13 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
       direction       : this._dir,
       positionStrategy: strategy,
       panelClass      : `${this._tooltipPrefix}-panel`,
-      scrollStrategy  : this._scrollStrategy()
+      scrollStrategy  : this._scrollStrategy(),
+      width           : this.width,
+      maxWidth        : this.maxWidth,
+      minWidth        : this.minWidth,
+      height          : this.height,
+      maxHeight       : this.maxHeight,
+      minHeight       : this.minHeight,
     });
 
     this._updatePosition();
@@ -545,7 +560,7 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
 
     const targetMap = this._dir && this._dir.value === 'rtl' ? POSITION_MAP_RTL : POSITION_MAP_LTR;
 
-    for (let [key, target] of Object.entries(targetMap)) {
+    for (const [key, target] of Object.entries(targetMap)) {
       if (target.originX === originX &&
         target.originY === originY &&
         target.overlayX === overlayX &&
@@ -695,7 +710,7 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
         (style as any).webkitUserDrag = 'none';
       }
 
-      style.touchAction             = 'none';
+      style.touchAction                      = 'none';
       (style as any).webkitTapHighlightColor = 'transparent';
     }
   }

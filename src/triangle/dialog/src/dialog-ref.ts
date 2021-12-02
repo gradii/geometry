@@ -139,7 +139,7 @@ export class TriDialogRef<T, R = any> {
    * @param position New dialog position.
    */
   updatePosition(position?: DialogPosition): this {
-    let strategy = this._getPositionStrategy();
+    const strategy = this._getPositionStrategy();
 
     if (position && (position.left || position.right)) {
       position.left ? strategy.left(position.left) : strategy.right(position.right);

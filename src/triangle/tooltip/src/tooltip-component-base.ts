@@ -6,10 +6,10 @@
 
 import { AnimationEvent } from '@angular/animations';
 import {
-  ChangeDetectorRef,
   Directive,
   OnDestroy,
-  TemplateRef
+  TemplateRef,
+  ɵmarkDirty
 } from '@angular/core';
 import {
   Observable,
@@ -50,8 +50,7 @@ export abstract class _TriTooltipComponentBase implements OnDestroy {
   /** Subject for notifying that the tooltip has been hidden from the view */
   protected readonly _onHide: Subject<void> = new Subject();
 
-  protected constructor(protected _changeDetectorRef: ChangeDetectorRef,
-  ) {
+  protected constructor() {
   }
 
   /**
@@ -138,6 +137,6 @@ export abstract class _TriTooltipComponentBase implements OnDestroy {
    * can be problematic in components with OnPush change detection.
    */
   _markForCheck(): void {
-    this._changeDetectorRef.markForCheck();
+    ɵmarkDirty(this);
   }
 }

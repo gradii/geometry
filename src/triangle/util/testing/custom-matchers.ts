@@ -160,7 +160,7 @@ export const customMatchers: jasmine.CustomMatcherFactories = {
     return {
       compare: function (actual: any, map: { [k: string]: string }) {
         let allPassed: boolean;
-        let attributeNames = Object.keys(map);
+        const attributeNames = Object.keys(map);
         allPassed = attributeNames.length !== 0;
         attributeNames.forEach(name => {
           allPassed = allPassed && _.hasAttribute(actual, name)
@@ -217,7 +217,7 @@ function buildCompareStyleFunction(inlineOnly = true) {
 
     let allPassed = Object.keys(styleMap).length !== 0;
     Object.keys(styleMap).forEach(prop => {
-      let {elHasStyle, current} = hasPrefixedStyles(actual, prop, styleMap[prop], inlineOnly,
+      const {elHasStyle, current} = hasPrefixedStyles(actual, prop, styleMap[prop], inlineOnly,
         styler);
       allPassed = allPassed && elHasStyle;
       if (!elHasStyle) {
@@ -259,7 +259,7 @@ function hasPrefixedStyles(actual: HTMLElement,
   value = value.trim();
   let elHasStyle = styler.lookupStyle(actual, key, inlineOnly) === value;
   if (!elHasStyle) {
-    let prefixedStyles = applyCssPrefixes({[key]: value});
+    const prefixedStyles = applyCssPrefixes({[key]: value});
     Object.keys(prefixedStyles).forEach(prop => {
       // Search for optional prefixed values
       elHasStyle = elHasStyle ||

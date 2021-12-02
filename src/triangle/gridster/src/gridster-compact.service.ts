@@ -112,7 +112,7 @@ export class GridsterCompact {
     let widgetMoved = false;
     if (direction == 'y') {
       const sorted            = this.getSortedItems('xy');
-      let heightMap: number[] = [];
+      const heightMap: number[] = [];
       const fn                = (prev: number[], item: GridsterItemComponentInterface) => {
         const blockWidth  = item.$item.cols;
         const blockHeight = item.$item.rows;
@@ -142,7 +142,7 @@ export class GridsterCompact {
       delta == -1 ? sorted.reduce(fn, heightMap) : sorted.reduceRight(fn, heightMap);
     } else {
       const sorted            = this.getSortedItems('yx');
-      let heightMap: number[] = [];
+      const heightMap: number[] = [];
       sorted.forEach(item => {
         const blockWidth  = item.$item.rows;
         const blockHeight = item.$item.cols;

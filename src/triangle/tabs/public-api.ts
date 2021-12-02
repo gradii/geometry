@@ -20,5 +20,9 @@ export { TriTab, TRI_TAB_GROUP } from './src/tab';
 export { TriTabLabel } from './src/tab-label';
 export { TriTabContent } from './src/tab-content';
 export { ScrollDirection } from './src/paginated-tab-header';
+export {
+  TriPaginatedTabHeader as ɵTriPaginatedTabHeader,
+  TriPaginatedTabHeaderItem as ɵTriPaginatedTabHeaderItem
+} from './src/paginated-tab-header';
 export * from './src/tabs-animations';
 export { TRI_TABS_CONFIG, TriTabsConfig } from './src/tab-config';

@@ -10,7 +10,7 @@ import { NgModule } from '@angular/core';
 import { NOTIFICATION_DEFAULT_CONFIG_PROVIDER } from './notification-config';
 import { NotificationContainerComponent } from './notification-container.component';
 import { NotificationComponent } from './notification.component';
-import { NotificationService } from './notification.service';
+import { TriNotificationService } from './notification.service';
 
 /**
  *
@@ -58,7 +58,7 @@ import { NotificationService } from './notification.service';
 @NgModule({
   imports     : [CommonModule, OverlayModule],
   declarations: [NotificationComponent, NotificationContainerComponent],
-  providers   : [NOTIFICATION_DEFAULT_CONFIG_PROVIDER, NotificationService],
+  providers   : [NOTIFICATION_DEFAULT_CONFIG_PROVIDER, TriNotificationService],
 })
 export class TriNotificationModule {
 }

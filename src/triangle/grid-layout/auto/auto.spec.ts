@@ -22,7 +22,7 @@ describe('grid auto parent directive', () => {
   let mediaController: MockMatchMedia;
   let platform: Platform;
   let shouldRun = true;
-  let createTestComponent = (template: string, styles?: any) => {
+  const createTestComponent = (template: string, styles?: any) => {
     shouldRun = true;
     fixture = makeCreateTestComponent(() => TestGridAutoComponent)(template, styles);
     inject([StyleUtils, MatchMedia, Platform],
@@ -54,7 +54,7 @@ describe('grid auto parent directive', () => {
 
   describe('with static features', () => {
     it('should add auto styles for parent', () => {
-      let template = `
+      const template = `
               <div gdAuto>
                   <div gdArea="header"></div>
                   <div gdArea="sidebar"></div>
@@ -74,7 +74,7 @@ describe('grid auto parent directive', () => {
     });
 
     it('should work with inline grid', () => {
-      let template = `
+      const template = `
               <div gdAuto gdInline>
                   <div gdArea="header"></div>
                   <div gdArea="sidebar"></div>
@@ -94,7 +94,7 @@ describe('grid auto parent directive', () => {
     });
 
     it('should work with row values', () => {
-      let template = `
+      const template = `
               <div gdAuto="row">
                   <div gdArea="header"></div>
                   <div gdArea="sidebar"></div>
@@ -114,7 +114,7 @@ describe('grid auto parent directive', () => {
     });
 
     it('should work with column values', () => {
-      let template = `
+      const template = `
               <div gdAuto="column">
                   <div gdArea="header"></div>
                   <div gdArea="sidebar"></div>
@@ -134,7 +134,7 @@ describe('grid auto parent directive', () => {
     });
 
     it('should work with dense values', () => {
-      let template = `
+      const template = `
               <div gdAuto="dense">
                   <div gdArea="header"></div>
                   <div gdArea="sidebar"></div>
@@ -154,7 +154,7 @@ describe('grid auto parent directive', () => {
     });
 
     it('should filter double dense values', () => {
-      let template = `
+      const template = `
               <div gdAuto="dense dense">
                   <div gdArea="header"></div>
                   <div gdArea="sidebar"></div>
@@ -174,7 +174,7 @@ describe('grid auto parent directive', () => {
     });
 
     it('should work with column dense values', () => {
-      let template = `
+      const template = `
               <div gdAuto="column dense">
                   <div gdArea="header"></div>
                   <div gdArea="sidebar"></div>
@@ -194,7 +194,7 @@ describe('grid auto parent directive', () => {
     });
 
     it('should work with row dense values', () => {
-      let template = `
+      const template = `
               <div gdAuto="row dense">
                   <div gdArea="header"></div>
                   <div gdArea="sidebar"></div>
@@ -214,7 +214,7 @@ describe('grid auto parent directive', () => {
     });
 
     it('should work with invalid direction values', () => {
-      let template = `
+      const template = `
               <div gdAuto="invalid dense">
                   <div gdArea="header"></div>
                   <div gdArea="sidebar"></div>
@@ -234,7 +234,7 @@ describe('grid auto parent directive', () => {
     });
 
     it('should work with invalid dense values', () => {
-      let template = `
+      const template = `
               <div gdAuto="column den5e">
                   <div gdArea="header"></div>
                   <div gdArea="sidebar"></div>
@@ -254,7 +254,7 @@ describe('grid auto parent directive', () => {
     });
 
     it('should add dynamic area styles', () => {
-      let template = `
+      const template = `
             <div [gdAuto]='auto'></div>
           `;
       createTestComponent(template);
@@ -279,7 +279,7 @@ describe('grid auto parent directive', () => {
 
   describe('with responsive features', () => {
     it('should add row styles for a child', () => {
-      let template = `
+      const template = `
               <div gdAuto="row"
                    gdAuto.xs="column"></div>
           `;

@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -12,9 +18,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Vector2, Rectangle } from '@gradii/vector-math';
+import { Rectangle, Vector2 } from '@gradii/vector-math';
 import { ModelGeometryInterface } from '../core/model-geometry-interface';
-import { BaseEntityEvent, DeserializeEvent } from './base-entity';
+import { BaseEntityEvent, DeserializeContext } from './base-entity';
 import { BaseModel, BaseModelGenerics, BaseModelListener, BaseModelOptions } from './base-model';
 
 export interface BasePositionModelListener extends BaseModelListener {
@@ -54,9 +60,12 @@ export class BasePositionModel<G extends BasePositionModelGenerics = BasePositio
     return Rectangle.createFromBounds(this.position.x, this.position.y, 0, 0);
   }
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
-    this.position = new Vector2(event.data.x, event.data.y);
+  deserialize(data: ReturnType<this['serialize']>, context: DeserializeContext<this>) {
+    super.deserialize(data, context);
+    this.position = new Vector2(
+      data.x,
+      data.y
+    );
   }
 
   serialize() {

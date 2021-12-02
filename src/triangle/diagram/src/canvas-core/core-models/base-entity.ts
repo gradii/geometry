@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -14,11 +20,7 @@
 
 import * as _ from 'lodash';
 import { CanvasEngine } from '../canvas-engine';
-import {
-  BaseEvent,
-  BaseListener,
-  BaseObserver
-} from '../core/base-observer';
+import { BaseEvent, BaseListener, BaseObserver } from '../core/base-observer';
 import { Toolkit } from '../toolkit';
 import { BaseModel } from './base-model';
 
@@ -42,13 +44,14 @@ export type BaseEntityGenerics = {
   OPTIONS: BaseEntityOptions;
 };
 
-export interface DeserializeEvent<T extends BaseEntity = BaseEntity> {
+export interface DeserializeContext<T extends BaseEntity = BaseEntity> {
   engine: CanvasEngine;
-  data: ReturnType<T['serialize']>;
+
+  // data: ReturnType<T['serialize']>;
 
   registerModel(model: BaseModel): any;
 
-  getModel<M extends BaseModel>(id: string): Promise<M>;
+  getModel<M extends BaseModel>(id: string, cb: (m: M) => void): void;
 }
 
 export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> extends BaseObserver<T['LISTENER']> {
@@ -86,8 +89,8 @@ export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> exten
     if (lookupTable[this.id]) {
       return lookupTable[this.id];
     }
-    let clone     = _.cloneDeep(this);
-    clone.id = Toolkit.UID();
+    const clone = _.cloneDeep(this);
+    clone.id  = Toolkit.UID();
     clone.clearListeners();
     lookupTable[this.id] = clone;
 
@@ -99,12 +102,12 @@ export class BaseEntity<T extends BaseEntityGenerics = BaseEntityGenerics> exten
     this.listeners = {};
   }
 
-  deserialize(event: DeserializeEvent<this>) {
+  deserialize(data: ReturnType<this['serialize']>, context: DeserializeContext<this>) {
     // this.id     = event.data.id;
     // this.options.locked = event.data.locked;
 
-    this.id     = event.data.id;
-    this.locked = event.data.locked;
+    this.id     = data.id;
+    this.locked = data.locked;
   }
 
   serialize() {

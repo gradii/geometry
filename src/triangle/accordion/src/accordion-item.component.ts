@@ -62,6 +62,8 @@ import { AccordionComponent } from './accordion.component';
   ]
 })
 export class AccordionItemComponent {
+  static ngAcceptInputType_disabled: BooleanInput;
+
   private _el;
 
   @HostBinding('class.tri-accordion-item')
@@ -71,13 +73,21 @@ export class AccordionItemComponent {
    * 面板头内容
    */
   @Input() title: string;
+
+  private _disabled = false;
   /**
    * Whether current tab is disabled
    * 当前tab是否禁止选中
    */
   @Input()
   @HostBinding('class.tri-accordion-item-disabled')
-  disabled       = false;
+  get disabled(): boolean {
+    return this._disabled;
+  }
+
+  set disabled(value: boolean) {
+    this._disabled = coerceBooleanProperty(value);
+  }
 
   constructor(@Host() private _accordion: AccordionComponent,
               private _elementRef: ElementRef) {
@@ -97,10 +107,11 @@ export class AccordionItemComponent {
   }
 
   set expanded(active: boolean) {
+    active = coerceBooleanProperty(active);
     if (this._expanded === active) {
       return;
     }
-    if (!this.disabled) {
+    if (!this._disabled) {
       this._expanded = coerceBooleanProperty(active);
     }
   }
@@ -111,5 +122,5 @@ export class AccordionItemComponent {
     this._accordion.click(this);
   }
 
-  static ngAcceptInputType_expand: BooleanInput;
+  static ngAcceptInputType_expanded: BooleanInput;
 }

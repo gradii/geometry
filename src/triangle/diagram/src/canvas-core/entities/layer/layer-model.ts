@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -14,7 +20,7 @@
 
 import * as _ from 'lodash';
 import { CanvasEngine } from '../../canvas-engine';
-import { DeserializeEvent } from '../../core-models/base-entity';
+import { DeserializeContext } from '../../core-models/base-entity';
 // import { DeserializeEvent } from '../../core-models/base-entity';
 import {
   BaseModel,
@@ -70,13 +76,13 @@ export abstract class LayerModel<G extends LayerModelGenerics = LayerModelGeneri
    */
   // abstract getChildModelFactoryBank(engine: G['ENGINE']): FactoryBank<AbstractModelFactory<BaseModel>, FactoryBankListener>;
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
-    this.isSvg       = !!event.data.isSvg;
-    this.transformed = !!event.data.transformed;
+  deserialize(data: ReturnType<this['serialize']>, context: DeserializeContext<this>) {
+    super.deserialize(data, context);
+    this.isSvg       = !!data.isSvg;
+    this.transformed = !!data.transformed;
 
-    this.isSvg       = !!event.data.isSvg;
-    this.transformed = !!event.data.transformed;
+    this.isSvg       = !!data.isSvg;
+    this.transformed = !!data.transformed;
   }
 
   serialize() {

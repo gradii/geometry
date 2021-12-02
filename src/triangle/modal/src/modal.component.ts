@@ -581,7 +581,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   assignComponentParams(instance: any, params: any) {
-    for (let [key, value] of Object.entries(params)) {
+    for (const [key, value] of Object.entries(params)) {
       if (isPromise(value)) {
 
         (value as Promise<any>).then(_ => {

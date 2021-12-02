@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -12,7 +18,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Inject, Input, QueryList, ViewChildren } from '@angular/core';
+import { XPortLabelWidget } from './x-port-label-widget';
 import { ENGINE } from '../../canvas-core/tokens';
 import { DiagramNodeModel } from '../../models/diagram-node-model';
 import { DiagramEngine } from '../diagram-engine';
@@ -24,13 +31,14 @@ import { DiagramEngine } from '../diagram-engine';
 @Component({
   selector: 'x-node-widget',
   template: `
+  <div (cdkObserveContent)="_onContentChanges()">
     <div class="title">
       <div class="titleName">
         {{node.name}}
       </div>
     </div>
     <div class="description">
-
+      {{node.description}}
     </div>
     <div class="ports">
       <div class="portsContainer">
@@ -44,6 +52,7 @@ import { DiagramEngine } from '../diagram-engine';
         </ng-container>
       </div>
     </div>
+</div>
   `,
   host    : {
     '[style.borderColor]'       : 'node.isSelected() ? "rgb(0,192,255)" : "black"',
@@ -100,7 +109,14 @@ export class XNodeWidget {
 
   @Input() node: DiagramNodeModel;
 
+  @ViewChildren(XPortLabelWidget)
+  ports: QueryList<XPortLabelWidget>;
+
   constructor(@Inject(ENGINE) public engine: DiagramEngine) {
+  }
+
+  _onContentChanges() {
+    this.ports.forEach(it => it.report());
   }
 
 

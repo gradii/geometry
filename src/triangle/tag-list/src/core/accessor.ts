@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { ControlValueAccessor } from '@angular/forms';
 import { Input, Directive } from '@angular/core';
 import { OptionsProvider } from './providers/options-provider';

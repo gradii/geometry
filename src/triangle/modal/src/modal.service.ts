@@ -159,7 +159,7 @@ export class ModalService {
       });
     });
 
-    let _props = {
+    const _props = {
       ...props,
       ...{
         visible: true

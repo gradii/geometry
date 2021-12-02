@@ -13,13 +13,13 @@ import { DndContainerRef } from '../drag-drop-ref/dnd-container-ref';
 // sort by Z-level.
 export function orderByHierarchy(refs: DndContainerRef[]) {
     // Build a map from HTMLElement to DropContainerRef
-    let refsByElement: Map<HTMLElement, DndContainerRef> = new Map();
+    const refsByElement: Map<HTMLElement, DndContainerRef> = new Map();
     refs.forEach(ref => {
         refsByElement.set(coerceElement(ref.element), ref);
     });
 
     // Function to identify the closest ancestor among th DropContainerRefs
-    let findAncestor = (ref: DndContainerRef) => {
+    const findAncestor = (ref: DndContainerRef) => {
         let ancestor = coerceElement(ref.element).parentElement;
 
         while (ancestor) {
@@ -36,18 +36,18 @@ export function orderByHierarchy(refs: DndContainerRef[]) {
     type NodeType = { ref: DndContainerRef, parent?: NodeType, children: NodeType[] };
 
     // Add all refs as nodes to the tree
-    let tree: Map<DndContainerRef, NodeType> = new Map();
+    const tree: Map<DndContainerRef, NodeType> = new Map();
     refs.forEach(ref => {
         tree.set(ref, { ref: ref, children: [] });
     });
 
     // Build parent-child links in tree
     refs.forEach(ref => {
-        let parent = findAncestor(ref);
+        const parent = findAncestor(ref);
 
         if (parent) {
-            let node = tree.get(ref);
-            let parentNode = tree.get(parent);
+            const node = tree.get(ref);
+            const parentNode = tree.get(parent);
 
             node!.parent = parentNode;
             parentNode!.children.push(node!);
@@ -55,16 +55,16 @@ export function orderByHierarchy(refs: DndContainerRef[]) {
     });
 
     // Find tree roots
-    let roots = Array.from(tree.values()).filter(node => !node.parent);
+    const roots = Array.from(tree.values()).filter(node => !node.parent);
 
     // Function to recursively build ordered list from roots and down
-    let buildOrderedList = (nodes: NodeType[], list: DndContainerRef[]) => {
+    const buildOrderedList = (nodes: NodeType[], list: DndContainerRef[]) => {
         list.push(...nodes.map(node => node.ref));
         nodes.forEach(node => { buildOrderedList(node.children, list); });
     };
 
     // Build and return the ordered list
-    let ordered: DndContainerRef[] = [];
+    const ordered: DndContainerRef[] = [];
     buildOrderedList(roots, ordered);
     return ordered;
 }

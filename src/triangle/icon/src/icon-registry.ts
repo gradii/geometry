@@ -507,7 +507,7 @@ export class IconRegistry implements OnDestroy {
    * Converts an element into an SVG node by cloning all of its children.
    */
   private _toSvgElement(element: Element): SVGElement {
-    let svg = this._svgElementFromString('<svg></svg>');
+    const svg = this._svgElementFromString('<svg></svg>');
 
     for (let i = 0; i < element.childNodes.length; i++) {
       if (element.childNodes[i].nodeType === this._document.ELEMENT_NODE) {

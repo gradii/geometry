@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -37,7 +43,7 @@ import { LabelModel } from './label-model';
   ]
 })
 export class LabelWidget implements AfterViewChecked {
-  @ViewChild('ref', {read: ElementRef, static: true})
+  @ViewChild('ref', { read: ElementRef, static: true })
   ref: ElementRef<any>;
 
   @Input()
@@ -67,15 +73,15 @@ export class LabelWidget implements AfterViewChecked {
   }
 
   // @ts-ignore
-  findPathAndRelativePositionToRenderLabel (index: number): { path: SVGPathElement | BezierCurve; position: number } {
+  findPathAndRelativePositionToRenderLabel(index: number): { path: SVGPathElement | BezierCurve; position: number } {
     // an array to hold all path lengths, making sure we hit the DOM only once to fetch this information
-    const link    = this.label.getParent();
-    if(link instanceof DiagramLinkModel) {
+    const link = this.label.getParent();
+    if (link instanceof DiagramLinkModel) {
       const totalLength = link.curve.getTotalLength();
       return {
-        path: link.curve,
-        position: totalLength/2,
-      }
+        path    : link.curve,
+        position: totalLength / 2,
+      };
     }
 
     const lengths = link.getRenderedPath().map((path) => path.getTotalLength());
@@ -99,7 +105,7 @@ export class LabelWidget implements AfterViewChecked {
       labelPosition -= lengths[pathIndex];
       pathIndex++;
     }
-  };
+  }
 
   calculateLabelPosition = () => {
     const found = this.findPathAndRelativePositionToRenderLabel(this.index + 1);
@@ -107,7 +113,7 @@ export class LabelWidget implements AfterViewChecked {
       return;
     }
 
-    const {path, position} = found;
+    const { path, position } = found;
 
     const labelDimensions = {
       width : this.ref.nativeElement.offsetWidth,

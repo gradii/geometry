@@ -5,7 +5,7 @@
  */
 
 import { Directive, Host, Inject, Input, Optional } from '@angular/core';
-import { FormItemComponent } from '@gradii/triangle/form';
+import { FormItemComponent } from './form-item.component';
 import { tolerantClamp } from './_utils';
 import { FormComponent } from './form.component';
 

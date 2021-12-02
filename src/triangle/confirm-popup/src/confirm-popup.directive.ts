@@ -25,13 +25,13 @@ import {
   Output,
   ViewContainerRef
 } from '@angular/core';
-import { ConfirmPopupComponent } from '@gradii/triangle/confirm-popup';
+import { ConfirmPopupComponent } from './confirm-popup.component';
 import {
   TRI_CONFIRM_POPUP_DEFAULT_OPTIONS,
   TRI_CONFIRM_POPUP_SCROLL_STRATEGY
 } from './confirm-popup-common';
 import {
-  _TriTooltipBase,
+  TriggerType,
   TriTooltipDefaultOptions
 } from '@gradii/triangle/tooltip';
 import { PopoverDirective } from '@gradii/triangle/popover';
@@ -51,6 +51,12 @@ import { takeUntil, tap } from 'rxjs/operators';
     'tooltipClass:triConfirmPopupClass',
     'tooltipContext:triConfirmPopupContext',
     'title:triConfirmPopupTitle',
+    'width:triConfirmPopupWidth',
+    'maxWidth:triConfirmPopupMaxWidth',
+    'minWidth:triConfirmPopupMinWidth',
+    'height:triConfirmPopupHeight',
+    'maxHeight:triConfirmPopupMaxHeight',
+    'minHeight:triConfirmPopupMinHeight',
   ],
   host: {
     'class': 'tri-confirm-popup-trigger'
@@ -62,6 +68,8 @@ export class ConfirmPopupDirective extends PopoverDirective {
   protected readonly _tooltipComponent: ComponentType<ConfirmPopupComponent> = ConfirmPopupComponent;
 
   protected _okText: string;
+
+  _tooltipTrigger: TriggerType = TriggerType.NOOP;
 
   @Input()
   get okText() {

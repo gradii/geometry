@@ -23,8 +23,8 @@ export class TestContext<D, C> {
     this.testElement = this.fixture.nativeElement;
     this.clarityDebugElement = this.fixture.debugElement.query(By.directive(clarityDirectiveType));
     if (!this.clarityDebugElement) {
-      let componentName = (<any>componentType).name;
-      let clarityDirectiveName = (<any>clarityDirectiveType).name;
+      const componentName = (<any>componentType).name;
+      const clarityDirectiveName = (<any>clarityDirectiveType).name;
       throw new Error(`Test component ${componentName} doesn't contain a ${clarityDirectiveName}`);
     }
     this.clarityDirective = this.clarityDebugElement.injector.get(clarityDirectiveType);

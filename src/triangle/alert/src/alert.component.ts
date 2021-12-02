@@ -5,14 +5,7 @@
  */
 
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ContentChild,
-  EventEmitter,
-  Input,
-  Output,
-  TemplateRef,
+  ChangeDetectionStrategy, Component, ContentChild, EventEmitter, Input, Output, TemplateRef,
   ViewEncapsulation
 } from '@angular/core';
 import { FadeAnimation } from '@gradii/triangle/core';
@@ -21,11 +14,11 @@ import { AlertDescriptionDirective, AlertMessageDirective } from './alert.direct
 
 
 @Component({
-  selector: 'tri-alert',
-  animations: [FadeAnimation],
-  encapsulation: ViewEncapsulation.None,
+  selector       : 'tri-alert',
+  animations     : [FadeAnimation],
+  encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+  template       : `
     <div
       [class.tri-alert]="true"
       [class.tri-alert-error]="type==='error'"
@@ -88,12 +81,12 @@ import { AlertDescriptionDirective, AlertMessageDirective } from './alert.direct
       </a>
     </div>
   `,
-  styleUrls: ['../style/alert.css'],
+  styleUrls      : ['../style/alert.css'],
 })
 export class AlertComponent {
 
-  display = true;
-  isTypeSet = false;
+  display       = true;
+  isTypeSet     = false;
   isShowIconSet = false;
   isDescriptionString: boolean;
   isMessageString: boolean;
@@ -117,7 +110,7 @@ export class AlertComponent {
     }
   }
 
-  constructor(private _cdRef: ChangeDetectorRef) {
+  constructor() {
   }
 
   private _banner = false;
@@ -135,7 +128,6 @@ export class AlertComponent {
     if (!this.isShowIconSet) {
       this.showIcon = true;
     }
-    this._cdRef.markForCheck();
   }
 
   private _closeable = false;
@@ -147,7 +139,6 @@ export class AlertComponent {
   @Input()
   set closeable(value: boolean) {
     this._closeable = coerceToBoolean(value);
-    this._cdRef.markForCheck();
   }
 
   private _showIcon = false;
@@ -158,9 +149,8 @@ export class AlertComponent {
 
   @Input()
   set showIcon(value: boolean) {
-    this._showIcon = coerceToBoolean(value);
+    this._showIcon     = coerceToBoolean(value);
     this.isShowIconSet = true;
-    this._cdRef.markForCheck();
   }
 
   private _type = 'info';
@@ -171,9 +161,8 @@ export class AlertComponent {
 
   @Input()
   set type(value: string) {
-    this._type = value;
+    this._type     = value;
     this.isTypeSet = true;
-    this._cdRef.markForCheck();
   }
 
   private _description: string | TemplateRef<void>;
@@ -185,8 +174,7 @@ export class AlertComponent {
   @Input()
   set description(value: string | TemplateRef<void>) {
     this.isDescriptionString = !(value instanceof TemplateRef);
-    this._description = value;
-    this._cdRef.markForCheck();
+    this._description        = value;
   }
 
   private _message: string | TemplateRef<void>;
@@ -198,8 +186,7 @@ export class AlertComponent {
   @Input()
   set message(value: string | TemplateRef<void>) {
     this.isMessageString = !(value instanceof TemplateRef);
-    this._message = value;
-    this._cdRef.markForCheck();
+    this._message        = value;
   }
 
   private _closeText: string | TemplateRef<void>;
@@ -211,8 +198,7 @@ export class AlertComponent {
   @Input()
   set closeText(value: string | TemplateRef<void>) {
     this.isCloseTextString = !(value instanceof TemplateRef);
-    this._closeText = value;
-    this._cdRef.markForCheck();
+    this._closeText        = value;
   }
 
   closeAlert(event?: any): void {

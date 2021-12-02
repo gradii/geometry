@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -15,7 +21,7 @@
 
 import * as _ from 'lodash';
 import {
-  BaseEntityEvent, BaseEntityListener, DeserializeEvent
+  BaseEntityEvent, BaseEntityListener, DeserializeContext
 } from '../../canvas-core/core-models/base-entity';
 import { BaseModel } from '../../canvas-core/core-models/base-model';
 import {
@@ -57,20 +63,17 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
   //   return super.getModels()
   // }
 
-  deserialize(event: DeserializeEvent<this>) {
+  deserialize(data: ReturnType<this['serialize']>, context: DeserializeContext<this>) {
     this.layers = [];
-    super.deserialize(event);
-    _.forEach(event.data.layers, (layer) => {
+    super.deserialize(data, context);
+    _.forEach(data.layers, (layer) => {
       let layerOb;
       if (layer.type === 'diagram-nodes') {
         layerOb = new NodeLayerModel();
-      } else if(layer.type === 'diagram-links') {
+      } else if (layer.type === 'diagram-links') {
         layerOb = new LinkLayerModel();
       }
-      layerOb.deserialize({
-        ...event,
-        data: layer
-      });
+      layerOb.deserialize(layer, context);
       this.addLayer(layerOb);
     });
   }
@@ -171,7 +174,7 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 
   addNode(node: NodeModel): NodeModel {
     this.getActiveNodeLayer().addModel(node);
-    this.fireEvent({node, isCreated: true}, 'nodesUpdated');
+    this.fireEvent({ node, isCreated: true }, 'nodesUpdated');
     return node;
   }
 
@@ -180,7 +183,7 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
       return layer.removeModel(link);
     });
     if (removed) {
-      this.fireEvent({link, isCreated: false}, 'linksUpdated');
+      this.fireEvent({ link, isCreated: false }, 'linksUpdated');
     }
   }
 
@@ -189,7 +192,7 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
       return layer.removeModel(node);
     });
     if (removed) {
-      this.fireEvent({node, isCreated: false}, 'nodesUpdated');
+      this.fireEvent({ node, isCreated: false }, 'nodesUpdated');
     }
   }
 

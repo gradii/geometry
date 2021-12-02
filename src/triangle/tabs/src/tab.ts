@@ -63,6 +63,15 @@ export class TriTab extends _TriTabMixinBase implements OnInit, CanDisable, OnCh
   @ViewChild(TemplateRef, {static: true}) _implicitContent: TemplateRef<any>;
   /** Plain text label for the tab, used when there is no template label. */
   @Input('label') textLabel: string = '';
+
+  @Input('title')
+  set title(value: string) {
+    this.textLabel = value;
+  }
+
+  @Input('name')
+  tabName = '';
+
   /** Aria label for the tab. */
   @Input('aria-label') ariaLabel: string;
   /**

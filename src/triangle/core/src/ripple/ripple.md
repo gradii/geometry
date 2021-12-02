@@ -83,7 +83,7 @@ Global ripple options can be specified by setting the `MAT_RIPPLE_GLOBAL_OPTIONS
 ```ts
 const globalRippleConfig: RippleGlobalOptions = {
   disabled: true,
-  anitriion: {
+  animation: {
     enterDuration: 300,
     exitDuration: 0
   }
@@ -98,11 +98,11 @@ const globalRippleConfig: RippleGlobalOptions = {
 
 All available global options can be seen in the `RippleGlobalOptions` interface.
 
-### Disabling anitriion
+### Disabling animation
 
-The anitriion of ripples can be disabled by using the `anitriion` global option. If the
+The animation of ripples can be disabled by using the `animation` global option. If the
 `enterDuration` and `exitDuration` is being set to `0`, ripples will just appear without any
-anitriion.
+animation.
 
 This is specifically useful in combination with the `disabled` global option, because globally
 disabling ripples won't affect the focus indicator ripples. If someone still wants to disable
@@ -111,23 +111,23 @@ those ripples for performance reasons, the duration can be set to `0`, to remove
 ```ts
 const globalRippleConfig: RippleGlobalOptions = {
   disabled: true,
-  anitriion: {
+  animation: {
     enterDuration: 0,
     exitDuration: 0
   }
 };
 ```
 
-**Note**: Ripples will also have no anitriion if the `NoopAnitriionsModule` is being used. This
-also means that the durations in the `anitriion` configuration won't be taken into account.
+**Note**: Ripples will also have no animation if the `NoopAnimationsModule` is being used. This
+also means that the durations in the `animation` configuration won't be taken into account.
 
-### Anitriion behavior
+### Animation behavior
 
-There are two different anitriion behaviors for the fade-out of ripples shown in the Trierial
+There are two different animation behaviors for the fade-out of ripples shown in the Trierial
 Design specifications.
 
 By default, all ripples will start fading out if the mouse or touch is released and the enter
-anitriion completed. The second possible behavior, which is also shown in the specifications, is
+animation completed. The second possible behavior, which is also shown in the specifications, is
 that ripples start to fade out immediately on mouse or touch release.
 
 In some scenarios, developers might prefer that behavior over the default and would like to have

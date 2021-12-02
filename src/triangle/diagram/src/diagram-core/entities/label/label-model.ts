@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -13,7 +19,7 @@
  */
 
 
-import { DeserializeEvent } from '../../../canvas-core/core-models/base-entity';
+import { DeserializeContext } from '../../../canvas-core/core-models/base-entity';
 import {
   BaseModel,
   BaseModelGenerics,
@@ -47,10 +53,10 @@ export class LabelModel<G extends LabelModelGenerics = LabelModelGenerics> exten
     this.offsetY = offsetY;
   }
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
-    this.offsetX = event.data.offsetX;
-    this.offsetY = event.data.offsetY;
+  deserialize(data: ReturnType<this['serialize']>, context: DeserializeContext<this>) {
+    super.deserialize(data, context);
+    this.offsetX = data.offsetX;
+    this.offsetY = data.offsetY;
   }
 
   serialize() {

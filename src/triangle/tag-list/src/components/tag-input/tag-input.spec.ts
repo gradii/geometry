@@ -425,7 +425,7 @@ describe('TagInputComponent', () => {
   });
 
   describe('when using the autocomplete', () => {
-    let keyUp: Event = new Event('keyUp');
+    const keyUp: Event = new Event('keyUp');
     keyUp['keyCode'] = 73;
 
     it('adds an autocomplete to the template', fakeAsync(() => {
@@ -581,7 +581,7 @@ describe('TagInputComponent', () => {
     }));
 
     it('should not add an item on blur if the dropdown is visible', fakeAsync(() => {
-      let keyUp: Event = new Event('keyUp');
+      const keyUp: Event = new Event('keyUp');
       keyUp['keyCode'] = 73;
 
       const fixture: ComponentFixture<

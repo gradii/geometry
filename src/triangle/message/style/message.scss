@@ -38,6 +38,11 @@ $message-prefix-cls : "#{v.$tri-prefix}-message";
     pointer-events : all;
   }
 
+  @at-root &-content {
+    display: flex;
+    align-items: center;
+  }
+
   @at-root &-success .#{v.$iconfont-css} {
     color : theming.tri-color($success);
   }
@@ -58,7 +63,6 @@ $message-prefix-cls : "#{v.$tri-prefix}-message";
   .#{v.$iconfont-css} {
     margin-right : 8px;
     font-size    : v.$font-size-lg;
-    top          : 1px;
     position     : relative;
   }
 

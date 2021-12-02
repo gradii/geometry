@@ -127,7 +127,7 @@ describe('Menu', () => {
       const spy = jasmine.createSpy('changeSpy for root menu');
       menu.change.subscribe(spy);
 
-      for (let menuItem of menuItems) {
+      for (const menuItem of menuItems) {
         menuItem.trigger();
       }
 

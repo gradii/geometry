@@ -19,12 +19,12 @@ import { FilterService } from '../filter.service';
               [filter]="filter"
               [operators]="operators"
               [showOperators]="showOperators">
-          <tri-dropdown>
+         <!-- <tri-dropdown>
               <ul tri-menu>
                   <li tri-menu-item
                       *ngFor="let item of data;">{{item[valueField]}}</li>
               </ul>
-          </tri-dropdown>
+          </tri-dropdown>-->
       </tri-data-table-filter-wrapper-cell>
   `
 })

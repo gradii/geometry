@@ -12,7 +12,7 @@ import { NotificationContainerComponent } from './notification-container.compone
 import { NotificationData, NotificationDataFilled } from './notification.definitions';
 
 @Injectable()
-export class NotificationService extends MessageBaseService<NotificationContainerComponent, NotificationData> {
+export class TriNotificationService extends MessageBaseService<NotificationContainerComponent, NotificationData> {
   constructor(overlayService: Overlay) {
     super(overlayService, NotificationContainerComponent, 'notification-');
   }

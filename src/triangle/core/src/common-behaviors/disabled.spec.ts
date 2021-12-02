@@ -6,8 +6,8 @@ describe('MixinDisabled', () => {
     class EmptyClass {
     }
 
-    let classWithDisabled = mixinDisabled(EmptyClass);
-    let instance = new classWithDisabled();
+    const classWithDisabled = mixinDisabled(EmptyClass);
+    const instance = new classWithDisabled();
 
     expect(instance.disabled)
       .toBe(false, 'Expected the mixed-into class to have a disabled property');

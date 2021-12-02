@@ -45,9 +45,9 @@ import { PopoverComponent } from '@gradii/triangle/popover';
           </ng-template>
 
           <div class="tri-popover-buttons">
-              <button tri-button [size]="'small'" (click)="_onCancel()">
+              <button tri-button size="small" (click)="_onCancel()">
                   <span>{{cancelText}}</span></button>
-              <button tri-button [size]="'small'" [color]="'primary'"
+              <button tri-button size="small" color="primary"
                       (click)="_onConfirm()">
                   <span>{{okText}}</span></button>
           </div>
@@ -70,7 +70,6 @@ export class ConfirmPopupComponent extends PopoverComponent implements OnDestroy
   onConfirm = new EventEmitter();
 
   constructor(
-    protected _changeDetectorRef: ChangeDetectorRef,
     protected _elementRef: ElementRef,
     protected _ngZone: NgZone,
     protected _focusMonitor: FocusMonitor,
@@ -78,7 +77,6 @@ export class ConfirmPopupComponent extends PopoverComponent implements OnDestroy
     protected _viewContainerRef: ViewContainerRef) {
 
     super(
-      _changeDetectorRef,
       _elementRef,
       _ngZone,
       _focusMonitor,

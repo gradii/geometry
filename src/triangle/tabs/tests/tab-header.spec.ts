@@ -30,7 +30,7 @@ import { TriTabLabelWrapper } from '../src/tab-label-wrapper';
 
 describe('TriTabHeader', () => {
   let dir: Direction = 'ltr';
-  let change = new Subject();
+  const change = new Subject();
   let fixture: ComponentFixture<SimpleTabHeaderApp>;
   let appComponent: SimpleTabHeaderApp;
 
@@ -450,7 +450,7 @@ describe('TriTabHeader', () => {
 
         expect(header.scrollDistance).toBeGreaterThan(0, 'Expected to scroll after some time.');
 
-        let previousDistance = header.scrollDistance;
+        const previousDistance = header.scrollDistance;
 
         dispatchFakeEvent(headerElement, 'mouseleave');
         fixture.detectChanges();
@@ -487,7 +487,7 @@ describe('TriTabHeader', () => {
 
         expect(header.scrollDistance).toBeGreaterThan(0, 'Expected to scroll after some time.');
 
-        let previousDistance = header.scrollDistance;
+        const previousDistance = header.scrollDistance;
 
         tick(100);
 

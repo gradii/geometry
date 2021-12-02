@@ -1,0 +1,49 @@
+load(
+    "//tools:defaults.bzl",
+    "ng_module",
+    "sass_binary",
+    "sass_library",
+    #  "ng_test_library",
+    #  "ng_web_test_suite",
+    #  "markdown_to_html"
+)
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "tab-nav-bar",
+    srcs = glob(
+        ["**/*.ts"],
+        exclude = ["**/*.spec.ts"],
+    ),
+    assets = [":style/tab-nav-bar.css"] + glob(["**/*.html"]),
+    module_name = "@gradii/triangle/tab-nav-bar",
+    deps = [
+        "//src/triangle/tabs",
+        "//src/triangle/core",
+        "//src/triangle/i18n",
+        "//src/triangle/util",
+        "@npm//@angular/cdk",
+        "@npm//@angular/core",
+        "@npm//rxjs",
+    ],
+)
+
+sass_library(
+    name = "tab_nav_bar_scss_lib",
+    srcs = glob(["**/_*.scss"]),
+    deps = ["//src/triangle/core:core_scss_lib"],
+)
+
+sass_binary(
+    name = "tab_nav_bar_scss",
+    src = "style/tab-nav-bar.scss",
+    deps = [
+        "//src/triangle/tab-nav-bar:tab_nav_bar_scss_lib",
+    ],
+)
+
+filegroup(
+    name = "source-files",
+    srcs = glob(["**/*.ts"]),
+)

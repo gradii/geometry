@@ -7,7 +7,7 @@
 import { Component, HostBinding, Input, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector           : 'tri-header',
+  selector           : 'tri-header, tri-layout-header',
   encapsulation      : ViewEncapsulation.None,
   template           : `
     <ng-content></ng-content>

@@ -212,7 +212,7 @@ export class SortPositionStrategy implements PositionStrategy {
                                    delta?: { x: number, y: number }): number {
     const isHorizontal = this._orientation === 'horizontal';
 
-    let heightMap = [];
+    const heightMap = [];
     let startIdx, endIdx;
     for (let i = 0; i < this._itemPositions.length; i++) {
 
@@ -257,7 +257,7 @@ export class SortPositionStrategy implements PositionStrategy {
   }
 
   trackActivePositions(activeDraggables) {
-    //_cacheItemPositions
+    // _cacheItemPositions
   }
 
   _cacheItemPositions() {

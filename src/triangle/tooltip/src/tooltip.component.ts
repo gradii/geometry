@@ -55,8 +55,7 @@ export class TooltipComponent extends _TriTooltipComponentBase {
   _isHandset: Observable<BreakpointState> = this._breakpointObserver.observe(Breakpoints.Handset);
 
   constructor(
-    changeDetectorRef: ChangeDetectorRef,
     private _breakpointObserver: BreakpointObserver) {
-    super(changeDetectorRef);
+    super();
   }
 }

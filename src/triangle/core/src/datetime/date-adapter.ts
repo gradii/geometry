@@ -254,8 +254,8 @@ export abstract class DateAdapter<D> {
    */
   sameDate(first: D | null, second: D | null): boolean {
     if (first && second) {
-      let firstValid  = this.isValid(first);
-      let secondValid = this.isValid(second);
+      const firstValid  = this.isValid(first);
+      const secondValid = this.isValid(second);
       if (firstValid && secondValid) {
         return !this.compareDate(first, second);
       }

@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -18,7 +24,7 @@ import {
   Rectangle
 } from '@gradii/vector-math';
 import * as _ from 'lodash';
-import { BaseEntityEvent, DeserializeEvent } from '../../../canvas-core/core-models/base-entity';
+import { BaseEntityEvent, DeserializeContext } from '../../../canvas-core/core-models/base-entity';
 import { BaseModelListener } from '../../../canvas-core/core-models/base-model';
 import {
   BasePositionModel,
@@ -59,7 +65,7 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
   setPosition(point: Vector2): void;
   setPosition(x: number, y: number): void;
   setPosition(x: number | Vector2, y?: number) {
-    let old = this.position;
+    const old = this.position;
     super.setPosition(x as number, y);
 
     // also update the port co-ordinates (for make glorious speed)
@@ -71,8 +77,8 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
     });
   }
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
+  deserialize(data: ReturnType<this['serialize']>, context: DeserializeContext<this>) {
+    super.deserialize(data, context);
   }
 
   serialize() {
@@ -103,7 +109,7 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
   }
 
   getPortFromID(id: string): PortModel | null {
-    for (let i in this.ports) {
+    for (const i in this.ports) {
       if (this.ports[i].getID() === id) {
         return this.ports[i];
       }
@@ -112,7 +118,7 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
   }
 
   getLink(id: string): LinkModel {
-    for (let portID in this.ports) {
+    for (const portID in this.ports) {
       const port = this.ports[portID];
       const link = port.findLink(id);
       if (link) {
@@ -132,7 +138,7 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 
   removePort(port: PortModel) {
     // clear the port from the links
-    for (let link of _.values(port.getLinks())) {
+    for (const link of _.values(port.getLinks())) {
       // @ts-ignore
       link.clearPort(port);
     }

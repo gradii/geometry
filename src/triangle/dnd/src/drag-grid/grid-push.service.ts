@@ -96,7 +96,7 @@ export class GridPushService {
     setDirectionValue: (item: TriDragGridItemComponent,
                         value: number) => void) {
     let widgetMoved         = false;
-    let heightMap: number[] = [];
+    const heightMap: number[] = [];
     const fn                = (prev: number[], item: TriDragGridItemComponent) => {
       const {
               rowPosition, columnPosition,
@@ -194,8 +194,8 @@ export class GridPushService {
     for (let i = 0; i < sorted.length; i++) {
       const it         = sorted[i];
       const isDragItem = it._dragRef === item;
-      let newX         = 0;
-      let newY         = 0;
+      const newX         = 0;
+      const newY         = 0;
       // const x          = isDragItem ? positionX : it.x;
       // const y          = isDragItem ? positionY : it.y;
 

@@ -151,14 +151,16 @@ $tri-tab-animation-duration : 200ms !default;
 }
 
 // Structural styles for the element that wraps the paginated header items.
-@mixin paginated-tab-header-item-wrapper {
+@mixin paginated-tab-header-item-wrapper($parent) {
   display : flex;
 
-  [tri-align-tabs="center"] & {
+  // We need to set the parent here explicitly, in order to prevent the alignment
+  // from any parent tab groups from propagating down to the children when nesting.
+  [mat-align-tabs="center"] > #{$parent} & {
     justify-content : center;
   }
 
-  [tri-align-tabs="end"] & {
+  [mat-align-tabs="end"] > #{$parent} & {
     justify-content : flex-end;
   }
 }

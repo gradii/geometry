@@ -6,10 +6,11 @@
 
 import { DataResult } from '@gradii/triangle/data-query';
 import { isFunction, isIterable, isPresent, isString } from '@gradii/triangle/util';
-import { defer, first, from, IterableX, toArray } from 'ix/iterable';
-import { map, memoize, publish } from 'ix/iterable/operators';
 import { GroupRow } from '../row-column/group-row';
 import { Row } from '../row-column/row';
+import { DeferIterable } from './iterator/defer-iterator';
+import { MapIterable } from './iterator/map-iterator';
+import { toArray } from './iterator/to-array-iterator';
 
 const isGroupItem = function (source) {
   return source.items !== undefined && source.field !== undefined;
@@ -20,7 +21,7 @@ export interface GridDataResult extends DataResult {
 
 export class DataResultIterator<T> implements Iterable<T> {
   private _cachedData: Array<T>;
-  private iterator: IterableX<any>;
+  private iterator: any;
 
   constructor(private source: GridDataResult | any[]    = [],
               // private groups: GroupDescriptor[],
@@ -32,20 +33,16 @@ export class DataResultIterator<T> implements Iterable<T> {
       this.source = [];
     }
     if (this.isGridDataResult(this.source)) {
-      this._data = this.source.data;
+      this._data  = this.source.data;
       this._total = (this.source as GridDataResult).total;
     } else {
       this._data = this.source;
     }
 
-    this.iterator = defer(() => this._bindRow()).pipe(
-      map((row, idx) => {
-        row._idx = idx;
-        return row;
-      }),
-      publish(),
-      memoize()
-    );
+    this.iterator = new MapIterable(new DeferIterable(() => this._bindRow()), (row, idx) => {
+      row._idx = idx;
+      return row;
+    });
   }
 
   private _data: any[];
@@ -96,7 +93,7 @@ export class DataResultIterator<T> implements Iterable<T> {
   }
 
   [Symbol.iterator](): Iterator<T> {
-    return this.iterator[Symbol.iterator]();
+    return this.data[Symbol.iterator]();
   }
 
   private* _bindRow() {
@@ -106,7 +103,7 @@ export class DataResultIterator<T> implements Iterable<T> {
 
       // bind to hierarchical sources (childItemsPath)
       if (this.childItemsPath) {
-        for (let item of list) {
+        for (const item of list) {
           yield* this._addTreeNode(item, 0);
         }
 
@@ -119,8 +116,12 @@ export class DataResultIterator<T> implements Iterable<T> {
         //   // bind to regular sources
       } else {
         if (isIterable(list)) {
-          const f = first(from(list).pipe());
-          for (let item of list) {
+          let f;
+          for (const item of list) {
+            f = item;
+            break;
+          }
+          for (const item of list) {
             if (isGroupItem(f)) {
               yield* this._addGroup(item);
             } else {
@@ -138,14 +139,14 @@ export class DataResultIterator<T> implements Iterable<T> {
     // add child rows
     if (isGroupItem(g)) {
       // add group row
-      const gr = new GroupRow();
-      gr.level = level;
+      const gr    = new GroupRow();
+      gr.level    = level;
       gr.dataItem = g;
-      gr.field = g.field;
-      gr.value = g.value;
+      gr.field    = g.field;
+      gr.value    = g.value;
       yield gr;
 
-      for (let _it of g.items) {
+      for (const _it of g.items) {
         yield* this._addGroup(_it, level + 1, gr);
       }
 
@@ -155,12 +156,12 @@ export class DataResultIterator<T> implements Iterable<T> {
   }
 
   private* _addTreeNode(item: any, level: number, parent?: GroupRow | Row) {
-    let gr       = new Row(parent),
-        children = this.getChildren(item, this.childItemsPath);
+    const gr       = new Row(parent),
+          children = this.getChildren(item, this.childItemsPath);
 
     // add main node
     gr.dataItem = item;
-    gr.level = level;
+    gr.level    = level;
     yield gr;
 
     // add child nodes

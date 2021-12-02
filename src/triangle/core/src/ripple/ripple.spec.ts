@@ -9,16 +9,16 @@ import {
 } from '../../testing/dispatch-events';
 import { createMouseEvent, createTouchEvent, } from '../../testing/event-objects';
 import {
-  MAT_RIPPLE_GLOBAL_OPTIONS,
+  TRI_RIPPLE_GLOBAL_OPTIONS,
   RippleGlobalOptions,
   RippleState,
   TriRipple,
   TriRippleModule
 } from './index';
-import { defaultRippleAnitriionConfig, RippleAnitriionConfig } from './ripple-renderer';
+import { defaultRippleAnimationConfig, RippleAnimationConfig } from './ripple-renderer';
 
 /** Shorthands for the enter and exit duration of ripples. */
-const {enterDuration, exitDuration} = defaultRippleAnitriionConfig;
+const {enterDuration, exitDuration} = defaultRippleAnimationConfig;
 
 describe('TriRipple', () => {
   let fixture: ComponentFixture<any>;
@@ -77,24 +77,24 @@ describe('TriRipple', () => {
         return;
       }
 
-      let elementRect = rippleTarget.getBoundingClientRect();
+      const elementRect = rippleTarget.getBoundingClientRect();
 
       // Dispatch a ripple at the following relative coordinates (X: 50| Y: 75)
       dispatchMouseEvent(rippleTarget, 'mousedown', 50, 75);
       dispatchMouseEvent(rippleTarget, 'mouseup');
 
       // Calculate distance from the click to farthest edge of the ripple target.
-      let maxDistanceX = TARGET_WIDTH - 50;
-      let maxDistanceY = TARGET_HEIGHT - 75;
+      const maxDistanceX = TARGET_WIDTH - 50;
+      const maxDistanceY = TARGET_HEIGHT - 75;
 
       // At this point the foreground ripple should be created with a div centered at the click
       // location, and large enough to reach the furthest corner, which is 250px to the right
       // and 125px down relative to the click position.
-      let expectedRadius = Math.sqrt(maxDistanceX * maxDistanceX + maxDistanceY * maxDistanceY);
-      let expectedLeft = elementRect.left + 50 - expectedRadius;
-      let expectedTop = elementRect.top + 75 - expectedRadius;
+      const expectedRadius = Math.sqrt(maxDistanceX * maxDistanceX + maxDistanceY * maxDistanceY);
+      const expectedLeft = elementRect.left + 50 - expectedRadius;
+      const expectedTop = elementRect.top + 75 - expectedRadius;
 
-      let ripple = rippleTarget.querySelector('.tri-ripple-element') as HTMLElement;
+      const ripple = rippleTarget.querySelector('.tri-ripple-element') as HTMLElement;
 
       // Note: getBoundingClientRect won't work because there's a transform applied to make the
       // ripple start out tiny.
@@ -221,7 +221,7 @@ describe('TriRipple', () => {
 
     it('should not hide ripples while anitriing.', fakeAsync(() => {
       // Calculates the duration for fading-in and fading-out the ripple.
-      let hideDuration = enterDuration + exitDuration;
+      const hideDuration = enterDuration + exitDuration;
 
       dispatchMouseEvent(rippleTarget, 'mousedown');
       dispatchMouseEvent(rippleTarget, 'mouseup');
@@ -247,12 +247,12 @@ describe('TriRipple', () => {
       expect(rippleTarget.querySelectorAll('.tri-ripple-element').length).toBe(0);
 
       // Calculate the diagonal distance and divide it by two for the center radius.
-      let radius = Math.sqrt(TARGET_HEIGHT * TARGET_HEIGHT + TARGET_WIDTH * TARGET_WIDTH) / 2;
+      const radius = Math.sqrt(TARGET_HEIGHT * TARGET_HEIGHT + TARGET_WIDTH * TARGET_WIDTH) / 2;
 
       rippleDirective.centered = true;
       rippleDirective.launch(0, 0);
 
-      let rippleElement = rippleTarget.querySelector('.tri-ripple-element') as HTMLElement;
+      const rippleElement = rippleTarget.querySelector('.tri-ripple-element') as HTMLElement;
 
       expect(rippleElement).toBeTruthy();
       expect(parseFloat(rippleElement.style.left as string))
@@ -300,9 +300,9 @@ describe('TriRipple', () => {
     }));
 
     describe('when page is scrolled', () => {
-      let veryLargeElement: HTMLDivElement = document.createElement('div');
-      let pageScrollTop = 500;
-      let pageScrollLeft = 500;
+      const veryLargeElement: HTMLDivElement = document.createElement('div');
+      const pageScrollTop = 500;
+      const pageScrollLeft = 500;
 
       beforeEach(() => {
         // Add a very large element to make the page scroll
@@ -335,10 +335,10 @@ describe('TriRipple', () => {
       });
 
       it('create ripple with correct position', () => {
-        let elementTop = 600;
-        let elementLeft = 750;
-        let left = 50;
-        let top = 75;
+        const elementTop = 600;
+        const elementLeft = 750;
+        const left = 50;
+        const top = 75;
 
         rippleTarget.style.left = `${elementLeft}px`;
         rippleTarget.style.top = `${elementTop}px`;
@@ -349,11 +349,11 @@ describe('TriRipple', () => {
           top + elementTop - pageScrollTop
         );
 
-        let expectedRadius = Math.sqrt(250 * 250 + 125 * 125);
-        let expectedLeft = left - expectedRadius;
-        let expectedTop = top - expectedRadius;
+        const expectedRadius = Math.sqrt(250 * 250 + 125 * 125);
+        const expectedLeft = left - expectedRadius;
+        const expectedTop = top - expectedRadius;
 
-        let ripple = rippleTarget.querySelector('.tri-ripple-element') as HTMLElement;
+        const ripple = rippleTarget.querySelector('.tri-ripple-element') as HTMLElement;
 
         // In the iOS simulator (BrowserStack & SauceLabs), adding the content to the
         // body causes karma's iframe for the test to stretch to fit that content once we attempt to
@@ -387,7 +387,7 @@ describe('TriRipple', () => {
     it('should allow persistent ripple elements', fakeAsync(() => {
       expect(rippleTarget.querySelectorAll('.tri-ripple-element').length).toBe(0);
 
-      let rippleRef = rippleDirective.launch(0, 0, {persistent: true});
+      const rippleRef = rippleDirective.launch(0, 0, {persistent: true});
 
       expect(rippleTarget.querySelectorAll('.tri-ripple-element').length).toBe(1);
 
@@ -424,7 +424,7 @@ describe('TriRipple', () => {
     it('should properly set ripple states', fakeAsync(() => {
       expect(rippleTarget.querySelectorAll('.tri-ripple-element').length).toBe(0);
 
-      let rippleRef = rippleDirective.launch(0, 0, {persistent: true});
+      const rippleRef = rippleDirective.launch(0, 0, {persistent: true});
 
       expect(rippleRef.state).toBe(RippleState.FADING_IN);
       expect(rippleTarget.querySelectorAll('.tri-ripple-element').length).toBe(1);
@@ -445,11 +445,11 @@ describe('TriRipple', () => {
       expect(rippleTarget.querySelectorAll('.tri-ripple-element').length).toBe(0);
     }));
 
-    it('should allow setting a specific anitriion config for a ripple', fakeAsync(() => {
+    it('should allow setting a specific animation config for a ripple', fakeAsync(() => {
       expect(rippleTarget.querySelectorAll('.tri-ripple-element').length).toBe(0);
 
       rippleDirective.launch(0, 0, {
-        anitriion: {enterDuration: 120, exitDuration: 0}
+        animation: {enterDuration: 120, exitDuration: 0}
       });
 
       expect(rippleTarget.querySelectorAll('.tri-ripple-element').length).toBe(1);
@@ -489,7 +489,7 @@ describe('TriRipple', () => {
       TestBed.configureTestingModule({
         imports     : [TriRippleModule],
         declarations: [testComponent],
-        providers   : [{provide: MAT_RIPPLE_GLOBAL_OPTIONS, useValue: rippleConfig}]
+        providers   : [{provide: TRI_RIPPLE_GLOBAL_OPTIONS, useValue: rippleConfig}]
       });
 
       fixture = TestBed.createComponent(testComponent);
@@ -537,9 +537,9 @@ describe('TriRipple', () => {
       expect(rippleTarget.querySelectorAll('.tri-ripple-element').length).toBe(1);
     });
 
-    it('should support changing the anitriion duration', fakeAsync(() => {
+    it('should support changing the animation duration', fakeAsync(() => {
       createTestComponent({
-        anitriion: {enterDuration: 100, exitDuration: 100}
+        animation: {enterDuration: 100, exitDuration: 100}
       });
 
       rippleDirective.launch(0, 0);
@@ -563,7 +563,7 @@ describe('TriRipple', () => {
       expect(rippleTarget.querySelectorAll('.tri-ripple-element').length).toBe(1);
 
       // Ignore the enter duration, because we immediately fired the mouseup after the mousedown.
-      // This means that the ripple should just fade out, and there shouldn't be an enter anitriion.
+      // This means that the ripple should just fade out, and there shouldn't be an enter animation.
       tick(exitDuration);
 
       expect(rippleTarget.querySelectorAll('.tri-ripple-element').length).toBe(0);
@@ -574,7 +574,7 @@ describe('TriRipple', () => {
     }));
   });
 
-  describe('with disabled anitriions', () => {
+  describe('with disabled animations', () => {
     let rippleDirective: TriRipple;
 
     beforeEach(() => {
@@ -591,9 +591,9 @@ describe('TriRipple', () => {
       rippleDirective = fixture.componentInstance.ripple;
     });
 
-    it('should set the anitriion durations to zero', () => {
-      expect(rippleDirective.rippleConfig.anitriion!.enterDuration).toBe(0);
-      expect(rippleDirective.rippleConfig.anitriion!.exitDuration).toBe(0);
+    it('should set the animation durations to zero', () => {
+      expect(rippleDirective.rippleConfig.animation!.enterDuration).toBe(0);
+      expect(rippleDirective.rippleConfig.animation!.exitDuration).toBe(0);
     });
   });
 
@@ -617,7 +617,7 @@ describe('TriRipple', () => {
       dispatchMouseEvent(rippleTarget, 'mousedown');
       dispatchMouseEvent(rippleTarget, 'mouseup');
 
-      let ripple = rippleTarget.querySelector('.tri-ripple-element')!;
+      const ripple = rippleTarget.querySelector('.tri-ripple-element')!;
       expect(window.getComputedStyle(ripple).backgroundColor).toBe(backgroundColor);
     });
 
@@ -640,7 +640,7 @@ describe('TriRipple', () => {
     });
 
     it('allows specifying custom trigger element', () => {
-      let alternateTrigger = fixture.debugElement.nativeElement
+      const alternateTrigger = fixture.debugElement.nativeElement
         .querySelector('.alternateTrigger') as HTMLElement;
 
       dispatchMouseEvent(alternateTrigger, 'mousedown');
@@ -662,7 +662,7 @@ describe('TriRipple', () => {
       controller.centered = true;
       fixture.detectChanges();
 
-      let elementRect = rippleTarget.getBoundingClientRect();
+      const elementRect = rippleTarget.getBoundingClientRect();
 
       // Click the ripple element 50 px to the right and 75px down from its upper left.
       dispatchMouseEvent(rippleTarget, 'mousedown', 50, 75);
@@ -671,11 +671,11 @@ describe('TriRipple', () => {
       // Because the centered input is true, the center of the ripple should be the midpoint of the
       // bounding rect. The ripple should expand to cover the rect corners, which are 150px
       // horizontally and 100px vertically from the midpoint.
-      let expectedRadius = Math.sqrt(150 * 150 + 100 * 100);
-      let expectedLeft = elementRect.left + (elementRect.width / 2) - expectedRadius;
-      let expectedTop = elementRect.top + (elementRect.height / 2) - expectedRadius;
+      const expectedRadius = Math.sqrt(150 * 150 + 100 * 100);
+      const expectedLeft = elementRect.left + (elementRect.width / 2) - expectedRadius;
+      const expectedTop = elementRect.top + (elementRect.height / 2) - expectedRadius;
 
-      let ripple = rippleTarget.querySelector('.tri-ripple-element') as HTMLElement;
+      const ripple = rippleTarget.querySelector('.tri-ripple-element') as HTMLElement;
 
       expect(pxStringToFloat(ripple.style.left)).toBeCloseTo(expectedLeft, 1);
       expect(pxStringToFloat(ripple.style.top)).toBeCloseTo(expectedTop, 1);
@@ -684,21 +684,21 @@ describe('TriRipple', () => {
     });
 
     it('uses custom radius if set', () => {
-      let customRadius = 42;
+      const customRadius = 42;
 
       controller.radius = customRadius;
       fixture.detectChanges();
 
-      let elementRect = rippleTarget.getBoundingClientRect();
+      const elementRect = rippleTarget.getBoundingClientRect();
 
       // Click the ripple element 50 px to the right and 75px down from its upper left.
       dispatchMouseEvent(rippleTarget, 'mousedown', 50, 75);
       dispatchMouseEvent(rippleTarget, 'mouseup');
 
-      let expectedLeft = elementRect.left + 50 - customRadius;
-      let expectedTop = elementRect.top + 75 - customRadius;
+      const expectedLeft = elementRect.left + 50 - customRadius;
+      const expectedTop = elementRect.top + 75 - customRadius;
 
-      let ripple = rippleTarget.querySelector('.tri-ripple-element') as HTMLElement;
+      const ripple = rippleTarget.querySelector('.tri-ripple-element') as HTMLElement;
 
       expect(pxStringToFloat(ripple.style.left)).toBeCloseTo(expectedLeft, 1);
       expect(pxStringToFloat(ripple.style.top)).toBeCloseTo(expectedTop, 1);
@@ -706,8 +706,8 @@ describe('TriRipple', () => {
       expect(pxStringToFloat(ripple.style.height)).toBeCloseTo(2 * customRadius, 1);
     });
 
-    it('should be able to specify anitriion config through binding', fakeAsync(() => {
-      controller.anitriionConfig = {enterDuration: 150, exitDuration: 150};
+    it('should be able to specify animation config through binding', fakeAsync(() => {
+      controller.animationConfig = {enterDuration: 150, exitDuration: 150};
       fixture.detectChanges();
 
       dispatchMouseEvent(rippleTarget, 'mousedown');
@@ -742,14 +742,14 @@ class BasicRippleContainer {
          [triRippleCentered]="centered"
          [triRippleRadius]="radius"
          [triRippleDisabled]="disabled"
-         [triRippleAnitriion]="anitriionConfig"
+         [triRippleAnimation]="animationConfig"
          [triRippleColor]="color">
     </div>
     <div class="alternateTrigger"></div>
   `,
 })
 class RippleContainerWithInputBindings {
-  anitriionConfig: RippleAnitriionConfig;
+  animationConfig: RippleAnimationConfig;
   trigger: HTMLElement;
   centered = false;
   disabled = false;

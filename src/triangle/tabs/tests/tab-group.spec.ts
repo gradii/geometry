@@ -55,7 +55,7 @@ describe('TriTabGroup', () => {
     });
 
     it('should change selected index on click', () => {
-      let component = fixture.debugElement.componentInstance;
+      const component = fixture.debugElement.componentInstance;
       component.selectedIndex = 0;
       checkSelectedIndex(0, fixture);
 
@@ -71,12 +71,12 @@ describe('TriTabGroup', () => {
     });
 
     it('should support two-way binding for selectedIndex', fakeAsync(() => {
-      let component = fixture.componentInstance;
+      const component = fixture.componentInstance;
       component.selectedIndex = 0;
 
       fixture.detectChanges();
 
-      let tabLabel = fixture.debugElement.queryAll(By.css('.mat-tab-label'))[1];
+      const tabLabel = fixture.debugElement.queryAll(By.css('.mat-tab-label'))[1];
       tabLabel.nativeElement.click();
       fixture.detectChanges();
       tick();
@@ -86,7 +86,7 @@ describe('TriTabGroup', () => {
 
     // Note: needs to be `async` in order to fail when we expect it to.
     it('should set to correct tab on fast change', async(() => {
-      let component = fixture.componentInstance;
+      const component = fixture.componentInstance;
       component.selectedIndex = 0;
       fixture.detectChanges();
 
@@ -105,8 +105,8 @@ describe('TriTabGroup', () => {
     }));
 
     it('should change tabs based on selectedIndex', fakeAsync(() => {
-      let component = fixture.componentInstance;
-      let tabComponent = fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
+      const component = fixture.componentInstance;
+      const tabComponent = fixture.debugElement.query(By.css('mat-tab-group'))!.componentInstance;
 
       spyOn(component, 'handleSelection').and.callThrough();
 
@@ -163,7 +163,7 @@ describe('TriTabGroup', () => {
     });
 
     it('should not crash when setting the selected index to NaN', () => {
-      let component = fixture.debugElement.componentInstance;
+      const component = fixture.debugElement.componentInstance;
 
       expect(() => {
         component.selectedIndex = NaN;
@@ -227,7 +227,7 @@ describe('TriTabGroup', () => {
       fixture.detectChanges();
 
       spyOn(fixture.componentInstance, 'animationDone');
-      let tabLabel = fixture.debugElement.queryAll(By.css('.mat-tab-label'))[1];
+      const tabLabel = fixture.debugElement.queryAll(By.css('.mat-tab-label'))[1];
       tabLabel.nativeElement.click();
       fixture.detectChanges();
       tick();
@@ -572,7 +572,7 @@ describe('TriTabGroup', () => {
     }));
 
     it('should support setting the header position', () => {
-      let tabGroupNode = fixture.debugElement.query(By.css('mat-tab-group'))!.nativeElement;
+      const tabGroupNode = fixture.debugElement.query(By.css('mat-tab-group'))!.nativeElement;
 
       expect(tabGroupNode.classList).not.toContain('mat-tab-group-inverted-header');
 
@@ -648,15 +648,15 @@ describe('TriTabGroup', () => {
   function checkSelectedIndex(expectedIndex: number, fixture: ComponentFixture<any>) {
     fixture.detectChanges();
 
-    let tabComponent: TriTabGroup = fixture.debugElement
+    const tabComponent: TriTabGroup = fixture.debugElement
       .query(By.css('mat-tab-group'))!.componentInstance;
     expect(tabComponent.selectedIndex).toBe(expectedIndex);
 
-    let tabLabelElement = fixture.debugElement
+    const tabLabelElement = fixture.debugElement
       .query(By.css(`.mat-tab-label:nth-of-type(${expectedIndex + 1})`))!.nativeElement;
     expect(tabLabelElement.classList.contains('mat-tab-label-active')).toBe(true);
 
-    let tabContentElement = fixture.debugElement
+    const tabContentElement = fixture.debugElement
       .query(By.css(`mat-tab-body:nth-of-type(${expectedIndex + 1})`))!.nativeElement;
     expect(tabContentElement.classList.contains('mat-tab-body-active')).toBe(true);
   }
@@ -683,7 +683,7 @@ describe('nested TriTabGroup with enabled animations', () => {
 
   it('should not throw when creating a component with nested tab groups', fakeAsync(() => {
     expect(() => {
-      let fixture = TestBed.createComponent(NestedTabs);
+      const fixture = TestBed.createComponent(NestedTabs);
       fixture.detectChanges();
       tick();
     }).not.toThrow();
@@ -691,7 +691,7 @@ describe('nested TriTabGroup with enabled animations', () => {
 
   it('should not throw when setting an animationDuration without units', fakeAsync(() => {
     expect(() => {
-      let fixture = TestBed.createComponent(TabsWithCustomAnimationDuration);
+      const fixture = TestBed.createComponent(TabsWithCustomAnimationDuration);
       fixture.detectChanges();
       tick();
     }).not.toThrow();

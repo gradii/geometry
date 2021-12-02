@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -12,12 +18,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { U } from '@angular/cdk/keycodes';
 import * as _ from 'lodash';
 import * as R from 'ramda';
 import { CanvasEngine } from '../../canvas-engine';
 import {
   BaseEntity, BaseEntityEvent, BaseEntityGenerics, BaseEntityListener, BaseEntityOptions,
-  DeserializeEvent
+  DeserializeContext
 } from '../../core-models/base-entity';
 import { BaseModel, BaseModelListener } from '../../core-models/base-model';
 import { LayerModel } from '../layer/layer-model';
@@ -124,7 +131,7 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 
   setGridSize(size: number = 0) {
     this.gridSize = size;
-    this.fireEvent({size: size}, 'gridUpdated');
+    this.fireEvent({ size: size }, 'gridUpdated');
   }
 
   getGridPosition(pos: number) {
@@ -139,43 +146,39 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
     const models: {
       [id: string]: BaseModel;
     } = {};
-    const promises: {
-      [id: string]: Promise<BaseModel>;
-    } = {};
     const resolvers: {
-      [id: string]: (model: BaseModel) => any;
+      [id: string]: Set<(model: BaseModel) => any>;
     } = {};
 
-    const event: DeserializeEvent = {
-      data         : data,
+    const context: DeserializeContext = {
       engine       : engine,
       registerModel: (model: BaseModel) => {
         models[model.getID()] = model;
         if (resolvers[model.getID()]) {
-          resolvers[model.getID()](model);
+          resolvers[model.getID()].forEach(cbFn => cbFn(model));
+          resolvers[model.getID()].clear();
         }
       },
-      getModel<T extends BaseModel>(id: string): Promise<T> {
+      getModel<T extends BaseModel>(id: string, cb: (m: any) => void): void {
         if (models[id]) {
-          return Promise.resolve(models[id]) as Promise<T>;
+          cb(models[id]);
+          return;
         }
-        if (!promises[id]) {
-          promises[id] = new Promise((resolve) => {
-            resolvers[id] = resolve;
-          });
+        if (!resolvers[id]) {
+          resolvers[id] = new Set();
         }
-        return promises[id] as Promise<T>;
+        resolvers[id].add(cb);
       }
     };
-    this.deserialize(event);
+    this.deserialize(data, context);
   }
 
-  deserialize(event: DeserializeEvent<this>) {
-    super.deserialize(event);
-    this.offsetX  = event.data.offsetX;
-    this.offsetY  = event.data.offsetY;
-    this.zoom     = event.data.zoom;
-    this.gridSize = event.data.gridSize;
+  deserialize(data: ReturnType<this['serialize']>, context: DeserializeContext<this>) {
+    super.deserialize(data, context);
+    this.offsetX  = data.offsetX;
+    this.offsetY  = data.offsetY;
+    this.zoom     = data.zoom;
+    this.gridSize = data.gridSize;
     // layers
   }
 
@@ -194,13 +197,13 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 
   setZoomLevel(zoom: number) {
     this.zoom = zoom;
-    this.fireEvent({zoom}, 'zoomUpdated');
+    this.fireEvent({ zoom }, 'zoomUpdated');
   }
 
   setOffset(offsetX: number, offsetY: number) {
     this.offsetX = offsetX;
     this.offsetY = offsetY;
-    this.fireEvent({offsetX, offsetY}, 'offsetUpdated');
+    this.fireEvent({ offsetX, offsetY }, 'offsetUpdated');
   }
 
   setOffsetX(offsetX: number) {

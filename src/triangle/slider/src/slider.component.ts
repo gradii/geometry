@@ -19,7 +19,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { TRI_INTERNAL_SLIDER } from '@gradii/triangle/slider/src/slider.types';
+import { TRI_INTERNAL_SLIDER } from './slider.types';
 import { fromEvent, merge, Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, pluck, takeUntil, tap } from 'rxjs/operators';
 import { Marks, MarksArray } from './slider-marks.component';

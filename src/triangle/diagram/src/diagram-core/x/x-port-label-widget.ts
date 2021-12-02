@@ -1,12 +1,19 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
+import { PortWidget } from '../entities/port/port-widget';
 import { DiagramPortModel } from '../../models/diagram-port-model';
 import { DiagramEngine } from '../diagram-engine';
 //
@@ -84,4 +91,13 @@ import { DiagramEngine } from '../diagram-engine';
 export class XPortLabelWidget {
   @Input() port: DiagramPortModel;
   @Input() engine: DiagramEngine;
+
+  @ViewChild(PortWidget, {static: false})
+  portWidget: PortWidget;
+
+  report() {
+    if (this.portWidget) {
+      this.portWidget.report();
+    }
+  }
 }

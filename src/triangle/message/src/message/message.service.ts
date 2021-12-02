@@ -58,7 +58,7 @@ export class MessageBaseService<ContainerClass extends MessageContainerComponent
 }
 
 @Injectable()
-export class MessageService extends MessageBaseService<MessageContainerComponent<MessageConfig>, MessageData> {
+export class TriMessageService extends MessageBaseService<MessageContainerComponent<MessageConfig>, MessageData> {
   constructor(protected overlay: Overlay) {
     super(overlay, MessageContainerComponent, 'message-');
   }

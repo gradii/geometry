@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TriDatePickerModule } from '@gradii/triangle/date-picker';
-import { TriDropDownModule } from '@gradii/triangle/dropdown';
+// import { TriDropDownModule } from '@gradii/triangle/dropdown';
 import { TriInputModule } from '@gradii/triangle/input';
 import { TriInputNumberModule } from '@gradii/triangle/input-number';
 import { TriSelectModule } from '@gradii/triangle/select';
@@ -47,7 +47,7 @@ const importedModules = [
   ReactiveFormsModule,
   FormsModule,
   TriSelectModule,
-  TriDropDownModule,
+  // TriDropDownModule,
   // AutoCompleteModule,
   TriInputModule,
   TriInputNumberModule,

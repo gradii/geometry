@@ -6,7 +6,8 @@
 
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { TriIconModule } from '../../icon';
+import { TriIconModule } from '@gradii/triangle/icon';
+import { TrimDirective } from './directive/trim.directive';
 import { FormControlComponent } from './form-control.component';
 import { FormErrorMessageDirective } from './form-error-message.directive';
 import { FormExplainComponent } from './form-explain.component';
@@ -20,6 +21,8 @@ import { FormTextDirective } from './form-text.directive';
 import { FormValidatorsMessagePipe } from './form-validators-message.pipe';
 
 import { FormComponent } from './form.component';
+import { EmailValidatorDirective } from './validators/email-validator.directive';
+import { PasswordValidatorDirective } from './validators/password-validator.directive';
 
 /**
  *
@@ -95,8 +98,14 @@ import { FormComponent } from './form.component';
 
     FormNoFeedbackDirective,
 
+    EmailValidatorDirective,
+    PasswordValidatorDirective,
+
+    TrimDirective,
+
     // pipes
-    FormValidatorsMessagePipe
+    FormValidatorsMessagePipe,
+
   ],
   exports     : [
     FormExtraDirective,
@@ -110,7 +119,12 @@ import { FormComponent } from './form.component';
     FormSplitDirective,
     FormItemRequiredDirective,
     FormErrorMessageDirective,
-    FormNoFeedbackDirective
+    FormNoFeedbackDirective,
+
+    EmailValidatorDirective,
+    PasswordValidatorDirective,
+
+    TrimDirective
   ],
   imports: [CommonModule, TriIconModule],
   providers   : []

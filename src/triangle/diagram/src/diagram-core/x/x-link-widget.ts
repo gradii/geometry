@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -172,8 +178,8 @@ export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewC
 
   ngAfterViewInit() {
     // ensure id is present for all points on the path
-    let points    = this.link.getPoints();
-    let paths     = [];
+    const points    = this.link.getPoints();
+    const paths     = [];
     this.refPaths = [];
 
     this.svgPaths.push(
@@ -185,7 +191,7 @@ export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewC
       }
     );
 
-    for (let it of points) {
+    for (const it of points) {
       this.pointPaths.push({
         point        : it as any,
         colorSelected: this.link.selectedColor,

@@ -18,7 +18,7 @@
  *    }
  */
 export function applyCssPrefixes(target: {[key: string]: any | null}) {
-  for (let key in target) {
+  for (const key in target) {
     let value = target[key] || '';
 
     switch (key) {

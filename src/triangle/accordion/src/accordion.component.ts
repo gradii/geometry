@@ -18,12 +18,13 @@ import { AccordionItemComponent } from './accordion-item.component';
   styleUrls      : [`../style/accordion.css`],
   host           : {
     'class'                           : 'tri-accordion',
-    '[class.tri-accordion-borderless]': '!bordered',
+    '[class.tri-accordion-borderless]': '!_bordered',
     '[class.tri-accordion-sm]'        : 'size === "small"',
     '[class.tri-accordion-lg]'        : 'size === "large"',
   }
 })
 export class AccordionComponent {
+  static ngAcceptInputType_bordered: BooleanInput;
 
   private _defaultExpanded = false;
 
@@ -39,12 +40,20 @@ export class AccordionComponent {
    */
   @Input() accordion = false;
 
+  private _bordered = true;
   /**
    * Whether has border
    * 是否有边框
    * @default true
    */
-  @Input() bordered = true;
+  @Input()
+  get bordered(): boolean {
+    return this._bordered;
+  }
+
+  set bordered(value: boolean) {
+    this._bordered = coerceBooleanProperty(value);
+  }
 
   @Input()
   get defaultExpanded(): boolean {

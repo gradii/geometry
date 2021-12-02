@@ -4,44 +4,18 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
-  AfterContentChecked,
-  AfterContentInit,
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ContentChild,
-  ContentChildren,
-  ElementRef,
-  EventEmitter, forwardRef,
-  Input,
-  isDevMode,
-  NgZone,
-  OnChanges,
-  OnDestroy,
-  Output,
-  QueryList,
-  Renderer2,
-  Self,
-  SimpleChanges,
-  ViewChild
+  AfterContentChecked, AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, ContentChild, ContentChildren,
+  ElementRef, EventEmitter, forwardRef, Input, isDevMode, NgZone, OnChanges, OnDestroy, Output, QueryList, Renderer2,
+  Self, SimpleChanges, ViewChild, ViewEncapsulation
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { isIterable } from '@gradii/check-type';
+import { CompositeFilterDescriptor, GroupDescriptor, GroupResult, SortDescriptor } from '@gradii/triangle/data-query';
+import { TRI_INTERNAL_DATA_TABLE } from './data-table.types';
 import {
-  CompositeFilterDescriptor,
-  GroupDescriptor,
-  GroupResult,
-  SortDescriptor
-} from '@gradii/triangle/data-query';
-import { TRI_INTERNAL_DATA_TABLE } from '@gradii/triangle/data-table/src/data-table.types';
-import {
-  isArray,
-  isBoolean,
-  isDate,
-  isFunction,
-  isNumber,
-  isObject,
-  isPresent
+  coerceToBoolean, isArray, isBoolean, isDate, isFunction, isNumber, isObject, isPresent
 } from '@gradii/triangle/util';
 import { merge } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
@@ -99,7 +73,7 @@ const createControl = (source: any) => (acc: any, key: string) => {
 
 const fieldMapFnObjectFactory = (obj: any) => {
   return function (field: any): string {
-    for (let [key, val] of Object.entries(obj)) {
+    for (const [key, val] of Object.entries(obj)) {
       if (field === key) {
         return (val as string);
       }
@@ -179,10 +153,11 @@ export type fieldFilterMapFn = (fieldKey: string) => 'text' | 'numeric' | 'boole
  * </ng-container>
  */
 @Component({
-  selector           : 'tri-data-table',
-  exportAs           : 'triDataTable',
+  selector: 'tri-data-table',
+  exportAs: 'triDataTable',
   // changeDetection    : ChangeDetectionStrategy.OnPush,
-  providers          : [
+  encapsulation: ViewEncapsulation.Emulated,
+  providers    : [
     BrowserSupportService,
     SelectionService,
     DetailsService,
@@ -206,16 +181,16 @@ export type fieldFilterMapFn = (fieldKey: string) => 'text' | 'numeric' | 'boole
     IdService,
     SortService,
     {
-      provide: TRI_INTERNAL_DATA_TABLE,
-      useExisting: forwardRef(()=>DataTableComponent)
+      provide    : TRI_INTERNAL_DATA_TABLE,
+      useExisting: forwardRef(() => DataTableComponent)
     }
   ],
-  host               : {
+  host         : {
     '[class.tri-data-table-wrapper]': 'true',
     '[attr.dir]'                    : 'direction',
     '[style.height.px]'             : 'height'
   },
-  template           : `
+  template     : `
     <tri-data-table-toolbar *ngIf="showTopToolbar"></tri-data-table-toolbar>
     <div class="tri-data-table tri-widget tri-table-large"
          [class.tri-data-table-lockedcolumns]="lockedLeafColumns.length > 0"
@@ -383,7 +358,7 @@ export type fieldFilterMapFn = (fieldKey: string) => 'text' | 'numeric' | 'boole
       </ng-template>
     </div>
     <div style="margin: 4rem;text-align: center;font-size: medium;"
-         *ngIf="view.length==0&&!loading"> 没有数据
+         *ngIf="!view||view.length==0&&!loading"> 没有数据
     </div>
     <tri-spin style="position:absolute;width:100%;" *ngIf="loading" [spinning]="loading"
               [size]="'large'"></tri-spin>
@@ -401,13 +376,13 @@ export type fieldFilterMapFn = (fieldKey: string) => 'text' | 'numeric' | 'boole
     </tri-pagination>
     <tri-data-table-toolbar *ngIf="showBottomToolbar"></tri-data-table-toolbar>
   `,
-  styleUrls          : [
+  styleUrls    : [
     `../style/data-table.css`,
     `../style/pagination.css`
   ]
 })
 export class DataTableComponent implements OnChanges, AfterViewInit, AfterContentChecked, AfterContentInit, OnDestroy {
-  direction = 'ltr';
+  direction                                                                = 'ltr';
   cachedWindowWidth;
   defaultSelection;
   selectionSubscription;
@@ -423,36 +398,36 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   columnsContainerChangeSubscription;
   _RowSelected;
   _hasGeneratedColumn: boolean;
-  @Input() loading = false;
+  @Input() loading                                                         = false;
   @Input() height: number;
-  @Output() filterChange: EventEmitter<CompositeFilterDescriptor> = new EventEmitter();
-  @Output() pageChange: EventEmitter<PageChangeEvent> = new EventEmitter();
-  @Output() groupChange: EventEmitter<GroupDescriptor[]> = new EventEmitter();
-  @Output() sortChange: EventEmitter<SortDescriptor[]> = new EventEmitter();
-  @Output() selectionChange: EventEmitter<SelectionEvent> = new EventEmitter();
-  @Output() dataStateChange: EventEmitter<DataStateChangeEvent> = new EventEmitter();
-  @Output() groupExpand: EventEmitter<{ group: GroupResult }> = new EventEmitter();
-  @Output() groupCollapse: EventEmitter<{ group: GroupResult }> = new EventEmitter();
-  @Output() detailExpand: EventEmitter<{ index: number; dataItem: any }> = new EventEmitter();
+  @Output() filterChange: EventEmitter<CompositeFilterDescriptor>          = new EventEmitter();
+  @Output() pageChange: EventEmitter<PageChangeEvent>                      = new EventEmitter();
+  @Output() groupChange: EventEmitter<GroupDescriptor[]>                   = new EventEmitter();
+  @Output() sortChange: EventEmitter<SortDescriptor[]>                     = new EventEmitter();
+  @Output() selectionChange: EventEmitter<SelectionEvent>                  = new EventEmitter();
+  @Output() dataStateChange: EventEmitter<DataStateChangeEvent>            = new EventEmitter();
+  @Output() groupExpand: EventEmitter<{ group: GroupResult }>              = new EventEmitter();
+  @Output() groupCollapse: EventEmitter<{ group: GroupResult }>            = new EventEmitter();
+  @Output() detailExpand: EventEmitter<{ index: number; dataItem: any }>   = new EventEmitter();
   @Output() detailCollapse: EventEmitter<{ index: number; dataItem: any }> = new EventEmitter();
-  @Output() autoGenerateColumnsChange = new EventEmitter();
-  @Output() edit: EventEmitter<EditEvent> = new EventEmitter();
-  @Output() cancel: EventEmitter<CancelEvent> = new EventEmitter();
-  @Output() save: EventEmitter<SaveEvent> = new EventEmitter();
-  @Output() remove: EventEmitter<RemoveEvent> = new EventEmitter();
-  @Output() add: EventEmitter<AddEvent> = new EventEmitter();
+  @Output() autoGenerateColumnsChange                                      = new EventEmitter();
+  @Output() edit: EventEmitter<EditEvent>                                  = new EventEmitter();
+  @Output() cancel: EventEmitter<CancelEvent>                              = new EventEmitter();
+  @Output() save: EventEmitter<SaveEvent>                                  = new EventEmitter();
+  @Output() remove: EventEmitter<RemoveEvent>                              = new EventEmitter();
+  @Output() add: EventEmitter<AddEvent>                                    = new EventEmitter();
   @ContentChildren(ColumnBase) columns: QueryList<ColumnBase>;
-  @ContentChild(DetailTemplateDirective, {static: false}) detailTemplate: DetailTemplateDirective;
+  @ContentChild(DetailTemplateDirective, { static: false }) detailTemplate: DetailTemplateDirective;
   @ContentChildren(NoRecordsTemplateDirective) noRecordsTemplate: NoRecordsTemplateDirective;
   // pagerTemplate: PagerTemplateDirective;
-  @ContentChild(ToolbarTemplateDirective, {static: false}) toolbarTemplate: ToolbarTemplateDirective;
-  @ViewChild('lockedHeader', {static: false}) lockedHeader: any;
-  @ViewChild('header', {static: false}) header: any;
-  @ViewChild('footer', {static: false}) footer: any;
+  @ContentChild(ToolbarTemplateDirective, { static: false }) toolbarTemplate: ToolbarTemplateDirective;
+  @ViewChild('lockedHeader', { static: false }) lockedHeader: any;
+  @ViewChild('header', { static: false }) header: any;
+  @ViewChild('footer', { static: false }) footer: any;
 
   // _cv: CollectionView = new CollectionView();
   // _rows: RowCollection = new RowCollection(24);
-  @ViewChild(ListComponent, {static: false}) list: ListComponent;
+  @ViewChild(ListComponent, { static: false }) list: ListComponent;
   scrollbarWidth: number;
   columnList: ColumnList;
   columnsContainer: ColumnsContainer;
@@ -475,17 +450,17 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
               private ngZone: NgZone,
               private scrollSyncService: ScrollSyncService,
               private cdr: ChangeDetectorRef) {
-    this.columns = new QueryList<ColumnBase>();
-    this.columnsContainer = new ColumnsContainer(() =>
+    this.columns           = new QueryList<ColumnBase>();
+    this.columnsContainer  = new ColumnsContainer(() =>
       this.columnList.filter(column => !this.isHidden(column) && this.matchesMedia(column))
     );
     // this.view = new DataCollection(new DataResultIterator(this._data, this._group, this.skip, this.childItemsPath));
-    this._sort = [];
-    this._group = [];
-    this._data = [];
+    this._sort             = [];
+    this._group            = [];
+    this._data             = [];
     this.cachedWindowWidth = 0;
-    this._rowClass = () => null;
-    this.scrollbarWidth = supportService.scrollbarWidth;
+    this._rowClass         = () => null;
+    this.scrollbarWidth    = supportService.scrollbarWidth;
     this.groupInfoService.registerColumnsContainer(() => this.columnList);
     if (selectionService) {
       this.selectionSubscription = selectionService.changes
@@ -506,30 +481,30 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
       )
       .subscribe(_a => {
         const expand = _a.expand;
-        const group = _a.dataItem;
-        return !expand ? this.groupExpand.emit({group}) : this.groupCollapse.emit({group});
+        const group  = _a.dataItem;
+        return !expand ? this.groupExpand.emit({ group }) : this.groupCollapse.emit({ group });
       });
-    this.detailsServiceSubscription = detailsService.changes
+    this.detailsServiceSubscription      = detailsService.changes
       .pipe(
-        filter(({dataItem}) => {
+        filter(({ dataItem }) => {
           return isPresent(dataItem);
         }),
         // tap(() => this.cdr.markForCheck())
       )
-      .subscribe(({expand, dataItem, index}) => {
+      .subscribe(({ expand, dataItem, index }) => {
         return expand ? this.detailExpand.emit({
           dataItem,
           index
-        }) : this.detailCollapse.emit({dataItem, index});
+        }) : this.detailCollapse.emit({ dataItem, index });
       });
-    this.filterSubscription = this.filterService.changes
+    this.filterSubscription              = this.filterService.changes
       // .pipe(
       // tap(() => this.cdr.markForCheck())
       // )
       .subscribe(x => {
         this.filterChange.emit(x);
       });
-    this.sortSubscription = this.sortService.changes.subscribe(x => {
+    this.sortSubscription                = this.sortService.changes.subscribe(x => {
       this.sortChange.emit(x);
     });
     this.attachStateChangesEmitter();
@@ -540,7 +515,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
         // tap(() => this.cdr.markForCheck())
       )
       .subscribe(this.columnsContainerChange.bind(this));
-    this.columnList = new ColumnList(this.columns);
+    this.columnList                         = new ColumnList(this.columns);
   }
 
   _sort: SortDescriptor[];
@@ -687,11 +662,11 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   }
 
   set selectable(value: boolean | SelectableSettings) {
-    this._selectable = value;
+    this._selectable = coerceBooleanProperty(value);
     // this.cdr.markForCheck();
   }
 
-  _filter: CompositeFilterDescriptor = {logic: 'and', filters: []};
+  _filter: CompositeFilterDescriptor = { logic: 'and', filters: [] };
 
   @Input()
   get filter(): CompositeFilterDescriptor {
@@ -723,7 +698,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   }
 
   set resizable(value) {
-    this._resizable = value;
+    this._resizable = coerceBooleanProperty(value);
     // this.cdr.markForCheck();
   }
 
@@ -751,7 +726,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     // this.cdr.markForCheck();
   }
 
-  _groupable: GroupableSettings = {enabled: false, showFooter: false};
+  _groupable: GroupableSettings = { enabled: false, showFooter: false };
 
   @Input()
   get groupable(): GroupableSettings | boolean {
@@ -775,7 +750,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   }
 
   set autoGenerateColumns(value: boolean) {
-    this._autoGenerateColumns = value;
+    this._autoGenerateColumns = coerceBooleanProperty(value);
     // this.cdr.markForCheck();
   }
 
@@ -861,14 +836,18 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   }
 
   set dataSource(value: any[] | GridDataResult) {
-    if (this._data != value) {
-      this._data = value;
-      this.view = new DataCollection(new DataResultIterator(value/*, this._group, this._skip*/, this._childItemsPath));
+    if (isArray(value) || isIterable(value)) {
+      if (this._data != value) {
+        this._data = value;
+        this.view  = new DataCollection(
+          new DataResultIterator(value/*, this._group, this._skip*/, this._childItemsPath));
 
-      // this._bindRow();
-      // this._rows.iter = Iterable.defer(() => this._bindRow()).memoize();
-      // this.cdr.markForCheck();
+        // this._bindRow();
+        // this._rows.iter = Iterable.defer(() => this._bindRow()).memoize();
+        // this.cdr.markForCheck();
+      }
     }
+
   }
 
   get showTopToolbar(): boolean {
@@ -910,8 +889,8 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
 
   get headerPadding(): any {
     const padding = `${this.scrollbarWidth}px`;
-    const right = padding;
-    const left = 0;
+    const right   = padding;
+    const left    = 0;
     return `0 ${right} 0 ${left}`;
   }
 
@@ -1031,8 +1010,8 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   }
 
   ngAfterViewInit() {
-    const resizeCheck = this.resizeCheck.bind(this);
-    this.resizeSubscription = this.renderer.listen('window', 'resize', resizeCheck);
+    const resizeCheck            = this.resizeCheck.bind(this);
+    this.resizeSubscription      = this.renderer.listen('window', 'resize', resizeCheck);
     this.orientationSubscription = this.renderer.listen('window', 'orientationchange', resizeCheck);
     this.attachScrollSync();
   }
@@ -1045,7 +1024,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
 
   ngAfterContentInit() {
     this._runAutoGenerateColumns();
-    this.columnList = new ColumnList(this.columns);
+    this.columnList                = new ColumnList(this.columns);
     this.columnsChangeSubscription = this.columns.changes.subscribe(() => this.verifySettings());
   }
 
@@ -1135,14 +1114,14 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     const isFormGroup = group instanceof FormGroup;
     if (!isFormGroup) {
       const fields = Object.keys(group).reduce(createControl(group), {});
-      group = new FormGroup(fields);
+      group        = new FormGroup(fields);
     }
     this.editService.addRow(group);
   }
 
   // todo
   editCell(rowIndex, column, group) {
-    let instance = this.columnInstance(column);
+    const instance = this.columnInstance(column);
     this.editService.editRow(rowIndex, group);
     //    this.focusEditElement('.ant-data-table-edit-cell');
   }
@@ -1175,7 +1154,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
       return;
     }
     this._pageIndex = event.pageIndex;
-    this._pageSize = event.pageSize;
+    this._pageSize  = event.pageSize;
     this.pageChange.emit(event);
   }
 
@@ -1249,6 +1228,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   }
 
   _runAutoGenerateColumns() {
+    if (!this.view) {
+      return;
+    }
     // check field define column
     const fieldColumns: ColumnBase[] = [];
     const otherColumns: ColumnBase[] = [];
@@ -1283,7 +1265,7 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
             } else if (isObject(this._fieldFilterMap)) {
               column.filter = fieldMapFnObjectFactory(this._fieldFilterMap)(field);
             } else if (this.view.length > 0) {
-              const data = this.view.at(0);
+              const data    = this.view.at(0);
               column.filter = ((field, _data) => {
                 if (isNumber(_data)) {
                   return 'numeric';
@@ -1366,9 +1348,9 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
     this.editServiceSubscription = this.editService.changes.subscribe(this.emitCRUDEvent.bind(this));
   }
 
-  emitCRUDEvent({action, rowIndex, formGroup, isNew}) {
+  emitCRUDEvent({ action, rowIndex, formGroup, isNew }) {
     let dataItem;
-    let row = this.view.at(rowIndex);
+    const row = this.view.at(rowIndex);
     if (isPresent(row)) {
       dataItem = row.dataItem;
     }
@@ -1435,4 +1417,8 @@ export class DataTableComponent implements OnChanges, AfterViewInit, AfterConten
   expandGroupChildren(groupIndex: number) {
 
   }
+
+  static ngAcceptInputType_resizable: BooleanInput;
+  static ngAcceptInputType_selectable: BooleanInput;
+  static ngAcceptInputType_autoGenerateColumns: BooleanInput;
 }

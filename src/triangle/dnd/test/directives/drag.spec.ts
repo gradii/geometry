@@ -1097,7 +1097,7 @@ describe('CdkDrag', () => {
     it('should be able to configure the drag start delay based on the event type', fakeAsync(() => {
       // We can't use Jasmine's `clock` because Zone.js interferes with it.
       spyOn(Date, 'now').and.callFake(() => currentTime);
-      let currentTime = 0;
+      const currentTime = 0;
 
       const fixture                            = createComponent(StandaloneDraggable);
       fixture.componentInstance.dragStartDelay = {touch: 500, mouse: 0};

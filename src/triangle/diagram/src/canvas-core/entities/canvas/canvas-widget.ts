@@ -1,5 +1,11 @@
 /**
  * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+/**
+ * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
@@ -13,13 +19,13 @@
  */
 
 import {
-  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host, Inject,
-  NgZone, OnDestroy, OnInit
+  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef,
+  Host, Inject, NgZone, OnDestroy, OnInit
 } from '@angular/core';
 import { fromEvent, merge, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 import { CanvasEngine } from '../../canvas-engine';
-import { ENGINE } from '../../tokens';
+import { CANVAS_WIDGET, ENGINE } from '../../tokens';
 
 @Component({
   selector       : 'canvas-widget',
@@ -30,6 +36,11 @@ import { ENGINE } from '../../tokens';
                               [attr.key]="layer.getID()">
       </transform-layer-widget>
     </ng-template>`,
+  providers      : [
+    {
+      provide: CANVAS_WIDGET, useExisting: forwardRef(() => CanvasWidget)
+    }
+  ],
   styles         : [
     `:host {
       position : absolute;

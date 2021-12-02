@@ -69,7 +69,7 @@ export class ScrollService {
 
   /** 获取 `el` 相对于视窗距离 */
   getOffset(el: Element): { top: number; left: number } {
-    let ret = {
+    const ret = {
       top : 0,
       left: 0
     };

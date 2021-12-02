@@ -60,7 +60,7 @@ class NewRowTestComponent implements OnInit {
   editTemplate;
 
   constructor(editService: EditService) {
-    let group = new Map();
+    const group = new Map();
     editService.addRow(group);
     group.set('foo', true);
   }

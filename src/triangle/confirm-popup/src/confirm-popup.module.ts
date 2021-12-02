@@ -38,7 +38,7 @@ import { ConfirmPopupDirective } from './confirm-popup.directive';
  *
  */
 @NgModule({
-  imports: [
+  imports     : [
     CommonModule,
     TriButtonModule,
     OverlayModule,
@@ -46,8 +46,11 @@ import { ConfirmPopupDirective } from './confirm-popup.directive';
     TriCommonModule,
     TriPopoverModule
   ],
-  declarations: [ConfirmPopupComponent, ConfirmPopupDirective],
-  exports: [
+  declarations: [
+    ConfirmPopupComponent,
+    ConfirmPopupDirective
+  ],
+  exports     : [
     ConfirmPopupComponent,
     ConfirmPopupDirective,
     TriCommonModule,
