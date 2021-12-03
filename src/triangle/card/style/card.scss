@@ -1,13 +1,17 @@
 @use "../../core/style/mixins";
+@use "../../core/themes/theme";
+@use "../../core/style/theming";
 @use "../../core/style/variables" as v;
 
-$card-prefix-cls       : "#{v.$tri-prefix}-card";
-$card-padding-base     : 24px;
-$card-padding-wider    : 32px;
-$card-head-height      : 3rem !default;
-$card-footer-height    : 3rem !default;
-$card-head-line-height : 1.5rem !default;
-$card-border-radius    : v.$border-radius-base !default;
+$card-prefix-cls         : "#{v.$tri-prefix}-card";
+$card-padding-base       : 24px;
+$card-padding-wider      : 32px;
+$card-head-height        : 3rem !default;
+$card-footer-height      : 3rem !default;
+$card-head-line-height   : 1.5rem !default;
+$card-border-radius      : v.$border-radius-base !default;
+
+$card-actions-text-color : theming.tri-color(theme.$foreground, text-color) !default;
 
 .#{$card-prefix-cls} {
   border-radius  : $card-border-radius;
@@ -104,6 +108,7 @@ $card-border-radius    : v.$border-radius-base !default;
         border-bottom : none;
         flex          : 1;
         border        : 0;
+        color         : $card-actions-text-color;
 
         &:active, &:focus {
           box-shadow : none !important;
@@ -115,7 +120,16 @@ $card-border-radius    : v.$border-radius-base !default;
           border-right : 1px solid #cfcfcf;
           height       : 1em;
           position     : absolute;
-          right        : 1px;
+          right        : 0;
+        }
+
+        &:not(:first-child):before {
+          display      : block;
+          content      : "";
+          border-right : 1px solid #cfcfcf;
+          height       : 1em;
+          position     : absolute;
+          left        : 0;
         }
       }
     }
