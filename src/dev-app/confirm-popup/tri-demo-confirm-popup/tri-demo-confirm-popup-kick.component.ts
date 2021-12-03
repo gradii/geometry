@@ -8,7 +8,7 @@ import {
   Component,
   OnInit
 } from '@angular/core';
-import { MessageService } from '@gradii/triangle/message';
+import { TriMessageService } from '@gradii/triangle/message';
 
 /**
  * @title confirm-popup-kick
@@ -40,7 +40,7 @@ export class TriDemoConfirmPopupKickComponent implements OnInit {
     this.message.info('click confirm');
   }
 
-  constructor(private message: MessageService) {
+  constructor(private message: TriMessageService) {
   }
 
   ngOnInit() {

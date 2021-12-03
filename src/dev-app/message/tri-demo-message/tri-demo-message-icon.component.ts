@@ -8,7 +8,7 @@ import {
   Component,
   OnInit
 } from '@angular/core';
-import { MessageService } from '@gradii/triangle/message';
+import { TriMessageService } from '@gradii/triangle/message';
 
 /**
  * @title message-icon
@@ -27,7 +27,7 @@ export class TriDemoMessageIconComponent implements OnInit {
     this._message.create(type, `这是一条${text}提示`);
   };
 
-  constructor(private _message: MessageService) {
+  constructor(private _message: TriMessageService) {
   }
 
   ngOnInit() {

@@ -5,7 +5,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { NotificationService } from '@gradii/triangle/message';
+import { TriNotificationService } from '@gradii/triangle/message';
 
 /**
  * @title notification-basic
@@ -18,7 +18,7 @@ import { NotificationService } from '@gradii/triangle/message';
   styles: []
 })
 export class TriDemoNotificationBasicComponent implements OnInit {
-  constructor(private _notification: NotificationService) {}
+  constructor(private _notification: TriNotificationService) {}
 
   ngOnInit() {}
 

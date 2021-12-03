@@ -5,7 +5,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { NotificationService } from '@gradii/triangle/message';
+import { TriNotificationService } from '@gradii/triangle/message';
 
 /**
  * @title notification-html
@@ -21,7 +21,7 @@ export class TriDemoNotificationHtmlComponent implements OnInit {
   createBasicNotification = () => {
     this._notification.html('<strong>自定义通知栏内HTML</strong><br><p>HTML</p>');
   };
-  constructor(private _notification: NotificationService) {}
+  constructor(private _notification: TriNotificationService) {}
 
   ngOnInit() {}
 }

@@ -5,7 +5,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from '@gradii/triangle/message';
+import { TriMessageService } from '@gradii/triangle/message';
 
 /**
  * @title message-basic
@@ -18,7 +18,7 @@ import { MessageService } from '@gradii/triangle/message';
   styles: []
 })
 export class TriDemoMessageBasicComponent implements OnInit {
-  constructor(private _message: MessageService) {}
+  constructor(private _message: TriMessageService) {}
 
   ngOnInit() {}
 

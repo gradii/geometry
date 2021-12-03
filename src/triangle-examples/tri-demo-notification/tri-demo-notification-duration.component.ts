@@ -5,7 +5,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { NotificationService } from '@gradii/triangle/message';
+import { TriNotificationService } from '@gradii/triangle/message';
 
 /**
  * @title notification-duration
@@ -21,7 +21,7 @@ export class TriDemoNotificationDurationComponent implements OnInit {
   createBasicNotification = () => {
     this._notification.blank('这是标题', '我不会自动关闭，我不会自动关闭，我不会自动关闭，我不会自动关闭，我不会自动关闭，我不会自动关闭，我不会自动关闭', { duration: 0 });
   };
-  constructor(private _notification: NotificationService) {}
+  constructor(private _notification: TriNotificationService) {}
 
   ngOnInit() {}
 }

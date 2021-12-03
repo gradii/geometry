@@ -8,7 +8,7 @@ import {
   Component,
   OnInit
 } from '@angular/core';
-import { MessageService } from '@gradii/triangle/message';
+import { TriMessageService } from '@gradii/triangle/message';
 
 /**
  * @title confirm-popup-locale
@@ -31,7 +31,7 @@ import { MessageService } from '@gradii/triangle/message';
   `
 })
 export class TriDemoConfirmPopupLocalComponent implements OnInit {
-  constructor(private message: MessageService) {
+  constructor(private message: TriMessageService) {
   }
 
   ngOnInit() {

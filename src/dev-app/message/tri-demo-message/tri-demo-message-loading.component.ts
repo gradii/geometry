@@ -4,11 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  Component,
-  OnInit
-} from '@angular/core';
-import { MessageService } from '@gradii/triangle/message';
+import { Component, OnInit } from '@angular/core';
+import { TriMessageService } from '@gradii/triangle/message';
 
 /**
  * @title message-loading
@@ -17,11 +14,11 @@ import { MessageService } from '@gradii/triangle/message';
   selector: 'tri-demo-message-loading',
   template: `
     <button tri-button [type]="'default'" (click)="createBasicMessage()">显示加载中</button>
-`,
+  `,
   styles  : []
 })
 export class TriDemoMessageLoadingComponent implements OnInit {
-  _id;
+  private _id: string;
   createBasicMessage = () => {
     this._id = this._message.loading('正在执行中', {duration: 0}).messageId;
     // setTimeout(_ => {
@@ -29,7 +26,7 @@ export class TriDemoMessageLoadingComponent implements OnInit {
     // }, 2500);
   };
 
-  constructor(private _message: MessageService) {
+  constructor(private _message: TriMessageService) {
   }
 
   ngOnInit() {

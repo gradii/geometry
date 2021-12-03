@@ -5,7 +5,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { NotificationService } from '@gradii/triangle/message';
+import { TriNotificationService } from '@gradii/triangle/message';
 
 /**
  * @title notification-icon
@@ -24,7 +24,7 @@ export class TriDemoNotificationIconComponent implements OnInit {
   createNotification = type => {
     this._notification.create(type, '这是标题', '这是提示框的文案这是提示框示框的文案这是提示是提示框的文案这是提示框的文案');
   };
-  constructor(private _notification: NotificationService) {}
+  constructor(private _notification: TriNotificationService) {}
 
   ngOnInit() {}
 }
