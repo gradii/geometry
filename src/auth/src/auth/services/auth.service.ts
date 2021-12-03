@@ -24,7 +24,7 @@ import { TriAuthToken } from './token/token';
 export class TriAuthService {
 
   constructor(protected tokenService: TriTokenService,
-              @Inject(TRI_AUTH_STRATEGIES) protected strategies) {
+              @Inject(TRI_AUTH_STRATEGIES) protected strategies: TriAuthStrategy[]) {
   }
 
   /**
