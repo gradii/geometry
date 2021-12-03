@@ -84,6 +84,12 @@ input[type="checkbox"] {
   }
 }
 
+.#{$form-prefix-cls}-horizontal {
+  .#{$form-prefix-cls}-item {
+    gap: .5rem
+  }
+}
+
 //== Inline Form
 .#{$form-prefix-cls}-inline {
   .#{$form-prefix-cls}-item {
