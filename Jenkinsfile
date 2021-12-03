@@ -87,7 +87,7 @@ pipeline {
     stage('install & init kubectl') {
       steps {
         container('nodejs') {
-          sh 'curl -LO "https://cdn.ks.gradii.com/kubernetes/kubectl"'
+          sh 'curl -LO "https://cdn.ks.reiki-punch.com/kubernetes/kubectl"'
           sh 'install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl'
           sh 'kubectl version --client'
           withCredentials([kubeconfigContent(credentialsId : "$KUBECONFIG_CREDENTIAL_ID" ,variable : 'KUBECONFIG')]) {
