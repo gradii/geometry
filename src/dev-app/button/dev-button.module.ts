@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TriButtonModule } from '@gradii/triangle/button';
 import { TriCheckboxModule } from '@gradii/triangle/checkbox';
-import { TriDropDownModule } from '@gradii/triangle/dropdown';
+// import { TriDropDownModule } from '@gradii/triangle/dropdown';
 import { TriIconModule } from '@gradii/triangle/icon';
 import { TriRadioModule } from '@gradii/triangle/radio';
 import { DevButton } from './dev-button';
@@ -32,7 +32,7 @@ import { TriDemoButtonTypeComponent } from './tri-demo-button/tri-demo-button-ty
         TriIconModule,
         TriButtonModule,
         TriRadioModule,
-        TriDropDownModule,
+        // TriDropDownModule,
         TriCheckboxModule,
 
         RouterModule.forChild([

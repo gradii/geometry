@@ -21,7 +21,7 @@ import {
     <button tri-button [type]="'default'">
       <span>secondary</span>
     </button>
-    <tri-dropdown>
+    <!--<tri-dropdown>
       <button tri-button tri-dropdown><span>more</span> <i class="anticon anticon-down"></i></button>
       <ul tri-menu>
         <li tri-menu-item>
@@ -34,7 +34,7 @@ import {
           <a>3rd item</a>
         </li>
       </ul>
-    </tri-dropdown>
+    </tri-dropdown>-->
 `,
   styles  : []
 })

@@ -13,7 +13,7 @@ ng_module(
         "//src/triangle/button",
         "//src/triangle/radio",
         "//src/triangle/checkbox",
-        "//src/triangle/dropdown",
+#        "//src/triangle/dropdown",
         "//src/triangle/icon",
         "@npm//@angular/forms",
         "@npm//@angular/router",

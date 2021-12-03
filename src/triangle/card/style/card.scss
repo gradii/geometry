@@ -103,13 +103,19 @@ $card-border-radius    : v.$border-radius-base !default;
         border-top    : none;
         border-bottom : none;
         flex          : 1;
+        border        : 0;
 
-        :first-child {
-          border-left : none;
+        &:active, &:focus {
+          box-shadow : none !important;
         }
 
-        :last-child {
-          border-right : none;
+        &:not(:last-child):after {
+          display      : block;
+          content      : "";
+          border-right : 1px solid #cfcfcf;
+          height       : 1em;
+          position     : absolute;
+          right        : 1px;
         }
       }
     }

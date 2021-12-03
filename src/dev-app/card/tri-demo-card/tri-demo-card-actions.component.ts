@@ -26,9 +26,9 @@ import { Component, OnInit } from '@angular/core';
       </tri-card-body>
       <tri-card-actions>
         <tri-button-group>
-          <button triButton>Btn</button>
-          <button triButton>Btn</button>
-          <button triButton>Btn</button>
+          <button triTextButton color="primary">Btn</button>
+          <button triTextButton color="primary">Btn</button>
+          <button triTextButton color="primary">Btn</button>
         </tri-button-group>
       </tri-card-actions>
     </tri-card>
