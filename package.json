@@ -25,6 +25,7 @@
     "e2e": "bazel test //src/... --build_tag_filters=e2e --test_tag_filters=e2e --build_tests_only",
     "deploy-dev-app": "node ./scripts/deploy-dev-app.js",
     "deploy-fedaco": "node ./scripts/deploy-fedaco.js",
+    "deploy-triangle": "node ./scripts/deploy-triangle.js",
     "breaking-changes": "ts-node --project scripts/tsconfig.json scripts/breaking-changes.ts",
     "gulp": "gulp",
     "stage-release": "ts-node --project tools/release/tsconfig.json tools/release/stage-release.ts",

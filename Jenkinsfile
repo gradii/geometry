@@ -213,6 +213,37 @@ pipeline {
           }
         }
 
+
+        stage('build triangle') {
+          when {
+            anyOf {
+              expression { params.FORCE_DEPLOY_TRIANGLE ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/ }
+              allOf {
+                not {
+                  branch 'release'
+                }
+                anyOf {
+                  changeset 'src/annotation/**'
+                  changeset 'src/check-type/**'
+                  changeset 'src/triangle/**'
+                }
+              }
+            }
+          }
+
+          steps {
+            container('nodejs') {
+              withCredentials([usernamePassword(passwordVariable : 'NPM_PASSWORD' ,usernameVariable : 'NPM_USERNAME' ,credentialsId : "$NPM_CREDENTIAL_ID" ,)]) {
+                sh 'npm config set @gradii:registry https://npm.pkg.github.com/'
+                sh 'npm config set //npm.pkg.github.com/:_authToken $NPM_PASSWORD'
+              }
+              sh 'yarn run deploy-triangle'
+
+              sh 'yarn publish dist/releases/triangle'
+            }
+          }
+        }
+
         stage('deploy triangle-api') {
           environment {
             APP_NAME = 'triangle-api'
