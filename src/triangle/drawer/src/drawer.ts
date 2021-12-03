@@ -21,7 +21,7 @@ import { fromEvent, Observable, Subject } from 'rxjs';
 import { distinctUntilChanged, filter, map, mapTo, take, takeUntil, } from 'rxjs/operators';
 import { TRI_DRAWER_CONTAINER } from './common';
 import { triDrawerAnimations } from './drawer-animations';
-import { TriDrawerContainer } from './drawer-container';
+import type { TriDrawerContainer } from './drawer-container';
 import { AutoFocusTarget, TriDrawerMode, TriDrawerToggleResult } from './drawer.types';
 
 /**
