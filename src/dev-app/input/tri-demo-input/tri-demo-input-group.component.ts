@@ -74,6 +74,17 @@ import { Component, OnInit } from '@angular/core';
     </tri-input-group>
     <br>
     <tri-input-group [size]="'large'">
+      <input type="text" placeholder="Minimum" tri-input style="width: 100px;">
+      <button triButton>Save</button>
+    </tri-input-group>
+    <br>
+    <tri-input-group [size]="'large'">
+      <input type="text" placeholder="Minimum" tri-input style="width: 100px;">
+      <button triButton>Save</button>
+      <button triButton>Dropdown</button>
+    </tri-input-group>
+    <br>
+    <tri-input-group [size]="'large'">
       <tri-select [ngModel]="'Sign Up'" [ngModelOptions]="{standalone: true}">
         <tri-option [label]="'Sign Up'" [value]="'Sign Up'"></tri-option>
         <tri-option [label]="'Sign In'" [value]="'Sign In'"></tri-option>

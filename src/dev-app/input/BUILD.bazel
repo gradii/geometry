@@ -16,6 +16,7 @@ ng_module(
         "//src/triangle/select",
         "//src/triangle/grid",
         "//src/triangle/icon",
+        "//src/triangle/button",
         "@npm//@angular/cdk",
         "@npm//@angular/router",
         "@npm//@angular/forms",

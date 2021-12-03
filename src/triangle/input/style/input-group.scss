@@ -47,6 +47,21 @@
   }
 
   @at-root
+  & > .#{mixins.$tri-prefix}-btn {
+    @at-root &:active {
+      z-index : 4;
+    }
+
+    @at-root &:focus {
+      z-index : 4;
+    }
+
+    @at-root &:hover {
+      z-index : 3;
+    }
+  }
+
+  @at-root
   & > * {
     &:not(:first-child) {
       margin-left : -(input-variables.$input-border-width);
@@ -167,7 +182,7 @@
 
   @at-root & {
     @at-root & > * {
-      border-radius : 0;
+      border-radius : 0 !important;
     }
 
     // reset border for Select, DatePicker, AutoComplete, Cascader, Mention, TimePicker
@@ -180,7 +195,7 @@
     & > .#{mixins.$tri-prefix}-cascader-picker .#{mixins.$tri-prefix}-input,
     & > .#{mixins.$tri-prefix}-mention-wrapper .#{mixins.$tri-prefix}-mention-editor,
     & > .#{mixins.$tri-prefix}-time-picker .#{mixins.$tri-prefix}-time-picker-input {
-      border-radius : 0;
+      border-radius : 0 !important;
     }
 
     @at-root
@@ -192,8 +207,8 @@
     & > .#{mixins.$tri-prefix}-cascader-picker:first-child .#{mixins.$tri-prefix}-input,
     & > .#{mixins.$tri-prefix}-mention-wrapper:first-child .#{mixins.$tri-prefix}-mention-editor,
     & > .#{mixins.$tri-prefix}-time-picker:first-child .#{mixins.$tri-prefix}-time-picker-input {
-      border-top-left-radius    : mixins.$border-radius-base;
-      border-bottom-left-radius : mixins.$border-radius-base;
+      border-top-left-radius    : mixins.$border-radius-base !important;
+      border-bottom-left-radius : mixins.$border-radius-base !important;
     }
 
     @at-root
@@ -205,8 +220,8 @@
     & > .#{mixins.$tri-prefix}-cascader-picker:last-child .#{mixins.$tri-prefix}-input,
     & > .#{mixins.$tri-prefix}-mention-wrapper:last-child .#{mixins.$tri-prefix}-mention-editor,
     & > .#{mixins.$tri-prefix}-time-picker:last-child .#{mixins.$tri-prefix}-time-picker-input {
-      border-top-right-radius    : mixins.$border-radius-base;
-      border-bottom-right-radius : mixins.$border-radius-base;
+      border-top-right-radius    : mixins.$border-radius-base !important;
+      border-bottom-right-radius : mixins.$border-radius-base !important;
     }
   }
 

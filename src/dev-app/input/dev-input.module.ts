@@ -8,11 +8,12 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { TriButtonModule } from '@gradii/triangle/button';
+import { TriDatePickerModule } from '@gradii/triangle/date-picker';
 import { TriGridModule } from '@gradii/triangle/grid';
 import { TriIconModule } from '@gradii/triangle/icon';
 import { TriInputModule } from '@gradii/triangle/input';
 import { TriInputNumberModule } from '@gradii/triangle/input-number';
-import { TriDatePickerModule } from '@gradii/triangle/date-picker';
 import { TriSelectModule } from '@gradii/triangle/select';
 import { DevInput } from './dev-input';
 import { TriDemoInputAddOnComponent } from './tri-demo-input/tri-demo-input-add-on.component';
@@ -37,7 +38,7 @@ import { TriDemoInputTextareaComponent } from './tri-demo-input/tri-demo-input-t
     TriGridModule,
     TriIconModule,
     TriDatePickerModule,
-    
+
     RouterModule.forChild([
       {
         path: '', component: DevInput, children: [
@@ -57,6 +58,7 @@ import { TriDemoInputTextareaComponent } from './tri-demo-input/tri-demo-input-t
         ]
       }
     ]),
+    TriButtonModule,
   ],
   declarations: [
     DevInput,
