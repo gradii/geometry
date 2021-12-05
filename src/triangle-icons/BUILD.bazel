@@ -20,7 +20,6 @@ ts_library(
     deps = [
     ],
     module_name = "@gradii/triangle-icons",
-    tsconfig = ":tsconfig.json",
 )
 
 ng_package(
