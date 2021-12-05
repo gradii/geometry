@@ -1,4 +1,8 @@
 TRIANGLE_ICONS_ENTRYPOINTS = [
+  "display"
 ]
 
-TRIANGLE_ICONS_TARGETS = ["//src/triangle-icons"]
+TRIANGLE_ICONS_TARGETS = [
+  "//src/triangle-icons",
+  "//src/triangle-icons/display",
+]
