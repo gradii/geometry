@@ -22,6 +22,11 @@ pipeline {
             defaultValue: false,
             description: '强制部署dev app?'
         )
+    booleanParam(
+            name: 'FORCE_DEPLOY_TRIANGLE_API',
+            defaultValue: false,
+            description: '强制部署triangle api?'
+        )
   }
 
   environment {
@@ -249,13 +254,15 @@ pipeline {
             APP_NAME = 'triangle-api'
           }
           when {
-            // branch 'master'
-            allOf {
-              not {
-                branch 'release'
-              }
-              anyOf {
-                changeset 'apps/triangle-api/**'
+            anyOf {
+              expression { params.FORCE_DEPLOY_TRIANGLE_API ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/ }
+              allOf {
+                not {
+                  branch 'release'
+                }
+                anyOf {
+                  changeset 'apps/triangle-api/**'
+                }
               }
             }
           }
