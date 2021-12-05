@@ -13,6 +13,7 @@ import {
   CopyIcon,
   DevIcon
 } from './dev-icon';
+import { TriDemoIcon } from './tri-demo-icon/tri-demo-icon';
 import { TriDemoIconFill } from './tri-demo-icon/tri-demo-icon-fill';
 import { TriDemoIconOutline } from './tri-demo-icon/tri-demo-icon-outline';
 import { TriDemoIconTwotone } from './tri-demo-icon/tri-demo-icon-twotone';
@@ -27,6 +28,7 @@ import { TriDemoIconTwotone } from './tri-demo-icon/tri-demo-icon-twotone';
     RouterModule.forChild([
       {
         path: '', component: DevIcon, children: [
+          {path: 'tri-demo-icon', component: TriDemoIcon},
           {path: 'tri-demo-icon-outline', component: TriDemoIconOutline},
           {path: 'tri-demo-icon-fill', component: TriDemoIconFill},
           {path: 'tri-demo-icon-twotone', component: TriDemoIconTwotone}
@@ -37,6 +39,7 @@ import { TriDemoIconTwotone } from './tri-demo-icon/tri-demo-icon-twotone';
   declarations: [
     DevIcon,
 
+    TriDemoIcon,
     TriDemoIconOutline,
     TriDemoIconFill,
     TriDemoIconTwotone,

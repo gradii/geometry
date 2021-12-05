@@ -11,6 +11,8 @@ ng_module(
     ],
     deps = [
         "//src/triangle/icon",
+        "//src/triangle-icons",
+        "//src/triangle-icons/display",
         "@npm//@angular/cdk",
         "@npm//@angular/router",
     ],

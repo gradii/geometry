@@ -9,6 +9,7 @@
 // converts this template file into the actual SystemJS configuration file.
 
 var TRIANGLE_PACKAGES = $TRIANGLE_ENTRYPOINTS_TMPL;
+var TRIANGLE_ICONS_PACKAGES = $TRIANGLE_ICONS_ENTRYPOINTS_TMPL;
 var CUBE_PACKAGES     = $CUBE_ENTRYPOINTS_TMPL;
 
 /** Map of Angular framework packages and their bundle names. */
@@ -125,6 +126,8 @@ function setupLocalReleasePackages() {
   // Configure all primary entry-points.
   configureEntryPoint('triangle');
 
+  configureEntryPoint('triangle-icons');
+
   configureEntryPoint('check-type');
 
   configureEntryPoint('vector-math');
@@ -132,6 +135,10 @@ function setupLocalReleasePackages() {
   // Configure all secondary entry-points.
   TRIANGLE_PACKAGES.forEach(function (pkgName) {
     configureEntryPoint('triangle', pkgName);
+  });
+
+  TRIANGLE_ICONS_PACKAGES.forEach(function (pkgName) {
+    configureEntryPoint('triangle-icons', pkgName);
   });
 
   CUBE_PACKAGES.forEach(function (pkgName) {
