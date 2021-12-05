@@ -1,7 +1,14 @@
 PINARA_ENTRYPOINTS = [
+  "check-type",
+#  "fn",
+  "pluralize",
+  "to-case",
 ]
+
 PINARA_TARGETS = [
-  "//src/check-type",
-  "//src/pluralize",
-  "//src/to-case",
+  "//src/pinara",
+  "//src/pinara/check-type",
+#  "//src/pinara/fn",
+  "//src/pinara/pluralize",
+  "//src/pinara/to-case",
 ]
