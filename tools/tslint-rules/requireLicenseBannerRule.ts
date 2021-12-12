@@ -1,7 +1,7 @@
+import minimatch from 'minimatch';
 import * as path from 'path';
-import * as ts from 'typescript';
 import * as Lint from 'tslint';
-import * as minimatch from 'minimatch';
+import * as ts from 'typescript';
 
 const buildConfig = require('../../build-config');
 
@@ -49,7 +49,7 @@ class RequireLicenseBannerWalker extends Lint.RuleWalker {
       return;
     }
 
-    const fileContent = sourceFile.getFullText();
+    const fileContent       = sourceFile.getFullText();
     const licenseCommentPos = fileContent.indexOf(licenseBanner);
 
     if (licenseCommentPos !== 0) {

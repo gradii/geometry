@@ -4,15 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  Directive,
-  ElementRef,
-  HostListener,
-  Input,
-  OnChanges,
-  Renderer2,
-  SimpleChanges
-} from '@angular/core';
+import { Directive, ElementRef, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
 import { TreeNode } from '../models';
 import { TreeDraggingTargetService } from '../services/tree-dragging-target.service';
 
@@ -20,6 +12,10 @@ const DRAGGING_TARGET_CLASS = 'ngx-tree-dragging-target';
 
 @Directive({
   selector: '[triTreeViewDrag]',
+  host    : {
+    '(dragstart)': 'onDragStart($event)',
+    '(dragend)'  : 'onDragEnd($event)',
+  }
 })
 export class TreeDragDirective implements OnChanges {
   @Input('treeViewDrag') draggingTarget: TreeNode;
@@ -32,7 +28,6 @@ export class TreeDragDirective implements OnChanges {
   ) {
   }
 
-  @HostListener('dragstart', ['$event'])
   onDragStart(ev: DragEvent) {
     // setting the data is required by firefox
     ev.dataTransfer!.setData('text', this.draggingTarget.id);
@@ -54,7 +49,6 @@ export class TreeDragDirective implements OnChanges {
       console.log('drag')
   }*/
 
-  @HostListener('dragend', ['$event'])
   onDragEnd(event: DragEvent) {
     if (this.draggingTarget.mouseAction) {
       this.draggingTarget.mouseAction('dragEnd', event);

@@ -24,6 +24,7 @@ ng_module(
         "//src/triangle/icon",
         "//src/triangle/menu",
         "//src/triangle/util",
+        "//src:dev_mode_types",
         "@npm//@angular/animations",
         "@npm//@angular/cdk",
         "@npm//@angular/common",

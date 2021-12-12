@@ -5,20 +5,10 @@
  */
 
 import {
-  Directive,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Input,
-  OnDestroy,
-  Output,
-  Renderer2
+  Directive, ElementRef, EventEmitter, Input, OnDestroy, Output, Renderer2
 } from '@angular/core';
 import { isFunction } from '@gradii/check-type';
-import {
-  DragAndDropEvent,
-  TreeNode
-} from '../models';
+import { DragAndDropEvent, TreeNode } from '../models';
 import { TreeDraggingTargetService } from '../services/tree-dragging-target.service';
 
 const DRAG_OVER_CLASS     = 'is-dragging-over';
@@ -29,9 +19,15 @@ export type AllowDropPredicate = (element: TreeNode | null | undefined,
 
 @Directive({
   selector: '[triTreeViewDrop]',
+  host    : {
+    '(dragover)' : 'onDragOver($event)',
+    '(dragenter)': 'onDragEnter($event)',
+    '(dragleave)': 'onDragLeave($event)',
+    '(onDrop)'   : 'onDrop($event)',
+  }
 })
 export class TreeDropDirective implements OnDestroy {
-  @Output('treeViewDrop') onDrop$            = new EventEmitter<DragAndDropEvent>();
+  @Output('treeViewDrop') onDrop$           = new EventEmitter<DragAndDropEvent>();
   @Output('treeDropDragOver') onDragOver$   = new EventEmitter<DragAndDropEvent>();
   @Output('treeDropDragLeave') onDragLeave$ = new EventEmitter<DragAndDropEvent>();
   @Output('treeDropDragEnter') onDragEnter$ = new EventEmitter<DragAndDropEvent>();
@@ -62,7 +58,6 @@ export class TreeDropDirective implements OnDestroy {
     this.onDragOver$.complete();
   }
 
-  @HostListener('dragover', ['$event'])
   onDragOver($event: DragEvent) {
     if (!this.allowDrop($event)) {
       return;
@@ -77,7 +72,6 @@ export class TreeDropDirective implements OnDestroy {
     this._stopEvent($event);
   }
 
-  @HostListener('dragenter', ['$event'])
   onDragEnter($event: DragEvent) {
     if (!this.allowDrop($event)) {
       this.addDisabledClass();
@@ -91,7 +85,6 @@ export class TreeDropDirective implements OnDestroy {
     this._stopEvent($event);
   }
 
-  @HostListener('dragleave', ['$event'])
   onDragLeave($event: DragEvent) {
     if (!this.allowDrop($event)) {
       this.removeDisabledClass();
@@ -105,7 +98,6 @@ export class TreeDropDirective implements OnDestroy {
     this._stopEvent($event);
   }
 
-  @HostListener('drop', ['$event'])
   onDrop($event: DragEvent) {
     if (!this.allowDrop($event)) {
       return;

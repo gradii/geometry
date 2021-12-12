@@ -36,7 +36,6 @@ export class DevIcon implements OnInit {
     '(click)'       : 'onCopy($event)',
     '[style.cursor]': '"pointer"'
   },
-
 })
 export class CopyIcon {
   constructor(

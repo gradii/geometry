@@ -1,6 +1,6 @@
-import {existsSync} from 'fs';
-import * as minimatch from 'minimatch';
-import {dirname, join, normalize, relative, resolve} from 'path';
+import { existsSync } from 'fs';
+import minimatch from 'minimatch';
+import { dirname, join, normalize, relative, resolve } from 'path';
 import * as Lint from 'tslint';
 import * as ts from 'typescript';
 
@@ -24,7 +24,7 @@ export class Rule extends Lint.Rules.AbstractRule {
  * with relative cross entry-point references.
  */
 function checkSourceFile(ctx: Lint.WalkContext<string[]>) {
-  const filePath = ctx.sourceFile.fileName;
+  const filePath         = ctx.sourceFile.fileName;
   const relativeFilePath = relative(process.cwd(), filePath);
 
   if (!ctx.options.every(o => minimatch(relativeFilePath, o))) {
@@ -34,22 +34,22 @@ function checkSourceFile(ctx: Lint.WalkContext<string[]>) {
   (function visitNode(node: ts.Node) {
     if (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) {
       if (!node.moduleSpecifier || !ts.isStringLiteralLike(node.moduleSpecifier) ||
-          !node.moduleSpecifier.text.startsWith('.')) {
+        !node.moduleSpecifier.text.startsWith('.')) {
         return;
       }
 
-      const modulePath = node.moduleSpecifier.text;
-      const basePath = dirname(filePath);
-      const currentPackage = findClosestBazelPackage(basePath);
+      const modulePath      = node.moduleSpecifier.text;
+      const basePath        = dirname(filePath);
+      const currentPackage  = findClosestBazelPackage(basePath);
       const resolvedPackage = findClosestBazelPackage(resolve(basePath, modulePath));
 
       if (currentPackage && resolvedPackage &&
-          normalize(currentPackage) !== normalize(resolvedPackage)) {
+        normalize(currentPackage) !== normalize(resolvedPackage)) {
         const humanizedType = ts.isImportDeclaration(node) ? 'Import' : 'Export';
         ctx.addFailureAtNode(
-            node,
-            `${humanizedType} resolves to a different Bazel build package through a relative ` +
-                `path. This is not allowed and can be fixed by using the actual module import.`);
+          node,
+          `${humanizedType} resolves to a different Bazel build package through a relative ` +
+          `path. This is not allowed and can be fixed by using the actual module import.`);
       }
       return;
     }
@@ -58,7 +58,7 @@ function checkSourceFile(ctx: Lint.WalkContext<string[]>) {
 }
 
 /** Finds the closest Bazel build package for the given path. */
-function findClosestBazelPackage(startPath: string): string|null {
+function findClosestBazelPackage(startPath: string): string | null {
   let currentPath = startPath;
   while (!hasBuildFile(currentPath)) {
     const parentPath = dirname(currentPath);

@@ -4,25 +4,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  isArray,
-  isFunction,
-  isString
-} from '@gradii/check-type';
-import {
-  Subject,
-  Subscription
-} from 'rxjs';
-import {
-  EventsMap,
-  TREE_EVENTS
-} from '../constants/events';
+import { isArray, isFunction, isString } from '@gradii/check-type';
+import { Subject, Subscription } from 'rxjs';
+import { EventsMap, TREE_EVENTS } from '../constants/events';
 import { TreeEvent } from './events';
 import { TreeNode } from './tree-node';
-import {
-  createTreeDataOptions,
-  TreeDataOptions
-} from './tree-options';
+import { createTreeDataOptions, TreeDataOptions } from './tree-options';
 
 export interface ScrollIntoViewTarget {
   node: TreeNode;

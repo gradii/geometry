@@ -1,6 +1,0 @@
-<span *ngIf="!template">{{ node.displayField }}</span>
-
-<ng-container
-  [ngTemplateOutletContext]="{ $implicit: null, node: node, index: index, options: options }"
-  [ngTemplateOutlet]="template">
-</ng-container>
