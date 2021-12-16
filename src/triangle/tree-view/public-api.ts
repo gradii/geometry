@@ -7,8 +7,8 @@
 import { TreeLoadingComponent } from './src/components/tree-loading.component';
 import { TreeNodeContentComponent } from './src/components/tree-node-content.component';
 import { TreeNodeDropSlotComponent } from './src/components/tree-node-drop-slot.component';
-import { TreeNodeExpanderComponent } from './src/components/tree-node-expander.component';
-import { TreeNodeWrapperComponent } from './src/components/tree-node-wrapper.component';
+import { TreeNodeToggleComponent } from './src/components/tree-node-toggle.component';
+import { TreeNodeItemComponent } from './src/components/tree-node-item.component';
 import { TreeNodeChildrenComponent, TreeNodeComponent } from './src/components/tree-node.component';
 import { TreeViewportComponent } from './src/components/tree-viewport.component';
 import { TreeComponent } from './src/components/tree.component';
@@ -27,8 +27,8 @@ export {
   TreeNodeChildrenComponent,
   TreeNodeContentComponent,
   TreeNodeDropSlotComponent,
-  TreeNodeExpanderComponent,
-  TreeNodeWrapperComponent,
+  TreeNodeToggleComponent,
+  TreeNodeItemComponent,
   TreeNodeComponent,
   TreeViewportComponent,
   TreeComponent,

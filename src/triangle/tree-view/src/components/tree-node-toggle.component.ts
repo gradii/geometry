@@ -13,7 +13,7 @@ import { merge, Subscription } from 'rxjs';
 import { TreeEvent, TreeNode, TreeUIOptions } from '../models';
 
 @Component({
-  selector       : 'tri-tree-node-expander',
+  selector       : 'tri-tree-node-toggle',
   template       : `
     <ng-template [ngIf]="!template">
       <div (click)="node.mouseAction('expanderClick', $event)"
@@ -41,7 +41,7 @@ import { TreeEvent, TreeNode, TreeUIOptions } from '../models';
   styleUrls      : ['../../style/components/tree-node-expander.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TreeNodeExpanderComponent implements OnInit, OnDestroy {
+export class TreeNodeToggleComponent implements OnInit, OnDestroy {
   @Input() options: TreeUIOptions;
   @Input() node: TreeNode;
   @Input() index: number;

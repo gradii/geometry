@@ -12,8 +12,8 @@ import { TriIconModule } from '@gradii/triangle/icon';
 import { TreeLoadingComponent } from './components/tree-loading.component';
 import { TreeNodeContentComponent } from './components/tree-node-content.component';
 import { TreeNodeDropSlotComponent } from './components/tree-node-drop-slot.component';
-import { TreeNodeExpanderComponent } from './components/tree-node-expander.component';
-import { TreeNodeWrapperComponent } from './components/tree-node-wrapper.component';
+import { TreeNodeItemComponent } from './components/tree-node-item.component';
+import { TreeNodeToggleComponent } from './components/tree-node-toggle.component';
 import { TreeNodeChildrenComponent, TreeNodeComponent } from './components/tree-node.component';
 import { TreeViewportComponent } from './components/tree-viewport.component';
 import { TreeComponent } from './components/tree.component';
@@ -34,8 +34,8 @@ import { VIRTUAL_SCROLL_NODE_HEIGHT_QUOTA } from './services/tree-virtual-scroll
     TreeLoadingComponent,
     TreeNodeComponent,
     TreeComponent,
-    TreeNodeExpanderComponent,
-    TreeNodeWrapperComponent,
+    TreeNodeToggleComponent,
+    TreeNodeItemComponent,
     TreeNodeChildrenComponent,
     TreeNodeContentComponent,
     TreeViewportComponent,

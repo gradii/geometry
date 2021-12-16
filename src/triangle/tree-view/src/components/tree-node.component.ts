@@ -23,7 +23,7 @@ import type { TreeComponent } from './tree.component';
   selector : 'tri-tree-node',
   template : `
     <ng-template [ngIf]="!treeNodeFullTemplate">
-      <tri-tree-node-wrapper
+      <tri-tree-node-item
         (click)="node.mouseAction('click', $event)"
         (contextmenu)="node.mouseAction('contextMenu', $event)"
         (dblclick)="node.mouseAction('dblClick', $event)"
@@ -42,7 +42,7 @@ import type { TreeComponent } from './tree.component';
         [style.padding-left]="options.levelPadding!(node)"
         [treeAllowDrop]="allowDrop"
         [treeDragEnabled]="allowDrag(node)">
-      </tri-tree-node-wrapper>
+      </tri-tree-node-item>
 
       <tri-tree-node-children
         *ngIf="node.isExpanded && node.hasVisibleChildren"

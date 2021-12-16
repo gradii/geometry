@@ -13,14 +13,14 @@ import { TreeVirtualScroll } from '../services/tree-virtual-scroll.service';
 import type { TreeComponent } from './tree.component';
 
 @Component({
-  selector : 'tri-tree-node-wrapper',
+  selector : 'tri-tree-node-item',
   template : `
     <ng-template [ngIf]="!treeNodeWrapperTemplate">
-      <tri-tree-node-expander [index]="index"
-                              [node]="node"
-                              [options]="options"
-                              [template]="expanderTemplate">
-      </tri-tree-node-expander>
+      <tri-tree-node-toggle [index]="index"
+                            [node]="node"
+                            [options]="options"
+                            [template]="expanderTemplate">
+      </tri-tree-node-toggle>
       <tri-pseudo-checkbox
         *ngIf="options.selectionType === 'multiple' || options.selectionType === 'single'"
         [ngStyle]="{margin: '0 4px'}"
@@ -46,7 +46,7 @@ import type { TreeComponent } from './tree.component';
   },
   styleUrls: ['../../style/components/tree-node-wrapper.component.css'],
 })
-export class TreeNodeWrapperComponent implements OnInit, OnDestroy, AfterViewInit {
+export class TreeNodeItemComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() node: TreeNode;
   @Input() options: TreeUIOptions;
   @Input() index: number;

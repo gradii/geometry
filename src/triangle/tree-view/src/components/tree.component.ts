@@ -46,7 +46,7 @@ import { TreeViewportComponent } from './tree-viewport.component';
     </tri-tree-viewport>
   `,
   styleUrls      : ['../../style/components/tree.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
   providers      : [
     {
       provide    : TRI_TREE_VIEW,
