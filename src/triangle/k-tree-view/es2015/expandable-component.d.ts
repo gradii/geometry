@@ -1,0 +1,32 @@
+/**-----------------------------------------------------------------------------------------
+* Copyright © 2021 Progress Software Corporation. All rights reserved.
+* Licensed under commercial license. See LICENSE.md in the project root for more information
+*-------------------------------------------------------------------------------------------*/
+import { EventEmitter } from '@angular/core';
+import { FilterState } from './filter-state.interface';
+import { TreeItem } from './treeitem.interface';
+/**
+ * @hidden
+ *
+ * An injection token used by the expand-directive to interface with
+ * the TreeView or the DropDownTree components.
+ */
+export declare abstract class ExpandableComponent {
+    /**
+     * A function which determines if a specific node is expanded.
+     */
+    abstract isExpanded: (item: object, index: string) => boolean;
+    /**
+     * Fires when the user expands a TreeView node.
+     */
+    abstract expand: EventEmitter<TreeItem>;
+    /**
+     * Fires when the user collapses a TreeView node.
+     */
+    abstract collapse: EventEmitter<TreeItem>;
+    /**
+     * Emits when the built-in filtering mechanism in the data-binding directives updates the node visibility.
+     * Used for the built-in auto-expand functionalities of the component and available for custom implementations.
+     */
+    abstract filterStateChange?: EventEmitter<FilterState>;
+}
