@@ -1,0 +1,157 @@
+import * as assert from 'assert';
+import { EventEmitter } from 'events';
+
+import { BerReader } from 'asn1';
+import type { StrictEventEmitter } from 'strict-event-emitter-types';
+
+import { MessageParserError } from './errors';
+import { AddResponse, BindResponse, CompareResponse, DeleteResponse, ExtendedResponse, ModifyDNResponse, ModifyResponse, SearchResponse, SearchEntry, SearchReference } from './messages';
+import type { MessageResponse } from './messages/MessageResponse';
+import { ProtocolOperation } from './ProtocolOperation';
+
+interface MessageParserEvents {
+  message: (message: MessageResponse) => void;
+  error: (error: Error) => void;
+}
+
+type MessageParserEmitter = StrictEventEmitter<EventEmitter, MessageParserEvents>;
+
+export class MessageParser extends (EventEmitter as new () => MessageParserEmitter) {
+  private buffer?: Buffer;
+
+  public read(data: Buffer): void {
+    let nextMessage;
+
+    if (this.buffer) {
+      this.buffer = Buffer.concat([this.buffer, data]);
+    } else {
+      this.buffer = data;
+    }
+
+    const reader = new BerReader(this.buffer);
+    let foundSequence: number | null = null;
+
+    try {
+      foundSequence = reader.readSequence();
+    } catch (ex) {
+      this.emit('error', ex as Error);
+    }
+
+    if (!foundSequence || reader.remain < reader.length) {
+      // Have not received enough data to successfully parse
+      return;
+    }
+
+    if (reader.remain > reader.length) {
+      // Received too much data
+      nextMessage = this.buffer.slice(reader.offset + reader.length);
+      reader._size = reader.offset + reader.length;
+      assert.strictEqual(reader.remain, reader.length);
+    }
+
+    // Free up space since `ber` holds the current message and `nextMessage` is temporarily pointing
+    // at the next sequence of data (if it exists)
+    delete this.buffer;
+
+    let messageId: number | undefined;
+    let protocolOperation: ProtocolOperation | undefined;
+
+    try {
+      messageId = reader.readInt();
+      protocolOperation = reader.readSequence() as ProtocolOperation;
+
+      const message = this._getMessageFromProtocolOperation(messageId, protocolOperation, reader);
+
+      if (message) {
+        this.emit('message', message);
+      }
+    } catch (ex) {
+      if (messageId) {
+        const errorWithMessageDetails = ex as MessageParserError;
+        errorWithMessageDetails.messageDetails = {
+          messageId,
+          protocolOperation,
+        };
+
+        this.emit('error', errorWithMessageDetails);
+        return;
+      }
+
+      this.emit('error', ex as Error);
+      return;
+    }
+
+    if (nextMessage) {
+      this.read(nextMessage);
+    }
+  }
+
+  private _getMessageFromProtocolOperation(messageId: number, protocolOperation: ProtocolOperation, reader: BerReader): MessageResponse {
+    let message: MessageResponse;
+
+    switch (protocolOperation) {
+      case ProtocolOperation.LDAP_RES_BIND:
+        message = new BindResponse({
+          messageId,
+        });
+        break;
+      case ProtocolOperation.LDAP_RES_ADD:
+        message = new AddResponse({
+          messageId,
+        });
+        break;
+      case ProtocolOperation.LDAP_RES_COMPARE:
+        message = new CompareResponse({
+          messageId,
+        });
+        break;
+      case ProtocolOperation.LDAP_RES_DELETE:
+        message = new DeleteResponse({
+          messageId,
+        });
+        break;
+      case ProtocolOperation.LDAP_RES_EXTENSION:
+        message = new ExtendedResponse({
+          messageId,
+        });
+        break;
+      case ProtocolOperation.LDAP_RES_MODRDN:
+        message = new ModifyDNResponse({
+          messageId,
+        });
+        break;
+      case ProtocolOperation.LDAP_RES_MODIFY:
+        message = new ModifyResponse({
+          messageId,
+        });
+        break;
+      case ProtocolOperation.LDAP_RES_SEARCH:
+        message = new SearchResponse({
+          messageId,
+        });
+        break;
+      case ProtocolOperation.LDAP_RES_SEARCH_ENTRY:
+        message = new SearchEntry({
+          messageId,
+        });
+        break;
+      case ProtocolOperation.LDAP_RES_SEARCH_REF:
+        message = new SearchReference({
+          messageId,
+        });
+        break;
+      default: {
+        const error = new MessageParserError(`Protocol Operation not supported: 0x${protocolOperation.toString(16)}`);
+        error.messageDetails = {
+          messageId,
+          protocolOperation,
+        };
+
+        throw error;
+      }
+    }
+
+    message.parse(reader);
+    return message;
+  }
+}
