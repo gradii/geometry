@@ -48,7 +48,8 @@ import { isFunction } from '@gradii/triangle/util';
     }
   ],
   host         : {
-    'class': 'tri-checkbox-wrapper'
+    'class'  : 'tri-checkbox-wrapper',
+    '(click)': 'onClick($event)'
   },
   styleUrls    : [
     '../style/checkbox.css'
@@ -74,8 +75,8 @@ export class CheckboxComponent implements ControlValueAccessor {
   @Input() label: string;
   @Input() value: any;
   @Input() initValue: boolean   = true;
-  @Output() change              = new EventEmitter<any>();
-  @Output() indeterminateChange = new EventEmitter<any>();
+  @Output() change              = new EventEmitter<boolean>();
+  @Output() indeterminateChange = new EventEmitter<boolean>();
 
   constructor() {
   }
@@ -98,8 +99,7 @@ export class CheckboxComponent implements ControlValueAccessor {
     }
   }
 
-  @HostListener('click', ['$event'])
-  onClick(e) {
+  onClick(e: MouseEvent) {
     e.preventDefault();
     if (!this.disabled) {
       if (this.indeterminate && this._checked) {
@@ -111,7 +111,7 @@ export class CheckboxComponent implements ControlValueAccessor {
     }
   }
 
-  updateValue(value) {
+  updateValue(value: boolean) {
     if (value === this._checked) {
       return;
     }
@@ -120,7 +120,7 @@ export class CheckboxComponent implements ControlValueAccessor {
     }
     this.checked = value;
 
-    this.change.emit({sender: this, checked: value});
+    this.change.emit(value);
   }
 
   focus() {

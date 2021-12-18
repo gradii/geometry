@@ -50,7 +50,7 @@ $accordion-prefix-cls : "#{v.$tri-prefix}-accordion";
 
   @at-root &-sm > #{&}-item > #{&}-header {
     line-height : 1rem;
-    padding     : 4px 0 4px 16px;
+    padding     : 4px 0 4px 4px;
   }
 
   @at-root &-lg > #{&}-item > #{&}-header {
