@@ -1,0 +1,22 @@
+load(
+    "//tools:defaults.bzl",
+    "ts_library",
+)
+
+package(default_visibility = ["//visibility:public"])
+
+ts_library(
+    name = "workbench",
+    srcs = glob(
+        ["**/*.ts"],
+        exclude = ["**/*.spec.ts"],
+    ),
+    module_name = "@gradii/triangle-icons/workbench",
+    deps = [
+    ],
+)
+
+filegroup(
+    name = "source-files",
+    srcs = glob(["**/*.ts"]),
+)
