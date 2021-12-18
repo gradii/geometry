@@ -19,9 +19,11 @@ $accordion-prefix-cls : "#{v.$tri-prefix}-accordion";
     display : block;
 
     @at-root &:last-child {
-      @at-root &,
-      & > .#{$accordion-prefix-cls}-header {
-        border-radius : 0 0 v.$border-radius-base v.$border-radius-base;
+      @at-root & > .#{$accordion-prefix-cls}-header {
+        &:not(.expanded) {
+          border-radius : 0 0 v.$border-radius-base v.$border-radius-base;
+          margin-bottom : -1px
+        }
       }
     }
 
@@ -30,10 +32,9 @@ $accordion-prefix-cls : "#{v.$tri-prefix}-accordion";
       padding     : 8px 0 8px 8px;
       cursor      : pointer;
       position    : relative;
-      transition  : all .3s;
 
-      display: flex;
-      align-items: center;
+      display     : flex;
+      align-items : center;
 
       .arrow {
         @include accordion-close();
@@ -42,7 +43,7 @@ $accordion-prefix-cls : "#{v.$tri-prefix}-accordion";
         vertical-align : middle;
         transition     : transform 0.24s;
         height         : 1.5rem;
-        width: 1.5rem;
+        width          : 1.5rem;
       }
     }
   }
@@ -74,7 +75,7 @@ $accordion-prefix-cls : "#{v.$tri-prefix}-accordion";
   @at-root &#{&}-borderless {
     > .#{$accordion-prefix-cls}-item:last-child {
       > .#{$accordion-prefix-cls}-header {
-        border-radius: 0;
+        border-radius : 0;
       }
     }
   }
