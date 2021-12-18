@@ -16,12 +16,16 @@ import {
   selector: 'tri-demo-checkbox-indeterminate',
   template: `
     <div style="border-bottom: 1px solid rgb(233, 233, 233);">
-      <tri-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" [indeterminate]="indeterminate">
+      <tri-checkbox [(ngModel)]="allChecked"
+                    [indeterminate]="indeterminate"
+                    (ngModelChange)="updateAllChecked()">
         <span>Check all</span>
       </tri-checkbox>
     </div>
     <br>
-    <tri-checkbox-group [(ngModel)]="checkOptionsOne" (ngModelChange)="updateSingleChecked()"></tri-checkbox-group>
+    <tri-checkbox-group [options]="checkOptionsOne"
+                        [(ngModel)]="checkOptionsOneValue"
+                        (ngModelChange)="updateSingleChecked()"></tri-checkbox-group>
   `,
   styles  : []
 })
@@ -34,23 +38,28 @@ export class TriDemoCheckboxIndeterminateComponent implements OnInit {
     {label: 'Orange', value: 'Orange', checked: false}
   ];
 
+  checkOptionsOneValue: any[] = [];
+
   updateAllChecked() {
     this.indeterminate = false;
     if (this.allChecked) {
-      this.checkOptionsOne.forEach(item => (item.checked = true));
+      this.checkOptionsOneValue = this.checkOptionsOne.map(item => {
+        return item.value;
+      });
     } else {
-      this.checkOptionsOne.forEach(item => (item.checked = false));
+      this.checkOptionsOneValue = [];
     }
   }
 
   updateSingleChecked() {
-    if (this.checkOptionsOne.every(item => item.checked === false)) {
+    if (this.checkOptionsOneValue.length === 0) {
       this.allChecked    = false;
       this.indeterminate = false;
-    } else if (this.checkOptionsOne.every(item => item.checked === true)) {
+    } else if (this.checkOptionsOneValue.length === this.checkOptionsOne.length) {
       this.allChecked    = true;
       this.indeterminate = false;
     } else {
+      this.allChecked    = false;
       this.indeterminate = true;
     }
   }

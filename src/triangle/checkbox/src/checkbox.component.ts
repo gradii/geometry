@@ -18,13 +18,15 @@ import { isFunction } from '@gradii/triangle/util';
   selector     : 'tri-checkbox',
   encapsulation: ViewEncapsulation.None,
   template     : `
-    <label>
-      <span [class.tri-checkbox]="true"
-            [class.tri-checkbox-checked]="_checked && !indeterminate"
-            [class.tri-checkbox-focused]="_focused"
-            [class.tri-checkbox-disabled]="disabled"
-            [class.tri-checkbox-indeterminate]="!_checked && indeterminate">
-        <span class="tri-checkbox-inner"></span>
+    <span [class.tri-checkbox]="true"
+          [class.tri-checkbox-checked]="_checked"
+          [class.tri-checkbox-focused]="_focused"
+          [class.tri-checkbox-disabled]="disabled"
+          [class.tri-checkbox-indeterminate]="!_checked && indeterminate">
+        <span class="tri-checkbox-inner">
+          <tri-icon *ngIf="checked" svgIcon="outline:check"></tri-icon>
+          <tri-icon *ngIf="!checked && indeterminate" svgIcon="outline:line"></tri-icon>
+        </span>
         <input type="checkbox"
                class="tri-checkbox-input"
                [attr.value]="value"
@@ -33,11 +35,10 @@ import { isFunction } from '@gradii/triangle/util';
                (blur)="blur()"
                (change)="$event.stopPropagation()">
       </span>
-      <ng-template [ngIf]="label"><span>{{label}}</span></ng-template>
-      <ng-template [ngIf]="!label">
-        <ng-content></ng-content>
-      </ng-template>
-    </label>
+    <ng-template [ngIf]="label"><span>{{label}}</span></ng-template>
+    <ng-template [ngIf]="!label">
+      <ng-content></ng-content>
+    </ng-template>
   `,
   providers    : [
     {
@@ -92,6 +93,9 @@ export class CheckboxComponent implements ControlValueAccessor {
 
   set checked(value) {
     this._checked = value;
+    if (value) {
+      this.indeterminate = false;
+    }
   }
 
   @HostListener('click', ['$event'])
@@ -114,7 +118,7 @@ export class CheckboxComponent implements ControlValueAccessor {
     if (isFunction(this.onChange)) {
       this.onChange(value);
     }
-    this._checked = value;
+    this.checked = value;
 
     this.change.emit({sender: this, checked: value});
   }

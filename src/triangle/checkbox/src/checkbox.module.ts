@@ -7,6 +7,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { TriIconModule } from '@gradii/triangle/icon';
 import { CheckboxGroupComponent } from './checkbox-group.component';
 import { CheckboxComponent } from './checkbox.component';
 
@@ -32,7 +33,7 @@ import { CheckboxComponent } from './checkbox.component';
  * <!-- example(tri-demo-checkbox-group) -->
  */
 @NgModule({
-  imports     : [CommonModule, FormsModule],
+  imports     : [CommonModule, FormsModule, TriIconModule],
   declarations: [CheckboxComponent, CheckboxGroupComponent],
   exports     : [CheckboxComponent, CheckboxGroupComponent]
 })

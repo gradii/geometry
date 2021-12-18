@@ -69,7 +69,7 @@ export class ConfirmPopupDirective extends PopoverDirective {
 
   protected _okText: string;
 
-  _tooltipTrigger: TriggerType = TriggerType.NOOP;
+  _tooltipTrigger: TriggerType = TriggerType.HINT;
 
   @Input()
   get okText() {

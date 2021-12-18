@@ -5,37 +5,48 @@
  */
 
 import {
-  AfterContentInit,
-  Component,
-  ContentChildren,
-  forwardRef,
-  Input,
-  NgZone,
-  QueryList,
-  ViewEncapsulation
+  Component, EventEmitter, forwardRef, Input, OnChanges, Output, SimpleChanges, TemplateRef, ViewEncapsulation
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { isArray, isFunction } from '@gradii/triangle/util';
-import { of } from 'rxjs';
-import { merge } from 'rxjs/operators';
-import { CheckboxComponent } from './checkbox.component';
+import { isArray, isNumber, isString } from '@gradii/check-type';
+
+type OptionDisplay = {
+  isChecked: boolean,
+  value: any,
+  label?: string
+};
 
 @Component({
   selector     : 'tri-checkbox-group',
   encapsulation: ViewEncapsulation.None,
   template     : `
-    <tri-checkbox
-      [class.tri-checkbox-vertical]="layout=='vertical'"
-      *ngFor="let option of _options"
-      [disabled]="option.disabled||disabled"
-      [label]="option.label"
-      [value]="option.value"
-      [(ngModel)]="option.checked"
-      (ngModelChange)="_optionChange($event)"
-    >
-    </tri-checkbox>
-    <ng-content></ng-content>
+    <ul [class.tri-checkbox-list-inline]="direction === 'row'">
+      <li
+        *ngFor="let item of options_display; let i = index"
+        [class.tri-checkbox-column-margin]="direction === 'column'"
+        [ngStyle]="{ 'width.px': itemWidth }"
+        [ngClass]="{ 'tri-checkbox-wrap': itemWidth !== undefined }"
+      >
+      <span>
+        <tri-checkbox
+          [name]="name"
+          [label]="item.label"
+          [(ngModel)]="item.isChecked"
+          [disabled]="this.disabled ? true : item['value']['disabled']"
+          (ngModelChange)="toggle($event, i)"
+        >
+          <ng-template
+            [ngIf]="!!labelTemplate"
+            [ngTemplateOutlet]="labelTemplate"
+            [ngTemplateOutletContext]="{ $implicit: item, checked: item['isChecked'], disabled: disabled }"
+          >
+          </ng-template>
+        </tri-checkbox>
+      </span>
+      </li>
+    </ul>
   `,
+  styleUrls    : ['../style/checkbox-group.css'],
   providers    : [
     {
       provide    : NG_VALUE_ACCESSOR,
@@ -45,111 +56,106 @@ import { CheckboxComponent } from './checkbox.component';
   ],
   host         : {
     '[class.tri-checkbox-group]': 'true'
-  }
+  },
 })
-export class CheckboxGroupComponent implements AfterContentInit, ControlValueAccessor {
-  _el: HTMLElement;
-  _totalOptions: Array<any> = [];
-  _prefixCls = 'tri-checkbox-group';
-  // ngModel Access
-  onChange: Function;
-  onTouched: any = Function.prototype;
-  @Input() disabled = false;
-  @Input('type') layout: string;
-  @Input()
-  checkboxType: 'normal' | 'simple' = 'normal';
-  @Input()
-  valueMatcher: Function;
+export class CheckboxGroupComponent implements OnChanges, ControlValueAccessor {
+  @Input() name: string;
+  @Input() itemWidth: number;
+  @Input() direction: 'row' | 'column' = 'column';
+  @Input() disabled                    = false;
+  @Input() options: any[]              = [];
+  @Input() filterKey: string           = 'value';
+  @Input() labelKey: string            = 'label';
+  @Input() labelTemplate: TemplateRef<any>;
 
-  constructor(private _ngZone: NgZone) {
+  @Output() change: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  values: (any | string)[] = [];
+
+  options_display: OptionDisplay[] = [];
+
+  private onChange = (_: any) => {
+  };
+  private onTouch  = () => {
+  };
+
+  constructor() {
   }
 
-  private _checkboxTiles: QueryList<CheckboxComponent>;
-
-  @ContentChildren(CheckboxComponent)
-  set checkboxTiles(value: QueryList<CheckboxComponent>) {
-    this._checkboxTiles = value;
-    this._buildTotalOptions();
-  }
-
-  _options: Array<any> = [];
-
-  @Input()
-  set options(value) {
-    this._options = value;
-    this._buildTotalOptions();
-  }
-
-  _buildTotalOptions() {
-    if (this._checkboxTiles instanceof QueryList) {
-      this._totalOptions = [...this._options, ...this._checkboxTiles.toArray()];
-    } else {
-      this._totalOptions = [...this._options];
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['options']) {
+      this.checkType();
     }
   }
 
-  _optionChange(event?) {
-    // this.onChange(this._options);
-    if (isFunction(this.onChange)) {
-      if (this.checkboxType === 'simple') {
-        this.onChange(
-          this._totalOptions.filter(checkbox => checkbox.checked).map(checkbox => checkbox.value)
-        );
-      } else {
-        this.onChange(
-          this._totalOptions.map(checkbox => ({
-            checked: checkbox.checked,
-            label  : checkbox.label,
-            value  : checkbox.value
-          }))
-        );
+  checkType() {
+    this.options_display                     = [];
+    const checkedRecord: Record<string, any> = {};
+    this.values.forEach(item => {
+      if (isString(item) || isNumber(item)) {
+        checkedRecord[String(item)] = true;
+      } else if (this.filterKey && item[this.filterKey]) {
+        checkedRecord[item[this.filterKey]] = true;
       }
-    }
-  }
-
-  ngAfterContentInit() {
-    of(this._checkboxTiles)
-      .pipe(merge(this._checkboxTiles.changes))
-      .subscribe(items => {
-        items.map(item => {
-          item.change.subscribe(() => {
-            this._optionChange();
-          });
-        });
-      });
-  }
-
-  writeValue(value: any | any[]): void {
-    if (isArray(value)) {
-      if (this.checkboxType === 'simple') {
-        this._ngZone.runOutsideAngular(() => {
-          setTimeout(() => {
-            this._totalOptions.forEach(_option => {
-              if (!this.valueMatcher && value.includes(_option.value) ||
-                isFunction(this.valueMatcher) && this.valueMatcher(_option, value)
-              ) {
-                _option.checked = true;
-              } else {
-                _option.checked = false;
-              }
-            });
-          });
-        });
+    });
+    this.options.forEach(item => {
+      const option: OptionDisplay = {isChecked: false, value: item};
+      if (isString(item) || isNumber(item)) {
+        option.label = String(item);
+        if (checkedRecord[item]) {
+          option.isChecked = true;
+        }
       } else {
-        this._totalOptions = value;
+        if (this.labelKey && item[this.labelKey]) {
+          option.label = item[this.labelKey];
+        }
+
+        if (this.filterKey && item[this.filterKey]) {
+          if (!this.labelKey) {
+            option.label = item[this.filterKey];
+          }
+          if (checkedRecord[item[this.filterKey]]) {
+            option.isChecked = true;
+          }
+        } else {
+          if (this.values.includes(item)) {
+            option.isChecked = true;
+          }
+        }
       }
+
+      this.options_display.push(option);
+    });
+  }
+
+  writeValue(inputArray: any): void {
+    if (inputArray && isArray(inputArray)) {
+      this.values = inputArray;
+      this.checkType();
     }
   }
 
-  registerOnChange(fn: (_: any) => {}): void {
+  registerOnChange(fn: any): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: () => {}): void {
-    this.onTouched = fn;
+  registerOnTouched(fn: any): void {
+    this.onTouch = fn;
   }
 
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+  toggle(checked: boolean, index: number) {
+    this.onChange(this.getCheckedArray());
+    this.onTouch();
+    this.change.next(!!this.options_display[index]);
+  }
+
+  getCheckedArray() {
+    const checkedArray: any[] = [];
+    this.options_display.forEach(item => {
+      if (item.isChecked) {
+        checkedArray.push(item.value);
+      }
+    });
+    return checkedArray;
   }
 }

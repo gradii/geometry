@@ -16,13 +16,14 @@ ng_module(
         ["**/*.ts"],
         exclude = ["**/*.spec.ts"],
     ),
-    assets = [":style/checkbox.css"] + glob(["**/*.html"]),
+    assets = [":style/checkbox.css", ":style/checkbox-group.css"] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/checkbox",
     deps = [
         "//src/triangle/core",
         "//src/triangle/i18n",
         "//src/triangle/icon",
         "//src/triangle/util",
+        "//src/check-type",
         "@npm//@angular/animations",
         "@npm//@angular/cdk",
         "@npm//@angular/common",
@@ -41,6 +42,14 @@ sass_library(
 sass_binary(
     name = "checkbox_scss",
     src = "style/checkbox.scss",
+    deps = [
+        "//src/triangle/checkbox:checkbox_scss_lib",
+    ],
+)
+
+sass_binary(
+    name = "checkbox_group_scss",
+    src = "style/checkbox-group.scss",
     deps = [
         "//src/triangle/checkbox:checkbox_scss_lib",
     ],

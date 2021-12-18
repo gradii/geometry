@@ -5,21 +5,47 @@
 @use "../../input/style/input-theme";
 @use "../../core/themes/theme";
 
+$checkbox-prefix-cls       : "#{v.$tri-prefix}-checkbox" !default;
 
-@mixin antCheckboxFn($checkbox-prefix-cls: "#{v.$tri-prefix}-checkbox") {
-  $primary                   : theme.$primary;
-  $foreground                : theme.$foreground;
-  $background                : theme.$background;
+$primary                   : theme.$primary !default;
+$foreground                : theme.$foreground !default;
+$background                : theme.$background !default;
 
-  $checkbox-size             : 16px;
-  $checkbox-inner-prefix-cls : "#{$checkbox-prefix-cls}-inner";
+$checkbox-size             : 16px !default;
+$checkbox-inner-prefix-cls : "#{$checkbox-prefix-cls}-inner" !default;
+
+@mixin antCheckboxFn() {
+
+  @keyframes triCheckboxRipperEffect {
+    0% {
+      transform : scale(1);
+      opacity   : 0.5;
+    }
+    100% {
+      transform : scale(1.6);
+      opacity   : 0;
+    }
+  }
+
+  @keyframes triCheckboxInnerEffect {
+    0% {
+      transform : scale(.1);
+      opacity   : 0.2;
+    }
+    100% {
+      transform : scale(1);
+      opacity   : 1;
+    }
+  }
+
   // 一般状态
   .#{$checkbox-prefix-cls} {
     white-space    : nowrap;
     cursor         : pointer;
     outline        : none;
     display        : inline-block;
-    line-height    : 1;
+    width          : $checkbox-size;
+    height         : $checkbox-size;
     position       : relative;
     vertical-align : text-bottom;
 
@@ -33,12 +59,13 @@
       position            : absolute;
       top                 : 0;
       left                : 0;
-      width               : 100%;
-      height              : 100%;
+      bottom              : 0;
+      right               : 0;
       border-radius       : v.$border-radius-sm;
       border              : 1px solid theming.tri-color($primary);
       content             : "";
-      animation           : antCheckboxEffect 0.36s ease-in-out;
+
+      animation           : triCheckboxRipperEffect 0.36s ease-in-out;
       animation-fill-mode : both;
       visibility          : hidden;
     }
@@ -50,9 +77,7 @@
 
     @at-root &-inner {
       position         : relative;
-      top              : 0;
-      left             : 0;
-      display          : inline-block;
+      display          : inline-flex;
       width            : v.$checkbox-size;
       height           : v.$checkbox-size;
       border           : v.$border-width-base v.$border-style-base theming.tri-color($foreground, border-color-base);
@@ -60,19 +85,9 @@
       background-color : #fff;
       transition       : all .3s;
 
-      @at-root &::after {
-        transform   : rotate(45deg) scale(0);
-        position    : absolute;
-        left        : 4px;
-        top         : 0px;
-        display     : table;
-        width       : 6px;
-        height      : 12px;
-        border      : 2px solid #fff;
-        border-top  : 0;
-        border-left : 0;
-        content     : " ";
-        transition  : all .1s v.$ease-in-back;
+      @at-root & > tri-icon {
+        transform  : scale(0);
+        transition : transform .1s v.$ease-in-back;
       }
     }
 
@@ -91,35 +106,20 @@
   }
 
   // 半选状态
-  .#{$checkbox-prefix-cls}-indeterminate .#{$checkbox-inner-prefix-cls}::after {
-    content      : " ";
-    transform    : scale(1);
-    position     : absolute;
-    border-width : 0 0 2px 0;
-    left         : 3px;
-    top          : 5px;
-    width        : 8px;
-    height       : 3px;
+  .#{$checkbox-prefix-cls}-indeterminate .#{$checkbox-inner-prefix-cls} > tri-icon {
+    transform : scale(1);
+    color     : white;
   }
 
-  .#{$checkbox-prefix-cls}-indeterminate.#{$checkbox-prefix-cls}-disabled .#{$checkbox-inner-prefix-cls}::after {
-    border-color : theming.tri-color($foreground, disabled-color);
+  .#{$checkbox-prefix-cls}-indeterminate.#{$checkbox-prefix-cls}-disabled .#{$checkbox-inner-prefix-cls} > tri-icon {
+    color : theming.tri-color($foreground, disabled-color);
   }
 
   // 选中状态
-  .#{$checkbox-prefix-cls}-checked .#{$checkbox-inner-prefix-cls}::after {
-    transform   : rotate(45deg) scale(1);
-    position    : absolute;
-    //left: 4px;
-    //top: 1px;
-    display     : table;
-    width       : 6px;
-    height      : 12px;
-    border      : 2px solid #fff;
-    border-top  : 0;
-    border-left : 0;
-    content     : " ";
-    transition  : all .2s mixins.$ease-out-back .1s;
+  .#{$checkbox-prefix-cls}-checked .#{$checkbox-inner-prefix-cls} > tri-icon {
+    transform : scale(1);
+    color     : white;
+    animation : triCheckboxInnerEffect .2s mixins.$ease-out;
   }
 
   .#{$checkbox-prefix-cls}-checked,
@@ -134,9 +134,9 @@
     cursor : not-allowed;
 
     @at-root &.#{$checkbox-prefix-cls}-checked {
-      .#{$checkbox-inner-prefix-cls}::after {
+      .#{$checkbox-inner-prefix-cls} > tri-icon {
         animation-name : none;
-        border-color   : theming.tri-color($foreground, disabled-color);
+        color          : theming.tri-color($foreground, disabled-color);
       }
     }
 
@@ -147,9 +147,9 @@
     .#{$checkbox-inner-prefix-cls} {
       border-color     : theming.tri-color($foreground, border-color-base) !important;
       background-color : input-theme.$input-disabled-bg;
-      @at-root &::after {
+      @at-root & > tri-icon {
         animation-name : none;
-        border-color   : input-theme.$input-disabled-bg;
+        color          : input-theme.$input-disabled-bg;
       }
     }
 
@@ -180,32 +180,5 @@
       display : inline-block;
     }
   }
-
-  //$ie8: \0screen;
-  //
-  //// IE8 hack for https://github.com/ant-design/ant-design/issues/2148
-  //@media #{$ie8} {
-  //  .#{$checkbox-prefix-cls}-checked .#{$checkbox-prefix-cls}-inner:before,
-  //  .#{$checkbox-prefix-cls}-checked .#{$checkbox-prefix-cls}-inner:after {
-  //    @include iconfont-font("\e632");
-  //    font-weight: bold;
-  //    font-size: 8px;
-  //    border: 0;
-  //    color: #fff;
-  //    left: 2px;
-  //    top: 3px;
-  //    position: absolute;
-  //  }
-  //}
 }
 
-@keyframes antCheckboxEffect {
-  0% {
-    transform : scale(1);
-    opacity   : 0.5;
-  }
-  100% {
-    transform : scale(1.6);
-    opacity   : 0;
-  }
-}
