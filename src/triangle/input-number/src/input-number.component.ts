@@ -60,7 +60,7 @@ import {
       class="tri-input-number-input-wrap">
       <input class="tri-input-number-input"
              #inputNumber
-             [placeholder]="placeHolder"
+             [placeholder]="placeholder"
              [disabled]="disabled"
              [(ngModel)]="_displayValue"
              (ngModelChange)="_userInputChange()"
@@ -99,7 +99,7 @@ export class InputNumberComponent implements OnInit, ControlValueAccessor {
   /**
    * Placeholder
    */
-  @Input() placeHolder = '';
+  @Input() placeholder       = '';
   /**
    * whether show up/down spinner
    */

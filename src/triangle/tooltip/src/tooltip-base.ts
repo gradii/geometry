@@ -51,7 +51,8 @@ export abstract class _TriTooltipBase<T extends _TriTooltipComponentBase> implem
   _tooltipInstance: T | null;
 
   private _portal: ComponentPortal<T>;
-  private _position: TooltipPosition    = 'bottom';
+  private _position: TooltipPosition = 'bottom';
+
   private _disabled: boolean            = false;
   private _tooltipClass: string | string[] | Set<string> | { [key: string]: any };
   private _tooltipContext: { [key: string]: any };
