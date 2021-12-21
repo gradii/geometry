@@ -1,0 +1,35 @@
+<p>demo-validation works!</p>
+
+
+<div>
+  <form-render [formFields]="renderFormFields"
+               [shadowForms]="renderedShadowForms"
+               [allShadowForms]="allShadowForms"
+  >
+    <ng-template [shadowFormLayoutDefine]="'basic'">
+      <div>
+        <field-layout fieldName="country">
+          <label>country</label>
+          <ng-template fieldLayoutOutlet></ng-template>
+        </field-layout>
+      </div>
+
+      <div>
+        <field-layout fieldName="city">
+          <label>city</label>
+          <ng-template fieldLayoutOutlet></ng-template>
+        </field-layout>
+      </div>
+    </ng-template>
+
+    <ng-template formLayoutDefine>
+      <div>
+        this is the form.
+      </div>
+
+      <div>
+        <ng-template shadowFormLayoutOutlet></ng-template>
+      </div>
+    </ng-template>
+  </form-render>
+</div>

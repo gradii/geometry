@@ -1,0 +1,249 @@
+<div class="main-content">
+
+  <div>
+    todo list
+    <ul>
+      <li>shadow form visible by a parent shadow form. then the form field like in one form</li>
+      <li>form field render</li>
+      <li>shadow form / form field, template define.</li>
+      <li>formily code. the dynamic form render
+      </li>
+    </ul>
+  </div>
+  <div>
+    <form-render [formFields]="renderFormFields"
+                 [shadowForms]="renderedShadowForms"
+                 [allShadowForms]="allShadowForms"
+    >
+      <!--
+      <shadow-form-define name="basic">
+        <form-field-define name="country"></form-field-define>
+        <form-field-define name="city"></form-field-define>
+        <form-field-define name="foundation"></form-field-define>
+      </shadow-form-define>
+
+      <shadow-form-define name="type">
+        <form-field name="type"></form-field>
+      </shadow-form-define>
+
+      <shadow-form-define name="company">
+        <form-field name="type"></form-field>
+      </shadow-form-define>
+      -->
+
+      <!--layout-->
+      <ng-template formLayoutDefine>
+        <!-- todo      <ng-template shadowFormLayoutTemplate></ng-template> -->
+
+        <div class="layout-wrapper">
+          <div class="form-combine test-area">
+            <h4>without shadow form layout.
+              display all field</h4>
+            <div class="form-wrapper">
+              <ng-container shadowFormLayoutOutlet></ng-container>
+            </div>
+          </div>
+
+          <div class="form-combine test-area">
+            <h4>without shadow form layout.
+              form combine originType and basic and person shadow</h4>
+            <div class="form-wrapper">
+              <ng-container shadowFormLayoutOutlet
+                            [select]="['originType', 'basic', 'person']">
+              </ng-container>
+            </div>
+          </div>
+
+          <ng-template shadowFormLayout [ifVisible]="['originType', 'basic', 'person']" let-shadowForms>
+            <div class="form-combine test-area">
+              <h4>form combine originType and basic and person shadow</h4>
+              <p>{{shadowForms.length}}</p>
+              <div class="form-wrapper">
+                <ng-container shadowFormLayoutOutlet
+                              [select]="['originType', 'basic', 'person']">
+                </ng-container>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+
+        <div class="layout-wrapper">
+          <ng-template shadowFormLayout [ifVisible]="['originType']">
+            <div class="form-cls">
+              <h4>form originType shadow</h4>
+              <div class="form-wrapper">
+                <ng-container shadowFormLayoutOutlet select="originType"></ng-container>
+              </div>
+            </div>
+          </ng-template>
+
+          <ng-template shadowFormLayout [ifVisible]="['basic']">
+            <div class="form-cls">
+              <h4>form main shadow form</h4>
+              <div class="form-wrapper">
+                <ng-container shadowFormLayoutOutlet></ng-container>
+              </div>
+            </div>
+          </ng-template>
+
+          <ng-template shadowFormLayout [ifVisible]="['social']">
+            <div class="form-cls">
+              <h4>form social shadow</h4>
+              <div class="form-wrapper">
+                <ng-container shadowFormLayoutOutlet></ng-container>
+              </div>
+            </div>
+          </ng-template>
+
+          <ng-template shadowFormLayout [ifVisible]="['company']" let-shadowForms>
+            <div class="form-cls">
+              <h4>form company shadow</h4>
+              <div class="form-wrapper">
+                <ng-container shadowFormLayoutOutlet></ng-container>
+              </div>
+            </div>
+          </ng-template>
+
+          <ng-template shadowFormLayout [ifVisible]="['organization']">
+            <div class="form-cls">
+              <h4>form organization shadow</h4>
+              <div class="form-wrapper">
+                <ng-container shadowFormLayoutOutlet></ng-container>
+              </div>
+            </div>
+          </ng-template>
+
+          <ng-template shadowFormLayout [ifVisible]="['person']">
+            <div class="form-cls">
+              <h4>form person shadow</h4>
+              <div class="form-wrapper">
+                <ng-container shadowFormLayoutOutlet></ng-container>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+
+        <!--         <shadow-form-layout [select]>&lt;!&ndash; orphan shadow form &ndash;&gt;-->
+        <!--           <div>-->
+        <!--             <h4>form unmatched shadow</h4>-->
+        <!--             <shadow-form-layout-outlet></shadow-form-layout-outlet>-->
+        <!--           </div>-->
+        <!--         </shadow-form-layout>-->
+      </ng-template>
+
+      <ng-template [shadowFormLayoutDefine]="'basic'" let-shadowForm>
+        <field-layout fieldName="foundation">
+          <h6>foundation {{shadowForm.name}}</h6>
+          <div>
+            <ng-container fieldLayoutOutlet></ng-container>
+          </div>
+        </field-layout>
+        <field-layout fieldName="country">
+          <h6>country {{shadowForm.name}}</h6>
+          <div>
+            <ng-container fieldLayoutOutlet></ng-container>
+          </div>
+        </field-layout>
+        <field-layout fieldName="city">
+          <h6>city {{shadowForm.name}}</h6>
+          <div>
+            <ng-container fieldLayoutOutlet></ng-container>
+          </div>
+        </field-layout>
+      </ng-template>
+
+      <ng-template [shadowFormLayoutDefine]="'originType'" let-shadowForm>
+        <field-layout fieldName="type">
+          <div class="form-items-list">
+            <div class="form-item">
+              <div class="control-label">
+                <label>originType</label>
+              </div>
+              <div class="control-area">
+                <ng-container fieldLayoutOutlet></ng-container>
+              </div>
+              <div class="validation-info">
+                <em class="validation-content">validation info area</em>
+              </div>
+            </div>
+          </div>
+        </field-layout>
+      </ng-template>
+
+      <ng-template [shadowFormLayoutDefine]="'social'" let-shadowForm>
+        <field-layout fieldName="socialCode">
+          <h6>socialCode</h6>
+          <div>
+            <ng-container fieldLayoutOutlet></ng-container>
+          </div>
+        </field-layout>
+      </ng-template>
+
+      <ng-template [shadowFormLayoutDefine]="'company'" let-shadowForm>
+        <field-layout fieldName="companyLicense">
+          <h6>companyLicense</h6>
+          <div>
+            <ng-container fieldLayoutOutlet></ng-container>
+          </div>
+        </field-layout>
+      </ng-template>
+
+      <ng-template [shadowFormLayoutDefine]="'organization'" let-shadowForm>
+        <field-layout fieldName="organizationNumber">
+          <h6>organizationNumber</h6>
+          <div>
+            <ng-container fieldLayoutOutlet></ng-container>
+          </div>
+        </field-layout>
+      </ng-template>
+
+      <!-- example for direct render -->
+      <ng-template [shadowFormLayoutDefine]="'person'" let-shadowForm>
+        <!--
+        <shadow-form-field-layout [shadowForm]="shadowForm" select="identityCard">
+          <h6>identityCard</h6>
+          <div>
+            <ng-container shadowFormFieldLayoutOutlet></ng-container>
+          </div>
+        </shadow-form-field-layout>
+        -->
+        {{shadowForm.name}}
+        <ng-container fieldLayoutOutlet field="identityCard"></ng-container>
+      </ng-template>
+
+      <ng-template [shadowFormLayoutDefine] let-shadowForm>
+        <!--
+        <shadow-form-field-layout [shadowForm]="shadowForm" select="identityCard">
+          <h6>identityCard</h6>
+          <div>
+            <ng-container shadowFormFieldLayoutOutlet></ng-container>
+          </div>
+        </shadow-form-field-layout>
+        -->
+        {{shadowForm.name}}
+        <ng-container fieldLayoutOutlet field="identityCard"></ng-container>
+      </ng-template>
+
+    </form-render>
+  </div>
+
+  <!--
+  <div *ngFor="let it of renderFormFields">
+    <div style="display:flex; justify-content: space-between; margin: 5px 0">
+
+      <span>{{it.name}}</span>
+      <ng-container [ngSwitch]="it.form_type">
+        <ng-template ngSwitchCase="select">
+          <select [name]="it.name">
+            <option *ngFor="let val of it.inputs.values" [value]="val">{{val}}</option>
+          </select>
+        </ng-template>
+        <ng-template ngSwitchDefault>
+          <input [name]="it.name"/>
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
+  -->
+
+</div>

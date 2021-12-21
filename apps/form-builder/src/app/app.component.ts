@@ -1,10 +1,13 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
+
 
 @Component({
-  selector: "applications-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"],
+  selector   : 'form-builder-root',
+  templateUrl: './app.component.html',
+  styleUrls  : ['./app.component.scss']
 })
 export class AppComponent {
-  title = "form-builder";
+  title = 'form-builder';
+  constructor() {
+  }
 }
