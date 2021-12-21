@@ -59,7 +59,7 @@ export class Link extends Visibility {
     this._stop$.next();
   }
 
-  updateVisible(value) {
+  updateVisible(value: boolean) {
     this.visible = !!value;
     if (value) {
       if (this.source.visible) {

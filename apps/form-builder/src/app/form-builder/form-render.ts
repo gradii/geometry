@@ -1,16 +1,16 @@
 import { Component, ContentChild, ContentChildren, Input } from '@angular/core';
+import { VisibleShadowFormDataSource } from './data-source/visible-shadow-form-data-source';
 import { FormLayoutDefine } from './form-render/form-layout-define.directive';
 import { FormLayoutService } from './form-render/form-layout.service';
 import { ShadowFormLayoutDefine } from './form-render/shadow-form-layout-define.directive';
-import { VisibleShadowFormDataSource } from './data-source/visible-shadow-form-data-source';
 
 
 /**
  *
  */
 @Component({
-  selector: 'form-render',
-  template: `
+  selector : 'form-render',
+  template : `
     <div *ngFor="let it of formFields"
          style="width: 100%; display: flex; justify-content: space-between; margin: 5px 0">
       <span>{{it.name}}</span>
@@ -21,7 +21,7 @@ import { VisibleShadowFormDataSource } from './data-source/visible-shadow-form-d
           </select>
         </ng-template>
         <ng-template ngSwitchDefault>
-          <input [name]="it.name" [formControl]="it.formControl" />
+          <input [name]="it.name" [formControl]="it.formControl"/>
         </ng-template>
       </ng-container>
     </div>
@@ -39,7 +39,7 @@ import { VisibleShadowFormDataSource } from './data-source/visible-shadow-form-d
     </ng-template>
 
     <!-- default template for shadow form -->
-    <ng-template >
+    <ng-template>
 
     </ng-template>
   `,
@@ -49,11 +49,12 @@ import { VisibleShadowFormDataSource } from './data-source/visible-shadow-form-d
   ]
 })
 export class FormRender {
-  private _allShadowForms;
+  private _allShadowForms: any;
 
-  private _shadowForms = [];
+  private _shadowForms: any[] = [];
+
   @Input()
-  formFields = [];
+  formFields: any[] = [];
 
   @Input()
   get shadowForms(): any[] {
@@ -74,7 +75,7 @@ export class FormRender {
 
   set allShadowForms(value) {
     this.layoutService.allShadowForms = value;
-    this._allShadowForms = value;
+    this._allShadowForms              = value;
   }
 
   @Input()
@@ -83,7 +84,7 @@ export class FormRender {
   // @ContentChild(ShadowFormLayoutTemplate)
   // shadowFormLayoutTemplate
 
-  @ContentChild(FormLayoutDefine, { static: false })
+  @ContentChild(FormLayoutDefine, {static: false})
   formLayout: FormLayoutDefine;
 
   @ContentChildren(ShadowFormLayoutDefine)

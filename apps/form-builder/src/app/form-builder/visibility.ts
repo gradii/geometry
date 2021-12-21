@@ -1,9 +1,7 @@
-
-
 export abstract class Visibility {
-  visible;
+  visible: boolean;
 
-  updateVisible(value) {
-    throw new Error('not implement')
-  };
+  updateVisible(value: any) {
+    throw new Error('not implement');
+  }
 }

@@ -1,12 +1,12 @@
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Form } from './form';
-import { Link } from './link/link';
-import { Visibility } from './visibility';
-import { FormField } from './form-field/form-field';
 import { ConnectedLinkEvent } from './events/connected-link.event';
 import { DisconnectLinkEvent } from './events/disconnect-link.event';
+import { Form } from './form';
+import { FormField } from './form-field/form-field';
+import { Link } from './link/link';
+import { Visibility } from './visibility';
 
 
 export class ShadowForm extends Visibility {
@@ -18,9 +18,9 @@ export class ShadowForm extends Visibility {
 
   controlledBy: ShadowForm;
 
-  dependence = [];
+  dependence: any[] = [];
 
-  formGroup = new FormGroup({});
+  formGroup       = new FormGroup({});
   shadowFormGroup = new FormGroup({});
   // shadowChainFormGroup = new FormGroup({})
 
@@ -31,12 +31,13 @@ export class ShadowForm extends Visibility {
   connectedLink = new Set<Link>();
 
   connectionChange = new Subject();
-  connectionEvent = new Subject();
+  connectionEvent  = new Subject();
 
   connectedLinkOutPorts = new Set<Link>();
-  connectedLinkInPorts = new Set<Link>();
+  connectedLinkInPorts  = new Set<Link>();
 
-  constructor(public name, public fields: FormField[]) {
+  constructor(public name: string,
+              public fields: FormField[]) {
     super();
 
     fields.forEach(it => {
@@ -53,9 +54,10 @@ export class ShadowForm extends Visibility {
     if (this.fields.length) {
       return this.fields[0];
     }
+    return undefined;
   }
 
-  updateVisible(value) {
+  updateVisible(value: boolean) {
     // this.connectedLink.forEach()
     this.visible = value;
 
@@ -70,13 +72,13 @@ export class ShadowForm extends Visibility {
 
   rebuildShadowFormGroup() {
     // const shadowFormGroup = new FormGroup({});
-    const keys = Object.keys(this.shadowFormGroup.controls);
+    const keys: string[] = Object.keys(this.shadowFormGroup.controls);
 
     this.connectedLinkOutPorts.forEach(link => {
-      const targetForm = link.target;
-      const formName = targetForm.name;
+      const targetForm       = link.target;
+      const formName: string = targetForm.name;
       if (keys.includes(formName)) {
-        keys[formName] = undefined;
+        delete keys[keys.indexOf(formName)];
         this.shadowFormGroup.setControl(formName, targetForm.formGroup);
       } else {
         this.shadowFormGroup.addControl(formName, targetForm.formGroup);
@@ -96,9 +98,9 @@ export class ShadowForm extends Visibility {
     // this.shadowFormGroup = shadowFormGroup;
   }
 
-  connect(form: ShadowForm, predicate, formFieldValue) {
+  connect(form: ShadowForm, predicate: any, formFieldValue: any) {
     if (this._linkShadowForm.has(form)) {
-      //have linked
+      // have linked
       // return this._linkShadowForm
       throw new Error(`have linked form`);
     }
@@ -129,7 +131,7 @@ export class ShadowForm extends Visibility {
       );
   }
 
-  disconnect(form) {
+  disconnect(form: any) {
     const link = this._linkShadowForm.get(form);
     if (link) {
       this.connectedLink.delete(link);
@@ -139,7 +141,7 @@ export class ShadowForm extends Visibility {
     }
   }
 
-  controlUseOneField(form: ShadowForm, formFieldValue, predicate?) {
+  controlUseOneField(form: ShadowForm, formFieldValue: any, predicate?: any) {
     return this.connect(form, predicate, formFieldValue).pipe(
       tap((it) => {
         console.log(it);
@@ -147,9 +149,9 @@ export class ShadowForm extends Visibility {
     );
   }
 
-  controlUseManyField(form, formValue) {
-    // form.dependOn(this, formValue);
-  }
+  // controlUseManyField(form, formValue) {
+  //   // form.dependOn(this, formValue);
+  // }
 
   show() {
     this.visible = true;

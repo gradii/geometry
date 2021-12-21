@@ -7,12 +7,13 @@ export class SingleFieldLinkPredicate implements LinkPredicate {
   constructor() {
   }
 
-  predicate(source: ShadowForm, target: ShadowForm, fieldValue) {
+  predicate(source: ShadowForm, target: ShadowForm, fieldValue: any): boolean {
     const sourceField = source.first();
     if (sourceField && sourceField.formControl.value === fieldValue) {
       // return new ConnectedRelation(source, target, fieldValue);
-      return true;//maybe return link effect
+      return true; // maybe return link effect
     }
+    return false;
   }
 
   connectedEffect(source: ShadowForm, target: ShadowForm) {

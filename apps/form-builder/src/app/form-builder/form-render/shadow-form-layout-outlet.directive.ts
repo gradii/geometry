@@ -1,33 +1,24 @@
-import {
-  ApplicationRef,
-  ChangeDetectorRef,
-  ComponentFactoryResolver,
-  Directive,
-  Inject,
-  Injector,
-  Input,
-  OnInit,
-  Optional,
-  ViewChild,
-  ViewContainerRef
-} from '@angular/core';
-import { ShadowFormLayoutComponent } from './shadow-form-layout-define.directive';
 import { CdkPortalOutlet, DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { DOCUMENT } from '@angular/common';
-import { defer, Subject } from 'rxjs';
+import {
+  ApplicationRef, ChangeDetectorRef, ComponentFactoryResolver, Directive, Inject, Injector, Input,
+  OnDestroy, OnInit, Optional, TemplateRef, ViewChild, ViewContainerRef
+} from '@angular/core';
 import { isString } from '@gradii/check-type';
-import { ShadowForm } from '../shadow-form';
+import { defer, Subject } from 'rxjs';
 import { map, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { ShadowFormLayoutViewer } from '../data-source/shadow-form-layout-viewer';
 import { VisibleShadowFormDataSource } from '../data-source/visible-shadow-form-data-source';
 import { FormRender } from '../form-render';
+import { ShadowForm } from '../shadow-form';
+import { ShadowFormLayoutComponent } from './shadow-form-layout-define.directive';
 
 /**
  */
 @Directive({
   selector: 'ng-template[shadowFormLayoutOutlet]'
 })
-export class ShadowFormLayoutOutletDirective {
+export class ShadowFormLayoutOutletDirective implements OnDestroy {
   private _portal: TemplatePortal<any>;
   private _outlet: DomPortalOutlet;
 
@@ -43,7 +34,7 @@ export class ShadowFormLayoutOutletDirective {
     private _changeDetectorRef?: ChangeDetectorRef) {
   }
 
-  attach(template, context: any = {}) {
+  attach(template: TemplateRef<any>, context: any = {}) {
     if (!this._portal) {
       this._portal = new TemplatePortal(template, this._viewContainerRef);
     }
@@ -86,10 +77,10 @@ export class ShadowFormLayoutOutletDirective {
  */
 @Directive({
   selector: '[shadowFormLayoutOutlet]',
-  inputs: []
+  inputs  : []
 })
 export class ShadowFormLayoutOutlet implements OnInit {
-  _destroy$ = new Subject();
+  _destroy$                       = new Subject();
   private _shadowFormLayoutViewer = new ShadowFormLayoutViewer();
 
   private _select: string[] = [];
@@ -140,9 +131,9 @@ export class ShadowFormLayoutOutlet implements OnInit {
   }
 
 
-  selectedPortalList = [];
+  selectedPortalList: any[] = [];
 
-  @ViewChild(CdkPortalOutlet, { static: true })
+  @ViewChild(CdkPortalOutlet, {static: true})
   portalOutlet: CdkPortalOutlet;
 
   constructor(

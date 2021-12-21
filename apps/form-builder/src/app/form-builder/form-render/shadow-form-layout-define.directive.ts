@@ -1,15 +1,17 @@
-import { ContentChild, Directive, Host, Input, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
+import { TemplatePortal } from '@angular/cdk/portal';
+import {
+  ContentChild, Directive, Host, Input, OnDestroy, TemplateRef, ViewContainerRef, ViewRef
+} from '@angular/core';
+import { isString } from '@gradii/check-type';
+import { Subject } from 'rxjs';
+import { shareReplay, takeUntil, tap } from 'rxjs/operators';
+import { ShadowFormLayoutViewer } from '../data-source/shadow-form-layout-viewer';
+import { VisibleShadowFormDataSource } from '../data-source/visible-shadow-form-data-source';
 import { FormRender } from '../form-render';
 import { ShadowForm } from '../shadow-form';
 import { FormLayoutDefine } from './form-layout-define.directive';
 import { FormLayoutService } from './form-layout.service';
 import { ShadowFormLayoutOutlet } from './shadow-form-layout-outlet.directive';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { isString } from '@gradii/check-type';
-import { ShadowFormLayoutViewer } from '../data-source/shadow-form-layout-viewer';
-import { VisibleShadowFormDataSource } from '../data-source/visible-shadow-form-data-source';
-import { shareReplay, takeUntil, tap } from 'rxjs/operators';
-import { Subject } from 'rxjs';
 
 
 @Directive({
@@ -53,14 +55,14 @@ export class ShadowFormLayoutDefine {
 
 @Directive({
   selector: 'ng-template[shadowFormLayout]',
-  host: {
+  host    : {
     'class': 'shadow-form-layout'
   }
 })
 export class ShadowFormLayoutComponent implements OnDestroy {
   private _destroy$ = new Subject();
 
-  private _viewRef;
+  private _viewRef: ViewRef;
   private _ifVisible: any[] | undefined = [];
 
   private _shadowFormLayoutViewer: ShadowFormLayoutViewer = new ShadowFormLayoutViewer();
@@ -105,8 +107,8 @@ export class ShadowFormLayoutComponent implements OnDestroy {
       // if (!this.rendered) {
       //   this.rendered = true;
       if (!this._viewRef) {
-        const nameList = this.selectShadowForms.map(it=>it.name);
-        this._viewRef = this._viewContainerRef.createEmbeddedView(this._templateRef, {
+        const nameList = this.selectShadowForms.map(it => it.name);
+        this._viewRef  = this._viewContainerRef.createEmbeddedView(this._templateRef, {
           $implicit: this.selectShadowForms,
           nameList,
         });
@@ -187,7 +189,7 @@ export class ShadowFormLayoutComponent implements OnDestroy {
 
         if (visibleSfList && visibleSfList.length) {
           this.selectShadowForms = visibleSfList;
-          this.visible = true;
+          this.visible           = true;
         } else {
           this.visible = false;
         }

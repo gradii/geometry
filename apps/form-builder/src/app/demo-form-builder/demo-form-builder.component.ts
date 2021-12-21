@@ -1,30 +1,30 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as jsYaml from 'js-yaml';
 import { tap } from 'rxjs/operators';
 import { Form } from '../form-builder/form';
-import { SingleFieldLinkPredicate } from '../form-builder/link-predicate/single-field-link-predicate';
 import { FormField } from '../form-builder/form-field/form-field';
+import { SingleFieldLinkPredicate } from '../form-builder/link-predicate/single-field-link-predicate';
 import { ShadowForm } from '../form-builder/shadow-form';
 
 @Component({
-  selector: 'devops-tools-demo-form-builder',
+  selector   : 'devops-tools-demo-form-builder',
   templateUrl: './demo-form-builder.component.html',
-  styleUrls: ['./demo-form-builder.component.scss']
+  styleUrls  : ['./demo-form-builder.component.scss']
 })
 export class DemoFormBuilderComponent implements OnInit {
 
-  mainForm;
+  mainForm: any;
 
   allShadowForms: ShadowForm[];
 
   constructor(private httpClient: HttpClient) {
   }
 
-  formFields = [];
+  formFields: any[] = [];
 
-  renderFormFields = [];
-  renderedShadowForms = [];
+  renderFormFields: any[]    = [];
+  renderedShadowForms: any[] = [];
 
   ngOnInit() {
     this.httpClient.get('assets/definitions/form-fields.yml', {
@@ -33,7 +33,7 @@ export class DemoFormBuilderComponent implements OnInit {
       tap((it) => {
         // console.log(it);
 
-        const d = jsYaml.load(it);
+        const d: any = jsYaml.load(it);
 
         // console.log(d);
 
@@ -48,9 +48,9 @@ export class DemoFormBuilderComponent implements OnInit {
 
   initFormFields() {
 
-    const typeFormField = new FormField('type');
+    const typeFormField    = new FormField('type');
     typeFormField.formType = 'select';
-    typeFormField.inputs = {
+    typeFormField.inputs   = {
       values: [
         'social',
         'company',
@@ -58,17 +58,17 @@ export class DemoFormBuilderComponent implements OnInit {
         'person'
       ]
     };
-    typeFormField.formControl.setValue('person')
+    typeFormField.formControl.setValue('person');
 
-    const countryFormField = new FormField('country');
+    const countryFormField    = new FormField('country');
     countryFormField.formType = 'input';
 
-    const cityFormField = new FormField('city');
-    const foundationFormField = new FormField('foundation');
-    const socialCodeFormField = new FormField('socialCode');
-    const companyLicenseFormField = new FormField('companyLicense');
+    const cityFormField               = new FormField('city');
+    const foundationFormField         = new FormField('foundation');
+    const socialCodeFormField         = new FormField('socialCode');
+    const companyLicenseFormField     = new FormField('companyLicense');
     const organizationNumberFormField = new FormField('organizationNumber');
-    const identityCardFormField = new FormField('identityCard');
+    const identityCardFormField       = new FormField('identityCard');
 
     const mainForm = new Form([
       typeFormField,

@@ -1,27 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { FormField } from '../form-builder/form-field/form-field';
-import { Form } from '../form-builder/form';
-import { SingleFieldLinkPredicate } from '../form-builder/link-predicate/single-field-link-predicate';
 import { tap } from 'rxjs/operators';
+import { Form } from '../form-builder/form';
+import { FormField } from '../form-builder/form-field/form-field';
+import { SingleFieldLinkPredicate } from '../form-builder/link-predicate/single-field-link-predicate';
 
 @Component({
-  selector: 'kpm-demo-change-select',
+  selector   : 'kpm-demo-change-select',
   templateUrl: './demo-change-select.component.html',
-  styleUrls: ['./demo-change-select.component.scss']
+  styleUrls  : ['./demo-change-select.component.scss']
 })
 export class DemoChangeSelectComponent implements OnInit {
-  mainForm
+  mainForm: any;
 
-  renderedShadowForms;
+  renderedShadowForms: any;
 
-  renderFormFields;
+  renderFormFields: any;
 
-  allShadowForms;
+  allShadowForms: any;
 
-  selectLayout = 'basic,originType'
+  selectLayout = 'basic,originType';
 
   get selectLayoutArray() {
-    return this.selectLayout.split(',')
+    return this.selectLayout.split(',');
   }
 
   constructor() {
@@ -33,9 +33,9 @@ export class DemoChangeSelectComponent implements OnInit {
 
   initFormFields() {
 
-    const typeFormField = new FormField('type');
+    const typeFormField    = new FormField('type');
     typeFormField.formType = 'select';
-    typeFormField.inputs = {
+    typeFormField.inputs   = {
       values: [
         'social',
         'company',
@@ -43,17 +43,17 @@ export class DemoChangeSelectComponent implements OnInit {
         'person'
       ]
     };
-    typeFormField.formControl.setValue('person')
+    typeFormField.formControl.setValue('person');
 
-    const countryFormField = new FormField('country');
+    const countryFormField    = new FormField('country');
     countryFormField.formType = 'input';
 
-    const cityFormField = new FormField('city');
-    const foundationFormField = new FormField('foundation');
-    const socialCodeFormField = new FormField('socialCode');
-    const companyLicenseFormField = new FormField('companyLicense');
+    const cityFormField               = new FormField('city');
+    const foundationFormField         = new FormField('foundation');
+    const socialCodeFormField         = new FormField('socialCode');
+    const companyLicenseFormField     = new FormField('companyLicense');
     const organizationNumberFormField = new FormField('organizationNumber');
-    const identityCardFormField = new FormField('identityCard');
+    const identityCardFormField       = new FormField('identityCard');
 
     const mainForm = new Form([
       typeFormField,

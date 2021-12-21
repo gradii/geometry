@@ -4,10 +4,10 @@ import { debounceTime, tap } from 'rxjs/operators';
 
 
 enum FormFieldDisplayMode {
-  Normal = 0,
-  Edit = 1,
-  Disable = 1 << 1,
-  Readonly = 1 << 2,
+  Normal       = 0,
+  Edit         = 1,
+  Disable      = 1 << 1,
+  Readonly     = 1 << 2,
   Presentation = (1 << 3) & FormFieldDisplayMode.Readonly,
 }
 
@@ -20,9 +20,9 @@ enum FormFieldDisplayMode {
 export class FormField {
   connectedFormList: any[];
 
-  state;
+  state: any;
 
-  visibility;
+  visibility: boolean;
 
   connectionChange = new EventEmitter();
 
@@ -30,7 +30,7 @@ export class FormField {
 
   formControl = new FormControl();
 
-  bindingTarget = [];
+  bindingTarget: string[] = [];
 
   mode: FormFieldDisplayMode;
 
@@ -40,8 +40,8 @@ export class FormField {
 
   outputs: any;
 
-  constructor(public name) {
-    //if binding target length gt 0. then should exec init
+  constructor(public name: string) {
+    // if binding target length gt 0. then should exec init
     this._init();
   }
 
@@ -50,8 +50,8 @@ export class FormField {
       debounceTime(0),
       tap((value) => {
         this.formControl.setValue(value, {
-            onlySelf: true,
-            emitEvent: false,
+            onlySelf             : true,
+            emitEvent            : false,
             emitModelToViewChange: true
           }
         );

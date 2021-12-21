@@ -1,23 +1,17 @@
 import {
-  ChangeDetectorRef,
-  Component,
-  ComponentFactoryResolver,
-  Directive,
-  Inject,
-  Input,
-  Optional,
-  Type,
+  ChangeDetectorRef, Component, ComponentFactoryResolver, Directive, Inject, Input, OnInit,
+  Optional, Type,
   ViewContainerRef
 } from '@angular/core';
-import { ShadowForm } from '../shadow-form';
 import { InputFormFieldComponent } from '../form-field/input-form-field.component';
+import { ShadowForm } from '../shadow-form';
 import { ShadowFormLayoutDefine } from './shadow-form-layout-define.directive';
 
 
 @Directive({
   selector: '[fieldLayoutOutlet]'
 })
-export class ShadowFormFieldLayoutOutlet /*extends CdkPortalOutlet */ {
+export class ShadowFormFieldLayoutOutlet implements OnInit/*extends CdkPortalOutlet */ {
   private _field: string;
 
   @Input()
@@ -65,9 +59,10 @@ export class ShadowFormFieldLayoutOutlet /*extends CdkPortalOutlet */ {
   }
 
   ngOnInit() {
-    let fields = [];
+    let fields: any[] = [];
     if (this.shadowFormFieldLayout) {
-      const field = this.shadowFormFieldLayout.shadowForm.fields.find(it => it.name === this.shadowFormFieldLayout.fieldName);
+      const field = this.shadowFormFieldLayout.shadowForm.fields.find(
+        it => it.name === this.shadowFormFieldLayout.fieldName);
       if (field) {
         fields.push(field);
       }
@@ -75,7 +70,8 @@ export class ShadowFormFieldLayoutOutlet /*extends CdkPortalOutlet */ {
       if (this.field === '*') {
         fields = this.shadowFormLayoutDefine.shadowForm.fields;
       } else {
-        const field = this.shadowFormLayoutDefine.shadowForm.fields.find(it => it.name === this.field);
+        const field = this.shadowFormLayoutDefine.shadowForm.fields.find(
+          it => it.name === this.field);
         if (field) {
           fields.push(field);
         }
@@ -85,10 +81,11 @@ export class ShadowFormFieldLayoutOutlet /*extends CdkPortalOutlet */ {
     if (fields.length) {
       fields.forEach(field => {
 
-        const compFactory = this._cfr.resolveComponentFactory<InputFormFieldComponent>(InputFormFieldComponent);
-        const ins = compFactory.componentType as Type<InputFormFieldComponent>;
+        const compFactory = this._cfr.resolveComponentFactory<InputFormFieldComponent>(
+          InputFormFieldComponent);
+        const ins         = compFactory.componentType as Type<InputFormFieldComponent>;
         this._location.clear();
-        const compRef = this._location.createComponent(compFactory);
+        const compRef              = this._location.createComponent(compFactory);
         compRef.instance.formField = field;
         this._cdr.markForCheck();
       });
@@ -104,12 +101,12 @@ export class ShadowFormFieldLayoutOutlet /*extends CdkPortalOutlet */ {
   selector: 'field-layout',
   template: `
     <ng-content></ng-content>`,
-  styles: [
+  styles  : [
     `
       :host {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        display         : flex;
+        align-items     : center;
+        justify-content : space-between;
       }
     `
   ]

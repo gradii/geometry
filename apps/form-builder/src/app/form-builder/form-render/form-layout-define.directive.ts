@@ -1,9 +1,4 @@
-import {
-  ContentChildren,
-  Directive,
-  Host,
-  TemplateRef
-} from '@angular/core';
+import { ContentChildren, Directive, Host, TemplateRef } from '@angular/core';
 import { FormRender } from '../form-render';
 import { FormLayoutService } from './form-layout.service';
 import { ShadowFormLayoutComponent } from './shadow-form-layout-define.directive';
@@ -23,7 +18,7 @@ export class FormLayoutDefine {
   formLayoutSlot = [''];
 
   @ContentChildren(ShadowFormLayoutComponent)
-  shadowFormLayoutList: ShadowFormLayoutComponent[]
+  shadowFormLayoutList: ShadowFormLayoutComponent[];
 
 
   constructor(

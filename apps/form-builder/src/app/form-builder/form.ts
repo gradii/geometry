@@ -1,8 +1,8 @@
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
+import { FormField } from './form-field/form-field';
 import { ShadowForm } from './shadow-form';
 import { Visibility } from './visibility';
-import { FormField } from './form-field/form-field';
 
 /**
  * when form attached to main form or a parent form
@@ -14,10 +14,10 @@ export class Form extends Visibility {
 
   renderFields: FormField[];
 
-  renderedFormField = new BehaviorSubject([]);
+  renderedFormField   = new BehaviorSubject<any[]>([]);
   renderedShadowForms = new Set<ShadowForm>();
 
-  linkRelations = [];
+  linkRelations: any[] = [];
 
   // form group
   formGroup = new FormGroup({});
@@ -40,7 +40,7 @@ export class Form extends Visibility {
   }
 
   _resolveFormField() {
-    const fields = [];
+    const fields: any[] = [];
     // this.renderedFormField.forEach((it) => {
     //   fields.add(it);
     // });
@@ -60,7 +60,7 @@ export class Form extends Visibility {
     return fields;
   }
 
-  createShadowForm(fields: FormField[], name) {
+  createShadowForm(fields: FormField[], name: string) {
     fields.forEach(it => {
       if (!this.fields.includes(it)) {
         this.fields.push(it);
@@ -80,11 +80,11 @@ export class Form extends Visibility {
     return shadowForm;
   }
 
-  connect(form) {
+  connect(form: any) {
 
   }
 
-  disConnect(form) {
+  disConnect(form: any) {
 
   }
 }
