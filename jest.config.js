@@ -3,5 +3,6 @@ module.exports = {
     "<rootDir>/apps/diagram-demo",
     "<rootDir>/libs/check-type",
     "<rootDir>/apps/triangle-api",
+    "<rootDir>/apps/form-builder",
   ],
 };

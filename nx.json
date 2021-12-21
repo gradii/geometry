@@ -44,6 +44,9 @@
     "fedaco": {
       "tags": ["pkg"]
     },
+    "form-builder": {
+      "tags": []
+    },
     "triangle-api": {
       "tags": []
     },
