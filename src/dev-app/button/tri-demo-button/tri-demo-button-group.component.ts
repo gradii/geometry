@@ -73,6 +73,10 @@ import { Component, OnInit } from '@angular/core';
     <tri-button-group [size]="'small'">
       <button tri-button>Small</button>
       <button tri-button>Small</button>
+    </tri-button-group>
+    <tri-button-group [size]="'xs'">
+      <button tri-button>X Small</button>
+      <button tri-button>X Small</button>
     </tri-button-group>`,
   styles  : []
 })

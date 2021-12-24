@@ -16,10 +16,12 @@
 $btn-font-weight        : v.$font-weight-normal !default;
 $btn-border-radius-base : v.$border-radius-base !default;
 $btn-border-radius-sm   : v.$border-radius-base !default;
+$btn-border-radius-xs   : v.$border-radius-base !default;
 
 $btn-height-base        : 2rem !default;
 $btn-height-lg          : 2.25rem !default;
 $btn-height-sm          : 1.75rem !default;
+$btn-height-xs          : 1.5rem !default;
 
 $btn-padding-x-lg       : 1.125rem !default;
 $btn-padding-y-lg       : 0.375rem !default;
@@ -35,6 +37,11 @@ $btn-padding-x-sm       : 0.5rem !default;
 $btn-padding-y-sm       : 0.25rem !default;
 $btn-font-size-sm       : v.$font-size-sm !default;
 $btn-line-height-sm     : 1 !default;
+
+$btn-padding-x-xs       : 0.5rem !default;
+$btn-padding-y-xs       : 0 !default;
+$btn-font-size-xs       : v.$font-size-xs !default;
+$btn-line-height-xs     : 1 !default;
 
 $btn-circle-size        : $btn-height-base !default;
 $btn-circle-size-lg     : $btn-height-lg !default;
@@ -117,10 +124,17 @@ $btn-primary-bg         : grey !default;
         $btn-line-height-sm,
         $btn-border-radius-sm
     );
+  }
 
-    > .#{v.$iconfont-css} {
-      font-size : v.$font-size-base,
-    }
+  &-xs > .#{$btnClassName} {
+    @include button-size(
+        $btn-height-xs,
+        $btn-padding-y-xs,
+        $btn-padding-x-xs,
+        $btn-font-size-xs,
+        $btn-line-height-xs,
+        $btn-border-radius-xs
+    );
   }
 }
 
@@ -196,10 +210,16 @@ $btn-primary-bg         : grey !default;
     );
   }
 
-  //& + & {
-  //  margin-left: 4px;
-  //  margin-top: 4px;
-  //}
+  &-xs {
+    @include button-size(
+        $btn-height-xs,
+        $btn-padding-y-xs,
+        $btn-padding-x-xs,
+        $btn-font-size-xs,
+        $btn-line-height-xs,
+        $btn-border-radius-xs
+    );
+  }
 }
 
 // primary button style

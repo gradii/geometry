@@ -15,7 +15,6 @@ $_primary             : theme.$primary;
 $_secondary           : theme.$secondary;
 $_success             : theme.$success;
 $_info                : theme.$info;
-$_highlight           : theme.$highlight;
 $_warning             : theme.$warning;
 $_error               : theme.$error;
 
@@ -42,13 +41,9 @@ $btn-warning-color    : #fff !default;
 $btn-warning-bg       : theming.tri-color($_warning) !default;
 $btn-warning-border   : theming.tri-color($_warning) !default;
 
-$btn-danger-color     : theming.tri-color($_background, background-color-base) !default;
-$btn-danger-bg        : theming.tri-color($_error) !default;
-$btn-danger-border    : theming.tri-color($_error) !default;
-
-$btn-highlight-color  : #fff !default;
-$btn-highlight-bg     : theming.tri-color($_highlight) !default;
-$btn-highlight-border : theming.tri-color($_highlight) !default;
+$btn-error-color      : #fff !default;
+$btn-error-bg         : theming.tri-color($_error) !default;
+$btn-error-border     : theming.tri-color($_error) !default;
 
 $btn-disable-color    : theming.tri-color($_foreground, disabled-color) !default;
 $btn-disable-bg       : theming.tri-color($_foreground, disabled-bg) !default;
@@ -106,14 +101,10 @@ $btn-ghost-border     : theming.tri-color($_foreground, border-color-base) !defa
       border-style : dashed;
     }
 
-    @at-root &-danger {
-      @include button-common.button-variant-danger($btn-danger-color, $btn-danger-bg, $btn-danger-border, $btn-primary-color);
-    }
+    @at-root &-error {
+      @include button-common.button-variant-basic($btn-error-color, $btn-error-bg, $btn-error-border);
 
-    @at-root &-highlight {
-      @include button-common.button-variant-basic($btn-highlight-color, $btn-highlight-bg, $btn-highlight-border);
-
-      @include button-common.btn-group-border(".#{$btn-prefix-cls}-group", theming.tri-color-palette($btn-highlight-border, 7), $btn-default-border);
+      @include button-common.btn-group-border(".#{$btn-prefix-cls}-group", theming.tri-color-palette($btn-error-border, 7), $btn-default-border);
     }
 
     $text-map-list : (
@@ -122,7 +113,7 @@ $btn-ghost-border     : theming.tri-color($_foreground, border-color-base) !defa
       success: $btn-success-bg,
       info: $btn-info-bg,
       warning: $btn-warning-bg,
-      danger: $btn-danger-bg,
+      error: $btn-error-bg,
     );
 
     @each $name, $color in $text-map-list {
@@ -161,8 +152,8 @@ $btn-ghost-border     : theming.tri-color($_foreground, border-color-base) !defa
       @include button-common.button-variant-ghost(theming.tri-color($_primary));
     }
 
-    @at-root &-background-ghost#{&}-danger {
-      @include button-common.button-variant-ghost($btn-danger-color);
+    @at-root &-background-ghost#{&}-error {
+      @include button-common.button-variant-ghost($btn-error-color);
     }
   }
 }

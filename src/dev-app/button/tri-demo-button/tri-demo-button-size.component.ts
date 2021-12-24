@@ -16,6 +16,7 @@ import { Component, OnInit } from '@angular/core';
       <label tri-radio-button [value]="'large'"><span>Large</span></label>
       <label tri-radio-button [value]="'default'"><span>Default</span></label>
       <label tri-radio-button [value]="'small'"><span>Small</span></label>
+      <label tri-radio-button [value]="'xsmall'"><span>XSmall</span></label>
     </tri-radio-group>
     <br>
     <br>
@@ -29,6 +30,7 @@ import { Component, OnInit } from '@angular/core';
     <button tri-button [type]="'primary'" [size]="size">
       <span>Normal</span>
     </button>
+    <br>
     <br>
     <tri-button-group [size]="size">
       <button tri-button [type]="'primary'">

@@ -15,13 +15,15 @@ export type ButtonColor =
   | 'secondary'
   | 'success'
   | 'info'
-  | 'dashed'
   | 'warning'
-  | 'danger'
-  | 'highlight'
+  | 'error'
   | 'default';
 export type ButtonShape = 'circle' | null;
-export type ButtonSize = 'small' | 'large' | 'default';
+export type ButtonSize = 'xlarge' | 'xl' |
+  'large' | 'lg' |
+  'default' |
+  'small' | 'sm' |
+  'xsmall' | 'xs';
 
 @Directive({
   selector: '[triRaisedButton]',
@@ -99,11 +101,12 @@ export class TriIconOnlyButton {
     '[class.tri-btn-success]'         : '_color === "success"',
     '[class.tri-btn-info]'            : '_color === "info"',
     '[class.tri-btn-warning]'         : '_color === "warning"',
-    '[class.tri-btn-danger]'          : '_color === "danger"',
-    '[class.tri-btn-highlight]'       : '_color === "highlight"',
+    '[class.tri-btn-error]'           : '_color === "error"',
     '[class.tri-btn-circle]'          : '_shape === "circle"',
-    '[class.tri-btn-lg]'              : '_size === "large"',
-    '[class.tri-btn-sm]'              : '_size === "small"',
+    '[class.tri-btn-xl]'              : '_size === "xlarge" || _size === "xl"',
+    '[class.tri-btn-lg]'              : '_size === "large" || _size === "lg"',
+    '[class.tri-btn-sm]'              : '_size === "small" || _size === "sm"',
+    '[class.tri-btn-xs]'              : '_size === "xsmall" || _size === "xs"',
     '[class.tri-btn-loading]'         : '_loading',
     '[class.tri-btn-background-ghost]': '_ghost'
   }
@@ -237,5 +240,7 @@ export class ButtonComponent implements AfterContentInit {
     }
   }
 
+  static ngAcceptInputType_color: ButtonColor | keyof ButtonColor | string;
+  static ngAcceptInputType_size: ButtonSize | keyof ButtonSize | string;
   static ngAcceptInputType_iconOnly: BooleanInput;
 }

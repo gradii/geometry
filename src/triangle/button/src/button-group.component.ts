@@ -6,18 +6,22 @@
 
 import { Component, Input, ViewEncapsulation } from '@angular/core';
 
-export type ButtonGroupSize = 'small' | 'large' | 'default';
+export type ButtonGroupSize = 'large' | 'lg' |
+  'default' |
+  'small' | 'sm' |
+  'xsmall' | 'xs';
 
 @Component({
-  selector           : 'tri-button-group',
-  encapsulation      : ViewEncapsulation.None,
-  template           : `
+  selector     : 'tri-button-group',
+  encapsulation: ViewEncapsulation.None,
+  template     : `
     <ng-content></ng-content>
   `,
-  host               : {
+  host         : {
     '[class.tri-btn-group]'   : 'true',
-    '[class.tri-btn-group-lg]': '_size==\'large\'',
-    '[class.tri-btn-group-sm]': '_size==\'small\''
+    '[class.tri-btn-group-lg]': '_size=="large" || _size==="lg"',
+    '[class.tri-btn-group-sm]': '_size=="small" || _size==="sm"',
+    '[class.tri-btn-group-xs]': '_size=="xsmall" || _size==="xs"'
   },
 })
 export class ButtonGroupComponent {
@@ -31,5 +35,7 @@ export class ButtonGroupComponent {
   set size(value: ButtonGroupSize) {
     this._size = value;
   }
+
+  static ngAcceptInputType_size: ButtonGroupSize | keyof ButtonGroupSize | string;
 
 }

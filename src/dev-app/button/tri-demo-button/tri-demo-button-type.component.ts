@@ -4,10 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  Component,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 /**
  * @title button-type
@@ -15,23 +12,32 @@ import {
 @Component({
   selector: 'tri-demo-button-type',
   template: `
-    <button tri-button [type]="'primary'">
-      <span>Primary</span>
-    </button>
-    <button tri-button [type]="'default'">
-      <span>Default</span>
-    </button>
-    <button tri-button [type]="'dashed'">
-      <span>Dashed</span>
-    </button>
-    <button tri-button [type]="'danger'">
-      <span>Danger</span>
-    </button>
-    <a triButton href="//google.com">
-      Link Button
-    </a>
+    <h5>default fill button</h5>
+    <div>
+      <button tri-button [color]="'default'">
+        <span>Default</span>
+      </button>
+      <button tri-button [color]="'primary'">
+        <span>Primary</span>
+      </button>
+      <button tri-button color="secondary">
+        secondary button
+      </button>
+      <button tri-button [color]="'error'">
+        <span>Danger</span>
+      </button>
+      <a triButton href="//google.com">
+        Link Button
+      </a>
+      <a triTextButton href="//google.com">
+        Link Button
+      </a>
+    </div>
 
     <h5>raised button</h5>
+    <button triRaisedButton color="default">
+      primary button
+    </button>
     <button triRaisedButton color="primary">
       primary button
     </button>
@@ -47,14 +53,29 @@ import {
     <button triRaisedButton color="warning">
       warning button
     </button>
-    <button triRaisedButton color="danger">
-      danger button
+    <button triRaisedButton color="error">
+      error button
     </button>
 
 
     <h5>rounded button</h5>
     <button triRoundedButton color="primary">
       rounded button
+    </button>
+    <button triRoundedButton color="secondary">
+      secondary button
+    </button>
+    <button triRoundedButton color="success">
+      success button
+    </button>
+    <button triRoundedButton color="info">
+      info button
+    </button>
+    <button triRoundedButton color="warning">
+      warning button
+    </button>
+    <button triRoundedButton color="error">
+      error button
     </button>
 
     <h5>text button</h5>
@@ -73,8 +94,8 @@ import {
     <button triTextButton color="warning">
       warning text button
     </button>
-    <button triTextButton color="danger">
-      danger text button
+    <button triTextButton color="error">
+      error text button
     </button>
 
     <h5>outlined button</h5>
@@ -93,8 +114,8 @@ import {
     <button triOutlinedButton color="warning">
       warning outlined button
     </button>
-    <button triOutlinedButton color="danger">
-      danger outlined button
+    <button triOutlinedButton color="error">
+      error outlined button
     </button>
   `,
   styles  : []

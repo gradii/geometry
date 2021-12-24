@@ -25,32 +25,32 @@ import { TriDemoButtonSizeComponent } from './tri-demo-button/tri-demo-button-si
 import { TriDemoButtonTypeComponent } from './tri-demo-button/tri-demo-button-type.component';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
+  imports     : [
+    CommonModule,
+    FormsModule,
 
-        TriIconModule,
-        TriButtonModule,
-        TriRadioModule,
-        // TriDropDownModule,
-        TriCheckboxModule,
+    TriIconModule,
+    TriButtonModule,
+    TriRadioModule,
+    // TriDropDownModule,
+    TriCheckboxModule,
 
-        RouterModule.forChild([
-            {
-                path: '', component: DevButton, children: [
-                    {path: 'tri-demo-button-color', component: TriDemoButtonColorComponent},
-                    {path: 'tri-demo-button-disabled', component: TriDemoButtonDisabledComponent},
-                    {path: 'tri-demo-button-ghost', component: TriDemoButtonGhostComponent},
-                    {path: 'tri-demo-button-group', component: TriDemoButtonGroupComponent},
-                    {path: 'tri-demo-button-icon', component: TriDemoButtonIconComponent},
-                    {path: 'tri-demo-button-loading', component: TriDemoButtonLoadingComponent},
-                    {path: 'tri-demo-button-multiple', component: TriDemoButtonMultipleComponent},
-                    {path: 'tri-demo-button-size', component: TriDemoButtonSizeComponent},
-                    {path: 'tri-demo-button-type', component: TriDemoButtonTypeComponent},
-                ]
-            }
-        ]),
-    ],
+    RouterModule.forChild([
+      {
+        path: '', component: DevButton, children: [
+          {path: 'tri-demo-button-color', component: TriDemoButtonColorComponent},
+          {path: 'tri-demo-button-disabled', component: TriDemoButtonDisabledComponent},
+          {path: 'tri-demo-button-ghost', component: TriDemoButtonGhostComponent},
+          {path: 'tri-demo-button-group', component: TriDemoButtonGroupComponent},
+          {path: 'tri-demo-button-icon', component: TriDemoButtonIconComponent},
+          {path: 'tri-demo-button-loading', component: TriDemoButtonLoadingComponent},
+          {path: 'tri-demo-button-multiple', component: TriDemoButtonMultipleComponent},
+          {path: 'tri-demo-button-size', component: TriDemoButtonSizeComponent},
+          {path: 'tri-demo-button-type', component: TriDemoButtonTypeComponent},
+        ]
+      }
+    ]),
+  ],
   declarations: [
     DevButton,
 
