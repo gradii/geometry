@@ -56,6 +56,15 @@ $btn-ghost-bg         : transparent !default;
 $btn-ghost-border     : theming.tri-color($_foreground, border-color-base) !default;
 
 @mixin tri-button-theme() {
+  $text-map-list : (
+    primary: $btn-primary-bg,
+    secondary: $btn-secondary-bg,
+    success: $btn-success-bg,
+    info: $btn-info-bg,
+    warning: $btn-warning-bg,
+    error: $btn-error-bg,
+  );
+
 
   // Button styles
   // -----------------------------
@@ -92,29 +101,11 @@ $btn-ghost-border     : theming.tri-color($_foreground, border-color-base) !defa
       @include button-common.btn-group-border(".#{$btn-prefix-cls}-group", theming.tri-color-palette($btn-warning-border, 7), $btn-default-border);
     }
 
-    @at-root &-ghost {
-      @include button-common.button-variant-other($btn-ghost-color, $btn-ghost-bg, $btn-ghost-border, theming.tri-color($_primary));
-    }
-
-    @at-root &-dashed {
-      @include button-common.button-variant-other($btn-default-color, $btn-default-bg, $btn-default-border, theming.tri-color($_primary));
-      border-style : dashed;
-    }
-
     @at-root &-error {
       @include button-common.button-variant-basic($btn-error-color, $btn-error-bg, $btn-error-border);
 
       @include button-common.btn-group-border(".#{$btn-prefix-cls}-group", theming.tri-color-palette($btn-error-border, 7), $btn-default-border);
     }
-
-    $text-map-list : (
-      primary: $btn-primary-bg,
-      secondary: $btn-secondary-bg,
-      success: $btn-success-bg,
-      info: $btn-info-bg,
-      warning: $btn-warning-bg,
-      error: $btn-error-bg,
-    );
 
     @each $name, $color in $text-map-list {
       @at-root &-text#{&}-#{$name} {
@@ -132,6 +123,11 @@ $btn-ghost-border     : theming.tri-color($_foreground, border-color-base) !defa
       box-shadow : 0 3px 1px -2px rgb(0 0 0 / 20%),
       0 2px 2px 0 rgb(0 0 0 / 14%),
       0 1px 5px 0 rgb(0 0 0 / 12%);
+
+      &:focus,
+      &.focus {
+        box-shadow : none;
+      }
     }
 
     @at-root &#{&}-rounded {
@@ -141,19 +137,43 @@ $btn-ghost-border     : theming.tri-color($_foreground, border-color-base) !defa
     @at-root &#{&}-rounded#{&-icon-only} {
       border-radius : 50%
     }
+  }
 
-    @at-root &-background-ghost {
-      background   : transparent !important;
-      border-color : #fff;
-      color        : #fff;
+  .#{$btn-prefix-cls} {
+    @at-root &-ghost {
+      @include button-common.button-variant-fill(
+          $btn-ghost-bg,
+          $btn-ghost-border,
+          $btn-ghost-color,
+          $btn-ghost-bg,
+          theming.tri-color($_primary), //$hover-border,
+          theming.tri-color($_primary), //$hover-color,
+          rgba($btn-ghost-bg, .2), //$active-background,
+          theming.tri-color($_primary), //$active-border,
+          theming.tri-color($_primary), //$active-color
+        $enable-shadows : false,
+        $enable-border  : true,
+      );
     }
 
-    @at-root &-background-ghost#{&}-primary {
-      @include button-common.button-variant-ghost(theming.tri-color($_primary));
+    @each $name, $color in $text-map-list {
+      @at-root &-ghost#{&}-#{$name} {
+        @include button-common.button-variant-ghost($color);
+      }
     }
 
-    @at-root &-background-ghost#{&}-error {
-      @include button-common.button-variant-ghost($btn-error-color);
+    @at-root &-background-ghost:not(:hover):not(:focus):not(:active) {
+      filter : opacity(.9);
+    }
+
+    @at-root &-background-ghost#{&}-text {
+      border : 0 !important;
+    }
+  }
+
+  .#{$btn-prefix-cls} {
+    @at-root &-dashed {
+      border-style : dashed !important;
     }
   }
 }

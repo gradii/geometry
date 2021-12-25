@@ -35,13 +35,6 @@ $btn-circle-size        : $btn-height-base !default;
 $btn-circle-size-lg     : $btn-height-lg !default;
 $btn-circle-size-sm     : $btn-height-sm !default;
 
-//$btn-group-border               : $primary-7 !default;
-
-// for compatibile
-//$btn-ghost-color  : $text-color;
-//$btn-ghost-bg     : transparent;
-//$btn-ghost-border : $border-color-base;
-
 // Button styles
 // -----------------------------
 .#{$btn-prefix-cls} {
@@ -55,7 +48,14 @@ $btn-circle-size-sm     : $btn-height-sm !default;
     @include mixins.btn-circle($btn-prefix-cls)
   }
 
-  .#{v.$iconfont-css} {
+  @at-root &-square {
+    display         : inline-flex;
+    align-items     : center;
+    justify-content : center;
+    @include mixins.btn-square($btn-prefix-cls)
+  }
+
+  > .#{v.$iconfont-css} {
     display         : inline-flex;
     justify-content : center;
     align-items     : center;
@@ -72,14 +72,6 @@ $btn-circle-size-sm     : $btn-height-sm !default;
   @at-root &-group {
     @include mixins.btn-group($btn-prefix-cls);
   }
-
-  @at-root &#{&}-icon-only {
-    .#{v.$iconfont-css} {
-      margin  : 0 !important;
-      padding : 0 !important;
-    }
-  }
-
 
   @at-root &#{&}-icon-only#{&}-rounded {
     display         : inline-flex;

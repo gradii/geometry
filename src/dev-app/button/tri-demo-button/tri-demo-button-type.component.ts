@@ -12,20 +12,8 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'tri-demo-button-type',
   template: `
-    <h5>default fill button</h5>
+    <h4>href button</h4>
     <div>
-      <button tri-button [color]="'default'">
-        <span>Default</span>
-      </button>
-      <button tri-button [color]="'primary'">
-        <span>Primary</span>
-      </button>
-      <button tri-button color="secondary">
-        secondary button
-      </button>
-      <button tri-button [color]="'error'">
-        <span>Danger</span>
-      </button>
       <a triButton href="//google.com">
         Link Button
       </a>
@@ -34,93 +22,91 @@ import { Component, OnInit } from '@angular/core';
       </a>
     </div>
 
-    <h5>raised button</h5>
-    <button triRaisedButton color="default">
-      primary button
-    </button>
-    <button triRaisedButton color="primary">
-      primary button
-    </button>
-    <button triRaisedButton color="secondary">
-      secondary button
-    </button>
-    <button triRaisedButton color="success">
-      success button
-    </button>
-    <button triRaisedButton color="info">
-      info button
-    </button>
-    <button triRaisedButton color="warning">
-      warning button
-    </button>
-    <button triRaisedButton color="error">
-      error button
-    </button>
+    <h4>variant</h4>
+    <ng-container *ngFor="let color of colorList">
+      <h5>{{color}}</h5>
+      <div>
+        <ng-container *ngFor="let type of typeList">
+          <ng-container [ngSwitch]="type">
+            <button triButton *ngSwitchCase="'fill'" [color]="color">
+              {{type}} Button
+            </button>
+            <button triRaisedButton *ngSwitchCase="'raised'" [color]="color">
+              {{type}} Button
+            </button>
+            <button triRoundedButton *ngSwitchCase="'rounded'" [color]="color">
+              {{type}} Button
+            </button>
+            <button triDashedButton *ngSwitchCase="'dashed'" [color]="color">
+              {{type}} Button
+            </button>
+            <!-- <button triDashedButton *ngSwitchCase="'rounded'" [color]="color">
+               {{type}} Button
+             </button>-->
+            <button triTextButton *ngSwitchCase="'text'" [color]="color">
+              {{type}} Button
+            </button>
+            <button triOutlinedButton *ngSwitchCase="'outlined'" [color]="color">
+              {{type}} Button
+            </button>
+          </ng-container>
+        </ng-container>
+      </div>
+    </ng-container>
 
+    <!--    <ng-container *ngFor="let ghost of ghostTypeList">-->
+    <h4>ghost</h4>
+    <div style="background-color: #181818; padding: 2rem">
+      <div style="background-color: rgb(36, 36, 36)">
+        <ng-container *ngFor="let color of colorList">
+          <h5>{{color}}</h5>
+          <ng-container *ngFor="let type of ghostTypeList">
+            <ng-container [ngSwitch]="type">
+              <button triRoundedButton *ngSwitchCase="'rounded'" [color]="color" ghost>
+                {{type}} Button
+              </button>
+              <button triTextButton *ngSwitchCase="'text'" [color]="color" ghost>
+                {{type}} Button
+              </button>
+              <button triOutlinedButton *ngSwitchCase="'outlined'" [color]="color" ghost>
+                {{type}} Button
+              </button>
+              <button triDashedButton *ngSwitchCase="'dashed'" [color]="color" ghost>
+                {{type}} Button
+              </button>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+    <!--    </ng-container>-->
 
-    <h5>rounded button</h5>
-    <button triRoundedButton color="primary">
-      rounded button
-    </button>
-    <button triRoundedButton color="secondary">
-      secondary button
-    </button>
-    <button triRoundedButton color="success">
-      success button
-    </button>
-    <button triRoundedButton color="info">
-      info button
-    </button>
-    <button triRoundedButton color="warning">
-      warning button
-    </button>
-    <button triRoundedButton color="error">
-      error button
-    </button>
-
-    <h5>text button</h5>
-    <button triTextButton color="primary">
-      primary text button
-    </button>
-    <button triTextButton color="secondary">
-      secondary text button
-    </button>
-    <button triTextButton color="success">
-      success text button
-    </button>
-    <button triTextButton color="info">
-      info text button
-    </button>
-    <button triTextButton color="warning">
-      warning text button
-    </button>
-    <button triTextButton color="error">
-      error text button
-    </button>
-
-    <h5>outlined button</h5>
-    <button triOutlinedButton color="primary">
-      primary outlined button
-    </button>
-    <button triOutlinedButton color="secondary">
-      secondary outlined button
-    </button>
-    <button triOutlinedButton color="success">
-      success outlined button
-    </button>
-    <button triOutlinedButton color="info">
-      info outlined button
-    </button>
-    <button triOutlinedButton color="warning">
-      warning outlined button
-    </button>
-    <button triOutlinedButton color="error">
-      error outlined button
-    </button>
   `,
-  styles  : []
+  styles  : [
+    `.tri-btn + .tri-btn {
+      margin-left : 1rem;
+    }`
+  ]
 })
 export class TriDemoButtonTypeComponent implements OnInit {
+  typeList  = ['fill', 'raised', 'rounded', 'dashed', 'text', 'outlined'];
+  colorList = [
+    'default',
+    'primary',
+    'secondary',
+    'success',
+    'info',
+    'warning',
+    'error'
+  ];
+
+  ghostTypeList = [
+    'outlined',
+    'rounded',
+    'dashed',
+    'text'
+  ];
+
   constructor() {
   }
 

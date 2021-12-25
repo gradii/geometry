@@ -46,6 +46,13 @@ $btn-line-height-xs     : 1 !default;
 $btn-circle-size        : $btn-height-base !default;
 $btn-circle-size-lg     : $btn-height-lg !default;
 $btn-circle-size-sm     : $btn-height-sm !default;
+$btn-circle-size-xs     : $btn-height-xs !default;
+
+$btn-square-size        : $btn-height-base !default;
+$btn-square-size-lg     : $btn-height-lg !default;
+$btn-square-size-sm     : $btn-height-sm !default;
+$btn-square-size-xs     : $btn-height-xs !default;
+
 
 $btn-box-shadow         : 0 !default;
 $btn-active-box-shadow  : none !default;
@@ -222,31 +229,25 @@ $btn-primary-bg         : grey !default;
   }
 }
 
-// primary button style
-@mixin btn-primary() {
-  @include button-variant-basic($btn-primary-color, $btn-primary-bg);
-}
-
 // default button style
 @mixin btn-default() {
   $foreground : theme.$foreground;
   $background : theme.$background;
   $primary    : theme.$primary;
 
-  @include button-variant-other(
-      theming.tri-color($foreground, text-color),
+  @include button-variant-fill(
       theming.tri-color($background, component-background),
       theming.tri-color($foreground, border-color-base),
-      theming.tri-color($primary),
+      theming.tri-color($foreground, text-color),
+      theming.tri-color($background, component-background),
       null,
-      theming.tri-color-palette(theming.tri-color($primary), 7)
+      theming.tri-color($foreground, text-color),
+      theming.tri-color-palette(theming.tri-color($foreground, border-color-base), 7), //$active-background,
+      null,
+      theming.tri-color($foreground, text-color),
+    $enable-shadows : false,
+    $enable-border  : false
   );
-  &:hover,
-  &:focus,
-  &:active,
-  &.active {
-    background : #fff;
-  }
 }
 
 
@@ -268,6 +269,31 @@ $btn-primary-bg         : grey !default;
       0, 0, $btn-font-size-sm, $btn-line-height-sm, 50%);
   }
 }
+
+@mixin btn-square($btnClassName: btn) {
+  width : $btn-square-size;
+  @include button-size($btn-square-size,
+    0, 0, $btn-font-size-base, $btn-line-height-base, null);
+
+  &.#{$btnClassName}-lg {
+    @include size.square($btn-square-size-lg);
+    @include button-size($btn-square-size-lg,
+      0, 0, $btn-font-size-lg * 1.125, $btn-line-height-lg, null);
+  }
+
+  &.#{$btnClassName}-sm {
+    @include size.square($btn-square-size-sm);
+    @include button-size($btn-square-size-sm,
+      0, 0, $btn-font-size-sm, $btn-line-height-sm, null);
+  }
+
+  &.#{$btnClassName}-xs {
+    @include size.square($btn-square-size-xs);
+    @include button-size($btn-square-size-xs,
+      0, 0, $btn-font-size-sm, $btn-line-height-sm, null);
+  }
+}
+
 
 // Horizontal button groups styl
 // --------------------------------------------------
@@ -328,7 +354,7 @@ $btn-primary-bg         : grey !default;
 // Easily pump out default styles, as well as :hover, :focus, :active,
 // and disabled options for all buttons
 
-@mixin button-variant(
+@mixin button-variant-fill(
   $background,
   $border-color,
   $color: contrast.color-contrast($background),
@@ -341,44 +367,75 @@ $btn-primary-bg         : grey !default;
   $disabled-background: $background,
   $disabled-border: $border-color,
   $disabled-color: $color,
+  $enable-gradients: v.$enable-gradients,
+  $enable-shadows: true,
+  $enable-border: true,
+  $border-width: v.$border-width-base,
+  $border-style: v.$border-style-base,
 ) {
-  color  : $color;
+  $border : null;
+  @if $enable-border {
+    $border       : $border-width $border-style $border-color;
+  } @else if $enable-border == null {
+    $border       : null;
+    $hover-border : null;
+  } @else {
+    $border       : 0;
+    $hover-border : 0;
+  }
+
+  color   : $color;
   @include gradients.gradient-bg($background);
-  border : v.$border-width-base v.$border-style-base $border-color;
-  @include box-shadow.box-shadow($btn-box-shadow);
+  @if ($enable-border != null) {
+    border : $border;
+  }
+  @if $enable-shadows {
+    @include box-shadow.box-shadow($btn-box-shadow);
+  }
 
   &:hover {
-    color        : $hover-color;
+    @if $hover-color != $color or $hover-color != $active-color {
+      color : $hover-color;
+    }
     @include gradients.gradient-bg($hover-background);
-    border-color : $hover-border;
+    @if $hover-border != $border or $hover-border != $active-border {
+      border-color : $hover-border;
+    }
   }
 
   &:focus,
   &.focus {
-    color        : $hover-color;
-    @include gradients.gradient-bg($hover-background);
-    border-color : $hover-border;
+    @if $hover-color != $color or $hover-color != $active-color {
+      color : $hover-color;
+    }
+    @if $hover-background != $background or $hover-background != $active-background {
+      @include gradients.gradient-bg($hover-background);
+    }
+    @if $hover-border != $border or $hover-border != $active-border {
+      border-color : $hover-border;
+    }
     // Avoid using mixin so we can pass custom focus shadow properly
-    @if v.$enable-shadows {
-      box-shadow : $btn-box-shadow, 0 0 0 $btn-focus-width rgba(color.mix($color, $border-color, 15%), .5);
-    } @else {
+    @if $enable-shadows {
       box-shadow : 0 0 0 $btn-focus-width rgba(color.mix($color, $border-color, 15%), .5);
     }
   }
 
   &:active,
   &.active {
-    color            : $active-color;
-    background-color : $active-background;
+    @if $active-color != $color or $active-color != $hover-color {
+      color : $active-color;
+    }
+    @if $active-background != $background or $active-background != $hover-background {
+      @include gradients.gradient-bg($active-background);
+    }
     // Remove CSS gradients if they're enabled
     background-image : if(v.$enable-gradients, none, null);
-    border-color     : $active-border;
+    @if $enable-border {
+      border-color : $active-border;
+    }
 
     &:focus {
-      // Avoid using mixin so we can pass custom focus shadow properly
-      @if v.$enable-shadows and $btn-active-box-shadow != none {
-        box-shadow : $btn-active-box-shadow, 0 0 0 $btn-focus-width rgba(color.mix($color, $border-color, 15%), .5);
-      } @else {
+      @if $enable-shadows {
         box-shadow : 0 0 0 $btn-focus-width rgba(color.mix($color, $border-color, 15%), .5);
       }
     }
@@ -390,59 +447,15 @@ $btn-primary-bg         : grey !default;
     background-color : $disabled-background;
     // Remove CSS gradients if they're enabled
     background-image : if(v.$enable-gradients, none, null);
-    border-color     : $disabled-border;
-  }
-}
-
-@mixin button-outline-variant(
-  $color,
-  $color-hover: contrast.color-contrast($color),
-  $active-background: $color,
-  $active-border: $color,
-  $active-color: contrast.color-contrast($active-background)
-) {
-  color        : $color;
-  border-color : $color;
-
-  &:hover {
-    color            : $color-hover;
-    background-color : $active-background;
-    border-color     : $active-border;
-  }
-
-  &:focus,
-  &.focus {
-    box-shadow : 0 0 0 $btn-focus-width rgba($color, .5);
-  }
-
-  &:active,
-  &.active,
-  &.dropdown-toggle.show {
-    color            : $active-color;
-    background-color : $active-background;
-    border-color     : $active-border;
-
-    &:focus {
-      // Avoid using mixin so we can pass custom focus shadow properly
-      @if v.$enable-shadows and $btn-active-box-shadow != none {
-        box-shadow : $btn-active-box-shadow, 0 0 0 $btn-focus-width rgba($color, .5);
-      } @else {
-        box-shadow : 0 0 0 $btn-focus-width rgba($color, .5);
-      }
+    @if $enable-border {
+      border-color : $disabled-border;
     }
   }
-
-  &:disabled,
-  &.disabled {
-    color            : $color;
-    background-color : transparent;
-  }
 }
-
 
 // button variant mixin
 @mixin button-variant-text($color) {
-  @include button-variant(
+  @include button-variant-fill(
       transparent, //$background
       transparent, //$border-color
       $color, //$color
@@ -451,12 +464,14 @@ $btn-primary-bg         : grey !default;
       $color, //$hover-color,
       theming.tri-color-palette($color, 1), //$active-background,
       transparent, //$active-border,
-      $color, //$active-color
+      $color, //$active-color,
+    $enable-shadows : false,
+    $enable-border  : false
   );
 }
 
 @mixin button-variant-outlined($color) {
-  @include button-variant(
+  @include button-variant-fill(
       transparent, //$background
       $color, //$border-color
       $color, //$color
@@ -466,12 +481,13 @@ $btn-primary-bg         : grey !default;
       theming.tri-color-palette($color, 1), //$active-background,
       $color, //$active-border,
       $color, //$active-color
+    $enable-shadows : false,
+    $enable-border  : true
   );
 }
 
-
 @mixin button-variant-basic($color, $background, $border-color: $background) {
-  @include button-variant(
+  @include button-variant-fill(
       $background, //$background
       $border-color, //$border-color
       $color, //$color
@@ -481,55 +497,25 @@ $btn-primary-bg         : grey !default;
       theming.tri-color-palette($border-color, 7), //$active-background,
       theming.tri-color-palette($border-color, 7), //$active-border,
       $color, //$active-color
-  );
-}
-
-@mixin button-variant-danger($color, $background, $border-color, $primary-color) {
-  @include button-variant(
-      $background,
-      $border-color,
-      $color,
-      $color, //$hover-background
-      $color, //$hover-border,
-      $primary-color, //$hover-color,
-      theming.tri-color-palette($color, 7), //$active-background,
-      theming.tri-color-palette($color, 7), //$active-border,
-      $primary-color, //$active-color
+    $enable-shadows : false,
+    $enable-border  : null,
   );
 }
 
 @mixin button-variant-ghost($color) {
-  @include button-variant(
-      transparent,
-      $color,
-      $color,
-      transparent,
+  @include button-variant-fill(
+      transparent, //$background
+      $color, //$border-color
+      $color, //$color
+      transparent, //$hover-background
       theming.tri-color-palette($color, 5), //$hover-border,
       theming.tri-color-palette($color, 5), //$hover-color,
-      transparent, //$active-background,
+      rgba(theming.tri-color-palette($color, 1), .2), //$active-background,
       theming.tri-color-palette($color, 7), //$active-border,
       theming.tri-color-palette($color, 7), //$active-color
+    $enable-shadows : false, //$enable-shadows,
   );
 }
-
-@mixin button-variant-other(
-  $color, $background, $border-color, $primary-color,
-  $active-background: theming.tri-color-palette($border-color, 7),
-  $active-border: theming.tri-color-palette($border-color, 7)
-) {
-  @include button-variant(
-      $background,
-      $border-color,
-      $color,
-      $background,
-      $primary-color, //$hover-border,
-      $primary-color, //$hover-color,
-      $active-background, //$active-background,
-      $active-border, //$active-border,
-      $color, //$active-color
-  );
-}
-
 
 @mixin btn-group-border(
   $btn-group-class: btn-group,

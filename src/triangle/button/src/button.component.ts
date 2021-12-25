@@ -18,7 +18,7 @@ export type ButtonColor =
   | 'warning'
   | 'error'
   | 'default';
-export type ButtonShape = 'circle' | null;
+export type ButtonShape = 'square' | 'circle' | null;
 export type ButtonSize = 'xlarge' | 'xl' |
   'large' | 'lg' |
   'default' |
@@ -66,18 +66,31 @@ export class TriTextButton {
 }
 
 @Directive({
-  selector: '[triOutlinedButton]',
+  selector: '[triOutlinedButton], [triDashedButton]',
   host    : {
-    'class': 'tri-btn-outlined'
+    'class'                 : 'tri-btn-outlined',
+    '[class.tri-btn-dashed]': '_dashed',
   }
 })
 export class TriOutlinedButton {
+  private _dashed: boolean = false;
+
+  @Input('triDashedButton')
+  get dashed(): boolean {
+    return this._dashed;
+  }
+
+  set dashed(value: boolean) {
+    this._dashed = coerceBooleanProperty(value);
+  }
+
+  static ngAcceptInputType_dashed: BooleanInput;
 }
 
 @Directive({
   selector: '[triIconOnlyButton]',
   host    : {
-    'class': 'tri-btn-icon-only tri-btn-rounded',
+    'class': 'tri-btn-icon-only',
   }
 })
 export class TriIconOnlyButton {
@@ -85,7 +98,7 @@ export class TriIconOnlyButton {
 
 @Component({
   selector       : `[triButton], [tri-button],
-  [triRaisedButton], [triRoundedButton], [triTextButton], [triOutlinedButton], [triIconOnlyButton]`,
+  [triRaisedButton], [triRoundedButton], [triTextButton], [triOutlinedButton], [triIconOnlyButton], [triDashedButton]`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation  : ViewEncapsulation.None,
   template       : `
@@ -103,11 +116,13 @@ export class TriIconOnlyButton {
     '[class.tri-btn-warning]'         : '_color === "warning"',
     '[class.tri-btn-error]'           : '_color === "error"',
     '[class.tri-btn-circle]'          : '_shape === "circle"',
+    '[class.tri-btn-square]'          : '_shape === "square"',
     '[class.tri-btn-xl]'              : '_size === "xlarge" || _size === "xl"',
     '[class.tri-btn-lg]'              : '_size === "large" || _size === "lg"',
     '[class.tri-btn-sm]'              : '_size === "small" || _size === "sm"',
     '[class.tri-btn-xs]'              : '_size === "xsmall" || _size === "xs"',
     '[class.tri-btn-loading]'         : '_loading',
+    '[class.tri-btn-ghost]'           : '_ghost',
     '[class.tri-btn-background-ghost]': '_ghost'
   }
 })
@@ -210,7 +225,6 @@ export class ButtonComponent implements AfterContentInit {
   /**
    * Get ghost
    * 获取幽灵按钮
-   * @deprecated
    */
   @Input()
   get ghost(): boolean {
@@ -223,7 +237,7 @@ export class ButtonComponent implements AfterContentInit {
    * @param  value
    */
   set ghost(value: boolean) {
-    this._ghost = value;
+    this._ghost = coerceBooleanProperty(value);
   }
 
 
@@ -240,6 +254,7 @@ export class ButtonComponent implements AfterContentInit {
     }
   }
 
+  static ngAcceptInputType_ghost: BooleanInput;
   static ngAcceptInputType_color: ButtonColor | keyof ButtonColor | string;
   static ngAcceptInputType_size: ButtonSize | keyof ButtonSize | string;
   static ngAcceptInputType_iconOnly: BooleanInput;

@@ -10,8 +10,8 @@ import { TriRippleModule } from '@gradii/triangle/core';
 import { TriIconModule } from '@gradii/triangle/icon';
 import { ButtonGroupComponent } from './button-group.component';
 import {
-  ButtonComponent, TriIconOnlyButton, TriOutlinedButton, TriRaisedButton, TriRoundedButton,
-  TriTextButton
+  ButtonComponent, TriIconOnlyButton, TriOutlinedButton, TriRaisedButton,
+  TriRoundedButton, TriTextButton
 } from './button.component';
 
 /**
@@ -42,13 +42,13 @@ import {
 @NgModule({
   declarations: [
     ButtonComponent, ButtonGroupComponent,
-    TriRaisedButton, TriRoundedButton, TriTextButton, TriOutlinedButton, TriIconOnlyButton
+    TriRaisedButton, TriRoundedButton, TriTextButton, TriOutlinedButton, TriIconOnlyButton,
   ],
   exports     : [
     ButtonComponent, ButtonGroupComponent,
-    TriRaisedButton, TriRoundedButton, TriTextButton, TriOutlinedButton, TriIconOnlyButton
+    TriRaisedButton, TriRoundedButton, TriTextButton, TriOutlinedButton, TriIconOnlyButton,
   ],
-  imports: [CommonModule, TriIconModule, TriRippleModule]
+  imports     : [CommonModule, TriIconModule, TriRippleModule]
 })
 export class TriButtonModule {
 }
