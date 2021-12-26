@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 /**
  * @title select-basic
@@ -12,35 +15,35 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'tri-demo-select-basic',
   template: `
-    <tri-select style="width: 120px;" [(ngModel)]="selectedOption">
+    <tri-select style="width: 120px;" [(ngModel)]="selectedOption" [allowClear]="true">
       <tri-option
         *ngFor="let option of options"
+        [label]="option.label"
         [value]="option"
         [disabled]="option.disabled">
-        {{option.label}}
       </tri-option>
     </tri-select>
     <tri-select style="width: 120px;" [(ngModel)]="selectedOption" [disabled]="true">
       <tri-option
         *ngFor="let option of options"
+        [label]="option.label"
         [value]="option"
         [disabled]="option.disabled">
-        {{option.label}}
       </tri-option>
     </tri-select>
   `,
   styles  : []
 })
-export class TriDemoSelectBasicComponent implements OnInit {
-  options: any[] = [];
-  selectedOption: any[];
+export class TriDemoComboboxBasicComponent implements OnInit {
+  options = [];
+  selectedOption;
 
   constructor() {
   }
 
   ngOnInit() {
     /*模拟服务器异步加载*/
-    setTimeout(() => {
+    setTimeout(_ => {
       this.options        = [
         {value: 'jack', label: 'Jack'},
         {value: 'lucy', label: 'Lucy'},

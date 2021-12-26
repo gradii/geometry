@@ -35,7 +35,7 @@ import { FilterService } from '../../filter.service';
       class="tri-filter-and"
       [ngModel]="filter?.logic"
       (ngModelChange)="logicChange($event)">
-      <tri-option *ngFor="let it of operators" [label]="it.label" [value]="it.value"></tri-option>
+      <tri-option *ngFor="let it of operators" [value]="it.value">{{it.label}}</tri-option>
     </tri-select>
     <tri-data-table-numeric-filter-menu-input
       *ngIf="extra"

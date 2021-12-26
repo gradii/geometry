@@ -1,12 +1,12 @@
-<tri-select (ngModelChange)="yearChange.emit($event)" [dropdownMatchSelectWidth]="false" [ngModel]="activeYear"
+<tri-select (ngModelChange)="yearChange.emit($event)" [ngModel]="activeYear"
             [size]="size" class="tri-fullcalendar-year-select">
-  <tri-option *ngFor="let year of years" [label]="year.label" [value]="year.value"></tri-option>
+  <tri-option *ngFor="let year of years" [value]="year.value">{{year.label}}</tri-option>
 </tri-select>
 
-<tri-select (ngModelChange)="monthChange.emit($event)" *ngIf="mode === 'month'" [dropdownMatchSelectWidth]="false"
+<tri-select (ngModelChange)="monthChange.emit($event)" *ngIf="mode === 'month'"
             [ngModel]="activeMonth"
             [size]="size" class="tri-fullcalendar-month-select">
-  <tri-option *ngFor="let month of months" [label]="month.label" [value]="month.value"></tri-option>
+  <tri-option *ngFor="let month of months" [value]="month.value">{{month.label}}</tri-option>
 </tri-select>
 
 <tri-radio-group (ngModelChange)="modeChange.emit($event)" [(ngModel)]="mode" [size]="size">

@@ -24,5 +24,6 @@ export class TriOptionModule {
 export * from './option';
 export * from './option-base';
 export * from './optgroup';
+export * from './optgroup-base';
 export * from './option-parent';
 export * from './helper';

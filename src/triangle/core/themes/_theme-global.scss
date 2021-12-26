@@ -22,6 +22,7 @@
 @use "../../drawer/style/drawer-theme" as *;
 @use "../../empty/style/empty-theme" as *;
 @use "../../form/style/form-theme" as *;
+@use "../../form-field/style/form-field-theme" as *;
 @use "../../grid-list/style/grid-list-theme" as *;
 @use "../../icon/style/icon-theme" as *;
 @use "../../input/style/input-theme" as *;
@@ -38,6 +39,7 @@
 @use "../../progress/style/progress-theme" as *;
 @use "../../radio/style/radio-theme" as *;
 @use "../../rate/style/rate-theme" as *;
+@use "../../combobox/style/combobox-theme" as *;
 @use "../../select/style/select-theme" as *;
 @use "../../slider/style/slider-theme" as *;
 @use "../../spin/style/spin-theme" as *;
@@ -65,6 +67,7 @@
   @include tri-accordion-theme();
   @include tri-button-theme();
   @include tri-radio-theme();
+  @include tri-combobox-theme();
   @include tri-select-theme();
   @include tri-card-theme();
   @include tri-carousel-theme();

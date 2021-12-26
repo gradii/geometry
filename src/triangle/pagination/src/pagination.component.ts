@@ -113,13 +113,13 @@ import { PageChangeEvent } from './event/page-change.event';
           (ngModelChange)="_pageSizeChange($event)">
           <tri-option
             *ngFor="let option of _options"
-            [label]="option+ '条/页'"
             [value]="option">
+            {{option+ '条/页'}}
           </tri-option>
           <tri-option
             *ngIf="_options.indexOf(_pageSize)==-1"
-            [label]="_pageSize + '条/页'"
             [value]="_pageSize">
+            {{_pageSize + '条/页'}}
           </tri-option>
         </tri-select>
         <div class="tri-pagination-options-quick-jumper"

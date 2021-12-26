@@ -26,39 +26,39 @@ import { SizeLDSType } from '@gradii/triangle/core';
     <tri-select style="width: 200px;" [(ngModel)]="single" [size]="size">
       <tri-option
         *ngFor="let option of options"
+        [label]="option.label"
         [value]="option.value"
         [disabled]="option.disabled">
-        {{option.label}}
       </tri-option>
     </tri-select>
     <br>
     <br>
-    <tri-select style="width: 200px;" [(ngModel)]="single" [size]="size">
+    <tri-select style="width: 200px;" [(ngModel)]="single" [size]="size" [showSearch]="true">
       <tri-option
         *ngFor="let option of options"
+        [label]="option.label"
         [value]="option.value"
         [disabled]="option.disabled">
-        {{option.label}}
       </tri-option>
     </tri-select>
     <br>
     <br>
-    <tri-select style="width: 100%" [(ngModel)]="multiple" [size]="size" multiple>
+    <tri-select style="width: 100%" [(ngModel)]="multiple" [size]="size" [mode]="'multiple'">
       <tri-option
         *ngFor="let option of options"
+        [label]="option.label"
         [value]="option.value"
         [disabled]="option.disabled">
-        {{option.label}}
       </tri-option>
     </tri-select>
     <br>
     <br>
-    <tri-select style="width: 100%" [(ngModel)]="tag" [size]="size">
+    <tri-select style="width: 100%" [(ngModel)]="tag" [size]="size" [mode]="'tags'">
       <tri-option
         *ngFor="let option of options"
+        [label]="option.label"
         [value]="option.value"
         [disabled]="option.disabled">
-        {{option.label}}
       </tri-option>
     </tri-select>
   `,

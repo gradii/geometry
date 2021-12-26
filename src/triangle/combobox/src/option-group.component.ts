@@ -16,7 +16,7 @@ import {
 import { OptionComponent } from './option.component';
 
 @Component({
-  selector       : 'tri-option-group',
+  selector       : 'tri-combobox-option-group',
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl    : './option-group.component.html'

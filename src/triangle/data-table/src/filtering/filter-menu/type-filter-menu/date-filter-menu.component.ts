@@ -32,7 +32,9 @@ import { FilterService } from '../../filter.service';
       *ngIf="extra"
       class="mb-2 tri-filter-and"
       [ngModel]="filter?.logic">
-      <tri-option *ngFor="let it of operators" [label]="it.label" [value]="it.value"></tri-option>
+      <tri-option *ngFor="let it of operators" [value]="it.value">
+        {{it.label}}
+      </tri-option>
     </tri-select>
     <tri-data-table-date-filter-menu-input
       class="mb-2"

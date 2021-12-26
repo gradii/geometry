@@ -37,6 +37,8 @@ import { TRI_SELECT_TRIGGER, TriSelectTrigger } from './select-trigger';
     'aria-autocomplete'           : 'none',
     'aria-haspopup'               : 'true',
     'class'                       : 'tri-select',
+    '[class.lg]'                  : 'size==="lg" || size === "large"',
+    '[class.sm]'                  : 'size==="sm" || size === "small"',
     '[attr.id]'                   : 'id',
     '[attr.tabindex]'             : 'tabIndex',
     '[attr.aria-controls]'        : 'panelOpen ? id + "-panel" : null',

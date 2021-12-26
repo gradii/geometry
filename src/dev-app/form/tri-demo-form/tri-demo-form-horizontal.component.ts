@@ -88,8 +88,8 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
                           [validateStatus]="getFormControl('phoneNumber')">
           <tri-input-group [size]="'large'">
             <tri-select formControlName="phoneNumberPrefix" size="large" style="width: 25%;">
-              <tri-option [label]="'+86'" [value]="'+86'"></tri-option>
-              <tri-option [label]="'+87'" [value]="'+87'"></tri-option>
+              <tri-option [value]="'+86'">+86</tri-option>
+              <tri-option [value]="'+87'">+87</tri-option>
             </tri-select>
             <input triInput formControlName="phoneNumber" size="large" id="'phoneNumber'" style="width: 75%;">
           </tri-input-group>

@@ -6,16 +6,19 @@
 
 $message-prefix-cls : "#{ v.$tri-prefix}-message";
 
+$foreground         : theme.$foreground !default;
+$background         : theme.$background !default;
+
+$primary            : theme.$primary !default;
+$success            : theme.$success !default;
+$info               : theme.$info !default;
+$warning            : theme.$warning !default;
+$error              : theme.$error !default;
+
+
 @mixin tri-message-theme() {
   .#{$message-prefix-cls} {
-    $success    : theme.$success;
-    $info       : theme.$info;
-    $warning    : theme.$warning;
-    $error      : theme.$error;
 
-    $primary    : theme.$primary;
-    $foreground : theme.$foreground;
-    $background : theme.$background;
 
     @at-root &-notice-content {
       box-shadow : v.$shadow-2;
@@ -57,7 +60,7 @@ $message-prefix-cls : "#{ v.$tri-prefix}-message";
     }
 
     &-loading .#{v.$iconfont-css} {
-      animation: loadingCircle 1s infinite linear;
+      animation : loadingCircle 1s infinite linear;
 
       @include other.loading-circle-keyframe()
     }

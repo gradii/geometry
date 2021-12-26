@@ -37,7 +37,7 @@ import { SelectService } from './select.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation  : ViewEncapsulation.None,
   animations     : [SlideAnimation],
-  templateUrl    : './select.component.html',
+  templateUrl    : './combobox.component.html',
   host           : {
     '[class.tri-select-lg]'         : 'size==="large"',
     '[class.tri-select-sm]'         : 'size==="small"',
@@ -60,7 +60,7 @@ import { SelectService } from './select.service';
       }
     `
   ],
-  styleUrls      : ['../style/select.css']
+  styleUrls      : ['../style/combobox.css']
 })
 export class ComboboxComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnDestroy, AfterContentInit {
   // tslint:disable-next-line:no-any

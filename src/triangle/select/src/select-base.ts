@@ -25,10 +25,9 @@ import {
   ControlValueAccessor, FormGroupDirective, NgControl, NgForm, Validators,
 } from '@angular/forms';
 import {
-  CanDisable, CanDisableRipple, CanUpdateErrorState, ErrorStateMatcher, HasTabIndex, mixinDisabled,
-  mixinDisableRipple, mixinErrorState, mixinTabIndex, TriOptgroup, TriOption,
-  TriOptionSelectionChange,
-  _TriOptionBase
+  _TriOptionBase, CanDisable, CanDisableRipple, CanUpdateErrorState, ErrorStateMatcher, HasTabIndex,
+  mixinDisabled, mixinDisableRipple, mixinErrorState, mixinTabIndex, TriOptgroup, TriOption,
+  TriOptionSelectionChange
 } from '@gradii/triangle/core';
 import { TRI_FORM_FIELD, TriFormField } from '@gradii/triangle/form-field';
 
@@ -271,6 +270,17 @@ export abstract class _TriSelectBase<C>
   }
 
   private _value: any;
+
+  @Input()
+  get size() {
+    return this._size;
+  }
+
+  set size(value) {
+    this._size = value;
+  }
+
+  private _size: 'large' | 'lg' | 'small' | 'sm' | 'default' | string;
 
   /** Aria label of the select. */
   @Input('aria-label') ariaLabel: string = '';
@@ -678,9 +688,9 @@ export abstract class _TriSelectBase<C>
   }
 
   /** Returns the theme to be used on the panel. */
-  // _getPanelTheme(): string {
-  //   // return this._parentFormField ? `tri-${this._parentFormField.color}` : '';
-  // }
+  _getPanelTheme(): string {
+    return this._parentFormField ? `tri-${this._parentFormField.color}` : '';
+  }
 
   /** Whether the select has a value. */
   get empty(): boolean {

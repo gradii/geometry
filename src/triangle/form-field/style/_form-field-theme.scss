@@ -33,7 +33,7 @@ $underline-focused-color : theming.tri-color($primary, text);
 
 $density-scale           : v.$density;
 
-@mixin color() {
+@mixin form-field-color() {
 
   .tri-form-field-label {
     color : $label-color;
@@ -241,17 +241,17 @@ $dedupe                  : 0;
   @include form-field-outline-theme.form-field-outline-typography($config);
 }
 
-@mixin density() {
+@mixin form-field-density() {
 
   @include form-field-standard-theme.private-form-field-standard-density($density-scale);
   @include form-field-fill-theme.private-form-field-fill-density($density-scale);
   @include form-field-outline-theme.private-form-field-outline-density($density-scale);
 }
 
-@mixin theme($theme-or-color-config) {
+@mixin tri-form-field-theme($theme-or-color-config) {
   @include mixins.import-once("tri-form-field") {
-    @include color();
-    @include density();
-    @include typography();
+    @include form-field-color();
+    @include form-field-density();
+    @include form-field-typography();
   }
 }

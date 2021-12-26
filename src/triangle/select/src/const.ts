@@ -15,7 +15,7 @@ export const SELECT_PANEL_PADDING_X = 16;
 export const SELECT_PANEL_INDENT_PADDING_X = SELECT_PANEL_PADDING_X * 2;
 
 /** The height of the select items in `em` units. */
-export const SELECT_ITEM_HEIGHT_EM = 3;
+export const SELECT_ITEM_HEIGHT_EM = 2;
 
 /**
  * Distance between the panel edge and the option text in

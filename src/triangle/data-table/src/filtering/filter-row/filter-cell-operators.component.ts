@@ -25,7 +25,7 @@ import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/co
                            [popupSettings]="{ width: 'auto' }"
                            [valueField]="'value'"
                            -->
-                           <tri-option *ngFor="let item of operators" [label]="item['label']" [value]="item['value']"></tri-option>
+                           <tri-option *ngFor="let item of operators" [value]="item['value']">{{item['label']}}</tri-option>
                          </tri-select>
                          <button *ngIf="showButton"
                                  type="button"

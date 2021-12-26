@@ -26,7 +26,7 @@ $select-prefix-cls : #{v.$tri-prefix}-select;
   }
 }
 
-@mixin tri-select-theme() {
+@mixin tri-combobox-theme() {
   $foreground : theme.$foreground;
   $background : theme.$background;
 

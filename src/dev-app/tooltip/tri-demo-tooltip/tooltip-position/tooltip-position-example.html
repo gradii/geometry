@@ -2,8 +2,8 @@
 <!--  <mat-label>Tooltip position</mat-label>-->
 <tri-select [formControl]="position">
   <tri-option *ngFor="let positionOption of positionOptions"
-              [label]="positionOption"
               [value]="positionOption">
+    {{positionOption}}
   </tri-option>
 </tri-select>
 <!--</mat-form-field>-->

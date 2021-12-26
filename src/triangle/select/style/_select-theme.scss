@@ -1,101 +1,83 @@
-@use 'sass:map';
-@use '../core/theming/theming';
-@use '../core/style/private';
-@use '../core/style/form-common';
-@use '../core/typography/typography';
-@use '../core/typography/typography-utils';
+@use "sass:map";
+@use "../../core/style/theming";
+@use "../../core/themes/theme";
+@use "../../core/style/mixins";
+@use "../../core/style/legend/form-common";
+@use "../../core/style/typography/typography";
+@use "../../core/style/typography/typography-utils";
+
+$foreground : theme.$foreground !default;
+$background : theme.$background !default;
+
+$primary    : theme.$primary !default;
+$secondary  : theme.$secondary !default;
+$success    : theme.$success !default;
+$info       : theme.$info !default;
+$warning    : theme.$warning !default;
+$error      : theme.$error !default;
 
 
-@mixin color($config-or-theme) {
-  $config: theming.get-color-config($config-or-theme);
-  $foreground: map.get($config, foreground);
-  $background: map.get($config, background);
-  $primary: map.get($config, primary);
-  $accent: map.get($config, accent);
-  $warn: map.get($config, warn);
-
-  .mat-select-value {
-    color: theming.get-color-from-palette($foreground, text);
+@mixin select-color() {
+  .tri-select-value {
+    color : theming.tri-color($foreground, text);
   }
 
-  .mat-select-placeholder {
-    color: form-common.private-control-placeholder-color($config);
+  .tri-select-disabled .tri-select-value {
+    color : theming.tri-color($foreground, disabled-text);
   }
 
-  .mat-select-disabled .mat-select-value {
-    color: theming.get-color-from-palette($foreground, disabled-text);
+  .tri-select-arrow-icon {
+    color : theming.tri-color($foreground, secondary-text);
   }
 
-  .mat-select-arrow {
-    color: theming.get-color-from-palette($foreground, secondary-text);
-  }
+  .tri-select-panel {
+    background : theming.tri-color($background, card);
 
-  .mat-select-panel {
-    background: theming.get-color-from-palette($background, card);
-    @include private.private-theme-overridable-elevation(4, $config);
-
-    .mat-option.mat-selected:not(.mat-option-multiple) {
-      background: theming.get-color-from-palette($background, hover, 0.12);
+    .tri-option.tri-selected:not(.tri-option-multiple) {
+      background : theming.tri-color($background, hover, 0.12);
     }
   }
 
-  .mat-form-field {
-    &.mat-focused {
-      &.mat-primary .mat-select-arrow {
-        color: theming.get-color-from-palette($primary, text);
+  .tri-form-field {
+    &.tri-focused {
+      &.tri-primary .tri-select-arrow {
+        color : theming.tri-color($primary, text);
       }
 
-      &.mat-accent .mat-select-arrow {
-        color: theming.get-color-from-palette($accent, text);
+      &.tri-accent .tri-select-arrow {
+        color : theming.tri-color($secondary, text);
       }
 
-      &.mat-warn .mat-select-arrow {
-        color: theming.get-color-from-palette($warn, text);
+      &.tri-warn .tri-select-arrow {
+        color : theming.tri-color($warning, text);
       }
     }
 
-    .mat-select.mat-select-invalid .mat-select-arrow {
-      color: theming.get-color-from-palette($warn, text);
+    .tri-select.tri-select-invalid .tri-select-arrow {
+      color : theming.tri-color($warning, text);
     }
 
-    .mat-select.mat-select-disabled .mat-select-arrow {
-      color: theming.get-color-from-palette($foreground, disabled-text);
+    .tri-select.tri-select-disabled .tri-select-arrow {
+      color : theming.tri-color($foreground, disabled-text);
     }
   }
 }
 
-@mixin typography($config-or-theme) {
-  $config: typography.private-typography-to-2014-config(
-      theming.get-typography-config($config-or-theme));
-  // The unit-less line-height from the font config.
-  $line-height: typography-utils.line-height($config, input);
+@mixin select-typography() {
 
-  .mat-select {
-    font-family: typography-utils.font-family($config);
+  .tri-select {
   }
 
-  .mat-select-trigger {
-    height: typography-utils.private-coerce-unitless-to-em($line-height);
+  .tri-select-trigger {
   }
 }
 
-@mixin _density($config-or-theme) {}
+@mixin select-density() {}
 
-@mixin theme($theme-or-color-config) {
-  $theme: theming.private-legacy-get-theme($theme-or-color-config);
-  @include theming.private-check-duplicate-theme-styles($theme, 'mat-select') {
-    $color: theming.get-color-config($theme);
-    $density: theming.get-density-config($theme);
-    $typography: theming.get-typography-config($theme);
-
-    @if $color != null {
-      @include color($color);
-    }
-    @if $density != null {
-      @include _density($density);
-    }
-    @if $typography != null {
-      @include typography($typography);
-    }
+@mixin tri-select-theme() {
+  @include mixins.import-once("tri-select") {
+    @include select-color();
+    @include select-density();
+    @include select-typography();
   }
 }

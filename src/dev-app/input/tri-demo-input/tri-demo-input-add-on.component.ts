@@ -22,16 +22,15 @@ import { Component, OnInit } from '@angular/core';
         <input triInput name="siteName" [(ngModel)]="siteName"/>
         <ng-template #addOnBefore>
           <tri-select style="width: 80px;" [ngModel]="'http://'">
-            <tri-option [label]="'http://'" [value]="'http://'"></tri-option>
-            <tri-option [label]="'https://'" [value]="'https://'"></tri-option>
+            <tri-option [value]="'http://'">http://</tri-option>
+            <tri-option [value]="'https://'">https://</tri-option>
           </tri-select>
         </ng-template>
         <ng-template #addOnAfter>
           <tri-select style="width: 70px;" [ngModel]="'.com'">
-            <tri-option [label]="'.com'" [value]="'.com'"></tri-option>
-            <tri-option [label]="'.jp'" [value]="'.jp'"></tri-option>
-            <tri-option [label]="'.cn'" [value]="'.cn'"></tri-option>
-            <tri-option [label]="'.org'" [value]="'.org'"></tri-option>
+            <tri-option [value]="'.com'">.com</tri-option>
+            <tri-option [value]="'.cn'">.cn</tri-option>
+            <tri-option [value]="'.org'">.org</tri-option>
           </tri-select>
         </ng-template>
       </tri-input-group>

@@ -8,12 +8,12 @@ import { FocusableOption, FocusOptions, FocusOrigin } from '@angular/cdk/a11y';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ENTER, hasModifierKey, SPACE } from '@angular/cdk/keycodes';
 import {
-  AfterViewChecked, ChangeDetectorRef, ElementRef, EventEmitter, Inject, Input, OnDestroy, Optional,
+  AfterViewChecked, ChangeDetectorRef, Directive, ElementRef, EventEmitter, Input, OnDestroy,
   Output, ɵmarkDirty
 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { _TriOptgroupBase } from './optgroup';
-import { TRI_OPTION_PARENT_COMPONENT, TriOptionParentComponent } from './option-parent';
+import { _TriOptgroupBase } from './optgroup-base';
+import { TriOptionParentComponent } from './option-parent';
 
 /**
  * Option IDs need to be unique across components, so this counter exists outside of
@@ -21,7 +21,7 @@ import { TRI_OPTION_PARENT_COMPONENT, TriOptionParentComponent } from './option-
  */
 let _uniqueIdCounter = 0;
 
-/** Event object emitted by MatOption when selected or deselected. */
+/** Event object emitted by TriOption when selected or deselected. */
 export class TriOptionSelectionChange {
   constructor(
     /** Reference to the option that emitted the event. */
@@ -32,34 +32,58 @@ export class TriOptionSelectionChange {
   }
 }
 
+@Directive()
 export class _TriOptionBase implements FocusableOption, AfterViewChecked, OnDestroy {
-  static ngAcceptInputType_disabled: BooleanInput;
-  /** The form value of the option. */
-  @Input() value: any;
-  /** The unique ID of the option. */
-  @Input() id: string                  = `tri-option-${_uniqueIdCounter++}`;
-  /** Event emitted when the option is selected or deselected. */
-  // tslint:disable-next-line:no-output-on-prefix
-  @Output() readonly onSelectionChange = new EventEmitter<TriOptionSelectionChange>();
-  /** Emits when the state of the option changes and any parents have to be notified. */
-  readonly _stateChanges               = new Subject<void>();
-  private _mostRecentViewValue         = '';
+  private _selected            = false;
+  private _active              = false;
+  private _disabled            = false;
+  private _mostRecentViewValue = '';
 
-  constructor(
-    private _element: ElementRef<HTMLElement>,
-    private _changeDetectorRef: ChangeDetectorRef,
-    @Optional() @Inject(TRI_OPTION_PARENT_COMPONENT) private _parent: TriOptionParentComponent,
-    @Optional() readonly group: _TriOptgroupBase) {
+  /** Whether the wrapping component is in multiple selection mode. */
+  get multiple() {
+    return this._parent && this._parent.multiple;
   }
-
-  private _selected = false;
 
   /** Whether or not the option is currently selected. */
   get selected(): boolean {
     return this._selected;
   }
 
-  private _active = false;
+  /** The form value of the option. */
+  @Input() value: any;
+
+  /** The unique ID of the option. */
+  @Input() id: string = `tri-option-${_uniqueIdCounter++}`;
+
+  /** Whether the option is disabled. */
+  @Input()
+  get disabled(): boolean {
+    return (this.group && this.group.disabled) || this._disabled;
+  }
+
+  set disabled(value: BooleanInput) {
+    this._disabled = coerceBooleanProperty(value);
+  }
+
+  /** Whether ripples for the option are disabled. */
+  get disableRipple(): boolean {
+    return !!(this._parent && this._parent.disableRipple);
+  }
+
+  /** Event emitted when the option is selected or deselected. */
+  // tslint:disable-next-line:no-output-on-prefix
+  @Output() readonly onSelectionChange = new EventEmitter<TriOptionSelectionChange>();
+
+  /** Emits when the state of the option changes and any parents have to be notified. */
+  readonly _stateChanges = new Subject<void>();
+
+  constructor(
+    private _element: ElementRef<HTMLElement>,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _parent: TriOptionParentComponent,
+    readonly group: _TriOptgroupBase,
+  ) {
+  }
 
   /**
    * Whether or not the option is currently active and ready to be selected.
@@ -69,28 +93,6 @@ export class _TriOptionBase implements FocusableOption, AfterViewChecked, OnDest
    */
   get active(): boolean {
     return this._active;
-  }
-
-  private _disabled = false;
-
-  /** Whether the option is disabled. */
-  @Input()
-  get disabled() {
-    return (this.group && this.group.disabled) || this._disabled;
-  }
-
-  set disabled(value: any) {
-    this._disabled = coerceBooleanProperty(value);
-  }
-
-  /** Whether the wrapping component is in multiple selection mode. */
-  get multiple() {
-    return this._parent && this._parent.multiple;
-  }
-
-  /** Whether ripples for the option are disabled. */
-  get disableRipple() {
-    return this._parent && this._parent.disableRipple;
   }
 
   /**
@@ -123,7 +125,7 @@ export class _TriOptionBase implements FocusableOption, AfterViewChecked, OnDest
   /** Sets focus onto this option. */
   focus(_origin?: FocusOrigin, options?: FocusOptions): void {
     // Note that we aren't using `_origin`, but we need to keep it because some internal consumers
-    // use `TriOption` in a `FocusKeyManager` and we need it to trich `FocusableOption`.
+    // use `TriOption` in a `FocusKeyManager` and we need it to match `FocusableOption`.
     const element = this._getHostElement();
 
     if (typeof element.focus === 'function') {
@@ -186,7 +188,7 @@ export class _TriOptionBase implements FocusableOption, AfterViewChecked, OnDest
    * Gets the `aria-selected` value for the option. We explicitly omit the `aria-selected`
    * attribute from single-selection, unselected options. Including the `aria-selected="false"`
    * attributes adds a significant amount of noise to screen-reader users without providing useful
-   * infortriion.
+   * information.
    */
   _getAriaSelected(): boolean | null {
     return this.selected || (this.multiple ? false : null);

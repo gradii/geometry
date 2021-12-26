@@ -22,7 +22,7 @@ import { FilterService } from '../../filter.service';
                     [ngModel]="firstFilter.operator"
                     (ngModelChange)="operatorChange($event, firstFilter)"
         >
-          <tri-option *ngFor="let it of operators" [label]="it.label" [value]="it.value"></tri-option>
+          <tri-option *ngFor="let it of operators" [value]="it.value">{{it.label}}</tri-option>
         </tri-select>
       </div>
 
@@ -43,7 +43,7 @@ import { FilterService } from '../../filter.service';
         <tri-select class="mb-2" *ngIf="extra"
                     [ngModel]="secondFilter.operator"
                     (ngModelChange)="operatorChange($event, secondFilter)">
-          <tri-option *ngFor="let it of operators" [label]="it.label" [value]="it.value"></tri-option>
+          <tri-option *ngFor="let it of operators" [value]="it.value">{{it.label}}</tri-option>
         </tri-select>
       </div>
       <div tri-col [span]="16">

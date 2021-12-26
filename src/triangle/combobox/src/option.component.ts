@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector       : 'tri-option',
+  selector       : 'tri-combobox-option',
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl    : './option.component.html'

@@ -28,8 +28,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
         </tri-form-label>
         <tri-form-control tri-col [span]="14">
           <tri-select formControlName="select" [size]="'large'">
-            <tri-option [label]="'China'" [value]="'China'"></tri-option>
-            <tri-option [label]="'U.S.A'" [value]="'U.S.A'"></tri-option>
+            <tri-option [value]="'China'">China</tri-option>
+            <tri-option [value]="'U.S.A'">U.S.A</tri-option>
           </tri-select>
         </tri-form-control>
       </tri-form-item>
@@ -38,10 +38,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
           <label tri-form-item-required>Select[multiple]</label>
         </tri-form-label>
         <tri-form-control tri-col [span]="14">
-          <tri-select formControlName="select_multiple" [size]="'large'" [mode]="'multiple'">
-            <tri-option [label]="'Red'" [value]="'Red'"></tri-option>
-            <tri-option [label]="'Green'" [value]="'Green'"></tri-option>
-            <tri-option [label]="'Blue'" [value]="'Blue'"></tri-option>
+          <tri-select formControlName="select_multiple" [size]="'large'" multiple>
+            <tri-option [value]="'Red'">Red</tri-option>
+            <tri-option [value]="'Green'">Green</tri-option>
+            <tri-option [value]="'Blue'">Blue</tri-option>
           </tri-select>
         </tri-form-control>
       </tri-form-item>
@@ -67,7 +67,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
           <label>InputNumber</label>
         </tri-form-label>
         <tri-form-control tri-col [span]="14">
-          <tri-input-number formControlName="input_number" [size]="'large'" [step]="1" [max]="4" [min]="1"></tri-input-number>
+          <tri-input-number formControlName="input_number" [size]="'large'" [step]="1" [max]="4"
+                            [min]="1"></tri-input-number>
           <span tri-form-text> machines</span>
         </tri-form-control>
       </tri-form-item>
@@ -136,28 +137,29 @@ export class TriDemoFormMixComponent implements OnInit {
   validateForm: FormGroup;
 
   marks = {
-    0: 'A',
-    25: 'B',
-    50: 'C',
-    75: 'D',
+    0  : 'A',
+    25 : 'B',
+    50 : 'C',
+    75 : 'D',
     100: 'E'
   };
 
   now = new Date();
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) {
+  }
 
   ngOnInit() {
     this.validateForm = this.fb.group({
-      select: ['China'],
+      select         : ['China'],
       select_multiple: [['Red']],
-      datepicker: [new Date()],
-      timepicker: [new Date()],
-      input_number: [4],
-      switch: [false],
-      slider: [0],
-      radio_group: [1],
-      radio_button: [1]
+      datepicker     : [new Date()],
+      timepicker     : [new Date()],
+      input_number   : [4],
+      switch         : [false],
+      slider         : [0],
+      radio_group    : [1],
+      radio_button   : [1]
     });
   }
 }
