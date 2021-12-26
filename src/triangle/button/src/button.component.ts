@@ -242,14 +242,13 @@ export class ButtonComponent implements AfterContentInit {
 
 
   get _innerIElement() {
-    return this._el.querySelector('i');
+    return this._el.querySelector(':scope > .tri-icon') as HTMLElement;
   }
 
   ngAfterContentInit() {
     this._iconElement = this._innerIElement;
     /** check if host children only has i element */
-    if (this._iconElement && this._el.children.length === 1 && this._iconElement.isEqualNode(
-      this._el.children[0])) {
+    if (this._iconElement && this._el.children.length === 1) {
       this._iconOnly = true;
     }
   }
