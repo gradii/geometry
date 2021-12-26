@@ -16,7 +16,7 @@ $_secondary           : theme.$secondary;
 $_success             : theme.$success;
 $_info                : theme.$info;
 $_warning             : theme.$warning;
-$_error               : theme.$error;
+$_danger              : theme.$error;
 
 $btn-primary-color    : #fff !default;
 $btn-primary-bg       : theming.tri-color($_primary) !default;
@@ -41,9 +41,9 @@ $btn-warning-color    : #fff !default;
 $btn-warning-bg       : theming.tri-color($_warning) !default;
 $btn-warning-border   : theming.tri-color($_warning) !default;
 
-$btn-error-color      : #fff !default;
-$btn-error-bg         : theming.tri-color($_error) !default;
-$btn-error-border     : theming.tri-color($_error) !default;
+$btn-danger-color     : #fff !default;
+$btn-danger-bg        : theming.tri-color($_danger) !default;
+$btn-danger-border    : theming.tri-color($_danger) !default;
 
 $btn-disable-color    : theming.tri-color($_foreground, disabled-color) !default;
 $btn-disable-bg       : theming.tri-color($_foreground, disabled-bg) !default;
@@ -62,7 +62,7 @@ $btn-ghost-border     : theming.tri-color($_foreground, border-color-base) !defa
     success: $btn-success-bg,
     info: $btn-info-bg,
     warning: $btn-warning-bg,
-    error: $btn-error-bg,
+    danger: $btn-danger-bg,
   );
 
 
@@ -101,10 +101,10 @@ $btn-ghost-border     : theming.tri-color($_foreground, border-color-base) !defa
       @include button-common.btn-group-border(".#{$btn-prefix-cls}-group", theming.tri-color-palette($btn-warning-border, 7), $btn-default-border);
     }
 
-    @at-root &-error {
-      @include button-common.button-variant-basic($btn-error-color, $btn-error-bg, $btn-error-border);
+    @at-root &-danger {
+      @include button-common.button-variant-basic($btn-danger-color, $btn-danger-bg, $btn-danger-border);
 
-      @include button-common.btn-group-border(".#{$btn-prefix-cls}-group", theming.tri-color-palette($btn-error-border, 7), $btn-default-border);
+      @include button-common.btn-group-border(".#{$btn-prefix-cls}-group", theming.tri-color-palette($btn-danger-border, 7), $btn-default-border);
     }
 
     @each $name, $color in $text-map-list {

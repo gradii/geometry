@@ -16,7 +16,7 @@ export type ButtonColor =
   | 'success'
   | 'info'
   | 'warning'
-  | 'error'
+  | 'danger'
   | 'default';
 export type ButtonShape = 'square' | 'circle' | null;
 export type ButtonSize = 'xlarge' | 'xl' |
@@ -114,7 +114,7 @@ export class TriIconOnlyButton {
     '[class.tri-btn-success]'         : '_color === "success"',
     '[class.tri-btn-info]'            : '_color === "info"',
     '[class.tri-btn-warning]'         : '_color === "warning"',
-    '[class.tri-btn-error]'           : '_color === "error"',
+    '[class.tri-btn-danger]'           : '_color === "danger"',
     '[class.tri-btn-circle]'          : '_shape === "circle"',
     '[class.tri-btn-square]'          : '_shape === "square"',
     '[class.tri-btn-xl]'              : '_size === "xlarge" || _size === "xl"',
