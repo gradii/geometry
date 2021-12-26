@@ -46,7 +46,7 @@
     "ts-circular-deps:check": "yarn -s ts-circular-deps check --config ./src/circular-deps-test.conf.js",
     "ts-circular-deps:approve": "yarn -s ts-circular-deps approve --config ./src/circular-deps-test.conf.js"
   },
-  "version": "1.12.9",
+  "version": "1.12.10",
   "requiredAngularVersion": "^12.0.0",
   "dependencies": {
     "@angular/animations": "12.2.13",
