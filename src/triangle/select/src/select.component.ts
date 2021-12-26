@@ -414,8 +414,8 @@ export class TriSelect extends _TriSelectBase<TriSelectChange> implements OnInit
   private _getOriginBasedOnOption(): string {
     const itemHeight             = this._getItemHeight();
     const optionHeightAdjustment = (itemHeight - this._triggerRect.height) / 2;
-    const originY                = Math.abs(
-      this._offsetY) - optionHeightAdjustment + itemHeight / 2;
+    const originY                = Math.abs(this._offsetY) - optionHeightAdjustment
+      + itemHeight / 2;
     return `50% ${originY}px 0px`;
   }
 

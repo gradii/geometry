@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { QueryList } from '@angular/core';
 import { TriOptgroup } from './optgroup';
 import { TriOption } from './option';
