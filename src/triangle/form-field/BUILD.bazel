@@ -16,7 +16,13 @@ ng_module(
         ["**/*.ts"],
         exclude = ["**/*.spec.ts"],
     ),
-    assets = [":style/form-field.css"] + glob(["**/*.html"]),
+    assets = [
+        ":style/form-field.css",
+        ":style/form-field-fill.css",
+        ":style/form-field-input.css",
+        ":style/form-field-outline.css",
+        ":style/form-field-standard.css",
+    ] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/form-field",
     deps = [
         "//src/triangle/core",
@@ -42,7 +48,35 @@ sass_binary(
     name = "form_field_scss",
     src = "style/form-field.scss",
     deps = [
-        "//src/triangle/form-field:form_field_scss_lib",
+        "//src/triangle/core:core_scss_lib",
+    ],
+)
+
+sass_binary(
+    name = "form_field_fill_scss",
+    src = "style/form-field-fill.scss",
+    deps = [
+        "//src/triangle/core:core_scss_lib",
+    ],
+)
+
+sass_binary(
+    name = "form_field_input_scss",
+    src = "style/form-field-input.scss",
+    deps = ["//src/triangle/core:core_scss_lib"],
+)
+
+sass_binary(
+    name = "form_field_outline_scss",
+    src = "style/form-field-outline.scss",
+    deps = ["//src/triangle/core:core_scss_lib"],
+)
+
+sass_binary(
+    name = "form_field_standard_scss",
+    src = "style/form-field-standard.scss",
+    deps = [
+        "//src/triangle/core:core_scss_lib",
     ],
 )
 #

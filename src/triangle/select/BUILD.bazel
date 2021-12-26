@@ -21,8 +21,9 @@ ng_module(
     deps = [
         "//src/triangle/core",
         "//src/triangle/i18n",
-        "//src/triangle/icon",
         "//src/triangle/util",
+        "//src/triangle/icon",
+        "//src/triangle/form-field",
         "@npm//@angular/animations",
         "@npm//@angular/cdk",
         "@npm//@angular/common",
@@ -42,7 +43,6 @@ sass_binary(
     name = "select_scss",
     src = "style/select.scss",
     deps = [
-        "//src/triangle/input:input_scss_lib",
         "//src/triangle/select:select_scss_lib",
     ],
 )

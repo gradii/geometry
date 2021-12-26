@@ -11,18 +11,18 @@ load(
 package(default_visibility = ["//visibility:public"])
 
 ng_module(
-    name = "simple-select",
+    name = "combobox",
     srcs = glob(
         ["**/*.ts"],
         exclude = ["**/*.spec.ts"],
     ),
-    assets = [":style/simple-select.css"] + glob(["**/*.html"]),
-    module_name = "@gradii/triangle/simple-select",
+    assets = [":style/combobox.css"] + glob(["**/*.html"]),
+    module_name = "@gradii/triangle/combobox",
     deps = [
         "//src/triangle/core",
         "//src/triangle/i18n",
-        "//src/triangle/util",
         "//src/triangle/icon",
+        "//src/triangle/util",
         "@npm//@angular/animations",
         "@npm//@angular/cdk",
         "@npm//@angular/common",
@@ -33,16 +33,17 @@ ng_module(
 )
 
 sass_library(
-    name = "simple_select_scss_lib",
+    name = "select_scss_lib",
     srcs = glob(["**/_*.scss"]),
     deps = ["//src/triangle/core:core_scss_lib"],
 )
 
 sass_binary(
-    name = "simple_select_scss",
-    src = "style/simple-select.scss",
+    name = "select_scss",
+    src = "style/select.scss",
     deps = [
-        "//src/triangle/simple-select:simple_select_scss_lib",
+        "//src/triangle/input:input_scss_lib",
+        "//src/triangle/select:select_scss_lib",
     ],
 )
 #

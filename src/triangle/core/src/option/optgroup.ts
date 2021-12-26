@@ -4,24 +4,48 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { BooleanInput } from '@angular/cdk/coercion';
-import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
-import { CanDisable, CanDisableCtor, mixinDisabled } from '../common-behaviors/disabled';
 
+import {
+  ChangeDetectionStrategy, Component, Directive, Inject, InjectionToken, Input, Optional,
+  ViewEncapsulation,
+} from '@angular/core';
+import { CanDisable, mixinDisabled } from '../common-behaviors/disabled';
+import { TRI_OPTION_PARENT_COMPONENT, TriOptionParentComponent } from './option-parent';
 
-// Boilerplate for applying mixins to TriOptgroup.
+// Boilerplate for applying mixins to MatOptgroup.
 /** @docs-private */
-class TriOptgroupBase {
-}
-
-const _TriOptgroupMixinBase: CanDisableCtor & typeof TriOptgroupBase =
-        mixinDisabled(TriOptgroupBase);
+const _TriOptgroupMixinBase = mixinDisabled(class {
+});
 
 // Counter for unique group ids.
 let _uniqueOptgroupIdCounter = 0;
 
+@Directive()
+export class _TriOptgroupBase extends _TriOptgroupMixinBase implements CanDisable {
+  /** Label for the option group. */
+  @Input() label: string;
+
+  /** Unique id for the underlying label. */
+  _labelId: string = `mat-optgroup-label-${_uniqueOptgroupIdCounter++}`;
+
+  /** Whether the group is in inert a11y mode. */
+  _inert: boolean;
+
+  constructor(@Inject(TRI_OPTION_PARENT_COMPONENT) @Optional() parent?: TriOptionParentComponent) {
+    super();
+    this._inert = parent?.inertGroups ?? false;
+  }
+}
+
 /**
- * Component that is used to group instances of `tri-option`.
+ * Injection token that can be used to reference instances of `MatOptgroup`. It serves as
+ * alternative token to the actual `MatOptgroup` class which could cause unnecessary
+ * retention of the class and its component metadata.
+ */
+export const TRI_OPTGROUP = new InjectionToken<TriOptgroup>('TriOptgroup');
+
+/**
+ * Component that is used to group instances of `mat-option`.
  */
 @Component({
   selector       : 'tri-optgroup',
@@ -33,17 +57,12 @@ let _uniqueOptgroupIdCounter = 0;
   styleUrls      : ['optgroup.css'],
   host           : {
     'class'                        : 'tri-optgroup',
-    'role'                         : 'group',
+    '[attr.role]'                  : '_inert ? null : "group"',
+    '[attr.aria-disabled]'         : '_inert ? null : disabled.toString()',
+    '[attr.aria-labelledby]'       : '_inert ? null : _labelId',
     '[class.tri-optgroup-disabled]': 'disabled',
-    '[attr.aria-disabled]'         : 'disabled.toString()',
-    '[attr.aria-labelledby]'       : '_labelId',
-  }
+  },
+  providers      : [{provide: TRI_OPTGROUP, useExisting: TriOptgroup}],
 })
-export class TriOptgroup extends _TriOptgroupMixinBase implements CanDisable {
-  // tslint:disable-next-line:variable-name
-  static ngAcceptInputType_disabled: BooleanInput;
-  /** Label for the option group. */
-  @Input() label: string;
-  /** Unique id for the underlying label. */
-  _labelId: string = `tri-optgroup-label-${_uniqueOptgroupIdCounter++}`;
+export class TriOptgroup extends _TriOptgroupBase {
 }

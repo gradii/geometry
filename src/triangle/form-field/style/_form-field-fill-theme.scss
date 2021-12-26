@@ -1,0 +1,115 @@
+@use "sass:map";
+@use "sass:math";
+@use "../../core/style/theming";
+@use "../../core/themes/theme";
+@use "../../core/style/mixins";
+@use "../../core/style/typography/typography";
+@use "../../core/style/typography/typography-utils";
+
+$foreground               : theme.$foreground;
+$background               : theme.$background;
+$success                  : theme.$success;
+$primary                  : theme.$primary;
+$error                    : theme.$error;
+$warning                  : theme.$warning;
+
+$fill-background          : theming.tri-color($foreground, base) !default;
+$fill-disabled-background : theming.tri-color($foreground, base) !default;
+$underline-color          : theming.tri-color($foreground, divider) !default;
+$label-disabled-color     : theming.tri-color($foreground, disabled-text) !default;
+
+@mixin fill-color() {
+  .tri-form-field-appearance-fill {
+    .tri-form-field-flex {
+      background-color : $fill-background;
+    }
+
+    &.tri-form-field-disabled .tri-form-field-flex {
+      background-color : $fill-disabled-background;
+    }
+
+    .tri-form-field-underline::before {
+      background-color : $underline-color;
+    }
+
+    &.tri-form-field-disabled {
+      .tri-form-field-label {
+        color : $label-disabled-color;
+      }
+
+      .tri-form-field-underline::before {
+        background-color : transparent;
+      }
+    }
+  }
+}
+
+// Used to make instances of the _tri-form-field-label-floating mixin negligibly different,
+// and prevent Google's CSS Optimizer from collapsing the declarations. This is needed because some
+// of the selectors contain pseudo-classes not recognized in all browsers. If a browser encounters
+// an unknown pseudo-class it will discard the entire rule set.
+$fill-dedupe              : 0;
+
+// Applies a floating label above the form field control itself.
+@mixin _label-floating($font-scale, $infix-padding, $infix-margin-top) {
+  transform    : translateY(-$infix-margin-top - $infix-padding + $fill-dedupe) scale($font-scale);
+  width        : math.div(100%, $font-scale) + $fill-dedupe;
+
+  $fill-dedupe : $fill-dedupe + 0.00001 !global;
+}
+
+@mixin form-field-fill-typography() {
+  // The unit-less line-height from the font config.
+  $line-height                  : typography-utils.line-height($config, input);
+  // The amount to scale the font for the floating label and subscript.
+  $subscript-font-scale         : 0.75;
+  // The padding on top of the infix.
+  $infix-padding-top            : 0.25em;
+  // The padding below the infix.
+  $infix-padding-bottom         : 0.75em;
+  // The margin applied to the form-field-infix to reserve space for the floating label.
+  $infix-margin-top             : $subscript-font-scale * typography-utils.private-coerce-unitless-to-em($line-height);
+  // The amount we offset the label from the input text in the fill appearance.
+  $fill-appearance-label-offset : -0.5em;
+
+  .tri-form-field-appearance-fill {
+    .tri-form-field-infix {
+      padding : $infix-padding-top 0 $infix-padding-bottom 0;
+    }
+
+    .tri-form-field-label {
+      top        : $infix-margin-top + $infix-padding-top;
+      margin-top : $fill-appearance-label-offset;
+    }
+
+    &.tri-form-field-can-float {
+      &.tri-form-field-should-float .tri-form-field-label,
+      .tri-input-server:focus + .tri-form-field-label-wrapper .tri-form-field-label {
+        @include _label-floating(
+            $subscript-font-scale, $infix-padding-top + $fill-appearance-label-offset,
+            $infix-margin-top);
+      }
+
+      // Server-side rendered matInput with a label attribute but label not shown
+      // (used as a pure CSS stand-in for tri-form-field-should-float).
+      .tri-input-server[label]:not(:label-shown) + .tri-form-field-label-wrapper
+      .tri-form-field-label {
+        @include _label-floating(
+            $subscript-font-scale,
+            $infix-padding-top + $fill-appearance-label-offset,
+            $infix-margin-top
+        );
+      }
+    }
+  }
+}
+
+@mixin private-form-field-fill-density() {}
+
+@mixin fill-theme($theme-or-color-config) {
+  @include mixins.import-once("tri-form-field-fill") {
+    @include fill-color();
+    @include private-form-field-fill-density();
+    @include fill-typography();
+  }
+}

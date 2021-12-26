@@ -12,6 +12,7 @@ import { TriCommonModule } from '@gradii/triangle/core';
 
 
 import { TriIconModule } from '@gradii/triangle/icon';
+import { ComboboxComponent } from './combobox.component';
 import { OptionContainerComponent } from './option-container.component';
 import { OptionGroupComponent } from './option-group.component';
 import { OptionLiComponent } from './option-li.component';
@@ -19,7 +20,6 @@ import { OptionComponent } from './option.component';
 import { FilterGroupOptionPipe, FilterOptionPipe } from './option.pipe';
 import { SelectTopControlComponent } from './select-top-control.component';
 import { SelectUnselectableDirective } from './select-unselectable.directive';
-import { SelectComponent } from './select.component';
 
 @NgModule({
   imports     : [
@@ -35,7 +35,7 @@ import { SelectComponent } from './select.component';
     FilterGroupOptionPipe,
     FilterOptionPipe,
     OptionComponent,
-    SelectComponent,
+    ComboboxComponent,
     OptionContainerComponent,
     OptionGroupComponent,
     OptionLiComponent,
@@ -44,10 +44,10 @@ import { SelectComponent } from './select.component';
   ],
   exports     : [
     OptionComponent,
-    SelectComponent,
+    ComboboxComponent,
     OptionContainerComponent,
     OptionGroupComponent,
   ]
 })
-export class TriSelectModule {
+export class TriComboboxModule {
 }

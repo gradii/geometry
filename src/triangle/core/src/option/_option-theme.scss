@@ -50,8 +50,8 @@
 @mixin tri-option-typography($config) {
   .tri-option {
     font     : {
-      family : typography-utils.tri-font-family($config);
-      size   : typography-utils.tri-font-size($config, subheading-2);
+      family : typography-utils.font-family($config);
+      size   : typography-utils.font-size($config, subheading-2);
     }
   }
 }

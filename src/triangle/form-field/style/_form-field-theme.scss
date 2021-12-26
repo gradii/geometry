@@ -1,0 +1,257 @@
+@use "sass:map";
+@use "sass:math";
+@use "../../core/style/theming";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
+@use "../../core/themes/theme";
+@use "../../core/style/typography/typography";
+@use "../../core/style/typography/typography-utils";
+
+@use "./form-field-fill-theme.scss";
+@use "./form-field-outline-theme.scss";
+@use "./form-field-standard-theme.scss";
+
+$foreground              : theme.$foreground;
+$background              : theme.$background;
+$success                 : theme.$success;
+$primary                 : theme.$primary;
+$secondary               : theme.$secondary;
+$error                   : theme.$error;
+$warning                 : theme.$warning;
+
+// Label colors. Required is used for the `*` star shown in the label.
+$label-color             : theming.tri-color($foreground, secondary-text);
+$focused-label-color     : theming.tri-color($primary, text);
+$required-label-color    : theming.tri-color($secondary, text);
+
+// Underline colors.
+$underline-color-base    : theming.tri-color($foreground, divider);
+$underline-color-accent  : theming.tri-color($secondary, text);
+$underline-color-warn    : theming.tri-color($warning, text);
+$underline-focused-color : theming.tri-color($primary, text);
+
+
+$density-scale           : v.$density;
+
+@mixin color() {
+
+  .tri-form-field-label {
+    color : $label-color;
+  }
+
+  .tri-hint {
+    color : $label-color;
+  }
+
+  .tri-form-field.tri-focused .tri-form-field-label {
+    color : $focused-label-color;
+
+    &.tri-accent {
+      color : $underline-color-accent;
+    }
+
+    &.tri-warn {
+      color : $underline-color-warn;
+    }
+  }
+
+  .tri-focused .tri-form-field-required-marker {
+    color : $required-label-color;
+  }
+
+  .tri-form-field-ripple {
+    background-color : $underline-color-base;
+  }
+
+  .tri-form-field.tri-focused {
+    .tri-form-field-ripple {
+      background-color : $underline-focused-color;
+
+      &.tri-accent {
+        background-color : $underline-color-accent;
+      }
+
+      &.tri-warn {
+        background-color : $underline-color-warn;
+      }
+    }
+  }
+
+  .tri-form-field-type-tri-native-select.tri-focused:not(.tri-form-field-invalid) {
+    .tri-form-field-infix::after {
+      color : $underline-focused-color;
+    }
+
+    &.tri-accent .tri-form-field-infix::after {
+      color : $underline-color-accent;
+    }
+
+    &.tri-warn .tri-form-field-infix::after {
+      color : $underline-color-warn;
+    }
+  }
+
+  // Styling for the error state of the form field. Note that while the same can be
+  // achieved with the ng-* classes, we use this approach in order to ensure that the same
+  // logic is used to style the error state and to show the error messages.
+  .tri-form-field.tri-form-field-invalid {
+    .tri-form-field-label {
+      color : $underline-color-warn;
+
+      &.tri-accent,
+      .tri-form-field-required-marker {
+        color : $underline-color-warn;
+      }
+    }
+
+    .tri-form-field-ripple,
+    .tri-form-field-ripple.tri-accent {
+      background-color : $underline-color-warn;
+    }
+  }
+
+  .tri-error {
+    color : $underline-color-warn;
+  }
+
+  @include form-field-standard-theme.standard-color($config);
+  @include form-field-fill-theme.fill-color($config);
+  @include form-field-outline-theme.outline-color($config);
+}
+
+// Used to make instances of the _tri-form-field-label-floating mixin negligibly different,
+// and prevent Google's CSS Optimizer from collapsing the declarations. This is needed because some
+// of the selectors contain pseudo-classes not recognized in all browsers. If a browser encounters
+// an unknown pseudo-class it will discard the entire rule set.
+$dedupe                  : 0;
+
+// Applies a floating label above the form field control itself.
+@mixin _label-floating($font-scale, $infix-padding, $infix-margin-top) {
+  transform : translateY(-$infix-margin-top - $infix-padding + $dedupe) scale($font-scale);
+  width     : math.div(100%, $font-scale) + $dedupe;
+
+  $dedupe   : $dedupe + 0.00001 !global;
+}
+
+@mixin form-field-typography($config-or-theme) {
+  // The unit-less line-height from the font config.
+  $line-height                   : typography-utils.line-height($config, input);
+
+  // The amount to scale the font for the floating label and subscript.
+  $subscript-font-scale          : 0.75;
+  // The amount to scale the font for the prefix and suffix icons.
+  $prefix-suffix-icon-font-scale : 1.5;
+
+  // The padding on the infix. Mocks show half of the text size.
+  $infix-padding                 : 0.5em;
+  // The margin applied to the form-field-infix to reserve space for the floating label.
+  // If the line-height is given as a unitless number, coerce it to `em`.
+  $infix-margin-top              : $subscript-font-scale *
+      typography-utils.private-coerce-unitless-to-em($line-height);
+  // Font size to use for the label and subscript text.
+  $subscript-font-size           : $subscript-font-scale * 100%;
+  // Font size to use for the for the prefix and suffix icons.
+  $prefix-suffix-icon-font-size  : $prefix-suffix-icon-font-scale * 100%;
+  // The space between the bottom of the .tri-form-field-flex area and the subscript wrapper.
+  // Mocks show half of the text size, but this margin is applied to an element with the subscript
+  // text font size, so we need to divide by the scale factor to make it half of the original text
+  // size.
+  $subscript-margin-top          : math.div(0.5em, $subscript-font-scale);
+  // The padding applied to the form-field-wrapper to reserve space for the subscript, since it's
+  // absolutely positioned. This is a combination of the subscript's margin and line-height, but we
+  // need to multiply by the subscript font scale factor since the wrapper has a larger font size.
+  $wrapper-padding-bottom        : ($subscript-margin-top + $line-height) * $subscript-font-scale;
+
+  .tri-form-field {
+    //@include typography-utils.typography-level($config, input);
+  }
+
+  .tri-form-field-wrapper {
+    padding-bottom : $wrapper-padding-bottom;
+  }
+
+  .tri-form-field-prefix,
+  .tri-form-field-suffix {
+    // Allow icons in a prefix or suffix to adapt to the correct size.
+    .tri-icon {
+      font-size   : $prefix-suffix-icon-font-size;
+      line-height : $line-height;
+    }
+
+    // Allow icon buttons in a prefix or suffix to adapt to the correct size.
+    .tri-icon-button {
+      height : $prefix-suffix-icon-font-scale * 1em;
+      width  : $prefix-suffix-icon-font-scale * 1em;
+
+      .tri-icon {
+        height      : typography-utils.private-coerce-unitless-to-em($line-height);
+        line-height : $line-height;
+      }
+    }
+  }
+
+  .tri-form-field-infix {
+    padding    : $infix-padding 0;
+    // Throws off the baseline if we do it as a real margin, so we do it as a border instead.
+    border-top : $infix-margin-top solid transparent;
+  }
+
+  .tri-form-field-can-float {
+    &.tri-form-field-should-float .tri-form-field-label,
+    .tri-input-server:focus + .tri-form-field-label-wrapper .tri-form-field-label {
+      @include _label-floating(
+          $subscript-font-scale, $infix-padding, $infix-margin-top);
+    }
+
+    // Server-side rendered matInput with a label attribute but label not shown
+    // (used as a pure CSS stand-in for tri-form-field-should-float).
+    .tri-input-server[label]:not(:label-shown) + .tri-form-field-label-wrapper
+    .tri-form-field-label {
+      @include _label-floating(
+          $subscript-font-scale, $infix-padding, $infix-margin-top);
+    }
+  }
+
+  .tri-form-field-label-wrapper {
+    top         : -$infix-margin-top;
+    padding-top : $infix-margin-top;
+  }
+
+  .tri-form-field-label {
+    top : $infix-margin-top + $infix-padding;
+  }
+
+  .tri-form-field-underline {
+    // We want the underline to start at the end of the content box, not the padding box,
+    // so we move it up by the padding amount.
+    bottom : $wrapper-padding-bottom;
+  }
+
+  .tri-form-field-subscript-wrapper {
+    font-size  : $subscript-font-size;
+    margin-top : $subscript-margin-top;
+
+    // We want the subscript to start at the end of the content box, not the padding box,
+    // so we move it up by the padding amount (adjusted for the smaller font size);
+    top        : calc(100% - #{math.div($wrapper-padding-bottom, $subscript-font-scale)});
+  }
+
+  @include form-field-standard-theme.form-field-standard-typography($config);
+  @include form-field-fill-theme.form-field-fill-typography($config);
+  @include form-field-outline-theme.form-field-outline-typography($config);
+}
+
+@mixin density() {
+
+  @include form-field-standard-theme.private-form-field-standard-density($density-scale);
+  @include form-field-fill-theme.private-form-field-fill-density($density-scale);
+  @include form-field-outline-theme.private-form-field-outline-density($density-scale);
+}
+
+@mixin theme($theme-or-color-config) {
+  @include mixins.import-once("tri-form-field") {
+    @include color();
+    @include density();
+    @include typography();
+  }
+}

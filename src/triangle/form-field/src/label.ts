@@ -6,8 +6,9 @@
 
 import { Directive } from '@angular/core';
 
+/** The floating label for a `tri-form-field`. */
 @Directive({
-  selector: '[triSuffix]',
+  selector: 'tri-label',
 })
-export class SuffixDirective {
+export class TriLabel {
 }

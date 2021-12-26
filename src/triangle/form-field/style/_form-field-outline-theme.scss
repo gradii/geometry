@@ -1,0 +1,146 @@
+@use "sass:map";
+@use "sass:math";
+@use "../../core/style/theming";
+@use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
+@use "../../core/themes/theme";
+@use "../../core/style/typography/typography";
+@use "../../core/style/typography/typography-utils";
+
+
+$foreground     : theme.$foreground;
+$background     : theme.$background;
+$success        : theme.$success;
+$primary        : theme.$primary;
+$secondary      : theme.$secondary;
+$error          : theme.$error;
+$warning        : theme.$warning;
+
+// The unit-less line-height from the font config.
+$line-height                     : v.$line-height-base;
+
+@mixin form-field-outline-color($config-or-theme) {
+
+  $label-disabled-color    : theming.tri-color($foreground, disabled-text);
+  $outline-color           : theming.tri-color($foreground, divider);
+  $outline-color-hover     : theming.tri-color($foreground, divider);
+  $outline-color-primary   : theming.tri-color($primary);
+  $outline-color-secondary : theming.tri-color($secondary);
+  $outline-color-warning   : theming.tri-color($warning);
+  $outline-color-disabled  : theming.tri-color($foreground, divider);
+
+  .tri-form-field-appearance-outline {
+    .tri-form-field-outline {
+      color : $outline-color;
+    }
+
+    .tri-form-field-outline-thick {
+      color : $outline-color-hover;
+    }
+
+    &.tri-focused {
+      .tri-form-field-outline-thick {
+        color : $outline-color-primary;
+      }
+
+      &.tri-secondary .tri-form-field-outline-thick {
+        color : $outline-color-secondary;
+      }
+
+      &.tri-warn .tri-form-field-outline-thick {
+        color : $outline-color-warning;
+      }
+    }
+
+    // Class repeated so that rule is specific enough to override focused secondary color case.
+    &.tri-form-field-invalid.tri-form-field-invalid {
+      .tri-form-field-outline-thick {
+        color : $outline-color-warning;
+      }
+    }
+
+    &.tri-form-field-disabled {
+      .tri-form-field-label {
+        color : $label-disabled-color;
+      }
+
+      .tri-form-field-outline {
+        color : $outline-color-disabled;
+      }
+    }
+  }
+}
+
+// Used to make instances of the _tri-form-field-label-floating mixin negligibly different,
+// and prevent Google's CSS Optimizer from collapsing the declarations. This is needed because some
+// of the selectors contain pseudo-classes not recognized in all browsers. If a browser encounters
+// an unknown pseudo-class it will discard the entire rule set.
+$outline-dedupe : 0;
+
+// Applies a floating label above the form field control itself.
+@mixin _label-floating($font-scale, $infix-padding, $infix-margin-top) {
+  transform       : translateY(-$infix-margin-top - $infix-padding + $outline-dedupe) scale($font-scale);
+  width           : math.div(100%, $font-scale) + $outline-dedupe;
+
+  $outline-dedupe : $outline-dedupe + 0.00001 !global;
+}
+
+@mixin form-field-outline-typography($config-or-theme) {
+  // The amount to scale the font for the floating label and subscript.
+  $subscript-font-scale            : 0.75;
+  // The padding above and below the infix.
+  $infix-padding                   : 1em;
+  // The margin applied to the form-field-infix to reserve space for the floating label.
+  $infix-margin-top                : $subscript-font-scale * typography-utils.private-coerce-unitless-to-em($line-height);
+  // The space between the bottom of the .tri-form-field-flex area and the subscript wrapper.
+  // Mocks show half of the text size, but this margin is applied to an element with the subscript
+  // text font size, so we need to divide by the scale factor to make it half of the original text
+  // size.
+  $subscript-margin-top            : math.div(0.5em, $subscript-font-scale);
+  // The padding applied to the form-field-wrapper to reserve space for the subscript, since it's
+  // absolutely positioned. This is a combination of the subscript's margin and line-height, but we
+  // need to multiply by the subscript font scale factor since the wrapper has a larger font size.
+  $wrapper-padding-bottom          : ($subscript-margin-top + $line-height) * $subscript-font-scale;
+  // The amount we offset the label from the input text in the outline appearance.
+  $outline-appearance-label-offset : -0.25em;
+
+  .tri-form-field-appearance-outline {
+    .tri-form-field-infix {
+      padding : $infix-padding 0 $infix-padding 0;
+    }
+
+    .tri-form-field-label {
+      top        : $infix-margin-top + $infix-padding;
+      margin-top : $outline-appearance-label-offset;
+    }
+
+    &.tri-form-field-can-float {
+      &.tri-form-field-should-float .tri-form-field-label,
+      .tri-input-server:focus + .tri-form-field-label-wrapper .tri-form-field-label {
+        @include _label-floating(
+            $subscript-font-scale, $infix-padding + $outline-appearance-label-offset,
+            $infix-margin-top);
+      }
+
+      // Server-side rendered matInput with a label attribute but label not shown
+      // (used as a pure CSS stand-in for tri-form-field-should-float).
+      .tri-input-server[label]:not(:label-shown) + .tri-form-field-label-wrapper
+      .tri-form-field-label {
+        @include _label-floating(
+            $subscript-font-scale, $infix-padding + $outline-appearance-label-offset,
+            $infix-margin-top);
+      }
+    }
+  }
+}
+
+@mixin private-form-field-outline-density($config-or-theme) {}
+
+@mixin outline-theme() {
+  @include mixins.import-once($theme, "tri-form-field-outline") {
+    @include form-field-outline-color();
+    @include private-form-field-outline-density();
+    @include form-field-outline-typography();
+  }
+}
+

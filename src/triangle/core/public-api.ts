@@ -27,3 +27,5 @@ export * from './src/ripple/index';
 export * from './src/selection/index';
 
 export * from './src/datetime/index';
+
+export * from './src/error/error-options';

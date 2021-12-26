@@ -1,37 +1,38 @@
 @use "sass:map";
+@use "sass:math";
 @use "sass:meta";
 @use "sass:string";
 // Utility for fetching a nested value from a typography config.
-@function _tri-get-type-value($config, $level, $name) {
+@function _get-type-value($config, $level, $name) {
   @return map.get(map.get($config, $level), $name);
 }
 
 // Gets the font size for a level inside a typography config.
-@function tri-font-size($config, $level) {
-  @return _tri-get-type-value($config, $level, font-size);
+@function font-size($config, $level) {
+  @return _get-type-value($config, $level, font-size);
 }
 
 // Gets the line height for a level inside a typography config.
-@function tri-line-height($config, $level) {
-  @return _tri-get-type-value($config, $level, line-height);
+@function line-height($config, $level) {
+  @return _get-type-value($config, $level, line-height);
 }
 
 // Gets the font weight for a level inside a typography config.
-@function tri-font-weight($config, $level) {
-  @return _tri-get-type-value($config, $level, font-weight);
+@function font-weight($config, $level) {
+  @return _get-type-value($config, $level, font-weight);
 }
 
 // Gets the letter spacing for a level inside a typography config.
-@function tri-letter-spacing($config, $level) {
-  @return _tri-get-type-value($config, $level, letter-spacing);
+@function letter-spacing($config, $level) {
+  @return _get-type-value($config, $level, letter-spacing);
 }
 
 // Gets the font-family from a typography config and removes the quotes around it.
-@function tri-font-family($config, $level: null) {
+@function font-family($config, $level: null) {
   $font-family : map.get($config, font-family);
 
   @if $level != null {
-    $font-family : _tri-get-type-value($config, $level, font-family);
+    $font-family : _get-type-value($config, $level, font-family);
   }
 
   // Guard against unquoting non-string values, because it's deprecated.
@@ -66,11 +67,17 @@
 
 // Converts a typography level into CSS styles.
 @mixin tri-typography-level-to-styles($config, $level) {
-  $font-size     : tri-font-size($config, $level);
-  $font-weight   : tri-font-weight($config, $level);
-  $line-height   : tri-line-height($config, $level);
-  $font-family   : tri-font-family($config, $level);
+  $font-size     : font-size($config, $level);
+  $font-weight   : font-weight($config, $level);
+  $line-height   : line-height($config, $level);
+  $font-family   : font-family($config, $level);
 
   @include tri-typography-font-shorthand($font-size, $font-weight, $line-height, $font-family);
-  letter-spacing : tri-letter-spacing($config, $level);
+  letter-spacing : letter-spacing($config, $level);
+}
+
+/// Coerce a value to `em` if it is a unitless number, otherwise returns
+/// the value provided.
+@function private-coerce-unitless-to-em($value) {
+  @return if(math.is-unitless($value), 1em * $value, $value);
 }

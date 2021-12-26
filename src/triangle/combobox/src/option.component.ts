@@ -5,12 +5,7 @@
  */
 
 import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  TemplateRef,
-  ViewChild,
-  ViewEncapsulation
+  ChangeDetectionStrategy, Component, Input, TemplateRef, ViewChild, ViewEncapsulation
 } from '@angular/core';
 
 @Component({
@@ -24,6 +19,6 @@ export class OptionComponent {
   @Input() label: string;
   // tslint:disable-next-line:no-any
   @Input() value: any;
-  @Input() disabled = false;
+  @Input() disabled      = false;
   @Input() customContent = false;
 }

@@ -1,6 +1,6 @@
 // This mixin will ensure that lines that overflow the container will hide the overflow and
 // truncate neatly with an ellipsis.
-@mixin tri-truncate-line() {
+@mixin truncate-line() {
   white-space   : nowrap;
   overflow      : hidden;
   text-overflow : ellipsis;
@@ -10,7 +10,7 @@
 // is in dense mode.
 @mixin tri-line-base($secondary-font-size) {
   .tri-line {
-    @include tri-truncate-line();
+    @include truncate-line();
     display    : block;
     box-sizing : border-box;
 

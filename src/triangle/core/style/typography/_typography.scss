@@ -98,10 +98,10 @@
   .tri-h5, #{$selector} h5 {
     @include typography-utils.tri-typography-font-shorthand(
       // calc is used here to support css variables
-        calc(#{typography-utils.tri-font-size($config, body-1)} * 0.83),
-        typography-utils.tri-font-weight($config, body-1),
-        typography-utils.tri-line-height($config, body-1),
-        typography-utils.tri-font-family($config, body-1)
+        calc(#{typography-utils.font-size($config, body-1)} * 0.83),
+        typography-utils.font-weight($config, body-1),
+        typography-utils.line-height($config, body-1),
+        typography-utils.font-family($config, body-1)
     );
 
     margin : 0 0 12px;
@@ -110,10 +110,10 @@
   .tri-h6, #{$selector} h6 {
     @include typography-utils.tri-typography-font-shorthand(
       // calc is used here to support css variables
-        calc(#{typography-utils.tri-font-size($config, body-1)} * 0.67),
-        typography-utils.tri-font-weight($config, body-1),
-        typography-utils.tri-line-height($config, body-1),
-        typography-utils.tri-font-family($config, body-1)
+        calc(#{typography-utils.font-size($config, body-1)} * 0.67),
+        typography-utils.font-weight($config, body-1),
+        typography-utils.line-height($config, body-1),
+        typography-utils.font-family($config, body-1)
     );
 
     margin : 0 0 12px;
