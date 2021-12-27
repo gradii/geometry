@@ -6,9 +6,11 @@
 
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
-  AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Directive, ElementRef,
-  Input, Renderer2, ViewEncapsulation, ɵmarkDirty
+  AfterContentInit, ChangeDetectionStrategy, Component, ElementRef, Input, Renderer2,
+  ViewEncapsulation, ɵmarkDirty
 } from '@angular/core';
+
+export type ButtonVariant = 'raised' | 'outlined' | 'dashed' | 'default' | 'rounded' | 'text';
 
 export type ButtonColor =
   'primary'
@@ -25,80 +27,8 @@ export type ButtonSize = 'xlarge' | 'xl' |
   'small' | 'sm' |
   'xsmall' | 'xs';
 
-@Directive({
-  selector: '[triRaisedButton]',
-  host    : {
-    'class': 'tri-btn-raised',
-  }
-})
-export class TriRaisedButton {
-}
-
-@Directive({
-  selector: '[triRoundedButton]',
-  host    : {
-    'class'                  : 'tri-btn-rounded',
-    '[class.tri-btn-rounded]': '_rounded'
-  }
-})
-export class TriRoundedButton {
-  private _rounded: boolean = true;
-
-  @Input('triRoundedButton')
-  get rounded(): boolean {
-    return this._rounded;
-  }
-
-  set rounded(value: boolean) {
-    this._rounded = coerceBooleanProperty(value);
-  }
-
-  static ngAcceptInputType_rounded: BooleanInput;
-}
-
-@Directive({
-  selector: '[triTextButton]',
-  host    : {
-    'class': 'tri-btn-text'
-  }
-})
-export class TriTextButton {
-}
-
-@Directive({
-  selector: '[triOutlinedButton], [triDashedButton]',
-  host    : {
-    'class'                 : 'tri-btn-outlined',
-    '[class.tri-btn-dashed]': '_dashed',
-  }
-})
-export class TriOutlinedButton {
-  private _dashed: boolean = false;
-
-  @Input('triDashedButton')
-  get dashed(): boolean {
-    return this._dashed;
-  }
-
-  set dashed(value: boolean) {
-    this._dashed = coerceBooleanProperty(value);
-  }
-
-  static ngAcceptInputType_dashed: BooleanInput;
-}
-
-@Directive({
-  selector: '[triIconOnlyButton]',
-  host    : {
-    'class': 'tri-btn-icon-only',
-  }
-})
-export class TriIconOnlyButton {
-}
-
 @Component({
-  selector       : `[triButton], [tri-button],
-  [triRaisedButton], [triRoundedButton], [triTextButton], [triOutlinedButton], [triIconOnlyButton], [triDashedButton]`,
+  selector       : `[triButton], [tri-button]`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation  : ViewEncapsulation.None,
   template       : `
@@ -108,13 +38,18 @@ export class TriIconOnlyButton {
   styleUrls      : ['../style/button.css'],
   host           : {
     'class'                           : 'tri-btn',
+    '[class.tri-btn-raised]'          : '_variant==="raised"',
+    '[class.tri-btn-rounded]'         : '_variant==="rounded"',
+    '[class.tri-btn-text]'            : '_variant==="text"',
+    '[class.tri-btn-outlined]'        : '_variant==="outlined" || _variant==="dashed"',
+    '[class.tri-btn-dashed]'          : '_variant==="dashed"',
+    '[class.tri-btn-icon-only]'       : '_iconOnly',
     '[class.tri-btn-primary]'         : '_color === "primary"',
     '[class.tri-btn-secondary]'       : '_color === "secondary"',
-    '[class.tri-btn-dashed]'          : '_color === "dashed"',
     '[class.tri-btn-success]'         : '_color === "success"',
     '[class.tri-btn-info]'            : '_color === "info"',
     '[class.tri-btn-warning]'         : '_color === "warning"',
-    '[class.tri-btn-danger]'           : '_color === "danger"',
+    '[class.tri-btn-danger]'          : '_color === "danger"',
     '[class.tri-btn-circle]'          : '_shape === "circle"',
     '[class.tri-btn-square]'          : '_shape === "square"',
     '[class.tri-btn-xl]'              : '_size === "xlarge" || _size === "xl"',
@@ -131,16 +66,21 @@ export class ButtonComponent implements AfterContentInit {
   _el: HTMLElement;
   nativeElement: HTMLElement;
   _iconElement: HTMLElement;
-  _iconOnly = false;
 
-  constructor(private _elementRef: ElementRef, private _renderer: Renderer2,
-              private cdRef: ChangeDetectorRef) {
-    this._el = this._elementRef.nativeElement;
+  _variant: ButtonVariant;
+
+  @Input()
+  get variant() {
+    return this._variant;
   }
 
-  _color: ButtonColor;
+  set variant(value: ButtonVariant) {
+    this._variant = value;
+  }
 
-  @Input('triIconOnlyButton')
+  _iconOnly = false;
+
+  @Input()
   get iconOnly(): boolean {
     return this._iconOnly;
   }
@@ -148,6 +88,8 @@ export class ButtonComponent implements AfterContentInit {
   set iconOnly(value: boolean) {
     this._iconOnly = coerceBooleanProperty(value);
   }
+
+  _color: ButtonColor;
 
   @Input()
   get color(): ButtonColor {
@@ -241,20 +183,25 @@ export class ButtonComponent implements AfterContentInit {
   }
 
 
-  get _innerIElement() {
+  get _innerIconElement() {
     return this._el.querySelector(':scope > .tri-icon') as HTMLElement;
   }
 
+  constructor(private _elementRef: ElementRef, private _renderer: Renderer2) {
+    this._el = this._elementRef.nativeElement;
+  }
+
   ngAfterContentInit() {
-    this._iconElement = this._innerIElement;
+    this._iconElement = this._innerIconElement;
     /** check if host children only has i element */
     if (this._iconElement && this._el.children.length === 1) {
       this._iconOnly = true;
     }
   }
 
-  static ngAcceptInputType_ghost: BooleanInput;
+  static ngAcceptInputType_variant: ButtonVariant | keyof ButtonVariant | string;
   static ngAcceptInputType_color: ButtonColor | keyof ButtonColor | string;
   static ngAcceptInputType_size: ButtonSize | keyof ButtonSize | string;
+  static ngAcceptInputType_ghost: BooleanInput;
   static ngAcceptInputType_iconOnly: BooleanInput;
 }

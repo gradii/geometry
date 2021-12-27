@@ -5,6 +5,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
+import { ButtonColor, ButtonVariant } from '@gradii/triangle/button';
 
 /**
  * @title button-type
@@ -27,29 +28,9 @@ import { Component, OnInit } from '@angular/core';
       <h5>{{color}}</h5>
       <div>
         <ng-container *ngFor="let type of typeList">
-          <ng-container [ngSwitch]="type">
-            <button triButton *ngSwitchCase="'fill'" [color]="color">
+            <button triButton [variant]="type" [color]="color">
               {{type}} Button
             </button>
-            <button triRaisedButton *ngSwitchCase="'raised'" [color]="color">
-              {{type}} Button
-            </button>
-            <button triRoundedButton *ngSwitchCase="'rounded'" [color]="color">
-              {{type}} Button
-            </button>
-            <button triDashedButton *ngSwitchCase="'dashed'" [color]="color">
-              {{type}} Button
-            </button>
-            <!-- <button triDashedButton *ngSwitchCase="'rounded'" [color]="color">
-               {{type}} Button
-             </button>-->
-            <button triTextButton *ngSwitchCase="'text'" [color]="color">
-              {{type}} Button
-            </button>
-            <button triOutlinedButton *ngSwitchCase="'outlined'" [color]="color">
-              {{type}} Button
-            </button>
-          </ng-container>
         </ng-container>
       </div>
     </ng-container>
@@ -61,20 +42,9 @@ import { Component, OnInit } from '@angular/core';
         <ng-container *ngFor="let color of colorList">
           <h5>{{color}}</h5>
           <ng-container *ngFor="let type of ghostTypeList">
-            <ng-container [ngSwitch]="type">
-              <button triRoundedButton *ngSwitchCase="'rounded'" [color]="color" ghost>
+              <button triButton [variant]="type" [color]="color" ghost>
                 {{type}} Button
               </button>
-              <button triTextButton *ngSwitchCase="'text'" [color]="color" ghost>
-                {{type}} Button
-              </button>
-              <button triOutlinedButton *ngSwitchCase="'outlined'" [color]="color" ghost>
-                {{type}} Button
-              </button>
-              <button triDashedButton *ngSwitchCase="'dashed'" [color]="color" ghost>
-                {{type}} Button
-              </button>
-            </ng-container>
           </ng-container>
         </ng-container>
       </div>
@@ -90,17 +60,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TriDemoButtonTypeComponent implements OnInit {
   typeList  = ['fill', 'raised', 'rounded', 'dashed', 'text', 'outlined'];
-  colorList = [
+  colorList: ButtonColor[] = [
     'default',
     'primary',
     'secondary',
     'success',
     'info',
     'warning',
-    'error'
+    'danger'
   ];
 
-  ghostTypeList = [
+  ghostTypeList: ButtonVariant[] = [
     'outlined',
     'rounded',
     'dashed',

@@ -34,37 +34,37 @@ import { Component, OnInit } from '@angular/core';
     <br>
 
     <tri-checkbox [(ngModel)]="loading"></tri-checkbox>
-    <button triIconOnlyButton [triRoundedButton]="false" size="large" [loading]="loading">
+    <button triButton size="large" [loading]="loading">
       <tri-icon svgIcon="outline:poweroff"></tri-icon>
     </button>
 
-    <button triIconOnlyButton triRoundedButton size="large" [loading]="loading">
+    <button triButton variant="rounded" size="large" [loading]="loading">
       <tri-icon svgIcon="outline:poweroff"></tri-icon>
     </button>
 
-    <button triIconOnlyButton size="large" [loading]="loading">
-      <tri-icon svgIcon="outline:poweroff"></tri-icon>
-    </button>
-
-
-    <button triIconOnlyButton [triRoundedButton]="false" [loading]="loading">
-      <tri-icon svgIcon="outline:poweroff"></tri-icon>
-    </button>
-
-    <button triIconOnlyButton triRoundedButton [loading]="loading">
-      <tri-icon svgIcon="outline:poweroff"></tri-icon>
-    </button>
-
-    <button triIconOnlyButton [loading]="loading">
+    <button triButton size="large" [loading]="loading">
       <tri-icon svgIcon="outline:poweroff"></tri-icon>
     </button>
 
 
-    <button triRoundedButton [loading]="true">
+    <button triButton [loading]="loading">
       <tri-icon svgIcon="outline:poweroff"></tri-icon>
     </button>
 
-    <button triIconOnlyButton [loading]="true">
+    <button triButton variant="rounded" [loading]="loading">
+      <tri-icon svgIcon="outline:poweroff"></tri-icon>
+    </button>
+
+    <button triButton [loading]="loading">
+      <tri-icon svgIcon="outline:poweroff"></tri-icon>
+    </button>
+
+
+    <button triButton variant="rounded" [loading]="true">
+      <tri-icon svgIcon="outline:poweroff"></tri-icon>
+    </button>
+
+    <button triButton [loading]="true">
       <tri-icon svgIcon="outline:poweroff"></tri-icon>
     </button>
 

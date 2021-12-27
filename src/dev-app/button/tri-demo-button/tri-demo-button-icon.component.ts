@@ -26,7 +26,7 @@ import { Component, OnInit } from '@angular/core';
       <tri-icon svgIcon="outline:search"></tri-icon>
     </button>
     <br/>
-    <button triIconOnlyButton [color]="'primary'" [shape]="'square'">
+    <button triButton [color]="'primary'" [shape]="'square'">
       <tri-icon svgIcon="outline:search"></tri-icon>
     </button>
     <button tri-button [color]="'primary'" [shape]="'circle'">
@@ -37,7 +37,7 @@ import { Component, OnInit } from '@angular/core';
       <span>Search</span>
     </button>
     <br>
-    <button triDashedButton [shape]="'circle'">
+    <button triButton variant="dashed" [shape]="'circle'">
       <tri-icon svgIcon="outline:search"></tri-icon>
     </button>
     <button tri-button [color]="'default'">
