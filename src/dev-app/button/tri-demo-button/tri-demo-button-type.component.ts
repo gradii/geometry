@@ -13,13 +13,17 @@ import { ButtonColor, ButtonVariant } from '@gradii/triangle/button';
 @Component({
   selector: 'tri-demo-button-type',
   template: `
+    <h4>default button</h4>
+    <button triButton>
+      default button
+    </button>
     <h4>href button</h4>
     <div>
       <a triButton href="//google.com">
-        Link Button
+        Link button
       </a>
       <a triTextButton href="//google.com">
-        Link Button
+        Link button
       </a>
     </div>
 
@@ -29,7 +33,7 @@ import { ButtonColor, ButtonVariant } from '@gradii/triangle/button';
       <div>
         <ng-container *ngFor="let type of typeList">
             <button triButton [variant]="type" [color]="color">
-              {{type}} Button
+              {{type}} button
             </button>
         </ng-container>
       </div>
@@ -43,7 +47,7 @@ import { ButtonColor, ButtonVariant } from '@gradii/triangle/button';
           <h5>{{color}}</h5>
           <ng-container *ngFor="let type of ghostTypeList">
               <button triButton [variant]="type" [color]="color" ghost>
-                {{type}} Button
+                {{type}} button
               </button>
           </ng-container>
         </ng-container>

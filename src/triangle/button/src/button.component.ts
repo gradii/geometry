@@ -67,7 +67,7 @@ export class ButtonComponent implements AfterContentInit {
   nativeElement: HTMLElement;
   _iconElement: HTMLElement;
 
-  _variant: ButtonVariant;
+  _variant: ButtonVariant = 'outlined';
 
   @Input()
   get variant() {

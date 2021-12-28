@@ -1,59 +1,62 @@
+@use "sass:color";
 @use "sass:map";
 @use "../../core/themes/theme";
 @use "../../core/style/legend/button-common";
 @use "../../core/style/theming";
 @use "../../core/style/variables" as v;
 
-$btn-prefix-cls       : "#{ v.$tri-prefix}-btn";
+$btn-prefix-cls        : "#{ v.$tri-prefix}-btn";
 
 // Buttons
 
-$_foreground          : theme.$foreground;
-$_background          : theme.$background;
+$_foreground           : theme.$foreground;
+$_background           : theme.$background;
 
-$_primary             : theme.$primary;
-$_secondary           : theme.$secondary;
-$_success             : theme.$success;
-$_info                : theme.$info;
-$_warning             : theme.$warning;
-$_danger              : theme.$error;
+$_primary              : theme.$primary;
+$_secondary            : theme.$secondary;
+$_success              : theme.$success;
+$_info                 : theme.$info;
+$_warning              : theme.$warning;
+$_danger               : theme.$error;
 
-$btn-primary-color    : #fff !default;
-$btn-primary-bg       : theming.tri-color($_primary) !default;
+$btn-primary-color     : #fff !default;
+$btn-primary-bg        : theming.tri-color($_primary) !default;
 
-$btn-secondary-color  : #fff !default;
-$btn-secondary-bg     : theming.tri-color($_secondary) !default;
-$btn-secondary-border : theming.tri-color($_secondary) !default;
+$btn-secondary-color   : #fff !default;
+$btn-secondary-bg      : theming.tri-color($_secondary) !default;
+$btn-secondary-border  : theming.tri-color($_secondary) !default;
 
-$btn-default-color    : theming.tri-color($_foreground, text-color) !default;
-$btn-default-bg       : #fff !default;
-$btn-default-border   : theming.tri-color($_foreground, border-color-base) !default;
+$btn-default-color     : theming.tri-color($_foreground, text-color) !default;
+$btn-default-bg        : #fff !default;
+$btn-default-border    : theming.tri-color($_foreground, border-color-base) !default;
+$btn-default-hover-bg  : rgba(theming.tri-color-palette($btn-default-color, 1), .2) !default;
+$btn-default-active-bg : theming.tri-color-palette($btn-default-color, 1) !default;
 
-$btn-success-color    : #fff !default;
-$btn-success-bg       : theming.tri-color($_success) !default;
-$btn-success-border   : theming.tri-color($_success) !default;
+$btn-success-color     : #fff !default;
+$btn-success-bg        : theming.tri-color($_success) !default;
+$btn-success-border    : theming.tri-color($_success) !default;
 
-$btn-info-color       : #fff !default;
-$btn-info-bg          : theming.tri-color($_info) !default;
-$btn-info-border      : theming.tri-color($_info) !default;
+$btn-info-color        : #fff !default;
+$btn-info-bg           : theming.tri-color($_info) !default;
+$btn-info-border       : theming.tri-color($_info) !default;
 
-$btn-warning-color    : #fff !default;
-$btn-warning-bg       : theming.tri-color($_warning) !default;
-$btn-warning-border   : theming.tri-color($_warning) !default;
+$btn-warning-color     : #fff !default;
+$btn-warning-bg        : theming.tri-color($_warning) !default;
+$btn-warning-border    : theming.tri-color($_warning) !default;
 
-$btn-danger-color     : #fff !default;
-$btn-danger-bg        : theming.tri-color($_danger) !default;
-$btn-danger-border    : theming.tri-color($_danger) !default;
+$btn-danger-color      : #fff !default;
+$btn-danger-bg         : theming.tri-color($_danger) !default;
+$btn-danger-border     : theming.tri-color($_danger) !default;
 
-$btn-disable-color    : theming.tri-color($_foreground, disabled-color) !default;
-$btn-disable-bg       : theming.tri-color($_foreground, disabled-bg) !default;
-$btn-disable-border   : theming.tri-color($_foreground, border-color-base) !default;
+$btn-disable-color     : theming.tri-color($_foreground, disabled-color) !default;
+$btn-disable-bg        : theming.tri-color($_foreground, disabled-bg) !default;
+$btn-disable-border    : theming.tri-color($_foreground, border-color-base) !default;
 
-$btn-group-border     : theming.tri-color($_primary, 600) !default;
+$btn-group-border      : theming.tri-color($_primary, 600) !default;
 
-$btn-ghost-color      : theming.tri-color($_foreground, text-color) !default;
-$btn-ghost-bg         : transparent !default;
-$btn-ghost-border     : theming.tri-color($_foreground, border-color-base) !default;
+$btn-ghost-color       : theming.tri-color($_foreground, text-color) !default;
+$btn-ghost-bg          : transparent !default;
+$btn-ghost-border      : theming.tri-color($_foreground, border-color-base) !default;
 
 @mixin tri-button-theme() {
   $text-map-list : (
@@ -107,10 +110,39 @@ $btn-ghost-border     : theming.tri-color($_foreground, border-color-base) !defa
       @include button-common.btn-group-border(".#{$btn-prefix-cls}-group", theming.tri-color-palette($btn-danger-border, 7), $btn-default-border);
     }
 
+    @at-root &-text {
+      background : transparent;
+      &:hover {
+        background : $btn-default-hover-bg;
+      }
+
+      &:active {
+        background : $btn-default-active-bg;
+      }
+    }
+
     @each $name, $color in $text-map-list {
       @at-root &-text#{&}-#{$name} {
         @include button-common.button-variant-text($color);
       }
+    }
+
+    // default outlined
+    @at-root &-outlined {
+      @include button-common.button-variant-fill(
+          transparent, //$background
+          $btn-default-border, //$border-color
+          $btn-default-color, //$color
+          transparent, //$hover-background
+          color.adjust(theming.tri-color($_primary), $lightness: 5%), //$hover-border,
+          color.adjust(theming.tri-color($_primary), $lightness: 5%), //$hover-color,
+          $btn-default-active-bg, //$active-background,
+          theming.tri-color($_primary), //$active-border,
+          theming.tri-color($_primary), //$active-color
+        $box-shadow-color: rgba(theming.tri-color($_primary), .5),
+        $enable-shadows : false,
+        $enable-border  : true
+      );
     }
 
     @each $name, $color in $text-map-list {

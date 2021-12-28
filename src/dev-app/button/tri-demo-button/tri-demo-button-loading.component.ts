@@ -46,7 +46,6 @@ import { Component, OnInit } from '@angular/core';
       <tri-icon svgIcon="outline:poweroff"></tri-icon>
     </button>
 
-
     <button triButton [loading]="loading">
       <tri-icon svgIcon="outline:poweroff"></tri-icon>
     </button>
@@ -78,15 +77,15 @@ export class TriDemoButtonLoadingComponent implements OnInit {
 
   isLoadingOne = false;
   isLoadingTwo = false;
-  loadOne      = value => {
+  loadOne      = (value) => {
     this.isLoadingOne = true;
-    setTimeout(_ => {
+    setTimeout((_) => {
       this.isLoadingOne = false;
     }, 5000);
   };
-  loadTwo      = value => {
+  loadTwo      = (value) => {
     this.isLoadingTwo = true;
-    setTimeout(_ => {
+    setTimeout((_) => {
       this.isLoadingTwo = false;
     }, 5000);
   };
