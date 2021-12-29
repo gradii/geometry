@@ -13,7 +13,8 @@ import {
 @Component({
   selector: 'tri-list-empty',
   template: `
-    <tri-embed-empty [componentName]="'list'" [specificContent]="noResult"></tri-embed-empty>
+    <tri-embed-empty [componentName]="'list'"
+                     [specificContent]="noResult"></tri-embed-empty>
   `
 })
 export class ListEmptyComponent {

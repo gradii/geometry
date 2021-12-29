@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { GanttItemType } from '@gradii/cube/gantt';
 
 export const mockItems = [

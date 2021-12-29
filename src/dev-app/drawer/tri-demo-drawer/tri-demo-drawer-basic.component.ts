@@ -12,7 +12,7 @@ import { Component, TemplateRef, ViewChild } from '@angular/core';
     <div>
       demo drawer basic
       <tri-drawer-container>
-       
+
         <tri-drawer #start (opened)="myinput.focus()" mode="side">
           Start Side Drawer
           <br>

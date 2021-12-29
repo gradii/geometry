@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import {Component} from '@angular/core';
 
 /** @title Implicit main content with two sidenavs */

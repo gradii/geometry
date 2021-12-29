@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { GanttGroup } from '@gradii/cube/gantt';
 
 export const mockGroups: GanttGroup[] = [

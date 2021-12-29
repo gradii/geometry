@@ -66,32 +66,32 @@ export class DemoDiagramSettingsComponent implements AfterViewInit, OnInit {
     const model = this.model;
 
     // 3-A) create a default node
-    let node1 = new DiagramNodeModel({
+    const node1 = new DiagramNodeModel({
       name : 'Start',
       color: 'rgb(167,23,23)',
       type : 'start'
     });
     node1.setPosition(100, 100);
-    let port1 = node1.addOutPort('Out1', 'out1');
+    const port1 = node1.addOutPort('Out1', 'out1');
 
-    let node2 = new DiagramNodeModel({
+    const node2 = new DiagramNodeModel({
       name: 'End',
       color: 'rgb(200,255,36)',
       type: 'end'
     });
-    let port2 = node2.addInPort('In1', 'in1');
+    const port2 = node2.addInPort('In1', 'in1');
     node2.setPosition(400, 100);
 
-    let link1       = port1.link<DiagramLinkModel>(port2);
+    const link1       = port1.link<DiagramLinkModel>(port2);
     link1.labelName = 'Test';
     link1.addLabel('Hello World!');
 
 
     model.addAll(node1, node2, link1);
 
-    //-----
+    // -----
 
-    let auditNode1 = new DiagramNodeModel('Audit1', 'rgb(36,222,255)');
+    const auditNode1 = new DiagramNodeModel('Audit1', 'rgb(36,222,255)');
     auditNode1.addInPort('audit1In1', 'Audit1In1');
     auditNode1.addOutPort('audit1Out1', 'Audit1Out1');
     auditNode1.setPosition(200, 200);
@@ -99,7 +99,7 @@ export class DemoDiagramSettingsComponent implements AfterViewInit, OnInit {
     model.addNode(auditNode1);
 
 
-    let auditNode2 = new DiagramNodeModel('Audit2', 'rgb(36,222,255)');
+    const auditNode2 = new DiagramNodeModel('Audit2', 'rgb(36,222,255)');
     auditNode2.addInPort('audit2In1', 'Audit2In1');
     auditNode2.addOutPort('audit2Out1', 'Audit2Out1');
     auditNode2.setPosition(200, 250);

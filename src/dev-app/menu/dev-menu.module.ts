@@ -44,7 +44,7 @@ import { TriDemoMenuStandaloneStatefulMenuExample } from './tri-demo-menu-standa
   ],
   declarations: [
     DevMenu,
-    
+
     TriDemoMenuBasicExample,
     TriDemoMenuContextExample,
     TriDemoMenuInlineExample,

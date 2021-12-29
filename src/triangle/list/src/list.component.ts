@@ -21,14 +21,6 @@ import { ListGrid } from './interface';
   templateUrl    : './list.component.html',
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styles         : [
-    `
-      tri-list,
-      tri-list tri-spin {
-        display : block;
-      }
-    `
-  ],
   host           : {
     '[class.tri-list]'                          : 'true',
     '[class.tri-list-vertical]'                 : 'itemLayout === "vertical"',
@@ -40,7 +32,15 @@ import { ListGrid } from './interface';
     '[class.tri-list-grid]'                     : 'grid',
     '[class.tri-list-something-after-last-item]': '!!(loadMore || pagination || footer)'
   },
-  styleUrls      : ['../style/list.css']
+  styleUrls      : ['../style/list.css'],
+  styles         : [
+    `
+      tri-list,
+      tri-list tri-spin {
+        display : block;
+      }
+    `
+  ],
 })
 export class ListComponent {
   // #region fields

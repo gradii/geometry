@@ -101,7 +101,7 @@ export class DemoDiagramDragAndDropComponent implements AfterViewInit {
       if (canvasManager) {
         const droppedPoint = canvasManager.getRelativeMousePoint(e);
 
-        let nodesCount = 0;
+        const nodesCount = 0;
 
         // const nodePort1 = new DiagramNodeModel('Node ' + (++nodesCount), 'rgb(192,255,0)')
         //   .addInPort('In');

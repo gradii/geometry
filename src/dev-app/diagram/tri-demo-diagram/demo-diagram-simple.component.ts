@@ -32,20 +32,20 @@ export class DemoDiagramSimpleComponent implements AfterViewInit, OnInit {
     const model = this.model;
 
     // 3-A) create a default node
-    let node1 = new DiagramNodeModel({
+    const node1 = new DiagramNodeModel({
       name: 'Node 1',
       color: 'rgb(0,192,255)'
     });
     node1.setPosition(100, 100);
-    let port1 = node1.addOutPort('Out');
+    const port1 = node1.addOutPort('Out');
 
     // 3-B) create another default node
-    let node2 = new DiagramNodeModel('Node 2', 'rgb(192,255,0)');
-    let port2 = node2.addInPort('In');
+    const node2 = new DiagramNodeModel('Node 2', 'rgb(192,255,0)');
+    const port2 = node2.addInPort('In');
     node2.setPosition(400, 100);
 
     // link the ports
-    let link1 = port1.link<DiagramLinkModel>(port2);
+    const link1 = port1.link<DiagramLinkModel>(port2);
     link1.labelName = 'Test';
     link1.addLabel('Hello World!');
 

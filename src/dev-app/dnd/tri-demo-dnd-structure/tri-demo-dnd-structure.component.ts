@@ -86,13 +86,13 @@ export class TriDemoDndStructureComponent {
   }
 
   dragMoved(event) {
-    let e = this.document.elementFromPoint(event.pointerPosition.x, event.pointerPosition.y);
+    const e = this.document.elementFromPoint(event.pointerPosition.x, event.pointerPosition.y);
 
     if (!e) {
       this.clearDragInfo();
       return;
     }
-    let container = e.classList.contains('node-item') ? e : e.closest('.node-item');
+    const container = e.classList.contains('node-item') ? e : e.closest('.node-item');
     if (!container) {
       this.clearDragInfo();
       return;
@@ -135,7 +135,7 @@ export class TriDemoDndStructureComponent {
     const oldItemContainer = parentItemId != 'main' ? this.nodeLookup[parentItemId].children : this.nodes;
     const newContainer     = targetListId != 'main' ? this.nodeLookup[targetListId].children : this.nodes;
 
-    let i = oldItemContainer.findIndex(c => c.id === draggedItemId);
+    const i = oldItemContainer.findIndex(c => c.id === draggedItemId);
     oldItemContainer.splice(i, 1);
 
     switch (this.dropActionTodo.action) {
@@ -159,11 +159,11 @@ export class TriDemoDndStructureComponent {
   }
 
   getParentNodeId(id: string, nodesToSearch: TreeNode[], parentId: string): string {
-    for (let node of nodesToSearch) {
+    for (const node of nodesToSearch) {
       if (node.id == id) {
         return parentId;
       }
-      let ret = this.getParentNodeId(id, node.children, node.id);
+      const ret = this.getParentNodeId(id, node.children, node.id);
       if (ret) {
         return ret;
       }

@@ -1,3 +1,9 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { mockItems, mockGroups } from '../gantt/mocks';
 import { GanttViewType, GanttPrintService } from '@gradii/cube/gantt';
