@@ -30,7 +30,7 @@ $btn-default-color     : theming.tri-color($_foreground, text-color) !default;
 $btn-default-bg        : #fff !default;
 $btn-default-border    : theming.tri-color($_foreground, border-color-base) !default;
 $btn-default-hover-bg  : rgba(theming.tri-color-palette($btn-default-color, 1), .2) !default;
-$btn-default-active-bg : theming.tri-color-palette($btn-default-color, 1) !default;
+$btn-default-active-bg : rgba(theming.tri-color-palette(theming.tri-color($_primary), 1), .5) !default;
 
 $btn-success-color     : #fff !default;
 $btn-success-bg        : theming.tri-color($_success) !default;

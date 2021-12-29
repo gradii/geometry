@@ -17,6 +17,8 @@ $radio-outer-circle-size : 1px !default;
 $radio-button-bg         : button-theme.$btn-default-bg !default;
 $radio-button-color      : button-theme.$btn-default-color !default;
 
+$radio-button-active-bg  : button-theme.$btn-default-active-bg;
+
 @mixin tri-radio-theme() {
   $primary       : theme.$primary;
   $primary-color : theming.tri-color($primary);
@@ -118,7 +120,7 @@ $radio-button-color      : button-theme.$btn-default-color !default;
     }
 
     @at-root &-checked {
-      background   : $radio-button-bg;
+      background   : $radio-button-active-bg;;
       border-color : $primary-color;
       color        : $primary-color;
       box-shadow   : -1px 0 0 0 $primary-color;
