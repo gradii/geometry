@@ -28,6 +28,5 @@ import { ListItemMetaComponent } from './list-item-meta.component';
 export class ListItemComponent {
   @ContentChildren(ListItemMetaComponent) metas!: QueryList<ListItemMetaComponent>;
   @Input() actions: Array<TemplateRef<void>> = [];
-  @Input() content: string | TemplateRef<void>;
   @Input() extra: TemplateRef<void>;
 }

@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { AfterContentInit, AfterViewInit, Directive, forwardRef, Input } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Directive, EventEmitter, forwardRef, Input, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { isFunction, isPresent } from '@gradii/triangle/util';
 import { RadioButtonComponent } from './radio-button.component';
@@ -50,6 +50,18 @@ export class RadioGroupDirective implements AfterContentInit, AfterViewInit, Con
     this._type = value;
   }
 
+  @Input()
+  get value() {
+    return this._value;
+  }
+
+  set value(value: any) {
+    this.updateValue(value);
+  }
+
+  @Output()
+  valueChange = new EventEmitter();
+
   addRadio(radio: RadioComponent | RadioButtonComponent | RadioOption) {
     this.radios.push(radio);
     this.updateChecked();
@@ -71,6 +83,7 @@ export class RadioGroupDirective implements AfterContentInit, AfterViewInit, Con
     if (isFunction(this.onChange)) {
       this.onChange(value);
     }
+    this.valueChange.emit(value);
   }
 
   updateValue(value: any) {

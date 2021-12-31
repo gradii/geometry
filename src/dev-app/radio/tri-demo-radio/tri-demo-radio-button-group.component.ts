@@ -4,10 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  Component,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 /**
  * @title radio-button-group
@@ -63,11 +60,21 @@ import {
         </label>
       </tri-radio-group>
     </div>
+    <div style="margin-top:16px;">
+      <tri-radio-group [(ngModel)]="booleanValue">
+        <label tri-radio-button *ngFor="let it of booleanValueList" [value]="it">
+          <span>{{it}}</span>
+        </label>
+      </tri-radio-group>
+    </div>
   `,
   styles  : []
 })
 export class TriDemoRadioButtonGroupComponent implements OnInit {
-  radioValue = 'A';
+  radioValue   = 'A';
+  booleanValue = false;
+
+  booleanValueList = [false, true];
 
   constructor() {
   }
