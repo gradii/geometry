@@ -1,0 +1,15 @@
+<tri-button-toggle-group #group="triButtonToggleGroup">
+  <tri-button-toggle value="left" aria-label="Text align left">
+    <tri-icon>format_align_left</tri-icon>
+  </tri-button-toggle>
+  <tri-button-toggle value="center" aria-label="Text align center">
+    <tri-icon>format_align_center</tri-icon>
+  </tri-button-toggle>
+  <tri-button-toggle value="right" aria-label="Text align right">
+    <tri-icon>format_align_right</tri-icon>
+  </tri-button-toggle>
+  <tri-button-toggle value="justify" disabled aria-label="Text align justify">
+    <tri-icon>format_align_justify</tri-icon>
+  </tri-button-toggle>
+</tri-button-toggle-group>
+<div class="example-selected-value">Selected value: {{group.value}}</div>

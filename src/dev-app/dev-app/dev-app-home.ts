@@ -18,6 +18,7 @@ import { Component } from '@angular/core';
           <li><a routerLink="tabs">tabs</a></li>
           <li><a routerLink="accordion">accordion</a></li>
           <li><a routerLink="button">button</a></li>
+          <li><a routerLink="button-toggle">button-toggle</a></li>
           <li><a routerLink="icon">icon</a></li>
           <li><a routerLink="tree-view">tree view</a></li>
           <li><a routerLink="select">select</a></li>

@@ -37,11 +37,11 @@ const _TriButtonToggleBase = mixinDisableRipple(class {
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs         : ['disableRipple'],
   host           : {
+    'class'                                        : 'tri-button-toggle',
     '[class.tri-button-toggle-standalone]'         : '!buttonToggleGroup',
     '[class.tri-button-toggle-checked]'            : 'checked',
     '[class.tri-button-toggle-disabled]'           : 'disabled',
     '[class.tri-button-toggle-appearance-standard]': 'appearance === "standard"',
-    'class'                                        : 'tri-button-toggle',
     '[attr.aria-label]'                            : 'null',
     '[attr.aria-labelledby]'                       : 'null',
     '[attr.id]'                                    : 'id',

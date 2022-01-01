@@ -40,6 +40,10 @@ export const DEV_APP_ROUTES: Routes = [
         loadChildren: '/button/dev-button.module#DevButtonModule'
       },
       {
+        path        : 'button-toggle',
+        loadChildren: '/button-toggle/dev-button-toggle.module#DevButtonToggleModule'
+      },
+      {
         path        : 'icon',
         loadChildren: '/icon/dev-icon.module#DevIconModule'
       },

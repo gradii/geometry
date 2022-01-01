@@ -20,6 +20,7 @@ ng_module(
         "//src/dev-app/input",
         "//src/dev-app/input-number",
         "//src/dev-app/button",
+        "//src/dev-app/button-toggle",
         "//src/dev-app/accordion",
         "//src/dev-app/alert",
         "//src/dev-app/tabs",

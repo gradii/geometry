@@ -1,0 +1,25 @@
+load("//tools:defaults.bzl", "ng_module", "sass_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "button-toggle",
+    srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"],),
+    assets = glob([
+           "**/*.html",
+           "**/*.css",
+        ]) + [
+        ":dev_button_toggle_scss",
+    ],
+    deps = [
+        "//src/triangle/button-toggle",
+        "//src/triangle/icon",
+        "@npm//@angular/forms",
+        "@npm//@angular/router",
+    ],
+)
+
+sass_binary(
+    name = "dev_button_toggle_scss",
+    src = "dev-button-toggle.scss",
+)

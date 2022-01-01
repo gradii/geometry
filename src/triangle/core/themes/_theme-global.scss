@@ -10,6 +10,7 @@
 @use "../../badge/style/badge-theme" as *;
 @use "../../breadcrumb/style/breadcrumb-theme" as *;
 @use "../../button/style/button-theme" as *;
+@use "../../button-toggle/style/button-toggle-theme" as *;
 @use "../../calendar/style/calendar-theme" as *;
 @use "../../card/style/card-theme" as *;
 @use "../../carousel/style/carousel-theme" as *;
@@ -66,6 +67,7 @@
   @include tri-tabs-theme();
   @include tri-accordion-theme();
   @include tri-button-theme();
+  @include tri-button-toggle-theme();
   @include tri-radio-theme();
   @include tri-combobox-theme();
   @include tri-select-theme();
