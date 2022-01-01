@@ -13,25 +13,25 @@ import {
  * @title select-tag
  */
 @Component({
-  selector: 'tri-demo-select-tag',
+  selector: 'tri-demo-combobox-tag',
   template: `
-    <tri-select
+    <tri-combobox
       style="width: 400px;"
       [mode]="'tags'"
       [placeHolder]="'请选择人员'"
       [(ngModel)]="selectedMultipleOption"
       [notFoundContent]="'无法找到'"
       [showSearch]="true">
-      <tri-option
+      <tri-combobox-option
         *ngFor="let option of searchOptions"
         [label]="option.label"
         [value]="option">
-      </tri-option>
-    </tri-select>
+      </tri-combobox-option>
+    </tri-combobox>
   `,
   styles  : []
 })
-export class TriDemoSelectTagComponent implements OnInit {
+export class TriDemoComboboxTagComponent implements OnInit {
   searchOptions          = [{value: 'jack', label: '杰克'}, {value: 'lucy', label: '露西'}, {
     value: 'tom',
     label: '汤姆'

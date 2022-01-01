@@ -19,7 +19,7 @@ import {
 import { isPresent } from '@gradii/triangle/util';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { OptionComponent } from './option.component';
+import { ComboboxOptionComponent } from './combobox-option.component';
 import { SelectService } from './select.service';
 
 @Component({
@@ -42,7 +42,7 @@ export class OptionLiComponent implements OnInit, OnDestroy {
   selected = false;
   active = false;
   destroy$ = new Subject();
-  @Input() option: OptionComponent;
+  @Input() option: ComboboxOptionComponent;
   @Input() menuItemSelectedIcon: TemplateRef<any>;
 
   constructor(

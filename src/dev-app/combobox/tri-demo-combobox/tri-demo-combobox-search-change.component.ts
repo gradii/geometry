@@ -14,27 +14,27 @@ import {
  * @title select-search-change
  */
 @Component({
-  selector: 'tri-demo-select-search-change',
+  selector: 'tri-demo-combobox-search-change',
   template: `
-    <tri-select
+    <tri-combobox
       style="width: 200px;"
       [allowClear]="true"
       [placeHolder]="'input search text'"
 
       [(ngModel)]="selectedOption"
-      (searchChange)="searchChange($event)"
+      (search)="searchChange($event)"
       [notFoundContent]="'无法找到'"
       [showSearch]="true">
-      <tri-option
+      <tri-combobox-option
         *ngFor="let option of searchOptions"
         [label]="option[0]"
         [value]="option[0]">
-      </tri-option>
-    </tri-select>
+      </tri-combobox-option>
+    </tri-combobox>
   `,
   styles  : []
 })
-export class TriDemoSelectSearchChangeComponent implements OnInit {
+export class TriDemoComboboxSearchChangeComponent implements OnInit {
   selectedOption;
   searchOptions = [];
 

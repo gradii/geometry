@@ -13,7 +13,7 @@ import {
   TemplateRef,
   ViewEncapsulation
 } from '@angular/core';
-import { OptionComponent } from './option.component';
+import { ComboboxOptionComponent } from './combobox-option.component';
 
 @Component({
   selector       : 'tri-combobox-option-group',
@@ -23,7 +23,7 @@ import { OptionComponent } from './option.component';
 })
 export class OptionGroupComponent {
   isLabelString = false;
-  @ContentChildren(OptionComponent) listOfOptionComponent: QueryList<OptionComponent>;
+  @ContentChildren(ComboboxOptionComponent) listOfOptionComponent: QueryList<ComboboxOptionComponent>;
 
   _label: string | TemplateRef<void>;
 

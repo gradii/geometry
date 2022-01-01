@@ -52,6 +52,10 @@ export const DEV_APP_ROUTES: Routes = [
         loadChildren: '/select/dev-select.module#DevSelectModule'
       },
       {
+        path        : 'combobox',
+        loadChildren: '/combobox/dev-combobox.module#DevComboboxModule'
+      },
+      {
         path        : 'radio',
         loadChildren: '/radio/dev-radio.module#DevRadioModule'
       },

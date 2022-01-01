@@ -6,7 +6,7 @@
 
 export * from './src/option-group.component';
 export * from './src/option-container.component';
-export * from './src/option.component';
+export * from './src/combobox-option.component';
 export * from './src/combobox.component';
 export * from './src/combobox.module';
 export * from './src/select-unselectable.directive';

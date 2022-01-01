@@ -14,9 +14,9 @@ import {
  * @title select-multiple-change
  */
 @Component({
-  selector: 'tri-demo-select-multiple-change',
+  selector: 'tri-demo-combobox-multiple-change',
   template: `
-    <tri-select
+    <tri-combobox
       style="width: 400px;"
       keepUnListOptions
       [mode]="'multiple'"
@@ -24,16 +24,16 @@ import {
       (onSearch)="searchChange($event)"
       [(ngModel)]="selectedMultipleOption"
       [notFoundContent]="'无法找到'">
-      <tri-option
+      <tri-combobox-option
         *ngFor="let option of searchOptions"
         [label]="option[0]"
         [value]="option[0]">
-      </tri-option>
-    </tri-select>
+      </tri-combobox-option>
+    </tri-combobox>
   `,
   styles  : []
 })
-export class TriDemoSelectMultipleChangeComponent implements OnInit {
+export class TriDemoComboboxMultipleChangeComponent implements OnInit {
   searchOptions;
   selectedMultipleOption = [];
 

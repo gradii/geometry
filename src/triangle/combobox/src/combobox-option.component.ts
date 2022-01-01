@@ -12,9 +12,9 @@ import {
   selector       : 'tri-combobox-option',
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl    : './option.component.html'
+  templateUrl    : './combobox-option.component.html'
 })
-export class OptionComponent {
+export class ComboboxOptionComponent {
   @ViewChild(TemplateRef, {static: true}) template: TemplateRef<any>;
   @Input() label: string;
   // tslint:disable-next-line:no-any

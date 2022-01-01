@@ -6,7 +6,7 @@
 
 import { ConnectedPosition } from '@angular/cdk/overlay';
 import {
-  ChangeDetectionStrategy, Component, ContentChild, ContentChildren, OnInit, QueryList,
+  ChangeDetectionStrategy, Component, ContentChild, ContentChildren, Input, OnInit, QueryList,
   ViewEncapsulation
 } from '@angular/core';
 import {
@@ -83,6 +83,8 @@ export class TriSelect extends _TriSelectBase<TriSelectChange> implements OnInit
    * when the panel opens. Will change based on the y-position of the selected option.
    */
   _offsetY = 0;
+
+  @Input() size: string;
 
   @ContentChildren(TriOption, {descendants: true}) options: QueryList<TriOption>;
 

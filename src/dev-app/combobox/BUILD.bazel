@@ -3,14 +3,14 @@ load("//tools:defaults.bzl", "ng_module", "sass_binary")
 package(default_visibility = ["//visibility:public"])
 
 ng_module(
-    name = "select",
+    name = "combobox",
     srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"]),
     assets = [
-        "dev-select.html",
-        ":dev_select_scss",
+        "dev-combobox.html",
+        ":dev_combobox_scss",
     ],
     deps = [
-        "//src/triangle/select",
+        "//src/triangle/combobox",
         "//src/triangle/radio",
 
         "@npm//@angular/forms",
@@ -19,6 +19,6 @@ ng_module(
 )
 
 sass_binary(
-    name = "dev_select_scss",
-    src = "dev-select.scss",
+    name = "dev_combobox_scss",
+    src = "dev-combobox.scss",
 )

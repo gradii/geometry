@@ -12,6 +12,7 @@ ng_module(
     deps = [
         "//src/triangle/select",
         "//src/triangle/radio",
+        "//src/triangle/tabs",
 
         "@npm//@angular/forms",
         "@npm//@angular/router",

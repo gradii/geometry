@@ -19,13 +19,13 @@ import { coerceToBoolean, isPresent } from '@gradii/triangle/util';
 import { EMPTY, merge, Subject } from 'rxjs';
 import { flatMap, startWith, takeUntil } from 'rxjs/operators';
 import { OptionGroupComponent } from './option-group.component';
-import { OptionComponent } from './option.component';
+import { ComboboxOptionComponent } from './combobox-option.component';
 import { TFilterOption } from './option.pipe';
 import { SelectTopControlComponent } from './select-top-control.component';
 import { SelectService } from './select.service';
 
 @Component({
-  selector       : 'tri-select',
+  selector       : 'tri-combobox',
   providers      : [
     SelectService,
     {
@@ -72,7 +72,7 @@ export class ComboboxComponent implements ControlValueAccessor, OnInit, AfterVie
   @ViewChild(SelectTopControlComponent,
     {static: false}) selectTopControlComponent: SelectTopControlComponent;
   /** should move to tri-option-container when https://github.com/angular/angular/issues/20810 resolved **/
-  @ContentChildren(OptionComponent) listOfOptionComponent: QueryList<OptionComponent>;
+  @ContentChildren(ComboboxOptionComponent) listOfOptionComponent: QueryList<ComboboxOptionComponent>;
   @ContentChildren(
     OptionGroupComponent) listOfOptionGroupComponent: QueryList<OptionGroupComponent>;
   @Output() readonly onSearch                   = new EventEmitter<string>();

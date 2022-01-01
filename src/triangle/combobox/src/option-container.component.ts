@@ -25,7 +25,7 @@ import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { OptionGroupComponent } from './option-group.component';
 import { OptionLiComponent } from './option-li.component';
-import { OptionComponent } from './option.component';
+import { ComboboxOptionComponent } from './combobox-option.component';
 import { SelectService } from './select.service';
 
 @Component({
@@ -45,7 +45,7 @@ export class OptionContainerComponent implements OnDestroy, OnInit {
   constructor(public selectService: SelectService, private cdr: ChangeDetectorRef, private ngZone: NgZone) {
   }
 
-  scrollIntoViewIfNeeded(option: OptionComponent): void {
+  scrollIntoViewIfNeeded(option: ComboboxOptionComponent): void {
     // delay after open
     setTimeout(() => {
       if (this.listOfOptionLiComponent && this.listOfOptionLiComponent.length && option) {
@@ -66,7 +66,7 @@ export class OptionContainerComponent implements OnDestroy, OnInit {
   }
 
   // tslint:disable-next-line:no-any
-  trackValue(_index: number, option: OptionComponent): any {
+  trackValue(_index: number, option: ComboboxOptionComponent): any {
     return option.value;
   }
 

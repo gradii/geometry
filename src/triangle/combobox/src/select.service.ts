@@ -10,7 +10,7 @@ import { isBlank, isPresent } from '@gradii/triangle/util';
 import { BehaviorSubject, combineLatest, merge, Observable, ReplaySubject, Subject } from 'rxjs';
 import { distinctUntilChanged, filter, map, share, skip, tap } from 'rxjs/operators';
 import { OptionGroupComponent } from './option-group.component';
-import { OptionComponent } from './option.component';
+import { ComboboxOptionComponent } from './combobox-option.component';
 import { defaultFilterOption, FilterOptionPipe, TFilterOption } from './option.pipe';
 
 @Injectable()
@@ -26,23 +26,23 @@ export class SelectService {
   // selectedValueChanged should emit ngModelChange or not
   searchValue = '';
   isShowNotFound = false;
-  activatedOption: OptionComponent | null;
-  activatedOption$ = new ReplaySubject<OptionComponent | null>(1);
+  activatedOption: ComboboxOptionComponent | null;
+  activatedOption$ = new ReplaySubject<ComboboxOptionComponent | null>(1);
   // tslint:disable-next-line:no-any
   listOfSelectedValue: any[] = [];
   // flat ViewChildren
-  listOfTemplateOption: OptionComponent[] = [];
+  listOfTemplateOption: ComboboxOptionComponent[] = [];
   // tag option
-  listOfTagOption: OptionComponent[] = [];
+  listOfTagOption: ComboboxOptionComponent[] = [];
   // tag option concat template option
-  listOfTagAndTemplateOption: OptionComponent[] = [];
+  listOfTagAndTemplateOption: ComboboxOptionComponent[] = [];
   // ViewChildren
-  listOfOptionComponent: OptionComponent[] = [];
+  listOfOptionComponent: ComboboxOptionComponent[] = [];
   listOfOptionGroupComponent: OptionGroupComponent[] = [];
   // click or enter add tag option
-  addedTagOption: OptionComponent | null;
+  addedTagOption: ComboboxOptionComponent | null;
   // display in top control
-  listOfCachedSelectedOption: OptionComponent[] = [];
+  listOfCachedSelectedOption: ComboboxOptionComponent[] = [];
   // tslint:disable-next-line:no-any
   private listOfSelectedValueWithEmit$ = new BehaviorSubject<{ value: any[]; emit: boolean }>({
     value: [],
@@ -66,7 +66,7 @@ export class SelectService {
   );
   // ContentChildren Change
   private mapOfTemplateOption$ = new BehaviorSubject<{
-    listOfOptionComponent: OptionComponent[];
+    listOfOptionComponent: ComboboxOptionComponent[];
     listOfOptionGroupComponent: OptionGroupComponent[];
   }>({
     listOfOptionComponent     : [],
@@ -81,7 +81,7 @@ export class SelectService {
       this.listOfTemplateOption = this.listOfOptionComponent.concat(
         this.listOfOptionGroupComponent.reduce(
           (pre, cur) => [...pre, ...cur.listOfOptionComponent.toArray()],
-          [] as OptionComponent[]
+          [] as ComboboxOptionComponent[]
         )
       );
       this.updateListOfTagOption();
@@ -93,7 +93,7 @@ export class SelectService {
   );
   // searchValue Change
   private searchValueRaw$ = new BehaviorSubject<string>('');
-  private listOfFilteredOption: OptionComponent[] = [];
+  private listOfFilteredOption: ComboboxOptionComponent[] = [];
   searchValue$: Observable<any> = this.searchValueRaw$.pipe(
     distinctUntilChanged(),
     skip(1),
@@ -145,7 +145,7 @@ export class SelectService {
   // tslint:disable-next-line:no-any
   compareWith = (o1: any, o2: any) => o1 === o2;
 
-  clickOption(option: OptionComponent): void {
+  clickOption(option: ComboboxOptionComponent): void {
     /** update listOfSelectedOption -> update listOfSelectedValue -> next listOfSelectedValue$ **/
     if (!option.disabled) {
       this.updateActivatedOption(option);
@@ -181,7 +181,7 @@ export class SelectService {
         this.listOfCachedSelectedOption = [selectedOption];
       }
     } else {
-      const listOfCachedSelectedOption: OptionComponent[] = [];
+      const listOfCachedSelectedOption: ComboboxOptionComponent[] = [];
       this.listOfSelectedValue.forEach(v => {
         const listOfMixedOption = [...this.listOfTagAndTemplateOption, ...this.listOfCachedSelectedOption];
         const option = listOfMixedOption.find(o => this.compareWith(o.value, v));
@@ -199,7 +199,7 @@ export class SelectService {
         value => !this.listOfTemplateOption.find(o => this.compareWith(o.value, value))
       );
       this.listOfTagOption = listOfMissValue.map(value => {
-        const optionComponent = new OptionComponent();
+        const optionComponent = new ComboboxOptionComponent();
         optionComponent.value = value;
         optionComponent.label = value;
         return optionComponent;
@@ -213,7 +213,7 @@ export class SelectService {
   updateAddTagOption(): void {
     const isMatch = this.listOfTagAndTemplateOption.find(item => item.label === this.searchValue);
     if (this.isTagsMode && this.searchValue && !isMatch) {
-      const option = new OptionComponent();
+      const option = new ComboboxOptionComponent();
       option.value = this.searchValue;
       option.label = this.searchValue;
       this.addedTagOption = option;
@@ -245,7 +245,7 @@ export class SelectService {
     this.listOfSelectedValueWithEmit$.next({value, emit});
   }
 
-  updateActivatedOption(option: OptionComponent | null): void {
+  updateActivatedOption(option: ComboboxOptionComponent | null): void {
     this.activatedOption$.next(option);
     this.activatedOption = option;
   }
@@ -301,7 +301,7 @@ export class SelectService {
   }
 
   updateTemplateOption(
-    listOfOptionComponent: OptionComponent[],
+    listOfOptionComponent: ComboboxOptionComponent[],
     listOfOptionGroupComponent: OptionGroupComponent[]
   ): void {
     this.mapOfTemplateOption$.next({listOfOptionComponent, listOfOptionGroupComponent});
@@ -378,7 +378,7 @@ export class SelectService {
   }
 
   // tslint:disable-next-line:no-any
-  removeValueFormSelected(option: OptionComponent): void {
+  removeValueFormSelected(option: ComboboxOptionComponent): void {
     if (this.disabled || option.disabled) {
       return;
     }

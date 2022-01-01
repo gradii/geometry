@@ -26,6 +26,7 @@ ng_module(
         "//src/dev-app/icon",
         "//src/dev-app/tree-view",
         "//src/dev-app/select",
+        "//src/dev-app/combobox",
         "//src/dev-app/radio",
         "//src/dev-app/drawer",
         "//src/dev-app/transfer",

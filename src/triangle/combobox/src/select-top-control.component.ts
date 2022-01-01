@@ -20,11 +20,11 @@ import {
 import { ZoomAnimation } from '@gradii/triangle/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { OptionComponent } from './option.component';
+import { ComboboxOptionComponent } from './combobox-option.component';
 import { SelectService } from './select.service';
 
 @Component({
-  selector           : '[tri-select-top-control]',
+  selector           : '[tri-combobox-top-control]',
   animations         : [ZoomAnimation],
   changeDetection    : ChangeDetectionStrategy.OnPush,
   encapsulation      : ViewEncapsulation.None,
@@ -97,7 +97,7 @@ export class SelectTopControlComponent implements OnInit, OnDestroy {
   }
 
   // tslint:disable-next-line:no-any
-  trackValue(_index: number, option: OptionComponent): any {
+  trackValue(_index: number, option: ComboboxOptionComponent): any {
     return option.value;
   }
 
@@ -115,7 +115,7 @@ export class SelectTopControlComponent implements OnInit, OnDestroy {
     }
   }
 
-  removeSelectedValue(option: OptionComponent, e: KeyboardEvent | MouseEvent): void {
+  removeSelectedValue(option: ComboboxOptionComponent, e: KeyboardEvent | MouseEvent): void {
     this.selectService.removeValueFormSelected(option);
     e.stopPropagation();
   }

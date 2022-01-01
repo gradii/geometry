@@ -7,9 +7,9 @@ import { Component } from '@angular/core';
 
 
 @Component({
-  selector   : 'dev-select',
-  templateUrl: './dev-select.html',
-  styleUrls  : ['./dev-select.css']
+  selector   : 'dev-combobox',
+  templateUrl: './dev-combobox.html',
+  styleUrls  : ['./dev-combobox.css']
 })
 export class DevCombobox {
 

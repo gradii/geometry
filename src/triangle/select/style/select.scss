@@ -8,7 +8,7 @@
 $arrow-size              : 5px !default;
 $arrow-margin            : 4px !default;
 $select-panel-max-height : 256px !default;
-$select-item-height      : 2em !default;
+$select-item-height      : 2rem !default;
 
 $placeholder-arrow-space : 2 * ($arrow-size + $arrow-margin);
 
@@ -28,6 +28,14 @@ $placeholder-arrow-space : 2 * ($arrow-size + $arrow-margin);
     @include vendor-prefixes.user-select(none);
     cursor : default;
   }
+}
+
+.tri-select-lg {
+  height: 3rem;
+}
+
+.tri-select-sm {
+  height: 2rem;
 }
 
 .tri-select-value {

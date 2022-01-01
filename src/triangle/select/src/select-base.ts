@@ -271,17 +271,6 @@ export abstract class _TriSelectBase<C>
 
   private _value: any;
 
-  @Input()
-  get size() {
-    return this._size;
-  }
-
-  set size(value) {
-    this._size = value;
-  }
-
-  private _size: 'large' | 'lg' | 'small' | 'sm' | 'default' | string;
-
   /** Aria label of the select. */
   @Input('aria-label') ariaLabel: string = '';
 

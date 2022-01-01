@@ -13,38 +13,38 @@ import {
  * @title select-search
  */
 @Component({
-  selector: 'tri-demo-select-search',
+  selector: 'tri-demo-combobox-search',
   template: `
-    <tri-select
+    <tri-combobox
       style="width: 200px;"
       [allowClear]="true"
       [placeHolder]="'Select a person'"
       [(ngModel)]="selectedOption"
       [showSearch]="true">
-      <tri-option
+      <tri-combobox-option
         *ngFor="let option of searchOptions"
         [label]="option.label"
         [value]="option.value"
         [disabled]="option.disabled">
-      </tri-option>
-    </tri-select>
-    <tri-select
+      </tri-combobox-option>
+    </tri-combobox>
+    <tri-combobox
       style="width: 200px;"
       [allowClear]="true"
       [placeHolder]="'Select a person'"
       [(ngModel)]="selectedOption"
       [showSearch]="true">
-      <tri-option
+      <tri-combobox-option
         *ngFor="let option of searchOptions"
         [label]="option.label"
         [value]="option.value"
         [disabled]="option.disabled">
-      </tri-option>
-    </tri-select>
+      </tri-combobox-option>
+    </tri-combobox>
   `,
   styles  : []
 })
-export class TriDemoSelectSearchComponent implements OnInit {
+export class TriDemoComboboxSearchComponent implements OnInit {
   selectedOption;
   searchOptions;
 

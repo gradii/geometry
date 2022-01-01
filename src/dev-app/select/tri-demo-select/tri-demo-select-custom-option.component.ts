@@ -10,29 +10,33 @@ import { Component, OnInit } from '@angular/core';
  * @title select-basic
  */
 @Component({
-  selector: 'tri-demo-combobox-basic',
+  selector: 'tri-demo-select-basic',
   template: `
-    <tri-combobox style="width: 120px;" [(ngModel)]="selectedOption" [allowClear]="true">
-      <tri-combobox-option
+    <tri-select style="width: 120px;" [(ngModel)]="selectedOption">
+      <tri-tab-group>
+        <tri-tab label="basic">
+          <tri-option
+            *ngFor="let option of options"
+            [value]="option"
+            [disabled]="option.disabled">
+            {{option.label}}
+          </tri-option>
+        </tri-tab>
+        <tri-tab label="advance"></tri-tab>
+      </tri-tab-group>
+    </tri-select>
+    <tri-select style="width: 120px;" [(ngModel)]="selectedOption" disabled>
+      <tri-option
         *ngFor="let option of options"
-        [label]="option.label"
         [value]="option"
         [disabled]="option.disabled">
         {{option.label}}
-      </tri-combobox-option>
-    </tri-combobox>
-    <tri-combobox style="width: 120px;" [(ngModel)]="selectedOption" [disabled]="true">
-      <tri-combobox-option
-        *ngFor="let option of options"
-        [label]="option.label"
-        [value]="option"
-        [disabled]="option.disabled">
-      </tri-combobox-option>
-    </tri-combobox>
+      </tri-option>
+    </tri-select>
   `,
   styles  : []
 })
-export class TriDemoComboboxBasicComponent implements OnInit {
+export class TriDemoSelectCustomOptionComponent implements OnInit {
   options: any[] = [];
   selectedOption: any[];
 
@@ -41,7 +45,7 @@ export class TriDemoComboboxBasicComponent implements OnInit {
 
   ngOnInit() {
     /*模拟服务器异步加载*/
-    setTimeout(_ => {
+    setTimeout(() => {
       this.options        = [
         {value: 'jack', label: 'Jack'},
         {value: 'lucy', label: 'Lucy'},

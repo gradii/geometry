@@ -13,20 +13,20 @@ import {
  * @title select-multiple
  */
 @Component({
-  selector: 'tri-demo-select-multiple',
+  selector: 'tri-demo-combobox-multiple',
   template: `
-    <tri-select style="width: 400px;"
+    <tri-combobox style="width: 400px;"
       [mode]="'multiple'"
       [placeHolder]="'请选择人员'"
       [(ngModel)]="selectedMultipleOption"
       [notFoundContent]="'无法找到'">
-      <tri-option
+      <tri-combobox-option
         *ngFor="let option of searchOptions"
         [label]="option.label"
         [value]="option.value"
         [disabled]="option.disabled">
-      </tri-option>
-    </tri-select>
+      </tri-combobox-option>
+    </tri-combobox>
   `,
   styles  : []
 })

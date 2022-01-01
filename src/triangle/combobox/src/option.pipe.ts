@@ -6,22 +6,22 @@
 
 import { Pipe, PipeTransform, QueryList } from '@angular/core';
 import { OptionGroupComponent } from './option-group.component';
-import { OptionComponent } from './option.component';
+import { ComboboxOptionComponent } from './combobox-option.component';
 
-export type TFilterOption = (input: string, option: OptionComponent) => boolean;
+export type TFilterOption = (input: string, option: ComboboxOptionComponent) => boolean;
 
 @Pipe({name: 'triFilterOption'})
 export class FilterOptionPipe implements PipeTransform {
   transform(
-    options: OptionComponent[] | QueryList<OptionComponent>,
+    options: ComboboxOptionComponent[] | QueryList<ComboboxOptionComponent>,
     searchValue: string,
     filterOption: TFilterOption,
     serverSearch: boolean
-  ): OptionComponent[] | QueryList<OptionComponent> {
+  ): ComboboxOptionComponent[] | QueryList<ComboboxOptionComponent> {
     if (serverSearch || !searchValue) {
       return options;
     } else {
-      return (options as OptionComponent[]).filter(o => filterOption(searchValue, o));
+      return (options as ComboboxOptionComponent[]).filter(o => filterOption(searchValue, o));
     }
   }
 }
@@ -44,7 +44,7 @@ export class FilterGroupOptionPipe implements PipeTransform {
   }
 }
 
-export function defaultFilterOption(searchValue: string, option: OptionComponent): boolean {
+export function defaultFilterOption(searchValue: string, option: ComboboxOptionComponent): boolean {
   if (option && option.label) {
     return option.label.toLowerCase().indexOf(searchValue.toLowerCase()) > -1;
   } else {
