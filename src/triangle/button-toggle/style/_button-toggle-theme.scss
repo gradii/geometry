@@ -90,7 +90,7 @@ $divider-color : theming.tri-color($foreground, divider);
 
 @mixin button-toggle-density() {
   .tri-button-toggle-appearance-standard .tri-button-toggle-label-content {
-    line-height : 3rem;
+    line-height : 2rem;
   }
 }
 
