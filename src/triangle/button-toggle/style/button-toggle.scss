@@ -2,12 +2,9 @@
 @use '../../core/style/legend/layout-common';
 @use '../../core/style/cdk/a11y';
 
-$standard-padding: 0 12px !default;
-$standard-border-radius: 4px !default;
-
 $legacy-padding: 0 16px !default;
 $legacy-height: 36px !default;
-$legacy-border-radius: 2px !default;
+$legacy-border-radius: 4px !default;
 
 .tri-button-toggle-group {
   position: relative;
@@ -17,18 +14,10 @@ $legacy-border-radius: 2px !default;
   overflow: hidden;
   border-radius: $legacy-border-radius;
   -webkit-tap-highlight-color: transparent;
+  outline: 0;
 
   @include a11y.cdk-high-contrast(active, off) {
     outline: solid 1px;
-  }
-}
-
-.tri-button-toggle-standalone.tri-button-toggle-appearance-standard,
-.tri-button-toggle-group-appearance-standard {
-  border-radius: $standard-border-radius;
-
-  @include a11y.cdk-high-contrast(active, off) {
-    outline: 0;
   }
 }
 
@@ -45,6 +34,7 @@ $legacy-border-radius: 2px !default;
 .tri-button-toggle {
   white-space: nowrap;
   position: relative;
+  outline: 0;
 
   // Fixes SVG icons that get thrown off because of the `vertical-align` on the parent.
   .mat-icon svg {
@@ -99,14 +89,6 @@ $legacy-border-radius: 2px !default;
 
   // Prevents IE from shifting the content on click.
   position: relative;
-
-  .tri-button-toggle-appearance-standard & {
-    padding: $standard-padding;
-  }
-}
-
-.tri-button-toggle-label-content > * {
-  vertical-align: middle;
 }
 
 // Overlay to be used as a tint.
@@ -128,17 +110,6 @@ $legacy-border-radius: 2px !default;
       opacity: 0.5;
       height: 0;
     }
-  }
-}
-
-@include a11y.cdk-high-contrast(active, off) {
-  .tri-button-toggle-checked.tri-button-toggle-appearance-standard
-  .tri-button-toggle-focus-overlay {
-    // In high contrast mode, we use a border for the checked state because backgrounds
-    // can either be opaque or transparent. We set the border height to a value that is larger
-    // than usual button toggles are. This allows us to keep this high contrast style in the
-    // base component style, instead of making it dependent on height determined through density.
-    border-bottom: solid 500px;
   }
 }
 
