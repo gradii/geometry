@@ -37,7 +37,7 @@ export class SelectionCheckboxDirective implements AfterContentChecked, OnDestro
     //    this.renderer         = renderer;
     this.type = 'checkbox';
     //    this.destroyChange     = this.renderer.listen(this.el.nativeElement, "click", this.onChange.bind(this));
-    this.destroyChange = checkbox.change.subscribe(this.onChange.bind(this));
+    this.destroyChange = checkbox.checkedChange.subscribe(this.onChange.bind(this));
   }
 
   ngAfterContentChecked() {

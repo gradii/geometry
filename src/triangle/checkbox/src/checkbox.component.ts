@@ -75,7 +75,7 @@ export class CheckboxComponent implements ControlValueAccessor {
   @Input() label: string;
   @Input() value: any;
   @Input() initValue: boolean   = true;
-  @Output() change              = new EventEmitter<boolean>();
+  @Output() checkedChange       = new EventEmitter<boolean>();
   @Output() indeterminateChange = new EventEmitter<boolean>();
 
   constructor() {
@@ -120,7 +120,7 @@ export class CheckboxComponent implements ControlValueAccessor {
     }
     this.checked = value;
 
-    this.change.emit(value);
+    this.checkedChange.emit(value);
   }
 
   focus() {
