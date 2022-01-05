@@ -47,19 +47,19 @@ $_tri-pseudo-checkmark-size   : mixins.$tri-checkbox-size - (2 * $_tri-pseudo-ch
 }
 
 .tri-pseudo-checkbox-indeterminate::after {
-  top           : (mixins.$tri-checkbox-size - mixins.$tri-checkbox-border-width) / 2 - mixins.$tri-checkbox-border-width;
-  left          : mixins.$tri-checkbox-border-width / 2;
+  top           : (mixins.$tri-checkbox-size - mixins.$tri-checkbox-border-width) * 0.5 - mixins.$tri-checkbox-border-width;
+  left          : mixins.$tri-checkbox-border-width * 0.5;
   width         : mixins.$tri-checkbox-size - 6px;
   opacity       : 1;
   border-radius : 2px;
 }
 
 .tri-pseudo-checkbox-checked::after {
-  top         : (mixins.$tri-checkbox-size / 2) - ($_tri-pseudo-checkmark-size / 4) -
-      (mixins.$tri-checkbox-size / 10) - mixins.$tri-checkbox-border-width;
+  top         : (mixins.$tri-checkbox-size * 0.5) - ($_tri-pseudo-checkmark-size * 0.25) -
+      (mixins.$tri-checkbox-size * 0.1) - mixins.$tri-checkbox-border-width;
   left        : $_tri-pseudo-checkbox-padding - mixins.$tri-checkbox-border-width * 1.5;
   width       : $_tri-pseudo-checkmark-size;
-  height      : ($_tri-pseudo-checkmark-size - mixins.$tri-checkbox-border-width) / 2;
+  height      : ($_tri-pseudo-checkmark-size - mixins.$tri-checkbox-border-width) * 0.5;
   border-left : mixins.$tri-checkbox-border-width solid currentColor;
   transform   : rotate(-45deg);
   opacity     : 1;

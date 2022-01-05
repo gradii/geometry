@@ -7,7 +7,7 @@
   $foreground : map.get($theme, foreground);
 
   .#{$switch-prefix-cls} {
-    border-radius    : $switch-height / 2;
+    border-radius    : $switch-height * 0.5;
     background-color : theming.tri-color($foreground, disabled);
 
     @at-root &-inner {
@@ -15,7 +15,7 @@
     }
 
     @at-root &:after {
-      border-radius    : $switch-inner-height / 2;
+      border-radius    : $switch-inner-height * 0.5;
       background-color : theming.tri-color($foreground, component-background);
     }
 

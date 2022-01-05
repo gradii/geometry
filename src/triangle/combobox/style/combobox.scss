@@ -166,7 +166,7 @@ $select-option-height : 2rem;
         }
 
         .#{$select-prefix-cls}-selection__clear {
-          top : input-variables.$input-height-lg / 2;
+          top : input-variables.$input-height-lg * 0.5;
         }
       }
     }
@@ -193,7 +193,7 @@ $select-option-height : 2rem;
 
         .#{$select-prefix-cls}-selection__clear,
         .#{$select-prefix-cls}-selection-arrow {
-          top : input-variables.$input-height-sm / 2;
+          top : input-variables.$input-height-sm * 0.5;
         }
 
         .#{$select-prefix-cls}-selection__clear,
@@ -362,7 +362,7 @@ $select-option-height : 2rem;
 
       .#{$select-prefix-cls}-selection__clear,
       .#{$select-prefix-cls}-arrow {
-        top : input-variables.$input-height-base / 2;
+        top : input-variables.$input-height-base * 0.5;
       }
     }
 

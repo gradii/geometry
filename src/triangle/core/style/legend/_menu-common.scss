@@ -65,7 +65,7 @@ $tri-menu-icon-margin       : 16px !default;
 
   // Renders a triangle to indicate that the menu item will open a sub-menu.
   &::after {
-    $size        : $triangle-height / 2;
+    $size        : $triangle-height * 0.5;
 
     width        : 0;
     height       : 0;

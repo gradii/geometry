@@ -8,5 +8,5 @@
 //     sec(45deg)  // 1.41422
 @function sec ($x) {
   $x : unitless-rad.unitless-rad($x);
-  @return 1 / math.cos($x);
+  @return math.div(1, math.cos($x));
 }

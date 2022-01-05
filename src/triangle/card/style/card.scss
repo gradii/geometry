@@ -34,7 +34,7 @@ $card-actions-text-color : theming.tri-color(theme.$foreground, text-color) !def
   @at-root &-header {
     height      : $card-head-height;
     line-height : $card-head-line-height;
-    padding     : ($card-head-height - $card-head-line-height)/2 ($card-padding-base);
+    padding     : ($card-head-height - $card-head-line-height)*0.5 ($card-padding-base);
     box-sizing  : border-box;
     display     : flex;
     align-items : center;

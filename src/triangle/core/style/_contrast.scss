@@ -197,7 +197,7 @@ $WCAG-CONTRAST : (// sass-lint:disable-line variable-name-format
   $contrast-lumin : luminance(functions.opaque($base, $contrast));
   $darker : math.min($base-lumin, $contrast-lumin);
   $lighter : math.max($base-lumin, $contrast-lumin);
-  $ratio : ($lighter + 0.05) / ($darker + 0.05);
+  $ratio : math.div($lighter + 0.05, $darker + 0.05);
 
   @if (meta.type-of($require) != "number") {
     $require : map.get($uppercase, $require) or $require;
@@ -232,7 +232,7 @@ $WCAG-CONTRAST : (// sass-lint:disable-line variable-name-format
   );
 
   @each $name, $value in $rgb {
-    $value : if($value / 255 < .03928, $value / 255 / 12.92, list.nth($_luminance-list, $value + 1));
+    $value : if(math.div($value, 255) < .03928, math.div(math.div($value, 255), 12.92), list.nth($_luminance-list, $value + 1));
     $rgb : map.merge($rgb, ($name: $value));
   }
 

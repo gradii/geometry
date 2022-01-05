@@ -8,8 +8,8 @@
 // ------------------------
 @mixin make-row($gutter: v.$grid-gutter-width) {
   position     : relative;
-  margin-left  : ($gutter / -2);
-  margin-right : ($gutter / -2);
+  margin-left  : math.div($gutter, -2);
+  margin-right : math.div($gutter, -2);
   height       : auto;
   @include clearfix.clearfix();
 }
@@ -33,8 +33,8 @@
     position      : relative;
     // Prevent columns from collapsing when empty
     min-height    : 1px;
-    padding-left  : (v.$grid-gutter-width / 2);
-    padding-right : (v.$grid-gutter-width / 2);
+    padding-left  : (v.$grid-gutter-width * 0.5);
+    padding-right : (v.$grid-gutter-width * 0.5);
   }
 }
 
@@ -59,17 +59,17 @@
   @if $index > 0 {
     .#{ v.$tri-prefix}-col#{$class}-#{$index} {
       display    : block;
-      width      : math.percentage(($index / v.$grid-columns));
+      width      : math.percentage(math.div($index, v.$grid-columns));
       box-sizing : border-box;
     }
     .#{ v.$tri-prefix}-col#{$class}-push-#{$index} {
-      left : math.percentage(($index / v.$grid-columns));
+      left : math.percentage(math.div($index, v.$grid-columns));
     }
     .#{ v.$tri-prefix}-col#{$class}-pull-#{$index} {
-      right : math.percentage(($index / v.$grid-columns));
+      right : math.percentage(math.div($index, v.$grid-columns));
     }
     .#{ v.$tri-prefix}-col#{$class}-offset-#{$index} {
-      margin-left : math.percentage(($index / v.$grid-columns));
+      margin-left : math.percentage(math.div($index, v.$grid-columns));
     }
     .#{ v.$tri-prefix}-col#{$class}-order-#{$index} {
       order : $index;

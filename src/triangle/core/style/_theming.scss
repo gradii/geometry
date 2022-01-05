@@ -69,7 +69,7 @@
 
 
 @function _cp_strip-units($number) {
-  @return $number / ($number * 0 + 1);
+  @return math.div($number, $number * 0 + 1);
 }
 
 // We create a very complex algorithm which take the place of original tint/shade color system
@@ -110,13 +110,13 @@ $_cold-rotate : 10; // cold color rotate degree
     @return color.mix(
         #ffffff,
         $color,
-        math.percentage(1 - ($current-easing / $primary-easing))
+        math.percentage(1 - math.div($current-easing, $primary-easing))
     );
   }
   @return color.mix(
       _get-shade-color($color),
       $color,
-      math.percentage(($current-easing - $primary-easing) / (100 - $primary-easing))
+      math.percentage(math.div($current-easing - $primary-easing, 100 - $primary-easing))
   );
 }
 

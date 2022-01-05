@@ -42,46 +42,46 @@ $spin-dot-size-lg : 2rem !default;
         position : absolute;
         top      : 50%;
         left     : 50%;
-        margin   : -$spin-dot-size / 2;
+        margin   : -$spin-dot-size * 0.5;
       }
 
       .#{$spin-prefix-cls}-text {
         position    : absolute;
         top         : 50%;
         width       : 100%;
-        padding-top : ($spin-dot-size - $font-size-base) / 2 + 0.125rem;
+        padding-top : ($spin-dot-size - $font-size-base) * 0.5 + 0.125rem;
       }
 
       @at-root &.#{$spin-prefix-cls}-show-text .#{$spin-prefix-cls}-dot {
-        margin-top : -$spin-dot-size / 2 - 0.625rem;
+        margin-top : -$spin-dot-size * 0.5 - 0.625rem;
       }
     }
 
     > div > .#{$spin-prefix-cls}-sm {
       .#{$spin-prefix-cls}-dot {
-        margin : -$spin-dot-size-sm / 2;
+        margin : -$spin-dot-size-sm * 0.5;
       }
 
       .#{$spin-prefix-cls}-text {
-        padding-top : ($spin-dot-size-sm - $font-size-base) / 2 + 0.125rem;
+        padding-top : ($spin-dot-size-sm - $font-size-base) * 0.5 + 0.125rem;
       }
 
       @at-root &.#{$spin-prefix-cls}-show-text .#{$spin-prefix-cls}-dot {
-        margin-top : -$spin-dot-size-sm / 2 - 0.625rem;
+        margin-top : -$spin-dot-size-sm * 0.5 - 0.625rem;
       }
     }
 
     > div > .#{$spin-prefix-cls}-lg {
       .#{$spin-prefix-cls}-dot {
-        margin : -$spin-dot-size-lg / 2;
+        margin : -$spin-dot-size-lg * 0.5;
       }
 
       .#{$spin-prefix-cls}-text {
-        padding-top : ($spin-dot-size-lg - $font-size-base) / 2 + 0.125rem;
+        padding-top : ($spin-dot-size-lg - $font-size-base) * 0.5 + 0.125rem;
       }
 
       @at-root &.#{$spin-prefix-cls}-show-text .#{$spin-prefix-cls}-dot {
-        margin-top : -$spin-dot-size-lg / 2 - 0.625rem;
+        margin-top : -$spin-dot-size-lg * 0.5 - 0.625rem;
       }
     }
   }

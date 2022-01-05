@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import "../../core/style/mixins";
 @import "../../core/style/variables";
 
@@ -5,16 +7,16 @@ $switch-prefix-cls             : "#{$tri-prefix}-switch";
 $switch-duration               : .36s;
 
 $switch-height                 : 1.5rem;
-$switch-line-height            : $switch-height / $font-size-base;
-$switch-inner-height           : $switch-height - 4px/$root-font-size;
-$switch-inner-padding-x        : ($switch-height - $switch-inner-height)/2;
-$switch-inner-padding-y        : ($switch-height - $switch-inner-height)/2;
+$switch-line-height            : math.div($switch-height, $font-size-base);
+$switch-inner-height           : $switch-height - math.div(4px, $root-font-size);
+$switch-inner-padding-x        : ($switch-height - $switch-inner-height)*0.5;
+$switch-inner-padding-y        : ($switch-height - $switch-inner-height)*0.5;
 
 $switch-height-sm              : 1.35rem;
 $switch-line-height-sm         : $switch-height-sm * 0.9;
-$switch-inner-height-sm        : $switch-height-sm - 2px/$root-font-size;
-$switch-inner-padding-x-sm     : 1px/$root-font-size * 1rem;
-$switch-inner-padding-y-sm     : ($switch-height-sm - $switch-inner-height-sm)/2;
+$switch-inner-height-sm        : $switch-height-sm - math.div(2px, $root-font-size);
+$switch-inner-padding-x-sm     : math.div(1px, $root-font-size) * 1rem;
+$switch-inner-padding-y-sm     : ($switch-height-sm - $switch-inner-height-sm)*0.5;
 
 $switch-inner-active-scalar    : 1.5;
 $switch-inner-active-scalar-sm : 1.25;
@@ -26,7 +28,7 @@ $switch-inner-active-scalar-sm : 1.25;
   height         : $switch-height;
   min-width      : $switch-height*2;
   vertical-align : middle;
-  border-radius  : $switch-height / 2;
+  border-radius  : $switch-height * 0.5;
   cursor         : pointer;
   transition     : all $switch-duration;
   user-select    : none;
@@ -46,7 +48,7 @@ $switch-inner-active-scalar-sm : 1.25;
     left          : $switch-inner-padding-x;
     top           : $switch-inner-padding-y;
 
-    border-radius : $switch-inner-height / 2;
+    border-radius : $switch-inner-height * 0.5;
     content       : " ";
     cursor        : pointer;
     transition    : all $switch-duration $ease-in-out-circ;

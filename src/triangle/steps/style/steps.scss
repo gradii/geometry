@@ -279,7 +279,7 @@ $steps-desciption-max-width : 120px !default;
   }
 
   .#{$steps-prefix-cls}-tail {
-    margin  : 0 0 0 $steps-desciption-max-width / 2;
+    margin  : 0 0 0 $steps-desciption-max-width * 0.5;
     padding : 0;
     width   : 100%;
     top     : 1px;
@@ -303,7 +303,7 @@ $steps-desciption-max-width : 120px !default;
         float         : left;
         width         : 100%;
         height        : 100%;
-        border-radius : $steps-dot-size / 2;
+        border-radius : $steps-dot-size * 0.5;
         position      : relative;
         @at-root &:after {
           content  : "";
@@ -338,7 +338,7 @@ $steps-desciption-max-width : 120px !default;
         line-height : $steps-current-dot-size;
 
         .#{$steps-prefix-cls}-icon-dot {
-          border-radius : $steps-current-dot-size / 2;
+          border-radius : $steps-current-dot-size * 0.5;
         }
       }
     }

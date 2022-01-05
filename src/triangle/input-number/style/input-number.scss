@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @use "../../core/style/variables" as v;
 @use "../../core/style/mixins";
 @use "../../input/style/input-mixin";
@@ -52,7 +54,7 @@ $input-number-prefix-cls : "#{v.$tri-prefix}-input-number";
     text-align    : left;
     outline       : 0;
     box-sizing    : border-box;
-    height        : v.$form-control-height-base - 2px/v.$root-font-size; //fix for rem calculate missing 1px
+    height        : v.$form-control-height-base - math.div(2px, v.$root-font-size); //fix for rem calculate missing 1px
     transition    : all 0.3s linear;
     border        : 0;
     padding       : 0 7px;
@@ -63,7 +65,7 @@ $input-number-prefix-cls : "#{v.$tri-prefix}-input-number";
     padding : 0;
 
     input {
-      height : v.$form-control-height-lg - 2px/v.$root-font-size;
+      height : v.$form-control-height-lg - math.div(2px, v.$root-font-size);
     }
   }
 
@@ -71,7 +73,7 @@ $input-number-prefix-cls : "#{v.$tri-prefix}-input-number";
     padding : 0;
 
     input {
-      height : v.$form-control-height-sm - 2px/v.$root-font-size;
+      height : v.$form-control-height-sm - math.div(2px, v.$root-font-size);
     }
   }
 

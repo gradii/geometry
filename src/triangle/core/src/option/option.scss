@@ -75,7 +75,7 @@
 }
 
 .tri-option-pseudo-checkbox {
-  $margin      : $tri-menu-side-padding / 2;
+  $margin      : $tri-menu-side-padding * 0.5;
   margin-right : $margin;
 
   [dir="rtl"] & {

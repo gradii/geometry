@@ -8,5 +8,5 @@
 //     csc(60deg)  // 1.1547
 @function csc ($x) {
   $x : unitless-rad.unitless-rad($x);
-  @return 1 / math.sin($x);
+  @return math.div(1, math.sin($x));
 }

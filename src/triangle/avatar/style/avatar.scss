@@ -15,7 +15,7 @@ $avatar-border-radius  : v.$border-radius-base !default;
   width         : $size;
   height        : $size;
   line-height   : $size;
-  border-radius : $size / 2;
+  border-radius : $size * 0.5;
 
   @at-root & > * {
     line-height : $size;

@@ -4,6 +4,6 @@
   @if math.is-unitless($number) {
     @return $number;
   } @else {
-    @return $number / ($number * 0 + 1);
+    @return math.div($number, $number * 0 + 1);
   }
 }

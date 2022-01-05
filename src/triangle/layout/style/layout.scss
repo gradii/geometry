@@ -84,7 +84,7 @@ $layout-zero-trigger-height : 42px !default;
           width         : $layout-zero-trigger-width;
           height        : $layout-zero-trigger-height;
           line-height   : $layout-zero-trigger-height;
-          font-size     : $layout-zero-trigger-width / 2;
+          font-size     : $layout-zero-trigger-width * 0.5;
           border-radius : 0 $border-radius-base $border-radius-base 0;
           cursor        : pointer;
           transition    : background .3s ease;

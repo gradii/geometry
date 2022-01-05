@@ -8,5 +8,5 @@
 //     cot(30deg)  // 1.73205
 @function cot ($x) {
   $x : unitless-rad.unitless-rad($x);
-  @return 1 / math.tan($x);
+  @return math.div(1, math.tan($x));
 }

@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @use "sass:meta";
 @use "../variables" as v;
 @use "../vendor/math/helpers/strip-unit";
@@ -30,7 +32,7 @@
 // fix chrome 12px bug, support ie
 @mixin iconfont-size-under-12px($size, $rotate: 0deg) {
   display     : inline-block;
-  $font-scale : $size / 12px;
+  $font-scale : math.div($size, 12px);
   font-size   : 12px;
   transform   : scale($font-scale) rotate($rotate);
 }

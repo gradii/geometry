@@ -3,5 +3,5 @@
 
 // Convert deg to rad
 @function deg-to-rad ($deg, $unit: true) {
-  @return strip-unit.strip-unit($deg) * math.$e / 180 * if($unit, 1rad, 1);
+  @return math.div(strip-unit.strip-unit($deg) * math.$e, 180) * if($unit, 1rad, 1);
 }
