@@ -8,6 +8,7 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Platform } from '@angular/cdk/platform';
 import { AutofillMonitor } from '@angular/cdk/text-field';
 import {
+  AfterViewChecked,
   AfterViewInit, Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, Optional
 } from '@angular/core';
 import { NgControl } from '@angular/forms';
@@ -29,6 +30,7 @@ let nextUniqueId = 0;
     '[attr.id]': 'id',
     '(focus)'  : '_focusChanged(true)',
     '(blur)'   : '_focusChanged(false)',
+    '(input)': '_onInput()',
   }
 })
 export class InputFormFieldDirective
@@ -39,10 +41,8 @@ export class InputFormFieldDirective
 
   readonly id: string = `tri-input-${++nextUniqueId}`;
 
-  get placeholder() {
-    return (this._elementRef.nativeElement as HTMLElement).getAttribute('placeholder');
-  }
-
+  @Input()
+  placeholder: string;
 
   get shouldLabelFloat(): boolean {
     return this.focused || !this.empty;
@@ -90,7 +90,7 @@ export class InputFormFieldDirective
   constructor(private input: InputDirective,
               private _platform: Platform,
               private _autofillMonitor: AutofillMonitor,
-              @Optional() private formField: FormFieldComponent,
+              @Optional() private _formField: FormFieldComponent,
               private _elementRef: ElementRef) {
   }
 
@@ -115,6 +115,41 @@ export class InputFormFieldDirective
     }
   }
 
+  _onInput() {
+    // This is a noop function and is used to let Angular know whenever the value changes.
+    // Angular will run a new change detection each time the `input` event has been dispatched.
+    // It's necessary that Angular recognizes the value change, because when floatingLabel
+    // is set to false and Angular forms aren't used, the placeholder won't recognize the
+    // value changes and will not disappear.
+    // Listening to the input event wouldn't be necessary when the input is using the
+    // FormsModule or ReactiveFormsModule, because Angular forms also listens to input events.
+  }
+
+
+  _previousPlaceholder: string;
+  _previousNativeValue: any;
+
+  /** Does some manual dirty checking on the native input `value` property. */
+  protected _dirtyCheckNativeValue() {
+    const newValue = this._elementRef.nativeElement.value;
+
+    if (this._previousNativeValue !== newValue) {
+      this._previousNativeValue = newValue;
+      this.stateChanges.next();
+    }
+  }
+
+  /** Does some manual dirty checking on the native input `placeholder` attribute. */
+  private _dirtyCheckPlaceholder() {
+    const placeholder = this._formField?._hideControlPlaceholder?.() ? null : this.placeholder;
+    if (placeholder !== this._previousPlaceholder) {
+      const element             = this._elementRef.nativeElement;
+      this._previousPlaceholder = placeholder;
+      placeholder
+        ? element.setAttribute('placeholder', placeholder)
+        : element.removeAttribute('placeholder');
+    }
+  }
 
   ngAfterViewInit() {
     if (this._platform.isBrowser) {
@@ -125,11 +160,29 @@ export class InputFormFieldDirective
     }
   }
 
-
   ngOnInit() {
-    if (this.formField) {
+    if (this._formField) {
       this.input.variant = 'default';
     }
+  }
+
+
+  ngDoCheck() {
+    // if (this.ngControl) {
+    //   // We need to re-evaluate this on every change detection cycle, because there are some
+    //   // error triggers that we can't subscribe to (e.g. parent form submissions). This means
+    //   // that whatever logic is in here has to be super lean or we risk destroying the performance.
+    //   this.updateErrorState();
+    // }
+
+    // We need to dirty-check the native element's value, because there are some cases where
+    // we won't be notified when it changes (e.g. the consumer isn't using forms or they're
+    // updating the value using `emitEvent: false`).
+    this._dirtyCheckNativeValue();
+
+    // We need to dirty-check and set the placeholder attribute ourselves, because whether it's
+    // present or not depends on a query which is prone to "changed after checked" errors.
+    this._dirtyCheckPlaceholder();
   }
 
   ngOnChanges() {

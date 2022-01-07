@@ -1,7 +1,9 @@
 <div class="example-container">
+  <input triInput [(ngModel)]="placeholder"/>
+
   <tri-form-field hintLabel="Max 10 characters" variant="fill" labelOrientation="auto-float">
     <tri-label>Enter some input</tri-label>
-    <input triInput #input maxlength="10" placeholder="Ex. Nougat">
+    <input triInput #input maxlength="10" [placeholder]="placeholder">
     <tri-hint align="end">{{input.value?.length || 0}}/10</tri-hint>
   </tri-form-field>
 

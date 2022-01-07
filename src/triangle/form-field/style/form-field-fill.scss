@@ -1,6 +1,7 @@
 @use 'sass:math';
 @use '../../core/style/variables';
 @use '../../core/style/cdk/a11y';
+@use './form-field-variable';
 
 // Styles that only apply to the fill appearance of the form-field.
 
@@ -14,7 +15,7 @@ $fill-underline-ripple-height : 2px !default;
 $fill-side-padding            : 1rem !default;
 // The vertical padding between the edge of the form field fill box and the start of the text as
 // well as between the floating label and the value.
-$fill-line-spacing            : 1.5rem !default;
+$fill-line-spacing            : form-field-variable.$fill-line-spacing;
 // The scale of the subscript and floating label text w.r.t the value text.
 $fill-subscript-font-scale    : 0.75 !default;
 // The horizontal padding between the edge of the subscript box and the start of the subscript text.

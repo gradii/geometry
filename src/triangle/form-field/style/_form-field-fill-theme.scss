@@ -6,6 +6,7 @@
 @use "../../core/style/variables" as v;
 @use "../../core/style/typography/typography";
 @use "../../core/style/typography/typography-utils";
+@use "./form-field-variable";
 
 $foreground               : theme.$foreground;
 $background               : theme.$background;
@@ -69,20 +70,17 @@ $fill-dedupe              : 0;
   // The padding on top of the infix.
   $infix-padding-top            : 0.25rem;
   // The padding below the infix.
-  $infix-padding-bottom         : 0.75rem;
+  $infix-padding-bottom         : 0;
   // The margin applied to the form-field-infix to reserve space for the floating label.
-  $infix-margin-top             : 1rem;
+  $infix-margin-top             : form-field-variable.$fill-line-spacing;
   // The amount we offset the label from the input text in the fill appearance.
   $fill-appearance-label-offset : -0.25rem;
 
   .tri-form-field-appearance-fill {
-    .tri-form-field-infix {
-      //padding : $infix-padding-top 0 $infix-padding-bottom 0;
-    }
 
     .tri-form-field-label {
-      top        : $infix-margin-top + $infix-padding-top;
-      margin-top : $fill-appearance-label-offset;
+      padding-left  : .5rem;
+      padding-right : .5rem;
     }
 
     &.tri-form-field-can-float {
@@ -91,17 +89,6 @@ $fill-dedupe              : 0;
         @include _label-floating(
             $subscript-font-scale, $infix-padding-top + $fill-appearance-label-offset,
             $infix-margin-top);
-      }
-
-      // Server-side rendered matInput with a label attribute but label not shown
-      // (used as a pure CSS stand-in for tri-form-field-should-float).
-      .tri-input-server[label]:not(:label-shown) + .tri-form-field-label-wrapper
-      .tri-form-field-label {
-        @include _label-floating(
-            $subscript-font-scale,
-            $infix-padding-top + $fill-appearance-label-offset,
-            $infix-margin-top
-        );
       }
     }
   }
