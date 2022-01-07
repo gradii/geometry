@@ -11,7 +11,7 @@
     <div class="tri-form-field-infix" #inputContainer>
       <ng-content></ng-content>
 
-      <span class="tri-form-field-label-wrapper">
+      <span class="tri-form-field-label-wrapper" *ngIf="_canLabelFloat()">
         <label class="tri-form-field-label"
                [id]="_labelId"
                [attr.for]="_control.id"
@@ -21,20 +21,13 @@
                [class.tri-accent]="color == 'accent'"
                [class.tri-warn]="color == 'warn'"
                #label
-               *ngIf="_hasFloatingLabel()"
-               [ngSwitch]="_hasLabel()">
+               *ngIf="_hasFloatingLabel()">
 
-          <!-- @breaking-change 8.0.0 remove in favor of tri-label element an placeholder attr. -->
-          <ng-container *ngSwitchCase="false">
-            <ng-content select="tri-placeholder"></ng-content>
-            <span>{{_control.placeholder}}</span>
-          </ng-container>
-
-          <ng-content select="tri-label" *ngSwitchCase="true"></ng-content>
-
-          <!-- @breaking-change 8.0.0 remove `tri-placeholder-required` class -->
+          <ng-template [ngIf]="_hasLabel()">
+            <ng-content select="tri-label"></ng-content>
+          </ng-template>
           <span
-            class="tri-placeholder-required tri-form-field-required-marker"
+            class="tri-form-field-required-marker"
             aria-hidden="true"
             *ngIf="!hideRequiredMarker && _control.required && !_control.disabled">&#32;*</span>
         </label>

@@ -45,11 +45,15 @@ const _TriFormFieldBase = mixinColor(
 );
 
 /** Possible appearance styles for the form field. */
-export type TriFormFieldVariant = 'standard' | 'fill' | null;
+export type TriFormFieldVariant = 'fill' | null;
 
-/** Possible values for the "floatLabel" form-field input. */
-export type FloatLabelType = 'always' | 'never' | 'auto';
-export type LabelOrientation = 'auto-float' | 'float' | 'horizontal' | 'vertical';
+export type LabelOrientation =
+  'auto-float'
+  | 'float'
+  | 'inline'
+  | 'none'
+  | 'horizontal'
+  | 'vertical';
 
 export interface TriFormFieldDefaultOptions {
   variant?: TriFormFieldVariant;
@@ -82,25 +86,27 @@ export const TRI_FORM_FIELD = new InjectionToken<FormFieldComponent>('TriFormFie
   ],
   animations     : [triFormFieldAnimations.transitionMessages],
   host           : {
-    'class'                                     : 'tri-form-field',
-    '[class.tri-form-field-appearance-standard]': 'variant == "standard"',
-    '[class.tri-form-field-appearance-fill]'    : 'variant == "fill"',
-    '[class.tri-form-field-invalid]'            : '_control.errorState',
-    '[class.tri-form-field-can-float]'          : '_canLabelFloat()',
-    '[class.tri-form-field-should-float]'       : '_shouldLabelFloat()',
-    '[class.tri-form-field-has-label]'          : '_hasFloatingLabel()',
-    '[class.tri-form-field-hide-placeholder]'   : '_hideControlPlaceholder()',
-    '[class.tri-form-field-disabled]'           : '_control.disabled',
-    '[class.tri-form-field-autofilled]'         : '_control.autofilled',
-    '[class.tri-focused]'                       : '_control.focused',
-    '[class.ng-untouched]'                      : '_shouldForward("untouched")',
-    '[class.ng-touched]'                        : '_shouldForward("touched")',
-    '[class.ng-pristine]'                       : '_shouldForward("pristine")',
-    '[class.ng-dirty]'                          : '_shouldForward("dirty")',
-    '[class.ng-valid]'                          : '_shouldForward("valid")',
-    '[class.ng-invalid]'                        : '_shouldForward("invalid")',
-    '[class.ng-pending]'                        : '_shouldForward("pending")',
-    '[class._tri-animation-noopable]'           : '!_animationsEnabled',
+    'class'                                    : 'tri-form-field',
+    '[class.tri-form-field-variant-horizontal]': 'labelOrientation == "horizontal"',
+    '[class.tri-form-field-variant-vertical]'  : 'labelOrientation == "vertical"',
+    '[class.tri-form-field-variant-float]'     : 'labelOrientation == "float"',
+    '[class.tri-form-field-appearance-fill]'   : 'variant == "fill"',
+    '[class.tri-form-field-invalid]'           : '_control.errorState',
+    '[class.tri-form-field-can-float]'         : '_canLabelFloat()',
+    '[class.tri-form-field-should-float]'      : '_shouldLabelFloat()',
+    '[class.tri-form-field-has-label]'         : '_hasFloatingLabel()',
+    '[class.tri-form-field-hide-placeholder]'  : '_hideControlPlaceholder()',
+    '[class.tri-form-field-disabled]'          : '_control.disabled',
+    '[class.tri-form-field-autofilled]'        : '_control.autofilled',
+    '[class.tri-focused]'                      : '_control.focused',
+    '[class.ng-untouched]'                     : '_shouldForward("untouched")',
+    '[class.ng-touched]'                       : '_shouldForward("touched")',
+    '[class.ng-pristine]'                      : '_shouldForward("pristine")',
+    '[class.ng-dirty]'                         : '_shouldForward("dirty")',
+    '[class.ng-valid]'                         : '_shouldForward("valid")',
+    '[class.ng-invalid]'                       : '_shouldForward("invalid")',
+    '[class.ng-pending]'                       : '_shouldForward("pending")',
+    '[class._tri-animation-noopable]'          : '!_animationsEnabled',
   },
   inputs         : ['color'],
   encapsulation  : ViewEncapsulation.None,
@@ -119,7 +125,7 @@ export class FormFieldComponent extends _TriFormFieldBase
   }
 
   set variant(value: TriFormFieldVariant) {
-    this._variant = value || (this._defaults && this._defaults.variant) || 'standard';
+    this._variant = value || 'fill';
   }
 
   _variant: TriFormFieldVariant;
@@ -183,7 +189,7 @@ export class FormFieldComponent extends _TriFormFieldBase
     }
   }
 
-  private _labelOrientation: LabelOrientation = 'vertical';
+  private _labelOrientation: LabelOrientation;
 
   /** Whether the Angular animations are enabled. */
   _animationsEnabled: boolean;
@@ -232,7 +238,7 @@ export class FormFieldComponent extends _TriFormFieldBase
     this._animationsEnabled = _animationMode !== 'NoopAnimations';
 
     // Set the default through here so we invoke the setter on the first run.
-    this.variant             = _defaults && _defaults.variant ? _defaults.variant : 'standard';
+    this.variant             = _defaults && _defaults.variant ? _defaults.variant : 'fill';
     this._hideRequiredMarker =
       _defaults && _defaults.hideRequiredMarker != null ? _defaults.hideRequiredMarker : false;
   }
@@ -322,7 +328,6 @@ export class FormFieldComponent extends _TriFormFieldBase
   _hideControlPlaceholder() {
     // In the legacy appearance the placeholder is promoted to a label if no label is given.
     return (
-      (this.variant === 'standard' && !this._hasLabel()) ||
       (this._hasLabel() && !this._shouldLabelFloat())
     );
   }
@@ -391,7 +396,7 @@ export class FormFieldComponent extends _TriFormFieldBase
 
   /** Gets the default float label state. */
   private _getDefaultLabelOrientation(): LabelOrientation {
-    return (this._defaults && this._defaults.labelOrientation) || 'vertical';
+    return (this._defaults && this._defaults.labelOrientation) || 'auto-float';
   }
 
   /**
