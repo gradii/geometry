@@ -5,40 +5,39 @@
 // Styles that only apply to the fill appearance of the form-field.
 
 // The border radius for the form field fill box.
-$fill-border-radius: 4px !default;
+$fill-border-radius           : 4px !default;
 // The height of the underline at the bottom of the form field fill box.
-$fill-underline-height: 1px !default;
+$fill-underline-height        : 1px !default;
 // The height of the underline ripple at the bottom of the form field fill box.
-$fill-underline-ripple-height: 2px !default;
+$fill-underline-ripple-height : 2px !default;
 // The horizontal padding between the edge of the form field fill box and the start of the text.
-$fill-side-padding: 0.75em !default;
+$fill-side-padding            : 1rem !default;
 // The vertical padding between the edge of the form field fill box and the start of the text as
 // well as between the floating label and the value.
-$fill-line-spacing: 0.75em !default;
+$fill-line-spacing            : 1.5rem !default;
 // The scale of the subscript and floating label text w.r.t the value text.
-$fill-subscript-font-scale: 0.75 !default;
+$fill-subscript-font-scale    : 0.75 !default;
 // The horizontal padding between the edge of the subscript box and the start of the subscript text.
-$fill-subscript-padding: math.div($fill-side-padding, $fill-subscript-font-scale);
+$fill-subscript-padding       : math.div($fill-side-padding, $fill-subscript-font-scale);
 
 
 .tri-form-field-appearance-fill {
   .tri-form-field-flex {
-    border-radius: $fill-border-radius $fill-border-radius 0 0;
-    padding: $fill-line-spacing $fill-side-padding 0
-             $fill-side-padding;
+    border-radius : $fill-border-radius $fill-border-radius 0 0;
+    padding       : $fill-line-spacing $fill-side-padding 0 $fill-side-padding;
 
     @include a11y.cdk-high-contrast(active, off) {
-      outline: solid 1px;
+      outline : solid 1px;
     }
   }
 
   &.tri-focused .tri-form-field-flex {
     @include a11y.cdk-high-contrast(active, off) {
-      outline: dashed 3px;
+      outline : dashed 3px;
     }
   }
 
   .tri-form-field-subscript-wrapper {
-    padding: 0 $fill-subscript-padding;
+    padding : 0 $fill-subscript-padding;
   }
 }

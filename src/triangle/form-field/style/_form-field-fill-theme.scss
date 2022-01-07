@@ -67,13 +67,13 @@ $fill-dedupe              : 0;
   // The amount to scale the font for the floating label and subscript.
   $subscript-font-scale         : 0.75;
   // The padding on top of the infix.
-  $infix-padding-top            : 0.25em;
+  $infix-padding-top            : 0.25rem;
   // The padding below the infix.
-  $infix-padding-bottom         : 0.75em;
+  $infix-padding-bottom         : 0.75rem;
   // The margin applied to the form-field-infix to reserve space for the floating label.
-  $infix-margin-top             : $subscript-font-scale * typography-utils.private-coerce-unitless-to-em($line-height);
+  $infix-margin-top             : 1rem;
   // The amount we offset the label from the input text in the fill appearance.
-  $fill-appearance-label-offset : -0.5em;
+  $fill-appearance-label-offset : -0.25rem;
 
   .tri-form-field-appearance-fill {
     .tri-form-field-infix {
@@ -107,7 +107,8 @@ $fill-dedupe              : 0;
   }
 }
 
-@mixin private-form-field-fill-density() {}
+@mixin private-form-field-fill-density() {
+}
 
 @mixin form-field-fill-theme($theme-or-color-config) {
   @include mixins.import-once("tri-form-field-fill") {
