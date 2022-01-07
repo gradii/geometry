@@ -1,30 +1,23 @@
-import {FocusMonitor} from '@angular/cdk/a11y';
-import {BooleanInput, coerceBooleanProperty} from '@angular/cdk/coercion';
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
+
+import { FocusMonitor } from '@angular/cdk/a11y';
+import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
-  Component,
-  ElementRef,
-  Inject,
-  Input,
-  OnDestroy,
-  Optional,
-  Self,
-  ViewChild,
+  Component, ElementRef, Inject, Input, OnDestroy, Optional, Self, ViewChild,
 } from '@angular/core';
 import {
-  AbstractControl,
-  ControlValueAccessor,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  NgControl,
-  Validators,
+  AbstractControl, ControlValueAccessor, FormBuilder, FormControl, FormGroup, NgControl, Validators,
 } from '@angular/forms';
-import {MAT_FORM_FIELD, MatFormField, MatFormFieldControl} from '@angular/material/form-field';
-import {Subject} from 'rxjs';
+import { TRI_FORM_FIELD, FormFieldComponent, TriFormFieldControl } from '@gradii/triangle/form-field';
+import { Subject } from 'rxjs';
 
 /** @title Form field with custom telephone number input control. */
 @Component({
-  selector: 'form-field-custom-control-example',
+  selector   : 'form-field-custom-control-example',
   templateUrl: 'form-field-custom-control-example.html',
 })
 export class FormFieldCustomControlExample {
@@ -35,21 +28,22 @@ export class FormFieldCustomControlExample {
 
 /** Data structure for holding telephone number. */
 export class MyTel {
-  constructor(public area: string, public exchange: string, public subscriber: string) {}
+  constructor(public area: string, public exchange: string, public subscriber: string) {
+  }
 }
 
 /** Custom `MatFormFieldControl` for telephone number input. */
 @Component({
-  selector: 'example-tel-input',
+  selector   : 'example-tel-input',
   templateUrl: 'example-tel-input-example.html',
-  styleUrls: ['example-tel-input-example.css'],
-  providers: [{provide: MatFormFieldControl, useExisting: MyTelInput}],
-  host: {
+  styleUrls  : ['example-tel-input-example.css'],
+  providers  : [{provide: TriFormFieldControl, useExisting: MyTelInput}],
+  host       : {
     '[class.example-floating]': 'shouldLabelFloat',
-    '[id]': 'id',
+    '[id]'                    : 'id',
   },
 })
-export class MyTelInput implements ControlValueAccessor, MatFormFieldControl<MyTel>, OnDestroy {
+export class MyTelInput implements ControlValueAccessor, TriFormFieldControl<MyTel>, OnDestroy {
   static nextId = 0;
   @ViewChild('area') areaInput: HTMLInputElement;
   @ViewChild('exchange') exchangeInput: HTMLInputElement;
@@ -57,17 +51,19 @@ export class MyTelInput implements ControlValueAccessor, MatFormFieldControl<MyT
 
   parts: FormGroup;
   stateChanges = new Subject<void>();
-  focused = false;
-  touched = false;
-  controlType = 'example-tel-input';
-  id = `example-tel-input-${MyTelInput.nextId++}`;
-  onChange = (_: any) => {};
-  onTouched = () => {};
+  focused      = false;
+  touched      = false;
+  controlType  = 'example-tel-input';
+  id           = `example-tel-input-${MyTelInput.nextId++}`;
+  onChange     = (_: any) => {
+  };
+  onTouched    = () => {
+  };
 
   get empty() {
     const {
-      value: {area, exchange, subscriber},
-    } = this.parts;
+            value: {area, exchange, subscriber},
+          } = this.parts;
 
     return !area && !exchange && !subscriber;
   }
@@ -82,43 +78,50 @@ export class MyTelInput implements ControlValueAccessor, MatFormFieldControl<MyT
   get placeholder(): string {
     return this._placeholder;
   }
+
   set placeholder(value: string) {
     this._placeholder = value;
     this.stateChanges.next();
   }
+
   private _placeholder: string;
 
   @Input()
   get required(): boolean {
     return this._required;
   }
+
   set required(value: BooleanInput) {
     this._required = coerceBooleanProperty(value);
     this.stateChanges.next();
   }
+
   private _required = false;
 
   @Input()
   get disabled(): boolean {
     return this._disabled;
   }
+
   set disabled(value: BooleanInput) {
     this._disabled = coerceBooleanProperty(value);
     this._disabled ? this.parts.disable() : this.parts.enable();
     this.stateChanges.next();
   }
+
   private _disabled = false;
 
   @Input()
   get value(): MyTel | null {
     if (this.parts.valid) {
       const {
-        value: {area, exchange, subscriber},
-      } = this.parts;
+              value: {area, exchange, subscriber},
+            } = this.parts;
       return new MyTel(area, exchange, subscriber);
     }
     return null;
   }
+
   set value(tel: MyTel | null) {
     const {area, exchange, subscriber} = tel || new MyTel('', '', '');
     this.parts.setValue({area, exchange, subscriber});
@@ -133,12 +136,12 @@ export class MyTelInput implements ControlValueAccessor, MatFormFieldControl<MyT
     formBuilder: FormBuilder,
     private _focusMonitor: FocusMonitor,
     private _elementRef: ElementRef<HTMLElement>,
-    @Optional() @Inject(MAT_FORM_FIELD) public _formField: MatFormField,
+    @Optional() @Inject(TRI_FORM_FIELD) public _formField: FormFieldComponent,
     @Optional() @Self() public ngControl: NgControl,
   ) {
     this.parts = formBuilder.group({
-      area: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-      exchange: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+      area      : [null, [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+      exchange  : [null, [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
       subscriber: [null, [Validators.required, Validators.minLength(4), Validators.maxLength(4)]],
     });
 

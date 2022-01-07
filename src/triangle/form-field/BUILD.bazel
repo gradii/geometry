@@ -20,7 +20,6 @@ ng_module(
         ":style/form-field.css",
         ":style/form-field-fill.css",
         ":style/form-field-input.css",
-        ":style/form-field-outline.css",
         ":style/form-field-standard.css",
     ] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/form-field",
@@ -29,6 +28,8 @@ ng_module(
         "//src/triangle/i18n",
         "//src/triangle/util",
         "//src/triangle/icon",
+        "//src/triangle/input",
+
         "@npm//@angular/animations",
         "@npm//@angular/cdk",
         "@npm//@angular/common",
@@ -63,12 +64,6 @@ sass_binary(
 sass_binary(
     name = "form_field_input_scss",
     src = "style/form-field-input.scss",
-    deps = ["//src/triangle/core:core_scss_lib"],
-)
-
-sass_binary(
-    name = "form_field_outline_scss",
-    src = "style/form-field-outline.scss",
     deps = ["//src/triangle/core:core_scss_lib"],
 )
 

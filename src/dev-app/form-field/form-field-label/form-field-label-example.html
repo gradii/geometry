@@ -1,33 +1,38 @@
 <div class="example-container">
   <form [formGroup]="options">
-    <mat-checkbox [formControl]="hideRequiredControl">Hide required marker</mat-checkbox>
+    <tri-checkbox [formControl]="hideRequiredControl">Hide required marker</tri-checkbox>
     <div>
-      <label>Float label: </label>
-      <mat-radio-group [formControl]="floatLabelControl">
-        <mat-radio-button value="auto">Auto</mat-radio-button>
-        <mat-radio-button value="always">Always</mat-radio-button>
-      </mat-radio-group>
+      <label>label orientation: </label>
+      <tri-radio-group [formControl]="floatLabelControl">
+        <label tri-radio-button value="auto-float">Auto</label>
+        <label tri-radio-button value="float">Always</label>
+        <label tri-radio-button value="horizontal">Horizontal</label>
+        <label tri-radio-button value="vertical">Vertical</label>
+      </tri-radio-group>
     </div>
 
-    <mat-form-field appearance="fill"
-        [hideRequiredMarker]="hideRequiredControl.value"
-        [floatLabel]="floatLabelControl.value">
-      <input matInput placeholder="Simple placeholder" required>
-    </mat-form-field>
+    <tri-form-field variant="fill"
+                    [hideRequiredMarker]="hideRequiredControl.value"
+                    [labelOrientation]="floatLabelControl.value">
+      <input triInput placeholder="Simple placeholder" required>
+    </tri-form-field>
 
-    <mat-form-field appearance="fill" [floatLabel]="floatLabelControl.value">
-      <mat-label>Both a label and a placeholder</mat-label>
-      <input matInput placeholder="Simple placeholder">
-    </mat-form-field>
+    <tri-form-field variant="fill" [labelOrientation]="floatLabelControl.value">
+      <tri-label>Both a label and a placeholder</tri-label>
+      <input triInput placeholder="Simple placeholder">
+    </tri-form-field>
 
-    <mat-form-field appearance="fill"
-        [hideRequiredMarker]="hideRequiredControl.value"
-        [floatLabel]="floatLabelControl.value">
-      <mat-select required>
-        <mat-option>-- None --</mat-option>
-        <mat-option value="option">Option</mat-option>
-      </mat-select>
-      <mat-label><mat-icon>favorite</mat-icon> <b> Fancy</b> <i> label</i></mat-label>
-    </mat-form-field>
+    <tri-form-field variant="fill"
+                    [hideRequiredMarker]="hideRequiredControl.value"
+                    [labelOrientation]="floatLabelControl.value">
+      <tri-select required>
+        <tri-option>-- None --</tri-option>
+        <tri-option value="option">Option</tri-option>
+      </tri-select>
+      <tri-label>
+        <tri-icon svgIcon="outline:tool"></tri-icon>
+        <b> Fancy</b> <i> label</i>
+      </tri-label>
+    </tri-form-field>
   </form>
 </div>

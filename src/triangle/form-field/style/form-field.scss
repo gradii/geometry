@@ -34,7 +34,7 @@ $default-infix-width: 180px !default;
 // The underline is outside of it so it can cover all of the elements under this flex container.
 .tri-form-field-flex {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   box-sizing: border-box;
   width: 100%;
 }
@@ -157,45 +157,6 @@ $default-infix-width: 180px !default;
   transition: none;
 }
 
-.tri-form-field-underline {
-  position: absolute;
-  width: 100%;
-  // Need this so that the underline doesn't block the hover effect.
-  pointer-events: none;
-  // We transform the height slightly higher to fix inconsistent underline height for some DPIs.
-  // Without this we observed that at zoom levels between 50% and 100% some form-field underlines
-  // would disappear. The issue appears to be related to fractional pixels since (e.g. underlines
-  // with their top at x.6 would disappear, but ones with there top at x.7 were fine). The exact
-  // fractions that caused problems seemed to depend on the screen resolution and zoom level. We
-  // experimentally discovered that adding a very slight scale factor fixes the issue.
-  // `scale3d` must be used rather than `scaleY`, as `scaleY` causes a jitter effect in Chrome.
-  transform: scale3d(1, 1.0001, 1);
-}
-
-.tri-form-field-ripple {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  transform-origin: 50%;
-  transform: scaleX(0.5);
-  opacity: 0;
-  transition: background-color variables.$swift-ease-in-duration
-    variables.$swift-ease-in-timing-function;
-}
-
-.tri-form-field.tri-focused,
-.tri-form-field.tri-form-field-invalid {
-  .tri-form-field-ripple {
-    opacity: 1;
-    // Note that we transition this to `none`, rather than `scaleX(1)`, because the scaling
-    // seems to cause some rendering artifacts on adjacent form fields (see #21612).
-    transform: none;
-    transition: transform 300ms variables.$swift-ease-out-timing-function,
-                opacity 100ms variables.$swift-ease-out-timing-function,
-                background-color 300ms variables.$swift-ease-out-timing-function;
-  }
-}
-
 // Wrapper for the hints and error messages.
 .tri-form-field-subscript-wrapper {
   position: absolute;
@@ -237,11 +198,4 @@ $default-infix-width: 180px !default;
 
 .tri-form-field-hint-end {
   order: 1;
-}
-
-.tri-form-field._tri-animation-noopable {
-  .tri-form-field-label,
-  .tri-form-field-ripple {
-    transition: none;
-  }
 }

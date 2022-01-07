@@ -10,23 +10,35 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TriCommonModule } from '@gradii/triangle/core';
 import { TriError } from './error';
-import { TriFormField } from './form-field';
+import { FormFieldComponent } from './form-field-component';
 import { TriHint } from './hint';
+import { InputFormFieldDirective } from './input-form-field/input-form-field-directive';
 import { TriLabel } from './label';
 import { TriPrefix } from './prefix';
 import { TriSuffix } from './suffix';
 
 @NgModule({
-  declarations: [TriError, TriFormField, TriHint, TriLabel, TriPrefix, TriSuffix],
-  imports     : [CommonModule, TriCommonModule, ObserversModule],
-  exports     : [
-    TriCommonModule,
+  declarations: [
     TriError,
-    TriFormField,
+    FormFieldComponent,
     TriHint,
     TriLabel,
     TriPrefix,
     TriSuffix,
+
+    InputFormFieldDirective
+  ],
+  imports     : [CommonModule, TriCommonModule, ObserversModule],
+  exports     : [
+    TriCommonModule,
+    TriError,
+    FormFieldComponent,
+    TriHint,
+    TriLabel,
+    TriPrefix,
+    TriSuffix,
+
+    InputFormFieldDirective
   ],
 })
 export class TriFormFieldModule {

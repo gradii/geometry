@@ -29,7 +29,7 @@ import {
   mixinDisabled, mixinDisableRipple, mixinErrorState, mixinTabIndex, TriOptgroup, TriOption,
   TriOptionSelectionChange
 } from '@gradii/triangle/core';
-import { TRI_FORM_FIELD, TriFormField } from '@gradii/triangle/form-field';
+import { TRI_FORM_FIELD, FormFieldComponent } from '@gradii/triangle/form-field';
 
 import { defer, merge, Observable, Subject } from 'rxjs';
 import {
@@ -364,7 +364,7 @@ export abstract class _TriSelectBase<C>
     @Optional() private _dir: Directionality,
     @Optional() _parentForm: NgForm,
     @Optional() _parentFormGroup: FormGroupDirective,
-    @Optional() @Inject(TRI_FORM_FIELD) protected _parentFormField: TriFormField,
+    @Optional() @Inject(TRI_FORM_FIELD) protected _parentFormField: FormFieldComponent,
     @Self() @Optional() ngControl: NgControl,
     @Attribute('tabindex') tabIndex: string,
     @Inject(TRI_SELECT_SCROLL_STRATEGY) scrollStrategyFactory: any,

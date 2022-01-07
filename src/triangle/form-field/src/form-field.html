@@ -2,25 +2,9 @@
   <div class="tri-form-field-flex" #connectionContainer
        (click)="_control.onContainerClick && _control.onContainerClick($event)">
 
-    <!-- Outline used for outline appearance. -->
-    <ng-container *ngIf="appearance == 'outline'">
-      <div class="tri-form-field-outline">
-        <div class="tri-form-field-outline-start"></div>
-        <div class="tri-form-field-outline-gap"></div>
-        <div class="tri-form-field-outline-end"></div>
-      </div>
-      <div class="tri-form-field-outline tri-form-field-outline-thick">
-        <div class="tri-form-field-outline-start"></div>
-        <div class="tri-form-field-outline-gap"></div>
-        <div class="tri-form-field-outline-end"></div>
-      </div>
-    </ng-container>
-
     <div
       class="tri-form-field-prefix"
-      *ngIf="_prefixChildren.length"
-      (cdkObserveContent)="updateOutlineGap()"
-      [cdkObserveContentDisabled]="appearance != 'outline'">
+      *ngIf="_prefixChildren.length">
       <ng-content select="[triPrefix]"></ng-content>
     </div>
 
@@ -28,11 +12,7 @@
       <ng-content></ng-content>
 
       <span class="tri-form-field-label-wrapper">
-        <!-- We add aria-owns as a workaround for an issue in JAWS & NVDA where the label isn't
-             read if it comes before the control in the DOM. -->
         <label class="tri-form-field-label"
-               (cdkObserveContent)="updateOutlineGap()"
-               [cdkObserveContentDisabled]="appearance != 'outline'"
                [id]="_labelId"
                [attr.for]="_control.id"
                [attr.aria-owns]="_control.id"
@@ -64,14 +44,6 @@
     <div class="tri-form-field-suffix" *ngIf="_suffixChildren.length">
       <ng-content select="[triSuffix]"></ng-content>
     </div>
-  </div>
-
-  <!-- Underline used for legacy, standard, and box appearances. -->
-  <div class="tri-form-field-underline"
-       *ngIf="appearance != 'outline'">
-    <span class="tri-form-field-ripple"
-          [class.tri-accent]="color == 'accent'"
-          [class.tri-warn]="color == 'warn'"></span>
   </div>
 
   <div class="tri-form-field-subscript-wrapper"

@@ -52,6 +52,7 @@ import { Component } from '@angular/core';
           <li><a routerLink="navbar">navbar</a></li>
           <li><a routerLink="gridster">gridster</a></li>
           <li><a routerLink="form">form</a></li>
+          <li><a routerLink="form-field">form-field</a></li>
           <li><a routerLink="splitter">splitter</a></li>
         </ul>
       </div>

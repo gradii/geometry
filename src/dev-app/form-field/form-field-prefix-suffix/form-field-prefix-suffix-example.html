@@ -1,16 +1,18 @@
 <div class="example-container">
-  <mat-form-field appearance="fill">
-    <mat-label>Enter your password</mat-label>
-    <input matInput [type]="hide ? 'password' : 'text'">
-    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+  <tri-form-field variant="fill">
+    <tri-label>Enter your password</tri-label>
+    <input triInput [type]="hide ? 'password' : 'text'">
+    <button triButton variant="text" triSuffix (click)="hide = !hide"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide">
+      <tri-icon [svgIcon]="hide ? 'fill:eye-invisible' : 'fill:eye'"></tri-icon>
     </button>
-  </mat-form-field>
+  </tri-form-field>
 
-  <mat-form-field appearance="fill" floatLabel="always">
-    <mat-label>Amount</mat-label>
-    <input matInput type="number" class="example-right-align" placeholder="0">
-    <span matPrefix>$&nbsp;</span>
-    <span matSuffix>.00</span>
-  </mat-form-field>
+  <tri-form-field variant="fill" floatLabel="always">
+    <tri-label>Amount</tri-label>
+    <input triInput type="number" class="example-right-align" placeholder="0">
+    <span triPrefix>$&nbsp;</span>
+    <span triSuffix>.00</span>
+  </tri-form-field>
 </div>

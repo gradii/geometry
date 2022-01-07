@@ -11,7 +11,7 @@ import {
 import {
   AfterContentChecked, AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component,
   ContentChildren, Directive, ElementRef, EventEmitter, Inject, Input, OnDestroy, Optional, Output,
-  QueryList, ViewChild, ViewEncapsulation,
+  QueryList, ViewChild, ViewEncapsulation, ɵmarkDirty
 } from '@angular/core';
 import { ANIMATION_MODULE_TYPE } from '@angular/platform-browser/animations';
 import {
@@ -145,6 +145,18 @@ export abstract class _TriTabGroupBase extends _TriTabGroupMixinBase implements 
     this._indexToSelect = coerceNumberProperty(value, null);
   }
 
+  @Input()
+  set selectedTabName(value: string) {
+    let index = -1;
+    for (const tab of this._tabs) {
+      ++index;
+      if (tab.tabName === value) {
+        this.selectedIndex = index;
+        break;
+      }
+    }
+  }
+
   private _animationDuration: string;
 
   /** Duration for the tab animation. Will be normalized to milliseconds if no units are set. */
@@ -221,7 +233,7 @@ export abstract class _TriTabGroupBase extends _TriTabGroupMixinBase implements 
 
     if (this._selectedIndex !== indexToSelect) {
       this._selectedIndex = indexToSelect;
-      this._changeDetectorRef.markForCheck();
+      ɵmarkDirty(this);
     }
   }
 
@@ -250,7 +262,7 @@ export abstract class _TriTabGroupBase extends _TriTabGroupMixinBase implements 
         }
       }
 
-      this._changeDetectorRef.markForCheck();
+      ɵmarkDirty(this);
     });
   }
 

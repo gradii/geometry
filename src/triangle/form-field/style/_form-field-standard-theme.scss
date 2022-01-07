@@ -6,7 +6,7 @@
 
 // Theme styles that only apply to the standard appearance of the form-field.
 
-@mixin form-field-standard-color($config-or-theme) {
+@mixin form-field-standard-color() {
   .tri-form-field-appearance-standard {
     .tri-form-field-underline {
       //background-color : $underline-color;
@@ -20,9 +20,9 @@
 
 @mixin form-field-standard-typography() {}
 
-@mixin private-form-field-standard-density($density-scale) {}
+@mixin private-form-field-standard-density() {}
 
-@mixin standard-theme() {
+@mixin form-field-standard-theme() {
   @include mixins.import-once("tri-form-field-standard") {
     @include form-field-standard-color();
     @include private-form-field-standard-density();

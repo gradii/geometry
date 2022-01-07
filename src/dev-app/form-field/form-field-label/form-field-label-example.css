@@ -1,8 +1,8 @@
-.example-container .mat-form-field + .mat-form-field {
+.example-container .tri-form-field + .tri-form-field {
   margin-left: 8px;
 }
 
-.example-container .mat-form-field {
+.example-container .tri-form-field {
   width: 220px;
 }
 

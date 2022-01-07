@@ -3,23 +3,18 @@ load("//tools:defaults.bzl", "ng_module", "sass_binary")
 package(default_visibility = ["//visibility:public"])
 
 ng_module(
-    name = "form",
+    name = "form-field",
     srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"],),
-    assets = [
-        "dev-form.html",
-        ":dev_form_scss",
+    assets = glob(["**/*.html"]) + [
+        ":dev_form_field_scss",
     ],
     deps = [
-        "//src/triangle/form",
-        "//src/triangle/date-picker",
-        "//src/triangle/button",
-        "//src/triangle/grid",
+        "//src/triangle/form-field",
+        "//src/triangle/select",
         "//src/triangle/input",
         "//src/triangle/radio",
-        "//src/triangle/slider",
-        "//src/triangle/input-number",
-        "//src/triangle/select",
-        "//src/triangle/tooltip",
+        "//src/triangle/icon",
+        "//src/triangle/button",
         "//src/triangle/checkbox",
 
         "@npm//@angular/cdk",
@@ -30,6 +25,6 @@ ng_module(
 )
 
 sass_binary(
-    name = "dev_form_scss",
-    src = "dev-form.scss",
+    name = "dev_form_field_scss",
+    src = "dev-form-field.scss",
 )

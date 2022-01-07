@@ -53,6 +53,7 @@ ng_module(
         "//src/dev-app/navbar",
         "//src/dev-app/gridster",
         "//src/dev-app/form",
+        "//src/dev-app/form-field",
 #        "//src/dev-app/splitter",
 #        "//src/dev-app/tree-select",
 

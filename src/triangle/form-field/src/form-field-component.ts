@@ -16,7 +16,7 @@ import {
 import { NgControl } from '@angular/forms';
 import { ANIMATION_MODULE_TYPE } from '@angular/platform-browser/animations';
 import { CanColor, mixinColor } from '@gradii/triangle/core';
-import { fromEvent, merge, Subject } from 'rxjs';
+import { fromEvent, Subject } from 'rxjs';
 import { startWith, take, takeUntil } from 'rxjs/operators';
 import { TRI_ERROR, TriError } from './error';
 import { triFormFieldAnimations } from './form-field-animations';
@@ -31,7 +31,6 @@ import { TRI_SUFFIX, TriSuffix } from './suffix';
 
 let nextUniqueId         = 0;
 const floatingLabelScale = 0.75;
-const outlineGapPadding  = 5;
 
 /**
  * Boilerplate for applying mixins to TriFormField.
@@ -46,26 +45,27 @@ const _TriFormFieldBase = mixinColor(
 );
 
 /** Possible appearance styles for the form field. */
-export type TriFormFieldAppearance = 'standard' | 'fill' | 'outline';
+export type TriFormFieldVariant = 'standard' | 'fill' | null;
 
 /** Possible values for the "floatLabel" form-field input. */
 export type FloatLabelType = 'always' | 'never' | 'auto';
+export type LabelOrientation = 'auto-float' | 'float' | 'horizontal' | 'vertical';
 
 export interface TriFormFieldDefaultOptions {
-  appearance?: TriFormFieldAppearance;
+  variant?: TriFormFieldVariant;
   hideRequiredMarker?: boolean;
   /**
    * Whether the label for form-fields should by default float `always`,
    * `never`, or `auto` (only when necessary).
    */
-  floatLabel?: FloatLabelType;
+  labelOrientation?: LabelOrientation;
 }
 
 export const TRI_FORM_FIELD_DEFAULT_OPTIONS = new InjectionToken<TriFormFieldDefaultOptions>(
   'TRI_FORM_FIELD_DEFAULT_OPTIONS',
 );
 
-export const TRI_FORM_FIELD = new InjectionToken<TriFormField>('TriFormField');
+export const TRI_FORM_FIELD = new InjectionToken<FormFieldComponent>('TriFormField');
 
 @Component({
   selector   : 'tri-form-field',
@@ -78,15 +78,13 @@ export const TRI_FORM_FIELD = new InjectionToken<TriFormField>('TriFormField');
     '../style/form-field.css',
     '../style/form-field-fill.css',
     '../style/form-field-input.css',
-    '../style/form-field-outline.css',
     '../style/form-field-standard.css',
   ],
   animations     : [triFormFieldAnimations.transitionMessages],
   host           : {
     'class'                                     : 'tri-form-field',
-    '[class.tri-form-field-appearance-standard]': 'appearance == "standard"',
-    '[class.tri-form-field-appearance-fill]'    : 'appearance == "fill"',
-    '[class.tri-form-field-appearance-outline]' : 'appearance == "outline"',
+    '[class.tri-form-field-appearance-standard]': 'variant == "standard"',
+    '[class.tri-form-field-appearance-fill]'    : 'variant == "fill"',
     '[class.tri-form-field-invalid]'            : '_control.errorState',
     '[class.tri-form-field-can-float]'          : '_canLabelFloat()',
     '[class.tri-form-field-should-float]'       : '_shouldLabelFloat()',
@@ -107,39 +105,24 @@ export const TRI_FORM_FIELD = new InjectionToken<TriFormField>('TriFormField');
   inputs         : ['color'],
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers      : [{provide: TRI_FORM_FIELD, useExisting: TriFormField}],
+  providers      : [{provide: TRI_FORM_FIELD, useExisting: FormFieldComponent}],
 })
-export class TriFormField
-  extends _TriFormFieldBase
+export class FormFieldComponent extends _TriFormFieldBase
   implements AfterContentInit, AfterContentChecked, AfterViewInit, OnDestroy, CanColor {
-  /**
-   * Whether the outline gap needs to be calculated
-   * immediately on the next change detection run.
-   */
-  private _outlineGapCalculationNeededImmediately = false;
-
-  /** Whether the outline gap needs to be calculated next time the zone has stabilized. */
-  private _outlineGapCalculationNeededOnStable = false;
 
   private readonly _destroyed = new Subject<void>();
 
   /** The form-field appearance style. */
   @Input()
-  get appearance(): TriFormFieldAppearance {
-    return this._appearance;
+  get variant(): TriFormFieldVariant {
+    return this._variant;
   }
 
-  set appearance(value: TriFormFieldAppearance) {
-    const oldValue = this._appearance;
-
-    this._appearance = value || (this._defaults && this._defaults.appearance) || 'standard';
-
-    if (this._appearance === 'outline' && oldValue !== value) {
-      this._outlineGapCalculationNeededOnStable = true;
-    }
+  set variant(value: TriFormFieldVariant) {
+    this._variant = value || (this._defaults && this._defaults.variant) || 'standard';
   }
 
-  _appearance: TriFormFieldAppearance;
+  _variant: TriFormFieldVariant;
 
   /** Whether the required marker should be hidden. */
   @Input()
@@ -158,12 +141,12 @@ export class TriFormField
 
   /** Whether the floating label should always float or not. */
   _shouldAlwaysFloat(): boolean {
-    return this.floatLabel === 'always' && !this._showAlwaysAnimate;
+    return this._labelOrientation === 'float' && !this._showAlwaysAnimate;
   }
 
   /** Whether the label can float or not. */
   _canLabelFloat(): boolean {
-    return this.floatLabel !== 'never';
+    return this._labelOrientation === 'float' || this._labelOrientation === 'auto-float';
   }
 
   /** State of the tri-hint and tri-error animations. */
@@ -188,27 +171,19 @@ export class TriFormField
   // Unique id for the label element.
   readonly _labelId = `tri-form-field-label-${nextUniqueId++}`;
 
-  /**
-   * Whether the label should always float, never float or float as the user types.
-   *
-   * Note: only the legacy appearance supports the `never` option. `never` was originally added as a
-   * way to make the floating label emulate the behavior of a standard input placeholder. However
-   * the form field now supports both floating labels and placeholders. Therefore in the non-legacy
-   * appearances the `never` option has been disabled in favor of just using the placeholder.
-   */
   @Input()
-  get floatLabel(): FloatLabelType {
-    return this._floatLabel === 'never' ? 'auto' : this._floatLabel;
+  get labelOrientation(): LabelOrientation {
+    return this._labelOrientation;
   }
 
-  set floatLabel(value: FloatLabelType) {
-    if (value !== this._floatLabel) {
-      this._floatLabel = value || this._getDefaultFloatLabelState();
+  set labelOrientation(value: LabelOrientation) {
+    if (value !== this._labelOrientation) {
+      this._labelOrientation = value || this._getDefaultLabelOrientation();
       this._changeDetectorRef.markForCheck();
     }
   }
 
-  private _floatLabel: FloatLabelType;
+  private _labelOrientation: LabelOrientation = 'vertical';
 
   /** Whether the Angular animations are enabled. */
   _animationsEnabled: boolean;
@@ -220,7 +195,7 @@ export class TriFormField
   @ContentChild(TriFormFieldControl) _controlNonStatic: TriFormFieldControl<any>;
   @ContentChild(TriFormFieldControl, {static: true}) _controlStatic: TriFormFieldControl<any>;
 
-  get _control() {
+  get _control(): TriFormFieldControl<any> {
     // TODO(crisbeto): we need this workaround in order to support both Ivy and ViewEngine.
     //  We should clean this up once Ivy is the default renderer.
     return this._explicitFormFieldControl || this._controlNonStatic || this._controlStatic;
@@ -253,11 +228,11 @@ export class TriFormField
   ) {
     super(elementRef);
 
-    this.floatLabel         = this._getDefaultFloatLabelState();
+    this.labelOrientation   = this._getDefaultLabelOrientation();
     this._animationsEnabled = _animationMode !== 'NoopAnimations';
 
     // Set the default through here so we invoke the setter on the first run.
-    this.appearance          = _defaults && _defaults.appearance ? _defaults.appearance : 'standard';
+    this.variant             = _defaults && _defaults.variant ? _defaults.variant : 'standard';
     this._hideRequiredMarker =
       _defaults && _defaults.hideRequiredMarker != null ? _defaults.hideRequiredMarker : false;
   }
@@ -299,23 +274,6 @@ export class TriFormField
         .subscribe(() => this._changeDetectorRef.markForCheck());
     }
 
-    // Note that we have to run outside of the `NgZone` explicitly,
-    // in order to avoid throwing users into an infinite loop
-    // if `zone-patch-rxjs` is included.
-    this._ngZone.runOutsideAngular(() => {
-      this._ngZone.onStable.pipe(takeUntil(this._destroyed)).subscribe(() => {
-        if (this._outlineGapCalculationNeededOnStable) {
-          this.updateOutlineGap();
-        }
-      });
-    });
-
-    // Run change detection and update the outline if the suffix or prefix changes.
-    merge(this._prefixChildren.changes, this._suffixChildren.changes).subscribe(() => {
-      this._outlineGapCalculationNeededOnStable = true;
-      this._changeDetectorRef.markForCheck();
-    });
-
     // Re-validate when the number of hints changes.
     this._hintChildren.changes.pipe(startWith(null)).subscribe(() => {
       this._processHints();
@@ -327,25 +285,10 @@ export class TriFormField
       this._syncDescribedByIds();
       this._changeDetectorRef.markForCheck();
     });
-
-    if (this._dir) {
-      this._dir.change.pipe(takeUntil(this._destroyed)).subscribe(() => {
-        if (typeof requestAnimationFrame === 'function') {
-          this._ngZone.runOutsideAngular(() => {
-            requestAnimationFrame(() => this.updateOutlineGap());
-          });
-        } else {
-          this.updateOutlineGap();
-        }
-      });
-    }
   }
 
   ngAfterContentChecked() {
     this._validateControlChild();
-    if (this._outlineGapCalculationNeededImmediately) {
-      this.updateOutlineGap();
-    }
   }
 
   ngAfterViewInit() {
@@ -379,7 +322,7 @@ export class TriFormField
   _hideControlPlaceholder() {
     // In the legacy appearance the placeholder is promoted to a label if no label is given.
     return (
-      (this.appearance === 'standard' && !this._hasLabel()) ||
+      (this.variant === 'standard' && !this._hasLabel()) ||
       (this._hasLabel() && !this._shouldLabelFloat())
     );
   }
@@ -411,7 +354,7 @@ export class TriFormField
           });
       }
 
-      this.floatLabel = 'always';
+      this.labelOrientation = 'float';
       this._changeDetectorRef.markForCheck();
     }
   }
@@ -447,8 +390,8 @@ export class TriFormField
   }
 
   /** Gets the default float label state. */
-  private _getDefaultFloatLabelState(): FloatLabelType {
-    return (this._defaults && this._defaults.floatLabel) || 'auto';
+  private _getDefaultLabelOrientation(): LabelOrientation {
+    return (this._defaults && this._defaults.labelOrientation) || 'vertical';
   }
 
   /**
@@ -459,7 +402,6 @@ export class TriFormField
     if (this._control) {
       const ids: string[] = [];
 
-      // TODO(wagnermaciel): Remove the type check when we find the root cause of this bug.
       if (
         this._control.userAriaDescribedBy &&
         typeof this._control.userAriaDescribedBy === 'string'
@@ -497,98 +439,5 @@ export class TriFormField
     if (!this._control && (typeof ngDevMode === 'undefined' || ngDevMode)) {
       throw getTriFormFieldMissingControlError();
     }
-  }
-
-  /**
-   * Updates the width and position of the gap in the outline. Only relevant for the outline
-   * appearance.
-   */
-  updateOutlineGap() {
-    const labelEl = this._label ? this._label.nativeElement : null;
-
-    if (
-      this.appearance !== 'outline' ||
-      !labelEl ||
-      !labelEl.children.length ||
-      !labelEl.textContent!.trim()
-    ) {
-      return;
-    }
-
-    if (!this._platform.isBrowser) {
-      // getBoundingClientRect isn't available on the server.
-      return;
-    }
-    // If the element is not present in the DOM, the outline gap will need to be calculated
-    // the next time it is checked and in the DOM.
-    if (!this._isAttachedToDOM()) {
-      this._outlineGapCalculationNeededImmediately = true;
-      return;
-    }
-
-    let startWidth = 0;
-    let gapWidth   = 0;
-
-    const container = this._connectionContainerRef.nativeElement;
-    const startEls  = container.querySelectorAll('.tri-form-field-outline-start');
-    const gapEls    = container.querySelectorAll('.tri-form-field-outline-gap');
-
-    if (this._label && this._label.nativeElement.children.length) {
-      const containerRect = container.getBoundingClientRect();
-
-      // If the container's width and height are zero, it means that the element is
-      // invisible and we can't calculate the outline gap. Mark the element as needing
-      // to be checked the next time the zone stabilizes. We can't do this immediately
-      // on the next change detection, because even if the element becomes visible,
-      // the `ClientRect` won't be reclaculated immediately. We reset the
-      // `_outlineGapCalculationNeededImmediately` flag some we don't run the checks twice.
-      if (containerRect.width === 0 && containerRect.height === 0) {
-        this._outlineGapCalculationNeededOnStable    = true;
-        this._outlineGapCalculationNeededImmediately = false;
-        return;
-      }
-
-      const containerStart = this._getStartEnd(containerRect);
-      const labelChildren  = labelEl.children;
-      const labelStart     = this._getStartEnd(labelChildren[0].getBoundingClientRect());
-      let labelWidth       = 0;
-
-      for (let i = 0; i < labelChildren.length; i++) {
-        labelWidth += (labelChildren[i] as HTMLElement).offsetWidth;
-      }
-      startWidth = Math.abs(labelStart - containerStart) - outlineGapPadding;
-      gapWidth   = labelWidth > 0 ? labelWidth * floatingLabelScale + outlineGapPadding * 2 : 0;
-    }
-
-    for (let i = 0; i < startEls.length; i++) {
-      startEls[i].style.width = `${startWidth}px`;
-    }
-    for (let i = 0; i < gapEls.length; i++) {
-      gapEls[i].style.width = `${gapWidth}px`;
-    }
-
-    this._outlineGapCalculationNeededOnStable = this._outlineGapCalculationNeededImmediately =
-      false;
-  }
-
-  /** Gets the start end of the rect considering the current directionality. */
-  private _getStartEnd(rect: ClientRect): number {
-    return this._dir && this._dir.value === 'rtl' ? rect.right : rect.left;
-  }
-
-  /** Checks whether the form field is attached to the DOM. */
-  private _isAttachedToDOM(): boolean {
-    const element: HTMLElement = this._elementRef.nativeElement;
-
-    if (element.getRootNode) {
-      const rootNode = element.getRootNode();
-      // If the element is inside the DOM the root node will be either the document
-      // or the closest shadow root, otherwise it'll be the element itself.
-      return rootNode && rootNode !== element;
-    }
-
-    // Otherwise fall back to checking if it's in the document. This doesn't account for
-    // shadow DOM, however browser that support shadow DOM should support `getRootNode` as well.
-    return document.documentElement!.contains(element);
   }
 }

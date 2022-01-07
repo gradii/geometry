@@ -8,7 +8,6 @@
 @use "../../core/style/typography/typography-utils";
 
 @use "./form-field-fill-theme.scss";
-@use "./form-field-outline-theme.scss";
 @use "./form-field-standard-theme.scss";
 
 $foreground              : theme.$foreground;
@@ -32,6 +31,8 @@ $underline-focused-color : theming.tri-color($primary, text);
 
 
 $density-scale           : v.$density;
+
+$line-height             : v.$line-height-base;
 
 @mixin form-field-color() {
 
@@ -57,24 +58,6 @@ $density-scale           : v.$density;
 
   .tri-focused .tri-form-field-required-marker {
     color : $required-label-color;
-  }
-
-  .tri-form-field-ripple {
-    background-color : $underline-color-base;
-  }
-
-  .tri-form-field.tri-focused {
-    .tri-form-field-ripple {
-      background-color : $underline-focused-color;
-
-      &.tri-accent {
-        background-color : $underline-color-accent;
-      }
-
-      &.tri-warn {
-        background-color : $underline-color-warn;
-      }
-    }
   }
 
   .tri-form-field-type-tri-native-select.tri-focused:not(.tri-form-field-invalid) {
@@ -103,20 +86,14 @@ $density-scale           : v.$density;
         color : $underline-color-warn;
       }
     }
-
-    .tri-form-field-ripple,
-    .tri-form-field-ripple.tri-accent {
-      background-color : $underline-color-warn;
-    }
   }
 
   .tri-error {
     color : $underline-color-warn;
   }
 
-  @include form-field-standard-theme.standard-color($config);
-  @include form-field-fill-theme.fill-color($config);
-  @include form-field-outline-theme.outline-color($config);
+  @include form-field-standard-theme.form-field-standard-color();
+  @include form-field-fill-theme.form-field-fill-color();
 }
 
 // Used to make instances of the _tri-form-field-label-floating mixin negligibly different,
@@ -133,9 +110,9 @@ $dedupe                  : 0;
   $dedupe   : $dedupe + 0.00001 !global;
 }
 
-@mixin form-field-typography($config-or-theme) {
+@mixin form-field-typography() {
   // The unit-less line-height from the font config.
-  $line-height                   : typography-utils.line-height($config, input);
+  //$line-height                   : typography-utils.line-height($config, input);
 
   // The amount to scale the font for the floating label and subscript.
   $subscript-font-scale          : 0.75;
@@ -191,9 +168,9 @@ $dedupe                  : 0;
   }
 
   .tri-form-field-infix {
-    padding    : $infix-padding 0;
+    //padding    : $infix-padding 0;
     // Throws off the baseline if we do it as a real margin, so we do it as a border instead.
-    border-top : $infix-margin-top solid transparent;
+    //border-top : $infix-margin-top solid transparent;
   }
 
   .tri-form-field-can-float {
@@ -236,19 +213,17 @@ $dedupe                  : 0;
     top        : calc(100% - #{math.div($wrapper-padding-bottom, $subscript-font-scale)});
   }
 
-  @include form-field-standard-theme.form-field-standard-typography($config);
-  @include form-field-fill-theme.form-field-fill-typography($config);
-  @include form-field-outline-theme.form-field-outline-typography($config);
+  @include form-field-standard-theme.form-field-standard-typography();
+  @include form-field-fill-theme.form-field-fill-typography();
 }
 
 @mixin form-field-density() {
 
-  @include form-field-standard-theme.private-form-field-standard-density($density-scale);
-  @include form-field-fill-theme.private-form-field-fill-density($density-scale);
-  @include form-field-outline-theme.private-form-field-outline-density($density-scale);
+  @include form-field-standard-theme.private-form-field-standard-density();
+  @include form-field-fill-theme.private-form-field-fill-density();
 }
 
-@mixin tri-form-field-theme($theme-or-color-config) {
+@mixin tri-form-field-theme() {
   @include mixins.import-once("tri-form-field") {
     @include form-field-color();
     @include form-field-density();

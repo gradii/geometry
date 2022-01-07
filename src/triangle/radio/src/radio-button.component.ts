@@ -9,7 +9,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { RadioComponent } from './radio.component';
 
 @Component({
-  selector     : '[tri-radio-button]',
+  selector     : 'tri-radio-button, [tri-radio-button]',
   encapsulation: ViewEncapsulation.None,
   template     : `
     <span [class.tri-radio-button]="true"

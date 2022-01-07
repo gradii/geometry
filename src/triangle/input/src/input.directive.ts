@@ -12,6 +12,7 @@ import { Directive, Input } from '@angular/core';
   host    : {
     'autocomplete'                : 'off',
     'class'                       : 'tri-input',
+    '[class.tri-input-outlined]'  : 'variant === "outlined"',
     '[class.tri-input-lg]'        : '_size === "large"',
     '[class.tri-input-sm]'        : '_size === "small"',
     '[class.tri-input-disabled]'  : '_disabled',
@@ -64,6 +65,9 @@ export class InputDirective {
   set disabled(value: boolean) {
     this._disabled = value;
   }
+
+  @Input()
+  variant: 'outlined' | 'filled' | 'default' = 'outlined';
 
   constructor() {
   }

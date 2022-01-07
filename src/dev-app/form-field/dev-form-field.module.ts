@@ -10,28 +10,25 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TriButtonModule } from '@gradii/triangle/button';
 import { TriCheckboxModule } from '@gradii/triangle/checkbox';
-import { TriDatePickerModule } from '@gradii/triangle/date-picker';
-import { TriFormModule } from '@gradii/triangle/form';
-import { TriGridModule } from '@gradii/triangle/grid';
+import { TriFormFieldModule } from '@gradii/triangle/form-field';
 import { TriIconModule } from '@gradii/triangle/icon';
 import { TriInputModule } from '@gradii/triangle/input';
-import { TriInputNumberModule } from '@gradii/triangle/input-number';
 import { TriRadioModule } from '@gradii/triangle/radio';
 import { TriSelectModule } from '@gradii/triangle/select';
-import { TriSliderModule } from '@gradii/triangle/slider';
-import { TriTimePickerModule } from '@gradii/triangle/time-picker';
-import { TriTooltipModule } from '@gradii/triangle/tooltip';
-import { DevForm } from './dev-form';
-import { TriDemoFormAdvancedComponent } from './tri-demo-form/tri-demo-form-advanced.component';
-import { TriDemoFormDynamicComponent } from './tri-demo-form/tri-demo-form-dynamic.component';
-import { TriDemoFormHorizontalComponent } from './tri-demo-form/tri-demo-form-horizontal.component';
-import { TriDemoFormInlineComponent } from './tri-demo-form/tri-demo-form-inline.component';
-import { TriDemoFormLayoutComponent } from './tri-demo-form/tri-demo-form-layout.component';
-import { TriDemoFormLoginComponent } from './tri-demo-form/tri-demo-form-login.component';
-import { TriDemoFormMixComponent } from './tri-demo-form/tri-demo-form-mix.component';
-import { TriDemoFormMultiControlComponent } from './tri-demo-form/tri-demo-form-multi-control.component';
-import { TriDemoFormValidateDynamicComponent } from './tri-demo-form/tri-demo-form-validate-dynamic.component';
-import { TriDemoFormValidateComponent } from './tri-demo-form/tri-demo-form-validate.component';
+import { DevFormField } from './dev-form-field';
+import { FormFieldAppearanceExample } from './form-field-appearance/form-field-appearance-example';
+import {
+  FormFieldCustomControlExample, MyTelInput
+} from './form-field-custom-control/form-field-custom-control-example';
+import { FormFieldErrorExample } from './form-field-error/form-field-error-example';
+import { FormFieldHarnessExample } from './form-field-harness/form-field-harness-example';
+import { FormFieldHintExample } from './form-field-hint/form-field-hint-example';
+import { FormFieldLabelExample } from './form-field-label/form-field-label-example';
+import { FormFieldOverviewExample } from './form-field-overview/form-field-overview-example';
+import {
+  FormFieldPrefixSuffixExample
+} from './form-field-prefix-suffix/form-field-prefix-suffix-example';
+import { FormFieldThemingExample } from './form-field-theming/form-field-theming-example';
 
 
 @NgModule({
@@ -39,51 +36,47 @@ import { TriDemoFormValidateComponent } from './tri-demo-form/tri-demo-form-vali
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    TriInputModule,
-    TriFormModule,
-    TriDatePickerModule,
-    TriGridModule,
-    TriRadioModule,
-    TriSliderModule,
-    TriInputNumberModule,
-    TriTimePickerModule,
+
+    TriFormFieldModule,
+    TriButtonModule,
+    TriIconModule,
     TriSelectModule,
-    TriTooltipModule,
-    TriCheckboxModule,
+    TriInputModule,
+    TriRadioModule,
 
     RouterModule.forChild([
       {
-        path: '', component: DevForm, children: [
-          {path: 'tri-demo-form-advanced', component: TriDemoFormAdvancedComponent},
-          {path: 'tri-demo-form-dynamic', component: TriDemoFormDynamicComponent},
-          {path: 'tri-demo-form-horizontal', component: TriDemoFormHorizontalComponent},
-          {path: 'tri-demo-form-inline', component: TriDemoFormInlineComponent},
-          {path: 'tri-demo-form-layout', component: TriDemoFormLayoutComponent},
-          {path: 'tri-demo-form-login', component: TriDemoFormLoginComponent},
-          {path: 'tri-demo-form-mix', component: TriDemoFormMixComponent},
-          {path: 'tri-demo-form-multi-control', component: TriDemoFormMultiControlComponent},
-          {path: 'tri-demo-form-validate', component: TriDemoFormValidateComponent},
-          {path: 'tri-demo-form-validate-dynamic', component: TriDemoFormValidateDynamicComponent},
+        path: '', component: DevFormField, children: [
+          {path: 'form-field-appearance', component: FormFieldAppearanceExample},
+          {path: 'form-field-custom-control', component: FormFieldCustomControlExample},
+          {path: 'form-field-error', component: FormFieldErrorExample},
+          {path: 'form-field-harness', component: FormFieldHarnessExample},
+          {path: 'form-field-hint', component: FormFieldHintExample},
+          {path: 'form-field-label', component: FormFieldLabelExample},
+          {path: 'form-field-overview', component: FormFieldOverviewExample},
+          {path: 'form-field-prefix-suffix', component: FormFieldPrefixSuffixExample},
+          {path: 'form-field-theming', component: FormFieldThemingExample},
         ]
       }
     ]),
-    TriButtonModule,
-    TriIconModule,
+    TriCheckboxModule,
+
   ],
   declarations: [
-    DevForm,
+    DevFormField,
 
-    TriDemoFormAdvancedComponent,
-    TriDemoFormDynamicComponent,
-    TriDemoFormHorizontalComponent,
-    TriDemoFormInlineComponent,
-    TriDemoFormLayoutComponent,
-    TriDemoFormLoginComponent,
-    TriDemoFormMixComponent,
-    TriDemoFormMultiControlComponent,
-    TriDemoFormValidateDynamicComponent,
-    TriDemoFormValidateComponent,
+    MyTelInput,
+
+    FormFieldAppearanceExample,
+    FormFieldCustomControlExample,
+    FormFieldErrorExample,
+    FormFieldHarnessExample,
+    FormFieldHintExample,
+    FormFieldLabelExample,
+    FormFieldOverviewExample,
+    FormFieldPrefixSuffixExample,
+    FormFieldThemingExample,
   ]
 })
-export class DevFormModule {
+export class DevFormFieldModule {
 }

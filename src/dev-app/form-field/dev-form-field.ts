@@ -10,11 +10,11 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector   : 'dev-form',
-  templateUrl: './dev-form.html',
-  styleUrls  : ['./dev-form.scss']
+  selector   : 'dev-form-field',
+  templateUrl: './dev-form-field.html',
+  styleUrls  : ['./dev-form-field.scss']
 })
-export class DevForm implements OnInit {
+export class DevFormField implements OnInit {
 
   constructor() {
   }

@@ -38,42 +38,6 @@ $fill-subscript-padding: math.div($fill-side-padding, $fill-subscript-font-scale
     }
   }
 
-  .tri-form-field-underline::before {
-    content: '';
-    display: block;
-    position: absolute;
-    bottom: 0;
-    height: $fill-underline-height;
-    width: 100%;
-  }
-
-  .tri-form-field-ripple {
-    bottom: 0;
-    height: $fill-underline-ripple-height;
-
-    @include a11y.cdk-high-contrast(active, off) {
-      // In high-contrast mode, we hide the ripple as we have a dashed outline as
-      // focus indicator.
-      height: 0;
-    }
-  }
-
-  // Note that we need this specific of a selector because we don't want
-  // the hover effect to show when the user hovers over the hints.
-  &:not(.tri-form-field-disabled) .tri-form-field-flex:hover ~ .tri-form-field-underline {
-    .tri-form-field-ripple {
-      opacity: 1;
-      transform: none;
-      transition: opacity 600ms variables.$swift-ease-out-timing-function;
-    }
-  }
-
-  &._tri-animation-noopable:not(.tri-form-field-disabled) .tri-form-field-flex:hover {
-    & ~ .tri-form-field-underline .tri-form-field-ripple {
-      transition: none;
-    }
-  }
-
   .tri-form-field-subscript-wrapper {
     padding: 0 $fill-subscript-padding;
   }

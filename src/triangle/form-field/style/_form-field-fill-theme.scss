@@ -3,6 +3,7 @@
 @use "../../core/style/theming";
 @use "../../core/themes/theme";
 @use "../../core/style/mixins";
+@use "../../core/style/variables" as v;
 @use "../../core/style/typography/typography";
 @use "../../core/style/typography/typography-utils";
 
@@ -13,12 +14,14 @@ $primary                  : theme.$primary;
 $error                    : theme.$error;
 $warning                  : theme.$warning;
 
-$fill-background          : theming.tri-color($foreground, base) !default;
-$fill-disabled-background : theming.tri-color($foreground, base) !default;
+$fill-background          : map.get(v.$tri-grey, 200) !default;
+$fill-disabled-background : theming.tri-color($background, disabled-bg) !default;
 $underline-color          : theming.tri-color($foreground, divider) !default;
 $label-disabled-color     : theming.tri-color($foreground, disabled-text) !default;
 
-@mixin fill-color() {
+$line-height              : v.$line-height-base !default;
+
+@mixin form-field-fill-color() {
   .tri-form-field-appearance-fill {
     .tri-form-field-flex {
       background-color : $fill-background;
@@ -60,7 +63,7 @@ $fill-dedupe              : 0;
 
 @mixin form-field-fill-typography() {
   // The unit-less line-height from the font config.
-  $line-height                  : typography-utils.line-height($config, input);
+  //$line-height                  : typography-utils.line-height(input);
   // The amount to scale the font for the floating label and subscript.
   $subscript-font-scale         : 0.75;
   // The padding on top of the infix.
@@ -74,7 +77,7 @@ $fill-dedupe              : 0;
 
   .tri-form-field-appearance-fill {
     .tri-form-field-infix {
-      padding : $infix-padding-top 0 $infix-padding-bottom 0;
+      //padding : $infix-padding-top 0 $infix-padding-bottom 0;
     }
 
     .tri-form-field-label {
@@ -106,10 +109,10 @@ $fill-dedupe              : 0;
 
 @mixin private-form-field-fill-density() {}
 
-@mixin fill-theme($theme-or-color-config) {
+@mixin form-field-fill-theme($theme-or-color-config) {
   @include mixins.import-once("tri-form-field-fill") {
-    @include fill-color();
+    @include form-field-fill-color();
     @include private-form-field-fill-density();
-    @include fill-typography();
+    @include form-field-fill-typography();
   }
 }
