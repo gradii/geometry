@@ -5,7 +5,8 @@
  */
 
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
-import { Directive, Input } from '@angular/core';
+import { Directive, Input, Optional, Self } from '@angular/core';
+import { NgControl, Validators } from '@angular/forms';
 
 @Directive({
   selector: '[triInput], [tri-input]',
@@ -16,8 +17,10 @@ import { Directive, Input } from '@angular/core';
     '[class.tri-input-lg]'        : '_size === "large"',
     '[class.tri-input-sm]'        : '_size === "small"',
     '[class.tri-input-disabled]'  : '_disabled',
-    '[disabled]'                  : '_disabled',
+    '[disabled]'                  : 'disabled',
     '[readonly]'                  : '_readonly',
+    '[required]'                  : 'required',
+    '[attr.aria-required]'        : 'required',
     '[class.tri-input-full-width]': '_fullWidth'
   }
 })
@@ -44,7 +47,18 @@ export class InputDirective {
     this._size = value;
   }
 
-  _readonly = false;
+  protected _required: boolean | undefined;
+
+  @Input()
+  get required(): boolean {
+    return this._required ?? this.ngControl?.control?.hasValidator(Validators.required) ?? false;
+  }
+
+  set required(value: BooleanInput) {
+    this._required = coerceBooleanProperty(value);
+  }
+
+  protected _readonly = false;
 
   @Input()
   get readonly(): boolean {
@@ -59,6 +73,9 @@ export class InputDirective {
 
   @Input()
   get disabled(): boolean {
+    if (this.ngControl && this.ngControl.disabled !== null) {
+      return this.ngControl.disabled;
+    }
     return this._disabled;
   }
 
@@ -69,7 +86,7 @@ export class InputDirective {
   @Input()
   variant: 'outlined' | 'filled' | 'default' = 'outlined';
 
-  constructor() {
+  constructor(@Optional() @Self() public ngControl: NgControl) {
   }
 
   static ngAcceptInputType_fullWidth: BooleanInput;

@@ -89,7 +89,7 @@ export const TRI_FORM_FIELD = new InjectionToken<FormFieldComponent>('TriFormFie
     'class'                                    : 'tri-form-field',
     '[class.tri-form-field-variant-horizontal]': 'labelOrientation == "horizontal"',
     '[class.tri-form-field-variant-vertical]'  : 'labelOrientation == "vertical"',
-    '[class.tri-form-field-variant-float]'     : 'labelOrientation == "float"',
+    '[class.tri-form-field-variant-float]'     : 'labelOrientation == "float" || labelOrientation == "auto-float"',
     '[class.tri-form-field-appearance-fill]'   : 'variant == "fill"',
     '[class.tri-form-field-invalid]'           : '_control.errorState',
     '[class.tri-form-field-can-float]'         : '_canLabelFloat()',
