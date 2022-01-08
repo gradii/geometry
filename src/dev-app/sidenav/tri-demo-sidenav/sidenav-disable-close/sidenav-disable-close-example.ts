@@ -5,7 +5,7 @@
  */
 
 import { Component, ViewChild } from '@angular/core';
-import { TriSidenav } from '@gradii/triangle/sidenav';
+import { SidenavComponent } from '@gradii/triangle/sidenav';
 
 /** @title Sidenav with custom escape and backdrop click behavior */
 @Component({

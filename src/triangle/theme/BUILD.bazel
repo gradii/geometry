@@ -1,0 +1,61 @@
+load(
+    "//tools:defaults.bzl",
+    "ng_module",
+    "sass_binary",
+    "sass_library",
+    #  "ng_test_library",
+    #  "ng_web_test_suite",
+    #  "markdown_to_html"
+)
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "theme",
+    srcs = glob(
+        ["**/*.ts"],
+        exclude = ["**/*.spec.ts"],
+    ),
+    assets = [":style/theme.css"] + glob(["**/*.html"]),
+    module_name = "@gradii/triangle/theme",
+    deps = [
+        "//src/triangle/core",
+        "@npm//@angular/core",
+        "@npm//rxjs",
+    ],
+)
+
+#
+#ng_test_library(
+#  name = "autocomplete_test_sources",
+#  srcs = glob(["**/*.spec.ts"]),
+#  deps = [
+#    "@npm//@angular/forms",
+#    "@npm//@angular/platform-browser",
+#    "@npm//rxjs",
+#    "//src/cdk/bidi",
+#    "//src/cdk/keycodes",
+#    "//src/cdk/overlay",
+#    "//src/cdk/scrolling",
+#    "//src/cdk/testing",
+#    "//src/lib/core",
+#    "//src/lib/form-field",
+#    "//src/lib/input",
+#    ":autocomplete"
+#  ]
+#)
+#
+#ng_web_test_suite(
+#  name = "unit_tests",
+#  deps = [":autocomplete_test_sources"],
+#)
+#
+#markdown_to_html(
+#  name = "overview",
+#  srcs = [":affix.md"],
+#)
+
+filegroup(
+    name = "source-files",
+    srcs = glob(["**/*.ts"]),
+)
