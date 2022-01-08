@@ -8,7 +8,6 @@
 @use "../../core/style/typography/typography-utils";
 
 @use "./form-field-fill-theme.scss";
-@use "./form-field-standard-theme.scss";
 @use "./form-field-variable";
 
 $foreground              : theme.$foreground;
@@ -27,7 +26,7 @@ $required-label-color    : theming.tri-color($secondary, text);
 // Underline colors.
 $underline-color-base    : theming.tri-color($foreground, divider);
 $underline-color-accent  : theming.tri-color($secondary, text);
-$underline-color-warn    : theming.tri-color($warning, text);
+$underline-color-warn    : theming.tri-color($error, text);
 $underline-focused-color : theming.tri-color($primary, text);
 
 
@@ -93,7 +92,6 @@ $line-height             : v.$line-height-base;
     color : $underline-color-warn;
   }
 
-  @include form-field-standard-theme.form-field-standard-color();
   @include form-field-fill-theme.form-field-fill-color();
 }
 
@@ -179,14 +177,10 @@ $dedupe                  : 0;
   .tri-form-field-label-wrapper {
     top         : -$infix-margin-top;
     padding-top : $infix-margin-top;
-  }
 
-  .tri-form-field-label {
-    top : $infix-margin-top + $infix-padding;
-  }
-
-  .tri-form-field-underline {
-    bottom : $wrapper-padding-bottom;
+    .tri-form-field-label {
+      top : $infix-margin-top + $infix-padding;
+    }
   }
 
   .tri-form-field-subscript-wrapper {
@@ -197,13 +191,10 @@ $dedupe                  : 0;
     top         : calc(100% - #{$wrapper-padding-bottom});
   }
 
-  @include form-field-standard-theme.form-field-standard-typography();
   @include form-field-fill-theme.form-field-fill-typography();
 }
 
 @mixin form-field-density() {
-
-  @include form-field-standard-theme.private-form-field-standard-density();
   @include form-field-fill-theme.private-form-field-fill-density();
 }
 

@@ -25,7 +25,7 @@ $fill-subscript-padding       : math.div($fill-side-padding, $fill-subscript-fon
 .tri-form-field-appearance-fill {
   .tri-form-field-flex {
     border-radius : $fill-border-radius $fill-border-radius 0 0;
-    padding       : $fill-line-spacing $fill-side-padding 0 $fill-side-padding;
+    //padding       : $fill-line-spacing $fill-side-padding 0 $fill-side-padding;
 
     @include a11y.cdk-high-contrast(active, off) {
       outline : solid 1px;
@@ -36,9 +36,5 @@ $fill-subscript-padding       : math.div($fill-side-padding, $fill-subscript-fon
     @include a11y.cdk-high-contrast(active, off) {
       outline : dashed 3px;
     }
-  }
-
-  .tri-form-field-subscript-wrapper {
-    padding : 0 $fill-subscript-padding;
   }
 }

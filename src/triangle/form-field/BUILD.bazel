@@ -20,7 +20,6 @@ ng_module(
         ":style/form-field.css",
         ":style/form-field-fill.css",
         ":style/form-field-input.css",
-        ":style/form-field-standard.css",
     ] + glob(["**/*.html"]),
     module_name = "@gradii/triangle/form-field",
     deps = [

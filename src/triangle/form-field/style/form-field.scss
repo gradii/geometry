@@ -1,5 +1,5 @@
-@use '../../core/style/variables';
-@use '../../core/style/cdk/a11y';
+@use "../../core/style/variables";
+@use "../../core/style/cdk/a11y";
 
 
 // Styles that apply to all appearances of the form-field.
@@ -19,7 +19,7 @@ $default-infix-width : 180px !default;
   // To avoid problems with text-align.
   text-align : left;
 
-  [dir='rtl'] & {
+  [dir="rtl"] & {
     text-align : right;
   }
 }
@@ -73,7 +73,7 @@ $default-infix-width : 180px !default;
   overflow       : hidden;
   pointer-events : none; // We shouldn't catch mouse events (let them through).
 
-  [dir='rtl'] & {
+  [dir="rtl"] & {
     // Usually this isn't necessary since the element is 100% wide, but
     // when we've got a `select` node, we need to set a `max-width` on it.
     left  : auto;
@@ -81,36 +81,38 @@ $default-infix-width : 180px !default;
   }
 }
 
-// The label itself. This is invisible unless it is. The logic to show it is
-// basically `empty || (float && (!empty || focused))`. Float is dependent on the
-// `floatingPlaceholder` property.
-.tri-form-field-label {
-  // The label is after the form field control, but needs to be aligned top-left of the infix <div>.
-  position         : absolute;
-  left             : 0;
+.tri-form-field-label-wrapper {
+  // The label itself. This is invisible unless it is. The logic to show it is
+  // basically `empty || (float && (!empty || focused))`. Float is dependent on the
+  // `floatingPlaceholder` property.
+  .tri-form-field-label {
+    // The label is after the form field control, but needs to be aligned top-left of the infix <div>.
+    position         : absolute;
+    left             : 0;
 
-  font             : inherit;
-  pointer-events   : none; // We shouldn't catch mouse events (let them through).
+    font             : inherit;
+    pointer-events   : none; // We shouldn't catch mouse events (let them through).
 
-  // Put ellipsis text overflow.
-  width            : 100%;
-  white-space      : nowrap;
-  text-overflow    : ellipsis;
-  overflow         : hidden;
+    // Put ellipsis text overflow.
+    width            : 100%;
+    white-space      : nowrap;
+    text-overflow    : ellipsis;
+    overflow         : hidden;
 
-  transform-origin : 0 0;
-  transition       : transform variables.$swift-ease-out-duration variables.$swift-ease-out-timing-function,
-  color variables.$swift-ease-out-duration variables.$swift-ease-out-timing-function,
-  width variables.$swift-ease-out-duration variables.$swift-ease-out-timing-function,
-  padding variables.$swift-ease-out-duration variables.$swift-ease-out-timing-function;
+    transform-origin : 0 0;
+    transition       : transform variables.$swift-ease-out-duration variables.$swift-ease-out-timing-function,
+    color variables.$swift-ease-out-duration variables.$swift-ease-out-timing-function,
+    width variables.$swift-ease-out-duration variables.$swift-ease-out-timing-function,
+    padding variables.$swift-ease-out-duration variables.$swift-ease-out-timing-function;
 
-  // Hide the label initially, and only show it when it's floating or the control is empty.
-  display          : none;
+    // Hide the label initially, and only show it when it's floating or the control is empty.
+    display          : none;
 
-  [dir='rtl'] & {
-    transform-origin : 100% 0;
-    left             : auto;
-    right            : 0;
+    [dir="rtl"] & {
+      transform-origin : 100% 0;
+      left             : auto;
+      right            : 0;
+    }
   }
 }
 

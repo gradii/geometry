@@ -5,7 +5,7 @@ package(default_visibility = ["//visibility:public"])
 ng_module(
     name = "form-field",
     srcs = glob(["**/*.ts"], exclude = ["**/*.spec.ts"],),
-    assets = glob(["**/*.html"]) + [
+    assets = glob(["**/*.html"]) + glob(["**/*.css"]) + [
         ":dev_form_field_scss",
     ],
     deps = [
