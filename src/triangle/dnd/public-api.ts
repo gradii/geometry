@@ -4,7 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-
 export { DragDrop } from './src/drag-drop';
 export { DragRef, DragRefConfig, Point, PreviewContainer } from './src/drag-drop-ref/drag-ref';
 export { DndContainerRef } from './src/drag-drop-ref/dnd-container-ref';
