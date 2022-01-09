@@ -81,7 +81,6 @@ export class TriDropListContainer<T = any> extends TriDropContainer implements O
   @Input('triDropContainerLockAxis')
   lockAxis: DragAxis;
 
-
   /** Whether sorting within this drop list is disabled. */
   @Input('triDropContainerSortingDisabled')
   sortingDisabled: boolean;
