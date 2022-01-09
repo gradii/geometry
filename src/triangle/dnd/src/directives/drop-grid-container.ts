@@ -40,8 +40,6 @@ export const TRI_DROP_GRID_CONTAINER_CONFIG = new InjectionToken('tri drop grid 
   `,
   encapsulation: ViewEncapsulation.None,
   providers    : [
-    // Prevent child drop lists from picking up the same group as their parent.
-    {provide: TRI_DROP_CONTAINER_GROUP, useValue: undefined},
     {provide: TRI_DROP_CONTAINER, useExisting: forwardRef(() => TriDropGridContainer)},
   ],
   host         : {

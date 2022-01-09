@@ -31,8 +31,6 @@ import { TRI_DROP_CONTAINER_GROUP, TriDropContainerGroup } from './drop-containe
   selector : '[triDropFlexContainer], tri-drop-flex-container',
   exportAs : 'triDropFlexContainer',
   providers: [
-    // Prevent child drop lists from picking up the same group as their parent.
-    {provide: TRI_DROP_CONTAINER_GROUP, useValue: undefined},
     {provide: TRI_DROP_CONTAINER, useExisting: TriDropFlexContainer},
   ],
   host     : {

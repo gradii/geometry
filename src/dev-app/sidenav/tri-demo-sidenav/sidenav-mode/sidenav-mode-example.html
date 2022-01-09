@@ -1,6 +1,8 @@
 <tri-sidenav-container class="example-container" *ngIf="shouldRun">
   <tri-sidenav #sidenav [mode]="mode.value">
-    <p><button tri-button (click)="sidenav.toggle()">Toggle</button></p>
+    <p>
+      <button tri-button (click)="sidenav.toggle()">Toggle</button>
+    </p>
     <p>
       <tri-radio-group class="example-radio-group" [formControl]="mode">
         <label>Mode:</label>
@@ -12,7 +14,9 @@
   </tri-sidenav>
 
   <tri-sidenav-content>
-    <p><button triButton (click)="sidenav.toggle()">Toggle</button></p>
+    <p>
+      <button triButton (click)="sidenav.toggle()">Toggle</button>
+    </p>
     <p>
       <tri-radio-group class="example-radio-group" [formControl]="mode">
         <label>Mode:</label>
@@ -24,4 +28,5 @@
   </tri-sidenav-content>
 </tri-sidenav-container>
 
+<button triButton (click)="sidenavService.toggle('start')"></button>
 <div *ngIf="!shouldRun">Please open on Stackblitz to see result</div>

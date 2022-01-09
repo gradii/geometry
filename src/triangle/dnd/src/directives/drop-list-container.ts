@@ -40,8 +40,6 @@ export interface TriDropContainerInternal extends TriDropContainer {
   selector : '[triDropListContainer], tri-drop-list-container',
   exportAs : 'triDropListContainer',
   providers: [
-    // Prevent child drop lists from picking up the same group as their parent.
-    {provide: TRI_DROP_CONTAINER_GROUP, useValue: undefined},
     {provide: TRI_DROP_CONTAINER, useExisting: TriDropListContainer},
   ],
   host     : {

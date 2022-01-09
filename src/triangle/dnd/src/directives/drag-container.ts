@@ -27,8 +27,6 @@ import { TriDropListContainer } from './drop-list-container';
   selector : '[triDragContainer], tri-drag-container',
   exportAs : 'triDragContainer',
   providers: [
-    // Prevent child drop lists from picking up the same group as their parent.
-    {provide: TRI_DROP_CONTAINER_GROUP, useValue: undefined},
     {provide: TRI_DROP_CONTAINER, useExisting: TriDragContainer},
   ],
   host     : {
