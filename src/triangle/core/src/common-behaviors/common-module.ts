@@ -38,12 +38,6 @@ export interface GranularSanityChecks {
   doctype: boolean;
   theme: boolean;
   version: boolean;
-
-  /**
-   * @deprecated No longer being used.
-   * @breaking-change 10.0.0
-   */
-  hammer: boolean;
 }
 
 /**

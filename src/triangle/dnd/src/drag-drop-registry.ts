@@ -8,13 +8,18 @@
 import { normalizePassiveListenerOptions } from '@angular/cdk/platform';
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable, NgZone, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
+import { interval, Subject, Subscription } from 'rxjs';
+import { debounceTime, mapTo, mergeMap, startWith, takeUntil, tap } from 'rxjs/operators';
 
 /** Event options that can be used to bind an active, capturing event. */
 const activeCapturingEventOptions = normalizePassiveListenerOptions({
   passive: false,
   capture: true
 });
+
+function isTouchEvent(event: MouseEvent | TouchEvent): event is TouchEvent {
+  return event.type[0] === 't';
+}
 
 /**
  * Service that keeps track of all the drag item and drop container
@@ -37,6 +42,8 @@ export class DragDropRegistry<I extends { isDragging(): boolean }, C> implements
   /** Drag item instances that are currently being dragged. */
   private _activeDragInstances: I[] = [];
 
+  _pointerPressIdleSubscription = Subscription.EMPTY;
+
   /** Keeps track of the event listeners that we've bound to the `document`. */
   private _globalListeners = new Map<string, {
     handler: (event: Event) => void,
@@ -54,6 +61,8 @@ export class DragDropRegistry<I extends { isDragging(): boolean }, C> implements
    * while the user is dragging a drag item instance.
    */
   readonly pointerMove: Subject<TouchEvent | MouseEvent> = new Subject<TouchEvent | MouseEvent>();
+
+  readonly pointerPressIdle: Subject<TouchEvent | MouseEvent> = new Subject<TouchEvent | MouseEvent>();
 
   /**
    * Emits the `touchend` or `mouseup` events that are dispatched
@@ -163,6 +172,23 @@ export class DragDropRegistry<I extends { isDragging(): boolean }, C> implements
           this._document.addEventListener(name, config.handler, config.options);
         });
       });
+
+      this._ngZone.runOutsideAngular(() => {
+        this._pointerPressIdleSubscription = this.pointerMove.pipe(
+          takeUntil(this.pointerUp),
+          debounceTime(300),
+          mergeMap((evt) => {
+            return interval(1500).pipe(
+              startWith(evt),
+              takeUntil(this.pointerMove),
+              mapTo(evt)
+            );
+          }),
+          tap((value) => {
+            this.pointerPressIdle.next(value);
+          })
+        ).subscribe();
+      });
     }
   }
 
@@ -189,6 +215,7 @@ export class DragDropRegistry<I extends { isDragging(): boolean }, C> implements
     this._dropInstances.forEach(instance => this.removeDropContainer(instance));
     this._clearGlobalListeners();
     this.pointerMove.complete();
+    this.pointerPressIdle.complete();
     this.pointerUp.complete();
   }
 
@@ -223,5 +250,7 @@ export class DragDropRegistry<I extends { isDragging(): boolean }, C> implements
     });
 
     this._globalListeners.clear();
+
+    this._pointerPressIdleSubscription.unsubscribe();
   }
 }

@@ -11,11 +11,11 @@ import { _getShadowRoot, normalizePassiveListenerOptions } from '@angular/cdk/pl
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { ElementRef, EmbeddedViewRef, NgZone, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { DragCSSStyleDeclaration } from '../drag-styling';
+import { finalize, take, tap } from 'rxjs/operators';
 import { DragContainerRef } from '../drag-drop-ref/drag-container-ref';
 import { DragDropRegistry } from '../drag-drop-registry';
 import {
-  combineTransforms, toggleNativeDragInteractions, toggleVisibility,
+  combineTransforms, DragCSSStyleDeclaration, toggleNativeDragInteractions, toggleVisibility
 } from '../drag-styling';
 import { ParentPositionTracker } from '../parent-position-tracker';
 import { getTransformTransitionDurationInMs } from '../transition-duration';
@@ -202,6 +202,8 @@ export class DragRef<T = any> {
 
   /** Subscription to pointer movement events. */
   private _pointerMoveSubscription = Subscription.EMPTY;
+
+  private _pointerMoveIdleSubscription = Subscription.EMPTY;
 
   /** Subscription to the event that is dispatched when the user lifts their pointer. */
   private _pointerUpSubscription = Subscription.EMPTY;
@@ -616,6 +618,7 @@ export class DragRef<T = any> {
   /** Unsubscribes from the global subscriptions. */
   private _removeSubscriptions() {
     this._pointerMoveSubscription.unsubscribe();
+    this._pointerMoveIdleSubscription.unsubscribe();
     this._pointerUpSubscription.unsubscribe();
     this._scrollSubscription.unsubscribe();
   }
@@ -669,39 +672,46 @@ export class DragRef<T = any> {
     }
   };
 
+  /**
+   * sub function block of {@href _pointerMove}
+   */
+  private _startDragging(pointerPosition: Point, event: MouseEvent | TouchEvent) {
+    const distanceX       = Math.abs(pointerPosition.x - this._pickupPositionOnPage.x);
+    const distanceY       = Math.abs(pointerPosition.y - this._pickupPositionOnPage.y);
+    const isOverThreshold = distanceX + distanceY >= this._config.dragStartThreshold;
+
+    // Only start dragging after the user has moved more than the minimum distance in either
+    // direction. Note that this is preferrable over doing something like `skip(minimumDistance)`
+    // in the `pointerMove` subscription, because we're not guaranteed to have one move event
+    // per pixel of movement (e.g. if the user moves their pointer quickly).
+    if (isOverThreshold) {
+      const isDelayElapsed = Date.now() >= this._dragStartTime + this._getDragStartDelay(event);
+      const container      = this._dndContainerRef;
+
+      if (!isDelayElapsed) {
+        this._endDragSequence(event);
+        return;
+      }
+
+      // Prevent other drag sequences from starting while something in the container is still
+      // being dragged. This can happen while we're waiting for the drop animation to finish
+      // and can cause errors, because some elements might still be moving around.
+      if (!container || (!container.isDragging() && !container.isReceiving())) {
+        // Prevent the default action as soon as the dragging sequence is considered as
+        // "started" since waiting for the next event can allow the device to begin scrolling.
+        event.preventDefault();
+        this._hasStartedDragging = true;
+        this._ngZone.run(() => this._startDragSequence(event));
+      }
+    }
+  }
+
   /** Handler that is invoked when the user moves their pointer after they've initiated a drag. */
   private _pointerMove = (event: MouseEvent | TouchEvent) => {
     const pointerPosition = this._getPointerPositionOnPage(event);
 
     if (!this._hasStartedDragging) {
-      const distanceX       = Math.abs(pointerPosition.x - this._pickupPositionOnPage.x);
-      const distanceY       = Math.abs(pointerPosition.y - this._pickupPositionOnPage.y);
-      const isOverThreshold = distanceX + distanceY >= this._config.dragStartThreshold;
-
-      // Only start dragging after the user has moved more than the minimum distance in either
-      // direction. Note that this is preferrable over doing something like `skip(minimumDistance)`
-      // in the `pointerMove` subscription, because we're not guaranteed to have one move event
-      // per pixel of movement (e.g. if the user moves their pointer quickly).
-      if (isOverThreshold) {
-        const isDelayElapsed = Date.now() >= this._dragStartTime + this._getDragStartDelay(event);
-        const container      = this._dndContainerRef;
-
-        if (!isDelayElapsed) {
-          this._endDragSequence(event);
-          return;
-        }
-
-        // Prevent other drag sequences from starting while something in the container is still
-        // being dragged. This can happen while we're waiting for the drop animation to finish
-        // and can cause errors, because some elements might still be moving around.
-        if (!container || (!container.isDragging() && !container.isReceiving())) {
-          // Prevent the default action as soon as the dragging sequence is considered as
-          // "started" since waiting for the next event can allow the device to begin scrolling.
-          event.preventDefault();
-          this._hasStartedDragging = true;
-          this._ngZone.run(() => this._startDragSequence(event));
-        }
-      }
+      this._startDragging(pointerPosition, event);
 
       return;
     }
@@ -915,8 +925,8 @@ export class DragRef<T = any> {
     // otherwise iOS will still add it, even though all the drag interactions on the handle
     // are disabled.
     if (this._handles.length) {
-      this._rootElementTapHighlight             = (rootElement.style as any).webkitTapHighlightColor || '';
-        (rootElement.style as any).webkitTapHighlightColor = 'transparent';
+      this._rootElementTapHighlight                      = (rootElement.style as any).webkitTapHighlightColor || '';
+      (rootElement.style as any).webkitTapHighlightColor = 'transparent';
     }
 
     this._hasStartedDragging = this._hasMoved = false;
@@ -955,7 +965,8 @@ export class DragRef<T = any> {
     // It's important that we maintain the position, because moving the element around in the DOM
     // can throw off `NgFor` which does smart diffing and re-creates elements only when necessary,
     // while moving the existing elements in all other cases.
-    toggleVisibility(this._rootElement, true, undefined, this._initialContainer.getItemPosition(this));
+    toggleVisibility(this._rootElement, true, undefined,
+      this._initialContainer.getItemPosition(this));
     this._anchor.parentNode!.replaceChild(this._rootElement, this._anchor);
 
     this._destroyPreview();
@@ -1016,26 +1027,40 @@ export class DragRef<T = any> {
     // initial container, check whether the it's over the initial container. This handles the
     // case where two containers are connected one way and the user tries to undo dragging an
     // item into a new container.
+    // drag back to _initialContainer when have drag out to another container
     if (!newContainer && this._dndContainerRef !== this._initialContainer &&
       this._initialContainer._isOverContainer(x, y)) {
       newContainer = this._initialContainer;
     }
 
+    this._pointerMoveIdleSubscription.unsubscribe();
     if (newContainer && newContainer !== this._dndContainerRef) {
-      this._ngZone.run(() => {
-        // Notify the old container that the item has left.
-        this.exited.next({item: this, container: this._dndContainerRef!});
-        this._dndContainerRef!.exit(this);
+      const element                     = coerceElement(newContainer!.element);
+      element.style.filter              = 'blur(1px)';
+      element.style.opacity             = '0.9';
+      this._pointerMoveIdleSubscription = this._dragDropRegistry.pointerPressIdle.pipe(
+        take(1),
+        finalize(() => {
+          element.style.filter = null;
+          element.style.opacity = null;
+        }),
+        tap(() => {
+          this._ngZone.run(() => {
+            // Notify the old container that the item has left.
+            this.exited.next({item: this, container: this._dndContainerRef!});
+            this._dndContainerRef!.exit(this);
 
-        // Notify the new container that the item has entered.
-        this._dndContainerRef = newContainer!;
-        this._dndContainerRef.enter(this, x, y);
-        this.entered.next({
-          item        : this,
-          container   : newContainer!,
-          currentIndex: newContainer!.getItemIndex(this)
-        });
-      });
+            // Notify the new container that the item has entered.
+            this._dndContainerRef = newContainer!;
+            this._dndContainerRef.enter(this, x, y);
+            this.entered.next({
+              item        : this,
+              container   : newContainer!,
+              currentIndex: newContainer!.getItemIndex(this)
+            });
+          });
+        })
+      ).subscribe();
     }
 
     this._dndContainerRef!._startScrollingIfNecessary(rawX, rawY);

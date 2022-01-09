@@ -82,7 +82,6 @@ export const TRI_FORM_FIELD = new InjectionToken<FormFieldComponent>('TriFormFie
     '../style/form-field.css',
     '../style/form-field-fill.css',
     '../style/form-field-input.css',
-    '../style/form-field-standard.css',
   ],
   animations     : [triFormFieldAnimations.transitionMessages],
   host           : {

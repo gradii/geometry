@@ -19,13 +19,12 @@ export * from './src/utils/drag-utils';
 export * from './src/drag-drop-module';
 export * from './src/drag-drop-registry';
 
-export { TRI_DROP_CONTAINER } from './src/directives/drop-container';
+export { TRI_DROP_CONTAINER, TriDropContainer as ɵTriDropContainer } from './src/directives/drop-container';
 export { TriDragContainer } from './src/directives/drag-container';
 export { TriDropFreeContainer } from './src/directives/drop-free-container';
 export { TriDropListContainer } from './src/directives/drop-list-container';
 export { TriDropGridContainer } from './src/directives/drop-grid-container';
 export { TriDropFlexContainer } from './src/directives/drop-flex-container';
-
 export { TriDragGridItemComponent } from './src/drag-grid/drag-grid-item.component';
 export { TriDragResizeContainer } from './src/drag-grid/drag-resize.component';
 
