@@ -20,7 +20,14 @@
     "skipLibCheck": true,
     "strictBindCallApply": true,
     "target": "es2015",
-    "lib": ["es5", "es2015", "dom", "dom.iterable", "ES2019.Object", "ES2016.Array.Include"],
+    "lib": [
+      "es5",
+      "es2015",
+      "dom",
+      "dom.iterable",
+      "ES2019.Object",
+      "ES2016.Array.Include"
+    ],
     "types": ["jest"],
     "baseUrl": ".",
     "paths": {
@@ -29,6 +36,7 @@
       "@gradii/diagram/*": ["src/diagram/*/public-api.ts"],
       "@gradii/fedaco": ["src/fedaco/public-api.ts"],
       "@gradii/injection": ["src/injection/public-api.ts"],
+      "@gradii/triangle": ["libs/triangle/src/index.ts"],
       "@gradii/vector-math": ["src/vector-math/public-api.ts"]
     }
   },

@@ -217,6 +217,47 @@
         }
       }
     },
+    "triangle": {
+      "projectType": "library",
+      "root": "libs/triangle",
+      "sourceRoot": "libs/triangle/src",
+      "prefix": "applications",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "outputs": ["dist/libs/triangle"],
+          "options": {
+            "project": "libs/triangle/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/triangle/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/triangle/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/triangle"],
+          "options": {
+            "jestConfig": "libs/triangle/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/triangle/src/**/*.ts",
+              "libs/triangle/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "triangle-api": {
       "root": "apps/triangle-api",
       "sourceRoot": "apps/triangle-api/src",
@@ -352,5 +393,5 @@
       "style": "scss"
     }
   },
-  "defaultProject": "diagram-demo"
+  "defaultProject": ""
 }
