@@ -265,6 +265,47 @@
         }
       }
     },
+    "ice-box": {
+      "projectType": "library",
+      "root": "libs/ice-box",
+      "sourceRoot": "libs/ice-box/src",
+      "prefix": "applications",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "outputs": ["dist/libs/ice-box"],
+          "options": {
+            "project": "libs/ice-box/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/ice-box/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/ice-box/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/ice-box"],
+          "options": {
+            "jestConfig": "libs/ice-box/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/ice-box/src/**/*.ts",
+              "libs/ice-box/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "triangle": {
       "projectType": "library",
       "root": "libs/triangle",

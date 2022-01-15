@@ -8,5 +8,6 @@ module.exports = {
     "<rootDir>/libs/vector-math",
     "<rootDir>/libs/fedaco",
     "<rootDir>/libs/annotation",
+    "<rootDir>/libs/ice-box",
   ],
 };
