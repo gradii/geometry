@@ -81,7 +81,7 @@ export class _RateStarItemComponent {
         >
       </rate-star-item>
   `,
-  styleUrls: ['../style/rate.css'],
+  styleUrls: ['../style/rate.scss'],
   host: {
     'class': 'tri-rate',
     '[class.tri-rate-disabled]': 'disabled',

@@ -29,7 +29,7 @@ import { GridsterComponent } from './gridster.component';
 @Component({
   selector     : 'gridster-item',
   templateUrl  : './gridster-item.html',
-  styleUrls    : ['../style/gridster-item.css'],
+  styleUrls    : ['../style/gridster-item.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, GridsterItemComponentInterface {

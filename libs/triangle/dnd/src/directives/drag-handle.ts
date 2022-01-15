@@ -13,6 +13,8 @@ import { Subject } from 'rxjs';
 import { TRI_DRAG_PARENT } from '../drag-parent';
 import { assertElementNode } from './assertions';
 
+declare const ngDevMode: object | null;
+
 /**
  * Injection token that can be used to reference instances of `TriDragHandle`. It serves as
  * alternative token to the actual `TriDragHandle` class which could cause unnecessary

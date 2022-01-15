@@ -87,7 +87,7 @@ export class RadioTileDirective implements RadioOption, OnChanges, OnDestroy {
   }
 
   @HostListener('click', ['$event'])
-  onClick(e) {
+  onClick(e: MouseEvent) {
     e.preventDefault();
     if (!this.disabled) {
       if (this.toggleable && this._checked) {

@@ -29,7 +29,7 @@ import {
   mixinDisabled, mixinDisableRipple, mixinErrorState, mixinTabIndex, TriOptgroup, TriOption,
   TriOptionSelectionChange
 } from '@gradii/triangle/core';
-import { TRI_FORM_FIELD, FormFieldComponent } from '@gradii/triangle/form-field';
+import { FormFieldComponent, TRI_FORM_FIELD } from '@gradii/triangle/form-field';
 
 import { defer, merge, Observable, Subject } from 'rxjs';
 import {
@@ -41,6 +41,8 @@ import {
   getTriSelectNonFunctionValueError,
 } from './select-errors';
 import { TRI_SELECT_SCROLL_STRATEGY } from './select-scroll';
+
+declare const ngDevMode: object | null;
 
 let nextUniqueId = 0;
 

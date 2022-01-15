@@ -9,6 +9,9 @@ import {Platform} from '@angular/cdk/platform';
 import {Inject, Injectable, Optional} from '@angular/core';
 import {DateAdapter, TRI_DATE_LOCALE} from './date-adapter';
 
+/** Variable replaced at build time that indicates whether the app is in development mode. */
+declare const ngDevMode: object | null;
+
 /** Whether the browser supports the Intl API. */
 let SUPPORTS_INTL_API: boolean;
 

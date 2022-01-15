@@ -23,6 +23,8 @@ import { Menu, TRI_MENU } from './menu-interface';
 import { TriMenuPanel } from './menu-panel';
 import { FocusNext, MenuStack } from './menu-stack';
 
+declare const ngDevMode: object | null;
+
 /**
  * Whether the target element is a menu item to be ignored by the overlay background click handler.
  */

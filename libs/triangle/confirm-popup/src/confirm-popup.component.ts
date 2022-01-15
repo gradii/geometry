@@ -54,7 +54,7 @@ import { PopoverComponent } from '@gradii/triangle/popover';
         </div>
       </div>
     </div>`,
-  styleUrls: ['../style/confirm-popup.css']
+  styleUrls: ['../style/confirm-popup.scss']
 })
 export class ConfirmPopupComponent extends PopoverComponent implements OnDestroy {
   @Input()

@@ -22,6 +22,8 @@ import { isClickInsideMenuOverlay } from './menu-item-trigger';
 import { TriMenuPanel } from './menu-panel';
 import { MenuStack } from './menu-stack';
 
+declare const ngDevMode: object | null;
+
 /** Tracks the last open context menu trigger across the entire application. */
 @Injectable({providedIn: 'root'})
 export class ContextMenuTracker {
@@ -65,7 +67,7 @@ export type ContextMenuCoordinates = { x: number; y: number };
 @Directive({
   selector : '[triContextMenuTriggerFor]',
   exportAs : 'triContextMenuTriggerFor',
-  host: {
+  host     : {
     '(contextmenu)': '_openOnContextMenu($event)'
   },
   providers: [

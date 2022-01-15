@@ -7,7 +7,7 @@
 import { Component, ElementRef, Inject, Input, TemplateRef, ViewChild } from '@angular/core';
 import { ConfirmPopupDirective } from '@gradii/triangle/confirm-popup';
 import { TriDialogService } from '@gradii/triangle/dialog';
-import { PopoverDirective } from '../../../../../popover';
+import { PopoverDirective } from '@gradii/triangle/popover';
 import { BaseEntityEvent } from '../../../canvas-core/core-models/base-entity';
 import { BaseModel } from '../../../canvas-core/core-models/base-model';
 import { ListenerHandle } from '../../../canvas-core/core/base-observer';
@@ -99,7 +99,7 @@ import { NodeModel } from './node-model';
       pointer-events        : all;
     }`
   ],
-  styleUrls: ['../../../../style/node-widget.css']
+  styleUrls: ['../../../../style/node-widget.scss']
 })
 export class NodeWidget {
   ob: any;

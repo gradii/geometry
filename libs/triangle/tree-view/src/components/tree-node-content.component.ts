@@ -18,7 +18,7 @@ import { TreeNode, TreeUIOptions } from '../models';
     </ng-container>
 
   `,
-  styleUrls: ['../../style/components/tree-node-content.component.css'],
+  styleUrls: ['../../style/components/tree-node-content.component.scss'],
 
 })
 export class TreeNodeContentComponent {

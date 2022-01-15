@@ -69,7 +69,7 @@ import {
              [attr.step]="_step"
              autocomplete="off">
     </div>`,
-  styleUrls      : [`../style/input-number.css`],
+  styleUrls      : [`../style/input-number.scss`],
   providers      : [
     {
       provide    : NG_VALUE_ACCESSOR,

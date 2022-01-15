@@ -31,7 +31,7 @@ const _TriButtonToggleBase = mixinDisableRipple(class {
 @Component({
   selector       : 'tri-button-toggle',
   templateUrl    : 'button-toggle.html',
-  styleUrls      : ['../style/button-toggle.css'],
+  styleUrls      : ['../style/button-toggle.scss'],
   encapsulation  : ViewEncapsulation.None,
   exportAs       : 'triButtonToggle',
   changeDetection: ChangeDetectionStrategy.OnPush,

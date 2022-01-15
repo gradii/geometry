@@ -10,7 +10,7 @@ import { CdkScrollableModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TriCommonModule, TriOptionModule } from '@gradii/triangle/core';
-import { TriIconModule } from '../../icon';
+import { TriIconModule } from '@gradii/triangle/icon';
 import { TRI_SELECT_SCROLL_STRATEGY_PROVIDER } from './select-config';
 import { TriSelectTrigger } from './select-trigger';
 import { TriSelect } from './select.component';

@@ -15,7 +15,7 @@ import { CollapseDirection, SplitterOrientation } from './splitter.types';
   selector       : 'tri-splitter-pane',
   template       : `
     <ng-content></ng-content>`,
-  styleUrls      : ['../style/splitter-pane.css'],
+  styleUrls      : ['../style/splitter-pane.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host           : {
     '[class.tri-splitter-pane-fixed]': '!size && !resizable'

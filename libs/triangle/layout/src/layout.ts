@@ -12,7 +12,7 @@ import { Component, HostBinding, ViewEncapsulation } from '@angular/core';
   template     : `
       <ng-content></ng-content>
   `,
-  styleUrls    : ['../style/layout.css'],
+  styleUrls    : ['../style/layout.scss'],
   styles       : [
     `:host {
           display : block;

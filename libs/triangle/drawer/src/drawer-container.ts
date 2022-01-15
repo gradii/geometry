@@ -22,6 +22,8 @@ import {
 import { TriDrawer } from './drawer';
 import { TriDrawerContent } from './drawer-content';
 
+declare const ngDevMode: object | null;
+
 /**
  * `<tri-drawer-container>` component.
  *
@@ -32,7 +34,7 @@ import { TriDrawerContent } from './drawer-content';
   selector       : 'tri-drawer-container',
   exportAs       : 'triDrawerContainer',
   templateUrl    : 'drawer-container.html',
-  styleUrls      : ['../style/drawer.css'],
+  styleUrls      : ['../style/drawer.scss'],
   host           : {
     'class'                                         : 'tri-drawer-container',
     '[class.tri-drawer-container-explicit-backdrop]': '_backdropOverride',

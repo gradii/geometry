@@ -5,16 +5,8 @@
  */
 
 import {
-  AfterViewInit,
-  Component,
-  ContentChildren,
-  ElementRef,
-  HostBinding,
-  Input,
-  OnDestroy,
-  Renderer2,
-  ViewChild,
-  ViewEncapsulation
+  AfterViewInit, Component, ContentChildren, ElementRef, HostBinding, Input, OnDestroy, QueryList,
+  ViewChild, ViewEncapsulation
 } from '@angular/core';
 import { CarouselContentDirective } from './carousel-content.directive';
 
@@ -24,25 +16,28 @@ import { CarouselContentDirective } from './carousel-content.directive';
   template     : `
     <div class="slick-initialized slick-slider" [class.slick-vertical]="vertical">
       <div class="slick-list" #slickList triCarouselSlickList>
-        <div class="slick-track" style="opacity: 1;" [style.transform]="transform" #slickTrack triCarouselSlickTrack>
+        <div class="slick-track" style="opacity: 1;" [style.transform]="transform" #slickTrack
+             triCarouselSlickTrack>
           <ng-content></ng-content>
         </div>
       </div>
       <ul class="slick-dots" style="display: block;" *ngIf="isDot">
-        <li [class.slick-active]="content.isActive" *ngFor="let content of slideContents; let i=index" (click)="setActive(content,i)">
+        <li [class.slick-active]="content.isActive"
+            *ngFor="let content of slideContents; let i=index" (click)="setActive(content,i)">
           <button>1</button>
         </li>
       </ul>
     </div>`,
-  styleUrls    : ['../style/carousel.css']
+  styleUrls    : ['../style/carousel.scss']
 })
 export class CarouselComponent implements AfterViewInit, OnDestroy {
   activeIndex = 0;
-  transform = 'translate3d(0px, 0px, 0px)';
-  interval;
-  slideContents;
-  @ViewChild('slickList', {static: false}) slickList: ElementRef;
-  @ViewChild('slickTrack', {static: false}) slickTrack: ElementRef;
+  transform   = 'translate3d(0px, 0px, 0px)';
+  interval: number;
+  slideContents: QueryList<CarouselContentDirective>;
+  @ViewChild('slickList', {static: false}) slickList: ElementRef<HTMLElement>;
+  @ViewChild('slickTrack', {static: false}) slickTrack: ElementRef<HTMLElement>;
+
   /**
    * Whether auto play
    * 是否自动切换
@@ -52,12 +47,13 @@ export class CarouselComponent implements AfterViewInit, OnDestroy {
    * Whether show dot.
    * 是否显示面板指示点
    */
-  @Input() isDot = true;
+  @Input() isDot    = true;
   /**
    * the animation effect.
    * 动画效果函数，可取 scrollx, fade
    */
-  @Input() effect = 'scrollx';
+  @Input() effect   = 'scrollx';
+
   /**
    * Whether vertical show
    * 垂直显示
@@ -65,9 +61,11 @@ export class CarouselComponent implements AfterViewInit, OnDestroy {
   @Input()
   @HostBinding('class.tri-carousel-vertical')
   vertical = false;
-  @HostBinding('class.tri-carousel') _nzCarousel = true;
 
-  constructor(public hostElement: ElementRef, private _renderer: Renderer2) {
+  @HostBinding('class.tri-carousel')
+  _nzCarousel = true;
+
+  constructor(public hostElement: ElementRef) {
   }
 
   /**
@@ -76,12 +74,12 @@ export class CarouselComponent implements AfterViewInit, OnDestroy {
    * @param value
    */
   @ContentChildren(CarouselContentDirective)
-  set _slideContents(value) {
+  set _slideContents(value: QueryList<CarouselContentDirective>) {
     this.slideContents = value;
     this.renderContent();
   }
 
-  setActive(content, i) {
+  setActive(content: CarouselContentDirective, i: number) {
     if (this.autoPlay) {
       this.createInterval();
     }
@@ -104,7 +102,7 @@ export class CarouselComponent implements AfterViewInit, OnDestroy {
   }
 
   renderContent() {
-    setTimeout(_ => {
+    setTimeout(() => {
       if (this.slideContents.first) {
         this.slideContents.first.isActive = true;
       }
@@ -124,24 +122,20 @@ export class CarouselComponent implements AfterViewInit, OnDestroy {
       }
 
       if (this.vertical) {
-        this._renderer.removeStyle(this.slickList.nativeElement, 'height');
+        this.slickList.nativeElement.style.removeProperty('height');
         if (this.slideContents.first) {
-          this._renderer.setStyle(
-            this.slickList.nativeElement,
+          this.slickList.nativeElement.style.setProperty(
             'height',
-            `${this.slideContents.first.nativeElement.offsetHeight}px`
-          );
+            `${this.slideContents.first.nativeElement.offsetHeight}px`);
         }
-        this._renderer.removeStyle(this.slickTrack.nativeElement, 'height');
-        this._renderer.setStyle(
-          this.slickTrack.nativeElement,
+        this.slickTrack.nativeElement.style.removeProperty('height');
+        this.slickTrack.nativeElement.style.setProperty(
           'height',
           `${this.slideContents.length * this.hostElement.nativeElement.offsetHeight}px`
         );
       } else {
-        this._renderer.removeStyle(this.slickTrack.nativeElement, 'width');
-        this._renderer.setStyle(
-          this.slickTrack.nativeElement,
+        this.slickTrack.nativeElement.style.removeProperty('width');
+        this.slickTrack.nativeElement.style.setProperty(
           'width',
           `${this.slideContents.length * this.hostElement.nativeElement.offsetWidth}px`
         );
@@ -151,7 +145,7 @@ export class CarouselComponent implements AfterViewInit, OnDestroy {
 
   createInterval() {
     this.clearInterval();
-    this.interval = setInterval(_ => {
+    this.interval = setInterval(() => {
       if (this.activeIndex < this.slideContents.length - 1) {
         this.activeIndex++;
       } else {

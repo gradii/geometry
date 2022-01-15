@@ -38,7 +38,7 @@ import { TreeEvent, TreeNode, TreeUIOptions } from '../models';
     </ng-container>
 
   `,
-  styleUrls      : ['../../style/components/tree-node-expander.component.css'],
+  styleUrls      : ['../../style/components/tree-node-expander.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TreeNodeToggleComponent implements OnInit, OnDestroy {

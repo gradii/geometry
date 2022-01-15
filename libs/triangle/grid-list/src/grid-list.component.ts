@@ -34,7 +34,7 @@ const TRI_FIT_MODE = 'fit';
   selector       : 'tri-grid-list',
   exportAs       : 'triGridList',
   templateUrl    : 'grid-list.component.html',
-  styleUrls      : ['../style/grid-list.css'],
+  styleUrls      : ['../style/grid-list.scss'],
   host           : {
     'class'      : 'tri-grid-list',
     // Ensures that the "cols" input value is reflected in the DOM. This is

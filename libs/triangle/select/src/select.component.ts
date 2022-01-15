@@ -28,7 +28,7 @@ import { TRI_SELECT_TRIGGER, TriSelectTrigger } from './select-trigger';
   selector       : 'tri-select',
   exportAs       : 'triSelect',
   templateUrl    : 'select.html',
-  styleUrls      : ['../style/select.css'],
+  styleUrls      : ['../style/select.scss'],
   inputs         : ['disabled', 'disableRipple', 'tabIndex'],
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,

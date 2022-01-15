@@ -60,7 +60,7 @@ import type { NotificationContainerComponent } from './notification-container.co
     </div>
   `,
   styleUrls    : [
-    '../../style/notification.css'
+    '../../style/notification.scss'
   ]
 })
 export class NotificationComponent extends MessageComponent {

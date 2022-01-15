@@ -26,6 +26,8 @@ import {
   getTreeNoValidDataSourceError,
 } from './tree-errors';
 
+declare const ngDevMode: object | null;
+
 /**
  * CDK tree component that connects with a data source to retrieve data of type `T` and renders
  * dataNodes with hierarchy. Updates the dataNodes when new data is provided by the data source.

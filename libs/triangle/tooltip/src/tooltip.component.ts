@@ -35,7 +35,7 @@ export const SCROLL_THROTTLE_MS = 20;
 @Component({
   selector       : 'tri-tooltip',
   templateUrl    : 'tooltip.component.html',
-  styleUrls      : ['../style/tooltip.css'],
+  styleUrls      : ['../style/tooltip.scss'],
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations     : [triTooltipAnimations.tooltipState],

@@ -24,7 +24,7 @@ import {
          class="tree-node-drop-slot">
     </div>
   `,
-  styleUrls  : ['../../style/components/tree-node-drop-slot.component.css'],
+  styleUrls  : ['../../style/components/tree-node-drop-slot.component.scss'],
 
 })
 export class TreeNodeDropSlotComponent {

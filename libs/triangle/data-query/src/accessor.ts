@@ -6,15 +6,16 @@
 
 import { isNullOrEmptyString } from './utils';
 
-const empty = ['', ''];
-const concat = function (left, right) {
+const empty          = ['', ''];
+const concat         = function (left: [string, string] | string[],
+                                 right: [string, string] | string[]) {
   return [left[0] + right[0], left[1] + right[1]];
 };
-const notEmpty = function (member) {
+const notEmpty       = function (member: any) {
   return !isNullOrEmptyString(member);
 };
-const parseMember = function (member, idx, length) {
-  let first = '(';
+const parseMember    = function (member: string, idx: number, length: number) {
+  let first   = '(';
   const index = member.indexOf('[');
   if (index === -1) {
     member = '.' + member;
@@ -25,15 +26,15 @@ const parseMember = function (member, idx, length) {
   member += idx < length - 1 ? ' || {})' : ')';
   return [first, member];
 };
-const wrapExpression = function (members, paramName) {
+const wrapExpression = function (members: string[], paramName: string) {
   return members
     .filter(notEmpty)
-    .reduce(function (pair, member, idx, arr) {
+    .reduce(function (pair: string[], member: string, idx: number, arr: string[]) {
       return concat(pair, parseMember(member, idx, arr.length));
     }, empty)
     .join(paramName);
 };
-const getterCache = {};
+const getterCache: Record<string, any>    = {};
 
 export function expr(expression = '', safe = false, paramName = 'd') {
   if (expression && expression.charAt(0) !== '[') {
@@ -52,5 +53,6 @@ export function expr(expression = '', safe = false, paramName = 'd') {
 
 export function getter(expression: string, safe?: boolean) {
   const key = expression + safe;
-  return (getterCache[key] = getterCache[key] || new Function('d', 'return ' + expr(expression, safe)));
+  return (getterCache[key] = getterCache[key] || new Function('d',
+    'return ' + expr(expression, safe)));
 }

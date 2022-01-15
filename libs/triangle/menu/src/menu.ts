@@ -51,10 +51,12 @@ export class TriMenu extends TriMenuGroup implements Menu, AfterContentInit, OnI
    * Sets the aria-orientation attribute and determines where menus will be opened.
    * Does not affect styling/layout.
    */
-  @Input('triMenuOrientation') orientation: 'horizontal' | 'vertical' = 'vertical';
+  @Input('triMenuOrientation')
+  orientation: 'horizontal' | 'vertical' = 'vertical';
 
   /** Event emitted when the menu is closed. */
-  @Output() readonly closed: EventEmitter<void | 'click' | 'tab' | 'escape'> = new EventEmitter();
+  @Output()
+  readonly closed: EventEmitter<void | 'click' | 'tab' | 'escape'> = new EventEmitter();
 
   // We provide a default MenuStack implementation in case the menu is an inline menu.
   // For Menus part of a MenuBar nested within a MenuPanel this will be overwritten
@@ -86,7 +88,8 @@ export class TriMenu extends TriMenuGroup implements Menu, AfterContentInit, OnI
    * the parent directive if the parent directive is placed on an `ng-template`. If using Ivy, the
    * injected value will be used over this one.
    */
-  @Input('triMenuPanel') private readonly _explicitPanel?: TriMenuPanel;
+  @Input('triMenuPanel')
+  _explicitPanel?: TriMenuPanel;
 
   constructor(
     private readonly _ngZone: NgZone,

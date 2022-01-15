@@ -26,6 +26,7 @@ import { TriDrag } from './drag';
 import { TRI_DROP_CONTAINER, TriDropContainer } from './drop-container';
 import { TRI_DROP_CONTAINER_GROUP, TriDropContainerGroup } from './drop-container-group';
 
+declare const ngDevMode: object | null;
 
 @Directive({
   selector : '[triDropFlexContainer], tri-drop-flex-container',
@@ -33,12 +34,12 @@ import { TRI_DROP_CONTAINER_GROUP, TriDropContainerGroup } from './drop-containe
   providers: [
     {provide: TRI_DROP_CONTAINER, useExisting: TriDropFlexContainer},
   ],
-  inputs: [
+  inputs   : [
     'disabled:TriDragContainerDisabled',
   ],
   host     : {
-    'class'                               : 'tri-drop-container',
-    '[attr.id]'                           : 'id',
+    'class'                                    : 'tri-drop-container',
+    '[attr.id]'                                : 'id',
     '[class.tri-drop-flex-container-disabled]' : 'disabled',
     '[class.tri-drop-flex-container-dragging]' : '_dropContainerRef.isDragging()',
     '[class.tri-drop-flex-container-receiving]': '_dropContainerRef.isReceiving()',

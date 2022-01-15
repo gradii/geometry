@@ -38,7 +38,7 @@ import { TagAnimation } from '@gradii/triangle/core';
       display : inline-block;
     }`
   ],
-  styleUrls: ['../style/tag.css']
+  styleUrls: ['../style/tag.scss']
 })
 export class TagComponent implements OnInit {
   _closed    = false;

@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { TRI_DRAWER_CONTAINER, TriDrawerContainer } from '@gradii/triangle/drawer';
 import { SidenavContentComponent } from './sidenav-content.component';
+import { TRI_SIDENAV_CONTAINER } from './sidenav.common';
 import { SidenavComponent } from './sidenav.component';
 
 
@@ -17,7 +18,7 @@ import { SidenavComponent } from './sidenav.component';
   selector       : 'tri-sidenav-container',
   exportAs       : 'triSidenavContainer',
   templateUrl    : 'sidenav-container.html',
-  styleUrls      : ['../style/sidenav.css'],
+  styleUrls      : ['../style/sidenav.scss'],
   host           : {
     'class'                                         : 'tri-drawer-container tri-sidenav-container',
     '[class.tri-drawer-container-explicit-backdrop]': '_backdropOverride',
@@ -28,9 +29,12 @@ import { SidenavComponent } from './sidenav.component';
     {
       provide    : TRI_DRAWER_CONTAINER,
       useExisting: SidenavContainerComponent
+    },
+    {
+      provide    : TRI_SIDENAV_CONTAINER,
+      useExisting: SidenavContainerComponent
     }
   ]
-
 })
 export class SidenavContainerComponent extends TriDrawerContainer {
   static ngAcceptInputType_hasBackdrop: BooleanInput;

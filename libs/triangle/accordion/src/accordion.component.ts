@@ -15,7 +15,7 @@ import { AccordionItemComponent } from './accordion-item.component';
   template       : `
     <ng-content></ng-content>
   `,
-  styleUrls      : [`../style/accordion.css`],
+  styleUrls      : [`../style/accordion.scss`],
   host           : {
     'class'                           : 'tri-accordion',
     '[class.tri-accordion-borderless]': '!_bordered',

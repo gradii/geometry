@@ -32,7 +32,7 @@ import { TRI_OPTION_PARENT_COMPONENT, TriOptionParentComponent } from './option-
     '(keydown)'                  : '_handleKeydown($event)',
     'class'                      : 'tri-option tri-focus-indicator',
   },
-  styleUrls      : ['option.css'],
+  styleUrls      : ['option.scss'],
   templateUrl    : 'option.html',
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -23,7 +23,7 @@ export class Droppable implements AfterViewInit, OnDestroy {
 
   @Input() pDroppableDisabled: boolean;
 
-  @Input() dropEffect: string;
+  @Input() dropEffect: DataTransfer['dropEffect'];
 
   @Output() onDragEnter: EventEmitter<any> = new EventEmitter();
 

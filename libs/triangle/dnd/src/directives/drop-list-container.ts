@@ -26,6 +26,8 @@ import { TriDrag } from './drag';
 import { TRI_DROP_CONTAINER, TriDropContainer } from './drop-container';
 import { TRI_DROP_CONTAINER_GROUP, TriDropContainerGroup } from './drop-container-group';
 
+declare const ngDevMode: object | null;
+
 /**
  * Internal compile-time-only representation of a `TriDropContainer`.
  * Used to avoid circular import issues between the `TriDropContainer` and the `TriDrag`.

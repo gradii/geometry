@@ -1,3 +1,0 @@
-CHECK_TYPE_ENTRYPOINTS = [
-]
-CHECK_TYPE_TARGETS = ["//src/check-type"]

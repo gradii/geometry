@@ -39,17 +39,19 @@ export function groupBy<T>(data: T[],
   if (!descriptors.length) {
     return data;
   }
-  const descriptor = descriptors[0];
-  const initialValue = {};
-  const view = exec(transformers(groupCombinator(descriptor.field)), initialValue, data);
-  const result = [];
+  const descriptor    = descriptors[0];
+  const initialValue  = {};
+  const view          = exec(transformers(
+      groupCombinator(descriptor.field)),
+    initialValue, data);
+  const result: any[] = [];
   Object.keys(view).forEach(function (field) {
     Object.keys(view[field]).forEach(function (value) {
-      const group = view[field][value];
+      const group         = view[field][value];
       let aggregateResult = {};
-      let filteredData = originalData;
+      let filteredData    = originalData;
       if (isPresent(descriptor.aggregates)) {
-        filteredData = filterBy(originalData, {
+        filteredData    = filterBy(originalData, {
           field     : descriptor.field,
           ignoreCase: false,
           operator  : 'eq',
@@ -61,7 +63,8 @@ export function groupBy<T>(data: T[],
         aggregates: aggregateResult,
         field     : field,
         items     :
-          descriptors.length > 1 ? groupBy(group.items, descriptors.slice(1), identity, filteredData) : group.items,
+          descriptors.length > 1 ? groupBy(group.items, descriptors.slice(1), identity,
+            filteredData) : group.items,
         value     : group.value
       };
     });

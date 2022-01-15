@@ -46,7 +46,7 @@ import {
   providers  : [
     {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CalendarComponent), multi: true}
   ],
-  styleUrls  : ['../style/calendar.css'],
+  styleUrls  : ['../style/calendar.scss'],
   styles     : [`
                   tri-calendar {
                     display: block;

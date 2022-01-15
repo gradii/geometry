@@ -48,7 +48,7 @@ export class TriSidebarFooterComponent {
       <ng-content select="tri-sidebar-footer"></ng-content>
     </div>
   `,
-  styleUrls      : ['../style/sidebar.css'],
+  styleUrls      : ['../style/sidebar.scss'],
   host           : {
     '[class.fixed]': 'fixedValue',
     '[class.right]': 'rightValue',
@@ -405,7 +405,7 @@ export class TriSidebarComponent implements OnInit, OnDestroy {
 
   protected getMenuLink(element: HTMLElement): HTMLElement | undefined {
     if (!element || element.tagName.toLowerCase() === 'nb-menu') {
-      return;
+      return undefined;
     }
 
     if (element.tagName.toLowerCase() === 'a') {

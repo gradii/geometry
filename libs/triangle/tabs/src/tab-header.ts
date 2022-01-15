@@ -79,7 +79,7 @@ export abstract class _TriTabHeaderBase extends TriPaginatedTabHeader
 @Component({
   selector     : 'tri-tab-header',
   templateUrl  : 'tab-header.html',
-  styleUrls    : ['../style/tab-header.css'],
+  styleUrls    : ['../style/tab-header.scss'],
   inputs       : ['selectedIndex'],
   outputs      : ['selectFocusedIndex', 'indexFocused'],
   encapsulation: ViewEncapsulation.None,

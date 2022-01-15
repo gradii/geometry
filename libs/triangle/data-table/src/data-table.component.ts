@@ -377,8 +377,8 @@ export type fieldFilterMapFn = (fieldKey: string) => 'text' | 'numeric' | 'boole
     <tri-data-table-toolbar *ngIf="showBottomToolbar"></tri-data-table-toolbar>
   `,
   styleUrls    : [
-    `../style/data-table.css`,
-    `../style/pagination.css`
+    `../style/data-table.scss`,
+    `../style/pagination.scss`
   ]
 })
 export class DataTableComponent implements OnChanges, AfterViewInit, AfterContentChecked, AfterContentInit, OnDestroy {

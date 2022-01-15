@@ -17,7 +17,7 @@ import { TreeNode } from '../models';
       [ngTemplateOutlet]="template">
     </ng-container>
   `,
-  styleUrls: ['../../style/components/tree-loading.component.css'],
+  styleUrls: ['../../style/components/tree-loading.component.scss'],
 
 })
 export class TreeLoadingComponent {

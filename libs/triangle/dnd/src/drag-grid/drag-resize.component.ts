@@ -16,6 +16,8 @@ import { TRI_DROP_CONTAINER } from '../directives/drop-container';
 import { Point } from '../drag-drop-ref/drag-ref';
 import { TriDragEnd, TriDragMove, TriDragStart } from '../event/drag-events';
 
+declare const ngDevMode: object | null;
+
 
 export interface TriDragResizeStart {
   source: TriDragResizeContainer;
@@ -119,7 +121,7 @@ export interface TriDragResizeEnd {
     '[class.tri-drag-resize-resizing]': 'resizing',
     '[style.inset.px]'                : '-outMargin/2',
   },
-  styleUrls      : [`../../style/drag-resize.css`]
+  styleUrls      : [`../../style/drag-resize.scss`]
 })
 export class TriDragResizeContainer {
   x: number = 0;

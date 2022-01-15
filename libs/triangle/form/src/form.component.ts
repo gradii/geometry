@@ -11,7 +11,7 @@ import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.None,
   template     : `
     <ng-content></ng-content>`,
-  styleUrls    : ['../style/form.css'],
+  styleUrls    : ['../style/form.scss'],
   host         : {
     '[class.tri-form-horizontal]': '_layout == "horizontal"',
     '[class.tri-form-vertical]'  : '_layout == "vertical"',

@@ -58,7 +58,7 @@ import type { MessageDataFilled, MessageDataOptions } from './message.definition
     </div>
   `,
   styleUrls    : [
-    '../../style/message.css'
+    '../../style/message.scss'
   ]
 })
 export class MessageComponent implements OnInit, OnDestroy {

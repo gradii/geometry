@@ -12,6 +12,8 @@ import { throwMissingMenuReference, throwMissingPointerFocusTracker } from './me
 import { Menu } from './menu-interface';
 import { FocusableElement, PointerFocusTracker } from './pointer-focus-tracker';
 
+declare const ngDevMode: object | null;
+
 /**
  * MenuAim is responsible for determining if a sibling menuitem's menu should be closed when a
  * Toggler item is hovered into. It is up to the hovered in item to call the MenuAim service in

@@ -44,7 +44,7 @@ import type { TreeComponent } from './tree.component';
   host     : {
     '[class.tree-node-wrapper]': 'className'
   },
-  styleUrls: ['../../style/components/tree-node-wrapper.component.css'],
+  styleUrls: ['../../style/components/tree-node-wrapper.component.scss'],
 })
 export class TreeNodeItemComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() node: TreeNode;

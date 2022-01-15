@@ -81,7 +81,7 @@ import { AlertDescriptionDirective, AlertMessageDirective } from './alert.direct
       </a>
     </div>
   `,
-  styleUrls      : ['../style/alert.css'],
+  styleUrls      : ['../style/alert.scss'],
 })
 export class AlertComponent {
 

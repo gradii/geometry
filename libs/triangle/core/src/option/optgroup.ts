@@ -28,7 +28,7 @@ export const TRI_OPTGROUP = new InjectionToken<TriOptgroup>('TriOptgroup');
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs         : ['disabled'],
-  styleUrls      : ['optgroup.css'],
+  styleUrls      : ['optgroup.scss'],
   host           : {
     'class'                        : 'tri-optgroup',
     '[attr.role]'                  : '_inert ? null : "group"',

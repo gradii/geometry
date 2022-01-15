@@ -59,7 +59,7 @@ import type { TreeComponent } from './tree.component';
       [ngTemplateOutlet]="treeNodeFullTemplate">
     </ng-container>
   `,
-  styleUrls: ['../../style/components/tree-node.component.css'],
+  styleUrls: ['../../style/components/tree-node.component.scss'],
 
 })
 export class TreeNodeComponent implements OnInit, OnDestroy {
@@ -137,7 +137,7 @@ export const EXPANSION_PANEL_ANIMATION_TIMING = '225ms cubic-bezier(0.4,0.0,0.2,
                       [style.padding-left]="options.levelPadding!(node)"
                       [template]="loadingTemplate"></tri-tree-loading>
   `,
-  styleUrls : ['../../style/components/tree-node-children.component.css'],
+  styleUrls : ['../../style/components/tree-node-children.component.scss'],
   host      : {
     '[@expandAnimation]'              : 'expandAnimation',
     '[class.tree-node-children]'      : 'className',

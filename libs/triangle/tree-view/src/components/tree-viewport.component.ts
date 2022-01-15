@@ -22,7 +22,7 @@ const DISABLE_ON_SCROLL_CLASS = 'disable-events-on-scroll';
   exportAs : 'triTreeViewport',
   template : `
     <ng-content></ng-content>`,
-  styleUrls: ['../../style/components/tree-viewport.component.css'],
+  styleUrls: ['../../style/components/tree-viewport.component.scss'],
   providers: [TreeVirtualScroll],
 
 })

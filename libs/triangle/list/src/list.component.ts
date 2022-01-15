@@ -32,7 +32,7 @@ import { ListGrid } from './interface';
     '[class.tri-list-grid]'                     : 'grid',
     '[class.tri-list-something-after-last-item]': '!!(loadMore || pagination || footer)'
   },
-  styleUrls      : ['../style/list.css'],
+  styleUrls      : ['../style/list.scss'],
   styles         : [
     `
       tri-list,

@@ -21,7 +21,7 @@ import { BreadcrumbItemComponent } from './breadcrumb-item.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template       : `
     <ng-content></ng-content>`,
-  styleUrls      : ['../style/breadcrumb.css'],
+  styleUrls      : ['../style/breadcrumb.scss'],
   host           : {
     'class': 'tri-breadcrumb'
   }

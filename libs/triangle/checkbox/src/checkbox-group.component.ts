@@ -46,7 +46,7 @@ type OptionDisplay = {
       </li>
     </ul>
   `,
-  styleUrls    : ['../style/checkbox-group.css'],
+  styleUrls    : ['../style/checkbox-group.scss'],
   providers    : [
     {
       provide    : NG_VALUE_ACCESSOR,

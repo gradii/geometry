@@ -58,7 +58,7 @@ import { StepConnectService } from './step-connect.service';
       </div>
     </div>
   `,
-  styleUrls: [`../style/steps.css`],
+  styleUrls: [`../style/steps.scss`],
   styles: [`
              .tri-steps-horizontal tri-step:not(:first-child) .tri-steps-head {
                padding-left : 10px;

@@ -34,7 +34,7 @@ import { SplitterOrientation } from './splitter.types';
     </ng-container>
 
   `,
-  styleUrls      : ['../style/splitter.css'],
+  styleUrls      : ['../style/splitter.scss'],
   host           : {
     'class'  : 'tri-splitter',
     '[class.tri-splitter-vertical]'  : 'orientation === "vertical"',

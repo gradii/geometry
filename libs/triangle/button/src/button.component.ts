@@ -35,7 +35,7 @@ export type ButtonSize = 'xlarge' | 'xl' |
     <tri-icon class="tri-icon-spin" svgIcon="outline:loading" *ngIf="loading"></tri-icon>
     <ng-content *ngIf="!iconOnly || iconOnly&&!loading"></ng-content>
   `,
-  styleUrls      : ['../style/button.css'],
+  styleUrls      : ['../style/button.scss'],
   host           : {
     'class'                           : 'tri-btn',
     '[class.tri-btn-raised]'          : '_variant==="raised"',

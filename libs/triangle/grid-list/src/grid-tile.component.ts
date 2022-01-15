@@ -41,7 +41,7 @@ import {
     '[attr.colspan]': 'colspan'
   },
   templateUrl    : 'grid-tile.component.html',
-  styleUrls      : ['../style/grid-list.css'],
+  styleUrls      : ['../style/grid-list.scss'],
   encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

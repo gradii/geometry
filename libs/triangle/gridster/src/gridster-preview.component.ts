@@ -15,7 +15,7 @@ import { GridsterItem } from './gridster-item.interface';
 @Component({
   selector     : 'gridster-preview',
   template     : '',
-  styleUrls    : ['../style/gridster-preview.css'],
+  styleUrls    : ['../style/gridster-preview.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class GridsterPreviewComponent implements OnInit, OnDestroy {

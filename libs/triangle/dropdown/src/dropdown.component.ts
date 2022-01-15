@@ -75,7 +75,7 @@ export type Placement =
         <ng-content select="[tri-dropdown-custom]"></ng-content>
       </div>
     </ng-template>`,
-  styleUrls      : ['../style/dropdown.css'],
+  styleUrls      : ['../style/dropdown.scss'],
   styles         : [`tri-dropdown {
     position: relative;
     display: inline-block;

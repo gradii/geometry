@@ -17,7 +17,7 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
     '[class.tri-card-bordered]'   : 'bordered',
     '[class.tri-card-no-hovering]': 'noHovering'
   },
-  styleUrls    : ['../style/card.css']
+  styleUrls    : ['../style/card.scss']
 })
 export class CardComponent {
 

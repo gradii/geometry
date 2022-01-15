@@ -44,7 +44,7 @@ type DragEventData = { pageX: number, pageY: number, originalX: number, original
     ></div>
 
   `,
-  styleUrls      : ['../style/splitter-bar.css'],
+  styleUrls      : ['../style/splitter-bar.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SplitterBarComponent implements OnInit, AfterViewInit, OnDestroy {

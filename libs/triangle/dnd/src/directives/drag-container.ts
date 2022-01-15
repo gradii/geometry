@@ -22,6 +22,7 @@ import { TRI_DROP_CONTAINER, TriDropContainer } from './drop-container';
 import { TRI_DROP_CONTAINER_GROUP, TriDropContainerGroup } from './drop-container-group';
 import { TriDropListContainer } from './drop-list-container';
 
+declare const ngDevMode: object | null;
 
 @Directive({
   selector : '[triDragContainer], tri-drag-container',

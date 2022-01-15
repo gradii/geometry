@@ -15,25 +15,25 @@ export interface ServerGroupResult {
   HasSubgroups: boolean;
 }
 
-const set = function (field, target, value) {
+const set                 = function (field: any, target: any, value: any) {
   target[field] = value;
   return target;
 };
-const convert = function (mapper) {
-  return function (values) {
+const convert             = function (mapper: any) {
+  return function (values: any) {
     return Object.keys(values).reduce(mapper.bind(null, values), {});
   };
 };
-const translateAggregate = convert(function (source, acc, field) {
+const translateAggregate  = convert(function (source: any, acc: any, field: string) {
   return set(field.toLowerCase(), acc, source[field]);
 });
-const translateAggregates = convert(function (source, acc, field) {
+const translateAggregates = convert(function (source: any, acc: any, field: string) {
   return set(field, acc, translateAggregate(source[field]));
 });
-const valueOrDefault = function (value, defaultValue) {
+const valueOrDefault      = function (value: any, defaultValue: any) {
   return isPresent(value) ? value : defaultValue;
 };
-const normalizeGroup = function (group) {
+const normalizeGroup      = function (group: any) {
   return {
     aggregates  : group.Aggregates || group.aggregates,
     field       : group.Member || group.member || group.field,
@@ -42,7 +42,13 @@ const normalizeGroup = function (group) {
     value       : valueOrDefault(group.Key, valueOrDefault(group.key, group.value))
   };
 };
-const translateGroup = compose(function ({field, hasSubgroups, value, aggregates, items}) {
+const translateGroup      = compose(function ({field, hasSubgroups, value, aggregates, items}: {
+  field: any,
+  hasSubgroups: boolean,
+  value: any,
+  aggregates: any,
+  items: any[]
+}) {
   return {
     aggregates: translateAggregates(aggregates),
     field     : field,
@@ -51,12 +57,13 @@ const translateGroup = compose(function ({field, hasSubgroups, value, aggregates
   };
 }, normalizeGroup);
 
-export function translateDataSourceResultGroups(data) {
+export function translateDataSourceResultGroups(data: any[]) {
   return data.map(translateGroup);
 }
 
-export function translateAggregateResults(data) {
-  return (data || []).reduce(function (acc, x) {
-    return set(x.Member, acc, set(x.AggregateMethodName.toLowerCase(), acc[x.Member] || {}, x.Value));
+export function translateAggregateResults(data: any | any[]) {
+  return (data || []).reduce(function (acc: any, x: any) {
+    return set(x.Member, acc,
+      set(x.AggregateMethodName.toLowerCase(), acc[x.Member] || {}, x.Value));
   }, {});
 }

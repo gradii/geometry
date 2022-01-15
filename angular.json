@@ -28,25 +28,41 @@
     },
     "check-type": {
       "projectType": "library",
-      "root": "src/check-type",
-      "sourceRoot": "src/check-type/src",
+      "root": "libs/check-type",
+      "sourceRoot": "libs/check-type/src",
       "prefix": "applications",
       "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "outputs": ["dist/libs/check-type"],
+          "options": {
+            "project": "libs/check-type/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/check-type/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/check-type/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/check-type"],
+          "options": {
+            "jestConfig": "libs/check-type/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "src/check-type/src/**/*.ts",
-              "src/check-type/src/**/*.html"
+              "libs/check-type/src/**/*.ts",
+              "libs/check-type/src/**/*.html"
             ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/src/check-type"],
-          "options": {
-            "jestConfig": "src/check-type/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }
@@ -315,25 +331,41 @@
     },
     "vector-math": {
       "projectType": "library",
-      "root": "src/vector-math",
-      "sourceRoot": "src/vector-math/src",
+      "root": "libs/vector-math",
+      "sourceRoot": "libs/vector-math/src",
       "prefix": "applications",
       "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "outputs": ["dist/libs/vector-math"],
+          "options": {
+            "project": "libs/vector-math/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/vector-math/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/vector-math/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/vector-math"],
+          "options": {
+            "jestConfig": "libs/vector-math/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "src/vector-math/src/**/*.ts",
-              "src/vector-math/src/**/*.html"
+              "libs/vector-math/src/**/*.ts",
+              "libs/vector-math/src/**/*.html"
             ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/src/vector-math"],
-          "options": {
-            "jestConfig": "src/vector-math/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }

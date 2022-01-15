@@ -32,6 +32,7 @@ import {
   TooltipPosition, TooltipTouchGestures, TriTooltipDefaultOptions
 } from './tooltip.interface';
 
+declare const ngDevMode: object | null;
 
 /**
  * Time between the user putting the pointer on a tooltip

@@ -29,6 +29,8 @@ import { TriLabel } from './label';
 import { TRI_PREFIX, TriPrefix } from './prefix';
 import { TRI_SUFFIX, TriSuffix } from './suffix';
 
+declare const ngDevMode: object | null;
+
 let nextUniqueId         = 0;
 const floatingLabelScale = 0.75;
 
@@ -79,9 +81,9 @@ export const TRI_FORM_FIELD = new InjectionToken<FormFieldComponent>('TriFormFie
   // in form-field-input.css. The MatInput styles are fairly minimal so it shouldn't be a
   // big deal for people who aren't using MatInput.
   styleUrls      : [
-    '../style/form-field.css',
-    '../style/form-field-fill.css',
-    '../style/form-field-input.css',
+    '../style/form-field.scss',
+    '../style/form-field-fill.scss',
+    '../style/form-field-input.scss',
   ],
   animations     : [triFormFieldAnimations.transitionMessages],
   host           : {

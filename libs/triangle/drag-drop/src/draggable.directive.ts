@@ -34,7 +34,7 @@ export class Draggable implements AfterViewInit, OnDestroy {
 
   @Input('triDraggable') scope: string;
 
-  @Input() dragEffect: string;
+  @Input() dragEffect: DataTransfer['effectAllowed'];
 
   @Input() dragHandle: string;
 

@@ -6,46 +6,18 @@
 
 // tslint:disable:no-any
 import {
-  BACKSPACE,
-  DOWN_ARROW,
-  ENTER,
-  ESCAPE,
-  LEFT_ARROW,
-  RIGHT_ARROW,
-  UP_ARROW
+  BACKSPACE, DOWN_ARROW, ENTER, ESCAPE, LEFT_ARROW, RIGHT_ARROW, UP_ARROW
 } from '@angular/cdk/keycodes';
 import {
-  CdkConnectedOverlay,
-  ConnectedOverlayPositionChange,
-  ConnectionPositionPair
+  CdkConnectedOverlay, ConnectedOverlayPositionChange, ConnectionPositionPair
 } from '@angular/cdk/overlay';
 import {
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  HostListener,
-  Input,
-  OnDestroy,
-  Output,
-  TemplateRef,
-  ViewChild
+  ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, HostListener, Input,
+  OnDestroy, Output, TemplateRef, ViewChild
 } from '@angular/core';
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR
-} from '@angular/forms';
-import {
-  DEFAULT_DROPDOWN_POSITIONS,
-  DropDownAnimation
-} from '@gradii/triangle/core';
-import {
-  coerceToArray,
-  isArray,
-  isObject,
-  loop
-} from '@gradii/triangle/util';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { DEFAULT_DROPDOWN_POSITIONS, DropDownAnimation } from '@gradii/triangle/core';
+import { coerceToArray, isArray, isObject, loop } from '@gradii/triangle/util';
 
 function arrayEquals<T>(array1: T[], array2: T[]): boolean {
   if (!array1 || !array2 || array1.length !== array2.length) {
@@ -119,115 +91,115 @@ export interface ShowSearchOptions {
   },
   styles     : [
     `.tri-cascader {
-      display: block;
+      display : block;
     }`,
     `.tri-cascader-menus {
-      margin-top: 4px;
-      margin-bottom: 4px;
-      top: 100%;
-      left: 0;
-      position: relative;
-      width: 100%;
+      margin-top    : 4px;
+      margin-bottom : 4px;
+      top           : 100%;
+      left          : 0;
+      position      : relative;
+      width         : 100%;
     }`
   ],
   styleUrls  : [
-    '../style/cascader.css'
+    '../style/cascader.scss'
   ]
 })
 export class CascaderComponent implements OnDestroy, ControlValueAccessor {
-  dropDownPosition = 'bottom';
-  menuVisible = false;
-  isLoading = false;
+  dropDownPosition                                                    = 'bottom';
+  menuVisible                                                         = false;
+  isLoading                                                           = false;
   el: HTMLElement;
-  isFocused = false;
-  isLabelRenderTemplate = false;
+  isFocused                                                           = false;
+  isLabelRenderTemplate                                               = false;
   labelRenderText: string;
-  labelRenderContext: any = {};
+  labelRenderContext: any                                             = {};
   // 表示当前菜单的数据列：all data columns
-  columns: CascaderOption[][] = [];
+  columns: CascaderOption[][]                                         = [];
   searchWidthStyle: string;
   /** If cascader is in search mode. */
-  inSearch = false;
+  inSearch                                                            = false;
   // ngModel Access
-  onChange: any = loop;
-  onTouched: any = loop;
-  positions: ConnectionPositionPair[] = [...DEFAULT_DROPDOWN_POSITIONS];
+  onChange: any                                                       = loop;
+  onTouched: any                                                      = loop;
+  positions: ConnectionPositionPair[]                                 = [...DEFAULT_DROPDOWN_POSITIONS];
   /** Whether is disabled */
-  @Input() disabled: boolean = false;
+  @Input() disabled: boolean                                          = false;
   /** Input size, one of `large` `default` `small` */
-  @Input() size: CascaderSize = 'default';
+  @Input() size: CascaderSize                                         = 'default';
   /** Whether show input box. Defaults to `true`. */
-  @Input() showInput: boolean = true;
+  @Input() showInput: boolean                                         = true;
   /** Whether allow clear. Defaults to `true`. */
-  @Input() allowClear: boolean = true;
+  @Input() allowClear: boolean                                        = true;
   /** Whether auto focus. */
   @Input()
-  autoFocus: boolean = false;
+  autoFocus: boolean                                                  = false;
   /** Whether to show arrow */
   @Input()
-  showArrow: boolean = true;
+  showArrow: boolean                                                  = true;
   /** Change value on each selection if set to true */
-  @Input() changeOnSelect: boolean = false;
+  @Input() changeOnSelect: boolean                                    = false;
   /** Hover text for the clear icon */
-  @Input() clearText = 'Clear';
+  @Input() clearText                                                  = 'Clear';
   /** Expand column item when click or hover, one of 'click' 'hover' */
-  @Input() expandTrigger: CascaderExpandTrigger = 'click';
+  @Input() expandTrigger: CascaderExpandTrigger                       = 'click';
   /** Specify content to show when no result matches. */
-  @Input() notFoundContent = 'Not Found';
+  @Input() notFoundContent                                            = 'Not Found';
   /** Input placeholder */
-  @Input() placeHolder = 'Please select';
+  @Input() placeHolder                                                = 'Please select';
   /** Additional style of popup overlay */
   @Input() menuStyle: { [key: string]: string; };
   /** Change value on selection only if this function returns `true` */
   @Input() changeOn: (option: CascaderOption, level: number) => boolean;
   /** Delay time to show when mouse enter, when `expandTrigger` is `hover`. */
-  @Input() mouseEnterDelay = 150; // ms
+  @Input() mouseEnterDelay                                            = 150; // ms
   /** Delay time to hide when mouse enter, when `expandTrigger` is `hover`. */
-  @Input() mouseLeaveDelay = 150; // ms
+  @Input() mouseLeaveDelay                                            = 150; // ms
   /** Triggering mode: can be Array<'click'|'hover'> */
   @Input() triggerAction: CascaderTriggerType | CascaderTriggerType[] = ['click'];
   /** Property name for getting `value` in the option */
-  @Input() valueProperty = 'value';
+  @Input() valueProperty                                              = 'value';
   /** Property name for getting `label` in the option */
-  @Input() labelProperty = 'label';
-  @Input() valueType: 'simple' | 'normal' | 'all' = 'simple';
-  @Input() maxColumn = Infinity;
+  @Input() labelProperty                                              = 'label';
+  @Input() valueType: 'simple' | 'normal' | 'all'                     = 'simple';
+  @Input() maxColumn                                                  = Infinity;
   /** 异步加载数据 */
   @Input() loadData: (node: CascaderOption, index?: number) => PromiseLike<any>;
   /** Event: emit on popup show or hide */
-  @Output() visibleChange = new EventEmitter<boolean>();
+  @Output() visibleChange                                             = new EventEmitter<boolean>();
   /** Event: emit on values changed */
-  @Output() change = new EventEmitter<any[] | Object>();
+  @Output() change                                                    = new EventEmitter<any[] | Object>();
   /** Event: emit on values and selection changed */
-  @Output() selectionChange = new EventEmitter<CascaderOption[]>();
+  @Output() selectionChange                                           = new EventEmitter<CascaderOption[]>();
   /**
    * Event: emit on option selected, event data：{option: any, index: number}
    */
-  @Output() selectEvent = new EventEmitter<{
+  @Output() selectEvent                                               = new EventEmitter<{
     option: CascaderOption,
     index: number
   }>();
   /** Event: emit on the clear button clicked */
-  @Output() clear = new EventEmitter<void>();
+  @Output() clear                                                     = new EventEmitter<void>();
   @ViewChild('input', {static: false}) input: ElementRef;
   /** 浮层菜单 */
   @ViewChild('menu', {static: false}) menu: ElementRef;
   @ViewChild(CdkConnectedOverlay, {static: false}) overlayDir: CdkConnectedOverlay;
   private defaultValue: any[];
-  private isOpening = false;
+  private isOpening                                                   = false;
   /** 选择选项后，渲染显示文本 */
   private labelRenderTpl: TemplateRef<any>;
   // 当前值
   private value: any[];
   // 已选择的选项表示当前已确认的选项：selection will trigger value change
-  private selectedOptions: CascaderOption[] = [];
+  private selectedOptions: CascaderOption[]                           = [];
   // 已激活的选项表示通过键盘方向键选择的选项，并未最终确认（除非按ENTER键）：activaction will not trigger value change
-  private activatedOptions: CascaderOption[] = [];
+  private activatedOptions: CascaderOption[]                          = [];
   // 显示或隐藏菜单计时器
   private delayTimer: any;
   private delaySelectTimer: any;
-  private oldColumnsHolder;
-  private oldActivatedOptions;
+  private oldColumnsHolder: any[];
+  private oldActivatedOptions: CascaderOption[];
 
   constructor(private elementRef: ElementRef,
               private cdr: ChangeDetectorRef) {
@@ -257,7 +229,7 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
     this._inputValue = value;
     if (!this.inSearch) {
       this.oldActivatedOptions = this.activatedOptions;
-      this.activatedOptions = [];
+      this.activatedOptions    = [];
     } else {
       this.activatedOptions = this.oldActivatedOptions;
     }
@@ -267,7 +239,7 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
       this.searchWidthStyle = `${this.input.nativeElement.offsetWidth}px`;
       this.prepareSearchValue();
     } else {
-      this.columns = this.oldColumnsHolder;
+      this.columns          = this.oldColumnsHolder;
       this.searchWidthStyle = '';
     }
   }
@@ -279,7 +251,7 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
   /** Display Render ngTemplate */
   @Input()
   set labelRender(value: TemplateRef<any>) {
-    this.labelRenderTpl = value;
+    this.labelRenderTpl        = value;
     this.isLabelRenderTemplate = (value instanceof TemplateRef);
   }
 
@@ -380,9 +352,9 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
     // this.isLabelRenderTemplate = false;
     // clear custom context
     this.labelRenderContext = {};
-    this.selectedOptions = [];
-    this.activatedOptions = [];
-    this._inputValue = '';
+    this.selectedOptions    = [];
+    this.activatedOptions   = [];
+    this._inputValue        = '';
     this.setMenuVisible(false);
 
     // trigger change event
@@ -475,8 +447,8 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
     }
     if (this.isPointerTiggerAction()) {
       const mouseTarget = event.relatedTarget as HTMLElement;
-      const hostEl = this.el;
-      const menuEl = this.menu && this.menu.nativeElement as HTMLElement;
+      const hostEl      = this.el;
+      const menuEl      = this.menu && this.menu.nativeElement as HTMLElement;
       if (hostEl.contains(mouseTarget) || (menuEl && menuEl.contains(mouseTarget))
         /*|| mouseTarget.parentElement.contains(menuEl)*/) {
         // 因为浮层的backdrop出现，暂时没有办法自动消失
@@ -637,7 +609,7 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
 
   afterWriteValue(): void {
     this.selectedOptions = this.activatedOptions;
-    this.value = this.getSubmitValue();
+    this.value           = this.getSubmitValue();
     this.buildDisplayLabel();
   }
 
@@ -651,9 +623,9 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
     this.delaySetMenuVisible(false, 200);
 
     setTimeout(() => {
-      this.inputValue = ''; // Not only remove `inputValue` but also reverse `nzColumns` in the hook.
-      const index = result.path.length - 1;
-      const destiNode = result.path[index];
+      this.inputValue       = ''; // Not only remove `inputValue` but also reverse `nzColumns` in the hook.
+      const index           = result.path.length - 1;
+      const destiNode       = result.path[index];
       const mockClickParent = (node: CascaderOption, cIndex: number) => {
         if (node && node.parent) {
           mockClickParent(node.parent, cIndex - 1);
@@ -681,7 +653,7 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
     if (vs.length) {
       this.initOptions(0);
     } else {
-      this.value = vs;
+      this.value            = vs;
       this.activatedOptions = [];
       this.afterWriteValue();
     }
@@ -716,7 +688,7 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
   }
 
   private buildDisplayLabel(): void {
-    const selectedOptions = this.selectedOptions;
+    const selectedOptions  = this.selectedOptions;
     const labels: string[] = selectedOptions.map(o => this.getOptionLabel(o));
     // 设置当前控件的显示值
     if (this.isLabelRenderTemplate) {
@@ -766,7 +738,8 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
    * @param index  选项所在的列组的索引
    * @param select 是否触发选择结点
    */
-  private setActiveOption(option: CascaderOption, index: number, select: boolean = false, loadChildren: boolean = true): void {
+  private setActiveOption(option: CascaderOption, index: number, select: boolean = false,
+                          loadChildren: boolean                                  = true): void {
     if (!option || option.disabled) {
       return;
     }
@@ -814,7 +787,8 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
     }
   }
 
-  private loadChildren(option: CascaderOption, index: number, success?: () => void, failure?: () => void): void {
+  private loadChildren(option: CascaderOption, index: number, success?: () => void,
+                       failure?: () => void): void {
     if (this.loadData) {
       this.isLoading = index < 0;
       option.loading = true;
@@ -829,7 +803,7 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
         }
       }, () => {
         option.loading = this.isLoading = false;
-        option.isLeaf = true;
+        option.isLeaf  = true;
         if (failure) {
           failure();
         }
@@ -875,7 +849,7 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
 
   /** 按下回车键时选择 */
   private onEnter(): void {
-    const columnIndex = Math.max(this.activatedOptions.length - 1, 0);
+    const columnIndex  = Math.max(this.activatedOptions.length - 1, 0);
     const activeOption = this.activatedOptions[columnIndex];
     if (activeOption && !activeOption.disabled) {
       if (this.inSearch) {
@@ -890,13 +864,13 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
    * press `up` or `down` arrow to activate the sibling option.
    */
   private moveUpOrDown(isUp: boolean): void {
-    const columnIndex = Math.max(this.activatedOptions.length - 1, 0);
+    const columnIndex  = Math.max(this.activatedOptions.length - 1, 0);
     // 该组中已经被激活的选项
     const activeOption = this.activatedOptions[columnIndex];
     // 该组所有的选项，用于遍历获取下一个被激活的选项
-    const options = this.columns[columnIndex] || [];
-    const length = options.length;
-    let nextIndex = -1;
+    const options      = this.columns[columnIndex] || [];
+    const length       = options.length;
+    let nextIndex      = -1;
     if (!activeOption) { // 该列还没有选中的选项
       nextIndex = isUp ? length : -1;
     } else {
@@ -939,7 +913,7 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
    * press `right` arrow to select the next column option.
    */
   private moveRight(): void {
-    const length = this.activatedOptions.length;
+    const length  = this.activatedOptions.length;
     const options = this.columns[length];
     if (options && options.length) {
       const nextOpt = options.find(o => !o.disabled);
@@ -967,11 +941,11 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
   }
 
   private onValueChange(): void {
-    const value = this.getSubmitValue();
+    const value      = this.getSubmitValue();
     const modelValue = this.valueFormatter();
     if (!arrayEquals(this.value, value)) {
       this.defaultValue = null; // clear the init-value
-      this.value = value;
+      this.value        = value;
       this.onChange(modelValue); // Angular need this
       if (value.length === 0) {
         this.clear.emit(); // first trigger `clear` and then `change`
@@ -1006,7 +980,7 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
   }
 
   private initOptions(index: number): void {
-    const vs = this.defaultValue;
+    const vs   = this.defaultValue;
     const load = () => {
       this.activateOnInit(index, vs[index]);
       if (index < vs.length - 1) {
@@ -1026,9 +1000,10 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
   }
 
   private prepareSearchValue(): void {
-    const results: CascaderSearchOption[] = [];
-    const path: CascaderOption[] = [];
-    const defaultFilter = (inputValue: string, p: CascaderOption[]): boolean => {
+    const results: CascaderSearchOption[]                                                  = [];
+    const path: CascaderOption[]                                                           = [];
+    const defaultFilter                                                                    = (inputValue: string,
+                                                                                              p: CascaderOption[]): boolean => {
       let flag = false;
       p.forEach(n => {
         if (n.label.indexOf(inputValue) > -1) {
@@ -1037,13 +1012,14 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
       });
       return flag;
     };
-    const filter: (inputValue: string, p: CascaderOption[]) => boolean =
-      this.showSearch instanceof Object && (this.showSearch as ShowSearchOptions).filter ?
-        (this.showSearch as ShowSearchOptions).filter :
-        defaultFilter;
+    const filter: (inputValue: string, p: CascaderOption[]) => boolean                     =
+            this.showSearch instanceof Object && (this.showSearch as ShowSearchOptions).filter ?
+              (this.showSearch as ShowSearchOptions).filter :
+              defaultFilter;
     const sorter: (a: CascaderOption[], b: CascaderOption[], inputValue: string) => number =
-      this.showSearch instanceof Object && (this.showSearch as ShowSearchOptions).sorter;
-    const loopParent = (node: CascaderOption, forceDisabled = false) => {
+            this.showSearch instanceof Object && (this.showSearch as ShowSearchOptions).sorter;
+    const loopParent                                                                       = (node: CascaderOption,
+                                                                                              forceDisabled = false) => {
       const disabled = forceDisabled || node.disabled;
       path.push(node);
       node.children.forEach((sNode) => {
@@ -1060,7 +1036,8 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
       });
       path.pop();
     };
-    const loopChild = (node: CascaderOption, forceDisabled = false) => {
+    const loopChild                                                                        = (node: CascaderOption,
+                                                                                              forceDisabled = false) => {
       path.push(node);
       const cPath = Array.from(path);
       if (filter(this._inputValue, cPath)) {
@@ -1075,7 +1052,7 @@ export class CascaderComponent implements OnDestroy, ControlValueAccessor {
       path.pop();
     };
 
-    this.oldColumnsHolder[0].forEach(node => loopParent(node));
+    this.oldColumnsHolder[0].forEach((node: any) => loopParent(node));
     if (sorter) {
       results.sort((a, b) => sorter(a.path, b.path, this._inputValue));
     }

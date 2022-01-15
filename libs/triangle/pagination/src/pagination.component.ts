@@ -131,7 +131,7 @@ import { PageChangeEvent } from './event/page-change.event';
         </div>
       </div>
     </ul>`,
-  styleUrls      : ['../style/pagination.css']
+  styleUrls      : ['../style/pagination.scss']
 })
 export class PaginationComponent {
   _firstIndex = 1;

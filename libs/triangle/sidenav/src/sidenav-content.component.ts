@@ -6,11 +6,12 @@
 
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, forwardRef, Inject, NgZone,
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, NgZone,
   ViewEncapsulation,
 } from '@angular/core';
 import { TriDrawerContent } from '@gradii/triangle/drawer';
-import { SidenavContainerComponent } from './sidenav-container.component';
+import type { SidenavContainerComponent } from './sidenav-container.component';
+import { TRI_SIDENAV_CONTAINER } from './sidenav.common';
 
 
 @Component({
@@ -27,7 +28,7 @@ import { SidenavContainerComponent } from './sidenav-container.component';
 export class SidenavContentComponent extends TriDrawerContent {
   constructor(
     changeDetectorRef: ChangeDetectorRef,
-    @Inject(forwardRef(() => SidenavContainerComponent)) container: SidenavContainerComponent,
+    @Inject(TRI_SIDENAV_CONTAINER) container: SidenavContainerComponent,
     elementRef: ElementRef<HTMLElement>,
     scrollDispatcher: ScrollDispatcher,
     ngZone: NgZone

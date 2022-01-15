@@ -18,6 +18,8 @@ import {
   TriButtonToggleDefaultOptions
 } from './type';
 
+declare const ngDevMode: object | null;
+
 // Counter used to generate unique IDs.
 let uniqueIdCounter = 0;
 

@@ -35,7 +35,7 @@ import { CandyDate } from '../lib/candy-date/candy-date';
     DropDownAnimation
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: [`../style/picker.css`]
+  styleUrls: [`../style/picker.scss`]
 })
 
 export class PickerComponent implements OnInit, AfterViewInit {

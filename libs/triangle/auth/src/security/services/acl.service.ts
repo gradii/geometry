@@ -6,11 +6,13 @@
 
 
 import { Inject, Injectable, Optional } from '@angular/core';
-import { TRI_SECURITY_OPTIONS_TOKEN, TriAclOptions, TriAclRole, TriAccessControl } from '../security.options';
+import {
+  TRI_SECURITY_OPTIONS_TOKEN, TriAccessControl, TriAclOptions, TriAclRole
+} from '../security.options';
 
-const shallowObjectClone = (o) => Object.assign({}, o);
-const shallowArrayClone = (a) => Object.assign([], a);
-const popParent = (abilities) => {
+const shallowObjectClone = (o: any) => ({...o});
+const shallowArrayClone  = (a: any[]) => [...a];
+const popParent          = (abilities: any) => {
   const parent = abilities['parent'];
   delete abilities['parent'];
   return parent;
@@ -26,7 +28,8 @@ export class TriAclService {
 
   private state: TriAccessControl = {};
 
-  constructor(@Optional() @Inject(TRI_SECURITY_OPTIONS_TOKEN) protected settings: TriAclOptions = {}) {
+  constructor(@Optional() @Inject(
+    TRI_SECURITY_OPTIONS_TOKEN) protected settings: TriAclOptions = {}) {
 
     if (settings.accessControl) {
       this.setAccessControl(settings.accessControl);
@@ -40,7 +43,7 @@ export class TriAclService {
   setAccessControl(list: TriAccessControl) {
     for (const [role, value] of Object.entries(list)) {
       const abilities = shallowObjectClone(value);
-      const parent = popParent(abilities);
+      const parent    = popParent(abilities);
       this.register(role, parent, abilities);
     }
   }
@@ -51,7 +54,8 @@ export class TriAclService {
    * @param {string} parent
    * @param {[permission: string]: string|string[]} abilities
    */
-  register(role: string, parent: string = null, abilities: {[permission: string]: string|string[]} = {}) {
+  register(role: string, parent: string                           = null,
+           abilities: { [permission: string]: string | string[] } = {}) {
 
     this.validateRole(role);
 
@@ -71,7 +75,7 @@ export class TriAclService {
    * @param {string} permission
    * @param {string | string[]} resource
    */
-  allow(role: string, permission: string, resource: string|string[]) {
+  allow(role: string, permission: string, resource: string | string[]) {
 
     this.validateRole(role);
 
@@ -82,7 +86,7 @@ export class TriAclService {
     resource = typeof resource === 'string' ? [resource] : resource;
 
     let resources = shallowArrayClone(this.getRoleResources(role, permission));
-    resources = resources.concat(resource);
+    resources     = resources.concat(resource);
 
     this.state[role][permission] = resources
       .filter((item, pos) => resources.indexOf(item) === pos);
@@ -95,11 +99,11 @@ export class TriAclService {
    * @param {string} resource
    * @returns {boolean}
    */
-  can(role: string, permission: string, resource: string) {
+  can(role: string, permission: string, resource: string): boolean {
     this.validateResource(resource);
 
     const parentRole = this.getRoleParent(role);
-    const parentCan = parentRole && this.can(this.getRoleParent(role), permission, resource);
+    const parentCan  = parentRole && this.can(this.getRoleParent(role), permission, resource);
     return parentCan || this.exactCan(role, permission, resource);
   }
 
@@ -115,7 +119,8 @@ export class TriAclService {
 
   private validateResource(resource: string) {
     if (!resource || [TriAclService.ANY_RESOURCE].includes(resource)) {
-      throw new Error(`TriAclService: cannot use empty or bulk '*' resource placeholder with 'can' method`);
+      throw new Error(
+        `TriAclService: cannot use empty or bulk '*' resource placeholder with 'can' method`);
     }
   }
 
@@ -128,7 +133,7 @@ export class TriAclService {
     return this.getRoleAbilities(role)[permission] || [];
   }
 
-  private getRoleAbilities(role: string): {[permission: string]: string[]} {
+  private getRoleAbilities(role: string): { [permission: string]: string[] } {
     const abilities = shallowObjectClone(this.state[role] || {});
     popParent(shallowObjectClone(this.state[role] || {}));
     return abilities;

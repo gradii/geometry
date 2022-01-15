@@ -33,7 +33,7 @@ import { GridsterUtils } from './gridster-utils.service';
 @Component({
   selector     : 'gridster',
   templateUrl  : './gridster.html',
-  styleUrls    : ['../style/gridster.css'],
+  styleUrls    : ['../style/gridster.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class GridsterComponent implements OnInit, OnChanges, OnDestroy, GridsterComponentInterface {

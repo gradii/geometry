@@ -33,7 +33,7 @@
       "tags": ["pkg"]
     },
     "check-type": {
-      "tags": ["pkg"]
+      "tags": []
     },
     "date-math": {
       "tags": ["pkg"]
@@ -54,7 +54,7 @@
       "tags": []
     },
     "vector-math": {
-      "tags": ["pkg"]
+      "tags": []
     }
   }
 }

@@ -402,7 +402,7 @@ export abstract class _TriTabGroupBase extends _TriTabGroupMixinBase implements 
   selector     : 'tri-tab-group',
   exportAs     : 'triTabGroup',
   templateUrl  : 'tab-group.html',
-  styleUrls    : ['../style/tab-group.css'],
+  styleUrls    : ['../style/tab-group.scss'],
   encapsulation: ViewEncapsulation.None,
   // tslint:disable-next-line:validate-decorators
   changeDetection: ChangeDetectionStrategy.Default,

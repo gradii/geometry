@@ -5,16 +5,8 @@
  */
 
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Input,
-  OnDestroy,
-  OnInit,
-  Renderer2,
-  TemplateRef,
-  ViewEncapsulation
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit,
+  TemplateRef, ViewEncapsulation
 } from '@angular/core';
 import { isPresent } from '@gradii/triangle/util';
 import { Subject } from 'rxjs';
@@ -28,6 +20,7 @@ import { SelectService } from './select.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation  : ViewEncapsulation.None,
   host           : {
+    'class'                                         : 'tri-select-dropdown-menu-item',
     '[class.tri-select-dropdown-menu-item-selected]': 'selected && !option.disabled',
     '[class.tri-select-dropdown-menu-item-disabled]': 'option.disabled',
     '[class.tri-select-dropdown-menu-item-active]'  : 'active && !option.disabled',
@@ -39,19 +32,17 @@ import { SelectService } from './select.service';
 })
 export class OptionLiComponent implements OnInit, OnDestroy {
   el: HTMLElement = this.elementRef.nativeElement;
-  selected = false;
-  active = false;
-  destroy$ = new Subject();
+  selected        = false;
+  active          = false;
+  destroy$        = new Subject();
   @Input() option: ComboboxOptionComponent;
   @Input() menuItemSelectedIcon: TemplateRef<any>;
 
   constructor(
-    private elementRef: ElementRef,
+    private elementRef: ElementRef<HTMLElement>,
     public selectService: SelectService,
     private cdr: ChangeDetectorRef,
-    renderer: Renderer2
   ) {
-    renderer.addClass(elementRef.nativeElement, 'tri-select-dropdown-menu-item');
   }
 
   clickOption(): void {
@@ -60,7 +51,8 @@ export class OptionLiComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.selectService.listOfSelectedValue$.pipe(takeUntil(this.destroy$)).subscribe(list => {
-      this.selected = isPresent(list.find((v: any) => this.selectService.compareWith(v, this.option.value)));
+      this.selected = isPresent(
+        list.find((v: any) => this.selectService.compareWith(v, this.option.value)));
       this.cdr.markForCheck();
     });
     this.selectService.activatedOption$.pipe(takeUntil(this.destroy$)).subscribe(option => {

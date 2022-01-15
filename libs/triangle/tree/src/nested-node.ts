@@ -16,6 +16,8 @@ import { CDK_TREE_NODE_OUTLET_NODE, CdkTreeNodeOutlet } from './outlet';
 import { CdkTree, CdkTreeNode } from './tree';
 import { getTreeControlFunctionsMissingError } from './tree-errors';
 
+declare const ngDevMode: object | null;
+
 /**
  * Nested node is a child of `<cdk-tree>`. It works with nested tree.
  * By using `cdk-nested-tree-node` component in tree node template, children of the parent node will

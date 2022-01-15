@@ -77,7 +77,7 @@ import { SelectService } from './select.service';
       }
     `
   ],
-  styleUrls: ['../style/select.css']
+  styleUrls: ['../style/select.scss']
 })
 export class SelectComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnDestroy, AfterContentInit {
   // tslint:disable-next-line:no-any

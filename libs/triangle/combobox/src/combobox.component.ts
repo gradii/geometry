@@ -60,7 +60,7 @@ import { SelectService } from './select.service';
       }
     `
   ],
-  styleUrls      : ['../style/combobox.css']
+  styleUrls      : ['../style/combobox.scss']
 })
 export class ComboboxComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnDestroy, AfterContentInit {
   // tslint:disable-next-line:no-any

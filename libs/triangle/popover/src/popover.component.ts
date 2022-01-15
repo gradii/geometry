@@ -54,7 +54,7 @@ export const popoverAnimation: AnimationTriggerMetadata = trigger('popoverAnimat
         </div>
       </div>
     </div>`,
-  styleUrls      : ['../style/popover.css'],
+  styleUrls      : ['../style/popover.scss'],
   host           : {
     'class': 'tri-popover'
   },

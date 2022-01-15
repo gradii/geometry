@@ -10,11 +10,11 @@ import { Directive, ElementRef, HostBinding } from '@angular/core';
   selector: '[triCarouselContent]'
 })
 export class CarouselContentDirective {
-  width = 0;
-  isActive = false;
-  left = null;
-  top = null;
-  fadeMode = false;
+  width        = 0;
+  isActive     = false;
+  left: number = null;
+  top: number  = null;
+  fadeMode     = false;
   nativeElement: HTMLElement;
 
   @HostBinding('class.slick-slide') _nzSlickSlide = true;

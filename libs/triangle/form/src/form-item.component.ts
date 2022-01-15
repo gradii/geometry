@@ -13,7 +13,7 @@ import { FormComponent } from './form.component';
   template     : `
     <ng-content></ng-content>`,
   // changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['../style/form-item.css'],
+  styleUrls: ['../style/form-item.scss'],
   host     : {
     'class'                           : 'tri-form-item',
     '[class.tri-form-item-vertical]'  : 'layout === "vertical"',

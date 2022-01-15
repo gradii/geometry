@@ -49,7 +49,7 @@ import { IconRegistry } from './icon-registry';
   selector       : 'tri-icon, i[tri-icon]',
   exportAs       : 'triIcon',
   template       : '<ng-content></ng-content>',
-  styleUrls      : ['../style/icon.css'],
+  styleUrls      : ['../style/icon.scss'],
   // inputs             : ['color'],
   host           : {
     'role'                   : 'img',

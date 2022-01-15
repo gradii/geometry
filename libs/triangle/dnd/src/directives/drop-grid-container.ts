@@ -28,6 +28,8 @@ import { TriDragDrop, TriDragEnter, TriDragExit } from '../event/drag-events';
 import { DragAxis, DragDropConfig, TRI_DRAG_CONFIG } from './config';
 import { TRI_DROP_CONTAINER_GROUP, TriDropContainerGroup } from './drop-container-group';
 
+declare const ngDevMode: object | null;
+
 export const TRI_DROP_GRID_CONTAINER_CONFIG = new InjectionToken('tri drop grid container config');
 
 

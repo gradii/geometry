@@ -16,7 +16,6 @@ import { TriMenuModule } from 'menu/src/menu.module';
   imports        : [CommonModule, TriMenuModule],
   exports        : [NbContextMenuDirective],
   declarations   : [NbContextMenuDirective, NbContextMenuComponent],
-  entryComponents: [NbContextMenuComponent],
 })
 export class NbContextMenuModule {
 }

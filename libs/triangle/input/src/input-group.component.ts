@@ -35,9 +35,9 @@ import { Component, ContentChild, HostBinding, Input, OnInit, TemplateRef, ViewE
 
   },
   styleUrls    : [
-    `../style/input.css`,
-    `../style/input-group.css`,
-    `../style/search-input.css`
+    `../style/input.scss`,
+    `../style/input-group.scss`,
+    `../style/search-input.scss`
   ]
 })
 export class InputGroupComponent implements OnInit {

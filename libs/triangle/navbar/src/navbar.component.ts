@@ -14,12 +14,13 @@ import {
 import { CanColor } from '@gradii/triangle/core';
 import { _TriNavbarBase, throwToolbarMixedModesError, TriNavbarRow } from './navbar';
 
+declare const ngDevMode: object | null;
 
 @Component({
   selector       : 'tri-navbar',
   exportAs       : 'triToolbar',
   templateUrl    : 'navbar.html',
-  styleUrls      : ['../style/navbar.css'],
+  styleUrls      : ['../style/navbar.scss'],
   inputs         : ['color'],
   host           : {
     'class'                           : 'tri-navbar',

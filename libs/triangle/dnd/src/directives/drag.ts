@@ -28,6 +28,8 @@ import { TRI_DRAG_PREVIEW, TriDragPreview } from './drag-preview';
 import { TRI_DROP_CONTAINER } from './drop-container';
 import { TriDropContainerInternal as TriDropContainer } from './drop-list-container';
 
+declare const ngDevMode: object | null;
+
 const DRAG_HOST_CLASS = 'tri-drag';
 
 /** Element that can be moved inside a TriDropContainer container. */

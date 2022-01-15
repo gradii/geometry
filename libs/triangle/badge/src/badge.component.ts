@@ -54,7 +54,7 @@ import {
   host: {
     'class': 'tri-badge'
   },
-  styleUrls: ['../style/badge.css']
+  styleUrls: ['../style/badge.scss']
 })
 export class BadgeComponent implements OnInit {
   maxNumberArray: any[];

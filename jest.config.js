@@ -5,5 +5,6 @@ module.exports = {
     "<rootDir>/apps/triangle-api",
     "<rootDir>/apps/form-builder",
     "<rootDir>/libs/triangle",
+    "<rootDir>/libs/vector-math",
   ],
 };

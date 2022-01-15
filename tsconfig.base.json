@@ -32,12 +32,13 @@
     "baseUrl": ".",
     "paths": {
       "@gradii/annotation": ["src/annotation/public-api.ts"],
-      "@gradii/check-type": ["src/check-type/public-api.ts"],
+      "@gradii/check-type": ["libs/check-type/src/index.ts"],
       "@gradii/diagram/*": ["src/diagram/*/public-api.ts"],
       "@gradii/fedaco": ["src/fedaco/public-api.ts"],
       "@gradii/injection": ["src/injection/public-api.ts"],
       "@gradii/triangle": ["libs/triangle/src/index.ts"],
-      "@gradii/vector-math": ["src/vector-math/public-api.ts"]
+      "@gradii/triangle/*": ["libs/triangle/*/public-api.ts"],
+      "@gradii/vector-math": ["libs/vector-math/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

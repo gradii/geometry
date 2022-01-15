@@ -27,7 +27,7 @@ import { _TriTabNavBase } from './tab-nav-base';
   exportAs: 'triTabNavBar, triTabNav',
   inputs: ['color'],
   templateUrl: 'tab-nav-bar.html',
-  styleUrls: ['../style/tab-nav-bar.css'],
+  styleUrls: ['../style/tab-nav-bar.scss'],
   host: {
     'class': 'tri-tab-nav-bar tri-tab-header',
     '[class.tri-tab-header-pagination-controls-enabled]': '_showPaginationControls',

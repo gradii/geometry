@@ -52,7 +52,7 @@ import { isFunction } from '@gradii/triangle/util';
     '(click)': 'onClick($event)'
   },
   styleUrls    : [
-    '../style/checkbox.css'
+    '../style/checkbox.scss'
   ]
 })
 export class CheckboxComponent implements ControlValueAccessor {

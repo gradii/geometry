@@ -240,7 +240,7 @@ export abstract class _TriTabBodyBase implements OnInit, OnDestroy {
 @Component({
   selector       : 'tri-tab-body',
   templateUrl    : 'tab-body.html',
-  styleUrls      : ['../style/tab-body.css'],
+  styleUrls      : ['../style/tab-body.scss'],
   encapsulation  : ViewEncapsulation.None,
   // tslint:disable-next-line:validate-decorators
   changeDetection: ChangeDetectionStrategy.Default,

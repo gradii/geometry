@@ -6,7 +6,7 @@
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
-import { Component, ElementRef, Host, HostBinding, Input } from '@angular/core';
+import { Component, Host, HostBinding, Input } from '@angular/core';
 import { AccordionComponent } from './accordion.component';
 
 @Component({
@@ -32,6 +32,10 @@ import { AccordionComponent } from './accordion.component';
       </div>
     </div>
   `,
+  host      : {
+    '[class.tri-accordion-item]': '_accordionItem',
+    '[class.tri-accordion-item-disabled]': 'disabled'
+  },
   animations: [
     trigger('accordionState', [
       state(
@@ -51,22 +55,10 @@ import { AccordionComponent } from './accordion.component';
       transition('inactive => active', animate('150ms ease-in')),
       transition('active => inactive', animate('150ms ease-out'))
     ])
-  ],
-  styleUrls : [`../style/accordion.css`],
-  styles    : [
-    `
-      tri-accordion {
-        display : block;
-      }
-    `
   ]
 })
 export class AccordionItemComponent {
-  static ngAcceptInputType_disabled: BooleanInput;
 
-  private _el;
-
-  @HostBinding('class.tri-accordion-item')
   _accordionItem = true;
   /**
    * The title of accordion
@@ -80,7 +72,6 @@ export class AccordionItemComponent {
    * 当前tab是否禁止选中
    */
   @Input()
-  @HostBinding('class.tri-accordion-item-disabled')
   get disabled(): boolean {
     return this._disabled;
   }
@@ -89,9 +80,7 @@ export class AccordionItemComponent {
     this._disabled = coerceBooleanProperty(value);
   }
 
-  constructor(@Host() private _accordion: AccordionComponent,
-              private _elementRef: ElementRef) {
-    this._el = this._elementRef.nativeElement;
+  constructor(@Host() private _accordion: AccordionComponent) {
     this._accordion.addTab(this);
   }
 
@@ -123,4 +112,5 @@ export class AccordionItemComponent {
   }
 
   static ngAcceptInputType_expanded: BooleanInput;
+  static ngAcceptInputType_disabled: BooleanInput;
 }
