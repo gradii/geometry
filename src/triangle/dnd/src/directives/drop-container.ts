@@ -42,7 +42,6 @@ export abstract class TriDropContainer<T = any> {
   _dropContainerRef: DndContainerRef<TriDropContainer>;
 
   /** Whether starting a dragging sequence from this container is disabled. */
-  @Input('triDropContainerDisabled')
   get disabled(): boolean {
     return this._disabled || (!!this._group && this._group.disabled);
   }

@@ -187,7 +187,7 @@ export class ButtonComponent implements AfterContentInit {
     return this._el.querySelector(':scope > .tri-icon') as HTMLElement;
   }
 
-  constructor(private _elementRef: ElementRef, private _renderer: Renderer2) {
+  constructor(private _elementRef: ElementRef) {
     this._el = this._elementRef.nativeElement;
   }
 

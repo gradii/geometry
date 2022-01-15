@@ -10,11 +10,11 @@ import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import {
   ChangeDetectorRef, Directive, ElementRef, EventEmitter, Inject, Input, Optional, Output, SkipSelf
 } from '@angular/core';
-import { TriDragDrop, TriDragEnter, TriDragExit } from '../event/drag-events';
 import { Subject } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 import { DragDrop } from '../drag-drop';
 import { DragContainerRef } from '../drag-drop-ref/drag-container-ref';
+import { TriDragDrop, TriDragEnter, TriDragExit } from '../event/drag-events';
 import { assertElementNode } from './assertions';
 import { DragDropConfig, TRI_DRAG_CONFIG } from './config';
 import { TriDrag } from './drag';
@@ -28,6 +28,9 @@ import { TriDropListContainer } from './drop-list-container';
   exportAs : 'triDragContainer',
   providers: [
     {provide: TRI_DROP_CONTAINER, useExisting: TriDragContainer},
+  ],
+  inputs: [
+    'disabled:triDragContainerDisabled',
   ],
   host     : {
     'class'                               : 'tri-drop-container',

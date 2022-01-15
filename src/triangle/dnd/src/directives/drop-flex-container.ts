@@ -33,6 +33,9 @@ import { TRI_DROP_CONTAINER_GROUP, TriDropContainerGroup } from './drop-containe
   providers: [
     {provide: TRI_DROP_CONTAINER, useExisting: TriDropFlexContainer},
   ],
+  inputs: [
+    'disabled:TriDragContainerDisabled',
+  ],
   host     : {
     'class'                               : 'tri-drop-container',
     '[attr.id]'                           : 'id',

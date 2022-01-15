@@ -248,6 +248,9 @@ export class DragRef<T = any> {
   /** Registered handles that are currently disabled. */
   private _disabledHandles = new Set<HTMLElement>();
 
+  /** used for preStarted container */
+  private _preStartedContainerRef?: DropContainerRef;
+
   /** Droppable container that the draggable is a part of. */
   private _dndContainerRef?: DropContainerRef;
 
@@ -1020,6 +1023,11 @@ export class DragRef<T = any> {
    * into a new one, depending on its current drag position.
    */
   private _updateActiveDropContainer({x, y}: Point, {x: rawX, y: rawY}: Point) {
+    if (this._preStartedContainerRef) {
+      this._preStartedContainerRef._isPreStarted = false;
+    }
+    this._pointerMoveIdleSubscription.unsubscribe();
+
     // Drop container that draggable has been moved into.
     let newContainer = this._initialContainer._getSiblingContainerFromPosition(this, x, y);
 
@@ -1028,40 +1036,46 @@ export class DragRef<T = any> {
     // case where two containers are connected one way and the user tries to undo dragging an
     // item into a new container.
     // drag back to _initialContainer when have drag out to another container
-    if (!newContainer && this._dndContainerRef !== this._initialContainer &&
-      this._initialContainer._isOverContainer(x, y)) {
-      newContainer = this._initialContainer;
-    }
+    if (!newContainer) {
+      if (
+        this._dndContainerRef !== this._initialContainer &&
+        this._initialContainer._isOverContainer(x, y)) {
+        newContainer = this._initialContainer;
+      }// else will be newContainer not exist, it is not be dragged out of initial container
+    } else {
+      if (newContainer !== this._dndContainerRef) {
+        const element                     = coerceElement(newContainer!.element);
+        element.style.filter              = 'blur(1px)';
+        element.style.opacity             = '0.9';
+        newContainer._isPreStarted        = true;
+        this._preStartedContainerRef      = newContainer;
+        this._pointerMoveIdleSubscription = this._dragDropRegistry.pointerPressIdle.pipe(
+          take(1),
+          finalize(() => {
+            element.style.filter       = null;
+            element.style.opacity      = null;
+            newContainer._isPreStarted = false;
+          }),
+          tap(() => {
+            this._ngZone.run(() => {
+              // Notify the old container that the item has left.
+              this.exited.next({item: this, container: this._dndContainerRef!});
+              this._dndContainerRef!.exit(this);
 
-    this._pointerMoveIdleSubscription.unsubscribe();
-    if (newContainer && newContainer !== this._dndContainerRef) {
-      const element                     = coerceElement(newContainer!.element);
-      element.style.filter              = 'blur(1px)';
-      element.style.opacity             = '0.9';
-      this._pointerMoveIdleSubscription = this._dragDropRegistry.pointerPressIdle.pipe(
-        take(1),
-        finalize(() => {
-          element.style.filter = null;
-          element.style.opacity = null;
-        }),
-        tap(() => {
-          this._ngZone.run(() => {
-            // Notify the old container that the item has left.
-            this.exited.next({item: this, container: this._dndContainerRef!});
-            this._dndContainerRef!.exit(this);
-
-            // Notify the new container that the item has entered.
-            this._dndContainerRef = newContainer!;
-            this._dndContainerRef.enter(this, x, y);
-            this.entered.next({
-              item        : this,
-              container   : newContainer!,
-              currentIndex: newContainer!.getItemIndex(this)
+              // Notify the new container that the item has entered.
+              this._dndContainerRef = newContainer!;
+              this._dndContainerRef.enter(this, x, y);
+              this.entered.next({
+                item        : this,
+                container   : newContainer!,
+                currentIndex: newContainer!.getItemIndex(this)
+              });
             });
-          });
-        })
-      ).subscribe();
+          })
+        ).subscribe();
+      }
     }
+
 
     this._dndContainerRef!._startScrollingIfNecessary(rawX, rawY);
     const elementPositionX = x - this._pickupPositionInElement.x;

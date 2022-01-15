@@ -43,6 +43,9 @@ export interface TriDropContainerInternal extends TriDropContainer {
   providers: [
     {provide: TRI_DROP_CONTAINER, useExisting: TriDropFreeContainer},
   ],
+  inputs: [
+    'disabled:triDropFreeContainerDisabled',
+  ],
   host     : {
     'class'                               : 'tri-drop-container',
     '[attr.id]'                           : 'id',

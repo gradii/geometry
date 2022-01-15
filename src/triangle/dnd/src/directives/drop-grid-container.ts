@@ -42,6 +42,9 @@ export const TRI_DROP_GRID_CONTAINER_CONFIG = new InjectionToken('tri drop grid 
   providers    : [
     {provide: TRI_DROP_CONTAINER, useExisting: forwardRef(() => TriDropGridContainer)},
   ],
+  inputs: [
+    'disabled:triDropGridContainerDisabled',
+  ],
   host         : {
     'class'                                           : 'tri-drop-grid-container',
     '[attr.id]'                                       : 'id',

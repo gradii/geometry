@@ -12,6 +12,7 @@ ng_module(
         ":list_item_scss",
         ":tri_demo_drag_and_drop_child_groups_with_monkey_patch_scss",
         ":tri_demo_dnd_not_cdk_component_scss",
+        ":tri_demo_dnd_placeholder_component_scss",
         ":tri_demo_dnd_grid_component_scss",
         ":tri_demo_dnd_grid_flex_row_component_scss",
         ":tri_demo_dnd_grid_flex_column_component_scss",
@@ -47,6 +48,11 @@ sass_binary(
 sass_binary(
     name = "tri_demo_dnd_not_cdk_component_scss",
     src = "tri-demo-dnd-not-cdk/tri-demo-dnd-not-cdk.component.scss",
+)
+
+sass_binary(
+    name = "tri_demo_dnd_placeholder_component_scss",
+    src = "tri-demo-dnd-placeholder/tri-demo-dnd-placeholder.component.scss",
 )
 
 sass_binary(

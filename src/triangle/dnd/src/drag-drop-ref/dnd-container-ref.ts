@@ -102,6 +102,8 @@ export class DndContainerRef<T = any> {
   /** Whether an item in the list is being dragged. */
   protected _isDragging = false;
 
+  _isPreStarted = false;
+
   // /** Keeps track of the positions of any parent scrollable elements. */
   // _parentPositions: ParentPositionTracker;
 
@@ -401,6 +403,10 @@ export class DndContainerRef<T = any> {
   /** Stops any currently-running auto-scroll sequences. */
   _stopScrolling() {
     this.scrollingStrategy.stopScrolling();
+  }
+
+  protected _preStart() {
+
   }
 
   /** Starts the dragging sequence within the list. */
