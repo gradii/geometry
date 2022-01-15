@@ -6,5 +6,7 @@ module.exports = {
     "<rootDir>/apps/form-builder",
     "<rootDir>/libs/triangle",
     "<rootDir>/libs/vector-math",
+    "<rootDir>/libs/fedaco",
+    "<rootDir>/libs/annotation",
   ],
 };

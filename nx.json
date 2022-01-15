@@ -30,7 +30,7 @@
   },
   "projects": {
     "annotation": {
-      "tags": ["pkg"]
+      "tags": []
     },
     "check-type": {
       "tags": []
@@ -42,7 +42,7 @@
       "tags": []
     },
     "fedaco": {
-      "tags": ["pkg"]
+      "tags": []
     },
     "form-builder": {
       "tags": []

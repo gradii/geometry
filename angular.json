@@ -3,25 +3,41 @@
   "projects": {
     "annotation": {
       "projectType": "library",
-      "root": "src/annotation",
-      "sourceRoot": "src/annotation/src",
+      "root": "libs/annotation",
+      "sourceRoot": "libs/annotation/src",
       "prefix": "applications",
       "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "outputs": ["dist/libs/annotation"],
+          "options": {
+            "project": "libs/annotation/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/annotation/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/annotation/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/annotation"],
+          "options": {
+            "jestConfig": "libs/annotation/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "src/annotation/src/**/*.ts",
-              "src/annotation/src/**/*.html"
+              "libs/annotation/src/**/*.ts",
+              "libs/annotation/src/**/*.html"
             ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/src/annotation"],
-          "options": {
-            "jestConfig": "src/annotation/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }
@@ -117,25 +133,41 @@
     },
     "fedaco": {
       "projectType": "library",
-      "root": "src/fedaco",
-      "sourceRoot": "src/fedaco/src",
+      "root": "libs/fedaco",
+      "sourceRoot": "libs/fedaco/src",
       "prefix": "applications",
       "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "outputs": ["dist/libs/fedaco"],
+          "options": {
+            "project": "libs/fedaco/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/fedaco/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/fedaco/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/fedaco"],
+          "options": {
+            "jestConfig": "libs/fedaco/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "src/fedaco/src/**/*.ts",
-              "src/fedaco/src/**/*.html"
+              "libs/fedaco/src/**/*.ts",
+              "libs/fedaco/src/**/*.html"
             ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/src/fedaco"],
-          "options": {
-            "jestConfig": "src/fedaco/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }

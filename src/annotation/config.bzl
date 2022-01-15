@@ -1,3 +1,0 @@
-ANNOTATION_ENTRYPOINTS = [
-]
-ANNOTATION_TARGETS = ["//src/annotation"]

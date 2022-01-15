@@ -31,10 +31,10 @@
     "types": ["jest"],
     "baseUrl": ".",
     "paths": {
-      "@gradii/annotation": ["src/annotation/public-api.ts"],
+      "@gradii/annotation": ["libs/annotation/index.ts"],
       "@gradii/check-type": ["libs/check-type/src/index.ts"],
       "@gradii/diagram/*": ["src/diagram/*/public-api.ts"],
-      "@gradii/fedaco": ["src/fedaco/public-api.ts"],
+      "@gradii/fedaco": ["libs/fedaco/index.ts"],
       "@gradii/injection": ["src/injection/public-api.ts"],
       "@gradii/triangle": ["libs/triangle/src/index.ts"],
       "@gradii/triangle/*": ["libs/triangle/*/public-api.ts"],
