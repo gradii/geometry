@@ -14,7 +14,7 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
     </span>
   `,
   host               : {
-    class                                 : 'ant-divider',
+    class                                 : 'tri-divider',
     '[class.tri-divider-horizontal]'      : `variant === 'horizontal'`,
     '[class.tri-divider-vertical]'        : `variant === 'vertical'`,
     '[class.tri-divider-plain]'           : `plain`,
@@ -24,7 +24,7 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
     '[class.tri-divider-dashed]'          : `dashed`
   }
 })
-export class NzDividerComponent {
+export class DividerComponent {
   @Input() variant: 'horizontal' | 'vertical'       = 'horizontal';
   @Input() orientation: 'left' | 'right' | 'center' = 'center';
 
