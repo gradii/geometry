@@ -265,33 +265,33 @@
         }
       }
     },
-    "ice-box": {
+    "stove": {
       "projectType": "library",
-      "root": "libs/ice-box",
-      "sourceRoot": "libs/ice-box/src",
+      "root": "libs/stove",
+      "sourceRoot": "libs/stove/src",
       "prefix": "applications",
       "architect": {
         "build": {
           "builder": "@nrwl/angular:package",
-          "outputs": ["dist/libs/ice-box"],
+          "outputs": ["dist/libs/stove"],
           "options": {
-            "project": "libs/ice-box/ng-package.json"
+            "project": "libs/stove/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "libs/ice-box/tsconfig.lib.prod.json"
+              "tsConfig": "libs/stove/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "libs/ice-box/tsconfig.lib.json"
+              "tsConfig": "libs/stove/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/ice-box"],
+          "outputs": ["coverage/libs/stove"],
           "options": {
-            "jestConfig": "libs/ice-box/jest.config.js",
+            "jestConfig": "libs/stove/jest.config.js",
             "passWithNoTests": true
           }
         },
@@ -299,8 +299,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/ice-box/src/**/*.ts",
-              "libs/ice-box/src/**/*.html"
+              "libs/stove/src/**/*.ts",
+              "libs/stove/src/**/*.html"
             ]
           }
         }

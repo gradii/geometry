@@ -35,7 +35,7 @@
       "@gradii/check-type": ["libs/check-type/src/index.ts"],
       "@gradii/diagram/*": ["src/diagram/*/public-api.ts"],
       "@gradii/fedaco": ["libs/fedaco/index.ts"],
-      "@gradii/ice-box": ["libs/ice-box/src/index.ts"],
+      "@gradii/stove": ["libs/stove/index.ts"],
       "@gradii/injection": ["src/injection/public-api.ts"],
       "@gradii/triangle": ["libs/triangle/src/index.ts"],
       "@gradii/triangle/*": ["libs/triangle/*/public-api.ts"],

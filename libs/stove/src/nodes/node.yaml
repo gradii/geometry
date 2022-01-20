@@ -1,0 +1,694 @@
+- id: '15786492785660.41803516438866173'
+  definitionId: space
+  parentSlotId: '1'
+  index: 0
+  styles:
+    xl:
+      direction: column
+      justify: flex-start
+      align: stretch
+      overflowX: visible
+      overflowY: visible
+      width:
+        type: auto
+        customValue: 100
+        customUnit: '%'
+      height:
+        type: custom
+        customValue: 100
+        customUnit: '%'
+      visible: true
+      background:
+        color:
+          value: transparent
+          dataValue: transparent
+          withData: false
+        imageSrc:
+          url: ''
+          uploadUrl: ''
+          name: ''
+          active: upload
+        imageSize: auto
+    lg: {}
+    md: {}
+    sm: {}
+    xs: {}
+  properties:
+    container: true
+    name: Space
+  actions:
+    init: []
+    click:
+      - action: ''
+        paramCode: |-
+          {
+            type: 'new'
+          }
+- id: '15786492785670.13489939253231087'
+  definitionId: space
+  parentSlotId: '3'
+  index: 0
+  styles:
+    xl:
+      direction: row
+      justify: flex-start
+      align: center
+      overflowX: visible
+      overflowY: visible
+      width:
+        customValue: 100
+        customUnit: '%'
+        type: auto
+      height:
+        customValue: 100
+        customUnit: '%'
+        type: auto
+      visible: true
+      background:
+        color:
+          value: transparent
+          dataValue: transparent
+          withData: false
+        imageSrc:
+          url: ''
+          uploadUrl: ''
+          name: ''
+          active: upload
+        imageSize: auto
+    lg: {}
+    md: {}
+    sm: {}
+    xs: {}
+  properties:
+    container: false
+    name: Space1
+  actions:
+    init: []
+    click: []
+- id: sidebar
+  definitionId: sidebar
+  parentSlotId: sidebarParent
+  index: 0
+  styles:
+    xl:
+      size:
+        widthValue: '256'
+        widthUnit: px
+        widthAuto: false
+      paddings:
+        paddingTop: 16
+        paddingRight: 16
+        paddingBottom: 16
+        paddingLeft: 16
+        paddingTopUnit: px
+        paddingRightUnit: px
+        paddingBottomUnit: px
+        paddingLeftUnit: px
+      visible: true
+      background:
+        color:
+          value: default
+          dataValue: default
+          withData: false
+    lg: {}
+    md: {}
+    sm: {}
+    xs: {}
+  properties:
+    fixed: false
+    responsiveValue: true
+    collapsedBreakpoints:
+      - xs
+      - is
+      - sm
+    compactedBreakpoints: []
+    name: Sidebar
+- id: header
+  definitionId: header
+  parentSlotId: headerParent
+  index: 0
+  styles:
+    xl:
+      size:
+        heightValue: '80'
+        heightUnit: px
+        heightAuto: false
+      paddings:
+        paddingTop: 16
+        paddingRight: 16
+        paddingBottom: 16
+        paddingLeft: 16
+        paddingTopUnit: px
+        paddingRightUnit: px
+        paddingBottomUnit: px
+        paddingLeftUnit: px
+      visible: true
+      background:
+        color:
+          value: default
+          dataValue: default
+          withData: false
+    lg: {}
+    md: {}
+    sm: {}
+    xs: {}
+  properties:
+    fixed: false
+    name: Header
+- id: sidebarSpace
+  definitionId: space
+  parentSlotId: sidebarChild
+  index: 0
+  styles:
+    xl:
+      direction: column
+      justify: flex-start
+      align: flex-start
+      height:
+        type: custom
+        customValue: 100
+        customUnit: '%'
+      overflowX: auto
+      overflowY: auto
+      width:
+        type: custom
+        customValue: 100
+        customUnit: '%'
+      visible: true
+      background:
+        imageSrc:
+          url: ''
+          uploadUrl: ''
+          name: ''
+          active: upload
+        imageSize: auto
+        color:
+          value: transparent
+          dataValue: transparent
+          withData: false
+    lg: {}
+    md: {}
+    sm: {}
+    xs: {}
+  properties:
+    container: false
+    name: SidebarSpace
+  actions:
+    init: []
+    click: []
+- id: menuComponent
+  definitionId: menu
+  parentSlotId: sidebarSpaceSlot
+  index: 0
+  styles:
+    xl:
+      size:
+        widthValue: '100'
+        widthUnit: '%'
+        widthAuto: false
+        heightAuto: true
+      visible: true
+      color:
+        value: basic
+        dataValue: basic
+        withData: false
+    lg: {}
+    md: {}
+    sm: {}
+    xs: {}
+  properties:
+    items:
+      - title: Home
+        link: /home
+        children: null
+    name: Menu
+    autoSyncItems: true
+- id: Gb63MmCEbha-cNDiTjp8a
+  definitionId: card
+  parentSlotId: '15786492785660.736525773611667'
+  styles:
+    xl:
+      visible: true
+      size:
+        widthValue: 100
+        widthUnit: '%'
+        widthAuto: false
+        heightValue: 300
+        heightUnit: px
+        heightAuto: true
+      headerPadding: true
+      bodyPadding: true
+      footerPadding: true
+      accent: ''
+      status: ''
+      background:
+        color: default
+        imageSrc:
+          url: ''
+          uploadUrl: ''
+          name: ''
+          active: upload
+        imageSize: auto
+  properties:
+    showHeader: true
+    showFooter: true
+    container: true
+    name: Card2
+  actions:
+    init: []
+  index: 1
+- id: 6cMyMyIaI32dsldfPPHI2
+  definitionId: space
+  styles:
+    xl:
+      visible: true
+      direction: row
+      justify: flex-start
+      align: center
+      height:
+        type: auto
+        customValue: 48
+        customUnit: px
+      paddings: {}
+      overflowX: visible
+      overflowY: visible
+      width:
+        type: auto
+        customValue: 48
+        customUnit: px
+      background:
+        color: transparent
+        imageSrc:
+          url: ''
+          uploadUrl: ''
+          name: ''
+          active: upload
+        imageSize: auto
+  properties:
+    container: false
+    name: Space8
+  parentSlotId: _G9bdhAQN-iUu1Zr5TWya
+  index: 0
+  actions:
+    init: []
+    click: []
+- id: FFQDocQQajLsx2X2EuFw1
+  definitionId: space
+  styles:
+    xl:
+      visible: true
+      direction: row
+      justify: flex-start
+      align: flex-start
+      height:
+        type: auto
+        customValue: 48
+        customUnit: px
+      paddings: {}
+      overflowX: visible
+      overflowY: visible
+      width:
+        type: auto
+        customValue: 48
+        customUnit: px
+      background:
+        color: transparent
+        imageSrc:
+          url: ''
+          uploadUrl: ''
+          name: ''
+          active: upload
+        imageSize: auto
+  properties:
+    container: false
+    name: Space9
+  parentSlotId: S2QonCCC_-94t-aiuwBeB
+  index: 0
+  actions:
+    init: []
+    click: []
+- id: 07zOrXvbNGK4w0o2WK1ne
+  definitionId: space
+  styles:
+    xl:
+      visible: true
+      direction: row
+      justify: flex-start
+      align: flex-start
+      height:
+        type: auto
+        customValue: 48
+        customUnit: px
+      paddings: {}
+      overflowX: visible
+      overflowY: visible
+      width:
+        type: auto
+        customValue: 48
+        customUnit: px
+      background:
+        color: transparent
+        imageSrc:
+          url: ''
+          uploadUrl: ''
+          name: ''
+          active: upload
+        imageSize: auto
+  properties:
+    container: true
+    name: Space10
+  parentSlotId: Oys8q1_-aQ-zIeihcuhiV
+  index: 0
+  actions:
+    init: []
+    click:
+      - action: ''
+        paramCode: |-
+          {
+            type: 'new'
+          }
+- id: 0i4zYZ_D2bFSxNlw3TnMK
+  definitionId: heading
+  styles:
+    xl:
+      visible: true
+      color: basic
+  properties:
+    text: Card Header
+    type: h6
+    italic: false
+    alignment: left
+    transform: none
+    name: Heading2
+  parentSlotId: lHHKVQ-8okGuDbbGqO6mU
+  index: 0
+- id: rmFqmZy844Jpk8-6zUZz9
+  definitionId: button
+  parentSlotId: lAH6YoNK0QnzfZiifkIFS
+  styles:
+    xl:
+      visible: true
+      size: medium
+      width:
+        type: auto
+        customValue: 220
+        customUnit: px
+      iconPlacement: none
+  properties:
+    text: Button
+    color: primary
+    variant: fill
+    disabled: false
+    icon: star
+    name: Button
+  actions:
+    click: []
+  index: 0
+- id: lgerPg736VKcIgI5ZXZvm
+  definitionId: button
+  parentSlotId: 3crFqx2LrZ8Jtajd375yG
+  styles:
+    xl:
+      visible: true
+      size: medium
+      width:
+        type: auto
+        customValue: 220
+        customUnit: px
+      iconPlacement: none
+  properties:
+    text: Button
+    color: danger
+    variant: fill
+    disabled: false
+    icon: star
+    name: Button1
+  actions:
+    click: []
+  index: 0
+- id: FoflPrF9JT4OTg_RNErdT
+  definitionId: card
+  parentSlotId: '15786492785660.736525773611667'
+  styles:
+    xl:
+      visible: true
+      size:
+        widthValue: 100
+        widthUnit: '%'
+        widthAuto: false
+        heightValue: 300
+        heightUnit: px
+        heightAuto: true
+      headerPadding: true
+      bodyPadding: true
+      footerPadding: true
+      accent: ''
+      status: ''
+      background:
+        color: default
+        imageSrc:
+          url: ''
+          uploadUrl: ''
+          name: ''
+          active: upload
+        imageSize: auto
+  properties:
+    showHeader: true
+    showFooter: true
+    container: true
+    name: Card3
+  actions:
+    init: []
+  index: 0
+- id: qjteET_qkTLh512JlMLGk
+  definitionId: space
+  styles:
+    xl:
+      visible: true
+      direction: row
+      justify: flex-start
+      align: center
+      height:
+        type: auto
+        customValue: 48
+        customUnit: px
+      paddings: {}
+      overflowX: visible
+      overflowY: visible
+      width:
+        type: auto
+        customValue: 48
+        customUnit: px
+      background:
+        color: transparent
+        imageSrc:
+          url: ''
+          uploadUrl: ''
+          name: ''
+          active: upload
+        imageSize: auto
+  properties:
+    container: false
+    name: Space11
+  parentSlotId: cwDyXmOciWxyD0-JmWCxp
+  index: 0
+  actions:
+    init: []
+    click: []
+- id: LhJzILpx121ToMms8yU_I
+  definitionId: space
+  styles:
+    xl:
+      visible: true
+      direction: row
+      justify: flex-start
+      align: flex-start
+      height:
+        type: auto
+        customValue: 48
+        customUnit: px
+      paddings: {}
+      overflowX: visible
+      overflowY: visible
+      width:
+        type: auto
+        customValue: 48
+        customUnit: px
+      background:
+        color: transparent
+        imageSrc:
+          url: ''
+          uploadUrl: ''
+          name: ''
+          active: upload
+        imageSize: auto
+  properties:
+    container: false
+    name: Space12
+  parentSlotId: FxKLEFS_f-pk-U60Mro32
+  index: 0
+  actions:
+    init: []
+    click: []
+- id: e_G8eg87o5qYyc--o0ec0
+  definitionId: space
+  styles:
+    xl:
+      visible: true
+      direction: row
+      justify: flex-start
+      align: flex-start
+      height:
+        type: auto
+        customValue: 48
+        customUnit: px
+      paddings: {}
+      overflowX: visible
+      overflowY: visible
+      width:
+        type: auto
+        customValue: 48
+        customUnit: px
+      background:
+        color: transparent
+        imageSrc:
+          url: ''
+          uploadUrl: ''
+          name: ''
+          active: upload
+        imageSize: auto
+  properties:
+    container: false
+    name: Space13
+  parentSlotId: Qm6H0N7R31W7sNHMoARi5
+  index: 0
+  actions:
+    init: []
+    click: []
+- id: UUdqcuIWMDbCG2wpxUk33
+  definitionId: heading
+  styles:
+    xl:
+      visible: true
+      color: basic
+  properties:
+    text: Card Header
+    type: h6
+    italic: false
+    alignment: left
+    transform: none
+    name: Heading3
+  parentSlotId: bwNPDyuuz_zoEX6mI5uvf
+  index: 0
+- id: I7kn8fo3Exv9nHJzGuO5s
+  definitionId: icon
+  parentSlotId: CMotr_DNKQtYmSlU25t9N
+  styles:
+    xl:
+      visible: true
+      size:
+        custom: false
+        customValue: 1.25
+        customUnit: rem
+        predefinedValue: ''
+      color: basic
+  properties:
+    icon: fill:android
+    tooltip: ''
+    name: Icon
+  index: 0
+- id: hSqKZG_y_hB_r3E7-G6CD
+  definitionId: accordion
+  parentSlotId: '15786492785660.736525773611667'
+  styles:
+    xl:
+      visible: true
+      size:
+        widthValue: 100
+        widthUnit: '%'
+        widthAuto: false
+        heightValue: 200
+        heightUnit: px
+        heightAuto: true
+      multi: false
+  properties:
+    options:
+      - value: Item 1
+        id: item0
+      - value: Item 2
+        id: item1
+    container: true
+    name: Accordion
+  actions:
+    init: []
+  index: 2
+- id: 7FkOLCn-aYRySMIE5NOo0
+  definitionId: space
+  styles:
+    xl:
+      visible: true
+      direction: row
+      justify: flex-start
+      align: flex-start
+      height:
+        type: auto
+        customValue: 48
+        customUnit: px
+      paddings: {}
+      overflowX: visible
+      overflowY: visible
+      width:
+        type: auto
+        customValue: 48
+        customUnit: px
+      background:
+        color: transparent
+        imageSrc:
+          url: ''
+          uploadUrl: ''
+          name: ''
+          active: upload
+        imageSize: auto
+  properties:
+    container: false
+    name: Space2
+  parentSlotId: G8oHRWc19OJ9VpY4U6JcP
+  index: 0
+  actions:
+    init: []
+    click: []
+- id: oal9AIG1juuEbDCUEIvHJ
+  definitionId: space
+  styles:
+    xl:
+      visible: true
+      direction: row
+      justify: flex-start
+      align: flex-start
+      height:
+        type: auto
+        customValue: 48
+        customUnit: px
+      paddings: {}
+      overflowX: visible
+      overflowY: visible
+      width:
+        type: auto
+        customValue: 48
+        customUnit: px
+      background:
+        color: transparent
+        imageSrc:
+          url: ''
+          uploadUrl: ''
+          name: ''
+          active: upload
+        imageSize: auto
+  properties:
+    container: false
+    name: Space3
+  parentSlotId: NySdnLjsw7WV-RE4kxPJY
+  index: 0
+  actions:
+    init: []
+    click: []

@@ -9768,6 +9768,13 @@ eslint-plugin-cypress@^2.10.3:
   dependencies:
     globals "^11.12.0"
 
+eslint-plugin-license-header@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.npmmirror.com/eslint-plugin-license-header/download/eslint-plugin-license-header-0.4.0.tgz#3e83825ed8e8bf3f83009e97cd1dd30531b6481e"
+  integrity sha512-KNpyxD+r8d9VoioyaHofUDsrYO+epVv/WjGZKugfO+qVN1KvHi/LwpXXY1618OCOYEaRNXZeRUtbOIb2YvJXTw==
+  dependencies:
+    requireindex "^1.2.0"
+
 eslint-scope@5.1.1, eslint-scope@^5.1.0, eslint-scope@^5.1.1:
   version "5.1.1"
   resolved "https://registry.npmmirror.com/eslint-scope/download/eslint-scope-5.1.1.tgz?cache=0&sync_timestamp=1637466831846&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Feslint-scope%2Fdownload%2Feslint-scope-5.1.1.tgz#e786e59a66cb92b3f6c1fb0d508aab174848f48c"
@@ -19316,6 +19323,11 @@ require-main-filename@^2.0.0:
   version "2.0.0"
   resolved "https://registry.nlark.com/require-main-filename/download/require-main-filename-2.0.0.tgz#d0b329ecc7cc0f61649f62215be69af54aa8989b"
   integrity sha1-0LMp7MfMD2Fkn2IhW+aa9UqomJs=
+
+requireindex@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.nlark.com/requireindex/download/requireindex-1.2.0.tgz#3463cdb22ee151902635aa6c9535d4de9c2ef1ef"
+  integrity sha1-NGPNsi7hUZAmNapslTXU3pwu8e8=
 
 requirejs-config-file@^4.0.0:
   version "4.0.0"
