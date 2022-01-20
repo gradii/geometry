@@ -58,7 +58,8 @@
     },
     "vector-math": {
       "tags": []
-    }
+    },
+    "workspace": {}
   },
   "cli": {
     "defaultCollection": "@nrwl/angular",

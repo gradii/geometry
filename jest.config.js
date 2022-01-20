@@ -9,5 +9,6 @@ module.exports = {
     "<rootDir>/libs/fedaco",
     "<rootDir>/libs/annotation",
     "<rootDir>/libs/ice-box",
+    "<rootDir>/apps/dev-app",
   ],
 };
