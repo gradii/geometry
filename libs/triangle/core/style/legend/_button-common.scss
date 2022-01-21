@@ -148,6 +148,7 @@ $btn-primary-bg         : grey !default;
 // --------------------------------------------------
 @mixin btn() {
   display          : inline-flex;
+  column-gap       : 0.4em;
   align-items      : center;
   justify-content  : center;
   text-align       : center;
@@ -413,7 +414,7 @@ $btn-primary-bg         : grey !default;
     }
     // Avoid using mixin so we can pass custom focus shadow properly
     @if $enable-shadows {
-      box-shadow: 0 0 0 $btn-focus-width if($box-shadow-color, $box-shadow-color, rgba(color.mix($color, $border-color, 15%), .5));
+      box-shadow : 0 0 0 $btn-focus-width if($box-shadow-color, $box-shadow-color, rgba(color.mix($color, $border-color, 15%), .5));
     }
   }
 
@@ -473,8 +474,8 @@ $btn-primary-bg         : grey !default;
       $color, //$border-color
       $color, //$color
       theming.tri-color-palette($color, 1), //$hover-background
-      color.adjust($color, $lightness: 5%), //$hover-border,
-      color.adjust($color, $lightness: 5%), //$hover-color,
+      color.adjust($color, $lightness : 5%), //$hover-border,
+      color.adjust($color, $lightness : 5%), //$hover-color,
       theming.tri-color-palette($color, 2), //$active-background,
       $color, //$active-border,
       $color, //$active-color

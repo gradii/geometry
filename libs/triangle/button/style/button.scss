@@ -55,14 +55,6 @@ $btn-circle-size-sm     : $btn-height-sm !default;
     @include mixins.btn-square($btn-prefix-cls)
   }
 
-  > .#{v.$iconfont-css}:first-child {
-    margin-right : 0.5em;
-  }
-
-  > .#{v.$iconfont-css}:last-child {
-    margin-left : 0.5em;
-  }
-
   > .#{v.$iconfont-css}:only-child {
     margin-left: 0;
     margin-right: 0;
@@ -73,7 +65,6 @@ $btn-circle-size-sm     : $btn-height-sm !default;
     justify-content : center;
     align-items     : center;
     vertical-align  : middle;
-    gap             : .125em;
     transition      : margin-left .1s v.$ease-in-out,
   }
 
@@ -87,9 +78,6 @@ $btn-circle-size-sm     : $btn-height-sm !default;
   }
 
   @at-root &#{&}-icon-only#{&}-rounded {
-    display         : inline-flex;
-    align-items     : center;
-    justify-content : center;
     @include mixins.btn-circle($btn-prefix-cls)
   }
 
