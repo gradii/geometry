@@ -383,7 +383,8 @@
       "prefix": "applications",
       "architect": {
         "version": {
-          "builder": "@jscutlery/semver:version"
+          "builder": "@jscutlery/semver:version",
+          "baseBranch": "master"
         },
         "build": {
           "builder": "@nrwl/angular:package",
