@@ -382,6 +382,9 @@
       "sourceRoot": "libs/triangle/src",
       "prefix": "applications",
       "architect": {
+        "version": {
+          "builder": "@jscutlery/semver:version"
+        },
         "build": {
           "builder": "@nrwl/angular:package",
           "outputs": ["dist/libs/triangle"],
