@@ -8,6 +8,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import {
   Component,
   ContentChild,
+  ContentChildren,
   HostBinding,
   Input,
   OnInit,
@@ -25,7 +26,7 @@ import {
     ])
   ],
   template: `
-    <ng-template *ngIf="content" [ngTemplateOutlet]="content"></ng-template>
+    <ng-content></ng-content>
     <span class="tri-badge-status-dot tri-badge-status-{{status}}" *ngIf="status"></span>
     <span class="tri-badge-status-text" *ngIf="badgeText">{{badgeText}}</span>
     <sup [@enterLeave]
@@ -52,7 +53,8 @@ import {
     </sup>
   `,
   host: {
-    'class': 'tri-badge'
+    'class': 'tri-badge',
+    '[class.tri-badge-status]': 'status',
   },
   styleUrls: ['../style/badge.scss']
 })
@@ -60,7 +62,6 @@ export class BadgeComponent implements OnInit {
   maxNumberArray: any[];
   countArray: any[] = [];
   countSingleArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-  @ContentChild('content', { static: true }) content: TemplateRef<any>;
 
   /**
    * Show the over flow count
@@ -87,7 +88,6 @@ export class BadgeComponent implements OnInit {
    * 设置 Badge 为状态点
    */
   @Input()
-  @HostBinding('class.tri-badge-status')
   status: string;
 
   constructor() {
@@ -132,11 +132,6 @@ export class BadgeComponent implements OnInit {
       this._count = value;
     }
     this.countArray = this._count.toString().split('');
-  }
-
-  @HostBinding('class.tri-badge-not-a-wrapper')
-  get setNoWrapper() {
-    return !this.content;
   }
 
   ngOnInit() {

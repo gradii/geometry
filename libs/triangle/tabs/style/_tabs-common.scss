@@ -65,7 +65,7 @@ $tri-tab-animation-duration : 200ms !default;
   position   : absolute;
   bottom     : 0;
   height     : $height;
-  transition : $tri-tab-animation-duration mixins.$ease-in-out-curve-function;
+  transition : left $tri-tab-animation-duration mixins.$ease-in-out-curve-function;
 
   z-index    : 1;
 

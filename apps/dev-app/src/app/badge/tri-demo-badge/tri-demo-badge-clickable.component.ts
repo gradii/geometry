@@ -4,10 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {
-  Component,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 /**
  * @title badge-clickable
@@ -17,26 +14,24 @@ import {
   template: `
     <a href="#here">
       <tri-badge [count]="5">
-        <ng-template #content>
-          <a class="head-example"></a>
-        </ng-template>
+        <a class="head-example"></a>
       </tri-badge>
     </a>
   `,
   styles  : [
     `
-    :host ::ng-deep .tri-badge {
-      margin-right: 16px;
-    }
+      :host ::ng-deep .tri-badge {
+        margin-right : 16px;
+      }
 
-    .head-example {
-      width: 42px;
-      height: 42px;
-      border-radius: 6px;
-      background: #eee;
-      display: inline-block;
-    }
-  `
+      .head-example {
+        width         : 42px;
+        height        : 42px;
+        border-radius : 6px;
+        background    : #eee;
+        display       : inline-block;
+      }
+    `
   ]
 })
 export class TriDemoBadgeClickableComponent implements OnInit {

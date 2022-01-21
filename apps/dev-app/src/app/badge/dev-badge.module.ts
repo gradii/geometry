@@ -9,6 +9,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TriBadgeModule } from '@gradii/triangle/badge';
 import { TriButtonModule } from '@gradii/triangle/button';
+import { TriIconModule } from '../../../../../libs/triangle/icon';
 import { DevBadgeComponent } from './dev-badge.component';
 import { TriDemoBadgeAnimateComponent } from './tri-demo-badge/tri-demo-badge-animate.component';
 import { TriDemoBadgeBasicComponent } from './tri-demo-badge/tri-demo-badge-basic.component';
@@ -20,27 +21,30 @@ import { TriDemoBadgeStandalonesComponent } from './tri-demo-badge/tri-demo-badg
 import { TriDemoBadgeStatusComponent } from './tri-demo-badge/tri-demo-badge-status.component';
 
 @NgModule({
-  imports     : [
-    CommonModule,
+    imports: [
+        CommonModule,
 
-    TriButtonModule,
-    TriBadgeModule,
+        TriButtonModule,
+        TriBadgeModule,
 
-    RouterModule.forChild([
-      {
-        path: '', component: DevBadgeComponent, children: [
-          {path: 'tri-demo-badge-animate', component: TriDemoBadgeAnimateComponent},
-          {path: 'tri-demo-badge-basic', component: TriDemoBadgeBasicComponent},
-          {path: 'tri-demo-badge-clickable', component: TriDemoBadgeClickableComponent},
-          {path: 'tri-demo-badge-dot', component: TriDemoBadgeDotComponent},
-          {path: 'tri-demo-badge-myceil', component: TriDemoBadgeMyCeilComponent},
-          {path: 'tri-demo-badge-overflow', component: TriDemoBadgeOverflowComponent},
-          {path: 'tri-demo-badge-standalones', component: TriDemoBadgeStandalonesComponent},
-          {path: 'tri-demo-badge-status', component: TriDemoBadgeStatusComponent},
-        ]
-      }
-    ])
-  ],
+        RouterModule.forChild([
+            {
+                path: '', component: DevBadgeComponent, children: [
+                    {path: 'tri-demo-badge-animate', component: TriDemoBadgeAnimateComponent},
+                    {path: 'tri-demo-badge-basic', component: TriDemoBadgeBasicComponent},
+                    {path: 'tri-demo-badge-clickable', component: TriDemoBadgeClickableComponent},
+                    {path: 'tri-demo-badge-dot', component: TriDemoBadgeDotComponent},
+                    {path: 'tri-demo-badge-myceil', component: TriDemoBadgeMyCeilComponent},
+                    {path: 'tri-demo-badge-overflow', component: TriDemoBadgeOverflowComponent},
+                    {path        : 'tri-demo-badge-standalones',
+                        component: TriDemoBadgeStandalonesComponent
+                    },
+                    {path: 'tri-demo-badge-status', component: TriDemoBadgeStatusComponent},
+                ]
+            }
+        ]),
+        TriIconModule
+    ],
   declarations: [
     DevBadgeComponent,
 

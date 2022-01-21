@@ -1,10 +1,14 @@
 {
   "name": "@gradii/triangle-icons",
   "version": "0.0.1",
-  "peerDependencies": {
-    "@angular/common": "^12.2.0",
-    "@angular/core": "^12.2.0"
+  "description": "gradii triangle icons",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gradii/triangle.git"
   },
+  "keywords": [
+  ],
+  "license": "MIT",
   "dependencies": {
     "tslib": "^2.3.0"
   }

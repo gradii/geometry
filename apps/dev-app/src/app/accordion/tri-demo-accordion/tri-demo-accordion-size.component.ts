@@ -13,9 +13,9 @@ import { Component, OnInit } from '@angular/core';
   selector: 'tri-demo-accordion-basic',
   template: `
     <tri-select [(ngModel)]="size">
-      <tri-option label="small" value="small"></tri-option>
-      <tri-option label="default" value="default"></tri-option>
-      <tri-option label="large" value="large"></tri-option>
+      <tri-option value="small">small</tri-option>
+      <tri-option value="default">default</tri-option>
+      <tri-option value="large">large</tri-option>
     </tri-select>
     <tri-accordion [size]="size">
       <tri-accordion-item *ngFor="let panel of panels"

@@ -55,6 +55,19 @@ $btn-circle-size-sm     : $btn-height-sm !default;
     @include mixins.btn-square($btn-prefix-cls)
   }
 
+  > .#{v.$iconfont-css}:first-child {
+    margin-right : 0.5em;
+  }
+
+  > .#{v.$iconfont-css}:last-child {
+    margin-left : 0.5em;
+  }
+
+  > .#{v.$iconfont-css}:only-child {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
   > .#{v.$iconfont-css} {
     display         : inline-flex;
     justify-content : center;
