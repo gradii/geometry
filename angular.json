@@ -384,7 +384,8 @@
       "architect": {
         "version": {
           "builder": "@jscutlery/semver:version",
-          "baseBranch": "master"
+          "baseBranch": "master",
+          "releaseAs": "patch"
         },
         "build": {
           "builder": "@nrwl/angular:package",
