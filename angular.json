@@ -472,6 +472,47 @@
         }
       }
     },
+    "triangle-icons": {
+      "projectType": "library",
+      "root": "libs/triangle-icons",
+      "sourceRoot": "libs/triangle-icons/src",
+      "prefix": "applications",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "outputs": ["dist/libs/triangle-icons"],
+          "options": {
+            "project": "libs/triangle-icons/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/triangle-icons/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/triangle-icons/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/triangle-icons"],
+          "options": {
+            "jestConfig": "libs/triangle-icons/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/triangle-icons/src/**/*.ts",
+              "libs/triangle-icons/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "vector-math": {
       "projectType": "library",
       "root": "libs/vector-math",

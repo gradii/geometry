@@ -1036,46 +1036,42 @@ export class DragRef<T = any> {
     // case where two containers are connected one way and the user tries to undo dragging an
     // item into a new container.
     // drag back to _initialContainer when have drag out to another container
-    if (!newContainer) {
-      if (
-        this._dndContainerRef !== this._initialContainer &&
-        this._initialContainer._isOverContainer(x, y)) {
-        newContainer = this._initialContainer;
-      }// else will be newContainer not exist, it is not be dragged out of initial container
-    } else {
-      if (newContainer !== this._dndContainerRef) {
-        const element                     = coerceElement(newContainer!.element);
-        element.style.filter              = 'blur(1px)';
-        element.style.opacity             = '0.9';
-        newContainer._isPreStarted        = true;
-        this._preStartedContainerRef      = newContainer;
-        this._pointerMoveIdleSubscription = this._dragDropRegistry.pointerPressIdle.pipe(
-          take(1),
-          finalize(() => {
-            element.style.filter       = null;
-            element.style.opacity      = null;
-            newContainer._isPreStarted = false;
-          }),
-          tap(() => {
-            this._ngZone.run(() => {
-              // Notify the old container that the item has left.
-              this.exited.next({item: this, container: this._dndContainerRef!});
-              this._dndContainerRef!.exit(this);
-
-              // Notify the new container that the item has entered.
-              this._dndContainerRef = newContainer!;
-              this._dndContainerRef.enter(this, x, y);
-              this.entered.next({
-                item        : this,
-                container   : newContainer!,
-                currentIndex: newContainer!.getItemIndex(this)
-              });
-            });
-          })
-        ).subscribe();
-      }
+    if (!newContainer && this._dndContainerRef !== this._initialContainer &&
+      this._initialContainer._isOverContainer(x, y)) {
+      newContainer = this._initialContainer;
     }
 
+    if (newContainer && newContainer !== this._dndContainerRef) {
+      const element                     = coerceElement(newContainer!.element);
+      element.style.filter              = 'blur(1px)';
+      element.style.opacity             = '0.9';
+      newContainer._isPreStarted        = true;
+      this._preStartedContainerRef      = newContainer;
+      this._pointerMoveIdleSubscription = this._dragDropRegistry.pointerPressIdle.pipe(
+        take(1),
+        finalize(() => {
+          element.style.filter       = null;
+          element.style.opacity      = null;
+          newContainer._isPreStarted = false;
+        }),
+        tap(() => {
+          this._ngZone.run(() => {
+            // Notify the old container that the item has left.
+            this.exited.next({item: this, container: this._dndContainerRef!});
+            this._dndContainerRef!.exit(this);
+
+            // Notify the new container that the item has entered.
+            this._dndContainerRef = newContainer!;
+            this._dndContainerRef.enter(this, x, y);
+            this.entered.next({
+              item        : this,
+              container   : newContainer!,
+              currentIndex: newContainer!.getItemIndex(this)
+            });
+          });
+        })
+      ).subscribe();
+    }
 
     this._dndContainerRef!._startScrollingIfNecessary(rawX, rawY);
     const elementPositionX = x - this._pickupPositionInElement.x;

@@ -25,6 +25,7 @@
       "es2015",
       "dom",
       "dom.iterable",
+      "ES2017.Object",
       "ES2019.Object",
       "ES2016.Array.Include"
     ],
@@ -37,7 +38,9 @@
       "@gradii/fedaco": ["libs/fedaco/index.ts"],
       "@gradii/injection": ["src/injection/public-api.ts"],
       "@gradii/stove": ["libs/stove/index.ts"],
-      "@gradii/triangle": ["libs/triangle/src/index.ts"],
+      "@gradii/triangle": ["libs/triangle/index.ts"],
+      "@gradii/triangle-icons": ["libs/triangle-icons/index.ts"],
+      "@gradii/triangle-icons/*": ["libs/triangle-icons/*/index.ts"],
       "@gradii/triangle/*": ["libs/triangle/*/public-api.ts"],
       "@gradii/vector-math": ["libs/vector-math/src/index.ts"]
     }

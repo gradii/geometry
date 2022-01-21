@@ -10,5 +10,6 @@ module.exports = {
     "<rootDir>/libs/annotation",
     "<rootDir>/libs/ice-box",
     "<rootDir>/apps/dev-app",
+    "<rootDir>/libs/triangle-icons",
   ],
 };

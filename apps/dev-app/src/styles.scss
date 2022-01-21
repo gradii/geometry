@@ -1,1 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
+
+@use "libs/triangle/core/style/theming";
+@use "libs/triangle/core/style/variables" as v;
+@forward "libs/triangle/core/themes/theme" with (
+  $primary    : theming.tri-palette(v.$tri-indigo),
+  $secondary  : theming.tri-palette(v.$tri-blue-grey, A200, A100, A400),
+  $info       : theming.tri-palette(v.$tri-blue, A200, A100, A400),
+  $warning    : theming.tri-palette(v.$tri-yellow, A200, A100, A400),
+  $success    : theming.tri-palette(v.$tri-green, A200, A100, A400),
+);
+
+@use "libs/triangle/core/themes/theme-global";
+@use "libs/triangle/core/core-theme";
+
+
+* {
+  box-sizing : border-box;
+}
+
+
+// Include non-theme styles for core.
+@include core-theme.tri-core();
+
+
+@include theme-global.gradii-triangle-theme-global();
+
+
+
+
+// cube style
+//@import "libs/cube/gantt/style/gantt";

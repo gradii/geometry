@@ -11,7 +11,7 @@ import { GanttViewType, GanttPrintService } from '@gradii/cube/gantt';
 @Component({
     selector: 'app-gantt-flat-example',
     templateUrl: './flat.component.html',
-    styleUrls: ['./flat.component.css'],
+    styleUrls: ['./flat.component.scss'],
     providers: [GanttPrintService]
 })
 export class AppGanttFlatExampleComponent implements OnInit {
