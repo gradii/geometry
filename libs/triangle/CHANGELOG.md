@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [2.2.9](https://github.com/gradii/triangle/compare/triangle-2.2.8...triangle-2.2.9) (2022-01-22)
+
+
+### Features
+
+* diagram add state change event ([4effe8d](https://github.com/gradii/triangle/commit/4effe8d7f6d142684ccb131be61597ce4eb4fa28))
+
+
+
 ## [2.2.8](https://github.com/gradii/triangle/compare/triangle-2.2.7...triangle-2.2.8) (2022-01-22)
 
 
