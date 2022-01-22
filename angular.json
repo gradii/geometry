@@ -384,8 +384,11 @@
       "architect": {
         "version": {
           "builder": "@jscutlery/semver:version",
-          "baseBranch": "master",
-          "releaseAs": "patch"
+          "options": {
+            "baseBranch": "master",
+            "releaseAs": "patch",
+            "postTargets": ["triangle:build"]
+          }
         },
         "build": {
           "builder": "@nrwl/angular:package",

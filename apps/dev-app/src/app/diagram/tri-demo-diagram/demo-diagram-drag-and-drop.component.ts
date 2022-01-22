@@ -28,14 +28,15 @@ import { DiagramComponent, DiagramModel, DiagramNodeModel } from '@gradii/triang
       [engineModel]="diagramModel"
       (drop)="onBlockDropped($event)"
       (dragover)="$event.preventDefault()"
+      (stateChange)="onStateChange($event)"
     ></tri-diagram>
   `,
   styles   : [
     `
       :host {
-        height: 800px;
-        width: 800px;
-        display: block;
+        height  : 800px;
+        width   : 800px;
+        display : block;
       }
     `
   ],
@@ -57,6 +58,10 @@ export class DemoDiagramDragAndDropComponent implements AfterViewInit {
 
   constructor() {
     this.diagramModel = new DiagramModel();
+  }
+
+  onStateChange(event) {
+    console.log(event);
   }
 
   ngAfterViewInit() {

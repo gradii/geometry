@@ -4,20 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import { CanvasModel } from '../entities/canvas/canvas-model';
 import {
   BaseEntity, BaseEntityEvent, BaseEntityGenerics, BaseEntityListener, BaseEntityOptions,
@@ -34,6 +20,7 @@ export interface BaseModelListener extends BaseEntityListener {
   selectionChanged?: (event: BaseEntityEvent<BaseModel> & { isSelected: boolean }) => void;
 
   entityRemoved?: (event: BaseEntityEvent<BaseModel>) => void;
+  entityAdded?: (event: BaseEntityEvent<BaseModel>) => void;
 }
 
 export interface BaseModelOptions extends BaseEntityOptions {

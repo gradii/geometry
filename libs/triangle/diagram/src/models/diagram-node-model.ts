@@ -88,6 +88,7 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     } else {
       this.portsOut.splice(this.portsOut.indexOf(port), 1);
     }
+    this.fireEvent({port, type: port.in ? 'in' : 'out', isCreate: false}, 'portsUpdated');
   }
 
   getPort(name: string) {
@@ -127,6 +128,7 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     if (!after) {
       this.portsIn.splice(0, 0, p);
     }
+    this.fireEvent({port: p, type: 'in', isCreate: true}, 'portsUpdated');
     return this.addPort(p);
   }
 
@@ -145,6 +147,7 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     if (!after) {
       this.portsOut.splice(0, 0, p);
     }
+    this.fireEvent({port: p, type: 'out', isCreate: true}, 'portsUpdated');
     return this.addPort(p);
   }
 

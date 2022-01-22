@@ -7,6 +7,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { TriIconModule } from '@gradii/triangle/icon';
 import { CheckableTagComponent } from './checkable-tag.component';
 import { TagComponent } from './tag.component';
 
@@ -14,7 +15,7 @@ import { TagComponent } from './tag.component';
  * tag
  */
 @NgModule({
-  imports     : [CommonModule, FormsModule],
+  imports     : [CommonModule, FormsModule, TriIconModule],
   declarations: [TagComponent, CheckableTagComponent],
   exports     : [TagComponent, CheckableTagComponent]
 })

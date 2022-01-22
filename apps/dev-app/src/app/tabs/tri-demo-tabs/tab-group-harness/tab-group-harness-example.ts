@@ -7,7 +7,7 @@
 import {Component} from '@angular/core';
 
 /**
- * @title Testing with MatTabGroupHarness
+ * @title Testing with triTabGroupHarness
  */
 @Component({
   selector: 'tab-group-harness-example',

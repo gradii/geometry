@@ -30,7 +30,7 @@ import { TagAnimation } from '@gradii/triangle/core';
           [@tagAnimation]
           (@tagAnimation.done)="_afterClose($event)">
       <span class="tri-tag-text"><ng-content></ng-content></span>
-      <i class="anticon anticon-cross" (click)="_close($event)" *ngIf="closable"></i>
+      <tri-icon svgIcon="outline:close" (click)="_close($event)" *ngIf="closable"></tri-icon>
     </span>
   `,
   styles       : [

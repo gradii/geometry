@@ -72,6 +72,7 @@ $card-actions-text-color : theming.tri-color(theme.$foreground, text-color) !def
     &#{&}-align-end {
       display         : flex;
       justify-content : flex-end;
+      align-items     : center;
 
       .tri-btn {
         &:last-child {
@@ -129,7 +130,7 @@ $card-actions-text-color : theming.tri-color(theme.$foreground, text-color) !def
           border-right : 1px solid #cfcfcf;
           height       : 1em;
           position     : absolute;
-          left        : 0;
+          left         : 0;
         }
       }
     }
