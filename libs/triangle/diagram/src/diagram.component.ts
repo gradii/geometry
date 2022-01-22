@@ -4,36 +4,23 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import {
-  AfterViewInit, Component, EventEmitter, Inject, Input, NgZone, OnDestroy, OnInit, Optional, Output
+  AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, NgZone, OnDestroy,
+  OnInit, Optional, Output
 } from '@angular/core';
 import { merge, Subject } from 'rxjs';
-import { debounceTime, filter, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, takeUntil, tap } from 'rxjs/operators';
 import { State } from './canvas-core/core-state/state';
 import { ListenerHandle } from './canvas-core/core/base-observer';
 import { ENGINE, ENGINE_OPTIONS } from './canvas-core/tokens';
 import { DiagramEngine } from './diagram-core/diagram-engine';
-import { DiagramNodeModel } from './models/diagram-node-model';
 import { DIAGRAM_STATES } from './tokens';
 
 
 @Component({
-  selector : 'tri-diagram',
-  providers: [
+  selector       : 'tri-diagram',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers      : [
     {
       provide   : ENGINE,
       useFactory: (options = {}) => new DiagramEngine(options),
@@ -42,7 +29,7 @@ import { DIAGRAM_STATES } from './tokens';
       ]
     },
   ],
-  template : `
+  template       : `
     <div defs>
       <!--      <node-layer-factory></node-layer-factory>-->
       <!--      <link-layer-factory></link-layer-factory>-->
@@ -56,7 +43,7 @@ import { DIAGRAM_STATES } from './tokens';
 
     <canvas-widget></canvas-widget>
   `,
-  styles   : [
+  styles         : [
     `:host {
       position : relative;
       cursor   : move;
@@ -116,21 +103,19 @@ export class DiagramComponent implements OnInit, AfterViewInit, OnDestroy {
   portsUpdated: EventEmitter<any> = new EventEmitter();
 
   @Output()
-  positionChanged: EventEmitter<any> = new EventEmitter();
-
-  @Output()
   selection: EventEmitter<any> = new EventEmitter();
 
   @Output()
   stateChange: EventEmitter<any> = new EventEmitter();
 
-  private destroy$ = new Subject();
+  private destroy$                       = new Subject();
   private registerHandle: ListenerHandle;
+  private _positionChanged: Subject<any> = new Subject();
 
   constructor(
     @Inject(ENGINE) public engine: DiagramEngine,
     @Optional() @Inject(DIAGRAM_STATES) private states: State[] = [],
-    private zone: NgZone
+    private ngZone: NgZone
   ) {
     states.forEach(state => {
       engine.getStateMachine().pushState(state);
@@ -149,7 +134,7 @@ export class DiagramComponent implements OnInit, AfterViewInit, OnDestroy {
           this.portsUpdated.emit(value);
         },
         positionChanged: (value) => {
-          this.positionChanged.emit(value);
+          this._positionChanged.next(value);
         },
         selection      : (value) => {
           this.selection.emit(value.selection);
@@ -168,23 +153,20 @@ export class DiagramComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.zone.runOutsideAngular(() => {
+    this.ngZone.runOutsideAngular(() => {
       merge(
-        this.nodesUpdated.pipe(
-        ),
-        this.linksUpdated.pipe(
-        ),
+        this.nodesUpdated.pipe(),
+        this.linksUpdated.pipe(),
         this.portsUpdated.pipe(),
-        this.positionChanged.pipe(
-          filter((evt) => evt.entity instanceof DiagramNodeModel),
-          debounceTime(200),
+        this._positionChanged.pipe(
+          debounceTime(500),
         )
       ).pipe(
         debounceTime(50),
         takeUntil(this.destroy$),
         tap((evt) => {
-          this.zone.run(() => {
-            this.stateChange.next(evt);
+          this.ngZone.run(() => {
+            this.stateChange.emit(evt);
           });
         })
       ).subscribe();
@@ -195,6 +177,7 @@ export class DiagramComponent implements OnInit, AfterViewInit, OnDestroy {
     this.registerHandle.deregister();
     this.destroy$.next();
     this.destroy$.complete();
+    this._positionChanged.complete();
   }
 
   ngAfterViewInit() {
