@@ -24,14 +24,14 @@
         aria-label="Button that displays a popover when focused or hovered over">
   <ng-template #ref>
     <tri-select [(ngModel)]="triggerType">
-      <tri-option value="click" label="click"></tri-option>
-      <tri-option value="hover" label="hover"></tri-option>
-      <tri-option value="noop" label="noop"></tri-option>
+      <tri-option label="click">click</tri-option>
+      <tri-option label="hover">hover</tri-option>
+      <tri-option label="noop">noop</tri-option>
     </tri-select>
     <tri-select [(ngModel)]="triggerType">
-      <tri-option value="click" label="click"></tri-option>
-      <tri-option value="hover" label="hover"></tri-option>
-      <tri-option value="noop" label="noop"></tri-option>
+      <tri-option label="click">click</tri-option>
+      <tri-option label="hover">hover</tri-option>
+      <tri-option label="noop">noop</tri-option>
     </tri-select>
 
     <button (click)="openDialog()">Open Dialog</button>

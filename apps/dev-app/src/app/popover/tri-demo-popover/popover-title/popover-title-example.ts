@@ -5,6 +5,8 @@
  */
 
 import { Component } from '@angular/core';
+import { interval, Subject, Subscription } from 'rxjs';
+import { takeUntil, tap } from 'rxjs/operators';
 
 /**
  * @title Basic popover
@@ -36,10 +38,23 @@ import { Component } from '@angular/core';
 export class PopoverTitleExample {
   i = 0;
 
+  subscription: Subscription;
+  destory$ = new Subject();
+
   beginDynamicChangeTitle() {
-    setInterval(() => {
-      this.i += 1;
-    }, 1000);
+    if(this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    this.subscription = interval(1000).pipe(
+      takeUntil(this.destory$),
+      tap(()=>{
+        this.i += 1;
+      })
+    ).subscribe();
+  }
+
+  ngDestory() {
+    this.destory$.complete()
   }
 
 }
