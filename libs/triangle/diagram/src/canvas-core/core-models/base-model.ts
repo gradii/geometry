@@ -4,6 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { toUniqueType } from '../../utils';
 import { CanvasModel } from '../entities/canvas/canvas-model';
 import {
   BaseEntity, BaseEntityEvent, BaseEntityGenerics, BaseEntityListener, BaseEntityOptions,

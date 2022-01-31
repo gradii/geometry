@@ -177,11 +177,7 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     // deserialize ports
     _.forEach(data.ports, (port: any) => {
       let portOb;
-      if (port.type === 'default') {
-        portOb = new DiagramPortModel(port.in);
-      } else {
-        throw new Error('support "default" node port type only');
-      }
+      portOb = new DiagramPortModel(port.in);
       portOb.deserialize(port, context);
       // the links need these
       context.registerModel(portOb);
@@ -190,6 +186,8 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     this.name        = data.name;
     this.displayName = data.displayName;
     this.namespace   = data.namespace;
+    // rebuild type
+    this.type        = toUniqueType(data.name, data.namespace);
     this.color       = data.color;
     this.portsIn     = _.map(data.portsInOrder, (id) => {
       return this.getPortFromID(id);
