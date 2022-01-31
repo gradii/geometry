@@ -4,25 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import { Component, Inject, Input, QueryList, ViewChildren } from '@angular/core';
-import { XPortLabelWidget } from './x-port-label-widget';
 import { ENGINE } from '../../canvas-core/tokens';
 import { DiagramNodeModel } from '../../models/diagram-node-model';
 import { DiagramEngine } from '../diagram-engine';
+import { XPortLabelWidget } from './x-port-label-widget';
 
 /**
  * Default node that models the DefaultNodeModel. It creates two columns
@@ -31,33 +17,33 @@ import { DiagramEngine } from '../diagram-engine';
 @Component({
   selector: 'x-node-widget',
   template: `
-  <div (cdkObserveContent)="_onContentChanges()">
-    <div class="title">
-      <div class="titleName">
-        {{node.name}}
+    <div (cdkObserveContent)="_onContentChanges()">
+      <div class="title">
+        <div class="titleName">
+          {{node.displayName}}
+        </div>
+      </div>
+      <div class="description">
+        {{node.description}}
+      </div>
+      <div class="ports">
+        <div class="portsContainer">
+          <ng-container *ngFor="let it of node.getInPorts()">
+            <x-port-label-widget [port]="it"></x-port-label-widget>
+          </ng-container>
+        </div>
+        <div class="portsContainer">
+          <ng-container *ngFor="let it of node.getOutPorts()">
+            <x-port-label-widget [port]="it"></x-port-label-widget>
+          </ng-container>
+        </div>
       </div>
     </div>
-    <div class="description">
-      {{node.description}}
-    </div>
-    <div class="ports">
-      <div class="portsContainer">
-        <ng-container *ngFor="let it of node.getInPorts()">
-          <x-port-label-widget [port]="it"></x-port-label-widget>
-        </ng-container>
-      </div>
-      <div class="portsContainer">
-        <ng-container *ngFor="let it of node.getOutPorts()">
-          <x-port-label-widget [port]="it"></x-port-label-widget>
-        </ng-container>
-      </div>
-    </div>
-</div>
   `,
   host    : {
     '[style.borderColor]'       : 'node.isSelected() ? "rgb(0,192,255)" : "black"',
     '[style.backgroundColor]'   : 'node.color',
-    '[attr.dataDefaultNodeName]': 'node.name',
+    '[attr.dataDefaultNodeName]': 'node.displayName',
     '[attr.selected]'           : 'node.isSelected()',
   },
   styles  : [

@@ -4,18 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
 import { Component, Input, ViewChild } from '@angular/core';
-import { PortWidget } from '../entities/port/port-widget';
 import { DiagramPortModel } from '../../models/diagram-port-model';
 import { DiagramEngine } from '../diagram-engine';
+import { PortWidget } from '../entities/port/port-widget';
 //
 // export interface DefaultPortLabelProps {
 //   port: DefaultPortModel;
@@ -52,41 +44,33 @@ import { DiagramEngine } from '../diagram-engine';
     <div class="portLabel">
       <ng-container *ngIf="port.in">
         <port-widget [port]="port">
-          <div class="port"></div>
+          <div class="port-inner port-inner-in"></div>
         </port-widget>
-        <div class="label">{{port.label}}</div>
+        <div class="label">{{port.displayName}}</div>
       </ng-container>
       <ng-container *ngIf="!port.in">
-        <div class="label">{{port.label}}</div>
+        <div class="label">{{port.displayName}}</div>
         <port-widget [port]="port">
-          <div class="port"></div>
+          <div class="port-inner port-inner-out"></div>
         </port-widget>
       </ng-container>
     </div>
   `,
-  styles: [`
-    .portLabel {
-      display: flex;
-      margin-top: 1px;
-      align-items: center;
-    }
+  styles  : [
+    `
+      .portLabel {
+        display     : flex;
+        margin-top  : 1px;
+        align-items : center;
+      }
 
-    .port {
-      width: 15px;
-      height: 15px;
-      background: rgba(255, 255, 255, 0.1);
-    }
+      .label {
+        padding   : 0 5px;
+        flex-grow : 1;
+      }
 
-    .port:hover {
-      background: rgb(192, 255, 0);
-    }
-
-    .label {
-      padding: 0 5px;
-      flex-grow: 1;
-    }
-
-  `]
+    `
+  ]
 })
 export class XPortLabelWidget {
   @Input() port: DiagramPortModel;

@@ -4,29 +4,18 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import * as _ from 'lodash';
 import { DeserializeContext } from '../canvas-core/core-models/base-entity';
 import { BasePositionModelOptions } from '../canvas-core/core-models/base-position-model';
 import { NodeModel, NodeModelGenerics } from '../diagram-core/entities/node/node-model';
 import { PortModelAlignment, PortModelAnchor } from '../diagram-core/entities/port/port-model';
+import { toUniqueType } from '../utils';
 import { DiagramPortModel } from './diagram-port-model';
 
-export interface DefaultNodeModelOptions extends BasePositionModelOptions {
+export interface DefaultNodeModelOptions extends Omit<BasePositionModelOptions, 'type'> {
   name?: string;
+  namespace?: string;
+  displayName?: string;
   color?: string;
 }
 
@@ -39,6 +28,8 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
   protected portsOut: DiagramPortModel[];
 
   name: string;
+  namespace: string;
+  displayName: string;
   color: string;
   description: string;
 
@@ -48,35 +39,60 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
    */
   protected options: DefaultNodeModelOptions;
 
-  constructor(name: string, color: string);
+  constructor(name: string, displayName: string);
+  constructor(name: string, displayName: string, color: string);
+  constructor(name: string, displayName: string, namespace: string, color: string);
   constructor(options?: DefaultNodeModelOptions);
-  constructor(options: any = {}, color?: string) {
-    if (typeof options === 'string') {
+  constructor(options: any = {}, displayName?: string, namespace?: string, color?: string) {
+    if (arguments.length === 2) {
       options = {
-        name: options,
-        color: color
+        name       : options,
+        displayName: displayName
+      };
+    } else if (arguments.length === 3) {
+      options = {
+        name       : options,
+        displayName: displayName,
+        color      : namespace
+      };
+    } else if (arguments.length === 4) {
+      options = {
+        name       : options,
+        displayName: displayName,
+        namespace  : namespace,
+        color      : color
+      };
+    } else if (arguments.length === 1 && typeof options === 'string') {
+      options = {
+        name       : options,
+        displayName: options
       };
     }
-    const {
-      type = 'default',
-      name = 'Untitled',
-      description = '',
-      color: _color = 'rgb(0,192,255)'
-    } = options;
+    options = {
+      ...options,
+      name       : options.name || 'default',
+      displayName: options.displayName || 'Untitled',
+      namespace  : options.namespace || 'default/node',
+      description: options.description || '',
+      color      : options.color || 'rgb(0,192,255)',
+    };
     super(options);
 
-    this.type = type;
+    this.type = toUniqueType(options.name, options.namespace);
+
+    this.name        = options.name;
+    this.displayName = options.displayName;
+    this.namespace   = options.namespace;
+    this.description = options.description;
+
+    this.color = options.color;
 
     this.portsOut = [];
-    this.portsIn = [];
-
-    this.name = name;
-    this.description = description;
-    this.color = _color;
+    this.portsIn  = [];
   }
 
   doClone(lookupTable: {}, clone: any): void {
-    clone.portsIn = [];
+    clone.portsIn  = [];
     clone.portsOut = [];
     super.doClone(lookupTable, clone);
   }
@@ -91,8 +107,8 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     this.fireEvent({port, type: port.in ? 'in' : 'out', isCreate: false}, 'portsUpdated');
   }
 
-  getPort(name: string) {
-    return this.ports[name];
+  getPort(name: string): DiagramPortModel {
+    return this.ports[name] as DiagramPortModel;
   }
 
   existPort<T extends DiagramPortModel>(port: T): boolean {
@@ -113,17 +129,19 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     return port;
   }
 
-  addInPort(name: string, label: string = name, after = true): DiagramPortModel {
+  addInPort(name: string, displayName: string = name,
+            namespace?: string, after         = true): DiagramPortModel {
     let p: DiagramPortModel = this.getPort(name) as DiagramPortModel;
     if (p) {
       return p;
     }
     p = new DiagramPortModel({
-      in: true,
-      name: name,
-      label: label,
-      alignment: PortModelAlignment.LEFT,
-      anchor: PortModelAnchor.leftCenter,
+      in         : true,
+      name       : name,
+      displayName: displayName,
+      namespace,
+      alignment  : PortModelAlignment.LEFT,
+      anchor     : PortModelAnchor.leftCenter,
     });
     if (!after) {
       this.portsIn.splice(0, 0, p);
@@ -132,17 +150,19 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     return this.addPort(p);
   }
 
-  addOutPort(name: string, label: string = name, after = true): DiagramPortModel {
+  addOutPort(name: string, displayName: string = name,
+             namespace?: string, after         = true): DiagramPortModel {
     let p: DiagramPortModel = this.getPort(name) as DiagramPortModel;
     if (p) {
       return p;
     }
     p = new DiagramPortModel({
-      in: false,
-      name: name,
-      label: label,
-      alignment: PortModelAlignment.RIGHT,
-      anchor: PortModelAnchor.rightCenter,
+      in         : false,
+      name       : name,
+      displayName: displayName,
+      namespace,
+      alignment  : PortModelAlignment.RIGHT,
+      anchor     : PortModelAnchor.rightCenter,
     });
     if (!after) {
       this.portsOut.splice(0, 0, p);
@@ -167,13 +187,14 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
       context.registerModel(portOb);
       this.addPort(portOb);
     });
-
-    this.name = data.name;
-    this.color = data.color;
-    this.portsIn = _.map(data.portsInOrder, (id) => {
+    this.name        = data.name;
+    this.displayName = data.displayName;
+    this.namespace   = data.namespace;
+    this.color       = data.color;
+    this.portsIn     = _.map(data.portsInOrder, (id) => {
       return this.getPortFromID(id);
     }) as DiagramPortModel[];
-    this.portsOut = _.map(data.portsOutOrder, (id) => {
+    this.portsOut    = _.map(data.portsOutOrder, (id) => {
       return this.getPortFromID(id);
     }) as DiagramPortModel[];
   }
@@ -181,9 +202,11 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
   override serialize(): any {
     return {
       ...super.serialize(),
-      name: this.name,
-      color: this.color,
-      portsInOrder: _.map(this.portsIn, (port) => {
+      name         : this.name,
+      displayName  : this.displayName,
+      namespace    : this.namespace,
+      color        : this.color,
+      portsInOrder : _.map(this.portsIn, (port) => {
         return port.getID();
       }),
       portsOutOrder: _.map(this.portsOut, (port) => {

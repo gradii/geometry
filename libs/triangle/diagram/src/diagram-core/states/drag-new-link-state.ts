@@ -4,28 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
+import { Action, ActionEvent, InputType } from '../../canvas-core/core-actions/action';
 import {
-  Action,
-  ActionEvent,
-  InputType
-} from '../../canvas-core/core-actions/action';
-import {
-  AbstractDisplacementState,
-  AbstractDisplacementStateEvent
+  AbstractDisplacementState, AbstractDisplacementStateEvent
 } from '../../canvas-core/core-state/abstract-displacement-state';
 import { DiagramEngine } from '../diagram-engine';
 import { LinkModel } from '../entities/link/link-model';
@@ -53,7 +34,7 @@ export class DragNewLinkState extends AbstractDisplacementState<DiagramEngine> {
     super({name: 'drag-new-link'});
 
     this.config = {
-      allowLooseLinks: false,
+      allowLooseLinks          : false,
       allowLinksFromLockedPorts: false,
       ...options
     };
@@ -116,14 +97,14 @@ export class DragNewLinkState extends AbstractDisplacementState<DiagramEngine> {
    * as the possible engine offset
    */
   fireMouseMoved(event: AbstractDisplacementStateEvent): any {
-    const portPos = this.port.getPosition();
+    const portPos             = this.port.getPosition();
     const zoomLevelPercentage = this.engine.getModel().getZoomLevel() / 100;
-    const engineOffsetX = this.engine.getModel().getOffsetX() / zoomLevelPercentage;
-    const engineOffsetY = this.engine.getModel().getOffsetY() / zoomLevelPercentage;
-    const initialXRelative = this.initialXRelative / zoomLevelPercentage;
-    const initialYRelative = this.initialYRelative / zoomLevelPercentage;
-    const linkNextX = portPos.x - engineOffsetX + (initialXRelative - portPos.x) + event.virtualDisplacementX;
-    const linkNextY = portPos.y - engineOffsetY + (initialYRelative - portPos.y) + event.virtualDisplacementY;
+    const engineOffsetX       = this.engine.getModel().getOffsetX() / zoomLevelPercentage;
+    const engineOffsetY       = this.engine.getModel().getOffsetY() / zoomLevelPercentage;
+    const initialXRelative    = this.initialXRelative / zoomLevelPercentage;
+    const initialYRelative    = this.initialYRelative / zoomLevelPercentage;
+    const linkNextX           = portPos.x - engineOffsetX + (initialXRelative - portPos.x) + event.virtualDisplacementX;
+    const linkNextY           = portPos.y - engineOffsetY + (initialYRelative - portPos.y) + event.virtualDisplacementY;
 
     this.link.getLastPoint().setPosition(linkNextX, linkNextY);
     this.link.attach();

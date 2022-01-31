@@ -4,20 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import { Vector2 } from '@gradii/vector-math';
 import { debounce } from 'lodash';
 import { DeleteItemsAction } from './actions/delete-items-action';
@@ -29,7 +15,6 @@ import { StateMachine } from './core-state/state-machine';
 import { BaseListener, BaseObserver } from './core/base-observer';
 // import { FactoryBank, FactoryBankListener } from './core/factory-bank';
 import { CanvasModel } from './entities/canvas/canvas-model';
-import { LayerModel } from './entities/layer/layer-model';
 
 export interface CanvasEngineListener extends BaseListener {
   canvasReady?(): void;
@@ -61,8 +46,8 @@ export class CanvasEngine<L extends CanvasEngineListener = CanvasEngineListener,
 
   constructor(options: CanvasEngineOptions = {}) {
     super();
-    this.model = null;
-    this.eventBus = new ActionEventBus(this);
+    this.model        = null;
+    this.eventBus     = new ActionEventBus(this);
     this.stateMachine = new StateMachine(this);
     // this.layerFactories = new FactoryBank();
     // this.registerFactoryBank(this.layerFactories);
@@ -72,8 +57,8 @@ export class CanvasEngine<L extends CanvasEngineListener = CanvasEngineListener,
      */
     this.options = {
       registerDefaultDeleteItemsAction: true,
-      registerDefaultZoomCanvasAction: true,
-      repaintDebounceMs: 0,
+      registerDefaultZoomCanvasAction : true,
+      repaintDebounceMs               : 0,
       ...options
     };
     if (this.options.registerDefaultZoomCanvasAction === true) {
@@ -102,6 +87,7 @@ export class CanvasEngine<L extends CanvasEngineListener = CanvasEngineListener,
     const canvasRect = this.canvas.getBoundingClientRect();
     return new Vector2(x - canvasRect.left, y - canvasRect.top);
   }
+
   //
   // registerFactoryBank(factory: FactoryBank) {
   //   factory.registerListener({
@@ -131,7 +117,7 @@ export class CanvasEngine<L extends CanvasEngineListener = CanvasEngineListener,
 
   setModel(model: M) {
     model.engine = this;
-    this.model = model;
+    this.model   = model;
     if (this.canvas) {
       requestAnimationFrame(() => {
         this.repaintCanvas();
@@ -186,8 +172,8 @@ export class CanvasEngine<L extends CanvasEngineListener = CanvasEngineListener,
   }
 
   zoomToFit() {
-    const xFactor = this.canvas.clientWidth / this.canvas.scrollWidth;
-    const yFactor = this.canvas.clientHeight / this.canvas.scrollHeight;
+    const xFactor    = this.canvas.clientWidth / this.canvas.scrollWidth;
+    const yFactor    = this.canvas.clientHeight / this.canvas.scrollHeight;
     const zoomFactor = xFactor < yFactor ? xFactor : yFactor;
 
     this.model.setZoomLevel(this.model.getZoomLevel() * zoomFactor);

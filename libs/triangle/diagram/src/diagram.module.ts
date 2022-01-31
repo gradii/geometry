@@ -4,15 +4,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { ObserversModule } from '@angular/cdk/observers';
+import { ComponentPortal, PortalModule } from '@angular/cdk/portal';
+
+import { CommonModule } from '@angular/common';
+import { Inject, NgModule, Optional, Type } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { TriCardModule } from '@gradii/triangle/card';
 import { TriConfirmPopupModule } from '@gradii/triangle/confirm-popup';
 import { TriDialogModule } from '@gradii/triangle/dialog';
@@ -26,6 +23,7 @@ import { TransformLayerWidget } from './canvas-core/entities/layer/transform-lay
 // import { SelectionBoxLayerFactory } from './canvas-core/entities/selection/selection-box-layer-factory';
 import { SelectionBoxWidget } from './canvas-core/entities/selection/selection-box-widget';
 import { ENGINE_OPTIONS } from './canvas-core/tokens';
+import { DiagramNodePortalOutlet } from './diagram-core/diagram-node-portal-outlet';
 import { LabelWidget } from './diagram-core/entities/label/label-widget';
 // import { LinkLayerFactory } from './diagram-core/entities/link-layer/link-layer-factory';
 import { LinkWidget } from './diagram-core/entities/link/link-widget';
@@ -52,13 +50,16 @@ import { XLinkWidget } from './diagram-core/x/x-link-widget';
 import { XNodeWidget } from './diagram-core/x/x-node-widget';
 import { XPortLabelWidget } from './diagram-core/x/x-port-label-widget';
 import { DiagramComponent } from './diagram.component';
-import { DIAGRAM_STATES } from './tokens';
+import { RegistryService } from './node-registry.service';
+import { DIAGRAM_NODE_COMPONENTS, DIAGRAM_STATES } from './tokens';
+import { ComponentProviderOptions } from './types';
 
 @NgModule({
-  imports: [
+  imports     : [
     CommonModule,
     FormsModule,
     ObserversModule,
+    PortalModule,
 
     TriMenuModule,
     TriIconModule,
@@ -115,10 +116,17 @@ import { DIAGRAM_STATES } from './tokens';
     XLinkPointWidget,
     XLinkSegmentWidget,
 
-    PathDirective
+    PathDirective,
+    DiagramNodePortalOutlet
   ],
   exports     : [
     DiagramComponent,
+    XLabelWidget,
+    XNodeWidget,
+    XPortLabelWidget,
+    XLinkWidget,
+    XLinkPointWidget,
+    XLinkSegmentWidget,
 
     // DefaultLabelFactory,
     // DefaultLabelWidget,
@@ -144,5 +152,20 @@ import { DIAGRAM_STATES } from './tokens';
   ]
 })
 export class TriDiagramModule {
-
+  constructor(
+    registry: RegistryService,
+    @Inject(DIAGRAM_NODE_COMPONENTS) @Optional() components: ComponentProviderOptions[]
+  ) {
+    // const defaults = [
+    //   {type: 'default/node:node', component: XNodeWidget},
+    // ];
+    components?.forEach(({type, component}) => {
+        let portal = component;
+        if (!(portal instanceof ComponentPortal)) {
+          portal = new ComponentPortal(component as Type<any>);
+        }
+        registry.set(type, portal);
+      }
+    );
+  }
 }

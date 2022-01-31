@@ -13,9 +13,9 @@ import { take, tap } from 'rxjs/operators';
 
 
 @Component({
-  selector : 'demo-diagram-workflow',
+  selector : 'demo-custom-diagram',
   template : `
-    <h3>demo diagram workflow</h3>
+    <h3>demo custom diagram</h3>
     <div>
       <tri-splitter class="splitter-border"
                     [orientation]="orientation"
@@ -36,37 +36,19 @@ import { take, tap } from 'rxjs/operators';
                   <button triButton (click)="onDeserialize()">deserialize</button>
 
                 </div>
-                <tri-tab-group>
-                  <tri-tab label="html native dnd">
-                    <div style="display: flex">
-                      <div
-                        *ngFor="let node of nodesLibrary"
-                        class="node-drag"
-                        draggable="true"
-                        [attr.data-type]="node.name"
-                        (dragstart)="onBlockDrag($event)"
-                        [ngStyle]="{ 'background-color': node.color }"
-                      >
-                        {{ node.name }}
-                      </div>
+                <div triDragContainer>
+                  <div style="display: flex">
+                    <div
+                      triDrag
+                      [triDragData]="node"
+                      *ngFor="let node of nodesLibrary"
+                      class="node-drag"
+                      [ngStyle]="{ 'background-color': node.color }"
+                    >
+                      {{ node.name }}
                     </div>
-                  </tri-tab>
-                  <tri-tab label="use dnd">
-                    <div triDragContainer>
-                      <div style="display: flex">
-                        <div
-                          triDrag
-                          [triDragData]="node"
-                          *ngFor="let node of nodesLibrary"
-                          class="node-drag"
-                          [ngStyle]="{ 'background-color': node.color }"
-                        >
-                          {{ node.name }}
-                        </div>
-                      </div>
-                    </div>
-                  </tri-tab>
-                </tri-tab-group>
+                  </div>
+                </div>
               </div>
 
               <div triDropFreeContainer
@@ -78,7 +60,8 @@ import { take, tap } from 'rxjs/operators';
                                (selection)="onSelectionChanged($event)"
                                (drop)="onBlockDropped($event)"
                                (dragover)="$event.preventDefault()"
-                  ></tri-diagram>
+                  >
+                  </tri-diagram>
                 </div>
               </div>
 
@@ -95,9 +78,9 @@ import { take, tap } from 'rxjs/operators';
 
     </div>
   `,
-  styleUrls: ['demo-diagram-workflow.component.scss']
+  styleUrls: ['demo-custom-diagram.component.scss']
 })
-export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
+export class DemoCustomDiagramComponent implements AfterViewInit, OnInit {
   @ViewChild(DiagramComponent, {static: true})
   diagram?: DiagramComponent;
 
@@ -115,9 +98,9 @@ export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
   maxSize = '60%';
 
   nodesLibrary = [
-    {color: '#AFF8D8', name: 'default1', namespace: 'audit'},
-    {color: '#FFB5E8', name: 'default2', namespace: 'audit-person'},
-    {color: '#85E3FF', name: 'default3', namespace: 'audit-department'},
+    {color: '#AFF8D8', name: 'custom-default1', namespace: 'audit'},
+    {color: '#FFB5E8', name: 'custom-default2', namespace: 'audit-person'},
+    {color: '#85E3FF', name: 'custom-default3', namespace: 'audit-department'},
   ];
 
   constructor(private ngZone: NgZone) {
@@ -139,16 +122,16 @@ export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
 
     // 3-A) create a default node
     const node1 = new DiagramNodeModel({
-      name : 'Node 1',
-      color: 'rgb(0,192,255)'
+      displayName: 'Node 1',
+      color      : 'rgb(0,192,255)'
     });
     node1.setPosition(100, 50);
     const port1 = node1.addOutPort('Out01');
 
 
     const node10 = new DiagramNodeModel({
-      name : 'Start',
-      color: 'rgb(205,20,79)'
+      displayName: 'Start',
+      color      : 'rgb(205,20,79)'
     });
     const port11 = node10.addOutPort('Out02');
     node10.setPosition(100, 100);
@@ -160,10 +143,10 @@ export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
     node2.setPosition(400, 100);
 
     const node3  = new DiagramNodeModel('Node 2', 'Node 2', 'rgb(192,255,0)');
-    const port31 = node3.addInPort('In1 ... Long Desc');
+    const port31 = node3.addInPort('In1', 'In1 ... Long Desc');
     const port32 = node3.addInPort('In2');
 
-    const portOut31 = node3.addOutPort('Out1 ... Long Desc');
+    const portOut31 = node3.addOutPort('Out1', 'Out1 ... Long Desc');
     const portOut32 = node3.addOutPort('Out2');
     node3.setPosition(500, 100);
 
@@ -174,6 +157,7 @@ export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
 
     // 4) add the models to the root graph
     model.addAll(node1, node2, link1, node3, node10);
+
 
   }
 
@@ -233,9 +217,10 @@ export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
     const nodeData = this.nodesLibrary.find((nodeLib) => nodeLib.name === type);
     if (nodeData) {
       const node = new DiagramNodeModel({
-        name     : nodeData.name,
-        namespace: nodeData.namespace,
-        color    : nodeData.color
+        name       : nodeData.name,
+        displayName: nodeData.name,
+        namespace  : nodeData.namespace,
+        color      : nodeData.color
       });
       // node.setExtras(nodeData);
 
@@ -263,8 +248,8 @@ export class DemoDiagramWorkflowComponent implements AfterViewInit, OnInit {
       const color    = evt.item.data.color;
       const node     = this.createNode(nodeType);
 
-      node.addInPort('In');
-      node.addOutPort('Out');
+      node.addInPort('in', '');
+      node.addOutPort('out', '');
       node.color = color;
 
       const coords = {

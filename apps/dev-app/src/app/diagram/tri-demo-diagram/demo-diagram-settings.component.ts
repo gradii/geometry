@@ -21,12 +21,13 @@ import {
     <div class="container" style="width: 800px; height: 400px">
       <tri-splitter>
         <tri-splitter-pane>
-          <tri-diagram [engineModel]="model" (selection)="onSelectionChange($event)"></tri-diagram>
+          <tri-diagram [engineModel]="model"
+                       (selection)="onSelectionChange($event)"></tri-diagram>
         </tri-splitter-pane>
         <tri-splitter-pane>
           <div *ngIf="selection else empty">
             <div>
-              name: {{selection.name}}
+              name: {{selection.displayName}}
               type: {{selection.type}}
             </div>
             <div>
@@ -67,22 +68,22 @@ export class DemoDiagramSettingsComponent implements AfterViewInit, OnInit {
 
     // 3-A) create a default node
     const node1 = new DiagramNodeModel({
-      name : 'Start',
-      color: 'rgb(167,23,23)',
-      type : 'start'
+      name     : 'Start',
+      namespace: 'start',
+      color    : 'rgb(167,23,23)',
     });
     node1.setPosition(100, 100);
     const port1 = node1.addOutPort('Out1', 'out1');
 
     const node2 = new DiagramNodeModel({
-      name: 'End',
-      color: 'rgb(200,255,36)',
-      type: 'end'
+      name     : 'End',
+      namespace: 'end',
+      color    : 'rgb(200,255,36)',
     });
     const port2 = node2.addInPort('In1', 'in1');
     node2.setPosition(400, 100);
 
-    const link1       = port1.link<DiagramLinkModel>(port2);
+    const link1     = port1.link<DiagramLinkModel>(port2);
     link1.labelName = 'Test';
     link1.addLabel('Hello World!');
 
@@ -109,28 +110,28 @@ export class DemoDiagramSettingsComponent implements AfterViewInit, OnInit {
 
   getInputTransition(node: DiagramNodeModel) {
     const transition: any = {};
-    node.getInPorts().forEach(it => {
+    node.getInPorts().forEach(port => {
       const sourceNodeModels: DiagramNodeModel[] = [];
-      it.getLinks().forEach(it => {
+      port.getLinks().forEach(it => {
         const sourcePort = it.getSourcePort();
         const target     = sourcePort.getParent();
         sourceNodeModels.push(target as DiagramNodeModel);
       });
-      transition[it.name] = sourceNodeModels.map(it => it.name);
+      transition[port.name] = sourceNodeModels.map(it => it.displayName);
     });
     return transition;
   }
 
   getOutputTransition(node: DiagramNodeModel) {
     const transition: any = {};
-    node.getOutPorts().forEach(it => {
+    node.getOutPorts().forEach(port => {
       const targetNodeModels: DiagramNodeModel[] = [];
-      it.getLinks().forEach(it => {
+      port.getLinks().forEach(it => {
         const targetPort = it.getTargetPort();
         const target     = targetPort.getParent();
         targetNodeModels.push(target as DiagramNodeModel);
       });
-      transition[it.name] = targetNodeModels.map(it => it.name);
+      transition[port.name] = targetNodeModels.map(it => it.displayName);
     });
     return transition;
   }

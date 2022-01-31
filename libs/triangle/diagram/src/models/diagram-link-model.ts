@@ -4,13 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import { BezierCurve, Vector2 } from '@gradii/vector-math';
 import * as _ from 'lodash';
 import { BaseEntityEvent, DeserializeContext, } from '../canvas-core/core-models/base-entity';
@@ -20,6 +13,7 @@ import {
   LinkModel, LinkModelGenerics, LinkModelListener
 } from '../diagram-core/entities/link/link-model';
 import { PortModel, PortModelAlignment } from '../diagram-core/entities/port/port-model';
+import { toUniqueType } from '../utils';
 import { DiagramLabelModel } from './diagram-label-model';
 
 export interface DefaultLinkModelListener extends LinkModelListener {
@@ -28,12 +22,13 @@ export interface DefaultLinkModelListener extends LinkModelListener {
   widthChanged(event: BaseEntityEvent<DiagramLinkModel> & { width: 0 | number }): void;
 }
 
-export interface DefaultLinkModelOptions extends BaseModelOptions {
+export interface DefaultLinkModelOptions extends Omit<BaseModelOptions, 'type'> {
+  name?: string;
+  namespace?: string;
   width?: number;
   color?: string;
   selectedColor?: string;
   curvyness?: number;
-  type?: string;
   labelName?: string;
 }
 
@@ -72,7 +67,8 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
   curve: BezierCurve;
 
   constructor({
-                type = 'default',
+                name = 'default',
+                namespace = 'default/link',
                 width = 3,
                 color = 'gray',
                 selectedColor = 'rgb(0,192,255)',
@@ -82,7 +78,7 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
               }: DefaultLinkModelOptions = {}) {
     super(rest);
 
-    this.type = type;
+    this.type = toUniqueType(name, namespace);
 
     this.width         = width;
     this.color         = color;
@@ -197,12 +193,12 @@ export class DiagramLinkModel extends LinkModel<DefaultLinkModelGenerics> {
 
   setWidth(width: number) {
     this.width = width;
-    this.fireEvent({ width }, 'widthChanged');
+    this.fireEvent({width}, 'widthChanged');
   }
 
   setColor(color: string) {
     this.color = color;
-    this.fireEvent({ color }, 'colorChanged');
+    this.fireEvent({color}, 'colorChanged');
   }
 
   override attach() {

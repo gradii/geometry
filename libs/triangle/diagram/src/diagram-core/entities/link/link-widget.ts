@@ -4,20 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import {
   ChangeDetectorRef, Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges
 } from '@angular/core';
@@ -47,8 +33,8 @@ import { PointModel } from './point-model';
 
     <ng-template let-labelModel let-index="index" ngFor [ngForOf]="link.getLabels()">
       <svg:foreignObject class="foreignObject" [attr.key]="labelModel.getID()">
-        <label-widget  [label]="labelModel"
-                       [index]="index"></label-widget>
+        <label-widget [label]="labelModel"
+                      [index]="index"></label-widget>
       </svg:foreignObject>
     </ng-template>
   `,

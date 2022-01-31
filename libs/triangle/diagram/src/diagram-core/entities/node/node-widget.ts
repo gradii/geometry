@@ -4,7 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Component, ElementRef, Inject, Input, TemplateRef, ViewChild } from '@angular/core';
+import { CdkPortalOutlet, ComponentPortal } from '@angular/cdk/portal';
+import { CdkPortalOutletAttachedRef } from '@angular/cdk/portal/portal-directives';
+import {
+  Component, ComponentRef, ElementRef, Inject, Injector, Input, ViewChild
+} from '@angular/core';
 import { ConfirmPopupDirective } from '@gradii/triangle/confirm-popup';
 import { TriDialogService } from '@gradii/triangle/dialog';
 import { PopoverDirective } from '@gradii/triangle/popover';
@@ -14,6 +18,7 @@ import { ListenerHandle } from '../../../canvas-core/core/base-observer';
 import type { CanvasWidget } from '../../../canvas-core/entities/canvas/canvas-widget';
 import { CANVAS_WIDGET, ENGINE } from '../../../canvas-core/tokens';
 import { DiagramNodeModel } from '../../../models/diagram-node-model';
+import { RegistryService } from '../../../node-registry.service';
 import { DiagramEngine } from '../../diagram-engine';
 import { NodeModel } from './node-model';
 
@@ -36,7 +41,13 @@ import { NodeModel } from './node-model';
       <!--      <ng-template [ngTemplateOutlet]="engine.generateWIdgetForNode(node)"></ng-template>-->
       <!--      <ng-template [ngTemplateOutlet]="engine.generateWidgetForNode(node)"-->
       <!--                   [ngTemplateOutletContext]="{event: {model: node}}"></ng-template>-->
-      <x-node-widget [node]="node"></x-node-widget>
+      <ng-template [ngIf]="isDefinedNodeComponent(node)" [ngIfElse]="elseDefaultNodeWidget">
+        <ng-template [triDiagramNodePortalOutlet]="nodeComponentPortal(node)"
+                     (attached)="onAttachedNodePortal(node, $event)"></ng-template>
+      </ng-template>
+      <ng-template #elseDefaultNodeWidget>
+        <x-node-widget [node]="node"></x-node-widget>
+      </ng-template>
     </div>
     <ng-template #confirmPopupTpl>
       <textarea name="description" triTextarea [(ngModel)]="inputValue"
@@ -50,7 +61,8 @@ import { NodeModel } from './node-model';
         <button class="node-menu-item" triMenuItem>Copy</button>
         <button class="node-menu-item" triMenuItem>Link</button>
         <button class="node-menu-item" triMenuItem
-                (click)="nodeContextMenu.close();">Edit Label</button>
+                (click)="nodeContextMenu.close();">Edit Label
+        </button>
         <button class="node-menu-item" triMenuItem
                 (click)="nodeContextMenu.close();onEditDescription(node);">Edit Description
         </button>
@@ -80,15 +92,6 @@ import { NodeModel } from './node-model';
         <button class="node-menu-item" triMenuItem>String</button>
       </div>
     </ng-template>
-
-    <ng-template #dialog>
-      <tri-card>
-        <tri-card-header>sdf</tri-card-header>
-        <tri-card-body>
-          sdf
-        </tri-card-body>
-      </tri-card>
-    </ng-template>
   `,
   styles   : [
     `.node {
@@ -109,8 +112,8 @@ export class NodeWidget {
   @Input() node: DiagramNodeModel;
   @Input() children?: any;
 
-  @ViewChild('dialog', {read: TemplateRef, static: true})
-  dialogTemplateRef: TemplateRef<any>;
+  @ViewChild(CdkPortalOutlet, {static: true})
+  _portalOutlet: CdkPortalOutlet;
 
   @ViewChild('nodeConfirmPopup', {read: ConfirmPopupDirective, static: true})
   editDescConfirmPopup: ConfirmPopupDirective;
@@ -120,14 +123,35 @@ export class NodeWidget {
 
   // @Input() diagramEngine: DiagramEngine;
 
-  inputValue = '';
+  inputValue      = '';
   inputLabelValue = '';
 
   constructor(
     @Inject(ENGINE) public engine: DiagramEngine,
     @Inject(CANVAS_WIDGET) private canvasWidget: CanvasWidget,
-    private dialogService: TriDialogService
+    private _injector: Injector,
+    private _registryService: RegistryService,
+    private _dialogService: TriDialogService,
   ) {
+  }
+
+  isDefinedNodeComponent(nodeModel: DiagramNodeModel) {
+    return this._registryService.has(nodeModel.getType());
+  }
+
+  nodeComponentPortal(nodeModel: DiagramNodeModel) {
+    const portal: ComponentPortal<any> = this._registryService.get(nodeModel.getType());
+    return portal;
+  }
+
+  onAttachedNodePortal(node: DiagramNodeModel, compRef: CdkPortalOutletAttachedRef) {
+    if (compRef instanceof ComponentRef) {
+      // tslint:disable-next-line:ban
+      Object.assign(compRef.instance, {
+        node,
+        hi: 'hi'
+      });
+    }
   }
 
   onAddInput(type: string) {

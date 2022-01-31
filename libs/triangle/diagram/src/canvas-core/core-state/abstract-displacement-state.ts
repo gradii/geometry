@@ -4,20 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import { CanvasEngine } from '../canvas-engine';
 import { Action, ActionEvent, InputType } from '../core-actions/action';
 import { State, StateOptions } from './state';
@@ -43,9 +29,10 @@ export abstract class AbstractDisplacementState<E extends CanvasEngine = CanvasE
       new Action({
         type: InputType.MOUSE_DOWN,
         fire: (actionEvent: ActionEvent<MouseEvent>) => {
-          this.initialX = actionEvent.event.clientX;
-          this.initialY = actionEvent.event.clientY;
-          const rel = this.engine.getRelativePoint(actionEvent.event.clientX, actionEvent.event.clientY);
+          this.initialX         = actionEvent.event.clientX;
+          this.initialY         = actionEvent.event.clientY;
+          const rel             = this.engine.getRelativePoint(actionEvent.event.clientX,
+            actionEvent.event.clientY);
           this.initialXRelative = rel.x;
           this.initialYRelative = rel.y;
         }
@@ -66,11 +53,11 @@ export abstract class AbstractDisplacementState<E extends CanvasEngine = CanvasE
           }
 
           this.fireMouseMoved({
-            displacementX: event.clientX - this.initialX,
-            displacementY: event.clientY - this.initialY,
+            displacementX       : event.clientX - this.initialX,
+            displacementY       : event.clientY - this.initialY,
             virtualDisplacementX: (event.clientX - this.initialX) / (this.engine.getModel().getZoomLevel() / 100.0),
             virtualDisplacementY: (event.clientY - this.initialY) / (this.engine.getModel().getZoomLevel() / 100.0),
-            event: event
+            event               : event
           });
         }
       })

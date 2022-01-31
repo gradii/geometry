@@ -4,14 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { boundingBoxFromPolygons, Rectangle, Vector2 } from '@gradii/vector-math';
 import {
-  Vector2,
-  Rectangle, boundingBoxFromPolygons
-} from '@gradii/vector-math';
-import {
-  CanvasEngine,
-  CanvasEngineListener,
-  CanvasEngineOptions
+  CanvasEngine, CanvasEngineListener, CanvasEngineOptions
 } from '../canvas-core/canvas-engine';
 import { BaseModel } from '../canvas-core/core-models/base-model';
 import { Toolkit } from '../canvas-core/toolkit';
@@ -110,7 +105,8 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener> {
       clientY: sourceRect.top
     });
     const zoom       = this.model.getZoomLevel() / 100.0;
-    return Rectangle.createFromBounds(point.x, point.y, sourceRect.width / zoom, sourceRect.height / zoom);
+    return Rectangle.createFromBounds(point.x, point.y, sourceRect.width / zoom,
+      sourceRect.height / zoom);
   }
 
   /**

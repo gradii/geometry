@@ -4,33 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
-import {
-  Vector2,
-  Polygon,
-  Rectangle,
-  boundingBoxFromPoints
-} from '@gradii/vector-math';
+import { boundingBoxFromPoints, Rectangle, Vector2 } from '@gradii/vector-math';
 import * as _ from 'lodash';
 import { BaseEntityEvent, DeserializeContext } from '../../../canvas-core/core-models/base-entity';
 import {
-  BaseModel,
-  BaseModelGenerics,
-  BaseModelListener,
-  BaseModelOptions
+  BaseModel, BaseModelGenerics, BaseModelListener, BaseModelOptions
 } from '../../../canvas-core/core-models/base-model';
 import { ModelGeometryInterface } from '../../../canvas-core/core/model-geometry-interface';
 import { DiagramModel } from '../../models/diagram-model';

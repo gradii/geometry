@@ -4,20 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import {
   AfterViewChecked, Component, DoCheck, ElementRef, Inject, Input, OnDestroy, OnInit, ViewChild
 } from '@angular/core';
@@ -30,27 +16,50 @@ import { PortModel } from './port-model';
 @Component({
   selector: 'port-widget',
   template: `
-    <div
-      #ref
-      class="port"
-      [attr.data-name]="port.getName()"
-      [attr.data-nodeid]="port.getNode().getID()"
-    >
+    <div class="port-wrapper">
       <ng-content></ng-content>
     </div>
-  `
+  `,
+  styles  : [
+    `
+      :host {
+        display : inline-flex;
+      }
+
+      .port-wrapper {
+        position   : relative;
+        width      : 15px;
+        height     : 15px;
+        background : rgba(255, 255, 255, 0.2);
+      }
+
+      .port-wrapper:hover {
+        background : rgb(192, 255, 0);
+      }
+    `
+  ],
+  host    : {
+    'class'              : 'port',
+    '[class.port-linked]': 'port.getLinks().size',
+    '[attr.data-name]'   : 'port.getName()',
+    '[attr.data-nodeid]' : 'port.getNode().getID()'
+  }
 })
 export class PortWidget implements OnInit, OnDestroy, DoCheck, AfterViewChecked {
   @ViewChild('ref', {read: ElementRef, static: true})
   ref: ElementRef<HTMLDivElement>;
+
   @Input() port: PortModel;
+
   private engineListenerHandle: ListenerHandle;
 
-  constructor(@Inject(ENGINE) public engine: DiagramEngine) {
+  constructor(@Inject(ENGINE) public engine: DiagramEngine,
+              private elementRef: ElementRef
+  ) {
   }
 
   report() {
-    this.port.updateCoords(this.engine.getPortCoords(this.port, this.ref.nativeElement));
+    this.port.updateCoords(this.engine.getPortCoords(this.port, this.elementRef.nativeElement));
   }
 
   getExtraProps() {

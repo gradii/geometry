@@ -4,20 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import * as _ from 'lodash';
 import { CanvasEngine } from '../canvas-engine';
 import { BaseEvent, BaseListener, BaseObserver } from '../core/base-observer';
@@ -34,7 +20,7 @@ export class StateMachine extends BaseObserver<StateMachineListener> {
 
   constructor(engine: CanvasEngine) {
     super();
-    this.engine = engine;
+    this.engine     = engine;
     this.stateStack = [];
   }
 
@@ -59,7 +45,7 @@ export class StateMachine extends BaseObserver<StateMachineListener> {
     if (this.currentState) {
       this.currentState.deactivated(state);
     }
-    const old = this.currentState;
+    const old         = this.currentState;
     this.currentState = state;
     if (this.currentState) {
       this.currentState.activated(old);

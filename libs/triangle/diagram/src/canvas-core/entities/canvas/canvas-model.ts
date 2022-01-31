@@ -4,21 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
-import { U } from '@angular/cdk/keycodes';
 import * as _ from 'lodash';
 import * as R from 'ramda';
 import { CanvasEngine } from '../../canvas-engine';
@@ -131,7 +116,7 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 
   setGridSize(size: number = 0) {
     this.gridSize = size;
-    this.fireEvent({ size: size }, 'gridUpdated');
+    this.fireEvent({size: size}, 'gridUpdated');
   }
 
   getGridPosition(pos: number) {
@@ -197,13 +182,13 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 
   setZoomLevel(zoom: number) {
     this.zoom = zoom;
-    this.fireEvent({ zoom }, 'zoomUpdated');
+    this.fireEvent({zoom}, 'zoomUpdated');
   }
 
   setOffset(offsetX: number, offsetY: number) {
     this.offsetX = offsetX;
     this.offsetY = offsetY;
-    this.fireEvent({ offsetX, offsetY }, 'offsetUpdated');
+    this.fireEvent({offsetX, offsetY}, 'offsetUpdated');
   }
 
   setOffsetX(offsetX: number) {

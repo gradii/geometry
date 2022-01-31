@@ -4,20 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import { Rectangle, Vector2 } from '@gradii/vector-math';
 import { ModelGeometryInterface } from '../core/model-geometry-interface';
 import { BaseEntityEvent, DeserializeContext } from './base-entity';

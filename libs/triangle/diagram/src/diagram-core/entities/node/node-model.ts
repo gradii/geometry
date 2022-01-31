@@ -4,39 +4,19 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
-
-import {
-  Vector2,
-  Rectangle
-} from '@gradii/vector-math';
+import { Rectangle, Vector2 } from '@gradii/vector-math';
 import * as _ from 'lodash';
 import { BaseEntityEvent, DeserializeContext } from '../../../canvas-core/core-models/base-entity';
 import { BaseModelListener } from '../../../canvas-core/core-models/base-model';
 import {
-  BasePositionModel,
-  BasePositionModelGenerics
+  BasePositionModel, BasePositionModelGenerics
 } from '../../../canvas-core/core-models/base-position-model';
-import { DiagramEngine } from '../../diagram-engine';
 import { DiagramModel } from '../../models/diagram-model';
 import { LinkModel } from '../link/link-model';
 import { PortModel } from '../port/port-model';
 
 export interface NodeModelListener extends BaseModelListener {
-  positionChanged(event: BaseEntityEvent<NodeModel>): void;
+  positionChanged?(event: BaseEntityEvent<NodeModel>): void;
 }
 
 export interface NodeModelGenerics extends BasePositionModelGenerics {

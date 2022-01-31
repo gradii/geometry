@@ -4,24 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import * as _ from 'lodash';
 import { DeserializeContext } from '../../../canvas-core/core-models/base-entity';
 import { LayerModel, LayerModelGenerics } from '../../../canvas-core/entities/layer/layer-model';
-import { DiagramLinkModel } from '../../../models/diagram-link-model';
 import { DiagramNodeModel } from '../../../models/diagram-node-model';
 import { DiagramEngine } from '../../diagram-engine';
 import { DiagramModel } from '../../models/diagram-model';
@@ -57,7 +42,7 @@ export class NodeLayerModel<G extends NodeLayerModelGenerics = NodeLayerModelGen
   }
 
   getModel(id: string): NodeModel {
-   return super.getModel(id) as NodeModel;
+    return super.getModel(id) as NodeModel;
   }
 
   getModels(): NodeModel[] {

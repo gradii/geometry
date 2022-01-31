@@ -4,21 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
-
 import * as _ from 'lodash';
 import {
   BaseEntityEvent, BaseEntityListener, DeserializeContext
@@ -174,7 +159,7 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 
   addNode(node: NodeModel): NodeModel {
     this.getActiveNodeLayer().addModel(node);
-    this.fireEvent({ node, isCreated: true }, 'nodesUpdated');
+    this.fireEvent({node, isCreated: true}, 'nodesUpdated');
     return node;
   }
 
@@ -183,7 +168,7 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
       return layer.removeModel(link);
     });
     if (removed) {
-      this.fireEvent({ link, isCreated: false }, 'linksUpdated');
+      this.fireEvent({link, isCreated: false}, 'linksUpdated');
     }
   }
 
@@ -192,7 +177,7 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
       return layer.removeModel(node);
     });
     if (removed) {
-      this.fireEvent({ node, isCreated: false }, 'nodesUpdated');
+      this.fireEvent({node, isCreated: false}, 'nodesUpdated');
     }
   }
 

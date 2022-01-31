@@ -4,20 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import { Component, Input } from '@angular/core';
 import { DiagramLabelModel } from '../../models/diagram-label-model';
 import { LabelModel } from '../entities/label/label-model';
@@ -30,15 +16,15 @@ import { LabelModel } from '../entities/label/label-model';
       {{ model.label }}
     </div>
   `,
-  styles: [
+  styles  : [
     `.label {
-      background: rgba(0, 0, 0, 0.8);
-      border-radius: 5px;
-      color: white;
-      font-size: 12px;
-      padding: 4px 8px;
-      font-family: sans-serif;
-      user-select: none;
+      background    : rgba(0, 0, 0, 0.8);
+      border-radius : 5px;
+      color         : white;
+      font-size     : 12px;
+      padding       : 4px 8px;
+      font-family   : sans-serif;
+      user-select   : none;
     }`
   ]
 })

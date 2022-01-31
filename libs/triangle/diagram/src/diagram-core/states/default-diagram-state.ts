@@ -4,25 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
-import {
-  Action,
-  ActionEvent,
-  InputType
-} from '../../canvas-core/core-actions/action';
+import { Action, ActionEvent, InputType } from '../../canvas-core/core-actions/action';
 import { State } from '../../canvas-core/core-state/state';
 import { DragCanvasState } from '../../canvas-core/states/drag-canvas-state';
 import { SelectingState } from '../../canvas-core/states/selecting-state';
@@ -41,9 +23,9 @@ export class DefaultDiagramState extends State<DiagramEngine> {
       name: 'default-diagrams'
     });
     this.childStates = [new SelectingState()];
-    this.dragCanvas = new DragCanvasState();
+    this.dragCanvas  = new DragCanvasState();
     this.dragNewLink = new DragNewLinkState();
-    this.dragItems = new DragDiagramItemsState();
+    this.dragItems   = new DragDiagramItemsState();
 
     // determine what was clicked on
     this.registerAction(

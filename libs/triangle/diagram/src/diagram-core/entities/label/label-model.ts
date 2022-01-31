@@ -4,26 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
-
 import { DeserializeContext } from '../../../canvas-core/core-models/base-entity';
 import {
-  BaseModel,
-  BaseModelGenerics,
-  BaseModelOptions
+  BaseModel, BaseModelGenerics, BaseModelOptions
 } from '../../../canvas-core/core-models/base-model';
 import { LinkModel } from '../link/link-model';
 
@@ -45,7 +28,7 @@ export class LabelModel<G extends LabelModelGenerics = LabelModelGenerics> exten
   constructor({
                 offsetX = 0,
                 offsetY = 0,
-    ...rest
+                ...rest
               }: G['OPTIONS']) {
     super(rest);
 

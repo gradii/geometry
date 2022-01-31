@@ -152,7 +152,7 @@
     ],
     "require-license-banner": [
       true,
-      "src/!(e2e-app|components-examples|universal-app)/**/!(*.spec).ts"
+      "libs/!(e2e-app|components-examples|universal-app)/**/!(*.spec).ts"
     ],
     "no-cross-entry-point-relative-imports": [
       true,

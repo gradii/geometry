@@ -4,26 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import * as _ from 'lodash';
-import {
-  Action,
-  ActionEvent,
-  InputType
-} from '../../canvas-core/core-actions/action';
+import { Action, ActionEvent, InputType } from '../../canvas-core/core-actions/action';
 import { MoveItemsState } from '../../canvas-core/states/move-items-state';
 import { DiagramEngine } from '../diagram-engine';
 import { LinkModel } from '../entities/link/link-model';

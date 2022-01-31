@@ -4,26 +4,14 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import { Vector2 } from '@gradii/vector-math';
 import { CanvasEngine } from '../canvas-engine';
 import { Action, ActionEvent, InputType } from '../core-actions/action';
 import { BaseModel } from '../core-models/base-model';
 import { BasePositionModel } from '../core-models/base-position-model';
-import { AbstractDisplacementState, AbstractDisplacementStateEvent } from '../core-state/abstract-displacement-state';
+import {
+  AbstractDisplacementState, AbstractDisplacementStateEvent
+} from '../core-state/abstract-displacement-state';
 import { State } from '../core-state/state';
 
 export class MoveItemsState<E extends CanvasEngine = CanvasEngine> extends AbstractDisplacementState<E> {
@@ -77,7 +65,7 @@ export class MoveItemsState<E extends CanvasEngine = CanvasEngine> extends Abstr
         if (!this.initialPositions[item.getID()]) {
           this.initialPositions[item.getID()] = {
             point: item.getPosition(),
-            item: item
+            item : item
           };
         }
 

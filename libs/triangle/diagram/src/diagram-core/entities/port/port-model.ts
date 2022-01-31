@@ -4,20 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import { Rectangle, Vector2 } from '@gradii/vector-math';
 import * as _ from 'lodash';
 import { BaseEntityEvent, DeserializeContext } from '../../../canvas-core/core-models/base-entity';
@@ -102,21 +88,21 @@ export class PortModel<G extends PortModelGenerics = PortModelGenerics> extends 
     super.deserialize(data, context);
     this.reportedPosition = false;
 
-    this.name      = data.name;
-    this.alignment = data.alignment;
+    this.name         = data.name;
+    this.alignment    = data.alignment;
     this.maximumLinks = data.maximumLinks;
-    this.anchor = data.anchor;
+    this.anchor       = data.anchor;
   }
 
   serialize() {
     return {
       ...super.serialize(),
-      name      : this.name,
-      alignment : this.alignment,
+      name        : this.name,
+      alignment   : this.alignment,
       maximumLinks: this.maximumLinks,
-      anchor    : this.anchor,
-      parentNode: this.parent.getID(),
-      links     : Array.from(this.links.values()).map((link) => {
+      anchor      : this.anchor,
+      parentNode  : this.parent.getID(),
+      links       : Array.from(this.links.values()).map((link) => {
         return link.getID();
       })
     };

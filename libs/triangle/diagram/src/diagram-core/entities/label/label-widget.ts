@@ -4,20 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import {
   AfterViewChecked, Component, ElementRef, Inject, Input, NgZone, ViewChild
 } from '@angular/core';
@@ -43,7 +29,7 @@ import { LabelModel } from './label-model';
   ]
 })
 export class LabelWidget implements AfterViewChecked {
-  @ViewChild('ref', { read: ElementRef, static: true })
+  @ViewChild('ref', {read: ElementRef, static: true})
   ref: ElementRef<any>;
 
   @Input()
@@ -113,7 +99,7 @@ export class LabelWidget implements AfterViewChecked {
       return;
     }
 
-    const { path, position } = found;
+    const {path, position} = found;
 
     const labelDimensions = {
       width : this.ref.nativeElement.offsetWidth,

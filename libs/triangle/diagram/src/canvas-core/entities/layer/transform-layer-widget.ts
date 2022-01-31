@@ -4,20 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import { Component, Input } from '@angular/core';
 import { LinkLayerModel } from '../../../diagram-core/entities/link-layer/link-layer-model';
 import { NodeLayerModel } from '../../../diagram-core/entities/node-layer/node-layer-model';

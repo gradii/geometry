@@ -4,20 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import {
   AfterViewChecked, AfterViewInit, Component, Inject, Input, OnDestroy, OnInit
 } from '@angular/core';
@@ -178,8 +164,8 @@ export class XLinkWidget implements OnInit, OnDestroy, AfterViewInit, AfterViewC
 
   ngAfterViewInit() {
     // ensure id is present for all points on the path
-    const points    = this.link.getPoints();
-    const paths     = [];
+    const points  = this.link.getPoints();
+    const paths   = [];
     this.refPaths = [];
 
     this.svgPaths.push(

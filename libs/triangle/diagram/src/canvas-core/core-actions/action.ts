@@ -4,31 +4,17 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 import { CanvasEngine } from '../canvas-engine';
 import { BaseModel } from '../core-models/base-model';
 import { Toolkit } from '../toolkit';
 
 export const enum InputType {
-  MOUSE_DOWN = 'mouse-down',
-  MOUSE_UP = 'mouse-up',
-  MOUSE_MOVE = 'mouse-move',
+  MOUSE_DOWN  = 'mouse-down',
+  MOUSE_UP    = 'mouse-up',
+  MOUSE_MOVE  = 'mouse-move',
   MOUSE_WHEEL = 'mouse-wheel',
-  KEY_DOWN = 'key-down',
-  KEY_UP = 'key-up'
+  KEY_DOWN    = 'key-down',
+  KEY_UP      = 'key-up'
 }
 
 export interface Mapping {
@@ -57,7 +43,7 @@ export class Action<T extends CanvasEngine = CanvasEngine> {
 
   constructor(options: ActionOptions) {
     this.options = options;
-    this.id = Toolkit.UID();
+    this.id      = Toolkit.UID();
   }
 
   setEngine(engine: T) {

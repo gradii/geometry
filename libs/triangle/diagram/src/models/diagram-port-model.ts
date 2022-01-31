@@ -4,31 +4,19 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
-
 import { DeserializeContext } from '../canvas-core/core-models/base-entity';
 // import { AbstractModelFactory } from '../../canvas-core/core/abstract-model-factory';
 import { LinkModel } from '../diagram-core/entities/link/link-model';
 import {
   PortModel, PortModelAlignment, PortModelGenerics, PortModelOptions
 } from '../diagram-core/entities/port/port-model';
+import { toUniqueType } from '../utils';
 import { DiagramLinkModel } from './diagram-link-model';
 
 export interface DefaultPortModelOptions extends PortModelOptions {
-  label?: string;
+  name: string;
+  displayName?: string;
+  namespace?: string;
   in?: boolean;
 }
 
@@ -37,7 +25,9 @@ export interface DefaultPortModelGenerics extends PortModelGenerics {
 }
 
 export class DiagramPortModel extends PortModel<DefaultPortModelGenerics> {
-  label: string;
+  name: string;
+  displayName: string;
+  namespace: string;
   in: boolean;
 
 
@@ -46,42 +36,66 @@ export class DiagramPortModel extends PortModel<DefaultPortModelGenerics> {
    */
   protected options: DefaultPortModelOptions;
 
-  constructor(isIn: boolean, name?: string, label?: string);
+  constructor(isIn: boolean);
+  constructor(isIn: boolean, name: string);
+  constructor(isIn: boolean, name: string, displayName: string);
+  constructor(isIn: boolean, name: string, displayName: string, namespace: string);
   constructor(options: DefaultPortModelOptions);
-  constructor(options: DefaultPortModelOptions | boolean, name?: string, label?: string) {
-    if (!!name) {
+  constructor(options: any, name?: string,
+              displayName?: string, namespace?: string) {
+    if (arguments.length === 2) {
       options = {
-        in   : !!options,
-        name : name,
-        label: label
+        in         : !!options,
+        name       : name,
+        displayName: name,
+      };
+    } else if (arguments.length === 3) {
+      options = {
+        in         : !!options,
+        name       : name,
+        displayName: displayName,
+      };
+    } else if (arguments.length === 4) {
+      options = {
+        in         : !!options,
+        name       : name,
+        displayName: displayName,
+        namespace  : namespace,
+      };
+    } else if (arguments.length === 1 && typeof options === 'boolean') {
+      options = {
+        in: options,
       };
     }
-    options = options as DefaultPortModelOptions;
-    super({
-      label    : options.label || options.name,
-      alignment: options.in ? PortModelAlignment.LEFT : PortModelAlignment.RIGHT,
-      type     : 'default',
-      ...options
-    });
+    options = {
+      ...options,
+      name       : options.name,
+      displayName: options.displayName ?? options.name,
+      namespace  : namespace || 'default/port',
+      alignment  : options.in ? PortModelAlignment.LEFT : PortModelAlignment.RIGHT,
+    };
+    super(options);
 
-    // this.type = type;
+    this.type = toUniqueType(options.name, options.namespace);
 
-    this.label = options.label;
-    this.in    = options.in;
+    this.name        = options.name;
+    this.displayName = options.displayName;
+    this.namespace   = options.namespace;
+    this.in          = options.in;
   }
 
 
   deserialize(data: ReturnType<this['serialize']>, context: DeserializeContext<this>) {
     super.deserialize(data, context);
-    this.in    = data.in;
-    this.label = data.label;
+    this.in          = data.in;
+    this.displayName = data.displayName;
   }
 
   serialize() {
     return {
       ...super.serialize(),
-      in   : this.in,
-      label: this.label
+      in         : this.in,
+      displayName: this.displayName
     };
   }
 
