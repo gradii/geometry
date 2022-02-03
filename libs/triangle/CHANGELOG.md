@@ -2,6 +2,10 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [2.2.18](https://github.com/gradii/triangle/compare/triangle-2.2.17...triangle-2.2.18) (2022-02-03)
+
+
+
 ## [2.2.17](https://github.com/gradii/triangle/compare/triangle-2.2.16...triangle-2.2.17) (2022-02-03)
 
 
