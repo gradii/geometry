@@ -71,7 +71,7 @@ export class DiagramNodeModel extends NodeModel<DefaultNodeModelGenerics> {
     options = {
       ...options,
       name       : options.name || 'default',
-      displayName: options.displayName || 'Untitled',
+      displayName: options.displayName || options.name,
       namespace  : options.namespace || 'default/node',
       description: options.description || '',
       color      : options.color || 'rgb(0,192,255)',

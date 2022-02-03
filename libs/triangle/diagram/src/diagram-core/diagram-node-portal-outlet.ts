@@ -8,10 +8,12 @@ declare const ngDevMode: Boolean;
 
 import { CdkPortalOutletAttachedRef, ComponentPortal, PortalOutlet } from '@angular/cdk/portal';
 import {
-  ComponentFactoryResolver, ComponentRef, Directive, EventEmitter, Injector, Input, OnDestroy,
-  OnInit, Output, ViewContainerRef
+  ComponentFactoryResolver, ComponentRef, Directive, EventEmitter, Inject, Injector, Input,
+  OnDestroy, OnInit, Output, ViewContainerRef
 } from '@angular/core';
+import { ENGINE } from '../canvas-core/tokens';
 import { DIAGRAM_NODE_DATA } from '../tokens';
+import { DiagramEngine } from './diagram-engine';
 
 
 function throwNullPortalError() {
@@ -123,6 +125,7 @@ export class DiagramNodePortalOutlet implements PortalOutlet, OnInit, OnDestroy 
   constructor(
     private _componentFactoryResolver: ComponentFactoryResolver,
     private _viewContainerRef: ViewContainerRef,
+    @Inject(ENGINE) private _engine: DiagramEngine,
   ) {
   }
 
@@ -174,7 +177,7 @@ export class DiagramNodePortalOutlet implements PortalOutlet, OnInit, OnDestroy 
       }
       if (data) {
         // tslint:disable-next-line:ban
-        this._config.data =  data;
+        this._config.data = data;
       }
     }
   }
@@ -212,7 +215,11 @@ export class DiagramNodePortalOutlet implements PortalOutlet, OnInit, OnDestroy 
           {
             provide : DIAGRAM_NODE_DATA,
             useValue: this.config,
-          }
+          },
+          {
+            provide : ENGINE,
+            useValue: this._engine,
+          },
         ],
         parent   : viewContainerRef.injector,
       })
