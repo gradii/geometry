@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [2.2.17](https://github.com/gradii/triangle/compare/triangle-2.2.16...triangle-2.2.17) (2022-02-03)
+
+
+### Bug Fixes
+
+* diagram canvas changedetect detach ([d2acba2](https://github.com/gradii/triangle/commit/d2acba209de9024152ef84611e4f7a2ed879787a))
+
+
+
 ## [2.2.16](https://github.com/gradii/triangle/compare/triangle-2.2.15...triangle-2.2.16) (2022-02-01)
 
 
