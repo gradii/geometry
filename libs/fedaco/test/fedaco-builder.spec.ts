@@ -1,4 +1,5 @@
 import { isFunction } from '@gradii/check-type';
+import { Table } from '../src/annotation/table/table';
 import { ConnectionFactory } from '../src/connector/connection-factory';
 import { DatabaseManager } from '../src/database-manager';
 import { DatabaseTransactionsManager } from '../src/database-transactions-manager';
@@ -143,6 +144,7 @@ describe('fedaco builder', () => {
     jest.spyOn(_model, 'getKeyName').mockReturnValue('foo');
     jest.spyOn(_model, 'getTable').mockReturnValue('foo_table');
     jest.spyOn(_model, 'getQualifiedKeyName').mockReturnValue('foo_table.foo');
+    jest.spyOn(_model, 'newBaseQueryBuilder').mockReturnValue(mockNewQueryBuilder());
     return _model;
   }
 
@@ -157,12 +159,16 @@ describe('fedaco builder', () => {
     return _model;
   }
 
-  function getBuilder() {
-    return new FedacoBuilder(new QueryBuilder(
+  function mockNewQueryBuilder() {
+    return new QueryBuilder(
       new Conn(),
       new MysqlQueryGrammar(),
       new Processor()
-    ));
+    );
+  }
+
+  function getBuilder() {
+    return new FedacoBuilder(mockNewQueryBuilder());
   }
 
   function mockConnectionForModel<T extends typeof Model>(modelClazz: any,
@@ -200,11 +206,11 @@ describe('fedaco builder', () => {
     let spySelect, spyFirst, result;
     spySelect = jest.spyOn(builder.getQuery(), 'where');
     // @ts-ignore
-    spyFirst  = jest.spyOn(builder, 'first').mockReturnValue({name: 'baz'});
+    spyFirst  = jest.spyOn(builder, 'first').mockReturnValue({ name: 'baz' });
     result    = await builder.find('bar', ['column']);
     expect(spySelect).toBeCalledWith('foo_table.foo', '=', 'bar', 'and');
     expect(spyFirst).toBeCalledWith(['column']);
-    expect(result).toStrictEqual({name: 'baz'});
+    expect(result).toStrictEqual({ name: 'baz' });
   });
 
   it('find many method', async () => {
@@ -1158,7 +1164,7 @@ describe('fedaco builder', () => {
 
     const result = await builder.delete();
 
-    expect(result).toEqual({'foo': builder});
+    expect(result).toEqual({ 'foo': builder });
   });
 
   it('where key method with int', () => {
@@ -1426,7 +1432,7 @@ describe('fedaco builder', () => {
 
     expect(result).toBe(1);
 
-    expect(spy1).toBeCalledWith('UPDATE `table` AS `alias` SET `foo` = ?, `alias`.`updated_at` = ?',
+    expect(spy1).toBeCalledWith('UPDATE `test_table` AS `alias` SET `alias`.`foo` = ?, `alias`.`updated_at` = ?',
       ['bar', expect.anything()]);
 
   });
@@ -1447,6 +1453,9 @@ describe('fedaco builder', () => {
 });
 
 
+@Table({
+  tableName: 'test_table'
+})
 class FedacoBuilderTestStub extends Model {
   _table = 'test_table';
 }

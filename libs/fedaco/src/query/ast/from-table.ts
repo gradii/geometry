@@ -12,12 +12,17 @@ import { TableReferenceExpression } from './table-reference-expression';
 
 
 export class FromTable extends SqlNode {
+  protected _cached: string;
+
   constructor(public table: TableReferenceExpression | RawExpression,
               public indexBy?: IndexBy) {
     super();
   }
 
   accept(visitor: SqlVisitor) {
-    return visitor.visitFromTable(this);
+    if (!this._cached) {
+      this._cached = visitor.visitFromTable(this);
+    }
+    return this._cached;
   }
 }

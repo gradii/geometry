@@ -14,19 +14,19 @@ import { QueryBuilder } from '../query-builder';
 
 export interface BuildQueries {
 
-  chunk(count: number, signal?: Observable<any>): Observable<{ results: any[], page: number }>;
+  chunk(count: number, signal?: Observable<any>): Observable<{results: any[], page: number}>;
 
-  each(count?: number, signal?: Observable<any>): Observable<{ item: any, index: number }>;
+  each(count?: number, signal?: Observable<any>): Observable<{item: any, index: number}>;
 
   chunkById(count: number,
             column?: string,
             alias?: string,
-            signal?: Observable<any>): Observable<{ results: any, page: number }>;
+            signal?: Observable<any>): Observable<{results: any, page: number}>;
 
   eachById(count: number,
            column?: string,
            alias?: string,
-           signal?: Observable<any>): Observable<{ item: any, index: number }>;
+           signal?: Observable<any>): Observable<{item: any, index: number}>;
 
   first(columns?: any[] | string): Promise<Model | /*object |*/ any | null>;
 
@@ -46,14 +46,14 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
   return class _Self extends base {
 
     public chunk(count: number,
-                 signal?: Observable<any>): Observable<{ results: any[], page: number }> {
+                 signal?: Observable<any>): Observable<{results: any[], page: number}> {
       if (!(count > 0)) {
         return EMPTY;
       }
       const clone = this.clone();
 
       return new Observable((observer: Subscriber<any>) => {
-        let isFirst   = true;
+        let isFirst = true;
         const subject = new BehaviorSubject(1);
         subject.pipe(
           signal ? bufferWhen(() => {
@@ -76,9 +76,9 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
                   observer.complete();
                 } else if (results.length === count) {
                   subject.next(page + 1);
-                  observer.next({results, page});
+                  observer.next({ results, page });
                 } else {
-                  observer.next({results, page});
+                  observer.next({ results, page });
                   subject.complete();
                   observer.complete();
                 }
@@ -100,11 +100,11 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
     }
 
     public each(count: number = 1000,
-                signal?: Observable<any>): Observable<{ item: any, index: number }> {
+                signal?: Observable<any>): Observable<{item: any, index: number}> {
       return this.chunk(count, signal).pipe(
-        mergeMap(({results, page}) => {
+        mergeMap(({ results, page }) => {
           return of(...results.map((it: any, idx: number) => {
-            return {item: it, index: (page - 1) * count + idx};
+            return { item: it, index: (page - 1) * count + idx };
           }));
         })
       );
@@ -121,14 +121,14 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
       if (!(count > 0)) {
         return EMPTY;
       }
-      column      = column ?? this.defaultKeyName();
-      alias       = alias ?? column;
+      column = column ?? this.defaultKeyName();
+      alias = alias ?? column;
       const clone = this.clone();
 
       return new Observable((observer: Subscriber<any>) => {
         let lastId: number = null;
-        let isFirst        = true;
-        const subject      = new BehaviorSubject(1);
+        let isFirst = true;
+        const subject = new BehaviorSubject(1);
         subject.pipe(
           signal ? bufferWhen(() => {
             // first time emit immediately
@@ -162,9 +162,9 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
                 if (results.length > 0) {
                   if (results.length === count) {
                     subject.next(page + 1);
-                    observer.next({results, page});
+                    observer.next({ results, page });
                   } else {
-                    observer.next({results, page});
+                    observer.next({ results, page });
                     subject.complete();
                     observer.complete();
                   }
@@ -189,11 +189,11 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
     public eachById(this: QueryBuilder & _Self, count: number = 1000,
                     column?: string,
                     alias?: string,
-                    signal?: Observable<any>): Observable<{ item: any, index: number }> {
+                    signal?: Observable<any>): Observable<{item: any, index: number}> {
       return this.chunkById(count, column, alias, signal).pipe(
-        mergeMap(({results, page}) => {
-          return of(...results.map((it: any, idx: number) => {
-            return {item: it, index: (page - 1) * count + idx};
+        mergeMap(({ results, page }): Observable<{item: any, index: number}> => {
+          return from<ArrayLike<{item: any, index: number}>>(results.map((it: any, idx: number) => {
+            return { item: it, index: (page - 1) * count + idx };
           }));
         })
       );

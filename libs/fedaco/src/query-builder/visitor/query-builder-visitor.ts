@@ -456,7 +456,10 @@ export class QueryBuilderVisitor implements SqlVisitor {
             columns.push(this._grammar.quoteTableName(columnName));
           } else if (identifier instanceof FromTable) {
             if (columnName) {
-              columns.push(columnName.split(/\s+as\s+/i).pop());
+              const withAlias = columnName.split(/\s+as\s+/i);
+              if(withAlias.length > 1) {
+                columns.push(withAlias.pop());
+              }
             }
           } else {
             // todo
@@ -628,15 +631,12 @@ export class QueryBuilderVisitor implements SqlVisitor {
     sql += ` SET ${node.setClauses.map(
       it => it.accept(this)).join(', ')
     }`;
-
     if (node.fromClause) {
       sql += ` ${node.fromClause.accept(this)}`;
     }
-
     if (node.whereClause) {
       sql += ` ${node.whereClause.accept(this)}`;
     }
-
     if (node.orderByClause) {
       sql += ` ${node.orderByClause.accept(this)}`;
     }

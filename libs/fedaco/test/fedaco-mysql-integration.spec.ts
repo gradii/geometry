@@ -132,18 +132,18 @@ describe('test database fedaco integration', () => {
   beforeAll(async () => {
     const db = new DatabaseConfig();
     db.addConnection({
-      'driver'  : 'mysql',
-      'host'    : '127.0.0.1',
-      'port'    : 3306,
+      'driver': 'mysql',
+      'host': '127.0.0.1',
+      'port': 3306,
       'database': 'fedaco_test',
       'username': 'root',
       'password': '123456',
       'timezone': '+08:00'
     });
     db.addConnection({
-      'driver'  : 'mysql',
-      'host'    : '127.0.0.1',
-      'port'    : 3306,
+      'driver': 'mysql',
+      'host': '127.0.0.1',
+      'port': 3306,
       'database': 'fedaco_second_test',
       'username': 'root',
       'password': '123456'
@@ -184,7 +184,7 @@ describe('test database fedaco integration', () => {
 
   it('basic create model', async () => {
     const model = await new EloquentTestUser().newQuery().create({
-      'id'   : 1,
+      'id': 1,
       'email': 'linbolen@gradii.com'
     });
 
@@ -197,12 +197,12 @@ describe('test database fedaco integration', () => {
     const factory = new EloquentTestUser();
 
     await factory.newQuery().create({
-      'id'   : 1,
+      'id': 1,
       'email': 'linbolen@gradii.com'
     });
 
     await factory.newQuery().create({
-      'id'   : 2,
+      'id': 2,
       'email': 'xsilen@gradii.com'
     });
 
@@ -254,8 +254,8 @@ describe('test database fedaco integration', () => {
   morphTypeName: 'user'
 })
 export class EloquentTestUser extends Model {
-  _table: any   = 'users';
-  _dates: any   = ['birthday'];
+  _table: any = 'users';
+  _dates: any = ['birthday'];
   _guarded: any = [];
 
   @PrimaryColumn()
@@ -274,16 +274,16 @@ export class EloquentTestUser extends Model {
   updated_at;
 
   @BelongsToManyColumn({
-    related        : EloquentTestUser,
-    table          : 'friends',
+    related: EloquentTestUser,
+    table: 'friends',
     foreignPivotKey: 'user_id',
     relatedPivotKey: 'friend_id'
   })
   friends;
 
   @BelongsToManyColumn({
-    related        : EloquentTestUser,
-    table          : 'friends',
+    related: EloquentTestUser,
+    table: 'friends',
     foreignPivotKey: 'user_id',
     relatedPivotKey: 'friend_id',
     // @ts-ignore
@@ -294,8 +294,8 @@ export class EloquentTestUser extends Model {
   friendsOne;
 
   @BelongsToManyColumn({
-    related        : EloquentTestUser,
-    table          : 'friends',
+    related: EloquentTestUser,
+    table: 'friends',
     foreignPivotKey: 'user_id',
     relatedPivotKey: 'friend_id',
     // @ts-ignore
@@ -306,27 +306,27 @@ export class EloquentTestUser extends Model {
   friendsTwo;
 
   @HasManyColumn({
-    related   : forwardRef(() => EloquentTestPost),
+    related: forwardRef(() => EloquentTestPost),
     foreignKey: 'user_id',
   })
   public posts: Promise<any[]>;
 
   @HasOneColumn({
-    related   : forwardRef(() => EloquentTestPost),
+    related: forwardRef(() => EloquentTestPost),
     foreignKey: 'user_id',
   })
   public post;
 
   @MorphManyColumn({
-    related  : forwardRef(() => EloquentTestPhoto),
+    related: forwardRef(() => EloquentTestPhoto),
     morphName: 'imageable',
   })
   public photos;
 
   @HasOneColumn({
-    related   : forwardRef(() => EloquentTestPost),
+    related: forwardRef(() => EloquentTestPost),
     foreignKey: 'user_id',
-    onQuery   : (q => {
+    onQuery: (q => {
       q.join('photo', join => {
         join.on('photo.imageable_id', 'post.id');
         join.where('photo.imageable_type', 'EloquentTestPost');
@@ -338,11 +338,11 @@ export class EloquentTestUser extends Model {
 
 export class EloquentTestUserWithCustomFriendPivot extends EloquentTestUser {
   @BelongsToManyColumn({
-    related        : EloquentTestUser,
-    table          : 'friends',
+    related: EloquentTestUser,
+    table: 'friends',
     foreignPivotKey: 'user_id',
     relatedPivotKey: 'friend_id',
-    onQuery        : (q: BelongsToMany) => {
+    onQuery: (q: BelongsToMany) => {
       q.using(EloquentTestFriendPivot).withPivot('user_id', 'friend_id', 'friend_level_id');
     }
   })
@@ -355,17 +355,17 @@ export class EloquentTestUserWithSpaceInColumnName extends EloquentTestUser {
 }
 
 export class EloquentTestNonIncrementing extends Model {
-  _table: any               = 'non_incrementing_users';
-  _guarded: any             = [];
+  _table: any = 'non_incrementing_users';
+  _guarded: any = [];
   public _incrementing: any = false;
-  public _timestamps: any   = false;
+  public _timestamps: any = false;
 }
 
 export class EloquentTestNonIncrementingSecond extends EloquentTestNonIncrementing {
   _connection: any = 'second_connection';
 
   @Column()
-  name;
+  name: string;
 }
 
 export class EloquentTestUserWithGlobalScope extends EloquentTestUser {
@@ -399,7 +399,7 @@ export class EloquentTestUserWithGlobalScope extends EloquentTestUser {
   morphTypeName: 'post',
 })
 export class EloquentTestPost extends Model {
-  _table: any   = 'posts';
+  _table: any = 'posts';
   _guarded: any = [];
 
   @PrimaryColumn()
@@ -412,13 +412,13 @@ export class EloquentTestPost extends Model {
   // user_id; no need to define this since BelongsToColumn dynamic add foreign user_id
 
   @BelongsToColumn({
-    related   : EloquentTestUser,
+    related: EloquentTestUser,
     foreignKey: 'user_id'
   })
   public user;
 
   @MorphManyColumn({
-    related  : forwardRef(() => EloquentTestPhoto),
+    related: forwardRef(() => EloquentTestPhoto),
     morphName: 'imageable',
   })
   photos;
@@ -432,7 +432,7 @@ export class EloquentTestPost extends Model {
 
 
   @HasManyColumn({
-    related   : forwardRef(() => EloquentTestPost),
+    related: forwardRef(() => EloquentTestPost),
     foreignKey: 'parent_id',
   })
   childPosts: Promise<any[]>;
@@ -443,7 +443,7 @@ export class EloquentTestPost extends Model {
   //
 
   @BelongsToColumn({
-    related   : forwardRef(() => EloquentTestPost),
+    related: forwardRef(() => EloquentTestPost),
     foreignKey: 'parent_id',
   })
   parentPost;
@@ -454,7 +454,7 @@ export class EloquentTestPost extends Model {
 }
 
 export class EloquentTestFriendLevel extends Model {
-  _table: any   = 'friend_levels';
+  _table: any = 'friend_levels';
   _guarded: any = [];
 
   @Column()
@@ -463,7 +463,7 @@ export class EloquentTestFriendLevel extends Model {
 
 @Table({})
 export class EloquentTestPhoto extends Model {
-  _table: any   = 'photos';
+  _table: any = 'photos';
   _guarded: any = [];
 
   @Column()
@@ -473,8 +473,8 @@ export class EloquentTestPhoto extends Model {
     morphTypeMap: {
       'EloquentTestUser': EloquentTestUser,
       'EloquentTestPost': EloquentTestPost,
-      'user'            : EloquentTestUser,
-      'post'            : EloquentTestPost,
+      'user': EloquentTestUser,
+      'post': EloquentTestPost,
     }
   })
   public imageable;
@@ -497,9 +497,9 @@ export class EloquentTestUserWithCustomDateSerialization extends EloquentTestUse
 }
 
 export class EloquentTestOrder extends Model {
-  _table: any   = 'test_orders';
+  _table: any = 'test_orders';
   _guarded: any = [];
-  _with: any[]  = ['item'];
+  _with: any[] = ['item'];
 
   @PrimaryColumn()
   id;
@@ -513,15 +513,15 @@ export class EloquentTestOrder extends Model {
 }
 
 export class EloquentTestItem extends Model {
-  _table: any      = 'test_items';
-  _guarded: any    = [];
+  _table: any = 'test_items';
+  _guarded: any = [];
   _connection: any = 'second_connection';
 
 
 }
 
 export class EloquentTestWithJSON extends Model {
-  _table: any   = 'with_json';
+  _table: any = 'with_json';
   _guarded: any = [];
 
   public _timestamps: any = false;
@@ -534,7 +534,7 @@ export class EloquentTestWithJSON extends Model {
 }
 
 export class EloquentTestFriendPivot extends Pivot {
-  _table: any   = 'friends';
+  _table: any = 'friends';
   _guarded: any = [];
 
   @BelongsToColumn({
@@ -548,7 +548,7 @@ export class EloquentTestFriendPivot extends Pivot {
   public friend;
 
   @BelongsToColumn({
-    related   : EloquentTestFriendLevel,
+    related: EloquentTestFriendLevel,
     foreignKey: 'friend_level_id'
   })
   public level;

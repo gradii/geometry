@@ -110,7 +110,7 @@ export interface SqlVisitor {
 
   visitSelectScalarExpression(node: SqlNode): string;
 
-  visitSetClause(node: SqlNode): string;
+  visitSetClause(node: SqlNode, ctx?: any): string;
 
   visitStringLiteralExpression(node: SqlNode): string;
 

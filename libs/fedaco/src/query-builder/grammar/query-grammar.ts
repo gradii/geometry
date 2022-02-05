@@ -40,6 +40,7 @@ import { Builder } from '../builder';
 import { GrammarInterface } from '../grammar.interface';
 import { JoinClauseBuilder, QueryBuilder } from '../query-builder';
 import { QueryBuilderVisitor } from '../visitor/query-builder-visitor';
+import { ColumnReferenceExpression } from "../../query/ast/column-reference-expression";
 
 export abstract class QueryGrammar extends BaseGrammar implements GrammarInterface {
   constructor() {
@@ -64,7 +65,7 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
 
     const columnNodes = [];
     for (const [key, value] of Object.entries(values)) {
-      const columnNode = SqlParser.createSqlParser(key).parseColumnAlias();
+      const columnNode = SqlParser.createSqlParser(key).parseColumnWithoutAlias(builder._from);
       columnNodes.push(new AssignmentSetClause(
         columnNode,
         bindingVariable(value as any, 'update')
