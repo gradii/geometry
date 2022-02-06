@@ -13,7 +13,7 @@ export function resolveIdentifier(identifier: Identifier | undefined): string | 
   return identifier ? resolveForwardRef<string>(identifier.name) : undefined;
 }
 
-export function wrapToArray(value) {
+export function wrapToArray(value: any | any[]) {
   if (isBlank(value)) {
     return [];
   }

@@ -37,7 +37,6 @@ import { CANVAS_WIDGET, ENGINE } from '../../tokens';
 })
 export class CanvasWidget implements OnInit, AfterViewInit, OnDestroy {
 
-
   keyUp: any;
   keyDown: any;
   canvasListener: any;

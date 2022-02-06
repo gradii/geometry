@@ -7,14 +7,9 @@
 import { isAnyEmpty, isArray, isBlank, isNumber, isString } from '@gradii/check-type';
 import { Constructor } from '../../helper/constructor';
 import { snakeCase } from '../../helper/str';
-import {
-  createIdentifier, createTableColumn, raw, rawSqlBindings
-} from '../../query-builder/ast-factory';
+import { createTableColumn, raw, rawSqlBindings } from '../../query-builder/ast-factory';
 import { Builder } from '../../query-builder/builder';
 import { QueryBuilder } from '../../query-builder/query-builder';
-import { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
-import { ExistsPredicateExpression } from '../../query/ast/expression/exists-predicate-expression';
-import { NestedExpression } from '../../query/ast/fragment/nested-expression';
 import { FedacoBuilder } from '../fedaco-builder';
 import { BelongsTo } from '../relations/belongs-to';
 import { MorphTo } from '../relations/morph-to';
@@ -61,7 +56,7 @@ export interface QueriesRelationShips {
            conjunction?: string, callback?: Function | null): this;
 
   /*Get the BelongsTo relationship for a single polymorphic type.*/
-  getBelongsToRelation(relation: MorphTo, type: string);
+  _getBelongsToRelation(relation: MorphTo, type: string): BelongsTo;
 
   /*Add a polymorphic relationship count / exists condition to the query with an "or".*/
   orHasMorph(relation: MorphTo | string, types: string[], operator?: string, count?: number): this;
@@ -115,16 +110,16 @@ export interface QueriesRelationShips {
               conjunction: string): this;
 
   /*Merge the where constraints from another query to the current query.*/
-  mergeConstraintsFrom(from: FedacoBuilder);
+  mergeConstraintsFrom(from: FedacoBuilder): FedacoBuilder;
 
   /*Add a sub-query count clause to this query.*/
-  addWhereCountQuery(query: Builder, operator?: string, count?: number, conjunction?: string);
+  addWhereCountQuery(query: Builder, operator?: string, count?: number, conjunction?: string): this;
 
   /*Get the "has relation" base query instance.*/
-  getRelationWithoutConstraints(relation: string);
+  _getRelationWithoutConstraints<T extends Relation>(relation: string): T;
 
   /*Check if we can run an "exists" query to optimize performance.*/
-  canUseExistsForExistenceCheck(operator: string, count: number);
+  _canUseExistsForExistenceCheck(operator: string, count: number): boolean;
 }
 
 export type QueriesRelationShipsCtor = Constructor<QueriesRelationShips>;
@@ -272,8 +267,8 @@ public readonly ${relation};
     }
 
     /*Get the BelongsTo relationship for a single polymorphic type.*/
-    _getBelongsToRelation(relation: MorphTo, type: string) {
-      const belongsTo = Relation.noConstraints(() => {
+    _getBelongsToRelation(relation: MorphTo, type: string): BelongsTo {
+      const belongsTo: BelongsTo = Relation.noConstraints(() => {
         return this.model.belongsTo(type, relation.getForeignKeyName(), relation.getOwnerKeyName());
       });
       belongsTo.getQuery().mergeConstraintsFrom(relation.getQuery());
@@ -445,7 +440,7 @@ public readonly ${relation};
     }
 
     /*Merge the where constraints from another query to the current query.*/
-    public mergeConstraintsFrom(from: FedacoBuilder) {
+    public mergeConstraintsFrom(from: FedacoBuilder): FedacoBuilder {
       const whereBindings = from.getQuery().getRawBindings()['where'] ?? [];
       const fb            = this.withoutGlobalScopes(from.removedScopes());
       fb.getQuery().mergeWheres(

@@ -12,14 +12,16 @@ import { JoinExpression } from '../../query/ast/join-expression';
 import { JoinOnExpression } from '../../query/ast/join-on-expression';
 import { TableReferenceExpression } from '../../query/ast/table-reference-expression';
 import { SqlParser } from '../../query/parser/sql-parser';
-import { bindingVariable, createColumnReferenceExpression, createIdentifier } from '../ast-factory';
+import { bindingVariable, createIdentifier } from '../ast-factory';
 
 export interface QueryBuilderJoin {
-  join(table: string, first, operator, second, type?, where?): this;
+  join(table: string | TableReferenceExpression,
+       first: string | ((...args: any[]) => any),
+       operator: string, second: any, type?: string, where?: any): this;
 
-  join(table: string, first, second): this;
+  join(table: string, first: string | ((...args: any[]) => any), second: any): this;
 
-  join(table: string, on: (q) => QueryBuilder | void): this;
+  join(table: string, on: (q: QueryBuilder) => QueryBuilder | void): this;
 
   join(tableOrJoinSql: string): this;
 
@@ -54,7 +56,10 @@ export type QueryBuilderJoinCtor = Constructor<QueryBuilderJoin>;
 export function mixinJoin<T extends Constructor<any>>(base: T): QueryBuilderJoinCtor & T {
   return class _Self extends base {
 
-    public join(this: QueryBuilder & _Self, table, first?, operator?, second?,
+    public join(this: QueryBuilder & _Self,
+                table: string | TableReferenceExpression,
+                first?: string | ((...args: any[]) => any),
+                operator?: string, second?: any,
                 type: string   = 'inner',
                 where: boolean = false) {
 
@@ -130,7 +135,8 @@ export function mixinJoin<T extends Constructor<any>>(base: T): QueryBuilderJoin
     }
 
     /*Add a "join where" clause to the query.*/
-    public joinWhere(this: QueryBuilder & _Self, table: string, first: Function | string,
+    public joinWhere(this: QueryBuilder & _Self, table: string,
+                     first: ((...args: any[]) => any) | string,
                      operator: string,
                      second: string, type: string = 'inner') {
       return this.join(table, first, operator, second, type, true);
@@ -138,7 +144,7 @@ export function mixinJoin<T extends Constructor<any>>(base: T): QueryBuilderJoin
 
     /*Add a subquery join clause to the query.*/
     public joinSub(this: QueryBuilder & _Self, query: Function | QueryBuilder | string, as: string,
-                   first: Function | string,
+                   first: ((...args: any[]) => any) | string,
                    operator: string = null, second: string = null, type: string = 'inner',
                    where: boolean                                               = false) {
       const node       = this._createSubQuery('join', query);
@@ -149,14 +155,16 @@ export function mixinJoin<T extends Constructor<any>>(base: T): QueryBuilderJoin
     }
 
     /*Add a left join to the query.*/
-    public leftJoin(this: QueryBuilder & _Self, table: string, first: Function | string,
+    public leftJoin(this: QueryBuilder & _Self, table: string,
+                    first: ((...args: any[]) => any) | string,
                     operator: string = null,
                     second: string   = null) {
       return this.join(table, first, operator, second, 'left');
     }
 
     /*Add a "join where" clause to the query.*/
-    public leftJoinWhere(this: QueryBuilder & _Self, table: string, first: Function | string,
+    public leftJoinWhere(this: QueryBuilder & _Self, table: string,
+                         first: ((...args: any[]) => any) | string,
                          operator: string,
                          second: string) {
       return this.joinWhere(table, first, operator, second, 'left');
@@ -165,20 +173,22 @@ export function mixinJoin<T extends Constructor<any>>(base: T): QueryBuilderJoin
     /*Add a subquery left join to the query.*/
     public leftJoinSub(this: QueryBuilder & _Self, query: Function | QueryBuilder | string,
                        as: string,
-                       first: Function | string,
+                       first: ((...args: any[]) => any) | string,
                        operator: string = null, second: string = null) {
       return this.joinSub(query, as, first, operator, second, 'left');
     }
 
     /*Add a right join to the query.*/
-    public rightJoin(this: QueryBuilder & _Self, table: string, first: Function | string,
+    public rightJoin(this: QueryBuilder & _Self, table: string,
+                     first: ((...args: any[]) => any) | string,
                      operator: string = null,
                      second: string   = null) {
       return this.join(table, first, operator, second, 'right');
     }
 
     /*Add a "right join where" clause to the query.*/
-    public rightJoinWhere(this: QueryBuilder & _Self, table: string, first: Function | string,
+    public rightJoinWhere(this: QueryBuilder & _Self, table: string,
+                          first: ((...args: any[]) => any) | string,
                           operator: string,
                           second: string) {
       return this.joinWhere(table, first, operator, second, 'right');
@@ -187,7 +197,7 @@ export function mixinJoin<T extends Constructor<any>>(base: T): QueryBuilderJoin
     /*Add a subquery right join to the query.*/
     public rightJoinSub(this: QueryBuilder & _Self, query: Function | QueryBuilder | string,
                         as: string,
-                        first: Function | string,
+                        first: ((...args: any[]) => any) | string,
                         operator: string = null, second: string = null) {
       return this.joinSub(query, as, first, operator, second, 'right');
     }
@@ -195,7 +205,7 @@ export function mixinJoin<T extends Constructor<any>>(base: T): QueryBuilderJoin
     /*Add a "cross join" clause to the query.*/
     public crossJoin(this: QueryBuilder & _Self,
                      table: string,
-                     first?: Function | string,
+                     first?: ((...args: any[]) => any) | string,
                      operator?: string,
                      second?: string) {
       if (first) {

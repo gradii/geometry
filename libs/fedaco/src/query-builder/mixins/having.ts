@@ -24,7 +24,7 @@ export interface QueryBuilderHaving {
   having(column: string, operator?: string, value?: string | number | boolean | RawExpression,
          conjunction?: string): this;
 
-  havingBetween(column: string, values: any[], conjunction?: string, not?: boolean);
+  havingBetween(column: string, values: any[], conjunction?: string, not?: boolean): this;
 
   havingRaw(sql: string): this;
 

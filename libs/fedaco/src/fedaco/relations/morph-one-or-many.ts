@@ -12,7 +12,9 @@ import { Relation } from './relation';
 export class MorphOneOrMany extends HasOneOrMany {
   /*The foreign key type for the relationship.*/
   protected morphType: string;
-  /*The class name of the parent model.*/
+  /*
+  * The class name of the parent model.
+  */
   protected morphClass: string;
 
   /*Create a new morph one or many relationship instance.*/

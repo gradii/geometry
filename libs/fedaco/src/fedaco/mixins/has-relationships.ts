@@ -7,6 +7,7 @@
 import { reflector } from '@gradii/annotation';
 import { isArray, isString } from '@gradii/check-type';
 import { findLast, tap } from 'ramda';
+import { FedacoRelationColumn, RelationColumnAnnotation } from '../../annotation/relation-column';
 import { Table, TableAnnotation } from '../../annotation/table/table';
 import { Constructor } from '../../helper/constructor';
 import { snakeCase } from '../../helper/str';
@@ -36,32 +37,32 @@ export interface HasRelationships {
   joiningTableSegment(): string;
 
   /*Determine if the model touches a given relation.*/
-  touches(relation: string);
+  touches(relation: string): boolean;
 
   /*Touch the owning relations of the model.*/
-  touchOwners();
+  touchOwners(): Promise<void>;
 
   /*Get the polymorphic relationship columns.*/
   _getMorphs(name: string, type: string, id: string): string[];
 
   /*Get the class name for polymorphic relations.*/
-  getMorphClass();
+  getMorphClass(): string;
 
   /*Create a new model instance for a related model.*/
-  _newRelatedInstance(this: Model & this, clazz: typeof Model);
+  _newRelatedInstance(this: Model & this, clazz: typeof Model): Model;
 
   newRelation<T extends BelongsTo & BelongsToMany & HasMany & HasManyThrough &
     HasOne & HasOneOrMany & HasOneThrough & MorphMany & MorphOne & MorphOneOrMany & MorphPivot &
     MorphTo & MorphToMany, K extends keyof this>(relation: K): T;
 
   /*Get all the loaded relations for the instance.*/
-  getRelations();
+  getRelations(): Record<string, any>;
 
   /*Get a specified relationship.*/
-  getRelation(relation: string);
+  getRelation(relation: string): any;
 
   /*Determine if the given relation is loaded.*/
-  relationLoaded(key: string);
+  relationLoaded(key: string): boolean;
 
   /*Set the given relationship on the model.*/
   setRelation(relation: string, value: any): this;
@@ -118,12 +119,12 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
     }
 
     /*Determine if the model touches a given relation.*/
-    public touches(relation: string) {
+    public touches(relation: string): boolean {
       return this.getTouchedRelations().includes(relation);
     }
 
     /*Touch the owning relations of the model.*/
-    public async touchOwners(this: Model & _Self) {
+    public async touchOwners(this: Model & _Self): Promise<void> {
       for (const relation of this.getTouchedRelations()) {
         await this.newRelation(relation).touch();
         if (this[relation] instanceof this.constructor) {
@@ -142,8 +143,11 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
       return [type || name + '_type', id || name + '_id'];
     }
 
-    /*Get the class name for polymorphic relations.*/
-    public getMorphClass() {
+    /*
+    * @todo fixme maybe remove this.constructor.name
+    * Get the class name for polymorphic relations.
+    */
+    public getMorphClass(): string {
 
       const metas                 = reflector.annotations(this.constructor);
       const meta: TableAnnotation = findLast(it => Table.isTypeOf(it), metas);
@@ -162,7 +166,7 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
     }
 
     /*Create a new model instance for a related model.*/
-    _newRelatedInstance(this: _Self & Model & this, clazz: typeof Model) {
+    _newRelatedInstance(this: _Self & Model & this, clazz: typeof Model): Model {
       return tap(instance => {
         if (!instance.getConnectionName()) {
           instance.setConnection(this._connection);
@@ -173,23 +177,23 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
     newRelation(this: Model & _Self, relation: string): Relation {
       const metadata = this.isRelation(relation);
       if (metadata) {
-        return metadata._getRelation(this, relation);
+        return (metadata as RelationColumnAnnotation)._getRelation(this, relation);
       }
       return undefined;
     }
 
     /*Get all the loaded relations for the instance.*/
-    public getRelations() {
+    public getRelations(): Record<string, any> {
       return this._relations;
     }
 
     /*Get a specified relationship.*/
-    public getRelation(relation: string) {
+    public getRelation(relation: string): any {
       return this._relations[relation];
     }
 
     /*Determine if the given relation is loaded.*/
-    public relationLoaded(key: string) {
+    public relationLoaded(key: string): boolean {
       return key in this._relations;
     }
 

@@ -15,6 +15,9 @@ import { wrapToArray } from '../ast-helper';
 import { QueryBuilder } from '../query-builder';
 
 export interface QueryBuilderAggregate {
+  _setAggregate(func: string,
+                columns: Array<string | ColumnReferenceExpression>): this;
+
   aggregate(func: string, columns: any[]): Promise<any>;
 
   count(columns?: string): Promise<number>;

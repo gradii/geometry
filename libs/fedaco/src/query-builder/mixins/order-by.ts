@@ -10,6 +10,7 @@ import { QueryBuilder } from '../../query-builder/query-builder';
 import { RawExpression } from '../../query/ast/expression/raw-expression';
 import { OrderByElement } from '../../query/ast/order-by-element';
 import { SqlParser } from '../../query/parser/sql-parser';
+import { SqlNode } from '../../query/sql-node';
 import { rawSqlBindings } from '../ast-factory';
 import { wrapToArray } from '../ast-helper';
 
@@ -19,16 +20,17 @@ export interface QueryBuilderOrderBy {
 
   oldest(column: string): this;
 
-  orderBy(column: Function | QueryBuilder | RawExpression | string,
+  orderBy(column: ((...args: any[]) => any) | QueryBuilder | RawExpression | string,
           direction?: string): this;
 
-  orderByDesc(column: (q) => void): this;
+  orderByDesc(column: (q: QueryBuilder) => void): this;
 
   orderByDesc(column: string): this;
 
   orderByRaw(sql: string, bindings: any[] | any): this;
 
-  reorder(column?, direction?): this;
+  reorder(column?: ((...args: any[]) => any) | QueryBuilder | RawExpression | string,
+          direction?: string): this;
 }
 
 export type QueryBuilderOrderByCtor = Constructor<QueryBuilderOrderBy>;
@@ -84,7 +86,7 @@ export function mixinOrderBy<T extends Constructor<any>>(base: T): QueryBuilderO
     }
 
     /*Add a raw "order by" clause to the query.*/
-    public orderByRaw(this: QueryBuilder & _Self, sql: string, bindings = []) {
+    public orderByRaw(this: QueryBuilder & _Self, sql: string, bindings: any[] = []) {
       // const type = 'Raw';
       // this[this.qUnions ? 'qUnionOrders' : 'qOrders'].push(compact('type', 'sql'));
       // this.addBinding(bindings, this.qUnions ? 'unionOrder' : 'order');
@@ -99,7 +101,9 @@ export function mixinOrderBy<T extends Constructor<any>>(base: T): QueryBuilderO
     }
 
     /*Remove all existing orders and optionally add a new order.*/
-    public reorder(this: QueryBuilder & _Self, column?, direction = 'asc') {
+    public reorder(this: QueryBuilder & _Self,
+                   column?: ((...args: any[]) => any) | QueryBuilder | RawExpression | string,
+                   direction = 'asc') {
       this._orders                 = [];
       this._unionOrders            = [];
       this._bindings['order']      = [];
@@ -110,7 +114,7 @@ export function mixinOrderBy<T extends Constructor<any>>(base: T): QueryBuilderO
       return this;
     }
 
-    protected _addOrder(ast) {
+    protected _addOrder(ast: SqlNode) {
       if (this._unions.length > 0) {
         this._unionOrders.push(ast);
       } else {

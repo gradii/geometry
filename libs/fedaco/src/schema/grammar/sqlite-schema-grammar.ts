@@ -497,7 +497,7 @@ export class SqliteSchemaGrammar extends SchemaGrammar {
     ORDER BY name`;
   }
 
-  getAlterTableSQL(tableDiff) {
+  getAlterTableSQL(tableDiff: any) {
     return 'undo sql';
   }
 }

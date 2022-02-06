@@ -9,7 +9,7 @@ import { SqlVisitor } from '../query/sql-visitor';
 import { Builder } from './builder';
 
 export interface GrammarInterface {
-  compileAggregateFragment(functionName, columns, visitor: SqlVisitor): string;
+  compileAggregateFragment(functionName: any, columns: any, visitor: SqlVisitor): string;
 
   compileDelete(builder: Builder): string;
 
@@ -21,7 +21,7 @@ export interface GrammarInterface {
 
   compileInsertOrIgnore(builder: Builder, values: any): string;
 
-  compileInsertUsing(builder: Builder, columns, nestedExpression: NestedExpression): string;
+  compileInsertUsing(builder: Builder, columns: any, nestedExpression: NestedExpression): string;
 
   compileJoinFragment(builder: Builder, visitor: SqlVisitor): string;
 

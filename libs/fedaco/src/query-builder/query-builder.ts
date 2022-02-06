@@ -10,9 +10,13 @@ import {
 import { FedacoBuilder } from '../fedaco/fedaco-builder';
 import { Relation } from '../fedaco/relations/relation';
 import { ColumnReferenceExpression } from '../query/ast/column-reference-expression';
-import { ComparisonPredicateExpression } from '../query/ast/expression/comparison-predicate-expression';
+import {
+  ComparisonPredicateExpression
+} from '../query/ast/expression/comparison-predicate-expression';
 import { RawExpression } from '../query/ast/expression/raw-expression';
-import { NestedPredicateExpression } from '../query/ast/fragment/expression/nested-predicate-expression';
+import {
+  NestedPredicateExpression
+} from '../query/ast/fragment/expression/nested-predicate-expression';
 import { NestedExpression } from '../query/ast/fragment/nested-expression';
 import { FromTable } from '../query/ast/from-table';
 import { PathExpression } from '../query/ast/path-expression';
@@ -26,7 +30,7 @@ import { GrammarInterface } from './grammar.interface';
 import { ProcessorInterface } from './processor-interface';
 
 
-export enum BindingType {
+export const enum BindingType {
   where = 'where',
   join  = 'join'
 }
@@ -71,7 +75,7 @@ export class QueryBuilder extends Builder {
     return this.newQuery();
   }
 
-  public clone() {
+  public clone(): QueryBuilder {
     const cloned        = this.newQuery();
     cloned._sqlParser   = this._sqlParser;
     // cloned._bindings    = this._bindings;
@@ -96,9 +100,10 @@ export class QueryBuilder extends Builder {
   }
 
   /*Clone the query without the given properties.*/
-  public cloneWithout(properties: any[]): this {
+  public cloneWithout(properties: any[]): QueryBuilder {
     const cloned = this.clone();
     for (const property of properties) {
+      // @ts-ignore
       cloned[property] = isArray(cloned[property]) ? [] : undefined;
     }
     return cloned;
@@ -109,7 +114,7 @@ export class QueryBuilder extends Builder {
    */
   _prepareValueAndOperator<P = any>(value: P, operator: string, useDefault?: boolean): [P, string];
 
-  _prepareValueAndOperator(value, operator, useDefault?: boolean) {
+  _prepareValueAndOperator(value: any, operator: string, useDefault?: boolean) {
     if (useDefault) {
       return [operator, '='];
     } else if (this._invalidOperatorAndValue(operator, value)) {
@@ -176,11 +181,11 @@ export class QueryBuilder extends Builder {
    * @param columns
    * @param as
    */
-  _selectAs(columns: string, as: string);
+  _selectAs(columns: string, as: string): this;
 
-  _selectAs(columns: { [key: string]: string });
+  _selectAs(columns: { [key: string]: string }): this;
 
-  _selectAs(columns, as?) {
+  _selectAs(columns: string | { [key: string]: string }, as?: string): this {
     if (arguments.length === 2) {
       // this.selectSub(columns, as);
       // if(isArray(columns)) {
@@ -190,7 +195,7 @@ export class QueryBuilder extends Builder {
       this._columns.push(
         new ColumnReferenceExpression(
           new PathExpression(
-            [createIdentifier(columns)]
+            [createIdentifier(columns as string)]
           ),
           createIdentifier(as)
         )
@@ -278,10 +283,18 @@ export class QueryBuilder extends Builder {
 
   public addSelect(...col: string[]): this;
 
-  public addSelect(columns: string[] | { [as: string]: any }): this;
+  public addSelect(...col: RawExpression[]): this;
 
-  public addSelect(columns: string[] | string | { [as: string]: any }, ...cols: string[]): this {
-    columns = isArray(columns) ? columns : arguments;
+  public addSelect(...col: ColumnReferenceExpression[]): this;
+
+  public addSelect(columns: Array<string | RawExpression | ColumnReferenceExpression>): this;
+
+  public addSelect(
+    columns: string | RawExpression | ColumnReferenceExpression |
+      Array<string | RawExpression | ColumnReferenceExpression>
+  ): this {
+    // @ts-ignore
+    columns = isArray(columns) ? columns : [...arguments];
     for (const column of columns as any[]) {
       if (column instanceof RawExpression) {
         this._columns.push(column);
@@ -334,8 +347,9 @@ export class QueryBuilder extends Builder {
 
   public fromSub(table: any, as: string): this {
     if (table instanceof QueryBuilder || isFunction(table)) {
-      this._from = new FromTable(new TableReferenceExpression(this._createSubQuery('from', table) as NestedExpression,
-        createIdentifier(as))
+      this._from = new FromTable(
+        new TableReferenceExpression(this._createSubQuery('from', table) as NestedExpression,
+          createIdentifier(as))
       );
     } else if (isString(table)) {
       this.from(table);
@@ -425,7 +439,7 @@ export class QueryBuilder extends Builder {
       isFunction(value);
   }
 
-  public newQuery(): this {
+  public newQuery(): QueryBuilder {
     // @ts-ignore
     return new QueryBuilder(this._connection, this._grammar, this._processor);
   }
@@ -449,13 +463,17 @@ export class QueryBuilder extends Builder {
 
   public select(...col: string[]): this;
 
-  public select(columns: string[] | { [as: string]: any }): this;
+  public select(...col: RawExpression[]): this;
 
-  public select(columns, ...cols): this {
+  public select(...col: ColumnReferenceExpression[]): this;
+
+  public select(columns: string[]): this;
+
+  public select(columns: string | string[] | RawExpression[] | ColumnReferenceExpression[] | any): this {
     this._columns            = [];
     this._bindings['select'] = [];
 
-    columns = isArray(columns) ? columns : [columns, ...cols];
+    columns = isArray(columns) ? columns : [...arguments];
     this.addSelect(columns);
     return this;
   }
@@ -712,7 +730,7 @@ export class JoinClauseBuilder extends QueryBuilder {
   }
 
   /*Get a new instance of the join clause builder.*/
-  public newQuery() {
+  public newQuery(): JoinClauseBuilder {
     return new JoinClauseBuilder(this.newParentQuery(), this.type, this.table);
   }
 
@@ -737,8 +755,8 @@ export class JoinClauseBuilder extends QueryBuilder {
   }
 
   /*Add an "or on" clause to the join.*/
-  public orOn(first: (query?) => any | string, operator: string | null = null,
-              second: string | null                                    = null) {
+  public orOn(first: (query?: QueryBuilder) => any | string, operator: string | null = null,
+              second: string | null                                                  = null) {
     return this.on(first, operator, second, 'or');
   }
 

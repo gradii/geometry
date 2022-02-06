@@ -34,13 +34,13 @@ import { UpdateSpecification } from '../../query/ast/update-specification';
 import { ValuesInsertSource } from '../../query/ast/values-insert-source';
 import { WhereClause } from '../../query/ast/where-clause';
 import { SqlParser } from '../../query/parser/sql-parser';
+import { SqlNode } from '../../query/sql-node';
 import { SqlVisitor } from '../../query/sql-visitor';
 import { bindingVariable, createIdentifier, raw } from '../ast-factory';
 import { Builder } from '../builder';
 import { GrammarInterface } from '../grammar.interface';
 import { JoinClauseBuilder, QueryBuilder } from '../query-builder';
 import { QueryBuilderVisitor } from '../visitor/query-builder-visitor';
-import { ColumnReferenceExpression } from "../../query/ast/column-reference-expression";
 
 export abstract class QueryGrammar extends BaseGrammar implements GrammarInterface {
   constructor() {
@@ -102,8 +102,8 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
     return ast;
   }
 
-  compileAggregateFragment(aggregateFunctionName,
-                           aggregateColumns,
+  compileAggregateFragment(aggregateFunctionName: any,
+                           aggregateColumns: any,
                            visitor: SqlVisitor) {
     return ``;
   }
@@ -165,7 +165,7 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
     return this.compileInsert(builder, values);
   }
 
-  compileInsertOrIgnore(builder: QueryBuilder, values): string {
+  compileInsertOrIgnore(builder: QueryBuilder, values: any | any[]): string {
     return this.compileInsert(builder, values, 'ignore into');
   }
 
@@ -190,7 +190,7 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
   }
 
   compileJoinFragment(builder: JoinClauseBuilder, visitor: SqlVisitor): string {
-    let whereClause;
+    let whereClause: ConditionExpression;
     if (builder._wheres.length > 0) {
       // todo check
       whereClause = new ConditionExpression(
@@ -331,7 +331,7 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
     return '';
   }
 
-  getOperators() {
+  getOperators(): any[] {
     return [];
   }
 
@@ -366,7 +366,7 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
     return this.quoteColumnName(column.replace(/\s|'|"|`/g, ''));
   }
 
-  protected _prepareAggregateAst(builder, ast) {
+  protected _prepareAggregateAst(builder: QueryBuilder, ast: SqlNode): QuerySpecification {
     if (builder._unions.length > 0) {
       if (builder._aggregate) {
         ast = new QuerySpecification(
@@ -393,7 +393,7 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
       }
     }
 
-    return ast;
+    return ast as QuerySpecification;
   }
 
   protected _prepareSelectAst(builder: QueryBuilder) {
@@ -493,7 +493,7 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
     return ast;
   }
 
-  protected _createVisitor(queryBuilder) {
+  protected _createVisitor(queryBuilder: QueryBuilder): QueryBuilderVisitor {
     return new QueryBuilderVisitor(queryBuilder._grammar, queryBuilder);
   }
 

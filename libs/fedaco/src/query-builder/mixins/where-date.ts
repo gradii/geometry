@@ -9,7 +9,9 @@ import { format } from 'date-fns';
 import { Constructor } from '../../helper/constructor';
 import { QueryBuilder } from '../../query-builder/query-builder';
 import { BindingVariable } from '../../query/ast/binding-variable';
-import { ComparisonPredicateExpression } from '../../query/ast/expression/comparison-predicate-expression';
+import {
+  ComparisonPredicateExpression
+} from '../../query/ast/expression/comparison-predicate-expression';
 import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
 import { RawExpression } from '../../query/ast/expression/raw-expression';
 import { SqlParser } from '../../query/parser/sql-parser';
@@ -124,32 +126,32 @@ export function mixinWhereDate<T extends Constructor<any>>(base: T): WhereDateCt
       return this;
     }
 
-    public orWhereDate(column, operator, value?) {
+    public orWhereDate(column: string, operator: string, value?: any) {
       [value, operator] = this._prepareValueAndOperator(value, operator, arguments.length === 2);
       return this.whereDate(column, operator, value, 'or');
     }
 
-    public orWhereDay(column, operator, value?) {
+    public orWhereDay(column: string, operator: string, value?: any) {
       [value, operator] = this._prepareValueAndOperator(value, operator, arguments.length === 2);
       return this.whereDay(column, operator, value, 'or');
     }
 
-    public orWhereMonth(column, operator, value?) {
+    public orWhereMonth(column: string, operator: string, value?: any) {
       [value, operator] = this._prepareValueAndOperator(value, operator, arguments.length === 2);
       return this.whereMonth(column, operator, value, 'or');
     }
 
-    public orWhereTime(column, operator, value?) {
+    public orWhereTime(column: string, operator: string, value?: any) {
       [value, operator] = this._prepareValueAndOperator(value, operator, arguments.length === 2);
       return this.whereTime(column, operator, value, 'or');
     }
 
-    public orWhereYear(column, operator, value?) {
+    public orWhereYear(column: string, operator: string, value?: any) {
       [value, operator] = this._prepareValueAndOperator(value, operator, arguments.length === 2);
       return this.whereYear(column, operator, value, 'or');
     }
 
-    public whereDate(column, operator, value?,
+    public whereDate(column: string, operator: string, value?: any,
                      conjunction: 'and' | 'or' = 'and') {
       [value, operator] = this._prepareValueAndOperator(value,
         operator,
@@ -165,7 +167,7 @@ export function mixinWhereDate<T extends Constructor<any>>(base: T): WhereDateCt
         conjunction);
     }
 
-    public whereDay(column, operator, value?,
+    public whereDay(column: string, operator: string, value?: any,
                     conjunction: 'and' | 'or' = 'and') {
       [value, operator] = this._prepareValueAndOperator(value,
         operator,
@@ -185,7 +187,7 @@ export function mixinWhereDate<T extends Constructor<any>>(base: T): WhereDateCt
         conjunction);
     }
 
-    public whereMonth(column, operator, value?,
+    public whereMonth(column: string, operator: string, value?: any,
                       conjunction: 'and' | 'or' = 'and') {
       [value, operator] = this._prepareValueAndOperator(value, operator, arguments.length === 2);
       if (isDate(value)) {
@@ -203,7 +205,7 @@ export function mixinWhereDate<T extends Constructor<any>>(base: T): WhereDateCt
         conjunction);
     }
 
-    public whereTime(column, operator, value?, conjunction: 'and' | 'or' = 'and') {
+    public whereTime(column: string, operator: string, value?: any, conjunction: 'and' | 'or' = 'and') {
       [value, operator] = this._prepareValueAndOperator(value, operator, arguments.length === 2);
       if (isDate(value)) {
         value = format(value,
@@ -216,7 +218,7 @@ export function mixinWhereDate<T extends Constructor<any>>(base: T): WhereDateCt
         conjunction);
     }
 
-    public whereYear(column, operator, value?, conjunction: 'and' | 'or' = 'and') {
+    public whereYear(column: string, operator: string, value?: any, conjunction: 'and' | 'or' = 'and') {
       [value, operator] = this._prepareValueAndOperator(value, operator, arguments.length === 2);
       if (isDate(value)) {
         value = format(value,

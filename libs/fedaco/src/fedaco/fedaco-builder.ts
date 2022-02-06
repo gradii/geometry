@@ -16,6 +16,7 @@ import {
 } from '../query-builder/mixins/build-query';
 import { QueryBuilder } from '../query-builder/query-builder';
 import { SqlNode } from '../query/sql-node';
+import type { FedacoBuilderCallBack } from './fedaco-types';
 import {
   ForwardCallToQueryBuilder, ForwardCallToQueryBuilderCtor, mixinForwardCallToQueryBuilder
 } from './mixins/forward-call-to-query-builder';
@@ -34,7 +35,7 @@ export interface FedacoBuilder<T extends Model = Model> extends GuardsAttributes
   make(attributes: Record<string, any>): T;
 
   /*Register a new global scope.*/
-  withGlobalScope(identifier: string, scope: Scope | Function): this;
+  withGlobalScope(identifier: string, scope: Scope | FedacoBuilderCallBack): this;
 
   /*Remove a registered global scope.*/
   withoutGlobalScope(scope: string): this;
@@ -56,19 +57,20 @@ export interface FedacoBuilder<T extends Model = Model> extends GuardsAttributes
   /**
    * Add a basic where clause to the query.
    */
-  where(column: Function | any[] | SqlNode | any): this;
+  where(column: FedacoBuilderCallBack | any[] | SqlNode | any): this;
 
   where(column: string | SqlNode | any, value: any): this;
 
-  where(column: Function | string | any[] | SqlNode | any, operator?: any, value?: any,
+  where(column: FedacoBuilderCallBack | string | any[] | SqlNode | any, operator?: any, value?: any,
         conjunction?: string): this;
 
   /*Add a basic where clause to the query, and return the first result.*/
-  firstWhere(column: Function | string | any[] | SqlNode, operator?: any, value?: any,
+  firstWhere(column: FedacoBuilderCallBack | string | any[] | SqlNode, operator?: any, value?: any,
              conjunction?: string): Promise<T>;
 
   /*Add an "or where" clause to the query.*/
-  orWhere(column: Function | any[] | string | SqlNode, operator?: any, value?: any): this;
+  orWhere(column: FedacoBuilderCallBack | any[] | string | SqlNode, operator?: any,
+          value?: any): this;
 
   /*Add an "order by" clause for a timestamp to the query.*/
   latest(column?: string): this;
@@ -115,7 +117,8 @@ export interface FedacoBuilder<T extends Model = Model> extends GuardsAttributes
   firstOrFail(columns?: any[]): Promise<T>;
 
   /*Execute the query and get the first result or call a callback.*/
-  firstOr(columns?: Function | any[], callback?: Function | null): Promise<T>;
+  firstOr(columns?: FedacoBuilderCallBack | any[],
+          callback?: FedacoBuilderCallBack | null): Promise<T>;
 
   /*Get a single column's value from the first result of a query.*/
   value<K extends keyof T>(column: K): Promise<T[K] | void>;
@@ -132,7 +135,8 @@ export interface FedacoBuilder<T extends Model = Model> extends GuardsAttributes
   eagerLoadRelations(models: any[]): Promise<T[]>;
 
   /*Eagerly load the relationship on a set of models.*/
-  _eagerLoadRelation(models: any[], name: string, constraints: Function): Promise<T[]>;
+  _eagerLoadRelation(models: any[], name: string,
+                     constraints: FedacoBuilderCallBack): Promise<T[]>;
 
   /*Get the relation instance for the given relation name.*/
   getRelation(name: string): Relation;
@@ -197,7 +201,7 @@ export interface FedacoBuilder<T extends Model = Model> extends GuardsAttributes
   forceDelete(): Promise<boolean>;
 
   /*Register a replacement for the default delete function.*/
-  onDelete(callback: Function): void;
+  onDelete(callback: FedacoBuilderCallBack): void;
 
   /*Determine if the given model has a scope.*/
   hasNamedScope(scope: string): boolean;
@@ -231,21 +235,21 @@ export interface FedacoBuilder<T extends Model = Model> extends GuardsAttributes
   whereScope(key: string, ...args: any[]): this;
 
   with(...relations: Array<{
-    [key: string]: Function;
+    [key: string]: FedacoBuilderCallBack;
   } | string>): this;
 
   with(relations: {
-    [key: string]: Function;
+    [key: string]: FedacoBuilderCallBack;
   }): this;
 
   with(relations: string[]): this;
 
-  with(relations: string, callback?: Function): this;
+  with(relations: string, callback?: FedacoBuilderCallBack): this;
 
   with(relations: {
-    [key: string]: Function;
-  } | string[] | string, callback?: Function | {
-    [key: string]: Function;
+    [key: string]: FedacoBuilderCallBack;
+  } | string[] | string, callback?: FedacoBuilderCallBack | {
+    [key: string]: FedacoBuilderCallBack;
   } | string): this;
 
   /*Prevent the specified relations from being eager loaded.*/
@@ -259,14 +263,15 @@ export interface FedacoBuilder<T extends Model = Model> extends GuardsAttributes
 
   /*Parse a list of relations into individuals.*/
   _parseWithRelations(relations: any[]): {
-    [key: string]: Function;
+    [key: string]: FedacoBuilderCallBack;
   };
 
   /*Create a constraint to select the given columns for the relation.*/
-  _createSelectWithConstraint(name: string): [string, Function];
+  _createSelectWithConstraint(name: string): [string, FedacoBuilderCallBack];
 
   /*Parse the nested relationships in a relation.*/
-  _addNestedWiths(name: string, results: Record<string, Function>): Record<string, Function>;
+  _addNestedWiths(name: string,
+                  results: Record<string, FedacoBuilderCallBack>): Record<string, FedacoBuilderCallBack>;
 
   /*Apply query-time casts to the model instance.*/
   withCasts(casts: any): this;
@@ -281,7 +286,7 @@ export interface FedacoBuilder<T extends Model = Model> extends GuardsAttributes
   toBase(): QueryBuilder;
 
   /*Get the relationships being eagerly loaded.*/
-  getEagerLoads(): { [key: string]: Function };
+  getEagerLoads(): { [key: string]: FedacoBuilderCallBack };
 
   /*Set the relationships being eagerly loaded.*/
   setEagerLoads(eagerLoad: any): this;
@@ -315,11 +320,11 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   /*The model being queried.*/
   protected _model: T;
   /*The relationships that should be eager loaded.*/
-  protected _eagerLoad: { [key: string]: Function } = {};
+  protected _eagerLoad: { [key: string]: FedacoBuilderCallBack } = {};
   /*All of the locally registered builder macros.*/
   protected _localMacros: any[] = [];
   /*A replacement for the typical delete function.*/
-  protected _onDelete: Function;
+  protected _onDelete: (builder: FedacoBuilder) => any;
   /*The methods that should be returned from query builder.*/
   // protected _passthru: any[] = [
   //   'insert', 'insertOrIgnore', 'insertGetId', 'insertUsing', 'getBindings',
@@ -343,7 +348,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Register a new global scope.*/
-  public withGlobalScope(identifier: string, scope: Scope | Function): this {
+  public withGlobalScope(identifier: string, scope: Scope | FedacoBuilderCallBack): this {
     this._scopes[identifier] = scope;
     if (isObject(scope) && 'extend' in scope) {
       // @ts-ignore
@@ -411,11 +416,11 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   /**
    * Add a basic where clause to the query.
    */
-  public where(column: Function | any[] | SqlNode | any): this;
+  public where(column: FedacoBuilderCallBack | any[] | SqlNode | any): this;
   public where(column: string | SqlNode | any, value: any): this;
-  public where(column: Function | string | any[] | SqlNode | any,
+  public where(column: FedacoBuilderCallBack | string | any[] | SqlNode | any,
                operator?: any, value?: any, conjunction?: string): this;
-  public where(column: Function | string | any[] | SqlNode | any,
+  public where(column: FedacoBuilderCallBack | string | any[] | SqlNode | any,
                operator?: any,
                value?: any, conjunction = 'and'): this {
     if (arguments.length === 2) {
@@ -433,7 +438,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Add a basic where clause to the query, and return the first result.*/
-  public firstWhere(column: Function | string | any[] | SqlNode,
+  public firstWhere(column: FedacoBuilderCallBack | string | any[] | SqlNode,
                     operator: any = null,
                     value: any    = null,
                     conjunction   = 'and'): Promise<T> {
@@ -441,7 +446,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Add an "or where" clause to the query.*/
-  public orWhere(column: Function | any[] | string | SqlNode,
+  public orWhere(column: FedacoBuilderCallBack | any[] | string | SqlNode,
                  operator: any = null,
                  value: any    = null): this {
     [value, operator] = this._query._prepareValueAndOperator(value, operator,
@@ -572,8 +577,8 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Execute the query and get the first result or call a callback.*/
-  public async firstOr(columns: Function | any[] = ['*'],
-                       callback: Function | null = null): Promise<T> {
+  public async firstOr(columns: FedacoBuilderCallBack | any[] = ['*'],
+                       callback: FedacoBuilderCallBack | null = null): Promise<T> {
     if (isFunction(columns)) {
       callback = columns;
       columns  = ['*'];
@@ -635,7 +640,8 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Eagerly load the relationship on a set of models.*/
-  async _eagerLoadRelation(models: any[], name: string, constraints: Function): Promise<T[]> {
+  async _eagerLoadRelation(models: any[], name: string,
+                           constraints: FedacoBuilderCallBack): Promise<T[]> {
     const relation = this.getRelation(name);
     relation.addEagerConstraints(models);
     constraints(relation);
@@ -867,7 +873,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Delete records from the database.*/
-  public async delete() {
+  public async delete(): Promise<any> {
     if (this._onDelete !== undefined) {
       return this._onDelete.call(this, this);
     }
@@ -882,7 +888,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Register a replacement for the default delete function.*/
-  public onDelete(callback: Function): void {
+  public onDelete(callback: (builder: FedacoBuilder) => any): void {
     this._onDelete = callback;
   }
 
@@ -994,12 +1000,12 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
     throw new Error('key is not in model or scope metadata is not exist');
   }
 
-  public with(...relations: Array<{ [key: string]: Function } | string>): this;
-  public with(relations: { [key: string]: Function }): this;
+  public with(...relations: Array<{ [key: string]: FedacoBuilderCallBack } | string>): this;
+  public with(relations: { [key: string]: FedacoBuilderCallBack }): this;
   public with(relations: string[]): this;
-  public with(relations: string, callback?: Function): this;
-  public with(relations: { [key: string]: Function } | string[] | string,
-              callback?: Function | { [key: string]: Function } | string): this {
+  public with(relations: string, callback?: FedacoBuilderCallBack): this;
+  public with(relations: { [key: string]: FedacoBuilderCallBack } | string[] | string,
+              callback?: FedacoBuilderCallBack | { [key: string]: FedacoBuilderCallBack } | string): this {
     let eagerLoad;
     if (isFunction(callback)) {
       eagerLoad = this._parseWithRelations([{[relations as string]: callback}]);
@@ -1030,8 +1036,8 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Parse a list of relations into individuals.*/
-  _parseWithRelations(relations: any[]): { [key: string]: Function } {
-    let results: Record<string, Function> = {};
+  _parseWithRelations(relations: any[]): { [key: string]: FedacoBuilderCallBack } {
+    let results: Record<string, FedacoBuilderCallBack> = {};
     for (const relation of relations) {
       if (isString(relation)) {
         const [name, constraints] = relation.includes(':') ?
@@ -1046,7 +1052,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
       } else {
         for (const [name, constraints] of Object.entries(relation)) {
           this._addNestedWiths(name, results);
-          results[name] = constraints as Function;
+          results[name] = constraints as FedacoBuilderCallBack;
         }
       }
     }
@@ -1054,7 +1060,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Create a constraint to select the given columns for the relation.*/
-  _createSelectWithConstraint(name: string): [string, Function] {
+  _createSelectWithConstraint(name: string): [string, FedacoBuilderCallBack] {
     return [
       name.split(':')[0], (query: any) => {
         query.select(name.split(':')[1].split(',').map(column => {
@@ -1071,7 +1077,8 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Parse the nested relationships in a relation.*/
-  _addNestedWiths(name: string, results: Record<string, Function>): Record<string, Function> {
+  _addNestedWiths(name: string,
+                  results: Record<string, FedacoBuilderCallBack>): Record<string, FedacoBuilderCallBack> {
     const progress = [];
     for (const segment of name.split('.')) {
       progress.push(segment);
@@ -1107,7 +1114,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   }
 
   /*Get the relationships being eagerly loaded.*/
-  public getEagerLoads(): { [key: string]: Function } {
+  public getEagerLoads(): { [key: string]: FedacoBuilderCallBack } {
     return this._eagerLoad;
   }
 

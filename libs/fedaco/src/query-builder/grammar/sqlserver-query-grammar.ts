@@ -36,7 +36,7 @@ export class SqlserverQueryGrammar extends QueryGrammar implements GrammarInterf
     return ast.accept(visitor);
   }
 
-  compileInsertOrIgnore(builder: QueryBuilder, values): string {
+  compileInsertOrIgnore(builder: QueryBuilder, values: any): string {
     throw new Error('RuntimeException');
   }
 

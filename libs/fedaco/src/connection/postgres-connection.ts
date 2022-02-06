@@ -33,7 +33,7 @@ export class PostgresConnection extends Connection {
   }
 
   /*Get a schema builder instance for the connection.*/
-  public getSchemaBuilder() {
+  public getSchemaBuilder(): PostgresSchemaBuilder {
     if (isBlank(this.schemaGrammar)) {
       this.useDefaultSchemaGrammar();
     }

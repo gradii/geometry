@@ -270,7 +270,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Eager load relation's column aggregations on the model.*/
-  public loadAggregate(relations: any[] | string, column: string, func: string = null) {
+  public loadAggregate(relations: any[] | string, column: string, func?: string) {
     // this.newCollection([this]).loadAggregate(relations, column, func);
     loadAggregate([this], relations, column, func);
     return this;
@@ -310,7 +310,7 @@ export class Model extends mixinHasAttributes(
 
   /*Eager load relationship column aggregation on the polymorphic relation of a model.*/
   public loadMorphAggregate(relation: string, relations: Record<string, string[]>, column: string,
-                            func: string = null) {
+                            func?: string) {
     if (!this[relation]) {
       return this;
     }
@@ -525,7 +525,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Insert the given attributes and set the ID on the model.*/
-  protected async insertAndSetId(query: FedacoBuilder, attributes: any[]) {
+  protected async insertAndSetId(query: FedacoBuilder, attributes: Record<string, any>) {
     const keyName = this.getKeyName();
     const id      = await query.insertGetId(attributes, keyName);
     this.setAttribute(keyName, id);

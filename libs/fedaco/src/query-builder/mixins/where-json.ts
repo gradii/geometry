@@ -89,7 +89,7 @@ export function mixinWhereJson<T extends Constructor<any>>(base: T): WhereJsonCt
       return this.whereJsonDoesntContain(column, value, 'or');
     }
 
-    public whereJsonLength(column, operator, value?, conjunction = 'and') {
+    public whereJsonLength(column: string, operator: string, value?: any, conjunction = 'and') {
       // var type = "JsonLength";
       // const [value, operator] = this.prepareValueAndOperator(value, operator, func_num_args() === 2);
       // this.wheres.push(compact("type", "column", "operator", "value", "boolean"));

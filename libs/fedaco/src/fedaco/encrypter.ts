@@ -11,7 +11,7 @@ export class Crypt {
 }
 
 export class Encrypter {
-  encrypt(value) {
+  encrypt(value: any) {
 
   }
 }

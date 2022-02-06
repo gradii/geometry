@@ -43,10 +43,10 @@ export class Relation extends mixinForwardCallToQueryBuilder(class {
   }
 
   /*Run a callback with constraints disabled on the relation.*/
-  public static noConstraints(callback: Function): Relation {
+  public static noConstraints<T extends Relation>(callback: (...args: any[]) => T): T {
     const previous       = Relation.constraints;
     Relation.constraints = false;
-    let rst;
+    let rst: T;
     try {
       rst = callback();
     } catch (e) {

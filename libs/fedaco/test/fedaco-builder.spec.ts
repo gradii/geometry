@@ -13,10 +13,15 @@ import { SqliteQueryGrammar } from '../src/query-builder/grammar/sqlite-query-gr
 import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
 import { SchemaBuilder } from '../src/schema/schema-builder';
-import { FedacoBuilderTestHigherOrderWhereScopeStub } from './model/fedaco-builder-test-higher-order-where-scope-stub';
+import {
+  FedacoBuilderTestHigherOrderWhereScopeStub
+} from './model/fedaco-builder-test-higher-order-where-scope-stub';
 import { FedacoBuilderTestNestedStub } from './model/fedaco-builder-test-nested-stub';
 import { FedacoBuilderTestScopeStub } from './model/fedaco-builder-test-scope-stub';
 import { StubModel } from './model/stub-model';
+
+const _global: any = {};
+
 
 describe('fedaco builder', () => {
   let model: Model, builder: FedacoBuilder;
@@ -171,8 +176,10 @@ describe('fedaco builder', () => {
     return new FedacoBuilder(mockNewQueryBuilder());
   }
 
-  function mockConnectionForModel<T extends typeof Model>(modelClazz: any,
-                                                          database) {
+  function mockConnectionForModel<T extends typeof Model>(
+    modelClazz: any,
+    database: string
+  ) {
     const grammar    = new SqliteQueryGrammar();
     const processor  = new Processor();
     const connection = new Conn(); // m::mock(ConnectionInterface::class, ['getQueryGrammar' => $grammar, 'getPostProcessor' => $processor]);
@@ -206,11 +213,11 @@ describe('fedaco builder', () => {
     let spySelect, spyFirst, result;
     spySelect = jest.spyOn(builder.getQuery(), 'where');
     // @ts-ignore
-    spyFirst  = jest.spyOn(builder, 'first').mockReturnValue({ name: 'baz' });
+    spyFirst  = jest.spyOn(builder, 'first').mockReturnValue({name: 'baz'});
     result    = await builder.find('bar', ['column']);
     expect(spySelect).toBeCalledWith('foo_table.foo', '=', 'bar', 'and');
     expect(spyFirst).toBeCalledWith(['column']);
-    expect(result).toStrictEqual({ name: 'baz' });
+    expect(result).toStrictEqual({name: 'baz'});
   });
 
   it('find many method', async () => {
@@ -766,8 +773,8 @@ describe('fedaco builder', () => {
     model   = getModel();
     builder.setModel(model);
     builder.setEagerLoads({
-      'orders': query => {
-        global['__fedaco.constrain'] = query;
+      'orders': (query: QueryBuilder) => {
+        _global['__fedaco.constrain'] = query;
       }
     });
 
@@ -814,7 +821,7 @@ describe('fedaco builder', () => {
     expect(spy15).toReturnWith(relation);
 
     expect(results).toEqual(['models.matched']);
-    expect(relation).toEqual(global['__fedaco.constrain']);
+    expect(relation).toEqual(_global['__fedaco.constrain']);
   });
 
   it('get relation properly sets nested relationships', () => {
@@ -1040,7 +1047,8 @@ describe('fedaco builder', () => {
 
     builder.setModel(model);
 
-    const result = builder.where(query => {
+    const result = builder.where((query: FedacoBuilder) => {
+      // @ts-ignore
       query.foo();
     });
     expect(spy1).toBeCalled();
@@ -1069,7 +1077,7 @@ describe('fedaco builder', () => {
     mockConnectionForModel(FedacoBuilderTestNestedStub, 'SQLite');
     const query = model1.newQuery()
       .where('foo', '=', 'bar')
-      .where(q => {
+      .where((q: FedacoBuilder) => {
         q.where('baz', '>', 9000).pipe(
           onlyTrashed()
         );
@@ -1089,7 +1097,7 @@ describe('fedaco builder', () => {
       .scope('empty')
       .where('foo', '=', 'bar')
       .scope('empty')
-      .where(q => {
+      .where((q: FedacoBuilder) => {
         q.scope('empty').where('baz', '>', 9000);
       });
     const data  = query.toSql();
@@ -1104,7 +1112,7 @@ describe('fedaco builder', () => {
     const query = model1.newQuery()
       .scope('one')
       .orWhere(
-        (q) => {
+        (q: FedacoBuilder) => {
           q.scope('two');
         }
       );
@@ -1120,12 +1128,12 @@ describe('fedaco builder', () => {
     const query = model1.newQuery()
       .scope('one')
       .orWhere(
-        q => {
+        (q: FedacoBuilder) => {
           q.scope('two');
         }
       )
       .orWhere(
-        q => {
+        (q: FedacoBuilder) => {
           q.scope('three');
         }
       );
@@ -1156,15 +1164,15 @@ describe('fedaco builder', () => {
 
   it('delete override', async () => {
     builder = getBuilder();
-    builder.onDelete(builder => {
+    builder.onDelete((qb: FedacoBuilder) => {
       return {
-        'foo': builder
+        'foo': qb
       };
     });
 
     const result = await builder.delete();
 
-    expect(result).toEqual({ 'foo': builder });
+    expect(result).toEqual({'foo': builder});
   });
 
   it('where key method with int', () => {
@@ -1432,7 +1440,8 @@ describe('fedaco builder', () => {
 
     expect(result).toBe(1);
 
-    expect(spy1).toBeCalledWith('UPDATE `test_table` AS `alias` SET `alias`.`foo` = ?, `alias`.`updated_at` = ?',
+    expect(spy1).toBeCalledWith(
+      'UPDATE `test_table` AS `alias` SET `alias`.`foo` = ?, `alias`.`updated_at` = ?',
       ['bar', expect.anything()]);
 
   });
@@ -1460,8 +1469,11 @@ class FedacoBuilderTestStub extends Model {
   _table = 'test_table';
 }
 
+@Table({
+  tableName: 'fedaco_builder_test_stub_without_timestamp'
+})
 class FedacoBuilderTestStubWithoutTimestamp extends Model {
-  static UPDATED_AT = null;
+  static UPDATED_AT: string = null;
 
   _table = 'test_table';
 }

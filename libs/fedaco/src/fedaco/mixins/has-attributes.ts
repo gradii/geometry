@@ -47,6 +47,7 @@ const PrimitiveCastTypes: string[] = [
   'immutable_custom_datetime', 'int', 'integer', 'json', 'object', 'real', 'string', 'timestamp'
 ];
 
+// tslint:disable-next-line:no-namespace
 export declare namespace HasAttributes {
   export const snakeAttributes: boolean;
   export const encrypter: Encrypter;
@@ -58,7 +59,7 @@ export interface HasAttributes {
   /*The model attribute's original state.*/
   _original: any;
   /*The changed model attributes.*/
-  _changes: any[];
+  _changes: Record<string, any>;
   /*The attributes that should be cast.*/
   // _casts: { [key: string]: string };
   /*The attributes that have been cast using custom classes.*/
@@ -72,10 +73,11 @@ export interface HasAttributes {
   _appends: any[];
 
   attributesToArray(): any;
+
   attributesToArray2(): any;
 
   /*Add the date attributes to the attributes array.*/
-  addDateAttributesToArray(attributes: any[]): any;
+  addDateAttributesToArray(attributes: any): any;
 
   // /*Add the mutated attributes to the attributes array.*/
   // addMutatedAttributesToArray(attributes: any[], mutatedAttributes: any[]) {
@@ -88,26 +90,28 @@ export interface HasAttributes {
   //   return attributes;
   // }
   /*Add the casted attributes to the attributes array.*/
-  addCastAttributesToArray(this: Model & this, attributes: any, mutatedAttributes: any[]);
+  addCastAttributesToArray(this: Model & this, attributes: any,
+                           mutatedAttributes: any[]): Record<string, any>;
 
   /*Get an attribute array of all arrayable attributes.*/
-  getArrayableAttributes();
+  getArrayableAttributes(): Record<string, any>;
 
   /*Get all of the appendable values that are arrayable.*/
-  getArrayableAppends();
+  getArrayableAppends(): Record<string, any>;
 
   /*Get the model's relationships in array form.*/
-  relationsToArray();
-  relationsToArray2();
+  relationsToArray(): Record<string, any>;
+
+  relationsToArray2(): Record<string, any>;
 
   /*Get an attribute array of all arrayable relations.*/
-  getArrayableRelations();
+  getArrayableRelations(): Record<string, any>;
 
   /*Get an attribute array of all arrayable values.*/
-  getArrayableItems(values: string[]);
+  getArrayableItems(values: string[]): Record<string, any>;
 
   /*Unset to delete a attribute from the model.*/
-  unsetAttribute(key: string);
+  unsetAttribute(key: string): void;
 
   /*Get an attribute from the model.*/
   getAttribute<K extends Extract<keyof this, string>>(key: K | string): any | Promise<any>;
@@ -116,13 +120,13 @@ export interface HasAttributes {
   getAttributeValue(key: string): any;
 
   /*Get an attribute from the $attributes array.*/
-  _getAttributeFromArray(key: string);
+  _getAttributeFromArray(key: string): any | null;
 
   /*Get a relationship.*/
-  getRelationValue(this: Model & this, key: string);
+  getRelationValue(this: Model & this, key: string): any | null;
 
   /*Determine if the given key is a relationship method on the model.*/
-  isRelation(key: string);
+  isRelation(key: string): FedacoDecorator<ColumnAnnotation> & ColumnAnnotation | undefined;
 
   // /*Handle a lazy loading violation.*/
   // handleLazyLoadingViolation(key: string) {
@@ -132,7 +136,8 @@ export interface HasAttributes {
   //   throw new LazyLoadingViolationException(this, key);
   // }
   /*Get a relationship value from a method.*/
-  getRelationshipFromMethod(this: Model & this, metadata: any, method: string);
+  getRelationshipFromMethod(this: Model & this, metadata: any,
+                            method: string): Promise<any | any[]>;
 
   // /*Determine if a get mutator exists for an attribute.*/
   // hasGetMutator(key: string) {
@@ -151,187 +156,188 @@ export interface HasAttributes {
   //   // return value instanceof Arrayable ? value.toArray() : value;
   // }
   /*Merge new casts with existing casts on the model.*/
-  mergeCasts(casts: any);
+  mergeCasts(casts: any): this;
 
   /*Cast an attribute to a native PHP type.*/
-  castAttribute(this: Model & this, key: string, value: any);
+  castAttribute(this: Model & this, key: string, value: any): any;
 
   /*Get the type of cast for a model attribute.*/
-  getCastType(this: Model & this, key: string);
+  getCastType(this: Model & this, key: string): string;
 
   /*Determine if the cast type is a custom date time cast.*/
-  isCustomDateTimeCast(cast: string);
+  isCustomDateTimeCast(cast: string): boolean;
 
   /*Determine if the cast type is an immutable custom date time cast.*/
-  isImmutableCustomDateTimeCast(cast: string);
+  isImmutableCustomDateTimeCast(cast: string): boolean;
 
   /*Determine if the cast type is a decimal cast.*/
-  isDecimalCast(cast: string);
+  isDecimalCast(cast: string): boolean;
 
   /*Set a given attribute on the model.*/
-  setAttribute(this: Model & this, key: string, value: any);
+  setAttribute(this: Model & this, key: string, value: any): this;
 
-  _scopeInfo(key: string);
+  _scopeInfo(key: string): FedacoDecorator<ColumnAnnotation> & ScopeAnnotation;
 
-  _columnInfo(key: string);
+  _columnInfo(key: string): FedacoDecorator<ColumnAnnotation> & ColumnAnnotation;
 
   /*Determine if the given attribute is a date or date castable.*/
-  isDateAttribute(key: string);
+  isDateAttribute(key: string): boolean;
 
   /*Set a given JSON attribute on the model.*/
-  fillJsonAttribute(key: string, value: any);
+  fillJsonAttribute(key: string, value: any): this;
 
   /*Set the value of a class castable attribute.*/
-  setClassCastableAttribute(key: string, value: any);
+  setClassCastableAttribute(key: string, value: any): void;
 
   /*Get an array attribute with the given key and value set.*/
-  getArrayAttributeWithValue(path: string, key: string, value: any);
+  getArrayAttributeWithValue(path: string, key: string, value: any): any;
 
   /*Get an array attribute or return an empty array if it is not set.*/
-  getArrayAttributeByKey(key: string);
+  getArrayAttributeByKey(key: string): any;
 
   /*Cast the given attribute to JSON.*/
-  castAttributeAsJson(key: string, value: any);
+  castAttributeAsJson(key: string, value: any): string;
 
   /*Encode the given value as JSON.*/
-  asJson(value: any);
+  asJson(value: any): string;
 
   /*Decode the given JSON back into an array or object.*/
-  fromJson(value: string);
+  fromJson(value: string): any | any[];
 
   /*Decode the given float.*/
-  fromFloat(value: any);
+  fromFloat(value: any): number;
 
   /*Return a decimal as string.*/
-  asDecimal(value: number, decimals: number);
+  asDecimal(value: number, decimals: number): string;
 
   /*Return a timestamp as DateTime object with time set to 00:00:00.*/
-  asDate(value: any);
+  asDate(value: any): Date;
 
   /*Return a timestamp as DateTime object.*/
   asDateTime(value: any): Date;
 
   /*Determine if the given value is a standard date format.*/
-  isStandardDateFormat(value: string);
+  isStandardDateFormat(value: string): boolean;
 
   /*Convert a DateTime to a storable string.*/
-  fromDateTime(value: any);
+  fromDateTime(value: any): string | null;
 
   /*Return a timestamp as unix timestamp.*/
-  asTimestamp(value: any);
+  asTimestamp(value: any): number;
 
   /*Prepare a date for array / JSON serialization.*/
-  serializeDate(date: Date);
+  serializeDate(date: Date): string;
 
   /**
-   *
    * @deprecated use @DateColumn instead
+   * @breaking-change 3.0.0
    * Get the attributes that should be converted to dates.
    */
-  getDates(this: Model & this);
+  getDates(this: Model & this): any[];
 
   /*Get the format for database stored dates.*/
-  getDateFormat(this: Model & this);
+  getDateFormat(this: Model & this): string;
 
   /*Set the date format used by the model.*/
-  setDateFormat(format: string);
+  setDateFormat(format: string): this;
 
   /**
    * @deprecated
+   * @breaking-change 3.0.0
    * Determine whether an attribute should be cast to a native type.
    */
-  hasCast(this: Model & this, key: string, types?: any[] | string | null);
+  hasCast(this: Model & this, key: string, types?: any[] | string | null): boolean;
 
   /*Get the casts array.*/
   getCasts(this: Model & this): { [key: string]: string };
 
   /*Determine whether a value is Date / DateTime castable for inbound manipulation.*/
-  isDateCastable(this: Model & this, key: string);
+  isDateCastable(this: Model & this, key: string): boolean;
 
   /*Determine whether a value is JSON castable for inbound manipulation.*/
-  isJsonCastable(this: Model & this, key: string);
+  isJsonCastable(this: Model & this, key: string): boolean;
 
   /*Determine whether a value is an encrypted castable for inbound manipulation.*/
-  isEncryptedCastable(this: Model & this, key: string);
+  isEncryptedCastable(this: Model & this, key: string): boolean;
 
   /*Determine if the given key is cast using a custom class.*/
-  isClassCastable(this: Model & this, key: string);
+  isClassCastable(this: Model & this, key: string): boolean;
 
   /*Merge the cast class attributes back into the model.*/
-  mergeAttributesFromClassCasts();
+  mergeAttributesFromClassCasts(): void;
 
   /*Normalize the response from a custom class caster.*/
-  normalizeCastClassResponse(key: string, value: any);
+  // normalizeCastClassResponse(key: string, value: any);
 
   /*Get all of the current attributes on the model.*/
-  getAttributes();
+  getAttributes(): Record<string, any>;
 
   /*Get all of the current attributes on the model for an insert operation.*/
-  getAttributesForInsert();
+  getAttributesForInsert(): Record<string, any>;
 
   /*Set the array of model attributes. No checking is done.*/
-  setRawAttributes(attributes: any, sync?: boolean);
+  setRawAttributes(attributes: any, sync?: boolean): this;
 
   /*Get the model's original attribute values.*/
-  getOriginal(key?: string | null, _default?: any);
+  getOriginal(key?: string | null, _default?: any): Record<string, any>;
 
   /*Get the model's original attribute values.*/
-  getOriginalWithoutRewindingModel(key?: string | null, _default?: any);
+  getOriginalWithoutRewindingModel(key?: string | null, _default?: any): Record<string, any>;
 
   /*Get the model's raw original attribute values.*/
-  getRawOriginal(key?: string | null, _default?: any);
+  getRawOriginal(key?: string, _default?: any): any;
 
   /*Get a subset of the model's attributes.*/
-  only(...attributes: any[]);
+  only(...attributes: any[]): Record<string, any>;
 
-  only(attributes: any[] | any);
+  only(attributes: any[] | any): Record<string, any>;
 
   /*Sync the original attributes with the current.*/
-  syncOriginal();
+  syncOriginal(): this;
 
   /*Sync a single original attribute with its current value.*/
-  syncOriginalAttribute(attribute: string);
+  syncOriginalAttribute(attribute: string): this;
 
   /*Sync multiple original attribute with their current values.*/
-  syncOriginalAttributes(attributes: any[] | string);
+  syncOriginalAttributes(attributes: any[] | string): this;
 
   /*Sync the changed attributes.*/
-  syncChanges();
+  syncChanges(): this;
 
   /*Determine if the model or any of the given attribute(s) have been modified.*/
-  isDirty(...args: string[]);
+  isDirty(...args: string[]): boolean;
 
-  isDirty(attributes?: any[] | string | null);
+  isDirty(attributes?: any[] | string | null): boolean;
 
   /*Determine if the model or all the given attribute(s) have remained the same.*/
-  isClean(...attributes: string[] | string[][]);
+  isClean(...attributes: string[] | string[][]): boolean;
 
   /*Determine if the model or any of the given attribute(s) have been modified.*/
-  wasChanged(attributes?: any[] | string | null);
+  wasChanged(attributes?: any[] | string | null): boolean;
 
   /*Determine if any of the given attributes were changed.*/
-  hasChanges(changes: any[], attributes?: any[] | string | null);
+  hasChanges(changes: Record<string, any>, attributes?: any[] | string): boolean;
 
   /*Get the attributes that have been changed since the last sync.*/
-  getDirty();
+  getDirty(): Record<string, any>;
 
   /*Get the attributes that were changed.*/
-  getChanges();
+  getChanges(): Record<string, any>;
 
   /*Determine if the new and old values for a given key are equivalent.*/
-  originalIsEquivalent(key: string);
+  originalIsEquivalent(key: string): boolean;
 
   /*Transform a raw model value using mutators, casts, etc.*/
-  transformModelValue(this: Model & this, key: string, value: any);
+  transformModelValue(this: Model & this, key: string, value: any): any;
 
   /*Append attributes to query when building a query.*/
-  append(attributes: any[] | string);
+  append(attributes: any[] | string): this;
 
   /*Set the accessors to append to model arrays.*/
-  setAppends(appends: any[]);
+  setAppends(appends: any[]): this;
 
   /*Return whether the accessor attribute has been appended.*/
-  hasAppended(attribute: string);
+  hasAppended(attribute: string): boolean;
 }
 
 type HasAttributesCtor = Constructor<HasAttributes>;
@@ -339,13 +345,14 @@ type HasAttributesCtor = Constructor<HasAttributes>;
 /** Mixin to augment a directive with a `disableRipple` property. */
 export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttributesCtor & T {
   // @ts-ignore
+  // @ts-ignore
   return class _Self extends base {
     /*The model's attributes.*/
     _attributes: any = {};
     /*The model attribute's original state.*/
     _original: any = {};
     /*The changed model attributes.*/
-    _changes: any[] = [];
+    _changes: Record<string, any> = {};
     /*The attributes that should be cast.*/
     _casts: { [key: string]: string } = {};
     /*The attributes that have been cast using custom classes.*/
@@ -397,7 +404,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Add the date attributes to the attributes array.*/
-    protected addDateAttributesToArray(this: Model & _Self, attributes: any[]) {
+    protected addDateAttributesToArray(this: Model & _Self, attributes: any) {
       for (const key of this.getDates()) {
         if (attributes[key] == undefined) {
           continue;
@@ -419,7 +426,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     // }
 
     /*Add the casted attributes to the attributes array.*/
-    protected addCastAttributesToArray(this: Model & this, attributes: any) {
+    protected addCastAttributesToArray(this: Model & this, attributes: any): Record<string, any> {
       for (const [key, value] of Object.entries(this.getCasts())) {
         if (!Object.keys(attributes).includes(key)) {
           continue;
@@ -455,7 +462,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Get all of the appendable values that are arrayable.*/
-    protected getArrayableAppends(this: Model & _Self) {
+    protected getArrayableAppends(this: Model & _Self): Record<string, any> {
       if (!this._appends.length) {
         return [];
       }
@@ -463,7 +470,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Get the model's relationships in array form.*/
-    public relationsToArray(this: Model & _Self) {
+    public relationsToArray(this: Model & _Self): Record<string, any> {
       const attributes: any = {};
       for (let [key, value] of Object.entries(this.getArrayableRelations())) {
         let relation;
@@ -523,7 +530,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
       return values;
     }
 
-    public unsetAttribute(key: string) {
+    public unsetAttribute(key: string): void {
       delete this._attributes[key];
     }
 
@@ -552,12 +559,12 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Get an attribute from the $attributes array.*/
-    _getAttributeFromArray(key: string) {
+    _getAttributeFromArray(key: string): any | null {
       return this.getAttributes()[key] ?? null;
     }
 
     /*Get a relationship.*/
-    public getRelationValue(this: Model & this, key: string) {
+    public getRelationValue(this: Model & this, key: string): any | null {
       if (this.relationLoaded(key)) {
         return this._relations[key];
       }
@@ -574,7 +581,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Determine if the given key is a relationship method on the model.*/
-    public isRelation(key: string) {
+    public isRelation(key: string): FedacoDecorator<ColumnAnnotation> & ColumnAnnotation | undefined {
       const metadata   = this._columnInfo(key);
       const isRelation = metadata && (
         FedacoRelationColumn.isTypeOf(metadata)
@@ -598,15 +605,16 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     /*Get a relationship value from a method.*/
     protected async getRelationshipFromMethod(this: Model & this,
                                               metadata: RelationColumnAnnotation,
-                                              method: string) {
+                                              method: string): Promise<any | any[]> {
       const relation = metadata._getRelation(this, method);
       if (!(relation instanceof Relation)) {
         if (isBlank(relation)) {
           throw new Error(
-            'LogicException(`${HasAttributes}::${method} must return a relationship instance, but "null" was returned. Was the "return" keyword used?`');
+            `LogicException getRelationshipFromMethod must return a relationship instance,` +
+            ` but "null" was returned. Was the "return" keyword used?`);
         }
         throw new Error(
-          'LogicException(`${HasAttributes}::${method} must return a relationship instance.`');
+          `LogicException(getRelationshipFromMethod must return a relationship instance.`);
       }
       return tap(results => {
         this.setRelation(method, results);
@@ -632,14 +640,14 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     // }
 
     /*Merge new casts with existing casts on the model.*/
-    public mergeCasts(casts: any) {
+    public mergeCasts(casts: any): this {
       // tslint:disable-next-line:ban
       Object.assign(this._casts, casts);
       return this;
     }
 
     /*Cast an attribute to a native PHP type.*/
-    protected castAttribute(this: Model & this, key: string, value: any) {
+    protected castAttribute(this: Model & this, key: string, value: any): any {
       let castType = this.getCastType(key);
       if (isBlank(value) && PrimitiveCastTypes.includes(castType)) {
         return value;
@@ -708,7 +716,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     // }
 
     /*Get the type of cast for a model attribute.*/
-    protected getCastType(this: Model & this, key: string) {
+    protected getCastType(this: Model & this, key: string): string {
       // if (this.isCustomDateTimeCast(this.getCasts()[key])) {
       //   return 'custom_datetime';
       // }
@@ -732,7 +740,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     // }
 
     /*Determine if the cast type is a custom date time cast.*/
-    protected isCustomDateTimeCast(cast: string) {
+    protected isCustomDateTimeCast(cast: string): boolean {
       const a: any = this._columnInfo(cast);
       return a && (a.isTypeof(DateColumn) || a.isTypeof(DatetimeColumn));
 
@@ -740,18 +748,18 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Determine if the cast type is an immutable custom date time cast.*/
-    protected isImmutableCustomDateTimeCast(cast: string) {
+    protected isImmutableCustomDateTimeCast(cast: string): boolean {
       return cast.startsWith('immutable_date:') ||
         cast.startsWith('immutable_datetime:');
     }
 
     /*Determine if the cast type is a decimal cast.*/
-    protected isDecimalCast(cast: string) {
+    protected isDecimalCast(cast: string): boolean {
       return cast.startsWith('decimal:');
     }
 
     /*Set a given attribute on the model.*/
-    public setAttribute(this: Model & this, key: string, value: any) {
+    public setAttribute(this: Model & this, key: string, value: any): this {
       /*if (this.hasSetMutator(key)) {
         return this.setMutatedAttributeValue(key, value);
       } else */
@@ -809,15 +817,17 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Determine if the given attribute is a date or date castable.*/
-    protected isDateAttribute(this: Model & this, key: string) {
+    protected isDateAttribute(this: Model & this, key: string): boolean {
       const a = this._columnInfo(key);
 
-      return a && (a.isDate || a.isDateCastable) || this.isDateCastable(key);
+      return DateColumn.isTypeOf(a) ||
+        DatetimeColumn.isTypeOf(a) ||
+        this.isDateCastable(key);
       // return in_array(key, this.getDates(), true) || this.isDateCastable(key);
     }
 
     /*Set a given JSON attribute on the model.*/
-    public fillJsonAttribute(this: Model & this, key: string, value: any) {
+    public fillJsonAttribute(this: Model & this, key: string, value: any): this {
       let path;
       [key, ...path]        = key.split('->');
       value                 = this.asJson(
@@ -828,12 +838,12 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Set the value of a class castable attribute.*/
-    protected setClassCastableAttribute(key: string, value: any) {
+    protected setClassCastableAttribute(key: string, value: any): void {
       // let caster       = this.resolveCasterClass(key);
-      this._attributes = [
+      this._attributes = {
         ...this._attributes, /*...this.normalizeCastClassResponse(key,
           caster.set(this, key, value, this._attributes))*/
-      ];
+      };
       // if (caster instanceof CastsInboundAttributes || !isObject(value)) {
       //   delete this._classCastCache[key];
       // } else {
@@ -842,14 +852,14 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Get an array attribute with the given key and value set.*/
-    protected getArrayAttributeWithValue(path: string, key: string, value: any) {
+    protected getArrayAttributeWithValue(path: string, key: string, value: any): any {
       return tap(target => {
         set(target, path.replace('->', '.'), value);
       }, this.getArrayAttributeByKey(key));
     }
 
     /*Get an array attribute or return an empty array if it is not set.*/
-    protected getArrayAttributeByKey(key: string) {
+    protected getArrayAttributeByKey(key: string): any {
       if (isBlank(this._attributes[key])) {
         return {};
       }
@@ -859,12 +869,13 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Cast the given attribute to JSON.*/
-    protected castAttributeAsJson(key: string, value: any) {
-      value = this.asJson(value);
-      if (value == false) {
+    protected castAttributeAsJson(key: string, value: any): string {
+      try {
+        value = this.asJson(value);
+        return value;
+      } catch (e) {
         throw new Error('JsonEncodingException.forAttribute(this, key, json_last_error_msg())');
       }
-      return value;
     }
 
     /*Encode the given value as JSON.*/
@@ -893,7 +904,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Decode the given float.*/
-    public fromFloat(value: any) {
+    public fromFloat(value: any): number {
       switch ( /*cast type string*/value) {
         case 'Infinity':
           return Infinity;
@@ -907,7 +918,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Return a decimal as string.*/
-    protected asDecimal(value: number, decimals: number) {
+    protected asDecimal(value: number, decimals: number): string {
       return value.toFixed(decimals);
     }
 
@@ -936,29 +947,29 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Determine if the given value is a standard date format.*/
-    protected isStandardDateFormat(value: string) {
-      return /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(value);
+    protected isStandardDateFormat(value: string): boolean {
+      return Boolean(/^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(value));
     }
 
     /*Convert a DateTime to a storable string.*/
-    public fromDateTime(this: Model & _Self, value: any) {
+    public fromDateTime(this: Model & _Self, value: any): string | null {
       return isBlank(value) ?
         value :
         format(this.asDateTime(value), this.getDateFormat());
     }
 
     /*Return a timestamp as unix timestamp.*/
-    protected asTimestamp(this: Model & _Self, value: any) {
+    protected asTimestamp(this: Model & _Self, value: any): number {
       return getUnixTime(+this.asDateTime(value));
     }
 
     /*Prepare a date for array / JSON serialization.*/
-    protected serializeDate(date: Date) {
+    protected serializeDate(date: Date): string {
       return format(date, `yyyy-MM-dd HH:mm:ss`);
     }
 
     /*Get the attributes that should be converted to dates.*/
-    public getDates(this: Model & this) {
+    public getDates(this: Model & this): any[] {
       if (!this.usesTimestamps()) {
         return this._dates;
       }
@@ -967,18 +978,20 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Get the format for database stored dates.*/
-    public getDateFormat(this: Model & this) {
+    public getDateFormat(this: Model & this): string {
       return this._dateFormat || this.getConnection().getQueryGrammar().getDateFormat();
     }
 
     /*Set the date format used by the model.*/
-    public setDateFormat(format: string) {
+
+    // tslint:disable-next-line:no-shadowed-variable
+    public setDateFormat(format: string): this {
       this._dateFormat = format;
       return this;
     }
 
     /*Determine whether an attribute should be cast to a native type.*/
-    public hasCast(this: Model & this, key: string, types: any[] | string | null = null) {
+    public hasCast(this: Model & this, key: string, types: any[] | string | null = null): boolean {
       if (key in this.getCasts()) {
         return types ? types.includes(this.getCastType(key)) : true;
       }
@@ -986,7 +999,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Get the casts array.*/
-    public getCasts(this: Model & this) {
+    public getCasts(this: Model & this): Record<string, any> {
       if (isObjectEmpty(this._casts)) {
         const typeOfClazz = this.constructor as typeof Model;
         const metas       = reflector.propMetadata(typeOfClazz);
@@ -1051,12 +1064,12 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Determine whether a value is Date / DateTime castable for inbound manipulation.*/
-    protected isDateCastable(this: Model & this, key: string) {
+    protected isDateCastable(this: Model & this, key: string): boolean {
       return this.hasCast(key, ['date', 'datetime', 'immutable_date', 'immutable_datetime']);
     }
 
     /*Determine whether a value is JSON castable for inbound manipulation.*/
-    protected isJsonCastable(this: Model & this, key: string) {
+    protected isJsonCastable(this: Model & this, key: string): boolean {
       return this.hasCast(key, [
         'array', 'json', 'object', 'collection', 'encrypted:array', 'encrypted:collection',
         'encrypted:json', 'encrypted:object'
@@ -1126,7 +1139,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     // }
 
     /*Merge the cast class attributes back into the model.*/
-    protected mergeAttributesFromClassCasts() {
+    protected mergeAttributesFromClassCasts(): void {
       for (const [key, value] of Object.entries(this._classCastCache)) {
         // let caster = this.resolveCasterClass(key);
         this._attributes = {
@@ -1141,23 +1154,23 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Normalize the response from a custom class caster.*/
-    protected normalizeCastClassResponse(key: string, value: any) {
-      return isArray(value) ? value : {};
-    }
+    // protected normalizeCastClassResponse(key: string, value: any) {
+    //   return isArray(value) ? value : {};
+    // }
 
     /*Get all of the current attributes on the model.*/
-    public getAttributes() {
+    public getAttributes(): Record<string, any> {
       this.mergeAttributesFromClassCasts();
       return this._attributes;
     }
 
     /*Get all of the current attributes on the model for an insert operation.*/
-    protected getAttributesForInsert() {
+    protected getAttributesForInsert(): Record<string, any> {
       return this.getAttributes();
     }
 
     /*Set the array of model attributes. No checking is done.*/
-    public setRawAttributes(attributes: Record<string, any>, sync = false) {
+    public setRawAttributes(attributes: Record<string, any>, sync = false): this {
       this._attributes = attributes;
       if (sync) {
         this.syncOriginal();
@@ -1167,7 +1180,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Get the model's original attribute values.*/
-    public getOriginal(this: Model & _Self, key: string | null = null, _default: any = null) {
+    public getOriginal(this: Model & _Self, key?: string, _default?: any): Record<string, any> {
       // @ts-ignore
       return (new this.constructor())
         .setRawAttributes(this._original, true)
@@ -1176,8 +1189,8 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Get the model's original attribute values.*/
     protected getOriginalWithoutRewindingModel(this: Model & _Self,
-                                               key: string | null = null,
-                                               _default: any      = null) {
+                                               key?: string,
+                                               _default?: any): Record<string, any> {
       if (key) {
         return this.transformModelValue(key, get(this._original, key, _default));
       }
@@ -1189,13 +1202,13 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Get the model's raw original attribute values.*/
-    public getRawOriginal(key: string | null = null, _default: any = null) {
+    public getRawOriginal(key?: string, _default?: any): any {
       return get(this._original, key, _default);
     }
 
     /*Get a subset of the model's attributes.*/
-    public only(this: Model & _Self, ...attributes: any[]);
-    public only(this: Model & _Self, attributes: any[] | any) {
+    public only(this: Model & _Self, ...attributes: any[]): Record<string, any>;
+    public only(this: Model & _Self, attributes: any[] | any): Record<string, any> {
       const results: any = {};
       for (const attribute of isArray(attributes) ? attributes : arguments) {
         results[attribute] = this.getAttribute(attribute);
@@ -1204,19 +1217,19 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Sync the original attributes with the current.*/
-    public syncOriginal() {
+    public syncOriginal(): this {
       // todo remove spread
       this._original = {...this.getAttributes()};
       return this;
     }
 
     /*Sync a single original attribute with its current value.*/
-    public syncOriginalAttribute(attribute: string) {
+    public syncOriginalAttribute(attribute: string): this {
       return this.syncOriginalAttributes(attribute);
     }
 
     /*Sync multiple original attribute with their current values.*/
-    public syncOriginalAttributes(attributes: any[] | string) {
+    public syncOriginalAttributes(attributes: any[] | string): this {
       attributes            = isArray(attributes) ? attributes : arguments as unknown as any[];
       const modelAttributes = this.getAttributes();
       for (const attribute of attributes) {
@@ -1226,14 +1239,15 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Sync the changed attributes.*/
-    public syncChanges(this: Model & _Self) {
+    public syncChanges(this: Model & _Self): this {
       this._changes = this.getDirty();
+      // @ts-ignore
       return this;
     }
 
-    public isDirty(this: Model & _Self, ...args: string[]);
+    public isDirty(this: Model & _Self, ...args: string[]): boolean;
     /*Determine if the model or any of the given attribute(s) have been modified.*/
-    public isDirty(this: Model & _Self, attributes: any[] | string | null = null) {
+    public isDirty(this: Model & _Self, attributes: any[] | string | null = null): boolean {
       return this.hasChanges(this.getDirty(),
         isArray(attributes) ? attributes : [...arguments] as unknown as any[]);
     }
@@ -1244,15 +1258,15 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Determine if the model or any of the given attribute(s) have been modified.*/
-    public wasChanged(this: Model & _Self, attributes: any[] | string | null = null) {
+    public wasChanged(this: Model & _Self, attributes?: any[] | string): boolean {
       return this.hasChanges(this.getChanges(),
         isArray(attributes) ? attributes : [...arguments] as unknown as any[]);
     }
 
     /*Determine if any of the given attributes were changed.*/
-    protected hasChanges(this: Model & _Self, changes: any[],
-                         attributes: any[] | string | null = null) {
-      if (!attributes.length) {
+    protected hasChanges(this: Model & _Self, changes: Record<string, any>,
+                         attributes?: any[] | string) {
+      if (!attributes || !attributes.length) {
         return !isObjectEmpty(changes);
       }
       for (const attribute of wrap(attributes)) {
@@ -1264,7 +1278,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Get the attributes that have been changed since the last sync.*/
-    public getDirty(this: Model & _Self) {
+    public getDirty(this: Model & _Self): Record<string, any> {
       const dirty: any = {};
       for (const [key, value] of Object.entries(this.getAttributes())) {
         if (!this.originalIsEquivalent(key)) {
@@ -1275,12 +1289,12 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Get the attributes that were changed.*/
-    public getChanges() {
+    public getChanges(): Record<string, any> {
       return this._changes;
     }
 
     /*Determine if the new and old values for a given key are equivalent.*/
-    public originalIsEquivalent(this: Model & _Self, key: string) {
+    public originalIsEquivalent(this: Model & _Self, key: string): boolean {
       if (!(key in this._original)) {
         return false;
       }
@@ -1308,7 +1322,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Transform a raw model value using mutators, casts, etc.*/
-    protected transformModelValue(this: Model & this, key: string, value: any) {
+    protected transformModelValue(this: Model & this, key: string, value: any): any {
       // if (this.hasGetMutator(key)) {
       //   return this.mutateAttribute(key, value);
       // }
@@ -1322,20 +1336,20 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     }
 
     /*Append attributes to query when building a query.*/
-    public append(attributes: any[] | string) {
+    public append(attributes: any[] | string): this {
       this._appends = uniq(
         [...this._appends, ...(isString(attributes) ? arguments : attributes)]);
       return this;
     }
 
     /*Set the accessors to append to model arrays.*/
-    public setAppends(appends: any[]) {
+    public setAppends(appends: any[]): this {
       this._appends = appends;
       return this;
     }
 
     /*Return whether the accessor attribute has been appended.*/
-    public hasAppended(attribute: string) {
+    public hasAppended(attribute: string): boolean {
       return attribute in this._appends;
     }
 

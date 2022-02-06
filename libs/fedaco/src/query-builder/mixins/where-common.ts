@@ -4,20 +4,25 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import {isArray, isFunction, isObject, isString} from '@gradii/check-type';
-import {Constructor} from '../../helper/constructor';
-import {QueryBuilder} from '../../query-builder/query-builder';
-import {BindingVariable} from '../../query/ast/binding-variable';
-import {BinaryExpression} from '../../query/ast/expression/binary-expression';
-import {ComparisonPredicateExpression} from '../../query/ast/expression/comparison-predicate-expression';
-import {Expression} from '../../query/ast/expression/expression';
-import {RawBindingExpression} from '../../query/ast/expression/raw-binding-expression';
-import {RawExpression} from '../../query/ast/expression/raw-expression';
-import {NestedPredicateExpression} from '../../query/ast/fragment/expression/nested-predicate-expression';
-import {SqlParser} from '../../query/parser/sql-parser';
-import {SqlNode} from '../../query/sql-node';
-import {forwardRef} from '../forward-ref';
-import {FedacoBuilder} from '../../fedaco/fedaco-builder';
+import { isArray, isFunction, isObject, isString } from '@gradii/check-type';
+import { FedacoBuilder } from '../../fedaco/fedaco-builder';
+import type { FedacoBuilderCallBack } from '../../fedaco/fedaco-types';
+import { Constructor } from '../../helper/constructor';
+import { QueryBuilder } from '../../query-builder/query-builder';
+import { BindingVariable } from '../../query/ast/binding-variable';
+import { BinaryExpression } from '../../query/ast/expression/binary-expression';
+import {
+  ComparisonPredicateExpression
+} from '../../query/ast/expression/comparison-predicate-expression';
+import { Expression } from '../../query/ast/expression/expression';
+import { RawBindingExpression } from '../../query/ast/expression/raw-binding-expression';
+import { RawExpression } from '../../query/ast/expression/raw-expression';
+import {
+  NestedPredicateExpression
+} from '../../query/ast/fragment/expression/nested-predicate-expression';
+import { SqlParser } from '../../query/parser/sql-parser';
+import { SqlNode } from '../../query/sql-node';
+import { forwardRef } from '../forward-ref';
 
 
 export interface QueryBuilderWhereCommon {
@@ -111,7 +116,8 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
     /**
      * Add another query builder as a nested where to the query builder.
      */
-    public addNestedWhereQuery(query: QueryBuilder, conjunction: 'and' | 'or' | string = 'and'): this {
+    public addNestedWhereQuery(query: QueryBuilder,
+                               conjunction: 'and' | 'or' | string = 'and'): this {
       if (query._wheres.length > 0) {
         // const type = 'Nested';
         // this.qWheres.push(compact('type', 'query', 'boolean'));
@@ -172,7 +178,7 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
                          operator?: string,
                          second?: string): this {
       if (arguments.length === 2) {
-        second = operator;
+        second   = operator;
         operator = '=';
       }
       return this.whereColumn(first, operator, second, 'or');
@@ -242,10 +248,10 @@ export function mixinWhereCommon<T extends Constructor<any>>(base: T): WhereComm
         return this._addArrayOfWheres(first, conjunction, 'whereColumn');
       }
       if (this._invalidOperator(operator)) {
-        conjunction = second as 'and' | 'or';
+        conjunction        = second as 'and' | 'or';
         [second, operator] = [operator, '='];
       }
-      const leftNode = first instanceof RawExpression ? first :
+      const leftNode  = first instanceof RawExpression ? first :
         SqlParser.createSqlParser(first as string).parseUnaryTableColumn();
       const rightNode = second instanceof RawExpression ? second :
         SqlParser.createSqlParser(second as string).parseUnaryTableColumn();
