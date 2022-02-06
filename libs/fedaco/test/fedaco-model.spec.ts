@@ -15,9 +15,10 @@ import { PrimaryColumn } from '../src/annotation/column/primary.column';
 import { TimestampColumn } from '../src/annotation/column/timestamp.column';
 import { HasManyColumn } from '../src/annotation/relation-column/has-many.relation-column';
 import { HasOneColumn } from '../src/annotation/relation-column/has-one.relation-column';
-import { ConnectionFactory } from '../src/connector/connection-factory';
-import { DatabaseManager } from '../src/database-manager';
+import { Table } from '../src/annotation/table/table';
+import { DatabaseTransactionsManager } from '../src/database-transactions-manager';
 import { FedacoBuilder } from '../src/fedaco/fedaco-builder';
+import { FedacoRelationListType, FedacoRelationType } from '../src/fedaco/fedaco-types';
 import { Dispatcher } from '../src/fedaco/mixins/has-events';
 import { Model } from '../src/fedaco/model';
 import { Relation } from '../src/fedaco/relations/relation';
@@ -28,7 +29,8 @@ import { Processor } from '../src/query-builder/processor';
 import { QueryBuilder } from '../src/query-builder/query-builder';
 import { SchemaBuilder } from '../src/schema/schema-builder';
 import { FedacoModelNamespacedModel } from './model/fedaco-model-namespaced.model';
-import { DatabaseTransactionsManager } from '../src/database-transactions-manager';
+
+const global: any = {};
 
 class Conn implements ConnectionInterface {
   _transactions: number;
@@ -396,7 +398,7 @@ describe('test database fedaco model', () => {
 
   it('create method saves new model', async () => {
     global['__fedaco.saved'] = false;
-    const model                = await new FedacoModelSaveStub().newQuery().create({
+    const model              = await new FedacoModelSaveStub().newQuery().create({
       'name': 'taylor'
     });
     expect(global['__fedaco.saved']).toBeTruthy();
@@ -405,7 +407,7 @@ describe('test database fedaco model', () => {
 
   it('make method does not save new model', () => {
     global['__fedaco.saved'] = false;
-    const model                = new FedacoModelSaveStub().newQuery().make({
+    const model              = new FedacoModelSaveStub().newQuery().make({
       'name': 'taylor'
     });
     expect(global['__fedaco.saved']).toBeFalsy();
@@ -414,7 +416,7 @@ describe('test database fedaco model', () => {
 
   it('force create method saves new model with guarded attributes', async () => {
     global['__fedaco.saved'] = false;
-    const model                = await new FedacoModelSaveStub().newQuery().forceCreate({
+    const model              = await new FedacoModelSaveStub().newQuery().forceCreate({
       'id': 21
     });
     expect(global['__fedaco.saved']).toBeTruthy();
@@ -1067,7 +1069,7 @@ describe('test database fedaco model', () => {
     const spy1 = jest.spyOn(model, 'newModelQuery').mockReturnValue(query);
     // const spy11 = jest.spyOn(model, 'updateTimestamps');/*.mockReturnValue(true);*/
     // const spy12 = jest.spyOn(model, 'getConnection');
-    const spy13 = jest.spyOn(model, 'touchOwners').mockReturnValue(true);
+    const spy13 = jest.spyOn(model, 'touchOwners').mockReturnValue(Promise.resolve());
     const spy2  = jest.spyOn(query, 'where');
     const spy4  = jest.spyOn(query, 'delete').mockImplementationOnce(async () => {
     });
@@ -1559,8 +1561,8 @@ describe('test database fedaco model', () => {
     expect(array).not.toHaveProperty('age');
     expect(array).not.toHaveProperty('id');
     model.setHidden(['age', 'id']);
-    model.makeVisibleIf(model => {
-      return !isBlank(model.name);
+    model.makeVisibleIf((m: FedacoModelStub) => {
+      return !isBlank(m.name);
     }, 'age');
     array = model.toArray();
     expect(array).toHaveProperty('name');
@@ -1591,8 +1593,8 @@ describe('test database fedaco model', () => {
     expect(array).toHaveProperty('age');
     expect(array).toHaveProperty('address');
     expect(array).toHaveProperty('id');
-    array = model.makeHiddenIf(model => {
-      return !isBlank(model.id);
+    array = model.makeHiddenIf((m: FedacoModelStub) => {
+      return !isBlank(m.id);
     }, ['name', 'age']).toArray();
     expect(array).toHaveProperty('address');
     expect(array).not.toHaveProperty('name');
@@ -2141,12 +2143,12 @@ describe('test database fedaco model', () => {
 //     expect(model.getMutatedAttributes()).toEqual(['firstName', 'middleName', 'lastName']);
 //   });
   it('replicate creates a new model instance with same attribute values', () => {
-    const model        = new FedacoModelStub();
+    const model      = new FedacoModelStub();
     model.id         = 'id';
     model.foo        = 'bar';
     model.created_at = new Date();
     model.updated_at = new Date();
-    const replicated   = model.replicate();
+    const replicated = model.replicate();
     expect(replicated.id).toBeUndefined();
     expect(replicated.foo).toBe('bar');
     expect(replicated.created_at).toBeUndefined();
@@ -2615,6 +2617,10 @@ describe('test database fedaco model', () => {
 //   });
 // });
 //
+
+@Table({
+  tableName: 'stub'
+})
 export class FedacoModelStub extends Model {
   _connection: any;
   _scopesCalled: any      = [];
@@ -2627,25 +2633,25 @@ export class FedacoModelStub extends Model {
   // };
 
   @Column()
-  id;
+  id: number | string;
 
   @Column()
-  name;
+  name: string;
 
   @Column()
-  age;
+  age: number;
 
   @Column()
-  first;
+  first: string;
 
   @Column()
-  last;
+  last: string;
 
   @FloatColumn()
-  castedFloat;
+  castedFloat: number;
 
   @Column()
-  list_items;
+  list_items: any[];
 
   @Column()
   public get listItems() {
@@ -2657,20 +2663,20 @@ export class FedacoModelStub extends Model {
   }
 
   @Column()
-  foo;
+  foo: any;
 
   @Column()
-  bar;
+  bar: any;
 
   @Column()
-  baz;
+  baz: any;
 
-  @Column() first_name;
-  @Column() last_name;
-  @Column() project;
+  @Column() first_name: string;
+  @Column() last_name: string;
+  @Column() project: any;
 
-  @HasOneColumn() relationOne;
-  @HasManyColumn() relationMany;
+  @HasOneColumn() relationOne: FedacoRelationType<any>;
+  @HasManyColumn() relationMany: FedacoRelationListType<any>;
 
   // @Column() created_at;
   // @Column() updated_at;
@@ -2683,7 +2689,7 @@ export class FedacoModelStub extends Model {
     this._attributes['password_hash'] = createHash('sha1').update(value, 'utf8').digest('hex');
   }
 
-  public publicIncrement(column, amount = 1, extra = []) {
+  public publicIncrement(column: string, amount: number = 1, extra: any[] = []) {
     return this.increment(column, amount, extra);
   }
 
@@ -2715,7 +2721,7 @@ export class FedacoModelStub extends Model {
     return 'foo';
   }
 
-  public getDates() {
+  public getDates(): any[] {
     return [];
   }
 
@@ -2737,8 +2743,8 @@ export class FedacoModelStub extends Model {
 }
 
 export class FedacoModelWithDateStub extends FedacoModelStub {
-  @Column() created_at;
-  @Column() updated_at;
+  @Column() created_at: Date;
+  @Column() updated_at: Date;
 }
 
 //
@@ -2763,23 +2769,24 @@ export class FedacoDateModelStub extends FedacoModelStub {
     return ['created_at', 'updated_at'];
   }
 
-  @DateColumn() created_at;
-  @DateColumn() updated_at;
+  @DateColumn() created_at: Date;
+  @DateColumn() updated_at: Date;
 }
 
 export class FedacoModelSaveStub extends Model {
   _table: any   = 'save_stub';
   _guarded: any = ['id'];
 
-  @Column() id;
-  @Column() name;
+  @Column() id: number;
+  @Column() name: string;
 
-  public async save(options: any) {
+  public async save(options: any): Promise<boolean> {
     // if (this.fireModelEvent('saving') === false) {
     //   return false;
     // }
     global['__fedaco.saved'] = true;
     this.fireModelEvent('saved', false);
+    return true;
   }
 
   public setIncrementing(value) {
@@ -2951,8 +2958,8 @@ export class FedacoModelCastingStub extends Model {
     return this.attributes['jsonAttribute'];
   }
 
-  serializeDate(date) {
-    return date.format('Y-m-d H:i:s');
+  serializeDate(date: Date) {
+    return format(date, 'yyyy-MM-dd HH:mm:ss');
   }
 }
 
@@ -2984,7 +2991,7 @@ export class FedacoModelNonIncrementingStub extends Model {
   _incrementing: any = false;
 
   @PrimaryColumn()
-  id;
+  id: number | string;
 }
 
 //
@@ -2999,8 +3006,8 @@ export class FedacoModelSavingEventStub {
 }
 
 export class FedacoModelEventObjectStub extends Model {
-  @Column() id;
-  @Column() name;
+  @Column() id: number;
+  @Column() name: string;
 
   protected dispatchesEvents: any = {
     'saving': FedacoModelSavingEventStub

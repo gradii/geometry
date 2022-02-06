@@ -346,17 +346,17 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Increment a column's value by a given amount.*/
-  protected increment(column: string, amount: number | number = 1, extra: any[] = []) {
+  protected increment(column: string, amount: number = 1, extra: any[] = []) {
     return this.incrementOrDecrement(column, amount, extra, 'increment');
   }
 
   /*Decrement a column's value by a given amount.*/
-  protected decrement(column: string, amount: number | number = 1, extra: any[] = []) {
+  protected decrement(column: string, amount: number = 1, extra: any[] = []) {
     return this.incrementOrDecrement(column, amount, extra, 'decrement');
   }
 
   /*Run the increment or decrement method on the model.*/
-  protected incrementOrDecrement(column: string, amount: number | number, extra: any[],
+  protected incrementOrDecrement(column: string, amount: number, extra: any[],
                                  method: string) {
     const query = this.newQueryWithoutRelationships();
     if (!this._exists) {
@@ -424,7 +424,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Save the model to the database.*/
-  public async save(options: { touch?: boolean } = {}) {
+  public async save(options: { touch?: boolean } = {}): Promise<boolean> {
     this.mergeAttributesFromClassCasts();
     const query = this.newModelQuery();
     if (this._fireModelEvent('saving') === false) {
@@ -601,7 +601,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Get a new query builder with no relationships loaded.*/
-  public newQueryWithoutRelationships() {
+  public newQueryWithoutRelationships(): FedacoBuilder {
     return this.registerGlobalScopes(this.newModelQuery());
   }
 
@@ -624,7 +624,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Get a new query to restore one or more models by their queueable IDs.*/
-  public newQueryForRestoration(ids: any[] | number | string) {
+  public newQueryForRestoration(ids: any[] | number | string): FedacoBuilder<this> {
     return isArray(ids) ?
       this.newQueryWithoutScopes().whereIn(this.getQualifiedKeyName(), ids) :
       this.newQueryWithoutScopes().whereKey(ids);

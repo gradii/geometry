@@ -17,9 +17,8 @@ import { QueryBuilderUnion } from '../../query-builder/mixins/union';
 import { QueryBuilderWhereCommon } from '../../query-builder/mixins/where-common';
 import { QueryBuilderWhereDate } from '../../query-builder/mixins/where-date';
 import { QueryBuilderWherePredicate } from '../../query-builder/mixins/where-predicate';
-import { QueryBuilder } from '../../query-builder/query-builder';
+import { JoinClauseBuilder, QueryBuilder } from '../../query-builder/query-builder';
 import { FedacoBuilder } from '../fedaco-builder';
-import { Model } from '../model';
 
 export interface ForwardCallToQueryBuilder extends Omit<QueryBuilderJoin, 'joinSub'>, QueryBuilderOrderBy,
   QueryBuilderGroupBy, QueryBuilderHaving, QueryBuilderLimitOffset, QueryBuilderUnion,
@@ -102,7 +101,10 @@ export interface ForwardCallToQueryBuilder extends Omit<QueryBuilderJoin, 'joinS
 
   first(...args: any[]): Promise<any>;
 
-  joinSub(query: Function | QueryBuilder | FedacoBuilder | string, as: string, first: Function | string,
+  join(...args: any[]): this;
+
+  joinSub(query: Function | QueryBuilder | FedacoBuilder | string, as: string,
+          first: ((join: JoinClauseBuilder) => any) | string,
           operator?: string,
           second?: string | number, type?: string, where?: boolean): this;
 
@@ -252,6 +254,7 @@ export function mixinForwardCallToQueryBuilder<T extends Constructor<any>>(base:
     forceDelete(...args: any[]) {
       return this.#directToBuilder('forceDelete', args);
     }
+
     //
     // withoutGlobalScope(...args: any[]) {
     //   return this.#directToBuilder('withoutGlobalScope', args);

@@ -9,7 +9,6 @@ import { SqlNode } from '../sql-node';
 import { SqlVisitor } from '../sql-visitor';
 import { FromClause } from './from-clause';
 import { FromTable } from './from-table';
-import { JoinClause } from './join-clause';
 import { LimitClause } from './limit-clause';
 import { OffsetClause } from './offset-clause';
 import { OrderByClause } from './order-by-clause';
@@ -36,6 +35,11 @@ export class UpdateSpecification extends SqlNode {
   }
 
   accept(visitor: SqlVisitor) {
-    return visitor.visitUpdateSpecification(this);
+    visitor._isVisitUpdateSpecification = true;
+
+    const rst = visitor.visitUpdateSpecification(this);
+
+    visitor._isVisitUpdateSpecification = false;
+    return rst;
   }
 }

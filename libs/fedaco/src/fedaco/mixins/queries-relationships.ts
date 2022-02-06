@@ -343,8 +343,15 @@ public readonly ${relation};
         let expression;
         if (func) {
           // todo check query from eq query from
-          const hashedColumn = this.getModel().getTable() === relation.getQuery().getModel().getTable() ?
-            `${relation.getRelationCountHash(false)}.${column}` : column;
+          let hashedColumn: string;
+          if (
+            this.getModel()._connection === relation.getQuery().getModel()._connection &&
+            this.getModel().getTable() === relation.getQuery().getModel().getTable()
+          ) {
+            hashedColumn = `${relation.getRelationCountHash(false)}.${column}`;
+          } else {
+            hashedColumn = column;
+          }
 
           const wrappedColumn = this.getQuery().getGrammar().wrap(
             column === '*' ? column :

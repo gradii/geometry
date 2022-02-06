@@ -10,6 +10,7 @@ import { findLast, tap } from 'ramda';
 import { singular } from '../../../helper/pluralize';
 import { Table, TableAnnotation } from '../../../annotation/table/table';
 import { Constructor } from '../../../helper/constructor';
+import { QueryBuilder } from '../../../query-builder/query-builder';
 import { FedacoBuilder } from '../../fedaco-builder';
 import { Model } from '../../model';
 
@@ -21,7 +22,7 @@ export declare namespace AsPivot {
 
   /*Create a new pivot model from raw values returned from a query.*/
   export function fromRawAttributes(
-    parent: Model, attributes: any[], table: string, exists: boolean): any;
+    parent: Model, attributes: any, table: string, exists: boolean): any;
 }
 
 export interface AsPivot extends Model {
@@ -42,25 +43,25 @@ export interface AsPivot extends Model {
   delete(): Promise<number | boolean>;
 
   /*Get the query builder for a delete operation on the pivot.*/
-  _getDeleteQuery();
+  _getDeleteQuery(): FedacoBuilder;
 
   /*Get the table associated with the model.*/
   getTable(): string;
 
   /*Get the foreign key column name.*/
-  getForeignKey();
+  getForeignKey(): string;
 
   /*Get the "related key" column name.*/
-  getRelatedKey();
+  getRelatedKey(): string;
 
   /*Get the "related key" column name.*/
-  getOtherKey();
+  getOtherKey(): string;
 
   /*Set the key names for the pivot model instance.*/
-  setPivotKeys(foreignKey: string, relatedKey: string);
+  setPivotKeys(foreignKey: string, relatedKey: string): this;
 
   /*Determine if the pivot model or given attributes has timestamp attributes.*/
-  hasTimestampAttributes(attributes?: any[] | null);
+  hasTimestampAttributes(attributes?: any[] | null): boolean;
 
   /*Get the name of the "created at" column.*/
   getCreatedAtColumn(): string;
@@ -72,13 +73,13 @@ export interface AsPivot extends Model {
   getQueueableId(): number | string;
 
   /*Get a new query to restore one or more models by their queueable IDs.*/
-  newQueryForRestoration(ids: number[] | string[] | string);
+  newQueryForRestoration(ids: number[] | string[] | string): FedacoBuilder<this>;
 
   /*Get a new query to restore multiple models by their queueable IDs.*/
-  _newQueryForCollectionRestoration(ids: number[] | string[]);
+  _newQueryForCollectionRestoration(ids: number[] | string[]): FedacoBuilder;
 
   /*Unset all the loaded relations for the instance.*/
-  unsetRelations();
+  unsetRelations(): this;
 }
 
 export type AsPivotCtor = Constructor<AsPivot>;
@@ -137,7 +138,7 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
       if (this._fireModelEvent('deleting') === false) {
         return 0;
       }
-      this.touchOwners();
+      await this.touchOwners();
       return tap(() => {
         this._exists = false;
         this._fireModelEvent('deleted', false);
@@ -145,7 +146,7 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
     }
 
     /*Get the query builder for a delete operation on the pivot.*/
-    _getDeleteQuery(this: Model & _Self) {
+    _getDeleteQuery(this: Model & _Self): FedacoBuilder {
       return this.newQueryWithoutRelationships().where({
         [this._foreignKey]: this.getOriginal(this._foreignKey, this.getAttribute(this._foreignKey)),
         [this._relatedKey]: this.getOriginal(this._relatedKey, this.getAttribute(this._relatedKey)),
@@ -171,22 +172,22 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
     }
 
     /*Get the foreign key column name.*/
-    public getForeignKey() {
+    public getForeignKey(): string {
       return this._foreignKey;
     }
 
     /*Get the "related key" column name.*/
-    public getRelatedKey() {
+    public getRelatedKey(): string {
       return this._relatedKey;
     }
 
     /*Get the "related key" column name.*/
-    public getOtherKey() {
+    public getOtherKey(): string {
       return this.getRelatedKey();
     }
 
     /*Set the key names for the pivot model instance.*/
-    public setPivotKeys(foreignKey: string, relatedKey: string) {
+    public setPivotKeys(foreignKey: string, relatedKey: string): this {
       this._foreignKey = foreignKey;
       this._relatedKey = relatedKey;
       return this;
@@ -217,7 +218,7 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
     }
 
     /*Get a new query to restore one or more models by their queueable IDs.*/
-    public newQueryForRestoration(this: Model & _Self, ids: number[] | string[] | string) {
+    public newQueryForRestoration(this: Model & _Self, ids: number[] | string[] | string): FedacoBuilder {
       if (isArray(ids)) {
         return this._newQueryForCollectionRestoration(ids as any[]);
       }
@@ -230,14 +231,14 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
     }
 
     /*Get a new query to restore multiple models by their queueable IDs.*/
-    _newQueryForCollectionRestoration(ids: number[] | string[]) {
+    _newQueryForCollectionRestoration(ids: number[] | string[]): FedacoBuilder {
       if (!(`${ids[0]}`).includes(':')) {
         return super.newQueryForRestoration(ids);
       }
       const query = this.newQueryWithoutScopes();
       for (const id of ids as string[]) {
         const segments = id.split(':');
-        query.orWhere(q => {
+        query.orWhere((q: QueryBuilder) => {
           return q.where(segments[0], segments[1]).where(segments[2], segments[3]);
         });
       }
@@ -245,9 +246,10 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
     }
 
     /*Unset all the loaded relations for the instance.*/
-    public unsetRelations(this: Model & _Self) {
+    public unsetRelations(this: Model & _Self): this {
       this.pivotParent = null;
       this._relations  = [];
+      // @ts-ignore
       return this;
     }
   };

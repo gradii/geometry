@@ -12,3 +12,8 @@ import type { Relation } from './relations/relation';
 export type FedacoBuilderCallBack =
   Function
   | ((builder?: FedacoBuilder | Relation | QueryBuilder) => any);
+
+
+export type FedacoRelationType<T extends any> = Promise<T> | T;
+
+export type FedacoRelationListType<T extends any> = Promise<T[]> | T[];

@@ -8,7 +8,7 @@ import { reflector } from '@gradii/annotation';
 import {
   isArray, isBlank, isFunction, isNumber, isObjectEmpty, isString
 } from '@gradii/check-type';
-import { format, getUnixTime, isValid, parse, startOfDay } from 'date-fns';
+import { format, formatISO, getUnixTime, isValid, parse, startOfDay } from 'date-fns';
 import { equals, findLast, omit, pick, tap, uniq } from 'ramda';
 import { FedacoDecorator } from '../../annotation/annotation.interface';
 import { ColumnAnnotation, FedacoColumn } from '../../annotation/column';
@@ -65,7 +65,10 @@ export interface HasAttributes {
   /*The attributes that have been cast using custom classes.*/
   _classCastCache: any[];
 
-  /*The attributes that should be mutated to dates.*/
+  /**
+  * @deprecated
+  * The attributes that should be mutated to dates.
+  */
   _dates: any[];
   /*The storage format of the model's date columns.*/
   _dateFormat: string;
@@ -380,7 +383,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     /*Convert the model's attributes to an array.*/
     public attributesToArray(this: Model & _Self) {
       let attributes = this.getArrayableAttributes();
-      attributes     = this.addDateAttributesToArray(attributes);
+      // attributes     = this.addDateAttributesToArray(attributes);
       // const mutatedAttributes = this.getMutatedAttributes();
       // attributes              = this.addMutatedAttributesToArray(attributes, mutatedAttributes);
       attributes = this.addCastAttributesToArray(attributes);
@@ -393,7 +396,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     /*Convert the model's attributes to an array.*/
     public attributesToArray2(this: Model & _Self) {
       let attributes = this.getArrayableAttributes();
-      attributes     = this.addDateAttributesToArray(attributes);
+      // attributes     = this.addDateAttributesToArray(attributes);
       // const mutatedAttributes = this.getMutatedAttributes();
       // attributes              = this.addMutatedAttributesToArray(attributes, mutatedAttributes);
       attributes = this.addCastAttributesToArray(attributes);
@@ -521,13 +524,16 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     /*Get an attribute array of all arrayable values.*/
     protected getArrayableItems(this: Model & _Self,
                                 values: Record<string, any>): Record<string, any> {
+      let haveNew = false;
       if (this.getVisible().length > 0) {
-        values = pick(this.getVisible(), values);
+        haveNew = true;
+        values  = pick(this.getVisible(), values);
       }
       if (this.getHidden().length > 0) {
-        values = omit(this.getHidden(), values);
+        haveNew = true;
+        values  = omit(this.getHidden(), values);
       }
-      return values;
+      return haveNew ? values : {...values};
     }
 
     public unsetAttribute(key: string): void {
@@ -943,7 +949,11 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
         date = parse(value, this.getDateFormat() || 'yyyy-MM-dd HH:mm:ss', new Date(value));
       } catch (e) {
       }
-      return isValid(date) ? date : new Date(value);
+      if (isValid(date)) {
+        return date;
+      } else {
+        throw new Error(`invalid date ${value}`);
+      }
     }
 
     /*Determine if the given value is a standard date format.*/
@@ -965,7 +975,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Prepare a date for array / JSON serialization.*/
     protected serializeDate(date: Date): string {
-      return format(date, `yyyy-MM-dd HH:mm:ss`);
+      return formatISO(date);
     }
 
     /*Get the attributes that should be converted to dates.*/

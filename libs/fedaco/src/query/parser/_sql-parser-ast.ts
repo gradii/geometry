@@ -145,6 +145,7 @@ export class _SqlParserAst {
 
   }
 
+  // seems like @link {createTableColumn} method
   parseColumnWithoutAlias(defaultTable?: string | FromTable) {
     if (defaultTable instanceof FromTable) {
     } else if (isString(defaultTable)) {

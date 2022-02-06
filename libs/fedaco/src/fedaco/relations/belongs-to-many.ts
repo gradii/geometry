@@ -540,15 +540,15 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
     const columns = {
       [this._related.getUpdatedAtColumn()]: this._related.freshTimestampString(),
     };
-    const ids     = this.allRelatedIds();
+    const ids     = await this.allRelatedIds();
     if (ids.length > 0) {
       await this.getRelated().newQueryWithoutRelationships().whereIn(key, ids).update(columns);
     }
   }
 
   /*Get all of the IDs for the related models.*/
-  public allRelatedIds() {
-    return this.newPivotQuery().pluck(this._relatedPivotKey);
+  public allRelatedIds(): Promise<any[]> {
+    return this.newPivotQuery().pluck(this._relatedPivotKey) as Promise<any[]>;
   }
 
   /*Save a new model and attach it to the parent model.*/
@@ -561,7 +561,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Save an array of new models and attach them to the parent model.*/
-  public saveMany(models: Collection | any[], pivotAttributes: any[] = []) {
+  public saveMany(models: Collection | any[], pivotAttributes: any = {}) {
     for (const [key, model] of Object.entries(models)) {
       this.save(model, /*cast type array*/ pivotAttributes[key] ?? [], false);
     }
@@ -580,7 +580,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Create an array of new instances of the related models.*/
-  public createMany(records: any[], joinings: any[] = []) {
+  public createMany(records: any[], joinings: any = {}) {
     const instances = [];
     for (const [key, record] of Object.entries(records)) {
       instances.push(this.create(record, /*cast type array*/ joinings[key] ?? [], false));

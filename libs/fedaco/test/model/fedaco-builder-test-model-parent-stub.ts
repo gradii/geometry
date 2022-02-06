@@ -4,13 +4,19 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { BelongsToManyColumn } from '../../src/annotation/relation-column/belongs-to-many.relation-column';
+import {
+  BelongsToManyColumn
+} from '../../src/annotation/relation-column/belongs-to-many.relation-column';
 import { BelongsToColumn } from '../../src/annotation/relation-column/belongs-to.relation-column';
 import { HasManyColumn } from '../../src/annotation/relation-column/has-many.relation-column';
+import { Table } from '../../src/annotation/table/table';
 import { Model } from '../../src/fedaco/model';
 import { Relation } from '../../src/fedaco/relations/relation';
 import { forwardRef } from '../../src/query-builder/forward-ref';
 
+@Table({
+  tableName: 'fedaco_builder_test_model_close_related_stub'
+})
 export class FedacoBuilderTestModelCloseRelatedStub extends Model {
 
   @HasManyColumn({
@@ -26,10 +32,15 @@ export class FedacoBuilderTestModelCloseRelatedStub extends Model {
   public baz: any[];
 }
 
+@Table({
+  tableName: 'fedaco_builder_test_model_far_related_stub'
+})
 export class FedacoBuilderTestModelFarRelatedStub extends Model {
 }
 
-
+@Table({
+  tableName: 'fedaco_builder_test_model_parent_stub'
+})
 export class FedacoBuilderTestModelParentStub extends Model {
 
   @BelongsToColumn({

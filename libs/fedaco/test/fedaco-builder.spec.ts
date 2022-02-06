@@ -1466,7 +1466,6 @@ describe('fedaco builder', () => {
   tableName: 'test_table'
 })
 class FedacoBuilderTestStub extends Model {
-  _table = 'test_table';
 }
 
 @Table({
@@ -1474,6 +1473,4 @@ class FedacoBuilderTestStub extends Model {
 })
 class FedacoBuilderTestStubWithoutTimestamp extends Model {
   static UPDATED_AT: string = null;
-
-  _table = 'test_table';
 }

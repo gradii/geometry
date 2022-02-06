@@ -12,10 +12,14 @@ import { BindingVariable } from '../../query/ast/binding-variable';
 import { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
 import { DeleteSpecification } from '../../query/ast/delete-specification';
 import { AsExpression } from '../../query/ast/expression/as-expression';
-import { BetweenPredicateExpression } from '../../query/ast/expression/between-predicate-expression';
+import {
+  BetweenPredicateExpression
+} from '../../query/ast/expression/between-predicate-expression';
 import { BinaryExpression } from '../../query/ast/expression/binary-expression';
 import { CommonValueExpression } from '../../query/ast/expression/common-value-expression';
-import { ComparisonPredicateExpression } from '../../query/ast/expression/comparison-predicate-expression';
+import {
+  ComparisonPredicateExpression
+} from '../../query/ast/expression/comparison-predicate-expression';
 import { ConditionExpression } from '../../query/ast/expression/condition-expression';
 import { ExistsPredicateExpression } from '../../query/ast/expression/exists-predicate-expression';
 import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
@@ -28,11 +32,15 @@ import { RawBindingExpression } from '../../query/ast/expression/raw-binding-exp
 import { RawExpression } from '../../query/ast/expression/raw-expression';
 import { StringLiteralExpression } from '../../query/ast/expression/string-literal-expression';
 import { AggregateFragment } from '../../query/ast/fragment/aggregate-fragment';
-import { NestedPredicateExpression } from '../../query/ast/fragment/expression/nested-predicate-expression';
+import {
+  NestedPredicateExpression
+} from '../../query/ast/fragment/expression/nested-predicate-expression';
 import { JoinFragment } from '../../query/ast/fragment/join-fragment';
 import { JsonPathColumn } from '../../query/ast/fragment/json-path-column';
 import { NestedExpression } from '../../query/ast/fragment/nested-expression';
-import { RejectOrderElementExpression } from '../../query/ast/fragment/order/reject-order-element-expression';
+import {
+  RejectOrderElementExpression
+} from '../../query/ast/fragment/order/reject-order-element-expression';
 import { UnionFragment } from '../../query/ast/fragment/union-fragment';
 import { FromClause } from '../../query/ast/from-clause';
 import { FromTable } from '../../query/ast/from-table';
@@ -75,6 +83,8 @@ import { QueryBuilder } from '../query-builder';
 export class QueryBuilderVisitor implements SqlVisitor {
   protected inJoinExpression: boolean = false;
   protected explicitBindingType: string;
+
+  _isVisitUpdateSpecification: boolean;
 
   constructor(
     protected _grammar: GrammarInterface,
@@ -250,7 +260,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
 
   visitFunctionCallExpression(node: FunctionCallExpression): string {
     let funcName = node.name.accept(this);
-    funcName = this._grammar.compilePredicateFuncName(funcName);
+    funcName     = this._grammar.compilePredicateFuncName(funcName);
 
     return `${funcName}(${
       node.parameters.map(it => it.accept(this)).join(', ')
@@ -457,7 +467,12 @@ export class QueryBuilderVisitor implements SqlVisitor {
           } else if (identifier instanceof FromTable) {
             if (columnName) {
               const withAlias = columnName.split(/\s+as\s+/i);
-              if(withAlias.length > 1) {
+              // short column name for update
+              if (this._isVisitUpdateSpecification) {
+                if (withAlias.length > 1) {
+                  columns.push(withAlias.pop());
+                }
+              } else {
                 columns.push(withAlias.pop());
               }
             }

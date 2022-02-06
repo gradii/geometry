@@ -6,6 +6,7 @@ import { BelongsToColumn } from '../../src/annotation/relation-column/belongs-to
 import { HasManyThroughColumn } from '../../src/annotation/relation-column/has-many-through.relation-column';
 import { HasManyColumn } from '../../src/annotation/relation-column/has-many.relation-column';
 import { DatabaseConfig } from '../../src/database-config';
+import { FedacoRelationListType, FedacoRelationType } from '../../src/fedaco/fedaco-types';
 import { mixinSoftDeletes } from '../../src/fedaco/mixins/soft-deletes';
 import { Model } from '../../src/fedaco/model';
 import { forwardRef } from '../../src/query-builder/forward-ref';
@@ -476,7 +477,7 @@ export class HasManyThroughTestUser extends Model {
     related   : forwardRef(() => HasManyThroughTestPost),
     foreignKey: 'user_id'
   })
-  public posts;
+  public posts: FedacoRelationListType<HasManyThroughTestPost>;
 }
 
 /*Eloquent Models...*/
@@ -485,13 +486,13 @@ export class HasManyThroughTestPost extends Model {
   _guarded: any = [];
 
   @Column()
-  title;
+  title: string;
 
   @BelongsToColumn({
     related   : HasManyThroughTestUser,
     foreignKey: 'user_id'
   })
-  public owner;
+  public owner: FedacoRelationType<HasManyThroughTestUser>;
 }
 
 export class HasManyThroughTestCountry extends Model {
@@ -504,7 +505,7 @@ export class HasManyThroughTestCountry extends Model {
     firstKey : 'country_id',
     secondKey: 'user_id'
   })
-  public posts;
+  public posts: FedacoRelationListType<HasManyThroughTestPost>;
 
   @HasManyColumn({
     related   : HasManyThroughTestUser,

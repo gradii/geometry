@@ -480,7 +480,7 @@ export class QueryBuilder extends Builder {
 
 
   /*Update a record in the database.*/
-  public async update(values: any = {}) {
+  public async update(values: any = {}): Promise<any> {
     this.applyBeforeQueryCallbacks();
 
     const sql = this._grammar.compileUpdate(this, values);

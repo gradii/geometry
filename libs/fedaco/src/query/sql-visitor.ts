@@ -8,6 +8,7 @@ import { SqlNode } from './sql-node';
 
 
 export interface SqlVisitor {
+  _isVisitUpdateSpecification: boolean;
 
   // visit(node: SqlNode) {
   // }
