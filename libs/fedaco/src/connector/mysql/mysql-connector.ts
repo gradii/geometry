@@ -12,7 +12,7 @@ import { MysqlWrappedConnection } from './mysql-wrapped-connection';
 
 export class MysqlConnector extends Connector implements ConnectorInterface {
   /*Establish a database connection.*/
-  public async connect(config: any) {
+  public async connect(config: any): Promise<MysqlWrappedConnection> {
     const dsn        = this.getDsn(config);
     const options    = this.getOptions(config);
     const connection = await this.createConnection(dsn, config, options);

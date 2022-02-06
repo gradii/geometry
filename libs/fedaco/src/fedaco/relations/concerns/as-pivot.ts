@@ -76,7 +76,7 @@ export interface AsPivot extends Model {
   newQueryForRestoration(ids: number[] | string[] | string): FedacoBuilder<this>;
 
   /*Get a new query to restore multiple models by their queueable IDs.*/
-  _newQueryForCollectionRestoration(ids: number[] | string[]): FedacoBuilder;
+  _newQueryForCollectionRestoration(ids: number[] | string[]): FedacoBuilder<this>;
 
   /*Unset all the loaded relations for the instance.*/
   unsetRelations(): this;

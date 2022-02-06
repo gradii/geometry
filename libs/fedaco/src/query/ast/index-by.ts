@@ -5,6 +5,7 @@
  */
 
 import { SqlNode } from '../sql-node';
+import { SqlVisitor } from '../sql-visitor';
 
 /**
  * IndexBy ::= "INDEX" "BY" SimpleStateFieldPathExpression
@@ -12,12 +13,12 @@ import { SqlNode } from '../sql-node';
 
 export class IndexBy extends SqlNode {
   public constructor(
-    public simpleStateFieldPathExpression/*: PathExpression*/ = null
+    public simpleStateFieldPathExpression: SqlNode/*: PathExpression*/ = null
   ) {
     super();
   }
 
-  public accept(sqlVisitor) {
+  public accept(sqlVisitor: SqlVisitor) {
     return sqlVisitor.visitIndexBy(this);
   }
 }

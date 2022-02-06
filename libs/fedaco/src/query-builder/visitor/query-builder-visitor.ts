@@ -48,6 +48,7 @@ import { GroupByClause } from '../../query/ast/group-by-clause';
 import { HavingClause } from '../../query/ast/having-clause';
 import { Identifier } from '../../query/ast/identifier';
 import { IdentifyVariableDeclaration } from '../../query/ast/identify-variable-declaration';
+import type { IndexBy } from '../../query/ast/index-by';
 import { InsertSpecification } from '../../query/ast/insert-specification';
 import { JoinClause } from '../../query/ast/join-clause';
 import { JoinExpression } from '../../query/ast/join-expression';
@@ -701,6 +702,10 @@ export class QueryBuilderVisitor implements SqlVisitor {
 
   visitNotExpression(node: NotExpression): string {
     return `not ${node.expression.accept(this)}`;
+  }
+
+  visitIndexBy(node: IndexBy): string {
+    throw new Error('not implement');
   }
 }
 

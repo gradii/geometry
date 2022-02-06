@@ -23,12 +23,13 @@ export class MysqlQueryBuilderVisitor extends QueryBuilderVisitor {
     super(_grammar, _queryBuilder);
   }
 
-  visitDeleteSpecification(node: DeleteSpecification) {
+  visitDeleteSpecification(node: DeleteSpecification): string {
     let sql;
 
     if (this._queryBuilder._joins.length > 0) {
       sql = `DELETE ${node.target.accept(this).split(/\s+as\s+/i).pop()}`;
     } else {
+      // language=SQL format=false
       sql = `DELETE FROM ${node.target.accept(this)}`;
     }
 

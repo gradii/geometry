@@ -7,13 +7,14 @@
 // import { PDO } from "PDO";
 import { Connector } from './connector';
 import { ConnectorInterface } from './connector-interface';
+import { WrappedConnection } from './wrapped-connection';
 
 export class PostgresConnector extends Connector implements ConnectorInterface {
   /*The default PDO connection options.*/
   protected options: any = {};
 
   /*Establish a database connection.*/
-  public connect(config: any[]) {
+  public async connect(config: any[]): Promise<WrappedConnection> {
     // var connection = this.createConnection(this.getDsn(config), config, this.getOptions(config));
     // this.configureEncoding(connection, config);
     // this.configureTimezone(connection, config);
@@ -21,6 +22,7 @@ export class PostgresConnector extends Connector implements ConnectorInterface {
     // this.configureApplicationName(connection, config);
     // this.configureSynchronousCommit(connection, config);
     // return connection;
+    throw new Error('method not implemented.');
   }
 
   // /*Set the connection character set and collation.*/

@@ -2651,7 +2651,7 @@ export class FedacoModelStub extends Model {
   castedFloat: number;
 
   @Column()
-  list_items: any[];
+  list_items: any;
 
   @Column()
   public get listItems() {
@@ -2743,8 +2743,8 @@ export class FedacoModelStub extends Model {
 }
 
 export class FedacoModelWithDateStub extends FedacoModelStub {
-  @Column() created_at: Date;
-  @Column() updated_at: Date;
+  @Column() created_at: Date | string;
+  @Column() updated_at: Date | string;
 }
 
 //
@@ -2769,8 +2769,8 @@ export class FedacoDateModelStub extends FedacoModelStub {
     return ['created_at', 'updated_at'];
   }
 
-  @DateColumn() created_at: Date;
-  @DateColumn() updated_at: Date;
+  @DateColumn() created_at: Date | string | number;
+  @DateColumn() updated_at: Date | string | number;
 }
 
 export class FedacoModelSaveStub extends Model {

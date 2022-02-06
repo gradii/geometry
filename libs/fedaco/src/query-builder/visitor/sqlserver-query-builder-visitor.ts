@@ -35,7 +35,7 @@ export class SqlserverQueryBuilderVisitor extends QueryBuilderVisitor {
     super(_grammar, _queryBuilder);
   }
 
-  visitQuerySpecification(node: QuerySpecification) {
+  visitQuerySpecification(node: QuerySpecification): string {
     if (node.limitClause) {
       this._limitToTop = node.limitClause.value;
     }
@@ -87,7 +87,7 @@ export class SqlserverQueryBuilderVisitor extends QueryBuilderVisitor {
     return sql;
   }
 
-  visitSelectClause(node: SelectClause) {
+  visitSelectClause(node: SelectClause): string {
     let topSql = '';
     if (this._limitToTop !== undefined) {
       topSql = `top ${this._limitToTop} `;
@@ -110,7 +110,7 @@ export class SqlserverQueryBuilderVisitor extends QueryBuilderVisitor {
     return `OFFSET ${node.offset} rows`;
   }
 
-  visitDeleteSpecification(node: DeleteSpecification) {
+  visitDeleteSpecification(node: DeleteSpecification): string {
     let sql;
 
     if (this._queryBuilder._joins.length > 0) {
@@ -146,7 +146,7 @@ export class SqlserverQueryBuilderVisitor extends QueryBuilderVisitor {
     return sql;
   }
 
-  visitBinaryUnionQueryExpression(node: BinaryUnionQueryExpression) {
+  visitBinaryUnionQueryExpression(node: BinaryUnionQueryExpression): string {
     let sql = `SELECT * FROM (${node.left.accept(
       this)}) AS [temp_table] UNION${node.all ? ' ALL' : ''} SELECT * FROM (${node.right.accept(
       this)}) AS [temp_table]`;

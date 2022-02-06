@@ -3,9 +3,10 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
+import type { Model } from './model';
 
 export class FedacoEventManage {
-  _registerModelEvent(model, event: string, callback: Function | string) {
+  _registerModelEvent(model: Model, event: string, callback: Function | string) {
     // if ((/*static*/<any>this).dispatcher !== undefined) {
     //   const name = this.prototype.constructor.name;
     //   (/*static*/<any>this).dispatcher.listen(`eloquent.${event}: ${name}`, callback);

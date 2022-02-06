@@ -132,4 +132,6 @@ export interface SqlVisitor {
   visitRejectOrderElementExpression(node: SqlNode): string;
 
   visitNotExpression(node: SqlNode): string;
+
+  visitIndexBy(node: SqlNode): string;
 }

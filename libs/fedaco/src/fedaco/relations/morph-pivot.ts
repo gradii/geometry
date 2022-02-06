@@ -75,7 +75,7 @@ export class MorphPivot extends Pivot {
   }
 
   /*Get a new query to restore one or more models by their queueable IDs.*/
-  public newQueryForRestoration(ids: number[] | string[] | string) {
+  public newQueryForRestoration(ids: number[] | string[] | string): FedacoBuilder<this> {
     if (isArray(ids)) {
       return this._newQueryForCollectionRestoration(ids);
     }
@@ -91,7 +91,7 @@ export class MorphPivot extends Pivot {
   }
 
   /*Get a new query to restore multiple models by their queueable IDs.*/
-  protected newQueryForCollectionRestoration(ids: any[]) {
+  protected newQueryForCollectionRestoration(ids: any[]): FedacoBuilder<this> {
     if (!ids[0].includes(':')) {
       return super.newQueryForRestoration(ids);
     }

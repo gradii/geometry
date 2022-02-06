@@ -12,6 +12,7 @@ import { GrammarInterface } from './grammar.interface';
  *
  */
 export class QueryBuilderResolverVisitor implements SqlVisitor {
+  _isVisitUpdateSpecification: boolean;
 
   constructor(private _grammar: GrammarInterface) {
 
@@ -257,5 +258,7 @@ export class QueryBuilderResolverVisitor implements SqlVisitor {
     throw new Error('Method not implemented.');
   }
 
-
+  visitIndexBy(node: SqlNode): string {
+    throw new Error('Method not implemented.');
+  }
 }

@@ -3,8 +3,9 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
+import { WrappedConnection } from './wrapped-connection';
 
 export interface ConnectorInterface {
-    /*Establish a database connection.*/
-    connect(config: any[]);
+  /*Establish a database connection.*/
+  connect(config: any[]): Promise<WrappedConnection>;
 }

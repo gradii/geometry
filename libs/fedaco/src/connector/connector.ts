@@ -23,7 +23,7 @@ export class Connector {
   protected options: any = {};
 
   /*Create a new PDO connection.*/
-  public createConnection(dsn: string, config: any, options: any) {
+  public async createConnection(dsn: string, config: any, options: any): Promise<WrappedConnection> {
     const [username, password] = [config['username'] ?? null, config['password'] ?? null];
     try {
       return this.createPdoConnection(dsn, username, password, options);
@@ -33,11 +33,12 @@ export class Connector {
   }
 
   /*Create a new PDO connection instance.*/
-  protected createPdoConnection(dsn: string, username: string, password: string, options: any[]) {
+  protected createPdoConnection(dsn: string, username: string, password: string, options: any[]): Promise<any> {
     // if (class_exists(PDOConnection) && !this.isPersistentConnection(options)) {
     //   return new PDOConnection(dsn, username, password, options);
     // }
     // return new PDO(dsn, username, password, options);
+    throw new Error('not implemented');
   }
 
   /*Determine if the connection is persistent.*/
@@ -46,12 +47,13 @@ export class Connector {
   }
 
   /*Handle an exception that occurred during connect execution.*/
-  protected tryAgainIfCausedByLostConnection(e: any, dsn: string, username: string,
-                                             password: string, options: any[]) {
+  protected async tryAgainIfCausedByLostConnection(e: any, dsn: string, username: string,
+                                             password: string, options: any[]): Promise<any> {
     // if (this.causedByLostConnection(e)) {
     //   return this.createPdoConnection(dsn, username, password, options);
     // }
     // throw e;
+    throw new Error('not implemented');
   }
 
   /*Get the PDO options based on the configuration.*/

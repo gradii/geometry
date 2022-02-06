@@ -8,13 +8,14 @@
 // import { PDO } from "PDO";
 import { Connector } from './connector';
 import { ConnectorInterface } from './connector-interface';
+import { WrappedConnection } from './wrapped-connection';
 
 export class SqlServerConnector extends Connector implements ConnectorInterface {
   /*The PDO connection options.*/
   protected options: any = {};
 
   /*Establish a database connection.*/
-  public connect(config: any[]) {
+  public async connect(config: any[]): Promise<WrappedConnection> {
     const options = this.getOptions(config);
     return this.createConnection(this.getDsn(config), config, options);
   }
