@@ -96,7 +96,6 @@ export declare namespace Model {
    */
   export function unguarded<R extends Promise<any> | any>(callback: () => R): R;
 
-
   export const snakeAttributes: boolean;
 
   export function addGlobalScope(scope: string, implementation: Scope | Function): void;

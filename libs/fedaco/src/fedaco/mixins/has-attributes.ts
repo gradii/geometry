@@ -1150,17 +1150,17 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Merge the cast class attributes back into the model.*/
     protected mergeAttributesFromClassCasts(): void {
-      for (const [key, value] of Object.entries(this._classCastCache)) {
-        // let caster = this.resolveCasterClass(key);
-        this._attributes = {
-          ...this._attributes,
-          // ...(
-          // caster instanceof CastsInboundAttributes ? {} :
-          // this.normalizeCastClassResponse(key, caster.set(this, key, value, this._attributes)
-          // )
-          // )
-        };
-      }
+      // for (const [key, value] of Object.entries(this._classCastCache)) {
+      //   // let caster = this.resolveCasterClass(key);
+      //   this._attributes = {
+      //     ...this._attributes,
+      //     // ...(
+      //     // caster instanceof CastsInboundAttributes ? {} :
+      //     // this.normalizeCastClassResponse(key, caster.set(this, key, value, this._attributes)
+      //     // )
+      //     // )
+      //   };
+      // }
     }
 
     /*Normalize the response from a custom class caster.*/

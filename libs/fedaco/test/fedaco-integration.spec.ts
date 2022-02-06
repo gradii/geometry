@@ -1,5 +1,5 @@
 import { isArray, isNumber } from '@gradii/check-type';
-import { format, formatISO, formatISO9075, startOfSecond } from 'date-fns';
+import { format, formatISO, isSameDay, startOfSecond, subDays } from 'date-fns';
 import { head } from 'ramda';
 import { Subject } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
@@ -1799,65 +1799,98 @@ describe('test database fedaco integration', () => {
     });
     expect(model.fromDateTime(model.getAttribute('created_at'))).toBe('2017-11-14 08:23:19.000');
   });
-  // it('timestamps using old sql server date format fallback to default parsing', () => {
-  //   let model = new FedacoTestUser();
-  //   model.setDateFormat('Y-m-d H:i:s.000');
-  //   model.setRawAttributes({
-  //     'updated_at': '2017-11-14 08:23:19.734'
-  //   });
-  //   let date = model.getAttribute('updated_at');
-  //   expect('the date should contains the precision').toBe('2017-11-14 08:23:19.734',
-  //     date.format('Y-m-d H:i:s.v'));
-  //   expect('the format should trims it').toBe('2017-11-14 08:23:19.000', model.fromDateTime(date));
-  //   expect(Date.hasFormat('2017-11-14 08:23:19.000', model.getDateFormat())).toBeTruthy();
-  //   expect(Date.hasFormat('2017-11-14 08:23:19.734', model.getDateFormat())).toFalse();
-  // });
-//   it('updating child model touches parent', () => {
-//     let before = Carbon.now();
-//     let user   = FedacoTouchingUser.initAttributes({
-//       'id'   : 1,
-//       'email': 'linbolen@gradii.com'
-//     });
-//     let post   = FedacoTouchingPost.initAttributes({
-//       'name'   : 'Parent Post',
-//       'user_id': 1
-//     });
-//     expect(before.isSameDay(user.updated_at)).toBeTruthy();
-//     expect(before.isSameDay(post.updated_at)).toBeTruthy();
-//     Carbon.setTestNow(future = before.copy().addDays(3));
-//     post.update({
-//       'name': 'Updated'
-//     });
-//     expect('It is not touching model own timestamps.').toBeTruthy(
-//       future.isSameDay(post.fresh().updated_at));
-//     expect('It is not touching models related timestamps.').toBeTruthy(
-//       future.isSameDay(user.fresh().updated_at));
-//     Carbon.setTestNow(before);
-//   });
-//   it('multi level touching works', () => {
-//     let before = Carbon.now();
-//     let user   = FedacoTouchingUser.initAttributes({
-//       'id'   : 1,
-//       'email': 'linbolen@gradii.com'
-//     });
-//     let post   = FedacoTouchingPost.initAttributes({
-//       'id'     : 1,
-//       'name'   : 'Parent Post',
-//       'user_id': 1
-//     });
-//     expect(before.isSameDay(user.updated_at)).toBeTruthy();
-//     expect(before.isSameDay(post.updated_at)).toBeTruthy();
-//     Carbon.setTestNow(future = before.copy().addDays(3));
-//     FedacoTouchingComment.initAttributes({
-//       'content': 'Comment content',
-//       'post_id': 1
-//     });
-//     expect('It is not touching models related timestamps.').toBeTruthy(
-//       future.isSameDay(post.fresh().updated_at));
-//     expect('It is not touching models related timestamps.').toBeTruthy(
-//       future.isSameDay(user.fresh().updated_at));
-//     Carbon.setTestNow(before);
-//   });
+
+  it('timestamps using old sql server date format fallback to default parsing', () => {
+    const model = new FedacoTestUser();
+    model.setDateFormat('yyyy-MM-dd HH:mm:ss.SSS');
+    model.setRawAttributes({
+      'updated_at': '2017-11-14 08:23:19.734'
+    });
+    const date = model.getAttribute('updated_at');
+
+    // the date should not contains the precision
+    expect(format(date, 'yyyy-MM-dd HH:mm:ss.SSS')).toBe('2017-11-14 08:23:19.734');
+    // the format should trims it
+    expect(model.fromDateTime(date)).toBe('2017-11-14 08:23:19.734');
+  });
+
+  it('updating child model touches parent', async () => {
+    const before = new Date();
+    const user   = await FedacoTouchingUser.createQuery().create({
+      'id'   : 1,
+      'email': 'linbolen@gradii.com'
+    });
+    const post   = await FedacoTouchingPost.createQuery().create({
+      'name'   : 'Parent Post',
+      'user_id': 1
+    });
+    expect(isSameDay(before, user.updated_at)).toBeTruthy();
+    expect(isSameDay(before, post.updated_at)).toBeTruthy();
+
+    await post.update({
+      'name': 'Updated'
+    });
+
+    const old = subDays(new Date(), 3);
+
+    await FedacoTouchingUser.createQuery().update({
+      updated_at: format(old, 'yyyy-MM-dd HH:mm:ss')
+    });
+
+    await FedacoTouchingPost.createQuery().update({
+      updated_at: format(old, 'yyyy-MM-dd HH:mm:ss')
+    });
+
+    expect(
+      isSameDay(old, (await FedacoTouchingUser.createQuery().first()).updated_at)).toBeTruthy();
+    expect(
+      isSameDay(old, (await FedacoTouchingPost.createQuery().first()).updated_at)).toBeTruthy();
+
+    // It is not touching model own timestamps.
+    expect(isSameDay(old, (await post.fresh()).updated_at)).toBeTruthy();
+
+    // It is not touching models related timestamps.
+    expect(isSameDay(old, (await user.fresh()).updated_at)).toBeTruthy();
+    // Carbon.setTestNow(before);
+  });
+
+  it('multi level touching works', async () => {
+    const before = new Date();
+    const user   = await FedacoTouchingUser.createQuery().create({
+      'id'   : 1,
+      'email': 'linbolen@gradii.com'
+    });
+    const post   = await FedacoTouchingPost.createQuery().create({
+      'id'     : 1,
+      'name'   : 'Parent Post',
+      'user_id': 1
+    });
+    expect(isSameDay(before, user.updated_at)).toBeTruthy();
+    expect(isSameDay(before, post.updated_at)).toBeTruthy();
+
+    const old = subDays(new Date(), 3);
+
+    await FedacoTouchingUser.createQuery().update({
+      updated_at: format(old, 'yyyy-MM-dd HH:mm:ss')
+    });
+
+    await FedacoTouchingPost.createQuery().update({
+      updated_at: format(old, 'yyyy-MM-dd HH:mm:ss')
+    });
+
+    // Carbon.setTestNow(future = before.copy().addDays(3));
+    await FedacoTouchingComment.createQuery().create({
+      'content': 'Comment content',
+      'post_id': 1
+    });
+
+    // It will touch models related timestamps.
+    expect(isSameDay(before, (await post.fresh()).updated_at)).toBeTruthy();
+    // It will touch models related timestamps.
+    expect(isSameDay(before, (await user.fresh()).updated_at)).toBeTruthy();
+    // Carbon.setTestNow(before);
+  });
+
 //   it('deleting child model touches parent timestamps', () => {
 //     let before = Carbon.now();
 //     let user   = FedacoTouchingUser.initAttributes({
@@ -2468,23 +2501,50 @@ export class FedacoTestFriendPivot extends Pivot {
   public level: FedacoRelationType<FedacoTestItem>;
 }
 
-// export class FedacoTouchingUser extends Fedaco {
-//   protected table: any = "users";
-//   protected guarded: any = [];
-// }
-// export class FedacoTouchingPost extends Fedaco {
-//   protected table: any = "posts";
-//   protected guarded: any = [];
-//   protected touches: any = ["user"];
-//   public user() {
-//     return this.belongsTo(FedacoTouchingUser, "user_id");
-//   }
-// }
-// export class FedacoTouchingComment extends Fedaco {
-//   protected table: any = "comments";
-//   protected guarded: any = [];
-//   protected touches: any = ["post"];
-//   public post() {
-//     return this.belongsTo(FedacoTouchingPost, "post_id");
-//   }
-// }
+@Table({
+  tableName: 'users'
+})
+export class FedacoTouchingUser extends Model {
+  _guarded: any = [];
+
+  @CreatedAtColumn()
+  created_at: Date;
+
+  @UpdatedAtColumn()
+  updated_at: Date;
+}
+
+@Table({
+  tableName: 'posts'
+})
+export class FedacoTouchingPost extends Model {
+  _guarded: any = [];
+  _touches: any = ['user'];
+
+  @BelongsToColumn({
+    related   : FedacoTouchingUser,
+    foreignKey: 'user_id'
+  })
+  public user: FedacoRelationType<any>;
+
+  @CreatedAtColumn()
+  created_at: Date;
+
+  @UpdatedAtColumn()
+  updated_at: Date;
+}
+
+
+@Table({
+  tableName: 'comments'
+})
+export class FedacoTouchingComment extends Model {
+  _guarded: any = [];
+  _touches: any = ['post'];
+
+  @BelongsToColumn({
+    related   : FedacoTouchingPost,
+    foreignKey: 'post_id'
+  })
+  public post: FedacoRelationType<FedacoTouchingPost>;
+}

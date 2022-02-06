@@ -7,7 +7,7 @@
 import { reflector } from '@gradii/annotation';
 import { isArray, isString } from '@gradii/check-type';
 import { findLast, tap } from 'ramda';
-import { FedacoRelationColumn, RelationColumnAnnotation } from '../../annotation/relation-column';
+import { RelationColumnAnnotation } from '../../annotation/relation-column';
 import { Table, TableAnnotation } from '../../annotation/table/table';
 import { Constructor } from '../../helper/constructor';
 import { snakeCase } from '../../helper/str';
@@ -29,6 +29,8 @@ import { Relation } from '../relations/relation';
 
 export interface HasRelationships {
   _relations: any;
+
+  _touches: string[];
 
   /*Get the joining table name for a many-to-many relation.*/
   joiningTable(related: typeof Model, instance?: Model | null): string;
@@ -127,7 +129,8 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
     public async touchOwners(this: Model & _Self): Promise<void> {
       for (const relation of this.getTouchedRelations()) {
         await this.newRelation(relation).touch();
-        if (this[relation] instanceof this.constructor) {
+        await this[relation];
+        if (this[relation] instanceof _Self) {
           this[relation].fireModelEvent('saved', false);
           await this[relation].touchOwners();
         } else if (isArray(this[relation])) {
