@@ -1,4 +1,5 @@
 import { isFunction } from '@gradii/check-type';
+import { format } from 'date-fns';
 import { Table } from '../src/annotation/table/table';
 import { ConnectionFactory } from '../src/connector/connection-factory';
 import { DatabaseManager } from '../src/database-manager';
@@ -1373,17 +1374,19 @@ describe('fedaco builder', () => {
     mockConnectionForModel(FedacoBuilderTestStub, '');
     builder.setModel(model);
 
-    spy1   = jest.spyOn(builder.getConnection(), 'update').mockReturnValue(1);
+    spy1      = jest.spyOn(builder.getConnection(), 'update').mockReturnValue(1);
     //     builder.getConnection().shouldReceive("update").once()._with("update \"table\" set \"foo\" = ?, \"table\".\"updated_at\" = ?", ["bar", now]).andReturn(1)
-    result = await builder.update({
+    result    = await builder.update({
       'foo': 'bar'
     });
+
+    const now = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
 
     expect(result).toBe(1);
 
     expect(spy1).toBeCalledWith(
-      'UPDATE `test_table` SET `foo` = ?, `updated_at` = ?',
-      ['bar', expect.anything()]);
+      'UPDATE `test_tables` SET `foo` = ?, `updated_at` = ?',
+      ['bar', now]);
   });
 
   it('update with timestamp value', async () => {
@@ -1400,10 +1403,12 @@ describe('fedaco builder', () => {
       'updated_at': null
     });
 
+    const now = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+
     expect(result).toBe(1);
 
     expect(spy1).toBeCalledWith(
-      'UPDATE `test_table` SET `foo` = ?, `updated_at` = ?',
+      'UPDATE `test_tables` SET `foo` = ?, `updated_at` = ?',
       ['bar', null]);
   });
 
@@ -1422,7 +1427,7 @@ describe('fedaco builder', () => {
 
     expect(result).toBe(1);
 
-    expect(spy1).toBeCalledWith('UPDATE `test_table` SET `foo` = ?', ['bar']);
+    expect(spy1).toBeCalledWith('UPDATE `test_tables` SET `foo` = ?', ['bar']);
   });
 
   it('update with alias', async () => {
@@ -1469,7 +1474,7 @@ class FedacoBuilderTestStub extends Model {
 }
 
 @Table({
-  tableName: 'fedaco_builder_test_stub_without_timestamp'
+  tableName: 'test_table'
 })
 class FedacoBuilderTestStubWithoutTimestamp extends Model {
   static UPDATED_AT: string = null;
