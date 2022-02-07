@@ -117,7 +117,7 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
       }
       const instance = new this();
       for (const event of instance.getObservableEvents()) {
-        (/*static*/ this).dispatcher.forget(`eloquent.${event}: ${this.constructor.name}`);
+        (/*static*/ this).dispatcher.forget(`fedaco.${event}: ${this.constructor.name}`);
       }
       for (const event of Object.values(instance._dispatchesEvents)) {
         (/*static*/ this).dispatcher.forget(event as string);
@@ -158,7 +158,7 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
     static _registerModelEvent(event: string, callback: Function | string) {
       if ((/*static*/<any>this).dispatcher !== undefined) {
         const name = this.prototype.constructor.name;
-        (/*static*/<any>this).dispatcher.listen(`eloquent.${event}: ${name}`, callback);
+        (/*static*/<any>this).dispatcher.listen(`fedaco.${event}: ${name}`, callback);
       }
     }
 
@@ -220,7 +220,7 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
       return !isAnyEmpty(result) ?
         result :
         (/*static*/<any>this.constructor).dispatcher[method](
-          `eloquent.${event}: ${this.constructor.name}`,
+          `fedaco.${event}: ${this.constructor.name}`,
           this);
     }
 

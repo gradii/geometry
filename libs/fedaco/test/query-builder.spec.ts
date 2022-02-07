@@ -10,7 +10,7 @@ import { Processor } from '../src/query-builder/processor';
 import { MysqlProcessor } from '../src/query-builder/processor/mysql-processor';
 import { PostgresProcessor } from '../src/query-builder/processor/postgres-processor';
 import { SqlServerProcessor } from '../src/query-builder/processor/sql-server-processor';
-import { QueryBuilder } from '../src/query-builder/query-builder';
+import { JoinClauseBuilder, QueryBuilder } from '../src/query-builder/query-builder';
 import { SchemaBuilder } from '../src/schema/schema-builder';
 
 
@@ -343,7 +343,7 @@ describe('database query builder test', () => {
   //region test build query
 
   it('test when callback', () => {
-    const callback = (query: QueryBuilder, condition) => {
+    const callback = (query: QueryBuilder, condition: boolean) => {
       expect(condition).toBeTruthy();
       query.where('id', '=', 1);
     };
@@ -365,7 +365,7 @@ describe('database query builder test', () => {
   });
 
   it('test when callback with return', () => {
-    const callback = (query, condition) => {
+    const callback = (query: QueryBuilder, condition: boolean) => {
       expect(condition).toBeTruthy();
       return query.where('id', '=', 1);
     };
@@ -388,11 +388,11 @@ describe('database query builder test', () => {
   });
 
   it('test when callback with default', () => {
-    const callback = (query, condition) => {
+    const callback = (query: QueryBuilder, condition: boolean) => {
       expect(condition).toBe('truthy');
       query.where('id', '=', 1);
     };
-    const _default = (query, condition) => {
+    const _default = (query: QueryBuilder, condition: boolean) => {
       expect(condition).toBe(0);
       query.where('id', '=', 2);
     };
@@ -425,7 +425,7 @@ describe('database query builder test', () => {
   });
 
   it('test unless callback', () => {
-    const callback = (query, condition) => {
+    const callback = (query: QueryBuilder, condition: boolean) => {
       expect(condition).toBeFalsy();
       query.where('id', '=', 1);
     };
@@ -447,7 +447,7 @@ describe('database query builder test', () => {
   });
 
   it('test unless callback with return', () => {
-    const callback = (query, condition) => {
+    const callback = (query: QueryBuilder, condition: boolean) => {
       expect(condition).toBeFalsy();
       return query.where('id', '=', 1);
     };
@@ -470,11 +470,11 @@ describe('database query builder test', () => {
   });
 
   it('test unless callback with default', () => {
-    const callback = (query, condition) => {
+    const callback = (query: QueryBuilder, condition: boolean) => {
       expect(condition).toBe(0);
       query.where('id', '=', 1);
     };
-    const _default = (query, condition) => {
+    const _default = (query: QueryBuilder, condition: boolean) => {
       expect(condition).toBe('truthy');
       query.where('id', '=', 2);
     };
@@ -505,7 +505,7 @@ describe('database query builder test', () => {
   });
 
   it('test tap callback', () => {
-    const callback = query => {
+    const callback = (query: QueryBuilder) => {
       return query.where('id', '=', 1);
     };
 
@@ -1186,9 +1186,10 @@ describe('database query builder test', () => {
   it('test union with join', () => {
     builder = getBuilder();
     builder.select('*').from('users');
-    builder.union(getBuilder().select('*').from('dogs').join('breeds', join => {
-      join.on('dogs.breed_id', '=', 'breeds.id').where('breeds.is_native', '=', 1);
-    }));
+    builder.union(getBuilder().select('*').from('dogs')
+      .join('breeds', (join: JoinClauseBuilder) => {
+        join.on('dogs.breed_id', '=', 'breeds.id').where('breeds.is_native', '=', 1);
+      }));
     expect(builder.toSql())
       .toBe(
         '(SELECT * FROM `users`) UNION (SELECT * FROM `dogs` INNER JOIN `breeds` ON `dogs`.`breed_id` = `breeds`.`id` AND `breeds`.`is_native` = ?)');
@@ -1434,7 +1435,7 @@ describe('database query builder test', () => {
 
   it('test order by sub queries', () => {
     const expected = 'SELECT * FROM `users` ORDER BY (SELECT `created_at` FROM `logins` WHERE `user_id` = `users`.`id` LIMIT 1)';
-    const subQuery = query => {
+    const subQuery = (query: QueryBuilder) => {
       return query.select('created_at').from('logins').whereColumn('user_id', 'users.id').limit(1);
     };
     builder        = getBuilder().select('*').from('users').orderBy(subQuery);
@@ -1629,7 +1630,7 @@ describe('database query builder test', () => {
   it('test get count for pagination with bindings', async () => {
     let spySelector, spyProcessSelector;
     builder = getBuilder();
-    builder.from('users').selectSub(q => {
+    builder.from('users').selectSub((q: QueryBuilder) => {
       q.select('body').from('posts').where('id', 4);
     }, 'post');
 
@@ -1737,7 +1738,7 @@ describe('database query builder test', () => {
 
   it('test nested where bindings', () => {
     builder = getBuilder();
-    builder.where('email', '=', 'foo').where(q => {
+    builder.where('email', '=', 'foo').where((q: QueryBuilder) => {
       q.selectRaw('?', ['ignore']).where('name', '=', 'bar');
     });
     builder.toSql();
@@ -1746,9 +1747,11 @@ describe('database query builder test', () => {
 
   it('test full sub selects', () => {
     builder = getBuilder();
-    builder.select('*').from('users').where('email', '=', 'foo').orWhere('id', '=', q => {
-      q.select(raw('max(id)')).from('users').where('email', '=', 'bar');
-    });
+    builder.select('*').from('users')
+      .where('email', '=', 'foo')
+      .orWhere('id', '=', q => {
+        q.select(raw('max(id)')).from('users').where('email', '=', 'bar');
+      });
     expect(builder.toSql())
       .toBe(
         'SELECT * FROM `users` WHERE `email` = ? OR `id` = (SELECT max(id) FROM `users` WHERE `email` = ?)');
@@ -1757,28 +1760,31 @@ describe('database query builder test', () => {
 
   it('test where exists', () => {
     builder = getBuilder();
-    builder.select('*').from('orders').whereExists(q => {
-      q.select('*').from('products').where('products.id', '=', raw('`orders`.`id`'));
-    });
+    builder.select('*')
+      .from('orders')
+      .whereExists((q: QueryBuilder) => {
+        q.select('*').from('products')
+          .where('products.id', '=', raw('`orders`.`id`'));
+      });
     expect(builder.toSql())
       .toBe(
         'SELECT * FROM `orders` WHERE EXISTS (SELECT * FROM `products` WHERE `products`.`id` = `orders`.`id`)');
     builder = getBuilder();
-    builder.select('*').from('orders').whereNotExists(q => {
+    builder.select('*').from('orders').whereNotExists((q: QueryBuilder) => {
       q.select('*').from('products').where('products.id', '=', raw('`orders`.`id`'));
     });
     expect(builder.toSql())
       .toBe(
         'SELECT * FROM `orders` WHERE NOT EXISTS (SELECT * FROM `products` WHERE `products`.`id` = `orders`.`id`)');
     builder = getBuilder();
-    builder.select('*').from('orders').where('id', '=', 1).orWhereExists(q => {
+    builder.select('*').from('orders').where('id', '=', 1).orWhereExists((q: QueryBuilder) => {
       q.select('*').from('products').where('products.id', '=', raw('`orders`.`id`'));
     });
     expect(builder.toSql())
       .toBe(
         'SELECT * FROM `orders` WHERE `id` = ? OR EXISTS (SELECT * FROM `products` WHERE `products`.`id` = `orders`.`id`)');
     builder = getBuilder();
-    builder.select('*').from('orders').where('id', '=', 1).orWhereNotExists(q => {
+    builder.select('*').from('orders').where('id', '=', 1).orWhereNotExists((q: QueryBuilder) => {
       q.select('*').from('products').where('products.id', '=', raw('`orders`.`id`'));
     });
     expect(builder.toSql())
@@ -1815,8 +1821,8 @@ describe('database query builder test', () => {
     builder.select('*').from('sizes').crossJoin('colors');
     expect(builder.toSql()).toBe('SELECT * FROM `sizes` CROSS JOIN `colors`');
     builder = getBuilder();
-    builder.select('*').from('tableB').join('tableA', 'tableA.column1', '=', 'tableB.column2',
-      'cross');
+    builder.select('*').from('tableB')
+      .join('tableA', 'tableA.column1', '=', 'tableB.column2', 'cross');
     expect(builder.toSql())
       .toBe(
         'SELECT * FROM `tableB` CROSS JOIN `tableA` ON `tableA`.`column1` = `tableB`.`column2`');
@@ -1830,7 +1836,8 @@ describe('database query builder test', () => {
   it('test complex join', () => {
     builder = getBuilder();
     builder.select('*').from('users').join('contacts', j => {
-      j.on('users.id', '=', 'contacts.id').orOn('users.name', '=', 'contacts.name');
+      j.on('users.id', '=', 'contacts.id')
+        .orOn('users.name', '=', 'contacts.name');
     });
     expect(builder.toSql())
       .toBe(
@@ -2067,17 +2074,19 @@ describe('database query builder test', () => {
 
   it('test joins with nested join with advanced subquery condition', () => {
     builder = getBuilder();
-    builder.select('users.id', 'contacts.id', 'contact_types.id').from('users').leftJoin('contacts',
-      j => {
-        j.on('users.id', 'contacts.id')
-          .join('contact_types', 'contacts.contact_type_id', '=', 'contact_types.id')
-          .whereExists(q => {
-            q.select('*').from('countrys').whereColumn('contacts.country', '=',
-              'countrys.country').join('planets', q => {
-              q.on('countrys.planet_id', '=', 'planet.id').where('planet.is_settled', '=', 1);
-            }).where('planet.population', '>=', 10000);
-          });
-      });
+    builder.select('users.id', 'contacts.id', 'contact_types.id').from('users')
+      .leftJoin(
+        'contacts',
+        j => {
+          j.on('users.id', 'contacts.id')
+            .join('contact_types', 'contacts.contact_type_id', '=', 'contact_types.id')
+            .whereExists(q => {
+              q.select('*').from('countrys').whereColumn('contacts.country', '=',
+                'countrys.country').join('planets', q => {
+                q.on('countrys.planet_id', '=', 'planet.id').where('planet.is_settled', '=', 1);
+              }).where('planet.population', '>=', 10000);
+            });
+        });
     expect(builder.toSql())
       .toBe(
         'SELECT `users`.`id`, `contacts`.`id`, `contact_types`.`id` FROM `users` LEFT JOIN (`contacts` INNER JOIN `contact_types` ON `contacts`.`contact_type_id` = `contact_types`.`id`) ON `users`.`id` = `contacts`.`id` AND EXISTS (SELECT * FROM `countrys` INNER JOIN `planets` ON `countrys`.`planet_id` = `planet`.`id` AND `planet`.`is_settled` = ? WHERE `contacts`.`country` = `countrys`.`country` AND `planet`.`population` >= ?)');
@@ -2737,7 +2746,8 @@ describe('database query builder test', () => {
     result = await builder.from('users').insertGetId({
       'email': 'foo'
     }, 'id');
-    expect(spyInsert).toBeCalledWith(builder, 'INSERT INTO `users` (`email`) VALUES (?) returning `id`', ['foo'], 'id');
+    expect(spyInsert).toBeCalledWith(builder,
+      'INSERT INTO `users` (`email`) VALUES (?) returning `id`', ['foo'], 'id');
     expect(result).toBe(1);
   });
 
@@ -2751,7 +2761,8 @@ describe('database query builder test', () => {
       'email': 'foo',
       'bar'  : raw('bar')
     }, 'id');
-    expect(spyInsert).toBeCalledWith(builder, 'INSERT INTO `users` (`email`, `bar`) VALUES (?, bar) returning `id`',
+    expect(spyInsert).toBeCalledWith(builder,
+      'INSERT INTO `users` (`email`, `bar`) VALUES (?, bar) returning `id`',
       ['foo'], 'id');
     expect(result).toBe(1);
   });
@@ -2762,13 +2773,15 @@ describe('database query builder test', () => {
     builder   = getMySqlBuilder();
     spyInsert = jest.spyOn(builder._processor, 'processInsertGetId');
     await builder.from('users').insertGetId([]);
-    expect(spyInsert).toBeCalledWith(builder, 'INSERT INTO `users` () VALUES () returning `id`', [], 'id');
+    expect(spyInsert).toBeCalledWith(builder, 'INSERT INTO `users` () VALUES () returning `id`', [],
+      'id');
 
 
     builder   = getPostgresBuilder();
     spyInsert = jest.spyOn(builder._processor, 'processInsertGetId');
     await builder.from('users').insertGetId([]);
-    expect(spyInsert).toBeCalledWith(builder, 'INSERT INTO "users" DEFAULT VALUES returning "id"', [], 'id');
+    expect(spyInsert).toBeCalledWith(builder, 'INSERT INTO "users" DEFAULT VALUES returning "id"',
+      [], 'id');
 
 
     builder   = getSQLiteBuilder();
@@ -3441,7 +3454,8 @@ describe('database query builder test', () => {
     result         = await builder.from('users').insertGetId({
       'email': 'foo'
     }, 'id');
-    expect(spyInsertGetId).toBeCalledWith(builder, 'INSERT INTO "users" ("email") VALUES (?) returning "id"',
+    expect(spyInsertGetId).toBeCalledWith(builder,
+      'INSERT INTO "users" ("email") VALUES (?) returning "id"',
       ['foo'], 'id');
     expect(result).toBe(1);
   });

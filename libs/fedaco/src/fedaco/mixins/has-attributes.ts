@@ -39,7 +39,7 @@ import { Relation } from '../relations/relation';
 
 const EPSILON = 0.000001;
 
-/*The built-in, primitive cast types supported by Eloquent.*/
+/*The built-in, primitive cast types supported by Fedaco.*/
 const PrimitiveCastTypes: string[] = [
   'array', 'bool', 'boolean', 'collection', 'custom_datetime', 'date', 'datetime', 'decimal',
   'double', 'encrypted', 'encrypted:array', 'encrypted:collection', 'encrypted:json',

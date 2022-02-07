@@ -5,7 +5,9 @@ import { Column } from '../src/annotation/column/column';
 import { CreatedAtColumn } from '../src/annotation/column/created-at.column';
 import { PrimaryColumn } from '../src/annotation/column/primary.column';
 import { UpdatedAtColumn } from '../src/annotation/column/updated-at.column';
-import { BelongsToManyColumn } from '../src/annotation/relation-column/belongs-to-many.relation-column';
+import {
+  BelongsToManyColumn
+} from '../src/annotation/relation-column/belongs-to-many.relation-column';
 import { BelongsToColumn } from '../src/annotation/relation-column/belongs-to.relation-column';
 import { HasManyColumn } from '../src/annotation/relation-column/has-many.relation-column';
 import { HasOneColumn } from '../src/annotation/relation-column/has-one.relation-column';
@@ -13,10 +15,12 @@ import { MorphManyColumn } from '../src/annotation/relation-column/morph-many.re
 import { MorphToColumn } from '../src/annotation/relation-column/morph-to.relation-column';
 import { Table } from '../src/annotation/table/table';
 import { DatabaseConfig } from '../src/database-config';
+import { FedacoRelationListType, FedacoRelationType } from '../src/fedaco/fedaco-types';
 import { Model } from '../src/fedaco/model';
 import { BelongsToMany } from '../src/fedaco/relations/belongs-to-many';
 import { Pivot } from '../src/fedaco/relations/pivot';
 import { forwardRef } from '../src/query-builder/forward-ref';
+import { JoinClauseBuilder } from '../src/query-builder/query-builder';
 import { SchemaBuilder } from '../src/schema/schema-builder';
 
 function connection(connectionName = 'default') {
@@ -132,18 +136,18 @@ describe('test database fedaco integration', () => {
   beforeAll(async () => {
     const db = new DatabaseConfig();
     db.addConnection({
-      'driver': 'mysql',
-      'host': '127.0.0.1',
-      'port': 3306,
+      'driver'  : 'mysql',
+      'host'    : '127.0.0.1',
+      'port'    : 3306,
       'database': 'fedaco_test',
       'username': 'root',
       'password': '123456',
       'timezone': '+08:00'
     });
     db.addConnection({
-      'driver': 'mysql',
-      'host': '127.0.0.1',
-      'port': 3306,
+      'driver'  : 'mysql',
+      'host'    : '127.0.0.1',
+      'port'    : 3306,
       'database': 'fedaco_second_test',
       'username': 'root',
       'password': '123456'
@@ -184,7 +188,7 @@ describe('test database fedaco integration', () => {
 
   it('basic create model', async () => {
     const model = await new EloquentTestUser().newQuery().create({
-      'id': 1,
+      'id'   : 1,
       'email': 'linbolen@gradii.com'
     });
 
@@ -197,12 +201,12 @@ describe('test database fedaco integration', () => {
     const factory = new EloquentTestUser();
 
     await factory.newQuery().create({
-      'id': 1,
+      'id'   : 1,
       'email': 'linbolen@gradii.com'
     });
 
     await factory.newQuery().create({
-      'id': 2,
+      'id'   : 2,
       'email': 'xsilen@gradii.com'
     });
 
@@ -254,36 +258,36 @@ describe('test database fedaco integration', () => {
   morphTypeName: 'user'
 })
 export class EloquentTestUser extends Model {
-  _table: any = 'users';
-  _dates: any = ['birthday'];
+  _table: any   = 'users';
+  _dates: any   = ['birthday'];
   _guarded: any = [];
 
   @PrimaryColumn()
-  id;
+  id: string | number;
 
   @Column()
-  name;
+  name: string;
 
   @Column()
-  email;
+  email: string;
 
   @CreatedAtColumn()
-  created_at;
+  created_at: Date;
 
   @UpdatedAtColumn()
-  updated_at;
+  updated_at: Date;
 
   @BelongsToManyColumn({
-    related: EloquentTestUser,
-    table: 'friends',
+    related        : EloquentTestUser,
+    table          : 'friends',
     foreignPivotKey: 'user_id',
     relatedPivotKey: 'friend_id'
   })
-  friends;
+  friends: FedacoRelationListType<EloquentTestUser>;
 
   @BelongsToManyColumn({
-    related: EloquentTestUser,
-    table: 'friends',
+    related        : EloquentTestUser,
+    table          : 'friends',
     foreignPivotKey: 'user_id',
     relatedPivotKey: 'friend_id',
     // @ts-ignore
@@ -291,11 +295,11 @@ export class EloquentTestUser extends Model {
       q.wherePivot('user_id', 1);
     }
   })
-  friendsOne;
+  friendsOne: FedacoRelationListType<EloquentTestUser>;
 
   @BelongsToManyColumn({
-    related: EloquentTestUser,
-    table: 'friends',
+    related        : EloquentTestUser,
+    table          : 'friends',
     foreignPivotKey: 'user_id',
     relatedPivotKey: 'friend_id',
     // @ts-ignore
@@ -303,64 +307,73 @@ export class EloquentTestUser extends Model {
       q.wherePivot('user_id', 2);
     }
   })
-  friendsTwo;
+  friendsTwo: FedacoRelationListType<EloquentTestUser>;
 
   @HasManyColumn({
-    related: forwardRef(() => EloquentTestPost),
+    related   : forwardRef(() => EloquentTestPost),
     foreignKey: 'user_id',
   })
   public posts: Promise<any[]>;
 
   @HasOneColumn({
-    related: forwardRef(() => EloquentTestPost),
+    related   : forwardRef(() => EloquentTestPost),
     foreignKey: 'user_id',
   })
-  public post;
+  public post: FedacoRelationType<EloquentTestPost>;
 
   @MorphManyColumn({
-    related: forwardRef(() => EloquentTestPhoto),
+    related  : forwardRef(() => EloquentTestPhoto),
     morphName: 'imageable',
   })
-  public photos;
+  public photos: FedacoRelationListType<EloquentTestPhoto>;
 
   @HasOneColumn({
-    related: forwardRef(() => EloquentTestPost),
+    related   : forwardRef(() => EloquentTestPost),
     foreignKey: 'user_id',
-    onQuery: (q => {
-      q.join('photo', join => {
+    onQuery   : (q => {
+      q.join('photo', (join: JoinClauseBuilder) => {
         join.on('photo.imageable_id', 'post.id');
         join.where('photo.imageable_type', 'EloquentTestPost');
       });
     })
   })
-  public postWithPhotos;
+  public postWithPhotos: FedacoRelationType<EloquentTestPost>;
 }
 
 export class EloquentTestUserWithCustomFriendPivot extends EloquentTestUser {
   @BelongsToManyColumn({
-    related: EloquentTestUser,
-    table: 'friends',
+    related        : EloquentTestUser,
+    table          : 'friends',
     foreignPivotKey: 'user_id',
     relatedPivotKey: 'friend_id',
-    onQuery: (q: BelongsToMany) => {
+    onQuery        : (q: BelongsToMany) => {
       q.using(EloquentTestFriendPivot).withPivot('user_id', 'friend_id', 'friend_level_id');
     }
   })
-  friends;
+  friends: FedacoRelationListType<EloquentTestUser>;
 }
 
+@Table({
+  tableName: 'users_with_space_in_colum_name',
+})
 export class EloquentTestUserWithSpaceInColumnName extends EloquentTestUser {
   _table: any = 'users_with_space_in_colum_name';
 
 }
 
+@Table({
+  tableName: 'non_incrementing_users',
+})
 export class EloquentTestNonIncrementing extends Model {
-  _table: any = 'non_incrementing_users';
-  _guarded: any = [];
+  _table: any               = 'non_incrementing_users';
+  _guarded: any             = [];
   public _incrementing: any = false;
-  public _timestamps: any = false;
+  public _timestamps: any   = false;
 }
 
+@Table({
+  tableName: 'eloquent_test_non_incrementing_second',
+})
 export class EloquentTestNonIncrementingSecond extends EloquentTestNonIncrementing {
   _connection: any = 'second_connection';
 
@@ -399,29 +412,29 @@ export class EloquentTestUserWithGlobalScope extends EloquentTestUser {
   morphTypeName: 'post',
 })
 export class EloquentTestPost extends Model {
-  _table: any = 'posts';
+  _table: any   = 'posts';
   _guarded: any = [];
 
   @PrimaryColumn()
-  id;
+  id: string | number;
 
   @Column()
-  name;
+  name: string;
 
   // @Column()
   // user_id; no need to define this since BelongsToColumn dynamic add foreign user_id
 
   @BelongsToColumn({
-    related: EloquentTestUser,
+    related   : EloquentTestUser,
     foreignKey: 'user_id'
   })
-  public user;
+  public user: FedacoRelationType<EloquentTestUser>;
 
   @MorphManyColumn({
-    related: forwardRef(() => EloquentTestPhoto),
+    related  : forwardRef(() => EloquentTestPhoto),
     morphName: 'imageable',
   })
-  photos;
+  photos: FedacoRelationListType<EloquentTestPhoto>;
 
   // public photos() {
   //   return this.morphMany(EloquentTestPhoto, 'imageable');
@@ -432,7 +445,7 @@ export class EloquentTestPost extends Model {
 
 
   @HasManyColumn({
-    related: forwardRef(() => EloquentTestPost),
+    related   : forwardRef(() => EloquentTestPost),
     foreignKey: 'parent_id',
   })
   childPosts: Promise<any[]>;
@@ -443,41 +456,44 @@ export class EloquentTestPost extends Model {
   //
 
   @BelongsToColumn({
-    related: forwardRef(() => EloquentTestPost),
+    related   : forwardRef(() => EloquentTestPost),
     foreignKey: 'parent_id',
   })
-  parentPost;
+  parentPost: FedacoRelationType<EloquentTestPost>;
 
   // public parentPost() {
   //   return this.belongsTo(EloquentTestPost, 'parent_id');
   // }
 }
 
+@Table({
+  tableName: 'friend_levels'
+})
 export class EloquentTestFriendLevel extends Model {
-  _table: any = 'friend_levels';
+  _table: any   = 'friend_levels';
   _guarded: any = [];
 
   @Column()
-  level;
+  level: number;
 }
 
 @Table({})
 export class EloquentTestPhoto extends Model {
-  _table: any = 'photos';
+  _table: any   = 'photos';
   _guarded: any = [];
 
   @Column()
-  name;
+  name: string;
 
   @MorphToColumn({
     morphTypeMap: {
       'EloquentTestUser': EloquentTestUser,
       'EloquentTestPost': EloquentTestPost,
-      'user': EloquentTestUser,
-      'post': EloquentTestPost,
+      'user'            : EloquentTestUser,
+      'post'            : EloquentTestPost,
     }
   })
-  public imageable;
+  public imageable: FedacoRelationType<any>;
 }
 
 export class EloquentTestUserWithStringCastId extends EloquentTestUser {
@@ -491,37 +507,37 @@ export class EloquentTestUserWithStringCastId extends EloquentTestUser {
 }
 
 export class EloquentTestUserWithCustomDateSerialization extends EloquentTestUser {
-  serializeDate(date) {
+  serializeDate(date: Date) {
     return format(date, 'yyyy-MM-dd');
   }
 }
 
 export class EloquentTestOrder extends Model {
-  _table: any = 'test_orders';
+  _table: any   = 'test_orders';
   _guarded: any = [];
-  _with: any[] = ['item'];
+  _with: any[]  = ['item'];
 
   @PrimaryColumn()
-  id;
+  id: string | number;
 
   @MorphToColumn({
     morphTypeMap: {
       EloquentTestItem: forwardRef(() => EloquentTestItem)
     }
   })
-  public item;
+  public item: FedacoRelationType<EloquentTestItem>;
 }
 
 export class EloquentTestItem extends Model {
-  _table: any = 'test_items';
-  _guarded: any = [];
+  _table: any      = 'test_items';
+  _guarded: any    = [];
   _connection: any = 'second_connection';
 
 
 }
 
 export class EloquentTestWithJSON extends Model {
-  _table: any = 'with_json';
+  _table: any   = 'with_json';
   _guarded: any = [];
 
   public _timestamps: any = false;
@@ -530,28 +546,28 @@ export class EloquentTestWithJSON extends Model {
   // };
 
   @ArrayColumn()
-  json;
+  json: any[];
 }
 
 export class EloquentTestFriendPivot extends Pivot {
-  _table: any = 'friends';
+  _table: any   = 'friends';
   _guarded: any = [];
 
   @BelongsToColumn({
     related: EloquentTestUser
   })
-  public user;
+  public user: FedacoRelationType<EloquentTestUser>;
 
   @BelongsToColumn({
     related: EloquentTestUser
   })
-  public friend;
+  public friend: FedacoRelationType<EloquentTestUser>;
 
   @BelongsToColumn({
-    related: EloquentTestFriendLevel,
+    related   : EloquentTestFriendLevel,
     foreignKey: 'friend_level_id'
   })
-  public level;
+  public level: FedacoRelationType<EloquentTestFriendLevel>;
 }
 
 // export class EloquentTouchingUser extends Eloquent {

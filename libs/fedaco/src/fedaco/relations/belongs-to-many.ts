@@ -12,6 +12,8 @@ import { Collection } from '../../define/collection';
 import { Constructor } from '../../helper/constructor';
 import { pluralStudy } from '../../helper/pluralize';
 import { camelCase } from '../../helper/str';
+import { QueryBuilder } from '../../query-builder/query-builder';
+import { RawExpression } from '../../query/ast/expression/raw-expression';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
 import { AsPivot } from './concerns/as-pivot';
@@ -375,11 +377,21 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
     throw new Error(`ModelNotFoundException().setModel(get_class(this._related), id);`);
   }
 
+  firstWhere(left: string, operator?: string,
+        right?: ((q: this) => void) | RawExpression | boolean | string | number | Array<string | number>,
+        conjunction?: 'and' | 'or' | string
+  ): Promise<Model>;
+
+  firstWhere(left: ((q: this) => void) | string | any[], operator?: string,
+        right?: ((q: this) => void) | RawExpression | boolean | string | number | Array<string | number>,
+        conjunction?: 'and' | 'or' | string
+  ): Promise<Model>;
+
   /*Add a basic where clause to the query, and return the first result.*/
-  public firstWhere(column: Function | string | any[],
+  public firstWhere(column: ((q: this) => void) | string | any[],
                     operator: any             = null,
                     value: any                = null,
-                    conjunction: 'and' | 'or' = 'and') {
+                    conjunction: 'and' | 'or' | string = 'and'): Promise<Model> {
     return this.where(column, operator, value, conjunction).first();
   }
 

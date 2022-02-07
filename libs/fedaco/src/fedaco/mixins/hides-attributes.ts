@@ -97,9 +97,9 @@ export function mixinHidesAttributes<T extends Constructor<{}>>(base: T): HidesA
 
     /*Make the given, typically hidden, attributes visible.*/
     public makeVisible(attributes: any[] | string | null): this {
-      attributes   = isArray(attributes) ? attributes : arguments as unknown as any[];
+      attributes   = isArray(attributes) ? attributes : [...arguments] as unknown as any[];
       this._hidden = difference(this._hidden, attributes);
-      if (this._visible.length) {
+      if (this.getVisible().length) {
         this._visible = [...this._visible, ...attributes];
       }
       return this;

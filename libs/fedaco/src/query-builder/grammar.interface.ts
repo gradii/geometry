@@ -8,32 +8,32 @@ import { NestedExpression } from '../query/ast/fragment/nested-expression';
 import { SqlVisitor } from '../query/sql-visitor';
 import { Builder } from './builder';
 
-export interface GrammarInterface {
+export interface GrammarInterface<T extends Builder = Builder> {
   compileAggregateFragment(functionName: any, columns: any, visitor: SqlVisitor): string;
 
-  compileDelete(builder: Builder): string;
+  compileDelete(builder: T): string;
 
-  compileExists(builder: Builder): string;
+  compileExists(builder: T): string;
 
-  compileInsert(builder: Builder, values: any): string;
+  compileInsert(builder: T, values: any): string;
 
-  compileInsertGetId(builder: Builder, values: any, sequence: string): string;
+  compileInsertGetId(builder: T, values: any, sequence: string): string;
 
-  compileInsertOrIgnore(builder: Builder, values: any): string;
+  compileInsertOrIgnore(builder: T, values: any): string;
 
-  compileInsertUsing(builder: Builder, columns: any, nestedExpression: NestedExpression): string;
+  compileInsertUsing(builder: T, columns: any, nestedExpression: NestedExpression): string;
 
-  compileJoinFragment(builder: Builder, visitor: SqlVisitor): string;
+  compileJoinFragment(builder: T, visitor: SqlVisitor): string;
 
-  compileNestedPredicate(builder: Builder, visitor: SqlVisitor): string;
+  compileNestedPredicate(builder: T, visitor: SqlVisitor): string;
 
-  compileSelect(builder: Builder): string;
+  compileSelect(builder: T): string;
 
-  compileTruncate(builder: Builder): { [sql: string]: any[] };
+  compileTruncate(builder: T): { [sql: string]: any[] };
 
-  compileUpdate(builder: Builder, values: any): string;
+  compileUpdate(builder: T, values: any): string;
 
-  compileUpsert(builder: Builder, values: any, uniqueBy: any[] | string,
+  compileUpsert(builder: T, values: any, uniqueBy: any[] | string,
                 update: any[] | null): string;
 
   compilePredicateFuncName(funcName: string): string;
@@ -42,7 +42,7 @@ export interface GrammarInterface {
 
   getOperators(): string[];
 
-  prepareBindingsForUpdate(builder: Builder, visitor: SqlVisitor): string;
+  prepareBindingsForUpdate(builder: T, visitor: SqlVisitor): string;
 
   prepareBindingForJsonContains(value: any): string;
 

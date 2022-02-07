@@ -6,7 +6,7 @@
 
 import { isFunction, isString } from '@gradii/check-type';
 import { Constructor } from '../../helper/constructor';
-import { QueryBuilder } from '../../query-builder/query-builder';
+import { JoinClauseBuilder, QueryBuilder } from '../../query-builder/query-builder';
 import { JoinFragment } from '../../query/ast/fragment/join-fragment';
 import { JoinExpression } from '../../query/ast/join-expression';
 import { JoinOnExpression } from '../../query/ast/join-on-expression';
@@ -21,34 +21,37 @@ export interface QueryBuilderJoin {
 
   join(table: string, first: string | ((...args: any[]) => any), second: any): this;
 
-  join(table: string, on: (q: QueryBuilder) => QueryBuilder | void): this;
+  join(table: string, on: (q: JoinClauseBuilder) => void): this;
 
   join(tableOrJoinSql: string): this;
 
-  joinWhere(table: string, first: Function | string, operator: string, second: string,
+  joinWhere(table: string, first: ((q: JoinClauseBuilder) => void) | string, operator: string, second: string,
             type?: string): this;
 
-  joinSub(query: Function | QueryBuilder | string, as: string, first: Function | string,
+  joinSub(query: ((q: JoinClauseBuilder) => void) | QueryBuilder | string, as: string, first: Function | string,
           operator?: string,
           second?: string | number, type?: string, where?: boolean): this;
 
-  leftJoin(table: string, first: Function | string, operator?: string, second?: string): this;
+  leftJoin(table: string, first: (q: JoinClauseBuilder) => void, operator?: string,
+           second?: string): this;
 
-  leftJoinWhere(table: string, first: Function | string, operator: string, second: string): this;
+  leftJoin(table: string, first: ((q: JoinClauseBuilder) => void) | string, operator?: string, second?: string): this;
 
-  leftJoinSub(query: Function | QueryBuilder | string, as: string, first: Function | string,
+  leftJoinWhere(table: string, first: ((q: JoinClauseBuilder) => void) | string, operator: string, second: string): this;
+
+  leftJoinSub(query:  ((q: JoinClauseBuilder) => void) | QueryBuilder | string, as: string, first: Function | string,
               operator?: string,
               second?: string): this;
 
-  rightJoin(table: string, first: Function | string, operator?: string, second?: string): this;
+  rightJoin(table: string, first: ((q: JoinClauseBuilder) => void) | string, operator?: string, second?: string): this;
 
-  rightJoinWhere(table: string, first: Function | string, operator: string, second: string): this;
+  rightJoinWhere(table: string, first: ((q: JoinClauseBuilder) => void) | string, operator: string, second: string): this;
 
-  rightJoinSub(query: Function | QueryBuilder | string, as: string, first: Function | string,
+  rightJoinSub(query: ((q: JoinClauseBuilder) => void) | QueryBuilder | string, as: string, first: Function | string,
                operator?: string,
                second?: string): this;
 
-  crossJoin(table: string, first?: Function | string, operator?: string, second?: string): this;
+  crossJoin(table: string, first?: ((q: JoinClauseBuilder) => void) | string, operator?: string, second?: string): this;
 }
 
 export type QueryBuilderJoinCtor = Constructor<QueryBuilderJoin>;

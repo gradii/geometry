@@ -260,15 +260,19 @@ describe('test database fedaco model', () => {
   it('dirty on cast or date attributes', () => {
     const model = new FedacoModelCastingStub();
     model.setDateFormat('yyyy-MM-dd HH:mm:ss');
+    // @ts-ignore
     model.boolAttribute     = 1;
     model.foo               = 1;
     model.bar               = '2017-03-18';
+    // @ts-ignore
     model.dateAttribute     = '2017-03-18';
+    // @ts-ignore
     model.datetimeAttribute = '2017-03-23 22:17:00';
     model.syncOriginal();
     model.boolAttribute     = true;
     model.foo               = true;
     model.bar               = '2017-03-18 00:00:00';
+    // @ts-ignore
     model.dateAttribute     = '2017-03-18 00:00:00';
     model.datetimeAttribute = null;
     expect(model.isDirty()).toBeTruthy();
@@ -1309,8 +1313,8 @@ describe('test database fedaco model', () => {
     expect(result).toBeTruthy();
     expect(model.id).toEqual(1);
     expect(model._exists).toBeTruthy();
-    expect(model.relationMany.length).toBe(2);
-    expect(pluck('id')(model.relationMany)).toEqual([2, 3]);
+    expect((model.relationMany as any[]).length).toBe(2);
+    expect(pluck('id')((model.relationMany as any[]))).toEqual([2, 3]);
   });
 
   it('get and set table operations', () => {
@@ -1988,6 +1992,7 @@ describe('test database fedaco model', () => {
 //     FedacoModelStub.observe(new EloquentTestObserverStub());
 //     FedacoModelStub.flushEventListeners();
 //   });
+
 //   it('model observers can be attached to models with string', () => {
 //     FedacoModelStub.setEventDispatcher(events = m.mock(Dispatcher));
 //     events.shouldReceive('listen').once()._with(
@@ -2729,15 +2734,15 @@ export class FedacoModelStub extends Model {
     return 'appended';
   }
 
-  public scopePublished(builder) {
+  public scopePublished(builder: FedacoBuilder) {
     this.scopesCalled.push('published');
   }
 
-  public scopeCategory(builder, category) {
+  public scopeCategory(builder: FedacoBuilder, category: any) {
     this.scopesCalled['category'] = category;
   }
 
-  public scopeFramework(builder, framework, version) {
+  public scopeFramework(builder: FedacoBuilder, framework: any, version: any) {
     this.scopesCalled['framework'] = [framework, version];
   }
 }
@@ -2789,7 +2794,7 @@ export class FedacoModelSaveStub extends Model {
     return true;
   }
 
-  public setIncrementing(value) {
+  public setIncrementing(value: boolean) {
     this._incrementing = value;
     return this;
   }
@@ -2854,6 +2859,9 @@ export class FedacoModelWithStub extends Model {
   }
 }
 
+@Table({
+  tableName: 'fedaco_model_without_relation_stub'
+})
 export class FedacoModelWithoutRelationStub extends Model {
   public _with: any = ['foo'];
   _guarded: any     = [];
@@ -2863,7 +2871,9 @@ export class FedacoModelWithoutRelationStub extends Model {
   }
 }
 
-
+@Table({
+  tableName: 'fedaco_model_without_table_stub'
+})
 export class FedacoModelWithoutTableStub extends Model {
 }
 
@@ -2878,6 +2888,9 @@ export class FedacoModelWithoutTableStub extends Model {
 // });
 //
 
+@Table({
+  tableName: 'fedaco_model_appends_stub'
+})
 export class FedacoModelAppendsStub extends Model {
   _appends: any = ['is_admin', 'camelCased', 'StudlyCased'];
 
@@ -2938,21 +2951,21 @@ export class FedacoModelCastingStub extends Model {
   //   'timestampAttribute' : 'timestamp'
   // };
 
-  @Column() foo;
-  @Column() bar;
+  @Column() foo: any;
+  @Column() bar: any;
 
-  @IntegerColumn() intAttribute;
-  @FloatColumn() floatAttribute;
-  @Column() stringAttribute;
-  @BooleanColumn() boolAttribute;
-  @BooleanColumn() booleanAttribute;
-  @ObjectColumn() objectAttribute;
-  @ArrayColumn() arrayAttribute;
-  @JsonColumn() jsonAttribute;
-  @ArrayColumn() collectionAttribute;
-  @DateColumn() dateAttribute;
-  @DatetimeColumn() datetimeAttribute;
-  @TimestampColumn() timestampAttribute;
+  @IntegerColumn() intAttribute: number;
+  @FloatColumn() floatAttribute: number;
+  @Column() stringAttribute: string;
+  @BooleanColumn() boolAttribute: boolean;
+  @BooleanColumn() booleanAttribute: boolean;
+  @ObjectColumn() objectAttribute: any;
+  @ArrayColumn() arrayAttribute: any[];
+  @JsonColumn() jsonAttribute: any;
+  @ArrayColumn() collectionAttribute: any[];
+  @DateColumn() dateAttribute: Date;
+  @DatetimeColumn() datetimeAttribute: Date;
+  @TimestampColumn() timestampAttribute: Date;
 
   public jsonAttributeValue() {
     return this.attributes['jsonAttribute'];
@@ -3020,9 +3033,11 @@ export class FedacoModelWithoutTimestamps extends Model {
   public timestamps: any = false;
 }
 
+@Table({
+  tableName: 'stub'
+})
 export class FedacoModelWithUpdatedAtNull extends Model {
   _table: any       = 'stub';
-  static UPDATED_AT = null;
 }
 
 export class UnsavedModel extends Model {
@@ -3032,7 +3047,7 @@ export class UnsavedModel extends Model {
 }
 
 export class Uppercase /*implements CastsInboundAttributes*/ {
-  public set(model, key, value, attributes) {
+  public set(model: Model, key: string, value: any, attributes: any) {
     return isString(value) ? value.toUpperCase() : value;
   }
 }

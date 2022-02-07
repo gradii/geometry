@@ -42,7 +42,7 @@ import { GrammarInterface } from '../grammar.interface';
 import { JoinClauseBuilder, QueryBuilder } from '../query-builder';
 import { QueryBuilderVisitor } from '../visitor/query-builder-visitor';
 
-export abstract class QueryGrammar extends BaseGrammar implements GrammarInterface {
+export abstract class QueryGrammar extends BaseGrammar implements GrammarInterface<QueryBuilder> {
   constructor() {
     super();
   }

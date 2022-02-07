@@ -39,39 +39,43 @@ export interface QueryBuilderWhereCommon {
    */
   forNestedWhere(): this;
 
-  orWhere(where: (q: QueryBuilder) => void): this;
+  orWhere(where: (q: this) => void): this;
 
-  orWhere(column: Function | string | any[], value: any): this;
+  orWhere(column: ((q: this) => void) | string | any[], value: any): this;
 
-  orWhere(column: Function | string | any[], operator: any, value: any): this;
+  orWhere(column: ((q: this) => void) | string | any[], operator: any, value: (q: this) => void): this;
 
-  orWhere(column: Function | string | any[], operator: any, value: (q: QueryBuilder) => void): this;
+  orWhere(column: ((q: this) => void) | string | any[], operator: any, value: any): this;
 
   orWhereColumn(first: string | any[], second?: string): this;
 
   orWhereColumn(first: string | any[], operator?: string, second?: string): this;
 
-  orWhereRaw(sql: string, bindings: any[]): this;
+  orWhereRaw(sql: string, bindings?: any[]): this;
 
   where(where: any[][]): this;
+
+  where(where: (q: this) => void): this;
+
+  where(where: (q: this) => void): this;
 
   where(where: { [key: string]: any }): this;
 
   where(where: (q: QueryBuilder) => void): this;
 
   where(left: string,
-        right: Function | RawExpression | boolean | string | number | Array<string | number>): this;
+        right: ((q: this) => void) | RawExpression | boolean | string | number | Array<string | number>): this;
 
   where(left: string, operator: string,
-        right: Function | RawExpression | boolean | string | number | Array<string | number>): this;
+        right: ((q: this) => void) | RawExpression | boolean | string | number | Array<string | number>): this;
 
   where(left: string, operator: string,
-        right: Function | RawExpression | boolean | string | number | Array<string | number>,
+        right: ((q: this) => void) | RawExpression | boolean | string | number | Array<string | number>,
         conjunction: 'and' | 'or' | string
   ): this;
 
-  where(left: Function | string | any[], operator: string,
-        right: Function | RawExpression | boolean | string | number | Array<string | number>,
+  where(left: ((q: this) => void) | string | any[], operator: string,
+        right: ((q: this) => void) | RawExpression | boolean | string | number | Array<string | number>,
         conjunction: 'and' | 'or' | string
   ): this;
 
@@ -85,7 +89,7 @@ export interface QueryBuilderWhereCommon {
 
   whereNested(callback: (query?: QueryBuilder) => void, conjunction?: 'and' | 'or' | string): this;
 
-  whereRaw(sql: string, bindings: any[], conjunction?: 'and' | 'or'): this;
+  whereRaw(sql: string, bindings?: any[], conjunction?: 'and' | 'or'): this;
 }
 
 export type WhereCommonCtor = Constructor<QueryBuilderWhereCommon>;

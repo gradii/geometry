@@ -345,6 +345,8 @@ export class QueryBuilder extends Builder {
     return this;
   }
 
+  public fromSub(table: (q: QueryBuilder) => void, as: string): this;
+  public fromSub(table: any, as: string): this;
   public fromSub(table: any, as: string): this {
     if (table instanceof QueryBuilder || isFunction(table)) {
       this._from = new FromTable(
@@ -391,7 +393,8 @@ export class QueryBuilder extends Builder {
   }
 
   /*Insert new records into the table using a subquery.*/
-  public async insertUsing(columns: any[], query: Function | QueryBuilder | string) {
+  public async insertUsing(columns: any[],
+                           query: ((q: QueryBuilder) => void) | QueryBuilder | string) {
     this.applyBeforeQueryCallbacks();
 
     if (!this.isQueryable(query)) {
@@ -439,7 +442,7 @@ export class QueryBuilder extends Builder {
       isFunction(value);
   }
 
-  public newQuery(): QueryBuilder {
+  public newQuery<T extends Builder = QueryBuilder>(): T {
     // @ts-ignore
     return new QueryBuilder(this._connection, this._grammar, this._processor);
   }
@@ -461,13 +464,11 @@ export class QueryBuilder extends Builder {
     return this;
   }
 
-  public select(...col: string[]): this;
-
-  public select(...col: RawExpression[]): this;
+  public select(...col: (string | RawExpression)[]): this;
 
   public select(...col: ColumnReferenceExpression[]): this;
 
-  public select(columns: string[]): this;
+  public select(columns: (string | RawExpression)[]): this;
 
   public select(columns: string | string[] | RawExpression[] | ColumnReferenceExpression[] | any): this {
     this._columns            = [];
@@ -623,18 +624,22 @@ export class QueryBuilder extends Builder {
   //   return bindings.filter(it=>!(it instanceof RawExpression))
   // }
 
-  selectSub(query: Function | QueryBuilder | string, as: string) {
+  selectSub(query: (q: QueryBuilder) => void, as: string): this;
+  selectSub(query: QueryBuilder | string, as: string): this;
+  selectSub(query: Function | QueryBuilder | string, as: string): this {
     let columnAsNode;
     if (isString(as)) {
       columnAsNode = SqlParser.createSqlParser(as).parseAsName();
     }
 
-    return this._columns.push(
+    this._columns.push(
       new ColumnReferenceExpression(
         this._createSubQuery('select', query),
         columnAsNode
       )
     );
+
+    return this;
   }
 
   lock(value: boolean | string = true) {
@@ -730,7 +735,8 @@ export class JoinClauseBuilder extends QueryBuilder {
   }
 
   /*Get a new instance of the join clause builder.*/
-  public newQuery(): JoinClauseBuilder {
+  public override newQuery<T extends Builder = JoinClauseBuilder>(): T {
+    // @ts-ignore
     return new JoinClauseBuilder(this.newParentQuery(), this.type, this.table);
   }
 
@@ -744,19 +750,20 @@ export class JoinClauseBuilder extends QueryBuilder {
   will produce the following SQL:
 
   on `contacts`.`user_id` = `users`.`id` and `contacts`.`info_id` = `info`.`id`*/
-  public on(first: ((q?: QueryBuilder) => any) | string,
+  public on(first: ((q?: JoinClauseBuilder) => any) | string,
             operator?: string,
             second?: string,
             conjunction: 'and' | 'or' = 'and') {
     if (isFunction(first)) {
-      return this.whereNested(first, conjunction);
+      return this.whereNested(first as ((q?: QueryBuilder) => any), conjunction);
     }
     return this.whereColumn(first, operator, second, conjunction);
   }
 
   /*Add an "or on" clause to the join.*/
-  public orOn(first: (query?: QueryBuilder) => any | string, operator: string | null = null,
-              second: string | null                                                  = null) {
+  public orOn(first: ((query?: JoinClauseBuilder) => any) | string,
+              operator?: string,
+              second?: string): this {
     return this.on(first, operator, second, 'or');
   }
 

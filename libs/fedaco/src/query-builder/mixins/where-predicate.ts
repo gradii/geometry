@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { FedacoBuilder } from '../../fedaco/fedaco-builder';
+import type { FedacoBuilder } from '../../fedaco/fedaco-builder';
 import { Constructor } from '../../helper/constructor';
 import { BindingVariable } from '../../query/ast/binding-variable';
 import {
@@ -27,9 +27,13 @@ export interface QueryBuilderWherePredicate {
 
   orWhereBetween(column: string, values: any[], not?: boolean): this;
 
-  orWhereExists(callback: Function, not?: boolean): void;
+  orWhereExists(callback: (q: QueryBuilder) => void, not?: boolean): void;
 
-  orWhereIn(column: string, q: (q: this) => this | void): this;
+  orWhereIn(column: string, q: (q: this) => void): this;
+
+  orWhereIn(column: string, q: (q: QueryBuilder) => void): this;
+
+  orWhereIn(column: string, q: QueryBuilder): this;
 
   orWhereIn(column: string, values: any[], not?: string): this;
 
@@ -39,9 +43,9 @@ export interface QueryBuilderWherePredicate {
 
   orWhereNotBetween(column: string, values: any[]): this;
 
-  orWhereNotExists(callback: Function): void;
+  orWhereNotExists(callback: (q: QueryBuilder) => void): void;
 
-  orWhereNotIn(column: string, q: (q: this) => this | void): this;
+  orWhereNotIn(column: string, q: (q: this) => void): this;
 
   orWhereNotIn(column: string, values: any[]): this;
 
@@ -52,9 +56,11 @@ export interface QueryBuilderWherePredicate {
 
   whereBetween(column: string, values: any[], conjunction?: string, not?: boolean): this;
 
-  whereExists(callback: Function, conjunction?: string, not?: boolean): void;
+  whereExists(callback: (q: QueryBuilder) => void, conjunction?: string, not?: boolean): void;
 
-  whereIn(column: string, q: (q: this) => this | void): this;
+  whereIn(column: string, q: (q: this) => void): this;
+
+  whereIn(column: string, q: QueryBuilder): this;
 
   whereIn(column: string, q: FedacoBuilder): this;
 
@@ -68,7 +74,7 @@ export interface QueryBuilderWherePredicate {
 
   whereNotExists(callback: Function, conjunction?: string): void;
 
-  whereNotIn(column: string, q: (q: this) => this | void): this;
+  whereNotIn(column: string, q: (q: this) => void): this;
 
   whereNotIn(column: string, values: any[], conjunction?: string): this;
 
@@ -196,7 +202,7 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
     }
 
     public whereIn(this: QueryBuilder & QueryBuilderWhereCommon & _Self, column: string,
-                   values: any[],
+                   values: any | any[],
                    conjunction: 'and' | 'or' = 'and',
                    not                       = false) {
       const expression                = SqlParser.createSqlParser(column).parseUnaryTableColumn();
@@ -205,7 +211,7 @@ export function mixinWherePredicate<T extends Constructor<any>>(base: T): WhereP
         subQuery = this._createSubQuery('where', values);
         // this.addBinding(bindings, 'where')
       } else {
-        valueArray = values.map(it => it instanceof RawExpression ? it : new BindingVariable(
+        valueArray = values.map((it: any) => it instanceof RawExpression ? it : new BindingVariable(
           new RawExpression(it)
         ));
       }

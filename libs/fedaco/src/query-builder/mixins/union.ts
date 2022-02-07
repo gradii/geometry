@@ -23,7 +23,7 @@ export function mixinUnion<T extends Constructor<any>>(base: T): QueryBuilderUni
     /*Add a union statement to the query.*/
     public union(this: QueryBuilder & _Self, query: QueryBuilder | Function, all: boolean = false) {
       if (isFunction(query)) {
-        query(query = this.newQuery());
+        query(query = this.newQuery() as QueryBuilder);
       }
       this._unions.push(
         new UnionFragment(query as QueryBuilder, all)

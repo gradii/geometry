@@ -11,7 +11,7 @@ import { mapWithKeys, wrap } from '../../../helper/arr';
 import { Constructor } from '../../../helper/constructor';
 import { QueryBuilder } from '../../../query-builder/query-builder';
 import { BaseModel } from '../../base-model';
-import { Model } from '../../model';
+import type { Model } from '../../model';
 import { newPivot } from '../../model-helper-global';
 import { BelongsToMany } from '../belongs-to-many';
 import type { Pivot } from '../pivot';
@@ -466,7 +466,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
       if (value as Model instanceof BaseModel) {
         return [value.getAttribute(this._relatedKey)];
       }
-      if (isArray(value)) {
+      if (isArray(value) && value.length && value[0] instanceof BaseModel) {
         return value.map(it => it.getAttribute(this._relatedKey));
       }
       // if (value instanceof Collection) {

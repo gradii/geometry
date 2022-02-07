@@ -3,7 +3,7 @@
 exports[`model annotation test annotation get hasMany relation: has many 1`] = `
 Object {
   "articles": Array [
-    PropDecoratorFactory {
+    FedacoRelationColumn {
       "_getRelation": [Function],
       "isRelation": true,
       "related": [Function],
@@ -11,7 +11,7 @@ Object {
     },
   ],
   "id": Array [
-    PropDecoratorFactory {},
+    FedacoColumn {},
   ],
 }
 `;
@@ -19,7 +19,7 @@ Object {
 exports[`model annotation test annotation hasMany: has many 1`] = `
 Object {
   "columnFoo": Array [
-    PropDecoratorFactory {
+    FedacoRelationColumn {
       "_getRelation": [Function],
       "isRelation": true,
       "related": [Function],
@@ -32,7 +32,8 @@ Object {
 exports[`model annotation test annotation hasOne: has one 1`] = `
 Object {
   "columnFoo": Array [
-    PropDecoratorFactory {
+    FedacoRelationColumn {
+      "_getRelation": [Function],
       "isRelation": true,
       "type": "HasOne",
     },
@@ -43,8 +44,10 @@ Object {
 exports[`model annotation test relation annoation: meta 1`] = `
 Object {
   "columnFoo": Array [
-    PropDecoratorFactory {
+    FedacoRelationColumn {
+      "_getRelation": [Function],
       "isRelation": true,
+      "type": "HasOne",
     },
   ],
 }

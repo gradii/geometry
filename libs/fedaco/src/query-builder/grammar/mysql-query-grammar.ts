@@ -12,7 +12,7 @@ import { MysqlQueryBuilderVisitor } from '../visitor/mysql-query-builder-visitor
 import { QueryBuilderVisitor } from '../visitor/query-builder-visitor';
 import { QueryGrammar } from './query-grammar';
 
-export class MysqlQueryGrammar extends QueryGrammar implements GrammarInterface {
+export class MysqlQueryGrammar extends QueryGrammar implements GrammarInterface<QueryBuilder> {
   private _tablePrefix = '';
 
   compileJoins() {

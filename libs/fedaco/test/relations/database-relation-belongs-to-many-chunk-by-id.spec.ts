@@ -1,10 +1,14 @@
 import { head } from 'ramda';
 import { tap } from 'rxjs/operators';
-import { BelongsToManyColumn } from '../../src/annotation/relation-column/belongs-to-many.relation-column';
+import {
+  BelongsToManyColumn
+} from '../../src/annotation/relation-column/belongs-to-many.relation-column';
+import { Table } from '../../src/annotation/table/table';
+import { DatabaseConfig } from '../../src/database-config';
+import { FedacoRelationListType } from '../../src/fedaco/fedaco-types';
 import { Model } from '../../src/fedaco/model';
 import { forwardRef } from '../../src/query-builder/forward-ref';
 import { SchemaBuilder } from '../../src/schema/schema-builder';
-import { DatabaseConfig } from '../../src/database-config';
 
 function connection(connectionName = 'default') {
   return Model.getConnectionResolver().connection(connectionName);
@@ -74,9 +78,11 @@ describe('test database fedaco belongs to many chunk by id', () => {
   it('belongs to chunk by id', async () => {
     await seedData();
     const user: BelongsToManyChunkByIdTestTestUser = await BelongsToManyChunkByIdTestTestUser.createQuery().first();
-    let i                                          = 0;
+
+    let i = 0;
+
     await user.newRelation('articles').chunkById(1).pipe(
-      tap(({results: collection}: {results: any[]}) => {
+      tap(({results: collection}: { results: any[] }) => {
         i++;
         expect(head(collection).aid).toBe(i);
       })
@@ -85,6 +91,9 @@ describe('test database fedaco belongs to many chunk by id', () => {
   });
 });
 
+@Table({
+  tableName: 'users'
+})
 export class BelongsToManyChunkByIdTestTestUser extends Model {
   _table: any            = 'users';
   _fillable: any         = ['id', 'email'];
@@ -96,9 +105,12 @@ export class BelongsToManyChunkByIdTestTestUser extends Model {
     foreignPivotKey: 'user_id',
     relatedPivotKey: 'article_id'
   })
-  public articles;
+  public articles: FedacoRelationListType<BelongsToManyChunkByIdTestTestArticle>;
 }
 
+@Table({
+  tableName: 'articles'
+})
 export class BelongsToManyChunkByIdTestTestArticle extends Model {
   _primaryKey: any         = 'aid';
   _table: any              = 'articles';
