@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isArray, isBlank, isString } from '@gradii/check-type';
+import { isArray, isBlank, isNumber, isString } from '@gradii/check-type';
 import { difference, intersection, pluck } from 'ramda';
 import { Collection } from '../../../define/collection';
 import { mapWithKeys, wrap } from '../../../helper/arr';
@@ -41,7 +41,7 @@ export interface InteractsWithPivotTable {
   _formatRecordsList(records: any[]): Record<string, any>;
 
   /*Attach all of the records that aren't in the given current records.*/
-  _attachNew(records: any[], current: any[], touch?: boolean): PivotTableData;
+  _attachNew(records: any[], current: any[], touch?: boolean): Promise<PivotTableData>;
 
   /*Update an existing pivot record on the table.*/
   updateExistingPivot(id: any, attributes: any[], touch?: boolean): Promise<any>;
@@ -149,12 +149,12 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
         )
       );
       if (detach.length > 0) {
-        this.detach(detach, false);
+        await this.detach(detach, false);
         changes['detached'] = this.castKeys(detach);
       }
       const attach = difference(Object.keys(records), detach);
       if (attach.length > 0) {
-        this.attach(attach, [], false);
+        await this.attach(attach, [], false);
         changes['attached'] = Object.keys(attach);
       }
       if (touch && (
@@ -185,10 +185,10 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
       const records    = this._formatRecordsList(this._parseIds(ids));
       const detach     = difference(current, Object.keys(records));
       if (detaching && detach.length > 0) {
-        this.detach(detach);
+        await this.detach(detach);
         changes['detached'] = this._castKeys(detach);
       }
-      changes = {...changes, ...this._attachNew(records, current, false)};
+      changes = {...changes, ...(await this._attachNew(records, current, false))};
       if (changes['attached'].length || changes['updated'].length || changes['detached'].length) {
         await this.touchIfTouching();
       }
@@ -208,26 +208,26 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     /*Format the sync / toggle record list so that it is keyed by ID.*/
     _formatRecordsList(this: BelongsToMany & _Self, records: any[]): Record<string, any> {
       return mapWithKeys(records, (attributes, id) => {
-        if (isString(attributes)) {
-          return {attributes: []};
+        if (isString(attributes) || isNumber(attributes)) {
+          return {[attributes]: []};
         }
         return {[id]: attributes};
       });
     }
 
     /*Attach all of the records that aren't in the given current records.*/
-    _attachNew(this: BelongsToMany & _Self,
+    async _attachNew(this: BelongsToMany & _Self,
                records: Record<string, any>,
-               current: any[], touch = true): PivotTableData {
+               current: any[], touch = true): Promise<PivotTableData> {
       const changes: any = {
         attached: [],
         updated : []
       };
       for (const [id, attributes] of Object.entries(records)) {
         if (!current.includes(id)) {
-          this.attach(id, attributes, touch);
+          await this.attach(id, attributes, touch);
           changes['attached'].push(this._castKey(id));
-        } else if (attributes.length > 0 && this.updateExistingPivot(id, attributes, touch)) {
+        } else if (attributes.length > 0 && await this.updateExistingPivot(id, attributes, touch)) {
           changes['updated'].push(this._castKey(id));
         }
       }

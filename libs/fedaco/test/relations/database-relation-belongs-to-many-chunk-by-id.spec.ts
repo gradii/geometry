@@ -1,5 +1,7 @@
 import { head } from 'ramda';
 import { tap } from 'rxjs/operators';
+import { Column } from '../../src/annotation/column/column';
+import { PrimaryColumn } from '../../src/annotation/column/primary.column';
 import {
   BelongsToManyColumn
 } from '../../src/annotation/relation-column/belongs-to-many.relation-column';
@@ -99,6 +101,9 @@ export class BelongsToManyChunkByIdTestTestUser extends Model {
   _fillable: any         = ['id', 'email'];
   public timestamps: any = false;
 
+  @PrimaryColumn()
+  id: string | number;
+
   @BelongsToManyColumn({
     related        : forwardRef(() => BelongsToManyChunkByIdTestTestArticle),
     table          : 'article_user',
@@ -118,4 +123,10 @@ export class BelongsToManyChunkByIdTestTestArticle extends Model {
   public incrementing: any = false;
   public timestamps: any   = false;
   protected fillable: any  = ['aid', 'title'];
+
+  @PrimaryColumn()
+  aid: string | number;
+
+  @Column()
+  title: string;
 }
