@@ -1,11 +1,11 @@
-import { PrimaryColumn } from '../../src/annotation/column/primary.column';
 import { Column } from '../../src/annotation/column/column';
+import { PrimaryColumn } from '../../src/annotation/column/primary.column';
 import { FedacoBuilder } from '../../src/fedaco/fedaco-builder';
 import { Model } from '../../src/fedaco/model';
 import { HasOne } from '../../src/fedaco/relations/has-one';
 import { getBuilder } from './relation-testing-helper';
 
-let builder: FedacoBuilder, related;
+let builder: FedacoBuilder, related: Model;
 
 function getRelation() {
   builder = getBuilder();
@@ -46,7 +46,7 @@ describe('test database fedaco has one', () => {
   });
 
   it('has one with dynamic default', async () => {
-    const relation = getRelation().withDefault(newModel => {
+    const relation = getRelation().withDefault((newModel: Model) => {
       newModel.username = 'taylor';
     });
     const spy1     = jest.spyOn(builder, 'first').mockReturnValue(null);
@@ -60,7 +60,7 @@ describe('test database fedaco has one', () => {
   });
 
   it('has one with dynamic default use parent model', async () => {
-    const relation = getRelation().withDefault((newModel, parentModel) => {
+    const relation = getRelation().withDefault((newModel: Model, parentModel: Model) => {
       newModel.username = parentModel.getAttribute('username');
     });
     jest.spyOn(builder, 'first').mockReturnValue(null);
@@ -72,6 +72,7 @@ describe('test database fedaco has one', () => {
     expect(newModel.username).toBe('taylor');
     expect(newModel.getAttribute('foreign_key')).toEqual(1);
   });
+
   it('has one with array default', async () => {
     const attributes = {
       'username': 'taylor'
@@ -198,11 +199,11 @@ describe('test database fedaco has one', () => {
 
 export class EloquentHasOneModelStub extends Model {
   @PrimaryColumn()
-  id;
+  id: string | number;
 
   @Column()
   public foreign_key: any = 'foreign.value';
 
   @Column()
-  username;
+  username: string;
 }

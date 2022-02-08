@@ -6,6 +6,7 @@
 
 import { makePropDecorator } from '@gradii/annotation';
 import { isString } from '@gradii/check-type';
+import { FedacoBuilder } from '../../../fedaco/fedaco-builder';
 import { Model } from '../../../fedaco/model';
 import { HasOne } from '../../../fedaco/relations/has-one';
 import { ForwardRefFn, resolveForwardRef } from '../../../query-builder/forward-ref';
@@ -20,7 +21,7 @@ export interface HasOneOfManyRelationAnnotation extends RelationColumnAnnotation
   localKey?: string;
 
   column?: string | any;
-  aggregate?: string | Function;
+  aggregate?: string | ((q: FedacoBuilder) => void) | Function;
 
   relationName?: string;
 }

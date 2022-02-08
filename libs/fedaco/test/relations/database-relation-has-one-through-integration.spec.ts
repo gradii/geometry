@@ -3,9 +3,12 @@ import { tap } from 'rxjs/operators';
 import { Column } from '../../src/annotation/column/column';
 import { DeletedAtColumn } from '../../src/annotation/column/deleted-at.column';
 import { BelongsToColumn } from '../../src/annotation/relation-column/belongs-to.relation-column';
-import { HasOneThroughColumn } from '../../src/annotation/relation-column/has-one-through.relation-column';
+import {
+  HasOneThroughColumn
+} from '../../src/annotation/relation-column/has-one-through.relation-column';
 import { HasOneColumn } from '../../src/annotation/relation-column/has-one.relation-column';
 import { DatabaseConfig } from '../../src/database-config';
+import { FedacoRelationType } from '../../src/fedaco/fedaco-types';
 import { mixinSoftDeletes } from '../../src/fedaco/mixins/soft-deletes';
 import { Model } from '../../src/fedaco/model';
 import { forwardRef } from '../../src/query-builder/forward-ref';
@@ -148,6 +151,7 @@ describe('test database fedaco has one through integration', () => {
     const contract = await (await HasOneThroughTestPosition.createQuery().first()).contract;
     expect(contract.title).toBe('A title');
   });
+
   it('it loads a default has one through relation', async () => {
     await migrateDefault();
     await seedDefaultData();
@@ -156,17 +160,20 @@ describe('test database fedaco has one through integration', () => {
     expect('email' in contract.getAttributes()).not.toBeTruthy();
     await resetDefault();
   });
+
   it('it loads a relation with custom intermediate and local key', async () => {
     await seedData();
     const contract = await (await HasOneThroughIntermediateTestPosition.createQuery().first()).contract;
     expect(contract.title).toBe('A title');
   });
+
   it('eager loading a relation with custom intermediate and local key', async () => {
     await seedData();
     const contract = (await HasOneThroughIntermediateTestPosition.createQuery().with(
       'contract').first()).contract;
-    expect(contract.title).toBe('A title');
+    expect((contract as HasOneThroughTestContract).title).toBe('A title');
   });
+
   it('where has on a relation with custom intermediate and local key', async () => {
     await seedData();
     const position = await HasOneThroughIntermediateTestPosition.createQuery().whereHas('contract',
@@ -175,6 +182,7 @@ describe('test database fedaco has one through integration', () => {
       }).get();
     expect(position).toHaveLength(1);
   });
+
   it('first or fail throws an exception', async () => {
     const position = await HasOneThroughTestPosition.createQuery().create({
       'id'       : 1,
@@ -187,10 +195,12 @@ describe('test database fedaco has one through integration', () => {
       'position_short': 'ps'
     });
     await expect(async () => {
-      await (await HasOneThroughTestPosition.createQuery().first()).newRelation('contract').firstOrFail();
+      await (await HasOneThroughTestPosition.createQuery().first()).newRelation(
+        'contract').firstOrFail();
     }).rejects.toThrowError(
       'ModelNotFoundException No query results for model [HasOneThroughTestContract].');
   });
+
   it('find or fail throws an exception', async () => {
     const position = await HasOneThroughTestPosition.createQuery().create({
       'id'       : 1,
@@ -207,6 +217,7 @@ describe('test database fedaco has one through integration', () => {
         'contract').findOrFail(1);
     }).rejects.toThrowError('ModelNotFoundException');
   });
+
   it('first retrieves first record', async () => {
     await seedData();
     const contract = await (await HasOneThroughTestPosition.createQuery().first()).newRelation(
@@ -214,21 +225,24 @@ describe('test database fedaco has one through integration', () => {
     expect(contract).not.toBeNull();
     expect(contract.title).toBe('A title');
   });
+
   it('all columns are retrieved by default', async () => {
     await seedData();
     const contract = await (await HasOneThroughTestPosition.createQuery().first()).newRelation(
       'contract').first();
     expect(Object.keys(contract.getAttributes())).toEqual(
       [
-        'id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at', 'laravel_through_key'
+        'id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at', 'fedaco_through_key'
       ]);
   });
+
   it('only proper columns are selected if provided', async () => {
     await seedData();
     const contract = await (await HasOneThroughTestPosition.createQuery().first()).newRelation(
       'contract').first(['title', 'body']);
-    expect(Object.keys(contract.getAttributes())).toEqual(['title', 'body', 'laravel_through_key']);
+    expect(Object.keys(contract.getAttributes())).toEqual(['title', 'body', 'fedaco_through_key']);
   });
+
   it('chunk returns correct models', async () => {
     await seedData();
     await seedDataExtended();
@@ -237,12 +251,13 @@ describe('test database fedaco has one through integration', () => {
       .pipe(
         tap(({results: contractsChunk}) => {
           const contract = head(contractsChunk as Model[]);
-          expect(contract.getAttributes()).toEqual([
+          expect(Object.keys(contract.getAttributes())).toEqual([
             'id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at',
-            'laravel_through_key'
+            'fedaco_through_key'
           ]);
         })).toPromise();
   });
+
   // it('cursor returns correct models', async () => {
   //   await seedData();
   //   await seedDataExtended();
@@ -256,6 +271,7 @@ describe('test database fedaco has one through integration', () => {
   //       ]);
   //   }
   // });
+
   it('each returns correct models', async () => {
     await seedData();
     await seedDataExtended();
@@ -264,24 +280,26 @@ describe('test database fedaco has one through integration', () => {
       tap(({item: contract}) => {
         expect(Object.keys(contract.getAttributes())).toEqual([
           'id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at',
-          'laravel_through_key'
+          'fedaco_through_key'
         ]);
       })
     );
   });
+
   it('intermediate soft deletes are ignored', async () => {
     await seedData();
     await (await HasOneThroughSoftDeletesTestUser.createQuery().first()).delete();
-    const contract = (await HasOneThroughSoftDeletesTestPosition.createQuery().first()).contract;
-    expect(contract.title).toBe('A title');
+    const contract = await (await HasOneThroughSoftDeletesTestPosition.createQuery().first()).contract;
+    expect((contract as HasOneThroughSoftDeletesTestContract).title).toBe('A title');
   });
+
   it('eager loading loads related models correctly', async () => {
     await seedData();
     const position = await HasOneThroughSoftDeletesTestPosition.createQuery()
       .with('contract')
       .first();
     expect(position.shortname).toBe('ps');
-    expect(position.contract.title).toBe('A title');
+    expect((position.contract as HasOneThroughSoftDeletesTestContract).title).toBe('A title');
   });
 
 });
@@ -295,7 +313,7 @@ export class HasOneThroughTestUser extends Model {
     related   : forwardRef(() => HasOneThroughTestContract),
     foreignKey: 'user_id'
   })
-  public contract;
+  public contract: FedacoRelationType<HasOneThroughTestContract>;
 }
 
 /*Eloquent Models...*/
@@ -304,13 +322,13 @@ export class HasOneThroughTestContract extends Model {
   _guarded: any = [];
 
   @Column()
-  title;
+  title: string;
 
   @BelongsToColumn({
     related   : HasOneThroughTestUser,
     foreignKey: 'user_id'
   })
-  public owner;
+  public owner: FedacoRelationType<HasOneThroughTestUser>;
 }
 
 export class HasOneThroughTestPosition extends Model {
@@ -323,13 +341,13 @@ export class HasOneThroughTestPosition extends Model {
     firstKey : 'position_id',
     secondKey: 'user_id'
   })
-  public contract;
+  public contract: FedacoRelationType<HasOneThroughTestContract>;
 
   @HasOneColumn({
     related   : HasOneThroughTestUser,
     foreignKey: 'position_id'
   })
-  public user;
+  public user: FedacoRelationType<HasOneThroughTestUser>;
 }
 
 /*Eloquent Models...*/
@@ -340,7 +358,7 @@ export class HasOneThroughDefaultTestUser extends Model {
   @HasOneColumn({
     related: forwardRef(() => HasOneThroughDefaultTestContract)
   })
-  public contract;
+  public contract: FedacoRelationType<HasOneThroughDefaultTestContract>;
 }
 
 /*Eloquent Models...*/
@@ -349,12 +367,12 @@ export class HasOneThroughDefaultTestContract extends Model {
   _guarded: any = [];
 
   @Column()
-  title;
+  title: string;
 
   @BelongsToColumn({
     related: HasOneThroughDefaultTestUser
   })
-  public owner;
+  public owner: FedacoRelationType<HasOneThroughDefaultTestUser>;
 }
 
 export class HasOneThroughDefaultTestPosition extends Model {
@@ -365,12 +383,12 @@ export class HasOneThroughDefaultTestPosition extends Model {
     related: HasOneThroughDefaultTestContract,
     through: HasOneThroughDefaultTestUser,
   })
-  public contract;
+  public contract: FedacoRelationType<HasOneThroughDefaultTestContract>;
 
   @HasOneColumn({
     related: HasOneThroughDefaultTestUser
   })
-  public user;
+  public user: FedacoRelationType<HasOneThroughDefaultTestUser>;
 }
 
 export class HasOneThroughIntermediateTestPosition extends Model {
@@ -385,16 +403,17 @@ export class HasOneThroughIntermediateTestPosition extends Model {
     localKey      : 'shortname',
     secondLocalKey: 'email'
   })
-  public contract;
+  public contract: FedacoRelationType<HasOneThroughTestContract>;
 
   @HasOneColumn({
     related   : HasOneThroughTestUser,
     foreignKey: 'position_id'
   })
-  public user;
+  public user: FedacoRelationType<HasOneThroughTestUser>;
 }
 
-export class HasOneThroughSoftDeletesTestUser extends (mixinSoftDeletes<typeof Model>(Model) as typeof Model) {
+export class HasOneThroughSoftDeletesTestUser extends (mixinSoftDeletes<typeof Model>(
+  Model) as typeof Model) {
   _table: any   = 'users';
   _guarded: any = [];
 
@@ -402,10 +421,10 @@ export class HasOneThroughSoftDeletesTestUser extends (mixinSoftDeletes<typeof M
     related   : forwardRef(() => HasOneThroughSoftDeletesTestContract),
     foreignKey: 'user_id'
   })
-  public contract;
+  public contract: FedacoRelationType<HasOneThroughSoftDeletesTestContract>;
 
   @DeletedAtColumn()
-  deleted_at;
+  deleted_at: Date;
 }
 
 /*Eloquent Models...*/
@@ -413,11 +432,14 @@ export class HasOneThroughSoftDeletesTestContract extends Model {
   _table: any   = 'contracts';
   _guarded: any = [];
 
+  @Column()
+  title: string;
+
   @BelongsToColumn({
     related   : HasOneThroughSoftDeletesTestUser,
     foreignKey: 'user_id'
   })
-  public owner;
+  public owner: FedacoRelationType<HasOneThroughSoftDeletesTestUser>;
 }
 
 export class HasOneThroughSoftDeletesTestPosition extends Model {
@@ -425,7 +447,7 @@ export class HasOneThroughSoftDeletesTestPosition extends Model {
   _guarded: any = [];
 
   @Column()
-  shortname;
+  shortname: string;
 
   @HasOneThroughColumn({
     related  : HasOneThroughSoftDeletesTestContract,
@@ -433,11 +455,11 @@ export class HasOneThroughSoftDeletesTestPosition extends Model {
     firstKey : 'position_id',
     secondKey: 'user_id'
   })
-  public contract;
+  public contract: FedacoRelationType<HasOneThroughSoftDeletesTestContract>;
 
   @HasOneColumn({
     related   : HasOneThroughSoftDeletesTestUser,
     foreignKey: 'position_id'
   })
-  public user;
+  public user: FedacoRelationType<HasOneThroughSoftDeletesTestUser>;
 }

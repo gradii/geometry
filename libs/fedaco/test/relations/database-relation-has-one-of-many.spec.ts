@@ -6,6 +6,7 @@ import { HasManyColumn } from '../../src/annotation/relation-column/has-many.rel
 import { HasOneColumn } from '../../src/annotation/relation-column/has-one.relation-column';
 import { HasOneOfManyColumn } from '../../src/annotation/relation-column/one-of-many/has-one-of-many.relation-column';
 import { DatabaseConfig } from '../../src/database-config';
+import { FedacoRelationListType, FedacoRelationType } from '../../src/fedaco/fedaco-types';
 import { mixinSoftDeletes } from '../../src/fedaco/mixins/soft-deletes';
 import { Model } from '../../src/fedaco/model';
 import { forwardRef } from '../../src/query-builder/forward-ref';
@@ -177,7 +178,7 @@ describe('test database fedaco has one of many', () => {
     const latestLogin = await user.newRelation('logins').create();
     user              = await HasOneOfManyTestUser.createQuery().with('latest_login').first();
     expect(user.relationLoaded('latest_login')).toBeTruthy();
-    expect(user.latest_login.id).toEqual(latestLogin.id);
+    expect((user.latest_login as HasOneOfManyTestLogin).id).toEqual(latestLogin.id);
   });
 
   it('has nested', async () => {
@@ -272,7 +273,7 @@ describe('test database fedaco has one of many', () => {
       'state': 'baz'
     });
     user = await HasOneOfManyTestUser.createQuery().first();
-    expect(user.foo_state.id).toEqual(currentForState.id);
+    expect((user.foo_state as HasOneOfManyTestState).id).toEqual(currentForState.id);
   });
 
   it('multiple aggregates', async () => {
@@ -284,7 +285,7 @@ describe('test database fedaco has one of many', () => {
       'published_at': '2021-05-01 00:00:00'
     });
     user        = await HasOneOfManyTestUser.createQuery().first();
-    expect(user.price.id).toEqual(price.id);
+    expect((user.price as HasOneOfManyTestPrice).id).toEqual(price.id);
   });
 
   it('eager loading with multiple aggregates', async () => {
@@ -309,9 +310,9 @@ describe('test database fedaco has one of many', () => {
       .with('price')
       .get();
     expect(users[0].price).not.toBeNull();
-    expect(users[0].price.id).toEqual(user1Price.id);
+    expect((users[0].price as HasOneOfManyTestPrice).id).toEqual(user1Price.id);
     expect(users[1].price).not.toBeNull();
-    expect(users[1].price.id).toEqual(user2Price.id);
+    expect((users[1].price as HasOneOfManyTestPrice).id).toEqual(user2Price.id);
   });
 
   it('with exists', async () => {
@@ -327,7 +328,7 @@ describe('test database fedaco has one of many', () => {
     await HasOneOfManyTestUser.createQuery().create();
     let user = await HasOneOfManyTestUser.createQuery().withExists('foo_state').first();
     expect(user.getAttribute('foo_state_exists')).toBeFalsy();
-    user.newRelation('states').create({
+    await user.newRelation('states').create({
       'type' : 'foo',
       'state': 'bar'
     });
@@ -353,26 +354,26 @@ export class HasOneOfManyTestUser extends Model {
     related   : forwardRef(() => HasOneOfManyTestLogin),
     foreignKey: 'user_id'
   })
-  public logins;
+  public logins: FedacoRelationType<HasOneOfManyTestLogin>;
 
   @HasOneOfManyColumn({
     related   : forwardRef(() => HasOneOfManyTestLogin),
     foreignKey: 'user_id'
   })
-  public latest_login;
+  public latest_login: FedacoRelationType<HasOneOfManyTestLogin>;
 
   @HasOneOfManyColumn({
     related   : forwardRef(() => HasOneOfManyTestLoginWithSoftDeletes),
     foreignKey: 'user_id'
   })
-  public latest_login_with_soft_deletes;
+  public latest_login_with_soft_deletes: FedacoRelationType<HasOneOfManyTestLoginWithSoftDeletes>;
 
   @HasOneOfManyColumn({
     related   : forwardRef(() => HasOneOfManyTestLogin),
     foreignKey: 'user_id',
     aggregate : 'latest'
   })
-  public latest_login_with_shortcut;
+  public latest_login_with_shortcut: FedacoRelationType<HasOneOfManyTestLogin>;
 
   @HasOneOfManyColumn({
     related   : forwardRef(() => HasOneOfManyTestLogin),
@@ -380,7 +381,7 @@ export class HasOneOfManyTestUser extends Model {
     column    : 'id',
     aggregate : 'count'
   })
-  public latest_login_with_invalid_aggregate;
+  public latest_login_with_invalid_aggregate: FedacoRelationType<HasOneOfManyTestLogin>;
 
   @HasOneOfManyColumn({
     related   : forwardRef(() => HasOneOfManyTestLogin),
@@ -388,13 +389,13 @@ export class HasOneOfManyTestUser extends Model {
     column    : 'id',
     aggregate : 'min'
   })
-  public first_login;
+  public first_login: FedacoRelationType<HasOneOfManyTestLogin>;
 
   @HasManyColumn({
     related   : forwardRef(() => HasOneOfManyTestState),
     foreignKey: 'user_id'
   })
-  public states;
+  public states: FedacoRelationListType<HasOneOfManyTestState>;
 
   @HasOneOfManyColumn({
     related   : forwardRef(() => HasOneOfManyTestState),
@@ -406,13 +407,13 @@ export class HasOneOfManyTestUser extends Model {
       q.where('type', 'foo');
     }
   })
-  public foo_state;
+  public foo_state: FedacoRelationType<HasOneOfManyTestState>;
 
   @HasManyColumn({
     related   : forwardRef(() => HasOneOfManyTestPrice),
     foreignKey: 'user_id',
   })
-  public prices;
+  public prices: FedacoRelationListType<HasOneOfManyTestPrice>;
 
   @HasOneOfManyColumn({
     related   : forwardRef(() => HasOneOfManyTestPrice),
@@ -425,7 +426,7 @@ export class HasOneOfManyTestUser extends Model {
       q.where('published_at', '<', format(new Date(), 'yyyy-MM-dd HH:mm:ss'));
     }
   })
-  public price;
+  public price: FedacoRelationType<HasOneOfManyTestPrice>;
 
   @HasOneOfManyColumn({
     related   : forwardRef(() => HasOneOfManyTestPrice),
@@ -434,7 +435,7 @@ export class HasOneOfManyTestUser extends Model {
       'published_at': 'MAX'
     }
   })
-  public price_without_key_in_aggregates;
+  public price_without_key_in_aggregates: FedacoRelationListType<HasOneOfManyTestPrice>;
 
   @HasOneColumn({
     related   : forwardRef(() => HasOneOfManyTestPrice),
@@ -443,7 +444,7 @@ export class HasOneOfManyTestUser extends Model {
       q.latestOfMany(['published_at', 'id']);
     })
   })
-  public price_with_shortcut;
+  public price_with_shortcut: FedacoRelationType<HasOneOfManyTestPrice>;
 }
 
 export class HasOneOfManyTestModel extends Model {
@@ -451,7 +452,7 @@ export class HasOneOfManyTestModel extends Model {
   @HasOneOfManyColumn({
     related: forwardRef(() => HasOneOfManyTestLogin),
   })
-  public logins;
+  public logins: FedacoRelationListType<HasOneOfManyTestLogin>;
 }
 
 export class HasOneOfManyTestLogin extends Model {
@@ -460,7 +461,7 @@ export class HasOneOfManyTestLogin extends Model {
   _timestamps: any = false;
 
   @PrimaryGeneratedColumn()
-  id;
+  id: string | number;
 }
 
 export class HasOneOfManyTestLoginWithSoftDeletes extends mixinSoftDeletes<any>(Model) {
@@ -486,5 +487,5 @@ export class HasOneOfManyTestPrice extends Model {
   // };
 
   @DatetimeColumn()
-  published_at;
+  published_at: Date;
 }

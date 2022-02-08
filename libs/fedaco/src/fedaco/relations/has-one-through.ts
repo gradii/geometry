@@ -4,6 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { isArray } from '@gradii/check-type';
 import { Collection } from '../../define/collection';
 import { Model } from '../model';
 import { mixinInteractsWithDictionary } from './concerns/interacts-with-dictionary';
@@ -35,7 +36,7 @@ export class HasOneThrough extends mixinInteractsWithDictionary(
       const key = this._getDictionaryKey(model.getAttribute(this._localKey));
       if (dictionary[key] !== undefined) {
         const value = dictionary[key];
-        model.setRelation(relation, value);
+        model.setRelation(relation, isArray(value) ? value[0] : value );
       }
     }
     return models;

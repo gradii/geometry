@@ -237,10 +237,10 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   _buildDictionary(results: Collection): { [key: string]: any[] } {
     const dictionary: any = {};
     for (const result of results) {
-      if (!dictionary[result.getAttribute('laravel_through_key')]) {
-        dictionary[result.getAttribute('laravel_through_key')] = [];
+      if (!dictionary[result.getAttribute('fedaco_through_key')]) {
+        dictionary[result.getAttribute('fedaco_through_key')] = [];
       }
-      dictionary[result.getAttribute('laravel_through_key')].push(result);
+      dictionary[result.getAttribute('fedaco_through_key')].push(result);
     }
     return dictionary;
   }
@@ -354,14 +354,14 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
     if (columns.includes('*')) {
       columns = [this._related.getTable() + '.*'];
     }
-    return [...columns, ...[this.getQualifiedFirstKeyName() + ' as laravel_through_key']];
+    return [...columns, ...[this.getQualifiedFirstKeyName() + ' as fedaco_through_key']];
   }
 
-  // /*Chunk the results of the query.*/
-  // public chunk(count: number, callback: Function) {
-  //   return this.prepareQueryBuilder().chunk(count, callback);
-  // }
-  //
+  /*Chunk the results of the query.*/
+  public chunk(count: number) {
+    return this._prepareQueryBuilder().chunk(count);
+  }
+
   // /*Chunk the results of a query by comparing numeric IDs.*/
   // public chunkById(count: number, callback: Function, column: string | null = null,
   //                  alias: string | null                                     = null) {

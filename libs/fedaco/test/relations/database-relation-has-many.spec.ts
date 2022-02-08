@@ -2,6 +2,7 @@ import { isArray } from '@gradii/check-type';
 import { Column } from '../../src/annotation/column/column';
 import { Model } from '../../src/fedaco/model';
 import { HasMany } from '../../src/fedaco/relations/has-many';
+import { Relation } from '../../src/fedaco/relations/relation';
 import { getBuilder } from './relation-testing-helper';
 
 let builder, related;
@@ -12,6 +13,7 @@ function getRelation(): HasMany {
   // builder.shouldReceive('where')._with('table.foreign_key', '=', 1);
   related = new Model();
   jest.spyOn(builder, 'getModel').mockReturnValue(related);
+  // @ts-ignore
   builder._model = related;
   const parent   = new Model();
   jest.spyOn(parent, 'getAttribute').mockReturnValue(1);
@@ -20,21 +22,23 @@ function getRelation(): HasMany {
   return new HasMany(builder, parent, '_table.foreign_key', 'id');
 }
 
-function expectNewModel(relation, attributes) {
-  const model    = new Model();
+function expectNewModel(relation: Relation, attributes: Record<string, any>) {
+  const model     = new Model();
   model._fillable = ['name'];
-  jest.spyOn(relation.getRelated(), 'setAttribute').mockImplementation((...args) => {
-    expect(args[0]).toEqual('foreign_key');
-    expect(args[1]).toEqual(1);
-  });
-  jest.spyOn(relation.getRelated(), 'newInstance').mockImplementation((...args) => {
+  jest.spyOn(relation.getRelated(), 'setAttribute').mockImplementation(
+    // @ts-ignore
+    (key: string, value: any) => {
+      expect(key).toEqual('foreign_key');
+      expect(value).toEqual(1);
+    });
+  jest.spyOn(relation.getRelated(), 'newInstance').mockImplementation((...args: any[]) => {
     // expect(args[0]).toEqual(attributes);
     return model;
   });
   return model;
 }
 
-function expectCreatedModel(relation, attributes) {
+function expectCreatedModel(relation: Relation, attributes: Record<string, any>) {
   const model = expectNewModel(relation, attributes);
   // model.expects(this.once()).method('save');
   jest.spyOn(model, 'save').mockImplementation((...args: any[]) => {
@@ -388,8 +392,8 @@ export class EloquentHasManyModelStub extends Model {
   public foreign_key: any = 'foreign.value';
 
   @Column()
-  public id;
+  public id: string | number;
 
   @Column()
-  public foo;
+  public foo: string;
 }
