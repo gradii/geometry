@@ -1,11 +1,12 @@
+import { FedacoBuilder } from './../../src/fedaco/fedaco-builder';
 import { Model } from '../../src/fedaco/model';
 import { BelongsTo } from '../../src/fedaco/relations/belongs-to';
 import { Column } from '../../src/annotation/column/column';
 import { getBuilder } from './relation-testing-helper';
 
-let builder, related;
+let builder: FedacoBuilder<Model>, related: Model;
 
-function getRelation(parent?, keyType = 'int') {
+function getRelation(parent?: Model, keyType = 'int') {
   builder = getBuilder();
   // this.builder.shouldReceive('where').with('relation.id', '=', 'foreign.value');
   related = new Model();
@@ -31,7 +32,7 @@ describe('test database fedaco belongs to', () => {
   });
 
   it('belongs to with dynamic default', async () => {
-    const relation = getRelation().withDefault(newModel => {
+    const relation = getRelation().withDefault((newModel: Model) => {
       newModel.username = 'taylor';
     });
 
@@ -208,7 +209,7 @@ export class EloquentBelongsToModelStub extends Model {
   public foreignKey: any = 'foreign.value';
 
   @Column()
-  username;
+  username: string;
 }
 
 export class AnotherEloquentBelongsToModelStub extends Model {

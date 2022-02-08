@@ -98,6 +98,8 @@ export declare namespace Model {
 
   export const snakeAttributes: boolean;
 
+  export function addGlobalScope(scope: string, implementation: Scope | ((q: QueryBuilder) => void)): void;
+
   export function addGlobalScope(scope: string, implementation: Scope | Function): void;
 }
 

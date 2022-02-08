@@ -39,6 +39,9 @@ export interface QueriesRelationShips {
   orDoesntHave(relation: string): this;
 
   /*Add a relationship count / exists condition to the query with where clauses.*/
+  whereHas(relation: string | Relation, callback?: ((q: FedacoBuilder) => void) | null, operator?: string,
+    count?: number): this;
+
   whereHas(relation: string | Relation, callback?: Function | null, operator?: string,
            count?: number): this;
 

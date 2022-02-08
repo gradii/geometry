@@ -1,3 +1,5 @@
+import { Table } from './../../src/annotation/table/table';
+import { FedacoRelationListType } from './../../src/fedaco/fedaco-types';
 import { BelongsToManyColumn } from '../../src/annotation/relation-column/belongs-to-many.relation-column';
 import { DatabaseConfig } from '../../src/database-config';
 import { Model } from '../../src/fedaco/model';
@@ -73,7 +75,7 @@ describe('test database fedaco belongs to many sync return value type', () => {
   it('sync return value type', async () => {
     await seedData();
     const user       = await BelongsToManySyncTestTestUser.createQuery().first();
-    const articleIDs = await BelongsToManySyncTestTestArticle.createQuery().pluck('id');
+    const articleIDs = await BelongsToManySyncTestTestArticle.createQuery().pluck('id') as any[];
     const changes    = await user.newRelation('articles').sync(articleIDs);
     changes['attached'].map(id => {
       expect(new BelongsToManySyncTestTestArticle().getKeyType()).toBe(typeof id);
@@ -81,6 +83,9 @@ describe('test database fedaco belongs to many sync return value type', () => {
   });
 });
 
+@Table({
+  tableName: 'users'
+})
 export class BelongsToManySyncTestTestUser extends Model {
   _table: any            = 'users';
   _fillable: any         = ['id', 'email'];
@@ -92,9 +97,12 @@ export class BelongsToManySyncTestTestUser extends Model {
     foreignPivotKey: 'user_id',
     relatedPivotKey: 'article_id'
   })
-  public articles;
+  public articles: FedacoRelationListType<BelongsToManySyncTestTestArticle>;
 }
 
+@Table({
+  tableName: 'articles'
+})
 export class BelongsToManySyncTestTestArticle extends Model {
   _table: any              = 'articles';
   _keyType: any            = 'string';

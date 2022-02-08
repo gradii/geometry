@@ -1,3 +1,8 @@
+import { Table } from './../../src/annotation/table/table';
+import { TableName } from './../../src/query/ast/table-name';
+import { FedacoBuilder } from './../../src/fedaco/fedaco-builder';
+import { FedacoRelationListType } from './../../src/fedaco/fedaco-types';
+import { QueryBuilder } from './../../src/query-builder/query-builder';
 import { HasManyColumn } from '../../src/annotation/relation-column/has-many.relation-column';
 import { DatabaseConfig } from '../../src/database-config';
 import { Model } from '../../src/fedaco/model';
@@ -116,15 +121,18 @@ export class EloquentClosureGlobalScopesTestModel extends Model {
     super.boot();
   }
 
-  public scopeApproved(query) {
+  public scopeApproved(query: QueryBuilder) {
     return query.where('approved', 1).orWhere('should_approve', 0);
   }
 
-  public scopeOrApproved(query) {
+  public scopeOrApproved(query: QueryBuilder) {
     return query.orWhere('approved', 1).orWhere('should_approve', 0);
   }
 }
 
+@Table({
+  tableName: 'table2'
+})
 export class EloquentGlobalScopesWithRelationModel extends EloquentClosureGlobalScopesTestModel {
   _table: any = 'table2';
 
@@ -135,7 +143,7 @@ export class EloquentGlobalScopesWithRelationModel extends EloquentClosureGlobal
       q.where('foo', 'bar');
     })
   })
-  public related;
+  public related: FedacoRelationListType<EloquentGlobalScopesTestModel>;
 }
 
 export class EloquentClosureGlobalScopesWithOrTestModel extends EloquentClosureGlobalScopesTestModel {
@@ -150,6 +158,9 @@ export class EloquentClosureGlobalScopesWithOrTestModel extends EloquentClosureG
   }
 }
 
+@Table({
+  tableName: '_table'
+})
 export class EloquentGlobalScopesTestModel extends Model {
   _table: any = '_table';
 
@@ -160,7 +171,7 @@ export class EloquentGlobalScopesTestModel extends Model {
 }
 
 export class ActiveScope extends Scope {
-  public apply(builder, model) {
+  public apply(builder: FedacoBuilder, model: Model) {
     return builder.where('active', 1);
   }
 }

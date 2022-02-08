@@ -511,7 +511,7 @@ export class HasManyThroughTestCountry extends Model {
     related   : HasManyThroughTestUser,
     foreignKey: 'country_id'
   })
-  public users;
+  public users: FedacoRelationListType<HasManyThroughTestUser>;
 }
 
 /*Eloquent Models...*/
@@ -522,7 +522,7 @@ export class HasManyThroughDefaultTestUser extends Model {
   @HasManyColumn({
     related: forwardRef(() => HasManyThroughDefaultTestPost),
   })
-  public posts;
+  public posts: FedacoRelationListType<HasManyThroughDefaultTestPost>;
 }
 
 /*Eloquent Models...*/
@@ -531,12 +531,12 @@ export class HasManyThroughDefaultTestPost extends Model {
   _guarded: any = [];
 
   @Column()
-  title;
+  title: string;
 
   @BelongsToColumn({
     related: HasManyThroughDefaultTestUser
   })
-  public owner;
+  public owner: FedacoRelationType<HasManyThroughDefaultTestUser>;
 }
 
 export class HasManyThroughDefaultTestCountry extends Model {
@@ -547,12 +547,12 @@ export class HasManyThroughDefaultTestCountry extends Model {
     related: HasManyThroughDefaultTestPost,
     through: HasManyThroughDefaultTestUser
   })
-  public posts;
+  public posts: FedacoRelationListType<HasManyThroughDefaultTestPost>;
 
   @HasManyColumn({
     related: HasManyThroughDefaultTestUser
   })
-  public users;
+  public users: FedacoRelationListType<HasManyThroughDefaultTestUser>;
 }
 
 export class HasManyThroughIntermediateTestCountry extends Model {
@@ -567,13 +567,13 @@ export class HasManyThroughIntermediateTestCountry extends Model {
     localKey      : 'shortname',
     secondLocalKey: 'email'
   })
-  public posts;
+  public posts: FedacoRelationListType<HasManyThroughTestPost>;
 
   @HasManyColumn({
     related   : HasManyThroughTestUser,
     foreignKey: 'country_id'
   })
-  public users;
+  public users: FedacoRelationListType<HasManyThroughTestUser>;
 }
 
 export class HasManyThroughSoftDeletesTestUser extends (mixinSoftDeletes<any>(Model) as typeof Model) {
@@ -584,10 +584,10 @@ export class HasManyThroughSoftDeletesTestUser extends (mixinSoftDeletes<any>(Mo
     related   : forwardRef(() => HasManyThroughSoftDeletesTestPost),
     foreignKey: 'user_id'
   })
-  public posts;
+  public posts: FedacoRelationListType<HasManyThroughSoftDeletesTestPost>;
 
   @DeletedAtColumn()
-  deleted_at;
+  deleted_at: Date;
 }
 
 /*Eloquent Models...*/
@@ -596,13 +596,13 @@ export class HasManyThroughSoftDeletesTestPost extends Model {
   _guarded: any = [];
 
   @Column()
-  title;
+  title: string;
 
   @BelongsToColumn({
     related   : HasManyThroughSoftDeletesTestUser,
     foreignKey: 'user_id'
   })
-  public owner;
+  public owner: FedacoRelationType<HasManyThroughSoftDeletesTestUser>;
 }
 
 export class HasManyThroughSoftDeletesTestCountry extends Model {
@@ -610,7 +610,7 @@ export class HasManyThroughSoftDeletesTestCountry extends Model {
   _guarded: any = [];
 
   @Column()
-  shortname;
+  shortname: string;
 
   @HasManyThroughColumn({
     related  : HasManyThroughSoftDeletesTestPost,
@@ -618,11 +618,11 @@ export class HasManyThroughSoftDeletesTestCountry extends Model {
     firstKey : 'country_id',
     secondKey: 'user_id',
   })
-  public posts;
+  public posts: FedacoRelationListType<HasManyThroughSoftDeletesTestPost>;
 
   @HasManyColumn({
     related   : HasManyThroughSoftDeletesTestUser,
     foreignKey: 'country_id'
   })
-  public users;
+  public users: FedacoRelationListType<HasManyThroughSoftDeletesTestUser>;;
 }
