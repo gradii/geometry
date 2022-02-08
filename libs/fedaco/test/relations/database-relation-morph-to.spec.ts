@@ -1,11 +1,15 @@
+import { DatabaseConfig } from './../../src/database-config';
+import { SchemaBuilder } from './../../src/schema/schema-builder';
+import { FedacoBuilder } from './../../src/fedaco/fedaco-builder';
 import { MorphToColumn } from '../../src/annotation/relation-column/morph-to.relation-column';
 import { Model } from '../../src/fedaco/model';
 import { MorphTo } from '../../src/fedaco/relations/morph-to';
 import { getBuilder } from './relation-testing-helper';
+import { FedacoRelationType } from 'libs/fedaco/src/fedaco/fedaco-types';
 
-let builder;
+let builder: FedacoBuilder<Model>;
 
-function getRelation(parent?) {
+function getRelation(parent?: Model) {
   builder       = getBuilder();
   const related = new Model();
   jest.spyOn(related, 'getKeyName').mockReturnValue('id');
@@ -15,7 +19,7 @@ function getRelation(parent?) {
   return new MorphTo(builder, parent, 'foreign_key', 'id', 'morph_type', 'relation');
 }
 
-function getRelationAssociate(parent) {
+function getRelationAssociate(parent: Model) {
   builder = getBuilder();
 
   const related = new Model();
@@ -26,7 +30,27 @@ function getRelationAssociate(parent) {
   return new MorphTo(builder, parent, 'foreign_key', 'id', 'morph_type', 'relation');
 }
 
+function connection(connectionName = 'default') {
+  return Model.getConnectionResolver().connection(connectionName);
+}
+
+function schema(connectionName = 'default'): SchemaBuilder {
+  return connection(connectionName).getSchemaBuilder();
+}
+
 describe('test database fedaco morph to', () => {
+  beforeAll(async () => {
+    const db = new DatabaseConfig();
+    db.addConnection({
+      'driver'  : 'sqlite',
+      'database': ':memory:'
+    });
+    db.bootFedaco();
+    db.setAsGlobal();
+  });
+
+  afterAll(async () => {
+  });
 
   it('lookup dictionary is properly constructed', () => {
     const relation = getRelation();
@@ -91,7 +115,7 @@ describe('test database fedaco morph to', () => {
   it('morph to with specified class default', async () => {
     const parent         = new EloquentMorphToModelStub();
     parent.relation_type = EloquentMorphToRelatedStub;
-    const relation       = parent.relation().withDefault();
+    const relation       = parent.newRelation('relation').withDefault();
     const newModel       = new EloquentMorphToRelatedStub();
     const result         = await relation.getResults();
     expect(result).toEqual(newModel);
@@ -147,7 +171,7 @@ export class EloquentMorphToModelStub extends Model {
   @MorphToColumn({
     morphTypeMap: {}
   })
-  public relation;
+  public relation: FedacoRelationType<any>;
 }
 
 export class EloquentMorphToRelatedStub extends Model {

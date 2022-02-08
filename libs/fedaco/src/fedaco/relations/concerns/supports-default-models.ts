@@ -10,6 +10,8 @@ import { Model } from '../../model';
 import { Relation } from '../relation';
 
 export interface SupportsDefaultModels {
+  withDefault(callback?: (m: Model) => void): this;
+
   withDefault(callback?: Function | any[] | any | boolean): this;
 
   _getDefaultFor(parent: Model): Model;

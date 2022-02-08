@@ -93,12 +93,12 @@ export class MorphTo extends BelongsTo {
   /*Build a dictionary with the models.*/
   protected buildDictionary(models: Collection) {
     for (const model of models) {
-      if (model._getAttributeFromArray(this._morphType)) {
+      if (model[this._morphType]) {
         const morphTypeKey  = this._getDictionaryKey(
-          model._getAttributeFromArray(this._morphType)
+          model[this._morphType]
         );
         const foreignKeyKey = this._getDictionaryKey(
-          model._getAttributeFromArray(this._foreignKey)
+          model[this._foreignKey]
         );
 
         let obj: Record<string, any> = this._dictionary[morphTypeKey];
@@ -231,7 +231,7 @@ export class MorphTo extends BelongsTo {
 
   /*Make a new related instance for the given model.*/
   protected newRelatedInstanceFor(parent: Model) {
-    return parent[this.getRelationName()]().getRelated().newInstance();
+    return parent.newRelation(this.getRelationName()).getRelated().newInstance();
   }
 
   /*Get the foreign key "type" name.*/
