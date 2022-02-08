@@ -9,6 +9,7 @@ import { tap } from 'ramda';
 import { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
 import { Pivot } from './pivot';
+import { Relation } from './relation';
 
 export class MorphPivot extends Pivot {
   /*The type of the polymorphic relation.
@@ -98,7 +99,7 @@ export class MorphPivot extends Pivot {
     const query = this.newQueryWithoutScopes();
     for (const id of ids) {
       const segments = id.split(':');
-      query.orWhere(q => {
+      query.orWhere((q: Relation) => {
         return q.where(segments[0], segments[1])
           .where(segments[2], segments[3])
           .where(segments[4], segments[5]);

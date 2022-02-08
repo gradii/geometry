@@ -262,7 +262,7 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   }
 
   /*Add a basic where clause to the query, and return the first result.*/
-  public async firstWhere(column: Function | string | any[],
+  public async firstWhere(column: any | string | any[],
                           operator: any = null,
                           value: any    = null,
                           conjunction   = 'and'): Promise<Model> {

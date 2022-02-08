@@ -4,7 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { createConnection } from 'mysql2';
 import { MysqlConnection } from '../../connection/mysql-connection';
 import { Connector } from '../connector';
 import { ConnectorInterface } from '../connector-interface';
@@ -30,8 +29,9 @@ export class MysqlConnector extends Connector implements ConnectorInterface {
                          options: any): Promise<MysqlWrappedConnection> {
     const [username, password] = [config['username'] ?? null, config['password'] ?? null];
     try {
+      const mysql2 = await import('mysql2');
       return Promise.resolve(
-        new MysqlWrappedConnection(createConnection({
+        new MysqlWrappedConnection(mysql2.createConnection({
           host    : config['host'],
           port    : config['port'],
           user    : username,

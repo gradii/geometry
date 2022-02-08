@@ -3,13 +3,13 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
-import { Database } from 'sqlite3';
+
 import { WrappedConnection } from '../wrapped-connection';
 import { SqliteWrappedStmt } from './sqlite-wrapped-stmt';
 
 export class SqliteWrappedConnection implements WrappedConnection {
 
-  constructor(public driver: Database) {
+  constructor(public driver: import('sqlite3').Database) {
   }
 
   execute(sql: string, bindings?: any[]): Promise<void> {

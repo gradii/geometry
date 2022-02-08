@@ -4,7 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { RunResult, Statement } from 'sqlite3';
 import { WrappedStmt } from '../wrapped-stmt';
 
 export class SqliteWrappedStmt implements WrappedStmt {
@@ -13,7 +12,7 @@ export class SqliteWrappedStmt implements WrappedStmt {
   _lastInsertId: number;
   _affectRows: number;
 
-  constructor(public driverStmt: Statement) {
+  constructor(public driverStmt: import('sqlite3').Statement) {
   }
 
   bindValues(bindings: any[]) {
@@ -30,7 +29,7 @@ export class SqliteWrappedStmt implements WrappedStmt {
     return new Promise((ok, fail) => {
       this.driverStmt
         .run(...(bindings ?? this._bindingValues),
-          function (this: RunResult, err: string) {
+          function (this: import('sqlite3').RunResult, err: string) {
             if (err) {
               return fail(err);
             }
@@ -52,7 +51,7 @@ export class SqliteWrappedStmt implements WrappedStmt {
 
     return new Promise((ok, fail) => {
       this.driverStmt.all(bindings ?? this._bindingValues,
-        function (this: RunResult, err: string, rows) {
+        function (this: import('sqlite3').RunResult, err: string, rows) {
           if (err) {
             return fail(err);
           }

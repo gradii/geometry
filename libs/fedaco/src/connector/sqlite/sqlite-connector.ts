@@ -4,7 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import * as sqlite3 from 'sqlite3';
 import { Connector } from '../connector';
 import { ConnectorInterface } from '../connector-interface';
 import { SqliteWrappedConnection } from './sqlite-wrapped-connection';
@@ -27,6 +26,7 @@ export class SqliteConnector extends Connector implements ConnectorInterface {
   async createConnection(database: string, config: any, options: any) {
     const [username, password] = [config['username'] ?? null, config['password'] ?? null];
     try {
+      const sqlite3 = await import('sqlite3');
       return new Promise((ok, fail) => {
        const db = new sqlite3.Database(database, (err) => {
           if (err) {
