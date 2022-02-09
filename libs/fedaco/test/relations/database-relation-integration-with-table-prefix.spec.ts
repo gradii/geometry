@@ -2,7 +2,7 @@ import { isArray } from '@gradii/check-type';
 import { DatabaseConfig } from '../../src/database-config';
 import { Model } from '../../src/fedaco/model';
 import { SchemaBuilder } from '../../src/schema/schema-builder';
-import { EloquentTestUser } from '../fedaco-integration.spec';
+import { EloquentTestUser } from '../fedaco-mysql-integration.spec';
 
 function connection(connectionName = 'default') {
   return Model.getConnectionResolver().connection(connectionName);
@@ -57,7 +57,7 @@ describe('test database fedaco integration with table prefix', () => {
     await EloquentTestUser.createQuery().create({
       'email': 'xsilen@gradii.com'
     });
-    const models = EloquentTestUser.createQuery().fromQuery(
+    const models = await EloquentTestUser.createQuery().fromQuery(
       'SELECT * FROM prefix_users WHERE email = ?',
       ['xsilen@gradii.com']);
     expect(isArray(models)).toBeTruthy();

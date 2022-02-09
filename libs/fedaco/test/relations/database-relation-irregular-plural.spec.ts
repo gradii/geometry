@@ -1,3 +1,4 @@
+import { FedacoRelationListType, FedacoRelationType } from './../../src/fedaco/fedaco-types';
 import { SchemaBuilder } from '../../src/schema/schema-builder';
 import { Model } from '../../src/fedaco/model';
 import { DatabaseConfig } from '../../src/database-config';
@@ -105,13 +106,13 @@ export class IrregularPluralHuman extends Model {
     foreignPivotKey: 'irregular_plural_token_id',
     relatedPivotKey: 'irregular_plural_human_id'
   })
-  public irregularPluralTokens;
+  public irregularPluralTokens: FedacoRelationListType<IrregularPluralToken>;
 
   @MorphToManyColumn({
     related: forwardRef(() => IrregularPluralMotto),
     name   : 'cool_motto'
   })
-  public mottoes;
+  public mottoes: FedacoRelationListType<IrregularPluralMotto>;
 }
 
 export class IrregularPluralToken extends Model {
@@ -128,5 +129,5 @@ export class IrregularPluralMotto extends Model {
     related: IrregularPluralHuman,
     name   : 'cool_motto'
   })
-  public irregularPluralHumans;
+  public irregularPluralHumans: FedacoRelationType<IrregularPluralHuman>;
 }
