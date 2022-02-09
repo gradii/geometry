@@ -7,6 +7,7 @@
 import { isAnyEmpty, isArray, isBlank, isObject } from '@gradii/check-type';
 import { difference, uniq } from 'ramda';
 import { Constructor } from '../../helper/constructor';
+import { Model } from '../model';
 
 export class NullDispatcher {
   constructor(public dispatcher: Dispatcher) {
@@ -111,13 +112,14 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
     }
 
     /*Remove all of the event listeners for the model.*/
-    public static flushEventListeners() {
+    public static flushEventListeners(this: Model & _Self) {
       if (!((/*static*/ this).dispatcher !== undefined)) {
         return;
       }
+      // @ts-ignore
       const instance = new this();
       for (const event of instance.getObservableEvents()) {
-        (/*static*/ this).dispatcher.forget(`fedaco.${event}: ${this.constructor.name}`);
+        (/*static*/ this).dispatcher.forget(`fedaco.${event}: ${this.getTable()}`);
       }
       for (const event of Object.values(instance._dispatchesEvents)) {
         (/*static*/ this).dispatcher.forget(event as string);
@@ -208,7 +210,7 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
     /*Fire the given event for the model.*/
 
     /*protected*/
-    _fireModelEvent(event: string, halt: boolean = true) {
+    _fireModelEvent(this: Model & _Self, event: string, halt: boolean = true) {
       if (!((/*static*/<any>this.constructor).dispatcher !== undefined)) {
         return true;
       }
@@ -220,7 +222,7 @@ export function mixinHasEvents<T extends Constructor<any>>(base: T) {
       return !isAnyEmpty(result) ?
         result :
         (/*static*/<any>this.constructor).dispatcher[method](
-          `fedaco.${event}: ${this.constructor.name}`,
+          `fedaco.${event}: ${this.getTable()}`,
           this);
     }
 

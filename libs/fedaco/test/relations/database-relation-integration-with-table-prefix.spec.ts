@@ -25,7 +25,7 @@ async function createSchema() {
   await schema('default').create('posts', table => {
     table.increments('id');
     table.integer('user_id');
-    table.integer('parent_id').nullable();
+    table.integer('parent_id').withNullable();
     table.string('name');
     table.timestamps();
   });

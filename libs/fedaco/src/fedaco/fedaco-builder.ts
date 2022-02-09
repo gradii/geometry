@@ -151,7 +151,7 @@ export interface FedacoBuilder<T extends Model = Model> extends GuardsAttributes
   // _enforceOrderBy();
 
   /*Get an array with the values of a given column.*/
-  pluck(column: string, key?: string): Promise<any[] | Record<string, any>>;
+  pluck(column: string, key?: string): Promise<any[]>;
 
   /*Paginate the given query.*/
   paginate(page?: number, pageSize?: number, columns?: any[]): Promise<{

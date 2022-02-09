@@ -18,7 +18,7 @@ export interface HasTimestamps {
   _timestamps: boolean;
 
   /*Update the model's update timestamp.*/
-  touch(attribute?: string): boolean;
+  touch(attribute?: string): Promise<boolean>;
 
   /*Update the creation and update timestamps.*/
   updateTimestamps(): boolean;

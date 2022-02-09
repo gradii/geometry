@@ -12,7 +12,7 @@ function getOneRelation() {
   const parent = new Model();
   jest.spyOn(parent, 'getAttribute').mockReturnValue(1);
   jest.spyOn(parent, 'getMorphClass').mockReturnValue('parent-model');
-  jest.spyOn(builder, 'where').mockReturnValue(parent);
+  jest.spyOn(builder, 'where').mockReturnValue(builder);
   return new MorphOne(builder, parent, '_table.morph_type', '_table.morph_id', 'id');
 }
 
@@ -26,7 +26,7 @@ function getManyRelation() {
   return new MorphMany(builder, parent, '_table.morph_type', '_table.morph_id', 'id');
 }
 
-function getNamespacedRelation(alias) {
+function getNamespacedRelation(alias: string) {
   // import Relation.morphMap({});
   builder = getBuilder();
   // builder.shouldReceive('whereNotNull').once()._with('table.morph_id');
@@ -38,6 +38,7 @@ function getNamespacedRelation(alias) {
   const parent = new EloquentModelNamespacedStub();
   jest.spyOn(parent, 'getAttribute').mockReturnValue(1);
   jest.spyOn(parent, 'getMorphClass').mockReturnValue(alias);
+  // @ts-ignore
   jest.spyOn(builder, 'where').mockReturnValue(alias);
   // parent.shouldReceive('getAttribute')._with('id').andReturn(1);
   // parent.shouldReceive('getMorphClass').andReturn(alias);

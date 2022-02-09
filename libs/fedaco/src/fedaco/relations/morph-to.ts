@@ -205,13 +205,14 @@ export class MorphTo extends BelongsTo {
 
   /*Associate the model instance to the given parent.*/
   public associate(model: Model) {
-    let foreignKey;
+    let foreignKey, foreignKeyValue = null, morphClass = null;
     if (model instanceof Model) {
       foreignKey = this._ownerKey && model[this._ownerKey] ? this._ownerKey : model.getKeyName();
+      foreignKeyValue = model[foreignKey];
+      morphClass = model.getMorphClass();
     }
-    this._parent.setAttribute(this._foreignKey, model instanceof Model ? model[foreignKey] : null);
-    this._parent.setAttribute(this._morphType,
-      model instanceof Model ? model.getMorphClass() : null);
+    this._parent.setAttribute(this._foreignKey, foreignKeyValue);
+    this._parent.setAttribute(this._morphType, morphClass);
     return this._parent.setRelation(this._relationName, model);
   }
 

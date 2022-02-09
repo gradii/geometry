@@ -106,7 +106,7 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
     static _relationResolvers: any[] = [];
 
     /*Get the joining table name for a many-to-many relation.*/
-    public joiningTable(related: typeof Model, instance: Model | null = null): string {
+    public joiningTable(this: Model & _Self, related: typeof Model, instance: Model | null = null): string {
       const segments = [
         instance ? instance.joiningTableSegment() : snakeCase(related.name),
         this.joiningTableSegment()
@@ -116,8 +116,8 @@ export function mixinHasRelationships<T extends Constructor<{}>>(base: T): HasRe
     }
 
     /*Get this model's half of the intermediate table name for belongsToMany relationships.*/
-    public joiningTableSegment(): string {
-      return snakeCase(this.constructor.name);
+    public joiningTableSegment(this: Model & _Self): string {
+      return snakeCase(this.getTable());
     }
 
     /*Determine if the model touches a given relation.*/

@@ -930,7 +930,7 @@ export class Model extends mixinHasAttributes(
    * Get the default foreign key name for the model.
    */
   public getForeignKey() {
-    return snakeCase(this.constructor.name) + '_' + this.getKeyName();
+    return snakeCase(this.getTable()) + '_' + this.getKeyName();
   }
 
   /*Get the number of models to return per page.*/

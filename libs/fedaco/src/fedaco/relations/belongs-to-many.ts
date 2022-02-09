@@ -541,7 +541,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Attempt to guess the name of the inverse of the relation.*/
   _guessInverseRelation() {
-    return camelCase(pluralStudy(this.getParent().constructor.name));
+    return camelCase(pluralStudy(this.getParent().getTable()));
   }
 
   /*Touch all of the related models for the relationship.

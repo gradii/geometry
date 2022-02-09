@@ -1,11 +1,22 @@
-import { FedacoRelationListType, FedacoRelationType } from './../../src/fedaco/fedaco-types';
-import { SchemaBuilder } from '../../src/schema/schema-builder';
-import { Model } from '../../src/fedaco/model';
+import { formatISO } from 'date-fns';
+import { Column } from '../../src/annotation/column/column';
+import { CreatedAtColumn } from '../../src/annotation/column/created-at.column';
+import { UpdatedAtColumn } from '../../src/annotation/column/updated-at.column';
+import {
+  BelongsToManyColumn
+} from '../../src/annotation/relation-column/belongs-to-many.relation-column';
+import {
+  MorphToManyColumn
+} from '../../src/annotation/relation-column/morph-to-many.relation-column';
+import {
+  MorphedByManyColumn
+} from '../../src/annotation/relation-column/morphed-by-many.relation-column';
+import { Table } from '../../src/annotation/table/table';
 import { DatabaseConfig } from '../../src/database-config';
-import { MorphedByManyColumn } from '../../src/annotation/relation-column/morphed-by-many.relation-column';
-import { MorphToManyColumn } from '../../src/annotation/relation-column/morph-to-many.relation-column';
-import { BelongsToManyColumn } from '../../src/annotation/relation-column/belongs-to-many.relation-column';
+import { Model } from '../../src/fedaco/model';
 import { forwardRef } from '../../src/query-builder/forward-ref';
+import { SchemaBuilder } from '../../src/schema/schema-builder';
+import { FedacoRelationListType, FedacoRelationType } from './../../src/fedaco/fedaco-types';
 
 function connection(connectionName = 'default') {
   return Model.getConnectionResolver().connection(connectionName);
@@ -36,7 +47,7 @@ async function createSchema() {
     table.string('name');
   });
   await schema().create('cool_mottos', table => {
-    table.integer('irregular_plural_motto_id');
+    table.integer('irregular_plural_mottos_id');
     table.integer('cool_motto_id');
     table.string('cool_motto_type');
   });
@@ -79,10 +90,11 @@ describe('test database fedaco irregular plural', () => {
     const human    = await IrregularPluralHuman.createQuery().first();
     const tokenIds = await IrregularPluralToken.createQuery().pluck('id');
     // Carbon.setTestNow('2018-05-01 15:16:17');
-    await human.newRelation('irregularPluralTokens').sync(tokenIds);
+    await human.newRelation('irregularPluralTokens').sync(tokenIds as any[]);
+    const now = formatISO(new Date());
     await human.refresh();
-    expect(/*cast type string*/ human.created_at).toBe('2018-05-01 12:13:14');
-    expect(/*cast type string*/ human.updated_at).toBe('2018-05-01 15:16:17');
+    expect(/*cast type string*/ formatISO(human.created_at)).toBe(now);
+    expect(/*cast type string*/ formatISO(human.updated_at)).toBe(now);
   });
 
   it('it pluralizes morph to many relationships', async () => {
@@ -97,6 +109,9 @@ describe('test database fedaco irregular plural', () => {
   });
 });
 
+@Table({
+  tableName: 'irregular_plural_humans'
+})
 export class IrregularPluralHuman extends Model {
   _guarded: any = [];
 
@@ -113,17 +128,32 @@ export class IrregularPluralHuman extends Model {
     name   : 'cool_motto'
   })
   public mottoes: FedacoRelationListType<IrregularPluralMotto>;
+
+  @CreatedAtColumn()
+  public created_at: Date;
+
+  @UpdatedAtColumn()
+  public updated_at: Date;
 }
 
+@Table({
+  tableName: 'irregular_plural_token'
+})
 export class IrregularPluralToken extends Model {
-  _guarded: any          = [];
-  public timestamps: any = false;
-  touches: any           = ['irregularPluralHumans'];
+  _guarded: any    = [];
+  _timestamps: any = false;
+  _touches: any    = ['irregularPluralHumans'];
 }
 
+@Table({
+  tableName: 'irregular_plural_motto'
+})
 export class IrregularPluralMotto extends Model {
-  _guarded: any          = [];
-  public timestamps: any = false;
+  _guarded: any    = [];
+  _timestamps: any = false;
+
+  @Column()
+  name: string;
 
   @MorphedByManyColumn({
     related: IrregularPluralHuman,
