@@ -69,20 +69,20 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Create a new belongs to many relationship instance.*/
   public constructor(query: FedacoBuilder,
-                     parent: Model,
-                     table: string,
-                     foreignPivotKey: string,
-                     relatedPivotKey: string,
-                     parentKey: string,
-                     relatedKey: string,
-                     relationName: string | null = null) {
+    parent: Model,
+    table: string,
+    foreignPivotKey: string,
+    relatedPivotKey: string,
+    parentKey: string,
+    relatedKey: string,
+    relationName: string | null = null) {
     super(query, parent);
-    this._parentKey       = parentKey;
-    this._relatedKey      = relatedKey;
-    this._relationName    = relationName;
+    this._parentKey = parentKey;
+    this._relatedKey = relatedKey;
+    this._relationName = relationName;
     this._relatedPivotKey = relatedPivotKey;
     this._foreignPivotKey = foreignPivotKey;
-    this._table           = table;
+    this._table = table;
     this.addConstraints();
   }
 
@@ -104,7 +104,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   /*Set the base constraints on the relation query.*/
   public addConstraints() {
     this._performJoin();
-    if (BelongsToMany.constraints) {
+    if ((this.constructor as any).constraints) {
       this._addWhereConstraints();
     }
   }
@@ -188,30 +188,30 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Set a where clause for a pivot table column.*/
   public wherePivot(column: string,
-                    value: any): FedacoBuilder;
+    value: any): FedacoBuilder;
   // public wherePivot(column: string,
   //                   value: any,
   //                   conjunction?): QueryBuilder;
   public wherePivot(column: string,
-                    operator?: string,
-                    value?: any,
-                    conjunction?: 'and' | 'or' | string): FedacoBuilder;
+    operator?: string,
+    value?: any,
+    conjunction?: 'and' | 'or' | string): FedacoBuilder;
   public wherePivot(column: string,
-                    operator?: any,
-                    value?: any,
-                    conjunction: 'and' | 'or' = 'and'): FedacoBuilder {
+    operator?: any,
+    value?: any,
+    conjunction: 'and' | 'or' = 'and'): FedacoBuilder {
     if (arguments.length === 2) {
-      value    = operator;
+      value = operator;
       operator = '=';
     }
-    this._pivotWheres.push(arguments);
+    this._pivotWheres.push([...arguments]);
     return this.getQuery().where(this.qualifyPivotColumn(column), operator, value, conjunction);
   }
 
   /*Set a "where between" clause for a pivot table column.*/
   public wherePivotBetween(column: string, values: any[],
-                           conjunction = 'and',
-                           not         = false) {
+    conjunction = 'and',
+    not = false) {
     return this.getQuery().whereBetween(this.qualifyPivotColumn(column), values, conjunction, not);
   }
 
@@ -232,8 +232,8 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Set a "where in" clause for a pivot table column.*/
   public wherePivotIn(column: string, values: any, conjunction = 'and',
-                      not                                      = false) {
-    this._pivotWhereIns.push(arguments);
+    not = false) {
+    this._pivotWhereIns.push([...arguments]);
     return this.whereIn(this.qualifyPivotColumn(column), values, conjunction, not);
   }
 
@@ -255,7 +255,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
     if (isBlank(value)) {
       throw new Error('InvalidArgumentException The provided value may not be null.');
     }
-    this._pivotValues.push({column, value});
+    this._pivotValues.push({ column, value });
     return this.wherePivot(column, '=', value);
   }
 
@@ -276,7 +276,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Set a "where null" clause for a pivot table column.*/
   public wherePivotNull(column: string, conjunction = 'and', not = false) {
-    this._pivotWhereNulls.push(arguments);
+    this._pivotWhereNulls.push([...arguments]);
     return this.whereNull(this.qualifyPivotColumn(column), conjunction, not);
   }
 
@@ -320,21 +320,21 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Get the first related record matching the attributes or create it.*/
   public async firstOrCreate(attributes: any = {},
-                             values: any     = {},
-                             joining: any[]  = [],
-                             touch           = true) {
+    values: any = {},
+    joining: any[] = [],
+    touch = true) {
     let instance = await this._related.newQuery().where(attributes).first();
     if (isBlank(instance)) {
-      instance = await this.create({...attributes, ...values}, joining, touch);
+      instance = await this.create({ ...attributes, ...values }, joining, touch);
     }
     return instance;
   }
 
   /*Create or update a related record matching the attributes, and fill it with values.*/
   public async updateOrCreate(attributes: any[],
-                              values: any[]  = [],
-                              joining: any[] = [],
-                              touch          = true) {
+    values: any[] = [],
+    joining: any[] = [],
+    touch = true) {
     const instance = await this._related.newQuery().where(attributes).first() as Model;
     if (isBlank(instance)) {
       return this.create([...attributes, ...values], joining, touch);
@@ -378,20 +378,20 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   firstWhere(left: string, operator?: string,
-        right?: ((q: this) => void) | RawExpression | boolean | string | number | Array<string | number>,
-        conjunction?: 'and' | 'or' | string
+    right?: ((q: this) => void) | RawExpression | boolean | string | number | Array<string | number>,
+    conjunction?: 'and' | 'or' | string
   ): Promise<Model>;
 
   firstWhere(left: ((q: this) => void) | string | any[], operator?: string,
-        right?: ((q: this) => void) | RawExpression | boolean | string | number | Array<string | number>,
-        conjunction?: 'and' | 'or' | string
+    right?: ((q: this) => void) | RawExpression | boolean | string | number | Array<string | number>,
+    conjunction?: 'and' | 'or' | string
   ): Promise<Model>;
 
   /*Add a basic where clause to the query, and return the first result.*/
   public firstWhere(column: ((q: this) => void) | string | any[],
-                    operator: any             = null,
-                    value: any                = null,
-                    conjunction: 'and' | 'or' | string = 'and'): Promise<Model> {
+    operator: any = null,
+    value: any = null,
+    conjunction: 'and' | 'or' | string = 'and'): Promise<Model> {
     return this.where(column, operator, value, conjunction).first();
   }
 
@@ -423,8 +423,8 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
     // the proper columns. Then, we will get the results and hydrate our pivot
     // models with the result of those columns as a separate model relation.
     const builder = this._query.applyScopes();
-    columns       = builder.getQuery()._columns.length ? [] : columns;
-    let models    = await builder.addSelect(this._shouldSelect(columns)).getModels();
+    columns = builder.getQuery()._columns.length ? [] : columns;
+    let models = await builder.addSelect(this._shouldSelect(columns)).getModels();
     this._hydratePivotRelation(models);
     if (models.length > 0) {
       models = await builder.eagerLoadRelations(models);
@@ -434,7 +434,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Get the select columns for the relation query.*/
   _shouldSelect(columns: any[] = ['*']) {
-    if (columns == ['*']) {
+    if (columns.length === 1 && columns[0] === '*') {
       columns = [`${this._related.getTable()}.*`];
     }
     return [...columns, ...this._aliasedPivotColumns()];
@@ -451,9 +451,9 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
   }
 
   /*Get a paginator for the "select" statement.*/
-  public async paginate(page: number   = 1,
-                        pageSize?: number,
-                        columns: any[] = ['*']) {
+  public async paginate(page: number = 1,
+    pageSize?: number,
+    columns: any[] = ['*']) {
     this._prepareQueryBuilder();
     const results = await this._query.paginate(page, pageSize, columns);
     this._hydratePivotRelation(results.items);
@@ -462,12 +462,12 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Chunk the results of the query.*/
   public chunk(count: number,
-               signal?: Observable<any>): Observable<{ results: any[], page: number }> {
+    signal?: Observable<any>): Observable<{ results: any[], page: number }> {
     this._prepareQueryBuilder();
     return this._query
       .chunk(count)
       .pipe(
-        tap(({results, page}) => {
+        tap(({ results, page }) => {
           this._hydratePivotRelation(results);
         })
       );
@@ -475,14 +475,14 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Chunk the results of a query by comparing numeric IDs.*/
   public chunkById(count: number,
-                   column?: string,
-                   alias?: string,
-                   signal?: Observable<any>): Observable<{ results: any, page: number }> {
+    column?: string,
+    alias?: string,
+    signal?: Observable<any>): Observable<{ results: any, page: number }> {
     this._prepareQueryBuilder();
     column = column ?? this.getRelated().qualifyColumn(this.getRelatedKeyName());
-    alias  = alias ?? this.getRelatedKeyName();
+    alias = alias ?? this.getRelatedKeyName();
     return this._query.chunkById(count, column, alias).pipe(
-      tap(({results}) => {
+      tap(({ results }) => {
         this._hydratePivotRelation(results);
       })
     );
@@ -493,7 +493,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
     return this._prepareQueryBuilder()
       .each(count, signal)
       .pipe(
-        tap(({item, index}) => {
+        tap(({ item, index }) => {
           this._hydratePivotRelation([item]);
         })
       );
@@ -548,11 +548,11 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   E.g.: Touch all roles associated with this user.*/
   public async touch() {
-    const key     = this.getRelated().getKeyName();
+    const key = this.getRelated().getKeyName();
     const columns = {
       [this._related.getUpdatedAtColumn()]: this._related.freshTimestampString(),
     };
-    const ids     = await this.allRelatedIds();
+    const ids = await this.allRelatedIds();
     if (ids.length > 0) {
       await this.getRelated().newQueryWithoutRelationships().whereIn(key, ids).update(columns);
     }
@@ -603,7 +603,7 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Add the constraints for a relationship query.*/
   public getRelationExistenceQuery(query: FedacoBuilder, parentQuery: FedacoBuilder,
-                                   columns: any[] | any = ['*']) {
+    columns: any[] | any = ['*']) {
     if (parentQuery.getQuery().from == query.getQuery().from) {
       return this.getRelationExistenceQueryForSelfJoin(query, parentQuery, columns);
     }
@@ -613,8 +613,8 @@ export class BelongsToMany extends mixinInteractsWithDictionary(
 
   /*Add the constraints for a relationship query on the same table.*/
   public getRelationExistenceQueryForSelfJoin(query: FedacoBuilder,
-                                              parentQuery: FedacoBuilder,
-                                              columns: any[] | any = ['*']) {
+    parentQuery: FedacoBuilder,
+    columns: any[] | any = ['*']) {
     query.select(columns);
     const hash = this.getRelationCountHash();
     query.from(`${this._related.getTable()} as ${hash}`);

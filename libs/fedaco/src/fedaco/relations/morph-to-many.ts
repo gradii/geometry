@@ -43,9 +43,8 @@ export class MorphToMany extends BelongsToMany {
       // constructor is not init.
       return;
     }
-    if ((this.constructor as typeof Relation).constraints) {
-      super.addConstraints();
-    }
+    
+    super.addConstraints();
   }
 
   /*Set the where clause for the relation query.*/

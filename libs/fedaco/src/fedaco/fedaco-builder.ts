@@ -1006,6 +1006,9 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   public with(relations: string, callback?: FedacoBuilderCallBack): this;
   public with(relations: { [key: string]: FedacoBuilderCallBack } | string[] | string,
               callback?: FedacoBuilderCallBack | { [key: string]: FedacoBuilderCallBack } | string): this {
+    if (!relations || isArray(relations) && !relations.length) {
+      return this;
+    }
     let eagerLoad;
     if (isFunction(callback)) {
       eagerLoad = this._parseWithRelations([{[relations as string]: callback}]);

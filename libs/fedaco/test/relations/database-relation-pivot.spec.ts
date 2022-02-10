@@ -174,9 +174,9 @@ describe('test database fedaco pivot', () => {
 });
 
 export class DatabaseEloquentPivotTestDateStub extends Pivot {
-  public getDates() {
-    return [];
-  }
+  // public getDates() {
+  //   return [];
+  // }
 }
 
 export class DatabaseEloquentPivotTestMutatorStub extends Pivot {

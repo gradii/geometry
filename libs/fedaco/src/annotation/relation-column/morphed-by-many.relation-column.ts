@@ -45,7 +45,7 @@ export const MorphedByManyColumn: FedacoDecorator<MorphedByManyRelationAnnotatio
         words[words.length - 1] = plural(words[words.length - 1]);
         table                   = words.join('_');
       }
-      const r = new MorphToMany(instance.newQuery(), m, p.name, p.table,
+      const r = new MorphToMany(instance.newQuery(), m, p.name, table,
         p.foreignPivotKey, p.relatedPivotKey,
         p.parentKey, p.relatedKey,
         relation, true);
