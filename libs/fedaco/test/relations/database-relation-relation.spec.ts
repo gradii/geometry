@@ -293,7 +293,7 @@ export class EloquentRelationStub extends Relation {
   public addConstraints() {
   }
 
-  public addEagerConstraints(models) {
+  public addEagerConstraints(models: Model[]) {
   }
 
   // public initRelation(models, relation) {

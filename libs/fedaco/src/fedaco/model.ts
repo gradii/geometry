@@ -952,9 +952,9 @@ export class Model extends mixinHasAttributes(
     const cloned = new (this.constructor as typeof Model)();
 
     cloned._table      = this._table;
-    cloned._guarded    = [...this._guarded];
-    cloned._visible    = [...this._visible];
-    cloned._hidden     = [...this._hidden];
+    cloned._guarded    = this._guarded && [...this._guarded];
+    cloned._visible    = this._visible && [...this._visible];
+    cloned._hidden     = this._hidden && [...this._hidden];
     cloned._attributes = {...this._attributes};
     cloned._relations  = {...this._relations};
 
