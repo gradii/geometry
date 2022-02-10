@@ -111,12 +111,12 @@ async function migrateDefault() {
   await schema().create('users_default', table => {
     table.increments('id');
     table.string('email').withUnique();
-    table.unsignedInteger('has_one_through_default_test_position_id').withUnique().withNullable();
+    table.unsignedInteger('positions_default_id').withUnique().withNullable();
     table.timestamps();
   });
   await schema().create('contracts_default', table => {
     table.increments('id');
-    table.integer('has_one_through_default_test_user_id').withUnique();
+    table.integer('users_default_id').withUnique();
     table.string('title');
     table.text('body');
     table.timestamps();
