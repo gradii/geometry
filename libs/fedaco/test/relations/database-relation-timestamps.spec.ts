@@ -50,7 +50,7 @@ describe('test database fedaco timestamps', () => {
   });
 
   it('user with created at and updated at', async () => {
-    const now  = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    const now  = new Date(format(new Date(), 'yyyy-MM-dd HH:mm:ss'));
     const user = await UserWithCreatedAndUpdated.createQuery().create({
       'email': 'test@test.com'
     });
@@ -59,7 +59,7 @@ describe('test database fedaco timestamps', () => {
   });
 
   it('user with created at', async () => {
-    const now  = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    const now  = new Date(format(new Date(), 'yyyy-MM-dd HH:mm:ss'));
     const user = await UserWithCreated.createQuery().create({
       'email': 'test@test.com'
     });
@@ -67,7 +67,7 @@ describe('test database fedaco timestamps', () => {
   });
 
   it('user with updated at', async () => {
-    const now  = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    const now  = new Date(format(new Date(), 'yyyy-MM-dd HH:mm:ss'));
     const user = await UserWithUpdated.createQuery().create({
       'email': 'test@test.com'
     });
@@ -81,34 +81,32 @@ export class UserWithCreatedAndUpdated extends Model {
   _guarded: any = [];
 
   @CreatedAtColumn()
-  created_at;
+  created_at: Date;
 
   @UpdatedAtColumn()
-  updated_at;
+  updated_at: Date;
 }
 
 export class UserWithCreated extends Model {
-  static UPDATED_AT         = null;
   _table: any               = 'users_created_at';
   _guarded: any             = [];
   protected dateFormat: any = 't';
 
   @CreatedAtColumn()
-  created_at;
+  created_at: Date;
 
-  @UpdatedAtColumn()
-  updated_at;
+  // @UpdatedAtColumn()
+  // updated_at: Date;
 }
 
 export class UserWithUpdated extends Model {
-  static CREATED_AT         = null;
   _table: any               = 'users_updated_at';
   _guarded: any             = [];
   protected dateFormat: any = 't';
 
-  @CreatedAtColumn()
-  created_at;
+  // @CreatedAtColumn()
+  // created_at: Date;
 
   @UpdatedAtColumn()
-  updated_at;
+  updated_at: Date;
 }
