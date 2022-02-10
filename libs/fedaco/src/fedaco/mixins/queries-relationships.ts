@@ -39,22 +39,31 @@ export interface QueriesRelationShips {
   orDoesntHave(relation: string): this;
 
   /*Add a relationship count / exists condition to the query with where clauses.*/
-  whereHas(relation: string | Relation, callback?: ((q: FedacoBuilder) => void) | null, operator?: string,
+  whereHas(relation: string | Relation, callback?: ((q: FedacoBuilder) => void), operator?: string,
     count?: number): this;
 
   whereHas(relation: string | Relation, callback?: Function | null, operator?: string,
            count?: number): this;
 
   /*Add a relationship count / exists condition to the query with where clauses and an "or".*/
+  orWhereHas(relation: string, callback?: ((q: FedacoBuilder) => void), operator?: string, count?: number): this;
+
   orWhereHas(relation: string, callback?: Function | null, operator?: string, count?: number): this;
 
   /*Add a relationship count / exists condition to the query with where clauses.*/
+  whereDoesntHave(relation: string, callback?: ((q: FedacoBuilder) => void)): this;
+  
   whereDoesntHave(relation: string, callback?: Function | null): this;
 
   /*Add a relationship count / exists condition to the query with where clauses and an "or".*/
+  orWhereDoesntHave(relation: string, callback?: ((q: FedacoBuilder) => void) | null): this;
+
   orWhereDoesntHave(relation: string, callback?: Function | null): this;
 
   /*Add a polymorphic relationship count / exists condition to the query.*/
+  hasMorph(relation: MorphTo | string, types: string[], operator?: string, count?: number,
+           conjunction?: string, callback?: ((q: FedacoBuilder) => void) | null): this;
+           
   hasMorph(relation: MorphTo | string, types: string[], operator?: string, count?: number,
            conjunction?: string, callback?: Function | null): this;
 
@@ -66,24 +75,39 @@ export interface QueriesRelationShips {
 
   /*Add a polymorphic relationship count / exists condition to the query.*/
   doesntHaveMorph(relation: MorphTo | string, types: string[], conjunction?: string,
+                  callback?: ((q: FedacoBuilder) => void)): this;
+
+  doesntHaveMorph(relation: MorphTo | string, types: string[], conjunction?: string,
                   callback?: Function): this;
 
   /*Add a polymorphic relationship count / exists condition to the query with an "or".*/
   orDoesntHaveMorph(relation: MorphTo | string, types: string[]): this;
 
   /*Add a polymorphic relationship count / exists condition to the query with where clauses.*/
+  whereHasMorph(relation: MorphTo | string, types: string[], callback?: ((q: FedacoBuilder) => void) | null,
+                operator?: string, count?: number): this;
+
   whereHasMorph(relation: MorphTo | string, types: string[], callback?: Function | null,
                 operator?: string, count?: number): this;
 
   /*Add a polymorphic relationship count / exists condition to the query with where clauses and an "or".*/
+  orWhereHasMorph(relation: MorphTo | string, types: string[], callback?: ((q: FedacoBuilder) => void) | null,
+                  operator?: string, count?: number): this;  
+  
   orWhereHasMorph(relation: MorphTo | string, types: string[], callback?: Function | null,
                   operator?: string, count?: number): this;
 
   /*Add a polymorphic relationship count / exists condition to the query with where clauses.*/
   whereDoesntHaveMorph(relation: MorphTo | string, types: string[],
+                       callback?: ((q: FedacoBuilder) => void) | null): this; 
+  
+  whereDoesntHaveMorph(relation: MorphTo | string, types: string[],
                        callback?: Function | null): this;
 
   /*Add a polymorphic relationship count / exists condition to the query with where clauses and an "or".*/
+  orWhereDoesntHaveMorph(relation: MorphTo | string, types: string[],
+                         callback?: ((q: FedacoBuilder) => void) | null): this;
+
   orWhereDoesntHaveMorph(relation: MorphTo | string, types: string[],
                          callback?: Function | null): this;
 
@@ -91,6 +115,8 @@ export interface QueriesRelationShips {
   withAggregate(relations: any, column: string, func?: string): this;
 
   /*Add subselect queries to count the relations.*/
+  withCount(relations: Record<string, ((q: Relation) => void)>): this;
+
   withCount(relations: any): this;
 
   /*Add subselect queries to include the max of the relation's column.*/
@@ -135,7 +161,7 @@ export function mixinQueriesRelationShips<T extends Constructor<any>>(base: T): 
                operator    = '>=',
                count       = 1,
                conjunction = 'and',
-               callback?: Function): this {
+               callback?: ((q: FedacoBuilder) => void) | Function): this {
       if (isString(relation)) {
         if (relation.includes('.')) {
           return this._hasNested(relation, operator, count, conjunction, callback);

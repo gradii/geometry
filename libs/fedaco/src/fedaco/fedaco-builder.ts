@@ -16,7 +16,7 @@ import {
 } from '../query-builder/mixins/build-query';
 import { QueryBuilder } from '../query-builder/query-builder';
 import { SqlNode } from '../query/sql-node';
-import type { FedacoBuilderCallBack } from './fedaco-types';
+import type { FedacoBuilderCallBack, RelationCallBack } from './fedaco-types';
 import {
   ForwardCallToQueryBuilder, ForwardCallToQueryBuilderCtor, mixinForwardCallToQueryBuilder
 } from './mixins/forward-call-to-query-builder';
@@ -235,21 +235,21 @@ export interface FedacoBuilder<T extends Model = Model> extends GuardsAttributes
   whereScope(key: string, ...args: any[]): this;
 
   with(...relations: Array<{
-    [key: string]: FedacoBuilderCallBack;
+    [key: string]: RelationCallBack;
   } | string>): this;
 
   with(relations: {
-    [key: string]: FedacoBuilderCallBack;
+    [key: string]: RelationCallBack;
   }): this;
 
   with(relations: string[]): this;
 
-  with(relations: string, callback?: FedacoBuilderCallBack): this;
+  with(relations: string, callback?: RelationCallBack): this;
 
   with(relations: {
-    [key: string]: FedacoBuilderCallBack;
-  } | string[] | string, callback?: FedacoBuilderCallBack | {
-    [key: string]: FedacoBuilderCallBack;
+    [key: string]: RelationCallBack;
+  } | string[] | string, callback?: RelationCallBack | {
+    [key: string]: RelationCallBack;
   } | string): this;
 
   /*Prevent the specified relations from being eager loaded.*/
@@ -416,6 +416,7 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
   /**
    * Add a basic where clause to the query.
    */
+  public where(query: (q: FedacoBuilder) => void): this;
   public where(column: FedacoBuilderCallBack | any[] | SqlNode | any): this;
   public where(column: string | SqlNode | any, value: any): this;
   public where(column: FedacoBuilderCallBack | string | any[] | SqlNode | any,
@@ -1000,12 +1001,12 @@ export class FedacoBuilder<T extends Model = Model> extends mixinGuardsAttribute
     throw new Error('key is not in model or scope metadata is not exist');
   }
 
-  public with(...relations: Array<{ [key: string]: FedacoBuilderCallBack } | string>): this;
-  public with(relations: { [key: string]: FedacoBuilderCallBack }): this;
+  public with(...relations: Array<{ [key: string]: RelationCallBack } | string>): this;
+  public with(relations: { [key: string]: RelationCallBack }): this;
   public with(relations: string[]): this;
-  public with(relations: string, callback?: FedacoBuilderCallBack): this;
-  public with(relations: { [key: string]: FedacoBuilderCallBack } | string[] | string,
-              callback?: FedacoBuilderCallBack | { [key: string]: FedacoBuilderCallBack } | string): this {
+  public with(relations: string, callback?: RelationCallBack): this;
+  public with(relations: { [key: string]: RelationCallBack } | string[] | string,
+              callback?: RelationCallBack | { [key: string]: RelationCallBack } | string): this {
     if (!relations || isArray(relations) && !relations.length) {
       return this;
     }

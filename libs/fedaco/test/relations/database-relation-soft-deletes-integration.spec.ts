@@ -1,3 +1,4 @@
+import { FedacoRelationListType, FedacoRelationType } from './../../src/fedaco/fedaco-types';
 import {head} from 'ramda';
 import {Column} from '../../src/annotation/column/column';
 import {PrimaryGeneratedColumn} from '../../src/annotation/column/primary-generated.column';
@@ -14,6 +15,7 @@ import {SchemaBuilder} from '../../src/schema/schema-builder';
 import {DeletedAtColumn} from '../../src/annotation/column/deleted-at.column';
 import {format} from 'date-fns';
 import {QueryBuilder} from '../../src/query-builder/query-builder';
+import { Relation } from '../../src/fedaco/relations/relation';
 
 function connection(connectionName = 'default') {
   return Model.getConnectionResolver().connection(connectionName);
@@ -337,7 +339,7 @@ describe('test database fedaco soft deletes integration', () => {
     abigail.newRelation('group').getQuery().pipe(withTrashed(), restore());
     abigail = await abigail.fresh();
     expect((await abigail.group).name).toBe('admin');
-    abigail.group.delete();
+    await (await abigail.group).delete();
     abigail = await abigail.fresh();
     expect(await abigail.group).toBeNull();
     expect((await abigail.newRelation('group').getQuery().pipe(withTrashed()).first()).name).toBe('admin');
@@ -539,20 +541,20 @@ describe('test database fedaco soft deletes integration', () => {
     });
     await abigail.delete();
     let comment = await SoftDeletesTestCommentWithTrashed.createQuery().with({
-      'owner': q => {
+      'owner': (q: Relation) => {
         // q.withoutGlobalScope(SoftDeletingScope);
         q.getQuery().withoutGlobalScope('softDeleting');
       }
     }).first();
     expect(comment.owner.email).toEqual(abigail.email);
     comment = await SoftDeletesTestCommentWithTrashed.createQuery().with({
-      'owner': q => {
+      'owner': (q: Relation) => {
         q.pipe(withTrashed());
       }
     }).first();
     expect(comment.owner.email).toEqual(abigail.email);
     const withoutSoftDeleteComment = await TestCommentWithoutSoftDelete.createQuery().with({
-      'owner': q => {
+      'owner': (q: Relation) => {
         q.pipe(withTrashed());
       }
     }).first();
@@ -573,6 +575,7 @@ describe('test database fedaco soft deletes integration', () => {
     await expect(async () => {
       await TestCommentWithoutSoftDelete.createQuery().with({
         'owner': q => {
+          // @ts-ignore
           q.thisMethodDoesNotExist();
         }
       }).first();
@@ -613,7 +616,7 @@ describe('test database fedaco soft deletes integration', () => {
       'owner_id': abigail.id
     });
     let comment = await SoftDeletesTestCommentWithTrashed.createQuery().with('owner').first();
-    expect(comment.owner.email).toEqual(abigail.email);
+    expect((await comment.owner).email).toEqual(abigail.email);
     await abigail.delete();
     comment = await SoftDeletesTestCommentWithTrashed.createQuery().with('owner').first();
     expect(comment.owner).toBeNull();
@@ -633,7 +636,7 @@ describe('test database fedaco soft deletes integration', () => {
       'owner_id': taylor.id
     });
     let comment = await SoftDeletesTestCommentWithTrashed.createQuery().with('owner').first();
-    expect(comment.owner.email).toEqual(taylor.email);
+    expect((await comment.owner).email).toEqual(taylor.email);
     await taylor.delete();
     comment = await SoftDeletesTestCommentWithTrashed.createQuery().with('owner').first();
     expect(comment.owner).toBeNull();
@@ -646,13 +649,16 @@ export class TestUserWithoutSoftDelete extends Model {
   _guarded: any = [];
 
   @PrimaryGeneratedColumn()
-  public id;
+  public id: number;
+
+  @Column()
+  email: string;
 
   @HasManyColumn({
     related: forwardRef(() => SoftDeletesTestPost),
     foreignKey: 'user_id'
   })
-  public posts;
+  public posts: FedacoRelationListType<SoftDeletesTestPost>;
 }
 
 /*Eloquent Models...*/
@@ -662,31 +668,31 @@ export class SoftDeletesTestUser extends (mixinSoftDeletes(
   _guarded: any = [];
 
   @PrimaryGeneratedColumn()
-  id;
+  id: number;
 
   @Column()
-  email;
+  email: string;
 
   @HasManyColumn({
     related: forwardRef(() => SoftDeletesTestPost),
     foreignKey: 'user_id'
   })
-  public posts;
+  public posts: FedacoRelationListType<SoftDeletesTestPost>;
 
   @HasOneColumn({
     related: forwardRef(() => SoftDeletesTestAddress),
     foreignKey: 'user_id'
   })
-  public address;
+  public address: FedacoRelationType<SoftDeletesTestAddress>;
 
   @BelongsToColumn({
     related: forwardRef(() => SoftDeletesTestGroup),
     foreignKey: 'group_id'
   })
-  public group;
+  public group: FedacoRelationType<SoftDeletesTestGroup>;
 
   @DeletedAtColumn()
-  deleted_at;
+  deleted_at: Date;
 }
 
 export class SoftDeletesTestUserWithTrashedPosts extends Model {
@@ -702,7 +708,7 @@ export class SoftDeletesTestUserWithTrashedPosts extends Model {
       );
     })
   })
-  public posts;
+  public posts: FedacoRelationListType<SoftDeletesTestPost>;
 }
 
 /*Eloquent Models...*/
@@ -711,13 +717,13 @@ export class SoftDeletesTestPost extends mixinSoftDeletes(Model) {
   _guarded: any = [];
 
   @Column()
-  title;
+  title: string;
 
   @HasManyColumn({
     related: forwardRef(() => SoftDeletesTestComment),
     foreignKey: 'post_id'
   })
-  public comments;
+  public comments: FedacoRelationListType<SoftDeletesTestComment>;
 }
 
 /*Eloquent Models...*/
@@ -731,7 +737,7 @@ export class TestCommentWithoutSoftDelete extends Model {
       'TestUserWithoutSoftDelete': TestUserWithoutSoftDelete
     }
   })
-  public owner;
+  public owner: FedacoRelationType<any>;
 }
 
 /*Eloquent Models...*/
@@ -745,7 +751,7 @@ export class SoftDeletesTestComment extends mixinSoftDeletes(Model) {
       'TestUserWithoutSoftDelete': TestUserWithoutSoftDelete
     }
   })
-  public owner;
+  public owner: FedacoRelationType<any>;
 }
 
 export class SoftDeletesTestCommentWithTrashed extends Model {
@@ -753,7 +759,7 @@ export class SoftDeletesTestCommentWithTrashed extends Model {
   _guarded: any = [];
 
   @Column()
-  comment;
+  comment: string;
 
   @MorphToColumn({
     morphTypeMap: {
@@ -761,7 +767,7 @@ export class SoftDeletesTestCommentWithTrashed extends Model {
       'TestUserWithoutSoftDelete': TestUserWithoutSoftDelete
     }
   })
-  public owner;
+  public owner: FedacoRelationType<any>;
 }
 
 /*Eloquent Models...*/
@@ -770,7 +776,7 @@ export class SoftDeletesTestAddress extends mixinSoftDeletes(Model) {
   _guarded: any = [];
 
   @Column()
-  address;
+  address: string;
 }
 
 /*Eloquent Models...*/
@@ -779,10 +785,10 @@ export class SoftDeletesTestGroup extends mixinSoftDeletes(Model) {
   _guarded: any = [];
 
   @Column()
-  name;
+  name: string;
 
   @HasManyColumn({
     related: SoftDeletesTestUser
   })
-  public users;
+  public users: FedacoRelationListType<SoftDeletesTestUser>;
 }
