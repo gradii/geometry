@@ -310,39 +310,40 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Eager load relationship column aggregation on the polymorphic relation of a model.*/
-  public loadMorphAggregate(relation: string, relations: Record<string, string[]>, column: string,
+  public async loadMorphAggregate(relation: string, relations: Record<string, string[] | string>, column: string,
                             func?: string) {
-    if (!this[relation]) {
+    const relationValue = await this[relation];
+    if (!relationValue) {
       return this;
     }
     // todo checkme
-    const className = this[relation].constructor.name;
-    loadAggregate(this[relation], relations[className] ?? [], column, func);
+    const className = relationValue.constructor.name;
+    await loadAggregate(relationValue, relations[className] ?? [], column, func);
     return this;
   }
 
   /*Eager load relationship counts on the polymorphic relation of a model.*/
-  public loadMorphCount(relation: string, relations: Record<string, string[]>) {
+  public loadMorphCount(relation: string, relations: Record<string, string[] | string>) {
     return this.loadMorphAggregate(relation, relations, '*', 'count');
   }
 
   /*Eager load relationship max column values on the polymorphic relation of a model.*/
-  public loadMorphMax(relation: string, relations: Record<string, string[]>, column: string) {
+  public loadMorphMax(relation: string, relations: Record<string, string[] | string>, column: string) {
     return this.loadMorphAggregate(relation, relations, column, 'max');
   }
 
   /*Eager load relationship min column values on the polymorphic relation of a model.*/
-  public loadMorphMin(relation: string, relations: Record<string, string[]>, column: string) {
+  public loadMorphMin(relation: string, relations: Record<string, string[] | string>, column: string) {
     return this.loadMorphAggregate(relation, relations, column, 'min');
   }
 
   /*Eager load relationship column summations on the polymorphic relation of a model.*/
-  public loadMorphSum(relation: string, relations: Record<string, string[]>, column: string) {
+  public loadMorphSum(relation: string, relations: Record<string, string[] | string>, column: string) {
     return this.loadMorphAggregate(relation, relations, column, 'sum');
   }
 
   /*Eager load relationship average column values on the polymorphic relation of a model.*/
-  public loadMorphAvg(relation: string, relations: Record<string, string[]>, column: string) {
+  public loadMorphAvg(relation: string, relations: Record<string, string[] | string>, column: string) {
     return this.loadMorphAggregate(relation, relations, column, 'avg');
   }
 

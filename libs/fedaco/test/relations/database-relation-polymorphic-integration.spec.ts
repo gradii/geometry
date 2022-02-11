@@ -1,3 +1,4 @@
+import { FedacoRelationType } from './../../src/fedaco/fedaco-types';
 import {BelongsToColumn} from '../../src/annotation/relation-column/belongs-to.relation-column';
 import {MorphManyColumn} from '../../src/annotation/relation-column/morph-many.relation-column';
 import {MorphToColumn} from '../../src/annotation/relation-column/morph-to.relation-column';
@@ -6,6 +7,7 @@ import {Model} from '../../src/fedaco/model';
 import {forwardRef} from '../../src/query-builder/forward-ref';
 import {SchemaBuilder} from '../../src/schema/schema-builder';
 import {HasManyColumn} from '../../src/annotation/relation-column/has-many.relation-column';
+import { FedacoRelationListType } from '../../src/fedaco/fedaco-types';
 
 function connection(connectionName = 'default') {
   return Model.getConnectionResolver().connection(connectionName);
@@ -77,25 +79,29 @@ describe('test database fedaco polymorphic integration', () => {
     schema().drop('posts');
     schema().drop('comments');
   });
+
   it('it loads relationships automatically', async () => {
     await seedData();
     const like = await TestLikeWithSingleWith.createQuery().first();
     expect(like.relationLoaded('likeable')).toBeTruthy();
-    expect(like.likeable).toEqual(TestComment.createQuery().first());
+    expect(await like.likeable).toEqual(await TestComment.createQuery().first());
   });
+
   it('it loads chained relationships automatically', async () => {
     await seedData();
     const like = await TestLikeWithSingleWith.createQuery().first();
     expect(like.likeable.relationLoaded('commentable')).toBeTruthy();
     expect(like.likeable.commentable).toEqual(await TestPost.createQuery().first());
   });
+
   it('it loads nested relationships automatically', async () => {
     await seedData();
     const like = await TestLikeWithNestedWith.createQuery().first();
     expect(like.relationLoaded('likeable')).toBeTruthy();
     expect(like.likeable.relationLoaded('owner')).toBeTruthy();
-    expect(like.likeable.owner).toEqual(TestUser.createQuery().first());
+    expect(like.likeable.owner).toEqual(await TestUser.createQuery().first());
   });
+
   it('it loads nested relationships on demand', async () => {
     await seedData();
     const like = await TestLike.createQuery().with('likeable.owner').first();
@@ -103,6 +109,7 @@ describe('test database fedaco polymorphic integration', () => {
     expect(like.likeable.relationLoaded('owner')).toBeTruthy();
     expect(like.likeable.owner).toEqual(await TestUser.createQuery().first());
   });
+
   // todo
   // it('it loads nested morph relationships on demand', async () => {
   //   await seedData();
@@ -128,13 +135,13 @@ describe('test database fedaco polymorphic integration', () => {
         })));
     expect(likes[0].relationLoaded('likeable')).toBeTruthy();
     expect(likes[0].likeable.relationLoaded('owner')).toBeTruthy();
-    expect(likes[0].likeable.likes_count).toEqual(2);
+    expect(likes[0].likeable.getAttribute('likes_count')).toEqual(2);
     expect(likes[1].relationLoaded('likeable')).toBeTruthy();
     expect(likes[1].likeable.relationLoaded('owner')).toBeTruthy();
-    expect(likes[1].likeable.comments_count).toEqual(1);
+    expect(likes[1].likeable.getAttribute('comments_count')).toEqual(1);
     expect(likes[2].relationLoaded('likeable')).toBeTruthy();
     expect(likes[2].likeable.relationLoaded('owner')).toBeTruthy();
-    expect(likes[2].likeable.likes_count).toEqual(2);
+    expect(likes[2].likeable.getAttribute('likes_count')).toEqual(2);
   });
 
 });
@@ -148,7 +155,7 @@ export class TestUser extends Model {
     related: forwardRef(() => TestPost),
     foreignKey: 'user_id'
   })
-  public posts;
+  public posts: FedacoRelationListType<any>;
 }
 
 /*Eloquent Models...*/
@@ -160,19 +167,19 @@ export class TestPost extends Model {
     related: forwardRef(() => TestComment),
     morphName: 'commentable'
   })
-  public comments;
+  public comments: FedacoRelationListType<TestComment>;
 
   @BelongsToColumn({
     related: TestUser,
     foreignKey: 'user_id'
   })
-  public owner;
+  public owner: FedacoRelationType<TestUser>;
 
   @MorphManyColumn({
     related: forwardRef(() => TestLike),
     morphName: 'likeable'
   })
-  public likes;
+  public likes: FedacoRelationListType<TestLike>;
 }
 
 /*Eloquent Models...*/
@@ -185,26 +192,33 @@ export class TestComment extends Model {
     related: TestUser,
     foreignKey: 'user_id'
   })
-  public owner;
+  public owner: FedacoRelationType<TestUser>;
 
   @MorphToColumn({
-    morphTypeMap: {}
+    morphTypeMap: {
+      TestPost
+    }
   })
-  public commentable;
+  public commentable: FedacoRelationType<any>;
 
   @MorphManyColumn({
     related: forwardRef(() => TestLike),
     morphName: 'likeable'
   })
-  public likes;
+  public likes: FedacoRelationListType<any>
 }
 
 export class TestLike extends Model {
   _table: any = 'likes';
   _guarded: any = [];
 
-  @MorphToColumn()
-  public likeable;
+  @MorphToColumn({
+    morphTypeMap: {
+      TestPost,
+      TestComment,
+    }
+  })
+  public likeable: FedacoRelationType<any>;
 }
 
 export class TestLikeWithSingleWith extends Model {
@@ -213,9 +227,12 @@ export class TestLikeWithSingleWith extends Model {
   _with: any = ['likeable'];
 
   @MorphToColumn({
-    morphTypeMap: {}
+    morphTypeMap: {
+      TestComment: TestComment,
+      TestPost: TestPost,
+    }
   })
-  public likeable;
+  public likeable: FedacoRelationType<any>;
 }
 
 export class TestLikeWithNestedWith extends Model {
@@ -224,7 +241,10 @@ export class TestLikeWithNestedWith extends Model {
   _with: any = ['likeable.owner'];
 
   @MorphToColumn({
-    morphTypeMap: {}
+    morphTypeMap: {
+      TestComment: TestComment,
+      TestPost: TestPost,
+    }
   })
-  public likeable;
+  public likeable: FedacoRelationType<any>;
 }
