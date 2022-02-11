@@ -1105,8 +1105,8 @@ describe('test database fedaco integration', () => {
       .pipe(
         tap(({item: result, index}) => {
           expect(result.email).toBe('xsilen@gradii.com');
-          expect(result.getAttribute('user_id')).toBe(user.id);
-          expect(result.getAttribute('friend_id')).toBe(friend.id);
+          expect(result.getRelation('pivot').getAttribute('user_id')).toBe(user.id);
+          expect(result.getRelation('pivot').getAttribute('friend_id')).toBe(friend.id);
         })
       ).toPromise();
   });

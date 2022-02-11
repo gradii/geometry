@@ -7,12 +7,13 @@
 import { reflector } from '@gradii/annotation';
 import { isArray, isBlank } from '@gradii/check-type';
 import { findLast, tap } from 'ramda';
-import { singular } from '../../../helper/pluralize';
 import { Table, TableAnnotation } from '../../../annotation/table/table';
 import { Constructor } from '../../../helper/constructor';
+import { singular } from '../../../helper/pluralize';
 import { QueryBuilder } from '../../../query-builder/query-builder';
 import { FedacoBuilder } from '../../fedaco-builder';
 import { Model } from '../../model';
+import { Pivot } from '../pivot';
 
 // tslint:disable-next-line:no-namespace
 export declare namespace AsPivot {
@@ -98,10 +99,12 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
                                  exists = false) {
       const instance: Model = new this();
       instance._timestamps  = instance.hasTimestampAttributes(attributes);
-      instance.setConnection(parent.getConnectionName()).setTable(table).forceFill(
-        attributes).syncOriginal();
+      instance.setConnection(parent.getConnectionName())
+        .setTable(table)
+        .forceFill(attributes)
+        .syncOriginal();
       instance.pivotParent = parent;
-      instance.exists      = exists;
+      instance._exists      = exists;
       return instance;
     }
 
@@ -164,6 +167,8 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
         }, metas);
         if (meta) {
           return singular(meta.tableName);
+        } else if (this.constructor === Pivot) {
+          return 'pivot';
         } else {
           throw new Error('must define table in annotation or `_table` property');
         }
@@ -218,7 +223,8 @@ export function mixinAsPivot<T extends Constructor<any>>(base: T): AsPivotCtor &
     }
 
     /*Get a new query to restore one or more models by their queueable IDs.*/
-    public newQueryForRestoration(this: Model & _Self, ids: number[] | string[] | string): FedacoBuilder {
+    public newQueryForRestoration(this: Model & _Self,
+                                  ids: number[] | string[] | string): FedacoBuilder {
       if (isArray(ids)) {
         return this._newQueryForCollectionRestoration(ids as any[]);
       }

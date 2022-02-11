@@ -510,12 +510,12 @@ describe('test database fedaco model', () => {
     expect(spy2).toBeCalledWith({'name': 'taylor'});
 
     expect(spy5.mock.calls).toEqual([
-      ['fedaco.saving: FedacoModelStub', model],
-      ['fedaco.updating: FedacoModelStub', model]
+      ['fedaco.saving: stub', model],
+      ['fedaco.updating: stub', model]
     ]);
     expect(spy6.mock.calls).toEqual([
-      ['fedaco.updated: FedacoModelStub', model],
-      ['fedaco.saved: FedacoModelStub', model]
+      ['fedaco.updated: stub', model],
+      ['fedaco.saved: stub', model]
     ]);
   });
 
@@ -595,7 +595,7 @@ describe('test database fedaco model', () => {
 
     expect(result).toBeFalsy();
 
-    expect(spy4).toBeCalledWith(`fedaco.saving: FedacoModelStub`, model);
+    expect(spy4).toBeCalledWith(`fedaco.saving: stub`, model);
   });
 
   it('update is canceled if updating event returns false', async () => {
@@ -630,8 +630,8 @@ describe('test database fedaco model', () => {
 
     expect(spy4.mock.calls).toEqual(
       [
-        [`fedaco.saving: FedacoModelStub`, model],
-        [`fedaco.updating: FedacoModelStub`, model]
+        [`fedaco.saving: stub`, model],
+        [`fedaco.updating: stub`, model]
       ]
     );
     expect(spy4).toHaveNthReturnedWith(1, true);
@@ -668,7 +668,7 @@ describe('test database fedaco model', () => {
     expect(result).toBeFalsy();
 
     expect(spy4).toBeCalledWith(
-      'fedaco.saving: FedacoModelEventObjectStub', model);
+      'fedaco.saving: fedaco_model_saving_event_stubs', model);
     expect(spy4).toHaveReturnedWith(false);
   });
 
@@ -764,15 +764,15 @@ describe('test database fedaco model', () => {
 
     expect(spy4.mock.calls).toEqual(
       [
-        [`fedaco.saving: FedacoModelStub`, model],
-        [`fedaco.updating: FedacoModelStub`, model]
+        [`fedaco.saving: stub`, model],
+        [`fedaco.updating: stub`, model]
       ]
     );
 
     expect(spy5.mock.calls).toEqual(
       [
-        [`fedaco.updated: FedacoModelStub`, model],
-        [`fedaco.saved: FedacoModelStub`, model]
+        [`fedaco.updated: stub`, model],
+        [`fedaco.saved: stub`, model]
       ]
     );
   });
@@ -952,15 +952,15 @@ describe('test database fedaco model', () => {
 
     expect(spy4.mock.calls).toEqual(
       [
-        [`fedaco.saving: FedacoModelStub`, model],
-        [`fedaco.creating: FedacoModelStub`, model]
+        [`fedaco.saving: stub`, model],
+        [`fedaco.creating: stub`, model]
       ]
     );
 
     expect(spy5.mock.calls).toEqual(
       [
-        [`fedaco.created: FedacoModelStub`, model],
-        [`fedaco.saved: FedacoModelStub`, model]
+        [`fedaco.created: stub`, model],
+        [`fedaco.saved: stub`, model]
       ]
     );
 
@@ -1014,15 +1014,15 @@ describe('test database fedaco model', () => {
 
     expect(spy4.mock.calls).toEqual(
       [
-        [`fedaco.saving: FedacoModelStub`, model],
-        [`fedaco.creating: FedacoModelStub`, model]
+        [`fedaco.saving: stub`, model],
+        [`fedaco.creating: stub`, model]
       ]
     );
 
     expect(spy5.mock.calls).toEqual(
       [
-        [`fedaco.created: FedacoModelStub`, model],
-        [`fedaco.saved: FedacoModelStub`, model]
+        [`fedaco.created: stub`, model],
+        [`fedaco.saved: stub`, model]
       ]
     );
 
@@ -1058,8 +1058,8 @@ describe('test database fedaco model', () => {
 
     expect(spy4.mock.calls).toEqual(
       [
-        [`fedaco.saving: FedacoModelStub`, model],
-        [`fedaco.creating: FedacoModelStub`, model]
+        [`fedaco.saving: stub`, model],
+        [`fedaco.creating: stub`, model]
       ]
     );
 
@@ -3018,6 +3018,9 @@ export class FedacoModelNonIncrementingStub extends Model {
 export class FedacoModelSavingEventStub {
 }
 
+@Table({
+  tableName: 'fedaco_model_saving_event_stub'
+})
 export class FedacoModelEventObjectStub extends Model {
   @Column() id: number;
   @Column() name: string;

@@ -61,6 +61,7 @@ describe('test database fedaco belongs to many with default attributes', () => {
     const spy2      = jest.spyOn(relation.getQuery(), 'getQuery').mockReturnValue(mockQuery);
     const spy3      = jest.spyOn(mockQuery, 'newQuery').mockReturnValue(query);
     jest.spyOn(query, 'insert').mockReturnValue(true);
+    jest.spyOn(relation, 'touchIfTouching').mockReturnValue(Promise.resolve());
 
     await relation.attach(1);
 

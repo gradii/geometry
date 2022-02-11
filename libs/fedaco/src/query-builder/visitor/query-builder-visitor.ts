@@ -469,7 +469,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
             if (columnName) {
               const withAlias = columnName.split(/\s+as\s+/i);
               // short column name for update
-              if (this._isVisitUpdateSpecification) {
+              if (this._isVisitUpdateSpecification && !this._queryBuilder._joins.length) {
                 if (withAlias.length > 1) {
                   columns.push(withAlias.pop());
                 }

@@ -353,7 +353,7 @@ describe('fedaco builder relation', () => {
     const result  = model.newQuery().has('foo.bar').orHas('foo.baz').toSql();
 
     expect(builder.toSql().result).toBe(
-      'SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND EXISTS (SELECT * FROM `fedaco_builder_test_model_far_related_stubs` WHERE `fedaco_builder_test_model_close_related_stubs`.`id` = `fedaco_builder_test_model_far_related_stubs`.`fedaco_builder_test_model_close_related_stub_id`)) OR EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND EXISTS (SELECT * FROM `fedaco_builder_test_model_far_related_stubs` WHERE `fedaco_builder_test_model_close_related_stubs`.`id` = `fedaco_builder_test_model_far_related_stubs`.`fedaco_builder_test_model_close_related_stub_id`))'
+      'SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND EXISTS (SELECT * FROM `fedaco_builder_test_model_far_related_stubs` WHERE `fedaco_builder_test_model_close_related_stubs`.`id` = `fedaco_builder_test_model_far_related_stubs`.`fedaco_builder_test_model_close_related_stubs_id`)) OR EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND EXISTS (SELECT * FROM `fedaco_builder_test_model_far_related_stubs` WHERE `fedaco_builder_test_model_close_related_stubs`.`id` = `fedaco_builder_test_model_far_related_stubs`.`fedaco_builder_test_model_close_related_stubs_id`))'
     );
     expect(builder.toSql().result).toBe(result.result);
   });
@@ -396,7 +396,7 @@ describe('fedaco builder relation', () => {
     const result = builder.toSql();
 
     expect(result.result).toBe(
-      'SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND EXISTS (SELECT * FROM `fedaco_builder_test_model_far_related_stubs` WHERE `fedaco_builder_test_model_close_related_stubs`.`id` = `fedaco_builder_test_model_far_related_stubs`.`fedaco_builder_test_model_close_related_stub_id`))');
+      'SELECT * FROM `fedaco_builder_test_model_parent_stubs` WHERE NOT EXISTS (SELECT * FROM `fedaco_builder_test_model_close_related_stubs` WHERE `fedaco_builder_test_model_parent_stubs`.`foo_id` = `fedaco_builder_test_model_close_related_stubs`.`id` AND EXISTS (SELECT * FROM `fedaco_builder_test_model_far_related_stubs` WHERE `fedaco_builder_test_model_close_related_stubs`.`id` = `fedaco_builder_test_model_far_related_stubs`.`fedaco_builder_test_model_close_related_stubs_id`))');
   });
 
   it('test or doesnt have', () => {

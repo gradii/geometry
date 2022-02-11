@@ -56,18 +56,30 @@ describe('test database fedaco morph to', () => {
 
   it('lookup dictionary is properly constructed', () => {
     const relation = getRelation();
+    // fake model
     const one      = {
       'morph_type' : 'morph_type_1',
-      'foreign_key': 'foreign_key_1'
+      'foreign_key': 'foreign_key_1',
+      getAttribute : (key: string) => '',
     };
+    // fake model
     const two      = {
       'morph_type' : 'morph_type_1',
-      'foreign_key': 'foreign_key_1'
+      'foreign_key': 'foreign_key_1',
+      getAttribute : (key: string) => '',
     };
+    // fake model
     const three    = {
       'morph_type' : 'morph_type_2',
-      'foreign_key': 'foreign_key_2'
+      'foreign_key': 'foreign_key_2',
+      getAttribute : (key: string) => '',
     };
+    // @ts-ignore
+    jest.spyOn(one, 'getAttribute').mockImplementation(key => one[key]);
+    // @ts-ignore
+    jest.spyOn(two, 'getAttribute').mockImplementation(key => two[key]);
+    // @ts-ignore
+    jest.spyOn(three, 'getAttribute').mockImplementation(key => three[key]);
     relation.addEagerConstraints([
       one,
       two,

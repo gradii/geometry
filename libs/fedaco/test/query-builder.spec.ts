@@ -2872,7 +2872,7 @@ describe('database query builder test', () => {
       });
     expect(spyUpdate)
       .toBeCalledWith(
-        'UPDATE `users` INNER JOIN `orders` ON `users`.`id` = `orders`.`user_id` SET `email` = ?, `name` = ? WHERE `users`.`id` = ?',
+        'UPDATE `users` INNER JOIN `orders` ON `users`.`id` = `orders`.`user_id` SET `users`.`email` = ?, `users`.`name` = ? WHERE `users`.`id` = ?',
         ['foo', 'bar', 1]);
 
     expect(result).toBe(1);
@@ -2905,7 +2905,7 @@ describe('database query builder test', () => {
       });
     expect(spyUpdate)
       .toBeCalledWith(
-        'UPDATE [users] SET [email] = ?, [name] = ? FROM [users] INNER JOIN [orders] ON [users].[id] = [orders].[user_id] WHERE [users].[id] = ?',
+        'UPDATE [users] SET [users].[email] = ?, [users].[name] = ? FROM [users] INNER JOIN [orders] ON [users].[id] = [orders].[user_id] WHERE [users].[id] = ?',
         ['foo', 'bar', 1]);
     expect(result).toBe(1);
 
@@ -2937,7 +2937,7 @@ describe('database query builder test', () => {
       });
     expect(spyUpdate)
       .toBeCalledWith(
-        'UPDATE `users` INNER JOIN `orders` ON `users`.`id` = `orders`.`user_id` SET `email` = ?, `name` = ? WHERE `users`.`id` = ?',
+        'UPDATE `users` INNER JOIN `orders` ON `users`.`id` = `orders`.`user_id` SET `users`.`email` = ?, `users`.`name` = ? WHERE `users`.`id` = ?',
         ['foo', 'bar', 1]);
     expect(result).toBe(1);
 
@@ -3025,7 +3025,7 @@ describe('database query builder test', () => {
     });
     expect(spyUpdate)
       .toBeCalledWith(
-        'UPDATE [u] SET [email] = ?, [name] = ? FROM [users] AS [u] INNER JOIN [orders] ON [u].[id] = [orders].[user_id] WHERE [u].[id] = ?',
+        'UPDATE [u] SET [u].[email] = ?, [u].[name] = ? FROM [users] AS [u] INNER JOIN [orders] ON [u].[id] = [orders].[user_id] WHERE [u].[id] = ?',
         ['foo', 'bar', 1]);
     expect(result).toBe(1);
   });

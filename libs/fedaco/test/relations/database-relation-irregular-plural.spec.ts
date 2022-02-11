@@ -93,8 +93,10 @@ describe('test database fedaco irregular plural', () => {
     await human.newRelation('irregularPluralTokens').sync(tokenIds as any[]);
     const now = formatISO(new Date());
     await human.refresh();
-    expect(/*cast type string*/ formatISO(human.created_at)).toBe(now);
-    expect(/*cast type string*/ formatISO(human.updated_at)).toBe(now);
+    expect(+human.created_at - +new Date() < 1000).toBeTruthy();
+    expect(+human.updated_at - +new Date() < 1000).toBeTruthy();
+    // expect(/*cast type string*/ formatISO(human.created_at)).toBe(now);
+    // expect(/*cast type string*/ formatISO(human.updated_at)).toBe(now);
   });
 
   it('it pluralizes morph to many relationships', async () => {

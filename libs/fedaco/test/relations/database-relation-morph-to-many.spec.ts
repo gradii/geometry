@@ -60,8 +60,8 @@ describe('test database fedaco morph to many', () => {
   it('attach inserts pivot table record', async () => {
     const args     = getRelationArguments();
     const relation = new MorphToMany(
-      args[0] as FedacoBuilder, 
-      args[1] as Model, 
+      args[0] as FedacoBuilder,
+      args[1] as Model,
       args[2] as string,
       args[3] as string,
       args[4] as string,
@@ -125,7 +125,7 @@ describe('test database fedaco morph to many', () => {
       // @ts-ignore
       where: () => { },
       // @ts-ignore
-      whereIn: () => { }, 
+      whereIn: () => { },
       // @ts-ignore
       delete: () => { },
       // @ts-ignore
@@ -143,7 +143,7 @@ describe('test database fedaco morph to many', () => {
     const spy2             = jest.spyOn(query, 'where').mockReturnValue(query);
     const spy3             = jest.spyOn(query, 'whereIn');
     const spy4             = jest.spyOn(query, 'delete').mockReturnValue(true);
-   
+
     const spy5             = jest.spyOn(relation.getQuery(), 'getQuery').mockReturnValue(query2);
     const spy6             = jest.spyOn(query2, 'newQuery').mockReturnValue(query);
     const spy7             = jest.spyOn(relation, 'touchIfTouching').mockReturnValue(Promise.resolve());
@@ -162,10 +162,10 @@ describe('test database fedaco morph to many', () => {
     expect(await relation.detach([1, 2, 3])).toBeTruthy();
 
     expect(spy1).toBeCalledWith('taggables');
-    expect(spy2).toHaveBeenNthCalledWith(1, 'taggable_id', 1);
+    expect(spy2).toHaveBeenNthCalledWith(1, 'taggables.taggable_id', 1);
     expect(spy2).toHaveBeenNthCalledWith(2, 'taggable_type', relation.getParent().constructor.name);
-      
-    expect(spy3).toBeCalledWith('tag_id', [1, 2, 3]);
+
+    expect(spy3).toBeCalledWith('taggables.tag_id', [1, 2, 3]);
     expect(spy4).toBeCalled();
     expect(spy7).toBeCalled();
 
@@ -180,7 +180,7 @@ describe('test database fedaco morph to many', () => {
       // @ts-ignore
       where: () => { },
       // @ts-ignore
-      whereIn: () => { }, 
+      whereIn: () => { },
       // @ts-ignore
       delete: () => { },
       // @ts-ignore
@@ -216,9 +216,9 @@ describe('test database fedaco morph to many', () => {
     expect(await relation.detach()).toBeTruthy();
 
     expect(spy1).toBeCalledWith('taggables');
-    expect(spy2).toHaveBeenNthCalledWith(1, 'taggable_id', 1);
-    expect(spy2).toHaveBeenNthCalledWith(1, 'taggable_type', relation.getParent().constructor.name);
-    
+    expect(spy2).toHaveBeenNthCalledWith(1, 'taggables.taggable_id', 1);
+    expect(spy2).toHaveBeenNthCalledWith(2, 'taggable_type', relation.getParent().constructor.name);
+
     expect(spy3).not.toBeCalled();
     expect(spy4).toBeCalledWith();
   });

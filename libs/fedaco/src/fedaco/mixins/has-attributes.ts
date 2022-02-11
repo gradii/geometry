@@ -66,9 +66,9 @@ export interface HasAttributes {
   _classCastCache: any[];
 
   /**
-  * @deprecated
-  * The attributes that should be mutated to dates.
-  */
+   * @deprecated
+   * The attributes that should be mutated to dates.
+   */
   _dates: any[];
   /*The storage format of the model's date columns.*/
   _dateFormat: string;

@@ -20,7 +20,6 @@ export declare namespace Pivot {
     parent: Model, attributes: any, table: string, exists?: boolean): any;
 }
 
-// @ts-ignore
 export interface Pivot extends AsPivotCtor, Omit<Model, keyof AsPivot>, Constructor<Model> {
 }
 
