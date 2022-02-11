@@ -245,9 +245,9 @@ describe('test database fedaco soft deletes integration', () => {
     /**/
     const userModel = await SoftDeletesTestUser.createQuery().find(2);
     await userModel.delete();
-    expect(userModel.getOriginal('deleted_at')).toEqual(format(now, 'yyyy-MM-dd'));
-    expect(SoftDeletesTestUser.createQuery().find(2)).toBeNull();
-    expect(SoftDeletesTestUser.createQuery().pipe(withTrashed()).find(2)).toEqual(userModel);
+    expect(userModel.getOriginal('deleted_at')).toEqual(new Date(format(now, 'yyyy-MM-dd HH:mm:ss')));
+    expect(await SoftDeletesTestUser.createQuery().find(2)).toBeUndefined();
+    expect((await SoftDeletesTestUser.createQuery().pipe(withTrashed()).find(2)).toArray()).toEqual(userModel.toArray());
   });
 
   it('restore after soft delete', async () => {
@@ -616,7 +616,7 @@ describe('test database fedaco soft deletes integration', () => {
       'owner_id': abigail.id
     });
     let comment = await SoftDeletesTestCommentWithTrashed.createQuery().with('owner').first();
-    expect((await comment.owner).email).toEqual(abigail.email);
+    expect(comment.owner.email).toEqual(abigail.email);
     await abigail.delete();
     comment = await SoftDeletesTestCommentWithTrashed.createQuery().with('owner').first();
     expect(comment.owner).toBeNull();
@@ -664,6 +664,7 @@ export class TestUserWithoutSoftDelete extends Model {
 /*Eloquent Models...*/
 export class SoftDeletesTestUser extends (mixinSoftDeletes(
   Model) as typeof Model & { new(...args: any[]): SoftDeletes }) {
+  static UPDATED_AT: string = null;
   _table: any = 'users';
   _guarded: any = [];
 
