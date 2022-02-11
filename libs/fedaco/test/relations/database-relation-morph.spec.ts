@@ -224,8 +224,8 @@ describe('test database fedaco morph', () => {
     const model    = new Model();
 
     const spy1 = jest.spyOn(relation.getQuery(), 'where').mockReturnValue(relation.getQuery());
-    const spy2 = jest.spyOn(relation.getQuery(), 'first').mockReturnValue(Promise.resolve(model));
-    const spy3 = jest.spyOn(relation.getRelated(), 'newInstance');
+    const spy2 = jest.spyOn(relation.getQuery(), 'first').mockReturnValue(Promise.resolve(null));
+    const spy3 = jest.spyOn(relation.getRelated(), 'newInstance').mockReturnValue(model);
 
     const spy4 = jest.spyOn(model, 'setAttribute');
     const spy5 = jest.spyOn(model, 'save');
@@ -239,22 +239,23 @@ describe('test database fedaco morph', () => {
     // model.shouldReceive('setAttribute').once()._with('morph_type', get_class(relation.getParent()));
     // model.shouldReceive('save').never();
 
-    expect(await relation.firstOrNew(['foo'])).toBeInstanceOf(Model);
+    expect(await relation.firstOrNew({foo: 'foo'})).toBeInstanceOf(Model);
 
-    expect(spy1).toBeCalledWith(['foo']);
+    expect(spy1).toBeCalledWith({foo: 'foo'});
     expect(spy2).toBeCalledWith();
-    expect(spy3).toBeCalledWith(['foo']);
+    expect(spy3).toBeCalledWith({foo: 'foo'});
     expect(spy4).toBeCalledWith('morph_id', 1);
-    expect(spy5).toBeCalledWith('morph_type', relation.getParent().constructor);
+    expect(spy5).not.toBeCalled()
 
   });
+
   it('first or new method with values returns new model with morph keys set', async () => {
     const relation = getOneRelation();
     const model    = new Model();
 
     const spy1 = jest.spyOn(relation.getQuery(), 'where').mockReturnValue(relation.getQuery());
-    const spy2 = jest.spyOn(relation.getQuery(), 'first').mockReturnValue(Promise.resolve(model));
-    const spy3 = jest.spyOn(relation.getRelated(), 'newInstance');
+    const spy2 = jest.spyOn(relation.getQuery(), 'first').mockReturnValue(Promise.resolve(null));
+    const spy3 = jest.spyOn(relation.getRelated(), 'newInstance').mockReturnValue(model);
 
     const spy4 = jest.spyOn(model, 'setAttribute');
     const spy5 = jest.spyOn(model, 'save');
@@ -272,7 +273,7 @@ describe('test database fedaco morph', () => {
       'baz': 'qux'
     });
     expect(spy4).toBeCalledWith('morph_id', 1);
-    expect(spy4).toBeCalledWith('morph_type', relation.getParent().constructor);
+    expect(spy4).toBeCalledWith('morph_type', 'parent-model');
     expect(spy5).not.toBeCalled();
 
   });
@@ -321,6 +322,7 @@ describe('test database fedaco morph', () => {
     expect(spy4).not.toBeCalled();
     expect(spy5).not.toBeCalled();
   });
+
   it('first or create method creates new morph model', async () => {
     const relation = getOneRelation();
     const model    = new Model();
@@ -332,13 +334,13 @@ describe('test database fedaco morph', () => {
     const spy4 = jest.spyOn(model, 'setAttribute');
     const spy5 = jest.spyOn(model, 'save').mockReturnValue(Promise.resolve(true));
 
-    expect(await relation.firstOrCreate(['foo'])).toBeInstanceOf(Model);
+    expect(await relation.firstOrCreate({foo: 'foo'})).toBeInstanceOf(Model);
 
-    expect(spy1).toBeCalledWith(['foo']);
+    expect(spy1).toBeCalledWith({foo: 'foo'});
     expect(spy2).toBeCalledWith();
-    expect(spy3).toBeCalledWith(['foo']);
-    expect(spy4).toBeCalledWith('morph_id', 1);
-    expect(spy4).toBeCalledWith('morph_type', relation.getParent().constructor);
+    expect(spy3).toBeCalledWith({foo: 'foo'});
+    expect(spy4).toHaveBeenNthCalledWith(1, 'morph_id', 1);
+    expect(spy4).toHaveBeenNthCalledWith(2, 'morph_type', 'parent-model');
     expect(spy5).toBeCalled();
   });
 
@@ -378,16 +380,16 @@ describe('test database fedaco morph', () => {
     const spy3  = jest.spyOn(relation.getRelated(), 'newInstance');
 
     const spy4 = jest.spyOn(model, 'setAttribute');
-    const spy5 = jest.spyOn(model, 'fill');
-    const spy6 = jest.spyOn(model, 'save');
+    const spy5 = jest.spyOn(model, 'fill').mockReturnValue(null);
+    const spy6 = jest.spyOn(model, 'save').mockReturnValue(null);
 
-    expect(await relation.updateOrCreate(['foo'], ['bar'])).toBeInstanceOf(Model);
+    expect(await relation.updateOrCreate({foo: 'foo'}, {bar: 'bar'})).toBeInstanceOf(Model);
 
-    expect(spy1).toBeCalledWith(['foo']);
+    expect(spy1).toBeCalledWith({foo: 'foo'});
     expect(spy2).toBeCalledWith();
     expect(spy3).not.toBeCalled();
     expect(spy4).not.toBeCalled();
-    expect(spy5).toBeCalledWith(['bar']);
+    expect(spy5).toBeCalledWith({bar: 'bar'});
     expect(spy6).toBeCalled();
   });
 
@@ -401,17 +403,17 @@ describe('test database fedaco morph', () => {
 
     const spy4 = jest.spyOn(model, 'setAttribute');
     const spy5 = jest.spyOn(model, 'save').mockReturnValue(Promise.resolve(true));
-    const spy6 = jest.spyOn(model, 'fill');
+    const spy6 = jest.spyOn(model, 'fill').mockReturnValue(null);
 
-    expect(await relation.updateOrCreate(['foo'], ['bar'])).toBeInstanceOf(Model);
+    expect(await relation.updateOrCreate({foo: 'foo'}, {bar: 'bar'})).toBeInstanceOf(Model);
 
-    expect(spy1).toBeCalledWith(['foo']);
+    expect(spy1).toBeCalledWith({foo: 'foo'});
     expect(spy2).toBeCalledWith();
-    expect(spy3).toBeCalledWith(['foo']);
+    expect(spy3).toBeCalledWith({foo: 'foo'});
     expect(spy4).toBeCalledWith('morph_id', 1);
-    expect(spy4).toBeCalledWith('morph_type', relation.getParent().constructor);
+    expect(spy4).toBeCalledWith('morph_type', 'parent-model');
     expect(spy5).toBeCalled();
-    expect(spy6).toBeCalledWith(['bar']);
+    expect(spy6).toBeCalledWith({bar: 'bar'});
   });
 
   it('create function on namespaced morph', async () => {
@@ -420,7 +422,7 @@ describe('test database fedaco morph', () => {
 
     const spy1 = jest.spyOn(created, 'setAttribute');
     const spy2 = jest.spyOn(relation.getRelated(), 'newInstance').mockReturnValue(created);
-    const spy3 = jest.spyOn(relation.getRelated(), 'save').mockReturnValue(Promise.resolve(true));
+    const spy3 = jest.spyOn(created, 'save').mockReturnValue(Promise.resolve(true));
 
     expect(await relation.create({
       'name': 'taylor'

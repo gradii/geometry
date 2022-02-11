@@ -142,7 +142,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   }
 
   /*Get the first related model record matching the attributes or instantiate it.*/
-  public async firstOrNew(attributes: any = {}, values: any = {}) {
+  public async firstOrNew(attributes: Record<string, any> = {}, values: any = {}) {
     let instance = await this.where(attributes).first() as Model;
     if (isBlank(instance)) {
       instance = this._related.newInstance({...attributes, ...values});
@@ -152,7 +152,7 @@ export class HasOneOrMany extends mixinInteractsWithDictionary(Relation) {
   }
 
   /*Get the first related record matching the attributes or create it.*/
-  public async firstOrCreate(attributes: any = {}, values: any = {}) {
+  public async firstOrCreate(attributes: Record<string, any> = {}, values: any = {}) {
     let instance = await this.where(attributes).first();
     if (isBlank(instance)) {
       instance = await this.create({...attributes, ...values});
