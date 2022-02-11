@@ -34,18 +34,18 @@ export class MorphPivot extends Pivot {
   }
 
   /*Delete the pivot model record from the database.*/
-  public delete() {
+  public async delete() {
     if (this._attributes[this.getKeyName()] !== undefined) {
       return /*cast type int*/ super.delete();
     }
     if (this._fireModelEvent('deleting') === false) {
       return 0;
     }
-    const query = this.getDeleteQuery();
+    const query = this._getDeleteQuery();
     query.where(this.morphType, this.morphClass);
     return tap(() => {
       this._fireModelEvent('deleted', false);
-    }, query.delete());
+    }, await query.delete());
   }
 
   /*Get the morph type for the pivot.*/

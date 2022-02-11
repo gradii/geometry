@@ -343,7 +343,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     _addTimestampsToAttachment(this: BelongsToMany & _Self, record: Record<any, any>,
                                exists = false): Record<string, any> {
       let fresh = this.parent.freshTimestamp();
-      if (this.using) {
+      if (this._using) {
         // @ts-ignore
         const pivotModel = new this._using();
         fresh            = fresh.format(pivotModel.getDateFormat());
@@ -365,7 +365,7 @@ export function mixinInteractsWithPivotTable<T extends Constructor<any>>(base: T
     /*Detach models from the relationship.*/
     public async detach(this: BelongsToMany & _Self, ids: any = null, touch = true): Promise<any> {
       let results;
-      if (this.using && ids.length &&
+      if (this._using && ids.length &&
         !this._pivotWheres.length &&
         !this._pivotWhereIns.length &&
         !this._pivotWhereNulls.length
