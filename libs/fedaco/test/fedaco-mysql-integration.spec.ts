@@ -14,6 +14,7 @@ import { HasOneColumn } from '../src/annotation/relation-column/has-one.relation
 import { MorphManyColumn } from '../src/annotation/relation-column/morph-many.relation-column';
 import { MorphToColumn } from '../src/annotation/relation-column/morph-to.relation-column';
 import { Table } from '../src/annotation/table/table';
+import { Connection } from '../src/connection';
 import { DatabaseConfig } from '../src/database-config';
 import { FedacoRelationListType, FedacoRelationType } from '../src/fedaco/fedaco-types';
 import { Model } from '../src/fedaco/model';
@@ -23,15 +24,15 @@ import { forwardRef } from '../src/query-builder/forward-ref';
 import { JoinClauseBuilder } from '../src/query-builder/query-builder';
 import { SchemaBuilder } from '../src/schema/schema-builder';
 
-function connection(connectionName = 'default') {
-  return Model.getConnectionResolver().connection(connectionName);
+function connection(connectionName = 'default'): Connection {
+  return Model.getConnectionResolver().connection(connectionName) as Connection;
 }
 
 function schema(connectionName = 'default'): SchemaBuilder {
   return connection(connectionName).getSchemaBuilder();
 }
 
-jest.setTimeout(100000);
+// jest.setTimeout(100000);
 
 async function createSchema() {
   await schema('default')
@@ -154,7 +155,16 @@ describe('test database fedaco integration', () => {
     }, 'second_connection');
     db.bootFedaco();
     db.setAsGlobal();
-    // await createSchema();
+    await createSchema();
+  });
+
+  afterAll(async () => {
+    await schema('default')
+      .dropAllTables();
+    await schema('second_connection')
+      .dropAllTables();
+    await connection('default').disconnect();
+    await connection('second_connection').disconnect();
   });
 
   afterEach(async () => {
