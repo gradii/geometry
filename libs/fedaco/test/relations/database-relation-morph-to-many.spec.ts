@@ -171,7 +171,7 @@ describe('test database fedaco morph to many', () => {
 
   });
 
-  it('detach method clears all pivot records when no i ds are given', () => {
+  it('detach method clears all pivot records when no i ds are given', async () => {
     const relation = getRelation();
 
     const query: QueryBuilder = {
@@ -213,13 +213,12 @@ describe('test database fedaco morph to many', () => {
     // relation.expects(this.once()).method('touchIfTouching');
     // expect(relation.detach()).toBeTruthy();
 
-    expect(spy1).toBeCalledWith('taggables');
-    expect(spy2).toBeCalledWith([
-      ['taggable_id', 1],
-      'taggable_type',
-      relation.getParent().constructor
+    expect(await relation.detach()).toBeTruthy();
 
-    ]);
+    expect(spy1).toBeCalledWith('taggables');
+    expect(spy2).toHaveBeenNthCalledWith(1, 'taggable_id', 1);
+    expect(spy2).toHaveBeenNthCalledWith(1, 'taggable_type', relation.getParent().constructor.name);
+    
     expect(spy3).not.toBeCalled();
     expect(spy4).toBeCalledWith();
   });
