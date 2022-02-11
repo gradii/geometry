@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 /**
  * @license
  *
@@ -6,6 +7,7 @@
 
 import { isArray, isBlank } from '@gradii/check-type';
 import { uniq } from 'ramda';
+import { map } from 'rxjs/operators';
 import { Collection } from '../../define/collection';
 import { Constructor } from '../../helper/constructor';
 import { FedacoBuilder } from '../fedaco-builder';
@@ -358,33 +360,26 @@ export class HasManyThrough extends mixinInteractsWithDictionary(
   }
 
   /*Chunk the results of the query.*/
-  public chunk(count: number) {
-    return this._prepareQueryBuilder().chunk(count);
+  public chunk(count: number, singal?: Observable<any>) {
+    return this._prepareQueryBuilder().chunk(count, singal);
   }
 
-  // /*Chunk the results of a query by comparing numeric IDs.*/
-  // public chunkById(count: number, callback: Function, column: string | null = null,
-  //                  alias: string | null                                     = null) {
-  //   column = column ?? this.getRelated().getQualifiedKeyName();
-  //   alias  = alias ?? this.getRelated().getKeyName();
-  //   return this.prepareQueryBuilder().chunkById(count, callback, column, alias);
-  // }
+  /*Chunk the results of a query by comparing numeric IDs.*/
+  public chunkById(count: number, column?: string, alias?: string) {
+    column = column ?? this.getRelated().getQualifiedKeyName();
+    alias  = alias ?? this.getRelated().getKeyName();
+    return this._prepareQueryBuilder().chunkById(count, column, alias);
+  }
 
   // /*Get a generator for the given query.*/
   // public cursor() {
   //   return this.prepareQueryBuilder().cursor();
   // }
 
-  // /*Execute a callback over each item while chunking.*/
-  // public each(callback: Function, count: number = 1000) {
-  //   return this.chunk(count, results => {
-  //     for (let [key, value] of Object.entries(results)) {
-  //       if (callback(value, key) === false) {
-  //         return false;
-  //       }
-  //     }
-  //   });
-  // }
+  /*Execute a callback over each item while chunking.*/
+  public each(count: number = 1000, singal?: Observable<any>) {
+    return this._prepareQueryBuilder().each(count, singal);;
+  }
 
   // /*Query lazily, by chunks of the given size.*/
   // public lazy(chunkSize: number = 1000) {

@@ -1,3 +1,4 @@
+import { PrimaryColumn } from './../../src/annotation/column/primary.column';
 import { head } from 'ramda';
 import { tap } from 'rxjs/operators';
 import { Column } from '../../src/annotation/column/column';
@@ -163,12 +164,12 @@ async function migrateDefault() {
   await schema().create('users_default', table => {
     table.increments('id');
     table.string('email').withUnique();
-    table.unsignedInteger('has_many_through_default_test_country_id');
+    table.unsignedInteger('countries_default_id');
     table.timestamps();
   });
   await schema().create('posts_default', table => {
     table.increments('id');
-    table.integer('has_many_through_default_test_user_id');
+    table.integer('users_default_id');
     table.string('title');
     table.text('body');
     table.timestamps();
@@ -185,8 +186,8 @@ describe('test database fedaco has many through integration', () => {
     const db = new DatabaseConfig();
     db.addConnection({
       'driver'  : 'sqlite',
-      // 'database': ':memory:'
-      'database': 'tmp/integration-has-many-through.sqlite'
+      'database': ':memory:'
+      // 'database': 'tmp/integration-has-many-through.sqlite'
     });
     db.bootFedaco();
     db.setAsGlobal();
@@ -377,7 +378,7 @@ describe('test database fedaco has many through integration', () => {
       'posts').first();
     expect(Object.keys(post.getAttributes())).toEqual(
       [
-        'id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at', 'laravel_through_key'
+        'id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at', 'fedaco_through_key'
       ]);
   });
 
@@ -385,7 +386,7 @@ describe('test database fedaco has many through integration', () => {
     await seedData();
     const post = await (await HasManyThroughTestCountry.createQuery().first()).newRelation(
       'posts').first(['title', 'body']);
-    expect(Object.keys(post.getAttributes())).toEqual(['title', 'body', 'laravel_through_key']);
+    expect(Object.keys(post.getAttributes())).toEqual(['title', 'body', 'fedaco_through_key']);
   });
 
   it('chunk returns correct models', async () => {
@@ -399,7 +400,7 @@ describe('test database fedaco has many through integration', () => {
           const post = head(postsChunk);
           expect(Object.keys(post.getAttributes())).toEqual([
             'id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at',
-            'laravel_through_key'
+            'fedaco_through_key'
           ]);
         })
       ).toPromise();
@@ -423,6 +424,7 @@ describe('test database fedaco has many through integration', () => {
     expect(i).toEqual(3);
     expect(count).toEqual(6);
   });
+
   // it('cursor returns correct models', async () => {
   //   await seedData();
   //   this.seedDataExtended();
@@ -433,7 +435,7 @@ describe('test database fedaco has many through integration', () => {
   //     expect(Object.keys(post.getAttributes())).toEqual(
   //       [
   //         'id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at',
-  //         'laravel_through_key'
+  //         'fedaco_through_key'
   //       ]);
   //   }
   // });
@@ -442,11 +444,11 @@ describe('test database fedaco has many through integration', () => {
     await seedData();
     await seedDataExtended();
     const country = await HasManyThroughTestCountry.createQuery().find(2);
-    await country.newRelation('posts').each(post => {
+    await country.newRelation('posts').each().pipe(tap(({item: post}) => {
       expect(Object.keys(post.getAttributes())).toEqual([
-        'id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at', 'laravel_through_key'
+        'id', 'user_id', 'title', 'body', 'email', 'created_at', 'updated_at', 'fedaco_through_key'
       ]);
-    }).toPromise();
+    })).toPromise();
   });
 
   it('intermediate soft deletes are ignored', async () => {
@@ -461,8 +463,7 @@ describe('test database fedaco has many through integration', () => {
     await seedData();
     const country = await HasManyThroughSoftDeletesTestCountry.createQuery().with('posts').first();
     expect(country.shortname).toBe('us');
-    await country.posts;
-    expect(country.posts[0].title).toBe('A title');
+    expect((await country.posts)[0].title).toBe('A title');
     expect(country.posts).toHaveLength(2);
   });
 
@@ -484,6 +485,9 @@ export class HasManyThroughTestUser extends Model {
 export class HasManyThroughTestPost extends Model {
   _table: any   = 'posts';
   _guarded: any = [];
+
+  @PrimaryColumn()
+  id: string;
 
   @Column()
   title: string;

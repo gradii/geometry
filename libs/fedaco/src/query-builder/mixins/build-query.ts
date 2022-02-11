@@ -121,7 +121,7 @@ export function mixinBuildQueries<T extends Constructor<any>>(base: T): BuildQue
       if (!(count > 0)) {
         return EMPTY;
       }
-      column = column ?? this.defaultKeyName();
+      column = column ?? this._defaultKeyName();
       alias = alias ?? column;
       const clone = this.clone();
 
