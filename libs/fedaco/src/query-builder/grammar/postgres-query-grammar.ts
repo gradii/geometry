@@ -92,6 +92,9 @@ export class PostgresQueryGrammar extends QueryGrammar implements GrammarInterfa
     // if(keepSlashQuote) {
     //   return `\`${columnName.replace(/`/g, '``')}\``;
     // }
+    if (columnName === '*') {
+      return '*';
+    }
     return `"${columnName.replace(/`/g, '')}"`;
   }
 

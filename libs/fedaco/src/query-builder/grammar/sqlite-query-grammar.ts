@@ -73,6 +73,9 @@ export class SqliteQueryGrammar extends QueryGrammar implements GrammarInterface
     // if(keepSlashQuote) {
     //   return `\`${columnName.replace(/`/g, '``')}\``;
     // }
+    if (columnName === '*') {
+      return '*';
+    }
     return `"${columnName.replace(/`/g, '')}"`;
   }
 

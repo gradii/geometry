@@ -62,6 +62,9 @@ export class SqlserverQueryGrammar extends QueryGrammar implements GrammarInterf
     // if(keepSlashQuote) {
     //   return `\`${columnName.replace(/`/g, '``')}\``;
     // }
+    if (columnName === '*') {
+      return '*';
+    }
     return `[${columnName.replace(/`/g, '')}]`;
   }
 

@@ -76,9 +76,8 @@ export class MysqlQueryGrammar extends QueryGrammar implements GrammarInterface<
     // }
     if (columnName === '*') {
       return columnName;
-    } else {
-      return `\`${columnName.replace(/`/g, '')}\``;
     }
+    return `\`${columnName.replace(/`/g, '')}\``;
   }
 
   quoteTableName(tableName: string): string {

@@ -467,47 +467,41 @@ export class QueryBuilderVisitor implements SqlVisitor {
   }
 
   visitPathExpression(node: PathExpression): string {
-    const columns = [];
-    for (let i = 0; i < node.paths.length; i++) {
-      const identifier = node.paths[i];
-      const columnName = identifier.accept(this);
-      if (columnName === '*') {
-        columns.push(columnName);
-      } else {
-        // last table no need for simple update(update with not join)
-        if (i < node.paths.length - 1) {
-          if ((this._isVisitUpdateSpecification && !this._queryBuilder._joins.length)) {
-            continue;
-          }
-        }
+    let schemaName = node.schemaIdentifier ? `${node.schemaIdentifier.accept(this)}` : null;
+    let tableName  = node.tableIdentifier ? `${node.tableIdentifier.accept(this)}` : null;
+    let columnName = node.columnIdentifier ? `${node.columnIdentifier.accept(this)}` : null;
 
-        if (i === node.paths.length - 2) {
-          if (identifier instanceof Identifier) {
-            columns.push(this._grammar.quoteTableName(columnName));
-          } else if (identifier instanceof FromTable) {
-            if (columnName) {
-              const withAlias = columnName.split(/\s+as\s+/i);
-              // short column name for update
-              if (this._isVisitUpdateSpecification && !this._queryBuilder._joins.length) {
-                if (withAlias.length > 1) {
-                  columns.push(withAlias.pop());
-                }
-              } else {
-                columns.push(withAlias.pop());
-              }
-            }
-          } else {
-            // todo
-            columns.push(columnName);
-          }
+    if (node.schemaIdentifier instanceof Identifier) {
+      schemaName = this._grammar.quoteSchemaName(schemaName);
+    }
+    if (node.tableIdentifier instanceof Identifier) {
+      tableName = this._grammar.quoteTableName(tableName);
+    }
+    if (node.columnIdentifier instanceof Identifier) {
+      columnName = columnName === '*' ? '*' : this._grammar.quoteColumnName(columnName);
+    }
 
-        } else {
-          columns.push(this._grammar.quoteColumnName(columnName));
-        }
+    let tableAlias;
+
+    if (tableName) {
+      const withAlias = tableName.replace(/'"`/g, '').split(/\s+as\s+/i);
+      if (withAlias.length > 1) {
+        tableAlias = withAlias.pop();
+
+        tableName = tableAlias;
+      }
+    }
+    // last table no need for simple update(update with not join)
+    if ((this._isVisitUpdateSpecification && !this._queryBuilder._joins.length)) {
+      if (!tableAlias) {
+        return columnName;
       }
     }
 
-    return columns.join('.');
+    if (tableName) {
+      return `${tableName}.${columnName}`;
+    }
+    return columnName;
   }
 
   visitQueryExpression(node: QueryExpression): string {

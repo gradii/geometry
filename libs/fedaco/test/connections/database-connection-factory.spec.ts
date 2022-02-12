@@ -1,7 +1,7 @@
 import { SqliteWrappedConnection } from '../../src/connector/sqlite/sqlite-wrapped-connection';
 import { DatabaseConfig } from '../../src/database-config';
 
-let db;
+let db: DatabaseConfig;
 
 class PDO {
 }
