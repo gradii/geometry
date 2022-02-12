@@ -7,13 +7,14 @@
 
 const {exec, set, cd, cp, rm, chmod} = require('shelljs');
 const {join}                         = require('path');
-const {glob}                         = require("glob");
+const glob                           = require("globby");
 const fs                             = require('fs');
 const fse                            = require('fs-extra');
 const format                         = require('date-fns/format');
 const tar                            = require('tar');
 const path                           = require('path');
 const prettier                       = require('prettier')
+const buildConfig                    = require('../build-config');
 
 // ShellJS should throw if any command fails.
 set('-e');
@@ -46,23 +47,27 @@ async function build() {
 
   fs.writeFileSync(`${distPath}/package.json`, JSON.stringify(pkgJson, null, 2));
 
-  let files = glob.sync(`${distPath}/**/*`, {nodir: true});
+  let files = glob.sync([`${distPath}/**/*.d.ts`, `${distPath}/**/*.js`], {nodir: true});
   files.forEach(file => {
     try {
       let content = fs.readFileSync(file, 'utf8')
         .replace(/^\/\/# sourceMappingURL=.+?$/mg, '')
         .replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1')
 
+      const licenseBanner = buildConfig.fedacoLicenseBanner;
+      const isJs = file.endsWith('.js');
       content = prettier.format(content, {
-        parser       : 'espree',
-        trailingComma: "es5",
-        tabWidth     : 2,
-        semi         : false,
+        parser       : isJs ? 'espree' : 'typescript',
+        trailingComma: isJs ? "es5" : "none",
+        tabWidth     : isJs ? 2 : 4,
+        semi         : isJs ? false : true,
         singleQuote  : true,
-      })
+      });
 
-      fs.writeFileSync(file, content, {encoding: 'utf8', mode: 10644});
+      fs.writeFileSync(file, `${licenseBanner}
+${content}`, {encoding: 'utf8', mode: 10644});
     } catch (e) {
+      console.error(e);
     }
   })
 

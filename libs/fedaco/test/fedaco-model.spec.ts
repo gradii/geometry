@@ -16,6 +16,7 @@ import { TimestampColumn } from '../src/annotation/column/timestamp.column';
 import { HasManyColumn } from '../src/annotation/relation-column/has-many.relation-column';
 import { HasOneColumn } from '../src/annotation/relation-column/has-one.relation-column';
 import { Table } from '../src/annotation/table/table';
+import { Connection } from '../src/connection';
 import { DatabaseTransactionsManager } from '../src/database-transactions-manager';
 import { FedacoBuilder } from '../src/fedaco/fedaco-builder';
 import { FedacoRelationListType, FedacoRelationType } from '../src/fedaco/fedaco-types';
@@ -2799,7 +2800,7 @@ export class FedacoModelSaveStub extends Model {
     return this;
   }
 
-  public getConnection() {
+  public getConnection(): Connection {
     const conn      = new Conn();
     const grammar   = new MysqlQueryGrammar();
     const processor = new Processor();
@@ -2810,6 +2811,7 @@ export class FedacoModelSaveStub extends Model {
       return new QueryBuilder(conn, grammar, processor);
     });
 
+    // @ts-ignore
     return conn;
   }
 }
