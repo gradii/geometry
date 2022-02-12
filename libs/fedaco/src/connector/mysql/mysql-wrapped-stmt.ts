@@ -23,9 +23,6 @@ export class MysqlWrappedStmt implements WrappedStmt {
   }
 
   async execute(bindings?: any[]) {
-    // @ts-ignore
-    console.log(`run this ${this.sqlStmt}`, bindings ?? this._bindingValues);
-
     return new Promise((ok, fail) => {
       this.driverConnection.execute(
         this.sqlStmt,
@@ -48,9 +45,6 @@ export class MysqlWrappedStmt implements WrappedStmt {
   }
 
   async fetchAll(bindings?: any[]) {
-    // @ts-ignore
-    console.log(`run this ${this.sqlStmt}`, bindings ?? this._bindingValues);
-
     return new Promise((ok, fail) => {
       this.driverConnection.query(
         this.sqlStmt,
