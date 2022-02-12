@@ -68,13 +68,17 @@ describe('test database connection factory', () => {
 
   it('single connection not created until needed', () => {
     const connection = db.getConnection();
+    // @ts-ignore
     expect(connection.pdo).not.toBeInstanceOf(PDO);
+    // @ts-ignore
     expect(connection.readPdo).not.toBeInstanceOf(PDO);
   });
 
   it('read write connections not created until needed', () => {
     const connection = db.getConnection('read_write');
+    // @ts-ignore
     expect(connection.pdo).not.toBeInstanceOf(PDO);
+    // @ts-ignore
     expect(connection.readPdo).not.toBeInstanceOf(PDO);
   });
 

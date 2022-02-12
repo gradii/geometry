@@ -7,6 +7,8 @@
 
 /*Object representation of a database column.*/
 import { isNumber } from '@gradii/check-type';
+import { camelCase, pascalCase } from '../helper/str';
+import { SchemaGrammar } from '../schema/grammar/schema-grammar';
 // import { Type } from './types/type';
 
 export class Column {
@@ -53,7 +55,7 @@ export class Column {
   /**/
   public setOptions(options: any[]) {
     for (const [name, value] of Object.entries(options)) {
-      const method = 'set' + name;
+      const method = 'set' + pascalCase(name);
 
       if (method in this) {
         // @ts-ignore
@@ -251,6 +253,11 @@ export class Column {
   public getCustomSchemaOptions() {
     return this._customSchemaOptions;
   }
+
+  getQuotedName(grammar: SchemaGrammar) {
+    return `"${this._name}"`;
+  }
+
 
   /**/
   public toArray() {

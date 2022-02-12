@@ -60,9 +60,9 @@ describe('test database transactions manager', () => {
     expect(manager.getTransactions()[1].getCallbacks()).toHaveLength(0);
     expect(manager.getTransactions()[2].getCallbacks()).toHaveLength(1);
   });
-  it('committing transactions executes callbacks', async() => {
-    const callbacks = [];
-    const manager   = new DatabaseTransactionsManager();
+  it('committing transactions executes callbacks', async () => {
+    const callbacks: any[] = [];
+    const manager          = new DatabaseTransactionsManager();
     manager.begin('default', 1);
     manager.addCallback(() => {
       callbacks.push(['default', 1]);
@@ -79,8 +79,8 @@ describe('test database transactions manager', () => {
   });
 
   it('committing executes only callbacks of the connection', () => {
-    const callbacks = [];
-    const manager   = new DatabaseTransactionsManager();
+    const callbacks: any[] = [];
+    const manager          = new DatabaseTransactionsManager();
     manager.begin('default', 1);
     manager.addCallback(() => {
       callbacks.push(['default', 1]);
@@ -95,8 +95,8 @@ describe('test database transactions manager', () => {
     expect(callbacks[0]).toEqual(['default', 1]);
   });
   it('callback is executed if no transactions', () => {
-    const callbacks = [];
-    const manager   = new DatabaseTransactionsManager();
+    const callbacks: any[] = [];
+    const manager          = new DatabaseTransactionsManager();
     manager.addCallback(() => {
       callbacks.push(['default', 1]);
     });

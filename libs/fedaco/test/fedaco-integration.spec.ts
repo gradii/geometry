@@ -44,6 +44,11 @@ jest.setTimeout(100000);
 
 async function createSchema() {
   await schema('default')
+    .dropAllTables();
+  await schema('second_connection')
+    .dropAllTables();
+
+  await schema('default')
     .create('test_orders', table => {
       table.increments('id');
       table.string('item_type');

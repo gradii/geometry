@@ -23,13 +23,15 @@ describe('test database fedaco relation', () => {
     expect(parent.relationLoaded('foo')).toBeFalsy();
   });
 
-  it('touch method updates related timestamps', () => {
+  it('touch method updates related timestamps', async() => {
     const builder  = getBuilder();
     const parent   = new (Model);
     const spy1     = jest.spyOn(parent, 'getAttribute').mockReturnValue(1);
     // parent.shouldReceive('getAttribute')._with('id').andReturn(1);
     const related  = new (EloquentNoTouchingModelStub);
     const spy2     = jest.spyOn(builder, 'getModel').mockReturnValue(related);
+    // @ts-ignore
+    builder._model = related;
     const spy3     = jest.spyOn(builder, 'whereNotNull');
     const spy4     = jest.spyOn(builder, 'where');
     const spy5     = jest.spyOn(builder, 'withoutGlobalScopes').mockReturnValue(builder);
@@ -41,9 +43,9 @@ describe('test database fedaco relation', () => {
       now
     );
 
-    const spy9 = jest.spyOn(builder, 'update');
+    const spy9 = jest.spyOn(builder, 'update').mockReturnValue(Promise.resolve());
 
-    relation.touch();
+    await relation.touch();
     expect(spy9).toBeCalledWith({'updated_at': now});
   });
 
@@ -307,7 +309,7 @@ export class EloquentRelationStub extends Relation {
 }
 
 export class EloquentNoTouchingModelStub extends Model {
-  _table: any               = 'table';
+  _table: any               = '_table';
   protected attributes: any = {
     'id': 1
   };

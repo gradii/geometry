@@ -3,6 +3,7 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
+import { Connection } from './connection';
 import { ConnectionFactory } from './connector/connection-factory';
 import { DatabaseManager } from './database-manager';
 import { Dispatcher, NullDispatcher } from './fedaco/mixins/has-events';
@@ -55,7 +56,7 @@ export class DatabaseConfig {
   }
 
   /*Get a connection instance from the global manager.*/
-  public static connection(connection: string | null = null): ConnectionInterface {
+  public static connection(connection: string | null = null): Connection {
     return this.instance.getConnection(connection);
   }
 
@@ -82,7 +83,7 @@ export class DatabaseConfig {
   }
 
   /*Get a registered connection instance.*/
-  public getConnection(name: string | null = null): ConnectionInterface {
+  public getConnection(name: string | null = null): Connection {
     return this.manager.connection(name);
   }
 

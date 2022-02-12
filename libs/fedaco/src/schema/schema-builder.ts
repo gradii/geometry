@@ -99,7 +99,7 @@ export class SchemaBuilder {
   }
 
   /*Modify a table on the schema.*/
-  public async table(table: string, callback: Function) {
+  public async table(table: string, callback: (bp: Blueprint) => void) {
     await this.build(this.createBlueprint(table, callback));
   }
 

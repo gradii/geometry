@@ -478,6 +478,11 @@ export class SqliteSchemaGrammar extends SchemaGrammar {
     return `PRAGMA table_info(${this.quoteStringLiteral(table)})`;
   }
 
+  getListTableIndexesSQL(table: string, database: string): string {
+    table = table.replace(/\./g, '__');
+    return `PRAGMA index_list(${table})`;
+  }
+
   getListTableForeignKeysSQL(table: string, database?: string) {
     table = table.replace(/\./g, '__');
     return `PRAGMA foreign_key_list(${this.quoteStringLiteral(table)})`;

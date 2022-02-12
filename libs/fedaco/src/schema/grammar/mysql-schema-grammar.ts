@@ -566,4 +566,38 @@ export class MysqlSchemaGrammar extends SchemaGrammar {
     const [field, path] = this.wrapJsonFieldAndPath(value);
     return 'json_unquote(json_extract(' + field + path + '))';
   }
+
+  getListSequencesSQL(database: string): string {
+    throw new Error('not implement');
+  }
+
+  getListTableColumnsSQL(table: string, database: string): string {
+    throw new Error('not implement');
+  }
+
+  getListTableIndexesSQL(table: string, database: string): string {
+    if (database !== null) {
+      return `SELECT NON_UNIQUE  AS Non_Unique,
+                     INDEX_NAME  AS Key_name,
+                     COLUMN_NAME AS Column_Name,
+                     SUB_PART    AS Sub_Part,
+                     INDEX_TYPE  AS Index_Type
+              FROM information_schema.STATISTICS
+              WHERE TABLE_NAME = ${this.quoteStringLiteral(
+                table)}
+                AND TABLE_SCHEMA = ${this.quoteStringLiteral(database)}
+              ORDER BY SEQ_IN_INDEX ASC`;
+    }
+
+    return 'SHOW INDEX FROM ' + table;
+  }
+
+  getListTableForeignKeysSQL(table: string, database?: string): string {
+    throw new Error('not implement');
+  }
+
+  getListTablesSQL(): string {
+    throw new Error('not implement');
+  }
+
 }
