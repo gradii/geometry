@@ -6,6 +6,7 @@
 
 import { isAnyEmpty, isArray, isString } from '@gradii/check-type';
 import { BaseGrammar } from '../../base-grammar';
+import { camelCase } from '../../helper/str';
 import { AssignmentSetClause } from '../../query/ast/assignment-set-clause';
 import { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
 import { DeleteSpecification } from '../../query/ast/delete-specification';
@@ -130,8 +131,7 @@ export abstract class QueryGrammar extends BaseGrammar implements GrammarInterfa
     const visitor = this._createVisitor(builder);
 
     if (isAnyEmpty(values)) {
-      return `INSERT INTO ${builder._from.accept(visitor)} DEFAULT
-              VALUES`;
+      return 'INSERT INTO ' + builder._from.accept(visitor) + ' DEFAULT VALUES';
     }
 
     // const ast = this._prepareSelectAst(builder);

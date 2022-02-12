@@ -20,12 +20,13 @@ import { RawExpression } from './expression/raw-expression';
 import { JsonPathColumn } from './fragment/json-path-column';
 import { NestedExpression } from './fragment/nested-expression';
 import { Identifier } from './identifier';
+import { JsonPathExpression } from './json-path-expression';
 import { PathExpression } from './path-expression';
 
 export class ColumnReferenceExpression extends SqlNode {
 
   public constructor(
-    public expression: JsonPathColumn | PathExpression | NestedExpression | ExistsPredicateExpression,
+    public expression: JsonPathExpression | PathExpression | NestedExpression | ExistsPredicateExpression,
     public fieldAliasIdentificationVariable?: Identifier,
     public hiddenAliasResultVariable: boolean = false
   ) {

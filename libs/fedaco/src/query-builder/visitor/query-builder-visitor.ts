@@ -364,7 +364,19 @@ export class QueryBuilderVisitor implements SqlVisitor {
   }
 
   visitJsonPathExpression(node: JsonPathExpression): string {
-    return `'$.${node.paths.map(it => `"${it.accept(this)}"`).join('.')}'`;
+    const pathLeg = node.pathLeg.accept(this);
+    if (pathLeg === '->') {
+      return `json_extract(${node.pathExpression.accept(this)}, "$.${node.jsonLiteral.accept(
+        this)}")`;
+    } else if (pathLeg === '->>') {
+      return `json_unquote(json_extract(${
+        node.pathExpression.accept(this)
+      }, "$.${
+        node.jsonLiteral.accept(this)
+      }"))`;
+    }
+    throw new Error('unknown path leg');
+    // return `'$.${node.pathExpression.map(it => `"${it.accept(this)}"`).join('.')}'`;
   }
 
   visitLimitClause(node: LimitClause): string {
@@ -411,7 +423,7 @@ export class QueryBuilderVisitor implements SqlVisitor {
   }
 
   visitNullPredicateExpression(node: NullPredicateExpression): string {
-    if (node.expression.expression instanceof JsonPathColumn) {
+    if (node.expression.expression instanceof JsonPathExpression) {
       const sql = node.expression.accept(this);
       if (node.not) {
         return `(${sql} IS NOT NULL AND json_type(${sql}) != 'NULL')`;
@@ -462,6 +474,13 @@ export class QueryBuilderVisitor implements SqlVisitor {
       if (columnName === '*') {
         columns.push(columnName);
       } else {
+        // last table no need for simple update(update with not join)
+        if (i < node.paths.length - 1) {
+          if ((this._isVisitUpdateSpecification && !this._queryBuilder._joins.length)) {
+            continue;
+          }
+        }
+
         if (i === node.paths.length - 2) {
           if (identifier instanceof Identifier) {
             columns.push(this._grammar.quoteTableName(columnName));
@@ -592,7 +611,10 @@ export class QueryBuilderVisitor implements SqlVisitor {
   }
 
   visitStringLiteralExpression(node: StringLiteralExpression): string {
-    return `"${node.value}"`;
+    if (isString(node.value)) {
+      return `"${node.value.replace(/"'`/g, '')}"`;
+    }
+    return `"${resolveForwardRef(node.value).replace(/"'`/g, '')}"`;
   }
 
   visitTableName(node: TableName): string {

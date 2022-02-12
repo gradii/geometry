@@ -6,9 +6,11 @@
 
 import { isString } from '@gradii/check-type';
 import { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
+import { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
 import { DeleteSpecification } from '../../query/ast/delete-specification';
 import { AsExpression } from '../../query/ast/expression/as-expression';
 import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
+import { JsonPathExpression } from '../../query/ast/json-path-expression';
 import { LockClause } from '../../query/ast/lock-clause';
 import { OffsetClause } from '../../query/ast/offset-clause';
 import { QueryExpression } from '../../query/ast/query-expression';
@@ -117,8 +119,10 @@ export class SqlserverQueryBuilderVisitor extends QueryBuilderVisitor {
       sql = `DELETE ${node.target.accept(this).split(/\s+as\s+/i).pop()}`;
     } else {
       if (node.topRow > 0) {
+        // language=SQL format=false
         sql = `DELETE top (${node.topRow}) FROM ${node.target.accept(this)}`;
       } else {
+        // language=SQL format=false
         sql = `DELETE FROM ${node.target.accept(this)}`;
       }
     }
@@ -147,9 +151,12 @@ export class SqlserverQueryBuilderVisitor extends QueryBuilderVisitor {
   }
 
   visitBinaryUnionQueryExpression(node: BinaryUnionQueryExpression): string {
-    let sql = `SELECT * FROM (${node.left.accept(
-      this)}) AS [temp_table] UNION${node.all ? ' ALL' : ''} SELECT * FROM (${node.right.accept(
-      this)}) AS [temp_table]`;
+    // language=SQL format=false
+    let sql = `SELECT * FROM (${
+      node.left.accept(this)
+    }) AS [temp_table] UNION${node.all ? ' ALL' : ''} SELECT * FROM (${
+      node.right.accept(this)
+    }) AS [temp_table]`;
 
     sql += this.visitQueryExpression(node);
 
@@ -157,22 +164,53 @@ export class SqlserverQueryBuilderVisitor extends QueryBuilderVisitor {
   }
 
   visitFunctionCallExpression(node: FunctionCallExpression): string {
-    const functionName = node.name.accept(this).toLowerCase();
-    if (['date', 'time'].includes(functionName)) {
+    let funcName = node.name.accept(this);
+    funcName     = this._grammar.compilePredicateFuncName(funcName);
+    if (['date', 'time'].includes(funcName)) {
       if (node.parameters.length === 1) {
         node = new FunctionCallExpression(
           createIdentifier('cast'),
           [
             new AsExpression(node.parameters[0],
-              createIdentifier(functionName))
+              createIdentifier(funcName))
           ]
         );
       }
     }
 
-    return `${node.name.accept(this).toLowerCase()}(${
-      node.parameters.map(it => it.accept(this)).join(', ')
-    })`;
+    if (['json_contains'].includes(funcName)) {
+      const latestParam = node.parameters[node.parameters.length - 1];
+      const restParams  = node.parameters.slice(0, node.parameters.length - 1);
+      if (restParams.length === 1 && !(
+        restParams[0] instanceof ColumnReferenceExpression &&
+        restParams[0].expression instanceof JsonPathExpression
+      )) {
+        return `${latestParam.accept(this)} in (select [value] from openjson(${
+          restParams.map(it => it.accept(this)).join(', ')
+        }))`;
+      }
+      return `${latestParam.accept(this)} in (select [value] from ${
+        restParams.map(it => it.accept(this)).join(', ')
+      })`;
+    }
+
+    if (['json_length'].includes(funcName)) {
+      return `(select count(*) from openjson(${
+        node.parameters.map(it => it.accept(this)).join(', ').replace(/^openjson\((.+)\)$/, '$1')
+      }))`;
+    }
+
+    return super.visitFunctionCallExpression(node);
+  }
+
+  visitJsonPathExpression(node: JsonPathExpression): string {
+    const pathLeg = node.pathLeg.accept(this);
+    if (pathLeg === '->') {
+      return `openjson(${node.pathExpression.accept(this)}, "$.${node.jsonLiteral.accept(
+        this)}")`;
+    }
+    throw new Error('unknown path leg');
+    // return `'$.${node.pathExpression.map(it => `"${it.accept(this)}"`).join('.')}'`;
   }
 
   visitUpdateSpecification(node: UpdateSpecification): string {

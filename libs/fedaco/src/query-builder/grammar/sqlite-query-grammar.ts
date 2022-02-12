@@ -4,6 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { snakeCase } from '../../helper/str';
 import { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
 import { DeleteSpecification } from '../../query/ast/delete-specification';
 import { ConditionExpression } from '../../query/ast/expression/condition-expression';
@@ -59,6 +60,13 @@ export class SqliteQueryGrammar extends QueryGrammar implements GrammarInterface
     } else {
       return '';
     }
+  }
+
+  compilePredicateFuncName(funcName: string): string {
+    if (funcName === 'JsonLength') {
+      return 'json_array_length';
+    }
+    return snakeCase(funcName);
   }
 
   quoteColumnName(columnName: string) {

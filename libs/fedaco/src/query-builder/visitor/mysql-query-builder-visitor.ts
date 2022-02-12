@@ -5,6 +5,7 @@
  */
 
 import { DeleteSpecification } from '../../query/ast/delete-specification';
+import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
 import { UpdateSpecification } from '../../query/ast/update-specification';
 import { GrammarInterface } from '../grammar.interface';
 import { QueryBuilder } from '../query-builder';
@@ -83,5 +84,20 @@ export class MysqlQueryBuilderVisitor extends QueryBuilderVisitor {
       sql += ` ${node.limitClause.accept(this)}`;
     }
     return sql;
+  }
+
+  visitFunctionCallExpression(node: FunctionCallExpression): string {
+    let funcName = node.name.accept(this);
+    funcName     = this._grammar.compilePredicateFuncName(funcName);
+
+    if ('json_length' === funcName) {
+      return `${funcName}(${
+        node.parameters.map(it => it.accept(this)).join(', ')
+          .replace(/^json_extract\((.+)\)$/, '$1')
+      })`;
+    }
+    return `${funcName}(${
+      node.parameters.map(it => it.accept(this)).join(', ')
+    })`;
   }
 }

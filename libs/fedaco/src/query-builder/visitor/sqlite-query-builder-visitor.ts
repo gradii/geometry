@@ -6,7 +6,9 @@
 
 import { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
 import { AsExpression } from '../../query/ast/expression/as-expression';
-import { ComparisonPredicateExpression } from '../../query/ast/expression/comparison-predicate-expression';
+import {
+  ComparisonPredicateExpression
+} from '../../query/ast/expression/comparison-predicate-expression';
 import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
 import { createIdentifier } from '../ast-factory';
 import { GrammarInterface } from '../grammar.interface';
@@ -36,8 +38,9 @@ export class SqliteQueryBuilderVisitor extends QueryBuilderVisitor {
   }
 
   visitFunctionCallExpression(node: FunctionCallExpression): string {
-    const name = node.name.accept(this).toLowerCase();
-    switch (name) {
+    let funcName = node.name.accept(this);
+    funcName     = this._grammar.compilePredicateFuncName(funcName);
+    switch (funcName) {
       case 'date':
         return `strftime('%Y-%m-%d', ${
           node.parameters.map(it => it.accept(this)).join(', ')
@@ -58,6 +61,14 @@ export class SqliteQueryBuilderVisitor extends QueryBuilderVisitor {
         return `strftime('%H:%M:%S', ${
           node.parameters.map(it => it.accept(this)).join(', ')
         })`;
+      case 'json_contains':
+        throw new Error('ExceptionRuntimeException sqlite does not support json_contains');
+      case 'json_array_length': {
+        return `${funcName}(${
+          node.parameters.map(it => it.accept(this)).join(', ')
+            .replace(/^json_extract\((.+)\)$/, '$1')
+        })`;
+      }
     }
 
     return super.visitFunctionCallExpression(node);

@@ -7,11 +7,16 @@
 import { SqlNode } from '../sql-node';
 import { SqlVisitor } from '../sql-visitor';
 import { Identifier } from './identifier';
+import { PathExpression } from './path-expression';
 
 // MultiPartIdentifier
 export class JsonPathExpression extends SqlNode {
 
-  constructor(public paths: Identifier[], ) {
+  constructor(
+    public pathExpression: PathExpression,
+    public pathLeg: Identifier,
+    public jsonLiteral: Identifier,
+  ) {
     super();
   }
 

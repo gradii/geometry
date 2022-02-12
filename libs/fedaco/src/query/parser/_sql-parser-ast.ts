@@ -9,7 +9,6 @@ import { createIdentifier } from '../../query-builder/ast-factory';
 import { ColumnReferenceExpression } from '../ast/column-reference-expression';
 import { NumberLiteralExpression } from '../ast/expression/number-literal-expression';
 import { StringLiteralExpression } from '../ast/expression/string-literal-expression';
-import { JsonPathColumn } from '../ast/fragment/json-path-column';
 import { FromTable } from '../ast/from-table';
 import { Identifier } from '../ast/identifier';
 import { JoinClause } from '../ast/join-clause';
@@ -146,7 +145,7 @@ export class _SqlParserAst {
   }
 
   // seems like @link {createTableColumn} method
-  parseColumnWithoutAlias(defaultTable?: string | FromTable) {
+  parseColumnWithoutAlias(defaultTable?: string | FromTable): ColumnReferenceExpression {
     if (defaultTable instanceof FromTable) {
     } else if (isString(defaultTable)) {
       throw new Error('not implement parseColumnAlias with string type table');
@@ -174,7 +173,7 @@ export class _SqlParserAst {
     let alias;
     if (this.peekKeywordAs()) {
       this.advance();
-      alias = this._parseClainName().map(it => it.name).join('.');
+      alias = this._parseChainName().map(it => it.name).join('.');
     }
     return new ColumnReferenceExpression(
       columnName,
@@ -182,33 +181,9 @@ export class _SqlParserAst {
     );
   }
 
-  _parseColumnName(defaultTable?: FromTable): JsonPathColumn | PathExpression {
-    const clainNamePaths = this._parseClainName();
-    if (clainNamePaths.length > 0) {
-      let ast: PathExpression;
-      if (clainNamePaths.length === 1 && defaultTable) {
-        ast = new PathExpression([defaultTable, ...clainNamePaths]);
-      } else {
-        ast = new PathExpression(clainNamePaths);
-      }
-
-      // ->
-      if (this.consumeOptionalOperator('-')) {
-        if (this.consumeOptionalOperator('>')) {
-          const name = this.expectIdentifierOrKeywordOrString();
-          return new JsonPathColumn(
-            ast,
-            new JsonPathExpression([
-              createIdentifier(name)
-            ])
-          );
-        }
-      }
-
-      return ast;
-    }
-
-
+  _parseColumnName(defaultTable?: FromTable): JsonPathExpression | PathExpression | null {
+    const ast = this._parseJsonColumnPathExpression(defaultTable);
+    return ast;
     // const paths = [];
     // if (this.next.isIdentifier()) {
     //   paths.push(createIdentifier(this.next.strValue));
@@ -229,7 +204,7 @@ export class _SqlParserAst {
     //   // }
     //   return new PathExpression(paths);
     // }
-    return undefined;
+    // return undefined;
   }
 
   // begin parse part
@@ -320,7 +295,7 @@ export class _SqlParserAst {
     return undefined;
   }
 
-  _parseClainName(): Identifier[] {
+  _parseChainName(): Identifier[] {
     const paths = [];
     if (this.consumeOptionalOperator('*')) {
       return [createIdentifier('*')];
@@ -348,8 +323,48 @@ export class _SqlParserAst {
     return paths;
   }
 
+  _parseChainPathExpression(defaultTable?: FromTable): PathExpression | null {
+    const chainNamePaths = this._parseChainName();
+    if (chainNamePaths.length > 0) {
+      let ast: PathExpression;
+      if (chainNamePaths.length === 1 && defaultTable) {
+        ast = new PathExpression([defaultTable, ...chainNamePaths]);
+      } else {
+        ast = new PathExpression(chainNamePaths);
+      }
+
+      return ast;
+    }
+
+    return null;
+  }
+
+  _parseJsonColumnPathExpression(defaultTable?: FromTable): PathExpression | JsonPathExpression | null {
+    const chainPathExpression = this._parseChainPathExpression(defaultTable);
+    if (chainPathExpression) {
+      if (this.consumeOptionalOperator('-')) {
+        if (this.consumeOptionalOperator('>')) {
+          let operator = '->';
+          if (this.consumeOptionalOperator('>')) {
+            operator = '->>';
+          }
+          const name = this.expectIdentifierOrKeywordOrString();
+          return new JsonPathExpression(
+            chainPathExpression,
+            createIdentifier(operator),
+            createIdentifier(name)
+          );
+        }
+      } else {
+        return chainPathExpression;
+      }
+    }
+
+    return null;
+  }
+
   _parseTableName(): TableName {
-    const clainNamePaths = this._parseClainName();
+    const clainNamePaths = this._parseChainName();
     if (clainNamePaths.length > 0) {
       return new TableName(clainNamePaths);
     }
@@ -381,7 +396,7 @@ export class _SqlParserAst {
   /**
    * @deprecated
    */
-  parseUnaryTableColumn() {
+  parseUnaryTableColumn(): PathExpression | null {
     const table = this.parseTableColumn();
     if (table) {
       if (this.consumeOptionalCharacter(asciiChars.$PERIOD)) {
@@ -400,7 +415,7 @@ export class _SqlParserAst {
         );
       }
     }
-    return undefined;
+    return null;
   }
 
   parseWhereCondition() {

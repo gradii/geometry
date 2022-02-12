@@ -55,6 +55,13 @@ export class MysqlQueryGrammar extends QueryGrammar implements GrammarInterface<
     return sql + columns.join(', ');
   }
 
+  compilePredicateFuncName(funcName: string) {
+    if (funcName === 'JsonLength') {
+      return 'json_length';
+    }
+    return super.compilePredicateFuncName(funcName);
+  }
+
   distinct(distinct: boolean | any[]): string {
     if (distinct !== false) {
       return 'DISTINCT';

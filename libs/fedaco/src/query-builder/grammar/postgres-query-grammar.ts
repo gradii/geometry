@@ -4,6 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { snakeCase } from '../../helper/str';
 import { AssignmentSetClause } from '../../query/ast/assignment-set-clause';
 import { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
 import { DeleteSpecification } from '../../query/ast/delete-specification';
@@ -31,6 +32,13 @@ export class PostgresQueryGrammar extends QueryGrammar implements GrammarInterfa
 
   protected _createVisitor(queryBuilder: QueryBuilder) {
     return new QueryBuilderVisitor(queryBuilder._grammar, queryBuilder);
+  }
+
+  compilePredicateFuncName(funcName: string): string {
+    if (funcName === 'JsonLength') {
+      return 'json_array_length';
+    }
+    return snakeCase(funcName);
   }
 
   compileTruncate(query: QueryBuilder): { [sql: string]: any[] } {

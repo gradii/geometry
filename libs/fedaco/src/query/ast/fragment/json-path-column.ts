@@ -6,10 +6,14 @@
 
 import { SqlNode } from '../../sql-node';
 import { SqlVisitor } from '../../sql-visitor';
+import { Identifier } from '../identifier';
 import { JsonPathExpression } from '../json-path-expression';
 import { PathExpression } from '../path-expression';
 
 
+/**
+ * @deprecated check if this is still used
+ */
 export class JsonPathColumn extends SqlNode {
   constructor(
     public columns: PathExpression,

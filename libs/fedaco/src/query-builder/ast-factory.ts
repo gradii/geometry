@@ -8,6 +8,7 @@ import { BindingVariable } from '../query/ast/binding-variable';
 import { ColumnReferenceExpression } from '../query/ast/column-reference-expression';
 import { RawBindingExpression } from '../query/ast/expression/raw-binding-expression';
 import { RawExpression } from '../query/ast/expression/raw-expression';
+import { StringLiteralExpression } from '../query/ast/expression/string-literal-expression';
 import { FromTable } from '../query/ast/from-table';
 import { Identifier } from '../query/ast/identifier';
 import { PathExpression } from '../query/ast/path-expression';
@@ -34,6 +35,11 @@ export function rawSqlBindings(value: string | number | boolean, bindings: any[]
 
 export function createIdentifier(identifier: string | ForwardRefFn<string>) {
   return new Identifier(identifier);
+}
+
+
+export function createStringLiteral(identifier: string | ForwardRefFn<string>) {
+  return new StringLiteralExpression(identifier);
 }
 
 export function createTableColumn(table: FromTable | Identifier, column: string) {

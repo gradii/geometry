@@ -4,6 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { isBoolean } from '@gradii/check-type';
+import { snakeCase } from '../../helper/str';
 import { DeleteSpecification } from '../../query/ast/delete-specification';
 import { ConditionExpression } from '../../query/ast/expression/condition-expression';
 import { FromClause } from '../../query/ast/from-clause';
@@ -40,12 +42,20 @@ export class SqlserverQueryGrammar extends QueryGrammar implements GrammarInterf
     throw new Error('RuntimeException');
   }
 
+  compilePredicateFuncName(funcName: string): string {
+    return snakeCase(funcName);
+  }
+
   distinct(distinct: boolean | any[]): string {
     if (distinct !== false) {
       return 'DISTINCT';
     } else {
       return '';
     }
+  }
+
+  prepareBindingForJsonContains(value: any): string {
+    return isBoolean(value) ? JSON.stringify(value) : value;
   }
 
   quoteColumnName(columnName: string) {
