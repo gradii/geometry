@@ -8,6 +8,7 @@ import { reflector } from '@gradii/annotation';
 import { isAnyEmpty, isArray, isBlank, isObjectEmpty, isString } from '@gradii/check-type';
 import { difference, findLast, tap, uniq } from 'ramda';
 import { Table, TableAnnotation } from '../annotation/table/table';
+import type { Connection } from '../connection';
 import { except } from '../helper/obj';
 import { plural, pluralStudy } from '../helper/pluralize';
 import { camelCase, snakeCase, upperCaseFirst } from '../helper/str';
@@ -731,7 +732,7 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Get the database connection for the model.*/
-  public getConnection() {
+  public getConnection(): Connection {
     return (this.constructor as any).resolveConnection(
       this.getConnectionName()
     );

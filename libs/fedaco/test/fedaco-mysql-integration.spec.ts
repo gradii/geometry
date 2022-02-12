@@ -261,6 +261,22 @@ describe('test database fedaco integration', () => {
     // }
   });
 
+  it('test insert get id method', async () => {
+    const factory = new EloquentTestUser();
+    // factory.getConnection().enableQueryLog();
+    await factory.newQuery().create({
+      'id'   : 1,
+      'email': 'linbolen@gradii.com'
+    });
+
+    await factory.newQuery().create({
+      'id'   : 2,
+      'email': 'xsilen@gradii.com'
+    });
+
+    console.log(factory.getConnection().getQueryLog());
+  });
+
 });
 
 /*Eloquent Models...*/

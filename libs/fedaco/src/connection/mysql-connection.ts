@@ -14,9 +14,25 @@ import { SchemaGrammar } from '../schema/grammar/schema-grammar';
 import { MySqlSchemaState } from '../schema/mysql-schema-state';
 
 export class MysqlConnection extends Connection {
+  _version: string;
+  _isMaria: boolean;
+
   /*Determine if the connected database is a MariaDB database.*/
   public async isMaria() {
-    return false;
+    if (isBlank(this._isMaria)) {
+      try {
+        const data = await this.selectOne('SELECT VERSION() as version');
+        if (data) {
+          this._version = data.version;
+          this._isMaria = this._version.indexOf('MariaDB') !== -1;
+        } else {
+          this._isMaria = false;
+        }
+      } catch (e) {
+        console.error('can not get mysql db version');
+      }
+    }
+    return this._isMaria;
     // return (await this.getPdo()).getAttribute('ATTR_SERVER_VERSION').includes('MariaDB');
   }
 
@@ -54,6 +70,18 @@ export class MysqlConnection extends Connection {
   }
 
   public async insertGetId(query: string, bindings: any[] = [], sequence: string) {
+    if (!(await this.isMaria())) {
+      if (query.includes('returning')) {
+        query = query.replace(/\s+returning\s+.+$/, '');
+      }
+      const [, d] = await Promise.all(
+        [
+          this.statement(query, bindings),
+          this.selectOne('SELECT LAST_INSERT_ID() as id')
+        ],
+      );
+      return d.id;
+    }
     const data = await this.statement(query, bindings);
     return isArray(data) && data.length === 1 ? data[0][sequence] : null;
   }

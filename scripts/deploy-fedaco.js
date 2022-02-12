@@ -46,7 +46,7 @@ async function build() {
 
   fs.writeFileSync(`${distPath}/package.json`, JSON.stringify(pkgJson, null, 2));
 
-  let files = glob.sync(`${distPath}/**/*(.js|.d.ts)`, {nodir: true});
+  let files = glob.sync(`${distPath}/**/*`, {nodir: true});
   files.forEach(file => {
     try {
       let content = fs.readFileSync(file, 'utf8')
@@ -61,7 +61,7 @@ async function build() {
         singleQuote  : true,
       })
 
-      fs.writeFileSync(file, content, 'utf8');
+      fs.writeFileSync(file, content, {encoding: 'utf8', mode: 10644});
     } catch (e) {
     }
   })
