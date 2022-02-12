@@ -1,6 +1,11 @@
 {
   "name": "@gradii/fedaco",
   "version": "0.0.10",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gradii/fedaco.git"
+  },
+  "license": "MIT",
   "peerDependencies": {
   },
   "dependencies": {
