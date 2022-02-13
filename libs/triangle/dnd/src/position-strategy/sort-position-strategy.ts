@@ -256,7 +256,7 @@ export class SortPositionStrategy implements PositionStrategy {
     return findIndex(items, currentItem => currentItem.drag === item);
   }
 
-  trackActivePositions(activeDraggables) {
+  trackActivePositions(activeDraggables: any[]) {
     // _cacheItemPositions
   }
 

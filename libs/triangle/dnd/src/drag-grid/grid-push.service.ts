@@ -165,7 +165,7 @@ export class GridPushService {
 
   //
 
-  private withinRange(item, pointerX, pointerY) {
+  private withinRange(item: any, pointerX: number, pointerY: number) {
 
   }
 

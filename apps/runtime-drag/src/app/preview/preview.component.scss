@@ -1,0 +1,32 @@
+.tri-drag-placeholder {
+  display          : block;
+  position         : relative;
+  width            : 100%;
+  height           : 50px;
+  background-color : rgb(218, 99, 93, .2);
+
+  &:after {
+    $border-gap : 3px;
+    content     : "";
+    position    : absolute;
+    left        : $border-gap;
+    top         : $border-gap;
+    right       : $border-gap;
+    bottom      : $border-gap;
+    display     : block;
+    border      : 1px dashed #a24b46;
+  }
+}
+
+.tri-drag-placeholder {
+  transition : transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+//preview
+.tri-drag-animating {
+  transition : transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.drag-container.tri-drop-container-dragging .drag-box:not(.tri-drag-placeholder) {
+  transition : transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
