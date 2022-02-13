@@ -11,5 +11,6 @@ module.exports = {
     "<rootDir>/libs/ice-box",
     "<rootDir>/apps/dev-app",
     "<rootDir>/libs/triangle-icons",
+    "<rootDir>/apps/runtime-drag",
   ],
 };
