@@ -16,7 +16,7 @@ const {
 
 const gty = 'ciba';
 
-module.exports.handler = async function cibaHandler(ctx, next) {
+export async function handler(ctx, next) {
   presence(ctx, 'auth_req_id');
 
   const {
@@ -225,6 +225,6 @@ module.exports.handler = async function cibaHandler(ctx, next) {
   };
 
   return next();
-};
+}
 
 export let parameters = new Set(['auth_req_id']);

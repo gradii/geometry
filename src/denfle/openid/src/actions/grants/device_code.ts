@@ -16,7 +16,7 @@ const {
 
 const gty = 'device_code';
 
-module.exports.handler = async function deviceCodeHandler(ctx, next) {
+export async function handler(ctx, next) {
   presence(ctx, 'device_code');
 
   const {
@@ -222,6 +222,6 @@ module.exports.handler = async function deviceCodeHandler(ctx, next) {
   };
 
   return next();
-};
+}
 
 export let parameters = new Set(['device_code']);

@@ -9,7 +9,7 @@ import resolveResource from '../../helpers/resolve_resource';
 
 const gty = 'authorization_code';
 
-module.exports.handler = async function authorizationCodeHandler(ctx, next) {
+export async function handler(ctx, next) {
   const {
     issueRefreshToken,
     allowOmittingSingleRegisteredRedirectUri,
@@ -216,6 +216,6 @@ module.exports.handler = async function authorizationCodeHandler(ctx, next) {
   };
 
   await next();
-};
+}
 
 export let parameters = new Set(['code', 'redirect_uri']);

@@ -225,14 +225,47 @@ export class SortPositionStrategy implements PositionStrategy {
         return array.length < 2;
       }
 
-      if (delta) {
-        const direction = isHorizontal ? delta.x : delta.y;
+      // If the user is still hovering over the same item as last time, their cursor hasn't left
+      // the item after we made the swap, and they didn't change the direction in which they're
+      // dragging, we don't consider it a direction swap.
+      if (
+        drag === this._previousSwap.drag &&
+        this._previousSwap.overlaps
+      ) {
+        if (delta) {
+          const direction = isHorizontal ? delta.x : delta.y;
+          if (direction === this._previousSwap.delta) {
+            return false;
+          }
+        }
 
-        // If the user is still hovering over the same item as last time, their cursor hasn't left
-        // the item after we made the swap, and they didn't change the direction in which they're
-        // dragging, we don't consider it a direction swap.
-        if (drag === this._previousSwap.drag && this._previousSwap.overlaps &&
-          direction === this._previousSwap.delta) {
+        const midX = (Math.floor(clientRect.left) + Math.floor(clientRect.right)) / 2;
+        const midY = (Math.floor(clientRect.top) + Math.floor(clientRect.bottom)) / 2;
+        /**
+         *  // at the middle right of the item
+         *  pointerX > midX && this._previousSwap.delta > 0 ||
+         *  // at the middle left of the item
+         *  pointerX < midX && this._previousSwap.delta < 0
+         *  // at the middle bottom of the item
+         *  pointerY > midY && this._previousSwap.delta > 0 ||
+         *  // at the middle top of the item
+         *  pointerY < midY && this._previousSwap.delta < 0
+         *
+         *  10size  give 10*0.08*2px = 1.6px floor give 0px
+         *  20size  give 20*0.08*2px = 3.2px floor give 2px
+         *  50size  give 50*0.08*2px = 8px   floor give 8px
+         *  100size give 100*0.08*2px= 16px  floor give 16px
+         *  250size give 250*0.08*2px= 40px  floor give 40px
+         *  300size give 300*0.08*2px= 40px  floor give 40px
+         *  500size give 500*0.08*2px= 40px  floor give 40px
+         *  but max gap is 40px when exceed 250px
+         */
+        if (
+          isHorizontal && (pointerX - midX) * this._previousSwap.delta > Math.max(0,
+            Math.min(Math.floor(clientRect.width * 0.08), 40)) ||
+          !isHorizontal && (pointerY - midY) * this._previousSwap.delta > Math.max(0,
+            Math.min(Math.floor(clientRect.height * 0.08), 40))
+        ) {
           return false;
         }
       }
