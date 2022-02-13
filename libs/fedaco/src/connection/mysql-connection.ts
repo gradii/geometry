@@ -74,12 +74,9 @@ export class MysqlConnection extends Connection {
       if (query.includes('returning')) {
         query = query.replace(/\s+returning\s+.+$/, '');
       }
-      const [, d] = await Promise.all(
-        [
-          this.statement(query, bindings),
-          this.selectOne('SELECT LAST_INSERT_ID() as id')
-        ],
-      );
+
+      await this.statement(query, bindings);
+      const d = await this.selectOne('SELECT LAST_INSERT_ID() as id');
       return d.id;
     }
     const data = await this.statement(query, bindings);
