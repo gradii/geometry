@@ -347,13 +347,13 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
         const midY = (Math.floor(clientRect.top) + Math.floor(clientRect.bottom)) / 2;
         /**
          *  // at the middle right of the item
-         *  pointerX > midX && this._previousSwap.delta > 0 ||
+         *  midX > pointerX && this._previousSwap.delta > 0 ||
          *  // at the middle left of the item
-         *  pointerX < midX && this._previousSwap.delta < 0
+         *  midX < pointerX && this._previousSwap.delta < 0
          *  // at the middle bottom of the item
-         *  pointerY > midY && this._previousSwap.delta > 0 ||
+         *  midY > pointerY && this._previousSwap.delta > 0 ||
          *  // at the middle top of the item
-         *  pointerY < midY && this._previousSwap.delta < 0
+         *  midY < pointerY && this._previousSwap.delta < 0
          *
          *  10size  give 10*0.08*2px = 1.6px floor give 0px
          *  20size  give 20*0.08*2px = 3.2px floor give 2px
@@ -364,14 +364,10 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
          *  500size give 500*0.08*2px= 40px  floor give 40px
          *  but max gap is 40px when exceed 250px
          */
-        if (
-          isHorizontal && (pointerX - midX) * this._previousSwap.delta > Math.max(0,
+        return isHorizontal && (midX - pointerX) * this._previousSwap.delta > Math.max(0,
             Math.min(Math.floor(clientRect.width * 0.08), 40)) ||
-          !isHorizontal && (pointerY - midY) * this._previousSwap.delta > Math.max(0,
-            Math.min(Math.floor(clientRect.height * 0.08), 40))
-        ) {
-          return false;
-        }
+          !isHorizontal && (midY - pointerY) * this._previousSwap.delta > Math.max(0,
+            Math.min(Math.floor(clientRect.height * 0.08), 40));
       }
 
       if (this._orientation === 'horizontal') {

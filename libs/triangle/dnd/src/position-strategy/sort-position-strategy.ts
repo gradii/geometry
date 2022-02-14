@@ -260,14 +260,10 @@ export class SortPositionStrategy implements PositionStrategy {
          *  500size give 500*0.08*2px= 40px  floor give 40px
          *  but max gap is 40px when exceed 250px
          */
-        if (
-          isHorizontal && (pointerX - midX) * this._previousSwap.delta > Math.max(0,
+        return isHorizontal && (midX - pointerX) * this._previousSwap.delta > Math.max(0,
             Math.min(Math.floor(clientRect.width * 0.08), 40)) ||
-          !isHorizontal && (pointerY - midY) * this._previousSwap.delta > Math.max(0,
-            Math.min(Math.floor(clientRect.height * 0.08), 40))
-        ) {
-          return false;
-        }
+          !isHorizontal && (midY - pointerY) * this._previousSwap.delta > Math.max(0,
+            Math.min(Math.floor(clientRect.height * 0.08), 40));
       }
 
       // Round these down since most browsers report client rects with
