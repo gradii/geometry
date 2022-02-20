@@ -7,8 +7,9 @@
 
 /*Object representation of a database column.*/
 import { isNumber } from '@gradii/check-type';
-import { camelCase, pascalCase } from '../helper/str';
+import { pascalCase } from '../helper/str';
 import type { SchemaGrammar } from '../schema/grammar/schema-grammar';
+
 // import { Type } from './types/type';
 
 export class Column {
@@ -61,7 +62,7 @@ export class Column {
         // @ts-ignore
         this[method](value);
       } else {
-        throw new Error (`The "${name}" column option is not supported`);
+        throw new Error(`The "${name}" column option is not supported`);
       }
     }
     return this;

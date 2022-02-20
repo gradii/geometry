@@ -1,1 +1,12 @@
-<p>preview-definition works!</p>
+<tri-splitter orientation="vertical">
+  <tri-splitter-pane>
+    <textarea triTextarea [(ngModel)]="data"></textarea>
+  </tri-splitter-pane>
+  <tri-splitter-pane>
+    <div style="height: 500px">
+      <form>
+        <input triInput />
+      </form>
+    </div>
+  </tri-splitter-pane>
+</tri-splitter>
