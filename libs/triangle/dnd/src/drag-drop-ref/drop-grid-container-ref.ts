@@ -160,7 +160,6 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
 
     const positionX = this.positionStrategy.pixelsToPositionX(item, elementPointX);
     const positionY = this.positionStrategy.pixelsToPositionY(item, elementPointY);
-    console.log(positionX, positionY);
 
     const placeholderRef = item.getPlaceholderElement();
 

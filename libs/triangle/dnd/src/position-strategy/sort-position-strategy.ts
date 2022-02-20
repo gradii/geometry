@@ -92,7 +92,6 @@ export class SortPositionStrategy implements PositionStrategy {
       // @ts-ignore
       TriDropContainer._dropContainers.forEach(container => {
         if (offsetItem.drag.getRootElement().contains(container.element.nativeElement)) {
-          console.log('executed!');
           adjustClientRect(container._dropContainerRef._clientRect,  siblingOffsetY, siblingOffsetX);
         }
       });
