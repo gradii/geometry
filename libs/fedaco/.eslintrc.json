@@ -24,6 +24,11 @@
             "prefix": "applications",
             "style": "kebab-case"
           }
+        ],
+        "@typescript-eslint/consistent-type-imports": [
+          "warn",
+          {
+          }
         ]
       }
     },

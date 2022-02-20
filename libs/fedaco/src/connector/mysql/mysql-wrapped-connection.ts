@@ -4,13 +4,14 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import type { Connection, RowDataPacket } from 'mysql2';
 import type { WrappedConnection } from '../wrapped-connection';
 import { MysqlWrappedStmt } from './mysql-wrapped-stmt';
 
 export class MysqlWrappedConnection implements WrappedConnection {
   lastError: string;
 
-  constructor(public driver: import('mysql2').Connection) {
+  constructor(public driver: Connection) {
     driver.on('error', (e: any) => {
       this.lastError = e.message;
     });
@@ -52,13 +53,14 @@ export class MysqlWrappedConnection implements WrappedConnection {
 
   async lastInsertId(): Promise<number> {
     return new Promise((ok, fail) => {
-      this.driver.execute('select LAST_INSERT_ID()', (err, data: import('mysql2').RowDataPacket[]) => {
-        if (err) {
-          fail(err);
-        } else {
-          ok(data && data.length === 1 && data[0]['LAST_INSERT_ID()']);
-        }
-      });
+      this.driver.execute('select LAST_INSERT_ID()',
+        (err, data: RowDataPacket[]) => {
+          if (err) {
+            fail(err);
+          } else {
+            ok(data && data.length === 1 && data[0]['LAST_INSERT_ID()']);
+          }
+        });
     });
   }
 

@@ -4,12 +4,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import type { Database } from 'sqlite3';
 import type { WrappedConnection } from '../wrapped-connection';
 import { SqliteWrappedStmt } from './sqlite-wrapped-stmt';
 
 export class SqliteWrappedConnection implements WrappedConnection {
 
-  constructor(public driver: import('sqlite3').Database) {
+  constructor(public driver: Database) {
   }
 
   execute(sql: string, bindings?: any[]): Promise<void> {

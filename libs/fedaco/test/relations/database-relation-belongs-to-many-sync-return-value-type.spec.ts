@@ -1,10 +1,10 @@
 import { Table } from './../../src/annotation/table/table';
-import { FedacoRelationListType } from './../../src/fedaco/fedaco-types';
+import type { FedacoRelationListType } from './../../src/fedaco/fedaco-types';
 import { BelongsToManyColumn } from '../../src/annotation/relation-column/belongs-to-many.relation-column';
 import { DatabaseConfig } from '../../src/database-config';
 import { Model } from '../../src/fedaco/model';
 import { forwardRef } from '../../src/query-builder/forward-ref';
-import { SchemaBuilder } from '../../src/schema/schema-builder';
+import type { SchemaBuilder } from '../../src/schema/schema-builder';
 
 
 function connection(connectionName = 'default') {
