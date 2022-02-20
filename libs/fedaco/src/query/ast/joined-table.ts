@@ -6,10 +6,10 @@
 
 import { ForwardRefFn } from '../../query-builder/forward-ref';
 import { SqlNode } from '../sql-node';
-import { SqlVisitor } from '../sql-visitor';
+import type { SqlVisitor } from '../sql-visitor';
 import { FromTable } from './from-table';
-import { JoinExpression } from './join-expression';
-import { TableReferenceExpression } from './table-reference-expression';
+import type { JoinExpression } from './join-expression';
+import type { TableReferenceExpression } from './table-reference-expression';
 
 
 /**

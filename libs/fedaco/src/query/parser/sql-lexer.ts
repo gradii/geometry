@@ -72,8 +72,8 @@ export class SqlLexer {
 // tslint:disable-next-line:class-name
 class _Scanner {
   length: number;
-  peek: number  = 0;
-  index: number = -1;
+  peek  = 0;
+  index = -1;
 
   constructor(public input: string) {
     this.length = input.length;
@@ -173,7 +173,7 @@ class _Scanner {
     const quote: number = this.peek;
     this.advance();  // Skip initial quote.
 
-    let buffer: string  = '';
+    let buffer  = '';
     let marker: number  = this.index;
     const input: string = this.input;
 
@@ -192,7 +192,7 @@ class _Scanner {
           } else {
             return this.error(`Invalid unicode escape [\\u${hex}]`, 0);
           }
-          for (let i: number = 0; i < 5; i++) {
+          for (let i = 0; i < 5; i++) {
             this.advance();
           }
         } else {

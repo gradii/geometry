@@ -7,26 +7,34 @@
 import { reflector } from '@gradii/annotation';
 import { isAnyEmpty, isArray, isBlank, isObjectEmpty, isString } from '@gradii/check-type';
 import { difference, findLast, tap, uniq } from 'ramda';
-import { Table, TableAnnotation } from '../annotation/table/table';
+import type { TableAnnotation } from '../annotation/table/table';
+import { Table } from '../annotation/table/table';
 import type { Connection } from '../connection';
 import { except } from '../helper/obj';
 import { plural, pluralStudy } from '../helper/pluralize';
 import { camelCase, snakeCase, upperCaseFirst } from '../helper/str';
-import { ConnectionResolverInterface } from '../interface/connection-resolver-interface';
-import { QueryBuilder } from '../query-builder/query-builder';
+import type { ConnectionResolverInterface } from '../interface/connection-resolver-interface';
+import type { QueryBuilder } from '../query-builder/query-builder';
 import { BaseModel } from './base-model';
 import { FedacoBuilder } from './fedaco-builder';
-import { GuardsAttributes, mixinGuardsAttributes } from './mixins/guards-attributes';
-import { HasAttributes, mixinHasAttributes } from './mixins/has-attributes';
-import { HasEvents, mixinHasEvents } from './mixins/has-events';
-import { HasGlobalScopes, mixinHasGlobalScopes } from './mixins/has-global-scopes';
-import { HasRelationships, mixinHasRelationships } from './mixins/has-relationships';
-import { HasTimestamps, mixinHasTimestamps } from './mixins/has-timestamps';
-import { HidesAttributes, mixinHidesAttributes } from './mixins/hides-attributes';
+import type { GuardsAttributes} from './mixins/guards-attributes';
+import { mixinGuardsAttributes } from './mixins/guards-attributes';
+import type { HasAttributes} from './mixins/has-attributes';
+import { mixinHasAttributes } from './mixins/has-attributes';
+import type { HasEvents} from './mixins/has-events';
+import { mixinHasEvents } from './mixins/has-events';
+import type { HasGlobalScopes} from './mixins/has-global-scopes';
+import { mixinHasGlobalScopes } from './mixins/has-global-scopes';
+import type { HasRelationships} from './mixins/has-relationships';
+import { mixinHasRelationships } from './mixins/has-relationships';
+import type { HasTimestamps} from './mixins/has-timestamps';
+import { mixinHasTimestamps } from './mixins/has-timestamps';
+import type { HidesAttributes} from './mixins/hides-attributes';
+import { mixinHidesAttributes } from './mixins/hides-attributes';
 import { loadAggregate } from './model-helper';
 // import { BelongsToMany } from './relations/belongs-to-many';
 // import { HasManyThrough } from './relations/has-many-through';
-import { Scope } from './scope';
+import type { Scope } from './scope';
 
 
 /*Begin querying the model on a given connection.*/
@@ -143,7 +151,7 @@ export class Model extends mixinHasAttributes(
 
   _classCastCache: any[];
 
-  _perPage: number = 10;
+  _perPage = 10;
 
   static resolver: ConnectionResolverInterface;
 

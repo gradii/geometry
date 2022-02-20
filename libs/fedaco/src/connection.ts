@@ -6,10 +6,10 @@
 
 import { isArray, isBlank, isBoolean, isFunction, isPromise } from '@gradii/check-type';
 import { format } from 'date-fns';
-import { BaseGrammar } from './base-grammar';
-import { SqliteWrappedConnection } from './connector/sqlite/sqlite-wrapped-connection';
-import { WrappedConnection } from './connector/wrapped-connection';
-import { WrappedStmt } from './connector/wrapped-stmt';
+import type { BaseGrammar } from './base-grammar';
+import type { SqliteWrappedConnection } from './connector/sqlite/sqlite-wrapped-connection';
+import type { WrappedConnection } from './connector/wrapped-connection';
+import type { WrappedStmt } from './connector/wrapped-stmt';
 import { DatabaseTransactionsManager } from './database-transactions-manager';
 // import { DatabaseTransactionsManager } from './database-transactions-manager';
 import { QueryExecuted } from './events/query-executed';
@@ -17,16 +17,16 @@ import { StatementPrepared } from './events/statement-prepared';
 import { TransactionBeginning } from './events/transaction-beginning';
 import { TransactionCommitted } from './events/transaction-committed';
 import { TransactionRolledBack } from './events/transaction-rolled-back';
-import { Dispatcher } from './fedaco/mixins/has-events';
+import type { Dispatcher } from './fedaco/mixins/has-events';
 import { get } from './helper/obj';
 import { mixinManagesTransactions } from './manages-transactions';
 import { raw } from './query-builder/ast-factory';
-import { ConnectionInterface } from './query-builder/connection-interface';
-import { QueryGrammar } from './query-builder/grammar/query-grammar';
+import type { ConnectionInterface } from './query-builder/connection-interface';
+import type { QueryGrammar } from './query-builder/grammar/query-grammar';
 import { Processor } from './query-builder/processor';
 import { QueryBuilder } from './query-builder/query-builder';
 import { QueryException } from './query-exception';
-import { SchemaGrammar } from './schema/grammar/schema-grammar';
+import type { SchemaGrammar } from './schema/grammar/schema-grammar';
 import { SchemaBuilder } from './schema/schema-builder';
 
 export class Connection extends mixinManagesTransactions(class {
@@ -42,7 +42,7 @@ export class Connection extends mixinManagesTransactions(class {
   /*The type of the connection.*/
   protected type: string | null;
   /*The table prefix for the connection.*/
-  protected tablePrefix: string = '';
+  protected tablePrefix = '';
   /*The database connection configuration options.*/
   protected config: any[] = [];
   /*The reconnector instance for the connection.*/
@@ -56,17 +56,17 @@ export class Connection extends mixinManagesTransactions(class {
   /*The event dispatcher instance.*/
   protected events: Dispatcher;
   /*The default fetch mode of the connection.*/
-  protected fetchMode: number = -1;
+  protected fetchMode = -1;
   /*Indicates if changes have been made to the database.*/
-  protected recordsModified: boolean = false;
+  protected recordsModified = false;
   /*Indicates if the connection should use the "write" PDO connection.*/
-  protected readOnWriteConnection: boolean = false;
+  protected readOnWriteConnection = false;
   /*All of the queries run against the connection.*/
   protected queryLog: any[] = [];
   /*Indicates whether queries are being logged.*/
-  protected loggingQueries: boolean = false;
+  protected loggingQueries = false;
   /*Indicates if the connection is in a "dry run".*/
-  protected _dryRun: boolean = false;
+  protected _dryRun = false;
   /*The instance of Doctrine connection.*/
   // protected doctrineConnection: DbalConnection;
   /*The connection resolvers.*/

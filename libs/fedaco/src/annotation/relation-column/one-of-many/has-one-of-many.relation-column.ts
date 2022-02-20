@@ -6,14 +6,16 @@
 
 import { makePropDecorator } from '@gradii/annotation';
 import { isString } from '@gradii/check-type';
-import { FedacoBuilder } from '../../../fedaco/fedaco-builder';
-import { Model } from '../../../fedaco/model';
+import type { FedacoBuilder } from '../../../fedaco/fedaco-builder';
+import type { Model } from '../../../fedaco/model';
 import { HasOne } from '../../../fedaco/relations/has-one';
-import { ForwardRefFn, resolveForwardRef } from '../../../query-builder/forward-ref';
+import type { ForwardRefFn} from '../../../query-builder/forward-ref';
+import { resolveForwardRef } from '../../../query-builder/forward-ref';
 import { _additionalProcessingGetter } from '../../additional-processing';
-import { FedacoDecorator } from '../../annotation.interface';
+import type { FedacoDecorator } from '../../annotation.interface';
 import { RelationType } from '../../enum-relation';
-import { FedacoRelationColumn, RelationColumnAnnotation } from '../../relation-column';
+import type { RelationColumnAnnotation } from '../../relation-column';
+import { FedacoRelationColumn } from '../../relation-column';
 
 export interface HasOneOfManyRelationAnnotation extends RelationColumnAnnotation<HasOne> {
   related?: typeof Model | ForwardRefFn;

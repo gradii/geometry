@@ -4,9 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { ManagesTransactions } from '../manages-transactions';
-import { SchemaBuilder } from '../schema/schema-builder';
-import { QueryBuilder } from './query-builder';
+import type { ManagesTransactions } from '../manages-transactions';
+import type { SchemaBuilder } from '../schema/schema-builder';
+import type { QueryBuilder } from './query-builder';
 
 /**
  *

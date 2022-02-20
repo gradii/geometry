@@ -5,7 +5,7 @@
  */
 
 import { plural } from '../helper/pluralize';
-import { Blueprint } from './blueprint';
+import type { Blueprint } from './blueprint';
 import { ColumnDefinition } from './column-definition';
 
 export class ForeignIdColumnDefinition extends ColumnDefinition {

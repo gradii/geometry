@@ -6,8 +6,8 @@
 
 import { isBlank } from '@gradii/check-type';
 import { uniq } from 'ramda';
-import { FedacoBuilder } from '../fedaco-builder';
-import { Model } from '../model';
+import type { FedacoBuilder } from '../fedaco-builder';
+import type { Model } from '../model';
 import { BelongsToMany } from './belongs-to-many';
 import { MorphPivot } from './morph-pivot';
 import { Relation } from './relation';
@@ -43,7 +43,7 @@ export class MorphToMany extends BelongsToMany {
       // constructor is not init.
       return;
     }
-    
+
     super.addConstraints();
   }
 

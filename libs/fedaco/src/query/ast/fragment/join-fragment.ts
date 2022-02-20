@@ -4,9 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { JoinClauseBuilder } from '../../../query-builder/query-builder';
+import type { JoinClauseBuilder } from '../../../query-builder/query-builder';
 import { SqlNode } from '../../sql-node';
-import { SqlVisitor } from '../../sql-visitor';
+import type { SqlVisitor } from '../../sql-visitor';
 
 
 export class JoinFragment extends SqlNode {

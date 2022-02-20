@@ -6,12 +6,11 @@
 
 import { makePropDecorator } from '@gradii/annotation';
 import { _additionalProcessingGetterSetter } from '../additional-processing';
-import { FedacoDecorator } from '../annotation.interface';
-import { ColumnAnnotation, FedacoColumn } from '../column';
+import type { FedacoDecorator } from '../annotation.interface';
+import type { ColumnAnnotation} from '../column';
+import { FedacoColumn } from '../column';
 
-export interface DecimalColumnAnnotation extends ColumnAnnotation {
-
-}
+export type DecimalColumnAnnotation = ColumnAnnotation
 
 export const DecimalColumn: FedacoDecorator<DecimalColumnAnnotation> = makePropDecorator(
   'Fedaco:DecimalColumn',

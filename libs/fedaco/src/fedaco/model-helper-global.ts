@@ -3,11 +3,11 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
-import { Model } from './model';
-import { AsPivot } from './relations/concerns/as-pivot';
+import type { Model } from './model';
+import type { AsPivot } from './relations/concerns/as-pivot';
 import { Pivot } from './relations/pivot';
 import { fromAttributes, fromRawAttributes } from './relations/pivot-helper';
-import { ForwardRefFn } from '../query-builder/forward-ref';
+import type { ForwardRefFn } from '../query-builder/forward-ref';
 
 
 /*Create a new pivot model instance.*/

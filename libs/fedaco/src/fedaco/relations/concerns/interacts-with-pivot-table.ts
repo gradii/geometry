@@ -6,14 +6,14 @@
 
 import { isArray, isBlank, isNumber, isString } from '@gradii/check-type';
 import { difference, intersection, pluck } from 'ramda';
-import { Collection } from '../../../define/collection';
+import type { Collection } from '../../../define/collection';
 import { mapWithKeys, wrap } from '../../../helper/arr';
-import { Constructor } from '../../../helper/constructor';
-import { QueryBuilder } from '../../../query-builder/query-builder';
+import type { Constructor } from '../../../helper/constructor';
+import type { QueryBuilder } from '../../../query-builder/query-builder';
 import { BaseModel } from '../../base-model';
 import type { Model } from '../../model';
 import { newPivot } from '../../model-helper-global';
-import { BelongsToMany } from '../belongs-to-many';
+import type { BelongsToMany } from '../belongs-to-many';
 import type { Pivot } from '../pivot';
 import type { AsPivot } from './as-pivot';
 

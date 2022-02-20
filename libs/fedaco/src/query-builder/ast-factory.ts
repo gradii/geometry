@@ -9,12 +9,12 @@ import { ColumnReferenceExpression } from '../query/ast/column-reference-express
 import { RawBindingExpression } from '../query/ast/expression/raw-binding-expression';
 import { RawExpression } from '../query/ast/expression/raw-expression';
 import { StringLiteralExpression } from '../query/ast/expression/string-literal-expression';
-import { FromTable } from '../query/ast/from-table';
+import type { FromTable } from '../query/ast/from-table';
 import { Identifier } from '../query/ast/identifier';
 import { PathExpression } from '../query/ast/path-expression';
 import { SyntaxKind, Token } from '../query/parser/sql-lexer';
 import { SqlParser } from '../query/parser/sql-parser';
-import { ForwardRefFn } from './forward-ref';
+import type { ForwardRefFn } from './forward-ref';
 
 export function raw(value: string | number | boolean) {
   return new RawExpression(value);

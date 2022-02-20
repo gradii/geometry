@@ -1,5 +1,9 @@
 # Fedaco Orm
 
+###
+No short description right now.
+can play fedaco here https://github.com/gradii/play-fedaco
+
 ### How To Use It
 
 - setup a connection
@@ -14,6 +18,9 @@
   ```
 - define a model
   ```typescript
+  @Table({
+    tableName: 'user'
+  })
   class User extends Model {
     @PrimaryColumn
     id;

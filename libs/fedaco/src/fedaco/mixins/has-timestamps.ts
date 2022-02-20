@@ -6,8 +6,8 @@
 
 import { isBlank } from '@gradii/check-type';
 import { getUnixTime } from 'date-fns';
-import { Constructor } from '../../helper/constructor';
-import { Model } from '../model';
+import type { Constructor } from '../../helper/constructor';
+import type { Model } from '../model';
 
 export interface HasTimestamps {
 
@@ -61,7 +61,7 @@ export function mixinHasTimestamps<T extends Constructor<any>>(base: T): HasTime
   return class _Self extends base {
 
     /*Indicates if the model should be timestamped.*/
-    public _timestamps: boolean = true;
+    public _timestamps = true;
 
     /*Update the model's update timestamp.*/
     public async touch(this: Model & _Self, attribute: string = null): Promise<boolean> {

@@ -6,10 +6,10 @@
 
 import { isArray } from '@gradii/check-type';
 import { tap } from 'ramda';
-import { FedacoBuilder } from '../fedaco-builder';
+import type { FedacoBuilder } from '../fedaco-builder';
 import { Model } from '../model';
 import { Pivot } from './pivot';
-import { Relation } from './relation';
+import type { Relation } from './relation';
 
 export class MorphPivot extends Pivot {
   /*The type of the polymorphic relation.

@@ -4,10 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { FedacoBuilder } from '../fedaco-builder';
-import { Model } from '../model';
+import type { FedacoBuilder } from '../fedaco-builder';
+import type { Model } from '../model';
 import { HasOneOrMany } from './has-one-or-many';
-import { Relation } from './relation';
+import type { Relation } from './relation';
 
 export class MorphOneOrMany extends HasOneOrMany {
   /*The foreign key type for the relationship.*/

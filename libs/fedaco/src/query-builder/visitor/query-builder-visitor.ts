@@ -6,83 +6,83 @@
 
 import { isArray, isBlank, isBoolean, isNumber, isString } from '@gradii/check-type';
 import { uniq } from 'ramda';
-import { AssignmentSetClause } from '../../query/ast/assignment-set-clause';
+import type { AssignmentSetClause } from '../../query/ast/assignment-set-clause';
 import { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
 import { BindingVariable } from '../../query/ast/binding-variable';
-import { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
-import { DeleteSpecification } from '../../query/ast/delete-specification';
-import { AsExpression } from '../../query/ast/expression/as-expression';
-import {
+import type { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
+import type { DeleteSpecification } from '../../query/ast/delete-specification';
+import type { AsExpression } from '../../query/ast/expression/as-expression';
+import type {
   BetweenPredicateExpression
 } from '../../query/ast/expression/between-predicate-expression';
-import { BinaryExpression } from '../../query/ast/expression/binary-expression';
-import { CommonValueExpression } from '../../query/ast/expression/common-value-expression';
-import {
+import type { BinaryExpression } from '../../query/ast/expression/binary-expression';
+import type { CommonValueExpression } from '../../query/ast/expression/common-value-expression';
+import type {
   ComparisonPredicateExpression
 } from '../../query/ast/expression/comparison-predicate-expression';
-import { ConditionExpression } from '../../query/ast/expression/condition-expression';
-import { ExistsPredicateExpression } from '../../query/ast/expression/exists-predicate-expression';
-import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
-import { InPredicateExpression } from '../../query/ast/expression/in-predicate-expression';
-import { NotExpression } from '../../query/ast/expression/not-expression';
-import { NullPredicateExpression } from '../../query/ast/expression/null-predicate-expression';
-import { NumberLiteralExpression } from '../../query/ast/expression/number-literal-expression';
-import { ParenthesizedExpression } from '../../query/ast/expression/parenthesized-expression';
-import { RawBindingExpression } from '../../query/ast/expression/raw-binding-expression';
+import type { ConditionExpression } from '../../query/ast/expression/condition-expression';
+import type { ExistsPredicateExpression } from '../../query/ast/expression/exists-predicate-expression';
+import type { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
+import type { InPredicateExpression } from '../../query/ast/expression/in-predicate-expression';
+import type { NotExpression } from '../../query/ast/expression/not-expression';
+import type { NullPredicateExpression } from '../../query/ast/expression/null-predicate-expression';
+import type { NumberLiteralExpression } from '../../query/ast/expression/number-literal-expression';
+import type { ParenthesizedExpression } from '../../query/ast/expression/parenthesized-expression';
+import type { RawBindingExpression } from '../../query/ast/expression/raw-binding-expression';
 import { RawExpression } from '../../query/ast/expression/raw-expression';
-import { StringLiteralExpression } from '../../query/ast/expression/string-literal-expression';
-import { AggregateFragment } from '../../query/ast/fragment/aggregate-fragment';
-import {
+import type { StringLiteralExpression } from '../../query/ast/expression/string-literal-expression';
+import type { AggregateFragment } from '../../query/ast/fragment/aggregate-fragment';
+import type {
   NestedPredicateExpression
 } from '../../query/ast/fragment/expression/nested-predicate-expression';
-import { JoinFragment } from '../../query/ast/fragment/join-fragment';
-import { JsonPathColumn } from '../../query/ast/fragment/json-path-column';
-import { NestedExpression } from '../../query/ast/fragment/nested-expression';
-import {
+import type { JoinFragment } from '../../query/ast/fragment/join-fragment';
+import type { JsonPathColumn } from '../../query/ast/fragment/json-path-column';
+import type { NestedExpression } from '../../query/ast/fragment/nested-expression';
+import type {
   RejectOrderElementExpression
 } from '../../query/ast/fragment/order/reject-order-element-expression';
-import { UnionFragment } from '../../query/ast/fragment/union-fragment';
-import { FromClause } from '../../query/ast/from-clause';
-import { FromTable } from '../../query/ast/from-table';
-import { GroupByClause } from '../../query/ast/group-by-clause';
-import { HavingClause } from '../../query/ast/having-clause';
+import type { UnionFragment } from '../../query/ast/fragment/union-fragment';
+import type { FromClause } from '../../query/ast/from-clause';
+import type { FromTable } from '../../query/ast/from-table';
+import type { GroupByClause } from '../../query/ast/group-by-clause';
+import type { HavingClause } from '../../query/ast/having-clause';
 import { Identifier } from '../../query/ast/identifier';
-import { IdentifyVariableDeclaration } from '../../query/ast/identify-variable-declaration';
+import type { IdentifyVariableDeclaration } from '../../query/ast/identify-variable-declaration';
 import type { IndexBy } from '../../query/ast/index-by';
-import { InsertSpecification } from '../../query/ast/insert-specification';
-import { JoinClause } from '../../query/ast/join-clause';
-import { JoinExpression } from '../../query/ast/join-expression';
-import { JoinOnExpression } from '../../query/ast/join-on-expression';
+import type { InsertSpecification } from '../../query/ast/insert-specification';
+import type { JoinClause } from '../../query/ast/join-clause';
+import type { JoinExpression } from '../../query/ast/join-expression';
+import type { JoinOnExpression } from '../../query/ast/join-on-expression';
 import { JoinedTable } from '../../query/ast/joined-table';
 import { JsonPathExpression } from '../../query/ast/json-path-expression';
-import { LimitClause } from '../../query/ast/limit-clause';
-import { LockClause } from '../../query/ast/lock-clause';
-import { NodePart } from '../../query/ast/node-part';
-import { OffsetClause } from '../../query/ast/offset-clause';
-import { OrderByClause } from '../../query/ast/order-by-clause';
-import { OrderByElement } from '../../query/ast/order-by-element';
+import type { LimitClause } from '../../query/ast/limit-clause';
+import type { LockClause } from '../../query/ast/lock-clause';
+import type { NodePart } from '../../query/ast/node-part';
+import type { OffsetClause } from '../../query/ast/offset-clause';
+import type { OrderByClause } from '../../query/ast/order-by-clause';
+import type { OrderByElement } from '../../query/ast/order-by-element';
 import { PathExpression } from '../../query/ast/path-expression';
-import { QueryExpression } from '../../query/ast/query-expression';
-import { QuerySpecification } from '../../query/ast/query-specification';
-import { RangeVariableDeclaration } from '../../query/ast/range-variable-declaration';
-import { SelectClause } from '../../query/ast/select-clause';
-import { SelectInsertSource } from '../../query/ast/select-insert-source';
-import { SelectScalarExpression } from '../../query/ast/select-scalar-expression';
-import { SetClause } from '../../query/ast/set-clause';
+import type { QueryExpression } from '../../query/ast/query-expression';
+import type { QuerySpecification } from '../../query/ast/query-specification';
+import type { RangeVariableDeclaration } from '../../query/ast/range-variable-declaration';
+import type { SelectClause } from '../../query/ast/select-clause';
+import type { SelectInsertSource } from '../../query/ast/select-insert-source';
+import type { SelectScalarExpression } from '../../query/ast/select-scalar-expression';
+import type { SetClause } from '../../query/ast/set-clause';
 import { TableName } from '../../query/ast/table-name';
-import { TableReferenceExpression } from '../../query/ast/table-reference-expression';
-import { UpdateSpecification } from '../../query/ast/update-specification';
-import { ValuesInsertSource } from '../../query/ast/values-insert-source';
-import { WhereClause } from '../../query/ast/where-clause';
-import { SqlNode } from '../../query/sql-node';
-import { SqlVisitor } from '../../query/sql-visitor';
+import type { TableReferenceExpression } from '../../query/ast/table-reference-expression';
+import type { UpdateSpecification } from '../../query/ast/update-specification';
+import type { ValuesInsertSource } from '../../query/ast/values-insert-source';
+import type { WhereClause } from '../../query/ast/where-clause';
+import type { SqlNode } from '../../query/sql-node';
+import type { SqlVisitor } from '../../query/sql-visitor';
 import { resolveIdentifier } from '../ast-helper';
 import { resolveForwardRef } from '../forward-ref';
-import { GrammarInterface } from '../grammar.interface';
+import type { GrammarInterface } from '../grammar.interface';
 import { QueryBuilder } from '../query-builder';
 
 export class QueryBuilderVisitor implements SqlVisitor {
-  protected inJoinExpression: boolean = false;
+  protected inJoinExpression = false;
   protected explicitBindingType: string;
 
   _isVisitUpdateSpecification: boolean;

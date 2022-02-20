@@ -4,11 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 import { intersection, tap } from 'ramda';
-import { Connection } from '../connection';
+import type { Connection } from '../connection';
 import { Table } from '../dbal/table';
 import { wrap } from '../helper/arr';
 import { Blueprint } from './blueprint';
-import { SchemaGrammar } from './grammar/schema-grammar';
+import type { SchemaGrammar } from './grammar/schema-grammar';
 
 export class SchemaBuilder {
   /*The database connection instance.*/
@@ -18,9 +18,9 @@ export class SchemaBuilder {
   /*The Blueprint resolver callback.*/
   protected resolver: Function;
   /*The default string length for migrations.*/
-  public static _defaultStringLength: number = 255;
+  public static _defaultStringLength = 255;
   /*The default relationship morph key type.*/
-  public static _defaultMorphKeyType: string = 'int';
+  public static _defaultMorphKeyType = 'int';
 
   /*Create a new database Schema manager.*/
   public constructor(connection: Connection) {

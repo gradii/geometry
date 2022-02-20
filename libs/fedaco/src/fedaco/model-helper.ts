@@ -7,7 +7,7 @@
 import { pick } from 'ramda';
 import { wrap } from '../helper/arr';
 import { except } from '../helper/obj';
-import { Model } from './model';
+import type { Model } from './model';
 
 export async function loadAggregate(models: any[], relations: any, column: string,
   func?: ((...args: any[]) => any) | string) {

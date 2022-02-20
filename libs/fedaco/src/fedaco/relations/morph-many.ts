@@ -5,7 +5,7 @@
  */
 
 import { isBlank } from '@gradii/check-type';
-import { Collection } from '../../define/collection';
+import type { Collection } from '../../define/collection';
 import { MorphOneOrMany } from './morph-one-or-many';
 
 export class MorphMany extends MorphOneOrMany {

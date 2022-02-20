@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import type { Observable } from 'rxjs';
 /**
  * @license
  *
@@ -8,12 +8,13 @@ import { Observable } from 'rxjs';
 import { isArray, isBlank } from '@gradii/check-type';
 import { uniq } from 'ramda';
 import { map } from 'rxjs/operators';
-import { Collection } from '../../define/collection';
-import { Constructor } from '../../helper/constructor';
-import { FedacoBuilder } from '../fedaco-builder';
-import { Model } from '../model';
-import {
-  InteractsWithDictionary, mixinInteractsWithDictionary
+import type { Collection } from '../../define/collection';
+import type { Constructor } from '../../helper/constructor';
+import type { FedacoBuilder } from '../fedaco-builder';
+import type { Model } from '../model';
+import type {
+  InteractsWithDictionary} from './concerns/interacts-with-dictionary';
+import { mixinInteractsWithDictionary
 } from './concerns/interacts-with-dictionary';
 import { Relation } from './relation';
 

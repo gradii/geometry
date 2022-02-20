@@ -5,7 +5,7 @@
  */
 
 import { Connector } from '../connector';
-import { ConnectorInterface } from '../connector-interface';
+import type { ConnectorInterface } from '../connector-interface';
 import { SqliteWrappedConnection } from './sqlite-wrapped-connection';
 
 

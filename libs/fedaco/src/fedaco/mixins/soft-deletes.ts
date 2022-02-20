@@ -6,8 +6,8 @@
 
 import { isBlank } from '@gradii/check-type';
 import { tap } from 'ramda';
-import { Constructor } from '../../helper/constructor';
-import { Model } from '../model';
+import type { Constructor } from '../../helper/constructor';
+import type { Model } from '../model';
 import { SoftDeletingScope } from '../scopes/soft-deleting-scope';
 
 export interface SoftDeletes {
@@ -66,7 +66,7 @@ export function mixinSoftDeletes<T extends Constructor<{}>>(base: T): SoftDelete
     isTypeofSoftDeletes = true;
 
     /*Indicates if the model is currently force deleting.*/
-    _forceDeleting: boolean = false;
+    _forceDeleting = false;
 
     static DELETED_AT: string;
 

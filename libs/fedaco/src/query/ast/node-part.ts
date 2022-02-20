@@ -5,7 +5,7 @@
  */
 
 import { SqlNode } from '../sql-node';
-import { SqlVisitor } from '../sql-visitor';
+import type { SqlVisitor } from '../sql-visitor';
 
 /**
  * node part is like a source file. it contains imports exports.

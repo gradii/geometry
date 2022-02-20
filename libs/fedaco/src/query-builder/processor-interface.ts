@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { QueryBuilder } from './query-builder';
+import type { QueryBuilder } from './query-builder';
 
 /**
  * @license

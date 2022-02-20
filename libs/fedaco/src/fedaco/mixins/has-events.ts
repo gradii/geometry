@@ -6,8 +6,8 @@
 
 import { isAnyEmpty, isArray, isBlank, isObject } from '@gradii/check-type';
 import { difference, uniq } from 'ramda';
-import { Constructor } from '../../helper/constructor';
-import { Model } from '../model';
+import type { Constructor } from '../../helper/constructor';
+import type { Model } from '../model';
 
 export class NullDispatcher {
   constructor(public dispatcher: Dispatcher) {

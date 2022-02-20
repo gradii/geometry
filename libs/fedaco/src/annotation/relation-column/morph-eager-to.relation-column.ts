@@ -5,12 +5,13 @@
  */
 
 import { makePropDecorator } from '@gradii/annotation';
-import { Model } from '../../fedaco/model';
+import type { Model } from '../../fedaco/model';
 import { MorphTo } from '../../fedaco/relations/morph-to';
 import { _additionalProcessingGetter } from '../additional-processing';
-import { FedacoDecorator } from '../annotation.interface';
+import type { FedacoDecorator } from '../annotation.interface';
 import { RelationType } from '../enum-relation';
-import { FedacoRelationColumn, RelationColumnAnnotation } from '../relation-column';
+import type { RelationColumnAnnotation } from '../relation-column';
+import { FedacoRelationColumn } from '../relation-column';
 
 /*Define a polymorphic, inverse one-to-one or many relationship.*/
 function morphEagerTo(m: Model, name: string, type: string, id: string, ownerKey: string) {

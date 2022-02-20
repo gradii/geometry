@@ -5,13 +5,13 @@
  */
 
 import { isAnyEmpty, isArray, isBlank, isNumber, isString } from '@gradii/check-type';
-import { Constructor } from '../../helper/constructor';
+import type { Constructor } from '../../helper/constructor';
 import { snakeCase } from '../../helper/str';
 import { createTableColumn, raw, rawSqlBindings } from '../../query-builder/ast-factory';
-import { Builder } from '../../query-builder/builder';
-import { QueryBuilder } from '../../query-builder/query-builder';
-import { FedacoBuilder } from '../fedaco-builder';
-import { BelongsTo } from '../relations/belongs-to';
+import type { Builder } from '../../query-builder/builder';
+import type { QueryBuilder } from '../../query-builder/query-builder';
+import type { FedacoBuilder } from '../fedaco-builder';
+import type { BelongsTo } from '../relations/belongs-to';
 import { MorphTo } from '../relations/morph-to';
 import { Relation } from '../relations/relation';
 
@@ -52,7 +52,7 @@ export interface QueriesRelationShips {
 
   /*Add a relationship count / exists condition to the query with where clauses.*/
   whereDoesntHave(relation: string, callback?: ((q: FedacoBuilder) => void)): this;
-  
+
   whereDoesntHave(relation: string, callback?: Function | null): this;
 
   /*Add a relationship count / exists condition to the query with where clauses and an "or".*/
@@ -63,7 +63,7 @@ export interface QueriesRelationShips {
   /*Add a polymorphic relationship count / exists condition to the query.*/
   hasMorph(relation: MorphTo | string, types: string[], operator?: string, count?: number,
            conjunction?: string, callback?: ((q: FedacoBuilder) => void) | null): this;
-           
+
   hasMorph(relation: MorphTo | string, types: string[], operator?: string, count?: number,
            conjunction?: string, callback?: Function | null): this;
 
@@ -92,15 +92,15 @@ export interface QueriesRelationShips {
 
   /*Add a polymorphic relationship count / exists condition to the query with where clauses and an "or".*/
   orWhereHasMorph(relation: MorphTo | string, types: string[], callback?: ((q: FedacoBuilder) => void) | null,
-                  operator?: string, count?: number): this;  
-  
+                  operator?: string, count?: number): this;
+
   orWhereHasMorph(relation: MorphTo | string, types: string[], callback?: Function | null,
                   operator?: string, count?: number): this;
 
   /*Add a polymorphic relationship count / exists condition to the query with where clauses.*/
   whereDoesntHaveMorph(relation: MorphTo | string, types: string[],
-                       callback?: ((q: FedacoBuilder) => void) | null): this; 
-  
+                       callback?: ((q: FedacoBuilder) => void) | null): this;
+
   whereDoesntHaveMorph(relation: MorphTo | string, types: string[],
                        callback?: Function | null): this;
 

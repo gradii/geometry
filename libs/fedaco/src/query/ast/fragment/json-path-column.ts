@@ -5,10 +5,10 @@
  */
 
 import { SqlNode } from '../../sql-node';
-import { SqlVisitor } from '../../sql-visitor';
+import type { SqlVisitor } from '../../sql-visitor';
 import { Identifier } from '../identifier';
-import { JsonPathExpression } from '../json-path-expression';
-import { PathExpression } from '../path-expression';
+import type { JsonPathExpression } from '../json-path-expression';
+import type { PathExpression } from '../path-expression';
 
 
 /**

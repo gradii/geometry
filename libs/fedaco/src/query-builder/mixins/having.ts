@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Constructor } from '../../helper/constructor';
+import type { Constructor } from '../../helper/constructor';
 import { BindingVariable } from '../../query/ast/binding-variable';
 import { BetweenPredicateExpression } from '../../query/ast/expression/between-predicate-expression';
 import { BinaryExpression } from '../../query/ast/expression/binary-expression';
@@ -12,9 +12,9 @@ import { ComparisonPredicateExpression } from '../../query/ast/expression/compar
 import { RawBindingExpression } from '../../query/ast/expression/raw-binding-expression';
 import { RawExpression } from '../../query/ast/expression/raw-expression';
 import { SqlParser } from '../../query/parser/sql-parser';
-import { SqlNode } from '../../query/sql-node';
+import type { SqlNode } from '../../query/sql-node';
 import { raw } from '../ast-factory';
-import { QueryBuilder } from '../query-builder';
+import type { QueryBuilder } from '../query-builder';
 
 export interface QueryBuilderHaving {
   addHaving(where: SqlNode, conjunction: string): this;

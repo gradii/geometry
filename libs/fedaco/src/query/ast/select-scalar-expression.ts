@@ -5,8 +5,8 @@
  */
 
 import { SqlNode } from '../sql-node';
-import { SqlVisitor } from '../sql-visitor';
-import { Expression } from './expression/expression';
+import type { SqlVisitor } from '../sql-visitor';
+import type { Expression } from './expression/expression';
 
 
 export class SelectScalarExpression extends SqlNode {

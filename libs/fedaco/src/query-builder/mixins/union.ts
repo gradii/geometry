@@ -5,8 +5,8 @@
  */
 
 import { isFunction } from '@gradii/check-type';
-import { Constructor } from '../../helper/constructor';
-import { QueryBuilder } from '../../query-builder/query-builder';
+import type { Constructor } from '../../helper/constructor';
+import type { QueryBuilder } from '../../query-builder/query-builder';
 import { UnionFragment } from '../../query/ast/fragment/union-fragment';
 
 export interface QueryBuilderUnion {

@@ -5,23 +5,23 @@
  */
 
 import { isArray, isFunction, isObject, isString } from '@gradii/check-type';
-import { FedacoBuilder } from '../../fedaco/fedaco-builder';
+import type { FedacoBuilder } from '../../fedaco/fedaco-builder';
 import type { FedacoBuilderCallBack } from '../../fedaco/fedaco-types';
-import { Constructor } from '../../helper/constructor';
-import { QueryBuilder } from '../../query-builder/query-builder';
+import type { Constructor } from '../../helper/constructor';
+import type { QueryBuilder } from '../../query-builder/query-builder';
 import { BindingVariable } from '../../query/ast/binding-variable';
 import { BinaryExpression } from '../../query/ast/expression/binary-expression';
 import {
   ComparisonPredicateExpression
 } from '../../query/ast/expression/comparison-predicate-expression';
-import { Expression } from '../../query/ast/expression/expression';
+import type { Expression } from '../../query/ast/expression/expression';
 import { RawBindingExpression } from '../../query/ast/expression/raw-binding-expression';
 import { RawExpression } from '../../query/ast/expression/raw-expression';
 import {
   NestedPredicateExpression
 } from '../../query/ast/fragment/expression/nested-predicate-expression';
 import { SqlParser } from '../../query/parser/sql-parser';
-import { SqlNode } from '../../query/sql-node';
+import type { SqlNode } from '../../query/sql-node';
 import { forwardRef } from '../forward-ref';
 
 

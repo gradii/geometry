@@ -4,16 +4,16 @@
  * Use of this source code is governed by an MIT-style license
  */
 import { has, isAnyEmpty, isArray, isBlank, isString } from '@gradii/check-type';
-import { Connection } from '../connection';
+import type { Connection } from '../connection';
 // import { SqliteConnection } from '../connection/sqlite-connection';
-import { Model } from '../fedaco/model';
+import type { Model } from '../fedaco/model';
 import { wrap } from '../helper/arr';
 import { lowerCaseFirst, upperCaseFirst } from '../helper/str';
 import { raw } from '../query-builder/ast-factory';
 import { ColumnDefinition } from './column-definition';
 import { ForeignIdColumnDefinition } from './foreign-id-column-definition';
 import { ForeignKeyDefinition } from './foreign-key-definition';
-import { SchemaGrammar } from './grammar/schema-grammar';
+import type { SchemaGrammar } from './grammar/schema-grammar';
 import { SchemaBuilder } from './schema-builder';
 
 export class Blueprint {
@@ -32,7 +32,7 @@ export class Blueprint {
   /*The collation that should be used for the table.*/
   public collation: string;
   /*Whether to make the table temporary.*/
-  public _temporary: boolean = false;
+  public _temporary = false;
   /*The column to add new columns after.*/
   public _after: string;
 

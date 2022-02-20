@@ -25,9 +25,9 @@ import { SqlParser } from '../query/parser/sql-parser';
 import { bindingVariable, createIdentifier, raw, rawSqlBindings } from './ast-factory';
 import { wrapToArray } from './ast-helper';
 import { Builder } from './builder';
-import { ConnectionInterface } from './connection-interface';
-import { GrammarInterface } from './grammar.interface';
-import { ProcessorInterface } from './processor-interface';
+import type { ConnectionInterface } from './connection-interface';
+import type { GrammarInterface } from './grammar.interface';
+import type { ProcessorInterface } from './processor-interface';
 
 
 export const enum BindingType {

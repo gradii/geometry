@@ -4,9 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 import { isBlank } from '@gradii/check-type';
-import { Connection } from './connection';
-import { DatabaseTransactionsManager } from './database-transactions-manager';
-import { Constructor } from './helper/constructor';
+import type { Connection } from './connection';
+import type { DatabaseTransactionsManager } from './database-transactions-manager';
+import type { Constructor } from './helper/constructor';
 
 export interface ManagesTransactions {
   /*The number of active transactions.*/
@@ -45,7 +45,7 @@ type ManagesTransactionsCtor = Constructor<ManagesTransactions>;
 export function mixinManagesTransactions<T extends Constructor<any>>(base: T): ManagesTransactionsCtor {
   return class _Self extends base {
     /*The number of active transactions.*/
-    protected _transactions: number = 0;
+    protected _transactions = 0;
     /*The transaction manager instance.*/
     protected _transactionsManager: DatabaseTransactionsManager;
 

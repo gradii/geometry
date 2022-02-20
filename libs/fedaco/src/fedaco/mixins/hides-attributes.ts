@@ -7,8 +7,9 @@
 import { reflector } from '@gradii/annotation';
 import { isArray, isBlank } from '@gradii/check-type';
 import { difference, findLast } from 'ramda';
-import { Table, TableAnnotation } from '../../annotation/table/table';
-import { Constructor } from '../../helper/constructor';
+import type { TableAnnotation } from '../../annotation/table/table';
+import { Table } from '../../annotation/table/table';
+import type { Constructor } from '../../helper/constructor';
 import { value } from '../../helper/fn';
 import { pluralStudy } from '../../helper/pluralize';
 

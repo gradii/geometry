@@ -5,8 +5,8 @@
  */
 
 import { SqlNode } from '../sql-node';
-import { SqlVisitor } from '../sql-visitor';
-import { OrderByElement } from './order-by-element';
+import type { SqlVisitor } from '../sql-visitor';
+import type { OrderByElement } from './order-by-element';
 
 
 export class OrderByClause extends SqlNode {

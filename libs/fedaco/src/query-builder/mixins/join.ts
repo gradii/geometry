@@ -5,8 +5,8 @@
  */
 
 import { isFunction, isString } from '@gradii/check-type';
-import { Constructor } from '../../helper/constructor';
-import { JoinClauseBuilder, QueryBuilder } from '../../query-builder/query-builder';
+import type { Constructor } from '../../helper/constructor';
+import type { JoinClauseBuilder, QueryBuilder } from '../../query-builder/query-builder';
 import { JoinFragment } from '../../query/ast/fragment/join-fragment';
 import { JoinExpression } from '../../query/ast/join-expression';
 import { JoinOnExpression } from '../../query/ast/join-on-expression';

@@ -5,9 +5,9 @@
  */
 
 import { SqlNode } from '../sql-node';
-import { SqlVisitor } from '../sql-visitor';
-import { IndexBy } from './index-by';
-import { RangeVariableDeclaration } from './range-variable-declaration';
+import type { SqlVisitor } from '../sql-visitor';
+import type { IndexBy } from './index-by';
+import type { RangeVariableDeclaration } from './range-variable-declaration';
 
 /**
  * IdentificationVariableDeclaration ::= RangeVariableDeclaration [IndexBy] {JoinVariableDeclaration}*

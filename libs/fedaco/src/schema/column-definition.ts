@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 import { value } from '../helper/fn';
-import { SqlNode } from '../query/sql-node';
+import type { SqlNode } from '../query/sql-node';
 
 export type PostgresColumnDefineAttributes = {
   deferrable?: boolean

@@ -5,15 +5,15 @@
  */
 
 import { isString } from '@gradii/check-type';
-import { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
-import {
+import type { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
+import type {
   ComparisonPredicateExpression
 } from '../../query/ast/expression/comparison-predicate-expression';
-import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
-import { JsonPathExpression } from '../../query/ast/json-path-expression';
-import { LockClause } from '../../query/ast/lock-clause';
-import { GrammarInterface } from '../grammar.interface';
-import { QueryBuilder } from '../query-builder';
+import type { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
+import type { JsonPathExpression } from '../../query/ast/json-path-expression';
+import type { LockClause } from '../../query/ast/lock-clause';
+import type { GrammarInterface } from '../grammar.interface';
+import type { QueryBuilder } from '../query-builder';
 import { QueryBuilderVisitor } from './query-builder-visitor';
 
 const LIKES = ['LIKE', 'ILIKE', 'NOT LIKE', 'NOT ILIKE'];

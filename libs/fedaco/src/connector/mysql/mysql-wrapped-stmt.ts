@@ -6,7 +6,7 @@
 
 import { isObject } from '@gradii/check-type';
 import type { Connection, FieldPacket, QueryError } from 'mysql2';
-import { WrappedStmt } from '../wrapped-stmt';
+import type { WrappedStmt } from '../wrapped-stmt';
 
 export class MysqlWrappedStmt implements WrappedStmt {
   private _bindingValues: any[] = [];

@@ -6,14 +6,16 @@
 
 import { makePropDecorator } from '@gradii/annotation';
 import { isBlank } from '@gradii/check-type';
-import { Model } from '../../fedaco/model';
+import type { Model } from '../../fedaco/model';
 import { BelongsTo } from '../../fedaco/relations/belongs-to';
 import { snakeCase } from '../../helper/str';
-import { ForwardRefFn, resolveForwardRef } from '../../query-builder/forward-ref';
+import type { ForwardRefFn} from '../../query-builder/forward-ref';
+import { resolveForwardRef } from '../../query-builder/forward-ref';
 import { _additionalProcessingGetter } from '../additional-processing';
-import { FedacoDecorator } from '../annotation.interface';
+import type { FedacoDecorator } from '../annotation.interface';
 import { RelationType } from '../enum-relation';
-import { FedacoRelationColumn, RelationColumnAnnotation } from '../relation-column';
+import type { RelationColumnAnnotation } from '../relation-column';
+import { FedacoRelationColumn } from '../relation-column';
 
 export interface BelongsToRelationAnnotation extends RelationColumnAnnotation {
   related: typeof Model | ForwardRefFn;

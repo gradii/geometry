@@ -5,8 +5,8 @@
  */
 
 import { SqlNode } from '../sql-node';
-import { SqlVisitor } from '../sql-visitor';
-import { JoinExpression } from './join-expression';
+import type { SqlVisitor } from '../sql-visitor';
+import type { JoinExpression } from './join-expression';
 
 
 export class JoinClause extends SqlNode {

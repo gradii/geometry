@@ -5,9 +5,9 @@
  */
 
 import { SqlNode } from '../sql-node';
-import { SqlVisitor } from '../sql-visitor';
-import { FromTable } from './from-table';
-import { Identifier } from './identifier';
+import type { SqlVisitor } from '../sql-visitor';
+import type { FromTable } from './from-table';
+import type { Identifier } from './identifier';
 
 // MultiPartIdentifier
 export class PathExpression extends SqlNode {

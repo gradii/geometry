@@ -6,15 +6,17 @@
 
 import { makePropDecorator } from '@gradii/annotation';
 import { isBlank } from '@gradii/check-type';
-import { Model } from '../../fedaco/model';
+import type { Model } from '../../fedaco/model';
 import { MorphTo } from '../../fedaco/relations/morph-to';
 import { Relation } from '../../fedaco/relations/relation';
 import { snakeCase } from '../../helper/str';
-import { ForwardRefFn, resolveForwardRef } from '../../query-builder/forward-ref';
+import type { ForwardRefFn} from '../../query-builder/forward-ref';
+import { resolveForwardRef } from '../../query-builder/forward-ref';
 import { _additionalProcessingGetter } from '../additional-processing';
-import { FedacoDecorator } from '../annotation.interface';
+import type { FedacoDecorator } from '../annotation.interface';
 import { RelationType } from '../enum-relation';
-import { FedacoRelationColumn, RelationColumnAnnotation } from '../relation-column';
+import type { RelationColumnAnnotation } from '../relation-column';
+import { FedacoRelationColumn } from '../relation-column';
 
 /*Define a polymorphic, inverse one-to-one or many relationship.*/
 function morphEagerTo(m: Model, name: string, type: string, id: string, ownerKey: string) {

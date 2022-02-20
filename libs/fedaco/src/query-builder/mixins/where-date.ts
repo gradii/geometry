@@ -6,8 +6,8 @@
 
 import { isDate, isNumber, isString } from '@gradii/check-type';
 import { format } from 'date-fns';
-import { Constructor } from '../../helper/constructor';
-import { QueryBuilder } from '../../query-builder/query-builder';
+import type { Constructor } from '../../helper/constructor';
+import type { QueryBuilder } from '../../query-builder/query-builder';
 import { BindingVariable } from '../../query/ast/binding-variable';
 import {
   ComparisonPredicateExpression

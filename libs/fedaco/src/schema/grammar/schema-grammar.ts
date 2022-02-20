@@ -7,14 +7,14 @@
 import { isBlank, isBoolean } from '@gradii/check-type';
 import { tap } from 'ramda';
 import { BaseGrammar } from '../../base-grammar';
-import { Connection } from '../../connection';
+import type { Connection } from '../../connection';
 import { TableDiff } from '../../dbal/table-diff';
 import { upperCaseFirst } from '../../helper/str';
 import { RawExpression } from '../../query/ast/expression/raw-expression';
 import { Blueprint } from '../blueprint';
 import { ColumnDefinition } from '../column-definition';
-import { ForeignKeyDefinition } from '../foreign-key-definition';
-import { SchemaBuilder } from '../schema-builder';
+import type { ForeignKeyDefinition } from '../foreign-key-definition';
+import type { SchemaBuilder } from '../schema-builder';
 // import { ChangeColumn } from './change-column';
 // import { RenameColumn } from './rename-column';
 
@@ -23,7 +23,7 @@ export class SchemaGrammar extends BaseGrammar {
   protected modifiers: string[];
 
   /*If this Grammar supports schema changes wrapped in a transaction.*/
-  protected transactions: boolean    = false;
+  protected transactions    = false;
   /**
    * The commands to be executed outside of create or alter command.
    */

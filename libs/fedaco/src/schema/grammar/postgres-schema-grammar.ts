@@ -5,15 +5,15 @@
  */
 
 import { isBlank, isString } from '@gradii/check-type';
-import { Connection } from '../../connection';
-import { Blueprint } from '../blueprint';
-import { ColumnDefinition } from '../column-definition';
-import { ForeignKeyDefinition } from '../foreign-key-definition';
+import type { Connection } from '../../connection';
+import type { Blueprint } from '../blueprint';
+import type { ColumnDefinition } from '../column-definition';
+import type { ForeignKeyDefinition } from '../foreign-key-definition';
 import { SchemaGrammar } from './schema-grammar';
 
 export class PostgresSchemaGrammar extends SchemaGrammar {
   /*If this Grammar supports schema changes wrapped in a transaction.*/
-  protected transactions: boolean = true;
+  protected transactions = true;
   /*The possible column modifiers.*/
   protected modifiers: string[] = [
     'Collate', 'Increment', 'Nullable', 'Default', 'VirtualAs', 'StoredAs'

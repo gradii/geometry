@@ -7,8 +7,9 @@
 import { reflector } from '@gradii/annotation';
 import { isArray, isPromise } from '@gradii/check-type';
 import { findLast } from 'ramda';
-import { ColumnAnnotation, FedacoColumn } from '../../annotation/column';
-import { Constructor } from '../../helper/constructor';
+import type { ColumnAnnotation} from '../../annotation/column';
+import { FedacoColumn } from '../../annotation/column';
+import type { Constructor } from '../../helper/constructor';
 
 function isAnyGuarded(guarded: string[]) {
   return guarded.length === 1 && guarded[0] === '*';

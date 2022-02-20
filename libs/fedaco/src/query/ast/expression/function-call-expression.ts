@@ -4,8 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { SqlVisitor } from '../../sql-visitor';
-import { Identifier } from '../identifier';
+import type { SqlVisitor } from '../../sql-visitor';
+import type { Identifier } from '../identifier';
 import { Expression } from './expression';
 
 export class FunctionCallExpression extends Expression {

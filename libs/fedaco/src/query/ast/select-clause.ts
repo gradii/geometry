@@ -8,11 +8,11 @@
  * SelectClause = "SELECT" ["DISTINCT"] ColumnExpression {"," ColumnExpression}
  */
 import { SqlNode } from '../sql-node';
-import { SqlVisitor } from '../sql-visitor';
-import { ColumnReferenceExpression } from './column-reference-expression';
-import { RawBindingExpression } from './expression/raw-binding-expression';
-import { RawExpression } from './expression/raw-expression';
-import { SelectScalarExpression } from './select-scalar-expression';
+import type { SqlVisitor } from '../sql-visitor';
+import type { ColumnReferenceExpression } from './column-reference-expression';
+import type { RawBindingExpression } from './expression/raw-binding-expression';
+import type { RawExpression } from './expression/raw-expression';
+import type { SelectScalarExpression } from './select-scalar-expression';
 
 export class SelectClause extends SqlNode {
 

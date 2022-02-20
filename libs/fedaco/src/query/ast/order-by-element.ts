@@ -5,8 +5,8 @@
  */
 
 import { SqlNode } from '../sql-node';
-import { SqlVisitor } from '../sql-visitor';
-import { NestedExpression } from './fragment/nested-expression';
+import type { SqlVisitor } from '../sql-visitor';
+import type { NestedExpression } from './fragment/nested-expression';
 
 
 export class OrderByElement extends SqlNode {

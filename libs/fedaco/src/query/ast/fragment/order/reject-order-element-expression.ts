@@ -5,9 +5,9 @@
  */
 
 import { SqlNode } from '../../../sql-node';
-import { SqlVisitor } from '../../../sql-visitor';
-import { Identifier } from '../../identifier';
-import { OrderByElement } from '../../order-by-element';
+import type { SqlVisitor } from '../../../sql-visitor';
+import type { Identifier } from '../../identifier';
+import type { OrderByElement } from '../../order-by-element';
 
 
 export class RejectOrderElementExpression extends SqlNode {

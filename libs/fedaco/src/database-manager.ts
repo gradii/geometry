@@ -4,18 +4,19 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isAnyEmpty, isBlank } from '@gradii/check-type';
-import { Connection } from './connection';
-import { ConnectionFactory } from './connector/connection-factory';
-import { ConnectionConfig, DatabaseConfig } from './database-config';
-import { DatabaseTransactionsManager } from './database-transactions-manager';
+import { isAnyEmpty } from '@gradii/check-type';
+import type { Connection } from './connection';
+import type { ConnectionFactory } from './connector/connection-factory';
+import type { ConnectionConfig } from './database-config';
+import { DatabaseConfig } from './database-config';
+import type { DatabaseTransactionsManager } from './database-transactions-manager';
 import { ConfigurationUrlParser } from './helper/configuration-url-parser';
-import { ConnectionResolverInterface } from './interface/connection-resolver-interface';
-import { ConnectionInterface } from './query-builder/connection-interface';
+import type { ConnectionResolverInterface } from './interface/connection-resolver-interface';
+import type { ConnectionInterface } from './query-builder/connection-interface';
 import { MysqlQueryGrammar } from './query-builder/grammar/mysql-query-grammar';
 import { Processor } from './query-builder/processor';
 import { QueryBuilder } from './query-builder/query-builder';
-import { SchemaBuilder } from './schema/schema-builder';
+import type { SchemaBuilder } from './schema/schema-builder';
 
 class Conn implements ConnectionInterface {
   _query;
@@ -139,7 +140,7 @@ export class DatabaseManager implements ConnectionResolverInterface {
   }
 
   /*Get a database connection instance.*/
-  public connection(name: string= 'default'): Connection {
+  public connection(name: string = 'default'): Connection {
     const [database, type] = this.parseConnectionName(name);
     name                   = name || database;
     if (!(this.connections[name] !== undefined)) {

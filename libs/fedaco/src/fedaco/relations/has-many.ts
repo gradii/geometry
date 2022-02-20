@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Collection } from '../../define/collection';
+import type { Collection } from '../../define/collection';
 import { HasOneOrMany } from './has-one-or-many';
 
 export class HasMany extends HasOneOrMany {

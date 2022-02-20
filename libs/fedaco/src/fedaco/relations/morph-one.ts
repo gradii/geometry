@@ -5,10 +5,10 @@
  */
 
 import { isBlank } from '@gradii/check-type';
-import { Collection } from '../../define/collection';
-import { JoinClauseBuilder } from '../../query-builder/query-builder';
-import { FedacoBuilder } from '../fedaco-builder';
-import { Model } from '../model';
+import type { Collection } from '../../define/collection';
+import type { JoinClauseBuilder } from '../../query-builder/query-builder';
+import type { FedacoBuilder } from '../fedaco-builder';
+import type { Model } from '../model';
 import { mixinCanBeOneOfMany } from './concerns/can-be-one-of-many';
 import { mixinComparesRelatedModels } from './concerns/compares-related-models';
 import { mixinSupportsDefaultModels } from './concerns/supports-default-models';

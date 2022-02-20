@@ -4,9 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { SqlNode } from '../query/sql-node';
-import { SqlVisitor } from '../query/sql-visitor';
-import { GrammarInterface } from './grammar.interface';
+import type { SqlNode } from '../query/sql-node';
+import type { SqlVisitor } from '../query/sql-visitor';
+import type { GrammarInterface } from './grammar.interface';
 
 /**
  *

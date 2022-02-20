@@ -4,9 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { SqlVisitor } from '../../sql-visitor';
-import { ConditionFactorExpression } from './condition-factor-expression';
-import { ConditionTermExpression } from './condition-term-expression';
+import type { SqlVisitor } from '../../sql-visitor';
+import type { ConditionFactorExpression } from './condition-factor-expression';
+import type { ConditionTermExpression } from './condition-term-expression';
 import { Expression } from './expression';
 
 

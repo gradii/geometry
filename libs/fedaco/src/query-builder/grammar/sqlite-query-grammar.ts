@@ -14,8 +14,8 @@ import { Identifier } from '../../query/ast/identifier';
 import { PathExpression } from '../../query/ast/path-expression';
 import { WhereClause } from '../../query/ast/where-clause';
 import { createIdentifier } from '../ast-factory';
-import { GrammarInterface } from '../grammar.interface';
-import { QueryBuilder } from '../query-builder';
+import type { GrammarInterface } from '../grammar.interface';
+import type { QueryBuilder } from '../query-builder';
 import { SqliteQueryBuilderVisitor } from '../visitor/sqlite-query-builder-visitor';
 import { QueryGrammar } from './query-grammar';
 

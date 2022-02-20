@@ -6,13 +6,13 @@
 
 import { createKeyword } from '../../query-builder/ast-factory';
 import { SqlNode } from '../sql-node';
-import { SqlVisitor } from '../sql-visitor';
-import { ConditionExpression } from './expression/condition-expression';
-import { JoinOnExpression } from './join-on-expression';
-import { Identifier } from './identifier';
-import { JoinedTable } from './joined-table';
-import { PathExpression } from './path-expression';
-import { TableReferenceExpression } from './table-reference-expression';
+import type { SqlVisitor } from '../sql-visitor';
+import type { ConditionExpression } from './expression/condition-expression';
+import type { JoinOnExpression } from './join-on-expression';
+import type { Identifier } from './identifier';
+import type { JoinedTable } from './joined-table';
+import type { PathExpression } from './path-expression';
+import type { TableReferenceExpression } from './table-reference-expression';
 
 
 export class JoinExpression extends SqlNode {

@@ -5,8 +5,8 @@
  */
 
 import { SqlNode } from '../../sql-node';
-import { SqlVisitor } from '../../sql-visitor';
-import { ColumnReferenceExpression } from '../column-reference-expression';
+import type { SqlVisitor } from '../../sql-visitor';
+import type { ColumnReferenceExpression } from '../column-reference-expression';
 
 
 export class NullPredicateExpression extends SqlNode {

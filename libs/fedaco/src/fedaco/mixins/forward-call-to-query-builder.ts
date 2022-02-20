@@ -4,21 +4,21 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Constructor } from '../../helper/constructor';
-import { ConnectionInterface } from '../../query-builder/connection-interface';
-import { QueryBuilderAggregate } from '../../query-builder/mixins/aggregate';
-import { BuildQueries } from '../../query-builder/mixins/build-query';
-import { QueryBuilderGroupBy } from '../../query-builder/mixins/group-by';
-import { QueryBuilderHaving } from '../../query-builder/mixins/having';
-import { QueryBuilderJoin } from '../../query-builder/mixins/join';
-import { QueryBuilderLimitOffset } from '../../query-builder/mixins/limit-offset';
-import { QueryBuilderOrderBy } from '../../query-builder/mixins/order-by';
-import { QueryBuilderUnion } from '../../query-builder/mixins/union';
-import { QueryBuilderWhereCommon } from '../../query-builder/mixins/where-common';
-import { QueryBuilderWhereDate } from '../../query-builder/mixins/where-date';
-import { QueryBuilderWherePredicate } from '../../query-builder/mixins/where-predicate';
-import { JoinClauseBuilder, QueryBuilder } from '../../query-builder/query-builder';
-import { FedacoBuilder } from '../fedaco-builder';
+import type { Constructor } from '../../helper/constructor';
+import type { ConnectionInterface } from '../../query-builder/connection-interface';
+import type { QueryBuilderAggregate } from '../../query-builder/mixins/aggregate';
+import type { BuildQueries } from '../../query-builder/mixins/build-query';
+import type { QueryBuilderGroupBy } from '../../query-builder/mixins/group-by';
+import type { QueryBuilderHaving } from '../../query-builder/mixins/having';
+import type { QueryBuilderJoin } from '../../query-builder/mixins/join';
+import type { QueryBuilderLimitOffset } from '../../query-builder/mixins/limit-offset';
+import type { QueryBuilderOrderBy } from '../../query-builder/mixins/order-by';
+import type { QueryBuilderUnion } from '../../query-builder/mixins/union';
+import type { QueryBuilderWhereCommon } from '../../query-builder/mixins/where-common';
+import type { QueryBuilderWhereDate } from '../../query-builder/mixins/where-date';
+import type { QueryBuilderWherePredicate } from '../../query-builder/mixins/where-predicate';
+import type { JoinClauseBuilder, QueryBuilder } from '../../query-builder/query-builder';
+import type { FedacoBuilder } from '../fedaco-builder';
 
 export interface ForwardCallToQueryBuilder extends Omit<QueryBuilderJoin, 'joinSub'>, QueryBuilderOrderBy,
   QueryBuilderGroupBy, QueryBuilderHaving, QueryBuilderLimitOffset, QueryBuilderUnion,

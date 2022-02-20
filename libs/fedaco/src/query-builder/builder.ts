@@ -4,17 +4,17 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { ColumnReferenceExpression } from '../query/ast/column-reference-expression';
-import { RawBindingExpression } from '../query/ast/expression/raw-binding-expression';
-import { RawExpression } from '../query/ast/expression/raw-expression';
-import { AggregateFragment } from '../query/ast/fragment/aggregate-fragment';
-import { JoinFragment } from '../query/ast/fragment/join-fragment';
-import { UnionFragment } from '../query/ast/fragment/union-fragment';
-import { FromTable } from '../query/ast/from-table';
-import { JoinExpression } from '../query/ast/join-expression';
-import { JoinedTable } from '../query/ast/joined-table';
-import { OrderByElement } from '../query/ast/order-by-element';
-import { GrammarInterface } from './grammar.interface';
+import type { ColumnReferenceExpression } from '../query/ast/column-reference-expression';
+import type { RawBindingExpression } from '../query/ast/expression/raw-binding-expression';
+import type { RawExpression } from '../query/ast/expression/raw-expression';
+import type { AggregateFragment } from '../query/ast/fragment/aggregate-fragment';
+import type { JoinFragment } from '../query/ast/fragment/join-fragment';
+import type { UnionFragment } from '../query/ast/fragment/union-fragment';
+import type { FromTable } from '../query/ast/from-table';
+import type { JoinExpression } from '../query/ast/join-expression';
+import type { JoinedTable } from '../query/ast/joined-table';
+import type { OrderByElement } from '../query/ast/order-by-element';
+import type { GrammarInterface } from './grammar.interface';
 import { mixinAggregate } from './mixins/aggregate';
 import { mixinBuildQueries } from './mixins/build-query';
 import { mixinGroupBy } from './mixins/group-by';

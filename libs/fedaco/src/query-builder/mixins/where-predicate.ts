@@ -5,7 +5,7 @@
  */
 
 import type { FedacoBuilder } from '../../fedaco/fedaco-builder';
-import { Constructor } from '../../helper/constructor';
+import type { Constructor } from '../../helper/constructor';
 import { BindingVariable } from '../../query/ast/binding-variable';
 import {
   BetweenPredicateExpression
@@ -18,8 +18,8 @@ import { NestedExpression } from '../../query/ast/fragment/nested-expression';
 import { SqlParser } from '../../query/parser/sql-parser';
 import { raw } from '../ast-factory';
 import { wrapToArray } from '../ast-helper';
-import { QueryBuilder } from '../query-builder';
-import { QueryBuilderWhereCommon } from './where-common';
+import type { QueryBuilder } from '../query-builder';
+import type { QueryBuilderWhereCommon } from './where-common';
 
 export interface QueryBuilderWherePredicate {
 

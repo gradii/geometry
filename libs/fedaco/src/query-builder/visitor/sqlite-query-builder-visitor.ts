@@ -4,15 +4,15 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
+import type { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
 import { AsExpression } from '../../query/ast/expression/as-expression';
-import {
+import type {
   ComparisonPredicateExpression
 } from '../../query/ast/expression/comparison-predicate-expression';
 import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
 import { createIdentifier } from '../ast-factory';
-import { GrammarInterface } from '../grammar.interface';
-import { QueryBuilder } from '../query-builder';
+import type { GrammarInterface } from '../grammar.interface';
+import type { QueryBuilder } from '../query-builder';
 import { QueryBuilderVisitor } from './query-builder-visitor';
 
 

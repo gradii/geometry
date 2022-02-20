@@ -9,9 +9,9 @@ import { Connection } from '../connection';
 import { SqlserverQueryGrammar } from '../query-builder/grammar/sqlserver-query-grammar';
 import { SqlServerProcessor } from '../query-builder/processor/sql-server-processor';
 import { SqlServerSchemaBuilder } from '../schema/builder/sql-server-schema-builder';
-import { SchemaGrammar } from '../schema/grammar/schema-grammar';
+import type { SchemaGrammar } from '../schema/grammar/schema-grammar';
 import { SqlServerSchemaGrammar } from '../schema/grammar/sql-server-schema-grammar';
-import { SchemaBuilder } from '../schema/schema-builder';
+import type { SchemaBuilder } from '../schema/schema-builder';
 
 export class SqlServerConnection extends Connection {
   /*Execute a Closure within a transaction.*/

@@ -5,8 +5,8 @@
  */
 
 import { isNumber } from '@gradii/check-type';
-import { ProcessorInterface } from './processor-interface';
-import { QueryBuilder } from './query-builder';
+import type { ProcessorInterface } from './processor-interface';
+import type { QueryBuilder } from './query-builder';
 
 export class Processor implements ProcessorInterface {
   processSelect(queryBuilder: QueryBuilder, results: any | any[]) {

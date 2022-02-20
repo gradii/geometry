@@ -5,14 +5,16 @@
  */
 
 import { makePropDecorator } from '@gradii/annotation';
-import { Model } from '../../fedaco/model';
+import type { Model } from '../../fedaco/model';
 import { MorphToMany } from '../../fedaco/relations/morph-to-many';
 import { plural } from '../../helper/pluralize';
-import { ForwardRefFn, resolveForwardRef } from '../../query-builder/forward-ref';
+import type { ForwardRefFn} from '../../query-builder/forward-ref';
+import { resolveForwardRef } from '../../query-builder/forward-ref';
 import { _additionalProcessingGetter } from '../additional-processing';
-import { FedacoDecorator } from '../annotation.interface';
+import type { FedacoDecorator } from '../annotation.interface';
 import { RelationType } from '../enum-relation';
-import { FedacoRelationColumn, RelationColumnAnnotation } from '../relation-column';
+import type { RelationColumnAnnotation } from '../relation-column';
+import { FedacoRelationColumn } from '../relation-column';
 
 
 export interface MorphedByManyRelationAnnotation extends RelationColumnAnnotation {

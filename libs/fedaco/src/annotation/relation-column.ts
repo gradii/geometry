@@ -4,10 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Model } from '../fedaco/model';
-import { Relation } from '../fedaco/relations/relation';
-import { ColumnAnnotation } from './column';
-import { RelationType } from './enum-relation';
+import type { Model } from '../fedaco/model';
+import type { Relation } from '../fedaco/relations/relation';
+import type { ColumnAnnotation } from './column';
+import type { RelationType } from './enum-relation';
 
 export interface RelationColumnAnnotation<T extends Relation = Relation> extends ColumnAnnotation {
   name?: string;

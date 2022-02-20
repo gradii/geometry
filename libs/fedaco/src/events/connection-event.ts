@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Connection } from '../connection';
+import type { Connection } from '../connection';
 
 export class ConnectionEvent {
   /*The name of the connection.*/

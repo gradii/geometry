@@ -5,9 +5,9 @@
  */
 
 import { makePropDecorator } from '@gradii/annotation';
-import { FedacoBuilder } from '../fedaco/fedaco-builder';
+import type { FedacoBuilder } from '../fedaco/fedaco-builder';
 import { _additionalProcessingGetter } from './additional-processing';
-import { FedacoDecorator } from './annotation.interface';
+import type { FedacoDecorator } from './annotation.interface';
 import { ColumnAnnotation } from './column';
 
 

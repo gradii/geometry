@@ -6,11 +6,12 @@
 
 import { isBlank } from '@gradii/check-type';
 import { last } from 'ramda';
-import { BehaviorSubject, EMPTY, from, interval, Observable, of, Subscriber } from 'rxjs';
+import type { Subscriber } from 'rxjs';
+import { BehaviorSubject, EMPTY, from, interval, Observable, of } from 'rxjs';
 import { bufferWhen, catchError, concatMap, map, mergeMap, take, tap } from 'rxjs/operators';
-import { Model } from '../../fedaco/model';
-import { Constructor } from '../../helper/constructor';
-import { QueryBuilder } from '../query-builder';
+import type { Model } from '../../fedaco/model';
+import type { Constructor } from '../../helper/constructor';
+import type { QueryBuilder } from '../query-builder';
 
 export interface BuildQueries {
 

@@ -5,12 +5,12 @@
  */
 
 import { SqlNode } from '../sql-node';
-import { SqlVisitor } from '../sql-visitor';
-import { ParenthesizedExpression } from './expression/parenthesized-expression';
-import { NestedExpression } from './fragment/nested-expression';
-import { Identifier } from './identifier';
-import { PathExpression } from './path-expression';
-import { TableName } from './table-name';
+import type { SqlVisitor } from '../sql-visitor';
+import type { ParenthesizedExpression } from './expression/parenthesized-expression';
+import type { NestedExpression } from './fragment/nested-expression';
+import type { Identifier } from './identifier';
+import type { PathExpression } from './path-expression';
+import type { TableName } from './table-name';
 
 
 export class TableReferenceExpression extends SqlNode {

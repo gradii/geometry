@@ -5,12 +5,12 @@
  */
 
 import { isString } from '@gradii/check-type';
-import { Constructor } from '../../helper/constructor';
-import { QueryBuilder } from '../../query-builder/query-builder';
+import type { Constructor } from '../../helper/constructor';
+import type { QueryBuilder } from '../../query-builder/query-builder';
 import { RawExpression } from '../../query/ast/expression/raw-expression';
 import { OrderByElement } from '../../query/ast/order-by-element';
 import { SqlParser } from '../../query/parser/sql-parser';
-import { SqlNode } from '../../query/sql-node';
+import type { SqlNode } from '../../query/sql-node';
 import { rawSqlBindings } from '../ast-factory';
 import { wrapToArray } from '../ast-helper';
 

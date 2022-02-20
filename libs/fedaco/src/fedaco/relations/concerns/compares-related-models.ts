@@ -5,11 +5,11 @@
  */
 
 import { isBlank, isNumber } from '@gradii/check-type';
-import { Constructor } from '../../../helper/constructor';
-import { Model } from '../../model';
-import { HasOne } from '../has-one';
-import { MorphOne } from '../morph-one';
-import { Relation } from '../relation';
+import type { Constructor } from '../../../helper/constructor';
+import type { Model } from '../../model';
+import type { HasOne } from '../has-one';
+import type { MorphOne } from '../morph-one';
+import type { Relation } from '../relation';
 
 export interface ComparesRelatedModels {
   is(model: Model | null): Model;

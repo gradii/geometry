@@ -6,7 +6,7 @@
 
 import { MysqlConnection } from '../../connection/mysql-connection';
 import { Connector } from '../connector';
-import { ConnectorInterface } from '../connector-interface';
+import type { ConnectorInterface } from '../connector-interface';
 import { MysqlWrappedConnection } from './mysql-wrapped-connection';
 
 export class MysqlConnector extends Connector implements ConnectorInterface {

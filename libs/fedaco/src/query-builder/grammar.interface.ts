@@ -4,9 +4,9 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { NestedExpression } from '../query/ast/fragment/nested-expression';
-import { SqlVisitor } from '../query/sql-visitor';
-import { Builder } from './builder';
+import type { NestedExpression } from '../query/ast/fragment/nested-expression';
+import type { SqlVisitor } from '../query/sql-visitor';
+import type { Builder } from './builder';
 
 export interface GrammarInterface<T extends Builder = Builder> {
   compileAggregateFragment(functionName: any, columns: any, visitor: SqlVisitor): string;

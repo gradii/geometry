@@ -4,13 +4,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { ForwardRefFn } from '../../query-builder/forward-ref';
+import type { ForwardRefFn } from '../../query-builder/forward-ref';
 import { _SqlParserAst } from './_sql-parser-ast';
 import { SqlLexer } from './sql-lexer';
 
 export class SqlParser {
 
-  index: number            = 0;
+  index            = 0;
   private _lexer: SqlLexer = new SqlLexer();
 
   constructor() {

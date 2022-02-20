@@ -4,18 +4,18 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Constructor } from '../../helper/constructor';
+import type { Constructor } from '../../helper/constructor';
 import { BindingVariable } from '../../query/ast/binding-variable';
 import {
   ComparisonPredicateExpression
 } from '../../query/ast/expression/comparison-predicate-expression';
-import { Expression } from '../../query/ast/expression/expression';
+import type { Expression } from '../../query/ast/expression/expression';
 import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
 import { NotExpression } from '../../query/ast/expression/not-expression';
 import { RawExpression } from '../../query/ast/expression/raw-expression';
 import { SqlParser } from '../../query/parser/sql-parser';
 import { bindingVariable, createIdentifier, raw } from '../ast-factory';
-import { QueryBuilder } from '../query-builder';
+import type { QueryBuilder } from '../query-builder';
 
 export interface QueryBuilderWhereJson {
   whereJsonContains(column: any, value: any, conjunction?: 'and' | 'or' | string,

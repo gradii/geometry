@@ -5,7 +5,7 @@
  */
 
 import { SqlNode } from '../sql-node';
-import { SqlVisitor } from '../sql-visitor';
+import type { SqlVisitor } from '../sql-visitor';
 
 
 export class LockClause extends SqlNode {

@@ -5,7 +5,7 @@
  */
 
 import { isObject } from '@gradii/check-type';
-import { Constructor } from '../../../helper/constructor';
+import type { Constructor } from '../../../helper/constructor';
 
 export interface InteractsWithDictionary {
   _getDictionaryKey(attribute: any): string;

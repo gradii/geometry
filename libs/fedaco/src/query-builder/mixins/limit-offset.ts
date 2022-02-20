@@ -5,8 +5,8 @@
  */
 
 import { isBlank } from '@gradii/check-type';
-import { Constructor } from '../../helper/constructor';
-import { QueryBuilder } from '../../query-builder/query-builder';
+import type { Constructor } from '../../helper/constructor';
+import type { QueryBuilder } from '../../query-builder/query-builder';
 import { RejectOrderElementExpression } from '../../query/ast/fragment/order/reject-order-element-expression';
 import { Identifier } from '../../query/ast/identifier';
 

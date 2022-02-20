@@ -6,11 +6,11 @@
 
 import { isBlank, isObject } from '@gradii/check-type';
 import { last, uniq } from 'ramda';
-import { Collection } from '../../define/collection';
+import type { Collection } from '../../define/collection';
 import { raw } from '../../query-builder/ast-factory';
-import { FedacoBuilder } from '../fedaco-builder';
+import type { FedacoBuilder } from '../fedaco-builder';
 import { mixinForwardCallToQueryBuilder } from '../mixins/forward-call-to-query-builder';
-import { Model } from '../model';
+import type { Model } from '../model';
 
 // export interface Relation extends ForwardCallToQueryBuilder {
 // }

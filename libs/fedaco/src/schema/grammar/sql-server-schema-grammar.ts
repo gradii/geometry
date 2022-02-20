@@ -5,14 +5,14 @@
  */
 
 import { isArray, isBlank } from '@gradii/check-type';
-import { Connection } from '../../connection';
+import type { Connection } from '../../connection';
 import { Blueprint } from '../blueprint';
-import { ColumnDefinition } from '../column-definition';
+import type { ColumnDefinition } from '../column-definition';
 import { SchemaGrammar } from './schema-grammar';
 
 export class SqlServerSchemaGrammar extends SchemaGrammar {
   /*If this Grammar supports schema changes wrapped in a transaction.*/
-  protected transactions: boolean = true;
+  protected transactions = true;
   /*The possible column modifiers.*/
   protected modifiers: string[] = ['Increment', 'Collate', 'Nullable', 'Default', 'Persisted'];
   /*The columns available as serials.*/

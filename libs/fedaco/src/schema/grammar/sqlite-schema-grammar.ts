@@ -5,10 +5,10 @@
  */
 
 import { isBlank } from '@gradii/check-type';
-import { Connection } from '../../connection';
-import { Blueprint } from '../blueprint';
-import { ColumnDefinition } from '../column-definition';
-import { ForeignKeyDefinition } from '../foreign-key-definition';
+import type { Connection } from '../../connection';
+import type { Blueprint } from '../blueprint';
+import type { ColumnDefinition } from '../column-definition';
+import type { ForeignKeyDefinition } from '../foreign-key-definition';
 import { SchemaGrammar } from './schema-grammar';
 
 

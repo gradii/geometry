@@ -6,18 +6,11 @@
 
 import { isArray } from '@gradii/check-type';
 import { RawExpression } from './query/ast/expression/raw-expression';
-import { Blueprint } from './schema/blueprint';
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
+import type { Blueprint } from './schema/blueprint';
 
 export abstract class BaseGrammar {
   /*The grammar table prefix.*/
-  protected tablePrefix: string = '';
+  protected tablePrefix = '';
 
   /*Wrap an array of values.*/
   public wrapArray(values: any[]) {

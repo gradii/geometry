@@ -5,7 +5,7 @@
  */
 import { isArray, isBlank, isObject, isString, isStringEmpty } from '@gradii/check-type';
 import { filter } from 'ramda';
-import { ConnectionConfig } from '../database-config';
+import type { ConnectionConfig } from '../database-config';
 
 export class ConfigurationUrlParser {
   /*The drivers aliases map.*/

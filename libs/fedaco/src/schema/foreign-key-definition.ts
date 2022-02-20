@@ -4,7 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 import { wrap } from '../helper/arr';
-import { ColumnDefineAttributes, ColumnDefinition } from './column-definition';
+import type { ColumnDefineAttributes} from './column-definition';
+import { ColumnDefinition } from './column-definition';
 
 
 export type ForeignKeyDefinitionAttributes = {

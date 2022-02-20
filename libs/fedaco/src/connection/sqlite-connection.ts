@@ -6,13 +6,13 @@
 
 import { isBlank } from '@gradii/check-type';
 import { Connection } from '../connection';
-import { QueryGrammar } from '../query-builder/grammar/query-grammar';
+import type { QueryGrammar } from '../query-builder/grammar/query-grammar';
 import { SqliteQueryGrammar } from '../query-builder/grammar/sqlite-query-grammar';
 import { SqliteProcessor } from '../query-builder/processor/sqlite-processor';
 import { SqliteSchemaBuilder } from '../schema/builder/sqlite-schema-builder';
-import { SchemaGrammar } from '../schema/grammar/schema-grammar';
+import type { SchemaGrammar } from '../schema/grammar/schema-grammar';
 import { SqliteSchemaGrammar } from '../schema/grammar/sqlite-schema-grammar';
-import { SchemaBuilder } from '../schema/schema-builder';
+import type { SchemaBuilder } from '../schema/schema-builder';
 import { SqliteSchemaState } from '../schema/sqlite-schema-state';
 
 export class SqliteConnection extends Connection {

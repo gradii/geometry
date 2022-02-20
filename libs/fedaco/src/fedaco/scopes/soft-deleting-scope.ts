@@ -3,8 +3,8 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
-import { FedacoBuilder } from '../fedaco-builder';
-import { Model } from '../model';
+import type { FedacoBuilder } from '../fedaco-builder';
+import type { Model } from '../model';
 import { Scope } from '../scope';
 
 

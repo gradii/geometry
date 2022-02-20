@@ -10,7 +10,7 @@ import { MysqlQueryGrammar } from '../query-builder/grammar/mysql-query-grammar'
 import { MysqlProcessor } from '../query-builder/processor/mysql-processor';
 import { MysqlSchemaBuilder } from '../schema/builder/mysql-schema-builder';
 import { MysqlSchemaGrammar } from '../schema/grammar/mysql-schema-grammar';
-import { SchemaGrammar } from '../schema/grammar/schema-grammar';
+import type { SchemaGrammar } from '../schema/grammar/schema-grammar';
 import { MySqlSchemaState } from '../schema/mysql-schema-state';
 
 export class MysqlConnection extends Connection {

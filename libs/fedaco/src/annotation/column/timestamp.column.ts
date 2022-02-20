@@ -6,11 +6,11 @@
 
 import { makePropDecorator } from '@gradii/annotation';
 import { _additionalProcessingGetterSetter } from '../additional-processing';
-import { ColumnAnnotation, FedacoColumn } from '../column';
+import type { ColumnAnnotation} from '../column';
+import { FedacoColumn } from '../column';
 
 
-export interface TimestampColumnAnnotation extends ColumnAnnotation {
-}
+export type TimestampColumnAnnotation = ColumnAnnotation
 
 export const TimestampColumn = makePropDecorator(
   'Fedaco:TimestampColumn',

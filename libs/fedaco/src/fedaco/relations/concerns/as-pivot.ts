@@ -7,12 +7,13 @@
 import { reflector } from '@gradii/annotation';
 import { isArray, isBlank } from '@gradii/check-type';
 import { findLast, tap } from 'ramda';
-import { Table, TableAnnotation } from '../../../annotation/table/table';
-import { Constructor } from '../../../helper/constructor';
+import type { TableAnnotation } from '../../../annotation/table/table';
+import { Table } from '../../../annotation/table/table';
+import type { Constructor } from '../../../helper/constructor';
 import { singular } from '../../../helper/pluralize';
-import { QueryBuilder } from '../../../query-builder/query-builder';
-import { FedacoBuilder } from '../../fedaco-builder';
-import { Model } from '../../model';
+import type { QueryBuilder } from '../../../query-builder/query-builder';
+import type { FedacoBuilder } from '../../fedaco-builder';
+import type { Model } from '../../model';
 import { Pivot } from '../pivot';
 
 // tslint:disable-next-line:no-namespace

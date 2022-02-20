@@ -3,7 +3,7 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
-import { Table } from './table';
+import type { Table } from './table';
 
 export class TableDiff {
 

@@ -10,8 +10,9 @@ import {
 } from '@gradii/check-type';
 import { format, formatISO, getUnixTime, isValid, parse, startOfDay } from 'date-fns';
 import { equals, findLast, omit, pick, tap, uniq } from 'ramda';
-import { FedacoDecorator } from '../../annotation/annotation.interface';
-import { ColumnAnnotation, FedacoColumn } from '../../annotation/column';
+import type { FedacoDecorator } from '../../annotation/annotation.interface';
+import type { ColumnAnnotation} from '../../annotation/column';
+import { FedacoColumn } from '../../annotation/column';
 import { ArrayColumn } from '../../annotation/column/array.column';
 import { BinaryColumn } from '../../annotation/column/binary.column';
 import { BooleanColumn } from '../../annotation/column/boolean.column';
@@ -27,13 +28,16 @@ import { PrimaryGeneratedColumn } from '../../annotation/column/primary-generate
 import { PrimaryColumn } from '../../annotation/column/primary.column';
 import { TextColumn } from '../../annotation/column/text.column';
 import { TimestampColumn } from '../../annotation/column/timestamp.column';
-import { FedacoRelationColumn, RelationColumnAnnotation } from '../../annotation/relation-column';
-import { Scope, ScopeAnnotation } from '../../annotation/scope';
+import type { RelationColumnAnnotation } from '../../annotation/relation-column';
+import { FedacoRelationColumn } from '../../annotation/relation-column';
+import type { ScopeAnnotation } from '../../annotation/scope';
+import { Scope } from '../../annotation/scope';
 import { wrap } from '../../helper/arr';
-import { Constructor } from '../../helper/constructor';
+import type { Constructor } from '../../helper/constructor';
 import { get, set } from '../../helper/obj';
 import { snakeCase } from '../../helper/str';
-import { Crypt, Encrypter } from '../encrypter';
+import type { Encrypter } from '../encrypter';
+import { Crypt } from '../encrypter';
 import { Model } from '../model';
 import { Relation } from '../relations/relation';
 

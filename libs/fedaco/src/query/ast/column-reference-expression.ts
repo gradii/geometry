@@ -14,14 +14,14 @@
  * SELECT f"oo, bar FROM `users`;
  */
 import { SqlNode } from '../sql-node';
-import { SqlVisitor } from '../sql-visitor';
-import { ExistsPredicateExpression } from './expression/exists-predicate-expression';
+import type { SqlVisitor } from '../sql-visitor';
+import type { ExistsPredicateExpression } from './expression/exists-predicate-expression';
 import { RawExpression } from './expression/raw-expression';
 import { JsonPathColumn } from './fragment/json-path-column';
-import { NestedExpression } from './fragment/nested-expression';
-import { Identifier } from './identifier';
-import { JsonPathExpression } from './json-path-expression';
-import { PathExpression } from './path-expression';
+import type { NestedExpression } from './fragment/nested-expression';
+import type { Identifier } from './identifier';
+import type { JsonPathExpression } from './json-path-expression';
+import type { PathExpression } from './path-expression';
 
 export class ColumnReferenceExpression extends SqlNode {
 

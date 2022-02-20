@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { WrappedStmt } from '../wrapped-stmt';
+import type { WrappedStmt } from '../wrapped-stmt';
 
 export class SqliteWrappedStmt implements WrappedStmt {
   private _bindingValues: any[] = [];

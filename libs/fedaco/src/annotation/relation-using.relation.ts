@@ -6,9 +6,9 @@
 
 import { makePropDecorator } from '@gradii/annotation';
 import { _additionalProcessingGetter } from './additional-processing';
-import { FedacoDecorator } from './annotation.interface';
-import { ColumnAnnotation } from './column';
-import { RelationColumnAnnotation } from './relation-column';
+import type { FedacoDecorator } from './annotation.interface';
+import type { ColumnAnnotation } from './column';
+import type { RelationColumnAnnotation } from './relation-column';
 
 export const RelationUsingColumn: FedacoDecorator<RelationColumnAnnotation> = makePropDecorator(
   'Fedaco:RelationUsingColumn',

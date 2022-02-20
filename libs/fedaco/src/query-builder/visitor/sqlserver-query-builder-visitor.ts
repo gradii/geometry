@@ -5,21 +5,21 @@
  */
 
 import { isString } from '@gradii/check-type';
-import { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
+import type { BinaryUnionQueryExpression } from '../../query/ast/binary-union-query-expression';
 import { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
-import { DeleteSpecification } from '../../query/ast/delete-specification';
+import type { DeleteSpecification } from '../../query/ast/delete-specification';
 import { AsExpression } from '../../query/ast/expression/as-expression';
 import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
 import { JsonPathExpression } from '../../query/ast/json-path-expression';
-import { LockClause } from '../../query/ast/lock-clause';
-import { OffsetClause } from '../../query/ast/offset-clause';
-import { QueryExpression } from '../../query/ast/query-expression';
-import { QuerySpecification } from '../../query/ast/query-specification';
-import { SelectClause } from '../../query/ast/select-clause';
-import { UpdateSpecification } from '../../query/ast/update-specification';
+import type { LockClause } from '../../query/ast/lock-clause';
+import type { OffsetClause } from '../../query/ast/offset-clause';
+import type { QueryExpression } from '../../query/ast/query-expression';
+import type { QuerySpecification } from '../../query/ast/query-specification';
+import type { SelectClause } from '../../query/ast/select-clause';
+import type { UpdateSpecification } from '../../query/ast/update-specification';
 import { createIdentifier } from '../ast-factory';
-import { GrammarInterface } from '../grammar.interface';
-import { QueryBuilder } from '../query-builder';
+import type { GrammarInterface } from '../grammar.interface';
+import type { QueryBuilder } from '../query-builder';
 import { QueryBuilderVisitor } from './query-builder-visitor';
 
 

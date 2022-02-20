@@ -5,8 +5,8 @@
  */
 
 import { isArray } from '@gradii/check-type';
-import { Collection } from '../../define/collection';
-import { Model } from '../model';
+import type { Collection } from '../../define/collection';
+import type { Model } from '../model';
 import { mixinInteractsWithDictionary } from './concerns/interacts-with-dictionary';
 import { mixinSupportsDefaultModels } from './concerns/supports-default-models';
 import { HasManyThrough } from './has-many-through';

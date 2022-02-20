@@ -6,7 +6,7 @@
 
 import { isNumber, isObject } from '@gradii/check-type';
 import { Processor } from '../processor';
-import { QueryBuilder } from '../query-builder';
+import type { QueryBuilder } from '../query-builder';
 
 export class PostgresProcessor extends Processor {
   /*Process an "insert get ID" query.*/

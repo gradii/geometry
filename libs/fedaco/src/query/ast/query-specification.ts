@@ -4,14 +4,14 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { SqlVisitor } from '../sql-visitor';
-import { FromClause } from './from-clause';
-import { GroupByClause } from './group-by-clause';
-import { HavingClause } from './having-clause';
-import { LockClause } from './lock-clause';
+import type { SqlVisitor } from '../sql-visitor';
+import type { FromClause } from './from-clause';
+import type { GroupByClause } from './group-by-clause';
+import type { HavingClause } from './having-clause';
+import type { LockClause } from './lock-clause';
 import { QueryExpression } from './query-expression';
-import { SelectClause } from './select-clause';
-import { WhereClause } from './where-clause';
+import type { SelectClause } from './select-clause';
+import type { WhereClause } from './where-clause';
 
 /**
  * QueryExpression = SelectClause FromClause [WhereClause] [GroupByClause] [HavingClause] [OrderByClause]

@@ -3,13 +3,13 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
-import { Connection } from './connection';
+import type { Connection } from './connection';
 import { ConnectionFactory } from './connector/connection-factory';
 import { DatabaseManager } from './database-manager';
-import { Dispatcher, NullDispatcher } from './fedaco/mixins/has-events';
+import type { Dispatcher } from './fedaco/mixins/has-events';
+import { NullDispatcher } from './fedaco/mixins/has-events';
 import { Model } from './fedaco/model';
-import { ConnectionInterface } from './query-builder/connection-interface';
-import { QueryBuilder } from './query-builder/query-builder';
+import type { QueryBuilder } from './query-builder/query-builder';
 
 export type ConnectionConfig = {
   database?: string,

@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { ConnectionResolverInterface } from '../interface/connection-resolver-interface';
+import type { ConnectionResolverInterface } from '../interface/connection-resolver-interface';
 import type { Model } from './model';
 
 

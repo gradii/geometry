@@ -5,9 +5,9 @@
  */
 
 import { isBlank, isNumber } from '@gradii/check-type';
-import { Connection } from '../../connection';
-import { Blueprint } from '../blueprint';
-import { ColumnDefinition } from '../column-definition';
+import type { Connection } from '../../connection';
+import type { Blueprint } from '../blueprint';
+import type { ColumnDefinition } from '../column-definition';
 import { SchemaGrammar } from './schema-grammar';
 
 export class MysqlSchemaGrammar extends SchemaGrammar {

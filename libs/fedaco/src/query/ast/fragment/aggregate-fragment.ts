@@ -5,8 +5,8 @@
  */
 
 import { SqlNode } from '../../sql-node';
-import { SqlVisitor } from '../../sql-visitor';
-import { Identifier } from '../identifier';
+import type { SqlVisitor } from '../../sql-visitor';
+import type { Identifier } from '../identifier';
 
 
 export class AggregateFragment extends SqlNode {

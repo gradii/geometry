@@ -10,7 +10,7 @@ import { ColumnReferenceExpression } from '../ast/column-reference-expression';
 import { NumberLiteralExpression } from '../ast/expression/number-literal-expression';
 import { StringLiteralExpression } from '../ast/expression/string-literal-expression';
 import { FromTable } from '../ast/from-table';
-import { Identifier } from '../ast/identifier';
+import type { Identifier } from '../ast/identifier';
 import { JoinClause } from '../ast/join-clause';
 import { JoinExpression } from '../ast/join-expression';
 import { JoinOnExpression } from '../ast/join-on-expression';
@@ -19,10 +19,11 @@ import { PathExpression } from '../ast/path-expression';
 import { TableName } from '../ast/table-name';
 import { TableReferenceExpression } from '../ast/table-reference-expression';
 import * as asciiChars from './ascii-chars';
-import { EOF, SyntaxKind, Token } from './sql-lexer';
+import type { Token } from './sql-lexer';
+import { EOF, SyntaxKind } from './sql-lexer';
 
 export class _SqlParserAst {
-  index: number             = 0;
+  index             = 0;
   private rparensExpected   = 0;
   private rbracketsExpected = 0;
   private rbracesExpected   = 0;

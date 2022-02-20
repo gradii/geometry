@@ -7,10 +7,10 @@
 import { isBlank, isFunction, isString } from '@gradii/check-type';
 import { last } from 'ramda';
 import { wrap } from '../../../helper/arr';
-import { Constructor } from '../../../helper/constructor';
-import { JoinClauseBuilder } from '../../../query-builder/query-builder';
-import { FedacoBuilder } from '../../fedaco-builder';
-import { MorphOneOrMany } from '../morph-one-or-many';
+import type { Constructor } from '../../../helper/constructor';
+import type { JoinClauseBuilder } from '../../../query-builder/query-builder';
+import type { FedacoBuilder } from '../../fedaco-builder';
+import type { MorphOneOrMany } from '../morph-one-or-many';
 
 export interface CanBeOneOfMany {
   ofMany(column?: string | any[] | null, aggregate?: string | Function | null,

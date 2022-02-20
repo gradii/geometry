@@ -5,9 +5,9 @@
  */
 
 import { isNumber } from '@gradii/check-type';
-import { Connection } from '../../connection';
+import type { Connection } from '../../connection';
 import { Processor } from '../processor';
-import { QueryBuilder } from '../query-builder';
+import type { QueryBuilder } from '../query-builder';
 
 export class SqlServerProcessor extends Processor {
   /*Process an "insert get ID" query.*/

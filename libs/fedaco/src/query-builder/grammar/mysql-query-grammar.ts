@@ -6,8 +6,8 @@
 
 import { isAnyEmpty, isArray, isObject } from '@gradii/check-type';
 import { wrap } from '../../helper/arr';
-import { GrammarInterface } from '../grammar.interface';
-import { QueryBuilder } from '../query-builder';
+import type { GrammarInterface } from '../grammar.interface';
+import type { QueryBuilder } from '../query-builder';
 import { MysqlQueryBuilderVisitor } from '../visitor/mysql-query-builder-visitor';
 import { QueryBuilderVisitor } from '../visitor/query-builder-visitor';
 import { QueryGrammar } from './query-grammar';

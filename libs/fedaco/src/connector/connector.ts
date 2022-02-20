@@ -5,7 +5,7 @@
  */
 
 import { MysqlWrappedConnection } from './mysql/mysql-wrapped-connection';
-import { WrappedConnection } from './wrapped-connection';
+import type { WrappedConnection } from './wrapped-connection';
 
 /**
  * @license

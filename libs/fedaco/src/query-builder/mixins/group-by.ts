@@ -4,14 +4,14 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Constructor } from '../../helper/constructor';
+import type { Constructor } from '../../helper/constructor';
 import { BindingVariable } from '../../query/ast/binding-variable';
 import { RawBindingExpression } from '../../query/ast/expression/raw-binding-expression';
 import { RawExpression } from '../../query/ast/expression/raw-expression';
 import { SqlParser } from '../../query/parser/sql-parser';
 import { raw } from '../ast-factory';
 import { wrapToArray } from '../ast-helper';
-import { QueryBuilder } from '../query-builder';
+import type { QueryBuilder } from '../query-builder';
 
 export interface QueryBuilderGroupBy {
   groupBy(groups: string[]): this;

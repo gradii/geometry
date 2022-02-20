@@ -4,11 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { QueryBuilder } from '../../../query-builder/query-builder';
+import type { QueryBuilder } from '../../../query-builder/query-builder';
 import { SqlNode } from '../../sql-node';
-import { SqlVisitor } from '../../sql-visitor';
-import { BindingVariable } from '../binding-variable';
-import { RawExpression } from '../expression/raw-expression';
+import type { SqlVisitor } from '../../sql-visitor';
+import type { BindingVariable } from '../binding-variable';
+import type { RawExpression } from '../expression/raw-expression';
 
 
 export class NestedExpression extends SqlNode {

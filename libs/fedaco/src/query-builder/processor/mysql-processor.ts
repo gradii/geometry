@@ -5,7 +5,7 @@
  */
 
 import { Processor } from '../processor';
-import { QueryBuilder } from '../query-builder';
+import type { QueryBuilder } from '../query-builder';
 
 export class MysqlProcessor extends Processor {
   /*Process the results of a column listing query.*/

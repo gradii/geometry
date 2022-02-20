@@ -5,9 +5,9 @@
  */
 
 import { isArray, isFunction, isObject } from '@gradii/check-type';
-import { Constructor } from '../../../helper/constructor';
-import { Model } from '../../model';
-import { Relation } from '../relation';
+import type { Constructor } from '../../../helper/constructor';
+import type { Model } from '../../model';
+import type { Relation } from '../relation';
 
 export interface SupportsDefaultModels {
   withDefault(callback?: (m: Model) => void): this;

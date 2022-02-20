@@ -6,22 +6,24 @@
 
 import { isArray, isBlank, isObject } from '@gradii/check-type';
 import { uniq } from 'ramda';
-import { Observable } from 'rxjs';
+import type { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Collection } from '../../define/collection';
-import { Constructor } from '../../helper/constructor';
+import type { Collection } from '../../define/collection';
+import type { Constructor } from '../../helper/constructor';
 import { pluralStudy } from '../../helper/pluralize';
 import { camelCase } from '../../helper/str';
 import { QueryBuilder } from '../../query-builder/query-builder';
-import { RawExpression } from '../../query/ast/expression/raw-expression';
-import { FedacoBuilder } from '../fedaco-builder';
-import { Model } from '../model';
-import { AsPivot } from './concerns/as-pivot';
-import {
-  InteractsWithDictionary, mixinInteractsWithDictionary
+import type { RawExpression } from '../../query/ast/expression/raw-expression';
+import type { FedacoBuilder } from '../fedaco-builder';
+import type { Model } from '../model';
+import type { AsPivot } from './concerns/as-pivot';
+import type {
+  InteractsWithDictionary} from './concerns/interacts-with-dictionary';
+import { mixinInteractsWithDictionary
 } from './concerns/interacts-with-dictionary';
-import {
-  InteractsWithPivotTable, mixinInteractsWithPivotTable
+import type {
+  InteractsWithPivotTable} from './concerns/interacts-with-pivot-table';
+import { mixinInteractsWithPivotTable
 } from './concerns/interacts-with-pivot-table';
 import { Relation } from './relation';
 

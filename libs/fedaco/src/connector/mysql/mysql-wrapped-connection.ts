@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { WrappedConnection } from '../wrapped-connection';
+import type { WrappedConnection } from '../wrapped-connection';
 import { MysqlWrappedStmt } from './mysql-wrapped-stmt';
 
 export class MysqlWrappedConnection implements WrappedConnection {

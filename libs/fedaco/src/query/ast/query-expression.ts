@@ -5,9 +5,9 @@
  */
 
 import { SqlNode } from '../sql-node';
-import { LimitClause } from './limit-clause';
-import { OffsetClause } from './offset-clause';
-import { OrderByClause } from './order-by-clause';
+import type { LimitClause } from './limit-clause';
+import type { OffsetClause } from './offset-clause';
+import type { OrderByClause } from './order-by-clause';
 
 
 export abstract class QueryExpression extends SqlNode {

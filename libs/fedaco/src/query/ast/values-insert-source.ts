@@ -5,10 +5,10 @@
  */
 
 import { SqlNode } from '../sql-node';
-import { SqlVisitor } from '../sql-visitor';
-import { BindingVariable } from './binding-variable';
-import { RawExpression } from './expression/raw-expression';
-import { NestedExpression } from './fragment/nested-expression';
+import type { SqlVisitor } from '../sql-visitor';
+import type { BindingVariable } from './binding-variable';
+import type { RawExpression } from './expression/raw-expression';
+import type { NestedExpression } from './fragment/nested-expression';
 
 
 export class ValuesInsertSource extends SqlNode {

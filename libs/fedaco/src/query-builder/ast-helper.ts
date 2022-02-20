@@ -5,7 +5,7 @@
  */
 
 import { isArray, isBlank } from '@gradii/check-type';
-import { Identifier } from '../query/ast/identifier';
+import type { Identifier } from '../query/ast/identifier';
 import { resolveForwardRef } from './forward-ref';
 
 

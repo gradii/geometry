@@ -4,11 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { DeleteSpecification } from '../../query/ast/delete-specification';
-import { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
-import { UpdateSpecification } from '../../query/ast/update-specification';
-import { GrammarInterface } from '../grammar.interface';
-import { QueryBuilder } from '../query-builder';
+import type { DeleteSpecification } from '../../query/ast/delete-specification';
+import type { FunctionCallExpression } from '../../query/ast/expression/function-call-expression';
+import type { UpdateSpecification } from '../../query/ast/update-specification';
+import type { GrammarInterface } from '../grammar.interface';
+import type { QueryBuilder } from '../query-builder';
 import { QueryBuilderVisitor } from './query-builder-visitor';
 
 

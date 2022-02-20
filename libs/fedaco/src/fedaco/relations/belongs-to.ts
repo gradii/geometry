@@ -6,19 +6,23 @@
 
 import { isBlank } from '@gradii/check-type';
 import { uniq } from 'ramda';
-import { Collection } from '../../define/collection';
-import { Constructor } from '../../helper/constructor';
+import type { Collection } from '../../define/collection';
+import type { Constructor } from '../../helper/constructor';
 import { BaseModel } from '../base-model';
-import { FedacoBuilder } from '../fedaco-builder';
-import { Model } from '../model';
-import {
-  ComparesRelatedModels, mixinComparesRelatedModels
+import type { FedacoBuilder } from '../fedaco-builder';
+import type { Model } from '../model';
+import type {
+  ComparesRelatedModels} from './concerns/compares-related-models';
+import { mixinComparesRelatedModels
 } from './concerns/compares-related-models';
-import {
-  InteractsWithDictionary, mixinInteractsWithDictionary
+import type {
+  InteractsWithDictionary} from './concerns/interacts-with-dictionary';
+import { mixinInteractsWithDictionary
 } from './concerns/interacts-with-dictionary';
+import type { SupportsDefaultModels
+} from './concerns/supports-default-models';
 import {
-  mixinSupportsDefaultModels, SupportsDefaultModels
+  mixinSupportsDefaultModels
 } from './concerns/supports-default-models';
 import { Relation } from './relation';
 

@@ -5,14 +5,14 @@
  */
 
 import { isObject } from '@gradii/check-type';
-import { Constructor } from '../../helper/constructor';
+import type { Constructor } from '../../helper/constructor';
 import { ColumnReferenceExpression } from '../../query/ast/column-reference-expression';
 import { AggregateFragment } from '../../query/ast/fragment/aggregate-fragment';
 import { PathExpression } from '../../query/ast/path-expression';
 import { SqlParser } from '../../query/parser/sql-parser';
 import { createColumnReferenceExpression, createIdentifier, rawSqlBindings } from '../ast-factory';
 import { wrapToArray } from '../ast-helper';
-import { QueryBuilder } from '../query-builder';
+import type { QueryBuilder } from '../query-builder';
 
 export interface QueryBuilderAggregate {
   _setAggregate(func: string,

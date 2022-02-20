@@ -5,7 +5,7 @@
  */
 
 import { has } from '@gradii/check-type';
-import { Model } from '../fedaco/model';
+import type { Model } from '../fedaco/model';
 import { ColumnAnnotation } from './column';
 
 export const _additionalProcessingGetter = (target: any, name: string, decorator: any) => {

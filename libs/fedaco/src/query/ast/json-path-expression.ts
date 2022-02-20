@@ -5,9 +5,9 @@
  */
 
 import { SqlNode } from '../sql-node';
-import { SqlVisitor } from '../sql-visitor';
-import { Identifier } from './identifier';
-import { PathExpression } from './path-expression';
+import type { SqlVisitor } from '../sql-visitor';
+import type { Identifier } from './identifier';
+import type { PathExpression } from './path-expression';
 
 // MultiPartIdentifier
 export class JsonPathExpression extends SqlNode {

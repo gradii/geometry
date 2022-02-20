@@ -4,10 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Constructor } from '../../helper/constructor';
+import type { Constructor } from '../../helper/constructor';
 /* tslint:disable:no-namespace */
 import { Model } from '../model';
-import { AsPivot, AsPivotCtor, mixinAsPivot } from './concerns/as-pivot';
+import type { AsPivot, AsPivotCtor} from './concerns/as-pivot';
+import { mixinAsPivot } from './concerns/as-pivot';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export declare namespace Pivot {

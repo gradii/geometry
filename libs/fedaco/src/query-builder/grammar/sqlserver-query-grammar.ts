@@ -9,11 +9,11 @@ import { snakeCase } from '../../helper/str';
 import { DeleteSpecification } from '../../query/ast/delete-specification';
 import { ConditionExpression } from '../../query/ast/expression/condition-expression';
 import { FromClause } from '../../query/ast/from-clause';
-import { JoinedTable } from '../../query/ast/joined-table';
+import type { JoinedTable } from '../../query/ast/joined-table';
 import { OffsetClause } from '../../query/ast/offset-clause';
 import { WhereClause } from '../../query/ast/where-clause';
-import { GrammarInterface } from '../grammar.interface';
-import { QueryBuilder } from '../query-builder';
+import type { GrammarInterface } from '../grammar.interface';
+import type { QueryBuilder } from '../query-builder';
 import { SqlserverQueryBuilderVisitor } from '../visitor/sqlserver-query-builder-visitor';
 import { QueryGrammar } from './query-grammar';
 

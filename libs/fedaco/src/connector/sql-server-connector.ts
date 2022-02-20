@@ -7,8 +7,8 @@
 // import { Arr } from "Illuminate/Support/Arr";
 // import { PDO } from "PDO";
 import { Connector } from './connector';
-import { ConnectorInterface } from './connector-interface';
-import { WrappedConnection } from './wrapped-connection';
+import type { ConnectorInterface } from './connector-interface';
+import type { WrappedConnection } from './wrapped-connection';
 
 export class SqlServerConnector extends Connector implements ConnectorInterface {
   /*The PDO connection options.*/

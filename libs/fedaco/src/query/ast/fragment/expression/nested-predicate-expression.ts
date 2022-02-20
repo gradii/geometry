@@ -4,8 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { QueryBuilder } from '../../../../query-builder/query-builder';
-import { SqlVisitor } from '../../../sql-visitor';
+import type { QueryBuilder } from '../../../../query-builder/query-builder';
+import type { SqlVisitor } from '../../../sql-visitor';
 import { Expression } from '../../expression/expression';
 
 

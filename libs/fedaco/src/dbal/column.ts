@@ -8,7 +8,7 @@
 /*Object representation of a database column.*/
 import { isNumber } from '@gradii/check-type';
 import { camelCase, pascalCase } from '../helper/str';
-import { SchemaGrammar } from '../schema/grammar/schema-grammar';
+import type { SchemaGrammar } from '../schema/grammar/schema-grammar';
 // import { Type } from './types/type';
 
 export class Column {
@@ -18,19 +18,19 @@ export class Column {
   /**/
   protected _length: number | null = null;
   /**/
-  protected _precision: number = 10;
+  protected _precision = 10;
   /**/
-  protected _scale: number = 0;
+  protected _scale = 0;
   /**/
-  protected _unsigned: boolean = false;
+  protected _unsigned = false;
   /**/
-  protected _fixed: boolean = false;
+  protected _fixed = false;
   /**/
-  protected _notnull: boolean = true;
+  protected _notnull = true;
   /**/
   protected _default: string | null = null;
   /**/
-  protected _autoincrement: boolean = false;
+  protected _autoincrement = false;
   /**/
   protected _platformOptions: Record<string, any> = {};
   /**/

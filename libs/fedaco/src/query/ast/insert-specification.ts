@@ -5,10 +5,10 @@
  */
 
 import { SqlNode } from '../sql-node';
-import { SqlVisitor } from '../sql-visitor';
-import { FromTable } from './from-table';
-import { QuerySpecification } from './query-specification';
-import { ValuesInsertSource } from './values-insert-source';
+import type { SqlVisitor } from '../sql-visitor';
+import type { FromTable } from './from-table';
+import type { QuerySpecification } from './query-specification';
+import type { ValuesInsertSource } from './values-insert-source';
 
 
 export class InsertSpecification extends SqlNode {

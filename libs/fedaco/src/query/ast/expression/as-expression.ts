@@ -5,9 +5,9 @@
  */
 
 import { SqlNode } from '../../sql-node';
-import { SqlVisitor } from '../../sql-visitor';
-import { Identifier } from '../identifier';
-import { Expression } from './expression';
+import type { SqlVisitor } from '../../sql-visitor';
+import type { Identifier } from '../identifier';
+import type { Expression } from './expression';
 
 export class AsExpression extends SqlNode {
 

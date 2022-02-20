@@ -3,7 +3,7 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
-import { ConnectionInterface } from '../query-builder/connection-interface';
+import type { ConnectionInterface } from '../query-builder/connection-interface';
 
 export interface ConnectionResolverInterface {
   /*Get a database connection instance.*/

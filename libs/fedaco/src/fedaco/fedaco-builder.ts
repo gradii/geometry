@@ -9,19 +9,23 @@ import {
 } from '@gradii/check-type';
 import { nth, omit, pluck } from 'ramda';
 import { wrap } from '../helper/arr';
-import { Constructor } from '../helper/constructor';
+import type { Constructor } from '../helper/constructor';
 import { pascalCase } from '../helper/str';
-import {
-  BuildQueries, BuildQueriesCtor, mixinBuildQueries
+import type {
+  BuildQueries, BuildQueriesCtor} from '../query-builder/mixins/build-query';
+import { mixinBuildQueries
 } from '../query-builder/mixins/build-query';
-import { QueryBuilder } from '../query-builder/query-builder';
-import { SqlNode } from '../query/sql-node';
+import type { QueryBuilder } from '../query-builder/query-builder';
+import type { SqlNode } from '../query/sql-node';
 import type { FedacoBuilderCallBack, RelationCallBack } from './fedaco-types';
-import {
-  ForwardCallToQueryBuilder, ForwardCallToQueryBuilderCtor, mixinForwardCallToQueryBuilder
+import type {
+  ForwardCallToQueryBuilder, ForwardCallToQueryBuilderCtor} from './mixins/forward-call-to-query-builder';
+import { mixinForwardCallToQueryBuilder
 } from './mixins/forward-call-to-query-builder';
-import { GuardsAttributes, mixinGuardsAttributes } from './mixins/guards-attributes';
-import { mixinQueriesRelationShips, QueriesRelationShips } from './mixins/queries-relationships';
+import type { GuardsAttributes} from './mixins/guards-attributes';
+import { mixinGuardsAttributes } from './mixins/guards-attributes';
+import type { QueriesRelationShips } from './mixins/queries-relationships';
+import { mixinQueriesRelationShips } from './mixins/queries-relationships';
 import { Model } from './model';
 import { Relation } from './relations/relation';
 import { Scope } from './scope';

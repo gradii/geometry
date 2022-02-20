@@ -4,10 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Model } from '../model';
-import { AsPivot } from './concerns/as-pivot';
-import { ForwardRefFn, resolveForwardRef } from '../../query-builder/forward-ref';
-import { Pivot } from './pivot';
+import type { Model } from '../model';
+import type { AsPivot } from './concerns/as-pivot';
+import type { ForwardRefFn} from '../../query-builder/forward-ref';
+import { resolveForwardRef } from '../../query-builder/forward-ref';
+import type { Pivot } from './pivot';
 
 export function fromAttributes(clazz: typeof AsPivot | ForwardRefFn<typeof AsPivot>, parent: Model, attributes: any, table: string,
                                exists = false) {
