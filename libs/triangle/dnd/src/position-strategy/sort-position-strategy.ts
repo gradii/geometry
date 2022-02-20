@@ -4,18 +4,19 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Direction } from '@angular/cdk/bidi';
-import { Subject } from 'rxjs';
-import { DndContainerRef } from '../drag-drop-ref/dnd-container-ref';
-import { DragRefInternal as DragRef } from '../drag-drop-ref/drag-ref';
-import { DropListContainerRef } from '../drag-drop-ref/drop-list-container-ref';
-import { DragDropRegistry } from '../drag-drop-registry';
+import type { Direction } from '@angular/cdk/bidi';
+import type { Subject } from 'rxjs';
+import { TriDropContainer } from '../directives/drop-container';
+import type { DndContainerRef } from '../drag-drop-ref/dnd-container-ref';
+import type { DragRefInternal as DragRef } from '../drag-drop-ref/drag-ref';
+import type { DropListContainerRef } from '../drag-drop-ref/drop-list-container-ref';
+import type { DragDropRegistry } from '../drag-drop-registry';
 import { combineTransforms } from '../drag-styling';
-import { CachedItemPosition } from '../drop-container.interface';
+import type { CachedItemPosition } from '../drop-container.interface';
 import { findIndex } from '../utils';
 import { adjustClientRect, getMutableClientRect, isInsideClientRect, } from '../utils/client-rect';
 import { moveItemInArray } from '../utils/drag-utils';
-import { PositionStrategy } from './position-strategy';
+import type { PositionStrategy } from './position-strategy';
 
 export class SortPositionStrategy implements PositionStrategy {
   /** Cache of the dimensions of all the items inside the container. */
@@ -74,6 +75,30 @@ export class SortPositionStrategy implements PositionStrategy {
     });
   }
 
+  _translateItem(offsetItem: CachedItemPosition, isDragItem: boolean,
+                 siblingOffsetX: number, siblingOffsetY: number) {
+    offsetItem.offsetX += siblingOffsetX;
+    offsetItem.offsetY += siblingOffsetY;
+
+    (isDragItem ? offsetItem.drag.getPlaceholderElement() : offsetItem.drag.getRootElement())
+      .style.transform = combineTransforms(
+      `translate3d(${Math.round(offsetItem.offsetX)}px, ${Math.round(offsetItem.offsetY)}px, 0)`,
+      offsetItem.initialTransform);
+    adjustClientRect(offsetItem.clientRect, siblingOffsetY, siblingOffsetX);
+
+
+    if (!isDragItem) {
+      // can't do this because when drag exist. it can't recover the position
+      // @ts-ignore
+      TriDropContainer._dropContainers.forEach(container => {
+        if (offsetItem.drag.getRootElement().contains(container.element.nativeElement)) {
+          console.log('executed!');
+          adjustClientRect(container._dropContainerRef._clientRect,  siblingOffsetY, siblingOffsetX);
+        }
+      });
+    }
+  }
+
   _sortItem(item: DragRef, pointerX: number, pointerY: number,
             pointerDelta: { x: number, y: number }): void {
 
@@ -104,13 +129,6 @@ export class SortPositionStrategy implements PositionStrategy {
     // Shuffle the array in place.
     moveItemInArray(siblings, currentIndex, newIndex);
 
-    this.sorted.next({
-      previousIndex: currentIndex,
-      currentIndex : newIndex,
-      container    : this.dropContainerRef,
-      item
-    });
-
     siblings.forEach((sibling, index) => {
       // Don't do anything if the position hasn't changed.
       if (oldOrder[index] === sibling) {
@@ -119,11 +137,6 @@ export class SortPositionStrategy implements PositionStrategy {
 
       const isDraggedItem   = sibling.drag === item;
       const offset          = isDraggedItem ? itemOffset : siblingOffset;
-      const elementToOffset = isDraggedItem ? item.getPlaceholderElement() :
-        sibling.drag.getRootElement();
-
-      // Update the offset to reflect the new position.
-      sibling.offsetX += offset;
 
       // Since we're moving the items with a `transform`, we need to adjust their cached
       // client rects to reflect their new position, as well as swap their positions in the cache.
@@ -132,14 +145,17 @@ export class SortPositionStrategy implements PositionStrategy {
       if (isHorizontal) {
         // Round the transforms since some browsers will
         // blur the elements, for sub-pixel transforms.
-        elementToOffset.style.transform = combineTransforms(
-          `translate3d(${Math.round(sibling.offsetX)}px, 0, 0)`, sibling.initialTransform);
-        adjustClientRect(sibling.clientRect, 0, offset);
+        this._translateItem(sibling, isDraggedItem, offset, 0);
       } else {
-        elementToOffset.style.transform = combineTransforms(
-          `translate3d(0, ${Math.round(sibling.offsetX)}px, 0)`, sibling.initialTransform);
-        adjustClientRect(sibling.clientRect, offset, 0);
+        this._translateItem(sibling, isDraggedItem, 0, offset);
       }
+    });
+
+    this.sorted.next({
+      previousIndex: currentIndex,
+      currentIndex : newIndex,
+      container    : this.dropContainerRef,
+      item
     });
 
     // Note that it's important that we do this after the client rects have been adjusted.
@@ -212,12 +228,6 @@ export class SortPositionStrategy implements PositionStrategy {
                                    delta?: { x: number, y: number }): number {
     const isHorizontal = this._orientation === 'horizontal';
 
-    const heightMap = [];
-    let startIdx, endIdx;
-    for (let i = 0; i < this._itemPositions.length; i++) {
-
-    }
-
     const index = findIndex(this._itemPositions, ({drag, clientRect}, _, array) => {
       if (drag === item) {
         // If there's only one item left in the container, it must be
@@ -229,15 +239,14 @@ export class SortPositionStrategy implements PositionStrategy {
       // the item after we made the swap, and they didn't change the direction in which they're
       // dragging, we don't consider it a direction swap.
       if (
-        drag === this._previousSwap.drag &&
-        this._previousSwap.overlaps
+        drag === this._previousSwap.drag
       ) {
-        if (delta) {
-          const direction = isHorizontal ? delta.x : delta.y;
-          if (direction === this._previousSwap.delta) {
-            return false;
-          }
-        }
+        // if (this._previousSwap.overlaps && delta) {
+        //   const direction = isHorizontal ? delta.x : delta.y;
+        //   if (direction === this._previousSwap.delta) {
+        //     return false;
+        //   }
+        // }
 
         const midX = (Math.floor(clientRect.left) + Math.floor(clientRect.right)) / 2;
         const midY = (Math.floor(clientRect.top) + Math.floor(clientRect.bottom)) / 2;

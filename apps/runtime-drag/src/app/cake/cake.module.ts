@@ -1,27 +1,30 @@
+import { ObserversModule } from '@angular/cdk/observers';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { CakeCardSlotDirective } from './cake-card-slot.directive';
 import { CakeDefinitionDirective } from './cake-definition.directive';
-import { CakeSlotDirective } from './cake-slot.directive';
-import { CakeRootSlotDirective } from './cake-root-slot.directive';
+import { CakeFlexSlotDirective } from './cake-flex-slot.directive';
+import { CakeGridSlotDirective } from './cake-grid-slot.directive';
+import { CakeListSlotDirective } from './cake-list-slot.directive';
 
 @NgModule({
   imports     : [
-    CommonModule
+    CommonModule,
+
+    ObserversModule
   ],
   declarations: [
     CakeDefinitionDirective,
-    CakeCardSlotDirective,
-    CakeSlotDirective,
-    CakeRootSlotDirective,
-    CakeRootSlotDirective
+
+    CakeGridSlotDirective,
+    CakeListSlotDirective,
+    CakeFlexSlotDirective
   ],
   exports     : [
     CakeDefinitionDirective,
-    CakeCardSlotDirective,
-    CakeSlotDirective,
-    CakeRootSlotDirective,
-    CakeRootSlotDirective
+
+    CakeGridSlotDirective,
+    CakeListSlotDirective,
+    CakeFlexSlotDirective,
   ]
 })
 export class CakeModule {

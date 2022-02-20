@@ -4,8 +4,6 @@ import { Directive } from '@angular/core';
   selector: '[pfCakeDefinition]'
 })
 export class CakeDefinitionDirective {
-
   constructor() {
   }
-
 }

@@ -4,13 +4,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { ViewportRuler } from '@angular/cdk/scrolling';
-import { NgZone } from '@angular/core';
-import { DndContainerRef } from '../drag-drop-ref/dnd-container-ref';
+import type { ViewportRuler } from '@angular/cdk/scrolling';
+import type { NgZone } from '@angular/core';
+import type { DndContainerRef } from '../drag-drop-ref/dnd-container-ref';
 import {
   AutoScrollHorizontalDirection, AutoScrollVerticalDirection, DROP_PROXIMITY_THRESHOLD
 } from '../enum';
-import { ParentPositionTracker, ScrollPosition } from '../parent-position-tracker';
+import type { ParentPositionTracker, ScrollPosition } from '../parent-position-tracker';
 import {
   getElementScrollDirections, getHorizontalScrollDirection, getVerticalScrollDirection, incrementHorizontalScroll,
   incrementVerticalScroll
@@ -21,12 +21,6 @@ import { takeUntil } from 'rxjs/operators';
 
 
 type ContainerConfig = 'autoScrollStep';
-
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
 
 export class ScrollingStrategy {
 

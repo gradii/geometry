@@ -11,7 +11,7 @@ import { _getShadowRoot, normalizePassiveListenerOptions } from '@angular/cdk/pl
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { ElementRef, EmbeddedViewRef, NgZone, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { finalize, take, tap } from 'rxjs/operators';
+import { finalize, take, takeLast, tap } from 'rxjs/operators';
 import { DragContainerRef } from '../drag-drop-ref/drag-container-ref';
 import { DragDropRegistry } from '../drag-drop-registry';
 import {
@@ -1048,12 +1048,13 @@ export class DragRef<T = any> {
       newContainer._isPreStarted        = true;
       this._preStartedContainerRef      = newContainer;
       this._pointerMoveIdleSubscription = this._dragDropRegistry.pointerPressIdle.pipe(
-        take(1),
+        take(2),
         finalize(() => {
           element.style.filter       = null;
           element.style.opacity      = null;
           newContainer._isPreStarted = false;
         }),
+        takeLast(1),
         tap(() => {
           this._ngZone.run(() => {
             // Notify the old container that the item has left.
@@ -1140,15 +1141,18 @@ export class DragRef<T = any> {
     // bind the event in the first place.
     const duration = getTransformTransitionDurationInMs(this._preview);
 
+    return this._animateDone(this._preview, duration, 'transform');
+  }
+
+  _animateDone(element: HTMLElement, duration: number, property: string): Promise<void> {
     if (duration === 0) {
       return Promise.resolve();
     }
-
     return this._ngZone.runOutsideAngular(() => {
       return new Promise(resolve => {
         const handler = ((event: TransitionEvent) => {
-          if (!event || (event.target === this._preview && event.propertyName === 'transform')) {
-            this._preview.removeEventListener('transitionend', handler);
+          if (!event || (event.target === element && event.propertyName === property)) {
+            element.removeEventListener('transitionend', handler);
             resolve();
             clearTimeout(timeout);
           }
@@ -1158,7 +1162,7 @@ export class DragRef<T = any> {
         // Since we know how long it's supposed to take, add a timeout with a 50% buffer that'll
         // fire if the transition hasn't completed when it was supposed to.
         const timeout = setTimeout(handler as Function, duration * 1.5);
-        this._preview.addEventListener('transitionend', handler);
+        element.addEventListener('transitionend', handler);
       });
     });
   }

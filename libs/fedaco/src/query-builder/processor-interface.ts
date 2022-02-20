@@ -6,12 +6,6 @@
 
 import type { QueryBuilder } from './query-builder';
 
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 export interface ProcessorInterface {
   processSelect(queryBuilder: QueryBuilder, results: any): Promise<any>;
 

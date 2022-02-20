@@ -178,7 +178,7 @@ export class DragDropRegistry<I extends { isDragging(): boolean }, C> implements
           takeUntil(this.pointerUp),
           debounceTime(300),
           mergeMap((evt) => {
-            return interval(1500).pipe(
+            return interval(1000).pipe(
               startWith(evt),
               takeUntil(this.pointerMove),
               mapTo(evt)

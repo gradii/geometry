@@ -7,12 +7,6 @@
 import { has, isArray, isBlank, isNumber } from '@gradii/check-type';
 import { value } from './fn';
 
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
 export function get(target: any[] | any, key?: string | number, defaultValue?: any) {
   if (isBlank(key)) {
     return target;

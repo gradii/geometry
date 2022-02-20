@@ -38,10 +38,10 @@ import { asapScheduler } from 'rxjs';
 
           <div
             triDropListContainer
-            [triDropContainerData]="todo"
+            [triDropListContainerData]="todo"
             class="example-list"
             (triDropContainerDropped)="drop($event)"
-            [triDropContainerConnectedTo]="dls"
+            [triDropListContainerConnectedTo]="dls"
           >
             <div class="example-box" *ngFor="let item of todo" triDrag>
               <div *ngIf="!isArray(item); else arrayView">{{item}}</div>
@@ -49,10 +49,10 @@ import { asapScheduler } from 'rxjs';
                 <div class="example-container">
                   <div
                     triDropListContainer
-                    [triDropContainerData]="item"
+                    [triDropListContainerData]="item"
                     class="example-list"
                     (triDropContainerDropped)="drop($event)"
-                    [triDropContainerConnectedTo]="dls"
+                    [triDropListContainerConnectedTo]="dls"
                   >
                     <div class="example-box" *ngFor="let innerItem of item" triDrag>
                       {{innerItem}}

@@ -23,11 +23,11 @@ import { demoData, TreeNode, DropInfo } from './data';
 
         <div *ngIf="node.isExpanded && node.children.length" class="node-children item-dropzone"
              triDropListContainer
-             [triDropContainerData]="node.children"
+             [triDropListContainerData]="node.children"
              [id]="node.id"
-             [triDropContainerConnectedTo]="dropTargetIds"
+             [triDropListContainerConnectedTo]="dropTargetIds"
              (triDropContainerDropped)="drop($event)"
-             [triDropContainerSortingDisabled]="true">
+             [triDropListContainerSortingDisabled]="true">
 
           <div *ngFor="let child of node.children" triDrag [triDragData]="child.id"
                (triDragMoved)="dragMoved($event)">
@@ -41,11 +41,11 @@ import { demoData, TreeNode, DropInfo } from './data';
 
     <div triDropListContainer
          class="item-dropzone"
-         [triDropContainerData]="nodes"
+         [triDropListContainerData]="nodes"
          [id]="'main'"
-         [triDropContainerConnectedTo]="dropTargetIds"
+         [triDropListContainerConnectedTo]="dropTargetIds"
          (triDropContainerDropped)="drop($event)"
-         [triDropContainerSortingDisabled]="true">
+         [triDropListContainerSortingDisabled]="true">
 
       <div *ngFor="let node of nodes" triDrag [triDragData]="node.id"
            (triDragMoved)="dragMoved($event)">

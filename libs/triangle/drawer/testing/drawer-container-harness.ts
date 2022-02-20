@@ -4,14 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
 import {ContentContainerComponentHarness, HarnessPredicate} from '@angular/cdk/testing';
 import {DrawerContainerHarnessFilters, DrawerHarnessFilters} from './drawer-harness-filters';
 import {MatDrawerContentHarness} from './drawer-content-harness';

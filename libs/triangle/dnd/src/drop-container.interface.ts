@@ -18,7 +18,10 @@ export interface CachedItemPosition {
 
   mainAxisLine?: number;
 
-  /** Amount by which the item has been moved since dragging started. */
+  /**
+   * Amount by which the item has been moved since dragging started.
+   * drop list only use offsetX as offset
+   */
   offsetX: number;
 
   offsetY?: number;

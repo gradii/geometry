@@ -21,7 +21,7 @@ $card-actions-text-color : theming.tri-color(theme.$foreground, text-color) !def
   flex-direction : column;
   align-items    : stretch;
   overflow       : hidden;
-  transition     : background-color, width, height, padding, margin .3s;
+  transition     : transform, background-color, width, height, padding, margin .3s;
 
   @at-root &:not(#{&}-no-hovering):hover {
     box-shadow   : v.$box-shadow-base;

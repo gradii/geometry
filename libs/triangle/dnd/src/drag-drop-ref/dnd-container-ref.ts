@@ -4,20 +4,22 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Direction } from '@angular/cdk/bidi';
+import type { Direction } from '@angular/cdk/bidi';
 import { coerceElement } from '@angular/cdk/coercion';
 import { _getShadowRoot } from '@angular/cdk/platform';
-import { ViewportRuler } from '@angular/cdk/scrolling';
-import { ElementRef, NgZone } from '@angular/core';
+import type { ViewportRuler } from '@angular/cdk/scrolling';
+import type { ElementRef, NgZone } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
-import { DragDropRegistry } from '../drag-drop-registry';
-import { DragCSSStyleDeclaration } from '../drag-styling';
+import { TriDropContainer } from '../directives/drop-container';
+import type { DragDropRegistry } from '../drag-drop-registry';
+import type { DragCSSStyleDeclaration } from '../drag-styling';
 import { ParentPositionTracker } from '../parent-position-tracker';
-import { PositionStrategy } from '../position-strategy/position-strategy';
+import type { PositionStrategy } from '../position-strategy/position-strategy';
 import { ScrollingStrategy } from '../scrolling-strategy/scrolling-strategy';
-import { adjustClientRect, isInsideClientRect, } from '../utils/client-rect';
+import { getTransformTransitionDurationInMs } from '../transition-duration';
+import { adjustClientRect, getMutableClientRect, isInsideClientRect, } from '../utils/client-rect';
 import { orderByHierarchy } from '../utils/hierarchy';
-import { DragRefInternal as DragRef, Point } from './drag-ref';
+import type { DragRefInternal as DragRef, Point } from './drag-ref';
 
 export type RootNode = DocumentOrShadowRoot & {
   // As of TS 4.4 the built in DOM typings don't include `elementFromPoint` on `ShadowRoot`,
@@ -452,9 +454,22 @@ export class DndContainerRef<T = any> {
       const rootElement = item.getRootElement();
 
       if (rootElement) {
+        const duration              = getTransformTransitionDurationInMs(rootElement);
+        item._animateDone(rootElement, duration, 'transform').then(() => {
+          // @ts-ignore
+          TriDropContainer._dropContainers.forEach(container => {
+            if (rootElement.contains(container.element.nativeElement)) {
+              const clientRect = getMutableClientRect(container.element.nativeElement);
+              container._dropContainerRef._clientRect.top    = clientRect.top;
+              container._dropContainerRef._clientRect.bottom = clientRect.bottom;
+              container._dropContainerRef._clientRect.left   = clientRect.left;
+              container._dropContainerRef._clientRect.right  = clientRect.right;
+            }
+          });
+        });
         const initialTransform      = this.positionStrategy._itemPositions
           .find(current => current.drag === item)?.initialTransform;
-        rootElement.style.transform = initialTransform || '';
+        rootElement.style.transform = initialTransform || 'translate3d(0, 0, 0)';
       }
     });
     this._siblings.forEach(sibling => sibling._stopReceiving(this));

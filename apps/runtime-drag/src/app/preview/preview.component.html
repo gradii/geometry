@@ -1,22 +1,49 @@
+<tri-splitter>
+  <tri-splitter-pane></tri-splitter-pane>
+  <tri-splitter-pane></tri-splitter-pane>
+</tri-splitter>
+
 <div triDropContainerGroup>
-<div
-  class="drag-container"
-  pfCakeRootSlot
-  triDropListContainer
->
-  <tri-card *ngFor="let card of cards" class="drag-box" triDrag pfCakeDefinition>
-    <ng-template triDragPlaceholder>
-      <div></div>
-    </ng-template>
-    <tri-card-header triDropListContainer>
-      <div>{{card.title}}</div>
-    </tri-card-header>
-    <tri-card-body triDropListContainer>
-      <p>{{card.content}}</p>
-    </tri-card-body>
-    <tri-card-footer triDropListContainer>
-      <button triButton variant="outlined">View More</button>
-    </tri-card-footer>
-  </tri-card>
-</div>
+  <div
+    class="drag-container"
+    orientation="horizontal"
+    gap="20px"
+    style="width: 100%"
+    pfCakeFlexSlot
+    triDropFlexContainer
+    (triDropFlexContainerDropped)="onDropFlexContainer($event)"
+  >
+    <tri-card *ngFor="let card of cards"
+              class="drag-box"
+              triDrag
+              pfCakeDefinition
+              style="width: 200px">
+      <!--
+      // drop list
+      <ng-template triDragPlaceholder>
+        <div class="custom-drag-placeholder"></div>
+      </ng-template>
+      -->
+      <tri-card-header
+        pfCakeListSlot
+        triDropListContainer>
+        <div>{{card.title}}</div>
+      </tri-card-header>
+
+      <tri-card-body
+        pfCakeListSlot
+        triDropListContainer>
+        <p>{{card.content}}</p>
+      </tri-card-body>
+
+      <tri-card-footer
+        pfCakeListSlot
+        triDropListContainer
+        triDropListContainerOrientation="horizontal"
+      >
+        <button triDrag triButton variant="outlined">View More</button>
+      </tri-card-footer>
+
+    </tri-card>
+  </div>
 </div>

@@ -104,9 +104,6 @@ export class DragContainerRef<T = any> extends DndContainerRef<T> {
   /** Cache of the dimensions of all the items inside the container. */
   _itemPositions: CachedItemPosition[] = [];
 
-  /** Cached `ClientRect` of the drop list. */
-  _clientRect: ClientRect | undefined;
-
   /** Draggable items in the container. */
   _draggables: readonly DragRef[] = [];
 

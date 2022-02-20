@@ -18,7 +18,7 @@ import { startWith, takeUntil } from 'rxjs/operators';
 import { DragDrop } from '../drag-drop';
 import { DndContainerRef } from '../drag-drop-ref/dnd-container-ref';
 import { DragRef } from '../drag-drop-ref/drag-ref';
-import { DropListContainerRef } from '../drag-drop-ref/drop-list-container-ref';
+import { DropFlexContainerRef } from '../drag-drop-ref/drop-flex-container-ref';
 import { TriDragDrop, TriDragEnter, TriDragExit, TriDragSortEvent } from '../event/drag-events';
 import { assertElementNode } from './assertions';
 import { DragAxis, DragDropConfig, DropContainerOrientation, TRI_DRAG_CONFIG } from './config';
@@ -168,8 +168,8 @@ export class TriDropFlexContainer<T = any> extends TriDropContainer implements O
         return this.sortPredicate(index, drag.data, drop.data);
       };
 
-    this._setupInputSyncSubscription(this._dropContainerRef as DropListContainerRef);
-    this._handleEvents(this._dropContainerRef as DropListContainerRef);
+    this._setupInputSyncSubscription(this._dropContainerRef as DropFlexContainerRef);
+    this._handleEvents(this._dropContainerRef as DropFlexContainerRef);
     TriDropContainer._dropContainers.push(this);
   }
 
@@ -206,7 +206,7 @@ export class TriDropFlexContainer<T = any> extends TriDropContainer implements O
   }
 
   /** Syncs the inputs of the TriDropContainer with the options of the underlying DropContainerRef. */
-  protected _setupInputSyncSubscription(ref: DropListContainerRef<TriDropFlexContainer>) {
+  protected _setupInputSyncSubscription(ref: DropFlexContainerRef<TriDropFlexContainer>) {
     if (this._dir) {
       this._dir.change
         .pipe(startWith(this._dir.value), takeUntil(this._destroyed))
@@ -267,7 +267,7 @@ export class TriDropFlexContainer<T = any> extends TriDropContainer implements O
    * todo remove me specify drop list event
    */
   /** Handles events from the underlying DropContainerRef. */
-  protected _handleEvents(ref: DropListContainerRef<TriDropFlexContainer>) {
+  protected _handleEvents(ref: DropFlexContainerRef<TriDropFlexContainer>) {
     ref.beforeStarted.subscribe(() => {
       this._syncItemsWithRef();
       this._changeDetectorRef.markForCheck();

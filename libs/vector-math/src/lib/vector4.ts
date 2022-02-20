@@ -6,13 +6,6 @@
 
 import { EPSILON } from './common';
 
-/**
- * @license
- *
- * Use of this source code is governed by an MIT-style license
- */
-
-
 export class Vector4 {
   public static zero = new Vector4([0, 0, 0, 1]);
 

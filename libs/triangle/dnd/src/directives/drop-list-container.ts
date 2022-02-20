@@ -71,59 +71,59 @@ export class TriDropListContainer<T = any> extends TriDropContainer implements O
    * container's items can be transferred. Can either be references to other drop containers,
    * or their unique IDs.
    */
-  @Input('triDropContainerConnectedTo')
+  @Input('triDropListContainerConnectedTo')
   connectedTo: (TriDropListContainer | string)[] | TriDropListContainer | string = [];
 
   /** Arbitrary data to attach to this container. */
-  @Input('triDropContainerData')
+  @Input('triDropListContainerData')
   data: T;
 
   /** Direction in which the list is oriented. */
-  @Input('triDropContainerOrientation')
+  @Input('triDropListContainerOrientation')
   orientation: DropContainerOrientation;
 
   /** Locks the position of the draggable elements inside the container along the specified axis. */
-  @Input('triDropContainerLockAxis')
+  @Input('triDropListContainerLockAxis')
   lockAxis: DragAxis;
 
   /** Whether sorting within this drop list is disabled. */
-  @Input('triDropContainerSortingDisabled')
+  @Input('triDropListContainerSortingDisabled')
   sortingDisabled: boolean;
 
   /**
    * Function that is used to determine whether an item
    * is allowed to be moved into a drop container.
    */
-  @Input('triDropContainerEnterPredicate')
+  @Input('triDropListContainerEnterPredicate')
   enterPredicate: (drag: TriDrag, drop: TriDropListContainer) => boolean = () => true;
 
   /** Functions that is used to determine whether an item can be sorted into a particular index. */
-  @Input('triDropContainerSortPredicate')
+  @Input('triDropListContainerSortPredicate')
   sortPredicate: (index: number, drag: TriDrag, drop: TriDropListContainer) => boolean = () => true;
 
   /** Whether to auto-scroll the view when the user moves their pointer close to the edges. */
-  @Input('triDropContainerAutoScrollDisabled')
+  @Input('triDropListContainerAutoScrollDisabled')
   autoScrollDisabled: boolean;
 
   /** Number of pixels to scroll for each frame when auto-scrolling an element. */
-  @Input('triDropContainerAutoScrollStep')
+  @Input('triDropListContainerAutoScrollStep')
   autoScrollStep: number;
 
   /** Emits when the user drops an item inside the container. */
-  @Output('triDropContainerDropped')
+  @Output('triDropListContainerDropped')
   readonly dropped: EventEmitter<TriDragDrop<T, any>> = new EventEmitter<TriDragDrop<T, any>>();
 
   /**
    * Emits when the user has moved a new drag item into this container.
    */
-  @Output('triDropContainerEntered')
+  @Output('triDropListContainerEntered')
   readonly entered: EventEmitter<TriDragEnter<T>> = new EventEmitter<TriDragEnter<T>>();
 
   /**
    * Emits when the user removes an item from the container
    * by dragging it into another container.
    */
-  @Output('triDropContainerExited')
+  @Output('triDropListContainerExited')
   readonly exited: EventEmitter<TriDragExit<T>> = new EventEmitter<TriDragExit<T>>();
 
   /**
@@ -131,10 +131,10 @@ export class TriDropListContainer<T = any> extends TriDropContainer implements O
    * @breaking-change 1.13.0
    */
   /** Emits as the user is swapping items while actively dragging. */
-  @Output('triDropContainerSorted')
+  @Output('triDropListContainerSorted')
   readonly sorted: EventEmitter<TriDragSortEvent<T>> = new EventEmitter<TriDragSortEvent<T>>();
 
-  @Output('triDropContainerRepositioned')
+  @Output('triDropListContainerRepositioned')
   readonly repositioned: EventEmitter<any> = new EventEmitter<any>();
 
   /**
@@ -158,7 +158,7 @@ export class TriDropListContainer<T = any> extends TriDropContainer implements O
     super(_group);
 
     if (typeof ngDevMode === 'undefined' || ngDevMode) {
-      assertElementNode(element.nativeElement, 'triDropContainer');
+      assertElementNode(element.nativeElement, 'triDropListContainer');
     }
 
     this._dropContainerRef      = dragDrop.createDropListContainerRef(element);

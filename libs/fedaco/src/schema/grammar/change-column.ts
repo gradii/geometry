@@ -4,11 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-// /**
-//  * @license
-//  *
-//  * Use of this source code is governed by an MIT-style license
-//  */
+
 // import { isBlank } from '@gradii/check-type';
 // import { Connection } from '../../connection';
 // import { Comparator } from '../../dbal/comparator';

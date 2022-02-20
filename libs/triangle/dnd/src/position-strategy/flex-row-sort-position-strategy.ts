@@ -4,18 +4,19 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Direction } from '@angular/cdk/bidi';
-import { Subject } from 'rxjs';
-import { DndContainerRef } from '../drag-drop-ref/dnd-container-ref';
-import { DragRefInternal as DragRef } from '../drag-drop-ref/drag-ref';
-import { DropListContainerRef } from '../drag-drop-ref/drop-list-container-ref';
-import { DragDropRegistry } from '../drag-drop-registry';
+import type { Direction } from '@angular/cdk/bidi';
+import type { Subject } from 'rxjs';
+import { TriDropContainer } from '../directives/drop-container';
+import type { DndContainerRef } from '../drag-drop-ref/dnd-container-ref';
+import type { DragRefInternal as DragRef } from '../drag-drop-ref/drag-ref';
+import type { DropFlexContainerRef } from '../drag-drop-ref/drop-flex-container-ref';
+import type { DragDropRegistry } from '../drag-drop-registry';
 import { combineTransforms } from '../drag-styling';
-import { CachedItemPosition } from '../drop-container.interface';
+import type { CachedItemPosition } from '../drop-container.interface';
 import { findIndex } from '../utils';
 import { adjustClientRect, getMutableClientRect, isInsideClientRect, } from '../utils/client-rect';
 import { moveItemInArray } from '../utils/drag-utils';
-import { PositionStrategy } from './position-strategy';
+import type { PositionStrategy } from './position-strategy';
 
 export class FlexRowSortPositionStrategy implements PositionStrategy {
   /** Cache of the dimensions of all the items inside the container. */
@@ -46,7 +47,7 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
     container: DndContainerRef,
     item: DragRef
   }> {
-    return (this.dropContainerRef as DropListContainerRef).sorted;
+    return (this.dropContainerRef as DropFlexContainerRef).sorted;
   }
 
   public dropContainerRef: DndContainerRef;
@@ -84,6 +85,17 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
       `translate3d(${offsetItem.offsetX}px, ${offsetItem.offsetY}px, 0)`,
       offsetItem.initialTransform);
     adjustClientRect(offsetItem.clientRect, siblingOffsetY, siblingOffsetX);
+
+    if (!isDragItem) {
+      // can't do this because when drag exist. it can't recover the position
+      // @ts-ignore
+      TriDropContainer._dropContainers.forEach(container => {
+        if (offsetItem.drag.getRootElement().contains(container.element.nativeElement)) {
+          console.log('executed!');
+          adjustClientRect(container._dropContainerRef._clientRect,  siblingOffsetY, siblingOffsetX);
+        }
+      });
+    }
   }
 
   _sortItem(item: DragRef, pointerX: number, pointerY: number,
@@ -154,8 +166,8 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
         currentIndex < newIndex ? newIndex - 1 : newIndex);
     } else {
       // How many pixels the item's placeholder should be offset.
-      let [itemOffset, itemOffsetY] = this._getItemOffsetPx(currentPosition, newPosition, delta);
-      itemOffset                    = isHorizontal ? itemOffset : itemOffsetY;
+      const [itemOffsetX, itemOffsetY] = this._getItemOffsetPx(currentPosition, newPosition, delta);
+      const itemOffset                 = isHorizontal ? itemOffsetX : itemOffsetY;
 
       // How many pixels all the other items should be offset.
       const siblingOffset = this._getSiblingOffsetPx(currentIndex, siblings, delta);
@@ -335,13 +347,13 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
       // If the user is still hovering over the same item as last time, their cursor hasn't left
       // the item after we made the swap, and they didn't change the direction in which they're
       // dragging, we don't consider it a direction swap.
-      if (drag === this._previousSwap.drag && this._previousSwap.overlaps) {
-        if (delta) {
-          const direction = isHorizontal ? delta.x : delta.y;
-          if (direction === this._previousSwap.delta) {
-            return false;
-          }
-        }
+      if (drag === this._previousSwap.drag) {
+        // if (this._previousSwap.overlaps && delta) {
+        //   const direction = isHorizontal ? delta.x : delta.y;
+        //   if (direction === this._previousSwap.delta) {
+        //     return false;
+        //   }
+        // }
 
         const midX = (Math.floor(clientRect.left) + Math.floor(clientRect.right)) / 2;
         const midY = (Math.floor(clientRect.top) + Math.floor(clientRect.bottom)) / 2;

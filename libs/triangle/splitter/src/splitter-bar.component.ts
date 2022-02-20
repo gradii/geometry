@@ -90,7 +90,7 @@ export class SplitterBarComponent implements OnInit, AfterViewInit, OnDestroy {
   nextTip: string;
   subscriptions           = new Subscription();
   // 移动的时候，阻止事件冒泡
-  private stopPropagation = ({originalEvent: event}) => {
+  private stopPropagation = ({originalEvent: event}: {originalEvent: MouseEvent}) => {
     event.stopPropagation();
     if (event.cancelable) {
       event.preventDefault();
