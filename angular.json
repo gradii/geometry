@@ -473,7 +473,7 @@
       "projectType": "library",
       "root": "libs/triangle",
       "sourceRoot": "libs/triangle/src",
-      "prefix": "applications",
+      "prefix": "tri",
       "architect": {
         "version": {
           "builder": "@jscutlery/semver:version",
