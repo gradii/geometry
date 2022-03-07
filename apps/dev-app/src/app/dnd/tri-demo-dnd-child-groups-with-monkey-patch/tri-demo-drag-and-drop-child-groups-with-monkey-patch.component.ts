@@ -22,7 +22,7 @@ import { asapScheduler } from 'rxjs';
           triDropListContainer
           [triDropListContainerData]="todo"
           class="example-list"
-          (triDropContainerDropped)="drop($event)"
+          (triDropListContainerDropped)="drop($event)"
           [triDropListContainerConnectedTo]="dls"
         >
           <div class="example-box" *ngFor="let item of todo" triDrag>
@@ -33,7 +33,7 @@ import { asapScheduler } from 'rxjs';
                   triDropListContainer
                   [triDropListContainerData]="item"
                   class="example-list"
-                  (triDropContainerDropped)="drop($event)"
+                  (triDropListContainerDropped)="drop($event)"
                   [triDropListContainerConnectedTo]="dls"
                 >
                   <div class="example-box" *ngFor="let innerItem of item" triDrag>

@@ -3,7 +3,7 @@
      [id]="parentItemId"
      [triDropListContainerData]="parentItem"
      [triDropListContainerConnectedTo]="allDropContainersIds"
-     (triDropContainerDropped)="onDragDrop($event)">
+     (triDropListContainerDropped)="onDragDrop($event)">
   <div triDrag
        [id]="item.uId"
        [triDragData]="item"
@@ -27,7 +27,7 @@
       [id]="item.uId"
       [triDropListContainerConnectedTo]="connectedDropContainersIds"
       [triDropListContainerData]="item"
-      (triDropContainerDropped)="onDragDrop($event)">
+      (triDropListContainerDropped)="onDragDrop($event)">
     <li *ngFor="let subItem of item.children">
       <list-item [item]="subItem"
                  [parentItem]="item"
