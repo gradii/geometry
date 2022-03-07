@@ -12,5 +12,6 @@ module.exports = {
     "<rootDir>/apps/dev-app",
     "<rootDir>/libs/triangle-icons",
     "<rootDir>/apps/runtime-drag",
+    "<rootDir>/libs/lofn",
   ],
 };

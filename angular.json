@@ -335,6 +335,31 @@
         }
       }
     },
+    "lofn": {
+      "root": "libs/lofn",
+      "sourceRoot": "libs/lofn/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/lofn/tsconfig.lib.json",
+              "libs/lofn/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/lofn/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/lofn"],
+          "options": {
+            "jestConfig": "libs/lofn/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "runtime-drag": {
       "projectType": "application",
       "root": "apps/runtime-drag",
