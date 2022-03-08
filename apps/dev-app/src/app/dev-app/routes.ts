@@ -88,11 +88,6 @@ export const DEV_APP_ROUTES: Routes = [
           it => it.DevCalendarModule)
       },
       {
-        path        : 'carousel',
-        loadChildren: () => import('../carousel/dev-carousel.module').then(
-          it => it.DevCarouselModule)
-      },
-      {
         path        : 'cascader',
         loadChildren: () => import('../cascader/dev-cascader.module').then(
           it => it.DevCascaderModule)
