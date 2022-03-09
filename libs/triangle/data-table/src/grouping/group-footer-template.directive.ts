@@ -7,7 +7,7 @@
 import { Directive, Optional, TemplateRef } from '@angular/core';
 
 @Directive({
-  selector: '[triGridGroupFooterTemplate]'
+  selector: '[triGridGroupFooterTemplate], ng-template[triGridGroupFooterTemplate]'
 })
 export class GroupFooterTemplateDirective {
   constructor(@Optional() public templateRef: TemplateRef<any>) {
