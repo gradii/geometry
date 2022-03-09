@@ -9,7 +9,7 @@ import { CELL_CONTEXT } from '../cell-context';
 import { EditService } from '../service/edit.service';
 
 @Directive({
-  selector: '[triGridEditCommand], [tri-grid-edit-command]'
+  selector: '[triGridEditCommand], [tri-grid-edit-command], ng-tempalte[triDataTableEditCommand]'
 })
 export class EditCommandDirective {
   rowIndex: number;

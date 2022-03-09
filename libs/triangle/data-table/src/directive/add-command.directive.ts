@@ -8,7 +8,7 @@ import { Directive, HostBinding, HostListener } from '@angular/core';
 import { EditService } from './../service/edit.service';
 
 @Directive({
-  selector: '[triGridAddCommand], [tri-grid-add-command]'
+  selector: '[triGridAddCommand], [tri-grid-add-command], ng-tempalte[triDataTableAddCommand]'
 })
 export class AddCommandDirective {
   private editService;

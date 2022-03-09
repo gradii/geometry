@@ -7,7 +7,7 @@
 import { Directive, Optional, TemplateRef } from '@angular/core';
 
 @Directive({
-  selector: '[triGridCellTemplate], [tri-grid-cell-template]'
+  selector: '[triGridCellTemplate], [tri-grid-cell-template], ng-template[triDataTableCellTemplate]'
 })
 export class CellTemplateDirective {
   constructor(@Optional() public templateRef: TemplateRef<any>) {

@@ -9,7 +9,7 @@ import { CELL_CONTEXT } from '../cell-context';
 import { EditService } from '../service/edit.service';
 
 @Directive({
-  selector: '[triGridRemoveCommand], [tri-grid-remove-command]'
+  selector: '[triGridRemoveCommand], [tri-grid-remove-command], ng-template[triDataTableRemoveCommand]'
 })
 export class RemoveCommandDirective {
   rowIndex: number;

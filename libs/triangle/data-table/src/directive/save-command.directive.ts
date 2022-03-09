@@ -9,7 +9,7 @@ import { CELL_CONTEXT, CellContext } from '../cell-context';
 import { EditService } from '../service/edit.service';
 
 @Directive({
-  selector: '[triGridSaveCommand], [tri-grid-save-command]'
+  selector: '[triGridSaveCommand], [tri-grid-save-command], ng-template[triDataTableSaveCommand]'
 })
 export class SaveCommandDirective {
   rowIndex: number;
