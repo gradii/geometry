@@ -7,7 +7,7 @@
 import { Directive, Input, Optional, TemplateRef } from '@angular/core';
 
 @Directive({
-  selector: '[triDataTableToolbarTemplate], [tri-data-table-toolbar-template]'
+  selector: '[triDataTableToolbarTemplate], ng-template[triDataTableToolbarTemplate]'
 })
 export class ToolbarTemplateDirective {
   constructor(@Optional() public templateRef: TemplateRef<any>) {
