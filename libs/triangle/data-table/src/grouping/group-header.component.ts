@@ -13,7 +13,7 @@ import { GroupInfoService } from './group-info.service';
 import { GroupsService } from './groups.service';
 
 @Component({
-  selector           : '[triGridGroupHeader]',
+  selector           : '[triGridGroupHeader], [triDataTableGroupHeader]',
   template           : `
     <ng-template [ngIf]="!skipGroupDecoration">
       <td [class.tri-group-cell]="true" *ngFor="let g of prefixGroupCell(rowItem)"></td>

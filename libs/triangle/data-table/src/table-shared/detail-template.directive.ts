@@ -7,7 +7,7 @@
 import { Directive, Input, Optional, TemplateRef } from '@angular/core';
 
 @Directive({
-  selector: '[triDataTableDetailTemplate], [tri-data-table-detaill-template]',
+  selector: '[triDataTableDetailTemplate], ng-template[triDataTableDetailTemplate]',
   exportAs: 'detailTemplate',
 })
 export class DetailTemplateDirective {

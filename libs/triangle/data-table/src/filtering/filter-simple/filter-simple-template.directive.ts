@@ -7,7 +7,7 @@
 import { Directive, Optional, TemplateRef } from '@angular/core';
 
 @Directive({
-  selector: '[triDataTableFilterSimpleTemplate], [tri-data-table-filter-simple-template]'
+  selector: '[triDataTableFilterSimpleTemplate], ng-template[triDataTableFilterSimpleTemplate]'
 })
 export class FilterSimpleTemplateDirective {
   constructor(@Optional() public templateRef: TemplateRef<any>) {
