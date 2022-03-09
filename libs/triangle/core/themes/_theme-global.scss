@@ -13,7 +13,6 @@
 @use "../../button-toggle/style/button-toggle-theme" as *;
 @use "../../calendar/style/calendar-theme" as *;
 @use "../../card/style/card-theme" as *;
-@use "../../carousel/style/carousel-theme" as *;
 @use "../../cascader/style/cascader-theme" as *;
 @use "../../checkbox/style/checkbox-theme" as *;
 @use "../../data-table/style/data-table-theme" as *;
@@ -72,7 +71,6 @@
   @include tri-combobox-theme();
   @include tri-select-theme();
   @include tri-card-theme();
-  @include tri-carousel-theme();
   @include tri-cascader-theme();
   @include tri-dialog-theme();
   @include tri-menu-theme();
