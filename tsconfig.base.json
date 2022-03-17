@@ -33,6 +33,7 @@
     "baseUrl": ".",
     "paths": {
       "@applications/lofn": ["libs/lofn/src/index.ts"],
+      "@applications/http": ["libs/http/src/index.ts"],
       "@gradii/annotation": ["libs/annotation/index.ts"],
       "@gradii/check-type": ["libs/check-type/src/index.ts"],
       "@gradii/diagram/*": ["src/diagram/*/public-api.ts"],

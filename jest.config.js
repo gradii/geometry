@@ -13,5 +13,6 @@ module.exports = {
     "<rootDir>/libs/triangle-icons",
     "<rootDir>/apps/runtime-drag",
     "<rootDir>/libs/lofn",
+    "<rootDir>/libs/http",
   ],
 };
