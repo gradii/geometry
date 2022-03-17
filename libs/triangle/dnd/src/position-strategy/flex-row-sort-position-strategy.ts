@@ -347,12 +347,13 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
       // the item after we made the swap, and they didn't change the direction in which they're
       // dragging, we don't consider it a direction swap.
       if (drag === this._previousSwap.drag) {
-        // if (this._previousSwap.overlaps && delta) {
-        //   const direction = isHorizontal ? delta.x : delta.y;
-        //   if (direction === this._previousSwap.delta) {
-        //     return false;
-        //   }
-        // }
+        // todo improve the delta maybe wrong when container change
+        if (this._previousSwap.overlaps && delta) {
+          const direction = isHorizontal ? delta.x : delta.y;
+          if (direction === this._previousSwap.delta) {
+            return false;
+          }
+        }
 
         const midX = (Math.floor(clientRect.left) + Math.floor(clientRect.right)) / 2;
         const midY = (Math.floor(clientRect.top) + Math.floor(clientRect.bottom)) / 2;

@@ -1048,7 +1048,11 @@ export class DragRef<T = any> {
       newContainer._isPreStarted        = true;
       this._preStartedContainerRef      = newContainer;
       this._pointerMoveIdleSubscription = this._dragDropRegistry.pointerPressIdle.pipe(
-        take(2),
+        // tap(() => {
+        //   element.style.filter  = '';
+        //   element.style.opacity = '';
+        // }),
+        take(5),
         finalize(() => {
           element.style.filter       = null;
           element.style.opacity      = null;

@@ -54,4 +54,8 @@ export class PreviewDefinitionComponent implements OnInit {
     return component;
   }
 
+
+  onDragDropped(event: any) {
+
+  }
 }

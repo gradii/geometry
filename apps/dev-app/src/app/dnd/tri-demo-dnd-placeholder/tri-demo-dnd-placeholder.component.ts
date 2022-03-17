@@ -79,7 +79,7 @@ export class TriDemoDndPlaceholderComponent {
 
   public dls: TriDropListContainer[] = [];
 
-  drop(event: TriDragDrop<any>) {
+  drop(event: TriDragDrop<any, any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data as string[], event.previousIndex, event.currentIndex);
     } else {

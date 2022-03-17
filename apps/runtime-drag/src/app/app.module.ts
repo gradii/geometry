@@ -7,6 +7,7 @@ import { TriCardModule } from '@gradii/triangle/card';
 import { TriDndModule } from '@gradii/triangle/dnd';
 import { TriInputModule } from '@gradii/triangle/input';
 import { TriSplitterModule } from '@gradii/triangle/splitter';
+import { TriAccordionModule } from '@gradii/triangle/accordion';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
@@ -31,6 +32,7 @@ import { PreviewComponent } from './preview/preview.component';
     TriButtonModule,
     TriSplitterModule,
     TriInputModule,
+    TriAccordionModule,
 
     CakeModule,
     TriDndModule
