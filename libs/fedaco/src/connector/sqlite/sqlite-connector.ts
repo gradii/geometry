@@ -28,7 +28,8 @@ export class SqliteConnector extends Connector implements ConnectorInterface {
     try {
       const sqlite3 = await import('sqlite3');
       return new Promise((ok, fail) => {
-       const db = new sqlite3.Database(database, (err) => {
+        // @ts-ignore
+       const db = new (sqlite3.Database || sqlite3?.default.Database)(database, (err) => {
           if (err) {
             return fail(err);
           }
