@@ -335,26 +335,26 @@
         }
       }
     },
-    "lofn": {
-      "root": "libs/lofn",
-      "sourceRoot": "libs/lofn/src",
+    "lofun": {
+      "root": "libs/lofun",
+      "sourceRoot": "libs/lofun/src",
       "projectType": "library",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/lofn/tsconfig.lib.json",
-              "libs/lofn/tsconfig.spec.json"
+              "libs/lofun/tsconfig.lib.json",
+              "libs/lofun/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/lofn/**/*"]
+            "exclude": ["**/node_modules/**", "!libs/lofun/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/lofn"],
+          "outputs": ["coverage/libs/lofun"],
           "options": {
-            "jestConfig": "libs/lofn/jest.config.js",
+            "jestConfig": "libs/lofun/jest.config.js",
             "passWithNoTests": true
           }
         }
