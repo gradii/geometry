@@ -4,7 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { MysqlConnection } from '../../connection/mysql-connection';
 import { Connector } from '../connector';
 import type { ConnectorInterface } from '../connector-interface';
 import { MysqlWrappedConnection } from './mysql-wrapped-connection';
@@ -18,50 +17,52 @@ export class MysqlConnector extends Connector implements ConnectorInterface {
     if (config['database'].length) {
       await connection.exec(`use \`${config['database']}\`;`);
     }
-    this.configureIsolationLevel(connection, config);
-    this.configureEncoding(connection, config);
+    await this.configureIsolationLevel(connection, config);
+    await this.configureEncoding(connection, config);
     await this.configureTimezone(connection, config);
-    this.setModes(connection, config);
+    await this.setModes(connection, config);
     return connection;
   }
 
   async createConnection(database: string, config: any,
                          options: any): Promise<MysqlWrappedConnection> {
     const [username, password] = [config['username'] ?? null, config['password'] ?? null];
-    try {
-      const mysql2 = await import('mysql2');
-      return Promise.resolve(
-        new MysqlWrappedConnection(mysql2.createConnection({
-          host    : config['host'],
-          port    : config['port'],
-          user    : username,
-          password: password,
-          database: config['database'],
-        }))
-      );
+    // try {
+    const mysql2               = await import('mysql2');
+    return Promise.resolve(
+      new MysqlWrappedConnection(mysql2.createConnection({
+        host    : config['host'],
+        port    : config['port'],
+        user    : username,
+        password: password,
+        database: config['database'],
+      }))
+    );
 
-    } catch (e) {
-      throw e;
-      // return this.tryAgainIfCausedByLostConnection(e, database, username, password, options);
-    }
+    // } catch (e) {
+    //   throw e;
+    // return this.tryAgainIfCausedByLostConnection(e, database, username, password, options);
+    // }
   }
 
   /*Set the connection transaction isolation level.*/
-  protected configureIsolationLevel(connection: any, config: any) {
+  protected async configureIsolationLevel(connection: any, config: any) {
     if (!(config['isolation_level'] !== undefined)) {
       return;
     }
-    connection.prepare(
-      `SET SESSION TRANSACTION ISOLATION LEVEL ${config['isolation_level']}`).execute();
+    const stmt = await connection.prepare(
+      `SET SESSION TRANSACTION ISOLATION LEVEL ${config['isolation_level']}`);
+    await stmt.execute();
   }
 
   /*Set the connection character set and collation.*/
-  protected configureEncoding(connection: any, config: any) {
+  protected async configureEncoding(connection: any, config: any) {
     if (!(config['charset'] !== undefined)) {
       return connection;
     }
-    connection.prepare(
-      `set names '${config['charset']}'${this.getCollation(config)}`).execute();
+    const stmt = await connection.prepare(
+      `set names '${config['charset']}'${this.getCollation(config)}`);
+    await stmt.execute();
   }
 
   /*Get the collation for the configuration.*/
@@ -102,29 +103,27 @@ export class MysqlConnector extends Connector implements ConnectorInterface {
   }
 
   /*Set the modes for the connection.*/
-  protected setModes(connection: any, config: any) {
+  protected async setModes(connection: any, config: any) {
     if (config['modes'] !== undefined) {
-      this.setCustomModes(connection, config);
+      await this.setCustomModes(connection, config);
     } else if (config['strict'] !== undefined) {
       if (config['strict']) {
-        connection.prepare(this.strictMode(connection, config)).execute();
+        await (await connection.prepare(this.strictMode(connection, config))).execute();
       } else {
-        connection
-          .prepare(`set session sql_mode='NO_ENGINE_SUBSTITUTION'`)
-          .execute();
+        await (await connection.prepare(`set session sql_mode='NO_ENGINE_SUBSTITUTION'`)).execute();
       }
     }
   }
 
   /*Set the custom modes on the connection.*/
-  protected setCustomModes(connection: any, config: any) {
+  protected async setCustomModes(connection: any, config: any) {
     const modes = config['modes'].join(',');
-    connection.prepare(`set session sql_mode='${modes}'`).execute();
+    await (await connection.prepare(`set session sql_mode='${modes}'`)).execute();
   }
 
   /*Get the query to enable strict mode.*/
   protected strictMode(connection: any, config: any) {
-    const version = config['version'] || connection.getAttribute('PDO.ATTR_SERVER_VERSION');
+    const version = config['version'] || connection.getAttribute('ATTR_SERVER_VERSION');
     // todo fixme
     if (version >= '8.0.11') {
       return `set session sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'`;

@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isBlank, isString } from '@gradii/check-type';
+import { isArray, isBlank, isString } from '@gradii/check-type';
 import { Connection } from '../connection';
 import { PostgresQueryGrammar } from '../query-builder/grammar/postgres-query-grammar';
 import { PostgresProcessor } from '../query-builder/processor/postgres-processor';
@@ -58,5 +58,10 @@ export class PostgresConnection extends Connection {
   /*Get the Doctrine DBAL driver.*/
   protected getDoctrineDriver() {
     // return new PostgresDriver();
+  }
+
+  public async insertGetId(query: string, bindings: any[] = [], sequence: string) {
+    const data = await this.statement(query, bindings);
+    return isArray(data) && data.length === 1 ? data[0][sequence] : null;
   }
 }
