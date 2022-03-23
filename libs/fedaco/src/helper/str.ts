@@ -148,6 +148,13 @@ export function headerCase(input: string, options: Options = {}) {
   });
 }
 
+export function slugCase(input: string, options: Options = {}) {
+  return dotCase(input, {
+    delimiter: '-',
+    ...options
+  });
+}
+
 export function isLowerCase(input: string) {
   return input.toLowerCase() === input && input.toUpperCase() !== input;
 }

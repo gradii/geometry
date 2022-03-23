@@ -11,7 +11,7 @@ import {
 import { format, formatISO, getUnixTime, isValid, parse, startOfDay } from 'date-fns';
 import { equals, findLast, omit, pick, tap, uniq } from 'ramda';
 import type { FedacoDecorator } from '../../annotation/annotation.interface';
-import type { ColumnAnnotation} from '../../annotation/column';
+import type { ColumnAnnotation } from '../../annotation/column';
 import { FedacoColumn } from '../../annotation/column';
 import { ArrayColumn } from '../../annotation/column/array.column';
 import { BinaryColumn } from '../../annotation/column/binary.column';
@@ -361,7 +361,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     /*The changed model attributes.*/
     _changes: Record<string, any> = {};
     /*The attributes that should be cast.*/
-    _casts: { [key: string]: string } = {};
+    _casts: { [key: string]: string } = null;
     /*The attributes that have been cast using custom classes.*/
     _classCastCache: any[] = [];
 
@@ -652,6 +652,9 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     /*Merge new casts with existing casts on the model.*/
     public mergeCasts(casts: any): this {
       // tslint:disable-next-line:ban
+      if (isBlank(this._casts)) {
+        this.getCasts();
+      }
       Object.assign(this._casts, casts);
       return this;
     }
@@ -1014,7 +1017,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
 
     /*Get the casts array.*/
     public getCasts(this: Model & this): Record<string, any> {
-      if (isObjectEmpty(this._casts)) {
+      if (isBlank(this._casts)) {
         const typeOfClazz = this.constructor as typeof Model;
         const metas       = reflector.propMetadata(typeOfClazz);
         const casts: any  = {};
@@ -1320,16 +1323,16 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
         return false;
       } else if (this.isDateAttribute(key)) {
         return this.fromDateTime(attribute) === this.fromDateTime(original);
-      } else if (this.hasCast(key, ['object', 'collection'])) {
+      } else if (this.hasCast(key, ['object', 'collection', 'json', 'array'])) {
         return equals(this.castAttribute(key, attribute), this.castAttribute(key, original));
       } else if (this.hasCast(key, ['real', 'float', 'double'])) {
-        if (attribute === null && original !== null || attribute !== null && original === null) {
+        if (attribute == null && original != null || attribute != null && original == null) {
           return false;
         }
         return Math.abs(this.castAttribute(key, attribute) - this.castAttribute(key,
           original)) < EPSILON * 4;
       } else if (this.hasCast(key, PrimitiveCastTypes)) {
-        return this.castAttribute(key, attribute) === this.castAttribute(key, original);
+        return equals(this.castAttribute(key, attribute), this.castAttribute(key, original));
       }
       return isNumber(attribute) &&
         isNumber(original) && attribute === original;

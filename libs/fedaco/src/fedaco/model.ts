@@ -7,6 +7,8 @@
 import { reflector } from '@gradii/annotation';
 import { isAnyEmpty, isArray, isBlank, isObjectEmpty, isString } from '@gradii/check-type';
 import { difference, findLast, tap, uniq } from 'ramda';
+import { FedacoColumn } from '../annotation/column';
+import { PrimaryColumn, PrimaryColumnAnnotation } from '../annotation/column/primary.column';
 import type { TableAnnotation } from '../annotation/table/table';
 import { Table } from '../annotation/table/table';
 import type { Connection } from '../connection';
@@ -17,19 +19,19 @@ import type { ConnectionResolverInterface } from '../interface/connection-resolv
 import type { QueryBuilder } from '../query-builder/query-builder';
 import { BaseModel } from './base-model';
 import { FedacoBuilder } from './fedaco-builder';
-import type { GuardsAttributes} from './mixins/guards-attributes';
+import type { GuardsAttributes } from './mixins/guards-attributes';
 import { mixinGuardsAttributes } from './mixins/guards-attributes';
-import type { HasAttributes} from './mixins/has-attributes';
+import type { HasAttributes } from './mixins/has-attributes';
 import { mixinHasAttributes } from './mixins/has-attributes';
-import type { HasEvents} from './mixins/has-events';
+import type { HasEvents } from './mixins/has-events';
 import { mixinHasEvents } from './mixins/has-events';
-import type { HasGlobalScopes} from './mixins/has-global-scopes';
+import type { HasGlobalScopes } from './mixins/has-global-scopes';
 import { mixinHasGlobalScopes } from './mixins/has-global-scopes';
-import type { HasRelationships} from './mixins/has-relationships';
+import type { HasRelationships } from './mixins/has-relationships';
 import { mixinHasRelationships } from './mixins/has-relationships';
-import type { HasTimestamps} from './mixins/has-timestamps';
+import type { HasTimestamps } from './mixins/has-timestamps';
 import { mixinHasTimestamps } from './mixins/has-timestamps';
-import type { HidesAttributes} from './mixins/hides-attributes';
+import type { HidesAttributes } from './mixins/hides-attributes';
 import { mixinHidesAttributes } from './mixins/hides-attributes';
 import { loadAggregate } from './model-helper';
 // import { BelongsToMany } from './relations/belongs-to-many';
@@ -107,7 +109,8 @@ export declare namespace Model {
 
   export const snakeAttributes: boolean;
 
-  export function addGlobalScope(scope: string, implementation: Scope | ((q: QueryBuilder) => void)): void;
+  export function addGlobalScope(scope: string,
+                                 implementation: Scope | ((q: QueryBuilder) => void)): void;
 
   export function addGlobalScope(scope: string, implementation: Scope | Function): void;
 }
@@ -137,7 +140,7 @@ export class Model extends mixinHasAttributes(
   /*The table alias for table*/
   _tableAlias: string = undefined;
   /*The primary key for the model.*/
-  _primaryKey = 'id';
+  _primaryKey: string;
 
   _keyType: any = 'int';
 
@@ -319,8 +322,9 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Eager load relationship column aggregation on the polymorphic relation of a model.*/
-  public async loadMorphAggregate(relation: string, relations: Record<string, string[] | string>, column: string,
-                            func?: string) {
+  public async loadMorphAggregate(relation: string, relations: Record<string, string[] | string>,
+                                  column: string,
+                                  func?: string) {
     const relationValue = await this[relation];
     if (!relationValue) {
       return this;
@@ -337,22 +341,26 @@ export class Model extends mixinHasAttributes(
   }
 
   /*Eager load relationship max column values on the polymorphic relation of a model.*/
-  public loadMorphMax(relation: string, relations: Record<string, string[] | string>, column: string) {
+  public loadMorphMax(relation: string, relations: Record<string, string[] | string>,
+                      column: string) {
     return this.loadMorphAggregate(relation, relations, column, 'max');
   }
 
   /*Eager load relationship min column values on the polymorphic relation of a model.*/
-  public loadMorphMin(relation: string, relations: Record<string, string[] | string>, column: string) {
+  public loadMorphMin(relation: string, relations: Record<string, string[] | string>,
+                      column: string) {
     return this.loadMorphAggregate(relation, relations, column, 'min');
   }
 
   /*Eager load relationship column summations on the polymorphic relation of a model.*/
-  public loadMorphSum(relation: string, relations: Record<string, string[] | string>, column: string) {
+  public loadMorphSum(relation: string, relations: Record<string, string[] | string>,
+                      column: string) {
     return this.loadMorphAggregate(relation, relations, column, 'sum');
   }
 
   /*Eager load relationship average column values on the polymorphic relation of a model.*/
-  public loadMorphAvg(relation: string, relations: Record<string, string[] | string>, column: string) {
+  public loadMorphAvg(relation: string, relations: Record<string, string[] | string>,
+                      column: string) {
     return this.loadMorphAggregate(relation, relations, column, 'avg');
   }
 
@@ -820,6 +828,21 @@ export class Model extends mixinHasAttributes(
 
   /*Get the primary key for the model.*/
   public getKeyName() {
+    if (this._primaryKey === undefined) {
+      const typeOfClazz = this.constructor as typeof Model;
+      const metas       = reflector.propMetadata(typeOfClazz);
+      for (const [key, meta] of Object.entries(metas)) {
+        const columnMeta: PrimaryColumnAnnotation = findLast(it => {
+          return PrimaryColumn.isTypeOf(it);
+        }, meta);
+        if (columnMeta) {
+          this._primaryKey = columnMeta.field || key;
+          this._keyType    = columnMeta.keyType;
+          break;
+        }
+      }
+      this._primaryKey = null;
+    }
     return this._primaryKey;
   }
 
