@@ -650,7 +650,7 @@ export function mixinHasAttributes<T extends Constructor<{}>>(base: T): HasAttri
     // }
 
     /*Merge new casts with existing casts on the model.*/
-    public mergeCasts(casts: any): this {
+    public mergeCasts(this: Model & this, casts: any): this {
       // tslint:disable-next-line:ban
       if (isBlank(this._casts)) {
         this.getCasts();
