@@ -12,7 +12,7 @@ import type { SchemaGrammar } from '../schema/grammar/schema-grammar';
 
 // import { Type } from './types/type';
 
-export class Column {
+export class DbalColumn {
   /**/
   protected _name: any;
   protected _type: any;

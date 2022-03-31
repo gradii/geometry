@@ -5,7 +5,7 @@
  */
 import { intersection, tap } from 'ramda';
 import type { Connection } from '../connection';
-import { Table } from '../dbal/table';
+import { DbalTable } from '../dbal/dbal-table';
 import { wrap } from '../helper/arr';
 import { Blueprint } from './blueprint';
 import type { SchemaGrammar } from './grammar/schema-grammar';
@@ -501,14 +501,14 @@ export class SchemaBuilder {
     return tables;
   }
 
-  public async listTableDetails(tableName: string): Promise<Table> {
+  public async listTableDetails(tableName: string): Promise<DbalTable> {
     const columns   = await this.listTableColumns(tableName);
     let foreignKeys = [];
     if (this.grammar.supportsForeignKeyConstraints()) {
       foreignKeys = await this.listTableForeignKeys(tableName);
     }
     const indexes = await this.listTableIndexes(tableName);
-    return new Table(tableName, columns, indexes, foreignKeys);
+    return new DbalTable(tableName, columns, indexes, foreignKeys);
   }
 
   /*Lists the foreign keys for the given table.*/

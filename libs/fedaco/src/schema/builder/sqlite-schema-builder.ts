@@ -5,7 +5,7 @@
  */
 
 import * as fs from 'fs';
-import { Column } from '../../dbal/column';
+import { DbalColumn } from '../../dbal/column';
 import { SchemaBuilder } from '../schema-builder';
 
 export class SqliteSchemaBuilder extends SchemaBuilder {
@@ -103,7 +103,7 @@ export class SqliteSchemaBuilder extends SchemaBuilder {
       'scale'        : scale,
       'autoincrement': false
     };
-    return new Column(tableColumn['name'], type, options);
+    return new DbalColumn(tableColumn['name'], type, options);
   }
 
   // @ts-ignore

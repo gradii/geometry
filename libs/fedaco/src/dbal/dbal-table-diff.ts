@@ -3,9 +3,9 @@
  *
  * Use of this source code is governed by an MIT-style license
  */
-import type { Table } from './table';
+import type { DbalTable } from './dbal-table';
 
-export class TableDiff {
+export class DbalTableDiff {
 
   constructor(
     public tableName: string,
@@ -15,7 +15,7 @@ export class TableDiff {
     public addedIndexes ?: any[],
     public changedIndexes ?: any[],
     public removedIndexes ?: any[],
-    public fromTable?: Table
+    public fromTable?: DbalTable
   ) {
 
   }

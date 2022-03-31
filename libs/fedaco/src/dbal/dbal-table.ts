@@ -5,7 +5,7 @@
  */
 
 /*Object Representation of a table.*/
-export class Table {
+export class DbalTable {
   // /**/
   // protected _columns: Column[] = [];
   // /**/

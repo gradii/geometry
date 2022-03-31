@@ -8,7 +8,7 @@ import { isBlank, isBoolean } from '@gradii/check-type';
 import { tap } from 'ramda';
 import { BaseGrammar } from '../../base-grammar';
 import type { Connection } from '../../connection';
-import { TableDiff } from '../../dbal/table-diff';
+import { DbalTableDiff } from '../../dbal/table-diff';
 import { upperCaseFirst } from '../../helper/str';
 import { RawExpression } from '../../query/ast/expression/raw-expression';
 import { Blueprint } from '../blueprint';
@@ -228,7 +228,7 @@ export class SchemaGrammar extends BaseGrammar {
     const fromTable = await schema.listTableDetails(table);
     return tap(tableDiff => {
       tableDiff.fromTable = fromTable;
-    }, new TableDiff(table));
+    }, new DbalTableDiff(table));
   }
 
 
