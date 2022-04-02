@@ -1052,7 +1052,7 @@ export class DragRef<T = any> {
         //   element.style.filter  = '';
         //   element.style.opacity = '';
         // }),
-        take(5),
+        take(2),
         finalize(() => {
           element.style.filter       = null;
           element.style.opacity      = null;
