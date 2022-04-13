@@ -47,10 +47,13 @@
     "form-builder": {
       "tags": []
     },
-    "lofun": {
+    "http": {
       "tags": []
     },
-    "http": {
+    "iterator": {
+      "tags": []
+    },
+    "lofun": {
       "tags": []
     },
     "runtime-drag": {

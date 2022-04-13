@@ -14,5 +14,6 @@ module.exports = {
     "<rootDir>/apps/runtime-drag",
     "<rootDir>/libs/lofn",
     "<rootDir>/libs/http",
+    "<rootDir>/libs/iterator",
   ],
 };

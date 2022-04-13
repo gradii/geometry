@@ -335,31 +335,6 @@
         }
       }
     },
-    "lofun": {
-      "root": "libs/lofun",
-      "sourceRoot": "libs/lofun/src",
-      "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/lofun/tsconfig.lib.json",
-              "libs/lofun/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/lofun/**/*"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/lofun"],
-          "options": {
-            "jestConfig": "libs/lofun/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "http": {
       "root": "libs/http",
       "sourceRoot": "libs/http/src",
@@ -380,6 +355,56 @@
           "outputs": ["coverage/libs/http"],
           "options": {
             "jestConfig": "libs/http/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "iterator": {
+      "projectType": "library",
+      "root": "libs/iterator",
+      "sourceRoot": "libs/iterator/src",
+      "prefix": "applications",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/iterator"],
+          "options": {
+            "jestConfig": "libs/iterator/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/iterator/src/**/*.ts",
+              "libs/iterator/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "lofun": {
+      "root": "libs/lofun",
+      "sourceRoot": "libs/lofun/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/lofun/tsconfig.lib.json",
+              "libs/lofun/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/lofun/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/lofun"],
+          "options": {
+            "jestConfig": "libs/lofun/jest.config.js",
             "passWithNoTests": true
           }
         }
