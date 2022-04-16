@@ -211,43 +211,43 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
 
     if (currentMainAxisLine != newMainAxisLine) {
 
-       let mainSiblingOffsetX    = 0;
-       let newMainSiblingOffsetX = 0;
-       let mainSiblingOffsetY    = 0;
-       let newMainSiblingOffsetY = 0;
-       if (isHorizontal) {
-         mainSiblingOffsetX    = -currentPosition.width + -gap;
-         newMainSiblingOffsetX = currentPosition.width + gap;
-       } else {
-         mainSiblingOffsetY    = -currentPosition.height + -gap;
-         newMainSiblingOffsetY = currentPosition.height + gap;
-       }
-
-       // change the main axis line
-       siblings[currentIndex].mainAxisLine = newMainAxisLine;
-
-       // How many pixels the item's placeholder should be offset.
-       const [offsetX, offsetY] = this._getItemOffsetPx(currentPosition, newPosition, 1);
-
-       for (let i = 0; i < siblings.length; i++) {
-         const offsetItem    = siblings[i];
-         const isDraggedItem = siblings[i].drag === item;
-
-         if (isDraggedItem) {
-           this._translateItem(offsetItem, true, offsetX, offsetY);
-         } else {
-
-           if (siblings[i].mainAxisLine == currentMainAxisLine &&
-             currentIndex < i) {
-             this._translateItem(offsetItem, false, mainSiblingOffsetX, mainSiblingOffsetY);
-           }
-           if (siblings[i].mainAxisLine == newMainAxisLine &&
-             newIndex <= i
-           ) {
-             this._translateItem(offsetItem, false, newMainSiblingOffsetX, newMainSiblingOffsetY);
-           }
-         }
+      let mainSiblingOffsetX    = 0;
+      let newMainSiblingOffsetX = 0;
+      let mainSiblingOffsetY    = 0;
+      let newMainSiblingOffsetY = 0;
+      if (isHorizontal) {
+        mainSiblingOffsetX    = -currentPosition.width + -gap;
+        newMainSiblingOffsetX = currentPosition.width + gap;
+      } else {
+        mainSiblingOffsetY    = -currentPosition.height + -gap;
+        newMainSiblingOffsetY = currentPosition.height + gap;
       }
+
+      // change the main axis line
+      siblings[currentIndex].mainAxisLine = newMainAxisLine;
+
+      // How many pixels the item's placeholder should be offset.
+      const [offsetX, offsetY] = this._getItemOffsetPx(currentPosition, newPosition, 1);
+
+      // for (let i = 0; i < siblings.length; i++) {
+      //   const offsetItem    = siblings[i];
+      //   const isDraggedItem = siblings[i].drag === item;
+      //
+      //   if (isDraggedItem) {
+      //     this._translateItem(offsetItem, true, offsetX, offsetY);
+      //   } else {
+      //
+      //     if (siblings[i].mainAxisLine == currentMainAxisLine &&
+      //       currentIndex < i) {
+      //       this._translateItem(offsetItem, false, mainSiblingOffsetX, mainSiblingOffsetY);
+      //     }
+      //     if (siblings[i].mainAxisLine == newMainAxisLine &&
+      //       newIndex <= i
+      //     ) {
+      //       this._translateItem(offsetItem, false, newMainSiblingOffsetX, newMainSiblingOffsetY);
+      //     }
+      //   }
+      // }
 
 
       //sort
@@ -290,14 +290,14 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
       let x_list: CachedItemPosition[] = [];
       for (let i = 0; i < my_map.size; i++) {
         let si: CachedItemPosition[] = my_map.get(i);
-        x_list = x_list.concat(si);
+        x_list                       = x_list.concat(si);
       }
 
 
       console.log(my_map);
       console.log(x_list);
-      let nub:number = 0;
-      let temp_list: CachedItemPosition[] = [];
+      let nub: number                                = 0;
+      let temp_list: CachedItemPosition[]            = [];
       let new_map: Map<number, CachedItemPosition[]> = new Map<number, CachedItemPosition[]>();
       for (let i = 0; i < x_list.length; i++) {
         let sib = x_list[i];
@@ -306,7 +306,7 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
           let sib2 = temp_list[j];
           len += Math.round(sib2.clientRect.width);
         }
-        if (len+Math.round(sib.clientRect.width) > this.dropContainerRef._clientRect.width-28) {
+        if (len + Math.round(sib.clientRect.width) > this.dropContainerRef._clientRect.width - 28) {
           temp_list = [];
           nub++;
         }
@@ -314,40 +314,41 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
         new_map.set(nub, temp_list);
       }
       console.log(new_map);
+
       new_map.forEach((value, key) => {
         let offX = 0;
         let offY = 0;
 
-          for (let i = 0; i < value.length; i++) {
-              const sib = value[i];
-              //offY = 121.5 - sib.clientRect.top;
-              my_map.forEach((value2, key2) => {
+        for (let i = 0; i < value.length; i++) {
+          const sib = value[i];
+          //offY = 121.5 - sib.clientRect.top;
+          my_map.forEach((value2, key2) => {
 
-                if (value2.indexOf(sib) != -1) {
+            if (value2.indexOf(sib) != -1) {
 
-                  offY = -(key2 - key)*sib.clientRect.height;
-                  if(key > 0 ){
-                    if((key2 - key) > 0) {
-                      offY -=gap;
-                    }
-                    if((key2 - key) < 0) {
-                      offY +=gap;
-                    }
-
-                  }
-
-                  let len = 0;
-                  for(let j = 0; j < i; j++){
-                    let sd = value[j];
-                    len += sd.clientRect.width+gap;
-                  }
-                  offX = this.dropContainerRef._clientRect?.left+len - sib.clientRect.left;
-
+              offY = -(key2 - key) * sib.clientRect.height;
+              if (key > 0) {
+                if ((key2 - key) > 0) {
+                  offY -= gap;
                 }
-              });
+                if ((key2 - key) < 0) {
+                  offY += gap;
+                }
 
-              this._translateItem(sib, false, offX, offY);
-          }
+              }
+
+              let len = 0;
+              for (let j = 0; j < i; j++) {
+                let sd = value[j];
+                len += sd.clientRect.width + gap;
+              }
+              offX = this.dropContainerRef._clientRect?.left + len - sib.clientRect.left;
+
+            }
+          });
+
+          // this._translateItem(sib, false, offX, offY);
+        }
       });
       // if(list_next.length > 0){
       //   let _my_OffsetX = 0;
@@ -358,49 +359,106 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
       //   let _my_OffsetY = list_next[0].clientRect.height + gap;
       //   this._translateItem(list_next[0], false, -_my_OffsetX, _my_OffsetY);
       // }
-       //Shuffle the array in place. if to < from newIndex can be 0, but it's ok
-       moveItemInArray(siblings, currentIndex,
-         currentIndex < newIndex ? newIndex - 1 : newIndex);
-     //  let mainSiblingOffsetX    = 0;
-     //  let newMainSiblingOffsetX = 0;
-     //  let mainSiblingOffsetY    = 0;
-     //  let newMainSiblingOffsetY = 0;
-     //  if (isHorizontal) {
-     //    mainSiblingOffsetX    = -currentPosition.width + -gap;
-     //    newMainSiblingOffsetX = currentPosition.width + gap;
-     //  } else {
-     //    mainSiblingOffsetY    = -currentPosition.height + -gap;
-     //    newMainSiblingOffsetY = currentPosition.height + gap;
-     //  }
-     //
-     //  // change the main axis line
-     //  siblings[currentIndex].mainAxisLine = newMainAxisLine;
-     //
-     //  // How many pixels the item's placeholder should be offset.
-     //  const [offsetX, offsetY] = this._getItemOffsetPx(currentPosition, newPosition, 1);
-     //
-     //  for (let i = 0; i < siblings.length; i++) {
-     //    const offsetItem    = siblings[i];
-     //    const isDraggedItem = siblings[i].drag === item;
-     //
-     //    if (isDraggedItem) {
-     //      this._translateItem(offsetItem, true, offsetX, offsetY);
-     //    } else {
-     //      if (siblings[i].mainAxisLine == currentMainAxisLine &&
-     //        currentIndex < i) {
-     //        this._translateItem(offsetItem, false, mainSiblingOffsetX, mainSiblingOffsetY);
-     //      }
-     //      if (siblings[i].mainAxisLine == newMainAxisLine &&
-     //        newIndex <= i
-     //      ) {
-     //        this._translateItem(offsetItem, false, newMainSiblingOffsetX, newMainSiblingOffsetY);
-     //      }
-     //    }
-     // }
-     //
-     //  //Shuffle the array in place. if to < from newIndex can be 0, but it's ok
-     //  moveItemInArray(siblings, currentIndex,
-     //    currentIndex < newIndex ? newIndex - 1 : newIndex);
+      //Shuffle the array in place. if to < from newIndex can be 0, but it's ok
+      moveItemInArray(siblings, currentIndex,
+        currentIndex < newIndex ? newIndex - 1 : newIndex);
+
+      let mainAxisLine                = 0;
+      const mainAxisContainerStartGap = 0;
+      const mainAxisContainerEndGap   = 0;
+      let mainAxisIndex               = 0;
+      let mainAxisCursor              = this.dropContainerRef._clientRect.left + mainAxisContainerStartGap;
+      let crossAxisCursor             = this.dropContainerRef._clientRect.top;
+      const maxMainAxisCursor         = this._orientation === 'horizontal' ?
+        this.dropContainerRef._clientRect.left + this.dropContainerRef._clientRect.width - mainAxisContainerEndGap :
+        this.dropContainerRef._clientRect.top + this.dropContainerRef._clientRect.height - mainAxisContainerEndGap;
+
+      const mainAxisGap       = gap;
+      const crossAxisGap      = gap;
+      let crossAxisItemHeight = 0;
+      for (let i = 0; i < siblings.length; i++) {
+        const sibling = siblings[i];
+
+        const itemGap = mainAxisIndex > 0 ? mainAxisGap : mainAxisContainerStartGap;
+
+        mainAxisIndex++;
+
+        crossAxisItemHeight = Math.max(crossAxisItemHeight, sibling.clientRect.height);
+
+        // overflow wrap container
+        if (mainAxisCursor > maxMainAxisCursor) {
+          mainAxisLine++;
+          mainAxisIndex   = 0;
+          mainAxisCursor  = this.dropContainerRef._clientRect.left + mainAxisContainerStartGap;
+          crossAxisCursor = this.dropContainerRef._clientRect.top + crossAxisItemHeight + (mainAxisLine > 0 ? crossAxisGap : 0);
+        }
+
+        let offsetX = 0;
+        let offsetY = 0;
+        if (sibling.mainAxisLine === mainAxisLine) {
+          if (this._orientation === 'horizontal') {
+            offsetX = mainAxisCursor;
+          } else {
+            offsetY = mainAxisCursor;
+          }
+        } else {
+          if (this._orientation === 'horizontal') {
+            offsetX = mainAxisCursor - sibling.clientRect.left;
+            offsetY = crossAxisCursor - sibling.clientRect.top;
+          } else {
+            offsetY = mainAxisCursor - sibling.clientRect.top;
+            offsetX = crossAxisCursor - sibling.clientRect.left;
+          }
+        }
+
+
+        this._translateItem(sibling, false, offsetX, offsetY);
+
+        mainAxisCursor += this._orientation === 'horizontal' ?
+          sibling.clientRect.width + itemGap :
+          sibling.clientRect.height + itemGap;
+      }
+
+      //  let mainSiblingOffsetX    = 0;
+      //  let newMainSiblingOffsetX = 0;
+      //  let mainSiblingOffsetY    = 0;
+      //  let newMainSiblingOffsetY = 0;
+      //  if (isHorizontal) {
+      //    mainSiblingOffsetX    = -currentPosition.width + -gap;
+      //    newMainSiblingOffsetX = currentPosition.width + gap;
+      //  } else {
+      //    mainSiblingOffsetY    = -currentPosition.height + -gap;
+      //    newMainSiblingOffsetY = currentPosition.height + gap;
+      //  }
+      //
+      //  // change the main axis line
+      //  siblings[currentIndex].mainAxisLine = newMainAxisLine;
+      //
+      //  // How many pixels the item's placeholder should be offset.
+      //  const [offsetX, offsetY] = this._getItemOffsetPx(currentPosition, newPosition, 1);
+      //
+      //  for (let i = 0; i < siblings.length; i++) {
+      //    const offsetItem    = siblings[i];
+      //    const isDraggedItem = siblings[i].drag === item;
+      //
+      //    if (isDraggedItem) {
+      //      this._translateItem(offsetItem, true, offsetX, offsetY);
+      //    } else {
+      //      if (siblings[i].mainAxisLine == currentMainAxisLine &&
+      //        currentIndex < i) {
+      //        this._translateItem(offsetItem, false, mainSiblingOffsetX, mainSiblingOffsetY);
+      //      }
+      //      if (siblings[i].mainAxisLine == newMainAxisLine &&
+      //        newIndex <= i
+      //      ) {
+      //        this._translateItem(offsetItem, false, newMainSiblingOffsetX, newMainSiblingOffsetY);
+      //      }
+      //    }
+      // }
+      //
+      //  //Shuffle the array in place. if to < from newIndex can be 0, but it's ok
+      //  moveItemInArray(siblings, currentIndex,
+      //    currentIndex < newIndex ? newIndex - 1 : newIndex);
     } else {
 
       //How many pixels the item's placeholder should be offset.
