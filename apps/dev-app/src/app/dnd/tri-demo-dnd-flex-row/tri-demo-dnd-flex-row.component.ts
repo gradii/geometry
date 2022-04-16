@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { AfterViewInit, Component, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import {
   moveItemInArray, transferArrayItem, TRI_DROP_CONTAINER, TriDragDrop, TriDropListContainer
 } from '@gradii/triangle/dnd';
@@ -56,7 +56,9 @@ import { asapScheduler } from 'rxjs';
                     (triDropFlexContainerDropped)="drop($event)"
                     [triDropFlexContainerConnectedTo]="dls"
                   >
-                    <div class="example-box" *ngFor="let innerItem of item" triDrag>
+                    <div class="example-box" *ngFor="let innerItem of item; index as i;"
+                         [style.width.px]="getObjWidthMap(innerItem)"
+                         triDrag>
                       {{innerItem}}
                     </div>
                   </div>
@@ -72,7 +74,7 @@ import { asapScheduler } from 'rxjs';
   `,
   styleUrls: ['./tri-demo-dnd-flex-row.component.scss']
 })
-export class TriDemoDndFlexRowComponent implements AfterViewInit {
+export class TriDemoDndFlexRowComponent implements OnInit, AfterViewInit {
   boxItems = [
     'box1',
     'box2',
@@ -94,7 +96,6 @@ export class TriDemoDndFlexRowComponent implements AfterViewInit {
       'Have Meeting'
     ],
     [
-
       'Preare for work',
       'Drive to office',
       'Üark car'
@@ -104,10 +105,14 @@ export class TriDemoDndFlexRowComponent implements AfterViewInit {
     'Fall asleep'
   ];
 
+  objWidthMap = {};
+
   @ViewChildren(TRI_DROP_CONTAINER)
   private dlq: QueryList<TriDropListContainer>;
 
   public dls: TriDropListContainer[] = [];
+
+  widthList = [];
 
   drop(event: TriDragDrop<any>) {
     if (event.previousContainer === event.container) {
@@ -124,6 +129,17 @@ export class TriDemoDndFlexRowComponent implements AfterViewInit {
     return Array.isArray(item);
   }
 
+  getObjWidthMap(text: string) {
+    if (!this.objWidthMap[text]) {
+      this.objWidthMap[text] = this.calculateWidth();
+    }
+    return this.objWidthMap[text];
+  }
+
+  calculateWidth() {
+    return Math.max(Math.random() * 400, 100);
+  }
+
   onDragEntered(event) {
     console.log('entered', event);
   }
@@ -134,6 +150,12 @@ export class TriDemoDndFlexRowComponent implements AfterViewInit {
 
   onDragDropped(event) {
     console.log('dropped', event);
+  }
+
+  ngOnInit(): void {
+    // for (let i = 0; i < 30; i++) {
+    //   this.widthList.push(this.calculateWidth());
+    // }
   }
 
   ngAfterViewInit() {
@@ -148,4 +170,6 @@ export class TriDemoDndFlexRowComponent implements AfterViewInit {
       this.dls = ldls;
     });
   }
+
+
 }
