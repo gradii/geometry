@@ -131,7 +131,7 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
         currentIndex < newIndex ? newIndex - 1 : newIndex);
 
       // give a little bit offset
-      const containerGap      = {mainStart: .5, mainEnd: 1, crossStart: 0.5, crossEnd: 1};
+      const containerGap      = {mainStart: 0, mainEnd: 0, crossStart: 0, crossEnd: 0};
       let mainAxisLine        = 0;
       let mainAxisCursor      = containerGap.mainStart;
       let crossAxisCursor     = 0;
