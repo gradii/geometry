@@ -426,8 +426,13 @@ export class DndContainerRef<T = any> {
 
     const {rowGap, columnGap} = getComputedStyle(coerceElement(this.element));
 
-    (this.positionStrategy as FlexRowSortPositionStrategy).rowGap    = +rowGap.replace('px', '');
-    (this.positionStrategy as FlexRowSortPositionStrategy).columnGap = +columnGap.replace('px', '');
+    if (rowGap.endsWith('px')) {
+      (this.positionStrategy as FlexRowSortPositionStrategy).rowGap = +rowGap.replace('px', '');
+    }
+    if (columnGap.endsWith('px')) {
+      (this.positionStrategy as FlexRowSortPositionStrategy).columnGap = +columnGap.replace('px',
+        '');
+    }
 
     this._cacheItems();
     this._viewportScrollSubscription.unsubscribe();
