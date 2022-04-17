@@ -14,6 +14,7 @@ import { TriDropContainer } from '../directives/drop-container';
 import type { DragDropRegistry } from '../drag-drop-registry';
 import type { DragCSSStyleDeclaration } from '../drag-styling';
 import { ParentPositionTracker } from '../parent-position-tracker';
+import { FlexRowSortPositionStrategy } from '../position-strategy/flex-row-sort-position-strategy';
 import type { PositionStrategy } from '../position-strategy/position-strategy';
 import { ScrollingStrategy } from '../scrolling-strategy/scrolling-strategy';
 import { getTransformTransitionDurationInMs } from '../transition-duration';
@@ -422,6 +423,12 @@ export class DndContainerRef<T = any> {
     // that we can't increment/decrement the scroll position.
     this._initialScrollSnap = styles.msScrollSnapType || styles.scrollSnapType || '';
     styles.scrollSnapType   = styles.msScrollSnapType = 'none';
+
+    const {rowGap, columnGap} = getComputedStyle(coerceElement(this.element));
+
+    (this.positionStrategy as FlexRowSortPositionStrategy).rowGap    = +rowGap.replace('px', '');
+    (this.positionStrategy as FlexRowSortPositionStrategy).columnGap = +columnGap.replace('px', '');
+
     this._cacheItems();
     this._viewportScrollSubscription.unsubscribe();
     this._listenToScrollEvents();
@@ -454,12 +461,13 @@ export class DndContainerRef<T = any> {
       const rootElement = item.getRootElement();
 
       if (rootElement) {
-        const duration              = getTransformTransitionDurationInMs(rootElement);
+        const duration = getTransformTransitionDurationInMs(rootElement);
         item._animateDone(rootElement, duration, 'transform').then(() => {
           // @ts-ignore
           TriDropContainer._dropContainers.forEach(container => {
             if (rootElement.contains(container.element.nativeElement)) {
-              const clientRect = getMutableClientRect(container.element.nativeElement);
+              const clientRect                               = getMutableClientRect(
+                container.element.nativeElement);
               container._dropContainerRef._clientRect.top    = clientRect.top;
               container._dropContainerRef._clientRect.bottom = clientRect.bottom;
               container._dropContainerRef._clientRect.left   = clientRect.left;

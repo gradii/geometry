@@ -19,6 +19,10 @@ import { moveItemInArray } from '../utils/drag-utils';
 import type { PositionStrategy } from './position-strategy';
 
 export class FlexRowSortPositionStrategy implements PositionStrategy {
+
+  rowGap: number    = 0;
+  columnGap: number = 0;
+
   /** Cache of the dimensions of all the items inside the container. */
   _itemPositions: CachedItemPosition[] = [];
 
@@ -127,7 +131,7 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
         currentIndex < newIndex ? newIndex - 1 : newIndex);
 
       // give a little bit offset
-      const containerGap      = {mainStart: .5, mainEnd: 1, crossStart: 0, crossEnd: 1};
+      const containerGap      = {mainStart: .5, mainEnd: 1, crossStart: 0.5, crossEnd: 1};
       let mainAxisLine        = 0;
       let mainAxisCursor      = containerGap.mainStart;
       let crossAxisCursor     = 0;
@@ -137,14 +141,12 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
 
 
       const {
-              left  : containerLeft,
-              top   : containerTop,
-              width : containerWidth,
-              height: containerHeight
+              left: containerLeft,
+              top : containerTop,
             } = this.dropContainerRef._clientRect;
 
-      const mainAxisGap       = gap;
-      const crossAxisGap      = gap;
+      const mainAxisGap       = gap > 0 ? gap : this.rowGap;
+      const crossAxisGap      = gap > 0 ? gap : this.columnGap;
       let crossAxisItemBottom = 0;
 
       let itemGap      = containerGap.mainStart;
@@ -198,8 +200,11 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
           itemGap + sibling.clientRect.width :
           itemGap + sibling.clientRect.height;
         crossAxisItemBottom  = this._orientation === 'horizontal' ?
-          Math.max(crossAxisItemBottom, sibling.clientRect.bottom) - containerTop :
-          Math.max(crossAxisItemBottom, sibling.clientRect.right) - containerLeft;
+          Math.max(crossAxisItemBottom,
+            sibling.clientRect.bottom - containerTop) :
+          Math.max(crossAxisItemBottom,
+            sibling.clientRect.right - containerLeft)
+        ;
       }
     } else {
 
