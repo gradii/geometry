@@ -20,8 +20,8 @@ import type { TriDropGridContainer } from '../directives/drop-grid-container';
 import { DragDrop } from '../drag-drop';
 import { TRI_DRAG_PARENT } from '../drag-parent';
 import {
-  TriDragResize, TriDragResizeContainer, TriDragResizeEnd, TriDragResizeStart
-} from './drag-resize.component';
+  TriDragResize, TriDragResizeContainerComponent, TriDragResizeEnd, TriDragResizeStart
+} from './drag-resize.container.component';
 
 @Component({
   selector : 'tri-drag-grid-item',
@@ -68,7 +68,8 @@ import {
     `
   ]
 })
-export class TriDragGridItemComponent extends TriDrag implements OnInit, OnChanges, OnDestroy {
+export class TriDragGridItemComponent extends TriDrag
+  implements OnInit, OnChanges, OnDestroy {
 
   private lastPositionX: number;
   private lastPositionY: number;
@@ -139,8 +140,8 @@ export class TriDragGridItemComponent extends TriDrag implements OnInit, OnChang
 
   _init = false;
 
-  @ViewChild(TriDragResizeContainer)
-  dragResizeContainer: TriDragResizeContainer;
+  @ViewChild(TriDragResizeContainerComponent)
+  dragResizeContainer: TriDragResizeContainerComponent;
 
   constructor(
     @Inject(TRI_DROP_CONTAINER)

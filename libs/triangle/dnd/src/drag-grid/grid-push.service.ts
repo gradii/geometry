@@ -4,210 +4,386 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import type { TriDropGridContainer } from '../directives/drop-grid-container';
-import type { DragRefInternal as DragRef } from '../drag-drop-ref/drag-ref';
-import type { DropGridContainerRef } from '../drag-drop-ref/drop-grid-container-ref';
-import type { TriDragGridItemComponent } from '../drag-grid/drag-grid-item.component';
-import { CompactType, Direction } from '../enum';
-
-export interface GridsterItem {
-  x: number;
-  y: number;
-  rows: number;
-  cols: number;
-  layerIndex?: number;
-  initCallback?: (item: GridsterItem, itemComponent: any) => void;
-  dragEnabled?: boolean;
-  resizeEnabled?: boolean;
-  compactEnabled?: boolean;
-  maxItemRows?: number;
-  minItemRows?: number;
-  maxItemCols?: number;
-  minItemCols?: number;
-  minItemArea?: number;
-  maxItemArea?: number;
-
-  // tslint:disable-next-line:no-any
-  [propName: string]: any;
-}
-
+import { GridItemComponentInterface } from './grid-item.interface';
+import { GridComponentInterface } from './grid.interface';
 
 export class GridPushService {
-  compactType: CompactType;
+  public fromSouth: string;
+  public fromNorth: string;
+  public fromEast: string;
+  public fromWest: string;
+  private pushedItems: GridItemComponentInterface[];
+  private pushedItemsTemp: GridItemComponentInterface[];
+  private pushedItemsTempPath: { x: number; y: number }[][];
+  private pushedItemsPath: { x: number; y: number }[][];
+  private gridsterItem: GridItemComponentInterface;
+  private gridster: GridComponentInterface;
+  private pushedItemsOrder: GridItemComponentInterface[];
+  private tryPattern: {
+    fromEast: ((
+      gridsterItemCollide: GridItemComponentInterface,
+      gridsterItem: GridItemComponentInterface
+    ) => boolean)[];
+    fromWest: ((
+      gridsterItemCollide: GridItemComponentInterface,
+      gridsterItem: GridItemComponentInterface
+    ) => boolean)[];
+    fromNorth: ((
+      gridsterItemCollide: GridItemComponentInterface,
+      gridsterItem: GridItemComponentInterface
+    ) => boolean)[];
+    fromSouth: ((
+      gridsterItemCollide: GridItemComponentInterface,
+      gridsterItem: GridItemComponentInterface
+    ) => boolean)[];
+  };
+  private iteration = 0;
 
-  constructor(private ref: Pick<DropGridContainerRef, 'data'>) {
+  constructor(gridsterItem: GridItemComponentInterface) {
+    this.pushedItems         = [];
+    this.pushedItemsTemp     = [];
+    this.pushedItemsTempPath = [];
+    this.pushedItemsPath     = [];
+    this.gridsterItem        = gridsterItem;
+    this.gridster            = gridsterItem.gridster;
+    this.tryPattern          = {
+      fromEast : [this.tryWest, this.trySouth, this.tryNorth, this.tryEast],
+      fromWest : [this.tryEast, this.trySouth, this.tryNorth, this.tryWest],
+      fromNorth: [this.trySouth, this.tryEast, this.tryWest, this.tryNorth],
+      fromSouth: [this.tryNorth, this.tryEast, this.tryWest, this.trySouth]
+    };
+    this.fromSouth           = 'fromSouth';
+    this.fromNorth           = 'fromNorth';
+    this.fromEast            = 'fromEast';
+    this.fromWest            = 'fromWest';
   }
 
   destroy(): void {
-    // @ts-ignore
-    delete this.ref;
+    this.gridster = this.gridsterItem = null!;
   }
 
-  checkCompact(compactType: CompactType): void {
-    this.compactType = compactType;
-    if (compactType !== CompactType.None) {
-      if (compactType === CompactType.CompactUp) {
-        this.checkCompactMovement('y', -1);
-      } else if (compactType === CompactType.CompactLeft) {
-        this.checkCompactMovement('x', -1);
-      } else if (compactType === CompactType.CompactUpAndLeft) {
-        this.checkCompactMovement('y', -1);
-        this.checkCompactMovement('x', -1);
-      } else if (compactType === CompactType.CompactLeftAndUp) {
-        this.checkCompactMovement('x', -1);
-        this.checkCompactMovement('y', -1);
-      } else if (compactType === CompactType.CompactRight) {
-        this.checkCompactMovement('x', 1);
-      } else if (compactType === CompactType.CompactUpAndRight) {
-        this.checkCompactMovement('y', -1);
-        this.checkCompactMovement('x', 1);
-      } else if (compactType === CompactType.CompactRightAndUp) {
-        this.checkCompactMovement('x', 1);
-        this.checkCompactMovement('y', -1);
-      } else if (compactType === CompactType.CompactDown) {
-        this.checkCompactMovement('y', 1);
-      } else if (compactType === CompactType.CompactDownAndLeft) {
-        this.checkCompactMovement('y', 1);
-        this.checkCompactMovement('x', -1);
-      } else if (compactType === CompactType.CompactDownAndRight) {
-        this.checkCompactMovement('y', 1);
-        this.checkCompactMovement('x', 1);
-      } else if (compactType === CompactType.CompactLeftAndDown) {
-        this.checkCompactMovement('x', -1);
-        this.checkCompactMovement('y', 1);
-      } else if (compactType === CompactType.CompactRightAndDown) {
-        this.checkCompactMovement('x', 1);
-        this.checkCompactMovement('y', 1);
+  pushItems(direction: string, disable?: boolean): boolean {
+    if (this.gridster.$options.pushItems && !disable) {
+      this.pushedItemsOrder = [];
+      this.iteration        = 0;
+      const pushed          = this.push(this.gridsterItem, direction);
+      if (!pushed) {
+        this.restoreTempItems();
+      }
+      this.pushedItemsOrder    = [];
+      this.pushedItemsTemp     = [];
+      this.pushedItemsTempPath = [];
+      return pushed;
+    } else {
+      return false;
+    }
+  }
+
+  restoreTempItems(): void {
+    let i = this.pushedItemsTemp.length - 1;
+    for (; i > -1; i--) {
+      this.removeFromTempPushed(this.pushedItemsTemp[i]);
+    }
+  }
+
+  restoreItems(): void {
+    let i           = 0;
+    const l: number = this.pushedItems.length;
+    let pushedItem: GridItemComponentInterface;
+    for (; i < l; i++) {
+      pushedItem         = this.pushedItems[i];
+      pushedItem.$item.x = pushedItem.item.x || 0;
+      pushedItem.$item.y = pushedItem.item.y || 0;
+      pushedItem.setSize();
+    }
+    this.pushedItems     = [];
+    this.pushedItemsPath = [];
+  }
+
+  setPushedItems(): void {
+    let i           = 0;
+    const l: number = this.pushedItems.length;
+    let pushedItem: GridItemComponentInterface;
+    for (; i < l; i++) {
+      pushedItem = this.pushedItems[i];
+      pushedItem.checkItemChanges(pushedItem.$item, pushedItem.item);
+    }
+    this.pushedItems     = [];
+    this.pushedItemsPath = [];
+  }
+
+  checkPushBack(): void {
+    let i: number = this.pushedItems.length - 1;
+    let change    = false;
+    for (; i > -1; i--) {
+      if (this.checkPushedItem(this.pushedItems[i], i)) {
+        change = true;
+      }
+    }
+    if (change) {
+      this.checkPushBack();
+    }
+  }
+
+  private push(
+    gridsterItem: GridItemComponentInterface,
+    direction: string
+  ): boolean {
+    if (this.iteration > 100) {
+      console.warn('max iteration reached');
+      return false;
+    }
+    if (this.gridster.checkGridCollision(gridsterItem.$item)) {
+      return false;
+    }
+    if (direction === '') {
+      return false;
+    }
+    const conflicts: GridItemComponentInterface[] =
+            this.gridster.findItemsWithItem(gridsterItem.$item);
+    const invert                                  = direction === this.fromNorth || direction === this.fromWest;
+    // sort the list of conflicts in order of [y,x]. Invert when the push is from north and west
+    // this is done so they don't conflict witch each other and revert positions, keeping the previous order
+    conflicts.sort((a, b) => {
+      if (invert) {
+        return b.$item.y - a.$item.y || b.$item.x - a.$item.x;
+      } else {
+        return a.$item.y - b.$item.y || a.$item.x - b.$item.x;
+      }
+    });
+    let i                                           = 0;
+    let itemCollision: GridItemComponentInterface;
+    let makePush                                    = true;
+    const pushedItems: GridItemComponentInterface[] = [];
+    for (; i < conflicts.length; i++) {
+      itemCollision = conflicts[i];
+      if (itemCollision === this.gridsterItem) {
+        continue;
+      }
+      if (!itemCollision.canBeDragged()) {
+        makePush = false;
+        break;
+      }
+      const p = this.pushedItemsTemp.indexOf(itemCollision);
+      if (p > -1 && this.pushedItemsTempPath[p].length > 10) {
+        // stop if item is pushed more than 10 times to break infinite loops
+        makePush = false;
+        break;
+      }
+      if (
+        this.tryPattern[direction][0].call(this, itemCollision, gridsterItem)
+      ) {
+        this.pushedItemsOrder.push(itemCollision);
+        pushedItems.push(itemCollision);
+      } else if (
+        this.tryPattern[direction][1].call(this, itemCollision, gridsterItem)
+      ) {
+        this.pushedItemsOrder.push(itemCollision);
+        pushedItems.push(itemCollision);
+      } else if (
+        this.tryPattern[direction][2].call(this, itemCollision, gridsterItem)
+      ) {
+        this.pushedItemsOrder.push(itemCollision);
+        pushedItems.push(itemCollision);
+      } else if (
+        this.tryPattern[direction][3].call(this, itemCollision, gridsterItem)
+      ) {
+        this.pushedItemsOrder.push(itemCollision);
+        pushedItems.push(itemCollision);
+      } else {
+        makePush = false;
+        break;
+      }
+    }
+    if (!makePush) {
+      i = this.pushedItemsOrder.lastIndexOf(pushedItems[0]);
+      if (i > -1) {
+        let j = this.pushedItemsOrder.length - 1;
+        for (; j >= i; j--) {
+          itemCollision = this.pushedItemsOrder[j];
+          this.pushedItemsOrder.pop();
+          this.removeFromTempPushed(itemCollision);
+          this.removeFromPushedItem(itemCollision);
+        }
+      }
+    }
+    this.iteration++;
+    return makePush;
+  }
+
+  private trySouth(
+    gridsterItemCollide: GridItemComponentInterface,
+    gridsterItem: GridItemComponentInterface
+  ): boolean {
+    if (!this.gridster.$options.pushDirections.south) {
+      return false;
+    }
+    this.addToTempPushed(gridsterItemCollide);
+    gridsterItemCollide.$item.y =
+      gridsterItem.$item.y + gridsterItem.$item.rows;
+    if (this.push(gridsterItemCollide, this.fromNorth)) {
+      gridsterItemCollide.setSize();
+      this.addToPushed(gridsterItemCollide);
+      return true;
+    } else {
+      this.removeFromTempPushed(gridsterItemCollide);
+    }
+    return false;
+  }
+
+  private tryNorth(
+    gridsterItemCollide: GridItemComponentInterface,
+    gridsterItem: GridItemComponentInterface
+  ): boolean {
+    if (!this.gridster.$options.pushDirections.north) {
+      return false;
+    }
+    this.addToTempPushed(gridsterItemCollide);
+    gridsterItemCollide.$item.y =
+      gridsterItem.$item.y - gridsterItemCollide.$item.rows;
+    if (this.push(gridsterItemCollide, this.fromSouth)) {
+      gridsterItemCollide.setSize();
+      this.addToPushed(gridsterItemCollide);
+      return true;
+    } else {
+      this.removeFromTempPushed(gridsterItemCollide);
+    }
+    return false;
+  }
+
+  private tryEast(
+    gridsterItemCollide: GridItemComponentInterface,
+    gridsterItem: GridItemComponentInterface
+  ): boolean {
+    if (!this.gridster.$options.pushDirections.east) {
+      return false;
+    }
+    this.addToTempPushed(gridsterItemCollide);
+    gridsterItemCollide.$item.x =
+      gridsterItem.$item.x + gridsterItem.$item.cols;
+    if (this.push(gridsterItemCollide, this.fromWest)) {
+      gridsterItemCollide.setSize();
+      this.addToPushed(gridsterItemCollide);
+      return true;
+    } else {
+      this.removeFromTempPushed(gridsterItemCollide);
+    }
+    return false;
+  }
+
+  private tryWest(
+    gridsterItemCollide: GridItemComponentInterface,
+    gridsterItem: GridItemComponentInterface
+  ): boolean {
+    if (!this.gridster.$options.pushDirections.west) {
+      return false;
+    }
+    this.addToTempPushed(gridsterItemCollide);
+    gridsterItemCollide.$item.x =
+      gridsterItem.$item.x - gridsterItemCollide.$item.cols;
+    if (this.push(gridsterItemCollide, this.fromEast)) {
+      gridsterItemCollide.setSize();
+      this.addToPushed(gridsterItemCollide);
+      return true;
+    } else {
+      this.removeFromTempPushed(gridsterItemCollide);
+    }
+    return false;
+  }
+
+  private addToTempPushed(gridsterItem: GridItemComponentInterface): void {
+    let i = this.pushedItemsTemp.indexOf(gridsterItem);
+    if (i === -1) {
+      i                           = this.pushedItemsTemp.push(gridsterItem) - 1;
+      this.pushedItemsTempPath[i] = [];
+    }
+    this.pushedItemsTempPath[i].push({
+      x: gridsterItem.$item.x,
+      y: gridsterItem.$item.y
+    });
+  }
+
+  private removeFromTempPushed(
+    gridsterItem: GridItemComponentInterface
+  ): void {
+    const i            = this.pushedItemsTemp.indexOf(gridsterItem);
+    const tempPosition = this.pushedItemsTempPath[i].pop();
+    if (!tempPosition) {
+      return;
+    }
+    gridsterItem.$item.x = tempPosition.x;
+    gridsterItem.$item.y = tempPosition.y;
+    gridsterItem.setSize();
+    if (!this.pushedItemsTempPath[i].length) {
+      this.pushedItemsTemp.splice(i, 1);
+      this.pushedItemsTempPath.splice(i, 1);
+    }
+  }
+
+  private addToPushed(gridsterItem: GridItemComponentInterface): void {
+    if (this.pushedItems.indexOf(gridsterItem) < 0) {
+      this.pushedItems.push(gridsterItem);
+      this.pushedItemsPath.push([
+        {x: gridsterItem.item.x || 0, y: gridsterItem.item.y || 0},
+        {x: gridsterItem.$item.x, y: gridsterItem.$item.y}
+      ]);
+    } else {
+      const i = this.pushedItems.indexOf(gridsterItem);
+      this.pushedItemsPath[i].push({
+        x: gridsterItem.$item.x,
+        y: gridsterItem.$item.y
+      });
+    }
+  }
+
+  private removeFromPushed(i: number): void {
+    if (i > -1) {
+      this.pushedItems.splice(i, 1);
+      this.pushedItemsPath.splice(i, 1);
+    }
+  }
+
+  private removeFromPushedItem(
+    gridsterItem: GridItemComponentInterface
+  ): void {
+    const i = this.pushedItems.indexOf(gridsterItem);
+    if (i > -1) {
+      this.pushedItemsPath[i].pop();
+      if (!this.pushedItemsPath.length) {
+        this.pushedItems.splice(i, 1);
+        this.pushedItemsPath.splice(i, 1);
       }
     }
   }
 
-  private _compactMovement(
-    sorted: TriDragGridItemComponent[],
-    delta: number,
-    getDimensionValue: (item: TriDragGridItemComponent) => {
-      rowPosition: number,
-      columnPosition: number,
-      rowSize: number,
-      columnSize: number,
-      minDirectionSize: number,
-      maxDirectionSize: number
-    },
-    setDirectionValue: (item: TriDragGridItemComponent,
-                        value: number) => void) {
-    let widgetMoved         = false;
-    const heightMap: number[] = [];
-    const fn                = (prev: number[], item: TriDragGridItemComponent) => {
-      const {
-              rowPosition, columnPosition,
-              rowSize, columnSize,
-              minDirectionSize, maxDirectionSize
-            } = getDimensionValue(item);
-
-      const start = rowPosition, end = start + rowSize;
-
-      const initHeight = delta == -1 ? minDirectionSize : -maxDirectionSize;
-      if (end > heightMap.length) {
-        heightMap.fill(initHeight, heightMap.length, heightMap.length = end);
+  private checkPushedItem(
+    pushedItem: GridItemComponentInterface,
+    i: number
+  ): boolean {
+    const path = this.pushedItemsPath[i];
+    let j      = path.length - 2;
+    let lastPosition;
+    let x;
+    let y;
+    let change = false;
+    for (; j > -1; j--) {
+      lastPosition       = path[j];
+      x                  = pushedItem.$item.x;
+      y                  = pushedItem.$item.y;
+      pushedItem.$item.x = lastPosition.x;
+      pushedItem.$item.y = lastPosition.y;
+      if (!this.gridster.findItemWithItem(pushedItem.$item)) {
+        pushedItem.setSize();
+        path.splice(j + 1, path.length - j - 1);
+        change = true;
+      } else {
+        pushedItem.$item.x = x;
+        pushedItem.$item.y = y;
       }
-      const currentHeight = Math.max(initHeight, ...heightMap.slice(start, end));
-      const itemHeight    = delta == -1 ? currentHeight : -(currentHeight + columnSize);
-      if (columnPosition != itemHeight) {
-        setDirectionValue(item, itemHeight);
-        widgetMoved = true;
-      }
-      heightMap.fill(currentHeight + columnSize, start, end);
-      return heightMap;
-    };
-    delta == -1 ? sorted.reduce(fn, heightMap) : sorted.reduceRight(fn, heightMap);
-    return widgetMoved;
-  }
-
-  private checkCompactMovement(direction: 'x' | 'y', delta: number): void {
-    // let widgetMoved = false;
-    //
-    // if (direction == 'y') {
-    //   const sorted = this.ref.getSortedItems(Direction.xy);
-    //   widgetMoved  = this._compactMovement(
-    //     sorted,
-    //     delta,
-    //     (item) => {
-    //       return {
-    //         rowPosition     : item.x,
-    //         columnPosition  : item.y,
-    //         rowSize         : item.cols,
-    //         columnSize      : item.rows,
-    //         minDirectionSize: 0,
-    //         maxDirectionSize: this.ref.maxRows
-    //       };
-    //     },
-    //     (item, value) => item.y = value
-    //   );
-    // } else {
-    //   const sorted = this.ref.getSortedItems(Direction.yx);
-    //   widgetMoved  = this._compactMovement(
-    //     sorted,
-    //     delta,
-    //     (item) => {
-    //       return {
-    //         rowPosition     : item.y,
-    //         columnPosition  : item.x,
-    //         rowSize         : item.rows,
-    //         columnSize      : item.cols,
-    //         minDirectionSize: 0,
-    //         maxDirectionSize: this.ref.maxCols
-    //       };
-    //     },
-    //     (item, value) => item.x = value
-    //   );
-    // }
-  }
-
-  //
-
-  private withinRange(item: any, pointerX: number, pointerY: number) {
-
-  }
-
-  public _pushItem(item: DragRef, container: TriDropGridContainer, positionX: number, positionY: number,
-                   pointerDelta: { x: number, y: number }): void {
-    const sorted = container.getSortedItems(Direction.xy);
-
-
-    this.checkCompact(CompactType.CompactUp);
-
-    // if pointer x pointer y over
-    // total all size ?
-
-    // todo basic function move
-
-    // todo get x, y positionX positionY
-    // todo get container size
-    // compact
-
-    // todo if pointerX, pointerY within block range , move right / move left
-    // todo move right or left or up or down ?
-    //
-    // compact?
-
-
-    for (let i = 0; i < sorted.length; i++) {
-      const it         = sorted[i];
-      const isDragItem = it._dragRef === item;
-      const newX         = 0;
-      const newY         = 0;
-      // const x          = isDragItem ? positionX : it.x;
-      // const y          = isDragItem ? positionY : it.y;
-
-
-      // it.x = 1;
-      // it.y = 1;
-
-
-      // it.getRootElement().style.transform = `translate3d(0, 0, 0)`;
-      it.getRootElement().style.transform = `translate3d(${newX}, ${newY}, 0)`;
     }
+    if (path.length < 2) {
+      this.removeFromPushed(i);
+    }
+    return change;
   }
-
-
 }

@@ -21,8 +21,8 @@ import { DragDrop } from '../drag-drop';
 import { DndContainerRef } from '../drag-drop-ref/dnd-container-ref';
 import { DragRef } from '../drag-drop-ref/drag-ref';
 import { DropGridContainerRef } from '../drag-drop-ref/drop-grid-container-ref';
-import { CompactPosition } from '../drag-grid/compact-position';
 import { TriDragGridItemComponent } from '../drag-grid/drag-grid-item.component';
+import { GridCompactService } from '../drag-grid/grid-compact.service';
 import { CompactType, Direction, GridTypes } from '../enum';
 import { TriDragDrop, TriDragEnter, TriDragExit } from '../event/drag-events';
 import { DragAxis, DragDropConfig, TRI_DRAG_CONFIG } from './config';
@@ -271,7 +271,7 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     TriDropContainer._dropContainers.push(this);
 
 
-    this.compactService = new CompactPosition(this);
+    // this.compactService = new GridCompactService(this);
 
     this._ngZone.runOutsideAngular(() => {
       this.calculateLayout$.pipe(

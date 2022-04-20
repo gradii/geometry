@@ -66,8 +66,8 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
       _viewportRuler,
       positionStrategy);
 
-    this.pushService  = new GridPushService(this);
-    const swapService = new GridSwapService();
+    // this.pushService  = new GridPushService(this);
+    // const swapService = new GridSwapService(this);
   }
 
   enter(item: DragRef, pointerX: number, pointerY: number): void {

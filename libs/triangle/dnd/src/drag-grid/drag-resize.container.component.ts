@@ -5,8 +5,8 @@
  */
 
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output,
-  SimpleChanges, ViewChild
+  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter,
+  Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, tap } from 'rxjs/operators';
@@ -16,16 +16,16 @@ import { TRI_DROP_CONTAINER } from '../directives/drop-container';
 import { Point } from '../drag-drop-ref/drag-ref';
 import { TriDragEnd, TriDragMove, TriDragStart } from '../event/drag-events';
 
-declare const ngDevMode: object | null;
+declare const ngDevMode: boolean;
 
 
 export interface TriDragResizeStart {
-  source: TriDragResizeContainer;
+  source: TriDragResizeContainerComponent;
   dragEvent: TriDragStart;
 }
 
 export interface TriDragResize {
-  source: TriDragResizeContainer;
+  source: TriDragResizeContainerComponent;
   dragEvent: TriDragStart;
   x: number;
   y: number;
@@ -36,7 +36,7 @@ export interface TriDragResize {
 }
 
 export interface TriDragResizeEnd {
-  source: TriDragResizeContainer;
+  source: TriDragResizeContainerComponent;
   dragEvent: TriDragStart;
   x: number;
   y: number;
@@ -123,7 +123,7 @@ export interface TriDragResizeEnd {
   },
   styleUrls      : [`../../style/drag-resize.scss`]
 })
-export class TriDragResizeContainer {
+export class TriDragResizeContainerComponent implements OnInit, OnChanges, AfterViewInit {
   x: number = 0;
   y: number = 0;
 
