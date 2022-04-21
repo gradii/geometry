@@ -10,8 +10,6 @@ import { ElementRef, NgZone } from '@angular/core';
 import { Subject } from 'rxjs';
 import type { TriDropGridContainer } from '../directives/drop-grid-container';
 import { DragDropRegistry } from '../drag-drop-registry';
-import { GridPushService } from '../drag-grid/grid-push.service';
-import { GridSwapService } from '../drag-grid/grid-swap.service';
 import { CompactType } from '../enum';
 import { GridPositionStrategy } from '../position-strategy/grid-position-strategy';
 import { DndContainerRef } from './dnd-container-ref';
@@ -259,4 +257,5 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
   getItemPosition(item: DragRef): string {
     return 'absolute';
   }
+
 }
