@@ -10,8 +10,9 @@ import {
 } from '@angular/cdk/coercion';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import {
-  ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Inject, InjectionToken, Input,
-  NgZone, OnDestroy, OnInit, Optional, Output, SimpleChanges, SkipSelf, ViewChild, ViewEncapsulation
+  AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Inject,
+  InjectionToken, Input, NgZone, OnChanges, OnDestroy, OnInit, Optional, Output, SimpleChanges,
+  SkipSelf, ViewChild, ViewEncapsulation
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, startWith, takeUntil, tap } from 'rxjs/operators';
@@ -92,7 +93,7 @@ export const TRI_DROP_GRID_CONTAINER_CONFIG = new InjectionToken('tri drop grid 
     `
   ]
 })
-export class TriDropGridContainer<T = any> extends TriDropContainer implements OnInit, OnDestroy {
+export class TriDropGridContainer<T = any> extends TriDropContainer implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   /** Emits when the list has been destroyed. */
   private readonly _destroyed = new Subject<void>();
 
@@ -290,25 +291,40 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     });
   }
 
-  /** Registers an items with the drop list. */
-  addItem(item: TriDragGridItemComponent): void {
-
-    this._unsortedItems.add(item);
-
-    // this.calculateLayoutDebounce();
-
-    if (this._dropContainerRef.isDragging()) {
-      this._syncItemsWithRef();
+  /**
+   * @deprecated use positionItem instead
+   * @param itemComponent
+   */
+  addGridItem(itemComponent: TriDragGridItemComponent): void {
+    if (itemComponent.cols === undefined) {
+      itemComponent.cols       = this.defaultItemCols;
+      itemComponent.renderCols = itemComponent.cols;
+      // itemComponent.itemChanged();
     }
-  }
-
-  /** Removes an item from the drop list. */
-  removeItem(item: TriDragGridItemComponent): void {
-    this._unsortedItems.delete(item);
-
-    if (this._dropContainerRef.isDragging()) {
-      this._syncItemsWithRef();
+    if (itemComponent.rows === undefined) {
+      itemComponent.rows       = this.defaultItemRows;
+      itemComponent.renderRows = itemComponent.rows;
+      // itemComponent.itemChanged();
     }
+    if (itemComponent.x === -1 || itemComponent.y === -1) {
+      this.autoPositionItem(itemComponent);
+    } else if (this.checkCollision(itemComponent)) {
+      if (ngDevMode) {
+        itemComponent.notPlaced = true;
+        console.warn(
+          `Can't be placed in the bounds of the dashboard, trying to auto position!
+${JSON.stringify(itemComponent, ['cols', 'rows', 'x', 'y'])}`
+        );
+      }
+      if (!this.disableAutoPositionOnConflict) {
+        this.autoPositionItem(itemComponent);
+      } else {
+        itemComponent.notPlaced = true;
+      }
+    }
+    // this.grid.push(itemComponent);
+    this._unsortedItems.add(itemComponent);
+    this.calculateLayout$.next();
   }
 
   positionItem(item: TriDragGridItemComponent) {
@@ -317,8 +333,8 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     } else if (this.checkCollision(item)) {
       if (ngDevMode) {
         item.notPlaced = true;
-        console.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
-          JSON.stringify(item, ['cols', 'rows', 'x', 'y']));
+        console.warn(`Can't be placed in the bounds of the dashboard, trying to auto position!
+${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
       }
       if (!this.disableAutoPositionOnConflict) {
         this.autoPositionItem(item);
@@ -330,48 +346,6 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     }
 
     this.calculateLayout();
-  }
-
-  autoPositionItem(item: TriDragGridItemComponent): void {
-    if (this.getNextPossiblePosition(item)) {
-      item.notPlaced = false;
-    } else {
-      item.notPlaced = true;
-      if (ngDevMode) {
-        console.warn(`Can't be placed in the bounds of the dashboard!\n${JSON.stringify(item,
-          ['cols', 'rows', 'x', 'y'])}`);
-      }
-    }
-  }
-
-  getNextPossiblePosition(newItem: TriDragGridItemComponent,
-                          startingFrom: { y?: number, x?: number } = {}): boolean {
-    // this.setGridDimensions();
-    let rowsIndex = startingFrom.y || 0;
-    let colsIndex;
-    for (; rowsIndex < this.rows; rowsIndex++) {
-      newItem.y = rowsIndex;
-      colsIndex = startingFrom.x || 0;
-      for (; colsIndex < this.cols; colsIndex++) {
-        newItem.x = colsIndex;
-        if (!this.checkCollision(newItem)) {
-          return true;
-        }
-      }
-    }
-    const canAddToRows    = this.maxRows >= this.rows + newItem.rows;
-    const canAddToColumns = this.maxCols >= this.cols + newItem.cols;
-    const addToRows       = this.rows <= this.cols && canAddToRows;
-    if (!addToRows && canAddToColumns) {
-      newItem.x = this.cols;
-      newItem.y = 0;
-      return true;
-    } else if (canAddToRows) {
-      newItem.y = this.rows;
-      newItem.x = 0;
-      return true;
-    }
-    return false;
   }
 
 
@@ -452,8 +426,8 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
 
       ref.hasPadding         = this.hasPadding;
       ref.gutter             = this.gutter;
-      ref.currentColumnWidth = this.currentTileWidth;
-      ref.currentRowHeight   = this.currentTileHeight;
+      ref.currentColumnWidth = this.renderTileWidth;
+      ref.currentRowHeight   = this.renderTileHeight;
 
       ref
         .connectedTo(
@@ -542,8 +516,8 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     this.calculateLayout$.next();
   }
 
-  currentTileWidth: number;
-  currentTileHeight: number;
+  renderTileWidth: number;
+  renderTileHeight: number;
 
 
   //
@@ -587,8 +561,8 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     ref.gutter             = this.gutter;
     ref.currentWidth       = clientRect.width;
     ref.currentHeight      = clientRect.height;
-    ref.currentColumnWidth = this.currentTileWidth;
-    ref.currentRowHeight   = this.currentTileHeight;
+    ref.currentColumnWidth = this.renderTileWidth;
+    ref.currentRowHeight   = this.renderTileHeight;
 
 
     this._ngZone.runOutsideAngular(() => {
@@ -615,7 +589,7 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     return collision;
   }
 
-  checkGridCollision(item: any): boolean {
+  checkGridCollision(item: TriDragGridItemComponent): boolean {
     const noNegativePosition = item.y > -1 && item.x > -1;
     const maxGridCols        = item.cols + item.x <= this.maxCols;
     const maxGridRows        = item.rows + item.y <= this.maxRows;
@@ -627,7 +601,7 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits && inMinArea && inMaxArea);
   }
 
-  findItemWithItem(item: any): any | boolean {
+  findItemWithItem(item: TriDragGridItemComponent): any | boolean {
     for (const widget of this._unsortedItems) {
       if (widget !== item && this.checkCollisionTwoItems(widget, item)) {
         return widget;
@@ -636,8 +610,18 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     return false;
   }
 
+  findItemsWithItem(item: TriDragGridItemComponent): Array<TriDragGridItemComponent> {
+    const rst = [];
+    for (const widget of this._unsortedItems) {
+      if (widget !== item && this.checkCollisionTwoItems(widget, item)) {
+        rst.push(widget);
+      }
+    }
+    return rst;
+  }
+
   pixelsToPositionX(x: number, roundingMethod: (x: number) => number, noLimit?: boolean): number {
-    const position = roundingMethod(x / this.currentTileWidth);
+    const position = roundingMethod(x / this.renderTileWidth);
     if (noLimit) {
       return position;
     } else {
@@ -646,7 +630,7 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   }
 
   pixelsToPositionY(y: number, roundingMethod: (x: number) => number, noLimit?: boolean): number {
-    const position = roundingMethod(y / this.currentTileHeight);
+    const position = roundingMethod(y / this.renderTileHeight);
     if (noLimit) {
       return position;
     } else {
@@ -655,11 +639,11 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   }
 
   positionXToPixels(x: number): number {
-    return x * this.currentTileWidth;
+    return x * this.renderTileWidth;
   }
 
   positionYToPixels(y: number): number {
-    return y * this.currentTileHeight;
+    return y * this.renderTileHeight;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -906,9 +890,6 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   renderHeight: number;
 
 
-  /**
-   * @deprecated many be only use grid type
-   */
   canSetGridSize: boolean;
 
   setGridSize(): void {
@@ -1019,11 +1000,11 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     const clientRect = this.element.nativeElement.getBoundingClientRect();
 
     if (!this.hasPadding) {
-      this.currentTileWidth  = (clientRect.width + this.gutter) / this.cols;
-      this.currentTileHeight = (clientRect.height + this.gutter) / this.rows;
+      this.renderTileWidth  = (clientRect.width + this.gutter) / this.cols;
+      this.renderTileHeight = (clientRect.height + this.gutter) / this.rows;
     } else {
-      this.currentTileWidth  = (clientRect.width - this.gutter) / this.cols;
-      this.currentTileHeight = (clientRect.height - this.gutter) / this.rows;
+      this.renderTileWidth  = (clientRect.width - this.gutter) / this.cols;
+      this.renderTileHeight = (clientRect.height - this.gutter) / this.rows;
     }
 
     this._unsortedItems.forEach(item => {
@@ -1149,338 +1130,128 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   //   );
   //   this.cdRef.markForCheck();
   // }
+
+
+  // /** Registers an items with the drop list. */
+  // addItem(item: TriDragGridItemComponent): void {
   //
-  // addItem(itemComponent: GridsterItemComponentInterface): void {
-  //   if (itemComponent.$item.cols === undefined) {
-  //     itemComponent.$item.cols = this.$options.defaultItemCols;
-  //     itemComponent.item.cols  = itemComponent.$item.cols;
-  //     itemComponent.itemChanged();
+  //   this._unsortedItems.add(item);
+  //
+  //   // this.calculateLayoutDebounce();
+  //
+  //   if (this._dropContainerRef.isDragging()) {
+  //     this._syncItemsWithRef();
   //   }
-  //   if (itemComponent.$item.rows === undefined) {
-  //     itemComponent.$item.rows = this.$options.defaultItemRows;
-  //     itemComponent.item.rows  = itemComponent.$item.rows;
-  //     itemComponent.itemChanged();
-  //   }
-  //   if (itemComponent.$item.x === -1 || itemComponent.$item.y === -1) {
-  //     this.autoPositionItem(itemComponent);
-  //   } else if (this.checkCollision(itemComponent.$item)) {
-  //     if (!this.$options.disableWarnings) {
-  //       itemComponent.notPlaced = true;
-  //       console.warn(
-  //         'Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
-  //         JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y'])
-  //       );
-  //     }
-  //     if (!this.$options.disableAutoPositionOnConflict) {
-  //       this.autoPositionItem(itemComponent);
-  //     } else {
-  //       itemComponent.notPlaced = true;
-  //     }
-  //   }
-  //   this.grid.push(itemComponent);
-  //   this.calculateLayout$.next();
-  // }
-  //
-  // removeItem(itemComponent: GridsterItemComponentInterface): void {
-  //   this.grid.splice(this.grid.indexOf(itemComponent), 1);
-  //   this.calculateLayout$.next();
-  //   if (this.options.itemRemovedCallback) {
-  //     this.options.itemRemovedCallback(itemComponent.item, itemComponent);
-  //   }
-  // }
-  //
-  // checkCollision(item: GridsterItem): GridsterItemComponentInterface | boolean {
-  //   let collision: GridsterItemComponentInterface | boolean = false;
-  //   if (this.options.itemValidateCallback) {
-  //     collision = !this.options.itemValidateCallback(item);
-  //   }
-  //   if (!collision && this.checkGridCollision(item)) {
-  //     collision = true;
-  //   }
-  //   if (!collision) {
-  //     const c = this.findItemWithItem(item);
-  //     if (c) {
-  //       collision = c;
-  //     }
-  //   }
-  //   return collision;
-  // }
-  //
-  // checkGridCollision(item: GridsterItem): boolean {
-  //   const noNegativePosition = item.y > -1 && item.x > -1;
-  //   const maxGridCols        = item.cols + item.x <= this.$options.maxCols;
-  //   const maxGridRows        = item.rows + item.y <= this.$options.maxRows;
-  //   const maxItemCols        =
-  //           item.maxItemCols === undefined
-  //             ? this.$options.maxItemCols
-  //             : item.maxItemCols;
-  //   const minItemCols        =
-  //           item.minItemCols === undefined
-  //             ? this.$options.minItemCols
-  //             : item.minItemCols;
-  //   const maxItemRows        =
-  //           item.maxItemRows === undefined
-  //             ? this.$options.maxItemRows
-  //             : item.maxItemRows;
-  //   const minItemRows        =
-  //           item.minItemRows === undefined
-  //             ? this.$options.minItemRows
-  //             : item.minItemRows;
-  //   const inColsLimits       = item.cols <= maxItemCols && item.cols >= minItemCols;
-  //   const inRowsLimits       = item.rows <= maxItemRows && item.rows >= minItemRows;
-  //   const minAreaLimit       =
-  //           item.minItemArea === undefined
-  //             ? this.$options.minItemArea
-  //             : item.minItemArea;
-  //   const maxAreaLimit       =
-  //           item.maxItemArea === undefined
-  //             ? this.$options.maxItemArea
-  //             : item.maxItemArea;
-  //   const area               = item.cols * item.rows;
-  //   const inMinArea          = minAreaLimit <= area;
-  //   const inMaxArea          = maxAreaLimit >= area;
-  //   return !(
-  //     noNegativePosition &&
-  //     maxGridCols &&
-  //     maxGridRows &&
-  //     inColsLimits &&
-  //     inRowsLimits &&
-  //     inMinArea &&
-  //     inMaxArea
-  //   );
-  // }
-  //
-  // findItemWithItem(
-  //   item: GridsterItem
-  // ): GridsterItemComponentInterface | boolean {
-  //   let widgetsIndex = 0;
-  //   let widget: GridsterItemComponentInterface;
-  //   for (; widgetsIndex < this.grid.length; widgetsIndex++) {
-  //     widget = this.grid[widgetsIndex];
-  //     if (
-  //       widget.$item !== item &&
-  //       this.checkCollisionTwoItems(widget.$item, item)
-  //     ) {
-  //       return widget;
-  //     }
-  //   }
-  //   return false;
-  // }
-  //
-  // findItemsWithItem(item: GridsterItem): Array<GridsterItemComponentInterface> {
-  //   const a: Array<GridsterItemComponentInterface> = [];
-  //   let widgetsIndex                               = 0;
-  //   let widget: GridsterItemComponentInterface;
-  //   for (; widgetsIndex < this.grid.length; widgetsIndex++) {
-  //     widget = this.grid[widgetsIndex];
-  //     if (
-  //       widget.$item !== item &&
-  //       this.checkCollisionTwoItems(widget.$item, item)
-  //     ) {
-  //       a.push(widget);
-  //     }
-  //   }
-  //   return a;
-  // }
-  //
-  // autoPositionItem(itemComponent: GridsterItemComponentInterface): void {
-  //   if (this.getNextPossiblePosition(itemComponent.$item)) {
-  //     itemComponent.notPlaced = false;
-  //     itemComponent.item.x    = itemComponent.$item.x;
-  //     itemComponent.item.y    = itemComponent.$item.y;
-  //     itemComponent.itemChanged();
-  //   } else {
-  //     itemComponent.notPlaced = true;
-  //     if (!this.$options.disableWarnings) {
-  //       console.warn(
-  //         'Can\'t be placed in the bounds of the dashboard!/n' +
-  //         JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y'])
-  //       );
-  //     }
-  //   }
-  // }
-  //
-  // getNextPossiblePosition = (
-  //   newItem: GridsterItem,
-  //   startingFrom: { y?: number; x?: number } = {}
-  // ): boolean => {
-  //   if (newItem.cols === -1) {
-  //     newItem.cols = this.$options.defaultItemCols;
-  //   }
-  //   if (newItem.rows === -1) {
-  //     newItem.rows = this.$options.defaultItemRows;
-  //   }
-  //   this.setGridDimensions();
-  //   let rowsIndex = startingFrom.y || 0;
-  //   let colsIndex;
-  //   for (; rowsIndex < this.rows; rowsIndex++) {
-  //     newItem.y = rowsIndex;
-  //     colsIndex = startingFrom.x || 0;
-  //     for (; colsIndex < this.columns; colsIndex++) {
-  //       newItem.x = colsIndex;
-  //       if (!this.checkCollision(newItem)) {
-  //         return true;
-  //       }
-  //     }
-  //   }
-  //   const canAddToRows    = this.$options.maxRows >= this.rows + newItem.rows;
-  //   const canAddToColumns =
-  //           this.$options.maxCols >= this.columns + newItem.cols;
-  //   const addToRows       = this.rows <= this.columns && canAddToRows;
-  //   if (!addToRows && canAddToColumns) {
-  //     newItem.x = this.columns;
-  //     newItem.y = 0;
-  //     return true;
-  //   } else if (canAddToRows) {
-  //     newItem.y = this.rows;
-  //     newItem.x = 0;
-  //     return true;
-  //   }
-  //   return false;
-  // };
-  //
-  // getFirstPossiblePosition = (item: GridsterItem): GridsterItem => {
-  //   const tmpItem = Object.assign({}, item);
-  //   this.getNextPossiblePosition(tmpItem);
-  //   return tmpItem;
-  // };
-  //
-  // getLastPossiblePosition = (item: GridsterItem): GridsterItem => {
-  //   let farthestItem: { y: number; x: number } = {y: 0, x: 0};
-  //   farthestItem                               = this.grid.reduce(
-  //     (
-  //       prev: { y: number; x: number },
-  //       curr: GridsterItemComponentInterface
-  //     ) => {
-  //       const currCoords = {
-  //         y: curr.$item.y + curr.$item.rows - 1,
-  //         x: curr.$item.x + curr.$item.cols - 1
-  //       };
-  //       if (GridsterUtils.compareItems(prev, currCoords) === 1) {
-  //         return currCoords;
-  //       } else {
-  //         return prev;
-  //       }
-  //     },
-  //     farthestItem
-  //   );
-  //
-  //   const tmpItem = Object.assign({}, item);
-  //   this.getNextPossiblePosition(tmpItem, farthestItem);
-  //   return tmpItem;
-  // };
-  //
-  // pixelsToPositionX(
-  //   x: number,
-  //   roundingMethod: (x: number) => number,
-  //   noLimit?: boolean
-  // ): number {
-  //   const position = roundingMethod(x / this.curColWidth);
-  //   if (noLimit) {
-  //     return position;
-  //   } else {
-  //     return Math.max(position, 0);
-  //   }
-  // }
-  //
-  // pixelsToPositionY(
-  //   y: number,
-  //   roundingMethod: (x: number) => number,
-  //   noLimit?: boolean
-  // ): number {
-  //   const position = roundingMethod(y / this.curRowHeight);
-  //   if (noLimit) {
-  //     return position;
-  //   } else {
-  //     return Math.max(position, 0);
-  //   }
-  // }
-  //
-  // positionXToPixels(x: number): number {
-  //   return x * this.curColWidth;
-  // }
-  //
-  // positionYToPixels(y: number): number {
-  //   return y * this.curRowHeight;
-  // }
-  //
-  // getItemComponent(
-  //   item: GridsterItem
-  // ): GridsterItemComponentInterface | undefined {
-  //   return this.grid.find(c => c.item === item);
-  // }
-  //
-  // // ------ Functions for swapWhileDragging option
-  //
-  // // identical to checkCollision() except that this function calls findItemWithItemForSwaping() instead of findItemWithItem()
-  // checkCollisionForSwaping(
-  //   item: GridsterItem
-  // ): GridsterItemComponentInterface | boolean {
-  //   let collision: GridsterItemComponentInterface | boolean = false;
-  //   if (this.options.itemValidateCallback) {
-  //     collision = !this.options.itemValidateCallback(item);
-  //   }
-  //   if (!collision && this.checkGridCollision(item)) {
-  //     collision = true;
-  //   }
-  //   if (!collision) {
-  //     const c = this.findItemWithItemForSwapping(item);
-  //     if (c) {
-  //       collision = c;
-  //     }
-  //   }
-  //   return collision;
-  // }
-  //
-  // // identical to findItemWithItem() except that this function calls checkCollisionTwoItemsForSwaping() instead of checkCollisionTwoItems()
-  // findItemWithItemForSwapping(
-  //   item: GridsterItem
-  // ): GridsterItemComponentInterface | boolean {
-  //   let widgetsIndex: number = this.grid.length - 1;
-  //   let widget: GridsterItemComponentInterface;
-  //   for (; widgetsIndex > -1; widgetsIndex--) {
-  //     widget = this.grid[widgetsIndex];
-  //     if (
-  //       widget.$item !== item &&
-  //       GridsterComponent.checkCollisionTwoItemsForSwaping(widget.$item, item)
-  //     ) {
-  //       return widget;
-  //     }
-  //   }
-  //   return false;
-  // }
-  //
-  // previewStyle(drag = false): void {
-  //   if (this.movingItem) {
-  //     if (this.compact && drag) {
-  //       this.compact.checkCompactItem(this.movingItem);
-  //     }
-  //     this.previewStyle$.next(this.movingItem);
-  //   } else {
-  //     this.previewStyle$.next(null);
-  //   }
-  // }
-  //
-  // // ------ End of functions for swapWhileDragging option
-  //
-  // // eslint-disable-next-line @typescript-eslint/member-ordering
-  // private static getNewArrayLength(
-  //   length: number,
-  //   overallSize: number,
-  //   size: number
-  // ): number {
-  //   const newLength = Math.max(length, Math.floor(overallSize / size));
-  //
-  //   if (newLength < 0) {
-  //     return 0;
-  //   }
-  //
-  //   if (Number.isFinite(newLength)) {
-  //     return Math.floor(newLength);
-  //   }
-  //
-  //   return 0;
   // }
 
+  defaultItemCols: number;
+  defaultItemRows: number;
+
+  addItem(item: TriDragGridItemComponent): void {
+
+    this._unsortedItems.add(item);
+
+    // this.calculateLayoutDebounce();
+
+    if (this._dropContainerRef.isDragging()) {
+      this._syncItemsWithRef();
+    }
+  }
+
+  /** Removes an item from the drop list. */
+  removeItem(item: TriDragGridItemComponent): void {
+    this._unsortedItems.delete(item);
+    this.calculateLayout$.next();
+
+    if (this._dropContainerRef.isDragging()) {
+      this._syncItemsWithRef();
+    }
+  }
+
+
+  autoPositionItem(item: TriDragGridItemComponent): void {
+    if (this.getNextPossiblePosition(item)) {
+      item.notPlaced = false;
+      item.renderX   = item.x;
+      item.renderY   = item.y;
+      // itemComponent.itemChanged();
+    } else {
+      item.notPlaced = true;
+      if (ngDevMode) {
+        console.warn(`Can't be placed in the bounds of the dashboard!\n${JSON.stringify(item,
+          ['cols', 'rows', 'x', 'y'])}`);
+      }
+    }
+  }
+
+
+  getNextPossiblePosition(newItem: TriDragGridItemComponent,
+                          startingFrom: { y?: number, x?: number } = {}): boolean {
+    // this.setGridDimensions();
+    let rowsIndex = startingFrom.y || 0;
+    let colsIndex;
+    for (; rowsIndex < this.rows; rowsIndex++) {
+      newItem.y = rowsIndex;
+      colsIndex = startingFrom.x || 0;
+      for (; colsIndex < this.cols; colsIndex++) {
+        newItem.x = colsIndex;
+        if (!this.checkCollision(newItem)) {
+          return true;
+        }
+      }
+    }
+    const canAddToRows    = this.maxRows >= this.rows + newItem.rows;
+    const canAddToColumns = this.maxCols >= this.cols + newItem.cols;
+    const addToRows       = this.rows <= this.cols && canAddToRows;
+    if (!addToRows && canAddToColumns) {
+      newItem.x = this.cols;
+      newItem.y = 0;
+      return true;
+    } else if (canAddToRows) {
+      newItem.y = this.rows;
+      newItem.x = 0;
+      return true;
+    }
+    return false;
+  }
+
+  getFirstPossiblePosition = (item: TriDragGridItemComponent): TriDragGridItemComponent => {
+    const tmpItem = Object.assign({}, item);
+    this.getNextPossiblePosition(tmpItem);
+    return tmpItem;
+  };
+
+  checkCollisionForSwaping(
+    item: TriDragGridItemComponent
+  ): boolean {
+    let collision: any | boolean = false;
+    if (/*!collision &&*/ this.checkGridCollision(item)) {
+      collision = true;
+    }
+    if (!collision) {
+      const c = this.findItemWithItemForSwapping(item);
+      if (c) {
+        collision = c;
+      }
+    }
+    return collision;
+  }
+
+  findItemWithItemForSwapping(
+    item: TriDragGridItemComponent
+  ): boolean {
+    // let widgetsIndex: number = this.grid.length - 1;
+    // let widget: GridsterItemComponentInterface;
+    // for (; widgetsIndex > -1; widgetsIndex--) {
+    //   widget = this.grid[widgetsIndex];
+    //   if (
+    //     // widget.$item !== item &&
+    //     checkCollisionTwoItemsForSwaping(widget.$item, item)
+    //   ) {
+    //     return widget;
+    //   }
+    // }
+    return false;
+  }
 
 }

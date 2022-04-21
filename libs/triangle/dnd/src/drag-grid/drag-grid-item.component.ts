@@ -79,15 +79,21 @@ export class TriDragGridItemComponent extends TriDrag
 
   @Input('triDragGridItemX')
   x: number = -1;
+  renderX: number;
 
   @Input('triDragGridItemY')
   y: number = -1;
+  renderY: number;
 
   @Input('triDragGridItemRows')
   rows: number = 1;
+  renderRows: number;
 
   @Input('triDragGridItemCols')
   cols: number = 1;
+  renderCols: number;
+
+  // itemChanged
 
   @Input('triDragGridItemLayerIndex')
   layerIndex?: number;
@@ -190,15 +196,15 @@ export class TriDragGridItemComponent extends TriDrag
   }
 
   onDragResizeEnd(event: TriDragResizeEnd) {
-    console.log('resize end', event);
+    // console.log('resize end', event);
 
     const x = this.dropContainer.pixelsToPositionX(this.left + event.x, Math.round);
     const y = this.dropContainer.pixelsToPositionY(this.top + event.y, Math.round);
     this.x  = x;
     this.y  = y;
 
-    this.cols = Math.round(event.width / this.dropContainer.currentTileWidth);
-    this.rows = Math.round(event.height / this.dropContainer.currentTileHeight);
+    this.cols = Math.round(event.width / this.dropContainer.renderTileWidth);
+    this.rows = Math.round(event.height / this.dropContainer.renderTileHeight);
 
     this._ngZone.run(() => {
       this.dropContainer.positionItem(this);
@@ -333,6 +339,5 @@ export class TriDragGridItemComponent extends TriDrag
 
     // this.programDragPosition = {x: this.left, y: this.top};
   }
-
 
 }
