@@ -212,7 +212,7 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
             //   gridContainer.movingItem = null;
             // }
           }
-          // this.pushService.checkPushBack();
+          this.pushService.checkPushBack();
         }
       }
     }

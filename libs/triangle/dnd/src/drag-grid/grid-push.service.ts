@@ -102,45 +102,45 @@ export class GridPushService {
     }
   }
 
-  //
-  // restoreItems(): void {
-  //   let i           = 0;
-  //   const l: number = this.pushedItems.length;
-  //   let pushedItem: TriDragGridItemComponent;
-  //   for (; i < l; i++) {
-  //     pushedItem         = this.pushedItems[i];
-  //     pushedItem.renderX = pushedItem.x || 0;
-  //     pushedItem.renderY = pushedItem.y || 0;
-  //     // pushedItem.setSize();
-  //   }
-  //   this.pushedItems     = [];
-  //   this.pushedItemsPath = [];
-  // }
-  //
-  // setPushedItems(): void {
-  //   let i           = 0;
-  //   const l: number = this.pushedItems.length;
-  //   let pushedItem: TriDragGridItemComponent;
-  //   for (; i < l; i++) {
-  //     pushedItem = this.pushedItems[i];
-  //     pushedItem.checkItemChanges(pushedItem);
-  //   }
-  //   this.pushedItems     = [];
-  //   this.pushedItemsPath = [];
-  // }
-  //
-  // checkPushBack(): void {
-  //   let i: number = this.pushedItems.length - 1;
-  //   let change    = false;
-  //   for (; i > -1; i--) {
-  //     if (this.checkPushedItem(this.pushedItems[i], i)) {
-  //       change = true;
-  //     }
-  //   }
-  //   if (change) {
-  //     this.checkPushBack();
-  //   }
-  // }
+
+  restoreItems(): void {
+    let i           = 0;
+    const l: number = this.pushedItems.length;
+    let pushedItem: TriDragGridItemComponent;
+    for (; i < l; i++) {
+      pushedItem         = this.pushedItems[i];
+      pushedItem.renderX = pushedItem.x || 0;
+      pushedItem.renderY = pushedItem.y || 0;
+      // pushedItem.setSize();
+    }
+    this.pushedItems     = [];
+    this.pushedItemsPath = [];
+  }
+
+  setPushedItems(): void {
+    let i           = 0;
+    const l: number = this.pushedItems.length;
+    let pushedItem: TriDragGridItemComponent;
+    for (; i < l; i++) {
+      pushedItem = this.pushedItems[i];
+      pushedItem.checkItemChanges(pushedItem);
+    }
+    this.pushedItems     = [];
+    this.pushedItemsPath = [];
+  }
+
+  checkPushBack(): void {
+    let i: number = this.pushedItems.length - 1;
+    let change    = false;
+    for (; i > -1; i--) {
+      if (this.checkPushedItem(this.pushedItems[i], i)) {
+        change = true;
+      }
+    }
+    if (change) {
+      this.checkPushBack();
+    }
+  }
 
   private push(
     gridsterItem: TriDragGridItemComponent,
@@ -344,12 +344,12 @@ export class GridPushService {
     }
   }
 
-  // private removeFromPushed(i: number): void {
-  //   if (i > -1) {
-  //     this.pushedItems.splice(i, 1);
-  //     this.pushedItemsPath.splice(i, 1);
-  //   }
-  // }
+  private removeFromPushed(i: number): void {
+    if (i > -1) {
+      this.pushedItems.splice(i, 1);
+      this.pushedItemsPath.splice(i, 1);
+    }
+  }
 
   private removeFromPushedItem(
     gridsterItem: TriDragGridItemComponent
@@ -364,34 +364,34 @@ export class GridPushService {
     }
   }
 
-  // private checkPushedItem(
-  //   pushedItem: TriDragGridItemComponent,
-  //   i: number
-  // ): boolean {
-  //   const path = this.pushedItemsPath[i];
-  //   let j      = path.length - 2;
-  //   let lastPosition;
-  //   let x;
-  //   let y;
-  //   let change = false;
-  //   for (; j > -1; j--) {
-  //     lastPosition       = path[j];
-  //     x                  = pushedItem.renderX;
-  //     y                  = pushedItem.renderY;
-  //     pushedItem.renderX = lastPosition.x;
-  //     pushedItem.renderY = lastPosition.y;
-  //     if (!this.gridster.findItemWithItem(pushedItem)) {
-  //       pushedItem.setSize();
-  //       path.splice(j + 1, path.length - j - 1);
-  //       change = true;
-  //     } else {
-  //       pushedItem.renderX = x;
-  //       pushedItem.renderY = y;
-  //     }
-  //   }
-  //   if (path.length < 2) {
-  //     this.removeFromPushed(i);
-  //   }
-  //   return change;
-  // }
+  private checkPushedItem(
+    pushedItem: TriDragGridItemComponent,
+    i: number
+  ): boolean {
+    const path = this.pushedItemsPath[i];
+    let j      = path.length - 2;
+    let lastPosition;
+    let x;
+    let y;
+    let change = false;
+    for (; j > -1; j--) {
+      lastPosition       = path[j];
+      x                  = pushedItem.renderX;
+      y                  = pushedItem.renderY;
+      pushedItem.renderX = lastPosition.x;
+      pushedItem.renderY = lastPosition.y;
+      if (!this.dropGridContainerRef.data.findItemWithItem(pushedItem)) {
+        pushedItem.setSize();
+        path.splice(j + 1, path.length - j - 1);
+        change = true;
+      } else {
+        pushedItem.renderX = x;
+        pushedItem.renderY = y;
+      }
+    }
+    if (path.length < 2) {
+      this.removeFromPushed(i);
+    }
+    return change;
+  }
 }
