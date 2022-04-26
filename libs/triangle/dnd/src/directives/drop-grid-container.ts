@@ -22,6 +22,7 @@ import { DragDrop } from '../drag-drop';
 import { DndContainerRef } from '../drag-drop-ref/dnd-container-ref';
 import { DragRef } from '../drag-drop-ref/drag-ref';
 import { DropGridContainerRef } from '../drag-drop-ref/drop-grid-container-ref';
+import { CompactPositionService } from '../drag-grid/compact-position.service';
 import { TriDragGridItemComponent } from '../drag-grid/drag-grid-item.component';
 import { GridType } from '../drag-grid/grid-config.interface';
 import { CompactType, Direction, GridTypes } from '../enum';
@@ -29,7 +30,7 @@ import { TriDragDrop, TriDragEnter, TriDragExit } from '../event/drag-events';
 import { DragAxis, DragDropConfig, TRI_DRAG_CONFIG } from './config';
 import { TRI_DROP_CONTAINER_GROUP, TriDropContainerGroup } from './drop-container-group';
 
-declare const ngDevMode: object | null;
+declare const ngDevMode: boolean;
 
 export const TRI_DROP_GRID_CONTAINER_CONFIG = new InjectionToken('tri drop grid container config');
 
@@ -93,7 +94,9 @@ export const TRI_DROP_GRID_CONTAINER_CONFIG = new InjectionToken('tri drop grid 
     `
   ]
 })
-export class TriDropGridContainer<T = any> extends TriDropContainer implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+export class TriDropGridContainer<T = any>
+  extends TriDropContainer
+  implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   /** Emits when the list has been destroyed. */
   private readonly _destroyed = new Subject<void>();
 
@@ -153,8 +156,29 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   @Input('triDropGridContainerCompactType')
   compactType: CompactType;
 
+  @Input('triDropGridContainerPushItems')
+  pushItems: boolean;
+
+  @Input('triDropGridContainerPushDirectionsSouth')
+  pushDirectionsSouth: boolean = true;
+
+  @Input('triDropGridContainerPushDirectionsWest')
+  pushDirectionsWest: boolean = true;
+
+  @Input('triDropGridContainerPushDirectionsNorth')
+  pushDirectionsNorth: boolean = true;
+
+  @Input('triDropGridContainerPushDirectionsEast')
+  pushDirectionsEast: boolean = true;
+
+  @Input('triDropGridContainerDisablePushOnDrag')
+  disablePushOnDrag: boolean = false;
+
   @Input('triDropGridContainerDisableAutoPositionOnConflict')
   disableAutoPositionOnConflict: boolean;
+
+  @Input('triDropGridContainerCheckCollisionCallback')
+  checkCollisionCallback: (item: any) => boolean;
 
   @Input('triDropGridContainerGridType')
   gridType: GridTypes = 'fit';
@@ -216,7 +240,8 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
   //  */
   // /** Emits as the user is swapping items while actively dragging. */
   // @Output('triDropContainerSorted')
-  // readonly sorted: EventEmitter<TriDragSortEvent<T>> = new EventEmitter<TriDragSortEvent<T>>();
+  // readonly sorted: EventEmitter<TriDragSortEvent<T>> = new
+  // EventEmitter<TriDragSortEvent<T>>();
 
   @Output('triDropGridContainerRepositioned')
   readonly repositioned: EventEmitter<any> = new EventEmitter<any>();
@@ -232,7 +257,14 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
 
   private el: HTMLElement;
 
-  private compactService;
+  private compactService: CompactPositionService;
+
+  swapWhileDragging: boolean = false;
+
+  swap: boolean = false;
+
+  pushResizeItems: boolean = false;
+
 
   constructor(
     /** Element that the drop list is attached to. */
@@ -276,58 +308,56 @@ export class TriDropGridContainer<T = any> extends TriDropContainer implements O
     TriDropContainer._dropContainers.push(this);
 
 
-    // this.compactService = new GridCompactService(this);
-
-    this._ngZone.runOutsideAngular(() => {
-      this.calculateLayout$.pipe(
-        takeUntil(this._destroyed),
-        debounceTime(100),
-        tap(() => {
-          this._ngZone.run(() => {
-            this._calculateLayout();
-          });
-        })
-      ).subscribe();
-    });
+    this.compactService = new CompactPositionService(this);
   }
 
-  /**
-   * @deprecated use positionItem instead
-   * @param itemComponent
-   */
-  addGridItem(itemComponent: TriDragGridItemComponent): void {
-    if (itemComponent.cols === undefined) {
-      itemComponent.cols       = this.defaultItemCols;
-      itemComponent.renderCols = itemComponent.cols;
-      // itemComponent.itemChanged();
-    }
-    if (itemComponent.rows === undefined) {
-      itemComponent.rows       = this.defaultItemRows;
-      itemComponent.renderRows = itemComponent.rows;
-      // itemComponent.itemChanged();
-    }
-    if (itemComponent.x === -1 || itemComponent.y === -1) {
-      this.autoPositionItem(itemComponent);
-    } else if (this.checkCollision(itemComponent)) {
-      if (ngDevMode) {
-        itemComponent.notPlaced = true;
-        console.warn(
-          `Can't be placed in the bounds of the dashboard, trying to auto position!
-${JSON.stringify(itemComponent, ['cols', 'rows', 'x', 'y'])}`
-        );
-      }
-      if (!this.disableAutoPositionOnConflict) {
-        this.autoPositionItem(itemComponent);
-      } else {
-        itemComponent.notPlaced = true;
-      }
-    }
-    // this.grid.push(itemComponent);
-    this._unsortedItems.add(itemComponent);
-    this.calculateLayout$.next();
-  }
+//   /**
+//    * @deprecated use positionItem instead
+//    * @param itemComponent
+//    */
+//   addGridItem(itemComponent: TriDragGridItemComponent): void {
+//     if (itemComponent.cols === undefined) {
+//       itemComponent.cols       = this.defaultItemCols;
+//       itemComponent.renderCols = itemComponent.cols;
+//       // itemComponent.itemChanged();
+//     }
+//     if (itemComponent.rows === undefined) {
+//       itemComponent.rows       = this.defaultItemRows;
+//       itemComponent.renderRows = itemComponent.rows;
+//       // itemComponent.itemChanged();
+//     }
+//     if (itemComponent.x === -1 || itemComponent.y === -1) {
+//       this.autoPositionItem(itemComponent);
+//     } else if (this.checkCollision(itemComponent)) {
+//       if (ngDevMode) {
+//         itemComponent.notPlaced = true;
+//         console.warn(
+//           `Can't be placed in the bounds of the dashboard, trying to auto position!
+// ${JSON.stringify(itemComponent, ['cols', 'rows', 'x', 'y'])}`
+//         );
+//       }
+//       if (!this.disableAutoPositionOnConflict) {
+//         this.autoPositionItem(itemComponent);
+//       } else {
+//         itemComponent.notPlaced = true;
+//       }
+//     }
+//     // this.grid.push(itemComponent);
+//     this._unsortedItems.add(itemComponent);
+//     this.calculateLayout$.next();
+//   }
 
   positionItem(item: TriDragGridItemComponent) {
+    if (item.renderCols == null) {
+      item.renderCols = item.cols;
+      // item.itemChanged();
+    }
+    if (item.renderCols == null) {
+      item.renderRows = item.rows;
+      // item.itemChanged();
+    }
+    // item.renderX = item.x;
+    // item.renderY = item.y;
     if (item.x === -1 || item.y === -1) {
       this.autoPositionItem(item);
     } else if (this.checkCollision(item)) {
@@ -348,9 +378,8 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
     this.calculateLayout();
   }
 
-
   getUnSortedItems() {
-    return Array.from(this._unsortedItems);
+    return this._unsortedItems;
   }
 
   /** Gets the registered items in the list, sorted by their position in the DOM. */
@@ -358,17 +387,9 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
     return Array.from(this._unsortedItems).sort(
       (a: TriDragGridItemComponent, b: TriDragGridItemComponent) => {
         if (direction == Direction.yx) {
-          if (a.x == b.x) {
-            return a.y > b.y ? 1 : -1;
-          } else {
-            return a.x > b.x ? 1 : -1;
-          }
+          return (a.x - b.x || a.y > b.y) as number;
         } else {
-          if (a.y == b.y) {
-            return a.x > b.x ? 1 : -1;
-          } else {
-            return a.y > b.y ? 1 : -1;
-          }
+          return (a.y > b.y || a.x - b.x) as number;
         }
       });
   }
@@ -519,40 +540,6 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
   renderTileWidth: number;
   renderTileHeight: number;
 
-
-  //
-  // setGridDimensions(): void {
-  //   this.setGridSize();
-  //   if (!this.mobile && this.$options.mobileBreakpoint > this.curWidth) {
-  //     this.mobile = !this.mobile;
-  //     this.renderer.addClass(this.el, 'mobile');
-  //   } else if (this.mobile && this.$options.mobileBreakpoint < this.curWidth) {
-  //     this.mobile = !this.mobile;
-  //     this.renderer.removeClass(this.el, 'mobile');
-  //   }
-  //   let rows    = this.$options.minRows;
-  //   let columns = this.$options.minCols;
-  //
-  //   let widgetsIndex = this.grid.length - 1;
-  //   let widget;
-  //   for (; widgetsIndex >= 0; widgetsIndex--) {
-  //     widget = this.grid[widgetsIndex];
-  //     if (!widget.notPlaced) {
-  //       rows    = Math.max(rows, widget.$item.y + widget.$item.rows);
-  //       columns = Math.max(columns, widget.$item.x + widget.$item.cols);
-  //     }
-  //   }
-  //
-  //   if (this.columns !== columns || this.rows !== rows) {
-  //     this.columns = columns;
-  //     this.rows    = rows;
-  //     if (this.options.gridSizeChangedCallback) {
-  //       this.options.gridSizeChangedCallback(this);
-  //     }
-  //   }
-  // }
-
-
   ngOnInit() {
     const ref        = this._dropContainerRef;
     const clientRect = this.element.nativeElement.getBoundingClientRect();
@@ -564,20 +551,19 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
     ref.currentColumnWidth = this.renderTileWidth;
     ref.currentRowHeight   = this.renderTileHeight;
 
-
     this._ngZone.runOutsideAngular(() => {
-      this.calculateLayout$
-        .pipe(debounceTime(0), takeUntil(this._destroyed))
-        .subscribe(() => this._ngZone.run(() => this.calculateLayout()));
+      this.calculateLayout$.pipe(
+        debounceTime(0), takeUntil(this._destroyed),
+      ).subscribe(() => this._ngZone.run(() => this._calculateLayout()));
     });
   }
 
   checkCollision(item: TriDragGridItemComponent): any | boolean {
     let collision: any | boolean = false;
-    // if (this.options.itemValidateCallback) {
-    //   collision = !this.options.itemValidateCallback(item);
-    // }
-    if (/*!collision && */this.checkGridCollision(item)) {
+    if (this.checkCollisionCallback) {
+      collision = this.checkCollisionCallback(item);
+    }
+    if (!collision && this.checkGridCollision(item)) {
       collision = true;
     }
     if (!collision) {
@@ -590,12 +576,12 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
   }
 
   checkGridCollision(item: TriDragGridItemComponent): boolean {
-    const noNegativePosition = item.y > -1 && item.x > -1;
-    const maxGridCols        = item.cols + item.x <= this.maxCols;
-    const maxGridRows        = item.rows + item.y <= this.maxRows;
-    const inColsLimits       = item.cols <= item.maxItemCols && item.cols >= item.minItemCols;
-    const inRowsLimits       = item.rows <= item.maxItemRows && item.rows >= item.minItemRows;
-    const area               = item.cols * item.rows;
+    const noNegativePosition = item.renderY > -1 && item.renderX > -1;
+    const maxGridCols        = item.renderCols + item.renderX <= this.maxCols;
+    const maxGridRows        = item.renderRows + item.renderY <= this.maxRows;
+    const inColsLimits       = item.renderCols <= item.maxItemCols && item.renderCols >= item.minItemCols;
+    const inRowsLimits       = item.renderRows <= item.maxItemRows && item.renderRows >= item.minItemRows;
+    const area               = item.renderCols * item.renderRows;
     const inMinArea          = item.minItemArea <= area;
     const inMaxArea          = item.maxItemArea >= area;
     return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits && inMinArea && inMaxArea);
@@ -647,6 +633,13 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes['rows'] && changes['rows'].firstChange) {
+      this.renderRows = this.rows;
+    }
+    if (changes['cols'] && changes['cols'].firstChange) {
+      this.renderCols = this.cols;
+    }
+
     if (
       changes['x'] || changes['y'] ||
       changes['rows'] || changes['cols'] ||
@@ -718,10 +711,10 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
 
   checkCollisionTwoItems(item: TriDragGridItemComponent, item2: TriDragGridItemComponent): boolean {
     const collision =
-            item.x < item2.x + item2.cols &&
-            item.x + item.cols > item2.x &&
-            item.y < item2.y + item2.rows &&
-            item.y + item.rows > item2.y;
+            !(item.renderX + item.renderCols <= item2.renderX ||
+              item.renderX >= item2.renderX + item2.renderCols ||
+              item.renderY + item.renderRows <= item2.renderY ||
+              item.renderY >= item2.renderY + item2.renderRows);
     if (!collision) {
       return false;
     }
@@ -889,7 +882,6 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
   renderWidth: number;
   renderHeight: number;
 
-
   canSetGridSize: boolean;
 
   setGridSize(): void {
@@ -956,21 +948,21 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
     this._unsortedItems.forEach(item => {
       // item.updateItemSize();
       if (!item.notPlaced) {
-        rows    = Math.max(rows, item.y + item.rows);
-        columns = Math.max(columns, item.x + item.cols);
+        rows    = Math.max(rows, item.renderY + item.renderRows);
+        columns = Math.max(columns, item.renderX + item.renderCols);
       }
     });
 
     rows += this.addEmptyRowsCount;
     if (this.renderCols !== columns || this.renderRows !== rows) {
-      this.renderCols = columns;
-      this.renderRows = rows;
+      this.renderCols = Math.min(Math.max(columns, this.minCols), this.maxCols);
+      this.renderRows = Math.min(Math.max(rows, this.minRows), this.maxRows);
       // if (this.options.gridSizeChangedCallback) {
       //   this.options.gridSizeChangedCallback(this);
       // }
       this.gridSizeChanged.next({
-        cols: columns,
-        rows: rows
+        cols: this.renderCols,
+        rows: this.renderRows
       });
     }
   }
@@ -995,6 +987,7 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
       this.compactService.checkCompact(this.compactType);
     }
 
+    // if not auto row and column
     this.setGridDimensions();
 
     const clientRect = this.element.nativeElement.getBoundingClientRect();
@@ -1101,49 +1094,6 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
     // this.resize$.next();
   }
 
-  //
-  // updateGrid(): void {
-  //   if (this.$options.displayGrid === 'always' && !this.mobile) {
-  //     this.renderer.addClass(this.el, 'display-grid');
-  //   } else if (
-  //     this.$options.displayGrid === 'onDrag&Resize' &&
-  //     this.dragInProgress
-  //   ) {
-  //     this.renderer.addClass(this.el, 'display-grid');
-  //   } else if (
-  //     this.$options.displayGrid === 'none' ||
-  //     !this.dragInProgress ||
-  //     this.mobile
-  //   ) {
-  //     this.renderer.removeClass(this.el, 'display-grid');
-  //   }
-  //   this.setGridDimensions();
-  //   this.gridColumns.length = GridsterComponent.getNewArrayLength(
-  //     this.columns,
-  //     this.curWidth,
-  //     this.curColWidth
-  //   );
-  //   this.gridRows.length    = GridsterComponent.getNewArrayLength(
-  //     this.rows,
-  //     this.curHeight,
-  //     this.curRowHeight
-  //   );
-  //   this.cdRef.markForCheck();
-  // }
-
-
-  // /** Registers an items with the drop list. */
-  // addItem(item: TriDragGridItemComponent): void {
-  //
-  //   this._unsortedItems.add(item);
-  //
-  //   // this.calculateLayoutDebounce();
-  //
-  //   if (this._dropContainerRef.isDragging()) {
-  //     this._syncItemsWithRef();
-  //   }
-  // }
-
   defaultItemCols: number;
   defaultItemRows: number;
 
@@ -1172,8 +1122,8 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
   autoPositionItem(item: TriDragGridItemComponent): void {
     if (this.getNextPossiblePosition(item)) {
       item.notPlaced = false;
-      item.renderX   = item.x;
-      item.renderY   = item.y;
+      // item.x         = item.renderX;
+      // item.y         = item.renderY;
       // itemComponent.itemChanged();
     } else {
       item.notPlaced = true;
@@ -1186,40 +1136,34 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
 
 
   getNextPossiblePosition(newItem: TriDragGridItemComponent,
-                          startingFrom: { y?: number, x?: number } = {}): boolean {
+                          startingFrom: { y?: number, x?: number } = {}/*, dryRun: boolean*/): boolean {
     // this.setGridDimensions();
     let rowsIndex = startingFrom.y || 0;
     let colsIndex;
-    for (; rowsIndex < this.rows; rowsIndex++) {
-      newItem.y = rowsIndex;
-      colsIndex = startingFrom.x || 0;
-      for (; colsIndex < this.cols; colsIndex++) {
-        newItem.x = colsIndex;
+    for (; rowsIndex < this.renderRows; rowsIndex++) {
+      newItem.renderY = rowsIndex;
+      colsIndex       = startingFrom.x || 0;
+      for (; colsIndex < this.renderCols; colsIndex++) {
+        newItem.renderX = colsIndex;
         if (!this.checkCollision(newItem)) {
           return true;
         }
       }
     }
-    const canAddToRows    = this.maxRows >= this.rows + newItem.rows;
-    const canAddToColumns = this.maxCols >= this.cols + newItem.cols;
-    const addToRows       = this.rows <= this.cols && canAddToRows;
+    const canAddToRows    = this.maxRows >= this.renderRows + newItem.renderRows;
+    const canAddToColumns = this.maxCols >= this.renderCols + newItem.renderCols;
+    const addToRows       = this.renderRows <= this.renderCols && canAddToRows;
     if (!addToRows && canAddToColumns) {
-      newItem.x = this.cols;
-      newItem.y = 0;
+      newItem.renderX = this.renderCols;
+      newItem.renderY = 0;
       return true;
     } else if (canAddToRows) {
-      newItem.y = this.rows;
-      newItem.x = 0;
+      newItem.renderY = this.renderRows;
+      newItem.renderX = 0;
       return true;
     }
     return false;
   }
-
-  getFirstPossiblePosition = (item: TriDragGridItemComponent): TriDragGridItemComponent => {
-    const tmpItem = Object.assign({}, item);
-    this.getNextPossiblePosition(tmpItem);
-    return tmpItem;
-  };
 
   checkCollisionForSwaping(
     item: TriDragGridItemComponent

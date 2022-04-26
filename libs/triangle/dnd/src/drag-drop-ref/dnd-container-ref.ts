@@ -424,16 +424,6 @@ export class DndContainerRef<T = any> {
     this._initialScrollSnap = styles.msScrollSnapType || styles.scrollSnapType || '';
     styles.scrollSnapType   = styles.msScrollSnapType = 'none';
 
-    const {rowGap, columnGap} = getComputedStyle(coerceElement(this.element));
-
-    if (rowGap.endsWith('px')) {
-      (this.positionStrategy as FlexRowSortPositionStrategy).rowGap = +rowGap.replace('px', '');
-    }
-    if (columnGap.endsWith('px')) {
-      (this.positionStrategy as FlexRowSortPositionStrategy).columnGap = +columnGap.replace('px',
-        '');
-    }
-
     this._cacheItems();
     this._viewportScrollSubscription.unsubscribe();
     this._listenToScrollEvents();

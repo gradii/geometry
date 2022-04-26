@@ -37,7 +37,6 @@ import {
     >
       <div triDragHandle class="tri-drag-grid-item-content" style="width: 100%;height: 100%">
         <ng-content></ng-content>
-        {{x}} {{y}}
       </div>
     </tri-drag-resize-container>
   `,
@@ -79,19 +78,19 @@ export class TriDragGridItemComponent extends TriDrag
 
   @Input('triDragGridItemX')
   x: number = -1;
-  renderX: number;
+  renderX: number = -1;
 
   @Input('triDragGridItemY')
   y: number = -1;
-  renderY: number;
+  renderY: number = -1;
 
   @Input('triDragGridItemRows')
   rows: number = 1;
-  renderRows: number;
+  renderRows: number = 1;
 
   @Input('triDragGridItemCols')
   cols: number = 1;
-  renderCols: number;
+  renderCols: number = 1;
 
   // itemChanged
 
@@ -151,7 +150,7 @@ export class TriDragGridItemComponent extends TriDrag
 
   constructor(
     @Inject(TRI_DROP_CONTAINER)
-    private gridster: TriDropGridContainer,
+    private gridContainer: TriDropGridContainer,
     /** Element that the draggable is attached to. */
     public element: ElementRef<HTMLElement>,
     /** Droppable container that the draggable is a part of. */
@@ -259,17 +258,34 @@ export class TriDragGridItemComponent extends TriDrag
   ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
 
+    let autoPositionItem = false;
     if (changes['x']) {
       this.lastPositionX = changes['x'].currentValue;
+      this.renderX       = this.x;
+      autoPositionItem   = true;
     }
     if (changes['y']) {
       this.lastPositionY = changes['y'].currentValue;
+      this.renderY       = this.y;
+      autoPositionItem   = true;
     }
 
-    if (
-      changes['x'] || changes['y'] ||
-      changes['rows'] || changes['cols']
-    ) {
+    if (changes['cols']) {
+      this.renderCols  = Math.max(
+        Math.min(this.cols, this.gridContainer.maxCols),
+        this.gridContainer.minCols
+      );
+      autoPositionItem = true;
+    }
+    if (changes['rows']) {
+      this.renderRows  = Math.max(
+        Math.min(this.rows, this.gridContainer.maxRows),
+        this.gridContainer.minRows
+      );
+      autoPositionItem = true;
+    }
+
+    if (autoPositionItem) {
       this.dropContainer.positionItem(this);
     }
   }
@@ -289,8 +305,8 @@ export class TriDragGridItemComponent extends TriDrag
       currentColumnHeight = (ref.currentHeight - container.gutter) / container.rows;
     }
 
-    const x = clamp(this.x, 0, this.maxItemCols - 1);
-    const y = clamp(this.y, 0, this.maxItemRows - 1);
+    const x = clamp(this.renderX, 0, this.maxItemCols - 1);
+    const y = clamp(this.renderY, 0, this.maxItemRows - 1);
 
     if (!container.hasPadding) {
       this.left = x * currentColumnWidth;
@@ -304,34 +320,45 @@ export class TriDragGridItemComponent extends TriDrag
 
     this._dragRef.setProgramDragPosition({x: this.left, y: this.top});
     this._changeDetectorRef.markForCheck();
+  }
 
-    // const top    = this.y * this.gridster.curRowHeight;
-    // const left   = this.x * this.gridster.curColWidth;
-    // const width  = this.cols * this.gridster.curColWidth - this.gridster.$options.margin;
-    // const height = this.rows * this.gridster.curRowHeight - this.gridster.$options.margin;
-    //
-    // this.top  = top;
-    // this.left = left;
-    //
-    // if (!this.init && width > 0 && height > 0) {
-    //   this.init = true;
-    //   if (this.item.initCallback) {
-    //     this.item.initCallback(this.item, this);
-    //   }
-    //   if (this.gridster.options.itemInitCallback) {
-    //     this.gridster.options.itemInitCallback(this.item, this);
-    //   }
-    //   if (this.gridster.$options.scrollToNewItems) {
-    //     this.el.scrollIntoView(false);
-    //   }
-    // }
-    // if (width !== this.width || height !== this.height) {
-    //   this.width  = width;
-    //   this.height = height;
-    //   if (this.gridster.options.itemResizeCallback) {
-    //     this.gridster.options.itemResizeCallback(this.item, this);
-    //   }
-    // }
+  checkItemChanges(item: TriDragGridItemComponent): void {
+    if (
+      item.renderRows === item.rows &&
+      item.renderCols === item.cols &&
+      item.renderX === item.x &&
+      item.renderY === item.y
+    ) {
+      return;
+    }
+    if (this.gridContainer.checkCollision(this)) {
+      this.renderX    = item.x || 0;
+      this.renderY    = item.y || 0;
+      this.renderCols = item.cols || 1;
+      this.renderRows = item.rows || 1;
+      this.setSize();
+    } else {
+      this.cols = this.renderCols;
+      this.rows = this.renderRows;
+      this.x    = this.renderX;
+      this.y    = this.renderY;
+      this.gridContainer.calculateLayout();
+      this.itemChanged();
+    }
+  }
+
+  setSize(): void {
+    this.element.nativeElement.style.display = this.notPlaced ? 'none' : 'block';
+    // this.gridster.gridRenderer.updateItem(this.el, this, this.renderer);
+    this.updateItemSize();
+  }
+
+  itemChanged() {
+
+  }
+
+  dragStarted() {
+    // this.pushService = new GridPushService(this.data as unknown as TriDropGridContainer);
   }
 
   ngOnInit() {

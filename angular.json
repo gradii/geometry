@@ -410,6 +410,31 @@
         }
       }
     },
+    "runner": {
+      "root": "libs/runner",
+      "sourceRoot": "libs/runner/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/runner/tsconfig.lib.json",
+              "libs/runner/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/runner/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/runner"],
+          "options": {
+            "jestConfig": "libs/runner/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "runtime-drag": {
       "projectType": "application",
       "root": "apps/runtime-drag",

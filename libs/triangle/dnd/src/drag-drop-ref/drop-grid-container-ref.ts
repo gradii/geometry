@@ -10,6 +10,8 @@ import { ElementRef, NgZone } from '@angular/core';
 import { Subject } from 'rxjs';
 import type { TriDropGridContainer } from '../directives/drop-grid-container';
 import { DragDropRegistry } from '../drag-drop-registry';
+import { TriDragGridItemComponent } from '../drag-grid/drag-grid-item.component';
+import { GridPushDirection, GridPushService } from '../drag-grid/grid-push.service';
 import { CompactType } from '../enum';
 import { GridPositionStrategy } from '../position-strategy/grid-position-strategy';
 import { DndContainerRef } from './dnd-container-ref';
@@ -20,7 +22,14 @@ import { DragRefInternal, DragRefInternal as DragRef, Point } from './drag-ref';
  */
 export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
   hasPadding: boolean;
+  /**
+   * @deprecated use rowGap and columnGap instead
+   */
   gutter: number = 0;
+
+  rowGap: number    = 0;
+  columnGap: number = 0;
+
   currentWidth: number;
   currentHeight: number;
   currentColumnWidth: number;
@@ -37,7 +46,7 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
   compactType: CompactType;
 
 
-  private pushService;
+  private pushService: GridPushService;
 
   /** Emits as the user is swapping items while actively dragging. */
   readonly arranged = new Subject<{
@@ -64,7 +73,7 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
       _viewportRuler,
       positionStrategy);
 
-    // this.pushService  = new GridPushService(this);
+    this.pushService = new GridPushService(this);
     // const swapService = new GridSwapService(this);
   }
 
@@ -151,53 +160,62 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
   lastDragCols = 1;
   lastDragRows = 1;
 
-  _arrangeItem(item: DragRef, pointerX: number, pointerY: number,
+  positionXBackup: number;
+  positionYBackup: number;
+
+  collision: boolean;
+
+  _arrangeItem(item: DragRef<TriDragGridItemComponent>, pointerX: number, pointerY: number,
                elementPointX: number, elementPointY: number,
                pointerDelta: { x: number; y: number }) {
     super._arrangeItem(item, pointerX, pointerY, elementPointX, elementPointY, pointerDelta);
 
-    const positionX = this.positionStrategy.pixelsToPositionX(item, elementPointX);
-    const positionY = this.positionStrategy.pixelsToPositionY(item, elementPointY);
+    const latestPositionX = this.positionStrategy.latestPositionX;
+    const latestPositionY = this.positionStrategy.latestPositionY;
 
-    const placeholderRef = item.getPlaceholderElement();
+    this.positionStrategy._sortItem(item, elementPointX, elementPointY, pointerDelta);
 
-    const maxColumns  = Math.max(positionX + 1, (this.data as unknown as TriDropGridContainer).cols,
-      this.lastDragCols);
-    const maxRows     = Math.max(positionY + 1, (this.data as unknown as TriDropGridContainer).rows,
-      this.lastDragRows);
-    this.lastDragCols = maxColumns;
-    this.lastDragRows = maxRows;
+    const newPositionX = this.positionStrategy.latestPositionX;
+    const newPositionY = this.positionStrategy.latestPositionY;
 
-    let contentWidth, contentHeight;
-    if (!this.hasPadding) {
-      contentWidth  = maxColumns * this.currentColumnWidth - this.gutter;
-      contentHeight = maxRows * this.currentRowHeight - this.gutter;
-    } else {
-      contentWidth  = maxColumns * this.currentColumnWidth + this.gutter;
-      contentHeight = maxRows * this.currentRowHeight + this.gutter;
+    const gridContainer = (this.data as unknown as TriDropGridContainer);
+    if (gridContainer.pushItems) {
+      if (
+        this.positionXBackup !== item.data.renderX ||
+        this.positionYBackup !== item.data.renderY
+      ) {
+        let direction = '';
+        if (latestPositionX < newPositionX) {
+          direction = GridPushDirection.fromWest;
+        } else if (latestPositionX > newPositionX) {
+          direction = GridPushDirection.fromEast;
+        } else if (latestPositionY < newPositionY) {
+          direction = GridPushDirection.fromNorth;
+        } else if (latestPositionY > newPositionY) {
+          direction = GridPushDirection.fromSouth;
+        }
+        if (direction) {
+          console.log(`push direction ${direction}`);
+
+          this.pushService.pushItems(item, direction, gridContainer.disablePushOnDrag);
+
+          // this.swap.swapItems();
+          this.collision = gridContainer.checkCollision(item.data);
+          if (this.collision) {
+            item.data.renderX = this.positionXBackup;
+            item.data.renderY = this.positionYBackup;
+            // if (
+            //   gridContainer.draggable.dropOverItems &&
+            //   this.collision !== true &&
+            //   this.collision
+            // ) {
+            //   gridContainer.movingItem = null;
+            // }
+          }
+          // this.pushService.checkPushBack();
+        }
+      }
     }
-
-    (this.data as unknown as TriDropGridContainer).contentElement.nativeElement.style.width  = `${contentWidth}px`;
-    (this.data as unknown as TriDropGridContainer).contentElement.nativeElement.style.height = `${contentHeight}px`;
-
-    let x, y;
-    if (!this.hasPadding) {
-      x = positionX * this.currentColumnWidth;
-      y = positionY * this.currentRowHeight;
-    } else {
-      x = positionX * this.currentColumnWidth + this.gutter;
-      y = positionY * this.currentRowHeight + this.gutter;
-    }
-
-    // this.width  = this.cols * currentColumnWidth - container.gutter;
-    // this.height = this.rows * currentColumnHeight - container.gutter;
-
-
-    placeholderRef.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-
-
-    // this.pushService._pushItem(item, (this.data as unknown as TriDropGridContainer), positionX, positionY,
-    //   pointerDelta);
   }
 
   drop(item: DragRefInternal, currentIndex: number,
@@ -231,15 +249,11 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
   }
 
   checkCollision() {
-
   }
 
   _reset() {
     (this.data as unknown as TriDropGridContainer).contentElement.nativeElement.style.width  = `0`;
     (this.data as unknown as TriDropGridContainer).contentElement.nativeElement.style.height = `0`;
-
-
-    // #####################
 
     this._isDragging = false;
 

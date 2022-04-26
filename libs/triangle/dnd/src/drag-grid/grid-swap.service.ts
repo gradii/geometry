@@ -4,17 +4,17 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { GridComponentInterface } from './grid.interface';
-import { GridItemComponentInterface } from './grid-item.interface';
+import { TriDropGridContainer } from '../directives/drop-grid-container';
+import { TriDragGridItemComponent } from './drag-grid-item.component';
 
 export class GridSwapService {
-  private swapedItem: GridItemComponentInterface | undefined;
-  private gridsterItem: GridItemComponentInterface;
-  private grid: GridComponentInterface;
+  private swapedItem: TriDragGridItemComponent | undefined;
+  private gridsterItem: TriDragGridItemComponent;
+  private grid: TriDropGridContainer;
 
-  constructor(gridItem: GridItemComponentInterface) {
+  constructor(gridItem: TriDragGridItemComponent) {
     this.gridsterItem = gridItem;
-    this.grid     = gridItem.gridster;
+    this.grid         = gridItem.dropContainer;
   }
 
   destroy(): void {
@@ -22,7 +22,7 @@ export class GridSwapService {
   }
 
   swapItems(): void {
-    if (this.grid.$options.swap) {
+    if (this.grid.swap) {
       this.checkSwapBack();
       this.checkSwap(this.gridsterItem);
     }
@@ -30,17 +30,17 @@ export class GridSwapService {
 
   checkSwapBack(): void {
     if (this.swapedItem) {
-      const x: number         = this.swapedItem.$item.x;
-      const y: number         = this.swapedItem.$item.y;
-      this.swapedItem.$item.x = this.swapedItem.item.x || 0;
-      this.swapedItem.$item.y = this.swapedItem.item.y || 0;
-      if (this.grid.checkCollision(this.swapedItem.$item)) {
-        this.swapedItem.$item.x = x;
-        this.swapedItem.$item.y = y;
+      const x: number         = this.swapedItem.renderX;
+      const y: number         = this.swapedItem.renderY;
+      this.swapedItem.renderX = this.swapedItem.x || 0;
+      this.swapedItem.renderY = this.swapedItem.y || 0;
+      if (this.grid.checkCollision(this.swapedItem)) {
+        this.swapedItem.renderX = x;
+        this.swapedItem.renderY = y;
       } else {
-        this.swapedItem.setSize();
-        this.gridsterItem.$item.x = this.gridsterItem.item.x || 0;
-        this.gridsterItem.$item.y = this.gridsterItem.item.y || 0;
+        // this.swapedItem.setSize();
+        this.gridsterItem.renderX = this.gridsterItem.x || 0;
+        this.gridsterItem.renderY = this.gridsterItem.y || 0;
         this.swapedItem           = undefined;
       }
     }
@@ -48,64 +48,62 @@ export class GridSwapService {
 
   restoreSwapItem(): void {
     if (this.swapedItem) {
-      this.swapedItem.$item.x = this.swapedItem.item.x || 0;
-      this.swapedItem.$item.y = this.swapedItem.item.y || 0;
-      this.swapedItem.setSize();
-      this.swapedItem = undefined;
+      this.swapedItem.renderX = this.swapedItem.x || 0;
+      this.swapedItem.renderY = this.swapedItem.y || 0;
+      // this.swapedItem.setSize();
+      this.swapedItem         = undefined;
     }
   }
 
   setSwapItem(): void {
     if (this.swapedItem) {
       this.swapedItem.checkItemChanges(
-        this.swapedItem.$item,
-        this.swapedItem.item
+        this.swapedItem
       );
       this.swapedItem = undefined;
     }
   }
 
-  checkSwap(pushedBy: GridItemComponentInterface): void {
+  checkSwap(pushedBy: TriDragGridItemComponent): void {
     let gridsterItemCollision;
-    if (this.grid.$options.swapWhileDragging) {
+    if (this.grid.swapWhileDragging) {
       gridsterItemCollision = this.grid.checkCollisionForSwaping(
-        pushedBy.$item
+        pushedBy
       );
     } else {
-      gridsterItemCollision = this.grid.checkCollision(pushedBy.$item);
+      gridsterItemCollision = this.grid.checkCollision(pushedBy);
     }
     if (
       gridsterItemCollision &&
       gridsterItemCollision !== true &&
       gridsterItemCollision.canBeDragged()
     ) {
-      const gridsterItemCollide: GridItemComponentInterface =
+      const gridsterItemCollide: TriDragGridItemComponent =
               gridsterItemCollision;
-      const copyCollisionX                                  = gridsterItemCollide.$item.x;
-      const copyCollisionY                                  = gridsterItemCollide.$item.y;
-      const copyX                                           = pushedBy.$item.x;
-      const copyY                                           = pushedBy.$item.y;
-      const diffX                                           = copyX - copyCollisionX;
-      const diffY                                           = copyY - copyCollisionY;
-      gridsterItemCollide.$item.x                           = pushedBy.item.x - diffX;
-      gridsterItemCollide.$item.y                           = pushedBy.item.y - diffY;
-      pushedBy.$item.x                                      = gridsterItemCollide.item.x + diffX;
-      pushedBy.$item.y                                      = gridsterItemCollide.item.y + diffY;
+      const copyCollisionX                                = gridsterItemCollide.renderX;
+      const copyCollisionY                                = gridsterItemCollide.renderY;
+      const copyX                                         = pushedBy.renderX;
+      const copyY                                         = pushedBy.renderY;
+      const diffX                                         = copyX - copyCollisionX;
+      const diffY                                         = copyY - copyCollisionY;
+      gridsterItemCollide.renderX                         = pushedBy.x - diffX;
+      gridsterItemCollide.renderY                         = pushedBy.y - diffY;
+      pushedBy.renderX                                    = gridsterItemCollide.x + diffX;
+      pushedBy.renderY                                    = gridsterItemCollide.y + diffY;
       if (
-        this.grid.checkCollision(gridsterItemCollide.$item) ||
-        this.grid.checkCollision(pushedBy.$item)
+        this.grid.checkCollision(gridsterItemCollide) ||
+        this.grid.checkCollision(pushedBy)
       ) {
-        pushedBy.$item.x            = copyX;
-        pushedBy.$item.y            = copyY;
-        gridsterItemCollide.$item.x = copyCollisionX;
-        gridsterItemCollide.$item.y = copyCollisionY;
+        pushedBy.renderX            = copyX;
+        pushedBy.renderY            = copyY;
+        gridsterItemCollide.renderX = copyCollisionX;
+        gridsterItemCollide.renderY = copyCollisionY;
       } else {
-        gridsterItemCollide.setSize();
+        // gridsterItemCollide.setSize();
         this.swapedItem = gridsterItemCollide;
-        if (this.grid.$options.swapWhileDragging) {
+        if (this.grid.swapWhileDragging) {
           this.gridsterItem.checkItemChanges(
-            this.gridsterItem.$item,
-            this.gridsterItem.item
+            this.gridsterItem
           );
           this.setSwapItem();
         }

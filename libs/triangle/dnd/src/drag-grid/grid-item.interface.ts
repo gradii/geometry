@@ -6,9 +6,12 @@
 
 // import { GridsterDraggable } from './gridsterDraggable.service';
 import { Renderer2 } from '@angular/core';
-import { GridResizableService } from './grid-resizable.service';
+// import { GridResizableService } from './grid-resizable.service';
 import { GridComponentInterface } from './grid.interface';
 
+/**
+ * @deprecated
+ */
 export abstract class GridItemComponentInterface {
   item: GridItem;
   $item: GridItem;
@@ -17,7 +20,7 @@ export abstract class GridItemComponentInterface {
   width: number;
   height: number;
   // drag: GridsterDraggable;
-  resize: GridResizableService;
+  // resize: GridResizableService;
   notPlaced: boolean;
   updateOptions: () => void;
   itemChanged: () => void;

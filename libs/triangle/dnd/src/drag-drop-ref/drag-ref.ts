@@ -64,7 +64,7 @@ const MOUSE_EVENT_IGNORE_TIME = 800;
  * Used to avoid circular import issues between the `DragRef` and the `DropContainerRef`.
  * @docs-private
  */
-export interface DragRefInternal extends DragRef {
+export interface DragRefInternal<T = any> extends DragRef<T> {
 }
 
 /** Template that can be used to create a drag helper element (e.g. a preview or a placeholder). */

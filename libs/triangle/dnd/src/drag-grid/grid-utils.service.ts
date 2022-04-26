@@ -4,6 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { TriDropGridContainer } from '../directives/drop-grid-container';
 import { GridComponentInterface } from './grid.interface';
 
 export class GridUtilsService {
@@ -35,34 +36,34 @@ export class GridUtilsService {
     }
   }
 
-  static checkContentClassForEvent(
-    gridster: GridComponentInterface,
-    e: MouseEvent
-  ): boolean {
-    if (gridster.$options.draggable.ignoreContent) {
-      if (
-        !GridUtilsService.checkDragHandleClass(
-          e.target as HTMLElement,
-          e.currentTarget as HTMLElement,
-          gridster.$options.draggable.dragHandleClass,
-          gridster.$options.draggable.ignoreContentClass
-        )
-      ) {
-        return true;
-      }
-    } else {
-      if (
-        GridUtilsService.checkContentClass(
-          e.target as HTMLElement,
-          e.currentTarget as HTMLElement,
-          gridster.$options.draggable.ignoreContentClass
-        )
-      ) {
-        return true;
-      }
-    }
-    return false;
-  }
+  // static checkContentClassForEvent(
+  //   gridster: TriDropGridContainer,
+  //   e: MouseEvent
+  // ): boolean {
+  //   if (gridster.draggable.ignoreContent) {
+  //     if (
+  //       !GridUtilsService.checkDragHandleClass(
+  //         e.target as HTMLElement,
+  //         e.currentTarget as HTMLElement,
+  //         gridster.draggable.dragHandleClass,
+  //         gridster.draggable.ignoreContentClass
+  //       )
+  //     ) {
+  //       return true;
+  //     }
+  //   } else {
+  //     if (
+  //       GridUtilsService.checkContentClass(
+  //         e.target as HTMLElement,
+  //         e.currentTarget as HTMLElement,
+  //         gridster.$options.draggable.ignoreContentClass
+  //       )
+  //     ) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
   static checkContentClassForEmptyCellClickEvent(
     gridster: GridComponentInterface,

@@ -11,13 +11,12 @@ import { Subject } from 'rxjs';
 import { DragDropRegistry } from '../drag-drop-registry';
 import { dragDropPosition } from '../drag-styling';
 import { DROP_PROXIMITY_THRESHOLD } from '../enum';
+import { FlexRowSortPositionStrategy } from '../position-strategy/flex-row-sort-position-strategy';
+import { PositionStrategy } from '../position-strategy/position-strategy';
 import { findIndex } from '../utils';
 import { isPointerNearClientRect } from '../utils/client-rect';
-import { DragRefInternal as DragRef } from './drag-ref';
 import { DndContainerRef } from './dnd-container-ref';
-import {
-} from '../position-strategy/sort-position-strategy';
-import { PositionStrategy } from '../position-strategy/position-strategy';
+import { DragRefInternal as DragRef } from './drag-ref';
 
 /**
  * Reference to a drop list. Used to manipulate or dispose of the container.
@@ -126,6 +125,19 @@ export class DropFlexContainerRef<T = any> extends DndContainerRef<T> {
     // Notify siblings at the end so that the item has been inserted into the `activeDraggables`.
     this._notifyReceivingSiblings();
     this.entered.next({item, container: this, currentIndex: this.getItemIndex(item)});
+  }
+
+  protected _draggingStarted() {
+    super._draggingStarted();
+    const {rowGap, columnGap} = getComputedStyle(coerceElement(this.element));
+
+    if (rowGap.endsWith('px')) {
+      (this.positionStrategy as FlexRowSortPositionStrategy).rowGap = +rowGap.replace('px', '');
+    }
+    if (columnGap.endsWith('px')) {
+      (this.positionStrategy as FlexRowSortPositionStrategy).columnGap = +columnGap.replace('px',
+        '');
+    }
   }
 
   /**

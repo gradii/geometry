@@ -4,75 +4,71 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { GridComponentInterface } from './grid.interface';
-import {
-  GridItem,
-  // GridsterItem,
-  GridItemComponentInterface
-} from './grid-item.interface';
-import { CompactType } from './grid-config.interface';
+import { TriDropGridContainer } from '../directives/drop-grid-container';
+import { CompactType } from '../enum';
+import { TriDragGridItemComponent } from './drag-grid-item.component';
 
 export class CompactPositionService {
-  constructor(private grid: GridComponentInterface) {
+  constructor(private grid: TriDropGridContainer) {
   }
 
   destroy(): void {
     this.grid = null!;
   }
 
-  checkCompact(): void {
-    if (this.grid.$options.compactType !== CompactType.None) {
-      if (this.grid.$options.compactType === CompactType.CompactUp) {
+  checkCompact(compactType: CompactType): void {
+    if (compactType !== CompactType.None) {
+      if (compactType === CompactType.CompactUp) {
         this.checkCompactMovement('y', -1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactLeft
+        compactType === CompactType.CompactLeft
       ) {
         this.checkCompactMovement('x', -1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactUpAndLeft
+        compactType === CompactType.CompactUpAndLeft
       ) {
         this.checkCompactMovement('y', -1);
         this.checkCompactMovement('x', -1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactLeftAndUp
+        compactType === CompactType.CompactLeftAndUp
       ) {
         this.checkCompactMovement('x', -1);
         this.checkCompactMovement('y', -1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactRight
+        compactType === CompactType.CompactRight
       ) {
         this.checkCompactMovement('x', 1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactUpAndRight
+        compactType === CompactType.CompactUpAndRight
       ) {
         this.checkCompactMovement('y', -1);
         this.checkCompactMovement('x', 1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactRightAndUp
+        compactType === CompactType.CompactRightAndUp
       ) {
         this.checkCompactMovement('x', 1);
         this.checkCompactMovement('y', -1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactDown
+        compactType === CompactType.CompactDown
       ) {
         this.checkCompactMovement('y', 1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactDownAndLeft
+        compactType === CompactType.CompactDownAndLeft
       ) {
         this.checkCompactMovement('y', 1);
         this.checkCompactMovement('x', -1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactDownAndRight
+        compactType === CompactType.CompactDownAndRight
       ) {
         this.checkCompactMovement('y', 1);
         this.checkCompactMovement('x', 1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactLeftAndDown
+        compactType === CompactType.CompactLeftAndDown
       ) {
         this.checkCompactMovement('x', -1);
         this.checkCompactMovement('y', 1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactRightAndDown
+        compactType === CompactType.CompactRightAndDown
       ) {
         this.checkCompactMovement('x', 1);
         this.checkCompactMovement('y', 1);
@@ -80,50 +76,50 @@ export class CompactPositionService {
     }
   }
 
-  checkCompactItem(item: GridItem): void {
-    if (this.grid.$options.compactType !== CompactType.None) {
-      if (this.grid.$options.compactType === CompactType.CompactUp) {
+  checkCompactItem(compactType: CompactType, item: TriDragGridItemComponent): void {
+    if (compactType !== CompactType.None) {
+      if (compactType === CompactType.CompactUp) {
         this.moveTillCollision(item, 'y', -1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactLeft
+        compactType === CompactType.CompactLeft
       ) {
         this.moveTillCollision(item, 'x', -1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactUpAndLeft
+        compactType === CompactType.CompactUpAndLeft
       ) {
         this.moveTillCollision(item, 'y', -1);
         this.moveTillCollision(item, 'x', -1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactLeftAndUp
+        compactType === CompactType.CompactLeftAndUp
       ) {
         this.moveTillCollision(item, 'x', -1);
         this.moveTillCollision(item, 'y', -1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactUpAndRight
+        compactType === CompactType.CompactUpAndRight
       ) {
         this.moveTillCollision(item, 'y', -1);
         this.moveTillCollision(item, 'x', 1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactDown
+        compactType === CompactType.CompactDown
       ) {
         this.moveTillCollision(item, 'y', 1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactDownAndLeft
+        compactType === CompactType.CompactDownAndLeft
       ) {
         this.moveTillCollision(item, 'y', 1);
         this.moveTillCollision(item, 'x', -1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactLeftAndDown
+        compactType === CompactType.CompactLeftAndDown
       ) {
         this.moveTillCollision(item, 'x', -1);
         this.moveTillCollision(item, 'y', 1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactDownAndRight
+        compactType === CompactType.CompactDownAndRight
       ) {
         this.moveTillCollision(item, 'y', 1);
         this.moveTillCollision(item, 'x', 1);
       } else if (
-        this.grid.$options.compactType === CompactType.CompactRightAndDown
+        compactType === CompactType.CompactRightAndDown
       ) {
         this.moveTillCollision(item, 'x', 1);
         this.moveTillCollision(item, 'y', 1);
@@ -133,29 +129,41 @@ export class CompactPositionService {
 
   private checkCompactMovement(direction: 'x' | 'y', delta: number): void {
     let widgetMoved = false;
-    this.grid.grid.forEach((widget: GridItemComponentInterface) => {
-      if (widget.$item.compactEnabled !== false) {
-        const moved = this.moveTillCollision(widget.$item, direction, delta);
+    this.grid.getUnSortedItems().forEach((widget: TriDragGridItemComponent) => {
+      if (widget.compactEnabled !== false) {
+        const moved = this.moveTillCollision(widget, direction, delta);
         if (moved) {
-          widgetMoved            = true;
-          widget.item[direction] = widget.$item[direction];
-          widget.itemChanged();
+          widgetMoved = true;
+          // if (direction === 'x') {
+          //   widget.x = widget.renderX;
+          // } else {
+          //   widget.y = widget.renderY;
+          // }
+          // widget.itemChanged();
         }
       }
     });
     if (widgetMoved) {
-      this.checkCompact();
+      this.checkCompact(this.grid.compactType);
     }
   }
 
   private moveTillCollision(
-    item: GridItem,
+    item: TriDragGridItemComponent,
     direction: 'x' | 'y',
     delta: number
   ): boolean {
-    item[direction] += delta;
+    if (direction === 'x') {
+      item.renderX += delta;
+    } else {
+      item.renderY += delta;
+    }
     if (this.grid.checkCollision(item)) {
-      item[direction] -= delta;
+      if (direction === 'x') {
+        item.renderX -= delta;
+      } else {
+        item.renderY -= delta;
+      }
       return false;
     } else {
       this.moveTillCollision(item, direction, delta);

@@ -4,69 +4,85 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { GridItemComponentInterface } from './grid-item.interface';
-import { GridComponentInterface } from './grid.interface';
+import { TriDropGridContainer } from '../directives/drop-grid-container';
+import { DragRef } from '../drag-drop-ref/drag-ref';
+import { DropGridContainerRef } from '../drag-drop-ref/drop-grid-container-ref';
+import { TriDragGridItemComponent } from './drag-grid-item.component';
+
+export const enum GridPushDirection {
+  fromSouth = 'fromSouth',
+  fromNorth = 'fromNorth',
+  fromEast  = 'fromEast',
+  fromWest  = 'fromWest',
+}
+
 
 export class GridPushService {
-  public fromSouth: string;
-  public fromNorth: string;
-  public fromEast: string;
-  public fromWest: string;
-  private pushedItems: GridItemComponentInterface[];
-  private pushedItemsTemp: GridItemComponentInterface[];
+  public fromSouth: GridPushDirection;
+  public fromNorth: GridPushDirection;
+  public fromEast: GridPushDirection;
+  public fromWest: GridPushDirection;
+
+  private pushedItems: TriDragGridItemComponent[];
+  private pushedItemsTemp: TriDragGridItemComponent[];
   private pushedItemsTempPath: { x: number; y: number }[][];
   private pushedItemsPath: { x: number; y: number }[][];
-  private gridsterItem: GridItemComponentInterface;
-  private gridster: GridComponentInterface;
-  private pushedItemsOrder: GridItemComponentInterface[];
+  /**
+   * @deprecated
+   * @private
+   */
+  private gridsterItem: TriDragGridItemComponent;
+  // private gridster: TriDropGridContainer;
+  private pushedItemsOrder: TriDragGridItemComponent[];
   private tryPattern: {
     fromEast: ((
-      gridsterItemCollide: GridItemComponentInterface,
-      gridsterItem: GridItemComponentInterface
+      gridsterItemCollide: TriDragGridItemComponent,
+      gridsterItem: TriDragGridItemComponent
     ) => boolean)[];
     fromWest: ((
-      gridsterItemCollide: GridItemComponentInterface,
-      gridsterItem: GridItemComponentInterface
+      gridsterItemCollide: TriDragGridItemComponent,
+      gridsterItem: TriDragGridItemComponent
     ) => boolean)[];
     fromNorth: ((
-      gridsterItemCollide: GridItemComponentInterface,
-      gridsterItem: GridItemComponentInterface
+      gridsterItemCollide: TriDragGridItemComponent,
+      gridsterItem: TriDragGridItemComponent
     ) => boolean)[];
     fromSouth: ((
-      gridsterItemCollide: GridItemComponentInterface,
-      gridsterItem: GridItemComponentInterface
+      gridsterItemCollide: TriDragGridItemComponent,
+      gridsterItem: TriDragGridItemComponent
     ) => boolean)[];
   };
   private iteration = 0;
 
-  constructor(gridsterItem: GridItemComponentInterface) {
+  constructor(/*gridsterItem: TriDragGridItemComponent*/
+              private dropGridContainerRef: DropGridContainerRef<any>) {
     this.pushedItems         = [];
     this.pushedItemsTemp     = [];
     this.pushedItemsTempPath = [];
     this.pushedItemsPath     = [];
-    this.gridsterItem        = gridsterItem;
-    this.gridster            = gridsterItem.gridster;
-    this.tryPattern          = {
+    // this.gridsterItem        = gridsterItem;
+    // this.gridster            = gridsterItem.gridster;
+    this.tryPattern = {
       fromEast : [this.tryWest, this.trySouth, this.tryNorth, this.tryEast],
       fromWest : [this.tryEast, this.trySouth, this.tryNorth, this.tryWest],
       fromNorth: [this.trySouth, this.tryEast, this.tryWest, this.tryNorth],
       fromSouth: [this.tryNorth, this.tryEast, this.tryWest, this.trySouth]
     };
-    this.fromSouth           = 'fromSouth';
-    this.fromNorth           = 'fromNorth';
-    this.fromEast            = 'fromEast';
-    this.fromWest            = 'fromWest';
+    this.fromSouth  = GridPushDirection.fromSouth;
+    this.fromNorth  = GridPushDirection.fromNorth;
+    this.fromEast   = GridPushDirection.fromEast;
+    this.fromWest   = GridPushDirection.fromWest;
   }
 
   destroy(): void {
-    this.gridster = this.gridsterItem = null!;
+    // this.gridster = this.gridsterItem = null!;
   }
 
-  pushItems(direction: string, disable?: boolean): boolean {
-    if (this.gridster.$options.pushItems && !disable) {
+  pushItems(item: DragRef, direction: string, disable?: boolean): boolean {
+    if (!disable) {
       this.pushedItemsOrder = [];
       this.iteration        = 0;
-      const pushed          = this.push(this.gridsterItem, direction);
+      const pushed          = this.push(item.data, direction);
       if (!pushed) {
         this.restoreTempItems();
       }
@@ -86,114 +102,105 @@ export class GridPushService {
     }
   }
 
-  restoreItems(): void {
-    let i           = 0;
-    const l: number = this.pushedItems.length;
-    let pushedItem: GridItemComponentInterface;
-    for (; i < l; i++) {
-      pushedItem         = this.pushedItems[i];
-      pushedItem.$item.x = pushedItem.item.x || 0;
-      pushedItem.$item.y = pushedItem.item.y || 0;
-      pushedItem.setSize();
-    }
-    this.pushedItems     = [];
-    this.pushedItemsPath = [];
-  }
-
-  setPushedItems(): void {
-    let i           = 0;
-    const l: number = this.pushedItems.length;
-    let pushedItem: GridItemComponentInterface;
-    for (; i < l; i++) {
-      pushedItem = this.pushedItems[i];
-      pushedItem.checkItemChanges(pushedItem.$item, pushedItem.item);
-    }
-    this.pushedItems     = [];
-    this.pushedItemsPath = [];
-  }
-
-  checkPushBack(): void {
-    let i: number = this.pushedItems.length - 1;
-    let change    = false;
-    for (; i > -1; i--) {
-      if (this.checkPushedItem(this.pushedItems[i], i)) {
-        change = true;
-      }
-    }
-    if (change) {
-      this.checkPushBack();
-    }
-  }
+  //
+  // restoreItems(): void {
+  //   let i           = 0;
+  //   const l: number = this.pushedItems.length;
+  //   let pushedItem: TriDragGridItemComponent;
+  //   for (; i < l; i++) {
+  //     pushedItem         = this.pushedItems[i];
+  //     pushedItem.renderX = pushedItem.x || 0;
+  //     pushedItem.renderY = pushedItem.y || 0;
+  //     // pushedItem.setSize();
+  //   }
+  //   this.pushedItems     = [];
+  //   this.pushedItemsPath = [];
+  // }
+  //
+  // setPushedItems(): void {
+  //   let i           = 0;
+  //   const l: number = this.pushedItems.length;
+  //   let pushedItem: TriDragGridItemComponent;
+  //   for (; i < l; i++) {
+  //     pushedItem = this.pushedItems[i];
+  //     pushedItem.checkItemChanges(pushedItem);
+  //   }
+  //   this.pushedItems     = [];
+  //   this.pushedItemsPath = [];
+  // }
+  //
+  // checkPushBack(): void {
+  //   let i: number = this.pushedItems.length - 1;
+  //   let change    = false;
+  //   for (; i > -1; i--) {
+  //     if (this.checkPushedItem(this.pushedItems[i], i)) {
+  //       change = true;
+  //     }
+  //   }
+  //   if (change) {
+  //     this.checkPushBack();
+  //   }
+  // }
 
   private push(
-    gridsterItem: GridItemComponentInterface,
+    gridsterItem: TriDragGridItemComponent,
     direction: string
   ): boolean {
     if (this.iteration > 100) {
       console.warn('max iteration reached');
       return false;
     }
-    if (this.gridster.checkGridCollision(gridsterItem.$item)) {
+    if (this.dropGridContainerRef.data.checkGridCollision(gridsterItem)) {
       return false;
     }
     if (direction === '') {
       return false;
     }
-    const conflicts: GridItemComponentInterface[] =
-            this.gridster.findItemsWithItem(gridsterItem.$item);
-    const invert                                  = direction === this.fromNorth || direction === this.fromWest;
+    const conflicts: TriDragGridItemComponent[] =
+            this.dropGridContainerRef.data.findItemsWithItem(gridsterItem);
+    const invert                                = direction === this.fromNorth || direction === this.fromWest;
     // sort the list of conflicts in order of [y,x]. Invert when the push is from north and west
     // this is done so they don't conflict witch each other and revert positions, keeping the previous order
     conflicts.sort((a, b) => {
       if (invert) {
-        return b.$item.y - a.$item.y || b.$item.x - a.$item.x;
+        return b.renderY - a.renderY || b.renderX - a.renderX;
       } else {
-        return a.$item.y - b.$item.y || a.$item.x - b.$item.x;
+        return a.renderY - b.renderY || a.renderX - b.renderX;
       }
     });
-    let i                                           = 0;
-    let itemCollision: GridItemComponentInterface;
-    let makePush                                    = true;
-    const pushedItems: GridItemComponentInterface[] = [];
+    let i                                         = 0;
+    let itemCollision: TriDragGridItemComponent;
+    let makePush                                  = true;
+    const pushedItems: TriDragGridItemComponent[] = [];
     for (; i < conflicts.length; i++) {
       itemCollision = conflicts[i];
-      if (itemCollision === this.gridsterItem) {
+      if (itemCollision === gridsterItem) {
         continue;
       }
-      if (!itemCollision.canBeDragged()) {
-        makePush = false;
-        break;
-      }
+      // if (!itemCollision.canBeDragged()) {
+      //   makePush = false;
+      //   break;
+      // }
       const p = this.pushedItemsTemp.indexOf(itemCollision);
       if (p > -1 && this.pushedItemsTempPath[p].length > 10) {
         // stop if item is pushed more than 10 times to break infinite loops
         makePush = false;
         break;
       }
-      if (
-        this.tryPattern[direction][0].call(this, itemCollision, gridsterItem)
-      ) {
-        this.pushedItemsOrder.push(itemCollision);
-        pushedItems.push(itemCollision);
-      } else if (
-        this.tryPattern[direction][1].call(this, itemCollision, gridsterItem)
-      ) {
-        this.pushedItemsOrder.push(itemCollision);
-        pushedItems.push(itemCollision);
-      } else if (
-        this.tryPattern[direction][2].call(this, itemCollision, gridsterItem)
-      ) {
-        this.pushedItemsOrder.push(itemCollision);
-        pushedItems.push(itemCollision);
-      } else if (
-        this.tryPattern[direction][3].call(this, itemCollision, gridsterItem)
-      ) {
-        this.pushedItemsOrder.push(itemCollision);
-        pushedItems.push(itemCollision);
-      } else {
+
+      const fnList = this.tryPattern[direction];
+
+      for (const it of fnList) {
+        if (it.call(this, itemCollision, gridsterItem)) {
+          pushedItems.push(itemCollision);
+          this.pushedItemsTemp.push(itemCollision);
+          this.pushedItemsTempPath.push([itemCollision]);
+          break;
+        }
         makePush = false;
-        break;
       }
+      break;
+
     }
     if (!makePush) {
       i = this.pushedItemsOrder.lastIndexOf(pushedItems[0]);
@@ -212,15 +219,15 @@ export class GridPushService {
   }
 
   private trySouth(
-    gridsterItemCollide: GridItemComponentInterface,
-    gridsterItem: GridItemComponentInterface
+    gridsterItemCollide: TriDragGridItemComponent,
+    gridsterItem: TriDragGridItemComponent
   ): boolean {
-    if (!this.gridster.$options.pushDirections.south) {
+    if (!this.dropGridContainerRef.data.pushDirectionsSouth) {
       return false;
     }
     this.addToTempPushed(gridsterItemCollide);
-    gridsterItemCollide.$item.y =
-      gridsterItem.$item.y + gridsterItem.$item.rows;
+    gridsterItemCollide.renderY =
+      gridsterItem.renderY + gridsterItem.renderRows;
     if (this.push(gridsterItemCollide, this.fromNorth)) {
       gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
@@ -232,15 +239,15 @@ export class GridPushService {
   }
 
   private tryNorth(
-    gridsterItemCollide: GridItemComponentInterface,
-    gridsterItem: GridItemComponentInterface
+    gridsterItemCollide: TriDragGridItemComponent,
+    gridsterItem: TriDragGridItemComponent
   ): boolean {
-    if (!this.gridster.$options.pushDirections.north) {
+    if (!this.dropGridContainerRef.data.pushDirectionsNorth) {
       return false;
     }
     this.addToTempPushed(gridsterItemCollide);
-    gridsterItemCollide.$item.y =
-      gridsterItem.$item.y - gridsterItemCollide.$item.rows;
+    gridsterItemCollide.renderY =
+      gridsterItem.renderY - gridsterItemCollide.renderRows;
     if (this.push(gridsterItemCollide, this.fromSouth)) {
       gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
@@ -252,15 +259,15 @@ export class GridPushService {
   }
 
   private tryEast(
-    gridsterItemCollide: GridItemComponentInterface,
-    gridsterItem: GridItemComponentInterface
+    gridsterItemCollide: TriDragGridItemComponent,
+    gridsterItem: TriDragGridItemComponent
   ): boolean {
-    if (!this.gridster.$options.pushDirections.east) {
+    if (!this.dropGridContainerRef.data.pushDirectionsEast) {
       return false;
     }
     this.addToTempPushed(gridsterItemCollide);
-    gridsterItemCollide.$item.x =
-      gridsterItem.$item.x + gridsterItem.$item.cols;
+    gridsterItemCollide.renderX =
+      gridsterItem.renderX + gridsterItem.renderCols;
     if (this.push(gridsterItemCollide, this.fromWest)) {
       gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
@@ -272,15 +279,15 @@ export class GridPushService {
   }
 
   private tryWest(
-    gridsterItemCollide: GridItemComponentInterface,
-    gridsterItem: GridItemComponentInterface
+    gridsterItemCollide: TriDragGridItemComponent,
+    gridsterItem: TriDragGridItemComponent
   ): boolean {
-    if (!this.gridster.$options.pushDirections.west) {
+    if (!this.dropGridContainerRef.data.pushDirectionsWest) {
       return false;
     }
     this.addToTempPushed(gridsterItemCollide);
-    gridsterItemCollide.$item.x =
-      gridsterItem.$item.x - gridsterItemCollide.$item.cols;
+    gridsterItemCollide.renderX =
+      gridsterItem.renderX - gridsterItemCollide.renderCols;
     if (this.push(gridsterItemCollide, this.fromEast)) {
       gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
@@ -291,28 +298,29 @@ export class GridPushService {
     return false;
   }
 
-  private addToTempPushed(gridsterItem: GridItemComponentInterface): void {
+
+  private addToTempPushed(gridsterItem: TriDragGridItemComponent): void {
     let i = this.pushedItemsTemp.indexOf(gridsterItem);
     if (i === -1) {
       i                           = this.pushedItemsTemp.push(gridsterItem) - 1;
       this.pushedItemsTempPath[i] = [];
     }
     this.pushedItemsTempPath[i].push({
-      x: gridsterItem.$item.x,
-      y: gridsterItem.$item.y
+      x: gridsterItem.renderX,
+      y: gridsterItem.renderY
     });
   }
 
   private removeFromTempPushed(
-    gridsterItem: GridItemComponentInterface
+    gridsterItem: TriDragGridItemComponent
   ): void {
     const i            = this.pushedItemsTemp.indexOf(gridsterItem);
     const tempPosition = this.pushedItemsTempPath[i].pop();
     if (!tempPosition) {
       return;
     }
-    gridsterItem.$item.x = tempPosition.x;
-    gridsterItem.$item.y = tempPosition.y;
+    gridsterItem.renderX = tempPosition.x;
+    gridsterItem.renderY = tempPosition.y;
     gridsterItem.setSize();
     if (!this.pushedItemsTempPath[i].length) {
       this.pushedItemsTemp.splice(i, 1);
@@ -320,31 +328,31 @@ export class GridPushService {
     }
   }
 
-  private addToPushed(gridsterItem: GridItemComponentInterface): void {
-    if (this.pushedItems.indexOf(gridsterItem) < 0) {
-      this.pushedItems.push(gridsterItem);
+  private addToPushed(item: TriDragGridItemComponent): void {
+    if (this.pushedItems.indexOf(item) < 0) {
+      this.pushedItems.push(item);
       this.pushedItemsPath.push([
-        {x: gridsterItem.item.x || 0, y: gridsterItem.item.y || 0},
-        {x: gridsterItem.$item.x, y: gridsterItem.$item.y}
+        {x: item.x || 0, y: item.y || 0},
+        {x: item.renderX, y: item.renderY}
       ]);
     } else {
-      const i = this.pushedItems.indexOf(gridsterItem);
+      const i = this.pushedItems.indexOf(item);
       this.pushedItemsPath[i].push({
-        x: gridsterItem.$item.x,
-        y: gridsterItem.$item.y
+        x: item.renderX,
+        y: item.renderY
       });
     }
   }
 
-  private removeFromPushed(i: number): void {
-    if (i > -1) {
-      this.pushedItems.splice(i, 1);
-      this.pushedItemsPath.splice(i, 1);
-    }
-  }
+  // private removeFromPushed(i: number): void {
+  //   if (i > -1) {
+  //     this.pushedItems.splice(i, 1);
+  //     this.pushedItemsPath.splice(i, 1);
+  //   }
+  // }
 
   private removeFromPushedItem(
-    gridsterItem: GridItemComponentInterface
+    gridsterItem: TriDragGridItemComponent
   ): void {
     const i = this.pushedItems.indexOf(gridsterItem);
     if (i > -1) {
@@ -356,34 +364,34 @@ export class GridPushService {
     }
   }
 
-  private checkPushedItem(
-    pushedItem: GridItemComponentInterface,
-    i: number
-  ): boolean {
-    const path = this.pushedItemsPath[i];
-    let j      = path.length - 2;
-    let lastPosition;
-    let x;
-    let y;
-    let change = false;
-    for (; j > -1; j--) {
-      lastPosition       = path[j];
-      x                  = pushedItem.$item.x;
-      y                  = pushedItem.$item.y;
-      pushedItem.$item.x = lastPosition.x;
-      pushedItem.$item.y = lastPosition.y;
-      if (!this.gridster.findItemWithItem(pushedItem.$item)) {
-        pushedItem.setSize();
-        path.splice(j + 1, path.length - j - 1);
-        change = true;
-      } else {
-        pushedItem.$item.x = x;
-        pushedItem.$item.y = y;
-      }
-    }
-    if (path.length < 2) {
-      this.removeFromPushed(i);
-    }
-    return change;
-  }
+  // private checkPushedItem(
+  //   pushedItem: TriDragGridItemComponent,
+  //   i: number
+  // ): boolean {
+  //   const path = this.pushedItemsPath[i];
+  //   let j      = path.length - 2;
+  //   let lastPosition;
+  //   let x;
+  //   let y;
+  //   let change = false;
+  //   for (; j > -1; j--) {
+  //     lastPosition       = path[j];
+  //     x                  = pushedItem.renderX;
+  //     y                  = pushedItem.renderY;
+  //     pushedItem.renderX = lastPosition.x;
+  //     pushedItem.renderY = lastPosition.y;
+  //     if (!this.gridster.findItemWithItem(pushedItem)) {
+  //       pushedItem.setSize();
+  //       path.splice(j + 1, path.length - j - 1);
+  //       change = true;
+  //     } else {
+  //       pushedItem.renderX = x;
+  //       pushedItem.renderY = y;
+  //     }
+  //   }
+  //   if (path.length < 2) {
+  //     this.removeFromPushed(i);
+  //   }
+  //   return change;
+  // }
 }

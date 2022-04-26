@@ -17,6 +17,9 @@ import {
 
 // import { GridsterRenderer } from './gridsterRenderer.service';
 
+/**
+ * @deprecated
+ */
 export abstract class GridComponentInterface {
   $options: GridConfigS;
   grid: GridItemComponentInterface[];
