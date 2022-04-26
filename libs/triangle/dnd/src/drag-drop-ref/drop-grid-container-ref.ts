@@ -12,6 +12,7 @@ import type { TriDropGridContainer } from '../directives/drop-grid-container';
 import { DragDropRegistry } from '../drag-drop-registry';
 import { TriDragGridItemComponent } from '../drag-grid/drag-grid-item.component';
 import { GridPushDirection, GridPushService } from '../drag-grid/grid-push.service';
+import { GridSwapService } from '../drag-grid/grid-swap.service';
 import { CompactType } from '../enum';
 import { GridPositionStrategy } from '../position-strategy/grid-position-strategy';
 import { DndContainerRef } from './dnd-container-ref';
@@ -47,6 +48,7 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
 
 
   private pushService: GridPushService;
+  private swapService: GridSwapService;
 
   /** Emits as the user is swapping items while actively dragging. */
   readonly arranged = new Subject<{
@@ -74,7 +76,7 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
       positionStrategy);
 
     this.pushService = new GridPushService(this);
-    // const swapService = new GridSwapService(this);
+    this.swapService = new GridSwapService(this);
   }
 
   enter(item: DragRef, pointerX: number, pointerY: number): void {
@@ -216,6 +218,10 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
         }
       }
     }
+
+    if (gridContainer.swapItem) {
+      this.swapService.swapItem(item);
+    }
   }
 
   drop(item: DragRefInternal, currentIndex: number,
@@ -224,6 +230,10 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
        isPointerOverContainer: boolean, distance: Point,
        dropPoint: Point) {
     this._reset();
+
+    this.pushService.setPushedItems();
+    this.swapService.setSwapItem();
+
     const positionX = this.positionStrategy.pixelsToPositionX(item, elementPositionX);
     const positionY = this.positionStrategy.pixelsToPositionY(item, elementPositionY);
     this.dropped.next({
@@ -249,6 +259,17 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
   }
 
   checkCollision() {
+  }
+
+  exit(item: DragRefInternal) {
+    if ((this.data as unknown as TriDropGridContainer).pushItems) {
+      this.pushService.restoreItems();
+    }
+    if ((this.data as unknown as TriDropGridContainer).swapItem) {
+      this.swapService.restoreSwapItem();
+    }
+
+    super.exit(item);
   }
 
   _reset() {

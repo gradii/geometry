@@ -91,6 +91,21 @@ import { DisplayGrid, GridType } from '../../../../../../libs/triangle/gridster'
         </div>
 
         <div>
+          <h3>swap options</h3>
+          <div>
+            <tri-checkbox [(ngModel)]="options.swapItem" (ngModelChange)="changedOptions()">
+              Swap
+            </tri-checkbox>
+            <!--            <tri-checkbox [(ngModel)]="options.dock" (ngModelChange)="changedOptions()">-->
+            <!--              Dock-->
+            <!--            </tri-checkbox>-->
+            <!--            <tri-checkbox [(ngModel)]="options.swapThreshold" (ngModelChange)="changedOptions()">-->
+            <!--              Swap threshold-->
+            <!--            </tri-checkbox>-->
+          </div>
+        </div>
+
+        <div>
           <h3>gridType</h3>
           <tri-select style="min-width: 200px" [(ngModel)]="gridType">
             <tri-option label="none" value=""></tri-option>
@@ -138,6 +153,7 @@ import { DisplayGrid, GridType } from '../../../../../../libs/triangle/gridster'
                [triDropGridContainerHasPadding]="hasPadding"
                [triDropGridContainerCompactType]="compactType"
                [triDropGridContainerPushItems]="options.pushItems"
+               [triDropGridContainerSwapItem]="options.swapItem"
                [triDropGridContainerRows]="8"
                [triDropGridContainerCols]="8"
                [triDropGridContainerMaxRows]="8"
@@ -232,10 +248,10 @@ export class TriDemoDndGridComponent implements AfterViewInit {
   options: any = {
     gridType       : GridType.Fit,
     displayGrid    : DisplayGrid.Always,
-    pushItems      : true,
+    pushItems      : false,
     pushDirections : {north: true, east: true, south: true, west: true},
     pushResizeItems: false,
-    swap           : false,
+    swapItem      : true,
     draggable      : {
       enabled: true
     },
@@ -279,8 +295,7 @@ export class TriDemoDndGridComponent implements AfterViewInit {
     } else {
       const item = this.dashboard[event.item.index];
 
-      item.x = event.positionX;
-      item.y = event.positionY;
+      this.dashboard[event.item.index] = {...item, x: event.positionX, y: event.positionY};
     }
   }
 

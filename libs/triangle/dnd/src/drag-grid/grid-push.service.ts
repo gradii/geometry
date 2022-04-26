@@ -92,7 +92,6 @@ export class GridPushService {
     }
   }
 
-
   restoreItems(): void {
     let i           = 0;
     const l: number = this.pushedItems.length;
@@ -107,16 +106,20 @@ export class GridPushService {
     this.pushedItemsPath = [];
   }
 
+  /**
+   * @todo
+   */
   setPushedItems(): void {
-    let i           = 0;
     const l: number = this.pushedItems.length;
-    let pushedItem: TriDragGridItemComponent;
-    for (; i < l; i++) {
-      pushedItem = this.pushedItems[i];
-      pushedItem.checkItemChanges(pushedItem);
+    if (l) {
+      let pushedItem: TriDragGridItemComponent;
+      for (let i = 0; i < l; i++) {
+        pushedItem = this.pushedItems[i];
+        pushedItem.checkItemChanges(pushedItem);
+      }
+      this.pushedItems     = [];
+      this.pushedItemsPath = [];
     }
-    this.pushedItems     = [];
-    this.pushedItemsPath = [];
   }
 
   checkPushBack(): void {

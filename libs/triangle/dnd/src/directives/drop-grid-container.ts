@@ -159,6 +159,9 @@ export class TriDropGridContainer<T = any>
   @Input('triDropGridContainerPushItems')
   pushItems: boolean;
 
+  @Input('triDropGridContainerSwapItem')
+  swapItem: boolean;
+
   @Input('triDropGridContainerPushDirectionsSouth')
   pushDirectionsSouth: boolean = true;
 
