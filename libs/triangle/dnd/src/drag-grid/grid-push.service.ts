@@ -4,7 +4,6 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { TriDropGridContainer } from '../directives/drop-grid-container';
 import { DragRef } from '../drag-drop-ref/drag-ref';
 import { DropGridContainerRef } from '../drag-drop-ref/drop-grid-container-ref';
 import { TriDragGridItemComponent } from './drag-grid-item.component';
@@ -14,6 +13,13 @@ export const enum GridPushDirection {
   fromNorth = 'fromNorth',
   fromEast  = 'fromEast',
   fromWest  = 'fromWest',
+}
+
+const enum GridDirection {
+  south = 'south',
+  north = 'north',
+  east  = 'east',
+  west  = 'west',
 }
 
 
@@ -27,30 +33,14 @@ export class GridPushService {
   private pushedItemsTemp: TriDragGridItemComponent[];
   private pushedItemsTempPath: { x: number; y: number }[][];
   private pushedItemsPath: { x: number; y: number }[][];
-  /**
-   * @deprecated
-   * @private
-   */
-  private gridsterItem: TriDragGridItemComponent;
+
   // private gridster: TriDropGridContainer;
   private pushedItemsOrder: TriDragGridItemComponent[];
   private tryPattern: {
-    fromEast: ((
-      gridsterItemCollide: TriDragGridItemComponent,
-      gridsterItem: TriDragGridItemComponent
-    ) => boolean)[];
-    fromWest: ((
-      gridsterItemCollide: TriDragGridItemComponent,
-      gridsterItem: TriDragGridItemComponent
-    ) => boolean)[];
-    fromNorth: ((
-      gridsterItemCollide: TriDragGridItemComponent,
-      gridsterItem: TriDragGridItemComponent
-    ) => boolean)[];
-    fromSouth: ((
-      gridsterItemCollide: TriDragGridItemComponent,
-      gridsterItem: TriDragGridItemComponent
-    ) => boolean)[];
+    fromEast: (keyof typeof GridDirection)[];
+    fromWest: (keyof typeof GridDirection)[];
+    fromNorth: (keyof typeof GridDirection)[];
+    fromSouth: (keyof typeof GridDirection)[];
   };
   private iteration = 0;
 
@@ -63,10 +53,10 @@ export class GridPushService {
     // this.gridsterItem        = gridsterItem;
     // this.gridster            = gridsterItem.gridster;
     this.tryPattern = {
-      fromEast : [this.tryWest, this.trySouth, this.tryNorth, this.tryEast],
-      fromWest : [this.tryEast, this.trySouth, this.tryNorth, this.tryWest],
-      fromNorth: [this.trySouth, this.tryEast, this.tryWest, this.tryNorth],
-      fromSouth: [this.tryNorth, this.tryEast, this.tryWest, this.trySouth]
+      fromEast : ['west', 'south', 'north', 'east'],
+      fromWest : ['east', 'south', 'north', 'west'],
+      fromNorth: ['south', 'east', 'west', 'north'],
+      fromSouth: ['north', 'east', 'west', 'south']
     };
     this.fromSouth  = GridPushDirection.fromSouth;
     this.fromNorth  = GridPushDirection.fromNorth;
@@ -111,7 +101,7 @@ export class GridPushService {
       pushedItem         = this.pushedItems[i];
       pushedItem.renderX = pushedItem.x || 0;
       pushedItem.renderY = pushedItem.y || 0;
-      // pushedItem.setSize();
+      pushedItem.setSize();
     }
     this.pushedItems     = [];
     this.pushedItemsPath = [];
@@ -190,17 +180,25 @@ export class GridPushService {
 
       const fnList = this.tryPattern[direction];
 
+      let descendantPushed = false;
       for (const it of fnList) {
-        if (it.call(this, itemCollision, gridsterItem)) {
+        if (this.tryDirection(it, itemCollision, gridsterItem)) {
           pushedItems.push(itemCollision);
           this.pushedItemsTemp.push(itemCollision);
-          this.pushedItemsTempPath.push([itemCollision]);
+          this.pushedItemsTempPath.push([
+            {
+              x: itemCollision.renderX,
+              y: itemCollision.renderY
+            }
+          ]);
+          descendantPushed = true;
           break;
         }
-        makePush = false;
       }
-      break;
-
+      if (!descendantPushed) {
+        makePush = false;
+        break;
+      }
     }
     if (!makePush) {
       i = this.pushedItemsOrder.lastIndexOf(pushedItems[0]);
@@ -218,17 +216,45 @@ export class GridPushService {
     return makePush;
   }
 
-  private trySouth(
-    gridsterItemCollide: TriDragGridItemComponent,
-    gridsterItem: TriDragGridItemComponent
+  private tryDirection(direction: keyof typeof GridDirection,
+                       gridsterItemCollide: TriDragGridItemComponent,
+                       gridsterItem: TriDragGridItemComponent
   ): boolean {
-    if (!this.dropGridContainerRef.data.pushDirectionsSouth) {
+    if (direction === GridDirection.south && !this.dropGridContainerRef.data.pushDirectionsSouth) {
+      return false;
+    } else if (direction === GridDirection.north && !this.dropGridContainerRef.data.pushDirectionsNorth) {
+      return false;
+    } else if (direction === GridDirection.east && !this.dropGridContainerRef.data.pushDirectionsEast) {
+      return false;
+    } else if (direction === GridDirection.west && !this.dropGridContainerRef.data.pushDirectionsWest) {
       return false;
     }
+
     this.addToTempPushed(gridsterItemCollide);
-    gridsterItemCollide.renderY =
-      gridsterItem.renderY + gridsterItem.renderRows;
-    if (this.push(gridsterItemCollide, this.fromNorth)) {
+    let pushResult;
+    switch (direction) {
+      case GridDirection.south:
+        gridsterItemCollide.renderY =
+          gridsterItem.renderY + gridsterItem.renderRows;
+        pushResult                  = this.push(gridsterItemCollide, this.fromNorth);
+        break;
+      case GridDirection.north:
+        gridsterItemCollide.renderY =
+          gridsterItem.renderY - gridsterItemCollide.renderRows;
+        pushResult                  = this.push(gridsterItemCollide, this.fromSouth);
+        break;
+      case GridDirection.east:
+        gridsterItemCollide.renderX =
+          gridsterItem.renderX + gridsterItem.renderCols;
+        pushResult                  = this.push(gridsterItemCollide, this.fromWest);
+        break;
+      case GridDirection.west:
+        gridsterItemCollide.renderX =
+          gridsterItem.renderX - gridsterItemCollide.renderCols;
+        pushResult                  = this.push(gridsterItemCollide, this.fromEast);
+        break;
+    }
+    if (pushResult) {
       gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
       return true;
@@ -237,67 +263,6 @@ export class GridPushService {
     }
     return false;
   }
-
-  private tryNorth(
-    gridsterItemCollide: TriDragGridItemComponent,
-    gridsterItem: TriDragGridItemComponent
-  ): boolean {
-    if (!this.dropGridContainerRef.data.pushDirectionsNorth) {
-      return false;
-    }
-    this.addToTempPushed(gridsterItemCollide);
-    gridsterItemCollide.renderY =
-      gridsterItem.renderY - gridsterItemCollide.renderRows;
-    if (this.push(gridsterItemCollide, this.fromSouth)) {
-      gridsterItemCollide.setSize();
-      this.addToPushed(gridsterItemCollide);
-      return true;
-    } else {
-      this.removeFromTempPushed(gridsterItemCollide);
-    }
-    return false;
-  }
-
-  private tryEast(
-    gridsterItemCollide: TriDragGridItemComponent,
-    gridsterItem: TriDragGridItemComponent
-  ): boolean {
-    if (!this.dropGridContainerRef.data.pushDirectionsEast) {
-      return false;
-    }
-    this.addToTempPushed(gridsterItemCollide);
-    gridsterItemCollide.renderX =
-      gridsterItem.renderX + gridsterItem.renderCols;
-    if (this.push(gridsterItemCollide, this.fromWest)) {
-      gridsterItemCollide.setSize();
-      this.addToPushed(gridsterItemCollide);
-      return true;
-    } else {
-      this.removeFromTempPushed(gridsterItemCollide);
-    }
-    return false;
-  }
-
-  private tryWest(
-    gridsterItemCollide: TriDragGridItemComponent,
-    gridsterItem: TriDragGridItemComponent
-  ): boolean {
-    if (!this.dropGridContainerRef.data.pushDirectionsWest) {
-      return false;
-    }
-    this.addToTempPushed(gridsterItemCollide);
-    gridsterItemCollide.renderX =
-      gridsterItem.renderX - gridsterItemCollide.renderCols;
-    if (this.push(gridsterItemCollide, this.fromEast)) {
-      gridsterItemCollide.setSize();
-      this.addToPushed(gridsterItemCollide);
-      return true;
-    } else {
-      this.removeFromTempPushed(gridsterItemCollide);
-    }
-    return false;
-  }
-
 
   private addToTempPushed(gridsterItem: TriDragGridItemComponent): void {
     let i = this.pushedItemsTemp.indexOf(gridsterItem);
