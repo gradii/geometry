@@ -128,8 +128,30 @@ export class TriDropGridContainer<T = any>
   @Input('triDropGridContainerLockAxis')
   lockAxis: DragAxis;
 
-  @Input('triDropGridContainerGutter')
-  gutter: number = 10;
+  @Input('triDropGridContainerGap')
+  gap: number = 10;
+
+  private _rowGap: number = 0;
+
+  @Input('triDropGridContainerRowGap')
+  get rowGap(): number {
+    return this._rowGap || this.gap;
+  }
+
+  set rowGap(value: number) {
+    this._rowGap = value;
+  }
+
+  private _columnGap: number = 0;
+
+  @Input('triDropGridContainerColumnGap')
+  get columnGap(): number {
+    return this._columnGap || this.gap;
+  }
+
+  set columnGap(value: number) {
+    this._columnGap = value;
+  }
 
   renderRows: number = 1;
 
@@ -161,6 +183,9 @@ export class TriDropGridContainer<T = any>
 
   @Input('triDropGridContainerSwapItem')
   swapItem: boolean;
+
+  @Input('triDropGridContainerPushResizeItems')
+  pushResizeItems: boolean = false;
 
   @Input('triDropGridContainerPushDirectionsSouth')
   pushDirectionsSouth: boolean = true;
@@ -265,8 +290,6 @@ export class TriDropGridContainer<T = any>
   swapWhileDragging: boolean = false;
 
   swap: boolean = false;
-
-  pushResizeItems: boolean = false;
 
 
   constructor(
@@ -448,10 +471,13 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
       ref.autoScrollDisabled = coerceBooleanProperty(this.autoScrollDisabled);
       ref.autoScrollStep     = coerceNumberProperty(this.autoScrollStep, 2);
 
-      ref.hasPadding         = this.hasPadding;
-      ref.gutter             = this.gutter;
-      ref.currentColumnWidth = this.renderTileWidth;
-      ref.currentRowHeight   = this.renderTileHeight;
+      ref._hasPadding = this.hasPadding;
+      ref._rowGap     = this.rowGap;
+      ref._columnGap = this.rowGap;
+      ref._currentContainerWidth = this.renderWidth;
+      ref._currentContainerHeight = this.renderHeight;
+      ref._currentTileWidth       = this.renderTileWidth;
+      ref._currentTileHeight      = this.renderTileHeight;
 
       ref
         .connectedTo(
@@ -544,19 +570,9 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
   renderTileHeight: number;
 
   ngOnInit() {
-    const ref        = this._dropContainerRef;
-    const clientRect = this.element.nativeElement.getBoundingClientRect();
-
-    ref.hasPadding         = this.hasPadding;
-    ref.gutter             = this.gutter;
-    ref.currentWidth       = clientRect.width;
-    ref.currentHeight      = clientRect.height;
-    ref.currentColumnWidth = this.renderTileWidth;
-    ref.currentRowHeight   = this.renderTileHeight;
-
     this._ngZone.runOutsideAngular(() => {
       this.calculateLayout$.pipe(
-        debounceTime(0), takeUntil(this._destroyed),
+        debounceTime(10), takeUntil(this._destroyed),
       ).subscribe(() => this._ngZone.run(() => this._calculateLayout()));
     });
   }
@@ -996,11 +1012,11 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
     const clientRect = this.element.nativeElement.getBoundingClientRect();
 
     if (!this.hasPadding) {
-      this.renderTileWidth  = (clientRect.width + this.gutter) / this.cols;
-      this.renderTileHeight = (clientRect.height + this.gutter) / this.rows;
+      this.renderTileWidth  = (clientRect.width + this.columnGap) / this.cols;
+      this.renderTileHeight = (clientRect.height + this.rowGap) / this.rows;
     } else {
-      this.renderTileWidth  = (clientRect.width - this.gutter) / this.cols;
-      this.renderTileHeight = (clientRect.height - this.gutter) / this.rows;
+      this.renderTileWidth  = (clientRect.width - this.columnGap) / this.cols;
+      this.renderTileHeight = (clientRect.height - this.rowGap) / this.rows;
     }
 
     this._unsortedItems.forEach(item => {

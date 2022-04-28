@@ -22,30 +22,17 @@ import { DragRefInternal, DragRefInternal as DragRef, Point } from './drag-ref';
  * Reference to a drop list. Used to manipulate or dispose of the container.
  */
 export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
-  hasPadding: boolean;
-  /**
-   * @deprecated use rowGap and columnGap instead
-   */
-  gutter: number = 0;
+  _hasPadding: boolean;
 
-  rowGap: number    = 0;
-  columnGap: number = 0;
+  _rowGap: number    = 0;
+  _columnGap: number = 0;
 
-  currentWidth: number;
-  currentHeight: number;
-  currentColumnWidth: number;
-  currentRowHeight: number;
-  // viewPort: {
-  //   x: number,
-  //   y: number,
-  //   width: number,
-  //   height: number
-  // };
-  gridColumns: number[] = [];
-  gridRows: number[]    = [];
+  _currentContainerWidth: number;
+  _currentContainerHeight: number;
+  _currentTileWidth: number;
+  _currentTileHeight: number;
 
   compactType: CompactType;
-
 
   private pushService: GridPushService;
   private swapService: GridSwapService;
@@ -146,8 +133,8 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
     // The transform needs to be cleared so it doesn't throw off the measurements.
     placeholder.style.transform = '';
 
-    placeholder.style.width  = `${((this.data as unknown as TriDropGridContainer).config?.defaultItemCols || 1) * this.currentColumnWidth - this.gutter}px`;
-    placeholder.style.height = `${((this.data as unknown as TriDropGridContainer).config?.defaultItemRows || 1) * this.currentRowHeight - this.gutter}px`;
+    placeholder.style.width  = `${((this.data as unknown as TriDropGridContainer).config?.defaultItemCols || 1) * this._currentTileWidth - this._columnGap}px`;
+    placeholder.style.height = `${((this.data as unknown as TriDropGridContainer).config?.defaultItemRows || 1) * this._currentTileHeight - this._rowGap}px`;
 
     // Note that the positions were already cached when we called `start` above,
     // but we need to refresh them since the amount of items has changed and also parent rects.
@@ -162,8 +149,8 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
   lastDragCols = 1;
   lastDragRows = 1;
 
-  positionXBackup: number;
-  positionYBackup: number;
+  // positionXBackup: number;
+  // positionYBackup: number;
 
   collision: boolean;
 
@@ -172,19 +159,25 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
                pointerDelta: { x: number; y: number }) {
     super._arrangeItem(item, pointerX, pointerY, elementPointX, elementPointY, pointerDelta);
 
-    const latestPositionX = this.positionStrategy.latestPositionX;
-    const latestPositionY = this.positionStrategy.latestPositionY;
+    const latestPositionX = item.data.renderX;
+    const latestPositionY = item.data.renderY;
 
     this.positionStrategy._sortItem(item, elementPointX, elementPointY, pointerDelta);
 
-    const newPositionX = this.positionStrategy.latestPositionX;
-    const newPositionY = this.positionStrategy.latestPositionY;
+    const newPositionX = item.data.renderX;
+    const newPositionY = item.data.renderY;
 
     const gridContainer = (this.data as unknown as TriDropGridContainer);
+
+    const cancelledWhenCollisionContainer = gridContainer.checkGridCollision(item.data);
+    if (cancelledWhenCollisionContainer) {
+      this.positionStrategy._rollbackItem(item, item.data.x, item.data.y);
+    }
+
     if (gridContainer.pushItems) {
       if (
-        this.positionXBackup !== item.data.renderX ||
-        this.positionYBackup !== item.data.renderY
+        latestPositionX !== newPositionX ||
+        latestPositionY !== newPositionY
       ) {
         let direction = '';
         if (latestPositionX < newPositionX) {
@@ -197,23 +190,7 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
           direction = GridPushDirection.fromSouth;
         }
         if (direction) {
-          console.log(`push direction ${direction}`);
-
           this.pushService.pushItems(item, direction, gridContainer.disablePushOnDrag);
-
-          // this.swap.swapItems();
-          this.collision = gridContainer.checkCollision(item.data);
-          if (this.collision) {
-            item.data.renderX = this.positionXBackup;
-            item.data.renderY = this.positionYBackup;
-            // if (
-            //   gridContainer.draggable.dropOverItems &&
-            //   this.collision !== true &&
-            //   this.collision
-            // ) {
-            //   gridContainer.movingItem = null;
-            // }
-          }
           this.pushService.checkPushBack();
         }
       }
@@ -234,8 +211,9 @@ export class DropGridContainerRef<T = any> extends DndContainerRef<T> {
     this.pushService.setPushedItems();
     this.swapService.setSwapItem();
 
-    const positionX = this.positionStrategy.pixelsToPositionX(item, elementPositionX);
-    const positionY = this.positionStrategy.pixelsToPositionY(item, elementPositionY);
+    const positionX = this.positionStrategy.latestPositionX;
+    const positionY = this.positionStrategy.latestPositionY;
+
     this.dropped.next({
       item,
       currentIndex,

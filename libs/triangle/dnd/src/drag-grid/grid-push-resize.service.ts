@@ -4,7 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { TriDropGridContainer } from '../directives/drop-grid-container';
+import { DragRef } from '../drag-drop-ref/drag-ref';
+import { DropGridContainerRef } from '../drag-drop-ref/drop-grid-container-ref';
 import { TriDragGridItemComponent } from './drag-grid-item.component';
 import { GridItem } from './grid-item.interface';
 
@@ -15,8 +16,8 @@ export class GridPushResizeService {
   public fromWest: string;
   private pushedItems: Array<TriDragGridItemComponent>;
   private pushedItemsPath: Array<Array<GridItem>>;
-  private gridItem: TriDragGridItemComponent;
-  private grid: TriDropGridContainer;
+  // private gridItem: TriDragGridItemComponent;
+  // private grid: TriDropGridContainer;
   private tryPattern: {
     fromEast: (
       gridsterItemCollide: TriDragGridItemComponent,
@@ -40,30 +41,30 @@ export class GridPushResizeService {
     ) => boolean;
   };
 
-  constructor(gridsterItem: TriDragGridItemComponent) {
+  constructor(private dropGridContainerRef: DropGridContainerRef<any>) {
     this.pushedItems     = [];
     this.pushedItemsPath = [];
-    this.gridItem        = gridsterItem;
-    this.grid            = gridsterItem.gridContainer;
-    this.tryPattern      = {
+    // this.gridItem        = gridsterItem;
+    // this.grid            = gridsterItem.gridContainer;
+    this.tryPattern = {
       fromEast : this.tryWest,
       fromWest : this.tryEast,
       fromNorth: this.trySouth,
       fromSouth: this.tryNorth
     };
-    this.fromSouth       = 'fromSouth';
-    this.fromNorth       = 'fromNorth';
-    this.fromEast        = 'fromEast';
-    this.fromWest        = 'fromWest';
+    this.fromSouth  = 'fromSouth';
+    this.fromNorth  = 'fromNorth';
+    this.fromEast   = 'fromEast';
+    this.fromWest   = 'fromWest';
   }
 
   destroy(): void {
-    this.grid = this.gridItem = null!;
+    // this.grid = this.gridItem = null!;
   }
 
-  pushItems(direction: string): boolean {
-    if (this.grid.pushResizeItems) {
-      return this.push(this.gridItem, direction);
+  pushItems(item: DragRef, direction: string): boolean {
+    if (this.dropGridContainerRef.data.pushResizeItems) {
+      return this.push(item.data, direction);
     } else {
       return false;
     }
@@ -111,22 +112,22 @@ export class GridPushResizeService {
   }
 
   private push(
-    gridsterItem: TriDragGridItemComponent,
+    item: TriDragGridItemComponent,
     direction: string
   ): boolean {
     const gridsterItemCollision: TriDragGridItemComponent | boolean =
-            this.grid.checkCollision(gridsterItem);
+            (this.dropGridContainerRef.data).checkCollision(item);
     if (
       gridsterItemCollision &&
       gridsterItemCollision !== true &&
-      gridsterItemCollision !== this.gridItem /*&&
+      gridsterItemCollision !== item /*&&
       gridsterItemCollision.canBeResized()*/
     ) {
       if (
         this.tryPattern[direction].call(
           this,
           gridsterItemCollision,
-          gridsterItem,
+          item,
           direction
         )
       ) {
@@ -150,11 +151,11 @@ export class GridPushResizeService {
     gridsterItemCollide.renderRows =
       backUpRows + backUpY - gridsterItemCollide.renderY;
     if (
-      !this.grid.checkCollisionTwoItems(
+      !(this.dropGridContainerRef.data).checkCollisionTwoItems(
         gridsterItemCollide,
         gridsterItem
       ) &&
-      !this.grid.checkGridCollision(gridsterItemCollide)
+      !(this.dropGridContainerRef.data).checkGridCollision(gridsterItemCollide)
     ) {
       gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
@@ -176,11 +177,11 @@ export class GridPushResizeService {
     gridsterItemCollide.renderRows =
       gridsterItem.renderY - gridsterItemCollide.renderY;
     if (
-      !this.grid.checkCollisionTwoItems(
+      !(this.dropGridContainerRef.data).checkCollisionTwoItems(
         gridsterItemCollide,
         gridsterItem
       ) &&
-      !this.grid.checkGridCollision(gridsterItemCollide)
+      !(this.dropGridContainerRef.data).checkGridCollision(gridsterItemCollide)
     ) {
       gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
@@ -204,11 +205,11 @@ export class GridPushResizeService {
     gridsterItemCollide.renderCols =
       backUpCols + backUpX - gridsterItemCollide.renderX;
     if (
-      !this.grid.checkCollisionTwoItems(
+      !(this.dropGridContainerRef.data).checkCollisionTwoItems(
         gridsterItemCollide,
         gridsterItem
       ) &&
-      !this.grid.checkGridCollision(gridsterItemCollide)
+      !(this.dropGridContainerRef.data).checkGridCollision(gridsterItemCollide)
     ) {
       gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
@@ -230,11 +231,11 @@ export class GridPushResizeService {
     gridsterItemCollide.renderCols =
       gridsterItem.renderX - gridsterItemCollide.renderX;
     if (
-      !this.grid.checkCollisionTwoItems(
+      !(this.dropGridContainerRef.data).checkCollisionTwoItems(
         gridsterItemCollide,
         gridsterItem
       ) &&
-      !this.grid.checkGridCollision(gridsterItemCollide)
+      !(this.dropGridContainerRef.data).checkGridCollision(gridsterItemCollide)
     ) {
       gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
@@ -302,7 +303,7 @@ export class GridPushResizeService {
       pushedItem.renderY    = lastPosition.y;
       pushedItem.renderCols = lastPosition.cols;
       pushedItem.renderRows = lastPosition.rows;
-      if (!this.grid.findItemWithItem(pushedItem)) {
+      if (!(this.dropGridContainerRef.data).findItemWithItem(pushedItem)) {
         pushedItem.setSize();
         path.splice(j + 1, path.length - 1 - j);
       } else {

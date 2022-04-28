@@ -158,6 +158,8 @@ import { DisplayGrid, GridType } from '../../../../../../libs/triangle/gridster'
                [triDropGridContainerCols]="8"
                [triDropGridContainerMaxRows]="8"
                [triDropGridContainerMaxCols]="8"
+               [triDropGridContainerGap]="12"
+               [triDropGridContainerColumnGap]="8"
                (triDropGridContainerEntered)="onDragEntered($event)"
                (triDropGridContainerExited)="onDragExited($event)"
                (triDropGridContainerDropped)="onDragDropped($event)"
@@ -176,6 +178,9 @@ import { DisplayGrid, GridType } from '../../../../../../libs/triangle/gridster'
                 box{{i}}
                 <div>
                   [renderX, renderY]: [{{gridItem.renderX}}, {{gridItem.renderY}}]
+                </div>
+                <div>
+                  [renderRow, renderCol]: [{{gridItem.renderRows}}, {{gridItem.renderCols}}]
                 </div>
                 <div>
                   [x, y]: [{{gridItem.x}}, {{gridItem.y}}]
@@ -248,10 +253,10 @@ export class TriDemoDndGridComponent implements AfterViewInit {
   options: any = {
     gridType       : GridType.Fit,
     displayGrid    : DisplayGrid.Always,
-    pushItems      : false,
+    pushItems      : true,
     pushDirections : {north: true, east: true, south: true, west: true},
     pushResizeItems: false,
-    swapItem      : true,
+    swapItem       : false,
     draggable      : {
       enabled: true
     },

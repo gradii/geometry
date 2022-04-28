@@ -30,7 +30,7 @@ import {
     <tri-drag-resize-container
       [disabled]="!resizeEnabled"
       [width]="width" [height]="height"
-      [outMargin]="dropContainer.gutter"
+      [outMargin]="dropContainer.gap"
       (triDragResizeStarted)="onDragResizeStart($event)"
       (triDragResized)="onDragResize($event)"
       (triDragResizeEnded)="onDragResizeEnd($event)"
@@ -77,19 +77,19 @@ export class TriDragGridItemComponent extends TriDrag
   index: number = -1;
 
   @Input('triDragGridItemX')
-  x: number = -1;
+  x: number       = -1;
   renderX: number = -1;
 
   @Input('triDragGridItemY')
-  y: number = -1;
+  y: number       = -1;
   renderY: number = -1;
 
   @Input('triDragGridItemRows')
-  rows: number = 1;
+  rows: number       = 1;
   renderRows: number = 1;
 
   @Input('triDragGridItemCols')
-  cols: number = 1;
+  cols: number       = 1;
   renderCols: number = 1;
 
   // itemChanged
@@ -202,8 +202,8 @@ export class TriDragGridItemComponent extends TriDrag
     this.x  = x;
     this.y  = y;
 
-    this.cols = Math.round(event.width / this.dropContainer.renderTileWidth);
-    this.rows = Math.round(event.height / this.dropContainer.renderTileHeight);
+    this.renderCols = Math.round(event.width / this.dropContainer.renderTileWidth);
+    this.renderRows = Math.round(event.height / this.dropContainer.renderTileHeight);
 
     this._ngZone.run(() => {
       this.dropContainer.positionItem(this);
@@ -292,18 +292,10 @@ export class TriDragGridItemComponent extends TriDrag
 
   updateItemSize(): void {
     this._init      = true;
-    const ref       = this.dropContainer._dropContainerRef;
     const container = this.dropContainer;
 
-    let currentColumnWidth;
-    let currentColumnHeight;
-    if (!container.hasPadding) {
-      currentColumnWidth  = (ref.currentWidth + container.gutter) / container.cols;
-      currentColumnHeight = (ref.currentHeight + container.gutter) / container.rows;
-    } else {
-      currentColumnWidth  = (ref.currentWidth - container.gutter) / container.cols;
-      currentColumnHeight = (ref.currentHeight - container.gutter) / container.rows;
-    }
+    const currentColumnWidth  = container.renderTileWidth;
+    const currentColumnHeight = container.renderTileHeight;
 
     const x = clamp(this.renderX, 0, this.maxItemCols - 1);
     const y = clamp(this.renderY, 0, this.maxItemRows - 1);
@@ -312,11 +304,11 @@ export class TriDragGridItemComponent extends TriDrag
       this.left = x * currentColumnWidth;
       this.top  = y * currentColumnHeight;
     } else {
-      this.left = x * currentColumnWidth + container.gutter;
-      this.top  = y * currentColumnHeight + container.gutter;
+      this.left = x * currentColumnWidth + container.columnGap;
+      this.top  = y * currentColumnHeight + container.rowGap;
     }
-    this.width  = this.cols * currentColumnWidth - container.gutter;
-    this.height = this.rows * currentColumnHeight - container.gutter;
+    this.width  = this.renderCols * currentColumnWidth - container.columnGap;
+    this.height = this.renderRows * currentColumnHeight - container.rowGap;
 
     this._dragRef.setProgramDragPosition({x: this.left, y: this.top});
     this._changeDetectorRef.markForCheck();
