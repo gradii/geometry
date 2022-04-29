@@ -8,8 +8,8 @@ import { Directive } from '@angular/core';
 
 
 @Directive({
-  selector: 'drag-resize'
+  selector: '[triResizeable]',
 })
-export class DragResizeDirective {
+export class TriResizeable {
 
 }

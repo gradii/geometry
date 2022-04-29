@@ -116,8 +116,7 @@ export class GridPositionStrategy implements PositionStrategy {
     const left       = ref._clientRect.left;
     const scrollLeft = (ref.element as HTMLElement).scrollLeft;
     if (ref._hasPadding) {
-      return Math.round(
-        (pointerX - left + scrollLeft - ref._columnGap / 2) / ref._currentTileWidth);
+      return Math.round((pointerX - left + scrollLeft - ref._columnGap / 2) / ref._currentTileWidth);
     } else {
       return Math.round((pointerX - left + scrollLeft + ref._rowGap / 2) / ref._currentTileWidth);
     }

@@ -248,11 +248,11 @@ export class TriDragResizeContainerComponent implements OnInit, OnChanges, After
       this.contentElementRef.nativeElement.style.height    = `${this.y2 - this.y}px`;
     }
 
-    if (this.placeholderElementRef) {
-      this.placeholderElementRef.nativeElement.style.transform = `translate(${this.x}px, ${this.y}px)`;
-      this.placeholderElementRef.nativeElement.style.width     = `${this.x2 - this.x}px`;
-      this.placeholderElementRef.nativeElement.style.height    = `${this.y2 - this.y}px`;
-    }
+    // if (this.placeholderElementRef) {
+    //   this.placeholderElementRef.nativeElement.style.transform = `translate(${this.x}px, ${this.y}px)`;
+    //   this.placeholderElementRef.nativeElement.style.width     = `${this.x2 - this.x}px`;
+    //   this.placeholderElementRef.nativeElement.style.height    = `${this.y2 - this.y}px`;
+    // }
 
     // this.northDrag?._dragRef.setFreeDragPosition({x: this.x, y: this.y});
     // this.eastDrag?._dragRef.setFreeDragPosition({x: this.x + this._calculatedWidth, y: this.y});

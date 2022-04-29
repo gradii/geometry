@@ -6,7 +6,7 @@
 
 import { Directionality } from '@angular/cdk/bidi';
 import {
-  BooleanInput, coerceArray, coerceBooleanProperty, coerceNumberProperty, NumberInput
+  BooleanInput, coerceArray, coerceBooleanProperty, coerceElement, coerceNumberProperty, NumberInput
 } from '@angular/cdk/coercion';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import {
@@ -471,10 +471,10 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
       ref.autoScrollDisabled = coerceBooleanProperty(this.autoScrollDisabled);
       ref.autoScrollStep     = coerceNumberProperty(this.autoScrollStep, 2);
 
-      ref._hasPadding = this.hasPadding;
-      ref._rowGap     = this.rowGap;
-      ref._columnGap = this.rowGap;
-      ref._currentContainerWidth = this.renderWidth;
+      ref._hasPadding             = this.hasPadding;
+      ref._rowGap                 = this.rowGap;
+      ref._columnGap              = this.rowGap;
+      ref._currentContainerWidth  = this.renderWidth;
       ref._currentContainerHeight = this.renderHeight;
       ref._currentTileWidth       = this.renderTileWidth;
       ref._currentTileHeight      = this.renderTileHeight;
@@ -625,30 +625,26 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
     return rst;
   }
 
-  pixelsToPositionX(x: number, roundingMethod: (x: number) => number, noLimit?: boolean): number {
-    const position = roundingMethod(x / this.renderTileWidth);
-    if (noLimit) {
-      return position;
-    } else {
-      return Math.max(position, 0);
-    }
+  pixelsToPositionX(pointerX: number) {
+    const scrollLeft = coerceElement(this.element).scrollLeft;
+    return this.hasPadding ?
+      Math.round((pointerX + scrollLeft - this.columnGap / 2) / this.renderTileWidth) :
+      Math.round((pointerX + scrollLeft + this.rowGap / 2) / this.renderTileWidth);
   }
 
-  pixelsToPositionY(y: number, roundingMethod: (x: number) => number, noLimit?: boolean): number {
-    const position = roundingMethod(y / this.renderTileHeight);
-    if (noLimit) {
-      return position;
-    } else {
-      return Math.max(position, 0);
-    }
+  pixelsToPositionY(pointerY: number) {
+    const scrollTop = coerceElement(this.element).scrollTop;
+    return this.hasPadding ?
+      Math.round((pointerY + scrollTop - this.columnGap / 2) / this.renderTileHeight)  :
+      Math.round((pointerY + scrollTop + this.rowGap / 2) / this.renderTileHeight);
   }
 
   positionXToPixels(x: number): number {
-    return x * this.renderTileWidth;
+    return this.hasPadding ? x * this.renderTileWidth + this.columnGap : x * this.renderTileWidth;
   }
 
   positionYToPixels(y: number): number {
-    return y * this.renderTileHeight;
+    return this.hasPadding ? y * this.renderTileHeight + this.rowGap : y * this.renderTileHeight;
   }
 
   ngOnChanges(changes: SimpleChanges) {

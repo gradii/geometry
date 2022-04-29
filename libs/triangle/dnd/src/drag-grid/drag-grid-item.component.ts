@@ -176,8 +176,12 @@ export class TriDragGridItemComponent extends TriDrag
 
   onDragResize(event: TriDragResize) {
     console.log('resizing', event);
-    const x = this.dropContainer.pixelsToPositionX(this.left + event.x, Math.round);
-    const y = this.dropContainer.pixelsToPositionY(this.top + event.y, Math.round);
+    const x = this.dropContainer.pixelsToPositionX(
+      this.left + event.x
+    );
+    const y = this.dropContainer.pixelsToPositionY(
+      this.top + event.y
+    );
 
     const pixelX     = this.dropContainer.positionXToPixels(x);
     const pixelY     = this.dropContainer.positionYToPixels(y);
@@ -186,19 +190,19 @@ export class TriDragGridItemComponent extends TriDrag
 
     event.source.getPlaceHolderElement().style.transform = `translate(${translateX}px, ${translateY}px)`;
 
-    // const width                                       = Math.round(
-    //   event.width / this.dropContainer.currentTileWidth) * this.dropContainer.currentTileWidth;
-    // const height                                      = Math.round(
-    //   event.height / this.dropContainer.currentTileHeight) * this.dropContainer.currentTileHeight;
-    // event.source.getPlaceHolderElement().style.width  = `${width}px`;
-    // event.source.getPlaceHolderElement().style.height = `${height}px`;
+    const width                                       = Math.ceil(
+      event.width / this.dropContainer.renderTileWidth) * this.dropContainer.renderTileWidth;
+    const height                                      = Math.ceil(
+      event.height / this.dropContainer.renderTileHeight) * this.dropContainer.renderTileHeight;
+    event.source.getPlaceHolderElement().style.width  = `${width}px`;
+    event.source.getPlaceHolderElement().style.height = `${height}px`;
   }
 
   onDragResizeEnd(event: TriDragResizeEnd) {
     // console.log('resize end', event);
 
-    const x = this.dropContainer.pixelsToPositionX(this.left + event.x, Math.round);
-    const y = this.dropContainer.pixelsToPositionY(this.top + event.y, Math.round);
+    const x = this.dropContainer.pixelsToPositionX(this.left + event.x);
+    const y = this.dropContainer.pixelsToPositionY(this.top + event.y);
     this.x  = x;
     this.y  = y;
 
