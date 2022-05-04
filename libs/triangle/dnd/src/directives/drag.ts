@@ -6,11 +6,13 @@
 
 
 import { Directionality } from '@angular/cdk/bidi';
-import { BooleanInput, coerceBooleanProperty, coerceElement, coerceNumberProperty } from '@angular/cdk/coercion';
-import { DOCUMENT } from '@angular/common';
 import {
-  AfterViewInit, ChangeDetectorRef, ContentChild, ContentChildren, Directive, ElementRef, EventEmitter, Inject, Input,
-  NgZone, OnChanges, OnDestroy, Optional, Output, QueryList, Self, SimpleChanges, SkipSelf, ViewContainerRef,
+  BooleanInput, coerceBooleanProperty, coerceElement, coerceNumberProperty
+} from '@angular/cdk/coercion';
+import {
+  AfterViewInit, ChangeDetectorRef, ContentChild, ContentChildren, Directive, ElementRef,
+  EventEmitter, Inject, Input, NgZone, OnChanges, OnDestroy, Optional, Output, QueryList, Self,
+  SimpleChanges, SkipSelf, ViewContainerRef,
 } from '@angular/core';
 import { merge, Observable, Observer, Subject } from 'rxjs';
 import { map, startWith, switchMap, take, takeUntil, tap } from 'rxjs/operators';

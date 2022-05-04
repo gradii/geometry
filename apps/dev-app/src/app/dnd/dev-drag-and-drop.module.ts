@@ -26,6 +26,9 @@ import {
 import {
   TriDemoDndFlexRowComponent
 } from './tri-demo-dnd-flex-row/tri-demo-dnd-flex-row.component';
+import {
+  TriDemoDndGridResizeComponent
+} from './tri-demo-dnd-grid-resize/tri-demo-dnd-grid-resize.component';
 import { TriDemoDndGridComponent } from './tri-demo-dnd-grid/tri-demo-dnd-grid.component';
 import { ListItemComponent } from './tri-demo-dnd-nest/shared/list-item/list-item.component';
 import { TriDemoDndNestComponent } from './tri-demo-dnd-nest/tri-demo-dnd-nest.component';
@@ -63,6 +66,7 @@ import {
           {path: 'tri-demo-drag-flex-row', component: TriDemoDndFlexRowComponent},
           {path: 'tri-demo-drag-flex-column', component: TriDemoDndFlexColumnComponent},
           {path: 'tri-demo-drag-grid', component: TriDemoDndGridComponent},
+          {path: 'tri-demo-drag-grid-resize', component: TriDemoDndGridResizeComponent},
           {path: 'tri-demo-drag-drag-container', component: TriDemoDndDragContainerComponent},
         ]
       }
@@ -81,6 +85,7 @@ import {
     TriDemoDndFlexRowComponent,
     TriDemoDndFlexColumnComponent,
     TriDemoDndGridComponent,
+    TriDemoDndGridResizeComponent,
     TriDemoDndDragContainerComponent
   ]
 })

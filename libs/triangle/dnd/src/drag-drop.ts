@@ -7,18 +7,19 @@
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
 import { ElementRef, Inject, Injectable, NgZone } from '@angular/core';
-import { GridPositionStrategy } from './position-strategy/grid-position-strategy';
+import { DndContainerRef } from './drag-drop-ref/dnd-container-ref';
 import { DragContainerRef } from './drag-drop-ref/drag-container-ref';
 import { DragRef, DragRefConfig } from './drag-drop-ref/drag-ref';
-import { DndContainerRef } from './drag-drop-ref/dnd-container-ref';
 import { DropFlexContainerRef } from './drag-drop-ref/drop-flex-container-ref';
+import { DropFreeContainerRef } from './drag-drop-ref/drop-free-container-ref';
 import { DropGridContainerRef } from './drag-drop-ref/drop-grid-container-ref';
 import { DropListContainerRef } from './drag-drop-ref/drop-list-container-ref';
+import { ResizeRef } from './drag-drop-ref/resize-ref';
 import { DragDropRegistry } from './drag-drop-registry';
 import { FlexRowSortPositionStrategy } from './position-strategy/flex-row-sort-position-strategy';
+import { GridPositionStrategy } from './position-strategy/grid-position-strategy';
 import { NoopPositionStrategy } from './position-strategy/noop-position-strategy';
 import { SortPositionStrategy } from './position-strategy/sort-position-strategy';
-import { DropFreeContainerRef } from './drag-drop-ref/drop-free-container-ref';
 
 /** Default configuration to be used when creating a `DragRef`. */
 const DEFAULT_CONFIG = {
@@ -35,7 +36,7 @@ export class DragDrop {
     @Inject(DOCUMENT) private _document: any,
     private _ngZone: NgZone,
     private _viewportRuler: ViewportRuler,
-    private _dragDropRegistry: DragDropRegistry<DragRef, DndContainerRef>) {
+    private _dragDropRegistry: DragDropRegistry<any, DndContainerRef>) {
   }
 
   /**
@@ -47,6 +48,17 @@ export class DragDrop {
                       config: DragRefConfig = DEFAULT_CONFIG): DragRef<T> {
 
     return new DragRef<T>(element, config, this._document, this._ngZone, this._viewportRuler,
+      this._dragDropRegistry);
+  }
+
+  /**
+   * Turns an element into a draggable item.
+   * @param element Element to which to attach the dragging functionality.
+   * @param config Object used to configure the dragging behavior.
+   */
+  createResize<T = any>(element: ElementRef<HTMLElement> | HTMLElement,
+                        config: DragRefConfig = DEFAULT_CONFIG): ResizeRef<T> {
+    return new ResizeRef<T>(element, config, this._document, this._ngZone, this._viewportRuler,
       this._dragDropRegistry);
   }
 
@@ -87,7 +99,7 @@ export class DragDrop {
    */
   createDropGridContainerRef<T = any>(element: ElementRef<HTMLElement> | HTMLElement): DropGridContainerRef<T> {
     const positionStrategy = new GridPositionStrategy(this._dragDropRegistry);
-    const dropContainerRef     = new DropGridContainerRef<T>(element, this._dragDropRegistry,
+    const dropContainerRef = new DropGridContainerRef<T>(element, this._dragDropRegistry,
       this._document, this._ngZone,
       this._viewportRuler, positionStrategy);
 

@@ -625,18 +625,18 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
     return rst;
   }
 
-  pixelsToPositionX(pointerX: number) {
+  pixelsToPositionX(pointerX: number, fn: (x: number) => number = Math.round): number {
     const scrollLeft = coerceElement(this.element).scrollLeft;
     return this.hasPadding ?
-      Math.round((pointerX + scrollLeft - this.columnGap / 2) / this.renderTileWidth) :
-      Math.round((pointerX + scrollLeft + this.rowGap / 2) / this.renderTileWidth);
+      fn((pointerX + scrollLeft - this.columnGap / 2) / this.renderTileWidth) :
+      fn((pointerX + scrollLeft + this.rowGap / 2) / this.renderTileWidth);
   }
 
-  pixelsToPositionY(pointerY: number) {
+  pixelsToPositionY(pointerY: number, fn: (x: number) => number = Math.round) {
     const scrollTop = coerceElement(this.element).scrollTop;
     return this.hasPadding ?
-      Math.round((pointerY + scrollTop - this.columnGap / 2) / this.renderTileHeight)  :
-      Math.round((pointerY + scrollTop + this.rowGap / 2) / this.renderTileHeight);
+      fn((pointerY + scrollTop - this.columnGap / 2) / this.renderTileHeight) :
+      fn((pointerY + scrollTop + this.rowGap / 2) / this.renderTileHeight);
   }
 
   positionXToPixels(x: number): number {
@@ -982,9 +982,15 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
     }
   }
 
+  /**
+   * @deprecated
+   */
   renderRowHeight: number;
   renderColHeight: number;
   renderRowWidth: number;
+  /**
+   * @deprecated
+   */
   renderColWidth: number;
 
   rowHeightRatio: number;

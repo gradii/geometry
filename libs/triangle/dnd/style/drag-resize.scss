@@ -17,77 +17,104 @@
   z-index  : -1;
 }
 
-.gridster-item-resizable-handler {
-  position   : absolute;
-  z-index    : 2;
-  background : #1e89ef;
-  left       : 0;
-  top        : 0;
-}
+:host ::ng-deep {
+  $handler-size        : 2px;
+  $handler-corner-size : 10px;
 
-.tri-drag-resize-placeholder {
-  z-index    : -1;
-  background : rgba(30, 141, 232, 0.23);
-}
+  .gridster-item-resizable-handler {
+    position   : absolute;
+    z-index    : 2;
+    background : #1e89ef;
+    //left       : 0;
+    //top        : 0;
+    //transform  : translateX(-50%) translateY(-50%);
+  }
 
-.gridster-item-resizable-handler.handle-n {
-  cursor    : ns-resize;
-  height    : 2px;
+  .tri-drag-resize-placeholder {
+    position   : absolute;
+    z-index    : -1;
+    background : rgba(30, 141, 232, 0.23);
+  }
 
-  transform : translate3d(0, -50%, 0)
-}
+  .gridster-item-resizable-handler.handle-n {
+    cursor : ns-resize;
+    width  : 100%;
+    height : $handler-size;
 
-.gridster-item-resizable-handler.handle-e {
-  cursor : ew-resize;
-  width  : 2px;
-}
+    top    : -$handler-size;
+    left   : 0;
+  }
 
-.gridster-item-resizable-handler.handle-s {
-  cursor : ns-resize;
-  height : 2px;
-}
+  .gridster-item-resizable-handler.handle-e {
+    cursor : ew-resize;
+    width  : $handler-size;
+    height : 100%;
 
-.gridster-item-resizable-handler.handle-w {
-  cursor : ew-resize;
-  width  : 2px;
-}
+    right  : -$handler-size;
+    top    : 0;
+  }
 
-.gridster-item-resizable-handler.handle-ne {
-  cursor        : ne-resize;
-  width         : 10px;
-  height        : 10px;
-  border-radius : 50%;
-  margin-top    : -5px;
-  margin-left   : -5px;
-}
+  .gridster-item-resizable-handler.handle-s {
+    cursor : ns-resize;
+    width  : 100%;
+    height : $handler-size;
 
-.gridster-item-resizable-handler.handle-nw {
-  cursor        : nw-resize;
-  width         : 10px;
-  height        : 10px;
-  border-radius : 50%;
-  margin-top    : -5px;
-  margin-left   : -5px;
-}
+    bottom : -$handler-size;
+    left   : 0;
+  }
 
-.gridster-item-resizable-handler.handle-se {
-  cursor        : se-resize;
-  width         : 10px;
-  height        : 10px;
-  border-radius : 50%;
-  margin-top    : -5px;
-  margin-left   : -5px;
-}
+  .gridster-item-resizable-handler.handle-w {
+    cursor : ew-resize;
+    width  : $handler-size;
+    height : 100%;
 
-.gridster-item-resizable-handler.handle-sw {
-  cursor        : sw-resize;
-  width         : 10px;
-  height        : 10px;
-  border-radius : 50%;
-  margin-top    : -5px;
-  margin-left   : -5px;
+    left   : -$handler-size;
+    top    : 0;
+  }
+
+  .gridster-item-resizable-handler.handle-ne {
+    cursor        : ne-resize;
+    width         : $handler-corner-size;
+    height        : $handler-corner-size;
+    border-radius : 50%;
+
+    top           : -$handler-corner-size/2;
+    right         : -$handler-corner-size/2;
+  }
+
+  .gridster-item-resizable-handler.handle-nw {
+    cursor        : nw-resize;
+    width         : $handler-corner-size;
+    height        : $handler-corner-size;
+    border-radius : 50%;
+
+    top           : -$handler-corner-size/2;
+    left          : -$handler-corner-size/2;
+  }
+
+  .gridster-item-resizable-handler.handle-se {
+    cursor        : se-resize;
+    width         : $handler-corner-size;
+    height        : $handler-corner-size;
+    border-radius : 50%;
+
+    bottom        : -$handler-corner-size/2;
+    right         : -$handler-corner-size/2;
+  }
+
+  .gridster-item-resizable-handler.handle-sw {
+    cursor        : sw-resize;
+    width         : $handler-corner-size;
+    height        : $handler-corner-size;
+    border-radius : 50%;
+
+    bottom        : -$handler-corner-size/2;
+    left          : -$handler-corner-size/2;
+  }
 }
 
 gridster-item:hover .gridster-item-resizable-handler.handle-se {
   border-color : transparent transparent #ccc
 }
+
+

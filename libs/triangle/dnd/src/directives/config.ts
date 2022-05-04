@@ -26,6 +26,8 @@ export type DropContainerOrientation = 'horizontal' | 'vertical';
  */
 export const TRI_DRAG_CONFIG = new InjectionToken<DragDropConfig>('TRI_DRAG_CONFIG');
 
+export const TRI_RESIZE_CONFIG = new InjectionToken<DragDropConfig>('TRI_RESIZE_CONFIG');
+
 
 export interface DragGridItemConfig {
   defaultLayerIndex?: number;

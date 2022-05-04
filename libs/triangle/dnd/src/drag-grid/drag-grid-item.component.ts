@@ -27,18 +27,19 @@ import {
   selector : 'tri-drag-grid-item',
   exportAs : 'triDragGridItem',
   template : `
-    <tri-drag-resize-container
+    <div triDragHandle class="tri-drag-grid-item-content" style="width: 100%;height: 100%">
+      <ng-content></ng-content>
+    </div>
+    <!--<tri-drag-resize
       [disabled]="!resizeEnabled"
-      [width]="width" [height]="height"
-      [outMargin]="dropContainer.gap"
+      [width]="renderWidth" [height]="renderHeight"
+      [rowMargin]="dropContainer.rowGap"
+      [columnMargin]="dropContainer.columnGap"
       (triDragResizeStarted)="onDragResizeStart($event)"
       (triDragResized)="onDragResize($event)"
       (triDragResizeEnded)="onDragResizeEnd($event)"
     >
-      <div triDragHandle class="tri-drag-grid-item-content" style="width: 100%;height: 100%">
-        <ng-content></ng-content>
-      </div>
-    </tri-drag-resize-container>
+    </tri-drag-resize>-->
   `,
   providers: [
     {provide: TRI_DRAG_PARENT, useExisting: TriDragGridItemComponent}
@@ -46,8 +47,8 @@ import {
   host     : {
     '[style.position]' : '"absolute"',
     '[style.display]'  : '_init ? "block": null',
-    '[style.width.px]' : '_init ? width: null',
-    '[style.height.px]': '_init ? height: null'
+    '[style.width.px]' : '_init ? renderWidth: null',
+    '[style.height.px]': '_init ? renderHeight: null'
   },
   styles   : [
     `
@@ -65,7 +66,8 @@ import {
         background : white;
       }
     `
-  ]
+  ],
+  styleUrls      : [`../../style/drag-resize.scss`]
 })
 export class TriDragGridItemComponent extends TriDrag
   implements OnInit, OnChanges, OnDestroy {
@@ -134,14 +136,13 @@ export class TriDragGridItemComponent extends TriDrag
     this._compactEnabled = coerceBooleanProperty(value);
   }
 
-
   notPlaced: boolean = false;
 
-  private left: number = 0;
-  private top: number  = 0;
+  /*private*/ left: number = 0;
+  /*private*/ top: number  = 0;
 
-  width: number  = 100;
-  height: number = 100;
+  renderWidth: number  = 100;
+  renderHeight: number = 100;
 
   _init = false;
 
@@ -194,8 +195,8 @@ export class TriDragGridItemComponent extends TriDrag
       event.width / this.dropContainer.renderTileWidth) * this.dropContainer.renderTileWidth;
     const height                                      = Math.ceil(
       event.height / this.dropContainer.renderTileHeight) * this.dropContainer.renderTileHeight;
-    event.source.getPlaceHolderElement().style.width  = `${width}px`;
-    event.source.getPlaceHolderElement().style.height = `${height}px`;
+    event.source.getPlaceHolderElement().style.width  = `${width - this.dropContainer.columnGap}px`;
+    event.source.getPlaceHolderElement().style.height = `${height - this.dropContainer.rowGap}px`;
   }
 
   onDragResizeEnd(event: TriDragResizeEnd) {
@@ -222,12 +223,9 @@ export class TriDragGridItemComponent extends TriDrag
             defaultLayerIndex,
             defaultItemCols,
             defaultItemRows,
-            minItemCols,
-            maxItemCols,
-            minItemRows,
-            maxItemRows,
-            minItemArea,
-            maxItemArea,
+            minItemCols, maxItemCols,
+            minItemRows, maxItemRows,
+            minItemArea, maxItemArea,
           } = config;
 
     if (defaultLayerIndex) {
@@ -311,8 +309,8 @@ export class TriDragGridItemComponent extends TriDrag
       this.left = x * currentColumnWidth + container.columnGap;
       this.top  = y * currentColumnHeight + container.rowGap;
     }
-    this.width  = this.renderCols * currentColumnWidth - container.columnGap;
-    this.height = this.renderRows * currentColumnHeight - container.rowGap;
+    this.renderWidth  = this.renderCols * currentColumnWidth - container.columnGap;
+    this.renderHeight = this.renderRows * currentColumnHeight - container.rowGap;
 
     this._dragRef.setProgramDragPosition({x: this.left, y: this.top});
     this._changeDetectorRef.markForCheck();
