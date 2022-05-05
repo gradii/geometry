@@ -132,6 +132,7 @@ export class TriDropGridContainer<T = any>
   gap: number = 10;
 
   private _rowGap: number = 0;
+  disablePushOnResize: boolean;
 
   @Input('triDropGridContainerRowGap')
   get rowGap(): number {

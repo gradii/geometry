@@ -62,8 +62,8 @@ export class GridPushResizeService {
     // this.grid = this.gridItem = null!;
   }
 
-  pushItems(item: DragRef, direction: string): boolean {
-    if (this.dropGridContainerRef.data.pushResizeItems) {
+  pushItems(item: DragRef, direction: string, disable?: boolean): boolean {
+    if (!disable) {
       return this.push(item.data, direction);
     } else {
       return false;

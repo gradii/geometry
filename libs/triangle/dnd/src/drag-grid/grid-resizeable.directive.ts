@@ -31,15 +31,10 @@ interface ResizingEvent {
 })
 export class GridResizeableDirective implements OnInit, OnDestroy {
 
-  push: GridPushService;
-  pushResize: GridPushResizeService;
+  pushService: GridPushService;
+  pushResizeService: GridPushResizeService;
 
   itemBackup: number[] = [];
-
-  initPosition = {
-    x    : 0, y: 0,
-    width: 0, height: 0
-  };
 
   _initialClientRect: ClientRect;
   cachedRenderPosition: {
@@ -60,25 +55,9 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
     if (item && resize) {
       console.log('inited');
 
-      // this.push       = new GridPushService(this.item);
-      // this.pushResize = new GridPushResizeService(this.item);
+      this.pushService = new GridPushService(this.dropContainer._dropContainerRef);
+      this.pushResizeService = new GridPushResizeService(this.dropContainer._dropContainerRef);
     }
-  }
-
-  _setItemTop(top: number): void {
-    this.item.element.nativeElement.style.top = `${top}px`;
-  }
-
-  _setItemLeft(left: number): void {
-    this.item.element.nativeElement.style.left = `${left}px`;
-  }
-
-  _setItemHeight(height: number): void {
-    this.item.element.nativeElement.style.height = `${height}px`;
-  }
-
-  _setItemWidth(width: number): void {
-    this.item.element.nativeElement.style.width = `${width}px`;
   }
 
   newPosition: number;
@@ -98,31 +77,18 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       y/* - (this.dropContainer.rowGap /!*+ snapGap*!/)*/,
       Math.floor);
 
-    // if (anchorPosition === 'west') {
-    //   let x     = this.cachedRenderPosition.x + offsetX;
-    //   let width = this.cachedRenderPosition.renderWidth - offsetX;
-    //   if (this.minWidth > width) {
-    //     width = this.minWidth;
-    //     x     = this.cachedRenderPosition.x + this.cachedRenderPosition.renderWidth - this.minWidth;
-    //   }
-    //
-    //   this.newPosition = this.dropContainer.pixelsToPositionX(
-    //     x/* - (this.dropContainer.rowGap /!*+ snapGap*!/)*/,
-    //     Math.floor);
-    // }
-
-
     if (this.item.renderY !== this.newPosition) {
       this.itemBackup[1] = this.item.renderY;
       this.itemBackup[3] = this.item.renderRows;
       this.item.renderRows +=
         this.item.renderY - this.newPosition;
       this.item.renderY  = this.newPosition;
-      // this.pushResize.pushItems(this.pushResize.fromSouth);
-      // this.push.pushItems(
-      //   this.push.fromSouth,
-      //   this.gridster.$options.disablePushOnResize
-      // );
+
+      this.pushResizeService.pushItems(this.item._dragRef, 'fromSouth');
+      this.pushService.pushItems(
+        this.item._dragRef, 'fromSouth',
+        this.dropContainer.disablePushOnResize
+      );
 
       const previewRect     = {
         x    : this.cachedRenderPosition.x, y,
@@ -145,8 +111,6 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
           this.item.renderRows * this.dropContainer.renderTileHeight - this.dropContainer.rowGap;
 
       } else {
-        // this.item.renderY    = this.itemBackup[1];
-        // this.item.renderRows = this.itemBackup[3];
       }
 
       this.resize._resizeRef._previewRef?.applyTransform(
@@ -163,8 +127,8 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       this.resize._resizeRef.getPlaceholderElement().style.width  = `${placeholderRect.width}px`;
       this.resize._resizeRef.getPlaceholderElement().style.height = `${placeholderRect.height}px`;
 
-      // this.pushResize.checkPushBack();
-      // this.push.checkPushBack();
+      this.pushResizeService.checkPushBack();
+      this.pushService.checkPushBack();
     }
     // this._setItemTop(top);
     // this._setItemHeight(height);
@@ -191,11 +155,12 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       this.item.renderCols +=
         this.item.renderX - this.newPosition;
       this.item.renderX  = this.newPosition;
-      // this.pushResize.pushItems(this.pushResize.fromEast);
-      // this.push.pushItems(
-      //   this.push.fromEast,
-      //   this.gridster.$options.disablePushOnResize
-      // );
+
+      this.pushResizeService.pushItems(this.item._dragRef, 'fromEast');
+      this.pushService.pushItems(
+        this.item._dragRef, 'fromEast',
+        this.dropContainer.disablePushOnResize
+      );
 
       const previewRect     = {
         x, y         : this.cachedRenderPosition.y,
@@ -236,8 +201,8 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       this.resize._resizeRef.getPlaceholderElement().style.width  = `${placeholderRect.width}px`;
       this.resize._resizeRef.getPlaceholderElement().style.height = `${placeholderRect.height}px`;
 
-      // this.pushResize.checkPushBack();
-      // this.push.checkPushBack();
+      this.pushResizeService.checkPushBack();
+      this.pushService.checkPushBack();
     }
     // this._setItemLeft(this.left);
     // this._setItemWidth(this.width);
@@ -262,11 +227,12 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       this.itemBackup[3]   = this.item.renderRows;
       this.item.renderRows =
         this.newPosition - this.item.renderY;
-      // this.pushResize.pushItems(this.pushResize.fromNorth);
-      // this.push.pushItems(
-      //   this.push.fromNorth,
-      //   this.gridster.$options.disablePushOnResize
-      // );
+
+      this.pushResizeService.pushItems(this.item._dragRef, 'fromNorth');
+      this.pushService.pushItems(
+        this.item._dragRef, 'fromNorth',
+        this.dropContainer.disablePushOnResize
+      );
 
 
       const previewRect     = {
@@ -309,8 +275,8 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       // this.resize._resizeRef.getPlaceholderElement().style.width  = `${placeholderRect.width}px`;
       this.resize._resizeRef.getPlaceholderElement().style.height = `${placeholderRect.height}px`;
 
-      // this.pushResize.checkPushBack();
-      // this.push.checkPushBack();
+      this.pushResizeService.checkPushBack();
+      this.pushService.checkPushBack();
     }
     // this._setItemHeight(this.height);
   };
@@ -334,12 +300,12 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       this.itemBackup[2]   = this.item.renderCols;
       this.item.renderCols =
         this.newPosition - this.item.renderX;
-      // this.pushResize.pushItems(this.item._dragRef, this.pushResize.fromWest);
-      // this.push.pushItems(
-      //   this.item._dragRef,
-      //   this.push.fromWest,
-      //   this.gridster.$options.disablePushOnResize
-      // );
+
+      this.pushResizeService.pushItems(this.item._dragRef, 'fromWest');
+      this.pushService.pushItems(
+        this.item._dragRef, 'fromWest',
+        this.dropContainer.disablePushOnResize
+      );
 
       const previewRect     = {
         x    : this.cachedRenderPosition.x, y: this.cachedRenderPosition.y,
@@ -373,8 +339,8 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
 
       this.resize._resizeRef.getPlaceholderElement().style.width = `${placeholderRect.width}px`;
 
-      // this.pushResize.checkPushBack();
-      // this.push.checkPushBack();
+      this.pushResizeService.checkPushBack();
+      this.pushService.checkPushBack();
     }
     // this._setItemWidth(this.width);
   };
