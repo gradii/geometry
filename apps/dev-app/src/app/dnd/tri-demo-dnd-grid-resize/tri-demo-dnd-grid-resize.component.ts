@@ -163,6 +163,8 @@ import { DisplayGrid, GridType } from '../../../../../../libs/triangle/gridster'
                (triDropGridContainerEntered)="onDragEntered($event)"
                (triDropGridContainerExited)="onDragExited($event)"
                (triDropGridContainerDropped)="onDragDropped($event)"
+               (triDropGridContainerResized)="onResized($event)"
+
                [triDropGridContainerConnectedTo]="dls"
                class="example-grid-list" style="overflow: auto">
             <ng-template ngFor let-it let-i="index" [ngForOf]="dashboard">
@@ -303,6 +305,19 @@ export class TriDemoDndGridResizeComponent implements AfterViewInit {
 
       this.dashboard[event.item.index] = {...item, x: event.positionX, y: event.positionY};
     }
+  }
+
+  onResized(event: any[]) {
+    const evtItem = event[0];
+
+    // const item = this.dashboard[evtItem.index];
+
+    this.dashboard[evtItem.item.index] = {
+      x   : evtItem.x,
+      y   : evtItem.y,
+      cols: evtItem.cols,
+      rows: evtItem.rows
+    };
   }
 
   changedOptions() {

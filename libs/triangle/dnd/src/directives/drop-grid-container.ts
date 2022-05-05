@@ -275,6 +275,9 @@ export class TriDropGridContainer<T = any>
   @Output('triDropGridContainerRepositioned')
   readonly repositioned: EventEmitter<any> = new EventEmitter<any>();
 
+  @Output('triDropGridContainerResized')
+  readonly itemsResized: EventEmitter<any[]> = new EventEmitter<any[]>();
+
   /**
    * Keeps track of the items that are registered with this container. Historically we used to
    * do this with a `ContentChildren` query, however queries don't handle transplanted views very

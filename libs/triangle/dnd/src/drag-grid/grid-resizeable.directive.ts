@@ -4,13 +4,15 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { Directive, Inject, OnDestroy, OnInit, Optional, Self, SkipSelf } from '@angular/core';
+import {
+  Directive, EventEmitter, Inject, NgZone, OnDestroy, OnInit, Optional, Output, Self, SkipSelf
+} from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TRI_DROP_CONTAINER } from '../directives/drop-container';
 import { TriDropGridContainer } from '../directives/drop-grid-container';
 import { TriResize } from '../directives/resize';
-import { AnchorPosition, OffsetPoint, ResizeRef } from '../drag-drop-ref/resize-ref';
+import { AnchorPosition, OffsetPoint, Point, ResizeRef } from '../drag-drop-ref/resize-ref';
 import { getMutableClientRect } from '../utils/client-rect';
 import { TriDragGridItemComponent } from './drag-grid-item.component';
 import { GridPushResizeService } from './grid-push-resize.service';
@@ -46,7 +48,18 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
 
   destroy$ = new Subject();
 
+  @Output('triGridResizeStarted')
+  resizeStarted = new EventEmitter<ResizingEvent>();
+
+  @Output('triGridResizeResizing')
+  resizeResizing = new EventEmitter<ResizingEvent>();
+
+  @Output('triGridResizeResized')
+  resizeResized = new EventEmitter<any>();
+
+
   constructor(
+    private _ngZone: NgZone,
     @Inject(TRI_DROP_CONTAINER) @SkipSelf() public dropContainer: TriDropGridContainer,
     @Optional() @Self() private item: TriDragGridItemComponent,
     @Optional() @Self() private resize: TriResize,
@@ -432,7 +445,29 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe((evt) => {
       // const {item} = evt;
+      this._ngZone.run(() => {
 
+        this.resizeResized.next({
+          elementPositionX       : evt.elementPositionX,
+          elementPositionY       : evt.elementPositionY,
+          item                   : evt.item,
+          distance               : evt.distance,
+          dropPoint              : evt.dropPoint,
+          elementRelativePosition: evt.elementRelativePosition,
+
+          x   : this.item.renderX, y: this.item.renderY,
+          cols: this.item.renderCols, rows: this.item.renderRows
+        });
+
+        this.dropContainer.itemsResized.next([
+          {
+            resizeItem: this,
+            item      : this.item,
+            x         : this.item.renderX, y: this.item.renderY,
+            cols      : this.item.renderCols, rows: this.item.renderRows
+          }
+        ]);
+      });
       this.item.updateItemSize();
     });
   }
