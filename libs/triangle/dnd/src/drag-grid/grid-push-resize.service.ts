@@ -7,7 +7,6 @@
 import { DragRef } from '../drag-drop-ref/drag-ref';
 import { DropGridContainerRef } from '../drag-drop-ref/drop-grid-container-ref';
 import { TriDragGridItemComponent } from './drag-grid-item.component';
-import { GridItem } from './grid-item.interface';
 
 export class GridPushResizeService {
   public fromSouth: string;
@@ -15,7 +14,7 @@ export class GridPushResizeService {
   public fromEast: string;
   public fromWest: string;
   private pushedItems: Array<TriDragGridItemComponent>;
-  private pushedItemsPath: Array<Array<GridItem>>;
+  private pushedItemsPath: { x: number, y: number, cols: number, rows: number }[][];
   // private gridItem: TriDragGridItemComponent;
   // private grid: TriDropGridContainer;
   private tryPattern: {

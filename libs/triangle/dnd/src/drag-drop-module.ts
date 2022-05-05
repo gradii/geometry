@@ -23,7 +23,6 @@ import { TriResizePlaceholder } from './directives/resize-placeholder';
 import { TriResizePreview } from './directives/resize-preview';
 import { DragDrop } from './drag-drop';
 import { TriDragGridItemComponent } from './drag-grid/drag-grid-item.component';
-import { TriDragResizeContainerComponent } from './drag-grid/drag-resize.container.component';
 import { GridResizeableDirective } from './drag-grid/grid-resizeable.directive';
 
 @NgModule({
@@ -44,7 +43,6 @@ import { GridResizeableDirective } from './drag-grid/grid-resizeable.directive';
     TriDragPlaceholder,
     TriDragGridItemComponent,
 
-    TriDragResizeContainerComponent,
     TriResize,
     TriResizeHandle,
     TriResizePreview,
@@ -66,7 +64,6 @@ import { GridResizeableDirective } from './drag-grid/grid-resizeable.directive';
     TriDragGridItemComponent,
     TriDropFlexContainer,
 
-    TriDragResizeContainerComponent,
     TriResize,
     TriResizeHandle,
     TriResizePreview,

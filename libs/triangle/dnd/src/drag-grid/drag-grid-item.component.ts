@@ -19,9 +19,6 @@ import { TRI_DROP_CONTAINER } from '../directives/drop-container';
 import type { TriDropGridContainer } from '../directives/drop-grid-container';
 import { DragDrop } from '../drag-drop';
 import { TRI_DRAG_PARENT } from '../drag-parent';
-import {
-  TriDragResize, TriDragResizeContainerComponent, TriDragResizeEnd, TriDragResizeStart
-} from './drag-resize.container.component';
 
 @Component({
   selector : 'tri-drag-grid-item',
@@ -146,9 +143,6 @@ export class TriDragGridItemComponent extends TriDrag
 
   _init = false;
 
-  @ViewChild(TriDragResizeContainerComponent)
-  dragResizeContainer: TriDragResizeContainerComponent;
-
   constructor(
     @Inject(TRI_DROP_CONTAINER)
     private gridContainer: TriDropGridContainer,
@@ -169,52 +163,6 @@ export class TriDragGridItemComponent extends TriDrag
       config, _dir, dragDrop, _changeDetectorRef, _selfHandle, _parentDrag
     );
 
-  }
-
-  onDragResizeStart(event: TriDragResizeStart) {
-    console.log('resize start', event);
-  }
-
-  onDragResize(event: TriDragResize) {
-    console.log('resizing', event);
-    const x = this.dropContainer.pixelsToPositionX(
-      this.left + event.x
-    );
-    const y = this.dropContainer.pixelsToPositionY(
-      this.top + event.y
-    );
-
-    const pixelX     = this.dropContainer.positionXToPixels(x);
-    const pixelY     = this.dropContainer.positionYToPixels(y);
-    const translateX = pixelX - this.left;
-    const translateY = pixelY - this.top;
-
-    event.source.getPlaceHolderElement().style.transform = `translate(${translateX}px, ${translateY}px)`;
-
-    const width                                       = Math.ceil(
-      event.width / this.dropContainer.renderTileWidth) * this.dropContainer.renderTileWidth;
-    const height                                      = Math.ceil(
-      event.height / this.dropContainer.renderTileHeight) * this.dropContainer.renderTileHeight;
-    event.source.getPlaceHolderElement().style.width  = `${width - this.dropContainer.columnGap}px`;
-    event.source.getPlaceHolderElement().style.height = `${height - this.dropContainer.rowGap}px`;
-  }
-
-  onDragResizeEnd(event: TriDragResizeEnd) {
-    // console.log('resize end', event);
-
-    const x = this.dropContainer.pixelsToPositionX(this.left + event.x);
-    const y = this.dropContainer.pixelsToPositionY(this.top + event.y);
-    this.x  = x;
-    this.y  = y;
-
-    this.renderCols = Math.round(event.width / this.dropContainer.renderTileWidth);
-    this.renderRows = Math.round(event.height / this.dropContainer.renderTileHeight);
-
-    this._ngZone.run(() => {
-      this.dropContainer.positionItem(this);
-    });
-
-    event.source.reset();
   }
 
   _assignDefaults(config: DragDropConfig) {
