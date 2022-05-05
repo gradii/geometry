@@ -628,15 +628,15 @@ ${JSON.stringify(item, ['cols', 'rows', 'x', 'y'])}`);
   pixelsToPositionX(pointerX: number, fn: (x: number) => number = Math.round): number {
     const scrollLeft = coerceElement(this.element).scrollLeft;
     return this.hasPadding ?
-      fn((pointerX + scrollLeft - this.columnGap / 2) / this.renderTileWidth) :
-      fn((pointerX + scrollLeft + this.rowGap / 2) / this.renderTileWidth);
+      fn((pointerX + scrollLeft - this.columnGap) / this.renderTileWidth) :
+      fn((pointerX + scrollLeft + this.columnGap) / this.renderTileWidth);
   }
 
   pixelsToPositionY(pointerY: number, fn: (x: number) => number = Math.round) {
     const scrollTop = coerceElement(this.element).scrollTop;
     return this.hasPadding ?
-      fn((pointerY + scrollTop - this.columnGap / 2) / this.renderTileHeight) :
-      fn((pointerY + scrollTop + this.rowGap / 2) / this.renderTileHeight);
+      fn((pointerY + scrollTop - this.rowGap) / this.renderTileHeight) :
+      fn((pointerY + scrollTop + this.rowGap) / this.renderTileHeight);
   }
 
   positionXToPixels(x: number): number {
