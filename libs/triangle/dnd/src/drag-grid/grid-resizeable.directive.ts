@@ -449,6 +449,19 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       }
     });
 
+    this.resize._resizeRef.ended.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe((evt) => {
+      // const {item} = evt;
+
+      this.item.renderX    = this.item.x;
+      this.item.renderY    = this.item.y;
+      this.item.renderRows = this.item.rows;
+      this.item.renderCols = this.item.cols;
+
+      this.item.updateItemSize();
+    });
+
     this.resize._resizeRef.resized.pipe(
       takeUntil(this.destroy$)
     ).subscribe((evt) => {
