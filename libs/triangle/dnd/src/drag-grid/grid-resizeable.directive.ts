@@ -427,9 +427,6 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
     this.resize._resizeRef.resizing.pipe(
       takeUntil(this.destroy$)
     ).subscribe((evt: ResizingEvent) => {
-
-      const {offsetX, offsetY, offsetX2, offsetY2} = evt.distance;
-
       // const snapGap = 5;
       const anchorPosition = evt.resizeAnchorPosition;
 
@@ -450,52 +447,6 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       } else if (anchorPosition === 'eastSouth') {
         this.handleSouthEast(evt);
       }
-
-      // if (anchorPosition === 'north') {
-      //   this.item.renderY = this.dropContainer.pixelsToPositionY(
-      //     this.item.top + offsetY - (this.dropContainer.rowGap /*+ snapGap*/), Math.floor);
-      // } else if (anchorPosition === 'south') {
-      //   this.item.renderRows = Math.ceil(
-      //     (this.item.renderHeight + offsetY2 + this.dropContainer.rowGap /*+ snapGap*/) / this.dropContainer.renderTileHeight
-      //   );
-      //   console.log(this.item.renderRows);
-      // } else if (anchorPosition === 'west') {
-      //   this.item.renderX = this.dropContainer.pixelsToPositionX(
-      //     this.item.left + offsetX - (this.dropContainer.columnGap /*+ snapGap*/), Math.floor);
-      // } else if (anchorPosition === 'east') {
-      //   this.item.renderCols = Math.ceil(
-      //     (this.item.renderWidth + offsetX2 + (this.dropContainer.columnGap /*+ snapGap*/)) / this.dropContainer.renderTileWidth
-      //   );
-      // }
-      //
-      // const c = this.dropContainer.checkCollision(this.item);
-      // console.log('collisioned', c);
-      // if (c) {
-      //   if (anchorPosition === 'north') {
-      //     offsetY = c.top + c.renderHeight + this.dropContainer.rowGap - this.item.top;
-      //   } else if (anchorPosition === 'south') {
-      //     offsetY2 = c.top - this.dropContainer.rowGap - (this.item.top + this.item.renderHeight);
-      //   } else if (anchorPosition === 'west') {
-      //     offsetX = c.left + c.renderWidth + this.dropContainer.columnGap - this.item.left;
-      //   } else if (anchorPosition === 'east') {
-      //     offsetX2 = c.left - this.dropContainer.columnGap - (this.item.left + this.item.renderWidth);
-      //   }
-      // }
-      //
-      //
-      // this.resize._resizeRef._previewRef.applyTransform(
-      //   // @ts-ignore
-      //   this.resize._resizeRef._initialClientRect.left + offsetX,
-      //   // @ts-ignore
-      //   this.resize._resizeRef._initialClientRect.top + offsetY
-      // );
-      // this.resize._resizeRef._previewRef?.applySize(
-      //   // @ts-ignore
-      //   this.resize._resizeRef._initialClientRect.width + offsetX2 - offsetX,
-      //   // @ts-ignore
-      //   this.resize._resizeRef._initialClientRect.height + offsetY2 - offsetY
-      // );
-
     });
   }
 
