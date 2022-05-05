@@ -55,7 +55,7 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
     if (item && resize) {
       console.log('inited');
 
-      this.pushService = new GridPushService(this.dropContainer._dropContainerRef);
+      this.pushService       = new GridPushService(this.dropContainer._dropContainerRef);
       this.pushResizeService = new GridPushResizeService(this.dropContainer._dropContainerRef);
     }
   }
