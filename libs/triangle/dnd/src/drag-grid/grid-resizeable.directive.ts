@@ -250,7 +250,7 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
     if (this.minHeight > height) {
       height = this.minHeight;
     }
-    const y2 = this.cachedRenderPosition.y + height;
+    const y2         = this.cachedRenderPosition.y + height;
     this.newPosition = this.dropContainer.pixelsToPositionY(
       y2 + this.dropContainer.rowGap/* - (this.dropContainer.rowGap /!*+ snapGap*!/)*/,
       Math.ceil);
@@ -322,7 +322,7 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
     if (this.minWidth > width) {
       width = this.minWidth;
     }
-    const x2 = this.cachedRenderPosition.x + width;
+    const x2         = this.cachedRenderPosition.x + width;
     this.newPosition = this.dropContainer.pixelsToPositionX(
       x2 + this.dropContainer.columnGap/* - (this.dropContainer.rowGap /!*+ snapGap*!/)*/,
       Math.ceil);
@@ -348,8 +348,8 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       const placeholderRect = {
         x     : this.cachedRenderPosition.x,
         y     : this.cachedRenderPosition.y,
-        width: this.item.renderCols * this.dropContainer.renderTileWidth - this.dropContainer.columnGap,
-        height : this.cachedRenderPosition.renderHeight,
+        width : this.item.renderCols * this.dropContainer.renderTileWidth - this.dropContainer.columnGap,
+        height: this.cachedRenderPosition.renderHeight,
       };
 
       if (this.dropContainer.checkCollision(this.item)) {
@@ -434,7 +434,7 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
         this.handleNorth(evt);
       } else if (anchorPosition === 'south') {
         this.handleSouth(evt);
-      }  else if (anchorPosition === 'west') {
+      } else if (anchorPosition === 'west') {
         this.handleWest(evt);
       } else if (anchorPosition === 'east') {
         this.handleEast(evt);
@@ -447,6 +447,14 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       } else if (anchorPosition === 'eastSouth') {
         this.handleSouthEast(evt);
       }
+    });
+
+    this.resize._resizeRef.resized.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe((evt) => {
+      // const {item} = evt;
+
+      this.item.updateItemSize();
     });
   }
 
