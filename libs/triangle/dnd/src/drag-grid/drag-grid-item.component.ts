@@ -72,8 +72,8 @@ export class TriDragGridItemComponent extends TriDrag
   private lastPositionX: number;
   private lastPositionY: number;
 
-  @Input('triDragGridItemIndex')
-  index: number = -1;
+  @Input('triDragGridItemData')
+  data: any;
 
   @Input('triDragGridItemX')
   x: number       = -1;

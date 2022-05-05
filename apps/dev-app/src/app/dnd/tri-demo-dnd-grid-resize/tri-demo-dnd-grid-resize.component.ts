@@ -171,7 +171,7 @@ import { DisplayGrid, GridType } from '../../../../../../libs/triangle/gridster'
               <tri-drag-grid-item #item
                                   #gridItem="triDragGridItem"
                                   triResize
-                                  [triDragGridItemIndex]="i"
+                                  [triDragGridItemData]="i"
                                   [triDragGridItemX]="it.x"
                                   [triDragGridItemY]="it.y"
                                   [triDragGridItemRows]="it.rows"
@@ -301,9 +301,9 @@ export class TriDemoDndGridResizeComponent implements AfterViewInit {
         rows: 1
       });
     } else {
-      const item = this.dashboard[event.item.index];
+      const item = this.dashboard[event.item.data];
 
-      this.dashboard[event.item.index] = {...item, x: event.positionX, y: event.positionY};
+      this.dashboard[event.item.data] = {...item, x: event.positionX, y: event.positionY};
     }
   }
 

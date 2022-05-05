@@ -168,7 +168,7 @@ import { DisplayGrid, GridType } from '../../../../../../libs/triangle/gridster'
             <ng-template ngFor let-it let-i="index" [ngForOf]="dashboard">
               <tri-drag-grid-item #item
                                   #gridItem="triDragGridItem"
-                                  [triDragGridItemIndex]="i"
+                                  [triDragGridItemData]="i"
                                   [triDragGridItemX]="it.x"
                                   [triDragGridItemY]="it.y"
                                   [triDragGridItemRows]="it.rows"
@@ -298,9 +298,9 @@ export class TriDemoDndGridComponent implements AfterViewInit {
         rows: 1
       });
     } else {
-      const item = this.dashboard[event.item.index];
+      const item = this.dashboard[event.item.data];
 
-      this.dashboard[event.item.index] = {...item, x: event.positionX, y: event.positionY};
+      this.dashboard[event.item.data] = {...item, x: event.positionX, y: event.positionY};
     }
   }
 
