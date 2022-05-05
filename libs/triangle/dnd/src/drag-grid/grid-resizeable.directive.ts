@@ -77,8 +77,35 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
   minHeight: number;
   minWidth: number;
 
+  previewRect: {
+    posX: number, posY: number,
+    width: number, height: number
+  };
+
+  placeholderRect: {
+    posX: number, posY: number,
+    width: number, height: number
+  };
+
+  private _setItemSize() {
+    this.resize._resizeRef._previewRef?.applyTransform(
+      this.previewRect.posX - this.cachedRenderPosition.x + this._initialClientRect.left,
+      this.previewRect.posY - this.cachedRenderPosition.y + this._initialClientRect.top,
+    );
+
+    this.resize._resizeRef._previewRef?.applySize(
+      this.previewRect.width, this.previewRect.height
+    );
+
+    this.resize._resizeRef.getPlaceholderElement().style.transform =
+      `translate(${this.placeholderRect.posX}px, ${this.placeholderRect.posY}px)`;
+
+    this.resize._resizeRef.getPlaceholderElement().style.width  = `${this.placeholderRect.width}px`;
+    this.resize._resizeRef.getPlaceholderElement().style.height = `${this.placeholderRect.height}px`;
+  }
+
   private handleNorth = (evt: ResizingEvent): void => {
-    const {offsetX, offsetY, offsetX2, offsetY2} = evt.distance;
+    const {offsetY} = evt.distance;
 
     let y      = this.cachedRenderPosition.y + offsetY;
     let height = this.cachedRenderPosition.renderHeight - offsetY;
@@ -90,6 +117,10 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       y/* - (this.dropContainer.rowGap /!*+ snapGap*!/)*/,
       Math.floor);
 
+
+    this.previewRect.posY   = y;
+    this.previewRect.height = height;
+
     if (this.item.renderY !== this.newPosition) {
       this.itemBackup[1] = this.item.renderY;
       this.itemBackup[3] = this.item.renderRows;
@@ -97,58 +128,40 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
         this.item.renderY - this.newPosition;
       this.item.renderY  = this.newPosition;
 
-      this.pushResizeService.pushItems(this.item._dragRef, 'fromSouth');
+      this.pushResizeService.pushItems(
+        this.item._dragRef, 'fromSouth',
+        this.dropContainer.disablePushResizeItems
+      );
       this.pushService.pushItems(
         this.item._dragRef, 'fromSouth',
         this.dropContainer.disablePushOnResize
       );
 
-      const previewRect     = {
-        x    : this.cachedRenderPosition.x, y,
-        width: this.cachedRenderPosition.renderWidth, height
-      };
-      const placeholderRect = {
-        x     : this.cachedRenderPosition.x,
-        y     : this.dropContainer.positionYToPixels(this.item.renderY),
-        width : this.cachedRenderPosition.renderWidth,
-        height: this.item.renderRows * this.dropContainer.renderTileHeight - this.dropContainer.rowGap
-      };
+      this.placeholderRect.posY   = this.dropContainer.positionYToPixels(this.item.renderY);
+      this.placeholderRect.height = this.item.renderRows * this.dropContainer.renderTileHeight - this.dropContainer.rowGap;
 
       if (this.dropContainer.checkCollision(this.item)) {
         this.item.renderY    = this.itemBackup[1];
         this.item.renderRows = this.itemBackup[3];
 
-        placeholderRect.y      = previewRect.y =
+        this.placeholderRect.posY   = this.previewRect.posY =
           this.dropContainer.positionYToPixels(this.item.renderY);
-        placeholderRect.height = previewRect.height =
+        this.placeholderRect.height = this.previewRect.height =
           this.item.renderRows * this.dropContainer.renderTileHeight - this.dropContainer.rowGap;
 
       } else {
       }
-
-      this.resize._resizeRef._previewRef?.applyTransform(
-        previewRect.x - this.cachedRenderPosition.x + this._initialClientRect.left,
-        previewRect.y - this.cachedRenderPosition.y + this._initialClientRect.top,
-      );
-
-      this.resize._resizeRef._previewRef?.applySize(
-        previewRect.width, previewRect.height
-      );
-
-      this.resize._resizeRef.getPlaceholderElement().style.transform = `translate(${placeholderRect.x}px, ${placeholderRect.y}px)`;
-
-      this.resize._resizeRef.getPlaceholderElement().style.width  = `${placeholderRect.width}px`;
-      this.resize._resizeRef.getPlaceholderElement().style.height = `${placeholderRect.height}px`;
 
       this.pushResizeService.checkPushBack();
       this.pushService.checkPushBack();
     }
     // this._setItemTop(top);
     // this._setItemHeight(height);
+    this._setItemSize();
   };
 
   private handleWest = (evt: ResizingEvent): void => {
-    const {offsetX, offsetY, offsetX2, offsetY2} = evt.distance;
+    const {offsetX} = evt.distance;
 
     let x     = this.cachedRenderPosition.x + offsetX;
     let width = this.cachedRenderPosition.renderWidth - offsetX;
@@ -162,6 +175,12 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       Math.floor);
 
 
+    this.previewRect.posX  = x;
+    this.previewRect.width = width;
+
+    this.placeholderRect.posX  = this.dropContainer.positionXToPixels(this.item.renderX);
+    this.placeholderRect.width = this.item.renderCols * this.dropContainer.renderTileWidth - this.dropContainer.columnGap;
+
     if (this.item.renderX !== this.newPosition) {
       this.itemBackup[0] = this.item.renderX;
       this.itemBackup[2] = this.item.renderCols;
@@ -169,60 +188,35 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
         this.item.renderX - this.newPosition;
       this.item.renderX  = this.newPosition;
 
-      this.pushResizeService.pushItems(this.item._dragRef, 'fromEast');
+      this.pushResizeService.pushItems(
+        this.item._dragRef, 'fromEast',
+        this.dropContainer.disablePushResizeItems
+      );
       this.pushService.pushItems(
         this.item._dragRef, 'fromEast',
         this.dropContainer.disablePushOnResize
       );
 
-      const previewRect     = {
-        x, y         : this.cachedRenderPosition.y,
-        width, height: this.cachedRenderPosition.renderHeight
-      };
-      const placeholderRect = {
-        x     : this.dropContainer.positionXToPixels(this.item.renderX),
-        y     : this.cachedRenderPosition.y,
-        width : this.item.renderCols * this.dropContainer.renderTileWidth - this.dropContainer.columnGap,
-        height: this.cachedRenderPosition.renderHeight,
-      };
-
-
       if (this.dropContainer.checkCollision(this.item)) {
         this.item.renderX    = this.itemBackup[0];
         this.item.renderCols = this.itemBackup[2];
 
-        placeholderRect.x     = previewRect.x =
+        this.placeholderRect.posX  = this.previewRect.posX =
           this.dropContainer.positionXToPixels(this.item.renderX);
-        placeholderRect.width = previewRect.width =
+        this.placeholderRect.width = this.previewRect.width =
           this.item.renderCols * this.dropContainer.renderTileWidth - this.dropContainer.columnGap;
-
-      } else {
-        // this.gridster.previewStyle();
       }
-
-      this.resize._resizeRef._previewRef?.applyTransform(
-        previewRect.x - this.cachedRenderPosition.x + this._initialClientRect.left,
-        previewRect.y - this.cachedRenderPosition.y + this._initialClientRect.top,
-      );
-
-      this.resize._resizeRef._previewRef?.applySize(
-        previewRect.width, previewRect.height
-      );
-
-      this.resize._resizeRef.getPlaceholderElement().style.transform = `translate(${placeholderRect.x}px, ${placeholderRect.y}px)`;
-
-      this.resize._resizeRef.getPlaceholderElement().style.width  = `${placeholderRect.width}px`;
-      this.resize._resizeRef.getPlaceholderElement().style.height = `${placeholderRect.height}px`;
 
       this.pushResizeService.checkPushBack();
       this.pushService.checkPushBack();
     }
     // this._setItemLeft(this.left);
     // this._setItemWidth(this.width);
+    this._setItemSize();
   };
 
   private handleSouth = (evt: ResizingEvent): void => {
-    const {offsetX, offsetY, offsetX2, offsetY2} = evt.distance;
+    const {offsetY2} = evt.distance;
 
     let height = this.cachedRenderPosition.renderHeight + offsetY2;
     if (this.minHeight > height) {
@@ -233,6 +227,9 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       y2 + this.dropContainer.rowGap/* - (this.dropContainer.rowGap /!*+ snapGap*!/)*/,
       Math.ceil);
 
+    this.previewRect.height     = height;
+    this.placeholderRect.height = this.item.renderRows * this.dropContainer.renderTileHeight - this.dropContainer.rowGap;
+
     if (
       this.item.renderY + this.item.renderRows !==
       this.newPosition
@@ -241,61 +238,37 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       this.item.renderRows =
         this.newPosition - this.item.renderY;
 
-      this.pushResizeService.pushItems(this.item._dragRef, 'fromNorth');
+      this.pushResizeService.pushItems(
+        this.item._dragRef, 'fromNorth',
+        this.dropContainer.disablePushResizeItems
+      );
       this.pushService.pushItems(
         this.item._dragRef, 'fromNorth',
         this.dropContainer.disablePushOnResize
       );
 
-
-      const previewRect     = {
-        x    : this.cachedRenderPosition.x, y: this.cachedRenderPosition.y,
-        width: this.cachedRenderPosition.renderWidth, height
-      };
-      const placeholderRect = {
-        x     : this.cachedRenderPosition.x,
-        y     : this.cachedRenderPosition.y,
-        width : this.cachedRenderPosition.renderWidth,
-        height: this.item.renderRows * this.dropContainer.renderTileHeight - this.dropContainer.rowGap
-      };
-
       if (this.dropContainer.checkCollision(this.item)) {
         this.item.renderRows = this.itemBackup[3];
-        // this._setItemHeight(
-        //   this.gridster.positionYToPixels(this.item.renderRows) -
-        //   this.margin
-        // );
-        // return;
 
-        placeholderRect.height = previewRect.height =
+        this.placeholderRect.height = this.previewRect.height =
           this.item.renderRows * this.dropContainer.renderTileHeight - this.dropContainer.rowGap;
 
-      } else {
-        // this.gridster.previewStyle();
       }
-
-      // this.resize._resizeRef._previewRef?.applyTransform(
-      //   previewRect.x - this.cachedRenderPosition.x + this._initialClientRect.left,
-      //   previewRect.y - this.cachedRenderPosition.y + this._initialClientRect.top,
-      // );
-
-      this.resize._resizeRef._previewRef?.applySize(
-        previewRect.width, previewRect.height
-      );
-
-      // this.resize._resizeRef.getPlaceholderElement().style.transform = `translate(${placeholderRect.x}px, ${placeholderRect.y}px)`;
-
-      // this.resize._resizeRef.getPlaceholderElement().style.width  = `${placeholderRect.width}px`;
-      this.resize._resizeRef.getPlaceholderElement().style.height = `${placeholderRect.height}px`;
 
       this.pushResizeService.checkPushBack();
       this.pushService.checkPushBack();
     }
     // this._setItemHeight(this.height);
+
+    this._setItemSize();
+    // this.resize._resizeRef._previewRef?.applySize(
+    //   this.previewRect.width, this.previewRect.height
+    // );
+    // this.resize._resizeRef.getPlaceholderElement().style.height = `${this.placeholderRect.height}px`;
   };
 
   private handleEast = (evt: ResizingEvent): void => {
-    const {offsetX, offsetY, offsetX2, offsetY2} = evt.distance;
+    const {offsetX2} = evt.distance;
 
     let width = this.cachedRenderPosition.renderWidth + offsetX2;
     if (this.minWidth > width) {
@@ -306,6 +279,9 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       x2 + this.dropContainer.columnGap/* - (this.dropContainer.rowGap /!*+ snapGap*!/)*/,
       Math.ceil);
 
+    this.previewRect.width     = width;
+    this.placeholderRect.width = this.item.renderCols * this.dropContainer.renderTileWidth - this.dropContainer.columnGap;
+
     if (
       this.item.renderX + this.item.renderCols !==
       this.newPosition
@@ -314,48 +290,31 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       this.item.renderCols =
         this.newPosition - this.item.renderX;
 
-      this.pushResizeService.pushItems(this.item._dragRef, 'fromWest');
+      this.pushResizeService.pushItems(
+        this.item._dragRef, 'fromWest',
+        this.dropContainer.disablePushResizeItems
+      );
       this.pushService.pushItems(
         this.item._dragRef, 'fromWest',
         this.dropContainer.disablePushOnResize
       );
 
-      const previewRect     = {
-        x    : this.cachedRenderPosition.x, y: this.cachedRenderPosition.y,
-        width: width, height: this.cachedRenderPosition.renderHeight
-      };
-      const placeholderRect = {
-        x     : this.cachedRenderPosition.x,
-        y     : this.cachedRenderPosition.y,
-        width : this.item.renderCols * this.dropContainer.renderTileWidth - this.dropContainer.columnGap,
-        height: this.cachedRenderPosition.renderHeight,
-      };
-
       if (this.dropContainer.checkCollision(this.item)) {
         this.item.renderCols = this.itemBackup[2];
-        // this._setItemWidth(
-        //   this.gridster.positionXToPixels(this.item.renderCols) -
-        //   this.margin
-        // );
-        // return;
 
-        placeholderRect.width = previewRect.width =
+        this.placeholderRect.width = this.previewRect.width =
           this.item.renderCols * this.dropContainer.renderTileWidth - this.dropContainer.columnGap;
-
-      } else {
-        // this.gridster.previewStyle();
       }
-
-      this.resize._resizeRef._previewRef?.applySize(
-        previewRect.width, previewRect.height
-      );
-
-      this.resize._resizeRef.getPlaceholderElement().style.width = `${placeholderRect.width}px`;
 
       this.pushResizeService.checkPushBack();
       this.pushService.checkPushBack();
     }
-    // this._setItemWidth(this.width);
+
+    this._setItemSize();
+    // this.resize._resizeRef._previewRef?.applySize(
+    //   this.previewRect.width, this.previewRect.height
+    // );
+    // this.resize._resizeRef.getPlaceholderElement().style.width = `${this.placeholderRect.width}px`;
   };
 
   private handleNorthWest = (e: ResizingEvent): void => {
@@ -383,14 +342,8 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(() => {
       this._initialClientRect = getMutableClientRect(this.item.element.nativeElement);
-    });
-    this.resize._resizeRef.started.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(() => {
 
-      // const rect                = getMutableClientRect(this.item.element.nativeElement);
       this.cachedRenderPosition = {
-        // initialClientRect: rect,
         x           : this.item.left,
         y           : this.item.top,
         renderX     : this.item.renderX,
@@ -399,6 +352,23 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
         renderHeight: this.item.renderHeight
       };
 
+      this.previewRect = {
+        posX : this.item.left, posY: this.item.top,
+        width: this.item.renderWidth, height: this.item.renderHeight
+      };
+
+
+      this.placeholderRect = {
+        posX : this.item.left, posY: this.item.top,
+        width: this.item.renderWidth, height: this.item.renderHeight
+      };
+
+
+    });
+    this.resize._resizeRef.started.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+
       this.minHeight = this.item.minItemRows * this.dropContainer.renderTileHeight - this.dropContainer.rowGap;
       this.minWidth  = this.item.minItemCols * this.dropContainer.renderTileWidth - this.dropContainer.columnGap;
     });
@@ -406,8 +376,7 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
     this.resize._resizeRef.resizing.pipe(
       takeUntil(this.destroy$)
     ).subscribe((evt: ResizingEvent) => {
-      // const snapGap = 5;
-      const anchorPosition = evt.resizeAnchorPosition;
+      const {resizeAnchorPosition: anchorPosition} = evt;
 
       if (anchorPosition === 'north') {
         this.handleNorth(evt);
@@ -427,19 +396,6 @@ export class GridResizeableDirective implements OnInit, OnDestroy {
         this.handleSouthEast(evt);
       }
     });
-
-    // this.resize._resizeRef.ended.pipe(
-    //   takeUntil(this.destroy$)
-    // ).subscribe((evt) => {
-    //   // const {item} = evt;
-    //
-    //   this.item.renderX    = this.item.x;
-    //   this.item.renderY    = this.item.y;
-    //   this.item.renderRows = this.item.rows;
-    //   this.item.renderCols = this.item.cols;
-    //
-    //   this.item.updateItemSize();
-    // });
 
     this.resize._resizeRef.resized.pipe(
       takeUntil(this.destroy$)

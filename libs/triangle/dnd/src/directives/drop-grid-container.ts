@@ -132,7 +132,7 @@ export class TriDropGridContainer<T = any>
   gap: number = 10;
 
   private _rowGap: number = 0;
-  disablePushOnResize: boolean;
+
 
   @Input('triDropGridContainerRowGap')
   get rowGap(): number {
@@ -185,8 +185,8 @@ export class TriDropGridContainer<T = any>
   @Input('triDropGridContainerSwapItem')
   swapItem: boolean;
 
-  @Input('triDropGridContainerPushResizeItems')
-  pushResizeItems: boolean = false;
+  @Input('triDropGridContainerDisablePushResizeItems')
+  disablePushResizeItems: boolean = false;
 
   @Input('triDropGridContainerPushDirectionsSouth')
   pushDirectionsSouth: boolean = true;
@@ -202,6 +202,9 @@ export class TriDropGridContainer<T = any>
 
   @Input('triDropGridContainerDisablePushOnDrag')
   disablePushOnDrag: boolean = false;
+
+  @Input('triDropGridContainerDisablePushOnResize')
+  disablePushOnResize: boolean = false;
 
   @Input('triDropGridContainerDisableAutoPositionOnConflict')
   disableAutoPositionOnConflict: boolean;

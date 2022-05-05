@@ -160,6 +160,8 @@ import { DisplayGrid, GridType } from '../../../../../../libs/triangle/gridster'
                [triDropGridContainerMaxCols]="12"
                [triDropGridContainerGap]="12"
                [triDropGridContainerColumnGap]="8"
+               [triDropGridContainerDisablePushOnResize]="true"
+               [triDropGridContainerDisablePushResizeItems]="true"
                (triDropGridContainerEntered)="onDragEntered($event)"
                (triDropGridContainerExited)="onDragExited($event)"
                (triDropGridContainerDropped)="onDragDropped($event)"

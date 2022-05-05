@@ -17,6 +17,12 @@
   z-index  : -1;
 }
 
+::ng-deep {
+  .tri-resize-placeholder {
+    transition-property: none;
+  }
+}
+
 :host ::ng-deep {
   $handler-size        : 2px;
   $handler-corner-size : 10px;
