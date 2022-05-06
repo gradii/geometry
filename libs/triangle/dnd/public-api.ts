@@ -34,6 +34,9 @@ export * from './src/directives/drag-handle';
 export * from './src/directives/drag-preview';
 export * from './src/directives/drag-placeholder';
 export * from './src/directives/resize';
+export * from './src/directives/resize-handle';
+export * from './src/directives/resize-preview';
+export * from './src/directives/resize-placeholder';
 export * from './src/drag-grid/grid-resize.directive';
 
 export * from './src/position-strategy/grid-position-strategy';
