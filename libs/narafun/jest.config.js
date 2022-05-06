@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: "lofun",
+  displayName: "narafun",
   preset: "../../jest.preset.js",
   globals: {
     "ts-jest": {
