@@ -56,7 +56,7 @@
     "narafn": {
       "tags": []
     },
-    "runner": {
+    "action-runner": {
       "tags": []
     },
     "runtime-drag": {
