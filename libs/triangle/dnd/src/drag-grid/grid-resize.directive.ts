@@ -31,7 +31,7 @@ interface ResizingEvent {
 @Directive({
   selector: 'tri-drag-grid-item[triResize]'
 })
-export class GridResizeableDirective implements OnInit, OnDestroy {
+export class GridResizeDirective implements OnInit, OnDestroy {
 
   pushService: GridPushService;
   pushResizeService: GridPushResizeService;

@@ -23,7 +23,7 @@ import { TriResizePlaceholder } from './directives/resize-placeholder';
 import { TriResizePreview } from './directives/resize-preview';
 import { DragDrop } from './drag-drop';
 import { TriDragGridItemComponent } from './drag-grid/drag-grid-item.component';
-import { GridResizeableDirective } from './drag-grid/grid-resizeable.directive';
+import { GridResizeDirective } from './drag-grid/grid-resize.directive';
 
 @NgModule({
   imports     : [
@@ -48,7 +48,7 @@ import { GridResizeableDirective } from './drag-grid/grid-resizeable.directive';
     TriResizePreview,
     TriResizePlaceholder,
 
-    GridResizeableDirective
+    GridResizeDirective
   ],
   exports     : [
     CdkScrollableModule,
@@ -69,7 +69,7 @@ import { GridResizeableDirective } from './drag-grid/grid-resizeable.directive';
     TriResizePreview,
     TriResizePlaceholder,
 
-    GridResizeableDirective
+    GridResizeDirective
   ],
   providers   : [
     DragDrop,

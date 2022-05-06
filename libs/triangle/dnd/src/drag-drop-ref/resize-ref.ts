@@ -11,6 +11,7 @@ import { _getShadowRoot, normalizePassiveListenerOptions } from '@angular/cdk/pl
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { ElementRef, EmbeddedViewRef, NgZone, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Observable, Subject, Subscription } from 'rxjs';
+import { TriResize } from '../directives/resize';
 import { DragContainerRef } from '../drag-drop-ref/drag-container-ref';
 import { DragDropRegistry } from '../drag-drop-registry';
 import {
@@ -630,10 +631,6 @@ export class ResizeRef<T = any> {
       this._previewTemplate = this._anchor = null!;
   }
 
-  private isDropInDragContainer(): boolean {
-    return this._scrollContainerElement && this._scrollContainerElement instanceof DragContainerRef;
-  }
-
   /** Checks whether the element is currently being dragged. */
   isDragging(): boolean {
     return this._hasStartedDragging && this._dragDropRegistry.isDragging(this);
@@ -894,6 +891,13 @@ export class ResizeRef<T = any> {
       this._initialClientRect.height + offsetY2 - offsetY
     );
     // }
+
+    // @ts-ignore
+    (this.data as unknown as TriResize).dropContainer._dropContainerRef._cacheParentPositions();
+    (this.data as unknown as TriResize).dropContainer._dropContainerRef._startScrollingIfNecessary(
+      constrainedPointerPosition.x,
+      constrainedPointerPosition.y
+    );
 
     // Since this event gets fired for every pixel while dragging, we only
     // want to fire it if the consumer opted into it. Also we have to
@@ -1190,7 +1194,7 @@ export class ResizeRef<T = any> {
    */
   private _animatePreviewToPlaceholder(): Promise<void> {
     // If the user hasn't moved yet, the transitionend event won't fire.
-    if (!this._hasMoved || this.isDropInDragContainer()) {
+    if (!this._hasMoved) {
       return Promise.resolve();
     }
 
@@ -1249,7 +1253,7 @@ export class ResizeRef<T = any> {
       this._placeholderEmbeddedViewRef.detectChanges();
       placeholder = getRootNode(this._placeholderEmbeddedViewRef, this._document);
     } else {
-      placeholder = deepCloneNode(this._rootElement);
+      placeholder              = deepCloneNode(this._rootElement);
       placeholder.style.filter = 'blur(2px) opacity(0.8)';
     }
 
