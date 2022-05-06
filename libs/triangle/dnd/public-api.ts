@@ -33,6 +33,8 @@ export * from './src/directives/drag';
 export * from './src/directives/drag-handle';
 export * from './src/directives/drag-preview';
 export * from './src/directives/drag-placeholder';
+export * from './src/directives/resize';
+export * from './src/drag-grid/grid-resize.directive';
 
 export * from './src/position-strategy/grid-position-strategy';
 export * from './src/position-strategy/flex-column-position-strategy';
