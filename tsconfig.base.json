@@ -34,8 +34,8 @@
     "paths": {
       "@applications/http": ["libs/http/src/index.ts"],
       "@applications/iterator": ["libs/iterator/src/index.ts"],
-      "@applications/lofn": ["libs/lofn/src/index.ts"],
-      "@applications/runner": ["libs/runner/src/index.ts"],
+      "@gradii/narafun": ["libs/narafun/src/index.ts"],
+      "@gradii/action-runner": ["libs/action-runner/src/index.ts"],
       "@gradii/annotation": ["libs/annotation/index.ts"],
       "@gradii/check-type": ["libs/check-type/src/index.ts"],
       "@gradii/diagram/*": ["src/diagram/*/public-api.ts"],

@@ -410,26 +410,26 @@
         }
       }
     },
-    "runner": {
-      "root": "libs/runner",
-      "sourceRoot": "libs/runner/src",
+    "action-runner": {
+      "root": "libs/action-runner",
+      "sourceRoot": "libs/action-runner/src",
       "projectType": "library",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/runner/tsconfig.lib.json",
-              "libs/runner/tsconfig.spec.json"
+              "libs/action-runner/tsconfig.lib.json",
+              "libs/action-runner/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/runner/**/*"]
+            "exclude": ["**/node_modules/**", "!libs/action-runner/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/runner"],
+          "outputs": ["coverage/libs/action-runner"],
           "options": {
-            "jestConfig": "libs/runner/jest.config.js",
+            "jestConfig": "libs/action-runner/jest.config.js",
             "passWithNoTests": true
           }
         }
