@@ -20,23 +20,25 @@ export class Matrix3 {
   constructor(a11: number, a12: number, a13: number,
               a21: number, a22: number, a23: number,
               a31: number, a32: number, a33: number)
-  constructor() {
+  constructor(a11?: number | number[], a12?: number, a13?: number,
+              a21?: number, a22?: number, a23?: number,
+              a31?: number, a32?: number, a33?: number) {
     if (arguments.length === 1) {
-      if (arguments[0]) {
-        this.init(arguments[0]);
+      if (a11) {
+        this.init(a11 as number[]);
       }
     } else if (arguments.length === 9) {
-      this.values[0] = arguments[0];
-      this.values[1] = arguments[1];
-      this.values[2] = arguments[2];
+      this.values[0] = a11 as number;
+      this.values[1] = a12;
+      this.values[2] = a13;
 
-      this.values[3] = arguments[3];
-      this.values[4] = arguments[4];
-      this.values[5] = arguments[5];
+      this.values[3] = a21;
+      this.values[4] = a22;
+      this.values[5] = a23;
 
-      this.values[6] = arguments[6];
-      this.values[7] = arguments[7];
-      this.values[8] = arguments[8];
+      this.values[6] = a31;
+      this.values[7] = a32;
+      this.values[8] = a33;
     } else {
       this.values[0] = this.values[1] = this.values[2] = 0;
       this.values[3] = this.values[4] = this.values[5] = 0;

@@ -52,17 +52,17 @@ async function build() {
     try {
       let content = fs.readFileSync(file, 'utf8')
         .replace(/^\/\/# sourceMappingURL=.+?$/mg, '')
-        .replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1')
+        // .replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1')
 
       const licenseBanner = buildConfig.fedacoLicenseBanner;
-      const isJs = file.endsWith('.js');
-      content = prettier.format(content, {
-        parser       : isJs ? 'espree' : 'typescript',
-        trailingComma: isJs ? "es5" : "none",
-        tabWidth     : isJs ? 2 : 4,
-        semi         : isJs ? false : true,
-        singleQuote  : true,
-      });
+      // const isJs = file.endsWith('.js');
+      // content = prettier.format(content, {
+      //   parser       : isJs ? 'espree' : 'typescript',
+      //   trailingComma: isJs ? "es5" : "none",
+      //   tabWidth     : isJs ? 2 : 4,
+      //   semi         : isJs ? false : true,
+      //   singleQuote  : true,
+      // });
 
       fs.writeFileSync(file, `${licenseBanner}
 ${content}`, {encoding: 'utf8', mode: 10644});

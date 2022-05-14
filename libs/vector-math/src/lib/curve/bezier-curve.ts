@@ -44,7 +44,7 @@ export class BezierCurve {
       tangent = {x: 0, y: 0};
     }
     return tangent;
-  };
+  }
 
   public getPropertiesAtLength(length: number) {
     const points = this._getPoints();

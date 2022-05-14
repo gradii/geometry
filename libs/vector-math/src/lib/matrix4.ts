@@ -27,28 +27,34 @@ export class Matrix4 {
               a31: number, a32: number, a33: number, a34: number,
               a41: number, a42: number, a43: number, a44: number);
 
-  constructor() {
+  constructor(a11?: number | number[], a12?: number, a13?: number, a14?: number,
+              a21?: number, a22?: number, a23?: number, a24?: number,
+              a31?: number, a32?: number, a33?: number, a34?: number,
+              a41?: number, a42?: number, a43?: number, a44?: number) {
     if (arguments.length === 1) {
-      if (arguments[0]) {
-        this.init(arguments[0]);
+      if (a11) {
+        this.init(a11 as number[]);
       }
     } else if (arguments.length === 16) {
-      this.values[0]  = arguments[0];
-      this.values[1]  = arguments[1];
-      this.values[2]  = arguments[2];
-      this.values[3]  = arguments[3];
-      this.values[4]  = arguments[4];
-      this.values[5]  = arguments[5];
-      this.values[6]  = arguments[6];
-      this.values[7]  = arguments[7];
-      this.values[8]  = arguments[8];
-      this.values[9]  = arguments[9];
-      this.values[10] = arguments[10];
-      this.values[11] = arguments[11];
-      this.values[12] = arguments[12];
-      this.values[13] = arguments[13];
-      this.values[14] = arguments[14];
-      this.values[15] = arguments[15];
+      this.values[0] = a11 as number;
+      this.values[1] = a12;
+      this.values[2] = a13;
+      this.values[3] = a14;
+
+      this.values[4] = a21;
+      this.values[5] = a22;
+      this.values[6] = a23;
+      this.values[7] = a24;
+
+      this.values[8]  = a31;
+      this.values[9]  = a32;
+      this.values[10] = a33;
+      this.values[11] = a34;
+
+      this.values[12] = a41;
+      this.values[13] = a42;
+      this.values[14] = a43;
+      this.values[15] = a44;
     } else {
       this.values[0]  = this.values[1] = this.values[2] = this.values[3] = 0;
       this.values[4]  = this.values[5] = this.values[6] = this.values[7] = 0;

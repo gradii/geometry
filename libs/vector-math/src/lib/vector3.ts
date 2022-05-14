@@ -17,19 +17,19 @@ export class Vector3 {
 
   constructor(values?: number[]);
 
-  constructor(arg0: number, arg1: number, arg2: number);
+  constructor(x: number, y: number, z: number);
 
-  constructor() {
+  constructor(x?: number | number[], y?: number, z?: number) {
     if (arguments.length === 1) {
-      if (arguments[0]) {
-        this.values[0] = arguments[0][0];
-        this.values[1] = arguments[0][1];
-        this.values[2] = arguments[0][2];
+      if (x) {
+        this.values[0] = (x as number[])[0];
+        this.values[1] = (x as number[])[1];
+        this.values[2] = (x as number[])[2];
       }
     } else if (arguments.length === 3) {
-      this.values[0] = arguments[0];
-      this.values[1] = arguments[1];
-      this.values[2] = arguments[2];
+      this.values[0] = x as number;
+      this.values[1] = y as number;
+      this.values[2] = z as number;
     } else {
       this.values[0] = 0;
       this.values[1] = 0;
@@ -92,9 +92,9 @@ export class Vector3 {
   }
 
   public get squaredLength(): number {
-    let x = this.values[0],
-        y = this.values[1],
-        z = this.values[2];
+    const x = this.values[0],
+          y = this.values[1],
+          z = this.values[2];
 
     return (x * x + y * y + z * z);
   }

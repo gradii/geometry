@@ -13,23 +13,23 @@ export class Plane {
 
   constructor(normal: Vector3, constant: number);
 
-  constructor() {
-    if (arguments.length === 1 && arguments[0] instanceof Plane) {
-      this._normal   = arguments[0]._normal.clone();
-      this._constant = arguments[0]._constant;
+  constructor(x?: number | Plane | Vector3, y?: number, z?: number, w?: number) {
+    if (arguments.length === 1 && x instanceof Plane) {
+      this._normal   = x._normal.clone();
+      this._constant = x._constant;
     } else if (arguments.length === 4) {
-      this._normal   = new Vector3(arguments[0], arguments[1], arguments[2]);
-      this._constant = arguments[3];
+      this._normal   = new Vector3(x as number, y, z);
+      this._constant = w;
     } else if (arguments.length === 2) {
-      this._normal   = arguments[0].clone();
-      this._constant = arguments[1];
+      this._normal   = (x as Vector3).clone();
+      this._constant = (y as number);
     } else {
       this._normal   = new Vector3();
       this._constant = 0;
     }
   }
 
-  private _normal: Vector3;
+  private readonly _normal: Vector3;
 
   public get normal() {
     return this._normal;

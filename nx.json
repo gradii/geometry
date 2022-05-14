@@ -29,6 +29,9 @@
     }
   },
   "projects": {
+    "action-runner": {
+      "tags": []
+    },
     "annotation": {
       "tags": []
     },
@@ -54,9 +57,6 @@
       "tags": []
     },
     "narafn": {
-      "tags": []
-    },
-    "action-runner": {
       "tags": []
     },
     "runtime-drag": {

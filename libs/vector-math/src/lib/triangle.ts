@@ -12,15 +12,15 @@ export class Triangle {
 
   constructor(p0: Vector3, p1: Vector3, p2: Vector3);
 
-  constructor() {
+  constructor(p0: Vector3 | Triangle, p1?: Vector3, p2?: Vector3) {
     if (arguments.length === 3) {
-      this._point0 = arguments[0].clone();
-      this._point1 = arguments[1].clone();
-      this._point2 = arguments[2].clone();
+      this._point0 = (p0 as Vector3).clone();
+      this._point1 = (p1 as Vector3).clone();
+      this._point2 = (p2 as Vector3).clone();
     } else if (arguments.length === 1) {
-      this._point0 = arguments[0].point0;
-      this._point1 = arguments[1].point1;
-      this._point2 = arguments[2].point2;
+      this._point0 = (p0 as Triangle).point0;
+      this._point1 = (p0 as Triangle).point1;
+      this._point2 = (p0 as Triangle).point2;
     } else {
       this._point0 = Vector3.zero();
       this._point1 = Vector3.zero();

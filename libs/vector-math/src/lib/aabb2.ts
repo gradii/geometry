@@ -13,23 +13,23 @@ export class Aabb2 {
 
   constructor();
 
-  constructor() {
+  constructor(min?: Vector2, max?: Vector2) {
     if (arguments.length === 2) {
-      this._min = arguments[0];
-      this._max = arguments[1];
+      this._min = min;
+      this._max = max;
     } else {
       this._min = new Vector2();
       this._max = new Vector2();
     }
   }
 
-  private _min: Vector2;
+  private readonly _min: Vector2;
 
   public get min() {
     return this._min;
   }
 
-  private _max: Vector2;
+  private readonly _max: Vector2;
 
   public get max() {
     return this._max;

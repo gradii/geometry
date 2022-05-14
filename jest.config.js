@@ -16,5 +16,6 @@ module.exports = {
     "<rootDir>/libs/http",
     "<rootDir>/libs/iterator",
     "<rootDir>/libs/runner",
+    "<rootDir>/libs/narafn",
   ],
 };

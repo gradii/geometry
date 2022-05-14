@@ -1,6 +1,31 @@
 {
   "version": 1,
   "projects": {
+    "action-runner": {
+      "root": "libs/action-runner",
+      "sourceRoot": "libs/action-runner/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/action-runner/tsconfig.lib.json",
+              "libs/action-runner/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/action-runner/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/action-runner"],
+          "options": {
+            "jestConfig": "libs/action-runner/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "annotation": {
       "projectType": "library",
       "root": "libs/annotation",
@@ -386,19 +411,26 @@
       }
     },
     "narafn": {
+      "projectType": "library",
       "root": "libs/narafn",
       "sourceRoot": "libs/narafn/src",
-      "projectType": "library",
+      "prefix": "applications",
       "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+        "build": {
+          "builder": "@nrwl/angular:ng-packagr-lite",
+          "outputs": ["dist/libs/narafn"],
           "options": {
-            "tsConfig": [
-              "libs/narafn/tsconfig.lib.json",
-              "libs/narafn/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/narafn/**/*"]
-          }
+            "project": "libs/narafn/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/narafn/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/narafn/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
         },
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -407,30 +439,14 @@
             "jestConfig": "libs/narafn/jest.config.js",
             "passWithNoTests": true
           }
-        }
-      }
-    },
-    "action-runner": {
-      "root": "libs/action-runner",
-      "sourceRoot": "libs/action-runner/src",
-      "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/action-runner/tsconfig.lib.json",
-              "libs/action-runner/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/action-runner/**/*"]
-          }
         },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/action-runner"],
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
           "options": {
-            "jestConfig": "libs/action-runner/jest.config.js",
-            "passWithNoTests": true
+            "lintFilePatterns": [
+              "libs/narafn/src/**/*.ts",
+              "libs/narafn/src/**/*.html"
+            ]
           }
         }
       }

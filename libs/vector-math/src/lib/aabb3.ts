@@ -38,23 +38,23 @@ export class Aabb3 {
 
   constructor();
 
-  constructor() {
+  constructor(min?: Vector3, max?: Vector3) {
     if (arguments.length === 2) {
-      this._min = arguments[0].clone();
-      this._max = arguments[1].clone();
+      this._min = min.clone();
+      this._max = max.clone();
     } else {
       this._min = Vector3.zero();
       this._max = Vector3.zero();
     }
   }
 
-  private _min: Vector3;
+  private readonly _min: Vector3;
 
   public get min() {
     return this._min;
   }
 
-  private _max: Vector3;
+  private readonly _max: Vector3;
 
   public get max() {
     return this._max;

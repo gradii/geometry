@@ -26,13 +26,14 @@ export class Obb3 {
   constructor(center: Vector3, halfExtents: Vector3,
               axis0: Vector3, axis1: Vector3, axis2: Vector3);
 
-  constructor() {
+  constructor(center?: Vector3, halfExtents?: Vector3,
+              axis0?: Vector3, axis1?: Vector3, axis2?: Vector3) {
     if (arguments.length === 5) {
-      this._center      = arguments[0];
-      this._halfExtents = arguments[1];
-      this._axis0       = arguments[2];
-      this._axis1       = arguments[3];
-      this._axis2       = arguments[4];
+      this._center      = center;
+      this._halfExtents = halfExtents;
+      this._axis0       = axis0;
+      this._axis1       = axis1;
+      this._axis2       = axis2;
     } else {
       this._center      = Vector3.zero();
       this._halfExtents = Vector3.zero();
@@ -280,8 +281,8 @@ export class Obb3 {
       rb = other._halfExtents.at(i);
 
       if (Math.abs(Obb3._t.at(0) * Obb3._r.entry(0, i) +
-        Obb3._t.at(1) * Obb3._r.entry(1, i) +
-        Obb3._t.at(2) * Obb3._r.entry(2, i)) >
+          Obb3._t.at(1) * Obb3._r.entry(1, i) +
+          Obb3._t.at(2) * Obb3._r.entry(2, i)) >
         ra + rb) {
         return false;
       }

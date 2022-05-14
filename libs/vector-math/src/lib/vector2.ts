@@ -19,15 +19,15 @@ export class Vector2 {
 
   constructor(x: number, y: number);
 
-  constructor() {
+  constructor(x?: number | number[], y?: number) {
     if (arguments.length === 1) {
-      if (arguments[0]) {
-        this.x = arguments[0][0];
-        this.y = arguments[0][1];
+      if (x) {
+        this.x = (x as number[])[0];
+        this.y = (x as number[])[1];
       }
     } else if (arguments.length === 2) {
-      this.values[0] = arguments[0];
-      this.values[1] = arguments[1];
+      this.values[0] = x as number;
+      this.values[1] = y as number;
     } else {
       this.values[0] = 0;
       this.values[1] = 0;

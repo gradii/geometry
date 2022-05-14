@@ -22,16 +22,16 @@
     "baseUrl": ".",
     "paths": {
       "@gradii/annotation": [
-        "src/annotation/public-api.ts",
-        "../../src/annotation/public-api.ts"
+        "libs/annotation/public-api.ts",
+        "../../libs/annotation/public-api.ts"
       ],
       "@gradii/check-type": [
-        "src/check-type/public-api.ts",
-        "../../src/check-type/public-api.ts"
+        "libs/check-type/public-api.ts",
+        "../../libs/check-type/public-api.ts"
       ],
       "@gradii/fedaco": [
-        "src/fedaco/public-api.ts",
-        "../../src/fedaco/public-api.ts"
+        "libs/fedaco/public-api.ts",
+        "../../libs/fedaco/public-api.ts"
       ]
     }
   },

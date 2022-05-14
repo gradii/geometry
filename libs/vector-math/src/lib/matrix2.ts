@@ -23,16 +23,17 @@ export class Matrix2 {
   constructor(values?: number[]);
   constructor(a11: number, a12: number,
               a21: number, a22: number);
-  constructor() {
+  constructor(a11?: number | number[], a12?: number,
+              a21?: number, a22?: number) {
     if (arguments.length === 1) {
-      if (arguments[0]) {
-        this.init(arguments[0]);
+      if (a11) {
+        this.init(a11 as number[]);
       }
     } else if (arguments.length === 4) {
-      this.values[0] = arguments[0];
-      this.values[1] = arguments[1];
-      this.values[2] = arguments[2];
-      this.values[3] = arguments[3];
+      this.values[0] = a11 as number;
+      this.values[1] = a12;
+      this.values[2] = a21;
+      this.values[3] = a22;
     } else {
       this.values[0] = this.values[1] = this.values[2] = this.values[3] = 0;
     }
@@ -50,10 +51,10 @@ export class Matrix2 {
   }
 
   public static product(m1: Matrix2, m2: Matrix2, out: Matrix2 = null): Matrix2 {
-    let a11 = m1.at(0),
-        a12 = m1.at(1),
-        a21 = m1.at(2),
-        a22 = m1.at(3);
+    const a11 = m1.at(0),
+          a12 = m1.at(1),
+          a21 = m1.at(2),
+          a22 = m1.at(3);
 
     if (!out) {
       out = new Matrix2();
@@ -115,7 +116,7 @@ export class Matrix2 {
   }
 
   public all(): number[] {
-    let data: number[] = [];
+    const data: number[] = [];
     for (let i = 0; i < 4; i++) {
       data[i] = this.values[i];
     }
@@ -236,7 +237,7 @@ export class Matrix2 {
    * @returns
    */
   public transpose(): Matrix2 {
-    let temp = this.values[1];
+    const temp = this.values[1];
 
     this.values[1] = this.values[2];
     this.values[2] = temp;
@@ -327,13 +328,13 @@ export class Matrix2 {
   }
 
   public rotate(radians: number): Matrix2 {
-    let a11 = this.values[0],
-        a12 = this.values[1],
-        a21 = this.values[2],
-        a22 = this.values[3];
+    const a11 = this.values[0],
+          a12 = this.values[1],
+          a21 = this.values[2],
+          a22 = this.values[3];
 
-    let sin = Math.sin(radians),
-        cos = Math.cos(radians);
+    const sin = Math.sin(radians),
+          cos = Math.cos(radians);
 
     this.values[0] = a11 * cos + a12 * sin;
     this.values[1] = a11 * -sin + a12 * cos;
@@ -399,8 +400,8 @@ export class Matrix2 {
   }
 
   public transform(vector: Vector2): Vector2 {
-    let x = vector.x,
-        y = vector.y;
+    const x = vector.x,
+          y = vector.y;
 
     vector.setValues(
       x * this.values[0] + y * this.values[1],

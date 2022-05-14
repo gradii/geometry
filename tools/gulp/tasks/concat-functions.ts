@@ -1,7 +1,7 @@
-import { camelCase, capitalCase } from '@gradii/fedaco';
 import * as fse from 'fs-extra';
 import { task, } from 'gulp';
 import { join } from 'path';
+import { camelCase } from '@gradii/fedaco';
 import { buildConfig } from '../../package-tools';
 
 
@@ -12,10 +12,10 @@ task('concat-functions:dist', async () => {
   console.log(buildConfig.projectDir);
 
   const functionsDir = 'dist/output-generate-md/model-functions';
-  if(!fse.existsSync(functionsDir)) {
+  if (!fse.existsSync(functionsDir)) {
     return;
   }
-  const list         = fse.readdirSync(functionsDir);
+  const list = fse.readdirSync(functionsDir);
 
   list.forEach(it => {
     const currentDir = join(functionsDir, it);
@@ -31,7 +31,7 @@ task('concat-functions:dist', async () => {
         }
       });
       fse.writeFileSync(join(functionsDir, it + '.md'), totalContents.join(''));
-      fse.removeSync(currentDir)
+      fse.removeSync(currentDir);
     }
   });
 

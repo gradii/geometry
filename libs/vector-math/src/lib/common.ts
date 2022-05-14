@@ -10,8 +10,8 @@ export const EPSILON = 0.000001;
 const degree = Math.PI / 180;
 
 /**
- * 获取弧度对应的角度
- * @param  radian 弧度
+ * to degree by radian
+ * @param  radian radian
  * @return  角度
  */
 export function toDegree(radian: number) {
@@ -19,7 +19,8 @@ export function toDegree(radian: number) {
 }
 
 /**
- * 广义取模运算
+ * common mod operation
+ *
  * @param  n 被取模的值
  * @param  m 模
  * @return  返回n 被 m 取模的结果

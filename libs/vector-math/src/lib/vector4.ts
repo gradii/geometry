@@ -13,18 +13,18 @@ export class Vector4 {
 
   constructor(values?: number[]);
 
-  constructor(arg0: number, arg1: number, arg2: number, arg3: number);
+  constructor(x: number, y: number, z: number, w: number);
 
-  constructor() {
+  constructor(x?: number | number[], y?: number, z?: number, w?: number) {
     if (arguments.length === 1) {
-      if (arguments[0]) {
-        this.xyzw = arguments[0];
+      if (x) {
+        this.xyzw = x as number[];
       }
     } else if (arguments.length === 4) {
-      this.values[0] = arguments[0];
-      this.values[1] = arguments[1];
-      this.values[2] = arguments[2];
-      this.values[3] = arguments[3];
+      this.values[0] = x as number;
+      this.values[1] = y as number;
+      this.values[2] = z as number;
+      this.values[3] = w as number;
     } else {
       this.values[0] = 0;
       this.values[1] = 0;
