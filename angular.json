@@ -410,33 +410,33 @@
         }
       }
     },
-    "narafn": {
+    "nanofn": {
       "projectType": "library",
-      "root": "libs/narafn",
-      "sourceRoot": "libs/narafn/src",
+      "root": "libs/nanofn",
+      "sourceRoot": "libs/nanofn/src",
       "prefix": "applications",
       "architect": {
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
-          "outputs": ["dist/libs/narafn"],
+          "outputs": ["dist/libs/nanofn"],
           "options": {
-            "project": "libs/narafn/ng-package.json"
+            "project": "libs/nanofn/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "libs/narafn/tsconfig.lib.prod.json"
+              "tsConfig": "libs/nanofn/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "libs/narafn/tsconfig.lib.json"
+              "tsConfig": "libs/nanofn/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/narafn"],
+          "outputs": ["coverage/libs/nanofn"],
           "options": {
-            "jestConfig": "libs/narafn/jest.config.js",
+            "jestConfig": "libs/nanofn/jest.config.js",
             "passWithNoTests": true
           }
         },
@@ -444,8 +444,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/narafn/src/**/*.ts",
-              "libs/narafn/src/**/*.html"
+              "libs/nanofn/src/**/*.ts",
+              "libs/nanofn/src/**/*.html"
             ]
           }
         }

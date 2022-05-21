@@ -7,7 +7,7 @@ task('check-import', async () => {
 
   const project = new Project();
 
-  project.addSourceFilesAtPaths('./libs/narafn/src/**/*.ts');
+  project.addSourceFilesAtPaths('./libs/nanofn/src/**/*.ts');
 
   const sourceFiles = project.getSourceFiles();
 
