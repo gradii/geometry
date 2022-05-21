@@ -4,8 +4,8 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { eq } from '../lang/eq';
 import { _baseAssignValue } from './base-assign-value';
-import { eq } from '../eq';
 
 /** Used to check objects for own properties. */
 const hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -18,7 +18,7 @@ const hasOwnProperty = Object.prototype.hasOwnProperty;
  * @param {string} key The key of the property to assign.
  * @param {*} value The value to assign.
  */
-export function _assignValue(object, key, value) {
+export function _assignValue(object: any, key: string | symbol, value: any) {
   const objValue = object[key];
 
   if (!(hasOwnProperty.call(object, key) && eq(objValue, value))) {

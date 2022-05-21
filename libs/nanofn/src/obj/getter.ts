@@ -29,7 +29,7 @@ import { _baseGet } from '../_internal/base-get';
  * get(object, 'a.b.c', 'default')
  * // => 'default'
  */
-export function get(object: Record<string, any>, path: string, defaultValue: any): any {
+export function getter(object: Record<string, any>, path: string, defaultValue?: any): any {
   const result = object == null ? undefined : _baseGet(object, path);
   return result === undefined ? defaultValue : result;
 }

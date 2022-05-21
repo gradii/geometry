@@ -4,14 +4,14 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isDocumentAvailable } from '@progress/kendo-angular-common';
-import { getter } from '@progress/kendo-common';
+import { getter } from '@gradii/nanofn';
+import { TreeViewFilterSettings } from './treeview-filter-settings';
 
-const focusableRegex = /^(?:a|input|select|option|textarea|button|object)$/i;
+const focusableRegex                   = /^(?:a|input|select|option|textarea|button|object)$/i;
 /**
  * @hidden
  */
-export const match = (element, selector) => {
+export const match                     = (element, selector) => {
   const matcher = element.matches || element.msMatchesSelector || element.webkitMatchesSelector;
   if (!matcher) {
     return false;
@@ -21,7 +21,7 @@ export const match = (element, selector) => {
 /**
  * @hidden
  */
-export const closestWithMatch = (element, selector) => {
+export const closestWithMatch          = (element, selector) => {
   if (!document.documentElement.contains(element)) {
     return null;
   }
@@ -37,36 +37,33 @@ export const closestWithMatch = (element, selector) => {
 /**
  * @hidden
  */
-export const noop = () => {
+export const noop                      = () => {
 };
 /**
  * @hidden
  */
-export const isPresent = (value) => value !== null && value !== undefined;
+export const isPresent                 = (value) => value !== null && value !== undefined;
 /**
  * @hidden
  */
-export const isBlank = (value) => value === null || value === undefined;
+export const isBlank                   = (value) => value === null || value === undefined;
 /**
  * @hidden
  */
-export const isArray = (value) => Array.isArray(value);
+export const isArray                   = (value) => Array.isArray(value);
 /**
  * @hidden
  */
-export const isNullOrEmptyString = (value) => isBlank(value) || value.trim().length === 0;
+export const isNullOrEmptyString       = (value) => isBlank(value) || value.trim().length === 0;
 /**
  * @hidden
  */
-export const isBoolean = (value) => typeof value === 'boolean';
+export const isBoolean                 = (value) => typeof value === 'boolean';
 /**
  * @hidden
  */
-export const closestNode = (element) => {
+export const closestNode               = (element) => {
   const selector = 'li.k-treeview-item';
-  if (!isDocumentAvailable()) {
-    return null;
-  }
   if (element.closest) {
     return element.closest(selector);
   } else {
@@ -76,12 +73,12 @@ export const closestNode = (element) => {
 /**
  * @hidden
  */
-export const isFocusable = (element) => {
+export const isFocusable               = (element) => {
   if (element.tagName) {
-    const tagName = element.tagName.toLowerCase();
+    const tagName  = element.tagName.toLowerCase();
     const tabIndex = element.getAttribute('tabIndex');
-    const skipTab = tabIndex === '-1';
-    let focusable = tabIndex !== null && !skipTab;
+    const skipTab  = tabIndex === '-1';
+    let focusable  = tabIndex !== null && !skipTab;
     if (focusableRegex.test(tagName)) {
       focusable = !element.disabled && !skipTab;
     }
@@ -92,12 +89,9 @@ export const isFocusable = (element) => {
 /**
  * @hidden
  */
-export const isContent = (element) => {
+export const isContent                 = (element) => {
   const scopeSelector = '.k-treeview-leaf:not(.k-treeview-load-more-button),.k-treeview-item,.k-treeview';
-  if (!isDocumentAvailable()) {
-    return null;
-  }
-  let node = element;
+  let node            = element;
   while (node && !match(node, scopeSelector)) {
     node = node.parentNode;
   }
@@ -111,7 +105,7 @@ export const isContent = (element) => {
  * Returns the nested .k-treeview-leaf:not(.k-treeview-load-more-button) element.
  * If the passed parent item is itself a content node, it is returned.
  */
-export const getContentElement = (parent) => {
+export const getContentElement         = (parent) => {
   if (!isPresent(parent)) {
     return null;
   }
@@ -124,13 +118,13 @@ export const getContentElement = (parent) => {
 /**
  * @hidden
  */
-export const isLoadMoreButton = (element) => {
+export const isLoadMoreButton          = (element) => {
   return isPresent(closestWithMatch(element, '.k-treeview-leaf.k-treeview-load-more-button'));
 };
 /**
  * @hidden
  */
-export const closest = (node, predicate) => {
+export const closest                   = (node, predicate) => {
   while (node && !predicate(node)) {
     node = node.parentNode;
   }
@@ -139,32 +133,32 @@ export const closest = (node, predicate) => {
 /**
  * @hidden
  */
-export const hasParent = (element, container) => {
+export const hasParent                 = (element, container) => {
   return Boolean(closest(element, (node) => node === container));
 };
 /**
  * @hidden
  */
-export const focusableNode = (element) => element.nativeElement.querySelector('li[tabindex="0"]');
+export const focusableNode             = (element) => element.nativeElement.querySelector('li[tabindex="0"]');
 /**
  * @hidden
  */
-export const hasActiveNode = (target, node) => {
+export const hasActiveNode             = (target, node) => {
   const closestItem = node || closestNode(target);
   return closestItem && (closestItem === target || target.tabIndex < 0);
 };
 /**
  * @hidden
  */
-export const nodeId = (node) => node ? node.getAttribute('data-treeindex') : '';
+export const nodeId                    = (node) => node ? node.getAttribute('data-treeindex') : '';
 /**
  * @hidden
  */
-export const nodeIndex = (item) => (item || {}).index;
+export const nodeIndex                 = (item) => (item || {}).index;
 /**
  * @hidden
  */
-export const dataItemsEqual = (first, second) => {
+export const dataItemsEqual            = (first, second) => {
   if (!isPresent(first) && !isPresent(second)) {
     return true;
   }
@@ -173,7 +167,7 @@ export const dataItemsEqual = (first, second) => {
 /**
  * @hidden
  */
-export const getDataItem = (lookup) => {
+export const getDataItem               = (lookup) => {
   if (!isPresent(lookup)) {
     return lookup;
   }
@@ -183,44 +177,47 @@ export const getDataItem = (lookup) => {
  * @hidden
  */
 export const isArrayWithAtLeastOneItem = v => v && Array.isArray(v) && v.length !== 0;
+
 /**
  * @hidden
  * A recursive tree-filtering algorithm that returns:
  * - all child nodes of matching nodes
  * - a chain parent nodes from the match to the root node
  */
-export const filterTree = (items, term, { operator, ignoreCase, mode }, textField, depth = 0) => {
+export const filterTree = (items, term, {operator, ignoreCase, mode}: TreeViewFilterSettings, textField, depth = 0) => {
   const field = typeof textField === 'string' ? textField : textField[depth];
   items.forEach((wrapper) => {
-    const matcher = typeof operator === 'string' ? matchByFieldAndCase(field, operator, ignoreCase) : operator;
-    const isMatch = matcher(wrapper.dataItem, term);
-    wrapper.isMatch = isMatch;
-    wrapper.visible = isMatch;
+    const matcher           = typeof operator === 'string' ? matchByFieldAndCase(field, operator, ignoreCase) : operator;
+    const isMatch           = matcher(wrapper.dataItem, term);
+    wrapper.isMatch         = isMatch;
+    wrapper.visible         = isMatch;
     wrapper.containsMatches = false;
     if (isMatch) {
       setParentChain(wrapper.parent);
     }
     if (wrapper.children && wrapper.children.length > 0) {
       if (mode === 'strict' || !isMatch) {
-        filterTree(wrapper.children, term, { operator, ignoreCase, mode }, textField, depth + 1);
+        filterTree(wrapper.children, term, {operator, ignoreCase, mode}, textField, depth + 1);
       } else {
         makeAllVisible(wrapper.children);
       }
     }
   });
 };
-const setParentChain = (node) => {
+
+
+export const setParentChain = (node) => {
   if (!isPresent(node)) {
     return;
   }
   node.containsMatches = true;
-  node.visible = true;
+  node.visible         = true;
   if (isPresent(node.parent) && !node.parent.containsMatches) {
     setParentChain(node.parent);
   }
 };
-export const ɵ0 = setParentChain;
-const makeAllVisible = (nodes) => {
+
+export const makeAllVisible = (nodes) => {
   nodes.forEach(node => {
     node.visible = true;
     if (node.children) {
@@ -228,37 +225,39 @@ const makeAllVisible = (nodes) => {
     }
   });
 };
-export const ɵ1 = makeAllVisible;
-export const ɵ2 = (a, b) => a.indexOf(b) >= 0, ɵ3 = (a, b) => a.indexOf(b) === -1,
-  ɵ4 = (a, b) => a.lastIndexOf(b, 0) === 0, ɵ5 = (a, b) => a.lastIndexOf(b, 0) === -1,
-  ɵ6 = (a, b) => a.indexOf(b, a.length - b.length) >= 0, ɵ7 = (a, b) => a.indexOf(b, a.length - b.length) < 0;
-const operators = {
-  contains: ɵ2,
-  doesnotcontain: ɵ3,
-  startswith: ɵ4,
+
+export const ɵ2                                           = (a, b) => a.indexOf(b) >= 0, ɵ3 = (a, b) => a.indexOf(b) === -1,
+             ɵ4 = (a, b) => a.lastIndexOf(b, 0) === 0, ɵ5 = (a, b) => a.lastIndexOf(b, 0) === -1,
+             ɵ6                                           = (a, b) => a.indexOf(b, a.length - b.length) >= 0,
+             ɵ7                                           = (a, b) => a.indexOf(b, a.length - b.length) < 0;
+const operators                                           = {
+  contains        : ɵ2,
+  doesnotcontain  : ɵ3,
+  startswith      : ɵ4,
   doesnotstartwith: ɵ5,
-  endswith: ɵ6,
-  doesnotendwith: ɵ7
+  endswith        : ɵ6,
+  doesnotendwith  : ɵ7
 };
-const matchByCase = (matcher, ignoreCase) => (a, b) => {
+
+export const matchByCase = (matcher, ignoreCase) => (a, b) => {
   if (ignoreCase) {
     return matcher(a.toLowerCase(), b.toLowerCase());
   }
   return matcher(a, b);
 };
-export const ɵ8 = matchByCase;
-const matchByFieldAndCase = (field, operator, ignoreCase) => (dataItem, term) => matchByCase(operators[operator], ignoreCase)(getter(field)(dataItem), term);
-export const ɵ9 = matchByFieldAndCase;
+
+export const matchByFieldAndCase    = (field, operator, ignoreCase) => (dataItem, term) => matchByCase(operators[operator],
+  ignoreCase)(getter(dataItem, field), term);
 /**
  * @hidden
  */
-export const buildTreeIndex = (parentIndex, itemIndex) => {
+export const buildTreeIndex         = (parentIndex, itemIndex) => {
   return [parentIndex, itemIndex].filter(part => isPresent(part)).join('_');
 };
 /**
  * @hidden
  */
-export const buildTreeItem = (dataItem, currentLevelIndex, parentIndex) => {
+export const buildTreeItem          = (dataItem, currentLevelIndex, parentIndex) => {
   if (!isPresent(dataItem)) {
     return null;
   }
@@ -290,7 +289,7 @@ export const fetchLoadedDescendants = (lookup, filterExpression) => {
  * Important:
  *  - it disregards the element order
  */
-export const sameValues = (as, bs) => {
+export const sameValues             = (as, bs) => {
   if (as.size !== bs.size) {
     return false;
   }
@@ -300,11 +299,11 @@ export const sameValues = (as, bs) => {
  * @hidden
  * Returns the size class based on the component and size input.
  */
-export const getSizeClass = (component, size) => {
+export const getSizeClass           = (component, size) => {
   const SIZE_CLASSES = {
-    'small': `k-${component}-sm`,
+    'small' : `k-${component}-sm`,
     'medium': `k-${component}-md`,
-    'large': `k-${component}-lg`
+    'large' : `k-${component}-lg`
   };
   return SIZE_CLASSES[size];
 };

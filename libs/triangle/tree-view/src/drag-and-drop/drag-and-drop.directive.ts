@@ -14,14 +14,12 @@ import {
   NgZone,
   OnDestroy
 } from '@angular/core';
-import Draggable from '@telerik/kendo-draggable';
 import { DragClueService } from './drag-clue/drag-clue.service';
 import { DropHintService } from './drop-hint/drop-hint.service';
 import { DragClueTemplateDirective } from './drag-clue/drag-clue-template.directive';
 import { DropHintTemplateDirective } from './drop-hint/drop-hint-template.directive';
 import { TreeViewComponent } from '../treeview.component';
 import { DropPosition, TreeItemDragStartEvent, TreeItemDropEvent } from './models';
-import { hasObservers } from '@progress/kendo-angular-common';
 import {
   getContainerOffset,
   getDropAction,
@@ -30,6 +28,8 @@ import {
   treeItemFromEventTarget
 } from './drag-and-drop-utils';
 import { closestWithMatch, isContent, isPresent } from '../utils';
+import { Draggable } from '@gradii/triangle/draggable';
+import { hasObservers } from '../helper/has-observers';
 
 const DEFAULT_SCROLL_SETTINGS = {
   enabled : true,
@@ -64,7 +64,8 @@ export class DragAndDropDirective implements AfterContentInit, OnDestroy {
   dropHintTemplate: DropHintTemplateDirective;
   @HostBinding('style.user-select')
   userSelectStyle: string;
-  draggable: boolean;
+
+  draggable: Draggable;
   default;
   draggedItem: HTMLElement;
   pendingDragStartEvent: PointerEvent;

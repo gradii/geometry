@@ -7,12 +7,13 @@
 import { DataBoundComponent } from './data-bound-component';
 import { TreeItemFilterState } from './drag-and-drop/models/tree-item-filter-state';
 import { DEFAULT_FILTER_SETTINGS, TreeViewFilterSettings } from './treeview-filter-settings';
-import { Input } from '@angular/core';
+import { Injectable, Input } from '@angular/core';
 import { filterTree, isPresent } from './utils';
 
 /**
  * @hidden
  */
+@Injectable()
 export abstract class FilteringBase {
   component: DataBoundComponent;
   filterData: TreeItemFilterState[];

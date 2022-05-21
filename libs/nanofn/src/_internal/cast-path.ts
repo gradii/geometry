@@ -15,7 +15,7 @@ import { stringToPath } from './string-to-path';
  * @param {Object} [object] The object to query keys on.
  * @returns {Array} Returns the cast property path array.
  */
-export function _castPath(value, object) {
+export function _castPath(value: any, object: any): any {
   if (Array.isArray(value)) {
     return value;
   }

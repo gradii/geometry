@@ -33,7 +33,7 @@
  * eq(NaN, NaN)
  * // => true
  */
-export function eq(value, other) {
+export function eq(value: any, other: any): boolean {
   return value === other || (value !== value && other !== other);
 }
 

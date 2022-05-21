@@ -4,19 +4,18 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { _memoizeCapped } from './memoize-capped';
 
 const charCodeOfDot = '.'.charCodeAt(0);
-const reEscapeChar = /\\(\\)?/g;
-const rePropName = RegExp(
+const reEscapeChar  = /\\(\\)?/g;
+const rePropName    = RegExp(
   // Match anything that isn't a dot or bracket.
   '[^.[\\]]+' + '|' +
   // Or match property names within brackets.
   '\\[(?:' +
-    // Match a non-string expression.
-    '([^"\'][^[]*)' + '|' +
-    // Or match strings (supports escaping characters).
-    '(["\'])((?:(?!\\2)[^\\\\]|\\\\.)*?)\\2' +
+  // Match a non-string expression.
+  '([^"\'][^[]*)' + '|' +
+  // Or match strings (supports escaping characters).
+  '(["\'])((?:(?!\\2)[^\\\\]|\\\\.)*?)\\2' +
   ')\\]' + '|' +
   // Or match "" as the space between consecutive dots or empty brackets.
   '(?=(?:\\.|\\[\\])(?:\\.|\\[\\]|$))'
@@ -26,15 +25,15 @@ const rePropName = RegExp(
  * Converts `string` to a property path array.
  *
  * @private
- * @param {string} string The string to convert.
+ * @param {string} str The string to convert.
  * @returns {Array} Returns the property path array.
  */
-export const stringToPath = _memoizeCapped((string) => {
+export function stringToPath(str: string): string[] {
   const result = [];
-  if (string.charCodeAt(0) === charCodeOfDot) {
+  if (str.charCodeAt(0) === charCodeOfDot) {
     result.push('');
   }
-  string.replace(rePropName, (match, expression, quote, subString) => {
+  str.replace(rePropName, (match, expression, quote, subString) => {
     let key = match;
     if (quote) {
       key = subString.replace(reEscapeChar, '$1');
@@ -42,6 +41,7 @@ export const stringToPath = _memoizeCapped((string) => {
       key = expression.trim();
     }
     result.push(key);
+    return '';
   });
   return result;
-});
+}

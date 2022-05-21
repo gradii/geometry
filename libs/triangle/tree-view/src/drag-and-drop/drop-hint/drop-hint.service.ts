@@ -12,7 +12,7 @@ import { TreeItemLookup } from '../../treeitem-lookup.interface';
 import { dataItemsEqual, isPresent } from '../../utils';
 
 @Injectable()
-export class DropHintService extends DragAndDropAssetService {
+export class DropHintService extends DragAndDropAssetService<any> {
   componentFactoryResolver: any;
 
   constructor(componentFactoryResolver: ComponentFactoryResolver) {

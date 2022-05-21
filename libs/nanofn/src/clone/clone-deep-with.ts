@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { baseClone } from '../_internal/base-clone';
+import { _baseClone } from '../_internal/base-clone';
 
 /** Used to compose bitmasks for cloning. */
 const CLONE_DEEP_FLAG = 1;
@@ -37,9 +37,8 @@ const CLONE_SYMBOLS_FLAG = 4;
  * console.log(el.childNodes.length)
  * // => 20
  */
-function cloneDeepWith(value, customizer) {
+export function cloneDeepWith(value, customizer) {
   customizer = typeof customizer === 'function' ? customizer : undefined;
-  return baseClone(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG, customizer);
+  return _baseClone(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG, customizer);
 }
 
-loneDeepWith;

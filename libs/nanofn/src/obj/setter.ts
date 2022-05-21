@@ -32,7 +32,7 @@ import { _baseSet } from '../_internal/base-set';
  * console.log(object.x[0].y.z)
  * // => 5
  */
-export function set(object, path, value) {
+export function setter(object: any, path: string, value: any): any {
   return object == null ? object : _baseSet(object, path, value);
 }
 

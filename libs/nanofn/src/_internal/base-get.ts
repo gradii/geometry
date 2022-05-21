@@ -15,10 +15,10 @@ import { _toKey } from './to-key';
  * @param {Array|string} path The path of the property to get.
  * @returns {*} Returns the resolved value.
  */
-export function _baseGet(object, path) {
+export function _baseGet(object: any, path: string | string[]) {
   path = _castPath(path, object);
 
-  let index = 0;
+  let index    = 0;
   const length = path.length;
 
   while (object != null && index < length) {

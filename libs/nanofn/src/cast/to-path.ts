@@ -24,7 +24,7 @@ import { _toKey } from '../_internal/to-key';
  * toPath('a[0].b.c')
  * // => ['a', '0', 'b', 'c']
  */
-export function toPath(value) {
+export function toPath(value: any): string[] {
   if (Array.isArray(value)) {
     return map(value, _toKey);
   }

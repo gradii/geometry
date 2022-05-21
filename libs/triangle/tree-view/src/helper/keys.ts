@@ -1,5 +1,11 @@
+/**
+ * @license
+ *
+ * Use of this source code is governed by an MIT-style license
+ */
 
-export declare enum Keys {
+
+export const enum Keys {
   Alt = 18,
   ArrowDown = 40,
   ArrowLeft = 37,

@@ -46,7 +46,7 @@ const freeParseInt = parseInt;
  * toNumber('3.2')
  * // => 3.2
  */
-export function toNumber(value) {
+export function toNumber(value: any): number {
   if (typeof value === 'number') {
     return value;
   }
@@ -54,7 +54,9 @@ export function toNumber(value) {
     return NAN;
   }
   if (isObject(value)) {
-    const other = typeof value.valueOf === 'function' ? value.valueOf() : value;
+    const other = typeof value.valueOf === 'function' ?
+      value.valueOf() :
+      value;
     value       = isObject(other) ? `${other}` : other;
   }
   if (typeof value !== 'string') {

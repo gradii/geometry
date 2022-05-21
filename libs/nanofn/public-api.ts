@@ -4,7 +4,10 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-export * from './src/math/add';
+export { getter } from './src/obj/getter';
+export { setter } from './src/obj/setter';
+
+// export * from './src/math/add';
 // export { default as after } from './src/after';
 // export { default as ary } from './src/ary';
 // export { default as assign } from './src/assign';
@@ -292,7 +295,7 @@ export * from './src/math/add';
 // export { default as unionBy } from './src/unionBy';
 // export { default as unionWith } from './src/unionWith';
 // export { default as uniq } from './src/uniq';
-export { uniqBy } from './src/arr/uniq/uniq-by';
+// export { uniqBy } from './src/arr/uniq/uniq-by';
 // export { default as uniqWith } from './src/uniqWith';
 // export { default as uniqueId } from './src/uniqueId';
 // export { default as unset } from './src/unset';

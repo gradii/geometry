@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { baseAssignValue } from '../_internal/base-assign-value';
+import { _baseAssignValue } from '../_internal/base-assign-value';
 import { reduce } from './reduce';
 
 /** Used to check objects for own properties. */
@@ -38,7 +38,7 @@ export function countBy(collection: any[] | Record<string, any>,
     if (hasOwnProperty.call(result, key)) {
       ++result[key];
     } else {
-      baseAssignValue(result, key, 1);
+      _baseAssignValue(result, key, 1);
     }
     return result;
   }, {});

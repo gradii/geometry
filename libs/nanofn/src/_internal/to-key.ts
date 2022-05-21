@@ -16,7 +16,7 @@ const INFINITY = 1 / 0;
  * @param {*} value The value to inspect.
  * @returns {string|symbol} Returns the key.
  */
-export function _toKey(value) {
+export function _toKey(value: any): string | symbol {
   if (typeof value === 'string' || isSymbol(value)) {
     return value;
   }

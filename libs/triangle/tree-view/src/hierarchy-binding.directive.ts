@@ -7,8 +7,9 @@
 import { Directive, Host, Input, OnChanges, OnInit, Optional, SimpleChanges } from '@angular/core';
 import { DataBoundComponent } from './data-bound-component';
 import { DragAndDropDirective } from './drag-and-drop/drag-and-drop.directive';
+import { TreeItemFilterState } from './drag-and-drop/models/tree-item-filter-state';
 import { FilteringBase } from './filtering-base';
-import { getter } from '@progress/kendo-common';
+import { getter } from '@gradii/nanofn';
 import { isArrayWithAtLeastOneItem, isPresent } from './utils';
 import { of } from 'rxjs';
 import {
@@ -27,13 +28,13 @@ export const mapToWrappers = (currentLevelNodes, childrenField, parent = null,
   }
   return currentLevelNodes.map((node, idx) => {
     const index      = indexBuilder.nodeIndex(idx.toString(), parentIndex);
-    const wrapper    = {
+    const wrapper: TreeItemFilterState    = {
       dataItem: node,
       index,
       parent,
       visible : true
     };
-    wrapper.children = mapToWrappers(getter(childrenField)(node), childrenField, wrapper, index);
+    wrapper.children = mapToWrappers(getter(node, childrenField), childrenField, wrapper, index);
     return wrapper;
   });
 };
@@ -100,9 +101,9 @@ export class HierarchyBindingDirective extends FilteringBase implements OnInit, 
 
   ngOnInit() {
     if (isPresent(this.childrenField)) {
-      this.component.children    = item => of(getter(this.childrenField)(item));
+      this.component.children    = item => of(getter(item, this.childrenField));
       this.component.hasChildren = item => {
-        const children = getter(this.childrenField)(item);
+        const children = getter(item, this.childrenField);
         return Boolean(children && children.length);
       };
       this.component.editService = new HierarchyEditingService(this);

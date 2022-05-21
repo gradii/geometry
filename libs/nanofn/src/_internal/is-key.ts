@@ -19,7 +19,7 @@ const reIsPlainProp = /^\w*$/;
  * @param {Object} [object] The object to query keys on.
  * @returns {boolean} Returns `true` if `value` is a property name, else `false`.
  */
-export function _isKey(value, object) {
+export function _isKey(value: any, object: any): boolean {
   if (Array.isArray(value)) {
     return false;
   }

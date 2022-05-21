@@ -4,12 +4,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { ComponentRef, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
+import { ComponentRef, Injectable, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
 import { isPresent } from '../../utils';
 
 /**
  * @hidden
  */
+@Injectable()
 export abstract class DragAndDropAssetService<T> implements OnDestroy {
   _componentRef: ComponentRef<T>;
 

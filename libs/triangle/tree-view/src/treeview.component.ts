@@ -50,7 +50,6 @@ import {
 } from './drag-and-drop/models';
 import { FilterState } from './filter-state.interface';
 import { TreeViewSize } from './size';
-import { anyChanged, hasObservers, isDocumentAvailable } from '@progress/kendo-angular-common';
 import {
   hasChildren, isChecked, isDisabled, isExpanded, isSelected, isVisible, trackBy
 } from './default-callbacks';
@@ -71,6 +70,8 @@ import {
   nodeId,
   nodeIndex
 } from './utils';
+import { anyChanged } from './helper/changes';
+import { hasObservers } from './helper/has-observers';
 
 const providers = [
   ExpandStateService,
@@ -107,17 +108,17 @@ const providers = [
       class="k-treeview-filter"
       *ngIf="filterable"
     >
-      <tri-input
-        [size]="size"
-        [value]="filter"
-        [clearButton]="true"
-        (valueChange)="filterChange.emit($event)"
-        [placeholder]="filterInputPlaceholder"
-      >
-          <ng-template triInputPrefixTemplate>
-              <span class="k-input-icon k-icon k-i-search"></span>
-          </ng-template>
-      </tri-input>
+      <tri-input-group>
+        <input triInput
+               [size]="size"
+               [value]="filter"
+               ngModel
+               (ngModelChange)="filterChange.emit($event)"
+               [placeholder]="filterInputPlaceholder"/>
+        <ng-template #prefix>
+          <span class="k-input-icon k-icon k-i-search"></span>
+        </ng-template>
+      </tri-input-group>
     </span>
     <ul class="k-treeview-lines"
         triTreeViewGroup
@@ -158,71 +159,104 @@ export class TreeViewComponent implements OnChanges, OnInit, OnDestroy, DataBoun
   renderer: any;
   dataChangeNotification: any;
   localization: any;
+
   @HostBinding('class.k-treeview')
   classNames: boolean;
+
   @HostBinding('attr.role')
   role: string;
+
   @ViewChild('assetsContainer', {read: ViewContainerRef, static: true})
   assetsContainer: ViewContainerRef;
+
   @Input()
   filterInputPlaceholder: string;
   fetchNodes: () => BehaviorSubject<any[]>;
+
   @Output()
   childrenLoaded: EventEmitter<{ children: TreeItem[]; item: TreeItem; }>;
+
   @Output('blur')
   onBlur: EventEmitter<any>;
+
   @Output('focus')
   onFocus: EventEmitter<any>;
+
   @Output()
   expand: EventEmitter<TreeItem>;
+
   @Output()
   collapse: EventEmitter<TreeItem>;
+
   @Output()
   nodeDragStart: EventEmitter<TreeItemDragStartEvent>;
+
   @Output()
   nodeDrag: EventEmitter<TreeItemDragEvent>;
+
   @Output()
   filterStateChange: EventEmitter<FilterState>;
+
   @Output()
   nodeDrop: EventEmitter<TreeItemDropEvent>;
+
   @Output()
   nodeDragEnd: EventEmitter<TreeItemDragEvent>;
+
   @Output()
   addItem: EventEmitter<TreeItemAddRemoveArgs>;
+
   @Output()
   removeItem: EventEmitter<TreeItemAddRemoveArgs>;
+
   @Output()
   checkedChange: EventEmitter<TreeItemLookup>;
+
   @Output()
   selectionChange: EventEmitter<TreeItem>;
+
   @Output()
   filterChange: EventEmitter<string>;
+
   @Output()
   nodeClick: EventEmitter<NodeClickEvent>;
+
   @Output()
   nodeDblClick: EventEmitter<NodeClickEvent>;
+
   @ContentChild(NodeTemplateDirective, {static: false})
   nodeTemplateQuery: NodeTemplateDirective;
+
   @ContentChild(LoadMoreButtonTemplateDirective, {static: false})
   loadMoreButtonTemplateQuery: LoadMoreButtonTemplateDirective;
+
   @Input()
   trackBy: TrackByFunction<object>;
+
   @Input()
   textField: string | string[];
+
   @Input()
   isDisabled: (item: object, index: string) => boolean;
+
   @Input()
   isVisible: (item: object, index: string) => boolean;
+
   @Input()
   navigable: boolean;
+
   @Input()
   children: (item: object) => Observable<object[]>;
+
   @Input()
   loadOnDemand: boolean;
+
   @Input()
   filterable: boolean;
+
   @Input()
   filter: string;
+
   loadMoreService: LoadMoreService;
   editService: EditService;
   checkboxes: boolean;
@@ -610,9 +644,6 @@ export class TreeViewComponent implements OnChanges, OnInit, OnDestroy, DataBoun
    * Blurs the focused TreeView item.
    */
   blur() {
-    if (!isDocumentAvailable()) {
-      return;
-    }
     const target = focusableNode(this.element);
     if (document.activeElement === target) {
       target.blur();
@@ -816,7 +847,7 @@ export class TreeViewComponent implements OnChanges, OnInit, OnDestroy, DataBoun
   verifyLoadMoreService(): any {
     if (isDevMode() && !isPresent(this.loadMoreService)) {
       throw new Error(
-        `To use the TreeView paging functionality, you need to assign the \`kendoTreeViewLoadMore\` directive. See ${LOAD_MORE_DOC_LINK}.`);
+        `To use the TreeView paging functionality, you need to assign the \`kendoTreeViewLoadMore\` directive.`);
     }
   }
 

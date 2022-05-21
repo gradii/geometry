@@ -27,7 +27,7 @@ import { EMPTY, Observable, of, Subscription } from 'rxjs';
 import { DataChangeNotificationService } from './data-change-notification.service';
 import { TreeViewSize } from './size';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { getter } from '@progress/kendo-common';
+import { getter } from '@gradii/nanofn';
 import { isArray, isPresent } from './utils';
 import { catchError, filter, finalize, tap } from 'rxjs/operators';
 
@@ -88,7 +88,7 @@ import { catchError, filter, finalize, tap } from 'rxjs/operators';
           [index]="nodeIndex(index)"
           [isChecked]="isChecked"
           (checkStateChange)="checkNode(nodeIndex(index))"
-          tabindex="-1"
+          [attr.tabindex]="-1"
         ></tri-checkbox>
         <span triTreeViewItemContent
               [attr.data-treeindex]="nodeIndex(index)"
@@ -359,8 +359,8 @@ export class TreeViewGroupComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   nodeText(dataItem: any) {
-    const textField = isArray(this.textField) ? this.textField[0] : this.textField;
-    return getter(textField)(dataItem);
+    const textField: string = isArray(this.textField) ? this.textField[0] : this.textField as string;
+    return getter(dataItem, textField);
   }
 
   ngOnDestroy() {
@@ -399,9 +399,9 @@ export class TreeViewGroupComponent implements OnChanges, OnInit, OnDestroy {
 
   get nextFields(): string[] {
     if (isArray(this.textField)) {
-      return this.textField.length > 1 ? this.textField.slice(1) : this.textField;
+      return this.textField.length > 1 ? (this.textField as string[]).slice(1) : this.textField as string[];
     }
-    return [this.textField];
+    return [this.textField as string];
   }
 
   loadMoreNodes() {

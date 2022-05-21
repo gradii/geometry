@@ -4,16 +4,12 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { getter, setter } from '@gradii/nanofn';
 import { HierarchyBindingDirective } from '../../hierarchy-binding.directive';
-import { DropPosition, EditService } from '../models';
-import {
-  collapseEmptyParent, expandDropTarget, updateMovedItemIndex
-} from '../drag-and-drop-utils';
-import {
-  copyPageSize, decrementPageSize, incrementPageSize
-} from '../../load-more/load-more-utils';
+import { copyPageSize, decrementPageSize, incrementPageSize } from '../../load-more/load-more-utils';
 import { buildTreeIndex, getDataItem, isPresent } from '../../utils';
-import { get } from 'lodash';
+import { collapseEmptyParent, expandDropTarget, updateMovedItemIndex } from '../drag-and-drop-utils';
+import { DropPosition, EditService } from '../models';
 
 /**
  * @hidden
@@ -41,8 +37,7 @@ export class HierarchyEditingService implements EditService {
         ) : // the page size might be greater than the actual children array length
         destinationChildren.length;
       destinationChildren.splice(targetIndex, 0, clonedSourceDataItem);
-      setter(this.hierarchyBinding.childrenField)(getDataItem(destinationItem),
-        destinationChildren);
+      setter(getDataItem(destinationItem), this.hierarchyBinding.childrenField, destinationChildren);
       this.movedItemNewIndex = buildTreeIndex(destinationItem.item.index, targetIndex);
     } else {
       const destinationParentNodes = this.getParentNodes(destinationItem, destinationTree);
@@ -50,7 +45,7 @@ export class HierarchyEditingService implements EditService {
       const targetIndex            = destinationParentNodes.indexOf(
         getDataItem(destinationItem)) + shiftIndex;
       destinationParentNodes.splice(targetIndex, 0, clonedSourceDataItem);
-      const parentIndex = destinationItem.parent ? destinationItem.parent.item.index : null;
+      const parentIndex      = destinationItem.parent ? destinationItem.parent.item.index : null;
       this.movedItemNewIndex = buildTreeIndex(parentIndex, targetIndex);
     }
     // increment the parent page size => an item is moved into it
@@ -101,6 +96,6 @@ export class HierarchyEditingService implements EditService {
   }
 
   childrenFor(dataItem): any {
-    return get(this.hierarchyBinding.childrenField)(dataItem) || [];
+    return getter(dataItem, this.hierarchyBinding.childrenField) || [];
   }
 }

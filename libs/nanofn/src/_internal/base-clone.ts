@@ -28,40 +28,40 @@ import { keys } from '../keys';
 import { keysIn } from '../keys-in';
 
 /** Used to compose bitmasks for cloning. */
-const CLONE_DEEP_FLAG = 1;
-const CLONE_FLAT_FLAG = 2;
+const CLONE_DEEP_FLAG    = 1;
+const CLONE_FLAT_FLAG    = 2;
 const CLONE_SYMBOLS_FLAG = 4;
 
 /** `Object#toString` result references. */
-const argsTag = '[object Arguments]';
-const arrayTag = '[object Array]';
-const boolTag = '[object Boolean]';
-const dateTag = '[object Date]';
-const errorTag = '[object Error]';
-const mapTag = '[object Map]';
-const numberTag = '[object Number]';
-const objectTag = '[object Object]';
-const regexpTag = '[object RegExp]';
-const setTag = '[object Set]';
-const stringTag = '[object String]';
-const symbolTag = '[object Symbol]';
+const argsTag    = '[object Arguments]';
+const arrayTag   = '[object Array]';
+const boolTag    = '[object Boolean]';
+const dateTag    = '[object Date]';
+const errorTag   = '[object Error]';
+const mapTag     = '[object Map]';
+const numberTag  = '[object Number]';
+const objectTag  = '[object Object]';
+const regexpTag  = '[object RegExp]';
+const setTag     = '[object Set]';
+const stringTag  = '[object String]';
+const symbolTag  = '[object Symbol]';
 const weakMapTag = '[object WeakMap]';
 
-const arrayBufferTag = '[object ArrayBuffer]';
-const dataViewTag = '[object DataView]';
-const float32Tag = '[object Float32Array]';
-const float64Tag = '[object Float64Array]';
-const int8Tag = '[object Int8Array]';
-const int16Tag = '[object Int16Array]';
-const int32Tag = '[object Int32Array]';
-const uint8Tag = '[object Uint8Array]';
+const arrayBufferTag  = '[object ArrayBuffer]';
+const dataViewTag     = '[object DataView]';
+const float32Tag      = '[object Float32Array]';
+const float64Tag      = '[object Float64Array]';
+const int8Tag         = '[object Int8Array]';
+const int16Tag        = '[object Int16Array]';
+const int32Tag        = '[object Int32Array]';
+const uint8Tag        = '[object Uint8Array]';
 const uint8ClampedTag = '[object Uint8ClampedArray]';
-const uint16Tag = '[object Uint16Array]';
-const uint32Tag = '[object Uint32Array]';
+const uint16Tag       = '[object Uint16Array]';
+const uint32Tag       = '[object Uint32Array]';
 
 /** Used to identify `toStringTag` values supported by `clone`. */
-const cloneableTags = {};
-cloneableTags[argsTag] = cloneableTags[arrayTag] =
+const cloneableTags: any = {};
+cloneableTags[argsTag]   = cloneableTags[arrayTag] =
 cloneableTags[arrayBufferTag] = cloneableTags[dataViewTag] =
 cloneableTags[boolTag] = cloneableTags[dateTag] =
 cloneableTags[float32Tag] = cloneableTags[float64Tag] =
@@ -72,7 +72,7 @@ cloneableTags[regexpTag] = cloneableTags[setTag] =
 cloneableTags[stringTag] = cloneableTags[symbolTag] =
 cloneableTags[uint8Tag] = cloneableTags[uint8ClampedTag] =
 cloneableTags[uint16Tag] = cloneableTags[uint32Tag] = true;
-cloneableTags[errorTag] = cloneableTags[weakMapTag] = false;
+cloneableTags[errorTag]  = cloneableTags[weakMapTag] = false;
 
 /** Used to check objects for own properties. */
 const hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -102,9 +102,15 @@ function _initCloneByTag(object, tag, isDeep) {
     case dataViewTag:
       return _cloneDataView(object, isDeep);
 
-    case float32Tag: case float64Tag:
-    case int8Tag: case int16Tag: case int32Tag:
-    case uint8Tag: case uint8ClampedTag: case uint16Tag: case uint32Tag:
+    case float32Tag:
+    case float64Tag:
+    case int8Tag:
+    case int16Tag:
+    case int32Tag:
+    case uint8Tag:
+    case uint8ClampedTag:
+    case uint16Tag:
+    case uint32Tag:
       return _cloneTypedArray(object, isDeep);
 
     case mapTag:
@@ -133,8 +139,8 @@ function _initCloneByTag(object, tag, isDeep) {
  * @returns {Array} Returns the initialized clone.
  */
 function _initCloneArray(array) {
-  const { length } = array;
-  const result = new array.constructor(length);
+  const {length} = array;
+  const result   = new array.constructor(length);
 
   // Add properties assigned by `RegExp#exec`.
   if (length && typeof array[0] === 'string' && hasOwnProperty.call(array, 'index')) {
@@ -160,8 +166,8 @@ function _initCloneArray(array) {
  * @param {Object} [stack] Tracks traversed objects and their clone counterparts.
  * @returns {*} Returns the cloned value.
  */
-export function _baseClone(value, bitmask, customizer, key, object, stack) {
-  let result;
+export function _baseClone(value: any, bitmask: number, customizer?, key?, object?, stack?): any {
+  let result: any;
   const isDeep = bitmask & CLONE_DEEP_FLAG;
   const isFlat = bitmask & CLONE_FLAT_FLAG;
   const isFull = bitmask & CLONE_SYMBOLS_FLAG;
@@ -176,7 +182,7 @@ export function _baseClone(value, bitmask, customizer, key, object, stack) {
     return value;
   }
   const isArr = Array.isArray(value);
-  const tag = _getTag(value);
+  const tag   = _getTag(value);
   if (isArr) {
     result = _initCloneArray(value);
     if (!isDeep) {
@@ -235,7 +241,7 @@ export function _baseClone(value, bitmask, customizer, key, object, stack) {
   const props = isArr ? undefined : keysFunc(value);
   _arrayEach(props || value, (subValue, key) => {
     if (props) {
-      key = subValue;
+      key      = subValue;
       subValue = value[key];
     }
     // Recursively populate clone (susceptible to call stack limits).

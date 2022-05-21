@@ -6,7 +6,7 @@
 
 
 export { TreeViewComponent } from './src/treeview.component';
-export { TreeViewModule } from './src/treeview.module';
+export { TriTreeViewModule } from './src/treeview.module';
 export { NodeTemplateDirective } from './src/node-template.directive';
 export { CheckDirective } from './src/check.directive';
 export { DisableDirective } from './src/disable.directive';

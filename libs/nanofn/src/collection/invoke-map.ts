@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { baseEach } from './_internal/base-each';
+import { _baseEach } from './_internal/base-each';
 import { invoke } from './invoke';
 import { isArrayLike } from './is-array-like';
 
@@ -33,7 +33,7 @@ export function invokeMap(collection, path, args) {
   const isFunc = typeof path === 'function';
   const result = isArrayLike(collection) ? new Array(collection.length) : [];
 
-  baseEach(collection, (value) => {
+  _baseEach(collection, (value) => {
     result[++index] = isFunc ? path.apply(value, args) : invoke(value, path, args);
   });
   return result;

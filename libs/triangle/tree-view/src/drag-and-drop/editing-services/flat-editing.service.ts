@@ -6,7 +6,7 @@
 
 import { FlatDataBindingDirective } from '../../flat-binding.directive';
 import { DropPosition, EditService } from '../models';
-import { getter, setter } from '@progress/kendo-common';
+import { getter, setter } from '@gradii/nanofn';
 import { take } from 'rxjs/operators';
 import { collapseEmptyParent, expandDropTarget, updateMovedItemIndex } from '../drag-and-drop-utils';
 import { copyPageSize, decrementPageSize, incrementPageSize } from '../../load-more/load-more-utils';
@@ -29,8 +29,8 @@ export class FlatEditingService implements EditService {
     if (dropPosition === DropPosition.Over) {
       // expand the item that was dropped into
       expandDropTarget(destinationItem, destinationTree);
-      const destinationItemId = getter(this.flatBinding.idField)(getDataItem(destinationItem));
-      setter(this.flatBinding.parentIdField)(clonedSourceDataItem, destinationItemId);
+      const destinationItemId = getter(getDataItem(destinationItem), this.flatBinding.idField);
+      setter(clonedSourceDataItem, this.flatBinding.parentIdField, destinationItemId);
       const lastChildNodeIndex = this.getLastVisibleChildNodeIndex(destinationTree, this.flatBinding.originalData, getDataItem(destinationItem));
       // insert after the last visible child
       const targetIndex = lastChildNodeIndex + 1;
@@ -43,8 +43,8 @@ export class FlatEditingService implements EditService {
       const shiftIndex = dropPosition === DropPosition.After ? 1 : 0;
       const targetIndex = this.flatBinding.originalData.indexOf(getDataItem(destinationItem)) + shiftIndex;
       this.flatBinding.originalData.splice(targetIndex, 0, clonedSourceDataItem);
-      const destinationItemParentId = getter(this.flatBinding.parentIdField)(getDataItem(destinationItem));
-      setter(this.flatBinding.parentIdField)(clonedSourceDataItem, destinationItemParentId);
+      const destinationItemParentId = getter(getDataItem(destinationItem), this.flatBinding.parentIdField);
+      setter(clonedSourceDataItem, this.flatBinding.parentIdField, destinationItemParentId);
       // rebind the treeview data before searching for the focus target index
       this.rebindData();
       const parentIndex = destinationItem.parent ?

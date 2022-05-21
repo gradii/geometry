@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { baseOrderBy } from '../_internal/base-order-by';
+import { _baseOrderBy } from '../_internal/base-order-by';
 
 /**
  * This method is like `sortBy` except that it allows specifying the sort
@@ -40,7 +40,7 @@ import { baseOrderBy } from '../_internal/base-order-by';
  * ])
  *
  */
-export function orderBy(collection, iteratees, orders) {
+export function orderBy(collection: any[], iteratees: any[], orders: any[]) {
   if (collection == null) {
     return [];
   }
@@ -50,7 +50,7 @@ export function orderBy(collection, iteratees, orders) {
   if (!Array.isArray(orders)) {
     orders = orders == null ? [] : [orders];
   }
-  return baseOrderBy(collection, iteratees, orders);
+  return _baseOrderBy(collection, iteratees, orders);
 }
 
 

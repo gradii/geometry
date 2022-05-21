@@ -20,7 +20,7 @@ interface ExpandTreeItem extends TreeItem {
   expand: boolean;
 }
 
-const DEFAULT_FILTER_EXPAND_SETTINGS = {
+const DEFAULT_FILTER_EXPAND_SETTINGS: FilterExpandSettings = {
   maxAutoExpandResults: -1,
   expandMatches       : false,
   expandedOnClear     : 'none'

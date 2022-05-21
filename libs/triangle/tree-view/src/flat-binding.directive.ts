@@ -6,6 +6,7 @@
 
 import { Directive, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { DataBoundComponent } from './data-bound-component';
+import { TreeItemFilterState } from './drag-and-drop/models/tree-item-filter-state';
 import { FilteringBase } from './filtering-base';
 import { of } from 'rxjs';
 import { compose } from './funcs';
@@ -24,13 +25,15 @@ export const mapToTree = (currentLevelNodes, allNodes, parentIdField, idField, p
     return [];
   }
   return currentLevelNodes.map((node, idx) => {
-    const index      = indexBuilder.nodeIndex(idx.toString(), parentIndex);
-    const wrapper    = {
+    const index = indexBuilder.nodeIndex(idx.toString(), parentIndex);
+
+    const wrapper: TreeItemFilterState = {
       dataItem: node,
       index,
       parent,
       visible : true
     };
+
     wrapper.children = mapToTree(
       findChildren(getter(parentIdField), allNodes || [], getter(idField)(node)), allNodes,
       parentIdField, idField, wrapper, index);

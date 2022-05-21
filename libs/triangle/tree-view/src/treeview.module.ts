@@ -42,5 +42,5 @@ const EXPORTS = [
   exports: [EXPORTS],
   imports: [SharedModule]
 })
-export class TreeViewModule {
+export class TriTreeViewModule {
 }

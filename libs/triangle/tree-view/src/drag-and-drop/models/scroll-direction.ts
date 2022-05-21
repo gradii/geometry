@@ -7,8 +7,7 @@
 /**
  * @hidden
  */
-export let ScrollDirection;
-(function (ScrollDirection) {
-  ScrollDirection[ScrollDirection['Up'] = -1] = 'Up';
-  ScrollDirection[ScrollDirection['Down'] = 1] = 'Down';
-})(ScrollDirection || (ScrollDirection = {}));
+export const enum ScrollDirection {
+  Up   = -1,
+  Down = 1
+}

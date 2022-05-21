@@ -13,13 +13,15 @@
  * @param {string} key The key of the property to assign.
  * @param {*} value The value to assign.
  */
-export function _baseAssignValue(object, key, value) {
+export function _baseAssignValue(object: any,
+                                 key: string | symbol,
+                                 value: any): any {
   if (key == '__proto__') {
     Object.defineProperty(object, key, {
       'configurable': true,
-      'enumerable': true,
-      'value': value,
-      'writable': true
+      'enumerable'  : true,
+      'value'       : value,
+      'writable'    : true
     });
   } else {
     object[key] = value;

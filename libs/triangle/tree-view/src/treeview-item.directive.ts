@@ -219,7 +219,7 @@ export class TreeViewItemDirective implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  moveLookupItem(changes = {}): any {
+  moveLookupItem(changes: SimpleChanges = {}): any {
     const {dataItem, index, parentDataItem, parentIndex} = changes;
     if ((index && index.firstChange) || // skip first change
       (!dataItem && !index && !parentDataItem && !parentIndex)) {

@@ -4,7 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { baseClone } from '../_internal/base-clone';
+import { _baseClone } from '../_internal/base-clone';
 
 /** Used to compose bitmasks for cloning. */
 const CLONE_SYMBOLS_FLAG = 4;
@@ -33,8 +33,8 @@ const CLONE_SYMBOLS_FLAG = 4;
  * console.log(shallow[0] === objects[0])
  * // => true
  */
-export function clone(value) {
-  return baseClone(value, CLONE_SYMBOLS_FLAG);
+export function clone(value: any): any {
+  return _baseClone(value, CLONE_SYMBOLS_FLAG);
 }
 
 
