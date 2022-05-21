@@ -11,7 +11,7 @@ import { Subject } from 'rxjs';
 import { DragDropRegistry } from '../drag-drop-registry';
 import { dragDropPosition } from '../drag-styling';
 import { DROP_PROXIMITY_THRESHOLD } from '../enum';
-import { FlexRowSortPositionStrategy } from '../position-strategy/flex-row-sort-position-strategy';
+import { FlexSortPositionStrategy } from '../position-strategy/flex-sort-position-strategy';
 import { PositionStrategy } from '../position-strategy/position-strategy';
 import { findIndex } from '../utils';
 import { isPointerNearClientRect } from '../utils/client-rect';
@@ -132,10 +132,10 @@ export class DropFlexContainerRef<T = any> extends DndContainerRef<T> {
     const {rowGap, columnGap} = getComputedStyle(coerceElement(this.element));
 
     if (rowGap.endsWith('px')) {
-      (this.positionStrategy as FlexRowSortPositionStrategy).rowGap = +rowGap.replace('px', '');
+      (this.positionStrategy as FlexSortPositionStrategy).rowGap = +rowGap.replace('px', '');
     }
     if (columnGap.endsWith('px')) {
-      (this.positionStrategy as FlexRowSortPositionStrategy).columnGap = +columnGap.replace('px',
+      (this.positionStrategy as FlexSortPositionStrategy).columnGap = +columnGap.replace('px',
         '');
     }
   }

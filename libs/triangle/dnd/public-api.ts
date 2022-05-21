@@ -40,9 +40,7 @@ export * from './src/directives/resize-placeholder';
 export * from './src/drag-grid/grid-resize.directive';
 
 export * from './src/position-strategy/grid-position-strategy';
-export * from './src/position-strategy/flex-column-position-strategy';
-export * from './src/position-strategy/flex-row-position-strategy';
-export * from './src/position-strategy/flex-row-sort-position-strategy';
+export * from './src/position-strategy/flex-sort-position-strategy';
 export * from './src/position-strategy/horizontal-position-strategy';
 export * from './src/position-strategy/position-strategy';
 export * from './src/position-strategy/sort-position-strategy';

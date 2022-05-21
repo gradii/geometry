@@ -16,7 +16,7 @@ import { DropGridContainerRef } from './drag-drop-ref/drop-grid-container-ref';
 import { DropListContainerRef } from './drag-drop-ref/drop-list-container-ref';
 import { ResizeRef } from './drag-drop-ref/resize-ref';
 import { DragDropRegistry } from './drag-drop-registry';
-import { FlexRowSortPositionStrategy } from './position-strategy/flex-row-sort-position-strategy';
+import { FlexSortPositionStrategy } from './position-strategy/flex-sort-position-strategy';
 import { GridPositionStrategy } from './position-strategy/grid-position-strategy';
 import { NoopPositionStrategy } from './position-strategy/noop-position-strategy';
 import { SortPositionStrategy } from './position-strategy/sort-position-strategy';
@@ -112,7 +112,7 @@ export class DragDrop {
    * @param element Element to which to attach the drop list functionality.
    */
   createDropFlexContainerRef<T = any>(element: ElementRef<HTMLElement> | HTMLElement): DndContainerRef<T> {
-    const sortPositionStrategy = new FlexRowSortPositionStrategy(this._dragDropRegistry);
+    const sortPositionStrategy = new FlexSortPositionStrategy(this._dragDropRegistry);
     const dropContainerRef     = new DropFlexContainerRef<T>(element, this._dragDropRegistry,
       this._document, this._ngZone,
       this._viewportRuler, sortPositionStrategy);

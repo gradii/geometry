@@ -18,7 +18,7 @@ import { adjustClientRect, getMutableClientRect, isInsideClientRect, } from '../
 import { moveItemInArray } from '../utils/drag-utils';
 import type { PositionStrategy } from './position-strategy';
 
-export class FlexRowSortPositionStrategy implements PositionStrategy {
+export class FlexSortPositionStrategy implements PositionStrategy {
 
   rowGap: number    = 0;
   columnGap: number = 0;
@@ -145,16 +145,25 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
               top : containerTop,
             } = this.dropContainerRef._clientRect;
 
-      const mainAxisGap       = gap > 0 ? gap : this.rowGap;
-      const crossAxisGap      = gap > 0 ? gap : this.columnGap;
+      let mainAxisGap: number, crossAxisGap: number;
+      if (this._orientation === 'horizontal') {
+        mainAxisGap  = gap > 0 ? gap : this.rowGap;
+        crossAxisGap = gap > 0 ? gap : this.columnGap;
+      } else {
+        mainAxisGap  = gap > 0 ? gap : this.columnGap;
+        crossAxisGap = gap > 0 ? gap : this.rowGap;
+      }
       let crossAxisItemBottom = 0;
 
       let itemGap      = containerGap.mainStart;
       let itemCrossGap = 0;
       for (let i = 0; i < siblings.length; i++) {
         const sibling = siblings[i];
+
         // item overflow wrap in container
-        if (mainAxisCursor + itemGap + sibling.clientRect.width > maxMainAxisCursor) {
+        const siblingMainSize = this._orientation === 'horizontal' ? sibling.clientRect.width : sibling.clientRect.height;
+
+        if (mainAxisCursor + itemGap + siblingMainSize > maxMainAxisCursor) {
           mainAxisLine++;
           itemGap         = containerGap.mainStart;
           itemCrossGap    = crossAxisGap;
@@ -166,22 +175,13 @@ export class FlexRowSortPositionStrategy implements PositionStrategy {
 
         let offsetX = 0;
         let offsetY = 0;
-        if (sibling.mainAxisLine === mainAxisLine) {
-          if (this._orientation === 'horizontal') {
-            offsetX = containerLeft + mainAxisCursor + itemGap - sibling.clientRect.left;
-            offsetY = containerTop + crossAxisCursor + itemCrossGap - sibling.clientRect.top;
-          } else {
-            offsetY = containerTop + mainAxisCursor + itemCrossGap - sibling.clientRect.top;
-            offsetX = containerLeft + crossAxisCursor + itemCrossGap - sibling.clientRect.left;
-          }
+
+        if (this._orientation === 'horizontal') {
+          offsetX = containerLeft + mainAxisCursor + itemGap - sibling.clientRect.left;
+          offsetY = containerTop + crossAxisCursor + itemCrossGap - sibling.clientRect.top;
         } else {
-          if (this._orientation === 'horizontal') {
-            offsetX = containerLeft + mainAxisCursor + itemGap - sibling.clientRect.left;
-            offsetY = containerTop + crossAxisCursor + itemCrossGap - sibling.clientRect.top;
-          } else {
-            offsetY = containerLeft + mainAxisCursor + itemGap - sibling.clientRect.top;
-            offsetX = containerTop + crossAxisCursor + itemCrossGap - sibling.clientRect.left;
-          }
+          offsetY = containerTop + mainAxisCursor + itemGap - sibling.clientRect.top;
+          offsetX = containerLeft + crossAxisCursor + itemCrossGap - sibling.clientRect.left;
         }
 
         // if (Math.abs(offsetX) < 2) {

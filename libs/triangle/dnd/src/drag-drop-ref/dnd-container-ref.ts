@@ -14,7 +14,7 @@ import { TriDropContainer } from '../directives/drop-container';
 import type { DragDropRegistry } from '../drag-drop-registry';
 import type { DragCSSStyleDeclaration } from '../drag-styling';
 import { ParentPositionTracker } from '../parent-position-tracker';
-import { FlexRowSortPositionStrategy } from '../position-strategy/flex-row-sort-position-strategy';
+import { FlexSortPositionStrategy } from '../position-strategy/flex-sort-position-strategy';
 import type { PositionStrategy } from '../position-strategy/position-strategy';
 import { ScrollingStrategy } from '../scrolling-strategy/scrolling-strategy';
 import { getTransformTransitionDurationInMs } from '../transition-duration';
