@@ -416,6 +416,14 @@
       "sourceRoot": "libs/nanofn/src",
       "prefix": "applications",
       "architect": {
+        "version": {
+          "builder": "@jscutlery/semver:version",
+          "options": {
+            "baseBranch": "master",
+            "releaseAs": "patch",
+            "postTargets": ["nanofn:build"]
+          }
+        },
         "build": {
           "builder": "@nrwl/angular:ng-packagr-lite",
           "outputs": ["dist/libs/nanofn"],
