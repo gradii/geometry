@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [2.3.2](https://github.com/gradii/triangle/compare/triangle-2.3.1...triangle-2.3.2) (2022-05-22)
+
+
+### Bug Fixes
+
+* tree view collapse icon ([444cd5f](https://github.com/gradii/triangle/commit/444cd5f827bd04e11136ccd98a220e7de10d3243))
+
+
+
 ## [2.3.1](https://github.com/gradii/triangle/compare/triangle-2.3.0...triangle-2.3.1) (2022-05-22)
 
 
