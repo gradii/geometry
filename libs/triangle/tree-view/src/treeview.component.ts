@@ -103,7 +103,7 @@ const providers = [
   changeDetection: ChangeDetectionStrategy.Default,
   exportAs       : 'triTreeView',
   providers      : providers,
-  selector       : 'tri-treeview',
+  selector       : 'tri-tree-view',
   template       : `
     <span
       class="k-treeview-filter"

@@ -40,17 +40,22 @@ export const matchKey     = index => k => {
 export class CheckDirective implements OnChanges, OnDestroy {
   treeView: TreeViewComponent;
   zone: any;
+
   @Input('checkBy')
   checkKey: string | ((context: TreeItem) => any);
+
   @Input()
   checkedKeys: any[];
+
   @Input('kendoTreeViewCheckable')
   checkable: string | boolean | CheckableSettings;
+
   @Output()
   checkedKeysChange: EventEmitter<any[]>;
+
   subscriptions: Subscription;
   checkActions: any;
-  state: any;
+  state: Set<any>;
   clickSubscription: any;
   lastChange: any;
 

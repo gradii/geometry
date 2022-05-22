@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'demo-tree-view-basic',
   template: `
-    <tri-treeview
+    <tri-tree-view
       [nodes]="data"
       textField="text"
       triTreeViewHierarchyBinding
@@ -14,7 +14,7 @@ import { Component } from '@angular/core';
       triTreeViewCheckable
       [(checkedKeys)]="checkedKeys"
     >
-    </tri-treeview>
+    </tri-tree-view>
   `,
   styles  : [
     `
