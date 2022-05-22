@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 import { TriTreeViewModule } from '@gradii/triangle/tree-view';
 import { DevTreeViewComponent } from './dev-tree-view.component';
 import { DemoTreeViewBasicComponent } from './tri-demo-tree-view/demo-tree-view-basic.component';
+import { DemoTreeViewFlatComponent } from './tri-demo-tree-view/demo-tree-view-flat.component';
 
 @NgModule({
   imports     : [
@@ -23,6 +24,10 @@ import { DemoTreeViewBasicComponent } from './tri-demo-tree-view/demo-tree-view-
             path     : 'tri-demo-tree-view-basic',
             component: DemoTreeViewBasicComponent
           },
+          {
+            path     : 'tri-demo-tree-view-flat',
+            component: DemoTreeViewFlatComponent
+          },
         ]
       }
     ])
@@ -30,7 +35,8 @@ import { DemoTreeViewBasicComponent } from './tri-demo-tree-view/demo-tree-view-
   declarations: [
     DevTreeViewComponent,
 
-    DemoTreeViewBasicComponent
+    DemoTreeViewBasicComponent,
+    DemoTreeViewFlatComponent
   ]
 })
 export class DevTreeViewModule {

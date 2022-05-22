@@ -75,12 +75,10 @@ import { isPresent } from '@gradii/check-type';
           (click)="expandNode(nodeIndex(index), node, !isExpanded(node, nodeIndex(index)))"
           *ngIf="expandIcons && hasChildren(node)"
         >
-          <span
-            class="k-icon"
-            [class.k-i-collapse]="isExpanded(node, nodeIndex(index))"
-            [class.k-i-expand]="!isExpanded(node, nodeIndex(index))"
-          >
-          </span>
+          <tri-icon class="k-icon" [svgIcon]="
+          !isExpanded(node, nodeIndex(index)) ?
+           'fill:caret-right' : 'fill:caret-down'">
+          </tri-icon>
         </span>
         <tri-checkbox
           *ngIf="checkboxes"
