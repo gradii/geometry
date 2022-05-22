@@ -4,10 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { isPresent } from '@gradii/check-type';
 import { getter, setter } from '@gradii/nanofn';
 import { HierarchyBindingDirective } from '../../hierarchy-binding.directive';
 import { copyPageSize, decrementPageSize, incrementPageSize } from '../../load-more/load-more-utils';
-import { buildTreeIndex, getDataItem, isPresent } from '../../utils';
+import { buildTreeIndex, getDataItem } from '../../utils';
 import { collapseEmptyParent, expandDropTarget, updateMovedItemIndex } from '../drag-and-drop-utils';
 import { DropPosition, EditService } from '../models';
 

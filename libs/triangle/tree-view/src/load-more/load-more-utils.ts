@@ -4,12 +4,13 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { isPresent } from '../utils';
+import { isPresent } from '@gradii/check-type';
+
 
 /**
  * @hidden
  */
-export const copyPageSize = (treeview, source, target) => {
+export const copyPageSize      = (treeview, source, target) => {
   if (!isPresent(treeview.loadMoreService)) {
     return;
   }

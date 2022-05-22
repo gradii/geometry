@@ -8,22 +8,19 @@ import { DataBoundComponent } from './data-bound-component';
 import { TreeItemFilterState } from './drag-and-drop/models/tree-item-filter-state';
 import { DEFAULT_FILTER_SETTINGS, TreeViewFilterSettings } from './treeview-filter-settings';
 import { Injectable, Input } from '@angular/core';
-import { filterTree, isPresent } from './utils';
+import { filterTree } from './utils';
+import { isPresent } from '@gradii/check-type';
 
 /**
  * @hidden
  */
 @Injectable()
 export abstract class FilteringBase {
-  component: DataBoundComponent;
   filterData: TreeItemFilterState[];
-  visibleNodes: Set<any>;
-  _filterSettings: any;
+  visibleNodes: Set<any> = new Set();
+  _filterSettings: any   = DEFAULT_FILTER_SETTINGS;
 
-  constructor(component: DataBoundComponent) {
-    this.component       = component;
-    this.visibleNodes    = new Set();
-    this._filterSettings = DEFAULT_FILTER_SETTINGS;
+  constructor(public component: DataBoundComponent) {
   }
 
   /**

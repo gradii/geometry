@@ -6,8 +6,9 @@
 
 import { DropAction, DropPosition, ScrollDirection } from './models';
 import {
-  closestNode, closestWithMatch, getContentElement, hasParent, isContent, isPresent, nodeId
+  closestNode, closestWithMatch, getContentElement, hasParent, isContent, nodeId
 } from '../utils';
+import { isPresent } from '@gradii/check-type';
 
 /**
  * Checks if the browser supports relative stacking context.

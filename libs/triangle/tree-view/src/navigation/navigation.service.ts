@@ -10,7 +10,8 @@ import { NavigationItem } from './navigation-item.interface';
 import { NavigationModel } from './navigation-model';
 import { NavigationState } from './navigation-state.interface';
 import { Injectable } from '@angular/core';
-import { isPresent, nodeIndex } from '../utils';
+import { nodeIndex } from '../utils';
+import { isPresent } from '@gradii/check-type';
 
 @Injectable()
 export class NavigationService {

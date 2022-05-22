@@ -10,7 +10,7 @@ import { DragAndDropDirective } from './drag-and-drop/drag-and-drop.directive';
 import { TreeItemFilterState } from './drag-and-drop/models/tree-item-filter-state';
 import { FilteringBase } from './filtering-base';
 import { getter } from '@gradii/nanofn';
-import { isArrayWithAtLeastOneItem, isPresent } from './utils';
+import { isArrayWithAtLeastOneItem } from './utils';
 import { of } from 'rxjs';
 import {
   HierarchyEditingService
@@ -18,6 +18,7 @@ import {
 import { isVisible } from './default-callbacks';
 import { IndexBuilderService } from './index-builder.service';
 import { anyChanged, isChanged } from './helper/changes';
+import { isPresent } from '@gradii/check-type';
 
 const indexBuilder = new IndexBuilderService();
 
@@ -27,14 +28,14 @@ export const mapToWrappers = (currentLevelNodes, childrenField, parent = null,
     return [];
   }
   return currentLevelNodes.map((node, idx) => {
-    const index      = indexBuilder.nodeIndex(idx.toString(), parentIndex);
-    const wrapper: TreeItemFilterState    = {
+    const index                        = indexBuilder.nodeIndex(idx.toString(), parentIndex);
+    const wrapper: TreeItemFilterState = {
       dataItem: node,
       index,
       parent,
       visible : true
     };
-    wrapper.children = mapToWrappers(getter(node, childrenField), childrenField, wrapper, index);
+    wrapper.children                   = mapToWrappers(getter(node, childrenField), childrenField, wrapper, index);
     return wrapper;
   });
 };
@@ -62,15 +63,6 @@ export class HierarchyBindingDirective extends FilteringBase implements OnInit, 
     this.component.isVisible = shouldFilter ? (node) => this.visibleNodes.has(node) : isVisible;
   }
 
-  /**
-   * The field name which holds the data items of the child component.
-   */
-  set childrenField(value: string) {
-    if (!value) {
-      throw new Error('\'childrenField\' cannot be empty');
-    }
-    this._childrenField = value;
-  }
 
   /**
    * The nodes which will be displayed by the TreeView.
@@ -97,6 +89,16 @@ export class HierarchyBindingDirective extends FilteringBase implements OnInit, 
   @Input()
   get childrenField(): string {
     return this._childrenField;
+  }
+
+  /**
+   * The field name which holds the data items of the child component.
+   */
+  set childrenField(value: string) {
+    if (!value) {
+      throw new Error('\'childrenField\' cannot be empty');
+    }
+    this._childrenField = value;
   }
 
   ngOnInit() {

@@ -4,6 +4,7 @@
  * Use of this source code is governed by an MIT-style license
  */
 
+import { isPresent } from '@gradii/check-type';
 import { getter } from '@gradii/nanofn';
 import { TreeViewFilterSettings } from './treeview-filter-settings';
 
@@ -39,10 +40,6 @@ export const closestWithMatch          = (element, selector) => {
  */
 export const noop                      = () => {
 };
-/**
- * @hidden
- */
-export const isPresent                 = (value) => value !== null && value !== undefined;
 /**
  * @hidden
  */

@@ -2,6 +2,37 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+# [2.3.0](https://github.com/gradii/triangle/compare/triangle-2.2.18...triangle-2.3.0) (2022-05-22)
+
+
+### Bug Fixes
+
+* dnd gap ([bbd526f](https://github.com/gradii/triangle/commit/bbd526f393d29fc6eebd097cfdeda3d4fbe3a920))
+* dnd nest and swap ([089a8c5](https://github.com/gradii/triangle/commit/089a8c5b5a55aa27761123fdc0fb9ad36c857bd3))
+* fedaco types ([0876b98](https://github.com/gradii/triangle/commit/0876b98b443d2fb89d159bfd4ad936b6903e77b2))
+* flex drag and drop ([a6d9c79](https://github.com/gradii/triangle/commit/a6d9c79b62428fa43453d7bc8f8dcf6325019f0b))
+* row gap and column gap ([548b347](https://github.com/gradii/triangle/commit/548b34718ebc85873b61a7b86219517c6ff69096))
+* tree view ([5fad72f](https://github.com/gradii/triangle/commit/5fad72f2bcbb452457e1d374905ba2431621294f))
+
+
+### Features
+
+* cdk overlay ([3cf108a](https://github.com/gradii/triangle/commit/3cf108ab34da9d5d53b92b41f069b1566a0b42a1))
+* cdk overlay ([1482a23](https://github.com/gradii/triangle/commit/1482a2362d1cadbf2e2b2f7b46ef81a3d67d4d29))
+* data table ([3d98a78](https://github.com/gradii/triangle/commit/3d98a780a8fa1d18119a01098ee203547832e69d))
+* data table ([c0b5fa4](https://github.com/gradii/triangle/commit/c0b5fa441a3951b46447a763989545703dab297d))
+* data table ([ad8aa7e](https://github.com/gradii/triangle/commit/ad8aa7e9a08ba2a189ac60405d13d126efd5b6be))
+* data-table command selector ([b305227](https://github.com/gradii/triangle/commit/b305227612489e2b9768595220d4ac2fdfa32ff7))
+* dnd only available half on overlays ([650c016](https://github.com/gradii/triangle/commit/650c0164bfd91b4e60a10e562b92b1fb3e13fd4a))
+* dnd sort disable swap half ([996167d](https://github.com/gradii/triangle/commit/996167d78f991cd74b4047c68965ee89f6485565))
+* flex row sort ([526ed81](https://github.com/gradii/triangle/commit/526ed8195196aca9965e21d4c4f0c0daebd37129))
+* nanofn progressing ([d74d5ed](https://github.com/gradii/triangle/commit/d74d5ed9fbdc2f561ec7201d9f501401d3006789))
+* narafn ([ef70896](https://github.com/gradii/triangle/commit/ef70896e6027a1e86a134abf7b14e2370619035a))
+* pointer idle ([76283d5](https://github.com/gradii/triangle/commit/76283d5ca6ec8b216a72df394bd05d95245e11ff))
+* pointer idle ([acd4858](https://github.com/gradii/triangle/commit/acd4858318bbf2030c03811a36211c9202d8a620))
+
+
+
 ## [2.2.18](https://github.com/gradii/triangle/compare/triangle-2.2.17...triangle-2.2.18) (2022-02-03)
 
 

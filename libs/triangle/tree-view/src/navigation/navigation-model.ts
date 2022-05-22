@@ -6,7 +6,7 @@
 
 import { NavigationItem } from './navigation-item.interface';
 import { IndexBuilderService } from '../index-builder.service';
-import { isPresent } from '../utils';
+import { isPresent } from '@gradii/check-type';
 
 export const safe         = node => (node || {});
 export const safeChildren = node => (safe(node).children || []);

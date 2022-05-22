@@ -9,7 +9,8 @@ import { DropHintComponent } from './drop-hint.component';
 import { DragAndDropAssetService } from '../editing-services/drag-and-drop-asset.service';
 import { DropAction } from '../models';
 import { TreeItemLookup } from '../../treeitem-lookup.interface';
-import { dataItemsEqual, isPresent } from '../../utils';
+import { dataItemsEqual } from '../../utils';
+import { isPresent } from '@gradii/check-type';
 
 @Injectable()
 export class DropHintService extends DragAndDropAssetService<any> {

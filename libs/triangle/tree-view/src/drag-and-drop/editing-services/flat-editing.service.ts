@@ -10,7 +10,8 @@ import { getter, setter } from '@gradii/nanofn';
 import { take } from 'rxjs/operators';
 import { collapseEmptyParent, expandDropTarget, updateMovedItemIndex } from '../drag-and-drop-utils';
 import { copyPageSize, decrementPageSize, incrementPageSize } from '../../load-more/load-more-utils';
-import { buildTreeIndex, getDataItem, isPresent } from '../../utils';
+import { buildTreeIndex, getDataItem } from '../../utils';
+import { isPresent } from '@gradii/check-type';
 
 /**
  * @hidden

@@ -27,9 +27,10 @@ import {
   getDropTarget,
   treeItemFromEventTarget
 } from './drag-and-drop-utils';
-import { closestWithMatch, isContent, isPresent } from '../utils';
+import { closestWithMatch, isContent } from '../utils';
 import { Draggable } from '@gradii/triangle/draggable';
 import { hasObservers } from '../helper/has-observers';
+import { isPresent } from '@gradii/check-type';
 
 const DEFAULT_SCROLL_SETTINGS = {
   enabled : true,

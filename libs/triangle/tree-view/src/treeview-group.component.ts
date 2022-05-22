@@ -28,8 +28,9 @@ import { DataChangeNotificationService } from './data-change-notification.servic
 import { TreeViewSize } from './size';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { getter } from '@gradii/nanofn';
-import { isArray, isPresent } from './utils';
+import { isArray } from './utils';
 import { catchError, filter, finalize, tap } from 'rxjs/operators';
+import { isPresent } from '@gradii/check-type';
 
 @Component({
   animations: [
@@ -83,11 +84,9 @@ import { catchError, filter, finalize, tap } from 'rxjs/operators';
         </span>
         <tri-checkbox
           *ngIf="checkboxes"
-          [size]="size"
-          [node]="node"
-          [index]="nodeIndex(index)"
-          [isChecked]="isChecked"
-          (checkStateChange)="checkNode(nodeIndex(index))"
+          [indeterminate]="isChecked(node, nodeIndex(index)) === 'indeterminate'"
+          [checked]="isChecked(node, nodeIndex(index)) === 'checked'"
+          (checkedChange)="checkNode(nodeIndex(index))"
           [attr.tabindex]="-1"
         ></tri-checkbox>
         <span triTreeViewItemContent
@@ -162,31 +161,31 @@ import { catchError, filter, finalize, tap } from 'rxjs/operators';
       [attr.data-treeindex]="loadMoreButtonIndex"
     >
       <div class="k-treeview-mid">
-                <span
-                  *ngIf="loadingMoreNodes"
-                  class="k-icon k-i-loading k-i-expand"
-                >
-                </span>
+        <span
+          *ngIf="loadingMoreNodes"
+          class="k-icon k-i-loading k-i-expand"
+        >
+        </span>
         <span
           class="k-treeview-leaf k-treeview-load-more-button"
           [attr.data-treeindex]="loadMoreButtonIndex"
           triTreeViewItemContent
           [index]="loadMoreButtonIndex"
         >
-                    <span class="k-treeview-leaf-text">
-                        <ng-template
-                          *ngIf="loadMoreButtonTemplateRef"
-                          [ngTemplateOutlet]="loadMoreButtonTemplateRef"
-                          [ngTemplateOutletContext]="{
-                                index: loadMoreButtonIndex
-                            }"
-                        >
-                        </ng-template>
-                        <ng-container *ngIf="!loadMoreButtonTemplateRef">
-                            Load more
-                        </ng-container>
-                    </span>
-                </span>
+          <span class="k-treeview-leaf-text">
+            <ng-template
+              *ngIf="loadMoreButtonTemplateRef"
+              [ngTemplateOutlet]="loadMoreButtonTemplateRef"
+              [ngTemplateOutletContext]="{
+                    index: loadMoreButtonIndex
+                }"
+            >
+            </ng-template>
+            <ng-container *ngIf="!loadMoreButtonTemplateRef">
+                Load more
+            </ng-container>
+          </span>
+        </span>
       </div>
     </li>
   `,
@@ -196,8 +195,6 @@ import { catchError, filter, finalize, tap } from 'rxjs/operators';
   }
 })
 export class TreeViewGroupComponent implements OnChanges, OnInit, OnDestroy {
-  expandService: ExpandStateService;
-  loadingService: LoadingNotificationService;
   indexBuilder: IndexBuilderService;
   treeViewLookupService: TreeViewLookupService;
   navigationService: NavigationService;
@@ -244,27 +241,32 @@ export class TreeViewGroupComponent implements OnChanges, OnInit, OnDestroy {
   singleRecordSubscriptions: any;
 
   @Input()
-  isChecked: (item: object, index: string) => CheckedState;
-  @Input()
-  isDisabled: (item: object, index: string) => boolean;
-  @Input()
-  isExpanded: (item: object, index: string) => boolean;
-  @Input()
-  isVisible: (item: object, index: string) => boolean;
-  @Input()
-  isSelected: (item: object, index: string) => boolean;
-  @Input()
-  children: (item: object) => Observable<any[]>;
-  @Input()
-  hasChildren: (item: object) => boolean;
+  isChecked: (item: any, index: string) => CheckedState;
 
-  constructor(expandService: ExpandStateService, loadingService: LoadingNotificationService,
+  @Input()
+  isDisabled: (item: any, index: string) => boolean;
+
+  @Input()
+  isExpanded: (item: any, index: string) => boolean;
+
+  @Input()
+  isVisible: (item: any, index: string) => boolean;
+
+  @Input()
+  isSelected: (item: any, index: string) => boolean;
+
+  @Input()
+  children: (item: any) => Observable<any[]>;
+
+  @Input()
+  hasChildren: (item: any) => boolean;
+
+  constructor(protected expandService: ExpandStateService,
+              protected loadingService: LoadingNotificationService,
               indexBuilder: IndexBuilderService, treeViewLookupService: TreeViewLookupService,
               navigationService: NavigationService, nodeChildrenService: NodeChildrenService,
               dataChangeNotification: DataChangeNotificationService,
               changeDetectorRef: ChangeDetectorRef) {
-    this.expandService             = expandService;
-    this.loadingService            = loadingService;
     this.indexBuilder              = indexBuilder;
     this.treeViewLookupService     = treeViewLookupService;
     this.navigationService         = navigationService;

@@ -7,6 +7,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { TriCheckboxModule } from '@gradii/triangle/checkbox';
+import { TriIconModule } from '@gradii/triangle/icon';
 import { TriInputModule } from '@gradii/triangle/input';
 import { CheckDirective } from './check.directive';
 import { CheckBoxModule } from './checkbox/checkbox.module';
@@ -61,6 +63,8 @@ const COMPONENT_DIRECTIVES = [
     FormsModule,
     CheckBoxModule,
     TriInputModule,
+    TriCheckboxModule,
+    TriIconModule,
   ],
   entryComponents: [
     DragClueComponent,

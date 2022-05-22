@@ -17,8 +17,9 @@ import {
 import { TreeViewComponent } from '../treeview.component';
 import { Subscription } from 'rxjs';
 import { TreeItem } from '../treeitem.interface';
-import { isBoolean, isPresent, noop } from '../utils';
+import { isBoolean, noop } from '../utils';
 import { isChanged } from '../helper/changes';
+import { isPresent } from '@gradii/check-type';
 
 @Directive({selector: '[triTreeViewSelectable]'})
 export class SelectDirective implements OnDestroy, OnChanges {

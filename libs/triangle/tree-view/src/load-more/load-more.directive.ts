@@ -8,8 +8,8 @@ import { Observable } from 'rxjs';
 import { TreeViewComponent } from '../treeview.component';
 import { LoadMoreRequestArgs } from './load-more-request-args';
 import { Directive, Input, isDevMode } from '@angular/core';
-import { isPresent } from '../utils';
 import { v4 as uuid } from 'uuid';
+import { isPresent } from '@gradii/check-type';
 
 @Directive({
   selector: '[triTreeViewLoadMore]'

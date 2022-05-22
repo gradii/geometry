@@ -22,9 +22,9 @@ import { IndexBuilderService } from './index-builder.service';
 import { TreeViewLookupService } from './treeview-lookup.service';
 import { TreeItem } from './treeitem.interface';
 import { CheckedState } from './checkbox/checked-state';
-import { isPresent } from './utils';
 import { filter } from 'rxjs/operators';
 import { anyChanged } from './helper/changes';
+import { isPresent } from '@gradii/check-type';
 
 export const buildItem = (index, dataItem) => ({dataItem, index});
 let id                 = 0;

@@ -13,9 +13,10 @@ import { CheckedState } from './checkbox/checked-state';
 import { Subscription } from 'rxjs';
 import { TreeItem } from './treeitem.interface';
 import { TreeItemLookup } from './treeitem-lookup.interface';
-import { fetchLoadedDescendants, isBoolean, isPresent, noop } from './utils';
+import { fetchLoadedDescendants, isBoolean, noop } from './utils';
 import { filter, switchMap, take, tap } from 'rxjs/operators';
 import { isChanged } from './helper/changes';
+import { isPresent } from '@gradii/check-type';
 
 export const indexChecked = (keys, index) => keys.filter(k => k === index).length > 0;
 export const matchKey     = index => k => {

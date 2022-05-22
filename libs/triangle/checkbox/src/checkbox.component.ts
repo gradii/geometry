@@ -4,12 +4,11 @@
  * Use of this source code is governed by an MIT-style license
  */
 
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import {
-  Component, EventEmitter, forwardRef, HostListener, Input, Output, ViewEncapsulation
-} from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, Output, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { isFunction } from '@gradii/triangle/util';
+
+type CheckboxState = 'unchecked' | 'checked' | 'indeterminate';
 
 /**
  * form value bind with checked
@@ -58,7 +57,10 @@ import { isFunction } from '@gradii/triangle/util';
 export class CheckboxComponent implements ControlValueAccessor {
 
   _el: HTMLElement;
-  _focused                      = false;
+  _focused = false;
+
+  _state: CheckboxState;
+
   // ngModel Access
   onChange: Function;
   onTouched: Function;
@@ -77,6 +79,7 @@ export class CheckboxComponent implements ControlValueAccessor {
   @Input() initValue: boolean   = true;
   @Output() checkedChange       = new EventEmitter<boolean>();
   @Output() indeterminateChange = new EventEmitter<boolean>();
+  @Output() checkStateChange    = new EventEmitter<CheckboxState>();
 
   constructor() {
   }
@@ -107,7 +110,19 @@ export class CheckboxComponent implements ControlValueAccessor {
         this.indeterminateChange.emit(this.indeterminate);
       }
 
+      this.updateState();
+
       this.updateValue(!this._checked);
+    }
+  }
+
+  updateState() {
+    const state = this.indeterminate && this._checked ?
+      'indeterminate' :
+      this._checked ? 'checked' : 'unchecked';
+    if (this._state !== state) {
+      this.checkStateChange.emit(state);
+      this._state = state;
     }
   }
 
@@ -121,6 +136,8 @@ export class CheckboxComponent implements ControlValueAccessor {
     this.checked = value;
 
     this.checkedChange.emit(value);
+
+    this.updateState();
   }
 
   focus() {

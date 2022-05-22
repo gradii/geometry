@@ -5,7 +5,7 @@
  */
 
 import { ComponentRef, Injectable, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
-import { isPresent } from '../../utils';
+import { isPresent } from '@gradii/check-type';
 
 /**
  * @hidden

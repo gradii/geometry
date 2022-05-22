@@ -11,8 +11,9 @@ import { DragClueComponent } from './drag-clue.component';
 import { DropAction, ScrollDirection } from '../models';
 import { DragAndDropAssetService } from '../editing-services/drag-and-drop-asset.service';
 import { TreeItemLookup } from '../../treeitem-lookup.interface';
-import { dataItemsEqual, isPresent } from '../../utils';
+import { dataItemsEqual } from '../../utils';
 import { getScrollableContainer, scrollElementBy } from '../drag-and-drop-utils';
+import { isPresent } from '@gradii/check-type';
 
 /**
  * @hidden

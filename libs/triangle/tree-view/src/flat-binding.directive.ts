@@ -10,11 +10,12 @@ import { TreeItemFilterState } from './drag-and-drop/models/tree-item-filter-sta
 import { FilteringBase } from './filtering-base';
 import { of } from 'rxjs';
 import { compose } from './funcs';
-import { isArrayWithAtLeastOneItem, isBlank, isNullOrEmptyString, isPresent } from './utils';
+import { isArrayWithAtLeastOneItem, isBlank, isNullOrEmptyString } from './utils';
 import { FlatEditingService } from './drag-and-drop/editing-services/flat-editing.service';
 import { IndexBuilderService } from './index-builder.service';
 import { anyChanged, isChanged } from './helper/changes';
 import { getter } from '@gradii/triangle/data-query';
+import { isPresent } from '@gradii/check-type';
 
 export const findChildren = (prop, nodes, value) => nodes.filter((x) => prop(x) === value);
 const indexBuilder        = new IndexBuilderService();

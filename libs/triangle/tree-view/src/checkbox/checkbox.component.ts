@@ -22,7 +22,7 @@ import { getSizeClass } from '../utils';
 import { v4 as uuid } from 'uuid';
 
 @Component({
-  selector: 'tri-checkbox',
+  selector: 'tri-tree-view-checkbox',
   template: `
     <input
       type="checkbox"

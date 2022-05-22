@@ -65,13 +65,14 @@ import {
   isContent,
   isFocusable,
   isLoadMoreButton,
-  isPresent,
   match,
   nodeId,
   nodeIndex
 } from './utils';
 import { anyChanged } from './helper/changes';
 import { hasObservers } from './helper/has-observers';
+import { Directionality } from '@angular/cdk/bidi';
+import { isPresent } from '@gradii/check-type';
 
 const providers = [
   ExpandStateService,
@@ -116,7 +117,7 @@ const providers = [
                (ngModelChange)="filterChange.emit($event)"
                [placeholder]="filterInputPlaceholder"/>
         <ng-template #prefix>
-          <span class="k-input-icon k-icon k-i-search"></span>
+          <tri-icon svgIcon="outline:search"></tri-icon>
         </ng-template>
       </tri-input-group>
     </span>
@@ -145,7 +146,8 @@ const providers = [
     >
     </ul>
     <ng-container #assetsContainer></ng-container>
-  `
+  `,
+  styleUrls: ['../style/treeview.scss']
 })
 export class TreeViewComponent implements OnChanges, OnInit, OnDestroy, DataBoundComponent {
   element: ElementRef<HTMLElement>;
@@ -281,6 +283,7 @@ export class TreeViewComponent implements OnChanges, OnInit, OnDestroy, DataBoun
               nodeChildrenService: NodeChildrenService, selectionService: SelectionService,
               treeViewLookupService: TreeViewLookupService, ngZone: NgZone, renderer: Renderer2,
               dataChangeNotification: DataChangeNotificationService,
+              protected directionality: Directionality
               /*localization: LocalizationService*/) {
     this.element                = element;
     this.changeDetectorRef      = changeDetectorRef;
@@ -459,20 +462,20 @@ export class TreeViewComponent implements OnChanges, OnInit, OnDestroy, DataBoun
   /** @hidden */
   @HostBinding('attr.dir')
   get direction(): string {
-    return this.localization.rtl ? 'rtl' : 'ltr';
+    return this.directionality.value;
   }
 
   /**
    * Determines whether the content animation is enabled.
    */
-  set animate(value: boolean) {
-    this._animate = value;
-  }
-
   @Input()
   @HostBinding('@.disabled')
   get animate(): boolean {
     return !this._animate;
+  }
+
+  set animate(value: boolean) {
+    this._animate = value;
   }
 
   /**
