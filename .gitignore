@@ -46,3 +46,4 @@ testem.log
 __ngcc_entry_points__.json
 /.theia
 .env
+.angular
