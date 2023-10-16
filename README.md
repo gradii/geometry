@@ -1,6 +1,6 @@
 # Geometry
 
-### frontend component 
+### frontend angular ui component 
 
 [triangle](https://github.com/gradii/geometry/tree/main/libs/triangle)
 
